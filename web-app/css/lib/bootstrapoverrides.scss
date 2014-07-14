@@ -1,0 +1,25 @@
+.btn-primary {
+  background: rgb(5, 32, 144);
+  border-color: rgb(5, 32, 144);
+}
+
+h1, h2, h3, h4, label {
+  font-weight: 300;
+}
+
+
+label, .radio label, .checkbox label {
+  font-weight: 300;
+}
+
+.input-group-lg>.form-control, .input-group-lg>.input-group-addon, .input-group-lg>.input-group-btn>.btn {
+  border-radius: initial;
+}
+
+.btn, .btn-lg, .btn-group-lg>.btn {
+  border-radius: initial;
+}
+
+.form-control {
+  border-radius: initial;
+}

@@ -1,0 +1,421 @@
+$darkblue: rgba(5, 32, 144, 1.0);
+$lightblue: #588FD3;
+$protectiveblue: rgb(111, 183, 247);
+
+@mixin blueboxlink() {
+  color: white;
+  background: $darkblue;
+  padding: 8px 12px;
+  margin-right: 10px;
+}
+
+@mixin boldlink() {
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+  color: $lightblue;
+}
+
+
+* {
+  font-family: 'Lato';
+  font-weight: 300;
+}
+
+body {
+  font-size: 16px;
+}
+
+a {
+  color: $darkblue;
+}
+
+a.variantlink {
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 44px;
+  font-weight: 300;
+  margin-top: 0.4em;
+  margin-bottom: 0.2em;
+  small {
+    font-size: 16px;
+    color: rgba(147, 147, 147, 1.0);
+    font-weight: 300;
+    vertical-align: middle;
+  }
+}
+
+h2 small {
+  font-weight: 300;
+}
+
+h3 {
+}
+
+h4 {
+  font-size: 22px;
+}
+
+div.lead {
+  font-size: 28px;
+}
+
+div#branding {
+  font-size: 44px;
+  text-transform: uppercase;
+  font-weight: 300;
+  margin: 24px 0 18px;
+  small {
+    text-transform: none;
+    font-size: 24px;
+    color: #C7C4C4;
+  }
+}
+
+a.page-nav-link {
+  @include blueboxlink();
+  font-size: 16px;
+  margin: 5px 5px;
+  vertical-align: middle;
+  text-transform: lowercase;
+}
+
+div.separator {
+  height: 1px;
+  border-top: 1px solid #aaa;
+  margin: 20px 0;
+}
+
+div.linkout {
+  padding: 10px 0;
+  a {
+    @include blueboxlink();
+  }
+}
+
+table.basictable {
+  width: 100%;
+  th, td {
+    text-align: center;
+  }
+  th.datatype-header {
+    border-left: 1px solid black;
+  }
+  thead {
+    th {
+      padding: 9px;
+      background: rgb(5, 32, 144);
+      color: white;
+      font-size: 14px;
+    }
+    th.sorting_desc:before {
+      content:"▴ ";
+    }
+    th.sorting_asc:before {
+      content:"▾ ";
+    }
+  }
+}
+
+.variants-container::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.variants-container::-webkit-scrollbar:horizontal {
+    height: 11px;
+}
+
+.variants-container::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    border: 1px solid white; /* should match background, can't be transparent */
+    background-color: rgba(0, 0, 0, .5);
+}
+
+.variants-container::-webkit-scrollbar-track {
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.dataTables_length {
+  display: none;
+}
+
+.big-button-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.translational-research-box {
+  padding: 20px;
+  margin: 20px 0;
+  background: rgb(245, 245, 245);
+  border: 1px solid #aaa;
+}
+
+.login-header {
+  padding: 40px 0;
+  text-align: center;
+  h1 {
+    font-size: 50px;
+  }
+}
+
+.section-header {
+  font-size: 24px;
+}
+
+.variant-search-form h4 {
+  margin: 20px 0 12px;
+  font-size: 24px;
+}
+
+.main-searchbox .typeahead {
+  font-size: 20px;
+
+}
+
+.tabbed-about-page {
+  min-width: 960px;
+  margin: 30px 0;
+  .sidebar {
+    width: 20%;
+    box-sizing: border-box;
+    float: left;
+    padding-top: 20px;
+    .tab {
+      padding: 10px 24px;
+    }
+    .tab.active {
+      color: white;
+      background: $darkblue;
+    }
+    .tab:hover {
+      background: rgba(13, 64, 136, 0.2);
+      cursor: pointer;
+    }
+    .tab.active:hover {
+      background: $darkblue;
+    }
+    .sep {
+      width: 60%;
+      margin: 10px auto;
+      border-top: 1px solid #999;
+    }
+  }
+  .section {
+    width: 80%;
+    box-sizing: border-box;
+    float: left;
+    padding: 20px;
+    min-height: 200px;
+  }
+  .section-blue {
+    background: $darkblue;
+    color: white;
+  }
+  .paper {
+    padding: 6px 0;
+    a {
+      @include boldlink();
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
+    .citation {
+      font-size: 12px;
+      padding-top: 6px;
+    }
+  }
+}
+
+a.boldlink {
+  @include boldlink();
+}
+
+.transcript-annotation {
+  padding-left: 30px;
+  border-left: 4px solid $darkblue;
+}
+
+.about-people {
+  font-size: 12px;
+  .institution {
+    padding: 8px 0;
+  }
+  .name {
+    text-decoration: underline;
+  }
+  a.pi {
+    color: yellow;
+  }
+}
+
+p.leadlink {
+  font-size: 18px;
+  color: #888;
+  padding: 5px 0;
+  a {
+    @include boldlink();
+  }
+}
+
+div.cohort {
+  border-top: 1px solid #ddd;
+  margin: 12px 0;
+  padding: 12px 0;
+  a {
+    @include boldlink();
+  }
+  .name {
+    font-size: 24px;
+    padding-bottom: 8px;
+    span {
+      font-weight: bold;
+    }
+  }
+  .detail {
+    font-size: 18px;
+    span {
+      font-weight: bold;
+    }
+  }
+  .bullets {
+    .title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+  }
+}
+
+.term-description {
+  font-size: 12px;
+  color: #909090;
+  line-height: 1.2em;
+}
+
+.gwas-table-container {
+  margin-top: 30px;
+}
+
+.variants-container {
+  overflow-x: scroll;
+}
+
+.vis-container {
+  text-align: center;
+  .text-highlight {
+    font-weight: bold;
+  }
+  #tooltip {
+    position: absolute;
+    width: 200px;
+    height: auto;
+    padding: 10px;
+    background-color: white;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+  }
+
+  #tooltip.hidden {
+    display: none;
+  }
+
+  #tooltip p {
+    margin: 0;
+    font-family: sans-serif;
+    font-size: 12px;
+    line-height: 20px;
+  }
+  #tooltip {
+    .header {
+      font-weight: bold;
+      text-align: center;
+      border-bottom: 1px solid #eaebec;
+      margin-bottom: 2px;
+    }
+  }
+}
+
+span.dotlabel {
+  padding-top: 8px;
+}
+
+.assoc-up {
+  fill: $protectiveblue;
+  color: $protectiveblue;
+}
+
+.assoc-down {
+  fill: red;
+  color: red;
+}
+
+.assoc-none {
+  fill: white;
+}
+
+.variantlabel {
+ @include boldlink();
+  fill: $lightblue;
+}
+
+.gene-summary {
+  margin: 20px 0;
+  border: 1px solid #e0e0e0;
+  padding: 20px;
+  .bottom {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 12px;
+  }
+  .title {
+    font-weight: bold;
+    font-size: 20px;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+  }
+  a {
+    @include boldlink();
+  }
+}
+
+.form-callout {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.rightlinks {
+  float: right;
+}
+
+#language {
+  float: right; 
+  margin-top: 10px;
+}
+
+img.currentlanguage {
+  box-shadow: 0px 0px 16px #ddd;
+}
+
+.greyedout {
+  color: #aaa;
+}
+
+.section-content {
+  a {
+    @include boldlink();
+  }
+}
+
+.sigma-institution {
+  font-size: 14px;
+  padding-bottom: 8px;
+  .program {
+    font-weight: bold;
+  }
+}

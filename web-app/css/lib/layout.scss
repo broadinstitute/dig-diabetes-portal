@@ -1,0 +1,37 @@
+#header {
+  color: white;
+  text-transform: uppercase;
+  a, a:visited {
+    color: white;
+    padding: 0 6px;
+  }
+}
+
+#header-top {
+  background: rgba(5, 32, 144, 1.0);
+}
+
+#header-bottom {
+  background: rgba(43, 117, 207, 0.68);
+  padding: 10px 0;
+}
+
+body {
+  background: white;
+}
+
+#main {
+  padding: 40px 0 80px;
+}
+
+#footer {
+  padding: 20px 0 40px;
+  font-size: 1.5em;
+}
+
+#main, #footer {
+}
+
+#belowfooter {
+  height: 150px;
+}
