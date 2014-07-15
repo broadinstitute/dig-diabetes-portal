@@ -4,28 +4,29 @@
     <title><g:layoutTitle default="Grails"/></title>
 
 
-
+    <r:require modules="core"/>
+    <r:layoutResources/>
 
 
     %{--the part I added starts below--}%
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${grailsApplication.config.site.title}</title>
+    %{--<meta name="viewport" content="width=device-width, initial-scale=1.0">--}%
+    %{--<title>${grailsApplication.config.site.title}</title>--}%
 
-    <link media="all" rel="stylesheet" href="css/lib/bootstrap.min.css">
-    <link media="all" rel="stylesheet" href="css/lib/jquery.dataTables.css">
-    <link media="all" rel="stylesheet" href="css/lib/style.css">
+    %{--<link media="all" rel="stylesheet" href="css/lib/bootstrap.min.css">--}%
+    %{--<link media="all" rel="stylesheet" href="css/lib/jquery.dataTables.css">--}%
+    %{--<link media="all" rel="stylesheet" href="css/lib/style.css">--}%
 
 
-    <script src="js/lib/utils.js"></script>
-    <script src="js/lib/jquery-1.11.0.min.js"></script>
-    <script src="js/lib/bootstrap.min.js"></script>
-    <script src="js/lib/bootstrap3-typeahead.min.js"></script>
-    <script src="js/lib/jquery.dataTables.min.js"></script>
-    <script src="js/lib/underscore-min.js"></script>
-    <script src="js/lib/backbone-min.js"></script>
-    <script src="js/lib/shared.js"></script>
+    %{--<script src="js/lib/utils.js"></script>--}%
+    %{--<script src="js/lib/jquery-1.11.0.min.js"></script>--}%
+    %{--<script src="js/lib/bootstrap.min.js"></script>--}%
+    %{--<script src="js/lib/bootstrap3-typeahead.min.js"></script>--}%
+    %{--<script src="js/lib/jquery.dataTables.min.js"></script>--}%
+    %{--<script src="js/lib/underscore-min.js"></script>--}%
+    %{--<script src="js/lib/backbone-min.js"></script>--}%
+    %{--<script src="js/lib/shared.js"></script>--}%
 
-    <script src="http://d3js.org/d3.v3.js"></script>
+    %{--<script src="http://d3js.org/d3.v3.js"></script>--}%
 
     <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
 

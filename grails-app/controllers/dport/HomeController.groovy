@@ -20,4 +20,13 @@ class HomeController {
         ["vars": variableStrings]
     }
 
+    def root = {
+        render(template: 'portalHomeContent', model: [])
+    }
+
+    def portalHome = {
+        render(view: 'portalHome', model: [])
+    }
+
+
 }

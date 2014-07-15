@@ -3,6 +3,8 @@
 <head>
     <meta name="layout" content="core"/>
 
+    <r:require modules="core"/>
+    <r:layoutResources/>
 
     %{--<script type="text/template" id="tpl-gene-info">{% include "js_templates/gene_info.html" %}</script>--}%
     %{--<script type="text/template" id="tpl-gene-variants">{% include "js_templates/gene_variants.html" %}</script>--}%
