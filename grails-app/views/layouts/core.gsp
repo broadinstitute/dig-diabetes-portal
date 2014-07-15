@@ -85,7 +85,7 @@
             </div>
         %{--{% endif %}--}%
             <g:if test="${grailsApplication.config.site.version == 't2dgenes'}">
-                <a href="/">Home</a> &middot;
+                <a href="../home/portalHome">Home</a> &middot;
                 <a href="../informational/about">About The Data</a> &middot;
                 <a href="../informational/contact">Contact</a>
             </g:if>
