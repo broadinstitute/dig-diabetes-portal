@@ -9,6 +9,10 @@ class InformationalController {
     def contact (){
         render (view: 'contact')
     }
+    def hgat (){
+        render (view: 'hgat')
+    }
+
     // the root page for t2dgenes.  This page recruits underlying pages via Ajax calls
     def t2dgenes ()  {
         String defaultDisplay = 'cohorts'

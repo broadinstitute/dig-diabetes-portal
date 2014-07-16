@@ -14,7 +14,7 @@
             This prototype portal contains results from genetic association studies of type 2 diabetes.
             Datatsets include exome sequencing results contributed by <a class="boldlink" href="../informational/t2dgenes">T2D-GENES</a> and <a class="boldlink" href="../informational/got2d">GoT2D</a> (n&asymp;13,000);
         exome chip results contributed by <a class="boldlink" href="../informational/got2d">GoT2D</a> (n&asymp;82,000); and GWAS results contributed by <a class="boldlink" href="http://diagram-consortium.org/about.html">DIAGRAM</a> (n&asymp;69,000).
-        The portal also contains  results from large GWAS meta-analyses of <a class="boldlink" href="/about/hgat">24 other traits</a>.
+        The portal also contains  results from large GWAS meta-analyses of <a class="boldlink" href="../informational/hgat">24 other traits</a>.
         </p>
         <p>
             To use these results to investigate a biological hypothesis or assess a potential drug target,
