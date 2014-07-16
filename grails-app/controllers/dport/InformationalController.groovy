@@ -9,27 +9,14 @@ class InformationalController {
     def contact (){
         render (view: 'contact')
     }
+    // the root page for t2dgenes.  This page recruits underlying pages via Ajax calls
     def t2dgenes ()  {
         String defaultDisplay = 'cohorts'
         render (view: 't2dgenes', model:[specifics:defaultDisplay] )
     }
-    def cohorts ()  {
-        render (template: "cohorts" )
-    }
-    def papers ()  {
-        render (template: "papers" )
-    }
-    def project1 ()  {
-        render (template: "project1" )
-    }
-    def project2 ()  {
-        render (template: "project2" )
-    }
-    def project3 ()  {
-        render (template: "project3" )
-    }
-    def people ()  {
-        render (template: "people" )
+    // subsidiary pages for  t2dgenes
+    def t2dgenesection(){
+        render (template: "t2dsection/${params.id}" )
     }
 
 }

@@ -33,7 +33,7 @@
             </div>
             <div class="content">
                    <div id="t2dgeneContent">
-                        <g:render template="${specifics}"/>
+                        <g:render template="t2dsection/${specifics}"/>
                    </div>
                 </div>
             </div>
@@ -49,7 +49,7 @@
                 $.ajax({
                     cache:false,
                     type:"get",
-                    url:"./"+section,
+                    url:"./t2dgenesection/"+section,
                     async:true,
                     success: function (data) {
                        $("#t2dgeneContent").empty().html(data);
