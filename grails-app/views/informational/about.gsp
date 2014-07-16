@@ -20,13 +20,13 @@
         </p>
 
         <p class="leadlink">
-            <a href="/about/t2dgenes">T2D-GENES:</a>
+            <a href="../informational/t2dgenes">T2D-GENES:</a>
             exome sequencing results from 10,000 people (half T2D cases, half controls)
             representing five continental ancestry groups (African-American, East Asian, South Asian, European, and Hispanic).
         </p>
 
         <p class="leadlink">
-            <a href="/about/got2d">GoT2D:</a>
+            <a href="../informational/got2d"">GoT2D:</a>
             four exome sequencing cohorts (~3,000), plus a meta-analysis of exome chip results  from ~35,000 T2D cases and ~51,000 controls, all of European ancestry.
         </p>
 
