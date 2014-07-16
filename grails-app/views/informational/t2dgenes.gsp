@@ -32,7 +32,10 @@
                 <div class="tab" data-section="people">People</div>
             </div>
             <div class="content">
-                    <g:render template="cohort"/>
+                   <div id="t2dgeneContent">
+                        <g:render template="${specifics}"/>
+                   </div>
+                </div>
             </div>
         </div>
     </div>
@@ -40,10 +43,18 @@
         $(function() {
             $('#about-t2dgenes .sidebar .tab').on('click', function(e) {
                 var section = $(e.target).data('section');
+                console.log("section="+section);
                 $('.tab').removeClass('active');
                 $(e.target).addClass('active');
-                $('.section').hide();
-                $('.section[data-section="' + section + '"]').show();
+                $.ajax({
+                    cache:false,
+                    type:"get",
+                    url:"./"+section,
+                    async:true,
+                    success: function (data) {
+                       $("#t2dgeneContent").empty().html(data);
+                    }
+                });
             });
         });
     </script>
