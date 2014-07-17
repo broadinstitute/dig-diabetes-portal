@@ -2,11 +2,14 @@ package dport
 
 
 class GeneController {
+
     GeneManagementService geneManagementService
+
+    // return partial matches as Json for the purposes of the twitter typeahead handler
     def index() {
         String attemptedMatcher = params.q
         String partialMatches = geneManagementService.deliverPartialMatchesInJson(params.query,20)
-        String tester = "number of matches =${partialMatches} for string =${attemptedMatcher}"
-        render ("<html><body><h1>${tester}<h1><body></html>")
+        response.setContentType("application/json")
+        render ("${partialMatches}")
     }
 }

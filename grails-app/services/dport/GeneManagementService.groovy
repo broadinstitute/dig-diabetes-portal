@@ -7,13 +7,11 @@ class GeneManagementService {
 
     public List <String> deliverPartialMatches(String firstCharacters, int maximumMatches) {
         List <String> returnValue = []
-        println "Gene size deliverPartialMatches "
         if ((firstCharacters  !=  null) &&
             (firstCharacters.length() > 0))   {
             String upperCasedCharacters = firstCharacters.toUpperCase()
-            println "Gene size= ${Gene.findAll().size ()}"
             List <Gene> rawGeneRecords = Gene.findAll(
-                   "from Gene as b where b.name2 like '"+firstCharacters+"%' order by b.name2",
+                   "from Gene as b where b.name2 like '"+upperCasedCharacters+"%' order by b.name2",
                    [], [max: maximumMatches, offset: 0] )
             rawGeneRecords.each {  Gene gene ->
                 returnValue.add(gene.name2)
