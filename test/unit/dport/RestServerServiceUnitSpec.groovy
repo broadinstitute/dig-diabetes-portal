@@ -45,4 +45,16 @@ class RestServerServiceUnitSpec extends Specification {
     }
 
 
+
+
+    void "test retrieveGeneInfoByName"() {
+        when:
+        JSONObject jsonObject = service.retrieveGeneInfoByName("PANX1")
+        then:
+        assertNotNull jsonObject
+    }
+
+
+
+
 }

@@ -1,8 +1,10 @@
 package dport
 
+import org.codehaus.groovy.grails.web.json.JSONObject
 
 class GeneController {
 
+    RestServerService restServerService
     GeneManagementService geneManagementService
 
     // return partial matches as Json for the purposes of the twitter typeahead handler
@@ -14,7 +16,12 @@ class GeneController {
 
     def geneInfo() {
         String geneToStartWith = params.id
-        render (view: 'geneInfo', model:[geneToStartWith] )
+        JSONObject jsonObject =  restServerService.retrieveGeneInfoByName (geneToStartWith)
+        render (view: 'geneInfo', model:[gene_info:jsonObject['gene-info'],
+                                         show_gwas:1,
+                                         show_exchp: 1,
+                                         show_exseq: 1,
+                                         show_sigma: 0] )
     }
 
 
