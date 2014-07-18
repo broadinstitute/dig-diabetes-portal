@@ -22,7 +22,7 @@
 
          $('#gene-go').on('click', function() {
              var gene_symbol = $('#gene-input').val();
-             window.location.href = '/gene/' + gene_symbol;
+             window.location.href = '../gene/geneInfo/' + gene_symbol;
          });
 
          $('#variant-go').on('click', function() {

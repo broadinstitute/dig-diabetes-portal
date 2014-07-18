@@ -21,7 +21,7 @@ class GeneManagementServiceUnitSpec extends Specification {
         mockedGeneRecords << new Gene(name1: 'a', name2:'A')
         mockedGeneRecords << new Gene(name1: 'b', name2:'B')
         List <Gene> returnValue  = mockedGeneRecords.findAll{
-                "from Gene as b where b.name2 like '"+searchString+"%' order by b.name2" }
+                true }
         return  returnValue
     }
 

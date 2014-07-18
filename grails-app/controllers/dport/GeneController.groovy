@@ -11,4 +11,11 @@ class GeneController {
         response.setContentType("application/json")
         render ("${partialMatches}")
     }
+
+    def geneInfo() {
+        String geneToStartWith = params.id
+        render (view: 'geneInfo', model:[geneToStartWith] )
+    }
+
+
 }

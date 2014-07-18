@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><g:layoutTitle default="Grails"/></title>
-
+    %{--<title><g:layoutTitle default="Grails"/></title>--}%
+<title>${grailsApplication.config.site.title}</title>
 
     <r:require modules="core"/>
     <r:layoutResources/>

@@ -2,7 +2,7 @@ grails.servlet.version = "3.0" // Change depending on target container complianc
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
-grails.project.work.dir = "target/work"
+grails.project.work.dir = "target"
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
@@ -54,22 +54,41 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-
+        // all lifted from Bard
+//        build(":tomcat:$grailsVersion",
+//                ":release:2.0.3",
+//                ":rest-client-builder:1.0.2") {
+//            export = false
+//        }
+//        test(":spock:0.7") {
+//            exclude "spock-grails-support"
+//        }
+//        test ":codenarc:0.18.1"
+//        compile ":clover:3.1.10.1"
+//        compile ":cache:1.0.1"
 
         // plugins for the build system only
-        build ":tomcat:7.0.54"
+        build (":tomcat:7.0.54",
+                ":rest-client-builder:2.0.3") {
+            export = false
+        }
 
         // plugins for the compile step
         compile ":scaffolding:2.1.2"
         compile ':cache:1.1.7'
         compile ":asset-pipeline:1.8.11"
         compile ':resources:1.2.8'
+        compile ':rest-client-builder:2.0.3'
+        compile ":cache:1.0.1"
 
         // plugins needed at runtime but not for compilation
         runtime ":hibernate4:4.3.5.4" // or ":hibernate:3.6.10.16"
         runtime ":database-migration:1.4.0"
         runtime ":jquery:1.11.1"
         runtime ':resources:1.2.8'
+
+        test ":codenarc:0.18.1"
+        //compile ":clover:3.1.10.1"
 
 
         // Uncomment these to enable additional asset-pipeline capabilities
