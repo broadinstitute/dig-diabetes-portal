@@ -61,12 +61,15 @@
 
     <div class="separator"></div>
 
-            <g:render template="variationAcrossContinents" />
+    <g:render template="variationAcrossContinents" />
 
     <div class="separator"></div>
 
+     <g:render template="biologicalHypothesisTesting" />
 
-            <g:render template="biologicalHypothesisTesting" />
+     <div class="separator"></div>
+
+     <g:render template="findOutMore" />
 
 
         </div>

@@ -27,7 +27,7 @@
 
          $('#variant-go').on('click', function() {
              var variant_id = $('#variant-input').val();
-             window.location.href = '/variant/' + variant_id;
+             window.location.href = '../variant/variantInfo/' + variant_id;
          });
 
          $('#region-go').on('click', function() {

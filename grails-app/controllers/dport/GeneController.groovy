@@ -40,19 +40,6 @@ class GeneController {
             tableValues["COHORT"] = geneManagementService.cohortDetermination(chipKey, "exome chip")
             variationTable << tableValues
         }
-        // we need to process some of these data before sending them off to the client
-//        List  jsonArrayOriginVariation =  (grails.converters.deep.JSON.stringify(dataArray)jsonObject._13k_T2D_ORIGIN_VAR_TOTALS) ?: []
-//        List  jsonArrayExomeBasedVariation =  (jsonObject._13k_T2D_ORIGIN_VAR_TOTALS) ?: slurper.parseText("""
-//            [{"EU": {
-//                "COMMON": 0,
-//                "LOW_FREQUENCY": 0,
-//                "NS": 0,
-//                "RARE": 0,
-//                "TOTAL": 0,
-//            }}
-//        ]""".toString())
-//        List  jsonArrayOriginVariation =  jsonObject.getJSONArray(jsonObject._13k_T2D_ORIGIN_VAR_TOTALS)
-//        List  jsonArrayExomeBasedVariation = jsonObject.getJSONArray(jsonObject.EXCHP_T2D_VAR_TOTALS)
          render (view: 'geneInfo', model:[gene_info:jsonObject['gene-info'],
                                          show_gwas:1,
                                          show_exchp: 1,

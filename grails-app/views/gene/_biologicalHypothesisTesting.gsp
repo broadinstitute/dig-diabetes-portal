@@ -40,5 +40,4 @@
         </p>
     </div>
 
-    <div class="separator"></div>
 </g:if>
