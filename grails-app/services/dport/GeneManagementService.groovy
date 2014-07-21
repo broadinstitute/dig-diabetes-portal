@@ -89,4 +89,30 @@ class GeneManagementService {
     }
 
 
+    public String cohortDetermination(String abbreviation, String method) {
+        String returnValue = ""
+        switch ( abbreviation ){
+            case "AA":
+                returnValue = "African-Americans (${method})"
+                break;
+            case "EA":
+                returnValue = "East Asians (${method})"
+                break;
+            case "HS":
+                returnValue = "Hispanics (${method})"
+                break;
+            case "SA":
+                returnValue = "South Asians (${method})"
+                break;
+            case "EU":
+                returnValue = "Europeans (${method})"
+                break;
+            default:
+                returnValue = "${abbreviation} (${method})"
+                break;
+        }
+        return returnValue
+    }
+
+
 }

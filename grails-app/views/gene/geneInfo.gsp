@@ -11,7 +11,9 @@
 
 <div id="main">
 
+    <div class="container" >
 
+        <div class="gene-info-container" >
 
     <h1>
         <em><%=gene_info.ID%></em>
@@ -35,17 +37,40 @@
         </div>
     </g:if>
 
+    <script>
+         var geneInfo = {};
+         geneInfo.variationTable =  [] ;
+         <g:each in="${0..(variationTable.size()-1)}">
+         geneInfo.variationTable.push({"cohort":"${variationTable[it]["COHORT"]}",
+             "participants": "${variationTable[it]["NS"]}",
+             "variants": "${variationTable[it]["TOTAL"]}",
+             "common": "${variationTable[it]["COMMON"]}",
+             "lowfrequency": "${variationTable[it]["LOW_FREQUENCY"]}",
+             "rare": "${variationTable[it]["RARE"]}"
+         });
+         </g:each>
+
+    </script>
 
 
     <p><strong>Uniprot Summary:</strong> <%=gene_info.Function_description%></p>
 
     <div class="separator"></div>
 
-
-
     <g:render template="variantsAndAssociations" />
 
+    <div class="separator"></div>
 
+            <g:render template="variationAcrossContinents" />
+
+    <div class="separator"></div>
+
+
+            <g:render template="biologicalHypothesisTesting" />
+
+
+        </div>
+    </div>
 
 </div>
 
