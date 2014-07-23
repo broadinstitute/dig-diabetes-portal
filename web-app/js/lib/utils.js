@@ -11,6 +11,13 @@ var UTILS = {
             return v.CHROM + ':' + v.POS;
         }
     },
+    getVariantTitle: function(vDBSNP_ID,vCHROM,vPOS) {
+        if (vDBSNP_ID) {
+            return vDBSNP_ID;
+        } else {
+            return vCHROM + ':' + vPOS;
+        }
+    },
 
     get_highest_frequency: function(v) {
         var max = 0;
@@ -33,6 +40,22 @@ var UTILS = {
             return 'missense'
         }
         else if (v.MOST_DEL_SCORE == 3) {
+            return 'synonymous-coding'
+        }
+        // if MOST_DEL_SCORE is null, treat it as 4
+        else {
+            return 'non-coding';
+        }
+    },
+
+    getSimpleVariantsEffect: function(vMOST_DEL_SCORE) {
+        if (vMOST_DEL_SCORE == 1) {
+            return 'protein-truncating'
+        }
+        else if (vMOST_DEL_SCORE == 2) {
+            return 'missense'
+        }
+        else if (vMOST_DEL_SCORE == 3) {
             return 'synonymous-coding'
         }
         // if MOST_DEL_SCORE is null, treat it as 4
@@ -69,6 +92,28 @@ var UTILS = {
         return [pval, datatype];
     },
 
+    getLowestPValue: function(variantIN_EXCHP,
+                              variantEXCHP_T2D_P_value,
+                              variantIN_EXSEQ,
+                              variant_13k_T2D_P_EMMAX_FE_IV,
+                              variantIN_GWAS,
+                              variantGWAS_T2D_PVALUE) {
+        var pval = 1;
+        var datatype = '';
+        if (variantIN_EXCHP && variantEXCHP_T2D_P_value < pval) {
+            pval = variantEXCHP_T2D_P_value;
+            datatype = 'exchp';
+        }
+        if (variantIN_EXSEQ && variant_13k_T2D_P_EMMAX_FE_IV < pval) {
+            pval = variant_13k_T2D_P_EMMAX_FE_IV;
+            datatype = 'exseq';
+        }
+        if (variantIN_GWAS && variantGWAS_T2D_PVALUE < pval) {
+            pval = variantGWAS_T2D_PVALUE;
+            datatype = 'gwas';
+        }
+        return [pval, datatype];
+    },
     get_consequence_names: function(variant) {
         if (!variant.Consequence) return [];
         var keys = variant.Consequence.split(';');

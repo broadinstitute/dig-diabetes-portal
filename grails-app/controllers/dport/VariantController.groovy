@@ -1,16 +1,20 @@
 package dport
 import groovy.json.JsonSlurper
+import org.codehaus.groovy.grails.web.json.JSONObject
 
 class VariantController {
+    RestServerService   restServerService
 
     def index() { }
 
 
     def variantInfo() {
         def slurper = new JsonSlurper()
-//        String geneToStartWith = params.id
-//        JSONObject jsonObject =  restServerService.retrieveGeneInfoByName (geneToStartWith)
-//        List variationTable = []
+        String geneToStartWith = params.id
+
+       // JSONObject jsonObject =  restServerService.retrieveVariantInfoByName (geneToStartWith)
+        JSONObject jsonObject =  restServerService.retrieveVariantInfoByName (geneToStartWith)
+        List variationTable = []
 //        JSONObject exomeSequencingList =  jsonObject['gene-info']._13k_T2D_ORIGIN_VAR_TOTALS
 //        for (String sequenceKey in exomeSequencingList.keySet()){
 //            JSONObject exomeSequence = exomeSequencingList.getJSONObject(sequenceKey)
@@ -31,13 +35,12 @@ class VariantController {
 //            tableValues["COHORT"] = geneManagementService.cohortDetermination(chipKey, "exome chip")
 //            variationTable << tableValues
 //        }
-        render (view: 'variantInfo')
-//        , model:[gene_info:jsonObject['gene-info'],
-//                                         show_gwas:1,
-//                                         show_exchp: 1,
-//                                         show_exseq: 1,
-//                                         show_sigma: 0,
-//                                         variationTable: variationTable] )
+        render (view: 'variantInfo',
+                      model:[variant:jsonObject['variant-info'],
+                                         show_gwas:1,
+                                         show_exchp: 1,
+                                         show_exseq: 1,
+                                         show_sigma: 0] )
     }
 
 }

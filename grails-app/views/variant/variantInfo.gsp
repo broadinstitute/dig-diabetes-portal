@@ -13,16 +13,22 @@
 
     <div class="container" >
 
-        <div class="gene-info-container" >
+        <div class="variant-info-container" >
+            <div class="variant-info-view" >
 
-            %{--<h1>--}%
-                %{--<em><%=gene_info.ID%></em>--}%
-                %{--<a class="page-nav-link" href="#associations">Associations</a>--}%
-                %{--<a class="page-nav-link" href="#populations">Populations</a>--}%
-                %{--<a class="page-nav-link" href="#biology">Biology</a>--}%
-            %{--</h1>--}%
 
-            %{--<g:if test="(gene_info.GENE_SUMMARY_TOP)">--}%
+                <h1 id="variantTitle">
+                    <script>
+                        $('#variantTitle').append(UTILS.getVariantTitle("<%=variant.DBSNP_ID%>","<%=variant.CHROM%>","<%=variant.POS%>"));
+                    </script>
+                    <a class="page-nav-link" href="#associations">Associations</a>
+                    <a class="page-nav-link" href="#populations">Populations</a>
+                    <a class="page-nav-link" href="#biology">Biology</a>
+                </h1>
+
+                <g:render template="variantPageHeader" />
+
+                %{--<g:if test="(gene_info.GENE_SUMMARY_TOP)">--}%
                 %{--<div class="gene-summary">--}%
                     %{--<div class="title">Curated Summary</div>--}%
 
@@ -71,6 +77,7 @@
 
             %{--<g:render template="findOutMore" />--}%
 
+            </div>
 
         </div>
     </div>

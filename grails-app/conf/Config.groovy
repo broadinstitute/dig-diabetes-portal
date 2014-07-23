@@ -13,6 +13,7 @@
 
 site.version = 't2dgenes' // could be 'sigma' or 't2dgenes'
 site.title = 'Type 2 Diabetes Genetics'  // could be 'SIGMA T2D' or 'Type 2 Diabetes Genetics'
+server.URL = 'http://t2dgenetics.org/dev/rest/server/'
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
 

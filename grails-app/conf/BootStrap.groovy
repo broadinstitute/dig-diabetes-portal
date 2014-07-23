@@ -1,7 +1,9 @@
 import dport.Gene
+import dport.RestServerService
 
 class BootStrap {
     def grailsApplication
+    RestServerService restServerService
 
     def init = { servletContext ->
         // for the time being fill up our gene table locally. In the long run
@@ -33,6 +35,10 @@ class BootStrap {
             }
             println "Genes successfully loaded: ${counter}"
         }
+
+
+        // any services that need to be initialized should be referenced here
+        restServerService.initialize()
 
     }
     def destroy = {

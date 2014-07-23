@@ -14,6 +14,7 @@
     <div class="container" >
 
         <div class="gene-info-container" >
+            <div class="gene-info-view" >
 
     <h1>
         <em><%=gene_info.ID%></em>
@@ -71,7 +72,7 @@
 
      <g:render template="findOutMore" />
 
-
+            </div>
         </div>
     </div>
 
