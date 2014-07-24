@@ -8,6 +8,29 @@
 </head>
 
 <body>
+<script>
+    var variant;
+    $.ajax({
+        cache:false,
+        type:"get",
+        url:"../variantAjax/"+"<%=variantToSearch%>",
+        async:true,
+        success: function (data) {
+            fillTheFields(data) ;
+            console.log(' fields have been filled')
+        }
+    });
+    function fillTheFields (data)  {
+        variant =  data['variant'];
+        $('#variantTitle').append(UTILS.get_variant_title(variant));
+        $('#variantCharacterization').append(UTILS.getSimpleVariantsEffect(variant.MOST_DEL_SCORE));
+        $('#describingVariantAssociation').append(UTILS.variantInfoHeaderSentence(variant));
+        var pVal= UTILS.get_lowest_p_value(variant);
+        $('#variantPValue').append((parseFloat (pVal[0])).toPrecision(4));
+        $('#variantInfoGeneratingDataSet').append(pVal[1]);
+   }
+</script>
+
 
 <div id="main">
 
@@ -17,10 +40,8 @@
             <div class="variant-info-view" >
 
 
-                <h1 id="variantTitle">
-                    <script>
-                        $('#variantTitle').append(UTILS.getVariantTitle("<%=variant.DBSNP_ID%>","<%=variant.CHROM%>","<%=variant.POS%>"));
-                    </script>
+                <h1>
+                    <span id="variantTitle"></span>
                     <a class="page-nav-link" href="#associations">Associations</a>
                     <a class="page-nav-link" href="#populations">Populations</a>
                     <a class="page-nav-link" href="#biology">Biology</a>

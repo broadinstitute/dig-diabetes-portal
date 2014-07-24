@@ -11,15 +11,16 @@ var UTILS = {
             return v.CHROM + ':' + v.POS;
         }
     },
-    getVariantTitle: function(vDBSNP_ID,vCHROM,vPOS) {
-        if (vDBSNP_ID) {
-            return vDBSNP_ID;
+    variantInfoHeaderSentence: function (variant) {
+        var returnValue = "";
+        if (variant.IN_GENE) {
+            returnValue += "lies in the gene <em>" +variant.IN_GENE+ "</em>";
         } else {
-            return vCHROM + ':' + vPOS;
+            returnValue += "is nearest to the gene <em>" +variant.CLOSEST_GENE+ "</em>";
         }
+        return  returnValue;
     },
-
-    get_highest_frequency: function(v) {
+     get_highest_frequency: function(v) {
         var max = 0;
         var max_pop = '';
         _.each(['AA', 'EA', 'SA', 'EU', 'HS'], function(k) {
@@ -79,41 +80,19 @@ var UTILS = {
         var datatype = '';
         if (variant.IN_EXCHP && variant.EXCHP_T2D_P_value < pval) {
             pval = variant.EXCHP_T2D_P_value;
-            datatype = 'exchp';
+            datatype = 'exome chip';
         }
         if (variant.IN_EXSEQ && variant._13k_T2D_P_EMMAX_FE_IV < pval) {
             pval = variant._13k_T2D_P_EMMAX_FE_IV;
-            datatype = 'exseq';
+            datatype = 'exome sequencing';
         }
         if (variant.IN_GWAS && variant.GWAS_T2D_PVALUE < pval) {
             pval = variant.GWAS_T2D_PVALUE;
-            datatype = 'gwas';
+            datatype = 'GWAS';
         }
         return [pval, datatype];
     },
 
-    getLowestPValue: function(variantIN_EXCHP,
-                              variantEXCHP_T2D_P_value,
-                              variantIN_EXSEQ,
-                              variant_13k_T2D_P_EMMAX_FE_IV,
-                              variantIN_GWAS,
-                              variantGWAS_T2D_PVALUE) {
-        var pval = 1;
-        var datatype = '';
-        if (variantIN_EXCHP && variantEXCHP_T2D_P_value < pval) {
-            pval = variantEXCHP_T2D_P_value;
-            datatype = 'exchp';
-        }
-        if (variantIN_EXSEQ && variant_13k_T2D_P_EMMAX_FE_IV < pval) {
-            pval = variant_13k_T2D_P_EMMAX_FE_IV;
-            datatype = 'exseq';
-        }
-        if (variantIN_GWAS && variantGWAS_T2D_PVALUE < pval) {
-            pval = variantGWAS_T2D_PVALUE;
-            datatype = 'gwas';
-        }
-        return [pval, datatype];
-    },
     get_consequence_names: function(variant) {
         if (!variant.Consequence) return [];
         var keys = variant.Consequence.split(';');
@@ -128,6 +107,6 @@ var UTILS = {
             }
         });
         return names;
-    },
+    }
 
 };

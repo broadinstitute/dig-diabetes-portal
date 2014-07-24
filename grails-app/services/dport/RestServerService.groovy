@@ -212,25 +212,19 @@ class RestServerService {
     }
 
 
+    LinkedHashMap<String, String> convertJsonToMap (JSONObject jsonObject)  {
+        LinkedHashMap returnValue = [:]
+        for (String sequenceKey in jsonObject.keySet()){
+            def intermediateObject = jsonObject[sequenceKey]
+            if (intermediateObject) {
+                returnValue[sequenceKey] = intermediateObject.toString ()
+            } else {
+                returnValue[sequenceKey] = null
+            }
 
-//    JSONObject retrieveGeneInfoByName (String geneName) {
-//        JSONObject returnValue = null
-//        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
-//        String drivingJson = """{
-//"gene_symbol": "${geneName}",
-//"columns": ["ID", "CHROM", "BEG", "END", "Function_description", "_13k_T2D_VAR_TOTAL", "_13k_T2D_ORIGIN_VAR_TOTALS", "_13k_T2D_lof_NVAR", "_13k_T2D_lof_MINA_MINU_RET",
-//"_13k_T2D_lof_METABURDEN", "_13k_T2D_GWS_TOTAL", "_13k_T2D_NOM_TOTAL","_13k_T2D_lof_OBSA", "_13k_T2D_lof_OBSU", "EXCHP_T2D_VAR_TOTALS", "EXCHP_T2D_GWS_TOTAL", "EXCHP_T2D_NOM_TOTAL", "GWS_TRAITS",
-//"GWAS_T2D_GWS_TOTAL", "GWAS_T2D_NOM_TOTAL", "GWAS_T2D_VAR_TOTAL"],
-//"user_group": "ui"
-//}
-//""".toString()
-//        RestResponse response  = rest.post(GENE_INFO_URL)   {
-//            contentType "application/json"
-//            json drivingJson
-//        }
-//        returnValue =  response.json
-//        return returnValue
-//    }
+        }
+        return  returnValue
+    }
 
     JSONObject retrieveGeneInfoByName (String geneName) {
         JSONObject returnValue = null
