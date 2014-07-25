@@ -9,6 +9,25 @@ var UTILS = {
         }
         return inv;
     },
+    frequencyCharacterization: function (proportion, cutoffs){
+        var retVal = "";
+        if (proportion === 0) {
+            retVal += "unobserved" ;
+        }
+        else if (( proportion > 0) && ( proportion < 0)) {
+            retVal += "private";
+        }   // this is a strange conditional.  TODO is this really the right way to make this comparison?
+        else if (( proportion > cutoffs[0]) && ( proportion < cutoffs[1])) {
+            retVal += "rare";
+        }
+        else if (( proportion >= cutoffs[1] ) && ( proportion < cutoffs[2])) {
+            retVal += "low frequency" ;
+        }
+        else if (( proportion >= cutoffs[2] )) {
+            retVal += "common";
+        }
+        return retVal;
+    },
     get_variant_repr: function(v) {
         return v.CHROM + ':' + v.POS;
     },
@@ -180,25 +199,51 @@ var UTILS = {
 
             retVal += (proportion.toPrecision(3) + " percent of " + ethnicityFullName [i]);
             retVal += "(";
-            if (proportion === 0) {
-                retVal += "unobserved"
-            }
-            else if (( proportion > 0) && ( proportion < 0)) {
-                retVal += "private"
-            }   // this is a strange conditional.  TODO is this really the right way to make this comparison?
-            else if (( proportion > 0) && ( proportion < 0.005)) {
-                retVal += "rare"
-            }
-            else if (( proportion >= 0.005 ) && ( proportion < 0.05)) {
-                retVal += "low frequency"
-            }
-            else if (( proportion >= 0.05 )) {
-                retVal += "common"
-            }
+            retVal += UTILS.frequencyCharacterization(proportion,[0,0.005,0.05]);
             retVal += (")" +
                 "</li>");
         }
         return  retVal;
+    },
+    showPercentagesAcrossHeterozygousCarriers: function (variant, title) {
+        var retVal = "";
+        var heta  = parseFloat(variant["_13k_T2D_HETA"]) ;
+        var hetu  = parseFloat(variant["_13k_T2D_HETU"]) ;
+        retVal += ("<li>Number of people across datasets who carry one copy of " +title+ ": " + (heta+hetu) + "</li>");
+        retVal += ("<li>Number of these carriers who have type 2 diabetes: " + (heta) + "</li>");
+        retVal += ("<li>Number of people across datasets who carry one copy of " +title+ ": " + (hetu) + "</li>");
+        return  retVal;
+    },
+    showPercentagesAcrossHomozygousCarriers: function (variant, title) {
+        var retVal = "";
+        var homa  = parseFloat(variant["_13k_T2D_HOMA"]) ;
+        var homu  = parseFloat(variant["_13k_T2D_HOMU"]) ;
+        retVal += ("<li>Number of people across datasets who carry two copies of  " +title+ ": " + (homa+homu) + "</li>");
+        retVal += ("<li>Number of these carriers who have type 2 diabetes: " + (homa) + "</li>");
+        retVal += ("<li>Number of people across datasets who carry one copy of " +title+ ": " + (homu) + "</li>");
+        return  retVal;
+    },
+    eurocentricVariantCharacterization:  function (variant, title) {
+        var retVal = "";
+        var euroValue  = parseFloat(variant["EXCHP_T2D_MAF"]) ;
+        if (variant["EXCHP_T2D_P_value"]) {
+            retVal += ("<p>In exome chip data available on this portal, the minor allele frequency of "+title + " is "+
+                (euroValue*100)+ " percent in Europeans ("+UTILS.frequencyCharacterization(euroValue, [0.000001,0.005,0.05])+ ")");
+        }
+        return retVal;
+    },
+    sigmaVariantCharacterization:  function (variant, title) {
+        var retVal = "";
+        var euroValue  = parseFloat(variant["SIGMA_T2D_MAF"]) ;
+        if (variant["SIGMA_T2D_MAF"]) {
+            retVal += ("<p>The minor allele frequency of "+title + " in <em>SIGMA</em> sequencing data is: "+
+                (euroValue*100)+ " ("+UTILS.frequencyCharacterization(euroValue, [0.000001,0.005,0.05])+ ")");
+        } else {
+            retVal += ( "<p>This variant is not observed in SIGMA sequencing data.</p>");
+        }
+        return retVal;
     }
+
+
 
 };
