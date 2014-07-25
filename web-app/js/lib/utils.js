@@ -154,6 +154,51 @@ var UTILS = {
             retVal += noDataLine;
         }
         return retVal;
+    },
+    fillAssociationStatisticsLinkToTraitTable: function(variant,
+                                         vMap,
+                                         weHaveData,
+                                         dbsnp,
+                                         variantId) {
+        var retVal = "";
+        var iMap = UTILS.invertMap(vMap);
+        if (variant[iMap[weHaveData]]) {
+            retVal += ("<a class=\"boldlink\" href=\"/variant/\"" +
+                ((variant[iMap[weHaveData]]) ? (variant[iMap[dbsnp]]) : (variant[iMap[variantId]])) +
+                "/gwas\">Click here</a> to see a table of p-values for this variant across 25 traits studied in GWAS meta-analyses.");
+        }
+        return  retVal;
+    },
+    showPercentageAcrossEthnicities: function (variant) {
+        var retVal = "";
+        var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
+        var ethnicityFullName = ["African-Americans", "East Asians", "South Asians", "Europeans", "Hispanics"];
+        for (var i = 0; i < ethnicAbbreviation.length; i++) {
+            var stringProportion = variant['_13k_T2D_' + ethnicAbbreviation[i] + '_MAF'];
+            var proportion = parseFloat(stringProportion);
+            retVal += "<li>";
+
+            retVal += (proportion.toPrecision(3) + " percent of " + ethnicityFullName [i]);
+            retVal += "(";
+            if (proportion === 0) {
+                retVal += "unobserved"
+            }
+            else if (( proportion > 0) && ( proportion < 0)) {
+                retVal += "private"
+            }   // this is a strange conditional.  TODO is this really the right way to make this comparison?
+            else if (( proportion > 0) && ( proportion < 0.005)) {
+                retVal += "rare"
+            }
+            else if (( proportion >= 0.005 ) && ( proportion < 0.05)) {
+                retVal += "low frequency"
+            }
+            else if (( proportion >= 0.05 )) {
+                retVal += "common"
+            }
+            retVal += (")" +
+                "</li>");
+        }
+        return  retVal;
     }
 
 };

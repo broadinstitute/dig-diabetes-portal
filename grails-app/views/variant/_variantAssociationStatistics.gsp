@@ -18,7 +18,9 @@
 </g:if>
 
 
-
+ %{--NOTE --- according to the code Brett was reviewing the traits at this point. An inspection of the parameters--}%
+%{--does not show the traits being queried, however. My thought is that the following lines of code are vestigial,--}%
+%{--but I will leave them here for now until I'm completely sure of this conclusion.   ba, July 25, 2014--}%
 %{--<% if (variant.GWS_TRAITS) { %>--}%
 %{--<p>--}%
     %{--<%= UTILS.get_variant_title(variant) %> also reaches genome-wide significance in a meta-analysis of genome-wide association studies for the following traits:--}%
@@ -30,11 +32,10 @@
 %{--</ul>--}%
 %{--<% } %>--}%
 
-%{--<p>--}%
-    %{--<% if (variant.IN_GWAS) { %>--}%
-    %{--<a class="boldlink" href="/variant/<% if (variant.DBSNP_ID) {print(variant.DBSNP_ID)} else { print(variant.ID) } %>/gwas">Click here</a> to see a table of p-values for this variant across 25 traits studied in GWAS meta-analyses.--}%
-%{--<% } %>--}%
-%{--</p>--}%
+<p>
+    <span id="variantInfoAssociationStatisticsLinkToTraitTable"></span>
+
+</p>
 
 <div class="separator"></div>
 

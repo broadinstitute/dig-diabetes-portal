@@ -13,11 +13,6 @@ class VariantController {
         def slurper = new JsonSlurper()
         String geneToStartWith = params.id
 
-       // JSONObject jsonObject =  restServerService.retrieveVariantInfoByName (geneToStartWith)
-//        JSONObject jsonObject =  restServerService.retrieveVariantInfoByName (geneToStartWith)
-//        LinkedHashMap hashMap =  restServerService.convertJsonToMap (jsonObject['variant-info'])
-
-
         render (view: 'variantInfo',
                       model:[variantToSearch: geneToStartWith,
                                          show_gwas:1,
@@ -32,6 +27,17 @@ class VariantController {
         render(status:200, contentType:"application/json") {
             [variant:jsonObject['variant-info']]
         }
+    }
+    def gwas() {
+        def slurper = new JsonSlurper()
+        String variantToStartWith = params.id
+
+        render (view: 'gwasTable',
+                model:[variantToSearch: geneToStartWith,
+                       show_gwas:1,
+                       show_exchp: 1,
+                       show_exseq: 1,
+                       show_sigma: 0] )
     }
 
 }

@@ -90,8 +90,15 @@
                 "does not reach significance for association with T2D (either genome-wide or nominal)" ,
                 "<p>This variant is not in exome sequencing data available on this portal.</p>"
         ));
+        $('#variantInfoAssociationStatisticsLinkToTraitTable').append(UTILS.fillAssociationStatisticsLinkToTraitTable(variant,
+                cariantRec,
+                cariantRec.IN_GWAS,
+                cariantRec.DBSNP_ID,
+                cariantRec.ID
+        ));
+        $('#howCommonInExomeSequencing').append(UTILS.showPercentageAcrossEthnicities(variant));
 
-   }
+    }
 </script>
 
 
@@ -113,6 +120,8 @@
                 <g:render template="variantPageHeader" />
 
                 <g:render template="variantAssociationStatistics" />
+
+                <g:render template="howCommonIsVariant" />
 
                 %{--<g:if test="(gene_info.GENE_SUMMARY_TOP)">--}%
                 %{--<div class="gene-summary">--}%
