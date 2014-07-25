@@ -127,6 +127,9 @@
 
                 <g:render template="howCommonIsVariant" />
 
+                <g:render template="variantInfoBiology" />
+
+
                 %{--<g:if test="(gene_info.GENE_SUMMARY_TOP)">--}%
                 %{--<div class="gene-summary">--}%
                     %{--<div class="title">Curated Summary</div>--}%
