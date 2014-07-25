@@ -1,5 +1,14 @@
 var UTILS = {
-
+    invertMap: function (map){
+        var inv={};
+        var keys=Object.keys(map);
+        for(var i=0;i<keys.length;i++){
+            if (map[keys[i]]) {
+                inv[map[keys[i]]]=keys[i];
+            }
+        }
+        return inv;
+    },
     get_variant_repr: function(v) {
         return v.CHROM + ':' + v.POS;
     },
@@ -107,6 +116,44 @@ var UTILS = {
             }
         });
         return names;
+    },
+
+    fillAssociationsStatistics: function(variant,
+                                         vMap,
+                                         availableData,
+                                         pValue,
+                                         strongCutOff,
+                                         weakCutOff,
+                                         variantTitle,
+                                         textStrongLine1,
+                                         textStrongLine2,
+                                         textMediumLine,
+                                         textWeakLine,
+                                         noDataLine ) {
+        var retVal = "";
+        var iMap = UTILS.invertMap(vMap);
+        if (variant[iMap[availableData]]){
+            retVal +="<p>";
+            if (variant[iMap[pValue]] <= strongCutOff ) {
+                retVal += "<strong>" + textStrongLine1 +" "+ variantTitle  +" "+ textStrongLine2;
+            }
+            if  (variant[iMap[pValue]]  >  strongCutOff  && variant[iMap[pValue]] <=   weakCutOff) {
+                retVal += textMediumLine;
+            }
+            if  (variant[iMap[pValue]]  >  weakCutOff) {
+                retVal  += textMediumLine;
+            }
+            if (variant[iMap[pValue]] <= strongCutOff ) {
+                retVal += "</strong>" ;
+            }
+            retVal +="</p>"+
+                   "<ul>"+
+                    "<li>p-value from this analysis:"+variant[iMap[pValue]] + "</li>"+
+                    "</ul>";
+        } else {
+            retVal += noDataLine;
+        }
+        return retVal;
     }
 
 };
