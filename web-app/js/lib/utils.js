@@ -242,7 +242,78 @@ var UTILS = {
             retVal += ( "<p>This variant is not observed in SIGMA sequencing data.</p>");
         }
         return retVal;
+    },
+    variantInfoRadioChange: function (PolyPhen_SCORE, SIFT_SCORE, Condel_SCORE, MOST_DEL_SCORE, _13k_ANNOT_29_mammals_omega, Protein_position, Codons, Protein_change, PolyPhen_PRED, Consequence, Condel_PRED, SIFT_PRED) {
+        $('#annotationCodon').html(Codons);
+        $('#annotationProteinChange').html(Protein_change);
+        $('#ensembleSoAnnotation').html('<strong>' +Consequence+'</strong>');
+        if ((MOST_DEL_SCORE=== 1) || (MOST_DEL_SCORE=== "1")){
+            $('#variantTruncateProtein').html('<strong>yes</strong>');
+        } else {
+            $('#variantTruncateProtein').html('<strong>no</strong>');
+        }
+        $('#polyPhenPrediction').html('<strong>' +PolyPhen_PRED+'</strong>,<strong>'+PolyPhen_SCORE +'</strong>');
+        $('#siftPrediction').html('<strong>' +SIFT_PRED+'</strong>,<strong>'+SIFT_SCORE +'</strong>');
+        $('#condelPrediction').html('<strong>' +Condel_PRED+'</strong>,<strong>'+Condel_SCORE +'</strong>');
+        if ((MOST_DEL_SCORE=== 2) || (MOST_DEL_SCORE=== "2")) {
+            $('#mostDeleteScoreEquals2').css('display','block');
+        } else{
+            $('#mostDeleteScoreEquals2').css('display','none');
+        }
+
+    },
+    variantGenerateProteinsChooser:  function (variant, title) {
+        var retVal = "";
+        if (variant.MOST_DEL_SCORE && variant.MOST_DEL_SCORE < 4) {
+            retVal += "<h2><strong>What effect does " +title+ " have on the encoded protein?</strong></h2>\n"+
+            "<p>Choose one transcript below to see the predicted effect on the protein:</p>";
+            var allKeys = Object.keys(variant._13k_T2D_TRANSCRIPT_ANNOT);
+            for ( var  i=0 ; i<allKeys.length ; i++ ) {
+                var checked = (i==0) ? ' checked ' : '';
+                var annotation =variant._13k_T2D_TRANSCRIPT_ANNOT[allKeys[i]];
+                retVal += ("<div class=\"radio-inline\">\n" +
+                    "<label>\n"+
+                    "<input "+checked+" class='transcript-radio' type='radio' name='transcript_check' id='transcript-" +allKeys[i] +
+                    "' value='" +allKeys[i]+ "' onclick='UTILS.variantInfoRadioChange(" +
+                    "\""+annotation['PolyPhen_SCORE']+ "\"," +
+                    "\""+annotation['SIFT_SCORE']+ "\"," +
+                    "\""+annotation['Condel_SCORE']+ "\"," +
+                    "\""+annotation['MOST_DEL_SCORE']+ "\"," +
+                    "\""+annotation['_13k_ANNOT_29_mammals_omega']+ "\"," +
+                    "\""+annotation['Protein_position']+ "\"," +
+                    "\""+annotation['Codons']+ "\"," +
+                    "\""+annotation['Protein_change']+ "\"," +
+                    "\""+annotation['PolyPhen_PRED']+ "\"," +
+                    "\""+annotation['Consequence']+ "\"," +
+                    "\""+annotation['Condel_PRED']+ "\"," +
+                    "\""+annotation['SIFT_PRED']+ "\"" +
+                    ")' >\n"+
+                    allKeys[i]+"\n"+
+                    "</label>\n"+
+                    "</div>\n");
+             }
+            if (allKeys.length > 0){
+                var annotation =variant._13k_T2D_TRANSCRIPT_ANNOT[allKeys[0]];
+                UTILS.variantInfoRadioChange(annotation['PolyPhen_SCORE'],
+                annotation['SIFT_SCORE'],
+                annotation['Condel_SCORE'],
+                annotation['MOST_DEL_SCORE'],
+                annotation['_13k_ANNOT_29_mammals_omega'],
+                annotation['Protein_position'],
+                annotation['Codons'],
+                annotation['Protein_change'],
+                annotation['PolyPhen_PRED'],
+                annotation['Consequence'],
+                annotation['Condel_PRED'],
+                annotation['SIFT_PRED'] );
+
+            }
+
+
+        }
+        return retVal;
     }
+
 
 
 

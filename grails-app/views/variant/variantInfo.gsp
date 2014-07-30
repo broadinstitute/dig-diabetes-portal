@@ -4,7 +4,10 @@
     <meta name="layout" content="core"/>
     <r:require modules="core"/>
     <r:layoutResources/>
-
+    <%@ page import="dport.RestServerService" %>
+    <%
+        RestServerService   restServerService = grailsApplication.classLoader.loadClass('dport.RestServerService').newInstance()
+    %>
 </head>
 
 <body>
@@ -101,6 +104,7 @@
         $('#howCommonInHomozygousCarriers').append(UTILS.showPercentagesAcrossHomozygousCarriers(variant, "<%=variantToSearch%>"));
         $('#eurocentricVariantCharacterization').append(UTILS.eurocentricVariantCharacterization(variant, "<%=variantToSearch%>"));
         $('#sigmaVariantCharacterization').append(UTILS.sigmaVariantCharacterization(variant, "<%=variantToSearch%>"));
+        $('#effectOfVariantOnProtein').append(UTILS.variantGenerateProteinsChooser(variant, "<%=variantToSearch%>"));
 
     }
 </script>
@@ -127,7 +131,7 @@
 
                 <g:render template="howCommonIsVariant" />
 
-                <g:render template="variantInfoBiology" />
+                <g:render template="effectOfVariantOnProtein" />
 
 
                 %{--<g:if test="(gene_info.GENE_SUMMARY_TOP)">--}%

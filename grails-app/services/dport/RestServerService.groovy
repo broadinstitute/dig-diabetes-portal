@@ -283,7 +283,192 @@ class RestServerService {
 
 
 
+    static List<LinkedHashMap< String, String>> staticMessages = [[
+                      key: "transcript_ablation",
+                      name: "transcript ablation",
+                      description: "It deletes a region that includes a transcript feature."
+                  ],
+                  [
+                      key: "transcript_ablation" ,
+                      name: "transcript ablation" ,
+                      description: "It deletes a region that includes a transcript feature."
+                  ],
+                  [
+                      key: "splice_donor_variant",
+                      name: "splice donor variant",
+                      description: "It is a splice variant that changes the 2-base region at the 5' end of an intron."
+                  ],
+                  [
+                      key: "splice_acceptor_variant",
+                      name: "splice acceptor variant",
+                      description: "It is a splice variant that changes the 2-base region at the 3' end of an intron."
+                  ],
+                  [
+                      key: "stop_gained",
+                      name: "stop gained",
+                      description: "It is a sequence variant that introduces a stop codon, leading to a shortened transcript."
+                  ],
+                  [
+                      key: "frameshift_variant",
+                      name: "frameshift variant",
+                      description: "It causes a frameshift, disrupting the translational reading frame because the number of nucleotides inserted or deleted is not a multiple of three."
+                  ],
+                  [
+                      key: "stop_lost",
+                      name: "stop lost",
+                      description: "It is a sequence variant that changes a stop codon, resulting in an elongated transcript."
+                  ],
+                  [
+                      key: "initiator_codon_variant",
+                      name: "initiator codon variant",
+                      description: "It changes the first codon of a transcript."
+                  ],
+                  [
+                      key: "inframe_insertion",
+                      name: "inframe insertion",
+                      description: "It is an inframe non-synonymous variant that inserts bases into the coding sequence."
+                  ],
+                  [
+                      key: "inframe_deletion",
+                      name: "inframe deletion",
+                      description: "It is an inframe non-synonymous variant that deletes bases from the coding sequence."
+                  ],
+                  [
+                      key: "missense_variant",
+                      name: "missense variant",
+                      description: "It results in a different amino acid sequence but preserves length."
+                  ],
+                  [
+                      key: "transcript_amplification",
+                      name: "transript amplification",
+                      description: "It amplifies a region containing a transcript."
+                  ],
+                  [
+                      key: "splice_region_variant",
+                      name: "splice region variant",
+                      description: "It is a sequence variant in which a change has occurred within the region of a splice site, either within 1-3 bases of the exon or 3-8 bases of the intron."
+                  ],
+                  [
+                      key: "incomplete_terminal_codon_variant",
+                      name: "incomplete terminal codon variant",
+                      description: "It is a sequence variant that changes at least one base of the final codon of an incompletely annotated transcript."
+                  ],
+                  [
+                      key: "synonymous_variant",
+                      name: "synonymous variant",
+                      description: "It does not cause any change to the encoded amino acid."
+                  ],
+                  [
+                      key: "stop_retained_variant",
+                      name: "stop retained variant",
+                      description: "It changes the set of bases in a stop codon, but the stop codon itself remains functional."
+                  ],
+                  [
+                      key: "coding_sequence_variant",
+                      name: "coding sequence variant",
+                      description: "It changes the coding sequence."
+                  ],
+                  [
+                      key: "mature_miRNA_variant",
+                      name: "mature miRNA variant",
+                      description: "It is a transcript variant located with the sequence of the mature miRNA."
+                  ],
+                  [
+                      key: "5_prime_UTR_variant",
+                      name: "5' UTR variant",
+                      description: "It is found in the 5' untranslated region."
+                  ],
+                  [
+                      key: "3_prime_UTR_variant",
+                      name: "3' UTR variant",
+                      description: "It is found in the 3' untranslated region."
+                  ],
+                  [
+                      key: "non_coding_exon_variant",
+                      name: "non coding exon variant",
+                      description: "It changes the non-coding exon sequence."
+                  ],
+                  [
+                      key: "nc_transcript_variant",
+                      name: "nc transcript variant",
+                      description: "It is a transcript variant of a non-coding RNA."
+                  ],
+                  [
+                      key: "intron_variant",
+                      name: "intron variant",
+                      description: "It is a transcript variant occurring within an intron."
+                  ],
+                  [
+                      key: "NMD_transcript_variant",
+                      name: "nmd transcript variant",
+                      description: "It falls in a transcript that is the target of nonsense-mediated decay."
+                  ],
+                  [
+                      key: "upstream_gene_variant",
+                      name: "upstream gene variant",
+                      description: "It is located upstream (5') of the gene."
+                  ],
+                  [
+                      key: "downstream_gene_variant",
+                      name: "downstream gene variant",
+                      description: "It is located downstream (3') of the gene."
+                  ],
+                  [
+                      key: "TFBS_ablation",
+                      name: "tfbs ablation",
+                      description: "It deletes a region that includes a transcription factor binding site."
+                  ],
+                  [
+                      key: "TFBS_amplification",
+                      name: "tfbs amplification",
+                      description: "It amplifies a region that includes a transcription factor binding site."
+                  ],
+                  [
+                      key: "TF_binding_site_variant",
+                      name: "tf binding site variant",
+                      description: "It is located within a transcription factor binding site."
+                  ],
+                  [
+                      key: "regulatory_region_variant",
+                      name: "regulatory region variant",
+                      description: "It is located within a regulatory region."
+                  ],
+                  [
+                      key: "regulatory_region_ablation",
+                      name: "regulatory region ablation",
+                      description: "It deletes a regulatory region."
+                  ],
+                  [
+                      key: "regulatory_region_amplification",
+                      name: "regulatory region amplification",
+                      description: "It amplifies a regulatory region."
+                  ],
+                  [
+                      key: "feature_elongation",
+                      name: "feature elongation",
+                      description: "It causes the extension of a genomic feature with regard to the reference sequence."
+                  ],
+                  [
+                      key: "feature_truncation",
+                      name: "feature truncation",
+                      description: "It causes the truncation of a genomic feature with regard to the reference sequence."
+                  ],
+                  [
+                      key:"intergenic_variant",
+                              name: "intergenic variant",
+                              description:"It is located in the intergenic region(between genes)."
+                  ]];
 
+
+
+    public String retrieveStaticField(String keyToMatch) {
+        LinkedHashMap< String, String> returnValue
+        LinkedHashMap< String, String> lookUp =  staticMessages.find{it.key=="featre_elongation"}
+        if (lookUp) {
+            returnValue =  lookUp
+        }
+        return returnValue
+    }
 
 
 }
