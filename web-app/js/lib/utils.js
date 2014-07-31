@@ -244,10 +244,11 @@ var UTILS = {
         return retVal;
     },
     variantInfoRadioChange: function (PolyPhen_SCORE, SIFT_SCORE, Condel_SCORE, MOST_DEL_SCORE, _13k_ANNOT_29_mammals_omega, Protein_position, Codons, Protein_change, PolyPhen_PRED, Consequence, Condel_PRED, SIFT_PRED) {
+        var delScore = parseInt(MOST_DEL_SCORE);
         $('#annotationCodon').html(Codons);
         $('#annotationProteinChange').html(Protein_change);
         $('#ensembleSoAnnotation').html('<strong>' +Consequence+'</strong>');
-        if ((MOST_DEL_SCORE=== 1) || (MOST_DEL_SCORE=== "1")){
+        if (delScore=== 1){
             $('#variantTruncateProtein').html('<strong>yes</strong>');
         } else {
             $('#variantTruncateProtein').html('<strong>no</strong>');
@@ -255,10 +256,17 @@ var UTILS = {
         $('#polyPhenPrediction').html('<strong>' +PolyPhen_PRED+'</strong>,<strong>'+PolyPhen_SCORE +'</strong>');
         $('#siftPrediction').html('<strong>' +SIFT_PRED+'</strong>,<strong>'+SIFT_SCORE +'</strong>');
         $('#condelPrediction').html('<strong>' +Condel_PRED+'</strong>,<strong>'+Condel_SCORE +'</strong>');
-        if ((MOST_DEL_SCORE=== 2) || (MOST_DEL_SCORE=== "2")) {
+        if (delScore===  2)  {
             $('#mostDeleteScoreEquals2').css('display','block');
         } else{
             $('#mostDeleteScoreEquals2').css('display','none');
+        }
+        if (delScore<4) {
+            $('#variationInfoEncodedProtein').css('display','block');
+            $('#puntOnNoncodingVariant').css('display','none');
+        } else{
+            $('#variationInfoEncodedProtein').css('display','none');
+            $('#puntOnNoncodingVariant').css('display','block');
         }
 
     },

@@ -6,7 +6,7 @@
 
 %{--Note:  there is this goofy switch  if (annotation.MOST_DEL_SCORE < 4).  Do I need to deal with this?   --}%
 
-<div class="transcript-annotation"  style="display:block;">
+<div id="variationInfoEncodedProtein" class="transcript-annotation"  style="display:block;">
     <p>Codon change: <span id="annotationCodon"></span> </p>
     %{--<%=annotation.Codons%>--}%
     <p>Protein change: <span id="annotationProteinChange"></span></p>
@@ -76,8 +76,14 @@
     at any given position in its sequence. <strong>Condel</strong> combines the weighted averages for several such algorithms
     (including but not limited to PolyPhen-2 and SIFT) for a consensus prediction.
     </p>
-    </div></div>
+    </div>
 </div>
+<p>To learn what these predictions and scores mean, <a href="">click here</a>.</p>
+</div>
+<span id="puntOnNoncodingVariant">
+    <h2><strong>What is the biological impact of <%=title%>?</strong></h2>
+    <p>This variant is non-coding. Annotation coming soon.</p>
+</span>
 
 
 

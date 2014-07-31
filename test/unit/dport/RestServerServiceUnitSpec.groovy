@@ -54,6 +54,48 @@ class RestServerServiceUnitSpec extends Specification {
         assertNotNull jsonObject
     }
 
+    void "test retrieveVariantInfoByName"() {
+        when:
+        JSONObject jsonObject = service.retrieveVariantInfoByName("rs13266634")
+        then:
+        assertNotNull jsonObject
+    }
+
+
+    void "test searchVariantInfoByName"() {
+        when:
+        JSONObject jsonObject = service.searchVariantInfoByName("rs13266634")
+        then:
+        assertNotNull jsonObject
+    }
+
+
+    void "test retrieveGenomicRegionByName"() {
+        when:
+        JSONObject jsonObject = service.searchGenomicRegionByName("junk")
+        then:
+        assertNotNull jsonObject
+    }
+
+
+    void "test retrieveGenomicRegionBySpecifiedRegion"() {
+        when:
+        JSONObject jsonObject = service.searchGenomicRegionBySpecifiedRegion(9,21940000,22190000)
+        then:
+        assertNotNull jsonObject
+    }
+
+    void "test retrieveGenomicRegionAsSpecifiedByUsers"() {
+        when:
+        JSONObject jsonObject = service.searchGenomicRegionAsSpecifiedByUsers("chr9:21,940,000-22,190,000")
+        then:
+        assertNotNull jsonObject
+    }
+
+
+
+
+
 
 
 

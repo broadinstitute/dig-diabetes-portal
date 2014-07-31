@@ -167,7 +167,42 @@ class RestServerService {
         }
     }
 
+    /***
+     * The point is to extract the relevant numbers from a string that looks something like this:
+     *      String s="chr19:21,940,000-22,190,000"
+     * @param incoming
+     * @return
+     */
+    private LinkedHashMap<String, Integer> extractNumbersWeNeed (String incoming)  {
+        LinkedHashMap<String, Integer> returnValue = [:]
 
+        String commasRemoved=incoming.replace(/,/,"")
+        java.util.regex.Matcher chromosome = commasRemoved =~ /chr\d*/
+        if ( chromosome) {
+            java.util.regex.Matcher chromosomeNumberString = chromosome[0] =~ /\d+/
+            if (chromosomeNumberString) {
+                int  chromosomeNumber = Integer.parseInt(chromosomeNumberString[0])
+                returnValue ["chromosomeNumber"]  = chromosomeNumber
+            }
+        }
+        java.util.regex.Matcher  startExtent = commasRemoved =~ /:\d*/
+        if (startExtent){
+            java.util.regex.Matcher startExtentString = startExtent[0] =~ /\d+/
+            if (startExtentString)  {
+                int startExtentNumber = Integer.parseInt(startExtentString[0])
+                returnValue ["startExtent"]  = startExtentNumber
+            }
+        }
+        java.util.regex.Matcher  endExtent = commasRemoved =~ /-\d*/
+        if (endExtent){
+            java.util.regex.Matcher endExtentString = endExtent[0] =~ /\d+/
+            if (endExtentString)  {
+                int endExtentNumber = Integer.parseInt(endExtentString[0])
+                returnValue ["endExtent"]  = endExtentNumber
+            }
+        }
+        return  returnValue
+    }
 
 
 
@@ -270,6 +305,69 @@ class RestServerService {
 "variant_id": "${variantId}",
 "user_group": "ui",
 "filters": []
+"columns": [${"\""+VARIANT_SEARCH_COLUMNS.join("\",\"")+"\""}]
+}
+""".toString()
+        RestResponse response  = rest.post(VARIANT_SEARCH_URL)   {
+            contentType "application/json"
+            json drivingJson
+        }
+        returnValue =  response.json
+        return returnValue
+    }
+
+
+
+
+    JSONObject searchGenomicRegionBySpecifiedRegion (Integer chromosome,
+                                                     Integer beginSearch,
+                                                     Integer endSearch) {
+        JSONObject returnValue = null
+        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
+        String drivingJson = """{
+"user_group": "ui",
+"filters": [
+{ "filter_type": "STRING", "operand": "CHROM",  "operator": "EQ","value": "${chromosome}"  },
+{"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": ${beginSearch},
+{"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": ${endSearch} }
+]
+"columns": [${"\""+VARIANT_SEARCH_COLUMNS.join("\",\"")+"\""}]
+}
+""".toString()
+        RestResponse response  = rest.post(VARIANT_SEARCH_URL)   {
+            contentType "application/json"
+            json drivingJson
+        }
+        returnValue =  response.json
+        return returnValue
+    }
+
+    //("chr9:21,940,000-22,190,000")
+    JSONObject searchGenomicRegionAsSpecifiedByUsers(String userSpecifiedString) {
+        JSONObject returnValue = null
+        LinkedHashMap<String, Integer> ourNumbers = extractNumbersWeNeed(userSpecifiedString)
+        if (ourNumbers.containsKey("chromosomeNumber") &&
+                ourNumbers.containsKey("startExtent") &&
+                ourNumbers.containsKey("endExtent")) {
+            returnValue = searchGenomicRegionBySpecifiedRegion(ourNumbers["chromosomeNumber"],
+                    ourNumbers["startExtent"],
+                    ourNumbers["endExtent"])
+        }
+        return returnValue
+    }
+
+
+
+    JSONObject searchGenomicRegionByName (String genomicRegion) {
+        JSONObject returnValue = null
+        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
+        String drivingJson = """{
+"user_group": "ui",
+"filters": [
+{ "filter_type": "STRING", "operand": "CHROM",  "operator": "EQ","value": "9"  },
+{"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": 21940000},
+{"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": 22190000 }
+]
 "columns": [${"\""+VARIANT_SEARCH_COLUMNS.join("\",\"")+"\""}]
 }
 """.toString()

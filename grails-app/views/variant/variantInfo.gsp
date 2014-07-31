@@ -133,6 +133,8 @@
 
                 <g:render template="effectOfVariantOnProtein" />
 
+                <g:render template="findOutMore" />
+
 
                 %{--<g:if test="(gene_info.GENE_SUMMARY_TOP)">--}%
                 %{--<div class="gene-summary">--}%
