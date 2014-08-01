@@ -1,6 +1,7 @@
 <p><em>For variants that do not reach significance, odds ratios may be unreliable.</em></p>
 
-<table class="table table-striped basictable">
+
+<table id="variantTable" class="table table-striped basictable">
     <thead>
         <tr>
 <g:if test="${show_gene}">

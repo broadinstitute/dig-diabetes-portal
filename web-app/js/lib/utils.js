@@ -490,7 +490,6 @@ var UTILS = {
             }
 
             retVal += "</tr>"
-            if (i>25) {break;}
         }
     return retVal;
 }
