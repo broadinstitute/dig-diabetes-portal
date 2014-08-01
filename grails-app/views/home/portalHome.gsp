@@ -32,7 +32,7 @@
 
          $('#region-go').on('click', function() {
              var region_str = $('#region-input').val();
-             window.location.href = '/region/' + region_str;
+             window.location.href = '../region/regionInfo/' + region_str;
          });
 
          $('#trait-go').on('click', function() {

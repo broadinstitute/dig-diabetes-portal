@@ -135,56 +135,6 @@
 
                 <g:render template="findOutMore" />
 
-
-                %{--<g:if test="(gene_info.GENE_SUMMARY_TOP)">--}%
-                %{--<div class="gene-summary">--}%
-                    %{--<div class="title">Curated Summary</div>--}%
-
-                    %{--<div class="top">--}%
-                        %{--<%=gene_info.GENE_SUMMARY_TOP%>--}%
-                    %{--</div>--}%
-
-                    %{--<div class="bottom ishidden" style="display: none;">--}%
-                        %{--<%=gene_info.GENE_SUMMARY_BOTTOM%>--}%
-                    %{--</div>--}%
-                    %{--<a class="boldlink" id="gene-summary-expand">click to expand</a>--}%
-                %{--</div>--}%
-            %{--</g:if>--}%
-
-            %{--<script>--}%
-                %{--var geneInfo = {};--}%
-                %{--geneInfo.variationTable =  [] ;--}%
-                %{--<g:each in="${0..(variationTable.size()-1)}">--}%
-                %{--geneInfo.variationTable.push({"cohort":"${variationTable[it]["COHORT"]}",--}%
-                    %{--"participants": "${variationTable[it]["NS"]}",--}%
-                    %{--"variants": "${variationTable[it]["TOTAL"]}",--}%
-                    %{--"common": "${variationTable[it]["COMMON"]}",--}%
-                    %{--"lowfrequency": "${variationTable[it]["LOW_FREQUENCY"]}",--}%
-                    %{--"rare": "${variationTable[it]["RARE"]}"--}%
-                %{--});--}%
-                %{--</g:each>--}%
-
-            %{--</script>--}%
-
-
-            %{--<p><strong>Uniprot Summary:</strong> <%=gene_info.Function_description%></p>--}%
-
-            %{--<div class="separator"></div>--}%
-
-            %{--<g:render template="variantsAndAssociations" />--}%
-
-            %{--<div class="separator"></div>--}%
-
-            %{--<g:render template="variationAcrossContinents" />--}%
-
-            %{--<div class="separator"></div>--}%
-
-            %{--<g:render template="biologicalHypothesisTesting" />--}%
-
-            %{--<div class="separator"></div>--}%
-
-            %{--<g:render template="findOutMore" />--}%
-
             </div>
 
         </div>

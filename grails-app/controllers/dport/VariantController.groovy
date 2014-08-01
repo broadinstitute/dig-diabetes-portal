@@ -1,5 +1,4 @@
 package dport
-
 import groovy.json.JsonSlurper
 import org.codehaus.groovy.grails.web.json.JSONObject
 
@@ -10,22 +9,25 @@ class VariantController {
 
 
     def variantInfo() {
-        def slurper = new JsonSlurper()
-        String geneToStartWith = params.id
+        String variantToStartWith = params.id
+        if (variantToStartWith) {
+            render (view: 'variantInfo',
+                    model:[variantToSearch: variantToStartWith.trim(),
+                           show_gwas:1,
+                           show_exchp: 1,
+                           show_exseq: 1,
+                           show_sigma: 0] )
 
-        render (view: 'variantInfo',
-                      model:[variantToSearch: geneToStartWith,
-                                         show_gwas:1,
-                                         show_exchp: 1,
-                                         show_exseq: 1,
-                                         show_sigma: 0] )
-    }
+        }
+   }
     def variantAjax() {
-        String geneToStartWith = params.id
+        String variantToStartWith = params.id
+        if (variantToStartWith)      {
+            JSONObject jsonObject =  restServerService.retrieveVariantInfoByName (variantToStartWith.trim())
+            render(status:200, contentType:"application/json") {
+                [variant:jsonObject['variant-info']]
+            }
 
-        JSONObject jsonObject =  restServerService.retrieveVariantInfoByName (geneToStartWith)
-        render(status:200, contentType:"application/json") {
-            [variant:jsonObject['variant-info']]
         }
     }
     def gwas() {

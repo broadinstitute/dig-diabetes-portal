@@ -62,14 +62,6 @@ class RestServerServiceUnitSpec extends Specification {
     }
 
 
-    void "test searchVariantInfoByName"() {
-        when:
-        JSONObject jsonObject = service.searchVariantInfoByName("rs13266634")
-        then:
-        assertNotNull jsonObject
-    }
-
-
     void "test retrieveGenomicRegionByName"() {
         when:
         JSONObject jsonObject = service.searchGenomicRegionByName("junk")

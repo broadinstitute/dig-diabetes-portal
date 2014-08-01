@@ -240,7 +240,9 @@ class RestServerService {
             contentType "application/json"
             json jsonString
         }
-        returnValue =  response.json
+        if (response.responseEntity.statusCode.value == 200) {
+            returnValue =  response.json
+        }
         return returnValue
     }
 
@@ -272,7 +274,9 @@ class RestServerService {
             contentType "application/json"
             json drivingJson
         }
-        returnValue =  response.json
+        if (response.responseEntity.statusCode.value == 200) {
+            returnValue =  response.json
+        }
         return returnValue
     }
 
@@ -291,28 +295,9 @@ class RestServerService {
             contentType "application/json"
             json drivingJson
         }
-        returnValue =  response.json
-        return returnValue
-    }
-
-
-
-
-    JSONObject searchVariantInfoByName (String variantId) {
-        JSONObject returnValue = null
-        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
-        String drivingJson = """{
-"variant_id": "${variantId}",
-"user_group": "ui",
-"filters": []
-"columns": [${"\""+VARIANT_SEARCH_COLUMNS.join("\",\"")+"\""}]
-}
-""".toString()
-        RestResponse response  = rest.post(VARIANT_SEARCH_URL)   {
-            contentType "application/json"
-            json drivingJson
+        if (response.responseEntity.statusCode.value == 200) {
+            returnValue =  response.json
         }
-        returnValue =  response.json
         return returnValue
     }
 
@@ -328,9 +313,9 @@ class RestServerService {
 "user_group": "ui",
 "filters": [
 { "filter_type": "STRING", "operand": "CHROM",  "operator": "EQ","value": "${chromosome}"  },
-{"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": ${beginSearch},
+{"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": ${beginSearch} },
 {"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": ${endSearch} }
-]
+],
 "columns": [${"\""+VARIANT_SEARCH_COLUMNS.join("\",\"")+"\""}]
 }
 """.toString()
@@ -338,7 +323,9 @@ class RestServerService {
             contentType "application/json"
             json drivingJson
         }
-        returnValue =  response.json
+        if (response.responseEntity.statusCode.value == 200) {
+            returnValue =  response.json
+        }
         return returnValue
     }
 
@@ -367,7 +354,7 @@ class RestServerService {
 { "filter_type": "STRING", "operand": "CHROM",  "operator": "EQ","value": "9"  },
 {"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": 21940000},
 {"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": 22190000 }
-]
+],
 "columns": [${"\""+VARIANT_SEARCH_COLUMNS.join("\",\"")+"\""}]
 }
 """.toString()
@@ -375,7 +362,9 @@ class RestServerService {
             contentType "application/json"
             json drivingJson
         }
-        returnValue =  response.json
+        if (response.responseEntity.statusCode.value == 200) {
+            returnValue =  response.json
+        }
         return returnValue
     }
 

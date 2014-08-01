@@ -9,6 +9,10 @@ var UTILS = {
         }
         return inv;
     },
+    realNumberFormatter:function(incoming){
+       var value=parseFloat (incoming);
+        return value.toPrecision(3);
+    },
     frequencyCharacterization: function (proportion, cutoffs){
         var retVal = "";
         if (proportion === 0) {
@@ -320,7 +324,177 @@ var UTILS = {
 
         }
         return retVal;
-    }
+    },
+    determineHighestFrequencyEthnicity: function (variant) {
+        var highestValue = 0;
+        var winningEthnicity = 0;
+        var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
+        for (var i = 0; i < ethnicAbbreviation.length; i++) {
+            var stringValue = variant['_13k_T2D_' + ethnicAbbreviation[i] + '_MAF'];
+            var realValue = parseFloat(stringValue);
+            if (i==0){
+                highestValue = realValue;
+                winningEthnicity =  ethnicAbbreviation[i];
+            } else {
+                if (realValue > highestValue) {
+                    highestValue = realValue;
+                    winningEthnicity =  ethnicAbbreviation[i];
+                }
+            }
+        }
+        return  {highestFrequency:highestValue,
+                 populationWithHighestFrequency:winningEthnicity};
+    },
+
+    fillCollectedVariantsTable:  function ( fullJson, show_gene, show_sigma, show_exseq, show_exchp ) {
+       var retVal = "";
+       var vRec = fullJson.variants;
+        for ( var i=0 ; i<vRec.length ; i++ )    {
+            retVal += "<tr>"
+
+            // nearest gene
+            if (show_gene) {
+                retVal += "<td><a href='../../gene/geneInfo/"+vRec[i].CLOSEST_GENE+"' class='boldlink'>"+vRec[i].CLOSEST_GENE+"</td>";
+            }
+
+            // variant
+            if (vRec[i].ID) {
+                retVal += "<td><a href='../../variant/variantInfo/"+vRec[i].ID+"' class='boldlink'>"+vRec[i].CHROM+ ":" +vRec[i].POS+"</td>";
+            } else {
+                retVal += "<td></td>"
+            }
+            // rsid (DB SNP)
+            if (vRec[i].DBSNP_ID) {
+                retVal += "<td>"+vRec[i].DBSNP_ID+"</td>" ;
+            } else {
+                retVal += "<td></td>";
+            }
+
+            // protein change TODO: I don't know what fields should be filled in here.  Currently seems to always be empty
+            retVal += "<td></td>";
+
+            // effect on protein
+            if (vRec[i].Consequence) {
+                retVal += "<td>"+vRec[i].Consequence+"</td>" ;
+            } else {
+                retVal += "<td></td>";
+            }
+
+            if (show_sigma) {
+
+                // Source
+                if (vRec[i].SIGMA_SOURCE)  {
+                    retVal += "<td>" +vRec[i].SIGMA_SOURCE+"</td>";
+                } else {
+                    retVal += "<td></td>";
+                }
+
+                // P value
+                if (vRec[i].SIGMA_T2D_P)  {
+                    retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_P)+"</td>";
+                } else {
+                    retVal += "<td></td>";
+                }
+
+                // odds ratio
+                if (vRec[i].SIGMA_T2D_OR)  {
+                    retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_OR)+"</td>";
+                } else {
+                    retVal += "<td></td>";
+                }
+
+                // Case-control
+                if ((vRec[i].SIGMA_T2D_MINA) && (vRec[i].SIGMA_T2D_MINU))  {
+                    retVal += "<td>" +vRec[i].SIGMA_T2D_MINA + "/" +vRec[i].SIGMA_T2D_MINU+"</td>";
+                } else {
+                    retVal += "<td></td>";
+                }
+
+                // P value
+                if (vRec[i].SIGMA_T2D_MAF)  {
+                    retVal += "<td>" +vRec[i].SIGMA_T2D_MAF+"</td>";
+                } else {
+                    retVal += "<td></td>";
+                }
+
+            }
+            if (show_exseq) {
+
+                var highFreq = UTILS.determineHighestFrequencyEthnicity(vRec[i]);
+
+                // P value
+                if (vRec[i].GWAS_T2D_PVALUE)  {
+                    retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].GWAS_T2D_PVALUE)+"</td>";
+                } else {
+                    retVal += "<td></td>";
+                }
+
+                // odds ratio
+                if (vRec[i]._13k_T2D_OR_WALD_DOS_FE_IV)  {
+                    retVal += "<td>" +UTILS.realNumberFormatter(vRec[i]._13k_T2D_OR_WALD_DOS_FE_IV)+"</td>";
+                } else {
+                    retVal += "<td></td>";
+                }
+
+                // case/control
+                if ((vRec[i]._13k_T2D_MINA) && (vRec[i]._13k_T2D_MINU))  {
+                    retVal += "<td>" +vRec[i]._13k_T2D_MINA + "/" +vRec[i]._13k_T2D_MINU+"</td>";
+                } else {
+                    retVal += "<td></td>";
+                }
+
+                // highest frequency
+                if (highFreq.highestFrequency)  {
+                    retVal += "<td>" +highFreq.highestFrequency+"</td>";
+                } else {
+                    retVal += "<td></td>";
+                }
+
+                // P value
+                if (highFreq.populationWithHighestFrequency)  {
+                    retVal += "<td>" +highFreq.populationWithHighestFrequency+"</td>";
+                } else {
+                    retVal += "<td></td>";
+                }
+
+            }
+
+            if (show_exchp) {
+
+                var highFreq = UTILS.determineHighestFrequencyEthnicity(vRec[i]);
+
+                // P value
+                if (vRec[i].EXCHP_T2D_P_value)  {
+                    retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].EXCHP_T2D_P_value)+"</td>";
+                } else {
+                    retVal += "<td></td>";
+                }
+
+                // odds ratio  TODO: I don't know what value this maps to!
+                retVal += "<td></td>";
+
+            }
+
+            // P value TODO:  Referenced above as well. What's going on?
+            if (vRec[i].GWAS_T2D_PVALUE)  {
+                retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].GWAS_T2D_PVALUE)+"</td>";
+            } else {
+                retVal += "<td></td>";
+            }
+
+            // odds ratio
+            if (vRec[i].GWAS_T2D_OR)  {
+                retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].GWAS_T2D_OR)+"</td>";
+            } else {
+                retVal += "<td></td>";
+            }
+
+            retVal += "</tr>"
+            if (i>25) {break;}
+        }
+    return retVal;
+}
+
 
 
 

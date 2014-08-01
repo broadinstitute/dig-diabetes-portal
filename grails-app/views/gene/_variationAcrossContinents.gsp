@@ -19,7 +19,7 @@
         <tr>
             <th>cohort</th>
             <th>participants</th>
-            <th>total variants</th>                                                                                            are
+            <th>total variants</th>
             <th>common</th>
             <th>low-frequency</th>
             <th>rare</th>
