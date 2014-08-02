@@ -107,7 +107,7 @@
                         </h2>
                     </div>
                     <div class="col-sm-3" style="padding-top: 40px; text-align: right;">
-                        <a href="/variantsearch" class="btn btn-primary btn-lg">Go!</a>
+                        <a href="../variantSearch/variantSearch" class="btn btn-primary btn-lg">Go!</a>
                     </div>
                 </div>
                 <h2>

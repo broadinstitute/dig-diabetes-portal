@@ -28,3 +28,8 @@
 
 # "temporary" build files
 /target
+ 
+#Intelligent files
+*.iws
+*.ipr
+*.iml
