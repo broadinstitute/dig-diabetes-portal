@@ -1,4 +1,9 @@
 var UTILS = {
+    /***
+     * General-purpose utility that JavaScript ought to have.
+     * @param map
+     * @returns {{}}
+     */
     invertMap: function (map){
         var inv={};
         var keys=Object.keys(map);
@@ -8,6 +13,24 @@ var UTILS = {
             }
         }
         return inv;
+    },
+    /***
+     * One of those things JavaScript ought to have. The only warning-- these maps must share no keys Or
+     * else to lose  values
+     * @param workingMap
+     * @param mapFromWhichWeExtract
+     * @returns Resulting concatenated map, though this is also available through the first input parameter
+     */
+    concatMap: function (workingMap,mapFromWhichWeExtract){
+        if ( typeof(workingMap)=== "undefined") {
+            workingMap = {};
+        }
+        if (mapFromWhichWeExtract)
+        var keys=Object.keys(mapFromWhichWeExtract);
+        for(var i=0;i<keys.length;i++) {
+            workingMap[keys[i]] = mapFromWhichWeExtract [keys[i]];
+        }
+        return workingMap;
     },
     realNumberFormatter:function(incoming){
        var value=parseFloat (incoming);
@@ -492,7 +515,91 @@ var UTILS = {
             retVal += "</tr>"
         }
     return retVal;
-}
+},
+    extractAlleleFrequencyRanges: function(allFields) {
+        var returnValue  = {};
+        var differentEthnicities =  ['AA', 'EA', 'SA', 'EU', 'HS'];
+        var minMax =  ['min','max'];
+        for ( var i = 0 ; i < differentEthnicities.length ; i++ ) {
+            for ( var j = 0 ; j < minMax.length ; j++ ) {
+                var idValue = 'ethnicity_af_'+differentEthnicities[i] +'-' +minMax[j];
+                returnValue[idValue] = $('#' +idValue).val();
+            }
+        }
+         return returnValue;
+    },
+    /***
+     * Extract all checked values from a set of checkboxes. The object returned  describes only the checkboxes
+     * that have been checked -- it wasn't checked then there is no record
+     * @param checkboxName
+     * @param allFields
+     * @returns {{}}
+     */
+    extractValFromCheckboxes: function(everyId) {
+        var returnValue  = {};
+        for ( var i = 0 ; i < everyId.length ; i++ ) {
+            var domReference = $('#'+everyId[i]);
+            if ((domReference) &&
+                (domReference.is(':checked'))){
+                returnValue [domReference.val()]   = 1;
+            }
+        }
+        return returnValue;
+    },
+    /***
+     * Extract The values of all listed text boxes. If the checkbox is empty then don't return a record for that text box
+     * @param checkboxName
+     * @param allFields
+     * @returns {{}}
+     */
+    extractValFromTextboxes: function(everyId) {
+        var returnValue  = {};
+        for ( var i = 0 ; i < everyId.length ; i++ ) {
+            var domReference = $('#'+everyId[i]);
+            if ((domReference) && (domReference.val())){
+                returnValue [everyId[i]]   = domReference.val();
+            }
+        }
+        return returnValue;
+    },
+    postQuery: function (path, params, method) {
+    method = method || "post"; // Set method to post by default if not specified.
+
+    // The rest of this code assumes you are not using a library.
+    // It can be made less wordy if you use one.
+    var form = document.createElement("form");
+    form.setAttribute("method", method);
+    form.setAttribute("action", path);
+
+    for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+
+            form.appendChild(hiddenField);
+        }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+} ,
+    postJson: function (path, params) {
+        // construct an HTTP request
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', path, true);
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+
+        // send the collected data as JSON
+        xhr.send(JSON.stringify(params));
+
+        xhr.onloadend = function () {
+            // done
+        };
+
+    }
+
 
 
 

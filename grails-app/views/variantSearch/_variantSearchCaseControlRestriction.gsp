@@ -10,7 +10,7 @@
                 </label>
             </div>
             <div class="checkbox">
-                <label for="id_significance_nominal">
+                <label>
                     <input id="id_onlyseen_t2dcontrols" type="checkbox" name="onlyseen" value="t2dcontrols" />
                     are seen only in controls
                 </label>

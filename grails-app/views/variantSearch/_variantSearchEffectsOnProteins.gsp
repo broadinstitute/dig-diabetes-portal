@@ -4,15 +4,15 @@
     <div class="col-md-5">
         <div id="biology-form">
             <div class="radio">
-                <input type="radio" name="function" id="all_functions_checkbox" checked="checked"/>
+                <input type="radio" name="predictedEffects" value="all-effects" id="all_functions_checkbox" checked="checked"/>
                 all effects
             </div>
             <div class="radio">
-                <input type="radio" name="function"id="protein_truncating_checkbox"/>
+                <input type="radio" name="predictedEffects" value="protein-truncating" id="protein_truncating_checkbox"/>
                 protein-truncating
             </div>
             <div class="radio">
-                <input type="radio" name="function" value="missense"  id="missense_checkbox"/>
+                <input type="radio" name="predictedEffects" value="missense"  id="missense_checkbox"/>
                 missense
             </div>
             <div id="missense-options" style="display:none;">
@@ -43,11 +43,11 @@
                 </div>
             </div>
             <div class="radio">
-                <input type="radio" name="function" id="synonymous_checkbox"/>
+                <input type="radio" name="predictedEffects" value="noEffectSynonymous"  id="synonymous_checkbox"/>
                 no effect (synonymous coding)
             </div>
             <div class="radio">
-                <input type="radio" name="function" id="noncoding_checkbox"/>
+                <input type="radio" name="predictedEffects" value="noEffectNoncoding"  id="noncoding_checkbox"/>
                 no effect (non-coding)
             </div>
         </div>
