@@ -1,11 +1,11 @@
 package dport
 
-import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class VariantController {
     RestServerService   restServerService
+    FilterManagementService filterManagementService
 
     def index() { }
 
@@ -48,9 +48,10 @@ class VariantController {
         println "variant post received"
         String receivedParameters = request.parameters.toString()
         if (receivedParameters)    {
+            StringBuilder sb = filterManagementService.parseVariantSearchParameters(request.parameters,false)
             println("received="+receivedParameters)
             render("<h1> I heard you</h1>"+
-                    "<h3>parms="+receivedParameters+"</h3>")
+                    "<h3>parms="+sb.toString()+"</h3>")
         }  else {
             render("<h1> I heard you, but no valid JSON</h1>")
         }
