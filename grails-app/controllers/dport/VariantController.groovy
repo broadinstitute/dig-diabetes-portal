@@ -46,9 +46,7 @@ class VariantController {
 
     def variantSearch() {
         println "variant post received"
-        List <String> predictedEffects = request.parameters["predictedEffects"]
         String receivedParameters = request.parameters.toString()
-//        String receivedParameters = predictedEffects[0]
         if (receivedParameters)    {
             println("received="+receivedParameters)
             render("<h1> I heard you</h1>"+
