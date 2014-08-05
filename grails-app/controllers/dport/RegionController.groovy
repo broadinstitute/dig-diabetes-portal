@@ -1,6 +1,5 @@
 package dport
 
-import groovy.json.JsonSlurper
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class RegionController {
@@ -9,7 +8,6 @@ class RegionController {
     def index() { }
 
     def regionInfo() {
-        def slurper = new JsonSlurper()
         String regionSpecification = params.id
 
         render (view: 'regionInfo',

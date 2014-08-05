@@ -329,6 +329,44 @@ class RestServerService {
         return returnValue
     }
 
+
+
+
+
+
+
+
+
+
+    JSONObject searchGenomicRegionByCustomFilters (String customFilterSet) {
+        JSONObject returnValue = null
+        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
+        String drivingJson = """{
+"user_group": "ui",
+"filters": [
+${customFilterSet}
+],
+"columns": [${"\""+VARIANT_SEARCH_COLUMNS.join("\",\"")+"\""}]
+}
+""".toString()
+        RestResponse response  = rest.post(VARIANT_SEARCH_URL)   {
+            contentType "application/json"
+            json drivingJson
+        }
+        if (response.responseEntity.statusCode.value == 200) {
+            returnValue =  response.json
+        }
+        return returnValue
+    }
+
+
+
+
+
+
+
+
+
     //("chr9:21,940,000-22,190,000")
     JSONObject searchGenomicRegionAsSpecifiedByUsers(String userSpecifiedString) {
         JSONObject returnValue = null

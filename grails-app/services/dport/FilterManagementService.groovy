@@ -68,7 +68,7 @@ class FilterManagementService {
         String returnValue = ""
         switch (filterName){
             case "setPValueThreshold" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": ${parm1}, "operator": "LTE", "value": ${parm2} }""".toString()
+                returnValue = """{ "filter_type": "FLOAT", "operand": "${parm1}", "operator": "LTE", "value": ${parm2} }""".toString()
                 break;
             case "setRegionGeneSpecification" :
                 returnValue = """{ "filter_type": "STRING", "operand": "IN_GENE", "operator": "EQ", "value": "${parm1}" }""".toString()
@@ -128,6 +128,9 @@ class FilterManagementService {
 
         sb = caseControlOnly(sb, incomingParameters,currentlySigma)
 
+        sb = predictedEffectsOnProteins(sb, incomingParameters)
+
+        return sb.toString()
 
     }
 
@@ -140,7 +143,7 @@ class FilterManagementService {
 
         // datatype: Sigma, exome sequencing, exome chip, or diagram GWAS
         if  (incomingParameters.containsKey("datatype"))  {      // user has requested a particular data set. Without explicit request what is the default?
-            String requestedDataSet =  incomingParameters ["datatype"]
+            String requestedDataSet =  incomingParameters ["datatype"][0]
 
             switch (requestedDataSet)   {
                 case  "sigma":
@@ -171,7 +174,7 @@ class FilterManagementService {
     private  StringBuilder determineThreshold (StringBuilder sb, HashMap incomingParameters,String datatypeOperand){
         // set threshold
         if  (incomingParameters.containsKey("significance"))  {      // user has requested a particular data set. Without explicit request what is the default?
-            String requestedDataSet =  incomingParameters ["significance"]
+            String requestedDataSet =  incomingParameters ["significance"][0]
             switch (requestedDataSet)   {
                 case  "genomewide":
                     sb <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,5e-8 as BigDecimal) << "\n"
@@ -181,7 +184,7 @@ class FilterManagementService {
                     break;
                 case  "custom":
                     if (incomingParameters.containsKey("custom_significance_input")) {
-                        String stringCustomThreshold = incomingParameters["custom_significance_input"]
+                        String stringCustomThreshold = incomingParameters["custom_significance_input"][0]
                         BigDecimal numericCustomThreshold
                         try {
                             numericCustomThreshold = new BigDecimal(stringCustomThreshold)
@@ -210,26 +213,31 @@ class FilterManagementService {
         // set gene to search
         if (incomingParameters.containsKey("region_gene_input")) {
             // user has requested a particular data set. Without explicit request what is the default?
-            String stringParameter = incomingParameters["region_gene_input"]
+            String stringParameter = incomingParameters["region_gene_input"][0]
             sb << retrieveParameterizedFilterString("setRegionGeneSpecification", stringParameter, 0) << "\n"
         }
 
         // set gene to search
         if (incomingParameters.containsKey("region_chrom_input")) {
             // user has requested a particular data set. Without explicit request what is the default?
-            String stringParameter = incomingParameters["region_chrom_input"]
+            String stringParameter = incomingParameters["region_chrom_input"][0]
             java.util.regex.Matcher chromosomeNumber = stringParameter =~ /\d+/
-            sb << retrieveParameterizedFilterString("setRegionChromosomeSpecification", chromosomeNumber.toString(), 0) << "\n"
+            if (chromosomeNumber)   {
+                sb << retrieveParameterizedFilterString("setRegionChromosomeSpecification", chromosomeNumber[0].toString(), 0) << "\n"
+            } else {
+                // TODO: ERROR CONDITION.  DEFAULT?
+            }
+
         }
 
         // set beginning chromosome extent
         if (incomingParameters.containsKey("region_start_input")) {
             // user has requested a particular data set. Without explicit request what is the default?
-            String stringParameter = incomingParameters["region_start_input"]
+            String stringParameter = incomingParameters["region_start_input"][0]
             Integer extentDelimiter
             Boolean errorFree = true
             try {
-                extentDelimiter = new Integer(stringParameter)
+                extentDelimiter = new BigDecimal(stringParameter).intValue()
             } catch (exception) {
                 // TODO: this is an error condition -- the user-specified a non-numeric extent. What is the correct default action here ?
                 exception.printStackTrace()
@@ -244,11 +252,11 @@ class FilterManagementService {
         // set ending chromosome extent
         if (incomingParameters.containsKey("region_stop_input")) {
             // user has requested a particular data set. Without explicit request what is the default?
-            String stringParameter = incomingParameters["region_stop_input"]
+            String stringParameter = incomingParameters["region_stop_input"][0]
             Integer extentDelimiter
             Boolean errorFree = true
             try {
-                extentDelimiter = new Integer(stringParameter)
+                extentDelimiter = new BigDecimal(stringParameter).intValue()
             } catch (exception) {
                 // TODO: this is an error condition -- the user-specified a non-numeric extent. What is the correct default action here ?
                 exception.printStackTrace()
@@ -271,9 +279,9 @@ class FilterManagementService {
        for (String ethnicity in ethnicities) {
            for (String minOrMax in minMax) {
                // work with individual ethnicities
-               String ethnicityReference  =  "ethnicity_af_" + ethnicity + "-" +minMax
+               String ethnicityReference  =  "ethnicity_af_" + ethnicity + "-" +minOrMax
                if (incomingParameters.containsKey(ethnicityReference)) {
-                   String specificAlleleFrequency = incomingParameters[ethnicityReference]
+                   String specificAlleleFrequency = incomingParameters[ethnicityReference][0]
                    if ((specificAlleleFrequency) &&
                            (specificAlleleFrequency.length() > 0)) {
                        Boolean errorFree = true
@@ -300,9 +308,9 @@ class FilterManagementService {
 
        }
        for (String minOrMax in minMax) {
-            String ethnicityReference  =  "ethnicity_af_sigma-" +minMax
+            String ethnicityReference  =  "ethnicity_af_sigma-" +minOrMax
             if (incomingParameters.containsKey(ethnicityReference)) {
-                String specificAlleleFrequency = incomingParameters[ethnicityReference]
+                String specificAlleleFrequency = incomingParameters[ethnicityReference][0]
                 if ((specificAlleleFrequency) &&
                         (specificAlleleFrequency.length() > 0)) {
                     Boolean errorFree = true
@@ -331,14 +339,14 @@ class FilterManagementService {
 
 
 
-    private  LinkedHashMap caseControlOnly (StringBuilder sb, HashMap incomingParameters, Boolean usingSigma){
+    private  StringBuilder caseControlOnly (StringBuilder sb, HashMap incomingParameters, Boolean usingSigma){
 
         // datatype: Sigma, exome sequencing, exome chip, or diagram GWAS
         if  (incomingParameters.containsKey("t2dcases")) {
             if (usingSigma) {
                 sb << retrieveFilterString("onlySeenCaseSigma") << "\n"
             } else {
-                sb << retrieveFilterString("onlySeenControlT2d") << "\n"
+                sb << retrieveFilterString("onlySeenCaseT2d") << "\n"
             }
         }
         if  (incomingParameters.containsKey("t2dcontrols")) {
@@ -359,8 +367,8 @@ class FilterManagementService {
 
     private  StringBuilder predictedEffectsOnProteins (StringBuilder sb, HashMap incomingParameters){
 
-        if  (incomingParameters.containsKey("predictedEffects:"))  {      // user has requested a particular data set. Without explicit request what is the default?
-            String predictedEffects =  incomingParameters ["predictedEffects:"]
+        if  (incomingParameters.containsKey("predictedEffects"))  {      // user has requested a particular data set. Without explicit request what is the default?
+            String predictedEffects =  incomingParameters ["predictedEffects"][0]
 
             switch (predictedEffects)   {
                 case  "all-effects":
@@ -383,7 +391,7 @@ class FilterManagementService {
             }
         }
 
-        return [sb:sb, datatypeOperand:datatypeOperand]
+        return sb
 
     }
 

@@ -35,31 +35,6 @@
         }
     });
     function fillTheFields (data)  {
-//        var cariantRec = {
-//            _13k_T2D_HET_CARRIERS : 1,
-//            _13k_T2D_HOM_CARRIERS : 2,
-//            IN_EXSEQ : 3,
-//            _13k_T2D_SA_MAF : 4,
-//            MOST_DEL_SCORE : 5,
-//            CLOSEST_GENE : 6,
-//            CHROM : 7,
-//            Consequence : 8,
-//            ID : 9,
-//            _13k_T2D_MINA : 10,
-//            _13k_T2D_HS_MAF : 11,
-//            DBSNP_ID : 12,
-//            _13k_T2D_EA_MAF : 13,
-//            _13k_T2D_AA_MAF : 14,
-//            POS : 15,
-//            _13k_T2D_TRANSCRIPT_ANNOT : 16,
-//            IN_GWAS : 17,
-//            GWAS_T2D_PVALUE: 18,
-//            EXCHP_T2D_P_value: 19,
-//            _13k_T2D_P_EMMAX_FE_IV: 20
-//        }
-//        variant =  data['variant'];
-//        variantTitle =  UTILS.get_variant_title(variant);
-//        $('#variantTitle').append(variantTitle);
         $('#variantTableBody').append(UTILS.fillCollectedVariantsTable(data, ${show_gene}, ${show_sigma}, ${show_exseq}, ${show_exchp} ));
 
         $('#variantTable').dataTable({
