@@ -62,7 +62,7 @@
         varsToSend = UTILS.concatMap(varsToSend,caseControlRequests) ;
         varsToSend = UTILS.concatMap(varsToSend,alleleFrequencies) ;
         varsToSend = UTILS.concatMap(varsToSend,restrictToRegion) ;
-        UTILS.postQuery('../variant/variantSearch',varsToSend);
+        UTILS.postQuery('../variantSearch/variantSearchRequest',varsToSend);
     }
 </script>
 

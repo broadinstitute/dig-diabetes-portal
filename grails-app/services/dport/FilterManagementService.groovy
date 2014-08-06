@@ -74,13 +74,13 @@ class FilterManagementService {
                 returnValue = """{ "filter_type": "STRING", "operand": "IN_GENE", "operator": "EQ", "value": "${parm1}" }""".toString()
                 break;
             case "setRegionChromosomeSpecification" :
-                returnValue = """{ "filter_type": "STRING", "operand": "CHROM", "operator": "EQ", "value": ${parm1} }""".toString()
+                returnValue = """{ "filter_type": "STRING", "operand": "CHROM", "operator": "EQ", "value": "${parm1}" }""".toString()
                 break;
             case "setRegionPositionStart" :
-                returnValue = """{ "filter_type": "STRING", "operand": "POS", "operator": "GTE", "value": ${parm1} }""".toString()
+                returnValue = """{ "filter_type": "FLOAT", "operand": "POS", "operator": "GTE", "value": ${parm1} }""".toString()
                 break;
             case "setRegionPositionEnd" :
-                returnValue = """{ "filter_type": "STRING", "operand": "POS", "operator": "LTE", "value": ${parm1} }""".toString()
+                returnValue = """{ "filter_type": "FLOAT", "operand": "POS", "operator": "LTE", "value": ${parm1} }""".toString()
                 break;
             case "setEthnicityMaximum" :
                 returnValue = """{ "filter_type": "FLOAT", "operand": "_13k_T2D_${parm1}_MAF", "operator": "LTE", "value": ${parm2} }""".toString()
@@ -112,33 +112,35 @@ class FilterManagementService {
 
 
 
-    public String parseVariantSearchParameters (HashMap incomingParameters,Boolean currentlySigma) {
-        StringBuilder sb  = new  StringBuilder ()
+    public LinkedHashMap  parseVariantSearchParameters (HashMap incomingParameters,Boolean currentlySigma) {
+        LinkedHashMap  buildingFilters = [filters:new ArrayList<String>(),
+                                          filterDescriptions:new ArrayList<String>()]
 
-        LinkedHashMap map = determineDataSet (sb,incomingParameters)
 
-        String datatypeOperand = map.datatypeOperand
-        sb = map.sb
+        buildingFilters = determineDataSet (buildingFilters,incomingParameters)
 
-        sb = determineThreshold (sb, incomingParameters, datatypeOperand)
+        String datatypeOperand = buildingFilters.datatypeOperand
 
-        sb = setRegion(sb, incomingParameters)
+        buildingFilters = determineThreshold (buildingFilters, incomingParameters, datatypeOperand)
 
-        sb = setAlleleFrequencies(sb, incomingParameters)
+        buildingFilters = setRegion(buildingFilters, incomingParameters)
 
-        sb = caseControlOnly(sb, incomingParameters,currentlySigma)
+        buildingFilters = setAlleleFrequencies(buildingFilters, incomingParameters)
 
-        sb = predictedEffectsOnProteins(sb, incomingParameters)
+        buildingFilters = caseControlOnly(buildingFilters, incomingParameters,currentlySigma)
 
-        return sb.toString()
+        buildingFilters = predictedEffectsOnProteins(buildingFilters, incomingParameters)
+
+        return buildingFilters
 
     }
 
 
 
 
-    private  LinkedHashMap determineDataSet (StringBuilder sb, HashMap incomingParameters){
-        LinkedHashMap returnValue =  [:]
+    private  LinkedHashMap determineDataSet (LinkedHashMap  buildingFilters, HashMap incomingParameters){
+        List <String> filters =  buildingFilters.filters
+        List <String> filterDescriptions =  buildingFilters.filterDescriptions
         String datatypeOperand = ""
 
         // datatype: Sigma, exome sequencing, exome chip, or diagram GWAS
@@ -148,39 +150,47 @@ class FilterManagementService {
             switch (requestedDataSet)   {
                 case  "sigma":
                     datatypeOperand = 'SIGMA_T2D_P'
-                    sb <<  retrieveFilterString("dataSetSigma") << "\n"
+                    filters <<  retrieveFilterString("dataSetSigma") 
+                    filterDescriptions << "Whether variant is included in SIGMA analysis is equal to 1"
                     break;
                 case  "exomeseq":
                     datatypeOperand = '_13k_T2D_P_EMMAX_FE_IV'
-                    sb <<  retrieveFilterString("dataSetExseq") << "\n"
+                    filters <<  retrieveFilterString("dataSetExseq") 
+                    filterDescriptions << "Is observed in exome sequencing"
                     break;
                 case  "exomechip":
                     datatypeOperand = 'EXCHP_T2D_P_value'
-                    sb <<  retrieveFilterString("dataSetExchp") << "\n"
+                    filters <<  retrieveFilterString("dataSetExchp") 
+                    filterDescriptions << "Is observed in exome chip"
                     break;
                 case  "gwas":
                     datatypeOperand = 'GWAS_T2D_PVALUE'
-                    sb <<  retrieveFilterString("dataSetDiagramGwas") << "\n"
+                    filters <<  retrieveFilterString("dataSetDiagramGwas") 
+                    filterDescriptions << "P-value for association with T2D in GWAS dataset is greater than or equal to 0"
                     break;
                 default: break;
             }
         }
-
-        return [sb:sb, datatypeOperand:datatypeOperand]
+        buildingFilters["datatypeOperand"]  =  datatypeOperand
+        return buildingFilters
 
     }
 
 
-    private  StringBuilder determineThreshold (StringBuilder sb, HashMap incomingParameters,String datatypeOperand){
+    private  LinkedHashMap determineThreshold (LinkedHashMap  buildingFilters, HashMap incomingParameters,String datatypeOperand){
+        List <String> filters =  buildingFilters.filters
+        List <String> filterDescriptions =  buildingFilters.filterDescriptions
         // set threshold
         if  (incomingParameters.containsKey("significance"))  {      // user has requested a particular data set. Without explicit request what is the default?
             String requestedDataSet =  incomingParameters ["significance"][0]
             switch (requestedDataSet)   {
                 case  "genomewide":
-                    sb <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,5e-8 as BigDecimal) << "\n"
+                    filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,5e-8 as BigDecimal) 
+                    filterDescriptions << "P-value for association with T2D is less than or equal to 5e-8"
                     break;
                 case  "nominal":
-                    sb << retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,0.05 as BigDecimal) << "\n"
+                    filters << retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,0.05 as BigDecimal) 
+                    filterDescriptions << "P-value for association with T2D is less than or equal to 0.05"
                     break;
                 case  "custom":
                     if (incomingParameters.containsKey("custom_significance_input")) {
@@ -194,7 +204,8 @@ class FilterManagementService {
                             //TODO: this is an error condition. User supplied a nonnumeric custom threshold
                             break;
                         }
-                        sb << retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,numericCustomThreshold) << "\n"
+                        filters << retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,numericCustomThreshold) 
+                        filterDescriptions << "P-value for association with T2D is less than or equal to ${numericCustomThreshold}"
                     } else {
                         //TODO: this is an error condition. User requested a custom threshold but supplied no threshold
                         // description of that threshold. We need a specification of what to do ( from Mary?)
@@ -205,16 +216,19 @@ class FilterManagementService {
             }
         }
 
-        return sb
+        return buildingFilters
     }
 
-    private  StringBuilder setRegion (StringBuilder sb, HashMap incomingParameters) {
+    private  LinkedHashMap setRegion (LinkedHashMap  buildingFilters, HashMap incomingParameters) {
+        List <String> filters =  buildingFilters.filters
+        List <String> filterDescriptions =  buildingFilters.filterDescriptions
         // set the search region
         // set gene to search
         if (incomingParameters.containsKey("region_gene_input")) {
             // user has requested a particular data set. Without explicit request what is the default?
             String stringParameter = incomingParameters["region_gene_input"][0]
-            sb << retrieveParameterizedFilterString("setRegionGeneSpecification", stringParameter, 0) << "\n"
+            filters << retrieveParameterizedFilterString("setRegionGeneSpecification", stringParameter, 0) 
+            filterDescriptions << "In the gene ${stringParameter}"
         }
 
         // set gene to search
@@ -223,7 +237,8 @@ class FilterManagementService {
             String stringParameter = incomingParameters["region_chrom_input"][0]
             java.util.regex.Matcher chromosomeNumber = stringParameter =~ /\d+/
             if (chromosomeNumber)   {
-                sb << retrieveParameterizedFilterString("setRegionChromosomeSpecification", chromosomeNumber[0].toString(), 0) << "\n"
+                filters << retrieveParameterizedFilterString("setRegionChromosomeSpecification", chromosomeNumber[0].toString(), 0) 
+                filterDescriptions << "Chromosome is equal to ${stringParameter}"
             } else {
                 // TODO: ERROR CONDITION.  DEFAULT?
             }
@@ -244,7 +259,8 @@ class FilterManagementService {
                 errorFree = false
             }
             if (errorFree) {
-                sb << retrieveParameterizedFilterString("setRegionPositionStart", extentDelimiter.toString(), 0) << "\n"
+                filters << retrieveParameterizedFilterString("setRegionPositionStart", extentDelimiter.toString(), 0) 
+                filterDescriptions << "Chromosomal position is greater than or equal to ${extentDelimiter.toString()}"
             }
 
         }
@@ -263,23 +279,32 @@ class FilterManagementService {
                 errorFree = false
             }
             if (errorFree) {
-                sb << retrieveParameterizedFilterString("setRegionPositionEnd", extentDelimiter.toString(), 0) << "\n"
+                filters << retrieveParameterizedFilterString("setRegionPositionEnd", extentDelimiter.toString(), 0) 
+                filterDescriptions << "Chromosomal position is less than or equal to ${extentDelimiter.toString()}"
             }
 
         }
-        return  sb
+        return  buildingFilters
 
     }
 
 
 
-    private  StringBuilder setAlleleFrequencies (StringBuilder sb, HashMap incomingParameters) {
-       List <String> ethnicities = ['AA', 'EA', 'SA', 'EU', 'HS']
+    private  LinkedHashMap setAlleleFrequencies (LinkedHashMap  buildingFilters, HashMap incomingParameters) {
+        List <String> filters =  buildingFilters.filters
+        List <String> filterDescriptions =  buildingFilters.filterDescriptions
+        //ethnicities and minor allele frequencies
+       List <List<String>> ethnicities = []
+        ethnicities << ['African-Americans','AA']
+        ethnicities << ['East Asians','EA']
+        ethnicities << ['Europeans','EU']
+        ethnicities << ['South Asians','SA']
+        ethnicities << ['Hispanics','HS']
        List <String> minMax = ['min', 'max']
-       for (String ethnicity in ethnicities) {
+       for (List<String> ethnicity in ethnicities) {
            for (String minOrMax in minMax) {
                // work with individual ethnicities
-               String ethnicityReference  =  "ethnicity_af_" + ethnicity + "-" +minOrMax
+               String ethnicityReference  =  "ethnicity_af_" + ethnicity[1] + "-" +minOrMax
                if (incomingParameters.containsKey(ethnicityReference)) {
                    String specificAlleleFrequency = incomingParameters[ethnicityReference][0]
                    if ((specificAlleleFrequency) &&
@@ -295,9 +320,11 @@ class FilterManagementService {
                        }
                        if (errorFree) {
                            if (minOrMax == 'min') {
-                               sb << retrieveParameterizedFilterString("setEthnicityMinimum", ethnicity, alleleFrequency) << "\n"
+                               filters << retrieveParameterizedFilterString("setEthnicityMinimum", ethnicity[1], alleleFrequency) 
+                               filterDescriptions << "Minor allele frequency in ${ethnicity[0]} is greater than or equal to ${alleleFrequency}"
                            } else {
-                               sb << retrieveParameterizedFilterString("setEthnicityMaximum", ethnicity, alleleFrequency) << "\n"
+                               filters << retrieveParameterizedFilterString("setEthnicityMaximum", ethnicity[1], alleleFrequency) 
+                               filterDescriptions << "Minor allele frequency in ${ethnicity[0]} is less than or equal to  ${alleleFrequency}"
                            }
                        }
 
@@ -324,9 +351,11 @@ class FilterManagementService {
                     }
                     if (errorFree) {
                         if (minOrMax == 'min') {
-                            sb << retrieveParameterizedFilterString("setSigmaMinorAlleleFrequencyMinimum", "", alleleFrequency) << "\n"
+                            filters << retrieveParameterizedFilterString("setSigmaMinorAlleleFrequencyMinimum", "", alleleFrequency) 
+                            filterDescriptions << "Minor allele frequency is greater than or equal to ${alleleFrequency}"
                         } else {
-                            sb << retrieveParameterizedFilterString("setSigmaMinorAlleleFrequencMaximum", "", alleleFrequency) << "\n"
+                            filters << retrieveParameterizedFilterString("setSigmaMinorAlleleFrequencMaximum", "", alleleFrequency) 
+                            filterDescriptions << "Minor allele frequency less than or equal to ${alleleFrequency}"
                         }
                     }
 
@@ -334,39 +363,47 @@ class FilterManagementService {
             }
 
         }
-        return sb
+        return buildingFilters
+
     }
 
 
 
-    private  StringBuilder caseControlOnly (StringBuilder sb, HashMap incomingParameters, Boolean usingSigma){
-
+    private  LinkedHashMap caseControlOnly (LinkedHashMap  buildingFilters, HashMap incomingParameters, Boolean usingSigma){
+        List <String> filters =  buildingFilters.filters
+        List <String> filterDescriptions =  buildingFilters.filterDescriptions
         // datatype: Sigma, exome sequencing, exome chip, or diagram GWAS
         if  (incomingParameters.containsKey("t2dcases")) {
             if (usingSigma) {
-                sb << retrieveFilterString("onlySeenCaseSigma") << "\n"
+                filters << retrieveFilterString("onlySeenCaseSigma") 
+                filterDescriptions << "Number of minor alleles observed in cases in SIGMA analysis is equal to 0"
             } else {
-                sb << retrieveFilterString("onlySeenCaseT2d") << "\n"
+                filters << retrieveFilterString("onlySeenCaseT2d") 
+                filterDescriptions << "Number of case observations is equal to 0"
             }
         }
         if  (incomingParameters.containsKey("t2dcontrols")) {
             if (usingSigma) {
-                sb << retrieveFilterString("onlySeenControlSigma") << "\n"
+                filters << retrieveFilterString("onlySeenControlSigma") 
+                filterDescriptions << "Number of minor alleles observed in controls in SIGMA analysis is equal to 0"
             } else {
-                sb << retrieveFilterString("onlySeenControlT2d") << "\n"
+                filters << retrieveFilterString("onlySeenControlT2d") 
+                filterDescriptions << "Number of control observations is equal to 0"
             }
         }
         if  (incomingParameters.containsKey("homozygotes")) {
-            sb << retrieveFilterString("onlySeenHomozygotes") << "\n"
+            filters << retrieveFilterString("onlySeenHomozygotes") 
+            filterDescriptions << "Number of minor alleles observed in homozygotes is equal to 0"
         }
 
-        return sb
+        return buildingFilters
 
     }
 
 
-    private  StringBuilder predictedEffectsOnProteins (StringBuilder sb, HashMap incomingParameters){
-
+    private  LinkedHashMap predictedEffectsOnProteins (LinkedHashMap  buildingFilters, HashMap incomingParameters){
+        List <String> filters =  buildingFilters.filters
+        List <String> filterDescriptions =  buildingFilters.filterDescriptions
         if  (incomingParameters.containsKey("predictedEffects"))  {      // user has requested a particular data set. Without explicit request what is the default?
             String predictedEffects =  incomingParameters ["predictedEffects"][0]
 
@@ -375,23 +412,27 @@ class FilterManagementService {
                     // this is the default, do nothing
                     break;
                 case  "protein-truncating":
-                    sb <<  retrieveFilterString("proteinTruncatingCheckbox") << "\n"
+                    filters <<  retrieveFilterString("proteinTruncatingCheckbox") 
+                    filterDescriptions << "Estimated classification for proteins truncating variant effect"
                     break;
                 case  "missense":
-                    sb <<  retrieveFilterString("missenseCheckbox") << "\n"
+                    filters <<  retrieveFilterString("missenseCheckbox") 
+                    filterDescriptions << "Estimated classification for missense effect"
                     break;
                 case  "noEffectSynonymous":
-                     sb <<  retrieveFilterString("synonymousCheckbox") << "\n"
+                    filters <<  retrieveFilterString("synonymousCheckbox") 
+                    filterDescriptions << "Estimated classification for no effects (synonymous)"
                     break;
                 case  "noEffectNoncoding":
-                    sb <<  retrieveFilterString("noncodingCheckbox") << "\n"
+                    filters <<  retrieveFilterString("noncodingCheckbox") 
+                    filterDescriptions <<  "Estimated classification for no effects (non-coding)"
                     break;
 
                 default: break;
             }
         }
 
-        return sb
+        return buildingFilters
 
     }
 

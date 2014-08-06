@@ -44,18 +44,41 @@ class VariantController {
 
     }
 
+//    def variantSearch() {
+//        println "variant post received"
+//        String receivedParameters = request.parameters.toString()
+//        if (receivedParameters)    {
+//            String sb = filterManagementService.parseVariantSearchParameters(request.parameters,false)
+//            println("Here are our filters:${sb}")
+//            restServerService.searchGenomicRegionByCustomFilters()
+//        }  else {
+//            render("<h1> I heard you, but no valid JSON</h1>")
+//        }
+//
+//    }
+
+
+
     def variantSearch() {
-        println "variant post received"
+                println "variant post received"
         String receivedParameters = request.parameters.toString()
         if (receivedParameters)    {
-            String sb = filterManagementService.parseVariantSearchParameters(request.parameters,false)
-            println("Here are our filters:${sb}")
-            restServerService.searchGenomicRegionByCustomFilters()
-        }  else {
-            render("<h1> I heard you, but no valid JSON</h1>")
+            LinkedHashMap<String, String> parsedFilterParameters = filterManagementService.parseVariantSearchParameters(request.parameters,false)
+            if  (parsedFilterParameters)  {
+                render (view: 'variantSearchResults',
+                        model:[filter: parsedFilterParameters.filters,
+                               filterDescriptions: parsedFilterParameters.filterDescriptions] )
+            }  else {
+                render("<h1> I heard you, but no valid JSON</h1>")
+            }
         }
 
+
     }
+
+
+
+
     def gwas() {
         def slurper = new JsonSlurper()
         String variantToStartWith = params.id

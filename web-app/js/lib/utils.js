@@ -372,6 +372,9 @@ var UTILS = {
     fillCollectedVariantsTable:  function ( fullJson, show_gene, show_sigma, show_exseq, show_exchp ) {
        var retVal = "";
        var vRec = fullJson.variants;
+        if (!vRec)  {   // error condition
+             return;
+        }
         for ( var i=0 ; i<vRec.length ; i++ )    {
             retVal += "<tr>"
 
@@ -598,7 +601,35 @@ var UTILS = {
             // done
         };
 
+    } ,
+    postJson2: function (path, params) {
+        // construct an HTTP request
+        $.ajax({
+            type:'POST',
+            data:params,
+            url:path,
+            success:function(data,textStatus){
+                UTILS.fillTheVariantTable(data);
+            },
+            error:function(XMLHttpRequest,textStatus,errorThrown){
+                console.log('error');
+            }
+        });
     }
+    ,
+    fillTheVariantTable:  function (data)  {
+    $('#variantTableBody').append(UTILS.fillCollectedVariantsTable(data, 1, 0, 1, 1));
+
+    if (data.variants)     {
+        $('#variantTable').dataTable({
+            iDisplayLength: 20,
+            bFilter: false,
+            aaSorting: [[ 1, "asc" ]],
+            aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 5, 6, 8, 10, 11, 12, 13 ] } ]
+        });
+    }
+    console.log('fillThe Fields');
+}
 
 
 
