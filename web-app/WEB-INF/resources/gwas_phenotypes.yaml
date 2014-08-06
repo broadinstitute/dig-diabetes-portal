@@ -1,0 +1,175 @@
+---
+-
+  key: type_2_diabetes
+  name: type 2 diabetes
+  db_key: T2D
+  dataset: diagram
+  category: cardiometabolic
+
+-
+  key: fasting_glucose
+  name: fasting glucose
+  db_key: FastGlu
+  dataset: magic
+  category: cardiometabolic
+
+-
+  key: fasting_insulin
+  name: fasting insulin
+  db_key: FastIns
+  dataset: magic
+  category: cardiometabolic
+
+-
+  key: fasting proinsulin
+  name: fasting proinsulin
+  db_key: ProIns
+  dataset: magic
+  category: cardiometabolic
+
+-
+  key: two-hour glucose
+  name: two-hour glucose
+  db_key: 2hrGLU_BMIAdj
+  dataset: magic
+  category: cardiometabolic
+
+-
+  key: two-hour insulin
+  name: two-hour insulin
+  db_key: 2hrIns_BMIAdj
+  dataset: magic
+  category: cardiometabolic
+
+-
+  key: HOMA-IR
+  name: HOMA-IR
+  db_key: HOMAIR
+  dataset: magic
+  category: cardiometabolic
+
+-
+  key: HOMA-B
+  name: HOMA-B
+  db_key: HOMAB
+  dataset: magic
+  category: cardiometabolic
+
+-
+  key: HbA1c
+  name: HbA1c
+  db_key: HbA1c
+  dataset: magic
+  category: cardiometabolic
+
+-
+  key: BMI
+  name: BMI
+  db_key: BMI
+  dataset: giant
+  category: cardiometabolic
+
+-
+  key: waist-hip ratio
+  name: waist-hip ratio
+  db_key: WHR
+  dataset: giant
+  category: cardiometabolic
+
+-
+  key: height
+  name: height
+  db_key: Height
+  dataset: giant
+  category: cardiometabolic
+
+-
+  key: total cholesterol
+  name: total cholesterol
+  db_key: TC
+  dataset: glgc
+  category: cardiometabolic
+
+-
+  key: hdl_cholesterol
+  name: HDL cholesterol
+  db_key: HDL
+  dataset: glgc
+  category: cardiometabolic
+
+-
+  key: ldl_cholesterol
+  name: LDL cholesterol
+  db_key: LDL
+  dataset: glgc
+  category: cardiometabolic
+
+-
+  key: triglycerides
+  name: Triglycerides
+  db_key: TG
+  dataset: glgc
+  category: cardiometabolic
+
+-
+  key: coronary artery disease
+  name: coronary artery disease
+  db_key: CAD
+  dataset: cardiogram
+  category: cardiometabolic
+
+-
+  key: chronic kidney disease
+  name: chronic kidney disease
+  db_key: CKD
+  dataset: ckdgen
+  category: cardiometabolic
+
+-
+  key: eGFR-creat (serum creatinine)
+  name: eGFR-creat (serum creatinine)
+  db_key: eGFRcrea
+  dataset: ckdgen
+  category: cardiometabolic
+
+-
+  key: eGFR-cys (serum cystatin C)
+  name: eGFR-cys (serum cystatin C)
+  db_key: eGFRcys
+  dataset: ckdgen
+  category: cardiometabolic
+
+-
+  key: urinary albumin-to-creatinine ratio
+  name: urinary albumin-to-creatinine ratio
+  db_key: UACR
+  dataset: ckdgen
+  category: cardiometabolic
+
+-
+  key: microalbuminuria
+  name: microalbuminuria
+  db_key: MA
+  dataset: ckdgen
+  category: cardiometabolic
+
+-
+  key: bip
+  name: bipolar disorder
+  db_key: BIP
+  dataset: pgc
+  category: other
+
+-
+  key: scz
+  name: schizophrenia
+  db_key: SCZ
+  dataset: pgc
+  category: other
+
+-
+  key: mdd
+  name: major depressive disorder
+  db_key: MDD
+  dataset: pgc
+  category: other

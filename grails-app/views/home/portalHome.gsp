@@ -1,3 +1,4 @@
+<%@ page import="dport.Phenotype" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,7 +47,7 @@
              if (trait_val == "" || significance == 0) {
                  alert('Please choose a trait and enter a valid significance!')
              }
-             window.location.href = '/trait-search?trait=' + trait_val + '&significance=' + significance;
+             window.location.href = '../trait/traitSearch?trait=' + trait_val + '&significance=' + significance;
          });
 
      });
@@ -116,25 +117,26 @@
                 </h2>
                 <div class="input-group input-group-lg">
                     <select name="" id="trait-input" class="form-control" style="width:95%;">
-                        <option value="">-- Select A Trait --</option>
+                        <option value="">-- Select A Trait? --</option>
                         <optgroup label="Cardiometabolic">
-                            {% for phenotype in gwas_phenotypes %}
-                            {% if phenotype.category == 'cardiometabolic' %}
-                            <option value="{{ phenotype.db_key }}">{{ phenotype.name }}</option>
-                            {% endif %}
-                            {% endfor %}
+                            <g:each in="${Phenotype.list()}" var="phenotype">
+                                <g:if test="${phenotype.category=='cardiometabolic'}" >
+                                    <option value=${phenotype.databaseKey}>${phenotype.name}</option>
+                                </g:if>
+                            </g:each>
                         </optgroup>
                         <optgroup label="Other">
-                            {% for phenotype in gwas_phenotypes %}
-                            {% if phenotype.category == 'other' %}
-                            <option value="{{ phenotype.db_key }}">{{ phenotype.name }}</option>
-                            {% endif %}
-                            {% endfor %}
+                            <g:each in="${Phenotype.list()}" var="phenotype">
+                                <g:if test="${phenotype.category=='other'}" >
+                                    <option value="${phenotype.databaseKey}">${phenotype.name}</option>
+                                </g:if>
+                            </g:each>
                         </optgroup>
                     </select>
                 </div>
                 <h4>Set association threshold</h4>
                 <div class="row">
+                    <g:form name="trait" action="traitSearch">
                     <div class="col-sm-9">
                         <div class="radio">
                             <label>
@@ -156,6 +158,7 @@
                             <button id="trait-go" class="btn btn-primary btn-lg" type="button">Go!</button>
                         </span>
                     </div>
+                    </g:form>
                 </div>
 
             </div>
