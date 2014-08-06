@@ -21,13 +21,13 @@ class FilterManagementService {
             "gwas-nominal"    :
                     """{ "filter_type": "FLOAT", "operand": "GWAS_T2D_PVALUE", "operator": "LTE", "value": 5e-2 }""".toString(),
             "dataSetExseq"        :
-                    """{ "filter_type": "STRING", "operand": "IN_EXSEQ", "operator": "EQ", "value": 1 }""".toString(),
+                    """{ "filter_type": "STRING", "operand": "IN_EXSEQ", "operator": "EQ", "value": "1" }""".toString(),
             "dataSetExchp"        :
-                    """{ "filter_type": "STRING", "operand": "IN_EXCHP", "operator": "EQ", "value": 1 }""".toString(),
+                    """{ "filter_type": "STRING", "operand": "IN_EXCHP", "operator": "EQ", "value": "1" }""".toString(),
             "dataSetDiagramGwas"    :
                     """{ "filter_type": "FLOAT", "operand": "GWAS_T2D_PVALUE", "operator": "GTE", "value": 0 }""".toString(),
             "dataSetSigma"   :
-                    """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_P", "operator": "GTE", "value":  }""".toString(),
+                    """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_P", "operator": "GTE", "value":  }""".toString(),   // TODO: We need a number here
             "sigma-genomewide":
                     """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_P", "operator": "LTE", "value": 5e-8 }""".toString(),
             "sigma-nominal"   :

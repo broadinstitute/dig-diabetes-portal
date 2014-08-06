@@ -349,13 +349,34 @@ ${customFilterSet}
 "columns": [${"\""+VARIANT_SEARCH_COLUMNS.join("\",\"")+"\""}]
 }
 """.toString()
+        Date beforeCall  = new Date()
         RestResponse response  = rest.post(VARIANT_SEARCH_URL)   {
             contentType "application/json"
             json drivingJson
         }
+        Date afterCall  = new Date()
+        StringBuilder logStatus = new StringBuilder()
+        logStatus << """
+SERVER CALL:
+url=${VARIANT_SEARCH_URL},
+parm=${drivingJson},
+time required=${(afterCall.time-beforeCall.time)/1000} seconds
+""".toString()
         if (response.responseEntity.statusCode.value == 200) {
             returnValue =  response.json
+            logStatus << """status: ok
+number of records: ${returnValue["variants"].size()}
+is_error: ${response.json["is_error"]}""".toString()
+        }  else {
+            JSONObject tempValue =  response.json
+            logStatus << """status: ${response.responseEntity.statusCode.value}""".toString()
+            if  (tempValue)  {
+                logStatus << """is_error: ${response.json["is_error"]}""".toString()
+            }  else {
+                logStatus << "no valid Json returned"
+            }
         }
+        println logStatus.toString()
         return returnValue
     }
 

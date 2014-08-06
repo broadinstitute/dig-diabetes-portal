@@ -49,10 +49,9 @@
 
 
                 <h1>Variant Search Results</h1>
-                filterDescriptions:  ${filterDescriptions}
                 <div class="separator"></div>
 
-                <h3>Showing all variants that meet the following criteria:</h3>
+                <h3>Showing <span id="numberOfVariantsDisplayed"></span> variants that meet the following criteria:</h3>
                 filter: <span id="tempfilter"></span>
                 <script>
                     if (uri_dec)     {
@@ -65,7 +64,15 @@
                  </g:each>
                  </ul>
 
+                <div id="warnIfMoreThan1000Results"></div>
+
+                <p><a href="<%= goback_link %>" class="boldlink">Click here to refine your results</a></p>
+
+                %{--<div class="variants-container">--}%
+
                 <g:render template="../region/collectedVariantsForRegion" />
+
+                %{--</div>--}%
                 %{--<g:render template="geneSummaryForRegion" />--}%
 
                 %{--<g:render template="collectedVariantsForRegion" />--}%

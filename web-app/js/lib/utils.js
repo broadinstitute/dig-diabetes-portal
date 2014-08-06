@@ -621,12 +621,22 @@ var UTILS = {
     $('#variantTableBody').append(UTILS.fillCollectedVariantsTable(data, 1, 0, 1, 1));
 
     if (data.variants)     {
+        var totalNumberOfResults =  data.variants.length;
+        $('#numberOfVariantsDisplayed').append(''+totalNumberOfResults);
         $('#variantTable').dataTable({
             iDisplayLength: 20,
             bFilter: false,
             aaSorting: [[ 1, "asc" ]],
             aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 5, 6, 8, 10, 11, 12, 13 ] } ]
         });
+        if (totalNumberOfResults >= 1000)  {
+            $('#warnIfMoreThan1000Results').html("<p>"+
+                "<em>Your search generated more than 1,000 variants."+
+                "This portal currently displays only 1,000 at a time."+
+                "Please refine your search. </em>"+
+            "</p>")
+        }
+
     }
     console.log('fillThe Fields');
 }
