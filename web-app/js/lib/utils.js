@@ -639,11 +639,60 @@ var UTILS = {
 
     }
     console.log('fillThe Fields');
-}
+},
+    determineEffectsTypeHeader: function (data) {
+        var returnValue = 'odds ratio';
+        if ((data) && (data.length > 0)) {
+            if (data[0].BETA) {
+                returnValue = 'beta';
+            } else if (data[0].ZSCORE){
+                returnValue = 'zscore';
+            }
+        }
+        return returnValue;
+    },
+    fillPhenotypicTraitTable:  function ( vRec, show_gene, show_sigma, show_exseq, show_exchp ) {
+        var retVal = "";
+        if (!vRec) {   // error condition
+            return;
+        }
+        var effectsType = UTILS.determineEffectsTypeHeader (vRec);
+        var effectsField = 'ODDS_RATIO';
+        if (effectsType ==='beta'){
+            effectsField = 'BETA';
+        } if (effectsType ==='zscore'){
+            effectsField = 'ZSCORE';
+        }
+
+        for (var i = 0; i < vRec.length; i++) {
+
+            var variant = vRec [i] ;
+            retVal += "<tr>"
+
+            var pValueGreyedOut = (variant.PVALUE > .05)? "greyedout" :"normal";
+
+            retVal += "<td><a class='boldlink' href='../variant/variantInfo/"+ variant.DBSNP_ID+"'>"+ variant.DBSNP_ID+"</a></td>";
+
+            retVal += "<td><a class='boldlink' href='../gene/geneInfo/"+ variant.CLOSEST_GENE+"'>"+ variant.CLOSEST_GENE+"</a></td>";
+
+            retVal += "<td>"+ variant.PVALUE.toPrecision(3)+"</td>";
+
+            retVal += "<td class='" +pValueGreyedOut+ "'>"+ variant[effectsField].toPrecision(3)+"</td>";
+
+            retVal += "<td>";
+            if (variant.MAF) {
+                retVal += variant.MAF.toPrecision(3);
+            }
+            retVal += "</td>";
+
+            retVal += "<td><a class='boldlink' href='./variant/"+ variant.DBSNP_ID+"/gwas'>click here</a></td>";
+        }
+        return retVal;
+    }
 
 
 
 
 
 
-};
+        };

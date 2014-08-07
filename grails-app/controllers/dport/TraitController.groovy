@@ -9,12 +9,22 @@ class TraitController {
     def traitSearch() {
         String phenotypeKey=params.trait
         String requestedSignificance=params.significance
+        String phenotypeName = ''
+        String phenotypeDataSet = ''
+        Phenotype phenotype = Phenotype.findByDatabaseKey(phenotypeKey)
+        if (phenotype)  {
+            phenotypeName =  phenotype.name
+            phenotypeDataSet = phenotype.dataSet
+        }
         render (view: 'phenotype',
                 model:[show_gwas:1,
                        show_exchp: 1,
                        show_exseq: 1,
                        show_sigma: 0,
+                       show_gene: 1,
                        phenotypeKey:phenotypeKey,
+                       phenotypeName:phenotypeName,
+                       phenotypeDataSet:phenotypeDataSet,
                        requestedSignificance:requestedSignificance] )
 
     }

@@ -110,11 +110,11 @@
     <g:if test="${gene_info.GWS_TRAITS}">
         <strong>
             <p>Variants in or near this gene have been convincingly associated at genome-wide significance in GWAS meta-analyses with the following traits:</p>
-            <ul>
-                <% _.each(gene_info.GWS_TRAITS, function(t) { %>
-                <li><%=_.find(phenotypes, function(p) { return p.db_key == t }).name%></li>
-                <% }); %>
-            </ul>
+            %{--<ul>--}%
+                %{--<% _.each(gene_info.GWS_TRAITS, function(t) { %>--}%
+                %{--<li><%=_.find(phenotypes, function(p) { return p.db_key == t }).name%></li>--}%
+                %{--<% }); %>--}%
+            %{--</ul>--}%
         </strong>
     </g:if>
     <g:else>

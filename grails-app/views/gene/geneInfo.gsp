@@ -41,15 +41,19 @@
     <script>
          var geneInfo = {};
          geneInfo.variationTable =  [] ;
-         <g:each in="${0..(variationTable.size()-1)}">
-         geneInfo.variationTable.push({"cohort":"${variationTable[it]["COHORT"]}",
-             "participants": "${variationTable[it]["NS"]}",
-             "variants": "${variationTable[it]["TOTAL"]}",
-             "common": "${variationTable[it]["COMMON"]}",
-             "lowfrequency": "${variationTable[it]["LOW_FREQUENCY"]}",
-             "rare": "${variationTable[it]["RARE"]}"
-         });
-         </g:each>
+         if (variationTable) {
+             <g:each in="${0..(variationTable.size()-1)}">
+             if (variationTable[it]) {
+                 geneInfo.variationTable.push({"cohort": "${variationTable[it]["COHORT"]}",
+                     "participants": "${variationTable[it]["NS"]}",
+                     "variants": "${variationTable[it]["TOTAL"]}",
+                     "common": "${variationTable[it]["COMMON"]}",
+                     "lowfrequency": "${variationTable[it]["LOW_FREQUENCY"]}",
+                     "rare": "${variationTable[it]["RARE"]}"
+                 });
+             }
+             </g:each>
+         }
 
     </script>
 
