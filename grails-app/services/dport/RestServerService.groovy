@@ -15,6 +15,7 @@ class RestServerService {
     private  String GENE_INFO_URL = BASE_URL + "gene-info"
     private  String VARIANT_INFO_URL = BASE_URL + "variant-info"
     private  String VARIANT_SEARCH_URL = BASE_URL + "variant-search"
+    private  String TRAIT_SEARCH_URL = BASE_URL + "trait-search"
 
     static List <String> VARIANT_SEARCH_COLUMNS = [
     'ID',
@@ -329,6 +330,32 @@ class RestServerService {
         return returnValue
     }
 
+
+
+
+
+
+    JSONObject searchTraitByName (String traitName,
+                                  BigDecimal significance) {
+        JSONObject returnValue = null
+        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
+        String drivingJson = """{
+"user_group": "ui",
+"filters": [
+    {"operand": "PVALUE", "operator": "LTE", "value": ${significance.toString ()}, "filter_type": "FLOAT"}
+],
+"trait": "${traitName}"
+}
+""".toString()
+        RestResponse response  = rest.post(TRAIT_SEARCH_URL)   {
+            contentType "application/json"
+            json drivingJson
+        }
+        if (response.responseEntity.statusCode.value == 200) {
+            returnValue =  response.json
+        }
+        return returnValue
+    }
 
 
 

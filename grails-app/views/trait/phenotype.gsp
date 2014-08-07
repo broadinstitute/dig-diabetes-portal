@@ -10,18 +10,19 @@
 <body>
 <script>
     var variant;
-    %{--$.ajax({--}%
-        %{--cache:false,--}%
-        %{--type:"post",--}%
-        %{--url:"./phenotypeAjax/trait="+"<%=phenotypeKey%>"+"&significance="+<%=requestedSignificance%>,--}%
-        %{--async:true,--}%
-        %{--success: function (data) {--}%
-            %{--//fillTheFields(data) ;--}%
-            %{--console.log('returned data from trait search')--}%
-        %{--}--}%
-    %{--});--}%
+    $.ajax({
+        cache:false,
+        type:"post",
+        url:"./phenotypeAjax",
+        data:{trait:'<%=phenotypeKey%>',significance:'<%=requestedSignificance%>'},
+        async:true,
+        success: function (data) {
+            //fillTheFields(data) ;
+            console.log('returned data from trait search')
+        }
+    });
 
-    %{--data:{trait:'<%=phenotypeKey%>',significance:'<%=requestedSignificance%>'},--}%
+
 
     function fillTheFields (data)  {
         var cariantRec = {
@@ -117,7 +118,7 @@
         <div class="variant-info-container" >
             <div class="variant-info-view" >
 
-                %{--<g:render template="variantPageHeader" />--}%
+                <g:render template="traitTableHeader" />
 
             </div>
 

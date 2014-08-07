@@ -19,14 +19,21 @@ class TraitController {
 
     }
      def phenotypeAjax() {
-        String variantToStartWith = params.id
-        if (variantToStartWith)      {
-            JSONObject jsonObject =  restServerService.retrieveVariantInfoByName (variantToStartWith.trim())
+            String significance = params["significance"]
+            String phenotypicTrait  = params["trait"]
+            BigDecimal significanceValue
+            try {
+                significanceValue = new BigDecimal(significance)
+            } catch (NumberFormatException nfe)  {
+                println "User supplied a nonnumeric significance value = '${significance}'"
+                // TODO: error condition.  Go with GWAS significance
+                significantValue = 0.00000005
+            }
+            JSONObject jsonObject = restServerService.searchTraitByName(phenotypicTrait,significanceValue)
             render(status:200, contentType:"application/json") {
-                [variant:jsonObject['variant-info']]
+                [variant:jsonObject['variants']]
             }
 
-        }
     }
 
 }

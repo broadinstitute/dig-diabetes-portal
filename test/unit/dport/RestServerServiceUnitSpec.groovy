@@ -1,9 +1,8 @@
 package dport
 import grails.test.mixin.TestFor
+import org.codehaus.groovy.grails.web.json.JSONObject
 import spock.lang.Specification
 import spock.lang.Unroll
-import org.codehaus.groovy.grails.web.json.JSONObject
-
 /**
  * Created by balexand on 7/18/2014.
  */
@@ -18,10 +17,23 @@ class RestServerServiceUnitSpec extends Specification {
         assertNotNull status
     }
 
+
+    void "test searchTraitByName"() {
+        when:
+        JSONObject jsonObject = service.searchTraitByName("BMI",0.000005)
+        then:
+        assertNotNull jsonObject
+        jsonObject["is_error"] == false
+        jsonObject["variants"].size() > 0
+    }
+
+
+
     void "test retrieve Json"() {
         when:
         JSONObject jsonObject = service.getServiceJson("http://grails.org/api/v1.0/plugin/acegi/")
         then:
+        //def userJson = new JsonSlurper().parseText(results )
         assertNotNull jsonObject
     }
 
@@ -83,8 +95,6 @@ class RestServerServiceUnitSpec extends Specification {
         then:
         assertNotNull jsonObject
     }
-
-
 
 
 

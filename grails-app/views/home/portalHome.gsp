@@ -47,7 +47,7 @@
              if (trait_val == "" || significance == 0) {
                  alert('Please choose a trait and enter a valid significance!')
              }
-             window.location.href = '../trait/traitSearch?trait=' + trait_val + '&significance=' + significance;
+             window.location.href = '../trait/traitSearch?trait=' + trait_val +'&significance=' + significance;
          });
 
      });
