@@ -10,16 +10,18 @@
     </p>
     <ul>
         <li>
-            <g:if test="${(gene_info.GWAS_T2D_GWS_TOTAL > 0)}">
-                print('<strong>');
+            <g:if test="${gene_info.GWAS_T2D_GWS_TOTAL}">
+                <g:if test="${(gene_info.GWAS_T2D_GWS_TOTAL > 0)}">
+                    print('<strong>');
+                </g:if>
+                <%=gene_info.GWAS_T2D_GWS_TOTAL%> are associated with type 2 diabetes at or above genome-wide significance
+                <g:if test="${(gene_info.GWAS_T2D_GWS_TOTAL > 0)}">
+                    print('</strong>');
+                </g:if>
+                | <a class="variantlink" href="/region/chr<%=gene_info.CHROM%>:<%=gene_info.REGION_BEG%>-<%=
+                gene_info.REGION_END%>/variants?filters=gwas-genomewide">view</a>
             </g:if>
-            <%=gene_info.GWAS_T2D_GWS_TOTAL%> are associated with type 2 diabetes at or above genome-wide significance
-            <g:if test="${(gene_info.GWAS_T2D_GWS_TOTAL > 0)}">
-                print('</strong>');
-            </g:if>
-            | <a class="variantlink" href="/region/chr<%=gene_info.CHROM%>:<%=gene_info.REGION_BEG%>-<%=
-            gene_info.REGION_END%>/variants?filters=gwas-genomewide">view</a>
-        </li>
+         </li>
         <li>
             <%=gene_info.GWAS_T2D_NOM_TOTAL%> are associated with type 2 diabetes at or above nominal significance
             | <a class="variantlink" href="/region/chr<%=gene_info.CHROM%>:<%=gene_info.REGION_BEG%>-<%=
@@ -31,18 +33,31 @@
 
 <g:if test="${show_exchp}">
     <p>
-        There are <strong><%=gene_info.EXCHP_T2D_VAR_TOTALS.EU.TOTAL%> total variants</strong> in exome chip data available on this portal
+        <g:if test="${gene_info.EXCHP_T2D_VAR_TOTALS}">
+            There are <strong><%=gene_info.EXCHP_T2D_VAR_TOTALS.EU.TOTAL%> total variants</strong> in exome chip data available on this portal
     | <a class="variantlink" href="/gene/<%=gene_info.ID%>/variants?filters=total-exchp">view</a>
+        </g:if>
+        <g:else>
+            There are 0 total variants in exome chip data available on this portal
+    | <a class="variantlink" href="/gene/<%=gene_info.ID%>/variants?filters=total-exchp">view</a>
+        </g:else>
     </p>
     <ul>
         <li>
-            <g:if test="${(gene_info.EXCHP_T2D_GWS_TOTAL > 0)}">
-                print('<strong>');
+            <g:if test="${gene_info.EXCHP_T2D_GWS_TOTAL}">
+                <g:if test="${(gene_info.EXCHP_T2D_GWS_TOTAL > 0)}">
+                    print('<strong>');
+                </g:if>
+                <%=gene_info.EXCHP_T2D_GWS_TOTAL%> are associated with type 2 diabetes at or above genome-wide significance
+                <g:if test="${(gene_info.EXCHP_T2D_GWS_TOTAL > 0)}">
+                    print('</strong>');
+                </g:if>
             </g:if>
-            <%=gene_info.EXCHP_T2D_GWS_TOTAL%> are associated with type 2 diabetes at or above genome-wide significance
-            <g:if test="${(gene_info.EXCHP_T2D_GWS_TOTAL > 0)}">
-                print('</strong>');
-            </g:if>
+            <g:else>
+                 0 are associated with type 2 diabetes at or above genome-wide significance
+        | <a class="variantlink" href="/gene/<%=gene_info.ID%>/variants?filters=total-exchp">view</a>
+            </g:else>
+
             | <a class="variantlink" href="/gene/<%=gene_info.ID%>/variants?filters=exchp-genomewide">view</a>
         </li>
         <li>
@@ -63,6 +78,7 @@
     </p>
     <ul>
         <li>
+        <g:if test="${gene_info._13k_T2D_GWS_TOTAL}">
             <g:if test="${(gene_info._13k_T2D_GWS_TOTAL > 0)}">
                 print('<strong>');
             </g:if>
@@ -71,6 +87,9 @@
             <g:if test="${(gene_info._13k_T2D_GWS_TOTAL > 0)}">
                 print('</strong>');
             </g:if>
+
+        </g:if>
+
 
             | <a class="variantlink" href="/gene/<%=gene_info.ID%>/variants?filters=t2d-genomewide">view</a>
         </li>

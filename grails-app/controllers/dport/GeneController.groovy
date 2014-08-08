@@ -30,14 +30,20 @@ class GeneController {
             tableValues["COHORT"] = geneManagementService.cohortDetermination(sequenceKey, "exome sequencing")
             variationTable << tableValues
         }
-        JSONObject exomeChipList =  jsonObject['gene-info'].EXCHP_T2D_VAR_TOTALS
-        for (String chipKey in exomeChipList.keySet()){
-            JSONObject exomeChip = exomeChipList.getJSONObject(chipKey)
-            LinkedHashMap tableValues = [:]
-            for (key in exomeChip.keySet()){
-                tableValues[key]=exomeChip.getString(key)
+        if (!(jsonObject['gene-info'].EXCHP_T2D_VAR_TOTALS==JSONObject.NULL)){
+            JSONObject exomeChipList =  jsonObject['gene-info'].EXCHP_T2D_VAR_TOTALS
+            for (String chipKey in exomeChipList.keySet()){
+                JSONObject exomeChip = exomeChipList.getJSONObject(chipKey)
+                LinkedHashMap tableValues = [:]
+                for (key in exomeChip.keySet()){
+                    tableValues[key]=exomeChip.getString(key)
+                }
+                tableValues["COHORT"] = geneManagementService.cohortDetermination(chipKey, "exome chip")
+                variationTable << tableValues
             }
-            tableValues["COHORT"] = geneManagementService.cohortDetermination(chipKey, "exome chip")
+        } else {
+            LinkedHashMap tableValues = [:]
+            tableValues['EU'] =['COMMON': 0,'LOW_FREQUENCY': 0,'NS': 0,'RARE': 0,'TOTAL': 0]
             variationTable << tableValues
         }
          render (view: 'geneInfo', model:[gene_info:jsonObject['gene-info'],
