@@ -685,7 +685,57 @@ var UTILS = {
             }
             retVal += "</td>";
 
-            retVal += "<td><a class='boldlink' href='./variant/"+ variant.DBSNP_ID+"/gwas'>click here</a></td>";
+            retVal += "<td><a class='boldlink' href='./traitInfo/"+ variant.DBSNP_ID+"'>click here</a></td>";
+        }
+        return retVal;
+    },
+    fillTraitsPerVariantTable:  function ( vRec, show_gene, show_sigma, show_exseq, show_exchp ) {
+        var retVal = "";
+        if (!vRec) {   // error condition
+            return;
+        }
+
+        for (var i = 0; i < vRec.length; i++) {
+
+            var trait = vRec [i] ;
+            retVal += "<tr>"
+
+            retVal += "<td>" +trait.TRAIT+"</td>";
+
+            retVal += "<td>" +(trait.PVALUE.toPrecision(3))+"</td>";
+
+            retVal += "<td>";
+            if (trait.DIR === "up") {
+                retVal += "<span class='assoc-up'>&uarr;</span>";
+            } else if (trait.DIR === "down") {
+                retVal += "<span class='down-up'>&darr;</span>";
+            }
+            retVal += "</td>";
+
+            retVal += "<td>";
+            if (trait.ODDS_RATIO) {
+                retVal += (trait.ODDS_RATIO.toPrecision(3));
+            }
+            retVal += "</td>";
+
+
+            retVal += "<td>";
+            if (trait.MAF) {
+                retVal += (trait.MAF.toPrecision(3));
+            }
+            retVal += "</td>";
+
+
+            retVal += "<td>";
+            if (trait.BETA) {
+                retVal += "beta: " + trait.BETA.toPrecision(3);
+            } else if (trait.Z_SCORE){
+                retVal += "z-score: " + trait.ZSCORE.toPrecision(3);
+            }
+            retVal += "</td>";
+
+
+            retVal += "</tr>";
         }
         return retVal;
     }

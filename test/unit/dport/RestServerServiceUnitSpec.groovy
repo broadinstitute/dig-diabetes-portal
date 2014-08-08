@@ -28,6 +28,17 @@ class RestServerServiceUnitSpec extends Specification {
     }
 
 
+    void "test retrieveTraitInfoByVariant"() {
+        when:
+        JSONObject jsonObject = service.retrieveTraitInfoByVariant("rs4457676")
+        then:
+        assertNotNull jsonObject
+        jsonObject["is_error"] == false
+        jsonObject["trait-info"].size() > 0
+    }
+
+
+
 
     void "test retrieve Json"() {
         when:

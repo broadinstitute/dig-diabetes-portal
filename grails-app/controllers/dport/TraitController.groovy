@@ -6,6 +6,19 @@ class TraitController {
     RestServerService restServerService
 
     def index() {}
+
+
+     def traitInfo (){
+          String variantIdentifier = params.getIdentifier()
+         render (view: 'traitsPerVariant',
+                 model:[show_gwas:1,
+                        show_exchp: 1,
+                        show_exseq: 1,
+                        show_sigma: 0,
+                        show_gene: 1,
+                        variantIdentifier:variantIdentifier] )
+     }
+
     def traitSearch() {
         String phenotypeKey=params.trait
         String requestedSignificance=params.significance
@@ -28,6 +41,10 @@ class TraitController {
                        requestedSignificance:requestedSignificance] )
 
     }
+
+
+
+
      def phenotypeAjax() {
             String significance = params["significance"]
             String phenotypicTrait  = params["trait"]
@@ -43,6 +60,17 @@ class TraitController {
             render(status:200, contentType:"application/json") {
                 [variant:jsonObject['variants']]
             }
+
+    }
+
+
+
+    def ajaxTraitsPerVariant()  {
+        String variant = params["variantIdentifier"]
+        JSONObject jsonObject = restServerService.retrieveTraitInfoByVariant(variant)
+        render(status:200, contentType:"application/json") {
+            [traitInfo:jsonObject['trait-info']]
+        }
 
     }
 

@@ -14,6 +14,7 @@ class RestServerService {
     private  String BASE_URL = 'http://t2dgenetics.org/dev/rest/server/'
     private  String GENE_INFO_URL = BASE_URL + "gene-info"
     private  String VARIANT_INFO_URL = BASE_URL + "variant-info"
+    private  String TRAIT_INFO_URL = BASE_URL + "trait-info"
     private  String VARIANT_SEARCH_URL = BASE_URL + "variant-search"
     private  String TRAIT_SEARCH_URL = BASE_URL + "trait-search"
 
@@ -358,6 +359,26 @@ class RestServerService {
     }
 
 
+
+
+
+    JSONObject retrieveTraitInfoByVariant (String variantName) {
+        JSONObject returnValue = null
+        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
+        String drivingJson = """{
+"user_group": "ui",
+"variant_id": "${variantName}"
+}
+""".toString()
+        RestResponse response  = rest.post(TRAIT_INFO_URL)   {
+            contentType "application/json"
+            json drivingJson
+        }
+        if (response.responseEntity.statusCode.value == 200) {
+            returnValue =  response.json
+        }
+        return returnValue
+    }
 
 
 
