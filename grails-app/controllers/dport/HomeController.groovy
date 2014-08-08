@@ -31,7 +31,7 @@ class HomeController {
     }
 
     def portalHome = {
-        render(view: 'portalHome', model: [])
+        render(controller: 'home', view: 'portalHome', model: [])
     }
 
 

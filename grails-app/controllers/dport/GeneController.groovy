@@ -48,12 +48,24 @@ class GeneController {
                                          variationTable: variationTable] )
     }
 
-    def geneInfoData() {
+    def geneAjax() {
         String geneToStartWith = params.id
-        JSONObject jsonObject =  restServerService.retrieveGeneInfoByName (geneToStartWith)
-        response.setContentType("application/json")
-        render ("jsonObject" )
+        if (geneToStartWith)      {
+            JSONObject jsonObject =  restServerService.retrieveGeneInfoByName (geneToStartWith.trim())
+            render(status:200, contentType:"application/json") {
+                [variant:jsonObject['variant-info']]
+            }
+
+        }
     }
+
+
+//    def geneInfoData() {
+//        String geneToStartWith = params.id
+//        JSONObject jsonObject =  restServerService.retrieveGeneInfoByName (geneToStartWith)
+//        response.setContentType("application/json")
+//        render ("jsonObject" )
+//    }
 
 
 }

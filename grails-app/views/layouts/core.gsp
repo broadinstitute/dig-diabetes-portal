@@ -85,9 +85,9 @@
             </div>
         %{--{% endif %}--}%
             <g:if test="${grailsApplication.config.site.version == 't2dgenes'}">
-                <a href="../home/portalHome">Home</a> &middot;
-                <a href="../informational/about">About The Data</a> &middot;
-                <a href="../informational/contact">Contact</a>
+                <a href="${createLink(controller:'home',action:'portalHome')}">Home</a> &middot;
+                <a href="${createLink(controller:'informational', action:'about')}">About The Data</a> &middot;
+                <a href="${createLink(controller:'informational', action:'contact')}">Contact</a>
             </g:if>
             <g:elseif test="${grailsApplication.config.site.version == 'sigma'}">
                 <a href="/query">{% trans "Query" %}</a> &middot;

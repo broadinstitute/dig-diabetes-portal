@@ -6,7 +6,7 @@ class UrlMappings {
                 // apply constraints here
             }
         }
-        "/"(controller: 'home', action: 'portalHome')
+        "/"(redirect:[controller: 'home', action: 'portalHome',permanent:true])
         "500"(view:'/error')
 	}
 }

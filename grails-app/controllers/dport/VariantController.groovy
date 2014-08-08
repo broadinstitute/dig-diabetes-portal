@@ -44,19 +44,6 @@ class VariantController {
 
     }
 
-//    def variantSearch() {
-//        println "variant post received"
-//        String receivedParameters = request.parameters.toString()
-//        if (receivedParameters)    {
-//            String sb = filterManagementService.parseVariantSearchParameters(request.parameters,false)
-//            println("Here are our filters:${sb}")
-//            restServerService.searchGenomicRegionByCustomFilters()
-//        }  else {
-//            render("<h1> I heard you, but no valid JSON</h1>")
-//        }
-//
-//    }
-
 
 
     def variantSearch() {

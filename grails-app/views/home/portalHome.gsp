@@ -23,17 +23,23 @@
 
          $('#gene-go').on('click', function() {
              var gene_symbol = $('#gene-input').val();
-             window.location.href = '../gene/geneInfo/' + gene_symbol;
+             if (gene_symbol) {
+                 window.location.href = "${createLink(controller:'gene',action:'geneInfo')}/" + gene_symbol;
+             }
          });
 
          $('#variant-go').on('click', function() {
              var variant_id = $('#variant-input').val();
-             window.location.href = '../variant/variantInfo/' + variant_id;
+             if (variant_id) {
+                 window.location.href = "${createLink(controller:'variant',action:'variantInfo')}/" + variant_id;
+             }
          });
 
          $('#region-go').on('click', function() {
              var region_str = $('#region-input').val();
-             window.location.href = '../region/regionInfo/' + region_str;
+             if (region_str)   {
+                 window.location.href = "${createLink(controller:'region',action:'regionInfo')}/" + region_str;
+             }
          });
 
          $('#trait-go').on('click', function() {
@@ -46,8 +52,9 @@
              }
              if (trait_val == "" || significance == 0) {
                  alert('Please choose a trait and enter a valid significance!')
+             } else {
+                 window.location.href = "${createLink(controller:'trait',action:'traitSearch')}"+"?trait=" + trait_val +"&significance=" + significance;
              }
-             window.location.href = '../trait/traitSearch?trait=' + trait_val +'&significance=' + significance;
          });
 
      });
@@ -56,9 +63,9 @@
     <div class="container">
         <p>
             This prototype portal contains results from genetic association studies of type 2 diabetes.
-            Datatsets include exome sequencing results contributed by <a class="boldlink" href="../informational/t2dgenes">T2D-GENES</a> and <a class="boldlink" href="../informational/got2d">GoT2D</a> (n&asymp;13,000);
-        exome chip results contributed by <a class="boldlink" href="../informational/got2d">GoT2D</a> (n&asymp;82,000); and GWAS results contributed by <a class="boldlink" href="http://diagram-consortium.org/about.html">DIAGRAM</a> (n&asymp;69,000).
-        The portal also contains  results from large GWAS meta-analyses of <a class="boldlink" href="../informational/hgat">24 other traits</a>.
+            Datatsets include exome sequencing results contributed by <a class="boldlink" href="${createLink(controller:'informational', action:'t2dgenes')}">T2D-GENES</a> and <a class="boldlink" href="${createLink(controller:'informational', action:'got2d')}">GoT2D</a> (n&asymp;13,000);
+        exome chip results contributed by <a class="boldlink" href="${createLink(controller:'informational', action:'got2d')}">GoT2D</a> (n&asymp;82,000); and GWAS results contributed by <a class="boldlink" href="http://diagram-consortium.org/about.html">DIAGRAM</a> (n&asymp;69,000).
+        The portal also contains  results from large GWAS meta-analyses of <a class="boldlink" href="${createLink(controller:'informational', action:'hgat')}">24 other traits</a>.
         </p>
         <p>
             To use these results to investigate a biological hypothesis or assess a potential drug target,
@@ -108,7 +115,7 @@
                         </h2>
                     </div>
                     <div class="col-sm-3" style="padding-top: 40px; text-align: right;">
-                        <a href="../variantSearch/variantSearch" class="btn btn-primary btn-lg">Go!</a>
+                        <a href="${createLink(controller:'variantSearch', action:'variantSearch')}" class="btn btn-primary btn-lg">Go!</a>
                     </div>
                 </div>
                 <h2>
@@ -117,7 +124,7 @@
                 </h2>
                 <div class="input-group input-group-lg">
                     <select name="" id="trait-input" class="form-control" style="width:95%;">
-                        <option value="">-- Select A Trait? --</option>
+                        <option value="">-- Select A Trait --</option>
                         <optgroup label="Cardiometabolic">
                             <g:each in="${Phenotype.list()}" var="phenotype">
                                 <g:if test="${phenotype.category=='cardiometabolic'}" >
