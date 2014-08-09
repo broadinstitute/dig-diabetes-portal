@@ -40,7 +40,11 @@
         GWS_TRAITS: 27,
         GWAS_T2D_GWS_TOTAL: 28,
         GWAS_T2D_NOM_TOTAL: 29,
-        GWAS_T2D_VAR_TOTAL: 30
+        GWAS_T2D_VAR_TOTAL: 30,
+        EXCHP_T2D_VAR_TOTALS_EU_TOTAL: 31,
+        SIGMA_T2D_VAR_TOTAL: 32,
+        SIGMA_T2D_GWS_TOTAL: 33,
+        SIGMA_T2D_NOM_TOTAL: 34
     };
     function revG(d){
         var v;
@@ -50,7 +54,7 @@
             case 3:v="BEG";break;
             case 4:v="END";break;
             case 5:v="Function_description";break;
-            case 6:v="And_13k_T2D_VAR_TOTAL";break;
+            case 6:v="_13k_T2D_VAR_TOTAL";break;
             case 7:v="_13k_T2D_ORIGIN_VAR_TOTALS";break;
             case 8:v="HS";break;
             case 9:v="AA";break;
@@ -75,6 +79,10 @@
             case  28:v="GWAS_T2D_GWS_TOTAL";break;
             case  29:v="GWAS_T2D_NOM_TOTAL";break;
             case  30:v="GWAS_T2D_VAR_TOTAL";break;
+            case  31:v="EXCHP_T2D_VAR_TOTALS.EU.TOTAL";break;
+            case  32:v="SIGMA_T2D_VAR_TOTAL";break;
+            case  33:v="SIGMA_T2D_GWS_TOTAL";break;
+            case  34:v="SIGMA_T2D_NOM_TOTAL";break;
             default: v="";
         }
         return v;
@@ -86,16 +94,23 @@
         data:{geneName:'<%=geneName%>'},
         async:true,
         success: function (data) {
-            fillTheGeneFields(data) ;
+            fillTheGeneFields(data,${show_gwas},${show_exchp},${show_exseq},${show_sigma}) ;
             console.log('Finish processing fillTheGeneFields ')
         }
     });
+    // walk into nested fields
     function geneFieldOrZero(geneInfo,filedNumber) {
         var retval = 0;
         var fieldName  = revG(filedNumber);
-        if ((geneInfo)  &&
-            (geneInfo[fieldName])){
-            retval =  geneInfo[fieldName];
+        if ((geneInfo)  && (fieldName.length>0)) {
+            var fieldBreakdown = fieldName.split("."); // step into complex fields
+            retval =   geneInfo[fieldBreakdown[0]];
+            if (fieldBreakdown.length>1){
+                for (  var i = 1 ; i < fieldBreakdown.length ; i++ ) {
+                    var nextLevelSpec =  fieldBreakdown[i];
+                    retval =  retval[nextLevelSpec];
+                }
+            }
         }
         return retval;
     }
@@ -105,11 +120,11 @@
         if (totalNumber > 0){
             currentLine += '<strong>';
         }
-        currentLine += totalNumber+" total variants ";
+        currentLine += (totalNumber+" total variants ");
         if (totalNumber > 0){
             currentLine += '</strong>';
         }
-        currentLine += totalNumber+" "+description+" | ";
+        currentLine += (" "+description+" | ");
         $(textSpanId).append (currentLine);
         $(anchorId)[0].href= "/dport/region/regionInfo/chr"+geneFieldOrZero(geneInfo,chromosomeField)+":"+geneFieldOrZero(geneInfo,beginPositionField)+"-"+geneFieldOrZero(geneInfo,endPositionField) ;
     }
@@ -127,13 +142,65 @@
         $(textSpanId).append (currentLine);
         $(anchorId)[0].href= "/dport/region/regionInfo/chr"+geneFieldOrZero(geneInfo,chromosomeField)+":"+geneFieldOrZero(geneInfo,beginPositionField)+"-"+geneFieldOrZero(geneInfo,endPositionField) ;
     }
-    function fillTheGeneFields (data)  {
+    function fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma){
+
+        if(show_gwas){
+            variantsAndAssociationsTitleLine(rawGeneInfo,geneInfoRec.GWAS_T2D_VAR_TOTAL,'within 500 kb of this gene in GWAS data available on this portal',geneInfoRec.CHROM,geneInfoRec.BEG,geneInfoRec.END,"#totalGwasVariants","#totalGwasVariantAnchor");
+            variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec.GWAS_T2D_GWS_TOTAL,'genome-wide',geneInfoRec.CHROM,geneInfoRec.BEG,geneInfoRec.END,"#totalGwasVariantst2dgenome","#totalGwasVariantAnchor2dgenome");
+            variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec.GWAS_T2D_NOM_TOTAL,'nominal',geneInfoRec.CHROM,geneInfoRec.BEG,geneInfoRec.END,"#totalGwasVariantst2dnominal","#totalGwasVariantAnchor2dnominal");
+        }
+
+        if(show_exchp){
+            variantsAndAssociationsTitleLine(rawGeneInfo,geneInfoRec.EXCHP_T2D_VAR_TOTALS_EU_TOTAL,'in exome chip data available on this portal',geneInfoRec.CHROM,geneInfoRec.BEG,geneInfoRec.END,"#totalExomeChipVariants","#totalExomeChipVariantAnchor");
+            variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec.EXCHP_T2D_GWS_TOTAL,'genome-wide',geneInfoRec.CHROM,geneInfoRec.BEG,geneInfoRec.END,"#totalExomeChipVariantst2dgenome","#totalExomeChipVariantAnchor2dgenome");
+            variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec.EXCHP_T2D_NOM_TOTAL,'nominal',geneInfoRec.CHROM,geneInfoRec.BEG,geneInfoRec.END,"#totalExomeChipVariantst2dnominal","#totalExomeChipVariantAnchor2dnominal");
+        }
+
+        if(show_exseq){
+            variantsAndAssociationsTitleLine(rawGeneInfo,geneInfoRec._13k_T2D_VAR_TOTAL,'in exome sequencing data available on this portal',geneInfoRec.CHROM,geneInfoRec.BEG,geneInfoRec.END,"#totalExomeSeqVariants","#totalExomeSeqVariantAnchor");
+            variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec._13k_T2D_GWS_TOTAL,'genome-wide',geneInfoRec.CHROM,geneInfoRec.BEG,geneInfoRec.END,"#totalExomeSeqVariantst2dgenome","#totalExomeSeqVariantAnchor2dgenome");
+            variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec._13k_T2D_NOM_TOTAL,'nominal',geneInfoRec.CHROM,geneInfoRec.BEG,geneInfoRec.END,"#totalExomeSeqVariantst2dnominal","#totalExomeSeqVariantAnchor2dnominal");
+        }
+
+        if (show_sigma){
+            variantsAndAssociationsTitleLine(rawGeneInfo,geneInfoRec.SIGMA_T2D_VAR_TOTAL,'in SIGMA sequencing data available on this portal',geneInfoRec.CHROM,geneInfoRec.BEG,geneInfoRec.END,"#totalExomeSeqVariants","#totalExomeSeqVariantAnchor");
+            variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec.SIGMA_T2D_GWS_TOTAL,'genome-wide',geneInfoRec.CHROM,geneInfoRec.BEG,geneInfoRec.END,"#totalExomeSeqVariantst2dgenome","#totalExomeSeqVariantAnchor2dgenome");
+            variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec.SIGMA_T2D_NOM_TOTAL,'nominal',geneInfoRec.CHROM,geneInfoRec.BEG,geneInfoRec.END,"#totalExomeSeqVariantst2dnominal","#totalExomeSeqVariantAnchor2dnominal");
+        }
+
+    }
+    function fillVariationAcrossEthnicity (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma) {
+            if  ((rawGeneInfo)&&
+                 (rawGeneInfo["_13k_T2D_ORIGIN_VAR_TOTALS"]))  {
+                var ethnicityMap = rawGeneInfo["_13k_T2D_ORIGIN_VAR_TOTALS"];
+                for (var ethnicityKey in ethnicityMap) {
+                    if (ethnicityMap.hasOwnProperty(ethnicityKey)) {
+                        var ethnicityRec  = ethnicityMap[ethnicityKey];
+                        var sing = (ethnicityRec ["SING"])?(ethnicityRec ["SING"]): 0;
+                        var rare = (ethnicityRec ["RARE"])?(ethnicityRec ["RARE"]): 0;
+                        var lowFrequency = (ethnicityRec ["LOW_FREQUENCY"])?(ethnicityRec ["LOW_FREQUENCY"]): 0;
+                        var common = (ethnicityRec ["COMMON"])?(ethnicityRec ["COMMON"]): 0;
+                        var total = (ethnicityRec ["TOTAL"])?(ethnicityRec ["TOTAL"]): 0;
+                        var ns = (ethnicityRec ["NS"])?(ethnicityRec ["NS"]): 0;
+                        $('#continentalVariationTableBody').append ('<tr>'+
+                                '<td>' + UTILS.expandEthnicityDesignation (ethnicityKey) + '</td>'+
+                                '<td>' + ns + '</td>'+
+                                '<td>' + total + '</td>'+
+                                '<td>' + common + '</td>'+
+                                '<td>' + lowFrequency + '</td>'+
+                                '<td>' + rare + '</td>'+
+                                '</tr>');
+                    }
+                }
+
+            }
+    }
+    function fillTheGeneFields (data,show_gwas,show_exchp,show_exseq,show_sigma)  {
         var rawGeneInfo =  data['geneInfo'];
         var geneInfo = {};
         geneInfo.variationTable =  [] ;
-        variantsAndAssociationsTitleLine(rawGeneInfo,geneInfoRec.GWAS_T2D_VAR_TOTAL,'within 500 kb of this gene in GWAS data available on this portal',geneInfoRec.CHROM,geneInfoRec.BEG,geneInfoRec.END,"#totalGwasVariants","#totalGwasVariantAnchor");
-        variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec.GWAS_T2D_GWS_TOTAL,'genome-wide',geneInfoRec.CHROM,geneInfoRec.BEG,geneInfoRec.END,"#totalGwasVariantst2dgenome","#totalGwasVariantAnchor2dgenome");
-        variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec.GWAS_T2D_NOM_TOTAL,'nominal',geneInfoRec.CHROM,geneInfoRec.BEG,geneInfoRec.END,"#totalGwasVariantst2dnominal","#totalGwasVariantAnchor2dnominal");
+        fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma);
+        fillVariationAcrossEthnicity (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma);
 
 //        fillVariantsAndAssociationsSection (rawGeneInfo);
 //        $('#continentalAncestryTable').append(fillAncestryTable()) ;
@@ -211,12 +278,7 @@
          </g:if>
 
     </script>
-    <h1>temp</h1>
-               <span id="totalGwasVariants"></span><a id="totalGwasVariantAnchor" class="variantlink">view</a>
-                <ul>
-                    <li><span id="totalGwasVariantst2dgenome"></span><a id="totalGwasVariantAnchor2dgenome" class="variantlink">view</a></li>
-                    <li><span id="totalGwasVariantst2dnominal"></span><a id="totalGwasVariantAnchor2dnominal" class="variantlink">view</a></li>
-                </ul>
+
     <p><strong>Uniprot Summary:</strong> <%=gene_info.Function_description%></p>
 
     <div class="separator"></div>
@@ -229,7 +291,7 @@
 
     <div class="separator"></div>
 
-     <g:render template="biologicalHypothesisTesting" />
+     %{--<g:render template="biologicalHypothesisTesting" />--}%
 
      <div class="separator"></div>
 

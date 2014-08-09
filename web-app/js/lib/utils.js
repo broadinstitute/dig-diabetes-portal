@@ -147,6 +147,20 @@ var UTILS = {
         }
         return [pval, datatype];
     },
+    expandEthnicityDesignation: function (shortName) {
+        var retVal = "";
+        var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
+        var ethnicityFullName = ["African-Americans", "East Asians", "South Asians", "Europeans", "Hispanics"];
+        for (  var i = 0 ; i < ethnicAbbreviation.length ; i++ )  {
+            if (shortName === (ethnicAbbreviation [i])) break;
+        }
+        if  (i < ethnicityFullName.length)  {
+            retVal = ethnicityFullName [i]  ;
+        }  else {
+            retVal =  shortName;
+        }
+         return  retVal;
+    },
 
     get_consequence_names: function(variant) {
         if (!variant.Consequence) return [];
