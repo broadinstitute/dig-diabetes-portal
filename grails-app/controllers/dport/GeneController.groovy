@@ -51,6 +51,7 @@ class GeneController {
                                          show_exchp: 1,
                                          show_exseq: 1,
                                          show_sigma: 0,
+                                         geneName:geneToStartWith,
                                          variationTable: variationTable] )
     }
 
@@ -64,6 +65,17 @@ class GeneController {
 
         }
     }
+    def geneInfoAjax() {
+        String geneToStartWith = params.geneName
+        if (geneToStartWith)      {
+            JSONObject jsonObject =  restServerService.retrieveGeneInfoByName (geneToStartWith.trim())
+            render(status:200, contentType:"application/json") {
+                [geneInfo:jsonObject['gene-info']]
+            }
+
+        }
+    }
+
 
 
 //    def geneInfoData() {
