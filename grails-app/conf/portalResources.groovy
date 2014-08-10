@@ -11,6 +11,7 @@ modules = {
         resource url: 'css/lib/style.css'
         resource url: 'css/lib/jquery.dataTables.css'
 
+        resource url: 'js/lib/d3.min.js'
         resource url: 'js/lib/utils.js'
         resource url: 'js/lib/jquery-1.11.0.min.js'
         resource url: 'js/lib/jquery.dataTables.min.js'

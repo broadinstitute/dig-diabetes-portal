@@ -77,9 +77,21 @@ class TraitController {
 
     def regionInfo() {
         String regionSpecification = params.id
-
+        List<Phenotype> phenotypeList=Phenotype.list()
+        StringBuilder sb   = new StringBuilder ("")
+        int numberOfPhenotypes  =  phenotypeList.size()
+        int iterationCount  = 0
+        for (Phenotype phenotype in phenotypeList){
+            sb<< (phenotype.databaseKey + ":" + phenotype.name )
+            iterationCount++
+            if (iterationCount  < numberOfPhenotypes){
+                sb<< ","
+            }
+        }
+        String encodedString = java.net.URLEncoder.encode( sb.toString())
         render (view: 'traitVariantCross',
                 model:[regionSpecification: regionSpecification,
+                       phenotypeList:encodedString,
                        show_gene:1,
                        show_gwas:1,
                        show_exchp: 1,
