@@ -616,17 +616,20 @@ var UTILS = {
         };
 
     } ,
-    postJson2: function (path, params) {
-        // construct an HTTP request
+    postJson2: function (path, params, spinnerDisplay) {
+        var loading = $('#spinner').show();
+        loading.show();
         $.ajax({
             type:'POST',
             data:params,
             url:path,
             success:function(data,textStatus){
                 UTILS.fillTheVariantTable(data);
+                loading.hide();
             },
             error:function(XMLHttpRequest,textStatus,errorThrown){
-                console.log('error');
+                loading.hide();
+                errorReporter(jqXHR, exception) ;
             }
         });
     }

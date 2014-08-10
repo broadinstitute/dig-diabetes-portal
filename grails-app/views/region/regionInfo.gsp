@@ -24,6 +24,7 @@
         if (!y) { y = 1; }
         return ((x < y) ? 1 : ((x > y) ?  -1 : 0));
     };
+    var loading = $('#spinner').show();
     $.ajax({
         cache:false,
         type:"get",
@@ -31,7 +32,11 @@
         async:true,
         success: function (data) {
             fillTheFields(data) ;
-            console.log(' fields have been filled')
+            loading.hide();
+        },
+        error: function(jqXHR, exception) {
+            loading.hide();
+            errorReporter(jqXHR, exception) ;
         }
     });
     function fillTheFields (data)  {

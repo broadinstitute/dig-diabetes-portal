@@ -91,6 +91,7 @@
         }
         return v;
     }
+    var loading = $('#spinner').show();
     $.ajax({
         cache:false,
         type:"post",
@@ -99,7 +100,11 @@
         async:true,
         success: function (data) {
             fillTheGeneFields(data,${show_gwas},${show_exchp},${show_exseq},${show_sigma}) ;
-            console.log('Finish processing fillTheGeneFields ')
+            loading.hide();
+        },
+        error: function(jqXHR, exception) {
+            loading.hide();
+            errorReporter(jqXHR, exception) ;
         }
     });
     function expandRegionBegin(geneExtentBeginning) {

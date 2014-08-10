@@ -7,6 +7,8 @@ modules = {
     core {
         dependsOn "dataTables"
 
+        resource url: 'images/ajaxLoadingAnimation.gif'
+
         resource url: 'css/lib/bootstrap.min.css'
         resource url: 'css/lib/style.css'
         resource url: 'css/lib/jquery.dataTables.css'

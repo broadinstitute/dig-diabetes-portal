@@ -13,6 +13,7 @@
 <body>
 <script>
     var variant;
+    var loading = $('#spinner').show();
     $.ajax({
         cache:false,
         type:"get",
@@ -20,7 +21,11 @@
         async:true,
         success: function (data) {
             fillTheFields(data) ;
-            console.log(' fields have been filled')
+            loading.hide();
+        },
+        error: function(jqXHR, exception) {
+            loading.hide();
+            errorReporter(jqXHR, exception) ;
         }
     });
     function fillTheFields (data)  {

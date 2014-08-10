@@ -34,7 +34,11 @@
 //            console.log(' fields have been filled')
 //        }
 //    });
-    UTILS.postJson2('../variantSearch/variantSearchAjax',"<%=filter%>",  ${show_gene}, ${show_sigma}, ${show_exseq}, ${show_exchp} );
+    UTILS.postJson2('../variantSearch/variantSearchAjax',"<%=filter%>",
+            ${show_gene},
+            ${show_sigma},
+            ${show_exseq},
+            ${show_exchp} );
     var uri_dec = decodeURIComponent("<%=filter%>");
 </script>
 
@@ -52,7 +56,6 @@
                 <div class="separator"></div>
 
                 <h3>Showing <span id="numberOfVariantsDisplayed"></span> variants that meet the following criteria:</h3>
-                filter: <span id="tempfilter"></span>
                 <script>
                     if (uri_dec)     {
                         $('#tempfilter').append(uri_dec.split('+').join());

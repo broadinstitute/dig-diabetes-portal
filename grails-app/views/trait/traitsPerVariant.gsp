@@ -7,6 +7,7 @@
 <body>
 <script>
     var variant;
+    var loading = $('#spinner').show();
     $.ajax({
         cache:false,
         type:"post",
@@ -15,7 +16,11 @@
         async:true,
         success: function (data) {
             fillTheTraitsPerVariantFields(data) ;
-            console.log('Finish processing information retrieved from traits per variant')
+            loading.hide();
+        },
+        error: function(jqXHR, exception) {
+            loading.hide();
+            errorReporter(jqXHR, exception) ;
         }
     });
 

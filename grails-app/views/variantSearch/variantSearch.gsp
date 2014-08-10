@@ -13,16 +13,6 @@
 <body>
 <script>
     var variant;
-    %{--$.ajax({--}%
-        %{--cache:false,--}%
-        %{--type:"get",--}%
-        %{--url:"../variantAjax/"+"<%=variantToSearch%>",--}%
-        %{--async:true,--}%
-        %{--success: function (data) {--}%
-            %{--fillTheFields(data) ;--}%
-            %{--console.log(' fields have been filled')--}%
-        %{--}--}%
-    %{--});--}%
     function fillTheFields (data) {
         var cariantRec = {
             _13k_T2D_HET_CARRIERS: 1,

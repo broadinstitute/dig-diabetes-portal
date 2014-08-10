@@ -8,6 +8,7 @@
 
 <body>
 <script>
+    var loading = $('#spinner').show();
     $.ajax({
         cache:false,
         type:"get",
@@ -15,7 +16,11 @@
         async:true,
         success: function (data) {
             fillTraitVariantCross(data) ;
-            console.log(' fields have been filled') ;
+            loading.hide();
+        },
+        error: function(jqXHR, exception) {
+            loading.hide();
+            errorReporter(jqXHR, exception) ;
         }
     });
     var phenotypeListString  = decodeURIComponent("${phenotypeList}");

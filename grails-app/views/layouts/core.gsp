@@ -7,27 +7,6 @@
     <r:require modules="core"/>
     <r:layoutResources/>
 
-
-    %{--the part I added starts below--}%
-    %{--<meta name="viewport" content="width=device-width, initial-scale=1.0">--}%
-    %{--<title>${grailsApplication.config.site.title}</title>--}%
-
-    %{--<link media="all" rel="stylesheet" href="css/lib/bootstrap.min.css">--}%
-    %{--<link media="all" rel="stylesheet" href="css/lib/jquery.dataTables.css">--}%
-    %{--<link media="all" rel="stylesheet" href="css/lib/style.css">--}%
-
-
-    %{--<script src="js/lib/utils.js"></script>--}%
-    %{--<script src="js/lib/jquery-1.11.0.min.js"></script>--}%
-    %{--<script src="js/lib/bootstrap.min.js"></script>--}%
-    %{--<script src="js/lib/bootstrap3-typeahead.min.js"></script>--}%
-    %{--<script src="js/lib/jquery.dataTables.min.js"></script>--}%
-    %{--<script src="js/lib/underscore-min.js"></script>--}%
-    %{--<script src="js/lib/backbone-min.js"></script>--}%
-    %{--<script src="js/lib/shared.js"></script>--}%
-
-    %{--<script src="http://d3js.org/d3.v3.js"></script>--}%
-
     <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
 
 
@@ -36,7 +15,43 @@
 </head>
 
 <body>
-
+<style>
+.spinner {
+    position: fixed;
+    top: 35%;
+    left: 35%;
+    margin-left: -50px; /* half width of the spinner gif */
+    margin-top: -50px; /* half height of the spinner gif */
+    text-align:center;
+    z-index:1234;
+    overflow: auto;
+    width: 100px; /* width of the spinner gif */
+    height: 102px; /*hight of the spinner gif +2px to fix IE8 issue */
+}
+</style>
+<script>
+    // for now let's error out in a noisy way. Submerge this when it's time for production mode
+    function errorReporter(jqXHR, exception) {
+        if (jqXHR.status === 0) {
+            alert('Not connect.\n Verify Network.');
+        } else if (jqXHR.status == 404) {
+            alert('Requested page not found. [404]');
+        } else if (jqXHR.status == 500) {
+            alert('Internal Server Error [500].');
+        } else if (exception === 'parsererror') {
+            alert('Requested JSON parse failed.');
+        } else if (exception === 'timeout') {
+            alert('Time out error.');
+        } else if (exception === 'abort') {
+            alert('Ajax request aborted.');
+        } else {
+            alert('Uncaught Error.\n' + jqXHR.responseText);
+        }
+    }
+</script>
+<div id="spinner" class="spinner" style="display:none;">
+    <img id="img-spinner" src="${resource(dir: 'images', file: 'ajaxLoadingAnimation.gif')}" alt="Loading"/>
+</div>
 <div id="header">
     <div id="header-top">
         <div class="container">
