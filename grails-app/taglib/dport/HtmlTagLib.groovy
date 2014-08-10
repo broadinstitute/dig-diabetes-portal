@@ -1,7 +1,7 @@
 package dport
 
 class HtmlTagLib {
-    static defaultEncodeAs = [taglib: 'html']
+//    static defaultEncodeAs = [taglib: 'html']
 
     def renderHtml = {attrs ->
 

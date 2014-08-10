@@ -44,7 +44,9 @@
         EXCHP_T2D_VAR_TOTALS_EU_TOTAL: 31,
         SIGMA_T2D_VAR_TOTAL: 32,
         SIGMA_T2D_GWS_TOTAL: 33,
-        SIGMA_T2D_NOM_TOTAL: 34
+        SIGMA_T2D_NOM_TOTAL: 34,
+        _13k_T2D_lof_OBSA: 35,
+        _13k_T2D_lof_OBSU: 36
     };
     function revG(d){
         var v;
@@ -83,6 +85,8 @@
             case  32:v="SIGMA_T2D_VAR_TOTAL";break;
             case  33:v="SIGMA_T2D_GWS_TOTAL";break;
             case  34:v="SIGMA_T2D_NOM_TOTAL";break;
+            case  35:v="_13k_T2D_lof_OBSA";break;
+            case  36:v="_13k_T2D_lof_OBSU";break;
             default: v="";
         }
         return v;
@@ -168,6 +172,27 @@
             variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec.SIGMA_T2D_NOM_TOTAL,'nominal',geneInfoRec.CHROM,geneInfoRec.BEG,geneInfoRec.END,"#totalExomeSeqVariantst2dnominal","#totalExomeSeqVariantAnchor2dnominal");
         }
 
+        // show traits
+        if(show_gwas){
+            var htmlAccumulator  =  "";
+            if (rawGeneInfo["GWS_TRAITS"]){
+                var traitArray = rawGeneInfo["GWS_TRAITS"];
+                if (traitArray.length > 0){
+                    htmlAccumulator  +=  ("<strong> "+
+                            "<p>Variants in or near this gene have been convincingly associated at genome-wide significance in GWAS meta-analyses with the following traits:</p>"+
+                            "<ul>");
+                    for ( var i = 0 ; i < traitArray.length ; i++ ) {
+                        htmlAccumulator  += ("<li>"+traitArray[i]+"</li>")
+                    }
+                    htmlAccumulator  +=  ("</ul>"+
+                            "</strong>");
+                }
+            }  else {
+                htmlAccumulator  +=  "<p>Variants in or near this gene have not been convincingly associated with any traits at genome-wide significance in the GWAS meta-analyses included in this portal.</p>"
+            }
+            $('#gwasTraits').append(htmlAccumulator);
+        }
+
     }
     function fillVariationAcrossEthnicity (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma) {
             if  ((rawGeneInfo)&&
@@ -195,21 +220,61 @@
 
             }
     }
+    function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exseq,show_sigma) {
+        var bhtPeopleWithVariantWhoHaveDiabetes  = 0,
+                bhtPeopleWithVariant = 0,
+                bhtPeopleWithoutVariant = 0,
+                arrayOfMinaMinu = [];
+        $('#bhtLossOfFunctionVariants').append(geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_NVAR));
+        var minaMinu =  geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_MINA_MINU_RET) ;
+        if (minaMinu) {
+            arrayOfMinaMinu  = minaMinu.split('/');
+            if (arrayOfMinaMinu.length>1) {
+                bhtPeopleWithVariantWhoHaveDiabetes = arrayOfMinaMinu[0];
+                $('#bhtPeopleWithVariantWhoHaveDiabetes').append(bhtPeopleWithVariantWhoHaveDiabetes);
+            }
+        }
+        bhtPeopleWithVariant = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_OBSA);
+        $('#bhtPeopleWithVariant').append(bhtPeopleWithVariant);
+        if (bhtPeopleWithVariant  > 0) {
+            var bhtPercentOfPeopleWithVariantWhoHaveDisease =  (100 * (bhtPeopleWithVariantWhoHaveDiabetes / bhtPeopleWithVariant));
+            $('#bhtPercentOfPeopleWithVariantWhoHaveDisease').append (  bhtPercentOfPeopleWithVariantWhoHaveDisease.toPrecision(2) );
+        }
+
+        if (arrayOfMinaMinu.length>1) {
+            bhtPeopleWithVariantWithoutDiabetes = arrayOfMinaMinu[1];
+            $('#bhtPeopleWithVariantWithoutDiabetes').append(bhtPeopleWithVariantWithoutDiabetes);
+        }
+        bhtPeopleWithoutVariant = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_OBSU);
+        $('#bhtPeopleWithoutVariant').append(bhtPeopleWithoutVariant);
+        if (bhtPeopleWithoutVariant  > 0) {
+            var bhtPercentOfPeopleWithVariantWithoutDisease =  (100 * (bhtPeopleWithVariantWithoutDiabetes / bhtPeopleWithoutVariant));
+            $('#bhtPercentOfPeopleWithVariantWithoutDisease').append (  bhtPercentOfPeopleWithVariantWithoutDisease.toPrecision(2) );
+        }
+
+
+        var  bhtMetaBurdenForDiabetes  = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_METABURDEN);
+        if (bhtMetaBurdenForDiabetes  > 0)  {
+            $('#bhtMetaBurdenForDiabetes').append("<p>Collectively, these variants' p-value for association with type 2 diabetes is "+
+                    (bhtMetaBurdenForDiabetes.toPrecision(3)));
+        }
+    }
+    function fillUniprotSummary(geneInfo,show_gwas,show_exchp,show_exseq,show_sigma) {
+        var funcDescrLine = "";
+        if ((geneInfo)&&(geneInfo["Function_description"])){
+            funcDescrLine +=  ("<strong>Uniprot Summary:</strong>"+geneInfo['Function_description']);
+        } else {
+            funcDescrLine += "No uniprot summary available for this gene"
+        }
+
+        $('#uniprotSummaryGoesHere').append(funcDescrLine);
+    }
     function fillTheGeneFields (data,show_gwas,show_exchp,show_exseq,show_sigma)  {
         var rawGeneInfo =  data['geneInfo'];
-        var geneInfo = {};
-        geneInfo.variationTable =  [] ;
+        fillUniprotSummary(rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma);
         fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma);
         fillVariationAcrossEthnicity (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma);
-
-//        fillVariantsAndAssociationsSection (rawGeneInfo);
-//        $('#continentalAncestryTable').append(fillAncestryTable()) ;
-//        if ((rawGeneInfo) && (rawGeneInfo._13k_T2D_ORIGIN_VAR_TOTALS) ) {
-//            $('#continentalAncestryTable').append(fillAncestryTable(rawGeneInfo._13k_T2D_ORIGIN_VAR_TOTALS));
-//        }
-//        for (var key in rawGeneInfo._13k_T2D_ORIGIN_VAR_TOTALS){
-//            var record = rawGeneInfo._13k_T2D_ORIGIN_VAR_TOTALS[key];
-//        }
+        fillBiologicalHypothesisTesting (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma);
     }
 </script>
 
@@ -221,7 +286,7 @@
             <div class="gene-info-view" >
 
     <h1>
-        <em><%=gene_info.ID%></em>
+        <em><%=geneName%></em>
         <a class="page-nav-link" href="#associations">Associations</a>
         <a class="page-nav-link" href="#populations">Populations</a>
         <a class="page-nav-link" href="#biology">Biology</a>
@@ -238,7 +303,7 @@
 
                         <div id="geneHolderTop" class="top">
                             <script>
-                                var contents = "<g:renderGeneSummary geneFile="${geneName}-top"></g:renderGeneSummary>";
+                                var contents = '<g:renderGeneSummary geneFile="${geneName}-top"></g:renderGeneSummary>';
                                 $('#geneHolderTop').html(contents);
                             </script>
 
@@ -246,40 +311,28 @@
 
                         <div class="bottom ishidden" id="geneHolderBottom" style="display: none;">
                             <script>
-                                // var contents = "$<g:renderGeneSummary geneFile="${geneName}-bottom"></g:renderGeneSummary>";
-                                var contents = "<%=renderGeneSummary(geneFile:"${geneName}-bottom")%>";
+                                var contents = '<g:renderGeneSummary geneFile="${geneName}-bottom"></g:renderGeneSummary>';
                                 $('#geneHolderBottom').html(contents);
+                                function toggleGeneDescr(){
+                                    if ($('#geneHolderBottom').is(':visible'))  {
+                                        $('#geneHolderBottom').hide();
+                                    }else {
+                                        $('#geneHolderBottom').show();
+                                    }
+                                }
                             </script>
 
-                            %{--<%=gene_info.GENE_SUMMARY_BOTTOM%>--}%
+
                         </div>
-                        <a class="boldlink" id="gene-summary-expand">click to expand</a>
+                        <a class="boldlink" id="gene-summary-expand" onclick="toggleGeneDescr()">click to expand</a>
                     </div>
                 </g:if>
 
 
 
 
-                <script>
-         var geneInfo = {};
-         geneInfo.variationTable =  [] ;
-         <g:if test="${variationTable}">
-             <g:each in="${0..(variationTable.size()-1)}">
-             if (variationTable[it]) {
-                 geneInfo.variationTable.push({"cohort": "${(variationTable[it]["COHORT"])}",
-                     "participants": "${variationTable[it]["NS"]}",
-                     "variants": "${variationTable[it]["TOTAL"]}",
-                     "common": "${variationTable[it]["COMMON"]}",
-                     "lowfrequency": "${variationTable[it]["LOW_FREQUENCY"]}",
-                     "rare": "${variationTable[it]["RARE"]}"
-                 });
-             }
-             </g:each>
-         </g:if>
 
-    </script>
-
-    <p><strong>Uniprot Summary:</strong> <%=gene_info.Function_description%></p>
+                <p><span id="uniprotSummaryGoesHere"></span></p>
 
     <div class="separator"></div>
 
@@ -291,7 +344,7 @@
 
     <div class="separator"></div>
 
-     %{--<g:render template="biologicalHypothesisTesting" />--}%
+     <g:render template="biologicalHypothesisTesting" />
 
      <div class="separator"></div>
 

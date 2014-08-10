@@ -48,21 +48,10 @@
 
 
 <g:if test="${show_gwas}">
-    <g:if test="${gene_info.GWS_TRAITS}">
-        <strong>
-            <p>Variants in or near this gene have been convincingly associated at genome-wide significance in GWAS meta-analyses with the following traits:</p>
-            %{--<ul>--}%
-                %{--<% _.each(gene_info.GWS_TRAITS, function(t) { %>--}%
-                %{--<li><%=_.find(phenotypes, function(p) { return p.db_key == t }).name%></li>--}%
-                %{--<% }); %>--}%
-            %{--</ul>--}%
-        </strong>
-    </g:if>
-    <g:else>
-        <p>Variants in or near this gene have not been convincingly associated with any traits at genome-wide significance in the GWAS meta-analyses included in this portal.</p>
-    </g:else>
+    <span id="gwasTraits"></span>
 </g:if>
 
-<p><a class="boldlink"
-      href="/region/chr<%=gene_info.CHROM%>:<%=gene_info.REGION_BEG%>-<%=gene_info.REGION_END%>/gwas">See p-values and other statistics across 25 traits for all GWAS variants included in this portal</a>
+<p><a class="boldlink">
+      %{--href="/region/chr<%=gene_info.CHROM%>:<%=gene_info.REGION_BEG%>-<%=gene_info.REGION_END%>/gwas">--}%
+    See p-values and other statistics across 25 traits for all GWAS variants included in this portal</a>
 </p>
