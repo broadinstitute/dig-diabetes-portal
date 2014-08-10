@@ -18,6 +18,7 @@ class RegionController {
                        show_exseq: 1,
                        show_sigma: 0] )
     }
+
     def regionAjax() {
         String regionsSpecification = params.id
 

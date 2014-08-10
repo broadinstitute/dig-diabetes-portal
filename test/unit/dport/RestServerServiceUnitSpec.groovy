@@ -18,6 +18,29 @@ class RestServerServiceUnitSpec extends Specification {
     }
 
 
+
+    void "test retrieveTreatAsSpecifiedByGenomicRegion"() {
+        when:
+        JSONObject jsonObject = service.searchForTraitBySpecifiedRegion(9,21940000,22190000)
+        then:
+        jsonObject["is_error"] == false
+        jsonObject["variants"].size() > 0
+    }
+
+
+
+    void "test retrieveTreatByUnparsedGenomicRegion"() {
+        when:
+        JSONObject jsonObject = service.searchTraitByUnparsedRegion("chr9:21,940,000-22,190,000")
+        then:
+        jsonObject["is_error"] == false
+        jsonObject["variants"].size() > 0
+    }
+
+
+
+
+
     void "test searchTraitByName"() {
         when:
         JSONObject jsonObject = service.searchTraitByName("BMI",0.000005)

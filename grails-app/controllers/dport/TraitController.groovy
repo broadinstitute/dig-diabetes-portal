@@ -74,4 +74,29 @@ class TraitController {
 
     }
 
+
+    def regionInfo() {
+        String regionSpecification = params.id
+
+        render (view: 'traitVariantCross',
+                model:[regionSpecification: regionSpecification,
+                       show_gene:1,
+                       show_gwas:1,
+                       show_exchp: 1,
+                       show_exseq: 1,
+                       show_sigma: 0] )
+    }
+
+
+    def traitVariantCrossAjax() {
+        String regionsSpecification = params.id
+
+        JSONObject jsonObject =  restServerService.searchTraitByUnparsedRegion (regionsSpecification)
+        render(status:200, contentType:"application/json") {
+            [variants:jsonObject['variants']]
+        }
+    }
+
+
+
 }

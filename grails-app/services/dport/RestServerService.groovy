@@ -303,9 +303,14 @@ class RestServerService {
         return returnValue
     }
 
-
-
-
+    /***
+     * Variant search on the basis of chromosome, start position, and end position.
+     *
+     * @param chromosome
+     * @param beginSearch
+     * @param endSearch
+     * @return
+     */
     JSONObject searchGenomicRegionBySpecifiedRegion (Integer chromosome,
                                                      Integer beginSearch,
                                                      Integer endSearch) {
@@ -330,6 +335,33 @@ class RestServerService {
         }
         return returnValue
     }
+
+
+
+    JSONObject searchForTraitBySpecifiedRegion (Integer chromosome,
+                                                     Integer beginSearch,
+                                                     Integer endSearch) {
+        JSONObject returnValue = null
+        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
+        String drivingJson = """{
+"user_group": "ui",
+"filters": [
+{ "filter_type": "STRING", "operand": "CHROM",  "operator": "EQ","value": "${chromosome}"  },
+{"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": ${beginSearch} },
+{"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": ${endSearch} }
+]
+}
+""".toString()
+        RestResponse response  = rest.post(TRAIT_SEARCH_URL)   {
+            contentType "application/json"
+            json drivingJson
+        }
+        if (response.responseEntity.statusCode.value == 200) {
+            returnValue =  response.json
+        }
+        return returnValue
+    }
+
 
 
 
@@ -361,6 +393,43 @@ class RestServerService {
 
 
 
+    JSONObject searchTraitByRegionss (String traitName,
+                                  BigDecimal significance) {
+        JSONObject returnValue = null
+        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
+        String drivingJson = """{
+"user_group": "ui",
+"filters": [
+    {"operand": "PVALUE", "operator": "LTE", "value": ${significance.toString ()}, "filter_type": "FLOAT"}
+],
+"trait": "${traitName}"
+}
+""".toString()
+        RestResponse response  = rest.post(TRAIT_SEARCH_URL)   {
+            contentType "application/json"
+            json drivingJson
+        }
+        if (response.responseEntity.statusCode.value == 200) {
+            returnValue =  response.json
+        }
+        return returnValue
+    }
+    JSONObject searchTraitByRegion(String userSpecifiedRegion) {
+        JSONObject returnValue = null
+        LinkedHashMap<String, Integer> ourNumbers = extractNumbersWeNeed(userSpecifiedRegion)
+        if (ourNumbers.containsKey("chromosomeNumber") &&
+                ourNumbers.containsKey("startExtent") &&
+                ourNumbers.containsKey("endExtent")) {
+            returnValue = searchGenomicRegionBySpecifiedRegion(ourNumbers["chromosomeNumber"],
+                    ourNumbers["startExtent"],
+                    ourNumbers["endExtent"])
+        }
+        return returnValue
+    }
+
+
+
+
 
     JSONObject retrieveTraitInfoByVariant (String variantName) {
         JSONObject returnValue = null
@@ -380,12 +449,14 @@ class RestServerService {
         return returnValue
     }
 
-
-
-
-
-
-
+    /***
+     * Employ a set of filters to perform a variant search. In practice  I'm using this
+     * when I compose the filter set on the client ( browser), and thereby allow user-specified
+     * filtering on the basis of form.
+     *
+     * @param customFilterSet
+     * @return
+     */
     JSONObject searchGenomicRegionByCustomFilters (String customFilterSet) {
         JSONObject returnValue = null
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
@@ -428,15 +499,13 @@ is_error: ${response.json["is_error"]}""".toString()
         return returnValue
     }
 
-
-
-
-
-
-
-
-
-    //("chr9:21,940,000-22,190,000")
+    /***
+     * Take a string specifying a region in the form ->  "chr9:21,940,000-22,190,000"
+     * Purse this string and then perform a variant search using these three parameters
+     *
+     * @param userSpecifiedString
+     * @return
+     */
     JSONObject searchGenomicRegionAsSpecifiedByUsers(String userSpecifiedString) {
         JSONObject returnValue = null
         LinkedHashMap<String, Integer> ourNumbers = extractNumbersWeNeed(userSpecifiedString)
@@ -449,6 +518,26 @@ is_error: ${response.json["is_error"]}""".toString()
         }
         return returnValue
     }
+
+
+
+
+    JSONObject searchTraitByUnparsedRegion(String userSpecifiedString) {
+        JSONObject returnValue = null
+        LinkedHashMap<String, Integer> ourNumbers = extractNumbersWeNeed(userSpecifiedString)
+        if (ourNumbers.containsKey("chromosomeNumber") &&
+                ourNumbers.containsKey("startExtent") &&
+                ourNumbers.containsKey("endExtent")) {
+            returnValue = searchForTraitBySpecifiedRegion(ourNumbers["chromosomeNumber"],
+                    ourNumbers["startExtent"],
+                    ourNumbers["endExtent"])
+        }
+        return returnValue
+    }
+
+
+
+
 
 
 

@@ -20,13 +20,13 @@
                 <span id="bhtPeopleWithVariantWhoHaveDiabetes"></span> out of
                 <span id="bhtPeopleWithVariant"></span>
                 have type 2 diabetes.
-                (<span id="bhtPercentOfPeopleWithVariantWhoHaveDisease"></span>%)
+                <span id="bhtPercentOfPeopleWithVariantWhoHaveDisease"></span>
             </li>
             <li>
                 <span id="bhtPeopleWithVariantWithoutDiabetes"></span> out of
                 <span id="bhtPeopleWithoutVariant"></span>
                 do not have type 2 diabetes.
-                (<span id="bhtPercentOfPeopleWithVariantWithoutDisease"></span>%)
+                <span id="bhtPercentOfPeopleWithVariantWithoutDisease"></span>
             </li>
         </ul>
         <span id="bhtMetaBurdenForDiabetes"></span>

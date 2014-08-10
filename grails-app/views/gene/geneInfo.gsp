@@ -103,18 +103,25 @@
         }
     });
     // walk into nested fields
-    function geneFieldOrZero(geneInfo,filedNumber) {
+    function geneFieldOrZero(geneInfo,filedNumber,defaultValue) {
         var retval = 0;
         var fieldName  = revG(filedNumber);
         if ((geneInfo)  && (fieldName.length>0)) {
             var fieldBreakdown = fieldName.split("."); // step into complex fields
             retval =   geneInfo[fieldBreakdown[0]];
-            if (fieldBreakdown.length>1){
+            if ((retval)&&(fieldBreakdown.length>1)){
                 for (  var i = 1 ; i < fieldBreakdown.length ; i++ ) {
                     var nextLevelSpec =  fieldBreakdown[i];
                     retval =  retval[nextLevelSpec];
                 }
             }
+        }
+        if (!retval) {    // deal with a null.  Use a zero unless we are given an explicit alternative
+           if (typeof defaultValue!=="undefined"){
+               retval = defaultValue;
+           }  else {
+               retval=0;
+           }
         }
         return retval;
     }
@@ -193,6 +200,12 @@
             $('#gwasTraits').append(htmlAccumulator);
         }
 
+        // fill in trait vis
+        $('#linkToVariantTraitCross')[0].href= "/dport/trait/regionInfo/chr"+
+                geneFieldOrZero(rawGeneInfo,geneInfoRec.CHROM)+":"+
+                geneFieldOrZero(rawGeneInfo,geneInfoRec.BEG)+"-"+
+                geneFieldOrZero(rawGeneInfo,geneInfoRec.END) ;
+
     }
     function fillVariationAcrossEthnicity (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma) {
             if  ((rawGeneInfo)&&
@@ -222,34 +235,46 @@
     }
     function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exseq,show_sigma) {
         var bhtPeopleWithVariantWhoHaveDiabetes  = 0,
+                bhtPeopleWithVariantWithoutDiabetes = 0,
                 bhtPeopleWithVariant = 0,
                 bhtPeopleWithoutVariant = 0,
                 arrayOfMinaMinu = [];
+        // title line
         $('#bhtLossOfFunctionVariants').append(geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_NVAR));
+
+        // first subline
         var minaMinu =  geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_MINA_MINU_RET) ;
-        if (minaMinu) {
+        if (minaMinu) {   // we have a  _13k_T2D_lof_MINA_MINU_RET
             arrayOfMinaMinu  = minaMinu.split('/');
             if (arrayOfMinaMinu.length>1) {
                 bhtPeopleWithVariantWhoHaveDiabetes = arrayOfMinaMinu[0];
                 $('#bhtPeopleWithVariantWhoHaveDiabetes').append(bhtPeopleWithVariantWhoHaveDiabetes);
             }
+        }  else {  // we don't
+            $('#bhtPeopleWithVariantWhoHaveDiabetes').append(0);
         }
         bhtPeopleWithVariant = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_OBSA);
         $('#bhtPeopleWithVariant').append(bhtPeopleWithVariant);
         if (bhtPeopleWithVariant  > 0) {
             var bhtPercentOfPeopleWithVariantWhoHaveDisease =  (100 * (bhtPeopleWithVariantWhoHaveDiabetes / bhtPeopleWithVariant));
-            $('#bhtPercentOfPeopleWithVariantWhoHaveDisease').append (  bhtPercentOfPeopleWithVariantWhoHaveDisease.toPrecision(2) );
+            $('#bhtPercentOfPeopleWithVariantWhoHaveDisease').append ( "(" +
+                    (bhtPercentOfPeopleWithVariantWhoHaveDisease.toPrecision(2))+"%)");
         }
 
-        if (arrayOfMinaMinu.length>1) {
+        // second subline
+        if (arrayOfMinaMinu.length>1) {  // we have a  _13k_T2D_lof_MINA_MINU_RET
             bhtPeopleWithVariantWithoutDiabetes = arrayOfMinaMinu[1];
             $('#bhtPeopleWithVariantWithoutDiabetes').append(bhtPeopleWithVariantWithoutDiabetes);
+        }  else {  // we don't
+            bhtPeopleWithVariantWithoutDiabetes = 0;
+            $('#bhtPeopleWithVariantWithoutDiabetes').append(0);
         }
         bhtPeopleWithoutVariant = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_OBSU);
         $('#bhtPeopleWithoutVariant').append(bhtPeopleWithoutVariant);
         if (bhtPeopleWithoutVariant  > 0) {
             var bhtPercentOfPeopleWithVariantWithoutDisease =  (100 * (bhtPeopleWithVariantWithoutDiabetes / bhtPeopleWithoutVariant));
-            $('#bhtPercentOfPeopleWithVariantWithoutDisease').append (  bhtPercentOfPeopleWithVariantWithoutDisease.toPrecision(2) );
+            $('#bhtPercentOfPeopleWithVariantWithoutDisease').append (  "(" +
+                    (bhtPercentOfPeopleWithVariantWithoutDisease.toPrecision(2)) +"%)");
         }
 
 
