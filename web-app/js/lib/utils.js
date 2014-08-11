@@ -617,13 +617,13 @@ var UTILS = {
         };
 
     } ,
-    postJson2: function (path, params, show_gene, show_sigma, show_exseq,show_exchp, variantRootUrl,geneRootUrl) {
+    postJson2: function (path, params, show_gene, show_sigma, show_exseq,show_exchp, variantRootUrl,geneRootUrl,variantSearchAjaxUrl) {
         var loading = $('#spinner').show();
         loading.show();
         $.ajax({
             type:'POST',
             data:params,
-            url:path,
+            url:variantSearchAjaxUrl,
             success:function(data,textStatus){
                 UTILS.fillTheVariantTable(data,show_gene, show_sigma, show_exseq,show_exchp,variantRootUrl,geneRootUrl);
                 loading.hide();

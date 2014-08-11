@@ -111,7 +111,6 @@ class FilterManagementService {
 
 
 
-
     public LinkedHashMap  parseVariantSearchParameters (HashMap incomingParameters,Boolean currentlySigma) {
         LinkedHashMap  buildingFilters = [filters:new ArrayList<String>(),
                                           filterDescriptions:new ArrayList<String>()]
@@ -134,6 +133,86 @@ class FilterManagementService {
         return buildingFilters
 
     }
+
+    /***
+     * user has requested a search based on gene name, potentially with additional filtering based on ethnicity.
+     *
+     * @param geneId
+     * @param receivedParameters
+     * @return
+     */
+    public LinkedHashMap constructGeneSearch(String geneId,String receivedParameters) {
+        LinkedHashMap  buildingFilters = [filters:new ArrayList<String>(),
+                                          filterDescriptions:new ArrayList<String>()]
+
+        buildingFilters = findFiltersForGeneBasedSearch (buildingFilters,geneId)
+
+        buildingFilters = findFiltersBasedOnMaf (buildingFilters,receivedParameters)
+
+        return buildingFilters
+    }
+
+
+    /***
+     * user has requested a search based on gene name, potentially with additional filtering based on ethnicity.  Construct
+     * filters for them.
+     * @param buildingFilters
+     * @param geneId
+     * @param receivedParameters
+     * @return
+     */
+    LinkedHashMap findFiltersForGeneBasedSearch (LinkedHashMap  buildingFilters, String geneId ) {
+        List <String> filters =  buildingFilters.filters
+        List <String> filterDescriptions =  buildingFilters.filterDescriptions
+
+        filters <<  retrieveParameterizedFilterString("setRegionGeneSpecification",geneId,0)
+        filterDescriptions << "Restricted to gene "+geneId
+
+        return buildingFilters
+    }
+
+
+
+
+    LinkedHashMap findFiltersBasedOnMaf(LinkedHashMap  buildingFilters, String receivedParameters ) {
+        List <String> filters =  buildingFilters.filters
+        List <String> filterDescriptions =  buildingFilters.filterDescriptions
+
+        if (receivedParameters) {
+            String[] requestPortionList =  receivedParameters.split("-")
+            if (requestPortionList.size() > 1) {
+                String ethnicity = requestPortionList[1]
+                switch ( requestPortionList[0] ){
+                    case "total":
+                        filters << retrieveFilterString("dataSetDiagramGwas")
+                        filterDescriptions << "GWAS P value > 0"
+                        break;
+                    case "common":
+                        filters << retrieveParameterizedFilterString("setEthnicityMinimum",ethnicity,0.05)
+                        filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is greater than or equal to 0.05"
+                        break;
+                    case "lowfreq":
+                        filters << retrieveParameterizedFilterString("setEthnicityMinimum",ethnicity,0.005)
+                        filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is greater than or equal to 0.005"
+                        filters << retrieveParameterizedFilterString("setEthnicityMaximum",ethnicity,0.05)
+                        filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is less than 0.05"
+                        break;
+                    case "rare":
+                        filters << retrieveParameterizedFilterString("setEthnicityMinimum",ethnicity,0)
+                        filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is greater than or equal to 0.005"
+                        filters << retrieveParameterizedFilterString("setEthnicityMaximum",ethnicity,0.005)
+                        filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is less than 0.05"
+                        break;
+                    default: break;
+                }
+
+            }
+
+        }
+        return buildingFilters
+    }
+
+
 
 
 

@@ -31,7 +31,8 @@
             ${show_exseq},
             ${show_exchp},
             '<g:createLink controller="variant" action="variantInfo"  />',
-            '<g:createLink controller="gene" action="geneInfo"  />');
+            '<g:createLink controller="gene" action="geneInfo"  />',
+            '<g:createLink controller="variantSearch" action="variantSearchAjax" />');
     var uri_dec = decodeURIComponent("<%=filter%>");
 </script>
 

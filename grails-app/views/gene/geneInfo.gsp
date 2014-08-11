@@ -105,7 +105,8 @@
                     ${show_exseq},
                     ${show_sigma},
                     '<g:createLink controller="region" action="regionInfo" />',
-                    '<g:createLink controller="trait" action="regionInfo" />') ;
+                    '<g:createLink controller="trait" action="regionInfo" />',
+                    '<g:createLink controller="variantSearch" action="gene" />') ;
             loading.hide();
         },
         error: function(jqXHR, exception) {
@@ -289,7 +290,13 @@
                 expandRegionEnd(geneFieldOrZero(rawGeneInfo,geneInfoRec.END)) ;
 
     }
-    function fillVariationAcrossEthnicity (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma) {
+    function buildAnchorForVariantSearches (displayableContents,geneName, filter,rootVariantUrl){
+        var returnValue = "";
+        returnValue += ("<a class='boldlink' href='"+ rootVariantUrl+"/"+geneName+"?filter="+filter+"'>"+
+                displayableContents+"</a>");
+        return  returnValue;
+    }
+    function fillVariationAcrossEthnicity (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl) {
             if  ((rawGeneInfo)&&
                  (rawGeneInfo["_13k_T2D_ORIGIN_VAR_TOTALS"]))  {
                 var ethnicityMap = rawGeneInfo["_13k_T2D_ORIGIN_VAR_TOTALS"];
@@ -305,10 +312,10 @@
                         $('#continentalVariationTableBody').append ('<tr>'+
                                 '<td>' + UTILS.expandEthnicityDesignation (ethnicityKey) + '</td>'+
                                 '<td>' + ns + '</td>'+
-                                '<td>' + total + '</td>'+
-                                '<td>' + common + '</td>'+
-                                '<td>' + lowFrequency + '</td>'+
-                                '<td>' + rare + '</td>'+
+                                '<td>' + buildAnchorForVariantSearches(total,rawGeneInfo["ID"],'total-'+ethnicityKey,rootVariantUrl) + '</td>'+
+                                '<td>' + buildAnchorForVariantSearches(common,rawGeneInfo["ID"],'common-'+ethnicityKey,rootVariantUrl) + '</td>'+
+                                '<td>' + buildAnchorForVariantSearches(lowFrequency,rawGeneInfo["ID"],'lowfreq-'+ethnicityKey,rootVariantUrl) + '</td>'+
+                                '<td>' + buildAnchorForVariantSearches(rare,rawGeneInfo["ID"],'rare-'+ethnicityKey,rootVariantUrl) + '</td>'+
                                 '</tr>');
                     }
                 }
@@ -376,11 +383,11 @@
 
         $('#uniprotSummaryGoesHere').append(funcDescrLine);
     }
-    function fillTheGeneFields (data,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootGeneUrl)  {
+    function fillTheGeneFields (data,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootGeneUrl,rootVariantUrl)  {
         var rawGeneInfo =  data['geneInfo'];
         fillUniprotSummary(rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma);
         fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootGeneUrl);
-        fillVariationAcrossEthnicity (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma);
+        fillVariationAcrossEthnicity (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl);
         fillBiologicalHypothesisTesting (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma);
     }
 </script>

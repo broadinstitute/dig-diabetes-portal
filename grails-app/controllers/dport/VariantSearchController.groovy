@@ -8,7 +8,10 @@ class VariantSearchController {
 
         def index() { }
 
-
+    /***
+     * allow user to specify variant search parameters
+     * @return
+     */
         def variantSearch() {
                 render (view: 'variantSearch',
                         model:[show_gwas:1,
@@ -18,10 +21,12 @@ class VariantSearchController {
 
         }
 
-
-
+    /***
+     * User has posted a search request.  The search was made through a traditional form, so this routine calls a service
+     * that goes through and laboriously parses the request, thereby generating filters which we can pass to the backend
+     * @return
+     */
     def variantSearchRequest() {
-        println "variant post received"
         String receivedParameters = request.parameters.toString()
         if (receivedParameters)    {
             LinkedHashMap<String, String> parsedFilterParameters = filterManagementService.parseVariantSearchParameters(request.parameters,false)
@@ -45,13 +50,50 @@ class VariantSearchController {
                                show_sigma: 0,
                                filter: enc,
                                filterDescriptions: parsedFilterParameters.filterDescriptions] )
-            }  else {
-                render("<h1> I heard you, but no valid JSON</h1>")
+            }
+        }
+
+    }
+
+
+
+    def gene() {
+        String geneId = params.id
+        String receivedParameters = params.filter
+        if (geneId)    {
+            LinkedHashMap<String, String> parsedFilterParameters = filterManagementService.constructGeneSearch(geneId,receivedParameters)
+            if  (parsedFilterParameters)  {
+                List <String> listOfAllFilters = parsedFilterParameters.filters
+                StringBuilder sb = new  StringBuilder()
+
+
+                for ( int i=0 ; i<listOfAllFilters.size() ; i++ ) {
+                    sb <<  listOfAllFilters[i]
+                    if ((i+1)<listOfAllFilters.size()) {
+                        sb << ","
+                    }
+                }
+                String enc = java.net.URLEncoder.encode(sb.toString())
+                render (view: 'variantSearchResults',
+                        model:[show_gene: 1,
+                               show_gwas:1,
+                               show_exchp: 1,
+                               show_exseq: 1,
+                               show_sigma: 0,
+                               filter: enc,
+                               filterDescriptions: parsedFilterParameters.filterDescriptions] )
             }
         }
 
 
     }
+
+
+
+        /***
+     * a variant display table is on screen and the page is now asking for data. Perform the search.
+     * @return
+     */
     def variantSearchAjax() {
         String filters=params.getRequest().parameters.keySet()[0]
         println(filters);
