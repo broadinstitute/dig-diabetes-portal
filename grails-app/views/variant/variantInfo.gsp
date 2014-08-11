@@ -102,8 +102,8 @@
                 cariantRec,
                 cariantRec.IN_GWAS,
                 cariantRec.DBSNP_ID,
-                cariantRec.ID
-        ));
+                cariantRec.ID,
+                '<g:createLink controller="trait" action="traitInfo" />'));
         $('#howCommonInExomeSequencing').append(UTILS.showPercentageAcrossEthnicities(variant));
         $('#howCommonInHeterozygousCarriers').append(UTILS.showPercentagesAcrossHeterozygousCarriers(variant, "<%=variantToSearch%>"));
         $('#howCommonInHomozygousCarriers').append(UTILS.showPercentagesAcrossHomozygousCarriers(variant, "<%=variantToSearch%>"));

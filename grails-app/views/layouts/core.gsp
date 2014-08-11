@@ -95,8 +95,8 @@
         <div class="container">
             %{--{% if user.is_authenticated %}--}%
             <div class="rightlinks">
-                %{--{{ user.profile }} --}%  myname &middot;
-                <a href="/logout">{% trans "Log Out" %}</a>
+                %{--{{ user.profile }} --}%  User &middot;
+                <a href="/logout">Log Out</a>
             </div>
         %{--{% endif %}--}%
             <g:if test="${grailsApplication.config.site.version == 't2dgenes'}">

@@ -219,13 +219,14 @@ var UTILS = {
                                          vMap,
                                          weHaveData,
                                          dbsnp,
-                                         variantId) {
+                                         variantId,
+                                         rootTraitUrl) {
         var retVal = "";
         var iMap = UTILS.invertMap(vMap);
         if (variant[iMap[weHaveData]]) {
-            retVal += ("<a class=\"boldlink\" href=\"/variant/\"" +
+            retVal += ("<a class=\"boldlink\" href=\""+rootTraitUrl+"/" +
                 ((variant[iMap[weHaveData]]) ? (variant[iMap[dbsnp]]) : (variant[iMap[variantId]])) +
-                "/gwas\">Click here</a> to see a table of p-values for this variant across 25 traits studied in GWAS meta-analyses.");
+                "\">Click here</a> to see a table of p-values for this variant across 25 traits studied in GWAS meta-analyses.");
         }
         return  retVal;
     },
@@ -394,13 +395,11 @@ var UTILS = {
 
             // nearest gene
             if (show_gene) {
-                var geneInfoLink = '<g:createLink controller="gene" action="geneInfo" />';
                 retVal += "<td><a href='"+geneRootUrl+"/"+vRec[i].CLOSEST_GENE+"' class='boldlink'>"+vRec[i].CLOSEST_GENE+"</td>";
             }
 
             // variant
             if (vRec[i].ID) {
-                var variantInfoLink = '<g:createLink controller="variant" action="variantInfo" />';
                 retVal += "<td><a href='"+variantRootUrl+"/"+vRec[i].ID+"' class='boldlink'>"+vRec[i].CHROM+ ":" +vRec[i].POS+"</td>";
             } else {
                 retVal += "<td></td>"
@@ -618,7 +617,7 @@ var UTILS = {
         };
 
     } ,
-    postJson2: function (path, params, spinnerDisplay, variantRootUrl,geneRootUrl) {
+    postJson2: function (path, params, show_gene, show_sigma, show_exseq,show_exchp, variantRootUrl,geneRootUrl) {
         var loading = $('#spinner').show();
         loading.show();
         $.ajax({
@@ -626,7 +625,7 @@ var UTILS = {
             data:params,
             url:path,
             success:function(data,textStatus){
-                UTILS.fillTheVariantTable(data,variantRootUrl,geneRootUrl);
+                UTILS.fillTheVariantTable(data,show_gene, show_sigma, show_exseq,show_exchp,variantRootUrl,geneRootUrl);
                 loading.hide();
             },
             error:function(XMLHttpRequest,textStatus,errorThrown){
@@ -636,8 +635,8 @@ var UTILS = {
         });
     }
     ,
-    fillTheVariantTable:  function (data,variantRootUrl,geneRootUrl)  {
-    $('#variantTableBody').append(UTILS.fillCollectedVariantsTable(data, 1, 0, 1, 1, variantRootUrl,geneRootUrl));
+    fillTheVariantTable:  function (data,show_gene, show_sigma, show_exseq,show_exchp,variantRootUrl,geneRootUrl)  {
+    $('#variantTableBody').append(UTILS.fillCollectedVariantsTable(data, show_gene, show_sigma, show_exseq,show_exchp,variantRootUrl,geneRootUrl));
 
     if (data.variants)     {
         var totalNumberOfResults =  data.variants.length;

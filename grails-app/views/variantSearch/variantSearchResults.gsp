@@ -24,16 +24,7 @@
         if (!y) { y = 1; }
         return ((x < y) ? 1 : ((x > y) ?  -1 : 0));
     };
-//    $.ajax({
-//        cache:false,
-//        type:"post",
-//        url:"../variantSearchAjax/"+regionSpec,
-//        async:true,
-//        success: function (data) {
-//            fillTheFields(data) ;
-//            console.log(' fields have been filled')
-//        }
-//    });
+
     UTILS.postJson2('../variantSearch/variantSearchAjax',"<%=filter%>",
             ${show_gene},
             ${show_sigma},
@@ -71,7 +62,7 @@
 
                 <div id="warnIfMoreThan1000Results"></div>
 
-                <p><a href="<%= goback_link %>" class="boldlink">Click here to refine your results</a></p>
+                <p><a href="<g:createLink controller="variantSearch" action="variantSearch" />" class="boldlink">Click here to refine your results</a></p>
 
 
                 <g:render template="../region/collectedVariantsForRegion" />
