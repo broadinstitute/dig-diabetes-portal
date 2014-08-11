@@ -66,19 +66,9 @@
         <div class="variant-info-container" >
             <div class="variant-info-view" >
 
-
-                <h1>
-                    <span id="variantTitle"></span>
-                    <a class="page-nav-link" href="#associations">Associations</a>
-                    <a class="page-nav-link" href="#populations">Populations</a>
-                    <a class="page-nav-link" href="#biology">Biology</a>
-                </h1>
-
                 <g:render template="geneSummaryForRegion" />
 
                 <g:render template="collectedVariantsForRegion" />
-
-
 
             </div>
 
