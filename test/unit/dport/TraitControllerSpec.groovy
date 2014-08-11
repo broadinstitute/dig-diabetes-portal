@@ -15,6 +15,17 @@ class TraitControllerSpec extends Specification {
     def cleanup() {
     }
 
+    void "test empty constructor"() {
+        when:
+        Phenotype phenotype = new Phenotype()
+
+        then:
+        assertNotNull(phenotype)
+        assertNotNull(gene.name1)
+
+    }
+
+
     void "test something"() {
     }
 }

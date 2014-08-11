@@ -383,7 +383,7 @@ var UTILS = {
                  populationWithHighestFrequency:winningEthnicity};
     },
 
-    fillCollectedVariantsTable:  function ( fullJson, show_gene, show_sigma, show_exseq, show_exchp ) {
+    fillCollectedVariantsTable:  function ( fullJson, show_gene, show_sigma, show_exseq, show_exchp,variantRootUrl,geneRootUrl ) {
        var retVal = "";
        var vRec = fullJson.variants;
         if (!vRec)  {   // error condition
@@ -394,12 +394,14 @@ var UTILS = {
 
             // nearest gene
             if (show_gene) {
-                retVal += "<td><a href='../../gene/geneInfo/"+vRec[i].CLOSEST_GENE+"' class='boldlink'>"+vRec[i].CLOSEST_GENE+"</td>";
+                var geneInfoLink = '<g:createLink controller="gene" action="geneInfo" />';
+                retVal += "<td><a href='"+geneRootUrl+"/"+vRec[i].CLOSEST_GENE+"' class='boldlink'>"+vRec[i].CLOSEST_GENE+"</td>";
             }
 
             // variant
             if (vRec[i].ID) {
-                retVal += "<td><a href='../../variant/variantInfo/"+vRec[i].ID+"' class='boldlink'>"+vRec[i].CHROM+ ":" +vRec[i].POS+"</td>";
+                var variantInfoLink = '<g:createLink controller="variant" action="variantInfo" />';
+                retVal += "<td><a href='"+variantRootUrl+"/"+vRec[i].ID+"' class='boldlink'>"+vRec[i].CHROM+ ":" +vRec[i].POS+"</td>";
             } else {
                 retVal += "<td></td>"
             }
@@ -616,7 +618,7 @@ var UTILS = {
         };
 
     } ,
-    postJson2: function (path, params, spinnerDisplay) {
+    postJson2: function (path, params, spinnerDisplay, variantRootUrl,geneRootUrl) {
         var loading = $('#spinner').show();
         loading.show();
         $.ajax({
@@ -624,7 +626,7 @@ var UTILS = {
             data:params,
             url:path,
             success:function(data,textStatus){
-                UTILS.fillTheVariantTable(data);
+                UTILS.fillTheVariantTable(data,variantRootUrl,geneRootUrl);
                 loading.hide();
             },
             error:function(XMLHttpRequest,textStatus,errorThrown){
@@ -634,8 +636,8 @@ var UTILS = {
         });
     }
     ,
-    fillTheVariantTable:  function (data)  {
-    $('#variantTableBody').append(UTILS.fillCollectedVariantsTable(data, 1, 0, 1, 1));
+    fillTheVariantTable:  function (data,variantRootUrl,geneRootUrl)  {
+    $('#variantTableBody').append(UTILS.fillCollectedVariantsTable(data, 1, 0, 1, 1, variantRootUrl,geneRootUrl));
 
     if (data.variants)     {
         var totalNumberOfResults =  data.variants.length;

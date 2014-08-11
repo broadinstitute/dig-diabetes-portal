@@ -81,14 +81,17 @@
                 .attr('y2', height)
                 .attr('stroke', '#bbb')
                 .attr('stroke-width', '1');
-
+        ///dport/variant/variantInfo/'+ d.DBSNP_ID})
         var variant_labels = svg.append('g')
                 .selectAll(".row-g")
                 .data(that.variants)
                 .enter()
                 .append('a')
                 .attr('class', 'boldlink')
-                .attr('xlink:href', function(d) { return '/dport/variant/variantInfo/'+ d.DBSNP_ID})
+                .attr('xlink:href', function(d) {
+                    var rootUrl='<g:createLink controller="variant" action="variantInfo" />';
+                    return rootUrl+'/'+d.DBSNP_ID
+                })
                 .append('text')
                 .attr("class", function (d,i) { return "variantlabel r"+i;} )
                 .text(function (d) { return d.DBSNP_ID; })

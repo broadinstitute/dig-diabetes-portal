@@ -38,7 +38,9 @@
             ${show_gene},
             ${show_sigma},
             ${show_exseq},
-            ${show_exchp} );
+            ${show_exchp},
+            '<g:createLink controller="variant" action="variantInfo"  />',
+            '<g:createLink controller="gene" action="geneInfo"  />');
     var uri_dec = decodeURIComponent("<%=filter%>");
 </script>
 
@@ -71,14 +73,8 @@
 
                 <p><a href="<%= goback_link %>" class="boldlink">Click here to refine your results</a></p>
 
-                %{--<div class="variants-container">--}%
 
                 <g:render template="../region/collectedVariantsForRegion" />
-
-                %{--</div>--}%
-                %{--<g:render template="geneSummaryForRegion" />--}%
-
-                %{--<g:render template="collectedVariantsForRegion" />--}%
 
 
 

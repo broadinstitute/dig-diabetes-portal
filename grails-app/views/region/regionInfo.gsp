@@ -40,7 +40,13 @@
         }
     });
     function fillTheFields (data)  {
-        $('#variantTableBody').append(UTILS.fillCollectedVariantsTable(data, ${show_gene}, ${show_sigma}, ${show_exseq}, ${show_exchp} ));
+        $('#variantTableBody').append(UTILS.fillCollectedVariantsTable(data,
+                ${show_gene},
+                ${show_sigma},
+                ${show_exseq},
+                ${show_exchp},
+                '<g:createLink controller="variant" action="variantInfo" />',
+                '<g:createLink controller="gene" action="geneInfo" />'));
 
         $('#variantTable').dataTable({
             iDisplayLength: 20,
