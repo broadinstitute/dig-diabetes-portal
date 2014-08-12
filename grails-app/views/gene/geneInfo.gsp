@@ -350,7 +350,7 @@
                     }
                 }
     }
-    function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exseq,show_sigma) {
+    function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl) {
         var bhtPeopleWithVariantWhoHaveDiabetes  = 0,
                 bhtPeopleWithVariantWithoutDiabetes = 0,
                 bhtPeopleWithVariant = 0,
@@ -400,6 +400,11 @@
             $('#bhtMetaBurdenForDiabetes').append("<p>Collectively, these variants' p-value for association with type 2 diabetes is "+
                     (bhtMetaBurdenForDiabetes.toPrecision(3)));
         }
+        var linkToVariantsPredictedToTruncate = $('#linkToVariantsPredictedToTruncate') ;
+        if (typeof linkToVariantsPredictedToTruncate!== "undefined") {
+            linkToVariantsPredictedToTruncate[0].href =  rootVariantUrl+"/"+(geneInfo["ID"])+"?filter=lof";
+        }
+
     }
     function fillUniprotSummary(geneInfo,show_gwas,show_exchp,show_exseq,show_sigma) {
         var funcDescrLine = "";
@@ -416,7 +421,7 @@
         fillUniprotSummary(rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma);
         fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootGeneUrl);
         fillVariationAcrossEthnicity (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl);
-        fillBiologicalHypothesisTesting (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma);
+        fillBiologicalHypothesisTesting (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl);
     }
 </script>
 

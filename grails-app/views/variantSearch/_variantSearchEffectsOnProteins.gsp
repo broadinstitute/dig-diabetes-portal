@@ -1,18 +1,27 @@
 <h4>Display only variants with the following predicted effects on encoded proteins:</h4>
+<script>
+    function chgRadioButton(buttonLabel){
+        if (buttonLabel ==='missense')  {
+            $('#missense-options').show();
+        }  else {
+            $('#missense-options').hide();
+        }
+    }
+</script>
 
 <div class="row clearfix">
     <div class="col-md-5">
         <div id="biology-form">
             <div class="radio">
-                <input type="radio" name="predictedEffects" value="all-effects" id="all_functions_checkbox" checked="checked"/>
+                <input type="radio" name="predictedEffects" value="all-effects" id="all_functions_checkbox" onClick="chgRadioButton('all-effects')" checked="checked"/>
                 all effects
             </div>
             <div class="radio">
-                <input type="radio" name="predictedEffects" value="protein-truncating" id="protein_truncating_checkbox"/>
+                <input type="radio" name="predictedEffects" value="protein-truncating" id="protein_truncating_checkbox" onClick="chgRadioButton('protein-truncating')"/>
                 protein-truncating
             </div>
             <div class="radio">
-                <input type="radio" name="predictedEffects" value="missense"  id="missense_checkbox"/>
+                <input type="radio" name="predictedEffects" value="missense"  id="missense_checkbox" onClick="chgRadioButton('missense')"/>
                 missense
             </div>
             <div id="missense-options" style="display:none;">
@@ -43,11 +52,11 @@
                 </div>
             </div>
             <div class="radio">
-                <input type="radio" name="predictedEffects" value="noEffectSynonymous"  id="synonymous_checkbox"/>
+                <input type="radio" name="predictedEffects" value="noEffectSynonymous"  id="synonymous_checkbox" onClick="chgRadioButton('noEffectSynonymous')"/>
                 no effect (synonymous coding)
             </div>
             <div class="radio">
-                <input type="radio" name="predictedEffects" value="noEffectNoncoding"  id="noncoding_checkbox"/>
+                <input type="radio" name="predictedEffects" value="noEffectNoncoding"  id="noncoding_checkbox" onClick="chgRadioButton('noEffectNoncoding')"/>
                 no effect (non-coding)
             </div>
         </div>

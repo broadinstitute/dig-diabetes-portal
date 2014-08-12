@@ -52,7 +52,7 @@
             _13k_T2D_P_EMMAX_FE_IV: 20
          }
         variant =  data['variant'];
-        variantTitle =  UTILS.get_variant_title(variant);
+        variantTitle =  UTILS.get_variant_title(variant,"<%=variantToSearch%>");
         $('#variantTitle').append(variantTitle);
         $('#variantCharacterization').append(UTILS.getSimpleVariantsEffect(variant.MOST_DEL_SCORE));
         $('#describingVariantAssociation').append(UTILS.variantInfoHeaderSentence(variant));
@@ -108,8 +108,10 @@
         $('#howCommonInHeterozygousCarriers').append(UTILS.showPercentagesAcrossHeterozygousCarriers(variant, "<%=variantToSearch%>"));
         $('#howCommonInHomozygousCarriers').append(UTILS.showPercentagesAcrossHomozygousCarriers(variant, "<%=variantToSearch%>"));
         $('#eurocentricVariantCharacterization').append(UTILS.eurocentricVariantCharacterization(variant, "<%=variantToSearch%>"));
+        UTILS.verifyThatDisplayIsWarranted(variant["_13k_T2D_TRANSCRIPT_ANNOT"],$('#exomeDataExists'),$('#exomeDataDoesNotExist'));
         $('#sigmaVariantCharacterization').append(UTILS.sigmaVariantCharacterization(variant, "<%=variantToSearch%>"));
         $('#effectOfVariantOnProtein').append(UTILS.variantGenerateProteinsChooser(variant, "<%=variantToSearch%>"));
+        UTILS.verifyThatDisplayIsWarranted(variant["_13k_T2D_TRANSCRIPT_ANNOT"],$('#variationInfoEncodedProtein'),$('#puntOnNoncodingVariant'));
 
     }
 </script>

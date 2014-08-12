@@ -90,11 +90,16 @@ frequencyCharacterization: function (proportion, cutoffs){
         return v.CHROM + ':' + v.POS;
     },
 
-    get_variant_title: function(v) {
+    get_variant_title: function(v,emergencyTitle) {
         if (v.DBSNP_ID) {
             return v.DBSNP_ID;
         } else {
-            return v.CHROM + ':' + v.POS;
+            if (typeof v.CHROM!== "undefined") {
+                return v.CHROM + ':' + v.POS;
+            }  else {
+                return  emergencyTitle;
+            }
+
         }
     },
     variantInfoHeaderSentence: function (variant) {
@@ -315,6 +320,15 @@ frequencyCharacterization: function (proportion, cutoffs){
             retVal += ( "<p>This variant is not observed in SIGMA sequencing data.</p>");
         }
         return retVal;
+    },
+    verifyThatDisplayIsWarranted: function (fieldToTest, divToDisplayIfWeHaveData, giveToDisplayIfWeHaveNoData)  {
+        if (!fieldToTest)  {
+            divToDisplayIfWeHaveData.hide();
+            giveToDisplayIfWeHaveNoData.show();
+        } else {
+            divToDisplayIfWeHaveData.show ();
+            giveToDisplayIfWeHaveNoData.hide();
+        }
     },
     variantInfoRadioChange: function (PolyPhen_SCORE, SIFT_SCORE, Condel_SCORE, MOST_DEL_SCORE, _13k_ANNOT_29_mammals_omega, Protein_position, Codons, Protein_change, PolyPhen_PRED, Consequence, Condel_PRED, SIFT_PRED) {
         var delScore = parseInt(MOST_DEL_SCORE);

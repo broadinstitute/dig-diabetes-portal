@@ -27,6 +27,12 @@
 
     </div>
 
+    <div id="exomeDataDoesNotExist" style="display: none">
+
+        <p>This variant is not in exome sequencing data available on this portal.</p>
+
+    </div>
+
 
 </g:if>
 <g:else>

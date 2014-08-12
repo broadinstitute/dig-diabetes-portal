@@ -195,7 +195,7 @@ class FilterManagementService {
 
         if (receivedParameters) {
             String[] requestPortionList =  receivedParameters.split("-")
-            if (requestPortionList.size() > 1) {
+            if (requestPortionList.size() > 1) {  //  multipiece searches
                 String ethnicity = requestPortionList[1]
                 if (ethnicity == 'exchp'){ // we have no ethnicity. Everything comes from the European exome chipset
                     switch ( requestPortionList[0] ){
@@ -248,6 +248,14 @@ class FilterManagementService {
                     }
                 }
 
+            } else {  // we can put specialized searches here
+                switch (requestPortionList[0]) {
+                    case "lof":
+                        filters << retrieveFilterString ("lof")
+                        filterDescriptions << "Variant predicted to result in loss of function"
+                        break;
+                    default: break;
+                }
             }
 
         }

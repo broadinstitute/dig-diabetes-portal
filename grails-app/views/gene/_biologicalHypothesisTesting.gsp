@@ -11,7 +11,7 @@
     <div class="translational-research-box">
         <p>
             <span id="bhtLossOfFunctionVariants"></span> variants in <em><%=geneName%></em> are predicted to truncate the protein.
-        | <a class="variantlink" href="/gene/<%=geneName%>/variants?filters=lof">view</a>
+        | <a class="variantlink" id="linkToVariantsPredictedToTruncate">view</a>
         </p>
 
         <p>Among people who carry one copy of at least one of these variants (data drawn from exome sequencing):</p>
