@@ -23,24 +23,7 @@
             errorReporter(jqXHR, exception) ;
         }
     });
-    var phenotypeListString  = decodeURIComponent("${phenotypeList}");
-    function phenotypeListConstructor (inString) {
-        var keyValue = {} ;
-        var arrayHolder = [];
-        var listOfPhenotypes =  inString.split(",");
-        for ( var i = 0 ; i < listOfPhenotypes.length ; i++ ) {
-            var phenotypeAndKey =  listOfPhenotypes[i].split (":") ;
-            var reclaimedKey  =  phenotypeAndKey [0];
-            var reclaimedLabel  =  phenotypeAndKey [1].replace(/\+/g,' ');
-            keyValue  [reclaimedKey]  = reclaimedLabel;
-            arrayHolder.push  ({key:reclaimedKey,
-                                val:reclaimedLabel});
-        }
-        this.phenotypeMap = keyValue;
-        this.phenotypeArray  = arrayHolder;
-    }
-
-    var  phenotypeMap =  new phenotypeListConstructor (phenotypeListString) ;
+    var  phenotypeMap =  new UTILS.phenotypeListConstructor (decodeURIComponent("${phenotypeList}")) ;
     function fillTraitVariantCross (data)  {
         console.log('fill The traitVariantCross');
 

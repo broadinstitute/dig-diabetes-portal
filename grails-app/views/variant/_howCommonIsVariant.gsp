@@ -7,24 +7,27 @@
 </p>
 
 <g:if test="${show_exseq}">
-    <p>In exome sequencing data available on this portal, the minor allele frequency of <%=variantToSearch%> is:</p>
-    <ul>
+
+    <div id="exomeDataExists" style="display: block">
+
+        <p>In exome sequencing data available on this portal, the minor allele frequency of <%=variantToSearch%> is:</p>
+        <ul>
         <span id="howCommonInExomeSequencing"></span>
+        </ul>
 
-    </ul>
+        <p>Heterozygous carriers</p>
+        <ul>
+        <span id="howCommonInHeterozygousCarriers"></span>
+        </ul>
+
+        <p>Homozygous carriers</p>
+        <ul>
+        <span id="howCommonInHomozygousCarriers"></span>
+        </ul>
+
+    </div>
 
 
-
-%{--todo: (from Brett) tab over the following two sections (and bold them) to indicate that they are part of exome chip#}--}%
-<p>Heterozygous carriers</p>
-<ul>
-<span id="howCommonInHeterozygousCarriers"></span>
-</ul>
-
-    <p>Homozygous carriers</p>
-    <ul>
-<span id="howCommonInHomozygousCarriers"></span>
-    </ul>
 </g:if>
 <g:else>
     <p>This variant is not in exome sequencing data available on this portal.</p>

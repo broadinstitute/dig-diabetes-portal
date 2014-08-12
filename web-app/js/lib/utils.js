@@ -32,11 +32,42 @@ var UTILS = {
         }
         return workingMap;
     },
+    /***
+     * Everyone seems to use three digits of precision. I wonder why
+     * @param incoming
+     * @returns {string}
+     */
     realNumberFormatter:function(incoming){
        var value=parseFloat (incoming);
         return value.toPrecision(3);
     },
-    frequencyCharacterization: function (proportion, cutoffs){
+    /***
+     * Take phenotype information delivered by the server and change it into a usable form.
+     * NOTE: this is a constructor. Use it like this:
+     *     var  phenotypeMap =  new phenotypeListConstructor (phenotypeListString) ;
+     * NOTE: the incoming parameter will be encoded by grails by default. You need to run something like:
+     *     var phenotypeListString  = decodeURIComponent("${phenotypeList}");
+     * in order to convert the URL encoded string back into a usable form before calling
+     * this constructor.
+     * @param inString
+     */
+    phenotypeListConstructor: function (inString) {
+        var keyValue = {};
+        var arrayHolder = [];
+        var listOfPhenotypes = inString.split(",");
+        for (var i = 0; i < listOfPhenotypes.length; i++) {
+            var phenotypeAndKey = listOfPhenotypes[i].split(":");
+            var reclaimedKey = phenotypeAndKey [0];
+            var reclaimedLabel = phenotypeAndKey [1].replace(/\+/g, ' ');
+            keyValue  [reclaimedKey] = reclaimedLabel;
+            arrayHolder.push({key: reclaimedKey,
+                val: reclaimedLabel});
+        }
+        this.phenotypeMap = keyValue;
+        this.phenotypeArray = arrayHolder;
+    },
+
+frequencyCharacterization: function (proportion, cutoffs){
         var retVal = "";
         if (proportion === 0) {
             retVal += "unobserved" ;
@@ -239,7 +270,7 @@ var UTILS = {
             var proportion = parseFloat(stringProportion);
             retVal += "<li>";
 
-            retVal += (proportion.toPrecision(3) + " percent of " + ethnicityFullName [i]);
+            retVal += ((proportion*100).toPrecision(3) + " percent of " + ethnicityFullName [i]);
             retVal += "(";
             retVal += UTILS.frequencyCharacterization(proportion,[0,0.005,0.05]);
             retVal += (")" +
@@ -249,9 +280,9 @@ var UTILS = {
     },
     showPercentagesAcrossHeterozygousCarriers: function (variant, title) {
         var retVal = "";
-        var heta  = parseFloat(variant["_13k_T2D_HETA"]) ;
+        var heta  = parseFloat(variant["_13k_T2D_HETA"]);
         var hetu  = parseFloat(variant["_13k_T2D_HETU"]) ;
-        retVal += ("<li>Number of people across datasets who carry one copy of " +title+ ": " + (heta+hetu) + "</li>");
+        retVal += ("<li>Number of people across datasets who carry one copy of " +title+ ": " + (parseFloat(heta)+parseFloat(hetu)) + "</li>");
         retVal += ("<li>Number of these carriers who have type 2 diabetes: " + (heta) + "</li>");
         retVal += ("<li>Number of people across datasets who carry one copy of " +title+ ": " + (hetu) + "</li>");
         return  retVal;

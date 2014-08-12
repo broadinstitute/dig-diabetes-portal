@@ -114,6 +114,7 @@
             errorReporter(jqXHR, exception) ;
         }
     });
+    var  phenotype =  new UTILS.phenotypeListConstructor (decodeURIComponent("${phenotypeList}")) ;
     function expandRegionBegin(geneExtentBeginning) {
         if (geneExtentBeginning)  {
             return Math.max(geneExtentBeginning-500000,0);
@@ -272,7 +273,15 @@
                             "<p>Variants in or near this gene have been convincingly associated at genome-wide significance in GWAS meta-analyses with the following traits:</p>"+
                             "<ul>");
                     for ( var i = 0 ; i < traitArray.length ; i++ ) {
-                        htmlAccumulator  += ("<li>"+traitArray[i]+"</li>")
+                        var traitRepresentation = "";
+                        if ((typeof phenotype !== "undefined" ) &&
+                                (phenotype.phenotypeMap) &&
+                                (phenotype.phenotypeMap [traitArray[i]])){
+                            traitRepresentation =  phenotype.phenotypeMap [traitArray[i]];
+                        } else {
+                            traitRepresentation =  traitArray[i];
+                        }
+                        htmlAccumulator  += ("<li>"+traitRepresentation+"</li>")
                     }
                     htmlAccumulator  +=  ("</ul>"+
                             "</strong>");
@@ -305,6 +314,7 @@
                         var ethnicityRec  = ethnicityMap[ethnicityKey];
                         var sing = (ethnicityRec ["SING"])?(ethnicityRec ["SING"]): 0;
                         var rare = (ethnicityRec ["RARE"])?(ethnicityRec ["RARE"]): 0;
+                        var displayableRare =  rare+sing;
                         var lowFrequency = (ethnicityRec ["LOW_FREQUENCY"])?(ethnicityRec ["LOW_FREQUENCY"]): 0;
                         var common = (ethnicityRec ["COMMON"])?(ethnicityRec ["COMMON"]): 0;
                         var total = (ethnicityRec ["TOTAL"])?(ethnicityRec ["TOTAL"]): 0;
@@ -315,12 +325,30 @@
                                 '<td>' + buildAnchorForVariantSearches(total,rawGeneInfo["ID"],'total-'+ethnicityKey,rootVariantUrl) + '</td>'+
                                 '<td>' + buildAnchorForVariantSearches(common,rawGeneInfo["ID"],'common-'+ethnicityKey,rootVariantUrl) + '</td>'+
                                 '<td>' + buildAnchorForVariantSearches(lowFrequency,rawGeneInfo["ID"],'lowfreq-'+ethnicityKey,rootVariantUrl) + '</td>'+
-                                '<td>' + buildAnchorForVariantSearches(rare,rawGeneInfo["ID"],'rare-'+ethnicityKey,rootVariantUrl) + '</td>'+
+                                '<td>' + buildAnchorForVariantSearches(displayableRare,rawGeneInfo["ID"],'rare-'+ethnicityKey,rootVariantUrl) + '</td>'+
                                 '</tr>');
                     }
                 }
 
-            }
+                if (rawGeneInfo["EXCHP_T2D_VAR_TOTALS"]) {
+                    var excomeChip = rawGeneInfo["EXCHP_T2D_VAR_TOTALS"];
+                    if  (excomeChip["EU"] ){
+                        var excomeChipEuropean = excomeChip["EU"];
+                        if (excomeChipEuropean["NS"]){
+                            $('#continentalVariationTableBody').append ('<tr>'+
+                                    '<td>European (exome chip)</td>'+
+                                    '<td>' + excomeChipEuropean["NS"] + '</td>'+
+                                    '<td>' + buildAnchorForVariantSearches(excomeChipEuropean["TOTAL"],rawGeneInfo["ID"],'total-exchp',rootVariantUrl) + '</td>'+
+                                    '<td>' + buildAnchorForVariantSearches(excomeChipEuropean["COMMON"],rawGeneInfo["ID"],'common-exchp',rootVariantUrl) + '</td>'+
+                                    '<td>' + buildAnchorForVariantSearches(excomeChipEuropean["LOW_FREQUENCY"],rawGeneInfo["ID"],'lowfreq-exchp',rootVariantUrl) + '</td>'+
+                                    '<td>' + buildAnchorForVariantSearches(excomeChipEuropean["RARE"],rawGeneInfo["ID"],'rare-exchp',rootVariantUrl) + '</td>'+
+                                    '</tr>');
+
+                        }
+                    }
+
+                    }
+                }
     }
     function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exseq,show_sigma) {
         var bhtPeopleWithVariantWhoHaveDiabetes  = 0,

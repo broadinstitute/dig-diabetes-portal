@@ -85,8 +85,23 @@ class FilterManagementService {
             case "setEthnicityMaximum" :
                 returnValue = """{ "filter_type": "FLOAT", "operand": "_13k_T2D_${parm1}_MAF", "operator": "LTE", "value": ${parm2} }""".toString()
                 break;
+            case "setEthnicityMaximumAbsolute" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "_13k_T2D_${parm1}_MAF", "operator": "LT", "value": ${parm2} }""".toString()
+                break;
             case "setEthnicityMinimum" :
                 returnValue = """{ "filter_type": "FLOAT", "operand": "_13k_T2D_${parm1}_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
+                break;
+            case "setEthnicityMinimumAbsolute" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "_13k_T2D_${parm1}_MAF", "operator": "GT", "value": ${parm2} }""".toString()
+                break;
+            case "setExomeChipMinimum" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
+                break;
+            case "setExomeChipMinimumAbsolute" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "GT", "value": ${parm2} }""".toString()
+                break;
+            case "setExomeChipMaximumAbsolute" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "LT", "value": ${parm2} }""".toString()
                 break;
             case "setSigmaMinorAlleleFrequencyMinimum" :
                 returnValue = """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
@@ -182,28 +197,55 @@ class FilterManagementService {
             String[] requestPortionList =  receivedParameters.split("-")
             if (requestPortionList.size() > 1) {
                 String ethnicity = requestPortionList[1]
-                switch ( requestPortionList[0] ){
-                    case "total":
-                        filters << retrieveFilterString("dataSetDiagramGwas")
-                        filterDescriptions << "GWAS P value > 0"
-                        break;
-                    case "common":
-                        filters << retrieveParameterizedFilterString("setEthnicityMinimum",ethnicity,0.05)
-                        filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is greater than or equal to 0.05"
-                        break;
-                    case "lowfreq":
-                        filters << retrieveParameterizedFilterString("setEthnicityMinimum",ethnicity,0.005)
-                        filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is greater than or equal to 0.005"
-                        filters << retrieveParameterizedFilterString("setEthnicityMaximum",ethnicity,0.05)
-                        filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is less than 0.05"
-                        break;
-                    case "rare":
-                        filters << retrieveParameterizedFilterString("setEthnicityMinimum",ethnicity,0)
-                        filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is greater than or equal to 0.005"
-                        filters << retrieveParameterizedFilterString("setEthnicityMaximum",ethnicity,0.005)
-                        filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is less than 0.05"
-                        break;
-                    default: break;
+                if (ethnicity == 'exchp'){ // we have no ethnicity. Everything comes from the European exome chipset
+                    switch ( requestPortionList[0] ){
+                        case "total":
+                            filters << retrieveParameterizedFilterString("setExomeChipMinimum","",0)
+                            filterDescriptions << "Minor allele frequency in exome chip dataset is greater than or equal to zero"
+                            break;
+                        case "common":
+                            filters << retrieveParameterizedFilterString("setExomeChipMinimum","",0.05)
+                            filterDescriptions << "Minor allele frequency in exome chip dataset is greater than or equal to 0.05"
+                            break;
+                        case "lowfreq":
+                            filters << retrieveParameterizedFilterString("setExomeChipMinimum",ethnicity,0.005)
+                            filterDescriptions << "Minor allele frequency in exome chip dataset is greater than or equal to 0.005"
+                            filters << retrieveParameterizedFilterString("setExomeChipMaximumAbsolute",ethnicity,0.05)
+                            filterDescriptions << "Minor allele frequency in exome chip dataset is less than 0.05"
+                            break;
+                        case "rare":
+                            filters << retrieveParameterizedFilterString("setExomeChipMinimumAbsolute",ethnicity,0)
+                            filterDescriptions << "Minor allele frequency in exome chip dataset is greater than 0"
+                            filters << retrieveParameterizedFilterString("setExomeChipMaximumAbsolute",ethnicity,0.005)
+                            filterDescriptions << "Minor allele frequency in exome chip dataset is less than 0.005"
+                            break;
+                        default: break;
+                    }
+
+                } else {   // we have ethnicity data
+                    switch ( requestPortionList[0] ){
+                        case "total":
+                            filters << retrieveFilterString("dataSetDiagramGwas")
+                            filterDescriptions << "GWAS P value > 0"
+                            break;
+                        case "common":
+                            filters << retrieveParameterizedFilterString("setEthnicityMinimum",ethnicity,0.05)
+                            filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is greater than or equal to 0.05"
+                            break;
+                        case "lowfreq":
+                            filters << retrieveParameterizedFilterString("setEthnicityMinimum",ethnicity,0.005)
+                            filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is greater than or equal to 0.005"
+                            filters << retrieveParameterizedFilterString("setEthnicityMaximumAbsolute",ethnicity,0.05)
+                            filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is less than 0.05"
+                            break;
+                        case "rare":
+                            filters << retrieveParameterizedFilterString("setEthnicityMinimumAbsolute",ethnicity,0)
+                            filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is greater than 0"
+                            filters << retrieveParameterizedFilterString("setEthnicityMaximumAbsolute",ethnicity,0.005)
+                            filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is less than 0.005"
+                            break;
+                        default: break;
+                    }
                 }
 
             }
