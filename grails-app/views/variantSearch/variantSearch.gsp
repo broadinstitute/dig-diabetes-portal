@@ -47,11 +47,16 @@
         var restrictToRegion = UTILS.extractValFromTextboxes(['region_gene_input','region_chrom_input','region_start_input','region_stop_input']);
         var alleleFrequencies = UTILS.extractAlleleFrequencyRanges($('.form-control'));
         var caseControlRequests = UTILS.extractValFromCheckboxes(['id_onlyseen_t2dcases','id_onlyseen_t2dcontrols']);
+        var missensePredictions = [];
         varsToSend["predictedEffects"]  = $("input:radio[name='predictedEffects']:checked").val();
+        if (varsToSend["predictedEffects"]==='missense'){
+            missensePredictions = UTILS.extractValsFromCombobox(['polyphenSelect','siftSelect','condelSelect']);
+        }
         varsToSend = UTILS.concatMap(varsToSend,customSignificance) ;
         varsToSend = UTILS.concatMap(varsToSend,caseControlRequests) ;
         varsToSend = UTILS.concatMap(varsToSend,alleleFrequencies) ;
         varsToSend = UTILS.concatMap(varsToSend,restrictToRegion) ;
+        varsToSend = UTILS.concatMap(varsToSend,missensePredictions) ;
         UTILS.postQuery('../variantSearch/variantSearchRequest',varsToSend);
     }
 </script>

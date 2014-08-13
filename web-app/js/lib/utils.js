@@ -625,6 +625,16 @@ frequencyCharacterization: function (proportion, cutoffs){
         }
         return returnValue;
     },
+    extractValsFromCombobox: function(everyId) {
+        var returnValue  = {};
+        for ( var i = 0 ; i < everyId.length ; i++ ) {
+            var domReference = $('#'+everyId[i]);
+            if ((domReference) && (domReference.val())){
+                returnValue [everyId[i]]   = domReference.val();
+            }
+        }
+        return returnValue;
+    },
     postQuery: function (path, params, method) {
     method = method || "post"; // Set method to post by default if not specified.
 

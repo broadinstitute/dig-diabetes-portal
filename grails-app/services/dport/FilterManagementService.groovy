@@ -46,12 +46,6 @@ class FilterManagementService {
                     """{ "filter_type": "FLOAT", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 1 }""".toString(),
             "missenseCheckbox"        :
                     """{ "filter_type": "FLOAT", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 2 }""".toString(),
-            "polyphenSelect"        :
-                    """{ "filter_type": "STRING", "operand": "PolyPhen_PRED", "operator": "EQ", "value": "" }""".toString(),
-            "condelSelect"        :
-                    """{ "filter_type": "STRING", "operand": "Condel_PRED", "operator": "EQ", "value": "" }""".toString(),
-            "siftSelect"        :
-                    """{ "filter_type": "STRING", "operand": "SIFT_PRED", "operator": "EQ", "value": "" }""".toString(),
             "synonymousCheckbox"        :
                     """{ "filter_type": "FLOAT", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 3 }""".toString(),
             "noncodingCheckbox"        :
@@ -109,6 +103,15 @@ class FilterManagementService {
             case "setSigmaMinorAlleleFrequencyMaximum" :
                 returnValue = """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_MAF", "operator": "LTE", "value": ${parm2} }""".toString()
                 break;
+            case "polyphenSelect" :
+                returnValue = """{ "filter_type": "STRING", "operand": "PolyPhen_PRED", "operator": "EQ", "value": "${parm1}" }""".toString()
+                break;
+            case "condelSelect"        :
+                returnValue = """{ "filter_type": "STRING", "operand": "Condel_PRED", "operator": "EQ", "value": "${parm1}" }""".toString()
+                break;
+            case  "siftSelect"        :
+                returnValue = """{ "filter_type": "STRING", "operand": "SIFT_PRED", "operator": "EQ", "value": "${parm1}" }""".toString()
+                break;
 
             default: break;
         }
@@ -144,6 +147,8 @@ class FilterManagementService {
         buildingFilters = caseControlOnly(buildingFilters, incomingParameters,currentlySigma)
 
         buildingFilters = predictedEffectsOnProteins(buildingFilters, incomingParameters)
+
+        buildingFilters = predictedImpactOfMissenseMutations(buildingFilters, incomingParameters)
 
         return buildingFilters
 
@@ -559,6 +564,48 @@ class FilterManagementService {
 
                 default: break;
             }
+        }
+
+        return buildingFilters
+
+    }
+
+
+    private  LinkedHashMap predictedImpactOfMissenseMutations (LinkedHashMap  buildingFilters, HashMap incomingParameters){
+        List <String> filters =  buildingFilters.filters
+        List <String> filterDescriptions =  buildingFilters.filterDescriptions
+        if  (incomingParameters.containsKey("predictedEffects") &&
+            (incomingParameters ["predictedEffects"][0] == "missense"))  { // we only perform this processing if the user
+                                                                           // is asking about missense mutation
+
+            // There are three types of predictions to consider, corresponding to checkboxes
+            //      polyphen_select
+            //      sift_select
+            //      condel_select
+            // Handle these one at a time.  The process is simplified because the filter name uses parameters
+            // that map precisely to the combo box elements on the front end
+
+            //  polyphen2
+            if (incomingParameters.containsKey("polyphenSelect")){
+                String choiceOfOptions =  incomingParameters["polyphenSelect"][0]
+                filters <<  retrieveParameterizedFilterString("polyphenSelect",choiceOfOptions,0.0)
+                filterDescriptions << "PolyPhen2 prediction is equal to ${choiceOfOptions}"
+            }
+
+            //  SIFT
+            if (incomingParameters.containsKey("siftSelect")){
+                String choiceOfOptions =  incomingParameters["siftSelect"][0]
+                filters <<  retrieveParameterizedFilterString("siftSelect",choiceOfOptions,0.0)
+                filterDescriptions << "SIFT prediction is equal to ${choiceOfOptions}"
+            }
+
+            //  Condel
+            if (incomingParameters.containsKey("condelSelect")){
+                String choiceOfOptions =  incomingParameters["condelSelect"][0]
+                filters <<  retrieveParameterizedFilterString("condelSelect",choiceOfOptions,0.0)
+                filterDescriptions << "Condel prediction is equal to ${choiceOfOptions}"
+            }
+
         }
 
         return buildingFilters

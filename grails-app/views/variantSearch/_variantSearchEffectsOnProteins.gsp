@@ -27,7 +27,7 @@
             <div id="missense-options" style="display:none;">
                 <div class="checkbox">
                     PolyPhen-2 prediction
-                    <select name="polyphen" id="polyphen_select">
+                    <select name="polyphen" id="polyphenSelect">
                         <option value="">---</option>
                         <option value="probably_damaging">probably damaging</option>
                         <option value="possibly_damaging">possibly damaging</option>
@@ -36,7 +36,7 @@
                 </div>
                 <div class="checkbox">
                     SIFT prediction
-                    <select name="sift" id="sift_select">
+                    <select name="sift" id="siftSelect">
                         <option value="">---</option>
                         <option value="deleterious">deleterious</option>
                         <option value="tolerated">tolerated</option>
@@ -44,7 +44,7 @@
                 </div>
                 <div class="checkbox">
                     CONDEL prediction
-                    <select name="condel" id="condel_select">
+                    <select name="condel" id="condelSelect">
                         <option value="">---</option>
                         <option value="deleterious">deleterious</option>
                         <option value="benign">benign</option>
