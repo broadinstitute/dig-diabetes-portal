@@ -66,8 +66,33 @@ var UTILS = {
         this.phenotypeMap = keyValue;
         this.phenotypeArray = arrayHolder;
     },
+    /***
+     * Take phenotype information delivered by the server and change it into a usable form.
+     * NOTE: this is a constructor. Use it like this:
+     *     var  phenotypeMap =  new phenotypeListConstructor (phenotypeListString) ;
+     * NOTE: the incoming parameter will be encoded by grails by default. You need to run something like:
+     *     var phenotypeListString  = decodeURIComponent("${phenotypeList}");
+     * in order to convert the URL encoded string back into a usable form before calling
+     * this constructor.
+     * @param inString
+     */
+    proteinEffectListConstructor: function (inString) {
+        var keyValue = {};
+        var arrayHolder = [];
+        var listOfProteinEffect = inString.split("~");
+        for (var i = 0; i < listOfProteinEffect.length; i++) {
+            var proteinEffectAndKey = listOfProteinEffect[i].split(":");
+            var reclaimedKey = proteinEffectAndKey [0];
+            var reclaimedLabel = proteinEffectAndKey [1].replace(/\+/g, ' ');
+            keyValue  [reclaimedKey] = reclaimedLabel;
+            arrayHolder.push({key: reclaimedKey,
+                val: reclaimedLabel});
+        }
+        this.proteinEffectMap = keyValue;
+        this.proteinEffectArray = arrayHolder;
+    },
 
-frequencyCharacterization: function (proportion, cutoffs){
+    frequencyCharacterization: function (proportion, cutoffs){
         var retVal = "";
         if (proportion === 0) {
             retVal += "unobserved" ;
@@ -428,8 +453,30 @@ frequencyCharacterization: function (proportion, cutoffs){
         return  {highestFrequency:highestValue,
                  populationWithHighestFrequency:winningEthnicity};
     },
-
-    fillCollectedVariantsTable:  function ( fullJson, show_gene, show_sigma, show_exseq, show_exchp,variantRootUrl,geneRootUrl ) {
+    /***
+     *
+     * @param fullJson
+     * @param show_gene
+     * @param show_sigma
+     * @param show_exseq
+     * @param show_exchp
+     * @param variantRootUrl
+     * @param geneRootUrl
+     * @param dataSetDetermination  tells us which data set we are using. Here is the mapping:
+     * 0-> GWAS
+     * 1-> Sigma
+     * 2-> exome sequencing
+     * 3-> exome chip
+     * @returns {string}
+     */
+    fillCollectedVariantsTable:  function ( fullJson,
+                                            show_gene,
+                                            show_sigma,
+                                            show_exseq,
+                                            show_exchp,
+                                            variantRootUrl,
+                                            geneRootUrl,
+                                            dataSetDetermination) {
        var retVal = "";
        var vRec = fullJson.variants;
         if (!vRec)  {   // error condition
@@ -461,7 +508,18 @@ frequencyCharacterization: function (proportion, cutoffs){
 
             // effect on protein
             if (vRec[i].Consequence) {
-                retVal += "<td>"+vRec[i].Consequence+"</td>" ;
+                var proteinEffectRepresentation = "";
+                if ((typeof proteinEffectList !== "undefined" ) &&
+                    (proteinEffectList.proteinEffectMap) &&
+                    (proteinEffectList.proteinEffectMap [vRec[i].Consequence])){
+                    proteinEffectRepresentation =  proteinEffectList.proteinEffectMap[vRec[i].Consequence];
+                    if ((proteinEffectRepresentation)&&(proteinEffectRepresentation.length>0)) {
+                        proteinEffectRepresentation = proteinEffectRepresentation.replace(/;/g,';\n')
+                    }
+                } else {
+                    proteinEffectRepresentation =  vRec[i].Consequence;
+                }
+                retVal += "<td>"+proteinEffectRepresentation+"</td>" ;
             } else {
                 retVal += "<td></td>";
             }
@@ -509,8 +567,21 @@ frequencyCharacterization: function (proportion, cutoffs){
                 var highFreq = UTILS.determineHighestFrequencyEthnicity(vRec[i]);
 
                 // P value
-                if (vRec[i].GWAS_T2D_PVALUE)  {
-                    retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].GWAS_T2D_PVALUE)+"</td>";
+                // NOTE: we need to use trick here. We are going to present different columns
+                //   depending on what data set the user is looking at
+                var pValueToPresent = "";
+                switch (2){
+                    case 0:  pValueToPresent =  vRec[i].GWAS_T2D_PVALUE;
+                        break;
+                    case 1:  pValueToPresent =  vRec[i].SIGMA_T2D_P;
+                        break;
+                    case 2:  pValueToPresent =  vRec[i]._13k_T2D_P_EMMAX_FE_IV;
+                        break;
+                    case 3:  pValueToPresent =  vRec[i].EXCHP_T2D_P_value;
+                        break;
+                }
+                if (pValueToPresent)  {
+                    retVal += "<td>" +UTILS.realNumberFormatter(pValueToPresent)+"</td>";
                 } else {
                     retVal += "<td></td>";
                 }
@@ -672,7 +743,16 @@ frequencyCharacterization: function (proportion, cutoffs){
         };
 
     } ,
-    postJson2: function (path, params, show_gene, show_sigma, show_exseq,show_exchp, variantRootUrl,geneRootUrl,variantSearchAjaxUrl) {
+    postJson2: function (path,
+                         params,
+                         show_gene,
+                         show_sigma,
+                         show_exseq,
+                         show_exchp,
+                         variantRootUrl,
+                         geneRootUrl,
+                         variantSearchAjaxUrl,
+                         dataSetDetermination) {
         var loading = $('#spinner').show();
         loading.show();
         $.ajax({
@@ -680,7 +760,14 @@ frequencyCharacterization: function (proportion, cutoffs){
             data:params,
             url:variantSearchAjaxUrl,
             success:function(data,textStatus){
-                UTILS.fillTheVariantTable(data,show_gene, show_sigma, show_exseq,show_exchp,variantRootUrl,geneRootUrl);
+                UTILS.fillTheVariantTable(data,
+                    show_gene,
+                    show_sigma,
+                    show_exseq,
+                    show_exchp,
+                    variantRootUrl,
+                    geneRootUrl,
+                    dataSetDetermination);
                 loading.hide();
             },
             error:function(XMLHttpRequest,textStatus,errorThrown){
@@ -690,8 +777,22 @@ frequencyCharacterization: function (proportion, cutoffs){
         });
     }
     ,
-    fillTheVariantTable:  function (data,show_gene, show_sigma, show_exseq,show_exchp,variantRootUrl,geneRootUrl)  {
-    $('#variantTableBody').append(UTILS.fillCollectedVariantsTable(data, show_gene, show_sigma, show_exseq,show_exchp,variantRootUrl,geneRootUrl));
+    fillTheVariantTable:  function (data,
+                                    show_gene,
+                                    show_sigma,
+                                    show_exseq,
+                                    show_exchp,
+                                    variantRootUrl,
+                                    geneRootUrl,
+                                    dataSetDetermination)  {
+    $('#variantTableBody').append(UTILS.fillCollectedVariantsTable(data,
+        show_gene,
+        show_sigma,
+        show_exseq,
+        show_exchp,
+        variantRootUrl,
+        geneRootUrl,
+        dataSetDetermination));
 
     if (data.variants)     {
         var totalNumberOfResults =  data.variants.length;
@@ -699,7 +800,7 @@ frequencyCharacterization: function (proportion, cutoffs){
         $('#variantTable').dataTable({
             iDisplayLength: 20,
             bFilter: false,
-            aaSorting: [[ 1, "asc" ]],
+            aaSorting: [[ 5, "asc" ]],
             aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 5, 6, 8, 10, 11, 12, 13 ] } ]
         });
         if (totalNumberOfResults >= 1000)  {

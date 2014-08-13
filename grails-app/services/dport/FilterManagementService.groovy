@@ -268,10 +268,48 @@ class FilterManagementService {
     }
 
 
+    /***
+     * Here's the string matching that is usually done inside the filter compilation methods below. We also call this one routine directly from
+     * the VariantController, however, so it makes sense to perform this comparison in its own module
+     * @param incomingParameters
+     * @return
+     */
+    public  int distinguishBetweenDataSets (HashMap incomingParameters){
+        int returnValue = 0;
+        if  (incomingParameters.containsKey("datatype"))  {      // user has requested a particular data set. Without explicit request what is the default?
+            String requestedDataSet =  incomingParameters ["datatype"][0]
 
+            switch (requestedDataSet)   {
+                case  "gwas":
+                    returnValue = 0
+                    break;
+                case  "sigma":
+                    returnValue = 1
+                    break;
+                case  "exomeseq":
+                    returnValue = 2
+                    break;
+                case  "exomechip":
+                    returnValue = 3
+                    break;
 
+                default: break;
+            }
+        }
+        return returnValue
 
+    }
 
+    /***
+     * Like most of the other routines in this module we are mapping parameters to filters. There is one additional
+     * level of interaction for this routine because some other unrelated routine also needs to be able to make this
+     * distinction.  Therefore we break out this string matching and put it in external method   (distinguishBetweenDataSets)
+     * so that our code stays nice and DRY
+     *
+     * @param buildingFilters
+     * @param incomingParameters
+     * @return
+     */
     private  LinkedHashMap determineDataSet (LinkedHashMap  buildingFilters, HashMap incomingParameters){
         List <String> filters =  buildingFilters.filters
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
@@ -279,28 +317,31 @@ class FilterManagementService {
 
         // datatype: Sigma, exome sequencing, exome chip, or diagram GWAS
         if  (incomingParameters.containsKey("datatype"))  {      // user has requested a particular data set. Without explicit request what is the default?
-            String requestedDataSet =  incomingParameters ["datatype"][0]
 
-            switch (requestedDataSet)   {
-                case  "sigma":
+            int dataSetDistinguisher =   distinguishBetweenDataSets ( incomingParameters)
+
+
+            switch (dataSetDistinguisher)   {
+                case  0:
+                    datatypeOperand = 'GWAS_T2D_PVALUE'
+                    filters <<  retrieveFilterString("dataSetDiagramGwas")
+                    filterDescriptions << "P-value for association with T2D in GWAS dataset is greater than or equal to 0"
+                    break;
+
+                case  1:
                     datatypeOperand = 'SIGMA_T2D_P'
                     filters <<  retrieveFilterString("dataSetSigma") 
                     filterDescriptions << "Whether variant is included in SIGMA analysis is equal to 1"
                     break;
-                case  "exomeseq":
+                case  2:
                     datatypeOperand = '_13k_T2D_P_EMMAX_FE_IV'
                     filters <<  retrieveFilterString("dataSetExseq") 
                     filterDescriptions << "Is observed in exome sequencing"
                     break;
-                case  "exomechip":
+                case  3:
                     datatypeOperand = 'EXCHP_T2D_P_value'
                     filters <<  retrieveFilterString("dataSetExchp") 
                     filterDescriptions << "Is observed in exome chip"
-                    break;
-                case  "gwas":
-                    datatypeOperand = 'GWAS_T2D_PVALUE'
-                    filters <<  retrieveFilterString("dataSetDiagramGwas") 
-                    filterDescriptions << "P-value for association with T2D in GWAS dataset is greater than or equal to 0"
                     break;
                 default: break;
             }

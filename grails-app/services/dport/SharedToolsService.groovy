@@ -19,4 +19,24 @@ class SharedToolsService {
         }
         return java.net.URLEncoder.encode( sb.toString())
     }
+
+
+
+    public String urlEncodedListOfProteinEffect() {
+        List<ProteinEffect> proteinEffectList=ProteinEffect.list()
+        StringBuilder sb   = new StringBuilder ("")
+        int numberOfProteinEffects  =  proteinEffectList.size()
+        int iterationCount  = 0
+        for (ProteinEffect proteinEffect in proteinEffectList){
+            sb<< (proteinEffect.key + ":" + proteinEffect.name )
+            iterationCount++
+            if (iterationCount  < numberOfProteinEffects){
+                sb<< "~"
+            }
+        }
+        return java.net.URLEncoder.encode( sb.toString())
+    }
+
+
+
 }

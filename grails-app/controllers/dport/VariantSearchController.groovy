@@ -5,6 +5,7 @@ import org.codehaus.groovy.grails.web.json.JSONObject
 class VariantSearchController {
         FilterManagementService filterManagementService
         RestServerService   restServerService
+        SharedToolsService sharedToolsService
 
         def index() { }
 
@@ -31,10 +32,13 @@ class VariantSearchController {
         if (receivedParameters)    {
             LinkedHashMap<String, String> parsedFilterParameters = filterManagementService.parseVariantSearchParameters(request.parameters,false)
             if  (parsedFilterParameters)  {
+
+                Integer dataSetDetermination = filterManagementService.distinguishBetweenDataSets ( request.parameters )
+
+                // get back a list of filters that we need to pass to the backend. We package them up for a round trip to the client
+                // and back via the Ajax call
                 List <String> listOfAllFilters = parsedFilterParameters.filters
                 StringBuilder sb = new  StringBuilder()
-
-
                 for ( int i=0 ; i<listOfAllFilters.size() ; i++ ) {
                     sb <<  listOfAllFilters[i]
                     if ((i+1)<listOfAllFilters.size()) {
@@ -42,6 +46,9 @@ class VariantSearchController {
                     }
                 }
                 String enc = java.net.URLEncoder.encode(sb.toString())
+
+
+                String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
                 render (view: 'variantSearchResults',
                         model:[show_gene: 1,
                                show_gwas:1,
@@ -49,7 +56,9 @@ class VariantSearchController {
                                show_exseq: 1,
                                show_sigma: 0,
                                filter: enc,
-                               filterDescriptions: parsedFilterParameters.filterDescriptions] )
+                               filterDescriptions: parsedFilterParameters.filterDescriptions,
+                               proteinEffectsList:encodedProteinEffects,
+                               dataSetDetermination:dataSetDetermination] )
             }
         }
 

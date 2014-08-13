@@ -1,5 +1,6 @@
 import dport.Gene
 import dport.Phenotype
+import dport.ProteinEffect
 import dport.RestServerService
 
 class BootStrap {
@@ -90,6 +91,54 @@ class BootStrap {
                 counter++
             }
             println "Phenotypes successfully loaded: ${counter}"
+        }
+
+
+        if (ProteinEffect.count()) {
+            println "ProteinEffect already loaded. Total operational number = ${ProteinEffect.count()}"
+        } else {
+            String fileLocation = grailsApplication.mainContext.getResource("/WEB-INF/resources/so_consequences.yaml").file.toString()
+            println "Actively loading ProteinEffect from file = ${fileLocation}"
+            File file = new File(fileLocation)
+            int counter = 1
+            int fieldCount = 0
+            boolean headerLine = true
+            String key = ''
+            String name = ''
+            String description = ''
+            file.eachLine {
+                if (headerLine){
+                    headerLine = false
+                }  else {
+                    String rawLine = it
+                    if (rawLine.startsWith("-")) {
+                        fieldCount = 0
+                    }  else {
+                        fieldCount++
+                        String[] columnData =  rawLine.split(":")
+                        if (columnData.length > 1)
+                        {
+                            String rawKey = columnData[0].trim()
+                            String rawValue = columnData[1].trim()
+                            switch (rawKey) {
+                                case  "key" : key = rawValue;
+                                    break;
+                                case  "name" : name = rawValue;
+                                    break;
+                                case  "description" : description = rawValue;
+                                    new ProteinEffect (
+                                            key:key,
+                                            name:name,
+                                            description:description ).save(failOnError: true)
+                                    break;
+                            }
+
+                        }
+                    }
+                }
+                counter++
+            }
+            println "ProteinEffect successfully loaded: ${counter}"
         }
 
 

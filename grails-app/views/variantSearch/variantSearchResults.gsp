@@ -24,7 +24,7 @@
         if (!y) { y = 1; }
         return ((x < y) ? 1 : ((x > y) ?  -1 : 0));
     };
-
+    var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
     UTILS.postJson2('../variantSearch/variantSearchAjax',"<%=filter%>",
             ${show_gene},
             ${show_sigma},
@@ -32,7 +32,8 @@
             ${show_exchp},
             '<g:createLink controller="variant" action="variantInfo"  />',
             '<g:createLink controller="gene" action="geneInfo"  />',
-            '<g:createLink controller="variantSearch" action="variantSearchAjax" />');
+            '<g:createLink controller="variantSearch" action="variantSearchAjax" />',
+            ${dataSetDetermination} );
     var uri_dec = decodeURIComponent("<%=filter%>");
 </script>
 
