@@ -39,6 +39,7 @@
             errorReporter(jqXHR, exception) ;
         }
     });
+    var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
     function fillTheFields (data)  {
         $('#variantTableBody').append(UTILS.fillCollectedVariantsTable(data,
                 ${show_gene},
@@ -51,7 +52,7 @@
         $('#variantTable').dataTable({
             iDisplayLength: 20,
             bFilter: false,
-            aaSorting: [[ 1, "asc" ]],
+            aaSorting: [[ 5, "asc" ]],
             aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 5, 6, 8, 10, 11, 12, 13 ] } ]
         });
         console.log('fillThe Region Fields');

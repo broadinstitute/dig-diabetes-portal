@@ -602,7 +602,8 @@ var UTILS = {
 
                 // highest frequency
                 if (highFreq.highestFrequency)  {
-                    retVal += "<td>" +highFreq.highestFrequency+"</td>";
+
+                    retVal += "<td>" +UTILS.realNumberFormatter(highFreq.highestFrequency)+"</td>";
                 } else {
                     retVal += "<td></td>";
                 }

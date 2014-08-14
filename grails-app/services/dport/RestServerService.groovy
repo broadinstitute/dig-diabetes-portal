@@ -175,7 +175,7 @@ class RestServerService {
      * @param incoming
      * @return
      */
-    private LinkedHashMap<String, Integer> extractNumbersWeNeed (String incoming)  {
+    public LinkedHashMap<String, Integer> extractNumbersWeNeed (String incoming)  {
         LinkedHashMap<String, Integer> returnValue = [:]
 
         String commasRemoved=incoming.replace(/,/,"")

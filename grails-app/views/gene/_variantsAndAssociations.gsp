@@ -52,6 +52,5 @@
 </g:if>
 
 <p><a class="boldlink"  id="linkToVariantTraitCross">
-      %{--href="/region/chr<%=gene_info.CHROM%>:<%=gene_info.REGION_BEG%>-<%=gene_info.REGION_END%>/gwas">--}%
     See p-values and other statistics across 25 traits for all GWAS variants included in this portal</a>
 </p>
