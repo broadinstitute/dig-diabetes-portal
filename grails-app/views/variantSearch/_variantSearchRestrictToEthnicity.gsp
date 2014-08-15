@@ -25,26 +25,6 @@
        </g:if>
        <g:if test="${show_exseq}">
            <g:alleleFrequencyRange></g:alleleFrequencyRange>
-            %{--<% _.each(ethnicities, function(e) { %>--}%
-            %{--<div class="checkbox">--}%
-                %{--<div class="row">--}%
-                    %{--<div class="col-xs-5">--}%
-                        %{--<label>--}%
-                            %{--in <strong><%= e.name %></strong>:--}%
-                        %{--</label>--}%
-                    %{--</div>--}%
-                    %{--<div class="col-xs-2">--}%
-                        %{--<input type="text" class="form-control" id="ethnicity_af_<%= e.key %>-min" />--}%
-                    %{--</div>--}%
-                    %{--<div class="col-xs-1">--}%
-                        %{--to--}%
-                    %{--</div>--}%
-                    %{--<div class="col-xs-2">--}%
-                        %{--<input type="text" class="form-control" id="ethnicity_af_<%= e.key %>-max"/>--}%
-                    %{--</div>--}%
-                %{--</div>--}%
-            %{--</div>--}%
-            %{--<% }); %>--}%
         </g:if>
         </div>
     </div>

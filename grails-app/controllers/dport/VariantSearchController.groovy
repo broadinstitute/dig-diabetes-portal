@@ -1,5 +1,4 @@
 package dport
-
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class VariantSearchController {
@@ -14,11 +13,19 @@ class VariantSearchController {
      * @return
      */
         def variantSearch() {
+            String encParams
+            if (params.encParams){
+                 encParams =  params.encParams
+                //String param1AfterDecoding = URLDecoder.decode(encParams, "UTF-8");
+                println("params.encParams = ${params.encParams}")
+                //println("params.encParams2 = ${param1AfterDecoding}")
+            }
                 render (view: 'variantSearch',
                         model:[show_gwas:1,
                                show_exchp: 1,
                                show_exseq: 1,
-                               show_sigma: 0] )
+                               show_sigma: 0,
+                               encParams:encParams] )
 
         }
 
@@ -45,7 +52,24 @@ class VariantSearchController {
                         sb << ","
                     }
                 }
-                String enc = java.net.URLEncoder.encode(sb.toString())
+                String encodedFilters = java.net.URLEncoder.encode(sb.toString())
+
+                // we need to  encode the list of parameters so that we can reset them when we reenter
+                //  the filter setting form.  It is certainly true that this is a different form of the
+                //  same information that is held in BOTH the filter list and the filterDescription
+                //  list.  This one could be passed from a different page, however, so we really want
+                //  a simple, unambiguous way to store it and pass it around
+                List <String> listOfAllEncodedParameters = parsedFilterParameters.parameterEncoding
+                StringBuilder sbEncoded = new  StringBuilder()
+                for ( int i=0 ; i<listOfAllEncodedParameters.size() ; i++ ) {
+                    sbEncoded <<  listOfAllEncodedParameters[i]
+                    if ((i+1)<listOfAllEncodedParameters.size()) {
+                        sbEncoded << ","
+                    }
+                }
+                //String encodedParameters = java.net.URLEncoder.encode(sbEncoded.toString())
+                String encodedParameters = sbEncoded.toString()
+
 
 
                 String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
@@ -55,9 +79,10 @@ class VariantSearchController {
                                show_exchp: 1,
                                show_exseq: 1,
                                show_sigma: 0,
-                               filter: enc,
+                               filter: encodedFilters,
                                filterDescriptions: parsedFilterParameters.filterDescriptions,
                                proteinEffectsList:encodedProteinEffects,
+                               encodedParameters:encodedParameters,
                                dataSetDetermination:dataSetDetermination] )
             }
         }
@@ -82,7 +107,27 @@ class VariantSearchController {
                         sb << ","
                     }
                 }
+
+
+
+                // we need to  encode the list of parameters so that we can reset them when we reenter
+                //  the filter setting form.  It is certainly true that this is a different form of the
+                //  same information that is held in BOTH the filter list and the filterDescription
+                //  list.  This one could be passed from a different page, however, so we really want
+                //  a simple, unambiguous way to store it and pass it around
+                List <String> listOfAllEncodedParameters = parsedFilterParameters.parameterEncoding
+                StringBuilder sbEncoded = new  StringBuilder()
+                for ( int i=0 ; i<listOfAllEncodedParameters.size() ; i++ ) {
+                    sbEncoded <<  listOfAllEncodedParameters[i]
+                    if ((i+1)<listOfAllEncodedParameters.size()) {
+                        sbEncoded << ","
+                    }
+                }
+                //String encodedParameters = java.net.URLEncoder.encode(sbEncoded.toString())
+                String encodedParameters = sbEncoded.toString()
+
                 String enc = java.net.URLEncoder.encode(sb.toString())
+                String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
                 render (view: 'variantSearchResults',
                         model:[show_gene: 1,
                                show_gwas:1,
@@ -90,7 +135,10 @@ class VariantSearchController {
                                show_exseq: 1,
                                show_sigma: 0,
                                filter: enc,
-                               filterDescriptions: parsedFilterParameters.filterDescriptions] )
+                               filterDescriptions: parsedFilterParameters.filterDescriptions,
+                               proteinEffectsList:encodedProteinEffects,
+                               encodedParameters:encodedParameters,
+                               dataSetDetermination:1] )
             }
         }
 

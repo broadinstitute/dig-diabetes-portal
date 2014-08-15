@@ -503,8 +503,13 @@ var UTILS = {
                 retVal += "<td></td>";
             }
 
-            // protein change TODO: I don't know what fields should be filled in here.  Currently seems to always be empty
-            retVal += "<td></td>";
+            // protein change
+
+            if (vRec[i].Protein_change) {
+                retVal += "<td>"+vRec[i].Protein_change+"</td>" ;
+            } else {
+                retVal += "<td></td>";
+            }
 
             // effect on protein
             if (vRec[i].Consequence) {
@@ -594,7 +599,8 @@ var UTILS = {
                 }
 
                 // case/control
-                if ((vRec[i]._13k_T2D_MINA) && (vRec[i]._13k_T2D_MINU))  {
+                // don't rule out zeros here – they're perfectly legal.  Nulls however are bad
+                if ((typeof vRec[i]._13k_T2D_MINA!== "undefined") && (typeof vRec[i]._13k_T2D_MINU!== "undefined"))  {
                     retVal += "<td>" +vRec[i]._13k_T2D_MINA + "/" +vRec[i]._13k_T2D_MINU+"</td>";
                 } else {
                     retVal += "<td></td>";

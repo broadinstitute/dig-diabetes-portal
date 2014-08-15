@@ -14,28 +14,6 @@
 <script>
     var variant;
     function fillTheFields (data) {
-        var cariantRec = {
-            _13k_T2D_HET_CARRIERS: 1,
-            _13k_T2D_HOM_CARRIERS: 2,
-            IN_EXSEQ: 3,
-            _13k_T2D_SA_MAF: 4,
-            MOST_DEL_SCORE: 5,
-            CLOSEST_GENE: 6,
-            CHROM: 7,
-            Consequence: 8,
-            ID: 9,
-            _13k_T2D_MINA: 10,
-            _13k_T2D_HS_MAF: 11,
-            DBSNP_ID: 12,
-            _13k_T2D_EA_MAF: 13,
-            _13k_T2D_AA_MAF: 14,
-            POS: 15,
-            _13k_T2D_TRANSCRIPT_ANNOT: 16,
-            IN_GWAS: 17,
-            GWAS_T2D_PVALUE: 18,
-            EXCHP_T2D_P_value: 19,
-            _13k_T2D_P_EMMAX_FE_IV: 20
-        }
         variant = data['variant'];
         variantTitle = UTILS.get_variant_title(variant);
     };
@@ -59,6 +37,165 @@
         varsToSend = UTILS.concatMap(varsToSend,missensePredictions) ;
         UTILS.postQuery('../variantSearch/variantSearchRequest',varsToSend);
     }
+    var encParams="${encParams}";
+    function initializeFields( fields) {
+        console.log("fields=" + fields);
+        if (typeof fields!== "undefined"){
+            var eachField = fields.split (',');
+            if (eachField)  {
+                for ( var  i=0 ; i<eachField.length ; i++ )  {
+                    var keyvalue = eachField[i].split(':');
+                    if (keyvalue.length=== 2)  {
+                        var radioButtonToCheck;
+                        var textField;
+                        var comboBox;
+                        var key = parseInt(keyvalue [0]) ;
+                        var value = keyvalue [1];
+                        switch (key) {
+                            case 1:  // data value radio buttons
+
+                                if (value === "0") {
+                                    radioButtonToCheck = $("#id_datatype_sigma");
+                                } else if (value === "1") {
+                                    radioButtonToCheck = $("#id_datatype_exomeseq");
+                                } else if (value === "2") {
+                                    radioButtonToCheck = $("#id_datatype_exomechip");
+                                } else if (value === "3") {
+                                    radioButtonToCheck = $("#id_datatype_gwas");
+                                } else {
+                                    radioButtonToCheck = $("#id_datatype_exomeseq");
+                                }
+                                radioButtonToCheck.attr('checked', true);
+                                break;
+                            case 2:  // data value radio buttons
+                                if (value === "0") {
+                                    radioButtonToCheck = $("#id_significance_genomewide");
+                                } else if (value === "1") {
+                                    radioButtonToCheck = $("#id_significance_nominal");
+                                } else if (value === "2") {
+                                    radioButtonToCheck = $("#id_significance_custom");
+                                } else {     // should we have a default
+                                    //radioButtonToCheck = $("#id_datatype_exomeseq");
+                                }
+                                radioButtonToCheck.attr('checked', true);
+                                break;
+                            case 3:  //custom P value
+                                textField = $("#custom_significance_input");
+                                textField.val(value);
+                                break;
+                            case 4:  //custom P value
+                                textField = $("#region_gene_input");
+                                textField.val(value);
+                                break;
+                            case 5:  //custom P value
+                                textField = $("#region_chrom_input");
+                                textField.val(value);
+                                break;
+                            case 6:  //custom P value
+                                textField = $("#region_start_input");
+                                textField.val(value);
+                                break;
+                            case 7:  //custom P value
+                                textField = $("#region_stop_input");
+                                textField.val(value);
+                                break;
+                            case 8:  //custom P value
+                                textField = $("#ethnicity_af_AA-min");
+                                textField.val(value);
+                                break;
+                            case 9:  //custom P value
+                                textField = $("#ethnicity_af_AA-max");
+                                textField.val(value);
+                                break;
+                            case 10:  //custom P value
+                                textField = $("#ethnicity_af_EA-min");
+                                textField.val(value);
+                                break;
+                            case 11:  //custom P value
+                                textField = $("#ethnicity_af_EA-max");
+                                textField.val(value);
+                                break;
+                            case 12:  //custom P value
+                                textField = $("#ethnicity_af_SA-min");
+                                textField.val(value);
+                                break;
+                            case 13:  //custom P value
+                                textField = $("#ethnicity_af_SA-max");
+                                textField.val(value);
+                                break;
+                            case 14:  //custom P value
+                                textField = $("#ethnicity_af_EU-min");
+                                textField.val(value);
+                                break;
+                            case 15:  //custom P value
+                                textField = $("#ethnicity_af_EU-max");
+                                textField.val(value);
+                                break;
+                            case 16:  //custom P value
+                                textField = $("#ethnicity_af_HS-min");
+                                textField.val(value);
+                                break;
+                            case  17:  //custom P value
+                                textField = $("#ethnicity_af_HS-max");
+                                textField.val(value);
+                                break;
+                            case 18:  //custom P value
+                                //textField = $("#ethnicity_af_HS-min");
+                                //textField.val(value);
+                                break;
+                            case  19:  //custom P value
+                                //textField = $("#ethnicity_af_HS-max");
+                                //.val(value);
+                                break;
+                            case  20:  //show variants only in cases
+                                radioButtonToCheck = $("#id_onlyseen_t2dcases");
+                                radioButtonToCheck.attr('checked', true);
+                                break;
+                            case  21:  //show variants only and controls
+                                radioButtonToCheck = $("#id_onlyseen_t2dcontrols");
+                                radioButtonToCheck.attr('checked', true);
+                                break;
+                            case  22:  //show variants seen only in homozygotes
+                                radioButtonToCheck = $("#id_onlyseen_homozygotes");
+                                radioButtonToCheck.attr('checked', true);
+                                break;
+                            case 23:  // data value radio buttons
+                                if (value === "0") {
+                                    radioButtonToCheck = $("#all_functions_checkbox");
+                                } else if (value === "1") {
+                                    radioButtonToCheck = $("#protein_truncating_checkbox");
+                                } else if (value === "2") {
+                                    radioButtonToCheck = $("#missense_checkbox");
+                                    $("#missense-options").show()
+                                } else if (value === "3") {
+                                    radioButtonToCheck = $("#synonymous_checkbox");
+                                } else if (value === "4") {
+                                    radioButtonToCheck = $("#noncoding_checkbox");
+                                } else {
+                                    radioButtonToCheck = $("#all_functions_checkbox");
+                                }
+                                radioButtonToCheck.attr('checked', true);
+                                break;
+                            case 24:  // data value radio buttons
+                                $("#polyphenSelect").val(value) ;
+                                break;
+                            case 25:  // data value radio buttons
+                                $("#siftSelect").val(value) ;
+                                break;
+                            case 26:  // data value radio buttons
+                                $("#condelSelect").val(value) ;
+                                break;
+
+                            default: break;
+                        }
+                    }
+                }
+
+            }
+
+        }
+    }
+
 </script>
 
 
@@ -91,6 +228,9 @@
     </div>
 
 </div>
+<script>
+    initializeFields( encParams);
+</script>
 
 </body>
 </html>

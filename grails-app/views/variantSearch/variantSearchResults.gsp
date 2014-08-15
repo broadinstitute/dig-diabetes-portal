@@ -35,6 +35,8 @@
             '<g:createLink controller="variantSearch" action="variantSearchAjax" />',
             ${dataSetDetermination} );
     var uri_dec = decodeURIComponent("<%=filter%>");
+    var encodedParameters = decodeURIComponent("<%=encodedParameters%>");
+
 </script>
 
 
@@ -64,7 +66,7 @@
 
                 <div id="warnIfMoreThan1000Results"></div>
 
-                <p><a href="<g:createLink controller="variantSearch" action="variantSearch" />" class="boldlink">Click here to refine your results</a></p>
+                <p><a href="<g:createLink controller='variantSearch' action='variantSearch' params='[encParams:"${encodedParameters}"]'/>" class='boldlink'>Click here to refine your results</a></p>
 
 
                 <g:render template="../region/collectedVariantsForRegion" />

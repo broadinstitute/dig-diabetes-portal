@@ -28,6 +28,7 @@ class RestServerService {
     'Consequence',
     'IN_GENE',
     '_13k_T2D_TRANSCRIPT_ANNOT',
+    "Protein_change"
     ]
 
 

@@ -4,7 +4,7 @@
 <p> This region contains the following genes:
 <ul>
     <g:each in="${geneNamesToDisplay}">
-        <li><a class="variantlink" href="<g:createLink controller='gene' action='geneInfo'/>/${it}">${it}</a></li>
+        <li><a class="variantlink" href="<g:createLink controller='gene' action='geneInfo'/>/${it}">${it}</a> </li>
     </g:each>
 </ul>
 </p>
