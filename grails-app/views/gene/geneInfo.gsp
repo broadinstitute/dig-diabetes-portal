@@ -152,7 +152,19 @@
         }
         return retval;
     }
-    function variantsAndAssociationsTitleLine (geneInfo,totalNumberField,description,chromosomeField,beginPositionField,endPositionField,textSpanId,anchorId,rootRegionUrl, rootGeneUrl){
+    function variantsAndAssociationsTitleLine (geneInfo, // Raw info
+                                               totalNumberField,  // Which field are we reading
+                                               description,  // Special text for each line
+                                               chromosomeField,  // Chromosome number, in case we need it for the link
+                                               beginPositionField, // Beginning extent, in case we needed for the link
+                                               endPositionField, // Ending extent, in case we need it for the link
+                                               typeOfSearch, // Is this a region search chip or by gene
+                                               dataset,  // exomeseq, exomechip, gwas
+                                               significance,
+                                               textSpanId, // Span we are modifying
+                                               anchorId, // Anchor we are modifying
+                                               rootRegionUrl, // Root URL if this is a region search
+                                               rootGeneUrl){
         var currentLine = "There are ";
         var totalNumber =  geneFieldOrZero(geneInfo,totalNumberField);
         if (totalNumber > 0){
@@ -164,9 +176,26 @@
         }
         currentLine += (" "+description+" | ");
         $(textSpanId).append (currentLine);
-        $(anchorId)[0].href= rootRegionUrl + "/chr"+geneFieldOrZero(geneInfo,chromosomeField)+":"+expandRegionBegin(geneFieldOrZero(geneInfo,beginPositionField))+"-"+expandRegionEnd(geneFieldOrZero(geneInfo,endPositionField)) ;
+        if (typeOfSearch === "region")  {
+            $(anchorId)[0].href= rootGeneUrl + "Wide/"+ geneFieldOrZero(geneInfo,geneInfoRec.ID)+"?sig="+significance+"&dataset="+dataset +"&region=chr"+geneFieldOrZero(geneInfo,chromosomeField)+":"+expandRegionBegin(geneFieldOrZero(geneInfo,beginPositionField))+"-"+expandRegionEnd(geneFieldOrZero(geneInfo,endPositionField));
+        }    else  {
+            $(anchorId)[0].href = rootGeneUrl + "Wide/"+ geneFieldOrZero(geneInfo,geneInfoRec.ID)+"?sig="+significance+"&dataset="+dataset ;
+        }
+
     }
-    function variantsAndAssociationsContentsLine (geneInfo,totalNumberField,description,chromosomeField,beginPositionField,endPositionField,textSpanId,anchorId,rootRegionUrl, rootGeneUrl){
+    function variantsAndAssociationsContentsLine (geneInfo, // Raw info
+                                                  totalNumberField,  // Which field are we reading
+                                                  description,  // Special text for each line
+                                                  chromosomeField,  // Chromosome number, in case we need it for the link
+                                                  beginPositionField, // Beginning extent, in case we needed for the link
+                                                  endPositionField, // Ending extent, in case we need it for the link
+                                                  typeOfSearch, // gene or region
+                                                  dataset,  // exomeseq, exomechip, gwas
+                                                  significance,    // anything, gwasSig, nominalSig
+                                                  textSpanId, // Span we are modifying
+                                                  anchorId, // Anchor we are modifying
+                                                  rootRegionUrl, // Root URL if this is a region search
+                                                  rootGeneUrl){
         var currentLine = "";
         var totalNumber =  geneFieldOrZero(geneInfo,totalNumberField);
         if ((totalNumber > 0)  && (description ==='genome-wide')){
@@ -178,26 +207,39 @@
         }
         currentLine += " | ";
         $(textSpanId).append (currentLine);
-        $(anchorId)[0].href= rootRegionUrl + "/chr"+geneFieldOrZero(geneInfo,chromosomeField)+":"+expandRegionBegin(geneFieldOrZero(geneInfo,beginPositionField))+"-"+expandRegionEnd(geneFieldOrZero(geneInfo,endPositionField)) ;
+        if (typeOfSearch === "region") {
+            $(anchorId)[0].href = rootGeneUrl + "Wide/" + geneFieldOrZero(geneInfo, geneInfoRec.ID) + "?sig=" + description + "&dataset=" + dataset+"&region=chr"+geneFieldOrZero(geneInfo,chromosomeField)+":"+expandRegionBegin(geneFieldOrZero(geneInfo,beginPositionField))+"-"+expandRegionEnd(geneFieldOrZero(geneInfo,endPositionField));
+        } else {
+            $(anchorId)[0].href = rootGeneUrl + "Wide/" + geneFieldOrZero(geneInfo, geneInfoRec.ID) + "?sig=" + description + "&dataset=" + dataset;
+        }
     }
-    function fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootGeneUrl){
+    function fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootGeneUrl,rootVariantUrl){
 
         if(show_gwas){
             variantsAndAssociationsTitleLine(rawGeneInfo,geneInfoRec.GWAS_T2D_VAR_TOTAL,'within 500 kb of this gene in GWAS data available on this portal',
                     geneInfoRec.CHROM,
                     geneInfoRec.BEG,
                     geneInfoRec.END,
-                    "#totalGwasVariants","#totalGwasVariantAnchor",rootRegionUrl, rootGeneUrl);
+                    "region",
+                    "gwas",
+                    "everything",
+                    "#totalGwasVariants","#totalGwasVariantAnchor",rootRegionUrl, rootVariantUrl);
             variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec.GWAS_T2D_GWS_TOTAL,'genome-wide',
                     geneInfoRec.CHROM,
                     geneInfoRec.BEG,
                     geneInfoRec.END,
-                    "#totalGwasVariantst2dgenome","#totalGwasVariantAnchor2dgenome",rootRegionUrl, rootGeneUrl);
+                    "region",
+                    "gwas",
+                    "gwasSig",
+                    "#totalGwasVariantst2dgenome","#totalGwasVariantAnchor2dgenome",rootRegionUrl, rootVariantUrl);
             variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec.GWAS_T2D_NOM_TOTAL,'nominal',
                     geneInfoRec.CHROM,
                     geneInfoRec.BEG,
                     geneInfoRec.END,
-                    "#totalGwasVariantst2dnominal","#totalGwasVariantAnchor2dnominal",rootRegionUrl, rootGeneUrl);
+                    "region",
+                    "gwas",
+                    "nominalSig",
+                    "#totalGwasVariantst2dnominal","#totalGwasVariantAnchor2dnominal",rootRegionUrl, rootVariantUrl);
         }
 
         if(show_exchp){
@@ -205,20 +247,29 @@
                     geneInfoRec.CHROM,
                     geneInfoRec.BEG,
                     geneInfoRec.END,
+                    "gene",
+                    "exomechip",
+                    "everything",
                     "#totalExomeChipVariants",
-                    "#totalExomeChipVariantAnchor",rootRegionUrl, rootGeneUrl);
+                    "#totalExomeChipVariantAnchor",rootRegionUrl, rootVariantUrl);
             variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec.EXCHP_T2D_GWS_TOTAL,'genome-wide',
                     geneInfoRec.CHROM,
                     geneInfoRec.BEG,
                     geneInfoRec.END,
+                    "gene",
+                    "exomechip",
+                    "gwasSig",
                     "#totalExomeChipVariantst2dgenome",
-                    "#totalExomeChipVariantAnchor2dgenome",rootRegionUrl, rootGeneUrl);
+                    "#totalExomeChipVariantAnchor2dgenome",rootRegionUrl, rootVariantUrl);
             variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec.EXCHP_T2D_NOM_TOTAL,'nominal',
                     geneInfoRec.CHROM,
                     geneInfoRec.BEG,
                     geneInfoRec.END,
+                    "gene",
+                    "exomechip",
+                    "nominalSig",
                     "#totalExomeChipVariantst2dnominal",
-                    "#totalExomeChipVariantAnchor2dnominal",rootRegionUrl, rootGeneUrl);
+                    "#totalExomeChipVariantAnchor2dnominal",rootRegionUrl, rootVariantUrl);
         }
 
         if(show_exseq){
@@ -226,20 +277,29 @@
                     geneInfoRec.CHROM,
                     geneInfoRec.BEG,
                     geneInfoRec.END,
+                    "gene",
+                    "exomeseq",
+                    "everything",
                     "#totalExomeSeqVariants",
-                    "#totalExomeSeqVariantAnchor",rootRegionUrl, rootGeneUrl);
+                    "#totalExomeSeqVariantAnchor",rootRegionUrl, rootVariantUrl);
             variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec._13k_T2D_GWS_TOTAL,'genome-wide',
                     geneInfoRec.CHROM,
                     geneInfoRec.BEG,
                     geneInfoRec.END,
+                    "gene",
+                    "exomeseq",
+                    "gwasSig",
                     "#totalExomeSeqVariantst2dgenome",
-                    "#totalExomeSeqVariantAnchor2dgenome",rootRegionUrl, rootGeneUrl);
+                    "#totalExomeSeqVariantAnchor2dgenome",rootRegionUrl, rootVariantUrl);
             variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec._13k_T2D_NOM_TOTAL,'nominal',
                     geneInfoRec.CHROM,
                     geneInfoRec.BEG,
                     geneInfoRec.END,
+                    "gene",
+                    "exomeseq",
+                    "nominalSig",
                     "#totalExomeSeqVariantst2dnominal",
-                    "#totalExomeSeqVariantAnchor2dnominal",rootRegionUrl, rootGeneUrl);
+                    "#totalExomeSeqVariantAnchor2dnominal",rootRegionUrl, rootVariantUrl);
         }
 
         if (show_sigma){
@@ -247,20 +307,29 @@
                     geneInfoRec.CHROM,
                     geneInfoRec.BEG,
                     geneInfoRec.END,
+                    "gene",
+                    "sigma",
+                    "everything",
                     "#totalExomeSeqVariants",
-                    "#totalExomeSeqVariantAnchor",rootRegionUrl, rootGeneUrl);
+                    "#totalExomeSeqVariantAnchor",rootRegionUrl, rootVariantUrl);
             variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec.SIGMA_T2D_GWS_TOTAL,'genome-wide',
                     geneInfoRec.CHROM,
                     geneInfoRec.BEG,
                     geneInfoRec.END,
+                    "gene",
+                    "sigma",
+                    "gwasSig",
                     "#totalExomeSeqVariantst2dgenome",
-                    "#totalExomeSeqVariantAnchor2dgenome",rootRegionUrl, rootGeneUrl);
+                    "#totalExomeSeqVariantAnchor2dgenome",rootRegionUrl, rootVariantUrl);
             variantsAndAssociationsContentsLine(rawGeneInfo,geneInfoRec.SIGMA_T2D_NOM_TOTAL,'nominal',
                     geneInfoRec.CHROM,
                     geneInfoRec.BEG,
                     geneInfoRec.END,
+                    "gene",
+                    "sigma",
+                    "nominalSig",
                     "#totalExomeSeqVariantst2dnominal",
-                    "#totalExomeSeqVariantAnchor2dnominal",rootRegionUrl, rootGeneUrl);
+                    "#totalExomeSeqVariantAnchor2dnominal",rootRegionUrl, rootVariantUrl);
         }
 
         // show traits
@@ -416,10 +485,10 @@
 
         $('#uniprotSummaryGoesHere').append(funcDescrLine);
     }
-    function fillTheGeneFields (data,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootGeneUrl,rootVariantUrl)  {
+    function fillTheGeneFields (data,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootTraitUrl,rootVariantUrl)  {
         var rawGeneInfo =  data['geneInfo'];
         fillUniprotSummary(rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma);
-        fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootGeneUrl);
+        fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootTraitUrl,rootVariantUrl);
         fillVariationAcrossEthnicity (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl);
         fillBiologicalHypothesisTesting (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl);
     }

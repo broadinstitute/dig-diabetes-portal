@@ -5,6 +5,9 @@ import grails.transaction.Transactional
 @Transactional
 class FilterManagementService {
 
+
+    RestServerService restServerService
+
     LinkedHashMap<String, String> standardFilterStrings = [
             "t2d-genomewide"  :
                     """{ "filter_type": "FLOAT", "operand": "_13k_T2D_P_EMMAX_FE_IV", "operator": "LTE", "value": 5e-8 }""".toString(),
@@ -155,6 +158,77 @@ class FilterManagementService {
 
     }
 
+
+
+
+
+
+    /***
+     * user has requested a search based on gene name, potentially with additional filtering based on ethnicity.
+     *
+     * @param geneId
+     * @param receivedParameters
+     * @return
+     */
+    public LinkedHashMap constructGeneWideSearch(String geneId,String significance, String dataset, String region) {
+        LinkedHashMap  buildingFilters = [filters:new ArrayList<String>(),
+                                          filterDescriptions:new ArrayList<String>(),
+                                          parameterEncoding:new ArrayList<String>()]
+
+        // We need to use  determineDataSet First, since it determines the data type operand that is passed to determineThreshold
+        LinkedHashMap passInDataset = [:]
+        passInDataset["datatype"] = [dataset]
+
+//        LinkedHashMap extraParms = [filters:new ArrayList<String>(),
+//                                    filterDescriptions:new ArrayList<String>(),
+//                                    parameterEncoding:new ArrayList<String>()]
+//        extraParms = determineDataSet (  extraParms, passInDataset)
+//
+//        String datatypeOperand = extraParms.datatypeOperand
+        buildingFilters = parameterizedDataSet (  buildingFilters, passInDataset,significance)
+
+
+
+//        LinkedHashMap passInSignificance = [:]
+//        if (significance=='genome-wide') {
+//            passInSignificance ['significance']  =  'genomewide'
+//        }  else if (significance=='nominal') {
+//            passInSignificance ['significance']  =  'nominal'
+//        }
+//        buildingFilters = determineThreshold (buildingFilters, passInSignificance, datatypeOperand)
+
+
+        if ( region ) { // If there's a region then use it. Otherwise depend on the gene name. Don't use both
+            LinkedHashMap extractedNumbers =  restServerService.extractNumbersWeNeed(region)
+            if ((extractedNumbers)   &&
+                    (extractedNumbers["startExtent"])   &&
+                    (extractedNumbers["endExtent"])&&
+                    (extractedNumbers["chromosomeNumber"]) ) {
+
+                LinkedHashMap packagedParameters = [:]
+                packagedParameters ["region_chrom_input"]  =  [extractedNumbers["chromosomeNumber"]]
+                packagedParameters ["region_start_input"]  =  [extractedNumbers["startExtent"]]
+                packagedParameters ["region_stop_input"]  =  [extractedNumbers["endExtent"]]
+                buildingFilters = setRegion (buildingFilters,  packagedParameters)
+            }
+
+        }  else {
+                buildingFilters = findFiltersForGeneBasedSearch (buildingFilters,geneId)
+        }
+
+
+
+
+        return buildingFilters
+    }
+
+
+
+
+
+
+
+
     /***
      * user has requested a search based on gene name, potentially with additional filtering based on ethnicity.
      *
@@ -186,9 +260,11 @@ class FilterManagementService {
     LinkedHashMap findFiltersForGeneBasedSearch (LinkedHashMap  buildingFilters, String geneId ) {
         List <String> filters =  buildingFilters.filters
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
+        List <String> parameterEncoding =  buildingFilters.parameterEncoding
 
         filters <<  retrieveParameterizedFilterString("setRegionGeneSpecification",geneId,0)
         filterDescriptions << "Restricted to gene "+geneId
+        parameterEncoding << ("4:"+geneId)
 
         return buildingFilters
     }
@@ -199,57 +275,83 @@ class FilterManagementService {
     LinkedHashMap findFiltersBasedOnMaf(LinkedHashMap  buildingFilters, String receivedParameters ) {
         List <String> filters =  buildingFilters.filters
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
+        List <String> parameterEncoding =  buildingFilters.parameterEncoding
 
         if (receivedParameters) {
             String[] requestPortionList =  receivedParameters.split("-")
             if (requestPortionList.size() > 1) {  //  multipiece searches
                 String ethnicity = requestPortionList[1]
+                int ethnicityFieldIndex = 0
                 if (ethnicity == 'exchp'){ // we have no ethnicity. Everything comes from the European exome chipset
                     switch ( requestPortionList[0] ){
                         case "total":
                             filters << retrieveParameterizedFilterString("setExomeChipMinimum","",0)
                             filterDescriptions << "Minor allele frequency in exome chip dataset is greater than or equal to zero"
+                            parameterEncoding << ("14:0")
+                            parameterEncoding << ("15:1")
                             break;
                         case "common":
                             filters << retrieveParameterizedFilterString("setExomeChipMinimum","",0.05)
                             filterDescriptions << "Minor allele frequency in exome chip dataset is greater than or equal to 0.05"
+                            parameterEncoding << ("14:0.05")
+                            parameterEncoding << ("15:1")
                             break;
                         case "lowfreq":
                             filters << retrieveParameterizedFilterString("setExomeChipMinimum",ethnicity,0.005)
                             filterDescriptions << "Minor allele frequency in exome chip dataset is greater than or equal to 0.005"
                             filters << retrieveParameterizedFilterString("setExomeChipMaximumAbsolute",ethnicity,0.05)
                             filterDescriptions << "Minor allele frequency in exome chip dataset is less than 0.05"
+                            parameterEncoding << ("14:0.005")
+                            parameterEncoding << ("15:0.05")
                             break;
                         case "rare":
                             filters << retrieveParameterizedFilterString("setExomeChipMinimumAbsolute",ethnicity,0)
                             filterDescriptions << "Minor allele frequency in exome chip dataset is greater than 0"
                             filters << retrieveParameterizedFilterString("setExomeChipMaximumAbsolute",ethnicity,0.005)
                             filterDescriptions << "Minor allele frequency in exome chip dataset is less than 0.005"
+                            parameterEncoding << ("14:0")
+                            parameterEncoding << ("15:0.005")
                             break;
                         default: break;
                     }
 
                 } else {   // we have ethnicity data
+                    switch (ethnicity) {
+                        case 'AA': ethnicityFieldIndex = 8; break;
+                        case 'EA': ethnicityFieldIndex = 10; break;
+                        case 'SA': ethnicityFieldIndex = 12; break;
+                        case 'EU': ethnicityFieldIndex = 14; break;
+                        case 'HS': ethnicityFieldIndex = 16; break;
+                        default: ethnicityFieldIndex = 8;
+                    }
                     switch ( requestPortionList[0] ){
                         case "total":
-                            filters << retrieveFilterString("dataSetDiagramGwas")
-                            filterDescriptions << "GWAS P value > 0"
+                            filters << retrieveParameterizedFilterString("setEthnicityMinimumAbsolute",ethnicity,0)
+                            filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is greater than 0"
+                            parameterEncoding << ("${ethnicityFieldIndex}:0")
+                            parameterEncoding << ("${ethnicityFieldIndex+1}:1")
                             break;
                         case "common":
                             filters << retrieveParameterizedFilterString("setEthnicityMinimum",ethnicity,0.05)
                             filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is greater than or equal to 0.05"
+                            parameterEncoding << ("${ethnicityFieldIndex}:05")
+                            parameterEncoding << ("${ethnicityFieldIndex+1}:1")
                             break;
                         case "lowfreq":
                             filters << retrieveParameterizedFilterString("setEthnicityMinimum",ethnicity,0.005)
                             filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is greater than or equal to 0.005"
                             filters << retrieveParameterizedFilterString("setEthnicityMaximumAbsolute",ethnicity,0.05)
                             filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is less than 0.05"
+                            parameterEncoding << ("${ethnicityFieldIndex}:0.005")
+                            parameterEncoding << ("${ethnicityFieldIndex+1}:0.05")
                             break;
                         case "rare":
                             filters << retrieveParameterizedFilterString("setEthnicityMinimumAbsolute",ethnicity,0)
                             filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is greater than 0"
                             filters << retrieveParameterizedFilterString("setEthnicityMaximumAbsolute",ethnicity,0.005)
                             filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is less than 0.005"
+                            parameterEncoding << ("${ethnicityFieldIndex}:0")
+                            parameterEncoding << ("${ethnicityFieldIndex+1}:0.005")
                             break;
                         default: break;
                     }
@@ -260,6 +362,7 @@ class FilterManagementService {
                     case "lof":
                         filters << retrieveFilterString ("lof")
                         filterDescriptions << "Variant predicted to result in loss of function"
+                        parameterEncoding << ("23:1")
                         break;
                     default: break;
                 }
@@ -359,13 +462,138 @@ class FilterManagementService {
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private  LinkedHashMap parameterizedDataSet (LinkedHashMap  buildingFilters, HashMap incomingParameters, String significance){
+        List <String> filters =  buildingFilters.filters
+        List <String> filterDescriptions =  buildingFilters.filterDescriptions
+        List <String> parameterEncoding =  buildingFilters.parameterEncoding
+        String datatypeOperand = ""
+
+        // datatype: Sigma, exome sequencing, exome chip, or diagram GWAS
+        if  (incomingParameters.containsKey("datatype"))  {      // user has requested a particular data set. Without explicit request what is the default?
+
+            int dataSetDistinguisher =   distinguishBetweenDataSets ( incomingParameters)
+
+
+            switch (dataSetDistinguisher)   {
+                case  0:
+                    datatypeOperand = 'GWAS_T2D_PVALUE'
+                    if (significance=="everything") {
+                        filters <<  retrieveFilterString("dataSetDiagramGwas")
+                        filterDescriptions << "P-value for association with T2D in GWAS dataset is greater than or equal to 0"
+                        parameterEncoding << "1:3"
+                    } else if (significance=="genome-wide") {
+                        filters <<  retrieveFilterString("gwas-genomewide")
+                        filterDescriptions << "P-value for association with T2D in GWAS dataset is less than or equal to 05e-8"
+                        parameterEncoding << "1:3"
+                        parameterEncoding << "2:0"
+                    } else if (significance=="nominal"){
+                        filters <<  retrieveFilterString("gwas-nominal")
+                        filterDescriptions << "P-value for association with T2D in GWAS dataset is less than or equal to 0.05"
+                        parameterEncoding << "1:3"
+                        parameterEncoding << "2:1"
+                    }
+                    break;
+
+                case  1:
+                    datatypeOperand = 'SIGMA_T2D_P'
+                    if (significance=="everything") {
+                        filters <<  retrieveFilterString("dataSetSigma")
+                        filterDescriptions << "P-value for association in SIGMA analysis is greater than or equal to 0"
+                        parameterEncoding << "1:0"
+                    } else if (significance=="genome-wide") {
+                        filters <<  retrieveFilterString("sigma-genomewide")
+                        filterDescriptions << "P-value for association in SIGMA analysis is less than or equal to 0.5e-8"
+                        parameterEncoding << "1:0"
+                        parameterEncoding << "2:0"
+                    } else if (significance=="nominal"){
+                        filters <<  retrieveFilterString("sigma-nominal")
+                        filterDescriptions << "P-value for association in the SIGMA analysis is less than or equal to 0.05"
+                        parameterEncoding << "1:0"
+                        parameterEncoding << "2:1"
+                    }
+                    break;
+                case  2:
+                    datatypeOperand = '_13k_T2D_P_EMMAX_FE_IV'
+                    if (significance=="everything") {
+                        filters <<  retrieveFilterString("dataSetExseq")
+                        filterDescriptions << "P-value for association in exome sequencing"
+                        parameterEncoding << "1:1"
+                    } else if (significance=="genome-wide") {
+                        filters <<  retrieveFilterString("exchp-genomewide")
+                        filterDescriptions << "P-value for association in exome sequencing"
+                        filterDescriptions << "P-value significance is less than or equal to  0.5e-8"
+                        parameterEncoding << "1:1"
+                        parameterEncoding << "2:0"
+                    } else if (significance=="nominal"){
+                        filters <<  retrieveFilterString("exchp-nominal")
+                        filterDescriptions << "P-value for association in exome sequencing"
+                        filterDescriptions << "P-value significance is less than or equal to  0.05"
+                        parameterEncoding << "1:1"
+                        parameterEncoding << "2:1"
+                    }
+                    break;
+                case  3:
+                    datatypeOperand = 'EXCHP_T2D_P_value'
+                    if (significance=="everything") {
+                        filters <<  retrieveFilterString("dataSetExchp")
+                        filterDescriptions << "P-value for association in exome chip studies"
+                        parameterEncoding << "1:1"
+                    } else if (significance=="genome-wide") {
+                        filters <<  retrieveFilterString("t2d-genomewide")
+                        filterDescriptions << "P-value for association in exome chip studies"
+                        filterDescriptions << "P-value significance is less than or equal to  0.5e-8"
+                        parameterEncoding << "1:1"
+                        parameterEncoding << "2:0"
+                    } else if (significance=="nominal"){
+                        filters <<  retrieveFilterString("t2d-nominal")
+                        filterDescriptions << "P-value for association in exome chip studies"
+                        filterDescriptions << "P-value significance is less than or equal to  0.05"
+                        parameterEncoding << "1:1"
+                        parameterEncoding << "2:1"
+                    }
+
+                    filters <<  retrieveFilterString("dataSetExchp")
+                    filterDescriptions << "Is observed in exome chip"
+                    parameterEncoding << "1:2"
+                    break;
+                default: break;
+            }
+        }
+        buildingFilters["datatypeOperand"]  =  datatypeOperand
+        return buildingFilters
+
+    }
+
+
+
+
+
+
+
+
+
+
+
     private  LinkedHashMap determineThreshold (LinkedHashMap  buildingFilters, HashMap incomingParameters,String datatypeOperand){
         List <String> filters =  buildingFilters.filters
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
         // set threshold
         if  (incomingParameters.containsKey("significance"))  {      // user has requested a particular data set. Without explicit request what is the default?
-            String requestedDataSet =  incomingParameters ["significance"][0]
+            String requestedDataSet =  incomingParameters ["significance"]
             switch (requestedDataSet)   {
                 case  "genomewide":
                     filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,5e-8 as BigDecimal) 
