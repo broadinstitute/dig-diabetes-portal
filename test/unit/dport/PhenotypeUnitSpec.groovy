@@ -14,19 +14,32 @@ class PhenotypeUnitSpec extends Specification {
 
     def cleanup() {
     }
+    void "test empty constructor"() {
+        when:
+        Phenotype phenotype = new Phenotype()
+
+        then:
+        assertNotNull(phenotype)
+        assertNotNull(phenotype.name)
+
+    }
 
     void "test non-empty constructor"() {
         when:
-        Gene gene = new Gene (
-                name1:"columnData0",
-                name2:"columnData1",
-                chromosome:"columnData2",
-                addrStart :0L,
-                addrEnd:0L )
+        Phenotype phenotype = new Phenotype (
+                name:"columnData0",
+                key:"columnData1",
+                databaseKey:"columnData2",
+                dataSet :"columnData3",
+                category:"columnData4" )
 
         then:
-        assertNotNull(gene)
-        assertNotNull(gene.name1)
+        assertNotNull(phenotype)
+        assertNotNull(phenotype.name)
+        assertNotNull(phenotype.key)
+        assertNotNull(phenotype.databaseKey)
+        assertNotNull(phenotype.dataSet)
+        assertNotNull(phenotype.category)
 
     }
 }

@@ -3,15 +3,15 @@ package dport
 class HtmlTagLib {
 //    static defaultEncodeAs = [taglib: 'html']
 
-    def renderHtml = {attrs ->
-
-        def filePath = attrs.file
-
-        if (!filePath) {
-            throwTagError("'file' attribute must be provided")
-        }
-        IOUtils.copy((String)request.servletContext.getResourceAsStream(filePath), out);
-    }
+//    def renderHtml = {attrs ->
+//
+//        def filePath = attrs.file
+//
+//        if (!filePath) {
+//            throwTagError("'file' attribute must be provided")
+//        }
+//        IOUtils.copy((String)request.servletContext.getResourceAsStream(filePath), out);
+//    }
 
 
     def renderGeneSummary = {attrs ->
@@ -19,7 +19,8 @@ class HtmlTagLib {
         String geneName = attrs.geneFile
 
         if (!geneName) {
-            throwTagError("'file' attribute must be provided")
+            return;  // better to fail silently
+            //throwTagError("'file' attribute must be provided")
         }
 
         String fileName =  "/WEB-INF/resources/geneSummaries/${geneName}.html"
@@ -36,10 +37,7 @@ class HtmlTagLib {
         file.eachLine {
             fileContents += it
         }
-        //  StringWriter writer = new java.io.StringWriter();
-        // def f=request.servletContext.getResourceAsStream(fileDesignationOnDisk);
-        //IOUtils.copy((java.io.InputStream)request.servletContext.getResourceAsStream(fileDesignationOnDisk), writer);
-        out << fileContents
+         out << fileContents
     }
 }
 

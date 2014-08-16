@@ -13,8 +13,9 @@ import spock.lang.Specification
 @TestFor(GeneController)
 ///@Mock([Shoppable, QueryItem, CartAssay, CartProject])
 class GeneControllerUnitSpec extends Specification {
-    SharedToolsService sharedToolsService
-
+    SharedToolsService sharedToolsService = new  SharedToolsService()
+    GeneManagementService geneManagementService = new GeneManagementService()
+    RestServerService restServerService = new RestServerService()
 
     def setup() {
     }
@@ -22,8 +23,23 @@ class GeneControllerUnitSpec extends Specification {
     def cleanup() {
     }
 
+    void "test geneInfo"() {
+        setup:
+        controller.geneManagementService = geneManagementService
+        controller.sharedToolsService = sharedToolsService
+
+        when:
+         controller.geneInfo()
+
+        then:
+        response.status == 200
+    }
+
+
     void "test geneAjax"() {
         when:
+        params.id=""
+        controller.restServerService  = restServerService
         controller.geneAjax()
 
         then:
