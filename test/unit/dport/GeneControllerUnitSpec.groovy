@@ -1,5 +1,6 @@
 package dport
 
+import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
@@ -10,7 +11,10 @@ import spock.lang.Specification
  */
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(GeneController)
+///@Mock([Shoppable, QueryItem, CartAssay, CartProject])
 class GeneControllerUnitSpec extends Specification {
+    SharedToolsService sharedToolsService
+
 
     def setup() {
     }
@@ -18,11 +22,20 @@ class GeneControllerUnitSpec extends Specification {
     def cleanup() {
     }
 
-    void "test something"() {
+    void "test geneAjax"() {
         when:
-        int i = 1
+        controller.geneAjax()
 
         then:
-        assert i == 1
+        response.status == 200
+    }
+
+
+    void "test geneInfoAjax"() {
+        when:
+        controller.geneInfoAjax()
+
+        then:
+        response.status == 200
     }
 }

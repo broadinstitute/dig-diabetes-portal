@@ -45,4 +45,6 @@ class GeneUnitSpec extends Specification {
         assertNotNull(gene.name1)
 
     }
+
+
 }

@@ -8,9 +8,7 @@ class HomeController {
 
     def index = {
         java.util.LinkedHashMap variableStrings = [:]
-//        String siteVersion =   't2dgenes'   // 'sigma'
         if (grailsApplication.config.site.version == 't2dgenes') {
-//            if (siteVersion == 't2dgenes') {
             variableStrings["siteVersion"]  = 't2dgenes'
             variableStrings["siteTitle"]  = 'Type 2 Diabetes Genetics'
             variableStrings["fromEmail"]  = '"type2diabetesgenetics.org" <noreply@type2diabetesgenetics.org>'

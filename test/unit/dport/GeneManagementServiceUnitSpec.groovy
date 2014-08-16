@@ -20,8 +20,7 @@ class GeneManagementServiceUnitSpec extends Specification {
         mockedGeneRecords << new Gene(name1: 'ace', name2:'ACE')
         mockedGeneRecords << new Gene(name1: 'a', name2:'A')
         mockedGeneRecords << new Gene(name1: 'b', name2:'B')
-        List <Gene> returnValue  = mockedGeneRecords.findAll{
-                true }
+        List <Gene> returnValue  = mockedGeneRecords.findAll{true }
         return  returnValue
     }
 

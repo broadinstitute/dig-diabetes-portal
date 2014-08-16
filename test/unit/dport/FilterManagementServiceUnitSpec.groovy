@@ -32,33 +32,44 @@ class FilterManagementServiceUnitSpec extends Specification {
         i == 2
     }
 
+    /***
+     *  pass a simple  filter generation  parameter to  setRegion
+     */
     void "test setRegion"() {
         given:
-        StringBuilder sb = new StringBuilder()
+        LinkedHashMap  buildingFilters = [filters:new ArrayList<String>(),
+                                          filterDescriptions:new ArrayList<String>(),
+                                          parameterEncoding:new ArrayList<String>()]
         List<String> r1 = ["t1"]
         HashMap incomingParameters = [ "region_gene_input": r1]
         when:
-        String results = service.setRegion(sb,incomingParameters)
+        LinkedHashMap results = service.setRegion(buildingFilters,incomingParameters)
         then:
-         assert  sb
-         assert sb.length() > 0
+        assert  results.filters.size() > 0
+        assert  results.filterDescriptions.size() > 0
+        assert  results.parameterEncoding.size() > 0
     }
 
-
+    /***
+     * try stacking up two calls
+     */
     void "test setAlleleFrequencies"() {
         given:
-        StringBuilder sb = new StringBuilder()
-        List<String> r1 = ["t1"]
+        LinkedHashMap  buildingFilters = [filters:new ArrayList<String>(),
+                                          filterDescriptions:new ArrayList<String>(),
+                                          parameterEncoding:new ArrayList<String>()]
+        List<String> r1 = ["0.0001"]
         List<String> r2 = ["33"]
         HashMap incomingParameters1 = [ "ethnicity_af_AA-min": r1]
         HashMap incomingParameters2 = [ "ethnicity_af_AA-min": r2]
         when:
-        String sb1 = service.setAlleleFrequencies(sb,incomingParameters1)
-        String sb2 = service.setAlleleFrequencies(sb,incomingParameters2)
+        buildingFilters = service.setAlleleFrequencies(buildingFilters,incomingParameters1)
+        buildingFilters = service.setAlleleFrequencies(buildingFilters,incomingParameters2)
         then:
-        sb1.length() ==0
-        assert  sb2
-        assert sb2.length() > 0
+        assert  buildingFilters.filters.size() > 1
+        assert  buildingFilters.filterDescriptions.size() > 1
+        assert  buildingFilters.parameterEncoding.size() > 1
+
     }
 
 

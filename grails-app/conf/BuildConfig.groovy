@@ -80,6 +80,8 @@ grails.project.dependency.resolution = {
         compile ':resources:1.2.8'
         compile ':rest-client-builder:2.0.3'
         compile ":cache:1.0.1"
+//        compile 'org.objenesis:objenesis:1.4'
+//        compile "cglib:cglib:2.2"
 
         // plugins needed at runtime but not for compilation
         runtime ":hibernate4:4.3.5.4" // or ":hibernate:3.6.10.16"
@@ -88,6 +90,7 @@ grails.project.dependency.resolution = {
         runtime ':resources:1.2.8'
 
         test ":codenarc:0.18.1"
+
         //compile ":clover:3.1.10.1"
 
 
