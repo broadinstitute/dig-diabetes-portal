@@ -6,7 +6,6 @@ class RegionController {
     RestServerService   restServerService
     SharedToolsService sharedToolsService
 
-    def index() { }
 
     def regionInfo() {
         String regionSpecification = params.id
@@ -50,11 +49,12 @@ class RegionController {
 
     def regionAjax() {
         String regionsSpecification = params.id
-
-        JSONObject jsonObject =  restServerService.searchGenomicRegionAsSpecifiedByUsers (regionsSpecification)
-        render(status:200, contentType:"application/json") {
-            [variants:jsonObject['variants']]
+        if (regionsSpecification)  {
+            JSONObject jsonObject =  restServerService.searchGenomicRegionAsSpecifiedByUsers (regionsSpecification)
+            render(status:200, contentType:"application/json") {
+                [variants:jsonObject['variants']]
+            }
         }
-    }
+     }
 
 }

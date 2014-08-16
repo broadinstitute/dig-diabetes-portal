@@ -6,8 +6,8 @@ import spock.lang.Specification
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
-@TestFor(VariantSearchController)
-class VariantSearchControllerSpec extends Specification {
+@TestFor(TraitController)
+class TraitControllerUnitSpec extends Specification {
 
     def setup() {
     }
@@ -15,17 +15,18 @@ class VariantSearchControllerSpec extends Specification {
     def cleanup() {
     }
 
-    void "test variantSearch"() {
+    void "test traitInfo"() {
         setup:
-        params.encParams = 'rs123'
+        params.identifier = 'rs123'
 
         when:
-        controller.variantSearch()
+        controller.traitInfo()
 
         then:
         response.status == 200
-        view == '/variantSearch/variantSearch'
+        view == '/trait/traitsPerVariant'
         model.show_gwas == 1
 
     }
+
 }

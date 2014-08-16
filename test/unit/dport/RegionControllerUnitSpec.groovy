@@ -8,6 +8,8 @@ import spock.lang.Specification
  */
 @TestFor(RegionController)
 class RegionControllerUnitSpec extends Specification {
+    RestServerService restServerService = new RestServerService()
+
 
     def setup() {
     }
@@ -15,11 +17,19 @@ class RegionControllerUnitSpec extends Specification {
     def cleanup() {
     }
 
-    void "test something"() {
+
+
+    void "test regionAjax"() {
         when:
-        int i = 1
+        params.id=""
+        controller.restServerService  = restServerService
+        controller.restServerService  = restServerService.metaClass.searchGenomicRegionAsSpecifiedByUsers{-> ""}
+        controller.regionAjax()
 
         then:
-        assert i == 1
+        response.status == 200
     }
+
+
+
 }

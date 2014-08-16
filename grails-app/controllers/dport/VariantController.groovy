@@ -33,21 +33,20 @@ class VariantController {
         }
     }
 
-    def variantSearchAjax() {
-       println "variant post received"
-        JSONObject jsonObject = request.JSON
-        if (jsonObject)    {
-            println("received="+jsonObject.toString())
-         }  else {
-            render("<h1> I heard you, but no valid JSON</h1>")
-        }
-
-    }
+//    def variantSearchAjax() {
+//       println "variant post received"
+//        JSONObject jsonObject = request.JSON
+//        if (jsonObject)    {
+//            println("received="+jsonObject.toString())
+//         }  else {
+//            render("<h1> I heard you, but no valid JSON</h1>")
+//        }
+//
+//    }
 
 
 
     def variantSearch() {
-                println "variant post received"
         String receivedParameters = request.parameters.toString()
         if (receivedParameters)    {
             LinkedHashMap<String, String> parsedFilterParameters = filterManagementService.parseVariantSearchParameters(request.parameters,false)
@@ -66,16 +65,16 @@ class VariantController {
 
 
 
-    def gwas() {
-        def slurper = new JsonSlurper()
-        String variantToStartWith = params.id
-
-        render (view: 'gwasTable',
-                model:[variantToSearch: geneToStartWith,
-                       show_gwas:1,
-                       show_exchp: 1,
-                       show_exseq: 1,
-                       show_sigma: 0] )
-    }
+//    def gwas() {
+//        def slurper = new JsonSlurper()
+//        String variantToStartWith = params.id
+//
+//        render (view: 'gwasTable',
+//                model:[variantToSearch: geneToStartWith,
+//                       show_gwas:1,
+//                       show_exchp: 1,
+//                       show_exseq: 1,
+//                       show_sigma: 0] )
+//    }
 
 }

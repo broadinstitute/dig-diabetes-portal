@@ -6,7 +6,6 @@ class TraitController {
     RestServerService restServerService
     SharedToolsService sharedToolsService
 
-    def index() {}
 
 
      def traitInfo (){
