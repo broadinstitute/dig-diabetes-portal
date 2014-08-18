@@ -1,9 +1,7 @@
 package dport
-
+import dport.GeneController
 import grails.converters.JSON
 import grails.test.spock.IntegrationSpec
-import spock.lang.*
-
 /**
  *
  */

@@ -1,14 +1,16 @@
 package dport
 
-import grails.transaction.Transactional
-import  grails.plugins.rest.client.RestBuilder
+import grails.plugins.rest.client.RestBuilder
 import grails.plugins.rest.client.RestResponse
+import grails.transaction.Transactional
+import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 @Transactional
 class RestServerService {
     GrailsApplication grailsApplication
+    private static final log = LogFactory.getLog(this)
 
 
     private  String BASE_URL = 'http://t2dgenetics.org/mysql/rest/server/'
@@ -496,7 +498,8 @@ is_error: ${response.json["is_error"]}""".toString()
                 logStatus << "no valid Json returned"
             }
         }
-        println logStatus.toString()
+        log.info(logStatus.toString())
+   //     println logStatus.toString()
         return returnValue
     }
 

@@ -5,6 +5,11 @@ import grails.transaction.Transactional
 @Transactional
 class SharedToolsService {
 
+    /***
+     *  urlEncodedListOfPhenotypes delivers the information in the Phenotype domain object
+     *  for convenient delivery to the browser
+     * @return
+     */
     public String urlEncodedListOfPhenotypes() {
         List<Phenotype> phenotypeList=Phenotype.list()
         StringBuilder sb   = new StringBuilder ("")
@@ -20,8 +25,11 @@ class SharedToolsService {
         return java.net.URLEncoder.encode( sb.toString())
     }
 
-
-
+    /***
+     * urlEncodedListOfProteinEffect delivers the information in of the ProteinEffect domain object
+     * For convenient delivery to the browser
+     * @return
+     */
     public String urlEncodedListOfProteinEffect() {
         List<ProteinEffect> proteinEffectList=ProteinEffect.list()
         StringBuilder sb   = new StringBuilder ("")
@@ -38,7 +46,7 @@ class SharedToolsService {
     }
 
     /***
-     * get back a list of filters that we need to pass to the backend. We package them up for a round trip to the client
+     * packageUpFiltersForRoundTrip get back a list of filters that we need to pass to the backend. We package them up for a round trip to the client
      * and back via the Ajax call
      *
      * @param listOfAllFilters
