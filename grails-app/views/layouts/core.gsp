@@ -118,7 +118,7 @@
 <div id="footer">
     <div class="container">
         <div class="separator"></div>
-        <div id="helpus"><a href="/contact">Send feedback</a></div>
+        <div id="helpus"><a href="${createLink(controller:'informational', action:'contact')}">Send feedback</a></div>
     </div>
 </div>
 <div id="belowfooter"></div>

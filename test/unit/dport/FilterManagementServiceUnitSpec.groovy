@@ -9,16 +9,6 @@ import spock.lang.Unroll
 @TestFor(FilterManagementService)
 class FilterManagementServiceUnitSpec extends Specification {
     Closure<List <Gene>> retrieveGene = { String searchString, int numberOfMatches ->
-//        List <Gene> mockedGeneRecords = []
-//        mockedGeneRecords << new Gene(name1: 'abc', name2:'ABC')
-//        mockedGeneRecords << new Gene(name1: 'abd', name2:'ABD')
-//        mockedGeneRecords << new Gene(name1: 'abe', name2:'ABE')
-//        mockedGeneRecords << new Gene(name1: 'ace', name2:'ACE')
-//        mockedGeneRecords << new Gene(name1: 'ace', name2:'ACE')
-//        mockedGeneRecords << new Gene(name1: 'a', name2:'A')
-//        mockedGeneRecords << new Gene(name1: 'b', name2:'B')
-//        List <Gene> returnValue  = mockedGeneRecords.findAll{
-//            true }
         return  returnValue
     }
 

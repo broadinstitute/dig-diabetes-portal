@@ -179,24 +179,7 @@ class FilterManagementService {
         LinkedHashMap passInDataset = [:]
         passInDataset["datatype"] = [dataset]
 
-//        LinkedHashMap extraParms = [filters:new ArrayList<String>(),
-//                                    filterDescriptions:new ArrayList<String>(),
-//                                    parameterEncoding:new ArrayList<String>()]
-//        extraParms = determineDataSet (  extraParms, passInDataset)
-//
-//        String datatypeOperand = extraParms.datatypeOperand
         buildingFilters = parameterizedDataSet (  buildingFilters, passInDataset,significance)
-
-
-
-//        LinkedHashMap passInSignificance = [:]
-//        if (significance=='genome-wide') {
-//            passInSignificance ['significance']  =  'genomewide'
-//        }  else if (significance=='nominal') {
-//            passInSignificance ['significance']  =  'nominal'
-//        }
-//        buildingFilters = determineThreshold (buildingFilters, passInSignificance, datatypeOperand)
-
 
         if ( region ) { // If there's a region then use it. Otherwise depend on the gene name. Don't use both
             LinkedHashMap extractedNumbers =  restServerService.extractNumbersWeNeed(region)

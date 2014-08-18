@@ -33,3 +33,6 @@
 *.iws
 *.ipr
 *.iml
+
+# Was this written by grails plug-in? Not sure, but we don't need it
+out/production/dport-grailsPlugins/messages.properties
