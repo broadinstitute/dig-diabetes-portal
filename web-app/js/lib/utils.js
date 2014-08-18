@@ -437,6 +437,7 @@ var UTILS = {
         var highestValue = 0;
         var winningEthnicity = 0;
         var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
+        var noData=true;
         for (var i = 0; i < ethnicAbbreviation.length; i++) {
             var stringValue = variant['_13k_T2D_' + ethnicAbbreviation[i] + '_MAF'];
             var realValue = parseFloat(stringValue);
@@ -444,6 +445,7 @@ var UTILS = {
                 highestValue = realValue;
                 winningEthnicity =  ethnicAbbreviation[i];
             } else {
+                noData=false;
                 if (realValue > highestValue) {
                     highestValue = realValue;
                     winningEthnicity =  ethnicAbbreviation[i];
@@ -451,7 +453,8 @@ var UTILS = {
             }
         }
         return  {highestFrequency:highestValue,
-                 populationWithHighestFrequency:winningEthnicity};
+                 populationWithHighestFrequency:winningEthnicity,
+                 noData:noData};
     },
     /***
      *
@@ -553,7 +556,8 @@ var UTILS = {
                 }
 
                 // Case-control
-                if ((vRec[i].SIGMA_T2D_MINA) && (vRec[i].SIGMA_T2D_MINU))  {
+                if ((typeof vRec[i].SIGMA_T2D_MINA!== "undefined") && (typeof vRec[i].SIGMA_T2D_MINU!== "undefined")&&
+                    (vRec[i].SIGMA_T2D_MINA!== null) && (vRec[i].SIGMA_T2D_MINU!== null)){
                     retVal += "<td>" +vRec[i].SIGMA_T2D_MINA + "/" +vRec[i].SIGMA_T2D_MINU+"</td>";
                 } else {
                     retVal += "<td></td>";
@@ -600,7 +604,8 @@ var UTILS = {
 
                 // case/control
                 // don't rule out zeros here – they're perfectly legal.  Nulls however are bad
-                if ((typeof vRec[i]._13k_T2D_MINA!== "undefined") && (typeof vRec[i]._13k_T2D_MINU!== "undefined"))  {
+                if ((typeof vRec[i]._13k_T2D_MINA!== "undefined") && (typeof vRec[i]._13k_T2D_MINU!== "undefined") &&
+                    ( vRec[i]._13k_T2D_MINA!== null) && ( vRec[i]._13k_T2D_MINU!== null)){
                     retVal += "<td>" +vRec[i]._13k_T2D_MINA + "/" +vRec[i]._13k_T2D_MINU+"</td>";
                 } else {
                     retVal += "<td></td>";
@@ -615,7 +620,8 @@ var UTILS = {
                 }
 
                 // P value
-                if (highFreq.populationWithHighestFrequency)  {
+                if ((highFreq.populationWithHighestFrequency)&&
+                    (!highFreq.noData)){
                     retVal += "<td>" +highFreq.populationWithHighestFrequency+"</td>";
                 } else {
                     retVal += "<td></td>";

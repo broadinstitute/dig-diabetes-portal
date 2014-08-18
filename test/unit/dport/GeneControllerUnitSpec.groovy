@@ -36,17 +36,6 @@ class GeneControllerUnitSpec extends Specification {
     }
 
 
-    void "test geneAjax"() {
-        when:
-        params.id=""
-        controller.restServerService  = restServerService
-        controller.geneAjax()
-
-        then:
-        response.status == 200
-    }
-
-
     void "test geneInfoAjax"() {
         when:
         controller.geneInfoAjax()

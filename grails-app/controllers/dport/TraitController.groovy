@@ -6,8 +6,10 @@ class TraitController {
     RestServerService restServerService
     SharedToolsService sharedToolsService
 
-
-
+    /***
+     * create page frame for association statistics across 25 traits for a single variant. The resulting Ajax call is  ajaxTraitsPerVariant
+     * @return
+     */
      def traitInfo (){
           String variantIdentifier = params.getIdentifier()
          render (view: 'traitsPerVariant',
@@ -19,6 +21,10 @@ class TraitController {
                         variantIdentifier:variantIdentifier] )
      }
 
+    /***
+     *  search for a single trait from the main page and this will be the page frame.  The resulting Ajax call is  phenotypeAjax
+     * @return
+     */
     def traitSearch() {
         String phenotypeKey=params.trait
         String requestedSignificance=params.significance
@@ -42,9 +48,10 @@ class TraitController {
 
     }
 
-
-
-
+    /***
+     * This Ajax call is launched from the traitSearch page frame
+     * @return
+     */
      def phenotypeAjax() {
             String significance = params["significance"]
             String phenotypicTrait  = params["trait"]
@@ -63,8 +70,10 @@ class TraitController {
 
     }
 
-
-
+    /***
+     * Returns association statistics across 25 traits for a single variant.  The launching page is traitInfo
+     * @return
+     */
     def ajaxTraitsPerVariant()  {
         String variant = params["variantIdentifier"]
         JSONObject jsonObject = restServerService.retrieveTraitInfoByVariant(variant)
@@ -74,7 +83,10 @@ class TraitController {
 
     }
 
-
+    /***
+     * get here from 'SEE P  values and other statistics across 25 traits' on the gene info page. Associated Ajax call is traitVariantCrossAjax
+     * @return
+     */
     def regionInfo() {
         String regionSpecification = params.id
         String encodedString = sharedToolsService.urlEncodedListOfPhenotypes ()
@@ -88,7 +100,10 @@ class TraitController {
                        show_sigma: 0] )
     }
 
-
+    /***
+     *
+     * @return
+     */
     def traitVariantCrossAjax() {
         String regionsSpecification = params.id
 

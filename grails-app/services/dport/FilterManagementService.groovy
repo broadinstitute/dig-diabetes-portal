@@ -593,7 +593,7 @@ class FilterManagementService {
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
         // set threshold
         if  (incomingParameters.containsKey("significance"))  {      // user has requested a particular data set. Without explicit request what is the default?
-            String requestedDataSet =  incomingParameters ["significance"]
+            String requestedDataSet =  incomingParameters ["significance"][0]
             switch (requestedDataSet)   {
                 case  "genomewide":
                     filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,5e-8 as BigDecimal) 

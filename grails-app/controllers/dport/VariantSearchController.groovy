@@ -9,7 +9,9 @@ class VariantSearchController {
         def index() { }
 
     /***
-     * allow user to specify variant search parameters
+     * set up the search page. There may or may not be parameters, but there is no immediate follow-up Ajax call
+     * encParams can be null (in which case we take on the default values in the search page) or else they can
+     * tell us what the last known form values were "1:3,23:0"
      * @return
      */
         def variantSearch() {
@@ -30,8 +32,9 @@ class VariantSearchController {
         }
 
     /***
-     * User has posted a search request.  The search was made through a traditional form, so this routine calls a service
-     * that goes through and laboriously parses the request, thereby generating filters which we can pass to the backend
+     * User has posted a search request.  The search was made through a traditional form (the GO button on the variant search page).
+     * A service then laboriously parses the request, thereby generating filters which we can pass to the backend. The associated Ajax
+     * retrieval for this call is -->  variantSearchAjax
      * @return
      */
     def variantSearchRequest() {
@@ -41,38 +44,10 @@ class VariantSearchController {
             if  (parsedFilterParameters)  {
 
                 Integer dataSetDetermination = filterManagementService.distinguishBetweenDataSets ( request.parameters )
-
-                // get back a list of filters that we need to pass to the backend. We package them up for a round trip to the client
-                // and back via the Ajax call
-                List <String> listOfAllFilters = parsedFilterParameters.filters
-                StringBuilder sb = new  StringBuilder()
-                for ( int i=0 ; i<listOfAllFilters.size() ; i++ ) {
-                    sb <<  listOfAllFilters[i]
-                    if ((i+1)<listOfAllFilters.size()) {
-                        sb << ","
-                    }
-                }
-                String encodedFilters = java.net.URLEncoder.encode(sb.toString())
-
-                // we need to  encode the list of parameters so that we can reset them when we reenter
-                //  the filter setting form.  It is certainly true that this is a different form of the
-                //  same information that is held in BOTH the filter list and the filterDescription
-                //  list.  This one could be passed from a different page, however, so we really want
-                //  a simple, unambiguous way to store it and pass it around
-                List <String> listOfAllEncodedParameters = parsedFilterParameters.parameterEncoding
-                StringBuilder sbEncoded = new  StringBuilder()
-                for ( int i=0 ; i<listOfAllEncodedParameters.size() ; i++ ) {
-                    sbEncoded <<  listOfAllEncodedParameters[i]
-                    if ((i+1)<listOfAllEncodedParameters.size()) {
-                        sbEncoded << ","
-                    }
-                }
-                //String encodedParameters = java.net.URLEncoder.encode(sbEncoded.toString())
-                String encodedParameters = sbEncoded.toString()
-
-
-
+                String encodedFilters = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters )
+                String encodedParameters =  sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
                 String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
+
                 render (view: 'variantSearchResults',
                         model:[show_gene: 1,
                                show_gwas:1,
@@ -97,37 +72,11 @@ class VariantSearchController {
         if (geneId)    {
             LinkedHashMap<String, String> parsedFilterParameters = filterManagementService.constructGeneSearch(geneId,receivedParameters)
             if  (parsedFilterParameters)  {
-                List <String> listOfAllFilters = parsedFilterParameters.filters
-                StringBuilder sb = new  StringBuilder()
 
-
-                for ( int i=0 ; i<listOfAllFilters.size() ; i++ ) {
-                    sb <<  listOfAllFilters[i]
-                    if ((i+1)<listOfAllFilters.size()) {
-                        sb << ","
-                    }
-                }
-
-
-
-                // we need to  encode the list of parameters so that we can reset them when we reenter
-                //  the filter setting form.  It is certainly true that this is a different form of the
-                //  same information that is held in BOTH the filter list and the filterDescription
-                //  list.  This one could be passed from a different page, however, so we really want
-                //  a simple, unambiguous way to store it and pass it around
-                List <String> listOfAllEncodedParameters = parsedFilterParameters.parameterEncoding
-                StringBuilder sbEncoded = new  StringBuilder()
-                for ( int i=0 ; i<listOfAllEncodedParameters.size() ; i++ ) {
-                    sbEncoded <<  listOfAllEncodedParameters[i]
-                    if ((i+1)<listOfAllEncodedParameters.size()) {
-                        sbEncoded << ","
-                    }
-                }
-                //String encodedParameters = java.net.URLEncoder.encode(sbEncoded.toString())
-                String encodedParameters = sbEncoded.toString()
-
-                String enc = java.net.URLEncoder.encode(sb.toString())
+                String enc = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters )
+                String encodedParameters =  sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
                 String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
+
                 render (view: 'variantSearchResults',
                         model:[show_gene: 1,
                                show_gwas:1,
@@ -157,36 +106,9 @@ class VariantSearchController {
         if (geneId)    {
             LinkedHashMap<String, String> parsedFilterParameters = filterManagementService.constructGeneWideSearch(geneId,significance,dataset,region)
             if  (parsedFilterParameters)  {
-                List <String> listOfAllFilters = parsedFilterParameters.filters
-                StringBuilder sb = new  StringBuilder()
 
-
-                for ( int i=0 ; i<listOfAllFilters.size() ; i++ ) {
-                    sb <<  listOfAllFilters[i]
-                    if ((i+1)<listOfAllFilters.size()) {
-                        sb << ","
-                    }
-                }
-
-
-
-                // we need to  encode the list of parameters so that we can reset them when we reenter
-                //  the filter setting form.  It is certainly true that this is a different form of the
-                //  same information that is held in BOTH the filter list and the filterDescription
-                //  list.  This one could be passed from a different page, however, so we really want
-                //  a simple, unambiguous way to store it and pass it around
-                List <String> listOfAllEncodedParameters = parsedFilterParameters.parameterEncoding
-                StringBuilder sbEncoded = new  StringBuilder()
-                for ( int i=0 ; i<listOfAllEncodedParameters.size() ; i++ ) {
-                    sbEncoded <<  listOfAllEncodedParameters[i]
-                    if ((i+1)<listOfAllEncodedParameters.size()) {
-                        sbEncoded << ","
-                    }
-                }
-                //String encodedParameters = java.net.URLEncoder.encode(sbEncoded.toString())
-                String encodedParameters = sbEncoded.toString()
-
-                String enc = java.net.URLEncoder.encode(sb.toString())
+                String enc = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters )
+                String encodedParameters =  sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
                 String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
                 render (view: 'variantSearchResults',
                         model:[show_gene: 1,
@@ -218,7 +140,8 @@ class VariantSearchController {
 
 
     /***
-     * a variant display table is on screen and the page is now asking for data. Perform the search.
+     * a variant display table is on screen and the page is now asking for data. Perform the search.  This call retrieves the data
+     * for the original page format call -> variantSearchRequest
      * @return
      */
     def variantSearchAjax() {

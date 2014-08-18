@@ -9,7 +9,10 @@ class VariantController {
 
     def index() { }
 
-
+    /***
+     *  Launch the page frame that will hold a friendly collection of information about a single variant. The associated Ajax call is  variantAjax
+     * @return
+     */
     def variantInfo() {
         String variantToStartWith = params.id
         if (variantToStartWith) {
@@ -22,6 +25,11 @@ class VariantController {
 
         }
    }
+
+    /***
+     * provide  a nice collection of information about a single variant. This is the Ajax call associated with variantInfo
+     * @return
+     */
     def variantAjax() {
         String variantToStartWith = params.id
         if (variantToStartWith)      {
@@ -33,48 +41,25 @@ class VariantController {
         }
     }
 
-//    def variantSearchAjax() {
-//       println "variant post received"
-//        JSONObject jsonObject = request.JSON
-//        if (jsonObject)    {
-//            println("received="+jsonObject.toString())
-//         }  else {
-//            render("<h1> I heard you, but no valid JSON</h1>")
+
+//
+//    def variantSearch() {
+//        String receivedParameters = request.parameters.toString()
+//        if (receivedParameters)    {
+//            LinkedHashMap<String, String> parsedFilterParameters = filterManagementService.parseVariantSearchParameters(request.parameters,false)
+//            if  (parsedFilterParameters)  {
+//                render (view: 'variantSearchResults',
+//                        model:[filter: parsedFilterParameters.filters,
+//                               filterDescriptions: parsedFilterParameters.filterDescriptions] )
+//            }  else {
+//                render("<h1> I heard you, but no valid JSON</h1>")
+//            }
 //        }
 //
-//    }
-
-
-
-    def variantSearch() {
-        String receivedParameters = request.parameters.toString()
-        if (receivedParameters)    {
-            LinkedHashMap<String, String> parsedFilterParameters = filterManagementService.parseVariantSearchParameters(request.parameters,false)
-            if  (parsedFilterParameters)  {
-                render (view: 'variantSearchResults',
-                        model:[filter: parsedFilterParameters.filters,
-                               filterDescriptions: parsedFilterParameters.filterDescriptions] )
-            }  else {
-                render("<h1> I heard you, but no valid JSON</h1>")
-            }
-        }
-
-
-    }
-
-
-
-
-//    def gwas() {
-//        def slurper = new JsonSlurper()
-//        String variantToStartWith = params.id
 //
-//        render (view: 'gwasTable',
-//                model:[variantToSearch: geneToStartWith,
-//                       show_gwas:1,
-//                       show_exchp: 1,
-//                       show_exseq: 1,
-//                       show_sigma: 0] )
 //    }
+
+
+
 
 }
