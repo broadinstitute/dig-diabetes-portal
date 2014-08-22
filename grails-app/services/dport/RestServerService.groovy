@@ -14,6 +14,7 @@ class RestServerService {
 
 
     private  String BASE_URL = 'http://t2dgenetics.org/mysql/rest/server/'
+    //private  String BASE_URL = 'http://t2dgenetics.org/dev/rest/server/'
     private  String GENE_INFO_URL = BASE_URL + "gene-info"
     private  String VARIANT_INFO_URL = BASE_URL + "variant-info"
     private  String TRAIT_INFO_URL = BASE_URL + "trait-info"

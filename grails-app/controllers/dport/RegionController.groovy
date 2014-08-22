@@ -1,12 +1,13 @@
 package dport
 
+import grails.plugin.springsecurity.annotation.Secured
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class RegionController {
     RestServerService   restServerService
     SharedToolsService sharedToolsService
 
-
+    @Secured (['ROLE_USER','IS_AUTHENTICATED_FULLY'])
     def regionInfo() {
         String regionSpecification = params.id
         LinkedHashMap extractedNumbers =  restServerService.extractNumbersWeNeed(regionSpecification)

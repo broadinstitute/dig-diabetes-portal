@@ -5,25 +5,99 @@
 
     <r:require modules="core"/>
     <r:layoutResources/>
+    <style type="text/css">
+    html, body { margin: 0; padding:0;}
+    #signin-button {
+        padding: 5px;
+    }
 
-    %{--<script type="text/template" id="tpl-gene-info">{% include "js_templates/gene_info.html" %}</script>--}%
-    %{--<script type="text/template" id="tpl-gene-variants">{% include "js_templates/gene_variants.html" %}</script>--}%
-    %{--<script type="text/template" id="tpl-variant-info">{% include "js_templates/variant_info.html" %}</script>--}%
-    %{--<script type="text/template" id="tpl-variant-gwas">{% include "js_templates/variant_gwas.html" %}</script>--}%
-    %{--<script type="text/template" id="tpl-variant-table">{% include "js_templates/variant_table.html" %}</script>--}%
-    %{--<script type="text/template" id="tpl-variant-search">{% include "js_templates/variant_search.html" %}</script>--}%
-    %{--<script type="text/template" id="tpl-variant-search-results">{% include "js_templates/variant_search_results.html" %}</script>--}%
-    %{--<script type="text/template" id="tpl-trait-search-results">{% include "js_templates/trait_search_results.html" %}</script>--}%
-    %{--<script type="text/template" id="tpl-region-gwas">{% include "js_templates/region_gwas.html" %}</script>--}%
+    #oauth2-results pre { margin: 0; padding:0; width: 600px;}
+    .hide { display: none;}
+    .show { display: block;}
+    </style>
+    <script>
+        function signinCallback(authResult) {
+            if (authResult['status']['signed_in']) {
+                // Update the app to reflect a signed in user
+                // Hide the sign-in button now that the user is authorized, for example:
+                document.getElementById('signinButton').setAttribute('style', 'display: none');
+            } else {
+                // Update the app to reflect a signed out user
+                // Possible error values:
+                //   "user_signed_out" - User is signed-out
+                //   "access_denied" - User denied access to your app
+                //   "immediate_failed" - Could not automatically log in the user
+                console.log('Sign-in state: ' + authResult['error']);
+            }
+        }
+    </script>
 
 
 </head>
 <body>
 
 <div id="main">
-    %{--{% block content %}{% endblock %}--}%
-    here is where the content goes
+
+
+
+
+             <div class="container">
+                 <p>
+                     hello?
+                 </p>
+                %{--<div id="insertButton">--}%
+                    %{--<a class="button button-blue" href="javascript:insertButton();">Click me</a> to insert a button dynamically with <code>gapi.signin.render()</code>--}%
+                %{--</div>--}%
+                %{--<div id="signin-button" class="show">--}%
+
+
+
+                <div class="jumbotron">
+                    <h1>Diabetes portal</h1>
+                    <p class="lead">This portal can give you everything you ever wanted (but you need to login first) stage in</p>
+                    <p><a class="btn btn-lg btn-success" href="#" role="button">Get started today</a></p>
+                 <span id="signinButton">
+                     <span
+                             class="g-signin"
+                             data-callback="signinCallback"
+                             data-clientid="975413760331-d2nr5vq7sbbppjfog0cp9j4agesbeovt.apps.googleusercontent.com"
+                             data-cookiepolicy="single_host_origin"
+                             data-requestvisibleactions="http://schema.org/AddAction"
+                             data-scope="https://www.googleapis.com/auth/plus.login">
+                     </span>
+                 </span>
+                </div>
+
+
+                %{--<div style='width:20px; height: 10px;'>--}%
+                    %{--<div id="renderMe"></div>--}%
+                %{--</div>--}%
+
+                %{--</div>--}%
+                %{--<div style='width:200px; height: 100px;'>--}%
+                %{--<div id="oauth2-results" class="hide"></div>--}%
+            %{--</div>--}%
+                %{--<div style="font: 12px sans-serif, Arial; margin-left: 0.5em; margin-top: 0.5em"><a href="javascript:document.location.reload();">Reload the example</a> or <a--}%
+                        %{--href="/+/demos/signin_demo_render" target="_blank">open in a new window</a></div>--}%
+
+
+            </div>
+
+
+    <script>
+        //insertButton();
+    </script>
+
+
+
 </div>
 
+<script type="text/javascript">
+    (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/client:plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+    })();
+</script>
 </body>
 </html>

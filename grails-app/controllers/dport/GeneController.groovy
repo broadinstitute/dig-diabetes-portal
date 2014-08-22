@@ -1,5 +1,6 @@
 package dport
 
+import grails.plugin.springsecurity.annotation.Secured
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class GeneController {
@@ -24,6 +25,7 @@ class GeneController {
      * with the Jace on
      * @return
      */
+    @Secured (['ROLE_USER'])
     def geneInfo() {
         String geneToStartWith = params.id
         if (geneToStartWith)  {

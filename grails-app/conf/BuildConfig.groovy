@@ -7,14 +7,11 @@ grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
-grails.project.fork = [
+grails.project.fork =
+        [
     // configure settings for compilation JVM, note that if you alter the Groovy version forked compilation is required
     //  compile: [maxMemory: 256, minMemory: 64, debug: false, maxPerm: 256, daemon:true],
 
-    // configure settings for the test-app JVM, uses the daemon by default
-//    test: [maxMemory: 768, minMemory: 64, debug: false, maxPerm: 256, daemon:true],
-    // configure settings for the run-app JVM
-//    run: [maxMemory: 768, minMemory: 64, debug: false, maxPerm: 256, forkReserve:false],
     // configure settings for the run-war JVM
     war: [maxMemory: 768, minMemory: 64, debug: false, maxPerm: 256, forkReserve:false],
     // configure settings for the Console UI JVM
@@ -26,7 +23,7 @@ grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits("global") {
         // specify dependency exclusions here; for example, uncomment this to disable ehcache:
-        // excludes 'ehcache'
+        excludes 'ehcache'
     }
     log "error" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
@@ -40,6 +37,9 @@ grails.project.dependency.resolution = {
         mavenLocal()
         grailsCentral()
         mavenCentral()
+
+        mavenRepo 'https://raw.github.com/fernandezpablo85/scribe-java/mvn-repo/'
+        mavenRepo "http://repo.desirableobjects.co.uk/"
         // uncomment these (or add new ones) to enable remote dependency resolution from public Maven repositories
         //mavenRepo "http://repository.codehaus.org"
         //mavenRepo "http://download.java.net/maven/2/"
@@ -74,6 +74,17 @@ grails.project.dependency.resolution = {
         }
 
         // plugins for the compile step
+
+//        compile ":spring-security-oauth:2.1.0-RC4"
+      //  compile ":spring-security-oauth-google:0.3.1"
+
+        // …
+        // last stable version is 2.0.2
+        //compile ':spring-security-oauth:2.0.2'
+        // 2.1 is under development
+        // compile ':spring-security-oauth:2.1.0-SNAPSHOT'
+       // compile ':spring-security-oauth-facebook:0.1'
+        // …
         compile ":scaffolding:2.1.2"
         compile ':cache:1.1.7'
         compile ":asset-pipeline:1.8.11"
@@ -84,10 +95,13 @@ grails.project.dependency.resolution = {
 //        compile "cglib:cglib:2.2"
 
         // plugins needed at runtime but not for compilation
-        runtime ":hibernate4:4.3.5.4" // or ":hibernate:3.6.10.16"
-        runtime ":database-migration:1.4.0"
+//        runtime ":hibernate4:4.3.5.4" // or ":hibernate:3.6.10.16"
+        runtime ":hibernate:3.6.10.16"
+        //runtime ":database-migration:1.4.0"
         runtime ":jquery:1.11.1"
         runtime ':resources:1.2.8'
+
+        compile ":spring-security-core:2.0-RC4"
 
         test ":codenarc:0.18.1"
 

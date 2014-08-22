@@ -93,11 +93,23 @@
 
     <div id="header-bottom">
         <div class="container">
+            <sec:ifLoggedIn>
+                <div class="rightlinks">
+                    <sec:loggedInUserInfo field="username"/>   &middot;
+                    <g:link controller='logout'>Log Out</g:link>
+                </div>
+            </sec:ifLoggedIn>
+            <sec:ifNotLoggedIn>
+                <div class="rightlinks">
+                    <g:link controller='login' action='auth'>Login</g:link>
+                </div>
+            </sec:ifNotLoggedIn>
             %{--{% if user.is_authenticated %}--}%
-            <div class="rightlinks">
-                %{--{{ user.profile }} --}%  User &middot;
-                <a href="/logout">Log Out</a>
-            </div>
+            %{--<div class="rightlinks">--}%
+                %{--{{ user.profile }} --}%%{-- --}%
+                %{--User &middot;--}%
+                %{--<a href="/logout">Log Out</a>--}%
+            %{--</div>--}%
         %{--{% endif %}--}%
             <g:if test="${grailsApplication.config.site.version == 't2dgenes'}">
                 <a href="${createLink(controller:'home',action:'portalHome')}">Home</a> &middot;

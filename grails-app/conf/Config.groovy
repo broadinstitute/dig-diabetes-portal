@@ -75,7 +75,23 @@ grails {
 }
 
 
-grails.converters.encoding = "UTF-8"
+oauth {
+
+    providers {
+
+        google {
+            api = org.scribe.builder.api.GoogleApi20
+            key = '975413760331-d2nr5vq7sbbppjfog0cp9j4agesbeovt.apps.googleusercontent.com'
+            secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
+            successUri = '/oauth/google/success'
+            failureUri = '/oauth/google/error'
+            callback = "${baseURL}/oauth/google/callback"
+            scope = 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
+        }
+
+    }
+}
+            grails.converters.encoding = "UTF-8"
 // scaffolding templates configuration
 grails.scaffolding.templates.domainSuffix = 'Instance'
 
@@ -109,6 +125,30 @@ environments {
         grails.serverURL = "http://Default-Environment-igfrae3vpi.elasticbeanstalk.com"
     }
 }
+
+
+
+//security stuff
+grails.plugin.springsecurity.securityConfigType = "InterceptUrlMap"
+grails.plugin.springsecurity.interceptUrlMap = [
+        '/':                  ['permitAll'],
+        '/home':             ['permitAll'],
+        '/home/portalHome':             ['permitAll'],
+        '/home/index':             ['permitAll'],
+        '/gene':         ['permitAll'],
+        '/gene/**':         ['permitAll'],
+        '/variant':         ['ROLE_USER'],
+        '/variant/**':         ['ROLE_USER'],
+        '/assets/**':         ['permitAll'],
+        '/**/js/**':          ['permitAll'],
+        '/**/css/**':         ['permitAll'],
+        '/**/images/**':      ['permitAll'],
+        '/**/favicon.ico':    ['permitAll'],
+        '/login/**':          ['permitAll'],
+        '/logout/**':         ['permitAll'],
+        '/secure/**':         ['ROLE_ADMIN'],
+        '/finance/**':        ['ROLE_FINANCE', 'isFullyAuthenticated()'],
+]
 
 log4j = { root ->
     appenders {
@@ -179,3 +219,10 @@ codenarc {
     reportType = 'xml'
     propertiesFile = 'grails-app/conf/codenarc.properties'
 }
+
+// Added by the Spring Security Core plugin:
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'dport.people.User'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'dport.people.UserRole'
+grails.plugin.springsecurity.authority.className = 'dport.people.Role'
+
+

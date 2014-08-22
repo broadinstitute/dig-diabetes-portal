@@ -2,12 +2,48 @@ import dport.Gene
 import dport.Phenotype
 import dport.ProteinEffect
 import dport.RestServerService
+import dport.people.Role
+import dport.people.User
+import dport.people.UserRole
 
 class BootStrap {
     def grailsApplication
     RestServerService restServerService
+    def springSecurityService
 
     def init = { servletContext ->
+        def samples  = [
+                'ben':[fullName:'ben Alexander', password:'ben', email: "balexand@broadinstitute.org"],
+                'fred': [fullName:'Fred Friendly',  password:'fred', email: "fred@broadinstitute.org"]];
+
+        def userRole = Role.findByAuthority('ROLE_USER')  ?: new Role (authority: "ROLE_USER").save()
+        def adminRole = Role.findByAuthority('ROLE_ADMIN')  ?: new Role (authority: "ROLE_ADMIN").save()
+        def systemRole = Role.findByAuthority('ROLE_SYSTEM')  ?: new Role (authority: "ROLE_SYSTEM").save()
+
+
+        def users = User.list () ?: []
+        if (!users){
+            samples.each {username, attributes->
+                def user  = new User (
+                        username: username,
+                        password: attributes.password,
+                        enabled: true)
+                if (user.validate ()) {
+                    println "Creating user ${username}…"
+                    user.save(flush: true)
+                    UserRole.create user,userRole
+                    if (username=='ben'){
+                        UserRole.create user,adminRole
+                        UserRole.create user,systemRole
+                    }
+                }  else {
+                    println "problem in bootstrap for username ${username}"
+                }
+
+            }
+        }
+        println "# of users = ${User.list().size()}"
+
         // for the time being fill up our gene table locally. In the long run
         // we need to be pulling this information from the backend, of course
         if (Gene.count()) {

@@ -1,0 +1,5 @@
+CLIENT ID 975413760331-d2nr5vq7sbbppjfog0cp9j4agesbeovt.apps.googleusercontent.com
+EMAIL ADDRESS  975413760331-d2nr5vq7sbbppjfog0cp9j4agesbeovt@developer.gserviceaccount.com
+CLIENT SECRET  HKIxi3AOLAgyFV6lDJQCfEgY REDIRECT URIS  none JAVASCRIPT ORIGINS 
+http://localhost:8080
+http://default-environment-igfrae3vpi.elasticbeanstalk.com/
