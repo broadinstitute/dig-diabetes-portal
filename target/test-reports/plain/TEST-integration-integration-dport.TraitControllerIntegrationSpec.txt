@@ -1,0 +1,25 @@
+Testsuite: dport.TraitControllerIntegrationSpec
+Tests run: 6, Failures: 0, Errors: 0, Time elapsed: 25.921 sec
+------------- Standard Output ---------------
+--Output from test the traitInfo page--
+--Output from test the search a trait (and potentially  ignificance) page--
+--Output from test the search a trait by ajax page--
+--Output from test the association statistics across 25 traits by ajax page--
+--Output from test the search a traits across region page--
+--Output from test traitVariantCrossAjax--
+------------- ---------------- ---------------
+------------- Standard Error -----------------
+--Output from test the traitInfo page--
+--Output from test the search a trait (and potentially  ignificance) page--
+--Output from test the search a trait by ajax page--
+--Output from test the association statistics across 25 traits by ajax page--
+--Output from test the search a traits across region page--
+--Output from test traitVariantCrossAjax--
+------------- ---------------- ---------------
+
+Testcase: test the traitInfo page took 0.005 sec
+Testcase: test the search a trait (and potentially  ignificance) page took 0.018 sec
+Testcase: test the search a trait by ajax page took 0.699 sec
+Testcase: test the association statistics across 25 traits by ajax page took 0.634 sec
+Testcase: test the search a traits across region page took 0.006 sec
+Testcase: test traitVariantCrossAjax took 24.552 sec

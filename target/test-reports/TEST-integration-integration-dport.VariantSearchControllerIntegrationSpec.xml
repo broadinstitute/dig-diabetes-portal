@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="GPA84-952" name="dport.VariantSearchControllerIntegrationSpec" tests="1" time="0.0050" timestamp="2014-08-21T18:29:35">
+  <properties />
+  <testcase classname="dport.VariantSearchControllerIntegrationSpec" name="test variantSearch" time="0.0040" />
+  <system-out><![CDATA[--Output from test variantSearch--
+]]></system-out>
+  <system-err><![CDATA[--Output from test variantSearch--
+]]></system-err>
+</testsuite>

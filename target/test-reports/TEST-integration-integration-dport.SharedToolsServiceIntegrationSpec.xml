@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="GPA84-952" name="dport.SharedToolsServiceIntegrationSpec" tests="6" time="0.047" timestamp="2014-08-21T18:29:09">
+  <properties />
+  <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test urlEncodedListOfPhenotypes smoke" time="0.0070" />
+  <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test urlEncodedListOfProteinEffect smoke" time="0.0080" />
+  <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpFiltersForRoundTrip Typical usage" time="0.0090" />
+  <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpFiltersForRoundTrip with empty parameter list" time="0.0040" />
+  <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpEncodedParameters with typical parameter list" time="0.0080" />
+  <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpEncodedParameters with empty parameters" time="0.0030" />
+  <system-out><![CDATA[--Output from test urlEncodedListOfPhenotypes smoke--
+--Output from test urlEncodedListOfProteinEffect smoke--
+--Output from test packageUpFiltersForRoundTrip Typical usage--
+--Output from test packageUpFiltersForRoundTrip with empty parameter list--
+--Output from test packageUpEncodedParameters with typical parameter list--
+--Output from test packageUpEncodedParameters with empty parameters--
+]]></system-out>
+  <system-err><![CDATA[--Output from test urlEncodedListOfPhenotypes smoke--
+--Output from test urlEncodedListOfProteinEffect smoke--
+--Output from test packageUpFiltersForRoundTrip Typical usage--
+--Output from test packageUpFiltersForRoundTrip with empty parameter list--
+--Output from test packageUpEncodedParameters with typical parameter list--
+--Output from test packageUpEncodedParameters with empty parameters--
+]]></system-err>
+</testsuite>

@@ -1,0 +1,13 @@
+Testsuite: dport.VariantControllerIntegrationSpec
+Tests run: 2, Failures: 0, Errors: 0, Time elapsed: 0.102 sec
+------------- Standard Output ---------------
+--Output from test the variantInfo page--
+--Output from test the variantAjax data retrieval--
+------------- ---------------- ---------------
+------------- Standard Error -----------------
+--Output from test the variantInfo page--
+--Output from test the variantAjax data retrieval--
+------------- ---------------- ---------------
+
+Testcase: test the variantInfo page took 0.005 sec
+Testcase: test the variantAjax data retrieval took 0.092 sec

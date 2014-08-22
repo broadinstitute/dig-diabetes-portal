@@ -1,0 +1,10 @@
+Testsuite: dport.ProteinEffectIntegrationSpec
+Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.011 sec
+------------- Standard Output ---------------
+--Output from test functions on gene domain object--
+------------- ---------------- ---------------
+------------- Standard Error -----------------
+--Output from test functions on gene domain object--
+------------- ---------------- ---------------
+
+Testcase: test functions on gene domain object took 0.006 sec

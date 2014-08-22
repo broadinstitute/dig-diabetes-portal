@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="GPA84-952" name="dport.InformationalControllerIntegrationSpec" tests="7" time="0.577" timestamp="2014-08-21T18:29:06">
+  <properties />
+  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the about page" time="0.0050" />
+  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the contact page" time="0.0040" />
+  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the hgat page" time="0.0040" />
+  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the t2dgenes page" time="0.0040" />
+  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the t2dgenesection page" time="0.34" />
+  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the got2d page" time="0.0050" />
+  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the got2dsection page" time="0.208" />
+  <system-out><![CDATA[--Output from test the about page--
+--Output from test the contact page--
+--Output from test the hgat page--
+--Output from test the t2dgenes page--
+--Output from test the t2dgenesection page--
+--Output from test the got2d page--
+--Output from test the got2dsection page--
+]]></system-out>
+  <system-err><![CDATA[--Output from test the about page--
+--Output from test the contact page--
+--Output from test the hgat page--
+--Output from test the t2dgenes page--
+--Output from test the t2dgenesection page--
+--Output from test the got2d page--
+--Output from test the got2dsection page--
+]]></system-err>
+</testsuite>

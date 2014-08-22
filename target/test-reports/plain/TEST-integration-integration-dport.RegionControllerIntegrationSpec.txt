@@ -1,0 +1,13 @@
+Testsuite: dport.RegionControllerIntegrationSpec
+Tests run: 2, Failures: 0, Errors: 0, Time elapsed: 2.076 sec
+------------- Standard Output ---------------
+--Output from test the search a region page--
+--Output from test the search a region by ajax page--
+------------- ---------------- ---------------
+------------- Standard Error -----------------
+--Output from test the search a region page--
+--Output from test the search a region by ajax page--
+------------- ---------------- ---------------
+
+Testcase: test the search a region page took 0.249 sec
+Testcase: test the search a region by ajax page took 1.819 sec

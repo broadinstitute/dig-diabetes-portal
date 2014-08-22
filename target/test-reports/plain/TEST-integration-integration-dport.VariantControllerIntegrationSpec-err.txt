@@ -1,0 +1,2 @@
+--Output from test the variantInfo page--
+--Output from test the variantAjax data retrieval--

@@ -1,0 +1,55 @@
+Testsuite: dport.GeneManagementServiceIntegrationSpec
+Tests run: 16, Failures: 0, Errors: 0, Time elapsed: 0.264 sec
+------------- Standard Output ---------------
+--Output from test retrieveGene Single return Through direct call--
+--Output from test retrieveGene Multiple return Through direct call--
+--Output from test retrieveGene Nonexistent gene Through direct call--
+--Output from test retrieveGene Lowercase=no match Through direct call--
+--Output from test retrieveGene Null matches all Through direct call--
+--Output from test deliverPartialMatches Single return--
+--Output from test deliverPartialMatches Multiple return--
+--Output from test deliverPartialMatches Nonexistent gene--
+--Output from test deliverPartialMatches Lowercase=match--
+--Output from test deliverPartialMatches Null=no match--
+--Output from test deliverPartialMatchesInJson--
+--Output from test partialGeneMatches legal[0]--
+--Output from test partialGeneMatches legal[1]--
+--Output from test partialGeneMatches legal[2]--
+--Output from test partialGeneMatches should correctly return nothing[0]--
+--Output from test partialGeneMatches should correctly return nothing[1]--
+------------- ---------------- ---------------
+------------- Standard Error -----------------
+--Output from test retrieveGene Single return Through direct call--
+--Output from test retrieveGene Multiple return Through direct call--
+--Output from test retrieveGene Nonexistent gene Through direct call--
+--Output from test retrieveGene Lowercase=no match Through direct call--
+--Output from test retrieveGene Null matches all Through direct call--
+--Output from test deliverPartialMatches Single return--
+--Output from test deliverPartialMatches Multiple return--
+--Output from test deliverPartialMatches Nonexistent gene--
+--Output from test deliverPartialMatches Lowercase=match--
+--Output from test deliverPartialMatches Null=no match--
+--Output from test deliverPartialMatchesInJson--
+--Output from test partialGeneMatches legal[0]--
+--Output from test partialGeneMatches legal[1]--
+--Output from test partialGeneMatches legal[2]--
+--Output from test partialGeneMatches should correctly return nothing[0]--
+--Output from test partialGeneMatches should correctly return nothing[1]--
+------------- ---------------- ---------------
+
+Testcase: test retrieveGene Single return Through direct call took 0.015 sec
+Testcase: test retrieveGene Multiple return Through direct call took 0.016 sec
+Testcase: test retrieveGene Nonexistent gene Through direct call took 0.015 sec
+Testcase: test retrieveGene Lowercase=no match Through direct call took 0.016 sec
+Testcase: test retrieveGene Null matches all Through direct call took 0.047 sec
+Testcase: test deliverPartialMatches Single return took 0.009 sec
+Testcase: test deliverPartialMatches Multiple return took 0.01 sec
+Testcase: test deliverPartialMatches Nonexistent gene took 0.016 sec
+Testcase: test deliverPartialMatches Lowercase=match took 0.018 sec
+Testcase: test deliverPartialMatches Null=no match took 0.005 sec
+Testcase: test deliverPartialMatchesInJson took 0.029 sec
+Testcase: test partialGeneMatches legal[0] took 0.015 sec
+Testcase: test partialGeneMatches legal[1] took 0.011 sec
+Testcase: test partialGeneMatches legal[2] took 0.01 sec
+Testcase: test partialGeneMatches should correctly return nothing[0] took 0.01 sec
+Testcase: test partialGeneMatches should correctly return nothing[1] took 0.005 sec

@@ -1,0 +1,25 @@
+Testsuite: dport.SharedToolsServiceIntegrationSpec
+Tests run: 6, Failures: 0, Errors: 0, Time elapsed: 0.047 sec
+------------- Standard Output ---------------
+--Output from test urlEncodedListOfPhenotypes smoke--
+--Output from test urlEncodedListOfProteinEffect smoke--
+--Output from test packageUpFiltersForRoundTrip Typical usage--
+--Output from test packageUpFiltersForRoundTrip with empty parameter list--
+--Output from test packageUpEncodedParameters with typical parameter list--
+--Output from test packageUpEncodedParameters with empty parameters--
+------------- ---------------- ---------------
+------------- Standard Error -----------------
+--Output from test urlEncodedListOfPhenotypes smoke--
+--Output from test urlEncodedListOfProteinEffect smoke--
+--Output from test packageUpFiltersForRoundTrip Typical usage--
+--Output from test packageUpFiltersForRoundTrip with empty parameter list--
+--Output from test packageUpEncodedParameters with typical parameter list--
+--Output from test packageUpEncodedParameters with empty parameters--
+------------- ---------------- ---------------
+
+Testcase: test urlEncodedListOfPhenotypes smoke took 0.007 sec
+Testcase: test urlEncodedListOfProteinEffect smoke took 0.008 sec
+Testcase: test packageUpFiltersForRoundTrip Typical usage took 0.009 sec
+Testcase: test packageUpFiltersForRoundTrip with empty parameter list took 0.004 sec
+Testcase: test packageUpEncodedParameters with typical parameter list took 0.009 sec
+Testcase: test packageUpEncodedParameters with empty parameters took 0.003 sec

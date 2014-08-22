@@ -133,12 +133,13 @@ grails.plugin.springsecurity.securityConfigType = "InterceptUrlMap"
 grails.plugin.springsecurity.interceptUrlMap = [
         '/':                  ['permitAll'],
         '/home':             ['permitAll'],
-        '/home/portalHome':             ['permitAll'],
-        '/home/index':             ['permitAll'],
-        '/gene':         ['permitAll'],
-        '/gene/**':         ['permitAll'],
-        '/variant':         ['ROLE_USER'],
+        '/home/**':             ['permitAll'],
+        '/gene/**':         ['ROLE_USER'],
+        '/informational/**':         ['ROLE_USER'],
+        '/region/**':         ['ROLE_USER'],
+        '/trait/**':         ['ROLE_USER'],
         '/variant/**':         ['ROLE_USER'],
+        '/variantSearch/**':         ['ROLE_USER'],
         '/assets/**':         ['permitAll'],
         '/**/js/**':          ['permitAll'],
         '/**/css/**':         ['permitAll'],
@@ -149,6 +150,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/secure/**':         ['ROLE_ADMIN'],
         '/finance/**':        ['ROLE_FINANCE', 'isFullyAuthenticated()'],
 ]
+auth.loginFormUrl='/Security/auth2'
 
 log4j = { root ->
     appenders {
