@@ -29,7 +29,11 @@ a {
   color: #052090; }
 
 a.variantlink {
-  font-weight: bold; }
+    font-weight: bold; }
+a.genelink {
+    font-weight: bold;
+    font-style: italic;
+}
 
 h1 {
   font-size: 44px;
@@ -194,6 +198,12 @@ a.boldlink {
   cursor: pointer;
   text-decoration: underline;
   color: #588fd3; }
+a.boldItlink {
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #588fd3;
+    font-style: italic}
 
 .transcript-annotation {
   padding-left: 30px;

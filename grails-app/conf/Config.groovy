@@ -150,10 +150,14 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/**/favicon.ico':    ['permitAll'],
         '/login/**':          ['permitAll'],
         '/logout/**':         ['permitAll'],
-        '/secure/**':         ['ROLE_ADMIN'],
         '/finance/**':        ['ROLE_FINANCE', 'isFullyAuthenticated()'],
 ]
-auth.loginFormUrl='/Security/auth2'
+grails.plugin.auth.loginFormUrl='/Security/auth2'
+grails.plugin.springsecurity.logout.postOnly = false
+grails.plugin.springsecurity.rememberMe.cookieName="td2PortalRememberMe"
+grails.plugin.springsecurity.rememberMe.key="td2PortalKey"
+grails.plugin.springsecurity.rememberMe.persistent=true
+grails.plugin.logout.postOnly=false
 
 log4j = { root ->
     appenders {
@@ -183,8 +187,9 @@ log4j = { root ->
             appenders {
                 console name: 'stdout', layout: pattern(conversionPattern: "%d [%t] %-5p %c %x - %m%n")
             }
+//            grails.logging.jul.usebridge = true
+//            grails.plugin.springsecurity.debug.useFilter = true
 
-            // DO STUFF RELATED TO DEV ENV
         }
 
         staging {
@@ -204,7 +209,7 @@ log4j = { root ->
                 rollingFile name: 'stacktrace', file: "${logDirectory}/${appName}_stack.log".toString(), maxFileSize: '10MB'
                 //console name: 'stdout', layout: pattern(conversionPattern: "%d [%t] %-5p %c %x - %m%n")
             }
-
+            grails.logging.jul.usebridge = false
             // DO STUFF RELATED TO STAGING ENV
         }
 

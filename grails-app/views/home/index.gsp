@@ -42,9 +42,6 @@
 
 
              <div class="container">
-                 <p>
-                     hello?
-                 </p>
                 %{--<div id="insertButton">--}%
                     %{--<a class="button button-blue" href="javascript:insertButton();">Click me</a> to insert a button dynamically with <code>gapi.signin.render()</code>--}%
                 %{--</div>--}%

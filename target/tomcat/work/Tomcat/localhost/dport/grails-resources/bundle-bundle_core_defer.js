@@ -495,7 +495,7 @@ var UTILS = {
 
             // nearest gene
             if (show_gene) {
-                retVal += "<td><a href='"+geneRootUrl+"/"+vRec[i].CLOSEST_GENE+"' class='boldlink'>"+vRec[i].CLOSEST_GENE+"</td>";
+                retVal += "<td><a  href='"+geneRootUrl+"/"+vRec[i].CLOSEST_GENE+"' class='boldItlink'>"+vRec[i].CLOSEST_GENE+"</td>";
             }
 
             // variant
