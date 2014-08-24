@@ -1,5 +1,5 @@
 Testsuite: dport.GeneControllerIntegrationSpec
-Tests run: 3, Failures: 0, Errors: 0, Time elapsed: 1.025 sec
+Tests run: 3, Failures: 0, Errors: 0, Time elapsed: 0.81 sec
 ------------- Standard Output ---------------
 --Output from test engine that returns data for command completion--
 --Output from test return of the gene info core page--
@@ -11,6 +11,6 @@ Tests run: 3, Failures: 0, Errors: 0, Time elapsed: 1.025 sec
 --Output from test return of the gene info Ajax content--
 ------------- ---------------- ---------------
 
-Testcase: test engine that returns data for command completion took 0.579 sec
-Testcase: test return of the gene info core page took 0.038 sec
-Testcase: test return of the gene info Ajax content took 0.401 sec
+Testcase: test engine that returns data for command completion took 0.341 sec
+Testcase: test return of the gene info core page took 0.046 sec
+Testcase: test return of the gene info Ajax content took 0.397 sec

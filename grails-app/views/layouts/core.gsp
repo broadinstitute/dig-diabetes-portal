@@ -95,6 +95,10 @@
         <div class="container">
             <sec:ifLoggedIn>
                 <div class="rightlinks">
+                    <sec:ifAllGranted roles="ROLE_ADMIN">
+                        <g:link controller='admin' action="users">manage  users</g:link>
+                        &middot;
+                    </sec:ifAllGranted>
                     <sec:loggedInUserInfo field="username"/>   &middot;
                     <g:link controller='logout'>Log Out</g:link>
                 </div>

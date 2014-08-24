@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuites>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="0" name="GeneControllerIntegrationSpec" package="dport" tests="3" time="1.025" timestamp="2014-08-21T18:29:04">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="0" name="GeneControllerIntegrationSpec" package="dport" tests="3" time="0.81" timestamp="2014-08-23T13:31:59">
       <properties />
 
-      <testcase classname="dport.GeneControllerIntegrationSpec" name="test engine that returns data for command completion" time="0.579" />
+      <testcase classname="dport.GeneControllerIntegrationSpec" name="test engine that returns data for command completion" time="0.341" />
 
-      <testcase classname="dport.GeneControllerIntegrationSpec" name="test return of the gene info core page" time="0.038" />
+      <testcase classname="dport.GeneControllerIntegrationSpec" name="test return of the gene info core page" time="0.046" />
 
-      <testcase classname="dport.GeneControllerIntegrationSpec" name="test return of the gene info Ajax content" time="0.401" />
+      <testcase classname="dport.GeneControllerIntegrationSpec" name="test return of the gene info Ajax content" time="0.397" />
 
       <system-out><![CDATA[--Output from test engine that returns data for command completion--
 --Output from test return of the gene info core page--
@@ -20,10 +20,10 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="1" name="GeneIntegrationSpec" package="dport" tests="1" time="0.055" timestamp="2014-08-21T18:29:06">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="1" name="GeneIntegrationSpec" package="dport" tests="1" time="0.04" timestamp="2014-08-23T13:32:00">
       <properties />
 
-      <testcase classname="dport.GeneIntegrationSpec" name="test functions on gene domain object" time="0.038" />
+      <testcase classname="dport.GeneIntegrationSpec" name="test functions on gene domain object" time="0.03" />
 
       <system-out><![CDATA[--Output from test functions on gene domain object--
 ]]></system-out>
@@ -32,40 +32,40 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="2" name="GeneManagementServiceIntegrationSpec" package="dport" tests="16" time="0.264" timestamp="2014-08-21T18:29:06">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="2" name="GeneManagementServiceIntegrationSpec" package="dport" tests="16" time="0.233" timestamp="2014-08-23T13:32:00">
       <properties />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Single return Through direct call" time="0.015" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Single return Through direct call" time="0.014" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Multiple return Through direct call" time="0.016" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Multiple return Through direct call" time="0.013" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Nonexistent gene Through direct call" time="0.015" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Nonexistent gene Through direct call" time="0.013" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Lowercase=no match Through direct call" time="0.016" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Lowercase=no match Through direct call" time="0.014" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Null matches all Through direct call" time="0.047" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Null matches all Through direct call" time="0.056" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Single return" time="0.0090" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Single return" time="0.0080" />
 
       <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Multiple return" time="0.01" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Nonexistent gene" time="0.016" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Nonexistent gene" time="0.013" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Lowercase=match" time="0.018" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Lowercase=match" time="0.014" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Null=no match" time="0.0050" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Null=no match" time="0.0040" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatchesInJson" time="0.029" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatchesInJson" time="0.019" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches legal[0]" time="0.015" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches legal[0]" time="0.011" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches legal[1]" time="0.011" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches legal[1]" time="0.0080" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches legal[2]" time="0.01" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches legal[2]" time="0.0080" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches should correctly return nothing[0]" time="0.01" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches should correctly return nothing[0]" time="0.0080" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches should correctly return nothing[1]" time="0.0050" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches should correctly return nothing[1]" time="0.0040" />
 
       <system-out><![CDATA[--Output from test retrieveGene Single return Through direct call--
 --Output from test retrieveGene Multiple return Through direct call--
@@ -104,10 +104,10 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="3" name="HomeControllerIntegrationSpec" package="dport" tests="1" time="0.014" timestamp="2014-08-21T18:29:06">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="3" name="HomeControllerIntegrationSpec" package="dport" tests="1" time="0.016" timestamp="2014-08-23T13:32:00">
       <properties />
 
-      <testcase classname="dport.HomeControllerIntegrationSpec" name="test the main page of the application.  The first place that everybody goes" time="0.0080" />
+      <testcase classname="dport.HomeControllerIntegrationSpec" name="test the main page of the application.  The first place that everybody goes" time="0.0090" />
 
       <system-out><![CDATA[--Output from test the main page of the application.  The first place that everybody goes--
 ]]></system-out>
@@ -116,7 +116,7 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="4" name="InformationalControllerIntegrationSpec" package="dport" tests="7" time="0.577" timestamp="2014-08-21T18:29:06">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="4" name="InformationalControllerIntegrationSpec" package="dport" tests="7" time="0.635" timestamp="2014-08-23T13:32:00">
       <properties />
 
       <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the about page" time="0.0050" />
@@ -125,13 +125,13 @@
 
       <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the hgat page" time="0.0040" />
 
-      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the t2dgenes page" time="0.0040" />
+      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the t2dgenes page" time="0.0050" />
 
-      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the t2dgenesection page" time="0.34" />
+      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the t2dgenesection page" time="0.39" />
 
       <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the got2d page" time="0.0050" />
 
-      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the got2dsection page" time="0.208" />
+      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the got2dsection page" time="0.216" />
 
       <system-out><![CDATA[--Output from test the about page--
 --Output from test the contact page--
@@ -152,10 +152,10 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="5" name="PhenotypeIntegrationSpec" package="dport" tests="1" time="0.01" timestamp="2014-08-21T18:29:06">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="5" name="PhenotypeIntegrationSpec" package="dport" tests="1" time="0.011" timestamp="2014-08-23T13:32:01">
       <properties />
 
-      <testcase classname="dport.PhenotypeIntegrationSpec" name="test functions on phenotype domain object" time="0.0050" />
+      <testcase classname="dport.PhenotypeIntegrationSpec" name="test functions on phenotype domain object" time="0.0060" />
 
       <system-out><![CDATA[--Output from test functions on phenotype domain object--
 ]]></system-out>
@@ -164,10 +164,10 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="6" name="ProteinEffectIntegrationSpec" package="dport" tests="1" time="0.011" timestamp="2014-08-21T18:29:06">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="6" name="ProteinEffectIntegrationSpec" package="dport" tests="1" time="0.01" timestamp="2014-08-23T13:32:01">
       <properties />
 
-      <testcase classname="dport.ProteinEffectIntegrationSpec" name="test functions on gene domain object" time="0.0060" />
+      <testcase classname="dport.ProteinEffectIntegrationSpec" name="test functions on gene domain object" time="0.0050" />
 
       <system-out><![CDATA[--Output from test functions on gene domain object--
 ]]></system-out>
@@ -176,12 +176,12 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="7" name="RegionControllerIntegrationSpec" package="dport" tests="2" time="2.076" timestamp="2014-08-21T18:29:07">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="7" name="RegionControllerIntegrationSpec" package="dport" tests="2" time="3.142" timestamp="2014-08-23T13:32:01">
       <properties />
 
-      <testcase classname="dport.RegionControllerIntegrationSpec" name="test the search a region page" time="0.249" />
+      <testcase classname="dport.RegionControllerIntegrationSpec" name="test the search a region page" time="0.147" />
 
-      <testcase classname="dport.RegionControllerIntegrationSpec" name="test the search a region by ajax page" time="1.819" />
+      <testcase classname="dport.RegionControllerIntegrationSpec" name="test the search a region by ajax page" time="2.979" />
 
       <system-out><![CDATA[--Output from test the search a region page--
 --Output from test the search a region by ajax page--
@@ -192,20 +192,20 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="8" name="SharedToolsServiceIntegrationSpec" package="dport" tests="6" time="0.047" timestamp="2014-08-21T18:29:09">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="8" name="SharedToolsServiceIntegrationSpec" package="dport" tests="6" time="0.044" timestamp="2014-08-23T13:32:04">
       <properties />
 
       <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test urlEncodedListOfPhenotypes smoke" time="0.0070" />
 
-      <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test urlEncodedListOfProteinEffect smoke" time="0.0080" />
+      <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test urlEncodedListOfProteinEffect smoke" time="0.0060" />
 
-      <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpFiltersForRoundTrip Typical usage" time="0.0090" />
+      <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpFiltersForRoundTrip Typical usage" time="0.0080" />
 
       <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpFiltersForRoundTrip with empty parameter list" time="0.0040" />
 
       <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpEncodedParameters with typical parameter list" time="0.0080" />
 
-      <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpEncodedParameters with empty parameters" time="0.0030" />
+      <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpEncodedParameters with empty parameters" time="0.0040" />
 
       <system-out><![CDATA[--Output from test urlEncodedListOfPhenotypes smoke--
 --Output from test urlEncodedListOfProteinEffect smoke--
@@ -224,20 +224,20 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="9" name="TraitControllerIntegrationSpec" package="dport" tests="6" time="25.921" timestamp="2014-08-21T18:29:09">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="9" name="TraitControllerIntegrationSpec" package="dport" tests="6" time="28.962" timestamp="2014-08-23T13:32:04">
       <properties />
 
       <testcase classname="dport.TraitControllerIntegrationSpec" name="test the traitInfo page" time="0.0050" />
 
-      <testcase classname="dport.TraitControllerIntegrationSpec" name="test the search a trait (and potentially  ignificance) page" time="0.018" />
+      <testcase classname="dport.TraitControllerIntegrationSpec" name="test the search a trait (and potentially  ignificance) page" time="0.0060" />
 
-      <testcase classname="dport.TraitControllerIntegrationSpec" name="test the search a trait by ajax page" time="0.699" />
+      <testcase classname="dport.TraitControllerIntegrationSpec" name="test the search a trait by ajax page" time="0.829" />
 
-      <testcase classname="dport.TraitControllerIntegrationSpec" name="test the association statistics across 25 traits by ajax page" time="0.634" />
+      <testcase classname="dport.TraitControllerIntegrationSpec" name="test the association statistics across 25 traits by ajax page" time="0.663" />
 
       <testcase classname="dport.TraitControllerIntegrationSpec" name="test the search a traits across region page" time="0.0060" />
 
-      <testcase classname="dport.TraitControllerIntegrationSpec" name="test traitVariantCrossAjax" time="24.552" />
+      <testcase classname="dport.TraitControllerIntegrationSpec" name="test traitVariantCrossAjax" time="27.449" />
 
       <system-out><![CDATA[--Output from test the traitInfo page--
 --Output from test the search a trait (and potentially  ignificance) page--
@@ -256,12 +256,12 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="10" name="VariantControllerIntegrationSpec" package="dport" tests="2" time="0.102" timestamp="2014-08-21T18:29:35">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="10" name="VariantControllerIntegrationSpec" package="dport" tests="2" time="0.184" timestamp="2014-08-23T13:32:33">
       <properties />
 
-      <testcase classname="dport.VariantControllerIntegrationSpec" name="test the variantInfo page" time="0.0050" />
+      <testcase classname="dport.VariantControllerIntegrationSpec" name="test the variantInfo page" time="0.016" />
 
-      <testcase classname="dport.VariantControllerIntegrationSpec" name="test the variantAjax data retrieval" time="0.092" />
+      <testcase classname="dport.VariantControllerIntegrationSpec" name="test the variantAjax data retrieval" time="0.164" />
 
       <system-out><![CDATA[--Output from test the variantInfo page--
 --Output from test the variantAjax data retrieval--
@@ -272,10 +272,10 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="11" name="VariantSearchControllerIntegrationSpec" package="dport" tests="1" time="0.0050" timestamp="2014-08-21T18:29:35">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="11" name="VariantSearchControllerIntegrationSpec" package="dport" tests="1" time="0.0050" timestamp="2014-08-23T13:32:33">
       <properties />
 
-      <testcase classname="dport.VariantSearchControllerIntegrationSpec" name="test variantSearch" time="0.0040" />
+      <testcase classname="dport.VariantSearchControllerIntegrationSpec" name="test variantSearch" time="0.0050" />
 
       <system-out><![CDATA[--Output from test variantSearch--
 ]]></system-out>

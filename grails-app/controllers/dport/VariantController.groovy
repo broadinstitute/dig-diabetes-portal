@@ -42,23 +42,6 @@ class VariantController {
     }
 
 
-//
-//    def variantSearch() {
-//        String receivedParameters = request.parameters.toString()
-//        if (receivedParameters)    {
-//            LinkedHashMap<String, String> parsedFilterParameters = filterManagementService.parseVariantSearchParameters(request.parameters,false)
-//            if  (parsedFilterParameters)  {
-//                render (view: 'variantSearchResults',
-//                        model:[filter: parsedFilterParameters.filters,
-//                               filterDescriptions: parsedFilterParameters.filterDescriptions] )
-//            }  else {
-//                render("<h1> I heard you, but no valid JSON</h1>")
-//            }
-//        }
-//
-//
-//    }
-
 
 
 

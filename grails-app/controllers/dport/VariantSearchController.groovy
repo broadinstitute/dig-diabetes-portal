@@ -38,12 +38,18 @@ class VariantSearchController {
      * @return
      */
     def variantSearchRequest() {
-        String receivedParameters = request.parameters.toString()
-        if (receivedParameters)    {
-            LinkedHashMap<String, String> parsedFilterParameters = filterManagementService.parseVariantSearchParameters(request.parameters,false)
+        //String receivedParameters = request.parameters.toString()
+        //String receivedParameters = params.toString();
+        Map paramsMap = new HashMap()
+
+        params.each {key, value ->
+            paramsMap.put(key, value)
+        }
+        if (paramsMap)    {
+            LinkedHashMap<String, String> parsedFilterParameters = filterManagementService.parseVariantSearchParameters(paramsMap,false)
             if  (parsedFilterParameters)  {
 
-                Integer dataSetDetermination = filterManagementService.distinguishBetweenDataSets ( request.parameters )
+                Integer dataSetDetermination = filterManagementService.distinguishBetweenDataSets ( paramsMap )
                 String encodedFilters = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters )
                 String encodedParameters =  sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
                 String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
@@ -145,7 +151,9 @@ class VariantSearchController {
      * @return
      */
     def variantSearchAjax() {
-        String filters=params.getRequest().parameters.keySet()[0]
+       // String filters=params.getRequest().parameters.keySet()[0]
+        String filtersRaw=params['keys']
+        String filters=URLDecoder.decode(filtersRaw)
         println(filters);
         JSONObject jsonObject =  restServerService.searchGenomicRegionByCustomFilters(filters)
         render(status:200, contentType:"application/json") {

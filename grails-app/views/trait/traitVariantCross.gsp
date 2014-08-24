@@ -213,7 +213,7 @@
 
                 <p>
                     The table below shows all GWAS variants in this region available in this portal.
-                    Columns represent each of the <a class="boldlink" href="/about/hgat">25 traits</a> that were studied in meta-analyses included in this portal.
+                    Columns represent each of the <a class="boldlink" href="${createLink(controller:'informational', action:'hgat')}">25 traits</a> that were studied in meta-analyses included in this portal.
                 Rows represent variants, in genomic order.
                 All variants are shown, regardless of association.
                 </p>

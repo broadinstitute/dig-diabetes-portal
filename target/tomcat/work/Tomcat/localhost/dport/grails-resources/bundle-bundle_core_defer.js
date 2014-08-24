@@ -775,8 +775,10 @@ var UTILS = {
         loading.show();
         $.ajax({
             type:'POST',
-            data:params,
+            cache:false,
+            data:{'keys':params},
             url:variantSearchAjaxUrl,
+            async:true,
             success:function(data,textStatus){
                 UTILS.fillTheVariantTable(data,
                     show_gene,
@@ -790,7 +792,7 @@ var UTILS = {
             },
             error:function(XMLHttpRequest,textStatus,errorThrown){
                 loading.hide();
-                errorReporter(jqXHR, exception) ;
+                //errorReporter(XMLHttpRequest, exception) ;
             }
         });
     }

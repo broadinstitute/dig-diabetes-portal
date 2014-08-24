@@ -1,5 +1,6 @@
 package dport
 
+import dport.people.User
 import grails.transaction.Transactional
 
 @Transactional
@@ -44,6 +45,32 @@ class SharedToolsService {
         }
         return java.net.URLEncoder.encode( sb.toString())
     }
+
+
+
+    /***
+     * urlEncodedListOfProteinEffect delivers the information in of the ProteinEffect domain object
+     * For convenient delivery to the browser
+     * @return
+     */
+    public String urlEncodedListOfUsers() {
+        List<User> userList=User.list()
+        StringBuilder sb   = new StringBuilder ("")
+        int numberOfUsers  =  userList.size()
+        int iterationCount  = 0
+        for (User user in userList){
+            sb<< (user.username + ":" + (user.enabled?'T':'F') + ":" + (user.passwordExpired?'T':'F'))
+            iterationCount++
+            if (iterationCount  < numberOfUsers){
+                sb<< "~"
+            }
+        }
+        return java.net.URLEncoder.encode( sb.toString())
+    }
+
+
+
+
 
     /***
      * packageUpFiltersForRoundTrip get back a list of filters that we need to pass to the backend. We package them up for a round trip to the client
