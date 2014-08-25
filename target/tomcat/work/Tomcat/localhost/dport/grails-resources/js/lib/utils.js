@@ -490,7 +490,7 @@ var UTILS = {
 
             // nearest gene
             if (show_gene) {
-                retVal += "<td><a href='"+geneRootUrl+"/"+vRec[i].CLOSEST_GENE+"' class='boldlink'>"+vRec[i].CLOSEST_GENE+"</td>";
+                retVal += "<td><a  href='"+geneRootUrl+"/"+vRec[i].CLOSEST_GENE+"' class='boldItlink'>"+vRec[i].CLOSEST_GENE+"</td>";
             }
 
             // variant
@@ -770,8 +770,10 @@ var UTILS = {
         loading.show();
         $.ajax({
             type:'POST',
-            data:params,
+            cache:false,
+            data:{'keys':params},
             url:variantSearchAjaxUrl,
+            async:true,
             success:function(data,textStatus){
                 UTILS.fillTheVariantTable(data,
                     show_gene,
@@ -785,7 +787,7 @@ var UTILS = {
             },
             error:function(XMLHttpRequest,textStatus,errorThrown){
                 loading.hide();
-                errorReporter(jqXHR, exception) ;
+                //errorReporter(XMLHttpRequest, exception) ;
             }
         });
     }
@@ -860,7 +862,7 @@ var UTILS = {
 
             retVal += "<td><a class='boldlink' href='../variant/variantInfo/"+ variant.DBSNP_ID+"'>"+ variant.DBSNP_ID+"</a></td>";
 
-            retVal += "<td><a class='boldlink' href='../gene/geneInfo/"+ variant.CLOSEST_GENE+"'>"+ variant.CLOSEST_GENE+"</a></td>";
+            retVal += "<td><a class='boldItlink' href='../gene/geneInfo/"+ variant.CLOSEST_GENE+"'>"+ variant.CLOSEST_GENE+"</a></td>";
 
             retVal += "<td>"+ variant.PVALUE.toPrecision(3)+"</td>";
 

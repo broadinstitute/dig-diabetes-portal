@@ -131,15 +131,20 @@ environments {
 //security stuff
 grails.plugin.springsecurity.securityConfigType = "InterceptUrlMap"
 grails.plugin.springsecurity.interceptUrlMap = [
-        '/':                  ['permitAll'],
-        '/home':             ['permitAll'],
-        '/home/**':             ['permitAll'],
-        '/gene/**':         ['ROLE_USER'],
-        '/informational/**':         ['ROLE_USER'],
-        '/region/**':         ['ROLE_USER'],
-        '/trait/**':         ['ROLE_USER'],
-        '/variant/**':         ['ROLE_USER'],
-        '/variantSearch/**':         ['ROLE_USER'],
+        '/':                        ['permitAll'],
+        '/home':                    ['permitAll'],
+        '/home/index':              ['ROLE_USER'],
+        '/home/portalHome':         ['ROLE_USER'],
+        '/system/**':               ['ROLE_SYSTEM'],
+        '/admin/resetPassword':     ['permitAll'],
+        '/admin/updatePassword/**': ['permitAll'],
+        '/admin/**':            ['ROLE_ADMIN'],
+        '/gene/**':             ['ROLE_USER'],
+        '/informational/**':    ['ROLE_USER'],
+        '/region/**':           ['ROLE_USER'],
+        '/trait/**':            ['ROLE_USER'],
+        '/variant/**':          ['ROLE_USER'],
+        '/variantSearch/**':    ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/assets/**':         ['permitAll'],
         '/**/js/**':          ['permitAll'],
         '/**/css/**':         ['permitAll'],
@@ -147,10 +152,24 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/**/favicon.ico':    ['permitAll'],
         '/login/**':          ['permitAll'],
         '/logout/**':         ['permitAll'],
-        '/secure/**':         ['ROLE_ADMIN'],
         '/finance/**':        ['ROLE_FINANCE', 'isFullyAuthenticated()'],
 ]
-auth.loginFormUrl='/Security/auth2'
+grails.plugin.auth.loginFormUrl='/Security/auth2'
+grails.plugin.springsecurity.logout.postOnly = false
+grails.plugin.springsecurity.rememberMe.cookieName="td2PortalRememberMe"
+grails.plugin.springsecurity.rememberMe.key="td2PortalKey"
+grails.plugin.springsecurity.rememberMe.persistent=true
+grails.plugin.logout.postOnly=false
+grails.plugin.springsecurity.apf.storeLastUsername=true
+grails.plugin.springsecurity.failureHandler.exceptionMappings = [
+        'org.springframework.security.authentication.CredentialsExpiredException': '/admin/resetPassword'
+]
+//grails.plugin.springsecurity.failureHandler.exceptionMappings = [
+//        'org.springframework.security.authentication.LockedException':             '/user/accountLocked',
+//        'org.springframework.security.authentication.DisabledException':           '/user/accountDisabled',
+//        'org.springframework.security.authentication.AccountExpiredException':     '/user/accountExpired',
+//        'org.springframework.security.authentication.CredentialsExpiredException': '/user/passwordExpired'
+//]
 
 log4j = { root ->
     appenders {
@@ -173,6 +192,7 @@ log4j = { root ->
             'grails.app.service',
             'grails.plugins.hawkeventing',
             'net.sf.ehcache.hibernate'
+    info 'grails.app.service'
     root.level = org.apache.log4j.Level.INFO
 
     environments {
@@ -180,8 +200,9 @@ log4j = { root ->
             appenders {
                 console name: 'stdout', layout: pattern(conversionPattern: "%d [%t] %-5p %c %x - %m%n")
             }
+//            grails.logging.jul.usebridge = true
+//            grails.plugin.springsecurity.debug.useFilter = true
 
-            // DO STUFF RELATED TO DEV ENV
         }
 
         staging {
@@ -201,7 +222,7 @@ log4j = { root ->
                 rollingFile name: 'stacktrace', file: "${logDirectory}/${appName}_stack.log".toString(), maxFileSize: '10MB'
                 //console name: 'stdout', layout: pattern(conversionPattern: "%d [%t] %-5p %c %x - %m%n")
             }
-
+            grails.logging.jul.usebridge = false
             // DO STUFF RELATED TO STAGING ENV
         }
 

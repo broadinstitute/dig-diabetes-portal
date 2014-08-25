@@ -48,8 +48,8 @@ class FilterManagementServiceUnitSpec extends Specification {
         LinkedHashMap  buildingFilters = [filters:new ArrayList<String>(),
                                           filterDescriptions:new ArrayList<String>(),
                                           parameterEncoding:new ArrayList<String>()]
-        List<String> r1 = ["0.0001"]
-        List<String> r2 = ["33"]
+        String r1 = "0.0001"
+        String r2 = "33"
         HashMap incomingParameters1 = [ "ethnicity_af_AA-min": r1]
         HashMap incomingParameters2 = [ "ethnicity_af_AA-min": r2]
         when:

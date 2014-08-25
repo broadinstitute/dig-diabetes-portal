@@ -7,8 +7,9 @@ class HomeController {
     GrailsApplication grailsApplication
 
     def index = {
-        java.util.LinkedHashMap variableStrings = [:]
-         ["vars": variableStrings]
+//        java.util.LinkedHashMap variableStrings = [:]
+//         ["vars": variableStrings]
+        render(view:'portalHome')
     }
 
     def portalHome = {

@@ -177,7 +177,7 @@ class FilterManagementService {
 
         // We need to use  determineDataSet First, since it determines the data type operand that is passed to determineThreshold
         LinkedHashMap passInDataset = [:]
-        passInDataset["datatype"] = [dataset]
+        passInDataset["datatype"] = dataset
 
         buildingFilters = parameterizedDataSet (  buildingFilters, passInDataset,significance)
 
@@ -189,9 +189,9 @@ class FilterManagementService {
                     (extractedNumbers["chromosomeNumber"]) ) {
 
                 LinkedHashMap packagedParameters = [:]
-                packagedParameters ["region_chrom_input"]  =  [extractedNumbers["chromosomeNumber"]]
-                packagedParameters ["region_start_input"]  =  [extractedNumbers["startExtent"]]
-                packagedParameters ["region_stop_input"]  =  [extractedNumbers["endExtent"]]
+                packagedParameters ["region_chrom_input"]  =  extractedNumbers["chromosomeNumber"]
+                packagedParameters ["region_start_input"]  =  extractedNumbers["startExtent"]
+                packagedParameters ["region_stop_input"]  =  extractedNumbers["endExtent"]
                 buildingFilters = setRegion (buildingFilters,  packagedParameters)
             }
 
@@ -266,7 +266,7 @@ class FilterManagementService {
                 String ethnicity = requestPortionList[1]
                 int ethnicityFieldIndex = 0
                 if (ethnicity == 'exchp'){ // we have no ethnicity. Everything comes from the European exome chipset
-                    switch ( requestPortionList[0] ){
+                    switch ( requestPortionList ){
                         case "total":
                             filters << retrieveParameterizedFilterString("setExomeChipMinimum","",0)
                             filterDescriptions << "Minor allele frequency in exome chip dataset is greater than or equal to zero"
@@ -307,7 +307,7 @@ class FilterManagementService {
                         case 'HS': ethnicityFieldIndex = 16; break;
                         default: ethnicityFieldIndex = 8;
                     }
-                    switch ( requestPortionList[0] ){
+                    switch ( requestPortionList){
                         case "total":
                             filters << retrieveParameterizedFilterString("setEthnicityMinimumAbsolute",ethnicity,0)
                             filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is greater than 0"
@@ -341,7 +341,7 @@ class FilterManagementService {
                 }
 
             } else {  // we can put specialized searches here
-                switch (requestPortionList[0]) {
+                switch (requestPortionList) {
                     case "lof":
                         filters << retrieveFilterString ("lof")
                         filterDescriptions << "Variant predicted to result in loss of function"
@@ -365,7 +365,7 @@ class FilterManagementService {
     public  int distinguishBetweenDataSets (HashMap incomingParameters){
         int returnValue = 0;
         if  (incomingParameters.containsKey("datatype"))  {      // user has requested a particular data set. Without explicit request what is the default?
-            String requestedDataSet =  incomingParameters ["datatype"][0]
+            String requestedDataSet =  incomingParameters ["datatype"]
 
             switch (requestedDataSet)   {
                 case  "gwas":
@@ -576,7 +576,7 @@ class FilterManagementService {
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
         // set threshold
         if  (incomingParameters.containsKey("significance"))  {      // user has requested a particular data set. Without explicit request what is the default?
-            String requestedDataSet =  incomingParameters ["significance"][0]
+            String requestedDataSet =  incomingParameters ["significance"]
             switch (requestedDataSet)   {
                 case  "genomewide":
                     filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,5e-8 as BigDecimal) 
@@ -591,7 +591,7 @@ class FilterManagementService {
                 case  "custom":
                     if (incomingParameters.containsKey("custom_significance_input")) {
                         parameterEncoding << "2:2"
-                        String stringCustomThreshold = incomingParameters["custom_significance_input"][0]
+                        String stringCustomThreshold = incomingParameters["custom_significance_input"]
                         BigDecimal numericCustomThreshold
                         try {
                             numericCustomThreshold = new BigDecimal(stringCustomThreshold)
@@ -625,7 +625,7 @@ class FilterManagementService {
         // set gene to search
         if (incomingParameters.containsKey("region_gene_input")) {
             // user has requested a particular data set. Without explicit request what is the default?
-            String stringParameter = incomingParameters["region_gene_input"][0]
+            String stringParameter = incomingParameters["region_gene_input"]
             filters << retrieveParameterizedFilterString("setRegionGeneSpecification", stringParameter, 0) 
             filterDescriptions << "In the gene ${stringParameter}"
             parameterEncoding << "4:${stringParameter}"
@@ -634,10 +634,10 @@ class FilterManagementService {
         // set gene to search
         if (incomingParameters.containsKey("region_chrom_input")) {
             // user has requested a particular data set. Without explicit request what is the default?
-            String stringParameter = incomingParameters["region_chrom_input"][0]
+            String stringParameter = incomingParameters["region_chrom_input"]
             java.util.regex.Matcher chromosomeNumber = stringParameter =~ /\d+/
-            if (chromosomeNumber)   {
-                filters << retrieveParameterizedFilterString("setRegionChromosomeSpecification", chromosomeNumber[0].toString(), 0) 
+            if (chromosomeNumber[0])   {
+                filters << retrieveParameterizedFilterString("setRegionChromosomeSpecification", chromosomeNumber[0].toString(), 0)
                 filterDescriptions << "Chromosome is equal to ${stringParameter}"
                 parameterEncoding << "5:${stringParameter}"
             } else {
@@ -649,7 +649,7 @@ class FilterManagementService {
         // set beginning chromosome extent
         if (incomingParameters.containsKey("region_start_input")) {
             // user has requested a particular data set. Without explicit request what is the default?
-            String stringParameter = incomingParameters["region_start_input"][0]
+            String stringParameter = incomingParameters["region_start_input"]
             Integer extentDelimiter
             Boolean errorFree = true
             try {
@@ -670,7 +670,7 @@ class FilterManagementService {
         // set ending chromosome extent
         if (incomingParameters.containsKey("region_stop_input")) {
             // user has requested a particular data set. Without explicit request what is the default?
-            String stringParameter = incomingParameters["region_stop_input"][0]
+            String stringParameter = incomingParameters["region_stop_input"]
             Integer extentDelimiter
             Boolean errorFree = true
             try {
@@ -711,7 +711,7 @@ class FilterManagementService {
                // work with individual ethnicities
                String ethnicityReference  =  "ethnicity_af_" + ethnicity[1] + "-" +minOrMax
                if (incomingParameters.containsKey(ethnicityReference)) {
-                   String specificAlleleFrequency = incomingParameters[ethnicityReference][0]
+                   String specificAlleleFrequency = incomingParameters[ethnicityReference]
                    if ((specificAlleleFrequency) &&
                            (specificAlleleFrequency.length() > 0)) {
                        Boolean errorFree = true
@@ -726,11 +726,11 @@ class FilterManagementService {
                        if (errorFree) {
                            if (minOrMax == 'min') {
                                filters << retrieveParameterizedFilterString("setEthnicityMinimum", ethnicity[1], alleleFrequency) 
-                               filterDescriptions << "Minor allele frequency in ${ethnicity[0]} is greater than or equal to ${alleleFrequency}"
+                               filterDescriptions << "Minor allele frequency in ${ethnicity} is greater than or equal to ${alleleFrequency}"
                                parameterEncoding << "${fieldSpecifier}:${alleleFrequency}"
                            } else {
                                filters << retrieveParameterizedFilterString("setEthnicityMaximum", ethnicity[1], alleleFrequency) 
-                               filterDescriptions << "Minor allele frequency in ${ethnicity[0]} is less than or equal to  ${alleleFrequency}"
+                               filterDescriptions << "Minor allele frequency in ${ethnicity} is less than or equal to  ${alleleFrequency}"
                                parameterEncoding << "${fieldSpecifier}:${alleleFrequency}"
                            }
 
@@ -745,7 +745,7 @@ class FilterManagementService {
        for (String minOrMax in minMax) {
             String ethnicityReference  =  "ethnicity_af_sigma-" +minOrMax
             if (incomingParameters.containsKey(ethnicityReference)) {
-                String specificAlleleFrequency = incomingParameters[ethnicityReference][0]
+                String specificAlleleFrequency = incomingParameters[ethnicityReference]
                 if ((specificAlleleFrequency) &&
                         (specificAlleleFrequency.length() > 0)) {
                     Boolean errorFree = true
@@ -822,7 +822,7 @@ class FilterManagementService {
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
         if  (incomingParameters.containsKey("predictedEffects"))  {      // user has requested a particular data set. Without explicit request what is the default?
-            String predictedEffects =  incomingParameters ["predictedEffects"][0]
+            String predictedEffects =  incomingParameters ["predictedEffects"]
 
             switch (predictedEffects)   {
                 case  "all-effects":
@@ -864,7 +864,7 @@ class FilterManagementService {
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
         if  (incomingParameters.containsKey("predictedEffects") &&
-            (incomingParameters ["predictedEffects"][0] == "missense"))  { // we only perform this processing if the user
+            (incomingParameters ["predictedEffects"]== "missense"))  { // we only perform this processing if the user
                                                                            // is asking about missense mutation
 
             // There are three types of predictions to consider, corresponding to checkboxes
@@ -876,7 +876,7 @@ class FilterManagementService {
 
             //  polyphen2
             if (incomingParameters.containsKey("polyphenSelect")){
-                String choiceOfOptions =  incomingParameters["polyphenSelect"][0]
+                String choiceOfOptions =  incomingParameters["polyphenSelect"]
                 filters <<  retrieveParameterizedFilterString("polyphenSelect",choiceOfOptions,0.0)
                 filterDescriptions << "PolyPhen2 prediction is equal to ${choiceOfOptions}"
                 parameterEncoding << "24:${choiceOfOptions}"
@@ -884,7 +884,7 @@ class FilterManagementService {
 
             //  SIFT
             if (incomingParameters.containsKey("siftSelect")){
-                String choiceOfOptions =  incomingParameters["siftSelect"][0]
+                String choiceOfOptions =  incomingParameters["siftSelect"]
                 filters <<  retrieveParameterizedFilterString("siftSelect",choiceOfOptions,0.0)
                 filterDescriptions << "SIFT prediction is equal to ${choiceOfOptions}"
                 parameterEncoding << "25:${choiceOfOptions}"
@@ -892,7 +892,7 @@ class FilterManagementService {
 
             //  Condel
             if (incomingParameters.containsKey("condelSelect")){
-                String choiceOfOptions =  incomingParameters["condelSelect"][0]
+                String choiceOfOptions =  incomingParameters["condelSelect"]
                 filters <<  retrieveParameterizedFilterString("condelSelect",choiceOfOptions,0.0)
                 filterDescriptions << "Condel prediction is equal to ${choiceOfOptions}"
                 parameterEncoding << "26:${choiceOfOptions}"

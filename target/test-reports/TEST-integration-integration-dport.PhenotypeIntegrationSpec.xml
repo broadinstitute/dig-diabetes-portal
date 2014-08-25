@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="GPA84-952" name="dport.PhenotypeIntegrationSpec" tests="1" time="0.01" timestamp="2014-08-21T18:29:06">
+<testsuite errors="0" failures="0" hostname="Cognomen" name="dport.PhenotypeIntegrationSpec" tests="1" time="0.009" timestamp="2014-08-25T01:10:12">
   <properties />
-  <testcase classname="dport.PhenotypeIntegrationSpec" name="test functions on phenotype domain object" time="0.0050" />
+  <testcase classname="dport.PhenotypeIntegrationSpec" name="test functions on phenotype domain object" time="0.005" />
   <system-out><![CDATA[--Output from test functions on phenotype domain object--
 ]]></system-out>
   <system-err><![CDATA[--Output from test functions on phenotype domain object--

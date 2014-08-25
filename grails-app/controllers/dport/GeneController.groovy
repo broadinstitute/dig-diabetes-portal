@@ -25,7 +25,6 @@ class GeneController {
      * with the Jace on
      * @return
      */
-    @Secured (['ROLE_USER'])
     def geneInfo() {
         String geneToStartWith = params.id
         if (geneToStartWith)  {
