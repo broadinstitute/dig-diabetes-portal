@@ -135,8 +135,8 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/home':                ['permitAll'],
         '/home/index':          ['permitAll'],
         '/home/portalHome':     ['ROLE_USER'],
-        '/mgr/admin/**':     ['ROLE_ADMIN'],
-        '/admin/**':     ['ROLE_ADMIN'],
+        '/system/**':           ['ROLE_SYSTEM'],
+        '/admin/**':            ['ROLE_ADMIN'],
         '/gene/**':             ['ROLE_USER'],
         '/informational/**':    ['ROLE_USER'],
         '/region/**':           ['ROLE_USER'],
@@ -180,6 +180,7 @@ log4j = { root ->
             'grails.app.service',
             'grails.plugins.hawkeventing',
             'net.sf.ehcache.hibernate'
+    info 'grails.app.service'
     root.level = org.apache.log4j.Level.INFO
 
     environments {

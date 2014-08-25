@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="Cognomen" name="dport.GeneManagementServiceIntegrationSpec" tests="16" time="0.233" timestamp="2014-08-23T13:32:00">
+<testsuite errors="0" failures="0" hostname="Cognomen" name="dport.GeneManagementServiceIntegrationSpec" tests="16" time="0.209" timestamp="2014-08-25T01:10:12">
   <properties />
-  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Single return Through direct call" time="0.014" />
+  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Single return Through direct call" time="0.012" />
   <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Multiple return Through direct call" time="0.013" />
-  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Nonexistent gene Through direct call" time="0.013" />
-  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Lowercase=no match Through direct call" time="0.014" />
-  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Null matches all Through direct call" time="0.056" />
-  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Single return" time="0.0080" />
-  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Multiple return" time="0.01" />
-  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Nonexistent gene" time="0.013" />
-  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Lowercase=match" time="0.014" />
-  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Null=no match" time="0.0040" />
-  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatchesInJson" time="0.019" />
-  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches legal[0]" time="0.011" />
-  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches legal[1]" time="0.0080" />
-  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches legal[2]" time="0.0080" />
-  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches should correctly return nothing[0]" time="0.0080" />
-  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches should correctly return nothing[1]" time="0.0040" />
+  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Nonexistent gene Through direct call" time="0.012" />
+  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Lowercase=no match Through direct call" time="0.012" />
+  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Null matches all Through direct call" time="0.048" />
+  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Single return" time="0.007" />
+  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Multiple return" time="0.007" />
+  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Nonexistent gene" time="0.011" />
+  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Lowercase=match" time="0.013" />
+  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Null=no match" time="0.004" />
+  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatchesInJson" time="0.023" />
+  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches legal[0]" time="0.009" />
+  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches legal[1]" time="0.006" />
+  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches legal[2]" time="0.006" />
+  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches should correctly return nothing[0]" time="0.007" />
+  <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches should correctly return nothing[1]" time="0.004" />
   <system-out><![CDATA[--Output from test retrieveGene Single return Through direct call--
 --Output from test retrieveGene Multiple return Through direct call--
 --Output from test retrieveGene Nonexistent gene Through direct call--

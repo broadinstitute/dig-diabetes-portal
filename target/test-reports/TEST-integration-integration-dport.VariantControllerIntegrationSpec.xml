@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="Cognomen" name="dport.VariantControllerIntegrationSpec" tests="2" time="0.184" timestamp="2014-08-23T13:32:33">
+<testsuite errors="0" failures="0" hostname="Cognomen" name="dport.VariantControllerIntegrationSpec" tests="2" time="0.137" timestamp="2014-08-25T01:10:37">
   <properties />
-  <testcase classname="dport.VariantControllerIntegrationSpec" name="test the variantInfo page" time="0.016" />
-  <testcase classname="dport.VariantControllerIntegrationSpec" name="test the variantAjax data retrieval" time="0.164" />
+  <testcase classname="dport.VariantControllerIntegrationSpec" name="test the variantInfo page" time="0.004" />
+  <testcase classname="dport.VariantControllerIntegrationSpec" name="test the variantAjax data retrieval" time="0.13" />
   <system-out><![CDATA[--Output from test the variantInfo page--
 --Output from test the variantAjax data retrieval--
 ]]></system-out>

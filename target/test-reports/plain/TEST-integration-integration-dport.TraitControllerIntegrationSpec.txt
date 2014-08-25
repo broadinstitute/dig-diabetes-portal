@@ -1,5 +1,5 @@
 Testsuite: dport.TraitControllerIntegrationSpec
-Tests run: 6, Failures: 0, Errors: 0, Time elapsed: 28.962 sec
+Tests run: 6, Failures: 0, Errors: 0, Time elapsed: 21.616 sec
 ------------- Standard Output ---------------
 --Output from test the traitInfo page--
 --Output from test the search a trait (and potentially  ignificance) page--
@@ -18,8 +18,8 @@ Tests run: 6, Failures: 0, Errors: 0, Time elapsed: 28.962 sec
 ------------- ---------------- ---------------
 
 Testcase: test the traitInfo page took 0.005 sec
-Testcase: test the search a trait (and potentially  ignificance) page took 0.006 sec
-Testcase: test the search a trait by ajax page took 0.829 sec
-Testcase: test the association statistics across 25 traits by ajax page took 0.663 sec
+Testcase: test the search a trait (and potentially  ignificance) page took 0.004 sec
+Testcase: test the search a trait by ajax page took 0.471 sec
+Testcase: test the association statistics across 25 traits by ajax page took 0.559 sec
 Testcase: test the search a traits across region page took 0.006 sec
-Testcase: test traitVariantCrossAjax took 27.449 sec
+Testcase: test traitVariantCrossAjax took 20.568 sec

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="Cognomen" name="dport.GeneIntegrationSpec" tests="1" time="0.04" timestamp="2014-08-23T13:32:00">
+<testsuite errors="0" failures="0" hostname="Cognomen" name="dport.GeneIntegrationSpec" tests="1" time="0.024" timestamp="2014-08-25T01:10:12">
   <properties />
-  <testcase classname="dport.GeneIntegrationSpec" name="test functions on gene domain object" time="0.03" />
+  <testcase classname="dport.GeneIntegrationSpec" name="test functions on gene domain object" time="0.016" />
   <system-out><![CDATA[--Output from test functions on gene domain object--
 ]]></system-out>
   <system-err><![CDATA[--Output from test functions on gene domain object--

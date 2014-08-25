@@ -14,6 +14,7 @@ class BootStrap {
     def init = { servletContext ->
         def samples  = [
                 'ben':[fullName:'ben Alexander', password:'ben', email: "balexand@broadinstitute.org"],
+                'mary':[fullName:'Mary Carmichael', password:'mary', email: "maryc@broadinstitute.org"],
                 'fred': [fullName:'Fred Friendly',  password:'fred', email: "fred@broadinstitute.org"]];
 
         def userRole = Role.findByAuthority('ROLE_USER')  ?: new Role (authority: "ROLE_USER").save()
@@ -35,6 +36,9 @@ class BootStrap {
                     if (username=='ben'){
                         UserRole.create user,adminRole
                         UserRole.create user,systemRole
+                    }
+                    if (username=='mary'){
+                        UserRole.create user,adminRole
                     }
                 }  else {
                     println "problem in bootstrap for username ${username}"

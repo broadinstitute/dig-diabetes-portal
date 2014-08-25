@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="Cognomen" name="dport.RegionControllerIntegrationSpec" tests="2" time="3.142" timestamp="2014-08-23T13:32:01">
+<testsuite errors="0" failures="0" hostname="Cognomen" name="dport.RegionControllerIntegrationSpec" tests="2" time="2.547" timestamp="2014-08-25T01:10:12">
   <properties />
-  <testcase classname="dport.RegionControllerIntegrationSpec" name="test the search a region page" time="0.147" />
-  <testcase classname="dport.RegionControllerIntegrationSpec" name="test the search a region by ajax page" time="2.979" />
+  <testcase classname="dport.RegionControllerIntegrationSpec" name="test the search a region page" time="0.167" />
+  <testcase classname="dport.RegionControllerIntegrationSpec" name="test the search a region by ajax page" time="2.375" />
   <system-out><![CDATA[--Output from test the search a region page--
 --Output from test the search a region by ajax page--
 ]]></system-out>

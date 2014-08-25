@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="Cognomen" name="dport.TraitControllerIntegrationSpec" tests="6" time="28.962" timestamp="2014-08-23T13:32:04">
+<testsuite errors="0" failures="0" hostname="Cognomen" name="dport.TraitControllerIntegrationSpec" tests="6" time="21.616" timestamp="2014-08-25T01:10:15">
   <properties />
-  <testcase classname="dport.TraitControllerIntegrationSpec" name="test the traitInfo page" time="0.0050" />
-  <testcase classname="dport.TraitControllerIntegrationSpec" name="test the search a trait (and potentially  ignificance) page" time="0.0060" />
-  <testcase classname="dport.TraitControllerIntegrationSpec" name="test the search a trait by ajax page" time="0.829" />
-  <testcase classname="dport.TraitControllerIntegrationSpec" name="test the association statistics across 25 traits by ajax page" time="0.663" />
-  <testcase classname="dport.TraitControllerIntegrationSpec" name="test the search a traits across region page" time="0.0060" />
-  <testcase classname="dport.TraitControllerIntegrationSpec" name="test traitVariantCrossAjax" time="27.449" />
+  <testcase classname="dport.TraitControllerIntegrationSpec" name="test the traitInfo page" time="0.005" />
+  <testcase classname="dport.TraitControllerIntegrationSpec" name="test the search a trait (and potentially  ignificance) page" time="0.004" />
+  <testcase classname="dport.TraitControllerIntegrationSpec" name="test the search a trait by ajax page" time="0.471" />
+  <testcase classname="dport.TraitControllerIntegrationSpec" name="test the association statistics across 25 traits by ajax page" time="0.559" />
+  <testcase classname="dport.TraitControllerIntegrationSpec" name="test the search a traits across region page" time="0.006" />
+  <testcase classname="dport.TraitControllerIntegrationSpec" name="test traitVariantCrossAjax" time="20.568" />
   <system-out><![CDATA[--Output from test the traitInfo page--
 --Output from test the search a trait (and potentially  ignificance) page--
 --Output from test the search a trait by ajax page--

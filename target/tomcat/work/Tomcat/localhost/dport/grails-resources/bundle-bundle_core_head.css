@@ -202,10 +202,14 @@ table.basictable {
       padding-top: 6px; }
 
 a.boldlink {
-  font-weight: bold;
-  cursor: pointer;
-  text-decoration: underline;
-  color: #588fd3; }
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #588fd3; }
+a.mgr {
+     color: #003300;
+     font-weight: bolder
+}
 a.boldItlink {
     font-weight: bold;
     cursor: pointer;
