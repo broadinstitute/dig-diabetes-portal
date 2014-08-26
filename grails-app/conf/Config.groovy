@@ -126,19 +126,19 @@ environments {
     }
 }
 
- // email (gmail)
-//grails {
-//    mail {
-//        host = "smtp.gmail.com"
-//        port = 465
-//        username = "t2dportal@gmail.com"
-//        password = "diaPortal"
-//        props = ["mail.smtp.auth":"true",
-//                 "mail.smtp.socketFactory.port":"465",
-//                 "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
-//                 "mail.smtp.socketFactory.fallback":"false"]
-//    }
-//}
+// email (gmail)
+grails {
+    mail {
+        host = "smtp.gmail.com"
+        port = 465
+        username = "t2dportal@gmail.com"
+        password = "diaPortal"
+        props = ["mail.smtp.auth":"true",
+                 "mail.smtp.socketFactory.port":"465",
+                 "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+                 "mail.smtp.socketFactory.fallback":"false"]
+    }
+}
 
 //security stuff
 grails.plugin.springsecurity.securityConfigType = "InterceptUrlMap"
@@ -177,6 +177,8 @@ grails.plugin.logout.postOnly=false
 grails.plugin.springsecurity.apf.storeLastUsername=true
 grails.plugin.springsecurity.dao.hideUserNotFoundExceptions=false
 grails.plugin.springsecurity.useSecurityEventListener=true
+grails.plugin.springsecurity.errors.login.fail="Sorry, but your password has been reset.  Please check your email for a link with which you can re-initialize your password"
+//springSecurity.errors.login.fail=Sorry, we were not able to find a user with that username and password.
 grails.plugin.springsecurity.failureHandler.exceptionMappings = [
         'org.springframework.security.authentication.CredentialsExpiredException': '/admin/resetPassword'
 ]

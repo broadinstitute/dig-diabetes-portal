@@ -20,7 +20,7 @@
 
         <div class="row">
             <div class="col-md-8 col-md-offset-2 login-header">
-                <p>Please enter a new password</p>
+                <h1><p>We need to reset your password. Please enter a new one</p></h1>
             </div>
         </div>
 

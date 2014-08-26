@@ -3,9 +3,12 @@ package dport
 import dport.people.User
 import grails.transaction.Transactional
 
+
 @Transactional
 class SharedToolsService {
-   // MailService mailService
+
+     def mailService
+     def grailsApplication
 
     /***
      *  urlEncodedListOfPhenotypes delivers the information in the Phenotype domain object
@@ -118,6 +121,77 @@ class SharedToolsService {
 
         return sbEncoded.toString()
     }
+
+
+    public String encodeUser (String putativeUsername)  {
+        int key=47
+        String coded = ""
+        for ( int i = 0; i < putativeUsername.length(); ++i )
+        {
+
+            char c = putativeUsername.charAt( i );
+            int j = (int) c + key;
+            coded+=(j+"-")
+
+
+        }
+        return  coded
+    }
+
+
+
+    public String unencodeUser (String encodedUsername)  {
+        String returnValue = ""
+        String[] elements = encodedUsername.split("-")
+        for  ( int i = 0; i < elements.size(); ++i ){
+            String encChar = elements[i]
+            if (encChar.length()>0)    {
+                int codedVal = encChar.toInteger()
+                int decoded=codedVal-47
+                String aChar = new Character((char) decoded).toString();
+                returnValue +=  aChar
+            }
+        }
+        return returnValue
+
+    }
+
+
+
+    public String sendTestEmail(){
+        mailService.sendMail {
+            from "t2dPortal@gmail.com"
+            to "balexand@broadinstitute.org"
+            subject "Hello"
+            body "Test"
+        }
+
+    }
+
+
+
+
+    public String sendForgottenPasswordEmail(String userEmailAddress){
+        String serverUrl = "http://localhost:8080/dport"
+        if (grailsApplication.config.grails.serverURL.size()!=0){
+            serverUrl =   grailsApplication.config.grails.serverURL
+        }
+        String bodyOfMessage = "Dear diabetes portal user;\n In order to access the updated version of the diabetes portal it will be necessary for you to reset your password."+
+        "Please copy the following string into the URL of your browser:\n" +
+                serverUrl+"/admin/resetPasswordInteractive/"+  encodeUser(userEmailAddress) +"\n"+
+                "\n"+
+                "If you did not request a password reset then you can safely ignore this e-mail"
+        mailService.sendMail {
+            from "t2dPortal@gmail.com"
+            to "balexand@broadinstitute.org"
+            subject "Password reset necessary"
+            body bodyOfMessage
+        }
+
+    }
+
+
+
 
 
 }

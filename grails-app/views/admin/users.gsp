@@ -84,18 +84,20 @@
             retVal += "<td>" + user.name + "</td>";
             //"<td><a href='" + geneRootUrl + "/" + vRec[i].CLOSEST_GENE + "' class='boldlink'>" + vRec[i].CLOSEST_GENE + "</td>";
 
+            var replacePeriodsInUsername =  encodeURIComponent(user.name.replace(/\./g, '&#46;'))
+
             // password expired
             if (user.expired) {
-                retVal += "<td><a href='" + autoPasswordUnexpireUrl + "/" + user.name + "' class='boldlink'>expired</a></td>";
+                retVal += "<td><a href='" + autoPasswordUnexpireUrl + "/" + replacePeriodsInUsername + "' class='boldlink'>expired</a></td>";
             } else {
-                retVal += "<td><a href='" + autoPasswordExpireUrl + "/" + user.name + "' class='boldlink'>active</a></td>";
+                retVal += "<td><a href='" + autoPasswordExpireUrl + "/" + replacePeriodsInUsername + "' class='boldlink'>active</a></td>";
             }
 
             // account disabled
             if (!user.enabled) {
-                retVal += "<td><a href='" + autoAccountExpireUrl + "/" + user.name + "' class='boldlink'>enabled</a></td>";
+                retVal += "<td><a href='" + autoAccountExpireUrl + "/" + replacePeriodsInUsername + "' class='boldlink'>enabled</a></td>";
             } else {
-                retVal += "<td><a href='" + autoAccountUnexpireUrl + "/" + user.name + "' class='boldlink'>not enabled</a></td>"
+                retVal += "<td><a href='" + autoAccountUnexpireUrl + "/" + replacePeriodsInUsername + "' class='boldlink'>not enabled</a></td>"
             }
             retVal += "</tr>";
 

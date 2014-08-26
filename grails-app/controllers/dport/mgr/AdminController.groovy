@@ -24,11 +24,14 @@ class AdminController {
     }
 
     def forcePasswordExpire = {
-        String username = params.id
-        User user = User.findByUsername(username)
-        if (user)  {
-            user.setPasswordExpired(true)
-            user.save(flush: true, failOnError: true)
+        if (params.id)  {
+            String username = params.id.replaceAll("&#46;",".")
+
+            User user = User.findByUsername(username)
+            if (user)  {
+                user.setPasswordExpired(true)
+                user.save(flush: true, failOnError: true)
+            }
         }
         String encodedUsers = sharedToolsService.urlEncodedListOfUsers()
         render(view: 'users', model: [encodedUsers:encodedUsers])
@@ -36,11 +39,14 @@ class AdminController {
 
 
     def forcePasswordUnexpire = {
-        String username = params.id
-        User user = User.findByUsername(username)
-        if (user)  {
-            user.setPasswordExpired(false)
-            user.save(flush: true, failOnError: true)
+        if (params.id) {
+            String username = params.id.replaceAll("&#46;", ".")
+
+            User user = User.findByUsername(username)
+            if (user) {
+                user.setPasswordExpired(false)
+                user.save(flush: true, failOnError: true)
+            }
         }
         String encodedUsers = sharedToolsService.urlEncodedListOfUsers()
         render(view: 'users', model: [encodedUsers:encodedUsers])
@@ -48,11 +54,14 @@ class AdminController {
 
 
     def forceAccountExpire = {
-        String username = params.id
-        User user = User.findByUsername(username)
-        if (user)  {
-            user.setAccountExpired(true)
-            user.save(flush: true, failOnError: true)
+        if (params.id) {
+            String username = params.id.replaceAll("&#46;", ".")
+
+            User user = User.findByUsername(username)
+            if (user) {
+                user.setAccountExpired(true)
+                user.save(flush: true, failOnError: true)
+            }
         }
         String encodedUsers = sharedToolsService.urlEncodedListOfUsers()
         render(view: 'users', model: [encodedUsers:encodedUsers])
@@ -60,11 +69,14 @@ class AdminController {
 
 
     def forceAccountUnexpire = {
-        String username = params.id
-        User user = User.findByUsername(username)
-        if (user)  {
-            user.setAccountExpired(false)
-            user.save(flush: true, failOnError: true)
+        if (params.id) {
+            String username = params.id.replaceAll("&#46;", ".")
+
+            User user = User.findByUsername(username)
+            if (user) {
+                user.setAccountExpired(false)
+                user.save(flush: true, failOnError: true)
+            }
         }
         String encodedUsers = sharedToolsService.urlEncodedListOfUsers()
         render(view: 'users', model: [encodedUsers:encodedUsers])
@@ -139,11 +151,13 @@ class AdminController {
 
 
     def resetPasswordInteractive = {
-        String username = params.id
+        String encodedUsername = params.id
+        String username =  sharedToolsService.unencodeUser(encodedUsername)
         if (username.endsWith("broadinstitute")) {
             username += ".org"
         }
         render(view: 'resetPassword', model: [ username:username])
+//        sharedToolsService.sendEmail()
     }
 
     def updatePasswordInteractive() {
