@@ -1,0 +1,191 @@
+#email	name	nickname	is_staff	has_logged_in
+brettpthomas@gmail.com			1	1
+bthomas@broadinstitute.org	Brett Thomas 2	Brett2	0	0
+maryc@broadinstitute.org	Mary Carmichael	Mary	1	1
+flannick@broadinstitute.org	Jason Flannick PhD	Jason	1	1
+burtt@broadinstitute.org	Noel Burtt	Noel	1	1
+altshuler@molbio.mgh.harvard.edu	David Altshuler MD PhD	David	1	1
+tjordan@broadinstitute.org	Tad Jordan	Tad	0	1
+kyuksel@broadinstitute.org	Kaan Yuksel	Kaan	0	1
+mvg@broadinstitute.org	Marcin von Grotthuss PhD	Marcin	0	1
+mark.mccarthy@drl.ox.ac.uk	Mark McCarthy	Mark McCarthy	0	1
+gb11@uchicago.edu	Graeme Bell	Graeme	0	0
+craig.l.hanis@uth.tmc.edu	Craig Hanis	Craig	0	1
+boehnke@umich.edu	Michael Boehnke	Mike	0	0
+balexand@broadinstitute.org	Ben Alexander	Ben Alexander	0	1
+JCFLOREZ@mgh.harvard.edu	Jose Florez MD PhD	Jose	0	0
+jgwilson2@umc.edu	James Wilson	James	0	0
+ravid@txbiomedgenetics.org	Ravi Duggirala	Ravi	0	0
+john@txbiomedgenetics.org	John Blangero	John	0	0
+ncox@bsd.uchicago.edu	Nancy Cox PhD	Nancy	0	0
+mark.seielstad@ucsf.edu	Mark Seielstad 	Mark	0	0
+goncalo@umich.edu	Goncalo Abecasis	Goncalo	0	0
+brettpthomas+1@gmail.com	Brett Test	brett	0	0
+brettpthomas+2@gmail.com	Brett Test	brett	0	0
+brettpthomas+5@gmail.com	Brett Test	brett	0	0
+brettpthomas+6@gmail.com	Brett Test	b	0	0
+brettpthomas+7@gmail.com	Brett Test	b	0	0
+brettpthomas+10@gmail.com	BT BT	B	0	0
+brettpthomas+100@gmail.com	BT BT	B	0	0
+brettpthomas+1000@gmail.com	BT BT	B	0	0
+brettpthomas+14000@gmail.com	BT BT	B	0	1
+brettpthomas+140009@gmail.com	BT BT4	B4	0	1
+bthomas+1@broadinstitute.org	BT BT4	B4	0	0
+maryc+1@broadinstitute.org	Mary Carmichael	Mary	0	1
+burtt+1@broadinstitute.org	Noel Burtt	Noel	0	0
+bthomas+11@broadinstitute.org	BT BT4	B4	0	0
+bthomas+111@broadinstitute.org	BT BT4	B4	0	0
+abboud@uthscsa.edu	 Hannah Abboud	 Hannah	0	0
+akolkarb@mail.nih.gov	 Beena Akolkar	 Beena	0	1
+nallred@wakehealth.edu	 Nicholette Allred	 Nicholette	0	1
+malmeida@txbiomedgenetics.org	 Marcio Almeida	 Marcio	0	0
+ararn@uthscsa.edu	 Nedal Arar	 Nedal	0	0
+ja11@sanger.ac.uk	 Jennifer Asimit	 Jennifer	0	0
+gil.atzmon@einstein.yu.edu	 Gil Atzmon	 Gil	0	0
+lbaier@phx.niddk.nih.gov	 Leslie Baier	 Leslie	0	0
+ebanks@broadinstitute.org	 Eric Banks	 Eric	0	1
+mathartic@gmail.com	 Matthew Barber	 Matthew	0	0
+ib1@sanger.ac.uk	 Ines Barroso	 Ines	0	0
+below@uchicago.edu	 Jennifer Below	 Jennifer	0	0
+danny.ben-avraham@einstein.yu.edu	 Danny Ben-Avraham	 Danny	0	1
+db@igib.res.in	 Dwaipayan Bharadwaj	 Dwaipayan	0	1
+tblackw@umich.edu	 Tom Blackwell	 Tom	0	0
+cbogardus@phx.niddk.nih.gov	 Clifton Bogardus	 Clifton	0	0
+dbowden@wakehealth.edu	 Don Bowden	 Don	0	0
+buchanan@usc.edu	 Tom Buchanan	 Tom	0	0
+carneiro@broadinstitute.org	 Mauricio Carneiro	 Mauricio	0	0
+j.chambers@imperial.ac.uk	 John Chambers	 John	0	0
+jchan@cuhk.edu.hk	 Juliana Chan	 Juliana	0	0
+chandakgrc@ccmb.res.in	 Giriraj Chandak	 Giriraj	0	1
+hanchen@bu.edu	 Han Chen	 Han	0	0
+peng_chen@nuhs.edu.sg	 Peng Chen	 Peng	0	0
+kee_seng_chia@nuhs.edu.sg	 Kee Seng Chia	 Kee Seng	0	0
+pchines@mail.nih.gov	 Peter Chines	 Peter	0	1
+yooncho33@hotmail.com	 Yoon Shin Cho	 Yoon Shin	0	0
+choisk0413@gmail.com	 Sungkyoung Choi	 Sungkyoung	0	0
+pablo.e.cingolani@gmail.com	 Pablo Cingolani	 Pablo	0	1
+bcornes@partners.org	 Belinda Cornes	 Belinda	0	0
+jcurran@sfbrgenetics.org	 Joanne Curran	 Joanne	0	0
+Albarado@uthscsa.edu	 Ralph DeFronzo	 Ralph	0	0
+donnelly@stats.ox.ac.uk	 Peter Donneely	 Peter	0	0
+dupuis@bu.edu			0	1
+tdyer@txbiomedgenetics.org	 Tom Dyer	 Tom	0	0
+shah.ebrahim@lshtm.ac.uk	 Shah Ebrahim	 Shah	0	0
+felsenfa@exchange.nih.gov	 Adam Felsenfeld	 Adam	0	0
+ferreira@well.ox.ac.uk	 Teresa Ferreira	 Teresa	0	0
+Tasha.Fingerlin@ucdenver.edu	 Tasha Fingerlin	 Tasha	0	0
+jcflorez@partners.org	 Jose Florez	 Jose	0	0
+pfontani@broadinstitute.org	 Pierre Fontanillas	 Pierre	0	1
+tim.frayling@pms.ac.uk	 Tim Frayling	 Tim	0	1
+froguel@good.ibl.fr	 Philippe Froguel	 Philippe	0	1
+cfuchsb@umich.edu	 Christian Fuchsberger	 Christian	0	1
+stacey@broadinstitute.org	 Stacey Gabriel	 Stacey	0	0
+egamazon@medicine.bsd.uchicago.edu	 Eric Gamazon	 Eric	0	0
+kgaulton@gmail.com	 Kyle Gaulton	 Kyle	0	0
+beng@cc.huji.ac.il	 Ben Glaser	 Ben	0	0
+minjin.go@gmail.com	 Min-Jin Go	 Min-Jin	0	1
+robert.grossman@uchicago.edu	 Robert Grossman	 Robert	0	0
+hale@uthscsa.edu	 Daniel Hale	 Daniel	0	0
+D.Michael.Hallman@uth.tmc.edu	 Michael  Hallman	 Michael 	0	0
+Craig.L.Hanis@uth.tmc.edu	 Craig Hanis	 Craig	0	0
+rhanson@phx.niddk.nih.gov	 Rob Hanson	 Rob	0	0
+A.T.Hattersley@exeter.ac.uk	 Andrew Hattersley	 Andrew	0	0
+Heather.M.Highland@uth.tmc.edu	 Heather Highland	 Heather	0	1
+momoko@well.ox.ac.uk	 Momoko Horikoshi	 Momoko	0	0
+alfredhc@sjtu.edu.cn	 Alfred Cheng Hu	 Alfred Cheng	0	0
+jhuyghe@umich.edu	 Jeroen Huyghe	 Jeroen	0	0
+kamran_ikram@nuhs.edu.sg	 Kamran Ikram	 Kamran	0	0
+haky@uchicago.edu	 Hae Kyung Im	 Hae Kyung	0	1
+kathleen@bsc.gwu.edu	 Kathleen Jablonski	 Kathleen	0	0
+aujackso@umich.edu	 Anne Jackson	 Anne	0	1
+jenkinsonc@uthscsa.edu	 Christopher Jenkinson	 Christopher	0	0
+wpjia@yahoo.com	 Weiping Jia	 Weiping	0	0
+gjun@umich.edu	 Goo Jun	 Goo	0	0
+nokato@ri.imcj.go.jp	 Norihiro Kato	 Norihiro	0	0
+kbj6181@hanmail.net	 Bong-Jo Kim	 Bong-Jo	0	0
+nunadli@gmail.com	 Jayoun Kim	 Jayoun	0	0
+anwltlarkr@gmail.com	 Young Jin Kim	 Young Jin	0	0
+c.ryan.king@gmail.com	 Ryan King	 Ryan	0	0
+wknowler@phx.niddk.nih.gov	 Bill Knowler	 Bill	0	0
+j.kooner@imperial.ac.uk	 Jaspal Kooner	 Jaspal	0	0
+markku.laakso@kuh.fi	 Markku Laakso	 Markku	0	0
+jhlee1213@gmail.com	 Jaehoon Lee	 Jaehoon	0	0
+leejy63@nih.go.kr	 Jong-Young Lee	 Jong-Young	0	0
+biznok@gmail.com	 Sungyoung Lee	 Sungyoung	0	0
+Lehman@uthscsa.edu	 Donna Lehman	 Donna	0	0
+celi@well.ox.ac.uk	 Cecilia Lindgren	 Cecilia	0	0
+a0030809@nus.edu.sg	 Xuanyao Liu	 Xuanyao	0	0
+lockeae@umich.edu	 Adam Locke	 Adam	0	0
+rcwma@cuhk.edu.hk	 Ronald Ma	 Ronald	0	1
+mahajan.anubha@gmail.com	 Anubha Mahajan	 Anubha	0	1
+amanning@broadinstitute.org	 Alisa Manning	 Alisa	0	1
+Taylor.J.Maxwell@uth.tmc.edu	 Taylor Maxwell	 Taylor	0	0
+McKeonC@mail.nih.gov	 Catherine McKeon	 Catherine	0	0
+jmeigs@partners.org	 James Meigs	 James	0	1
+mohlke@med.unc.edu	 Karen Mohlke	 Karen	0	1
+amorris@well.ox.ac.uk	 Andrew Morris	 Andrew	0	0
+smusani@medicine.umsmed.edu	 Solomon Musani	 Solomon	0	0
+mng@wfubmc.edu	 Maggie Ng	 Maggie	0	1
+nicolae@galton.uchicago.edu	 Dan Nicolae	 Dan	0	0
+taesungp@gmail.com	 Taesung Park	 Taesung	0	1
+peralta.juan.manuel@gmail.com	 Juan Peralta	 Juan	0	0
+tpollin@medicine.umaryland.edu	 Toni Pollin	 Toni	0	1
+inga@well.ox.ac.uk	 Inga Prokopenko	 Inga	0	0
+wrayner@well.ox.ac.uk	 Will Rayner	 Will	0	1
+reich@genetics.med.harvard.edu	 David Reich	 David	0	0
+rivas@broadinstitute.org	 Manny Rivas	 Manny	0	1
+manj@srl.cam.ac.uk	 Manj Sandhu	 Manj	0	0
+ljst@umich.edu	 Laura Scott	 Laura	0	0
+Mark.Seielstad@ucsf.edu	 Mark Seielstad	 Mark	0	0
+kshakir@broadinstitute.org	 Khalid Shakir	 Khalid	0	0
+xlsim@umich.edu	 Xueling Sim	 Xueling	0	1
+rob.sladek@mcgill.ca	 Rob Sladek	 Rob	0	1
+ps56z@nih.gov	 Philip Smith	 Philip	0	0
+hrey@umich.edu	 Heather Stringham	 Heather	0	0
+eshyong@pacific.net.sg	 ES Tai	 ES	0	0
+nikhil_tandon@hotmail.com	 Nikhil Tandon	 Nikhil	0	0
+htaylor@medicine.umsmed.edu	 Herman Taylor	 Herman	0	0
+statyy@nus.edu.sg	 YY Teo	 YY	0	0
+teslo@umich.edu	 Tanya Teslovich	 Tanya	0	1
+thameem@uthscsa.edu	 Farook Thameen	 Farook	0	0
+jasontorres@uchicago.edu	 Jason Torres	 Jason	0	1
+trubetskoy.vasa@gmail.com	 Vasily Trubetskoy	 Vasily	0	1
+wcr601@hotmail.com	 Chongrong Wang	 Chongrong	0	0
+rwatanab@usc.edu	 Richard Watanabe	 Richard	0	1
+welchr@umich.edu	 Ryan Welch	 Ryan	0	1
+alw@genetics.med.harvard.edu	 Amy Williams	 Amy	0	0
+shire@well.ox.ac.uk	 Steve Wiltshire	 Steve	0	0
+tien_yin_wong@nuhs.edu.sg	 Tien Yin Wong	 Tien Yin	0	0
+arwood@pms.ac.uk	 Andy Wood	 Andy	0	0
+hye@uchicago.edu	 Honggang Ye	 Honggang	0	1
+eleftheria@sanger.ac.uk	 Eleftheria Zeggini	 Eleftheria	0	1
+szoellne@umich.edu			0	1
+btsuda@broadinstitute.org	Benjamin Tsuda	Benjamin	0	0
+christian.gieger@helmholtz-muenchen.de	Christian Gieger	Christian	0	0
+claes.ladenvall@med.lu.se	Claes Ladenvall	Claes	0	1
+cchurch@broadinstitute.org	Claire Churchhouse	Claire	0	1
+davismcc@well.ox.ac.uk	Davis McCarthy	Davis	0	1
+Dmitry.Shungin@med.lu.se	Dmitry Shungin	Dmitry	0	0
+emma.ahlqvist@med.lu.se	Emma Ahlqvist	Emma	0	0
+harald.grallert@helmholtz-muenchen.de	Harald Grallert	Harald	0	0
+joao.fadista@med.lu.se	Joao Fadista	Joao	0	1
+jperry@well.ox.ac.uk	John Perry	John	0	1
+strauch@helmholtz-muenchen.de	Konstantin Strauch	Konstantin	0	0
+leif.groop@med.lu.se	Leif Groop	Leif	0	1
+lbonnyca@mail.nih.gov	Lori Bonnycastle	Lori	0	1
+moutsian@well.ox.ac.uk	Loukas Moutsianas	Loukas	0	0
+martijn.vandebunt@ocdem.ox.ac.uk	Martijn Vandebunt	Martijn	0	0
+stitzelm@mail.nih.gov	Michael Stitzel	Michael	0	0
+nicola.beer@ocdem.ox.ac.uk	Nicola Beer	Nicola	0	1
+pal.njolstad@pedi.uib.no	Pal Njolstad	Pal	0	0
+directorpa@well.ox.ac.uk	Peter Donnelly	Peter	0	0
+peter.almgren@med.lu.se	Peter Almgren	Peter	0	0
+petter.vikman@med.lu.se	Peter Vikman	Peter	0	0
+meitinger@helmholtz-muenchen.de	Thomas Meitinger	Thomas	0	0
+Tibor.V_Varga@med.lu.se	Tibor Varga	Tibor	0	0
+strom@helmholtz-muenchen.de	Timothy Strom	Timothy	0	0
+T.M.FRAYLING@exeter.ac.uk	Timothy Frayling	Timothy	0	0
+vineeta_agarwala@hms.harvard.edu	Vineeta Agarwala	Vineeta	0	0
+mktrost@umich.edu	Mary Kate Wing	Mary Kate	0	1
+hmkang@umich.edu	Hyun Min Kang	Hyun	0	1
+lgroop@broadinstitute.org	Leif Groop	Leif	0	0

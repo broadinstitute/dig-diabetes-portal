@@ -96,10 +96,9 @@ class AdminController {
     }
 
 
-
     def resetPassword = {
         String username = session['SPRING_SECURITY_LAST_USERNAME']
-        render(view: 'newPassword', model: [ username:session['SPRING_SECURITY_LAST_USERNAME']])
+        render(view: 'newPassword', model: [ username:username])
     }
 
     def updatePassword() {
@@ -114,20 +113,20 @@ class AdminController {
         String newPassword2 = params.newPassword2
         if (!password || !newPassword || !newPassword2 || newPassword != newPassword2) {
             flash.message = 'Please enter your current password and a valid new password'
-            render view: 'passwordExpired', model: [username: session['SPRING_SECURITY_LAST_USERNAME']]
+            render view: 'newPassword', model: [username: session['SPRING_SECURITY_LAST_USERNAME']]
             return
         }
 
         User user = User.findByUsername(username)
         if (!springSecurityService.passwordEncoder.isPasswordValid(user.password, password, null /*salt*/)) {
             flash.message = 'Current password is incorrect'
-            render view: 'passwordExpired', model: [username: session['SPRING_SECURITY_LAST_USERNAME']]
+            render view: 'newPassword', model: [username: session['SPRING_SECURITY_LAST_USERNAME']]
             return
         }
 
         if (springSecurityService.passwordEncoder.isPasswordValid(user.password, newPassword, null /*salt*/)) {
             flash.message = 'Please choose a different password from your current one'
-            render view: 'passwordExpired', model: [username: session['SPRING_SECURITY_LAST_USERNAME']]
+            render view: 'newPassword', model: [username: session['SPRING_SECURITY_LAST_USERNAME']]
             return
         }
 
@@ -138,24 +137,37 @@ class AdminController {
         redirect controller: 'login', action: 'auth'
     }
 
-       // defines a new password?
-//    def springSecurityService
-//
-//    def updateAction() {
-//        def person = Person.get(params.id)
-//
-//        params.salt = person.salt
-//        if (person.password != params.password) {
-//            params.password = springSecurityService.encodePassword(password, salt)
-//            def salt = … // e.g. randomly generated using some utility method
-//            params.salt = salt
-//        }
-//        person.properties = params
-//        if (!person.save(flush: true)) {
-//            render view: 'edit', model: [person: person]
-//            return
-//        }
-//        redirect action: 'show', id: person.id
-//    }
+
+    def resetPasswordInteractive = {
+        String username = params.id
+        if (username.endsWith("broadinstitute")) {
+            username += ".org"
+        }
+        render(view: 'resetPassword', model: [ username:username])
+    }
+
+    def updatePasswordInteractive() {
+        String username = params.username
+        if (!username) {
+            flash.message = 'Sorry, you need to provide a username'
+            redirect controller: 'login', action: 'auth'
+            return
+        }
+        String newPassword = params.newPassword
+        String newPassword2 = params.newPassword2
+        if (!newPassword || !newPassword2 || newPassword != newPassword2) {
+            flash.message = 'Please two matching password records'
+            render view: 'passwordExpired', model: [username: session['SPRING_SECURITY_LAST_USERNAME']]
+            return
+        }
+
+        User user = User.findByUsername(username)
+
+        user.password = newPassword
+        user.passwordExpired = false
+        user.save() // if you have password constraints check them here
+
+        redirect controller: 'login', action: 'auth'
+    }
 
 }

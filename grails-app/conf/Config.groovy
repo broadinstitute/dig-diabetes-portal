@@ -126,7 +126,19 @@ environments {
     }
 }
 
-
+ // email (gmail)
+//grails {
+//    mail {
+//        host = "smtp.gmail.com"
+//        port = 465
+//        username = "t2dportal@gmail.com"
+//        password = "diaPortal"
+//        props = ["mail.smtp.auth":"true",
+//                 "mail.smtp.socketFactory.port":"465",
+//                 "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+//                 "mail.smtp.socketFactory.fallback":"false"]
+//    }
+//}
 
 //security stuff
 grails.plugin.springsecurity.securityConfigType = "InterceptUrlMap"
@@ -137,6 +149,8 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/home/portalHome':         ['ROLE_USER'],
         '/system/**':               ['ROLE_SYSTEM'],
         '/admin/resetPassword':     ['permitAll'],
+        '/admin/resetPasswordInteractive/**':     ['permitAll'],
+        '/admin/updatePasswordInteractive/**':     ['permitAll'],
         '/admin/updatePassword/**': ['permitAll'],
         '/admin/**':            ['ROLE_ADMIN'],
         '/gene/**':             ['ROLE_USER'],
@@ -161,6 +175,8 @@ grails.plugin.springsecurity.rememberMe.key="td2PortalKey"
 grails.plugin.springsecurity.rememberMe.persistent=true
 grails.plugin.logout.postOnly=false
 grails.plugin.springsecurity.apf.storeLastUsername=true
+grails.plugin.springsecurity.dao.hideUserNotFoundExceptions=false
+grails.plugin.springsecurity.useSecurityEventListener=true
 grails.plugin.springsecurity.failureHandler.exceptionMappings = [
         'org.springframework.security.authentication.CredentialsExpiredException': '/admin/resetPassword'
 ]

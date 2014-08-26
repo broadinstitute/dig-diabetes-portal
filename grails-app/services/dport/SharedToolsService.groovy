@@ -5,6 +5,7 @@ import grails.transaction.Transactional
 
 @Transactional
 class SharedToolsService {
+   // MailService mailService
 
     /***
      *  urlEncodedListOfPhenotypes delivers the information in the Phenotype domain object

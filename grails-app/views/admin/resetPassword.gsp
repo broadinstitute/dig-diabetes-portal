@@ -26,21 +26,13 @@
 
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
-                <g:form action='updatePassword' method='POST' id='passwordResetForm' class='form form-horizontal cssform' autocomplete='off'>
+                <g:form action='updatePasswordInteractive' method='POST' id='passwordResetForm' class='form form-horizontal cssform' autocomplete='off'>
 
                     <div class="form-group">
                         <label class="control-label col-sm-3" id="id_email">Username:</label>
 
                         <div class="col-sm-8">
-                            <span class='form_control' name='j_username' id='username'>${username}</span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-sm-3" for="oldPassword">Current password:</label>
-
-                        <div class="col-sm-8">
-                            <input type='password' class='text_' name='oldPassword' id='oldPassword'/>
+                            <input  type='text' class='text_' name='username' id='username' value="${username}" readonly/>
                         </div>
                     </div>
 

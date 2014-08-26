@@ -12,32 +12,85 @@ class BootStrap {
     def springSecurityService
 
     def init = { servletContext ->
-        def samples  = [
-                'ben':[fullName:'ben Alexander', password:'ben', email: "balexand@broadinstitute.org"],
-                'mary':[fullName:'Mary Carmichael', password:'mary', email: "maryc@broadinstitute.org"],
-                'fred': [fullName:'Fred Friendly',  password:'fred', email: "fred@broadinstitute.org"]];
+
+        //
+        // first handles users
+        //
+        def samples  = [:]  // put users here as a temporary holding location
+
+        // read in users from file
+        if (User.count()) {
+            println "Users already loaded. Total operational number = ${User.count()}"
+        } else {
+            String fileLocation = grailsApplication.mainContext.getResource("/WEB-INF/resources/users.tsv").file.toString()
+            println "Actively loading users from file = ${fileLocation}"
+            File file = new File(fileLocation)
+            int counter = 1
+            boolean headerLine = true
+            file.eachLine {
+                if (headerLine) {
+                    headerLine = false
+                } else {
+                    List<String> fields = it.split('\t')
+                    if (fields.size() != 5)  {
+                        println "Flawed user file.  number fields = ${fields.size()}. Aborting..."
+                        assert false
+                    }
+                    LinkedHashMap attributes = [:]
+                    String username =  fields[0];
+                    attributes['password'] = "123"
+                    attributes['fullName'] = fields[1]
+                    attributes['nickname'] = fields[2]
+                    attributes['email'] = fields[0]
+                    samples[username] = attributes
+                 }
+            }
+            samples['ben'] = [fullName:'Ben Alexander',
+                              password:'ben',
+                              nickname:'ben',
+                              email: "balexand@broadinstitute.org"]
+            samples['mary'] = [fullName:'Mary Carmichael',
+                              password:'Mary',
+                              nickname:'Mary',
+                              email: "balexand@broadinstitute.org"]
+            samples['fred'] = [fullName:'Fred friendly',
+                              password:'Fred',
+                              nickname:'Fred',
+                              email: "balexand@broadinstitute.org"]
+        }
+
+//        ['ben':[fullName:'ben Alexander', password:'ben', email: "balexand@broadinstitute.org"],
+//                'mary':[fullName:'Mary Carmichael', password:'mary', email: "maryc@broadinstitute.org"],
+//                'fred': [fullName:'Fred Friendly',  password:'fred', email: "fred@broadinstitute.org"]];
 
         def userRole = Role.findByAuthority('ROLE_USER')  ?: new Role (authority: "ROLE_USER").save()
         def adminRole = Role.findByAuthority('ROLE_ADMIN')  ?: new Role (authority: "ROLE_ADMIN").save()
         def systemRole = Role.findByAuthority('ROLE_SYSTEM')  ?: new Role (authority: "ROLE_SYSTEM").save()
 
-
+        // now we actually fill up the user domain object
         def users = User.list () ?: []
         if (!users){
             samples.each {username, attributes->
                 def user  = new User (
                         username: username,
                         password: attributes.password,
+                        fullName: attributes.fullName,
+                        nickname: attributes.nickname,
+                        email: attributes.email,
+                        hasLoggedIn: false,
                         enabled: true)
                 if (user.validate ()) {
-                    println "Creating user ${username}…"
+                    println "Creating user ${username}"
                     user.save(flush: true)
                     UserRole.create user,userRole
-                    if (username=='ben'){
+                    if ((username=='ben')||
+                            (username=='balexand')||
+                            (username=='flannick')){
                         UserRole.create user,adminRole
                         UserRole.create user,systemRole
                     }
-                    if (username=='mary'){
+                    if ((username=='mary')||
+                        (username=='maryc')){
                         UserRole.create user,adminRole
                     }
                 }  else {

@@ -91,6 +91,7 @@ grails.project.dependency.resolution = {
         compile ':resources:1.2.8'
         compile ':rest-client-builder:2.0.3'
         compile ":cache:1.0.1"
+        compile ":mail:1.0.7"
 //        compile 'org.objenesis:objenesis:1.4'
 //        compile "cglib:cglib:2.2"
 
