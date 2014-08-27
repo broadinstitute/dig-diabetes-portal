@@ -18,10 +18,10 @@
 <style>
 .spinner {
     position: fixed;
-    top: 35%;
-    left: 35%;
-    margin-left: -50px; /* half width of the spinner gif */
-    margin-top: -50px; /* half height of the spinner gif */
+    top: 2px;
+    right: 10%;
+    margin-left: 0px; /* half width of the spinner gif */
+    margin-top: 0px; /* half height of the spinner gif */
     text-align:center;
     z-index:1234;
     overflow: auto;
