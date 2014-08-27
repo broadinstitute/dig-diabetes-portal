@@ -8,10 +8,16 @@ class Phenotype {
     String category = ''
 
     static constraints = {
-         key nullable: false
-         name nullable: false
-         databaseKey nullable: false
-         dataSet nullable: false
-         category nullable: false
+           key blank: false, unique:true
+//         name blank: true
+//         databaseKey blank: true
+//         dataSet blank: true
+//         category blank: true
     }
+
+    static mapping = {
+        key column: '`key`'
+        name column: '`name`'
+    }
+
 }

@@ -1,13 +1,19 @@
 package dport
 
 class ProteinEffect {
-    String key
-    String name
-    String description
+    String key =''
+    String name =''
+    String description =''
 
     static constraints = {
-        key nullable: false
-        name nullable: false
-        description nullable: false
+          key blank: false, unique: true
+//        name blank: true
+//        description blank: true
     }
+
+    static mapping = {
+        key column: '`key`'
+        name column: '`name`'
+    }
+
 }

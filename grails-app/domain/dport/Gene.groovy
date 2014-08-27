@@ -9,10 +9,8 @@ class Gene {
     Long addrEnd = 0l
 
     static constraints = {
-        name1 nullable: false
-        name2 nullable: false
-        chromosome nullable: false
-        addrStart nullable: false
-        addrEnd nullable: false
+        name1 blank: false
+        name2 blank: true
+        chromosome blank: true
     }
 }
