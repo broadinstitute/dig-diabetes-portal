@@ -212,11 +212,49 @@ class RestServerService {
 
 
 
-    def hitService() {
-        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
-        def resp = rest.get("http://grails.org/api/v1.0/plugin/acegi/")
-       println resp.toString ()
-    }
+  private JSONObject postRestCall(String drivingJson, String targetUrl){
+      JSONObject returnValue = null
+      Date beforeCall  = new Date()
+      Date afterCall
+      RestResponse response
+      RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
+      StringBuilder logStatus = new StringBuilder()
+      try {
+          response  = rest.post(targetUrl)   {
+              contentType "application/json"
+              json drivingJson
+          }
+          afterCall  = new Date()
+      } catch ( Exception exception){
+          log.error("NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}")
+          log.error(exception.toString())
+          logStatus <<  "NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}"
+          exception.printStackTrace()
+      }
+      logStatus << """
+SERVER CALL:
+url=${targetUrl},
+parm=${drivingJson},
+time required=${(afterCall.time-beforeCall.time)/1000} seconds
+""".toString()
+      if (response?.responseEntity?.statusCode?.value == 200) {
+          returnValue =  response.json
+          logStatus << """status: ok""".toString()
+      }  else {
+          JSONObject tempValue =  response.json
+          logStatus << """status: ${response.responseEntity.statusCode.value}""".toString()
+          if  (tempValue)  {
+              logStatus << """is_error: ${response.json["is_error"]}""".toString()
+          }  else {
+              logStatus << "no valid Json returned"
+          }
+      }
+      log.info(logStatus)
+      return returnValue
+  }
+
+
+
 
    String getServiceBody (String url) {
        String returnValue = ""
@@ -237,7 +275,12 @@ class RestServerService {
         return returnValue
     }
 
-
+    /***
+     * used only for testing
+     * @param url
+     * @param jsonString
+     * @return
+     */
     JSONObject postServiceJson (String url,
                                 String jsonString) {
         JSONObject returnValue = null
@@ -269,20 +312,13 @@ class RestServerService {
 
     JSONObject retrieveGeneInfoByName (String geneName) {
         JSONObject returnValue = null
-        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         String drivingJson = """{
 "gene_symbol": "${geneName}",
 "user_group": "ui",
 "columns": [${"\""+GENE_COLUMNS.join("\",\"")+"\""}]
 }
 """.toString()
-        RestResponse response  = rest.post(GENE_INFO_URL)   {
-            contentType "application/json"
-            json drivingJson
-        }
-        if (response.responseEntity.statusCode.value == 200) {
-            returnValue =  response.json
-        }
+        returnValue = postRestCall( drivingJson, GENE_INFO_URL)
         return returnValue
     }
 
@@ -290,20 +326,13 @@ class RestServerService {
 
     JSONObject retrieveVariantInfoByName (String variantId) {
         JSONObject returnValue = null
-        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         String drivingJson = """{
 "variant_id": "${variantId}",
 "user_group": "ui",
 "columns": [${"\""+VARIANT_COLUMNS.join("\",\"")+"\""}]
 }
 """.toString()
-        RestResponse response  = rest.post(VARIANT_INFO_URL)   {
-            contentType "application/json"
-            json drivingJson
-        }
-        if (response.responseEntity.statusCode.value == 200) {
-            returnValue =  response.json
-        }
+        returnValue = postRestCall( drivingJson, VARIANT_INFO_URL)
         return returnValue
     }
 
@@ -319,7 +348,6 @@ class RestServerService {
                                                      Integer beginSearch,
                                                      Integer endSearch) {
         JSONObject returnValue = null
-        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         String drivingJson = """{
 "user_group": "ui",
 "filters": [
@@ -330,13 +358,7 @@ class RestServerService {
 "columns": [${"\""+VARIANT_SEARCH_COLUMNS.join("\",\"")+"\""}]
 }
 """.toString()
-        RestResponse response  = rest.post(VARIANT_SEARCH_URL)   {
-            contentType "application/json"
-            json drivingJson
-        }
-        if (response.responseEntity.statusCode.value == 200) {
-            returnValue =  response.json
-        }
+        returnValue = postRestCall( drivingJson, VARIANT_SEARCH_URL)
         return returnValue
     }
 
@@ -346,7 +368,6 @@ class RestServerService {
                                                      Integer beginSearch,
                                                      Integer endSearch) {
         JSONObject returnValue = null
-        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         String drivingJson = """{
 "user_group": "ui",
 "filters": [
@@ -356,13 +377,7 @@ class RestServerService {
 ]
 }
 """.toString()
-        RestResponse response  = rest.post(TRAIT_SEARCH_URL)   {
-            contentType "application/json"
-            json drivingJson
-        }
-        if (response.responseEntity.statusCode.value == 200) {
-            returnValue =  response.json
-        }
+        returnValue = postRestCall( drivingJson, TRAIT_SEARCH_URL)
         return returnValue
     }
 
@@ -375,7 +390,6 @@ class RestServerService {
     JSONObject searchTraitByName (String traitName,
                                   BigDecimal significance) {
         JSONObject returnValue = null
-        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         String drivingJson = """{
 "user_group": "ui",
 "filters": [
@@ -384,13 +398,7 @@ class RestServerService {
 "trait": "${traitName}"
 }
 """.toString()
-        RestResponse response  = rest.post(TRAIT_SEARCH_URL)   {
-            contentType "application/json"
-            json drivingJson
-        }
-        if (response.responseEntity.statusCode.value == 200) {
-            returnValue =  response.json
-        }
+        returnValue = postRestCall( drivingJson, TRAIT_SEARCH_URL)
         return returnValue
     }
 
@@ -409,15 +417,11 @@ class RestServerService {
 "trait": "${traitName}"
 }
 """.toString()
-        RestResponse response  = rest.post(TRAIT_SEARCH_URL)   {
-            contentType "application/json"
-            json drivingJson
-        }
-        if (response.responseEntity.statusCode.value == 200) {
-            returnValue =  response.json
-        }
-        return returnValue
+        returnValue = postRestCall( drivingJson, TRAIT_SEARCH_URL)
+         return returnValue
     }
+
+
     JSONObject searchTraitByRegion(String userSpecifiedRegion) {
         JSONObject returnValue = null
         LinkedHashMap<String, Integer> ourNumbers = extractNumbersWeNeed(userSpecifiedRegion)
@@ -437,21 +441,15 @@ class RestServerService {
 
     JSONObject retrieveTraitInfoByVariant (String variantName) {
         JSONObject returnValue = null
-        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         String drivingJson = """{
 "user_group": "ui",
 "variant_id": "${variantName}"
 }
 """.toString()
-        RestResponse response  = rest.post(TRAIT_INFO_URL)   {
-            contentType "application/json"
-            json drivingJson
-        }
-        if (response.responseEntity.statusCode.value == 200) {
-            returnValue =  response.json
-        }
+        returnValue = postRestCall( drivingJson, TRAIT_INFO_URL)
         return returnValue
     }
+
 
     /***
      * Employ a set of filters to perform a variant search. In practice  I'm using this
@@ -472,35 +470,7 @@ ${customFilterSet}
 "columns": [${"\""+VARIANT_SEARCH_COLUMNS.join("\",\"")+"\""}]
 }
 """.toString()
-        Date beforeCall  = new Date()
-        RestResponse response  = rest.post(VARIANT_SEARCH_URL)   {
-            contentType "application/json"
-            json drivingJson
-        }
-        Date afterCall  = new Date()
-        StringBuilder logStatus = new StringBuilder()
-        logStatus << """
-SERVER CALL:
-url=${VARIANT_SEARCH_URL},
-parm=${drivingJson},
-time required=${(afterCall.time-beforeCall.time)/1000} seconds
-""".toString()
-        if (response.responseEntity.statusCode.value == 200) {
-            returnValue =  response.json
-            logStatus << """status: ok
-number of records: ${returnValue["variants"].size()}
-is_error: ${response.json["is_error"]}""".toString()
-        }  else {
-            JSONObject tempValue =  response.json
-            logStatus << """status: ${response.responseEntity.statusCode.value}""".toString()
-            if  (tempValue)  {
-                logStatus << """is_error: ${response.json["is_error"]}""".toString()
-            }  else {
-                logStatus << "no valid Json returned"
-            }
-        }
-        log.info(logStatus.toString())
-   //     println logStatus.toString()
+        returnValue = postRestCall( drivingJson, VARIANT_SEARCH_URL)
         return returnValue
     }
 
@@ -559,14 +529,8 @@ is_error: ${response.json["is_error"]}""".toString()
 "columns": [${"\""+VARIANT_SEARCH_COLUMNS.join("\",\"")+"\""}]
 }
 """.toString()
-        RestResponse response  = rest.post(VARIANT_SEARCH_URL)   {
-            contentType "application/json"
-            json drivingJson
-        }
-        if (response.responseEntity.statusCode.value == 200) {
-            returnValue =  response.json
-        }
-        return returnValue
+        returnValue = postRestCall( drivingJson, VARIANT_SEARCH_URL)
+       return returnValue
     }
 
 

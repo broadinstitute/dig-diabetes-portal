@@ -122,7 +122,10 @@ environments {
     }
     production {
         grails.logging.jul.usebridge = false
-        grails.serverURL = "http://Default-Environment-igfrae3vpi.elasticbeanstalk.com"
+     //   grails.serverURL = "http://Default-Environment-igfrae3vpi.elasticbeanstalk.com"
+     //   grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
+        grails.serverURL = "http://type2diabetesgenetics.org"
+
     }
 }
 
@@ -210,7 +213,7 @@ log4j = { root ->
             'grails.app.service',
             'grails.plugins.hawkeventing',
             'net.sf.ehcache.hibernate'
-    info 'grails.app.service'
+    info 'grails.app.services'
     root.level = org.apache.log4j.Level.INFO
 
     environments {

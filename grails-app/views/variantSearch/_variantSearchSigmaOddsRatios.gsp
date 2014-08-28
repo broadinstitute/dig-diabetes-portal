@@ -1,5 +1,5 @@
 
-<g:if test="${show_sigma}">
+
 <h4>Restrict to odds ratio</h4>
 <div class="row clearfix">
     <div class="col-md-6">
@@ -22,4 +22,4 @@
 
     </div>
 </div>
-</g:if>
+<p></p>

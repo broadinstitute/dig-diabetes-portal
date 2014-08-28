@@ -23,6 +23,8 @@
         varsToSend["significance"]  = $("input:radio[name='significance']:checked").val();
         var customSignificance = UTILS.extractValFromTextboxes(['custom_significance_input']);
         var restrictToRegion = UTILS.extractValFromTextboxes(['region_gene_input','region_chrom_input','region_start_input','region_stop_input']);
+        var restrictToOr = UTILS.extractValFromTextboxes(['or-value']);
+        var orInequality = UTILS.extractValsFromCombobox(['or-select']);
         var alleleFrequencies = UTILS.extractAlleleFrequencyRanges($('.form-control'));
         var caseControlRequests = UTILS.extractValFromCheckboxes(['id_onlyseen_t2dcases','id_onlyseen_t2dcontrols']);
         var missensePredictions = [];
@@ -35,6 +37,8 @@
         varsToSend = UTILS.concatMap(varsToSend,alleleFrequencies) ;
         varsToSend = UTILS.concatMap(varsToSend,restrictToRegion) ;
         varsToSend = UTILS.concatMap(varsToSend,missensePredictions) ;
+        varsToSend = UTILS.concatMap(varsToSend,restrictToOr) ;
+        varsToSend = UTILS.concatMap(varsToSend,orInequality) ;
         UTILS.postQuery('../variantSearch/variantSearchRequest',varsToSend);
     }
     var encParams="${encParams}";

@@ -1,11 +1,12 @@
 package dport
 
 import grails.transaction.Transactional
+import org.apache.juli.logging.LogFactory
 
 @Transactional
 class FilterManagementService {
 
-
+    private static final log = LogFactory.getLog(this)
     RestServerService restServerService
 
     LinkedHashMap<String, String> standardFilterStrings = [
@@ -266,16 +267,18 @@ class FilterManagementService {
                 String ethnicity = requestPortionList[1]
                 int ethnicityFieldIndex = 0
                 if (ethnicity == 'exchp'){ // we have no ethnicity. Everything comes from the European exome chipset
-                    switch ( requestPortionList ){
+                    switch ( requestPortionList[0] ){
                         case "total":
                             filters << retrieveParameterizedFilterString("setExomeChipMinimum","",0)
                             filterDescriptions << "Minor allele frequency in exome chip dataset is greater than or equal to zero"
+                            parameterEncoding << ("1:2")
                             parameterEncoding << ("14:0")
                             parameterEncoding << ("15:1")
                             break;
                         case "common":
                             filters << retrieveParameterizedFilterString("setExomeChipMinimum","",0.05)
                             filterDescriptions << "Minor allele frequency in exome chip dataset is greater than or equal to 0.05"
+                            parameterEncoding << ("1:2")
                             parameterEncoding << ("14:0.05")
                             parameterEncoding << ("15:1")
                             break;
@@ -284,6 +287,7 @@ class FilterManagementService {
                             filterDescriptions << "Minor allele frequency in exome chip dataset is greater than or equal to 0.005"
                             filters << retrieveParameterizedFilterString("setExomeChipMaximumAbsolute",ethnicity,0.05)
                             filterDescriptions << "Minor allele frequency in exome chip dataset is less than 0.05"
+                            parameterEncoding << ("1:2")
                             parameterEncoding << ("14:0.005")
                             parameterEncoding << ("15:0.05")
                             break;
@@ -292,6 +296,7 @@ class FilterManagementService {
                             filterDescriptions << "Minor allele frequency in exome chip dataset is greater than 0"
                             filters << retrieveParameterizedFilterString("setExomeChipMaximumAbsolute",ethnicity,0.005)
                             filterDescriptions << "Minor allele frequency in exome chip dataset is less than 0.005"
+                            parameterEncoding << ("1:2")
                             parameterEncoding << ("14:0")
                             parameterEncoding << ("15:0.005")
                             break;
@@ -307,21 +312,24 @@ class FilterManagementService {
                         case 'HS': ethnicityFieldIndex = 16; break;
                         default: ethnicityFieldIndex = 8;
                     }
-                    switch ( requestPortionList){
+                    switch ( requestPortionList[0]){
                         case "total":
                             filters << retrieveParameterizedFilterString("setEthnicityMinimumAbsolute",ethnicity,0)
                             filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is greater than 0"
+                            parameterEncoding << ("1:1")
                             parameterEncoding << ("${ethnicityFieldIndex}:0")
                             parameterEncoding << ("${ethnicityFieldIndex+1}:1")
                             break;
                         case "common":
                             filters << retrieveParameterizedFilterString("setEthnicityMinimum",ethnicity,0.05)
                             filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is greater than or equal to 0.05"
+                            parameterEncoding << ("1:1")
                             parameterEncoding << ("${ethnicityFieldIndex}:05")
                             parameterEncoding << ("${ethnicityFieldIndex+1}:1")
                             break;
                         case "lowfreq":
                             filters << retrieveParameterizedFilterString("setEthnicityMinimum",ethnicity,0.005)
+                            parameterEncoding << ("1:1")
                             filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is greater than or equal to 0.005"
                             filters << retrieveParameterizedFilterString("setEthnicityMaximumAbsolute",ethnicity,0.05)
                             filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is less than 0.05"
@@ -333,6 +341,7 @@ class FilterManagementService {
                             filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is greater than 0"
                             filters << retrieveParameterizedFilterString("setEthnicityMaximumAbsolute",ethnicity,0.005)
                             filterDescriptions << "Minor allele frequency in ${ethnicity} from exome sequencing data set is less than 0.005"
+                            parameterEncoding << ("1:1")
                             parameterEncoding << ("${ethnicityFieldIndex}:0")
                             parameterEncoding << ("${ethnicityFieldIndex+1}:0.005")
                             break;
@@ -341,7 +350,7 @@ class FilterManagementService {
                 }
 
             } else {  // we can put specialized searches here
-                switch (requestPortionList) {
+                switch (requestPortionList[0]) {
                     case "lof":
                         filters << retrieveFilterString ("lof")
                         filterDescriptions << "Variant predicted to result in loss of function"
@@ -515,13 +524,15 @@ class FilterManagementService {
                         filterDescriptions << "P-value for association in exome sequencing"
                         parameterEncoding << "1:1"
                     } else if (significance=="genome-wide") {
-                        filters <<  retrieveFilterString("exchp-genomewide")
+                        filters <<  retrieveFilterString("dataSetExseq")
+                        filters <<  retrieveFilterString("t2d-genomewide")
                         filterDescriptions << "P-value for association in exome sequencing"
                         filterDescriptions << "P-value significance is less than or equal to  0.5e-8"
                         parameterEncoding << "1:1"
                         parameterEncoding << "2:0"
-                    } else if (significance=="nominal"){
-                        filters <<  retrieveFilterString("exchp-nominal")
+                    } else if (significance=="nominal"){    // wrong
+                        filters <<  retrieveFilterString("dataSetExseq")
+                        filters <<  retrieveFilterString("t2d-nominal")
                         filterDescriptions << "P-value for association in exome sequencing"
                         filterDescriptions << "P-value significance is less than or equal to  0.05"
                         parameterEncoding << "1:1"
@@ -532,17 +543,14 @@ class FilterManagementService {
                     datatypeOperand = 'EXCHP_T2D_P_value'
                     if (significance=="everything") {
                         filters <<  retrieveFilterString("dataSetExchp")
-                        filterDescriptions << "P-value for association in exome chip studies"
                         parameterEncoding << "1:1"
                     } else if (significance=="genome-wide") {
-                        filters <<  retrieveFilterString("t2d-genomewide")
-                        filterDescriptions << "P-value for association in exome chip studies"
+                        filters <<  retrieveFilterString("exchp-genomewide")  //really wrong
                         filterDescriptions << "P-value significance is less than or equal to  0.5e-8"
                         parameterEncoding << "1:1"
                         parameterEncoding << "2:0"
                     } else if (significance=="nominal"){
-                        filters <<  retrieveFilterString("t2d-nominal")
-                        filterDescriptions << "P-value for association in exome chip studies"
+                        filters <<  retrieveFilterString("exchp-nominal")
                         filterDescriptions << "P-value significance is less than or equal to  0.05"
                         parameterEncoding << "1:1"
                         parameterEncoding << "2:1"
@@ -616,6 +624,14 @@ class FilterManagementService {
 
         return buildingFilters
     }
+
+
+
+
+
+
+
+
 
     private  LinkedHashMap setRegion (LinkedHashMap  buildingFilters, HashMap incomingParameters) {
         List <String> filters =  buildingFilters.filters
@@ -903,6 +919,71 @@ class FilterManagementService {
         return buildingFilters
 
     }
+
+    /***
+     * Here we consider two fields: one is a numeric value, and the other is an inequality specification ( that is,
+     * do we want numbers' greater than' or else 'less than' the numeric value we've been given.
+     * @param buildingFilters
+     * @param incomingParameters
+     * @return
+     */
+    private  LinkedHashMap factorInTheOddsRatios (LinkedHashMap  buildingFilters, HashMap incomingParameters){
+        List <String> filters =  buildingFilters.filters
+        List <String> filterDescriptions =  buildingFilters.filterDescriptions
+        List <String> parameterEncoding =  buildingFilters.parameterEncoding
+        boolean greaterThanInequality = false
+
+        if  ( incomingParameters.containsKey("or-select")  ) {
+            String inequality = incomingParameters ["or-select"]
+             if (inequality == "GTE") {
+                 greaterThanInequality = true
+             } else if (inequality == "LTE") {
+                 greaterThanInequality = true
+             }  else {
+
+             }
+        }
+//                (incomingParameters ["predictedEffects"]== "missense"))  { // we only perform this processing if the user
+//            // is asking about missense mutation
+//
+//            // There are three types of predictions to consider, corresponding to checkboxes
+//            //      polyphen_select
+//            //      sift_select
+//            //      condel_select
+//            // Handle these one at a time.  The process is simplified because the filter name uses parameters
+//            // that map precisely to the combo box elements on the front end
+//
+//            //  polyphen2
+//            if (incomingParameters.containsKey("polyphenSelect")){
+//                String choiceOfOptions =  incomingParameters["polyphenSelect"]
+//                filters <<  retrieveParameterizedFilterString("polyphenSelect",choiceOfOptions,0.0)
+//                filterDescriptions << "PolyPhen2 prediction is equal to ${choiceOfOptions}"
+//                parameterEncoding << "24:${choiceOfOptions}"
+//            }
+//
+//            //  SIFT
+//            if (incomingParameters.containsKey("siftSelect")){
+//                String choiceOfOptions =  incomingParameters["siftSelect"]
+//                filters <<  retrieveParameterizedFilterString("siftSelect",choiceOfOptions,0.0)
+//                filterDescriptions << "SIFT prediction is equal to ${choiceOfOptions}"
+//                parameterEncoding << "25:${choiceOfOptions}"
+//            }
+//
+//            //  Condel
+//            if (incomingParameters.containsKey("condelSelect")){
+//                String choiceOfOptions =  incomingParameters["condelSelect"]
+//                filters <<  retrieveParameterizedFilterString("condelSelect",choiceOfOptions,0.0)
+//                filterDescriptions << "Condel prediction is equal to ${choiceOfOptions}"
+//                parameterEncoding << "26:${choiceOfOptions}"
+//            }
+//
+//        }
+//
+        return buildingFilters
+
+    }
+
+
 
 
 

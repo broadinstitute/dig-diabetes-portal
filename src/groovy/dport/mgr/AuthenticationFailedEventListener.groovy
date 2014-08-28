@@ -11,7 +11,11 @@ class AuthenticationFailedEventListener implements ApplicationListener<Authentic
 
     void onApplicationEvent(AuthenticationFailureBadCredentialsEvent event) {
         println "AuthenticationFailedEventListener fired"
-
-            sharedToolsService.sendForgottenPasswordEmail('balexand@broadinstitute.org')
+        if ((event) &&
+            (event.exception)&&
+            (event.exception.extraInformation)&&
+            (event.exception.extraInformation.username)){
+            sharedToolsService.sendForgottenPasswordEmail(event.exception.extraInformation.username)
+        }
     }
 }

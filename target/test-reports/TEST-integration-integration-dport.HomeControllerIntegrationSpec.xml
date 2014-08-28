@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="Cognomen" name="dport.HomeControllerIntegrationSpec" tests="1" time="0.013" timestamp="2014-08-25T01:10:12">
+<testsuite errors="0" failures="0" hostname="GPA84-952" name="dport.HomeControllerIntegrationSpec" tests="1" time="0.016" timestamp="2014-08-28T13:45:42">
   <properties />
-  <testcase classname="dport.HomeControllerIntegrationSpec" name="test the main page of the application.  The first place that everybody goes" time="0.008" />
+  <testcase classname="dport.HomeControllerIntegrationSpec" name="test the main page of the application.  The first place that everybody goes" time="0.0080" />
   <system-out><![CDATA[--Output from test the main page of the application.  The first place that everybody goes--
 ]]></system-out>
   <system-err><![CDATA[--Output from test the main page of the application.  The first place that everybody goes--

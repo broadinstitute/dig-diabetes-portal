@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="Cognomen" name="dport.InformationalControllerIntegrationSpec" tests="7" time="0.364" timestamp="2014-08-25T01:10:12">
+<testsuite errors="0" failures="0" hostname="GPA84-952" name="dport.InformationalControllerIntegrationSpec" tests="7" time="0.621" timestamp="2014-08-28T13:45:42">
   <properties />
-  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the about page" time="0.004" />
-  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the contact page" time="0.003" />
-  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the hgat page" time="0.003" />
-  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the t2dgenes page" time="0.003" />
-  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the t2dgenesection page" time="0.229" />
-  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the got2d page" time="0.004" />
-  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the got2dsection page" time="0.114" />
+  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the about page" time="0.0060" />
+  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the contact page" time="0.0040" />
+  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the hgat page" time="0.0050" />
+  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the t2dgenes page" time="0.0040" />
+  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the t2dgenesection page" time="0.365" />
+  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the got2d page" time="0.0050" />
+  <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the got2dsection page" time="0.226" />
   <system-out><![CDATA[--Output from test the about page--
 --Output from test the contact page--
 --Output from test the hgat page--

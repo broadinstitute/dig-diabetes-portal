@@ -48,7 +48,7 @@ class BootStrap {
             samples['ben'] = [fullName:'Ben Alexander',
                               password:'ben',
                               nickname:'ben',
-                              email: "balexand@broadinstitute.org"]
+                              email: "benjamin.alexander96@yahoo.com"]
             samples['mary'] = [fullName:'Mary Carmichael',
                               password:'Mary',
                               nickname:'Mary',
@@ -58,10 +58,6 @@ class BootStrap {
                               nickname:'Fred',
                               email: "balexand@broadinstitute.org"]
         }
-
-//        ['ben':[fullName:'ben Alexander', password:'ben', email: "balexand@broadinstitute.org"],
-//                'mary':[fullName:'Mary Carmichael', password:'mary', email: "maryc@broadinstitute.org"],
-//                'fred': [fullName:'Fred Friendly',  password:'fred', email: "fred@broadinstitute.org"]];
 
         def userRole = Role.findByAuthority('ROLE_USER')  ?: new Role (authority: "ROLE_USER").save()
         def adminRole = Role.findByAuthority('ROLE_ADMIN')  ?: new Role (authority: "ROLE_ADMIN").save()

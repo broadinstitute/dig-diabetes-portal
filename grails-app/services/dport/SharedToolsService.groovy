@@ -183,7 +183,7 @@ class SharedToolsService {
                 "If you did not request a password reset then you can safely ignore this e-mail"
         mailService.sendMail {
             from "t2dPortal@gmail.com"
-            to "balexand@broadinstitute.org"
+            to userEmailAddress
             subject "Password reset necessary"
             body bodyOfMessage
         }

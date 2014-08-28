@@ -1,5 +1,5 @@
 Testsuite: dport.VariantSearchControllerIntegrationSpec
-Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.005 sec
+Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.007 sec
 ------------- Standard Output ---------------
 --Output from test variantSearch--
 ------------- ---------------- ---------------
@@ -7,4 +7,4 @@ Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.005 sec
 --Output from test variantSearch--
 ------------- ---------------- ---------------
 
-Testcase: test variantSearch took 0.005 sec
+Testcase: test variantSearch took 0.007 sec
