@@ -29,7 +29,7 @@
 .spinner {
     position: fixed;
     top: 2px;
-    right: 10%;
+    right: 25%;
     margin-left: 0px; /* half width of the spinner gif */
     margin-top: 0px; /* half height of the spinner gif */
     text-align:center;

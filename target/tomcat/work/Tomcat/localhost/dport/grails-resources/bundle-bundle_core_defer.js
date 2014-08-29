@@ -280,7 +280,7 @@ var UTILS = {
             }
             retVal +="</p>"+
                    "<ul>"+
-                    "<li>p-value from this analysis:"+variant[iMap[pValue]] + "</li>"+
+                    "<li>p-value from this analysis: "+variant[iMap[pValue]] + "</li>"+
                     "</ul>";
         } else {
             retVal += noDataLine;

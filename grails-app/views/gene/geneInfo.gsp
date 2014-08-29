@@ -478,7 +478,7 @@
     function fillUniprotSummary(geneInfo,show_gwas,show_exchp,show_exseq,show_sigma) {
         var funcDescrLine = "";
         if ((geneInfo)&&(geneInfo["Function_description"])){
-            funcDescrLine +=  ("<strong>Uniprot Summary:</strong>"+geneInfo['Function_description']);
+            funcDescrLine +=  ("<strong>Uniprot Summary:</strong> "+geneInfo['Function_description']);
         } else {
             funcDescrLine += "No uniprot summary available for this gene"
         }

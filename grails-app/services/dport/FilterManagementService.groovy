@@ -847,22 +847,24 @@ class FilterManagementService {
                     break;
                 case  "protein-truncating":
                     filters <<  retrieveFilterString("proteinTruncatingCheckbox") 
-                    filterDescriptions << "Estimated classification for proteins truncating variant effect"
+                    filterDescriptions << "Predicted effect: protein-truncating"
                     parameterEncoding << "23:1"
                     break;
                 case  "missense":
                     filters <<  retrieveFilterString("missenseCheckbox") 
-                    filterDescriptions << "Estimated classification for missense effect"
+                    filterDescriptions << "Predicted effect: missense"
                     parameterEncoding << "23:2"
                     break;
                 case  "noEffectSynonymous":
-                    filters <<  retrieveFilterString("synonymousCheckbox") 
-                    filterDescriptions << "Estimated classification for no effects (synonymous)"
+                    filters <<  retrieveFilterString("synonymousCheckbox")
+                    //filterDescriptions << "Estimated classification for no effects (synonymous)"
+                    filterDescriptions << "No predicted effect (synonymous)"
                     parameterEncoding << "23:3"
                     break;
                 case  "noEffectNoncoding":
-                    filters <<  retrieveFilterString("noncodingCheckbox") 
-                    filterDescriptions <<  "Estimated classification for no effects (non-coding)"
+                    filters <<  retrieveFilterString("noncodingCheckbox")
+                    //filterDescriptions <<  "Estimated classification for no effects (non-coding)"
+                    filterDescriptions <<  "No predicted effect (non-coding)"
                     parameterEncoding << "23:4"
                     break;
 

@@ -37,7 +37,7 @@
         $('#phenotypeTraits').dataTable({
             iDisplayLength: 20,
             bFilter: false,
-            aaSorting: [[ 1, "asc" ]],
+            aaSorting: [[ 2, "asc" ]],
             aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 2, 3, 4 ] } ]
         });
         console.log('fill The phenotypeTraits table');
