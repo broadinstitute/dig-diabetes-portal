@@ -116,7 +116,12 @@ class FilterManagementService {
             case  "siftSelect"        :
                 returnValue = """{ "filter_type": "STRING", "operand": "SIFT_PRED", "operator": "EQ", "value": "${parm1}" }""".toString()
                 break;
-
+            case "setOrValueLTE" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "${parm1}", "operator": "LTE", "value": ${parm2} }""".toString()
+                break;
+            case "setOrValueGTE" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "${parm1}", "operator": "GTE", "value": ${parm2} }""".toString()
+                break;
             default: break;
         }
          return  returnValue
@@ -144,6 +149,8 @@ class FilterManagementService {
         String datatypeOperand = buildingFilters.datatypeOperand
 
         buildingFilters = determineThreshold (buildingFilters, incomingParameters, datatypeOperand)
+
+        buildingFilters = factorInTheOddsRatios(buildingFilters, incomingParameters, datatypeOperand)
 
         buildingFilters = setRegion(buildingFilters, incomingParameters)
 
@@ -929,59 +936,73 @@ class FilterManagementService {
      * @param incomingParameters
      * @return
      */
-    private  LinkedHashMap factorInTheOddsRatios (LinkedHashMap  buildingFilters, HashMap incomingParameters){
+    private  LinkedHashMap factorInTheOddsRatios (LinkedHashMap  buildingFilters, HashMap incomingParameters,String datatypeOperand){
         List <String> filters =  buildingFilters.filters
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
         boolean greaterThanInequality = false
 
-        if  ( incomingParameters.containsKey("or-select")  ) {
+        if  (( incomingParameters.containsKey("or-select")  ) &&
+                ( incomingParameters.containsKey("or-value"))){
             String inequality = incomingParameters ["or-select"]
-             if (inequality == "GTE") {
-                 greaterThanInequality = true
-             } else if (inequality == "LTE") {
-                 greaterThanInequality = true
-             }  else {
+            String orValueStr = incomingParameters ["or-value"]
+            Boolean errorFree = true
+            Double adjustedValue
+            Double orValue
+            try {
+                orValue = new Double(orValueStr)
+            } catch (exception) {
+                errorFree = false
+                // TODO: this is an error condition -- the user-specified a non-numeric allele frequency.  Default behavior?
+                exception.printStackTrace()
+            }
+            String filterInequalityDescription = ""
+            if (errorFree)  {
 
-             }
+            }
+            String chooseColumn
+            if (errorFree)  {
+                if (datatypeOperand == "_13k_T2D_P_EMMAX_FE_IV") {      // exome seq
+                    chooseColumn = "_13k_T2D_OR_WALD_DOS_FE_IV"
+                } else if (datatypeOperand == "GWAS_T2D_PVALUE") {
+                    chooseColumn = "GWAS_T2D_OR"
+                }  else if (datatypeOperand == "EXCHP_T2D_P_value") {
+                    chooseColumn = "EXCHP_T2D_BETA"
+                }  else {
+                    chooseColumn = "SIGMA_T2D_OR"
+                }
+            }
+
+            // exome chip filtering is special
+            if ( chooseColumn == "EXCHP_T2D_BETA")  {
+               if (orValue > 0){
+                   adjustedValue = Math.log(orValue)
+               } else {
+                   errorFree = false
+               }
+            }  else  {
+                adjustedValue =  orValue
+            }
+
+
+            if (errorFree) {
+                if (inequality == "GTE") {
+                    filters <<  retrieveParameterizedFilterString("setOrValueGTE",chooseColumn,adjustedValue as BigDecimal)
+                    filterDescriptions << "Odds ratio greater than or equal to ${orValue}"
+                    parameterEncoding << "27:1"
+                    parameterEncoding << "28:${orValue}"
+                } else if (inequality == "LTE") {
+                    filters <<  retrieveParameterizedFilterString("setOrValueLTE",chooseColumn,adjustedValue as BigDecimal)
+                    filterDescriptions << "Odds ratio less than or equal to ${orValue}"
+                    parameterEncoding << "27:2"
+                    parameterEncoding << "28:${orValue}"
+                }  else {
+                    errorFree = false
+                }
+            }
+
         }
-//                (incomingParameters ["predictedEffects"]== "missense"))  { // we only perform this processing if the user
-//            // is asking about missense mutation
-//
-//            // There are three types of predictions to consider, corresponding to checkboxes
-//            //      polyphen_select
-//            //      sift_select
-//            //      condel_select
-//            // Handle these one at a time.  The process is simplified because the filter name uses parameters
-//            // that map precisely to the combo box elements on the front end
-//
-//            //  polyphen2
-//            if (incomingParameters.containsKey("polyphenSelect")){
-//                String choiceOfOptions =  incomingParameters["polyphenSelect"]
-//                filters <<  retrieveParameterizedFilterString("polyphenSelect",choiceOfOptions,0.0)
-//                filterDescriptions << "PolyPhen2 prediction is equal to ${choiceOfOptions}"
-//                parameterEncoding << "24:${choiceOfOptions}"
-//            }
-//
-//            //  SIFT
-//            if (incomingParameters.containsKey("siftSelect")){
-//                String choiceOfOptions =  incomingParameters["siftSelect"]
-//                filters <<  retrieveParameterizedFilterString("siftSelect",choiceOfOptions,0.0)
-//                filterDescriptions << "SIFT prediction is equal to ${choiceOfOptions}"
-//                parameterEncoding << "25:${choiceOfOptions}"
-//            }
-//
-//            //  Condel
-//            if (incomingParameters.containsKey("condelSelect")){
-//                String choiceOfOptions =  incomingParameters["condelSelect"]
-//                filters <<  retrieveParameterizedFilterString("condelSelect",choiceOfOptions,0.0)
-//                filterDescriptions << "Condel prediction is equal to ${choiceOfOptions}"
-//                parameterEncoding << "26:${choiceOfOptions}"
-//            }
-//
-//        }
-//
-        return buildingFilters
+       return buildingFilters
 
     }
 

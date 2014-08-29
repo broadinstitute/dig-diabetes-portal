@@ -189,6 +189,19 @@
                             case 26:  // data value radio buttons
                                 $("#condelSelect").val(value) ;
                                 break;
+                            case 27:  // data value radio buttons
+//                                    if (value===1) {
+//                                        $("#or-select").val("GTE") ;
+//                                    } else  if (value===2) {
+//                                        $("#or-select").val("LTE") ;
+//                                    } else {
+//                                        $("#or-select").val("") ;
+//                                    }
+                                break;
+                            case 28:  // data value radio buttons
+                                textField = $("#or-value");
+                                textField.val(value);
+                                break;
 
                             default: break;
                         }
