@@ -38,7 +38,16 @@
         var margin = { top: 250, right: 100, bottom: 100, left: 100 };
         var width = total_width - margin.left - margin.right;
         var grid_size = Math.floor(width / 25);
-        var height = that.variants.length*grid_size;
+
+
+        var uniqueVariantLabels = [];
+        for ( var i = 0 ; i < that.variants.length ; i++ ) {
+            if  (uniqueVariantLabels.indexOf(that.variants[i]['DBSNP_ID'])==-1){
+                uniqueVariantLabels.push(that.variants[i]['DBSNP_ID']);
+            }
+        }
+
+        var height = uniqueVariantLabels.length*grid_size;
         var total_height = height + margin.top + margin.bottom;
 
         //var svg = d3.select(that.$("#vis")[0]).append("svg")
@@ -64,20 +73,19 @@
                 .attr('y2', height)
                 .attr('stroke', '#bbb')
                 .attr('stroke-width', '1');
-        ///dport/variant/variantInfo/'+ d.DBSNP_ID})
         var variant_labels = svg.append('g')
                 .selectAll(".row-g")
-                .data(that.variants)
+                .data(uniqueVariantLabels)
                 .enter()
                 .append('a')
                 .attr('class', 'boldlink')
                 .attr('xlink:href', function(d) {
                     var rootUrl='<g:createLink controller="variant" action="variantInfo" />';
-                    return rootUrl+'/'+d.DBSNP_ID
+                    return rootUrl+'/'+d
                 })
                 .append('text')
                 .attr("class", function (d,i) { return "variantlabel r"+i;} )
-                .text(function (d) { return d.DBSNP_ID; })
+                .text(function (d) { return d; })
                 .attr("x", 0)
                 .attr("y", function (d, i) { return i * grid_size + 5; })
                 .style("text-anchor", "end");
@@ -105,29 +113,29 @@
         for ( var i = 0 ; i < that.variants.length ; i++ ) {
             var currentVariant =   that.variants[i];
             var variantToAdd = currentVariant['DBSNP_ID'];
-            if (!variantIndices[variantToAdd]){
-                variantIndices[variantToAdd] =  variantCount++;
-            }
+            var indexOfVariant =   uniqueVariantLabels.indexOf(variantToAdd) ;
+            variantIndices[variantToAdd] =  indexOfVariant;
         }
         // now we have counted the total number of unique variants
         $('#displayCountOfIdentifiedTraits').append(variantCount);
 
+        var maintainUniqueness = [];
+
         for ( var i = 0 ; i < that.variants.length  ; i++ ) {
-            for (var j = 0; j < traits.length; j++) {
+
                 var currentVariant =   that.variants[i];
-                var a = {var_index :variantIndices[currentVariant['DBSNP_ID']],
-                    trait_index: trait_indices[currentVariant['TRAIT']],
-                    val:currentVariant};
-                 assocs.push(a)  ;
-            }
+                var variantIndex =  currentVariant['DBSNP_ID'];
+                var traitIndex =  currentVariant['TRAIT'];
+                var uniquenessString = ""+variantIndex+"-"+traitIndex;
+                if (maintainUniqueness.indexOf(uniquenessString)=== -1) {
+                    maintainUniqueness.push(uniquenessString);
+                    var a = {var_index :variantIndices[variantIndex],
+                        trait_index: trait_indices[traitIndex],
+                        val:currentVariant};
+                    assocs.push(a)  ;
+                }
+
         }
-//        _.each(that.variants, function(variant, i) {
-//            _.each(variant.assocs, function(a) {
-//                a.var_index = i;
-//                a.trait_index = trait_indices[a.TRAIT];
-//                assocs.push(a);
-//            });
-//        });
 
         var circle_size = function(assoc) {
             if (assoc.val.PVALUE > .05) return 3;

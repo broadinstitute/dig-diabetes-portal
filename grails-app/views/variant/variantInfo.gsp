@@ -52,8 +52,9 @@
             _13k_T2D_P_EMMAX_FE_IV: 20
          }
         variant =  data['variant'];
-        variantTitle =  UTILS.get_variant_title(variant,"<%=variantToSearch%>");
-        $('#variantTitle').append(variantTitle);
+        //variantTitle =  UTILS.get_variant_title(variant,"<%=variantToSearch%>");
+        variantTitle =  "<%=variantToSearch%>";
+        //$('#variantTitle').append(variantTitle);
         $('#variantCharacterization').append(UTILS.getSimpleVariantsEffect(variant.MOST_DEL_SCORE));
         $('#describingVariantAssociation').append(UTILS.variantInfoHeaderSentence(variant));
         var pVal= UTILS.get_lowest_p_value(variant);
@@ -126,7 +127,7 @@
 
 
                 <h1>
-                    <span id="variantTitle"></span>
+                    <span id="variantTitle"><%=variantToSearch%></span>
                     <a class="page-nav-link" href="#associations">Associations</a>
                     <a class="page-nav-link" href="#populations">Populations</a>
                     <a class="page-nav-link" href="#biology">Biology</a>
