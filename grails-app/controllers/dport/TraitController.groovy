@@ -108,10 +108,14 @@ class TraitController {
         String regionsSpecification = params.id
 
         JSONObject jsonObject =  restServerService.searchTraitByUnparsedRegion (regionsSpecification)
-        render(status:200, contentType:"application/json") {
-            [variants:jsonObject['variants']]
+        if ((jsonObject) && (jsonObject['variants'])) {
+            render(status:200, contentType:"application/json") {
+                [variants:jsonObject['variants']]
+            }
+        } else {
+            render(status:300, contentType:"application/json")
         }
-    }
+     }
 
 
 

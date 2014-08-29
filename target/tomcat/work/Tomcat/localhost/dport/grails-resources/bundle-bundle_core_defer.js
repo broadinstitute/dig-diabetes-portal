@@ -260,14 +260,20 @@ var UTILS = {
         var iMap = UTILS.invertMap(vMap);
         if (variant[iMap[availableData]]){
             retVal +="<p>";
+            // may or may not be bold
             if (variant[iMap[pValue]] <= strongCutOff ) {
-                retVal += "<strong>" + textStrongLine1 +" "+ variantTitle  +" "+ textStrongLine2;
+                retVal += "<strong>";
+            }
+            // always needs descr
+            retVal +=  (textStrongLine1 +" "+variantTitle+" ");
+            if (variant[iMap[pValue]] <= strongCutOff ) {
+                retVal += textStrongLine2;
             }
             if  (variant[iMap[pValue]]  >  strongCutOff  && variant[iMap[pValue]] <=   weakCutOff) {
                 retVal += textMediumLine;
             }
             if  (variant[iMap[pValue]]  >  weakCutOff) {
-                retVal  += textMediumLine;
+                retVal  += textWeakLine;
             }
             if (variant[iMap[pValue]] <= strongCutOff ) {
                 retVal += "</strong>" ;
@@ -306,7 +312,7 @@ var UTILS = {
             retVal += "<li>";
 
             retVal += ((proportion*100).toPrecision(3) + " percent of " + ethnicityFullName [i]);
-            retVal += "(";
+            retVal += " (";
             retVal += UTILS.frequencyCharacterization(proportion,[0,0.005,0.05]);
             retVal += (")" +
                 "</li>");

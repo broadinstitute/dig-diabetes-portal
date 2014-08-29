@@ -42,20 +42,25 @@
 <script>
     // for now let's error out in a noisy way. Submerge this when it's time for production mode
     function errorReporter(jqXHR, exception) {
-        if (jqXHR.status === 0) {
-            alert('Not connect.\n Verify Network.');
-        } else if (jqXHR.status == 404) {
-            alert('Requested page not found. [404]');
-        } else if (jqXHR.status == 500) {
-            alert('Internal Server Error [500].');
-        } else if (exception === 'parsererror') {
-            alert('Requested JSON parse failed.');
-        } else if (exception === 'timeout') {
-            alert('Time out error.');
-        } else if (exception === 'abort') {
-            alert('Ajax request aborted.');
-        } else {
-            alert('Uncaught Error.\n' + jqXHR.responseText);
+        // TODO: send these back to the server for later analysis.  for this week's demo we ignore them
+        if ( false )  {
+            if (jqXHR.status === 0) {
+                alert('Not connect.\n Verify Network.');
+            } else if (jqXHR.status == 404) {
+                alert('Requested page not found. [404]');
+            } else if (jqXHR.status == 500) {
+                alert('Internal Server Error [500].');
+            } else if (exception === 'parsererror') {
+                alert('Requested JSON parse failed.');
+            } else if (exception === 'timeout') {
+                alert('Time out error.');
+            } else if (exception === 'abort') {
+                alert('Ajax request aborted.');
+            } else {
+                alert('Uncaught Error.\n' + jqXHR.responseText);
+            }
+        }  else {
+            alert('incorrect data entered.  Please check your input and try again.')
         }
     }
 </script>
