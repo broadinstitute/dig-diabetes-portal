@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuites>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="0" name="GeneControllerIntegrationSpec" package="dport" tests="3" time="0.664" timestamp="2014-08-28T13:45:41">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="0" name="GeneControllerIntegrationSpec" package="dport" tests="3" time="0.615" timestamp="2014-08-31T21:32:12">
       <properties />
 
-      <testcase classname="dport.GeneControllerIntegrationSpec" name="test engine that returns data for command completion" time="0.331" />
+      <testcase classname="dport.GeneControllerIntegrationSpec" name="test engine that returns data for command completion" time="0.31" />
 
-      <testcase classname="dport.GeneControllerIntegrationSpec" name="test return of the gene info core page" time="0.033" />
+      <testcase classname="dport.GeneControllerIntegrationSpec" name="test return of the gene info core page" time="0.031" />
 
-      <testcase classname="dport.GeneControllerIntegrationSpec" name="test return of the gene info Ajax content" time="0.293" />
+      <testcase classname="dport.GeneControllerIntegrationSpec" name="test return of the gene info Ajax content" time="0.267" />
 
       <system-out><![CDATA[--Output from test engine that returns data for command completion--
 --Output from test return of the gene info core page--
@@ -20,10 +20,10 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="1" name="GeneIntegrationSpec" package="dport" tests="1" time="0.022" timestamp="2014-08-28T13:45:42">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="1" name="GeneIntegrationSpec" package="dport" tests="1" time="0.019" timestamp="2014-08-31T21:32:12">
       <properties />
 
-      <testcase classname="dport.GeneIntegrationSpec" name="test functions on gene domain object" time="0.014" />
+      <testcase classname="dport.GeneIntegrationSpec" name="test functions on gene domain object" time="0.013" />
 
       <system-out><![CDATA[--Output from test functions on gene domain object--
 ]]></system-out>
@@ -32,40 +32,40 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="2" name="GeneManagementServiceIntegrationSpec" package="dport" tests="16" time="0.238" timestamp="2014-08-28T13:45:42">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="2" name="GeneManagementServiceIntegrationSpec" package="dport" tests="16" time="0.178" timestamp="2014-08-31T21:32:12">
       <properties />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Single return Through direct call" time="0.013" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Single return Through direct call" time="0.011" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Multiple return Through direct call" time="0.0080" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Multiple return Through direct call" time="0.007" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Nonexistent gene Through direct call" time="0.019" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Nonexistent gene Through direct call" time="0.014" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Lowercase=no match Through direct call" time="0.017" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Lowercase=no match Through direct call" time="0.01" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Null matches all Through direct call" time="0.058" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test retrieveGene Null matches all Through direct call" time="0.04" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Single return" time="0.0080" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Single return" time="0.006" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Multiple return" time="0.0080" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Multiple return" time="0.006" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Nonexistent gene" time="0.014" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Nonexistent gene" time="0.01" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Lowercase=match" time="0.015" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Lowercase=match" time="0.011" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Null=no match" time="0.0040" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatches Null=no match" time="0.003" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatchesInJson" time="0.017" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test deliverPartialMatchesInJson" time="0.015" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches legal[0]" time="0.012" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches legal[0]" time="0.009" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches legal[1]" time="0.0080" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches legal[1]" time="0.006" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches legal[2]" time="0.0080" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches legal[2]" time="0.006" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches should correctly return nothing[0]" time="0.0070" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches should correctly return nothing[0]" time="0.006" />
 
-      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches should correctly return nothing[1]" time="0.0040" />
+      <testcase classname="dport.GeneManagementServiceIntegrationSpec" name="test partialGeneMatches should correctly return nothing[1]" time="0.003" />
 
       <system-out><![CDATA[--Output from test retrieveGene Single return Through direct call--
 --Output from test retrieveGene Multiple return Through direct call--
@@ -104,10 +104,10 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="3" name="HomeControllerIntegrationSpec" package="dport" tests="1" time="0.016" timestamp="2014-08-28T13:45:42">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="3" name="HomeControllerIntegrationSpec" package="dport" tests="1" time="0.012" timestamp="2014-08-31T21:32:12">
       <properties />
 
-      <testcase classname="dport.HomeControllerIntegrationSpec" name="test the main page of the application.  The first place that everybody goes" time="0.0080" />
+      <testcase classname="dport.HomeControllerIntegrationSpec" name="test the main page of the application.  The first place that everybody goes" time="0.008" />
 
       <system-out><![CDATA[--Output from test the main page of the application.  The first place that everybody goes--
 ]]></system-out>
@@ -116,22 +116,22 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="4" name="InformationalControllerIntegrationSpec" package="dport" tests="7" time="0.621" timestamp="2014-08-28T13:45:42">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="4" name="InformationalControllerIntegrationSpec" package="dport" tests="7" time="0.393" timestamp="2014-08-31T21:32:13">
       <properties />
 
-      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the about page" time="0.0060" />
+      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the about page" time="0.004" />
 
-      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the contact page" time="0.0040" />
+      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the contact page" time="0.003" />
 
-      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the hgat page" time="0.0050" />
+      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the hgat page" time="0.003" />
 
-      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the t2dgenes page" time="0.0040" />
+      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the t2dgenes page" time="0.003" />
 
-      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the t2dgenesection page" time="0.365" />
+      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the t2dgenesection page" time="0.246" />
 
-      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the got2d page" time="0.0050" />
+      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the got2d page" time="0.004" />
 
-      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the got2dsection page" time="0.226" />
+      <testcase classname="dport.InformationalControllerIntegrationSpec" name="test the got2dsection page" time="0.126" />
 
       <system-out><![CDATA[--Output from test the about page--
 --Output from test the contact page--
@@ -152,10 +152,10 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="5" name="PhenotypeIntegrationSpec" package="dport" tests="1" time="0.011" timestamp="2014-08-28T13:45:43">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="5" name="PhenotypeIntegrationSpec" package="dport" tests="1" time="0.009" timestamp="2014-08-31T21:32:13">
       <properties />
 
-      <testcase classname="dport.PhenotypeIntegrationSpec" name="test functions on phenotype domain object" time="0.0060" />
+      <testcase classname="dport.PhenotypeIntegrationSpec" name="test functions on phenotype domain object" time="0.005" />
 
       <system-out><![CDATA[--Output from test functions on phenotype domain object--
 ]]></system-out>
@@ -164,10 +164,10 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="6" name="ProteinEffectIntegrationSpec" package="dport" tests="1" time="0.011" timestamp="2014-08-28T13:45:43">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="6" name="ProteinEffectIntegrationSpec" package="dport" tests="1" time="0.009" timestamp="2014-08-31T21:32:13">
       <properties />
 
-      <testcase classname="dport.ProteinEffectIntegrationSpec" name="test functions on gene domain object" time="0.0060" />
+      <testcase classname="dport.ProteinEffectIntegrationSpec" name="test functions on gene domain object" time="0.005" />
 
       <system-out><![CDATA[--Output from test functions on gene domain object--
 ]]></system-out>
@@ -176,12 +176,12 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="7" name="RegionControllerIntegrationSpec" package="dport" tests="2" time="4.443" timestamp="2014-08-28T13:45:43">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="7" name="RegionControllerIntegrationSpec" package="dport" tests="2" time="4.584" timestamp="2014-08-31T21:32:13">
       <properties />
 
-      <testcase classname="dport.RegionControllerIntegrationSpec" name="test the search a region page" time="0.185" />
+      <testcase classname="dport.RegionControllerIntegrationSpec" name="test the search a region page" time="0.03" />
 
-      <testcase classname="dport.RegionControllerIntegrationSpec" name="test the search a region by ajax page" time="4.252" />
+      <testcase classname="dport.RegionControllerIntegrationSpec" name="test the search a region by ajax page" time="4.548" />
 
       <system-out><![CDATA[--Output from test the search a region page--
 --Output from test the search a region by ajax page--
@@ -192,20 +192,81 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="8" name="SharedToolsServiceIntegrationSpec" package="dport" tests="6" time="0.043" timestamp="2014-08-28T13:45:48">
+  <testsuite errors="2" failures="0" hostname="Cognomen" id="8" name="RestServerServiceIntegrationSpec" package="dport" tests="10" time="6.645" timestamp="2014-08-31T21:32:18">
       <properties />
 
-      <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test urlEncodedListOfPhenotypes smoke" time="0.0070" />
+      <testcase classname="dport.RestServerServiceIntegrationSpec" name="test  smoke" time="0.003" />
 
-      <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test urlEncodedListOfProteinEffect smoke" time="0.0070" />
+      <testcase classname="dport.RestServerServiceIntegrationSpec" name="test retrieveTreatAsSpecifiedByGenomicRegion" time="3.437" />
 
-      <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpFiltersForRoundTrip Typical usage" time="0.0080" />
+      <testcase classname="dport.RestServerServiceIntegrationSpec" name="test retrieveTreatByUnparsedGenomicRegion" time="0.101">
+          <error message="No signature of method: dport.RestServerService.searchForTraitBySpecifiedRegion() is applicable for argument types: (java.lang.String, java.lang.Integer, java.lang.Integer) values: [9, 21940000, 22190000]&#xa;Possible solutions: searchForTraitBySpecifiedRegion(java.lang.Integer, java.lang.Integer, java.lang.Integer)" type="groovy.lang.MissingMethodException">groovy.lang.MissingMethodException: No signature of method: dport.RestServerService.searchForTraitBySpecifiedRegion() is applicable for argument types: (java.lang.String, java.lang.Integer, java.lang.Integer) values: [9, 21940000, 22190000]
+Possible solutions: searchForTraitBySpecifiedRegion(java.lang.Integer, java.lang.Integer, java.lang.Integer)
+	at dport.RestServerService.$tt__searchTraitByUnparsedRegion(RestServerService.groovy:523)
+	at dport.RestServerServiceIntegrationSpec.test retrieveTreatByUnparsedGenomicRegion(RestServerServiceIntegrationSpec.groovy:48)
+</error>
 
-      <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpFiltersForRoundTrip with empty parameter list" time="0.0040" />
+      </testcase>
 
-      <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpEncodedParameters with typical parameter list" time="0.0070" />
+      <testcase classname="dport.RestServerServiceIntegrationSpec" name="test searchTraitByName" time="1.706" />
 
-      <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpEncodedParameters with empty parameters" time="0.0030" />
+      <testcase classname="dport.RestServerServiceIntegrationSpec" name="test retrieveTraitInfoByVariant" time="0.143" />
+
+      <testcase classname="dport.RestServerServiceIntegrationSpec" name="test connection to diabetes server" time="0.097" />
+
+      <testcase classname="dport.RestServerServiceIntegrationSpec" name="test retrieveGeneInfoByName" time="0.092" />
+
+      <testcase classname="dport.RestServerServiceIntegrationSpec" name="test retrieveVariantInfoByName" time="0.148" />
+
+      <testcase classname="dport.RestServerServiceIntegrationSpec" name="test retrieveGenomicRegionBySpecifiedRegion" time="0.038">
+          <error message="No signature of method: dport.RestServerService.searchGenomicRegionBySpecifiedRegion() is applicable for argument types: (java.lang.Integer, java.lang.Integer, java.lang.Integer) values: [9, 21940000, 22190000]&#xa;Possible solutions: searchGenomicRegionBySpecifiedRegion(java.lang.String, java.lang.Integer, java.lang.Integer)" type="groovy.lang.MissingMethodException">groovy.lang.MissingMethodException: No signature of method: dport.RestServerService.searchGenomicRegionBySpecifiedRegion() is applicable for argument types: (java.lang.Integer, java.lang.Integer, java.lang.Integer) values: [9, 21940000, 22190000]
+Possible solutions: searchGenomicRegionBySpecifiedRegion(java.lang.String, java.lang.Integer, java.lang.Integer)
+	at dport.RestServerServiceIntegrationSpec.test retrieveGenomicRegionBySpecifiedRegion(RestServerServiceIntegrationSpec.groovy:118)
+</error>
+
+      </testcase>
+
+      <testcase classname="dport.RestServerServiceIntegrationSpec" name="test retrieveGenomicRegionAsSpecifiedByUsers" time="0.874" />
+
+      <system-out><![CDATA[--Output from test  smoke--
+--Output from test retrieveTreatAsSpecifiedByGenomicRegion--
+--Output from test retrieveTreatByUnparsedGenomicRegion--
+--Output from test searchTraitByName--
+--Output from test retrieveTraitInfoByVariant--
+--Output from test connection to diabetes server--
+--Output from test retrieveGeneInfoByName--
+--Output from test retrieveVariantInfoByName--
+--Output from test retrieveGenomicRegionBySpecifiedRegion--
+--Output from test retrieveGenomicRegionAsSpecifiedByUsers--
+]]></system-out>
+
+      <system-err><![CDATA[--Output from test  smoke--
+--Output from test retrieveTreatAsSpecifiedByGenomicRegion--
+--Output from test retrieveTreatByUnparsedGenomicRegion--
+--Output from test searchTraitByName--
+--Output from test retrieveTraitInfoByVariant--
+--Output from test connection to diabetes server--
+--Output from test retrieveGeneInfoByName--
+--Output from test retrieveVariantInfoByName--
+--Output from test retrieveGenomicRegionBySpecifiedRegion--
+--Output from test retrieveGenomicRegionAsSpecifiedByUsers--
+]]></system-err>
+
+  </testsuite>
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="9" name="SharedToolsServiceIntegrationSpec" package="dport" tests="6" time="0.054" timestamp="2014-08-31T21:32:24">
+      <properties />
+
+      <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test urlEncodedListOfPhenotypes smoke" time="0.006" />
+
+      <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test urlEncodedListOfProteinEffect smoke" time="0.007" />
+
+      <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpFiltersForRoundTrip Typical usage" time="0.007" />
+
+      <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpFiltersForRoundTrip with empty parameter list" time="0.002" />
+
+      <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpEncodedParameters with typical parameter list" time="0.025" />
+
+      <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpEncodedParameters with empty parameters" time="0.003" />
 
       <system-out><![CDATA[--Output from test urlEncodedListOfPhenotypes smoke--
 --Output from test urlEncodedListOfProteinEffect smoke--
@@ -224,20 +285,28 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="9" name="TraitControllerIntegrationSpec" package="dport" tests="6" time="24.503" timestamp="2014-08-28T13:45:48">
+  <testsuite errors="1" failures="0" hostname="Cognomen" id="10" name="TraitControllerIntegrationSpec" package="dport" tests="6" time="1.123" timestamp="2014-08-31T21:32:24">
       <properties />
 
-      <testcase classname="dport.TraitControllerIntegrationSpec" name="test the traitInfo page" time="0.0050" />
+      <testcase classname="dport.TraitControllerIntegrationSpec" name="test the traitInfo page" time="0.005" />
 
-      <testcase classname="dport.TraitControllerIntegrationSpec" name="test the search a trait (and potentially  ignificance) page" time="0.0050" />
+      <testcase classname="dport.TraitControllerIntegrationSpec" name="test the search a trait (and potentially  ignificance) page" time="0.005" />
 
-      <testcase classname="dport.TraitControllerIntegrationSpec" name="test the search a trait by ajax page" time="0.523" />
+      <testcase classname="dport.TraitControllerIntegrationSpec" name="test the search a trait by ajax page" time="0.452" />
 
-      <testcase classname="dport.TraitControllerIntegrationSpec" name="test the association statistics across 25 traits by ajax page" time="0.487" />
+      <testcase classname="dport.TraitControllerIntegrationSpec" name="test the association statistics across 25 traits by ajax page" time="0.618" />
 
-      <testcase classname="dport.TraitControllerIntegrationSpec" name="test the search a traits across region page" time="0.01" />
+      <testcase classname="dport.TraitControllerIntegrationSpec" name="test the search a traits across region page" time="0.007" />
 
-      <testcase classname="dport.TraitControllerIntegrationSpec" name="test traitVariantCrossAjax" time="23.468" />
+      <testcase classname="dport.TraitControllerIntegrationSpec" name="test traitVariantCrossAjax" time="0.032">
+          <error message="No signature of method: dport.RestServerService.searchForTraitBySpecifiedRegion() is applicable for argument types: (java.lang.String, java.lang.Integer, java.lang.Integer) values: [1, 209348715, 210349783]&#xa;Possible solutions: searchForTraitBySpecifiedRegion(java.lang.Integer, java.lang.Integer, java.lang.Integer)" type="groovy.lang.MissingMethodException">groovy.lang.MissingMethodException: No signature of method: dport.RestServerService.searchForTraitBySpecifiedRegion() is applicable for argument types: (java.lang.String, java.lang.Integer, java.lang.Integer) values: [1, 209348715, 210349783]
+Possible solutions: searchForTraitBySpecifiedRegion(java.lang.Integer, java.lang.Integer, java.lang.Integer)
+	at dport.RestServerService.$tt__searchTraitByUnparsedRegion(RestServerService.groovy:523)
+	at dport.TraitController.traitVariantCrossAjax(TraitController.groovy:110)
+	at dport.TraitControllerIntegrationSpec.test traitVariantCrossAjax(TraitControllerIntegrationSpec.groovy:91)
+</error>
+
+      </testcase>
 
       <system-out><![CDATA[--Output from test the traitInfo page--
 --Output from test the search a trait (and potentially  ignificance) page--
@@ -256,12 +325,12 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="10" name="VariantControllerIntegrationSpec" package="dport" tests="2" time="0.111" timestamp="2014-08-28T13:46:12">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="11" name="VariantControllerIntegrationSpec" package="dport" tests="2" time="0.148" timestamp="2014-08-31T21:32:25">
       <properties />
 
-      <testcase classname="dport.VariantControllerIntegrationSpec" name="test the variantInfo page" time="0.0050" />
+      <testcase classname="dport.VariantControllerIntegrationSpec" name="test the variantInfo page" time="0.004" />
 
-      <testcase classname="dport.VariantControllerIntegrationSpec" name="test the variantAjax data retrieval" time="0.1" />
+      <testcase classname="dport.VariantControllerIntegrationSpec" name="test the variantAjax data retrieval" time="0.14" />
 
       <system-out><![CDATA[--Output from test the variantInfo page--
 --Output from test the variantAjax data retrieval--
@@ -272,10 +341,10 @@
 ]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="GPA84-952" id="11" name="VariantSearchControllerIntegrationSpec" package="dport" tests="1" time="0.0070" timestamp="2014-08-28T13:46:12">
+  <testsuite errors="0" failures="0" hostname="Cognomen" id="12" name="VariantSearchControllerIntegrationSpec" package="dport" tests="1" time="0.005" timestamp="2014-08-31T21:32:26">
       <properties />
 
-      <testcase classname="dport.VariantSearchControllerIntegrationSpec" name="test variantSearch" time="0.0070" />
+      <testcase classname="dport.VariantSearchControllerIntegrationSpec" name="test variantSearch" time="0.005" />
 
       <system-out><![CDATA[--Output from test variantSearch--
 ]]></system-out>

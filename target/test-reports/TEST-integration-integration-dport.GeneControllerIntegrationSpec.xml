@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="GPA84-952" name="dport.GeneControllerIntegrationSpec" tests="3" time="0.664" timestamp="2014-08-28T13:45:41">
+<testsuite errors="0" failures="0" hostname="Cognomen" name="dport.GeneControllerIntegrationSpec" tests="3" time="0.615" timestamp="2014-08-31T21:32:12">
   <properties />
-  <testcase classname="dport.GeneControllerIntegrationSpec" name="test engine that returns data for command completion" time="0.331" />
-  <testcase classname="dport.GeneControllerIntegrationSpec" name="test return of the gene info core page" time="0.033" />
-  <testcase classname="dport.GeneControllerIntegrationSpec" name="test return of the gene info Ajax content" time="0.293" />
+  <testcase classname="dport.GeneControllerIntegrationSpec" name="test engine that returns data for command completion" time="0.31" />
+  <testcase classname="dport.GeneControllerIntegrationSpec" name="test return of the gene info core page" time="0.031" />
+  <testcase classname="dport.GeneControllerIntegrationSpec" name="test return of the gene info Ajax content" time="0.267" />
   <system-out><![CDATA[--Output from test engine that returns data for command completion--
 --Output from test return of the gene info core page--
 --Output from test return of the gene info Ajax content--

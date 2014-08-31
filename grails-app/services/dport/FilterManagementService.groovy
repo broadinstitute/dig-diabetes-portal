@@ -195,7 +195,6 @@ class FilterManagementService {
                     (extractedNumbers["startExtent"])   &&
                     (extractedNumbers["endExtent"])&&
                     (extractedNumbers["chromosomeNumber"]) ) {
-
                 LinkedHashMap packagedParameters = [:]
                 packagedParameters ["region_chrom_input"]  =  extractedNumbers["chromosomeNumber"]
                 packagedParameters ["region_start_input"]  =  extractedNumbers["startExtent"]
@@ -452,7 +451,9 @@ class FilterManagementService {
                     filterDescriptions << "Is observed in exome chip"
                     parameterEncoding << "1:2"
                     break;
-                default: break;
+                default:
+                    log.error("FilterManagementService.determineDataSet: unexpected dataSetDistinguisher = ${dataSetDistinguisher}")
+                    break;
             }
         }
         buildingFilters["datatypeOperand"]  =  datatypeOperand
@@ -567,7 +568,9 @@ class FilterManagementService {
                     filterDescriptions << "Is observed in exome chip"
                     parameterEncoding << "1:2"
                     break;
-                default: break;
+                default:
+                    log.error("FilterManagementService.parameterizedDataSet: unexpected dataSetDistinguisher = ${dataSetDistinguisher}")
+                    break;
             }
         }
         buildingFilters["datatypeOperand"]  =  datatypeOperand
@@ -607,7 +610,7 @@ class FilterManagementService {
                     if (incomingParameters.containsKey("custom_significance_input")) {
                         parameterEncoding << "2:2"
                         String stringCustomThreshold = incomingParameters["custom_significance_input"]
-                        BigDecimal numericCustomThreshold
+                        BigDecimal numericCustomThreshold = 0.05
                         try {
                             numericCustomThreshold = new BigDecimal(stringCustomThreshold)
                             parameterEncoding << ("3:"+numericCustomThreshold.toString())
@@ -615,6 +618,7 @@ class FilterManagementService {
                             // presumably we have a nonnumeric value in the custom threshold
                             // ignore the request for custom threshold altogether in this case
                             //TODO: this is an error condition. User supplied a nonnumeric custom threshold
+                            log.error("FilterManagementService.determineThreshold: nonnumeric threshold provided by user = ${stringCustomThreshold}")
                             break;
                         }
                         filters << retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,numericCustomThreshold) 
@@ -622,10 +626,13 @@ class FilterManagementService {
                     } else {
                         //TODO: this is an error condition. User requested a custom threshold but supplied no threshold
                         // description of that threshold. We need a specification of what to do ( from Mary?)
+                        log.error("FilterManagementService.determineThreshold: no threshold provided by user ")
                         break;
                     }
                     break;
-                default: break;
+                default:
+                    log.error("FilterManagementService.determineThreshold: no threshold provided by user ")
+                    break;
             }
         }
 
@@ -664,6 +671,7 @@ class FilterManagementService {
                 filterDescriptions << "Chromosome is equal to ${stringParameter}"
                 parameterEncoding << "5:${stringParameter}"
             } else {
+                log.error("FilterManagementService.setRegion: no numeric portion of chromosome specifier = ${stringParameter}")
                 // TODO: ERROR CONDITION.  DEFAULT?
             }
 
@@ -680,6 +688,7 @@ class FilterManagementService {
                 parameterEncoding << "6:${stringParameter}"
             } catch (exception) {
                 // TODO: this is an error condition -- the user-specified a non-numeric extent. What is the correct default action here ?
+                log.error("FilterManagementService.setRegion: no numeric portion of user-specified extent beginning = ${stringParameter}")
                 exception.printStackTrace()
                 errorFree = false
             }
@@ -700,6 +709,7 @@ class FilterManagementService {
                 extentDelimiter = new BigDecimal(stringParameter).intValue()
             } catch (exception) {
                 // TODO: this is an error condition -- the user-specified a non-numeric extent. What is the correct default action here ?
+                log.error("FilterManagementService.setRegion: no numeric portion of user-specified extent ending = ${stringParameter}")
                 exception.printStackTrace()
                 errorFree = false
             }
@@ -744,6 +754,7 @@ class FilterManagementService {
                        } catch (exception) {
                            errorFree = false
                            // TODO: this is an error condition -- the user-specified a non-numeric allele frequency.  Default behavior?
+                           log.error("FilterManagementService.setAlleleFrequencies: unexpected non-numeric allele frequency = ${specificAlleleFrequency}, ${ethnicityReference}")
                            exception.printStackTrace()
                        }
                        if (errorFree) {
@@ -778,6 +789,7 @@ class FilterManagementService {
                     } catch (exception) {
                         errorFree = false
                         // TODO: this is an error condition -- the user-specified a non-numeric allele frequency.  Default behavior?
+                        log.error("FilterManagementService.setAlleleFrequencies: unexpected non-numeric allele frequency = ${specificAlleleFrequency} ${ethnicityReference}")
                         exception.printStackTrace()
                     }
                     if (errorFree) {
@@ -875,7 +887,9 @@ class FilterManagementService {
                     parameterEncoding << "23:4"
                     break;
 
-                default: break;
+                default:
+                    log.error("FilterManagementService.predictedEffectsOnProteins: unexpected predictedEffects = ${predictedEffects}")
+                    break;
             }
         }
 
@@ -954,6 +968,7 @@ class FilterManagementService {
             } catch (exception) {
                 errorFree = false
                 // TODO: this is an error condition -- the user-specified a non-numeric allele frequency.  Default behavior?
+                log.error("FilterManagementService.factorInTheOddsRatios: nonnumeric orValueStr = ${orValueStr}")
                 exception.printStackTrace()
             }
             String filterInequalityDescription = ""
@@ -978,6 +993,7 @@ class FilterManagementService {
                if (orValue > 0){
                    adjustedValue = Math.log(orValue)
                } else {
+                   log.error("FilterManagementService.factorInTheOddsRatios: nonpositive orValue specifier= ${orValue}")
                    errorFree = false
                }
             }  else  {
@@ -997,6 +1013,7 @@ class FilterManagementService {
                     parameterEncoding << "27:2"
                     parameterEncoding << "28:${orValue}"
                 }  else {
+                    log.error("FilterManagementService.factorInTheOddsRatios: unexpected inequality specifier= ${inequality}")
                     errorFree = false
                 }
             }

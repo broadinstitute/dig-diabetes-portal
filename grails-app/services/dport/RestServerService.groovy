@@ -13,13 +13,14 @@ class RestServerService {
     private static final log = LogFactory.getLog(this)
 
 
-    private  String BASE_URL = 'http://t2dgenetics.org/mysql/rest/server/'
-    //private  String BASE_URL = 'http://t2dgenetics.org/dev/rest/server/'
-    private  String GENE_INFO_URL = BASE_URL + "gene-info"
-    private  String VARIANT_INFO_URL = BASE_URL + "variant-info"
-    private  String TRAIT_INFO_URL = BASE_URL + "trait-info"
-    private  String VARIANT_SEARCH_URL = BASE_URL + "variant-search"
-    private  String TRAIT_SEARCH_URL = BASE_URL + "trait-search"
+    private  String MYSQL_REST_SERVER = ""
+    private  String BIGQUERY_REST_SERVER = ""
+    private  String BASE_URL = ""
+    private  String GENE_INFO_URL = "gene-info"
+    private  String VARIANT_INFO_URL = "variant-info"
+    private  String TRAIT_INFO_URL = "trait-info"
+    private  String VARIANT_SEARCH_URL = "variant-search"
+    private  String TRAIT_SEARCH_URL = "trait-search"
 
     static List <String> VARIANT_SEARCH_COLUMNS = [
     'ID',
@@ -158,8 +159,14 @@ class RestServerService {
     static List <String> EXCHP_VARIANT_COLUMNS = EXCHP_VARIANT_SEARCH_COLUMNS
     static List <String> GWAS_VARIANT_COLUMNS = GWAS_VARIANT_SEARCH_COLUMNS
 
-
+    /***
+     * plug together the different collections of column specifications we typically use
+     */
     public void initialize (){
+        MYSQL_REST_SERVER = grailsApplication.config.t2dRestServer.base+grailsApplication.config.t2dRestServer.mysql+grailsApplication.config.t2dRestServer.path
+        BIGQUERY_REST_SERVER = grailsApplication.config.t2dRestServer.base+grailsApplication.config.t2dRestServer.bigquery+grailsApplication.config.t2dRestServer.path
+        BASE_URL =  MYSQL_REST_SERVER
+        log.info ">>>Initializing rest server=${BASE_URL}"
         if (grailsApplication.config.site.version == 't2dgenes') {
             VARIANT_SEARCH_COLUMNS += EXSEQ_VARIANT_SEARCH_COLUMNS + EXCHP_VARIANT_SEARCH_COLUMNS + GWAS_VARIANT_SEARCH_COLUMNS
             VARIANT_COLUMNS += EXSEQ_VARIANT_COLUMNS + EXCHP_VARIANT_COLUMNS + GWAS_VARIANT_COLUMNS
@@ -173,6 +180,41 @@ class RestServerService {
         }
     }
 
+
+    private void pickADifferentRestServer (String newRestServer)  {
+        if (!(newRestServer  == BASE_URL))  {
+            log.info("NOTE: about to change from the old server = ${BASE_URL} to instead using = ${newRestServer}")
+            BASE_URL =  newRestServer
+            log.info("NOTE: change to server ${BASE_URL} is complete")
+        }
+    }
+
+    public void  goWithTheMysqlServer () {
+        pickADifferentRestServer (MYSQL_REST_SERVER)
+    }
+
+
+    public void  goWithTheBigQueryServer () {
+        pickADifferentRestServer (BIGQUERY_REST_SERVER)
+    }
+
+    public String  whatIsMyCurrentServer () {
+        String returnValue
+        if (BASE_URL == "") {
+            returnValue = 'uninitialized'
+        }  else if (MYSQL_REST_SERVER  == BASE_URL) {
+            returnValue = 'mysql'
+        }  else if  (BIGQUERY_REST_SERVER  == BASE_URL) {
+            returnValue = 'bigquery'
+        }  else {
+            returnValue = 'unknown'
+        }
+        return returnValue
+    }
+
+
+
+
     /***
      * The point is to extract the relevant numbers from a string that looks something like this:
      *      String s="chr19:21,940,000-22,190,000"
@@ -183,16 +225,18 @@ class RestServerService {
         LinkedHashMap<String, Integer> returnValue = [:]
 
         String commasRemoved=incoming.replace(/,/,"")
-        java.util.regex.Matcher chromosome = commasRemoved =~ /chr\d*/
-        if ( chromosome) {
-            java.util.regex.Matcher chromosomeNumberString = chromosome[0] =~ /\d+/
-            if (chromosomeNumberString) {
-                int  chromosomeNumber = Integer.parseInt(chromosomeNumberString[0])
-                returnValue ["chromosomeNumber"]  = chromosomeNumber
+        java.util.regex.Matcher chromosome = commasRemoved =~ /chr[\dXY]*/
+        if (chromosome.size()== 0){  // let's try to help if the user forgot to specify the chr
+            chromosome = commasRemoved =~ /[\dXY]*/
+        }
+        if ( chromosome.size() >  0) {
+            java.util.regex.Matcher chromosomeString = chromosome[0] =~ /[\dXY]+/
+            if (chromosomeString.size() >  0) {
+                returnValue["chromosomeNumber"] = chromosomeString[0]
             }
         }
         java.util.regex.Matcher  startExtent = commasRemoved =~ /:\d*/
-        if (startExtent){
+        if (startExtent.size() >  0){
             java.util.regex.Matcher startExtentString = startExtent[0] =~ /\d+/
             if (startExtentString)  {
                 int startExtentNumber = Integer.parseInt(startExtentString[0])
@@ -200,7 +244,7 @@ class RestServerService {
             }
         }
         java.util.regex.Matcher  endExtent = commasRemoved =~ /-\d*/
-        if (endExtent){
+        if (endExtent.size() >  0){
             java.util.regex.Matcher endExtentString = endExtent[0] =~ /\d+/
             if (endExtentString)  {
                 int endExtentNumber = Integer.parseInt(endExtentString[0])
@@ -210,8 +254,12 @@ class RestServerService {
         return  returnValue
     }
 
-
-
+    /***
+     * This is the underlying routine for every call to the rest backend.
+     * @param drivingJson
+     * @param targetUrl
+     * @return
+     */
   private JSONObject postRestCall(String drivingJson, String targetUrl){
       JSONObject returnValue = null
       Date beforeCall  = new Date()
@@ -220,7 +268,7 @@ class RestServerService {
       RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
       StringBuilder logStatus = new StringBuilder()
       try {
-          response  = rest.post(targetUrl)   {
+          response  = rest.post(BASE_URL+targetUrl)   {
               contentType "application/json"
               json drivingJson
           }
@@ -254,26 +302,6 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
   }
 
 
-
-
-   String getServiceBody (String url) {
-       String returnValue = ""
-       RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
-       RestResponse response = rest.get(url)
-       if (response.getStatus () == 200)  {
-           returnValue =  response.getBody()
-       }
-       return returnValue
-   }
-
-
-    JSONObject getServiceJson (String url) {
-        JSONObject returnValue = null
-        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
-        RestResponse response  = rest.get(url)
-        returnValue =  response.json
-        return returnValue
-    }
 
     /***
      * used only for testing
@@ -310,6 +338,12 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
         return  returnValue
     }
 
+    /***
+     * retrieve information about a gene specified by name
+     *
+     * @param geneName
+     * @return
+     */
     JSONObject retrieveGeneInfoByName (String geneName) {
         JSONObject returnValue = null
         String drivingJson = """{
@@ -322,8 +356,13 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
         return returnValue
     }
 
-
-
+    /***
+     * retrieve information about a variant specified by name. Note that the backend routine
+     * can support variant name aliases
+     *
+     * @param variantId
+     * @return
+     */
     JSONObject retrieveVariantInfoByName (String variantId) {
         JSONObject returnValue = null
         String drivingJson = """{
@@ -344,7 +383,7 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
      * @param endSearch
      * @return
      */
-    JSONObject searchGenomicRegionBySpecifiedRegion (Integer chromosome,
+    JSONObject searchGenomicRegionBySpecifiedRegion (String chromosome,
                                                      Integer beginSearch,
                                                      Integer endSearch) {
         JSONObject returnValue = null
@@ -363,7 +402,13 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
     }
 
 
-
+    /***
+     *   search for a trait on the basis of a region specification
+     * @param chromosome
+     * @param beginSearch
+     * @param endSearch
+     * @return
+     */
     JSONObject searchForTraitBySpecifiedRegion (Integer chromosome,
                                                      Integer beginSearch,
                                                      Integer endSearch) {
@@ -381,12 +426,12 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
         return returnValue
     }
 
-
-
-
-
-
-
+    /***
+     * search for a treat specified by name
+     * @param traitName
+     * @param significance
+     * @return
+     */
     JSONObject searchTraitByName (String traitName,
                                   BigDecimal significance) {
         JSONObject returnValue = null
@@ -402,43 +447,11 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
         return returnValue
     }
 
-
-
-
-    JSONObject searchTraitByRegionss (String traitName,
-                                  BigDecimal significance) {
-        JSONObject returnValue = null
-        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
-        String drivingJson = """{
-"user_group": "ui",
-"filters": [
-    {"operand": "PVALUE", "operator": "LTE", "value": ${significance.toString ()}, "filter_type": "FLOAT"}
-],
-"trait": "${traitName}"
-}
-""".toString()
-        returnValue = postRestCall( drivingJson, TRAIT_SEARCH_URL)
-         return returnValue
-    }
-
-
-    JSONObject searchTraitByRegion(String userSpecifiedRegion) {
-        JSONObject returnValue = null
-        LinkedHashMap<String, Integer> ourNumbers = extractNumbersWeNeed(userSpecifiedRegion)
-        if (ourNumbers.containsKey("chromosomeNumber") &&
-                ourNumbers.containsKey("startExtent") &&
-                ourNumbers.containsKey("endExtent")) {
-            returnValue = searchGenomicRegionBySpecifiedRegion(ourNumbers["chromosomeNumber"],
-                    ourNumbers["startExtent"],
-                    ourNumbers["endExtent"])
-        }
-        return returnValue
-    }
-
-
-
-
-
+    /***
+     * retrieved trait information based on a variant name
+     * @param variantName
+     * @return
+     */
     JSONObject retrieveTraitInfoByVariant (String variantName) {
         JSONObject returnValue = null
         String drivingJson = """{
@@ -494,10 +507,12 @@ ${customFilterSet}
         return returnValue
     }
 
-
-
-
-    JSONObject searchTraitByUnparsedRegion(String userSpecifiedString) {
+    /***
+     * retrieve a trait starting with the  raw region specification string we get from users
+     * @param userSpecifiedString
+     * @return
+     */
+    public JSONObject searchTraitByUnparsedRegion(String userSpecifiedString) {
         JSONObject returnValue = null
         LinkedHashMap<String, Integer> ourNumbers = extractNumbersWeNeed(userSpecifiedString)
         if (ourNumbers.containsKey("chromosomeNumber") &&
@@ -512,215 +527,6 @@ ${customFilterSet}
 
 
 
-
-
-
-
-    JSONObject searchGenomicRegionByName (String genomicRegion) {
-        JSONObject returnValue = null
-        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
-        String drivingJson = """{
-"user_group": "ui",
-"filters": [
-{ "filter_type": "STRING", "operand": "CHROM",  "operator": "EQ","value": "9"  },
-{"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": 21940000},
-{"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": 22190000 }
-],
-"columns": [${"\""+VARIANT_SEARCH_COLUMNS.join("\",\"")+"\""}]
-}
-""".toString()
-        returnValue = postRestCall( drivingJson, VARIANT_SEARCH_URL)
-       return returnValue
-    }
-
-
-
-    static List<LinkedHashMap< String, String>> staticMessages = [[
-                      key: "transcript_ablation",
-                      name: "transcript ablation",
-                      description: "It deletes a region that includes a transcript feature."
-                  ],
-                  [
-                      key: "transcript_ablation" ,
-                      name: "transcript ablation" ,
-                      description: "It deletes a region that includes a transcript feature."
-                  ],
-                  [
-                      key: "splice_donor_variant",
-                      name: "splice donor variant",
-                      description: "It is a splice variant that changes the 2-base region at the 5' end of an intron."
-                  ],
-                  [
-                      key: "splice_acceptor_variant",
-                      name: "splice acceptor variant",
-                      description: "It is a splice variant that changes the 2-base region at the 3' end of an intron."
-                  ],
-                  [
-                      key: "stop_gained",
-                      name: "stop gained",
-                      description: "It is a sequence variant that introduces a stop codon, leading to a shortened transcript."
-                  ],
-                  [
-                      key: "frameshift_variant",
-                      name: "frameshift variant",
-                      description: "It causes a frameshift, disrupting the translational reading frame because the number of nucleotides inserted or deleted is not a multiple of three."
-                  ],
-                  [
-                      key: "stop_lost",
-                      name: "stop lost",
-                      description: "It is a sequence variant that changes a stop codon, resulting in an elongated transcript."
-                  ],
-                  [
-                      key: "initiator_codon_variant",
-                      name: "initiator codon variant",
-                      description: "It changes the first codon of a transcript."
-                  ],
-                  [
-                      key: "inframe_insertion",
-                      name: "inframe insertion",
-                      description: "It is an inframe non-synonymous variant that inserts bases into the coding sequence."
-                  ],
-                  [
-                      key: "inframe_deletion",
-                      name: "inframe deletion",
-                      description: "It is an inframe non-synonymous variant that deletes bases from the coding sequence."
-                  ],
-                  [
-                      key: "missense_variant",
-                      name: "missense variant",
-                      description: "It results in a different amino acid sequence but preserves length."
-                  ],
-                  [
-                      key: "transcript_amplification",
-                      name: "transript amplification",
-                      description: "It amplifies a region containing a transcript."
-                  ],
-                  [
-                      key: "splice_region_variant",
-                      name: "splice region variant",
-                      description: "It is a sequence variant in which a change has occurred within the region of a splice site, either within 1-3 bases of the exon or 3-8 bases of the intron."
-                  ],
-                  [
-                      key: "incomplete_terminal_codon_variant",
-                      name: "incomplete terminal codon variant",
-                      description: "It is a sequence variant that changes at least one base of the final codon of an incompletely annotated transcript."
-                  ],
-                  [
-                      key: "synonymous_variant",
-                      name: "synonymous variant",
-                      description: "It does not cause any change to the encoded amino acid."
-                  ],
-                  [
-                      key: "stop_retained_variant",
-                      name: "stop retained variant",
-                      description: "It changes the set of bases in a stop codon, but the stop codon itself remains functional."
-                  ],
-                  [
-                      key: "coding_sequence_variant",
-                      name: "coding sequence variant",
-                      description: "It changes the coding sequence."
-                  ],
-                  [
-                      key: "mature_miRNA_variant",
-                      name: "mature miRNA variant",
-                      description: "It is a transcript variant located with the sequence of the mature miRNA."
-                  ],
-                  [
-                      key: "5_prime_UTR_variant",
-                      name: "5' UTR variant",
-                      description: "It is found in the 5' untranslated region."
-                  ],
-                  [
-                      key: "3_prime_UTR_variant",
-                      name: "3' UTR variant",
-                      description: "It is found in the 3' untranslated region."
-                  ],
-                  [
-                      key: "non_coding_exon_variant",
-                      name: "non coding exon variant",
-                      description: "It changes the non-coding exon sequence."
-                  ],
-                  [
-                      key: "nc_transcript_variant",
-                      name: "nc transcript variant",
-                      description: "It is a transcript variant of a non-coding RNA."
-                  ],
-                  [
-                      key: "intron_variant",
-                      name: "intron variant",
-                      description: "It is a transcript variant occurring within an intron."
-                  ],
-                  [
-                      key: "NMD_transcript_variant",
-                      name: "nmd transcript variant",
-                      description: "It falls in a transcript that is the target of nonsense-mediated decay."
-                  ],
-                  [
-                      key: "upstream_gene_variant",
-                      name: "upstream gene variant",
-                      description: "It is located upstream (5') of the gene."
-                  ],
-                  [
-                      key: "downstream_gene_variant",
-                      name: "downstream gene variant",
-                      description: "It is located downstream (3') of the gene."
-                  ],
-                  [
-                      key: "TFBS_ablation",
-                      name: "tfbs ablation",
-                      description: "It deletes a region that includes a transcription factor binding site."
-                  ],
-                  [
-                      key: "TFBS_amplification",
-                      name: "tfbs amplification",
-                      description: "It amplifies a region that includes a transcription factor binding site."
-                  ],
-                  [
-                      key: "TF_binding_site_variant",
-                      name: "tf binding site variant",
-                      description: "It is located within a transcription factor binding site."
-                  ],
-                  [
-                      key: "regulatory_region_variant",
-                      name: "regulatory region variant",
-                      description: "It is located within a regulatory region."
-                  ],
-                  [
-                      key: "regulatory_region_ablation",
-                      name: "regulatory region ablation",
-                      description: "It deletes a regulatory region."
-                  ],
-                  [
-                      key: "regulatory_region_amplification",
-                      name: "regulatory region amplification",
-                      description: "It amplifies a regulatory region."
-                  ],
-                  [
-                      key: "feature_elongation",
-                      name: "feature elongation",
-                      description: "It causes the extension of a genomic feature with regard to the reference sequence."
-                  ],
-                  [
-                      key: "feature_truncation",
-                      name: "feature truncation",
-                      description: "It causes the truncation of a genomic feature with regard to the reference sequence."
-                  ],
-                  [
-                      key:"intergenic_variant",
-                              name: "intergenic variant",
-                              description:"It is located in the intergenic region(between genes)."
-                  ]];
-
-
-
-    public String retrieveStaticField(String keyToMatch) {
-        LinkedHashMap< String, String> returnValue
-        LinkedHashMap< String, String> lookUp =  staticMessages.find{it.key=="featre_elongation"}
-        if (lookUp) {
-            returnValue =  lookUp
-        }
-        return returnValue
-    }
 
 
 }

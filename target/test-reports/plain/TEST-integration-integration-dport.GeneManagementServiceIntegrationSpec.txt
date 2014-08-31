@@ -1,5 +1,5 @@
 Testsuite: dport.GeneManagementServiceIntegrationSpec
-Tests run: 16, Failures: 0, Errors: 0, Time elapsed: 0.238 sec
+Tests run: 16, Failures: 0, Errors: 0, Time elapsed: 0.178 sec
 ------------- Standard Output ---------------
 --Output from test retrieveGene Single return Through direct call--
 --Output from test retrieveGene Multiple return Through direct call--
@@ -37,19 +37,19 @@ Tests run: 16, Failures: 0, Errors: 0, Time elapsed: 0.238 sec
 --Output from test partialGeneMatches should correctly return nothing[1]--
 ------------- ---------------- ---------------
 
-Testcase: test retrieveGene Single return Through direct call took 0.013 sec
-Testcase: test retrieveGene Multiple return Through direct call took 0.008 sec
-Testcase: test retrieveGene Nonexistent gene Through direct call took 0.02 sec
-Testcase: test retrieveGene Lowercase=no match Through direct call took 0.017 sec
-Testcase: test retrieveGene Null matches all Through direct call took 0.058 sec
-Testcase: test deliverPartialMatches Single return took 0.008 sec
-Testcase: test deliverPartialMatches Multiple return took 0.008 sec
-Testcase: test deliverPartialMatches Nonexistent gene took 0.014 sec
-Testcase: test deliverPartialMatches Lowercase=match took 0.015 sec
-Testcase: test deliverPartialMatches Null=no match took 0.004 sec
-Testcase: test deliverPartialMatchesInJson took 0.017 sec
-Testcase: test partialGeneMatches legal[0] took 0.012 sec
-Testcase: test partialGeneMatches legal[1] took 0.008 sec
-Testcase: test partialGeneMatches legal[2] took 0.008 sec
-Testcase: test partialGeneMatches should correctly return nothing[0] took 0.007 sec
-Testcase: test partialGeneMatches should correctly return nothing[1] took 0.004 sec
+Testcase: test retrieveGene Single return Through direct call took 0.011 sec
+Testcase: test retrieveGene Multiple return Through direct call took 0.007 sec
+Testcase: test retrieveGene Nonexistent gene Through direct call took 0.014 sec
+Testcase: test retrieveGene Lowercase=no match Through direct call took 0.01 sec
+Testcase: test retrieveGene Null matches all Through direct call took 0.04 sec
+Testcase: test deliverPartialMatches Single return took 0.006 sec
+Testcase: test deliverPartialMatches Multiple return took 0.006 sec
+Testcase: test deliverPartialMatches Nonexistent gene took 0.01 sec
+Testcase: test deliverPartialMatches Lowercase=match took 0.011 sec
+Testcase: test deliverPartialMatches Null=no match took 0.003 sec
+Testcase: test deliverPartialMatchesInJson took 0.015 sec
+Testcase: test partialGeneMatches legal[0] took 0.009 sec
+Testcase: test partialGeneMatches legal[1] took 0.006 sec
+Testcase: test partialGeneMatches legal[2] took 0.006 sec
+Testcase: test partialGeneMatches should correctly return nothing[0] took 0.006 sec
+Testcase: test partialGeneMatches should correctly return nothing[1] took 0.003 sec

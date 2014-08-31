@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="GPA84-952" name="dport.SharedToolsServiceIntegrationSpec" tests="6" time="0.043" timestamp="2014-08-28T13:45:48">
+<testsuite errors="0" failures="0" hostname="Cognomen" name="dport.SharedToolsServiceIntegrationSpec" tests="6" time="0.054" timestamp="2014-08-31T21:32:24">
   <properties />
-  <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test urlEncodedListOfPhenotypes smoke" time="0.0070" />
-  <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test urlEncodedListOfProteinEffect smoke" time="0.0070" />
-  <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpFiltersForRoundTrip Typical usage" time="0.0080" />
-  <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpFiltersForRoundTrip with empty parameter list" time="0.0040" />
-  <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpEncodedParameters with typical parameter list" time="0.0070" />
-  <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpEncodedParameters with empty parameters" time="0.0030" />
+  <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test urlEncodedListOfPhenotypes smoke" time="0.006" />
+  <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test urlEncodedListOfProteinEffect smoke" time="0.007" />
+  <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpFiltersForRoundTrip Typical usage" time="0.007" />
+  <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpFiltersForRoundTrip with empty parameter list" time="0.002" />
+  <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpEncodedParameters with typical parameter list" time="0.025" />
+  <testcase classname="dport.SharedToolsServiceIntegrationSpec" name="test packageUpEncodedParameters with empty parameters" time="0.003" />
   <system-out><![CDATA[--Output from test urlEncodedListOfPhenotypes smoke--
 --Output from test urlEncodedListOfProteinEffect smoke--
 --Output from test packageUpFiltersForRoundTrip Typical usage--

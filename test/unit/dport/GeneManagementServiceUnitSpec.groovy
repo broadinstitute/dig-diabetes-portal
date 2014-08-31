@@ -11,6 +11,7 @@ import spock.lang.Unroll
 @Unroll
 @TestFor(GeneManagementService)
 class GeneManagementServiceUnitSpec extends Specification {
+
     Closure<List <Gene>> retrieveGene = { String searchString, int numberOfMatches ->
         List <Gene> mockedGeneRecords = []
         mockedGeneRecords << new Gene(name1: 'abc', name2:'ABC')

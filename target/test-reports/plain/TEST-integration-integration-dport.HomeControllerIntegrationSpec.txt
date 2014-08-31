@@ -1,5 +1,5 @@
 Testsuite: dport.HomeControllerIntegrationSpec
-Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.016 sec
+Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.012 sec
 ------------- Standard Output ---------------
 --Output from test the main page of the application.  The first place that everybody goes--
 ------------- ---------------- ---------------

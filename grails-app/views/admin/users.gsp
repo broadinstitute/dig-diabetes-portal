@@ -82,7 +82,6 @@
 
             // username
             retVal += "<td>" + user.name + "</td>";
-            //"<td><a href='" + geneRootUrl + "/" + vRec[i].CLOSEST_GENE + "' class='boldlink'>" + vRec[i].CLOSEST_GENE + "</td>";
 
             var replacePeriodsInUsername =  encodeURIComponent(user.name.replace(/\./g, '&#46;'))
 

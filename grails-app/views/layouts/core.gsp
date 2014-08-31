@@ -115,7 +115,7 @@
                         &middot;
                     </sec:ifAllGranted>
                     <sec:ifAllGranted roles="ROLE_SYSTEM">
-                        <g:link controller='system' action="mgr" class="mgr">System Mgr</g:link>
+                        <g:link controller='system' action="systemManager">System Mgr</g:link>
                         &middot;
                     </sec:ifAllGranted>
                     <sec:loggedInUserInfo field="username"/>   &middot;

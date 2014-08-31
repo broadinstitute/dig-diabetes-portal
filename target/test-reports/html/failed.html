@@ -15,10 +15,12 @@
      - Failed tests</h1>
 <p class="intro">
                         Executed
-                        47
+                        57
                         tests
                     
-                        without a single error or failure!
+                        with
+                        3 errors
+                        .
                     </p>
 </div>
 <div class="grid_2 omega">
@@ -41,6 +43,284 @@
 </nav>
 </div>
 <div class="clear"></div>
+<div class="testsuite error">
+<div class="header">
+<h2>RestServerServiceIntegrationSpec</h2>
+<h3>
+                        Executed
+                        10
+                        tests
+                    
+                        with
+                        2 errors
+                        .
+                    </h3>
+</div>
+<div class="testcase clearfix success grid_8 alpha omega" data-name="test  smoke">
+<div class="grid_3 alpha">
+<p>
+<span class="icon success"></span><b class="testname message success">test  smoke</b>
+</p>
+<p class="summary">Executed in 0.003 seconds.</p>
+</div>
+<div class="grid_5 omega outputinfo"></div>
+<div class="clear"></div>
+</div>
+<div class="testcase clearfix success grid_8 alpha omega" data-name="test retrieveTreatAsSpecifiedByGenomicRegion">
+<div class="grid_3 alpha">
+<p>
+<span class="icon success"></span><b class="testname message success">test retrieveTreatAsSpecifiedByGenomicRegion</b>
+</p>
+<p class="summary">Executed in 3.437 seconds.</p>
+</div>
+<div class="grid_5 omega outputinfo"></div>
+<div class="clear"></div>
+</div>
+<div class="testcase clearfix error grid_8 alpha omega" data-name="test retrieveTreatByUnparsedGenomicRegion">
+<div class="grid_3 alpha">
+<p>
+<span class="icon error"></span><b class="testname message error">test retrieveTreatByUnparsedGenomicRegion</b>
+</p>
+<p class="summary">Executed in 0.101 seconds.</p>
+</div>
+<div class="grid_5 omega outputinfo">
+<div class="details">
+<p>
+<b class="message">No signature of method: dport.RestServerService.searchForTraitBySpecifiedRegion() is applicable for argument types: (java.lang.String, java.lang.Integer, java.lang.Integer) values: [9, 21940000, 22190000]
+Possible solutions: searchForTraitBySpecifiedRegion(java.lang.Integer, java.lang.Integer, java.lang.Integer)</b>
+</p>
+<pre>groovy.lang.MissingMethodException: No signature of method: dport.RestServerService.searchForTraitBySpecifiedRegion() is applicable for argument types: (java.lang.String, java.lang.Integer, java.lang.Integer) values: [9, 21940000, 22190000]
+Possible solutions: searchForTraitBySpecifiedRegion(java.lang.Integer, java.lang.Integer, java.lang.Integer)
+	at dport.RestServerService.$tt__searchTraitByUnparsedRegion(RestServerService.groovy:523)
+	at dport.RestServerServiceIntegrationSpec.test retrieveTreatByUnparsedGenomicRegion(RestServerServiceIntegrationSpec.groovy:48)
+</pre>
+</div>
+</div>
+<div class="clear"></div>
+</div>
+<div class="testcase clearfix success grid_8 alpha omega" data-name="test searchTraitByName">
+<div class="grid_3 alpha">
+<p>
+<span class="icon success"></span><b class="testname message success">test searchTraitByName</b>
+</p>
+<p class="summary">Executed in 1.706 seconds.</p>
+</div>
+<div class="grid_5 omega outputinfo"></div>
+<div class="clear"></div>
+</div>
+<div class="testcase clearfix success grid_8 alpha omega" data-name="test retrieveTraitInfoByVariant">
+<div class="grid_3 alpha">
+<p>
+<span class="icon success"></span><b class="testname message success">test retrieveTraitInfoByVariant</b>
+</p>
+<p class="summary">Executed in 0.143 seconds.</p>
+</div>
+<div class="grid_5 omega outputinfo"></div>
+<div class="clear"></div>
+</div>
+<div class="testcase clearfix success grid_8 alpha omega" data-name="test connection to diabetes server">
+<div class="grid_3 alpha">
+<p>
+<span class="icon success"></span><b class="testname message success">test connection to diabetes server</b>
+</p>
+<p class="summary">Executed in 0.097 seconds.</p>
+</div>
+<div class="grid_5 omega outputinfo"></div>
+<div class="clear"></div>
+</div>
+<div class="testcase clearfix success grid_8 alpha omega" data-name="test retrieveGeneInfoByName">
+<div class="grid_3 alpha">
+<p>
+<span class="icon success"></span><b class="testname message success">test retrieveGeneInfoByName</b>
+</p>
+<p class="summary">Executed in 0.092 seconds.</p>
+</div>
+<div class="grid_5 omega outputinfo"></div>
+<div class="clear"></div>
+</div>
+<div class="testcase clearfix success grid_8 alpha omega" data-name="test retrieveVariantInfoByName">
+<div class="grid_3 alpha">
+<p>
+<span class="icon success"></span><b class="testname message success">test retrieveVariantInfoByName</b>
+</p>
+<p class="summary">Executed in 0.148 seconds.</p>
+</div>
+<div class="grid_5 omega outputinfo"></div>
+<div class="clear"></div>
+</div>
+<div class="testcase clearfix error grid_8 alpha omega" data-name="test retrieveGenomicRegionBySpecifiedRegion">
+<div class="grid_3 alpha">
+<p>
+<span class="icon error"></span><b class="testname message error">test retrieveGenomicRegionBySpecifiedRegion</b>
+</p>
+<p class="summary">Executed in 0.038 seconds.</p>
+</div>
+<div class="grid_5 omega outputinfo">
+<div class="details">
+<p>
+<b class="message">No signature of method: dport.RestServerService.searchGenomicRegionBySpecifiedRegion() is applicable for argument types: (java.lang.Integer, java.lang.Integer, java.lang.Integer) values: [9, 21940000, 22190000]
+Possible solutions: searchGenomicRegionBySpecifiedRegion(java.lang.String, java.lang.Integer, java.lang.Integer)</b>
+</p>
+<pre>groovy.lang.MissingMethodException: No signature of method: dport.RestServerService.searchGenomicRegionBySpecifiedRegion() is applicable for argument types: (java.lang.Integer, java.lang.Integer, java.lang.Integer) values: [9, 21940000, 22190000]
+Possible solutions: searchGenomicRegionBySpecifiedRegion(java.lang.String, java.lang.Integer, java.lang.Integer)
+	at dport.RestServerServiceIntegrationSpec.test retrieveGenomicRegionBySpecifiedRegion(RestServerServiceIntegrationSpec.groovy:118)
+</pre>
+</div>
+</div>
+<div class="clear"></div>
+</div>
+<div class="testcase clearfix success grid_8 alpha omega" data-name="test retrieveGenomicRegionAsSpecifiedByUsers">
+<div class="grid_3 alpha">
+<p>
+<span class="icon success"></span><b class="testname message success">test retrieveGenomicRegionAsSpecifiedByUsers</b>
+</p>
+<p class="summary">Executed in 0.874 seconds.</p>
+</div>
+<div class="grid_5 omega outputinfo"></div>
+<div class="clear"></div>
+</div>
+<div class="clearfix output footer">
+<div class="sysout">
+<h2>Standard output</h2>
+<pre class="stdout">--Output from test  smoke--
+--Output from test retrieveTreatAsSpecifiedByGenomicRegion--
+--Output from test retrieveTreatByUnparsedGenomicRegion--
+--Output from test searchTraitByName--
+--Output from test retrieveTraitInfoByVariant--
+--Output from test connection to diabetes server--
+--Output from test retrieveGeneInfoByName--
+--Output from test retrieveVariantInfoByName--
+--Output from test retrieveGenomicRegionBySpecifiedRegion--
+--Output from test retrieveGenomicRegionAsSpecifiedByUsers--
+</pre>
+</div>
+<div class="syserr">
+<h2>System error</h2>
+<pre class="syserr">--Output from test  smoke--
+--Output from test retrieveTreatAsSpecifiedByGenomicRegion--
+--Output from test retrieveTreatByUnparsedGenomicRegion--
+--Output from test searchTraitByName--
+--Output from test retrieveTraitInfoByVariant--
+--Output from test connection to diabetes server--
+--Output from test retrieveGeneInfoByName--
+--Output from test retrieveVariantInfoByName--
+--Output from test retrieveGenomicRegionBySpecifiedRegion--
+--Output from test retrieveGenomicRegionAsSpecifiedByUsers--
+</pre>
+</div>
+</div>
+<div class="clear"></div>
+</div>
+<div class="testsuite error">
+<div class="header">
+<h2>TraitControllerIntegrationSpec</h2>
+<h3>
+                        Executed
+                        6
+                        tests
+                    
+                        with
+                        one error
+                        .
+                    </h3>
+</div>
+<div class="testcase clearfix success grid_8 alpha omega" data-name="test the traitInfo page">
+<div class="grid_3 alpha">
+<p>
+<span class="icon success"></span><b class="testname message success">test the traitInfo page</b>
+</p>
+<p class="summary">Executed in 0.005 seconds.</p>
+</div>
+<div class="grid_5 omega outputinfo"></div>
+<div class="clear"></div>
+</div>
+<div class="testcase clearfix success grid_8 alpha omega" data-name="test the search a trait (and potentially  ignificance) page">
+<div class="grid_3 alpha">
+<p>
+<span class="icon success"></span><b class="testname message success">test the search a trait (and potentially  ignificance) page</b>
+</p>
+<p class="summary">Executed in 0.005 seconds.</p>
+</div>
+<div class="grid_5 omega outputinfo"></div>
+<div class="clear"></div>
+</div>
+<div class="testcase clearfix success grid_8 alpha omega" data-name="test the search a trait by ajax page">
+<div class="grid_3 alpha">
+<p>
+<span class="icon success"></span><b class="testname message success">test the search a trait by ajax page</b>
+</p>
+<p class="summary">Executed in 0.452 seconds.</p>
+</div>
+<div class="grid_5 omega outputinfo"></div>
+<div class="clear"></div>
+</div>
+<div class="testcase clearfix success grid_8 alpha omega" data-name="test the association statistics across 25 traits by ajax page">
+<div class="grid_3 alpha">
+<p>
+<span class="icon success"></span><b class="testname message success">test the association statistics across 25 traits by ajax page</b>
+</p>
+<p class="summary">Executed in 0.618 seconds.</p>
+</div>
+<div class="grid_5 omega outputinfo"></div>
+<div class="clear"></div>
+</div>
+<div class="testcase clearfix success grid_8 alpha omega" data-name="test the search a traits across region page">
+<div class="grid_3 alpha">
+<p>
+<span class="icon success"></span><b class="testname message success">test the search a traits across region page</b>
+</p>
+<p class="summary">Executed in 0.007 seconds.</p>
+</div>
+<div class="grid_5 omega outputinfo"></div>
+<div class="clear"></div>
+</div>
+<div class="testcase clearfix error grid_8 alpha omega" data-name="test traitVariantCrossAjax">
+<div class="grid_3 alpha">
+<p>
+<span class="icon error"></span><b class="testname message error">test traitVariantCrossAjax</b>
+</p>
+<p class="summary">Executed in 0.032 seconds.</p>
+</div>
+<div class="grid_5 omega outputinfo">
+<div class="details">
+<p>
+<b class="message">No signature of method: dport.RestServerService.searchForTraitBySpecifiedRegion() is applicable for argument types: (java.lang.String, java.lang.Integer, java.lang.Integer) values: [1, 209348715, 210349783]
+Possible solutions: searchForTraitBySpecifiedRegion(java.lang.Integer, java.lang.Integer, java.lang.Integer)</b>
+</p>
+<pre>groovy.lang.MissingMethodException: No signature of method: dport.RestServerService.searchForTraitBySpecifiedRegion() is applicable for argument types: (java.lang.String, java.lang.Integer, java.lang.Integer) values: [1, 209348715, 210349783]
+Possible solutions: searchForTraitBySpecifiedRegion(java.lang.Integer, java.lang.Integer, java.lang.Integer)
+	at dport.RestServerService.$tt__searchTraitByUnparsedRegion(RestServerService.groovy:523)
+	at dport.TraitController.traitVariantCrossAjax(TraitController.groovy:110)
+	at dport.TraitControllerIntegrationSpec.test traitVariantCrossAjax(TraitControllerIntegrationSpec.groovy:91)
+</pre>
+</div>
+</div>
+<div class="clear"></div>
+</div>
+<div class="clearfix output footer">
+<div class="sysout">
+<h2>Standard output</h2>
+<pre class="stdout">--Output from test the traitInfo page--
+--Output from test the search a trait (and potentially  ignificance) page--
+--Output from test the search a trait by ajax page--
+--Output from test the association statistics across 25 traits by ajax page--
+--Output from test the search a traits across region page--
+--Output from test traitVariantCrossAjax--
+</pre>
+</div>
+<div class="syserr">
+<h2>System error</h2>
+<pre class="syserr">--Output from test the traitInfo page--
+--Output from test the search a trait (and potentially  ignificance) page--
+--Output from test the search a trait by ajax page--
+--Output from test the association statistics across 25 traits by ajax page--
+--Output from test the search a traits across region page--
+--Output from test traitVariantCrossAjax--
+</pre>
+</div>
+</div>
+<div class="clear"></div>
+</div>
 <div class="clear"></div>
 </div>
 <!--

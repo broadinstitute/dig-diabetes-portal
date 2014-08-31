@@ -23,7 +23,14 @@ grails.plugin.databasemigration.updateOnStart = true
 
 site.version = 't2dgenes' // could be 'sigma' or 't2dgenes'
 site.title = 'Type 2 Diabetes Genetics'  // could be 'SIGMA T2D' or 'Type 2 Diabetes Genetics'
+//server.URL = 'http://t2dgenetics.org/mysql/rest/server/'
 server.URL = 'http://t2dgenetics.org/dev/rest/server/'
+t2dRestServer {
+    base = 'http://t2dgenetics.org/'
+    mysql =  'mysql/'
+    bigquery =  'dev/'
+    path = 'rest/server/'
+}
 
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
@@ -124,7 +131,10 @@ environments {
         grails.logging.jul.usebridge = false
      //   grails.serverURL = "http://Default-Environment-igfrae3vpi.elasticbeanstalk.com"
      //   grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
-        grails.serverURL = "http://type2diabetesgenetics.org"
+      //  grails.serverURL = "http://type2diabetesgenetics.org"
+      //  grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
+        grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+
 
     }
 }
