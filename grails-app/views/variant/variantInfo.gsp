@@ -8,6 +8,13 @@
     <%
         RestServerService   restServerService = grailsApplication.classLoader.loadClass('dport.RestServerService').newInstance()
     %>
+    <style>
+.parentsFont {
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+}
+    </style>
 </head>
 
 <body>
@@ -52,8 +59,8 @@
             _13k_T2D_P_EMMAX_FE_IV: 20
          }
         variant =  data['variant'];
-        //variantTitle =  UTILS.get_variant_title(variant,"<%=variantToSearch%>");
-        variantTitle =  "<%=variantToSearch%>";
+        variantTitle =  UTILS.get_variant_title(variant,"<%=variantToSearch%>");
+        //variantTitle =  "< % = variantToSearch % >";
         //$('#variantTitle').append(variantTitle);
         $('#variantCharacterization').append(UTILS.getSimpleVariantsEffect(variant.MOST_DEL_SCORE));
         $('#describingVariantAssociation').append(UTILS.variantInfoHeaderSentence(variant));
@@ -105,13 +112,17 @@
                 cariantRec.DBSNP_ID,
                 cariantRec.ID,
                 '<g:createLink controller="trait" action="traitInfo" />'));
+        $('#variantTitle').append(variantTitle);
+        $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
+        $('#populationsHowCommonIs').append(variantTitle);
+        $('#biologicalImpactOfMysteryVariant').append(variantTitle);
         $('#howCommonInExomeSequencing').append(UTILS.showPercentageAcrossEthnicities(variant));
-        $('#howCommonInHeterozygousCarriers').append(UTILS.showPercentagesAcrossHeterozygousCarriers(variant, "<%=variantToSearch%>"));
-        $('#howCommonInHomozygousCarriers').append(UTILS.showPercentagesAcrossHomozygousCarriers(variant, "<%=variantToSearch%>"));
-        $('#eurocentricVariantCharacterization').append(UTILS.eurocentricVariantCharacterization(variant, "<%=variantToSearch%>"));
+        $('#howCommonInHeterozygousCarriers').append(UTILS.showPercentagesAcrossHeterozygousCarriers(variant, variantTitle));
+        $('#howCommonInHomozygousCarriers').append(UTILS.showPercentagesAcrossHomozygousCarriers(variant, variantTitle));
+        $('#eurocentricVariantCharacterization').append(UTILS.eurocentricVariantCharacterization(variant, variantTitle));
         UTILS.verifyThatDisplayIsWarranted(variant["_13k_T2D_TRANSCRIPT_ANNOT"],$('#exomeDataExists'),$('#exomeDataDoesNotExist'));
-        $('#sigmaVariantCharacterization').append(UTILS.sigmaVariantCharacterization(variant, "<%=variantToSearch%>"));
-        $('#effectOfVariantOnProtein').append(UTILS.variantGenerateProteinsChooser(variant, "<%=variantToSearch%>"));
+        $('#sigmaVariantCharacterization').append(UTILS.sigmaVariantCharacterization(variant, variantTitle));
+        $('#effectOfVariantOnProtein').append(UTILS.variantGenerateProteinsChooser(variant,variantTitle));
         UTILS.verifyThatDisplayIsWarranted(variant["_13k_T2D_TRANSCRIPT_ANNOT"],$('#variationInfoEncodedProtein'),$('#puntOnNoncodingVariant'));
 
     }
@@ -127,7 +138,7 @@
 
 
                 <h1>
-                    <span id="variantTitle"><%=variantToSearch%></span>
+                    <strong><span id="variantTitle" class="parentsFont"></span></strong>
                     <a class="page-nav-link" href="#associations">Associations</a>
                     <a class="page-nav-link" href="#populations">Populations</a>
                     <a class="page-nav-link" href="#biology">Biology</a>

@@ -8,6 +8,7 @@
 <script>
     var variant;
     var loading = $('#spinner').show();
+    var  phenotypeMap =  new UTILS.phenotypeListConstructor (decodeURIComponent("${phenotypeList}")) ;
     $.ajax({
         cache:false,
         type:"post",
@@ -28,7 +29,13 @@
 
     function fillTheTraitsPerVariantFields (data)  {
         var variant =  data['traitInfo'];
-        $('#traitsPerVariantTableBody').append(UTILS.fillTraitsPerVariantTable(variant, ${show_gene}, ${show_sigma}, ${show_exseq}, ${show_exchp} ));
+        $('#traitsPerVariantTableBody').append(UTILS.fillTraitsPerVariantTable(variant,
+                ${show_gene},
+                ${show_sigma},
+                ${show_exseq},
+                ${show_exchp},
+                phenotypeMap,
+                '<g:createLink controller="trait" action="traitSearch" />'));
         $('#traitsPerVariantTable').dataTable({
             iDisplayLength: 20,
             bFilter: false,

@@ -12,13 +12,16 @@ class TraitController {
      */
      def traitInfo (){
           String variantIdentifier = params.getIdentifier()
+         String encodedString = sharedToolsService.urlEncodedListOfPhenotypes ()
+
          render (view: 'traitsPerVariant',
                  model:[show_gwas:1,
                         show_exchp: 1,
                         show_exseq: 1,
                         show_sigma: 0,
                         show_gene: 1,
-                        variantIdentifier:variantIdentifier] )
+                        variantIdentifier:variantIdentifier,
+                        phenotypeList:encodedString] )
      }
 
     /***
@@ -61,7 +64,7 @@ class TraitController {
             } catch (NumberFormatException nfe)  {
                 println "User supplied a nonnumeric significance value = '${significance}'"
                 // TODO: error condition.  Go with GWAS significance
-                significantValue = 0.00000005
+                significanceValue = 0.00000005
             }
             JSONObject jsonObject = restServerService.searchTraitByName(phenotypicTrait,significanceValue)
             render(status:200, contentType:"application/json") {

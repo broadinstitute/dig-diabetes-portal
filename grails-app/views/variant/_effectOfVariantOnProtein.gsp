@@ -201,7 +201,7 @@
 
 </div>
 <span id="puntOnNoncodingVariant">
-    <h2><strong>What is the biological impact of <%=title%>?</strong></h2>
+    <h2><strong>What is the biological impact of <span id="biologicalImpactOfMysteryVariant" class="parentsFont"></span>?</strong></h2>
     <p>This variant is non-coding. Annotation coming soon.</p>
 </span>
 

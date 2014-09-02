@@ -115,17 +115,26 @@ var UTILS = {
         return v.CHROM + ':' + v.POS;
     },
 
+    /***
+     * We need a name for the variant
+     * @param v
+     * @param emergencyTitle
+     * @returns {*}
+     */
     get_variant_title: function(v,emergencyTitle) {
-        if (v.DBSNP_ID) {
-            return v.DBSNP_ID;
-        } else {
-            if (typeof v.CHROM!== "undefined") {
-                return v.CHROM + ':' + v.POS;
-            }  else {
-                return  emergencyTitle;
+        var variantName;
+        if (v){
+            if (v.DBSNP_ID) {
+                variantName = v.DBSNP_ID;
+            } else if (v.ID) {
+                variantName = v.ID;
+            } else {
+                variantName = emergencyTitle;
             }
-
+        } else {
+            variantName = emergencyTitle;
         }
+        return variantName;
     },
     variantInfoHeaderSentence: function (variant) {
         var returnValue = "";
@@ -556,7 +565,17 @@ var UTILS = {
 
                 // odds ratio
                 if (vRec[i].SIGMA_T2D_OR)  {
-                    retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_OR)+"</td>";
+                    if (vRec[i].SIGMA_T2D_P)  {
+                        var pValue = parseFloat (vRec[i].SIGMA_T2D_P);
+                        if (($.isNumeric(pValue))&&(pValue>0.05)) {
+                            retVal += "<td class='greyedout'>" + UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_OR) + "</td>";
+                        } else {
+                            retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_OR)+"</td>";
+                        }
+                    } else {
+                        retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_OR)+"</td>";
+                    }
+
                 } else {
                     retVal += "<td></td>";
                 }
@@ -603,7 +622,16 @@ var UTILS = {
 
                 // odds ratio
                 if (vRec[i]._13k_T2D_OR_WALD_DOS_FE_IV)  {
-                    retVal += "<td>" +UTILS.realNumberFormatter(vRec[i]._13k_T2D_OR_WALD_DOS_FE_IV)+"</td>";
+                    if (pValueToPresent)  {
+                        var pValue = parseFloat (pValueToPresent);
+                        if (($.isNumeric(pValue))&&(pValue>0.05)) {
+                            retVal += "<td class='greyedout'>" + UTILS.realNumberFormatter(vRec[i]._13k_T2D_OR_WALD_DOS_FE_IV) + "</td>";
+                        } else {
+                            retVal += "<td>" +UTILS.realNumberFormatter(vRec[i]._13k_T2D_OR_WALD_DOS_FE_IV)+"</td>";
+                        }
+                    } else {
+                        retVal += "<td>" +UTILS.realNumberFormatter(vRec[i]._13k_T2D_OR_WALD_DOS_FE_IV)+"</td>";
+                    }
                 } else {
                     retVal += "<td></td>";
                 }
@@ -646,12 +674,21 @@ var UTILS = {
                     retVal += "<td></td>";
                 }
 
-                // odds ratio  TODO: I don't know what value this maps to!
+                // odds ratio
                 if (vRec[i].EXCHP_T2D_BETA)  {
-                    var logExchipOddsRatioString  =   vRec[i].EXCHP_T2D_BETA;
                     var logExchipOddsRatio  =   parseFloat(vRec[i].EXCHP_T2D_BETA);
                     if ($.isNumeric(logExchipOddsRatio))  {
-                        retVal += "<td>" +UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio))+"</td>";
+
+                        if (vRec[i].EXCHP_T2D_P_value)  {
+                            var pValue = parseFloat (vRec[i].EXCHP_T2D_P_value);
+                            if (($.isNumeric(pValue))&&(pValue>0.05)) {
+                                retVal += "<td class='greyedout'>" + UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio)) + "</td>";
+                            } else {
+                                retVal += "<td>" +UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio))+"</td>";
+                            }
+                        } else {
+                            retVal += "<td>" +UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio))+"</td>";
+                        }
                     }  else {
                         retVal += "<td></td>";
                     }
@@ -671,7 +708,16 @@ var UTILS = {
 
             // odds ratio
             if (vRec[i].GWAS_T2D_OR)  {
-                retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].GWAS_T2D_OR)+"</td>";
+                if (vRec[i].GWAS_T2D_PVALUE)  {
+                    var pValue = parseFloat (vRec[i].GWAS_T2D_PVALUE);
+                    if (($.isNumeric(pValue))&&(pValue>0.05)) {
+                        retVal += "<td class='greyedout'>" + UTILS.realNumberFormatter(vRec[i].GWAS_T2D_OR) + "</td>";
+                    } else {
+                        retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].GWAS_T2D_OR)+"</td>";
+                    }
+                } else {
+                    retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].GWAS_T2D_OR)+"</td>";
+                }
             } else {
                 retVal += "<td></td>";
             }
@@ -895,7 +941,7 @@ var UTILS = {
         }
         return retVal;
     },
-    fillTraitsPerVariantTable:  function ( vRec, show_gene, show_sigma, show_exseq, show_exchp ) {
+    fillTraitsPerVariantTable:  function ( vRec, show_gene, show_sigma, show_exseq, show_exchp,phenotypeMap,traitRootUrl ) {
         var retVal = "";
         if (!vRec) {   // error condition
             return;
@@ -906,7 +952,13 @@ var UTILS = {
             var trait = vRec [i] ;
             retVal += "<tr>"
 
-            retVal += "<td>" +trait.TRAIT+"</td>";
+            var convertedTrait=trait.TRAIT;
+            if ((phenotypeMap) &&
+                (phenotypeMap.phenotypeMap) &&
+                (typeof phenotypeMap.phenotypeMap[trait.TRAIT] !== "undefined")) {
+                convertedTrait=phenotypeMap.phenotypeMap[trait.TRAIT];
+            }
+            retVal += "<td><a href='"+traitRootUrl+"?trait="+trait.TRAIT+"&significance=5e-8'>"+convertedTrait+"</a></td>";
 
             retVal += "<td>" +(trait.PVALUE.toPrecision(3))+"</td>";
 
@@ -914,7 +966,7 @@ var UTILS = {
             if (trait.DIR === "up") {
                 retVal += "<span class='assoc-up'>&uarr;</span>";
             } else if (trait.DIR === "down") {
-                retVal += "<span class='down-up'>&darr;</span>";
+                retVal += "<span class='assoc-down'>&darr;</span>";
             }
             retVal += "</td>";
 

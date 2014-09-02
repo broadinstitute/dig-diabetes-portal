@@ -25,8 +25,6 @@
     });
     var  phenotypeMap =  new UTILS.phenotypeListConstructor (decodeURIComponent("${phenotypeList}")) ;
     function fillTraitVariantCross (data)  {
-        console.log('fill The traitVariantCross');
-
         draw_vis(data,phenotypeMap.phenotypeArray);
     }
     var draw_vis = function(data,allTraits) {

@@ -16,3 +16,7 @@
     <a target="_blank" href="http://scholar.google.com">Google Scholar</a>
     Search the published literature for references to this variant.
 </div>
+<div class="linkout">
+    <a target="_blank" href="http://crispr.mit.edu/">CRISPR tool</a>
+    Enter a DNA sequence containing this variant for guidance on designing a relevant CRISPR.
+</div>
