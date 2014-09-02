@@ -8,6 +8,7 @@ class FilterManagementService {
 
     private static final log = LogFactory.getLog(this)
     RestServerService restServerService
+    SharedToolsService sharedToolsService
 
     LinkedHashMap<String, String> standardFilterStrings = [
             "t2d-genomewide"  :
@@ -28,6 +29,8 @@ class FilterManagementService {
                     """{ "filter_type": "STRING", "operand": "IN_EXSEQ", "operator": "EQ", "value": "1" }""".toString(),
             "dataSetExchp"        :
                     """{ "filter_type": "STRING", "operand": "IN_EXCHP", "operator": "EQ", "value": "1" }""".toString(),
+            "dataSetGwas"    :
+                    """{ "filter_type": "STRING", "operand": "IN_GWAS", "operator": "EQ", "value": "1" }""".toString(),
             "dataSetDiagramGwas"    :
                     """{ "filter_type": "FLOAT", "operand": "GWAS_T2D_PVALUE", "operator": "GTE", "value": 0 }""".toString(),
             "dataSetSigma"   :
@@ -136,8 +139,17 @@ class FilterManagementService {
         return  returnValue
     }
 
-
-
+    /***
+     * take the parameters from the variant search page and build a call to the REST API. You need to
+     * end up generating three things:
+     * 1) a list of the filters that are part of the API call  itself
+     * 2) a textbased representation of those same filters for human consumption
+     * 3) a list of front-end widget settings  which we will use if the user goes to rrefine their search
+     *
+     * @param incomingParameters
+     * @param currentlySigma
+     * @return
+     */
     public LinkedHashMap  parseVariantSearchParameters (HashMap incomingParameters,Boolean currentlySigma) {
         LinkedHashMap  buildingFilters = [filters:new ArrayList<String>(),
                                           filterDescriptions:new ArrayList<String>(),
@@ -214,6 +226,153 @@ class FilterManagementService {
 
 
 
+
+    public HashMap storeParametersInHashmap ( String gene,
+                                              String significance,
+                                              String dataset,
+                                              String region,
+                                              String filter ) {
+        HashMap returnValue = [:]
+
+        if (dataset) {
+            switch (dataset) {
+                case 'gwas' :
+                    returnValue['datatype']  = 'gwas'
+                    break;
+                case 'sigma' :
+                    returnValue['datatype']  = 'sigma'
+                    break;
+                case 'exomeseq' :
+                    returnValue['datatype']  = 'exomeseq'
+                    break;
+                case 'exomechip' :
+                    returnValue['datatype']  = 'exomechip'
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+        if (significance) {
+            switch (significance) {
+                case 'everything' : // this is equivalent to P>0,
+                    // is it also equivalent to P not specified?
+                    break;
+                case 'genome-wide' :
+                    returnValue['significance']  = 'genomewide'
+                    break;
+                case 'nominal' : // this is equivalent to P>0,
+                    returnValue['significance']  = 'nominal'
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (region) { // If there's a region then use it. Otherwise depend on the gene name. Don't use both
+            LinkedHashMap extractedNumbers = restServerService.extractNumbersWeNeed(region)
+            if (extractedNumbers) {
+                if (extractedNumbers["chromosomeNumber"]) {
+                    returnValue["region_chrom_input"] = extractedNumbers["chromosomeNumber"]
+                }
+                if (extractedNumbers["startExtent"]) {
+                    returnValue["region_start_input"] = extractedNumbers["startExtent"]
+                }
+                if (extractedNumbers["endExtent"]) {
+                    returnValue["region_stop_input"] = extractedNumbers["endExtent"]
+                }
+            }
+        } else if (gene) {
+            returnValue['region_gene_input']  = gene
+        }
+
+
+        if (filter) {
+            returnValue = interpretSpecialFilters (returnValue, filter)
+        }
+
+
+
+        return returnValue
+    }
+
+
+
+     private HashMap interpretSpecialFilters(HashMap developingParameterCollection,String filter)  {
+         LinkedHashMap returnValue = new LinkedHashMap()
+         if (filter) {
+             String[] requestPortionList =  filter.split("-")
+             if (requestPortionList.size() > 1) {  //  multipiece searches
+                 String ethnicity = requestPortionList[1]
+                 if (ethnicity == 'exchp') { // we have no ethnicity. Everything comes from the European exome chipset
+                     returnValue['datatype'] = 'exomechip'
+                     switch ( requestPortionList[0] ){
+                         case "total":
+                             returnValue['ethnicity_af_EU-min'] = 0.0
+                             returnValue['ethnicity_af_EU-max'] = 1.0
+                             break;
+                         case "common":
+                             returnValue['ethnicity_af_EU-min'] = 0.05
+                             returnValue['ethnicity_af_EU-max'] = 1.0
+                             break;
+                         case "lowfreq":
+                             returnValue['ethnicity_af_EU-min'] = 0.005
+                             returnValue['ethnicity_af_EU-max'] = 0.05
+                             break;
+                         case "rare":
+                             returnValue['ethnicity_af_EU-min'] = 0.0
+                             returnValue['ethnicity_af_EU-max'] = 0.005
+                             break;
+                         default:
+                             log.error("FilterManagementService:interpretSpecialFilters. Unexpected string 1 = ${requestPortionList[0]}")
+                             break;
+                     }
+                 } else {   // we have ethnicity data
+                     developingParameterCollection['datatype']  = 'exomeseq'
+                     String baseEthnicityMarker =  "ethnicity_af_"+ ethnicity  + "-"
+                     switch ( requestPortionList[0]){
+                         case "total":
+                             returnValue[baseEthnicityMarker  +'min'] = 0.0
+                             returnValue[baseEthnicityMarker  +'max'] = 1.0
+                             break;
+                         case "common":
+                             returnValue[baseEthnicityMarker  +'min'] = 0.05
+                             returnValue[baseEthnicityMarker  +'max'] = 1.0
+                             break;
+                         case "lowfreq":
+                             returnValue[baseEthnicityMarker  +'min'] = 0.005
+                             returnValue[baseEthnicityMarker  +'max'] = 0.05
+                             break;
+                         case "rare":
+                             returnValue[baseEthnicityMarker  +'min'] = 0.0
+                             returnValue[baseEthnicityMarker  +'max'] = 0.005
+                             break;
+                         default:
+                             log.error("FilterManagementService:interpretSpecialFilters. Unexpected string 2 = ${requestPortionList[0]}")
+                             break;
+                     }
+                 }
+
+             } else {  // we can put specialized searches here
+                 switch (requestPortionList[0]) {
+                     case "lof":
+                         returnValue['datatype']  = 'exomeseq'
+                         returnValue['predictedEffects']  = 'protein-truncating'
+                         break;
+                     default:
+                         log.error("FilterManagementService:interpretSpecialFilters. Unexpected string 3 = ${requestPortionList[0]}")
+                         break;
+                 }
+             }
+
+         }
+         if (developingParameterCollection)  {
+             developingParameterCollection.each{ k, v -> returnValue["${k}"]=v}
+         }
+
+         return returnValue
+     }
 
 
 
@@ -405,9 +564,9 @@ class FilterManagementService {
 
     /***
      * Like most of the other routines in this module we are mapping parameters to filters. There is one additional
-     * level of interaction for this routine because some other unrelated routine also needs to be able to make this
-     * distinction.  Therefore we break out this string matching and put it in external method   (distinguishBetweenDataSets)
-     * so that our code stays nice and DRY
+     * level of interaction for this routine because other aspects of the filter set we are building our dependent
+     * on the selection of the data set. Therefore produce one additional key  ( "datatypeOperand" ) which can then
+     * be available  for any other routines that want to look at it
      *
      * @param buildingFilters
      * @param incomingParameters
@@ -428,8 +587,8 @@ class FilterManagementService {
             switch (dataSetDistinguisher)   {
                 case  0:
                     datatypeOperand = 'GWAS_T2D_PVALUE'
-                    filters <<  retrieveFilterString("dataSetDiagramGwas")
-                    filterDescriptions << "P-value for association with T2D in GWAS dataset is greater than or equal to 0"
+                    filters <<  retrieveFilterString("dataSetGwas")
+                    filterDescriptions << "Is observed in Diagram GWAS"
                     parameterEncoding << "1:3"
                     break;
 
@@ -441,7 +600,7 @@ class FilterManagementService {
                     break;
                 case  2:
                     datatypeOperand = '_13k_T2D_P_EMMAX_FE_IV'
-                    filters <<  retrieveFilterString("dataSetExseq") 
+                    filters <<  retrieveFilterString("dataSetExseq")
                     filterDescriptions << "Is observed in exome sequencing"
                     parameterEncoding << "1:1"
                     break;
@@ -588,7 +747,7 @@ class FilterManagementService {
 
 
 
-    private  LinkedHashMap determineThreshold (LinkedHashMap  buildingFilters, HashMap incomingParameters,String datatypeOperand){
+    private  LinkedHashMap  determineThreshold (LinkedHashMap  buildingFilters, HashMap incomingParameters,String datatypeOperand){
         List <String> filters =  buildingFilters.filters
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
@@ -662,14 +821,16 @@ class FilterManagementService {
         }
 
         // set gene to search
+        Boolean errorFree = true
         if (incomingParameters.containsKey("region_chrom_input")) {
             // user has requested a particular data set. Without explicit request what is the default?
             String stringParameter = incomingParameters["region_chrom_input"]
-            java.util.regex.Matcher chromosomeNumber = stringParameter =~ /\d+/
-            if (chromosomeNumber[0])   {
-                filters << retrieveParameterizedFilterString("setRegionChromosomeSpecification", chromosomeNumber[0].toString(), 0)
-                filterDescriptions << "Chromosome is equal to ${stringParameter}"
-                parameterEncoding << "5:${stringParameter}"
+            String  chromosomeString = sharedToolsService.parseChromosome(stringParameter)
+            //java.util.regex.Matcher chromosomeNumber = stringParameter =~ /\d+/
+            if (chromosomeString != "")   {
+                filters << retrieveParameterizedFilterString("setRegionChromosomeSpecification", chromosomeString, 0)
+                filterDescriptions << "Chromosome is equal to ${chromosomeString}"
+                parameterEncoding << "5:${chromosomeString}"
             } else {
                 log.error("FilterManagementService.setRegion: no numeric portion of chromosome specifier = ${stringParameter}")
                 // TODO: ERROR CONDITION.  DEFAULT?
@@ -681,42 +842,23 @@ class FilterManagementService {
         if (incomingParameters.containsKey("region_start_input")) {
             // user has requested a particular data set. Without explicit request what is the default?
             String stringParameter = incomingParameters["region_start_input"]
-            Integer extentDelimiter
-            Boolean errorFree = true
-            try {
-                extentDelimiter = new BigDecimal(stringParameter).intValue()
+            String startExtentString =   sharedToolsService.parseExtent(stringParameter)
+            if (startExtentString  != "")  {
                 parameterEncoding << "6:${stringParameter}"
-            } catch (exception) {
-                // TODO: this is an error condition -- the user-specified a non-numeric extent. What is the correct default action here ?
-                log.error("FilterManagementService.setRegion: no numeric portion of user-specified extent beginning = ${stringParameter}")
-                exception.printStackTrace()
-                errorFree = false
+                filters << retrieveParameterizedFilterString("setRegionPositionStart", startExtentString, 0)
+                filterDescriptions << "Chromosomal position is greater than or equal to ${startExtentString}"
             }
-            if (errorFree) {
-                filters << retrieveParameterizedFilterString("setRegionPositionStart", extentDelimiter.toString(), 0) 
-                filterDescriptions << "Chromosomal position is greater than or equal to ${extentDelimiter.toString()}"
-            }
-
-        }
+         }
 
         // set ending chromosome extent
         if (incomingParameters.containsKey("region_stop_input")) {
             // user has requested a particular data set. Without explicit request what is the default?
             String stringParameter = incomingParameters["region_stop_input"]
-            Integer extentDelimiter
-            Boolean errorFree = true
-            try {
-                extentDelimiter = new BigDecimal(stringParameter).intValue()
-            } catch (exception) {
-                // TODO: this is an error condition -- the user-specified a non-numeric extent. What is the correct default action here ?
-                log.error("FilterManagementService.setRegion: no numeric portion of user-specified extent ending = ${stringParameter}")
-                exception.printStackTrace()
-                errorFree = false
-            }
-            if (errorFree) {
-                filters << retrieveParameterizedFilterString("setRegionPositionEnd", extentDelimiter.toString(), 0) 
-                filterDescriptions << "Chromosomal position is less than or equal to ${extentDelimiter.toString()}"
-                parameterEncoding << "7:${stringParameter}"
+            String endExtentString =   sharedToolsService.parseExtent(stringParameter)
+            if (endExtentString  != "")  {
+                filters << retrieveParameterizedFilterString("setRegionPositionEnd", endExtentString, 0)
+                filterDescriptions << "Chromosomal position is less than or equal to ${endExtentString}"
+                parameterEncoding << "7:${endExtentString}"
             }
 
         }
@@ -759,12 +901,12 @@ class FilterManagementService {
                        }
                        if (errorFree) {
                            if (minOrMax == 'min') {
-                               filters << retrieveParameterizedFilterString("setEthnicityMinimum", ethnicity[1], alleleFrequency) 
-                               filterDescriptions << "Minor allele frequency in ${ethnicity} is greater than or equal to ${alleleFrequency}"
+                               filters << retrieveParameterizedFilterString("setEthnicityMinimumAbsolute", ethnicity[1], alleleFrequency)
+                               filterDescriptions << "Minor allele frequency in ${ethnicity[0]} is greater than ${alleleFrequency}"
                                parameterEncoding << "${fieldSpecifier}:${alleleFrequency}"
                            } else {
                                filters << retrieveParameterizedFilterString("setEthnicityMaximum", ethnicity[1], alleleFrequency) 
-                               filterDescriptions << "Minor allele frequency in ${ethnicity} is less than or equal to  ${alleleFrequency}"
+                               filterDescriptions << "Minor allele frequency in ${ethnicity[0]} is less than or equal to  ${alleleFrequency}"
                                parameterEncoding << "${fieldSpecifier}:${alleleFrequency}"
                            }
 

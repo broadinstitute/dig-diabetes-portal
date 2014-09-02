@@ -13,7 +13,7 @@
 <g:if test="${show_exseq}">
             <div class="radio">
                 <label>
-                    <input id="id_datatype_exomeseq" type="radio" name="datatype" value="exomeseq" />
+                    <input id="id_datatype_exomeseq" type="radio" name="datatype" value="exomeseq" checked />
                     exome sequencing studies of type 2 diabetes
                 </label>
             </div>

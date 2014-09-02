@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="Cognomen" name="dport.ProteinEffectIntegrationSpec" tests="1" time="0.009" timestamp="2014-08-31T21:32:13">
-  <properties />
-  <testcase classname="dport.ProteinEffectIntegrationSpec" name="test functions on gene domain object" time="0.005" />
-  <system-out><![CDATA[--Output from test functions on gene domain object--
-]]></system-out>
-  <system-err><![CDATA[--Output from test functions on gene domain object--
-]]></system-err>
-</testsuite>

@@ -101,10 +101,10 @@
                             For comparison, this portal provides results from two other algorithms that also predict the effects of a variant on protein structure. SIFT relies on
                             sequence conservation across species to predict whether a protein will tolerate any given single amino acid substitution at any given position in its sequence.
                             Condel combines the weighted averages for several such algorithms (including but not limited to PolyPhen-2 and SIFT) for a consensus prediction.
-                            WARNING: PolyPhen-2, SIFT, and Condel may disagree with each other, and in some cases, their predictive accuracy is low.
                         </p>
                         <p class="term-description-expansion">
-                            <strong>WARNING: PolyPhen-2, SIFT, and Condel may disagree with each other, and in some cases,their predictive accuracy is low. </strong>
+                            <strong>WARNING: PolyPhen-2, SIFT, and Condel may disagree with each other, and in some cases,
+                                <a href="http://hmg.oxfordjournals.org/content/early/2014/06/12/hmg.ddu269.long" style ="text-decoration:  underline; color: #428bca;">their predictive accuracy is low.</a> </strong>
                         </p>
                     </div>
                 </div>
@@ -131,7 +131,8 @@
                             limited to PolyPhen-2 and SIFT) for a consensus prediction.
                         </p>
                         <p class="term-description-expansion">
-                            <strong>WARNING: PolyPhen-2, SIFT, and Condel may disagree with each other, and in some cases,their predictive accuracy is low. </strong>
+                            <strong>WARNING: PolyPhen-2, SIFT, and Condel may disagree with each other, and in some cases,
+                                <a href="http://hmg.oxfordjournals.org/content/early/2014/06/12/hmg.ddu269.long" style ="text-decoration:  underline; color: #428bca;">their predictive accuracy is low.</a> </strong>
                         </p>
                     </div>
                 </div>
@@ -158,7 +159,8 @@
                             conservation across species to predict whether a protein will tolerate any given single amino acid substitution at any given position in its sequence.
                         </p>
                         <p class="term-description-expansion">
-                            <strong>WARNING: PolyPhen-2, SIFT, and Condel may disagree with each other, and in some cases,their predictive accuracy is low. </strong>
+                            <strong>WARNING: PolyPhen-2, SIFT, and Condel may disagree with each other, and in some cases,
+                                <a href="http://hmg.oxfordjournals.org/content/early/2014/06/12/hmg.ddu269.long" style ="text-decoration:  underline; color: #428bca;">their predictive accuracy is low.</a> </strong>
                         </p>
                     </div>
                 </div>

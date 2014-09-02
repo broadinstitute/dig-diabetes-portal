@@ -1,6 +1,0 @@
---Output from test the traitInfo page--
---Output from test the search a trait (and potentially  ignificance) page--
---Output from test the search a trait by ajax page--
---Output from test the association statistics across 25 traits by ajax page--
---Output from test the search a traits across region page--
---Output from test traitVariantCrossAjax--

@@ -34,6 +34,11 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
     }
 
 
+
+
+
+
+
     void "test retrieveTreatAsSpecifiedByGenomicRegion"() {
         when:
         JSONObject jsonObject = restServerService.searchForTraitBySpecifiedRegion(9,21940000,22190000)

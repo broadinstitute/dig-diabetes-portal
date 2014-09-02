@@ -28,12 +28,13 @@ class GeneController {
     def geneInfo() {
         String geneToStartWith = params.id
         if (geneToStartWith)  {
+            String geneUpperCase =   geneToStartWith.toUpperCase()
             String encodedString = sharedToolsService.urlEncodedListOfPhenotypes ()
             render (view: 'geneInfo', model:[show_gwas:1,
                                              show_exchp: 1,
                                              show_exseq: 1,
                                              show_sigma: 0,
-                                             geneName:geneToStartWith,
+                                             geneName:geneUpperCase,
                                              phenotypeList:encodedString,
             ] )
         }

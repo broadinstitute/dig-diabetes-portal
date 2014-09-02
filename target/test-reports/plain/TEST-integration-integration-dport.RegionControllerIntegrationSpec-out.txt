@@ -1,2 +1,0 @@
---Output from test the search a region page--
---Output from test the search a region by ajax page--

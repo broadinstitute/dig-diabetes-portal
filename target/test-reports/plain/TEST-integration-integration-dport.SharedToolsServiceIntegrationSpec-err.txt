@@ -1,6 +1,0 @@
---Output from test urlEncodedListOfPhenotypes smoke--
---Output from test urlEncodedListOfProteinEffect smoke--
---Output from test packageUpFiltersForRoundTrip Typical usage--
---Output from test packageUpFiltersForRoundTrip with empty parameter list--
---Output from test packageUpEncodedParameters with typical parameter list--
---Output from test packageUpEncodedParameters with empty parameters--

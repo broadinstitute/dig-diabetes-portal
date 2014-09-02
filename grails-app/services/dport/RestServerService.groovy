@@ -10,6 +10,7 @@ import org.codehaus.groovy.grails.web.json.JSONObject
 @Transactional
 class RestServerService {
     GrailsApplication grailsApplication
+    SharedToolsService sharedToolsService
     private static final log = LogFactory.getLog(this)
 
 
@@ -214,7 +215,6 @@ class RestServerService {
 
 
 
-
     /***
      * The point is to extract the relevant numbers from a string that looks something like this:
      *      String s="chr19:21,940,000-22,190,000"
@@ -225,34 +225,50 @@ class RestServerService {
         LinkedHashMap<String, Integer> returnValue = [:]
 
         String commasRemoved=incoming.replace(/,/,"")
-        java.util.regex.Matcher chromosome = commasRemoved =~ /chr[\dXY]*/
-        if (chromosome.size()== 0){  // let's try to help if the user forgot to specify the chr
-            chromosome = commasRemoved =~ /[\dXY]*/
-        }
-        if ( chromosome.size() >  0) {
-            java.util.regex.Matcher chromosomeString = chromosome[0] =~ /[\dXY]+/
-            if (chromosomeString.size() >  0) {
-                returnValue["chromosomeNumber"] = chromosomeString[0]
-            }
-        }
+        returnValue["chromosomeNumber"] =  sharedToolsService.parseChromosome(commasRemoved)
         java.util.regex.Matcher  startExtent = commasRemoved =~ /:\d*/
         if (startExtent.size() >  0){
-            java.util.regex.Matcher startExtentString = startExtent[0] =~ /\d+/
-            if (startExtentString)  {
-                int startExtentNumber = Integer.parseInt(startExtentString[0])
-                returnValue ["startExtent"]  = startExtentNumber
-            }
-        }
+            returnValue ["startExtent"]  = sharedToolsService.parseExtent(startExtent[0])
+         }
         java.util.regex.Matcher  endExtent = commasRemoved =~ /-\d*/
         if (endExtent.size() >  0){
-            java.util.regex.Matcher endExtentString = endExtent[0] =~ /\d+/
-            if (endExtentString)  {
-                int endExtentNumber = Integer.parseInt(endExtentString[0])
-                returnValue ["endExtent"]  = endExtentNumber
-            }
+            returnValue ["endExtent"]  = sharedToolsService.parseExtent(endExtent[0])
         }
         return  returnValue
     }
+//    public LinkedHashMap<String, Integer> extractNumbersWeNeed (String incoming)  {
+//        LinkedHashMap<String, Integer> returnValue = [:]
+//
+//        String commasRemoved=incoming.replace(/,/,"")
+//        String parsedChromosome =  sharedToolsService.parseChromosome(commasRemoved)
+//        java.util.regex.Matcher chromosome = commasRemoved =~ /chr[\dXY]*/
+//        if (chromosome.size()== 0){  // let's try to help if the user forgot to specify the chr
+//            chromosome = commasRemoved =~ /[\dXY]*/
+//        }
+//        if ( chromosome.size() >  0) {
+//            java.util.regex.Matcher chromosomeString = chromosome[0] =~ /[\dXY]+/
+//            if (chromosomeString.size() >  0) {
+//                returnValue["chromosomeNumber"] = chromosomeString[0]
+//            }
+//        }
+//        java.util.regex.Matcher  startExtent = commasRemoved =~ /:\d*/
+//        if (startExtent.size() >  0){
+//            java.util.regex.Matcher startExtentString = startExtent[0] =~ /\d+/
+//            if (startExtentString)  {
+//                int startExtentNumber = Integer.parseInt(startExtentString[0])
+//                returnValue ["startExtent"]  = startExtentNumber
+//            }
+//        }
+//        java.util.regex.Matcher  endExtent = commasRemoved =~ /-\d*/
+//        if (endExtent.size() >  0){
+//            java.util.regex.Matcher endExtentString = endExtent[0] =~ /\d+/
+//            if (endExtentString)  {
+//                int endExtentNumber = Integer.parseInt(endExtentString[0])
+//                returnValue ["endExtent"]  = endExtentNumber
+//            }
+//        }
+//        return  returnValue
+//    }
 
     /***
      * This is the underlying routine for every call to the rest backend.
@@ -384,8 +400,8 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
      * @return
      */
     JSONObject searchGenomicRegionBySpecifiedRegion (String chromosome,
-                                                     Integer beginSearch,
-                                                     Integer endSearch) {
+                                                     String beginSearch,
+                                                     String endSearch) {
         JSONObject returnValue = null
         String drivingJson = """{
 "user_group": "ui",
@@ -409,9 +425,9 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
      * @param endSearch
      * @return
      */
-    JSONObject searchForTraitBySpecifiedRegion (Integer chromosome,
-                                                     Integer beginSearch,
-                                                     Integer endSearch) {
+    JSONObject searchForTraitBySpecifiedRegion (String chromosome,
+                                                String beginSearch,
+                                                String endSearch) {
         JSONObject returnValue = null
         String drivingJson = """{
 "user_group": "ui",

@@ -647,7 +647,18 @@ var UTILS = {
                 }
 
                 // odds ratio  TODO: I don't know what value this maps to!
-                retVal += "<td></td>";
+                if (vRec[i].EXCHP_T2D_BETA)  {
+                    var logExchipOddsRatioString  =   vRec[i].EXCHP_T2D_BETA;
+                    var logExchipOddsRatio  =   parseFloat(vRec[i].EXCHP_T2D_BETA);
+                    if ($.isNumeric(logExchipOddsRatio))  {
+                        retVal += "<td>" +UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio))+"</td>";
+                    }  else {
+                        retVal += "<td></td>";
+                    }
+                } else {
+                    retVal += "<td></td>";
+                }
+
 
             }
 

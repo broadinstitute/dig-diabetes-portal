@@ -1,3 +1,0 @@
---Output from test engine that returns data for command completion--
---Output from test return of the gene info core page--
---Output from test return of the gene info Ajax content--

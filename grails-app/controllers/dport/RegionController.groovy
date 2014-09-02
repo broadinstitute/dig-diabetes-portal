@@ -1,9 +1,11 @@
 package dport
 
 import grails.plugin.springsecurity.annotation.Secured
+import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class RegionController {
+    private static final log = LogFactory.getLog(this)
     RestServerService   restServerService
     SharedToolsService sharedToolsService
 
@@ -16,16 +18,33 @@ class RegionController {
                 (extractedNumbers["startExtent"])   &&
                 (extractedNumbers["endExtent"])&&
                 (extractedNumbers["chromosomeNumber"]) ){
-            Integer startExtent = extractedNumbers["startExtent"]
-            Integer endExtent = extractedNumbers["endExtent"]
-            Integer chromosomeNumber = extractedNumbers["chromosomeNumber"]
-            List<Gene>  geneList = Gene.findAllByChromosome("chr"+chromosomeNumber)
-            for ( Gene gene in geneList) {
-                if (((gene.addrStart>startExtent) &&(gene.addrStart<endExtent)) ||
-                        ((gene.addrEnd>startExtent) &&(gene.addrEnd<endExtent))) {
-                    identifiedGenes << gene
-                }
+            String startExtentString = extractedNumbers["startExtent"]
+            String endExtentString = extractedNumbers["endExtent"]
+            String chromosomeNumber = extractedNumbers["chromosomeNumber"]
+            Long  startExtent
+            Long  endExtent
+            boolean encounteredErrors = false
+            try {
+                startExtent = Long.parseLong(startExtentString)
+            } catch (NumberFormatException nfe) {
+                encounteredErrors = true
+                log.info("RegionController.regionInfo: User supplied nonnumeric start extent= ${startExtentString}")
+            }
+            try {
+                endExtent = Long.parseLong(endExtentString)
+            } catch (NumberFormatException nfe) {
+                encounteredErrors = true
+                log.info("RegionController.regionInfo: User supplied nonnumeric start extent= ${endExtentString}")
+            }
+            if (!encounteredErrors){
+                List<Gene>  geneList = Gene.findAllByChromosome("chr"+chromosomeNumber)
+                for ( Gene gene in geneList) {
+                    if (((gene.addrStart>startExtent) &&(gene.addrStart<endExtent)) ||
+                            ((gene.addrEnd>startExtent) &&(gene.addrEnd<endExtent))) {
+                        identifiedGenes << gene
+                    }
 
+                }
             }
 
         }

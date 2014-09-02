@@ -30,6 +30,38 @@ class SharedToolsService {
         return java.net.URLEncoder.encode( sb.toString())
     }
 
+
+
+    public String  parseChromosome (String rawChromosomeString) {
+        String returnValue = ""
+        java.util.regex.Matcher chromosome = rawChromosomeString =~ /chr[\dXY]*/
+        if (chromosome.size() == 0) {  // let's try to help if the user forgot to specify the chr
+            chromosome = rawChromosomeString =~ /[\dXY]*/
+        }
+        if (chromosome.size() > 0) {
+            java.util.regex.Matcher chromosomeString = chromosome[0] =~ /[\dXY]+/
+            if (chromosomeString.size() > 0) {
+                returnValue = chromosomeString[0]
+            }
+        }
+        return returnValue;
+    }
+
+
+    public String  parseExtent (String rawExtentString) {
+        String returnValue = ""
+        java.util.regex.Matcher startExtentString = rawExtentString =~ /\d+/
+        if (startExtentString.size()>0)  {
+           returnValue =  startExtentString[0]
+        }
+        return returnValue;
+    }
+
+
+
+
+
+
     /***
      * urlEncodedListOfProteinEffect delivers the information in of the ProteinEffect domain object
      * For convenient delivery to the browser

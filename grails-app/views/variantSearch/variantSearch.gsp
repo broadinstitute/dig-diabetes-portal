@@ -17,6 +17,10 @@
         variant = data['variant'];
         variantTitle = UTILS.get_variant_title(variant);
     };
+    /***
+     * gather up all the information from all of the input fields, put it into a nice, tight data structure and
+     * posted back to the Web server
+     */
     function gatherFieldsAndPostResults(){
         var varsToSend = {};
         varsToSend["datatype"]  = $("input:radio[name='datatype']:checked").val();
@@ -42,6 +46,10 @@
         UTILS.postQuery('../variantSearch/variantSearchRequest',varsToSend);
     }
     var encParams="${encParams}";
+    /***
+     *  Initialize the fields so that they match the last query call
+     * @param fields
+     */
     function initializeFields( fields) {
         console.log("fields=" + fields);
         if (typeof fields!== "undefined"){
@@ -57,7 +65,6 @@
                         var value = keyvalue [1];
                         switch (key) {
                             case 1:  // data value radio buttons
-
                                 if (value === "0") {
                                     radioButtonToCheck = $("#id_datatype_sigma");
                                 } else if (value === "1") {
@@ -190,13 +197,13 @@
                                 $("#condelSelect").val(value) ;
                                 break;
                             case 27:  // data value radio buttons
-//                                    if (value===1) {
-//                                        $("#or-select").val("GTE") ;
-//                                    } else  if (value===2) {
-//                                        $("#or-select").val("LTE") ;
-//                                    } else {
-//                                        $("#or-select").val("") ;
-//                                    }
+                                    if (value==="1") {
+                                        $("#or-select").val('GTE') ;
+                                    } else  if (value==="2") {
+                                        $("#or-select").val('LTE') ;
+                                    } else {
+                                        $("#or-select").val('') ;
+                                    }
                                 break;
                             case 28:  // data value radio buttons
                                 textField = $("#or-value");

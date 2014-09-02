@@ -1,1 +1,0 @@
---Output from test functions on gene domain object--
