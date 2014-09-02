@@ -48,6 +48,7 @@ class RestServerService {
     '_13k_T2D_MINA',
     '_13k_T2D_MINU',
     '_13k_T2D_OR_WALD_DOS_FE_IV',
+    '_13k_T2D_SE'
     ]
 
 
@@ -56,6 +57,7 @@ class RestServerService {
     'EXCHP_T2D_P_value',
     'EXCHP_T2D_MAF',
     'EXCHP_T2D_BETA',
+    'EXCHP_T2D_SE'
     ]
 
 
@@ -236,39 +238,6 @@ class RestServerService {
         }
         return  returnValue
     }
-//    public LinkedHashMap<String, Integer> extractNumbersWeNeed (String incoming)  {
-//        LinkedHashMap<String, Integer> returnValue = [:]
-//
-//        String commasRemoved=incoming.replace(/,/,"")
-//        String parsedChromosome =  sharedToolsService.parseChromosome(commasRemoved)
-//        java.util.regex.Matcher chromosome = commasRemoved =~ /chr[\dXY]*/
-//        if (chromosome.size()== 0){  // let's try to help if the user forgot to specify the chr
-//            chromosome = commasRemoved =~ /[\dXY]*/
-//        }
-//        if ( chromosome.size() >  0) {
-//            java.util.regex.Matcher chromosomeString = chromosome[0] =~ /[\dXY]+/
-//            if (chromosomeString.size() >  0) {
-//                returnValue["chromosomeNumber"] = chromosomeString[0]
-//            }
-//        }
-//        java.util.regex.Matcher  startExtent = commasRemoved =~ /:\d*/
-//        if (startExtent.size() >  0){
-//            java.util.regex.Matcher startExtentString = startExtent[0] =~ /\d+/
-//            if (startExtentString)  {
-//                int startExtentNumber = Integer.parseInt(startExtentString[0])
-//                returnValue ["startExtent"]  = startExtentNumber
-//            }
-//        }
-//        java.util.regex.Matcher  endExtent = commasRemoved =~ /-\d*/
-//        if (endExtent.size() >  0){
-//            java.util.regex.Matcher endExtentString = endExtent[0] =~ /\d+/
-//            if (endExtentString)  {
-//                int endExtentNumber = Integer.parseInt(endExtentString[0])
-//                returnValue ["endExtent"]  = endExtentNumber
-//            }
-//        }
-//        return  returnValue
-//    }
 
     /***
      * This is the underlying routine for every call to the rest backend.

@@ -351,7 +351,7 @@ var UTILS = {
         var euroValue  = parseFloat(variant["EXCHP_T2D_MAF"]) ;
         if (variant["EXCHP_T2D_P_value"]) {
             retVal += ("<p>In exome chip data available on this portal, the minor allele frequency of "+title + " is "+
-                (euroValue*100)+ " percent in Europeans ("+UTILS.frequencyCharacterization(euroValue, [0.000001,0.005,0.05])+ ")");
+                (euroValue*100).toPrecision(3)+ " percent in Europeans ("+UTILS.frequencyCharacterization(euroValue, [0.000001,0.005,0.05])+ ")");
         }
         return retVal;
     },
@@ -360,7 +360,7 @@ var UTILS = {
         var euroValue  = parseFloat(variant["SIGMA_T2D_MAF"]) ;
         if (variant["SIGMA_T2D_MAF"]) {
             retVal += ("<p>The minor allele frequency of "+title + " in <em>SIGMA</em> sequencing data is: "+
-                (euroValue*100)+ " ("+UTILS.frequencyCharacterization(euroValue, [0.000001,0.005,0.05])+ ")");
+                (euroValue*100).toPrecision(3)+ " ("+UTILS.frequencyCharacterization(euroValue, [0.000001,0.005,0.05])+ ")");
         } else {
             retVal += ( "<p>This variant is not observed in SIGMA sequencing data.</p>");
         }
@@ -627,9 +627,9 @@ var UTILS = {
 
                 // odds ratio
                 if (vRec[i]._13k_T2D_OR_WALD_DOS_FE_IV)  {
-                    if (pValueToPresent)  {
-                        var pValue = parseFloat (pValueToPresent);
-                        if (($.isNumeric(pValue))&&(pValue>0.05)) {
+                    if (vRec[i]._13k_T2D_SE)  {
+                        var pValue = parseFloat (vRec[i]._13k_T2D_SE);
+                        if (($.isNumeric(pValue))&&(pValue>1)) {
                             retVal += "<td class='greyedout'>" + UTILS.realNumberFormatter(vRec[i]._13k_T2D_OR_WALD_DOS_FE_IV) + "</td>";
                         } else {
                             retVal += "<td>" +UTILS.realNumberFormatter(vRec[i]._13k_T2D_OR_WALD_DOS_FE_IV)+"</td>";
@@ -684,9 +684,9 @@ var UTILS = {
                     var logExchipOddsRatio  =   parseFloat(vRec[i].EXCHP_T2D_BETA);
                     if ($.isNumeric(logExchipOddsRatio))  {
 
-                        if (vRec[i].EXCHP_T2D_P_value)  {
-                            var pValue = parseFloat (vRec[i].EXCHP_T2D_P_value);
-                            if (($.isNumeric(pValue))&&(pValue>0.05)) {
+                        if (vRec[i].EXCHP_T2D_SE)  {
+                            var pValue = parseFloat (vRec[i].EXCHP_T2D_SE);
+                            if (($.isNumeric(pValue))&&(pValue>1)) {
                                 retVal += "<td class='greyedout'>" + UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio)) + "</td>";
                             } else {
                                 retVal += "<td>" +UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio))+"</td>";
@@ -713,16 +713,7 @@ var UTILS = {
 
             // odds ratio
             if (vRec[i].GWAS_T2D_OR)  {
-                if (vRec[i].GWAS_T2D_PVALUE)  {
-                    var pValue = parseFloat (vRec[i].GWAS_T2D_PVALUE);
-                    if (($.isNumeric(pValue))&&(pValue>0.05)) {
-                        retVal += "<td class='greyedout'>" + UTILS.realNumberFormatter(vRec[i].GWAS_T2D_OR) + "</td>";
-                    } else {
-                        retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].GWAS_T2D_OR)+"</td>";
-                    }
-                } else {
-                    retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].GWAS_T2D_OR)+"</td>";
-                }
+                retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].GWAS_T2D_OR)+"</td>";
             } else {
                 retVal += "<td></td>";
             }

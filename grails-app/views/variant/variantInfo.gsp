@@ -120,7 +120,8 @@
         $('#howCommonInHeterozygousCarriers').append(UTILS.showPercentagesAcrossHeterozygousCarriers(variant, variantTitle));
         $('#howCommonInHomozygousCarriers').append(UTILS.showPercentagesAcrossHomozygousCarriers(variant, variantTitle));
         $('#eurocentricVariantCharacterization').append(UTILS.eurocentricVariantCharacterization(variant, variantTitle));
-        UTILS.verifyThatDisplayIsWarranted(variant["_13k_T2D_TRANSCRIPT_ANNOT"],$('#exomeDataExists'),$('#exomeDataDoesNotExist'));
+        var weHaveEnoughDataToCharacterize = ((variant["_13k_T2D_TRANSCRIPT_ANNOT"]) && (variant["_13k_T2D_AA_MAF"]) && (variant["_13k_T2D_AA_MAF"]));
+        UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToCharacterize,$('#exomeDataExists'),$('#exomeDataDoesNotExist'));
         $('#sigmaVariantCharacterization').append(UTILS.sigmaVariantCharacterization(variant, variantTitle));
         $('#effectOfVariantOnProtein').append(UTILS.variantGenerateProteinsChooser(variant,variantTitle));
         UTILS.verifyThatDisplayIsWarranted(variant["_13k_T2D_TRANSCRIPT_ANNOT"],$('#variationInfoEncodedProtein'),$('#puntOnNoncodingVariant'));

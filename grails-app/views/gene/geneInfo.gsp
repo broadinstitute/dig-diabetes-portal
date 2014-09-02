@@ -216,7 +216,7 @@
     function fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootGeneUrl,rootVariantUrl){
 
         if(show_gwas){
-            variantsAndAssociationsTitleLine(rawGeneInfo,geneInfoRec.GWAS_T2D_VAR_TOTAL,'within 500 kb of this gene in GWAS data available on this portal',
+            variantsAndAssociationsTitleLine(rawGeneInfo,geneInfoRec.GWAS_T2D_VAR_TOTAL,'within 500 kb of this gene in DIAGRAM GWAS data available on this portal',
                     geneInfoRec.CHROM,
                     geneInfoRec.BEG,
                     geneInfoRec.END,
@@ -510,8 +510,10 @@
 
 
 
-                <g:if test="${(geneName == "C19orf80")||
+                <g:if test="${(geneName == "C19ORF80")||
                         (geneName == "PAM")||
+                        (geneName == "HNF1A")||
+                        (geneName == "SLC16A11")||
                         (geneName == "SLC30A8")||
                         (geneName == "WFS1")}">
                     <div class="gene-summary">

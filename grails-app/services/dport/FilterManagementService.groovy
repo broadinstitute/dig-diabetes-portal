@@ -101,6 +101,9 @@ class FilterManagementService {
             case "setExomeChipMinimumAbsolute" :
                 returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "GT", "value": ${parm2} }""".toString()
                 break;
+            case "setExomeChipMaximum" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "LTE", "value": ${parm2} }""".toString()
+                break;
             case "setExomeChipMaximumAbsolute" :
                 returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "LT", "value": ${parm2} }""".toString()
                 break;
@@ -901,11 +904,21 @@ class FilterManagementService {
                        }
                        if (errorFree) {
                            if (minOrMax == 'min') {
-                               filters << retrieveParameterizedFilterString("setEthnicityMinimumAbsolute", ethnicity[1], alleleFrequency)
+                               // if we are searching exome chip data then use a different filter. Everything else is the same
+                               if (incomingParameters.datatype=="exomechip"){
+                                   filters << retrieveParameterizedFilterString("setExomeChipMinimumAbsolute", ethnicity[1], alleleFrequency)
+                               } else {
+                                   filters << retrieveParameterizedFilterString("setEthnicityMinimumAbsolute", ethnicity[1], alleleFrequency)
+                               }
                                filterDescriptions << "Minor allele frequency in ${ethnicity[0]} is greater than ${alleleFrequency}"
                                parameterEncoding << "${fieldSpecifier}:${alleleFrequency}"
                            } else {
-                               filters << retrieveParameterizedFilterString("setEthnicityMaximum", ethnicity[1], alleleFrequency) 
+                               if (incomingParameters.datatype=="exomechip"){
+                                   filters << retrieveParameterizedFilterString("setExomeChipMaximum", ethnicity[1], alleleFrequency)
+                               } else {
+                                   filters << retrieveParameterizedFilterString("setEthnicityMaximum", ethnicity[1], alleleFrequency)
+                               }
+
                                filterDescriptions << "Minor allele frequency in ${ethnicity[0]} is less than or equal to  ${alleleFrequency}"
                                parameterEncoding << "${fieldSpecifier}:${alleleFrequency}"
                            }
