@@ -175,3 +175,57 @@
     <div class="col-md-7"></div>
 
 </div>
+
+
+
+<div class="row adminform">
+
+    <div class="col-md-5">
+        <label class="pull-right" for="userPrivs">
+            USER PRIVS
+        </label>
+    </div>
+
+    <div class="col-md-2">
+        <g:checkBox name="userPrivs" value="${((userPrivs&1)>0)}"/>
+    </div>
+
+
+    <div class="col-md-5"></div>
+
+</div>
+
+<div class="row adminform">
+
+    <div class="col-md-5">
+        <label class="pull-right" for="mgrPrivs">
+            ADMIN PRIVS
+        </label>
+    </div>
+
+    <div class="col-md-2">
+        <g:checkBox name="mgrPrivs" value="${((userPrivs&2)>0)}"/>
+    </div>
+
+
+    <div class="col-md-5"></div>
+
+</div>
+
+
+<div class="row adminform">
+
+    <div class="col-md-5">
+        <label class="pull-right" for="systemPrivs">
+            SYSTEM PRIVS
+        </label>
+    </div>
+
+    <div class="col-md-2">
+        <g:checkBox name="systemPrivs" value="${((userPrivs&4)>0)}"/>
+    </div>
+
+
+    <div class="col-md-5"></div>
+
+</div>

@@ -106,9 +106,15 @@ class SharedToolsService {
         return java.net.URLEncoder.encode( sb.toString())
     }
 
-
+    /***
+     * Given a user, translate their privileges into a flag integer
+     *
+     * @param userInstance
+     * @return
+     */
     public int extractPrivilegeFlags (User userInstance)  {
         int flag = 0
+        List<UserRole> userRoleList = UserRole.findAllByUser(userInstance)
         for (UserRole oneUserRole in userRoleList) {
             if (oneUserRole.role == Role.findByAuthority("ROLE_USER")) {
                 flag += 1
@@ -122,20 +128,66 @@ class SharedToolsService {
     }
 
 
-//    public int storePrivilegesFromFlags (int flag)  {
-//        List<>
-//        for (UserRole oneUserRole in userRoleList) {
-//            if (oneUserRole.role == Role.findByAuthority("ROLE_USER")) {
-//                flag += 1
-//            }  else  if (oneUserRole.role == Role.findByAuthority("ROLE_ADMIN")) {
-//                flag += 2
-//            }  else  if (oneUserRole.role == Role.findByAuthority("ROLE_SYSTEM")) {
-//                flag += 4
-//            }
-//        }
-//        return flag
-//    }
 
+
+    private void adjustPrivileges (User userInstance, int targetFlag,int currentFlag, int bitToConsider, String targetRole )  {
+        if ((targetFlag&bitToConsider) > 0 ) {
+            // we want them to have it
+
+            if ((currentFlag&bitToConsider) == 0) {
+                // we want them to have it and they don't. Give it to them
+                Role role =  Role.findByAuthority(targetRole)
+                UserRole.create userInstance,role
+            }  // else we want them to have it and they do already == no-op
+
+        }   else {
+            // we don't want them to have it
+
+            if ((currentFlag&bitToConsider) > 0) {
+                // we don't want them to have it but they do. Take it away
+                Role role =  Role.findByAuthority(targetRole)
+                UserRole userRole = UserRole.findByUserAndRole(userInstance,role)
+                        //               UserRole userRole =  UserRole.get(userInstance.id,role.id)
+                userRole.delete()
+            }  // else we don't want them to have it and they don't already == no-op
+
+        }
+
+    }
+
+
+
+    /***
+     * Give the user the privileges we want them to have – no more, no less
+     * @param userInstance
+     * @param flag
+     * @return
+     */
+    public int storePrivilegesFromFlags (User userInstance,int targetFlag)  {
+        // what privileges do they have already
+        int currentFlag = extractPrivilegeFlags ( userInstance)
+
+        // Now go through the flags we want them to have one by one and adjust accordingly
+        adjustPrivileges ( userInstance,  targetFlag, currentFlag, 0x1, "ROLE_USER" )
+        adjustPrivileges ( userInstance,  targetFlag, currentFlag, 0x2, "ROLE_ADMIN" )
+        adjustPrivileges ( userInstance,  targetFlag, currentFlag, 0x4, "ROLE_SYSTEM" )
+
+        return targetFlag
+    }
+
+    public int convertCheckboxesToPrivFlag(params){
+        int flag = 0
+        if (params["userPrivs"]=="on"){
+            flag += 1
+        }
+        if (params["mgrPrivs"]=="on"){
+            flag += 2
+        }
+        if (params["systemPrivs"]=="on"){
+            flag += 4
+        }
+        return flag
+    }
 
     /***
      * packageUpFiltersForRoundTrip get back a list of filters that we need to pass to the backend. We package them up for a round trip to the client

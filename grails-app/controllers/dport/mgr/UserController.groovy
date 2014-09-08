@@ -1,35 +1,28 @@
 package dport.mgr
-
 import dport.SharedToolsService
-import dport.people.Role
 import dport.people.User
 import dport.people.UserRole
 import grails.transaction.Transactional
 
-import static org.springframework.http.HttpStatus.CREATED
-import static org.springframework.http.HttpStatus.NOT_FOUND
-import static org.springframework.http.HttpStatus.NO_CONTENT
-import static org.springframework.http.HttpStatus.OK
+import static org.springframework.http.HttpStatus.*
 
 class UserController {
     SharedToolsService sharedToolsService
 
     def edit(User userInstance) {
-//        int id =  userInstance.id
-//        List<UserRole> userRoleList = UserRole.findAllByUser(userInstance)
+
+        List<UserRole> userRoleList = UserRole.findAllByUser(userInstance)
+
         int flag =   sharedToolsService.extractPrivilegeFlags  (userInstance)
-//        int flag = 0
-//        for (UserRole oneUserRole in userRoleList) {
-//            if (oneUserRole.role == Role.findByAuthority("ROLE_USER")) {
-//                flag += 1
-//            }  else  if (oneUserRole.role == Role.findByAuthority("ROLE_ADMIN")) {
-//                flag += 2
-//            }  else  if (oneUserRole.role == Role.findByAuthority("ROLE_SYSTEM")) {
-//                flag += 4
-//            }
-//         }
+
         respond userInstance,model:[userPrivs: flag]
     }
+
+    def create = {
+        respond new User(params),model:[userPrivs: 1]
+
+    }
+
 
     @Transactional
     def update(User userInstance) {
@@ -39,11 +32,16 @@ class UserController {
         }
 
         if (userInstance.hasErrors()) {
-            respond userInstance.errors, view:'edit'
+            int flag =   sharedToolsService.extractPrivilegeFlags  (userInstance)
+            respond userInstance.errors, view:'edit',model:[userPrivs: flag]
             return
         }
 
         userInstance.save flush:true
+
+        int flagsUserWants = sharedToolsService.convertCheckboxesToPrivFlag(params)
+
+        sharedToolsService.storePrivilegesFromFlags ( userInstance, flagsUserWants)
 
         request.withFormat {
             form multipartForm {
@@ -51,7 +49,7 @@ class UserController {
                 redirect userInstance
             }
             '*'{
-                respond userInstance, [status: OK,userPrivs: 1] }
+                respond userInstance, [status: OK,userPrivs: flagsUserWants] }
         }
     }
 
@@ -65,25 +63,30 @@ class UserController {
         }
 
         if (userInstance.hasErrors()) {
-            respond userInstance.errors, view:'create'
+            respond userInstance.errors, view:'create',model:[userPrivs: 1]
             return
         }
-        Role userRole = Role.findByAuthority("ROLE_USER")
+
         userInstance.save flush:true
+        int flagsUserWants = sharedToolsService.convertCheckboxesToPrivFlag(params)
+        sharedToolsService.storePrivilegesFromFlags ( userInstance, flagsUserWants)
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.created.message', args: ['User', userInstance.id])
                 redirect userInstance
             }
-            UserRole.create userInstance,userRole
-            '*' { respond userInstance, [status: CREATED, privsFlag: 3] }
+
+            '*' {
+                respond userInstance, [status: CREATED, privsFlag: flagsUserWants]
+            }
         }
     }
 
 
     def show(User userInstance) {
-        respond userInstance
+        int flag =   sharedToolsService.extractPrivilegeFlags  (userInstance)
+        respond userInstance, model:[userPrivs: flag]
     }
 
 
@@ -94,6 +97,8 @@ class UserController {
             notFound()
             return
         }
+
+        sharedToolsService.storePrivilegesFromFlags ( userInstance, 0)
 
         userInstance.delete flush:true
 
@@ -122,4 +127,7 @@ class UserController {
     def index() {
 
     }
+
+
+
 }

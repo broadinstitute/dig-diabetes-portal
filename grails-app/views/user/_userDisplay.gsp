@@ -19,7 +19,7 @@
                 <span id="password-label" class="property-label">password</span>
             </div>
             <div class="col-md-6 displayUserField">
-                <span class="property-value" aria-labelledby="password-label"><g:fieldValue bean="${userInstance}" field="password"/></span>
+                <span class="property-value" aria-labelledby="password-label">[encoded]</span>
             </div>
             <div class="col-md-4"></div>
 
@@ -155,9 +155,59 @@
             </div>
         </g:if>
 
+    <div class="row adminform2">
+            <div class="col-md-5">
+                <span id="userPrivs-label" class="property-label">
+                    USER PRIVS
+                </span>
+            </div>
+
+            <div class="col-md-2">
+                <span class="property-value" aria-labelledby="userPrivs-label">
+                    <g:formatBoolean boolean="${((userPrivs&1)>0)}" />
+                </span>
+            </div>
 
 
-        <div class="col-md-7"></div>
+            <div class="col-md-5"></div>
+
+    </div>
+
+
+    <div class="row adminform2">
+        <div class="col-md-5">
+            <span id="mgrPrivs-label" class="property-label">
+                ADMIN PRIVS
+            </span>
+        </div>
+
+        <div class="col-md-2">
+            <span class="property-value" aria-labelledby="mgrPrivs-label">
+                <g:formatBoolean boolean="${((userPrivs&2)>0)}" />
+            </span>
+        </div>
+
+
+        <div class="col-md-5"></div>
+
+    </div>
+
+
+    <div class="row adminform2">
+        <div class="col-md-5">
+            <span id="systemPrivs-label" class="property-label">
+                SYSTEM PRIVS
+            </span>
+        </div>
+
+        <div class="col-md-2">
+            <span class="property-value" aria-labelledby="systemPrivs-label">
+                <g:formatBoolean boolean="${((userPrivs&4)>0)}" />
+            </span>
+        </div>
+
+
+        <div class="col-md-5"></div>
 
     </div>
 

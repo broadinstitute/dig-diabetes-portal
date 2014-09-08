@@ -25,9 +25,9 @@ class AdminController {
 
         render(view: 'users', model: [encodedUsers:encodedUsers])
     }
-    def create = {
-        respond new User(params)
 
+    def create = {
+        respond new User(params),model:[userPrivs: 1]
     }
 
     @Transactional
@@ -38,34 +38,25 @@ class AdminController {
         }
 
         if (userInstance.hasErrors()) {
-            respond userInstance.errors, view:'create'
+            respond userInstance.errors, view:'create',model:[userPrivs: 1]
             return
         }
 
         userInstance.save flush:true
+
+        int flagsUserWants = sharedToolsService.convertCheckboxesToPrivFlag(params)
+
+        sharedToolsService.storePrivilegesFromFlags ( userInstance, flagsUserWants)
 
         request.withFormat {
             form multipartForm {
                 flash.message = message(code: 'default.created.message', args: ['User', userInstance.id])
                 redirect userInstance
             }
-            '*' { respond userInstance, [status: CREATED] }
+            '*' { respond userInstance, [status: CREATED, privsFlag: flagsUserWants] }
         }
     }
 
-
-//    def user = {
-//        String  username = params.id
-//        if (!username) {
-//            flash.message = 'Sorry, you need to provide a username'
-//            redirect controller: 'login', action: 'auth'
-//            return
-//        }   else  {
-//
-//        }
-//
-//         render(view: 'users', model: [encodedUsers:encodedUsers])
-//    }
 
     def forcePasswordExpire = {
         if (params.id)  {
