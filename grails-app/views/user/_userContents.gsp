@@ -26,7 +26,9 @@
         </div>
 
         <div class="col-md-6">
-            <g:textField class="pull-left" name="password" required="" size="60" value="${userInstance?.password}"/>
+            <span style="display:none">
+                <g:textField class="pull-left" name="password" required="" size="60" value="${userInstance?.password}"/>
+            </span>
         </div>
 
         <div class="col-md-4"></div>
@@ -208,7 +210,7 @@
 
 </div>
 
-
+<sec:ifAllGranted roles="ROLE_SYSTEM">
 <div class="row adminform">
 
     <div class="col-md-5">
@@ -225,3 +227,4 @@
     <div class="col-md-5"></div>
 
 </div>
+</sec:ifAllGranted>

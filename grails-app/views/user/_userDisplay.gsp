@@ -192,7 +192,7 @@
 
     </div>
 
-
+    <sec:ifAllGranted roles="ROLE_SYSTEM">
     <div class="row adminform2">
         <div class="col-md-5">
             <span id="systemPrivs-label" class="property-label">
@@ -210,6 +210,6 @@
         <div class="col-md-5"></div>
 
     </div>
-
+    </sec:ifAllGranted>
 
 

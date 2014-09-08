@@ -1,8 +1,6 @@
 package dport.mgr
-
 import dport.SharedToolsService
 import dport.people.User
-import grails.plugin.springsecurity.SpringSecurityService
 import grails.transaction.Transactional
 import org.codehaus.groovy.grails.commons.GrailsApplication
 
@@ -12,7 +10,7 @@ class AdminController {
 
     GrailsApplication grailsApplication
     SharedToolsService sharedToolsService
-    SpringSecurityService springSecurityService
+    def springSecurityService
 
 
     def index = {

@@ -33,8 +33,8 @@
                 <div class="row">
                     <div class="col-md-4"><h1>Show a user</h1></div>
 
-                    <div class="col-md-4"><g:link class="list" controller="admin" action="users">User list</g:link></div>
-                    <div class="col-md-4"><g:link class="create" controller="admin" action="create">New user</g:link></div>
+                    <div class="col-md-4"><g:link class="list btn btn-sm btn-primary" controller="admin" action="users">User list</g:link></div>
+                    <div class="col-md-4"><g:link class="create btn btn-sm btn-primary" controller="admin" action="create">New user</g:link></div>
                 </div>
 
                 <div class="row">

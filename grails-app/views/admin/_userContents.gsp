@@ -213,6 +213,7 @@
 </div>
 
 
+<sec:ifAllGranted roles="ROLE_SYSTEM">
 <div class="row adminform">
 
     <div class="col-md-5">
@@ -229,3 +230,4 @@
     <div class="col-md-5"></div>
 
 </div>
+</sec:ifAllGranted>
