@@ -5,7 +5,12 @@
   Time: 5:11 PM
 --%>
 
-<h1>User list</h1>
+<div class="row">
+    <h1>User list</h1>
+    <g:link action="create" class="page-nav-link pull-right">Create new user</g:link>
+    %{--<g:link action="create" class="btn btn-lg btn-primary pull-right">Create new user</g:link>--}%
+</div>
+<div class="row"></div>
 <table id="userTable" class="table table-striped basictable">
 <thead>
 <tr>

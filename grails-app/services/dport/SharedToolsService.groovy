@@ -1,6 +1,8 @@
 package dport
 
+import dport.people.Role
 import dport.people.User
+import dport.people.UserRole
 import grails.transaction.Transactional
 
 
@@ -95,7 +97,7 @@ class SharedToolsService {
         int numberOfUsers  =  userList.size()
         int iterationCount  = 0
         for (User user in userList){
-            sb<< (user.username + ":" + (user.getPasswordExpired()?'T':'F') + ":" + (user.getAccountExpired()?'T':'F'))
+            sb<< (user.username + ":" + (user.getPasswordExpired()?'T':'F') + ":" + (user.getAccountExpired()?'T':'F')+ ":" + user.getId())
             iterationCount++
             if (iterationCount  < numberOfUsers){
                 sb<< "~"
@@ -105,7 +107,34 @@ class SharedToolsService {
     }
 
 
+    public int extractPrivilegeFlags (User userInstance)  {
+        int flag = 0
+        for (UserRole oneUserRole in userRoleList) {
+            if (oneUserRole.role == Role.findByAuthority("ROLE_USER")) {
+                flag += 1
+            }  else  if (oneUserRole.role == Role.findByAuthority("ROLE_ADMIN")) {
+                flag += 2
+            }  else  if (oneUserRole.role == Role.findByAuthority("ROLE_SYSTEM")) {
+                flag += 4
+            }
+        }
+        return flag
+    }
 
+
+//    public int storePrivilegesFromFlags (int flag)  {
+//        List<>
+//        for (UserRole oneUserRole in userRoleList) {
+//            if (oneUserRole.role == Role.findByAuthority("ROLE_USER")) {
+//                flag += 1
+//            }  else  if (oneUserRole.role == Role.findByAuthority("ROLE_ADMIN")) {
+//                flag += 2
+//            }  else  if (oneUserRole.role == Role.findByAuthority("ROLE_SYSTEM")) {
+//                flag += 4
+//            }
+//        }
+//        return flag
+//    }
 
 
     /***

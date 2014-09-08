@@ -80,13 +80,13 @@ class BootStrap {
                     user.save(flush: true)
                     UserRole.create user,userRole
                     if ((username=='ben')||
-                            (username=='balexand')||
-                            (username=='flannick')){
+                            (username=='balexand@broadinstitute.org')||
+                            (username=='flannick@broadinstitute.org')){
                         UserRole.create user,adminRole
                         UserRole.create user,systemRole
                     }
                     if ((username=='mary')||
-                        (username=='maryc')){
+                        (username=='maryc@broadinstitute.org')){
                         UserRole.create user,adminRole
                     }
                 }  else {

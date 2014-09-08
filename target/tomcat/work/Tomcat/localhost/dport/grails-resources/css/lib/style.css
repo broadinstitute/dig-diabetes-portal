@@ -74,7 +74,12 @@ a.page-nav-link {
   margin: 5px 5px;
   vertical-align: middle;
   text-transform: lowercase; }
-
+div.adminform {
+    padding: 8px 12px;
+}
+.adminform2  {
+    padding: 8px 12px;
+}
 div.separator {
   height: 1px;
   border-top: 1px solid #aaa;

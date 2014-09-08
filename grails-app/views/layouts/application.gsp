@@ -13,29 +13,28 @@
 
     <script>
 
-    var encodedUsers = decodeURIComponent("<%=encodedUsers%>");
-    console.log('encodedUsers='+encodedUsers+'.');
-    var listOfUsers = [];
-    if ((typeof encodedUsers !== 'undefined')  &&
-        (encodedUsers.length > 0)){
-        var listOfUserData =  encodedUsers.split ('~') ;
-        if ((listOfUserData) &&
-            (listOfUserData.length > 0)) {
-            for ( var i = 0 ; i < listOfUserData.length ; i++ )  {
-                var listOfFields = listOfUserData[i].split (':');
-                if (listOfFields.length > 3) {
-                    listOfUsers.push(
-                            {'name':listOfFields[0],
-                             'expired':(listOfFields[1]==='T'),
-                             'enabled':(listOfFields[2]==='T'),
-                             'id':listOfFields[3]
-                            } )
-                }
-           }
-
-        }
+        var encodedUsers = decodeURIComponent("<%=encodedUsers%>");
         console.log('encodedUsers='+encodedUsers+'.');
-    }
+        var listOfUsers = [];
+        if ((typeof encodedUsers !== 'undefined')  &&
+                (encodedUsers.length > 0)){
+            var listOfUserData =  encodedUsers.split ('~') ;
+            if ((listOfUserData) &&
+                    (listOfUserData.length > 0)) {
+                for ( var i = 0 ; i < listOfUserData.length ; i++ )  {
+                    var listOfFields = listOfUserData[i].split (':');
+                    if (listOfFields.length > 2) {
+                        listOfUsers.push(
+                                {'name':listOfFields[0],
+                                    'expired':(listOfFields[1]==='T'),
+                                    'enabled':(listOfFields[2]==='T')
+                                } )
+                    }
+                }
+
+            }
+            console.log('encodedUsers='+encodedUsers+'.');
+        }
 
     </script>
 
@@ -64,7 +63,6 @@
 </div>
 <script>
     var fillUserTable =  function ( userData,
-                                    editUserRecordUrl,
                                     autoPasswordExpireUrl,
                                     autoPasswordUnexpireUrl,
                                     autoAccountExpireUrl,
@@ -83,7 +81,7 @@
             retVal += "<tr>"
 
             // username
-            retVal += "<td><a href='" + editUserRecordUrl + "/" + user.id + "' class='boldlink'>"+ user.name + "</a></td>";
+            retVal += "<td>" + user.name + "</td>";
 
             var replacePeriodsInUsername =  encodeURIComponent(user.name.replace(/\./g, '&#46;'))
 
@@ -107,7 +105,6 @@
     };
     var constructUserTable =  function (data)  {
         $('#userTableBody').append(fillUserTable(data,
-                '<g:createLink controller="user" action="edit" />',
                 '<g:createLink controller="admin" action="forcePasswordExpire" />',
                 '<g:createLink controller="admin" action="forcePasswordUnexpire" />',
                 '<g:createLink controller="admin" action="forceAccountExpire" />',
@@ -128,4 +125,3 @@
 </script>
 </body>
 </html>
-
