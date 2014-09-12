@@ -103,9 +103,11 @@
 
         var assocs = [];
         var trait_indices = {};
-        _.each(traits, function(t, i) {
-            trait_indices[t.key] = i;
-        });
+        if (typeof traits !== 'undefined') {
+            for ( var i = 0 ; i < traits.length ; i++ ) {
+                trait_indices[traits[i].key] = i;
+            }
+        }
         var variantIndices = {};
         var  variantCount = 0;
         for ( var i = 0 ; i < that.variants.length ; i++ ) {

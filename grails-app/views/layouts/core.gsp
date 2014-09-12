@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    %{--<title><g:layoutTitle default="Grails"/></title>--}%
 <title>${grailsApplication.config.site.title}</title>
 
     <r:require modules="core"/>
@@ -127,13 +126,6 @@
                     <g:link controller='login' action='auth'>Login</g:link>
                 </div>
             </sec:ifNotLoggedIn>
-            %{--{% if user.is_authenticated %}--}%
-            %{--<div class="rightlinks">--}%
-                %{--{{ user.profile }} --}%%{-- --}%
-                %{--User &middot;--}%
-                %{--<a href="/logout">Log Out</a>--}%
-            %{--</div>--}%
-        %{--{% endif %}--}%
             <g:if test="${grailsApplication.config.site.version == 't2dgenes'}">
                 <a href="${createLink(controller:'home',action:'portalHome')}">Home</a> &middot;
                 <a href="${createLink(controller:'informational', action:'about')}">About The Data</a> &middot;

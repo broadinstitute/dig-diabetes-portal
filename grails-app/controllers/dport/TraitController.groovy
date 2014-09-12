@@ -73,6 +73,15 @@ class TraitController {
 
     }
 
+
+
+    def genomeBrowser ()  {
+        render (view: 'genomeBrowser',
+                model:[] )
+    }
+
+
+
     /***
      * Returns association statistics across 25 traits for a single variant.  The launching page is traitInfo
      * @return
@@ -111,13 +120,14 @@ class TraitController {
         String regionsSpecification = params.id
 
         JSONObject jsonObject =  restServerService.searchTraitByUnparsedRegion (regionsSpecification)
-        if ((jsonObject) && (jsonObject['variants'])) {
-            render(status:200, contentType:"application/json") {
-                [variants:jsonObject['variants']]
+        if (jsonObject) {
+            render(status: 200, contentType: "application/json") {
+                [variants: jsonObject['variants']]
             }
         } else {
             render(status:300, contentType:"application/json")
         }
+
      }
 
 

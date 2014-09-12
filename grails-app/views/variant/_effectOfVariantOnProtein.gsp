@@ -167,33 +167,6 @@
             </div>
         </div>
 
-
-
-        %{--<div class="panel panel-default">--}%
-        %{--<div class="panel-heading">--}%
-        %{--<h4 class="panel-title">--}%
-        %{--<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">--}%
-        %{--<a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3071923/">Condel</a> prediction and score:--}%
-        %{--<span id="condelPrediction"></span> </p>--}%
-        %{--</a>--}%
-        %{--</h4>--}%
-        %{--</div>--}%
-        %{--<div id="collapseThree" class="panel-collapse collapse">--}%
-        %{--<div class="panel-body">--}%
-        %{--<div  class="term-description-expansion">--}%
-        %{--<p>--}%
-        %{--The algorithms above take different information into account to predict the effects of SNPs on protein structure.--}%
-        %{--<strong>PolyPhen-2</strong> predictions are based on whether a variant appears in a region that is highly conserved across species--}%
-        %{--(and thus may serve critical biological functions), and whether the variant is in a location likely to affect the protein's 3D structure.--}%
-        %{--<strong>SIFT</strong> also relies on sequence conservation across species to predict whether a protein will tolerate any given single amino acid substitution--}%
-        %{--at any given position in its sequence. <strong>Condel</strong> combines the weighted averages for several such algorithms--}%
-        %{--(including but not limited to PolyPhen-2 and SIFT) for a consensus prediction.--}%
-        %{--</p>--}%
-        %{--</div>--}%
-        %{--</div>--}%
-        %{--</div>--}%
-        %{--</div>--}%
-
     </div>
 
 </div>
