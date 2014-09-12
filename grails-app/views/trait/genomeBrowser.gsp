@@ -33,7 +33,7 @@
 
     <script  src="../../js/lib/igv/vendor/inflate.js"></script>
 
-    <script  src="../../js/lib/igv/vendor/zlib.js"></script>
+    <script  src="../../js/lib/igv/vendor/zlib_and_gzip.min.js"></script>
     <!--   <script type="text/javascript" src="vendor/bootstrap/plugins/holder.js"></script>  -->
 
     <!-- IGV js code -->

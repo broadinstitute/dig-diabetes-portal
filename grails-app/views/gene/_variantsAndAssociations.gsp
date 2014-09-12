@@ -55,4 +55,4 @@
 
     See p-values and other statistics across 25 traits for all GWAS variants included in this portal</a>
 </p>
-<p><a class="boldlink" href="<g:createLink controller="trait" action="genomeBrowser" />/${regionSpecification}"> Click here to examine this region with the IGV browser</a>
+<p><a class="boldlink" href="<g:createLink controller='trait' action='genomeBrowser'/>?id=${geneName}">Click here to examine this region with the IGV browser</a>

@@ -76,8 +76,9 @@ class TraitController {
 
 
     def genomeBrowser ()  {
+        String geneName = params.id
         render (view: 'genomeBrowser',
-                model:[] )
+                model:[geneName:geneName] )
     }
 
 

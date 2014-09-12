@@ -1,3 +1,13 @@
+
+
+<script>
+    function  igvSearch(searchString) {
+        igv.browser.search(searchString);
+        return true;
+    }
+</script>
+
+
 <div id="myDiv">
 
     <nav class="navbar" role="navigation">
@@ -12,8 +22,8 @@
                     <li class="dropdown" id="loci-menu-dropdown"><a href="#" class="dropdown-toggle"
                                                                     data-toggle="dropdown">Loci<b class="caret"></b></a>
                         <ul id="locusList" class="dropdown-menu">
-                            <li><a onclick="igv.browser.search('brca1')">brca1</a></li>
-                            <li><a onclick="igv.browser.search('chr22:24,375,948-24,384,434')">chr22:24,375,948-24,384,434</a>
+                            <li><a onclick="igvSearch('slc30a8')">SLC30A8</a></li>
+                            <li><a onclick="igvSearch('chr22:24,375,948-24,384,434')">chr22:24,375,948-24,384,434</a>
                             </li>
                             <li><a></a></li>
                         </ul>
@@ -157,12 +167,12 @@
                 <div class="nav navbar-nav navbar-left">
                     <div class="well-sm">
                         <input id="goBoxInput" class="form-control" placeholder="Locus Search" type="text"
-                               onchange="igv.browser.search($('#goBoxInput')[0].value)">
+                               onchange="igvSearch($('#goBoxInput')[0].value)">
                     </div>
                 </div>
                 <div class="nav navbar-nav navbar-left">
                     <div class="well-sm">
-                        <button id="goBox" class="btn btn-default" onclick="igv.browser.search($('#goBox')[0].value);">
+                        <button id="goBox" class="btn btn-default" onclick="igvSearch($('#goBoxInput')[0].value)">
                             Search
                         </button>
                     </div>
@@ -210,6 +220,7 @@
         browser = igv.createBrowser(options);
         div.appendChild(browser.div);
         browser.startup();
+        igvSearch('${geneName}')
     });
 
 </script>
