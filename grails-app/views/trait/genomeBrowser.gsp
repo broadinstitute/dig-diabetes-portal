@@ -33,11 +33,15 @@
     <!--   <script type="text/javascript" src="vendor/bootstrap/plugins/holder.js"></script>  -->
 
     <!-- IGV js code -->
-    <script src="http://www.broadinstitute.org/igvdata/t2d/igv-all.min.js"></script>
+    <script src="http://www.broadinstitute.org/igvdata/t2d/igv-all.js"></script>
 
 </head>
 
 <body>
+<script>
+    console.log('1');
+</script>
+
 
 
 <div id="main">

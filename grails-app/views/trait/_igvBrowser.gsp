@@ -37,40 +37,71 @@
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
                                     url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
-                                    trait: 'FASTING_GLUCOSE',
-                                    label: 'fasting glucose'
+                                    trait: 'FastGlu',
+                                    label: 'fasting glucose',
+                                    order: 9998
                                 })">fasting glucose</a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
                                     url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
-                                    trait: 'FASTING_INSULIN',
-                                    label: 'fasting insulin'
+                                    trait: '2hrGLU_BMIAdj',
+                                    label: 'two-hour glucose',
+                                    order: 9981
+                                })">two-hour glucose</a>
+                            </li>
+                            <li>
+                                <a onclick="igv.browser.loadTrack({
+                                    type: 't2d',
+                                    url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
+                                    trait: '2hrIns_BMIAdj',
+                                    label: 'two-hour insulin',
+                                    order: 9981
+                                })">two-hour insulin</a>
+                            </li>
+                            <li>
+                                <a onclick="igv.browser.loadTrack({
+                                    type: 't2d',
+                                    url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
+                                    trait: 'FastIns',
+                                    label: 'fasting insulin',
+                                    order: 9997
                                 })">fasting insulin</a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
                                     url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
+                                    trait: 'ProIns',
+                                    label: 'fasting proinsulin',
+                                    order: 9982
+                                })">fasting proinsulin</a>
+                            </li>                            <li>
+                                <a onclick="igv.browser.loadTrack({
+                                    type: 't2d',
+                                    url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
                                     trait: 'HbA1c',
-                                    label: 'HBA1C'
+                                    label: 'HBA1C',
+                                    order: 9996
                                 })">HBA1C</a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
                                     url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
-                                    trait: 'HOMA_IR',
-                                    label: 'HOMA-IR'
+                                    trait: 'HOMAIR',
+                                    label: 'HOMA-IR',
+                                    order: 9995
                                 })">HOMA_IR</a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
                                     url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
-                                    trait: 'HOMA_B',
-                                    label: 'HOMA-B'
+                                    trait: 'HOMAB',
+                                    label: 'HOMA-B',
+                                    order: 9994
                                 })">HOMA_B</a>
                             </li>
                             <li>
@@ -78,7 +109,8 @@
                                     type: 't2d',
                                     url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
                                     trait: 'BMI',
-                                    label: 'BMI'
+                                    label: 'BMI',
+                                    order: 9993
                                 })">BMI</a>
                             </li>
                             <li>
@@ -86,7 +118,8 @@
                                     type: 't2d',
                                     url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
                                     trait: 'WAIST_CIRCUMFRENCE',
-                                    label: 'waist circumference'
+                                    label: 'waist circumference',
+                                    order: 9992
                                 })">waist circumference</a>
                             </li>
                             <li>
@@ -94,23 +127,35 @@
                                     type: 't2d',
                                     url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
                                     trait: 'HIP_CIRCUMFRENCE',
-                                    label: 'hip circumference'
+                                    label: 'hip circumference',
+                                    order: 9991
                                 })">hip circumference</a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
                                     url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
-                                    trait: 'WAIST_HIP_RATIO',
-                                    label: 'waist-hip ratio'
+                                    trait: 'WHR',
+                                    label: 'waist-hip ratio',
+                                    order: 9990
                                 })">waist-hip ratio</a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
                                     url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
+                                    trait: 'Height',
+                                    label: 'height',
+                                    order: 9990
+                                })">height</a>
+                            </li>
+                            <li>
+                                <a onclick="igv.browser.loadTrack({
+                                    type: 't2d',
+                                    url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
                                     trait: 'HDL',
-                                    label: 'HDL'
+                                    label: 'HDL',
+                                    order: 9989
                                 })">HDL</a>
                             </li>
                             <li>
@@ -118,50 +163,128 @@
                                     type: 't2d',
                                     url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
                                     trait: 'LDL',
-                                    label: 'LDL'
+                                    label: 'LDL',
+                                    order: 9988
                                 })">LDL</a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
                                     url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
-                                    trait: 'TRIGLYCERIDES',
-                                    label: 'triglycerides'
+                                    trait: 'TG',
+                                    label: 'triglycerides',
+                                    order: 9987
                                 })">triglycerides</a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
                                     url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
-                                    trait: 'TOTAL_CHOLESTEROL',
-                                    label: 'total cholesterol'
-                                })">total cholesterol</a>
+                                    trait: 'CAD',
+                                    label: 'coronary artery disease',
+                                    order: 9978
+                                })">coronary artery disease</a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
                                     url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
-                                    trait: 'SYSTOLIC_BLOOD_PRESSURE',
-                                    label: 'systolic blood pressure'
-                                })">systolic blood pressure</a>
+                                    trait: 'CKD',
+                                    label: 'coronary kidney disease',
+                                    order: 9977
+                                })">coronary kidney disease</a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
                                     url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
-                                    trait: 'DIASTOLIC_BLOOD_PRESSURE',
-                                    label: 'diastolic blood pressure'
-                                })">diastolic blood pressure</a>
+                                    trait: 'eGFRcrea',
+                                    label: 'eGFR-creat (serum creatinine)',
+                                    order: 9976
+                                })">eGFR-creat (serum creatinine)</a>
                             </li>
-
                             <li>
                                 <a onclick="igv.browser.loadTrack({
-                                    url: 'http://www.broadinstitute.org/igvdata/BodyMap/hg19/IlluminaHiSeq2000_BodySites/brain_merged/accepted_hits.bam',
-                                    label: 'BodyMap Brain'
-                                })">Body
-                                map brain</a>
+                                    type: 't2d',
+                                    url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
+                                    trait: 'eGFRcrea',
+                                    label: 'eGFR-creat (serum creatinine)',
+                                    order: 9976
+                                })">eGFR-creat (serum creatinine)</a>
                             </li>
-                        </ul>
+                            <li>
+                                <a onclick="igv.browser.loadTrack({
+                                    type: 't2d',
+                                    url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
+                                    trait: 'eGFRcys',
+                                    label: 'eGFR-cys (serum cystatin C)',
+                                    order: 9975
+                                })">eGFR-cys (serum cystatin C)</a>
+                            </li>
+                            <li>
+                                <a onclick="igv.browser.loadTrack({
+                                    type: 't2d',
+                                    url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
+                                    trait: 'MA',
+                                    label: 'microalbuminuria',
+                                    order: 9974
+                                })">microalbuminuria</a>
+                            </li>
+                            <li>
+                                <a onclick="igv.browser.loadTrack({
+                                    type: 't2d',
+                                    url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
+                                    trait: 'UACR',
+                                    label: 'urinary albumin-to-creatinine ratio',
+                                    order: 9973
+                                })">urinary albumin-to-creatinine ratio</a>
+                            </li>
+                            <li>
+                                <a onclick="igv.browser.loadTrack({
+                                    type: 't2d',
+                                    url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
+                                    trait: 'SCZ',
+                                    label: 'schizophrenia',
+                                    order: 9972
+                                })">schizophrenia</a>
+                            </li>
+                            <li>
+                                <a onclick="igv.browser.loadTrack({
+                                    type: 't2d',
+                                    url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
+                                    trait: 'MDD',
+                                    label: 'major depressive disorder',
+                                    order: 9971
+                                })">major depressive disorder</a>
+                            </li>
+                                <li>
+                                <a onclick="igv.browser.loadTrack({
+                                    type: 't2d',
+                                    url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
+                                    trait: 'BIP',
+                                    label: 'bipolar disorder',
+                                    order: 9972
+                                })">bipolar disorder</a>
+                            </li>
+                            <li>
+                                <a onclick="igv.browser.loadTrack({
+                                    type: 't2d',
+                                    url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
+                                    trait: 'HDL',
+                                    label: 'HDL cholesterol',
+                                    order: 9980
+                                })">HDL cholesterol</a>
+                            </li>
+                            <li>
+                                <a onclick="igv.browser.loadTrack({
+                                    type: 't2d',
+                                    url: '//www.broadinstitute.org/igvdata/t2d/postJson.php',
+                                    trait: 'LDL',
+                                    label: 'LDL cholesterol',
+                                    order: 9979
+                                })">LDL cholesterol</a>
+                            </li>
+                         </ul>
                     </li>
                 </ul>
                 <div class="nav navbar-nav navbar-left">
@@ -202,6 +325,7 @@
         div = $("#myDiv")[0];
         options = {
             showKaryo: false,
+            locus:'SLC30A8',
             fastaURL: "//igvdata.broadinstitute.org/genomes/seq/hg19/hg19.fasta",
             cytobandURL: "//igvdata.broadinstitute.org/genomes/seq/hg19/cytoBand.txt",
             tracks: [
@@ -210,17 +334,24 @@
                     trait: "T2D",
                     label: "Type II Diabetes"
                 }),
-                new igv.SequenceTrack(),
+                new igv.WIGTrack({
+                    url: "//www.broadinstitute.org/igvdata/t2d/recomb_decode.bedgraph",
+                    label: "Recombination rate",
+                    order: 9998
+                }),
+                new igv.SequenceTrack({order:9999}),
                 new igv.GeneTrack({
                     url: "//igvdata.broadinstitute.org/annotations/hg19/genes/gencode.v18.collapsed.bed",
-                    label: "Genes"
+                    label: "Genes",
+                    order: 9998
+
                 })
            ]
         };
         browser = igv.createBrowser(options);
         div.appendChild(browser.div);
         browser.startup();
-        igvSearch('${geneName}')
+        //igvSearch('${geneName}')
     });
 
 </script>

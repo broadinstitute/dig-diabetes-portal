@@ -94,14 +94,14 @@ class GeneManagementServiceIntegrationSpec   extends IntegrationSpec {
     }
 
 
-
+    @Unroll("testing  partialGeneMatches with #label")
     void "test partialGeneMatches should correctly return nothing"() {
         when:
         String results = geneManagementService.partialGeneMatches(userString,10)
 
         then:
         def userJson = new JsonSlurper().parseText(results)
-        assert userJson.getClass().name == 'java.util.Collections$EmptyList'
+        assert userJson.size() == 0
 
         where:
         description         |  userString
