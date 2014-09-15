@@ -6,7 +6,6 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href=img/favicon.ico>
-    <link href="../../css/lib/style.css" type="text/css" rel="stylesheet">
 
     <title>IGV - Integrative Genomics Viewer</title>
 
@@ -17,8 +16,6 @@
 
     <!-- IGV Bootstrap css -->
     <link href="//www.broadinstitute.org/igvdata/t2d/igv.css" type="text/css" rel="stylesheet">
-    %{--<link href="../../css/igv/igv.css" type="text/css" rel="stylesheet">--}%
-
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -31,9 +28,8 @@
     <!-- Bootstrap -->
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
-    <script  src="../../js/lib/igv/vendor/inflate.js"></script>
-
-    <script  src="../../js/lib/igv/vendor/zlib_and_gzip.min.js"></script>
+    <script  src="../js/lib/igv/vendor/inflate.js"></script>
+    <script  src="../js/lib/igv/vendor/zlib_and_gzip.min.js"></script>
     <!--   <script type="text/javascript" src="vendor/bootstrap/plugins/holder.js"></script>  -->
 
     <!-- IGV js code -->

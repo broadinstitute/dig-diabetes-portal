@@ -1,10 +1,13 @@
 package dport
+
+import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class VariantSearchController {
     FilterManagementService filterManagementService
     RestServerService restServerService
     SharedToolsService sharedToolsService
+    private static final log = LogFactory.getLog(this)
 
     def index() {}
 
@@ -18,9 +21,7 @@ class VariantSearchController {
         String encParams
         if (params.encParams) {
             encParams = params.encParams
-            //String param1AfterDecoding = URLDecoder.decode(encParams, "UTF-8");
-            println("params.encParams = ${params.encParams}")
-            //println("params.encParams2 = ${param1AfterDecoding}")
+            log.debug "variantSearch params.encParams = ${params.encParams}"
         }
         render(view: 'variantSearch',
                 model: [show_gwas : 1,
@@ -51,79 +52,44 @@ class VariantSearchController {
 
     }
 
-
+    /***
+     * A collection of specialized searches are handled here, mostly from the geneinfo page. The idea is that we interpret those
+     * special requests in storeParametersInHashmap and convert them into  a parameter map, which can then be interpreted
+     * with our usual machinery.
+     *
+     * @return
+     */
     def gene() {
         String geneId = params.id
         String receivedParameters = params.filter
-
-        Map paramsMap = filterManagementService.storeParametersInHashmap (geneId,"","","",receivedParameters)
-
-        if (paramsMap) {
-            displayVariantSearchResults(paramsMap, false)
-        }
-
-//        if (geneId) {
-//            LinkedHashMap<String, String> parsedFilterParameters = filterManagementService.constructGeneSearch(geneId, receivedParameters)
-//            if (parsedFilterParameters) {
-//
-//                String enc = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters)
-//                String encodedParameters = sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
-//                String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
-//
-//                render(view: 'variantSearchResults',
-//                        model: [show_gene           : 1,
-//                                show_gwas           : 1,
-//                                show_exchp          : 1,
-//                                show_exseq          : 1,
-//                                show_sigma          : 0,
-//                                filter              : enc,
-//                                filterDescriptions  : parsedFilterParameters.filterDescriptions,
-//                                proteinEffectsList  : encodedProteinEffects,
-//                                encodedParameters   : encodedParameters,
-//                                dataSetDetermination: 1])
-//            }
-//        }
-
-
-    }
-
-
-    def geneWide() {
-        String geneId = params.id
         String significance = params.sig
         String dataset = params.dataset
         String region = params.region
 
-        Map paramsMap = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,"")
+      //  Map paramsMap = filterManagementService.storeParametersInHashmap (geneId,"","","",receivedParameters)
+        Map paramsMap = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters)
 
         if (paramsMap) {
             displayVariantSearchResults(paramsMap, false)
         }
 
+    }
 
-//        if (geneId) {
-//            LinkedHashMap<String, String> parsedFilterParameters = filterManagementService.constructGeneWideSearch(geneId, significance, dataset, region)
-//            if (parsedFilterParameters) {
+
+
+//    def geneWide() {
+//        String geneId = params.id
+//        String significance = params.sig
+//        String dataset = params.dataset
+//        String region = params.region
 //
-//                String enc = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters)
-//                String encodedParameters = sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
-//                String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
-//                render(view: 'variantSearchResults',
-//                        model: [show_gene           : 1,
-//                                show_gwas           : 1,
-//                                show_exchp          : 1,
-//                                show_exseq          : 1,
-//                                show_sigma          : 0,
-//                                filter              : enc,
-//                                filterDescriptions  : parsedFilterParameters.filterDescriptions,
-//                                proteinEffectsList  : encodedProteinEffects,
-//                                encodedParameters   : encodedParameters,
-//                                dataSetDetermination: 1])
-//            }
+//        Map paramsMap = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,"")
+//
+//        if (paramsMap) {
+//            displayVariantSearchResults(paramsMap, false)
 //        }
 
 
-    }
 
     /***
      * a variant display table is on screen and the page is now asking for data. Perform the search.  This call retrieves the data
@@ -131,10 +97,9 @@ class VariantSearchController {
      * @return
      */
     def variantSearchAjax() {
-        // String filters=params.getRequest().parameters.keySet()[0]
         String filtersRaw = params['keys']
         String filters = URLDecoder.decode(filtersRaw)
-        println(filters);
+        log.debug "variantSearch variantSearchAjax = ${filters}"
         JSONObject jsonObject = restServerService.searchGenomicRegionByCustomFilters(filters)
         render(status: 200, contentType: "application/json") {
             [variants: jsonObject['variants']]

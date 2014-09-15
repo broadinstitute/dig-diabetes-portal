@@ -4,7 +4,15 @@ modules = {
         resource url: "js/lib/jquery.dataTables.min.js"
         resource url: "css/lib/jquery.dataTables.css"
     }
+    common {
+        resource url: 'css/lib/style.css'
+    }
+    geneInfo {
+        resource url: 'js/lib/dport/geneInfo.js'
+    }
     igv {
+        dependsOn "common"
+
         resource url: 'js/lib/jquery-1.11.0.min.js'
 
         resource url: 'images/ajaxLoadingAnimation.gif'
@@ -12,20 +20,21 @@ modules = {
         resource url: 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'
         resource url: 'http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
 
-        resource  url: "http://www.broadinstitute.org/igvdata/t2d/igv.css"
+        resource url: "http://www.broadinstitute.org/igvdata/t2d/igv.css"
 
         resource url: 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'
 
         resource url: 'http://www.broadinstitute.org/igvdata/t2d/igv-all.min.js'
 
     }
-        core {
+    core {
+        dependsOn "common"
         dependsOn "dataTables"
 
         resource url: 'images/ajaxLoadingAnimation.gif'
 
         resource url: 'css/lib/bootstrap.min.css'
-        resource url: 'css/lib/style.css'
+
         resource url: 'css/lib/jquery.dataTables.css'
 
         resource url: 'js/lib/d3.min.js'

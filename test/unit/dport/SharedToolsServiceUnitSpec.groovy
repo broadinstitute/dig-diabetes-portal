@@ -24,4 +24,22 @@ class SharedToolsServiceUnitSpec extends Specification {
         assertNotNull status
     }
 
+    /***
+     * Distinguish good chromosome specifications from bad?
+     */
+    void "test parseChromosome"() {
+        when:
+        String chr1 = service.parseChromosome('chr9')
+        String chr2 = service.parseChromosome('chrX')
+        String chr3 = service.parseChromosome('chrY')
+        String chr4 = service.parseChromosome('chrZ')
+        then:
+        chr1=='9'
+        chr2=='X'
+        chr3=='Y'
+        chr4==''
+    }
+
+
+
 }

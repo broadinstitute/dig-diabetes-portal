@@ -1,10 +1,13 @@
 package dport
 
+import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class TraitController {
     RestServerService restServerService
     SharedToolsService sharedToolsService
+    private static final log = LogFactory.getLog(this)
+
 
     /***
      * create page frame for association statistics across 25 traits for a single variant. The resulting Ajax call is  ajaxTraitsPerVariant
@@ -62,7 +65,7 @@ class TraitController {
             try {
                 significanceValue = new BigDecimal(significance)
             } catch (NumberFormatException nfe)  {
-                println "User supplied a nonnumeric significance value = '${significance}'"
+                log.info("USER ERROR: User supplied a nonnumeric significance value = '${significance}")
                 // TODO: error condition.  Go with GWAS significance
                 significanceValue = 0.00000005
             }

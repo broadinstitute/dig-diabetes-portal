@@ -223,8 +223,8 @@ class RestServerService {
      * @param incoming
      * @return
      */
-    public LinkedHashMap<String, Integer> extractNumbersWeNeed (String incoming)  {
-        LinkedHashMap<String, Integer> returnValue = [:]
+    public LinkedHashMap<String, String> extractNumbersWeNeed (String incoming)  {
+        LinkedHashMap<String, String> returnValue = [:]
 
         String commasRemoved=incoming.replace(/,/,"")
         returnValue["chromosomeNumber"] =  sharedToolsService.parseChromosome(commasRemoved)

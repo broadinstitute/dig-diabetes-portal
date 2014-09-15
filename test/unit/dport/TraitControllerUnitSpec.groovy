@@ -17,15 +17,15 @@ class TraitControllerUnitSpec extends Specification {
 
     void "test traitInfo"() {
         setup:
-        params.identifier = 'rs123'
+        params.id = 'TP53'
 
         when:
-        controller.traitInfo()
+        controller.genomeBrowser()
 
         then:
         response.status == 200
-        view == '/trait/traitsPerVariant'
-        model.show_gwas == 1
+        view == '/trait/genomeBrowser'
+        model.geneName == 'TP53'
 
     }
 
