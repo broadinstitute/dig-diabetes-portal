@@ -325,7 +325,7 @@
         div = $("#myDiv")[0];
         options = {
             showKaryo: false,
-            locus:'SLC30A8',
+            locus:'${geneName}',
             fastaURL: "//igvdata.broadinstitute.org/genomes/seq/hg19/hg19.fasta",
             cytobandURL: "//igvdata.broadinstitute.org/genomes/seq/hg19/cytoBand.txt",
             tracks: [
