@@ -9,6 +9,10 @@
 
     <title>IGV - Integrative Genomics Viewer</title>
 
+    %{--<r:require modules="brandingStyle"/>    DOES NOT WORK --}%
+    %{--<link type="text/css" href="${resource(dir:'css/lib',file:'t2dBranding.css')}" /> AND THIS DOESN'T EITHER--}%
+
+
     <!-- Bootstrap core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 
@@ -33,13 +37,15 @@
     <!--   <script type="text/javascript" src="vendor/bootstrap/plugins/holder.js"></script>  -->
 
     <!-- IGV js code -->
-    <script src="http://www.broadinstitute.org/igvdata/t2d/igv-all.js"></script>
+    <script src="http://www.broadinstitute.org/igvdata/t2d/igv-all.min.js"></script>
+
+
 
 </head>
 
 <body>
 <script>
-    console.log('1');
+    console.log('3');
 </script>
 
 

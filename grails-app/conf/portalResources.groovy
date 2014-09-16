@@ -4,15 +4,13 @@ modules = {
         resource url: "js/lib/jquery.dataTables.min.js"
         resource url: "css/lib/jquery.dataTables.css"
     }
-    common {
-        resource url: 'css/lib/style.css'
-    }
     geneInfo {
         resource url: 'js/lib/dport/geneInfo.js'
     }
+    brandingStyle {
+        resource url: 'css/lib/t2dBranding.css',bundle:'brandingStyle'
+    }
     igv {
-        dependsOn "common"
-
         resource url: 'js/lib/jquery-1.11.0.min.js'
 
         resource url: 'images/ajaxLoadingAnimation.gif'
@@ -26,9 +24,10 @@ modules = {
 
         resource url: 'http://www.broadinstitute.org/igvdata/t2d/igv-all.min.js'
 
+        resource url: 'css/lib/bootstrap.min.css'
+
     }
     core {
-        dependsOn "common"
         dependsOn "dataTables"
 
         resource url: 'images/ajaxLoadingAnimation.gif'
@@ -36,6 +35,8 @@ modules = {
         resource url: 'css/lib/bootstrap.min.css'
 
         resource url: 'css/lib/jquery.dataTables.css'
+
+        resource url: 'css/lib/style.css'
 
         resource url: 'js/lib/d3.min.js'
         resource url: 'js/lib/utils.js'
