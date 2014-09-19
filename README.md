@@ -1,8 +1,8 @@
 <h1>Diabetes portal</h1>
 
-The diabetes portal is written in Grails. The following description should give you all the information you need to download, compile, and run a version of the portal.
+The diabetes portal is written in Grails. The following description should give you all the information you need to download, compile, and run a local version of the portal.
 
-<h3>Document contents</h3>
+<h3>Table of Contents:</h3>
 <dl>
 <dt>Environment</dt><dd> Set up your environment for running a Grails based project</dd>
 <dt> Get the code</dt><dd> Download the code from GitHub</dd>
@@ -14,16 +14,16 @@ The diabetes portal is written in Grails. The following description should give 
 
    The following steps should give you a working development environment:
 
-<h3>Install Java (this is the toughest step)</h3>
+<h4>Install Java (this is the toughest step)</h4>
 <p>
-Googling “download Java jdk” should take you where you need to go. The same command brought me to the URL:<br/>
-<tt>http://www.oracle.com/technetwork/java/javaee/downloads/java-ee-sdk-6u3-jdk-7u1-downloads-523391.html</tt><br/>
+Googling “download Java jdk” should take you where you need to go. The same command brought me to this 
+<a href="http://www.oracle.com/technetwork/java/javaee/downloads/java-ee-sdk-6u3-jdk-7u1-downloads-523391.html">URL</a>
 which seems like a good place to start.
 </p>
 
 <p>
 Note that you will need the whole Java development toolkit (JDK), not simply the Java runtime environment (JRE).
-As far as versions, I have successfully compiled this program both under Java 6 and Java 7
+As far as versions, I have successfully compiled this program both under Java 6 and Java 7 (I haven't yet tried Java 8).
 </p>
 
 <p>
@@ -38,24 +38,33 @@ PATH=$JAVA_HOME/bin:$PATH
 export JAVA_HOME
 ```
 <p>
-   But if you have a different approach than I’m sure that’s fine too.</p>
+   But if you have a different approach than I’m sure that’s fine too.  Simply make sure that if you type:</p>
 
-<h3>Install GVM</h3>
+```bash
+echo $JAVA_HOME
+```
+
+that you see the directory you expect to see.
+
+<h4>Install GVM</h4>
 
 <p>
-   There’s a tool called GVM that can do most of the rest of the installation work for you.  You can see that tool at the following URL <tt>http://gvmtool.net/</tt>.
-   You start by installing GVM, which has only two dependencies, namely ‘curl’ and ‘unzip’.  If you don’t have those installed then install them.
-   If you do then you can proceed to install GVM with the following command line evocation:
+There’s a tool called GVM that can do most of the rest of the installation work for you.  You can find that tool at the following URL <tt>http://gvmtool.net/</tt>.
+You start by installing GVM, which has only two dependencies, namely ‘curl’ and ‘unzip’.  These are essential-- if you don't have them installed then you cannot
+proceed with GVM.  To be sure you can certainly install grails without GVM if you like.  Check the instructions <a href="https://grails.org/">here</a>.</p>
+
+<p>
+Provided that you want to proceed with GVM, use the following command line evocation:
 </p>
 
 ```bash
  curl -s get.gvmtool.net | bash
 ```
 <p>
-   Once this line runs successfully the rest of the install should be pretty easy.
+   Once this line runs successfully the rest of the install becomes pretty easy.
 </p>
 
-  <h3>Install grails</h3>
+  <h4>Install grails</h4>
 <p>
    with GVM in place installing grails should consist of exactly one line:</p>
 
@@ -70,13 +79,16 @@ export JAVA_HOME
    Grails –version
 ```
    and you should see a response that indicates that grails is working.
-  <h3>Install groovy</h3>
+  <h4>Install groovy</h4>
 <p>
    Not strictly necessary but you may as well having come this far   </p>
 
 ```bash
    gvm install groovy
 ```
+
+<p>
+Groovy is a really fun language with lots of possibilities. Check out the documentation  <a href="http://groovy.codehaus.org/">here</a>
 
 <h2>Get the code</h2>
 
@@ -88,7 +100,7 @@ git clone git@github.com:broadinstitute/dig-diabetes-portal.git
 ```
 
 <p>
-Git will create a new directory called dig-diabetes-portal.  Make this your current working directory and then you will be ready to start building the system.</p>
+Git will create a new directory called dig-diabetes-portal.  Change your current working directory and then you will be ready to start building the system.</p>
 
 <h2>Run the tests</h2>
 
@@ -129,4 +141,15 @@ grails IW --intellij
 ```
 
 <p>
-which will generate an "*.ipr" file along with everything else you need to open the fully functional project under   IntelliJ</p>
+which will generate an "*.ipr" file along with everything else you need to open the fully functional project under  IntelliJ</p>
+
+
+<p>
+Just for the record, if you want to now deploy a  the portal you would need to use grails to create a WAR file that you could
+then the handoff to a suitable servlet container  such as Apache or Tomcat.  The grails command necessary to create a war file
+is:</p>
+
+
+```bash
+grails war
+```
