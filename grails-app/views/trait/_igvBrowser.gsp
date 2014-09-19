@@ -671,6 +671,13 @@ body {
 
 %{--</style>--}%
 
+<script>
+        function  igvSearch(searchString) {
+                igv.browser.search(searchString);
+                return true;
+            }
+</script>
+
 <div id="myDiv">
 
     <nav class="navbar" role="navigation">
@@ -681,17 +688,6 @@ body {
                         class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
                 <a class="navbar-brand" href="#">IGV</a></div>
             <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
-                <ul class="nav navbar-nav navbar-left">
-                    <li class="dropdown" id="loci-menu-dropdown"><a href="#" class="dropdown-toggle"
-                                                                    data-toggle="dropdown">Loci<b class="caret"></b></a>
-                        <ul id="locusList" class="dropdown-menu">
-                            <li><a onclick="igvSearch('slc30a8')">SLC30A8</a></li>
-                            <li><a onclick="igvSearch('chr22:24,375,948-24,384,434')">chr22:24,375,948-24,384,434</a>
-                            </li>
-                            <li><a></a></li>
-                        </ul>
-                    </li>
-                </ul>
                 <ul class="nav navbar-nav navbar-left">
                     <li class="dropdown" id="tracks-menu-dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tracks<b class="caret"></b></a>

@@ -384,17 +384,152 @@ function fillVariationAcrossEthnicity (rawGeneInfo,show_gwas,show_exchp,show_exs
         }
     }
 }
+function fillUpBarChart (peopleWithDiseaseNumeratorString,peopleWithDiseaseDenominatorString,peopleWithoutDiseaseNumeratorString,peopleWithoutDiseaseDenominatorString) {
+    var peopleWithDiseaseDenominator,
+        peopleWithoutDiseaseDenominator,
+        peopleWithDiseaseNumerator,
+        peopleWithoutDiseaseNumerator,
+        calculatedPercentWithDisease,
+        calculatedPercentWithoutDisease,
+        proportionWithDiseaseDescriptiveString,
+        proportionWithoutDiseaseDescriptiveString;
+    if ((typeof peopleWithDiseaseDenominatorString !== 'undefined') &&
+        (typeof peopleWithoutDiseaseDenominatorString !== 'undefined')){
+        peopleWithDiseaseDenominator  = parseInt(peopleWithDiseaseDenominatorString);
+        peopleWithoutDiseaseDenominator  = parseInt(peopleWithoutDiseaseDenominatorString);
+        peopleWithDiseaseNumerator  = parseInt(peopleWithDiseaseNumeratorString);
+        peopleWithoutDiseaseNumerator  = parseInt(peopleWithoutDiseaseNumeratorString);
+        if (( peopleWithDiseaseDenominator !== 0 ) &&
+            ( peopleWithoutDiseaseDenominator !== 0 )) {
+            calculatedPercentWithDisease = (100 * (peopleWithDiseaseNumerator / peopleWithDiseaseDenominator));
+            calculatedPercentWithoutDisease = (100 * (peopleWithoutDiseaseNumerator / peopleWithoutDiseaseDenominator));
+            proportionWithDiseaseDescriptiveString = "(" + peopleWithDiseaseNumerator + " out of " + peopleWithDiseaseDenominator + ")";
+            proportionWithoutDiseaseDescriptiveString = "(" + peopleWithoutDiseaseNumerator + " out of " + peopleWithoutDiseaseDenominator + ")";
+            var dataForBarChart = [
+                    { value: calculatedPercentWithDisease,
+                        barname: 'Have T2D',
+                        barsubname: '(cases)',
+                        barsubnamelink:'http://www.google.com',
+                        inbar: '',
+                        descriptor: proportionWithDiseaseDescriptiveString},
+                    {value: calculatedPercentWithoutDisease,
+                        barname: 'Do not have T2D',
+                        barsubname: '(controls)',
+                        barsubnamelink:'http://www.google.com',
+                        inbar: '',
+                        descriptor: proportionWithoutDiseaseDescriptiveString}
+                ],
+                roomForLabels = 120,
+                maximumPossibleValue = (Math.max(calculatedPercentWithDisease,calculatedPercentWithoutDisease) *1.5),
+                labelSpacer = 10;
+
+            var margin = {top: 30, right: 20, bottom: 50, left: 70},
+                width = 800 - margin.left - margin.right,
+                height = 250 - margin.top - margin.bottom;
+
+
+            var barChart = baget.barChart()
+                .selectionIdentifier("#chart")
+                .width(width)
+                .height(height)
+                .margin(margin)
+                .roomForLabels (roomForLabels)
+                .maximumPossibleValue (maximumPossibleValue)
+                .labelSpacer (labelSpacer)
+                .assignData(dataForBarChart);
+            barChart.render();
+        }
+
+    }
+
+}
 function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl) {
     var bhtPeopleWithVariantWhoHaveDiabetes  = 0,
         bhtPeopleWithVariantWithoutDiabetes = 0,
         bhtPeopleWithVariant = 0,
         bhtPeopleWithoutVariant = 0,
-        arrayOfMinaMinu = [];
-    // title line
-    $('#bhtLossOfFunctionVariants').append(geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_NVAR));
+        arrayOfMinaMinu = [],
+        numberOfVariants,
+        proportionsWithDisease,
+        bhtMetaBurdenForDiabetes;
+
+      numberOfVariants = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_NVAR);
+      proportionsWithDisease =  geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_MINA_MINU_RET) ;
+      bhtPeopleWithVariant = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_OBSA);
+      bhtPeopleWithoutVariant = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_OBSU);
+      bhtMetaBurdenForDiabetes  = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_METABURDEN);
+
+    $('#bhtLossOfFunctionVariants').append(numberOfVariants);
+
+    // variables for bar chart
+    var arrayOfProportionsWithDisease,
+        peopleWithDiseaseDenominator,
+        peopleWithDiseaseNumerator,
+        peopleWithoutDiseaseDenominator,
+        peopleWithoutDiseaseNumerator,
+        calculatedPercentWithDisease,
+        calculatedPercentWithoutDisease,
+        proportionWithDiseaseDescriptiveString,
+        proportionWithoutDiseaseDescriptiveString;
+    if (proportionsWithDisease) {
+        arrayOfProportionsWithDisease  = proportionsWithDisease.split('/');
+        if (arrayOfProportionsWithDisease.length>1) {
+            peopleWithDiseaseNumerator = arrayOfProportionsWithDisease[0];
+            peopleWithoutDiseaseNumerator = arrayOfProportionsWithDisease[1];
+            peopleWithDiseaseDenominator = bhtPeopleWithVariant;
+            peopleWithoutDiseaseDenominator =  bhtPeopleWithoutVariant;
+        }
+        fillUpBarChart (peopleWithDiseaseNumerator,peopleWithDiseaseDenominator,peopleWithoutDiseaseNumerator,peopleWithoutDiseaseDenominator);
+//        if ((typeof peopleWithDiseaseDenominator !== 'undefined') &&
+//            (typeof peopleWithoutDiseaseDenominator !== 'undefined')  &&
+//            ( peopleWithDiseaseDenominator !== 0 ) &&
+//            ( peopleWithoutDiseaseDenominator !== 0 )) {
+//            calculatedPercentWithDisease = (100 * (peopleWithDiseaseNumerator / peopleWithDiseaseDenominator));
+//            calculatedPercentWithoutDisease = (100 * (peopleWithoutDiseaseNumerator / peopleWithoutDiseaseDenominator));
+//            proportionWithDiseaseDescriptiveString = "(" + peopleWithDiseaseNumerator + " out of " + peopleWithDiseaseDenominator + ")";
+//            proportionWithDiseaseDescriptiveString = "(" + peopleWithoutDiseaseNumerator + " out of " + peopleWithoutDiseaseDenominator + ")";
+//            var dataForBarChart = [
+//                    { value: calculatedPercentWithDisease,
+//                        barname: 'Have T2D',
+//                        barsubname: '(cases)',
+//                        barsubnamelink:'http://www.google.com',
+//                        inbar: '',
+//                        descriptor: proportionWithDiseaseDescriptiveString},
+//                    {value: calculatedPercentWithoutDisease,
+//                        barname: 'Do not have T2D',
+//                        barsubname: '(controls)',
+//                        barsubnamelink:'http://www.google.com',
+//                        inbar: '',
+//                        descriptor: proportionWithDiseaseDescriptiveString}
+//                ],
+//                roomForLabels = 120,
+//                maximumPossibleValue = 100,
+//                labelSpacer = 10;
+//
+//            var margin = {top: 30, right: 20, bottom: 50, left: 70},
+//                width = 800 - margin.left - margin.right,
+//                height = 250 - margin.top - margin.bottom;
+//
+//
+//            var barChart = baget.barChart()
+//                .selectionIdentifier("#chart")
+//                .width(width)
+//                .height(height)
+//                .margin(margin)
+//                .roomForLabels (roomForLabels)
+//                .maximumPossibleValue (maximumPossibleValue)
+//                .labelSpacer (labelSpacer)
+//                .assignData(dataForBarChart);
+//            barChart.render();
+//
+//        }
+    }
+
+
+
 
     // first subline
-    var minaMinu =  geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_MINA_MINU_RET) ;
+    var minaMinu =  proportionsWithDisease ;
     if (minaMinu) {   // we have a  _13k_T2D_lof_MINA_MINU_RET
         arrayOfMinaMinu  = minaMinu.split('/');
         if (arrayOfMinaMinu.length>1) {
@@ -404,7 +539,6 @@ function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exs
     }  else {  // we don't
         $('#bhtPeopleWithVariantWhoHaveDiabetes').append(0);
     }
-    bhtPeopleWithVariant = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_OBSA);
     $('#bhtPeopleWithVariant').append(bhtPeopleWithVariant);
     if (bhtPeopleWithVariant  > 0) {
         var bhtPercentOfPeopleWithVariantWhoHaveDisease =  (100 * (bhtPeopleWithVariantWhoHaveDiabetes / bhtPeopleWithVariant));
@@ -420,7 +554,7 @@ function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exs
         bhtPeopleWithVariantWithoutDiabetes = 0;
         $('#bhtPeopleWithVariantWithoutDiabetes').append(0);
     }
-    bhtPeopleWithoutVariant = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_OBSU);
+
     $('#bhtPeopleWithoutVariant').append(bhtPeopleWithoutVariant);
     if (bhtPeopleWithoutVariant  > 0) {
         var bhtPercentOfPeopleWithVariantWithoutDisease =  (100 * (bhtPeopleWithVariantWithoutDiabetes / bhtPeopleWithoutVariant));
@@ -429,7 +563,7 @@ function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exs
     }
 
 
-    var  bhtMetaBurdenForDiabetes  = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_METABURDEN);
+
     if (bhtMetaBurdenForDiabetes  > 0)  {
         $('#bhtMetaBurdenForDiabetes').append("<p>Collectively, these variants' p-value for association with type 2 diabetes is "+
             (bhtMetaBurdenForDiabetes.toPrecision(3)));

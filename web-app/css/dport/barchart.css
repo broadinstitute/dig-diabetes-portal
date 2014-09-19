@@ -1,0 +1,78 @@
+text.barChartLabel  {
+    font-family: 'Lato';
+    font-weight: normal;
+    font-size: 18pt;
+}
+text.barSubChartLabel  {
+    font-family: 'Lato';
+    font-weight: normal;
+    font-size: 12pt;
+    stroke: #aaaaaa;
+    fill: #aaaaaa;
+}
+text.valueLabels  {
+    font-family: 'Lato';
+    font-weight: normal;
+    font-size: 18pt;
+    color: #4682b4;
+    stroke: steelblue;
+    fill: steelblue;
+}
+text.valueQualifiers  {
+    font-family: 'Lato';
+    font-weight: normal;
+    font-size: 14pt;
+    stroke: #aaaaaa;
+    fill: #aaaaaa;
+}
+text.clickableQuestionMark  {
+    font-family: 'Arial';
+    font-weight: bold;
+    font-size: 12pt;
+    background: #ff0000;
+    stroke: #ffffff;
+    fill: #ffffff;
+}
+circle.clickableQuestionMark  {
+    font-family: 'Arial';
+    font-weight: bold;
+    font-size: 14pt;
+    stroke: #4682b4;
+    fill: #4682b4;
+}
+.xaxis  {
+    font-family: 'Lato';
+    font-weight: lighter;
+    font-size: 14pt;
+    stroke: #aaaaaa;
+    fill: #aaaaaa;
+}
+rect.h-bar {
+    stroke: white;
+    fill: steelblue;
+}
+#xaxis text text {
+    font-size: 12px;
+}
+td.barchartFormatter {
+    width: 800px;
+}
+td.significanceDescriptorFormatter {
+    width: 100px;
+}
+div.significantDifference {
+    width: 150px;
+    height: 150px;
+    background:  #4682b4;
+    font-size: 14pt;
+    vertical-align: middle;
+    text-align: center;
+    color: #ffffff;
+}
+div.significantDifferenceText {
+    padding-top: 20px;
+    font-size: 14pt;
+    vertical-align: middle;
+    text-align: center;
+    color: #ffffff;
+}

@@ -5,7 +5,10 @@ modules = {
         resource url: "css/lib/jquery.dataTables.css"
     }
     geneInfo {
+        resource url: 'css/dport/barchart.css'
+
         resource url: 'js/lib/dport/geneInfo.js'
+        resource url: 'js/lib/dport/barchart.js'
     }
     brandingStyle {
         resource url: 'css/lib/t2dBranding.css',bundle:'brandingStyle'
