@@ -17,7 +17,7 @@ The diabetes portal is written in Grails. The following description should give 
 <h3>Install Java (this is the toughest step)</h3>
 <p>
 Googling “download Java jdk” should take you where you need to go. The same command brought me to the URL:<br/>
-<tt>http://www.oracle.com/technetwork/java/javaee/downloads/java-ee-sdk-6u3-jdk-7u1-downloads-523391.html</tt>
+<tt>http://www.oracle.com/technetwork/java/javaee/downloads/java-ee-sdk-6u3-jdk-7u1-downloads-523391.html</tt><br/>
 which seems like a good place to start.
 </p>
 
@@ -78,3 +78,55 @@ export JAVA_HOME
    gvm install groovy
 ```
 
+<h2>Get the code</h2>
+
+<p>
+Now it’s time to pull down the code from the repository. Provided that you have already installed a git client this can be accomplished with one line</p>
+
+```bash
+git clone git@github.com:broadinstitute/dig-diabetes-portal.git
+```
+
+<p>
+Git will create a new directory called dig-diabetes-portal.  Make this your current working directory and then you will be ready to start building the system.</p>
+
+<h2>Run the tests</h2>
+
+<p>
+A good place to start might be with running the tests. You can run the unit tests with the following command: </p>
+
+
+```bash
+grails test-app unit:
+```
+
+<p>
+You can run integration tests with this command:</p>
+
+
+```bash
+grails test-app integration:
+```
+
+<h2>Start up the portal</h2>
+
+<p>
+Once you have demonstrated that you can run both tests to completion you can be reasonably confident that your environment is in good 
+shape and that you are ready to run the portal. The command looks like this: </p>
+
+```bash
+grails run-app
+```
+
+<p>
+this command should be all you need to start a running application from the command line.  If you'd like to do some development, however,
+you will probably want to import the project into an IDE.  I like IntelliJ (though there is an active community of Grails developers
+who use eclipse).   If you would like to prepare your project  for an IDE then there is a grails command for that.  To open
+up the project in IntelliJ, for example, the command is:  </p>
+
+```bash
+grails IW --intellij
+```
+
+<p>
+which will generate an "*.ipr" file along with everything else you need to open the fully functional project under   IntelliJ</p>
