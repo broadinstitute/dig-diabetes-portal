@@ -124,7 +124,8 @@ Groovy is a really fun language with lots of possibilities. Check out the docume
 <h2>Get the code</h2>
 
 <p>
-Now it’s time to pull down the code from the repository. Provided that you have already installed a git client this can be accomplished with one line</p>
+Now it’s time to pull down the code from the repository. Provided that you have already installed a git client this can be accomplished with one line
+</p>
 
 ```
 git clone git@github.com:broadinstitute/dig-diabetes-portal.git
