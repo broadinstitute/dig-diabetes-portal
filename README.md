@@ -93,7 +93,14 @@ Once this command completes successfully you should be able to run the following
 grails –-version
 ```
 
- and you should see a response that indicates that grails is working and running  the version number you requested
+<p>
+and you should see a response that indicates that grails is working and running  the version number you requested
+</p>
+
+<p>
+A quick note for Mac users: homebrew also provides an easy approach to perform the Grails installation.  And while we're on the topic
+installing Grails by hand is also quite easy.  You download the package and set a GRAILS_HOME environmental variable and you're all set.
+</p>
 
 <h4>Install Groovy</h4>
 
