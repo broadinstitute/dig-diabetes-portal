@@ -6,8 +6,8 @@ The diabetes portal is written in Grails. The following description should give 
 <dl>
 <dt>Environment</dt><dd> Set up your environment for running a Grails based project</dd>
 <dt> Get the code</dt><dd> Download the code from GitHub</dd>
-<dt> Testing</dt><dd>Run some prepackaged tests to make sure your environment  is in good shape</dd>
-<dt>Run your portal</dt><dd>Start up the diabetes portal and run it locally</dd>
+<dt> Testing</dt><dd>Run some pre-packaged tests to make sure your environment  is in good shape</dd>
+<dt>Run the portal</dt><dd>Start up the diabetes portal and run it locally</dd>
 </dl>
 
 <h2>Environment</h2>
@@ -18,7 +18,7 @@ The diabetes portal is written in Grails. The following description should give 
 <p>
 Googling “download Java jdk” should take you where you need to go. The same command brought me to this 
 <a href="http://www.oracle.com/technetwork/java/javaee/downloads/java-ee-sdk-6u3-jdk-7u1-downloads-523391.html">URL</a>
-which seems like a good place to start.
+from which I successfully downloaded Java.
 </p>
 
 <p>
@@ -38,13 +38,24 @@ PATH=$JAVA_HOME/bin:$PATH
 export JAVA_HOME
 ```
 <p>
-   But if you have a different approach than I’m sure that’s fine too.  Simply make sure that if you type:</p>
+Other approaches to defining an environmental variable are fine too.  Simply make sure that if you type:
+</p>
 
 ```bash
 echo $JAVA_HOME
 ```
 
-that you see the directory you expect to see.
+<p>
+that you see the directory you expect to see.    The critical test of your success  in this step, however, is  typing
+</p>
+
+```bash
+java -version
+```
+
+<p>
+which should report  the version of your Java runtime environment.
+</p>
 
 <h4>Install GVM</h4>
 
@@ -64,7 +75,7 @@ Provided that you want to proceed with GVM, use the following command line evoca
    Once this line runs successfully the rest of the install becomes pretty easy.
 </p>
 
-  <h4>Install grails</h4>
+  <h4>Install Grails</h4>
 <p>
    with GVM in place installing grails should consist of exactly one line:</p>
 
@@ -73,22 +84,35 @@ Provided that you want to proceed with GVM, use the following command line evoca
 ```
 
 <p>
-   Once this command completes successfully you should be able to run the following command from the command line: </p>
+   Once this command completes successfully you should be able to run the following command from the command line (Note the extra - that the analogous Java command does not require): </p>
 
 ```bash
-   Grails –version
+   grails –-version
 ```
-   and you should see a response that indicates that grails is working.
-  <h4>Install groovy</h4>
+
+ and you should see a response that indicates that grails is working and running  the version number you requested
+
+<h4>Install Groovy</h4>
 <p>
-   Not strictly necessary but you may as well having come this far   </p>
+ Not strictly necessary (since grails comes  with its own version of groovy built-in) but you may as well having come this far
+ </p>
 
 ```bash
    gvm install groovy
 ```
 
+If your Groovy installation  completed successfully then the following command will tell you that Groovy is running
+
+
+```bash
+groovy --version
+```
+
 <p>
+To be clear, you can run grails without  installing Groovy explicitly.  If you do install Groovy explicitly, however, then you can begin writing programs
+in straight up Groovy as well, which has its own attractions.
 Groovy is a really fun language with lots of possibilities. Check out the documentation  <a href="http://groovy.codehaus.org/">here</a>
+</p>
 
 <h2>Get the code</h2>
 
@@ -100,9 +124,18 @@ git clone git@github.com:broadinstitute/dig-diabetes-portal.git
 ```
 
 <p>
-Git will create a new directory called dig-diabetes-portal.  Change your current working directory and then you will be ready to start building the system.</p>
+Git will create a new directory called dig-diabetes-portal.  Change your current working directory and then you will be ready to start building the system.
+</p>
 
-<h2>Run the tests</h2>
+<p>
+While your cloning repos note that both  Groovy and Grails have their own repo, and that you can download the source code for either or both languages.  Each
+of these repos is instructive and worth going through, especially if you get stuck somewhere along the way.  For the record, note that Groovy is
+written mostly in Java (though there is currently a project underway to  rewrite Groovy in Groovy).  Grails, by comparison, is written
+mostly in Groovy.
+</p>
+
+
+<h2>Testing/h2>
 
 <p>
 A good place to start might be with running the tests. You can run the unit tests with the following command: </p>
@@ -120,7 +153,12 @@ You can run integration tests with this command:</p>
 grails test-app integration:
 ```
 
-<h2>Start up the portal</h2>
+<p>
+Skipping the 'unit' or 'integration' specification will cause the entire test suite to run. Conversely adding a class name
+to the end of one of the earlier commands  will allow you to run  only a single test.</p>
+
+
+<h2>Run the portal</h2>
 
 <p>
 Once you have demonstrated that you can run both tests to completion you can be reasonably confident that your environment is in good 
@@ -132,12 +170,13 @@ grails run-app
 
 <p>
 this command should be all you need to start a running application from the command line.  If you'd like to do some development, however,
-you will probably want to import the project into an IDE.  I like IntelliJ (though there is an active community of Grails developers
-who use eclipse).   If you would like to prepare your project  for an IDE then there is a grails command for that.  To open
+you will probably want to import the project into an IDE.  I like <a href="http://www.jetbrains.com/idea/">IntelliJ</a>, though there is also
+an active community of Grails developers
+who use eclipse.   If you would like to prepare your project  for an IDE then there is a grails command for that.  To open
 up the project in IntelliJ, for example, the command is:  </p>
 
 ```bash
-grails IW --intellij
+grails integrate-with --intellij
 ```
 
 <p>
