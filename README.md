@@ -77,17 +77,20 @@ Provided that you want to proceed with GVM, use the following command line evoca
 
   <h4>Install Grails</h4>
 <p>
-   with GVM in place installing grails should consist of exactly one line:</p>
+with GVM in place installing grails should consist of exactly one line:
+</p>
 
-```bash
-   gvm install grails 2.4.3
+```
+gvm install grails 2.4.3
 ```
 
 <p>
-   Once this command completes successfully you should be able to run the following command from the command line (Note the extra - that the analogous Java command does not require): </p>
+Once this command completes successfully you should be able to run the following command from the command line (Note the extra - that the analogous Java command does not require):
+</p>
 
-```bash
-   grails –-version
+
+```
+grails –-version
 ```
 
  and you should see a response that indicates that grails is working and running  the version number you requested
@@ -135,7 +138,7 @@ mostly in Groovy.
 </p>
 
 
-<h2>Testing/h2>
+<h2>Testing</h2>
 
 <p>
 A good place to start might be with running the tests. You can run the unit tests with the following command: </p>
