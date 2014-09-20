@@ -96,18 +96,22 @@ grails –-version
  and you should see a response that indicates that grails is working and running  the version number you requested
 
 <h4>Install Groovy</h4>
-<p>
- Not strictly necessary (since grails comes  with its own version of groovy built-in) but you may as well having come this far
- </p>
 
-```bash
-   gvm install groovy
+<p>
+Not strictly necessary (since grails comes  with its own version of groovy built-in) but you may as well having come this far
+</p>
+
+
+```
+gvm install groovy
 ```
 
+<p>
 If your Groovy installation  completed successfully then the following command will tell you that Groovy is running
+</p>
 
 
-```bash
+```
 groovy --version
 ```
 
@@ -122,7 +126,7 @@ Groovy is a really fun language with lots of possibilities. Check out the docume
 <p>
 Now it’s time to pull down the code from the repository. Provided that you have already installed a git client this can be accomplished with one line</p>
 
-```bash
+```
 git clone git@github.com:broadinstitute/dig-diabetes-portal.git
 ```
 
