@@ -53,6 +53,9 @@
                 async:true,
                 success: function (data) {
                     $("#got2dContent").empty().html(data);
+                },
+                error: function(jqXHR, exception) {
+                    core.errorReporter(jqXHR, exception) ;
                 }
             });
 

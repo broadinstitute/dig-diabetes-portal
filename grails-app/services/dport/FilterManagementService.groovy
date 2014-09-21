@@ -34,7 +34,7 @@ class FilterManagementService {
             "dataSetDiagramGwas"    :
                     """{ "filter_type": "FLOAT", "operand": "GWAS_T2D_PVALUE", "operator": "GTE", "value": 0 }""".toString(),
             "dataSetSigma"   :
-                    """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_P", "operator": "GTE", "value":  }""".toString(),   // TODO: We need a number here
+                    """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_P", "operator": "GTE", "value":  }""".toString(),
             "sigma-genomewide":
                     """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_P", "operator": "LTE", "value": 5e-8 }""".toString(),
             "sigma-nominal"   :
