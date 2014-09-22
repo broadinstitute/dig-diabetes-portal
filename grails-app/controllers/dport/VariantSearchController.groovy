@@ -39,9 +39,7 @@ class VariantSearchController {
      * @return
      */
     def variantSearchRequest() {
-        //String receivedParameters = request.parameters.toString()
-        //String receivedParameters = params.toString();
-        Map paramsMap = new HashMap()
+         Map paramsMap = new HashMap()
 
         params.each { key, value ->
             paramsMap.put(key, value)
@@ -66,7 +64,6 @@ class VariantSearchController {
         String dataset = params.dataset
         String region = params.region
 
-      //  Map paramsMap = filterManagementService.storeParametersInHashmap (geneId,"","","",receivedParameters)
         Map paramsMap = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters)
 
         if (paramsMap) {
@@ -74,20 +71,6 @@ class VariantSearchController {
         }
 
     }
-
-
-
-//    def geneWide() {
-//        String geneId = params.id
-//        String significance = params.sig
-//        String dataset = params.dataset
-//        String region = params.region
-//
-//        Map paramsMap = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,"")
-//
-//        if (paramsMap) {
-//            displayVariantSearchResults(paramsMap, false)
-//        }
 
 
 
@@ -107,6 +90,15 @@ class VariantSearchController {
     }
 
 
+
+    /***
+     *  This method launches a table presenting all of the variants that match the user specified search criteria.  Note that there are two ways
+     *  to get to this point: 1) the user can specify the individual parameters that want using a form; or else 2) the user clicks on an anchor
+     *  that contains a prebuilt search.  The idea of this routine is that both of those paths should lead to exactly the same result.
+     *
+     * @param paramsMap
+     * @param currentlySigma
+     */
     private void displayVariantSearchResults(HashMap paramsMap, boolean currentlySigma) {
         LinkedHashMap<String, String> parsedFilterParameters = filterManagementService.parseVariantSearchParameters(paramsMap, currentlySigma)
         if (parsedFilterParameters) {
