@@ -30,7 +30,7 @@
         },
         error: function(jqXHR, exception) {
             loading.hide();
-            errorReporter(jqXHR, exception) ;
+            core.errorReporter(jqXHR, exception) ;
         }
     });
     var  phenotype =  new UTILS.phenotypeListConstructor (decodeURIComponent("${phenotypeList}")) ;

@@ -21,7 +21,7 @@
         },
         error: function(jqXHR, exception) {
             loading.hide();
-            errorReporter(jqXHR, exception) ;
+            core.errorReporter(jqXHR, exception) ;
         }
     });
 
@@ -42,9 +42,6 @@
             aaSorting: [[ 1, "asc" ]],
             aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 1, 3, 4 ] } ]
         });
-        console.log('fill The phenotypeTraits table');
-
-
     }
 </script>
 

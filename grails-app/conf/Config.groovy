@@ -23,6 +23,7 @@ grails.plugin.databasemigration.updateOnStart = true
 
 site.version = 't2dgenes' // could be 'sigma' or 't2dgenes'
 site.title = 'Type 2 Diabetes Genetics'  // could be 'SIGMA T2D' or 'Type 2 Diabetes Genetics'
+site.operator = 'balexand@broadinstitute.org'
 //server.URL = 'http://t2dgenetics.org/mysql/rest/server/'
 server.URL = 'http://t2dgenetics.org/dev/rest/server/'
 t2dRestServer {
@@ -160,6 +161,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/home':                    ['permitAll'],
         '/home/index':              ['ROLE_USER'],
         '/home/portalHome':         ['ROLE_USER'],
+        '/home/errorReporter':      ['ROLE_USER'],
         '/system/**':               ['ROLE_SYSTEM'],
         '/admin/resetPassword':     ['permitAll'],
         '/admin/resetPasswordInteractive/**':     ['permitAll'],

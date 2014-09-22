@@ -39,29 +39,69 @@
 }
 </style>
 <script>
+    // Whatever else happens we want to be able to get to the error reporter. Therefore I'll put it here, as opposed
+    //  to locating it and a JavaScript library that might not get loaded ( which might be why we need to report an error in the first place)
+    var core = core || {};
     // for now let's error out in a noisy way. Submerge this when it's time for production mode
-    function errorReporter(jqXHR, exception) {
-        // TODO: send these back to the server for later analysis.  for this week's demo we ignore them
-        if ( false )  {
-            if (jqXHR.status === 0) {
-                alert('Not connect.\n Verify Network.');
-            } else if (jqXHR.status == 404) {
-                alert('Requested page not found. [404]');
-            } else if (jqXHR.status == 500) {
-                alert('Internal Server Error [500].');
-            } else if (exception === 'parsererror') {
-                alert('Requested JSON parse failed.');
-            } else if (exception === 'timeout') {
-                alert('Time out error.');
-            } else if (exception === 'abort') {
-                alert('Ajax request aborted.');
-            } else {
-                alert('Uncaught Error.\n' + jqXHR.responseText);
+    core.errorReporter = function (jqXHR, exception) {
+        // we have three ways to report errors. 1) to the console, via alert, or through a post.
+        var consoleReporter=true,
+            alertReporter = false,
+            postReporter = true,
+                errorText = "" ;
+        if (consoleReporter  || alertReporter || postReporter)  {
+             if ( typeof jqXHR !== 'undefined') {
+                 if (jqXHR.status === 0) {
+                     errorText += 'status == 0.  Not connected?\n Or page abandoned prematurely?';
+                 } else if (jqXHR.status == 404) {
+                     errorText += 'Requested page not found. [404]';
+                 } else if (jqXHR.status == 500) {
+                     errorText += 'Internal Server Error [500].';
+                 } else {
+                     errorText += 'Uncaught Error.\n' + jqXHR.responseText;
+                 }
+             }
+             if ( typeof exception !== 'undefined') {
+                 if (exception === 'parsererror') {
+                     errorText += 'Requested JSON parse failed.';
+                 } else if (exception === 'timeout') {
+                     errorText += 'Time out error.';
+                 } else if (exception === 'abort') {
+                     errorText += 'Ajax request aborted.';
+                 } else {
+                     errorText += 'exception text ='+exception;
+                 }
+             }
+            var date=new Date();
+            errorText += '\nError recorded at '+date.toString();
+            if (consoleReporter)  {
+                console.log(errorText);
             }
-        }  else {
-            alert('incorrect data entered.  Please check your input and try again.')
+            if (alertReporter)  {
+                console.log(errorText);
+            }
+            if (postReporter)  {
+                $.ajax({
+                    cache:false,
+                    type:"post",
+                    url:"${createLink(controller:'home', action:'errorReporter')}",
+                    data:{'errorText':errorText},
+                    async:true,
+                    success: function (data) {
+                        if (consoleReporter)  {
+                            console.log('error successfully posted');
+                        }
+                    },
+                    error: function(xhr, ex) {
+                        if (consoleReporter)  {
+                            console.log('error posting unsuccessful');
+                        }
+                    }
+                });
+
+            }
         }
-    }
+   }
 </script>
 <div id="spinner" class="spinner" style="display:none;">
     <img id="img-spinner" src="${resource(dir: 'images', file: 'ajaxLoadingAnimation.gif')}" alt="Loading"/>
@@ -73,12 +113,10 @@
 
                 <div id="language">
                     <form id="language-es" action="/i18n/setlang/" method="post">
-                        %{--{% csrf_token %}--}%
                         <input type="hidden" name="language" value="es"/>
                     </form>
 
                     <form id="language-en-us" action="/i18n/setlang/" method="post">
-                        %{--{% csrf_token %}--}%
                         <input type="hidden" name="language" value="en"/>
                     </form>
                     <a href="#" onclick="document.getElementById('language-es').submit();">
@@ -93,7 +131,6 @@
 
                 <div id="branding">
                     SIGMA <strong>T2D</strong> <small>
-                    %{--{% trans "a resource on the genetics of type 2 diabetes in Mexico" %}--}%
                 </small>
                 </div>
             </g:if>
