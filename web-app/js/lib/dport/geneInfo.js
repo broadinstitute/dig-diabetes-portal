@@ -466,11 +466,7 @@ function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exs
         peopleWithDiseaseDenominator,
         peopleWithDiseaseNumerator,
         peopleWithoutDiseaseDenominator,
-        peopleWithoutDiseaseNumerator,
-        calculatedPercentWithDisease,
-        calculatedPercentWithoutDisease,
-        proportionWithDiseaseDescriptiveString,
-        proportionWithoutDiseaseDescriptiveString;
+        peopleWithoutDiseaseNumerator;
     if (proportionsWithDisease) {
         arrayOfProportionsWithDisease  = proportionsWithDisease.split('/');
         if (arrayOfProportionsWithDisease.length>1) {
@@ -480,49 +476,6 @@ function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exs
             peopleWithoutDiseaseDenominator =  bhtPeopleWithoutVariant;
         }
         fillUpBarChart (peopleWithDiseaseNumerator,peopleWithDiseaseDenominator,peopleWithoutDiseaseNumerator,peopleWithoutDiseaseDenominator);
-//        if ((typeof peopleWithDiseaseDenominator !== 'undefined') &&
-//            (typeof peopleWithoutDiseaseDenominator !== 'undefined')  &&
-//            ( peopleWithDiseaseDenominator !== 0 ) &&
-//            ( peopleWithoutDiseaseDenominator !== 0 )) {
-//            calculatedPercentWithDisease = (100 * (peopleWithDiseaseNumerator / peopleWithDiseaseDenominator));
-//            calculatedPercentWithoutDisease = (100 * (peopleWithoutDiseaseNumerator / peopleWithoutDiseaseDenominator));
-//            proportionWithDiseaseDescriptiveString = "(" + peopleWithDiseaseNumerator + " out of " + peopleWithDiseaseDenominator + ")";
-//            proportionWithDiseaseDescriptiveString = "(" + peopleWithoutDiseaseNumerator + " out of " + peopleWithoutDiseaseDenominator + ")";
-//            var dataForBarChart = [
-//                    { value: calculatedPercentWithDisease,
-//                        barname: 'Have T2D',
-//                        barsubname: '(cases)',
-//                        barsubnamelink:'http://www.google.com',
-//                        inbar: '',
-//                        descriptor: proportionWithDiseaseDescriptiveString},
-//                    {value: calculatedPercentWithoutDisease,
-//                        barname: 'Do not have T2D',
-//                        barsubname: '(controls)',
-//                        barsubnamelink:'http://www.google.com',
-//                        inbar: '',
-//                        descriptor: proportionWithDiseaseDescriptiveString}
-//                ],
-//                roomForLabels = 120,
-//                maximumPossibleValue = 100,
-//                labelSpacer = 10;
-//
-//            var margin = {top: 30, right: 20, bottom: 50, left: 70},
-//                width = 800 - margin.left - margin.right,
-//                height = 250 - margin.top - margin.bottom;
-//
-//
-//            var barChart = baget.barChart()
-//                .selectionIdentifier("#chart")
-//                .width(width)
-//                .height(height)
-//                .margin(margin)
-//                .roomForLabels (roomForLabels)
-//                .maximumPossibleValue (maximumPossibleValue)
-//                .labelSpacer (labelSpacer)
-//                .assignData(dataForBarChart);
-//            barChart.render();
-//
-//        }
     }
 
 

@@ -54,10 +54,10 @@ rect.h-bar {
 #xaxis text text {
     font-size: 12px;
 }
-td.barchartFormatter {
+div.barchartFormatter {
     width: 800px;
 }
-td.significanceDescriptorFormatter {
+div.significanceDescriptorFormatter {
     width: 100px;
 }
 div.significantDifference {
@@ -75,4 +75,14 @@ div.significantDifferenceText {
     vertical-align: middle;
     text-align: center;
     color: #ffffff;
+}
+.standardFont  {
+    font-family: 'Lato';
+    font-weight: normal;
+    font-size: 16pt;
+}
+.standardEmphasisFont  {
+    font-family: 'Lato';
+    font-weight: bold;
+    font-size: 16pt;
 }
