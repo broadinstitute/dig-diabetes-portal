@@ -1,26 +1,26 @@
 text.barChartLabel  {
     font-family: 'Lato';
-    font-weight: normal;
+    font-weight: 400;
     font-size: 18pt;
 }
 text.barSubChartLabel  {
     font-family: 'Lato';
-    font-weight: normal;
+    font-weight: 400;
     font-size: 12pt;
     stroke: #aaaaaa;
     fill: #aaaaaa;
 }
 text.valueLabels  {
     font-family: 'Lato';
-    font-weight: normal;
+    font-weight: 400;
     font-size: 18pt;
     color: #4682b4;
-    stroke: steelblue;
-    fill: steelblue;
+    stroke: #052090;
+    fill: #052090;
 }
 text.valueQualifiers  {
     font-family: 'Lato';
-    font-weight: normal;
+    font-weight: 400;
     font-size: 14pt;
     stroke: #aaaaaa;
     fill: #aaaaaa;
@@ -49,7 +49,7 @@ circle.clickableQuestionMark  {
 }
 rect.h-bar {
     stroke: white;
-    fill: steelblue;
+    fill: #052090;
 }
 #xaxis text text {
     font-size: 12px;
@@ -62,12 +62,13 @@ div.significanceDescriptorFormatter {
 }
 div.significantDifference {
     width: 150px;
-    height: 150px;
-    background:  #4682b4;
+    height: 140px;
+    background:  #052090;
     font-size: 14pt;
     vertical-align: middle;
     text-align: center;
     color: #ffffff;
+    margin: 0 0 1px;
 }
 div.significantDifferenceText {
     padding-top: 20px;
@@ -75,14 +76,21 @@ div.significantDifferenceText {
     vertical-align: middle;
     text-align: center;
     color: #ffffff;
+    margin: 0 0 1px;
 }
 .standardFont  {
-    font-family: 'Lato';
-    font-weight: normal;
+    /*font-family: 'Lato';*/
+    /*font-weight: normal;*/
     font-size: 16pt;
 }
 .standardEmphasisFont  {
-    font-family: 'Lato';
-    font-weight: bold;
+    /*font-family: 'Lato';*/
+    /*font-weight: bold;*/
     font-size: 16pt;
+}
+.slimDescription {
+    margin: 0 0 1px;
+}
+span.bhtLossOfFunctionVariants {
+    text-decoration: underline;
 }

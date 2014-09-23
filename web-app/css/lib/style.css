@@ -19,8 +19,12 @@ label, .radio label, .checkbox label {
   border-radius: initial; }
 
 * {
-  font-family: 'Lato';
-  font-weight: 300; }
+    font-family: 'Lato';
+    font-weight: 400;
+    /* why do the below lines not work? */
+    /*font-family: 'Lato-Light';*/
+    /*src: url('/fonts/Lato_Light/Lato-Light.ttf');*/
+}
 
 body {
   font-size: 16px; }
@@ -133,8 +137,8 @@ table.basictable {
   padding: 20px; }
 
 .translational-research-box {
-  padding: 20px;
-  margin: 20px 0;
+  padding: 8px 0 0 10px ;
+  margin: 0;
   background: whitesmoke;
   border: 1px solid #aaa; }
 

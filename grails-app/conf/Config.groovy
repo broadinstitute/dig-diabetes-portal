@@ -229,6 +229,10 @@ log4j = { root ->
     info 'grails.app.services'
     root.level = org.apache.log4j.Level.INFO
 
+    grails.resources.adhoc.includes = [
+            '/images/**', '/css/**', '/js/**', '/img/**', '/fonts/**'
+    ]
+
     environments {
         development {
             appenders {

@@ -423,9 +423,9 @@ function fillUpBarChart (peopleWithDiseaseNumeratorString,peopleWithDiseaseDenom
                 maximumPossibleValue = (Math.max(calculatedPercentWithDisease,calculatedPercentWithoutDisease) *1.5),
                 labelSpacer = 10;
 
-            var margin = {top: 30, right: 20, bottom: 50, left: 70},
+            var margin = {top: 0, right: 20, bottom: 0, left: 70},
                 width = 800 - margin.left - margin.right,
-                height = 250 - margin.top - margin.bottom;
+                height = 150 - margin.top - margin.bottom;
 
 
             var barChart = baget.barChart()
@@ -479,46 +479,46 @@ function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exs
     }
 
 
-
-
-    // first subline
-    var minaMinu =  proportionsWithDisease ;
-    if (minaMinu) {   // we have a  _13k_T2D_lof_MINA_MINU_RET
-        arrayOfMinaMinu  = minaMinu.split('/');
-        if (arrayOfMinaMinu.length>1) {
-            bhtPeopleWithVariantWhoHaveDiabetes = arrayOfMinaMinu[0];
-            $('#bhtPeopleWithVariantWhoHaveDiabetes').append(bhtPeopleWithVariantWhoHaveDiabetes);
-        }
-    }  else {  // we don't
-        $('#bhtPeopleWithVariantWhoHaveDiabetes').append(0);
-    }
-    $('#bhtPeopleWithVariant').append(bhtPeopleWithVariant);
-    if (bhtPeopleWithVariant  > 0) {
-        var bhtPercentOfPeopleWithVariantWhoHaveDisease =  (100 * (bhtPeopleWithVariantWhoHaveDiabetes / bhtPeopleWithVariant));
-        $('#bhtPercentOfPeopleWithVariantWhoHaveDisease').append ( "(" +
-            (bhtPercentOfPeopleWithVariantWhoHaveDisease.toPrecision(2))+"%)");
-    }
-
-    // second subline
-    if (arrayOfMinaMinu.length>1) {  // we have a  _13k_T2D_lof_MINA_MINU_RET
-        bhtPeopleWithVariantWithoutDiabetes = arrayOfMinaMinu[1];
-        $('#bhtPeopleWithVariantWithoutDiabetes').append(bhtPeopleWithVariantWithoutDiabetes);
-    }  else {  // we don't
-        bhtPeopleWithVariantWithoutDiabetes = 0;
-        $('#bhtPeopleWithVariantWithoutDiabetes').append(0);
-    }
-
-    $('#bhtPeopleWithoutVariant').append(bhtPeopleWithoutVariant);
-    if (bhtPeopleWithoutVariant  > 0) {
-        var bhtPercentOfPeopleWithVariantWithoutDisease =  (100 * (bhtPeopleWithVariantWithoutDiabetes / bhtPeopleWithoutVariant));
-        $('#bhtPercentOfPeopleWithVariantWithoutDisease').append (  "(" +
-            (bhtPercentOfPeopleWithVariantWithoutDisease.toPrecision(2)) +"%)");
-    }
-
+//
+//
+//    // first subline
+//    var minaMinu =  proportionsWithDisease ;
+//    if (minaMinu) {   // we have a  _13k_T2D_lof_MINA_MINU_RET
+//        arrayOfMinaMinu  = minaMinu.split('/');
+//        if (arrayOfMinaMinu.length>1) {
+//            bhtPeopleWithVariantWhoHaveDiabetes = arrayOfMinaMinu[0];
+//            $('#bhtPeopleWithVariantWhoHaveDiabetes').append(bhtPeopleWithVariantWhoHaveDiabetes);
+//        }
+//    }  else {  // we don't
+//        $('#bhtPeopleWithVariantWhoHaveDiabetes').append(0);
+//    }
+//    $('#bhtPeopleWithVariant').append(bhtPeopleWithVariant);
+//    if (bhtPeopleWithVariant  > 0) {
+//        var bhtPercentOfPeopleWithVariantWhoHaveDisease =  (100 * (bhtPeopleWithVariantWhoHaveDiabetes / bhtPeopleWithVariant));
+//        $('#bhtPercentOfPeopleWithVariantWhoHaveDisease').append ( "(" +
+//            (bhtPercentOfPeopleWithVariantWhoHaveDisease.toPrecision(2))+"%)");
+//    }
+//
+//    // second subline
+//    if (arrayOfMinaMinu.length>1) {  // we have a  _13k_T2D_lof_MINA_MINU_RET
+//        bhtPeopleWithVariantWithoutDiabetes = arrayOfMinaMinu[1];
+//        $('#bhtPeopleWithVariantWithoutDiabetes').append(bhtPeopleWithVariantWithoutDiabetes);
+//    }  else {  // we don't
+//        bhtPeopleWithVariantWithoutDiabetes = 0;
+//        $('#bhtPeopleWithVariantWithoutDiabetes').append(0);
+//    }
+//
+//    $('#bhtPeopleWithoutVariant').append(bhtPeopleWithoutVariant);
+//    if (bhtPeopleWithoutVariant  > 0) {
+//        var bhtPercentOfPeopleWithVariantWithoutDisease =  (100 * (bhtPeopleWithVariantWithoutDiabetes / bhtPeopleWithoutVariant));
+//        $('#bhtPercentOfPeopleWithVariantWithoutDisease').append (  "(" +
+//            (bhtPercentOfPeopleWithVariantWithoutDisease.toPrecision(2)) +"%)");
+//    }
+//
 
 
     if (bhtMetaBurdenForDiabetes  > 0)  {
-        $('#bhtMetaBurdenForDiabetes').append("<p>Collectively, these variants' p-value for association with type 2 diabetes is "+
+        $('#bhtMetaBurdenForDiabetes').append("p="+
             (bhtMetaBurdenForDiabetes.toPrecision(3)));
     }
     var linkToVariantsPredictedToTruncate = $('#linkToVariantsPredictedToTruncate') ;

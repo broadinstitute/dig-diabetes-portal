@@ -70,7 +70,6 @@ var baget = baget || {};  // encapsulating variable
                 .orient('bottom')
                 .scale(x)
                 .tickSize(2);
-            //               .tickValues([0,0.25,0.50,0.75,1.0]);
 
             var x_xis = chart.append('g')
                 .attr("transform", "translate(0,"+(height+40)+")")
@@ -181,26 +180,26 @@ var baget = baget || {};  // encapsulating variable
                 .append("g");
 
 
-            elemEnter
-                .append("circle")
-                .attr("cx",  margin.left+roomForLabels-labelSpacer)
-                .attr("cy", function(d, i){
-                    return y(d.barname) + y.rangeBand()/2;
-                } )
-                .attr('r',8)
-                .attr("transform", function(d){return "translate(-5,29)"})
-                .attr('class', 'clickableQuestionMark')
-            ;
-            elemEnter
-                .append("text")
-                .attr("x",  margin.left+roomForLabels-labelSpacer)
-                .attr("y", function(d, i){
-                    return y(d.barname) + y.rangeBand()/2;
-                } )
-                .attr("dy", ""+(1.4+textLeading)+"em")
-                .attr("text-anchor", "end")
-                .attr('class', 'clickableQuestionMark')
-                .text("?");
+//            elemEnter
+//                .append("circle")
+//                .attr("cx",  margin.left+roomForLabels-labelSpacer)
+//                .attr("cy", function(d, i){
+//                    return y(d.barname) + y.rangeBand()/2;
+//                } )
+//                .attr('r',8)
+//                .attr("transform", function(d){return "translate(-5,29)"})
+//                .attr('class', 'clickableQuestionMark')
+//            ;
+//            elemEnter
+//                .append("text")
+//                .attr("x",  margin.left+roomForLabels-labelSpacer)
+//                .attr("y", function(d, i){
+//                    return y(d.barname) + y.rangeBand()/2;
+//                } )
+//                .attr("dy", ""+(1.4+textLeading)+"em")
+//                .attr("text-anchor", "end")
+//                .attr('class', 'clickableQuestionMark')
+//                .text("?");
 
 
         }
