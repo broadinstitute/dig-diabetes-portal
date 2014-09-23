@@ -407,13 +407,13 @@ function fillUpBarChart (peopleWithDiseaseNumeratorString,peopleWithDiseaseDenom
             proportionWithoutDiseaseDescriptiveString = "(" + peopleWithoutDiseaseNumerator + " out of " + peopleWithoutDiseaseDenominator + ")";
             var dataForBarChart = [
                     { value: calculatedPercentWithDisease,
-                        barname: 'Have T2D',
+                        barname: 'have T2D',
                         barsubname: '(cases)',
                         barsubnamelink:'http://www.google.com',
                         inbar: '',
                         descriptor: proportionWithDiseaseDescriptiveString},
                     {value: calculatedPercentWithoutDisease,
-                        barname: 'Do not have T2D',
+                        barname: 'do not have T2D',
                         barsubname: '(controls)',
                         barsubnamelink:'http://www.google.com',
                         inbar: '',

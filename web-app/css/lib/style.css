@@ -20,7 +20,7 @@ label, .radio label, .checkbox label {
 
 * {
     font-family: 'Lato';
-    font-weight: 400;
+    font-weight: 300;
     /* why do the below lines not work? */
     /*font-family: 'Lato-Light';*/
     /*src: url('/fonts/Lato_Light/Lato-Light.ttf');*/
@@ -38,7 +38,9 @@ a.genelink {
     font-weight: bold;
     font-style: italic;
 }
-
+#totalGwasVariants {
+    font-size: 14pt;
+}
 h1 {
   font-size: 44px;
   font-weight: 300;
@@ -87,7 +89,7 @@ div.adminform {
 div.separator {
   height: 1px;
   border-top: 1px solid #aaa;
-  margin: 20px 0; }
+  margin: 40px 0; }
 
 div.linkout {
   padding: 10px 0; }
@@ -137,10 +139,11 @@ table.basictable {
   padding: 20px; }
 
 .translational-research-box {
-  padding: 8px 0 0 10px ;
+  padding: 2px 0 0 px ;
   margin: 0;
-  background: whitesmoke;
-  border: 1px solid #aaa; }
+  font-size: 18pt;
+  color: #052090;
+}
 
 .login-header {
   padding: 40px 0;

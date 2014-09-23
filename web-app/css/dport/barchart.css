@@ -1,26 +1,26 @@
 text.barChartLabel  {
     font-family: 'Lato';
-    font-weight: 400;
-    font-size: 18pt;
+    font-weight: 300;
+    font-size: 14pt;
 }
 text.barSubChartLabel  {
     font-family: 'Lato';
-    font-weight: 400;
+    font-weight: 200;
     font-size: 12pt;
     stroke: #aaaaaa;
     fill: #aaaaaa;
 }
 text.valueLabels  {
     font-family: 'Lato';
-    font-weight: 400;
-    font-size: 18pt;
+    font-weight: 300;
+    font-size: 14pt;
     color: #4682b4;
     stroke: #052090;
     fill: #052090;
 }
 text.valueQualifiers  {
     font-family: 'Lato';
-    font-weight: 400;
+    font-weight: 300;
     font-size: 14pt;
     stroke: #aaaaaa;
     fill: #aaaaaa;
@@ -81,12 +81,12 @@ div.significantDifferenceText {
 .standardFont  {
     /*font-family: 'Lato';*/
     /*font-weight: normal;*/
-    font-size: 16pt;
+    font-size: 14pt;
 }
 .standardEmphasisFont  {
     /*font-family: 'Lato';*/
     /*font-weight: bold;*/
-    font-size: 16pt;
+    font-size: 14pt;
 }
 .slimDescription {
     margin: 0 0 1px;

@@ -167,7 +167,7 @@ var baget = baget || {};  // encapsulating variable
                 .attr("dy", ""+textLeading+"em")
                 .attr("text-anchor", "start")
                 .attr('class', 'valueQualifiers')
-                .text(function(d,i){return ""+d.descriptor+ "%";})
+                .text(function(d,i){return ""+d.descriptor;})
 
 
             var elem = chart.selectAll("text.clickableQuestionMark")
