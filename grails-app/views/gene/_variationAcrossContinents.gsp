@@ -14,7 +14,7 @@
         Click on a number to view variants.
     </p>
 
-    <table id="continentalVariation" class="table table-striped basictable">
+    <table id="continentalVariation" class="table table-striped distinctivetable">
         <thead>
         <tr>
             <th>cohort</th>

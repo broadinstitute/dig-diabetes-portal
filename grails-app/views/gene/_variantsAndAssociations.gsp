@@ -12,7 +12,7 @@
 <br/>
 
 
-<table id="variantsAndAssociationsTable" class="table table-striped basictable distinctive">
+<table id="variantsAndAssociationsTable" class="table table-striped distinctivetable distinctive">
     <thead id="variantsAndAssociationsHead">
     </thead>
     <tbody id="variantsAndAssociationsTableBody">
