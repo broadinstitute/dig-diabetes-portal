@@ -290,6 +290,7 @@ function fillVariantsAndAssociationLine (geneInfo,// our gene record
                                          locusWideFieldIdentifier, // where in the gen record do we find the number of locus wide variants
                                          nominalFieldIdentifier,  // where in the gen record do we find the number of nominally significance variants
                                          anchorBuildingFunction,  // which anchor building function should we use
+                                         emphasizeGwas,    // 0->no emphasis, 1-> Emphasize middle row, 2-> Emphasize bottom row
                                          rootVariantUrl) {  // root URL is the basis for callbacks
     if  (geneInfo)  {
         var geneName = geneInfo["ID"];
@@ -314,40 +315,84 @@ function fillVariantsAndAssociationLine (geneInfo,// our gene record
         var genomeWideVariants = geneFieldOrZero(geneInfo,genomeWideFieldIdentifier);
         var locusWideVariants = geneFieldOrZero(geneInfo,locusWideFieldIdentifier);
         var nominallySignificantVariants = geneFieldOrZero(geneInfo,nominalFieldIdentifier);
-        $('#variantsAndAssociationsTableBody').append ('<tr>'+
+        var tableRow = '';
+        tableRow += '<tr>'+
             '<td>' + dataSetNameForUser + '</td>'+
             '<td>' + sampleSize + '</td>'+
-            '<td>' + anchorBuildingFunction(totalVariants,geneName,'everything',dataSetName,genomicRegion,rootVariantUrl) + '</td>'+
-            '<td>' + anchorBuildingFunction(genomeWideVariants,geneName,'genome-wide',dataSetName,genomicRegion,rootVariantUrl) + '</td>'+
-            '<td>' + anchorBuildingFunction(locusWideVariants,geneName,'nominal',dataSetName,genomicRegion,rootVariantUrl) + '</td>'+   // TODO: should be locus wide
+            '<td>' + anchorBuildingFunction(totalVariants,geneName,'everything',dataSetName,genomicRegion,rootVariantUrl) + '</td>';
+        if (emphasizeGwas == 2)   {
+            tableRow += '<td class="emphasizedBottom">';
+        }  else if (emphasizeGwas == 1)   {
+            tableRow += '<td class="emphasized">';
+        }  else {
+            tableRow += '<td>';
+        }
+        tableRow +=  anchorBuildingFunction(genomeWideVariants,geneName,'genome-wide',dataSetName,genomicRegion,rootVariantUrl) + '</td>';
+        tableRow += '<td>' + anchorBuildingFunction(locusWideVariants,geneName,'nominal',dataSetName,genomicRegion,rootVariantUrl) + '</td>'+   // TODO: should be locus wide
             '<td>' + anchorBuildingFunction(nominallySignificantVariants,geneName,'nominal',dataSetName,genomicRegion,rootVariantUrl) + '</td>'+
-            '</tr>');
+            '</tr>';
+        $('#variantsAndAssociationsTableBody').append ( tableRow);
     }
+}
+function emphasisRecommended (geneInfo) {
+    var returnValue = false;
+    if (geneInfo) {
+        if ((geneFieldOrZero(geneInfo,geneInfoRec.GWAS_T2D_GWS_TOTAL)>0)  ||
+        (geneFieldOrZero(geneInfo,geneInfoRec.EXCHP_T2D_GWS_TOTAL)>0)  ||
+        (geneFieldOrZero(geneInfo,geneInfoRec.EXCHP_T2D_GWS_TOTAL)>0)){
+            returnValue = true;
+        }
+    }
+    return  returnValue;
 }
 function fillVariantsAndAssociations (geneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl) {
     if  (geneInfo){
         var regionSpecifier =  "chr"+geneFieldOrZero(geneInfo,geneInfoRec.CHROM)+":"+
             expandRegionBegin(geneFieldOrZero(geneInfo,geneInfoRec.BEG))+"-"+
             expandRegionEnd(geneFieldOrZero(geneInfo,geneInfoRec.END));
+        var emphasisRequired =   emphasisRecommended (geneInfo);
+        var  emphasizeGwas = (emphasisRequired?1:0);
+        var headerRow = "<tr>"+
+            "<th>data type</th>"+
+            "<th>sample size</th>"+
+            "<th>total variants</th>";
+        if (emphasizeGwas){
+            headerRow += "<th class='emphasizedTop' style='border-top: 3px solid #ee0'>";
+        } else {
+            headerRow += "<th>";
+        }
+        headerRow += "genome-wide<br/>significant variants</th>"+
+            "<th>locus-wide<br/>significant variants</th>"+
+            "<th>nominal<br/>significant variants</th>"+
+            "</tr>";
+        $('#variantsAndAssociationsHead').append ( headerRow);
         if (show_gwas) {
             fillVariantsAndAssociationLine (geneInfo,'gwas','69,033',regionSpecifier,
                 geneInfoRec.GWAS_T2D_VAR_TOTAL,geneInfoRec.GWAS_T2D_GWS_TOTAL,geneInfoRec.GWAS_T2D_NOM_TOTAL,geneInfoRec.GWAS_T2D_NOM_TOTAL,
-                buildAnchorForRegionVariantSearches,rootVariantUrl);
+                buildAnchorForRegionVariantSearches,emphasizeGwas,rootVariantUrl);
         }
         if (show_exchp) {
             fillVariantsAndAssociationLine (geneInfo,'exomechip','79,854',regionSpecifier,
                 geneInfoRec.EXCHP_T2D_VAR_TOTALS_EU_TOTAL,geneInfoRec.EXCHP_T2D_GWS_TOTAL,geneInfoRec.EXCHP_T2D_NOM_TOTAL,geneInfoRec.EXCHP_T2D_NOM_TOTAL,
-                buildAnchorForGeneVariantSearches,rootVariantUrl);
+                buildAnchorForGeneVariantSearches,emphasizeGwas,rootVariantUrl);
         }
         if (show_exseq) {
+            if (emphasisRequired) {
+                if (!show_sigma) {
+                    emphasizeGwas = 2;
+                }
+            }
             fillVariantsAndAssociationLine (geneInfo,'exomeseq','12,940',regionSpecifier,
                 geneInfoRec._13k_T2D_VAR_TOTAL,geneInfoRec._13k_T2D_GWS_TOTAL,geneInfoRec._13k_T2D_NOM_TOTAL,geneInfoRec._13k_T2D_NOM_TOTAL,
-                buildAnchorForGeneVariantSearches,rootVariantUrl);
+                buildAnchorForGeneVariantSearches,emphasizeGwas,rootVariantUrl);
         }
         if (show_sigma) {
+            if (emphasisRequired) {
+               emphasizeGwas = 2;
+            }
             fillVariantsAndAssociationLine (geneInfo,'exomeseq','99, 999',regionSpecifier,
                 geneInfoRec.SIGMA_T2D_VAR_TOTAL,geneInfoRec.SIGMA_T2D_GWS_TOTAL,geneInfoRec.SIGMA_T2D_NOM_TOTAL,geneInfoRec.SIGMA_T2D_NOM_TOTAL,
-                buildAnchorForGeneVariantSearches,rootVariantUrl);
+                buildAnchorForGeneVariantSearches,emphasizeGwas,rootVariantUrl);
         }
 
     }

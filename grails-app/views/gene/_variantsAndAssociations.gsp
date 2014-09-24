@@ -12,16 +12,8 @@
 <br/>
 
 
-<table id="variantsAndAssociationsTable" class="table table-striped basictable">
-    <thead>
-    <tr>
-        <th>data type</th>
-        <th>sample size</th>
-        <th>total variants</th>
-        <th>genome-wide<br/>significant variants</th>
-        <th>locus-wide<br/>significant variants</th>
-        <th>nominal<br/>significant variants</th>
-    </tr>
+<table id="variantsAndAssociationsTable" class="table table-striped basictable distinctive">
+    <thead id="variantsAndAssociationsHead">
     </thead>
     <tbody id="variantsAndAssociationsTableBody">
     </tbody>

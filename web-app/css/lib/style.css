@@ -99,14 +99,34 @@ div.linkout {
 table.basictable {
   width: 100%; }
   table.basictable th, table.basictable td {
-    text-align: center; }
-  table.basictable th.datatype-header {
-    border-left: 1px solid black; }
+    text-align: center;
+  }
+table.distinctive th {
+    border-right: 2px solid #ddd;
+}
+table th.emphasizedTop {
+    border-left: 3px solid #ee0;
+    border-right: 3px solid #ee0;
+    border-top: 30px solid #ee0;
+}
+table td.emphasized  {
+    border-left: 3px solid #ee0;
+    border-right: 3px solid #ee0;
+}
+table td.emphasizedBottom {
+    border-left: 3px solid #ee0;
+    border-right: 3px solid #ee0;
+    border-bottom: 3px solid #ee0;
+}
+table.basictable th.datatype-header {
+    border-left: 1px solid black;
+  }
   table.basictable thead th {
     padding: 9px;
     background: #052090;
     color: white;
-    font-size: 14px; }
+    font-size: 14px;
+  }
   table.basictable thead th.sorting_desc:before {
     content: "▴ "; }
   table.basictable thead th.sorting_asc:before {
