@@ -9,10 +9,6 @@
 
     <title>IGV - Integrative Genomics Viewer</title>
 
-    %{--<r:require modules="brandingStyle"/>    DOES NOT WORK --}%
-    %{--<link type="text/css" href="${resource(dir:'css/lib',file:'t2dBranding.css')}" /> AND THIS DOESN'T EITHER--}%
-
-
     <!-- Bootstrap core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 

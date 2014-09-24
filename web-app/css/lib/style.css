@@ -38,9 +38,6 @@ a.genelink {
     font-weight: bold;
     font-style: italic;
 }
-#totalGwasVariants {
-    font-size: 14pt;
-}
 h1 {
   font-size: 44px;
   font-weight: 300;
@@ -397,7 +394,9 @@ body {
   background: white; }
 
 #main {
-  padding: 40px 0 80px; }
+  padding: 40px 0 80px;
+  font-size: 14pt;
+}
 
 #footer {
   padding: 20px 0 40px;

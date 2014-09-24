@@ -177,6 +177,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/variantSearch/**':    ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/assets/**':         ['permitAll'],
         '/**/js/**':          ['permitAll'],
+        '/**/fonts/**':       ['permitAll'],
         '/**/css/**':         ['permitAll'],
         '/**/images/**':      ['permitAll'],
         '/**/favicon.ico':    ['permitAll'],
