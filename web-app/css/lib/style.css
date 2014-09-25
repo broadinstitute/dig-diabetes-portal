@@ -119,6 +119,9 @@ table.basictable td {
 table.distinctive th {
     border-right: 2px solid #ddd;
 }
+span.headersubtext {
+    font-size: 8pt;
+}
 table th.emphasizedTop {
     border-left: 3px solid #ee0;
     border-right: 3px solid #ee0;

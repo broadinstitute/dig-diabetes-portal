@@ -25,7 +25,9 @@ modules = {
 
         resource url: 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'
 
+        resource url: 'http://www.broadinstitute.org/igvdata/t2d/igv-all.min.css'
         resource url: 'http://www.broadinstitute.org/igvdata/t2d/igv-all.min.js'
+
 
         resource url: 'css/lib/bootstrap.min.css'
 

@@ -238,6 +238,7 @@ function fillVariationAcrossEthnicity (rawGeneInfo,show_gwas,show_exchp,show_exs
                 var ns = (ethnicityRec ["NS"])?(ethnicityRec ["NS"]): 0;
                 $('#continentalVariationTableBody').append ('<tr>'+
                     '<td>' + UTILS.expandEthnicityDesignation (ethnicityKey) + '</td>'+
+                    '<td>exome sequence</td>'+
                     '<td>' + ns + '</td>'+
                     '<td>' + buildAnchorForVariantSearches(total,rawGeneInfo["ID"],'total-'+ethnicityKey,rootVariantUrl) + '</td>'+
                     '<td>' + buildAnchorForVariantSearches(common,rawGeneInfo["ID"],'common-'+ethnicityKey,rootVariantUrl) + '</td>'+
@@ -253,7 +254,8 @@ function fillVariationAcrossEthnicity (rawGeneInfo,show_gwas,show_exchp,show_exs
                 var excomeChipEuropean = excomeChip["EU"];
                 if (excomeChipEuropean["NS"]){
                     $('#continentalVariationTableBody').append ('<tr>'+
-                        '<td>European (exome chip)</td>'+
+                        '<td>European</td>'+
+                        '<td>exome chip</td>'+
                         '<td>' + excomeChipEuropean["NS"] + '</td>'+
                         '<td>' + buildAnchorForVariantSearches(excomeChipEuropean["TOTAL"],rawGeneInfo["ID"],'total-exchp',rootVariantUrl) + '</td>'+
                         '<td>' + buildAnchorForVariantSearches(excomeChipEuropean["COMMON"],rawGeneInfo["ID"],'common-exchp',rootVariantUrl) + '</td>'+
@@ -269,14 +271,14 @@ function fillVariationAcrossEthnicity (rawGeneInfo,show_gwas,show_exchp,show_exs
 }
 function buildAnchorForRegionVariantSearches (displayableContents,geneName, significanceFilter,dataset,regionSpecification,rootVariantUrl){
     var returnValue = "";
-    returnValue += ("<a class='variantlink' href='"+ rootVariantUrl+"/"+geneName+"?sig="+significanceFilter+
+    returnValue += ("<a class='boldlink' href='"+ rootVariantUrl+"/"+geneName+"?sig="+significanceFilter+
         "&dataset="+dataset + "&region=" +regionSpecification+"'>"+
         displayableContents+"</a>");
     return  returnValue;
 }
 function buildAnchorForGeneVariantSearches (displayableContents,geneName, significanceFilter,dataset,junk,rootVariantUrl){
     var returnValue = "";
-    returnValue += ("<a class='variantlink' href='"+ rootVariantUrl+"/"+geneName+"?sig="+significanceFilter+
+    returnValue += ("<a class='boldlink' href='"+ rootVariantUrl+"/"+geneName+"?sig="+significanceFilter+
         "&dataset="+dataset + "'>"+
         displayableContents+"</a>");
     return  returnValue;
@@ -361,9 +363,9 @@ function fillVariantsAndAssociations (geneInfo,show_gwas,show_exchp,show_exseq,s
         } else {
             headerRow += "<th>";
         }
-        headerRow += "genome-wide<br/>significant variants</th>"+
-            "<th>locus-wide<br/>significant variants</th>"+
-            "<th>nominal<br/>significant variants</th>"+
+        headerRow += "genome-wide<br/>significant variants<br/><span class='headersubtext'>P&lt;5x10<sup>-8</sup></span></th>"+
+            "<th>locus-wide<br/>significant variants<br/><span class='headersubtext'>P&lt;5x10<sup>-4</sup></span></th>"+
+            "<th>nominal<br/>significant variants<br/><span class='headersubtext'>P&lt;0.05</sup></span></th>"+
             "</tr>";
         $('#variantsAndAssociationsHead').append ( headerRow);
         if (show_gwas) {
