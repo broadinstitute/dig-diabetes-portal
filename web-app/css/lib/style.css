@@ -175,7 +175,7 @@ table.basictable th.datatype-header {
   padding: 20px; }
 
 .translational-research-box {
-  padding: 2px 0 0 px ;
+  padding: 2px 0 0px ;
   margin: 0;
   font-size: 18pt;
   color: #052090;
@@ -443,3 +443,46 @@ body {
 
 #belowfooter {
   height: 150px; }
+div.boxyDisplay {
+    height: 200px;
+    margin: 5px;
+    padding:  15px;
+    text-align: center;
+}
+.genomeWideSignificant {
+    background-color: #721B96;
+    color: white;
+}
+.locusWideSignificant {
+    background-color: #AA1DA3;
+    color: white;
+}
+.nominallySignificant {
+    background-color: #DC9AEA;
+    color: black;
+}
+.notSignificant {
+    background-color: #ffffff;
+    border: 1px solid black;
+    color: black;
+}
+div.notVeryImportantText {
+    padding: 2px;
+    font-size: 9pt;
+}
+div.moreImportantText {
+    padding: 2px;
+    font-size: 12pt;
+}
+div.prettyImportantText {
+    padding: 2px;
+    font-size: 14pt;
+}
+div.veryImportantText {
+    padding: 2px;
+    font-size: 16pt;
+}
+#variantTitleInAssociationStatistics {
+    font-weight: bold;
+}
+

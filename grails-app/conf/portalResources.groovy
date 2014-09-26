@@ -10,6 +10,9 @@ modules = {
         resource url: 'js/lib/dport/geneInfo.js'
         resource url: 'js/lib/dport/barchart.js'
     }
+    variantInfo {
+        resource url: 'js/lib/dport/variantInfo.js'
+    }
     brandingStyle {
         resource url: 'css/lib/t2dBranding.css',bundle:'brandingStyle'
     }
@@ -21,7 +24,7 @@ modules = {
         resource url: 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'
         resource url: 'http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
 
-        resource url: "http://www.broadinstitute.org/igvdata/t2d/igv.css"
+//        resource url: "http://www.broadinstitute.org/igvdata/t2d/igv.css"
 
         resource url: 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'
 

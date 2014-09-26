@@ -1,21 +1,23 @@
 <a name="associations"></a>
-<h2><strong>See association statistics</strong></h2>
+<h2><strong>Is <b><span id="variantTitleInAssociationStatistics"></span></b> associated with T2D or related traits?</strong></h2>
 
+<br/>
 
-<g:if test="${show_gwas}">
-    <span id="variantInfoGwasSection"></span>
-</g:if>
+<div class="row clearfix">
+    <div class="col-md-3">
+        <div id="gwasAssociationStatisticsBox"></div>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-3">
+        <div id="exomeChipAssociationStatisticsBox"></div>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-3">
+        <div id="exomeSequenceAssociationStatisticsBox"></div>
+    </div>
+</div>
 
-
-
-<g:if test="${show_exchp}">
-    <span id="variantInfoExomeChipSection"></span>
-</g:if>
-
-
-<g:if test="${show_exchp}">
-    <span id="variantInfoExomeDataSection"></span>
-</g:if>
+<br/>
 
 <p>
     <span id="variantInfoAssociationStatisticsLinkToTraitTable"></span>

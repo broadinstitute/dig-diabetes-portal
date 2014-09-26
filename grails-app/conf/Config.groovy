@@ -135,7 +135,7 @@ environments {
      //   grails.serverURL = "http://type2diabetesgenetics.org"
 
         grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-        //grails.serverURL = "type2diabetes-qa.elasticbeanstalk.com"
+        //grails.serverURL = "http://type2diabetes-qa.elasticbeanstalk.com/"
 
 
     }

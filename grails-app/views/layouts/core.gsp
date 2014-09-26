@@ -24,6 +24,7 @@
 </head>
 
 <body>
+<g:javascript src="lib/bootstrap.min.js" />
 <style>
 .spinner {
     position: fixed;

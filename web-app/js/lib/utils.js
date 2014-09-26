@@ -306,6 +306,64 @@ var UTILS = {
         }
         return  retVal;
     },
+
+    describeAssociationsStatistics: function(variant,
+                                         vMap,
+                                         availableData,
+                                         pValue,
+                                         orValue,
+                                         strongCutOff,
+                                         mediumCutOff,
+                                         weakCutOff,
+                                         variantTitle,
+                                         datatype,
+                                         includeCaseControlComparison ) {
+        var retVal = "";
+        var significanceDescriptor = "";
+        var orValueNumerical;
+        var orValueText = "";
+        var iMap = UTILS.invertMap(vMap);
+        var pNumericalValue =  variant[iMap[pValue]];
+        var pTextValue =  "";
+        if (variant[iMap[availableData]]){
+            retVal +="<div class='boxyDisplay ";
+            // may or may not be bold
+            if (pNumericalValue <= strongCutOff ) {
+                retVal += "genomeWideSignificant'>";
+                significanceDescriptor = "genome-wide significant";
+            } else if ((pNumericalValue > strongCutOff) &&
+                       (pNumericalValue <= mediumCutOff )){
+                retVal += "locusWideSignificant'>";
+                significanceDescriptor = "locus-wide significant";
+            } else if ((pNumericalValue > mediumCutOff) &&
+                (pNumericalValue <= weakCutOff )){
+                retVal += "nominallySignificant'>";
+                significanceDescriptor = "nominally significant";
+            }  else {
+                retVal += "notSignificant'>";
+                significanceDescriptor = "not significant";
+            }
+            // always needs descr
+            pTextValue = pNumericalValue.toPrecision(3);
+            retVal +=  ("<h2>" +datatype+ "</h2>");
+            retVal +=  ("<div class='veryImportantText'>p = " +pTextValue+ "</div>");
+            retVal +=  ("<div class='notVeryImportantText'>" +significanceDescriptor+ "</div>");
+            orValueNumerical =  variant[iMap[orValue]];
+            if ((orValueNumerical) &&
+                (orValueNumerical  !== 'null')) {
+                orValueText = orValueNumerical.toPrecision(3);
+                retVal +=  ("<div class='veryImportantText'>OR = " +orValueText+ "</div>");
+            }
+            if (includeCaseControlComparison) {
+                ;
+            }
+        } else {
+            retVal += '';
+        }
+        return retVal;
+    },
+
+
     showPercentageAcrossEthnicities: function (variant) {
         var retVal = "";
         var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
