@@ -40,9 +40,6 @@
 </head>
 
 <body>
-<script>
-    console.log('3');
-</script>
 
 
 
