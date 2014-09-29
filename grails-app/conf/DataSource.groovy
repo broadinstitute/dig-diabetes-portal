@@ -32,8 +32,8 @@ environments {
             username = System.getProperty("RDS_USERNAME")
             password = System.getProperty("RDS_PASSWORD")
             pooled = true
-            dbCreate = "validate"
-            //dbCreate = "create-drop"   /////////// caution!!
+           // dbCreate = "validate"
+            dbCreate = "create-drop"   /////////// caution!!
             driverClassName = "com.mysql.jdbc.Driver"
             url =  "jdbc:mysql://" + System.getProperty("RDS_HOSTNAME") + ":" + System.getProperty("RDS_PORT") + "/" + System.getProperty("RDS_DB_NAME") + "?user=" + System.getProperty("RDS_USERNAME") + "&password=" + System.getProperty("RDS_PASSWORD");
             dialect = org.hibernate.dialect.MySQL5InnoDBDialect

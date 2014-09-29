@@ -1,3 +1,4 @@
+import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
 import org.apache.log4j.PatternLayout
 
@@ -11,6 +12,50 @@ if (!catalinaBase) catalinaBase = '.'   // just in case
 def logDirectory = "${catalinaBase}/logs"
 
 grails.plugin.databasemigration.updateOnStart = true
+
+
+if  (Environment.current == Environment.DEVELOPMENT)  {
+     println('\n\n*** Preparing DEV environment ***\n\n')
+} else if  (Environment.current == Environment.TEST)  {
+    println('\n\n*** Preparing TEST environment ***\n\n')
+}   else if  (Environment.current == Environment.PRODUCTION)  {
+    println('\n\n*** Preparing PROD environment ***\n\n')
+ }
+
+
+/**
+ * Loads external config files from the .grails subfolder in the user's home directory
+ * Home directory in Windows is usually: C:\Users\<username>\.grails
+ * In Unix, this is usually ~\.grails
+ *
+ * dataExport-commons-config.groovy is used to holed generic, non envrironment-specific configurations such as external api credentials, etc.
+ */
+if (appName) {
+    grails.config.locations = []
+
+    // If the developer specifies a directory for the external config files at the command line, use it.
+    // This will look like 'grails -DprimaryConfigDir=[directory name] [target]'
+    // Otherwise, look for these files in the user's home .grails/projectdb directory
+    // If there are no external config files in either location, don't override anything in this Config.groovy
+    String primaryOverrideDirName = System.properties.get('primaryConfigDir')
+    String secondaryOverrideDirName = "${userHome}/.grails/${appName}"
+
+    List<String> fileNames = ["${appName}-commons-config.groovy", "${appName}-${Environment.current.name}-config.groovy"]
+    fileNames.each { fileName ->
+        String primaryFullName = "${primaryOverrideDirName}/${fileName}"
+        String secondaryFullName = "${secondaryOverrideDirName}/${fileName}"
+
+        if (new File(primaryFullName).exists()) {
+            println "Overriding Config.groovy with $primaryFullName"
+            grails.config.locations << "file:$primaryFullName"
+        } else if (new File(secondaryFullName).exists()) {
+            println "Overriding Config.groovy with $secondaryFullName"
+            grails.config.locations << "file:$secondaryFullName"
+        }
+    }
+ }
+
+
 
 // grails.config.locations = [ "classpath:${appName}-config.properties",
 //                             "classpath:${appName}-config.groovy",
@@ -134,13 +179,11 @@ environments {
      //   grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
      //   grails.serverURL = "http://type2diabetesgenetics.org"
 
-        grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-        //grails.serverURL = "http://type2diabetes-qa.elasticbeanstalk.com/"
-
-
+        //grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+        grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
     }
 }
-
+println ">>>>>>>>>>>>grails.serverURL=${grails.serverURL}<<<<<<<<<<<<<<<<<<<<<<"
 // email (gmail)
 grails {
     mail {
@@ -231,18 +274,12 @@ log4j = { root ->
     info 'grails.app.services'
     root.level = org.apache.log4j.Level.INFO
 
-    grails.resources.adhoc.includes = [
-            '/images/**', '/css/**', '/js/**', '/img/**', '/fonts/**'
-    ]
 
     environments {
         development {
             appenders {
                 console name: 'stdout', layout: pattern(conversionPattern: "%d [%t] %-5p %c %x - %m%n")
             }
-//            grails.logging.jul.usebridge = true
-//            grails.plugin.springsecurity.debug.useFilter = true
-
         }
 
         staging {
@@ -282,6 +319,11 @@ codenarc {
     reportType = 'xml'
     propertiesFile = 'grails-app/conf/codenarc.properties'
 }
+
+grails.resources.adhoc.includes = [
+        '/images/**', '/css/**', '/js/**', '/img/**', '/fonts/**'
+]
+
 
 // Added by the Spring Security Core plugin:
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'dport.people.User'
