@@ -99,15 +99,16 @@ grails.project.dependency.resolution = {
         // plugins needed at runtime but not for compilation
 //        runtime ":hibernate4:4.3.5.4" // or ":hibernate:3.6.10.16"
         runtime ":hibernate:3.6.10.16"
-        //runtime ":database-migration:1.4.0"
+        runtime ":database-migration:1.4.0"
         runtime ":jquery:1.11.1"
         runtime ':resources:1.2.8'
 
         compile ":spring-security-core:2.0-RC4"
 
-        test ":codenarc:0.18.1"
+        test ":codenarc:0.21"
 
-        //compile ":clover:3.1.10.1"
+       // compile ":clover:4.0.1"
+        test ":code-coverage:2.0.3-2"
 
 
         // Uncomment these to enable additional asset-pipeline capabilities
