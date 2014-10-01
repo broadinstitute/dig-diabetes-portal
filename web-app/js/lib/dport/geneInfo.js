@@ -1,4 +1,5 @@
 var variant;
+var delayedDataPresentation = {};
 var geneInfoRec = {
     ID: 1,
     CHROM: 2,
@@ -454,6 +455,7 @@ function fillUpBarChart (peopleWithDiseaseNumeratorString,peopleWithDiseaseDenom
                 .labelSpacer (labelSpacer)
                 .assignData(dataForBarChart);
             barChart.render();
+            return barChart;
         }
 
     }
@@ -491,7 +493,24 @@ function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exs
             peopleWithDiseaseDenominator = bhtPeopleWithVariant;
             peopleWithoutDiseaseDenominator =  bhtPeopleWithoutVariant;
         }
-        fillUpBarChart (peopleWithDiseaseNumerator,peopleWithDiseaseDenominator,peopleWithoutDiseaseNumerator,peopleWithoutDiseaseDenominator);
+        delayedDataPresentation = {functionToRun:fillUpBarChart,
+                                   peopleWithDiseaseNumerator:peopleWithDiseaseNumerator,
+                                   peopleWithDiseaseDenominator:peopleWithDiseaseDenominator,
+                                   peopleWithoutDiseaseNumerator:peopleWithoutDiseaseNumerator,
+                                   peopleWithoutDiseaseDenominator:peopleWithoutDiseaseDenominator,
+                                   barchartPtr:{},
+                                   launch:function(){
+                                       barchartPtr = fillUpBarChart (peopleWithDiseaseNumerator,peopleWithDiseaseDenominator,peopleWithoutDiseaseNumerator,peopleWithoutDiseaseDenominator);
+                                       return barchartPtr;
+                                   },
+                                   removeBarchart:function(){
+                                       if ((typeof barchartPtr !== 'undefined') &&
+                                           (typeof barchartPtr.clear !== 'undefined')){
+                                           barchartPtr.clear();
+                                       }
+                                   }
+        };
+       // fillUpBarChart (peopleWithDiseaseNumerator,peopleWithDiseaseDenominator,peopleWithoutDiseaseNumerator,peopleWithoutDiseaseDenominator);
     }
 
 

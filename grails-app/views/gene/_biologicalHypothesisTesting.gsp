@@ -4,7 +4,6 @@
 
     <a name="biology"></a>
 
-    <h2><strong>Biological hypothesis testing</strong></h2>
     <div class="translational-research-box">
         <p style="font-weight: 600">Question 1: Does truncating the encoded protein affect disease risk?</p>
     </div>

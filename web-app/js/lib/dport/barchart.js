@@ -256,6 +256,11 @@ var baget = baget || {};  // encapsulating variable
             return instance;
         };
 
+        instance.clear = function(){
+            selection.select('svg').remove();
+            return instance;
+        };
+
         return instance;
     };
 

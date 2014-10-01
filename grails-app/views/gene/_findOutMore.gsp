@@ -1,5 +1,4 @@
 
-<h2><strong>Find out more</strong></h2>
 
 <div class="linkout">
     <a target="_blank" href="http://www.gtexportal.org/home/?page=geneSearchAction&id=<%=geneName%>">GTEx</a>

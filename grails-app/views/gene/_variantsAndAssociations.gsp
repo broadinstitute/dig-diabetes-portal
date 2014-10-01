@@ -1,6 +1,6 @@
 <a name="associations"></a>
 
-<h2><strong>Variants and associations</strong></h2>
+%{--<h2><strong>Variants and associations</strong></h2>--}%
 
 <h3>
     Explore all variants within 100kb of <em>${geneName}</em>
@@ -27,11 +27,11 @@
 %{--<p><a class="boldlink"  id="linkToVariantTraitCross">--}%
     %{--See p-values and other statistics across 25 traits for all GWAS variants included in this portal</a>--}%
 
-</p>
-<p><a class="boldlink" href="<g:createLink controller='trait' action='genomeBrowser'/>?id=${geneName}">
-    Browse p-values for disease-associated variance within 100kb of <em><strong>${geneName}</strong></em>
-</a>
+%{--</p>--}%
+%{--<p><a class="boldlink" href="<g:createLink controller='trait' action='genomeBrowser'/>?id=${geneName}">--}%
+    %{--Browse p-values for disease-associated variance within 100kb of <em><strong>${geneName}</strong></em>--}%
+%{--</a>--}%
 
-<p>
-    T2D data are shown by default. Use the checkboxes below the browser to add data from GWAS of related traits (e.g. BMI)
-</p>
+%{--<p>--}%
+    %{--T2D data are shown by default. Use the checkboxes below the browser to add data from GWAS of related traits (e.g. BMI)--}%
+%{--</p>--}%
