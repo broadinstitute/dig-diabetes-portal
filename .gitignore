@@ -29,7 +29,10 @@
 # "temporary" build files
 /target
 
- 
+
+#Code coverage indicator
+cobertura.ser
+
 #Intelligent files
 *.iws
 *.ipr

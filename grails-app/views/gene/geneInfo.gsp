@@ -163,7 +163,7 @@
                                                 url: "http://t2dgenetics.org/mysql/rest/server/trait-search",
                                                 type: "t2d",
                                                 trait: "T2D",
-                                                label: "Type II Diabetes"
+                                                label: "Type 2 Diabetes"
                                             }),
                                             new igv.WIGTrack({
                                                 url: "//www.broadinstitute.org/igvdata/t2d/recomb_decode.bedgraph",
