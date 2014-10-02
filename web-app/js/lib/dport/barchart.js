@@ -41,10 +41,14 @@ var baget = baget || {};  // encapsulating variable
             roomForLabels = 120,
             maximumPossibleValue = 100,
             labelSpacer = 10,
+            integerValues = 0,// by default we show percentages, set value to one to show integers
+            logXScale = 0,// by default go with a linear x axis.  Set value to 1 for log
+            customBarColoring = 0,// by default don't color the bars differently.  Otherwise each one gets its own class
             selection;   // no default because we can't make a plot without a place to put it
 
         // private variables
-        var  instance = {};
+        var  instance = {},
+            internalMin;
 
         var margin = {top: 30, right: 20, bottom: 50, left: 70},
             width = 800 - margin.left - margin.right,
@@ -63,9 +67,18 @@ var baget = baget || {};  // encapsulating variable
                 .attr('width', width*1.5)
                 .attr('height', height*1.4);
 
-            x = d3.scale.linear()
-                .domain([0,maximumPossibleValue ])
-                .range([margin.left+roomForLabels, width+roomForLabels]);
+            if (logXScale){
+                internalMin = 1;
+                x = d3.scale.log()
+                    .base(10)
+                    .domain([internalMin,maximumPossibleValue ])
+                    .range([margin.left+roomForLabels, width+roomForLabels]);
+            } else {
+                internalMin = 0;
+                x = d3.scale.linear()
+                    .domain([0,maximumPossibleValue ])
+                    .range([margin.left+roomForLabels, width+roomForLabels]);
+            }
 
             var names=[],
                 verticalPositioning = []
@@ -144,6 +157,10 @@ var baget = baget || {};  // encapsulating variable
                 .scale(x)
                 .tickSize(2);
 
+            if (logXScale){
+                xAxis.tickValues([1,10,100,1000,10000])
+            }
+
             var x_xis = chart.append('g')
                 .attr("transform", "translate(0,"+(height+40)+")")
                 .attr('class','xaxis')
@@ -157,11 +174,16 @@ var baget = baget || {};  // encapsulating variable
                 .data(data,function(d,i){return d.barname;});
 
             bars.enter().append("rect")
-                .attr('class','h-bar')
-                .attr("x", x(0))
+                .attr('class',function(d,i){
+                    if (customBarColoring === 1) {
+                        return 'barstyling'+i;
+                    }else {
+                        return 'h-bar';
+                    }
+                })
+                .attr("x", x(internalMin))
                 .attr("y", function(d, i){
                     return vPosition.pos(d.barname);
-                    //return y(d.barname) + y.rangeBand()/2;
                 } )
                 .attr("width", function(d,i){
                     return (0)
@@ -173,7 +195,7 @@ var baget = baget || {};  // encapsulating variable
             bars.transition()
                 .delay(100).duration(1400)
                 .attr("width", function(d,i){
-                    return (x( d.value)-x(0))
+                    return (x( d.value)-x(internalMin))
                 });
 
             // get rid of any extra data in case we've done this before
@@ -190,14 +212,21 @@ var baget = baget || {};  // encapsulating variable
             chart.selectAll("text.barChartLabel")
                 .data(data)
                 .enter().append("text")
-                .attr("x",  margin.left+roomForLabels-labelSpacer)
+                .attr("x", function(d, i){
+                    return margin.left+roomForLabels-labelSpacer;
+                })
                 .attr("y", function(d, i){
                     return vPosition.pos(d.barname);
-                    // return y(d.barname) + y.rangeBand()/2;
                 } )
                 .attr("dy", ""+textLeading+"em")
                 .attr("text-anchor", "end")
-                .attr('class', 'barChartLabel')
+                .attr('class',function(d, i) {
+                    if (typeof d.inset === 'undefined') {
+                        return 'barChartLabel';
+                    } else {
+                        return 'rightBarChartLabel';
+                    }
+                })
                 .text(function(d,i){return d.barname;});
 
             // sub labels, just below the main labels above
@@ -207,7 +236,6 @@ var baget = baget || {};  // encapsulating variable
                 .attr("x",  margin.left+roomForLabels-labelSpacer)
                 .attr("y", function(d, i){
                     return vPosition.pos(d.barname);
-                    //return y(d.barname) + y.rangeBand()/2;
                 } )
                 .attr("dy", ""+(1.5+textLeading)+"em")
                 .attr("dx", "-1em")
@@ -224,13 +252,23 @@ var baget = baget || {};  // encapsulating variable
                 })
                 .attr("y", function(d){
                     return vPosition.pos(d.barname);
-                    //return y(d.barname) + y.rangeBand()/2;
                 } )
                 .attr("dx", 12)
                 .attr("dy", ""+textLeading+"em")
                 .attr("text-anchor", "start")
                 .attr('class', 'valueLabels')
-                .text(function(d,i){return ""+(d.value).toPrecision(3)+ "%";});
+                .text(function(d,i){
+                    // do we format the value to the right of the bar as a percentage or an integer
+                    //  one other special case: if the label is inset then don't label anything
+                    if (typeof d.inset === 'undefined'){
+                        if (integerValues ===  1){
+                            return ""+(d.value);
+                        }else {
+                            return ""+(d.value).toPrecision(3)+ "%";
+                        }
+                    }
+
+                });
 
             // labels to the right of the right hand labels
             chart.selectAll("text.valueQualifiers")
@@ -241,7 +279,6 @@ var baget = baget || {};  // encapsulating variable
                 })
                 .attr("y", function(d){
                     return vPosition.pos(d.barname);
-                    // return y(d.barname) + y.rangeBand()/2;
                 } )
                 .attr("dx", 108)
                 .attr("dy", ""+textLeading+"em")
@@ -328,6 +365,27 @@ var baget = baget || {};  // encapsulating variable
             height = x;
             return instance;
         };
+
+        instance.integerValues = function (x) {
+            if (!arguments.length) return integerValues;
+            integerValues = x;
+            return instance;
+        };
+
+        instance.logXScale = function (x) {
+            if (!arguments.length) return logXScale;
+            logXScale = x;
+            return instance;
+        };
+
+
+        instance.customBarColoring = function (x) {
+            if (!arguments.length) return customBarColoring;
+            customBarColoring = x;
+            return instance;
+        };
+
+
 
         instance.selectionIdentifier = function (x) {
             if (!arguments.length) return selectionIdentifier;

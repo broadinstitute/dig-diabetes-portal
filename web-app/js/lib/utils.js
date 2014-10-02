@@ -363,24 +363,24 @@ var UTILS = {
         return retVal;
     },
 
-
-    showPercentageAcrossEthnicities: function (variant) {
-        var retVal = "";
-        var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
-        var ethnicityFullName = ["African-Americans", "East Asians", "South Asians", "Europeans", "Hispanics"];
-        for (var i = 0; i < ethnicAbbreviation.length; i++) {
-            var stringProportion = variant['_13k_T2D_' + ethnicAbbreviation[i] + '_MAF'];
-            var proportion = parseFloat(stringProportion);
-            retVal += "<li>";
-
-            retVal += ((proportion*100).toPrecision(3) + " percent of " + ethnicityFullName [i]);
-            retVal += " (";
-            retVal += UTILS.frequencyCharacterization(proportion,[0,0.005,0.05]);
-            retVal += (")" +
-                "</li>");
-        }
-        return  retVal;
-    },
+//
+//    showPercentageAcrossEthnicities: function (variant) {
+//        var retVal = "";
+//        var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
+//        var ethnicityFullName = ["African-Americans", "East Asians", "South Asians", "Europeans", "Hispanics"];
+//        for (var i = 0; i < ethnicAbbreviation.length; i++) {
+//            var stringProportion = variant['_13k_T2D_' + ethnicAbbreviation[i] + '_MAF'];
+//            var proportion = parseFloat(stringProportion);
+//            retVal += "<li>";
+//
+//            retVal += ((proportion*100).toPrecision(3) + " percent of " + ethnicityFullName [i]);
+//            retVal += " (";
+//            retVal += UTILS.frequencyCharacterization(proportion,[0,0.005,0.05]);
+//            retVal += (")" +
+//                "</li>");
+//        }
+//        return  retVal;
+//    },
     showPercentagesAcrossHeterozygousCarriers: function (variant, title) {
         var retVal = "";
         var heta  = parseFloat(variant["_13k_T2D_HETA"]);

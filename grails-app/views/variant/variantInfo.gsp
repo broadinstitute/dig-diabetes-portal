@@ -63,6 +63,8 @@
 
                 <g:render template="howCommonIsVariant" />
 
+                <g:render template="carrierStatusImpact" />
+
                 <g:render template="effectOfVariantOnProtein" />
 
                 <g:render template="findOutMore" />

@@ -3,12 +3,6 @@ text.barChartLabel  {
     font-weight: 300;
     font-size: 14pt;
 }
-text.rightBarChartLabel{
-    font-family: 'Lato';
-    font-weight: 300;
-    font-size: 14pt;
-    text-anchor: start;
-}
 text.barSubChartLabel  {
     font-family: 'Lato';
     font-weight: 200;
@@ -56,32 +50,6 @@ circle.clickableQuestionMark  {
 rect.h-bar {
     stroke: white;
     fill: #052090;
-}
-rect.barstyling0 {
-    display: none;
-    fill:#955a9e;
-}
-rect.barstyling1 {
-    fill:#955a9e;
-}
-rect.barstyling2 {
-    fill: #a83e49;
-}
-rect.barstyling3 {
-    fill: #f5b338;
-}
-rect.barstyling4 {
-    display: none;
-    fill: #052090;
-}
-rect.barstyling5 {
-    fill:#955a9e;
-}
-rect.barstyling6 {
-    fill: #a83e49;
-}
-rect.barstyling7 {
-    fill: #f5b338;
 }
 #xaxis text text {
     font-size: 12px;

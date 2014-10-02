@@ -12,7 +12,10 @@ modules = {
         resource url: 'js/lib/dport/barchart.js'
     }
     variantInfo {
+        resource url: 'css/dport/variant.css'
+
         resource url: 'js/lib/dport/variantInfo.js'
+        resource url: 'js/lib/dport/barchart.js'
     }
 //    brandingStyle {
 //        resource url: 'css/lib/t2dBranding.css',bundle:'brandingStyle'

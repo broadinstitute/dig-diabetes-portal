@@ -178,7 +178,7 @@
                                                 url: "${grailsApplication.config.server.URL}variant-search",
                                                 trait: "T2D",
                                                 label: "Exome Chip",
-                                                pvalue: "EXOME_T2D_P_value"
+                                                pvalue: "EXCHP_T2D_P_value"
                                             }),
                                             new igv.T2dTrack({
                                                 url: "${grailsApplication.config.server.URL}variant-search",
