@@ -3,6 +3,10 @@
  *
  * This JavaScript file should be sufficient for creating a bar chart.
  *
+ * We want to be able to handle not only individual bars but also grouped bars.  If you are
+ * creating a bar group you'll need to put the grouped bars into an array inside the top level
+ * objects. For each grouping provide a bar name.
+ *
  * @type {baget|*|{}}
  */
 
@@ -47,7 +51,12 @@ var baget = baget || {};  // encapsulating variable
             height = 250 - margin.top - margin.bottom;
 
         instance.render = function() {
-            var x, y;
+            var x, y,
+                minimumValue,
+                maximumValue,
+                range = 0,
+                vPosition;
+
             var chart =  selection
                 .append('svg')
                 .attr('class', 'chart')
@@ -58,11 +67,75 @@ var baget = baget || {};  // encapsulating variable
                 .domain([0,maximumPossibleValue ])
                 .range([margin.left+roomForLabels, width+roomForLabels]);
 
-            var names=[];
-            data.map(function(d){names.push(d.barname)});
-            y = d3.scale.ordinal()
-                .domain(names)
-                .rangeBands([margin.top, height]);
+            var names=[],
+                verticalPositioning = []
+
+            data.map(function(d){
+                names.push(d.barname);
+                verticalPositioning.push(d.position);
+            });
+
+
+            /***
+             * we want to be able to support either ordinal or else explicitly placed horizontal bars.  To achieve this
+             * interpose an object that will either reference the ordinal scale or else the linear one with its
+             * explicit positioning
+             *
+             * As far as bar height goes, for the explicit positioning go through and find the minimum distance between any two bars.
+             * This will tell you how thin the bars have to be so that they can all fit.
+             */
+            if ((verticalPositioning.length >  0) &&
+                ((typeof (verticalPositioning [0]) !== 'undefined') )){
+                var minimumValue = Math.min.apply(null, verticalPositioning),
+                    maximumValue = Math.max.apply(null, verticalPositioning),
+                    range = maximumValue-minimumValue;
+                if(range > 0){
+                    y = d3.scale.linear()
+                        .domain([0,range])
+                        .range([margin.top, height]);
+                    vPosition = {nameMap:{},pos:{},barHeight:{}}
+                    var minspacing = 0;
+                    var smallestPosition = -1;
+                    // before we start assigning bars we need to know the smallest one so that everything can be offset
+                    // from zero (otherwise we start with the smallest, which means we never get to the top of the graph)
+                    for ( var i = 0 ; i < data.length ; i++ ) {
+                        if (smallestPosition  === -1 ){
+                            smallestPosition = data[i].position;
+                        } else {
+                            if (smallestPosition > data[i].position){
+                                smallestPosition = data[i].position
+                            }
+                        }
+                    }
+                    for ( var i = 0 ; i < data.length ; i++ ){
+                        vPosition.nameMap[data[i].barname] = y(data[i].position-smallestPosition)+5;
+                        // look at the distance between each bar position in order to calculate bar height
+                        if (i>0){
+                            if (minspacing==0){
+                                minspacing = data[i].position-data[i-1].position;
+                            } else {
+                                if ((data[i].position-data[i-1].position)< minspacing){
+                                    minspacing = data[i].position-data[i-1].position;
+                                }
+                            }
+                        }
+                    }
+                    vPosition.pos = function (name){
+                        return vPosition.nameMap[name];
+                    }
+                    vPosition.barHeight = (y(minspacing)-y(0))/2;
+                }
+            }
+            if(range == 0) {
+                y = d3.scale.ordinal()
+                    .domain(names)
+                    .rangeBands([margin.top, height]);
+                vPosition = {pos:function (name){
+                    //return vPosition.pos(name);
+                    return y(name) + y.rangeBand()/2;
+                },
+                    barHeight:y.rangeBand()/4}
+            }
 
             var	xAxis = d3.svg.axis();
 
@@ -79,6 +152,7 @@ var baget = baget || {};  // encapsulating variable
 
 
             // the bars in the bar chart
+            // special handling in case the bars have groups
             var bars = chart.selectAll("rect")
                 .data(data,function(d,i){return d.barname;});
 
@@ -86,12 +160,14 @@ var baget = baget || {};  // encapsulating variable
                 .attr('class','h-bar')
                 .attr("x", x(0))
                 .attr("y", function(d, i){
-                    return y(d.barname) + y.rangeBand()/2;
+                    return vPosition.pos(d.barname);
+                    //return y(d.barname) + y.rangeBand()/2;
                 } )
                 .attr("width", function(d,i){
                     return (0)
                 })
-                .attr("height", y.rangeBand()/4);
+                .attr("height", vPosition.barHeight);
+            //           .attr("height", vPosition.barHeighty.rangeBand()/4);
 
             // perform the animation
             bars.transition()
@@ -116,7 +192,8 @@ var baget = baget || {};  // encapsulating variable
                 .enter().append("text")
                 .attr("x",  margin.left+roomForLabels-labelSpacer)
                 .attr("y", function(d, i){
-                    return y(d.barname) + y.rangeBand()/2;
+                    return vPosition.pos(d.barname);
+                    // return y(d.barname) + y.rangeBand()/2;
                 } )
                 .attr("dy", ""+textLeading+"em")
                 .attr("text-anchor", "end")
@@ -129,7 +206,8 @@ var baget = baget || {};  // encapsulating variable
                 .enter().append("text")
                 .attr("x",  margin.left+roomForLabels-labelSpacer)
                 .attr("y", function(d, i){
-                    return y(d.barname) + y.rangeBand()/2;
+                    return vPosition.pos(d.barname);
+                    //return y(d.barname) + y.rangeBand()/2;
                 } )
                 .attr("dy", ""+(1.5+textLeading)+"em")
                 .attr("dx", "-1em")
@@ -145,7 +223,8 @@ var baget = baget || {};  // encapsulating variable
                     return (x(d.value));
                 })
                 .attr("y", function(d){
-                    return y(d.barname) + y.rangeBand()/2;
+                    return vPosition.pos(d.barname);
+                    //return y(d.barname) + y.rangeBand()/2;
                 } )
                 .attr("dx", 12)
                 .attr("dy", ""+textLeading+"em")
@@ -161,7 +240,8 @@ var baget = baget || {};  // encapsulating variable
                     return (x(d.value));
                 })
                 .attr("y", function(d){
-                    return y(d.barname) + y.rangeBand()/2;
+                    return vPosition.pos(d.barname);
+                    // return y(d.barname) + y.rangeBand()/2;
                 } )
                 .attr("dx", 108)
                 .attr("dy", ""+textLeading+"em")

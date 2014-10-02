@@ -122,6 +122,7 @@ class RestServerService {
     '_13k_T2D_lof_MINA_MINU_RET',
     '_13k_T2D_lof_METABURDEN',
     '_13k_T2D_GWS_TOTAL',
+//    '_13k_T2D_LWS_TOTAL',
     '_13k_T2D_NOM_TOTAL',
     '_13k_T2D_lof_OBSA',
     '_13k_T2D_lof_OBSU'
@@ -131,6 +132,7 @@ class RestServerService {
     static List <String> EXCHP_GENE_COLUMNS = [
     'EXCHP_T2D_VAR_TOTALS',
     'EXCHP_T2D_GWS_TOTAL',
+//    'EXCHP_T2D_LWS_TOTAL',
     'EXCHP_T2D_NOM_TOTAL',
     ]
 
@@ -138,6 +140,7 @@ class RestServerService {
     static List <String> GWAS_GENE_COLUMNS = [
     'GWS_TRAITS',
     'GWAS_T2D_GWS_TOTAL',
+//    'GWAS_T2D_LWS_TOTAL',
     'GWAS_T2D_NOM_TOTAL',
     'GWAS_T2D_VAR_TOTAL',
     ]

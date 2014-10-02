@@ -160,7 +160,8 @@
                                         cytobandURL: "//igvdata.broadinstitute.org/genomes/seq/hg19/cytoBand.txt",
                                         tracks: [
                                             new igv.T2dTrack({
-                                                url: "http://t2dgenetics.org/mysql/rest/server/trait-search",
+                                                url: "${grailsApplication.config.server.URL}trait-search",
+//                                                url: "http://t2dgenetics.org/mysql/rest/server/trait-search",
                                                 type: "t2d",
                                                 trait: "T2D",
                                                 label: "Type 2 Diabetes"
@@ -207,7 +208,7 @@
                                 }
                             }
                         });
-
+                        $('#collapseOne').collapse({hide: true})
                     </script>
 
 

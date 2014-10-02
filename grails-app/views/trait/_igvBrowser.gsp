@@ -427,7 +427,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'FastGlu',
                                     label: 'fasting glucose'
                                 })">fasting glucose</a>
@@ -435,7 +435,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: '2hrGLU_BMIAdj',
                                     label: 'two-hour glucose',
                                     order: 9981
@@ -444,7 +444,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: '2hrIns_BMIAdj',
                                     label: 'two-hour insulin',
                                     order: 9981
@@ -453,7 +453,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'FastIns',
                                     label: 'fasting insulin',
                                     order: 9997
@@ -462,7 +462,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'ProIns',
                                     label: 'fasting proinsulin',
                                     order: 9982
@@ -470,7 +470,7 @@ body {
                             </li>                            <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'HbA1c',
                                     label: 'HBA1C',
                                     order: 9996
@@ -479,7 +479,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'HOMAIR',
                                     label: 'HOMA-IR',
                                     order: 9995
@@ -488,7 +488,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'HOMAB',
                                     label: 'HOMA-B',
                                     order: 9994
@@ -497,7 +497,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'BMI',
                                     label: 'BMI',
                                     order: 9993
@@ -506,7 +506,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'WAIST_CIRCUMFRENCE',
                                     label: 'waist circumference',
                                     order: 9992
@@ -515,7 +515,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'HIP_CIRCUMFRENCE',
                                     label: 'hip circumference',
                                     order: 9991
@@ -524,7 +524,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'WHR',
                                     label: 'waist-hip ratio',
                                     order: 9990
@@ -533,7 +533,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'Height',
                                     label: 'height',
                                     order: 9990
@@ -542,7 +542,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'HDL',
                                     label: 'HDL',
                                     order: 9989
@@ -551,7 +551,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'LDL',
                                     label: 'LDL',
                                     order: 9988
@@ -560,7 +560,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'TG',
                                     label: 'triglycerides',
                                     order: 9987
@@ -569,7 +569,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'CAD',
                                     label: 'coronary artery disease',
                                     order: 9978
@@ -578,7 +578,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'CKD',
                                     label: 'coronary kidney disease',
                                     order: 9977
@@ -587,7 +587,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'eGFRcrea',
                                     label: 'eGFR-creat (serum creatinine)',
                                     order: 9976
@@ -596,7 +596,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'eGFRcrea',
                                     label: 'eGFR-creat (serum creatinine)',
                                     order: 9976
@@ -605,7 +605,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'eGFRcys',
                                     label: 'eGFR-cys (serum cystatin C)',
                                     order: 9975
@@ -614,7 +614,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'MA',
                                     label: 'microalbuminuria',
                                     order: 9974
@@ -623,7 +623,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'UACR',
                                     label: 'urinary albumin-to-creatinine ratio',
                                     order: 9973
@@ -632,7 +632,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'SCZ',
                                     label: 'schizophrenia',
                                     order: 9972
@@ -641,7 +641,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'MDD',
                                     label: 'major depressive disorder',
                                     order: 9971
@@ -650,7 +650,7 @@ body {
                                 <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'BIP',
                                     label: 'bipolar disorder',
                                     order: 9972
@@ -659,7 +659,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'HDL',
                                     label: 'HDL cholesterol',
                                     order: 9980
@@ -668,7 +668,7 @@ body {
                             <li>
                                 <a onclick="igv.browser.loadTrack({
                                     type: 't2d',
-                                    url: 'http://t2dgenetics.org/mysql/rest/server/trait-search',
+                                    url: '${grailsApplication.config.server.URL}trait-search',
                                     trait: 'LDL',
                                     label: 'LDL cholesterol',
                                     order: 9979
