@@ -159,13 +159,38 @@
                                         fastaURL: "//igvdata.broadinstitute.org/genomes/seq/hg19/hg19.fasta",
                                         cytobandURL: "//igvdata.broadinstitute.org/genomes/seq/hg19/cytoBand.txt",
                                         tracks: [
+                                            %{--new igv.T2dTrack({--}%
+                                                %{--url: "${grailsApplication.config.server.URL}trait-search",--}%
+%{--//                                                url: "http://t2dgenetics.org/mysql/rest/server/trait-search",--}%
+                                                %{--type: "t2d",--}%
+                                                %{--trait: "T2D",--}%
+                                                %{--label: "Type 2 Diabetes"--}%
+                                            %{--}),--}%
                                             new igv.T2dTrack({
                                                 url: "${grailsApplication.config.server.URL}trait-search",
-//                                                url: "http://t2dgenetics.org/mysql/rest/server/trait-search",
                                                 type: "t2d",
                                                 trait: "T2D",
-                                                label: "Type 2 Diabetes"
+                                                label: "Type 2 Diabetes",
+                                                pvalue: "PVALUE"
+
                                             }),
+                                            new igv.T2dTrack({
+                                                url: "${grailsApplication.config.server.URL}variant-search",
+                                                trait: "T2D",
+                                                label: "Exome Chip",
+                                                pvalue: "EXOME_T2D_P_value"
+                                            }),
+                                            new igv.T2dTrack({
+                                                url: "${grailsApplication.config.server.URL}variant-search",
+                                                trait: "T2D",
+                                                label: "Exome Sequencing",
+                                                pvalue: "_13k_T2D_P_EMMAX_FE_IV"
+                                            }),
+
+
+
+
+
                                             new igv.WIGTrack({
                                                 url: "//www.broadinstitute.org/igvdata/t2d/recomb_decode.bedgraph",
                                                 label: "Recombination rate",
