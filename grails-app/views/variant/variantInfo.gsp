@@ -56,10 +56,10 @@
                 <g:render template="variantPageHeader"/>
 
                 <div class="accordion" id="accordionVariant">
-
                     <div class="accordion-group">
                         <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionVariant"
+                            <a class="accordion-toggle  collapsed" data-toggle="collapse"
+                               data-parent="#accordionVariant"
                                href="#collapseVariantAssociationStatistics">
                                 <h2><strong>Is <b><span id="variantTitleInAssociationStatistics"></span>
                                 </b> associated with T2D or related traits?</strong></h2>
@@ -73,25 +73,30 @@
                         </div>
                     </div>
 
-                <div class="accordion-group">
-                    <div class="accordion-heading">
-                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionVariant"
-                           href="#collapseDiseaseRisk">
-                            <h2><strong>How does carrier status effect disease risk?</strong></h2>
-                        </a>
-                    </div>
+                <div class="separator"></div>
 
-                    <div id="collapseDiseaseRisk" class="accordion-body collapse">
-                        <div class="accordion-inner">
-                            <g:render template="diseaseRisk"/>
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle  collapsed" data-toggle="collapse"
+                               data-parent="#accordionVariant"
+                               href="#collapseDiseaseRisk">
+                                <h2><strong>How does carrier status effect disease risk?</strong></h2>
+                            </a>
+                        </div>
+
+                        <div id="collapseDiseaseRisk" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <g:render template="diseaseRisk"/>
+                            </div>
                         </div>
                     </div>
-                </div>
 
+                <div class="separator"></div>
 
-                <div class="accordion-group">
+                    <div class="accordion-group">
                         <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionVariant"
+                            <a class="accordion-toggle  collapsed" data-toggle="collapse"
+                               data-parent="#accordionVariant"
                                href="#collapseHowCommonIsVariant">
                                 <h2><strong>How common is <span id="populationsHowCommonIs" class="parentsFont"></span>?
                                 </strong></h2>
@@ -105,10 +110,12 @@
                         </div>
                     </div>
 
+                <div class="separator"></div>
 
                     <div class="accordion-group">
                         <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionVariant"
+                            <a class="accordion-toggle  collapsed" data-toggle="collapse"
+                               data-parent="#accordionVariant"
                                href="#collapseCarrierStatusImpact">
                                 <h2><strong>How many carriers are observed in the data set?</strong></h2>
                             </a>
@@ -121,10 +128,12 @@
                         </div>
                     </div>
 
+                <div class="separator"></div>
 
                     <div class="accordion-group">
                         <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionVariant"
+                            <a class="accordion-toggle  collapsed" data-toggle="collapse"
+                               data-parent="#accordionVariant"
                                href="#collapseAffectOfVariantOnProtein">
                                 <div id="effectOfVariantOnProteinTitle"></div>
                             </a>
@@ -137,10 +146,12 @@
                         </div>
                     </div>
 
+                <div class="separator"></div>
 
                     <div class="accordion-group">
                         <div class="accordion-heading">
-                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordionVariant"
+                            <a class="accordion-toggle  collapsed" data-toggle="collapse"
+                               data-parent="#accordionVariant"
                                href="#collapseFindOutMore">
                                 <h2><strong>Find out more</strong></h2>
                             </a>

@@ -434,7 +434,7 @@ body {
 
 #main {
   padding: 40px 0 80px;
-  font-size: 14pt;
+  font-size: 12pt;
 }
 
 #footer {
@@ -485,4 +485,14 @@ div.veryImportantText {
 #variantTitleInAssociationStatistics {
     font-weight: bold;
 }
-
+.accordion-heading .accordion-toggle:before {
+    font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
+    margin-left: -30px;
+    content: "\e114";    /* adjust as needed, taken from bootstrap.css */
+    float: left;        /* adjust as needed */
+    color: grey;         /* adjust as needed */
+}
+.accordion-heading .accordion-toggle.collapsed:before {
+    /* symbol for "collapsed" panels */
+    content: "\e080";    /* adjust as needed, taken from bootstrap.css */
+}

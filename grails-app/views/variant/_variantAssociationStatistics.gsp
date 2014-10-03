@@ -22,5 +22,4 @@
 
 </p>
 
-<div class="separator"></div>
 

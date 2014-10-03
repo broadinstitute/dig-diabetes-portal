@@ -195,7 +195,12 @@ var baget = baget || {};  // encapsulating variable
             bars.transition()
                 .delay(100).duration(1400)
                 .attr("width", function(d,i){
-                    return (x( d.value)-x(internalMin))
+                    if (typeof d.value === 'undefined'){
+                        return 0;
+                    }else{
+                        return (x( d.value)-x(internalMin));
+                    }
+
                 });
 
             // get rid of any extra data in case we've done this before
@@ -248,7 +253,12 @@ var baget = baget || {};  // encapsulating variable
                 .data(data)
                 .enter().append("text")
                 .attr("x", function(d){
-                    return (x(d.value));
+                    if (typeof d.value !== 'undefined') {
+                        return (x(d.value));
+                    }else {
+                        return 0;
+                    }
+
                 })
                 .attr("y", function(d){
                     return vPosition.pos(d.barname);
@@ -261,10 +271,12 @@ var baget = baget || {};  // encapsulating variable
                     // do we format the value to the right of the bar as a percentage or an integer
                     //  one other special case: if the label is inset then don't label anything
                     if (typeof d.inset === 'undefined'){
-                        if (integerValues ===  1){
-                            return ""+(d.value);
-                        }else {
-                            return ""+(d.value).toPrecision(3)+ "%";
+                        if (typeof d.value !== 'undefined') {
+                            if (integerValues ===  1){
+                                return ""+(d.value);
+                            }else {
+                                return ""+(d.value).toPrecision(3)+ "%";
+                            }
                         }
                     }
 
@@ -275,7 +287,11 @@ var baget = baget || {};  // encapsulating variable
                 .data(data)
                 .enter().append("text")
                 .attr("x", function(d){
-                    return (x(d.value));
+                    if (typeof d.value !== 'undefined') {
+                        return (x(d.value));
+                    } else {
+                        return 0;
+                    }
                 })
                 .attr("y", function(d){
                     return vPosition.pos(d.barname);
