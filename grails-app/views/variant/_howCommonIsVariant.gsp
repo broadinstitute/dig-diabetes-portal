@@ -1,7 +1,6 @@
 
-<a name="populations"></a>
-<h2><strong>How common is <span id="populationsHowCommonIs" class="parentsFont"></span>?</strong></h2>
 
+<br/>
 
 <g:if test="${show_exseq}">
 
@@ -16,7 +15,7 @@
         <p>
             <div id="howCommonIsChart"></div>
         </p>
-
+    </div>
 
 </g:if>
 <g:else>

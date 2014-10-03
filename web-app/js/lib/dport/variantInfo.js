@@ -1,3 +1,5 @@
+var delayedHowCommonIsPresentation = {},
+    delayedCarrierStatusDiseaseRiskPresentation = {};
 function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
     var cariantRec = {
         _13k_T2D_HET_CARRIERS: 1,
@@ -139,6 +141,99 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
             }
 
         },
+        fillCarrierStatusDiseaseRisk: function (homozygCase, heterozygCase, nonCarrierCase,
+                                                homozygControl, heterozygControl, nonCarrierControl) {
+            if ((typeof homozygCase !== 'undefined')) {
+                var data3 = [
+                        { value: 1,
+                            position: 1,
+                            barname: 'Cases',
+                            barsubname: '',
+                            barsubnamelink:'http://www.google.com',
+                            inbar: '',
+                            descriptor: '(total 6253)',
+                            inset: 1 },
+                        { value:  homozygCase,
+                            position: 2,
+                            barname: ' ',
+                            barsubname: '',
+                            barsubnamelink:'http://www.google.com',
+                            inbar: '',
+                            descriptor: '',
+                            legendText: '2 copies (homozygous)'},
+                        {value: heterozygCase,
+                            position: 3,
+                            barname: '  ',
+                            barsubname: '',
+                            barsubnamelink:'http://www.google.com',
+                            inbar: '',
+                            descriptor: '',
+                            legendText: '1 copy (heterozygous)'},
+                        { value: nonCarrierCase,
+                            position: 4,
+                            barname: '   ',
+                            barsubname: '',
+                            barsubnamelink:'http://www.google.com',
+                            inbar: '',
+                            descriptor: '',
+                            legendText: '0 copies'},
+                        {  value: 1,
+                            position:  6,
+                            barname: 'Controls',
+                            barsubname: '',
+                            barsubnamelink:'http://www.google.com',
+                            inbar: '',
+                            descriptor: '(total 6498)',
+                            inset: 1 },
+                        {  value: homozygControl,
+                            position:  7,
+                            barname: '    ',
+                            barsubname: '',
+                            barsubnamelink:'http://www.google.com',
+                            inbar: '',
+                            descriptor: ''},
+                        { value: heterozygControl,
+                            position: 8,
+                            barname: '     ',
+                            barsubname: '',
+                            barsubnamelink:'http://www.google.com',
+                            inbar: '',
+                            descriptor: ''},
+                        { value: nonCarrierControl,
+                            position: 9,
+                            barname: '      ',
+                            barsubname: '',
+                            barsubnamelink:'http://www.google.com',
+                            inbar: '',
+                            descriptor: ''}
+
+                    ],
+                    roomForLabels = 20,
+                    maximumPossibleValue = (Math.max(homozygCase, heterozygCase, nonCarrierCase,homozygControl, heterozygControl, nonCarrierControl) * 1.5),
+                    labelSpacer = 10;
+
+                var margin = {top: 140, right: 20, bottom: 0, left: 0},
+                    width = 800 - margin.left - margin.right,
+                    height = 520 - margin.top - margin.bottom;
+
+                var barChart = baget.barChart()
+                    .selectionIdentifier("#carrierStatusDiseaseRiskChart")
+                    .width(width)
+                    .height(height)
+                    .margin(margin)
+                    .roomForLabels (roomForLabels)
+                    .maximumPossibleValue (7000)
+                    .labelSpacer (labelSpacer)
+                    .assignData(data3)
+                    .integerValues(1)
+                    .logXScale(1)
+                    .customBarColoring(1)
+                    .customLegend(1);
+                barChart.render();
+                return barChart;
+            }
+
+        },
 
         showEthnicityPercentageWithBarChart: function (variant) {
             var retVal = "";
@@ -159,7 +254,81 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
                 ethnicityPercentages[3],
                 ethnicityPercentages[5]
             );
-        }
+        },
+
+        showCarrierStatusDiseaseRisk: function (variant) {
+            var heta=1,hetu=1,totalCases=1,
+                homa=1,homu=1,totalControls=1;
+            try {
+                heta = parseFloat(variant["_13k_T2D_HETA"]);
+                hetu = parseFloat(variant["_13k_T2D_HETU"]);
+                homa = parseFloat(variant["_13k_T2D_HOMA"]);
+                homu = parseFloat(variant["_13k_T2D_HOMU"]);
+//                totalCases = parseFloat(variant["_13k_T2D_OBSA"]);
+//                totalControls = parseFloat(variant["_13k_T2D_OBSU"]);
+                totalCases = 5949;
+                totalControls = 6279;
+            }catch(e){}
+
+             return privateMethods.fillCarrierStatusDiseaseRisk(homa,heta,totalCases,homu,hetu,totalControls);
+        },
+        variantGenerateProteinsChooserTitle:  function (variant, title) {
+            var retVal = "";
+            retVal += "<h2><strong>What effect does " +title+ " have on the encoded protein?</strong></h2>";
+            return retVal;
+        },
+        variantGenerateProteinsChooser:  function (variant, title) {
+            var retVal = "";
+            if (variant.MOST_DEL_SCORE && variant.MOST_DEL_SCORE < 4) {
+                retVal += "<p>Choose one transcript below to see the predicted effect on the protein:</p>";
+                var allKeys = Object.keys(variant._13k_T2D_TRANSCRIPT_ANNOT);
+                for ( var  i=0 ; i<allKeys.length ; i++ ) {
+                    var checked = (i==0) ? ' checked ' : '';
+                    var annotation =variant._13k_T2D_TRANSCRIPT_ANNOT[allKeys[i]];
+                    retVal += ("<div class=\"radio-inline\">\n" +
+                        "<label>\n"+
+                        "<input "+checked+" class='transcript-radio' type='radio' name='transcript_check' id='transcript-" +allKeys[i] +
+                        "' value='" +allKeys[i]+ "' onclick='UTILS.variantInfoRadioChange(" +
+                        "\""+annotation['PolyPhen_SCORE']+ "\"," +
+                        "\""+annotation['SIFT_SCORE']+ "\"," +
+                        "\""+annotation['Condel_SCORE']+ "\"," +
+                        "\""+annotation['MOST_DEL_SCORE']+ "\"," +
+                        "\""+annotation['_13k_ANNOT_29_mammals_omega']+ "\"," +
+                        "\""+annotation['Protein_position']+ "\"," +
+                        "\""+annotation['Codons']+ "\"," +
+                        "\""+annotation['Protein_change']+ "\"," +
+                        "\""+annotation['PolyPhen_PRED']+ "\"," +
+                        "\""+annotation['Consequence']+ "\"," +
+                        "\""+annotation['Condel_PRED']+ "\"," +
+                        "\""+annotation['SIFT_PRED']+ "\"" +
+                        ")' >\n"+
+                        allKeys[i]+"\n"+
+                        "</label>\n"+
+                        "</div>\n");
+                }
+                if (allKeys.length > 0){
+                    var annotation =variant._13k_T2D_TRANSCRIPT_ANNOT[allKeys[0]];
+                    UTILS.variantInfoRadioChange(annotation['PolyPhen_SCORE'],
+                        annotation['SIFT_SCORE'],
+                        annotation['Condel_SCORE'],
+                        annotation['MOST_DEL_SCORE'],
+                        annotation['_13k_ANNOT_29_mammals_omega'],
+                        annotation['Protein_position'],
+                        annotation['Codons'],
+                        annotation['Protein_change'],
+                        annotation['PolyPhen_PRED'],
+                        annotation['Consequence'],
+                        annotation['Condel_PRED'],
+                        annotation['SIFT_PRED'] );
+
+                }
+
+
+            }
+            return retVal;
+        },
+
+
 
     }
 
@@ -219,15 +388,18 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
     $('#biologicalImpactOfMysteryVariant').append(variantTitle);
 //    $('#howCommonInExomeSequencing').append(privateMethods.showPercentageAcrossEthnicities(variant));
     privateMethods.showEthnicityPercentageWithBarChart(variant);
-    $('#howCommonInHeterozygousCarriers').append(privateMethods.showPercentagesAcrossHeterozygousCarriers(variant, variantTitle));
-    $('#howCommonInHomozygousCarriers').append(privateMethods.showPercentagesAcrossHomozygousCarriers(variant, variantTitle));
-
+   // delayedHowCommonIsPresentation
+//    $('#howCommonInHeterozygousCarriers').append(privateMethods.showPercentagesAcrossHeterozygousCarriers(variant, variantTitle));
+//    $('#howCommonInHomozygousCarriers').append(privateMethods.showPercentagesAcrossHomozygousCarriers(variant, variantTitle));
+    privateMethods.showCarrierStatusDiseaseRisk(variant);
 
  //   $('#eurocentricVariantCharacterization').append(privateMethods.eurocentricVariantCharacterization(variant, variantTitle));
     var weHaveEnoughDataToCharacterize = ((variant["_13k_T2D_TRANSCRIPT_ANNOT"]) && (variant["_13k_T2D_AA_MAF"]) && (variant["_13k_T2D_AA_MAF"]));
     UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToCharacterize, $('#exomeDataExists'), $('#exomeDataDoesNotExist'));
     $('#sigmaVariantCharacterization').append(UTILS.sigmaVariantCharacterization(variant, variantTitle));
-    $('#effectOfVariantOnProtein').append(UTILS.variantGenerateProteinsChooser(variant, variantTitle));
+
+    $('#effectOfVariantOnProteinTitle').append(privateMethods.variantGenerateProteinsChooserTitle(variant, variantTitle));
+    $('#effectOfVariantOnProtein').append(privateMethods.variantGenerateProteinsChooser(variant, variantTitle));
     UTILS.verifyThatDisplayIsWarranted(variant["_13k_T2D_TRANSCRIPT_ANNOT"], $('#variationInfoEncodedProtein'), $('#puntOnNoncodingVariant'));
 
 }

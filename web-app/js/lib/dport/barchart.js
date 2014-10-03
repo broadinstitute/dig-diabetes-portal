@@ -44,6 +44,7 @@ var baget = baget || {};  // encapsulating variable
             integerValues = 0,// by default we show percentages, set value to one to show integers
             logXScale = 0,// by default go with a linear x axis.  Set value to 1 for log
             customBarColoring = 0,// by default don't color the bars differently.  Otherwise each one gets its own class
+            customLegend = 0,// by default skip the legend.  Note that this legend (and legends in general) are tough to implement in a general form
             selection;   // no default because we can't make a plot without a place to put it
 
         // private variables
@@ -189,7 +190,6 @@ var baget = baget || {};  // encapsulating variable
                     return (0)
                 })
                 .attr("height", vPosition.barHeight);
-            //           .attr("height", vPosition.barHeighty.rangeBand()/4);
 
             // perform the animation
             bars.transition()
@@ -286,6 +286,80 @@ var baget = baget || {};  // encapsulating variable
                 .attr('class', 'valueQualifiers')
                 .text(function(d,i){return ""+d.descriptor;})
 
+            if (customLegend==1) {
+                // add legend
+                var legendPos = 565,
+                    legendTextYPosition = 15,
+                    spaceBetweenLegendEntries = 15,
+                    spaceBetweenLegendColorAndLegendText = 30,
+                    legendHolderBoxWidth = 150,
+                    legendHolderBoxHeight = 80,
+                    legendTitleYPositioning = 18;
+
+
+
+                var legend = chart.append("g")
+                    .attr("class", "legendHolder")
+                    .attr("x", margin.left+legendPos)
+                    .attr("y", 0)
+                    .attr("height", 100)
+                    .attr("width", 100)
+                    .attr('transform', 'translate(-20,50)');
+
+
+
+                legend.selectAll('rect')
+                    .data([0])
+                    .enter()
+                    .append("rect")
+                    .attr("x", margin.left+legendPos )
+                    .attr("y", 0)
+                    .attr("width", legendHolderBoxWidth)
+                    .attr("height", legendHolderBoxHeight)
+                    .attr("class", "legendHolder");
+
+                legend.selectAll('text')
+                    .data([0])
+                    .enter()
+                    .append("text")
+                    .attr("class","legendTitle")
+                    .attr("x",  margin.left+legendPos+(legendHolderBoxWidth/2))
+                    .attr("y", legendTitleYPositioning)
+                    .attr("class","legendTitle")
+                    .text('Legend');
+
+
+                legend.selectAll('rect')
+                    .data(data)
+                    .enter()
+                    .append("rect")
+                    .attr("x", margin.left+legendPos+10 )
+                    .attr("y", function (d, i) {
+                        return i * spaceBetweenLegendEntries + legendTextYPosition;
+                    })
+                    .attr("width", 10)
+                    .attr("height", 10)
+                    .attr("class", function (d, i) {
+                        return 'legendStyling' + i;
+                    })
+
+                legend.selectAll('text')
+                    .data(data)
+                    .enter()
+                    .append("text")
+                    .attr("x",  margin.left+legendPos+spaceBetweenLegendColorAndLegendText)
+                    .attr("y", function (d, i) {
+                        return i * spaceBetweenLegendEntries + legendTextYPosition+9;
+                    })
+                    .attr("class","legendStyling")
+                    .text(function (d) {
+                        if (typeof d.legendText !== 'undefined' ){
+                            return d.legendText;
+                        } else {
+                            return '';
+                        }
+                    });
+            }
 
             var elem = chart.selectAll("text.clickableQuestionMark")
                 .data(data);
@@ -382,6 +456,12 @@ var baget = baget || {};  // encapsulating variable
         instance.customBarColoring = function (x) {
             if (!arguments.length) return customBarColoring;
             customBarColoring = x;
+            return instance;
+        };
+
+        instance.customLegend = function (x) {
+            if (!arguments.length) return customLegend;
+            customLegend = x;
             return instance;
         };
 

@@ -1,6 +1,6 @@
 
-<a name="populations"></a>
-<h2><strong>How does carrier status affect disease risk?</strong></h2>
+
+
 
 
 <g:if test="${show_exseq}">
@@ -8,15 +8,9 @@
     <div id="exomeDataExists2" style="display: block">
 
 
-        <p>Heterozygous carriers</p>
-        <ul>
-        <span id="howCommonInHeterozygousCarriers"></span>
-        </ul>
-
-        <p>Homozygous carriers</p>
-        <ul>
-        <span id="howCommonInHomozygousCarriers"></span>
-        </ul>
+         <p>
+            <div id="carrierStatusDiseaseRiskChart"></div>
+        </p>
 
     </div>
 

@@ -12,6 +12,7 @@ modules = {
         resource url: 'js/lib/dport/barchart.js'
     }
     variantInfo {
+        resource url: 'css/dport/barchart.css'
         resource url: 'css/dport/variant.css'
 
         resource url: 'js/lib/dport/variantInfo.js'

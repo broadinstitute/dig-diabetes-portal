@@ -1,4 +1,3 @@
-<h2>Find out more</h2>
 
 <div class="linkout">
     <a target="_blank" href="http://www.gtexportal.org/home/">GTEx</a>

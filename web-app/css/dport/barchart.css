@@ -57,9 +57,54 @@ rect.h-bar {
     stroke: white;
     fill: #052090;
 }
+.legend{
+    border: 1px solid black;
+}
+.legendTitle{
+    font-family: 'Lato';
+    font-weight: 300;
+    font-size: 12pt;
+    font-style: italic;
+    text-anchor: middle;
+}
+rect.legendHolder  {
+    fill:white;
+    stroke:black;
+    opacity:0.8;
+}
+.legendStyling {
+    font-size: 9pt;
+ }
+.legendStyling0 {
+
+    display: none;
+}
+.legendStyling1 {
+    font-size: 8pt;
+    fill:#955a9e;
+}
+.legendStyling2 {
+    font-size: 8pt;
+    fill: #a83e49;
+}
+.legendStyling3 {
+    font-size: 8pt;
+    fill: #f5b338;
+}
+.legendStyling4 {
+    display: none;
+}
+.legendStyling5 {
+    display: none;
+}
+.legendStyling6 {
+    display: none;
+}
+.legendStyling7 {
+    display: none;
+}
 rect.barstyling0 {
     display: none;
-    fill:#955a9e;
 }
 rect.barstyling1 {
     fill:#955a9e;
@@ -83,6 +128,7 @@ rect.barstyling6 {
 rect.barstyling7 {
     fill: #f5b338;
 }
+
 #xaxis text text {
     font-size: 12px;
 }
@@ -111,13 +157,9 @@ div.significantDifferenceText {
     margin: 0 0 1px;
 }
 .standardFont  {
-    /*font-family: 'Lato';*/
-    /*font-weight: normal;*/
     font-size: 14pt;
 }
 .standardEmphasisFont  {
-    /*font-family: 'Lato';*/
-    /*font-weight: bold;*/
     font-size: 14pt;
 }
 .slimDescription {

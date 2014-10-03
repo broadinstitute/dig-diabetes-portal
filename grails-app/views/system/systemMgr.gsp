@@ -38,7 +38,7 @@
                                 <div class="radio">
                                     <label>
                                         <input id="bigQueryRestServer" type="radio" name="datatype" value="bigquery" />
-                                        Big Query
+                                        New REST server (http://69.173.71.178:8080/dev/rest/server/)
                                     </label>
                                 </div>
 

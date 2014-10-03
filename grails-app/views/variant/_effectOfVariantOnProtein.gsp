@@ -1,9 +1,6 @@
 
-<a name="biology"></a>
 
 <div id="effectOfVariantOnProtein"></div>
-
-
 
 
 <div id="variationInfoEncodedProtein" style="display:block;">

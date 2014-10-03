@@ -170,8 +170,11 @@ class RestServerService {
      */
     public void initialize (){
         MYSQL_REST_SERVER = grailsApplication.config.t2dRestServer.base+grailsApplication.config.t2dRestServer.mysql+grailsApplication.config.t2dRestServer.path
-        BIGQUERY_REST_SERVER = grailsApplication.config.t2dRestServer.base+grailsApplication.config.t2dRestServer.bigquery+grailsApplication.config.t2dRestServer.path
-        BASE_URL =  MYSQL_REST_SERVER
+        BIGQUERY_REST_SERVER = grailsApplication.config.server.URL
+        //server.URL
+
+       // BASE_URL =  MYSQL_REST_SERVER
+        BASE_URL =  grailsApplication.config.server.URL;
         log.info ">>>Initializing rest server=${BASE_URL}"
         if (grailsApplication.config.site.version == 't2dgenes') {
             VARIANT_SEARCH_COLUMNS += EXSEQ_VARIANT_SEARCH_COLUMNS + EXCHP_VARIANT_SEARCH_COLUMNS + GWAS_VARIANT_SEARCH_COLUMNS

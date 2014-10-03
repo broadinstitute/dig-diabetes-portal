@@ -69,9 +69,6 @@
 
                 <h1>
                     <em><%=geneName%></em>
-                    <a class="page-nav-link" href="#associations">Associations</a>
-                    <a class="page-nav-link" href="#populations">Populations</a>
-                    <a class="page-nav-link" href="#biology">Biology</a>
                 </h1>
 
 
@@ -145,10 +142,11 @@
                             </div>
                         </div>
                     </div>
+
                     <script>
                         $('#accordion2').on('show.bs.collapse', function (e) {
                             if (e.target.id === "collapseIgv") {
-                           //     $(document).ready(function () {
+
                                 if (!igv.browser) {
                                     var div, options, browser;
 
@@ -159,13 +157,6 @@
                                         fastaURL: "//igvdata.broadinstitute.org/genomes/seq/hg19/hg19.fasta",
                                         cytobandURL: "//igvdata.broadinstitute.org/genomes/seq/hg19/cytoBand.txt",
                                         tracks: [
-                                            %{--new igv.T2dTrack({--}%
-                                                %{--url: "${grailsApplication.config.server.URL}trait-search",--}%
-%{--//                                                url: "http://t2dgenetics.org/mysql/rest/server/trait-search",--}%
-                                                %{--type: "t2d",--}%
-                                                %{--trait: "T2D",--}%
-                                                %{--label: "Type 2 Diabetes"--}%
-                                            %{--}),--}%
                                             new igv.T2dTrack({
                                                 url: "${grailsApplication.config.server.URL}trait-search",
                                                 type: "t2d",
