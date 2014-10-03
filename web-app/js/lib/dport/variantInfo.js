@@ -1,5 +1,6 @@
 var delayedHowCommonIsPresentation = {},
-    delayedCarrierStatusDiseaseRiskPresentation = {};
+    delayedCarrierStatusDiseaseRiskPresentation = {},
+    delayedBurdenTestPresentation = {};
 function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
     var cariantRec = {
         _13k_T2D_HET_CARRIERS: 1,
@@ -264,10 +265,10 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
                 hetu = parseFloat(variant["_13k_T2D_HETU"]);
                 homa = parseFloat(variant["_13k_T2D_HOMA"]);
                 homu = parseFloat(variant["_13k_T2D_HOMU"]);
-//                totalCases = parseFloat(variant["_13k_T2D_OBSA"]);
-//                totalControls = parseFloat(variant["_13k_T2D_OBSU"]);
-                totalCases = 5949;
-                totalControls = 6279;
+                totalCases = parseFloat(variant["_13k_T2D_OBSA"]);
+                totalControls = parseFloat(variant["_13k_T2D_OBSU"]);
+              //  totalCases = 5949;
+              //  totalControls = 6279;
             }catch(e){}
 
              return privateMethods.fillCarrierStatusDiseaseRisk(homa,heta,totalCases,homu,hetu,totalControls);
@@ -327,7 +328,113 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
             }
             return retVal;
         },
+        fillUpBarChart: function  (peopleWithDiseaseNumeratorString,peopleWithDiseaseDenominatorString,peopleWithoutDiseaseNumeratorString,peopleWithoutDiseaseDenominatorString) {
+        var peopleWithDiseaseDenominator,
+            peopleWithoutDiseaseDenominator,
+            peopleWithDiseaseNumerator,
+            peopleWithoutDiseaseNumerator,
+            calculatedPercentWithDisease,
+            calculatedPercentWithoutDisease,
+            proportionWithDiseaseDescriptiveString,
+            proportionWithoutDiseaseDescriptiveString;
+        if ((typeof peopleWithDiseaseDenominatorString !== 'undefined') &&
+            (typeof peopleWithoutDiseaseDenominatorString !== 'undefined')) {
+            peopleWithDiseaseDenominator = parseInt(peopleWithDiseaseDenominatorString);
+            peopleWithoutDiseaseDenominator = parseInt(peopleWithoutDiseaseDenominatorString);
+            peopleWithDiseaseNumerator = parseInt(peopleWithDiseaseNumeratorString);
+            peopleWithoutDiseaseNumerator = parseInt(peopleWithoutDiseaseNumeratorString);
+            if (( peopleWithDiseaseDenominator !== 0 ) &&
+                ( peopleWithoutDiseaseDenominator !== 0 )) {
+                calculatedPercentWithDisease = (100 * (peopleWithDiseaseNumerator / peopleWithDiseaseDenominator));
+                calculatedPercentWithoutDisease = (100 * (peopleWithoutDiseaseNumerator / peopleWithoutDiseaseDenominator));
+                proportionWithDiseaseDescriptiveString = "(" + peopleWithDiseaseNumerator + " out of " + peopleWithDiseaseDenominator + ")";
+                proportionWithoutDiseaseDescriptiveString = "(" + peopleWithoutDiseaseNumerator + " out of " + peopleWithoutDiseaseDenominator + ")";
+                var dataForBarChart = [
+                        { value: calculatedPercentWithDisease,
+                            barname: 'have T2D',
+                            barsubname: '(cases)',
+                            barsubnamelink: 'http://www.google.com',
+                            inbar: '',
+                            descriptor: proportionWithDiseaseDescriptiveString},
+                        {value: calculatedPercentWithoutDisease,
+                            barname: 'do not have T2D',
+                            barsubname: '(controls)',
+                            barsubnamelink: 'http://www.google.com',
+                            inbar: '',
+                            descriptor: proportionWithoutDiseaseDescriptiveString}
+                    ],
+                    roomForLabels = 120,
+                    maximumPossibleValue = (Math.max(calculatedPercentWithDisease, calculatedPercentWithoutDisease) * 1.5),
+                    labelSpacer = 10;
 
+                var margin = {top: 0, right: 20, bottom: 0, left: 70},
+                    width = 800 - margin.left - margin.right,
+                    height = 150 - margin.top - margin.bottom;
+
+
+                var barChart = baget.barChart()
+                    .selectionIdentifier("#diseaseRiskChart")
+                    .width(width)
+                    .height(height)
+                    .margin(margin)
+                    .roomForLabels(roomForLabels)
+                    .maximumPossibleValue(maximumPossibleValue)
+                    .labelSpacer(labelSpacer)
+                    .assignData(dataForBarChart);
+                barChart.render();
+                return barChart;
+            }
+        }
+        },
+
+        fillDiseaseRiskBurdenTest: function  (variant,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl) {
+            var hetu = 0,
+                heta = 0,
+                homa = 0,
+                homu = 0,
+                totalUnaffected = 0,
+                totalAffected = 0,
+                pValue = 0;
+            heta = parseFloat(variant["_13k_T2D_HETA"]);
+            hetu = parseFloat(variant["_13k_T2D_HETU"]);
+            homa = parseFloat(variant["_13k_T2D_HOMA"]);
+            homu = parseFloat(variant["_13k_T2D_HOMU"]);
+            totalUnaffected = parseFloat(variant["_13k_T2D_OBSU"]);
+            totalAffected = parseFloat(variant["_13k_T2D_OBSA"]);
+            pValue  = parseFloat(variant["_13k_T2D_P_EMMAX_FE_IV"]);
+
+           // $('#bhtLossOfFunctionVariants').append(numberOfVariants);
+
+            // variables for bar chart
+            var numeratorUnaffected,
+                denominatorUnaffected,
+                numeratorAffected,
+                denominatorAffected;
+            if ((totalUnaffected) && (totalAffected)) {
+                numeratorUnaffected = hetu + (2 * homu);
+                numeratorAffected = heta + (2 * homa);
+                denominatorUnaffected =  totalUnaffected;
+                denominatorAffected =  totalAffected;
+                delayedBurdenTestPresentation = {functionToRun: privateMethods.fillUpBarChart,
+                    barchartPtr: {},
+                    launch: function () {
+                        barchartPtr = privateMethods.fillUpBarChart(numeratorUnaffected, denominatorUnaffected, numeratorAffected, denominatorAffected);
+                        return barchartPtr;
+                    },
+                    removeBarchart: function () {
+                        if ((typeof barchartPtr !== 'undefined') &&
+                            (typeof barchartPtr.clear !== 'undefined')) {
+                            barchartPtr.clear();
+                        }
+                    }
+                };
+            }
+            if (pValue  > 0)  {
+                $('#drMetaBurdenForDiabetes').append("p="+
+                    (pValue.toPrecision(3)));
+            }
+
+        }
 
 
     }
@@ -392,6 +499,7 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
 //    $('#howCommonInHeterozygousCarriers').append(privateMethods.showPercentagesAcrossHeterozygousCarriers(variant, variantTitle));
 //    $('#howCommonInHomozygousCarriers').append(privateMethods.showPercentagesAcrossHomozygousCarriers(variant, variantTitle));
     privateMethods.showCarrierStatusDiseaseRisk(variant);
+    privateMethods.fillDiseaseRiskBurdenTest(variant);
 
  //   $('#eurocentricVariantCharacterization').append(privateMethods.eurocentricVariantCharacterization(variant, variantTitle));
     var weHaveEnoughDataToCharacterize = ((variant["_13k_T2D_TRANSCRIPT_ANNOT"]) && (variant["_13k_T2D_AA_MAF"]) && (variant["_13k_T2D_AA_MAF"]));

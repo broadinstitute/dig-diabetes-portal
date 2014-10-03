@@ -24,7 +24,7 @@
                     <div class="significantDifference">
                         <div class="significantDifferenceText">
                             <p class="slimDescription">significant difference</p>
-                            <p  id="bhtMetaBurdenForDiabetes" class="slimDescription"><span class="glyphicon glyphicon-question-sign"></span><i class=""></i></p>
+                            <p  id="bhtMetaBurdenForDiabetes" class="slimDescription"><i class=""></i></p>
                             %{--TODO: uncomment the following line when we have some real data--}%
                             %{--<p class="slimDescription">OR=1.4</p>--}%
                         </div>

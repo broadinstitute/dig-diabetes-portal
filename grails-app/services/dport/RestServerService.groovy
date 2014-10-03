@@ -91,6 +91,8 @@ class RestServerService {
     '_13k_T2D_HOM_CARRIERS',
     '_13k_T2D_HOMA',
     '_13k_T2D_HOMU',
+    '_13k_T2D_OBSA',
+    '_13k_T2D_OBSU',
     ]
 
     static List <String> SIGMA_VARIANT_COLUMNS = SIGMA_VARIANT_SEARCH_COLUMNS + [

@@ -144,7 +144,7 @@
                     </div>
 
                     <script>
-                        $('#accordion2').on('show.bs.collapse', function (e) {
+                        $('#accordion2').on('shown.bs.collapse', function (e) {
                             if (e.target.id === "collapseIgv") {
 
                                 if (!igv.browser) {

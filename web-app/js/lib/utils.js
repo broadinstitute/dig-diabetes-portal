@@ -506,7 +506,30 @@ var UTILS = {
         }
         return retVal;
     },
-    determineHighestFrequencyEthnicity: function (variant) {
+    geneFieldOrZero: function (geneInfo,filedNumber,defaultValue) {
+    var retval = 0;
+    var fieldName  = revG(filedNumber);
+    if ((geneInfo)  && (fieldName.length>0)) {
+        var fieldBreakdown = fieldName.split("."); // step into complex fields
+        retval =   geneInfo[fieldBreakdown[0]];
+        if ((retval)&&(fieldBreakdown.length>1)){
+            for (  var i = 1 ; i < fieldBreakdown.length ; i++ ) {
+                var nextLevelSpec =  fieldBreakdown[i];
+                retval =  retval[nextLevelSpec];
+            }
+        }
+    }
+    if (!retval) {    // deal with a null.  Use a zero unless we are given an explicit alternative
+        if (typeof defaultValue!=="undefined"){
+            retval = defaultValue;
+        }  else {
+            retval=0;
+        }
+    }
+    return retval;
+},
+
+determineHighestFrequencyEthnicity: function (variant) {
         var highestValue = 0;
         var winningEthnicity = 0;
         var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
