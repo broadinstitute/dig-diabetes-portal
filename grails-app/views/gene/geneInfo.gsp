@@ -5,6 +5,10 @@
     <r:require modules="core"/>
     <r:require modules="geneInfo"/>
     <r:layoutResources/>
+    <%@ page import="dport.RestServerService" %>
+    %{--<%--}%
+    %{--RestServerService   restServerService = grailsApplication.classLoader.loadClass('dport.RestServerService').newInstance()--}%
+    %{--%>--}%
 
     <link type="application/font-woff">
     <link type="application/vnd.ms-fontobject">
@@ -29,7 +33,7 @@
     <link href="http://www.broadinstitute.org/igvdata/t2d/igv.css" type="text/css" rel="stylesheet">
     %{--<g:javascript base="http://iwww.broadinstitute.org/" src="/igvdata/t2d/igv-all.js" />--}%
     <g:javascript base="http://www.broadinstitute.org/" src="/igvdata/t2d/igv-all.min.js"/>
-
+    <g:set var="restServer" bean="restServerService"/>
 </head>
 
 <body>
@@ -133,7 +137,7 @@
         <div class="accordion-heading">
             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"
                href="#collapseIgv">
-                <h2><strong>Integrative Genomics Viewer</strong></h2>
+                <h2><strong>Explore Significant SNPs with IGV</strong></h2>
             </a>
         </div>
 
@@ -159,7 +163,7 @@
                         cytobandURL: "//igvdata.broadinstitute.org/genomes/seq/hg19/cytoBand.txt",
                         tracks: [
                             new igv.T2dTrack({
-                                url: "${grailsApplication.config.server.URL}trait-search",
+                                url: "${restServer.currentRestServer()}trait-search",
                                 type: "t2d",
                                 trait: "T2D",
                                 label: "Type 2 Diabetes",
@@ -167,13 +171,13 @@
 
                             }),
                             new igv.T2dTrack({
-                                url: "${grailsApplication.config.server.URL}variant-search",
+                                url: "${restServer.currentRestServer()}variant-search",
                                 trait: "T2D",
                                 label: "Exome Chip",
                                 pvalue: "EXCHP_T2D_P_value"
                             }),
                             new igv.T2dTrack({
-                                url: "${grailsApplication.config.server.URL}variant-search",
+                                url: "${restServer.currentRestServer()}variant-search",
                                 trait: "T2D",
                                 label: "Exome Sequencing",
                                 pvalue: "_13k_T2D_P_EMMAX_FE_IV"
@@ -258,7 +262,7 @@
             </div>
         </div>
     </div>
-</div>
+
 
 <div class="separator"></div>
 

@@ -496,3 +496,9 @@ div.veryImportantText {
     /* symbol for "collapsed" panels */
     content: "\e080";    /* adjust as needed, taken from bootstrap.css */
 }
+
+.accordion div.separator {
+    height: 1px;
+    border-top: 1px solid #aaa;
+    margin: 20px 0;
+}

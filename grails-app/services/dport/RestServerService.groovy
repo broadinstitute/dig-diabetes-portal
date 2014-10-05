@@ -16,6 +16,10 @@ class RestServerService {
 
     private  String MYSQL_REST_SERVER = ""
     private  String BIGQUERY_REST_SERVER = ""
+    private  String TEST_REST_SERVER = ""
+    private  String DEV_REST_SERVER = ""
+    private  String QA_REST_SERVER = ""
+    private  String PROD_REST_SERVER = ""
     private  String BASE_URL = ""
     private  String GENE_INFO_URL = "gene-info"
     private  String VARIANT_INFO_URL = "variant-info"
@@ -173,6 +177,11 @@ class RestServerService {
     public void initialize (){
         MYSQL_REST_SERVER = grailsApplication.config.t2dRestServer.base+grailsApplication.config.t2dRestServer.mysql+grailsApplication.config.t2dRestServer.path
         BIGQUERY_REST_SERVER = grailsApplication.config.server.URL
+        TEST_REST_SERVER = grailsApplication.config.t2dTestRestServer.base+grailsApplication.config.t2dTestRestServer.name+grailsApplication.config.t2dTestRestServer.path
+        DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base+grailsApplication.config.t2dDevRestServer.name+grailsApplication.config.t2dDevRestServer.path
+        QA_REST_SERVER = grailsApplication.config.t2dQaRestServer.base+grailsApplication.config.t2dQaRestServer.name+grailsApplication.config.t2dQaRestServer.path
+        PROD_REST_SERVER = grailsApplication.config.t2dProdRestServer.base+grailsApplication.config.t2dProdRestServer.name+grailsApplication.config.t2dProdRestServer.path
+
         //server.URL
 
        // BASE_URL =  MYSQL_REST_SERVER
@@ -209,21 +218,41 @@ class RestServerService {
         pickADifferentRestServer (BIGQUERY_REST_SERVER)
     }
 
+    public void  goWithTheTestServer () {
+        pickADifferentRestServer (TEST_REST_SERVER)
+    }
+
+    public void  goWithTheDevServer () {
+        pickADifferentRestServer (DEV_REST_SERVER)
+    }
+
+    public void  goWithTheQaServer () {
+        pickADifferentRestServer (QA_REST_SERVER)
+    }
+
+    public void  goWithTheProdServer () {
+        pickADifferentRestServer (PROD_REST_SERVER)
+    }
+
+
+    public String  currentRestServer()  {
+        return   BASE_URL;
+    }
+
     public String  whatIsMyCurrentServer () {
         String returnValue
-        if (BASE_URL == "") {
+        String currentBaseUrl =  currentRestServer ()
+        if (currentBaseUrl == "") {
             returnValue = 'uninitialized'
-        }  else if (MYSQL_REST_SERVER  == BASE_URL) {
+        }  else if (MYSQL_REST_SERVER  == currentBaseUrl) {
             returnValue = 'mysql'
-        }  else if  (BIGQUERY_REST_SERVER  == BASE_URL) {
+        }  else if  (BIGQUERY_REST_SERVER  == currentBaseUrl) {
             returnValue = 'bigquery'
         }  else {
             returnValue = 'unknown'
         }
         return returnValue
     }
-
-
 
     /***
      * The point is to extract the relevant numbers from a string that looks something like this:
@@ -261,7 +290,7 @@ class RestServerService {
       RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
       StringBuilder logStatus = new StringBuilder()
       try {
-          response  = rest.post(BASE_URL+targetUrl)   {
+          response  = rest.post(currentRestServer()+targetUrl)   {
               contentType "application/json"
               json drivingJson
           }

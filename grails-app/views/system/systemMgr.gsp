@@ -35,12 +35,36 @@
                                         my SQL Server
                                     </label>
                                 </div>
-                                <div class="radio">
-                                    <label>
-                                        <input id="bigQueryRestServer" type="radio" name="datatype" value="bigquery" />
-                                        New REST server (http://69.173.71.178:8080/dev/rest/server/)
-                                    </label>
-                                </div>
+                                %{--<div class="radio">--}%
+                                    %{--<label>--}%
+                                        %{--<input id="bigQueryRestServer" type="radio" name="datatype" value="bigquery" />--}%
+                                        %{--New REST server (http://69.173.71.178:8080/dev/rest/server/)--}%
+                                    %{--</label>--}%
+                                %{--</div>--}%
+                            <div class="radio">
+                                <label>
+                                    <input id="devserver" type="radio" name="datatype" value="devserver" />
+                                    dev server (http://69.173.71.178:8080/dev/rest/server)
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input id="testserver" type="radio" name="datatype" value="testserver" />
+                                    test server (http://69.173.70.52:8080/test/rest/server)
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input id="qaserver" type="radio" name="datatype" value="qaserver" />
+                                    dev server (http://69.173.70.198:8080/qa/rest/server)
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input id="prodserver" type="radio" name="datatype" value="prodserver" />
+                                    test server (http://69.173.71.179:8080/prod/rest/server)
+                                </label>
+                            </div>
 
                          </div>
                     </div>

@@ -152,7 +152,7 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
                             barsubname: '',
                             barsubnamelink:'http://www.google.com',
                             inbar: '',
-                            descriptor: '(total 6253)',
+                            descriptor: '(total '+(homozygCase+heterozygCase+nonCarrierCase)+')',
                             inset: 1 },
                         { value:  homozygCase,
                             position: 2,
@@ -184,7 +184,7 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
                             barsubname: '',
                             barsubnamelink:'http://www.google.com',
                             inbar: '',
-                            descriptor: '(total 6498)',
+                            descriptor: '(total '+(homozygControl+heterozygControl+nonCarrierControl)+')',
                             inset: 1 },
                         {  value: homozygControl,
                             position:  7,
@@ -345,8 +345,8 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
             peopleWithoutDiseaseNumerator = parseInt(peopleWithoutDiseaseNumeratorString);
             if (( peopleWithDiseaseDenominator !== 0 ) &&
                 ( peopleWithoutDiseaseDenominator !== 0 )) {
-                calculatedPercentWithDisease = (100 * (peopleWithDiseaseNumerator / peopleWithDiseaseDenominator));
-                calculatedPercentWithoutDisease = (100 * (peopleWithoutDiseaseNumerator / peopleWithoutDiseaseDenominator));
+                calculatedPercentWithDisease = (100 * (peopleWithDiseaseNumerator / (2*peopleWithDiseaseDenominator)));
+                calculatedPercentWithoutDisease = (100 * (peopleWithoutDiseaseNumerator / (2*peopleWithoutDiseaseDenominator)));
                 proportionWithDiseaseDescriptiveString = "(" + peopleWithDiseaseNumerator + " out of " + peopleWithDiseaseDenominator + ")";
                 proportionWithoutDiseaseDescriptiveString = "(" + peopleWithoutDiseaseNumerator + " out of " + peopleWithoutDiseaseDenominator + ")";
                 var dataForBarChart = [

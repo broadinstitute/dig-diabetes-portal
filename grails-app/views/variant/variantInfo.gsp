@@ -73,7 +73,7 @@
                         </div>
                     </div>
 
-                <div class="separator"></div>
+                    <div class="separator"></div>
 
                     <div class="accordion-group">
                         <div class="accordion-heading">
@@ -91,7 +91,7 @@
                         </div>
                     </div>
 
-                <div class="separator"></div>
+                    <div class="separator"></div>
 
                     <div class="accordion-group">
                         <div class="accordion-heading">
@@ -110,7 +110,7 @@
                         </div>
                     </div>
 
-                <div class="separator"></div>
+                    <div class="separator"></div>
 
                     <div class="accordion-group">
                         <div class="accordion-heading">
@@ -128,7 +128,7 @@
                         </div>
                     </div>
 
-                <div class="separator"></div>
+                    <div class="separator"></div>
 
                     <div class="accordion-group">
                         <div class="accordion-heading">
@@ -144,9 +144,13 @@
                                 <g:render template="effectOfVariantOnProtein"/>
                             </div>
                         </div>
+
+
+
+
                     </div>
 
-                <div class="separator"></div>
+                    <div class="separator"></div>
 
                     <div class="accordion-group">
                         <div class="accordion-heading">

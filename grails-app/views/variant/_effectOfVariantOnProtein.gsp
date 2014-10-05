@@ -1,5 +1,3 @@
-
-
 <div id="effectOfVariantOnProtein"></div>
 
 
@@ -32,7 +30,7 @@
                     <p>
                         Ensembl SO annotations:  <span id="ensembleSoAnnotation"></span>
                     </p>
-                 </h4>
+                </h4>
             </div>
         </div>
 
@@ -40,11 +38,12 @@
             <div class="">
                 <h4 class="panel-title">
                     <p>
-                        Does this variant truncate the protein? <strong><span id="variantTruncateProtein"></span></strong>
+                        Does this variant truncate the protein? <strong><span id="variantTruncateProtein"></span>
+                    </strong>
                         <a data-toggle="collapse" data-parent="#accordion"
-                           href="#collapseTwo" style ="text-decoration: underline; color: #428bca;">Learn more</a>
+                           href="#collapseTwo" style="text-decoration: underline; color: #428bca;">Learn more</a>
                     </p>
-                 </h4>
+                </h4>
             </div>
 
             <div id="collapseTwo" class="panel-collapse collapse">
@@ -83,13 +82,16 @@
                     <h4 class="panel-title">
 
                         <p>
-                            <a href="http://genetics.bwh.harvard.edu/pph2/dokuwiki/about" style="text-decoration: underline; color: #428bca;">PolyPhen-2</a> prediction and score:
+                            <a href="http://genetics.bwh.harvard.edu/pph2/dokuwiki/about"
+                               style="text-decoration: underline; color: #428bca;">PolyPhen-2</a> prediction and score:
                             <span id="polyPhenPrediction"></span>
-                            <a data-toggle="collapse" data-parent="#accordion" href="#polyphenDetails" style ="text-decoration: underline; color: #428bca;">Learn more</a>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#polyphenDetails"
+                               style="text-decoration: underline; color: #428bca;">Learn more</a>
                         </p>
 
                     </h4>
                 </div>
+
                 <div id="polyphenDetails" class="panel-collapse collapse">
                     <div class="panel-body transcript-annotation">
                         <p class="term-description-expansion">
@@ -99,9 +101,12 @@
                             sequence conservation across species to predict whether a protein will tolerate any given single amino acid substitution at any given position in its sequence.
                             Condel combines the weighted averages for several such algorithms (including but not limited to PolyPhen-2 and SIFT) for a consensus prediction.
                         </p>
+
                         <p class="term-description-expansion">
                             <strong>WARNING: PolyPhen-2, SIFT, and Condel may disagree with each other, and in some cases,
-                                <a href="http://hmg.oxfordjournals.org/content/early/2014/06/12/hmg.ddu269.long" style ="text-decoration:  underline; color: #428bca;">their predictive accuracy is low.</a> </strong>
+                                <a href="http://hmg.oxfordjournals.org/content/early/2014/06/12/hmg.ddu269.long"
+                                   style="text-decoration:  underline; color: #428bca;">their predictive accuracy is low.</a>
+                            </strong>
                         </p>
                     </div>
                 </div>
@@ -112,24 +117,30 @@
                 <div class="">
                     <h4 class="panel-title">
                         <p>
-                            <a href="http://sift.jcvi.org/" style="text-decoration: underline; color: #428bca;">SIFT</a> prediction and score:
+                            <a href="http://sift.jcvi.org/"
+                               style="text-decoration: underline; color: #428bca;">SIFT</a> prediction and score:
                             <span id="siftPrediction"></span>
-                            <a data-toggle="collapse" data-parent="#accordion" href="#siftDetails" style ="text-decoration: underline; color: #428bca;">Learn more</a>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#siftDetails"
+                               style="text-decoration: underline; color: #428bca;">Learn more</a>
                         </p>
                     </h4>
                 </div>
+
                 <div id="siftDetails" class="panel-collapse collapse">
                     <div class="panel-body transcript-annotation">
                         <p class="term-description-expansion">
                             <strong>SIFT relies on sequence conservation across species to predict whether a protein's function will be affected by any given single amino acid substitution at any
                             given position in its sequence.</strong> For comparison, this portal provides results from two other algorithms that predict a variant's effects on protein structure and
-                            function. PolyPhen-2 predictions are based on whether a variant appears in a region that is highly conserved across species (and thus may serve critical biological functions),
-                            and whether the variant is in a location likely to affect the protein's 3D structure. Condel combines the weighted averages for several such algorithms (including but not
-                            limited to PolyPhen-2 and SIFT) for a consensus prediction.
+                        function. PolyPhen-2 predictions are based on whether a variant appears in a region that is highly conserved across species (and thus may serve critical biological functions),
+                        and whether the variant is in a location likely to affect the protein's 3D structure. Condel combines the weighted averages for several such algorithms (including but not
+                        limited to PolyPhen-2 and SIFT) for a consensus prediction.
                         </p>
+
                         <p class="term-description-expansion">
                             <strong>WARNING: PolyPhen-2, SIFT, and Condel may disagree with each other, and in some cases,
-                                <a href="http://hmg.oxfordjournals.org/content/early/2014/06/12/hmg.ddu269.long" style ="text-decoration:  underline; color: #428bca;">their predictive accuracy is low.</a> </strong>
+                                <a href="http://hmg.oxfordjournals.org/content/early/2014/06/12/hmg.ddu269.long"
+                                   style="text-decoration:  underline; color: #428bca;">their predictive accuracy is low.</a>
+                            </strong>
                         </p>
                     </div>
                 </div>
@@ -140,8 +151,11 @@
                 <div class="">
                     <h4 class="panel-title">
                         <p>
-                            <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3071923/" style="text-decoration: underline; color: #428bca;">Condel</a> prediction and score:<span id="condelPrediction"></span>
-                            <a data-toggle="collapse" data-parent="#accordion" href="#condelDetails" style ="text-decoration:  underline; color: #428bca;">Learn more</a>
+                            <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3071923/"
+                               style="text-decoration: underline; color: #428bca;">Condel</a> prediction and score:<span
+                                id="condelPrediction"></span>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#condelDetails"
+                               style="text-decoration:  underline; color: #428bca;">Learn more</a>
                         </p>
                     </h4>
                 </div>
@@ -151,13 +165,16 @@
                         <p class="term-description-expansion">
                             <strong>Condel predicts a variant's effects on protein structure and function by combining the weighted averages for several algorithms (including
                             but not limited to PolyPhen-2 and SIFT) for a consensus prediction.</strong>  For comparison, this portal provides results from PolyPhen-2 and SIFT
-                            alone. PolyPhen-2 predictions are based on whether a variant appears in a region that is highly conserved across species (and thus may serve
-                            critical biological functions), and whether the variant is in a location likely to affect the protein's 3D structure. SIFT also relies on sequence
-                            conservation across species to predict whether a protein will tolerate any given single amino acid substitution at any given position in its sequence.
+                        alone. PolyPhen-2 predictions are based on whether a variant appears in a region that is highly conserved across species (and thus may serve
+                        critical biological functions), and whether the variant is in a location likely to affect the protein's 3D structure. SIFT also relies on sequence
+                        conservation across species to predict whether a protein will tolerate any given single amino acid substitution at any given position in its sequence.
                         </p>
+
                         <p class="term-description-expansion">
                             <strong>WARNING: PolyPhen-2, SIFT, and Condel may disagree with each other, and in some cases,
-                                <a href="http://hmg.oxfordjournals.org/content/early/2014/06/12/hmg.ddu269.long" style ="text-decoration:  underline; color: #428bca;">their predictive accuracy is low.</a> </strong>
+                                <a href="http://hmg.oxfordjournals.org/content/early/2014/06/12/hmg.ddu269.long"
+                                   style="text-decoration:  underline; color: #428bca;">their predictive accuracy is low.</a>
+                            </strong>
                         </p>
                     </div>
                 </div>
@@ -167,11 +184,11 @@
     </div>
 
 </div>
-</div>
 
-</div>
 <span id="puntOnNoncodingVariant">
-    <h2><strong>What is the biological impact of <span id="biologicalImpactOfMysteryVariant" class="parentsFont"></span>?</strong></h2>
+    <h2><strong>What is the biological impact of <span id="biologicalImpactOfMysteryVariant"
+                                                       class="parentsFont"></span>?</strong></h2>
+
     <p>This variant is non-coding. Annotation coming soon.</p>
 </span>
 

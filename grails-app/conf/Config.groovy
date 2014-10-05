@@ -69,12 +69,35 @@ if (appName) {
 site.version = 't2dgenes' // could be 'sigma' or 't2dgenes'
 site.title = 'Type 2 Diabetes Genetics'  // could be 'SIGMA T2D' or 'Type 2 Diabetes Genetics'
 site.operator = 'balexand@broadinstitute.org'
-//server.URL = 'http://t2dgenetics.org/mysql/rest/server/'
-server.URL = 'http://69.173.71.178:8080/dev/rest/server/'
+//
+//    default server on start up
+//
+server.URL = 'http://t2dgenetics.org/mysql/rest/server/'
+//server.URL = 'http://69.173.71.178:8080/dev/rest/server/'
 t2dRestServer {
     base = 'http://t2dgenetics.org/'
     mysql =  'mysql/'
     bigquery =  'dev/'
+    path = 'rest/server/'
+}
+t2dTestRestServer {
+    base = 'http://69.173.70.52:8080/'
+    name =  'test/'
+    path = 'rest/server/'
+}
+t2dDevRestServer {
+    base = 'http://69.173.71.178:8080/'
+    name =  'dev/'
+    path = 'rest/server/'
+}
+t2dQaRestServer {
+    base = 'http://69.173.70.198:8080/'
+    name =  'qa/'
+    path = 'rest/server/'
+}
+t2dProdRestServer {
+    base = 'http://69.173.71.179:8080/'
+    name =  'prod/'
     path = 'rest/server/'
 }
 
