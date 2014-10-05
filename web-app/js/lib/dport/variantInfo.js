@@ -430,8 +430,17 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
                 };
             }
             if (pValue  > 0)  {
-                $('#drMetaBurdenForDiabetes').append("p="+
-                    (pValue.toPrecision(3)));
+                var degreeOfSignificance = '';
+                if (pValue < 5e-8)  {
+                    degreeOfSignificance = 'significant difference';
+                } else if (pValue < 5e-2)  {
+                    degreeOfSignificance = 'nominal difference';
+                } ;
+                $('#describePValueInDiseaseRisk').append("<p class='slimDescription'>"+degreeOfSignificance+"</p>\n"+
+                    "<p  id='bhtMetaBurdenForDiabetes' class='slimDescription'>p="+(pValue.toPrecision(3)) +"</p>");
+
+//                $('#drMetaBurdenForDiabetes').append("p="+
+//                    (pValue.toPrecision(3)));
             }
 
         }
@@ -469,7 +478,8 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
         5e-2,
         variantTitle,
         "exome chip",
-        false));
+        false,
+        true));
     $('#exomeSequenceAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
         cariantRec,
         cariantRec._13k_T2D_P_EMMAX_FE_IV,

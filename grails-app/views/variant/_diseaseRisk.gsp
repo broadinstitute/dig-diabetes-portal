@@ -20,9 +20,9 @@
         <div  class="col-md-2">
             <td class="significanceDescriptorFormatter">
                 <div class="significantDifference">
-                    <div class="significantDifferenceText">
-                        <p class="slimDescription">significant difference</p>
-                        <p  id="drMetaBurdenForDiabetes" class="slimDescription"><i class=""></i></p>
+                    <div  id="describePValueInDiseaseRisk" class="significantDifferenceText">
+                        %{--<p class="slimDescription">significant difference</p>--}%
+                        %{--<p  id="drMetaBurdenForDiabetes" class="slimDescription"><i class=""></i></p>--}%
                     </div>
                 </div>
             </td>

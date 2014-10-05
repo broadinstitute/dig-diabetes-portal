@@ -553,8 +553,14 @@ function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exs
 
 
     if (bhtMetaBurdenForDiabetes  > 0)  {
-        $('#bhtMetaBurdenForDiabetes').append("p="+
-            (bhtMetaBurdenForDiabetes.toPrecision(3)));
+         var degreeOfSignificance = '';
+         if (bhtMetaBurdenForDiabetes < 5e-8)  {
+             degreeOfSignificance = 'significant difference';
+         } else if (bhtMetaBurdenForDiabetes < 5e-2)  {
+             degreeOfSignificance = 'nominal difference';
+         } ;
+        $('#describePValueInBiologicalHypothesis').append("<p class='slimDescription'>"+degreeOfSignificance+"</p>\n"+
+            "<p  id='bhtMetaBurdenForDiabetes' class='slimDescription'>p="+(bhtMetaBurdenForDiabetes.toPrecision(3)) +"</p>");
     }
     var linkToVariantsPredictedToTruncate = $('#linkToVariantsPredictedToTruncate') ;
     if (typeof linkToVariantsPredictedToTruncate!== "undefined") {

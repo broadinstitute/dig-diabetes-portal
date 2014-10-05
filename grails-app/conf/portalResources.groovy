@@ -6,6 +6,7 @@ modules = {
         resource url: "css/lib/jquery.dataTables.css"
     }
     geneInfo {
+        resource url: 'css/dport/geneInfo.css'
         resource url: 'css/dport/barchart.css'
 
         resource url: 'js/lib/dport/geneInfo.js'

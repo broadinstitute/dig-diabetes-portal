@@ -317,10 +317,12 @@ var UTILS = {
                                          weakCutOff,
                                          variantTitle,
                                          datatype,
-                                         includeCaseControlComparison ) {
+                                         includeCaseControlComparison,
+                                         takeExpOfOr) {
         var retVal = "";
         var significanceDescriptor = "";
         var orValueNumerical;
+        var orValueNumericalAdjusted;
         var orValueText = "";
         var iMap = UTILS.invertMap(vMap);
         var pNumericalValue =  variant[iMap[pValue]];
@@ -351,7 +353,8 @@ var UTILS = {
             orValueNumerical =  variant[iMap[orValue]];
             if ((orValueNumerical) &&
                 (orValueNumerical  !== 'null')) {
-                orValueText = orValueNumerical.toPrecision(3);
+                orValueNumericalAdjusted = (takeExpOfOr === true)  ? Math.exp(orValueNumerical) :  orValueNumerical  ;
+                orValueText = orValueNumericalAdjusted.toPrecision(3);
                 retVal +=  ("<div class='veryImportantText'>OR = " +orValueText+ "</div>");
             }
             if (includeCaseControlComparison) {

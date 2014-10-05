@@ -198,7 +198,7 @@ environments {
     }
     production {
 
-//   grails.serverURL = "http://Default-Environment-igfrae3vpi.elasticbeanstalk.com"
+//  grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //   grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //   grails.serverURL = "http://type2diabetesgenetics.org"
    grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"

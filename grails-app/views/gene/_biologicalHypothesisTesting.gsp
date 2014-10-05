@@ -22,9 +22,9 @@
          <div  class="col-md-2">
                 <td class="significanceDescriptorFormatter">
                     <div class="significantDifference">
-                        <div class="significantDifferenceText">
-                            <p class="slimDescription">significant difference</p>
-                            <p  id="bhtMetaBurdenForDiabetes" class="slimDescription"><i class=""></i></p>
+                        <div id="describePValueInBiologicalHypothesis" class="significantDifferenceText">
+                            %{--<p class="slimDescription">significant difference</p>--}%
+                            %{--<p  id="bhtMetaBurdenForDiabetes" class="slimDescription"><i class=""></i></p>--}%
                             %{--TODO: uncomment the following line when we have some real data--}%
                             %{--<p class="slimDescription">OR=1.4</p>--}%
                         </div>
