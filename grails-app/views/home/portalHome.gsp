@@ -62,9 +62,11 @@
 <div id="main">
     <div class="container">
         <p>
-            This prototype portal contains results from genetic association studies of type 2 diabetes.
-            Datatsets include exome sequencing results contributed by <a class="boldlink" href="${createLink(controller:'informational', action:'t2dgenes')}">T2D-GENES</a> and <a class="boldlink" href="${createLink(controller:'informational', action:'got2d')}">GoT2D</a> (n&asymp;13,000);
-        exome chip results contributed by <a class="boldlink" href="${createLink(controller:'informational', action:'got2d')}">GoT2D</a> (n&asymp;82,000); and GWAS results contributed by <a class="boldlink" href="http://diagram-consortium.org/about.html">DIAGRAM</a> (n&asymp;69,000).
+            This portal contains results from genetic association studies of type 2 diabetes.
+            Datatsets include exome sequencing results contributed by <a class="boldlink" href="${createLink(controller:'informational', action:'t2dgenes')}">T2D-GENES</a>
+            and <a class="boldlink" href="${createLink(controller:'informational', action:'got2d')}">GoT2D</a> (n&asymp;12,940);
+        exome chip results contributed by <a class="boldlink" href="${createLink(controller:'informational', action:'got2d')}">GoT2D</a> (n&asymp;79,854);
+        and GWAS results contributed by <a class="boldlink" href="http://diagram-consortium.org/about.html">DIAGRAM</a> (n&asymp;69,033).
         The portal also contains  results from large GWAS meta-analyses of <a class="boldlink" href="${createLink(controller:'informational', action:'hgat')}">24 other traits</a>.
         </p>
         <p>

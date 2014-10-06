@@ -16,7 +16,7 @@ var baget = baget || {};  // encapsulating variable
 
 (function () {
 
-    baget.barChart = function () {
+    baget.barChart = function (barChartName) {// name is optional, but allows you to clear specifically
 
 //        var data = [
 //                { value: 12,
@@ -67,6 +67,10 @@ var baget = baget || {};  // encapsulating variable
                 .attr('class', 'chart')
                 .attr('width', width*1.5)
                 .attr('height', height*1.4);
+
+            if (typeof barChartName !== 'undefined') {
+                chart.attr('class',barChartName);
+            }
 
             if (logXScale){
                 internalMin = 1;
@@ -490,8 +494,13 @@ var baget = baget || {};  // encapsulating variable
             return instance;
         };
 
-        instance.clear = function(){
-            selection.select('svg').remove();
+        instance.clear = function(barChartName){ // if there is a name then only clear the svg with that class
+            if (typeof barChartName === 'undefined') {
+                d3.select('svg').remove();
+            } else {
+                d3.select('svg.'+barChartName).remove();
+            }
+
             return instance;
         };
 

@@ -22,6 +22,5 @@
     <p>This variant is not in exome sequencing data available on this portal.</p>
 </g:else>
 
-<div class="separator"></div>
 
 

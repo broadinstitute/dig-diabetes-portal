@@ -413,7 +413,7 @@ body {
 <div id="myDiv">
 <p>
     Use the browser below to explore all genome-wide and locus-wide
-    significant SNPs within 100kb of this gene. Choose "Tracks" to view
+    significant variants within 100kb of this gene. Choose "Tracks" to view
     results relevant to type 2 diabetes (exome sequencing, exome chip, or
     GWAS) or any of 24 other related traits (GWAS).
 </p>

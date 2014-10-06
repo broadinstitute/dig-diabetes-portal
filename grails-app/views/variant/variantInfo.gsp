@@ -199,6 +199,39 @@
             }
         }
     });
+    $('#accordionVariant').on('show.bs.collapse', function (e) {
+        if (e.target.id === "collapseHowCommonIsVariant") {
+            if ((typeof delayedHowCommonIsPresentation  !== 'undefined') &&
+                    (typeof delayedHowCommonIsPresentation .launch !== 'undefined')) {
+                delayedHowCommonIsPresentation .launch();
+            }
+        }
+    });
+    $('#accordionVariant').on('hide.bs.collapse', function (e) {
+        if (e.target.id === "collapseHowCommonIsVariant") {
+            if ((typeof delayedHowCommonIsPresentation  !== 'undefined') &&
+                    (typeof delayedHowCommonIsPresentation .launch !== 'undefined')) {
+                delayedHowCommonIsPresentation .removeBarchart();
+            }
+        }
+    });
+    $('#accordionVariant').on('show.bs.collapse', function (e) {
+        if (e.target.id === "collapseCarrierStatusImpact") {
+            if ((typeof delayedCarrierStatusDiseaseRiskPresentation  !== 'undefined') &&
+                    (typeof delayedCarrierStatusDiseaseRiskPresentation.launch !== 'undefined')) {
+                delayedCarrierStatusDiseaseRiskPresentation .launch();
+            }
+        }
+    });
+    $('#accordionVariant').on('hide.bs.collapse', function (e) {
+        if (e.target.id === "collapseCarrierStatusImpact") {
+            if ((typeof delayedCarrierStatusDiseaseRiskPresentation  !== 'undefined') &&
+                    (typeof delayedCarrierStatusDiseaseRiskPresentation .launch !== 'undefined')) {
+                delayedCarrierStatusDiseaseRiskPresentation .removeBarchart();
+            }
+        }
+    });
+
     $('#collapseOne').collapse({hide: true})
 </script>
 

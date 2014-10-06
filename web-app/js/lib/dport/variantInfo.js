@@ -128,7 +128,7 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
                     width = 800 - margin.left - margin.right,
                     height = 300 - margin.top - margin.bottom;
 
-                var commonBarChart = baget.barChart()
+                var commonBarChart = baget.barChart('howCommonIsChart')
                     .selectionIdentifier("#howCommonIsChart")
                     .width(width)
                     .height(height)
@@ -217,7 +217,7 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
                     width = 800 - margin.left - margin.right,
                     height = 520 - margin.top - margin.bottom;
 
-                var barChart = baget.barChart()
+                var barChart = baget.barChart('carrierStatusDiseaseRiskChart')
                     .selectionIdentifier("#carrierStatusDiseaseRiskChart")
                     .width(width)
                     .height(height)
@@ -248,13 +248,28 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
             if (variant["EXCHP_T2D_P_value"]) {
                 ethnicityPercentages.push(parseFloat(euroValue)*100);
             }
-            return privateMethods.fillHowCommonIsUpBarChart(ethnicityPercentages[0],
-                ethnicityPercentages[4],
-                ethnicityPercentages[1],
-                ethnicityPercentages[2],
-                ethnicityPercentages[3],
-                ethnicityPercentages[5]
-            );
+            // We have everything we need to build the bar chart.  Store the functional reference in an object
+            // that we can call whenever we want
+            delayedHowCommonIsPresentation = {
+                barchartPtr:{},
+                launch:function(){
+                    barchartPtr =  privateMethods.fillHowCommonIsUpBarChart(ethnicityPercentages[0],
+                        ethnicityPercentages[4],
+                        ethnicityPercentages[1],
+                        ethnicityPercentages[2],
+                        ethnicityPercentages[3],
+                        ethnicityPercentages[5]
+                    );
+                    return barchartPtr;
+                },
+                removeBarchart:function(){
+                    if ((typeof barchartPtr !== 'undefined') &&
+                        (typeof barchartPtr.clear !== 'undefined')){
+                        barchartPtr.clear('howCommonIsChart');
+                    }
+                }
+
+            }
         },
 
         showCarrierStatusDiseaseRisk: function (variant) {
@@ -267,11 +282,29 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
                 homu = parseFloat(variant["_13k_T2D_HOMU"]);
                 totalCases = parseFloat(variant["_13k_T2D_OBSA"]);
                 totalControls = parseFloat(variant["_13k_T2D_OBSU"]);
-              //  totalCases = 5949;
-              //  totalControls = 6279;
             }catch(e){}
 
-             return privateMethods.fillCarrierStatusDiseaseRisk(homa,heta,totalCases,homu,hetu,totalControls);
+            delayedCarrierStatusDiseaseRiskPresentation = {
+                barchartPtr:{},
+                launch:function(){
+                    barchartPtr =  privateMethods.fillCarrierStatusDiseaseRisk(homa,
+                        heta,
+                        totalCases,
+                        homu,
+                        hetu,
+                        totalControls);
+                    return barchartPtr;
+                },
+                removeBarchart:function(){
+                    if ((typeof barchartPtr !== 'undefined') &&
+                        (typeof barchartPtr.clear !== 'undefined')){
+                        barchartPtr.clear('carrierStatusDiseaseRiskChart');
+                    }
+                }
+
+            }
+
+           // return privateMethods.fillCarrierStatusDiseaseRisk(homa,heta,totalCases,homu,hetu,totalControls);
         },
         variantGenerateProteinsChooserTitle:  function (variant, title) {
             var retVal = "";
@@ -372,7 +405,7 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
                     height = 150 - margin.top - margin.bottom;
 
 
-                var barChart = baget.barChart()
+                var barChart = baget.barChart('diseaseRiskChart')
                     .selectionIdentifier("#diseaseRiskChart")
                     .width(width)
                     .height(height)
@@ -424,7 +457,7 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
                     removeBarchart: function () {
                         if ((typeof barchartPtr !== 'undefined') &&
                             (typeof barchartPtr.clear !== 'undefined')) {
-                            barchartPtr.clear();
+                            barchartPtr.clear('diseaseRiskChart');
                         }
                     }
                 };

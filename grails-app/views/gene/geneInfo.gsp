@@ -137,7 +137,7 @@
         <div class="accordion-heading">
             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"
                href="#collapseIgv">
-                <h2><strong>Explore Significant SNPs with IGV</strong></h2>
+                <h2><strong>Explore significant variants with IGV</strong></h2>
             </a>
         </div>
 
