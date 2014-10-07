@@ -72,8 +72,8 @@ site.operator = 'balexand@broadinstitute.org'
 //
 //    default server on start up
 //
-server.URL = 'http://t2dgenetics.org/mysql/rest/server/'
-//server.URL = 'http://69.173.71.178:8080/dev/rest/server/'
+//server.URL = 'http://t2dgenetics.org/mysql/rest/server/'
+server.URL = 'http://69.173.71.178:8080/dev/rest/server/'
 t2dRestServer {
     base = 'http://t2dgenetics.org/'
     mysql =  'mysql/'
@@ -199,9 +199,9 @@ environments {
     production {
 
 //  grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
-//   grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
+   grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //   grails.serverURL = "http://type2diabetesgenetics.org"
-   grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+//   grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //        grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
         grails.logging.jul.usebridge = false
     }

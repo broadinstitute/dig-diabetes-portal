@@ -80,7 +80,7 @@
                             <a class="accordion-toggle  collapsed" data-toggle="collapse"
                                data-parent="#accordionVariant"
                                href="#collapseDiseaseRisk">
-                                <h2><strong>How does carrier status effect disease risk?</strong></h2>
+                                <h2><strong>How does carrier status affect disease risk?</strong></h2>
                             </a>
                         </div>
 

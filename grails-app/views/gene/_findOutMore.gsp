@@ -12,7 +12,7 @@
 
 <div class="linkout">
     <a href="http://www.omim.org/search?index=entry&sort=score+desc%2C+prefix_sort+desc&start=1&limit=10&search=<%=geneName%>">OMIM</a>
-    Find information on genotype-phenotype relationships, 12,000 genes and all known Mendelian disorders
+    Find information on genotype-phenotype relationships, 12,000 genes and all known Mendelian disorders.
 </div>
 
 <div class="linkout">

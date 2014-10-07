@@ -179,7 +179,7 @@ function variantsAndAssociationsContentsLine (geneInfo, // Raw info
         $(anchorId)[0].href = rootGeneUrl + "/" + geneFieldOrZero(geneInfo, geneInfoRec.ID) + "?sig=" + description + "&dataset=" + dataset;
     }
 }
-function fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootGeneUrl,rootVariantUrl){
+function fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootTraitUrl,rootVariantUrl){
 
     // show traits
     if(show_gwas){
@@ -188,18 +188,22 @@ function fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exse
             var traitArray = rawGeneInfo["GWS_TRAITS"];
             if (traitArray.length > 0){
                 htmlAccumulator  +=  ("<strong> "+
-                    "<p>Variants within "+rawGeneInfo['ID']+" 100kb of our also significantly associated with:</p>"+
+                    "<p>Variants within 100kb of "+rawGeneInfo['ID']+" are also genome-wide significantly associated with:</p>"+
                     "<ul>");
                 for ( var i = 0 ; i < traitArray.length ; i++ ) {
                     var traitRepresentation = "";
                     if ((typeof phenotype !== "undefined" ) &&
                         (phenotype.phenotypeMap) &&
                         (phenotype.phenotypeMap [traitArray[i]])){
-                        traitRepresentation =  phenotype.phenotypeMap [traitArray[i]];
+
+                            traitRepresentation =  phenotype.phenotypeMap [traitArray[i]];
+
                     } else {
                         traitRepresentation =  traitArray[i];
                     }
-                    htmlAccumulator  += ("<li>"+traitRepresentation+"</li>")
+                      if (!(traitRepresentation.contains('diabetes'))) {  // special case: don't include diabetes, since it is above in table
+                          htmlAccumulator += ("<li><a href='" + rootTraitUrl + "?trait=" + traitArray[i] + "&significance=5e-8'>" + traitRepresentation + "</a></li>")
+                      }
                 }
                 htmlAccumulator  +=  ("</ul>"+
                     "</strong>");

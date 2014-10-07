@@ -464,11 +464,11 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
             }
             if (pValue  > 0)  {
                 var degreeOfSignificance = '';
-                if (pValue < 5e-8)  {
-                    degreeOfSignificance = 'significant difference';
-                } else if (pValue < 5e-2)  {
-                    degreeOfSignificance = 'nominal difference';
-                } ;
+//                if (pValue < 5e-8)  {
+//                    degreeOfSignificance = 'significant difference';
+//                } else if (pValue < 5e-2)  {
+//                    degreeOfSignificance = 'nominal difference';
+//                } ;
                 $('#describePValueInDiseaseRisk').append("<p class='slimDescription'>"+degreeOfSignificance+"</p>\n"+
                     "<p  id='bhtMetaBurdenForDiabetes' class='slimDescription'>p="+(pValue.toPrecision(3)) +"</p>");
 
