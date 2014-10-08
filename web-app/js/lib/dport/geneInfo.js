@@ -36,7 +36,10 @@ var geneInfoRec = {
     SIGMA_T2D_GWS_TOTAL: 33,
     SIGMA_T2D_NOM_TOTAL: 34,
     _13k_T2D_lof_OBSA: 35,
-    _13k_T2D_lof_OBSU: 36
+    _13k_T2D_lof_OBSU: 36,
+    GWAS_T2D_LWS_TOTAL: 37,
+    EXCHP_T2D_LWS_TOTAL: 38,
+    _13k_T2D_LWS_TOTAL: 39
 };
 function revG(d){
     var v;
@@ -77,6 +80,9 @@ function revG(d){
         case  34:v="SIGMA_T2D_NOM_TOTAL";break;
         case  35:v="_13k_T2D_lof_OBSA";break;
         case  36:v="_13k_T2D_lof_OBSU";break;
+        case  37:v="GWAS_T2D_LWS_TOTAL";break;
+        case  38:v="EXCHP_T2D_LWS_TOTAL";break;
+        case  39:v="_13k_T2D_LWS_TOTAL";break;
         default: v="";
     }
     return v;
@@ -335,7 +341,7 @@ function fillVariantsAndAssociationLine (geneInfo,// our gene record
             tableRow += '<td>';
         }
         tableRow +=  anchorBuildingFunction(genomeWideVariants,geneName,'genome-wide',dataSetName,genomicRegion,rootVariantUrl) + '</td>';
-        tableRow += '<td>' + anchorBuildingFunction(locusWideVariants,geneName,'nominal',dataSetName,genomicRegion,rootVariantUrl) + '</td>'+   // TODO: should be locus wide
+        tableRow += '<td>' + anchorBuildingFunction(locusWideVariants,geneName,'locus',dataSetName,genomicRegion,rootVariantUrl) + '</td>'+   // TODO: should be locus wide
             '<td>' + anchorBuildingFunction(nominallySignificantVariants,geneName,'nominal',dataSetName,genomicRegion,rootVariantUrl) + '</td>'+
             '</tr>';
         $('#variantsAndAssociationsTableBody').append ( tableRow);
@@ -368,19 +374,19 @@ function fillVariantsAndAssociations (geneInfo,show_gwas,show_exchp,show_exseq,s
         } else {
             headerRow += "<th>";
         }
-        headerRow += "genome-wide<br/>significant variants<br/><span class='headersubtext'>P&lt;5x10<sup>-8</sup></span></th>"+
-            "<th>locus-wide<br/>significant variants<br/><span class='headersubtext'>P&lt;5x10<sup>-4</sup></span></th>"+
-            "<th>nominal<br/>significant variants<br/><span class='headersubtext'>P&lt;0.05</sup></span></th>"+
+        headerRow += "genome-wide<br/>significant variants<br/><span class='headersubtext'>P&nbsp;&lt;&nbsp;5x10<sup>-8</sup></span></th>"+
+            "<th>locus-wide<br/>significant variants<br/><span class='headersubtext'>P&nbsp;&lt;&nbsp;1x10<sup>-4</sup></span></th>"+
+            "<th>nominal<br/>significant variants<br/><span class='headersubtext'>P&nbsp;&lt;&nbsp;0.05</sup></span></th>"+
             "</tr>";
         $('#variantsAndAssociationsHead').append ( headerRow);
         if (show_gwas) {
             fillVariantsAndAssociationLine (geneInfo,'gwas','69,033',regionSpecifier,
-                geneInfoRec.GWAS_T2D_VAR_TOTAL,geneInfoRec.GWAS_T2D_GWS_TOTAL,geneInfoRec.GWAS_T2D_NOM_TOTAL,geneInfoRec.GWAS_T2D_NOM_TOTAL,
+                geneInfoRec.GWAS_T2D_VAR_TOTAL,geneInfoRec.GWAS_T2D_GWS_TOTAL,geneInfoRec.GWAS_T2D_LWS_TOTAL,geneInfoRec.GWAS_T2D_NOM_TOTAL,
                 buildAnchorForRegionVariantSearches,emphasizeGwas,rootVariantUrl);
         }
         if (show_exchp) {
             fillVariantsAndAssociationLine (geneInfo,'exomechip','79,854',regionSpecifier,
-                geneInfoRec.EXCHP_T2D_VAR_TOTALS_EU_TOTAL,geneInfoRec.EXCHP_T2D_GWS_TOTAL,geneInfoRec.EXCHP_T2D_NOM_TOTAL,geneInfoRec.EXCHP_T2D_NOM_TOTAL,
+                geneInfoRec.EXCHP_T2D_VAR_TOTALS_EU_TOTAL,geneInfoRec.EXCHP_T2D_GWS_TOTAL,geneInfoRec.EXCHP_T2D_LWS_TOTAL,geneInfoRec.EXCHP_T2D_NOM_TOTAL,
                 buildAnchorForGeneVariantSearches,emphasizeGwas,rootVariantUrl);
         }
         if (show_exseq) {
@@ -390,14 +396,14 @@ function fillVariantsAndAssociations (geneInfo,show_gwas,show_exchp,show_exseq,s
                 }
             }
             fillVariantsAndAssociationLine (geneInfo,'exomeseq','12,940',regionSpecifier,
-                geneInfoRec._13k_T2D_VAR_TOTAL,geneInfoRec._13k_T2D_GWS_TOTAL,geneInfoRec._13k_T2D_NOM_TOTAL,geneInfoRec._13k_T2D_NOM_TOTAL,
+                geneInfoRec._13k_T2D_VAR_TOTAL,geneInfoRec._13k_T2D_GWS_TOTAL,geneInfoRec._13k_T2D_LWS_TOTAL,geneInfoRec._13k_T2D_NOM_TOTAL,
                 buildAnchorForGeneVariantSearches,emphasizeGwas,rootVariantUrl);
         }
         if (show_sigma) {
             if (emphasisRequired) {
                emphasizeGwas = 2;
             }
-            fillVariantsAndAssociationLine (geneInfo,'exomeseq','99, 999',regionSpecifier,
+            fillVariantsAndAssociationLine (geneInfo,'exomeseq','99, 999',regionSpecifier,// is there a SIGMA_T2D_LWS_TOTAL?
                 geneInfoRec.SIGMA_T2D_VAR_TOTAL,geneInfoRec.SIGMA_T2D_GWS_TOTAL,geneInfoRec.SIGMA_T2D_NOM_TOTAL,geneInfoRec.SIGMA_T2D_NOM_TOTAL,
                 buildAnchorForGeneVariantSearches,emphasizeGwas,rootVariantUrl);
         }
@@ -514,46 +520,7 @@ function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exs
                                        }
                                    }
         };
-       // fillUpBarChart (peopleWithDiseaseNumerator,peopleWithDiseaseDenominator,peopleWithoutDiseaseNumerator,peopleWithoutDiseaseDenominator);
-    }
-
-
-//
-//
-//    // first subline
-//    var minaMinu =  proportionsWithDisease ;
-//    if (minaMinu) {   // we have a  _13k_T2D_lof_MINA_MINU_RET
-//        arrayOfMinaMinu  = minaMinu.split('/');
-//        if (arrayOfMinaMinu.length>1) {
-//            bhtPeopleWithVariantWhoHaveDiabetes = arrayOfMinaMinu[0];
-//            $('#bhtPeopleWithVariantWhoHaveDiabetes').append(bhtPeopleWithVariantWhoHaveDiabetes);
-//        }
-//    }  else {  // we don't
-//        $('#bhtPeopleWithVariantWhoHaveDiabetes').append(0);
-//    }
-//    $('#bhtPeopleWithVariant').append(bhtPeopleWithVariant);
-//    if (bhtPeopleWithVariant  > 0) {
-//        var bhtPercentOfPeopleWithVariantWhoHaveDisease =  (100 * (bhtPeopleWithVariantWhoHaveDiabetes / bhtPeopleWithVariant));
-//        $('#bhtPercentOfPeopleWithVariantWhoHaveDisease').append ( "(" +
-//            (bhtPercentOfPeopleWithVariantWhoHaveDisease.toPrecision(2))+"%)");
-//    }
-//
-//    // second subline
-//    if (arrayOfMinaMinu.length>1) {  // we have a  _13k_T2D_lof_MINA_MINU_RET
-//        bhtPeopleWithVariantWithoutDiabetes = arrayOfMinaMinu[1];
-//        $('#bhtPeopleWithVariantWithoutDiabetes').append(bhtPeopleWithVariantWithoutDiabetes);
-//    }  else {  // we don't
-//        bhtPeopleWithVariantWithoutDiabetes = 0;
-//        $('#bhtPeopleWithVariantWithoutDiabetes').append(0);
-//    }
-//
-//    $('#bhtPeopleWithoutVariant').append(bhtPeopleWithoutVariant);
-//    if (bhtPeopleWithoutVariant  > 0) {
-//        var bhtPercentOfPeopleWithVariantWithoutDisease =  (100 * (bhtPeopleWithVariantWithoutDiabetes / bhtPeopleWithoutVariant));
-//        $('#bhtPercentOfPeopleWithVariantWithoutDisease').append (  "(" +
-//            (bhtPercentOfPeopleWithVariantWithoutDisease.toPrecision(2)) +"%)");
-//    }
-//
+     }
 
 
     if (bhtMetaBurdenForDiabetes  > 0)  {

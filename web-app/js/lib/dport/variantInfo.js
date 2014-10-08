@@ -535,7 +535,7 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
     $('#variantTitle').append(variantTitle);
     $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
     $('#populationsHowCommonIs').append(variantTitle);
-    $('#biologicalImpactOfMysteryVariant').append(variantTitle);
+//    $('#biologicalImpactOfMysteryVariant').append(variantTitle);
 //    $('#howCommonInExomeSequencing').append(privateMethods.showPercentageAcrossEthnicities(variant));
     privateMethods.showEthnicityPercentageWithBarChart(variant);
    // delayedHowCommonIsPresentation

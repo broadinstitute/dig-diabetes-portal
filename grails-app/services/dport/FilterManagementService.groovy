@@ -218,6 +218,9 @@ class FilterManagementService {
                 case 'genome-wide' :
                     returnValue['significance']  = 'genomewide'
                     break;
+                case 'locus' :
+                    returnValue['significance']  = 'locus'
+                    break;
                 case 'nominal' : // this is equivalent to P>0,
                     returnValue['significance']  = 'nominal'
                     break;
@@ -448,6 +451,12 @@ class FilterManagementService {
                     filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,5e-8 as BigDecimal) 
                     filterDescriptions << "P-value for association with T2D is less than or equal to 5e-8"
                     parameterEncoding << "2:0"
+                    break;
+                case  "locus":
+                    filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,5e-4 as BigDecimal)
+                    filterDescriptions << "P-value for association with T2D is less than or equal to 0.0001"
+                    parameterEncoding << "2:2"
+                    parameterEncoding << "3:0.0001"
                     break;
                 case  "nominal":
                     filters << retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,0.05 as BigDecimal) 

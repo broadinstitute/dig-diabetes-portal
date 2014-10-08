@@ -163,7 +163,9 @@ var baget = baget || {};  // encapsulating variable
                 .tickSize(2);
 
             if (logXScale){
-                xAxis.tickValues([1,10,100,1000,10000])
+                xAxis
+                    .tickValues([1,10,100,1000,10000])
+                    .tickFormat(d3.format("d"));
             }
 
             var x_xis = chart.append('g')
