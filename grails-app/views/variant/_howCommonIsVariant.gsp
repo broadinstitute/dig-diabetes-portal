@@ -4,7 +4,7 @@
 
 <g:if test="${show_exseq}">
 
-    <div id="exomeDataExists" style="display: block">
+    <div id="howCommonIsExists" style="display: block">
 
         <p>
             <strong>Frequencies</strong>
@@ -17,10 +17,16 @@
         </p>
     </div>
 
+     <div id="howCommonIsNoExists" style="display: none">
+
+        <p>
+           <h4>Insufficient data exists regarding this variant.</h4>
+        </p>
+
+    </div>
+
+
 </g:if>
-<g:else>
-    <p>This variant is not in exome sequencing data available on this portal.</p>
-</g:else>
 
 
 

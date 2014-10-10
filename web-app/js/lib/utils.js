@@ -365,52 +365,6 @@ var UTILS = {
         }
         return retVal;
     },
-
-//
-//    showPercentageAcrossEthnicities: function (variant) {
-//        var retVal = "";
-//        var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
-//        var ethnicityFullName = ["African-Americans", "East Asians", "South Asians", "Europeans", "Hispanics"];
-//        for (var i = 0; i < ethnicAbbreviation.length; i++) {
-//            var stringProportion = variant['_13k_T2D_' + ethnicAbbreviation[i] + '_MAF'];
-//            var proportion = parseFloat(stringProportion);
-//            retVal += "<li>";
-//
-//            retVal += ((proportion*100).toPrecision(3) + " percent of " + ethnicityFullName [i]);
-//            retVal += " (";
-//            retVal += UTILS.frequencyCharacterization(proportion,[0,0.005,0.05]);
-//            retVal += (")" +
-//                "</li>");
-//        }
-//        return  retVal;
-//    },
-    showPercentagesAcrossHeterozygousCarriers: function (variant, title) {
-        var retVal = "";
-        var heta  = parseFloat(variant["_13k_T2D_HETA"]);
-        var hetu  = parseFloat(variant["_13k_T2D_HETU"]) ;
-        retVal += ("<li>Number of people across datasets who carry one copy of " +title+ ": " + (parseFloat(heta)+parseFloat(hetu)) + "</li>");
-        retVal += ("<li>Number of these carriers who have type 2 diabetes: " + (heta) + "</li>");
-        retVal += ("<li>Number of people across datasets who carry one copy of " +title+ ": " + (hetu) + "</li>");
-        return  retVal;
-    },
-    showPercentagesAcrossHomozygousCarriers: function (variant, title) {
-        var retVal = "";
-        var homa  = parseFloat(variant["_13k_T2D_HOMA"]) ;
-        var homu  = parseFloat(variant["_13k_T2D_HOMU"]) ;
-        retVal += ("<li>Number of people across datasets who carry two copies of  " +title+ ": " + (homa+homu) + "</li>");
-        retVal += ("<li>Number of these carriers who have type 2 diabetes: " + (homa) + "</li>");
-        retVal += ("<li>Number of people across datasets who carry one copy of " +title+ ": " + (homu) + "</li>");
-        return  retVal;
-    },
-    eurocentricVariantCharacterization:  function (variant, title) {
-        var retVal = "";
-        var euroValue  = parseFloat(variant["EXCHP_T2D_MAF"]) ;
-        if (variant["EXCHP_T2D_P_value"]) {
-            retVal += ("<p>In exome chip data available on this portal, the minor allele frequency of "+title + " is "+
-                (euroValue*100).toPrecision(3)+ " percent in Europeans ("+UTILS.frequencyCharacterization(euroValue, [0.000001,0.005,0.05])+ ")");
-        }
-        return retVal;
-    },
     sigmaVariantCharacterization:  function (variant, title) {
         var retVal = "";
         var euroValue  = parseFloat(variant["SIGMA_T2D_MAF"]) ;

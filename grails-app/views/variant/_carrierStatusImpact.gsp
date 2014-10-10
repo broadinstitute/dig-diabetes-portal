@@ -5,30 +5,21 @@
 
 <g:if test="${show_exseq}">
 
-    <div id="exomeDataExists2" style="display: block">
+                <div id="carrierStatusExist" style="display: block">
 
 
-         <p>
-            <div id="carrierStatusDiseaseRiskChart"></div>
-        </p>
+                    <p>
+                    <div id="carrierStatusDiseaseRiskChart"></div>
+                </p>
 
-    </div>
+                </div>
 
-    <div id="exomeDataDoesNotExist" style="display: none">
+                <div id="carrierStatusNoExist" style="display: none">
 
-        <p>This variant is not in exome sequencing data available on this portal.</p>
+                    <h4>Insufficient data exists regarding this variant.</h4>
 
-    </div>
+                </div>
 
-
-</g:if>
-<g:else>
-    <p>This variant is not in exome sequencing data available on this portal.</p>
-</g:else>
-
-<g:if test="${show_exchp}">
-
-    <span id="eurocentricVariantCharacterization"></span>
 
 </g:if>
 

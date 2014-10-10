@@ -47,33 +47,6 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
             }
             return  retVal;
         },
-        showPercentagesAcrossHeterozygousCarriers: function (variant, title) {
-            var retVal = "";
-            var heta = parseFloat(variant["_13k_T2D_HETA"]);
-            var hetu = parseFloat(variant["_13k_T2D_HETU"]);
-            retVal += ("<li>Number of people across datasets who carry one copy of " + title + ": " + (parseFloat(heta) + parseFloat(hetu)) + "</li>");
-            retVal += ("<li>Number of these carriers who have type 2 diabetes: " + (heta) + "</li>");
-            retVal += ("<li>Number of people across datasets who carry one copy of " + title + ": " + (hetu) + "</li>");
-            return  retVal;
-        },
-        showPercentagesAcrossHomozygousCarriers: function (variant, title) {
-            var retVal = "";
-            var homa = parseFloat(variant["_13k_T2D_HOMA"]);
-            var homu = parseFloat(variant["_13k_T2D_HOMU"]);
-            retVal += ("<li>Number of people across datasets who carry two copies of  " + title + ": " + (homa + homu) + "</li>");
-            retVal += ("<li>Number of these carriers who have type 2 diabetes: " + (homa) + "</li>");
-            retVal += ("<li>Number of people across datasets who carry one copy of " + title + ": " + (homu) + "</li>");
-            return  retVal;
-        },
-        eurocentricVariantCharacterization:  function (variant, title) {
-            var retVal = "";
-            var euroValue  = parseFloat(variant["EXCHP_T2D_MAF"]) ;
-            if (variant["EXCHP_T2D_P_value"]) {
-                retVal += ("<p>In exome chip data available on this portal, the minor allele frequency of "+title + " is "+
-                    (euroValue*100).toPrecision(3)+ " percent in Europeans ("+UTILS.frequencyCharacterization(euroValue, [0.000001,0.005,0.05])+ ")");
-            }
-            return retVal;
-        },
         fillHowCommonIsUpBarChart: function (africanAmericanFrequency, hispanicFrequency, eastAsianFrequency, southAsianFrequency, europeanSequenceFrequency, europeanChipFrequency) {
             if ((typeof africanAmericanFrequency !== 'undefined')) {
                 var dataForBarChart = [
@@ -471,9 +444,6 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
 //                } ;
                 $('#describePValueInDiseaseRisk').append("<p class='slimDescription'>"+degreeOfSignificance+"</p>\n"+
                     "<p  id='bhtMetaBurdenForDiabetes' class='slimDescription'>p="+(pValue.toPrecision(3)) +"</p>");
-
-//                $('#drMetaBurdenForDiabetes').append("p="+
-//                    (pValue.toPrecision(3)));
             }
 
         }
@@ -481,49 +451,59 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
 
     }
 
-
+    // All the values we write no matter what
     $('#variantTitleInAssociationStatistics').append(variantTitle);
     $('#variantCharacterization').append(UTILS.getSimpleVariantsEffect(variant.MOST_DEL_SCORE));
     $('#describingVariantAssociation').append(UTILS.variantInfoHeaderSentence(variant));
     var pVal = UTILS.get_lowest_p_value(variant);
     $('#variantPValue').append((parseFloat(pVal[0])).toPrecision(4));
     $('#variantInfoGeneratingDataSet').append(pVal[1]);
+    $('#variantTitle').append(variantTitle);
+    $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
+    $('#populationsHowCommonIs').append(variantTitle);
 
 
-    $('#gwasAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
-        cariantRec,
-        cariantRec.IN_GWAS,
-        cariantRec.GWAS_T2D_PVALUE,
-        cariantRec.GWAS_T2D_OR,
-        5e-8,
-        5e-4,
-        5e-2,
-        variantTitle,
-        "GWAS",
-        false));
-    $('#exomeChipAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
-        cariantRec,
-        cariantRec.EXCHP_T2D_P_value,
-        cariantRec.EXCHP_T2D_P_value,
-        cariantRec.EXCHP_T2D_BETA,
-        5e-8,
-        5e-4,
-        5e-2,
-        variantTitle,
-        "exome chip",
-        false,
-        true));
-    $('#exomeSequenceAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
-        cariantRec,
-        cariantRec._13k_T2D_P_EMMAX_FE_IV,
-        cariantRec._13k_T2D_P_EMMAX_FE_IV,
-        cariantRec._13k_T2D_OR_WALD_DOS_FE_IV,
-        5e-8,
-        5e-4,
-        5e-2,
-        variantTitle,
-        "exome sequence",
-        false));
+    var weHaveVariantsAndAssociations = ((variant["IN_GWAS"]) || (variant["GWAS_T2D_PVALUE"]) || (variant["GWAS_T2D_OR"]) ||
+        (variant["EXCHP_T2D_P_value"]) || (variant["EXCHP_T2D_BETA"]) ||
+        (variant["_13k_T2D_P_EMMAX_FE_IV"]) || (variant["_13k_T2D_OR_WALD_DOS_FE_IV"]) );
+    UTILS.verifyThatDisplayIsWarranted(weHaveVariantsAndAssociations, $('#VariantsAndAssociationsExist'), $('#VariantsAndAssociationsNoExist'));
+    if (weHaveVariantsAndAssociations){
+        $('#gwasAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
+            cariantRec,
+            cariantRec.IN_GWAS,
+            cariantRec.GWAS_T2D_PVALUE,
+            cariantRec.GWAS_T2D_OR,
+            5e-8,
+            5e-4,
+            5e-2,
+            variantTitle,
+            "GWAS",
+            false));
+        $('#exomeChipAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
+            cariantRec,
+            cariantRec.EXCHP_T2D_P_value,
+            cariantRec.EXCHP_T2D_P_value,
+            cariantRec.EXCHP_T2D_BETA,
+            5e-8,
+            5e-4,
+            5e-2,
+            variantTitle,
+            "exome chip",
+            false,
+            true));
+        $('#exomeSequenceAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
+            cariantRec,
+            cariantRec._13k_T2D_P_EMMAX_FE_IV,
+            cariantRec._13k_T2D_P_EMMAX_FE_IV,
+            cariantRec._13k_T2D_OR_WALD_DOS_FE_IV,
+            5e-8,
+            5e-4,
+            5e-2,
+            variantTitle,
+            "exome sequence",
+            false));
+    }
+
 
 
     $('#variantInfoAssociationStatisticsLinkToTraitTable').append(UTILS.fillAssociationStatisticsLinkToTraitTable(variant,
@@ -532,22 +512,35 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
         cariantRec.DBSNP_ID,
         cariantRec.ID,
         traitsStudiedUrlRoot));
-    $('#variantTitle').append(variantTitle);
-    $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
-    $('#populationsHowCommonIs').append(variantTitle);
-//    $('#biologicalImpactOfMysteryVariant').append(variantTitle);
-//    $('#howCommonInExomeSequencing').append(privateMethods.showPercentageAcrossEthnicities(variant));
-    privateMethods.showEthnicityPercentageWithBarChart(variant);
-   // delayedHowCommonIsPresentation
-//    $('#howCommonInHeterozygousCarriers').append(privateMethods.showPercentagesAcrossHeterozygousCarriers(variant, variantTitle));
-//    $('#howCommonInHomozygousCarriers').append(privateMethods.showPercentagesAcrossHomozygousCarriers(variant, variantTitle));
-    privateMethods.showCarrierStatusDiseaseRisk(variant);
-    privateMethods.fillDiseaseRiskBurdenTest(variant);
 
- //   $('#eurocentricVariantCharacterization').append(privateMethods.eurocentricVariantCharacterization(variant, variantTitle));
-    var weHaveEnoughDataToCharacterize = ((variant["_13k_T2D_TRANSCRIPT_ANNOT"]) && (variant["_13k_T2D_AA_MAF"]) && (variant["_13k_T2D_AA_MAF"]));
-    UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToCharacterize, $('#exomeDataExists'), $('#exomeDataDoesNotExist'));
+
+
+
+    // disease burden
+    var weHaveEnoughDataForRiskBurdenTest = ((variant["_13k_T2D_HETA"]) && (variant["_13k_T2D_HETU"]) && (variant["_13k_T2D_HOMA"]) &&
+        (variant["_13k_T2D_HOMU"]) && (variant["_13k_T2D_OBSU"]) && (variant["_13k_T2D_OBSA"]));
+    UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataForRiskBurdenTest, $('#diseaseRiskExists'), $('#diseaseRiskNoExists'));
+    if (weHaveEnoughDataForRiskBurdenTest){
+        privateMethods.fillDiseaseRiskBurdenTest(variant);
+    }
     $('#sigmaVariantCharacterization').append(UTILS.sigmaVariantCharacterization(variant, variantTitle));
+
+    // how common is this allele across different ethnicities
+    var weHaveEnoughDataToDescribeMinorAlleleFrequencies = ((variant["EXCHP_T2D_MAF"]) && (variant["_13k_T2D_AA_MAF"]) && (variant["_13k_T2D_AA_MAF"]));
+    UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToDescribeMinorAlleleFrequencies, $('#howCommonIsExists'), $('#howCommonIsNoExists'));
+    if (weHaveEnoughDataToDescribeMinorAlleleFrequencies){
+        privateMethods.showEthnicityPercentageWithBarChart(variant);
+    }
+
+    // case control data set characterization
+    var weHaveEnoughDataToCharacterizeCaseControls = ((variant["_13k_T2D_HETA"]) && (variant["_13k_T2D_HETU"]) && (variant["_13k_T2D_HOMA"]) &&
+        (variant["_13k_T2D_HOMU"]) && (variant["_13k_T2D_OBSU"]) && (variant["_13k_T2D_OBSA"]));
+    UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToCharacterizeCaseControls, $('#carrierStatusExist'), $('#carrierStatusNoExist'));
+    if (weHaveEnoughDataToCharacterizeCaseControls){
+        privateMethods.showCarrierStatusDiseaseRisk(variant);
+    }
+
+
 
     $('#effectOfVariantOnProteinTitle').append(privateMethods.variantGenerateProteinsChooserTitle(variant, variantTitle));
     $('#effectOfVariantOnProtein').append(privateMethods.variantGenerateProteinsChooser(variant, variantTitle));

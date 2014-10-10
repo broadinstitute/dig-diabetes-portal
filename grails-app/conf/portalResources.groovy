@@ -11,6 +11,8 @@ modules = {
 
         resource url: 'js/lib/dport/geneInfo.js'
         resource url: 'js/lib/dport/barchart.js'
+
+        resource url: 'js/lib/dport/igvLaunch.js'
     }
     variantInfo {
         resource url: 'css/dport/barchart.css'
@@ -18,12 +20,11 @@ modules = {
 
         resource url: 'js/lib/dport/variantInfo.js'
         resource url: 'js/lib/dport/barchart.js'
+
+        resource url: 'js/lib/dport/igvLaunch.js'
     }
-//    brandingStyle {
-//        resource url: 'css/lib/t2dBranding.css',bundle:'brandingStyle'
-//    }
     // igv and core independently call jquery
-    igv { // igv alone on a page
+    igv {
         resource url: 'js/lib/jquery-1.11.0.min.js'
 
         resource url: 'images/ajaxLoadingAnimation.gif'

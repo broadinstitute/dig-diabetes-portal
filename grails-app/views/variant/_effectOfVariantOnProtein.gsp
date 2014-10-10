@@ -187,6 +187,6 @@
 
 <span id="puntOnNoncodingVariant">
 
-    <p>This variant is non-coding. Annotation coming soon.</p>
+    <h4>Insufficient data exists regarding this variant.</h4>
 </span>
 
