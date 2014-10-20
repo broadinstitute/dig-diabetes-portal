@@ -6,9 +6,6 @@
     <r:require modules="geneInfo"/>
     <r:layoutResources/>
     <%@ page import="dport.RestServerService" %>
-    %{--<%--}%
-    %{--RestServerService   restServerService = grailsApplication.classLoader.loadClass('dport.RestServerService').newInstance()--}%
-    %{--%>--}%
 
     <link type="application/font-woff">
     <link type="application/vnd.ms-fontobject">
@@ -28,7 +25,6 @@
     <g:javascript src="lib/igv/vendor/inflate.js"/>
     <g:javascript src="lib/igv/vendor/zlib_and_gzip.min.js"/>
 
-    %{--<g:javascript base="http://www.broadinstitute.org/" src="/igvdata/t2d/igv-all.min.js" />--}%
     <!-- IGV js  and css code -->
     <link href="http://www.broadinstitute.org/igvdata/t2d/igv.css" type="text/css" rel="stylesheet">
     %{--<g:javascript base="http://iwww.broadinstitute.org/" src="/igvdata/t2d/igv-all.js" />--}%

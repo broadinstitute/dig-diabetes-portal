@@ -1,7 +1,8 @@
 var delayedHowCommonIsPresentation = {},
     delayedCarrierStatusDiseaseRiskPresentation = {},
-    delayedBurdenTestPresentation = {};
-function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
+    delayedBurdenTestPresentation = {},
+    delayedIgvLaunch = {};
+function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot, restServerRoot) {
     var cariantRec = {
         _13k_T2D_HET_CARRIERS: 1,
         _13k_T2D_HOM_CARRIERS: 2,
@@ -29,7 +30,27 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
     };
     variant = data['variant'];
     variantTitle = UTILS.get_variant_title(variant, variantToSearch);
+
+    /***
+     * Within the object privateMethods are all the subroutines that we need to call
+     * @type {{showPercentageAcrossEthnicities: showPercentageAcrossEthnicities, fillHowCommonIsUpBarChart: fillHowCommonIsUpBarChart, fillCarrierStatusDiseaseRisk: fillCarrierStatusDiseaseRisk, showEthnicityPercentageWithBarChart: showEthnicityPercentageWithBarChart, showCarrierStatusDiseaseRisk: showCarrierStatusDiseaseRisk, variantGenerateProteinsChooserTitle: variantGenerateProteinsChooserTitle, variantGenerateProteinsChooser: variantGenerateProteinsChooser, fillUpBarChart: fillUpBarChart, fillDiseaseRiskBurdenTest: fillDiseaseRiskBurdenTest}}
+     */
     privateMethods = {
+        calculateSearchRegion: function(variant) {
+            var searchBand = 50000;// 50 kb
+            var returnValue = "";
+            if (variant){
+                if ((typeof variant["CHROM"] !== 'undefined') &&
+                    (typeof variant["POS"] !== 'undefined')){ // an't do anything without chromosome number and sequence position
+                    var chromosomeIdentifier = variant["CHROM"];  // String
+                    var position = variant["POS"];// number
+                    var beginPosition = Math.max(0,position-searchBand);
+                    var endPosition = position+searchBand;
+                    returnValue = "chr"+chromosomeIdentifier + ":"+beginPosition + "-"+endPosition;
+                }
+            }
+            return returnValue;
+        },
         showPercentageAcrossEthnicities: function (variant) {
             var retVal = "";
             var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
@@ -125,7 +146,7 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
                             barsubname: '',
                             barsubnamelink:'http://www.google.com',
                             inbar: '',
-                            descriptor: '(total '+(homozygCase+heterozygCase+nonCarrierCase)+')',
+                            descriptor: '(total '+(+nonCarrierCase)+')',
                             inset: 1 },
                         { value:  homozygCase,
                             position: 2,
@@ -143,7 +164,7 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
                             inbar: '',
                             descriptor: '',
                             legendText: '1 copy (heterozygous)'},
-                        { value: nonCarrierCase,
+                        { value: nonCarrierCase-(homozygCase+heterozygCase),
                             position: 4,
                             barname: '   ',
                             barsubname: '',
@@ -157,7 +178,7 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
                             barsubname: '',
                             barsubnamelink:'http://www.google.com',
                             inbar: '',
-                            descriptor: '(total '+(homozygControl+heterozygControl+nonCarrierControl)+')',
+                            descriptor: '(total '+(nonCarrierControl)+')',
                             inset: 1 },
                         {  value: homozygControl,
                             position:  7,
@@ -173,7 +194,7 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
                             barsubnamelink:'http://www.google.com',
                             inbar: '',
                             descriptor: ''},
-                        { value: nonCarrierControl,
+                        { value: nonCarrierControl-(homozygControl+heterozygControl),
                             position: 9,
                             barname: '      ',
                             barsubname: '',
@@ -451,7 +472,9 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
 
     }
 
-    // All the values we write no matter what
+    /***
+     * Now come all the methods we call when the page loads
+     */
     $('#variantTitleInAssociationStatistics').append(variantTitle);
     $('#variantCharacterization').append(UTILS.getSimpleVariantsEffect(variant.MOST_DEL_SCORE));
     $('#describingVariantAssociation').append(UTILS.variantInfoHeaderSentence(variant));
@@ -461,6 +484,20 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
     $('#variantTitle').append(variantTitle);
     $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
     $('#populationsHowCommonIs').append(variantTitle);
+    $('#exploreSurroundingSequenceTitle').append(variantTitle);
+
+
+    /***
+     * store everything we need to launch IGV
+     */
+    var regionforIgv = privateMethods.calculateSearchRegion(variant);
+    delayedIgvLaunch = {
+        rememberRegion: regionforIgv,
+        launch:function(){
+            igvLauncher.launch("#myVariantDiv", regionforIgv,restServerRoot);
+        }
+
+    }
 
 
     var weHaveVariantsAndAssociations = ((variant["IN_GWAS"]) || (variant["GWAS_T2D_PVALUE"]) || (variant["GWAS_T2D_OR"]) ||
@@ -513,9 +550,6 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
         cariantRec.ID,
         traitsStudiedUrlRoot));
 
-
-
-
     // disease burden
     var weHaveEnoughDataForRiskBurdenTest = ((variant["_13k_T2D_HETA"]) && (variant["_13k_T2D_HETU"]) && (variant["_13k_T2D_HOMA"]) &&
         (variant["_13k_T2D_HOMU"]) && (variant["_13k_T2D_OBSU"]) && (variant["_13k_T2D_OBSA"]));
@@ -539,8 +573,6 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot) {
     if (weHaveEnoughDataToCharacterizeCaseControls){
         privateMethods.showCarrierStatusDiseaseRisk(variant);
     }
-
-
 
     $('#effectOfVariantOnProteinTitle').append(privateMethods.variantGenerateProteinsChooserTitle(variant, variantTitle));
     $('#effectOfVariantOnProtein').append(privateMethods.variantGenerateProteinsChooser(variant, variantTitle));

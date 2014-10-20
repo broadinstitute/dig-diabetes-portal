@@ -16,6 +16,36 @@
         font-size: inherit;
     }
     </style>
+
+
+    <link type="application/font-woff">
+    <link type="application/vnd.ms-fontobject">
+    <link type="application/x-font-ttf">
+    <link type="font/opentype">
+
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css"
+          rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Bootstrap -->
+    <g:javascript src="lib/igv/vendor/inflate.js"/>
+    <g:javascript src="lib/igv/vendor/zlib_and_gzip.min.js"/>
+
+    <!-- IGV js  and css code -->
+    <link href="http://www.broadinstitute.org/igvdata/t2d/igv.css" type="text/css" rel="stylesheet">
+    %{--<g:javascript base="http://iwww.broadinstitute.org/" src="/igvdata/t2d/igv-all.js" />--}%
+    <g:javascript base="http://www.broadinstitute.org/" src="/igvdata/t2d/igv-all.min.js"/>
+    <g:set var="restServer" bean="restServerService"/>
+
+
+
+
+
 </head>
 
 <body>
@@ -31,7 +61,8 @@
         success: function (data) {
             fillTheFields(data,
                     "<%=variantToSearch%>",
-                    "<g:createLink controller='trait' action='traitInfo' />");
+                    "<g:createLink controller='trait' action='traitInfo' />",
+                    "${restServer.currentRestServer()}");
             loading.hide();
         },
         error: function (jqXHR, exception) {
@@ -145,10 +176,27 @@
                             </div>
                         </div>
 
-
-
-
                     </div>
+
+
+                    <div class="separator"></div>
+
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordionVariant"
+                               href="#collapseIgv">
+                                <h2><strong>Explore the sequence surrounding
+                                    <span id="exploreSurroundingSequenceTitle" class="parentsFont"></span> with IGV.</strong></h2>
+                            </a>
+                        </div>
+
+                        <div id="collapseIgv" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <g:render template="igvBrowser"/>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <div class="separator"></div>
 
@@ -177,6 +225,12 @@
 
 </div>
 <script>
+    $('#accordionVariant').on('shown.bs.collapse', function (e) {
+        if (e.target.id === "collapseIgv") {
+            delayedIgvLaunch.launch();
+        }
+
+    });
     $('#accordionVariant').on('show.bs.collapse', function (e) {
         if (e.target.id === "collapseIgv") {
 
