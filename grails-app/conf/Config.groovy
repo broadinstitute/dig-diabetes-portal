@@ -103,7 +103,7 @@ t2dProdRestServer {
     name =  'prod/'
     path = 'rest/server/'
 }
-server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
+server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
 
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
@@ -204,8 +204,8 @@ environments {
 
 //  grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //   grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
-   grails.serverURL = "http://type2diabetesgenetics.org"
-//   grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+//   grails.serverURL = "http://type2diabetesgenetics.org"
+   grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //        grails.serverURL = "type2diabetesqasrvr-env.elasticbeanstalk.com"
 //        grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
         grails.logging.jul.usebridge = false

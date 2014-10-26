@@ -93,7 +93,7 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
 }
 """.toString()
         when:
-        JSONObject jsonObject = restServerService.postServiceJson("http://t2dgenetics.org/mysql/rest/server/gene-info",
+        JSONObject jsonObject = restServerService.postServiceJson(restServerService.currentRestServer()+"gene-info",
                 testJson)
         then:
         assert jsonObject
