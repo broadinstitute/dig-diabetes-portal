@@ -40,6 +40,9 @@ if (appName) {
     String primaryOverrideDirName = System.properties.get('primaryConfigDir')
     String secondaryOverrideDirName = "${userHome}/.grails/${appName}"
 
+    println (">>>>>>>>>>>primaryOverrideDirName  = ${primaryOverrideDirName}")
+    println (">>>>>>>>>>>secondaryOverrideDirName  = ${secondaryOverrideDirName}")
+
     List<String> fileNames = ["${appName}-commons-config.groovy", "${appName}-${Environment.current.name}-config.groovy"]
     fileNames.each { fileName ->
         String primaryFullName = "${primaryOverrideDirName}/${fileName}"
