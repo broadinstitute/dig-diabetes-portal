@@ -81,6 +81,9 @@ class BootStrap {
                     UserRole.create user,userRole
                     if ((username=='ben')||
                             (username=='balexand@broadinstitute.org')||
+                            (username=='tgreen@broadinstitute.com')||
+                            (username=='kyuksel@broadinstitute.org')||
+                            (username=='tjordan@broadinstitute.org')||
                             (username=='flannick@broadinstitute.org')){
                         UserRole.create user,adminRole
                         UserRole.create user,systemRole

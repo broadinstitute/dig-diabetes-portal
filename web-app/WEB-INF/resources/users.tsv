@@ -1,5 +1,5 @@
 #email	name	nickname	is_staff	has_logged_in
-brettpthomas@gmail.com			1	1
+tgreen@broadinstitute.com	Todd Green 2	Todd	1	0
 bthomas@broadinstitute.org	Brett Thomas 2	Brett2	0	0
 maryc@broadinstitute.org	Mary Carmichael	Mary	1	1
 flannick@broadinstitute.org	Jason Flannick PhD	Jason	1	1
@@ -20,21 +20,6 @@ john@txbiomedgenetics.org	John Blangero	John	0	0
 ncox@bsd.uchicago.edu	Nancy Cox PhD	Nancy	0	0
 mark.seielstad@ucsf.edu	Mark Seielstad 	Mark	0	0
 goncalo@umich.edu	Goncalo Abecasis	Goncalo	0	0
-brettpthomas+1@gmail.com	Brett Test	brett	0	0
-brettpthomas+2@gmail.com	Brett Test	brett	0	0
-brettpthomas+5@gmail.com	Brett Test	brett	0	0
-brettpthomas+6@gmail.com	Brett Test	b	0	0
-brettpthomas+7@gmail.com	Brett Test	b	0	0
-brettpthomas+10@gmail.com	BT BT	B	0	0
-brettpthomas+100@gmail.com	BT BT	B	0	0
-brettpthomas+1000@gmail.com	BT BT	B	0	0
-brettpthomas+14000@gmail.com	BT BT	B	0	1
-brettpthomas+140009@gmail.com	BT BT4	B4	0	1
-bthomas+1@broadinstitute.org	BT BT4	B4	0	0
-maryc+1@broadinstitute.org	Mary Carmichael	Mary	0	1
-burtt+1@broadinstitute.org	Noel Burtt	Noel	0	0
-bthomas+11@broadinstitute.org	BT BT4	B4	0	0
-bthomas+111@broadinstitute.org	BT BT4	B4	0	0
 abboud@uthscsa.edu	 Hannah Abboud	 Hannah	0	0
 akolkarb@mail.nih.gov	 Beena Akolkar	 Beena	0	1
 nallred@wakehealth.edu	 Nicholette Allred	 Nicholette	0	1

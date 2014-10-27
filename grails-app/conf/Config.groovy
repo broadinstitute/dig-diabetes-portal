@@ -20,7 +20,9 @@ if  (Environment.current == Environment.DEVELOPMENT)  {
     println('\n\n*** Preparing TEST environment ***\n\n')
 }   else if  (Environment.current == Environment.PRODUCTION)  {
     println('\n\n*** Preparing PROD environment ***\n\n')
- }
+ }  else {
+    println("\n\n*** Preparing ${Environment.current} environment ***\n\n")
+}
 
 
 /**
@@ -37,11 +39,12 @@ if (appName) {
     // This will look like 'grails -DprimaryConfigDir=[directory name] [target]'
     // Otherwise, look for these files in the user's home .grails/projectdb directory
     // If there are no external config files in either location, don't override anything in this Config.groovy
-    String primaryOverrideDirName = System.properties.get('primaryConfigDir')
+    String primaryOverrideDirName = System.properties.get('overrideConfigDir')
     String secondaryOverrideDirName = "${userHome}/.grails/${appName}"
 
-    println (">>>>>>>>>>>primaryOverrideDirName  = ${primaryOverrideDirName}")
-    println (">>>>>>>>>>>secondaryOverrideDirName  = ${secondaryOverrideDirName}")
+    println (">>>>>>>>>>>Note to developers: config files may be placed in the directory  = ${secondaryOverrideDirName}")
+    println (">>>>>>>>>>>Alternatively, specify the directory you are drawing from with the grails option -DoverrideConfigDir=myDirectoryWhichMightBeNamedWhateverIWant")
+
 
     List<String> fileNames = ["${appName}-commons-config.groovy", "${appName}-${Environment.current.name}-config.groovy"]
     fileNames.each { fileName ->
@@ -58,16 +61,14 @@ if (appName) {
     }
  }
 
-
-
-// grails.config.locations = [ "classpath:${appName}-config.properties",
-//                             "classpath:${appName}-config.groovy",
-//                             "file:${userHome}/.grails/${appName}-config.properties",
-//                             "file:${userHome}/.grails/${appName}-config.groovy"]
-
-// if (System.properties["${appName}.config.location"]) {
-//    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
-// }
+if (grails.config.locations.isEmpty()){
+    println "\n** No config override  in effect **"
+} else {
+    println "\n** !! config override is in effect !! **"
+    for (location in grails.config.locations )   {
+        println "!!!!! ${location} !! **"
+    }
+}
 
 site.version = 't2dgenes' // could be 'sigma' or 't2dgenes'
 site.title = 'Type 2 Diabetes Genetics'  // could be 'SIGMA T2D' or 'Type 2 Diabetes Genetics'
@@ -104,6 +105,10 @@ t2dProdRestServer {
     path = 'rest/server/'
 }
 server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
+
+
+
+println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
 
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
@@ -211,7 +216,13 @@ environments {
         grails.logging.jul.usebridge = false
     }
 }
-println ">>>>>>>>>>>>grails.serverURL=${grails.serverURL}<<<<<<<<<<<<<<<<<<<<<<"
+
+if  (Environment.current == Environment.PRODUCTION)  {
+    println("\n\n>>>>>>>>>>>>grails.serverURL=${grails.serverURL}<<<<<<<<<<<<<<<<<<<<<<")
+}   else {
+    println("\nEnvironment = ${Environment.current}, therefore no grails.serverURL")
+}
+
 // email (gmail)
 grails {
     mail {
