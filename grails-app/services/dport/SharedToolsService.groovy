@@ -12,6 +12,15 @@ class SharedToolsService {
      def mailService
      def grailsApplication
 
+
+
+    static public LinkedHashMap<String,Boolean> sectionsToDisplay = [show_gene:1,
+                                                                     show_gwas:1,
+                                                                     show_exchp: 1,
+                                                                     show_exseq: 1,
+                                                                     show_sigma: 0]
+
+
     /***
      *  urlEncodedListOfPhenotypes delivers the information in the Phenotype domain object
      *  for convenient delivery to the browser

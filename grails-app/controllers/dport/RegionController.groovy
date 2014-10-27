@@ -57,11 +57,11 @@ class RegionController {
         String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
         render (view: 'regionInfo',
                 model:[regionSpecification: regionSpecification,
-                       show_gene:1,
-                       show_gwas:1,
-                       show_exchp: 1,
-                       show_exseq: 1,
-                       show_sigma: 0,
+                       show_gene:sharedToolsService.sectionsToDisplay.show_gene,
+                       show_gwas:sharedToolsService.sectionsToDisplay.show_gwas,
+                       show_exchp:sharedToolsService.sectionsToDisplay.show_exchp,
+                       show_exseq:sharedToolsService.sectionsToDisplay.show_exseq,
+                       show_sigma:sharedToolsService.sectionsToDisplay.show_sigma,
                        proteinEffectsList:encodedProteinEffects,
                        geneNamesToDisplay:geneNamesToDisplay
                 ] )
