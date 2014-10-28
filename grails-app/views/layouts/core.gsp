@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@ page import="org.springframework.web.servlet.support.RequestContextUtils" %>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
 <!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
@@ -115,34 +116,23 @@
 <div id="header">
     <div id="header-top">
         <div class="container">
+            <% def locale = RequestContextUtils.getLocale(request) %>
             <g:if test="${grailsApplication.config.site.version == 'sigma'}">
 
-                <div id="language">
-                    <form id="language-es" action="/i18n/setlang/" method="post">
-                        <input type="hidden" name="language" value="es"/>
-                    </form>
-
-                    <form id="language-en-us" action="/i18n/setlang/" method="post">
-                        <input type="hidden" name="language" value="en"/>
-                    </form>
-                    <a href="#" onclick="document.getElementById('language-es').submit();">
-                        <img class="{% if LANGUAGE_CODE == 'es' %}currentlanguage{% endif %}"
-                             src="images/Mexico.png" alt="Mexico"/>
-                    </a>
-                    <a href="#" onclick="document.getElementById('language-en-us').submit();">
-                        <img class="{% if LANGUAGE_CODE == 'en' %}currentlanguage{% endif %}"
-                             src="images/United-States.png" alt="USA"/>
-                    </a>
-                </div>
+                <span id="language">
+                    <a href="/dig-diabetes-portal/home/index?lang=es"><i class="icon-user icon-white"><img class="currentlanguage"
+                                                                                                           src="../images/Mexico.png" alt="Mexico"/></i></a>
+                    <a href="/dig-diabetes-portal/home/index?lang=en"> <i class="icon-user icon-white"><img class="currentlanguage"
+                                                                                                            src="../images/United-States.png" alt="USA"/></i></a>
+                </span>
 
                 <div id="branding">
-                    SIGMA <strong>T2D</strong> <small>
-                </small>
+                    SIGMA <strong>T2D</strong> <small>${grailsApplication.config.site.subtext}</small>
                 </div>
             </g:if>
             <g:elseif test="${grailsApplication.config.site.version == 't2dgenes'}">
                 <div id="branding">
-                    Type 2 Diabetes <strong>Genetics</strong> <small>Beta</small>
+                    Type 2 Diabetes <strong>Genetics</strong> <small>${grailsApplication.config.site.subtext}</small>
                 </div>
             </g:elseif>
         </div>
@@ -169,16 +159,9 @@
                     <g:link controller='login' action='auth'>Login</g:link>
                 </div>
             </sec:ifNotLoggedIn>
-            <g:if test="${grailsApplication.config.site.version == 't2dgenes'}">
-                <a href="${createLink(controller:'home',action:'portalHome')}">Home</a> &middot;
-                <a href="${createLink(controller:'informational', action:'about')}">About The Data</a> &middot;
-                <a href="${createLink(controller:'informational', action:'contact')}">Contact</a>
-            </g:if>
-            <g:elseif test="${grailsApplication.config.site.version == 'sigma'}">
-                <a href="/query">{% trans "Query" %}</a> &middot;
-                <a href="/">{% trans "About" %}</a> &middot;
-                <a href="/contact">{% trans "Contact" %}</a>
-            </g:elseif>
+            <a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a> &middot;
+            <a href="${createLink(controller:'informational', action:'about')}"><g:message code="localized.aboutTheData"/></a> &middot;
+            <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="localized.contact"/></a>
         </div>
     </div>
 </div>

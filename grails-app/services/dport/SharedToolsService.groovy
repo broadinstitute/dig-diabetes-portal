@@ -12,13 +12,36 @@ class SharedToolsService {
      def mailService
      def grailsApplication
 
+//    portal.sections.show_gene
+
+    public enum TypeOfSection {
+        show_gwas, show_exchp, show_exseq, show_sigma,show_gene
+    }
+
+    public Boolean getSectionToDisplay(TypeOfSection typeOfSection) {
+        Boolean returnValue = false
+        switch (typeOfSection) {
+            case TypeOfSection.show_gwas:
+                returnValue = grailsApplication.config.portal.sections.show_gwas
+                break;
+            case TypeOfSection.show_exchp:
+                returnValue = grailsApplication.config.portal.sections.show_exchp
+                break;
+            case TypeOfSection.show_exseq:
+                returnValue = grailsApplication.config.portal.sections.show_exseq
+                break;
+            case TypeOfSection.show_sigma:
+                returnValue = grailsApplication.config.portal.sections.show_sigma
+                break;
+            case TypeOfSection.show_gene:
+                returnValue = grailsApplication.config.portal.sections.show_gene
+                break;
+            default:break;
+        }
+        return returnValue
+    }
 
 
-    static public LinkedHashMap<String,Boolean> sectionsToDisplay = [show_gene:1,
-                                                                     show_gwas:1,
-                                                                     show_exchp: 1,
-                                                                     show_exseq: 1,
-                                                                     show_sigma: 0]
 
 
     /***

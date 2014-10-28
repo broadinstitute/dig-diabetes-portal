@@ -11,6 +11,43 @@ def catalinaBase = System.properties.getProperty('catalina.base')
 if (!catalinaBase) catalinaBase = '.'   // just in case
 def logDirectory = "${catalinaBase}/logs"
 
+
+site.version = 't2dgenes' // could be 'sigma' or 't2dgenes'
+if (site.version == 't2dgenes'){
+    site.title = 'Type 2 Diabetes Genetics'  // could be 'SIGMA T2D' or 'Type 2 Diabetes Genetics'
+    site.subtext = 'Beta'
+    site.operator = 'balexand@broadinstitute.org'
+
+    portal {
+        sections {
+            show_gene = 1
+            show_gwas  = 1
+            show_exchp = 1
+            show_exseq = 1
+            show_sigma = 0
+        }
+    }
+
+}else if (site.version == 'sigma'){
+    site.title = 'SIGMA T2D'  // could be 'SIGMA T2D' or 'Type 2 Diabetes Genetics'
+    site.subtext = 'a resource on the genetics of type 2 diabetes in Mexico'
+    site.operator = 'balexand@broadinstitute.org'
+
+    portal {
+        sections {
+            show_gene = 1
+            show_gwas  = 0
+            show_exchp = 0
+            show_exseq = 0
+            show_sigma = 1
+        }
+    }
+
+
+
+}
+
+
 grails.plugin.databasemigration.updateOnStart = true
 
 
@@ -70,9 +107,6 @@ if (grails.config.locations.isEmpty()){
     }
 }
 
-site.version = 't2dgenes' // could be 'sigma' or 't2dgenes'
-site.title = 'Type 2 Diabetes Genetics'  // could be 'SIGMA T2D' or 'Type 2 Diabetes Genetics'
-site.operator = 'balexand@broadinstitute.org'
 //
 //    default server on start up
 //
@@ -223,6 +257,11 @@ if  (Environment.current == Environment.PRODUCTION)  {
     println("\nEnvironment = ${Environment.current}, therefore no grails.serverURL")
 }
 
+
+
+
+
+
 // email (gmail)
 grails {
     mail {
@@ -242,9 +281,7 @@ grails.plugin.springsecurity.securityConfigType = "InterceptUrlMap"
 grails.plugin.springsecurity.interceptUrlMap = [
         '/':                        ['permitAll'],
         '/home':                    ['permitAll'],
-        '/home/index':              ['ROLE_USER'],
-        '/home/portalHome':         ['ROLE_USER'],
-        '/home/errorReporter':      ['ROLE_USER'],
+        '/home/**':              ['ROLE_USER'],
         '/system/**':               ['ROLE_SYSTEM'],
         '/admin/resetPassword':     ['permitAll'],
         '/admin/resetPasswordInteractive/**':     ['permitAll'],

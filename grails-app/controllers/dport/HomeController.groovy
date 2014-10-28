@@ -15,7 +15,12 @@ class HomeController {
     def portalHome = {
         render(controller: 'home', view: 'portalHome', model: [])
     }
-
+    def setEnglish = {
+        render(controller: 'home', view: 'portalHome', model: [])
+    }
+    def setEspanol = {
+        render(controller: 'home', view: 'portalHome', model: [])
+    }
     def errorReporter = {
         String errorText = params['errorText']
         log.debug "*** Received error from client reporter. text=${errorText}"
