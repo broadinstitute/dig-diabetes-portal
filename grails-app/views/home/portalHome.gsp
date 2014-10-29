@@ -61,6 +61,8 @@
  </script>
 <div id="main">
     <div class="container">
+
+<g:if test="${(!(show_sigma==null || show_sigma==0))}">
         <p>
             This portal contains results from genetic association studies of type 2 diabetes.
             Datatsets include exome sequencing results contributed by <a class="boldlink" href="${createLink(controller:'informational', action:'t2dgenes')}">T2D-GENES</a>
@@ -69,15 +71,16 @@
         and GWAS results contributed by <a class="boldlink" href="http://diagram-consortium.org/about.html">DIAGRAM</a> (n&asymp;69,033).
         The portal also contains  results from large GWAS meta-analyses of <a class="boldlink" href="${createLink(controller:'informational', action:'hgat')}">24 other traits</a>.
         </p>
+</g:if>
+
         <p>
-            To use these results to investigate a biological hypothesis or assess a potential drug target,
-            choose a starting point below.
+            <g:message code="mainpage.to.query.these.data"/>
         </p>
 
         <div class="row">
             <div class="col-sm-5">
                 <div class="main-searchbox">
-                    <h2>Start with a gene</h2>
+                    <h2><g:message code="mainpage.start.with.gene"/></h2>
                     <div class="input-group input-group-lg">
                         <input type="text" class="form-control" id="gene-input">
                         <span class="input-group-btn">
@@ -87,7 +90,7 @@
                     <div class="helptext">enter <a class="boldlink" href="http://www.genenames.org" target="_blank">HGNC</a> gene symbol</div>
                 </div>
                 <div class="main-searchbox">
-                    <h2>Start with a variant</h2>
+                    <h2><g:message code="mainpage.start.with.variant"/></h2>
                     <div class="input-group input-group-lg">
                         <input type="text" class="form-control" id="variant-input">
                         <span class="input-group-btn">
@@ -97,7 +100,7 @@
                     <div class="helptext">enter rsID (e.g., rs13266634)</div>
                 </div>
                 <div class="main-searchbox">
-                    <h2>Start with a genomic region</h2>
+                    <h2><g:message code="mainpage.start.with.region"/></h2>
                     <div class="input-group input-group-lg">
                         <input type="text" class="form-control" id="region-input">
                         <span class="input-group-btn">
@@ -112,7 +115,7 @@
                 <div class="row">
                     <div class="col-sm-9">
                         <h2>
-                            Find variants associated with type 2 diabetes <br/>
+                            <g:message code="mainpage.search.variant"/><br/>
                             <small>(from exome and exome chip data)</small>
                         </h2>
                     </div>
@@ -121,7 +124,7 @@
                     </div>
                 </div>
                 <h2>
-                    Find variants associated with type 2 diabetes and related traits <br/>
+                    <g:message code="mainpage.search.variant.related.traits"/><br/>
                     <small>(from large GWAS meta-analyses)</small>
                 </h2>
                 <div class="input-group input-group-lg">
@@ -143,7 +146,7 @@
                         </optgroup>
                     </select>
                 </div>
-                <h4>Set association threshold</h4>
+                <h4><g:message code="mainpage.set.association.threshold"/></h4>
                 <div class="row">
                     <g:form name="trait" action="traitSearch">
                     <div class="col-sm-9">

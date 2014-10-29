@@ -36,7 +36,7 @@ if (site.version == 't2dgenes'){
     portal {
         sections {
             show_gene = 1
-            show_gwas  = 0
+            show_gwas  = 1
             show_exchp = 0
             show_exseq = 0
             show_sigma = 1
@@ -281,7 +281,8 @@ grails.plugin.springsecurity.securityConfigType = "InterceptUrlMap"
 grails.plugin.springsecurity.interceptUrlMap = [
         '/':                        ['permitAll'],
         '/home':                    ['permitAll'],
-        '/home/**':              ['ROLE_USER'],
+        '/home/**':                 ['ROLE_USER'],
+        '/articles/**':             ['permitAll'],
         '/system/**':               ['ROLE_SYSTEM'],
         '/admin/resetPassword':     ['permitAll'],
         '/admin/resetPasswordInteractive/**':     ['permitAll'],
@@ -290,7 +291,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/admin/**':            ['ROLE_ADMIN'],
         '/user/**':            ['ROLE_ADMIN'],
         '/gene/**':             ['ROLE_USER'],
-        '/informational/**':    ['ROLE_USER'],
+        '/informational/**':    ['permitAll'],
         '/region/**':           ['ROLE_USER'],
         '/trait/**':            ['ROLE_USER'],
         '/variant/**':          ['ROLE_USER'],

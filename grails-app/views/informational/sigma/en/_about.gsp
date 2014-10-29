@@ -16,7 +16,7 @@
             and a low-frequency variant in the gene HNF1A that increases diabetes risk by five-fold.
             An explanation of the findings' potential significance, written by one of the authors, is available in
             <a href="http://www.genomesunzipped.org/2014/06/a-rare-variant-in-mexico-with-far-reaching-implications.php">English</a>
-            and <a href="/articles/estrada-hnf1a">Spanish</a>.
+            and <a href="<g:createLink controller="articles" action="estradahnf1a" />">Spanish</a>.
         </p>
         <p>
             This portal currently contains datasets from SIGMA's type 2 diabetes GWAS and exome sequencing projects in people of Mexican and Latin American descent.

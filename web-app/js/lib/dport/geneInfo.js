@@ -534,7 +534,8 @@ function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exs
             "<p  id='bhtMetaBurdenForDiabetes' class='slimDescription'>p="+(bhtMetaBurdenForDiabetes.toPrecision(3)) +"</p>");
     }
     var linkToVariantsPredictedToTruncate = $('#linkToVariantsPredictedToTruncate') ;
-    if (typeof linkToVariantsPredictedToTruncate!== "undefined") {
+    if ((typeof linkToVariantsPredictedToTruncate!== "undefined") &&
+        (typeof linkToVariantsPredictedToTruncate[0]!== "undefined")){
         linkToVariantsPredictedToTruncate[0].href =  rootVariantUrl+"/"+(geneInfo["ID"])+"?filter=lof";
     }
 

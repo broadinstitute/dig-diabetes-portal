@@ -1,5 +1,7 @@
 package dport
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 class HtmlTagLib {
 //    static defaultEncodeAs = [taglib: 'html']
 
@@ -35,7 +37,8 @@ class HtmlTagLib {
         String fileContents = ""
 
         file.eachLine {
-            fileContents += it
+            String rawCharacters = it
+            fileContents += StringEscapeUtils.escapeJavaScript(rawCharacters)
         }
          out << fileContents
     }

@@ -6,6 +6,7 @@ import org.apache.juli.logging.LogFactory
 class HomeController {
     private static final log = LogFactory.getLog(this)
     GrailsApplication grailsApplication
+    SharedToolsService sharedToolsService
     def mailService
 
     def index = {
@@ -13,7 +14,10 @@ class HomeController {
     }
 
     def portalHome = {
-        render(controller: 'home', view: 'portalHome', model: [])
+        render(controller: 'home', view: 'portalHome', model: [show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
+                                                               show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
+                                                               show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
+                                                               show_sigma:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma)])
     }
     def setEnglish = {
         render(controller: 'home', view: 'portalHome', model: [])
