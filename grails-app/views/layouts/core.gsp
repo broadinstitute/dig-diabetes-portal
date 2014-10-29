@@ -120,14 +120,12 @@
             <g:if test="${grailsApplication.config.site.version == 'sigma'}">
 
                 <span id="language">
-                    <a href="/dig-diabetes-portal/home/index?lang=es"><i class="icon-user icon-white"><img class="currentlanguage"
-                                                                                                           src="../images/Mexico.png" alt="Mexico"/></i></a>
-                    <a href="/dig-diabetes-portal/home/index?lang=en"> <i class="icon-user icon-white"><img class="currentlanguage"
-                                                                                                            src="../images/United-States.png" alt="USA"/></i></a>
+                    <a href="/dig-diabetes-portal/home/index?lang=es"><i class="icon-user icon-white"><r:img class="currentlanguage" uri="/images/Mexico.png" alt="Mexico"/></i></a>
+                    <a href="/dig-diabetes-portal/home/index?lang=en"> <i class="icon-user icon-white"><r:img class="currentlanguage" uri="/images/United-States.png" alt="USA"/></i></a>
                 </span>
 
                 <div id="branding">
-                    SIGMA <strong>T2D</strong> <small>${grailsApplication.config.site.subtext}</small>
+                    SIGMA <strong>T2D</strong> <small><g:message code="site.subtext"/></small>
                 </div>
             </g:if>
             <g:elseif test="${grailsApplication.config.site.version == 't2dgenes'}">
@@ -151,20 +149,27 @@
                         &middot;
                     </sec:ifAllGranted>
                     <sec:loggedInUserInfo field="username"/>   &middot;
-                    <g:link controller='logout'>Log Out</g:link>
+                    <g:link controller='logout'><g:message code="mainpage.log.out"/></g:link>
                 </div>
             </sec:ifLoggedIn>
             <sec:ifNotLoggedIn>
                 <div class="rightlinks">
-                    <g:link controller='login' action='auth'>Login</g:link>
+                    <g:link controller='login' action='auth'><g:message code="mainpage.log.in"/></g:link>
                 </div>
             </sec:ifNotLoggedIn>
-            <a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a> &middot;
-            <a href="${createLink(controller:'informational', action:'about')}"><g:message code="localized.aboutTheData"/></a> &middot;
-            <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="localized.contact"/></a>
+            <g:if test="${grailsApplication.config.site.version == 'sigma'}">
+                <a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a> &middot;
+                <a href="${createLink(controller:'informational', action:'aboutSigma')}"><g:message code="localized.aboutTheData"/></a> &middot;
+                <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="localized.contact"/></a>
+            </g:if>
+            <g:elseif test="${grailsApplication.config.site.version == 't2dgenes'}">
+                <a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a> &middot;
+                <a href="${createLink(controller:'informational', action:'about')}"><g:message code="localized.aboutTheData"/></a> &middot;
+                <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="localized.contact"/></a>
+             </g:elseif>
+            </div>
         </div>
     </div>
-</div>
 
 <g:layoutBody/>
 

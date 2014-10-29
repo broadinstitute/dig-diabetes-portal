@@ -1,10 +1,25 @@
 package dport
 
+import org.springframework.web.servlet.support.RequestContextUtils
+
+
+
 class InformationalController {
 
     def index() {}
     def about (){
         render (view: 'about')
+    }
+    def aboutSigma (){
+        def locale = RequestContextUtils.getLocale(request)
+        render (view:'sigma/homeHolder')
+
+//        if (locale.language == 'en'){
+//            render (view:'sigma/en/about')
+//        }else if (locale.language == 'es'){
+//            render (view:'sigma/es/about')
+//        }
+
     }
     def contact (){
         render (view: 'contact')
