@@ -25,6 +25,7 @@ class VariantControllerIntegrationSpec extends IntegrationSpec {
 
 
 
+
     void "test the variantInfo page"() {
         when:
         controller.params.id='rs853787'

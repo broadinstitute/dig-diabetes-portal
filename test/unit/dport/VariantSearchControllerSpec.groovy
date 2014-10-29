@@ -15,17 +15,15 @@ class VariantSearchControllerSpec extends Specification {
     def cleanup() {
     }
 
-    void "test variantSearch"() {
-        setup:
-        params.encParams = 'rs123'
 
+
+    void "test index"() {
         when:
-        controller.variantSearch()
+        controller.index()
 
         then:
         response.status == 200
-        view == '/variantSearch/variantSearch'
-        model.show_gwas == 1
 
     }
+
 }

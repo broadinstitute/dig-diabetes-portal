@@ -15,17 +15,14 @@ class VariantControllerUnitSpec extends Specification {
     def cleanup() {
     }
 
-    void "test traitInfo"() {
-        setup:
-        params.id = 'rs123'
 
+    void "test index"() {
         when:
-        controller.variantInfo()
+        controller.index()
 
         then:
         response.status == 200
-        view == '/variant/variantInfo'
-        model.show_gwas == 1
 
     }
+
 }
