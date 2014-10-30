@@ -5,7 +5,7 @@
 
 <p>
     <g:message code="sigma.data.to.query"/>
-    <a class="boldlink" href="/home"><g:message code="mainpage.click.here"/></a>.' %}
+    <a class='boldlink' href='<g:createLink controller="home" action="index"/>'><g:message code="mainpage.click.here"/></a>.
 </p>
 
 <table class="table">
@@ -112,7 +112,7 @@
 </table>
 
 <div class="table-info">
-    <g:message code="sigma.data.sample.location.study.design"/>
+    <g:message code="sigma.data.table.shows.sample"/>
 
 </div>
 

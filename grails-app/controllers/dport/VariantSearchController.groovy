@@ -109,11 +109,11 @@ class VariantSearchController {
             String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
 
             render(view: 'variantSearchResults',
-                    model: [show_gene           : 1,
-                            show_gwas           : 1,
-                            show_exchp          : 1,
-                            show_exseq          : 1,
-                            show_sigma          : 0,
+                    model: [show_gene           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
+                            show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
+                            show_exchp          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
+                            show_exseq          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
+                            show_sigma          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
                             filter              : encodedFilters,
                             filterDescriptions  : parsedFilterParameters.filterDescriptions,
                             proteinEffectsList  : encodedProteinEffects,

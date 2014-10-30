@@ -22,7 +22,7 @@
     Una explicación de la importancia de estos descubrimientos, escrita por uno de los autores,
     se encuentra disponible en
     <a href="http://www.genomesunzipped.org/2014/06/a-rare-variant-in-mexico-with-far-reaching-implications.php">inglés</a>
-    y en <a href="/articles/estradahnf1a">español</a>.
+    y en <a href="<g:createLink controller="articles" action="estradahnf1a" />">español</a>.
 </p>
 <p>
     Este portal actualmente contiene conjuntos de datos sobre el estudio de asociación del genoma completo (GWAS) en diabetes tipo 2 de SIGMA y sobre proyectos de secuenciación de exomas en individuos de México y Latinoamérica. Biólogos y otros investigadores pueden explorar estos conjuntos de datos para aprender más acerca de la variabilidad genética en estas poblaciones y su relación con la diabetes de tipo 2. Para acceder a los datos, regístrese aquí.

@@ -904,12 +904,21 @@ determineHighestFrequencyEthnicity: function (variant) {
     if (data.variants)     {
         var totalNumberOfResults =  data.variants.length;
         $('#numberOfVariantsDisplayed').append(''+totalNumberOfResults);
-        $('#variantTable').dataTable({
-            iDisplayLength: 20,
-            bFilter: false,
-            aaSorting: [[ 5, "asc" ]],
-            aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 5, 6, 8, 10, 11, 12, 13 ] } ]
-        });
+        if (show_sigma){
+            $('#variantTable').dataTable({
+                iDisplayLength: 20,
+                bFilter: false,
+                aaSorting: [[ 6, "asc" ]],
+                aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 6, 7, 8, 9, 10, 11 ] } ]
+            });
+        } else {
+            $('#variantTable').dataTable({
+                iDisplayLength: 20,
+                bFilter: false,
+                aaSorting: [[ 5, "asc" ]],
+                aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 5, 6, 8, 10, 11, 12, 13 ] } ]
+            });
+        }
         if (totalNumberOfResults >= 1000)  {
             $('#warnIfMoreThan1000Results').html("<p>"+
                 "<em>Your search generated more than 1,000 variants."+

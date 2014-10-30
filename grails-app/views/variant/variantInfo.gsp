@@ -104,6 +104,8 @@
                         </div>
                     </div>
 
+<g:if test="${show_exseq}">
+
                     <div class="separator"></div>
 
                     <div class="accordion-group">
@@ -121,6 +123,9 @@
                             </div>
                         </div>
                     </div>
+</g:if>
+
+<g:if test="${show_exseq}">
 
                     <div class="separator"></div>
 
@@ -140,6 +145,7 @@
                             </div>
                         </div>
                     </div>
+</g:if>
 
                     <div class="separator"></div>
 
