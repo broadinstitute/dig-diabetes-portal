@@ -181,23 +181,39 @@ class RestServerService {
         DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base+grailsApplication.config.t2dDevRestServer.name+grailsApplication.config.t2dDevRestServer.path
         QA_REST_SERVER = grailsApplication.config.t2dQaRestServer.base+grailsApplication.config.t2dQaRestServer.name+grailsApplication.config.t2dQaRestServer.path
         PROD_REST_SERVER = grailsApplication.config.t2dProdRestServer.base+grailsApplication.config.t2dProdRestServer.name+grailsApplication.config.t2dProdRestServer.path
-
-        //server.URL
-
-       // BASE_URL =  MYSQL_REST_SERVER
         BASE_URL =  grailsApplication.config.server.URL;
-        log.info ">>>Initializing rest server=${BASE_URL}"
-        if (grailsApplication.config.site.version == 't2dgenes') {
-            VARIANT_SEARCH_COLUMNS += EXSEQ_VARIANT_SEARCH_COLUMNS + EXCHP_VARIANT_SEARCH_COLUMNS + GWAS_VARIANT_SEARCH_COLUMNS
-            VARIANT_COLUMNS += EXSEQ_VARIANT_COLUMNS + EXCHP_VARIANT_COLUMNS + GWAS_VARIANT_COLUMNS
-            GENE_COLUMNS += EXSEQ_GENE_COLUMNS + EXCHP_GENE_COLUMNS + GWAS_GENE_COLUMNS
-        }
 
-        if (grailsApplication.config.site.version ==  'sigma') {
-            VARIANT_SEARCH_COLUMNS += SIGMA_VARIANT_SEARCH_COLUMNS + GWAS_VARIANT_SEARCH_COLUMNS
-            VARIANT_COLUMNS += SIGMA_VARIANT_COLUMNS + GWAS_VARIANT_COLUMNS
-            GENE_COLUMNS += SIGMA_GENE_COLUMNS + GWAS_GENE_COLUMNS
+    }
+
+    private List <String> getGeneColumns () {
+        List <String> returnValue
+        if (sharedToolsService.applicationName() == 'Sigma') {
+            returnValue = (GENE_COLUMNS + SIGMA_GENE_COLUMNS + GWAS_GENE_COLUMNS)
+        } else { // must be t2dGenes
+            returnValue = (GENE_COLUMNS + EXSEQ_GENE_COLUMNS + EXCHP_GENE_COLUMNS + GWAS_GENE_COLUMNS)
         }
+        return  returnValue
+    }
+
+
+    private List <String> getVariantColumns () {
+        List <String> returnValue
+        if (sharedToolsService.applicationName() == 'Sigma') {
+            returnValue = (VARIANT_COLUMNS + SIGMA_VARIANT_COLUMNS + GWAS_VARIANT_COLUMNS)
+        } else {
+            returnValue = (VARIANT_COLUMNS + EXSEQ_VARIANT_COLUMNS + EXCHP_VARIANT_COLUMNS + GWAS_VARIANT_COLUMNS)
+        }
+        return  returnValue
+    }
+
+    private List <String> getVariantSearchColumns () {
+        List <String> returnValue
+        if (sharedToolsService.applicationName() == 'Sigma') {
+            returnValue = (VARIANT_SEARCH_COLUMNS + SIGMA_VARIANT_SEARCH_COLUMNS + GWAS_VARIANT_SEARCH_COLUMNS)
+        } else {
+            returnValue = (VARIANT_SEARCH_COLUMNS + EXSEQ_VARIANT_SEARCH_COLUMNS + EXCHP_VARIANT_SEARCH_COLUMNS + GWAS_VARIANT_SEARCH_COLUMNS)
+        }
+        return  returnValue
     }
 
 
@@ -371,7 +387,7 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
         String drivingJson = """{
 "gene_symbol": "${geneName}",
 "user_group": "ui",
-"columns": [${"\""+GENE_COLUMNS.join("\",\"")+"\""}]
+"columns": [${"\""+getGeneColumns ().join("\",\"")+"\""}]
 }
 """.toString()
         returnValue = postRestCall( drivingJson, GENE_INFO_URL)
@@ -390,7 +406,7 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
         String drivingJson = """{
 "variant_id": "${variantId}",
 "user_group": "ui",
-"columns": [${"\""+VARIANT_COLUMNS.join("\",\"")+"\""}]
+"columns": [${"\""+getVariantColumns () .join("\",\"")+"\""}]
 }
 """.toString()
         returnValue = postRestCall( drivingJson, VARIANT_INFO_URL)
@@ -416,7 +432,7 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
 {"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": ${beginSearch} },
 {"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": ${endSearch} }
 ],
-"columns": [${"\""+VARIANT_SEARCH_COLUMNS.join("\",\"")+"\""}]
+"columns": [${"\""+getVariantSearchColumns ().join("\",\"")+"\""}]
 }
 """.toString()
         returnValue = postRestCall( drivingJson, VARIANT_SEARCH_URL)
@@ -502,7 +518,7 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
 "filters": [
 ${customFilterSet}
 ],
-"columns": [${"\""+VARIANT_SEARCH_COLUMNS.join("\",\"")+"\""}]
+"columns": [${"\""+getVariantSearchColumns ().join("\",\"")+"\""}]
 }
 """.toString()
         returnValue = postRestCall( drivingJson, VARIANT_SEARCH_URL)

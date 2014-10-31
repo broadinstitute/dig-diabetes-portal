@@ -17,7 +17,8 @@ class SystemController {
     }
 
     def systemManager = {
-        render(view: 'systemMgr', model: [])
+        render(view: 'systemMgr', model: [currentRestServer:restServerService.currentRestServer(),
+        currentApplicationIsSigma:sharedToolsService.applicationName()])
     }
 
     def updateRestServer() {
@@ -66,7 +67,30 @@ class SystemController {
                 flash.message = "But you were already using the ${currentServer} server!"
             }
         }
-        render(view: 'systemMgr', model: [])
+        render(view: 'systemMgr', model: [currentRestServer:restServerService.currentRestServer(),
+                                          currentApplicationIsSigma:sharedToolsService.applicationName()])
+    }
+
+    def switchSigmaT2d(){
+       // String restServer = params
+        String requestedApplication = params.datatype
+        if ( requestedApplication == 'sigma')  {
+            sharedToolsService.setApplicationToSigma  ()
+        }  else if  ( requestedApplication == 't2dgenes')  {
+            sharedToolsService.setApplicationToT2dgenes  ()
+        }   else {
+            flash.message = "Internal error: you requested server = ${requestedApplication} which I do not recognize!"
+        }
+
+        render(view: 'systemMgr', model: [currentRestServer:restServerService.currentRestServer(),
+                                          currentApplicationIsSigma:sharedToolsService.applicationName()])
+    }
+
+
+    def switchApplicationToT2dgenes(){
+        sharedToolsService.setApplicationToT2dgenes()
+        render(view: 'systemMgr', model: [currentRestServer:restServerService.currentRestServer(),
+                                          currentApplicationIsSigma:sharedToolsService.applicationName()])
     }
 
 }

@@ -117,8 +117,7 @@
     <div id="header-top">
         <div class="container">
             <% def locale = RequestContextUtils.getLocale(request) %>
-            <g:if test="${grailsApplication.config.site.version == 'sigma'}">
-
+            <g:renderSigmaSection>
                 <span id="language">
                     <a href="/dig-diabetes-portal/home?lang=es"><i class="icon-user icon-white"><r:img class="currentlanguage" uri="/images/Mexico.png" alt="Mexico"/></i></a>
                     <a href="/dig-diabetes-portal/home?lang=en"> <i class="icon-user icon-white"><r:img class="currentlanguage" uri="/images/United-States.png" alt="USA"/></i></a>
@@ -127,12 +126,12 @@
                 <div id="branding">
                     SIGMA <strong>T2D</strong> <small><g:message code="site.subtext"/></small>
                 </div>
-            </g:if>
-            <g:elseif test="${grailsApplication.config.site.version == 't2dgenes'}">
+            </g:renderSigmaSection>
+            <g:renderNotSigmaSection>
                 <div id="branding">
                     Type 2 Diabetes <strong>Genetics</strong> <small>${grailsApplication.config.site.subtext}</small>
                 </div>
-            </g:elseif>
+            </g:renderNotSigmaSection>
         </div>
     </div>
 
@@ -157,16 +156,16 @@
                     <g:link controller='login' action='auth'><g:message code="mainpage.log.in"/></g:link>
                 </div>
             </sec:ifNotLoggedIn>
-            <g:if test="${grailsApplication.config.site.version == 'sigma'}">
+            <g:renderSigmaSection>
                 <a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a> &middot;
                 <a href="${createLink(controller:'informational', action:'aboutSigma')}"><g:message code="localized.aboutTheData"/></a> &middot;
                 <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="localized.contact"/></a>
-            </g:if>
-            <g:elseif test="${grailsApplication.config.site.version == 't2dgenes'}">
+            </g:renderSigmaSection>
+            <g:renderNotSigmaSection>
                 <a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a> &middot;
                 <a href="${createLink(controller:'informational', action:'about')}"><g:message code="localized.aboutTheData"/></a> &middot;
                 <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="localized.contact"/></a>
-             </g:elseif>
+             </g:renderNotSigmaSection>
             </div>
         </div>
     </div>
@@ -176,7 +175,7 @@
 <div id="footer">
     <div class="container">
         <div class="separator"></div>
-        <div id="helpus"><a href="${createLink(controller:'informational', action:'contact')}">Send feedback</a></div>
+        <div id="helpus"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="mainpage.send.feedback"/></a></div>
     </div>
 </div>
 <div id="belowfooter"></div>

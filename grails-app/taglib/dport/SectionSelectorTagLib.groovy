@@ -12,6 +12,12 @@ class SectionSelectorTagLib {
         }
 
     }
+    def renderNotSigmaSection = { attrs,body ->
+        if (!sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma)){
+            out << body()
+        }
+
+    }
 
 
 
@@ -32,6 +38,21 @@ class SectionSelectorTagLib {
 
     }
 
+    def renderExomeChipIndicator = { attrs,body ->
+        out << sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp)
+    }
+
+    def renderExomeSequenceIndicator = { attrs,body ->
+        out << sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq)
+    }
+
+    def renderSigmaIndicator = { attrs,body ->
+        out << sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma)
+    }
+
+    def renderGwasIndicator = { attrs,body ->
+        out << sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas)
+    }
 
 
 

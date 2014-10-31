@@ -403,7 +403,7 @@ function fillVariantsAndAssociations (geneInfo,show_gwas,show_exchp,show_exseq,s
             if (emphasisRequired) {
                emphasizeGwas = 2;
             }
-            fillVariantsAndAssociationLine (geneInfo,'exomeseq','99, 999',regionSpecifier,// is there a SIGMA_T2D_LWS_TOTAL?
+            fillVariantsAndAssociationLine (geneInfo,'sigma','99, 999',regionSpecifier,// is there a SIGMA_T2D_LWS_TOTAL?
                 geneInfoRec.SIGMA_T2D_VAR_TOTAL,geneInfoRec.SIGMA_T2D_GWS_TOTAL,geneInfoRec.SIGMA_T2D_NOM_TOTAL,geneInfoRec.SIGMA_T2D_NOM_TOTAL,
                 buildAnchorForGeneVariantSearches,emphasizeGwas,rootVariantUrl);
         }

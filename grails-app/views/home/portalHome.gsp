@@ -14,7 +14,7 @@
          $('#gene-input').typeahead(
                   {
                      source: function(query, process) {
-                         $.get('../gene', {query: query}, function(data) {
+                         $.get('<g:createLink controller="gene" action="index"/>', {query: query}, function(data) {
                              process(data);
                          })
                      }
@@ -88,7 +88,7 @@
                             <button id="gene-go" class="btn btn-primary btn-lg" type="button">Go!</button>
                         </span>
                     </div>
-                    <div class="helptext">enter <a class="boldlink" href="http://www.genenames.org" target="_blank">HGNC</a> gene symbol</div>
+                    <div class="helptext"><g:message code="mainpage.start.with.gene.subtext"/></div>
                 </div>
                 <div class="main-searchbox">
                     <h2><g:message code="mainpage.start.with.variant"/></h2>
@@ -98,7 +98,7 @@
                             <button id="variant-go" class="btn btn-primary btn-lg" type="button">Go!</button>
                         </span>
                     </div>
-                    <div class="helptext">enter rsID (e.g., rs13266634)</div>
+                    <div class="helptext"><g:message code="mainpage.start.with.variant.subtext"/></div>
                 </div>
                 <div class="main-searchbox">
                     <h2><g:message code="mainpage.start.with.region"/></h2>
@@ -108,7 +108,7 @@
                             <button id="region-go" class="btn btn-primary btn-lg" type="button">Go!</button>
                         </span>
                     </div>
-                    <div class="helptext">enter coordinates (e.g., chr9:21,940,000-22,190,000)</div>
+                    <div class="helptext"><g:message code="mainpage.start.with.region.subtext"/></div>
                 </div>
             </div>
 
@@ -117,7 +117,7 @@
                     <div class="col-sm-9">
                         <h2>
                             <g:message code="mainpage.search.variant"/><br/>
-                            <small>(from exome and exome chip data)</small>
+                            <small><g:message code="mainpage.search.variant.subtext"/></small>
                         </h2>
                     </div>
                     <div class="col-sm-3" style="padding-top: 40px; text-align: right;">
@@ -126,11 +126,11 @@
                 </div>
                 <h2>
                     <g:message code="mainpage.search.variant.related.traits"/><br/>
-                    <small>(from large GWAS meta-analyses)</small>
+                    <small><g:message code="mainpage.search.variant.related.traits.subtext"/></small>
                 </h2>
                 <div class="input-group input-group-lg">
                     <select name="" id="trait-input" class="form-control" style="width:95%;">
-                        <option value="">-- Select A Trait --</option>
+                        <option value=""><g:message code="mainpage.search.variant.related.traits.subtext2"/></option>
                         <optgroup label="Cardiometabolic">
                             <g:each in="${Phenotype.list()}" var="phenotype">
                                 <g:if test="${phenotype.category=='cardiometabolic'}" >
@@ -154,16 +154,16 @@
                         <div class="radio">
                             <label>
                                 <input id="id_significance_genomewide" type="radio" name="significance" value="genomewide" checked />
-                                genome-wide significance  |  &le; 5 x 10<sup>-8</sup>
+                                <g:message code="mainpage.set.association.threshold.significance1"/>  |  &le; 5 x 10<sup>-8</sup>
                             </label>
                         </div>
                         <div class="radio">
                             <label for="id_significance_custom">
                                 <input id="id_significance_custom" type="radio" name="significance" value="custom" />
-                                custom
+                                <g:message code="mainpage.set.association.threshold.significance2a"/>
                             </label>
                             <input type="text" id="custom_significance_input"/>
-                            or stronger
+                            <g:message code="mainpage.set.association.threshold.significance2b"/>
                         </div>
                     </div>
                     <div class="col-sm-3" style="padding-top: 10px; text-align: right;">

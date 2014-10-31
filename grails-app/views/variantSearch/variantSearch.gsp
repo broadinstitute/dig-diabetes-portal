@@ -21,6 +21,8 @@
      * gather up all the information from all of the input fields, put it into a nice, tight data structure and
      * posted back to the Web server
      */
+
+
     function gatherFieldsAndPostResults(){
         var varsToSend = {};
         varsToSend["datatype"]  = $("input:radio[name='datatype']:checked").val();
@@ -51,7 +53,15 @@
      * @param fields
      */
     function initializeFields( fields) {
-        console.log("fields=" + fields);
+        $('#region_gene_input').typeahead(
+                {
+                    source: function(query, process) {
+                        $.get('<g:createLink controller="gene" action="index"/>', {query: query}, function(data) {
+                            process(data);
+                        })
+                    }
+                }
+        );
         if (typeof fields!== "undefined"){
             var eachField = fields.split (',');
             if (eachField)  {

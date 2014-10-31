@@ -21,8 +21,20 @@
 
         <div class="variant-info-container" >
             <div class="variant-info-view" >
+                <div class="row clearfix">
+
+                    <div class="col-md-12">
+                        <h2>
+                            Remember: any changes you make on this page impact the whole server, and will therefore be felt by all the other users
+                        </h2>
+                    </div>
+
+                </div>
+
+                <div class="separator"></div>
+
                 <g:form action='updateRestServer' method='POST' id='updateRestServer' class='form form-horizontal cssform' autocomplete='off'>
-                <h4>Choose your backend REST server</h4>
+                <h4>Choose your backend REST server (<em>current server = <a href="${currentRestServer}">${currentRestServer}</a></em>)</h4>
                 <div class="row clearfix">
                     <div class="col-md-3"></div>
                     <div class="col-md-6">
@@ -96,6 +108,66 @@
 
                 </div>
                 </g:form>
+
+
+                <div class="separator"></div>
+
+                <g:form action='switchSigmaT2d' method='POST' class='form form-horizontal cssform' autocomplete='off'>
+                    <h4>Choose your application(<em>current application = <a href="${currentApplicationIsSigma}">${currentApplicationIsSigma}</a></em>)</h4>
+                    <div class="row clearfix">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                            <div id="application-form">
+
+
+                                <div class="radio">
+                                    <label>
+                                        <input id="sigma" type="radio" name="datatype" value="sigma" />
+                                        present Sigma
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input id="t2dgenes" type="radio" name="datatype" value="t2dgenes" />
+                                        present T2D Genes
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6">
+                            <div >
+                                <div style="text-align:center; padding-top: 20px;">
+                                    <input class="btn btn-primary btn-lg" type='submit' id="submitApplication"
+                                           value='Commit'/>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
+                            <div >
+                                <g:if test='${flash.message}'>
+                                    <div class="alert alert-danger">${flash.message}</div>
+                                </g:if>
+                            </div>
+                        </div>
+                        <div class="col-md-2"></div>
+
+                    </div>
+                </g:form>
+
+
+
+
+
+
             </div>
 
 

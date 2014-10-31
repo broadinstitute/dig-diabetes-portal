@@ -12,6 +12,14 @@ class SharedToolsService {
      def mailService
      def grailsApplication
 
+    Integer showGwas = -1
+    Integer showExomeChip = -1
+    Integer showExomeSequence = -1
+    Integer showSigma = -1
+    Integer showGene = -1
+
+
+
 //    portal.sections.show_gene
 
     public enum TypeOfSection {
@@ -19,29 +27,58 @@ class SharedToolsService {
     }
 
     public Boolean getSectionToDisplay(TypeOfSection typeOfSection) {
+        showGwas = (showGwas==-1)?grailsApplication.config.portal.sections.show_gwas:showGwas
+        showExomeChip = (showExomeChip==-1)?grailsApplication.config.portal.sections.show_exchp:showExomeChip
+        showExomeSequence = (showExomeSequence==-1)?grailsApplication.config.portal.sections.show_exseq:showExomeSequence
+        showSigma = (showSigma==-1)?grailsApplication.config.portal.sections.show_sigma:showSigma
+        showGene = (showGene==-1)?grailsApplication.config.portal.sections.show_gene:showGene
         Boolean returnValue = false
         switch (typeOfSection) {
             case TypeOfSection.show_gwas:
-                returnValue = grailsApplication.config.portal.sections.show_gwas
+                returnValue = showGwas
                 break;
             case TypeOfSection.show_exchp:
-                returnValue = grailsApplication.config.portal.sections.show_exchp
+                returnValue = showExomeChip
                 break;
             case TypeOfSection.show_exseq:
-                returnValue = grailsApplication.config.portal.sections.show_exseq
+                returnValue = showExomeSequence
                 break;
             case TypeOfSection.show_sigma:
-                returnValue = grailsApplication.config.portal.sections.show_sigma
+                returnValue = showSigma
                 break;
             case TypeOfSection.show_gene:
-                returnValue = grailsApplication.config.portal.sections.show_gene
+                returnValue = showGene
                 break;
             default:break;
         }
         return returnValue
     }
 
+    public Boolean setApplicationToSigma() {
+        showGwas = 1
+        showExomeChip = 0
+        showExomeSequence = 0
+        showSigma = 1
+    }
 
+    public Boolean setApplicationToT2dgenes() {
+        showGwas = 1
+        showExomeChip = 1
+        showExomeSequence = 1
+        showSigma = 0
+    }
+
+    public String  applicationName () {
+        String returnValue = ""
+        if (showSigma  == 0)   {
+            returnValue = "t2dGenes"
+        }  else  if (showSigma  == 1)   {
+            returnValue = "Sigma"
+        }  else  {
+            returnValue = "Undetermined (code = ${showSigma})"
+        }
+        return returnValue
+    }
 
 
     /***
