@@ -12,7 +12,7 @@ if (!catalinaBase) catalinaBase = '.'   // just in case
 def logDirectory = "${catalinaBase}/logs"
 
 
-site.version = 't2dgenes' // could be 'sigma' or 't2dgenes'
+site.version = 'sigma' // could be 'sigma' or 't2dgenes'
 if (site.version == 't2dgenes'){
     site.title = 'Type 2 Diabetes Genetics'  // could be 'SIGMA T2D' or 'Type 2 Diabetes Genetics'
     site.subtext = 'Beta'
