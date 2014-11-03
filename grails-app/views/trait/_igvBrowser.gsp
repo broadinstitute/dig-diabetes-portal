@@ -414,8 +414,15 @@ body {
 <p>
     Use the browser below to explore all genome-wide and locus-wide
     significant variants within 100kb of this gene. Choose "Tracks" to view
-    results relevant to type 2 diabetes (exome sequencing, exome chip, or
-    GWAS) or any of 24 other related traits (GWAS).
+    results relevant to type 2 diabetes
+    <g:renderNotSigmaSection>
+        (exome sequencing, exome chip, or GWAS)
+    </g:renderNotSigmaSection>
+    or any of 24 other related traits
+    <g:renderNotSigmaSection>
+        (GWAS)
+    </g:renderNotSigmaSection>
+     .
 </p>
 
 <br/>

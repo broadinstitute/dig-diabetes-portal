@@ -85,7 +85,7 @@
                     <div class="input-group input-group-lg">
                         <input type="text" class="form-control" id="gene-input">
                         <span class="input-group-btn">
-                            <button id="gene-go" class="btn btn-primary btn-lg" type="button">Go!</button>
+                            <button id="gene-go" class="btn btn-primary btn-lg" type="button"><g:message code="mainpage.button.imperative"/></button>
                         </span>
                     </div>
                     <div class="helptext"><g:message code="mainpage.start.with.gene.subtext"/></div>
@@ -95,7 +95,7 @@
                     <div class="input-group input-group-lg">
                         <input type="text" class="form-control" id="variant-input">
                         <span class="input-group-btn">
-                            <button id="variant-go" class="btn btn-primary btn-lg" type="button">Go!</button>
+                            <button id="variant-go" class="btn btn-primary btn-lg" type="button"><g:message code="mainpage.button.imperative"/></button>
                         </span>
                     </div>
                     <div class="helptext"><g:message code="mainpage.start.with.variant.subtext"/></div>
@@ -105,7 +105,7 @@
                     <div class="input-group input-group-lg">
                         <input type="text" class="form-control" id="region-input">
                         <span class="input-group-btn">
-                            <button id="region-go" class="btn btn-primary btn-lg" type="button">Go!</button>
+                            <button id="region-go" class="btn btn-primary btn-lg" type="button"><g:message code="mainpage.button.imperative"/></button>
                         </span>
                     </div>
                     <div class="helptext"><g:message code="mainpage.start.with.region.subtext"/></div>
@@ -121,7 +121,7 @@
                         </h2>
                     </div>
                     <div class="col-sm-3" style="padding-top: 40px; text-align: right;">
-                        <a href="${createLink(controller:'variantSearch', action:'variantSearch')}" class="btn btn-primary btn-lg">Go!</a>
+                        <a href="${createLink(controller:'variantSearch', action:'variantSearch')}" class="btn btn-primary btn-lg"><g:message code="mainpage.button.imperative"/></a>
                     </div>
                 </div>
                 <h2>
@@ -168,7 +168,7 @@
                     </div>
                     <div class="col-sm-3" style="padding-top: 10px; text-align: right;">
                         <span class="input-group-btn">
-                            <button id="trait-go" class="btn btn-primary btn-lg" type="button">Go!</button>
+                            <button id="trait-go" class="btn btn-primary btn-lg" type="button"><g:message code="mainpage.button.imperative"/></button>
                         </span>
                     </div>
                     </g:form>

@@ -2,7 +2,14 @@ var delayedHowCommonIsPresentation = {},
     delayedCarrierStatusDiseaseRiskPresentation = {},
     delayedBurdenTestPresentation = {},
     delayedIgvLaunch = {};
-function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot, restServerRoot) {
+function fillTheFields(data,
+                       variantToSearch,
+                       traitsStudiedUrlRoot,
+                       restServerRoot,
+                       showGwas,
+                       showExchp,
+                       showExseq,
+                       showSigma) {
     var cariantRec = {
         _13k_T2D_HET_CARRIERS: 1,
         _13k_T2D_HOM_CARRIERS: 2,
@@ -494,7 +501,11 @@ function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot, restServerRo
     delayedIgvLaunch = {
         rememberRegion: regionforIgv,
         launch:function(){
-            igvLauncher.launch("#myVariantDiv", regionforIgv,restServerRoot);
+            if (showSigma){
+                igvLauncher.launch("#myVariantDiv", regionforIgv,restServerRoot,[1,0,0]);
+            } else {
+                igvLauncher.launch("#myVariantDiv", regionforIgv,restServerRoot);
+            }
         }
 
     }

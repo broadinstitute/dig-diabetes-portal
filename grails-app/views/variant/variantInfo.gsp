@@ -38,7 +38,6 @@
 
     <!-- IGV js  and css code -->
     <link href="http://www.broadinstitute.org/igvdata/t2d/igv.css" type="text/css" rel="stylesheet">
-    %{--<g:javascript base="http://iwww.broadinstitute.org/" src="/igvdata/t2d/igv-all.js" />--}%
     <g:javascript base="http://www.broadinstitute.org/" src="/igvdata/t2d/igv-all.min.js"/>
     <g:set var="restServer" bean="restServerService"/>
 
@@ -62,7 +61,11 @@
             fillTheFields(data,
                     "<%=variantToSearch%>",
                     "<g:createLink controller='trait' action='traitInfo' />",
-                    "${restServer.currentRestServer()}");
+                    "${restServer.currentRestServer()}",
+                    ${show_gwas},
+                    ${show_exchp},
+                    ${show_exseq},
+                    ${show_sigma});
             loading.hide();
         },
         error: function (jqXHR, exception) {
