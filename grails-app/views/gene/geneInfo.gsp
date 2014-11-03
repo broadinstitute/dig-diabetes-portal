@@ -149,7 +149,13 @@
     <script>
         $('#accordion2').on('shown.bs.collapse', function (e) {
             if (e.target.id === "collapseIgv") {
+ <g:renderSigmaSection>
+                igvLauncher.launch("#myDiv", "${geneName}","${restServer.currentRestServer()}",[1,0,0]);
+ </g:renderSigmaSection>
+ <g:renderNotSigmaSection>
                 igvLauncher.launch("#myDiv", "${geneName}","${restServer.currentRestServer()}");
+ </g:renderNotSigmaSection>
+
             }
 
         });
