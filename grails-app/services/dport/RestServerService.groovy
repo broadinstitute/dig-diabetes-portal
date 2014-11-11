@@ -315,7 +315,7 @@ class RestServerService {
           log.error("NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}")
           log.error(exception.toString())
           logStatus <<  "NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}"
-          exception.printStackTrace()
+          afterCall  = new Date()
       }
       logStatus << """
 SERVER CALL:
