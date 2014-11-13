@@ -502,9 +502,9 @@ function fillTheFields(data,
         rememberRegion: regionforIgv,
         launch:function(){
             if (showSigma){
-                igvLauncher.launch("#myVariantDiv", regionforIgv,restServerRoot,[1,0,0]);
+                igvLauncher.launch("#myVariantDiv", regionforIgv,restServerRoot,[1,0,0,1]);
             } else {
-                igvLauncher.launch("#myVariantDiv", regionforIgv,restServerRoot);
+                igvLauncher.launch("#myVariantDiv", regionforIgv,restServerRoot,[1,1,1,0]);
             }
         }
 

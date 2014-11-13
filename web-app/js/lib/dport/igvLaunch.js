@@ -10,7 +10,7 @@ var igvLauncher = igvLauncher || {};  // encapsulating variable
                     url: rootServer + "trait-search",
                     type: "t2d",
                     trait: "T2D",
-                    label: "Type 2 Diabetes: GWAS",
+                    label: "Type 2 Diabetes: DIAGRAM GWAS",
                     pvalue: "PVALUE",
                     colorScale:  {
                         thresholds: [5e-8, 5e-4, 0.05],
@@ -40,6 +40,18 @@ var igvLauncher = igvLauncher || {};  // encapsulating variable
                         colors: ["rgb(0,102,51)", "rgb(122,179,23)", "rgb(158,213,76)", "rgb(227,238,249)"]
                     },
                     description: '<strong>Type 2 diabetes: exome sequencing</strong><br/>Results in this track are from a study of 12,940 people conducted by the T2D-GENES and GoT2D consortia.'
+
+                }),
+                new igv.T2dTrack({
+                    url: rootServer + "variant-search",
+                    trait: "Sigma T2D",
+                    label: "Type 2 Diabetes: Sigma Sequencing",
+                    pvalue: "SIGMA_T2D_P",
+                    colorScale:  {
+                        thresholds: [5e-8, 5e-4, 0.05],
+                        colors: ["rgb(0,102,51)", "rgb(122,179,23)", "rgb(158,213,76)", "rgb(227,238,249)"]
+                    },
+                    description: '<strong>Type 2 diabetes: Sigma sequencing</strong><br/>Results in this track are from a study of 2000 people conducted by the Sigma consortia.'
 
                 }),
 
