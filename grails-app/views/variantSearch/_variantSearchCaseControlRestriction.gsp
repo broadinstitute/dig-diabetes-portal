@@ -15,14 +15,6 @@
                     are seen only in controls
                 </label>
             </div>
-            <g:if test="${show_sigma}">
-                <div class="checkbox">
-                    <label>
-                        <input id="id_onlyseen_homozygotes" type="checkbox" name="onlyseen" value="homozygotes" disabled />
-                        contain homozygous genotypes
-                    </label>
-                </div>
-            </g:if>
         </div>
     </div>
     <div class="col-md-6">
