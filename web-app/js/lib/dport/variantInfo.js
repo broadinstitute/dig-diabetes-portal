@@ -33,7 +33,9 @@ function fillTheFields(data,
         _13k_T2D_P_EMMAX_FE_IV: 20,
         GWAS_T2D_OR: 21,
         EXCHP_T2D_BETA: 22,
-        _13k_T2D_OR_WALD_DOS_FE_IV: 23
+        _13k_T2D_OR_WALD_DOS_FE_IV: 23,
+        SIGMA_T2D_P: 24,
+        SIGMA_T2D_OR: 25
     };
     variant = data['variant'];
     variantTitle = UTILS.get_variant_title(variant, variantToSearch);
@@ -273,16 +275,30 @@ function fillTheFields(data,
             }
         },
 
-        showCarrierStatusDiseaseRisk: function (variant) {
+        showCarrierStatusDiseaseRisk: function (variant,show_gwas,show_exchp,show_exseq,show_sigma) {
             var heta=1,hetu=1,totalCases=1,
                 homa=1,homu=1,totalControls=1;
             try {
-                heta = parseFloat(variant["_13k_T2D_HETA"]);
-                hetu = parseFloat(variant["_13k_T2D_HETU"]);
-                homa = parseFloat(variant["_13k_T2D_HOMA"]);
-                homu = parseFloat(variant["_13k_T2D_HOMU"]);
-                totalCases = parseFloat(variant["_13k_T2D_OBSA"]);
-                totalControls = parseFloat(variant["_13k_T2D_OBSU"]);
+                if (show_exseq){
+                    heta = parseFloat(variant["_13k_T2D_HETA"]);
+                    hetu = parseFloat(variant["_13k_T2D_HETU"]);
+                    homa = parseFloat(variant["_13k_T2D_HOMA"]);
+                    homu = parseFloat(variant["_13k_T2D_HOMU"]);
+                    totalCases = parseFloat(variant["_13k_T2D_OBSA"]);
+                    totalControls = parseFloat(variant["_13k_T2D_OBSU"]);
+                } else if (show_sigma){
+                    heta = parseFloat(variant["SIGMA_T2D_HETA"]);
+                    hetu = parseFloat(variant["SIGMA_T2D_HETU"]);
+                    homa = parseFloat(variant["SIGMA_T2D_HOMA"]);
+                    homu = parseFloat(variant["SIGMA_T2D_HOMU"]);
+                    totalCases = parseFloat(variant["SIGMA_T2D_OBSA"]);
+                    totalControls = parseFloat(variant["SIGMA_T2D_OBSU"]);
+                }
+
+
+
+
+
             }catch(e){}
 
             delayedCarrierStatusDiseaseRiskPresentation = {
@@ -429,13 +445,23 @@ function fillTheFields(data,
                 totalUnaffected = 0,
                 totalAffected = 0,
                 pValue = 0;
-            heta = parseFloat(variant["_13k_T2D_HETA"]);
-            hetu = parseFloat(variant["_13k_T2D_HETU"]);
-            homa = parseFloat(variant["_13k_T2D_HOMA"]);
-            homu = parseFloat(variant["_13k_T2D_HOMU"]);
-            totalUnaffected = parseFloat(variant["_13k_T2D_OBSU"]);
-            totalAffected = parseFloat(variant["_13k_T2D_OBSA"]);
-            pValue  = parseFloat(variant["_13k_T2D_P_EMMAX_FE_IV"]);
+            if (show_exseq){
+                heta = parseFloat(variant["_13k_T2D_HETA"]);
+                hetu = parseFloat(variant["_13k_T2D_HETU"]);
+                homa = parseFloat(variant["_13k_T2D_HOMA"]);
+                homu = parseFloat(variant["_13k_T2D_HOMU"]);
+                totalUnaffected = parseFloat(variant["_13k_T2D_OBSU"]);
+                totalAffected = parseFloat(variant["_13k_T2D_OBSA"]);
+                pValue  = parseFloat(variant["_13k_T2D_P_EMMAX_FE_IV"]);
+            } else if (show_sigma){
+                heta = parseFloat(variant["SIGMA_T2D_HETA"]);
+                hetu = parseFloat(variant["SIGMA_T2D_HETU"]);
+                homa = parseFloat(variant["SIGMA_T2D_HOMA"]);
+                homu = parseFloat(variant["SIGMA_T2D_HOMU"]);
+                totalUnaffected = parseFloat(variant["SIGMA_T2D_OBSU"]);
+                totalAffected = parseFloat(variant["SIGMA_T2D_OBSA"]);
+                pValue  = parseFloat(variant["SIGMA_T2D_P"]);
+            }
 
            // $('#bhtLossOfFunctionVariants').append(numberOfVariants);
 
@@ -511,45 +537,84 @@ function fillTheFields(data,
     }
 
 
-    var weHaveVariantsAndAssociations = ((variant["IN_GWAS"]) || (variant["GWAS_T2D_PVALUE"]) || (variant["GWAS_T2D_OR"]) ||
-        (variant["EXCHP_T2D_P_value"]) || (variant["EXCHP_T2D_BETA"]) ||
-        (variant["_13k_T2D_P_EMMAX_FE_IV"]) || (variant["_13k_T2D_OR_WALD_DOS_FE_IV"]) );
+    var weHaveVariantsAndAssociations;
+    if (showSigma){
+        weHaveVariantsAndAssociations = ((variant["IN_GWAS"]) || (variant["GWAS_T2D_PVALUE"]) || (variant["GWAS_T2D_OR"]) ||
+            (variant["SIGMA_T2D_P"]) || (variant["SIGMA_T2D_OR"])  );
+    } else {
+        weHaveVariantsAndAssociations = ((variant["IN_GWAS"]) || (variant["GWAS_T2D_PVALUE"]) || (variant["GWAS_T2D_OR"]) ||
+            (variant["EXCHP_T2D_P_value"]) || (variant["EXCHP_T2D_BETA"]) ||
+            (variant["_13k_T2D_P_EMMAX_FE_IV"]) || (variant["_13k_T2D_OR_WALD_DOS_FE_IV"]) );
+    }
+
     UTILS.verifyThatDisplayIsWarranted(weHaveVariantsAndAssociations, $('#VariantsAndAssociationsExist'), $('#VariantsAndAssociationsNoExist'));
     if (weHaveVariantsAndAssociations){
-        $('#gwasAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
-            cariantRec,
-            cariantRec.IN_GWAS,
-            cariantRec.GWAS_T2D_PVALUE,
-            cariantRec.GWAS_T2D_OR,
-            5e-8,
-            5e-4,
-            5e-2,
-            variantTitle,
-            "GWAS",
-            false));
-        $('#exomeChipAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
-            cariantRec,
-            cariantRec.EXCHP_T2D_P_value,
-            cariantRec.EXCHP_T2D_P_value,
-            cariantRec.EXCHP_T2D_BETA,
-            5e-8,
-            5e-4,
-            5e-2,
-            variantTitle,
-            "exome chip",
-            false,
-            true));
-        $('#exomeSequenceAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
-            cariantRec,
-            cariantRec._13k_T2D_P_EMMAX_FE_IV,
-            cariantRec._13k_T2D_P_EMMAX_FE_IV,
-            cariantRec._13k_T2D_OR_WALD_DOS_FE_IV,
-            5e-8,
-            5e-4,
-            5e-2,
-            variantTitle,
-            "exome sequence",
-            false));
+        if (showGwas){
+            $('#gwasAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
+                cariantRec,
+                cariantRec.IN_GWAS,
+                cariantRec.GWAS_T2D_PVALUE,
+                cariantRec.GWAS_T2D_OR,
+                5e-8,
+                5e-4,
+                5e-2,
+                variantTitle,
+                "DIAGRAM GWAS",
+                false));
+        }
+        if ( showSigma){
+            $('#gwasSigmaAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
+                cariantRec,
+                cariantRec.IN_GWAS,
+                cariantRec.GWAS_T2D_PVALUE,
+                cariantRec.GWAS_T2D_OR,
+                5e-8,
+                5e-4,
+                5e-2,
+                variantTitle,
+                "DIAGRAM GWAS",
+                false));
+        }
+        if (showExchp) {
+            $('#exomeChipAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
+                cariantRec,
+                cariantRec.EXCHP_T2D_P_value,
+                cariantRec.EXCHP_T2D_P_value,
+                cariantRec.EXCHP_T2D_BETA,
+                5e-8,
+                5e-4,
+                5e-2,
+                variantTitle,
+                "exome chip",
+                false,
+                true));
+        }
+        if (showExseq) {
+            $('#exomeSequenceAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
+                cariantRec,
+                cariantRec._13k_T2D_P_EMMAX_FE_IV,
+                cariantRec._13k_T2D_P_EMMAX_FE_IV,
+                cariantRec._13k_T2D_OR_WALD_DOS_FE_IV,
+                5e-8,
+                5e-4,
+                5e-2,
+                variantTitle,
+                "exome sequence",
+                false));
+        }
+        if (showSigma){
+            $('#sigmaAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
+                cariantRec,
+                cariantRec.SIGMA_T2D_P,
+                cariantRec.SIGMA_T2D_P,
+                cariantRec.SIGMA_T2D_OR,
+                5e-8,
+                5e-4,
+                5e-2,
+                variantTitle,
+                "Sigma",
+                false));
+        }
     }
 
 
@@ -562,11 +627,17 @@ function fillTheFields(data,
         traitsStudiedUrlRoot));
 
     // disease burden
-    var weHaveEnoughDataForRiskBurdenTest = ((variant["_13k_T2D_HETA"]) && (variant["_13k_T2D_HETU"]) && (variant["_13k_T2D_HOMA"]) &&
-        (variant["_13k_T2D_HOMU"]) && (variant["_13k_T2D_OBSU"]) && (variant["_13k_T2D_OBSA"]));
+    var weHaveEnoughDataForRiskBurdenTest;
+    if (showSigma){
+        weHaveEnoughDataForRiskBurdenTest = ((variant["SIGMA_T2D_HETA"]) && (variant["SIGMA_T2D_HETU"]) && (variant["SIGMA_T2D_HOMA"]) &&
+            (variant["SIGMA_T2D_HOMU"]) && (variant["SIGMA_T2D_OBSU"]) && (variant["SIGMA_T2D_OBSA"]));
+    }else {
+        weHaveEnoughDataForRiskBurdenTest = ((variant["_13k_T2D_HETA"]) && (variant["_13k_T2D_HETU"]) && (variant["_13k_T2D_HOMA"]) &&
+            (variant["_13k_T2D_HOMU"]) && (variant["_13k_T2D_OBSU"]) && (variant["_13k_T2D_OBSA"]));
+    }
     UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataForRiskBurdenTest, $('#diseaseRiskExists'), $('#diseaseRiskNoExists'));
     if (weHaveEnoughDataForRiskBurdenTest){
-        privateMethods.fillDiseaseRiskBurdenTest(variant);
+        privateMethods.fillDiseaseRiskBurdenTest(variant,showGwas,showExchp,showExseq,showSigma);
     }
     $('#sigmaVariantCharacterization').append(UTILS.sigmaVariantCharacterization(variant, variantTitle));
 
@@ -578,11 +649,17 @@ function fillTheFields(data,
     }
 
     // case control data set characterization
-    var weHaveEnoughDataToCharacterizeCaseControls = ((variant["_13k_T2D_HETA"]) && (variant["_13k_T2D_HETU"]) && (variant["_13k_T2D_HOMA"]) &&
-        (variant["_13k_T2D_HOMU"]) && (variant["_13k_T2D_OBSU"]) && (variant["_13k_T2D_OBSA"]));
+    var weHaveEnoughDataToCharacterizeCaseControls;
+    if (showSigma){
+        weHaveEnoughDataToCharacterizeCaseControls  = ((variant["SIGMA_T2D_HETA"]) && (variant["SIGMA_T2D_HETU"]) && (variant["SIGMA_T2D_HOMA"]) &&
+            (variant["SIGMA_T2D_HOMU"]) && (variant["SIGMA_T2D_OBSU"]) && (variant["SIGMA_T2D_OBSA"]));
+    }else {
+        weHaveEnoughDataToCharacterizeCaseControls  = ((variant["_13k_T2D_HETA"]) && (variant["_13k_T2D_HETU"]) && (variant["_13k_T2D_HOMA"]) &&
+            (variant["_13k_T2D_HOMU"]) && (variant["_13k_T2D_OBSU"]) && (variant["_13k_T2D_OBSA"]));
+    }
     UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToCharacterizeCaseControls, $('#carrierStatusExist'), $('#carrierStatusNoExist'));
     if (weHaveEnoughDataToCharacterizeCaseControls){
-        privateMethods.showCarrierStatusDiseaseRisk(variant);
+        privateMethods.showCarrierStatusDiseaseRisk(variant,showGwas,showExchp,showExseq,showSigma);
     }
 
     $('#effectOfVariantOnProteinTitle').append(privateMethods.variantGenerateProteinsChooserTitle(variant, variantTitle));

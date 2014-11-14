@@ -1,5 +1,5 @@
 
-<g:if test="${show_exseq}">
+<g:if test="${show_exseq || show_sigma}">
 
     <p></p>
     <p class="standardFont">
@@ -19,8 +19,6 @@
                 <td class="significanceDescriptorFormatter">
                     <div class="significantDifference">
                         <div  id="describePValueInDiseaseRisk" class="significantDifferenceText">
-                            %{--<p class="slimDescription">significant difference</p>--}%
-                            %{--<p  id="drMetaBurdenForDiabetes" class="slimDescription"><i class=""></i></p>--}%
                         </div>
                     </div>
                 </td>

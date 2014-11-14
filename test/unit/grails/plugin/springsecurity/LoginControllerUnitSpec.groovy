@@ -102,6 +102,7 @@ class LoginControllerUnitSpec extends Specification {
 
         then:
         response.getStatus()==status
+        println "flash['message'].toString()=${flash['message'].toString()}"
         flash['message'].toString().contains(messageText)
 
         where:

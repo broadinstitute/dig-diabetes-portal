@@ -3,7 +3,7 @@
 
 
 
-<g:if test="${show_exseq}">
+<g:if test="${show_exseq || show_sigma}">
 
                 <div id="carrierStatusExist" style="display: block">
 
