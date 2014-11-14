@@ -199,7 +199,7 @@
 
     </g:if>
 
-<g:if test="${show_exseq}">
+<g:if test="${show_exseq || show_sigma}">
 
     <div class="separator"></div>
 

@@ -39,7 +39,13 @@ var geneInfoRec = {
     _13k_T2D_lof_OBSU: 36,
     GWAS_T2D_LWS_TOTAL: 37,
     EXCHP_T2D_LWS_TOTAL: 38,
-    _13k_T2D_LWS_TOTAL: 39
+    _13k_T2D_LWS_TOTAL: 39,
+    SIGMA_T2D_lof_OBSA: 40,
+    SIGMA_T2D_lof_OBSU: 41,
+    SIGMA_T2D_lof_NVAR: 42,
+    SIGMA_T2D_lof_MINA: 43,
+    SIGMA_T2D_lof_MINU: 44,
+    SIGMA_T2D_lof_P: 45
 };
 function revG(d){
     var v;
@@ -82,7 +88,12 @@ function revG(d){
         case  36:v="_13k_T2D_lof_OBSU";break;
         case  37:v="GWAS_T2D_LWS_TOTAL";break;
         case  38:v="EXCHP_T2D_LWS_TOTAL";break;
-        case  39:v="_13k_T2D_LWS_TOTAL";break;
+        case  40:v="SIGMA_T2D_lof_OBSA";break;
+        case  41:v="SIGMA_T2D_lof_OBSU";break;
+        case  42:v="SIGMA_T2D_lof_NVAR";break;
+        case  43:v="SIGMA_T2D_lof_MINA";break;
+        case  44:v="SIGMA_T2D_lof_MINU";break;
+        case  45:v="SIGMA_T2D_lof_P";break;
         default: v="";
     }
     return v;
@@ -403,7 +414,7 @@ function fillVariantsAndAssociations (geneInfo,show_gwas,show_exchp,show_exseq,s
             if (emphasisRequired) {
                emphasizeGwas = 2;
             }
-            fillVariantsAndAssociationLine (geneInfo,'sigma','99, 999',regionSpecifier,// is there a SIGMA_T2D_LWS_TOTAL?
+            fillVariantsAndAssociationLine (geneInfo,'sigma','8,658',regionSpecifier,// is there a SIGMA_T2D_LWS_TOTAL?
                 geneInfoRec.SIGMA_T2D_VAR_TOTAL,geneInfoRec.SIGMA_T2D_GWS_TOTAL,geneInfoRec.SIGMA_T2D_NOM_TOTAL,geneInfoRec.SIGMA_T2D_NOM_TOTAL,
                 buildAnchorForGeneVariantSearches,emphasizeGwas,rootVariantUrl);
         }
@@ -472,37 +483,68 @@ function fillUpBarChart (peopleWithDiseaseNumeratorString,peopleWithDiseaseDenom
 
 }
 function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl) {
-    var bhtPeopleWithVariantWhoHaveDiabetes  = 0,
-        bhtPeopleWithVariantWithoutDiabetes = 0,
+    var // raw values
         bhtPeopleWithVariant = 0,
         bhtPeopleWithoutVariant = 0,
-        arrayOfMinaMinu = [],
         numberOfVariants,
         proportionsWithDisease,
-        bhtMetaBurdenForDiabetes;
-
-      numberOfVariants = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_NVAR);
-      proportionsWithDisease =  geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_MINA_MINU_RET) ;
-      bhtPeopleWithVariant = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_OBSA);
-      bhtPeopleWithoutVariant = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_OBSU);
-      bhtMetaBurdenForDiabetes  = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_METABURDEN);
-
-    $('#bhtLossOfFunctionVariants').append(numberOfVariants);
-
-    // variables for bar chart
-    var arrayOfProportionsWithDisease,
+        bhtMetaBurdenForDiabetes,
+        // temp values
+        arrayOfProportionsWithDisease,
+        // useful values
         peopleWithDiseaseDenominator,
         peopleWithDiseaseNumerator,
         peopleWithoutDiseaseDenominator,
-        peopleWithoutDiseaseNumerator;
-    if (proportionsWithDisease) {
-        arrayOfProportionsWithDisease  = proportionsWithDisease.split('/');
-        if (arrayOfProportionsWithDisease.length>1) {
-            peopleWithDiseaseNumerator = arrayOfProportionsWithDisease[0];
-            peopleWithoutDiseaseNumerator = arrayOfProportionsWithDisease[1];
-            peopleWithDiseaseDenominator = bhtPeopleWithVariant;
-            peopleWithoutDiseaseDenominator =  bhtPeopleWithoutVariant;
+        peopleWithoutDiseaseNumerator
+
+    if (show_exseq){
+        numberOfVariants = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_NVAR);
+        proportionsWithDisease =  geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_MINA_MINU_RET) ;
+        bhtPeopleWithVariant = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_OBSA);
+        bhtPeopleWithoutVariant = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_OBSU);
+        bhtMetaBurdenForDiabetes  = geneFieldOrZero(geneInfo,geneInfoRec._13k_T2D_lof_METABURDEN);
+
+        // this one value comes back in the form of a very inconvenient string.  Break it down.
+        if (proportionsWithDisease) {
+            arrayOfProportionsWithDisease = proportionsWithDisease.split('/');
+            if (arrayOfProportionsWithDisease.length > 1) {
+                peopleWithDiseaseNumerator = arrayOfProportionsWithDisease[0];
+                peopleWithoutDiseaseNumerator = arrayOfProportionsWithDisease[1];
+                peopleWithDiseaseDenominator = bhtPeopleWithVariant;
+                peopleWithoutDiseaseDenominator = bhtPeopleWithoutVariant;
+            }
         }
+
+        } else if (show_sigma) {
+        numberOfVariants = geneFieldOrZero(geneInfo,geneInfoRec.SIGMA_T2D_lof_NVAR);
+        peopleWithDiseaseNumerator =  geneFieldOrZero(geneInfo,geneInfoRec.SIGMA_T2D_lof_MINA);
+        peopleWithoutDiseaseNumerator = geneFieldOrZero(geneInfo,geneInfoRec.SIGMA_T2D_lof_MINU) ;
+        bhtPeopleWithVariant = geneFieldOrZero(geneInfo,geneInfoRec.SIGMA_T2D_lof_OBSA);
+        bhtPeopleWithoutVariant = geneFieldOrZero(geneInfo,geneInfoRec.SIGMA_T2D_lof_OBSU);
+        bhtMetaBurdenForDiabetes  = geneFieldOrZero(geneInfo,geneInfoRec.SIGMA_T2D_lof_P);
+
+        // create variables to match the ones we have to create and the more heavily processed t2dgenes branch
+        peopleWithDiseaseDenominator = bhtPeopleWithVariant;
+        peopleWithoutDiseaseDenominator = bhtPeopleWithoutVariant;
+    }
+
+    // String describing whether or not we have variants.  If we do then provide a link.
+    if (numberOfVariants > 0){
+        $('#possibleCarrierVariantsLink').append("<a class='variantlink' id='linkToVariantsPredictedToTruncate' " +
+                "href='"+rootVariantUrl+"/"+(geneInfo["ID"])+"?filter=lof"+"'>"+
+                numberOfVariants+"</a> variants are predicted to truncate a protein encoded by <em>"+geneInfo["ID"]+
+               "</em>. Among carriers of at least one copy of one of these variants:"
+        );
+    }else{
+        $('#possibleCarrierVariantsLink').append("Insufficient data exist to test this hypothesis.");
+    }
+
+
+    // The bar chart graphic
+    if ((peopleWithDiseaseNumerator)||
+        (peopleWithDiseaseDenominator)&&
+        (peopleWithoutDiseaseNumerator)&&
+        (peopleWithoutDiseaseDenominator)){
         delayedDataPresentation = {functionToRun:fillUpBarChart,
                                    peopleWithDiseaseNumerator:peopleWithDiseaseNumerator,
                                    peopleWithDiseaseDenominator:peopleWithDiseaseDenominator,
@@ -522,21 +564,21 @@ function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exs
         };
      }
 
-
-    if (bhtMetaBurdenForDiabetes  > 0)  {
-         var degreeOfSignificance = '';
-         if (bhtMetaBurdenForDiabetes < 5e-8)  {
-             degreeOfSignificance = 'significant difference';
-         } else if (bhtMetaBurdenForDiabetes < 5e-2)  {
-             degreeOfSignificance = 'nominal difference';
-         } ;
-        $('#describePValueInBiologicalHypothesis').append("<p class='slimDescription'>"+degreeOfSignificance+"</p>\n"+
-            "<p  id='bhtMetaBurdenForDiabetes' class='slimDescription'>p="+(bhtMetaBurdenForDiabetes.toPrecision(3)) +"</p>");
-    }
-    var linkToVariantsPredictedToTruncate = $('#linkToVariantsPredictedToTruncate') ;
-    if ((typeof linkToVariantsPredictedToTruncate!== "undefined") &&
-        (typeof linkToVariantsPredictedToTruncate[0]!== "undefined")){
-        linkToVariantsPredictedToTruncate[0].href =  rootVariantUrl+"/"+(geneInfo["ID"])+"?filter=lof";
+    // Colorful square describing significance
+    if (bhtMetaBurdenForDiabetes > 0) {
+        var degreeOfSignificance = '';
+        if (bhtMetaBurdenForDiabetes < 5e-8) {
+            degreeOfSignificance = 'significant difference';
+        } else if (bhtMetaBurdenForDiabetes < 5e-2) {
+            degreeOfSignificance = 'nominal difference';
+        }
+        ;
+        $('#significanceDescriptorFormatter').append("<div class='significantDifference'>" +
+            "<div id='describePValueInBiologicalHypothesis' class='significantDifferenceText'>" +
+            "<p class='slimDescription'>" + degreeOfSignificance + "</p>\n" +
+            "<p  id='bhtMetaBurdenForDiabetes' class='slimDescription'>p=" + (bhtMetaBurdenForDiabetes.toPrecision(3)) + "</p>" +
+            "</div>" +
+            "</div>");
     }
 
 }

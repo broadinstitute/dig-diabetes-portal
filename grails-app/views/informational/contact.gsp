@@ -12,8 +12,14 @@
 <div id="main">
 
     <div class="container">
-        <div class="lead"><a href="mailto://maryc@broadinstitute.org">Email the portal team</a></div>
 
+        <g:renderSigmaSection>
+            <div class="lead"><a href="mailto://type2-diabetes-genetics@broadinstitute.org">Email the portal team</a></div>
+        </g:renderSigmaSection>
+        <g:renderNotSigmaSection>
+            <div class="lead"><a href="mailto://type2-diabetes-genetics@broadinstitute.org">Email the portal team</a></div>
+        </g:renderNotSigmaSection>
+    </div>
         <div class="separator"></div>
 
         <h2>Contact a consortium leader</h2>

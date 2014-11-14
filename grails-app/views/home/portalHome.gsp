@@ -88,7 +88,13 @@
                             <button id="gene-go" class="btn btn-primary btn-lg" type="button"><g:message code="mainpage.button.imperative"/></button>
                         </span>
                     </div>
-                    <div class="helptext"><g:message code="mainpage.start.with.gene.subtext"/></div>
+                    <g:renderSigmaSection>
+                        <div class="helptext"><g:message code="mainpage.start.with.gene.subtext.sigma"/></div>
+                    </g:renderSigmaSection>
+                    <g:renderNotSigmaSection>
+                        <div class="helptext"><g:message code="mainpage.start.with.gene.subtext"/></div>
+                    </g:renderNotSigmaSection>
+
                 </div>
                 <div class="main-searchbox">
                     <h2><g:message code="mainpage.start.with.variant"/></h2>
@@ -98,7 +104,12 @@
                             <button id="variant-go" class="btn btn-primary btn-lg" type="button"><g:message code="mainpage.button.imperative"/></button>
                         </span>
                     </div>
-                    <div class="helptext"><g:message code="mainpage.start.with.variant.subtext"/></div>
+                    <g:renderSigmaSection>
+                        <div class="helptext"><g:message code="mainpage.start.with.variant.subtext.sigma"/></div>
+                    </g:renderSigmaSection>
+                    <g:renderNotSigmaSection>
+                        <div class="helptext"><g:message code="mainpage.start.with.variant.subtext"/></div>
+                    </g:renderNotSigmaSection>
                 </div>
                 <div class="main-searchbox">
                     <h2><g:message code="mainpage.start.with.region"/></h2>
