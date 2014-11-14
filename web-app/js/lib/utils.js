@@ -509,6 +509,19 @@ determineHighestFrequencyEthnicity: function (variant) {
                  populationWithHighestFrequency:winningEthnicity,
                  noData:noData};
     },
+    prettyUpSigmaSource:function (rawText){
+        var returnValue;
+        if (rawText === 'EXOME_CHIP'){
+            returnValue = 'exome chip';
+        } else if (rawText === 'OMNI'){
+            returnValue = 'omni';
+        } else if (rawText === 'EXOMES'){
+            returnValue = 'exomes';
+        }else {
+            returnValue = rawText;
+        }
+        return returnValue;
+    },
     /***
      *
      * @param fullJson
@@ -574,12 +587,10 @@ determineHighestFrequencyEthnicity: function (variant) {
                     (proteinEffectList.proteinEffectMap) &&
                     (proteinEffectList.proteinEffectMap [vRec[i].Consequence])){
                     proteinEffectRepresentation =  proteinEffectList.proteinEffectMap[vRec[i].Consequence];
-                    if ((proteinEffectRepresentation)&&(proteinEffectRepresentation.length>0)) {
-                        proteinEffectRepresentation = proteinEffectRepresentation.replace(/;/g,';\n')
-                    }
                 } else {
                     proteinEffectRepresentation =  vRec[i].Consequence;
                 }
+                proteinEffectRepresentation = proteinEffectRepresentation.replace(/[;,]/g,'<br/>');
                 retVal += "<td>"+proteinEffectRepresentation+"</td>" ;
             } else {
                 retVal += "<td></td>";
@@ -589,7 +600,7 @@ determineHighestFrequencyEthnicity: function (variant) {
 
                 // Source
                 if (vRec[i].SIGMA_SOURCE)  {
-                    retVal += "<td>" +vRec[i].SIGMA_SOURCE+"</td>";
+                    retVal += "<td>" +UTILS.prettyUpSigmaSource (vRec[i].SIGMA_SOURCE)+"</td>";
                 } else {
                     retVal += "<td></td>";
                 }
@@ -626,9 +637,9 @@ determineHighestFrequencyEthnicity: function (variant) {
                     retVal += "<td></td>";
                 }
 
-                // P value
+                // frequency
                 if (vRec[i].SIGMA_T2D_MAF)  {
-                    retVal += "<td>" +vRec[i].SIGMA_T2D_MAF+"</td>";
+                    retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_MAF)+"</td>";
                 } else {
                     retVal += "<td></td>";
                 }
@@ -928,7 +939,6 @@ determineHighestFrequencyEthnicity: function (variant) {
         }
 
     }
-    console.log('fillThe Fields');
 },
     determineEffectsTypeHeader: function (data) {
         var returnValue = 'odds ratio';

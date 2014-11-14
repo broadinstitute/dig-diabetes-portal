@@ -20,7 +20,7 @@
 <g:if test="${show_exchp}">
 <th colspan="2" class="datatype-header">exome chip</th>
 </g:if>
-<th colspan="2" class="datatype-header">GWAS</th>
+<th colspan="2" class="datatype-header">DIAGRAM</th>
 </tr>
 <tr>
 <g:if test="${show_gene}"><th>nearest gene</th></g:if>
