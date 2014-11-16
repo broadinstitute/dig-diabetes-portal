@@ -245,7 +245,8 @@ environments {
 //   grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //   grails.serverURL = "http://type2diabetesgenetics.org"
 //   grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-        grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
+        grails.serverURL = "sigmat2dqasrv7-env.elasticbeanstalk.com"
+        //grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
 //        grails.serverURL = "type2diabetesqasrvr-env.elasticbeanstalk.com"
 //        grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
         grails.logging.jul.usebridge = false
@@ -302,7 +303,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/**/fonts/**':       ['permitAll'],
         '/**/css/**':         ['permitAll'],
         '/**/images/**':      ['permitAll'],
-        '/**/favicon.ico':    ['permitAll'],
+        '/**/*.ico':    ['permitAll'],
         '/login/**':          ['permitAll'],
         '/logout/**':         ['permitAll'],
         '/finance/**':        ['ROLE_FINANCE', 'isFullyAuthenticated()'],
@@ -312,6 +313,7 @@ grails.plugin.springsecurity.logout.postOnly = false
 grails.plugin.springsecurity.rememberMe.cookieName="td2PortalRememberMe"
 grails.plugin.springsecurity.rememberMe.key="td2PortalKey"
 grails.plugin.springsecurity.rememberMe.rememberMe.persistent=true
+grails.plugins.springsecurity.successHandler.alwaysUseDefault = true
 grails.plugin.springsecurity.successHandler.defaultTargetUrl = "/home/index"
 //grails.plugin.logout.postOnly=false
 grails.plugin.springsecurity.apf.storeLastUsername=true

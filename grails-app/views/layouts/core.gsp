@@ -13,7 +13,7 @@
     <r:layoutResources/>
 
     <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
-
+    <g:external uri="/images/icons/dna-strands.ico"/>
 
 
     <g:layoutHead/>

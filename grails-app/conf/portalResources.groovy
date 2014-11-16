@@ -46,6 +46,7 @@ modules = {
         dependsOn "jquery"
 
         resource url: 'images/ajaxLoadingAnimation.gif'
+        resource url: 'images/icons/dna-strands.ico'
 
         resource url: 'css/lib/bootstrap.min.css'
 
