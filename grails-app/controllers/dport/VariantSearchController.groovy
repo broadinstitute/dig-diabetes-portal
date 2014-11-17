@@ -22,6 +22,9 @@ class VariantSearchController {
         if (params.encParams) {
             encParams = params.encParams
             log.debug "variantSearch params.encParams = ${params.encParams}"
+        } else if (sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma))  {  // if sigma default data set is sigma
+
+            encParams = "1:0"
         }
         render(view: 'variantSearch',
                 model: [show_gwas : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
@@ -45,7 +48,7 @@ class VariantSearchController {
             paramsMap.put(key, value)
         }
         if (paramsMap) {
-            displayVariantSearchResults(paramsMap, false)
+            displayVariantSearchResults(paramsMap, sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma))
         }
 
     }

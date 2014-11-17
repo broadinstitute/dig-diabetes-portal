@@ -171,7 +171,7 @@ class FilterManagementService {
 
         buildingFilters = setAlleleFrequencies(buildingFilters, incomingParameters)
 
-        buildingFilters = caseControlOnly(buildingFilters, incomingParameters,currentlySigma)
+        buildingFilters = caseControlOnly(buildingFilters, incomingParameters,currentlySigma,datatypeOperand)
 
         buildingFilters = predictedEffectsOnProteins(buildingFilters, incomingParameters)
 
@@ -585,7 +585,8 @@ class FilterManagementService {
                String ethnicityReference  =  "ethnicity_af_" + ethnicity[1] + "-" +minOrMax
                if (incomingParameters.containsKey(ethnicityReference)) {
                    String specificAlleleFrequency = incomingParameters[ethnicityReference]
-                   if ((specificAlleleFrequency) &&
+                   if ( (!"undefined".equals(specificAlleleFrequency))&&
+                   (specificAlleleFrequency) &&
                            (specificAlleleFrequency.length() > 0)) {
                        Boolean errorFree = true
                        BigDecimal alleleFrequency
@@ -664,7 +665,7 @@ class FilterManagementService {
 
 
 
-    private  LinkedHashMap caseControlOnly (LinkedHashMap  buildingFilters, HashMap incomingParameters, Boolean usingSigma){
+    private  LinkedHashMap caseControlOnly (LinkedHashMap  buildingFilters, HashMap incomingParameters, Boolean usingSigma,caseControlOnly){
         List <String> filters =  buildingFilters.filters
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
@@ -672,22 +673,22 @@ class FilterManagementService {
         if  (incomingParameters.containsKey("t2dcases")) {
             if (usingSigma) {
                 filters << retrieveFilterString("onlySeenCaseSigma") 
-                filterDescriptions << "Number of minor alleles observed in cases in SIGMA analysis is equal to 0"
+                filterDescriptions << "Number of minor alleles observed in controls in SIGMA analysis is equal to 0"
                 parameterEncoding << "20:0"
             } else {
                 filters << retrieveFilterString("onlySeenCaseT2d") 
-                filterDescriptions << "Number of case observations is equal to 0"
+                filterDescriptions << "Number of observations in controls is equal to 0"
                 parameterEncoding << "20:1"
             }
         }
         if  (incomingParameters.containsKey("t2dcontrols")) {
             if (usingSigma) {
                 filters << retrieveFilterString("onlySeenControlSigma") 
-                filterDescriptions << "Number of minor alleles observed in controls in SIGMA analysis is equal to 0"
+                filterDescriptions << "Number of minor alleles observed in cases in SIGMA analysis is equal to 0"
                 parameterEncoding << "21:0"
             } else {
                 filters << retrieveFilterString("onlySeenControlT2d") 
-                filterDescriptions << "Number of control observations is equal to 0"
+                filterDescriptions << "Number of observations in cases is equal to 0"
                 parameterEncoding << "21:1"
             }
         }
