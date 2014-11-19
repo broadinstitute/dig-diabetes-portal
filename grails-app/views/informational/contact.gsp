@@ -13,14 +13,13 @@
 
     <div class="container">
 
-        <g:renderSigmaSection>
-            <div class="lead"><a href="mailto://type2-diabetes-genetics@broadinstitute.org">Email the portal team</a></div>
-        </g:renderSigmaSection>
-        <g:renderNotSigmaSection>
-            <div class="lead"><a href="mailto://type2-diabetes-genetics@broadinstitute.org">Email the portal team</a></div>
-        </g:renderNotSigmaSection>
+        <div class="lead">Email the portal team at <a href="mailto://type2-diabetes-genetics@broadinstitute.org">type2-diabetes-genetics@broadinstitute.org</a></div>
+
     </div>
+
+<g:renderNotSigmaSection>
         <div class="separator"></div>
+    <div class="container">
 
         <h2>Contact a consortium leader</h2>
 
@@ -158,8 +157,9 @@
             <a href="mailto://tiinamaija.tuomi@helsinki.fi">Tiinamaija Tuomi</a>
         </p>
     </div>
+    </div>
 
-
+</g:renderNotSigmaSection>
 </div>
 
 </body>
