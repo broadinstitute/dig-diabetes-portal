@@ -21,6 +21,30 @@ class SectionSelectorTagLib {
 
 
 
+    def rendersSigmaMessage = { attrs,body ->
+        if (sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma)){
+            String messageText = ""
+            if (attrs.messageSpec){
+                messageText = g.message(code:attrs.messageSpec)
+                out << messageText
+            }
+        }
+    }
+
+
+    def rendersNotSigmaMessage = { attrs,body ->
+        if (!sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma)){
+            String messageText = ""
+            if (attrs.messageSpec){
+                messageText = g.message(code:attrs.messageSpec)
+                out << messageText
+            }
+        }
+    }
+
+
+
+
     def renderExomeSequenceSection = { attrs,body ->
         if (sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq)){
             out << body()

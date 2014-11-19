@@ -125,12 +125,12 @@
                 </span>
 
                 <div id="branding">
-                    SIGMA <strong>T2D</strong> <small><g:message code="site.subtext"/></small>
+                    SIGMA <strong>T2D</strong> <small><g:rendersSigmaMessage messageSpec="site.subtext"/></small>
                 </div>
             </g:renderSigmaSection>
             <g:renderNotSigmaSection>
                 <div id="branding">
-                    Type 2 Diabetes <strong>Genetics</strong> <small>${grailsApplication.config.site.subtext}</small>
+                    Type 2 Diabetes <strong>Genetics</strong> <small>Beta</small>
                 </div>
             </g:renderNotSigmaSection>
         </div>
