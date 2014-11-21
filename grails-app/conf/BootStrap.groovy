@@ -54,9 +54,17 @@ class BootStrap {
                               nickname:'Mary',
                               email: "balexand@broadinstitute.org"]
             samples['fred'] = [fullName:'Fred friendly',
-                              password:'Fred',
-                              nickname:'Fred',
-                              email: "balexand@broadinstitute.org"]
+                               password:'Fred',
+                               nickname:'Fred',
+                               email: "balexand@broadinstitute.org"]
+            samples['test'] = [fullName:'Testy test test',
+                               password:'test',
+                               nickname:'Fred',
+                               email: "balexand@broadinstitute.org"]
+            samples['tgreen@broadinstitute.org'] = [fullName:'Todd',
+                                                    password:'welcome',
+                                                    nickname:'Todd',
+                                                    email: "tgreen@broadinstitute.org"]
         }
 
         def userRole = Role.findByAuthority('ROLE_USER')  ?: new Role (authority: "ROLE_USER").save()
@@ -81,7 +89,7 @@ class BootStrap {
                     UserRole.create user,userRole
                     if ((username=='ben')||
                             (username=='balexand@broadinstitute.org')||
-                            (username=='tgreen@broadinstitute.com')||
+                            (username=='tgreen@broadinstitute.org')||
                             (username=='kyuksel@broadinstitute.org')||
                             (username=='tjordan@broadinstitute.org')||
                             (username=='flannick@broadinstitute.org')){

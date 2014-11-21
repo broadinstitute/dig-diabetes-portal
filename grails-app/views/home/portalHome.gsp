@@ -135,6 +135,18 @@
                         <a href="${createLink(controller:'variantSearch', action:'variantSearch')}" class="btn btn-primary btn-lg"><g:message code="mainpage.button.imperative"/></a>
                     </div>
                 </div>
+                <g:if test="${0}">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <h2>
+                                Develop hypotheses<br/>
+                            </h2>
+                        </div>
+                        <div class="col-sm-3" style="padding-top: 40px; text-align: right;">
+                            <a href="${createLink(controller:'hypothesisGen', action:'dynamicBurdenTest')}" class="btn btn-primary btn-lg"><g:message code="mainpage.button.imperative"/></a>
+                        </div>
+                    </div>
+                </g:if>
                 <h2>
                     <g:message code="mainpage.search.variant.related.traits"/><br/>
                     <small><g:message code="mainpage.search.variant.related.traits.subtext"/></small>

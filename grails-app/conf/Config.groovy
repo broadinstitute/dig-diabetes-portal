@@ -246,10 +246,10 @@ environments {
 //   grails.serverURL = "http://type2diabetesgenetics.org"
 //   grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
         //grails.serverURL = "sigmat2dqasrv7-env.elasticbeanstalk.com"
-        grails.serverURL = "sigmat2dprod-env.elasticbeanstalk.com"
+       // grails.serverURL = "sigmat2dprod-env.elasticbeanstalk.com"
        // grails.serverURL = "sigmat2ddev-env.elasticbeanstalk.com"
         //grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
-//        grails.serverURL = "type2diabetesqasrvr-env.elasticbeanstalk.com"
+        grails.serverURL = "type2diabetesqasrvr-env.elasticbeanstalk.com"
 //        grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
         grails.logging.jul.usebridge = false
     }
@@ -299,6 +299,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/region/**':           ['ROLE_USER'],
         '/trait/**':            ['ROLE_USER'],
         '/variant/**':          ['ROLE_USER'],
+        '/hypothesisGen/**':    ['ROLE_USER'],
         '/variantSearch/**':    ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/assets/**':         ['permitAll'],
         '/**/js/**':          ['permitAll'],
