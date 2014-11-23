@@ -35,6 +35,28 @@ eventCompileStart = { org.codehaus.gant.GantBinding gantBinding ->
     Date date = new Date()
     println "compiling on ${date.toString()}"
 
+    // try a trick from http://wordpress.transentia.com.au/wordpress/2010/05/09/capturing-build-info-in-grails/
+    // http://www.ehatchersolutions.com/JavaDevWithAnt/ant.html
+    ant.property(environment: "env")
+    ant.property(name: 'env.COMPUTERNAME', value: "${ant.antProject.properties.'env.HOSTNAME'}")
+
+    def now = new Date().format('dd/MMM/yyyy; kk:mm:ss')
+    ant.echo(message: 'Writing temporary.BuildInfo.groovy...')
+    ant.echo(message: "buildTime: ${now}")
+    ant.echo(message: "buildHost: ${ant.antProject.properties.'env.COMPUTERNAME'}")
+    ant.echo(message: "buildWho: ${ant.antProject.properties."user.name"}")
+    ant.mkdir(dir: 'src/groovy/temporary')
+    new File('src/groovy/temporary/BuildInfo.groovy').withWriter { writer ->
+        writer << """
+package temporary
+
+public interface BuildInfo {
+  String buildTime = '${now}'
+  String buildHost = '${ant.antProject.properties.'env.COMPUTERNAME'}'
+  String buildWho = '${ant.antProject.properties."user.name"}'
+}
+"""
+    }
 }
 //
 //

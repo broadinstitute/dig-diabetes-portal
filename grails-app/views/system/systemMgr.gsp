@@ -4,6 +4,7 @@
   Date: 8/23/2014
   Time: 5:09 PM
 --%>
+<%@ page import="temporary.BuildInfo" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -164,7 +165,20 @@
                 </g:form>
 
 
+                <div class="row clearfix" style="margin-top:20px; padding: 10px">
+                    <div class="col-md-8"></div>
+                    <div class="col-md-4">
+                        <div >
+                            <div style="border: 2px solid darkblue; padding: 10px">
+                                <span style="font-decoration:underline"><em>Build information</em><br />
+                                Environment: ${grails.util.Environment.current.name}.<br />
+                                Built by ${BuildInfo.buildWho}@${BuildInfo.buildHost}<br />
+                                at ${BuildInfo.buildTime}.
+                            </div>
+                    </div>
 
+
+                </div>
 
 
 
