@@ -164,19 +164,19 @@
                     </div>
                 </g:form>
 
+                <div class="separator"></div>
 
                 <div class="row clearfix" style="margin-top:20px; padding: 10px">
-                    <div class="col-md-8"></div>
+
                     <div class="col-md-4">
-                        <div >
                             <div style="border: 2px solid darkblue; padding: 10px">
-                                <span style="font-decoration:underline"><em>Build information</em><br />
+                                <span style="font-decoration:underline"><em>Build information</em><br /></span>
                                 Environment: ${grails.util.Environment.current.name}.<br />
                                 Built by ${BuildInfo.buildWho}@${BuildInfo.buildHost}<br />
                                 at ${BuildInfo.buildTime}.
                             </div>
                     </div>
-
+                    <div class="col-md-8"></div>
 
                 </div>
 
