@@ -292,52 +292,124 @@ class RestServerService {
         return  returnValue
     }
 
+
+
+
+
+
+
+
+
+
     /***
      * This is the underlying routine for every call to the rest backend.
      * @param drivingJson
      * @param targetUrl
      * @return
      */
-  private JSONObject postRestCall(String drivingJson, String targetUrl){
-      JSONObject returnValue = null
-      Date beforeCall  = new Date()
-      Date afterCall
-      RestResponse response
-      RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
-      StringBuilder logStatus = new StringBuilder()
-      try {
-          response  = rest.post(currentRestServer()+targetUrl)   {
-              contentType "application/json"
-              json drivingJson
-          }
-          afterCall  = new Date()
-      } catch ( Exception exception){
-          log.error("NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}")
-          log.error(exception.toString())
-          logStatus <<  "NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}"
-          afterCall  = new Date()
-      }
-      logStatus << """
+    private JSONObject postRestCallBase(String drivingJson, String targetUrl, currentRestServer){
+        JSONObject returnValue = null
+        Date beforeCall  = new Date()
+        Date afterCall
+        RestResponse response
+        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
+        StringBuilder logStatus = new StringBuilder()
+        try {
+            response  = rest.post(currentRestServer+targetUrl)   {
+                contentType "application/json"
+                json drivingJson
+            }
+            afterCall  = new Date()
+        } catch ( Exception exception){
+            log.error("NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}")
+            log.error(exception.toString())
+            logStatus <<  "NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}"
+            afterCall  = new Date()
+        }
+        logStatus << """
 SERVER CALL:
 url=${targetUrl},
 parm=${drivingJson},
 time required=${(afterCall.time-beforeCall.time)/1000} seconds
 """.toString()
-      if (response?.responseEntity?.statusCode?.value == 200) {
-          returnValue =  response.json
-          logStatus << """status: ok""".toString()
-      }  else {
-          JSONObject tempValue =  response.json
-          logStatus << """status: ${response.responseEntity.statusCode.value}""".toString()
-          if  (tempValue)  {
-              logStatus << """is_error: ${response.json["is_error"]}""".toString()
-          }  else {
-              logStatus << "no valid Json returned"
-          }
-      }
-      log.info(logStatus)
-      return returnValue
-  }
+        if (response?.responseEntity?.statusCode?.value == 200) {
+            returnValue =  response.json
+            logStatus << """status: ok""".toString()
+        }  else {
+            JSONObject tempValue =  response.json
+            logStatus << """status: ${response.responseEntity.statusCode.value}""".toString()
+            if  (tempValue)  {
+                logStatus << """is_error: ${response.json["is_error"]}""".toString()
+            }  else {
+                logStatus << "no valid Json returned"
+            }
+        }
+        log.info(logStatus)
+        return returnValue
+    }
+
+
+
+
+
+    private JSONObject postRestCallBurden(String drivingJson, String targetUrl){
+        return postRestCallBase(drivingJson,targetUrl,"http://diabetesgeneticsportal2.broadinstitute.org:8888/dev/burden/")
+    }
+
+
+
+
+    private JSONObject postRestCall(String drivingJson, String targetUrl){
+        return postRestCallBase(drivingJson,targetUrl,currentRestServer())
+    }
+
+
+    /***
+     * This is the underlying routine for every call to the rest backend.
+     * @param drivingJson
+     * @param targetUrl
+     * @return
+     */
+//  private JSONObject postRestCall(String drivingJson, String targetUrl){
+//      JSONObject returnValue = null
+//      Date beforeCall  = new Date()
+//      Date afterCall
+//      RestResponse response
+//      RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
+//      StringBuilder logStatus = new StringBuilder()
+//      try {
+//          response  = rest.post(currentRestServer()+targetUrl)   {
+//              contentType "application/json"
+//              json drivingJson
+//          }
+//          afterCall  = new Date()
+//      } catch ( Exception exception){
+//          log.error("NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}")
+//          log.error(exception.toString())
+//          logStatus <<  "NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}"
+//          afterCall  = new Date()
+//      }
+//      logStatus << """
+//SERVER CALL:
+//url=${targetUrl},
+//parm=${drivingJson},
+//time required=${(afterCall.time-beforeCall.time)/1000} seconds
+//""".toString()
+//      if (response?.responseEntity?.statusCode?.value == 200) {
+//          returnValue =  response.json
+//          logStatus << """status: ok""".toString()
+//      }  else {
+//          JSONObject tempValue =  response.json
+//          logStatus << """status: ${response.responseEntity.statusCode.value}""".toString()
+//          if  (tempValue)  {
+//              logStatus << """is_error: ${response.json["is_error"]}""".toString()
+//          }  else {
+//              logStatus << "no valid Json returned"
+//          }
+//      }
+//      log.info(logStatus)
+//      return returnValue
+//  }
 
 
 

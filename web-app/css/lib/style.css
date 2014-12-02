@@ -20,7 +20,7 @@ label, .radio label, .checkbox label {
 
 * {
     font-family: 'Lato';
-    font-weight: 300;
+    font-weight: 400;
     /* why do the below lines not work? */
     /*font-family: 'Lato-Light';*/
     /*src: url('/fonts/Lato_Light/Lato-Light.ttf');*/

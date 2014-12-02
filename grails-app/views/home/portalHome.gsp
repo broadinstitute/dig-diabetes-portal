@@ -17,7 +17,7 @@ div.helix {
 div.helix::after {
     content: "";
     background-image: url("${resource(dir: 'images', file: 'doubleHelix2.png')}");
-    opacity: 0.3;
+    opacity: 0.1;
     background-size: 200px;
     top: 0;
     left: 0;
@@ -173,7 +173,7 @@ div.helix::after {
                            class="btn btn-primary btn-lg"><g:message code="mainpage.button.imperative"/></a>
                     </div>
                 </div>
-                <g:if test="${0}">
+                <g:if test="${1}">
                     <div class="row">
                         <div class="col-sm-9">
                             <h2>

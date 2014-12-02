@@ -1,9 +1,11 @@
 <style>
 .dbtBoundingBox {
     border: solid 1px black;
-    width : 100%;
-    height: 200px;
+    width : 96%;
+    height: 300px;
     margin-top: 30px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 .dbtBoundingBoxSubrow {
     margin: 20px;
@@ -28,8 +30,15 @@
                         </div>
                         <div class="row dbtBoundingBoxSubrow">
                             <ul class="list-group">
-                                <li class="list-group-item">Specify one or more variants</li>
-                                <li class="list-group-item">Upload a file containing variants</li>
+                                <li class="list-group-item">
+                                    <g:textField name="explicitVariants" value="${0}" />
+                                </li>
+                                <li class="list-group-item">
+                                    <g:uploadForm action="variantUpload">
+                                        <input type="file"  class="btn btn-default btn-sm" name="myVariantFile" />
+                                        <input type="submit"   class="btn btn-default btn-sm" />
+                                    </g:uploadForm>
+                                </li>
                             </ul>
                         </div>
 

@@ -4,6 +4,7 @@ import dport.people.Role
 import dport.people.User
 import dport.people.UserRole
 import grails.transaction.Transactional
+import org.apache.juli.logging.LogFactory
 
 
 @Transactional
@@ -11,6 +12,8 @@ class SharedToolsService {
 
      def mailService
      def grailsApplication
+     private static final log = LogFactory.getLog(this)
+
 
     Integer showGwas = -1
     Integer showExomeChip = -1
@@ -128,6 +131,99 @@ class SharedToolsService {
         return returnValue;
     }
 
+
+    public String convertMultipartFileToString(org.springframework.web.multipart.commons.CommonsMultipartFile incomingFile) {
+        StringBuilder sb = []
+        if (!incomingFile.empty) {
+            java.io.InputStream inputStream = incomingFile.getInputStream()
+            try {
+                int temp
+                while ((temp = inputStream.read()) != -1) {
+                    sb << ((char) temp).toString()
+                }
+            } catch (Exception ex) {
+                log.error('Problem reading input file=' + ex.toString() + '.')
+            }
+        } else {
+            log.info('User passed us an empty file.')
+        }
+        return sb.toString()
+    }
+
+    /***
+     * split up a compound string on the basis of commas.  Turn it into a nice clean list
+     *
+     * @param initialString
+     * @return
+     */
+    List<String> convertStringToArray (String initialString){
+        List<String> returnValue = []
+        List<String> rawList = []
+        if (initialString){
+            rawList =  initialString.split(',')
+        }
+        for (String oneString in rawList){
+            returnValue << oneString.replaceAll("[^a-zA-Z_\\d\\s:]","")
+        }
+        return returnValue
+    }
+
+
+
+    /***
+     * Convert a simple list into a collection of strings enclosed in quotation marks and separated
+     * by commas
+     * @param list
+     * @return
+     */
+    String convertListToString (List <String> list){
+        String returnValue = ""
+        if (list) {
+            List filteredList = list.findAll{it.toString().size()>0} // make sure everything is a string with at least size > 0
+            if (filteredList.size()>0){
+                returnValue = "\""+filteredList.join("\",\"")+"\"" // put them together in a way that Json can consume
+            }
+        }
+        return returnValue
+    }
+
+    /***
+     * take the data from a multiple line representation (as one might find in a datafile) and
+     * put every line into its own element in a list. While were at it remove quotation marks
+     * as well as everything else that is in a digit, character, or underscore.
+     *
+     * @param multiline
+     * @return
+     */
+    List<String> convertMultilineToList (String multiline){
+        List<String> returnValue = []
+        multiline.eachLine {
+            if (it) {
+                String filteredVersion =  it.toString().replaceAll("[^a-zA-Z_\\d\\s:]","")
+                if (filteredVersion){
+                    returnValue <<  filteredVersion
+                }
+            }
+        }
+        return returnValue
+    }
+
+
+
+
+
+
+    String createDistributedBurdenTestInput(List <String> variantList){
+        String returnValue ="""{
+            "variants":[
+               ${convertListToString(variantList)}
+        ],
+            "covariates": "N/A",
+            "samples": "N/A",
+            "filters": "N/A"
+        }"""
+        return returnValue
+    }
 
 
 
