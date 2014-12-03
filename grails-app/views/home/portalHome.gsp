@@ -173,7 +173,7 @@ div.helix::after {
                            class="btn btn-primary btn-lg"><g:message code="mainpage.button.imperative"/></a>
                     </div>
                 </div>
-                <g:if test="${1}">
+                <g:if test="${0}">
                     <div class="row">
                         <div class="col-sm-9">
                             <h2>

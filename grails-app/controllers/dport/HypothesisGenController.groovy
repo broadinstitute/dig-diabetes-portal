@@ -46,33 +46,40 @@ class HypothesisGenController {
         render (view: "dynamicBurdenTest")
     }
 
+    /***
+     * Starting with an explicit list of variants, extract what you need and display a page with results
+     * @return
+     */
     def variantUpload() {
         log.debug "Received a request to upload a variant file"
-        String variantFileContent
-        if (params.myVariantFile){
-            variantFileContent = sharedToolsService.convertMultipartFileToString(params.myVariantFile)
+        if (params.explicitVariants){
+            List<String> listOfVariants = sharedToolsService.convertStringToArray(params.explicitVariants)
+            String drivingJson = sharedToolsService.createDistributedBurdenTestInput(listOfVariants)
+            JSONObject jsonObject =  restServerService.postRestCallBurden (drivingJson, "variant")
+            if (jsonObject){
+                render(view: "dynamicBurdenTest", model:[jsonObject])
+                return
+            }
         }
-//        if (params.myVariantFile){
-//            org.springframework.web.multipart.commons.CommonsMultipartFile incomingFile = params.myVariantFile
-//            if (incomingFile.empty) {
-//                flash.message = 'file cannot be empty'
-//                render(view: "dynamicBurdenTest")
-//                return
-//            }
-//            StringBuilder sb = []
-//            java.io.InputStream inputStream = incomingFile.getInputStream()
-//            try {
-//                int temp
-//                while((temp=inputStream.read())!=-1)
-//                {
-//                    sb << ((char)temp).toString()
-//                }
-//            }catch (Exception ex){
-//                log.error('Problem reading input file='+ex.toString()+'.')
-//            }
-//            log.debug('file content:'+sb.toString()+'.')
-//        }
-        log.info('file content:'+variantFileContent+'.')
+        render(view: "dynamicBurdenTest")
+    }
+
+    /***
+     * starting with a file, extract its contents, compose a rest query and display a page with results
+     * @return
+     */
+    def variantFileUpload() {
+        log.debug "Received a request to upload a variant file"
+        if (params.myVariantFile){
+            String variantFileContent = sharedToolsService.convertMultipartFileToString(params.myVariantFile)
+            List<String> listOfVariants = sharedToolsService.convertMultilineToList(variantFileContent)
+            String drivingJson = sharedToolsService.createDistributedBurdenTestInput(listOfVariants)
+            JSONObject jsonObject =  restServerService.postRestCallBurden (drivingJson, "variant")
+            if (jsonObject){
+                render(view: "dynamicBurdenTest", model:[jsonObject])
+                return
+            }
+        }
         render(view: "dynamicBurdenTest")
     }
 

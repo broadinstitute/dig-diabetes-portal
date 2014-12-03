@@ -26,6 +26,7 @@ class RestServerService {
     private  String TRAIT_INFO_URL = "trait-info"
     private  String VARIANT_SEARCH_URL = "variant-search"
     private  String TRAIT_SEARCH_URL = "trait-search"
+    private  String DBT_URL = ""
 
     static List <String> VARIANT_SEARCH_COLUMNS = [
     'ID',
@@ -182,7 +183,7 @@ class RestServerService {
         QA_REST_SERVER = grailsApplication.config.t2dQaRestServer.base+grailsApplication.config.t2dQaRestServer.name+grailsApplication.config.t2dQaRestServer.path
         PROD_REST_SERVER = grailsApplication.config.t2dProdRestServer.base+grailsApplication.config.t2dProdRestServer.name+grailsApplication.config.t2dProdRestServer.path
         BASE_URL =  grailsApplication.config.server.URL;
-
+        DBT_URL   = grailsApplication.config.dbtRestServer.URL
     }
 
     private List <String> getGeneColumns () {
@@ -353,7 +354,7 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
 
 
     private JSONObject postRestCallBurden(String drivingJson, String targetUrl){
-        return postRestCallBase(drivingJson,targetUrl,"http://diabetesgeneticsportal2.broadinstitute.org:8888/dev/burden/")
+        return postRestCallBase(drivingJson,targetUrl,DBT_URL)
     }
 
 

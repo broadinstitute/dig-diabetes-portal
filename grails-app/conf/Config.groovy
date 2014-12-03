@@ -139,7 +139,7 @@ t2dProdRestServer {
     path = 'rest/server/'
 }
 server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
-
+dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
 
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
