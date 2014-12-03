@@ -2,33 +2,36 @@ package dport
 
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.web.json.JSONObject
+import java.net.URLDecoder;
 
 class HypothesisGenController {
     RestServerService   restServerService
     SharedToolsService sharedToolsService
+    FilterManagementService filterManagementService
+
     private static final log = LogFactory.getLog(this)
 
     def index() {}
 
     def dynamicBurdenTest (){
-        render (view: "dynamicBurdenTest")
+        render (view: "dynamicBurdenTest", model:[caller:0])
     }
 
     def burdenAjax() {
-        String variantToStartWith = params.variant
-        if (variantToStartWith)      {
-            String testJson = """{
-  "variants":["2_98709555_","2_98736047_","2_98737873_","2_98744752_"],
-  "covariates": "N/A",
-  "samples": "N/A",
-  "filters": "N/A"
-}""".toString()
-            JSONObject jsonObject =  restServerService.postRestCallBurden (testJson.trim(), "variant")
-            render(status:200, contentType:"application/json") {
-                [variant:jsonObject]
+        String variantToStartWith = params.variants
+        String decodedVariants = URLDecoder.decode(variantToStartWith, "UTF-8");
+        if (decodedVariants)      {
+            List<String> listOfVariants = sharedToolsService.convertStringToArray(decodedVariants)
+            String drivingJson = sharedToolsService.createDistributedBurdenTestInput(listOfVariants)
+            JSONObject jsonObject =  restServerService.postRestCallBurden (drivingJson, "variant")
+            if (jsonObject){
+                render(status: 200, contentType: "application/json") {
+                    [burdenTestResults: jsonObject]
+                }
+                return
             }
-            return;
         }
+        return
     }
     def burdenForm() {
         String variantToStartWith = 1
@@ -46,6 +49,62 @@ class HypothesisGenController {
         render (view: "dynamicBurdenTest")
     }
 
+
+
+
+    def developListOfVariants() {
+            Map paramsMap = new HashMap()
+
+            params.each { key, value ->
+                paramsMap.put(key, value)
+            }
+            if (paramsMap) {
+                buildVariantListRequest(paramsMap)
+            }
+
+    }
+
+
+
+
+
+    private void buildVariantListRequest(HashMap paramsMap, List <String> explicitVariantList) {
+        LinkedHashMap<String, String> parsedFilterParameters = [] // filterManagementService.parseVariantSearchParameters(paramsMap, false)
+       // if (parsedFilterParameters) {
+
+           // Integer dataSetDetermination = filterManagementService.distinguishBetweenDataSets(paramsMap) // is this necessary?
+
+
+        // these are necessary until we are doing searching
+//            String encodedFilters = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters)
+//            String encodedParameters = sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
+            String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
+
+        String encodedVariantList = sharedToolsService.packageUpFiltersForRoundTrip(explicitVariantList)
+        String encodedVariantList2 = sharedToolsService.packageUpEncodedParameters(explicitVariantList)
+
+
+
+            render(view: 'dynamicBurdenTest',
+                    model: [caller:3,
+                            show_gene           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
+                            show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
+                            show_exchp          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
+                            show_exseq          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
+                            show_sigma          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
+                            variants            : encodedVariantList,
+                            variants2            : encodedVariantList2,
+//                            filter              : encodedFilters,
+//                            filterDescriptions  : parsedFilterParameters.filterDescriptions,
+                            proteinEffectsList  : encodedProteinEffects
+//                            encodedParameters   : encodedParameters,
+//                            dataSetDetermination: dataSetDetermination
+                    ])
+      //  }
+    }
+
+
+
     /***
      * Starting with an explicit list of variants, extract what you need and display a page with results
      * @return
@@ -54,14 +113,19 @@ class HypothesisGenController {
         log.debug "Received a request to upload a variant file"
         if (params.explicitVariants){
             List<String> listOfVariants = sharedToolsService.convertStringToArray(params.explicitVariants)
-            String drivingJson = sharedToolsService.createDistributedBurdenTestInput(listOfVariants)
-            JSONObject jsonObject =  restServerService.postRestCallBurden (drivingJson, "variant")
-            if (jsonObject){
-                render(view: "dynamicBurdenTest", model:[jsonObject])
-                return
-            }
+            buildVariantListRequest([:], listOfVariants)
+            return;
+
+//
+//            String drivingJson = sharedToolsService.createDistributedBurdenTestInput(listOfVariants)
+//            JSONObject jsonObject =  restServerService.postRestCallBurden (drivingJson, "variant")
+//            if (jsonObject){
+//                render(view: "dynamicBurdenTest", model:[jsonObject])
+//                return
+//            }
         }
-        render(view: "dynamicBurdenTest")
+       /* render(view: "dynamicBurdenTest", model: [caller:1,
+        ])*/
     }
 
     /***
@@ -73,14 +137,17 @@ class HypothesisGenController {
         if (params.myVariantFile){
             String variantFileContent = sharedToolsService.convertMultipartFileToString(params.myVariantFile)
             List<String> listOfVariants = sharedToolsService.convertMultilineToList(variantFileContent)
-            String drivingJson = sharedToolsService.createDistributedBurdenTestInput(listOfVariants)
-            JSONObject jsonObject =  restServerService.postRestCallBurden (drivingJson, "variant")
-            if (jsonObject){
-                render(view: "dynamicBurdenTest", model:[jsonObject])
-                return
-            }
+            buildVariantListRequest([:], listOfVariants)
+            return;
+
+//            String drivingJson = sharedToolsService.createDistributedBurdenTestInput(listOfVariants)
+//            JSONObject jsonObject =  restServerService.postRestCallBurden (drivingJson, "variant")
+//            if (jsonObject){
+//                render(view: "dynamicBurdenTest", model:[jsonObject])
+//                return
+//            }
         }
-        render(view: "dynamicBurdenTest")
+        //render(view: "dynamicBurdenTest", model: [caller:2])
     }
 
 

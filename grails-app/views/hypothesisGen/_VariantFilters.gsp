@@ -1,21 +1,3 @@
-<style>
-.dbtBoundingBox {
-    border: solid 1px black;
-    width : 96%;
-    height: 300px;
-    margin-top: 30px;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-.dbtBoundingBoxSubrow {
-    margin: 20px;
-}
-.subsectionHolder {
-    padding:10px 0px 10px 25px;
-    font-weight: 400;
-    font-size: 12pt;
-}
-</style>
 <div class="row">
     <div class="col-sm-11">
         <div class="dbtBoundingBox">

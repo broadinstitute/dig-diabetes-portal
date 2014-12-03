@@ -11,40 +11,118 @@
 
 <body>
 <script>
+//    postVariantReq = function (path,
+//                         params,
+//                         show_gene,
+//                         show_sigma,
+//                         show_exseq,
+//                         show_exchp,
+//                         variantRootUrl,
+//                         geneRootUrl,
+//                         variantSearchAjaxUrl,
+//                         dataSetDetermination) {
+//        var loading = $('#spinner').show();
+//        loading.show();
+//        $.ajax({
+//            type:'POST',
+//            cache:false,
+//            data:{'keys':params},
+//            url:variantSearchAjaxUrl,
+//            async:true,
+//            success:function(data,textStatus){
+//                UTILS.fillTheVariantTable(data,
+//                        show_gene,
+//                        show_sigma,
+//                        show_exseq,
+//                        show_exchp,
+//                        variantRootUrl,
+//                        geneRootUrl,
+//                        dataSetDetermination);
+//                loading.hide();
+//            },
+//            error:function(XMLHttpRequest,textStatus,errorThrown){
+//                loading.hide();
+//                //errorReporter(XMLHttpRequest, exception) ;
+//            }
+//        });
+//    };
+var fillResponseFields = function (data){
+    if ((typeof data === 'undefined') ||
+            (typeof data.burdenTestResults === 'undefined') ||
+            (typeof data.burdenTestResults["is_error"] === 'undefined') ){
+        // the call to the backend failed.  Correct Behavior  === ?
+    } else if (typeof data.burdenTestResults["is_error"] === false){
+        // call was executed successfully but the data returned. Correct Behavior  === ?
+    }else{
+        $('#dbtPValue').text(UTILS.realNumberFormatter(data.burdenTestResults.pValue));
+        $('#dbtBeta').text(UTILS.realNumberFormatter(data.burdenTestResults.oddsRatio));
+        $('#stdErr').text(UTILS.realNumberFormatter(data.burdenTestResults.stdErr));
+        $('#dbtActualResultsExist').show();
+    }
+};
+
+    var postVariantReq = function (path,
+                               params) {
+        var loading = $('#spinner').show();
+        loading.show();
+        $.ajax({
+            type:'POST',
+            cache:false,
+            data:{'variants':params},
+            url:path,
+            async:true,
+            success:function(data){
+                fillResponseFields (data);
+//                UTILS.fillTheVariantTable(data,
+//                        show_gene,
+//                        show_sigma,
+//                        show_exseq,
+//                        show_exchp,
+//                        variantRootUrl,
+//                        geneRootUrl,
+//                        dataSetDetermination);
+                loading.hide();
+            },
+            error:function(XMLHttpRequest,textStatus,errorThrown){
+                loading.hide();
+                //errorReporter(XMLHttpRequest, exception) ;
+            }
+        });
+    };
+
+
+
+    var  proteinEffectList;
     var dynamicBurdenTest = function (){
         $('dbtActualResultsExist').hide();
         var loading = $('#spinner').show();
-        $.ajax({
-            cache: false,
-            type: "post",
-            url: "./burdenAjax",
-            data: {variant: 'my variant'},
-            async: true,
-            success: function (data) {
-                console.log(' successful return='+data);
-                fillResponseFields(data);
-                loading.hide();
-            },
-            error: function (jqXHR, exception) {
-                loading.hide();
-                core.errorReporter(jqXHR, exception);
-            }
-        });
+        postVariantReq("./burdenAjax","${variants}");
+//        $.ajax({
+//            cache: false,
+//            type: "post",
+//            url: "./burdenAjax",
+//            data: {variant: 'my variant'},
+//            async: true,
+//            success: function (data) {
+//                console.log(' successful return='+data);
+//                fillResponseFields(data);
+//                loading.hide();
+//            },
+//            error: function (jqXHR, exception) {
+//                loading.hide();
+//                core.errorReporter(jqXHR, exception);
+//            }
+//        });
         return;
-    },
-    fillResponseFields = function (data){
-        if ((typeof data === 'undefined') ||
-                (typeof data.variant === 'undefined') ||
-                (typeof data.variant["is_error"] === 'undefined') ){
-            // the call to the backend failed.  Correct Behavior  === ?
-        } else if (typeof data.variant["is_error"] === false){
-            // call was executed successfully but the data returned. Correct Behavior  === ?
-        }else{
-            $('#dbtPValue').text(UTILS.realNumberFormatter(data.variant["pValue"]));
-            $('#dbtBeta').text(UTILS.realNumberFormatter(data.variant["beta"]));
-            $('#dbtActualResultsExist').show();
-        }
     };
+
+
+    // actual code
+    if ("${caller>0}"){
+        // we have variants
+        proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
+        dynamicBurdenTest();
+    }
 </script>
 
 <div id="main">
@@ -59,7 +137,7 @@
                             <div class="accordion-heading">
                                 <a  class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordionDbt"
                                     href="#collapseOne">
-                                    <h2><strong>Genes</strong></h2>
+                                    <h2><strong>Step 1: Develop a list of variant</strong></h2>
                                 </a>
                             </div>
                             <div id="collapseOne" class="accordion-body collapse in">
@@ -72,12 +150,25 @@
                             <div class="accordion-heading">
                                 <a  class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordionDbt"
                                     href="#collapseTwo">
-                                    <h2><strong>Variant filters</strong></h2>
+                                    <h2><strong>Step 2:  Refine variant list</strong></h2>
                                 </a>
                             </div>
                             <div id="collapseTwo" class="accordion-body collapse">
                                 <div class="accordion-inner">
                                     <g:render template="variantFilters"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a  class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordionDbt"
+                                    href="#collapseThree">
+                                    <h2><strong>Step 3:  Burden test results</strong></h2>
+                                </a>
+                            </div>
+                            <div id="collapseThree" class="accordion-body collapse">
+                                <div class="accordion-inner">
+                                    <g:render template="burdenTestResults"/>
                                 </div>
                             </div>
                         </div>
@@ -101,14 +192,20 @@
 }
 .dbtResults .dbtResultsSpecifics1 {
     position: absolute;
-    margin: 10px auto 10px 10px;
+    margin: 0px auto 10px 10px;
     width: 150px;
 }
 .dbtResults .dbtResultsSpecifics2 {
     position: absolute;
+    margin: 30px auto 10px 20px;
+    width: 150px;
+}
+.dbtResults .dbtResultsSpecifics3 {
+    position: absolute;
     margin: 60px auto 10px 20px;
     width: 150px;
 }
+
 #dbtActualResultsExist {
     display: none;
 }
@@ -122,15 +219,13 @@
                         <div id="dbtActualResultsExist">
                             <h4>Results from dynamic burden test:</h4>
                             <div class ="dbtResults">
-                                <div class ="dbtResultsSpecifics1">pValue = <span id="dbtPValue">0.987</span></div>
-                                <div class ="dbtResultsSpecifics2">Beta = <span id="dbtBeta">1.2</span></div>
+                                <div class ="dbtResultsSpecifics1">pValue = <span id="dbtPValue"></span></div>
+                                <div class ="dbtResultsSpecifics2">Beta = <span id="dbtBeta"></span></div>
+                                <div class ="dbtResultsSpecifics3">Std err = <span id="stdErr"></span></div>
                             </div>
                         </div>
                     </div>
 
-        %{--<g:form action="burdenForm" method="GET" name="myForm">--}%
-                    %{--<g:actionSubmit action="burdenForm" value="Execute" />--}%
-        %{--</g:form>--}%
                 </div>
             </div>
 
