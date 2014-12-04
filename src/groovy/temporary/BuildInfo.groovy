@@ -2,7 +2,7 @@
 package temporary
 
 public interface BuildInfo {
-  String buildTime = '03/Dec/2014; 15:52:49'
+  String buildTime = '04/Dec/2014; 13:39:52'
   String buildHost = 'GPAD4-DCF'
   String buildWho = 'balexand'
 }

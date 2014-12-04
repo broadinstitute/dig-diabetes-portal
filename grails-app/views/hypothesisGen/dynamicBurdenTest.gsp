@@ -11,58 +11,25 @@
 
 <body>
 <script>
-//    postVariantReq = function (path,
-//                         params,
-//                         show_gene,
-//                         show_sigma,
-//                         show_exseq,
-//                         show_exchp,
-//                         variantRootUrl,
-//                         geneRootUrl,
-//                         variantSearchAjaxUrl,
-//                         dataSetDetermination) {
-//        var loading = $('#spinner').show();
-//        loading.show();
-//        $.ajax({
-//            type:'POST',
-//            cache:false,
-//            data:{'keys':params},
-//            url:variantSearchAjaxUrl,
-//            async:true,
-//            success:function(data,textStatus){
-//                UTILS.fillTheVariantTable(data,
-//                        show_gene,
-//                        show_sigma,
-//                        show_exseq,
-//                        show_exchp,
-//                        variantRootUrl,
-//                        geneRootUrl,
-//                        dataSetDetermination);
-//                loading.hide();
-//            },
-//            error:function(XMLHttpRequest,textStatus,errorThrown){
-//                loading.hide();
-//                //errorReporter(XMLHttpRequest, exception) ;
-//            }
-//        });
-//    };
-var fillResponseFields = function (data){
-    if ((typeof data === 'undefined') ||
-            (typeof data.burdenTestResults === 'undefined') ||
-            (typeof data.burdenTestResults["is_error"] === 'undefined') ){
-        // the call to the backend failed.  Correct Behavior  === ?
-    } else if (typeof data.burdenTestResults["is_error"] === false){
-        // call was executed successfully but the data returned. Correct Behavior  === ?
-    }else{
-        $('#dbtPValue').text(UTILS.realNumberFormatter(data.burdenTestResults.pValue));
-        $('#dbtBeta').text(UTILS.realNumberFormatter(data.burdenTestResults.oddsRatio));
-        $('#stdErr').text(UTILS.realNumberFormatter(data.burdenTestResults.stdErr));
-        $('#dbtActualResultsExist').show();
-    }
-};
+    var launchDynamicBurdenTest;
+$( document ).ready(function (){
+    var fillResponseFields = function (data){
+        if ((typeof data === 'undefined') ||
+                (typeof data.burdenTestResults === 'undefined') ||
+                (typeof data.burdenTestResults["is_error"] === 'undefined') ){
+            // the call to the backend failed.  Correct Behavior  === ?
+        } else if (typeof data.burdenTestResults["is_error"] === false){
+            // call was executed successfully but the data returned. Correct Behavior  === ?
+        }else{
+            $('#dbtPValue').text(UTILS.realNumberFormatter(data.burdenTestResults.pValue));
+            $('#dbtBeta').text(UTILS.realNumberFormatter(data.burdenTestResults.oddsRatio));
+            $('#stdErr').text(UTILS.realNumberFormatter(data.burdenTestResults.stdErr));
+            $('#dbtActualResultsExist').show();
+        }
+    };
 
     var postVariantReq = function (path,
-                               params) {
+                                   params) {
         var loading = $('#spinner').show();
         loading.show();
         $.ajax({
@@ -73,14 +40,6 @@ var fillResponseFields = function (data){
             async:true,
             success:function(data){
                 fillResponseFields (data);
-//                UTILS.fillTheVariantTable(data,
-//                        show_gene,
-//                        show_sigma,
-//                        show_exseq,
-//                        show_exchp,
-//                        variantRootUrl,
-//                        geneRootUrl,
-//                        dataSetDetermination);
                 loading.hide();
             },
             error:function(XMLHttpRequest,textStatus,errorThrown){
@@ -97,32 +56,73 @@ var fillResponseFields = function (data){
         $('dbtActualResultsExist').hide();
         var loading = $('#spinner').show();
         postVariantReq("./burdenAjax","${variants}");
-//        $.ajax({
-//            cache: false,
-//            type: "post",
-//            url: "./burdenAjax",
-//            data: {variant: 'my variant'},
-//            async: true,
-//            success: function (data) {
-//                console.log(' successful return='+data);
-//                fillResponseFields(data);
-//                loading.hide();
-//            },
-//            error: function (jqXHR, exception) {
-//                loading.hide();
-//                core.errorReporter(jqXHR, exception);
-//            }
-//        });
+        return;
+    };
+    var dynamicBurdenTest2 = function (variantIds){
+        $('dbtActualResultsExist').hide();
+        var loading = $('#spinner').show();
+        postVariantReq("./burdenAjax",variantIds);
         return;
     };
 
+    var fillBtVariantTable = function (arrayOfVariants){
+        var returnValue = "";
+        var numberOfVariants = arrayOfVariants.length;
+        for (var i = 0 ; i < numberOfVariants ; i++) {
+            returnValue += "<tr>";
+            returnValue += "<td></td>";
+            returnValue += "<td>"+arrayOfVariants[i]+"</td>";
+            returnValue += "<td></td>";
+            returnValue += "<td></td>";
+            returnValue += "<td></td>";
+            returnValue += "<td></td>";
+            returnValue += "<td></td>";
+            returnValue += "</tr>";
+        }
+        $('#btVariantTableBody').append(returnValue);
+    };
 
-    // actual code
+
+    launchDynamicBurdenTest = function (){
+        //first we need to pull the variant IDs out of the table
+        var jQueryTable=$('#btVariantTable').dataTable();
+        var dataTable = jQueryTable.fnGetData();
+        // extract the particular data we want
+        var variantIds = [];
+        if ((!(typeof dataTable === 'undefined') ) &&
+                (dataTable.length > 0)){
+            for ( var i = 0 ; i < dataTable.length ; i++ ){
+                var tableRow = dataTable [i];
+                if (!(typeof tableRow === 'undefined') ){
+                    variantIds.push (tableRow [i]);
+                }
+            }
+        }
+        dynamicBurdenTest(variantIds);
+
+    };
+
+
+    // Decide what to do based on the state indicator.
+    //   0= first time through-- we are just collecting information at this point
+    //   3= We have a list of variants with which to work
     if ("${caller>0}"){
         // we have variants
-        proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
-        dynamicBurdenTest();
+        var variantsInListString = "${variants2}",
+                numberOfVariants = variantsInListString.length;
+        if (("${caller==3}") &&
+                (numberOfVariants > 0)){
+            var arrayOfVariants = variantsInListString.split(',');
+            fillBtVariantTable (arrayOfVariants);
+        }
+        %{--if (("${caller==5}") &&--}%
+                %{--(numberOfVariants > 0)){--}%
+            %{--proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;--}%
+            %{--dynamicBurdenTest();--}%
+        %{--}--}%
     }
+
+});
 </script>
 
 <div id="main">
@@ -155,7 +155,7 @@ var fillResponseFields = function (data){
                             </div>
                             <div id="collapseTwo" class="accordion-body collapse">
                                 <div class="accordion-inner">
-                                    <g:render template="variantFilters"/>
+                                    <g:render template="refineVariantList"/>
                                 </div>
                             </div>
                         </div>
@@ -213,7 +213,7 @@ var fillResponseFields = function (data){
                 <div class="row resultsCage">
 
                     <div class="col-sm-2">
-                        <button class="btn btn-lg btn-primary" onclick="dynamicBurdenTest()">Execute</button>
+                        %{--<button class="btn btn-lg btn-primary" onclick="launchDynamicBurdenTest()">Execute</button>--}%
                     </div>
                     <div class="col-sm-10">
                         <div id="dbtActualResultsExist">

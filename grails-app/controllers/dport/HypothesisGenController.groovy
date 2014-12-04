@@ -105,6 +105,8 @@ class HypothesisGenController {
 
 
 
+
+
     /***
      * Starting with an explicit list of variants, extract what you need and display a page with results
      * @return
