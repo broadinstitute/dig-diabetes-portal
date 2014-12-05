@@ -696,7 +696,6 @@ determineHighestFrequencyEthnicity: function (variant) {
 
                 // highest frequency
                 if (highFreq.highestFrequency)  {
-
                     retVal += "<td>" +UTILS.realNumberFormatter(highFreq.highestFrequency)+"</td>";
                 } else {
                     retVal += "<td></td>";

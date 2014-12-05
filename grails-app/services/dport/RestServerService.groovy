@@ -27,6 +27,7 @@ class RestServerService {
     private  String VARIANT_SEARCH_URL = "variant-search"
     private  String TRAIT_SEARCH_URL = "trait-search"
     private  String DBT_URL = ""
+    private  String EXPERIMENTAL_URL = ""
 
     static List <String> VARIANT_SEARCH_COLUMNS = [
     'ID',
@@ -39,6 +40,19 @@ class RestServerService {
     'IN_GENE',
     '_13k_T2D_TRANSCRIPT_ANNOT',
     "Protein_change"
+    ]
+
+    static List <String> VARIANT_INFO_SEARCH_COLUMNS = [
+            'CLOSEST_GENE',
+            'ID',
+            'DBSNP_ID',
+            'Protein_change',
+            'Consequence',
+            '_13k_T2D_EU_MAF',
+            '_13k_T2D_HS_MAF',
+            '_13k_T2D_AA_MAF',
+            '_13k_T2D_EA_MAF',
+            '_13k_T2D_SA_MAF'
     ]
 
 
@@ -182,8 +196,9 @@ class RestServerService {
         DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base+grailsApplication.config.t2dDevRestServer.name+grailsApplication.config.t2dDevRestServer.path
         QA_REST_SERVER = grailsApplication.config.t2dQaRestServer.base+grailsApplication.config.t2dQaRestServer.name+grailsApplication.config.t2dQaRestServer.path
         PROD_REST_SERVER = grailsApplication.config.t2dProdRestServer.base+grailsApplication.config.t2dProdRestServer.name+grailsApplication.config.t2dProdRestServer.path
-        BASE_URL =  grailsApplication.config.server.URL;
+        BASE_URL =  grailsApplication.config.server.URL
         DBT_URL   = grailsApplication.config.dbtRestServer.URL
+        EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URL
     }
 
     private List <String> getGeneColumns () {
@@ -206,6 +221,15 @@ class RestServerService {
         }
         return  returnValue
     }
+
+    private List <String> getVariantInfoColumns () {
+        List <String> returnValue
+        returnValue = (VARIANT_INFO_SEARCH_COLUMNS)
+        return  returnValue
+    }
+
+
+
 
     private List <String> getVariantSearchColumns () {
         List <String> returnValue
@@ -357,6 +381,21 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
         return postRestCallBase(drivingJson,targetUrl,DBT_URL)
     }
 
+
+    private JSONObject postRestCallExperimental(String drivingJson, String targetUrl){
+        return postRestCallBase(drivingJson,targetUrl,EXPERIMENTAL_URL)
+    }
+    JSONObject retrieveVariantInfoByName_Experimental (String variantId) {
+        JSONObject returnValue = null
+        String drivingJson = """{
+"variant_id": ${variantId},
+"user_group": "ui",
+"columns": [${"\""+getVariantInfoColumns () .join("\",\"")+"\""}]
+}
+""".toString()
+        returnValue = postRestCallExperimental( drivingJson, VARIANT_INFO_URL)
+        return returnValue
+    }
 
 
 

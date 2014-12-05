@@ -67,18 +67,56 @@ class HypothesisGenController {
 
 
 
+    def variantInfoAjax() {
+        String variantToStartWith = params.variants
+        String decodedVariants = URLDecoder.decode(variantToStartWith, "UTF-8");
+//        if (decodedVariants)      {
+//            List<String> listOfVariants = sharedToolsService.convertStringToArray(decodedVariants)
+//            String drivingJson = sharedToolsService.createDistributedBurdenTestInput(listOfVariants)
+//            JSONObject jsonObject =  restServerService.postRestCallBurden (drivingJson, "variant")
+//            if (jsonObject){
+//                render(status: 200, contentType: "application/json") {
+//                    [burdenTestResults: jsonObject]
+//                }
+//                return
+//            }
+//        }
+//
+        // new stuff
+        JSONObject jsonObject
+        if (decodedVariants)      {
+            List<String> variantsInListForm = sharedToolsService.convertStringToArray(decodedVariants)
+            String variantsInStringForm = sharedToolsService.convertListToString(variantsInListForm)
+            jsonObject =  restServerService.retrieveVariantInfoByName_Experimental ("[" +variantsInStringForm+ "]")
+            render(status:200, contentType:"application/json") {
+                [variant:jsonObject['variant-info']]
+            }
+            return
+        }
+
+        return
+    }
+
+
+
+
+
 
     private void buildVariantListRequest(HashMap paramsMap, List <String> explicitVariantList) {
         LinkedHashMap<String, String> parsedFilterParameters = [] // filterManagementService.parseVariantSearchParameters(paramsMap, false)
        // if (parsedFilterParameters) {
-
-           // Integer dataSetDetermination = filterManagementService.distinguishBetweenDataSets(paramsMap) // is this necessary?
-
-
-        // these are necessary until we are doing searching
+       // Integer dataSetDetermination = filterManagementService.distinguishBetweenDataSets(paramsMap) // is this necessary?
+       // these are necessary until we are doing searching
 //            String encodedFilters = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters)
 //            String encodedParameters = sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
-            String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
+
+
+
+
+
+
+        String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
+       // String encodedJson = URLEncoder.encode(jsonObject, "UTF-8");
 
         String encodedVariantList = sharedToolsService.packageUpFiltersForRoundTrip(explicitVariantList)
         String encodedVariantList2 = sharedToolsService.packageUpEncodedParameters(explicitVariantList)
@@ -93,7 +131,8 @@ class HypothesisGenController {
                             show_exseq          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
                             show_sigma          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
                             variants            : encodedVariantList,
-                            variants2            : encodedVariantList2,
+                            variants2           : encodedVariantList2,
+//                            variantInfo         : jsonObject['variant-info'],
 //                            filter              : encodedFilters,
 //                            filterDescriptions  : parsedFilterParameters.filterDescriptions,
                             proteinEffectsList  : encodedProteinEffects

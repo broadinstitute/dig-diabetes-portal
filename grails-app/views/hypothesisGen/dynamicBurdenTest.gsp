@@ -49,6 +49,27 @@ $( document ).ready(function (){
         });
     };
 
+    var requestExpandedVariantInfo = function (path,
+                                   params) {
+        var loading = $('#spinner').show();
+        loading.show();
+        $.ajax({
+            type:'POST',
+            cache:false,
+            data:{'variants':params},
+            url:path,
+            async:true,
+            success:function(data){
+                fillBtVariantTable (data);
+                $('#collapseTwo').collapse('show');
+                loading.hide();
+            },
+            error:function(XMLHttpRequest,textStatus,errorThrown){
+                loading.hide();
+                //errorReporter(XMLHttpRequest, exception) ;
+            }
+        });
+    };
 
 
     var  proteinEffectList;
@@ -65,18 +86,36 @@ $( document ).ready(function (){
         return;
     };
 
-    var fillBtVariantTable = function (arrayOfVariants){
+    var fillBtVariantTable = function (jsonObject){
+        var safetyCellFiller = function (dataHolder,fieldName){
+            if((typeof  dataHolder [fieldName]=== 'undefined') ){
+                return ("<td></td>");
+            }else {
+                return ("<td>" + dataHolder [fieldName]+ "</td>");
+            }
+        };
         var returnValue = "";
-        var numberOfVariants = arrayOfVariants.length;
+        var arrayOfInfo = jsonObject.variant;
+        var numberOfVariants = arrayOfInfo.length;
         for (var i = 0 ; i < numberOfVariants ; i++) {
+            var highFreq = UTILS.determineHighestFrequencyEthnicity(arrayOfInfo[i]);
             returnValue += "<tr>";
-            returnValue += "<td></td>";
-            returnValue += "<td>"+arrayOfVariants[i]+"</td>";
-            returnValue += "<td></td>";
-            returnValue += "<td></td>";
-            returnValue += "<td></td>";
-            returnValue += "<td></td>";
-            returnValue += "<td></td>";
+            returnValue += safetyCellFiller(arrayOfInfo[i], "CLOSEST_GENE");
+            returnValue += safetyCellFiller(arrayOfInfo[i], "ID");
+            returnValue += safetyCellFiller(arrayOfInfo[i], "DBSNP_ID");
+            returnValue += safetyCellFiller(arrayOfInfo[i], "Protein_change");
+            returnValue += safetyCellFiller(arrayOfInfo[i], "Consequence");
+            if (highFreq.highestFrequency)  {
+                returnValue += "<td>" +UTILS.realNumberFormatter(highFreq.highestFrequency)+"</td>";
+            } else {
+                returnValue += "<td></td>";
+            }            
+            if ((highFreq.populationWithHighestFrequency)&&
+                    (!highFreq.noData)){
+                returnValue += "<td>" +highFreq.populationWithHighestFrequency+"</td>";
+            } else {
+                returnValue += "<td></td>";
+            }
             returnValue += "</tr>";
         }
         $('#btVariantTableBody').append(returnValue);
@@ -109,11 +148,16 @@ $( document ).ready(function (){
     if ("${caller>0}"){
         // we have variants
         var variantsInListString = "${variants2}",
-                numberOfVariants = variantsInListString.length;
+                numberOfVariants = variantsInListString.length,
+                variantInfo;
+        //variantInfo = decodeURIComponent("${variantInfo}");
         if (("${caller==3}") &&
                 (numberOfVariants > 0)){
-            var arrayOfVariants = variantsInListString.split(',');
-            fillBtVariantTable (arrayOfVariants);
+            // we have a list of variants, but we need to go back to the server to get more info
+            // about each one in order to fill out the table
+            requestExpandedVariantInfo("./variantInfoAjax","${variants}");
+           // var arrayOfVariants = variantsInListString.split(',');
+           // fillBtVariantTable (arrayOfVariants);
         }
         %{--if (("${caller==5}") &&--}%
                 %{--(numberOfVariants > 0)){--}%
@@ -254,8 +298,8 @@ $( document ).ready(function (){
     });
     $( document ).ready(function() {
       //  console.log('prepping the document');
-        $('#collapseOne').collapse('hide');
-       $('#collapseTwo').collapse('hide');
+        $('#collapseOne').collapse('show');
+//       $('#collapseTwo').collapse('hide');
     });
 
 </script>
