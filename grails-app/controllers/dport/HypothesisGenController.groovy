@@ -14,7 +14,13 @@ class HypothesisGenController {
     def index() {}
 
     def dynamicBurdenTest (){
-        render (view: "dynamicBurdenTest", model:[caller:0])
+        render (view: "dynamicBurdenTest", model:[caller:0,
+                                                  show_gene           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
+                                                  show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
+                                                  show_exchp          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
+                                                  show_exseq          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
+                                                  show_sigma          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
+        ])
     }
 
     def burdenAjax() {
@@ -103,23 +109,19 @@ class HypothesisGenController {
 
 
     private void buildVariantListRequest(HashMap paramsMap, List <String> explicitVariantList) {
-        LinkedHashMap<String, String> parsedFilterParameters = [] // filterManagementService.parseVariantSearchParameters(paramsMap, false)
-       // if (parsedFilterParameters) {
-       // Integer dataSetDetermination = filterManagementService.distinguishBetweenDataSets(paramsMap) // is this necessary?
-       // these are necessary until we are doing searching
-//            String encodedFilters = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters)
-//            String encodedParameters = sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
+        LinkedHashMap<String, String> parsedFilterParameters
+        String encodedProteinEffects
+        String encodedVariantList
+        String encodedVariantList2
+        if (paramsMap.isEmpty()){
+             encodedVariantList = sharedToolsService.packageUpFiltersForRoundTrip(explicitVariantList)
+             encodedVariantList2 = sharedToolsService.packageUpEncodedParameters(explicitVariantList)
+        }else {
+            parsedFilterParameters = filterManagementService.parseVariantSearchParameters(paramsMap, false)
+        }
 
+        encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
 
-
-
-
-
-        String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
-       // String encodedJson = URLEncoder.encode(jsonObject, "UTF-8");
-
-        String encodedVariantList = sharedToolsService.packageUpFiltersForRoundTrip(explicitVariantList)
-        String encodedVariantList2 = sharedToolsService.packageUpEncodedParameters(explicitVariantList)
 
 
 
@@ -134,7 +136,7 @@ class HypothesisGenController {
                             variants2           : encodedVariantList2,
 //                            variantInfo         : jsonObject['variant-info'],
 //                            filter              : encodedFilters,
-//                            filterDescriptions  : parsedFilterParameters.filterDescriptions,
+                            filterDescriptions  : parsedFilterParameters?.filterDescriptions,
                             proteinEffectsList  : encodedProteinEffects
 //                            encodedParameters   : encodedParameters,
 //                            dataSetDetermination: dataSetDetermination
@@ -156,17 +158,7 @@ class HypothesisGenController {
             List<String> listOfVariants = sharedToolsService.convertStringToArray(params.explicitVariants)
             buildVariantListRequest([:], listOfVariants)
             return;
-
-//
-//            String drivingJson = sharedToolsService.createDistributedBurdenTestInput(listOfVariants)
-//            JSONObject jsonObject =  restServerService.postRestCallBurden (drivingJson, "variant")
-//            if (jsonObject){
-//                render(view: "dynamicBurdenTest", model:[jsonObject])
-//                return
-//            }
         }
-       /* render(view: "dynamicBurdenTest", model: [caller:1,
-        ])*/
     }
 
     /***
@@ -180,16 +172,24 @@ class HypothesisGenController {
             List<String> listOfVariants = sharedToolsService.convertMultilineToList(variantFileContent)
             buildVariantListRequest([:], listOfVariants)
             return;
-
-//            String drivingJson = sharedToolsService.createDistributedBurdenTestInput(listOfVariants)
-//            JSONObject jsonObject =  restServerService.postRestCallBurden (drivingJson, "variant")
-//            if (jsonObject){
-//                render(view: "dynamicBurdenTest", model:[jsonObject])
-//                return
-//            }
         }
-        //render(view: "dynamicBurdenTest", model: [caller:2])
     }
+
+
+    def variantSearch() {
+        log.debug "Received a request to search for variant"
+        Map paramsMap = new HashMap()
+
+        params.each { key, value ->
+            paramsMap.put(key, value)
+        }
+        if (paramsMap) {
+            buildVariantListRequest(paramsMap,[])
+        }
+    }
+
+
+
 
 
 }

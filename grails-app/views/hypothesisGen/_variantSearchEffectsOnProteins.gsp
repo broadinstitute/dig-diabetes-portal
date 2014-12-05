@@ -61,7 +61,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-7">
+    <div class="col-md-7" style="display: none">
         <p>
             Loss-of-function variants <a href="http://www.plengegen.com/wp-content/uploads/Plenge_NRDD_2013_geneticsTV.pdf">can be valuable models for drug development</a> because
         they naturally illustrate the phenotypic effects of deactivating a gene.

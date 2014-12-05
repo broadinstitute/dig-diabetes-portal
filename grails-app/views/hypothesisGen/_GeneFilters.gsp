@@ -73,7 +73,15 @@
 
                                     <div id="collapseVariantAnnotationThree" class="accordion-body collapse">
                                         <div class="accordion-inner">
-                                            <h3>Still TBD</h3>
+                                            <g:render template="variantSearchRestrictToRegion" />
+                                            <g:render template="variantSearchRestrictToEthnicity" />
+                                            <g:render template="variantSearchEffectsOnProteins" />
+                                            <div class="big-button-container">
+                                                <button class="btn btn-lg btn-primary" onclick="gatherFieldsAndPostResults()">Go</button>
+                                                %{--<form id="dummy-form" action="/variantsearch/results" method="get">--}%
+                                                %{--<a id="variant-search-go" class="btn btn-lg btn-primary">Go</a>--}%
+                                                %{--</form>--}%
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
