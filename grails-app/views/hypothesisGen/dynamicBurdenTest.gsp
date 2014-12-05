@@ -32,10 +32,12 @@ $( document ).ready(function (){
                                    params) {
         var loading = $('#spinner').show();
         loading.show();
+        var stringForSending;
+        stringForSending = params.join(',');
         $.ajax({
             type:'POST',
             cache:false,
-            data:{'variants':params},
+            data:{'variants':stringForSending},
             url:path,
             async:true,
             success:function(data){
@@ -73,12 +75,18 @@ $( document ).ready(function (){
 
 
     var  proteinEffectList;
-    var dynamicBurdenTest = function (){
+    var dynamicBurdenTest = function (variantIds){
         $('dbtActualResultsExist').hide();
         var loading = $('#spinner').show();
-        postVariantReq("./burdenAjax","${variants}");
+        postVariantReq("./burdenAjax",variantIds);
         return;
     };
+    %{--var dynamicBurdenTest = function (){--}%
+        %{--$('dbtActualResultsExist').hide();--}%
+        %{--var loading = $('#spinner').show();--}%
+        %{--postVariantReq("./burdenAjax","${variants}");--}%
+        %{--return;--}%
+    %{--};--}%
     var dynamicBurdenTest2 = function (variantIds){
         $('dbtActualResultsExist').hide();
         var loading = $('#spinner').show();
@@ -109,7 +117,7 @@ $( document ).ready(function (){
                 returnValue += "<td>" +UTILS.realNumberFormatter(highFreq.highestFrequency)+"</td>";
             } else {
                 returnValue += "<td></td>";
-            }            
+            }
             if ((highFreq.populationWithHighestFrequency)&&
                     (!highFreq.noData)){
                 returnValue += "<td>" +highFreq.populationWithHighestFrequency+"</td>";
@@ -133,11 +141,11 @@ $( document ).ready(function (){
             for ( var i = 0 ; i < dataTable.length ; i++ ){
                 var tableRow = dataTable [i];
                 if (!(typeof tableRow === 'undefined') ){
-                    variantIds.push (tableRow [i]);
+                    variantIds.push (tableRow [1]);
                 }
             }
         }
-        dynamicBurdenTest(variantIds);
+        dynamicBurdenTest2(variantIds);
 
     };
 
