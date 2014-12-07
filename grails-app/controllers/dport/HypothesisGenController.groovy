@@ -95,7 +95,7 @@ class HypothesisGenController {
             String variantsInStringForm = sharedToolsService.convertListToString(variantsInListForm)
             jsonObject =  restServerService.retrieveVariantInfoByName_Experimental ("[" +variantsInStringForm+ "]")
             render(status:200, contentType:"application/json") {
-                [variant:jsonObject['variant-info']]
+                [variants:jsonObject['variant-info']]
             }
             return
         }
@@ -113,11 +113,15 @@ class HypothesisGenController {
         String encodedProteinEffects
         String encodedVariantList
         String encodedVariantList2
+        String encodedFilters = ""
+        String encodedParameters = ""
         if (paramsMap.isEmpty()){
              encodedVariantList = sharedToolsService.packageUpFiltersForRoundTrip(explicitVariantList)
              encodedVariantList2 = sharedToolsService.packageUpEncodedParameters(explicitVariantList)
         }else {
             parsedFilterParameters = filterManagementService.parseVariantSearchParameters(paramsMap, false)
+            encodedFilters = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters)
+            encodedParameters = sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
         }
 
         encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
@@ -135,13 +139,31 @@ class HypothesisGenController {
                             variants            : encodedVariantList,
                             variants2           : encodedVariantList2,
 //                            variantInfo         : jsonObject['variant-info'],
-//                            filter              : encodedFilters,
+                            filter              : encodedFilters,
                             filterDescriptions  : parsedFilterParameters?.filterDescriptions,
-                            proteinEffectsList  : encodedProteinEffects
-//                            encodedParameters   : encodedParameters,
+                            proteinEffectsList  : encodedProteinEffects,
+                            encodedParameters   : encodedParameters,
 //                            dataSetDetermination: dataSetDetermination
                     ])
       //  }
+    }
+
+
+
+
+    /***
+     * a variant display table is on screen and the page is now asking for data. Perform the search.  This call retrieves the data
+     * for the original page format call -> variantSearchRequest
+     * @return                                                                                         to
+     */
+    def variantDbtSearchAjax() {
+        String filtersRaw = params['keys']
+        String filters = URLDecoder.decode(filtersRaw)
+        log.debug "variantSearch variantSearchAjax = ${filters}"
+        JSONObject jsonObject = restServerService.searchGenomicRegionByCustomFilters(filters)
+        render(status: 200, contentType: "application/json") {
+            [variants: jsonObject['variants']]
+        }
     }
 
 

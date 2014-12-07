@@ -12,29 +12,34 @@
 <body>
 <script>
     var launchDynamicBurdenTest;
-$( document ).ready(function (){
+
+
 
     function gatherFieldsAndPostResults(){
         var varsToSend = {};
-        var customSignificance = UTILS.extractValFromTextboxes(['custom_significance_input']);
+       // var customSignificance = UTILS.extractValFromTextboxes(['custom_significance_input']);
         var restrictToRegion = UTILS.extractValFromTextboxes(['region_gene_input','region_chrom_input','region_start_input','region_stop_input']);
         var restrictToOr = UTILS.extractValFromTextboxes(['or-value']);
         var orInequality = UTILS.extractValsFromCombobox(['or-select']);
         var alleleFrequencies = UTILS.extractAlleleFrequencyRanges($('.form-control'));
-        var caseControlRequests = UTILS.extractValFromCheckboxes(['id_onlyseen_t2dcases','id_onlyseen_t2dcontrols']);
+     //   var caseControlRequests = UTILS.extractValFromCheckboxes(['id_onlyseen_t2dcases','id_onlyseen_t2dcontrols']);
         var missensePredictions = [];
         varsToSend["predictedEffects"]  = $("input:radio[name='predictedEffects']:checked").val();
         if (varsToSend["predictedEffects"]==='missense'){
             missensePredictions = UTILS.extractValsFromCombobox(['polyphenSelect','siftSelect','condelSelect']);
         }
-        varsToSend = UTILS.concatMap(varsToSend,customSignificance) ;
-        varsToSend = UTILS.concatMap(varsToSend,caseControlRequests) ;
+       // varsToSend = UTILS.concatMap(varsToSend,customSignificance) ;
+       // varsToSend = UTILS.concatMap(varsToSend,caseControlRequests) ;
         varsToSend = UTILS.concatMap(varsToSend,alleleFrequencies) ;
         varsToSend = UTILS.concatMap(varsToSend,restrictToRegion) ;
         varsToSend = UTILS.concatMap(varsToSend,missensePredictions) ;
         varsToSend = UTILS.concatMap(varsToSend,restrictToOr) ;
         varsToSend = UTILS.concatMap(varsToSend,orInequality) ;
-        UTILS.postQuery('../variantSearch/variantSearchRequest',varsToSend);
+
+        //   add some defaults:
+        varsToSend = UTILS.concatMap(varsToSend,{'datatype':'exomechip'}) ;
+
+        UTILS.postQuery('./variantSearch',varsToSend);
     };
     %{--var encParams="${encParams}";--}%
     /***
@@ -55,77 +60,77 @@ $( document ).ready(function (){
                                region_start_input,
                                region_stop_input,
                                ethnicity_af_AA_min,
-                                ethnicity_af_AA_max,
-                                ethnicity_af_EA_min,
-                                ethnicity_af_EA_max,
-                                ethnicity_af_SA_min,
-                                ethnicity_af_SA_max,
-                                ethnicity_af_EU_min,
-                                ethnicity_af_EU_max,
-                                ethnicity_af_HS_min,
-                                ethnicity_af_HS_max,
-                                id_onlyseen_t2dcases,
-                                id_onlyseen_t2dcontrols,
-                                id_onlyseen_homozygotes,
-                                all_functions_checkbox,
-                                protein_truncating_checkbox,
-                                missense_checkbox,
-                                synonymous_checkbox,
-                                noncoding_checkbox,
-                                polyphenSelect,
-                                siftSelect,
-                                condelSelect,
-                                or_select,
-                                or_value) {
+                               ethnicity_af_AA_max,
+                               ethnicity_af_EA_min,
+                               ethnicity_af_EA_max,
+                               ethnicity_af_SA_min,
+                               ethnicity_af_SA_max,
+                               ethnicity_af_EU_min,
+                               ethnicity_af_EU_max,
+                               ethnicity_af_HS_min,
+                               ethnicity_af_HS_max,
+                               id_onlyseen_t2dcases,
+                               id_onlyseen_t2dcontrols,
+                               id_onlyseen_homozygotes,
+                               all_functions_checkbox,
+                               protein_truncating_checkbox,
+                               missense_checkbox,
+                               synonymous_checkbox,
+                               noncoding_checkbox,
+                               polyphenSelect,
+                               siftSelect,
+                               condelSelect,
+                               or_select,
+                               or_value) {
         var safeRadioButtonSaver = function (value, defaultValue, id0, id1, id2, id3, id4){
-            var radioButtonToCheck;
-            if ((typeof value === 'undefined') || (value < 0) || (value > 4)) { value = defaultValue; }
-            switch (variable){
-                case 0:
-                    if (typeof id0 !== 'undefined') {
-                        radioButtonToCheck = $(id0);
+                    var radioButtonToCheck;
+                    if ((typeof value === 'undefined') || (value < 0) || (value > 4)) { value = defaultValue; }
+                    switch (variable){
+                        case 0:
+                            if (typeof id0 !== 'undefined') {
+                                radioButtonToCheck = $(id0);
+                            }
+                            break;
+                        case 1:
+                            if (typeof id1 !== 'undefined') {
+                                radioButtonToCheck = $(id1);
+                            }
+                            break;
+                        case 2:
+                            if (typeof id2 !== 'undefined') {
+                                radioButtonToCheck = $(id2);
+                            }
+                            break;
+                        case 3:
+                            if (typeof id3 !== 'undefined') {
+                                radioButtonToCheck = $(id3);
+                            }
+                            break;
+                        case 4:
+                            if (typeof id4 !== 'undefined') {
+                                radioButtonToCheck = $(id4);
+                            }
+                            break;
+                        default:
+                            break;
                     }
-                    break;
-                case 1:
-                    if (typeof id1 !== 'undefined') {
-                        radioButtonToCheck = $(id1);
+                    radioButtonToCheck.attr('checked', true);
+                },
+                safeTextSaver = function (value, id){
+                    if ((typeof id !== 'undefined') && (typeof value !== 'undefined')){
+                        $(id).val(value);
                     }
-                    break;
-                case 2:
-                    if (typeof id2 !== 'undefined') {
-                        radioButtonToCheck = $(id2);
+                },
+                safeCheckboxSaver = function (id){
+                    if (typeof id !== 'undefined') {
+                        $(id).attr('checked', true);
                     }
-                    break;
-                case 3:
-                    if (typeof id3 !== 'undefined') {
-                        radioButtonToCheck = $(id3);
+                },
+                safeComboboxSaver = function (value, id){
+                    if ((typeof id !== 'undefined') && (typeof value !== 'undefined')){
+                        $(id).val(value);
                     }
-                    break;
-                case 4:
-                    if (typeof id4 !== 'undefined') {
-                        radioButtonToCheck = $(id4);
-                    }
-                    break;
-                default:
-                    break;
-            }
-            radioButtonToCheck.attr('checked', true);
-        },
-        safeTextSaver = function (value, id){
-            if ((typeof id !== 'undefined') && (typeof value !== 'undefined')){
-                $(id).val(value);
-            }
-        },
-        safeCheckboxSaver = function (id){
-            if (typeof id !== 'undefined') {
-                $(id).attr('checked', true);
-            }
-        },
-        safeComboboxSaver = function (value, id){
-            if ((typeof id !== 'undefined') && (typeof value !== 'undefined')){
-                $(id).val(value);
-            }
-        };
+                };
         $(region_gene_input).typeahead(
                 {
                     source: function(query, process) {
@@ -302,7 +307,7 @@ $( document ).ready(function (){
     };
 
     var requestExpandedVariantInfo = function (path,
-                                   params) {
+                                               params) {
         var loading = $('#spinner').show();
         loading.show();
         $.ajax({
@@ -324,6 +329,30 @@ $( document ).ready(function (){
     };
 
 
+    var requestExpandedVariantSearch = function (path,
+                                               params) {
+        var loading = $('#spinner').show();
+        loading.show();
+        $.ajax({
+            type:'POST',
+            cache:false,
+            data:{'variants':params},
+            url:path,
+            async:true,
+            success:function(data){
+                fillBtVariantTable (data);
+                $('#collapseTwo').collapse('show');
+                loading.hide();
+            },
+            error:function(XMLHttpRequest,textStatus,errorThrown){
+                loading.hide();
+                //errorReporter(XMLHttpRequest, exception) ;
+            }
+        });
+    };
+
+
+
     var  proteinEffectList;
     var dynamicBurdenTest = function (variantIds){
         $('dbtActualResultsExist').hide();
@@ -332,10 +361,10 @@ $( document ).ready(function (){
         return;
     };
     %{--var dynamicBurdenTest = function (){--}%
-        %{--$('dbtActualResultsExist').hide();--}%
-        %{--var loading = $('#spinner').show();--}%
-        %{--postVariantReq("./burdenAjax","${variants}");--}%
-        %{--return;--}%
+    %{--$('dbtActualResultsExist').hide();--}%
+    %{--var loading = $('#spinner').show();--}%
+    %{--postVariantReq("./burdenAjax","${variants}");--}%
+    %{--return;--}%
     %{--};--}%
     var dynamicBurdenTest2 = function (variantIds){
         $('dbtActualResultsExist').hide();
@@ -353,7 +382,7 @@ $( document ).ready(function (){
             }
         };
         var returnValue = "";
-        var arrayOfInfo = jsonObject.variant;
+        var arrayOfInfo = jsonObject.variants;
         var numberOfVariants = arrayOfInfo.length;
         for (var i = 0 ; i < numberOfVariants ; i++) {
             var highFreq = UTILS.determineHighestFrequencyEthnicity(arrayOfInfo[i]);
@@ -380,7 +409,7 @@ $( document ).ready(function (){
     };
 
 
-    launchDynamicBurdenTest = function (){
+   var launchDynamicBurdenTest = function (){
         //first we need to pull the variant IDs out of the table
         var jQueryTable=$('#btVariantTable').dataTable();
         var dataTable = jQueryTable.fnGetData();
@@ -399,34 +428,83 @@ $( document ).ready(function (){
 
     };
 
+    var requestDbtSearch =   function (params,
+                                   show_gene,
+                                   show_sigma,
+                                   show_exseq,
+                                   show_exchp,
+                                   variantRootUrl,
+                                   geneRootUrl,
+                                   variantSearchAjaxUrl,
+                                   dataSetDetermination) {
+        var loading = $('#spinner').show();
+        loading.show();
+        $.ajax({
+            type:'POST',
+            cache:false,
+            data:{'keys':params},
+            url:variantSearchAjaxUrl,
+            async:true,
+            success:function(data,textStatus){
+                fillBtVariantTable (data);
+//                        show_gene,
+//                        show_sigma,
+//                        show_exseq,
+//                        show_exchp,
+//                        variantRootUrl,
+//                        geneRootUrl,
+//                        dataSetDetermination);
+                loading.hide();
+            },
+            error:function(XMLHttpRequest,textStatus,errorThrown){
+                loading.hide();
+                //errorReporter(XMLHttpRequest, exception) ;
+            }
+        });
+    }
+
+
+
+
+    $( document ).ready(function (){
 
     // Decide what to do based on the state indicator.
     //   0= first time through-- we are just collecting information at this point
     //   3= We have a list of variants with which to work
-    if ("${caller>0}"){
+
+    var caller = parseInt(${caller});
+    if (caller>0){
         // we have variants
+        console.log('caller=${caller}, '+caller+'.');
         var variantsInListString = "${variants2}",
                 numberOfVariants = variantsInListString.length,
                 variantInfo;
         //variantInfo = decodeURIComponent("${variantInfo}");
-        if (("${caller==3}") &&
-                (numberOfVariants > 0)){
+        if (caller===3){
+            if (numberOfVariants > 0) {  // the user explicitly specified variants. We need to gather information about each one
+                initializeFields();
 
-            initializeFields();
-            // We've already seen the user once, and it's possible that they set some fields.  Let's check.
-            //  And if so we will set the values to match their previous settings
+                // we have a list of variants, but we need to go back to the server to get more info
+                // about each one in order to fill out the table
+                requestExpandedVariantInfo("./variantInfoAjax","${variants}");
 
-            // we have a list of variants, but we need to go back to the server to get more info
-            // about each one in order to fill out the table
-            requestExpandedVariantInfo("./variantInfoAjax","${variants}");
-           // var arrayOfVariants = variantsInListString.split(',');
-           // fillBtVariantTable (arrayOfVariants);
+            }  else {  // the user is requesting a variant lookup.  We can do that
+
+                var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
+                requestDbtSearch("<%=filter%>",
+                        ${show_gene},
+                        ${show_sigma},
+                        ${show_exseq},
+                        ${show_exchp},
+                        '<g:createLink controller="variant" action="variantInfo"  />',
+                        '<g:createLink controller="gene" action="geneInfo"  />',
+                        '<g:createLink controller="HypothesisGen" action="variantDbtSearchAjax" />',
+                        1 );
+                var uri_dec = decodeURIComponent("<%=filter%>");
+                var encodedParameters = decodeURIComponent("<%=encodedParameters%>");
+            }
         }
-        %{--if (("${caller==5}") &&--}%
-                %{--(numberOfVariants > 0)){--}%
-            %{--proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;--}%
-            %{--dynamicBurdenTest();--}%
-        %{--}--}%
+
     }
 
 });
