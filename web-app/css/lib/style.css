@@ -503,13 +503,17 @@ div.veryImportantText {
     margin: 20px 0;
 }
 .dbtBoundingBox {
-    border: solid 1px black;
     width : 96%;
     height: 300px;
     margin-top: 30px;
     overflow-y: auto;
     overflow-x: hidden;
 }
+.drawAttention {
+    border: solid 14px lightcyan;
+    margin: 25px;
+}
+
 .dbtBoundingBoxSubrow {
     margin: 20px;
 }

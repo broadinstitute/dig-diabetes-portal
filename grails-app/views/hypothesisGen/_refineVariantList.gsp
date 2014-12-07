@@ -32,11 +32,22 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-sm-10">
-        <h4>Options for change to be found</h4>
+<div id="doSomethingWithExistingList">
+    <div class="row">
+
+        <div class="col-sm-2">
+            <span>Options</span>
+        </div>
+        <div class="col-sm-10">
+            <ul>
+                <li>Add variants to existing list</li>
+                <li>Remove variants from existing list</li>
+                <li>Execute burden search
+                    <button class="btn btn-lg btn-primary" onclick="launchDynamicBurdenTest()">Execute</button>
+                </li>
+            </ul>
+
+
+        </div>
     </div>
-    <div class="col-sm-10">
-        <button class="btn btn-lg btn-primary" onclick="launchDynamicBurdenTest()">Execute</button>
-     </div>
 </div>

@@ -280,9 +280,15 @@
             $('#dbtBeta').text(UTILS.realNumberFormatter(data.burdenTestResults.oddsRatio));
             $('#stdErr').text(UTILS.realNumberFormatter(data.burdenTestResults.stdErr));
             $('#dbtActualResultsExist').show();
+            $('#collapseOne').hide();
         }
     };
 
+
+    /***
+     *   launch the dynamic burden test and display the results when they show up
+     *
+     */
     var postVariantReq = function (path,
                                    params) {
         var loading = $('#spinner').show();
@@ -298,10 +304,16 @@
             success:function(data){
                 fillResponseFields (data);
                 loading.hide();
+                $('#variantSelectingBox').removeClass('drawAttention');
+                $('#doSomethingWithExistingList').removeClass('drawAttention');
+                $('.dbtResults').addClass('drawAttention');
             },
             error:function(XMLHttpRequest,textStatus,errorThrown){
                 loading.hide();
-                //errorReporter(XMLHttpRequest, exception) ;
+                errorReporter(XMLHttpRequest, exception) ;
+                $('#variantSelectingBox').removeClass('drawAttention');
+                $('#doSomethingWithExistingList').removeClass('drawAttention');
+                $('.dbtResults').addClass('drawAttention');
             }
         });
     };
@@ -354,18 +366,13 @@
 
 
     var  proteinEffectList;
-    var dynamicBurdenTest = function (variantIds){
-        $('dbtActualResultsExist').hide();
-        var loading = $('#spinner').show();
-        postVariantReq("./burdenAjax",variantIds);
-        return;
-    };
-    %{--var dynamicBurdenTest = function (){--}%
-    %{--$('dbtActualResultsExist').hide();--}%
-    %{--var loading = $('#spinner').show();--}%
-    %{--postVariantReq("./burdenAjax","${variants}");--}%
-    %{--return;--}%
-    %{--};--}%
+//    var dynamicBurdenTest = function (variantIds){
+//        $('dbtActualResultsExist').hide();
+//        var loading = $('#spinner').show();
+//        postVariantReq("./burdenAjax",variantIds);
+//        return;
+//    };
+
     var dynamicBurdenTest2 = function (variantIds){
         $('dbtActualResultsExist').hide();
         var loading = $('#spinner').show();
@@ -428,6 +435,18 @@
 
     };
 
+    /***
+     * Request  a variant-search look up.
+     * @param params
+     * @param show_gene
+     * @param show_sigma
+     * @param show_exseq
+     * @param show_exchp
+     * @param variantRootUrl
+     * @param geneRootUrl
+     * @param variantSearchAjaxUrl
+     * @param dataSetDetermination
+     */
     var requestDbtSearch =   function (params,
                                    show_gene,
                                    show_sigma,
@@ -446,19 +465,14 @@
             url:variantSearchAjaxUrl,
             async:true,
             success:function(data,textStatus){
+                // variant search succeeded --  display results
                 fillBtVariantTable (data);
-//                        show_gene,
-//                        show_sigma,
-//                        show_exseq,
-//                        show_exchp,
-//                        variantRootUrl,
-//                        geneRootUrl,
-//                        dataSetDetermination);
+
                 loading.hide();
             },
             error:function(XMLHttpRequest,textStatus,errorThrown){
                 loading.hide();
-                //errorReporter(XMLHttpRequest, exception) ;
+                errorReporter(XMLHttpRequest, exception) ;
             }
         });
     }
@@ -473,23 +487,36 @@
     //   3= We have a list of variants with which to work
 
     var caller = parseInt(${caller});
-    if (caller>0){
-        // we have variants
+    if (caller===0){
+        // adjust appearance
+        $('#variantSelectingBox').addClass('drawAttention');
+
+    } else if (caller>0) {  // user has chosen variants before
         console.log('caller=${caller}, '+caller+'.');
         var variantsInListString = "${variants2}",
                 numberOfVariants = variantsInListString.length,
                 variantInfo;
-        //variantInfo = decodeURIComponent("${variantInfo}");
+
+         // adjust appearance
+        $('#variantSelectingBox').removeClass('drawAttention');
+        $('#doSomethingWithExistingList').addClass('drawAttention');
+
         if (caller===3){
+            $('#collapseTwo').show(); // We want to see the table  since we have variants ( either explicitly or implied )
+
             if (numberOfVariants > 0) {  // the user explicitly specified variants. We need to gather information about each one
                 initializeFields();
 
                 // we have a list of variants, but we need to go back to the server to get more info
-                // about each one in order to fill out the table
+                //   about each one in order to fill out the table.  So this path implies -> 1) Request variant info,
+                //   2) display it when you get it; and 3) await further instructions
                 requestExpandedVariantInfo("./variantInfoAjax","${variants}");
 
             }  else {  // the user is requesting a variant lookup.  We can do that
 
+                // this path implies: perform a variant search look up, which will get us not only a set of variants
+                //   but useful information about each one. Display that information when it finally comes back, and
+                //   then await further instructions
                 var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
                 requestDbtSearch("<%=filter%>",
                         ${show_gene},
@@ -517,43 +544,23 @@
 
             <div class="dynamicBurdenTest">
                 <div class="row">
-                    <div class="accordion" id="accordionDbt">
-                        <div class="accordion-group">
-                            <div class="accordion-heading">
-                                <a  class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordionDbt"
-                                    href="#collapseOne">
-                                    <h2><strong>Step 1: Develop a list of variant</strong></h2>
-                                </a>
+                    <div id="accordionDbt">
+                        <div>
+                            <div>
+
+                                <div id="collapseTwo" style="display: none">
+                                    <h2><strong>Refine variant list</strong></h2>
+                                    <div >
+                                        <g:render template="refineVariantList"/>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="collapseOne" class="accordion-body collapse in">
-                                <div class="accordion-inner">
+
+
+                            <div id="collapseOne">
+                                <h2><strong>Develop a list of variant</strong></h2>
+                                <div>
                                     <g:render template="geneFilters"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-group">
-                            <div class="accordion-heading">
-                                <a  class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordionDbt"
-                                    href="#collapseTwo">
-                                    <h2><strong>Step 2:  Refine variant list</strong></h2>
-                                </a>
-                            </div>
-                            <div id="collapseTwo" class="accordion-body collapse">
-                                <div class="accordion-inner">
-                                    <g:render template="refineVariantList"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-group">
-                            <div class="accordion-heading">
-                                <a  class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordionDbt"
-                                    href="#collapseThree">
-                                    <h2><strong>Step 3:  Burden test results</strong></h2>
-                                </a>
-                            </div>
-                            <div id="collapseThree" class="accordion-body collapse">
-                                <div class="accordion-inner">
-                                    <g:render template="burdenTestResults"/>
                                 </div>
                             </div>
                         </div>
@@ -566,7 +573,6 @@
     margin: 10px auto 0 0;
 }
 .dbtResults {
-    border: 1px dashed blue;
     font-size: 18px;
     font-weight: bold;
     position: relative;
@@ -598,7 +604,6 @@
                 <div class="row resultsCage">
 
                     <div class="col-sm-2">
-                        %{--<button class="btn btn-lg btn-primary" onclick="launchDynamicBurdenTest()">Execute</button>--}%
                     </div>
                     <div class="col-sm-10">
                         <div id="dbtActualResultsExist">
@@ -618,32 +623,7 @@
     </div>
 
 </div>
-<script>
-    $('#accordionDbt').on('show.bs.collapse', function (e) {
-        if (e.target.id === "collapseOne") {
-//            if ((typeof delayedDataPresentation !== 'undefined') &&
-//                    (typeof delayedDataPresentation.launch !== 'undefined')) {
-//                delayedDataPresentation.launch();
-//            }
-            console.log('collapseOne caught');
-        }
-    });
-    $('#accordionDbt').on('hide.bs.collapse', function (e) {
-        if (e.target.id === "collapseTwo") {
-//            if ((typeof delayedDataPresentation !== 'undefined') &&
-//                    (typeof delayedDataPresentation.launch !== 'undefined')) {
-//                delayedDataPresentation.removeBarchart();
-//            }
-            console.log('collapseTo caught');
-        }
-    });
-    $( document ).ready(function() {
-      //  console.log('prepping the document');
-        $('#collapseOne').collapse('show');
-//       $('#collapseTwo').collapse('hide');
-    });
 
-</script>
 
 </body>
 

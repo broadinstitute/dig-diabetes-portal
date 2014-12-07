@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-sm-11">
-        <div class="dbtBoundingBox">
+        <div class="dbtBoundingBox" id="variantSelectingBox">
 
             <div class="row">
                 <div class="col-sm-12">
