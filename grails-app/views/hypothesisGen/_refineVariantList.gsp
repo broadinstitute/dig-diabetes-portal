@@ -35,19 +35,97 @@
 <div id="doSomethingWithExistingList">
     <div class="row">
 
-        <div class="col-sm-2">
-            <span>Options</span>
+        <div class="col-sm-6">
+            <h2><strong>Modify your existing list:</strong></h2>
         </div>
-        <div class="col-sm-10">
-            <ul>
-                <li>Add variants to existing list</li>
-                <li>Remove variants from existing list</li>
-                <li>Execute burden search
-                    <button class="btn btn-lg btn-primary" onclick="launchDynamicBurdenTest()">Execute</button>
-                </li>
-            </ul>
+        <div class="col-sm-6"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-11" style="margin-left:20px; padding-left: 40px">
+            <g:if test='${(caller==3)}'>
+                <div class="row">
+                    <div class="accordion" id="accordionVariantListRevisions">
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle collapsed" data-toggle="collapse"
+                                   data-parent="#accordionVariantListRevisions"
+                                   href="#collapseVariantListRevisionOne">
+                                    <h4><strong>Add variants to existing list</strong></h4>
+                                </a>
+                            </div>
 
+                            <div id="collapseVariantListRevisionOne" class="accordion-body collapse in">
+                                <div class="accordion-inner">
+                                    <g:form action="variantUpload">
+                                        <div class="row">
+                                            <ul>
+                                                <li><a href="#">Specify variant by ID to add to the existing list</a></li>
+                                                <li><a href="#">Use a file specifying variants to add to the existing list</a></li>
+                                                <li><a href="#">Perform a variant search and add the results to the existing list</a></li>
+                                            </ul>
+                                        </div>
+                                    </g:form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle collapsed" data-toggle="collapse"
+                                   data-parent="#accordionVariantListRevisions"
+                                   href="#collapseVariantListRevisionTwo">
+                                    <h4><strong>Remove variants from existing list</strong></h4>
+                                </a>
+                            </div>
+
+                            <div id="collapseVariantListRevisionTwo" class="accordion-body collapse">
+                                <div class="accordion-inner">
+                                    <g:uploadForm action="variantFileUpload">
+                                        <div class="row">
+                                            <ul>
+                                                <li><a href="#">Specify variant by ID to remove from the existing list</a></li>
+                                                <li><a href="#">Use a file specifying variants to remove from the existing list</a></li>
+                                                <li><a href="#">Perform a variant search and remove the results to the existing list</a></li>
+                                            </ul>
+                                        </div>
+                                    </g:uploadForm>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle collapsed" data-toggle="collapse"
+                                   data-parent="#accordionVariantListRevisions"
+                                   href="#collapseVariantListRevisionThree">
+                                    <h4><strong>Execute burden test on existing list</strong></h4>
+                                </a>
+                            </div>
+
+                            <div id="collapseVariantListRevisionThree" class="accordion-body collapse">
+                                <div class="accordion-inner">
+                                    <a href="#"  onclick="launchDynamicBurdenTest()">Launch burden test now</a>
+                                    %{--<button class="btn btn-lg btn-primary" onclick="launchDynamicBurdenTest()">Execute</button>--}%
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </g:if>
 
         </div>
     </div>
+
+
+
+
+
+
+
+
+
 </div>

@@ -37,7 +37,7 @@
         varsToSend = UTILS.concatMap(varsToSend,orInequality) ;
 
         //   add some defaults:
-        varsToSend = UTILS.concatMap(varsToSend,{'datatype':'exomechip'}) ;
+        varsToSend = UTILS.concatMap(varsToSend,{'datatype':'exomeseq'}) ;
 
         UTILS.postQuery('./variantSearch',varsToSend);
     };
@@ -279,7 +279,7 @@
             $('#dbtPValue').text(UTILS.realNumberFormatter(data.burdenTestResults.pValue));
             $('#dbtBeta').text(UTILS.realNumberFormatter(data.burdenTestResults.oddsRatio));
             $('#stdErr').text(UTILS.realNumberFormatter(data.burdenTestResults.stdErr));
-            $('#dbtActualResultsExist').show();
+            $('#resultsCage').show();
             $('#collapseOne').hide();
         }
     };
@@ -306,14 +306,18 @@
                 loading.hide();
                 $('#variantSelectingBox').removeClass('drawAttention');
                 $('#doSomethingWithExistingList').removeClass('drawAttention');
-                $('.dbtResults').addClass('drawAttention');
+                $('#doSomethingWithExistingList').hide();
+                $('.resultsCage').show();
+                $('.resultsCage').addClass('drawAttention');
             },
             error:function(XMLHttpRequest,textStatus,errorThrown){
                 loading.hide();
                 errorReporter(XMLHttpRequest, exception) ;
                 $('#variantSelectingBox').removeClass('drawAttention');
                 $('#doSomethingWithExistingList').removeClass('drawAttention');
-                $('.dbtResults').addClass('drawAttention');
+                $('#doSomethingWithExistingList').hide();
+                $('.resultsCage').show();
+                $('.resultsCage').addClass('drawAttention');
             }
         });
     };
@@ -374,7 +378,7 @@
 //    };
 
     var dynamicBurdenTest2 = function (variantIds){
-        $('dbtActualResultsExist').hide();
+        $('resultsCage').hide();
         var loading = $('#spinner').show();
         postVariantReq("./burdenAjax",variantIds);
         return;
@@ -382,7 +386,8 @@
 
     var fillBtVariantTable = function (jsonObject){
         var safetyCellFiller = function (dataHolder,fieldName){
-            if((typeof  dataHolder [fieldName]=== 'undefined') ){
+            if((typeof  dataHolder [fieldName]=== 'undefined') ||
+                    (dataHolder [fieldName]=== null)){
                 return ("<td></td>");
             }else {
                 return ("<td>" + dataHolder [fieldName]+ "</td>");
@@ -475,12 +480,93 @@
                 errorReporter(XMLHttpRequest, exception) ;
             }
         });
-    }
+    };
+
+
+    // provide names of form fields
+    var initFormFields = function (){
+        var  fields,
+                region_gene_input = '#region_gene_input',
+                id_datatype_sigma,
+                id_datatype_exomeseq,
+                id_datatype_exomechip,
+                id_datatype_gwas,
+                id_significance_genomewide,
+                id_significance_nominal,
+                id_significance_custom,
+                custom_significance_input,
+                region_chrom_input = '#region_chrom_input',
+                region_start_input = '#region_start_input',
+                region_stop_input = '#region_stop_input',
+                ethnicity_af_AA_min,
+                ethnicity_af_AA_max,
+                ethnicity_af_EA_min,
+                ethnicity_af_EA_max,
+                ethnicity_af_SA_min,
+                ethnicity_af_SA_max,
+                ethnicity_af_EU_min,
+                ethnicity_af_EU_max,
+                ethnicity_af_HS_min,
+                ethnicity_af_HS_max,
+                id_onlyseen_t2dcases,
+                id_onlyseen_t2dcontrols,
+                id_onlyseen_homozygotes,
+                all_functions_checkbox,
+                protein_truncating_checkbox,
+                missense_checkbox,
+                synonymous_checkbox,
+                noncoding_checkbox,
+                polyphenSelect,
+                siftSelect,
+                condelSelect,
+                or_select,
+                or_value;
+        initializeFields( fields,
+                region_gene_input,
+                id_datatype_sigma,
+                id_datatype_exomeseq,
+                id_datatype_exomechip,
+                id_datatype_gwas,
+                id_significance_genomewide,
+                id_significance_nominal,
+                id_significance_custom,
+                custom_significance_input,
+                region_chrom_input,
+                region_start_input,
+                region_stop_input,
+                ethnicity_af_AA_min,
+                ethnicity_af_AA_max,
+                ethnicity_af_EA_min,
+                ethnicity_af_EA_max,
+                ethnicity_af_SA_min,
+                ethnicity_af_SA_max,
+                ethnicity_af_EU_min,
+                ethnicity_af_EU_max,
+                ethnicity_af_HS_min,
+                ethnicity_af_HS_max,
+                id_onlyseen_t2dcases,
+                id_onlyseen_t2dcontrols,
+                id_onlyseen_homozygotes,
+                all_functions_checkbox,
+                protein_truncating_checkbox,
+                missense_checkbox,
+                synonymous_checkbox,
+                noncoding_checkbox,
+                polyphenSelect,
+                siftSelect,
+                condelSelect,
+                or_select,
+                or_value)
+    };
+
 
 
 
 
     $( document ).ready(function (){
+
+    //
+        initFormFields();
 
     // Decide what to do based on the state indicator.
     //   0= first time through-- we are just collecting information at this point
@@ -505,7 +591,7 @@
             $('#collapseTwo').show(); // We want to see the table  since we have variants ( either explicitly or implied )
 
             if (numberOfVariants > 0) {  // the user explicitly specified variants. We need to gather information about each one
-                initializeFields();
+
 
                 // we have a list of variants, but we need to go back to the server to get more info
                 //   about each one in order to fill out the table.  So this path implies -> 1) Request variant info,
@@ -545,7 +631,11 @@
             <div class="dynamicBurdenTest">
                 <div class="row">
                     <div id="accordionDbt">
-                        <div>
+
+                         <div>
+
+
+
                             <div>
 
                                 <div id="collapseTwo" style="display: none">
@@ -556,21 +646,25 @@
                                 </div>
                             </div>
 
-
+                        <g:if test='${(caller!=3)}'>
                             <div id="collapseOne">
                                 <h2><strong>Develop a list of variant</strong></h2>
                                 <div>
                                     <g:render template="geneFilters"/>
                                 </div>
                             </div>
-                        </div>
+                        </g:if>
+                      </div>
+
 
                     </div>
                 </div>
 <style>
 .resultsCage {
-    height: 400px;
-    margin: 10px auto 0 0;
+    height: 240px;
+    margin: 30px auto 0 0;
+    padding-left: 20px;
+    display: none;
 }
 .dbtResults {
     font-size: 18px;
@@ -598,24 +692,31 @@
 }
 
 #dbtActualResultsExist {
-    display: none;
+
 }
 </style>
-                <div class="row resultsCage">
-
-                    <div class="col-sm-2">
+                <div class="resultsCage">
+                    <div class="row">
+                    <div class="col-sm-12">
+                        <h2><strong>Results from dynamic burden test:</strong></h2>
                     </div>
-                    <div class="col-sm-10">
-                        <div id="dbtActualResultsExist">
-                            <h4>Results from dynamic burden test:</h4>
-                            <div class ="dbtResults">
-                                <div class ="dbtResultsSpecifics1">pValue = <span id="dbtPValue"></span></div>
-                                <div class ="dbtResultsSpecifics2">Beta = <span id="dbtBeta"></span></div>
-                                <div class ="dbtResultsSpecifics3">Std err = <span id="stdErr"></span></div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-sm-2">
+                        </div>
+                        <div class="col-sm-10">
+                            <div id="dbtActualResultsExist">
+                                <div class ="dbtResults">
+                                    <div class ="dbtResultsSpecifics1">pValue = <span id="dbtPValue"></span></div>
+                                    <div class ="dbtResultsSpecifics2">Beta = <span id="dbtBeta"></span></div>
+                                    <div class ="dbtResultsSpecifics3">Std err = <span id="stdErr"></span></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
 
