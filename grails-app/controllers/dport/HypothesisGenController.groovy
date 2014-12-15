@@ -44,9 +44,8 @@ class HypothesisGenController {
         if (variantToStartWith)      {
             String testJson = """{
   "variants":["2_98709555_","2_98736047_","2_98737873_","2_98744752_"],
-  "covariates": "N/A",
-  "samples": "N/A",
-  "filters": "N/A"
+  "covariates": [],
+  "samples": []
 }""".toString()
             JSONObject jsonObject =  restServerService.postRestCallBurden (testJson.trim(), "variant")
             render(view: "dynamicBurdenTest", model:[jsonObject])

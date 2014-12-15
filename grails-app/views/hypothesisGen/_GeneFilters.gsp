@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-sm-11">
         <div class="dbtBoundingBox" id="variantSelectingBox">
-
+        <div class="dbtInnerBoundingBox" id="innerVariantSelectingBox">
             <div class="row">
                 <div class="col-sm-12">
                     <h3>There are three ways to create a list of variants:</h3>
@@ -105,6 +105,7 @@
             </div>
 
         </div>
+    </div>
     </div>
 
 </div>

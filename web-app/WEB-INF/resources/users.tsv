@@ -1,5 +1,5 @@
 #email	name	nickname	is_staff	has_logged_in
-tgreen@broadinstitute.com	Todd Green 2	Todd	1	0
+tgreen@broadinstitute.org	Todd Green 2	Todd	1	0
 bthomas@broadinstitute.org	Brett Thomas 2	Brett2	0	0
 maryc@broadinstitute.org	Mary Carmichael	Mary	1	1
 flannick@broadinstitute.org	Jason Flannick PhD	Jason	1	1
@@ -134,7 +134,7 @@ statyy@nus.edu.sg	 YY Teo	 YY	0	0
 teslo@umich.edu	 Tanya Teslovich	 Tanya	0	1
 thameem@uthscsa.edu	 Farook Thameen	 Farook	0	0
 jasontorres@uchicago.edu	 Jason Torres	 Jason	0	1
-trubetskoy.vasa@gmail.com	 Vasily Trubetskoy	 Vasily	0	1
+trubetskoy.vasa@gmail.com	 Vasily Trubmvgetskoy	 Vasily	0	1
 wcr601@hotmail.com	 Chongrong Wang	 Chongrong	0	0
 rwatanab@usc.edu	 Richard Watanabe	 Richard	0	1
 welchr@umich.edu	 Ryan Welch	 Ryan	0	1
@@ -174,3 +174,55 @@ vineeta_agarwala@hms.harvard.edu	Vineeta Agarwala	Vineeta	0	0
 mktrost@umich.edu	Mary Kate Wing	Mary Kate	0	1
 hmkang@umich.edu	Hyun Min Kang	Hyun	0	1
 lgroop@broadinstitute.org	Leif Groop	Leif	0	0
+karol@broadinstitute.org	Karol Estrada	Karol Estrada	0	0
+altshul@broadinstitute.org	Altshuler David	Altshuler David	0	0
+sburns@broadinstitute.org	Burns Sean	Burns Sean	0	0
+zdymek@broadinstitute.org	Dymek Zachary	Dymek Zachary	0	0
+kgnana@broadinstitute.org	Gnanapradeepan Keerthana	Gnanapradeepan Keerthana	0	0
+shuba@broadinstitute.org	Gopal Shuba	Gopal Shuba	0	0
+aliciachagoya@comunidad.unam.mx	Huerta Alicia	Huerta Alicia	0	0
+sjacobs@broadinstitute.org	Jacobs Suzanne	Jacobs Suzanne	0	0
+nlanda@partners.org	Landa Nicole	Landa	0	0	
+danmac@broadinstitute.org	MacCarthur Daniel	Daniel	0	0
+amit@broadinstitute.org	Majithia Amit	Majithia	0	0	
+ami@broadinstitute.org	Moonshine Levy Ami	ami	0	0
+mpalmer@broadinstitute.org	Palmer Michelle	Michelle	0	0
+nickp@broadinstitute.org	Patterson Nick	Nick	0	0
+jrperez@broadinstitute.org	Perez Jose	Jose	0	0
+vrusu@broadinstitute.org	Rusu Victor	Rusu	0	0
+zwtan@broadinstitute.org	Wei Zhi	Wei Zhi	0	0
+mttusie@gmail.com	Tusie Teresa	Tusie	0	0
+gwalford@partners.org	Walford Geoffrey	Geoffrey	0	0
+jwright@broadinstitute.org	Wright Jason	Jason	0	0
+lzhao@broadinstitute.org	Zhao Liping	Liping	0	0
+avruch@molbio.mgh.harvard.edu	Avruch Joseph	Joeseph	0	0
+clary@broadinstitute.org	Clish Clary	Clary	0	0
+hgarcia@inmegen.gob.mx	Garcia Humberto	Garcia	0	0	
+cliceriogonzalez@hotmail.com	cliceriogonzalez@hotmail.com	cliceriogonzalez@hotmail.com	0	0
+hmm@xanum.uam.mx	hmm@xanum.uam.mx	hmm@xanum.uam.mx	0	0
+amartinez@inmegen.gob.mx	amartinez@inmegen.gob.mx	amartinez@inmegen.gob.mx	0	0
+carlamarquezluna@gmail.com	carlamarquezluna@gmail.com	carlamarquezluna@gmail.com	0	0
+haiman@med.usc.edu	Haiman Chris	christopher	0	0
+amanning@broadinstitute.org	Manning Alisa	Alisa	0	0
+bwagner@broadinstitute.org	Wagner Bridget	Bridget	0	0
+azentell@biomedicas.unam.mx	Zentella Alejandro	Zentella Alejandro	0	0
+aburgin@broadinstitute.org	Burgin Alex	Burgin Alex	0	0
+behender@usc.edu	       Henderson Brian	Brian	0	0
+caguilarsalinas@yahoo.com	Aguilar-Salinas Carlos	Aguilar-Salinas Carlos	0	0
+stram@med.usc.edu	Stram Daniel	Daniel	0	0
+dbrivera@broadinstitute.org	Borges-Rivera Diego	Diego	0	0
+dwassaf@broadinstitute.org	Wassaf Dina	Dina	0	0
+schumacher@med.usc.edu	Schumacher Fredrick	Fredrick	0	0
+hoch@broadinstitute.org	Hoch Eitan	Hoch Eitan	0	0
+jfernandez@inmegen.gob.mx	Fernandez Juan	Juan	0	0
+jgasser@broadinstitute.org	Gasser Jessica	Jessica	0	0
+mercader@gmail.com	Mercader Josep	josepmaria	0	0
+lorozco@inmegen.gob.mx	Orosco Lorena	Orosco Lorena	0	0
+mbetancourt@salud.carlosslim.org	Betancourt Miguel	Betancourt Miguel	0	0
+ning@molbio.mgh.harvard.edu	Dai Ning	Dai Ning	0	0
+schreiber@broadinstitute.org	Schreiber Stuart	Stuart	0	0
+sromero@inmegen.gob.mx	Romero Sandra	Romero Sandra	0	0
+szhang@broadinstitute.org	Zhang Sidi	Zhang Sidi	0	0
+xsheng@usc.edu	Sheng Grace	Grace	0	0
+mcortes@broadinstitute.org	Cortes Marisa	Marisa	0	0
+thibault@broadinstitute.org	Thibault Joel	Joel	0	0

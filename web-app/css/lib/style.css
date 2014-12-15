@@ -504,14 +504,30 @@ div.veryImportantText {
 }
 .dbtBoundingBox {
     width : 96%;
-    height: 300px;
+    /*height: 315px;*/
+    height: 100%;
+    max-height: 600px;
     margin-top: 30px;
     overflow-y: auto;
     overflow-x: hidden;
 }
+.dbtInnerBoundingBox {
+    border: solid 2px #052090;
+    margin: 0px;
+    padding: 10px 0px 10px 18px;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+}
 .drawAttention {
-    border: solid 14px lightcyan;
+    border: solid 14px rgba(43, 117, 207, 0.68);
+    border-radius: 14px;
+    -moz-border-radius: 14px;
+    -webkit-border-radius: 14px;
     margin: 25px;
+    -webkit-box-shadow: 9px 10px 8px 1px rgba(0,0,0,0.33);
+    -moz-box-shadow: 9px 10px 8px 1px rgba(0,0,0,0.33);
+    box-shadow: 9px 10px 8px 1px rgba(0,0,0,0.33);
 }
 
 .dbtBoundingBoxSubrow {
@@ -524,9 +540,55 @@ div.veryImportantText {
 }
 #doSomethingWithExistingList {
     margin: 20px;
-    padding: 20px;
     font-size: 16pt;
 }
-#doSomethingWithExistingList  ul {
+.innerDoSomethingWithExistingList {
+    border: solid 2px #052090;
+    margin: 0px;
+    padding: 20px;
+    padding: 10px 0px 10px 18px;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+}
+#doSomethingWithExistingList > ul {
     list-style-type: none;
 }
+ .resultsCage {
+     height: 100%;
+     margin: 30px auto 0 0;
+     display: none;
+ }
+.dbtResults {
+    font-size: 22px;
+    font-weight: bold;
+    position: relative;
+    padding: 15px;
+    width: 80%;
+    height: 130px;
+    margin: 20px auto 0 100px;
+}
+.dbtResults .dbtResultsSpecifics1 {
+    position: absolute;
+    margin: 0px 20px 10px auto;
+}
+.dbtResults .dbtResultsSpecifics2 {
+    position: absolute;
+    margin: 30px 20px 10px auto;
+}
+.dbtResults .dbtResultsSpecifics3 {
+    position: absolute;
+    margin: 60px 20px 10px auto;
+}
+.innerResultsCage {
+    border: solid 2px #052090;
+    margin: 0px;
+    padding: 10px 0px 10px 18px;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+}
+#dbtActualResultsExist {
+
+}
+

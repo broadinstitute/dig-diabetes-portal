@@ -5,8 +5,10 @@ import dport.RestServerService
 import dport.people.Role
 import dport.people.User
 import dport.people.UserRole
+import org.apache.juli.logging.LogFactory
 
 class BootStrap {
+    private static final log = LogFactory.getLog(this)
     def grailsApplication
     RestServerService restServerService
     def springSecurityService
@@ -20,10 +22,10 @@ class BootStrap {
 
         // read in users from file
         if (User.count()) {
-            println "Users already loaded. Total operational number = ${User.count()}"
+            log.info( "Users already loaded. Total operational number = ${User.count()}")
         } else {
             String fileLocation = grailsApplication.mainContext.getResource("/WEB-INF/resources/users.tsv").file.toString()
-            println "Actively loading users from file = ${fileLocation}"
+            log.info( "Actively loading users from file = ${fileLocation}")
             File file = new File(fileLocation)
             int counter = 1
             boolean headerLine = true
@@ -33,17 +35,32 @@ class BootStrap {
                 } else {
                     List<String> fields = it.split('\t')
                     if (fields.size() != 5)  {
-                        println "Flawed user file.  number fields = ${fields.size()}. Aborting..."
+                        log.error("*****Flawed user file.  number fields = ${fields.size()}. Aboring on line ${counter}****")
+                        log.error("*****${it}****")
+                        if (fields.size()> 3)  {
+                            log.error(">>>Problematic line  field #1 with ${fields[0]}")
+                        }
+                        if (fields.size()> 2)  {
+                            log.error(">>>Problematic line  field #2 with ${fields[1]}")
+                        }
+                        if (fields.size()> 3)  {
+                            log.error(">>>Problematic line  field #3 with ${fields[2]}")
+                        }
+                        if (fields.size()==0) {
+                            log.error("Line appeared to be empty.")
+                        }
+
                         assert false
                     }
                     LinkedHashMap attributes = [:]
                     String username =  fields[0];
-                    attributes['password'] = "123"
+                    attributes['password'] = "bloodglucose"
                     attributes['fullName'] = fields[1]
                     attributes['nickname'] = fields[2]
                     attributes['email'] = fields[0]
                     samples[username] = attributes
                  }
+                counter++
             }
             samples['ben'] = [fullName:'Ben Alexander',
                               password:'ben',
@@ -84,7 +101,7 @@ class BootStrap {
                         hasLoggedIn: false,
                         enabled: true)
                 if (user.validate ()) {
-                    println "Creating user ${username}"
+                    log.info( "Creating user ${username}")
                     user.save(flush: true)
                     UserRole.create user,userRole
                     if ((username=='ben')||
@@ -101,20 +118,20 @@ class BootStrap {
                         UserRole.create user,adminRole
                     }
                 }  else {
-                    println "problem in bootstrap for username ${username}"
+                    log.error( "problem in bootstrap for username ${username}" )
                 }
 
             }
         }
-        println "# of users = ${User.list().size()}"
+        log.error( "# of users = ${User.list().size()}")
 
         // for the time being fill up our gene table locally. In the long run
         // we need to be pulling this information from the backend, of course
         if (Gene.count()) {
-            println "Genes already loaded. Total operational number = ${Gene.count()}"
+            log.info( "Genes already loaded. Total operational number = ${Gene.count()}" )
         } else {
             String fileLocation = grailsApplication.mainContext.getResource("/WEB-INF/resources/genes.tsv").file.toString()
-            println "Actively loading genes from file = ${fileLocation}"
+            log.info( "Actively loading genes from file = ${fileLocation}")
             File file = new File(fileLocation)
             int counter = 1
             boolean headerLine = true
@@ -135,14 +152,14 @@ class BootStrap {
                 }
                 counter++
             }
-            println "Genes successfully loaded: ${counter}"
+            log.info( "Genes successfully loaded: ${counter}" )
         }
 
         if (Phenotype.count()) {
-            println "Phenotypes already loaded. Total operational number = ${Phenotype.count()}"
+            log.info( "Phenotypes already loaded. Total operational number = ${Phenotype.count()}")
         } else {
             String fileLocation = grailsApplication.mainContext.getResource("/WEB-INF/resources/gwas_phenotypes.yaml").file.toString()
-            println "Actively loading phenotypes from file = ${fileLocation}"
+            log.info( "Actively loading phenotypes from file = ${fileLocation}" )
             File file = new File(fileLocation)
             int counter = 1
             int fieldCount = 0
@@ -190,15 +207,15 @@ class BootStrap {
                 }
                 counter++
             }
-            println "Phenotypes successfully loaded: ${counter}"
+            log.info( "Phenotypes successfully loaded: ${counter}")
         }
 
 
         if (ProteinEffect.count()) {
-            println "ProteinEffect already loaded. Total operational number = ${ProteinEffect.count()}"
+            log.info( "ProteinEffect already loaded. Total operational number = ${ProteinEffect.count()}" )
         } else {
             String fileLocation = grailsApplication.mainContext.getResource("/WEB-INF/resources/so_consequences.yaml").file.toString()
-            println "Actively loading ProteinEffect from file = ${fileLocation}"
+            log.info( "Actively loading ProteinEffect from file = ${fileLocation}" )
             File file = new File(fileLocation)
             int counter = 1
             int fieldCount = 0
@@ -238,7 +255,7 @@ class BootStrap {
                 }
                 counter++
             }
-            println "ProteinEffect successfully loaded: ${counter}"
+            log.info( "ProteinEffect successfully loaded: ${counter}" )
         }
 
 
