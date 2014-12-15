@@ -250,7 +250,7 @@ environments {
        // grails.serverURL = "sigmat2dprod-env.elasticbeanstalk.com"
        // grails.serverURL = "sigmat2ddev-env.elasticbeanstalk.com"
         //grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
-        grails.serverURL = "type2diabetesqasrvr-env.elasticbeanstalk.com"
+        grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
        // grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
         grails.logging.jul.usebridge = false
     }
