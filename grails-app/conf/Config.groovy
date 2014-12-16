@@ -140,6 +140,7 @@ t2dProdRestServer {
 }
 server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
 dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
+//dbtRestServer.URL = 'http://diabetesgeneticsportal2.broadinstitute.org:8888/dev/burden/'
 experimentalRestServer.URL = 'http://69.173.71.178:8888/dev2/server/'
 
 
@@ -250,8 +251,9 @@ environments {
        // grails.serverURL = "sigmat2dprod-env.elasticbeanstalk.com"
        // grails.serverURL = "sigmat2ddev-env.elasticbeanstalk.com"
         //grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
-        grails.serverURL = "type2diabetesqasrvr-env.elasticbeanstalk.com"
-       // grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+        //grails.serverURL = "type2diabetesqasrvr-env.elasticbeanstalk.com"
+        //grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+        grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
         grails.logging.jul.usebridge = false
     }
 }
@@ -300,7 +302,6 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/region/**':           ['ROLE_USER'],
         '/trait/**':            ['ROLE_USER'],
         '/variant/**':          ['ROLE_USER'],
-        '/hypothesisGen/**':    ['ROLE_USER'],
         '/variantSearch/**':    ['IS_AUTHENTICATED_ANONYMOUSLY'],
         '/assets/**':         ['permitAll'],
         '/**/js/**':          ['permitAll'],
@@ -310,7 +311,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/**/*.ico':    ['permitAll'],
         '/login/**':          ['permitAll'],
         '/logout/**':         ['permitAll'],
-        '/finance/**':        ['ROLE_FINANCE', 'isFullyAuthenticated()'],
+        '/hypothesisGen/**':  ['ROLE_USER']
 ]
 grails.plugin.auth.loginFormUrl='/Security/auth2'
 grails.plugin.springsecurity.logout.postOnly = false

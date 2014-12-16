@@ -218,9 +218,8 @@ class SharedToolsService {
             "variants":[
                ${convertListToString(variantList)}
         ],
-            "covariates": "N/A",
-            "samples": "N/A",
-            "filters": "N/A"
+            "covariates": [],
+            "samples": []
         }"""
         return returnValue
     }
