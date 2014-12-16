@@ -253,7 +253,9 @@ environments {
         //grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
         //grails.serverURL = "type2diabetesqasrvr-env.elasticbeanstalk.com"
         //grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-        grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+        //grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+        grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+       // grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
         grails.logging.jul.usebridge = false
     }
 }
@@ -357,7 +359,7 @@ log4j = { root ->
             'grails.app.service',
             'grails.plugins.hawkeventing',
             'net.sf.ehcache.hibernate'
-    info 'grails.app.services'
+    info 'grails.app'
     root.level = org.apache.log4j.Level.INFO
 
 

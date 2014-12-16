@@ -659,43 +659,8 @@
 
                     </div>
                 </div>
-<style>
-.resultsCage {
-    height: 240px;
-    margin: 30px auto 0 0;
-    padding-left: 20px;
-    display: none;
-}
-.dbtResults {
-    font-size: 18px;
-    font-weight: bold;
-    position: relative;
-    padding: 15px;
-    width: 200px;
-    height: 130px;
-    margin: 20px auto 0 100px;
-}
-.dbtResults .dbtResultsSpecifics1 {
-    position: absolute;
-    margin: 0px auto 10px 10px;
-    width: 150px;
-}
-.dbtResults .dbtResultsSpecifics2 {
-    position: absolute;
-    margin: 30px auto 10px 20px;
-    width: 150px;
-}
-.dbtResults .dbtResultsSpecifics3 {
-    position: absolute;
-    margin: 60px auto 10px 20px;
-    width: 150px;
-}
-
-#dbtActualResultsExist {
-
-}
-</style>
                 <div class="resultsCage">
+                    <div class="innerResultsCage">
                     <div class="row">
                     <div class="col-sm-12">
                         <h2><strong>Results from dynamic burden test:</strong></h2>
@@ -717,6 +682,7 @@
                         </div>
 
                     </div>
+                   </div>
                 </div>
             </div>
 
