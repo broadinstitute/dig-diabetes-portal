@@ -254,8 +254,8 @@ environments {
         //grails.serverURL = "type2diabetesqasrvr-env.elasticbeanstalk.com"
         //grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
         //grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
-        grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-       // grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+        //grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+        grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
         grails.logging.jul.usebridge = false
     }
 }
@@ -322,7 +322,7 @@ grails.plugin.springsecurity.rememberMe.key="td2PortalKey"
 grails.plugin.springsecurity.rememberMe.rememberMe.persistent=true
 grails.plugins.springsecurity.successHandler.alwaysUseDefault = true
 grails.plugin.springsecurity.successHandler.defaultTargetUrl = "/home/index"
-//grails.plugin.logout.postOnly=false
+
 grails.plugin.springsecurity.apf.storeLastUsername=true
 grails.plugin.springsecurity.dao.hideUserNotFoundExceptions=false
 grails.plugin.springsecurity.useSecurityEventListener=true

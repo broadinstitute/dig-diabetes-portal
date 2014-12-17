@@ -11,10 +11,6 @@ import spock.lang.Unroll
 @Unroll
 class GeneUnitSpec extends Specification {
 
-    Gene gene1
-    Gene gene2
-
-
     def setup() {
 
     }

@@ -54,19 +54,6 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        // all lifted from Bard
-//        build(":tomcat:$grailsVersion",
-//                ":release:2.0.3",
-//                ":rest-client-builder:1.0.2") {
-//            export = false
-//        }
-//        test(":spock:0.7") {
-//            exclude "spock-grails-support"
-//        }
-//        test ":codenarc:0.18.1"
-//        compile ":clover:3.1.10.1"
-//        compile ":cache:1.0.1"
-
         // plugins for the build system only
         build (":tomcat:7.0.54",
                 ":rest-client-builder:2.0.3") {
@@ -74,17 +61,6 @@ grails.project.dependency.resolution = {
         }
 
         // plugins for the compile step
-
-//        compile ":spring-security-oauth:2.1.0-RC4"
-      //  compile ":spring-security-oauth-google:0.3.1"
-
-        // …
-        // last stable version is 2.0.2
-        //compile ':spring-security-oauth:2.0.2'
-        // 2.1 is under development
-        // compile ':spring-security-oauth:2.1.0-SNAPSHOT'
-       // compile ':spring-security-oauth-facebook:0.1'
-        // …
         compile ":scaffolding:2.1.2"
         compile ':cache:1.1.7'
         compile ":asset-pipeline:1.8.11"
