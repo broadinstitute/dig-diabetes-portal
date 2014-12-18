@@ -3,12 +3,13 @@
 %{--<h2><strong>Variants and associations</strong></h2>--}%
 
 <h3>
-    Explore variants within 100kb of <em>${geneName}</em>
+    %{--Explore variants within 100kb of <em>${geneName}</em>--}%
+    <g:message code="gene.variantassociations.mainDirective" default="Explore" args="[geneName]"/>
 </h3>
 <p></p>
 <p>
-    Click on a number below to generate a table of variants associated with type 2 diabetes in the following categories:
-</p>
+    %{--Click on a number below to generate a table of variants associated with type 2 diabetes in the following categories:--}%
+    <g:message code="gene.variantassociations.subDirective" default="Click on a number below to generate a table of variants associated with type 2 diabetes in the following categories:"/></p>
 <br/>
 
 

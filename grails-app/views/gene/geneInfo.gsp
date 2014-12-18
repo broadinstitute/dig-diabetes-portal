@@ -118,7 +118,7 @@
         <div class="accordion-heading">
             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"
                href="#collapseOne">
-                <h2><strong>Variants and associations</strong></h2>
+                <h2><strong><g:message code="gene.variantassociations.title" default="Variants and associations"/></strong></h2>
             </a>
         </div>
 
