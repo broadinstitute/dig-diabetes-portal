@@ -42,6 +42,14 @@
         data: {geneName: '<%=geneName%>'},
         async: true,
         success: function (data) {
+            var variantsAndAssociationsTableHeaders = {
+                datatype:'data type',
+                samplesize:'sample size',
+                totalvariants:'total variants',
+                genomewide:'genome-wide significant variants',
+                locuswide:'locus-wide significant variants',
+                nominalwide:'nominal significant variants'
+            };
             fillTheGeneFields(data,
                     ${show_gwas},
                     ${show_exchp},
@@ -49,7 +57,8 @@
                     ${show_sigma},
                     '<g:createLink controller="region" action="regionInfo" />',
                     '<g:createLink controller="trait" action="traitSearch" />',
-                    '<g:createLink controller="variantSearch" action="gene" />');
+                    '<g:createLink controller="variantSearch" action="gene" />',
+                    variantsAndAssociationsTableHeaders );
             loading.hide();
         },
         error: function (jqXHR, exception) {
