@@ -2,6 +2,7 @@ package dport
 
 import groovy.json.JsonSlurper
 import org.codehaus.groovy.grails.web.json.JSONObject
+import org.springframework.transaction.annotation.Transactional
 
 class VariantController {
     RestServerService   restServerService

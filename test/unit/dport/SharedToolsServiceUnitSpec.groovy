@@ -85,7 +85,7 @@ p
         String results = service.createDistributedBurdenTestInput(list)
         def userJson = new JsonSlurper().parseText(results )
         then:
-        userJson.keySet().size() == 4
+        userJson.keySet().size() == 3
     }
 
 
