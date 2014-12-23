@@ -37,7 +37,7 @@ class VariantController {
         if (variantToStartWith)      {
             JSONObject jsonObject =  restServerService.retrieveVariantInfoByName (variantToStartWith.trim())
             render(status:200, contentType:"application/json") {
-                [variant:jsonObject['variant-info']]
+                [variant:jsonObject]
             }
 
         }

@@ -1,12 +1,15 @@
 package dport
 
+import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
+import org.codehaus.groovy.grails.web.json.JSONObject
 import spock.lang.Specification
 
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(VariantController)
+@Mock([SharedToolsService])
 class VariantControllerUnitSpec extends Specification {
 
 
@@ -25,38 +28,34 @@ class VariantControllerUnitSpec extends Specification {
         response.status == 200
 
     }
-//    void "test variantInfo with params"() {
-//        when:
-//        controller.params.id="1"
-//       controller.sharedToolsService = new SharedToolsService()
-//       controller.sharedToolsService.metaClass.getSectionToDisplay = {def x->'1';
-//       println "closure!";
-//       'abc'}
-//        controller.variantInfo()
-//
-//        then:
-//        response.view == 'variantInfo'
-//
-//    }
-    void "test variantInfo with no params"() {
+    void "test variantInfo with params"() {
         when:
+        controller.params.id="1"
+        controller.sharedToolsService = Mock(SharedToolsService)
         controller.variantInfo()
 
         then:
+        view=="/variant/variantInfo"
+        model.variantToSearch=="1"
         response.status == 200
 
     }
 
+
     void "Test that index renders template for ajax calls"() {
         given:
         request.makeAjaxRequest()
-       // views['/authenticationEvent/_index.gsp'] = 'my template text'
+        JSONObject jsonObject = new  JSONObject("{'a':'mockData'}")
+        controller.params.id="1"
+        controller.restServerService = Mock(RestServerService)
+        controller.restServerService.metaClass.retrieveVariantInfoByName = {String x->return jsonObject}
 
         when:
         controller.variantAjax()
 
         then:
-       // response.contentAsString == 'my template text'
         response.status == 200
+        response.contentAsString.contains('variant')
+        response.contentAsString.contains('mockData')
     }
 }

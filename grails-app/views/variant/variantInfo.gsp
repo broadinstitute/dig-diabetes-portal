@@ -58,14 +58,16 @@
         url: "../variantAjax/" + "<%=variantToSearch%>",
         async: true,
         success: function (data) {
-            fillTheFields(data,
-                    "<%=variantToSearch%>",
-                    "<g:createLink controller='trait' action='traitInfo' />",
-                    "${restServer.currentRestServer()}",
-                    ${show_gwas},
-                    ${show_exchp},
-                    ${show_exseq},
-                    ${show_sigma});
+            if ( typeof data !== 'undefined')  {
+                fillTheFields(data,
+                        "<%=variantToSearch%>",
+                        "<g:createLink controller='trait' action='traitInfo' />",
+                        "${restServer.currentRestServer()}",
+                        ${show_gwas},
+                        ${show_exchp},
+                        ${show_exseq},
+                        ${show_sigma});
+            }
             loading.hide();
         },
         error: function (jqXHR, exception) {

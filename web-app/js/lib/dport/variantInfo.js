@@ -36,8 +36,9 @@ function fillTheFields(data,
         _13k_T2D_OR_WALD_DOS_FE_IV: 23,
         SIGMA_T2D_P: 24,
         SIGMA_T2D_OR: 25
-    };
-    variant = data['variant'];
+        },
+    variantObj = data['variant'],
+    variant =  variantObj['variant-info'],
     variantTitle = UTILS.get_variant_title(variant, variantToSearch);
 
     /***

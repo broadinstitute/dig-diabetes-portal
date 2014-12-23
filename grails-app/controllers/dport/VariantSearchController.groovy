@@ -84,7 +84,7 @@ class VariantSearchController {
      */
     def variantSearchAjax() {
         String filtersRaw = params['keys']
-        String filters = URLDecoder.decode(filtersRaw)
+        String filters = URLDecoder.decode(filtersRaw, "UTF-8")
         log.debug "variantSearch variantSearchAjax = ${filters}"
         JSONObject jsonObject = restServerService.searchGenomicRegionByCustomFilters(filters)
         render(status: 200, contentType: "application/json") {

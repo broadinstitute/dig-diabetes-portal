@@ -7,7 +7,10 @@
 
 <div class="row">
     <h1>User list</h1>
-    <g:link action="create" class="page-nav-link pull-right">Create new user</g:link>
+    <div class="pull-right" style="margin-bottom: 10px; margin-right: 20px">
+        <g:link class="page-nav-link" action="create">Create new user</g:link>
+        <g:link class="page-nav-link" action="dump">Dump user list</g:link>
+    </div>
     %{--<g:link action="create" class="btn btn-lg btn-primary pull-right">Create new user</g:link>--}%
 </div>
 <div class="row"></div>

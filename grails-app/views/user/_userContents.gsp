@@ -26,8 +26,9 @@
         </div>
 
         <div class="col-md-6">
-            <span style="display:none">
-                <g:textField class="pull-left" name="password" required="" size="60" value="${userInstance?.password}"/>
+            <span style="display:inline-block">
+                %{--userInstance?.password--}%
+                <g:textField class="pull-left" name="password" required="" size="60" value="" placeholder="New value password required in order to Update"/>
             </span>
         </div>
 

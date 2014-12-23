@@ -3,15 +3,19 @@ package dport
 import dport.people.Role
 import dport.people.User
 import dport.people.UserRole
+import grails.plugin.mail.MailService
 import grails.transaction.Transactional
 import org.apache.juli.logging.LogFactory
+import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 
 @Transactional
 class SharedToolsService {
 
-     def mailService
-     def grailsApplication
+     MailService mailService
+    GrailsApplication grailsApplication
+    LinkGenerator grailsLinkGenerator
      private static final log = LogFactory.getLog(this)
 
 
@@ -450,12 +454,10 @@ class SharedToolsService {
 
     public String sendForgottenPasswordEmail(String userEmailAddress){
         String serverUrl = "http://localhost:8080/dport"
-        if (grailsApplication.config.grails.serverURL.size()!=0){
-            serverUrl =   grailsApplication.config.grails.serverURL
-        }
-        String bodyOfMessage = "Dear diabetes portal user;\n In order to access the updated version of the diabetes portal it will be necessary for you to reset your password."+
-        "Please copy the following string into the URL of your browser:\n" +
-                serverUrl+"/admin/resetPasswordInteractive/"+  encodeUser(userEmailAddress) +"\n"+
+        String passwordResetUrl = grailsLinkGenerator.link(controller:'admin', action:'resetPasswordInteractive',absolute: true)
+        String bodyOfMessage = "Dear diabetes portal user;\n\n In order to access the updated version of the diabetes portal it will be necessary for you to reset your password."+
+        "Please copy the following string into the URL of your browser:\n\n" +
+                passwordResetUrl+ "/"+ encodeUser(userEmailAddress) +"\n"+
                 "\n"+
                 "If you did not request a password reset then you can safely ignore this e-mail"
         mailService.sendMail {
