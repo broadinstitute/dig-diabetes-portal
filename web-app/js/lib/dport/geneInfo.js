@@ -467,15 +467,15 @@ function fillUpBarChart (peopleWithDiseaseNumeratorString,peopleWithDiseaseDenom
 
 
             var barChart = baget.barChart()
-                .selectionIdentifier("#chart")
                 .width(width)
                 .height(height)
                 .margin(margin)
                 .roomForLabels (roomForLabels)
                 .maximumPossibleValue (maximumPossibleValue)
                 .labelSpacer (labelSpacer)
-                .assignData(dataForBarChart);
-            barChart.render();
+                .dataHanger("#chart",dataForBarChart);
+
+            d3.select("#chart").call(barChart.render);
             return barChart;
         }
 

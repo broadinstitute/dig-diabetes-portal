@@ -182,9 +182,9 @@
 </div>
 <div id="belowfooter">
     <div class="row">
-        <div class="footer" class="pull-right">
+        <div class="footer">
             <div class="col-lg-6"></div>
-            <div class="col-lg-6">
+            <div class="col-lg-6 small-buildinfo">
                 Built on ${BuildInfo?.buildHost} at ${BuildInfo?.buildTime}.  Version=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}
             </div>
 

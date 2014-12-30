@@ -133,15 +133,14 @@ function fillTheFields(data,
                     height = 300 - margin.top - margin.bottom;
 
                 var commonBarChart = baget.barChart('howCommonIsChart')
-                    .selectionIdentifier("#howCommonIsChart")
                     .width(width)
                     .height(height)
                     .margin(margin)
                     .roomForLabels(roomForLabels)
                     .maximumPossibleValue(maximumPossibleValue)
                     .labelSpacer(labelSpacer)
-                    .assignData(dataForBarChart);
-                commonBarChart.render();
+                    .dataHanger("#howCommonIsChart",dataForBarChart);
+                d3.select("#howCommonIsChart").call(commonBarChart.render);
                 return commonBarChart;
             }
 
@@ -233,8 +232,9 @@ function fillTheFields(data,
                     .integerValues(1)
                     .logXScale(1)
                     .customBarColoring(1)
-                    .customLegend(1);
-                barChart.render();
+                    .customLegend(1)
+                    .dataHanger("#carrierStatusDiseaseRiskChart",data3);
+                d3.select("#carrierStatusDiseaseRiskChart").call(barChart.render);
                 return barChart;
             }
 
@@ -431,8 +431,9 @@ function fillTheFields(data,
                     .roomForLabels(roomForLabels)
                     .maximumPossibleValue(maximumPossibleValue)
                     .labelSpacer(labelSpacer)
-                    .assignData(dataForBarChart);
-                barChart.render();
+                    .assignData(dataForBarChart)
+                    .dataHanger("#diseaseRiskChart",dataForBarChart);
+                d3.select("#diseaseRiskChart").call(barChart.render);
                 return barChart;
             }
         }
