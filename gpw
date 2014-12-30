@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+#  Insert some versioning parameters into a war generation
+#
+: ${1?"Usage: $0 version_number"}
+echo 'building prod grails'
+revisionNumber="$(git rev-parse HEAD)"
+echo 'got it'
+echo "${revisionNumber}"
+grails prod war -Dbuild.number=${revisionNumber} -Dapp.version=$1
