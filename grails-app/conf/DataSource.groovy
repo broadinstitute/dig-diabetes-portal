@@ -32,7 +32,7 @@ environments {
             username = System.getProperty("RDS_USERNAME")
             password = System.getProperty("RDS_PASSWORD")
             pooled = true
-            //dbCreate = "validate"
+            dbCreate = "validate"
             //dbCreate = "update"
             //dbCreate = "create-drop"   /////////// caution!!
             driverClassName = "com.mysql.jdbc.Driver"

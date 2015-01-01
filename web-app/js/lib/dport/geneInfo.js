@@ -135,67 +135,6 @@ function geneFieldOrZero(geneInfo,filedNumber,defaultValue) {
     }
     return retval;
 }
-function variantsAndAssociationsTitleLine (geneInfo, // Raw info
-                                           totalNumberField,  // Which field are we reading
-                                           description,  // Special text for each line
-                                           chromosomeField,  // Chromosome number, in case we need it for the link
-                                           beginPositionField, // Beginning extent, in case we needed for the link
-                                           endPositionField, // Ending extent, in case we need it for the link
-                                           typeOfSearch, // Is this a region search chip or by gene
-                                           dataset,  // exomeseq, exomechip, gwas
-                                           significance,
-                                           textSpanId, // Span we are modifying
-                                           anchorId, // Anchor we are modifying
-                                           rootRegionUrl, // Root URL if this is a region search
-                                           rootGeneUrl){
-    var currentLine = "There are ";
-    var totalNumber =  geneFieldOrZero(geneInfo,totalNumberField);
-    if (totalNumber > 0){
-        currentLine += '<strong>';
-    }
-    currentLine += (totalNumber+" total variants ");
-    if (totalNumber > 0){
-        currentLine += '</strong>';
-    }
-    currentLine += (" "+description+" | ");
-    $(textSpanId).append (currentLine);
-    if (typeOfSearch === "region")  {
-        $(anchorId)[0].href= rootGeneUrl + "/"+ geneFieldOrZero(geneInfo,geneInfoRec.ID)+"?sig="+significance+"&dataset="+dataset +"&region=chr"+geneFieldOrZero(geneInfo,chromosomeField)+":"+expandRegionBegin(geneFieldOrZero(geneInfo,beginPositionField))+"-"+expandRegionEnd(geneFieldOrZero(geneInfo,endPositionField));
-    }    else  {
-        $(anchorId)[0].href = rootGeneUrl + "/"+ geneFieldOrZero(geneInfo,geneInfoRec.ID)+"?sig="+significance+"&dataset="+dataset ;
-    }
-
-}
-function variantsAndAssociationsContentsLine (geneInfo, // Raw info
-                                              totalNumberField,  // Which field are we reading
-                                              description,  // Special text for each line
-                                              chromosomeField,  // Chromosome number, in case we need it for the link
-                                              beginPositionField, // Beginning extent, in case we needed for the link
-                                              endPositionField, // Ending extent, in case we need it for the link
-                                              typeOfSearch, // gene or region
-                                              dataset,  // exomeseq, exomechip, gwas
-                                              significance,    // anything, gwasSig, nominalSig
-                                              textSpanId, // Span we are modifying
-                                              anchorId, // Anchor we are modifying
-                                              rootRegionUrl, // Root URL if this is a region search
-                                              rootGeneUrl){
-    var currentLine = "";
-    var totalNumber =  geneFieldOrZero(geneInfo,totalNumberField);
-    if ((totalNumber > 0)  && (description ==='genome-wide')){
-        currentLine += '<strong>';
-    }
-    currentLine += (totalNumber+"  are associated with type 2 diabetes at or above "+description+" significance ");
-    if ((totalNumber > 0)  && (description ==='genome-wide')){
-        currentLine += '</strong>';
-    }
-    currentLine += " | ";
-    $(textSpanId).append (currentLine);
-    if (typeOfSearch === "region") {
-        $(anchorId)[0].href = rootGeneUrl + "/" + geneFieldOrZero(geneInfo, geneInfoRec.ID) + "?sig=" + description + "&dataset=" + dataset+"&region=chr"+geneFieldOrZero(geneInfo,chromosomeField)+":"+expandRegionBegin(geneFieldOrZero(geneInfo,beginPositionField))+"-"+expandRegionEnd(geneFieldOrZero(geneInfo,endPositionField));
-    } else {
-        $(anchorId)[0].href = rootGeneUrl + "/" + geneFieldOrZero(geneInfo, geneInfoRec.ID) + "?sig=" + description + "&dataset=" + dataset;
-    }
-}
 function fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootTraitUrl,rootVariantUrl){
 
     // show traits
@@ -230,13 +169,6 @@ function fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exse
         }
         $('#gwasTraits').append(htmlAccumulator);
     }
-
-//    // fill in trait vis
-//    $('#linkToVariantTraitCross')[0].href= rootGeneUrl+"/chr"+
-//        geneFieldOrZero(rawGeneInfo,geneInfoRec.CHROM)+":"+
-//        expandRegionBegin(geneFieldOrZero(rawGeneInfo,geneInfoRec.BEG))+"-"+
-//        expandRegionEnd(geneFieldOrZero(rawGeneInfo,geneInfoRec.END)) ;
-
 }
 function buildAnchorForVariantSearches (displayableContents,geneName, filter,rootVariantUrl){
     var returnValue = "";
