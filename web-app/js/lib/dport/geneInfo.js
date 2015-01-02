@@ -135,7 +135,7 @@ function geneFieldOrZero(geneInfo,filedNumber,defaultValue) {
     }
     return retval;
 }
-function fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootTraitUrl,rootVariantUrl){
+function fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootTraitUrl,rootVariantUrl,significanceStrings){
 
     // show traits
     if(show_gwas){
@@ -144,7 +144,7 @@ function fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exse
             var traitArray = rawGeneInfo["GWS_TRAITS"];
             if (traitArray.length > 0){
                 htmlAccumulator  +=  ("<strong> "+
-                    "<p>Variants within 100kb of "+rawGeneInfo['ID']+" are also genome-wide significantly associated with:</p>"+
+                    "<p>"+significanceStrings.significantAssociations+"</p>"+
                     "<ul>");
                 for ( var i = 0 ; i < traitArray.length ; i++ ) {
                     var traitRepresentation = "";
@@ -157,7 +157,7 @@ function fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exse
                     } else {
                         traitRepresentation =  traitArray[i];
                     }
-                      if (!(traitRepresentation.contains('diabetes'))) {  // special case: don't include diabetes, since it is above in table
+                      if (!(traitRepresentation.indexOf('diabetes')>-1)) {  // special case: don't include diabetes, since it is above in table
                           htmlAccumulator += ("<li><a href='" + rootTraitUrl + "?trait=" + traitArray[i] + "&significance=5e-8'>" + traitRepresentation + "</a></li>")
                       }
                 }
@@ -165,7 +165,7 @@ function fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exse
                     "</strong>");
             }
         }  else {
-            htmlAccumulator  +=  "<p>Variants in or near this gene have not been convincingly associated with any traits at genome-wide significance in the GWAS meta-analyses included in this portal.</p>"
+            htmlAccumulator  +=  "<p>"+significanceStrings.noSignificantAssociationsExist+"</p>"
         }
         $('#gwasTraits').append(htmlAccumulator);
     }
@@ -301,7 +301,7 @@ function emphasisRecommended (geneInfo) {
     }
     return  returnValue;
 }
-function fillVariantsAndAssociations (geneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl) {
+function fillVariantsAndAssociations (geneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl,headers) {
     if  (geneInfo){
         var regionSpecifier =  "chr"+geneFieldOrZero(geneInfo,geneInfoRec.CHROM)+":"+
             expandRegionBegin(geneFieldOrZero(geneInfo,geneInfoRec.BEG))+"-"+
@@ -309,17 +309,17 @@ function fillVariantsAndAssociations (geneInfo,show_gwas,show_exchp,show_exseq,s
         var emphasisRequired =   emphasisRecommended (geneInfo);
         var  emphasizeGwas = (emphasisRequired?1:0);
         var headerRow = "<tr>"+
-            "<th>data type</th>"+
-            "<th>sample size</th>"+
-            "<th>total variants</th>";
+            "<th>"+headers.hdr1+"</th>"+
+            "<th>"+headers.hdr2+"</th>"+
+            "<th>"+headers.hdr3+"</th>";
         if (emphasizeGwas){
             headerRow += "<th class='emphasizedTop' style='border-top: 3px solid #ee0'>";
         } else {
             headerRow += "<th>";
         }
-        headerRow += "genome-wide<br/>significant variants<br/><span class='headersubtext'>P&nbsp;&lt;&nbsp;5x10<sup>-8</sup></span></th>"+
-            "<th>locus-wide<br/>significant variants<br/><span class='headersubtext'>P&nbsp;&lt;&nbsp;1x10<sup>-4</sup></span></th>"+
-            "<th>nominal<br/>significant variants<br/><span class='headersubtext'>P&nbsp;&lt;&nbsp;0.05</sup></span></th>"+
+        headerRow += headers.hdr4+"</th>"+
+            "<th>"+headers.hdr5+"</th>"+
+            "<th>"+headers.hdr6+"</th>"+
             "</tr>";
         $('#variantsAndAssociationsHead').append ( headerRow);
         if (show_gwas) {
@@ -414,7 +414,7 @@ function fillUpBarChart (peopleWithDiseaseNumeratorString,peopleWithDiseaseDenom
     }
 
 }
-function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl) {
+function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl,fillBiologicalHypothesisTesting) {
     var // raw values
         bhtPeopleWithVariant = 0,
         bhtPeopleWithoutVariant = 0,
@@ -464,11 +464,10 @@ function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exs
     if (numberOfVariants > 0){
         $('#possibleCarrierVariantsLink').append("<a class='variantlink' id='linkToVariantsPredictedToTruncate' " +
                 "href='"+rootVariantUrl+"/"+(geneInfo["ID"])+"?filter=lof"+"'>"+
-                numberOfVariants+"</a> variants are predicted to truncate a protein encoded by <em>"+geneInfo["ID"]+
-               "</em>. Among carriers of at least one copy of one of these variants:"
+                numberOfVariants+"</a> "+ fillBiologicalHypothesisTesting.question1explanation
         );
     }else{
-        $('#possibleCarrierVariantsLink').append("Insufficient data exist to test this hypothesis.");
+        $('#possibleCarrierVariantsLink').append(fillBiologicalHypothesisTesting.question1insufficient);
     }
 
 
@@ -500,9 +499,9 @@ function fillBiologicalHypothesisTesting (geneInfo,show_gwas,show_exchp,show_exs
     if (bhtMetaBurdenForDiabetes > 0) {
         var degreeOfSignificance = '';
         if (bhtMetaBurdenForDiabetes < 5e-8) {
-            degreeOfSignificance = 'significant difference';
+            degreeOfSignificance = fillBiologicalHypothesisTesting.question1significant;
         } else if (bhtMetaBurdenForDiabetes < 5e-2) {
-            degreeOfSignificance = 'nominal difference';
+            degreeOfSignificance = fillBiologicalHypothesisTesting.question1nominal;
         }
         ;
         $('#significanceDescriptorFormatter').append("<div class='significantDifference'>" +
@@ -524,11 +523,22 @@ function fillUniprotSummary(geneInfo,show_gwas,show_exchp,show_exseq,show_sigma)
 
     $('#uniprotSummaryGoesHere').append(funcDescrLine);
 }
-function fillTheGeneFields (data,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootTraitUrl,rootVariantUrl)  {
+function fillTheGeneFields (data,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootTraitUrl,rootVariantUrl,textStringObject)  {
     var rawGeneInfo =  data['geneInfo'];
     fillUniprotSummary(rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma);
-    fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootRegionUrl, rootTraitUrl,rootVariantUrl);
-    fillVariantsAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl);
+    fillVarianceAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,
+        show_sigma,
+        rootRegionUrl,
+        rootTraitUrl,
+        rootVariantUrl,
+        textStringObject.variantsAndAssociationsPhenotypeAssociations);
+    fillVariantsAndAssociations (rawGeneInfo,show_gwas,show_exchp,show_exseq,
+        show_sigma,
+        rootVariantUrl,
+        textStringObject.variantsAndAssociationsTableHeaders);
     fillVariationAcrossEthnicity (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl);
-    fillBiologicalHypothesisTesting (rawGeneInfo,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl);
+    fillBiologicalHypothesisTesting (rawGeneInfo,show_gwas,show_exchp,show_exseq,
+        show_sigma,
+        rootVariantUrl,
+        textStringObject.biologicalHypothesisTesting);
 }

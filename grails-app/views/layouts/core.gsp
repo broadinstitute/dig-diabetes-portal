@@ -82,6 +82,7 @@
              }
             var date=new Date();
             errorText += '\nError recorded at '+date.toString();
+            errorText += '\nVersion=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}';
             if (consoleReporter)  {
                 console.log(errorText);
             }

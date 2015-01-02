@@ -253,8 +253,9 @@ environments {
         //grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
         //grails.serverURL = "type2diabetesqasrvr-env.elasticbeanstalk.com"
         //grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-        //grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
-        grails.serverURL = "http://ci-env.elasticbeanstalk.com"
+        grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+        //grails.serverURL = "http://privatecitest-env.elasticbeanstalk.com/"
+       // grails.serverURL = "http://ci-env.elasticbeanstalk.com"
         //grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
         //grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
         grails.logging.jul.usebridge = false

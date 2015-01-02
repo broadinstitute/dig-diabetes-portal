@@ -412,15 +412,14 @@ body {
 
 <div id="myDiv">
 <p>
-    Use the browser below to explore all genome-wide and locus-wide
-    significant variants within 100kb of this gene. Choose "Tracks" to view
-    results relevant to type 2 diabetes
+
+    <g:message code="gene.igv.intro1" default="Use the browser"/>
     <g:renderNotSigmaSection>
-        (exome sequencing, exome chip, or GWAS)
+        <g:message code="gene.igv.intro2" default="(non-Sigma databases)"/>
     </g:renderNotSigmaSection>
-    or any of 24 other related traits
+       <g:message code="gene.igv.intro3" default="or the traits"/>
     <g:renderNotSigmaSection>
-        (GWAS)
+       <g:message code="gene.igv.intro4" default="(GWAS)"/>
     </g:renderNotSigmaSection>
      .
 </p>

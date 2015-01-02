@@ -15,6 +15,8 @@ class BootStrap {
 
     def init = { servletContext ->
 
+        log.info( "BBBBBBB Starting bootstrap BBBBBBBBBBB")
+
         //
         // first handles users
         //

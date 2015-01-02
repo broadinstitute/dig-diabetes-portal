@@ -43,12 +43,22 @@
         async: true,
         success: function (data) {
             var variantsAndAssociationsTableHeaders = {
-                datatype:'data type',
-                samplesize:'sample size',
-                totalvariants:'total variants',
-                genomewide:'genome-wide significant variants',
-                locuswide:'locus-wide significant variants',
-                nominalwide:'nominal significant variants'
+                hdr1:'<g:message code="gene.variantassociations.table.colhdr.1" default="data type" />',
+                hdr2:'<g:message code="gene.variantassociations.table.colhdr.2" default="sample size" />',
+                hdr3:'<g:message code="gene.variantassociations.table.colhdr.3" default="total variants" />',
+                hdr4:'<g:message code="gene.variantassociations.table.colhdr.4" default="genome wide" />',
+                hdr5:'<g:message code="gene.variantassociations.table.colhdr.5" default="locus wide" />',
+                hdr6:'<g:message code="gene.variantassociations.table.colhdr.6" default="nominal" />'
+            };
+            var variantsAndAssociationsPhenotypeAssociations = {
+                significantAssociations:'<g:message code="gene.variantassociations.significantAssociations" default="variants were associated with"  args="[geneName]"/>',
+                noSignificantAssociationsExist:'<g:message code="gene.variantassociations.noSignificantAssociations" default="no significant associations"/>'
+            };
+            var biologicalHypothesisTesting = {
+                question1explanation:'<g:message code="gene.biologicalhypothesis.question1.explanation" default="explanation" args="[geneName]"/>',
+                question1insufficient:'<g:message code="gene.biologicalhypothesis.question1.insufficientdata" default="insufficient data"/>',
+                question1nominal:'<g:message code="gene.biologicalhypothesis.question1.nominaldifference" default="nominal difference"/>',
+                question1significant:'<g:message code="gene.biologicalhypothesis.question1.significantdifference" default="significant difference"/>'
             };
             fillTheGeneFields(data,
                     ${show_gwas},
@@ -58,7 +68,10 @@
                     '<g:createLink controller="region" action="regionInfo" />',
                     '<g:createLink controller="trait" action="traitSearch" />',
                     '<g:createLink controller="variantSearch" action="gene" />',
-                    variantsAndAssociationsTableHeaders );
+                    {variantsAndAssociationsTableHeaders:variantsAndAssociationsTableHeaders,
+                     variantsAndAssociationsPhenotypeAssociations:variantsAndAssociationsPhenotypeAssociations,
+                     biologicalHypothesisTesting:biologicalHypothesisTesting}
+            );
             loading.hide();
         },
         error: function (jqXHR, exception) {
@@ -144,7 +157,7 @@
         <div class="accordion-heading">
             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"
                href="#collapseIgv">
-                <h2><strong>Explore significant variants with IGV</strong></h2>
+                <h2><strong><g:message code="gene.igv.title" default="Explore variants with IGV"/></strong></h2>
             </a>
         </div>
 
@@ -195,7 +208,7 @@
         <div class="accordion-heading">
             <a class="accordion-toggle  collapsed" data-toggle="collapse" data-parent="#accordion2"
                href="#collapseTwo">
-                <h2><strong>Variation across continental ancestry groups</strong></h2>
+                <h2><strong><g:message code="gene.continentalancestry.title" default="variation across continental ancestry"/></strong></h2>
             </a>
         </div>
 
@@ -216,7 +229,7 @@
         <div class="accordion-heading">
             <a class="accordion-toggle  collapsed" data-toggle="collapse" data-parent="#accordion2"
                href="#collapseThree">
-                <h2><strong>Biological hypothesis testing</strong></h2>
+                <h2><strong><g:message code="gene.biologicalhypothesis.title" default="variation across continental ancestry"/></strong></h2>
             </a>
         </div>
 
@@ -235,7 +248,7 @@
         <div class="accordion-heading">
             <a class="accordion-toggle  collapsed" data-toggle="collapse" data-parent="#accordion2"
                href="#findOutMore">
-                <h2><strong>Find out more</strong></h2>
+                <h2><strong><g:message code="gene.findoutmore.title" default="find out more"/></strong></h2>
             </a>
         </div>
 

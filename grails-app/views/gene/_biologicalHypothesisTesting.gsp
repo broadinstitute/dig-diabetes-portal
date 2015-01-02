@@ -5,14 +5,10 @@
     <a name="biology"></a>
 
     <div class="translational-research-box">
-        <p style="font-weight: 600">Question 1: Does truncating the encoded protein affect disease risk?</p>
+        <p style="font-weight: 600"><g:message code="gene.biologicalhypothesis.question1" default="question 1" /></p>
     </div>
     <p></p>
     <p class="standardFont"  id="possibleCarrierVariantsLink">
-        %{--<a class="variantlink" id="linkToVariantsPredictedToTruncate">--}%
-            %{--<span id="bhtLossOfFunctionVariants" class="bhtLossOfFunctionVariants"></span>--}%
-        %{--</a> variants are predicted to truncate a protein encoded by <em><%=geneName%></em>.--}%
-        %{--Carriers of at least one copy of one of these variants:--}%
     </p>
     <div class="row clearfix">
          <div class="col-md-10">
