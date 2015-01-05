@@ -60,7 +60,7 @@
                 question1nominal:'<g:message code="gene.biologicalhypothesis.question1.nominaldifference" default="nominal difference"/>',
                 question1significant:'<g:message code="gene.biologicalhypothesis.question1.significantdifference" default="significant difference"/>'
             };
-            fillTheGeneFields(data,
+            mpgSoftware.geneInfo.fillTheGeneFields(data,
                     ${show_gwas},
                     ${show_exchp},
                     ${show_exseq},
@@ -183,17 +183,17 @@
         });
         $('#accordion2').on('show.bs.collapse', function (e) {
             if (e.target.id === "collapseThree") {
-                if ((typeof delayedDataPresentation !== 'undefined') &&
-                        (typeof delayedDataPresentation.launch !== 'undefined')) {
-                    delayedDataPresentation.launch();
+                if ((typeof mpgSoftware.geneInfo.retrieveDelayedBiologicalHypothesisOneDataPresenter() !== 'undefined') &&
+                        (typeof mpgSoftware.geneInfo.retrieveDelayedBiologicalHypothesisOneDataPresenter().launch !== 'undefined')) {
+                    mpgSoftware.geneInfo.retrieveDelayedBiologicalHypothesisOneDataPresenter().launch();
                 }
             }
         });
         $('#accordion2').on('hide.bs.collapse', function (e) {
             if (e.target.id === "collapseThree") {
-                if ((typeof delayedDataPresentation !== 'undefined') &&
-                        (typeof delayedDataPresentation.launch !== 'undefined')) {
-                    delayedDataPresentation.removeBarchart();
+                if ((typeof mpgSoftware.geneInfo.retrieveDelayedBiologicalHypothesisOneDataPresenter() !== 'undefined') &&
+                        (typeof mpgSoftware.geneInfo.retrieveDelayedBiologicalHypothesisOneDataPresenter().launch !== 'undefined')) {
+                    mpgSoftware.geneInfo.retrieveDelayedBiologicalHypothesisOneDataPresenter().removeBarchart();
                 }
             }
         });
