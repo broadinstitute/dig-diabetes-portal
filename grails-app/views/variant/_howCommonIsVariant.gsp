@@ -20,7 +20,7 @@
      <div id="howCommonIsNoExists" style="display: none">
 
         <p>
-           <h4>Insufficient data exists regarding this variant.</h4>
+           <h4><g:message code="variant.insufficientdata" default="Insufficient data to draw conclusion"/></h4>
         </p>
 
     </div>

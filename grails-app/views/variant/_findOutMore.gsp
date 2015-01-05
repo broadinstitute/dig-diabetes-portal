@@ -1,21 +1,21 @@
 
 <div class="linkout">
     <a target="_blank" href="http://www.gtexportal.org/home/">GTEx</a>
-    Look up significant eQTLs for a given SNP.
+    <g:message code="findoutmore.variantgtex.descr" default="GTEx"/>
 </div>
 <div class="linkout">
     <a target="_blank" href="http://www.snpedia.com">SNPedia</a>
-    Consult a human genetics wiki for information and citations related to this variant.
+    <g:message code="findoutmore.snpedia.descr" default="SNPedia"/>
 </div>
 <div class="linkout">
     <a target="_blank" href="http://www.ncbi.nlm.nih.gov/pubmed/">PubMed</a>
-    Search the published literature for references to this variant.
+    <g:message code="findoutmore.pubmed.descr" default="pubmed"/>
 </div>
 <div class="linkout">
     <a target="_blank" href="http://scholar.google.com">Google Scholar</a>
-    Search the published literature for references to this variant.
+    <g:message code="findoutmore.googlescholar.descr" default="googlescholar"/>
 </div>
 <div class="linkout">
     <a target="_blank" href="http://crispr.mit.edu/">CRISPR tool</a>
-    Enter a DNA sequence containing this variant for guidance on designing a relevant CRISPR.
+    <g:message code="findoutmore.crispr.descr" default="CRISPR"/>
 </div>

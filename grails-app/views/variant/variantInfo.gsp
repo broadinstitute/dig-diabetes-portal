@@ -97,8 +97,7 @@
                             <a class="accordion-toggle  collapsed" data-toggle="collapse"
                                data-parent="#accordionVariant"
                                href="#collapseVariantAssociationStatistics">
-                                <h2><strong>Is <b><span id="variantTitleInAssociationStatistics"></span>
-                                </b> associated with T2D or related traits?</strong></h2>
+                                <h2><strong><g:message code="variant.variantAssociationStatistics.title" default="Is variant associated with T2D"/></strong></h2>
                             </a>
                         </div>
 
@@ -118,7 +117,7 @@
                             <a class="accordion-toggle  collapsed" data-toggle="collapse"
                                data-parent="#accordionVariant"
                                href="#collapseDiseaseRisk">
-                                <h2><strong>How does carrier status affect disease risk?</strong></h2>
+                                <h2><strong><g:message code="variant.diseaseRisk.title" default="How does carrier status impact risk"/></strong></h2>
                             </a>
                         </div>
 
@@ -139,7 +138,7 @@
                             <a class="accordion-toggle  collapsed" data-toggle="collapse"
                                data-parent="#accordionVariant"
                                href="#collapseHowCommonIsVariant">
-                                <h2><strong>How common is <span id="populationsHowCommonIs" class="parentsFont"></span>?
+                                <h2><strong><g:message code="variant.howCommonIsVariant.title" default="How common is variant"/>
                                 </strong></h2>
                             </a>
                         </div>
@@ -160,7 +159,7 @@
                             <a class="accordion-toggle  collapsed" data-toggle="collapse"
                                data-parent="#accordionVariant"
                                href="#collapseCarrierStatusImpact">
-                                <h2><strong>How many carriers are observed in the data set?</strong></h2>
+                                <h2><strong><g:message code="variant.carrierStatusImpact.title" default="How many carriers in the data set"/></strong></h2>
                             </a>
                         </div>
 
@@ -179,7 +178,7 @@
                             <a class="accordion-toggle  collapsed" data-toggle="collapse"
                                data-parent="#accordionVariant"
                                href="#collapseAffectOfVariantOnProtein">
-                                <div id="effectOfVariantOnProteinTitle"></div>
+                                <g:message code="variant.effectOfVariantOnProtein.title" default="What is the effect of this variant on the associated protein"/>
                             </a>
                         </div>
 
@@ -198,8 +197,7 @@
                         <div class="accordion-heading">
                             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordionVariant"
                                href="#collapseIgv">
-                                <h2><strong>Explore the sequence surrounding
-                                    <span id="exploreSurroundingSequenceTitle" class="parentsFont"></span> with IGV.</strong></h2>
+                                <h2><strong><g:message code="variant.igvBrowser.title" default="Explorer with IGV"/></strong></h2>
                             </a>
                         </div>
 
@@ -218,7 +216,7 @@
                             <a class="accordion-toggle  collapsed" data-toggle="collapse"
                                data-parent="#accordionVariant"
                                href="#collapseFindOutMore">
-                                <h2><strong>Find out more</strong></h2>
+                                <h2><strong><g:message code="variant.findOutMore.title" default="find out more"/></strong></h2>
                             </a>
                         </div>
 

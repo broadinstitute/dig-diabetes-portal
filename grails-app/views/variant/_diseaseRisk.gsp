@@ -29,7 +29,7 @@
     <div id="diseaseRiskNoExists" style="display: none">
         <div class="row clearfix">
             <div class="col-md-12">
-                <h4>Insufficient data exists regarding this variant.</h4>
+                <h4><g:message code="variant.insufficientdata" default="Insufficient data to draw conclusion"/></h4>
              </div>
         </div>
     </div>

@@ -34,7 +34,7 @@
 </div>
 
 <div id="VariantsAndAssociationsNoExist"  style="display: none">
-    <h4>Insufficient data exists regarding this variant.</h4>
+    <h4><g:message code="variant.insufficientdata" default="Insufficient data to draw conclusion"/></h4>
 </div>
 
 <br/>
