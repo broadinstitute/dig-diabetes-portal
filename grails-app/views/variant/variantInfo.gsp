@@ -59,7 +59,7 @@
         async: true,
         success: function (data) {
             if ( typeof data !== 'undefined')  {
-                fillTheFields(data,
+                variantInfo.fillTheFields(data,
                         "<%=variantToSearch%>",
                         "<g:createLink controller='trait' action='traitInfo' />",
                         "${restServer.currentRestServer()}",
@@ -238,7 +238,7 @@
 <script>
     $('#accordionVariant').on('shown.bs.collapse', function (e) {
         if (e.target.id === "collapseIgv") {
-            delayedIgvLaunch.launch();
+            variantInfo.retrieveDelayedIgvLaunch().launch();
         }
 
     });
@@ -250,49 +250,49 @@
     });
     $('#accordionVariant').on('show.bs.collapse', function (e) {
         if (e.target.id === "collapseDiseaseRisk") {
-            if ((typeof delayedBurdenTestPresentation !== 'undefined') &&
-                    (typeof delayedBurdenTestPresentation.launch !== 'undefined')) {
-                delayedBurdenTestPresentation.launch();
+            if ((typeof variantInfo.retrieveDelayedBurdenTestPresentation() !== 'undefined') &&
+                    (typeof variantInfo.retrieveDelayedBurdenTestPresentation().launch !== 'undefined')) {
+                variantInfo.retrieveDelayedBurdenTestPresentation().launch();
             }
         }
     });
     $('#accordionVariant').on('hide.bs.collapse', function (e) {
         if (e.target.id === "collapseDiseaseRisk") {
-            if ((typeof delayedBurdenTestPresentation !== 'undefined') &&
-                    (typeof delayedBurdenTestPresentation.launch !== 'undefined')) {
-                delayedBurdenTestPresentation.removeBarchart();
+            if ((typeof variantInfo.retrieveDelayedBurdenTestPresentation() !== 'undefined') &&
+                    (typeof variantInfo.retrieveDelayedBurdenTestPresentation().launch !== 'undefined')) {
+                variantInfo.retrieveDelayedBurdenTestPresentation().removeBarchart();
             }
         }
     });
     $('#accordionVariant').on('show.bs.collapse', function (e) {
         if (e.target.id === "collapseHowCommonIsVariant") {
-            if ((typeof delayedHowCommonIsPresentation  !== 'undefined') &&
-                    (typeof delayedHowCommonIsPresentation .launch !== 'undefined')) {
-                delayedHowCommonIsPresentation .launch();
+            if ((typeof variantInfo.retrieveDelayedHowCommonIsPresentation()  !== 'undefined') &&
+                    (typeof variantInfo.retrieveDelayedHowCommonIsPresentation().launch !== 'undefined')) {
+                variantInfo.retrieveDelayedHowCommonIsPresentation().launch();
             }
         }
     });
     $('#accordionVariant').on('hide.bs.collapse', function (e) {
         if (e.target.id === "collapseHowCommonIsVariant") {
-            if ((typeof delayedHowCommonIsPresentation  !== 'undefined') &&
-                    (typeof delayedHowCommonIsPresentation .launch !== 'undefined')) {
-                delayedHowCommonIsPresentation .removeBarchart();
+            if ((typeof variantInfo.retrieveDelayedHowCommonIsPresentation()  !== 'undefined') &&
+                    (typeof variantInfo.retrieveDelayedHowCommonIsPresentation().launch !== 'undefined')) {
+                variantInfo.retrieveDelayedHowCommonIsPresentation().removeBarchart();
             }
         }
     });
     $('#accordionVariant').on('show.bs.collapse', function (e) {
         if (e.target.id === "collapseCarrierStatusImpact") {
-            if ((typeof delayedCarrierStatusDiseaseRiskPresentation  !== 'undefined') &&
-                    (typeof delayedCarrierStatusDiseaseRiskPresentation.launch !== 'undefined')) {
-                delayedCarrierStatusDiseaseRiskPresentation .launch();
+            if ((typeof variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation()  !== 'undefined') &&
+                    (typeof variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch !== 'undefined')) {
+                variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch();
             }
         }
     });
     $('#accordionVariant').on('hide.bs.collapse', function (e) {
         if (e.target.id === "collapseCarrierStatusImpact") {
-            if ((typeof delayedCarrierStatusDiseaseRiskPresentation  !== 'undefined') &&
-                    (typeof delayedCarrierStatusDiseaseRiskPresentation .launch !== 'undefined')) {
-                delayedCarrierStatusDiseaseRiskPresentation .removeBarchart();
+            if ((typeof variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation()  !== 'undefined') &&
+                    (typeof variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch !== 'undefined')) {
+                variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().removeBarchart();
             }
         }
     });

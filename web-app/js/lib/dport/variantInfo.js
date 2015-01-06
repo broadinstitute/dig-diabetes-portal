@@ -1,15 +1,11 @@
-var delayedHowCommonIsPresentation = {},
-    delayedCarrierStatusDiseaseRiskPresentation = {},
-    delayedBurdenTestPresentation = {},
-    delayedIgvLaunch = {};
-function fillTheFields(data,
-                       variantToSearch,
-                       traitsStudiedUrlRoot,
-                       restServerRoot,
-                       showGwas,
-                       showExchp,
-                       showExseq,
-                       showSigma) {
+variantInfo = (function () {
+
+
+    var delayedHowCommonIsPresentation = {},
+        delayedCarrierStatusDiseaseRiskPresentation = {},
+        delayedBurdenTestPresentation = {},
+        delayedIgvLaunch = {};
+
     var cariantRec = {
         _13k_T2D_HET_CARRIERS: 1,
         _13k_T2D_HOM_CARRIERS: 2,
@@ -36,27 +32,24 @@ function fillTheFields(data,
         _13k_T2D_OR_WALD_DOS_FE_IV: 23,
         SIGMA_T2D_P: 24,
         SIGMA_T2D_OR: 25
-        },
-    variantObj = data['variant'],
-    variant =  variantObj['variant-info'],
-    variantTitle = UTILS.get_variant_title(variant, variantToSearch);
+    };
 
     /***
      * Within the object privateMethods are all the subroutines that we need to call
      * @type {{showPercentageAcrossEthnicities: showPercentageAcrossEthnicities, fillHowCommonIsUpBarChart: fillHowCommonIsUpBarChart, fillCarrierStatusDiseaseRisk: fillCarrierStatusDiseaseRisk, showEthnicityPercentageWithBarChart: showEthnicityPercentageWithBarChart, showCarrierStatusDiseaseRisk: showCarrierStatusDiseaseRisk, variantGenerateProteinsChooserTitle: variantGenerateProteinsChooserTitle, variantGenerateProteinsChooser: variantGenerateProteinsChooser, fillUpBarChart: fillUpBarChart, fillDiseaseRiskBurdenTest: fillDiseaseRiskBurdenTest}}
      */
     privateMethods = {
-        calculateSearchRegion: function(variant) {
+        calculateSearchRegion: function (variant) {
             var searchBand = 50000;// 50 kb
             var returnValue = "";
-            if (variant){
+            if (variant) {
                 if ((typeof variant["CHROM"] !== 'undefined') &&
-                    (typeof variant["POS"] !== 'undefined')){ // an't do anything without chromosome number and sequence position
+                    (typeof variant["POS"] !== 'undefined')) { // an't do anything without chromosome number and sequence position
                     var chromosomeIdentifier = variant["CHROM"];  // String
                     var position = variant["POS"];// number
-                    var beginPosition = Math.max(0,position-searchBand);
-                    var endPosition = position+searchBand;
-                    returnValue = "chr"+chromosomeIdentifier + ":"+beginPosition + "-"+endPosition;
+                    var beginPosition = Math.max(0, position - searchBand);
+                    var endPosition = position + searchBand;
+                    returnValue = "chr" + chromosomeIdentifier + ":" + beginPosition + "-" + endPosition;
                 }
             }
             return returnValue;
@@ -139,29 +132,28 @@ function fillTheFields(data,
                     .roomForLabels(roomForLabels)
                     .maximumPossibleValue(maximumPossibleValue)
                     .labelSpacer(labelSpacer)
-                    .dataHanger("#howCommonIsChart",dataForBarChart);
+                    .dataHanger("#howCommonIsChart", dataForBarChart);
                 d3.select("#howCommonIsChart").call(commonBarChart.render);
                 return commonBarChart;
             }
 
         },
-        fillCarrierStatusDiseaseRisk: function (homozygCase, heterozygCase, nonCarrierCase,
-                                                homozygControl, heterozygControl, nonCarrierControl) {
+        fillCarrierStatusDiseaseRisk: function (homozygCase, heterozygCase, nonCarrierCase, homozygControl, heterozygControl, nonCarrierControl) {
             if ((typeof homozygCase !== 'undefined')) {
                 var data3 = [
                         { value: 1,
                             position: 1,
                             barname: 'Cases',
                             barsubname: '',
-                            barsubnamelink:'http://www.google.com',
+                            barsubnamelink: 'http://www.google.com',
                             inbar: '',
-                            descriptor: '(total '+(+nonCarrierCase)+')',
+                            descriptor: '(total ' + (+nonCarrierCase) + ')',
                             inset: 1 },
-                        { value:  homozygCase,
+                        { value: homozygCase,
                             position: 2,
                             barname: ' ',
                             barsubname: '',
-                            barsubnamelink:'http://www.google.com',
+                            barsubnamelink: 'http://www.google.com',
                             inbar: '',
                             descriptor: '',
                             legendText: '2 copies (homozygous)'},
@@ -169,51 +161,51 @@ function fillTheFields(data,
                             position: 3,
                             barname: '  ',
                             barsubname: '',
-                            barsubnamelink:'http://www.google.com',
+                            barsubnamelink: 'http://www.google.com',
                             inbar: '',
                             descriptor: '',
                             legendText: '1 copy (heterozygous)'},
-                        { value: nonCarrierCase-(homozygCase+heterozygCase),
+                        { value: nonCarrierCase - (homozygCase + heterozygCase),
                             position: 4,
                             barname: '   ',
                             barsubname: '',
-                            barsubnamelink:'http://www.google.com',
+                            barsubnamelink: 'http://www.google.com',
                             inbar: '',
                             descriptor: '',
                             legendText: '0 copies'},
                         {  value: 1,
-                            position:  6,
+                            position: 6,
                             barname: 'Controls',
                             barsubname: '',
-                            barsubnamelink:'http://www.google.com',
+                            barsubnamelink: 'http://www.google.com',
                             inbar: '',
-                            descriptor: '(total '+(nonCarrierControl)+')',
+                            descriptor: '(total ' + (nonCarrierControl) + ')',
                             inset: 1 },
                         {  value: homozygControl,
-                            position:  7,
+                            position: 7,
                             barname: '    ',
                             barsubname: '',
-                            barsubnamelink:'http://www.google.com',
+                            barsubnamelink: 'http://www.google.com',
                             inbar: '',
                             descriptor: ''},
                         { value: heterozygControl,
                             position: 8,
                             barname: '     ',
                             barsubname: '',
-                            barsubnamelink:'http://www.google.com',
+                            barsubnamelink: 'http://www.google.com',
                             inbar: '',
                             descriptor: ''},
-                        { value: nonCarrierControl-(homozygControl+heterozygControl),
+                        { value: nonCarrierControl - (homozygControl + heterozygControl),
                             position: 9,
                             barname: '      ',
                             barsubname: '',
-                            barsubnamelink:'http://www.google.com',
+                            barsubnamelink: 'http://www.google.com',
                             inbar: '',
                             descriptor: ''}
 
                     ],
                     roomForLabels = 20,
-                    maximumPossibleValue = (Math.max(homozygCase, heterozygCase, nonCarrierCase,homozygControl, heterozygControl, nonCarrierControl) * 1.5),
+                    maximumPossibleValue = (Math.max(homozygCase, heterozygCase, nonCarrierCase, homozygControl, heterozygControl, nonCarrierControl) * 1.5),
                     labelSpacer = 10;
 
                 var margin = {top: 140, right: 20, bottom: 0, left: 0},
@@ -225,15 +217,15 @@ function fillTheFields(data,
                     .width(width)
                     .height(height)
                     .margin(margin)
-                    .roomForLabels (roomForLabels)
-                    .maximumPossibleValue (7000)
-                    .labelSpacer (labelSpacer)
+                    .roomForLabels(roomForLabels)
+                    .maximumPossibleValue(7000)
+                    .labelSpacer(labelSpacer)
                     .assignData(data3)
                     .integerValues(1)
                     .logXScale(1)
                     .customBarColoring(1)
                     .customLegend(1)
-                    .dataHanger("#carrierStatusDiseaseRiskChart",data3);
+                    .dataHanger("#carrierStatusDiseaseRiskChart", data3);
                 d3.select("#carrierStatusDiseaseRiskChart").call(barChart.render);
                 return barChart;
             }
@@ -246,18 +238,18 @@ function fillTheFields(data,
             var ethnicityPercentages = [];
             for (var i = 0; i < ethnicAbbreviation.length; i++) {
                 var stringProportion = variant['_13k_T2D_' + ethnicAbbreviation[i] + '_MAF'];
-                ethnicityPercentages.push(parseFloat(stringProportion)*100);
+                ethnicityPercentages.push(parseFloat(stringProportion) * 100);
             }
-            var euroValue  = parseFloat(variant["EXCHP_T2D_MAF"]) ;
+            var euroValue = parseFloat(variant["EXCHP_T2D_MAF"]);
             if (variant["EXCHP_T2D_P_value"]) {
-                ethnicityPercentages.push(parseFloat(euroValue)*100);
+                ethnicityPercentages.push(parseFloat(euroValue) * 100);
             }
             // We have everything we need to build the bar chart.  Store the functional reference in an object
             // that we can call whenever we want
             delayedHowCommonIsPresentation = {
-                barchartPtr:{},
-                launch:function(){
-                    barchartPtr =  privateMethods.fillHowCommonIsUpBarChart(ethnicityPercentages[0],
+                barchartPtr: {},
+                launch: function () {
+                    barchartPtr = privateMethods.fillHowCommonIsUpBarChart(ethnicityPercentages[0],
                         ethnicityPercentages[4],
                         ethnicityPercentages[1],
                         ethnicityPercentages[2],
@@ -266,9 +258,9 @@ function fillTheFields(data,
                     );
                     return barchartPtr;
                 },
-                removeBarchart:function(){
+                removeBarchart: function () {
                     if ((typeof barchartPtr !== 'undefined') &&
-                        (typeof barchartPtr.clear !== 'undefined')){
+                        (typeof barchartPtr.clear !== 'undefined')) {
                         barchartPtr.clear('howCommonIsChart');
                     }
                 }
@@ -276,18 +268,18 @@ function fillTheFields(data,
             }
         },
 
-        showCarrierStatusDiseaseRisk: function (variant,show_gwas,show_exchp,show_exseq,show_sigma) {
-            var heta=1,hetu=1,totalCases=1,
-                homa=1,homu=1,totalControls=1;
+        showCarrierStatusDiseaseRisk: function (variant, show_gwas, show_exchp, show_exseq, show_sigma) {
+            var heta = 1, hetu = 1, totalCases = 1,
+                homa = 1, homu = 1, totalControls = 1;
             try {
-                if (show_exseq){
+                if (show_exseq) {
                     heta = parseFloat(variant["_13k_T2D_HETA"]);
                     hetu = parseFloat(variant["_13k_T2D_HETU"]);
                     homa = parseFloat(variant["_13k_T2D_HOMA"]);
                     homu = parseFloat(variant["_13k_T2D_HOMU"]);
                     totalCases = parseFloat(variant["_13k_T2D_OBSA"]);
                     totalControls = parseFloat(variant["_13k_T2D_OBSU"]);
-                } else if (show_sigma){
+                } else if (show_sigma) {
                     heta = parseFloat(variant["SIGMA_T2D_HETA"]);
                     hetu = parseFloat(variant["SIGMA_T2D_HETU"]);
                     homa = parseFloat(variant["SIGMA_T2D_HOMA"]);
@@ -297,15 +289,13 @@ function fillTheFields(data,
                 }
 
 
-
-
-
-            }catch(e){}
+            } catch (e) {
+            }
 
             delayedCarrierStatusDiseaseRiskPresentation = {
-                barchartPtr:{},
-                launch:function(){
-                    barchartPtr =  privateMethods.fillCarrierStatusDiseaseRisk(homa,
+                barchartPtr: {},
+                launch: function () {
+                    barchartPtr = privateMethods.fillCarrierStatusDiseaseRisk(homa,
                         heta,
                         totalCases,
                         homu,
@@ -313,53 +303,53 @@ function fillTheFields(data,
                         totalControls);
                     return barchartPtr;
                 },
-                removeBarchart:function(){
+                removeBarchart: function () {
                     if ((typeof barchartPtr !== 'undefined') &&
-                        (typeof barchartPtr.clear !== 'undefined')){
+                        (typeof barchartPtr.clear !== 'undefined')) {
                         barchartPtr.clear('carrierStatusDiseaseRiskChart');
                     }
                 }
 
             }
 
-           // return privateMethods.fillCarrierStatusDiseaseRisk(homa,heta,totalCases,homu,hetu,totalControls);
+            // return privateMethods.fillCarrierStatusDiseaseRisk(homa,heta,totalCases,homu,hetu,totalControls);
         },
-        variantGenerateProteinsChooserTitle:  function (variant, title) {
+        variantGenerateProteinsChooserTitle: function (variant, title) {
             var retVal = "";
-            retVal += "<h2><strong>What effect does " +title+ " have on the encoded protein?</strong></h2>";
+            retVal += "<h2><strong>What effect does " + title + " have on the encoded protein?</strong></h2>";
             return retVal;
         },
-        variantGenerateProteinsChooser:  function (variant, title) {
+        variantGenerateProteinsChooser: function (variant, title) {
             var retVal = "";
             if (variant.MOST_DEL_SCORE && variant.MOST_DEL_SCORE < 4) {
                 retVal += "<p>Choose one transcript below to see the predicted effect on the protein:</p>";
                 var allKeys = Object.keys(variant._13k_T2D_TRANSCRIPT_ANNOT);
-                for ( var  i=0 ; i<allKeys.length ; i++ ) {
-                    var checked = (i==0) ? ' checked ' : '';
-                    var annotation =variant._13k_T2D_TRANSCRIPT_ANNOT[allKeys[i]];
+                for (var i = 0; i < allKeys.length; i++) {
+                    var checked = (i == 0) ? ' checked ' : '';
+                    var annotation = variant._13k_T2D_TRANSCRIPT_ANNOT[allKeys[i]];
                     retVal += ("<div class=\"radio-inline\">\n" +
-                        "<label>\n"+
-                        "<input "+checked+" class='transcript-radio' type='radio' name='transcript_check' id='transcript-" +allKeys[i] +
-                        "' value='" +allKeys[i]+ "' onclick='UTILS.variantInfoRadioChange(" +
-                        "\""+annotation['PolyPhen_SCORE']+ "\"," +
-                        "\""+annotation['SIFT_SCORE']+ "\"," +
-                        "\""+annotation['Condel_SCORE']+ "\"," +
-                        "\""+annotation['MOST_DEL_SCORE']+ "\"," +
-                        "\""+annotation['_13k_ANNOT_29_mammals_omega']+ "\"," +
-                        "\""+annotation['Protein_position']+ "\"," +
-                        "\""+annotation['Codons']+ "\"," +
-                        "\""+annotation['Protein_change']+ "\"," +
-                        "\""+annotation['PolyPhen_PRED']+ "\"," +
-                        "\""+annotation['Consequence']+ "\"," +
-                        "\""+annotation['Condel_PRED']+ "\"," +
-                        "\""+annotation['SIFT_PRED']+ "\"" +
-                        ")' >\n"+
-                        allKeys[i]+"\n"+
-                        "</label>\n"+
+                        "<label>\n" +
+                        "<input " + checked + " class='transcript-radio' type='radio' name='transcript_check' id='transcript-" + allKeys[i] +
+                        "' value='" + allKeys[i] + "' onclick='UTILS.variantInfoRadioChange(" +
+                        "\"" + annotation['PolyPhen_SCORE'] + "\"," +
+                        "\"" + annotation['SIFT_SCORE'] + "\"," +
+                        "\"" + annotation['Condel_SCORE'] + "\"," +
+                        "\"" + annotation['MOST_DEL_SCORE'] + "\"," +
+                        "\"" + annotation['_13k_ANNOT_29_mammals_omega'] + "\"," +
+                        "\"" + annotation['Protein_position'] + "\"," +
+                        "\"" + annotation['Codons'] + "\"," +
+                        "\"" + annotation['Protein_change'] + "\"," +
+                        "\"" + annotation['PolyPhen_PRED'] + "\"," +
+                        "\"" + annotation['Consequence'] + "\"," +
+                        "\"" + annotation['Condel_PRED'] + "\"," +
+                        "\"" + annotation['SIFT_PRED'] + "\"" +
+                        ")' >\n" +
+                        allKeys[i] + "\n" +
+                        "</label>\n" +
                         "</div>\n");
                 }
-                if (allKeys.length > 0){
-                    var annotation =variant._13k_T2D_TRANSCRIPT_ANNOT[allKeys[0]];
+                if (allKeys.length > 0) {
+                    var annotation = variant._13k_T2D_TRANSCRIPT_ANNOT[allKeys[0]];
                     UTILS.variantInfoRadioChange(annotation['PolyPhen_SCORE'],
                         annotation['SIFT_SCORE'],
                         annotation['Condel_SCORE'],
@@ -371,7 +361,7 @@ function fillTheFields(data,
                         annotation['PolyPhen_PRED'],
                         annotation['Consequence'],
                         annotation['Condel_PRED'],
-                        annotation['SIFT_PRED'] );
+                        annotation['SIFT_PRED']);
 
                 }
 
@@ -379,67 +369,67 @@ function fillTheFields(data,
             }
             return retVal;
         },
-        fillUpBarChart: function  (peopleWithDiseaseNumeratorString,peopleWithDiseaseDenominatorString,peopleWithoutDiseaseNumeratorString,peopleWithoutDiseaseDenominatorString) {
-        var peopleWithDiseaseDenominator,
-            peopleWithoutDiseaseDenominator,
-            peopleWithDiseaseNumerator,
-            peopleWithoutDiseaseNumerator,
-            calculatedPercentWithDisease,
-            calculatedPercentWithoutDisease,
-            proportionWithDiseaseDescriptiveString,
-            proportionWithoutDiseaseDescriptiveString;
-        if ((typeof peopleWithDiseaseDenominatorString !== 'undefined') &&
-            (typeof peopleWithoutDiseaseDenominatorString !== 'undefined')) {
-            peopleWithDiseaseDenominator = parseInt(peopleWithDiseaseDenominatorString);
-            peopleWithoutDiseaseDenominator = parseInt(peopleWithoutDiseaseDenominatorString);
-            peopleWithDiseaseNumerator = parseInt(peopleWithDiseaseNumeratorString);
-            peopleWithoutDiseaseNumerator = parseInt(peopleWithoutDiseaseNumeratorString);
-            if (( peopleWithDiseaseDenominator !== 0 ) &&
-                ( peopleWithoutDiseaseDenominator !== 0 )) {
-                calculatedPercentWithDisease = (100 * (peopleWithDiseaseNumerator / (2*peopleWithDiseaseDenominator)));
-                calculatedPercentWithoutDisease = (100 * (peopleWithoutDiseaseNumerator / (2*peopleWithoutDiseaseDenominator)));
-                proportionWithDiseaseDescriptiveString = "(" + peopleWithDiseaseNumerator + " out of " + peopleWithDiseaseDenominator + ")";
-                proportionWithoutDiseaseDescriptiveString = "(" + peopleWithoutDiseaseNumerator + " out of " + peopleWithoutDiseaseDenominator + ")";
-                var dataForBarChart = [
-                        { value: calculatedPercentWithDisease,
-                            barname: 'have T2D',
-                            barsubname: '(cases)',
-                            barsubnamelink: 'http://www.google.com',
-                            inbar: '',
-                            descriptor: proportionWithDiseaseDescriptiveString},
-                        {value: calculatedPercentWithoutDisease,
-                            barname: 'do not have T2D',
-                            barsubname: '(controls)',
-                            barsubnamelink: 'http://www.google.com',
-                            inbar: '',
-                            descriptor: proportionWithoutDiseaseDescriptiveString}
-                    ],
-                    roomForLabels = 120,
-                    maximumPossibleValue = (Math.max(calculatedPercentWithDisease, calculatedPercentWithoutDisease) * 1.5),
-                    labelSpacer = 10;
+        fillUpBarChart: function (peopleWithDiseaseNumeratorString, peopleWithDiseaseDenominatorString, peopleWithoutDiseaseNumeratorString, peopleWithoutDiseaseDenominatorString) {
+            var peopleWithDiseaseDenominator,
+                peopleWithoutDiseaseDenominator,
+                peopleWithDiseaseNumerator,
+                peopleWithoutDiseaseNumerator,
+                calculatedPercentWithDisease,
+                calculatedPercentWithoutDisease,
+                proportionWithDiseaseDescriptiveString,
+                proportionWithoutDiseaseDescriptiveString;
+            if ((typeof peopleWithDiseaseDenominatorString !== 'undefined') &&
+                (typeof peopleWithoutDiseaseDenominatorString !== 'undefined')) {
+                peopleWithDiseaseDenominator = parseInt(peopleWithDiseaseDenominatorString);
+                peopleWithoutDiseaseDenominator = parseInt(peopleWithoutDiseaseDenominatorString);
+                peopleWithDiseaseNumerator = parseInt(peopleWithDiseaseNumeratorString);
+                peopleWithoutDiseaseNumerator = parseInt(peopleWithoutDiseaseNumeratorString);
+                if (( peopleWithDiseaseDenominator !== 0 ) &&
+                    ( peopleWithoutDiseaseDenominator !== 0 )) {
+                    calculatedPercentWithDisease = (100 * (peopleWithDiseaseNumerator / (2 * peopleWithDiseaseDenominator)));
+                    calculatedPercentWithoutDisease = (100 * (peopleWithoutDiseaseNumerator / (2 * peopleWithoutDiseaseDenominator)));
+                    proportionWithDiseaseDescriptiveString = "(" + peopleWithDiseaseNumerator + " out of " + peopleWithDiseaseDenominator + ")";
+                    proportionWithoutDiseaseDescriptiveString = "(" + peopleWithoutDiseaseNumerator + " out of " + peopleWithoutDiseaseDenominator + ")";
+                    var dataForBarChart = [
+                            { value: calculatedPercentWithDisease,
+                                barname: 'have T2D',
+                                barsubname: '(cases)',
+                                barsubnamelink: 'http://www.google.com',
+                                inbar: '',
+                                descriptor: proportionWithDiseaseDescriptiveString},
+                            {value: calculatedPercentWithoutDisease,
+                                barname: 'do not have T2D',
+                                barsubname: '(controls)',
+                                barsubnamelink: 'http://www.google.com',
+                                inbar: '',
+                                descriptor: proportionWithoutDiseaseDescriptiveString}
+                        ],
+                        roomForLabels = 120,
+                        maximumPossibleValue = (Math.max(calculatedPercentWithDisease, calculatedPercentWithoutDisease) * 1.5),
+                        labelSpacer = 10;
 
-                var margin = {top: 0, right: 20, bottom: 0, left: 70},
-                    width = 800 - margin.left - margin.right,
-                    height = 150 - margin.top - margin.bottom;
+                    var margin = {top: 0, right: 20, bottom: 0, left: 70},
+                        width = 800 - margin.left - margin.right,
+                        height = 150 - margin.top - margin.bottom;
 
 
-                var barChart = baget.barChart('diseaseRiskChart')
-                    .selectionIdentifier("#diseaseRiskChart")
-                    .width(width)
-                    .height(height)
-                    .margin(margin)
-                    .roomForLabels(roomForLabels)
-                    .maximumPossibleValue(maximumPossibleValue)
-                    .labelSpacer(labelSpacer)
-                    .assignData(dataForBarChart)
-                    .dataHanger("#diseaseRiskChart",dataForBarChart);
-                d3.select("#diseaseRiskChart").call(barChart.render);
-                return barChart;
+                    var barChart = baget.barChart('diseaseRiskChart')
+                        .selectionIdentifier("#diseaseRiskChart")
+                        .width(width)
+                        .height(height)
+                        .margin(margin)
+                        .roomForLabels(roomForLabels)
+                        .maximumPossibleValue(maximumPossibleValue)
+                        .labelSpacer(labelSpacer)
+                        .assignData(dataForBarChart)
+                        .dataHanger("#diseaseRiskChart", dataForBarChart);
+                    d3.select("#diseaseRiskChart").call(barChart.render);
+                    return barChart;
+                }
             }
-        }
         },
 
-        fillDiseaseRiskBurdenTest: function  (variant,show_gwas,show_exchp,show_exseq,show_sigma,rootVariantUrl) {
+        fillDiseaseRiskBurdenTest: function (variant, show_gwas, show_exchp, show_exseq, show_sigma, rootVariantUrl) {
             var hetu = 0,
                 heta = 0,
                 homa = 0,
@@ -447,25 +437,25 @@ function fillTheFields(data,
                 totalUnaffected = 0,
                 totalAffected = 0,
                 pValue = 0;
-            if (show_exseq){
+            if (show_exseq) {
                 heta = parseFloat(variant["_13k_T2D_HETA"]);
                 hetu = parseFloat(variant["_13k_T2D_HETU"]);
                 homa = parseFloat(variant["_13k_T2D_HOMA"]);
                 homu = parseFloat(variant["_13k_T2D_HOMU"]);
                 totalUnaffected = parseFloat(variant["_13k_T2D_OBSU"]);
                 totalAffected = parseFloat(variant["_13k_T2D_OBSA"]);
-                pValue  = parseFloat(variant["_13k_T2D_P_EMMAX_FE_IV"]);
-            } else if (show_sigma){
+                pValue = parseFloat(variant["_13k_T2D_P_EMMAX_FE_IV"]);
+            } else if (show_sigma) {
                 heta = parseFloat(variant["SIGMA_T2D_HETA"]);
                 hetu = parseFloat(variant["SIGMA_T2D_HETU"]);
                 homa = parseFloat(variant["SIGMA_T2D_HOMA"]);
                 homu = parseFloat(variant["SIGMA_T2D_HOMU"]);
                 totalUnaffected = parseFloat(variant["SIGMA_T2D_OBSU"]);
                 totalAffected = parseFloat(variant["SIGMA_T2D_OBSA"]);
-                pValue  = parseFloat(variant["SIGMA_T2D_P"]);
+                pValue = parseFloat(variant["SIGMA_T2D_P"]);
             }
 
-           // $('#bhtLossOfFunctionVariants').append(numberOfVariants);
+            // $('#bhtLossOfFunctionVariants').append(numberOfVariants);
 
             // variables for bar chart
             var numeratorUnaffected,
@@ -475,8 +465,8 @@ function fillTheFields(data,
             if ((totalUnaffected) && (totalAffected)) {
                 numeratorUnaffected = hetu + (2 * homu);
                 numeratorAffected = heta + (2 * homa);
-                denominatorUnaffected =  totalUnaffected;
-                denominatorAffected =  totalAffected;
+                denominatorUnaffected = totalUnaffected;
+                denominatorAffected = totalAffected;
                 delayedBurdenTestPresentation = {functionToRun: privateMethods.fillUpBarChart,
                     barchartPtr: {},
                     launch: function () {
@@ -491,15 +481,17 @@ function fillTheFields(data,
                     }
                 };
             }
-            if (pValue  > 0)  {
+            if (pValue > 0) {
                 var degreeOfSignificance = '';
-//                if (pValue < 5e-8)  {
-//                    degreeOfSignificance = 'significant difference';
-//                } else if (pValue < 5e-2)  {
-//                    degreeOfSignificance = 'nominal difference';
-//                } ;
-                $('#describePValueInDiseaseRisk').append("<p class='slimDescription'>"+degreeOfSignificance+"</p>\n"+
-                    "<p  id='bhtMetaBurdenForDiabetes' class='slimDescription'>p="+(pValue.toPrecision(3)) +"</p>");
+                /*
+                 if (pValue < 5e-8)  {
+                 degreeOfSignificance = 'significant difference';
+                 } else if (pValue < 5e-2)  {
+                 degreeOfSignificance = 'nominal difference';
+                 } ;
+                 */
+                $('#describePValueInDiseaseRisk').append("<p class='slimDescription'>" + degreeOfSignificance + "</p>\n" +
+                    "<p  id='bhtMetaBurdenForDiabetes' class='slimDescription'>p=" + (pValue.toPrecision(3)) + "</p>");
             }
 
         }
@@ -510,162 +502,195 @@ function fillTheFields(data,
     /***
      * Now come all the methods we call when the page loads
      */
-    $('#variantTitleInAssociationStatistics').append(variantTitle);
-    $('#variantCharacterization').append(UTILS.getSimpleVariantsEffect(variant.MOST_DEL_SCORE));
-    $('#describingVariantAssociation').append(UTILS.variantInfoHeaderSentence(variant));
-    var pVal = UTILS.get_lowest_p_value(variant);
-    $('#variantPValue').append((parseFloat(pVal[0])).toPrecision(4));
-    $('#variantInfoGeneratingDataSet').append(pVal[1]);
-    $('#variantTitle').append(variantTitle);
-    $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
-    $('#populationsHowCommonIs').append(variantTitle);
-    $('#exploreSurroundingSequenceTitle').append(variantTitle);
+    function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot, restServerRoot, showGwas, showExchp, showExseq, showSigma) {
+        variantObj = data['variant'],
+            variant = variantObj['variant-info'],
+            variantTitle = UTILS.get_variant_title(variant, variantToSearch);
+
+        $('#variantTitleInAssociationStatistics').append(variantTitle);
+        $('#variantCharacterization').append(UTILS.getSimpleVariantsEffect(variant.MOST_DEL_SCORE));
+        $('#describingVariantAssociation').append(UTILS.variantInfoHeaderSentence(variant));
+        var pVal = UTILS.get_lowest_p_value(variant);
+        $('#variantPValue').append((parseFloat(pVal[0])).toPrecision(4));
+        $('#variantInfoGeneratingDataSet').append(pVal[1]);
+        $('#variantTitle').append(variantTitle);
+        $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
+        $('#populationsHowCommonIs').append(variantTitle);
+        $('#exploreSurroundingSequenceTitle').append(variantTitle);
 
 
-    /***
-     * store everything we need to launch IGV
-     */
-    var regionforIgv = privateMethods.calculateSearchRegion(variant);
-    delayedIgvLaunch = {
-        rememberRegion: regionforIgv,
-        launch:function(){
-            if (showSigma){
-                igvLauncher.launch("#myVariantDiv", regionforIgv,restServerRoot,[1,0,0,1]);
-            } else {
-                igvLauncher.launch("#myVariantDiv", regionforIgv,restServerRoot,[1,1,1,0]);
+        /***
+         * store everything we need to launch IGV
+         */
+        var regionforIgv = privateMethods.calculateSearchRegion(variant);
+        delayedIgvLaunch = {
+            rememberRegion: regionforIgv,
+            launch: function () {
+                if (showSigma) {
+                    igvLauncher.launch("#myVariantDiv", regionforIgv, restServerRoot, [1, 0, 0, 1]);
+                } else {
+                    igvLauncher.launch("#myVariantDiv", regionforIgv, restServerRoot, [1, 1, 1, 0]);
+                }
+            }
+
+        }
+
+
+        var weHaveVariantsAndAssociations;
+        if (showSigma) {
+            weHaveVariantsAndAssociations = ((variant["IN_GWAS"]) || (variant["GWAS_T2D_PVALUE"]) || (variant["GWAS_T2D_OR"]) ||
+                (variant["SIGMA_T2D_P"]) || (variant["SIGMA_T2D_OR"])  );
+        } else {
+            weHaveVariantsAndAssociations = ((variant["IN_GWAS"]) || (variant["GWAS_T2D_PVALUE"]) || (variant["GWAS_T2D_OR"]) ||
+                (variant["EXCHP_T2D_P_value"]) || (variant["EXCHP_T2D_BETA"]) ||
+                (variant["_13k_T2D_P_EMMAX_FE_IV"]) || (variant["_13k_T2D_OR_WALD_DOS_FE_IV"]) );
+        }
+
+        UTILS.verifyThatDisplayIsWarranted(weHaveVariantsAndAssociations, $('#VariantsAndAssociationsExist'), $('#VariantsAndAssociationsNoExist'));
+        if (weHaveVariantsAndAssociations) {
+            if (showGwas) {
+                $('#gwasAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
+                    cariantRec,
+                    cariantRec.IN_GWAS,
+                    cariantRec.GWAS_T2D_PVALUE,
+                    cariantRec.GWAS_T2D_OR,
+                    5e-8,
+                    5e-4,
+                    5e-2,
+                    variantTitle,
+                    "DIAGRAM GWAS",
+                    false));
+            }
+            if (showSigma) {
+                $('#gwasSigmaAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
+                    cariantRec,
+                    cariantRec.IN_GWAS,
+                    cariantRec.GWAS_T2D_PVALUE,
+                    cariantRec.GWAS_T2D_OR,
+                    5e-8,
+                    5e-4,
+                    5e-2,
+                    variantTitle,
+                    "DIAGRAM GWAS",
+                    false));
+            }
+            if (showExchp) {
+                $('#exomeChipAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
+                    cariantRec,
+                    cariantRec.EXCHP_T2D_P_value,
+                    cariantRec.EXCHP_T2D_P_value,
+                    cariantRec.EXCHP_T2D_BETA,
+                    5e-8,
+                    5e-4,
+                    5e-2,
+                    variantTitle,
+                    "exome chip",
+                    false,
+                    true));
+            }
+            if (showExseq) {
+                $('#exomeSequenceAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
+                    cariantRec,
+                    cariantRec._13k_T2D_P_EMMAX_FE_IV,
+                    cariantRec._13k_T2D_P_EMMAX_FE_IV,
+                    cariantRec._13k_T2D_OR_WALD_DOS_FE_IV,
+                    5e-8,
+                    5e-4,
+                    5e-2,
+                    variantTitle,
+                    "exome sequence",
+                    false));
+            }
+            if (showSigma) {
+                $('#sigmaAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
+                    cariantRec,
+                    cariantRec.SIGMA_T2D_P,
+                    cariantRec.SIGMA_T2D_P,
+                    cariantRec.SIGMA_T2D_OR,
+                    5e-8,
+                    5e-4,
+                    5e-2,
+                    variantTitle,
+                    "Sigma",
+                    false));
             }
         }
 
-    }
 
+        $('#variantInfoAssociationStatisticsLinkToTraitTable').append(UTILS.fillAssociationStatisticsLinkToTraitTable(variant,
+            cariantRec,
+            cariantRec.IN_GWAS,
+            cariantRec.DBSNP_ID,
+            cariantRec.ID,
+            traitsStudiedUrlRoot));
 
-    var weHaveVariantsAndAssociations;
-    if (showSigma){
-        weHaveVariantsAndAssociations = ((variant["IN_GWAS"]) || (variant["GWAS_T2D_PVALUE"]) || (variant["GWAS_T2D_OR"]) ||
-            (variant["SIGMA_T2D_P"]) || (variant["SIGMA_T2D_OR"])  );
-    } else {
-        weHaveVariantsAndAssociations = ((variant["IN_GWAS"]) || (variant["GWAS_T2D_PVALUE"]) || (variant["GWAS_T2D_OR"]) ||
-            (variant["EXCHP_T2D_P_value"]) || (variant["EXCHP_T2D_BETA"]) ||
-            (variant["_13k_T2D_P_EMMAX_FE_IV"]) || (variant["_13k_T2D_OR_WALD_DOS_FE_IV"]) );
-    }
-
-    UTILS.verifyThatDisplayIsWarranted(weHaveVariantsAndAssociations, $('#VariantsAndAssociationsExist'), $('#VariantsAndAssociationsNoExist'));
-    if (weHaveVariantsAndAssociations){
-        if (showGwas){
-            $('#gwasAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
-                cariantRec,
-                cariantRec.IN_GWAS,
-                cariantRec.GWAS_T2D_PVALUE,
-                cariantRec.GWAS_T2D_OR,
-                5e-8,
-                5e-4,
-                5e-2,
-                variantTitle,
-                "DIAGRAM GWAS",
-                false));
+        // disease burden
+        var weHaveEnoughDataForRiskBurdenTest;
+        if (showSigma) {
+            weHaveEnoughDataForRiskBurdenTest = ((variant["SIGMA_T2D_HETA"]) && (variant["SIGMA_T2D_HETU"]) && (variant["SIGMA_T2D_HOMA"]) &&
+                (variant["SIGMA_T2D_HOMU"]) && (variant["SIGMA_T2D_OBSU"]) && (variant["SIGMA_T2D_OBSA"]));
+        } else {
+            weHaveEnoughDataForRiskBurdenTest = ((variant["_13k_T2D_HETA"]) && (variant["_13k_T2D_HETU"]) && (variant["_13k_T2D_HOMA"]) &&
+                (variant["_13k_T2D_HOMU"]) && (variant["_13k_T2D_OBSU"]) && (variant["_13k_T2D_OBSA"]));
         }
-        if ( showSigma){
-            $('#gwasSigmaAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
-                cariantRec,
-                cariantRec.IN_GWAS,
-                cariantRec.GWAS_T2D_PVALUE,
-                cariantRec.GWAS_T2D_OR,
-                5e-8,
-                5e-4,
-                5e-2,
-                variantTitle,
-                "DIAGRAM GWAS",
-                false));
+        UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataForRiskBurdenTest, $('#diseaseRiskExists'), $('#diseaseRiskNoExists'));
+        if (weHaveEnoughDataForRiskBurdenTest) {
+            privateMethods.fillDiseaseRiskBurdenTest(variant, showGwas, showExchp, showExseq, showSigma);
         }
-        if (showExchp) {
-            $('#exomeChipAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
-                cariantRec,
-                cariantRec.EXCHP_T2D_P_value,
-                cariantRec.EXCHP_T2D_P_value,
-                cariantRec.EXCHP_T2D_BETA,
-                5e-8,
-                5e-4,
-                5e-2,
-                variantTitle,
-                "exome chip",
-                false,
-                true));
+        $('#sigmaVariantCharacterization').append(UTILS.sigmaVariantCharacterization(variant, variantTitle));
+
+        // how common is this allele across different ethnicities
+        var weHaveEnoughDataToDescribeMinorAlleleFrequencies = ((variant["EXCHP_T2D_MAF"]) && (variant["_13k_T2D_AA_MAF"]) && (variant["_13k_T2D_AA_MAF"]));
+        UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToDescribeMinorAlleleFrequencies, $('#howCommonIsExists'), $('#howCommonIsNoExists'));
+        if (weHaveEnoughDataToDescribeMinorAlleleFrequencies) {
+            privateMethods.showEthnicityPercentageWithBarChart(variant);
         }
-        if (showExseq) {
-            $('#exomeSequenceAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
-                cariantRec,
-                cariantRec._13k_T2D_P_EMMAX_FE_IV,
-                cariantRec._13k_T2D_P_EMMAX_FE_IV,
-                cariantRec._13k_T2D_OR_WALD_DOS_FE_IV,
-                5e-8,
-                5e-4,
-                5e-2,
-                variantTitle,
-                "exome sequence",
-                false));
+
+        // case control data set characterization
+        var weHaveEnoughDataToCharacterizeCaseControls;
+        if (showSigma) {
+            weHaveEnoughDataToCharacterizeCaseControls = ((variant["SIGMA_T2D_HETA"]) && (variant["SIGMA_T2D_HETU"]) && (variant["SIGMA_T2D_HOMA"]) &&
+                (variant["SIGMA_T2D_HOMU"]) && (variant["SIGMA_T2D_OBSU"]) && (variant["SIGMA_T2D_OBSA"]));
+        } else {
+            weHaveEnoughDataToCharacterizeCaseControls = ((variant["_13k_T2D_HETA"]) && (variant["_13k_T2D_HETU"]) && (variant["_13k_T2D_HOMA"]) &&
+                (variant["_13k_T2D_HOMU"]) && (variant["_13k_T2D_OBSU"]) && (variant["_13k_T2D_OBSA"]));
         }
-        if (showSigma){
-            $('#sigmaAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
-                cariantRec,
-                cariantRec.SIGMA_T2D_P,
-                cariantRec.SIGMA_T2D_P,
-                cariantRec.SIGMA_T2D_OR,
-                5e-8,
-                5e-4,
-                5e-2,
-                variantTitle,
-                "Sigma",
-                false));
+        UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToCharacterizeCaseControls, $('#carrierStatusExist'), $('#carrierStatusNoExist'));
+        if (weHaveEnoughDataToCharacterizeCaseControls) {
+            privateMethods.showCarrierStatusDiseaseRisk(variant, showGwas, showExchp, showExseq, showSigma);
         }
+
+        $('#effectOfVariantOnProteinTitle').append(privateMethods.variantGenerateProteinsChooserTitle(variant, variantTitle));
+        $('#effectOfVariantOnProtein').append(privateMethods.variantGenerateProteinsChooser(variant, variantTitle));
+        UTILS.verifyThatDisplayIsWarranted(variant["_13k_T2D_TRANSCRIPT_ANNOT"], $('#variationInfoEncodedProtein'), $('#puntOnNoncodingVariant'));
+
     }
 
 
+    var retrieveDelayedHowCommonIsPresentation = function () {
+            return delayedHowCommonIsPresentation;
+        },
+        retrieveDelayedCarrierStatusDiseaseRiskPresentation = function () {
+            return delayedCarrierStatusDiseaseRiskPresentation;
+        },
+        retrieveDelayedBurdenTestPresentation = function () {
+            return delayedBurdenTestPresentation;
+        },
+        retrieveDelayedIgvLaunch = function () {
+            return delayedIgvLaunch;
+        };
 
-    $('#variantInfoAssociationStatisticsLinkToTraitTable').append(UTILS.fillAssociationStatisticsLinkToTraitTable(variant,
-        cariantRec,
-        cariantRec.IN_GWAS,
-        cariantRec.DBSNP_ID,
-        cariantRec.ID,
-        traitsStudiedUrlRoot));
+    return {
+        // private routines MADE PUBLIC FOR UNIT TESTING ONLY (find a way to do this in test mode only)
 
-    // disease burden
-    var weHaveEnoughDataForRiskBurdenTest;
-    if (showSigma){
-        weHaveEnoughDataForRiskBurdenTest = ((variant["SIGMA_T2D_HETA"]) && (variant["SIGMA_T2D_HETU"]) && (variant["SIGMA_T2D_HOMA"]) &&
-            (variant["SIGMA_T2D_HOMU"]) && (variant["SIGMA_T2D_OBSU"]) && (variant["SIGMA_T2D_OBSA"]));
-    }else {
-        weHaveEnoughDataForRiskBurdenTest = ((variant["_13k_T2D_HETA"]) && (variant["_13k_T2D_HETU"]) && (variant["_13k_T2D_HOMA"]) &&
-            (variant["_13k_T2D_HOMU"]) && (variant["_13k_T2D_OBSU"]) && (variant["_13k_T2D_OBSA"]));
-    }
-    UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataForRiskBurdenTest, $('#diseaseRiskExists'), $('#diseaseRiskNoExists'));
-    if (weHaveEnoughDataForRiskBurdenTest){
-        privateMethods.fillDiseaseRiskBurdenTest(variant,showGwas,showExchp,showExseq,showSigma);
-    }
-    $('#sigmaVariantCharacterization').append(UTILS.sigmaVariantCharacterization(variant, variantTitle));
-
-    // how common is this allele across different ethnicities
-    var weHaveEnoughDataToDescribeMinorAlleleFrequencies = ((variant["EXCHP_T2D_MAF"]) && (variant["_13k_T2D_AA_MAF"]) && (variant["_13k_T2D_AA_MAF"]));
-    UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToDescribeMinorAlleleFrequencies, $('#howCommonIsExists'), $('#howCommonIsNoExists'));
-    if (weHaveEnoughDataToDescribeMinorAlleleFrequencies){
-        privateMethods.showEthnicityPercentageWithBarChart(variant);
+        // public routines
+        fillTheFields: fillTheFields,
+        retrieveDelayedHowCommonIsPresentation: retrieveDelayedHowCommonIsPresentation,
+        retrieveDelayedCarrierStatusDiseaseRiskPresentation: retrieveDelayedCarrierStatusDiseaseRiskPresentation,
+        retrieveDelayedBurdenTestPresentation: retrieveDelayedBurdenTestPresentation,
+        retrieveDelayedIgvLaunch: retrieveDelayedIgvLaunch
     }
 
-    // case control data set characterization
-    var weHaveEnoughDataToCharacterizeCaseControls;
-    if (showSigma){
-        weHaveEnoughDataToCharacterizeCaseControls  = ((variant["SIGMA_T2D_HETA"]) && (variant["SIGMA_T2D_HETU"]) && (variant["SIGMA_T2D_HOMA"]) &&
-            (variant["SIGMA_T2D_HOMU"]) && (variant["SIGMA_T2D_OBSU"]) && (variant["SIGMA_T2D_OBSA"]));
-    }else {
-        weHaveEnoughDataToCharacterizeCaseControls  = ((variant["_13k_T2D_HETA"]) && (variant["_13k_T2D_HETU"]) && (variant["_13k_T2D_HOMA"]) &&
-            (variant["_13k_T2D_HOMU"]) && (variant["_13k_T2D_OBSU"]) && (variant["_13k_T2D_OBSA"]));
-    }
-    UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToCharacterizeCaseControls, $('#carrierStatusExist'), $('#carrierStatusNoExist'));
-    if (weHaveEnoughDataToCharacterizeCaseControls){
-        privateMethods.showCarrierStatusDiseaseRisk(variant,showGwas,showExchp,showExseq,showSigma);
-    }
 
-    $('#effectOfVariantOnProteinTitle').append(privateMethods.variantGenerateProteinsChooserTitle(variant, variantTitle));
-    $('#effectOfVariantOnProtein').append(privateMethods.variantGenerateProteinsChooser(variant, variantTitle));
-    UTILS.verifyThatDisplayIsWarranted(variant["_13k_T2D_TRANSCRIPT_ANNOT"], $('#variationInfoEncodedProtein'), $('#puntOnNoncodingVariant'));
+}());
 
-}
