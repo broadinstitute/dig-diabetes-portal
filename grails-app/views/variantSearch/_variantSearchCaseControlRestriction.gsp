@@ -1,4 +1,4 @@
-<h4>Show variants that:</h4>
+<h4><g:message code="variantSearch.caseVsControlRestrictions.title" default="Show variants that:" /></h4>
 
 <div class="row clearfix">
     <div class="col-md-6">
@@ -6,13 +6,13 @@
             <div class="checkbox">
                 <label>
                     <input id="id_onlyseen_t2dcases" type="checkbox" name="onlyseen" value="t2dcases" />
-                    are seen only in cases
+                    <g:message code="variantSearch.caseVsControlRestrictions.onlyInCases" default="are seen only in cases" />
                 </label>
             </div>
             <div class="checkbox">
                 <label>
                     <input id="id_onlyseen_t2dcontrols" type="checkbox" name="onlyseen" value="t2dcontrols" />
-                    are seen only in controls
+                    <g:message code="variantSearch.caseVsControlRestrictions.onlyInControls" default="are seen only in controls" />
                 </label>
             </div>
         </div>

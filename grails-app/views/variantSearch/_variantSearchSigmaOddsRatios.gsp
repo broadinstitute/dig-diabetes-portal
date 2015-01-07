@@ -1,6 +1,6 @@
 
 
-<h4>Restrict to odds ratio</h4>
+<h4><g:message code="variantSearch.oddsRatios.title" default="Restrict to odds ratio" /></h4>
 <div class="row clearfix">
     <div class="col-md-6">
         <div id="or-form">
