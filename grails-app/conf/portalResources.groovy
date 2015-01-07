@@ -41,6 +41,9 @@ modules = {
         resource url: 'css/lib/bootstrap.min.css'
 
     }
+    tableViewer {
+        resource url: 'js/lib/dport/tableViewer.js'
+    }
 
     core {
         dependsOn "jquery"

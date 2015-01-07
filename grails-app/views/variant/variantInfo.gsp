@@ -94,7 +94,7 @@
                 subtitle2:'<g:message code="variant.impactOnProtein.subtitle2" default="have on the encoded protein" />'
             };
             if ( typeof data !== 'undefined')  {
-                variantInfo.fillTheFields(data,
+                mpgSoftware.variantInfo.fillTheFields(data,
                         "<%=variantToSearch%>",
                         "<g:createLink controller='trait' action='traitInfo' />",
                         "${restServer.currentRestServer()}",
@@ -278,7 +278,7 @@
 <script>
     $('#accordionVariant').on('shown.bs.collapse', function (e) {
         if (e.target.id === "collapseIgv") {
-            variantInfo.retrieveDelayedIgvLaunch().launch();
+            mpgSoftware.variantInfo.retrieveDelayedIgvLaunch().launch();
         }
 
     });
@@ -290,49 +290,49 @@
     });
     $('#accordionVariant').on('show.bs.collapse', function (e) {
         if (e.target.id === "collapseDiseaseRisk") {
-            if ((typeof variantInfo.retrieveDelayedBurdenTestPresentation() !== 'undefined') &&
-                    (typeof variantInfo.retrieveDelayedBurdenTestPresentation().launch !== 'undefined')) {
-                variantInfo.retrieveDelayedBurdenTestPresentation().launch();
+            if ((typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation() !== 'undefined') &&
+                    (typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch !== 'undefined')) {
+                mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch();
             }
         }
     });
     $('#accordionVariant').on('hide.bs.collapse', function (e) {
         if (e.target.id === "collapseDiseaseRisk") {
-            if ((typeof variantInfo.retrieveDelayedBurdenTestPresentation() !== 'undefined') &&
-                    (typeof variantInfo.retrieveDelayedBurdenTestPresentation().launch !== 'undefined')) {
-                variantInfo.retrieveDelayedBurdenTestPresentation().removeBarchart();
+            if ((typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation() !== 'undefined') &&
+                    (typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch !== 'undefined')) {
+                mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().removeBarchart();
             }
         }
     });
     $('#accordionVariant').on('show.bs.collapse', function (e) {
         if (e.target.id === "collapseHowCommonIsVariant") {
-            if ((typeof variantInfo.retrieveDelayedHowCommonIsPresentation()  !== 'undefined') &&
-                    (typeof variantInfo.retrieveDelayedHowCommonIsPresentation().launch !== 'undefined')) {
-                variantInfo.retrieveDelayedHowCommonIsPresentation().launch();
+            if ((typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation()  !== 'undefined') &&
+                    (typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().launch !== 'undefined')) {
+                mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().launch();
             }
         }
     });
     $('#accordionVariant').on('hide.bs.collapse', function (e) {
         if (e.target.id === "collapseHowCommonIsVariant") {
-            if ((typeof variantInfo.retrieveDelayedHowCommonIsPresentation()  !== 'undefined') &&
-                    (typeof variantInfo.retrieveDelayedHowCommonIsPresentation().launch !== 'undefined')) {
-                variantInfo.retrieveDelayedHowCommonIsPresentation().removeBarchart();
+            if ((typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation()  !== 'undefined') &&
+                    (typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().launch !== 'undefined')) {
+                mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().removeBarchart();
             }
         }
     });
     $('#accordionVariant').on('show.bs.collapse', function (e) {
         if (e.target.id === "collapseCarrierStatusImpact") {
-            if ((typeof variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation()  !== 'undefined') &&
-                    (typeof variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch !== 'undefined')) {
-                variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch();
+            if ((typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation()  !== 'undefined') &&
+                    (typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch !== 'undefined')) {
+                mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch();
             }
         }
     });
     $('#accordionVariant').on('hide.bs.collapse', function (e) {
         if (e.target.id === "collapseCarrierStatusImpact") {
-            if ((typeof variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation()  !== 'undefined') &&
-                    (typeof variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch !== 'undefined')) {
-                variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().removeBarchart();
+            if ((typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation()  !== 'undefined') &&
+                    (typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch !== 'undefined')) {
+                mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().removeBarchart();
             }
         }
     });
