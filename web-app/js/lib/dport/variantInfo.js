@@ -65,51 +65,57 @@ variantInfo = (function () {
                 return returnValue;
             },
 
-            fillHowCommonIsUpBarChart = function (africanAmericanFrequency, hispanicFrequency, eastAsianFrequency, southAsianFrequency, europeanSequenceFrequency, europeanChipFrequency) {
+            fillHowCommonIsUpBarChart = function (africanAmericanFrequency,
+                                                  hispanicFrequency,
+                                                  eastAsianFrequency,
+                                                  southAsianFrequency,
+                                                  europeanSequenceFrequency,
+                                                  europeanChipFrequency,
+                                                  alleleFrequencyStrings) {
                 if ((typeof africanAmericanFrequency !== 'undefined')) {
                     var dataForBarChart = [
                             { value: africanAmericanFrequency,
                                 position: 2,
-                                barname: 'African-American',
+                                barname: alleleFrequencyStrings.africanAmerican,
                                 barsubname: '',
                                 barsubnamelink: 'http://www.google.com',
                                 inbar: '',
                                 descriptor: ''},
                             {value: hispanicFrequency,
                                 position: 4,
-                                barname: 'Hispanic',
+                                barname: alleleFrequencyStrings.hispanic,
                                 barsubname: '',
                                 barsubnamelink: 'http://www.google.com',
                                 inbar: '',
                                 descriptor: ''},
                             { value: eastAsianFrequency,
                                 position: 6,
-                                barname: 'East Asian',
+                                barname: alleleFrequencyStrings.eastAsian,
                                 barsubname: '',
                                 barsubnamelink: 'http://www.google.com',
                                 inbar: '',
                                 descriptor: ''},
                             {  value: southAsianFrequency,
                                 position: 8,
-                                barname: 'South Asian',
+                                barname: alleleFrequencyStrings.southAsian,
                                 barsubname: '',
                                 barsubnamelink: 'http://www.google.com',
                                 inbar: '',
                                 descriptor: ''},
                             { value: europeanSequenceFrequency,
                                 position: 10,
-                                barname: 'European',
+                                barname: alleleFrequencyStrings.european,
                                 barsubname: '',
                                 barsubnamelink: 'http://www.google.com',
                                 inbar: '',
-                                descriptor: '(exome sequence)'},
+                                descriptor: alleleFrequencyStrings.exomeSequence},
                             { value: europeanChipFrequency,
                                 position: 11,
                                 barname: ' ',
                                 barsubname: '',
                                 barsubnamelink: 'http://www.google.com',
                                 inbar: '',
-                                descriptor: '(exome chip)'}
+                                descriptor: alleleFrequencyStrings.exomeChip}
                         ],
                         roomForLabels = 120,
                         maximumPossibleValue = (Math.max(africanAmericanFrequency, hispanicFrequency, eastAsianFrequency, southAsianFrequency, europeanSequenceFrequency, europeanChipFrequency) * 1.5),
@@ -132,16 +138,22 @@ variantInfo = (function () {
                 }
 
             },
-            fillCarrierStatusDiseaseRisk = function (homozygCase, heterozygCase, nonCarrierCase, homozygControl, heterozygControl, nonCarrierControl) {
+            fillCarrierStatusDiseaseRisk = function (homozygCase,
+                                                     heterozygCase,
+                                                     nonCarrierCase,
+                                                     homozygControl,
+                                                     heterozygControl,
+                                                     nonCarrierControl,
+                                                     carrierStatusImpact) {
                 if ((typeof homozygCase !== 'undefined')) {
                     var data3 = [
                             { value: 1,
                                 position: 1,
-                                barname: 'Cases',
+                                barname: carrierStatusImpact.casesTitle,
                                 barsubname: '',
                                 barsubnamelink: 'http://www.google.com',
                                 inbar: '',
-                                descriptor: '(total ' + (+nonCarrierCase) + ')',
+                                descriptor: '('+carrierStatusImpact.designationTotal +' ' + (+nonCarrierCase) + ')',
                                 inset: 1 },
                             { value: homozygCase,
                                 position: 2,
@@ -150,7 +162,7 @@ variantInfo = (function () {
                                 barsubnamelink: 'http://www.google.com',
                                 inbar: '',
                                 descriptor: '',
-                                legendText: '2 copies (homozygous)'},
+                                legendText: carrierStatusImpact.legendTextHomozygous},
                             {value: heterozygCase,
                                 position: 3,
                                 barname: '  ',
@@ -158,7 +170,7 @@ variantInfo = (function () {
                                 barsubnamelink: 'http://www.google.com',
                                 inbar: '',
                                 descriptor: '',
-                                legendText: '1 copy (heterozygous)'},
+                                legendText: carrierStatusImpact.legendTextHeterozygous},
                             { value: nonCarrierCase - (homozygCase + heterozygCase),
                                 position: 4,
                                 barname: '   ',
@@ -166,14 +178,14 @@ variantInfo = (function () {
                                 barsubnamelink: 'http://www.google.com',
                                 inbar: '',
                                 descriptor: '',
-                                legendText: '0 copies'},
+                                legendText: carrierStatusImpact.legendTextNoncarrier},
                             {  value: 1,
                                 position: 6,
-                                barname: 'Controls',
+                                barname: carrierStatusImpact.controlsTitle,
                                 barsubname: '',
                                 barsubnamelink: 'http://www.google.com',
                                 inbar: '',
-                                descriptor: '(total ' + (nonCarrierControl) + ')',
+                                descriptor: '('+carrierStatusImpact.designationTotal +' ' + (nonCarrierControl) + ')',
                                 inset: 1 },
                             {  value: homozygControl,
                                 position: 7,
@@ -226,7 +238,7 @@ variantInfo = (function () {
 
             },
 
-            showEthnicityPercentageWithBarChart = function (variant) {
+            showEthnicityPercentageWithBarChart = function (variant,alleleFrequencyStrings) {
                 var retVal = "";
                 var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
                 var ethnicityPercentages = [];
@@ -248,7 +260,8 @@ variantInfo = (function () {
                             ethnicityPercentages[1],
                             ethnicityPercentages[2],
                             ethnicityPercentages[3],
-                            ethnicityPercentages[5]
+                            ethnicityPercentages[5],
+                            alleleFrequencyStrings
                         );
                         return barchartPtr;
                     },
@@ -262,7 +275,7 @@ variantInfo = (function () {
                 }
             },
 
-            showCarrierStatusDiseaseRisk = function (variant, show_gwas, show_exchp, show_exseq, show_sigma) {
+            showCarrierStatusDiseaseRisk = function (variant, show_gwas, show_exchp, show_exseq, show_sigma,carrierStatusImpact) {
                 var heta = 1, hetu = 1, totalCases = 1,
                     homa = 1, homu = 1, totalControls = 1;
                 try {
@@ -294,7 +307,8 @@ variantInfo = (function () {
                             totalCases,
                             homu,
                             hetu,
-                            totalControls);
+                            totalControls,
+                            carrierStatusImpact);
                         return barchartPtr;
                     },
                     removeBarchart: function () {
@@ -307,15 +321,15 @@ variantInfo = (function () {
                 }
 
             },
-            variantGenerateProteinsChooserTitle = function (variant, title) {
+            variantGenerateProteinsChooserTitle = function (variant, title,impactOnProtein) {
                 var retVal = "";
-                retVal += "<h2><strong>What effect does " + title + " have on the encoded protein?</strong></h2>";
+                retVal += "<h2><strong>"+impactOnProtein.subtitle1+" " + title + " "+impactOnProtein.subtitle2+"</strong></h2>";
                 return retVal;
             },
-            variantGenerateProteinsChooser = function (variant, title) {
+            variantGenerateProteinsChooser = function (variant, title,impactOnProtein) {
                 var retVal = "";
                 if (variant.MOST_DEL_SCORE && variant.MOST_DEL_SCORE < 4) {
-                    retVal += "<p>Choose one transcript below to see the predicted effect on the protein:</p>";
+                    retVal += "<p>" +impactOnProtein.chooseOneTranscript + "</p>";
                     var allKeys = Object.keys(variant._13k_T2D_TRANSCRIPT_ANNOT);
                     for (var i = 0; i < allKeys.length; i++) {
                         var checked = (i == 0) ? ' checked ' : '';
@@ -362,7 +376,11 @@ variantInfo = (function () {
                 }
                 return retVal;
             },
-            fillUpBarChart = function (peopleWithDiseaseNumeratorString, peopleWithDiseaseDenominatorString, peopleWithoutDiseaseNumeratorString, peopleWithoutDiseaseDenominatorString) {
+            fillUpBarChart = function (peopleWithDiseaseNumeratorString,
+                                       peopleWithDiseaseDenominatorString,
+                                       peopleWithoutDiseaseNumeratorString,
+                                       peopleWithoutDiseaseDenominatorString,
+                                       diseaseBurdenStrings) {
                 var peopleWithDiseaseDenominator,
                     peopleWithoutDiseaseDenominator,
                     peopleWithDiseaseNumerator,
@@ -385,14 +403,14 @@ variantInfo = (function () {
                         proportionWithoutDiseaseDescriptiveString = "(" + peopleWithoutDiseaseNumerator + " out of " + peopleWithoutDiseaseDenominator + ")";
                         var dataForBarChart = [
                                 { value: calculatedPercentWithDisease,
-                                    barname: 'have T2D',
-                                    barsubname: '(cases)',
+                                    barname: diseaseBurdenStrings.caseBarName,
+                                    barsubname: diseaseBurdenStrings.caseBarSubName,
                                     barsubnamelink: 'http://www.google.com',
                                     inbar: '',
                                     descriptor: proportionWithDiseaseDescriptiveString},
                                 {value: calculatedPercentWithoutDisease,
-                                    barname: 'do not have T2D',
-                                    barsubname: '(controls)',
+                                    barname: diseaseBurdenStrings.controlBarName,
+                                    barsubname: diseaseBurdenStrings.controlBarSubName,
                                     barsubnamelink: 'http://www.google.com',
                                     inbar: '',
                                     descriptor: proportionWithoutDiseaseDescriptiveString}
@@ -422,7 +440,7 @@ variantInfo = (function () {
                 }
             },
 
-            fillDiseaseRiskBurdenTest = function (variant, show_gwas, show_exchp, show_exseq, show_sigma, rootVariantUrl) {
+            fillDiseaseRiskBurdenTest = function (variant, show_gwas, show_exchp, show_exseq, show_sigma, rootVariantUrl,diseaseBurdenStrings) {
                 var hetu = 0,
                     heta = 0,
                     homa = 0,
@@ -464,7 +482,7 @@ variantInfo = (function () {
                         functionToRun: fillUpBarChart,
                         barchartPtr: {},
                         launch: function () {
-                            barchartPtr = fillUpBarChart(numeratorUnaffected, denominatorUnaffected, numeratorAffected, denominatorAffected);
+                            barchartPtr = fillUpBarChart(numeratorUnaffected, denominatorUnaffected, numeratorAffected, denominatorAffected,diseaseBurdenStrings);
                             return barchartPtr;
                         },
                         removeBarchart: function () {
@@ -488,7 +506,82 @@ variantInfo = (function () {
                         "<p  id='bhtMetaBurdenForDiabetes' class='slimDescription'>p=" + (pValue.toPrecision(3)) + "</p>");
                 }
 
-            };
+            },
+         describeAssociationsStatistics = function(variant,
+                                                      vMap,
+                                                      availableData,
+                                                      pValue,
+                                                      orValue,
+                                                      strongCutOff,
+                                                      mediumCutOff,
+                                                      weakCutOff,
+                                                      variantTitle,
+                                                      datatype,
+                                                      includeCaseControlComparison,
+                                                      takeExpOfOr,
+                                                      variantAssociationStrings) {
+            var retVal = "";
+            var significanceDescriptor = "";
+            var orValueNumerical;
+            var orValueNumericalAdjusted;
+            var orValueText = "";
+            var iMap = UTILS.invertMap(vMap);
+            var pNumericalValue =  variant[iMap[pValue]];
+            var pTextValue =  "";
+            if (variant[iMap[availableData]]){
+                retVal +="<div class='boxyDisplay ";
+                // may or may not be bold
+                if (pNumericalValue <= strongCutOff ) {
+                    retVal += "genomeWideSignificant'>";
+                    significanceDescriptor = variantAssociationStrings.genomeSignificance ;
+                } else if ((pNumericalValue > strongCutOff) &&
+                    (pNumericalValue <= mediumCutOff )){
+                    retVal += "locusWideSignificant'>";
+                    significanceDescriptor = variantAssociationStrings.locusSignificance;
+                } else if ((pNumericalValue > mediumCutOff) &&
+                    (pNumericalValue <= weakCutOff )){
+                    retVal += "nominallySignificant'>";
+                    significanceDescriptor = variantAssociationStrings.nominalSignificance;
+                }  else {
+                    retVal += "notSignificant'>";
+                    significanceDescriptor = "not significant";
+                }
+                // always needs descr
+                pTextValue = pNumericalValue.toPrecision(3);
+                retVal +=  ("<h2>" +datatype+ "</h2>");
+                retVal +=  ("<div class='veryImportantText'>p = " +pTextValue+ "</div>");
+                retVal +=  ("<div class='notVeryImportantText'>" +significanceDescriptor+ "</div>");
+                orValueNumerical =  variant[iMap[orValue]];
+                if ((orValueNumerical) &&
+                    (orValueNumerical  !== 'null')) {
+                    orValueNumericalAdjusted = (takeExpOfOr === true)  ? Math.exp(orValueNumerical) :  orValueNumerical  ;
+                    orValueText = orValueNumericalAdjusted.toPrecision(3);
+                    retVal +=  ("<div class='veryImportantText'>OR = " +orValueText+ "</div>");
+                }
+                if (includeCaseControlComparison) {
+                    ;
+                }
+            } else {
+                retVal += '';
+            }
+            return retVal;
+         },
+        fillAssociationStatisticsLinkToTraitTable = function(variant,
+                                                            vMap,
+                                                            weHaveData,
+                                                            dbsnp,
+                                                            variantId,
+                                                            rootTraitUrl,
+                                                            variantAssociationStrings) {
+            var retVal = "";
+            var iMap = UTILS.invertMap(vMap);
+            if (variant[iMap[weHaveData]]) {
+                retVal += ("<a class=\"boldlink\" href=\""+rootTraitUrl+"/" +
+                    ((variant[iMap[weHaveData]]) ? (variant[iMap[dbsnp]]) : (variant[iMap[variantId]])) +
+                    "\">" +variantAssociationStrings.variantPValues);
+            }
+            return  retVal;
+        };
 
 
         return {
@@ -504,11 +597,16 @@ variantInfo = (function () {
             showCarrierStatusDiseaseRisk: showCarrierStatusDiseaseRisk,
             variantGenerateProteinsChooserTitle: variantGenerateProteinsChooserTitle,
             variantGenerateProteinsChooser: variantGenerateProteinsChooser,
-            fillDiseaseRiskBurdenTest: fillDiseaseRiskBurdenTest
+            fillDiseaseRiskBurdenTest: fillDiseaseRiskBurdenTest,
+            describeAssociationsStatistics: describeAssociationsStatistics,
+            fillAssociationStatisticsLinkToTraitTable:fillAssociationStatisticsLinkToTraitTable
         }
 
 
-    }());
+    }());  // end of private methods
+
+
+
 
     /***
      * Here is the main publicly available method in this module, which ends up driving, directly or indirectly, most
@@ -524,11 +622,11 @@ variantInfo = (function () {
      * @param showExseq
      * @param showSigma
      */
-    function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot, restServerRoot, showGwas, showExchp, showExseq, showSigma) {
+    function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot, restServerRoot, showGwas, showExchp, showExseq, showSigma,textStringObject) {
         variantObj = data['variant'],
             variant = variantObj['variant-info'],
-            variantTitle = UTILS.get_variant_title(variant, variantToSearch);
-        var setTitlesAndTheLikeFromData = function (variantTitle,variant){
+            variantTitle = UTILS.get_variant_title(variant, variantToSearch),
+         setTitlesAndTheLikeFromData = function (variantTitle, variant) {
             $('#variantTitleInAssociationStatistics').append(variantTitle);
             $('#variantCharacterization').append(UTILS.getSimpleVariantsEffect(variant.MOST_DEL_SCORE));
             $('#describingVariantAssociation').append(UTILS.variantInfoHeaderSentence(variant));
@@ -539,12 +637,12 @@ variantInfo = (function () {
             $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
             $('#populationsHowCommonIs').append(variantTitle);
             $('#exploreSurroundingSequenceTitle').append(variantTitle);
-        };
-         var  prepareDelayedIgvLaunch = function (variant,showSigma,restServerRoot){
-             /***
-              * store everything we need to launch IGV
-              */
-             var regionforIgv = privateMethods.calculateSearchRegion(variant);
+        },
+         prepareDelayedIgvLaunch = function (variant, showSigma, restServerRoot) {
+            /***
+             * store everything we need to launch IGV
+             */
+            var regionforIgv = privateMethods.calculateSearchRegion(variant);
             return {
                 rememberRegion: regionforIgv,
                 launch: function () {
@@ -555,10 +653,9 @@ variantInfo = (function () {
                     }
                 }
             };
-        };
-        var  variantAssociations = function (variant,showSigma,variantTitle,traitsStudiedUrlRoot) {
-
-            var weHaveVariantsAndAssociations;
+        },
+         variantAssociations = function (variant, showSigma, variantTitle, traitsStudiedUrlRoot,variantAssociationStrings) {
+             var weHaveVariantsAndAssociations;
             if (showSigma) {
                 weHaveVariantsAndAssociations = ((variant["IN_GWAS"]) || (variant["GWAS_T2D_PVALUE"]) || (variant["GWAS_T2D_OR"]) ||
                     (variant["SIGMA_T2D_P"]) || (variant["SIGMA_T2D_OR"])  );
@@ -571,7 +668,7 @@ variantInfo = (function () {
             UTILS.verifyThatDisplayIsWarranted(weHaveVariantsAndAssociations, $('#VariantsAndAssociationsExist'), $('#VariantsAndAssociationsNoExist'));
             if (weHaveVariantsAndAssociations) {
                 if (showGwas) {
-                    $('#gwasAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
+                    $('#gwasAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(variant,
                         cariantRec,
                         cariantRec.IN_GWAS,
                         cariantRec.GWAS_T2D_PVALUE,
@@ -581,10 +678,12 @@ variantInfo = (function () {
                         5e-2,
                         variantTitle,
                         "DIAGRAM GWAS",
-                        false));
+                        false,
+                        false,
+                        variantAssociationStrings));
                 }
                 if (showSigma) {
-                    $('#gwasSigmaAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
+                    $('#gwasSigmaAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(variant,
                         cariantRec,
                         cariantRec.IN_GWAS,
                         cariantRec.GWAS_T2D_PVALUE,
@@ -594,10 +693,12 @@ variantInfo = (function () {
                         5e-2,
                         variantTitle,
                         "DIAGRAM GWAS",
-                        false));
+                        false,
+                        false,
+                        variantAssociationStrings));
                 }
                 if (showExchp) {
-                    $('#exomeChipAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
+                    $('#exomeChipAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(variant,
                         cariantRec,
                         cariantRec.EXCHP_T2D_P_value,
                         cariantRec.EXCHP_T2D_P_value,
@@ -608,10 +709,11 @@ variantInfo = (function () {
                         variantTitle,
                         "exome chip",
                         false,
-                        true));
+                        true,
+                        variantAssociationStrings));
                 }
                 if (showExseq) {
-                    $('#exomeSequenceAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
+                    $('#exomeSequenceAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(variant,
                         cariantRec,
                         cariantRec._13k_T2D_P_EMMAX_FE_IV,
                         cariantRec._13k_T2D_P_EMMAX_FE_IV,
@@ -621,10 +723,12 @@ variantInfo = (function () {
                         5e-2,
                         variantTitle,
                         "exome sequence",
-                        false));
+                        false,
+                        false,
+                        variantAssociationStrings));
                 }
                 if (showSigma) {
-                    $('#sigmaAssociationStatisticsBox').append(UTILS.describeAssociationsStatistics(variant,
+                    $('#sigmaAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(variant,
                         cariantRec,
                         cariantRec.SIGMA_T2D_P,
                         cariantRec.SIGMA_T2D_P,
@@ -634,18 +738,21 @@ variantInfo = (function () {
                         5e-2,
                         variantTitle,
                         "Sigma",
-                        false));
+                        false,
+                        false,
+                        variantAssociationStrings));
                 }
             }
-            $('#variantInfoAssociationStatisticsLinkToTraitTable').append(UTILS.fillAssociationStatisticsLinkToTraitTable(variant,
+            $('#variantInfoAssociationStatisticsLinkToTraitTable').append(privateMethods.fillAssociationStatisticsLinkToTraitTable(variant,
                 cariantRec,
                 cariantRec.IN_GWAS,
                 cariantRec.DBSNP_ID,
                 cariantRec.ID,
-                traitsStudiedUrlRoot));
+                traitsStudiedUrlRoot,
+                variantAssociationStrings));
 
-        };
-        var  calculateDiseaseBurden = function (variant,variantTitle, showSigma, showGwas, showExchp, showExseq) {// disease burden
+        },
+         calculateDiseaseBurden = function (variant, variantTitle, showSigma, showGwas, showExchp, showExseq,diseaseBurdenStrings) {// disease burden
             var weHaveEnoughDataForRiskBurdenTest;
             if (showSigma) {
                 weHaveEnoughDataForRiskBurdenTest = ((variant["SIGMA_T2D_HETA"]) && (variant["SIGMA_T2D_HETU"]) && (variant["SIGMA_T2D_HOMA"]) &&
@@ -656,18 +763,18 @@ variantInfo = (function () {
             }
             UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataForRiskBurdenTest, $('#diseaseRiskExists'), $('#diseaseRiskNoExists'));
             if (weHaveEnoughDataForRiskBurdenTest) {
-                privateMethods.fillDiseaseRiskBurdenTest(variant, showGwas, showExchp, showExseq, showSigma);
+                privateMethods.fillDiseaseRiskBurdenTest(variant, showGwas, showExchp, showExseq, showSigma, null,diseaseBurdenStrings);
             }
             $('#sigmaVariantCharacterization').append(UTILS.sigmaVariantCharacterization(variant, variantTitle));
-        };
-        var  howCommonIsThisVariantAcrossEthnicities = function (variant) {// how common is this allele across different ethnicities
+        },
+         howCommonIsThisVariantAcrossEthnicities = function (variant,alleleFrequencyStrings) {// how common is this allele across different ethnicities
             var weHaveEnoughDataToDescribeMinorAlleleFrequencies = ((variant["EXCHP_T2D_MAF"]) && (variant["_13k_T2D_AA_MAF"]) && (variant["_13k_T2D_AA_MAF"]));
             UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToDescribeMinorAlleleFrequencies, $('#howCommonIsExists'), $('#howCommonIsNoExists'));
             if (weHaveEnoughDataToDescribeMinorAlleleFrequencies) {
-                privateMethods.showEthnicityPercentageWithBarChart(variant);
+                privateMethods.showEthnicityPercentageWithBarChart(variant,alleleFrequencyStrings);
             }
-        };
-        var  showHowCarriersAreDistributed = function (variant, showGwas, showExchp, showExseq, showSigma) {// case control data set characterization
+        },
+         showHowCarriersAreDistributed = function (variant, showGwas, showExchp, showExseq, showSigma,carrierStatusImpact) {// case control data set characterization
             var weHaveEnoughDataToCharacterizeCaseControls;
             if (showSigma) {
                 weHaveEnoughDataToCharacterizeCaseControls = ((variant["SIGMA_T2D_HETA"]) && (variant["SIGMA_T2D_HETU"]) && (variant["SIGMA_T2D_HOMA"]) &&
@@ -678,12 +785,12 @@ variantInfo = (function () {
             }
             UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToCharacterizeCaseControls, $('#carrierStatusExist'), $('#carrierStatusNoExist'));
             if (weHaveEnoughDataToCharacterizeCaseControls) {
-                privateMethods.showCarrierStatusDiseaseRisk(variant, showGwas, showExchp, showExseq, showSigma);
+                privateMethods.showCarrierStatusDiseaseRisk(variant, showGwas, showExchp, showExseq, showSigma,carrierStatusImpact);
             }
-        };
-        var  describeImpactOfVariantOnProtein = function (variant, variantTitle) {
-            $('#effectOfVariantOnProteinTitle').append(privateMethods.variantGenerateProteinsChooserTitle(variant, variantTitle));
-            $('#effectOfVariantOnProtein').append(privateMethods.variantGenerateProteinsChooser(variant, variantTitle));
+        },
+         describeImpactOfVariantOnProtein = function (variant, variantTitle,impactOnProtein) {
+            $('#effectOfVariantOnProteinTitle').append(privateMethods.variantGenerateProteinsChooserTitle(variant, variantTitle,impactOnProtein));
+            $('#effectOfVariantOnProtein').append(privateMethods.variantGenerateProteinsChooser(variant, variantTitle,impactOnProtein));
             UTILS.verifyThatDisplayIsWarranted(variant["_13k_T2D_TRANSCRIPT_ANNOT"], $('#variationInfoEncodedProtein'), $('#puntOnNoncodingVariant'));
         };
 
@@ -691,16 +798,15 @@ variantInfo = (function () {
         /***
          * the following top-level routines do all the work in fillTheFields
          */
-        setTitlesAndTheLikeFromData(variantTitle,variant);
-        delayedIgvLaunch = prepareDelayedIgvLaunch(variant,showSigma,restServerRoot);
-        variantAssociations(variant,showSigma,variantTitle,traitsStudiedUrlRoot);
+        setTitlesAndTheLikeFromData(variantTitle, variant);
+        delayedIgvLaunch = prepareDelayedIgvLaunch(variant, showSigma, restServerRoot);
+        variantAssociations(variant, showSigma, variantTitle, traitsStudiedUrlRoot,textStringObject.variantAssociationStrings);
 
-        calculateDiseaseBurden(variant,variantTitle, showSigma, showGwas, showExchp, showExseq);
-        howCommonIsThisVariantAcrossEthnicities (variant);
-        showHowCarriersAreDistributed(variant, showGwas, showExchp, showExseq, showSigma);
-        describeImpactOfVariantOnProtein (variant, variantTitle);
-    }
-
+        calculateDiseaseBurden(variant, variantTitle, showSigma, showGwas, showExchp, showExseq,textStringObject.diseaseBurdenStrings);
+        howCommonIsThisVariantAcrossEthnicities(variant,textStringObject.alleleFrequencyStrings);
+        showHowCarriersAreDistributed(variant, showGwas, showExchp, showExseq, showSigma,textStringObject.carrierStatusImpact);
+        describeImpactOfVariantOnProtein(variant, variantTitle,textStringObject.impactOnProtein);
+    };
 
     var retrieveDelayedHowCommonIsPresentation = function () {
             return delayedHowCommonIsPresentation;

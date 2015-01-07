@@ -58,6 +58,41 @@
         url: "../variantAjax/" + "<%=variantToSearch%>",
         async: true,
         success: function (data) {
+            var variantAssociationStrings = {
+                genomeSignificance:'<g:message code="variant.variantAssociations.significance.genomeSignificance" default="GWAS significance" />',
+                locusSignificance:'<g:message code="variant.variantAssociations.significance.locusSignificance" default="locus wide significance" />',
+                nominalSignificance:'<g:message code="variant.variantAssociations.significance.nominalSignificance" default="nominal significance" />',
+                nonSignificance:'<g:message code="variant.variantAssociations.significance.nonSignificance" default="no significance" />',
+                variantPValues:'<g:message code="variant.variantAssociations.variantPValues" default="click here to see a table of P values" />'
+            };
+            var diseaseBurdenStrings = {
+                caseBarName:'<g:message code="variant.diseaseBurden.case.barname" default="have T2D" />',
+                caseBarSubName:'<g:message code="variant.diseaseBurden.case.barsubname" default="cases" />',
+                controlBarName:'<g:message code="variant.diseaseBurden.control.barname" default="do not have T2D" />',
+                controlBarSubName:'<g:message code="variant.diseaseBurden.control.barname" default="controls" />'
+            };
+            var alleleFrequencyStrings = {
+                africanAmerican:'<g:message code="variant.alleleFrequency.africanAmerican" default="africanAmerican" />',
+                hispanic:'<g:message code="variant.alleleFrequency.hispanic" default="hispanic" />',
+                eastAsian:'<g:message code="variant.alleleFrequency.eastAsian" default="eastAsian" />',
+                southAsian:'<g:message code="variant.alleleFrequency.southAsian" default="southAsian" />',
+                european:'<g:message code="variant.alleleFrequency.european" default="european" />',
+                exomeSequence:'<g:message code="variant.alleleFrequency.exomeSequence" default="exomeSequence" />',
+                exomeChip:'<g:message code="variant.alleleFrequency.exomeChip" default="exomeChip" />'
+             };
+            var carrierStatusImpact = {
+                casesTitle:'<g:message code="variant.carrierStatusImpact.casesTitle" default="casesTitle" />',
+                controlsTitle:'<g:message code="variant.carrierStatusImpact.controlsTitle" default="controlsTitle" />',
+                legendTextHomozygous:'<g:message code="variant.carrierStatusImpact.legendText.homozygous" default="legendTextHomozygous" />',
+                legendTextHeterozygous:'<g:message code="variant.carrierStatusImpact.legendText.heterozygous" default="legendTextHeterozygous" />',
+                legendTextNoncarrier:'<g:message code="variant.carrierStatusImpact.legendText.nonCarrier" default="legendTextNoncarrier" />',
+                designationTotal:'<g:message code="variant.carrierStatusImpact.designation.total" default="designationTotal" />'
+            };
+            var impactOnProtein = {
+                chooseOneTranscript:'<g:message code="variant.impactOnProtein.chooseOneTranscript" default="choose one transcript" />',
+                subtitle1:'<g:message code="variant.impactOnProtein.subtitle1" default="what effect does" />',
+                subtitle2:'<g:message code="variant.impactOnProtein.subtitle2" default="have on the encoded protein" />'
+            };
             if ( typeof data !== 'undefined')  {
                 variantInfo.fillTheFields(data,
                         "<%=variantToSearch%>",
@@ -66,7 +101,12 @@
                         ${show_gwas},
                         ${show_exchp},
                         ${show_exseq},
-                        ${show_sigma});
+                        ${show_sigma},
+                        {variantAssociationStrings:variantAssociationStrings,
+                         diseaseBurdenStrings:diseaseBurdenStrings,
+                         alleleFrequencyStrings:alleleFrequencyStrings,
+                         carrierStatusImpact:carrierStatusImpact,
+                         impactOnProtein:impactOnProtein});
             }
             loading.hide();
         },

@@ -7,4 +7,5 @@ echo 'building prod grails'
 revisionNumber="$(git rev-parse HEAD)"
 echo 'got it'
 echo "${revisionNumber}"
+sed -i "s/app.version.*$/app.version=${1}/g" application.properties
 grails prod war -Dbuild.number=${revisionNumber} -Dapp.version=$1

@@ -291,80 +291,8 @@ var UTILS = {
         }
         return retVal;
     },
-    fillAssociationStatisticsLinkToTraitTable: function(variant,
-                                         vMap,
-                                         weHaveData,
-                                         dbsnp,
-                                         variantId,
-                                         rootTraitUrl) {
-        var retVal = "";
-        var iMap = UTILS.invertMap(vMap);
-        if (variant[iMap[weHaveData]]) {
-            retVal += ("<a class=\"boldlink\" href=\""+rootTraitUrl+"/" +
-                ((variant[iMap[weHaveData]]) ? (variant[iMap[dbsnp]]) : (variant[iMap[variantId]])) +
-                "\">Click here</a> to see a table of p-values for this variant across 25 traits studied in GWAS meta-analyses.");
-        }
-        return  retVal;
-    },
 
-    describeAssociationsStatistics: function(variant,
-                                         vMap,
-                                         availableData,
-                                         pValue,
-                                         orValue,
-                                         strongCutOff,
-                                         mediumCutOff,
-                                         weakCutOff,
-                                         variantTitle,
-                                         datatype,
-                                         includeCaseControlComparison,
-                                         takeExpOfOr) {
-        var retVal = "";
-        var significanceDescriptor = "";
-        var orValueNumerical;
-        var orValueNumericalAdjusted;
-        var orValueText = "";
-        var iMap = UTILS.invertMap(vMap);
-        var pNumericalValue =  variant[iMap[pValue]];
-        var pTextValue =  "";
-        if (variant[iMap[availableData]]){
-            retVal +="<div class='boxyDisplay ";
-            // may or may not be bold
-            if (pNumericalValue <= strongCutOff ) {
-                retVal += "genomeWideSignificant'>";
-                significanceDescriptor = "genome-wide significant";
-            } else if ((pNumericalValue > strongCutOff) &&
-                       (pNumericalValue <= mediumCutOff )){
-                retVal += "locusWideSignificant'>";
-                significanceDescriptor = "locus-wide significant";
-            } else if ((pNumericalValue > mediumCutOff) &&
-                (pNumericalValue <= weakCutOff )){
-                retVal += "nominallySignificant'>";
-                significanceDescriptor = "nominally significant";
-            }  else {
-                retVal += "notSignificant'>";
-                significanceDescriptor = "not significant";
-            }
-            // always needs descr
-            pTextValue = pNumericalValue.toPrecision(3);
-            retVal +=  ("<h2>" +datatype+ "</h2>");
-            retVal +=  ("<div class='veryImportantText'>p = " +pTextValue+ "</div>");
-            retVal +=  ("<div class='notVeryImportantText'>" +significanceDescriptor+ "</div>");
-            orValueNumerical =  variant[iMap[orValue]];
-            if ((orValueNumerical) &&
-                (orValueNumerical  !== 'null')) {
-                orValueNumericalAdjusted = (takeExpOfOr === true)  ? Math.exp(orValueNumerical) :  orValueNumerical  ;
-                orValueText = orValueNumericalAdjusted.toPrecision(3);
-                retVal +=  ("<div class='veryImportantText'>OR = " +orValueText+ "</div>");
-            }
-            if (includeCaseControlComparison) {
-                ;
-            }
-        } else {
-            retVal += '';
-        }
-        return retVal;
-    },
+
     sigmaVariantCharacterization:  function (variant, title) {
         var retVal = "";
         var euroValue  = parseFloat(variant["SIGMA_T2D_MAF"]) ;
@@ -385,6 +313,29 @@ var UTILS = {
             giveToDisplayIfWeHaveNoData.hide();
         }
     },
+    /***
+     * Watch out for this next function.  It is accessed only from variantInfo so you might think that it would belong in
+     * variantInfo.js, but there is a trick.  Not only is it used during page set up but as well it is connected through an
+     * onClick call back so that it responds to the user hitting a radio button. This means that the method needs to be
+     * at once accessible down in the well encapsulated bowels of the JavaScript processing structure, but also needs to be
+     * made available for top-level interactive user access. I could certainly achieve this goal by building the method at the
+     * lowest level and then having a few calls calls that expose the UI through the layers of encapsulation, but it
+     * would be a little messy and this method has quite a few parameters as it is. In this case I think it makes more sense
+     * to leave it here in UTILS, though I'd be happy to discuss with any interested software engineers whether or not
+     * minimizing complexity should trump minimizing shared API surface area over a beer some time.
+     * @param PolyPhen_SCORE
+     * @param SIFT_SCORE
+     * @param Condel_SCORE
+     * @param MOST_DEL_SCORE
+     * @param _13k_ANNOT_29_mammals_omega
+     * @param Protein_position
+     * @param Codons
+     * @param Protein_change
+     * @param PolyPhen_PRED
+     * @param Consequence
+     * @param Condel_PRED
+     * @param SIFT_PRED
+     */
     variantInfoRadioChange: function (PolyPhen_SCORE, SIFT_SCORE, Condel_SCORE, MOST_DEL_SCORE, _13k_ANNOT_29_mammals_omega, Protein_position, Codons, Protein_change, PolyPhen_PRED, Consequence, Condel_PRED, SIFT_PRED) {
         var delScore = parseInt(MOST_DEL_SCORE);
         $('#annotationCodon').html(Codons);

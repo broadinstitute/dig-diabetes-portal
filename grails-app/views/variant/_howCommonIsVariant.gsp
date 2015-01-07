@@ -7,8 +7,7 @@
     <div id="howCommonIsExists" style="display: block">
 
         <p>
-            <strong>Frequencies</strong>
-            from exome sequence and exome chip data
+             <g:message code="variant.alleleFrequency.subtitle" default="Relative allele frequencies" />
         </p>
 
 
