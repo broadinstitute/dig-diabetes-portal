@@ -1,4 +1,4 @@
-<p><em>For variants that do not reach significance, odds ratios may be unreliable.</em></p>
+<p><em><g:message code="variantTable.searchResults.oddsRatiosUnreliable" default="odds ratios unreliable" /></em></p>
 
 
 <table id="variantTable" class="table table-striped basictable">
@@ -12,7 +12,7 @@
 <th></th>
 <th></th>
 <g:if test="${show_sigma}">
-<th colspan="5" class="datatype-header">SIGMA</th>
+<th colspan="5" class="datatype-header"><g:message code="variantTable.columnHeaders.sigma.title" default="SIGMA" /></th>
 </g:if>
 <g:if test="${show_exseq}">
 <th colspan="5" class="datatype-header">exome sequencing</th>

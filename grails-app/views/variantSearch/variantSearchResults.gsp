@@ -12,15 +12,34 @@
 
 
     var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
-    UTILS.postJson2('../variantSearch/variantSearchAjax',"<%=filter%>",
-            ${show_gene},
-            ${show_sigma},
-            ${show_exseq},
-            ${show_exchp},
-            '<g:createLink controller="variant" action="variantInfo"  />',
-            '<g:createLink controller="gene" action="geneInfo"  />',
-            '<g:createLink controller="variantSearch" action="variantSearchAjax" />',
-            ${dataSetDetermination} );
+    var loading = $('#spinner').show();
+    loading.show();
+    $.ajax({
+        type:'POST',
+        cache:false,
+        data:{'keys':"<%=filter%>"},
+        url:'<g:createLink controller="variantSearch" action="variantSearchAjax" />',
+        async:true,
+        success:function(data,textStatus){
+            var variantTableContext = {
+                tooManyResults:'<g:message code="variantTable.searchResults.tooManyResults" default="too many results, sharpen your search" />'
+            };
+            variantProcessing.fillTheVariantTable(data,
+                    ${show_gene},
+                    ${show_sigma},
+                    ${show_exseq},
+                    ${show_exchp},
+                    '<g:createLink controller="variant" action="variantInfo"  />',
+                    '<g:createLink controller="gene" action="geneInfo"  />',
+                    ${dataSetDetermination},
+                    {variantTableContext:variantTableContext});
+            loading.hide();
+        },
+        error:function(XMLHttpRequest,textStatus,errorThrown){
+            loading.hide();
+            errorReporter(XMLHttpRequest, exception) ;
+        }
+    });
     var uri_dec = decodeURIComponent("<%=filter%>");
     var encodedParameters = decodeURIComponent("<%=encodedParameters%>");
 
