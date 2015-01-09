@@ -3,6 +3,7 @@
 <head>
     <meta name="layout" content="core"/>
     <r:require modules="core"/>
+    <r:require modules="tableViewer"/>
     <r:layoutResources/>
 </head>
 
@@ -41,13 +42,14 @@
     });
     var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
     function fillTheFields (data)  {
-        $('#variantTableBody').append(UTILS.fillCollectedVariantsTable(data,
+        $('#variantTableBody').append(variantProcessing.fillCollectedVariantsTable(data,
                 ${show_gene},
                 ${show_sigma},
                 ${show_exseq},
                 ${show_exchp},
                 '<g:createLink controller="variant" action="variantInfo" />',
-                '<g:createLink controller="gene" action="geneInfo" />'));
+                '<g:createLink controller="gene" action="geneInfo" />'),
+                {});
 <g:if test="${show_sigma}">
         $('#variantTable').dataTable({
             iDisplayLength: 20,

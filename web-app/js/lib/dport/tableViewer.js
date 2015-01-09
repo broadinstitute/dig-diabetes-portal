@@ -316,6 +316,7 @@ var variantProcessing = (function () {
         }
     };
     return {
-        fillTheVariantTable: fillTheVariantTable
+        fillTheVariantTable: fillTheVariantTable,
+        fillCollectedVariantsTable:fillCollectedVariantsTable
     }
 }());
