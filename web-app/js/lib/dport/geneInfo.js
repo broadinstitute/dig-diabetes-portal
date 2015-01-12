@@ -7,273 +7,344 @@ var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.geneInfo = (function () {
 
-        var delayedDataPresentation = {};
-        var geneInfoRec = {
-            ID: 1,
-            CHROM: 2,
-            BEG: 3,
-            END: 4,
-            Function_description: 5,
-            _13k_T2D_VAR_TOTAL: 6,
-            _13k_T2D_ORIGIN_VAR_TOTALS: 7,
-            HS: 8,
-            AA: 9,
-            EU: 10,
-            EA: 11,
-            SA: 12,
-            SING: 13,
-            RARE: 14,
-            LOW_FREQUENCY: 15,
-            COMMON: 16,
-            TOTAL: 17,
-            NS: 18,
-            _13k_T2D_lof_NVAR: 19,
-            _13k_T2D_lof_MINA_MINU_RET: 20,
-            _13k_T2D_lof_METABURDEN: 21,
-            _13k_T2D_GWS_TOTAL: 22,
-            _13k_T2D_NOM_TOTAL: 23,
-            EXCHP_T2D_VAR_TOTALS: 24,
-            EXCHP_T2D_GWS_TOTAL: 25,
-            EXCHP_T2D_NOM_TOTAL: 26,
-            GWS_TRAITS: 27,
-            GWAS_T2D_GWS_TOTAL: 28,
-            GWAS_T2D_NOM_TOTAL: 29,
-            GWAS_T2D_VAR_TOTAL: 30,
-            EXCHP_T2D_VAR_TOTALS_EU_TOTAL: 31,
-            SIGMA_T2D_VAR_TOTAL: 32,
-            SIGMA_T2D_GWS_TOTAL: 33,
-            SIGMA_T2D_NOM_TOTAL: 34,
-            _13k_T2D_lof_OBSA: 35,
-            _13k_T2D_lof_OBSU: 36,
-            GWAS_T2D_LWS_TOTAL: 37,
-            EXCHP_T2D_LWS_TOTAL: 38,
-            _13k_T2D_LWS_TOTAL: 39,
-            SIGMA_T2D_lof_OBSA: 40,
-            SIGMA_T2D_lof_OBSU: 41,
-            SIGMA_T2D_lof_NVAR: 42,
-            SIGMA_T2D_lof_MINA: 43,
-            SIGMA_T2D_lof_MINU: 44,
-            SIGMA_T2D_lof_P: 45
-        };
-        var revG = function (d) {
-            var v;
-            switch (d) {
-                case 1:
-                    v = "ID";
-                    break;
-                case 2:
-                    v = "CHROM";
-                    break;
-                case 3:
-                    v = "BEG";
-                    break;
-                case 4:
-                    v = "END";
-                    break;
-                case 5:
-                    v = "Function_description";
-                    break;
-                case 6:
-                    v = "_13k_T2D_VAR_TOTAL";
-                    break;
-                case 7:
-                    v = "_13k_T2D_ORIGIN_VAR_TOTALS";
-                    break;
-                case 8:
-                    v = "HS";
-                    break;
-                case 9:
-                    v = "AA";
-                    break;
-                case 10:
-                    v = "EU";
-                    break;
-                case 11:
-                    v = "EA";
-                    break;
-                case  12:
-                    v = "SA";
-                    break;
-                case  13:
-                    v = "SING";
-                    break;
-                case  14:
-                    v = "RARE";
-                    break;
-                case  15:
-                    v = "LOW_FREQUENCY";
-                    break;
-                case  16:
-                    v = "COMMON";
-                    break;
-                case  17:
-                    v = "TOTAL";
-                    break;
-                case  18:
-                    v = "NS";
-                    break;
-                case  19:
-                    v = "_13k_T2D_lof_NVAR";
-                    break;
-                case  20:
-                    v = "_13k_T2D_lof_MINA_MINU_RET";
-                    break;
-                case  21:
-                    v = "_13k_T2D_lof_METABURDEN";
-                    break;
-                case  22:
-                    v = "_13k_T2D_GWS_TOTAL";
-                    break;
-                case  23:
-                    v = "_13k_T2D_NOM_TOTAL";
-                    break;
-                case  24:
-                    v = "EXCHP_T2D_VAR_TOTALS";
-                    break;
-                case  25:
-                    v = "EXCHP_T2D_GWS_TOTAL";
-                    break;
-                case  26:
-                    v = "EXCHP_T2D_NOM_TOTAL";
-                    break;
-                case  27:
-                    v = "GWS_TRAITS";
-                    break;
-                case  28:
-                    v = "GWAS_T2D_GWS_TOTAL";
-                    break;
-                case  29:
-                    v = "GWAS_T2D_NOM_TOTAL";
-                    break;
-                case  30:
-                    v = "GWAS_T2D_VAR_TOTAL";
-                    break;
-                case  31:
-                    v = "EXCHP_T2D_VAR_TOTALS.EU.TOTAL";
-                    break;
-                case  32:
-                    v = "SIGMA_T2D_VAR_TOTAL";
-                    break;
-                case  33:
-                    v = "SIGMA_T2D_GWS_TOTAL";
-                    break;
-                case  34:
-                    v = "SIGMA_T2D_NOM_TOTAL";
-                    break;
-                case  35:
-                    v = "_13k_T2D_lof_OBSA";
-                    break;
-                case  36:
-                    v = "_13k_T2D_lof_OBSU";
-                    break;
-                case  37:
-                    v = "GWAS_T2D_LWS_TOTAL";
-                    break;
-                case  38:
-                    v = "EXCHP_T2D_LWS_TOTAL";
-                    break;
-                case  40:
-                    v = "SIGMA_T2D_lof_OBSA";
-                    break;
-                case  41:
-                    v = "SIGMA_T2D_lof_OBSU";
-                    break;
-                case  42:
-                    v = "SIGMA_T2D_lof_NVAR";
-                    break;
-                case  43:
-                    v = "SIGMA_T2D_lof_MINA";
-                    break;
-                case  44:
-                    v = "SIGMA_T2D_lof_MINU";
-                    break;
-                case  45:
-                    v = "SIGMA_T2D_lof_P";
-                    break;
-                default:
-                    v = "";
-            }
-            return v;
-        };
-        var expandRegionBegin = function (geneExtentBeginning) {
-            if (geneExtentBeginning) {
-                return Math.max(geneExtentBeginning - 500000, 0);
-            } else {
-                return 0;
-            }
-        };
-        var expandRegionEnd = function (geneExtentEnding) {
-            if (geneExtentEnding) {
-                return geneExtentEnding + 500000;
-            } else {
-                return 0;
-            }
-        };
-// walk into nested fields
-        var geneFieldOrZero = function (geneInfo, filedNumber, defaultValue) {
-            var retval = 0;
-            var fieldName = revG(filedNumber);
-            if ((geneInfo) && (fieldName.length > 0)) {
-                var fieldBreakdown = fieldName.split("."); // step into complex fields
-                retval = geneInfo[fieldBreakdown[0]];
-                if ((retval) && (fieldBreakdown.length > 1)) {
-                    for (var i = 1; i < fieldBreakdown.length; i++) {
-                        var nextLevelSpec = fieldBreakdown[i];
-                        retval = retval[nextLevelSpec];
-                    }
-                }
-            }
-            if (!retval) {    // deal with a null.  Use a zero unless we are given an explicit alternative
-                if (typeof defaultValue !== "undefined") {
-                    retval = defaultValue;
-                } else {
-                    retval = 0;
-                }
-            }
-            return retval;
-        };
-        var fillVarianceAndAssociations = function (rawGeneInfo, show_gwas, show_exchp, show_exseq, show_sigma, rootRegionUrl, rootTraitUrl, rootVariantUrl, significanceStrings) {
+        var delayedDataPresentation = {},
 
-            // show traits
-            if (show_gwas) {
-                var htmlAccumulator = "";
-                if (rawGeneInfo["GWS_TRAITS"]) {
-                    var traitArray = rawGeneInfo["GWS_TRAITS"];
-                    if (traitArray.length > 0) {
-                        htmlAccumulator += ("<strong> " +
-                            "<p>" + significanceStrings.significantAssociations + "</p>" +
-                            "<ul>");
-                        for (var i = 0; i < traitArray.length; i++) {
-                            var traitRepresentation = "";
-                            if ((typeof phenotype !== "undefined" ) &&
-                                (phenotype.phenotypeMap) &&
-                                (phenotype.phenotypeMap [traitArray[i]])) {
-
-                                traitRepresentation = phenotype.phenotypeMap [traitArray[i]];
-
-                            } else {
-                                traitRepresentation = traitArray[i];
-                            }
-                            if (!(traitRepresentation.indexOf('diabetes') > -1)) {  // special case: don't include diabetes, since it is above in table
-                                htmlAccumulator += ("<li><a href='" + rootTraitUrl + "?trait=" + traitArray[i] + "&significance=5e-8'>" + traitRepresentation + "</a></li>")
-                            }
+            /***
+             *    geneInfoJsonMap:  Access the interior of the JSON records  symbolically
+             */
+            geneInfoJsonMap = (function () {
+                var geneInfoRec = {
+                        ID: 1,
+                        CHROM: 2,
+                        BEG: 3,
+                        END: 4,
+                        Function_description: 5,
+                        _13k_T2D_VAR_TOTAL: 6,
+                        _13k_T2D_ORIGIN_VAR_TOTALS: 7,
+                        HS: 8,
+                        AA: 9,
+                        EU: 10,
+                        EA: 11,
+                        SA: 12,
+                        SING: 13,
+                        RARE: 14,
+                        LOW_FREQUENCY: 15,
+                        COMMON: 16,
+                        TOTAL: 17,
+                        NS: 18,
+                        _13k_T2D_lof_NVAR: 19,
+                        _13k_T2D_lof_MINA_MINU_RET: 20,
+                        _13k_T2D_lof_METABURDEN: 21,
+                        _13k_T2D_GWS_TOTAL: 22,
+                        _13k_T2D_NOM_TOTAL: 23,
+                        EXCHP_T2D_VAR_TOTALS: 24,
+                        EXCHP_T2D_GWS_TOTAL: 25,
+                        EXCHP_T2D_NOM_TOTAL: 26,
+                        GWS_TRAITS: 27,
+                        GWAS_T2D_GWS_TOTAL: 28,
+                        GWAS_T2D_NOM_TOTAL: 29,
+                        GWAS_T2D_VAR_TOTAL: 30,
+                        EXCHP_T2D_VAR_TOTALS_EU_TOTAL: 31,
+                        SIGMA_T2D_VAR_TOTAL: 32,
+                        SIGMA_T2D_GWS_TOTAL: 33,
+                        SIGMA_T2D_NOM_TOTAL: 34,
+                        _13k_T2D_lof_OBSA: 35,
+                        _13k_T2D_lof_OBSU: 36,
+                        GWAS_T2D_LWS_TOTAL: 37,
+                        EXCHP_T2D_LWS_TOTAL: 38,
+                        _13k_T2D_LWS_TOTAL: 39,
+                        SIGMA_T2D_lof_OBSA: 40,
+                        SIGMA_T2D_lof_OBSU: 41,
+                        SIGMA_T2D_lof_NVAR: 42,
+                        SIGMA_T2D_lof_MINA: 43,
+                        SIGMA_T2D_lof_MINU: 44,
+                        SIGMA_T2D_lof_P: 45
+                    },
+                    revG = function (d) {
+                        var v;
+                        switch (d) {
+                            case 1:
+                                v = "ID";
+                                break;
+                            case 2:
+                                v = "CHROM";
+                                break;
+                            case 3:
+                                v = "BEG";
+                                break;
+                            case 4:
+                                v = "END";
+                                break;
+                            case 5:
+                                v = "Function_description";
+                                break;
+                            case 6:
+                                v = "_13k_T2D_VAR_TOTAL";
+                                break;
+                            case 7:
+                                v = "_13k_T2D_ORIGIN_VAR_TOTALS";
+                                break;
+                            case 8:
+                                v = "HS";
+                                break;
+                            case 9:
+                                v = "AA";
+                                break;
+                            case 10:
+                                v = "EU";
+                                break;
+                            case 11:
+                                v = "EA";
+                                break;
+                            case  12:
+                                v = "SA";
+                                break;
+                            case  13:
+                                v = "SING";
+                                break;
+                            case  14:
+                                v = "RARE";
+                                break;
+                            case  15:
+                                v = "LOW_FREQUENCY";
+                                break;
+                            case  16:
+                                v = "COMMON";
+                                break;
+                            case  17:
+                                v = "TOTAL";
+                                break;
+                            case  18:
+                                v = "NS";
+                                break;
+                            case  19:
+                                v = "_13k_T2D_lof_NVAR";
+                                break;
+                            case  20:
+                                v = "_13k_T2D_lof_MINA_MINU_RET";
+                                break;
+                            case  21:
+                                v = "_13k_T2D_lof_METABURDEN";
+                                break;
+                            case  22:
+                                v = "_13k_T2D_GWS_TOTAL";
+                                break;
+                            case  23:
+                                v = "_13k_T2D_NOM_TOTAL";
+                                break;
+                            case  24:
+                                v = "EXCHP_T2D_VAR_TOTALS";
+                                break;
+                            case  25:
+                                v = "EXCHP_T2D_GWS_TOTAL";
+                                break;
+                            case  26:
+                                v = "EXCHP_T2D_NOM_TOTAL";
+                                break;
+                            case  27:
+                                v = "GWS_TRAITS";
+                                break;
+                            case  28:
+                                v = "GWAS_T2D_GWS_TOTAL";
+                                break;
+                            case  29:
+                                v = "GWAS_T2D_NOM_TOTAL";
+                                break;
+                            case  30:
+                                v = "GWAS_T2D_VAR_TOTAL";
+                                break;
+                            case  31:
+                                v = "EXCHP_T2D_VAR_TOTALS.EU.TOTAL";
+                                break;
+                            case  32:
+                                v = "SIGMA_T2D_VAR_TOTAL";
+                                break;
+                            case  33:
+                                v = "SIGMA_T2D_GWS_TOTAL";
+                                break;
+                            case  34:
+                                v = "SIGMA_T2D_NOM_TOTAL";
+                                break;
+                            case  35:
+                                v = "_13k_T2D_lof_OBSA";
+                                break;
+                            case  36:
+                                v = "_13k_T2D_lof_OBSU";
+                                break;
+                            case  37:
+                                v = "GWAS_T2D_LWS_TOTAL";
+                                break;
+                            case  38:
+                                v = "EXCHP_T2D_LWS_TOTAL";
+                                break;
+                            case  40:
+                                v = "SIGMA_T2D_lof_OBSA";
+                                break;
+                            case  41:
+                                v = "SIGMA_T2D_lof_OBSU";
+                                break;
+                            case  42:
+                                v = "SIGMA_T2D_lof_NVAR";
+                                break;
+                            case  43:
+                                v = "SIGMA_T2D_lof_MINA";
+                                break;
+                            case  44:
+                                v = "SIGMA_T2D_lof_MINU";
+                                break;
+                            case  45:
+                                v = "SIGMA_T2D_lof_P";
+                                break;
+                            default:
+                                v = "";
                         }
-                        htmlAccumulator += ("</ul>" +
-                            "</strong>");
-                    }
-                } else {
-                    htmlAccumulator += "<p>" + significanceStrings.noSignificantAssociationsExist + "</p>"
+                        return v;
+                    },
+                    fieldName = function (fieldId) {
+                        return revG(fieldId);
+                    },
+                    fieldSymbol = function () {
+                        return  geneInfoRec;
+                    };
+                return {
+                    fieldName: fieldName,
+                    fieldSymbol: fieldSymbol
                 }
-                $('#gwasTraits').append(htmlAccumulator);
-            }
-        };
-        var buildAnchorForVariantSearches = function (displayableContents, geneName, filter, rootVariantUrl) {
-            var returnValue = "";
-            returnValue += ("<a class='boldlink' href='" + rootVariantUrl + "/" + geneName + "?filter=" + filter + "'>" +
-                displayableContents + "</a>");
-            return  returnValue;
-        };
-        var fillVariationAcrossEthnicity = function (rawGeneInfo, show_gwas, show_exchp, show_exseq, show_sigma, rootVariantUrl) {
+            }()),
+
+
+            /***
+             * Pushback  the region of a search from a gene
+             * @param geneExtentBeginning
+             * @returns {number}
+             */
+            expandRegionBegin = function (geneExtentBeginning) {
+                if (geneExtentBeginning) {
+                    return Math.max(geneExtentBeginning - 500000, 0);
+                } else {
+                    return 0;
+                }
+            },
+
+
+            /***
+             *
+             * @param geneExtentEnding
+             * @returns {*}
+             */
+            expandRegionEnd = function (geneExtentEnding) {
+                if (geneExtentEnding) {
+                    return geneExtentEnding + 500000;
+                } else {
+                    return 0;
+                }
+            },
+
+            /***
+             * Access an expected field iin the JSON.  If the expected result is absent  or undefined
+             * then return a numeric zero.
+             *
+             * @param geneInfo
+             * @param filedNumber
+             * @param defaultValue
+             * @returns {number}
+             */
+            geneFieldOrZero = function (geneInfo, filedNumber, defaultValue) {
+                var retval = 0;
+                var fieldName = geneInfoJsonMap.fieldName(filedNumber);
+                if ((geneInfo) && (fieldName.length > 0)) {
+                    var fieldBreakdown = fieldName.split("."); // step into complex fields
+                    retval = geneInfo[fieldBreakdown[0]];
+                    if ((retval) && (fieldBreakdown.length > 1)) {
+                        for (var i = 1; i < fieldBreakdown.length; i++) {
+                            var nextLevelSpec = fieldBreakdown[i];
+                            retval = retval[nextLevelSpec];
+                        }
+                    }
+                }
+                if (!retval) {    // deal with a null.  Use a zero unless we are given an explicit alternative
+                    if (typeof defaultValue !== "undefined") {
+                        retval = defaultValue;
+                    } else {
+                        retval = 0;
+                    }
+                }
+                return retval;
+            },
+
+            /***
+             *  Fill out some DOM structures conditionally. Used in the  variant and associations table on the gene info page
+             * @param rawGeneInfo
+             * @param show_gwas
+             * @param show_exchp
+             * @param show_exseq
+             * @param show_sigma
+             * @param rootRegionUrl
+             * @param rootTraitUrl
+             * @param rootVariantUrl
+             * @param significanceStrings
+             */
+            fillVarianceAndAssociations = function (rawGeneInfo, show_gwas, show_exchp, show_exseq, show_sigma, rootRegionUrl, rootTraitUrl, rootVariantUrl, significanceStrings) {
+
+                // show traits
+                if (show_gwas) {
+                    var htmlAccumulator = "";
+                    if (rawGeneInfo["GWS_TRAITS"]) {
+                        var traitArray = rawGeneInfo["GWS_TRAITS"];
+                        if (traitArray.length > 0) {
+                            htmlAccumulator += ("<strong> " +
+                                "<p>" + significanceStrings.significantAssociations + "</p>" +
+                                "<ul>");
+                            for (var i = 0; i < traitArray.length; i++) {
+                                var traitRepresentation = "";
+                                if ((typeof phenotype !== "undefined" ) &&
+                                    (phenotype.phenotypeMap) &&
+                                    (phenotype.phenotypeMap [traitArray[i]])) {
+
+                                    traitRepresentation = phenotype.phenotypeMap [traitArray[i]];
+
+                                } else {
+                                    traitRepresentation = traitArray[i];
+                                }
+                                if (!(traitRepresentation.indexOf('diabetes') > -1)) {  // special case: don't include diabetes, since it is above in table
+                                    htmlAccumulator += ("<li><a href='" + rootTraitUrl + "?trait=" + traitArray[i] + "&significance=5e-8'>" + traitRepresentation + "</a></li>")
+                                }
+                            }
+                            htmlAccumulator += ("</ul>" +
+                                "</strong>");
+                        }
+                    } else {
+                        htmlAccumulator += "<p>" + significanceStrings.noSignificantAssociationsExist + "</p>"
+                    }
+                    $('#gwasTraits').append(htmlAccumulator);
+                }
+            },
+
+            /***
+             * convenience method to build an anchor with all the right fields
+             * @param displayableContents
+             * @param geneName
+             * @param filter
+             * @param rootVariantUrl
+             * @returns {string}
+             */
+            buildAnchorForVariantSearches = function (displayableContents, geneName, filter, rootVariantUrl) {
+                var returnValue = "";
+                returnValue += ("<a class='boldlink' href='" + rootVariantUrl + "/" + geneName + "?filter=" + filter + "'>" +
+                    displayableContents + "</a>");
+                return  returnValue;
+            },
+
+        /***
+         *
+         * @param rawGeneInfo
+         * @param show_gwas
+         * @param show_exchp
+         * @param show_exseq
+         * @param show_sigma
+         * @param rootVariantUrl
+         */
+        fillVariationAcrossEthnicity = function (rawGeneInfo, show_gwas, show_exchp, show_exseq, show_sigma, rootVariantUrl) {
             if ((rawGeneInfo) &&
                 (rawGeneInfo["_13k_T2D_ORIGIN_VAR_TOTALS"])) {
                 var ethnicityMap = rawGeneInfo["_13k_T2D_ORIGIN_VAR_TOTALS"];
@@ -390,9 +461,9 @@ var mpgSoftware = mpgSoftware || {};
         var emphasisRecommended = function (geneInfo) {
             var returnValue = false;
             if (geneInfo) {
-                if ((geneFieldOrZero(geneInfo, geneInfoRec.GWAS_T2D_GWS_TOTAL) > 0) ||
-                    (geneFieldOrZero(geneInfo, geneInfoRec.EXCHP_T2D_GWS_TOTAL) > 0) ||
-                    (geneFieldOrZero(geneInfo, geneInfoRec.EXCHP_T2D_GWS_TOTAL) > 0)) {
+                if ((geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().GWAS_T2D_GWS_TOTAL) > 0) ||
+                    (geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().EXCHP_T2D_GWS_TOTAL) > 0) ||
+                    (geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().EXCHP_T2D_GWS_TOTAL) > 0)) {
                     returnValue = true;
                 }
             }
@@ -400,9 +471,9 @@ var mpgSoftware = mpgSoftware || {};
         };
         var fillVariantsAndAssociations = function (geneInfo, show_gwas, show_exchp, show_exseq, show_sigma, rootVariantUrl, headers) {
             if (geneInfo) {
-                var regionSpecifier = "chr" + geneFieldOrZero(geneInfo, geneInfoRec.CHROM) + ":" +
-                    expandRegionBegin(geneFieldOrZero(geneInfo, geneInfoRec.BEG)) + "-" +
-                    expandRegionEnd(geneFieldOrZero(geneInfo, geneInfoRec.END));
+                var regionSpecifier = "chr" + geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().CHROM) + ":" +
+                    expandRegionBegin(geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().BEG)) + "-" +
+                    expandRegionEnd(geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().END));
                 var emphasisRequired = emphasisRecommended(geneInfo);
                 var emphasizeGwas = (emphasisRequired ? 1 : 0);
                 var headerRow = "<tr>" +
@@ -421,12 +492,12 @@ var mpgSoftware = mpgSoftware || {};
                 $('#variantsAndAssociationsHead').append(headerRow);
                 if (show_gwas) {
                     fillVariantsAndAssociationLine(geneInfo, 'gwas', '69,033', regionSpecifier,
-                        geneInfoRec.GWAS_T2D_VAR_TOTAL, geneInfoRec.GWAS_T2D_GWS_TOTAL, geneInfoRec.GWAS_T2D_LWS_TOTAL, geneInfoRec.GWAS_T2D_NOM_TOTAL,
+                        geneInfoJsonMap.fieldSymbol().GWAS_T2D_VAR_TOTAL, geneInfoJsonMap.fieldSymbol().GWAS_T2D_GWS_TOTAL, geneInfoJsonMap.fieldSymbol().GWAS_T2D_LWS_TOTAL, geneInfoJsonMap.fieldSymbol().GWAS_T2D_NOM_TOTAL,
                         buildAnchorForRegionVariantSearches, emphasizeGwas, rootVariantUrl);
                 }
                 if (show_exchp) {
                     fillVariantsAndAssociationLine(geneInfo, 'exomechip', '79,854', regionSpecifier,
-                        geneInfoRec.EXCHP_T2D_VAR_TOTALS_EU_TOTAL, geneInfoRec.EXCHP_T2D_GWS_TOTAL, geneInfoRec.EXCHP_T2D_LWS_TOTAL, geneInfoRec.EXCHP_T2D_NOM_TOTAL,
+                        geneInfoJsonMap.fieldSymbol().EXCHP_T2D_VAR_TOTALS_EU_TOTAL, geneInfoJsonMap.fieldSymbol().EXCHP_T2D_GWS_TOTAL, geneInfoJsonMap.fieldSymbol().EXCHP_T2D_LWS_TOTAL, geneInfoJsonMap.fieldSymbol().EXCHP_T2D_NOM_TOTAL,
                         buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl);
                 }
                 if (show_exseq) {
@@ -436,7 +507,7 @@ var mpgSoftware = mpgSoftware || {};
                         }
                     }
                     fillVariantsAndAssociationLine(geneInfo, 'exomeseq', '12,940', regionSpecifier,
-                        geneInfoRec._13k_T2D_VAR_TOTAL, geneInfoRec._13k_T2D_GWS_TOTAL, geneInfoRec._13k_T2D_LWS_TOTAL, geneInfoRec._13k_T2D_NOM_TOTAL,
+                        geneInfoJsonMap.fieldSymbol()._13k_T2D_VAR_TOTAL, geneInfoJsonMap.fieldSymbol()._13k_T2D_GWS_TOTAL, geneInfoJsonMap.fieldSymbol()._13k_T2D_LWS_TOTAL, geneInfoJsonMap.fieldSymbol()._13k_T2D_NOM_TOTAL,
                         buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl);
                 }
                 if (show_sigma) {
@@ -444,7 +515,7 @@ var mpgSoftware = mpgSoftware || {};
                         emphasizeGwas = 2;
                     }
                     fillVariantsAndAssociationLine(geneInfo, 'sigma', '8,658', regionSpecifier,// is there a SIGMA_T2D_LWS_TOTAL?
-                        geneInfoRec.SIGMA_T2D_VAR_TOTAL, geneInfoRec.SIGMA_T2D_GWS_TOTAL, geneInfoRec.SIGMA_T2D_NOM_TOTAL, geneInfoRec.SIGMA_T2D_NOM_TOTAL,
+                        geneInfoJsonMap.fieldSymbol().SIGMA_T2D_VAR_TOTAL, geneInfoJsonMap.fieldSymbol().SIGMA_T2D_GWS_TOTAL, geneInfoJsonMap.fieldSymbol().SIGMA_T2D_NOM_TOTAL, geneInfoJsonMap.fieldSymbol().SIGMA_T2D_NOM_TOTAL,
                         buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl);
                 }
 
@@ -528,11 +599,11 @@ var mpgSoftware = mpgSoftware || {};
                 retainBarchartPtr;
 
             if (show_exseq) {
-                numberOfVariants = geneFieldOrZero(geneInfo, geneInfoRec._13k_T2D_lof_NVAR);
-                proportionsWithDisease = geneFieldOrZero(geneInfo, geneInfoRec._13k_T2D_lof_MINA_MINU_RET);
-                bhtPeopleWithVariant = geneFieldOrZero(geneInfo, geneInfoRec._13k_T2D_lof_OBSA);
-                bhtPeopleWithoutVariant = geneFieldOrZero(geneInfo, geneInfoRec._13k_T2D_lof_OBSU);
-                bhtMetaBurdenForDiabetes = geneFieldOrZero(geneInfo, geneInfoRec._13k_T2D_lof_METABURDEN);
+                numberOfVariants = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._13k_T2D_lof_NVAR);
+                proportionsWithDisease = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._13k_T2D_lof_MINA_MINU_RET);
+                bhtPeopleWithVariant = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._13k_T2D_lof_OBSA);
+                bhtPeopleWithoutVariant = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._13k_T2D_lof_OBSU);
+                bhtMetaBurdenForDiabetes = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._13k_T2D_lof_METABURDEN);
 
                 // this one value comes back in the form of a very inconvenient string.  Break it down.
                 if (proportionsWithDisease) {
@@ -546,12 +617,12 @@ var mpgSoftware = mpgSoftware || {};
                 }
 
             } else if (show_sigma) {
-                numberOfVariants = geneFieldOrZero(geneInfo, geneInfoRec.SIGMA_T2D_lof_NVAR);
-                peopleWithDiseaseNumerator = geneFieldOrZero(geneInfo, geneInfoRec.SIGMA_T2D_lof_MINA);
-                peopleWithoutDiseaseNumerator = geneFieldOrZero(geneInfo, geneInfoRec.SIGMA_T2D_lof_MINU);
-                bhtPeopleWithVariant = geneFieldOrZero(geneInfo, geneInfoRec.SIGMA_T2D_lof_OBSA);
-                bhtPeopleWithoutVariant = geneFieldOrZero(geneInfo, geneInfoRec.SIGMA_T2D_lof_OBSU);
-                bhtMetaBurdenForDiabetes = geneFieldOrZero(geneInfo, geneInfoRec.SIGMA_T2D_lof_P);
+                numberOfVariants = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().SIGMA_T2D_lof_NVAR);
+                peopleWithDiseaseNumerator = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().SIGMA_T2D_lof_MINA);
+                peopleWithoutDiseaseNumerator = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().SIGMA_T2D_lof_MINU);
+                bhtPeopleWithVariant = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().SIGMA_T2D_lof_OBSA);
+                bhtPeopleWithoutVariant = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().SIGMA_T2D_lof_OBSU);
+                bhtMetaBurdenForDiabetes = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().SIGMA_T2D_lof_P);
 
                 // create variables to match the ones we have to create and the more heavily processed t2dgenes branch
                 peopleWithDiseaseDenominator = bhtPeopleWithVariant;
@@ -626,7 +697,7 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var retrieveGeneInfoRec = function () {
-            return geneInfoRec;
+            return geneInfoJsonMap.fieldSymbol();
         };
 
         var fillTheGeneFields = function (data, show_gwas, show_exchp, show_exseq, show_sigma, rootRegionUrl, rootTraitUrl, rootVariantUrl, textStringObject) {
@@ -653,10 +724,12 @@ var mpgSoftware = mpgSoftware || {};
         return {
             // private routines MADE PUBLIC FOR UNIT TESTING ONLY (find a way to do this in test mode only)
             expandRegionBegin: expandRegionBegin,
-            expandRegionEnd:expandRegionEnd,
-            geneFieldOrZero:geneFieldOrZero,
-            fillVarianceAndAssociations:fillVarianceAndAssociations,
-            retrieveGeneInfoRec:retrieveGeneInfoRec,
+            expandRegionEnd: expandRegionEnd,
+            geneFieldOrZero: geneFieldOrZero,
+            fillVarianceAndAssociations: fillVarianceAndAssociations,
+            retrieveGeneInfoRec: retrieveGeneInfoRec,
+            buildAnchorForVariantSearches: buildAnchorForVariantSearches,
+            fillVariantsAndAssociationLine:fillVariantsAndAssociationLine,
 
 
             // public routines

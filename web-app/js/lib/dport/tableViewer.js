@@ -315,8 +315,70 @@ var variantProcessing = (function () {
 
         }
     };
+
+
+    fillTraitsPerVariantTable = function ( vRec, show_gene, show_sigma, show_exseq, show_exchp,phenotypeMap,traitRootUrl ) {
+        var retVal = "";
+        if (!vRec) {   // error condition
+            return;
+        }
+
+        for (var i = 0; i < vRec.length; i++) {
+
+            var trait = vRec [i] ;
+            retVal += "<tr>"
+
+            var convertedTrait=trait.TRAIT;
+            if ((phenotypeMap) &&
+                (phenotypeMap.phenotypeMap) &&
+                (typeof phenotypeMap.phenotypeMap[trait.TRAIT] !== "undefined")) {
+                convertedTrait=phenotypeMap.phenotypeMap[trait.TRAIT];
+            }
+            retVal += "<td><a href='"+traitRootUrl+"?trait="+trait.TRAIT+"&significance=5e-8'>"+convertedTrait+"</a></td>";
+
+            retVal += "<td>" +(trait.PVALUE.toPrecision(3))+"</td>";
+
+            retVal += "<td>";
+            if (trait.DIR === "up") {
+                retVal += "<span class='assoc-up'>&uarr;</span>";
+            } else if (trait.DIR === "down") {
+                retVal += "<span class='assoc-down'>&darr;</span>";
+            }
+            retVal += "</td>";
+
+            retVal += "<td>";
+            if (trait.ODDS_RATIO) {
+                retVal += (trait.ODDS_RATIO.toPrecision(3));
+            }
+            retVal += "</td>";
+
+
+            retVal += "<td>";
+            if (trait.MAF) {
+                retVal += (trait.MAF.toPrecision(3));
+            }
+            retVal += "</td>";
+
+
+            retVal += "<td>";
+            if (trait.BETA) {
+                retVal += "beta: " + trait.BETA.toPrecision(3);
+            } else if (trait.Z_SCORE){
+                retVal += "z-score: " + trait.ZSCORE.toPrecision(3);
+            }
+            retVal += "</td>";
+
+
+            retVal += "</tr>";
+        }
+        return retVal;
+    }
+
+
+
     return {
         fillTheVariantTable: fillTheVariantTable,
-        fillCollectedVariantsTable:fillCollectedVariantsTable
+        fillCollectedVariantsTable:fillCollectedVariantsTable,
+        fillTraitsPerVariantTable:fillTraitsPerVariantTable
     }
 }());
