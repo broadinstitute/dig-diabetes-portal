@@ -39,7 +39,7 @@ describe("expandRegionEnd", function() {
 
 });
 
-var  geneInfo = {
+var  simulatedJsonReturn = {
     BEG: 117962462,
     CHROM: "8",
     END: 118189003,
@@ -61,15 +61,16 @@ var  geneInfo = {
     _13k_T2D_ORIGIN_VAR_TOTALS: {
         'AA':{COMMON: 1,LOW_FREQUENCY: 5,NS: 2025,RARE: 16,SING: 12,TOTAL: 34}}
 };
+
 describe("geneFieldOrZero", function() {
     it("geneFieldOrZero accesses ID data", function() {
-        expect(mpgSoftware.geneInfo.geneFieldOrZero(geneInfo,mpgSoftware.geneInfo.retrieveGeneInfoRec().ID)).toEqual("SLC30A8");
+        expect(mpgSoftware.geneInfo.geneFieldOrZero(simulatedJsonReturn,mpgSoftware.geneInfo.retrieveGeneInfoRec().ID)).toEqual("SLC30A8");
     });
     it("geneFieldOrZero test default value", function() {
-        expect(mpgSoftware.geneInfo.geneFieldOrZero(geneInfo,mpgSoftware.geneInfo.retrieveGeneInfoRec().SIGMA_T2D_lof_P,47)).toEqual(47);
+        expect(mpgSoftware.geneInfo.geneFieldOrZero(simulatedJsonReturn,mpgSoftware.geneInfo.retrieveGeneInfoRec().SIGMA_T2D_lof_P,47)).toEqual(47);
     });
     it("geneFieldOrZero test tthe nonexistent fields return zero", function() {
-        expect(mpgSoftware.geneInfo.geneFieldOrZero(geneInfo,mpgSoftware.geneInfo.retrieveGeneInfoRec().SIGMA_T2D_lof_P)).toEqual(0);
+        expect(mpgSoftware.geneInfo.geneFieldOrZero(simulatedJsonReturn,mpgSoftware.geneInfo.retrieveGeneInfoRec().SIGMA_T2D_lof_P)).toEqual(0);
     });
 });
 
@@ -78,7 +79,33 @@ describe("fillVarianceAndAssociations", function() {
     var anchorDom = document.createElement("div");
     anchorDom.setAttribute('id','gwasTraits');
     it("testing fillVarianceAndAssociations", function() {
-        mpgSoftware.geneInfo.fillVarianceAndAssociations(geneInfo,true,'show_exchp','show_exseq','show_sigma','rootRegionUrl','rootTraitUrl','rootVariantUrl',phenotype);
-        expect(typeof anchorDom !== 'undefined');
+        mpgSoftware.geneInfo.fillVarianceAndAssociations(simulatedJsonReturn,true,'show_exchp','show_exseq','show_sigma','rootRegionUrl','rootTraitUrl','rootVariantUrl',phenotype);
+        expect(typeof anchorDom !== 'undefined').toBe(true);
     });
+});
+
+
+
+describe("buildAnchorForVariantSearches", function() {
+    it("testing buildAnchorForVariantSearches", function() {
+        var returnedAnchor = mpgSoftware.geneInfo.buildAnchorForVariantSearches('displayableContents', 'geneName', 'filter', 'rootVariantUrl');
+        expect(returnedAnchor.indexOf('displayableContents')>-1).toBe(true);
+        expect(returnedAnchor.indexOf('geneName')>-1).toBe(true);
+        expect(returnedAnchor.indexOf('filter')>-1).toBe(true);
+        expect(returnedAnchor.indexOf('displayableContents')>-1).toBe(true);
+    });
+});
+
+
+describe("fillVariantsAndAssociationLine", function() {
+    it("testing fillVariantsAndAssociationLine", function() {
+        var anchorDom = document.createElement("div");
+        anchorDom.setAttribute('id','variantsAndAssociationsTableBody');
+        mpgSoftware.geneInfo.fillVariantsAndAssociationLine(simulatedJsonReturn,
+                                                                                 'gwas',
+                                                                                 '100',
+                                                                                 'chr1:209348715-210349783',
+                                                                                 28, 30, 29, 28,
+                                                                                 function(){return '<a>'},true,'rootVariantUrl');
+        expect(typeof anchorDom !== 'undefined').toBe(true);    });
 });

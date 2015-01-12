@@ -1,6 +1,7 @@
 <head>
     <meta name="layout" content="core"/>
     <r:require modules="core"/>
+    <r:require modules="tableViewer"/>
     <r:layoutResources/>
 </head>
 
@@ -29,7 +30,7 @@
 
     function fillTheTraitsPerVariantFields (data)  {
         var variant =  data['traitInfo'];
-        $('#traitsPerVariantTableBody').append(UTILS.fillTraitsPerVariantTable(variant,
+        $('#traitsPerVariantTableBody').append(variantProcessing.fillTraitsPerVariantTable(variant,
                 ${show_gene},
                 ${show_sigma},
                 ${show_exseq},
