@@ -317,14 +317,37 @@ class RestServerService {
         return  returnValue
     }
 
+    /***
+     * This is the underlying routine for every GET request to the REST backend
+     * where response is text/plain type.
+     * @param drivingJson
+     * @param targetUrl
+     * @return
+     */
+    private String getRestCallBase(String targetUrl, String currentRestServer){
+        String returnValue = null
+        RestResponse response
+        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
+        StringBuilder logStatus = new StringBuilder()
+        try {
+            response  = rest.get(currentRestServer+targetUrl) {
+                contentType "text/plain"
+            }
+        } catch (Exception exception){
+            log.error("NOTE: exception on post to backend. Target=${targetUrl}")
+            log.error(exception.toString())
+            logStatus <<  "NOTE: exception on post to backend. Target=${targetUrl}"
+        }
 
-
-
-
-
-
-
-
+        if (response?.responseEntity?.statusCode?.value == 200) {
+            returnValue =  response.text
+            logStatus << """status: ok""".toString()
+        } else {
+            logStatus << """status: failed""".toString()
+        }
+        log.info(logStatus)
+        return returnValue
+    }
 
     /***
      * This is the underlying routine for every call to the rest backend.

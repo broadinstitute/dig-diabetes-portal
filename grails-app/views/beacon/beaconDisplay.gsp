@@ -30,21 +30,25 @@
         var reference   = document.getElementById("reference-input").value;
         var position    = document.getElementById("position-input").value;
         var allele      = document.getElementById("allele-input").value;
-        var params      = {'dataset' : dataset,  'reference': reference,
-                           'position': position, 'allele'   : allele};
+        var params      = {"dataset"  : dataset,
+                           "reference": reference,
+                           "position" : position,
+                           "allele"   : allele};
         $.ajax({
-            type   : 'POST',
-            cache  : false,
-            data   : JSON.stringify(params),
-            url    : "./beaconVariantQueryAjax",
-            async  : true,
-            success: function(data) {
-                        console.log(data);
-                        loading.hide();
-                     },
-            error  : function() {
-                        loading.hide();
-                     }
+            type        : 'POST',
+            cache       : false,
+            data        : JSON.stringify(params),
+            contentType :"application/json; charset=utf-8",
+            url         : "./beaconVariantQueryAjax",
+            async       : true,
+            success     : function(data) {
+                            console.log("success: ", data);
+                            loading.hide();
+                            $(".showResult").text("Exist: " + data)
+                          },
+            error       : function() {
+                            loading.hide("error");
+                          }
         });
     };
 </script>
@@ -132,7 +136,11 @@
                 </form>
             </div>
             <br>
+            <div class="showResult" style="font-weight:bold;display:inline-block"></div>
+            <br>
+            <br>
             <div class="save btn btn-lg btn-primary pull-left" onclick="queryVariants()">Submit</div>
+
         </div>
     </div>
 

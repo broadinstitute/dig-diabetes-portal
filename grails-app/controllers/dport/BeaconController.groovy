@@ -1,44 +1,26 @@
 package dport
 
-import org.codehaus.groovy.grails.web.json.JSONObject
-
 class BeaconController {
+    RestServerService restServerService
 
     def index() {}
 
     def BeaconDisplay (){
-        render (view: "beaconDisplay", model:[caller:0
-        ])
+        render (view: "beaconDisplay", model:[caller:0])
     }
 
     def beaconVariantQueryAjax() {
-        println params
-        String variantToStartWith = params.variants
-        String decodedVariants = URLDecoder.decode(variantToStartWith, "UTF-8");
-//        if (decodedVariants)      {
-//            Lis<String> listOfVariants = sharedToolsService.convertStringToArray(decodedVariants)
-//            String drivingJson = sharedToolsService.createDistributedBurdenTestInput(listOfVariants)
-//            JSONObject jsonObject =  restServerService.postRestCallBurden (drivingJson, "variant")
-//            if (jsonObject){
-//                render(status: 200, contentType: "application/json") {
-//                    [burdenTestResults: jsonObject]
-//                }
-//                return
-//            }
-//        }
-//
-        // new stuff
-        JSONObject jsonObject
-        if (decodedVariants)      {
-            List<String> variantsInListForm = sharedToolsService.convertStringToArray(decodedVariants)
-            String variantsInStringForm = sharedToolsService.convertListToString(variantsInListForm)
-            jsonObject =  restServerService.retrieveVariantInfoByName_Experimental ("[" +variantsInStringForm+ "]")
-            render(status:200, contentType:"application/json") {
-                [variants:jsonObject['variant-info']]
-            }
-            return
-        }
+        def reqJSON = request.JSON
+        String dataset   = reqJSON.getString("dataset")
+        String reference = reqJSON.getString("reference")
+        String position  = reqJSON.getString("position")
+        String allele    = reqJSON.getString("allele")
 
-        return
+        String currentRestServer = "http://broad-beacon.broadinstitute.org:8090/dev/beacon/"
+        //TODO Remove hardcoding on ref=hg19 after updating the REST service
+        String targetUrl         = "query?chrom=" + reference + "&pos=" + position + "&allele=" + allele + "&ref=hg19"
+
+        String resp = restServerService.getRestCallBase(targetUrl, currentRestServer)
+        render resp
     }
 }
