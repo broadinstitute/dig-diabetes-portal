@@ -18,6 +18,37 @@
 
 <body>
 
+<script>
+    /***
+     * Make a variant search request to back-end.
+     */
+    var queryVariants = function () {
+        var loading = $('#spinner').show();
+        loading.show();
+
+        var dataset     = document.getElementById("dataset-input").value;
+        var reference   = document.getElementById("reference-input").value;
+        var position    = document.getElementById("position-input").value;
+        var allele      = document.getElementById("allele-input").value;
+        var params      = {'dataset' : dataset,  'reference': reference,
+                           'position': position, 'allele'   : allele};
+        $.ajax({
+            type   : 'POST',
+            cache  : false,
+            data   : JSON.stringify(params),
+            url    : "./beaconVariantQueryAjax",
+            async  : true,
+            success: function(data) {
+                        console.log(data);
+                        loading.hide();
+                     },
+            error  : function() {
+                        loading.hide();
+                     }
+        });
+    };
+</script>
+
 <div id="main">
     <div class="container">
         <h1>Broad Institute GA4GH Beacon</h1>
@@ -93,20 +124,15 @@
                 <form>
                     <br>
                     Start:
-                    <input type="text" name="position">
+                    <input type="text" name="position" id="position-input">
                     <br>
                     <br>
                     Allele:
-                    <input type="text" name="allele">
+                    <input type="text" name="allele" id="allele-input">
                 </form>
             </div>
             <br>
-            <div>
-                <fieldset class="buttons">
-                    <g:actionSubmit class="save btn btn-lg btn-primary pull-left"   action="update"
-                                    value="Submit"/>
-                </fieldset>
-            </div>
+            <div class="save btn btn-lg btn-primary pull-left" onclick="queryVariants()">Submit</div>
         </div>
     </div>
 
