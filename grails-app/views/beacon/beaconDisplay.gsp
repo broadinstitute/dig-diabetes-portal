@@ -9,7 +9,7 @@
 <html>
 <head>
 
-    <meta name="layout" content="core"/>
+    <meta name="layout" content="beaconCore"/>
     <r:require modules="core"/>
     <r:require modules="geneInfo"/>
     <r:layoutResources/>
@@ -55,7 +55,7 @@
 
 <div id="main">
     <div class="container">
-        <h1>Broad Institute GA4GH Beacon</h1>
+<!--        <h1>Broad Institute GA4GH Beacon</h1> -->
 
         <div class="beaconDisplay">
             <p>
@@ -124,10 +124,10 @@
                     <option value="Y">Y</option>
                 </select>
             </div>
-            <div>
-                <form>
+            <div class="input-group input-group-lg">
+                <form style="width:90%;">
                     <br>
-                    Start:
+                    Position:
                     <input type="text" name="position" id="position-input">
                     <br>
                     <br>
