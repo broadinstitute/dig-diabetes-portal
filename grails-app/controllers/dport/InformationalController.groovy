@@ -10,6 +10,9 @@ class InformationalController {
     def about (){
         render (view: 'about')
     }
+    def aboutBeacon (){
+        render (view: 'aboutBeacon')
+    }
     def aboutSigma (){
         def locale = RequestContextUtils.getLocale(request)
         render (view:'sigma/homeHolder')
@@ -23,6 +26,9 @@ class InformationalController {
     }
     def contact (){
         render (view: 'contact')
+    }
+    def contactBeacon (){
+        render (view: 'contactBeacon')
     }
     def hgat (){
         render (view: 'hgat')

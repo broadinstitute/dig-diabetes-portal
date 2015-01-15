@@ -68,6 +68,10 @@ class BootStrap {
                               password:'ben',
                               nickname:'ben',
                               email: "benjamin.alexander96@yahoo.com"]
+            samples['kaan'] = [fullName:'Kaan Yuksel',
+                              password:'kaan',
+                              nickname:'kaan',
+                              email: "kyuksel@broadinstitute.org"]
             samples['mary'] = [fullName:'Mary Carmichael',
                               password:'Mary',
                               nickname:'Mary',

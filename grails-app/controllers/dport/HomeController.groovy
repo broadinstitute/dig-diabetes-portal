@@ -19,6 +19,11 @@ class HomeController {
                                                                show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
                                                                show_sigma:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma)])
     }
+
+    def beaconHome = {
+        render(view: 'beaconDisplay')
+    }
+
     def setEnglish = {
         render(controller: 'home', view: 'portalHome', model: [])
     }

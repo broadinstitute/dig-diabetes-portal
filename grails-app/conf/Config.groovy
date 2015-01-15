@@ -309,6 +309,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/trait/**':            ['ROLE_USER'],
         '/variant/**':          ['ROLE_USER'],
         '/variantSearch/**':    ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/beacon/*':          ['permitAll'],
         '/assets/**':         ['permitAll'],
         '/**/js/**':          ['permitAll'],
         '/**/fonts/**':       ['permitAll'],
