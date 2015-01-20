@@ -27,13 +27,14 @@
         loading.show();
 
         var dataset     = document.getElementById("dataset-input").value;
-        var reference   = document.getElementById("reference-input").value;
+        var chromosome   = document.getElementById("chromosome-input").value;
         var position    = document.getElementById("position-input").value;
         var allele      = document.getElementById("allele-input").value;
         var params      = {"dataset"  : dataset,
-                           "reference": reference,
+                           "chromosome": chromosome,
                            "position" : position,
                            "allele"   : allele};
+
         $.ajax({
             type        : 'POST',
             cache       : false,
@@ -44,13 +45,35 @@
             success     : function(data) {
                             console.log("success: ", data);
                             loading.hide();
-                            $(".showResult").text("Exist: " + data)
+                            if ($('#showResult').is(':hidden')) {
+                                $('#showResult').show();
+                            }
+                            $('#showResult').text("Exist: " + data);
                           },
             error       : function() {
                             loading.hide("error");
                           }
         });
     };
+
+    /***
+     * Re-set form values.
+     */
+    var resetForm = function (dataset, chromosome, position, allele) {
+        var form_dataset   = document.getElementById("dataset-input");
+        var form_chromosome = document.getElementById("chromosome-input");
+        var form_position  = document.getElementById("position-input");
+        var form_allele    = document.getElementById("allele-input");
+
+        form_dataset.value   = dataset;
+        form_chromosome.value = chromosome;
+        form_position.value  = position;
+        form_allele.value    = allele;
+
+        if ($('#showResult').is(':visible')) {
+            $('#showResult').hide()
+        }
+    }
 </script>
 
 <div id="main">
@@ -71,17 +94,17 @@
                 <div>
                     <p>
                         <span>
-                            <a class="boldlink" href="http://genomicsandhealth.org">Reference: 2&nbsp;Position: 20038741&nbsp;Allele: A&nbsp;Project: PRJEB7898</a>
+                            <a class="boldlink" onclick="resetForm('PRJEB7898', 1, 13417, 'CGAGA');">Chromosome: 1&nbsp;Position: 13417&nbsp;Allele: CGAGA&nbsp;Project: PRJEB7898</a>
                         </span>
                     </p>
                     <p>
                         <span>
-                            <a class="boldlink" href="http://genomicsandhealth.org">Reference: 14&nbsp;Position: 54317231&nbsp;Allele: D&nbsp;Project: PRJEB7898</a>
+                            <a class="boldlink" onclick="resetForm('PRJEB7898', 14, 5431731, 'D');">Chromosome: 14&nbsp;Position: 5431731&nbsp;Allele: D&nbsp;Project: PRJEB7898</a>
                         </span>
                     </p>
                     <p>
                         <span>
-                            <a class="boldlink" href="http://genomicsandhealth.org">Reference: X&nbsp;Position: 20038741&nbsp;Allele: ATG&nbsp;Project: PRJEB7898</a>
+                            <a class="boldlink" onclick="resetForm('PRJEB7898', 'X', 20038741, 'G');">Chromosome: X&nbsp;Position: 20038741&nbsp;Allele: G&nbsp;Project: PRJEB7898</a>
                         </span>
                     </p>
                 </div>
@@ -89,15 +112,15 @@
 
             <br>
             <div class="input-group input-group-lg">
-                <select name="" id="dataset-input" class="form-control" style="width:38%;">
+                <select name="" id="dataset-input" class="form-control" style="width:100%;">
                     <option value=""><g:message code="beacon.select.dataset"/></option>
-                    <option value="PRJEB7898">PRJEB7898 -- The Exome Aggregation Consortium (ExAC) v0.2</option>
+                    <option value="PRJEB7898" selected="selected">PRJEB7898 -- The Exome Aggregation Consortium (ExAC) v0.2</option>
                 </select>
             </div>
             <br>
             <div class="input-group input-group-lg">
-                <select name="" id="reference-input" class="form-control" style="width:100%;">
-                    <option value=""><g:message code="beacon.select.reference"/></option>
+                <select name="" id="chromosome-input" class="form-control" style="width:100%;">
+                    <option value=""><g:message code="beacon.select.chromosome"/></option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -136,11 +159,10 @@
                 </form>
             </div>
             <br>
-            <div class="showResult" style="font-weight:bold;display:inline-block"></div>
+            <div class="bottom ishidden" id="showResult" style="font-weight:bold;"></div>
             <br>
             <br>
             <div class="save btn btn-lg btn-primary pull-left" onclick="queryVariants()">Submit</div>
-
         </div>
     </div>
 

@@ -132,7 +132,7 @@
             </g:renderSigmaSection>
             <g:renderNotSigmaSection>
                 <div id="branding">
-                    Broad Institute <strong>Beacon</strong> <small>Beta</small>
+                    Broad Institute <strong>Beacon</strong>
                 </div>
             </g:renderNotSigmaSection>
         </div>
