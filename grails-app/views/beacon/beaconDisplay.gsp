@@ -114,7 +114,7 @@
             <div class="input-group input-group-lg">
                 <select name="" id="dataset-input" class="form-control" style="width:100%;">
                     <option value=""><g:message code="beacon.select.dataset"/></option>
-                    <option value="PRJEB7898" selected="selected">PRJEB7898 -- The Exome Aggregation Consortium (ExAC) v0.2</option>
+                    <option value="PRJEB7898" selected="selected">PRJEB7898 -- The Exome Aggregation Consortium (ExAC) v0.3</option>
                 </select>
             </div>
             <br>
@@ -160,7 +160,6 @@
             </div>
             <br>
             <div class="bottom ishidden" id="showResult" style="font-weight:bold;"></div>
-            <br>
             <br>
             <div class="save btn btn-lg btn-primary pull-left" onclick="queryVariants()">Submit</div>
         </div>
