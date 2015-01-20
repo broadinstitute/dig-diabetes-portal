@@ -35,6 +35,7 @@
                            "position" : position,
                            "allele"   : allele};
         var table = $('#resultTable');
+        var formatIsText = document.getElementById("textRadio").checked;
 
         $.ajax({
             type        : 'POST',
@@ -48,17 +49,22 @@
                             loading.hide();
 
                             table.empty(); // clear previously created table content, if any
-                            table.append('<thead><tr><th colspan=\"2\">Result</th></tr></thead>');
-                            table.append('<tbody><tr><td>Project</td><td>' + dataset + '</td></tr>');
-                            table.append('<tr><td>Chromosome</td><td>' + chromosome + '</td></tr>');
-                            table.append('<tr><td>Position</td><td>' + position + '</td></tr>');
-                            table.append('<tr><td>Allele</td><td>' + allele + '</td></tr>');
-                            if (data === 'YES') { // display query answer in bold; in green if positive and in red if negative
-                                table.append('<tr><td style=\"font-weight:bold;\">Exist</td><td style=\"color:green;font-weight:bold;\">' + data + '</td></tr></tbody>');
+                            if (formatIsText) {
+                                table.append('<thead><tr><th colspan=\"2\">Result</th></tr></thead>');
+                                table.append('<tbody><tr><td>Project</td><td>' + dataset + '</td></tr>');
+                                table.append('<tr><td>Chromosome</td><td>' + chromosome + '</td></tr>');
+                                table.append('<tr><td>Position</td><td>' + position + '</td></tr>');
+                                table.append('<tr><td>Allele</td><td>' + allele + '</td></tr>');
+                                if (data === 'YES') { // display query answer in bold; in green if positive and in red if negative
+                                    table.append('<tr><td style=\"font-weight:bold;\">Exist</td><td style=\"color:green;font-weight:bold;\">' + data + '</td></tr></tbody>');
+                                } else {
+                                    table.append('<tr><td style=\"font-weight:bold;\">Exist</td><td style=\"color:red;font-weight:bold;\">' + data + '</td></tr></tbody>');
+                                }
                             } else {
-                                table.append('<tr><td style=\"font-weight:bold;\">Exist</td><td style=\"color:red;font-weight:bold;\">' + data + '</td></tr></tbody>');
+                                var obj = {'Query':{'Project':dataset, 'Chromosome':chromosome, 'Position':position, 'Allele':allele}, 'Exist':data};
+                                var str = JSON.stringify(obj, undefined, 2); // indentation level = 2
+                                table.append('<code>' + str + '</code>');
                             }
-
                           },
             error       : function() {
                             loading.hide("error");
@@ -164,11 +170,19 @@
                     <br>
                     Allele:
                     <input type="text" name="allele" id="allele-input">
+                    <br>
+                    <br>
+                    Format Type:&nbsp;&nbsp;&nbsp;
+                    <span>
+                    <label>
+                        <input id="textRadio" type="radio" name="resultFormat" value="text" style="margin-right:2px" checked/>
+                        Text&nbsp;
+                        <input id="jsonRadio" type="radio" name="resultFormat" value="text" style="margin-right:2px"/>
+                        JSON
+                    </label>
+                    </span>
                 </form>
             </div>
-            <br>
-            <div class="bottom ishidden" id="showResult" style="font-weight:bold;"></div>
-
             <div style="text-align:left;">
                 <table id="resultTable" class="table table-striped basictable" style="text-align:left;width:53%">
                 </table>
