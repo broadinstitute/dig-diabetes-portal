@@ -34,6 +34,7 @@
                            "chromosome": chromosome,
                            "position" : position,
                            "allele"   : allele};
+        var table = $('#resultTable');
 
         $.ajax({
             type        : 'POST',
@@ -45,10 +46,19 @@
             success     : function(data) {
                             console.log("success: ", data);
                             loading.hide();
-                            if ($('#showResult').is(':hidden')) {
-                                $('#showResult').show();
+
+                            table.empty(); // clear previously created table content, if any
+                            table.append('<thead><tr><th colspan=\"2\">Result</th></tr></thead>');
+                            table.append('<tbody><tr><td>Project</td><td>' + dataset + '</td></tr>');
+                            table.append('<tr><td>Chromosome</td><td>' + chromosome + '</td></tr>');
+                            table.append('<tr><td>Position</td><td>' + position + '</td></tr>');
+                            table.append('<tr><td>Allele</td><td>' + allele + '</td></tr>');
+                            if (data === 'YES') { // display query answer in bold; in green if positive and in red if negative
+                                table.append('<tr><td style=\"font-weight:bold;\">Exist</td><td style=\"color:green;font-weight:bold;\">' + data + '</td></tr></tbody>');
+                            } else {
+                                table.append('<tr><td style=\"font-weight:bold;\">Exist</td><td style=\"color:red;font-weight:bold;\">' + data + '</td></tr></tbody>');
                             }
-                            $('#showResult').text("Exist: " + data);
+
                           },
             error       : function() {
                             loading.hide("error");
@@ -70,9 +80,7 @@
         form_position.value  = position;
         form_allele.value    = allele;
 
-        if ($('#showResult').is(':visible')) {
-            $('#showResult').hide()
-        }
+        $('#resultTable').empty(); // clear previously created table content, if any
     }
 </script>
 
@@ -160,7 +168,11 @@
             </div>
             <br>
             <div class="bottom ishidden" id="showResult" style="font-weight:bold;"></div>
-            <br>
+
+            <div style="text-align:left;">
+                <table id="resultTable" class="table table-striped basictable" style="text-align:left;width:53%">
+                </table>
+            </div>
             <div class="save btn btn-lg btn-primary pull-left" onclick="queryVariants()">Submit</div>
         </div>
     </div>
