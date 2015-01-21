@@ -51,6 +51,11 @@ grails.project.dependency.resolution = {
         runtime 'mysql:mysql-connector-java:5.1.29'
         // runtime 'org.postgresql:postgresql:9.3-1101-jdbc41'
         test "org.grails:grails-datastore-test-support:1.0-grails-2.4"
+
+        // necessary for authentication?
+        test "org.grails:grails-datastore-test-support:1.0-grails-2.4"
+        compile "com.google.api-client:google-api-client:1.16.0-rc"
+        compile 'com.google.http-client:google-http-client-jackson2:1.16.0-rc'
     }
 
     plugins {
@@ -80,6 +85,10 @@ grails.project.dependency.resolution = {
         runtime ':resources:1.2.8'
 
         compile ":spring-security-core:2.0-RC4"
+
+        // nec for authentication!
+        compile ":spring-security-oauth:2.1.0-RC4"
+        compile ':spring-security-oauth-google:0.3.1'
 
         test ":codenarc:0.21"
 

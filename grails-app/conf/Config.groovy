@@ -195,23 +195,46 @@ grails {
     }
 }
 
+appName = grails.util.Metadata.current.'app.name'
+def baseURL = grails.serverURL ?: "http://127.0.0.1:${System.getProperty('server.port', '8080')}/${appName}"
+
 
 oauth {
 
     providers {
 
         google {
-            api = org.scribe.builder.api.GoogleApi20
+            api = org.grails.plugin.springsecurity.oauth.GoogleApi20
             key = '975413760331-d2nr5vq7sbbppjfog0cp9j4agesbeovt.apps.googleusercontent.com'
-            secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
-            successUri = '/oauth/google/success'
+            successUri = "${baseURL}/springSecurityOAuth/onSuccess"
             failureUri = '/oauth/google/error'
-            callback = "${baseURL}/oauth/google/callback"
+            callback = "${baseURL}/springSecurityOAuth/codeExchange?provider=google"
             scope = 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
         }
 
     }
 }
+
+googleapi {
+    baseUrl = 'www.googleapis.com'
+}
+
+//oauth {
+//
+//    providers {
+//
+//        google {
+//            api = org.scribe.builder.api.GoogleApi20
+//            key = '975413760331-d2nr5vq7sbbppjfog0cp9j4agesbeovt.apps.googleusercontent.com'
+//            secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
+//            successUri = '/oauth/google/success'
+//            failureUri = '/oauth/google/error'
+//            callback = "${baseURL}/oauth/google/callback"
+//            scope = 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
+//        }
+//
+//    }
+//}
             grails.converters.encoding = "UTF-8"
 // scaffolding templates configuration
 grails.scaffolding.templates.domainSuffix = 'Instance'
@@ -318,7 +341,9 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/**/*.ico':    ['permitAll'],
         '/login/**':          ['permitAll'],
         '/logout/**':         ['permitAll'],
-        '/hypothesisGen/**':  ['ROLE_USER']
+        '/hypothesisGen/**':  ['ROLE_USER'],
+        '/oauth/**':          ['permitAll'],
+        '/springSecurityOAuth/**':          ['permitAll']
 ]
 grails.plugin.auth.loginFormUrl='/Security/auth2'
 grails.plugin.springsecurity.logout.postOnly = false

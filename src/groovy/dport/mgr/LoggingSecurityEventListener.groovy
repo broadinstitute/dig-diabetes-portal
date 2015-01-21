@@ -20,7 +20,7 @@ class LoggingSecurityEventListener implements
         event.authentication.with {
             def username = principal.hasProperty('username')?.getProperty(principal) ?: principal
             log.info "event=${event.class.simpleName} username=${username} " +
-                    "remoteAddress=${details.remoteAddress} sessionId=${details.sessionId}"
+                    "remoteAddress=${details?.remoteAddress} sessionId=${details?.sessionId}"
         }
     }
 
@@ -29,7 +29,7 @@ class LoggingSecurityEventListener implements
         authentication.with {
             def username = principal.hasProperty('username')?.getProperty(principal) ?: principal
             log.info "event=Logout username=${username} " +
-                    "remoteAddress=${details.remoteAddress} sessionId=${details.sessionId}"
+                    "remoteAddress=${details?.remoteAddress} sessionId=${details?.sessionId}"
         }
     }
 }
