@@ -34,7 +34,8 @@
                            "chromosome": chromosome,
                            "position" : position,
                            "allele"   : allele};
-        var table = $('#resultTable');
+        var resultTable = $('#resultTable');
+        var resultJson = $('#resultJson');
         var formatIsText = document.getElementById("textRadio").checked;
 
         $.ajax({
@@ -45,32 +46,52 @@
             url         : "./beaconVariantQueryAjax",
             async       : true,
             success     : function(data) {
-                            console.log("success: ", data);
                             loading.hide();
 
-                            table.empty(); // clear previously created table content, if any
-                            if (formatIsText) {
-                                table.append('<thead><tr><th colspan=\"2\">Result</th></tr></thead>');
-                                table.append('<tbody><tr><td>Project</td><td>' + dataset + '</td></tr>');
-                                table.append('<tr><td>Chromosome</td><td>' + chromosome + '</td></tr>');
-                                table.append('<tr><td>Position</td><td>' + position + '</td></tr>');
-                                table.append('<tr><td>Allele</td><td>' + allele + '</td></tr>');
-                                if (data === 'YES') { // display query answer in bold; in green if positive and in red if negative
-                                    table.append('<tr><td style=\"font-weight:bold;\">Exist</td><td style=\"color:green;font-weight:bold;\">' + data + '</td></tr></tbody>');
-                                } else {
-                                    table.append('<tr><td style=\"font-weight:bold;\">Exist</td><td style=\"color:red;font-weight:bold;\">' + data + '</td></tr></tbody>');
-                                }
+                            // clear previously created table content, if any
+                            resultTable.empty();
+                            // regenerate table content with updated data
+                            resultTable.append('<thead><tr><th colspan=\"2\">Result</th></tr></thead>');
+                            resultTable.append('<tbody><tr><td>Project</td><td>' + dataset + '</td></tr>');
+                            resultTable.append('<tr><td>Chromosome</td><td>' + chromosome + '</td></tr>');
+                            resultTable.append('<tr><td>Position</td><td>' + position + '</td></tr>');
+                            resultTable.append('<tr><td>Allele</td><td>' + allele + '</td></tr>');
+                            if (data === 'YES') { // display query answer in bold; in green if positive and in red if negative
+                                resultTable.append('<tr><td style=\"font-weight:bold;\">Exist</td><td style=\"color:green;font-weight:bold;\">' + data + '</td></tr></tbody>');
                             } else {
-                                var obj = {'Query':{'Project':dataset, 'Chromosome':chromosome, 'Position':position, 'Allele':allele}, 'Exist':data};
-                                var str = JSON.stringify(obj, undefined, 2); // indentation level = 2
-                                table.append('<code>' + str + '</code>');
+                                resultTable.append('<tr><td style=\"font-weight:bold;\">Exist</td><td style=\"color:red;font-weight:bold;\">' + data + '</td></tr></tbody>');
                             }
+
+                            // clear previously created json content, if any
+                            resultJson.empty();
+                            // regenerate json content with updated data
+                            var obj = {'Query':{'Project':dataset, 'Chromosome':chromosome, 'Position':position, 'Allele':allele}, 'Exist':data};
+                            var str = JSON.stringify(obj, undefined, 2); // indentation level = 2
+                            resultJson.append('<code>' + str + '</code>');
+
+                            // display only the selected format (table or json)
+                            switchDisplay();
                           },
             error       : function() {
                             loading.hide("error");
                           }
         });
     };
+
+    /***
+     * Toggle between displaying result as table and JSON upon click of radio button.
+     */
+    var switchDisplay = function () {
+        var formatIsText = document.getElementById("textRadio").checked;
+
+        if (formatIsText) {
+            $('#resultTable').show();
+            $('#resultJson').hide();
+        } else {
+            $('#resultJson').show();
+            $('#resultTable').hide();
+        }
+    }
 
     /***
      * Re-set form values.
@@ -175,9 +196,9 @@
                     Format Type:&nbsp;&nbsp;&nbsp;
                     <span>
                     <label>
-                        <input id="textRadio" type="radio" name="resultFormat" value="text" style="margin-right:2px" checked/>
+                        <input id="textRadio" type="radio" name="resultFormat" value="text" onclick="switchDisplay()" style="margin-right:2px" checked/>
                         Text&nbsp;
-                        <input id="jsonRadio" type="radio" name="resultFormat" value="text" style="margin-right:2px"/>
+                        <input id="jsonRadio" type="radio" name="resultFormat" value="text" onclick="switchDisplay()" style="margin-right:2px"/>
                         JSON
                     </label>
                     </span>
@@ -185,6 +206,10 @@
             </div>
             <div style="text-align:left;">
                 <table id="resultTable" class="table table-striped basictable" style="text-align:left;width:53%">
+                </table>
+            </div>
+            <div style="text-align:left;">
+                <table id="resultJson" class="table table-striped basictable" style="text-align:left;width:53%">
                 </table>
             </div>
             <div class="save btn btn-lg btn-primary pull-left" onclick="queryVariants()">Submit</div>
