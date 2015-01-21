@@ -23,60 +23,83 @@
      * Make a variant search request to back-end.
      */
     var queryVariants = function () {
-        var loading = $('#spinner').show();
-        loading.show();
-
         var dataset     = document.getElementById("dataset-input").value;
-        var chromosome   = document.getElementById("chromosome-input").value;
+        var chromosome  = document.getElementById("chromosome-input").value;
         var position    = document.getElementById("position-input").value;
         var allele      = document.getElementById("allele-input").value;
         var params      = {"dataset"  : dataset,
                            "chromosome": chromosome,
                            "position" : position,
                            "allele"   : allele};
-        var resultTable = $('#resultTable');
-        var resultJson = $('#resultJson');
-        var formatIsText = document.getElementById("textRadio").checked;
 
-        $.ajax({
-            type        : 'POST',
-            cache       : false,
-            data        : JSON.stringify(params),
-            contentType :"application/json; charset=utf-8",
-            url         : "./beaconVariantQueryAjax",
-            async       : true,
-            success     : function(data) {
-                            loading.hide();
+        var displayError = $('#displayError');
+        displayError.empty(); // clear previously displayed error message, if any
 
-                            // clear previously created table content, if any
-                            resultTable.empty();
-                            // regenerate table content with updated data
-                            resultTable.append('<thead><tr><th colspan=\"2\">Result</th></tr></thead>');
-                            resultTable.append('<tbody><tr><td>Project</td><td>' + dataset + '</td></tr>');
-                            resultTable.append('<tr><td>Chromosome</td><td>' + chromosome + '</td></tr>');
-                            resultTable.append('<tr><td>Position</td><td>' + position + '</td></tr>');
-                            resultTable.append('<tr><td>Allele</td><td>' + allele + '</td></tr>');
-                            if (data === 'YES') { // display query answer in bold; in green if positive and in red if negative
-                                resultTable.append('<tr><td style=\"font-weight:bold;\">Exist</td><td style=\"color:green;font-weight:bold;\">' + data + '</td></tr></tbody>');
-                            } else {
-                                resultTable.append('<tr><td style=\"font-weight:bold;\">Exist</td><td style=\"color:red;font-weight:bold;\">' + data + '</td></tr></tbody>');
-                            }
+        if (userInputIsValid(params, displayError)) {
+            var loading = $('#spinner').show();
+            loading.show();
 
-                            // clear previously created json content, if any
-                            resultJson.empty();
-                            // regenerate json content with updated data
-                            var obj = {'Query':{'Project':dataset, 'Chromosome':chromosome, 'Position':position, 'Allele':allele}, 'Exist':data};
-                            var str = JSON.stringify(obj, undefined, 2); // indentation level = 2
-                            resultJson.append('<code>' + str + '</code>');
+            var resultTable = $('#resultTable');
+            var resultJson = $('#resultJson');
 
-                            // display only the selected format (table or json)
-                            switchDisplay();
-                          },
-            error       : function() {
-                            loading.hide("error");
-                          }
-        });
+            $.ajax({
+                type: 'POST',
+                cache: false,
+                data: JSON.stringify(params),
+                contentType: "application/json; charset=utf-8",
+                url: "./beaconVariantQueryAjax",
+                async: true,
+                success: function (data) {
+                    loading.hide();
+
+                    // clear previously created table content, if any
+                    resultTable.empty();
+                    // regenerate table content with updated data
+                    resultTable.append('<thead><tr><th style=\"text-align:left\" colspan=\"2\">Result</th></tr></thead>');
+                    resultTable.append('<tbody><tr><td style=\"text-align:left\">Project</td><td style=\"text-align:left\">' + dataset + '</td></tr>');
+                    resultTable.append('<tr><td style=\"text-align:left\">Chromosome</td><td style=\"text-align:left\">' + chromosome + '</td></tr>');
+                    resultTable.append('<tr><td style=\"text-align:left\">Position</td><td style=\"text-align:left\">' + position + '</td></tr>');
+                    resultTable.append('<tr><td style=\"text-align:left\">Allele</td><td style=\"text-align:left\">' + allele + '</td></tr>');
+                    if (data === 'YES') { // display query answer in bold; in green if positive and in red if negative
+                        resultTable.append('<tr><td style=\"font-weight:bold;text-align:left\">Exist</td><td style=\"color:green;font-weight:bold;text-align:left\">' + data + '</td></tr></tbody>');
+                    } else {
+                        resultTable.append('<tr><td style=\"font-weight:bold;text-align: left\">Exist</td><td style=\"color:red;font-weight:bold;text-align:left\">' + data + '</td></tr></tbody>');
+                    }
+
+                    // clear previously created json content, if any
+                    resultJson.empty();
+                    // regenerate json content with updated data
+                    var obj = {'Query': {'Project': dataset, 'Chromosome': chromosome, 'Position': position, 'Allele': allele}, 'Exist': data};
+                    var str = JSON.stringify(obj, undefined, 2); // indentation level = 2
+                    resultJson.append('<code>' + str + '</code>');
+
+                    // display only the selected format (table or json)
+                    switchDisplay();
+                },
+                error: function () {
+                    loading.hide("error");
+                }
+            });
+        }
     };
+
+    /***
+     * Check if a user entered valid input and if not, display a message accordingly.
+     */
+    var userInputIsValid = function (params, displayError) {
+        var missingParams = [];
+        for (var key in params) {
+            if (params.hasOwnProperty(key) && !params[key]) {
+                missingParams.push(key);
+            }
+        }
+        if (missingParams.length > 0) {
+            displayError.append("Please enter values for the following fields: " + missingParams.join(", "));
+            return false;
+        }
+
+        return true;
+    }
 
     /***
      * Toggle between displaying result as table and JSON upon click of radio button.
@@ -204,12 +227,16 @@
                     </span>
                 </form>
             </div>
-            <div style="text-align:left;">
-                <table id="resultTable" class="table table-striped basictable" style="text-align:left;width:53%">
+            <div>
+                <table id="resultTable" class="table table-striped basictable" style="width:53%">
                 </table>
             </div>
-            <div style="text-align:left;">
-                <table id="resultJson" class="table table-striped basictable" style="text-align:left;width:53%">
+            <div>
+                <table id="resultJson" class="table table-striped basictable" style="width:53%">
+                </table>
+            </div>
+            <div>
+                <table id="displayError" class="table table-striped basictable" style="color:red;font-weight:bold;width:53%">
                 </table>
             </div>
             <div class="save btn btn-lg btn-primary pull-left" onclick="queryVariants()">Submit</div>
