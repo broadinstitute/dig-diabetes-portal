@@ -4,10 +4,10 @@
   border-color: #052090; }
 
 h1, h2, h3, h4, label {
-  font-weight: 300; }
+  font-weight: 400; }
 
 label, .radio label, .checkbox label {
-  font-weight: 300; }
+  font-weight: 400; }
 
 .input-group-lg > .form-control, .input-group-lg > .input-group-addon, .input-group-lg > .input-group-btn > .btn {
   border-radius: initial; }
@@ -50,14 +50,24 @@ h1 {
     vertical-align: middle; }
 
 h2 small {
-  font-weight: 300; }
-
+  font-weight: 300;
+}
+.medText {
+    font-size: 20px;
+    font-weight: 300;
+}
+.medTextDark {
+    font-size: 20px;
+    font-weight: 400;
+}
 h4 {
   font-size: 22px; }
 
 div.lead {
   font-size: 28px; }
-
+.sectionBuffer {
+    margin-top:30px;
+}
 div#branding {
   font-size: 44px;
   text-transform: uppercase;
