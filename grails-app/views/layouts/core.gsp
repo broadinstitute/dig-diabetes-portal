@@ -165,9 +165,13 @@
                 <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="localized.contact"/></a>
             </g:renderSigmaSection>
             <g:renderNotSigmaSection>
-                <a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a> &middot;
-                <a href="${createLink(controller:'informational', action:'about')}"><g:message code="localized.aboutTheData"/></a> &middot;
-                <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="localized.contact"/></a>
+                <a href="${createLink(controller:'informational', action:'about')}"><g:message code="portal.header.nav.about"/></a>
+                <a href="#"><g:message code="portal.header.nav.tutorials"/></a>
+                <a href="#"><g:message code="portal.header.nav.policies"/></a>
+                <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact"/></a>
+                %{--<a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a>--}%
+
+
              </g:renderNotSigmaSection>
             </div>
         </div>
