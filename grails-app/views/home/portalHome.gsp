@@ -4,36 +4,53 @@
 <head>
     <meta name="layout" content="core"/>
     <r:require modules="core"/>
+    %{--<r:require modules="portalHome"/>--}%
     <r:layoutResources/>
 </head>
 
 <body>
 <script>
-    $(function () {
 
-        $('#generalized-input').typeahead(
-                {
-                    source: function (query, process) {
-                        $.get('<g:createLink controller="gene" action="index"/>', {query: query}, function (data) {
-                            process(data);
-                        })
-                    }
-                }
-        );
+    $(function () {
+        "use strict";
+
+        /***
+         * type ahead recognizing genes
+         */
+        $('#generalized-input').typeahead({
+            source: function (query, process) {
+                $.get('<g:createLink controller="gene" action="index"/>', {query: query}, function (data) {
+                    process(data);
+                })
+            }
+        });
+
+        /***
+         * respond to end-of-search-line button
+         */
         $('#generalized-go').on('click', function () {
             var somethingSymbol = $('#generalized-input').val();
             if (somethingSymbol) {
                 window.location.href = "${createLink(controller:'gene',action:'findTheRightDataPage')}/" + somethingSymbol;
             }
         });
-        $('#trait-go').on('click', function () {
-            var trait_val = $('#trait-input option:selected').val();
-            var significance = 0;
-            if ($('#id_significance_genomewide').prop('checked')) {
-                significance = 5e-8;
-            } else {
-                significance = $('#custom_significance_input').val();
+
+        /***
+         * capture enter key, make it equivalent to clicking on end-of-search-line button
+         */
+        $("input").keypress(function (e) { // capture enter keypress
+            var k = e.keyCode || e.which;
+            if (k == 13) {
+                $('#generalized-go').click();
             }
+        });
+
+        /***
+         *  Launch find variants associated with other traits
+         */
+        $('#trait-input').on('change', function () {
+            var trait_val = $('#trait-input option:selected').val();
+            var significance = 5e-8;
             if (trait_val == "" || significance == 0) {
                 alert('Please choose a trait and enter a valid significance!')
             } else {
@@ -41,16 +58,8 @@
             }
         });
 
+
     });
-    function findVariantsForTrait(){
-        var trait_val = $('#trait-input option:selected').val();
-        var significance =  5e-8;
-        if (trait_val == "" || significance == 0) {
-            alert('Please choose a trait and enter a valid significance!')
-        } else {
-            window.location.href = "${createLink(controller:'trait',action:'traitSearch')}" + "?trait=" + trait_val + "&significance=" + significance;
-        }
-    };
 
 </script>
 
@@ -131,7 +140,8 @@
                         </h2>
 
                         <div class="input-group input-group-lg">
-                            <select name="" id="trait-input" class="form-control" style="width:95%;" onchange="findVariantsForTrait()">
+                            <select name="" id="trait-input" class="form-control" style="width:95%;">
+                                %{--<select name="" id="trait-input" class="form-control" style="width:95%;" onchange="findVariantsForTrait()">--}%
                                 <optgroup label="Cardiometabolic">
                                     <g:each in="${Phenotype.list()}" var="phenotype">
                                         <g:if test="${phenotype.category == 'cardiometabolic'}">

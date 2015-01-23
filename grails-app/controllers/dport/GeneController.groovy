@@ -58,7 +58,7 @@ class GeneController {
         }
         String possibleGene = params.id
         if (possibleGene){
-            possibleGene = possibleGene.toUpperCase()
+            possibleGene = possibleGene.trim().toUpperCase()
         }
         Gene gene = Gene.findByName2(possibleGene)
         if (gene){
