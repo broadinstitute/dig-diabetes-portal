@@ -44,6 +44,37 @@ class GeneController {
      }
 
     /***
+     * we've been asked to search, but we don't know what kind of string. Here is how we can figure it out:
+     */
+    def findTheRightDataPage () {
+        String uncharacterizedString = params.id
+        LinkedHashMap extractedNumbers =  restServerService.extractNumbersWeNeed(uncharacterizedString)
+        if ((extractedNumbers)   &&
+                (extractedNumbers["startExtent"])   &&
+                (extractedNumbers["endExtent"])&&
+                (extractedNumbers["chromosomeNumber"]) ){
+            redirect(controller:'region',action:'regionInfo', params: [id: params.id])
+            return
+        }
+        String possibleGene = params.id
+        if (possibleGene){
+            possibleGene = possibleGene.trim().toUpperCase()
+        }
+        Gene gene = Gene.findByName2(possibleGene)
+        if (gene){
+            redirect(controller:'gene',action:'geneInfo', params: [id: params.id])
+            return
+        }
+        redirect(controller: 'variant', action: 'variantInfo', params: [id: params.id])
+        return
+    }
+
+
+
+
+
+
+    /***
      *
      * @return
      */
