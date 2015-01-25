@@ -228,9 +228,9 @@ that is stored somewhere on a local disk. The portal is looking for such a priva
 the directory that should hold your private config, try running the above 'gpw' command and watch the resulting
 console output to find a line that look something like this:
 
-'''
+```bash
 >>>>>>>>>>>Note to developers: config files may be placed in the directory  = /Users/ben/.grails/dig-diabetes-portal
-'''
+```
 
 This line will tell you where on disk to store your private configuration file. In that directory you may then
 create a file  named 'dig-diabetes-portal-commons-config.groovy'.  This file will now be read in by grails
@@ -238,15 +238,18 @@ during the compilation phase, and any values listed in this file will override t
 default configuration file (named Config.groovy).  Any values not explicitly overridden will retain their default values.
 You will know that you have created a personal configuration file in the right place and with the right name if you see   lines similar to the following when you compile the portal using gpw.
 
-'''
+```bash
 \*\* !! config override is in effect !! \*\*
-!!!!! file:/Users/ben/.grails/dig-diabetes-portal/dig-diabetes-portal-commons-config.groovy !! **
+\!\!\!\!\! file:/Users/ben/.grails/dig-diabetes-portal/dig-diabetes-portal-commons-config.groovy !! **
+```
 
 Note that a personal configuration file will soon become mandatory, and that this file will need to contain
 at a minimum the following line:
 
+```bash
 oauth.providers.google.api.secret = 'xxxxxxx'
+```
 
 If you don't have your own Google account or you work from our existing accounts then contact the diabetes portal team.
-'''
+
 
