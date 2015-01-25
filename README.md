@@ -14,7 +14,7 @@ The diabetes portal is written in Grails. The following description should give 
 
    The following steps should give you a working development environment:
 
-<h4>Install Java (this is the toughest step)</h4>
+<h4>Install Java</h4>
 <p>
 Googling “download Java jdk” should take you where you need to go. The same command brought me to this 
 <a href="http://www.oracle.com/technetwork/java/javaee/downloads/java-ee-sdk-6u3-jdk-7u1-downloads-523391.html">URL</a>
@@ -199,11 +199,54 @@ which will generate an "*.ipr" file along with everything else you need to open 
 
 
 <p>
-Just for the record, if you want to now deploy a  the portal you would need to use grails to create a WAR file that you could
-then the handoff to a suitable servlet container  such as Apache or Tomcat.  The grails command necessary to create a war file
-is:</p>
+If you want to now deploy a  the portal you would need to use grails to create a WAR file that you could
+then the handoff to a suitable servlet container  such as Apache or Tomcat.  The grails command necessary to create a war file by hand is:</p>
 
 
 ```bash
 grails war
 ```
+
+In order to increase consistency a bash script exists to build war files.  This script is named 'gpw', and it passes
+a few parameters in as the war is created making the resulting executable easier to track.  To run this script
+enter the following command from a bash-aware command prompt:
+
+
+```bash
+./gpw nameForThisVersion
+```
+
+Note that this script performs a 'git rev-parse HEAD' in order to determine your current git repo version, so your
+command line interface needs to recognize 'git'.
+
+<h4>Configuration</h4>
+
+While the diabetes portal is open source at its core, there are a few keys ( mostly relevant to authentication and
+services we pay for) which need to remain secret. As well, you may choose to override some of the default values
+utilized by the portal during compilation. In both cases you'll need to utilize a private configuration file
+that is stored somewhere on a local disk. The portal is looking for such a private configuration file. To determine
+the directory that should hold your private config, try running the above 'gpw' command and watch the resulting
+console output to find a line that look something like this:
+
+'''
+>>>>>>>>>>>Note to developers: config files may be placed in the directory  = /Users/ben/.grails/dig-diabetes-portal
+'''
+
+This line will tell you where on disk to store your private configuration file. In that directory you may then
+create a file  named 'dig-diabetes-portal-commons-config.groovy'.  This file will now be read in by grails
+during the compilation phase, and any values listed in this file will override those listed in the portals
+default configuration file (named Config.groovy).  Any values not explicitly overridden will retain their default values.
+You will know that you have created a personal configuration file in the right place and with the right name if you see   lines similar to the following when you compile the portal using gpw.
+
+'''
+\*\* !! config override is in effect !! \*\*
+!!!!! file:/Users/ben/.grails/dig-diabetes-portal/dig-diabetes-portal-commons-config.groovy !! **
+
+Note that a personal configuration file will soon become mandatory, and that this file will need to contain
+at a minimum the following line:
+
+oauth.providers.google.api.secret = 'xxxxxxx'
+
+If you don't have your own Google account or you work from our existing accounts then contact the diabetes portal team.
+'''
+
