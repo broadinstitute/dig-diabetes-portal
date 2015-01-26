@@ -21,6 +21,11 @@ class HomeController {
                                                                show_sigma:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma)])
     }
 
+    def introVideoHolder = {
+        render(controller: 'home', view: 'introVideoHolder')
+    }
+
+
     def beaconHome = {
         render(view: 'beaconDisplay')
     }

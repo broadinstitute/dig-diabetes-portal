@@ -7,7 +7,12 @@
     %{--<r:require modules="portalHome"/>--}%
     <r:layoutResources/>
 </head>
-
+<style>
+.unpaddedSection {
+    padding-left : 0;
+    padding-right : 0;
+}
+</style>
 <body>
 <script>
 
@@ -48,9 +53,9 @@
         /***
          *  Launch find variants associated with other traits
          */
-        $('#trait-input').on('change', function () {
+        $('#traitSearchLaunch').on('click', function () {
             var trait_val = $('#trait-input option:selected').val();
-            var significance = 5e-8;
+            var significance = 5e-4;
             if (trait_val == "" || significance == 0) {
                 alert('Please choose a trait and enter a valid significance!')
             } else {
@@ -71,7 +76,7 @@
 
                 %{--gene, variant or region--}%
                 <div class="row">
-                    <div class="col-md-11">
+                    <div class="col-xs-11 col-md-11 col-lg-11 unpaddedSection">
 
                         <h2><g:message code="primary.text.input.header"/></h2>
 
@@ -79,9 +84,8 @@
                             <input type="text" class="form-control" id="generalized-input"></span>
                             <span class="input-group-btn">
                                 %{--<span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>--}%
-                                <button id="generalized-go" class="btn btn-default btn-lg" type="button">
-                                    <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"
-                                          style="color:black"></span>
+                                <button id="generalized-go" class="btn btn-primary btn-lg" type="button">
+                                    <g:message code="mainpage.button.imperative"/>
                                 </button>
                             </span>
                         </div>
@@ -92,7 +96,7 @@
                         <g:renderNotSigmaSection>
                             <div class="helptext">examples:
                                 <a href='<g:createLink controller="gene" action="geneInfo"
-                                                       params="[id: 'SLC30A8']"/>'>slc30a8</a>,
+                                                       params="[id: 'SLC30A8']"/>'>SLC30A8</a>,
                                 <a href='<g:createLink controller="variant" action="variantInfo"
                                                        params="[id: 'rs13266634']"/>'>rs13266634</a>,
                                 <a href='<g:createLink controller="region" action="regionInfo"
@@ -102,22 +106,26 @@
 
                     </div>
 
-                    <div class="col-md-1"></div>
+                    <div class="col-xs-1 col-md-1 col-lg-1"></div>
                 </div>
 
                 %{--set up search form--}%
 
 
                 <div class="row sectionBuffer">
-                    <div class="col-sm-9">
+                    <div class="col-xs-10 col-md-10 col-lg-10 unpaddedSection">
                         <h2>
                             <g:message code="variant.search.header"/>
                         </h2>
                     </div>
 
-                    <div class="col-sm-3 text-center" style="margin-top: 20px">
+                    <div class="col-xs-1 col-md-1 col-lg-1 unpaddedSection" style="margin-top: 20px; padding: 0">
                         <a href="${createLink(controller: 'variantSearch', action: 'variantSearch')}"
                            class="btn btn-primary btn-lg"><g:message code="mainpage.button.imperative"/></a>
+                    </div>
+
+                    <div class="col-xs-1  col-md-1 col-lg-1">
+
                     </div>
 
                 </div>
@@ -128,20 +136,18 @@
                     </div>
                 </div>
 
-
-
                 %{--variants with other traits--}%
                 <div class="row sectionBuffer">
 
-                    <div class="col-md-12">
+                    <div class="col-xs-10 col-md-10 col-lg-10 unpaddedSection">
 
                         <h2>
                             <g:message code="trait.search.header"/><br/>
                         </h2>
 
-                        <div class="input-group input-group-lg">
-                            <select name="" id="trait-input" class="form-control" style="width:95%;">
-                                %{--<select name="" id="trait-input" class="form-control" style="width:95%;" onchange="findVariantsForTrait()">--}%
+                        %{--<div class="input-group input-group-lg">--}%
+                            <select name="" id="trait-input" class="form-control btn-group btn-input clearfix">
+
                                 <optgroup label="Cardiometabolic">
                                     <g:each in="${Phenotype.list()}" var="phenotype">
                                         <g:if test="${phenotype.category == 'cardiometabolic'}">
@@ -156,9 +162,19 @@
                                         </g:if>
                                     </g:each>
                                 </optgroup>
+
+
+
                             </select>
-                        </div>
+                        %{--</div>--}%
                     </div>
+                    <div class="col-xs-1 col-md-1  col-lg-1 unpaddedSection"  style="margin-top: 50px; padding: 0">
+                        <div id="traitSearchLaunch" class="btn btn-primary btn-lg"><g:message code="mainpage.button.imperative"/></div>
+                    </div>
+                    <div class="col-xs-1 col-md-1 col-lg-1">
+
+                    </div>
+
                 </div>
 
             </div>
@@ -185,14 +201,15 @@
         </div>
 
         %{--video--}%
-        <div class="row sectionBuffer" style="padding: 25px">
-            <div class="col-md-offset-2 col-md-8 col-sm-12">
-                <div class="medTextDark" style="padding-bottom: 20px">Video: How to use the portal</div>
-                <iframe width="768" height="432" src="//www.youtube.com/embed/jqfVnIzYG3g" frameborder="0"
-                        allowfullscreen></iframe>
+        <div class="row sectionBuffer">
+            <div class="col-md-6">
+                <a href="${createLink(controller:'home',action:'introVideoHolder')}">
+                <div class="medTextDark">Video: How to use the portal</div>
+                </a>
+
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-6">
             </div>
 
         </div>
