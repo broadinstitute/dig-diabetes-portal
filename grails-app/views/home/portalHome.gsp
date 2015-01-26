@@ -72,11 +72,11 @@
 <div id="main">
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-7" style="margin-top: -10px">
 
                 %{--gene, variant or region--}%
                 <div class="row">
-                    <div class="col-xs-11 col-md-11 col-lg-11 unpaddedSection">
+                    <div class="col-xs-11 col-md-11 col-lg-11 unpaddedSection" style="padding-right: 2px">
 
                         <h2><g:message code="primary.text.input.header"/></h2>
 
@@ -181,7 +181,7 @@
 
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <div class="row">
                     <div class="col-md-offset-1 col-md-10 medTextDark">
                         <g:message code="about.the.portal.header"/>
