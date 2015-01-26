@@ -2,6 +2,7 @@ package dport
 
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.apache.juli.logging.LogFactory
+import temporary.BuildInfo
 
 class HomeController {
     private static final log = LogFactory.getLog(this)
@@ -19,6 +20,18 @@ class HomeController {
                                                                show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
                                                                show_sigma:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma)])
     }
+
+    def versionNumber = {
+        String version = """{"host":"${BuildInfo?.buildHost}",
+"time":"${BuildInfo?.buildTime}",
+"appVersion":"${BuildInfo?.appVersion}",
+"buildNumber":"${BuildInfo?.buildNumber}",
+}""".toString()
+        render(status:200, contentType:"application/json") {
+            [info:version]
+        }
+    }
+
 
     def beaconHome = {
         render(view: 'beaconDisplay')
