@@ -145,12 +145,14 @@
                             <g:message code="trait.search.header"/><br/>
                         </h2>
 
-                        %{--<div class="input-group input-group-lg">--}%
                             <select name="" id="trait-input" class="form-control btn-group btn-input clearfix">
 
                                 <optgroup label="Cardiometabolic">
+                                    <g:each in="${Phenotype.findByName('fasting glucose')}" var="phenotype">
+                                       <option value= ${phenotype.databaseKey}>${phenotype.name}</option>
+                                    </g:each>
                                     <g:each in="${Phenotype.list()}" var="phenotype">
-                                        <g:if test="${phenotype.category == 'cardiometabolic'}">
+                                        <g:if test="${(phenotype.category == 'cardiometabolic')&&(phenotype.name != 'fasting glucose')}">
                                             <option value= ${phenotype.databaseKey}>${phenotype.name}</option>
                                         </g:if>
                                     </g:each>
@@ -166,9 +168,9 @@
 
 
                             </select>
-                        %{--</div>--}%
+
                     </div>
-                    <div class="col-xs-1 col-md-1  col-lg-1 unpaddedSection"  style="margin-top: 50px; padding: 0">
+                    <div class="col-xs-1 col-md-1  col-lg-1 unpaddedSection"  style="margin-top: 40px; padding: 0">
                         <div id="traitSearchLaunch" class="btn btn-primary btn-lg"><g:message code="mainpage.button.imperative"/></div>
                     </div>
                     <div class="col-xs-1 col-md-1 col-lg-1">
