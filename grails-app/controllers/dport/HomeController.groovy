@@ -21,18 +21,6 @@ class HomeController {
                                                                show_sigma:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma)])
     }
 
-    def versionNumber = {
-        String version = """{"host":"${BuildInfo?.buildHost}",
-"time":"${BuildInfo?.buildTime}",
-"appVersion":"${BuildInfo?.appVersion}",
-"buildNumber":"${BuildInfo?.buildNumber}",
-}""".toString()
-        render(status:200, contentType:"application/json") {
-            [info:version]
-        }
-    }
-
-
     def beaconHome = {
         render(view: 'beaconDisplay')
     }
