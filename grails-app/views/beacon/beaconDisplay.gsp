@@ -152,17 +152,17 @@
                 <div>
                     <p>
                         <span>
-                            <a class="boldlink" onclick="resetForm('PRJEB7898', 1, 13417, 'CGAGA');">Chromosome: 1&nbsp;Position: 13417&nbsp;Allele: CGAGA&nbsp;Project: PRJEB7898</a>
+                            <a class="boldlink" onclick="resetForm('exac0.3', 1, 13417, 'CGAGA');">Chromosome: 1&nbsp;Position: 13417&nbsp;Allele: CGAGA&nbsp;Project: exac0.3</a>
                         </span>
                     </p>
                     <p>
                         <span>
-                            <a class="boldlink" onclick="resetForm('PRJEB7898', 14, 5431731, 'D');">Chromosome: 14&nbsp;Position: 5431731&nbsp;Allele: D&nbsp;Project: PRJEB7898</a>
+                            <a class="boldlink" onclick="resetForm('exac0.3', 14, 5431731, 'D');">Chromosome: 14&nbsp;Position: 5431731&nbsp;Allele: D&nbsp;Project: exac0.3</a>
                         </span>
                     </p>
                     <p>
                         <span>
-                            <a class="boldlink" onclick="resetForm('PRJEB7898', 'X', 20038741, 'G');">Chromosome: X&nbsp;Position: 20038741&nbsp;Allele: G&nbsp;Project: PRJEB7898</a>
+                            <a class="boldlink" onclick="resetForm('exac0.3', 'X', 20038741, 'G');">Chromosome: X&nbsp;Position: 20038741&nbsp;Allele: G&nbsp;Project: exac0.3</a>
                         </span>
                     </p>
                 </div>
@@ -172,7 +172,7 @@
             <div class="input-group input-group-lg">
                 <select name="" id="dataset-input" class="form-control" style="width:100%;">
                     <option value=""><g:message code="beacon.select.dataset"/></option>
-                    <option value="PRJEB7898" selected="selected">PRJEB7898 -- The Exome Aggregation Consortium (ExAC) v0.3</option>
+                    <option value="exac0.3" selected="selected">exac0.3 -- The Exome Aggregation Consortium (ExAC) v0.3</option>
                 </select>
             </div>
             <br>
@@ -216,7 +216,7 @@
                     <input type="text" name="allele" id="allele-input">
                     <br>
                     <br>
-                    Format Type:&nbsp;&nbsp;&nbsp;
+                    Format Type:&nbsp;
                     <span>
                     <label>
                         <input id="textRadio" type="radio" name="resultFormat" value="text" onclick="switchDisplay()" style="margin-right:2px" checked/>
