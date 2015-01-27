@@ -8,48 +8,81 @@
 </head>
 
 <body>
+<style>
+#about-t2dgenes {
+    margin-left: 0px;
+    margin-right: 0px;
+    width: 100%;
+}
+.myPills {
+background:  #588fd3;
+padding: 15px 0 15px 0;
+}
+.myPills a {
+    color: white;
+}
+</style>
 
 <div id="main">
 
     <div class="container">
-        <h1>T2D-GENES</h1>
-        <h4>Type 2 Diabetes Genetic Exploration by Next-generation sequencing in multi-Ethnic Samples</h4>
+        <h1><g:message code="t2dgenes.mainPage.title" default="t2dgenes" /></h1>
+        <h4><g:message code="t2dgenes.mainPage.subtitle" default="t2dgenes" /></h4>
         <p>
-            T2D-GENES is a large collaborative effort to find genetic variants that influence risk of type 2 diabetes.
-            With funding from <a class="boldlink" href="http://www.niddk.nih.gov/Pages/default.aspx">NIDDK</a>, the group is conducting two sequencing studies and
-        one GWAS-based fine-mapping study in five ethnicities.
+            <g:message code="t2dgenes.mainPage.descr" default="t2dgenes description" />
+
         </p>
-        <div class="separator"></div>
-        <div id="about-t2dgenes" class="tabbed-about-page">
-            <div class="sidebar">
-                <div class="tab active" data-section="cohorts">Cohorts</div>
-                <div class="tab" data-section="papers">Papers</div>
-                <div class="sep"></div>
-                <div class="tab" data-section="project1">Project 1</div>
-                <div class="tab" data-section="project2">Project 2</div>
-                <div class="tab" data-section="project3">Project 3</div>
-                <div class="sep"></div>
-                <div class="tab" data-section="people">People</div>
-            </div>
-            <div class="content">
-                   <div id="t2dgeneContent">
+        <div class="row">
+            <div id="about-t2dgenes" class="tabbed-about-page">
+
+                <ul  class="nav nav-pills">
+                    <div class="row">
+                        <div class="col-md-2 text-center">
+                            <li role="presentation" id="aboutt2d_cohorts" class="myPills active"><a  style="text-decoration:underline;color:yellow" href="#">Cohorts</a></li>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <li role="presentation" id="aboutt2d_papers" class="myPills"><a href="#">Papers</a></li>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <li role="presentation" id="aboutt2d_project1" class="myPills"><a href="#">Project 1</a></li>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <li role="presentation" id="aboutt2d_project2" class="myPills"><a href="#">Project 2</a></li>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <li role="presentation" id="aboutt2d_project3" class="myPills"><a href="#">Project 3</a></li>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <li role="presentation" id="aboutt2d_people" class="myPills"><a href="#">People</a></li>
+                        </div>
+                    </div>
+
+                </ul>
+                <div class="content">
+                    <div id="t2dgeneContent">
                         <g:render template="t2dsection/${specifics}"/>
-                   </div>
+                    </div>
                 </div>
             </div>
         </div>
+        </div>
+
     </div>
     <script type="text/javascript">
         $(function() {
-            $('#about-t2dgenes .sidebar .tab').on('click', function(e) {
-                var section = $(e.target).data('section');
-                console.log("section="+section);
-                $('.tab').removeClass('active');
-                $(e.target).addClass('active');
+            $('#about-t2dgenes .nav li').on('click', function(e) {
+                var activeNav = $(e.target.parentNode);
+                var activeNavName = activeNav.attr('id').split('_')[1];
+                $('.nav-pills  li').removeClass('active');
+                $('.nav-pills  li').children().css('color','#fff');
+                $('.nav-pills  li').children().css('text-decoration','none');
+                activeNav.addClass('active');
+                activeNav.children().css('color','yellow');
+                activeNav.children().css('text-decoration','underline');
                 $.ajax({
                     cache:false,
                     type:"get",
-                    url:"./t2dgenesection/"+section,
+                    url:"${createLink(controller:'informational',action:'t2dgenesection')}"+"/"+activeNavName,
                     async:true,
                     success: function (data) {
                        $("#t2dgeneContent").empty().html(data);
