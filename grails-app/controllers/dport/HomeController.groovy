@@ -12,6 +12,7 @@ class HomeController {
 
     def index = {
         render(view:'portalHome')
+//      redirect(controller:'beacon', action:'beaconDisplay’)
     }
 
     def portalHome = {
