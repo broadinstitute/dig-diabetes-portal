@@ -9,6 +9,7 @@
 
 <body>
 
+
 <div id="main">
     <div class="container">
         <div class="row">
@@ -22,23 +23,32 @@
             </div>
         </div>
         <div class="row sectionBuffer">
-            <div class="col-md-3 col-sm-6 medText">
-                <a href="${createLink(controller:'informational', action:'t2dgenes')}">T2D-GENES:</a>
+
+            <div class="col-md-3 medText">
+                <div class="iconHolder">
+                    <a href="${createLink(controller:'informational', action:'t2dgenes')}">T2D-GENES:</a>
+                </div>
                 <g:message code="aboutTheData.datasets.t2dgenes" default="about the data" />
             </div>
 
-            <div class="col-md-3 col-sm-6 medText">
-                <a href="${createLink(controller:'informational', action:'got2d')}">GoT2D:</a>
+            <div class="col-md-3 medText vertDivider">
+                <div class="iconHolder center-text">
+                    <a href="${createLink(controller:'informational', action:'got2d')}">GoT2D:</a>
+                </div>
                 <g:message code="aboutTheData.datasets.got2d" default="about the data" />
             </div>
 
-            <div class="col-md-3 col-sm-6 medText">
-                <a href="http://diagram-consortium.org/about.html">DIAGRAM:</a>
+            <div class="col-md-3 medText vertDivider">
+                <div class="iconHolder">
+                    <a href="http://diagram-consortium.org/about.html">DIAGRAM:</a>
+                </div>
                 <g:message code="aboutTheData.datasets.diagram" default="about the data" />
             </div>
 
-            <div class="col-md-3 col-sm-6 medText">
-                <a href="${createLink(controller:'informational', action:'hgat')}">GWAS meta-analyses:</a>
+            <div class="col-md-3 medText vertDivider">
+                <div class="iconHolder">
+                    <a href="${createLink(controller:'informational', action:'hgat')}">GWAS meta-analyses:</a>
+                </div>
                 <g:message code="aboutTheData.datasets.gwasMetaAnalysis" default="about the data" />
             </div>
 

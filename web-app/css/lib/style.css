@@ -604,4 +604,19 @@ div.veryImportantText {
 .small-buildinfo {
     font-size: 8pt;
 }
+.iconHolder  {
+    margin: 0 auto 0 auto;
+    text-align:center;
+}
+.vertDivider  {
 
+}
+.vertDivider:after {
+    content:"";
+    background: #ccc;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 250px;
+    width: 1px;
+}
