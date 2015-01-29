@@ -8,7 +8,7 @@
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"><!--<![endif]-->
 <html>
 <head>
-<title>${grailsApplication.config.site.title}</title>
+<title>Broad Institute Beacon</title>
 
     <r:require modules="core"/>
     <r:layoutResources/>
@@ -95,7 +95,16 @@
 <div id="footer">
     <div class="container">
         <div class="separator"></div>
-        <div id="helpus"><a href="${createLink(controller:'informational', action:'contactBeacon')}"><g:message code="mainpage.send.beacon.feedback"/></a></div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div id="helpus"><a href="${createLink(controller:'informational', action:'contactBeacon')}"><g:message code="mainpage.send.beacon.feedback"/></a></div>
+            </div>
+            <div class="col-sm-4 col-sm-offset-2">
+                <a href="http://www.broadinstitute.org">
+                    <img class="logoholder" src="${resource(dir: 'images', file: 'BroadInstLogoforDigitalRGB.png')}" width="100%" alt="Broad Institute"/>
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 <div id="belowfooter">
