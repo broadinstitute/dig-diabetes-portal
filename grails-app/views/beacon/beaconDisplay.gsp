@@ -157,7 +157,7 @@
                     </p>
                     <p>
                         <span>
-                            <a class="boldlink" onclick="resetForm('exac0.3', 14, 5431731, 'D');">Chromosome: 14&nbsp;Position: 5431731&nbsp;Allele: D&nbsp;Project: exac0.3</a>
+                            <a class="boldlink" onclick="resetForm('exac0.3', 5, 989870, 'D');">Chromosome: 5&nbsp;Position: 989870&nbsp;Allele: D&nbsp;Project: exac0.3</a>
                         </span>
                     </p>
                     <p>
