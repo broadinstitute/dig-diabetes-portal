@@ -1,4 +1,4 @@
-<div class="section section-blue" data-section="project3">
+<div class="section" style="display : block">
     <h3>Trans-ethnic fine-mapping "mega-meta-analysis"</h3>
     <p><em>Results from this project will be made available on this portal.</em></p>
     <p>

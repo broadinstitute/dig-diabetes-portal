@@ -1,4 +1,4 @@
-<div class="section section-blue" data-section="project1">
+<div class="section" style="display : block">
     <h3>Deep whole-exome sequencing in 10,000 people from five ethnicities</h3>
     <p><em>Results from this project are available on this portal.</em></p>
     <p>

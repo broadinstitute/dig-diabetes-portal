@@ -5,7 +5,7 @@
 </h4>
 
 <div class="cohort">
-    <div class="name"><span>Study:</span> Jackson Heart Study Candidate Gene Association Resource</div>
+    <div class="name"><span>Cohort:</span> Jackson Heart Study Candidate Gene Association Resource</div>
 
     <div class="detail"><span>Ethnicity:</span> African-American</div>
 
@@ -39,7 +39,7 @@
         <div class="title">Related publications:</div>
         <ul>
             <li>Taylor, H. A. et al. <a
-                    href="http://www.ncbi.nlm.nih.gov/pubmed/16320381">Toward resolution of cardiovascular health disparities in African Americans: design and methods of the Jackson Heart Study.</a> Ethn Dis 15, S6–4 (2005)
+                    href="http://www.ncbi.nlm.nih.gov/pubmed/16320381">Toward resolution of cardiovascular health disparities in African Americans: design and methods of the Jackson Heart Cohort.</a> Ethn Dis 15, S6–4 (2005)
             </li>
         </ul>
     </div>
@@ -50,7 +50,7 @@
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Study:</span> Wake Forest Study</div>
+    <div class="name"><span>Cohort:</span> Wake Forest Study</div>
 
     <div class="detail"><span>Ethnicity:</span> African-American</div>
 
@@ -91,7 +91,7 @@
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Study:</span> Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH)
+    <div class="name"><span>Cohort:</span> Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH)
     </div>
 
     <div class="detail"><span>Ethnicity:</span> East Asian</div>
@@ -137,7 +137,7 @@
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Study:</span> Singapore Diabetes Cohort Study and Singapore Prospective Study Program</div>
+    <div class="name"><span>Cohort:</span> Singapore Diabetes Cohort Study and Singapore Prospective Study Program</div>
 
     <div class="detail"><span>Ethnicity:</span> East Asian</div>
 
@@ -189,7 +189,7 @@
 
 
 <div class="cohort">
-    <div class="name"><span>Study:</span> Longevity Genes in Founder Populations (Ashkenazi)</div>
+    <div class="name"><span>Cohort:</span> Longevity Genes in Founder Populations (Ashkenazi)</div>
 
     <div class="detail"><span>Ethnicity:</span> European</div>
 
@@ -244,7 +244,7 @@
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Study:</span> Metabolic Syndrome in Men Study</div>
+    <div class="name"><span>Cohort:</span> Metabolic Syndrome in Men Study</div>
 
     <div class="detail"><span>Ethnicity:</span> European</div>
 
@@ -290,7 +290,7 @@
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Study:</span> San Antonio Mexican American Family Studies, Texas</div>
+    <div class="name"><span>Cohort:</span> San Antonio Mexican American Family Studies, Texas</div>
 
     <div class="detail"><span>Ethnicity:</span> Hispanic</div>
 
@@ -346,7 +346,7 @@
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Study:</span> Starr County, Texas</div>
+    <div class="name"><span>Cohort:</span> Starr County, Texas</div>
 
     <div class="detail"><span>Ethnicity:</span> Hispanic</div>
 
@@ -386,7 +386,7 @@
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Study:</span> London Life Sciences Population (LOLIPOP)</div>
+    <div class="name"><span>Cohort:</span> London Life Sciences Population (LOLIPOP)</div>
 
     <div class="detail"><span>Ethnicity:</span> South Asian</div>
 
@@ -430,7 +430,7 @@
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Study:</span> Singapore Indian Eye Study</div>
+    <div class="name"><span>Cohort:</span> Singapore Indian Eye Study</div>
 
     <div class="detail"><span>Ethnicity:</span> South Asian</div>
 
