@@ -27,6 +27,15 @@ class HomeController {
     }
 
 
+    def analyticsT2d = {
+        render "<h1>t2danaltics</h1>"
+    }
+
+    def analyticsSigma = {
+        render "<h1>sigma</h1>"
+    }
+
+
     def beaconHome = {
         render(view: 'beaconDisplay')
     }

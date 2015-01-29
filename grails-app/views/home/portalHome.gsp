@@ -2,11 +2,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    %{--<g:applyLayout name="core"/>--}%
-    %{--<g:applyLayout name="td2genesCore"/>--}%
-    <meta name="layout" content="core"/>
+    <meta name="layout" content="t2dGenesFootless"/>
     <r:require modules="core"/>
-    %{--<r:require modules="portalHome"/>--}%
     <r:layoutResources/>
 </head>
 <style>

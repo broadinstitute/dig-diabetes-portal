@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="core"/>
+    <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
     %{--<r:require modules="portalHome"/>--}%
     <r:layoutResources/>
