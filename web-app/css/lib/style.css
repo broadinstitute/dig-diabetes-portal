@@ -61,7 +61,11 @@ h2 small {
     font-weight: 300;
 }
 h4 {
-  font-size: 22px; }
+  font-size: 22px;
+}
+h4 small {
+    font-weight: 300;
+}
 
 div.lead {
   font-size: 28px; }
@@ -619,4 +623,18 @@ div.veryImportantText {
     left: 0;
     height: 250px;
     width: 1px;
+}
+.logohelper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+.logoholder {
+    vertical-align: middle;
+    max-height: 100px;
+    max-width: 160px;
+}
+.logoframe {
+   overflow: hidden;
+    max-height: 160px;
 }
