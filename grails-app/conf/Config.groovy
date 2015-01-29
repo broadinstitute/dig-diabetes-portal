@@ -259,6 +259,7 @@ environments {
         grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 //      grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
+//      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false
     }
 }
