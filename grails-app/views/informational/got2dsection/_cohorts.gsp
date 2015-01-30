@@ -1,5 +1,5 @@
 <div class="section" data-section="cohorts">
-<h4 style="padding-bottom: 20px">GoT2D is conducting a meta-analysis of exome chip data from the following cohorts:</h4>
+<h4 style="padding-bottom: 20px"><g:message code="got2d.cohort.descr" default="go T2D"/></h4>
 
 <div class="cohort">
     <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> University of Michigan/Finnish (METSIM, FUSION, Finrisk, D2D, Dr's Extra)
