@@ -2,19 +2,19 @@
 <h4 style="padding-bottom: 20px">GoT2D is conducting a meta-analysis of exome chip data from the following cohorts:</h4>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> University of Michigan/Finnish (METSIM, FUSION, Finrisk, D2D, Dr's Extra)
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> University of Michigan/Finnish (METSIM, FUSION, Finrisk, D2D, Dr's Extra)
     </div>
 
-    <div class="detail"><span>Ethnicity:</span> European</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> <g:message code="got2d.cohorts.european" default="European"/></div>
 
-    <div class="detail"><span>Total research participants:</span> 15,369</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.numberOfParticipants" default="number of participants"/></span> 15,369</div>
 
-    <div class="detail"><span>T2D cases:</span> 4731</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 4731</div>
 
-    <div class="detail"><span>Controls:</span> 10,638</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 10,638</div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://markku.laakso@kuh.fi">Markku Laakso</a> (METSIM), <a
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://markku.laakso@kuh.fi">Markku Laakso</a> (METSIM), <a
                 href="mailto://lbonnyca@mail.nih.gov">Lori Bonnycastle</a> (FUSION), <a
                 href="mailto://erkki.vartiainen@flinders.edu.au">Erkki Vartiainen</a> (Finrisk), <a
                 href="mailto://johan.eriksson@helsinki.fi">Johan Erikssson</a> (D2D), <a
@@ -23,213 +23,213 @@
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> Broad-Finnish DIREVA/PPP</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> Broad-Finnish DIREVA/PPP</div>
 
-    <div class="detail"><span>Ethnicity:</span> European</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> <g:message code="got2d.cohorts.european" default="European"/></div>
 
-    <div class="detail"><span>Total research participants:</span> 7,638</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.numberOfParticipants" default="number of participants"/></span> 7,638</div>
 
-    <div class="detail"><span>T2D cases:</span> 3,472</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 3,472</div>
 
-    <div class="detail"><span>Controls:</span> 4,166</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 4,166</div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://leif.groop@med.lu.se">Leif Groop</a> (DIREVA), <a
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://leif.groop@med.lu.se">Leif Groop</a> (DIREVA), <a
                 href="mailto://tiinamaija.tuomi@helsinki.fi">Tiinamaija Tuomi</a> (PPP)</div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> Broad/PMB-Swedish/ANDIS/SDR</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> Broad/PMB-Swedish/ANDIS/SDR</div>
 
-    <div class="detail"><span>Ethnicity:</span> European</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> <g:message code="got2d.cohorts.european" default="European"/></div>
 
-    <div class="detail"><span>Total research participants:</span> 11,131</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.numberOfParticipants" default="number of participants"/></span> 11,131</div>
 
-    <div class="detail"><span>T2D cases:</span> 6,108</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 6,108</div>
 
-    <div class="detail"><span>Controls:</span> 5,023</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 5,023</div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://leif.groop@med.lu.se">Leif Groop</a></div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://leif.groop@med.lu.se">Leif Groop</a></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> Pedersen/Denmark</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> Pedersen/Denmark</div>
 
-    <div class="detail"><span>Ethnicity:</span> European</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> <g:message code="got2d.cohorts.european" default="European"/></div>
 
-    <div class="detail"><span>Total research participants:</span> 16,000</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.numberOfParticipants" default="number of participants"/></span> 16,000</div>
 
-    <div class="detail"><span>T2D cases:</span> 5,000</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 5,000</div>
 
-    <div class="detail"><span>Controls:</span> 11,000</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 11,000</div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://oluf@sund.ku.dk">Oluf Pedersen</a></div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://oluf@sund.ku.dk">Oluf Pedersen</a></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> BC58</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> BC58</div>
 
-    <div class="detail"><span>Ethnicity:</span> European</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> <g:message code="got2d.cohorts.european" default="European"/></div>
 
-    <div class="detail"><span>Total research participants:</span> 6,000</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.numberOfParticipants" default="number of participants"/></span> 6,000</div>
 
-    <div class="detail"><span>T2D cases:</span> 0</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 0</div>
 
-    <div class="detail"><span>Controls:</span> 6,000</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 6,000</div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: XXX</div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> XXX</div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> Umeå/Franks</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> Umeå/Franks</div>
 
-    <div class="detail"><span>Ethnicity:</span> European</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> <g:message code="got2d.cohorts.european" default="European"/></div>
 
-    <div class="detail"><span>Total research participants:</span> 2,000</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.numberOfParticipants" default="number of participants"/></span> 2,000</div>
 
-    <div class="detail"><span>T2D cases:</span> 1,000</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 1,000</div>
 
-    <div class="detail"><span>Controls:</span> 1,000</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 1,000</div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://paul.franks@medicin.umu.se">Paul Franks</a></div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://paul.franks@medicin.umu.se">Paul Franks</a></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> KORA</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> KORA</div>
 
-    <div class="detail"><span>Ethnicity:</span> European</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> <g:message code="got2d.cohorts.european" default="European"/></div>
 
-    <div class="detail"><span>Total research participants:</span> 5,000</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.numberOfParticipants" default="number of participants"/></span> 5,000</div>
 
-    <div class="detail"><span>T2D cases:</span> 2,500</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 2,500</div>
 
-    <div class="detail"><span>Controls:</span> 2,500</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 2,500</div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://Meitinger@helmholtz-muenchen.de">Thomas Meitinger</a></div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://Meitinger@helmholtz-muenchen.de">Thomas Meitinger</a></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> Exeter</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> Exeter</div>
 
-    <div class="detail"><span>Ethnicity:</span> European</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> <g:message code="got2d.cohorts.european" default="European"/></div>
 
-    <div class="detail"><span>Total research participants:</span> 2,913</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.numberOfParticipants" default="number of participants"/></span> 2,913</div>
 
-    <div class="detail"><span>T2D cases:</span> 1,446</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 1,446</div>
 
-    <div class="detail"><span>Controls:</span> 1,567</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 1,567</div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://T.M.Frayling@exeter.ac.uk">Timothy Frayling</a></div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://T.M.Frayling@exeter.ac.uk">Timothy Frayling</a></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> EGCUT</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> EGCUT</div>
 
-    <div class="detail"><span>Ethnicity:</span> European</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> <g:message code="got2d.cohorts.european" default="European"/></div>
 
-    <div class="detail"><span>Total research participants:</span> 2,000</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.numberOfParticipants" default="number of participants"/></span> 2,000</div>
 
-    <div class="detail"><span>T2D cases:</span> 2,000</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 2,000</div>
 
-    <div class="detail"><span>Controls:</span> 2,000</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 2,000</div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: XXX</div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> XXX</div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> Frank Hu et al</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> Frank Hu et al</div>
 
-    <div class="detail"><span>Ethnicity:</span></div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span></div>
 
     <div class="detail"><span>Data type:</span></div>
 
-    <div class="detail"><span>Total research participants:</span></div>
+    <div class="detail"><span><g:message code="got2d.cohorts.numberOfParticipants" default="number of participants"/></span></div>
 
-    <div class="detail"><span>T2D cases:</span></div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span></div>
 
-    <div class="detail"><span>Controls:</span></div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span></div>
 
     <div class="bullets">
-        <div class="title">Contact the PI:</div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span></div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span></div>
 
-    <div class="detail"><span>Ethnicity:</span> European</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> <g:message code="got2d.cohorts.european" default="European"/></div>
 
-    <div class="detail"><span>Total research participants:</span> 6,000</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.numberOfParticipants" default="number of participants"/></span> 6,000</div>
 
-    <div class="detail"><span>T2D cases:</span> 3,000</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 3,000</div>
 
-    <div class="detail"><span>Controls:</span> 3,000</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 3,000</div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://frank.hu@channing.harvard.edu">Frank Hu</a></div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://frank.hu@channing.harvard.edu">Frank Hu</a></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> Nick Wareham et al</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> Nick Wareham et al</div>
 
-    <div class="detail"><span>Ethnicity:</span> European</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> <g:message code="got2d.cohorts.european" default="European"/></div>
 
-    <div class="detail"><span>Total research participants:</span> 2,500</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.numberOfParticipants" default="number of participants"/></span> 2,500</div>
 
-    <div class="detail"><span>T2D cases:</span> 900</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 900</div>
 
-    <div class="detail"><span>Controls:</span> 1,600</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 1,600</div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://nick.wareham@mrc-epid.cam.ac.uk">Nick Wareham</a></div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://nick.wareham@mrc-epid.cam.ac.uk">Nick Wareham</a></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> EPIC Norfolk</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> EPIC Norfolk</div>
 
-    <div class="detail"><span>Ethnicity:</span> European</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> <g:message code="got2d.cohorts.european" default="European"/></div>
 
-    <div class="detail"><span>Total research participants:</span> 1,000</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.numberOfParticipants" default="number of participants"/></span> 1,000</div>
 
-    <div class="detail"><span>T2D cases:</span> 1,000</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 1,000</div>
 
-    <div class="detail"><span>Controls:</span> 0</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 0</div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: XXX</div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> XXX</div>
     </div>
 </div>
 
 <h4 style="padding-bottom: 20px">GoT2D also has four exome sequencing cohorts:</h4>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> FUSION (Finland-United States Investigation of NIDDM Genetics)</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> FUSION (Finland-United States Investigation of NIDDM Genetics)</div>
 
-    <div class="detail"><span>Ethnicity:</span> European</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> <g:message code="got2d.cohorts.european" default="European"/></div>
 
-    <div class="detail"><span>T2D cases:</span> 472</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 472</div>
 
-    <div class="detail"><span>Controls:</span> 486</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 486</div>
 
     <div class="bullets">
-        <div class="title">Related publications:</div>
+        <div class="title"><g:message code="got2d.cohorts.relatedPublications" default=" related publications"/></div>
         <ul>
             <li>
                 Valle, T. et al. <a
@@ -245,21 +245,21 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://lbonnyca@mail.nih.gov">Lori Bonnycastle</a></div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://lbonnyca@mail.nih.gov">Lori Bonnycastle</a></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> KORA-gen</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> KORA-gen</div>
 
-    <div class="detail"><span>Ethnicity:</span> European</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> <g:message code="got2d.cohorts.european" default="European"/></div>
 
-    <div class="detail"><span>T2D cases:</span> 97</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 97</div>
 
-    <div class="detail"><span>Controls:</span> 90</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 90</div>
 
     <div class="bullets">
-        <div class="title">Related publications:</div>
+        <div class="title"><g:message code="got2d.cohorts.relatedPublications" default=" related publications"/></div>
         <ul>
             <li>
                 Wichmann, H. E., Gieger, C. and Illig, T. <a
@@ -270,21 +270,21 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://Meitinger@helmholtz-muenchen.de">Thomas Meitinger</a></div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://Meitinger@helmholtz-muenchen.de">Thomas Meitinger</a></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> UKT2D Consortium</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> UKT2D Consortium</div>
 
-    <div class="detail"><span>Ethnicity:</span> European</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> <g:message code="got2d.cohorts.european" default="European"/></div>
 
-    <div class="detail"><span>T2D cases:</span> 322</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 322</div>
 
-    <div class="detail"><span>Controls:</span> 320</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 320</div>
 
     <div class="bullets">
-        <div class="title">Related publications:</div>
+        <div class="title"><g:message code="got2d.cohorts.relatedPublications" default=" related publications"/></div>
         <ul>
             <li>
                 Wellcome Trust Case Control Consortium. <a
@@ -302,39 +302,36 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://mark.mccarthy@drl.ox.ac.uk">Mark McCarthy</a> and
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://mark.mccarthy@drl.ox.ac.uk">Mark McCarthy</a> and
             <a href="mailto://tim.spector@kcl.ac.uk">Timothy Spector</a></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> PPP-Malmo-Botnia Study</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> <g:message code="got2d.cohorts.pppMalmoBotnia.title" default="Malmo-Botnia Study"/></div>
 
-    <div class="detail"><span>Ethnicity:</span> European</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> <g:message code="got2d.cohorts.european" default="European"/></div>
 
-    <div class="detail"><span>T2D cases:</span> 478</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 478</div>
 
-    <div class="detail"><span>Controls:</span> 443</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 443</div>
 
     <div class="bullets">
-        <div class="title">Type 2 diabetes case selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.caseSelectionCriteria.title" default="case selection criteria"/></div>
         <ul>
-            <li>Cases selected according to ADA (2003) definitions of type 2 diabetes: fasting plasma glucose >7.0 mM or 2 hour postload glucose during an OGTT >11.1 mM</li>
-            <li>To exclude T1D, anti-GAD antibody positive samples excluded</li>
-            <li>To exclude MODY, subjects from families with mutations in known MODY diabetes genes and diabetic individuals with onset age <35 years excluded</li>
+            <g:message code="got2d.cohorts.pppMalmoBotnia.caseSelectionCriteria.descr" default="case selection criteria"/>
         </ul>
     </div>
 
     <div class="bullets">
-        <div class="title">Control selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.controlSelectionCriteria.title" default="control selection criteria"/></div>
         <ul>
-            <li>Unrelated population controls and sibling controls with normal glucose tolerance (NGT) based on ADA (2003) definitions: fasting plasma glucose <6.1 mM and 2 hour postload glucose during an OGTT <7.8 mM at last clinical visit</li>
-            <li>Unrelated controls had no first degree family history of type 2 diabetes</li>
+            <g:message code="got2d.cohorts.pppMalmoBotnia.controlSelectionCriteria.descr" default="control selection criteria"/>
         </ul>
     </div>
 
     <div class="bullets">
-        <div class="title">Related publications:</div>
+        <div class="title"><g:message code="got2d.cohorts.relatedPublications" default=" related publications"/></div>
         <ul>
             <li>
                 Groop, L. et al. <a

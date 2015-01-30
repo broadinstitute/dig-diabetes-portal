@@ -5,16 +5,16 @@
 </h4>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> Jackson Heart Study Candidate Gene Association Resource</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> Jackson Heart Study Candidate Gene Association Resource</div>
 
-    <div class="detail"><span>Ethnicity:</span> African-American</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> African-American</div>
 
-    <div class="detail"><span>T2D Cases:</span> 500</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 500</div>
 
-    <div class="detail"><span>Controls:</span> 526</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 526</div>
 
     <div class="bullets">
-        <div class="title">Type 2 diabetes case selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.caseSelectionCriteria.title" default="case selection criteria"/></div>
         <ul>
             <li>Genomic DNA from blood and genome-wide genotypes available (minimum 25 ug DNA remaining)</li>
             <li>Non-related individuals based on family IDs</li>
@@ -23,7 +23,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Control selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.controlSelectionCriteria.title" default="control selection criteria"/></div>
         <ul>
             <li>No T2D by ADA 2004 definition, fasting plasma glucose <100 mg/dl, and HbA1c <6% at each of two exams</li>
             <li>Controls were matched to cases in a two-stage approach:
@@ -36,7 +36,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Related publications:</div>
+        <div class="title"><g:message code="got2d.cohorts.relatedPublications" default=" related publications"/></div>
         <ul>
             <li>Taylor, H. A. et al. <a
                     href="http://www.ncbi.nlm.nih.gov/pubmed/16320381">Toward resolution of cardiovascular health disparities in African Americans: design and methods of the Jackson Heart Cohort.</a> Ethn Dis 15, S6–4 (2005)
@@ -45,21 +45,21 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://james.wilson1@med.va.gov">Jim Wilson</a></div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://james.wilson1@med.va.gov">Jim Wilson</a></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> Wake Forest Study</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> Wake Forest Study</div>
 
-    <div class="detail"><span>Ethnicity:</span> African-American</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> African-American</div>
 
-    <div class="detail"><span>T2D Cases:</span> 518</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 518</div>
 
-    <div class="detail"><span>Controls:</span> 530</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 530</div>
 
     <div class="bullets">
-        <div class="title">Type 2 diabetes case selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.caseSelectionCriteria.title" default="case selection criteria"/></div>
         <ul>
             <li>Cases have diabetic nephropathy and are recruited from dialysis clinics</li>
             <li>Samples meet ADA 2004 criteria of fasting (8 hours or longer fast) glucose ≥126 mg/dl or 2 hr GTT glucose ≥200 mg/dL or random glucose ≥200 mg/dl, or report use of oral or injectable medication or physician diagnosed diabetes</li>
@@ -69,7 +69,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Control selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.controlSelectionCriteria.title" default="control selection criteria"/></div>
         <ul>
             <li>No current diagnosis of diabetes or renal disease</li>
             <li>All controls have blood glucose measured, nearly all after fasting; if non-fasting, samples with glucose >100 mg/dL excluded</li>
@@ -77,7 +77,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Related publications:</div>
+        <div class="title"><g:message code="got2d.cohorts.relatedPublications" default=" related publications"/></div>
         <ul>
             <li>Yu, H., Bowden, D. W., Spray, B. J., Rich, S. S. & Freedman, B. I. <a
                     href="http://www.ncbi.nlm.nih.gov/pubmed/8989734">Linkage analysis between loci in the renin-angiotensin axis and end-stage renal disease in African Americans.</a> J. Am. Soc. Nephrol. 7, 2559–2564 (1996)
@@ -86,22 +86,22 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://dbowden@wakehealth.edu">Donald Bowden</a></div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://dbowden@wakehealth.edu">Donald Bowden</a></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH)
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH)
     </div>
 
-    <div class="detail"><span>Ethnicity:</span> East Asian</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> East Asian</div>
 
-    <div class="detail"><span>T2D Cases:</span> 526</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 526</div>
 
-    <div class="detail"><span>Controls:</span> 561</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 561</div>
 
     <div class="bullets">
-        <div class="title">Type 2 diabetes case selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.caseSelectionCriteria.title" default="case selection criteria"/></div>
         <ul>
             <li>Past history of T2D</li>
             <li>Use of T2D medication</li>
@@ -112,7 +112,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Control selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.controlSelectionCriteria.title" default="control selection criteria"/></div>
         <ul>
             <li>No past history of diabetes</li>
             <li>No anti-diabetic medication</li>
@@ -122,7 +122,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Related publications:</div>
+        <div class="title"><g:message code="got2d.cohorts.relatedPublications" default=" related publications"/></div>
         <ul>
             <li>Cho, Y. S. et al. <a
                     href="http://www.ncbi.nlm.nih.gov/pubmed/19396169">A large-scale genome-wide association study of Asian populations uncovers genetic factors inﬂuencing eight quantitative traits.</a> Nat. Genet. 41, 527–534 (2009)
@@ -131,22 +131,22 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://leejy63@nih.go.kr">Jong-Young Lee</a> and <a
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://leejy63@nih.go.kr">Jong-Young Lee</a> and <a
                 href="mailto://yooncho33@korea.kr">Yoon Shin Cho</a></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> Singapore Diabetes Cohort Study and Singapore Prospective Study Program</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> Singapore Diabetes Cohort Study and Singapore Prospective Study Program</div>
 
-    <div class="detail"><span>Ethnicity:</span> East Asian</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> East Asian</div>
 
-    <div class="detail"><span>T2D Cases:</span> 486</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 486</div>
 
-    <div class="detail"><span>Controls:</span> 592</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 592</div>
 
     <div class="bullets">
-        <div class="title">Type 2 diabetes case selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.caseSelectionCriteria.title" default="case selection criteria"/></div>
         <ul>
             <li>Clinically ascertained T2D from primary care clinics</li>
             <li>Individuals with early age of T2D diagnosis preferentially selected</li>
@@ -154,7 +154,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Control selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.controlSelectionCriteria.title" default="control selection criteria"/></div>
         <ul>
             <li>Fasting blood glucose <6 mmol/l</li>
             <li>No personal history of diabetes</li>
@@ -164,7 +164,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Related publications:</div>
+        <div class="title"><g:message code="got2d.cohorts.relatedPublications" default=" related publications"/></div>
         <ul>
             <li>Hughes, K. et al. <a
                     href="http://www.ncbi.nlm.nih.gov/pubmed/2348145">Cardiovascular diseases in Chinese, Malays, and Indians in Singapore. II. Differences in risk factor levels.</a> J Epidemiol Community Health 44, 29–35 (1990)
@@ -182,23 +182,23 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://eringpkd@nus.edu.sg">Daniel Ng Peng Keat</a> and <a
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://eringpkd@nus.edu.sg">Daniel Ng Peng Keat</a> and <a
                 href="mailto://e_shyong_tai@nuhs.edu.sg">Tai E. Shyong</a></div>
     </div>
 </div>
 
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> Longevity Genes in Founder Populations (Ashkenazi)</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> Longevity Genes in Founder Populations (Ashkenazi)</div>
 
-    <div class="detail"><span>Ethnicity:</span> European</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> European</div>
 
-    <div class="detail"><span>T2D Cases:</span> 506</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 506</div>
 
-    <div class="detail"><span>Controls:</span> 355</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 355</div>
 
     <div class="bullets">
-        <div class="title">Type 2 diabetes case selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.caseSelectionCriteria.title" default="case selection criteria"/></div>
         <ul>
             <li>Ashkenazi Jewish origin, defined as having all four grandparents born in Northern or Eastern Europe; subjects with known or supected Sephardic Jewish or non-Jewish ancestry excluded</li>
             <li>T2D defined according to the World Health Organisation criteria (fasting glucose >140 mg/dl on two or more ocasions or random glucose >200mg/dl)</li>
@@ -215,7 +215,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Control selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.controlSelectionCriteria.title" default="control selection criteria"/></div>
         <ul>
             <li>Fasting blood glucose <7 mmol/l</li>
             <li>No personal history of diabetes</li>
@@ -224,7 +224,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Related publications:</div>
+        <div class="title"><g:message code="got2d.cohorts.relatedPublications" default=" related publications"/></div>
         <ul>
             <li>Atzmon, G. et al. <a
                     href="http://www.ncbi.nlm.nih.gov/pubmed/20560205">Abraham’s children in the genome era: major Jewish diaspora populations comprise distinct genetic clusters with shared Middle Eastern Ancestry.</a> Am. J. Hum. Genet. 86, 850–859 (2010)
@@ -239,21 +239,21 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://nir.barzilai@einstein.yu.edu">Nir Barzilai</a></div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://nir.barzilai@einstein.yu.edu">Nir Barzilai</a></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> Metabolic Syndrome in Men Study</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> Metabolic Syndrome in Men Study</div>
 
-    <div class="detail"><span>Ethnicity:</span> European</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> European</div>
 
-    <div class="detail"><span>T2D Cases:</span> 484</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 484</div>
 
-    <div class="detail"><span>Controls:</span> 498</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 498</div>
 
     <div class="bullets">
-        <div class="title">Type 2 diabetes case selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.caseSelectionCriteria.title" default="case selection criteria"/></div>
         <ul>
             <li>Previous diagnosis of T2D, or both fasting and 2-hr criteria met for new T2D diagnosis</li>
             <li>C-peptide >0.10 nmol/L</li>
@@ -265,7 +265,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Control selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.controlSelectionCriteria.title" default="control selection criteria"/></div>
         <ul>
             <li>Normal glucose tolerance at baseline and follow-up visits</li>
             <li>Prioritized samples with no family history of diabetes and meeting strict NGT criteria: fasting glucose <5.6 mmol/l and 2 hour post-challenge glucose <7.8 mmol/l</li>
@@ -276,7 +276,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Related publications:</div>
+        <div class="title"><g:message code="got2d.cohorts.relatedPublications" default=" related publications"/></div>
         <ul>
             <li>Stancakova, A. et al. <a
                     href="http://www.ncbi.nlm.nih.gov/pubmed/19223598">Changes in insulin sensitivity and insulin release in relation to glycemia and glucose tolerance in 6,414 Finnish men.</a> Diabetes 58, 1212–1221 (2009)
@@ -285,21 +285,21 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://markku.laakso@kuh.fi">Markku Laakso</a></div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://markku.laakso@kuh.fi">Markku Laakso</a></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> San Antonio Mexican American Family Studies, Texas</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> San Antonio Mexican American Family Studies, Texas</div>
 
-    <div class="detail"><span>Ethnicity:</span> Hispanic</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> Hispanic</div>
 
-    <div class="detail"><span>T2D Cases:</span> 272</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 272</div>
 
-    <div class="detail"><span>Controls:</span> 218</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 218</div>
 
     <div class="bullets">
-        <div class="title">Type 2 diabetes case selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.caseSelectionCriteria.title" default="case selection criteria"/></div>
         <ul>
             <li>Samples drawn from four separate family studies: San Antonio Family Heart Study (PI: John Blangero); San Antonio Family Diabetes/Gallbladder Study (PIs: Donna M. Lehman and Ravindranath Duggirala); Family Investigation of Nephropathy and Diabetes -  San Antonio component (PI: Hanna E. Abboud); and Veterans Administration Genetic Epidemiology Study (PIs: Ralph A. DeFronzo and Christopher P. Jenkinson)</li>
             <li>Cases met one of three criteria:
@@ -313,7 +313,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Control selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.controlSelectionCriteria.title" default="control selection criteria"/></div>
         <ul>
             <li>Fasting glucose <126 mg/dl at each visit</li>
             <li>If OGTT performed, 2 hour glucose must be <200mg/dl</li>
@@ -323,7 +323,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Related publications:</div>
+        <div class="title"><g:message code="got2d.cohorts.relatedPublications" default=" related publications"/></div>
         <ul>
             <li>Mitchell, B. D. et al. <a
                     href="http://www.ncbi.nlm.nih.gov/pubmed/8901667">Genetic and environmental contributions to cardiovascular risk factors in Mexican Americans. The San Antonio Family Heart Study.</a> Circulation 94, 2159–2170 (1996)
@@ -341,21 +341,21 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://ravid@txbiomedgenetics.org">Ravi Duggirala</a></div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://ravid@txbiomedgenetics.org">Ravi Duggirala</a></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> Starr County, Texas</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> Starr County, Texas</div>
 
-    <div class="detail"><span>Ethnicity:</span> Hispanic</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> Hispanic</div>
 
-    <div class="detail"><span>T2D Cases:</span> 749</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 749</div>
 
-    <div class="detail"><span>Controls:</span> 704</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 704</div>
 
     <div class="bullets">
-        <div class="title">Type 2 diabetes case selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.caseSelectionCriteria.title" default="case selection criteria"/></div>
         <ul>
             <li>Diagnosis of diabetes, drawn from several studies on diabetes in Starr County</li>
             <li>Cases required to have onset after age 35 to exclude T1D</li>
@@ -364,7 +364,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Control selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.controlSelectionCriteria.title" default="control selection criteria"/></div>
         <ul>
             <li>Controls ascertained from epidemiologically random sample of individuals in Starr County, TX</li>
             <li>Individuals with known diagnosis of diabetes excluded</li>
@@ -373,7 +373,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Related publications:</div>
+        <div class="title"><g:message code="got2d.cohorts.relatedPublications" default=" related publications"/></div>
         <ul>
             <li><a href="http://www.ncbi.nlm.nih.gov/pubmed/6637993">Hanis, C. L. et al. Diabetes among Mexican Americans in Starr County, Texas.</a> Am. J. Epidemiol. 118, 659–672 (1983)
             </li>
@@ -381,21 +381,21 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="craig.l.hanis@uth.tmc.edu">Craig Hanis</a></div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="craig.l.hanis@uth.tmc.edu">Craig Hanis</a></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> London Life Sciences Population (LOLIPOP)</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> London Life Sciences Population (LOLIPOP)</div>
 
-    <div class="detail"><span>Ethnicity:</span> South Asian</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> South Asian</div>
 
-    <div class="detail"><span>T2D Cases:</span> 531</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 531</div>
 
-    <div class="detail"><span>Controls:</span> 538</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 538</div>
 
     <div class="bullets">
-        <div class="title">Type 2 diabetes case selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.caseSelectionCriteria.title" default="case selection criteria"/></div>
         <ul>
             <li>Samples chosen from a coronary heart disease case-control study</li>
             <li>Indians living in West London, UK with all 4 grandparents born on the Indian subcontinent</li>
@@ -404,7 +404,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Control selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.controlSelectionCriteria.title" default="control selection criteria"/></div>
         <ul>
             <li>No previous history of diabetes</li>
             <li>No anti-diabetic medication</li>
@@ -413,7 +413,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Related publications:</div>
+        <div class="title"><g:message code="got2d.cohorts.relatedPublications" default=" related publications"/></div>
         <ul>
             <li>Chahal, N. S. et al. <a
                     href="http://www.ncbi.nlm.nih.gov/pubmed/19578033">Ethnicity-related differences in left ventricular function, structure and geometry: a population study of UK Indian Asian and European white subjects.</a> Heart 96, 466–471 (2010)
@@ -425,28 +425,28 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://j.kooner@imperial.ac.uk">Jaspal Kooner</a></div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://j.kooner@imperial.ac.uk">Jaspal Kooner</a></div>
     </div>
 </div>
 
 <div class="cohort">
-    <div class="name"><span>Cohort:</span> Singapore Indian Eye Study</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> Singapore Indian Eye Study</div>
 
-    <div class="detail"><span>Ethnicity:</span> South Asian</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> South Asian</div>
 
-    <div class="detail"><span>T2D Cases:</span> 563</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 563</div>
 
-    <div class="detail"><span>Controls:</span> 585</div>
+    <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 585</div>
 
     <div class="bullets">
-        <div class="title">Type 2 diabetes case selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.caseSelectionCriteria.title" default="case selection criteria"/></div>
         <ul>
             <li>HbA1c ≥6.5% or personal history of diabetes with age at diagnosis available</li>
         </ul>
     </div>
 
     <div class="bullets">
-        <div class="title">Control selection criteria:</div>
+        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.controlSelectionCriteria.title" default="control selection criteria"/></div>
         <ul>
             <li>HbA1c <6%</li>
             <li>No personal history of diabetes</li>
@@ -456,7 +456,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Related publications:</div>
+        <div class="title"><g:message code="got2d.cohorts.relatedPublications" default=" related publications"/></div>
         <ul>
             <li>Lavanya, R. et al. <a
                     href="http://www.ncbi.nlm.nih.gov/pubmed/19995197">Methodology of the Singapore Indian Chinese Cohort (SICC) eye study: quantifying ethnic variations in the epidemiology of eye diseases in Asians.</a> Ophthalmic Epidemiol 16, 325–336 (2009)
@@ -465,7 +465,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title">Contact the PI: <a href="mailto://ophwty@nus.edu.sg">Wong Tien Yin</a></div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://ophwty@nus.edu.sg">Wong Tien Yin</a></div>
     </div>
 </div>
 </div>

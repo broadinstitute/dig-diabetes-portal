@@ -12,25 +12,23 @@
 <div id="main">
 
 <div class="container">
-<h1>GoT2D</h1>
+<h1><g:message code="got2d.title" default="GoT2D"/></h1>
 
 <p>
-    The GoT2D consortium uses genome sequencing, exome sequencing, and exome chip genotyping to
-    identify and investigate low-frequency variants that influence risk of type 2 diabetes.
-    Results from the exome chip study (n=86,209) are currently available on this portal.
+    <g:message code="got2d.descr" default="GoT2D descr"/>
 </p>
 
 <div class="separator"></div>
 
 <div id="about-got2d" class="tabbed-about-page">
 <div class="sidebar">
-    <div class="tab active" data-section="cohorts">Cohorts</div>
+    <div class="tab active" data-section="cohorts"><g:message code="got2d.subsection.cohorts" default="cohorts"/></div>
 
-    <div class="tab" data-section="exomechip">Exome chip results</div>
+    <div class="tab" data-section="exomechip"><g:message code="got2d.subsection.exome" default="exome"/></div>
 
-    <div class="tab" data-section="papers">Papers</div>
+    <div class="tab" data-section="papers"><g:message code="got2d.subsection.papers" default="papers"/></div>
 
-    <div class="tab" data-section="people">People</div>
+    <div class="tab" data-section="people"><g:message code="got2d.subsection.people" default="people"/></div>
 </div>
 
 <div class="content">
