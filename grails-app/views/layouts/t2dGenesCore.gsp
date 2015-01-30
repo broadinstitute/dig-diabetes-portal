@@ -89,7 +89,7 @@
             <g:renderNotSigmaSection>
                 <a href="${createLink(controller:'informational', action:'about')}"><g:message code="portal.header.nav.about"/></a>
                 <a href="#"><g:message code="portal.header.nav.tutorials"/></a>
-                <a href="#"><g:message code="portal.header.nav.policies"/></a>
+                <a href="${createLink(controller:'informational', action:'policies')}"><g:message code="portal.header.nav.policies"/></a>
                 <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact"/></a>
             %{--<a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a>--}%
 
@@ -101,7 +101,27 @@
 
 <g:layoutBody/>
 
-<g:applyLayout name="footer"/>
+
+<div id="footer">
+    <div class="container">
+        <div class="separator"></div>
+        <div id="helpus"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="mainpage.send.feedback"/></a></div>
+    </div>
+</div>
+<div id="belowfooter">
+    <div class="row">
+        <div class="footer">
+            <div class="col-lg-6"></div>
+            <div class="col-lg-6 small-buildinfo">
+                <span class="pull-right" style="padding-right:25px">
+                    Built on ${BuildInfo?.buildHost} at ${BuildInfo?.buildTime}.  Version=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}
+                </span>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 </body>
 </html>

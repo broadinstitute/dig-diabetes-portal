@@ -1,0 +1,1 @@
+<h2>Rules about reusing portal text</h2>

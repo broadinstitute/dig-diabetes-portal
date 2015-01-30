@@ -55,14 +55,25 @@ class InformationalController {
     }
 
 
-    // the root page for got2d.  This page recruits underlying pages via Ajax calls
+    // the root page for contact.  This page recruits underlying pages via Ajax calls
     def contact()  {
         String defaultDisplay = 'portal'
         render (view: 'contact', model:[specifics:defaultDisplay] )
     }
-    // subsidiary pages for  got2d
+    // subsidiary pages for  contact
     def contactsection(){
         render (template: "contact/${params.id}" )
+    }
+
+
+    // the root page for contact.  This page recruits underlying pages via Ajax calls
+    def policies()  {
+        String defaultDisplay = 'tracking'
+        render (view: 'policies', model:[specifics:defaultDisplay] )
+    }
+    // subsidiary pages for  contact
+    def policiessection(){
+        render (template: "policies/${params.id}" )
     }
 
 
