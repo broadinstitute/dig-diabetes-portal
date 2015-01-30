@@ -650,3 +650,19 @@ div.veryImportantText {
    overflow: hidden;
     max-height: 160px;
 }
+
+
+ #about-t2dgenes {
+     margin-left: 0px;
+     margin-right: 0px;
+     width: 100%;
+ }
+
+.myPills {
+    background: #588fd3;
+    padding: 15px 0 15px 0;
+}
+
+.myPills a {
+    color: white;
+}
