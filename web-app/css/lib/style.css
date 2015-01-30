@@ -666,3 +666,15 @@ div.veryImportantText {
 .myPills a {
     color: white;
 }
+ .activated {
+     color:yellow;
+     text-decoration: underline;
+ }
+.activated a{
+    color:yellow;
+    text-decoration: underline;
+}
+.deactivated {
+    color:white;
+    text-decoration: none;
+}

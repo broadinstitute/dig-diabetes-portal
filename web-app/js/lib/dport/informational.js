@@ -16,11 +16,16 @@ var mpgSoftware = mpgSoftware || {};
                 if (typeof activeNav.attr('id') !== 'undefined') {
                     var activeNavName = activeNav.attr('id').split('_')[1];
                     $('.nav-pills  li').removeClass('active');
-                    $('.nav-pills  li').children().css('color', '#fff');
-                    $('.nav-pills  li').children().css('text-decoration', 'none');
+                    $('.nav-pills  li').removeClass('activated');
                     activeNav.addClass('active');
-                    activeNav.children().css('color', 'yellow');
-                    activeNav.children().css('text-decoration', 'underline');
+                    activeNav.addClass('activated');
+                    $('.nav-pills  li').removeClass('active');
+//                    $('.nav-pills  li').children().css('color', '#fff');
+//                    $('.nav-pills  li').children().css('text-decoration', 'none');
+                    activeNav.addClass('active');
+//                    activeNav.children().css('color', 'yellow');
+//                    activeNav.children().css('text-decoration', 'underline');
+
                     $.ajax({
                         cache: false,
                         type: "get",

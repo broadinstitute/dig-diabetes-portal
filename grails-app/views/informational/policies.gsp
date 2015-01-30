@@ -21,8 +21,8 @@
                 <ul class="nav nav-pills">
                     <div class="row">
                         <div class="col-md-3 text-center">
-                            <li role="presentation" id="policies_tracking" class="myPills active">
-                                <a style="text-decoration:underline;color:yellow" href="#">
+                            <li role="presentation" id="policies_tracking" class="myPills active activated">
+                                <a href="#">
                                     <g:message code="policies.tracking" default="cohorts"/>
                                 </a>
                             </li>

@@ -25,8 +25,8 @@
                 <ul class="nav nav-pills">
                     <div class="row">
                         <div class="col-md-3 text-center">
-                            <li role="presentation" id="got2d_cohorts" class="myPills active">
-                                <a style="text-decoration:underline;color:yellow" href="#">
+                            <li role="presentation" id="got2d_cohorts" class="myPills active activated">
+                                <a  href="#">
                                     <g:message code="got2d.subsection.cohorts" default="cohorts"/>
                                 </a>
                             </li>
