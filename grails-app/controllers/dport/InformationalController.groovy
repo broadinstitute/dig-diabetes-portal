@@ -24,9 +24,9 @@ class InformationalController {
 //        }
 
     }
-    def contact (){
-        render (view: 'contact')
-    }
+//    def contact (){
+//        render (view: 'contact')
+//    }
     def contactBeacon (){
         render (view: 'contactBeacon')
     }
@@ -53,5 +53,18 @@ class InformationalController {
     def got2dsection(){
         render (template: "got2dsection/${params.id}" )
     }
+
+
+    // the root page for got2d.  This page recruits underlying pages via Ajax calls
+    def contact()  {
+        String defaultDisplay = 'portal'
+        render (view: 'contact', model:[specifics:defaultDisplay] )
+    }
+    // subsidiary pages for  got2d
+    def contactsection(){
+        render (template: "contact/${params.id}" )
+    }
+
+
 
 }

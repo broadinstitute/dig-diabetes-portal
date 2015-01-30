@@ -62,7 +62,7 @@
 
                 <div class="content">
                     <div id="got2dContent">
-                        <g:render template="t2dsection/${specifics}"/>
+                        <g:render template="got2dsection/${specifics}"/>
                     </div>
                 </div>
             </div>
