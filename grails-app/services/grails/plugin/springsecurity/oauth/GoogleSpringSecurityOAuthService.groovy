@@ -26,6 +26,6 @@ class GoogleSpringSecurityOAuthService {
             log.error "No user email from Google. Response:\n${response.body}"
             throw new RuntimeException ('No user email from Google')
         }
-        return// new GoogleOAuthToken(accessToken, user.email)
+        return new GoogleOAuthToken(accessToken, user.email)
     }
 }

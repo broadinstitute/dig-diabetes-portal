@@ -170,7 +170,11 @@ class SpringSecurityOAuthController {
        }
 
        String code = params.code
-       JSONObject jsonObject =   googleRestService.buildCallToRetrieveOneTimeCode(code)
+       //JSONObject jsonObject =   googleRestService.buildCallToRetrieveOneTimeCode(code)
+       LinkedHashMap map =   googleRestService.buildCallToRetrieveOneTimeCode(code)
+       JSONObject jsonObject = map["identityInformation"]
+       String accessToken = map["accessToken"]
+       String idToken = map["idToken"]
 
        log.debug "jsonObject = ${jsonObject}"
 
@@ -184,8 +188,11 @@ class SpringSecurityOAuthController {
        String displayName = jsonObject["displayName"]
        String objectType = jsonObject["objectType"]
 
-       springManipService.forceLogin(identifier,session)
+       String accessKey = oauthService.findSessionKeyForAccessToken(params.provider)
+       session[accessKey] = new org.scribe.model.Token(accessToken, grailsApplication.config.oauth.providers.google.secret,jsonObject.toString())
 
+       springManipService.forceLogin(identifier,session)
+       tokenStuff(params.provider)
        redirect( controller: 'home', action: 'portalHome' )
 //       render (  view: 'hello', model:[email: email,
 //       ID: ID,
@@ -194,6 +201,38 @@ class SpringSecurityOAuthController {
 //       displayName:displayName,
 //       objectType:objectType])
    }
+    void tokenStuff(provider){
+        // Validate the 'provider' URL. Any errors here are either misconfiguration
+        // or web crawlers (or malicious users).
+        if (!params.provider) {
+            renderError 400, "The Spring Security OAuth callback URL must include the 'provider' URL parameter."
+            return
+        }
+
+        def sessionKey = oauthService.findSessionKeyForAccessToken(params.provider)
+        if (!session[sessionKey]) {
+            renderError 500, "No OAuth token in the session for provider '${params.provider}'!"
+            return
+        }
+
+        // Create the relevant authentication token and attempt to log in.
+        OAuthToken oAuthToken = createAuthToken(params.provider, session[sessionKey])
+        if (User.findByUsername(oAuthToken.principal)){
+//        if (oAuthToken.principal instanceof GrailsUser) {
+//            authenticateAndRedirect(oAuthToken, defaultTargetUrl)
+        } else {
+            // This OAuth account hasn't been registered against an internal
+            // account yet. Give the oAuthID the opportunity to create a new
+            // internal account or link to an existing one.
+            session[SPRING_SECURITY_OAUTH_TOKEN] = oAuthToken
+
+            def redirectUrl = SpringSecurityUtils.securityConfig.oauth.registration.askToLinkOrCreateAccountUri
+            assert redirectUrl, "grails.plugin.springsecurity.oauth.registration.askToLinkOrCreateAccountUri" +
+                    " configuration option must be set!"
+ //           log.debug "Redirecting to askToLinkOrCreateAccountUri: ${redirectUrl}"
+ //           redirect(redirectUrl instanceof Map ? redirectUrl : [uri: redirectUrl])
+        }
+    }
 
 
 

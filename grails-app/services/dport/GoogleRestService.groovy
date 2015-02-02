@@ -17,7 +17,7 @@ class GoogleRestService {
 
     private  String MYSQL_REST_SERVER = ""
 
-    JSONObject buildCallToRetrieveOneTimeCode(String oneTimeCode) {
+    Map buildCallToRetrieveOneTimeCode(String oneTimeCode) {
         String destination =   "https://${grailsApplication.config.googleapi.baseUrl}/oauth2/v3/token"
         //  String encodedRedirectUrl=URLEncoder.encode(grailsApplication.config.oauth.providers.google.successUri, "UTF-8")
         String encodedRedirectUrl=URLEncoder.encode(grailsApplication.config.oauth.providers.google.callback, "UTF-8")
@@ -40,17 +40,11 @@ class GoogleRestService {
                 identityInformation.gender+
                 identityInformation.language+
                 identityInformation.etag)
-        return identityInformation
+        //return identityInformation
+        return [identityInformation:identityInformation,
+                accessToken:accessToken,
+                idToken:idToken]
 
-//                identityInformation.emails['value']
-//                identityInformation.id
-//                identityInformation.name ['familyName']
-//                identityInformation.name ['givenName']
-//                identityInformation.displayName
-//                identityInformation.domain
-//                identityInformation.gender
-//                identityInformation.language
-//                identityInformation.etag
     }
 
     private JSONObject postGoogleRestCallBase(String drivingContents, String targetUrl){
