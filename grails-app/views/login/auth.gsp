@@ -21,10 +21,9 @@
 
         <div class="row">
             <div class="col-md-8 col-md-offset-2 login-header">
-                <p>Welcome to this prototype portal for data from large genetic studies of type 2 diabetes. In order to access the site you must have a Google log in name.  These accounts are free
-                and take only a minute or two to create. If you would like to create such an account then click on the following
-                    <a href="https://accounts.google.com/SignUp?service=oz&continue=https%3A%2F%2Fplus.google.com%2F%3Fgpsrc%3Dogpy0">link</a>.  If you already have a Google account then
-                click on the login button below.
+                <p>
+                    <g:message code="google.login.page.intro" default="welcome, go get yourself a Google account" />
+                </p>
             </div>
             <div class="col-md-2"></div>
         </div>

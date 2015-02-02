@@ -170,8 +170,10 @@ class SpringSecurityOAuthController {
        }
 
        String code = params.code
-       //JSONObject jsonObject =   googleRestService.buildCallToRetrieveOneTimeCode(code)
        LinkedHashMap map =   googleRestService.buildCallToRetrieveOneTimeCode(code)
+       if (!map) {
+           redirect( controller: 'home', action: 'portalHome' )
+       }
        JSONObject jsonObject = map["identityInformation"]
        String accessToken = map["accessToken"]
        String idToken = map["idToken"]
@@ -194,12 +196,6 @@ class SpringSecurityOAuthController {
        springManipService.forceLogin(email,session)
        tokenStuff(params.provider)
        redirect( controller: 'home', action: 'portalHome' )
-//       render (  view: 'hello', model:[email: email,
-//       ID: ID,
-//       domain: domain,
-//       language: language,
-//       displayName:displayName,
-//       objectType:objectType])
    }
     void tokenStuff(provider){
         // Validate the 'provider' URL. Any errors here are either misconfiguration
