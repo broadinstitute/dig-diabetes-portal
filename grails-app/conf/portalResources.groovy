@@ -5,6 +5,12 @@ modules = {
         resource url: "js/lib/jquery.dataTables.min.js"
         resource url: "css/lib/jquery.dataTables.css"
     }
+    portalHome {
+        resource url: 'js/lib/dport/portalHome.js'
+    }
+    informational {
+        resource url: 'js/lib/dport/informational.js'
+    }
     geneInfo {
         resource url: 'css/dport/geneInfo.css'
         resource url: 'css/dport/barchart.css'

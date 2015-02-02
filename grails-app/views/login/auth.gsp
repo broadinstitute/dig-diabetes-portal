@@ -2,7 +2,7 @@
 <html>
 <head>
     <title><g:message code="springSecurity.login.title"/></title>
-    <meta name="layout" content="core"/>
+    <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
     <r:layoutResources/>
 

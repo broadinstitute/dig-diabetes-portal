@@ -1,4 +1,4 @@
-<div class="section section-blue" data-section="project2">
+<div class="section" style="display : block">
     <h3>Deep whole-genome sequencing of 600 individuals selected from extended Mexican American pedigrees</h3>
     <p><em>Results from this project will be made available on this portal.</em></p>
     <p>

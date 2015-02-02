@@ -1,4 +1,4 @@
-<div class="section section-blue" data-section="people">
+<div class="section" style="display : block">
 <div class="row about-people">
     <div class="col-md-3">
         <div class="institution">

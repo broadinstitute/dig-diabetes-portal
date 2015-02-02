@@ -1,67 +1,98 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="core"/>
+    <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
+    <r:require modules="informational"/>
     <r:layoutResources/>
 
 </head>
 
 <body>
 
+
 <div id="main">
 
     <div class="container">
-        <h1>T2D-GENES</h1>
-        <h4>Type 2 Diabetes Genetic Exploration by Next-generation sequencing in multi-Ethnic Samples</h4>
+        <h1>T2D Genes (icon)</h1>
+        %{--<h4><g:message code="t2dgenes.mainPage.subtitle" default="t2dgenes" /></h4>--}%
         <p>
-            T2D-GENES is a large collaborative effort to find genetic variants that influence risk of type 2 diabetes.
-            With funding from <a class="boldlink" href="http://www.niddk.nih.gov/Pages/default.aspx">NIDDK</a>, the group is conducting two sequencing studies and
-        one GWAS-based fine-mapping study in five ethnicities.
+            <g:message code="t2dgenes.mainPage.descr" default="t2dgenes description"/>
+
         </p>
-        <div class="separator"></div>
-        <div id="about-t2dgenes" class="tabbed-about-page">
-            <div class="sidebar">
-                <div class="tab active" data-section="cohorts">Cohorts</div>
-                <div class="tab" data-section="papers">Papers</div>
-                <div class="sep"></div>
-                <div class="tab" data-section="project1">Project 1</div>
-                <div class="tab" data-section="project2">Project 2</div>
-                <div class="tab" data-section="project3">Project 3</div>
-                <div class="sep"></div>
-                <div class="tab" data-section="people">People</div>
-            </div>
-            <div class="content">
-                   <div id="t2dgeneContent">
+
+        <div class="row">
+            <div class="buttonHolder tabbed-about-page">
+
+                <ul class="nav nav-pills">
+                    <div class="row">
+                        <div class="col-md-2 text-center" id="aboutt2dDiv_cohorts">
+                            <li role="presentation" id="aboutt2d_cohorts" class="myPills active activated">
+                                <a href="#">
+                                  <g:message code="got2d.subsection.cohorts" default="cohorts"/>
+                                </a>
+                            </li>
+                        </div>
+
+                        <div class="col-md-2 text-center" id="aboutt2dDiv_papers">
+                            <li role="presentation" id="aboutt2d_papers" class="myPills">
+                                <a href="#">
+                                   <g:message code="got2d.subsection.papers" default="papers"/>
+                                </a>
+                            </li>
+                        </div>
+
+                        <div class="col-md-2 text-center" id="aboutt2dDiv_people">
+                            <li role="presentation" id="aboutt2d_people" class="myPills">
+                                <a href="#">
+                                   <g:message code="got2d.subsection.people" default="people"/>
+                                </a>
+                            </li>
+                        </div>
+
+                        <div class="col-md-2 text-center" id="aboutt2dDiv_project1">
+                            <li role="presentation" id="aboutt2d_project1" class="myPills">
+                                <a href="#">
+                                    Project 1
+                                </a>
+                            </li>
+                        </div>
+
+                        <div class="col-md-2 text-center" id="aboutt2dDiv_project2">
+                            <li role="presentation" id="aboutt2d_project2" class="myPills">
+                                <a href="#">
+                                    Project 2
+                                </a>
+                            </li>
+                        </div>
+
+                        <div class="col-md-2 text-center" id="aboutt2dDiv_project3">
+                            <li role="presentation" id="aboutt2d_project3" class="myPills">
+                                <a href="#">
+                                    Project 3
+                                </a>
+                            </li>
+                        </div>
+                    </div>
+
+                </ul>
+
+                <div class="content">
+                    <div id="t2dgeneContent">
                         <g:render template="t2dsection/${specifics}"/>
-                   </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        $(function() {
-            $('#about-t2dgenes .sidebar .tab').on('click', function(e) {
-                var section = $(e.target).data('section');
-                console.log("section="+section);
-                $('.tab').removeClass('active');
-                $(e.target).addClass('active');
-                $.ajax({
-                    cache:false,
-                    type:"get",
-                    url:"./t2dgenesection/"+section,
-                    async:true,
-                    success: function (data) {
-                       $("#t2dgeneContent").empty().html(data);
-                    },
-                    error: function(jqXHR, exception) {
-                        core.errorReporter(jqXHR, exception) ;
-                    }
-                });
-            });
-        });
-    </script>
 
+</div>
+
+<script>
+    mpgSoftware.informational.buttonManager (".buttonHolder .nav li",
+            "${createLink(controller:'informational',action:'t2dgenesection')}",
+            "#t2dgeneContent");
+</script>
 
 
 </div>

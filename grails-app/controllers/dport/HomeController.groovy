@@ -2,6 +2,7 @@ package dport
 
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.apache.juli.logging.LogFactory
+import temporary.BuildInfo
 
 class HomeController {
     private static final log = LogFactory.getLog(this)
@@ -11,6 +12,7 @@ class HomeController {
 
     def index = {
         render(view:'portalHome')
+//      redirect(controller:'beacon', action:'beaconDisplay’)
     }
 
     def portalHome = {
@@ -19,6 +21,20 @@ class HomeController {
                                                                show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
                                                                show_sigma:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma)])
     }
+
+    def introVideoHolder = {
+        render(controller: 'home', view: 'introVideoHolder')
+    }
+
+
+    def analyticsT2d = {
+        render "<h1>t2danaltics</h1>"
+    }
+
+    def analyticsSigma = {
+        render "<h1>sigma</h1>"
+    }
+
 
     def beaconHome = {
         render(view: 'beaconDisplay')

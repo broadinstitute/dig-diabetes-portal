@@ -8,7 +8,7 @@
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"><!--<![endif]-->
 <html>
 <head>
-<title>${grailsApplication.config.site.title}</title>
+    <title>${grailsApplication.config.site.title}</title>
 
     <r:require modules="core"/>
     <r:layoutResources/>
@@ -54,32 +54,32 @@
     core.errorReporter = function (jqXHR, exception) {
         // we have three ways to report errors. 1) to the console, via alert, or through a post.
         var consoleReporter=true,
-            alertReporter = false,
-            postReporter = true,
+                alertReporter = false,
+                postReporter = true,
                 errorText = "" ;
         if (consoleReporter  || alertReporter || postReporter)  {
-             if ( typeof jqXHR !== 'undefined') {
-                 if (jqXHR.status === 0) {
-                     errorText += 'status == 0.  Not connected?\n Or page abandoned prematurely?';
-                 } else if (jqXHR.status == 404) {
-                     errorText += 'Requested page not found. [404]';
-                 } else if (jqXHR.status == 500) {
-                     errorText += 'Internal Server Error [500].';
-                 } else {
-                     errorText += 'Uncaught Error.\n' + jqXHR.responseText;
-                 }
-             }
-             if ( typeof exception !== 'undefined') {
-                 if (exception === 'parsererror') {
-                     errorText += 'Requested JSON parse failed.';
-                 } else if (exception === 'timeout') {
-                     errorText += 'Time out error.';
-                 } else if (exception === 'abort') {
-                     errorText += 'Ajax request aborted.';
-                 } else {
-                     errorText += 'exception text ='+exception;
-                 }
-             }
+            if ( typeof jqXHR !== 'undefined') {
+                if (jqXHR.status === 0) {
+                    errorText += 'status == 0.  Not connected?\n Or page abandoned prematurely?';
+                } else if (jqXHR.status == 404) {
+                    errorText += 'Requested page not found. [404]';
+                } else if (jqXHR.status == 500) {
+                    errorText += 'Internal Server Error [500].';
+                } else {
+                    errorText += 'Uncaught Error.\n' + jqXHR.responseText;
+                }
+            }
+            if ( typeof exception !== 'undefined') {
+                if (exception === 'parsererror') {
+                    errorText += 'Requested JSON parse failed.';
+                } else if (exception === 'timeout') {
+                    errorText += 'Time out error.';
+                } else if (exception === 'abort') {
+                    errorText += 'Ajax request aborted.';
+                } else {
+                    errorText += 'exception text ='+exception;
+                }
+            }
             var date=new Date();
             errorText += '\nError recorded at '+date.toString();
             errorText += '\nVersion=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}';
@@ -110,7 +110,7 @@
 
             }
         }
-   }
+    }
 </script>
 <div id="spinner" class="spinner" style="display:none;">
     <img id="img-spinner" src="${resource(dir: 'images', file: 'ajaxLoadingAnimation.gif')}" alt="Loading"/>
@@ -125,15 +125,18 @@
                     %{--<a href="/dig-diabetes-portal/home?lang=en"> <i class="icon-user icon-white"><r:img class="currentlanguage" uri="/images/United-States.png" alt="USA"/></i></a>--}%
                     <a href='<g:createLink controller="home" action="index" params="[lang:'en']"/>'> <i class="icon-user icon-white"><r:img class="currentlanguage" uri="/images/United-States.png" alt="USA"/></i></a>
                 </span>
-
-                <div id="branding">
-                    SIGMA <strong>T2D</strong> <small><g:rendersSigmaMessage messageSpec="site.subtext"/></small>
-                </div>
+                <a style="margin: 0; padding: 0" href="${createLink(controller: 'home', action:'portalHome')}">
+                    <div id="branding">
+                        SIGMA <strong>T2D</strong> <small><g:rendersSigmaMessage messageSpec="site.subtext"/></small>
+                    </div>
+                </a>
             </g:renderSigmaSection>
             <g:renderNotSigmaSection>
-                <div id="branding">
-                    Type 2 Diabetes <strong>Genetics</strong> <small>Beta</small>
-                </div>
+                <a style="margin: 0; padding: 0" href="${createLink(controller: 'home', action:'portalHome')}">
+                    <div id="branding">
+                        Type 2 Diabetes <strong>Genetics</strong> <small>Beta</small>
+                    </div>
+                </a>
             </g:renderNotSigmaSection>
         </div>
     </div>
@@ -169,13 +172,17 @@
                 <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="localized.contact"/></a>
             </g:renderSigmaSection>
             <g:renderNotSigmaSection>
-                <a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a> &middot;
-                <a href="${createLink(controller:'informational', action:'about')}"><g:message code="localized.aboutTheData"/></a> &middot;
-                <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="localized.contact"/></a>
-             </g:renderNotSigmaSection>
-            </div>
+                <a href="${createLink(controller:'informational', action:'about')}"><g:message code="portal.header.nav.about"/></a>
+                <a href="#"><g:message code="portal.header.nav.tutorials"/></a>
+                <a href="#"><g:message code="portal.header.nav.policies"/></a>
+                <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact"/></a>
+            %{--<a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a>--}%
+
+
+            </g:renderNotSigmaSection>
         </div>
     </div>
+</div>
 
 <g:layoutBody/>
 
@@ -190,7 +197,9 @@
         <div class="footer">
             <div class="col-lg-6"></div>
             <div class="col-lg-6 small-buildinfo">
-                Built on ${BuildInfo?.buildHost} at ${BuildInfo?.buildTime}.  Version=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}
+                <span class="pull-right" style="padding-right:10px">
+                    Built on ${BuildInfo?.buildHost} at ${BuildInfo?.buildTime}.  Version=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}
+                </span>
             </div>
 
         </div>

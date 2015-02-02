@@ -265,24 +265,24 @@ environments {
         grails.logging.jul.usebridge = true
     }
     production {
-
-//  grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
-//   grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
-//   grails.serverURL = "http://type2diabetesgenetics.org"
-//   grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-        //grails.serverURL = "sigmat2dqasrv7-env.elasticbeanstalk.com"
-       // grails.serverURL = "sigmat2dprod-env.elasticbeanstalk.com"
-       // grails.serverURL = "sigmat2ddev-env.elasticbeanstalk.com"
-        //grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
-        //grails.serverURL = "type2diabetesqasrvr-env.elasticbeanstalk.com"
-        //grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-
-       // grails.serverURL = "http://cidbtest-env.elasticbeanstalk.com"
-       // grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
-        //grails.serverURL = "http://privatecitest-env.elasticbeanstalk.com/"
-        grails.serverURL = "http://ci-env.elasticbeanstalk.com"
-        //grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-        grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetesgenetics.org"
+//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+//      grails.serverURL = "sigmat2dqasrv7-env.elasticbeanstalk.com"
+//      grails.serverURL = "sigmat2dprod-env.elasticbeanstalk.com"
+//      grails.serverURL = "sigmat2ddev-env.elasticbeanstalk.com"
+//      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
+//      grails.serverURL = "type2diabetesqasrvr-env.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+//      grails.serverURL = "http://cidbtest-env.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+//      grails.serverURL = "http://privatecitest-env.elasticbeanstalk.com/"
+//      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
+        grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+//      grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
+//      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false
     }
 }
@@ -316,10 +316,13 @@ grails {
 grails.plugin.springsecurity.securityConfigType = "InterceptUrlMap"
 grails.plugin.springsecurity.interceptUrlMap = [
         '/':                        ['permitAll'],
+        '/index':                   ['permitAll'],
+        '/index.gsp':                   ['permitAll'],
         '/home':                    ['permitAll'],
         '/home/**':                 ['ROLE_USER'],
         '/articles/**':             ['permitAll'],
         '/system/**':               ['ROLE_SYSTEM'],
+        '/system/determineVersion':               ['permitAll'],
         '/admin/resetPassword':     ['permitAll'],
         '/admin/resetPasswordInteractive/**':     ['permitAll'],
         '/admin/updatePasswordInteractive/**':     ['permitAll'],
@@ -338,7 +341,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/**/fonts/**':       ['permitAll'],
         '/**/css/**':         ['permitAll'],
         '/**/images/**':      ['permitAll'],
-        '/**/*.ico':    ['permitAll'],
+        '/**/*.ico':          ['permitAll'],
         '/login/**':          ['permitAll'],
         '/logout/**':         ['permitAll'],
         '/hypothesisGen/**':  ['ROLE_USER'],
@@ -350,8 +353,10 @@ grails.plugin.springsecurity.logout.postOnly = false
 grails.plugin.springsecurity.rememberMe.cookieName="td2PortalRememberMe"
 grails.plugin.springsecurity.rememberMe.key="td2PortalKey"
 grails.plugin.springsecurity.rememberMe.rememberMe.persistent=true
-grails.plugins.springsecurity.successHandler.alwaysUseDefault = true
+grails.plugin.springsecurity.successHandler.alwaysUseDefault = true
 grails.plugin.springsecurity.successHandler.defaultTargetUrl = "/home/index"
+grails.plugin.springsecurity.rejectIfNoRule = true     // pessimistic rule -- no rule means access rejected if true
+grails.plugin.springsecurity.fii.rejectPublicInvocations = false  // if true then un-mapped URLs will trigger an IllegalArgumentException
 
 grails.plugin.springsecurity.apf.storeLastUsername=true
 grails.plugin.springsecurity.dao.hideUserNotFoundExceptions=false

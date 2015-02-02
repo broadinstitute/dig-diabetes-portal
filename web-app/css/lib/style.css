@@ -1,13 +1,25 @@
 @import url(typeahead.js-bootstrap.css);
+.spinner {
+    position: fixed;
+    top: 2px;
+    right: 25%;
+    margin-left: 0px; /* half width of the spinner gif */
+    margin-top: 0px; /* half height of the spinner gif */
+    text-align:center;
+    z-index:1234;
+    overflow: auto;
+    width: 100px; /* width of the spinner gif */
+    height: 102px; /*hight of the spinner gif +2px to fix IE8 issue */
+}
 .btn-primary {
   background: #052090;
   border-color: #052090; }
 
 h1, h2, h3, h4, label {
-  font-weight: 300; }
+  font-weight: 400; }
 
 label, .radio label, .checkbox label {
-  font-weight: 300; }
+  font-weight: 400; }
 
 .input-group-lg > .form-control, .input-group-lg > .input-group-addon, .input-group-lg > .input-group-btn > .btn {
   border-radius: initial; }
@@ -50,14 +62,28 @@ h1 {
     vertical-align: middle; }
 
 h2 small {
-  font-weight: 300; }
-
+  font-weight: 300;
+}
+.medText {
+    font-size: 20px;
+    font-weight: 300;
+}
+.medTextDark {
+    font-size: 24px;
+    font-weight: 300;
+}
 h4 {
-  font-size: 22px; }
+  font-size: 22px;
+}
+h4 small {
+    font-weight: 300;
+}
 
 div.lead {
   font-size: 28px; }
-
+.sectionBuffer {
+    margin-top:30px;
+}
 div#branding {
   font-size: 44px;
   text-transform: uppercase;
@@ -594,4 +620,61 @@ div.veryImportantText {
 .small-buildinfo {
     font-size: 8pt;
 }
+.iconHolder  {
+    margin: 0 auto 0 auto;
+    text-align:center;
+}
+.vertDivider  {
 
+}
+.vertDivider:after {
+    content:"";
+    background: #ccc;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 250px;
+    width: 1px;
+}
+.logohelper {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+.logoholder {
+    vertical-align: middle;
+    max-height: 100px;
+    max-width: 160px;
+}
+.logoframe {
+   overflow: hidden;
+    max-height: 160px;
+}
+
+
+ #about-t2dgenes {
+     margin-left: 0px;
+     margin-right: 0px;
+     width: 100%;
+ }
+
+.myPills {
+    background: #588fd3;
+    padding: 15px 0 15px 0;
+}
+
+.myPills a {
+    color: white;
+}
+ .activated {
+     color:yellow;
+     text-decoration: underline;
+ }
+.activated a{
+    color:yellow;
+    text-decoration: underline;
+}
+.deactivated {
+    color:white;
+    text-decoration: none;
+}

@@ -3,6 +3,7 @@ package dport.mgr
 import dport.RestServerService
 import  dport.SharedToolsService
 import dport.people.User;
+import temporary.BuildInfo;
 import org.codehaus.groovy.grails.commons.GrailsApplication
 
 class SystemController {
@@ -20,6 +21,20 @@ class SystemController {
         render(view: 'systemMgr', model: [currentRestServer:restServerService.currentRestServer(),
         currentApplicationIsSigma:sharedToolsService.applicationName()])
     }
+
+    def determineVersion = {
+        String jsonVersion  =  """
+{"buildHost": "${BuildInfo?.buildHost}",
+"buildTime":"${BuildInfo?.buildTime}",
+"appVersion":"${BuildInfo?.appVersion}",
+"buildNumber":"${BuildInfo?.buildNumber}"
+}""".toString()
+        render(status:200, contentType:"application/json") {
+            [info:jsonVersion]
+        }
+      }
+
+
 
     def updateRestServer() {
         String restServer = params.datatype

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="core"/>
+    <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
     <r:layoutResources/>
 
@@ -9,36 +9,51 @@
 
 <body>
 
+
 <div id="main">
     <div class="container">
-        <h1>About The Data</h1>
+        <div class="row">
+            <div class="col-xs-12">
+                <h1><g:message code="aboutTheData.title" default="about the data" /></h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 medText">
+                <g:message code="aboutTheData.descr" default="about the data" />
+            </div>
+        </div>
+        <div class="row sectionBuffer">
 
-        <p>
-            This portal contains results from the following studies, which were supported by <a
-                href="www.niddk.nih.gov">NIDDK</a> and
-            <a href="http://www.genome.gov">NHGRI</a> (click any study to learn more):
-        </p>
+            <div class="col-md-3 medText">
+                <div class="iconHolder">
+                    <a href="${createLink(controller:'informational', action:'t2dgenes')}">T2D-GENES:</a>
+                </div>
+                <g:message code="aboutTheData.datasets.t2dgenes" default="about the data" />
+            </div>
 
-        <p class="leadlink">
-            <a href="${createLink(controller:'informational', action:'t2dgenes')}">T2D-GENES:</a>
-            exome sequencing results from 10,000 people (half T2D cases, half controls)
-            representing five continental ancestry groups (African-American, East Asian, South Asian, European, and Hispanic).
-        </p>
+            <div class="col-md-3 medText vertDivider">
+                <div class="iconHolder center-text">
+                    <a href="${createLink(controller:'informational', action:'got2d')}">GoT2D:</a>
+                </div>
+                <g:message code="aboutTheData.datasets.got2d" default="about the data" />
+            </div>
 
-        <p class="leadlink">
-            <a href="${createLink(controller:'informational', action:'got2d')}">GoT2D:</a>
-            four exome sequencing cohorts (~3,000), plus a meta-analysis of exome chip results  from ~35,000 T2D cases and ~51,000 controls, all of European ancestry.
-        </p>
+            <div class="col-md-3 medText vertDivider">
+                <div class="iconHolder">
+                    <a href="http://diagram-consortium.org/about.html">DIAGRAM:</a>
+                </div>
+                <g:message code="aboutTheData.datasets.diagram" default="about the data" />
+            </div>
 
-        <p class="leadlink">
-            <a href="http://diagram-consortium.org/about.html">DIAGRAM:</a>
-            GWAS results from 12,171 cases and 56,862 controls, all of European ancestry. DIAGRAM is the largest current GWAS dataset in T2D.
-        </p>
+            <div class="col-md-3 medText vertDivider">
+                <div class="iconHolder">
+                    <a href="${createLink(controller:'informational', action:'hgat')}">GWAS meta-analyses:</a>
+                </div>
+                <g:message code="aboutTheData.datasets.gwasMetaAnalysis" default="about the data" />
+            </div>
 
-        <p class="leadlink">
-            <a href="${createLink(controller:'informational', action:'hgat')}">Human Genetics Annotation Table:</a>
-            SNP-specific p-values from large GWAS meta-analyses for 25 traits.
-        </p>
+         </div>
+
 
     </div>
 </div>

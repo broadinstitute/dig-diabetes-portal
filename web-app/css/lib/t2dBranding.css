@@ -227,6 +227,13 @@ a.boldItlink {
 .about-people a.pi {
     color: yellow; }
 
+.activeNav   {
+    font-size: 12px;
+    padding: 8px 0;
+    text-decoration: underline;
+    color: yellow;
+}
+
 p.leadlink {
     font-size: 18px;
     color: #888;
@@ -236,7 +243,6 @@ p.leadlink a {
     cursor: pointer;
     text-decoration: underline;
     color: #588fd3; }
-
 div.cohort {
     border-top: 1px solid #ddd;
     margin: 12px 0;
