@@ -191,7 +191,7 @@ class SpringSecurityOAuthController {
        String accessKey = oauthService.findSessionKeyForAccessToken(params.provider)
        session[accessKey] = new org.scribe.model.Token(accessToken, grailsApplication.config.oauth.providers.google.secret,jsonObject.toString())
 
-       springManipService.forceLogin(identifier,session)
+       springManipService.forceLogin(email,session)
        tokenStuff(params.provider)
        redirect( controller: 'home', action: 'portalHome' )
 //       render (  view: 'hello', model:[email: email,

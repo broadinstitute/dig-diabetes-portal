@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><g:message code="springSecurity.login.title"/></title>
+    <title>log in</title>
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
     <r:layoutResources/>
@@ -9,6 +9,11 @@
 </head>
 
 <body>
+<style>
+.googleLoginButton a {
+    color: white;
+}
+</style>
 
 <div id="main">
 
@@ -16,66 +21,31 @@
 
         <div class="row">
             <div class="col-md-8 col-md-offset-2 login-header">
-                <p>Welcome to this prototype portal for data from large genetic studies of type 2 diabetes. If you have permission to view the site, log in below. To get permission or learn more about the site, please
-                    <a class="boldlink" href="mailto://t2dgenetics@gmail.com">email the portal team</a>.</p>
+                <p>Welcome to this prototype portal for data from large genetic studies of type 2 diabetes. In order to access the site you must have a Google log in name.  These accounts are free
+                and take only a minute or two to create. If you would like to create such an account then click on the following
+                    <a href="https://accounts.google.com/SignUp?service=oz&continue=https%3A%2F%2Fplus.google.com%2F%3Fgpsrc%3Dogpy0">link</a>.  If you already have a Google account then
+                click on the login button below.
             </div>
+            <div class="col-md-2"></div>
         </div>
 
         <div class="row">
-           <div class="col-md-6 col-md-offset-3">
-               <form action='${postUrl}' method='POST' id='loginForm' class='form form-horizontal' autocomplete='off'>
-                    <g:if test='${flash.message}'>
-                        <div class="alert alert-danger">${flash.message}</div>
-                    </g:if>
-                    %{--<form action="#" method="post" class="form form-horizontal">--}%
-                        %{--{% csrf_token %}--}%
-                        %{--{% if next %}--}%
-                        %{--<input type="hidden" name="next" value="{{ next}}" >--}%
-                        %{--{% endif %}--}%
-                        <div class="form-group">
-                            <label class="control-label col-sm-3" id="id_email"><g:message code="springSecurity.login.username.label"/>:</label>
+            <div class="center-block col-xs-12 text-center">
 
-                            <div class="col-sm-8">
-                                <input type='text' class='form_control' name='j_username' id='username'/>
-                            </div>
-                        </div>
+                <s2o:ifNotLoggedInWith provider="google">
+                    <div class="btn btn-primary btn-lg googleLoginButton text-center">
+                        <oauth:connect provider="google" id="google-connect-link"><g:message
+                                code="google.log.in"/></oauth:connect>
+                    </div>
 
-                        <div class="form-group">
-                            <label class="control-label col-sm-3" for="id_password"><g:message
-                                    code="springSecurity.login.password.label"/>:</label>
-
-                            <div class="col-sm-8">
-                                <input type='password' class='text_' name='j_password' id='password'/>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-sm-3"></div>
-                            <div class="col-sm-8">
-                                <input type='checkbox' class='chk' name='${rememberMeParameter}' id='remember_me'
-                                <g:if test='${hasCookie}'>checked='checked'</g:if>/>
-                                <label for='remember_me'><g:message code="springSecurity.login.remember.me.label"/></label>
-                            </div>
-                        </div>
-
-                        <div style="text-align:center; padding-top: 20px;">
-                            <input class="btn btn-primary btn-lg" type='submit' id="submit"
-                                   value='${message(code: "springSecurity.login.button")}'/>
-                        </div>
-
-               </form>
+                </s2o:ifNotLoggedInWith>
 
             </div>
+
         </div>
     </div>
 
 </div>
-<script type='text/javascript'>
-    <!--
-    (function() {
-        document.forms['loginForm'].elements['j_username'].focus();
-    })();
-    // -->
-</script>
+
 </body>
 </html>
