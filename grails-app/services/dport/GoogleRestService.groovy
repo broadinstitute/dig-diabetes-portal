@@ -19,7 +19,7 @@ class GoogleRestService {
 
     Map buildCallToRetrieveOneTimeCode(String oneTimeCode) {
         String destination =   "https://${grailsApplication.config.googleapi.baseUrl}/oauth2/v3/token"
-        //  String encodedRedirectUrl=URLEncoder.encode(grailsApplication.config.oauth.providers.google.successUri, "UTF-8")
+        log.info("Google authentication callback==>${grailsApplication.config.oauth.providers.google.callback}")
         String encodedRedirectUrl=URLEncoder.encode(grailsApplication.config.oauth.providers.google.callback, "UTF-8")
         String contents = "code=${oneTimeCode}&"+
                 "client_id=${grailsApplication.config.oauth.providers.google.key}&"+

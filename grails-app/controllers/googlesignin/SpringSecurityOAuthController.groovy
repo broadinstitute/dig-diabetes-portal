@@ -225,9 +225,7 @@ class SpringSecurityOAuthController {
             def redirectUrl = SpringSecurityUtils.securityConfig.oauth.registration.askToLinkOrCreateAccountUri
             assert redirectUrl, "grails.plugin.springsecurity.oauth.registration.askToLinkOrCreateAccountUri" +
                     " configuration option must be set!"
- //           log.debug "Redirecting to askToLinkOrCreateAccountUri: ${redirectUrl}"
- //           redirect(redirectUrl instanceof Map ? redirectUrl : [uri: redirectUrl])
-        }
+         }
     }
 
 
