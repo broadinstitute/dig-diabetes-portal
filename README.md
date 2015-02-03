@@ -1,5 +1,16 @@
 <h1>Diabetes portal</h1>
 
+__Important note to portal developers and sysops (current February 3, 2015)__
+__After we make the move our 
+new Google sign-on based authentication system, please note that the code will no longer run unless you
+incorporate a private configuration file, as described below in the section titled "Configuration".  The code
+should compile correctly without private configuration files, but it will not run in any of the following configurations:
+  * debug mode for development
+  * test mode, for running unit, integration, or functional tests
+  * generating a war file for the purposes of deployment
+  * running that war file on your target server
+More information is provided down below in this README file
+
 The diabetes portal is written in Grails. The following description should give you all the information you need to download, compile, and run a local version of the portal.
 
 <h3>Table of Contents:</h3>
@@ -243,13 +254,50 @@ You will know that you have created a personal configuration file in the right p
 \!\!\!\!\! file:/Users/ben/.grails/dig-diabetes-portal/dig-diabetes-portal-commons-config.groovy !! **
 ```
 
-Note that a personal configuration file will soon become mandatory, and that this file will need to contain
+Note that a personal configuration file will (very) soon become mandatory, and that this file will need to contain
 at a minimum the following line:
 
 ```bash
 oauth.providers.google.api.secret = 'xxxxxxx'
 ```
+where *xxxxxxx* represents our Google OAuth secret key.  For developers working on the diabetes portal in
+the Medical Population Genomics department at the Broad Institute then please see me (ba) for our current key.
+Otherwise set up your own authorization secret key with Google and replace *xxxxxxx* with your number.  
 
-If you don't have your own Google account or you work from our existing accounts then contact the diabetes portal team.
+Special note: if you don't create the above configuration file, or else if you put it in the wrong place then 
+two things will happen:  first, during compilation the Grails code will give you a polite, comprehensible message
+indicating that you did not supply a configuration file. That message will Show up on your console, and should 
+look something like this:
+
+```bash
+\*\* No config override  in effect \*\*
+```
+
+as well, Grails will error out without running, and will provide a long and barely comprehensible error message
+that starts out looking like this:
+
+```bash
+Error |
+Fatal error running tests: Error creating bean with name 'grails.plugin.databasemigration.DbdocController': 
+Initialization of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: 
+Error creating bean with name 'instanceControllerTagLibraryApi': 
+Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire method: 
+public void org.codehaus.groovy.grails.plugins.web.api.ControllerTagLibraryApi.setTagLibraryLookup(org.codehaus.groovy.grails.web.pages.TagLibraryLookup); 
+nested exception is org.springframework.beans.factory.BeanCreationException: 
+Error creating bean with name 'gspTagLibraryLookup': 
+Invocation of init method failed; 
+nested exception is org.springframework.beans.factory.BeanCreationException: 
+Error creating bean with name 'grails.plugin.springsecurity.oauth.SpringSecurityOAuthTagLib': 
+Initialization of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: 
+Error creating bean with name 'oauthService': 
+Invocation of init method failed; nested exception is java.lang.IllegalStateException: 
+Missing oauth secret or key (or both!) in configuration for google. (Use --stacktrace to see the full trace)
+.Tests FAILED 
+|
+```
+
+So if you see the above message, look to see if you have a configuration file, if it is in the right place, and if
+it contains the right values.
+
 
 
