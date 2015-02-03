@@ -1,6 +1,7 @@
 <h1>Diabetes portal</h1>
 
-**__Important note to portal developers and sysops (current February 3, 2015)__: after we make the move our 
+__Important note to portal developers and sysops (current February 3, 2015)__
+__After we make the move our 
 new Google sign-on based authentication system, please note that the code will no longer run unless you
 incorporate a private configuration file, as described below in the section titled "Configuration".  The code
 should compile correctly without private configuration files, but it will not run in any of the following configurations:
@@ -8,7 +9,7 @@ should compile correctly without private configuration files, but it will not ru
   * test mode, for running unit, integration, or functional tests
   * generating a war file for the purposes of deployment
   * running that war file on your target server
-More information is provided down below in this README file**
+More information is provided down below in this README file
 
 The diabetes portal is written in Grails. The following description should give you all the information you need to download, compile, and run a local version of the portal.
 
@@ -277,7 +278,20 @@ that starts out looking like this:
 
 ```bash
 Error |
-Fatal error running tests: Error creating bean with name 'grails.plugin.databasemigration.DbdocController': Initialization of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'instanceControllerTagLibraryApi': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire method: public void org.codehaus.groovy.grails.plugins.web.api.ControllerTagLibraryApi.setTagLibraryLookup(org.codehaus.groovy.grails.web.pages.TagLibraryLookup); nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'gspTagLibraryLookup': Invocation of init method failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'grails.plugin.springsecurity.oauth.SpringSecurityOAuthTagLib': Initialization of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'oauthService': Invocation of init method failed; nested exception is java.lang.IllegalStateException: Missing oauth secret or key (or both!) in configuration for google. (Use --stacktrace to see the full trace)
+Fatal error running tests: Error creating bean with name 'grails.plugin.databasemigration.DbdocController': 
+Initialization of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: 
+Error creating bean with name 'instanceControllerTagLibraryApi': 
+Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire method: 
+public void org.codehaus.groovy.grails.plugins.web.api.ControllerTagLibraryApi.setTagLibraryLookup(org.codehaus.groovy.grails.web.pages.TagLibraryLookup); 
+nested exception is org.springframework.beans.factory.BeanCreationException: 
+Error creating bean with name 'gspTagLibraryLookup': 
+Invocation of init method failed; 
+nested exception is org.springframework.beans.factory.BeanCreationException: 
+Error creating bean with name 'grails.plugin.springsecurity.oauth.SpringSecurityOAuthTagLib': 
+Initialization of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: 
+Error creating bean with name 'oauthService': 
+Invocation of init method failed; nested exception is java.lang.IllegalStateException: 
+Missing oauth secret or key (or both!) in configuration for google. (Use --stacktrace to see the full trace)
 .Tests FAILED 
 |
 ```
