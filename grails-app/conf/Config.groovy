@@ -203,7 +203,7 @@ oauth {
         google {
             api = org.scribe.builder.api.GoogleApi20
             key = '975413760331-d2nr5vq7sbbppjfog0cp9j4agesbeovt.apps.googleusercontent.com'
-            secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
+            secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'   // has to go in the next version
             successUri = '/oauth/google/success'
             failureUri = '/oauth/google/error'
             callback = "${baseURL}/oauth/google/callback"
