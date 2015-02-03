@@ -20,12 +20,7 @@ var mpgSoftware = mpgSoftware || {};
                     activeNav.addClass('active');
                     activeNav.addClass('activated');
                     $('.nav-pills  li').removeClass('active');
-//                    $('.nav-pills  li').children().css('color', '#fff');
-//                    $('.nav-pills  li').children().css('text-decoration', 'none');
                     activeNav.addClass('active');
-//                    activeNav.children().css('color', 'yellow');
-//                    activeNav.children().css('text-decoration', 'underline');
-
                     $.ajax({
                         cache: false,
                         type: "get",
