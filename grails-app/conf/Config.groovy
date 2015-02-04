@@ -195,30 +195,6 @@ grails {
     }
 }
 
-appName = grails.util.Metadata.current.'app.name'
-def baseURL = grails.serverURL ?: "http://127.0.0.1:${System.getProperty('server.port', '8080')}/${appName}"
-
-
-oauth {
-
-    providers {
-
-        google {
-            api = org.grails.plugin.springsecurity.oauth.GoogleApi20
-            key = '975413760331-d2nr5vq7sbbppjfog0cp9j4agesbeovt.apps.googleusercontent.com'
-            successUri = "${baseURL}/springSecurityOAuth/onSuccess"
-            failureUri = '/oauth/google/error'
-            callback = "${baseURL}/springSecurityOAuth/codeExchange?provider=google"
-            scope = 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
-        }
-
-    }
-}
-
-googleapi {
-    baseUrl = 'www.googleapis.com'
-}
-
 //oauth {
 //
 //    providers {
@@ -293,7 +269,35 @@ if  (Environment.current == Environment.PRODUCTION)  {
     println("\nEnvironment = ${Environment.current}, therefore no grails.serverURL")
 }
 
+auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
+oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
 
+
+appName = grails.util.Metadata.current.'app.name'
+def baseURL = grails.serverURL ?: "http://127.0.0.1:${System.getProperty('server.port', '8080')}/${appName}"
+
+
+println("\n\n>>>>>>>>>>>>baseURL=${baseURL}<<<<<<<<<<<<<<<<<<<<<<")
+
+oauth {
+
+    providers {
+
+        google {
+            api = org.grails.plugin.springsecurity.oauth.GoogleApi20
+            key = '975413760331-d2nr5vq7sbbppjfog0cp9j4agesbeovt.apps.googleusercontent.com'
+            successUri = "${baseURL}/springSecurityOAuth/onSuccess"
+            failureUri = '/oauth/google/error'
+            callback = "${baseURL}/springSecurityOAuth/codeExchange?provider=google"
+            scope = 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
+        }
+
+    }
+}
+
+googleapi {
+    baseUrl = 'www.googleapis.com'
+}
 
 
 
