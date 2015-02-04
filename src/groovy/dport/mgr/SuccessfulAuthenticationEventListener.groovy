@@ -2,6 +2,7 @@ package dport.mgr
 
 //import dport.people.LoginTracking
 import dport.people.User
+import dport.people.UserSession
 import org.apache.commons.logging.LogFactory
 import org.springframework.context.ApplicationListener
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent
@@ -16,6 +17,9 @@ class SuccessfulAuthenticationEventListener implements ApplicationListener<Authe
     void onApplicationEvent(AuthenticationSuccessEvent event){
         log.info "Successful login by username=${event.source?.principal?.username} "
         User user = User.findById(event.source?.principal?.id)
+        UserSession userSession = new UserSession(user: user,
+                startSession: new Date(),
+                remoteAddress:event.source?.getDetails()?.remoteAddress)
 //        LoginTracking loginTracking = new LoginTracking(user: user,
 //                timeOfLogin: event.timestamp,
 //                accountNonExpired: 0,
@@ -24,9 +28,8 @@ class SuccessfulAuthenticationEventListener implements ApplicationListener<Authe
 //                remoteAddress: event.source?.getDetails()?.remoteAddress,
 //                additionalNotes: "")
         log.info "login tracking record~~~~~~~~~~~~~~~~~~~~~"
-        // TODO: we need to save this record if we want to be able to track users
-        //loginTracking.save()
-        log.info "~~~~~~~~~~~~~~~~~~~~~NOT stored!"
+        userSession.save()
+        log.info "~~~~~~~~~~~~~~~~~~~~~ stored!"
     }
 
 }

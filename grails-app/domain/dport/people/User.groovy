@@ -25,6 +25,10 @@ class User {
 		password blank: false
         fullName blank:true
         nickname blank:true
+        email blank: true
+        primaryOrganization nullable:true
+        webSiteUrl blank:true
+        preferredLanguage blank:true
 	}
 
 	static mapping = {
