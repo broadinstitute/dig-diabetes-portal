@@ -2,11 +2,14 @@ package grails.plugin.springsecurity.oauth
 
 import grails.converters.JSON
 import grails.transaction.Transactional
+import org.apache.juli.logging.LogFactory
+import uk.co.desirableobjects.oauth.scribe.OauthService
 
 @Transactional
 class GoogleSpringSecurityOAuthService {
 
-    def oauthService
+    OauthService oauthService
+    private static final log = LogFactory.getLog(this)
 
     /*
      * Requires scope of "https://www.googleapis.com/auth/userinfo.email"
@@ -19,12 +22,14 @@ class GoogleSpringSecurityOAuthService {
         try {
             user = JSON.parse(response.body)
         } catch (Exception e) {
-            log.error "Error parsing response from Google. Response:\n${response.body}"
-            throw new RuntimeException ('Error parsing response from Google', e)
+            log.error "Error parsing response from Google. Response:\n${response?.body}"
+            return
+            //throw new RuntimeException ('Error parsing response from Google', e)
         }
         if (!user?.email) {
-            log.error "No user email from Google. Response:\n${response.body}"
-            throw new RuntimeException ('No user email from Google')
+            log.error "No user email from Google. Response:\n${response?.body}"
+            return
+            //throw new RuntimeException ('No user email from Google')
         }
         return new GoogleOAuthToken(accessToken, user.email)
     }

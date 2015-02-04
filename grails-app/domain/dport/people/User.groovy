@@ -9,6 +9,9 @@ class User {
     String email
     String fullName = ""
     String nickname = ""
+    String primaryOrganization = ""
+    String webSiteUrl = ""
+    String preferredLanguage = ""
     boolean hasLoggedIn
 	boolean enabled = true
 	boolean accountExpired

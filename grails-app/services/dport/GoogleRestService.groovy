@@ -17,9 +17,20 @@ class GoogleRestService {
 
     private  String MYSQL_REST_SERVER = ""
 
+    /***
+     * The security of OAuth2 comes in part from the fact that you need to login independently and
+     * develop a contract with some service, giving them a URL and saying 'contact me via this URL
+     * whenever I try to authenticate a user.  Furthermore, when you call me provide a one time code,
+     * which I will then pass back to you along with my secret key in order to prove that I am really
+     * legit.'  The routine below is called in response to this contact originating from a security
+     * service (in this case Google).  The parameter is the one time code which we then pass back to
+     * them in order to get an access key. Once we have the access key then immediately post a request
+     * for information about the authenticated user, asking for an email and any other core information.
+     *
+     */
     Map buildCallToRetrieveOneTimeCode(String oneTimeCode) {
         String destination =   "https://${grailsApplication.config.googleapi.baseUrl}/oauth2/v3/token"
-        log.info("Google authentication callback==>${grailsApplication.config.oauth.providers.google.callback}")
+        log.debug("Google authentication callback==>${grailsApplication.config.oauth.providers.google.callback}")
         String encodedRedirectUrl=URLEncoder.encode(grailsApplication.config.oauth.providers.google.callback, "UTF-8")
         String contents = "code=${oneTimeCode}&"+
                 "client_id=${grailsApplication.config.oauth.providers.google.key}&"+
@@ -30,23 +41,14 @@ class GoogleRestService {
         String idToken = jsonObject.id_token
         String accessToken = jsonObject.access_token
         JSONObject identityInformation =  postAuthorizedGoogleRestCall(accessToken,"https://www.googleapis.com/plus/v1/people/me")
-        log.info(""+
-                identityInformation.emails['value']+
-                identityInformation.id+
-                identityInformation.name ['familyName']+
-                identityInformation.name ['givenName']+
-                identityInformation.displayName+
-                identityInformation.domain+
-                identityInformation.gender+
-                identityInformation.language+
-                identityInformation.etag)
-        //return identityInformation
         return [identityInformation:identityInformation,
                 accessToken:accessToken,
                 idToken:idToken]
 
     }
 
+
+    // Could we swap this specialized version for the normal post?
     private JSONObject postGoogleRestCallBase(String drivingContents, String targetUrl){
         JSONObject returnValue = null as JSONObject
         Date beforeCall  = new Date()
@@ -95,7 +97,10 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
 
 
 
-
+/***
+ * This call is different from all the other posts because of the header line
+ * that describes 'authorization' and 'bearer'
+ */
     private JSONObject postAuthorizedGoogleRestCall(String authorization,String targetUrl){
         JSONObject returnValue = null as JSONObject
         Date beforeCall  = new Date()
@@ -289,43 +294,17 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
 
 
 
-
-//    private String  twitterSignatureGenerator(){
-//      String key = grailsApplication.config.auth.providers.twitter.key
-//      String secret = grailsApplication.config.auth.providers.twitter.secret
-//      String combo = "${key}:${secret}"
-//      return combo.bytes.encodeBase64().toString()
-//  }
-
     public JSONObject generateTwitterAuthenticationString () {
         int authSeconds = (int)(new Date().getTime()/1000);
         int nonce = (int)(new Date().getTime()/10);
-        // JSONObject response = requestTwitterAppAuthentication  ("https://api.twitter.com/oauth2/token",  twitterSignatureGenerator())
         JSONObject response = requestTwitterAppAuthentication  ("https://api.twitter.com/oauth2/token",  grailsApplication.config.auth.providers.twitter.key, grailsApplication.config.auth.providers.twitter.secret)
-//         JSONObject response = requestTwitterAuthentication  ("https://api.twitter.com/oauth2/request_token",
-//                nonce.toString(),
-//                URLEncoder.encode(grailsApplication.config.auth.providers.twitter.callback , "UTF-8"),
-//                authSeconds.toString(),
-//                grailsApplication.config.auth.providers.twitter.key,
-//                grailsApplication.config.auth.providers.twitter.secret
-//        )
 
         return response
     }
 
 
     public JSONObject executeTwitterRequest (String accessToken,String queryText) {
-//        int authSeconds = (int)(new Date().getTime()/1000);
-//        int nonce = (int)(new Date().getTime()/10);
         JSONObject response = searchTwitter("https://api.twitter.com/1.1/search/tweets.json", accessToken, queryText)
-//         JSONObject response = requestTwitterAuthentication  ("https://api.twitter.com/oauth2/request_token",
-//                nonce.toString(),
-//                URLEncoder.encode(grailsApplication.config.auth.providers.twitter.callback , "UTF-8"),
-//                authSeconds.toString(),
-//                grailsApplication.config.auth.providers.twitter.key,
-//                grailsApplication.config.auth.providers.twitter.secret
-//        )
-
         return response
     }
 

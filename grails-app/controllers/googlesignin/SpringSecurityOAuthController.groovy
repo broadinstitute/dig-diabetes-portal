@@ -158,12 +158,15 @@ class SpringSecurityOAuthController {
         return
     }
 
-
-
-   def codeExchange  = {
+    /***
+     *  This URL is activated only by an authenticating service (right now we are using Google, others may follow).
+     *  The call has to describe the provider ('google', for now), and it has to provide a one time login code,
+     *  we will swap that one time login code for an access key, then use the access key to obtain user information,
+     *  and then use the email address we get from that user information to key into our local security system.
+     */
+    def codeExchange  = {
        // Validate the 'provider' URL. Any errors here are either misconfiguration
        // or web crawlers (or malicious users).
-       params.provider="google"
        if (!params.provider) {
            renderError 400, "The Spring Security OAuth callback URL must include the 'provider' URL parameter."
            return
@@ -171,16 +174,11 @@ class SpringSecurityOAuthController {
 
        String code = params.code
        LinkedHashMap map =   googleRestService.buildCallToRetrieveOneTimeCode(code)
-       if (!map) {
+       if (!map) { // something went wrong.  Go back to the homepage, but this user is currently not getting in
            redirect( controller: 'home', action: 'portalHome' )
        }
        JSONObject jsonObject = map["identityInformation"]
        String accessToken = map["accessToken"]
-       String idToken = map["idToken"]
-
-       log.debug "jsonObject = ${jsonObject}"
-
-       String identifier = jsonObject.emails['value']
 
        // break out the fields we want
        String email = jsonObject.emails[0]['value']
@@ -193,11 +191,21 @@ class SpringSecurityOAuthController {
        String accessKey = oauthService.findSessionKeyForAccessToken(params.provider)
        session[accessKey] = new org.scribe.model.Token(accessToken, grailsApplication.config.oauth.providers.google.secret,jsonObject.toString())
 
-       springManipService.forceLogin(email,session)
-       tokenStuff(params.provider)
+        //springManipService.forceLogin(email,session)
+        springManipService.forceLogin(jsonObject,session)
+
+
+      // tokenGeneralization(email,params.provider)
        redirect( controller: 'home', action: 'portalHome' )
    }
-    void tokenStuff(provider){
+
+    /***
+     * This code would allow us to have multiple OAuth security providers.  Right now
+     * were going with only one but that situation may change, so I will leave this code in place for now
+     * @param email
+     * @param provider
+     */
+    void tokenGeneralization(String email,String provider){
         // Validate the 'provider' URL. Any errors here are either misconfiguration
         // or web crawlers (or malicious users).
         if (!params.provider) {
@@ -213,19 +221,10 @@ class SpringSecurityOAuthController {
 
         // Create the relevant authentication token and attempt to log in.
         OAuthToken oAuthToken = createAuthToken(params.provider, session[sessionKey])
-        if (User.findByUsername(oAuthToken.principal)){
-//        if (oAuthToken.principal instanceof GrailsUser) {
-//            authenticateAndRedirect(oAuthToken, defaultTargetUrl)
-        } else {
-            // This OAuth account hasn't been registered against an internal
-            // account yet. Give the oAuthID the opportunity to create a new
-            // internal account or link to an existing one.
-            session[SPRING_SECURITY_OAUTH_TOKEN] = oAuthToken
-
-            def redirectUrl = SpringSecurityUtils.securityConfig.oauth.registration.askToLinkOrCreateAccountUri
-            assert redirectUrl, "grails.plugin.springsecurity.oauth.registration.askToLinkOrCreateAccountUri" +
-                    " configuration option must be set!"
-         }
+        if (!User.findByUsername(oAuthToken?.principal)){
+            log("${provider} authentication failed for ${email}")
+        }
+        // user is authenticated
     }
 
 
@@ -280,6 +279,15 @@ class SpringSecurityOAuthController {
         render status: code, text: msg
     }
 
+    /***
+     * Here we use a stored been in order to convert a simple scribe token into an OAuthToken.  This is one of the
+     * few places in the authentication workflow where we are dependent on a method written elsewhere that would be
+     * tough to do without
+     *
+     * @param providerName
+     * @param scribeToken
+     * @return
+     */
     protected OAuthToken createAuthToken(providerName, scribeToken) {
         def providerService = grailsApplication.mainContext.getBean("${providerName}SpringSecurityOAuthService")
         OAuthToken oAuthToken = providerService.createAuthToken(scribeToken)
@@ -288,7 +296,6 @@ class SpringSecurityOAuthController {
         if (oAuthID) {
             updateOAuthToken(oAuthToken, oAuthID.user)
         }
-
         return oAuthToken
     }
 
@@ -326,109 +333,6 @@ class SpringSecurityOAuthController {
         return oAuthToken
     }
 
-
-
-
-
-/*
-    private def updateUser(User user, OAuthToken oAuthToken) {
-        if (!user.validate()) {
-            return
-        }
-
-        if (oAuthToken instanceof TwitterOAuthToken) {
-            TwitterOAuthToken twitterOAuthToken = (TwitterOAuthToken) oAuthToken
-
-            if (!user.username) {
-                user.username = twitterOAuthToken.twitterProfile.screenName
-                if (!user.validate()) {
-                    user.username = null
-                }
-            }
-
-            if (!user.firstName || !user.lastName) {
-                def names = twitterOAuthToken.twitterProfile.name?.split(' ')
-                if (names) {
-                    if (!user.lastName) {
-                        user.lastName = names[0]
-                        if (!user.validate()) {
-                            user.lastName = null
-                        }
-                    }
-
-                    if (!user.firstName) {
-                        user.firstName = names[-1]
-                        if (!user.validate()) {
-                            user.firstName = null
-                        }
-                    }
-                }
-            }
-        } else if (oAuthToken instanceof FacebookOAuthToken) {
-            FacebookOAuthToken facebookOAuthToken = (FacebookOAuthToken) oAuthToken
-
-            if (!user.username) {
-                user.username = facebookOAuthToken.facebookProfile.username
-                if (!user.validate()) {
-                    user.username = null
-                }
-            }
-
-            if (!user.email) {
-                user.email = facebookOAuthToken.facebookProfile.email
-                if (!user.validate()) {
-                    user.email = null
-                }
-            }
-
-            if (!user.lastName) {
-                user.lastName = facebookOAuthToken.facebookProfile.lastName
-                if (!user.validate()) {
-                    user.lastName = null
-                }
-            }
-
-            if (!user.firstName) {
-                user.firstName = facebookOAuthToken.facebookProfile.firstName
-                if (!user.validate()) {
-                    user.firstName = null
-                }
-            }
-        } else if (oAuthToken instanceof GoogleOAuthToken) {
-            GoogleOAuthToken googleOAuthToken = (GoogleOAuthToken) oAuthToken
-
-            if (!user.email) {
-                user.email = googleOAuthToken.email
-                if (!user.validate()) {
-                    user.email = null
-                }
-            }
-        } else if (oAuthToken instanceof YahooOAuthToken) {
-            YahooOAuthToken yahooOAuthToken = (YahooOAuthToken) oAuthToken
-
-            if (!user.username) {
-                user.username = yahooOAuthToken.profile.nickname
-                if (!user.validate()) {
-                    user.username = null
-                }
-            }
-
-            if (!user.lastName) {
-                user.lastName = yahooOAuthToken.profile.familyName
-                if (!user.validate()) {
-                    user.lastName = null
-                }
-            }
-
-            if (!user.firstName) {
-                user.firstName = yahooOAuthToken.profile.givenName
-                if (!user.validate()) {
-                    user.firstName = null
-                }
-            }
-        }
-    }
-*/
 
     protected Map getDefaultTargetUrl() {
         def config = SpringSecurityUtils.securityConfig
