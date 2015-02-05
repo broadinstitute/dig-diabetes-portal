@@ -23,6 +23,7 @@ class SpringManipService {
 
     void signIn(String username, String password) {
         try {
+//            springSecurityService.reauthenticate username
             def authentication = new UsernamePasswordAuthenticationToken(username, password)
             SCH.context.authentication = authenticationManager.authenticate(authentication)
         } catch (BadCredentialsException e) {
@@ -56,10 +57,10 @@ class SpringManipService {
         String email = identityInformation.emails[0]['value']
         String username = email
         String password = 'bloodglucose'
-        String fullName = ""
-        String nickname = ""
-        String primaryOrganization = ""
-        String webSiteUrl = ""
+        String fullName = "default"
+        String nickname = "default"
+        String primaryOrganization = "default"
+        String webSiteUrl = "default"
         String preferredLanguage = "en" // default to English
         // find better values if we can
         if (identityInformation.displayName){
@@ -102,15 +103,18 @@ class SpringManipService {
                     email: email,
                     fullName: fullName,
                     nickname:nickname,
-                    primaryOrganization:primaryOrganization,
-                    webSiteUrl:webSiteUrl,
-                    preferredLanguage:preferredLanguage,
+                  //  primaryOrganization:primaryOrganization,
+                 //   webSiteUrl:webSiteUrl,
+                  //  preferredLanguage:preferredLanguage,
                     enabled: true )
             if (user.validate ()){
                 Role userRole = Role.findByAuthority('ROLE_USER')
                 log.info( "Creating user ${email}")
                 user.save(flush: true)
                 UserRole.create user,userRole
+            } else {
+                log.error( "Problem validating user: ${email}")
+                log.error( "specs=${user.errors.toString()}")
             }
             signIn(email,'bloodglucose')
         }

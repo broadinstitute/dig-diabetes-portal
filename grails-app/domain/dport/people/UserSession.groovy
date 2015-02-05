@@ -2,7 +2,6 @@ package dport.people
 
 class UserSession implements Serializable {
 
-    private static final long serialVersionUID = 1
 
     User user
     Date startSession = new Date()
@@ -17,5 +16,6 @@ class UserSession implements Serializable {
         remoteAddress blank: true
         dataField blank: true
     }
+
 
  }

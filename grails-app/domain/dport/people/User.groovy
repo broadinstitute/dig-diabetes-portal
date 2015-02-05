@@ -8,10 +8,10 @@ class User {
 	String password
     String email
     String fullName = ""
-    String nickname = ""
-    String primaryOrganization = ""
-    String webSiteUrl = ""
-    String preferredLanguage = ""
+    String nickname = "default"
+//    String primaryOrganization = "default"
+//    String webSiteUrl = "default"
+ //   String preferredLanguage = "default"
     boolean hasLoggedIn
 	boolean enabled = true
 	boolean accountExpired
@@ -24,16 +24,18 @@ class User {
 		username blank: false, unique: true
 		password blank: false
         fullName blank:true
-        nickname nullable:true
+        nickname blank:true
         email blank: true
-        primaryOrganization nullable: true
-        webSiteUrl nullable:true
-        preferredLanguage blank:true
+//        primaryOrganization blank: true
+//        webSiteUrl blank:true
+//        preferredLanguage blank:true
 	}
 
 	static mapping = {
 		password column: '`password`'
-	}
+//        password preferredLanguage: '`prflang`'
+//        password primaryOrganization: '`primorg`'
+    }
 
 	Set<Role> getAuthorities() {
 		UserRole.findAllByUser(this).collect { it.role }

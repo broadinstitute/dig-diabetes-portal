@@ -251,12 +251,11 @@ environments {
 //      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
 //      grails.serverURL = "type2diabetesqasrvr-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-      grails.serverURL = "http://cidbtest-env.elasticbeanstalk.com"
-//      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+//      grails.serverURL = "http://cidbtest-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://privatecitest-env.elasticbeanstalk.com/"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //        grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-//      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 //      grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false
@@ -456,5 +455,7 @@ grails.resources.adhoc.includes = [
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'dport.people.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'dport.people.UserRole'
 grails.plugin.springsecurity.authority.className = 'dport.people.Role'
+
+oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
 
 
