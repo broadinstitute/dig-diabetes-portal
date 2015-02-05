@@ -286,8 +286,8 @@ oauth {
         google {
             api = org.grails.plugin.springsecurity.oauth.GoogleApi20
             key = '975413760331-d2nr5vq7sbbppjfog0cp9j4agesbeovt.apps.googleusercontent.com'
-            successUri = "${baseURL}/springSecurityOAuth/onSuccess"
-            failureUri = '/oauth/google/error'
+            successUri = "${baseURL}/springSecurityOAuth/onSuccess"   // never used?
+            failureUri = "${baseURL}/springSecurityOAuth/onFailure"   // never used?
             callback = "${baseURL}/springSecurityOAuth/codeExchange?provider=google"
             scope = 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
         }
@@ -296,7 +296,7 @@ oauth {
 }
 
 googleapi {
-    baseUrl = 'www.googleapis.com'
+    baseGoogleUrl = 'www.googleapis.com'
 }
 
 

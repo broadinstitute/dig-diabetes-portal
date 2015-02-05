@@ -24,10 +24,10 @@ class User {
 		username blank: false, unique: true
 		password blank: false
         fullName blank:true
-        nickname blank:true
+        nickname nullable:true
         email blank: true
-        primaryOrganization nullable:true
-        webSiteUrl blank:true
+        primaryOrganization nullable: true
+        webSiteUrl nullable:true
         preferredLanguage blank:true
 	}
 
