@@ -64,6 +64,7 @@ class SpringSecurityOAuthController {
        LinkedHashMap map =   googleRestService.buildCallToRetrieveOneTimeCode(code)
        if (!map) { // something went wrong.  Go back to the homepage, but this user is currently not getting in
            redirect( controller: 'home', action: 'portalHome' )
+           return
        }
        JSONObject jsonObject = map["identityInformation"]
        String accessToken = map["accessToken"]
