@@ -206,18 +206,18 @@
         </div>
 
         %{--video--}%
-        <div class="row sectionBuffer">
-            <div class="col-md-6">
-                <a href="${createLink(controller: 'home', action: 'introVideoHolder')}">
-                    <div class="medTextDark">Video: How to use the portal</div>
-                </a>
+        %{--<div class="row sectionBuffer">--}%
+            %{--<div class="col-md-6">--}%
+                %{--<a href="${createLink(controller: 'home', action: 'introVideoHolder')}">--}%
+                    %{--<div class="medTextDark">Video: How to use the portal</div>--}%
+                %{--</a>--}%
 
-            </div>
+            %{--</div>--}%
 
-            <div class="col-md-6">
-            </div>
+            %{--<div class="col-md-6">--}%
+            %{--</div>--}%
 
-        </div>
+        %{--</div>--}%
 
         <div class="row sectionBuffer">
             <div class="col-xs-12 text-center">

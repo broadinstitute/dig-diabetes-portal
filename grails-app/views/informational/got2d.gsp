@@ -13,7 +13,16 @@
 <div id="main">
 
     <div class="container">
-        <h1><g:message code="got2d.title" default="GoT2D"/></h1>
+
+        <div class="row" style="margin-bottom: 30px">
+            <div class="col-md-2">
+                <img src="${resource(dir: 'images/icons', file: 'GoT2D.png')}"
+                     width="150px" height="140px" alt="T2D Genes"/>
+            </div>
+            <div class="col-md-10"></div>
+        </div>
+
+
 
         <p>
             <g:message code="got2d.descr" default="GoT2D descr"/>
