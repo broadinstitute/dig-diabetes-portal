@@ -90,10 +90,6 @@ class BootStrap {
                                password:'test',
                                nickname:'Fred',
                                email: "balexand@broadinstitute.org"]
-            samples['tgreen@broadinstitute.org'] = [fullName:'Todd',
-                                                    password:'welcome',
-                                                    nickname:'Todd',
-                                                    email: "tgreen@broadinstitute.org"]
         }
 
         def userRole = Role.findByAuthority('ROLE_USER')  ?: new Role (authority: "ROLE_USER").save()

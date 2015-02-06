@@ -14,8 +14,14 @@
 <div id="main">
 
     <div class="container">
-        <h1>T2D Genes (icon)</h1>
-        %{--<h4><g:message code="t2dgenes.mainPage.subtitle" default="t2dgenes" /></h4>--}%
+        <div class="row" style="margin-bottom: 20px">
+            <div class="col-md-2 col-md-offset-5 text-center">
+            <img src="${resource(dir: 'images/icons', file: 'basicT2DG.png')}"
+                 width="200px" height="250px" alt="T2D Genes"/>
+            </div>
+            <div class="col-md-5"></div>
+        </div>
+
         <p>
             <g:message code="t2dgenes.mainPage.descr" default="t2dgenes description"/>
 

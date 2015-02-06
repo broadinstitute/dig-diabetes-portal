@@ -246,15 +246,18 @@
             <div class="col-md-offset-4 col-md-4 text-center">
                 <div class="row">
                     <div class="col-xs-4 text-center">
-                        t2d genes icon
+                        <img class="logoholder" src="${resource(dir: 'images/icons', file: 'basicT2DG.svg')}"
+                             width="100%" alt="T2D Genes"/>
                     </div>
 
                     <div class="col-xs-4 text-center">
-                        niddk icon
+                        <img class="logoholder" src="${resource(dir: 'images/icons', file: '720px-US-NIH-NIDDK-Logo.svg.png')}"
+                             width="100%" height="100%" alt="NIDDK" style="padding-top: 30px"/>
                     </div>
 
                     <div class="col-xs-4 text-center">
-                        nih incon
+                        <img class="logoholder" src="${resource(dir: 'images/icons', file: '480px-NIH_logo.svg.png')}"
+                             width="100%" alt="NIH"/>
                     </div>
                 </div>
             </div>
@@ -266,75 +269,68 @@
         </div>
 
 
-        <div class="row sectionBuffer">
-            <div class="row">
-                <div class="col-xs-12 text-center">
-                    <h4>
-                        <small>
-                            <g:message code="analysis.provided.by" default="analysis provided by"/>
-                        </small>
-                    </h4>
-                </div>
-            </div>
+        %{--<div class="row sectionBuffer">--}%
+            %{--<div class="row">--}%
+                %{--<div class="col-xs-12 text-center">--}%
+                    %{--<h4>--}%
+                        %{--<small>--}%
+                            %{--<g:message code="analysis.provided.by" default="analysis provided by"/>--}%
+                        %{--</small>--}%
+                    %{--</h4>--}%
+                %{--</div>--}%
+            %{--</div>--}%
 
 
-            <div class="row">
+            %{--<div class="row">--}%
 
-                <div class="col-sm-1 col-md-offset-2 col-md-1 text-center logoframe">
-                    <span class="logohelper"></span>
-                    <img class="logoholder" src="${resource(dir: 'images', file: 'BroadInstLogoforDigitalRGB.png')}"
-                         width="100%" alt="Broad Institute"/>
-                </div>
+                %{--<div class="col-sm-1 col-md-offset-2 col-md-1 text-center logoframe">--}%
+                    %{--<span class="logohelper"></span>--}%
+                    %{--T2DGenes--}%
+                %{--</div>--}%
 
-                <div class="col-sm-1 col-md-1 text-center logoframe">
-                    <span class="logohelper"></span>
-                    go t2d
-                    <img class="logoholder" src="${resource(dir: 'images', file: 'BroadInstLogoforDigitalRGB.png')}"
-                         width="100%" alt="Broad Institute"/>
-                </div>
+                %{--<div class="col-sm-1 col-md-1 text-center logoframe">--}%
+                    %{--<span class="logohelper"></span>--}%
+                    %{--GoT2D--}%
+                %{--</div>--}%
 
-                <div class="col-sm-1 col-md-1 text-center logoframe">
-                    <span class="logohelper"></span>
-                    diagram
-                    <img class="logoholder" src="${resource(dir: 'images', file: 'BroadInstLogoforDigitalRGB.png')}"
-                         width="100%" alt="Broad Institute"/>
-                </div>
+                %{--<div class="col-sm-1 col-md-1 text-center logoframe">--}%
+                    %{--<span class="logohelper"></span>--}%
+                    %{--Diagram--}%
+                %{--</div>--}%
 
-                <div class="col-sm-1 col-md-1 text-center logoframe">
-                    <span class="logohelper"></span>
-                    University of Michigan
-                    <img class="logoholder" src="${resource(dir: 'images', file: 'BroadInstLogoforDigitalRGB.png')}"
-                         width="100%" alt="Broad Institute"/>
-                </div>
+                %{--<div class="col-sm-1 col-md-1 text-center logoframe">--}%
+                    %{--<span class="logohelper"></span>--}%
+                    %{--University of Michigan--}%
+                %{--</div>--}%
 
-                <div class="col-sm-1 col-md-1 text-center logoframe">
-                    <span class="logohelper"></span>
-                    <img class="logoholder" src="${resource(dir: 'images', file: 'BroadInstLogoforDigitalRGB.png')}"
-                         width="100%" alt="Broad Institute"/>
-                </div>
+                %{--<div class="col-sm-1 col-md-1 text-center logoframe">--}%
+                    %{--<span class="logohelper"></span>--}%
+                    %{--<img class="logoholder" src="${resource(dir: 'images', file: 'BroadInstLogoforDigitalRGB.png')}"--}%
+                         %{--width="100%" alt="Broad Institute"/>--}%
+                %{--</div>--}%
 
-                <div class="col-sm-1 col-md-1 text-center logoframe">
-                    <span class="logohelper"></span>
-                    University of Oxford
-                </div>
+                %{--<div class="col-sm-1 col-md-1 text-center logoframe">--}%
+                    %{--<span class="logohelper"></span>--}%
+                    %{--University of Oxford--}%
+                %{--</div>--}%
 
-                <div class="col-sm-1 col-md-1 text-center logoframe">
-                    <span class="logohelper"></span>
-                    University of Texas
-                </div>
+                %{--<div class="col-sm-1 col-md-1 text-center logoframe">--}%
+                    %{--<span class="logohelper"></span>--}%
+                    %{--University of Texas--}%
+                %{--</div>--}%
 
-                <div class="col-sm-1 col-md-1 text-center logoframe">
-                    <span class="logohelper"></span>
-                    University of Lund
-                </div>
+                %{--<div class="col-sm-1 col-md-1 text-center logoframe">--}%
+                    %{--<span class="logohelper"></span>--}%
+                    %{--University of Lund--}%
+                %{--</div>--}%
 
-                <div class="col-md-2 text-center">
+                %{--<div class="col-md-2 text-center">--}%
 
-                </div>
-            </div>
+                %{--</div>--}%
+            %{--</div>--}%
 
 
-        </div>
+        %{--</div>--}%
 
 
     <div class="separator"></div>
