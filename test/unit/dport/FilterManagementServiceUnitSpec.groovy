@@ -13,15 +13,6 @@ class FilterManagementServiceUnitSpec extends Specification {
     }
 
 
-    void "test Filter management smoke"() {
-        given:
-         int    i = 1
-        when:
-        i = 2
-        then:
-        i == 2
-    }
-
     /***
      *  pass a simple  filter generation  parameter to  setRegion
      */
