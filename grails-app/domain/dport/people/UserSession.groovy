@@ -12,9 +12,9 @@ class UserSession implements Serializable {
     static constraints = {
         user blank: false
         startSession blank: false
-        endSession blank: true
-        remoteAddress blank: true
-        dataField blank: true
+        endSession nullable: true
+        remoteAddress nullable: true
+        dataField nullable: true
     }
 
 

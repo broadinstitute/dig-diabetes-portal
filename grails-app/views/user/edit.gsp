@@ -11,11 +11,92 @@
     <r:require modules="core"/>
     <r:layoutResources/>
 
+    <script>
+
+        var encodedSessionList = decodeURIComponent("<%=encodedSessionList%>");
+        console.log('encodedUsers='+encodedSessionList+'.');
+        var listOfUserSessions = [];
+        if ((typeof encodedSessionList !== 'undefined')  &&
+                (encodedSessionList.length > 0)){
+            var listOfUserSessionData =  encodedSessionList.split ('~') ;
+            if ((listOfUserSessionData) &&
+                    (listOfUserSessionData.length > 0)) {
+                for ( var i = 0 ; i < listOfUserSessionData.length ; i++ )  {
+                    var listOfFields = listOfUserSessionData[i].split ('#');
+                    if (listOfFields.length > 3) {
+                        listOfUserSessions.push(
+                                {'name':listOfFields[0],
+                                    'startSession':listOfFields[1],
+                                    'endSession':listOfFields[2],
+                                    'remoteAddress':listOfFields[3],
+                                    'dataField':listOfFields[4]
+                                } )
+                    }
+                }
+
+            }
+            console.log('encodedUsers='+encodedSessionList+'.');
+        }
+
+    </script>
 
 </head>
 
 <body>
 <script>
+    var fillUserSessionTable =  function ( userSessionData) {
+        var retVal = "";
+
+        if (!userSessionData) {   // error condition
+            return;
+        }
+        for (var i = 0; i < userSessionData.length; i++) {
+
+            var userSession = userSessionData[i];
+
+            retVal += "<tr>"
+
+            // username
+            retVal += "<td>"+ userSession.name + "</td>";
+            var replacePeriodsInUsername =  encodeURIComponent(userSession.name.replace(/\./g, '&#46;')) ;
+
+            //date 1
+            var startSessionString =  userSession.startSession.replace(/\+/g, ' ') ;
+            retVal += "<td>"+startSessionString+"</td>";
+            retVal += "<td>"+userSession.endSession+"</td>";
+            retVal += "<td>"+userSession.remoteAddress+"</td>";
+            retVal += "<td>"+userSession.dataField+"</td>";
+
+            // password expired
+//            if (user.expired) {
+//                retVal += "<td><a href='" + autoPasswordUnexpireUrl + "/" + replacePeriodsInUsername + "' class='boldlink'>expired</a></td>";
+//            } else {
+//                retVal += "<td><a href='" + autoPasswordExpireUrl + "/" + replacePeriodsInUsername + "' class='boldlink'>active</a></td>";
+//            }
+
+            retVal += "</tr>";
+
+        }
+        return  retVal;
+    };
+    var constructUserTable =  function (data)  {
+        $('#userSessionsTable').append(fillUserSessionTable(data));
+
+
+        $('#userTable').dataTable({
+            iDisplayLength: 20,
+            bFilter: false,
+            aaSorting: [[ 0, "asc" ]],
+            aoColumnDefs: [{ sType: "allnumeric", aTargets: [] } ]
+        });
+        console.log('constructed userTable Fields');
+    } ;
+    $( document ).ready(function() {
+        if ((typeof listOfUserSessions !== 'undefined')) {
+            constructUserTable(listOfUserSessions);
+        }
+        ;
+    });
 </script>
 
 
@@ -103,6 +184,31 @@
 
 
                 </g:form>
+
+
+                <div class="row adminform">
+
+                    <div class="col-xs-12">
+
+                        <table id="userSessionsTable" class="table table-striped basictable">
+                            <thead>
+                            <tr>
+                                <th>user</th>
+                                <th>startSession</th>
+                                <th>endSession</th>
+                                <th>remoteAddress</th>
+                                <th>dataField</th>
+                            </tr>
+                            </thead>
+                            <tbody id="userSessionsBody">
+                            </tbody>
+                        </table>
+
+                    </div>
+
+
+                </div>
+
 
 
 
