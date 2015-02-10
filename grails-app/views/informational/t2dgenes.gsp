@@ -17,7 +17,7 @@
         <div class="row" style="margin-bottom: 20px">
             <div class="col-md-2 col-md-offset-5 text-center">
             <img src="${resource(dir: 'images/icons', file: 'basicT2DG.png')}"
-                 width="200px" height="250px" alt="T2D Genes"/>
+                 width="197px" height="250px" alt="T2D Genes"/>
             </div>
             <div class="col-md-5"></div>
         </div>

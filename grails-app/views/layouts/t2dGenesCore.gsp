@@ -46,30 +46,6 @@
 <g:layoutBody/>
 
 
-%{--<div id="footer">--}%
-    %{--<div class="container">--}%
-        %{--<div class="separator"></div>--}%
-        %{--<div id="helpus"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="mainpage.send.feedback"/></a></div>--}%
-    %{--</div>--}%
-%{--</div>--}%
-<style>
-.footerFeedbackHolder {
-    vertical-align: top;
-    text-align: left;
-    padding-left: 0;
-}
-.footerLogoHolder {
-    vertical-align: top;
-    text-align: right;
-    padding-right: 0;
-}
-.footerLogo {
-    vertical-align: middle;
-    max-height: 100px;
-    max-width: 160px;
-}
-
-</style>
 <div id="footer">
     <div class="container">
         <div class="row">

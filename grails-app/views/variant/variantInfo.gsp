@@ -337,7 +337,7 @@
         }
     });
 
-    $('#collapseOne').collapse({hide: true})
+    $('#collapseVariantAssociationStatistics').collapse({hide: false})
 </script>
 
 </body>
