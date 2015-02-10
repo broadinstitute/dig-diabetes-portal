@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="t2dGenesFootless"/>
+    <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
     <r:layoutResources/>
 </head>
@@ -69,7 +69,7 @@
 </script>
 
 %{--Main search page for application--}%
-<div id="main">
+<div id="main" style="padding-bottom: 0">
     <div class="container">
         <div class="row">
             <div class="col-md-7" style="margin-top: -10px">
@@ -332,23 +332,6 @@
 
         %{--</div>--}%
 
-
-    <div class="separator"></div>
-
-
-    <div class="row sectionBuffer">
-
-        <div class="col-xs-12 col-md-offset-5 col-md-2 text-center logoframe">
-            <span class="logohelper"></span>
-            Built by
-            <img class="logoholder" src="${resource(dir: 'images', file: 'BroadInstLogoforDigitalRGB.png')}"
-                 width="100%" alt="Broad Institute"/>
-        </div>
-
-        <div class="col-md-5">
-        </div>
-
-     </div>
 
 
     </div>
