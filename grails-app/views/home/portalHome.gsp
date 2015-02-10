@@ -228,7 +228,7 @@
                 </h4>
             </div>
 
-            <div class="col-xs-12 medTextDark text-center">
+            <div class="col-xs-12 text-center">
                 <g:message code="portal.use.citation.itself" default="citation text"/>
             </div>
         </div>

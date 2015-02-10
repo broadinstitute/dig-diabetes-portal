@@ -294,7 +294,8 @@ a.boldItlink {
   .about-people .name {
     text-decoration: underline; }
   .about-people a.pi {
-    color: yellow; }
+    font-weight: bold;
+  }
 
 p.leadlink {
   font-size: 18px;
@@ -632,8 +633,8 @@ div.veryImportantText {
     background: #ccc;
     position: absolute;
     top: 0;
-    left: 0;
-    height: 250px;
+    left: -5px;
+    height: 400px;
     width: 1px;
 }
 .logohelper {
