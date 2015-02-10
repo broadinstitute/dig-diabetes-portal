@@ -12,7 +12,16 @@ var mpgSoftware = mpgSoftware || {};
                                        baseUrlForCallbacks,
                                        returningDataGoesHere ){
             $(buttonIdentifiers).on('click', function (e) {
-                var activeNav = $(e.target.parentNode);
+                var activeNav;
+                // little workaround here: either the anchor OR the containing div might get clicked.
+                //  We are more interested in the anchor, however, so if the container is clicked
+                //  then pull out the anchor to deal with.
+                var objectWithClick = $(e.target.parentNode);
+                if  (objectWithClick.hasClass('myPills')) {
+                    activeNav =  objectWithClick;
+                }  else {
+                    activeNav =  $(objectWithClick.children()[0]);
+                }
                 if (typeof activeNav.attr('id') !== 'undefined') {
                     var activeNavName = activeNav.attr('id').split('_')[1];
                     $('.nav-pills  li').removeClass('active');

@@ -115,7 +115,7 @@
 
 
                 <div class="row sectionBuffer">
-                    <div class="col-xs-10 col-md-10 col-lg-10 unpaddedSection">
+                    <div class="col-xs-10 col-md-10 col-lg-10 unpaddedSection" style="padding-top: 10px">
                         <h3>
                             <g:message code="variant.search.header"/>
                         </h3>
@@ -133,8 +133,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12 medText">
-                        <g:message code="variant.search.specifics"/>
+                    <div class="col-md-12">
+                        <div class="helptext">
+                            <g:message code="variant.search.specifics"/>
+                        </div>
                     </div>
                 </div>
 

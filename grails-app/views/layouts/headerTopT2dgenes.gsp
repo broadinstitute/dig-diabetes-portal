@@ -13,11 +13,9 @@
             </a>
         </g:renderSigmaSection>
         <g:renderNotSigmaSection>
-            <a style="margin: 0; padding: 0" href="${createLink(controller: 'home', action:'portalHome')}">
-                <div id="branding">
-                    Type 2 Diabetes <strong>Genetics</strong> <small>Beta</small>
-                </div>
-            </a>
+            <div id="branding">
+                Type 2 Diabetes <strong>Genetics</strong> <small>beta</small>
+            </div>
         </g:renderNotSigmaSection>
     </div>
 </div>
