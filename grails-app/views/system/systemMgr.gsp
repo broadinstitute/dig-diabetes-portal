@@ -166,11 +166,14 @@
 
                 <div class="separator"></div>
 
+
                 <div class="row clearfix">
                     <div class="col-md-12">
-                        Logged with google?
-                        <s2o:ifLoggedInWith provider="google">yes</s2o:ifLoggedInWith>
-                        <s2o:ifNotLoggedInWith provider="google">no</s2o:ifNotLoggedInWith>
+                        <strong>
+                            Logged with google?
+                            <s2o:ifLoggedInWith provider="google">yes</s2o:ifLoggedInWith>
+                            <s2o:ifNotLoggedInWith provider="google">no</s2o:ifNotLoggedInWith>
+                        </strong>
                     </div>
                 </div>
 

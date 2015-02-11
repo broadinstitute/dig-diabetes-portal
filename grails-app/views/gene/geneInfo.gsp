@@ -139,12 +139,12 @@
     <div class="accordion-group">
         <div class="accordion-heading">
             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"
-               href="#collapseOne">
+               href="#collapseOne" aria-expanded="true" >
                 <h2><strong><g:message code="gene.variantassociations.title" default="Variants and associations"/></strong></h2>
             </a>
         </div>
 
-        <div id="collapseOne" class="accordion-body collapse in">
+        <div id="collapseOne" class="accordion-body collapse">
             <div class="accordion-inner">
                 <g:render template="variantsAndAssociations"/>
             </div>

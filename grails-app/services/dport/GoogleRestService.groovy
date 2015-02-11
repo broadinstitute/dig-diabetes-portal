@@ -38,8 +38,8 @@ class GoogleRestService {
                 "redirect_uri=${encodedRedirectUrl}&"+
                 "grant_type=authorization_code"
         JSONObject jsonObject = postGoogleRestCallBase (contents,destination)
-        String idToken = jsonObject.id_token
-        String accessToken = jsonObject.access_token
+        String idToken = jsonObject?.id_token
+        String accessToken = jsonObject?.access_token
         JSONObject identityInformation =  postAuthorizedGoogleRestCall(accessToken,"https://${grailsApplication.config.googleapi.baseGoogleUrl}/plus/v1/people/me")
         return [identityInformation:identityInformation,
                 accessToken:accessToken,

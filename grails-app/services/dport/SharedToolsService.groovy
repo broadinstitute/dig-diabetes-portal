@@ -3,6 +3,7 @@ package dport
 import dport.people.Role
 import dport.people.User
 import dport.people.UserRole
+import dport.people.UserSession
 import grails.plugin.mail.MailService
 import grails.transaction.Transactional
 import org.apache.juli.logging.LogFactory
@@ -273,6 +274,24 @@ class SharedToolsService {
         }
         return java.net.URLEncoder.encode( sb.toString())
     }
+
+
+    public String urlEncodedListOfUserSessions(List<UserSession> userSessionList) {
+        StringBuilder sb   = new StringBuilder ("")
+        int numberOfUsers  =  userSessionList.size()
+        int iterationCount  = 0
+        for (UserSession userSession in userSessionList){
+            sb<< (userSession.user.username + "#" + (userSession.getStartSession().toString()) + "#" + (userSession.getEndSession()?:'none')+ "#" +
+                    (userSession.getRemoteAddress()?:'none') + "#" + (userSession.getDataField()?:'none') )
+            iterationCount++
+            if (iterationCount  < numberOfUsers){
+                sb<< "~"
+            }
+        }
+        return java.net.URLEncoder.encode( sb.toString())
+    }
+
+
 
     /***
      * Given a user, translate their privileges into a flag integer

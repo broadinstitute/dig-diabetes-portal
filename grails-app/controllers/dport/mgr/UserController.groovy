@@ -2,6 +2,7 @@ package dport.mgr
 import dport.SharedToolsService
 import dport.people.User
 import dport.people.UserRole
+import dport.people.UserSession
 import grails.transaction.Transactional
 
 import static org.springframework.http.HttpStatus.*
@@ -12,10 +13,12 @@ class UserController {
     def edit(User userInstance) {
 
         List<UserRole> userRoleList = UserRole.findAllByUser(userInstance)
+        List<UserSession> userSessionList = UserSession.findAllByUser(userInstance)
+        String encodedSessions = sharedToolsService.urlEncodedListOfUserSessions(userSessionList)
 
         int flag =   sharedToolsService.extractPrivilegeFlags  (userInstance)
 
-        respond userInstance,model:[userPrivs: flag]
+        respond userInstance,model:[userPrivs: flag,userRoleList:userRoleList,encodedSessionList:encodedSessions]
     }
 
     def create = {

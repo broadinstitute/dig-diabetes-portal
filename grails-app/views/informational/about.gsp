@@ -8,7 +8,14 @@
 </head>
 
 <body>
-
+ <style>
+ .aboutIconHolder  {
+     margin: auto;
+     text-align:center;
+     vertical-align: middle;
+     height: 210px;
+ }
+ </style>
 
 <div id="main">
     <div class="container">
@@ -25,29 +32,38 @@
         <div class="row sectionBuffer">
 
             <div class="col-md-3 medText">
-                <div class="iconHolder">
-                    <a href="${createLink(controller:'informational', action:'t2dgenes')}">T2D-GENES:</a>
+                <div class="aboutIconHolder">
+                    <a href="${createLink(controller:'informational', action:'t2dgenes')}">
+                        <img src="${resource(dir: 'images/icons', file: 'basicT2DG.png')}"
+                             width="162px" height="206px" alt="T2D Genes"/>
+                    </a>
                 </div>
                 <g:message code="aboutTheData.datasets.t2dgenes" default="about the data" />
             </div>
 
             <div class="col-md-3 medText vertDivider">
-                <div class="iconHolder center-text">
-                    <a href="${createLink(controller:'informational', action:'got2d')}">GoT2D:</a>
+                <div class="aboutIconHolder center-text" style="padding-top: 40px">
+                    <a href="${createLink(controller:'informational', action:'got2d')}">
+                        <img src="${resource(dir: 'images/icons', file: 'GoT2D.png')}"
+                             width="162px" height="113px" alt="T2D Genes"/>
+                    </a>
                 </div>
                 <g:message code="aboutTheData.datasets.got2d" default="about the data" />
             </div>
 
             <div class="col-md-3 medText vertDivider">
-                <div class="iconHolder">
-                    <a href="http://diagram-consortium.org/about.html">DIAGRAM:</a>
+                <div class="aboutIconHolder" style="padding-top: 61px">
+                    <a href="http://diagram-consortium.org/about.html">
+                        <img src="${resource(dir: 'images/icons', file: 'diagram.png')}"
+                                                                            width="180px" height="91px" alt="Diagram GWAS"/>
+                    </a>
                 </div>
                 <g:message code="aboutTheData.datasets.diagram" default="about the data" />
             </div>
 
             <div class="col-md-3 medText vertDivider">
-                <div class="iconHolder">
-                    <a href="${createLink(controller:'informational', action:'hgat')}">GWAS meta-analyses:</a>
+                <div class="aboutIconHolder" style="padding-top: 66px">
+                    <a href="${createLink(controller:'informational', action:'hgat')}"><strong>GWAS<br/> meta-analyses:</strong></a>
                 </div>
                 <g:message code="aboutTheData.datasets.gwasMetaAnalysis" default="about the data" />
             </div>

@@ -1,4 +1,3 @@
-<h1>Diabetes portal</h1>
 
 __Important note to portal developers and sysops (current February 3, 2015)__
 __After we make the move our 
@@ -9,7 +8,9 @@ should compile correctly without private configuration files, but it will not ru
   * test mode, for running unit, integration, or functional tests
   * generating a war file for the purposes of deployment
   * running that war file on your target server
-More information is provided down below in this README file
+More information is provided down below (see the "configuration" section in this README file)__
+
+<h1>Diabetes portal</h1>
 
 The diabetes portal is written in Grails. The following description should give you all the information you need to download, compile, and run a local version of the portal.
 

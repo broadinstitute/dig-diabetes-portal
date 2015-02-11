@@ -48,20 +48,41 @@
 
 <div id="footer">
     <div class="container">
-        <div class="separator"></div>
-        <div id="helpus"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="mainpage.send.feedback"/></a></div>
+        <div class="row">
+            <div class="separator"></div>
+        </div>
+        <div class="row" style="margin-top: 0">
+            <div class="col-xs-2 footerFeedbackHolder">
+                <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="mainpage.send.feedback"/></a>
+            </div>
+            <div class="col-xs-6"></div>
+            <div class="col-xs-4 footerLogoHolder">
+                <span class="">
+                    <span class=""></span>
+                    Built by
+                    <img class="footerLogo" src="${resource(dir: 'images', file: 'BroadInstLogoforDigitalRGB.png')}"
+                         width="100%" alt="Broad Institute"/>
+                </span>
+            </div>
+        </div>
+
+
     </div>
 </div>
+
 <div id="belowfooter">
     <div class="row">
         <div class="footer">
-            <div class="col-lg-6"></div>
-            <div class="col-lg-6 small-buildinfo">
-                <span class="pull-right" style="padding-right:25px">
+            <div class="container">
+                <div class="row">
+            <div class="col-xs-8"></div>
+            <div class="col-xs-4 small-buildinfo footerLogoHolder">
+                <span class="">
                     Built on ${BuildInfo?.buildHost} at ${BuildInfo?.buildTime}.  Version=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}
                 </span>
             </div>
-
+                </div>
+            </div>
         </div>
     </div>
 </div>

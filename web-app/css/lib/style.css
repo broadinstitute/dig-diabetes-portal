@@ -294,7 +294,8 @@ a.boldItlink {
   .about-people .name {
     text-decoration: underline; }
   .about-people a.pi {
-    color: yellow; }
+    font-weight: bold;
+  }
 
 p.leadlink {
   font-size: 18px;
@@ -632,8 +633,8 @@ div.veryImportantText {
     background: #ccc;
     position: absolute;
     top: 0;
-    left: 0;
-    height: 250px;
+    left: -5px;
+    height: 400px;
     width: 1px;
 }
 .logohelper {
@@ -677,4 +678,19 @@ div.veryImportantText {
 .deactivated {
     color:white;
     text-decoration: none;
+}
+.footerFeedbackHolder {
+    vertical-align: top;
+    text-align: left;
+    padding-left: 0;
+}
+.footerLogoHolder {
+    vertical-align: top;
+    text-align: right;
+    padding-right: 0;
+}
+.footerLogo {
+    vertical-align: middle;
+    max-height: 100px;
+    max-width: 160px;
 }

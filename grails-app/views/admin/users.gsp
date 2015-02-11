@@ -36,7 +36,6 @@
         }
         console.log('encodedUsers='+encodedUsers+'.');
     }
-
     </script>
 
 </head>

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="t2dGenesFootless"/>
+    <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
     <r:layoutResources/>
 </head>
@@ -69,7 +69,7 @@
 </script>
 
 %{--Main search page for application--}%
-<div id="main">
+<div id="main" style="padding-bottom: 0">
     <div class="container">
         <div class="row">
             <div class="col-md-7" style="margin-top: -10px">
@@ -115,7 +115,7 @@
 
 
                 <div class="row sectionBuffer">
-                    <div class="col-xs-10 col-md-10 col-lg-10 unpaddedSection">
+                    <div class="col-xs-10 col-md-10 col-lg-10 unpaddedSection" style="padding-top: 10px">
                         <h3>
                             <g:message code="variant.search.header"/>
                         </h3>
@@ -133,8 +133,10 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12 medText">
-                        <g:message code="variant.search.specifics"/>
+                    <div class="col-md-12">
+                        <div class="helptext">
+                            <g:message code="variant.search.specifics"/>
+                        </div>
                     </div>
                 </div>
 
@@ -228,7 +230,7 @@
                 </h4>
             </div>
 
-            <div class="col-xs-12 medTextDark text-center">
+            <div class="col-xs-12 text-center">
                 <g:message code="portal.use.citation.itself" default="citation text"/>
             </div>
         </div>
@@ -332,23 +334,6 @@
 
         %{--</div>--}%
 
-
-    <div class="separator"></div>
-
-
-    <div class="row sectionBuffer">
-
-        <div class="col-xs-12 col-md-offset-5 col-md-2 text-center logoframe">
-            <span class="logohelper"></span>
-            Built by
-            <img class="logoholder" src="${resource(dir: 'images', file: 'BroadInstLogoforDigitalRGB.png')}"
-                 width="100%" alt="Broad Institute"/>
-        </div>
-
-        <div class="col-md-5">
-        </div>
-
-     </div>
 
 
     </div>
