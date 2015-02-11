@@ -1,5 +1,9 @@
 
-
+<style>
+    h1,h2,h3,h4,label{
+        font-weight: 300;
+    }
+</style>
 <br/>
 <div id="VariantsAndAssociationsExist" style="display: block">
     <div class="row clearfix">

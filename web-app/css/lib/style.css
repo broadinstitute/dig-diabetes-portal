@@ -475,6 +475,7 @@ div.boxyDisplay {
     margin: 5px;
     padding:  15px;
     text-align: center;
+    font-weight: 300;
 }
 .genomeWideSignificant {
     background-color: #006633;

@@ -1,3 +1,7 @@
+
+.thinText {
+    font-weight: 300;
+}
 text.barChartLabel  {
     font-family: 'Lato';
     font-weight: 300;
@@ -93,6 +97,9 @@ div.significantDifferenceText {
 .slimDescription {
     margin: 0 0 1px;
 }
-span.bhtLossOfFunctionVariants {
+.slimAndTallDescription {
+    margin: 15px 0 1px;
+
+}span.bhtLossOfFunctionVariants {
     text-decoration: underline;
 }

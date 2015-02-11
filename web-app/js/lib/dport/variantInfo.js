@@ -441,7 +441,8 @@ var mpgSoftware = mpgSoftware || {};
                         totalUnaffected = 0,
                         totalAffected = 0,
                         pValue = 0,
-                        retainBarchartPtr;
+                        retainBarchartPtr,
+                        oddsRatio;
                     if (show_exseq) {
                         heta = parseFloat(variant["_13k_T2D_HETA"]);
                         hetu = parseFloat(variant["_13k_T2D_HETU"]);
@@ -450,6 +451,7 @@ var mpgSoftware = mpgSoftware || {};
                         totalUnaffected = parseFloat(variant["_13k_T2D_OBSU"]);
                         totalAffected = parseFloat(variant["_13k_T2D_OBSA"]);
                         pValue = parseFloat(variant["_13k_T2D_P_EMMAX_FE_IV"]);
+                        oddsRatio = parseFloat(variant["_13k_T2D_OR_WALD_DOS_FE_IV"]);
                     } else if (show_sigma) {
                         heta = parseFloat(variant["SIGMA_T2D_HETA"]);
                         hetu = parseFloat(variant["SIGMA_T2D_HETU"]);
@@ -458,6 +460,7 @@ var mpgSoftware = mpgSoftware || {};
                         totalUnaffected = parseFloat(variant["SIGMA_T2D_OBSU"]);
                         totalAffected = parseFloat(variant["SIGMA_T2D_OBSA"]);
                         pValue = parseFloat(variant["SIGMA_T2D_P"]);
+                        oddsRatio = parseFloat(variant["SIGMA_T2D_OR"]);
                     }
 
                     // $('#bhtLossOfFunctionVariants').append(numberOfVariants);
@@ -497,7 +500,10 @@ var mpgSoftware = mpgSoftware || {};
                          } ;
                          */
                         $('#describePValueInDiseaseRisk').append("<p class='slimDescription'>" + degreeOfSignificance + "</p>\n" +
-                            "<p  id='bhtMetaBurdenForDiabetes' class='slimDescription'>p=" + (pValue.toPrecision(3)) + "</p>");
+                            "<p  id='bhtMetaBurdenForDiabetes' class='slimAndTallDescription'>p=" + (pValue.toPrecision(3)) + "</p>");
+                        if (typeof oddsRatio !== 'undefined') {
+                            $('#describePValueInDiseaseRisk').append("<p  id='bhtOddsRatioForDiabetes' class='slimAndTallDescription'>OR=" + UTILS.realNumberFormatter(oddsRatio) + "</p>");
+                        }
                     }
 
                 },
@@ -531,14 +537,14 @@ var mpgSoftware = mpgSoftware || {};
                         // always needs descr
                         pTextValue = pNumericalValue.toPrecision(3);
                         retVal += ("<h2>" + datatype + "</h2>");
-                        retVal += ("<div class='veryImportantText'>p = " + pTextValue + "</div>");
-                        retVal += ("<div class='notVeryImportantText'>" + significanceDescriptor + "</div>");
+                        retVal += ("<div  style='font-weight: 300' class='veryImportantText'>p = " + pTextValue + "</div>");
+                        retVal += ("<div  style='font-weight: 300' class='notVeryImportantText'>" + significanceDescriptor + "</div>");
                         orValueNumerical = variant[iMap[orValue]];
                         if ((orValueNumerical) &&
                             (orValueNumerical !== 'null')) {
                             orValueNumericalAdjusted = (takeExpOfOr === true) ? Math.exp(orValueNumerical) : orValueNumerical;
                             orValueText = orValueNumericalAdjusted.toPrecision(3);
-                            retVal += ("<div class='veryImportantText'>OR = " + orValueText + "</div>");
+                            retVal += ("<div  style='font-weight: 300' class='veryImportantText'>OR = " + orValueText + "</div>");
                         }
                         if (includeCaseControlComparison) {
                             ;
