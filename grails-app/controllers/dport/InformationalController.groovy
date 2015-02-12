@@ -57,7 +57,7 @@ class InformationalController {
 
     // the root page for contact.  This page recruits underlying pages via Ajax calls
     def contact()  {
-        String defaultDisplay = 'portal'
+        String defaultDisplay = 'consortium'
         render (view: 'contact', model:[specifics:defaultDisplay] )
     }
     // subsidiary pages for  contact

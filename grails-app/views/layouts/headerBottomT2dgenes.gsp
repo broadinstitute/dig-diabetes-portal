@@ -27,7 +27,7 @@
         <g:renderNotSigmaSection>
             <a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a> &middot;
             <a href="${createLink(controller:'informational', action:'about')}"><g:message code="portal.header.nav.about"/></a> &middot;
-            <a href="#"><g:message code="portal.header.nav.tutorials"/></a> &middot;
+            <a href="${createLink(controller: 'home', action: 'introVideoHolder')}"><g:message code="portal.header.nav.tutorials"/></a> &middot;
             <a href="${createLink(controller:'informational', action:'policies')}"><g:message code="portal.header.nav.policies"/></a> &middot;
             <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact"/></a>
 

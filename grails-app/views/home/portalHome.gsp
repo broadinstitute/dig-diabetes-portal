@@ -190,10 +190,10 @@
                 <div class="row">
                     <div class="col-md-offset-1 col-md-10 medTextDark">
                         <g:message code="about.the.portal.header"/>
-                        <span style="padding-left:25px" class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="popover"
-                              title="<g:message code='about.the.portal.header'/>"
-                              data-content="<g:message code='about.the.portal.text'/>"
-                        ></span>
+                        %{--<span style="padding-left:25px" class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="popover"--}%
+                              %{--title="<g:message code='about.the.portal.header'/>"--}%
+                              %{--data-content="<g:message code='about.the.portal.text'/>"--}%
+                        %{--></span>--}%
                     </div>
 
                     <div class="col-md-1"></div>
@@ -218,7 +218,7 @@
         <div class="row sectionBuffer">
             <div class="col-md-6">
                 <a href="${createLink(controller: 'home', action: 'introVideoHolder')}">
-                    <div class="medTextDark">Video: How to use the portal</div>
+                    <div class="medTextDark"><g:message code="mainpage.video.link.enticement" default="how to use the portal"/></div>
                 </a>
 
             </div>

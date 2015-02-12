@@ -19,7 +19,7 @@
 
    </div>
 </div>
-<div class="row">
+<div class="row sectionBuffer">
     <div class="col-md-5">
 
         <p>

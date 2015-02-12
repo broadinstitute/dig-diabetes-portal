@@ -69,7 +69,7 @@
         </p>
         <p>
             Cohort: BC58<br/>
-            PI: <a href="">XXXXX</a>
+            PI: <a href="mailto://p.deloukas@qmul.ac.uk">Panos Deloukas</a>,<a href="mailto://mark.mccarthy@drl.ox.ac.uk">Mark McCarthy</a>
         </p>
         <p>
             Cohort: Umeå/Franks<br/>
@@ -85,7 +85,7 @@
         </p>
         <p>
             Cohort: EGCUT<br/>
-            PI: <a href="">XXXXX</a>
+            PI: <a href="mailto://nick.wareham@mrc-epid.cam.ac.uk">Andres Metspalu</a>
         </p>
         <p>
             Cohort: Frank Hu et al<br/>
@@ -97,7 +97,7 @@
         </p>
         <p>
             Cohort: EPIC Norfolk<br/>
-            PI: <a href="">XXXXX</a>
+            PI: <a href="mailto://nick.wareham@mrc-epid.cam.ac.uk">Nicholas J Wareham</a>
         </p>
         <p>
             Cohort: FUSION (Finland-United States Investigation of NIDDM Genetics)<br/>
