@@ -190,6 +190,10 @@
                 <div class="row">
                     <div class="col-md-offset-1 col-md-10 medTextDark">
                         <g:message code="about.the.portal.header"/>
+                        <span style="padding-left:25px" class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="popover"
+                              title="<g:message code='about.the.portal.header'/>"
+                              data-content="<g:message code='about.the.portal.text'/>"
+                        ></span>
                     </div>
 
                     <div class="col-md-1"></div>
@@ -199,10 +203,7 @@
                 <div class="row">
                     <div class="col-md-offset-1 col-md-10 medText">
 
-                        %{--<span class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="popover"--}%
-                              %{--title="<g:message code='about.the.portal.header'/>"--}%
-                              %{--data-content="<g:message code='about.the.portal.text'/>"--}%
-                              %{--></span>--}%
+
 
                         <g:message code="about.the.portal.text"/>
                     </div>

@@ -4,7 +4,7 @@
         <h3>T2D-GENES: exomes (n=~10,000)</h3>
         <p>
             Cohort: Jackson Heart Study Candidate Gene Association Resource <br/>
-            PI: <a href="mailto://james.wilson1@med.va.gov"></a>Jim Wilson
+            PI: <a href="mailto://james.wilson1@med.va.gov">Jim Wilson</a>
         </p>
         <p>
             Cohort: Wake Forest Study<br/>

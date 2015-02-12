@@ -21,33 +21,18 @@
 </div>
 <div class="row">
     <div class="col-md-5">
-        <h4>Principal Investigator</h4>
-        <p>
-            Jose Florez
-        </p>
 
-        <h4>Project leads</h4>
         <p>
-            Jason Flannick, technical lead<br/>
-            Mary Carmichael, creative lead
-        </p>
-
-        <h4>Technical team</h4>
-        <p>
+            David Altshuler<br/>
+            Jose Florez<br/>
+            Jason Flannick<br/>
+            Mary Carmichael<br/>
+            Noel Burtt<br/>
             Ben Alexander<br/>
             Kaan Yuksel<br/>
             Marcin von Grothuss<br/>
             Tad Jordan<br/>
             Todd Green<br/>
-            <span class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="popover"
-                  title="public server" data-content="Server for the everybody."
-                  data-placement="right" title="Server for everybody"></span>
-        </p>
-
-
-        <h4>Project manager</h4>
-        <p>
-            Noel Burtt
         </p>
 
     </div>
