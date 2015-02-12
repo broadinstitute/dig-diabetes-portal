@@ -66,7 +66,9 @@ modules = {
 
         resource url: 'js/lib/bootstrap3-typeahead.min.js'
         resource url: 'js/lib/shared.js'
-        resource url: 'js/lib/d3.min.js'
+        resource url: 'js/lib/tooltip.js'
+        resource url: 'js/lib/popover.js'
+
     }
     igvNarrow {  // IGV on a page with core
         resource url: 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'

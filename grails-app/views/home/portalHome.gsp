@@ -198,6 +198,12 @@
 
                 <div class="row">
                     <div class="col-md-offset-1 col-md-10 medText">
+
+                        %{--<span class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="popover"--}%
+                              %{--title="<g:message code='about.the.portal.header'/>"--}%
+                              %{--data-content="<g:message code='about.the.portal.text'/>"--}%
+                              %{--></span>--}%
+
                         <g:message code="about.the.portal.text"/>
                     </div>
 
@@ -208,18 +214,18 @@
         </div>
 
         %{--video--}%
-        %{--<div class="row sectionBuffer">--}%
-            %{--<div class="col-md-6">--}%
-                %{--<a href="${createLink(controller: 'home', action: 'introVideoHolder')}">--}%
-                    %{--<div class="medTextDark">Video: How to use the portal</div>--}%
-                %{--</a>--}%
+        <div class="row sectionBuffer">
+            <div class="col-md-6">
+                <a href="${createLink(controller: 'home', action: 'introVideoHolder')}">
+                    <div class="medTextDark">Video: How to use the portal</div>
+                </a>
 
-            %{--</div>--}%
+            </div>
 
-            %{--<div class="col-md-6">--}%
-            %{--</div>--}%
+            <div class="col-md-6">
+            </div>
 
-        %{--</div>--}%
+        </div>
 
         <div class="row sectionBuffer">
             <div class="col-xs-12 text-center">

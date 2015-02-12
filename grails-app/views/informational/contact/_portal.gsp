@@ -39,6 +39,9 @@
             Marcin von Grothuss<br/>
             Tad Jordan<br/>
             Todd Green<br/>
+            <span class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="popover"
+                  title="public server" data-content="Server for the everybody."
+                  data-placement="right" title="Server for everybody"></span>
         </p>
 
 

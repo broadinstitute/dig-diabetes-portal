@@ -87,6 +87,7 @@
     </div>
 </div>
 
+<g:applyLayout name="activatePopups"/>
 
 </body>
 </html>
