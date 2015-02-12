@@ -83,7 +83,10 @@
     <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 6,000</div>
 
     <div class="bullets">
-        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> XXX</div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/>
+            <a href="mailto://p.deloukas@qmul.ac.uk">Panos Deloukas</a>,
+            <a href="mailto://mark.mccarthy@drl.ox.ac.uk">Mark McCarthy</a>
+        </div>
     </div>
 </div>
 
@@ -147,7 +150,8 @@
     <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 2,000</div>
 
     <div class="bullets">
-        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> XXX</div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/>
+            <a href="mailto://nick.wareham@mrc-epid.cam.ac.uk">Andres Metspalu</a></div>
     </div>
 </div>
 
@@ -213,7 +217,7 @@
     <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 0</div>
 
     <div class="bullets">
-        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> XXX</div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://nick.wareham@mrc-epid.cam.ac.uk">Nicholas J Wareham</a></div>
     </div>
 </div>
 
