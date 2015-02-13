@@ -252,26 +252,38 @@
 
             </div>
 
-            <div class="col-md-offset-4 col-md-4 text-center">
+            <div class="col-md-offset-2 col-md-8 text-center">
                 <div class="row">
-                    <div class="col-xs-4 text-center">
+                    <div class="col-xs-offset-1 col-xs-2 text-center"  style="padding: 20px">
                         <img class="logoholder" src="${resource(dir: 'images/icons', file: 'basicT2DG.svg')}"
                              width="100%" alt="T2D Genes"/>
                     </div>
 
-                    <div class="col-xs-4 text-center">
+                    <div class="col-xs-2 text-center" style="padding: 25px 20px 20px 20px">
+                        <img class="logoholder" src="${resource(dir: 'images/icons', file: 'GoT2D.png')}"
+                             width="100%" alt="NIH"/>
+                    </div>
+
+                    <div class="col-xs-2 text-center"  style="padding: 31px 0 0 0">
+                        <img class="logoholder" src="${resource(dir: 'images/icons', file: 'diagram.png')}"
+                             width="100%" alt="NIH"/>
+                    </div>
+
+                    <div class="col-xs-2 text-center"  style="padding-top: 19px">
                         <img class="logoholder" src="${resource(dir: 'images/icons', file: '720px-US-NIH-NIDDK-Logo.svg.png')}"
                              width="100%" height="100%" alt="NIDDK" style="padding-top: 30px"/>
                     </div>
 
-                    <div class="col-xs-4 text-center">
+                    <div class="col-xs-2 text-center"  style="padding: 20px">
                         <img class="logoholder" src="${resource(dir: 'images/icons', file: '480px-NIH_logo.svg.png')}"
                              width="100%" alt="NIH"/>
                     </div>
+
+                    <div class="col-xs-1"></div>
                 </div>
             </div>
 
-            <div class="col-md-4 ">
+            <div class="col-md-2">
 
             </div>
 

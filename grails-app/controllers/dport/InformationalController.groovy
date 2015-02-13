@@ -68,7 +68,7 @@ class InformationalController {
 
     // the root page for contact.  This page recruits underlying pages via Ajax calls
     def policies()  {
-        String defaultDisplay = 'tracking'
+        String defaultDisplay = 'dataUse'
         render (view: 'policies', model:[specifics:defaultDisplay] )
     }
     // subsidiary pages for  contact

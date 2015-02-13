@@ -20,16 +20,9 @@
 
                 <ul class="nav nav-pills">
                     <div class="row">
-                        <div class="col-md-3 text-center">
-                            <li role="presentation" id="policies_tracking" class="myPills active activated">
-                                <a href="#">
-                                    <g:message code="policies.tracking" default="cohorts"/>
-                                </a>
-                            </li>
-                        </div>
 
                         <div class="col-md-3 text-center">
-                            <li role="presentation" id="policies_dataUse" class="myPills">
+                            <li role="presentation" id="policies_dataUse" class="myPills activated">
                                 <a href="#">
                                     <g:message code="policies.dataUse" default="exome"/>
                                 </a>
@@ -51,6 +44,15 @@
                                 </a>
                             </li>
                         </div>
+
+                        <div class="col-md-3 text-center">
+                            <li role="presentation" id="policies_tracking" class="myPills active">
+                                <a href="#">
+                                    <g:message code="policies.tracking" default="cohorts"/>
+                                </a>
+                            </li>
+                        </div>
+
 
                     </div>
 
