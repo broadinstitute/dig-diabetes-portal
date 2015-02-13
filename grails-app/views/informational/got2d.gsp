@@ -14,18 +14,18 @@
 
     <div class="container">
 
-        <div class="row" style="margin-bottom: 30px">
+        <div class="row" style="margin-bottom: 35px">
             <div class="col-md-2 col-md-offset-5 text-center">
                 <img src="${resource(dir: 'images/icons', file: 'GoT2D.png')}"
                      width="200px" height="140px" alt="T2D Genes"/>
             </div>
             <div class="col-md-5"></div>
         </div>
-        <div class="row" style="margin-bottom: 30px">
-            <div class="col-xs-12 text-center">
-                    <g:message code="got2d.descr" default="GoT2D descr"/>
-            </div>
-        </div>
+
+
+        <p>
+            <g:message code="got2d.descr" default="GoT2D descr"/>
+        </p>
 
 
 

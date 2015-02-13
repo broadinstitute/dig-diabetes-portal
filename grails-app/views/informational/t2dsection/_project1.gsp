@@ -1,6 +1,6 @@
 <div class="section" style="display : block">
     <h3>Deep whole-exome sequencing in 10,000 people from five ethnicities</h3>
-    <p><em>Results from this project are available on this portal.</em></p>
+
     <p>
         Project 1’s goal is to discover how variation in the protein-coding portion of the genome contributes to type 2 diabetes risk. The project’s dataset is unusually large and diverse, with exomes from 10,000 people across five ethnicities, including 1,000 type 2 diabetes cases and 1,000 controls from each:
     </p>

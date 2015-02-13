@@ -59,7 +59,6 @@
             <div class="col-xs-4 footerLogoHolder">
                 <span class="">
                     <span class=""></span>
-                    Built by
                     <img class="footerLogo" src="${resource(dir: 'images', file: 'BroadInstLogoforDigitalRGB.png')}"
                          width="100%" alt="Broad Institute"/>
                 </span>

@@ -1,6 +1,6 @@
 <div class="section" style="display : block">
     <h3>Trans-ethnic fine-mapping "mega-meta-analysis"</h3>
-    <p><em>Results from this project will be made available on this portal.</em></p>
+
     <p>
         Genome-wide association studies (GWAS) have implicated dozens of genomic regions in type 2 diabetes risk, but in many cases it is unclear which variants in those regions actually influence the underlying biology of disease, and which variants are merely near the disease-causing variants but do not themselves contribute to pathophysiology. The goal of Project 3 is to precisely identify the causal variants by (1) focusing on genomic regions previously implicated in type 2 diabetes risk; (2) inferring the existence of surrounding low-frequency variants by imputing relevant data from the 1000 Genomes Project; and (3) using a range of statistical approaches to determine which of these variants are most likely to cause disease.
     </p>
