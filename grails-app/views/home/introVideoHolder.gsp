@@ -18,10 +18,9 @@
             %{--video--}%
             <div class="row sectionBuffer" style="padding: 25px">
                 <div class="col-md-offset-2 col-md-8 col-sm-12">
-                    <div class="medTextDark" style="padding-bottom: 20px">Video: How to use the portal</div>
-                    <iframe src="//player.vimeo.com/video/119123225" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                    <p><a href="http://vimeo.com/119123225">Inventions - &#039;Springworlds&#039;</a> from
-                        <a href="http://vimeo.com/danjacobs">Dan W Jacobs</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+                    <div class="medTextDark" style="padding-bottom: 20px"><strong>Video: How to use the portal</strong></div>
+                    <iframe src="//player.vimeo.com/video/119352074" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                    <p><a href="https://vimeo.com/119352074">T2D portal tutorial</a> from <a href="https://vimeo.com/user33530350">Broad Institute</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
 
                 </div>
 

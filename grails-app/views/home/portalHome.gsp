@@ -215,6 +215,9 @@
         </div>
 
         %{--video--}%
+
+
+
         <div class="row sectionBuffer">
             <div class="col-md-6">
                 <a href="${createLink(controller: 'home', action: 'introVideoHolder')}">
