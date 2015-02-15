@@ -320,9 +320,9 @@ grails.plugin.springsecurity.securityConfigType = "InterceptUrlMap"
 grails.plugin.springsecurity.interceptUrlMap = [
         '/':                        ['permitAll'],
         '/index':                   ['permitAll'],
-        '/index.gsp':                   ['permitAll'],
+        '/index.gsp':               ['permitAll'],
         '/home':                    ['permitAll'],
-        '/home/**':                 ['ROLE_USER'],
+        '/home/**':                 ['permitAll'],
         '/articles/**':             ['permitAll'],
         '/system/**':               ['ROLE_SYSTEM'],
         '/system/determineVersion':               ['permitAll'],
@@ -337,7 +337,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/region/**':           ['ROLE_USER'],
         '/trait/**':            ['ROLE_USER'],
         '/variant/**':          ['ROLE_USER'],
-        '/variantSearch/**':    ['IS_AUTHENTICATED_ANONYMOUSLY'],
+        '/variantSearch/**':    ['ROLE_USER'],
         '/beacon/*':          ['permitAll'],
         '/assets/**':         ['permitAll'],
         '/**/js/**':          ['permitAll'],
@@ -456,6 +456,6 @@ grails.plugin.springsecurity.userLookup.userDomainClassName = 'dport.people.User
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'dport.people.UserRole'
 grails.plugin.springsecurity.authority.className = 'dport.people.Role'
 
-oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
+//oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
 
 
