@@ -12,7 +12,7 @@ if (!catalinaBase) catalinaBase = '.'   // just in case
 def logDirectory = "${catalinaBase}/logs"
 
 
-site.version = 't2dgenes' // could be 'sigma' or 't2dgenes'
+site.version = 'sigma' // could be 'sigma' or 't2dgenes'
 if (site.version == 't2dgenes'){
     site.title = 'Type 2 Diabetes Genetics'  // could be 'SIGMA T2D' or 'Type 2 Diabetes Genetics'
     site.subtext = 'Beta'
@@ -245,17 +245,13 @@ environments {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgenetics.org"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-//      grails.serverURL = "sigmat2dqasrv7-env.elasticbeanstalk.com"
-//      grails.serverURL = "sigmat2dprod-env.elasticbeanstalk.com"
-//      grails.serverURL = "sigmat2ddev-env.elasticbeanstalk.com"
-//      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
-//      grails.serverURL = "type2diabetesqasrvr-env.elasticbeanstalk.com"
+      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
+//        grails.serverURL = "http://sigmat2ddev-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //      grails.serverURL = "http://cidbtest-env.elasticbeanstalk.com"
-//      grails.serverURL = "http://privatecitest-env.elasticbeanstalk.com/"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //        grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 //      grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false

@@ -4,7 +4,7 @@ import org.springframework.web.servlet.support.RequestContextUtils
 
 
 
-class InformationalController {
+class  InformationalController {
 
     def index() {}
     def about (){
@@ -14,8 +14,8 @@ class InformationalController {
         render (view: 'aboutBeacon')
     }
     def aboutSigma (){
-        def locale = RequestContextUtils.getLocale(request)
-        render (view:'sigma/homeHolder')
+        String defaultDisplay = 'about'
+        render (view:'homeHolder', model:[specifics:defaultDisplay])
 
 //        if (locale.language == 'en'){
 //            render (view:'sigma/en/about')
@@ -24,6 +24,14 @@ class InformationalController {
 //        }
 
     }
+
+
+    // subsidiary pages for  contact
+    def aboutSigmaSection(){
+        render (template: "sigma/${params.id}" )
+    }
+
+
 //    def contact (){
 //        render (view: 'contact')
 //    }
