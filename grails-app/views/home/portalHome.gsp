@@ -93,7 +93,14 @@
                         </div>
 
                         <g:renderSigmaSection>
-                            <div class="helptext"><g:message code="mainpage.start.with.gene.subtext.sigma"/></div>
+                            <div class="helptext">
+                                <a href='<g:createLink controller="gene" action="geneInfo"
+                                                       params="[id: 'SLC16A11']"/>'>SLC16A11</a>,
+                                <a href='<g:createLink controller="variant" action="variantInfo"
+                                                       params="[id: 'rs13342232']"/>'>rs13342232</a>,
+                                <a href='<g:createLink controller="region" action="regionInfo"
+                                                       params="[id: 'chr9:21,940,000-22,190,000']"/>'>chr9:21,940,000-22,190,000</a>
+                            </div>
                         </g:renderSigmaSection>
                         <g:renderNotSigmaSection>
                             <div class="helptext">examples:
