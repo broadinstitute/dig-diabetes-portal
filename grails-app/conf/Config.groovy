@@ -195,23 +195,7 @@ grails {
     }
 }
 
-//oauth {
-//
-//    providers {
-//
-//        google {
-//            api = org.scribe.builder.api.GoogleApi20
-//            key = '975413760331-d2nr5vq7sbbppjfog0cp9j4agesbeovt.apps.googleusercontent.com'
-//            secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
-//            successUri = '/oauth/google/success'
-//            failureUri = '/oauth/google/error'
-//            callback = "${baseURL}/oauth/google/callback"
-//            scope = 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
-//        }
-//
-//    }
-//}
-            grails.converters.encoding = "UTF-8"
+grails.converters.encoding = "UTF-8"
 // scaffolding templates configuration
 grails.scaffolding.templates.domainSuffix = 'Instance'
 
@@ -245,7 +229,8 @@ environments {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgenetics.org"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
+//      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
+        grails.serverURL = "sigmat2dqasrv.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2ddev-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //      grails.serverURL = "http://cidbtest-env.elasticbeanstalk.com"
@@ -451,7 +436,5 @@ grails.resources.adhoc.includes = [
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'dport.people.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'dport.people.UserRole'
 grails.plugin.springsecurity.authority.className = 'dport.people.Role'
-
-//oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
 
 
