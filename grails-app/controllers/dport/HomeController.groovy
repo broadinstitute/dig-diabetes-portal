@@ -11,8 +11,15 @@ class HomeController {
     def mailService
 
     def index = {
-        render(view:'portalHome')
-//      redirect(controller:'beacon', action:'beaconDisplay’)
+        if  ((sharedToolsService.getApplicationIsT2dgenes()) ||
+                (sharedToolsService.getApplicationIsSigma())) {
+            render(view:'portalHome')
+        }  else if (sharedToolsService.getApplicationIsBeacon()) {
+            redirect(controller:'beacon', action:'beaconDisplay')
+        } else {
+            log.error ">>>>> Critical internal error!  The application was set to something other than T2dgenes, Sigma, or Beacon.  No home page possible.  <<<<<"
+        }
+
     }
 
     def portalHome = {

@@ -11,10 +11,10 @@
                 </div>
             </a>
         </g:renderSigmaSection>
-        <g:renderNotSigmaSection>
+        <g:renderT2dGenesSection>
             <div id="branding">
                 Type 2 Diabetes <strong>Genetics</strong> <small>beta</small>
             </div>
-        </g:renderNotSigmaSection>
+        </g:renderT2dGenesSection>
     </div>
 </div>

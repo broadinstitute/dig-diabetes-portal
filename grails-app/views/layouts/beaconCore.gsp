@@ -47,11 +47,11 @@
                     SIGMA <strong>T2D</strong> <small><g:rendersSigmaMessage messageSpec="site.subtext"/></small>
                 </div>
             </g:renderSigmaSection>
-            <g:renderNotSigmaSection>
+            <g:renderT2dGenesSection>
                 <div id="branding">
                     Broad Institute <strong>Beacon</strong>
                 </div>
-            </g:renderNotSigmaSection>
+            </g:renderT2dGenesSection>
         </div>
     </div>
 
@@ -81,11 +81,11 @@
                 <a href="${createLink(controller:'informational', action:'aboutSigma')}"><g:message code="localized.aboutTheData"/></a> &middot;
                 <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="localized.contact"/></a>
             </g:renderSigmaSection>
-            <g:renderNotSigmaSection>
+            <g:renderT2dGenesSection>
                 <a href="${createLink(controller:'beacon',action:'beaconDisplay')}"><g:message code="localized.home"/></a> &middot;
                 <a href="${createLink(controller:'informational', action:'aboutBeacon')}"><g:message code="localized.aboutTheBeaconData"/></a> &middot;
                 <a href="${createLink(controller:'informational', action:'contactBeacon')}"><g:message code="localized.contact"/></a>
-             </g:renderNotSigmaSection>
+             </g:renderT2dGenesSection>
             </div>
         </div>
     </div>

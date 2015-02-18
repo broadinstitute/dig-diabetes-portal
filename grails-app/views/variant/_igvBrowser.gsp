@@ -14,13 +14,13 @@
     Use the browser below to explore all genome-wide and locus-wide
     significant variants within 50kb of this variant. Choose "Tracks" to view
     results relevant to type 2 diabetes
-    <g:renderNotSigmaSection>
+    <g:renderT2dGenesSection>
     (exome sequencing, exome chip, or GWAS)
-    </g:renderNotSigmaSection>
+    </g:renderT2dGenesSection>
      or any of 24 other related traits
-    <g:renderNotSigmaSection>
+    <g:renderT2dGenesSection>
     (GWAS)
-    </g:renderNotSigmaSection>
+    </g:renderT2dGenesSection>
     .
 </p>
 

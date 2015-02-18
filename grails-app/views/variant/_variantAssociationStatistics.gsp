@@ -20,7 +20,7 @@
             </div>
             <div class="col-md-1"></div>
         </g:renderSigmaSection>
-        <g:renderNotSigmaSection>
+        <g:renderT2dGenesSection>
             <div class="col-md-3">
                 <div id="gwasAssociationStatisticsBox"></div>
             </div>
@@ -32,7 +32,7 @@
             <div class="col-md-3">
                 <div id="exomeSequenceAssociationStatisticsBox"></div>
             </div>
-        </g:renderNotSigmaSection>
+        </g:renderT2dGenesSection>
 
     </div>
 </div>

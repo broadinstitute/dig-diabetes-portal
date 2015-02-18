@@ -7,13 +7,21 @@ class SectionSelectorTagLib {
     SharedToolsService sharedToolsService
 
     def renderSigmaSection = { attrs,body ->
-        if (sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma)){
+        if (sharedToolsService.getApplicationIsSigma()){
             out << body()
         }
 
     }
-    def renderNotSigmaSection = { attrs,body ->
-        if (!sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma)){
+
+    def renderT2dGenesSection = { attrs,body ->
+        if (sharedToolsService.getApplicationIsT2dgenes()){
+            out << body()
+        }
+
+    }
+
+    def renderBeaconSection = { attrs,body ->
+        if (sharedToolsService.getApplicationIsBeacon()){
             out << body()
         }
 

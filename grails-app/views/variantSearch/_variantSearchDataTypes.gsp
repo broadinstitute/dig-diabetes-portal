@@ -41,9 +41,9 @@
         <g:renderSigmaSection>
             <g:message code="variantSearch.dataTypes.sigmaHelpText" default="Select SIGMA to see results" />
         </g:renderSigmaSection>
-        <g:renderNotSigmaSection>
+        <g:renderT2dGenesSection>
             <g:message code="variantSearch.dataTypes.exomeSequencingHelpText" default="Select exome sequencing data" />
-        </g:renderNotSigmaSection>
+        </g:renderT2dGenesSection>
 
 
 

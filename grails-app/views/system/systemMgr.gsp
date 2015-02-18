@@ -114,7 +114,7 @@
                 <div class="separator"></div>
 
                 <g:form action='switchSigmaT2d' method='POST' class='form form-horizontal cssform' autocomplete='off'>
-                    <h4>Choose your application(<em>current application = <a href="${currentApplicationIsSigma}">${currentApplicationIsSigma}</a></em>)</h4>
+                    <h4>Choose your application(<em>current application = <strong>${currentApplicationIsSigma}</strong></em>)</h4>
                     <div class="row clearfix">
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
@@ -123,14 +123,20 @@
 
                                 <div class="radio">
                                     <label>
-                                        <input id="sigma" type="radio" name="datatype" value="sigma" />
-                                        present Sigma
+                                        <input id="t2dgenes" type="radio" name="datatype" value="t2dgenes"  <%=(currentApplicationIsSigma=='t2dGenes')?'checked':''%> />
+                                        T2D Genes
                                     </label>
                                 </div>
                                 <div class="radio">
                                     <label>
-                                        <input id="t2dgenes" type="radio" name="datatype" value="t2dgenes" />
-                                        present T2D Genes
+                                        <input id="sigma" type="radio" name="datatype" value="sigma" <%=(currentApplicationIsSigma=='Sigma')?'checked':''%> />
+                                        Sigma
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input id="beacon" type="radio" name="datatype" value="beacon"  <%=(currentApplicationIsSigma=='Beacon')?'checked':''%> />
+                                        beacon
                                     </label>
                                 </div>
                             </div>

@@ -2,6 +2,7 @@ import dport.Gene
 import dport.Phenotype
 import dport.ProteinEffect
 import dport.RestServerService
+import dport.SharedToolsService
 import dport.people.Role
 import dport.people.User
 import dport.people.UserRole
@@ -11,6 +12,7 @@ class BootStrap {
     private static final log = LogFactory.getLog(this)
     def grailsApplication
     RestServerService restServerService
+    SharedToolsService sharedToolsService
     def springSecurityService
 
     def init = { servletContext ->
@@ -252,6 +254,7 @@ class BootStrap {
 
         // any services that need to be initialized should be referenced here
         restServerService.initialize()
+        sharedToolsService.initialize()
 
     }
     def destroy = {

@@ -174,9 +174,9 @@
  <g:renderSigmaSection>
                 igvLauncher.launch("#myDiv", "${geneName}","${restServer.currentRestServer()}",[1,0,0,1]);
  </g:renderSigmaSection>
- <g:renderNotSigmaSection>
+ <g:renderT2dGenesSection>
                 igvLauncher.launch("#myDiv", "${geneName}","${restServer.currentRestServer()}",[1,1,1,0]);
- </g:renderNotSigmaSection>
+ </g:renderT2dGenesSection>
 
             }
 

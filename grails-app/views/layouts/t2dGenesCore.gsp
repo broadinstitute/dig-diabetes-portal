@@ -21,9 +21,9 @@
 <g:renderSigmaSection>
     <g:applyLayout name="analyticsSigma"/>
 </g:renderSigmaSection>
-<g:renderNotSigmaSection>
+<g:renderT2dGenesSection>
     <g:applyLayout name="analyticsT2dGenes"/>
-</g:renderNotSigmaSection>
+</g:renderT2dGenesSection>
 
 
 </head>

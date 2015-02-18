@@ -102,7 +102,7 @@
                                                        params="[id: 'chr9:21,940,000-22,190,000']"/>'>chr9:21,940,000-22,190,000</a>
                             </div>
                         </g:renderSigmaSection>
-                        <g:renderNotSigmaSection>
+                        <g:renderT2dGenesSection>
                             <div class="helptext">examples:
                                 <a href='<g:createLink controller="gene" action="geneInfo"
                                                        params="[id: 'SLC30A8']"/>'>SLC30A8</a>,
@@ -111,7 +111,7 @@
                                 <a href='<g:createLink controller="region" action="regionInfo"
                                                        params="[id: 'chr9:21,940,000-22,190,000']"/>'>chr9:21,940,000-22,190,000</a>
                             </div>
-                        </g:renderNotSigmaSection>
+                        </g:renderT2dGenesSection>
 
                     </div>
 

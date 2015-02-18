@@ -17,7 +17,7 @@
 
     </div>
 
-<g:renderNotSigmaSection>
+<g:renderBeaconSection>
         <div class="separator"></div>
     <div class="container">
 
@@ -29,7 +29,7 @@
     </div>
     </div>
 
-</g:renderNotSigmaSection>
+</g:renderBeaconSection>
 </div>
 
 </body>

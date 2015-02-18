@@ -13,13 +13,13 @@
 <p>
 
     <g:message code="gene.igv.intro1" default="Use the browser"/>
-    <g:renderNotSigmaSection>
+    <g:renderT2dGenesSection>
         <g:message code="gene.igv.intro2" default="(non-Sigma databases)"/>
-    </g:renderNotSigmaSection>
+    </g:renderT2dGenesSection>
        <g:message code="gene.igv.intro3" default="or the traits"/>
-    <g:renderNotSigmaSection>
+    <g:renderT2dGenesSection>
        <g:message code="gene.igv.intro4" default="(GWAS)"/>
-    </g:renderNotSigmaSection>
+    </g:renderT2dGenesSection>
      .
 </p>
 

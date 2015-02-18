@@ -91,8 +91,16 @@ class SystemController {
         String requestedApplication = params.datatype
         if ( requestedApplication == 'sigma')  {
             sharedToolsService.setApplicationToSigma  ()
+            redirect(controller:'home', action:'index')
+            return
         }  else if  ( requestedApplication == 't2dgenes')  {
             sharedToolsService.setApplicationToT2dgenes  ()
+            redirect(controller:'home', action:'index')
+            return
+        }  else if  ( requestedApplication == 'beacon')  {
+            sharedToolsService.setApplicationToBeacon  ()
+            redirect(controller:'beacon', action:'beaconDisplay')
+            return
         }   else {
             flash.message = "Internal error: you requested server = ${requestedApplication} which I do not recognize!"
         }

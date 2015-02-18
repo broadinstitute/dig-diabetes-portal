@@ -25,21 +25,31 @@ class SharedToolsService {
     Integer showExomeSequence = -1
     Integer showSigma = -1
     Integer showGene = -1
+    Integer showBeacon = -1
 
 
 
-//    portal.sections.show_gene
-
-    public enum TypeOfSection {
-        show_gwas, show_exchp, show_exseq, show_sigma,show_gene
+    public void  initialize(){
+        showGwas = (grailsApplication.config.portal.sections.show_gwas)?1:0
+        showExomeChip = (grailsApplication.config.portal.sections.show_exchp)?1:0
+        showExomeSequence = (grailsApplication.config.portal.sections.show_exseq)?1:0
+        showSigma = (grailsApplication.config.portal.sections.show_sigma)?1:0
+        showGene = (grailsApplication.config.portal.sections.show_gene)?1:0
+        showBeacon = (grailsApplication.config.portal.sections.show_beacon)?1:0
     }
 
-    public Boolean getSectionToDisplay(TypeOfSection typeOfSection) {
+    public enum TypeOfSection {
+        show_gwas, show_exchp, show_exseq, show_sigma,show_gene, show_beacon
+    }
+
+
+    public Boolean getSectionToDisplay( typeOfSection) {
         showGwas = (showGwas==-1)?grailsApplication.config.portal.sections.show_gwas:showGwas
         showExomeChip = (showExomeChip==-1)?grailsApplication.config.portal.sections.show_exchp:showExomeChip
         showExomeSequence = (showExomeSequence==-1)?grailsApplication.config.portal.sections.show_exseq:showExomeSequence
         showSigma = (showSigma==-1)?grailsApplication.config.portal.sections.show_sigma:showSigma
         showGene = (showGene==-1)?grailsApplication.config.portal.sections.show_gene:showGene
+        showBeacon = (showBeacon==-1)?grailsApplication.config.portal.sections.show_beacon:showBeacon
         Boolean returnValue = false
         switch (typeOfSection) {
             case TypeOfSection.show_gwas:
@@ -57,16 +67,28 @@ class SharedToolsService {
             case TypeOfSection.show_gene:
                 returnValue = showGene
                 break;
+            case TypeOfSection.show_beacon:
+                returnValue = showBeacon
+                break;
             default:break;
         }
         return returnValue
     }
+
+
 
     public Boolean setApplicationToSigma() {
         showGwas = 1
         showExomeChip = 0
         showExomeSequence = 0
         showSigma = 1
+        showBeacon = 0
+    }
+
+    public Boolean getApplicationIsSigma() {
+        return ((showSigma) &&
+                (!showBeacon) &&
+                (showGwas || showExomeChip  || showExomeSequence))
     }
 
     public Boolean setApplicationToT2dgenes() {
@@ -74,16 +96,41 @@ class SharedToolsService {
         showExomeChip = 1
         showExomeSequence = 1
         showSigma = 0
+        showBeacon = 0
     }
+
+
+    public Boolean getApplicationIsT2dgenes() {
+        return ((!showSigma) &&
+                (!showBeacon) &&
+                (showGwas || showExomeChip  || showExomeSequence))
+    }
+
+
+    public Boolean setApplicationToBeacon() {
+        showGwas = 0
+        showExomeChip = 0
+        showExomeSequence = 0
+        showSigma = 0
+        showBeacon = 1
+    }
+
+    public Boolean getApplicationIsBeacon() {
+        return ((showBeacon)   &&
+                (!showSigma) )
+    }
+
 
     public String  applicationName () {
         String returnValue = ""
-        if (showSigma  == 0)   {
+        if (getApplicationIsT2dgenes())   {
             returnValue = "t2dGenes"
-        }  else  if (showSigma  == 1)   {
+        }  else  if (getApplicationIsSigma())   {
             returnValue = "Sigma"
+        }  else  if (getApplicationIsBeacon())   {
+            returnValue = "Beacon"
         }  else  {
-            returnValue = "Undetermined (code = ${showSigma})"
+            returnValue = "Undetermined application: internal error"
         }
         return returnValue
     }

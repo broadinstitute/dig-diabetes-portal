@@ -24,13 +24,13 @@
             <a href="${createLink(controller:'informational', action:'aboutSigma')}"><g:message code="localized.aboutTheData"/></a> &middot;
             <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="localized.contact"/></a>
         </g:renderSigmaSection>
-        <g:renderNotSigmaSection>
+        <g:renderT2dGenesSection>
             <a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a> &middot;
             <a href="${createLink(controller:'informational', action:'about')}"><g:message code="portal.header.nav.about"/></a> &middot;
             <a href="${createLink(controller: 'home', action: 'introVideoHolder')}"><g:message code="portal.header.nav.tutorials"/></a> &middot;
             <a href="${createLink(controller:'informational', action:'policies')}"><g:message code="portal.header.nav.policies"/></a> &middot;
             <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact"/></a>
 
-        </g:renderNotSigmaSection>
+        </g:renderT2dGenesSection>
     </div>
 </div>

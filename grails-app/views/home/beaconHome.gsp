@@ -2,11 +2,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="core"/>
+    <meta name="layout" content="beaconCore"/>
     <r:require modules="core"/>
     <r:layoutResources/>
     <style>
-%{--body {background-image: url("${resource(dir: 'images', file: 'doubleHelix2.png')}")}--}%
 
 div.helix {
     display: block;
@@ -117,12 +116,12 @@ div.helix::after {
                                     code="mainpage.button.imperative"/></button>
                         </span>
                     </div>
-                    <g:renderSigmaSection>
-                        <div class="helptext"><g:message code="mainpage.start.with.gene.subtext.sigma"/></div>
-                    </g:renderSigmaSection>
-                    <g:renderNotSigmaSection>
-                        <div class="helptext"><g:message code="mainpage.start.with.gene.subtext"/></div>
-                    </g:renderNotSigmaSection>
+                    %{--<g:renderSigmaSection>--}%
+                        %{--<div class="helptext"><g:message code="mainpage.start.with.gene.subtext.sigma"/></div>--}%
+                    %{--</g:renderSigmaSection>--}%
+                    %{--<g:renderNotSigmaSection>--}%
+                        %{--<div class="helptext"><g:message code="mainpage.start.with.gene.subtext"/></div>--}%
+                    %{--</g:renderNotSigmaSection>--}%
 
                 </div>
 

@@ -12,7 +12,7 @@ if (!catalinaBase) catalinaBase = '.'   // just in case
 def logDirectory = "${catalinaBase}/logs"
 
 
-site.version = 'sigma' // could be 'sigma' or 't2dgenes'
+site.version = 't2dgenes' // could be 'sigma', 't2dgenes', or 'beacon'
 if (site.version == 't2dgenes'){
     site.title = 'Type 2 Diabetes Genetics'  // could be 'SIGMA T2D' or 'Type 2 Diabetes Genetics'
     site.subtext = 'Beta'
@@ -25,6 +25,7 @@ if (site.version == 't2dgenes'){
             show_exchp = 1
             show_exseq = 1
             show_sigma = 0
+            show_beacon = 0
         }
     }
 
@@ -40,12 +41,32 @@ if (site.version == 't2dgenes'){
             show_exchp = 0
             show_exseq = 0
             show_sigma = 1
+            show_beacon = 0
+        }
+    }
+
+
+
+} else if (site.version == 'sigma'){
+    site.title = 'BEACON'  // could be 'SIGMA T2D' or 'Type 2 Diabetes Genetics'
+    site.subtext = 'index lookup for all variants'
+    site.operator = 'kyuksel@broadinstitute.org '
+
+    portal {
+        sections {
+            show_gene = 0
+            show_gwas  = 0
+            show_exchp = 0
+            show_exseq = 0
+            show_sigma = 0
+            show_beacon = 1
         }
     }
 
 
 
 }
+
 
 
 grails.plugin.databasemigration.updateOnStart = true
@@ -339,7 +360,7 @@ grails.plugin.springsecurity.rememberMe.cookieName="td2PortalRememberMe"
 grails.plugin.springsecurity.rememberMe.key="td2PortalKey"
 grails.plugin.springsecurity.rememberMe.rememberMe.persistent=true
 grails.plugin.springsecurity.successHandler.alwaysUseDefault = true
-grails.plugin.springsecurity.successHandler.defaultTargetUrl = "/home/index"
+//grails.plugin.springsecurity.successHandler.defaultTargetUrl = "/home/index"
 grails.plugin.springsecurity.rejectIfNoRule = true     // pessimistic rule -- no rule means access rejected if true
 grails.plugin.springsecurity.fii.rejectPublicInvocations = false  // if true then un-mapped URLs will trigger an IllegalArgumentException
 
