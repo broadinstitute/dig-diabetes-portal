@@ -32,13 +32,13 @@
     <th style="min-width: 80px;"><g:message code="variantTable.columnHeaders.sigma.source" default="source" /></th>
     <th style="min-width: 80px;"><g:message code="variantTable.columnHeaders.sigma.pValue" default="p-value" /></th>
     <th style="min-width: 80px;"><g:message code="variantTable.columnHeaders.sigma.oddsRatio" default="odds ratio" /></th>
-    <th>case/control</th>
-    <th>frequency</th>
+    <th><g:message code="variantTable.columnHeaders.exomeSequencing.caseControl" default="case/control" /></th>
+    <th><g:message code="variantTable.columnHeaders.sigma.frequency" default="frequency" /></th>
 </g:if>
 <g:if test="${show_exseq}">
     <th style="min-width: 80px;"><g:message code="variantTable.columnHeaders.exomeSequencing.pValue" default="p-value" /></th>
     <th style="min-width: 80px;"><g:message code="variantTable.columnHeaders.exomeSequencing.oddsRatio" default="odds ratio" /></th>
-    <th><g:message code="variantTable.columnHeaders.exomeSequencing.caseControl" default="" />case/control</th>
+    <th><g:message code="variantTable.columnHeaders.exomeSequencing.caseControl" default="case/control" /></th>
     <th><g:message code="variantTable.columnHeaders.exomeSequencing.highestFrequency" default="highest frequency" /></th>
     <th><g:message code="variantTable.columnHeaders.exomeSequencing.popWithHighestFrequency" default="population with highest frequency" /></th>
 </g:if>

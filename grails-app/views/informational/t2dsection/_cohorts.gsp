@@ -210,7 +210,7 @@
     </div>
 
     <div class="bullets">
-        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://nir.barzilai@einstein.yu.edu">Nir Barzilai</a></div>
+        <div class="title"><g:message code="got2d.cohorts.contactThePi" default="contactThePi"/> <a href="mailto://gil.atzmon@einstein.yu.edu">Gil Atzmon</a></div>
     </div>
 </div>
 

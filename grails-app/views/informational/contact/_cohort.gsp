@@ -20,7 +20,7 @@
         </p>
         <p>
             Cohort: Longevity Genes in Founder Populations (Ashkenazi)<br/>
-            PI: <a href="mailto://nir.barzilai@einstein.yu.edu">Nir Barzilai</a>
+            PI: <a href="mailto://gil.atzmon@einstein.yu.edu">Gil Atzmon</a>
         </p>
 
         <p>

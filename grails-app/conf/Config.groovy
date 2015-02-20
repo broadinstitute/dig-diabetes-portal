@@ -271,10 +271,6 @@ if  (Environment.current == Environment.PRODUCTION)  {
     println("\nEnvironment = ${Environment.current}, therefore no grails.serverURL")
 }
 
-auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
-oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
-
-
 appName = grails.util.Metadata.current.'app.name'
 def baseURL = grails.serverURL ?: "http://127.0.0.1:${System.getProperty('server.port', '8080')}/${appName}"
 
