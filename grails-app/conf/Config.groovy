@@ -251,14 +251,14 @@ environments {
 //      grails.serverURL = "http://type2diabetesgenetics.org"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
-        grails.serverURL = "http:// sigmat2dqasrv.elasticbeanstalk.com"
+//        grails.serverURL = "http:// sigmat2dqasrv.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2ddev.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2ddev-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //      grails.serverURL = "http://cidbtest-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //        grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-//      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 //      grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false
@@ -270,6 +270,7 @@ if  (Environment.current == Environment.PRODUCTION)  {
 }   else {
     println("\nEnvironment = ${Environment.current}, therefore no grails.serverURL")
 }
+
 
 appName = grails.util.Metadata.current.'app.name'
 def baseURL = grails.serverURL ?: "http://127.0.0.1:${System.getProperty('server.port', '8080')}/${appName}"
