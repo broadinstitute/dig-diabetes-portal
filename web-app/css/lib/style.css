@@ -648,6 +648,11 @@ div.veryImportantText {
     max-height: 100px;
     max-width: 160px;
 }
+.sigmalogoholder {
+    vertical-align: middle;
+    max-height: 100px;
+    max-width: 250px;
+}
 .logoframe {
    overflow: hidden;
     max-height: 160px;

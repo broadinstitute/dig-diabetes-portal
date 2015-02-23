@@ -248,57 +248,88 @@
             </div>
 
             <div class="col-xs-12 text-center">
-                <g:message code="portal.use.citation.itself" default="citation text"/>
+                <g:renderT2dGenesSection>
+                    <g:message code="portal.use.citation.itself" default="citation text"/>
+                </g:renderT2dGenesSection>
+                <g:renderSigmaSection>
+                    <g:message code="sigma.use.citation.itself" default="citation text"/>
+                </g:renderSigmaSection>
             </div>
         </div>
 
-        <div class="row sectionBuffer">
-            <div class="col-xs-12 text-center">
-                <h4>
-                    <small>
-                        <g:message code="funding.provided.by" default="funding provided by"/>
-                    </small>
-                </h4>
+    <div class="row sectionBuffer">
+        <div class="col-xs-12 text-center">
+            <h4>
+                <small>
+                    <g:message code="funding.provided.by" default="funding provided by"/>
+                </small>
+            </h4>
 
-            </div>
+        </div>
 
-            <div class="col-md-offset-2 col-md-8 text-center">
+
+        <g:renderT2dGenesSection>
+
+                <div class="col-md-offset-2 col-md-8 text-center">
+                    <div class="row">
+                        <div class="col-xs-offset-1 col-xs-2 text-center"  style="padding: 20px">
+                            <img class="logoholder" src="${resource(dir: 'images/icons', file: 'basicT2DG.svg')}"
+                                 width="100%" alt="T2D Genes"/>
+                        </div>
+
+                        <div class="col-xs-2 text-center" style="padding: 25px 20px 20px 20px">
+                            <img class="logoholder" src="${resource(dir: 'images/icons', file: 'GoT2D.png')}"
+                                 width="100%" alt="NIH"/>
+                        </div>
+
+                        <div class="col-xs-2 text-center"  style="padding: 31px 0 0 0">
+                            <img class="logoholder" src="${resource(dir: 'images/icons', file: 'diagram.png')}"
+                                 width="100%" alt="NIH"/>
+                        </div>
+
+                        <div class="col-xs-2 text-center"  style="padding-top: 19px">
+                            <img class="logoholder" src="${resource(dir: 'images/icons', file: '720px-US-NIH-NIDDK-Logo.svg.png')}"
+                                 width="100%" height="100%" alt="NIDDK" style="padding-top: 30px"/>
+                        </div>
+
+                        <div class="col-xs-2 text-center"  style="padding: 20px">
+                            <img class="logoholder" src="${resource(dir: 'images/icons', file: '480px-NIH_logo.svg.png')}"
+                                 width="100%" alt="NIH"/>
+                        </div>
+
+                        <div class="col-xs-1"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+
+                </div>
+
+        </g:renderT2dGenesSection>
+        <g:renderSigmaSection>
+
+            <div class="col-md-offset-3 col-md-6 text-center">
                 <div class="row">
-                    <div class="col-xs-offset-1 col-xs-2 text-center"  style="padding: 20px">
-                        <img class="logoholder" src="${resource(dir: 'images/icons', file: 'basicT2DG.svg')}"
+                    <div class="col-xs-6 text-center"  style="top-padding: 0; margin-top: 12px">
+                        <img class="sigmalogoholder" src="${resource(dir: 'images/icons', file: 'BroadSlimLogoHealthResearch355.png')}"
                              width="100%" alt="T2D Genes"/>
                     </div>
 
-                    <div class="col-xs-2 text-center" style="padding: 25px 20px 20px 20px">
-                        <img class="logoholder" src="${resource(dir: 'images/icons', file: 'GoT2D.png')}"
+                     <div class="col-xs-6 text-center"  style="padding: 0">
+                        <img class="sigmalogoholder" src="${resource(dir: 'images/icons', file: 'SlimSigmaLogo234fromai-outlines.jpg')}"
                              width="100%" alt="NIH"/>
                     </div>
 
-                    <div class="col-xs-2 text-center"  style="padding: 31px 0 0 0">
-                        <img class="logoholder" src="${resource(dir: 'images/icons', file: 'diagram.png')}"
-                             width="100%" alt="NIH"/>
-                    </div>
-
-                    <div class="col-xs-2 text-center"  style="padding-top: 19px">
-                        <img class="logoholder" src="${resource(dir: 'images/icons', file: '720px-US-NIH-NIDDK-Logo.svg.png')}"
-                             width="100%" height="100%" alt="NIDDK" style="padding-top: 30px"/>
-                    </div>
-
-                    <div class="col-xs-2 text-center"  style="padding: 20px">
-                        <img class="logoholder" src="${resource(dir: 'images/icons', file: '480px-NIH_logo.svg.png')}"
-                             width="100%" alt="NIH"/>
-                    </div>
-
-                    <div class="col-xs-1"></div>
                 </div>
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-3">
 
             </div>
 
-        </div>
+        </g:renderSigmaSection>
 
+    </div>
 
         %{--<div class="row sectionBuffer">--}%
             %{--<div class="row">--}%
