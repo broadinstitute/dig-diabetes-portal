@@ -24,12 +24,6 @@ class BootStrap {
         //
         def samples  = [:]  // put users here as a temporary holding location
 
-        //********************** TODO: find a better way!!!
-        log.info( "Crazy plan.  Delete all users. Current number= ${User.count()}")
-        User.executeUpdate("delete User")
-        log.info( "Done.  number of users= ${User.count()}")
-
-
         // read in users from file
         if (User.count()) {
             log.info( "Users already loaded. Total operational number = ${User.count()}")

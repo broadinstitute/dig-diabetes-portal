@@ -10,8 +10,6 @@ class UserSession implements Serializable {
     String dataField
 
     static constraints = {
-        user blank: false
-        startSession blank: false
         endSession nullable: true
         remoteAddress nullable: true
         dataField nullable: true
