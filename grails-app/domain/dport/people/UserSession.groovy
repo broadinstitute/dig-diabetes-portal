@@ -1,5 +1,7 @@
 package dport.people
 
+import org.apache.commons.lang.builder.HashCodeBuilder
+
 class UserSession implements Serializable {
 
 
@@ -15,5 +17,4 @@ class UserSession implements Serializable {
         dataField nullable: true
     }
 
-
- }
+}
