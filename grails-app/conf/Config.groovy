@@ -252,6 +252,10 @@ environments {
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2dqasrv2.elasticbeanstalk.com"
+<<<<<<< HEAD
+=======
+//        grails.serverURL = "http://sigmat2ddev.elasticbeanstalk.com"
+>>>>>>> 8653330a08be32fb70f88589900c699bd7604f72
 //        grails.serverURL = "http://sigmat2ddevsrv2.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //      grails.serverURL = "http://cidbtest-env.elasticbeanstalk.com"
