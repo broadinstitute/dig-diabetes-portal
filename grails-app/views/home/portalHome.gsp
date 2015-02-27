@@ -95,7 +95,11 @@
                         <g:renderSigmaSection>
                             <div class="helptext">
                                 <a href='<g:createLink controller="gene" action="geneInfo"
-                                                       params="[id: 'SLC16A11']"/>'>SLC16A11</a>,
+                                                       params="[id: 'SLC16A11']"/>'>SLC16A11</a>
+                                <span style="padding-left:0px" class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="popover"
+                                      title="<g:message code='input.searchTerm.geneExample.help.header'/>"
+                                      data-content="<g:message code='input.searchTerm.geneExample.help.text'/>"
+                                ></span>,
                                 <a href='<g:createLink controller="variant" action="variantInfo"
                                                        params="[id: 'rs13342232']"/>'>rs13342232</a>,
                                 <a href='<g:createLink controller="region" action="regionInfo"
@@ -105,11 +109,19 @@
                         <g:renderT2dGenesSection>
                             <div class="helptext">examples:
                                 <a href='<g:createLink controller="gene" action="geneInfo"
-                                                       params="[id: 'SLC30A8']"/>'>SLC30A8</a>,
+                                                       params="[id: 'SLC30A8']"/>'>SLC30A8</a>
+                                <span style="padding-left:0px" class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="popover"
+                                                                title="<g:message code='input.searchTerm.geneExample.help.header'/>"
+                                                                data-content="<g:message code='input.searchTerm.geneExample.help.text'/>"
+                                ></span>,
                                 <a href='<g:createLink controller="variant" action="variantInfo"
-                                                       params="[id: 'rs13266634']"/>'>rs13266634</a>,
+                                                       params="[id: 'rs13266634']"/>'>rs13266634</a>
+                                <g:helpText title="input.searchTerm.variantExample.help.header"
+                                            body="input.searchTerm.varianExample.help.text" placer="0 0 0 2px"/>,
                                 <a href='<g:createLink controller="region" action="regionInfo"
                                                        params="[id: 'chr9:21,940,000-22,190,000']"/>'>chr9:21,940,000-22,190,000</a>
+                                <g:helpText title="input.searchTerm.rangeExample.help.header"
+                                            body="input.searchTerm.rangeExample.help.text" placer="0 0 0 2px"/>
                             </div>
                         </g:renderT2dGenesSection>
 
