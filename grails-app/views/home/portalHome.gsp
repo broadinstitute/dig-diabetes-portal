@@ -110,18 +110,16 @@
                             <div class="helptext">examples:
                                 <a href='<g:createLink controller="gene" action="geneInfo"
                                                        params="[id: 'SLC30A8']"/>'>SLC30A8</a>
-                                <span style="padding-left:0px" class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="popover"
-                                                                title="<g:message code='input.searchTerm.geneExample.help.header'/>"
-                                                                data-content="<g:message code='input.searchTerm.geneExample.help.text'/>"
-                                ></span>,
+                                <g:helpText title="input.searchTerm.geneExample.help.header" placement="left"
+                                            body="input.searchTerm.geneExample.help.text"/>,
                                 <a href='<g:createLink controller="variant" action="variantInfo"
                                                        params="[id: 'rs13266634']"/>'>rs13266634</a>
-                                <g:helpText title="input.searchTerm.variantExample.help.header"
-                                            body="input.searchTerm.varianExample.help.text" placer="0 0 0 2px"/>,
+                                <g:helpText title="input.searchTerm.variantExample.help.header" placement="left"
+                                            body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
                                 <a href='<g:createLink controller="region" action="regionInfo"
                                                        params="[id: 'chr9:21,940,000-22,190,000']"/>'>chr9:21,940,000-22,190,000</a>
-                                <g:helpText title="input.searchTerm.rangeExample.help.header"
-                                            body="input.searchTerm.rangeExample.help.text" placer="0 0 0 2px"/>
+                                <g:helpText title="input.searchTerm.rangeExample.help.header"  placement="bottom"
+                                            body="input.searchTerm.rangeExample.help.text" qplacer="0 0 0 2px"/>
                             </div>
                         </g:renderT2dGenesSection>
 
