@@ -2,7 +2,7 @@ package dport
 
 class HelpTextTagLib {
    // static defaultEncodeAs = [taglib: 'html']
-    static String defaultPopupPlacement = "auto"
+    static String defaultPopupPlacement = "left"
     static String defaultQuestionmarkPlacement = "0"
 
     def helpText = { attrs,body ->

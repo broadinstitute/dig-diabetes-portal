@@ -114,7 +114,7 @@
                                             body="input.searchTerm.geneExample.help.text"/>,
                                 <a href='<g:createLink controller="variant" action="variantInfo"
                                                        params="[id: 'rs13266634']"/>'>rs13266634</a>
-                                <g:helpText title="input.searchTerm.variantExample.help.header" placement="left"
+                                <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
                                             body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
                                 <a href='<g:createLink controller="region" action="regionInfo"
                                                        params="[id: 'chr9:21,940,000-22,190,000']"/>'>chr9:21,940,000-22,190,000</a>
