@@ -102,7 +102,7 @@
         (geneName == "SLC30A8") ||
         (geneName == "WFS1")}">
     <div class="gene-summary">
-        <div class="title">Curated Summary</div>
+        <div class="title"><g:message code="gene.header.geneSummary" default="Curated summary"/></div>
 
         <div id="geneHolderTop" class="top">
             <script>
@@ -128,7 +128,9 @@
             </script>
 
         </div>
-        <a class="boldlink" id="gene-summary-expand" onclick="toggleGeneDescr()">click to expand</a>
+        <a class="boldlink" id="gene-summary-expand" onclick="toggleGeneDescr()">
+            <g:message code="gene.header.clickToExpand" default="click to expand"/>
+        </a>
     </div>
 </g:if>
 
