@@ -46,9 +46,15 @@
                 hdr1:'<g:message code="gene.variantassociations.table.colhdr.1" default="data type" />',
                 hdr2:'<g:message code="gene.variantassociations.table.colhdr.2" default="sample size" />',
                 hdr3:'<g:message code="gene.variantassociations.table.colhdr.3" default="total variants" />',
-                hdr4:'<g:message code="gene.variantassociations.table.colhdr.4" default="genome wide" />',
-                hdr5:'<g:message code="gene.variantassociations.table.colhdr.5" default="locus wide" />',
-                hdr6:'<g:message code="gene.variantassociations.table.colhdr.6" default="nominal" />'
+                hdr4:'<g:message code="gene.variantassociations.table.colhdr.4a" default="genome wide" />'+
+                        '<g:helpText title="gene.variantassociations.table.colhdr.4.help.header" placement="top" body="gene.variantassociations.table.colhdr.4.help.text" qplacer="2px 0 0 6px"/>'+
+                        '<g:message code="gene.variantassociations.table.colhdr.4b" default="genome wide" />',
+                hdr5:'<g:message code="gene.variantassociations.table.colhdr.5a" default="locus wide" />'+
+                        '<g:helpText title="gene.variantassociations.table.colhdr.5.help.header" placement="top" body="gene.variantassociations.table.colhdr.5.help.text" qplacer="2px 0 0 6px"/>'+
+                        '<g:message code="gene.variantassociations.table.colhdr.5b" default="locus wide" />',
+                hdr6:'<g:message code="gene.variantassociations.table.colhdr.6a" default="nominal" />'+
+                     '<g:helpText title="gene.variantassociations.table.colhdr.6.help.header" placement="top" body="gene.variantassociations.table.colhdr.6.help.text" qplacer="2px 0 0 6px"/>'+
+                     '<g:message code="gene.variantassociations.table.colhdr.6b" default="nominal" />'
             };
             var variantsAndAssociationsPhenotypeAssociations = {
                 significantAssociations:'<g:message code="gene.variantassociations.significantAssociations" default="variants were associated with"  args="[geneName]"/>',
@@ -60,6 +66,16 @@
                 question1nominal:'<g:message code="gene.biologicalhypothesis.question1.nominaldifference" default="nominal difference"/>',
                 question1significant:'<g:message code="gene.biologicalhypothesis.question1.significantdifference" default="significant difference"/>'
             };
+            var variantsAndAssociationsRowHelpText ={
+                 genomeWide:'<g:message code="gene.variantassociations.table.rowhdr.gwas" default="gwas"/>',
+                 genomeWideQ:'<g:helpText title="gene.variantassociations.table.rowhdr.gwas.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.variantassociations.table.rowhdr.gwas.help.text"/>',
+                 exomeChip:'<g:message code="gene.variantassociations.table.rowhdr.exomeChip" default="gwas"/>',
+                 exomeChipQ:'<g:helpText title="gene.variantassociations.table.rowhdr.exomeChip.help.header"  qplacer="2px 0 0 6px" placement="right" body="gene.variantassociations.table.rowhdr.exomeChip.help.text"/>',
+                 sigma:'<g:message code="gene.variantassociations.table.rowhdr.sigma" default="gwas"/>',
+                 sigmaQ:'<g:helpText title="gene.variantassociations.table.rowhdr.sigma.help.header"  qplacer="2px 0 0 6px" placement="right" body="gene.variantassociations.table.rowhdr.sigma.help.text"/>',
+                 exomeSequence:'<g:message code="gene.variantassociations.table.rowhdr.exomeSequence" default="gwas"/>',
+                 exomeSequenceQ:'<g:helpText title="gene.variantassociations.table.rowhdr.exomeSequence.help.header" qplacer="2px 0 0 6px" placement="right"  body="gene.variantassociations.table.rowhdr.exomeSequence.help.text"/>'
+            };
             mpgSoftware.geneInfo.fillTheGeneFields(data,
                     ${show_gwas},
                     ${show_exchp},
@@ -70,8 +86,19 @@
                     '<g:createLink controller="variantSearch" action="gene" />',
                     {variantsAndAssociationsTableHeaders:variantsAndAssociationsTableHeaders,
                      variantsAndAssociationsPhenotypeAssociations:variantsAndAssociationsPhenotypeAssociations,
-                     biologicalHypothesisTesting:biologicalHypothesisTesting}
+                     biologicalHypothesisTesting:biologicalHypothesisTesting,
+                     variantsAndAssociationsRowHelpText: variantsAndAssociationsRowHelpText}
             );
+            $('[data-toggle="popover"]').popover({
+                animation: true,
+                html: true,
+                template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
+            });
+            $(".pop-top").popover({placement : 'top'});
+            $(".pop-right").popover({placement : 'right'});
+            $(".pop-bottom").popover({placement : 'bottom'});
+            $(".pop-left").popover({ placement : 'left'});
+            $(".pop-auto").popover({ placement : 'auto'});
             loading.hide();
         },
         error: function (jqXHR, exception) {
@@ -102,7 +129,10 @@
         (geneName == "SLC30A8") ||
         (geneName == "WFS1")}">
     <div class="gene-summary">
-        <div class="title"><g:message code="gene.header.geneSummary" default="Curated summary"/></div>
+        <div class="title"><g:message code="gene.header.geneSummary" default="Curated summary"/>
+        <g:helpText title="gene.header.geneSummary.help.header" placement="right"
+                    body="gene.header.geneSummary.help.text"/>
+        </div>
 
         <div id="geneHolderTop" class="top">
             <script>
@@ -134,7 +164,11 @@
     </div>
 </g:if>
 
-<p><span id="uniprotSummaryGoesHere"></span></p>
+<p>
+    <g:helpText title="gene.header.uniprotSummary.help.header" placement="right"
+                body="gene.header.uniprotSummary.help.text"/>
+    <span id="uniprotSummaryGoesHere"></span>
+</p>
 
 
 <div class="accordion" id="accordion2">

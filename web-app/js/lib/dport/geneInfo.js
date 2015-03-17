@@ -415,22 +415,27 @@ var mpgSoftware = mpgSoftware || {};
                                                        nominalFieldIdentifier,  // where in the gen record do we find the number of nominally significance variants
                                                        anchorBuildingFunction,  // which anchor building function should we use
                                                        emphasizeGwas,    // 0->no emphasis, 1-> Emphasize middle row, 2-> Emphasize bottom row
-                                                       rootVariantUrl) {  // root URL is the basis for callbacks
+                                                       rootVariantUrl, // root URL is the basis for callbacks
+                                                       rowHelpText) { // help text for each row
             if (geneInfo) {
                 var geneName = geneInfo["ID"];
                 var dataSetNameForUser;
                 switch (dataSetName) {
                     case 'gwas':
-                        dataSetNameForUser = 'GWAS';
+                        dataSetNameForUser = rowHelpText.genomeWide+
+                                             rowHelpText.genomeWideQ;
                         break;
                     case 'exomechip':
-                        dataSetNameForUser = 'exome chip';
+                        dataSetNameForUser = rowHelpText.exomeChip+
+                            rowHelpText.exomeChipQ;
                         break;
                     case 'exomeseq':
-                        dataSetNameForUser = 'exome sequence';
+                        dataSetNameForUser =  rowHelpText.exomeSequence+
+                            rowHelpText.exomeSequenceQ;
                         break;
                     case 'sigma':
-                        dataSetNameForUser = 'Sigma';
+                        dataSetNameForUser =  rowHelpText.sigma+
+                            rowHelpText.sigmaQ;
                         break;
                     default:
                         dataSetNameForUser = 'unknown';
@@ -469,7 +474,7 @@ var mpgSoftware = mpgSoftware || {};
             }
             return  returnValue;
         };
-        var fillVariantsAndAssociations = function (geneInfo, show_gwas, show_exchp, show_exseq, show_sigma, rootVariantUrl, headers) {
+        var fillVariantsAndAssociations = function (geneInfo, show_gwas, show_exchp, show_exseq, show_sigma, rootVariantUrl, headers,rowHelpText) {
             if (geneInfo) {
                 var regionSpecifier = "chr" + geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().CHROM) + ":" +
                     expandRegionBegin(geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().BEG)) + "-" +
@@ -493,12 +498,12 @@ var mpgSoftware = mpgSoftware || {};
                 if (show_gwas) {
                     fillVariantsAndAssociationLine(geneInfo, 'gwas', '69,033', regionSpecifier,
                         geneInfoJsonMap.fieldSymbol().GWAS_T2D_VAR_TOTAL, geneInfoJsonMap.fieldSymbol().GWAS_T2D_GWS_TOTAL, geneInfoJsonMap.fieldSymbol().GWAS_T2D_LWS_TOTAL, geneInfoJsonMap.fieldSymbol().GWAS_T2D_NOM_TOTAL,
-                        buildAnchorForRegionVariantSearches, emphasizeGwas, rootVariantUrl);
+                        buildAnchorForRegionVariantSearches, emphasizeGwas, rootVariantUrl,rowHelpText);
                 }
                 if (show_exchp) {
                     fillVariantsAndAssociationLine(geneInfo, 'exomechip', '79,854', regionSpecifier,
                         geneInfoJsonMap.fieldSymbol().EXCHP_T2D_VAR_TOTALS_EU_TOTAL, geneInfoJsonMap.fieldSymbol().EXCHP_T2D_GWS_TOTAL, geneInfoJsonMap.fieldSymbol().EXCHP_T2D_LWS_TOTAL, geneInfoJsonMap.fieldSymbol().EXCHP_T2D_NOM_TOTAL,
-                        buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl);
+                        buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl,rowHelpText);
                 }
                 if (show_exseq) {
                     if (emphasisRequired) {
@@ -508,7 +513,7 @@ var mpgSoftware = mpgSoftware || {};
                     }
                     fillVariantsAndAssociationLine(geneInfo, 'exomeseq', '12,940', regionSpecifier,
                         geneInfoJsonMap.fieldSymbol()._13k_T2D_VAR_TOTAL, geneInfoJsonMap.fieldSymbol()._13k_T2D_GWS_TOTAL, geneInfoJsonMap.fieldSymbol()._13k_T2D_LWS_TOTAL, geneInfoJsonMap.fieldSymbol()._13k_T2D_NOM_TOTAL,
-                        buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl);
+                        buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl,rowHelpText);
                 }
                 if (show_sigma) {
                     if (emphasisRequired) {
@@ -516,7 +521,7 @@ var mpgSoftware = mpgSoftware || {};
                     }
                     fillVariantsAndAssociationLine(geneInfo, 'sigma', '8,658', regionSpecifier,// is there a SIGMA_T2D_LWS_TOTAL?
                         geneInfoJsonMap.fieldSymbol().SIGMA_T2D_VAR_TOTAL, geneInfoJsonMap.fieldSymbol().SIGMA_T2D_GWS_TOTAL, geneInfoJsonMap.fieldSymbol().SIGMA_T2D_NOM_TOTAL, geneInfoJsonMap.fieldSymbol().SIGMA_T2D_NOM_TOTAL,
-                        buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl);
+                        buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl,rowHelpText);
                 }
 
             }
@@ -712,7 +717,8 @@ var mpgSoftware = mpgSoftware || {};
             fillVariantsAndAssociations(rawGeneInfo, show_gwas, show_exchp, show_exseq,
                 show_sigma,
                 rootVariantUrl,
-                textStringObject.variantsAndAssociationsTableHeaders);
+                textStringObject.variantsAndAssociationsTableHeaders,
+                textStringObject.variantsAndAssociationsRowHelpText);
             fillVariationAcrossEthnicity(rawGeneInfo, show_gwas, show_exchp, show_exseq, show_sigma, rootVariantUrl);
             fillBiologicalHypothesisTesting(rawGeneInfo, show_gwas, show_exchp, show_exseq,
                 show_sigma,
