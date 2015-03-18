@@ -64,7 +64,8 @@
                 question1explanation:'<g:message code="gene.biologicalhypothesis.question1.explanation" default="explanation" args="[geneName]"/>',
                 question1insufficient:'<g:message code="gene.biologicalhypothesis.question1.insufficientdata" default="insufficient data"/>',
                 question1nominal:'<g:message code="gene.biologicalhypothesis.question1.nominaldifference" default="nominal difference"/>',
-                question1significant:'<g:message code="gene.biologicalhypothesis.question1.significantdifference" default="significant difference"/>'
+                question1significant:'<g:message code="gene.biologicalhypothesis.question1.significantdifference" default="significant difference"/>',
+                question1significantQ:'<g:helpText title="gene.biologicalhypothesis.question1.significance.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.biologicalhypothesis.question1.significance.help.text"/>'
             };
             var variantsAndAssociationsRowHelpText ={
                  genomeWide:'<g:message code="gene.variantassociations.table.rowhdr.gwas" default="gwas"/>',

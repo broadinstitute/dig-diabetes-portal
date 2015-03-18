@@ -716,7 +716,8 @@ var mpgSoftware = mpgSoftware || {};
                 $('#significanceDescriptorFormatter').append("<div class='significantDifference'>" +
                     "<div id='describePValueInBiologicalHypothesis' class='significantDifferenceText'>" +
                     "<p class='slimDescription'>" + degreeOfSignificance + "</p>\n" +
-                    "<p  id='bhtMetaBurdenForDiabetes' class='slimDescription'>p=" + (bhtMetaBurdenForDiabetes.toPrecision(3)) + "</p>" +
+                    "<p  id='bhtMetaBurdenForDiabetes' class='slimDescription'>p=" + (bhtMetaBurdenForDiabetes.toPrecision(3)) +
+                    fillBiologicalHypothesisTesting.question1significantQ+ "</p>" +
                     "</div>" +
                     "</div>");
             }

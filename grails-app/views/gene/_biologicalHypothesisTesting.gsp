@@ -5,7 +5,10 @@
     <a name="biology"></a>
 
     <div class="translational-research-box">
-        <p style="font-weight: 600"><g:message code="gene.biologicalhypothesis.question1" default="question 1" /></p>
+        <p style="font-weight: 600"><g:message code="gene.biologicalhypothesis.question1" default="question 1" />
+        <g:helpText title="gene.biologicalhypothesis.title.help.header" placement="left"
+                    body="gene.biologicalhypothesis.title.help.text"/>
+        </p>
     </div>
     <p></p>
     <p class="standardFont"  id="possibleCarrierVariantsLink">
