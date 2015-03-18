@@ -344,7 +344,38 @@ var mpgSoftware = mpgSoftware || {};
          * @param show_sigma
          * @param rootVariantUrl
          */
-        fillVariationAcrossEthnicity = function (rawGeneInfo, show_gwas, show_exchp, show_exseq, show_sigma, rootVariantUrl) {
+        fillVariationAcrossEthnicity = function (rawGeneInfo, show_gwas, show_exchp, show_exseq, show_sigma, rootVariantUrl,continentalAncestryText) {
+            var chooseAncestryStrings = function (ethnicityKey,continentalAncestryText,datatype){
+                var returnValue = {ancestry:'unknown',
+                                   helpText:'',
+                                   datatype:''};
+                if (('AA' === ethnicityKey) && ('sequence' === datatype)){
+                    returnValue.ancestry = continentalAncestryText.continentalAA;
+                    returnValue.helpText = continentalAncestryText.continentalAAQ;
+                    returnValue.datatype = continentalAncestryText.continentalAAdatatype;
+                } else if (('EA' === ethnicityKey) && ('sequence' === datatype)){
+                    returnValue.ancestry = continentalAncestryText.continentalEA;
+                    returnValue.helpText = continentalAncestryText.continentalEAQ;
+                    returnValue.datatype = continentalAncestryText.continentalEAdatatype;
+                } else if (('SA' === ethnicityKey) && ('sequence' === datatype)){
+                    returnValue.ancestry = continentalAncestryText.continentalSA;
+                    returnValue.helpText = continentalAncestryText.continentalSAQ;
+                    returnValue.datatype = continentalAncestryText.continentalSAdatatype;
+                } else if (('EU' === ethnicityKey) && ('sequence' === datatype)){
+                    returnValue.ancestry = continentalAncestryText.continentalEU;
+                    returnValue.helpText = continentalAncestryText.continentalEUQ;
+                    returnValue.datatype = continentalAncestryText.continentalEUdatatype;
+                } else if (('HS' === ethnicityKey) && ('sequence' === datatype)){
+                    returnValue.ancestry = continentalAncestryText.continentalHS;
+                    returnValue.helpText = continentalAncestryText.continentalHSQ;
+                    returnValue.datatype = continentalAncestryText.continentalHSdatatype;
+                } else if  (('EU' === ethnicityKey) && ('chip' === datatype)){
+                    returnValue.ancestry = continentalAncestryText.continentalEUchip;
+                    returnValue.helpText = continentalAncestryText.continentalEUchipQ;
+                    returnValue.datatype = continentalAncestryText.continentalEUchipDatatype;
+                };
+                return returnValue;
+            };
             if ((rawGeneInfo) &&
                 (rawGeneInfo["_13k_T2D_ORIGIN_VAR_TOTALS"])) {
                 var ethnicityMap = rawGeneInfo["_13k_T2D_ORIGIN_VAR_TOTALS"];
@@ -358,9 +389,11 @@ var mpgSoftware = mpgSoftware || {};
                         var common = (ethnicityRec ["COMMON"]) ? (ethnicityRec ["COMMON"]) : 0;
                         var total = (ethnicityRec ["TOTAL"]) ? (ethnicityRec ["TOTAL"]) : 0;
                         var ns = (ethnicityRec ["NS"]) ? (ethnicityRec ["NS"]) : 0;
+                        var ethnicity = chooseAncestryStrings(ethnicityKey,continentalAncestryText,'sequence');
                         $('#continentalVariationTableBody').append('<tr>' +
-                            '<td>' + UTILS.expandEthnicityDesignation(ethnicityKey) + '</td>' +
-                            '<td>exome sequence</td>' +
+                            '<td>' + ethnicity.ancestry +
+                            ethnicity.helpText + '</td>' +
+                            '<td>' + ethnicity.datatype +'</td>' +
                             '<td>' + ns + '</td>' +
                             '<td>' + buildAnchorForVariantSearches(total, rawGeneInfo["ID"], 'total-' + ethnicityKey, rootVariantUrl) + '</td>' +
                             '<td>' + buildAnchorForVariantSearches(common, rawGeneInfo["ID"], 'common-' + ethnicityKey, rootVariantUrl) + '</td>' +
@@ -374,10 +407,12 @@ var mpgSoftware = mpgSoftware || {};
                     var excomeChip = rawGeneInfo["EXCHP_T2D_VAR_TOTALS"];
                     if (excomeChip["EU"]) {
                         var excomeChipEuropean = excomeChip["EU"];
+                        var ethnicity = chooseAncestryStrings("EU",continentalAncestryText,'chip');
                         if (excomeChipEuropean["NS"]) {
                             $('#continentalVariationTableBody').append('<tr>' +
-                                '<td>European</td>' +
-                                '<td>exome chip</td>' +
+                                '<td>'+ ethnicity.ancestry +
+                                   ethnicity.helpText +'</td>' +
+                                '<td>' + ethnicity.datatype +'</td>' +
                                 '<td>' + excomeChipEuropean["NS"] + '</td>' +
                                 '<td>' + buildAnchorForVariantSearches(excomeChipEuropean["TOTAL"], rawGeneInfo["ID"], 'total-exchp', rootVariantUrl) + '</td>' +
                                 '<td>' + buildAnchorForVariantSearches(excomeChipEuropean["COMMON"], rawGeneInfo["ID"], 'common-exchp', rootVariantUrl) + '</td>' +
@@ -719,7 +754,9 @@ var mpgSoftware = mpgSoftware || {};
                 rootVariantUrl,
                 textStringObject.variantsAndAssociationsTableHeaders,
                 textStringObject.variantsAndAssociationsRowHelpText);
-            fillVariationAcrossEthnicity(rawGeneInfo, show_gwas, show_exchp, show_exseq, show_sigma, rootVariantUrl);
+            fillVariationAcrossEthnicity(rawGeneInfo, show_gwas, show_exchp, show_exseq, show_sigma,
+                                          rootVariantUrl,
+                                          textStringObject.continentalAncestryText);
             fillBiologicalHypothesisTesting(rawGeneInfo, show_gwas, show_exchp, show_exseq,
                 show_sigma,
                 rootVariantUrl,

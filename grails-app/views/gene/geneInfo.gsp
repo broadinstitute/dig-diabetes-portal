@@ -76,6 +76,29 @@
                  exomeSequence:'<g:message code="gene.variantassociations.table.rowhdr.exomeSequence" default="gwas"/>',
                  exomeSequenceQ:'<g:helpText title="gene.variantassociations.table.rowhdr.exomeSequence.help.header" qplacer="2px 0 0 6px" placement="right"  body="gene.variantassociations.table.rowhdr.exomeSequence.help.text"/>'
             };
+            continentalAncestryText = {
+                continentalAA:'<g:message code="gene.continentalancestry.title.rowhdr.AA" default="gwas"/>',
+                continentalAAQ:'<g:helpText title="gene.continentalancestry.title.rowhdr.AA.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.title.rowhdr.AA.help.text"/>',
+                continentalAAdatatype:'<g:message code="gene.continentalancestry.datatype.exomeSequence" default="exome sequence"/>'+
+                        '<g:helpText title="gene.continentalancestry.datatype.exomeSequence.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.datatype.exomeSequence.help.text"/>',
+                continentalEA:'<g:message code="gene.continentalancestry.title.rowhdr.EA" default="gwas"/>',
+                continentalEAQ:'<g:helpText title="gene.continentalancestry.title.rowhdr.EA.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.title.rowhdr.EA.help.text"/>',
+                continentalEAdatatype:'<g:message code="gene.continentalancestry.datatype.exomeSequence" default="exome sequence"/>',
+                continentalSA:'<g:message code="gene.continentalancestry.title.rowhdr.SA" default="gwas"/>',
+                continentalSAQ:'<g:helpText title="gene.continentalancestry.title.rowhdr.SA.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.title.rowhdr.SA.help.text"/>',
+                continentalSAdatatype:'<g:message code="gene.continentalancestry.datatype.exomeSequence" default="exome sequence"/>',
+                continentalEU:'<g:message code="gene.continentalancestry.title.rowhdr.EU" default="gwas"/>',
+                continentalEUQ:'<g:helpText title="gene.continentalancestry.title.rowhdr.EU.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.title.rowhdr.EU.help.text"/>',
+                continentalEUdatatype:'<g:message code="gene.continentalancestry.datatype.exomeSequence" default="exome sequence"/>',
+                continentalHS:'<g:message code="gene.continentalancestry.title.rowhdr.HS" default="gwas"/>',
+                continentalHSQ:'<g:helpText title="gene.continentalancestry.title.rowhdr.HS.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.title.rowhdr.HS.help.text"/>',
+                continentalHSdatatype:'<g:message code="gene.continentalancestry.datatype.exomeSequence" default="exome sequence"/>',
+                continentalEUchip:'<g:message code="gene.continentalancestry.title.rowhdr.chipEU" default="gwas"/>',
+                continentalEUchipQ:'<g:helpText title="gene.continentalancestry.title.rowhdr.chipEU.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.title.rowhdr.chipEU.help.text"/>',
+                continentalEUchipDatatype:'<g:message code="gene.continentalancestry.datatype.exomeChip" default="exome chip"/>'+
+                        '<g:helpText title="gene.continentalancestry.datatype.exomeChip.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.datatype.exomeChip.help.text"/>'
+
+            };
             mpgSoftware.geneInfo.fillTheGeneFields(data,
                     ${show_gwas},
                     ${show_exchp},
@@ -87,7 +110,8 @@
                     {variantsAndAssociationsTableHeaders:variantsAndAssociationsTableHeaders,
                      variantsAndAssociationsPhenotypeAssociations:variantsAndAssociationsPhenotypeAssociations,
                      biologicalHypothesisTesting:biologicalHypothesisTesting,
-                     variantsAndAssociationsRowHelpText: variantsAndAssociationsRowHelpText}
+                     variantsAndAssociationsRowHelpText: variantsAndAssociationsRowHelpText,
+                     continentalAncestryText: continentalAncestryText}
             );
             $('[data-toggle="popover"]').popover({
                 animation: true,
