@@ -8,6 +8,7 @@
             <div class="">
                 <h4 class="panel-title">
                     <p>
+                        <g:helpText title="variant.impactOnProtein.codonChangeQ.help.header"  qplacer="2px 6px 0 0" placement="right" body="variant.impactOnProtein.codonChangeQ.help.text"/>
                         <g:message code="variant.impactOnProtein.codonChange" default="codon change"/><span id="annotationCodon"></span>
                     </p>
                 </h4>
