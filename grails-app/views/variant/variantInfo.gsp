@@ -63,22 +63,41 @@
                 locusSignificance:'<g:message code="variant.variantAssociations.significance.locusSignificance" default="locus wide significance" />',
                 nominalSignificance:'<g:message code="variant.variantAssociations.significance.nominalSignificance" default="nominal significance" />',
                 nonSignificance:'<g:message code="variant.variantAssociations.significance.nonSignificance" default="no significance" />',
-                variantPValues:'<g:message code="variant.variantAssociations.variantPValues" default="click here to see a table of P values" />'
+                variantPValues:'<g:message code="variant.variantAssociations.variantPValues" default="click here to see a table of P values" />',
+                sourceDiagram:'<g:message code="variant.variantAssociations.source.diagram" default="diagram GWAS" />',
+                sourceDiagramQ:'<g:helpText title="variant.variantAssociations.source.diagramQ.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.source.diagramQ.help.text"/>',
+                sourceExomeChip:'<g:message code="variant.variantAssociations.source.exomeChip" default="Exome chip" />',
+                sourceExomeChipQ:'<g:helpText title="variant.variantAssociations.source.exomeChipQ.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.source.exomeChipQ.help.text"/>',
+                sourceExomeSequence:'<g:message code="variant.variantAssociations.source.exomeSequence" default="Exome sequence" />',
+                sourceExomeSequenceQ:'<g:helpText title="variant.variantAssociations.source.exomeSequenceQ.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.source.exomeSequenceQ.help.text"/>',
+                sourceSigma:'<g:message code="variant.variantAssociations.source.sigma" default="Sigma" />',
+                sourceExomeSequenceQ:'<g:helpText title="variant.variantAssociations.source.sigmaQ.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.source.sigmaQ.help.text"/>',
+                associationPValueQ:'<g:helpText title="variant.variantAssociations.pValue.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.pValue.help.text"/>',
+                associationOddsRatioQ:'<g:helpText title="variant.variantAssociations.oddsRatio.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.oddsRatio.help.text"/>'
             };
             var diseaseBurdenStrings = {
                 caseBarName:'<g:message code="variant.diseaseBurden.case.barname" default="have T2D" />',
                 caseBarSubName:'<g:message code="variant.diseaseBurden.case.barsubname" default="cases" />',
                 controlBarName:'<g:message code="variant.diseaseBurden.control.barname" default="do not have T2D" />',
-                controlBarSubName:'<g:message code="variant.diseaseBurden.control.barname" default="controls" />'
+                controlBarSubName:'<g:message code="variant.diseaseBurden.control.barname" default="controls" />',
+                diseaseBurdenPValueQ:'<g:helpText title="variant.diseaseBurden.control.pValue.help.header"  qplacer="2px 0 0 6px" placement="left" body="variant.variantAssociations.pValue.help.text"/>',
+                diseaseBurdenOddsRatioQ:'<g:helpText title="variant.diseaseBurden.control.oddsRatio.help.header"  qplacer="2px 0 0 6px" placement="left" body="variant.variantAssociations.oddsRatio.help.text"/>'
             };
             var alleleFrequencyStrings = {
                 africanAmerican:'<g:message code="variant.alleleFrequency.africanAmerican" default="africanAmerican" />',
+                africanAmericanQ:'<g:helpText title="variant.alleleFrequency.africanAmericanQ.help.header"  qplacer="2px 6px 0 0" placement="right" body="variant.alleleFrequency.africanAmericanQ.help.text"/>',
                 hispanic:'<g:message code="variant.alleleFrequency.hispanic" default="hispanic" />',
+                hispanicQ:'<g:helpText title="variant.alleleFrequency.hispanicQ.help.header"  qplacer="2px 6px 0 0" placement="right" body="variant.alleleFrequency.hispanicQ.help.text"/>',
                 eastAsian:'<g:message code="variant.alleleFrequency.eastAsian" default="eastAsian" />',
+                eastAsianQ:'<g:helpText title="variant.alleleFrequency.eastAsianQ.help.header"  qplacer="2px 6px 0 0" placement="right" body="variant.alleleFrequency.eastAsianQ.help.text"/>',
                 southAsian:'<g:message code="variant.alleleFrequency.southAsian" default="southAsian" />',
+                southAsianQ:'<g:helpText title="variant.alleleFrequency.southAsianQ.help.header"  qplacer="2px 6px 0 0" placement="right" body="variant.alleleFrequency.southAsianQ.help.text"/>',
                 european:'<g:message code="variant.alleleFrequency.european" default="european" />',
+                europeanQ:'<g:helpText title="variant.alleleFrequency.europeanQ.help.header"  qplacer="2px 6px 0 0" placement="right" body="variant.alleleFrequency.europeanQ.help.text"/>',
                 exomeSequence:'<g:message code="variant.alleleFrequency.exomeSequence" default="exomeSequence" />',
-                exomeChip:'<g:message code="variant.alleleFrequency.exomeChip" default="exomeChip" />'
+                exomeSequenceQ:'<g:helpText title="variant.alleleFrequency.exomeSequenceQ.help.header"  qplacer="2px 6px 0 0" placement="right" body="variant.alleleFrequency.exomeSequenceQ.help.text"/>',
+                exomeChip:'<g:message code="variant.alleleFrequency.exomeChip" default="exomeChip" />',
+                exomeChipQ:'<g:helpText title="variant.alleleFrequency.exomeChipQ.help.header"  qplacer="2px 6px 0 0" placement="right" body="variant.alleleFrequency.exomeChipQ.help.text"/>'
              };
             var carrierStatusImpact = {
                 casesTitle:'<g:message code="variant.carrierStatusImpact.casesTitle" default="casesTitle" />',
@@ -108,6 +127,11 @@
                          carrierStatusImpact:carrierStatusImpact,
                          impactOnProtein:impactOnProtein});
             }
+            $(".pop-top").popover({placement : 'top'});
+            $(".pop-right").popover({placement : 'right'});
+            $(".pop-bottom").popover({placement : 'bottom'});
+            $(".pop-left").popover({ placement : 'left'});
+            $(".pop-auto").popover({ placement : 'auto'});
             loading.hide();
         },
         error: function (jqXHR, exception) {

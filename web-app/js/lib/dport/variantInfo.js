@@ -500,14 +500,17 @@ var mpgSoftware = mpgSoftware || {};
                          } ;
                          */
                         $('#describePValueInDiseaseRisk').append("<p class='slimDescription'>" + degreeOfSignificance + "</p>\n" +
-                            "<p  id='bhtMetaBurdenForDiabetes' class='slimAndTallDescription'>p=" + (pValue.toPrecision(3)) + "</p>");
+                            "<p  id='bhtMetaBurdenForDiabetes' class='slimAndTallDescription'>p=" + (pValue.toPrecision(3)) +
+                            diseaseBurdenStrings.diseaseBurdenPValueQ + "</p>");
                         if (typeof oddsRatio !== 'undefined') {
-                            $('#describePValueInDiseaseRisk').append("<p  id='bhtOddsRatioForDiabetes' class='slimAndTallDescription'>OR=" + UTILS.realNumberFormatter(oddsRatio) + "</p>");
+                            $('#describePValueInDiseaseRisk').append("<p  id='bhtOddsRatioForDiabetes' class='slimAndTallDescription'>OR=" +
+                                UTILS.realNumberFormatter(oddsRatio) +diseaseBurdenStrings.diseaseBurdenOddsRatioQ + "</p>");
                         }
                     }
 
                 },
-                describeAssociationsStatistics = function (variant, vMap, availableData, pValue, orValue, strongCutOff, mediumCutOff, weakCutOff, variantTitle, datatype, includeCaseControlComparison, takeExpOfOr, variantAssociationStrings) {
+                describeAssociationsStatistics = function (variant, vMap, availableData, pValue, orValue, strongCutOff, mediumCutOff, weakCutOff,
+                                                           variantTitle, datatype, includeCaseControlComparison, takeExpOfOr, variantAssociationStrings) {
                     var retVal = "";
                     var significanceDescriptor = "";
                     var orValueNumerical;
@@ -537,14 +540,16 @@ var mpgSoftware = mpgSoftware || {};
                         // always needs descr
                         pTextValue = pNumericalValue.toPrecision(3);
                         retVal += ("<h2>" + datatype + "</h2>");
-                        retVal += ("<div  style='font-weight: 300' class='veryImportantText'>p = " + pTextValue + "</div>");
-                        retVal += ("<div  style='font-weight: 300' class='notVeryImportantText'>" + significanceDescriptor + "</div>");
+                        retVal += ("<div class='veryImportantText'>p = " + pTextValue +
+                            variantAssociationStrings.associationPValueQ +"</div>");
+                        retVal += ("<div class='notVeryImportantText'>" + significanceDescriptor + "</div>");
                         orValueNumerical = variant[iMap[orValue]];
                         if ((orValueNumerical) &&
                             (orValueNumerical !== 'null')) {
                             orValueNumericalAdjusted = (takeExpOfOr === true) ? Math.exp(orValueNumerical) : orValueNumerical;
                             orValueText = orValueNumericalAdjusted.toPrecision(3);
-                            retVal += ("<div  style='font-weight: 300' class='veryImportantText'>OR = " + orValueText + "</div>");
+                            retVal += ("<div class='veryImportantText'>OR = " + orValueText +
+                                variantAssociationStrings.associationOddsRatioQ + "</div>");
                         }
                         if (includeCaseControlComparison) {
                             ;
@@ -657,7 +662,8 @@ var mpgSoftware = mpgSoftware || {};
                                 5e-4,
                                 5e-2,
                                 variantTitle,
-                                "DIAGRAM GWAS",
+                                textStringObject.variantAssociationStrings.sourceDiagram+
+                                    textStringObject.variantAssociationStrings.sourceDiagramQ,
                                 false,
                                 false,
                                 variantAssociationStrings));
@@ -672,7 +678,8 @@ var mpgSoftware = mpgSoftware || {};
                                 5e-4,
                                 5e-2,
                                 variantTitle,
-                                "DIAGRAM GWAS",
+                                textStringObject.variantAssociationStrings.sourceDiagram+
+                                    textStringObject.variantAssociationStrings.sourceDiagramQ,
                                 false,
                                 false,
                                 variantAssociationStrings));
@@ -687,7 +694,8 @@ var mpgSoftware = mpgSoftware || {};
                                 5e-4,
                                 5e-2,
                                 variantTitle,
-                                "exome chip",
+                                textStringObject.variantAssociationStrings.sourceExomeChip+
+                                    textStringObject.variantAssociationStrings.sourceExomeChipQ,
                                 false,
                                 true,
                                 variantAssociationStrings));
@@ -702,7 +710,8 @@ var mpgSoftware = mpgSoftware || {};
                                 5e-4,
                                 5e-2,
                                 variantTitle,
-                                "exome sequence",
+                                textStringObject.variantAssociationStrings.sourceExomeSequence+
+                                    textStringObject.variantAssociationStrings.sourceExomeSequenceQ,
                                 false,
                                 false,
                                 variantAssociationStrings));
@@ -717,7 +726,8 @@ var mpgSoftware = mpgSoftware || {};
                                 5e-4,
                                 5e-2,
                                 variantTitle,
-                                "Sigma",
+                                textStringObject.variantAssociationStrings.sourceSigma+
+                                    textStringObject.variantAssociationStrings.sourceSigmaQ,
                                 false,
                                 false,
                                 variantAssociationStrings));
