@@ -27,14 +27,18 @@ class EthnicityCyclingTagLib {
                             </label>
             </div>
                         <div class="col-xs-2">
-                            <input type="text" class="form-control" id="ethnicity_af_${ethnicity[0]}-min" />
+                            <input type="text" class="form-control" id="ethnicity_af_${ethnicity[0]}-min" style="width: 60%; display: inline-block"/>
+                            <span width:40%></span>
             </div>
                         <div class="col-xs-1">
                             to
                         </div>
             <div class="col-xs-2">
-            <input type="text" class="form-control" id="ethnicity_af_${ethnicity[0]}-max"/>
-            </div>
+            <input type="text" class="form-control" id="ethnicity_af_${ethnicity[0]}-max"  style="width: 60%; display: inline-block"/>""".toString()
+            out << g.helpText(title:"variantSearch.setAlleleFrequencies.freqSpec.${ethnicity[0]}.help.header",
+                    qplacer:"2px 0 0 6px", placement:"right",
+                    body:"variantSearch.setAlleleFrequencies.freqSpec.${ethnicity[0]}.help.text")
+           out << """</div>
                         </div>
             </div>""".toString()
         }
