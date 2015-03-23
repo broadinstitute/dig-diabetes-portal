@@ -8,7 +8,7 @@
             <div class="">
                 <h4 class="panel-title">
                     <p>
-                        <g:helpText title="variant.impactOnProtein.codonChangeQ.help.header"  qplacer="2px 6px 0 0" placement="right" body="variant.impactOnProtein.codonChangeQ.help.text"/>
+                        <g:helpText title="variant.impactOnProtein.codonChangeQ.help.header"  qplacer="2px 6px 0 0" placement="bottom" body="variant.impactOnProtein.codonChangeQ.help.text"/>
                         <g:message code="variant.impactOnProtein.codonChange" default="codon change"/><span id="annotationCodon"></span>
                     </p>
                 </h4>
@@ -19,6 +19,7 @@
             <div class="">
                 <h4 class="panel-title">
                     <p>
+                        <g:helpText title="variant.impactOnProtein.proteinChangeQ.help.header"  qplacer="2px 6px 0 0" placement="bottom" body="variant.impactOnProtein.proteinChangeQ.help.text"/>
                         <g:message code="variant.impactOnProtein.proteinChange" default="Protein change:"/> <span id="annotationProteinChange"></span>
                     </p>
                 </h4>
@@ -29,6 +30,7 @@
             <div class="">
                 <h4 class="panel-title">
                     <p>
+                        <g:helpText title="variant.impactOnProtein.ensembleSoAnnotationsQ.help.header"  qplacer="2px 6px 0 0" placement="bottom" body="variant.impactOnProtein.ensembleSoAnnotationsQ.help.text"/>
                         <g:message code="variant.impactOnProtein.ensembleSoAnnotations" default="Ensembl SO annotations:"/><span id="ensembleSoAnnotation"></span>
                     </p>
                 </h4>
@@ -39,6 +41,7 @@
             <div class="">
                 <h4 class="panel-title">
                     <p>
+                        <g:helpText title="variant.impactOnProtein.variantTruncateProteinQ.help.header"  qplacer="2px 6px 0 0" placement="bottom" body="variant.impactOnProtein.variantTruncateProteinQ.help.text"/>
                         <g:message code="variant.impactOnProtein.variantTruncateProtein" default="Does this variant truncate the protein?"/> <strong><span id="variantTruncateProtein"></span>
                     </strong>
                         <a data-toggle="collapse" data-parent="#accordion"
@@ -65,6 +68,7 @@
                     <h4 class="panel-title">
 
                         <p>
+                            <g:helpText title="variant.impactOnProtein.polyphenPredictionQ.help.header"  qplacer="2px 6px 0 0" placement="bottom" body="variant.impactOnProtein.polyphenPredictionQ.help.text"/>
                             <a href="http://genetics.bwh.harvard.edu/pph2/dokuwiki/about"
                                style="text-decoration: underline; color: #428bca;"><g:message code="variant.impactOnProtein.polyphenPrediction" default="PolyPhen-2 prediction"/>
                             <span id="polyPhenPrediction"></span>
@@ -87,6 +91,7 @@
                 <div class="">
                     <h4 class="panel-title">
                         <p>
+                            <g:helpText title="variant.impactOnProtein.siftPredictionQ.help.header"  qplacer="2px 6px 0 0" placement="bottom" body="variant.impactOnProtein.siftPredictionQ.help.text"/>
                             <a href="http://sift.jcvi.org/"
                                style="text-decoration: underline; color: #428bca;"><g:message code="variant.impactOnProtein.siftPrediction" default="PolyPhen-2 prediction"/>
                             <span id="siftPrediction"></span>
@@ -108,6 +113,7 @@
                 <div class="">
                     <h4 class="panel-title">
                         <p>
+                            <g:helpText title="variant.impactOnProtein.condelPredictionQ.help.header"  qplacer="2px 6px 0 0" placement="bottom" body="variant.impactOnProtein.condelPredictionQ.help.text"/>
                             <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3071923/"
                                style="text-decoration: underline; color: #428bca;"><g:message code="variant.impactOnProtein.condelPrediction" default="Condel prediction"/>
                             <span id="condelPrediction"></span>
