@@ -25,7 +25,7 @@
             <div class="radio">
                 <input type="radio" name="predictedEffects" value="missense"  id="missense_checkbox" onClick="chgRadioButton('missense')"/>
                 <g:message code="variantSearch.proteinEffectRestrictions.missense" default="missense" />
-                <g:helpText title="variantSearch.caseVsControlRestrictions.onlyInCasesQ.help.header"  qplacer="2px 0 0 6px" placement="right" body="variantSearch.caseVsControlRestrictions.onlyInCasesQ.help.text"/>
+                <g:helpText title="variantSearch.proteinEffectRestrictions.missenseQ.help.header"  qplacer="2px 0 0 6px" placement="right" body="variantSearch.proteinEffectRestrictions.missenseQ.help.text"/>
             </div>
             <div id="missense-options" style="display:none;">
                 <div class="checkbox">
@@ -57,12 +57,12 @@
             <div class="radio">
                 <input type="radio" name="predictedEffects" value="noEffectSynonymous"  id="synonymous_checkbox" onClick="chgRadioButton('noEffectSynonymous')"/>
                 <g:message code="variantSearch.proteinEffectRestrictions.synonymousCoding" default="no effect (synonymous coding)" />
-                <g:helpText title="variantSearch.caseVsControlRestrictions.onlyInCasesQ.help.header"  qplacer="2px 0 0 6px" placement="right" body="variantSearch.caseVsControlRestrictions.onlyInCasesQ.help.text"/>
+                <g:helpText title="variantSearch.proteinEffectRestrictions.synonymousCodingQ.help.header"  qplacer="2px 0 0 6px" placement="right" body="variantSearch.proteinEffectRestrictions.synonymousCodingQ.help.text"/>
             </div>
             <div class="radio">
                 <input type="radio" name="predictedEffects" value="noEffectNoncoding"  id="noncoding_checkbox" onClick="chgRadioButton('noEffectNoncoding')"/>
                 <g:message code="variantSearch.proteinEffectRestrictions.noncoding" default="no effect (non-coding)" />
-                <g:helpText title="variantSearch.caseVsControlRestrictions.onlyInCasesQ.help.header"  qplacer="2px 0 0 6px" placement="right" body="variantSearch.caseVsControlRestrictions.onlyInCasesQ.help.text"/>
+                <g:helpText title="variantSearch.proteinEffectRestrictions.noncodingQ.help.header"  qplacer="2px 0 0 6px" placement="right" body="variantSearch.proteinEffectRestrictions.noncodingQ.help.text"/>
             </div>
         </div>
     </div>
