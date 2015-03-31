@@ -9,8 +9,11 @@ import spock.lang.Specification
 @TestFor(EthnicityCyclingTagLib)
 class EthnicityCyclingTagLibUnitSpec extends Specification {
 
+
+
     void "test selectAllItemsInPage #label"() {
         given:
+        mockTagLib HelpTextTagLib
         String template = '<g:alleleFrequencyRange></g:alleleFrequencyRange>'
 
         when:
