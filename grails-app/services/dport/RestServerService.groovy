@@ -427,54 +427,6 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
     }
 
 
-    /***
-     * This is the underlying routine for every call to the rest backend.
-     * @param drivingJson
-     * @param targetUrl
-     * @return
-     */
-//  private JSONObject postRestCall(String drivingJson, String targetUrl){
-//      JSONObject returnValue = null
-//      Date beforeCall  = new Date()
-//      Date afterCall
-//      RestResponse response
-//      RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
-//      StringBuilder logStatus = new StringBuilder()
-//      try {
-//          response  = rest.post(currentRestServer()+targetUrl)   {
-//              contentType "application/json"
-//              json drivingJson
-//          }
-//          afterCall  = new Date()
-//      } catch ( Exception exception){
-//          log.error("NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}")
-//          log.error(exception.toString())
-//          logStatus <<  "NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}"
-//          afterCall  = new Date()
-//      }
-//      logStatus << """
-//SERVER CALL:
-//url=${targetUrl},
-//parm=${drivingJson},
-//time required=${(afterCall.time-beforeCall.time)/1000} seconds
-//""".toString()
-//      if (response?.responseEntity?.statusCode?.value == 200) {
-//          returnValue =  response.json
-//          logStatus << """status: ok""".toString()
-//      }  else {
-//          JSONObject tempValue =  response.json
-//          logStatus << """status: ${response.responseEntity.statusCode.value}""".toString()
-//          if  (tempValue)  {
-//              logStatus << """is_error: ${response.json["is_error"]}""".toString()
-//          }  else {
-//              logStatus << "no valid Json returned"
-//          }
-//      }
-//      log.info(logStatus)
-//      return returnValue
-//  }
-
-
 
     /***
      * used only for testing
@@ -548,6 +500,47 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
         return returnValue
     }
 
+
+
+
+    String generateDataRestrictionFilters (){
+        StringBuilder sb = new  StringBuilder ()
+        if (sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma)) {
+            sb << """,
+{ "filter_type": "STRING", "operand": "IN_SIGMA",  "operator": "EQ","value": "1"  }""".toString()
+        }
+        if (sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq)) {
+            sb << """,
+{ "filter_type": "STRING", "operand": "IN_EXSEQ",  "operator": "EQ","value": "1"  }""".toString()
+        }
+        return sb.toString()
+    }
+
+
+
+
+
+    String generateRangeFilters (String chromosome,
+                            String beginSearch,
+                            String endSearch,
+                            Boolean dataRestriction)    {
+           StringBuilder sb = new  StringBuilder ()
+           sb << """[
+                   { "filter_type": "STRING", "operand": "CHROM",  "operator": "EQ","value": "${chromosome}"  },
+                   {"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": ${beginSearch} },
+                   {"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": ${endSearch} }""".toString()
+        if (dataRestriction) {
+            sb <<   generateDataRestrictionFilters ()
+        }
+        sb << """
+]""".toString()
+        return sb.toString()
+    }
+
+
+
+
+
     /***
      * Variant search on the basis of chromosome, start position, and end position.
      *
@@ -562,11 +555,7 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
         JSONObject returnValue = null
         String drivingJson = """{
 "user_group": "ui",
-"filters": [
-{ "filter_type": "STRING", "operand": "CHROM",  "operator": "EQ","value": "${chromosome}"  },
-{"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": ${beginSearch} },
-{"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": ${endSearch} }
-],
+"filters": ${generateRangeFilters (chromosome,beginSearch,endSearch,true)},
 "columns": [${"\""+getVariantSearchColumns ().join("\",\"")+"\""}]
 }
 """.toString()
@@ -588,11 +577,7 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
         JSONObject returnValue = null
         String drivingJson = """{
 "user_group": "ui",
-"filters": [
-{ "filter_type": "STRING", "operand": "CHROM",  "operator": "EQ","value": "${chromosome}"  },
-{"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": ${beginSearch} },
-{"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": ${endSearch} }
-]
+"filters": ${generateRangeFilters (chromosome,beginSearch,endSearch,false)}
 }
 """.toString()
         returnValue = postRestCall( drivingJson, TRAIT_SEARCH_URL)
@@ -608,15 +593,16 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
     JSONObject searchTraitByName (String traitName,
                                   BigDecimal significance) {
         JSONObject returnValue = null
-        String drivingJson = """{
+        StringBuilder sb = new  StringBuilder ()
+        sb << """{
 "user_group": "ui",
 "filters": [
-    {"operand": "PVALUE", "operator": "LTE", "value": ${significance.toString ()}, "filter_type": "FLOAT"}
-],
+    {"operand": "PVALUE", "operator": "LTE", "value": ${significance.toString ()}, "filter_type": "FLOAT"}""".toString()
+        sb << """],
 "trait": "${traitName}"
 }
 """.toString()
-        returnValue = postRestCall( drivingJson, TRAIT_SEARCH_URL)
+        returnValue = postRestCall( sb.toString(), TRAIT_SEARCH_URL)
         return returnValue
     }
 
@@ -648,15 +634,17 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
     JSONObject searchGenomicRegionByCustomFilters (String customFilterSet) {
         JSONObject returnValue = null
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
-        String drivingJson = """{
+        StringBuilder sb = new  StringBuilder ()
+        sb << """{
 "user_group": "ui",
 "filters": [
-${customFilterSet}
-],
+${customFilterSet}""".toString()
+        sb <<   generateDataRestrictionFilters ()
+        sb << """],
 "columns": [${"\""+getVariantSearchColumns ().join("\",\"")+"\""}]
 }
 """.toString()
-        returnValue = postRestCall( drivingJson, VARIANT_SEARCH_URL)
+        returnValue = postRestCall( sb.toString(), VARIANT_SEARCH_URL)
         return returnValue
     }
 
