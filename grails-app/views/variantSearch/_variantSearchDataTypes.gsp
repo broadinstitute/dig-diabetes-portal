@@ -7,6 +7,7 @@
                 <label>
                     <input id="id_datatype_sigma" type="radio" name="datatype" value="sigma" />
                     <g:message code="variantSearch.dataTypes.sigmaSequencing" default="SIGMA sequencing" />
+                    <g:helpText title="variantSearch.dataTypes.sigmaSequencingQ.help.header"  qplacer="2px 0 0 6px 0 0" placement="right" body="variantSearch.dataTypes.sigmaSequencingQ.help.text"/>
                 </label>
             </div>
 </g:if>
@@ -15,6 +16,7 @@
                 <label>
                     <input id="id_datatype_exomeseq" type="radio" name="datatype" value="exomeseq" checked />
                     <g:message code="variantSearch.dataTypes.exomeSequencing" default="exome sequencing" />
+                    <g:helpText title="variantSearch.dataTypes.sigmaSequencingQ.help.header"  qplacer="2px 0 0 6px 0 0" placement="right" body="variantSearch.dataTypes.sigmaSequencingQ.help.text"/>
                 </label>
             </div>
 </g:if>
@@ -23,6 +25,7 @@
                 <label>
                     <input id="id_datatype_exomechip" type="radio" name="datatype" value="exomechip" />
                     <g:message code="variantSearch.dataTypes.exomeChipStudies" default="exome chip" />
+                    <g:helpText title="variantSearch.dataTypes.sigmaSequencingQ.help.header"  qplacer="2px 0 0 6px 0 0" placement="right" body="variantSearch.dataTypes.sigmaSequencingQ.help.text"/>
                 </label>
             </div>
 </g:if>
@@ -31,6 +34,7 @@
                 <label>
                     <input id="id_datatype_gwas" type="radio" name="datatype" value="gwas" />
                     <g:message code="variantSearch.dataTypes.diagramGwas" default="DIAGRAM GWAS" />
+                    <g:helpText title="variantSearch.dataTypes.sigmaSequencingQ.help.header"  qplacer="2px 0 0 6px 0 0" placement="right" body="variantSearch.dataTypes.sigmaSequencingQ.help.text"/>
                 </label>
             </div>
 </g:if>

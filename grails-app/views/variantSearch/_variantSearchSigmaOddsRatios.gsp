@@ -13,7 +13,8 @@
                     </select>
                 </div>
                 <div class="col-sm-3">
-                    <input class="form-control" type="text" id="or-value"/>
+                        <input class="form-control" type="text" id="or-value" style="width: 80%; display: inline-block"/>
+                        <g:helpText title="variantSearch.oddsRatios.inputQ.help.header" placement="right" body="variantSearch.oddsRatios.inputQ.help.text"/>
                 </div>
             </div>
         </div>

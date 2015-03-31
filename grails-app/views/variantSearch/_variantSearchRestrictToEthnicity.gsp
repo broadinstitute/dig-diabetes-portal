@@ -12,13 +12,13 @@
                             </div>
                             <div class="col-xs-2" style="text-align: right">from</div>
                             <div class="col-xs-2">
-                                <input type="text" class="form-control" id="ethnicity_af_sigma" />
+                                <input type="text" class="form-control" id="ethnicity_af_sigma-min" />
                             </div>
                             <div class="col-xs-1" style="text-align: right">
                                 to
                             </div>
                             <div class="col-xs-2">
-                                <input type="text" class="form-control" id="ethnicity_af_sigma"/>
+                                <input type="text" class="form-control" id="ethnicity_af_sigma-max"/>
                             </div>
                         </div>
                     </div>

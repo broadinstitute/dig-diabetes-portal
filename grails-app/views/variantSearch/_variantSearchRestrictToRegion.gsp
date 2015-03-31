@@ -6,7 +6,8 @@
             <div class="row" style="margin-bottom: 20px;">
                 <div class="col-xs-3" style="text-align: right;"><g:message code="variantSearch.restrictToRegion.gene" default="Gene" /></div>
                 <div class="col-xs-6">
-                    <input type="text" class="form-control" id="region_gene_input"/>
+                    <input type="text" class="form-control" id="region_gene_input" style="width: 90%; display: inline-block"/>
+                    <g:helpText title="variantSearch.restrictToRegion.region.geneInputQ.help.header" placement="right" body="variantSearch.restrictToRegion.region.geneInputQ.help.text"/>
                 </div>
             </div>
             <div class="row">
@@ -15,10 +16,11 @@
                     <input class="form-control" type="text" id="region_chrom_input" placeholder="chrom"/>
                 </div>
                 <div class="col-xs-3">
-                    <input class="form-control" type="text" id="region_start_input" placeholder="start"/>
+                    <input class="form-control" type="text" id="region_start_input" style="width: 80%; display: inline-block" placeholder="start"/>
                 </div>
                 <div class="col-xs-3">
-                    <input class="form-control" type="text" id="region_stop_input" placeholder="stop"/>
+                    <input class="form-control" type="text" id="region_stop_input" style="width: 80%; display: inline-block" placeholder="stop"/>
+                    <g:helpText title="variantSearch.restrictToRegion.region.regionStopQ.help.header" placement="right" body="variantSearch.restrictToRegion.region.regionStopQ.help.header"/>
                 </div>
             </div>
         </div>
