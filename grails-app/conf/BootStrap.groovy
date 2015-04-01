@@ -28,7 +28,6 @@ class BootStrap {
 //        log.info( "Crazy plan.  Delete all users. Current number= ${User.count()}")
 //        User.executeUpdate("delete User")
 //        log.info( "Done.  number of users= ${User.count()}")
-        log.info( "no need for the crazy plan")
 
         // read in users from file
         if (User.count()) {

@@ -76,7 +76,7 @@ var UTILS = {
      * this constructor.
      * @param inString
      */
-    proteinEffectListConstructor: function (inString) {
+    proteinEffectListConstructor: function (inString,helpText) {
         var keyValue = {};
         var arrayHolder = [];
         var listOfProteinEffect = inString.split("~");

@@ -11,6 +11,10 @@
 <script>
 
 
+    var variantTableProteinEffect = {
+        stop_gained:'<g:helpText title="variantTable.tableContent.proteinEffect.stop_gained.help.header" placement="top" body="variantTable.tableContent.proteinEffect.stop_gained.help.text" qplacer="2px 0 0 6px"/>'
+//    :'<g:helpText title="variantTable.tableContent.proteinEffect..help.header" placement="top" body="variantTable.tableContent.proteinEffect..help.text" qplacer="2px 0 0 6px"/>'
+    };
     var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
     var loading = $('#spinner').show();
     loading.show();
@@ -24,6 +28,7 @@
             var variantTableContext = {
                 tooManyResults:'<g:message code="variantTable.searchResults.tooManyResults" default="too many results, sharpen your search" />'
             };
+
             variantProcessing.fillTheVariantTable(data,
                     ${show_gene},
                     ${show_sigma},
