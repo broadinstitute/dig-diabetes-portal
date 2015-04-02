@@ -40,7 +40,7 @@
         <div class="emphasize-block">
             Not sure who to talk to?
             Try our group email address:<br/>
-            <a href="mailto:type2-diabetes-genetics@broadinstitute.org">type2-diabetes-genetics@broadinstitute.org</a>
+            <a href="mailto:t2dgenetics@broadinstitute.org">t2dgenetics@broadinstitute.org</a>
         </div>
 
     </div>

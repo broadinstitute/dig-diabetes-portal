@@ -745,11 +745,11 @@ var mpgSoftware = mpgSoftware || {};
                 calculateDiseaseBurden = function (variant, variantTitle, showSigma, showGwas, showExchp, showExseq, diseaseBurdenStrings) {// disease burden
                     var weHaveEnoughDataForRiskBurdenTest;
                     if (showSigma) {
-                        weHaveEnoughDataForRiskBurdenTest = ((variant["SIGMA_T2D_HETA"]) && (variant["SIGMA_T2D_HETU"]) && (variant["SIGMA_T2D_HOMA"]) &&
-                            (variant["SIGMA_T2D_HOMU"]) && (variant["SIGMA_T2D_OBSU"]) && (variant["SIGMA_T2D_OBSA"]));
+                        weHaveEnoughDataForRiskBurdenTest = ((variant["SIGMA_T2D_HETA"]!==null) && (variant["SIGMA_T2D_HETU"]!==null) && (variant["SIGMA_T2D_HOMA"]!==null) &&
+                            (variant["SIGMA_T2D_HOMU"]!==null) && (variant["SIGMA_T2D_OBSU"]!==null) && (variant["SIGMA_T2D_OBSA"]!==null));
                     } else {
-                        weHaveEnoughDataForRiskBurdenTest = ((variant["_13k_T2D_HETA"]) && (variant["_13k_T2D_HETU"]) && (variant["_13k_T2D_HOMA"]) &&
-                            (variant["_13k_T2D_HOMU"]) && (variant["_13k_T2D_OBSU"]) && (variant["_13k_T2D_OBSA"]));
+                        weHaveEnoughDataForRiskBurdenTest = ((variant["_13k_T2D_HETA"]!==null) && (variant["_13k_T2D_HETU"]!==null) && (variant["_13k_T2D_HOMA"]!==null) &&
+                            (variant["_13k_T2D_HOMU"]!==null) && (variant["_13k_T2D_OBSU"]!==null) && (variant["_13k_T2D_OBSA"]!==null));
                     }
                     UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataForRiskBurdenTest, $('#diseaseRiskExists'), $('#diseaseRiskNoExists'));
                     if (weHaveEnoughDataForRiskBurdenTest) {
@@ -758,7 +758,7 @@ var mpgSoftware = mpgSoftware || {};
                     $('#sigmaVariantCharacterization').append(UTILS.sigmaVariantCharacterization(variant, variantTitle));
                 },
                 howCommonIsThisVariantAcrossEthnicities = function (variant, alleleFrequencyStrings) {// how common is this allele across different ethnicities
-                    var weHaveEnoughDataToDescribeMinorAlleleFrequencies = ((variant["EXCHP_T2D_MAF"]) && (variant["_13k_T2D_AA_MAF"]) && (variant["_13k_T2D_AA_MAF"]));
+                    var weHaveEnoughDataToDescribeMinorAlleleFrequencies = ((variant["EXCHP_T2D_MAF"]!==null) && (variant["_13k_T2D_AA_MAF"]!==null) && (variant["_13k_T2D_AA_MAF"]!==null));
                     UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToDescribeMinorAlleleFrequencies, $('#howCommonIsExists'), $('#howCommonIsNoExists'));
                     if (weHaveEnoughDataToDescribeMinorAlleleFrequencies) {
                         privateMethods.showEthnicityPercentageWithBarChart(variant, alleleFrequencyStrings);
@@ -767,11 +767,11 @@ var mpgSoftware = mpgSoftware || {};
                 showHowCarriersAreDistributed = function (variant, showGwas, showExchp, showExseq, showSigma, carrierStatusImpact) {// case control data set characterization
                     var weHaveEnoughDataToCharacterizeCaseControls;
                     if (showSigma) {
-                        weHaveEnoughDataToCharacterizeCaseControls = ((variant["SIGMA_T2D_HETA"]) && (variant["SIGMA_T2D_HETU"]) && (variant["SIGMA_T2D_HOMA"]) &&
-                            (variant["SIGMA_T2D_HOMU"]) && (variant["SIGMA_T2D_OBSU"]) && (variant["SIGMA_T2D_OBSA"]));
+                        weHaveEnoughDataToCharacterizeCaseControls = ((variant["SIGMA_T2D_HETA"]!==null) && (variant["SIGMA_T2D_HETU"]!==null) && (variant["SIGMA_T2D_HOMA"]!==null) &&
+                            (variant["SIGMA_T2D_HOMU"]!==null) && (variant["SIGMA_T2D_OBSU"]!==null) && (variant["SIGMA_T2D_OBSA"]!==null));
                     } else {
-                        weHaveEnoughDataToCharacterizeCaseControls = ((variant["_13k_T2D_HETA"]) && (variant["_13k_T2D_HETU"]) && (variant["_13k_T2D_HOMA"]) &&
-                            (variant["_13k_T2D_HOMU"]) && (variant["_13k_T2D_OBSU"]) && (variant["_13k_T2D_OBSA"]));
+                        weHaveEnoughDataToCharacterizeCaseControls = ((variant["_13k_T2D_HETA"]!==null) && (variant["_13k_T2D_HETU"]!==null) && (variant["_13k_T2D_HOMA"]!==null) &&
+                            (variant["_13k_T2D_HOMU"]!==null) && (variant["_13k_T2D_OBSU"]!==null) && (variant["_13k_T2D_OBSA"]!==null));
                     }
                     UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToCharacterizeCaseControls, $('#carrierStatusExist'), $('#carrierStatusNoExist'));
                     if (weHaveEnoughDataToCharacterizeCaseControls) {
