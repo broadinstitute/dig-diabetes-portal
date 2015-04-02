@@ -511,12 +511,14 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
         }
         if (sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq)) {
             sb << """,
-{ "filter_type": "STRING", "operand": "IN_EXSEQ",  "operator": "EQ","value": "1"  }""".toString()
+{ "filter_type": "STRING", "operand": "IN_EXSEQ",  "operator": "EQ","value": "1"  }
+""".toString()
         }
         return sb.toString()
     }
 
-
+//    { "filter_type": "STRING", "operand": "IN_EXCHIP",  "operator": "EQ","value": "1"  },
+//    { "filter_type": "STRING", "operand": "IN_GWAS",  "operator": "EQ","value": "1"  }
 
 
 
@@ -639,7 +641,7 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
 "user_group": "ui",
 "filters": [
 ${customFilterSet}""".toString()
-        sb <<   generateDataRestrictionFilters ()
+//        sb <<   generateDataRestrictionFilters ()
         sb << """],
 "columns": [${"\""+getVariantSearchColumns ().join("\",\"")+"\""}]
 }
