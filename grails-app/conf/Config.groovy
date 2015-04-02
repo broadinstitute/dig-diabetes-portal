@@ -162,7 +162,9 @@ t2dProdRestServer {
 server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
 dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
 //dbtRestServer.URL = 'http://diabetesgeneticsportal2.broadinstitute.org:8888/dev/burden/'
-experimentalRestServer.URL = 'http://69.173.71.178:8888/dev2/server/'
+//experimentalRestServer.URL = 'http://69.173.71.178:8888/dev2/server/'
+experimentalRestServer.URL = 'http://dig-dev.broadinstitute.org:8888/dev/gs/'
+
 
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
