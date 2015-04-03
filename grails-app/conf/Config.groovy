@@ -16,7 +16,7 @@ site.version = 't2dgenes' // could be 'sigma', 't2dgenes', or 'beacon'
 if (site.version == 't2dgenes'){
     site.title = 'Type 2 Diabetes Genetics'  // could be 'SIGMA T2D' or 'Type 2 Diabetes Genetics'
     site.subtext = 'Beta'
-    site.operator = 'balexand@broadinstitute.org'
+    site.operator = 't2d-error@googlegroups.com'
 
     portal {
         sections {
@@ -32,7 +32,7 @@ if (site.version == 't2dgenes'){
 }else if (site.version == 'sigma'){
     site.title = 'SIGMA T2D'  // could be 'SIGMA T2D' or 'Type 2 Diabetes Genetics'
     site.subtext = 'a resource on the genetics of type 2 diabetes in Mexico'
-    site.operator = 'balexand@broadinstitute.org'
+    site.operator = 't2d-error@googlegroups.com'
 
     portal {
         sections {

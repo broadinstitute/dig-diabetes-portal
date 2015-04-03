@@ -521,7 +521,7 @@ class SharedToolsService {
     public String sendTestEmail(){
         mailService.sendMail {
             from "t2dPortal@gmail.com"
-            to "balexand@broadinstitute.org"
+            to "t2d-error@googlegroups.com"
             subject "Hello"
             body "Test"
         }
