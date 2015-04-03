@@ -8,8 +8,8 @@ class HelpTextTagLib {
 
     def helpText = { attrs,body ->
         // We have to have some help text or else don't bother displaying indicator icon
-        if ( (sharedToolsService.getHelpTextSetting()==2) ||
-                ( (sharedToolsService.getHelpTextSetting()==1) &&
+        if ( (sharedToolsService?.getHelpTextSetting()==2) ||
+                ( (sharedToolsService?.getHelpTextSetting()==1) &&
                     ( ( g.message(code:attrs.title) ) ||
                       ( g.message(code:attrs.body) ) ) ) ){
                     String popupPlacement = (attrs.placement) ?: defaultPopupPlacement
