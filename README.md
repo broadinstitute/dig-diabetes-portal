@@ -300,5 +300,21 @@ Missing oauth secret or key (or both!) in configuration for google. (Use --stack
 So if you see the above message, look to see if you have a configuration file, if it is in the right place, and if
 it contains the right values.
 
+<h2>Development tools:</h2>
+
+<h3>Code coverage</h3>
+```bash
+ grails test-app -coverage
+```
+and see ./target/test-reports/cobertura
+
+<h3>Automated code Checker</h3>
+```bash
+ grails codenarc
+```
+and find your summary report in ./target/CodeNarcReport.html
+
+
+
 
 
