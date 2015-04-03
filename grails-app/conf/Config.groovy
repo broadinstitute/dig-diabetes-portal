@@ -159,6 +159,11 @@ t2dProdRestServer {
     name =  'prod/'
     path = 'rest/server/'
 }
+t2dNewDevRestServer {
+    base = 'http://dig-dev.broadinstitute.org:8888/'
+    name =  'dev/'
+    path = 'gs/'
+}
 server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
 dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
 //dbtRestServer.URL = 'http://diabetesgeneticsportal2.broadinstitute.org:8888/dev/burden/'

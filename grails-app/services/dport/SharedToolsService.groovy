@@ -27,6 +27,19 @@ class SharedToolsService {
     Integer showGene = -1
     Integer showBeacon = -1
 
+    Integer helpTextSetting = 1 // 0== never display, 1== display conditionally, 2== always display
+
+    public void setHelpTextSetting(int newHelpTextSetting){
+        if ((newHelpTextSetting>-1) && (newHelpTextSetting < 3)) {
+            helpTextSetting = newHelpTextSetting
+        }else{
+            log.error("Attempt to set help text to ${newHelpTextSetting}.  Should be 0, 1, or 2.")
+        }
+    }
+
+    public int getHelpTextSetting (){
+        return helpTextSetting
+    }
 
 
     public void  initialize(){

@@ -73,6 +73,10 @@ class  InformationalController {
         render (template: "contact/${params.id}" )
     }
 
+    def forum(){
+        render (view: "forum" )
+    }
+
 
     // the root page for contact.  This page recruits underlying pages via Ajax calls
     def policies()  {

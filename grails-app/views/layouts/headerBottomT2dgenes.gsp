@@ -3,11 +3,11 @@
         <sec:ifLoggedIn>
             <div class="rightlinks">
                 <sec:ifAllGranted roles="ROLE_ADMIN">
-                    <g:link controller='admin' action="users" class="mgr">manage  users</g:link>
+                    <g:link controller='admin' action="users" class="mgr">Manage</g:link>
                     &middot;
                 </sec:ifAllGranted>
                 <sec:ifAllGranted roles="ROLE_SYSTEM">
-                    <g:link controller='system' action="systemManager">System Mgr</g:link>
+                    <g:link controller='system' action="systemManager">System</g:link>
                     &middot;
                 </sec:ifAllGranted>
                 <sec:loggedInUserInfo field="username"/>   &middot;
@@ -23,14 +23,15 @@
             <a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a> &middot;
             <a href="${createLink(controller:'informational', action:'aboutSigma')}"><g:message code="localized.aboutTheData"/></a> &middot;
             <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="localized.contact"/></a>
+            <a href="${createLink(controller:'informational', action:'forum')}"><g:message code="portal.header.nav.forum"/></a>
         </g:renderSigmaSection>
         <g:renderT2dGenesSection>
             <a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a> &middot;
             <a href="${createLink(controller:'informational', action:'about')}"><g:message code="portal.header.nav.about"/></a> &middot;
             <a href="${createLink(controller: 'home', action: 'introVideoHolder')}"><g:message code="portal.header.nav.tutorials"/></a> &middot;
             <a href="${createLink(controller:'informational', action:'policies')}"><g:message code="portal.header.nav.policies"/></a> &middot;
-            <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact"/></a>
-
+            <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact"/></a>&middot;
+            <a href="${createLink(controller:'informational', action:'forum')}"><g:message code="portal.header.nav.forum"/></a>
         </g:renderT2dGenesSection>
     </div>
 </div>

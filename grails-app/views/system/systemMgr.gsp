@@ -5,6 +5,8 @@
   Time: 5:09 PM
 --%>
 <%@ page import="temporary.BuildInfo" %>
+<%@ page import="dport.RestServerService" %>
+%{--Use RestServerService--}%
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,6 +17,7 @@
 </head>
 
 <body>
+<g:set var="restServer" bean="restServerService"/>
 
 <div id="main">
 
@@ -44,40 +47,47 @@
 
                                 <div class="radio">
                                     <label>
-                                        <input id="mySqlRestServer" type="radio" name="datatype" value="mysql" />
-                                        my SQL Server
+                                        <input id="mySqlRestServer" type="radio" name="datatype" value="mysql"
+                                        <%=restServer.getCurrentServer()==restServer.getMysql()?" checked ":"" %> />
+                                        my SQL Server (${restServer.getMysql()})
                                     </label>
                                 </div>
-                                %{--<div class="radio">--}%
-                                    %{--<label>--}%
-                                        %{--<input id="bigQueryRestServer" type="radio" name="datatype" value="bigquery" />--}%
-                                        %{--New REST server (http://69.173.71.178:8080/dev/rest/server/)--}%
-                                    %{--</label>--}%
-                                %{--</div>--}%
                             <div class="radio">
                                 <label>
-                                    <input id="devserver" type="radio" name="datatype" value="devserver" />
-                                    dev server (http://69.173.71.178:8080/dev/rest/server)
+                                    <input id="newdevserver" type="radio" name="datatype" value="newdevserver"
+                                        <%=restServer.getCurrentServer()==restServer.getNewdevserver()?" checked ":"" %> />
+                                    new dev server (${restServer.getNewdevserver()})
                                 </label>
                             </div>
                             <div class="radio">
                                 <label>
-                                    <input id="testserver" type="radio" name="datatype" value="testserver" />
-                                    test server (http://69.173.70.52:8080/test/rest/server)
+                                    <input id="devserver" type="radio" name="datatype" value="devserver"
+                                        <%=restServer.getCurrentServer()==restServer.getDevserver()?" checked ":"" %> />
+                                    dev server (${restServer.getDevserver()})
                                 </label>
                             </div>
                             <div class="radio">
                                 <label>
-                                    <input id="qaserver" type="radio" name="datatype" value="qaserver" />
-                                    dev server (http://69.173.70.198:8080/qa/rest/server)
+                                    <input id="testserver" type="radio" name="datatype" value="testserver"
+                                        <%=restServer.getCurrentServer()==restServer.getTestserver()?" checked ":"" %> />
+                                    test server (${restServer.getTestserver()})
                                 </label>
                             </div>
                             <div class="radio">
                                 <label>
-                                    <input id="prodserver" type="radio" name="datatype" value="prodserver" />
-                                    test server (http://69.173.71.179:8080/prod/rest/server)
+                                    <input id="qaserver" type="radio" name="datatype" value="qaserver"
+                                        <%=restServer.getCurrentServer()==restServer.getQaserver()?" checked ":"" %>  />
+                                    qa server (${restServer.getQaserver()})
                                 </label>
                             </div>
+                            <div class="radio">
+                                <label>
+                                    <input id="prodserver" type="radio" name="datatype" value="prodserver"
+                                        <%=restServer.getCurrentServer()==restServer.getProdserver()?" checked ":"" %>  />
+                                    prod server (${restServer.getProdserver()})
+                                </label>
+                            </div>
+
 
                          </div>
                     </div>
@@ -173,7 +183,68 @@
                 <div class="separator"></div>
 
 
+            <g:form action='updateHelpTextLevel' method='POST' class='form form-horizontal cssform' autocomplete='off'>
+                <h4>Adjust help text presentation(<em>current Setting = <strong>${helpTextLevel}</strong></em>)</h4>
                 <div class="row clearfix">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <div id="help-text-form">
+
+
+                            <div class="radio">
+                                <label>
+                                    <input id="noHelpText" type="radio" name="datatype" value="none"  <%=(helpTextLevel==0)?'checked':''%> />
+                                    Never display help text
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input id="conditionalHelpText" type="radio" name="datatype" value="conditional" <%=(helpTextLevel==1)?'checked':''%> />
+                                    Display help text question marks only if mapped to real text
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input id="allHelpText" type="radio" name="datatype" value="always"  <%=(helpTextLevel==2)?'checked':''%> />
+                                    Display help text question marks unconditionally
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <div class="row clearfix">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <div >
+                            <div style="text-align:center; padding-top: 20px;">
+                                <input class="btn btn-primary btn-lg" type='submit' id="submitHelpTextApplication"
+                                       value='Commit'/>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row clearfix">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div >
+                            <g:if test='${flash.message}'>
+                                <div class="alert alert-danger">${flash.message}</div>
+                            </g:if>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+
+                </div>
+            </g:form>
+
+
+            <div class="separator"></div>
+
+
+            <div class="row clearfix">
                     <div class="col-md-12">
                         <strong>
                             Logged with google?

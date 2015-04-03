@@ -20,6 +20,7 @@ class RestServerService {
     private  String DEV_REST_SERVER = ""
     private  String QA_REST_SERVER = ""
     private  String PROD_REST_SERVER = ""
+    private  String NEW_DEV_REST_SERVER = ""
     private  String BASE_URL = ""
     private  String GENE_INFO_URL = "gene-info"
     private  String VARIANT_INFO_URL = "variant-info"
@@ -194,12 +195,39 @@ class RestServerService {
         BIGQUERY_REST_SERVER = grailsApplication.config.server.URL
         TEST_REST_SERVER = grailsApplication.config.t2dTestRestServer.base+grailsApplication.config.t2dTestRestServer.name+grailsApplication.config.t2dTestRestServer.path
         DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base+grailsApplication.config.t2dDevRestServer.name+grailsApplication.config.t2dDevRestServer.path
+        NEW_DEV_REST_SERVER = grailsApplication.config.t2dNewDevRestServer.base+grailsApplication.config.t2dNewDevRestServer.name+grailsApplication.config.t2dNewDevRestServer.path
         QA_REST_SERVER = grailsApplication.config.t2dQaRestServer.base+grailsApplication.config.t2dQaRestServer.name+grailsApplication.config.t2dQaRestServer.path
         PROD_REST_SERVER = grailsApplication.config.t2dProdRestServer.base+grailsApplication.config.t2dProdRestServer.name+grailsApplication.config.t2dProdRestServer.path
         BASE_URL =  grailsApplication.config.server.URL
         DBT_URL   = grailsApplication.config.dbtRestServer.URL
         EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URL
+        pickADifferentRestServer (NEW_DEV_REST_SERVER)
     }
+
+
+    public  String getBigQuery(){
+        return BIGQUERY_REST_SERVER;
+    }
+    public  String getMysql(){
+        return MYSQL_REST_SERVER;
+    }
+    public  String getDevserver(){
+        return DEV_REST_SERVER;
+    }
+    public  String getTestserver(){
+        return TEST_REST_SERVER;
+    }
+    public  String getQaserver(){
+        return QA_REST_SERVER;
+    }
+    public  String getProdserver(){
+        return PROD_REST_SERVER;
+    }
+    public  String getNewdevserver(){
+        return NEW_DEV_REST_SERVER;
+    }
+
+
 
     private List <String> getGeneColumns () {
         List <String> returnValue
@@ -250,6 +278,10 @@ class RestServerService {
         }
     }
 
+    public String  getCurrentServer () {
+        return (BASE_URL?:"none")
+    }
+
     public void  goWithTheMysqlServer () {
         pickADifferentRestServer (MYSQL_REST_SERVER)
     }
@@ -265,6 +297,10 @@ class RestServerService {
 
     public void  goWithTheDevServer () {
         pickADifferentRestServer (DEV_REST_SERVER)
+    }
+
+    public void  goWithTheNewDevServer () {
+        pickADifferentRestServer (NEW_DEV_REST_SERVER)
     }
 
     public void  goWithTheQaServer () {
