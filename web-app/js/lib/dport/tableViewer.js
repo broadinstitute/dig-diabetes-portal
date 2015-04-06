@@ -28,6 +28,47 @@
 }());
 var variantProcessing = (function () {
 
+
+    /***
+     * private functions
+     */
+
+    /***
+     * Find the population with the highest frequency.
+     *
+     * @param variant
+     * @returns {{highestFrequency: number, populationWithHighestFrequency: number, noData: boolean}}
+     */
+    var determineHighestFrequencyEthnicity = function (variant) {
+        var highestValue = 0;
+        var winningEthnicity = 0;
+        var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
+        var noData=true;
+        for (var i = 0; i < ethnicAbbreviation.length; i++) {
+            var stringValue = variant['_13k_T2D_' + ethnicAbbreviation[i] + '_MAF'];
+            if (stringValue!==null){
+                var realValue = parseFloat(stringValue);
+                if (i==0){
+                    highestValue = realValue;
+                    winningEthnicity =  ethnicAbbreviation[i];
+                } else {
+                    noData=false;
+                    if (realValue > highestValue) {
+                        highestValue = realValue;
+                        winningEthnicity =  ethnicAbbreviation[i];
+                    }
+                }
+            }
+        }
+        if (noData === true){
+            populationWithHighestFrequency = '--';
+        }
+        return  {highestFrequency:highestValue,
+            populationWithHighestFrequency:winningEthnicity,
+            noData:noData};
+    };
+
+
     /***
      *
      * @param fullJson
@@ -153,7 +194,7 @@ var variantProcessing = (function () {
             }
             if (show_exseq) {
 
-                var highFreq = UTILS.determineHighestFrequencyEthnicity(vRec[i]);
+                var highFreq = determineHighestFrequencyEthnicity(vRec[i]);
 
                 // P value
                 // NOTE: we need to use trick here. We are going to present different columns
@@ -219,7 +260,7 @@ var variantProcessing = (function () {
 
             if (show_exchp) {
 
-                var highFreq = UTILS.determineHighestFrequencyEthnicity(vRec[i]);
+                var highFreq = determineHighestFrequencyEthnicity(vRec[i]);
 
                 // P value
                 if (vRec[i].EXCHP_T2D_P_value)  {

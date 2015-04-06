@@ -437,29 +437,7 @@ var UTILS = {
     return retval;
 },
 
-determineHighestFrequencyEthnicity: function (variant) {
-        var highestValue = 0;
-        var winningEthnicity = 0;
-        var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
-        var noData=true;
-        for (var i = 0; i < ethnicAbbreviation.length; i++) {
-            var stringValue = variant['_13k_T2D_' + ethnicAbbreviation[i] + '_MAF'];
-            var realValue = parseFloat(stringValue);
-            if (i==0){
-                highestValue = realValue;
-                winningEthnicity =  ethnicAbbreviation[i];
-            } else {
-                noData=false;
-                if (realValue > highestValue) {
-                    highestValue = realValue;
-                    winningEthnicity =  ethnicAbbreviation[i];
-                }
-            }
-        }
-        return  {highestFrequency:highestValue,
-                 populationWithHighestFrequency:winningEthnicity,
-                 noData:noData};
-    },
+
     prettyUpSigmaSource:function (rawText){
         var returnValue;
         if (rawText === 'EXOME_CHIP'){
