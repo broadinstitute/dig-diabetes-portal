@@ -318,21 +318,21 @@ and find your summary report in ./target/CodeNarcReport.html
 
 We have a process to move from code push to production deploy. It looks like this:
 <ul>
-<li>1) every time a developer pushes code:</li> 
+<li><strong> 1)every time a developer pushes code:</strong></li> 
 <li>1.1) the CI system pulls my code from git
 <li>1.2) the system runs all the unit and integration tests. IF they pass then
 <li>1.3) CI deploys, and gives that version a CI git tag. Then…
-<li>2) every morning at 2 AM
+<li><strong>2) every morning at 2 AM</strong>
 <li>2.1) the tag describing last successfully deployed CI version is pulled from git
 <li>2.2) the system runs all the unit and integration tests. IF they pass then
 <li>2.3) dev deploys, and gives that version a DEV git tag.
 <li>2.4) developers look at the deployed dev system, and decide whether they like it. If they do then…
-<li>3) a developer goes to the Jenkins project named 'MANUAL-deployedToQA'
+<li><strong>3) a developer goes to the Jenkins project named 'MANUAL-deployedToQA'</strong>
 <li>3.1) the developer goes in with the name of a DEV tag in mind. The developer chooses that tag from the drop-down list, then presses the 'Build' button
 <li>3.2) the system runs all the unit and integration tests. IF they pass then
 <li>3.3) the system BRANCHES the code, and deploys that branch to QA
 <li>3.4) developers look at the system themselves, but also request the attention of nondevelopers (presumably Mary) to see if this system is acceptable. If it is then...
-<li>4) a developer goes to the Jenkins project named 'MANUAL-deployedToQA', presumably during nonpeak hours
+<li><strong>4) a developer goes to the Jenkins project named 'MANUAL-deployedToQA', presumably during nonpeak hours</strong>
 <li>4.1) the developer goes in with the name of a DEV tag in mind. The developer chooses that tag from the drop-down list, then presses the 'Build' button
 <li>4.2) the system runs all the unit and integration tests. IF they pass then
 <li>4.3) the system BRANCHES the code again, and deploys that branch to PROD
