@@ -1,6 +1,6 @@
 
 <div class="linkout">
-    <a target="_blank" href="http://www.gtexportal.org/home/">GTEx</a>
+    <a target="_blank" href="http://www.gtexportal.org/home/eqtls/bySnp?snpId=<%=variantToSearch%>&tissueName=All">GTEx</a>
     <g:message code="findoutmore.variantgtex.descr" default="GTEx"/>
 </div>
 <div class="linkout">
