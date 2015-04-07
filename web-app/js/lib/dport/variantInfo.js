@@ -79,44 +79,44 @@ var mpgSoftware = mpgSoftware || {};
                                     position: 2,
                                     barname: alleleFrequencyStrings.africanAmerican,
                                     barsubname: '',
-                                    barsubnamelink: 'http://www.google.com',
+                                    barsubnamelink: '',
                                     inbar: '',
                                     descriptor: ''},
                                 {value: hispanicFrequency,
                                     position: 4,
                                     barname: alleleFrequencyStrings.hispanic,
                                     barsubname: '',
-                                    barsubnamelink: 'http://www.google.com',
+                                    barsubnamelink: '',
                                     inbar: '',
                                     descriptor: ''},
                                 { value: eastAsianFrequency,
                                     position: 6,
                                     barname: alleleFrequencyStrings.eastAsian,
                                     barsubname: '',
-                                    barsubnamelink: 'http://www.google.com',
+                                    barsubnamelink: '',
                                     inbar: '',
                                     descriptor: ''},
                                 {  value: southAsianFrequency,
                                     position: 8,
                                     barname: alleleFrequencyStrings.southAsian,
                                     barsubname: '',
-                                    barsubnamelink: 'http://www.google.com',
+                                    barsubnamelink: '',
                                     inbar: '',
                                     descriptor: ''},
                                 { value: europeanSequenceFrequency,
                                     position: 10,
                                     barname: alleleFrequencyStrings.european,
                                     barsubname: '',
-                                    barsubnamelink: 'http://www.google.com',
+                                    barsubnamelink: '',
                                     inbar: '',
                                     descriptor: alleleFrequencyStrings.exomeSequence},
                                 { value: europeanChipFrequency,
                                     position: 11,
                                     barname: ' ',
                                     barsubname: '',
-                                    barsubnamelink: 'http://www.google.com',
+                                    barsubnamelink: '',
                                     inbar: '',
-                                    descriptor: alleleFrequencyStrings.exomeChip}
+                                    descriptor: ((typeof europeanChipFrequency !== 'undefined' )?alleleFrequencyStrings.exomeChip:'')}
                             ],
                             roomForLabels = 120,
                             maximumPossibleValue = (Math.max(africanAmericanFrequency, hispanicFrequency, eastAsianFrequency, southAsianFrequency, europeanSequenceFrequency, europeanChipFrequency) * 1.5),
@@ -146,7 +146,7 @@ var mpgSoftware = mpgSoftware || {};
                                     position: 1,
                                     barname: carrierStatusImpact.casesTitle,
                                     barsubname: '',
-                                    barsubnamelink: 'http://www.google.com',
+                                    barsubnamelink: '',
                                     inbar: '',
                                     descriptor: '(' + carrierStatusImpact.designationTotal + ' ' + (+nonCarrierCase) + ')',
                                     inset: 1 },
@@ -154,7 +154,7 @@ var mpgSoftware = mpgSoftware || {};
                                     position: 2,
                                     barname: ' ',
                                     barsubname: '',
-                                    barsubnamelink: 'http://www.google.com',
+                                    barsubnamelink: '',
                                     inbar: '',
                                     descriptor: '',
                                     legendText: carrierStatusImpact.legendTextHomozygous},
@@ -162,7 +162,7 @@ var mpgSoftware = mpgSoftware || {};
                                     position: 3,
                                     barname: '  ',
                                     barsubname: '',
-                                    barsubnamelink: 'http://www.google.com',
+                                    barsubnamelink: '',
                                     inbar: '',
                                     descriptor: '',
                                     legendText: carrierStatusImpact.legendTextHeterozygous},
@@ -170,7 +170,7 @@ var mpgSoftware = mpgSoftware || {};
                                     position: 4,
                                     barname: '   ',
                                     barsubname: '',
-                                    barsubnamelink: 'http://www.google.com',
+                                    barsubnamelink: '',
                                     inbar: '',
                                     descriptor: '',
                                     legendText: carrierStatusImpact.legendTextNoncarrier},
@@ -178,7 +178,7 @@ var mpgSoftware = mpgSoftware || {};
                                     position: 6,
                                     barname: carrierStatusImpact.controlsTitle,
                                     barsubname: '',
-                                    barsubnamelink: 'http://www.google.com',
+                                    barsubnamelink: '',
                                     inbar: '',
                                     descriptor: '(' + carrierStatusImpact.designationTotal + ' ' + (nonCarrierControl) + ')',
                                     inset: 1 },
@@ -186,21 +186,21 @@ var mpgSoftware = mpgSoftware || {};
                                     position: 7,
                                     barname: '    ',
                                     barsubname: '',
-                                    barsubnamelink: 'http://www.google.com',
+                                    barsubnamelink: '',
                                     inbar: '',
                                     descriptor: ''},
                                 { value: heterozygControl,
                                     position: 8,
                                     barname: '     ',
                                     barsubname: '',
-                                    barsubnamelink: 'http://www.google.com',
+                                    barsubnamelink: '',
                                     inbar: '',
                                     descriptor: ''},
                                 { value: nonCarrierControl - (homozygControl + heterozygControl),
                                     position: 9,
                                     barname: '      ',
                                     barsubname: '',
-                                    barsubnamelink: 'http://www.google.com',
+                                    barsubnamelink: '',
                                     inbar: '',
                                     descriptor: ''}
 
@@ -219,7 +219,7 @@ var mpgSoftware = mpgSoftware || {};
                             .height(height)
                             .margin(margin)
                             .roomForLabels(roomForLabels)
-                            .maximumPossibleValue(7000)
+                            .maximumPossibleValue(10000)
                             .labelSpacer(labelSpacer)
                             .assignData(data3)
                             .integerValues(1)
@@ -242,10 +242,20 @@ var mpgSoftware = mpgSoftware || {};
                         var stringProportion = variant['_13k_T2D_' + ethnicAbbreviation[i] + '_MAF'];
                         ethnicityPercentages.push(parseFloat(stringProportion) * 100);
                     }
-                    var euroValue = parseFloat(variant["EXCHP_T2D_MAF"]);
-                    if (variant["EXCHP_T2D_P_value"]) {
-                        ethnicityPercentages.push(parseFloat(euroValue) * 100);
+                    // with a special case:  the chip data may be null, but we still want to show the rest of the plot.
+                    // Replace the value with 'undefined' and the bar chart machinery knows to not display a bar
+                    var euroValue;
+                    if (variant["EXCHP_T2D_MAF"] !==  null ){
+                        euroValue = parseFloat(variant["EXCHP_T2D_MAF"]);
+                        if (variant["EXCHP_T2D_P_value"]) {
+                            euroValue = parseFloat(euroValue) * 100;
+                        }
                     }
+                    ethnicityPercentages.push(euroValue);
+//                    var euroValue = parseFloat(variant["EXCHP_T2D_MAF"]);
+//                    if (variant["EXCHP_T2D_P_value"]) {
+//                        ethnicityPercentages.push(parseFloat(euroValue) * 100);
+//                    }
                     // We have everything we need to build the bar chart.  Store the functional reference in an object
                     // that we can call whenever we want
                     delayedHowCommonIsPresentation = {
@@ -398,13 +408,13 @@ var mpgSoftware = mpgSoftware || {};
                                     { value: calculatedPercentWithDisease,
                                         barname: diseaseBurdenStrings.caseBarName,
                                         barsubname: diseaseBurdenStrings.caseBarSubName,
-                                        barsubnamelink: 'http://www.google.com',
+                                        barsubnamelink: '',
                                         inbar: '',
                                         descriptor: proportionWithDiseaseDescriptiveString},
                                     {value: calculatedPercentWithoutDisease,
                                         barname: diseaseBurdenStrings.controlBarName,
                                         barsubname: diseaseBurdenStrings.controlBarSubName,
-                                        barsubnamelink: 'http://www.google.com',
+                                        barsubnamelink: '',
                                         inbar: '',
                                         descriptor: proportionWithoutDiseaseDescriptiveString}
                                 ],
@@ -758,7 +768,7 @@ var mpgSoftware = mpgSoftware || {};
                     $('#sigmaVariantCharacterization').append(UTILS.sigmaVariantCharacterization(variant, variantTitle));
                 },
                 howCommonIsThisVariantAcrossEthnicities = function (variant, alleleFrequencyStrings) {// how common is this allele across different ethnicities
-                    var weHaveEnoughDataToDescribeMinorAlleleFrequencies = ((variant["EXCHP_T2D_MAF"]!==null) && (variant["_13k_T2D_AA_MAF"]!==null) && (variant["_13k_T2D_AA_MAF"]!==null));
+                    var weHaveEnoughDataToDescribeMinorAlleleFrequencies = ( (variant["_13k_T2D_AA_MAF"]!==null) && (variant["_13k_T2D_AA_MAF"]!==null));// note: "EXCHP_T2D_MAF" is allowed to be null
                     UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToDescribeMinorAlleleFrequencies, $('#howCommonIsExists'), $('#howCommonIsNoExists'));
                     if (weHaveEnoughDataToDescribeMinorAlleleFrequencies) {
                         privateMethods.showEthnicityPercentageWithBarChart(variant, alleleFrequencyStrings);

@@ -210,7 +210,11 @@ var baget = baget || {};  // encapsulating variable
                             if (typeof d.value === 'undefined') {
                                 return 0;
                             } else {
-                                return (x(d.value) - x(internalMin));
+                                var boxWidth = x(d.value) - x(internalMin);
+                                if ((boxWidth>0) && (boxWidth < 10)){
+                                    boxWidth=2;
+                                }
+                                return (boxWidth);
                             }
 
                         });
@@ -394,16 +398,55 @@ var baget = baget || {};  // encapsulating variable
 
                     // This next section is necessary only if you want to include question marks
                     // that provide external HTML links.
-                    var elem = chart.selectAll("text.clickableQuestionMark")
-                        .data(data);
+                    var weHaveQuestionMarks = false;
+                    for ( var i = 0 ; ((i < data.length) && (!weHaveQuestionMarks)) ; i++ ){
+                        if ((typeof(data[i].barsubnamelink) !== 'undefined') &&
+                            (data[i].barsubnamelink.length > 0)){
+                            weHaveQuestionMarks = true;
+                        }
+                    }
+                    if (weHaveQuestionMarks){
+                        var elem = chart.selectAll("text.clickableQuestionMark")
+                            .data(data);
 
-                    var elemEnter = elem
-                        .enter()
-                        .append("svg:a")
-                        .attr("xlink:href", function (d) {
-                            return d.barsubnamelink;
-                        })
-                        .append("g");
+                        var elemEnter = elem
+                            .enter()
+                            .append("svg:a")
+                            .attr("xlink:href", function (d) {
+                                return d.barsubnamelink;
+                            })
+                            .append("g");
+
+                        elemEnter
+                            .append("circle")
+                            .attr("cx",  margin.left+roomForLabels-labelSpacer)
+                            .attr("cy", function(d, i){
+                                if (range!==0){
+                                    vPosition.pos(d.barname);
+                                }else{
+                                    return y(d.barname) + y.rangeBand()/2;
+                                }
+                            } )
+                            .attr('r',8)
+                            .attr("transform", function(d){return "translate(-5,29)"})
+                            .attr('class', 'clickableQuestionMark')
+                        ;
+                        elemEnter
+                            .append("text")
+                            .attr("x",  margin.left+roomForLabels-labelSpacer)
+                            .attr("y", function(d, i){
+                                if (range!==0){
+                                    vPosition.pos(d.barname);
+                                }else{
+                                    return y(d.barname) + y.rangeBand()/2;
+                                }                        } )
+                            .attr("dy", ""+(1.4+textLeading)+"em")
+                            .attr("text-anchor", "end")
+                            .attr('class', 'clickableQuestionMark')
+                            .text("?");
+
+                    }
+
                 });
 
         }
@@ -428,7 +471,7 @@ var baget = baget || {};  // encapsulating variable
         // assign data to the DOM
         instance.assignData = function (x) {
             if (!arguments.length) return data;
-            // data = x;
+           // data = x;
             return instance;
         };
 
