@@ -78,7 +78,7 @@ var baget = baget || {};  // encapsulating variable
                     }
 
                     if (logXScale) {
-                        internalMin = 1;
+                        internalMin = 0.5;
                         x = d3.scale.log()
                             .base(10)
                             .domain([internalMin, maximumPossibleValue ])
