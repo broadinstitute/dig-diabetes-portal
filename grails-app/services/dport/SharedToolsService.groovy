@@ -458,6 +458,56 @@ class SharedToolsService {
 
     }
 
+/***
+ * build up a phenotype list
+ * @return
+ */
+    public LinkedHashMap<String,List<LinkedHashMap>> composePhenotypeOptions (){
+        LinkedHashMap returnValue = [:]
+        List cardioList = []
+        Phenotype singlePhenotype = Phenotype.findByName('fasting glucose')
+        cardioList << ['mkey':singlePhenotype.databaseKey,'name':singlePhenotype.name]
+        for (Phenotype phenotype in Phenotype.list()){
+            if ((phenotype.category == 'cardiometabolic') && (phenotype.name != 'fasting glucose')){
+                cardioList << ['mkey':phenotype.databaseKey,'name':phenotype.name]
+            }
+        }
+        returnValue ["cardio"] = cardioList
+        List otherList = []
+        for (Phenotype phenotype in Phenotype.list()){
+            if ( phenotype.category == 'other'){
+                otherList << ['mkey':phenotype.databaseKey,'name':phenotype.name]
+            }
+        }
+        returnValue ["other"] = otherList
+        return returnValue
+    }
+
+
+
+
+    /***
+     * build up a phenotype list
+     * @return
+     */
+    public LinkedHashMap<String,List<LinkedHashMap>> composeDatasetOptions (){
+        LinkedHashMap returnValue = [:]
+        List ancestry = []
+        ancestry << ['mkey':'AA','name':'African-American']
+        ancestry << ['mkey':'EA','name':'East Asian']
+        ancestry << ['mkey':'SA','name':'South Asian']
+        ancestry << ['mkey':'EU','name':'European']
+        ancestry << ['mkey':'HS','name':'Hispanic']
+        returnValue ["ancestry"] = ancestry
+        return returnValue
+    }
+
+
+
+
+
+
+
     /***
      *  we need to  encode the list of parameters so that we can reset them when we reenter  the filter setting form.  It
      *  is certainly true that this is a different form of the same information that is held in BOTH the filter list and the

@@ -23,7 +23,6 @@ class VariantSearchController {
             encParams = params.encParams
             log.debug "variantSearch params.encParams = ${params.encParams}"
         } else if (sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma))  {  // if sigma default data set is sigma
-
             encParams = "1:0"
         }
         render(view: 'variantSearch',
@@ -34,6 +33,25 @@ class VariantSearchController {
                         encParams : encParams])
 
     }
+
+
+    def variantSearchWF(){
+        String encParams
+        if (params.encParams) {
+            encParams = params.encParams
+            log.debug "variantSearch params.encParams = ${params.encParams}"
+        } else if (sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma))  {  // if sigma default data set is sigma
+            encParams = "1:0"
+        }
+
+        render(view: 'variantWorkflow',
+                model: [show_gwas : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
+                        show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
+                        show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
+                        show_sigma: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
+                        encParams : encParams])
+    }
+
 
     /***
      * User has posted a search request.  The search was made through a traditional form (the GO button on the variant search page).

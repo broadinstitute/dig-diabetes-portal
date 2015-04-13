@@ -8,6 +8,7 @@
                 </sec:ifAllGranted>
                 <sec:ifAllGranted roles="ROLE_SYSTEM">
                     <g:link controller='system' action="systemManager">System</g:link>
+                    <g:link controller='variantSearch' action="variantSearchWF">T</g:link>
                     &middot;
                 </sec:ifAllGranted>
                 <sec:loggedInUserInfo field="username"/>   &middot;
