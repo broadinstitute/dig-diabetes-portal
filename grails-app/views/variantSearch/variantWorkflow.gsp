@@ -41,9 +41,21 @@
     })();
     var makeDataSetsAppear = function (){
         $('#dataSetChooser').show ();
+        $('#filterInstructions').text('Choose a sample set  (or click GO for all sample sets):')
     };
     var makeVariantFilterAppear = function (){
         $('#variantFilter').show ();
+        $('#filterInstructions').text('Add filters, if any:')
+    };
+    var gatherFieldsAndPostResults = function (){
+        var varsToSend = {};
+        var phenotypeInput = UTILS.extractValsFromCombobox(['phenotypeInput']);
+        var datasetInput = UTILS.extractValsFromCombobox(['datasetInput']);
+        var variantFilters = UTILS.extractValFromTextboxes(['pValueInput','orValueInput']);
+        varsToSend = UTILS.concatMap(varsToSend,phenotypeInput) ;
+        varsToSend = UTILS.concatMap(varsToSend,datasetInput) ;
+        varsToSend = UTILS.concatMap(varsToSend,variantFilters) ;
+        UTILS.postQuery('./variantVWRequest',varsToSend);
     };
     $(document).ready(function (){
         $("#phenotype-input").prepend("<option value='' selected='selected'></option>");
@@ -80,11 +92,11 @@
             <div class="variant-view" >
 
                 <div class="row clearfix">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <h4>Specify a request</h4>
                         <g:render template="variantWFSpec" />
                     </div>
-                    <div  class="col-md-6">
+                    <div  class="col-md-7">
 
                         <g:render template="variantWFDescr" />
 

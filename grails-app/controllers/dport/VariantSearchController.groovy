@@ -49,7 +49,8 @@ class VariantSearchController {
                         show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                         show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
                         show_sigma: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
-                        encParams : encParams])
+                        encParams : encParams,
+                        variantWorkflowParmList:[]])
     }
 
 
@@ -102,7 +103,38 @@ class VariantSearchController {
         }
     }
 
+    def variantVWRequest(){
+        String phenotypeInput = ''
+        String datasetInput = ''
+        String pValueInput = ''
+        String  orValueInput = ''
+        if (params.phenotypeInput) {
+            phenotypeInput = params.phenotypeInput
+        }
+        if (params.datasetInput) {
+            datasetInput = params.datasetInput
+        }
+        if (params.pValueInput) {
+            pValueInput = params.pValueInput
+        }
+        if (params.orValueInput) {
+            orValueInput = params.orValueInput
+        }
+        LinkedHashMap variantWorkflowParms = [phenotypeInput:phenotypeInput,
+                                                   datasetInput:datasetInput,
+                                                   pValueInput:pValueInput,
+                                                   orValueInput:orValueInput ]
+        List <LinkedHashMap> variantWorkflowParmList = [variantWorkflowParms]
 
+
+        render(view: 'variantWorkflow',
+                model: [show_gwas : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
+                        show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
+                        show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
+                        show_sigma: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
+                        variantWorkflowParmList : variantWorkflowParmList])
+
+    }
 
 
 

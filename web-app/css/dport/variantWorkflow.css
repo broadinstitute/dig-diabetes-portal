@@ -15,3 +15,10 @@
     font-style: italic;
     font-weight: bold;
 }
+.variantWFdescriptionBox {
+    height: 500px;
+    border-left: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    border-right: 1px solid lightgray;
+    padding: 15px;
+}

@@ -1,18 +1,20 @@
+<div style="">
+    <ul  id="myTab" class="nav nav-tabs">
+        <li class="active"><a href="#developingQuery" data-toggle="tab">Developing query</a></li>
+        <li><a href="#variantList" data-toggle="tab">Variant List</a></li>
+        <li><a href="#variantTable" data-toggle="tab">Variant Table</a></li>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">List summaries <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a href="#listSummary1" data-toggle="tab">Histogram</a></li>
+                <li><a href="#listSummary2" data-toggle="tab">Summary statistics</a></li>
+            </ul>
+        </li>
 
-<ul  id="myTab" class="nav nav-tabs">
-    <li class="active"><a href="#developingQuery" data-toggle="tab">Developing query</a></li>
-    <li><a href="#variantList" data-toggle="tab">Variant List</a></li>
-    <li><a href="#variantTable" data-toggle="tab">Variant Table</a></li>
-    <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">List summaries <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-            <li><a href="#listSummary1" data-toggle="tab">Histogram</a></li>
-            <li><a href="#listSummary2" data-toggle="tab">Summary statistics</a></li>
-        </ul>
-    </li>
+    </ul>
 
-</ul>
-<div id="myTabContent" class="tab-content">
+
+<div id="myTabContent" class="tab-content variantWFdescriptionBox">
     <div class="tab-pane fade in active" id="developingQuery">
         <p></p>
     </div>
@@ -34,7 +36,9 @@
         <h2>I contain important statistics</h2>
     </div>
 </div>
-</div><script type="text/javascript">
+</div>
+</div>
+<script type="text/javascript">
     $('#myTab a').click(function (e) {
         if($(this).parent('li').hasClass('active')){
             $( $(this).attr('href') ).hide();
