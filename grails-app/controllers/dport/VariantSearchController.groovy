@@ -95,6 +95,17 @@ class VariantSearchController {
 
 
 
+    def retrieveDatasetsAjax() {
+        JSONObject jsonObject = restServerService.retrieveDatasets([], [])
+        render(status: 200, contentType: "application/json") {
+            [datasets: jsonObject]
+        }
+    }
+
+
+
+
+
     /***
      * a variant display table is on screen and the page is now asking for data. Perform the search.  This call retrieves the data
      * for the original page format call -> variantSearchRequest

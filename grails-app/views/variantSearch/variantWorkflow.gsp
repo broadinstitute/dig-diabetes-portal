@@ -8,6 +8,68 @@
 </head>
 
 <body>
+<script>
+    var mpgSoftware = mpgSoftware || {};
+
+
+    (function () {
+        "use strict";
+
+
+        mpgSoftware.variantWF = (function () {
+
+
+            var fillDataSetDropdown = function (dataSetJson) { // help text for each row
+                if ((typeof dataSetJson !== 'undefined')  &&
+                        (dataSetJson["is_error"] === false))
+                {
+                    var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
+                    var options = $("#dataset-input");
+                    var dataSetList = dataSetJson ["dataset"];
+                    for ( var i = 0 ; i < numberOfRecords ; i++ ){
+                        options.append($("<option />").val(dataSetList[i]).text(dataSetList[i]));
+                    }
+                }
+            };
+
+            return {
+                fillDataSetDropdown:fillDataSetDropdown
+            }
+
+        }());
+
+    })();
+    var makeDataSetsAppear = function (){
+        $('#dataSetChooser').show ();
+    };
+    var makeVariantFilterAppear = function (){
+        $('#variantFilter').show ();
+    };
+    $(document).ready(function (){
+        $("#phenotype-input").prepend("<option value='' selected='selected'></option>");
+    });
+
+
+    var loading = $('#spinner').show();
+    $.ajax({
+        cache: false,
+        type: "post",
+        url: "./retrieveDatasetsAjax",
+        data: {none: ''},
+        async: true,
+        success: function (data) {
+            if ((typeof data !== 'undefined')  &&
+                    (typeof data.datasets !== 'undefined')) {
+                mpgSoftware.variantWF.fillDataSetDropdown(data.datasets);
+            }
+            loading.hide();
+        },
+        error: function (jqXHR, exception) {
+            loading.hide();
+            core.errorReporter(jqXHR, exception);
+        }
+    });
+</script>
 
 
 <div id="main">
@@ -30,8 +92,6 @@
                 </div>
 
 
-
-
            </div>
 
         </div>
@@ -39,7 +99,7 @@
 
 </div>
 <script>
-    initializeFields( encParams);
+    //initializeFields( encParams);
 </script>
 
 </body>
