@@ -876,6 +876,104 @@ class FilterManagementService {
 
 
 
+    public LinkedHashMap processNewParameters ( String dataSet,
+            String gene,
+                                                      String geneExpander,
+                                                      String phenotype,
+                                                      String pValue,
+                                                      String pValueInequality,
+                                                      String orValue,
+                                                      String orValueInequality,
+                                                      String filters ) {
+        LinkedHashMap returnValue = [:]
+
+        if (dataSet) {
+            returnValue['dataSet']  = dataSet
+        }
+
+        if (gene) {
+            returnValue['gene']  = gene
+        }
+
+        if (geneExpander) {
+            int expander = 0
+            try {
+                expander = Integer.parseInt(geneExpander)
+            } catch (e) {
+                ; // not really a big deal if we fail -- it just means there is no expansion defined
+            }
+            returnValue['geneExpander']  = expander
+        }
+
+
+        if (phenotype) {
+            returnValue['phenotype']  = phenotype
+        }
+
+
+        if (pValue) {
+            float value = 0
+            try {
+                value = Float.parseFloat(pValue)
+                returnValue['pValue']  = value
+            } catch (e) {
+                ; // no P value defined if we fail the conversion
+            }
+        }
+
+        if (pValueInequality) {
+            returnValue['pValueInequality']  = pValueInequality
+        }
+
+
+        if (orValue) {
+            float value = 0
+            try {
+                value = Float.parseFloat(orValue)
+                returnValue['orValue']  = value
+            } catch (e) {
+                ; // no or value defined if we fail the conversion
+            }
+        }
+
+        if (orValueInequality) {
+            returnValue['orValueInequality']  = orValueInequality
+        }
+
+        if (filters) {
+            returnValue['filters']  = filters
+        }
+
+        return returnValue
+    }
+
+
+    public List <LinkedHashMap<String,String>> combineNewAndOldParameters ( LinkedHashMap newParameters,
+                                                String encodedOldParameters) {
+        // decode the old parameters and make them into a map
+        // create a new list, with new parameters as the first element
+        //  and subsequent parameter lists following
+        List <LinkedHashMap> returnValue = []
+        returnValue << newParameters
+        return returnValue
+    }
+
+
+    public List <LinkedHashMap<String,String>> encodeAllFilters ( List <LinkedHashMap> allFilters ) {
+        // Each set of filters in the list now needs to be broken into three parts:
+        //   (displayable strings can be created dynamically with a taglib), so we return only
+        //   encoded (to go back and forth to the browser)
+        //   filters (the JSON we pass to the API to perform a query)
+        //
+        //Important note: combineNewAndOldParameters and encodeAllFilters both return
+        //  List <LinkedHashMap<String,String>>, but it's not the same data structure.
+        //  In the first case each map contains a collection of different keys and values,
+        //  one for each selectable filter. In the second case each map contains only two
+        //  elements: 1) encoded parameters, and 2) JSON filters ready for action
+        List <LinkedHashMap> returnValue = []
+        returnValue << [encoded:"",jsonFilters:""]
+        return returnValue
+    }
 
 
 

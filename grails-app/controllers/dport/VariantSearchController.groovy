@@ -50,8 +50,51 @@ class VariantSearchController {
                         show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
                         show_sigma: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
                         encParams : encParams,
-                        variantWorkflowParmList:[]])
+                        variantWorkflowParmList:[],
+                        encodedFilterSets : [[:],[:]]])
     }
+
+
+    def variantVWRequest(){
+        String phenotypeInput = ''
+        String datasetInput = ''
+        String pValueInput = ''
+        String  orValueInput = ''
+        if (params.phenotypeInput) {
+            phenotypeInput = params.phenotypeInput
+        }
+        if (params.datasetInput) {
+            datasetInput = params.datasetInput
+        }
+        if (params.pValueInput) {
+            pValueInput = params.pValueInput
+        }
+        if (params.orValueInput) {
+            orValueInput = params.orValueInput
+        }
+        LinkedHashMap newParameters = filterManagementService.processNewParameters (params.dataSet,
+                params.gene,
+                params.geneExpander,
+                params.phenotype,
+                params.pValue,
+                params.pValueInequality,
+                params.orValue,
+                params.orValueInequality,
+                params.filters)
+        List <LinkedHashMap> combinedFilters = filterManagementService.combineNewAndOldParameters(newParameters,
+                params.oldParameters)
+        List <LinkedHashMap> encodedFilterSets = filterManagementService.encodeAllFilters (combinedFilters)
+
+
+        render(view: 'variantWorkflow',
+                model: [show_gwas : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
+                        show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
+                        show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
+                        show_sigma: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
+                        encodedFilterSets : encodedFilterSets])
+
+    }
+
 
 
     /***
@@ -101,39 +144,6 @@ class VariantSearchController {
         render(status: 200, contentType: "application/json") {
             [datasets: jsonObject]
         }
-    }
-
-    def variantVWRequest(){
-        String phenotypeInput = ''
-        String datasetInput = ''
-        String pValueInput = ''
-        String  orValueInput = ''
-        if (params.phenotypeInput) {
-            phenotypeInput = params.phenotypeInput
-        }
-        if (params.datasetInput) {
-            datasetInput = params.datasetInput
-        }
-        if (params.pValueInput) {
-            pValueInput = params.pValueInput
-        }
-        if (params.orValueInput) {
-            orValueInput = params.orValueInput
-        }
-        LinkedHashMap variantWorkflowParms = [phenotypeInput:phenotypeInput,
-                                                   datasetInput:datasetInput,
-                                                   pValueInput:pValueInput,
-                                                   orValueInput:orValueInput ]
-        List <LinkedHashMap> variantWorkflowParmList = [variantWorkflowParms]
-
-
-        render(view: 'variantWorkflow',
-                model: [show_gwas : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
-                        show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
-                        show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                        show_sigma: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
-                        variantWorkflowParmList : variantWorkflowParmList])
-
     }
 
 

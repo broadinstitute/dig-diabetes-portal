@@ -42,5 +42,20 @@ class VariantQueryToolsTagLib {
 
     }
 
+    def renderEncodedFilters = { attrs,body ->
+        if ((attrs.filterSet) &&
+                (attrs.filterSet.size()>1)) {
+            for(LinkedHashMap map in attrs.filterSet){
+                if (map.ecoded){
+                    out = "<h2>there was something in this map</h2>"
+                }
+            }
 
-}
+        } else {
+            out << ""
+        }
+    }
+
+
+
+    }

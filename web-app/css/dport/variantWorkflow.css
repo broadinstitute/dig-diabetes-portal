@@ -22,3 +22,27 @@
     border-right: 1px solid lightgray;
     padding: 15px;
 }
+
+.variantWFsingleFilter {
+    background-color: #CEF6CE;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.developingQueryComponents {
+    margin: 5px 0 5px 0;
+    background-color: #CEF6CE;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.developingQueryComponentsFilters {
+    border: 1px solid lightseagreen;
+    padding: 10px 0 10px 0;
+}
+.developingQueryComponentsFilterTitle {
+    font-family: "Arial Black", Gadget, sans-serif;
+    margin: 0px auto 0 5px;
+}
+.developingQueryComponentsFilterIcons {
+    font-family: "Arial Black", Gadget, sans-serif;
+    margin: 4px 10px 0 auto;
+}
