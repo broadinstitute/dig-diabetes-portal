@@ -88,16 +88,17 @@ class VariantQueryToolsTagLib {
 
                     <div class="col-md-6">&gt;&nbsp;&nbsp; ${map.orValue}</div>
                                         </div>""".toString()
-
-                        if (map.pValue) {
-                            out << """<div class="row clearfix">
+                    }
+                    if (map.pValue) {
+                        out << """<div class="row clearfix">
                     <div class="col-md-6 text-right">p-value</div>
 
                                             <div class="col-md-6">&lt&nbsp;&nbsp; ${map.pValue}</div>
-                    </div>
-                                    </div>""".toString()
+                    </div>""".toString()
+                    }
 
-                            out << """<div class="col-md-3"></div>
+                            out << """</div>
+                                <div class="col-md-3"></div>
 
                                 </div>
                     </div>
@@ -117,8 +118,6 @@ class VariantQueryToolsTagLib {
                 } else {
                     out << ""
                 }
-            }
-        }
     }
 
     def renderHiddenFields = { attrs, body ->

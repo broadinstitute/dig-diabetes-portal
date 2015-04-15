@@ -87,6 +87,10 @@
 
 
                             </div>
+
+
+
+
                         </div>
 
                     </span>
@@ -97,6 +101,9 @@
 
                     </div>
 
+                    <div class="row clearfix" style="margin-top: 10px">
+                        %{--<g:render template="variantEffectOnproteins" />--}%
+                    </div>
 
                     <div>
                     </div>

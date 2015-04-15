@@ -20,19 +20,37 @@
         </div>
 
         <div class="tab-pane fade" id="variantList">
-            <p>RS123</p>
 
-            <p>This is the variant you seek</p>
-            <hr>
+            <div class="panel panel-default">
 
-            <p>RS123</p>
+                <div class="panel-body">
+                    <p><strong>RS123</strong></p>
 
-            <p>This is the variant you seek</p>
-            <hr>
+                    <p>This is the variant you wanted</p>
+                    <p>Here is lots of useful information describing this variant in more detail</p>
+                    <hr>
+
+                    <p><strong>RS123</strong></p>
+
+                    <p>This is the variant you wanted</p>
+                    <p>Here is lots of useful information describing this variant in more detail</p>
+
+                    <hr>
+                    <p><strong>RS123</strong></p>
+
+                    <p>This is the variant you wanted</p>
+                    <p>Here is lots of useful information describing this variant in more detail</p>
+
+                    <hr>
+                </div>
+            </div>
+
         </div>
 
         <div class="tab-pane fade" id="variantTable">
-            <p></p>
+
+
+
         </div>
 
         <div class="tab-pane fade" id="listSummary1">
