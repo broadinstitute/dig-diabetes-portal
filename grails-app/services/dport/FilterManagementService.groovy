@@ -954,7 +954,14 @@ class FilterManagementService {
         // create a new list, with new parameters as the first element
         //  and subsequent parameter lists following
         List <LinkedHashMap> returnValue = []
+
+        // Shortcut shortcut shortcut!!!!!!
+        newParameters["encoded"] = 1
+
         returnValue << newParameters
+        if (encodedOldParameters){
+            returnValue << newParameters
+        }
         return returnValue
     }
 
@@ -970,9 +977,12 @@ class FilterManagementService {
         //  In the first case each map contains a collection of different keys and values,
         //  one for each selectable filter. In the second case each map contains only two
         //  elements: 1) encoded parameters, and 2) JSON filters ready for action
+
         List <LinkedHashMap> returnValue = []
         returnValue << [encoded:"",jsonFilters:""]
-        return returnValue
+
+        // For the purposes of demo let's take a Big shortcut
+        return allFilters
     }
 
 

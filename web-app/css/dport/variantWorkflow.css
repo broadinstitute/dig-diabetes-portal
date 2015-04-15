@@ -46,3 +46,9 @@
     font-family: "Arial Black", Gadget, sans-serif;
     margin: 4px 10px 0 auto;
 }
+.developingQueryComponentsBlockOfFilters {
+    border: 1px solid gray;
+    margin: 20px;
+    padding: 0;
+    margin-bottom: 25px;
+}

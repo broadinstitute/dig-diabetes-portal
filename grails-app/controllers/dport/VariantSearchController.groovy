@@ -51,27 +51,11 @@ class VariantSearchController {
                         show_sigma: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
                         encParams : encParams,
                         variantWorkflowParmList:[],
-                        encodedFilterSets : [[:],[:]]])
+                        encodedFilterSets : [[:]]])
     }
 
 
     def variantVWRequest(){
-        String phenotypeInput = ''
-        String datasetInput = ''
-        String pValueInput = ''
-        String  orValueInput = ''
-        if (params.phenotypeInput) {
-            phenotypeInput = params.phenotypeInput
-        }
-        if (params.datasetInput) {
-            datasetInput = params.datasetInput
-        }
-        if (params.pValueInput) {
-            pValueInput = params.pValueInput
-        }
-        if (params.orValueInput) {
-            orValueInput = params.orValueInput
-        }
         LinkedHashMap newParameters = filterManagementService.processNewParameters (params.dataSet,
                 params.gene,
                 params.geneExpander,

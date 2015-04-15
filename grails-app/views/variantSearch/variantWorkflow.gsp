@@ -24,7 +24,7 @@
                         (dataSetJson["is_error"] === false))
                 {
                     var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
-                    var options = $("#dataset-input");
+                    var options = $("#dataSet");
                     var dataSetList = dataSetJson ["dataset"];
                     for ( var i = 0 ; i < numberOfRecords ; i++ ){
                         options.append($("<option />").val(dataSetList[i]).text(dataSetList[i]));
@@ -49,16 +49,16 @@
     };
     var gatherFieldsAndPostResults = function (){
         var varsToSend = {};
-        var phenotypeInput = UTILS.extractValsFromCombobox(['phenotypeInput']);
-        var datasetInput = UTILS.extractValsFromCombobox(['datasetInput']);
-        var variantFilters = UTILS.extractValFromTextboxes(['pValueInput','orValueInput']);
+        var phenotypeInput = UTILS.extractValsFromCombobox(['phenotype']);
+        var datasetInput = UTILS.extractValsFromCombobox(['dataSet']);
+        var variantFilters = UTILS.extractValFromTextboxes(['pValue','orValue']);
         varsToSend = UTILS.concatMap(varsToSend,phenotypeInput) ;
         varsToSend = UTILS.concatMap(varsToSend,datasetInput) ;
         varsToSend = UTILS.concatMap(varsToSend,variantFilters) ;
         UTILS.postQuery('./variantVWRequest',varsToSend);
     };
     $(document).ready(function (){
-        $("#phenotype-input").prepend("<option value='' selected='selected'></option>");
+        $("#phenotype").prepend("<option value='' selected='selected'></option>");
     });
 
 

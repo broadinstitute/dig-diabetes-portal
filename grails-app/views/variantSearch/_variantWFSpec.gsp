@@ -14,16 +14,19 @@
                         Phenotype:
                 </div>
                <div class="col-md-5">
-                        <select name="" id="phenotype-input" class="form-control btn-group btn-input clearfix"
+                        <select name="" id="phenotype" class="form-control btn-group btn-input clearfix"
                                 onchange="makeDataSetsAppear()">
                             <g:renderPhenotypeOptions/>
                         </select>
 
                 </div>
-                <div class="col-md-3">
+               <div class="col-md-1">
+                   <g:helpText title="variantSearch.wfRequest.phenotype.help.header" placement="right"
+                               body="variantSearch.wfRequest.phenotype.help.text" qplacer="10px 0 0 0"/>
+               </div>
+               <div class="col-md-2">
 
-                </div>
-
+               </div>
             </div>
         </div>
 
@@ -34,14 +37,18 @@
                         Sample:
                     </div>
                     <div class="col-md-5">
-                        <select name="" id="dataset-input" class="form-control btn-group btn-input clearfix"
+                        <select name="" id="dataSet" class="form-control btn-group btn-input clearfix"
                                 onchange="makeVariantFilterAppear()">
                         </select>
 
                     </span>
 
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-1">
+                        <g:helpText title="variantSearch.wfRequest.dataSet.help.header" placement="right"
+                                    body="variantSearch.wfRequest.dataSet.help.text" qplacer="10px 0 0 0"/>
+                    </div>
+                    <div class="col-md-2">
 
                     </div>
 
@@ -59,17 +66,24 @@
                     <div class="col-md-6">
                         <div  style="margin-top: 20px" class="well well-sm">
                             <div class="row clearfix">
-                                <div class="col-md-6 col-md-offset-1">p Value</div>
+                                <div class="col-md-6">p Value</div>
 
-                                <div class="col-md-5"><input type="text" class="form-control" id="pValue-input"></div>
-
+                                <div class="col-md-4"><input type="text" class="form-control" id="pValue" style="height:24px"></div>
+                                <div class="col-md-2">
+                                    <g:helpText title="variantSearch.wfRequest.dataSet.help.header" placement="right"
+                                                body="variantSearch.wfRequest.dataSet.help.text" qplacer="0 10px 0 0"/>
+                                </div>
 
                             </div>
 
                             <div class="row clearfix" style="margin-top: 10px">
-                                <div class="col-md-6 col-md-offset-1">OR Value</div>
+                                <div class="col-md-6">OR Value</div>
 
-                                <div class="col-md-5"><input type="text" class="form-control" id="orValue-input"></div>
+                                <div class="col-md-4"><input type="text" class="form-control" id="orValue" style="height:24px"></div>
+                                <div class="col-md-2">
+                                    <g:helpText title="variantSearch.wfRequest.dataSet.help.header" placement="right"
+                                                body="variantSearch.wfRequest.dataSet.help.text" qplacer="0 10px 0 0"/>
+                                </div>
 
 
                             </div>
