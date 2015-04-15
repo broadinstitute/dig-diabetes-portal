@@ -52,9 +52,11 @@
         var phenotypeInput = UTILS.extractValsFromCombobox(['phenotype']);
         var datasetInput = UTILS.extractValsFromCombobox(['dataSet']);
         var variantFilters = UTILS.extractValFromTextboxes(['pValue','orValue']);
+        var savedValue = UTILS.extractValFromTextboxes(['savedValue']);
         varsToSend = UTILS.concatMap(varsToSend,phenotypeInput) ;
         varsToSend = UTILS.concatMap(varsToSend,datasetInput) ;
         varsToSend = UTILS.concatMap(varsToSend,variantFilters) ;
+        varsToSend = UTILS.concatMap(varsToSend,savedValue) ;
         UTILS.postQuery('./variantVWRequest',varsToSend);
     };
     $(document).ready(function (){
@@ -109,6 +111,11 @@
         </div>
     </div>
 
+</div>
+<div style = "display: none">
+    <div id="hiddenFields">
+         <g:renderHiddenFields filterSet='${encodedFilterSets}'/>
+    </div>
 </div>
 <script>
     //initializeFields( encParams);
