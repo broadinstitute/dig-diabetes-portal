@@ -960,7 +960,17 @@ class FilterManagementService {
 
         returnValue << newParameters
         if (encodedOldParameters){
-            returnValue << newParameters
+            List <String> savedParameters =  encodedOldParameters.split("\\^")
+            if (savedParameters.size() > 3){
+                LinkedHashMap savedParms = [:]
+                savedParms['phenotype'] = savedParameters[0]
+                savedParms['dataSet'] = savedParameters[1]
+                savedParms['orValue'] = savedParameters[2]
+                savedParms['pValue'] = savedParameters[3]
+                savedParms['encoded'] = 1
+                returnValue << savedParms
+            }
+
         }
         return returnValue
     }

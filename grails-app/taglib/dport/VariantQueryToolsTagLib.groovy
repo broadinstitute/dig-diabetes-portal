@@ -127,7 +127,7 @@ class VariantQueryToolsTagLib {
             int blockCount = 0
             for (LinkedHashMap map in attrs.filterSet) {
                 if (map.encoded) {
-                    StringBuilder sb = new StringBuilder("^")
+                    StringBuilder sb = new StringBuilder("")
                     if (map.phenotype) {
                         sb << "${map.phenotype}"
                     }
