@@ -47,7 +47,7 @@ class VariantQueryToolsTagLib {
                 (attrs.filterSet.size() > 0)) {
             int blockCount = 0
             for (LinkedHashMap map in attrs.filterSet) {
-                if (map.encoded) {
+                if (map.size()>0) {
                     out << """<div id="filterBlock${blockCount}" class="developingQueryComponentsBlockOfFilters">
                     <div style="height: 25px; background-color: #ffffff">
                     <span class="text-left developingQueryComponentsFilterTitle">Filter number ${blockCount + 1}</span>
@@ -125,29 +125,23 @@ class VariantQueryToolsTagLib {
                 (attrs.filterSet.size() > 0)) {
             int blockCount = 0
             for (LinkedHashMap map in attrs.filterSet) {
-                if (map.encoded) {
-                    StringBuilder sb = new StringBuilder("")
-                    if (map.phenotype) {
-                        sb << "${map.phenotype}"
+                    if (map.size()>0){
+                        String encodedFilterList = sharedToolsService.encodeAFilterList(
+                                [phenotype:map.phenotype,
+                                 dataSet:map.dataSet,
+                                 orValue: map.orValue,
+                                 orValueInequality: map.orValueInequality,
+                                 pValue: map.pValue,
+                                 pValueInequality: map.pValueInequality])
+                        out << """<input type="text" class="form-control" id="savedValue${blockCount}" value="${
+                            encodedFilterList
+                        }" style="height:0px">""".toString()
+                        blockCount++;
                     }
-                    sb << "^"
-                    if (map.dataSet) {
-                        sb << "${map.dataSet}"
-                    }
-                    sb << "^"
-                    if (map.orValue) {
-                        sb << "${map.orValue}"
-                    }
-                    sb << "^"
-                    if (map.pValue) {
-                        sb << "${map.pValue}"
-                    }
-                    out << """<input type="text" class="form-control" id="savedValue" value="${
-                        sb.toString()
-                    }" style="height:0px"></div>""".toString()
-                    blockCount++;
-                }
-            }
+             }
+            out << """<input type="text" class="form-control" id="totalFilterCount" value="${
+                blockCount
+            }" style="height:0px"></div>""".toString()
         }
     }
 

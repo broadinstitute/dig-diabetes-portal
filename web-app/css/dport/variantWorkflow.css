@@ -20,13 +20,18 @@
     border-left: 1px solid lightgray;
     border-bottom: 1px solid lightgray;
     border-right: 1px solid lightgray;
-    padding: 15px;
+    padding: 0px;
 }
 
 .variantWFsingleFilter {
     background-color: #CEF6CE;
     border: 1px solid transparent;
     border-radius: 4px;
+}
+
+.developingQueryHolder{
+    overflow-y: scroll;
+    height: 500px;
 }
 .developingQueryComponents {
     margin: 5px 0 5px 0;

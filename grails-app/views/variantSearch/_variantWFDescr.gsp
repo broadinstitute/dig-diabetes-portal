@@ -15,7 +15,7 @@
 
 
     <div id="myTabContent" class="tab-content variantWFdescriptionBox">
-        <div class="tab-pane fade in active" id="developingQuery">
+        <div class="tab-pane fade in active developingQueryHolder" id="developingQuery">
             <g:renderEncodedFilters filterSet='${encodedFilterSets}'/>
         </div>
 

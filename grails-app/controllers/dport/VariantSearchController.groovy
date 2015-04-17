@@ -65,8 +65,10 @@ class VariantSearchController {
                 params.orValue,
                 params.orValueInequality,
                 params.filters)
+
+        List <String> oldFilters=filterManagementService.observeMultipleFilters(params)
         List <LinkedHashMap> combinedFilters = filterManagementService.combineNewAndOldParameters(newParameters,
-                params.savedValue)
+                oldFilters)
         List <LinkedHashMap> encodedFilterSets = filterManagementService.encodeAllFilters (combinedFilters)
 
 

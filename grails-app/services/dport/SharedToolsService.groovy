@@ -6,6 +6,7 @@ import dport.people.UserRole
 import dport.people.UserSession
 import grails.plugin.mail.MailService
 import grails.transaction.Transactional
+import groovy.json.StringEscapeUtils
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
@@ -598,6 +599,69 @@ class SharedToolsService {
 
     }
 
+
+
+    public String encodeAFilterList(LinkedHashMap<String,String> parametersToEncode) {
+        StringBuilder sb   = new StringBuilder ("")
+        if (((parametersToEncode.containsKey("phenotype")) && (parametersToEncode["phenotype"]))) {
+            sb << ("1="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["phenotype"].toString())+"^")
+        }
+        if (((parametersToEncode.containsKey("dataSet")) && (parametersToEncode["dataSet"]))) {
+            sb << ("2="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["dataSet"].toString())+"^")
+        }
+        if (((parametersToEncode.containsKey("orValue")) && (parametersToEncode["orValue"]))) {
+            sb << ("3="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["orValue"].toString())+"^")
+        }
+        if (((parametersToEncode.containsKey("orValueInequality")) && (parametersToEncode["orValueInequality"]))) {
+            sb << ("4="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["orValueInequality"])+"^")
+        }
+        if (((parametersToEncode.containsKey("pValue")) && (parametersToEncode["pValue"]))) {
+            sb << ("5="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["pValue"].toString())+"^")
+        }
+        if (((parametersToEncode.containsKey("pValueInequality")) && (parametersToEncode["pValueInequality"]))) {
+            sb << ("6="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["pValueInequality"].toString())+"^")
+        }
+        return  sb.toString()
+    }
+
+
+
+    public LinkedHashMap<String,String>  decodeAFilterList(String encodedFilterString) {
+        LinkedHashMap<String,String> returnValue= [:]
+        if (encodedFilterString){
+            List <String> parametersList =  encodedFilterString.split("\\^")
+            for ( int  i = 0 ; i < parametersList.size() ; i++  > 0){
+                List <String> divKeys = parametersList[i].split("=")
+                if (divKeys.size() != 2){
+                    log.info("Problem interpreting filter list = ${parametersList}")
+                }else {
+                    int parameterKey
+                    try {
+                        parameterKey = Integer.parseInt(divKeys [0])
+                    }catch (e){
+                        log.info("Unexpected key when interpreting filter list = ${parametersList}")
+                    }
+                    switch (parameterKey){
+                        case 1:returnValue ["phenotype"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+                            break
+                        case 2:returnValue ["dataSet"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+                            break
+                        case 3:returnValue ["orValue"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+                            break
+                        case 4:returnValue ["orValueInequality"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+                            break
+                        case 5:returnValue ["pValue"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+                            break
+                        case 6:returnValue ["pValueInequality"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+                            break
+                        default:
+                            log.info("Unexpected parameter key  = ${parameterKey}")
+                    }
+                }
+            }
+        }
+        return  returnValue
+    }
 
 
 

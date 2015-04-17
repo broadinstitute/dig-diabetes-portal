@@ -53,7 +53,19 @@
         var phenotypeInput = UTILS.extractValsFromCombobox(['phenotype']);
         var datasetInput = UTILS.extractValsFromCombobox(['dataSet']);
         var variantFilters = UTILS.extractValFromTextboxes(['pValue','orValue']);
-        var savedValue = UTILS.extractValFromTextboxes(['savedValue']);
+        var totalFilterCount = UTILS.extractValFromTextboxes(['totalFilterCount']);
+        var savedValuesList = [];
+        var savedValue = {};
+        if (typeof totalFilterCount['totalFilterCount'] !== 'undefined') {
+            var valueCount = parseInt(totalFilterCount['totalFilterCount']);
+            if (valueCount>0){
+                for ( var i = 0 ; i < valueCount ; i++ ){
+                    savedValuesList.push ('savedValue'+i);
+                }
+                savedValue = UTILS.extractValFromTextboxes(savedValuesList);
+            }
+        }
+        //var savedValue = UTILS.extractValFromTextboxes(['savedValue']);
         varsToSend = UTILS.concatMap(varsToSend,phenotypeInput) ;
         varsToSend = UTILS.concatMap(varsToSend,datasetInput) ;
         varsToSend = UTILS.concatMap(varsToSend,variantFilters) ;

@@ -947,29 +947,41 @@ class FilterManagementService {
         return returnValue
     }
 
+    // pull back only the parameters we want with the regex
+    public List <String> observeMultipleFilters (parameters){
+       List <String> returnValue = []
+       LinkedHashMap savedValues = parameters.findAll{ it.key =~ /^savedValue/ }
+       for (savedValue in savedValues){
+           returnValue << savedValue.value as String
+       }
+       return returnValue
+    }
+
+
 
     public List <LinkedHashMap<String,String>> combineNewAndOldParameters ( LinkedHashMap newParameters,
-                                                String encodedOldParameters) {
+                                                List <String> encodedOldParameterList) {
         // decode the old parameters and make them into a map
         // create a new list, with new parameters as the first element
         //  and subsequent parameter lists following
         List <LinkedHashMap> returnValue = []
 
-        // Shortcut shortcut shortcut!!!!!!
-        newParameters["encoded"] = 1
-
         returnValue << newParameters
-        if (encodedOldParameters){
-            List <String> savedParameters =  encodedOldParameters.split("\\^")
-            if (savedParameters.size() > 3){
-                LinkedHashMap savedParms = [:]
-                savedParms['phenotype'] = savedParameters[0]
-                savedParms['dataSet'] = savedParameters[1]
-                savedParms['orValue'] = savedParameters[2]
-                savedParms['pValue'] = savedParameters[3]
-                savedParms['encoded'] = 1
-                returnValue << savedParms
+        if (encodedOldParameterList){
+            for (String value in encodedOldParameterList){
+                returnValue << sharedToolsService.decodeAFilterList(value)
             }
+          //  returnValue << sharedToolsService.decodeAFilterList(encodedOldParameters)
+//            List <String> savedParameters =  encodedOldParameters.split("\\^")
+//            if (savedParameters.size() > 3){
+//                LinkedHashMap savedParms = [:]
+//                savedParms['phenotype'] = savedParameters[0]
+//                savedParms['dataSet'] = savedParameters[1]
+//                savedParms['orValue'] = savedParameters[2]
+//                savedParms['pValue'] = savedParameters[3]
+//                savedParms['encoded'] = 1
+//                returnValue << savedParms
+//            }
 
         }
         return returnValue
