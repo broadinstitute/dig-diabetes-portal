@@ -406,14 +406,14 @@ var mpgSoftware = mpgSoftware || {};
                             proportionWithoutDiseaseDescriptiveString = "(" + peopleWithoutDiseaseNumerator + " out of " + peopleWithoutDiseaseDenominator + ")";
                             var dataForBarChart = [
                                     { value: calculatedPercentWithDisease,
-                                        barname: diseaseBurdenStrings.caseBarName,
-                                        barsubname: diseaseBurdenStrings.caseBarSubName,
+                                        barname:  diseaseBurdenStrings.controlBarName,
+                                        barsubname:  diseaseBurdenStrings.controlBarSubName,
                                         barsubnamelink: '',
                                         inbar: '',
                                         descriptor: proportionWithDiseaseDescriptiveString},
                                     {value: calculatedPercentWithoutDisease,
-                                        barname: diseaseBurdenStrings.controlBarName,
-                                        barsubname: diseaseBurdenStrings.controlBarSubName,
+                                        barname: diseaseBurdenStrings.caseBarName,
+                                        barsubname: diseaseBurdenStrings.caseBarSubName,
                                         barsubnamelink: '',
                                         inbar: '',
                                         descriptor: proportionWithoutDiseaseDescriptiveString}

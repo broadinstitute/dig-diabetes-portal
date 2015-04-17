@@ -79,7 +79,7 @@
                 caseBarName:'<g:message code="variant.diseaseBurden.case.barname" default="have T2D" />',
                 caseBarSubName:'<g:message code="variant.diseaseBurden.case.barsubname" default="cases" />',
                 controlBarName:'<g:message code="variant.diseaseBurden.control.barname" default="do not have T2D" />',
-                controlBarSubName:'<g:message code="variant.diseaseBurden.control.barname" default="controls" />',
+                controlBarSubName:'<g:message code="variant.diseaseBurden.control.barsubname" default="controls" />',
                 diseaseBurdenPValueQ:'<g:helpText title="variant.diseaseBurden.control.pValue.help.header"  qplacer="2px 0 0 6px" placement="left" body="variant.variantAssociations.pValue.help.text"/>',
                 diseaseBurdenOddsRatioQ:'<g:helpText title="variant.diseaseBurden.control.oddsRatio.help.header"  qplacer="2px 0 0 6px" placement="left" body="variant.variantAssociations.oddsRatio.help.text"/>'
             };
