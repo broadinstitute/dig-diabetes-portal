@@ -31,6 +31,7 @@ modules = {
     }
     variantWF {
         resource url: 'css/dport/variantWorkflow.css'
+        resource url: 'js/lib/dport/variantWorkflow.js'
     }
     // igv and core independently call jquery
     igv {

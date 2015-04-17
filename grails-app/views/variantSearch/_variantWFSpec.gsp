@@ -15,7 +15,7 @@
                 </div>
                <div class="col-md-5">
                         <select name="" id="phenotype" class="form-control btn-group btn-input clearfix"
-                                onchange="makeDataSetsAppear()">
+                                onchange="mpgSoftware.variantWF.respondToPhenotypeSelection()">
                             <g:renderPhenotypeOptions/>
                         </select>
 
@@ -38,7 +38,8 @@
                     </div>
                     <div class="col-md-5">
                         <select name="" id="dataSet" class="form-control btn-group btn-input clearfix"
-                                onchange="makeVariantFilterAppear()">
+                                onchange="mpgSoftware.variantWF.respondToDataSetSelection()"
+                                onclick="mpgSoftware.variantWF.respondToDataSetSelection()">
                         </select>
 
                     </span>
@@ -113,6 +114,6 @@
 
 
 
-        <button class="btn btn-lg btn-primary pull-right variant-filter-button" onclick="gatherFieldsAndPostResults()">Go</button>
+        <button class="btn btn-lg btn-primary pull-right variant-filter-button" onclick="mpgSoftware.variantWF.gatherFieldsAndPostResults()">Go</button>
     </div>
 </div>

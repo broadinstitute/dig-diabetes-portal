@@ -512,7 +512,7 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
                                  List <String> experimentList) {
         JSONObject returnValue = null
         String sampleGroup = (sampleGroupList.size() > 0)?("\""+sampleGroupList.join("\",\"")+"\""):"";
-        String experimentGroup = (sampleGroupList.size() > 0)?("\""+experimentList.join("\",\"")+"\""):"";
+        String experimentGroup = (experimentList.size() > 0)?("\""+experimentList.join("\",\"")+"\""):"";
         String drivingJson = """{
 "sample_group": [${sampleGroup}],
 "experiment": [${experimentGroup}]

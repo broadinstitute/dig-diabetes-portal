@@ -126,7 +126,15 @@ class VariantSearchController {
 
 
     def retrieveDatasetsAjax() {
-        JSONObject jsonObject = restServerService.retrieveDatasets([], [])
+        List <String> phenotypeList = []
+        List <String> experimentList = []
+        if((params.phenotype) && (params.phenotype !=  null )){
+            phenotypeList << params.phenotype
+        }
+        if ((params.experiment) && (params.experiment !=  null )){
+            experimentList << params.experiment
+        }
+        JSONObject jsonObject = restServerService.retrieveDatasets(phenotypeList, experimentList)
         render(status: 200, contentType: "application/json") {
             [datasets: jsonObject]
         }
