@@ -49,7 +49,10 @@
     </div>
 </div>
 <script>
-    //initializeFields( encParams);
+    $( document ).ready( function(){
+        $('.panel-collapse.in')
+                .collapse('hide');
+    });
 </script>
 
 </body>

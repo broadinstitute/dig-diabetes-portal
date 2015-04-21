@@ -59,6 +59,7 @@ var mpgSoftware = mpgSoftware || {};
             var datasetInput = UTILS.extractValsFromCombobox(['dataSet']);
             var variantFilters = UTILS.extractValFromTextboxes(['pValue','orValue']);
             var totalFilterCount = UTILS.extractValFromTextboxes(['totalFilterCount']);
+            var experimentChoice = UTILS.extractValFromCheckboxes(['datasetExomeChip','datasetExomeSeq','datasetGWAS']);
             var savedValuesList = [];
             var savedValue = {};
             if (typeof totalFilterCount['totalFilterCount'] !== 'undefined') {
@@ -75,6 +76,7 @@ var mpgSoftware = mpgSoftware || {};
             varsToSend = UTILS.concatMap(varsToSend,datasetInput) ;
             varsToSend = UTILS.concatMap(varsToSend,variantFilters) ;
             varsToSend = UTILS.concatMap(varsToSend,savedValue) ;
+            varsToSend = UTILS.concatMap(varsToSend,experimentChoice) ;
             UTILS.postQuery('./variantVWRequest',varsToSend);
         };
         var initializePage = function (){
