@@ -17,6 +17,24 @@ class VariantController {
      */
     def variantInfo() {
         String variantToStartWith = params.id
+        // special case (which really should be handled on the backend, but let's fix it here for now)
+        // there is a common way of specifying variants which uses underscores in our database, though in the field it is seen with dashes
+        // my algorithm -- split on dashes.  If the first thing we see is a number then do the substitution (underscores for dashes)
+        if (variantToStartWith){
+            List <String> dividedByDashes = variantToStartWith.split("-")
+            if ((dividedByDashes) &&
+                    (dividedByDashes.size()>2)){
+                int isThisANumber = 0
+                try {
+                    isThisANumber = Integer.parseInt(dividedByDashes[0])
+                }catch(e){
+                   // his is only a test. An exception here is not a problem
+                }
+                if (isThisANumber > 0){// okay -- let's do the substitution
+                    variantToStartWith = variantToStartWith.replaceAll('-','_')
+                }
+            }
+        }
         if (variantToStartWith) {
             render(view: 'variantInfo',
                     model: [variantToSearch: variantToStartWith.trim(),

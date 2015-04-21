@@ -508,6 +508,26 @@ var UTILS = {
         }
         return returnValue;
     },
+    /***
+     * We need to make sure that all the fields have values before starting the plotting routines. I'll formalize
+     * this check, and cover both nulls and undefined
+     * @param variant
+     * @param fieldNameArray
+     */
+    nullsExist: function(variant,fieldNameArray){
+        var returnValue = false;
+        //First take care of the pathological cases
+        if (typeof variant === 'undefined') {return true;}
+        if (typeof fieldNameArray === 'undefined') {return false;}
+        for ( var i = 0 ; i < fieldNameArray.length ; i++ ){
+            if((variant[fieldNameArray[i]]===null) ||
+                (typeof variant[fieldNameArray[i]] === 'undefined') ){
+                returnValue = true;
+                break;
+            }
+        }
+        return returnValue;
+    },
     postQuery: function (path, params, method) {
     method = method || "post"; // Set method to post by default if not specified.
 
