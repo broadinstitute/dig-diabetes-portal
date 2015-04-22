@@ -45,7 +45,9 @@
 
         <g:applyLayout name="headerBottomT2dgenes"/>
 
-    </div>
+        <g:applyLayout name="notice"/>
+
+</div>
 </div>
 
 <g:layoutBody/>

@@ -4,6 +4,7 @@
 <head>
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
+    <r:require modules="scroller"/>
     <r:layoutResources/>
 </head>
 <style>

@@ -5,6 +5,10 @@ modules = {
         resource url: "js/lib/jquery.dataTables.min.js"
         resource url: "css/lib/jquery.dataTables.css"
     }
+    scroller {
+        resource url: 'js/lib/dport/jquery.li-scroller.1.0.js'
+        resource url: 'css/lib/li-scroller.css'
+    }
     portalHome {
         resource url: 'js/lib/dport/portalHome.js'
     }

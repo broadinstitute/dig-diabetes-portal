@@ -41,13 +41,13 @@ span.dataSetChoice{
 
                          <ul style="list-style-type: none;">
                              <li>
-                                 <input id="datasetExomeChip" type="checkbox" aria-label="Exome chip"><span class="dataSetChoice">Exome chip</span>
+                                 <input id="datasetExomeChip" type="checkbox" aria-label="Exome chip"  value="datasetExomeChip"><span class="dataSetChoice">Exome chip</span>
                              </li>
                              <li>
-                                 <input id="datasetExomeSeq" type="checkbox" aria-label="Exome sequence"><span class="dataSetChoice">Exome sequence</span>
+                                 <input id="datasetExomeSeq" type="checkbox" aria-label="Exome sequence"  value="datasetExomeSeq"><span class="dataSetChoice">Exome sequence</span>
                              </li>
                              <li>
-                                 <input id="datasetGWAS" type="checkbox" aria-label="GWAS"><span class="dataSetChoice">GWAS</span>
+                                 <input id="datasetGWAS" type="checkbox" aria-label="GWAS"  value="datasetGWAS"><span class="dataSetChoice">GWAS</span>
                            </li>
                          </ul>
 

@@ -28,6 +28,8 @@ class SharedToolsService {
     Integer showGene = -1
     Integer showBeacon = -1
 
+    String warningText = ""
+
     Integer helpTextSetting = 1 // 0== never display, 1== display conditionally, 2== always display
 
     public void setHelpTextSetting(int newHelpTextSetting){
@@ -41,6 +43,17 @@ class SharedToolsService {
     public int getHelpTextSetting (){
         return helpTextSetting
     }
+
+    public String getWarningText(){
+        return warningText
+    }
+
+    public void setWarningText(String warningText){
+        this.warningText = warningText
+    }
+
+
+
 
 
     public void  initialize(){

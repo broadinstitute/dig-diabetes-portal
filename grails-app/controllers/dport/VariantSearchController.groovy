@@ -64,7 +64,10 @@ class VariantSearchController {
                 params.pValueInequality,
                 params.orValue,
                 params.orValueInequality,
-                params.filters)
+                params.filters,
+                params.datasetExomeChip,
+                params.datasetExomeSeq,
+                params.datasetGWAS)
 
         List <String> oldFilters=filterManagementService.observeMultipleFilters(params)
         List <LinkedHashMap> combinedFilters = filterManagementService.combineNewAndOldParameters(newParameters,

@@ -243,6 +243,39 @@
 
             <div class="separator"></div>
 
+            <g:form action='updateWarningText' method='POST' class='form form-horizontal cssform' autocomplete='off'>
+                <h4>Set warning text(<em>current Setting = <strong>${warningText}</strong></em>)</h4>
+                <input type="text" name="warningText" Value="${warningText}"><br>
+                <div class="row clearfix">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <div >
+                            <div style="text-align:center; padding-top: 20px;">
+                                <input class="btn btn-primary btn-lg" type='submit' id="submitWarningText"
+                                       value='Commit'/>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row clearfix">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div >
+                            <g:if test='${flash.message}'>
+                                <div class="alert alert-danger">${flash.message}</div>
+                            </g:if>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+
+                </div>
+            </g:form>
+
+
+            <div class="separator"></div>
+
 
             <div class="row clearfix">
                     <div class="col-md-12">

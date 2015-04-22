@@ -884,7 +884,10 @@ class FilterManagementService {
                                                       String pValueInequality,
                                                       String orValue,
                                                       String orValueInequality,
-                                                      String filters ) {
+                                                      String filters,
+                                                      String datasetExomeChip,
+                                                      String datasetExomeSeq,
+                                                      String datasetGWAS) {
         LinkedHashMap returnValue = [:]
 
         if (dataSet) {
@@ -943,6 +946,10 @@ class FilterManagementService {
         if (filters) {
             returnValue['filters']  = filters
         }
+
+        returnValue['datasetExomeChip']  = (datasetExomeChip)?Boolean.TRUE:Boolean.FALSE
+        returnValue['datasetExomeSeq']  = (datasetExomeSeq)?Boolean.TRUE:Boolean.FALSE
+        returnValue['datasetGWAS']  = (datasetGWAS)?Boolean.TRUE:Boolean.FALSE
 
         return returnValue
     }

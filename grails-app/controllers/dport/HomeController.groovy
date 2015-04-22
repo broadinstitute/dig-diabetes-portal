@@ -13,7 +13,11 @@ class HomeController {
     def index = {
         if  ((sharedToolsService.getApplicationIsT2dgenes()) ||
                 (sharedToolsService.getApplicationIsSigma())) {
-            render(view:'portalHome')
+            render(view:'portalHome', model: [ticker:"${sharedToolsService.getWarningText()}",
+                                              show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
+                                              show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
+                                              show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
+                                              show_sigma:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma)])
         }  else if (sharedToolsService.getApplicationIsBeacon()) {
             redirect(controller:'beacon', action:'beaconDisplay')
         } else {
@@ -23,7 +27,8 @@ class HomeController {
     }
 
     def portalHome = {
-        render(controller: 'home', view: 'portalHome', model: [show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
+        render(controller: 'home', view: 'portalHome', model: [ticker:"${sharedToolsService.getWarningText()}",
+                                                               show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                                                show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
                                                                show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
                                                                show_sigma:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma)])

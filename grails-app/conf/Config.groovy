@@ -255,7 +255,7 @@ environments {
     production {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
-//      grails.serverURL = "http://type2diabetesgenetics.org"
+      grails.serverURL = "http://type2diabetesgenetics.org"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2dqasrv2.elasticbeanstalk.com"
@@ -265,7 +265,7 @@ environments {
 //      grails.serverURL = "http://cidbtest-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //        grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 //      grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false

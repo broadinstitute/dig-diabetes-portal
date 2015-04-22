@@ -18,7 +18,8 @@ class SystemController {
     }
 
     def systemManager = {
-        render(view: 'systemMgr', model: [currentRestServer:restServerService.currentRestServer(),
+        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
+                                          currentRestServer:restServerService.currentRestServer(),
         currentApplicationIsSigma:sharedToolsService.applicationName(),
         helpTextLevel:sharedToolsService.getHelpTextSetting()])
     }
@@ -34,6 +35,19 @@ class SystemController {
             [info:jsonVersion]
         }
       }
+
+
+
+
+    def updateWarningText() {
+        String warningText = params.warningText
+        sharedToolsService.setWarningText(warningText)
+        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
+                currentRestServer:restServerService.currentRestServer(),
+                                          currentApplicationIsSigma:sharedToolsService.applicationName(),
+                                          helpTextLevel:sharedToolsService.getHelpTextSetting()])
+
+    }
 
 
 
@@ -63,7 +77,8 @@ class SystemController {
                 flash.message = "But you had already set the help text to always display!"
             }
         }
-        render(view: 'systemMgr', model: [currentRestServer:restServerService.currentRestServer(),
+        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
+                                          currentRestServer:restServerService.currentRestServer(),
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
                                           helpTextLevel:sharedToolsService.getHelpTextSetting()])
     }
@@ -124,7 +139,8 @@ class SystemController {
             }
         }
 
-        render(view: 'systemMgr', model: [currentRestServer:restServerService.currentRestServer(),
+        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
+                                          currentRestServer:restServerService.currentRestServer(),
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
                                           helpTextLevel:sharedToolsService.getHelpTextSetting()])
     }
@@ -148,7 +164,8 @@ class SystemController {
             flash.message = "Internal error: you requested server = ${requestedApplication} which I do not recognize!"
         }
 
-        render(view: 'systemMgr', model: [currentRestServer:restServerService.currentRestServer(),
+        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
+                                          currentRestServer:restServerService.currentRestServer(),
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
                                           helpTextLevel:sharedToolsService.getHelpTextSetting()])
     }
@@ -156,7 +173,8 @@ class SystemController {
 
     def switchApplicationToT2dgenes(){
         sharedToolsService.setApplicationToT2dgenes()
-        render(view: 'systemMgr', model: [currentRestServer:restServerService.currentRestServer(),
+        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
+                                          currentRestServer:restServerService.currentRestServer(),
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
                                           helpTextLevel:sharedToolsService.getHelpTextSetting()])
     }
