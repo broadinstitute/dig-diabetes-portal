@@ -6,10 +6,28 @@ var mpgSoftware = mpgSoftware || {};
 
 
     mpgSoftware.variantWF = (function () {
-
-
+         var forgetThisFilter = function  (indexNumber){
+            if(typeof indexNumber !== 'undefined'){
+                $('#savedValue'+indexNumber).remove ();
+                $('#filterBlock'+indexNumber).remove ();
+            }
+        };
+        var removeThisFilterSet = function (currentObject){
+          console.log (' well shit Howdy');
+            var filterIndex;
+            var label = 'remover';
+            var id = $(currentObject).attr ('id');
+            var desiredLocation = id.indexOf (label);
+            if ((desiredLocation > -1) &&
+                (typeof id !== 'undefined') ){
+                var filterIndexString = id.substring(id.indexOf(label)+ label.length);
+                filterIndex = parseInt(filterIndexString);
+                forgetThisFilter (filterIndex);
+            }
+        };
         var fillDataSetDropdown = function (dataSetJson) { // help text for each row
             if ((typeof dataSetJson !== 'undefined')  &&
+                (typeof dataSetJson["is_error"] !== 'undefined')
                 (dataSetJson["is_error"] === false))
             {
                 var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
@@ -31,8 +49,10 @@ var mpgSoftware = mpgSoftware || {};
                        experiment:experiment},
                 async: true,
                 success: function (data) {
-                    if ((typeof data !== 'undefined') &&
-                        (typeof data.datasets !== 'undefined')) {
+                    if (( data !==  null ) &&
+                        ( typeof data !== 'undefined') &&
+                        ( typeof data.datasets !== 'undefined' ) &&
+                        (  data.datasets !==  null ) ) {
                         fillDataSetDropdown(data.datasets);
                     }
                     loading.hide();
@@ -87,7 +107,8 @@ var mpgSoftware = mpgSoftware || {};
             respondToPhenotypeSelection:respondToPhenotypeSelection,
             respondToDataSetSelection:respondToDataSetSelection,
             gatherFieldsAndPostResults:gatherFieldsAndPostResults,
-            initializePage:initializePage
+            initializePage:initializePage,
+            removeThisFilterSet:removeThisFilterSet
         }
 
     }());

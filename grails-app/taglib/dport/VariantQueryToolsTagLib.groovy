@@ -52,9 +52,9 @@ class VariantQueryToolsTagLib {
                     <div style="height: 25px; background-color: #ffffff">
                     <span class="text-left developingQueryComponentsFilterTitle">Filter number ${blockCount + 1}</span>
                     <span class="pull-right developingQueryComponentsFilterIcons" style="margin: 4px 10px 0 auto;">
-                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                        <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="editer${blockCount}"></span>
+                    <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="adder${blockCount}"></span>
+                    <span class="glyphicon glyphicon-remove-circle" aria-hidden="true" onclick="mpgSoftware.variantWF.removeThisFilterSet(this)" id="remover${blockCount}"></span>
                     </span>
                 </div>
 
@@ -76,32 +76,37 @@ class VariantQueryToolsTagLib {
                     <div class="col-md-9">${map.dataSet}</div>
                             </div>""".toString()
                     }
-                    out << """<div class="row clearfix developingQueryComponents">
-                    <div class="col-md-3 text-right">Filters:</div>
+                    out << """<div class="row clearfix developingQueryComponents">""".toString()
+                    if (map.orValue  || map.pValue) {
+                        out << """<div class="col-md-3 text-right">Filters:</div>
                     <div class="col-md-6">
                                     <div class="developingQueryComponentsFilters">
                                     """.toString()
 
-                    if (map.orValue) {
-                        out << """<div class="row clearfix">
-                                            <div class="col-md-6 text-right">odds ratio</div>
+                            // a line to describe the odds ratio
+                            if (map.orValue) {
+                                out << """<div class="row clearfix">
+                                                <div class="col-md-6 text-right">odds ratio</div>
 
-                    <div class="col-md-6">&gt;&nbsp;&nbsp; ${map.orValue}</div>
-                                        </div>""".toString()
-                    }
-                    if (map.pValue) {
-                        out << """<div class="row clearfix">
-                    <div class="col-md-6 text-right">p-value</div>
+                        <div class="col-md-6">&gt;&nbsp;&nbsp; ${map.orValue}</div>
+                                            </div>""".toString()
+                            }  // a single line for the odds ratio
 
-                                            <div class="col-md-6">&lt&nbsp;&nbsp; ${map.pValue}</div>
-                    </div>""".toString()
-                    }
+                            // a line to describe the P value
+                            if (map.pValue) {
+                                out << """<div class="row clearfix">
+                            <div class="col-md-6 text-right">p-value</div>
+
+                                                    <div class="col-md-6">&lt&nbsp;&nbsp; ${map.pValue}</div>
+                            </div>""".toString()
+                            }// a single line for the P value
 
                             out << """</div>
                                 <div class="col-md-3"></div>
 
-                                </div>
-                    </div>
+                                </div>""".toString()
+                    }  // the section containing all filters
+                        out << """</div>
                         </div>
 
                     <div class="col-md-2">
