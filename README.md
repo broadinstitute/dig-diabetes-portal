@@ -1,9 +1,7 @@
 
-__Important note to portal developers and sysops (current February 3, 2015)__
-__After we make the move our 
-new Google sign-on based authentication system, please note that the code will no longer run unless you
-incorporate a private configuration file, as described below in the section titled "Configuration".  The code
-should compile correctly without private configuration files, but it will not run in any of the following configurations:
+__Important note to portal developers and sysops __
+__ The code requires the incorporation of a private configuration file, as described below in the section titled "Configuration".  The code
+may compile correctly without private configuration files, but it will not run in any of the following configurations:
   * debug mode for development
   * test mode, for running unit, integration, or functional tests
   * generating a war file for the purposes of deployment
@@ -319,23 +317,30 @@ and find your summary report in ./target/CodeNarcReport.html
 We have a process to move from code push to production deploy. It looks like this:
 <ul>
 <li><strong> 1)every time a developer pushes code:</strong></li> 
-<li>1.1) the CI system pulls my code from git
+<li>1.1) the CI system pulls the latest code from Git on the master branch
 <li>1.2) the system runs all the unit and integration tests. IF they pass then
-<li>1.3) CI deploys, and gives that version a CI git tag. Then…
+<li>1.3) CI deploys, and gives that version a CI Git tag. Then…
 <li><strong>2) every morning at 2 AM</strong>
-<li>2.1) the tag describing last successfully deployed CI version is pulled from git
+<li>2.1) the tag describing last successfully deployed CI version is pulled from Git
 <li>2.2) the system runs all the unit and integration tests. IF they pass then
-<li>2.3) dev deploys, and gives that version a DEV git tag.
-<li>2.4) developers look at the deployed dev system, and decide whether they like it. If they do then…
+<li>2.3) DEV deploys, and gives that version a DEV Git tag.
+<li>2.4) developers(and potentially testers) look at the deployed DEV system, and decide whether they like it. If they do then eventually…
 <li><strong>3) a developer goes to the Jenkins project named 'MANUAL-deployedToQA'</strong>
-<li>3.1) the developer goes in with the name of a DEV tag in mind. The developer chooses that tag from the drop-down list, then presses the 'Build' button
+<li>3.1) the developer goes in with the name of a DEV tag in hand. The developer chooses that tag from the drop-down list, then presses the 'Build' button
 <li>3.2) the system runs all the unit and integration tests. IF they pass then
 <li>3.3) the system BRANCHES the code, and deploys that branch to QA
-<li>3.4) developers look at the system themselves, but also request the attention of nondevelopers (presumably Mary) to see if this system is acceptable. If it is then...
-<li><strong>4) a developer goes to the Jenkins project named 'MANUAL-deployedToQA', presumably during nonpeak hours</strong>
-<li>4.1) the developer goes in with the name of a DEV tag in mind. The developer chooses that tag from the drop-down list, then presses the 'Build' button
+<li>3.4) developers look at the system themselves, but also request the attention of testers/internal-users to see if this system is acceptable. If it is then...
+<li><strong>4) a developer goes to the Jenkins project named 'MANUAL-deployedToProd' (hopefully during nonpeak hours)</strong>
+<li>4.1) the developer goes in with the name of a QA branch in hand. The developer chooses that branch name from the drop-down list, then presses the 'Build' button
 <li>4.2) the system runs all the unit and integration tests. IF they pass then
 <li>4.3) the system BRANCHES the code again, and deploys that branch to PROD
+<li><strong>5) and, as necessary...</strong>
+<li>5.1) someone finds a critical bug that can't wait for the next iteration.  A developer checks out the branch currently running on prod and fixes the problem.
+<li>5.2) the developer checks in the fix.  Since it isn't on the master branch it doesn't enter the CI system, so test carefully!
+<li>5.3) tag your version by hand.
+<li>5.4) Then follow steps (4) above to deploy the revised code
+<li>5.5) Don't forget to merge your version back into the master branch before the next iteration begins!
+
 </ul>
 done. Code has been deployed to PROD.
 
