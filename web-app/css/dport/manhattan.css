@@ -1,0 +1,15 @@
+.pValue>g>line{
+    stroke: #cccccc;
+}
+/*.pValue>g:first-of-type>line{*/
+    /*stroke: #000;*/
+/*}*/
+svg {
+    padding: 10px;
+}
+.pValue>path{
+    stroke-opacity: 0;
+}
+line.significanceIndicator{
+    stroke: #ff0000;
+}
