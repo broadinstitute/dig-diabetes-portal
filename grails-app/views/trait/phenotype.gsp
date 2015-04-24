@@ -18,7 +18,8 @@
         data:{trait:'<%=phenotypeKey%>',significance:'<%=requestedSignificance%>'},
         async:true,
         success: function (data) {
-            fillTheTraitFields(data) ;
+           // fillTheTraitFields(data) ;
+            iterativeTableFiller(data);
             loading.hide();
         },
         error: function(jqXHR, exception) {
@@ -26,6 +27,29 @@
             core.errorReporter(jqXHR, exception) ;
         }
     });
+
+
+
+    function iterativeTableFiller (data)  {
+        var variant =  data['variant'];
+        var effectTypeTitle =  UTILS.determineEffectsTypeHeader(variant);
+        var effectTypeString =  UTILS.determineEffectsTypeString(effectTypeTitle);
+        $('#effectTypeHeader').append(effectTypeTitle);
+        $('#phenotypeTraits').dataTable({
+            iDisplayLength: 25,
+            bFilter: false,
+            aaSorting: [[ 2, "asc" ]],
+            aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 2, 3, 4 ] } ]
+        });
+        var dataLength = variant.length;
+        var effectsField = UTILS.determineEffectsTypeString (effectTypeString);
+        for ( var i = 0 ; i < dataLength ; i++ ){
+            var array = UTILS.convertLineForPhenotypicTraitTable(variant[i],effectsField,${show_gene}, ${show_sigma}, ${show_exseq}, ${show_exchp});
+            $('#phenotypeTraits').dataTable().fnAddData( array, (i==25));
+        }
+    }
+
+
 
 
 
