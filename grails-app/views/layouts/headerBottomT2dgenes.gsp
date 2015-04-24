@@ -8,6 +8,9 @@
                 </sec:ifAllGranted>
                 <sec:ifAllGranted roles="ROLE_SYSTEM">
                     <g:link controller='system' action="systemManager">System</g:link>
+                    &middot;
+                </sec:ifAllGranted>
+                <sec:ifAllGranted roles="ROLE_SYSTEM,ROLE_ADMIN">
                     <g:link controller='variantSearch' action="variantSearchWF">T</g:link>
                     &middot;
                 </sec:ifAllGranted>

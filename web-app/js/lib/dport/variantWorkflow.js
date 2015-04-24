@@ -100,7 +100,7 @@ var mpgSoftware = mpgSoftware || {};
             UTILS.postQuery('./variantVWRequest',varsToSend);
         };
         var initializePage = function (){
-            $("#phenotype").prepend("<option value='' selected='selected'></option>");
+            //$("#phenotype").prepend("<option value='' selected='selected'></option>");
         };
         return {
             fillDataSetDropdown:fillDataSetDropdown,

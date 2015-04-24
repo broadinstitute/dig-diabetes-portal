@@ -13,7 +13,8 @@ class VariantQueryToolsTagLib {
             out <<  "<optgroup label='Cardiometabolic'>"
             List <Map> cardioList = map["cardio"]
             for (Map cardio in cardioList){
-               out <<  "<option value='${cardio.mkey}'>${cardio.name}</option>"
+               String selectionIndicator = (cardio.mkey == 'T2D')?"  selected":""
+               out <<  "<option value='${cardio.mkey}' ${selectionIndicator}>${cardio.name}</option>"
             }
             out <<  "</optgroup>"
             out << "<optgroup label='Other'>"
@@ -50,7 +51,7 @@ class VariantQueryToolsTagLib {
                 if (map.size()>0) {
                     out << """<div id="filterBlock${blockCount}" class="developingQueryComponentsBlockOfFilters">
                     <div style="height: 25px; background-color: #ffffff">
-                    <span class="text-left developingQueryComponentsFilterTitle">Filter number ${blockCount + 1}</span>
+                    <span class="text-left developingQueryComponentsFilterTitle">Filter ${blockCount + 1}</span>
                     <span class="pull-right developingQueryComponentsFilterIcons" style="margin: 4px 10px 0 auto;">
                     <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="editer${blockCount}"></span>
                     <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="adder${blockCount}"></span>
@@ -78,7 +79,7 @@ class VariantQueryToolsTagLib {
                     }
                     out << """<div class="row clearfix developingQueryComponents">""".toString()
                     if (map.orValue  || map.pValue) {
-                        out << """<div class="col-md-3 text-right">Filters:</div>
+                        out << """<div class="col-md-3 text-right">Refinement:</div>
                     <div class="col-md-6">
                                     <div class="developingQueryComponentsFilters">
                                     """.toString()
