@@ -15,6 +15,10 @@ modules = {
     informational {
         resource url: 'js/lib/dport/informational.js'
     }
+    manhattan {
+        resource url: 'js/lib/dport/manhattan.js'
+        resource url: 'css/dport/manhattan.css'
+    }
     geneInfo {
         resource url: 'css/dport/geneInfo.css'
         resource url: 'css/dport/barchart.css'

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="t2dGenesCore"/>
-    <r:require modules="core"/>
+    <r:require modules="core,manhattan"/>
     <r:layoutResources/>
     <%@ page import="dport.RestServerService" %>
 </head>
