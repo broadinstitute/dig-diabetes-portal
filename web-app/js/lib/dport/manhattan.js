@@ -26,12 +26,17 @@ var baget = baget || {};  // encapsulating variable
             dotRadius = 3.5,
             significanceThreshold = 7.5,
             blockColoringThreshold,
-            xAxisAccessor = {},
-            yAxisAccessor = {},
+            xAxisAccessor = function (x){return x},
+            yAxisAccessor = function (y){return y},
+            chromosomeAccessor = function (c){return c},
+            nameAccessor = function (c){return c},
             color = d3.scale.category10(),
             overrideXMinimum,overrideXMaximum,overrideYMinimum,overrideYMaximum,
             selection,
             dataExtent,
+            includeXChromosome = false,
+            includeYChromosome = false,
+            margin={top: 20, right: 15, bottom: 60, left: 60},
 
             /***
              * Encapsulate functionality directly surrounding chromosomes
@@ -65,7 +70,7 @@ var baget = baget || {};  // encapsulating variable
                     {c:'X',l:154913754,p:99.8},
                     {c:'Y',l:57772954,p:99.9}],
                     chromosomeToIndex = {},
-                    genomeLength = 3080419480,
+                    combinedGenomeLength = 3080419480,
                 /***
                  * Convert a chromosome name and position within that chromosome  to and ordered location
                  * within the complete genome.
@@ -73,12 +78,17 @@ var baget = baget || {};  // encapsulating variable
                  * @param position
                  * @param chromosomeInfo
                  */
+                 activeGenomeLength = function () {
+                    var  skipThis = (includeXChromosome)?chromosomes.lengthOfAChromosome('X'):0;
+                    skipThis +=  (includeYChromosome)?chromosomes.lengthOfAChromosome('Y'):0;
+                    return combinedGenomeLength - skipThis;
+                 },
                  convertALocation  = function(chromosomeName, position) {
                     var chromosomeIndex = chromosomeToIndex[chromosomeName];
                     var returnValue;
                     if (typeof chromosomeIndex !== 'undefined') {
                         var startingPosition = chromosomeInfo[chromosomeIndex-1].p;
-                        returnValue =  (startingPosition*genomeLength/100.0)+position; // start of chromosome
+                        returnValue =  (startingPosition*activeGenomeLength()/100.0)+position; // start of chromosome
                     }
                     return  Number(returnValue);
                 },
@@ -93,8 +103,16 @@ var baget = baget || {};  // encapsulating variable
                         }
                     }
                     return  returnValue;
-                }
-
+                },
+                lengthOfAChromosome = function (chromosomeName) {
+                    var chromosomeIndex = chromosomeToIndex[chromosomeName];
+                    var returnValue = color(1);
+                    return chromosomeInfo[chromosomeIndex].l;
+                },
+                chromosomeByName = function (chromosomeName) {
+                    var chromosomeIndex = chromosomeToIndex[chromosomeName];
+                    return chromosomeInfo[chromosomeIndex];
+                };
 
                 // initialization
                 for( var i = 1 ; i < chromosomeInfo.length ; i++ ){
@@ -105,9 +123,12 @@ var baget = baget || {};  // encapsulating variable
                     // public variables
                     chromosomeInfo:chromosomeInfo,
                     chromosomeToIndex:chromosomeToIndex,
-                    genomeLength:genomeLength,
                     convertALocation:convertALocation,
-                    colorByChromosomeNumber:colorByChromosomeNumber
+                    colorByChromosomeNumber:colorByChromosomeNumber,
+                    lengthOfAChromosome:lengthOfAChromosome,
+                    activeGenomeLength :activeGenomeLength,
+                    numberOfAutosomes: 22,
+                    chromosomeByName:chromosomeByName
                 }
             }(color)),
 
@@ -138,7 +159,7 @@ var baget = baget || {};  // encapsulating variable
             // first do the X extents, which are much more complicated
             var minimumExtent, maximumExtent;
             if (crossChromosomePlot) {  // plot the whole genome, so we know the extents
-                maximumExtent = chromosomes.genomeLength;
+                maximumExtent = chromosomes.activeGenomeLength();
                 minimumExtent = 0;
             } else {
                 (function () {
@@ -148,7 +169,7 @@ var baget = baget || {};  // encapsulating variable
                     var rememberExtents = [];
                     var numberOfExtents = allData.length;
                     for (var i = 0; i < numberOfExtents; i++) {
-                        rememberExtents.push(chromosomes.convertALocation("" + allData[i].c, allData[i].x))
+                        rememberExtents.push(chromosomes.convertALocation("" + chromosomeAccessor (allData[i]), xAxisAccessor(allData[i])))
                     }
                     maximumExtent = d3.max(rememberExtents);
                     minimumExtent = d3.min(rememberExtents);
@@ -162,16 +183,22 @@ var baget = baget || {};  // encapsulating variable
             }
             return { minimumXExtent: minimumExtent,
                 maximumXExtent: maximumExtent,
-                minimumYExtent: (typeof minimumYValueOverride !== 'undefined') ? minimumYValueOverride:d3.min(allData, function (d) {return d.y;}),
-                maximumYExtent: (typeof maximumYValueOverride !== 'undefined') ? maximumYValueOverride:d3.max(allData, function (d) {return d.y;})  }
+                minimumYExtent: (typeof minimumYValueOverride !== 'undefined') ? minimumYValueOverride:d3.min(allData, function (d) {return yAxisAccessor (d);}),
+                maximumYExtent: (typeof maximumYValueOverride !== 'undefined') ? maximumYValueOverride:d3.max(allData, function (d) {return yAxisAccessor (d);})  }
         };
 
 
         var createAxes = function (axisGroup,chromosomes,xScale,yScale, width, height, margin){
             // draw the x axis
             var v = [];
-            for ( var i = 1 ; i < chromosomes.chromosomeInfo.length ; i++ )  {
-                v.push(((chromosomes.chromosomeInfo[i-1].p+chromosomes.chromosomeInfo[i].p)*chromosomes.genomeLength)/200);
+            for ( var i = 1 ; i < chromosomes.numberOfAutosomes+1 ; i++ )  {
+                    v.push(((chromosomes.chromosomeInfo[i-1].p+chromosomes.chromosomeInfo[i].p)*chromosomes.activeGenomeLength())/200);
+            }
+            if (includeXChromosome)  {
+                v.push(((chromosomes.chromosomeInfo[21].p+chromosomes.chromosomeByName('X').p)*chromosomes.activeGenomeLength())/200);
+            }
+            if (includeYChromosome)  {
+                v.push(((chromosomes.chromosomeInfo[22].p+chromosomes.chromosomeByName('Y').p)*chromosomes.activeGenomeLength())/200);
             }
 
             // draw the y axis first, so that the
@@ -179,7 +206,7 @@ var baget = baget || {};  // encapsulating variable
             //  (if for example, y minimum  === 0) go to sleep
             var yAxis = d3.svg.axis()
                 .scale(yScale)
-                .tickSize(-((xScale(chromosomes.genomeLength)-xScale(0))+margin.right))
+                .tickSize(-((xScale(chromosomes.activeGenomeLength())-xScale(0))))
                 .orient('left');
 
             axisGroup.append('g')
@@ -208,12 +235,12 @@ var baget = baget || {};  // encapsulating variable
                 .attr("class", "x label")
                 .attr("text-anchor", "middle")
                 .attr("y", height+margin.bottom)
-                .attr("x", width)
+                .attr("x", width/2)
                 .attr("dy", ".75em")
-                .text("chromosome number");
+                .text("chromosome");
 
             axisGroup.append('g')
-                .attr('transform', 'translate(0,' + height +')')
+                .attr('transform', 'translate(5,' + height +')')
                 .attr('class', 'main axis chromosome')
                 .call(xAxis);
 
@@ -222,7 +249,7 @@ var baget = baget || {};  // encapsulating variable
         var createDots = function (dotHolder,data,chromosomes, radius, xScale,yScale,dataExtent,c,tip) {
             var dots=dotHolder.selectAll('.dot')
                 .data(data,function(d){        // merge data sets so that we hold only unique points
-                    return(""+ d.c+"_"+ d.x+"_"+ d.y);
+                    return(""+ chromosomeAccessor (d)+"_"+ xAxisAccessor (d)+"_"+ yAxisAccessor (d));
                 });
             dots
                 .enter()
@@ -230,24 +257,28 @@ var baget = baget || {};  // encapsulating variable
                 .attr('class', 'dot')
                 .attr("r", radius)
                 .attr("cx", function(d){
-                    return xScale(chromosomes.convertALocation (""+d.c, d.x));
+                    return xScale(chromosomes.convertALocation (""+chromosomeAccessor (d), xAxisAccessor (d)));
                 })
                 .attr("cy", function(d){
                     return yScale(dataExtent.minimumYExtent);
                 })
                 .style("fill", function(d,i) {
-                    if (d.y > significanceThreshold)  {
+                    if (yAxisAccessor (d) > significanceThreshold)  {
                         return color(9);
                     } else {
-                        return chromosomes.colorByChromosomeNumber(d.c);
+                        return chromosomes.colorByChromosomeNumber(chromosomeAccessor (d));
                     }
                 })
                 .on('mouseover', tip.show)
-                .on('mouseout', tip.hide);
+                .on('mouseout', tip.hide)
+                .append("svg:a")
+                .attr("xlink:href", function (d) {
+                    return "http://google.com";//d.barsubnamelink;
+                });
             dots.transition()
                 .delay(100).duration(1400)
                 .attr("cy", function(d){
-                    return yScale(d.y);
+                    return yScale(yAxisAccessor (d));
                 });
 
         };
@@ -258,10 +289,10 @@ var baget = baget || {};  // encapsulating variable
             if (typeof yValueThreshold !== 'undefined')  {
                 for (var i = 1; i < chromosomes.chromosomeInfo.length; i++) {
                     blockGroup.append("rect")
-                        .attr("x", xScale(((chromosomes.chromosomeInfo[i - 1].p) * chromosomes.genomeLength) / 100) )
+                        .attr("x", xScale(((chromosomes.chromosomeInfo[i - 1].p) * chromosomes.activeGenomeLength()) / 100) )
                         .attr("y",  yScale(yValueThreshold))
-                        .attr("width", xScale(((chromosomes.chromosomeInfo[i].p) * chromosomes.genomeLength) / 100) -
-                                        xScale(((chromosomes.chromosomeInfo[i - 1].p) * chromosomes.genomeLength) / 100) )
+                        .attr("width", xScale(((chromosomes.chromosomeInfo[i].p) * chromosomes.activeGenomeLength()) / 100) -
+                                        xScale(((chromosomes.chromosomeInfo[i - 1].p) * chromosomes.activeGenomeLength()) / 100) )
                         .attr("height",    yScale(dataExtent.minimumYExtent)-yScale(yValueThreshold))
                         .style("fill", function(d) {
                             return chromosomes.colorByChromosomeNumber(chromosomes.chromosomeInfo[i].c);
@@ -274,7 +305,7 @@ var baget = baget || {};  // encapsulating variable
 
 
 
-        var addSignificanceIndicator = function (significanceHolder, significanceThreshold, chromosomes,  xScale, yScale ) {
+        var addSignificanceIndicator = function (significanceHolder, significanceThreshold, chromosomes,  xScale, yScale,margin ) {
             if (typeof significanceThreshold === 'undefined')   {
                 return ;
             }
@@ -293,7 +324,7 @@ var baget = baget || {};  // encapsulating variable
                     return yScale(significanceThreshold)
                 })
                 .attr("x2",  function (d) {
-                    return xScale(chromosomes.genomeLength)-margin.right;
+                    return xScale(chromosomes.activeGenomeLength())-margin.right;
                 })
                 .attr("y2",  function (d) {
                     return yScale(significanceThreshold)
@@ -324,7 +355,7 @@ var baget = baget || {};  // encapsulating variable
                         (typeof(tooltipAccessor(d)) !== "undefined")){
                         textToPresent = tooltipAccessor(d);
                     }  else {
-                        textToPresent = d.n+'<br/>Chr='+d.c+', loc='+d.x+'<br/>('+chromosomes.convertALocation (""+d.c, d.x)+')' ;
+                        textToPresent = nameAccessor (d)+'<br/>Chr='+chromosomeAccessor (d)+', loc='+xAxisAccessor (d)+'<br/>('+chromosomes.convertALocation (""+chromosomeAccessor (d), xAxisAccessor (d))+')' ;
                     }
                 }
                 return "<strong><span>" + textToPresent + "</span></strong> ";
@@ -343,11 +374,6 @@ var baget = baget || {};  // encapsulating variable
         // Now walk through the DOM and create the enrichment plot
         instance.render = function (currentSelection) {
 
-
-            var margin = {top: 20, right: 15, bottom: 60, left: 60}
-                , width = 960 - margin.left - margin.right
-                , height = 500 - margin.top - margin.bottom;
-
             // work in the SVG we created to hold the data
             var chart = currentSelection.select('svg');
 
@@ -364,7 +390,8 @@ var baget = baget || {};  // encapsulating variable
 
             // create the scales
             var x = d3.scale.linear()
-                .domain([dataExtent.minimumXExtent-((dataExtent.maximumXExtent-dataExtent.minimumXExtent)/50), dataExtent.maximumXExtent])
+               // .domain([dataExtent.minimumXExtent-((dataExtent.maximumXExtent-dataExtent.minimumXExtent)/50), dataExtent.maximumXExtent])
+                .domain([dataExtent.minimumXExtent-((dataExtent.maximumXExtent-dataExtent.minimumXExtent)/50), chromosomes.activeGenomeLength()])
                 .range([ margin.left, width ]);
             var y = d3.scale.linear()
                 .domain([dataExtent.minimumYExtent,dataExtent.maximumYExtent])
@@ -385,7 +412,7 @@ var baget = baget || {};  // encapsulating variable
                 .enter()
                 .append('g')
                 .attr('class', 'significanceHolder')
-                .call(addSignificanceIndicator ,significanceThreshold,chromosomes,x,y);
+                .call(addSignificanceIndicator ,significanceThreshold,chromosomes,x,y,margin);
 
 
             // create a solid block to cover the area where we know dots should be.
@@ -468,6 +495,24 @@ var baget = baget || {};  // encapsulating variable
         instance.yAxisAccessor = function (x) {
             if (!arguments.length) return yAxisAccessor;
             yAxisAccessor = x;
+            return instance;
+        };
+
+        instance.chromosomeAccessor = function (x) {
+            if (!arguments.length) return chromosomeAccessor;
+            chromosomeAccessor = x;
+            return instance;
+        };
+
+        instance.margin = function (x) {
+            if (!arguments.length) return margin;
+            margin = x;
+            return instance;
+        };
+
+        instance.nameAccessor = function (x) {
+            if (!arguments.length) return nameAccessor;
+            nameAccessor = x;
             return instance;
         };
 
@@ -568,6 +613,18 @@ var baget = baget || {};  // encapsulating variable
             return instance;
         };
 
+
+        instance.includeXChromosome = function (x) {
+            if (!arguments.length) return includeXChromosome;
+            includeXChromosome = x;
+            return instance;
+        };
+
+        instance.includeYChromosome = function (x) {
+            if (!arguments.length) return includeYChromosome;
+            includeYChromosome = x;
+            return instance;
+        };
 
 
 

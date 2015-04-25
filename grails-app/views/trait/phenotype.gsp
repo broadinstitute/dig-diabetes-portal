@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="t2dGenesCore"/>
-    <r:require modules="core,manhattan"/>
+    <r:require modules="core,phenotype"/>
     <r:layoutResources/>
     <%@ page import="dport.RestServerService" %>
 </head>
@@ -18,8 +18,45 @@
         data:{trait:'<%=phenotypeKey%>',significance:'<%=requestedSignificance%>'},
         async:true,
         success: function (data) {
-           // fillTheTraitFields(data) ;
-            iterativeTableFiller(data);
+
+            var margin = {top: 50, right: 20, bottom: 10, left: 70},
+                    width = 800 - margin.left - margin.right,
+                    height = 650 - margin.top - margin.bottom;
+
+            var width = 960,
+                    height = 500;
+
+            var manhattan = baget.manhattan()
+                    .width(width)
+                    .height(height)
+                    .dataHanger("#manhattanPlot1",data.variant)
+                    .crossChromosomePlot(true)
+//                    .overrideYMinimum (0)
+//                    .overrideYMaximum (10)
+//                .overrideXMinimum (0)
+//                .overrideXMaximum (1000000000)
+                    .dotRadius(3)
+                    //.blockColoringThreshold(0.5)
+                    .significanceThreshold(6.5)
+                    .xAxisAccessor(function (d){return d.POS})
+                    .yAxisAccessor(function (d){if (d.PVALUE>0){
+                                return (0-Math.log10(d.PVALUE));
+                            } else{
+                                return 0}
+                            })
+                    .nameAccessor(function (d){return d.DBSNP_ID})
+                    .chromosomeAccessor(function (d){return d.CHROM})
+                            .includeXChromosome(true)
+                            .includeYChromosome(false)
+                    ;
+
+            d3.select("#manhattanPlot1").call(manhattan.render);
+
+            mpgSoftware.phenotype.iterativeTableFiller(data,
+                    ${show_gwas},
+                    ${show_exchp},
+                    ${show_exseq},
+                    ${show_sigma});
             loading.hide();
         },
         error: function(jqXHR, exception) {
@@ -29,45 +66,6 @@
     });
 
 
-
-    function iterativeTableFiller (data)  {
-        var variant =  data['variant'];
-        var effectTypeTitle =  UTILS.determineEffectsTypeHeader(variant);
-        var effectTypeString =  UTILS.determineEffectsTypeString(effectTypeTitle);
-        $('#effectTypeHeader').append(effectTypeTitle);
-        $('#phenotypeTraits').dataTable({
-            iDisplayLength: 25,
-            bFilter: false,
-            aaSorting: [[ 2, "asc" ]],
-            aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 2, 3, 4 ] } ]
-        });
-        var dataLength = variant.length;
-        var effectsField = UTILS.determineEffectsTypeString (effectTypeString);
-        for ( var i = 0 ; i < dataLength ; i++ ){
-            var array = UTILS.convertLineForPhenotypicTraitTable(variant[i],effectsField,${show_gene}, ${show_sigma}, ${show_exseq}, ${show_exchp});
-            $('#phenotypeTraits').dataTable().fnAddData( array, (i==25));
-        }
-    }
-
-
-
-
-
-    function fillTheTraitFields (data)  {
-        var variant =  data['variant'];
-        var effectTypeTitle =  UTILS.determineEffectsTypeHeader(variant);
-        $('#effectTypeHeader').append(effectTypeTitle);
-        $('#traitTableBody').append(UTILS.fillPhenotypicTraitTable(variant, ${show_gene}, ${show_sigma}, ${show_exseq}, ${show_exchp} ));
-        $('#phenotypeTraits').dataTable({
-            iDisplayLength: 20,
-            bFilter: false,
-            aaSorting: [[ 2, "asc" ]],
-            aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 2, 3, 4 ] } ]
-        });
-        console.log('fill The phenotypeTraits table');
-
-
-    }
 </script>
 
 

@@ -15,9 +15,20 @@ modules = {
     informational {
         resource url: 'js/lib/dport/informational.js'
     }
+    d3tooltip {
+        resource url: 'js/lib/dport/d3tooltip.js'
+        resource url: 'css/dport/d3tooltip.css'
+    }
     manhattan {
+        dependsOn "d3tooltip"
+
         resource url: 'js/lib/dport/manhattan.js'
         resource url: 'css/dport/manhattan.css'
+    }
+    phenotype {
+        dependsOn "manhattan"
+
+        resource url: 'js/lib/dport/phenotype.js'
     }
     geneInfo {
         resource url: 'css/dport/geneInfo.css'

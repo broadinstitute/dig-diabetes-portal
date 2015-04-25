@@ -1,9 +1,6 @@
 .pValue>g>line{
     stroke: #cccccc;
 }
-/*.pValue>g:first-of-type>line{*/
-    /*stroke: #000;*/
-/*}*/
 svg {
     padding: 10px;
 }
@@ -12,4 +9,47 @@ svg {
 }
 line.significanceIndicator{
     stroke: #ff0000;
+}
+text.y {
+    font-size: 12pt;
+}
+text.x {
+    font-size: 12pt;
+}
+
+.chart rect {
+    fill: steelblue;
+}
+
+.mychart text {
+    fill: black;
+    font: 10px sans-serif;
+    text-anchor: middle;
+}
+text.y {
+    fill: black;
+    font: 14px sans-serif;
+    text-anchor: middle;
+}
+text.x {
+    fill: black;
+    font: 14px sans-serif;
+    text-anchor: middle;
+}
+.pValue>g>line{
+    stroke: #cccccc;
+}
+svg {
+    padding: 10px;
+}
+.pValue>path{
+    stroke-opacity: 0;
+}
+line.significanceIndicator{
+    stroke: #ff0000;
+}
+.domain {
+    fill: none;
+    stroke: black;
+    stroke-width: 1;
 }

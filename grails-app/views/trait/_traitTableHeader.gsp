@@ -31,6 +31,8 @@
     GWAS meta-analysis consortium:
 </p>
 
+<div id="manhattanPlot1"></div>
+
 <table id="phenotypeTraits" class="table basictable table-striped">
     <thead>
     <tr>
