@@ -29,11 +29,13 @@ text.x {
 text.y {
     fill: black;
     font: 14px sans-serif;
+    font-weight: bold;
     text-anchor: middle;
 }
 text.x {
     fill: black;
     font: 14px sans-serif;
+    font-weight: bold;
     text-anchor: middle;
 }
 .pValue>g>line{

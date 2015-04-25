@@ -38,8 +38,12 @@ var baget = baget || {};  // encapsulating variable
             includeYChromosome = false,
             margin={top: 20, right: 15, bottom: 60, left: 60},
             dotClickLink,
+            oddColor = d3.rgb('#58D3F7'),
+            evenColor = d3.rgb('#9FF781'),
+            oddColorSignificant = d3.rgb('#FA5858'),
+            evenColorSignificant = d3.rgb('#FA5858'),
 
-            /***
+        /***
              * Encapsulate functionality directly surrounding chromosomes
              */
             chromosomes = (function (color)  {
@@ -99,15 +103,28 @@ var baget = baget || {};  // encapsulating variable
                     if (typeof chromosomeIndex !== 'undefined') {
                         if ((chromosomeIndex % 2)  === 0){
                             returnValue = color(2);
+                            returnValue = evenColor;
                         }   else {
                             returnValue = color(4);
+                            returnValue = oddColor;
                         }
                     }
                     return  returnValue;
                 },
-                lengthOfAChromosome = function (chromosomeName) {
+                colorSignificanceByChromosomeNumber = function (chromosomeName)  {
+                        var chromosomeIndex = chromosomeToIndex[chromosomeName];
+                        var returnValue = color(1);
+                        if (typeof chromosomeIndex !== 'undefined') {
+                            if ((chromosomeIndex % 2)  === 0){
+                                returnValue = evenColorSignificant;
+                            }   else {
+                                returnValue = oddColorSignificant;
+                            }
+                        }
+                        return  returnValue;
+                    },
+                    lengthOfAChromosome = function (chromosomeName) {
                     var chromosomeIndex = chromosomeToIndex[chromosomeName];
-                    var returnValue = color(1);
                     return chromosomeInfo[chromosomeIndex].l;
                 },
                 chromosomeByName = function (chromosomeName) {
@@ -129,7 +146,8 @@ var baget = baget || {};  // encapsulating variable
                     lengthOfAChromosome:lengthOfAChromosome,
                     activeGenomeLength :activeGenomeLength,
                     numberOfAutosomes: 22,
-                    chromosomeByName:chromosomeByName
+                    chromosomeByName:chromosomeByName ,
+                    colorSignificanceByChromosomeNumber:colorSignificanceByChromosomeNumber
                 }
             }(color)),
 
@@ -270,7 +288,7 @@ var baget = baget || {};  // encapsulating variable
                 })
                 .style("fill", function(d,i) {
                     if (yAxisAccessor (d) > significanceThreshold)  {
-                        return color(9);
+                        return chromosomes.colorSignificanceByChromosomeNumber(chromosomeAccessor (d));
                     } else {
                         return chromosomes.colorByChromosomeNumber(chromosomeAccessor (d));
                     }
@@ -358,7 +376,9 @@ var baget = baget || {};  // encapsulating variable
                         (typeof(tooltipAccessor(d)) !== "undefined")){
                         textToPresent = tooltipAccessor(d);
                     }  else {
-                        textToPresent = nameAccessor (d)+'<br/>Chr='+chromosomeAccessor (d)+', loc='+xAxisAccessor (d)+'<br/>('+chromosomes.convertALocation (""+chromosomeAccessor (d), xAxisAccessor (d))+')' ;
+                        textToPresent = nameAccessor (d)+
+                            '<br/>pValue='+ d.PVALUE.toPrecision(3)+
+                            '<br/>Chr='+chromosomeAccessor (d)+', pos='+xAxisAccessor (d);
                     }
                 }
                 return "<strong><span>" + textToPresent + "</span></strong> ";
@@ -652,8 +672,29 @@ var baget = baget || {};  // encapsulating variable
             return instance;
         };
 
+        instance.oddColor = function (x) {
+            if (!arguments.length) return oddColor;
+            oddColor = x;
+            return instance;
+        };
 
+        instance.evenColor = function (x) {
+            if (!arguments.length) return evenColor;
+            evenColor = x;
+            return instance;
+        };
 
+        instance.oddColorSignificant = function (x) {
+            if (!arguments.length) return oddColorSignificant;
+            oddColorSignificant = x;
+            return instance;
+        };
+
+        instance.evenColorSignificant = function (x) {
+            if (!arguments.length) return evenColorSignificant;
+            evenColorSignificant = x;
+            return instance;
+        };
 
 
         return instance;
