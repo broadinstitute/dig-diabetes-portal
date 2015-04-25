@@ -46,8 +46,9 @@
                             })
                     .nameAccessor(function (d){return d.DBSNP_ID})
                     .chromosomeAccessor(function (d){return d.CHROM})
-                            .includeXChromosome(true)
-                            .includeYChromosome(false)
+                    .includeXChromosome(true)
+                    .includeYChromosome(false)
+                    .dotClickLink('<g:createLink controller="variant" action="variantInfo" />')
                     ;
 
             d3.select("#manhattanPlot1").call(manhattan.render);

@@ -37,6 +37,7 @@ var baget = baget || {};  // encapsulating variable
             includeXChromosome = false,
             includeYChromosome = false,
             margin={top: 20, right: 15, bottom: 60, left: 60},
+            dotClickLink,
 
             /***
              * Encapsulate functionality directly surrounding chromosomes
@@ -247,13 +248,18 @@ var baget = baget || {};  // encapsulating variable
           };
 
         var createDots = function (dotHolder,data,chromosomes, radius, xScale,yScale,dataExtent,c,tip) {
-            var dots=dotHolder.selectAll('.dot')
+            var anchors=dotHolder.selectAll('a.dot')
                 .data(data,function(d){        // merge data sets so that we hold only unique points
                     return(""+ chromosomeAccessor (d)+"_"+ xAxisAccessor (d)+"_"+ yAxisAccessor (d));
                 });
-            dots
+            anchors
                 .enter()
-                .append('circle')
+                .append('a')
+                .attr('class', 'clickable')
+                .attr("xlink:href", function(d) {
+                    return dotClickLink+"/"+nameAccessor(d) ;
+                } );
+            var dots = anchors.append('circle')
                 .attr('class', 'dot')
                 .attr("r", radius)
                 .attr("cx", function(d){
@@ -270,11 +276,8 @@ var baget = baget || {};  // encapsulating variable
                     }
                 })
                 .on('mouseover', tip.show)
-                .on('mouseout', tip.hide)
-                .append("svg:a")
-                .attr("xlink:href", function (d) {
-                    return "http://google.com";//d.barsubnamelink;
-                });
+                .on('mouseout', tip.hide);
+
             dots.transition()
                 .delay(100).duration(1400)
                 .attr("cy", function(d){
@@ -440,6 +443,22 @@ var baget = baget || {};  // encapsulating variable
             if(!dotHolder[0][0]){
                 createDots(chart.select('g.dotHolder'),chart.data()[0],chromosomes,dotRadius,x,y,dataExtent,significanceThreshold,tip);
             }
+
+
+
+
+
+            $(document.body).on('click', 'clickable', function () {
+
+
+
+                    console.log(' hooray');
+
+
+                return "http://www.google.com";
+            });
+
+
 
 
         } ;
@@ -625,6 +644,15 @@ var baget = baget || {};  // encapsulating variable
             includeYChromosome = x;
             return instance;
         };
+
+
+        instance.dotClickLink = function (x) {
+            if (!arguments.length) return dotClickLink;
+            dotClickLink = x;
+            return instance;
+        };
+
+
 
 
 
