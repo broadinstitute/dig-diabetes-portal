@@ -283,35 +283,36 @@
 
             <div class="col-xs-12 text-center">
                 <div class="row">
-                    <div class="col-sm-4 text-center" style="padding: 0">
+                    <div class="col-sm-4 text-center" style="padding: 0; margin-left: 0;">
                         <div class="row">
-                            <div class="col-sm-7 text-center" style="padding: 5px">
+                            <div class="col-sm-offset-1 col-sm-7 text-center" style="padding: 5px">
                                 <img class="logoholder" src="${resource(dir: 'images/icons', file: 'basicT2DG.svg')}"
                                      width="100%" alt="T2D Genes"/>
                             </div>
 
-                            <div class="col-sm-5 text-center" style="padding: 20px 40px 10px 10px">
+                            <div class="col-sm-3 text-center" style="padding: 10px 0px 0px 5px">
                                 <img class="logoholder" src="${resource(dir: 'images/icons', file: 'GoT2D.png')}"
                                      width="100%" alt="GoT2D"/>
                             </div>
+
+                            <div class="col-sm-1"></div>
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-offset-3 col-sm-6 text-center" style="padding: 0px 50px 0 50px">
+                            <div class="col-sm-offset-5 col-sm-4 text-center" style="padding: 0px 30px 0 30px">
                                 <img class="logoholder"
                                      src="${resource(dir: 'images/icons', file: '480px-NIH_logo.svg.png')}"
                                      width="100%" alt="NIH"/>
                             </div>
-
-                            <div class="col-sm-3"></div>
+                           <div class="col-sm-3"></div>
                         </div>
                     </div>
 
-                    <div class="col-sm-8 text-center" style="padding: 20px 0 0 0">
+                    <div class="col-sm-7 text-center" style="padding: 20px 0 0 0">
 
                         <div class="row">
 
-                            <div class="col-sm-5 text-center" style="padding: 0 30px 0 0">
+                            <div class="col-sm-5 text-center" style="padding: 0 10px 0 0">
                                 <img class="logoholder" src="${resource(dir: 'images/icons', file: 'diagram.png')}"
                                      width="100%" alt="NIH"/>
                             </div>
@@ -322,7 +323,7 @@
                                      width="100%" height="100%" alt="NIDDK" style="padding-top: 10px"/>
                             </div>
 
-                            <div class="col-sm-5 text-center" style="padding: 0 0 0 30px">
+                            <div class="col-sm-5 text-center" style="padding: 0 0 0 0">
                                 <img class="logoholder"
                                      src="${resource(dir: 'images/icons', file: 'CarlosSlimFoundation.png')}"
                                      width="100%" alt="Carlos Slim Foundation"/>
@@ -341,6 +342,7 @@
                         </div>
 
                     </div>
+                    <div class="col-sm-1"></div>
 
                 </div>
 
