@@ -22,19 +22,6 @@ The diabetes portal is written in Grails. The following description should give 
 
 <h2>Environment</h2>
 
-<p>
-Some notes about the JSON returned from getMetaData:</p>
-<p>
-The top-level elements, called experiments, differ fundamentally from the sample_groups contained
-within them: <br/>
-<ul>
-<li>numRecords only count experiments, not sample_groups</li>
-<li>only sample_groups have IDs</li>
-<li>only experiments have a technology</li>
-</ul>
-Note: uniqueness for a data set is defined on the basis of the combination of experiment,
-sample group, and version.</p>
-
    The following steps should give you a working development environment:
 
 <h4>Install Java</h4>
