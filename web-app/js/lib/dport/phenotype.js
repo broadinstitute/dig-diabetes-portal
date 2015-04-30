@@ -45,7 +45,7 @@ var mpgSoftware = mpgSoftware || {};
                 aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 2, 3, 4 ] } ]
             });
             var dataLength = variant.length;
-            var effectsField = UTILS.determineEffectsTypeString (effectTypeString);
+            var effectsField = UTILS.determineEffectsTypeString (effectTypeTitle);
             for ( var i = 0 ; i < dataLength ; i++ ){
                 var array = convertLineForPhenotypicTraitTable(variant[i],effectsField,show_gene, show_sigma, show_exseq, show_exchp);
                 $('#phenotypeTraits').dataTable().fnAddData( array, (i==25) || (i==(dataLength-1)));
