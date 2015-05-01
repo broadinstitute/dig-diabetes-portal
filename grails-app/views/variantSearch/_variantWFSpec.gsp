@@ -13,6 +13,9 @@ span.dataSetChoice{
 }
 </style>
 
+
+<g:render template="variantWFFeedback" />
+
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="row clearfix">

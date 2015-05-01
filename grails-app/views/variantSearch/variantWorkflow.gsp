@@ -25,15 +25,15 @@
             <div class="variant-view" >
 
                 <div class="row clearfix">
-                    <div class="col-md-5">
-                        <h4>Specify a request</h4>
+                    <div class="col-md-12">
+                        <h4>Find genetic variants of interest</h4>
                         <g:render template="variantWFSpec" />
                     </div>
-                    <div  class="col-md-7">
+                    %{--<div  class="col-md-7">--}%
 
-                        <g:render template="variantWFDescr" />
+                        %{--<g:render template="variantWFDescr" />--}%
 
-                    </div>
+                    %{--</div>--}%
                 </div>
 
 
