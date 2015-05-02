@@ -30,10 +30,12 @@
                 height = 650 - margin.top - margin.bottom;
 
 
-        baget.crossMap()
+        var crossMap = baget.crossMap()
                 .width(width)
                 .height (height)
-                .margin (margin)
+                .margin (margin) ;
+
+        crossMap.dataHanger("#vis",phenotypeMap.phenotypeArray)
                 .render(data,phenotypeMap.phenotypeArray);
     }
 
@@ -96,4 +98,3 @@
 
 </body>
 </html>
->

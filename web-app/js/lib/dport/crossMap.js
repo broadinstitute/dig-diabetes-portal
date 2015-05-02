@@ -27,100 +27,139 @@ var baget = baget || {};  // encapsulating variable
             margin = { top: 250, right: 100, bottom: 100, left: 100 },
                width = 1080 - margin.left - margin.right;
 
-        var instance = {};
+
+
+        /***
+         * private functions
+         * @param assoc
+         * @returns {number}
+         */
+        var instance = {},
+            svg;
+
+
+        // indicate significance level with size
+        var circle_size = function (assoc) {
+            if (assoc > .05) return 3;
+            else if (assoc > .0001) return 5;
+            else if (assoc > 5e-8) return 8;
+            else return 16;
+        };
+
+        // indicate direction of effect with color
+        var circle_class = function (assoc) {
+            var c = '';
+            if (assoc.d == 'down') c += 'assoc-down';
+            else if (assoc.d == 'up') c += 'assoc-up';
+            else c += 'assoc-none';
+
+            if (assoc.p > .05) c += ' assoc-none';
+            else if (assoc.p > .0001) c += ' assoc-sm';
+            else if (assoc.p > 5e-8) c += ' assoc-med';
+            else c += ' assoc-lg';
+
+
+            return c;
+        } ;
+
+
+
+        var buildInternalRepresentation = function (inArray) {
+            var traitMap;  // given a trait, give me a number
+            var inverseTraitMap = {};  // given a number, give me a trait
+            var variantArrayOfArrays; // arrays of each trait, all pointed to by the elements of an array
+            var variantArrayOfArrayVariantPointers; // arrays of each trait, all pointed to by the elements of an array
+            var variantMap;
+            var inverseVariantMap = {};  // given a number, give me a trait
+            var getUniqueTraits = function (dd) {
+                var u = {}, a = [], ddLength = dd.length;
+                var v = {}, b = [];
+                for (var i = 0, l = ddLength; i < l; ++i) {
+                    if (!u.hasOwnProperty(dd[i].TRAIT)) {
+                        a.push(dd[i].TRAIT);
+                        u[dd[i].TRAIT] = 1;
+                    }
+                    if (!v.hasOwnProperty(dd[i].ID)) {
+                        b.push(dd[i].ID);
+                        v[dd[i].ID] = 1;
+                    }
+                }
+                return {traits: a,
+                    variants: b};
+            };
+            var createAMap = function (allTraitsArray) {
+                var retval = {};
+                for (var i = 0; i < allTraitsArray.length; i++) {
+                    retval[allTraitsArray[i]] = i;
+                }
+                return retval;
+            };
+            var createArrayOfArrays = function (incoming, traitMap) {
+                var variantArrayOfArrays = [];
+                variantArrayOfArrayVariantPointers = [];
+                var ddLength = incoming.length;
+                for (var key in traitMap) {
+                    if (traitMap.hasOwnProperty(key)) {
+                        variantArrayOfArrays.push([]);
+                        variantArrayOfArrayVariantPointers.push([]);
+                    }
+                }
+                // create my array of arrays with all the variant
+                for (var i = 0; i < ddLength; i++) {
+                    var variant = incoming [i];
+                    var variantIdPointer = variantMap[variant.ID];
+                    variantArrayOfArrays [traitMap [variant.TRAIT]].push(variant);
+                    variantArrayOfArrayVariantPointers[traitMap [variant.TRAIT]].push({v: variantIdPointer,
+                        t: traitMap [variant.TRAIT],
+                        p: variant.PVALUE,
+                        d: variant.DIR,
+                        o: variant.ODDS_RATIO,
+                        dbsnp: variant.DBSNP_ID,
+                        chr: variant.CHROM,
+                        pos: variant.POS,
+                        b: variant.BETA,
+                        z: variant.ZSCORE
+                    });
+                }
+                // and now for each of those arrays of arrays, create an array of pointers so that I can step through the variants in order
+                return  variantArrayOfArrays;
+            };
+            var getVariantsByTraitNumber = function (traitNumber) {
+                return  variantArrayOfArrays[traitNumber];
+            };
+            var getTraitNameByTraitNumber = function (traitNumber) {
+                return phenotypeMap.phenotypeMap[inverseTraitMap[traitNumber]];
+            };
+
+
+            //ctor
+            var uniqueArrays = getUniqueTraits(inArray);
+            traitMap = createAMap(uniqueArrays.traits);
+            variantMap = createAMap(uniqueArrays.variants);
+            for (var key in traitMap) {
+                if (traitMap.hasOwnProperty(key)) {
+                    inverseTraitMap[traitMap[key]] = key;
+                }
+            }
+            variantArrayOfArrays = createArrayOfArrays(inArray, traitMap);
+
+            return {
+                getVariantsByTraitNumber: getVariantsByTraitNumber,
+                getTraitNameByTraitNumber: getTraitNameByTraitNumber,
+                variantArrayOfArrayVariantPointers: variantArrayOfArrayVariantPointers,
+                variantMap: variantMap
+            }
+
+        };
+
+
+
+
 
         instance.render = function (data, allTraits) {
             var that = data,
                 traits = allTraits;
 
-
-            var buildInternalRepresentation = function (inArray) {
-                var traitMap;  // given a trait, give me a number
-                var inverseTraitMap = {};  // given a number, give me a trait
-                var variantArrayOfArrays; // arrays of each trait, all pointed to by the elements of an array
-                var variantArrayOfArrayVariantPointers; // arrays of each trait, all pointed to by the elements of an array
-                var variantMap;
-                var inverseVariantMap = {};  // given a number, give me a trait
-                var getUniqueTraits = function (dd) {
-                    var u = {}, a = [], ddLength = dd.length;
-                    var v = {}, b = [];
-                    for (var i = 0, l = ddLength; i < l; ++i) {
-                        if (!u.hasOwnProperty(dd[i].TRAIT)) {
-                            a.push(dd[i].TRAIT);
-                            u[dd[i].TRAIT] = 1;
-                        }
-                        if (!v.hasOwnProperty(dd[i].ID)) {
-                            b.push(dd[i].ID);
-                            v[dd[i].ID] = 1;
-                        }
-                    }
-                    return {traits: a,
-                        variants: b};
-                };
-                var createAMap = function (allTraitsArray) {
-                    var retval = {};
-                    for (var i = 0; i < allTraitsArray.length; i++) {
-                        retval[allTraitsArray[i]] = i;
-                    }
-                    return retval;
-                };
-                var createArrayOfArrays = function (incoming, traitMap) {
-                    var variantArrayOfArrays = [];
-                    variantArrayOfArrayVariantPointers = [];
-                    var ddLength = incoming.length;
-                    for (var key in traitMap) {
-                        if (traitMap.hasOwnProperty(key)) {
-                            variantArrayOfArrays.push([]);
-                            variantArrayOfArrayVariantPointers.push([]);
-                        }
-                    }
-                    // create my array of arrays with all the variant
-                    for (var i = 0; i < ddLength; i++) {
-                        var variant = incoming [i];
-                        var variantIdPointer = variantMap[variant.ID];
-                        variantArrayOfArrays [traitMap [variant.TRAIT]].push(variant);
-                        variantArrayOfArrayVariantPointers[traitMap [variant.TRAIT]].push({v: variantIdPointer,
-                            t: traitMap [variant.TRAIT],
-                            p: variant.PVALUE,
-                            d: variant.DIR,
-                            o: variant.ODDS_RATIO,
-                            dbsnp: variant.DBSNP_ID,
-                            chr: variant.CHROM,
-                            pos: variant.POS,
-                            b: variant.BETA,
-                            z: variant.ZSCORE
-                        });
-                    }
-                    // and now for each of those arrays of arrays, create an array of pointers so that I can step through the variants in order
-                    return  variantArrayOfArrays;
-                };
-                var getVariantsByTraitNumber = function (traitNumber) {
-                    return  variantArrayOfArrays[traitNumber];
-                };
-                var getTraitNameByTraitNumber = function (traitNumber) {
-                    return phenotypeMap.phenotypeMap[inverseTraitMap[traitNumber]];
-                };
-
-
-                //ctor
-                var uniqueArrays = getUniqueTraits(inArray);
-                traitMap = createAMap(uniqueArrays.traits);
-                variantMap = createAMap(uniqueArrays.variants);
-                for (var key in traitMap) {
-                    if (traitMap.hasOwnProperty(key)) {
-                        inverseTraitMap[traitMap[key]] = key;
-                    }
-                }
-                variantArrayOfArrays = createArrayOfArrays(inArray, traitMap);
-
-                return {
-                    getVariantsByTraitNumber: getVariantsByTraitNumber,
-                    getTraitNameByTraitNumber: getTraitNameByTraitNumber,
-                    variantArrayOfArrayVariantPointers: variantArrayOfArrayVariantPointers,
-                    variantMap: variantMap
-                }
-
-            };
 
 
 
@@ -147,7 +186,8 @@ var baget = baget || {};  // encapsulating variable
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
             window.vis = svg;
 
-            var xaxis = svg.append('line')
+            // draw a line along the top
+            svg.append('line')
                 .attr('x1', '15')
                 .attr('y1', '-15')
                 .attr('x2', width)
@@ -155,14 +195,17 @@ var baget = baget || {};  // encapsulating variable
                 .attr('stroke', '#bbb')
                 .attr('stroke-width', '1');
 
-            var yaxis = svg.append('line')
+            // draw a line down the left side
+            svg.append('line')
                 .attr('x1', '15')
                 .attr('y1', '-15')
                 .attr('x2', '15')
                 .attr('y2', height)
                 .attr('stroke', '#bbb')
                 .attr('stroke-width', '1');
-            var variant_labels = svg.append('g')
+
+            // label variant down the left side
+            svg.append('g')
                 .selectAll(".row-g")
                 .data(uniqueVariantLabels)
                 .enter()
@@ -185,7 +228,8 @@ var baget = baget || {};  // encapsulating variable
                 })
                 .style("text-anchor", "end");
 
-            var trait_labels = svg.append('g')
+            // label traits along the top
+            svg.append('g')
                 .selectAll(".col-g")
                 .data(traits)
                 .enter()
@@ -202,29 +246,6 @@ var baget = baget || {};  // encapsulating variable
                     return 'translate(' + i * grid_size + ',-20) rotate(-60)';
                 });
 
-            var circle_size = function (assoc) {
-                if (assoc > .05) return 3;
-                else if (assoc > .0001) return 5;
-                else if (assoc > 5e-8) return 8;
-                else return 16;
-            };
-
-
-            var circle_class = function (assoc) {
-                var c = '';
-                if (assoc.d == 'down') c += 'assoc-down';
-                else if (assoc.d == 'up') c += 'assoc-up';
-                else c += 'assoc-none';
-
-                if (assoc.p > .05) c += ' assoc-none';
-                else if (assoc.p > .0001) c += ' assoc-sm';
-                else if (assoc.p > 5e-8) c += ' assoc-med';
-                else c += ' assoc-lg';
-
-
-                return c;
-            }
-
 
             var rows = svg.selectAll('g.cellr')
                 .data(orgData.variantArrayOfArrayVariantPointers)
@@ -233,7 +254,7 @@ var baget = baget || {};  // encapsulating variable
                 .attr('class', 'cellr')
 
 
-            var cells = rows.selectAll('circle.cellg')
+            rows.selectAll('circle.cellg')
                 .data(function (d, i) {
                     return d
                 })
@@ -286,6 +307,12 @@ var baget = baget || {};  // encapsulating variable
         // Now walk through the DOM and create the enrichment plot
         instance.dataHanger = function (selectionIdentifier, data) {
 
+//             svg = d3.select(selectionIdentifier).append("svg")
+//                .attr("width", width + margin.left + margin.right)
+//                .attr("height", height + margin.top + margin.bottom)
+//                .append("g")
+//                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
 //            selection = d3.select(selectionIdentifier)
 //                .selectAll('svg.mychart')
 //                .data([data],function(){return ""+data.toString()})
@@ -296,7 +323,7 @@ var baget = baget || {};  // encapsulating variable
 //                .attr('height', height*1.4)
 //                .call(tip);
 //
-//            return instance;
+            return instance;
         };
 
 
