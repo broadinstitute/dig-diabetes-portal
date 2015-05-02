@@ -20,11 +20,8 @@
         success: function (data) {
 
             var margin = {top: 50, right: 20, bottom: 10, left: 70},
-                    width = 800 - margin.left - margin.right,
+                    width = 1050 - margin.left - margin.right,
                     height = 650 - margin.top - margin.bottom;
-
-            var width = 960,
-                    height = 500;
 
             var manhattan = baget.manhattan()
                     .width(width)

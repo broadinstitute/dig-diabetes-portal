@@ -25,6 +25,11 @@ modules = {
         resource url: 'js/lib/dport/manhattan.js'
         resource url: 'css/dport/manhattan.css'
     }
+    crossMap {
+        dependsOn "d3tooltip"
+
+        resource url: 'js/lib/dport/crossMap.js'
+    }
     phenotype {
         dependsOn "manhattan"
 
