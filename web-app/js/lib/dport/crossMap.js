@@ -75,25 +75,23 @@ var baget = baget || {};  // encapsulating variable
             var variantMap;
             var inverseVariantMap = {};  // given a number, give me a trait
             var extractUniqueLists = function (dd) {
-                var uniqueVariantsMap=d3.nest()
-                    .key(function(d) {
-                        return d.ID;
-                    })
+                var uniqueVariants=d3.nest()
+                    .key(function(d) {return d.ID;})
                     .sortKeys(function(a,b) { return a.POS - b.POS; })
-                    .rollup(function(d) {
-                        return d[0].DBSNP_ID;
-                    })
-                    .entries(dd) ;
-
-                var uniqueVariants=    uniqueVariantsMap.map(function(d){
+                    .rollup(function(d) {return d[0].DBSNP_ID;})
+                    .entries(dd)
+                    .map(function(d){
                        return {'id':d.key,
                             'rsname':d.values}
                     });
                 var uniqueTraits=d3.nest()
                     .key(function(d) {return d.TRAIT;})
-                    .rollup(function(d) {return d.TRAIT;})
+                    .rollup(function(d) {return phenotypeMap.phenotypeMap[d[0].TRAIT];})
                     .entries(dd)
-                    .map(function(d){ return d.key; });
+                    .map(function(d){
+                        return {'id':d.key,
+                            'name':d.values}
+                    });
 
                 return {traits: uniqueTraits,
                     variants: uniqueVariants};
@@ -147,8 +145,9 @@ var baget = baget || {};  // encapsulating variable
             var uniqueArrays = extractUniqueLists(inArray);
             var  variantIdArray =  uniqueArrays.variants.map(function (d){return d.id});
             var  variantNameArray = uniqueArrays.variants.map(function (d){return d.rsname});
-            traitMap = createAMap(uniqueArrays.traits);
-            //variantMap = createAMap(variantNameArray);
+            var  traitIdArray =  uniqueArrays.traits.map(function (d){return d.id});
+            var  traitNameArray = uniqueArrays.traits.map(function (d){return d.rsname});
+            traitMap = createAMap(traitIdArray);
             variantMap = createAMap(variantIdArray);
             for (var key in traitMap) {
                 if (traitMap.hasOwnProperty(key)) {
@@ -160,7 +159,8 @@ var baget = baget || {};  // encapsulating variable
             return {
                 variantNameArray:  variantNameArray,
                 variantIDArray:  variantIdArray,
-                traitNameArray:  uniqueArrays.traits,
+                traitNameArray:  traitNameArray,
+                traitIDArray:  traitIdArray,
                 getVariantsByTraitNumber: getVariantsByTraitNumber,
                 getTraitNameByTraitNumber: getTraitNameByTraitNumber,
                 variantArrayOfArrayVariantPointers: variantArrayOfArrayVariantPointers,
@@ -181,10 +181,10 @@ var baget = baget || {};  // encapsulating variable
 
             var orgData = buildInternalRepresentation(data);
             var traitName = orgData.getTraitNameByTraitNumber;
-            var height = orgData.variantNameArray.length * grid_size;
+            var expandedWidth = orgData.variantNameArray.length * grid_size;
 
 
-            var group = svg.attr("height", height + margin.top + margin.bottom)
+            var group = svg.attr("width", expandedWidth + margin.top + margin.bottom)
                            .append("g")
                            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -193,7 +193,7 @@ var baget = baget || {};  // encapsulating variable
             group.append('line')
                 .attr('x1', spaceForVariantLabel-25)
                 .attr('y1', '-15')
-                .attr('x2', width+(spaceForVariantLabel-25))
+                .attr('x2', expandedWidth+(spaceForVariantLabel-25))
                 .attr('y2', '-15')
                 .attr('stroke', '#bbb')
                 .attr('stroke-width', '1');
@@ -210,16 +210,11 @@ var baget = baget || {};  // encapsulating variable
             // label variant down the left side
             group.append('g')
                 .selectAll(".row-g")
-                .data(orgData.variantNameArray)
+                .data(orgData.traitIDArray)
                 .enter()
-                .append('a')
-                .attr('class', 'boldlink')
-                .attr('xlink:href', function (d) {
-                     return variantLinkUrl + '/' + d
-                })
                 .append('text')
                 .attr("class", function (d, i) {
-                    return "variantlabel r" + i;
+                    return "traitlabel  r" + i;
                 })
                 .text(function (d) {
                     return d;
@@ -233,29 +228,34 @@ var baget = baget || {};  // encapsulating variable
             // label traits along the top
             group.append('g')
                 .selectAll(".col-g")
-                .data(phenotypeArray)
+                .data(orgData.variantNameArray)
                 .enter()
                 .append('text')
-                .attr("class", function (d, i) {
-                    return "traitlabel r" + i;
-                })
-                .text(function (d, i) {
-                    return traitName(i)
-                })
                 .attr('y', 30)
                 .attr('x', spaceForVariantLabel-10)
                 .attr("transform", function (d, i) {
                     return 'translate(' + i * grid_size + ',-20) rotate(-60)';
+                })
+                .append('a')
+                .attr('class', 'boldlink')
+                .attr('xlink:href', function (d) {
+                    return variantLinkUrl + '/' + d
+                })
+                .attr("class", function (d, i) {
+                    return "variantlabel r" + i;
+                })
+                .text(function (d, i) {
+                    return  d;
                 });
 
-
+            // All the traits for a single variant
             var rows = group.selectAll('g.cellr')
                 .data(orgData.variantArrayOfArrayVariantPointers)
                 .enter()
                 .append('g')
                 .attr('class', 'cellr')
 
-
+            // Now draw something for each trait
             rows.selectAll('circle.cellg')
                 .data(function (d, i) {
                     return d
@@ -264,10 +264,12 @@ var baget = baget || {};  // encapsulating variable
                 .append('circle')
                 .attr('class', 'cellg')
                 .attr("cx", function (d, i) {
-                    return d.t * grid_size + spaceForVariantLabel;
+                    return d.v * grid_size + spaceForVariantLabel;
                 })
                 .attr("cy", function (d, i) {
-                    return d.v * grid_size
+                    return d.t * grid_size ;
+
+                  //  return d.v * grid_size
                 })
                 .attr('r', function (d, i) {
                     return circle_size(d.p);
@@ -311,7 +313,7 @@ var baget = baget || {};  // encapsulating variable
 
             var buildSvgContainer = function(parent, width, margin){
                 if (typeof parent !== 'undefined'){
-                    parent.attr("width", width + margin.left + margin.right);
+                    parent.attr("height", height + margin.top + margin.bottom);
                  }
             };
 
