@@ -33,10 +33,12 @@
         var crossMap = baget.crossMap()
                 .width(width)
                 .height (height)
-                .margin (margin) ;
+                .margin (margin)
+                .variantLinkUrl ('<g:createLink controller="variant" action="variantInfo" />')
+                .phenotypeArray (phenotypeMap.phenotypeArray);
 
-        crossMap.dataHanger("#vis",phenotypeMap.phenotypeArray)
-                .render(data,phenotypeMap.phenotypeArray);
+        crossMap.dataHanger("#vis",data)
+                .render();
     }
 
 </script>
