@@ -75,19 +75,19 @@ var baget = baget || {};  // encapsulating variable
             var variantMap;
             var inverseVariantMap = {};  // given a number, give me a trait
             var extractUniqueLists = function (dd) {
-                var uniqueVariants=d3.nest()
-                    .key(function(d) {return d.ID;})
+                var uniqueVariantsMap=d3.nest()
+                    .key(function(d) {
+                        return d.ID;
+                    })
                     .sortKeys(function(a,b) { return a.POS - b.POS; })
                     .rollup(function(d) {
-                        return d.DBSNP_ID;//+"%"+ d.DBSNP_ID;
+                        return d[0].DBSNP_ID;
                     })
-                    .entries(dd)
-                    .map(function(d){
-//                        var combo =  d.key;
-//                        var both = combo.split('%');
-//                        return {'id':both[0],
-//                            'name':both[1]}
-                        return d.key;
+                    .entries(dd) ;
+
+                var uniqueVariants=    uniqueVariantsMap.map(function(d){
+                       return {'id':d.key,
+                            'rsname':d.values}
                     });
                 var uniqueTraits=d3.nest()
                     .key(function(d) {return d.TRAIT;})
@@ -146,10 +146,10 @@ var baget = baget || {};  // encapsulating variable
             //ctor
             var uniqueArrays = extractUniqueLists(inArray);
             var  variantIdArray =  uniqueArrays.variants.map(function (d){return d.id});
-            var  variantNameArray = uniqueArrays.variants.map(function (d){return d}); //uniqueArrays.variants.map(function (d){return d.name});
+            var  variantNameArray = uniqueArrays.variants.map(function (d){return d.rsname});
             traitMap = createAMap(uniqueArrays.traits);
-            variantMap = createAMap(variantNameArray);
-           // variantMap = createAMap(variantIdArray);
+            //variantMap = createAMap(variantNameArray);
+            variantMap = createAMap(variantIdArray);
             for (var key in traitMap) {
                 if (traitMap.hasOwnProperty(key)) {
                     inverseTraitMap[traitMap[key]] = key;
@@ -159,6 +159,7 @@ var baget = baget || {};  // encapsulating variable
 
             return {
                 variantNameArray:  variantNameArray,
+                variantIDArray:  variantIdArray,
                 traitNameArray:  uniqueArrays.traits,
                 getVariantsByTraitNumber: getVariantsByTraitNumber,
                 getTraitNameByTraitNumber: getTraitNameByTraitNumber,
