@@ -349,6 +349,7 @@ couple of days before the user group, so that the group can help take a look at 
 
 
 
-
+To restart Jenkins enter this url
+http://tgreen-vm.broadinstitute.org:9090/restart
 
 a
