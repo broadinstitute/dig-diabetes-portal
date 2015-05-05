@@ -165,7 +165,10 @@ span.dataSetChoice{
         </div>
 
 
+        <span class = "pull-right">
+            <button class="btn btn-med btn-primary variant-filter-button" onclick="mpgSoftware.variantWF.cancelThisFieldCollection()">Cancel</button>
+            <button class="btn btn-med btn-primary variant-filter-button" onclick="mpgSoftware.variantWF.gatherFieldsAndPostResults()">Build request &gt;&gt;</button>
+        </span>
 
-        <button class="btn btn-med btn-primary pull-right variant-filter-button" onclick="mpgSoftware.variantWF.gatherFieldsAndPostResults()">Build request &gt;&gt;</button>
     </div>
 </div>

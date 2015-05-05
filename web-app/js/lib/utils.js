@@ -4,12 +4,12 @@ var UTILS = {
      * @param map
      * @returns {{}}
      */
-    invertMap: function (map){
-        var inv={};
-        var keys=Object.keys(map);
-        for(var i=0;i<keys.length;i++){
+    invertMap: function (map) {
+        var inv = {};
+        var keys = Object.keys(map);
+        for (var i = 0; i < keys.length; i++) {
             if (map[keys[i]]) {
-                inv[map[keys[i]]]=keys[i];
+                inv[map[keys[i]]] = keys[i];
             }
         }
         return inv;
@@ -21,13 +21,13 @@ var UTILS = {
      * @param mapFromWhichWeExtract
      * @returns Resulting concatenated map, though this is also available through the first input parameter
      */
-    concatMap: function (workingMap,mapFromWhichWeExtract){
-        if ( typeof(workingMap)=== "undefined") {
+    concatMap: function (workingMap, mapFromWhichWeExtract) {
+        if (typeof(workingMap) === "undefined") {
             workingMap = {};
         }
         if (mapFromWhichWeExtract)
-        var keys=Object.keys(mapFromWhichWeExtract);
-        for(var i=0;i<keys.length;i++) {
+            var keys = Object.keys(mapFromWhichWeExtract);
+        for (var i = 0; i < keys.length; i++) {
             workingMap[keys[i]] = mapFromWhichWeExtract [keys[i]];
         }
         return workingMap;
@@ -37,8 +37,8 @@ var UTILS = {
      * @param incoming
      * @returns {string}
      */
-    realNumberFormatter:function(incoming){
-       var value=parseFloat (incoming);
+    realNumberFormatter: function (incoming) {
+        var value = parseFloat(incoming);
         return value.toPrecision(3);
     },
     /***
@@ -76,7 +76,7 @@ var UTILS = {
      * this constructor.
      * @param inString
      */
-    proteinEffectListConstructor: function (inString,helpText) {
+    proteinEffectListConstructor: function (inString, helpText) {
         var keyValue = {};
         var arrayHolder = [];
         var listOfProteinEffect = inString.split("~");
@@ -92,10 +92,10 @@ var UTILS = {
         this.proteinEffectArray = arrayHolder;
     },
 
-    frequencyCharacterization: function (proportion, cutoffs){
+    frequencyCharacterization: function (proportion, cutoffs) {
         var retVal = "";
         if (proportion === 0) {
-            retVal += "unobserved" ;
+            retVal += "unobserved";
         }
         else if (( proportion > 0) && ( proportion < 0)) {
             retVal += "private";
@@ -104,14 +104,14 @@ var UTILS = {
             retVal += "rare";
         }
         else if (( proportion >= cutoffs[1] ) && ( proportion < cutoffs[2])) {
-            retVal += "low frequency" ;
+            retVal += "low frequency";
         }
         else if (( proportion >= cutoffs[2] )) {
             retVal += "common";
         }
         return retVal;
     },
-    get_variant_repr: function(v) {
+    get_variant_repr: function (v) {
         return v.CHROM + ':' + v.POS;
     },
 
@@ -121,9 +121,9 @@ var UTILS = {
      * @param emergencyTitle
      * @returns {*}
      */
-    get_variant_title: function(v,emergencyTitle) {
+    get_variant_title: function (v, emergencyTitle) {
         var variantName;
-        if (v){
+        if (v) {
             if (v.DBSNP_ID) {
                 variantName = v.DBSNP_ID;
             } else if (v.ID) {
@@ -139,16 +139,16 @@ var UTILS = {
     variantInfoHeaderSentence: function (variant) {
         var returnValue = "";
         if (variant.IN_GENE) {
-            returnValue += "lies in the gene <em>" +variant.IN_GENE+ "</em>";
+            returnValue += "lies in the gene <em>" + variant.IN_GENE + "</em>";
         } else {
-            returnValue += "is nearest to the gene <em>" +variant.CLOSEST_GENE+ "</em>";
+            returnValue += "is nearest to the gene <em>" + variant.CLOSEST_GENE + "</em>";
         }
         return  returnValue;
     },
-     get_highest_frequency: function(v) {
+    get_highest_frequency: function (v) {
         var max = 0;
         var max_pop = '';
-        _.each(['AA', 'EA', 'SA', 'EU', 'HS'], function(k) {
+        _.each(['AA', 'EA', 'SA', 'EU', 'HS'], function (k) {
             var af = v['_13k_T2D_' + k + '_MAF'];
             if (af > max) {
                 max = af;
@@ -158,7 +158,7 @@ var UTILS = {
         return [max, max_pop];
     },
 
-    get_simple_variant_effect: function(v) {
+    get_simple_variant_effect: function (v) {
         if (v.MOST_DEL_SCORE == 1) {
             return 'protein-truncating'
         }
@@ -174,7 +174,7 @@ var UTILS = {
         }
     },
 
-    getSimpleVariantsEffect: function(vMOST_DEL_SCORE) {
+    getSimpleVariantsEffect: function (vMOST_DEL_SCORE) {
         if (vMOST_DEL_SCORE == 1) {
             return 'protein-truncating'
         }
@@ -190,7 +190,7 @@ var UTILS = {
         }
     },
 
-    get_significance_text: function(significance) {
+    get_significance_text: function (significance) {
         if (significance < 5e-8) {
             return 'genome-wide';
         } else if (significance < 5e-2) {
@@ -200,7 +200,7 @@ var UTILS = {
         }
     },
 
-    get_lowest_p_value: function(variant) {
+    get_lowest_p_value: function (variant) {
         var pval = 1;
         var datatype = '';
         if (variant.IN_EXCHP && variant.EXCHP_T2D_P_value < pval) {
@@ -221,24 +221,26 @@ var UTILS = {
         var retVal = "";
         var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
         var ethnicityFullName = ["African-Americans", "East Asians", "South Asians", "Europeans", "Hispanics"];
-        for (  var i = 0 ; i < ethnicAbbreviation.length ; i++ )  {
+        for (var i = 0; i < ethnicAbbreviation.length; i++) {
             if (shortName === (ethnicAbbreviation [i])) break;
         }
-        if  (i < ethnicityFullName.length)  {
-            retVal = ethnicityFullName [i]  ;
-        }  else {
-            retVal =  shortName;
+        if (i < ethnicityFullName.length) {
+            retVal = ethnicityFullName [i];
+        } else {
+            retVal = shortName;
         }
-         return  retVal;
+        return  retVal;
     },
 
-    get_consequence_names: function(variant) {
+    get_consequence_names: function (variant) {
         if (!variant.Consequence) return [];
         var keys = variant.Consequence.split(';');
         var names = [];
-        _.each(keys, function(k) {
+        _.each(keys, function (k) {
             if (!k) return;
-            var consequence = _.find(CONSTANTS.so_consequences, function(c) { return c.key == k });
+            var consequence = _.find(CONSTANTS.so_consequences, function (c) {
+                return c.key == k
+            });
             if (consequence) {
                 names.push(consequence.name);
             } else {
@@ -248,44 +250,33 @@ var UTILS = {
         return names;
     },
 
-    fillAssociationsStatistics: function(variant,
-                                         vMap,
-                                         availableData,
-                                         pValue,
-                                         strongCutOff,
-                                         weakCutOff,
-                                         variantTitle,
-                                         textStrongLine1,
-                                         textStrongLine2,
-                                         textMediumLine,
-                                         textWeakLine,
-                                         noDataLine ) {
+    fillAssociationsStatistics: function (variant, vMap, availableData, pValue, strongCutOff, weakCutOff, variantTitle, textStrongLine1, textStrongLine2, textMediumLine, textWeakLine, noDataLine) {
         var retVal = "";
         var iMap = UTILS.invertMap(vMap);
-        if (variant[iMap[availableData]]){
-            retVal +="<p>";
+        if (variant[iMap[availableData]]) {
+            retVal += "<p>";
             // may or may not be bold
-            if (variant[iMap[pValue]] <= strongCutOff ) {
+            if (variant[iMap[pValue]] <= strongCutOff) {
                 retVal += "<strong>";
             }
             // always needs descr
-            retVal +=  (textStrongLine1 +" "+variantTitle+" ");
-            if (variant[iMap[pValue]] <= strongCutOff ) {
+            retVal += (textStrongLine1 + " " + variantTitle + " ");
+            if (variant[iMap[pValue]] <= strongCutOff) {
                 retVal += textStrongLine2;
             }
-            if  (variant[iMap[pValue]]  >  strongCutOff  && variant[iMap[pValue]] <=   weakCutOff) {
+            if (variant[iMap[pValue]] > strongCutOff && variant[iMap[pValue]] <= weakCutOff) {
                 retVal += textMediumLine;
             }
-            if  (variant[iMap[pValue]]  >  weakCutOff) {
-                retVal  += textWeakLine;
+            if (variant[iMap[pValue]] > weakCutOff) {
+                retVal += textWeakLine;
             }
-            if (variant[iMap[pValue]] <= strongCutOff ) {
-                retVal += "</strong>" ;
+            if (variant[iMap[pValue]] <= strongCutOff) {
+                retVal += "</strong>";
             }
-            retVal +="</p>"+
-                   "<ul>"+
-                    "<li>p-value from this analysis: "+variant[iMap[pValue]] + "</li>"+
-                    "</ul>";
+            retVal += "</p>" +
+                "<ul>" +
+                "<li>p-value from this analysis: " + variant[iMap[pValue]] + "</li>" +
+                "</ul>";
         } else {
             retVal += noDataLine;
         }
@@ -293,23 +284,23 @@ var UTILS = {
     },
 
 
-    sigmaVariantCharacterization:  function (variant, title) {
+    sigmaVariantCharacterization: function (variant, title) {
         var retVal = "";
-        var euroValue  = parseFloat(variant["SIGMA_T2D_MAF"]) ;
+        var euroValue = parseFloat(variant["SIGMA_T2D_MAF"]);
         if (variant["SIGMA_T2D_MAF"]) {
-            retVal += ("<p>The minor allele frequency of "+title + " in <em>SIGMA</em> sequencing data is: "+
-                (euroValue*100).toPrecision(3)+ " ("+UTILS.frequencyCharacterization(euroValue, [0.000001,0.005,0.05])+ ")");
+            retVal += ("<p>The minor allele frequency of " + title + " in <em>SIGMA</em> sequencing data is: " +
+                (euroValue * 100).toPrecision(3) + " (" + UTILS.frequencyCharacterization(euroValue, [0.000001, 0.005, 0.05]) + ")");
         } else {
             retVal += ( "<p>This variant is not observed in SIGMA sequencing data.</p>");
         }
         return retVal;
     },
-    verifyThatDisplayIsWarranted: function (fieldToTest, divToDisplayIfWeHaveData, giveToDisplayIfWeHaveNoData)  {
-        if (!fieldToTest)  {
+    verifyThatDisplayIsWarranted: function (fieldToTest, divToDisplayIfWeHaveData, giveToDisplayIfWeHaveNoData) {
+        if (!fieldToTest) {
             divToDisplayIfWeHaveData.hide();
             giveToDisplayIfWeHaveNoData.show();
         } else {
-            divToDisplayIfWeHaveData.show ();
+            divToDisplayIfWeHaveData.show();
             giveToDisplayIfWeHaveNoData.hide();
         }
     },
@@ -340,73 +331,73 @@ var UTILS = {
         var delScore = parseInt(MOST_DEL_SCORE);
         $('#annotationCodon').html(Codons);
         $('#annotationProteinChange').html(Protein_change);
-        $('#ensembleSoAnnotation').html('<strong>' +Consequence+'</strong>');
-        if (delScore=== 1){
+        $('#ensembleSoAnnotation').html('<strong>' + Consequence + '</strong>');
+        if (delScore === 1) {
             $('#variantTruncateProtein').html('<strong>yes</strong>');
         } else {
             $('#variantTruncateProtein').html('<strong>no</strong>');
         }
-        $('#polyPhenPrediction').html('<strong>' +PolyPhen_PRED+'</strong>,<strong>'+PolyPhen_SCORE +'</strong>');
-        $('#siftPrediction').html('<strong>' +SIFT_PRED+'</strong>,<strong>'+SIFT_SCORE +'</strong>');
-        $('#condelPrediction').html('<strong>' +Condel_PRED+'</strong>,<strong>'+Condel_SCORE +'</strong>');
-        if (delScore===  2)  {
-            $('#mostDeleteScoreEquals2').css('display','block');
-        } else{
-            $('#mostDeleteScoreEquals2').css('display','none');
+        $('#polyPhenPrediction').html('<strong>' + PolyPhen_PRED + '</strong>,<strong>' + PolyPhen_SCORE + '</strong>');
+        $('#siftPrediction').html('<strong>' + SIFT_PRED + '</strong>,<strong>' + SIFT_SCORE + '</strong>');
+        $('#condelPrediction').html('<strong>' + Condel_PRED + '</strong>,<strong>' + Condel_SCORE + '</strong>');
+        if (delScore === 2) {
+            $('#mostDeleteScoreEquals2').css('display', 'block');
+        } else {
+            $('#mostDeleteScoreEquals2').css('display', 'none');
         }
-        if (delScore<4) {
-            $('#variationInfoEncodedProtein').css('display','block');
-            $('#puntOnNoncodingVariant').css('display','none');
-        } else{
-            $('#variationInfoEncodedProtein').css('display','none');
-            $('#puntOnNoncodingVariant').css('display','block');
+        if (delScore < 4) {
+            $('#variationInfoEncodedProtein').css('display', 'block');
+            $('#puntOnNoncodingVariant').css('display', 'none');
+        } else {
+            $('#variationInfoEncodedProtein').css('display', 'none');
+            $('#puntOnNoncodingVariant').css('display', 'block');
         }
 
     },
-    variantGenerateProteinsChooser:  function (variant, title) {
+    variantGenerateProteinsChooser: function (variant, title) {
         var retVal = "";
         if (variant.MOST_DEL_SCORE && variant.MOST_DEL_SCORE < 4) {
-            retVal += "<h2><strong>What effect does " +title+ " have on the encoded protein?</strong></h2>\n"+
-            "<p>Choose one transcript below to see the predicted effect on the protein:</p>";
+            retVal += "<h2><strong>What effect does " + title + " have on the encoded protein?</strong></h2>\n" +
+                "<p>Choose one transcript below to see the predicted effect on the protein:</p>";
             var allKeys = Object.keys(variant._13k_T2D_TRANSCRIPT_ANNOT);
-            for ( var  i=0 ; i<allKeys.length ; i++ ) {
-                var checked = (i==0) ? ' checked ' : '';
-                var annotation =variant._13k_T2D_TRANSCRIPT_ANNOT[allKeys[i]];
+            for (var i = 0; i < allKeys.length; i++) {
+                var checked = (i == 0) ? ' checked ' : '';
+                var annotation = variant._13k_T2D_TRANSCRIPT_ANNOT[allKeys[i]];
                 retVal += ("<div class=\"radio-inline\">\n" +
-                    "<label>\n"+
-                    "<input "+checked+" class='transcript-radio' type='radio' name='transcript_check' id='transcript-" +allKeys[i] +
-                    "' value='" +allKeys[i]+ "' onclick='UTILS.variantInfoRadioChange(" +
-                    "\""+annotation['PolyPhen_SCORE']+ "\"," +
-                    "\""+annotation['SIFT_SCORE']+ "\"," +
-                    "\""+annotation['Condel_SCORE']+ "\"," +
-                    "\""+annotation['MOST_DEL_SCORE']+ "\"," +
-                    "\""+annotation['_13k_ANNOT_29_mammals_omega']+ "\"," +
-                    "\""+annotation['Protein_position']+ "\"," +
-                    "\""+annotation['Codons']+ "\"," +
-                    "\""+annotation['Protein_change']+ "\"," +
-                    "\""+annotation['PolyPhen_PRED']+ "\"," +
-                    "\""+annotation['Consequence']+ "\"," +
-                    "\""+annotation['Condel_PRED']+ "\"," +
-                    "\""+annotation['SIFT_PRED']+ "\"" +
-                    ")' >\n"+
-                    allKeys[i]+"\n"+
-                    "</label>\n"+
+                    "<label>\n" +
+                    "<input " + checked + " class='transcript-radio' type='radio' name='transcript_check' id='transcript-" + allKeys[i] +
+                    "' value='" + allKeys[i] + "' onclick='UTILS.variantInfoRadioChange(" +
+                    "\"" + annotation['PolyPhen_SCORE'] + "\"," +
+                    "\"" + annotation['SIFT_SCORE'] + "\"," +
+                    "\"" + annotation['Condel_SCORE'] + "\"," +
+                    "\"" + annotation['MOST_DEL_SCORE'] + "\"," +
+                    "\"" + annotation['_13k_ANNOT_29_mammals_omega'] + "\"," +
+                    "\"" + annotation['Protein_position'] + "\"," +
+                    "\"" + annotation['Codons'] + "\"," +
+                    "\"" + annotation['Protein_change'] + "\"," +
+                    "\"" + annotation['PolyPhen_PRED'] + "\"," +
+                    "\"" + annotation['Consequence'] + "\"," +
+                    "\"" + annotation['Condel_PRED'] + "\"," +
+                    "\"" + annotation['SIFT_PRED'] + "\"" +
+                    ")' >\n" +
+                    allKeys[i] + "\n" +
+                    "</label>\n" +
                     "</div>\n");
-             }
-            if (allKeys.length > 0){
-                var annotation =variant._13k_T2D_TRANSCRIPT_ANNOT[allKeys[0]];
+            }
+            if (allKeys.length > 0) {
+                var annotation = variant._13k_T2D_TRANSCRIPT_ANNOT[allKeys[0]];
                 UTILS.variantInfoRadioChange(annotation['PolyPhen_SCORE'],
-                annotation['SIFT_SCORE'],
-                annotation['Condel_SCORE'],
-                annotation['MOST_DEL_SCORE'],
-                annotation['_13k_ANNOT_29_mammals_omega'],
-                annotation['Protein_position'],
-                annotation['Codons'],
-                annotation['Protein_change'],
-                annotation['PolyPhen_PRED'],
-                annotation['Consequence'],
-                annotation['Condel_PRED'],
-                annotation['SIFT_PRED'] );
+                    annotation['SIFT_SCORE'],
+                    annotation['Condel_SCORE'],
+                    annotation['MOST_DEL_SCORE'],
+                    annotation['_13k_ANNOT_29_mammals_omega'],
+                    annotation['Protein_position'],
+                    annotation['Codons'],
+                    annotation['Protein_change'],
+                    annotation['PolyPhen_PRED'],
+                    annotation['Consequence'],
+                    annotation['Condel_PRED'],
+                    annotation['SIFT_PRED']);
 
             }
 
@@ -414,55 +405,55 @@ var UTILS = {
         }
         return retVal;
     },
-    geneFieldOrZero: function (geneInfo,filedNumber,defaultValue) {
-    var retval = 0;
-    var fieldName  = revG(filedNumber);
-    if ((geneInfo)  && (fieldName.length>0)) {
-        var fieldBreakdown = fieldName.split("."); // step into complex fields
-        retval =   geneInfo[fieldBreakdown[0]];
-        if ((retval)&&(fieldBreakdown.length>1)){
-            for (  var i = 1 ; i < fieldBreakdown.length ; i++ ) {
-                var nextLevelSpec =  fieldBreakdown[i];
-                retval =  retval[nextLevelSpec];
+    geneFieldOrZero: function (geneInfo, filedNumber, defaultValue) {
+        var retval = 0;
+        var fieldName = revG(filedNumber);
+        if ((geneInfo) && (fieldName.length > 0)) {
+            var fieldBreakdown = fieldName.split("."); // step into complex fields
+            retval = geneInfo[fieldBreakdown[0]];
+            if ((retval) && (fieldBreakdown.length > 1)) {
+                for (var i = 1; i < fieldBreakdown.length; i++) {
+                    var nextLevelSpec = fieldBreakdown[i];
+                    retval = retval[nextLevelSpec];
+                }
             }
         }
-    }
-    if (!retval) {    // deal with a null.  Use a zero unless we are given an explicit alternative
-        if (typeof defaultValue!=="undefined"){
-            retval = defaultValue;
-        }  else {
-            retval=0;
+        if (!retval) {    // deal with a null.  Use a zero unless we are given an explicit alternative
+            if (typeof defaultValue !== "undefined") {
+                retval = defaultValue;
+            } else {
+                retval = 0;
+            }
         }
-    }
-    return retval;
-},
+        return retval;
+    },
 
 
-    prettyUpSigmaSource:function (rawText){
+    prettyUpSigmaSource: function (rawText) {
         var returnValue;
-        if (rawText === 'EXOME_CHIP'){
+        if (rawText === 'EXOME_CHIP') {
             returnValue = 'exome chip';
-        } else if (rawText === 'OMNI'){
+        } else if (rawText === 'OMNI') {
             returnValue = 'omni';
-        } else if (rawText === 'EXOMES'){
+        } else if (rawText === 'EXOMES') {
             returnValue = 'exomes';
-        }else {
+        } else {
             returnValue = rawText;
         }
         return returnValue;
     },
 
-    extractAlleleFrequencyRanges: function(allFields) {
-        var returnValue  = {};
-        var differentEthnicities =  ['AA', 'EA', 'SA', 'EU', 'HS'];
-        var minMax =  ['min','max'];
-        for ( var i = 0 ; i < differentEthnicities.length ; i++ ) {
-            for ( var j = 0 ; j < minMax.length ; j++ ) {
-                var idValue = 'ethnicity_af_'+differentEthnicities[i] +'-' +minMax[j];
-                returnValue[idValue] = $('#' +idValue).val();
+    extractAlleleFrequencyRanges: function (allFields) {
+        var returnValue = {};
+        var differentEthnicities = ['AA', 'EA', 'SA', 'EU', 'HS'];
+        var minMax = ['min', 'max'];
+        for (var i = 0; i < differentEthnicities.length; i++) {
+            for (var j = 0; j < minMax.length; j++) {
+                var idValue = 'ethnicity_af_' + differentEthnicities[i] + '-' + minMax[j];
+                returnValue[idValue] = $('#' + idValue).val();
             }
         }
-         return returnValue;
+        return returnValue;
     },
     /***
      * Extract all checked values from a set of checkboxes. The object returned  describes only the checkboxes
@@ -471,13 +462,13 @@ var UTILS = {
      * @param allFields
      * @returns {{}}
      */
-    extractValFromCheckboxes: function(everyId) {
-        var returnValue  = {};
-        for ( var i = 0 ; i < everyId.length ; i++ ) {
-            var domReference = $('#'+everyId[i]);
+    extractValFromCheckboxes: function (everyId) {
+        var returnValue = {};
+        for (var i = 0; i < everyId.length; i++) {
+            var domReference = $('#' + everyId[i]);
             if ((domReference) &&
-                (domReference.is(':checked'))){
-                returnValue [domReference.val()]   = 1;
+                (domReference.is(':checked'))) {
+                returnValue [domReference.val()] = 1;
             }
         }
         return returnValue;
@@ -488,22 +479,22 @@ var UTILS = {
      * @param allFields
      * @returns {{}}
      */
-    extractValFromTextboxes: function(everyId) {
-        var returnValue  = {};
-        for ( var i = 0 ; i < everyId.length ; i++ ) {
-            var domReference = $('#'+everyId[i]);
-            if ((domReference) && (domReference.val())){
-                returnValue [everyId[i]]   = domReference.val();
+    extractValFromTextboxes: function (everyId) {
+        var returnValue = {};
+        for (var i = 0; i < everyId.length; i++) {
+            var domReference = $('#' + everyId[i]);
+            if ((domReference) && (domReference.val())) {
+                returnValue [everyId[i]] = domReference.val();
             }
         }
         return returnValue;
     },
-    extractValsFromCombobox: function(everyId) {
-        var returnValue  = {};
-        for ( var i = 0 ; i < everyId.length ; i++ ) {
-            var domReference = $('#'+everyId[i]);
-            if ((domReference) && (domReference.val())){
-                returnValue [everyId[i]]   = domReference.val();
+    extractValsFromCombobox: function (everyId) {
+        var returnValue = {};
+        for (var i = 0; i < everyId.length; i++) {
+            var domReference = $('#' + everyId[i]);
+            if ((domReference) && (domReference.val())) {
+                returnValue [everyId[i]] = domReference.val();
             }
         }
         return returnValue;
@@ -514,43 +505,54 @@ var UTILS = {
      * @param variant
      * @param fieldNameArray
      */
-    nullsExist: function(variant,fieldNameArray){
+    nullsExist: function (variant, fieldNameArray) {
         var returnValue = false;
         //First take care of the pathological cases
-        if (typeof variant === 'undefined') {return true;}
-        if (typeof fieldNameArray === 'undefined') {return false;}
-        for ( var i = 0 ; i < fieldNameArray.length ; i++ ){
-            if((variant[fieldNameArray[i]]===null) ||
-                (typeof variant[fieldNameArray[i]] === 'undefined') ){
+        if (typeof variant === 'undefined') {
+            return true;
+        }
+        if (typeof fieldNameArray === 'undefined') {
+            return false;
+        }
+        for (var i = 0; i < fieldNameArray.length; i++) {
+            if ((variant[fieldNameArray[i]] === null) ||
+                (typeof variant[fieldNameArray[i]] === 'undefined')) {
                 returnValue = true;
                 break;
             }
         }
         return returnValue;
     },
+    /***
+     * general-purpose way of posting a query. Fake a bunch of hidden variables to store
+     * everything in the object params.
+     * @param path
+     * @param params
+     * @param method
+     */
     postQuery: function (path, params, method) {
-    method = method || "post"; // Set method to post by default if not specified.
+        method = method || "post"; // Set method to post by default if not specified.
 
-    // The rest of this code assumes you are not using a library.
-    // It can be made less wordy if you use one.
-    var form = document.createElement("form");
-    form.setAttribute("method", method);
-    form.setAttribute("action", path);
+        var form = document.createElement("form");
+        form.setAttribute("method", method);
+        form.setAttribute("action", path);
 
-    for(var key in params) {
-        if(params.hasOwnProperty(key)) {
-            var hiddenField = document.createElement("input");
-            hiddenField.setAttribute("type", "hidden");
-            hiddenField.setAttribute("name", key);
-            hiddenField.setAttribute("value", params[key]);
+        if (typeof params !== 'undefined') {
+            for (var key in params) {
+                if (params.hasOwnProperty(key)) {
+                    var hiddenField = document.createElement("input");
+                    hiddenField.setAttribute("type", "hidden");
+                    hiddenField.setAttribute("name", key);
+                    hiddenField.setAttribute("value", params[key]);
 
-            form.appendChild(hiddenField);
+                    form.appendChild(hiddenField);
+                }
+            }
         }
-    }
 
-    document.body.appendChild(form);
-    form.submit();
-} ,
+        document.body.appendChild(form);
+        form.submit();
+    },
     postJson: function (path, params) {
         // construct an HTTP request
         var xhr = new XMLHttpRequest();
@@ -564,13 +566,13 @@ var UTILS = {
             // done
         };
 
-    } ,
+    },
     determineEffectsTypeHeader: function (data) {
         var returnValue = 'odds ratio';
         if ((data) && (data.length > 0)) {
             if (data[0].BETA) {
                 returnValue = 'beta';
-            } else if (data[0].ZSCORE){
+            } else if (data[0].ZSCORE) {
                 returnValue = 'zscore';
             }
         }
@@ -578,9 +580,10 @@ var UTILS = {
     },
     determineEffectsTypeString: function (effectsType) {
         var effectsField = 'ODDS_RATIO';
-        if (effectsType ==='beta'){
+        if (effectsType === 'beta') {
             effectsField = 'BETA';
-        } if (effectsType ==='zscore'){
+        }
+        if (effectsType === 'zscore') {
             effectsField = 'ZSCORE';
         }
         return effectsField;
@@ -595,33 +598,34 @@ var UTILS = {
      * @param show_exchp
      * @returns {string}
      */
-    fillPhenotypicTraitTable:  function ( vRec, show_gene, show_sigma, show_exseq, show_exchp ) {
+    fillPhenotypicTraitTable: function (vRec, show_gene, show_sigma, show_exseq, show_exchp) {
         var retVal = "";
         if (!vRec) {   // error condition
             return;
         }
-        var effectsType = UTILS.determineEffectsTypeHeader (vRec);
+        var effectsType = UTILS.determineEffectsTypeHeader(vRec);
         var effectsField = 'ODDS_RATIO';
-        if (effectsType ==='beta'){
+        if (effectsType === 'beta') {
             effectsField = 'BETA';
-        } if (effectsType ==='zscore'){
+        }
+        if (effectsType === 'zscore') {
             effectsField = 'ZSCORE';
         }
 
         for (var i = 0; i < vRec.length; i++) {
 
-            var variant = vRec [i] ;
+            var variant = vRec [i];
             retVal += "<tr>"
 
-            var pValueGreyedOut = (variant.PVALUE > .05)? "greyedout" :"normal";
+            var pValueGreyedOut = (variant.PVALUE > .05) ? "greyedout" : "normal";
 
-            retVal += "<td><a class='boldlink' href='../variant/variantInfo/"+ variant.DBSNP_ID+"'>"+ variant.DBSNP_ID+"</a></td>";
+            retVal += "<td><a class='boldlink' href='../variant/variantInfo/" + variant.DBSNP_ID + "'>" + variant.DBSNP_ID + "</a></td>";
 
-            retVal += "<td><a class='boldItlink' href='../gene/geneInfo/"+ variant.CLOSEST_GENE+"'>"+ variant.CLOSEST_GENE+"</a></td>";
+            retVal += "<td><a class='boldItlink' href='../gene/geneInfo/" + variant.CLOSEST_GENE + "'>" + variant.CLOSEST_GENE + "</a></td>";
 
-            retVal += "<td>"+ variant.PVALUE.toPrecision(3)+"</td>";
+            retVal += "<td>" + variant.PVALUE.toPrecision(3) + "</td>";
 
-            retVal += "<td class='" +pValueGreyedOut+ "'>"+ variant[effectsField].toPrecision(3)+"</td>";
+            retVal += "<td class='" + pValueGreyedOut + "'>" + variant[effectsField].toPrecision(3) + "</td>";
 
             retVal += "<td>";
             if (variant.MAF) {
@@ -629,10 +633,10 @@ var UTILS = {
             }
             retVal += "</td>";
 
-            retVal += "<td><a class='boldlink' href='./traitInfo/"+ variant.DBSNP_ID+"'>click here</a></td>";
+            retVal += "<td><a class='boldlink' href='./traitInfo/" + variant.DBSNP_ID + "'>click here</a></td>";
         }
         return retVal;
-    },
+    }
 
 
 

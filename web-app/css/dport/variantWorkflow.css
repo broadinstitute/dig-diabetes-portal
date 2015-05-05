@@ -24,14 +24,12 @@
 }
 
 .variantWFsingleFilter {
-    background-color: #CEF6CE;
     border: 1px solid transparent;
     border-radius: 4px;
 }
 
 .developingQueryHolder{
     overflow-y: scroll;
-    height: 500px;
 }
 .developingQueryComponents {
     margin: 5px 0 5px 0;
@@ -40,8 +38,8 @@
     border-radius: 4px;
 }
 .developingQueryComponentsFilters {
-    border: 1px solid lightseagreen;
     padding: 10px 0 10px 0;
+
 }
 .developingQueryComponentsFilterTitle {
     font-family: "Arial Black", Gadget, sans-serif;
@@ -52,8 +50,8 @@
     margin: 4px 10px 0 auto;
 }
 .developingQueryComponentsBlockOfFilters {
-    border: 1px solid gray;
     margin: 20px;
     padding: 0;
     margin-bottom: 25px;
+    width: 95%;
 }

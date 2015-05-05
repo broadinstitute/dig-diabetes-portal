@@ -27,7 +27,7 @@ var mpgSoftware = mpgSoftware || {};
         };
         var fillDataSetDropdown = function (dataSetJson) { // help text for each row
             if ((typeof dataSetJson !== 'undefined')  &&
-                (typeof dataSetJson["is_error"] !== 'undefined')
+                (typeof dataSetJson["is_error"] !== 'undefined')&&
                 (dataSetJson["is_error"] === false))
             {
                 var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
@@ -99,10 +99,28 @@ var mpgSoftware = mpgSoftware || {};
             varsToSend = UTILS.concatMap(varsToSend,experimentChoice) ;
             UTILS.postQuery('./variantVWRequest',varsToSend);
         };
+        var cancelThisFieldCollection = function (){
+            var varsToSend = {};
+            var savedValue = {};
+            var savedValuesList = [];
+            var totalFilterCount = UTILS.extractValFromTextboxes(['totalFilterCount']);
+            if (typeof totalFilterCount['totalFilterCount'] !== 'undefined') {
+                var valueCount = parseInt(totalFilterCount['totalFilterCount']);
+                if (valueCount>0){
+                    for ( var i = 0 ; i < valueCount ; i++ ){
+                        savedValuesList.push ('savedValue'+i);
+                    }
+                    savedValue = UTILS.extractValFromTextboxes(savedValuesList);
+                }
+            }
+            varsToSend = UTILS.concatMap(varsToSend,savedValue) ;
+            UTILS.postQuery('./variantVWRequest',varsToSend);
+        };
         var initializePage = function (){
             //$("#phenotype").prepend("<option value='' selected='selected'></option>");
         };
         return {
+            cancelThisFieldCollection:cancelThisFieldCollection,
             fillDataSetDropdown:fillDataSetDropdown,
             respondToPhenotypeSelection:respondToPhenotypeSelection,
             respondToDataSetSelection:respondToDataSetSelection,

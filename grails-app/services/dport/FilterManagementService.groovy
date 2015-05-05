@@ -973,7 +973,20 @@ class FilterManagementService {
         //  and subsequent parameter lists following
         List <LinkedHashMap> returnValue = []
 
-        returnValue << newParameters
+        // It is possible to send back an null filter, which we can then drop from further processing
+        // does perform that test right here
+        if ((newParameters) &&
+                // must have at least one of the following
+                (
+                          (newParameters.containsKey('phenotype')) ||
+                          (newParameters.containsKey('pValue') ) ||
+                          (newParameters.containsKey('orValue') ) ||
+                          (newParameters.containsKey('dataset') )
+                )
+        ){
+            returnValue << newParameters
+        }
+
         if (encodedOldParameterList){
             for (String value in encodedOldParameterList){
                 returnValue << sharedToolsService.decodeAFilterList(value)

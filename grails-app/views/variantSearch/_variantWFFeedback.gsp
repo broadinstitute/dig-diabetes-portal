@@ -21,3 +21,6 @@
         <g:renderEncodedFilters filterSet='${encodedFilterSets}'/>
     </div>
 </div>
+%{--<div id="headerWF"></div>--}%
+%{--<div id="contentWF"></div>--}%
+%{--<div id="footerWF"></div>--}%
