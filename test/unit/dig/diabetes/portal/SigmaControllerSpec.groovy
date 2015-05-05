@@ -1,0 +1,20 @@
+package dig.diabetes.portal
+
+import grails.test.mixin.TestFor
+import spock.lang.Specification
+
+/**
+ * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
+ */
+@TestFor(SigmaController)
+class SigmaControllerSpec extends Specification {
+
+    def setup() {
+    }
+
+    def cleanup() {
+    }
+
+    void "test something"() {
+    }
+}
