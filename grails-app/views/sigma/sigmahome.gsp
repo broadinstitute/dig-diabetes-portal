@@ -13,7 +13,7 @@
 
 <body>
     <h1></h1>
-    <g:if test="${params.section == 'about'}">
+    <g:if test="${params.section == 'about' || params.section == null}">
         <g:render template="about"/>
     </g:if>
 
