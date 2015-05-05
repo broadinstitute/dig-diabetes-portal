@@ -8,7 +8,10 @@
 </head>
 
 <body>
-    Simple sigma
+    <div>
+        <g:render template="sigma-notices"/>
+    </div>
+    <div>Sigma header goes here</div>
     <g:layoutBody/>
 </body>
 </html>

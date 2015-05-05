@@ -12,16 +12,58 @@
 </head>
 
 <body>
-    <h1></h1>
-    <g:if test="${params.section == 'about' || params.section == null}">
-        <g:render template="about"/>
-    </g:if>
+    <div>
+        <table>
+            <tr>
+                <td style="width:20%">
+                    <g:if test="${params.section == 'data'}">
+                        <h1>Data</h1>
+                    </g:if>
+                    <g:if test="${params.section == 'about' || params.section == null}">
+                        <h1>About</h1>
+                    </g:if>
+                </td>
+                <td>
+                    <g:if test="${params.section == 'data'}">
+                        <g:render template="data-overview"/>
+                    </g:if>
+                    <g:if test="${params.section == 'about' || params.section == null}">
+                        <g:render template="about-overview"/>
+                    </g:if>
+                </td>
+            </tr>
+        </table>
+    </div>
 
-    <g:if test="${params.section == 'data'}">
-        <g:render template="data"/>
-    </g:if>
+    <div>
+        <table>
+            <tr>
+                <td style="width:20%;vertical-align: top;">
+                    <table>
+                        <tr>
+                            <td><g:link params="[section: 'about']">About</g:link></td>
+                        </tr>
+                        <tr>
+                            <td><g:link params="[section: 'data']">Data</g:link></td>
+                        </tr>
+                        <tr>
+                            <td>Etc...</td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <div class="jumbotron">
+                        <g:if test="${params.section == 'data'}">
+                            <g:render template="data"/>
+                        </g:if>
+                        <g:if test="${params.section == 'about' || params.section == null}">
+                            <g:render template="about"/>
+                        </g:if>
+                    </div>
+                </td>
+            </tr>
+        </table>
 
-    <g:link params="[section: 'about']">About</g:link>
-    <g:link params="[section: 'data']">Data</g:link>
+    </div>
 </body>
 </html>
