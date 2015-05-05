@@ -6,37 +6,47 @@ var mpgSoftware = mpgSoftware || {};
 
 
     mpgSoftware.variantWF = (function () {
-         var forgetThisFilter = function  (indexNumber){
+        // private variables
+        var customLegend = 0; // 0->defining a filter, 1-> potentially manipulating our  list of existing filters
+
+        /***
+         * private methods
+         * @param indexNumber
+         */
+        // getter/setter
+        var numberExistingFilters = function (x){
+            var filterCount = $('#totalFilterCount');
+            if (!arguments.length) {//no argument, this is a getter call
+                var returnValue = 0;
+                if (typeof filterCount !== 'undefined') {
+                    returnValue =  parseInt (filterCount.attr('value'));
+                }
+                return returnValue;
+            } else {// we received an argument, treat this as a setter
+                if (typeof filterCount !== 'undefined') {
+                    filterCount.attr('value',x)
+                }
+            }
+
+        };
+         var handleBlueBoxVisibility = function (){
+            var blueBox = $('.bluebox');
+            if (numberExistingFilters() > 0){
+                blueBox.show();
+            } else {
+                blueBox.hide();
+            }
+        };
+        // getter/setter
+        var currentInteractivityState = function(x){
+            if (!arguments.length) return customLegend;
+            customLegend = x;
+            return instance;
+        };
+        var forgetThisFilter = function  (indexNumber){
             if(typeof indexNumber !== 'undefined'){
                 $('#savedValue'+indexNumber).remove ();
                 $('#filterBlock'+indexNumber).remove ();
-            }
-        };
-        var removeThisFilterSet = function (currentObject){
-          console.log (' well shit Howdy');
-            var filterIndex;
-            var label = 'remover';
-            var id = $(currentObject).attr ('id');
-            var desiredLocation = id.indexOf (label);
-            if ((desiredLocation > -1) &&
-                (typeof id !== 'undefined') ){
-                var filterIndexString = id.substring(id.indexOf(label)+ label.length);
-                filterIndex = parseInt(filterIndexString);
-                forgetThisFilter (filterIndex);
-            }
-        };
-        var fillDataSetDropdown = function (dataSetJson) { // help text for each row
-            if ((typeof dataSetJson !== 'undefined')  &&
-                (typeof dataSetJson["is_error"] !== 'undefined')&&
-                (dataSetJson["is_error"] === false))
-            {
-                var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
-                var options = $("#dataSet");
-                options.empty();
-                var dataSetList = dataSetJson ["dataset"];
-                for ( var i = 0 ; i < numberOfRecords ; i++ ){
-                    options.append($("<option />").val(dataSetList[i]).text(dataSetList[i]));
-                }
             }
         };
         var retrieveDataSets = function (phenotype, experiment) {
@@ -46,7 +56,7 @@ var mpgSoftware = mpgSoftware || {};
                 type: "post",
                 url: "./retrieveDatasetsAjax",
                 data: {phenotype: phenotype,
-                       experiment:experiment},
+                    experiment:experiment},
                 async: true,
                 success: function (data) {
                     if (( data !==  null ) &&
@@ -62,6 +72,40 @@ var mpgSoftware = mpgSoftware || {};
                     core.errorReporter(jqXHR, exception);
                 }
             });
+        };
+
+
+        /***
+         * public methods
+         * @param currentObject
+         */
+        var removeThisFilterSet = function (currentObject){
+            var filterIndex;
+            var label = 'remover';
+            var id = $(currentObject).attr ('id');
+            var desiredLocation = id.indexOf (label);
+            if ((desiredLocation > -1) &&
+                (typeof id !== 'undefined') ){
+                var filterIndexString = id.substring(id.indexOf(label)+ label.length);
+                filterIndex = parseInt(filterIndexString);
+                forgetThisFilter (filterIndex);
+                numberExistingFilters(numberExistingFilters()-1);
+                handleBlueBoxVisibility ();
+            }
+        };
+        var fillDataSetDropdown = function (dataSetJson) { // help text for each row
+            if ((typeof dataSetJson !== 'undefined')  &&
+                (typeof dataSetJson["is_error"] !== 'undefined')&&
+                (dataSetJson["is_error"] === false))
+            {
+                var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
+                var options = $("#dataSet");
+                options.empty();
+                var dataSetList = dataSetJson ["dataset"];
+                for ( var i = 0 ; i < numberOfRecords ; i++ ){
+                    options.append($("<option />").val(dataSetList[i]).text(dataSetList[i]));
+                }
+            }
         };
         var respondToPhenotypeSelection = function (){
             var phenotypeComboBox = UTILS.extractValsFromCombobox(['phenotype']);
@@ -117,6 +161,12 @@ var mpgSoftware = mpgSoftware || {};
             UTILS.postQuery('./variantVWRequest',varsToSend);
         };
         var initializePage = function (){
+            handleBlueBoxVisibility ();
+            if (currentInteractivityState() === 0){
+
+            }else if (currentInteractivityState() === 1){
+
+            }
             //$("#phenotype").prepend("<option value='' selected='selected'></option>");
         };
         return {
