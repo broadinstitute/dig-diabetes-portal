@@ -40,12 +40,16 @@
             <tr>
                 <td style="width:20%;vertical-align: top;">
                     <table>
-                        <tr>
-                            <td><g:link params="[section: 'about']">About</g:link></td>
-                        </tr>
-                        <tr>
-                            <td><g:link params="[section: 'data']">Data</g:link></td>
-                        </tr>
+                        <g:if test="${params.section != 'about' && params.section != null}">
+                            <tr>
+                                <td><g:link params="[section: 'about']">About</g:link></td>
+                            </tr>
+                        </g:if>
+                        <g:if test="${params.section != 'data'}">
+                            <tr>
+                                <td><g:link params="[section: 'data']">Data</g:link></td>
+                            </tr>
+                        </g:if>
                         <tr>
                             <td>Etc...</td>
                         </tr>
