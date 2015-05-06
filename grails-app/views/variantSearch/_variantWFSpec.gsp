@@ -131,6 +131,7 @@ span.dataSetChoice{
                 <select name="additionalFilters" id="additionalFilters"
                         class="form-control btn-group btn-input clearfix"
                         onchange="mpgSoftware.firstResponders.respondToRequestForMoreFilters()">
+                    <option value='' selected='selected'></option>
                     <option value="pvalue">p-value</option>
                     <option value="oddsratio">odds ratio</option>
                     <option value="effectsize">effect size</option>
