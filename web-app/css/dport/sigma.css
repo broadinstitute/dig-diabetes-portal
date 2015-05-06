@@ -1,9 +1,27 @@
 .sigma-about {
-    background-color: #ff0000;
+    background: #207cca;
+    background: -moz-linear-gradient(top,  #207cca 0%, #1e5799 99%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#207cca), color-stop(99%,#1e5799));
+    background: -webkit-linear-gradient(top,  #207cca 0%,#1e5799 99%);
+    background: -o-linear-gradient(top,  #207cca 0%,#1e5799 99%);
+    background: -ms-linear-gradient(top,  #207cca 0%,#1e5799 99%);
+    background: linear-gradient(to bottom,  #207cca 0%,#1e5799 99%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#207cca', endColorstr='#1e5799',GradientType=0 );
+
     height: 70px;
 }
 
 .sigma-data {
-    background-color: blue;
+    background: #a4b357;
+    background: -moz-linear-gradient(top,  #a4b357 0%, #75890c 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a4b357), color-stop(100%,#75890c));
+    background: -webkit-linear-gradient(top,  #a4b357 0%,#75890c 100%);
+    background: -o-linear-gradient(top,  #a4b357 0%,#75890c 100%);
+    background: -ms-linear-gradient(top,  #a4b357 0%,#75890c 100%);
+    background: linear-gradient(to bottom,  #a4b357 0%,#75890c 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a4b357', endColorstr='#75890c',GradientType=0 );
+
     height: 70px
 }
+
+

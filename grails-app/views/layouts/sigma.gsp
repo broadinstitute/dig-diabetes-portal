@@ -12,7 +12,7 @@
     <div>
         <g:render template="sigma-notices"/>
     </div>
-    <div>Sigma header goes here</div>
+    <div><g:render template="sigma-header"/></div>
     <g:layoutBody/>
 </body>
 </html>

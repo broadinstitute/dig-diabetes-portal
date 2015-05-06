@@ -35,7 +35,7 @@ modules = {
 
         resource url: 'js/lib/dport/phenotype.js'
     }
-    geneInfo {
+        geneInfo {
         resource url: 'css/dport/geneInfo.css'
         resource url: 'css/dport/barchart.css'
 
