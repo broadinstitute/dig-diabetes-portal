@@ -161,36 +161,6 @@ span.dataSetChoice{
     <div id="filterHolder">
 
     </div>
-    %{--<div class="row clearfix">--}%
-        %{--Here is the data set section--}%
-        %{--<div class="primarySectionSeparator" id="dataSetChooser">--}%
-            %{--<div class="col-sm-offset-1 col-md-3" style="text-align: right">--}%
-                %{--P value:--}%
-            %{--</div>--}%
-
-        %{--<div class="col-md-2">--}%
-            %{--<select name="" id="pvInequivalence" class="form-control btn-group btn-input clearfix">--}%
-                %{--<option value="lessThan">&lt;</option>--}%
-                %{--<option value="greaterThan">&gt;</option>--}%
-            %{--</select>--}%
-        %{--</div>--}%
-
-            %{--<div class="col-md-3">--}%
-                %{--<input type="text" class="form-control" id="pvValue">--}%
-
-            %{--</div>--}%
-
-            %{--<div class="col-md-1">--}%
-                %{--<g:helpText title="variantSearch.wfRequest.dataSet.help.header" placement="right"--}%
-                            %{--body="variantSearch.wfRequest.dataSet.help.text" qplacer="10px 0 0 0"/>--}%
-            %{--</div>--}%
-
-            %{--<div class="col-md-2">--}%
-
-            %{--</div>--}%
-
-        %{--</div>--}%
-    %{--</div>--}%
 
 
 

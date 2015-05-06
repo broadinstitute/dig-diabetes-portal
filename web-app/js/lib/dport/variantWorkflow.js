@@ -93,7 +93,7 @@ var mpgSoftware = mpgSoftware || {};
          * public methods
          * @param currentObject
          */
-        var removeThisFilterSet = function (currentObject){
+        var removeThisClause = function (currentObject){
             if (currentInteractivityState()){
                 var filterIndex;
                 var label = 'remover';
@@ -109,6 +109,16 @@ var mpgSoftware = mpgSoftware || {};
                 }
             }
         };
+        var removeThisFilter = function (currentObject){
+            if (typeof currentObject !== 'undefined') {
+                var currentObjectId = currentObject.id;
+                var targetName = currentObjectId.split("_")[1];
+                var target = $('#'+targetName);
+                if (typeof target !== 'undefined')  {
+                    target.remove ();
+                }
+            }
+         };
         var fillDataSetDropdown = function (dataSetJson) { // help text for each row
             if ((typeof dataSetJson !== 'undefined')  &&
                 (typeof dataSetJson["is_error"] !== 'undefined')&&
@@ -127,7 +137,9 @@ var mpgSoftware = mpgSoftware || {};
             var varsToSend = {};
             var phenotypeInput = UTILS.extractValsFromCombobox(['phenotype']);
             var datasetInput = UTILS.extractValsFromCombobox(['dataSet']);
-            var variantFilters = UTILS.extractValFromTextboxes(['pValue','orValue']);
+            var pvEquivalence = UTILS.extractValsFromCombobox(['pvEquivalence']);
+            var orEquivalence = UTILS.extractValsFromCombobox(['orEquivalence']);
+            var variantFilters = UTILS.extractValFromTextboxes(['pvValue','orValue']);
             var totalFilterCount = UTILS.extractValFromTextboxes(['totalFilterCount']);
             var experimentChoice = UTILS.extractValFromCheckboxes(['datasetExomeChip','datasetExomeSeq','datasetGWAS']);
             var savedValuesList = [];
@@ -144,6 +156,8 @@ var mpgSoftware = mpgSoftware || {};
             //var savedValue = UTILS.extractValFromTextboxes(['savedValue']);
             varsToSend = UTILS.concatMap(varsToSend,phenotypeInput) ;
             varsToSend = UTILS.concatMap(varsToSend,datasetInput) ;
+            varsToSend = UTILS.concatMap(varsToSend,pvEquivalence) ;
+            varsToSend = UTILS.concatMap(varsToSend,orEquivalence) ;
             varsToSend = UTILS.concatMap(varsToSend,variantFilters) ;
             varsToSend = UTILS.concatMap(varsToSend,savedValue) ;
             varsToSend = UTILS.concatMap(varsToSend,experimentChoice) ;
@@ -176,7 +190,8 @@ var mpgSoftware = mpgSoftware || {};
             fillDataSetDropdown:fillDataSetDropdown,
             gatherFieldsAndPostResults:gatherFieldsAndPostResults,
             initializePage:initializePage,
-            removeThisFilterSet:removeThisFilterSet,
+            removeThisClause:removeThisClause,
+            removeThisFilter:removeThisFilter,
             existingFiltersManipulators:existingFiltersManipulators,
             currentInteractivityState:currentInteractivityState,
             retrieveDataSets:retrieveDataSets
@@ -188,8 +203,8 @@ var mpgSoftware = mpgSoftware || {};
         /***
          * private
          */
-        var appendValueWithEquivalenceChooser = function (currentDiv,sectionName,equivalenceId,valueId,helpTitle,helpText){
-            currentDiv.append("<div class='row clearfix'>"+
+        var appendValueWithEquivalenceChooser = function (currentDiv,holderId,sectionName,equivalenceId,valueId,helpTitle,helpText){
+            currentDiv.append("<div id='"+holderId+"' class='row clearfix'>"+
                 "<div class='primarySectionSeparator' id='dataSetChooser'>"+
                 "<div class='col-sm-offset-1 col-md-3' style='text-align: right'>"+sectionName+"</div>"+
                 "<div class='col-md-2'>"+
@@ -203,22 +218,22 @@ var mpgSoftware = mpgSoftware || {};
                 "<span style='padding:10px 0 0 0' class='glyphicon glyphicon-question-sign pop-right' aria-hidden='true' data-toggle='popover' animation='true' "+
                 "trigger='hover' data-container='body' data-placement='right' title='' data-content='"+helpText + "' data-original-title='"+helpTitle + "'></span>"+
                 "</div>"+
-                "<div class='col-md-2'></div>"+
+                "<div class='col-md-2'>"+
+                "<span class='glyphicon glyphicon-remove-circle filterCanceler filterRefiner' aria-hidden='true' onclick='mpgSoftware.variantWF.removeThisFilter(this)' id='remove_"+holderId+"'></span>"+
                 "</div>"+
                 "</div>");
 
         };
 
-        var displayPVChooser = function (currentDiv,sectionName,equivalenceId,valueId){
-            var holder = $('#filterHolder');
-            appendValueWithEquivalenceChooser (holder,'p value','pvEquivalence','pvValue','P value help title','everything there is to say about P values');
-        };
-        var displayORChooser = function (){
-            var holder = $('#filterHolder');
-            appendValueWithEquivalenceChooser (holder,'odds ratio','orEquivalence','orValue','Odds ratio help title','everything there is to say about an odds ratio');
-        };
-        var displayESChooser = function (){
+        var displayPVChooser = function (holder){
 
+            appendValueWithEquivalenceChooser (holder,'pvHolder','p value','pvEquivalence','pvValue','P value help title','everything there is to say about P values');
+        };
+        var displayORChooser = function (holder){
+            appendValueWithEquivalenceChooser (holder,'pvHolder','odds ratio','orEquivalence','orValue','Odds ratio help title','everything there is to say about an odds ratio');
+        };
+        var displayESChooser = function (holder){
+            appendValueWithEquivalenceChooser (holder,'esHolder','beta','esEquivalence','esValue','Effect size help title','everything there is to say about an effect sizes');
         };
         var displayGeneChooser = function (){
 
@@ -251,15 +266,15 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var respondToRequestForMoreFilters = function (x){
-            console.log('well shit Howdy') ;
+            var holder = $('#filterHolder');
             var choice = $("#additionalFilters option:selected");
             var selection = choice.val();
             switch (selection){
-                case 'pvalue':displayPVChooser();
+                case 'pvalue':displayPVChooser(holder);
                         break;
-                case 'oddsratio':displayORChooser();
+                case 'oddsratio':displayORChooser(holder);
                     break;
-                case 'effectsize':displayESChooser();
+                case 'effectsize':displayESChooser(holder);
                     break;
                 case 'gene':displayGeneChooser();
                     break;
