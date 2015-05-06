@@ -34,6 +34,42 @@
             </tr>
         </table>
     </div>
+<div class="row clearfix">
+    <div class="col-xs-12">
+        <div class="row clearfix text-center" style="height: 200px">
+            <h1>my header</h1>
+        </div>
+    </div>
+</div>
+<div class="row clearfix">
+    <div class="col-md-5 col-xs-12">
+        <div class="row clearfix">
+            <div class="col-md-12" style="background-color: red; height: 50px">
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-12" style="background-color: orange; height: 50px">
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-12" style="background-color: blue; height: 50px">
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-12" style="background-color: green; height: 50px">
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-12" style="background-color: purple; height: 50px">
+            </div>
+        </div>
+    </div>
+    <div  class="col-md-7 col-xs-12">
+        <h1>howdy</h1>
+        <h1>howdy</h1>
+        <h1>howdy</h1>
+    </div>
+</div>
 
     <div>
         <table>
