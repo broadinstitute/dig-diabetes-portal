@@ -88,9 +88,9 @@ class VariantQueryToolsTagLib {
 
                     <div class="col-md-2">
                        <span class="pull-right developingQueryComponentsFilterIcons" style="margin: 4px 10px 0 auto;">
-                       <span class="glyphicon glyphicon-pencil" aria-hidden="true" id="editer${blockCount}"></span>
-                       <span class="glyphicon glyphicon-plus-sign" aria-hidden="true" id="adder${blockCount}"></span>
-                       <span class="glyphicon glyphicon-remove-circle" aria-hidden="true" onclick="mpgSoftware.variantWF.removeThisFilterSet(this)" id="remover${blockCount}"></span>
+                       <span class="glyphicon glyphicon-pencil filterEditor filterActivator" aria-hidden="true" id="editer${blockCount}"></span>
+                       <span class="glyphicon glyphicon-plus-sign filterAdder filterActivator" aria-hidden="true" id="adder${blockCount}"></span>
+                       <span class="glyphicon glyphicon-remove-circle filterCanceler filterActivator" aria-hidden="true" onclick="mpgSoftware.variantWF.removeThisFilterSet(this)" id="remover${blockCount}"></span>
                     </span>
                     </div>
                     </div>

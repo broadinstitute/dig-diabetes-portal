@@ -55,3 +55,8 @@
     margin-bottom: 25px;
     width: 95%;
 }
+.filterActivator  {
+}
+.filterAdder {
+    display:none;
+}

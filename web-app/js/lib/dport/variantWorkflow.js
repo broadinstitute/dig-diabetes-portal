@@ -7,13 +7,24 @@ var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.variantWF = (function () {
         // private variables
-        var customLegend = 0; // 0->defining a filter, 1-> potentially manipulating our  list of existing filters
-
+        var currentInteractivity = 1, // 0->defining a filter, 1-> potentially manipulating our  list of existing filters
+        activeColor = '#0008b',
+        inactiveColor = '#808080';
         /***
          * private methods
          * @param indexNumber
          */
         // getter/setter
+        var existingFiltersManipulators = function(x){ // 0 deactivates, 1 activates
+            var filterActivator = $('.filterActivator');
+            if (x){
+                filterActivator.css('color',activeColor);
+                filterActivator.css('cursor', 'pointer');
+            }else {
+                filterActivator.css('color',inactiveColor);
+                filterActivator.css('cursor', 'default');
+            }
+        };
         var numberExistingFilters = function (x){
             var filterCount = $('#totalFilterCount');
             if (!arguments.length) {//no argument, this is a getter call
@@ -37,11 +48,14 @@ var mpgSoftware = mpgSoftware || {};
                 blueBox.hide();
             }
         };
-        // getter/setter
-        var currentInteractivityState = function(x){
-            if (!arguments.length) return customLegend;
-            customLegend = x;
-            return instance;
+        // getter/setter.
+        // 0 === we are working on a single filter
+        // 1 === all of the existing filters can be manipulated, since single filter is not in play
+        var currentInteractivityState = function(newValue){
+            if (!arguments.length) return currentInteractivity;
+           // if (currentInteractivity  !==  newValue){ // the state of things is changing. Make sure the interface is up-to-date
+                existingFiltersManipulators (newValue);
+           // }
         };
         var forgetThisFilter = function  (indexNumber){
             if(typeof indexNumber !== 'undefined'){
@@ -80,17 +94,19 @@ var mpgSoftware = mpgSoftware || {};
          * @param currentObject
          */
         var removeThisFilterSet = function (currentObject){
-            var filterIndex;
-            var label = 'remover';
-            var id = $(currentObject).attr ('id');
-            var desiredLocation = id.indexOf (label);
-            if ((desiredLocation > -1) &&
-                (typeof id !== 'undefined') ){
-                var filterIndexString = id.substring(id.indexOf(label)+ label.length);
-                filterIndex = parseInt(filterIndexString);
-                forgetThisFilter (filterIndex);
-                numberExistingFilters(numberExistingFilters()-1);
-                handleBlueBoxVisibility ();
+            if (currentInteractivityState()){
+                var filterIndex;
+                var label = 'remover';
+                var id = $(currentObject).attr ('id');
+                var desiredLocation = id.indexOf (label);
+                if ((desiredLocation > -1) &&
+                    (typeof id !== 'undefined') ){
+                    var filterIndexString = id.substring(id.indexOf(label)+ label.length);
+                    filterIndex = parseInt(filterIndexString);
+                    forgetThisFilter (filterIndex);
+                    numberExistingFilters(numberExistingFilters()-1);
+                    handleBlueBoxVisibility ();
+                }
             }
         };
         var fillDataSetDropdown = function (dataSetJson) { // help text for each row
@@ -111,11 +127,13 @@ var mpgSoftware = mpgSoftware || {};
             var phenotypeComboBox = UTILS.extractValsFromCombobox(['phenotype']);
             retrieveDataSets(phenotypeComboBox['phenotype']);
             $('#dataSetChooser').show ();
-            $('#filterInstructions').text('Choose a sample set  (or click GO for all sample sets):')
+            $('#filterInstructions').text('Choose a sample set  (or click GO for all sample sets):');
+            currentInteractivityState(0);  // but the other widgets know that the user is working on a single filter
         };
         var respondToDataSetSelection = function (){
             $('#variantFilter').show ();
-            $('#filterInstructions').text('Add filters, if any:')
+            $('#filterInstructions').text('Add filters, if any:');
+            currentInteractivityState(0);
         };
         var gatherFieldsAndPostResults = function (){
             var varsToSend = {};
@@ -162,12 +180,8 @@ var mpgSoftware = mpgSoftware || {};
         };
         var initializePage = function (){
             handleBlueBoxVisibility ();
-            if (currentInteractivityState() === 0){
-
-            }else if (currentInteractivityState() === 1){
-
-            }
-            //$("#phenotype").prepend("<option value='' selected='selected'></option>");
+            currentInteractivityState(1);
+            $("#phenotype").prepend("<option value='' selected='selected'></option>");
         };
         return {
             cancelThisFieldCollection:cancelThisFieldCollection,
@@ -176,7 +190,9 @@ var mpgSoftware = mpgSoftware || {};
             respondToDataSetSelection:respondToDataSetSelection,
             gatherFieldsAndPostResults:gatherFieldsAndPostResults,
             initializePage:initializePage,
-            removeThisFilterSet:removeThisFilterSet
+            removeThisFilterSet:removeThisFilterSet,
+            existingFiltersManipulators:existingFiltersManipulators,
+            currentInteractivityState:currentInteractivityState
         }
 
     }());

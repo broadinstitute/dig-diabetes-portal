@@ -63,7 +63,7 @@ span.dataSetChoice{
 
            <div class="primarySectionSeparator">
                 <div class="col-sm-offset-1 col-md-3" style="text-align: right">
-                        Phenotype:
+                        trait or disease of interest:
                 </div>
                <div class="col-md-5">
                         <select name="" id="phenotype" class="form-control btn-group btn-input clearfix"
@@ -86,7 +86,7 @@ span.dataSetChoice{
 
                 <div class="primarySectionSeparator" id="dataSetChooser" style="display:none">
                     <div class="col-sm-offset-1 col-md-3" style="text-align: right">
-                        Sample:
+                        data set:
                     </div>
                     <div class="col-md-5">
                         <select name="" id="dataSet" class="form-control btn-group btn-input clearfix"
