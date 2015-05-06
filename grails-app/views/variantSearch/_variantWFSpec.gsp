@@ -120,6 +120,11 @@ span.dataSetChoice{
             </div>
         </div>
 
+
+
+
+
+
     <div class="row clearfix">
         %{--Here is the drop-down that we will use to choose additional filters--}%
         <div class="primarySectionSeparator" id="additionalFilterSelection" style="display:none">
@@ -163,68 +168,6 @@ span.dataSetChoice{
 
     </div>
 
-
-
-
-
-
-
-
-        <div class="row clearfix">
-
-            <div class="primarySectionSeparator" id="variantFilter" style="display:none">
-
-                <div class="col-sm-offset-1 col-md-3" style="text-align: right; vertical-align: middle">
-                    Filters:
-                </div>
-
-                <div class="col-md-6">
-                    <div style="margin-top: 20px" class="well well-sm">
-                        <div class="row clearfix">
-                            <div class="col-md-6">p Value</div>
-
-                            <div class="col-md-4"><input type="text" class="form-control" id="pValue"
-                                                         style="height:24px"></div>
-
-                            <div class="col-md-2">
-                                <g:helpText title="variantSearch.wfRequest.dataSet.help.header" placement="right"
-                                            body="variantSearch.wfRequest.dataSet.help.text" qplacer="0 10px 0 0"/>
-                            </div>
-
-                        </div>
-
-                        <div class="row clearfix" style="margin-top: 10px">
-                            <div class="col-md-6">OR Value</div>
-
-                            <div class="col-md-4"><input type="text" class="form-control" id="orValue"
-                                                         style="height:24px"></div>
-
-                            <div class="col-md-2">
-                                <g:helpText title="variantSearch.wfRequest.dataSet.help.header" placement="right"
-                                            body="variantSearch.wfRequest.dataSet.help.text" qplacer="0 10px 0 0"/>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </span>
-
-                </div>
-
-                <div class="col-md-2">
-
-                </div>
-
-                <div class="row clearfix" style="margin-top: 10px">
-                    %{--<g:render template="variantEffectOnproteins" />--}%
-                </div>
-
-                <div>
-                </div>
-            </div>
-
-        </div>
 
 
         <span class="pull-right">

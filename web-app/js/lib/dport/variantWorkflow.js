@@ -205,7 +205,7 @@ var mpgSoftware = mpgSoftware || {};
          */
         var appendValueWithEquivalenceChooser = function (currentDiv,holderId,sectionName,equivalenceId,valueId,helpTitle,helpText){
             currentDiv.append("<div id='"+holderId+"' class='row clearfix'>"+
-                "<div class='primarySectionSeparator' id='dataSetChooser'>"+
+                "<div class='primarySectionSeparator'>"+
                 "<div class='col-sm-offset-1 col-md-3' style='text-align: right'>"+sectionName+"</div>"+
                 "<div class='col-md-2'>"+
                 "<select id='"+equivalenceId+"' class='form-control btn-group btn-input clearfix'>"+
@@ -225,21 +225,76 @@ var mpgSoftware = mpgSoftware || {};
 
         };
 
+
+        var appendGeneChooser = function (currentDiv,holderId,sectionName,geneInputId,valueId,helpTitle,helpText){
+            currentDiv.append("<div id='"+holderId+"' class='row clearfix'>"+
+                "<div class='primarySectionSeparator'>"+
+                "<div class='col-sm-offset-1 col-md-3' style='text-align: right'>"+sectionName+"</div>"+
+                "<div class='col-md-5'>"+
+                "<input type='text' class='form-control' id='region_gene_input' style='display: inline-block'/>"+
+                "</div>"+
+                "<div class='col-md-1'>"+
+                "<span style='padding:10px 0 0 0' class='glyphicon glyphicon-question-sign pop-right' aria-hidden='true' data-toggle='popover' animation='true' "+
+                "trigger='hover' data-container='body' data-placement='right' title='' data-content='"+helpText + "' data-original-title='"+helpTitle + "'></span>"+
+                "</div>"+
+                "<div class='col-md-2'>"+
+                "<span class='glyphicon glyphicon-remove-circle filterCanceler filterRefiner' aria-hidden='true' onclick='mpgSoftware.variantWF.removeThisFilter(this)' id='remove_"+holderId+"'></span>"+
+                "</div>"+
+                "</div>");
+
+        };
+
+
+        var appendPositionChooser = function (currentDiv,holderId,sectionName,chromosomeId,startHere,endHere,helpTitle,helpText){
+            currentDiv.append("<div id='"+holderId+"' class='row clearfix'>"+
+                "<div class='primarySectionSeparator'>"+
+                "<div class='col-sm-offset-1 col-md-3' style='text-align: right'>"+sectionName+"</div>"+
+                "<div class='col-md-5'>"+
+                "<div class='row'>"+
+                "<div class='col-xs-4'>"+
+                "<input class='form-control' type='text' id='" + chromosomeId+ "' placeholder='chrom'/>"+
+                "</div>"+
+                "<div class='col-xs-1'></div>"+
+                "<div class='col-xs-3'>"+
+                "<input class='form-control' type='text' id='" + startHere+ "' style='display: inline-block' placeholder='start'/>"+
+                "</div>"+
+                "<div class='col-xs-1'></div>"+
+                "<div class='col-xs-3'>"+
+                "<input class='form-control' type='text' id='" + endHere+ "' style='display: inline-block' placeholder='stop'/>"+
+                "</div>"+
+                "</div>"+
+                "<div class='col-md-1'>"+
+                "<span style='padding:10px 0 0 0' class='glyphicon glyphicon-question-sign pop-right' aria-hidden='true' data-toggle='popover' animation='true' "+
+                "trigger='hover' data-container='body' data-placement='right' title='' data-content='"+helpText + "' data-original-title='"+helpTitle + "'></span>"+
+                "</div>"+
+                "<div class='col-md-2'>"+
+                "<span class='glyphicon glyphicon-remove-circle filterCanceler filterRefiner' aria-hidden='true' onclick='mpgSoftware.variantWF.removeThisFilter(this)' id='remove_"+holderId+"'></span>"+
+                "</div>"+
+                "</div>");
+
+        };
+
+
         var displayPVChooser = function (holder){
 
-            appendValueWithEquivalenceChooser (holder,'pvHolder','p value','pvEquivalence','pvValue','P value help title','everything there is to say about P values');
+            appendValueWithEquivalenceChooser (holder,'pvHolder','p value','pvEquivalence','pvValue',
+                'P value help title','everything there is to say about P values');
         };
         var displayORChooser = function (holder){
-            appendValueWithEquivalenceChooser (holder,'pvHolder','odds ratio','orEquivalence','orValue','Odds ratio help title','everything there is to say about an odds ratio');
+            appendValueWithEquivalenceChooser (holder,'pvHolder','odds ratio','orEquivalence','orValue',
+                'Odds ratio help title','everything there is to say about an odds ratio');
         };
         var displayESChooser = function (holder){
-            appendValueWithEquivalenceChooser (holder,'esHolder','beta','esEquivalence','esValue','Effect size help title','everything there is to say about an effect sizes');
+            appendValueWithEquivalenceChooser (holder,'esHolder','beta','esEquivalence','esValue',
+                'Effect size help title','everything there is to say about an effect sizes');
         };
-        var displayGeneChooser = function (){
-
+        var displayGeneChooser = function (holder){
+            appendGeneChooser(holder,'geneHolder','gene','region_gene_input',
+                'Gene chooser help title','everything there is to say about choosing a gene');
         };
-        var displayPosChooser = function (){
-
+        var displayPosChooser = function (holder){
+            appendPositionChooser(holder,'geneHolder','gene','region_chrom_input','region_start_input','region_stop_input',
+                'position specification help title','everything there is to say about an specifying a position');
         };
         var displayPEChooser = function (){
 
@@ -276,9 +331,9 @@ var mpgSoftware = mpgSoftware || {};
                     break;
                 case 'effectsize':displayESChooser(holder);
                     break;
-                case 'gene':displayGeneChooser();
+                case 'gene':displayGeneChooser(holder);
                     break;
-                case 'position':displayPosChooser();
+                case 'position':displayPosChooser(holder);
                     break;
                 case 'predictedeffect':displayPEChooser();
                     break;
