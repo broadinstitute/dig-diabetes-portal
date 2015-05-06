@@ -123,18 +123,6 @@ var mpgSoftware = mpgSoftware || {};
                 }
             }
         };
-        var respondToPhenotypeSelection = function (){
-            var phenotypeComboBox = UTILS.extractValsFromCombobox(['phenotype']);
-            retrieveDataSets(phenotypeComboBox['phenotype']);
-            $('#dataSetChooser').show ();
-            $('#filterInstructions').text('Choose a sample set  (or click GO for all sample sets):');
-            currentInteractivityState(0);  // but the other widgets know that the user is working on a single filter
-        };
-        var respondToDataSetSelection = function (){
-            $('#variantFilter').show ();
-            $('#filterInstructions').text('Add filters, if any:');
-            currentInteractivityState(0);
-        };
         var gatherFieldsAndPostResults = function (){
             var varsToSend = {};
             var phenotypeInput = UTILS.extractValsFromCombobox(['phenotype']);
@@ -186,16 +174,112 @@ var mpgSoftware = mpgSoftware || {};
         return {
             cancelThisFieldCollection:cancelThisFieldCollection,
             fillDataSetDropdown:fillDataSetDropdown,
-            respondToPhenotypeSelection:respondToPhenotypeSelection,
-            respondToDataSetSelection:respondToDataSetSelection,
             gatherFieldsAndPostResults:gatherFieldsAndPostResults,
             initializePage:initializePage,
             removeThisFilterSet:removeThisFilterSet,
             existingFiltersManipulators:existingFiltersManipulators,
-            currentInteractivityState:currentInteractivityState
+            currentInteractivityState:currentInteractivityState,
+            retrieveDataSets:retrieveDataSets
         }
 
     }());
+
+    mpgSoftware.firstResponders = (function () {
+        /***
+         * private
+         */
+        var appendValueWithEquivalenceChooser = function (currentDiv,sectionName,equivalenceId,valueId,helpTitle,helpText){
+            currentDiv.append("<div class='row clearfix'>"+
+                "<div class='primarySectionSeparator' id='dataSetChooser'>"+
+                "<div class='col-sm-offset-1 col-md-3' style='text-align: right'>"+sectionName+"</div>"+
+                "<div class='col-md-2'>"+
+                "<select id='"+equivalenceId+"' class='form-control btn-group btn-input clearfix'>"+
+                "<option value='lessThan'>&lt;</option>"+
+                "<option value='greaterThan'>&gt;</option>"+
+                "</select>"+
+                "</div>"+
+                "<div class='col-md-3'><input type='text' class='form-control' id='"+valueId+"'></div>"+
+                "<div class='col-md-1'>"+
+                "<span style='padding:10px 0 0 0' class='glyphicon glyphicon-question-sign pop-right' aria-hidden='true' data-toggle='popover' animation='true' "+
+                "trigger='hover' data-container='body' data-placement='right' title='' data-content='"+helpText + "' data-original-title='"+helpTitle + "'></span>"+
+                "</div>"+
+                "<div class='col-md-2'></div>"+
+                "</div>"+
+                "</div>");
+
+        };
+
+        var displayPVChooser = function (currentDiv,sectionName,equivalenceId,valueId){
+            var holder = $('#filterHolder');
+            appendValueWithEquivalenceChooser (holder,'p value','pvEquivalence','pvValue','P value help title','everything there is to say about P values');
+        };
+        var displayORChooser = function (){
+            var holder = $('#filterHolder');
+            appendValueWithEquivalenceChooser (holder,'odds ratio','orEquivalence','orValue','Odds ratio help title','everything there is to say about an odds ratio');
+        };
+        var displayESChooser = function (){
+
+        };
+        var displayGeneChooser = function (){
+
+        };
+        var displayPosChooser = function (){
+
+        };
+        var displayPEChooser = function (){
+
+        };
+        var displayDSChooser = function (){
+
+        };
+
+        /***
+         * public
+         */
+        var respondToPhenotypeSelection = function (){
+            var phenotypeComboBox = UTILS.extractValsFromCombobox(['phenotype']);
+            mpgSoftware.variantWF.retrieveDataSets(phenotypeComboBox['phenotype']);
+            $('#dataSetChooser').show ();
+            $('#filterInstructions').text('Choose a sample set  (or click GO for all sample sets):');
+            mpgSoftware.variantWF.currentInteractivityState(0);  // but the other widgets know that the user is working on a single filter
+        };
+
+        var respondToDataSetSelection = function (){
+            $('#additionalFilterSelection').show ();
+            $('#filterInstructions').text('Add filters, if any:');
+            mpgSoftware.variantWF.currentInteractivityState(0);
+        };
+
+        var respondToRequestForMoreFilters = function (x){
+            console.log('well shit Howdy') ;
+            var choice = $("#additionalFilters option:selected");
+            var selection = choice.val();
+            switch (selection){
+                case 'pvalue':displayPVChooser();
+                        break;
+                case 'oddsratio':displayORChooser();
+                    break;
+                case 'effectsize':displayESChooser();
+                    break;
+                case 'gene':displayGeneChooser();
+                    break;
+                case 'position':displayPosChooser();
+                    break;
+                case 'predictedeffect':displayPEChooser();
+                    break;
+                case 'dataset':displayDSChooser();
+                    break;
+
+            }
+        };
+        return {
+            respondToPhenotypeSelection:respondToPhenotypeSelection,
+            respondToDataSetSelection:respondToDataSetSelection,
+            respondToRequestForMoreFilters:respondToRequestForMoreFilters
+        }
+
+    }());
+
 
 })();
 
