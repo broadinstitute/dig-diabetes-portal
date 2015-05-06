@@ -2,6 +2,7 @@
 <html>
 <head>
     <r:require modules="core"/>
+    <r:require modules="sigma"/>
     <r:layoutResources/>
     <title>Sigma T2D</title>
     <g:layoutHead/>

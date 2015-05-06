@@ -107,6 +107,9 @@ modules = {
         resource url: 'http://www.broadinstitute.org/igvdata/t2d/igv-all.min.css'
         resource url: 'http://www.broadinstitute.org/igvdata/t2d/igv-all.min.js'
     }
+    sigma {  // sigma site
+        resource url: 'css/dport/sigma.css'
+    }
 
 }
 
