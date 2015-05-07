@@ -1,1 +1,1 @@
-<h1>Here's some overview text about DATA</h1>
+<h2>A unique resource for biomedical researchers...</h2>

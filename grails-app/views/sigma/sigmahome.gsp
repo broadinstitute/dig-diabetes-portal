@@ -13,51 +13,51 @@
 
 <body>
 
-<div class="container-fluid">
+<div class="container-fluid sigma-nav">
     <g:if test="${params.section == 'about' || params.section == null}">
         <g:render template="about-header"/>
     </g:if>
     <g:if test="${params.section == 'data'}">
         <g:render template="data-header"/>
     </g:if>
+    <g:if test="${params.section == 'papers'}">
+        <g:render template="papers-header"/>
+    </g:if>
 </div>
 
-<div class="container-fluid">
+<div class="container-fluid sigma-nav">
     <div class="row clearfix">
-        <div class="col-md-2 col-xs-4" >
+        <div class="col-md-2 col-xs-4">
             <!-- topics go here -->
             <g:if test="${params.section != 'about' && params.section != null}">
                 <div class="row clearfix">
-                    <div class="sigma-about">
-                        <g:link params="[section: 'about']"><h1>About</h1></g:link>
+                    <div class="sigma-about text-center">
+                        <g:link params="[section: 'about']"><h1>About  ${language}</h1></g:link>
                     </div>
                 </div>
             </g:if>
             <g:if test="${params.section != 'data'}">
                 <div class="row clearfix">
-                    <div class="sigma-data">
+                    <div class="sigma-data text-center">
                         <g:link params="[section: 'data']"><h1>Data</h1></g:link>
                     </div>
                 </div>
             </g:if>
-            <div class="row clearfix">
-                <div style="background-color: orange; height: 70px">
-                    Papers
+            <g:if test="${params.section != 'papers'}">
+                <div class="row clearfix">
+                    <div class="sigma-papers text-center">
+                        <g:link params="[section: 'papers']"><h1>Papers</h1></g:link>
+                    </div>
                 </div>
-            </div>
-            <div class="row clearfix">
-                <div style="background-color: green; height: 70px">
-                    People
-                </div>
-            </div>
-            <div class="row clearfix">
-                <div style="background-color: purple; height: 50px">
-                </div>
-            </div>
+            </g:if>
+
         </div>
         <div class="col-md-9">
             <g:if test="${params.section == 'data'}">
                 <g:render template="data"/>
+            </g:if>
+            <g:if test="${params.section == 'papers'}">
+                <g:render template="papers"/>
             </g:if>
             <g:if test="${params.section == 'about' || params.section == null}">
                 <g:render template="about"/>

@@ -11,6 +11,11 @@
     height: 70px;
 }
 
+.sigma-nav h1 {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
 .sigma-data {
     background: #a4b357;
     background: -moz-linear-gradient(top,  #a4b357 0%, #75890c 100%);
@@ -24,4 +29,15 @@
     height: 70px
 }
 
+.sigma-papers {
+    background: #f0b7a1;
+    background: -moz-linear-gradient(top, #f0b7a1 0%, #8c3310 99%, #752201 100%, #bf6e4e 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f0b7a1), color-stop(99%, #8c3310), color-stop(100%, #752201), color-stop(100%, #bf6e4e));
+    background: -webkit-linear-gradient(top, #f0b7a1 0%, #8c3310 99%, #752201 100%, #bf6e4e 100%);
+    background: -o-linear-gradient(top, #f0b7a1 0%, #8c3310 99%, #752201 100%, #bf6e4e 100%);
+    background: -ms-linear-gradient(top, #f0b7a1 0%, #8c3310 99%, #752201 100%, #bf6e4e 100%);
+    background: linear-gradient(to bottom, #f0b7a1 0%, #8c3310 99%, #752201 100%, #bf6e4e 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f0b7a1', endColorstr='#bf6e4e', GradientType=0);
 
+    height: 70px;
+}

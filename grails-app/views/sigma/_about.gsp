@@ -1,3 +1,3 @@
 <h3>
-    <g:message code="sigmasite.about.summary"></g:message>
+    <g:message code="sigmasite.about.content"></g:message>
 </h3>
