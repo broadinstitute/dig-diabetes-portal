@@ -1,5 +1,6 @@
 package dport
 
+import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.web.json.JSONObject
 
@@ -137,10 +138,22 @@ class VariantSearchController {
         if ((params.experiment) && (params.experiment !=  null )){
             experimentList << params.experiment
         }
-        JSONObject jsonObject = restServerService.retrieveDatasets(phenotypeList, experimentList)
+       // JSONObject jsonObject = restServerService.retrieveDatasets(phenotypeList, experimentList)
+        JSONObject jsonObject = restServerService.pseudoRetrieveDatasets(phenotypeList, experimentList)
+//        String v = """
+//{"is_error": false,
+// "numRecords":1,
+// "dataset":["MAGIC 2014"]
+//}""".toString()
+//        def slurper = new JsonSlurper()
+//        def result = slurper.parseText(v)
+
         render(status: 200, contentType: "application/json") {
             [datasets: jsonObject]
         }
+//        render(status: 200, contentType: "application/json") {
+//            [datasets: jsonObject]
+//        }
     }
 
 

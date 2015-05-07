@@ -3,6 +3,7 @@ package dport
 import grails.plugins.rest.client.RestBuilder
 import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
+import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -522,6 +523,70 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
         returnValue = postRestCall( drivingJson, DATA_SET_URL)
         return returnValue
     }
+
+    // for now let's do a pseudo call
+    JSONObject pseudoRetrieveDatasets (List <String> sampleGroupList,
+                                 List <String> experimentList) {
+        JSONObject result
+        if ((sampleGroupList) &&
+            (sampleGroupList.size()>0)){
+            String magic = """
+{"is_error": false,
+ "numRecords":1,
+ "dataset":["MAGIC 2014"]
+}""".toString()
+            String t2d = """
+{"is_error": false,
+ "numRecords":4,
+ "dataset":["exome sequence: 26K","exome sequence: 13K","exome array","DIAGRAM GWAS"]
+}""".toString()
+            String giant = """
+{"is_error": false,
+ "numRecords":1,
+ "dataset":["GIANT 2014"]
+}""".toString()
+            String glgc = """
+{"is_error": false,
+ "numRecords":1,
+ "dataset":["GLGC 2011"]
+}""".toString()
+            String retval = ''
+           switch (sampleGroupList[0]) {
+               case 'T2D': retval = t2d; break;
+               case 'FastGlu': retval = magic; break;
+               case 'FastIns': retval = magic; break;
+               case 'ProIns': retval = magic; break;
+               case '2hrGLU_BMIAdj': retval = magic; break;
+               case '2hrIns_BMIAdj': retval = magic; break;
+               case 'HOMAIR': retval = magic; break;
+               case 'HOMAB': retval = magic; break;
+               case 'HbA1c': retval = magic; break;
+               case 'BMI': retval = magic; break;
+               case 'WHR': retval = giant; break;
+               case 'Height': retval = giant; break;
+               case 'TC': retval = glgc; break;
+               case 'HDL': retval = glgc; break;
+               case 'LDL': retval = glgc; break;
+               case 'TG': retval = glgc; break;
+               case 'CAD': retval = giant; break;
+               case 'CKD': retval = giant; break;
+               case 'eGFRcrea': retval = giant; break;
+               case 'eGFRcys': retval = giant; break;
+               case 'UACR': retval = giant; break;
+               case 'MA': retval = giant; break;
+               case 'BIP': retval = giant; break;
+               case 'SCZ': retval = giant; break;
+               case 'MDD': retval = giant; break;
+               default: retval = magic; break;
+           }
+
+
+            def slurper = new JsonSlurper()
+            result = slurper.parseText(retval)
+           }
+         return result
+    }
+
 
 
 
