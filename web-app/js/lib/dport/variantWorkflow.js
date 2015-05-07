@@ -267,12 +267,88 @@ var mpgSoftware = mpgSoftware || {};
                 "<span style='padding:10px 0 0 0' class='glyphicon glyphicon-question-sign pop-right' aria-hidden='true' data-toggle='popover' animation='true' "+
                 "trigger='hover' data-container='body' data-placement='right' title='' data-content='"+helpText + "' data-original-title='"+helpTitle + "'></span>"+
                 "</div>"+
+                "</div>"+
                 "<div class='col-md-2'>"+
                 "<span class='glyphicon glyphicon-remove-circle filterCanceler filterRefiner' aria-hidden='true' onclick='mpgSoftware.variantWF.removeThisFilter(this)' id='remove_"+holderId+"'></span>"+
                 "</div>"+
                 "</div>");
 
         };
+
+var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allFunctionsCheckbox,proteinTruncatingCheckbox,missenseCheckbox,missenseOptions,
+                                            polyphenSelect,siftSelect,condelSelect,synonymousCheckbox,noncodingCheckbox,    helpTitle,helpText){
+    currentDiv.append("<div id='"+holderId+"' class='row clearfix'>"+
+        "<div class='primarySectionSeparator'>"+
+        "<div class='col-sm-offset-1 col-md-3' style='text-align: right'>"+sectionName+"</div>"+
+        "<div class='col-md-5'>"+
+    "<div class='row clearfix'>"+
+    "<div class='col-md-12'>"+
+    "<div id='biology-form'>"+
+    "<div class='radio'>"+
+    "<input type='radio' name='predictedEffects' value='all-effects' id='" +allFunctionsCheckbox + "' onClick=\"chgRadioButton('all-effects')\" checked='checked'/>"+
+    "all effects"+
+    "</div>"+
+    "<div class='radio'>"+
+    "<input type='radio' name='predictedEffects' value='protein-truncating' id='" +proteinTruncatingCheckbox + "' onClick=\"chgRadioButton('protein-truncating')\"/>"+
+    "protein-truncating"+
+    "</div>"+
+    "<div class='radio'>"+
+    "<input type='radio' name='predictedEffects' value='missense'  id='" +missenseCheckbox + "' onClick=\"chgRadioButton('missense')\"/>"+
+    "missense"+
+    "</div>"+
+    "<div id='" + missenseOptions+ "' >"+
+    "<div class='checkbox'>"+
+    "PolyPhen-2 prediction"+
+    "<select name='polyphen' id='" +polyphenSelect+ "'>"+
+    "<option value=''>---</option>"+
+    "<option value='probably_damaging'>probably damaging</option>"+
+    "<option value='possibly_damaging'>possibly damaging</option>"+
+    "<option value='benign'>benign</option>"+
+    "</select>"+
+    "</div>"+
+    "<div class='checkbox'>"+
+    "SIFT prediction"+
+    "<select name='sift' id='" +siftSelect+ "'>"+
+    "<option value=''>---</option>"+
+    "<option value='deleterious'>deleterious</option>"+
+    "<option value='tolerated'>tolerated</option>"+
+    "</select>"+
+    "</div>"+
+    "<div class='checkbox'>"+
+    "CONDEL prediction"+
+    "<select name='condel' id='" +condelSelect+ "'>"+
+    "<option value=''>---</option>"+
+    "<option value='deleterious'>deleterious</option>"+
+    "<option value='benign'>benign</option>"+
+    "</select>"+
+    "</div>"+
+    "</div>"+
+    "<div class='radio'>"+
+    "<input type='radio' name='predictedEffects' value='noEffectSynonymous'  id='" +synonymousCheckbox + "' onClick=\"chgRadioButton('noEffectSynonymous')\"/>"+
+    "no effect (synonymous coding)"+
+    "</div>"+
+    "<div class='radio'>"+
+    "<input type='radio' name='predictedEffects' value='noEffectNoncoding'  id='" +noncodingCheckbox + " onClick=\"chgRadioButton('noEffectNoncoding')\"/>"+
+    "no effect (non-coding)"+
+    "</div>"+
+    "</div>"+
+    "</div>"+
+    "</div>"+
+    "</div>"+
+        "</div>"+
+        "<div class='col-md-1'>"+
+        "<span style='padding:10px 0 0 0' class='glyphicon glyphicon-question-sign pop-right' aria-hidden='true' data-toggle='popover' animation='true' "+
+        "trigger='hover' data-container='body' data-placement='right' title='' data-content='"+helpText + "' data-original-title='"+helpTitle + "'></span>"+
+        "</div>"+
+        "<div class='col-md-2'>"+
+        "<span class='glyphicon glyphicon-remove-circle filterCanceler filterRefiner' aria-hidden='true' onclick='mpgSoftware.variantWF.removeThisFilter(this)' id='remove_"+holderId+"'></span>"+
+        "</div>"+
+        "</div>");
+    $('#all_functions_checkbox').click()
+
+}
+
+
 
 
         var displayPVChooser = function (holder){
@@ -293,11 +369,13 @@ var mpgSoftware = mpgSoftware || {};
                 'Gene chooser help title','everything there is to say about choosing a gene');
         };
         var displayPosChooser = function (holder){
-            appendPositionChooser(holder,'geneHolder','gene','region_chrom_input','region_start_input','region_stop_input',
+            appendPositionChooser(holder,'geneHolder','position','region_chrom_input','region_start_input','region_stop_input',
                 'position specification help title','everything there is to say about an specifying a position');
         };
-        var displayPEChooser = function (){
-
+        var displayPEChooser = function (holder){
+            appendProteinEffectsButtons (holder,'peHolder','proteinEffect','all_functions_checkbox','protein_truncating_checkbox','missense_checkbox',
+                'missense-options','polyphenSelect','siftSelect','condelSelect','synonymous_checkbox','noncoding_checkbox',
+                'protein effect help title','everything there is to say about a protein effect');
         };
         var displayDSChooser = function (){
 
@@ -335,7 +413,7 @@ var mpgSoftware = mpgSoftware || {};
                     break;
                 case 'position':displayPosChooser(holder);
                     break;
-                case 'predictedeffect':displayPEChooser();
+                case 'predictedeffect':displayPEChooser(holder);
                     break;
                 case 'dataset':displayDSChooser();
                     break;
