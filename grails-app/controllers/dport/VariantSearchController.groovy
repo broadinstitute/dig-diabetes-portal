@@ -58,17 +58,26 @@ class VariantSearchController {
 
     def variantVWRequest(){
         LinkedHashMap newParameters = filterManagementService.processNewParameters (params.dataSet,
-                params.gene,
-                params.geneExpander,
+                params.esValue,
+                params.esEquivalence,
                 params.phenotype,
-                params.pValue,
-                params.pValueInequality,
+                params.pvValue,
+                params.pvEquivalence,
                 params.orValue,
-                params.orValueInequality,
+                params.orEquivalence,
                 params.filters,
                 params.datasetExomeChip,
                 params.datasetExomeSeq,
-                params.datasetGWAS)
+                params.datasetGWAS,
+                params.region_stop_input,
+                params.region_start_input,
+                params.region_chrom_input,
+                params.region_gene_input,
+                params.predictedEffects,
+                params.condelSelect,
+                params.polyphenSelect,
+                params.siftSelect
+        )
 
         List <String> oldFilters=filterManagementService.observeMultipleFilters(params)
         List <LinkedHashMap> combinedFilters = filterManagementService.combineNewAndOldParameters(newParameters,

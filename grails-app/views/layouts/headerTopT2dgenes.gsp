@@ -2,8 +2,12 @@
     <div class="container">
         <g:renderSigmaSection>
             <span id="language">
-                <a href='<g:createLink controller="home" action="index" params="[lang:'es']"/>'><i class="icon-user icon-white"><r:img class="currentlanguage" uri="/images/Mexico.png" alt="Mexico"/></i></a>
-                <a href='<g:createLink controller="home" action="index" params="[lang:'en']"/>'> <i class="icon-user icon-white"><r:img class="currentlanguage" uri="/images/United-States.png" alt="USA"/></i></a>
+                <a href='<g:createLink controller="home" action="index" params="[lang:'es']"/>'><i class="icon-user icon-white">
+                    <g:message code="portal.language.setting.spanish"/>
+                </i></a>
+                <a href='<g:createLink controller="home" action="index" params="[lang:'en']"/>'> <i class="icon-user icon-white">
+                    <g:message code="portal.language.setting.english"/>
+                </i></a>
             </span>
             <a style="margin: 0; padding: 0" href="${createLink(controller: 'home', action:'portalHome')}">
                 <div id="branding">

@@ -139,9 +139,16 @@ var mpgSoftware = mpgSoftware || {};
             var datasetInput = UTILS.extractValsFromCombobox(['dataSet']);
             var pvEquivalence = UTILS.extractValsFromCombobox(['pvEquivalence']);
             var orEquivalence = UTILS.extractValsFromCombobox(['orEquivalence']);
-            var variantFilters = UTILS.extractValFromTextboxes(['pvValue','orValue']);
+            var orEquivalence = UTILS.extractValsFromCombobox(['esEquivalence']);
+            var variantFilters = UTILS.extractValFromTextboxes(['pvValue','orValue','esValue']);
             var totalFilterCount = UTILS.extractValFromTextboxes(['totalFilterCount']);
             var experimentChoice = UTILS.extractValFromCheckboxes(['datasetExomeChip','datasetExomeSeq','datasetGWAS']);
+            var restrictToRegion = UTILS.extractValFromTextboxes(['region_gene_input','region_chrom_input','region_start_input','region_stop_input']);
+            var missensePredictions = [];
+            varsToSend["predictedEffects"]  = $("input:radio[name='predictedEffects']:checked").val();
+            if (varsToSend["predictedEffects"]==='missense'){
+                missensePredictions = UTILS.extractValsFromCombobox(['polyphenSelect','siftSelect','condelSelect']);
+            }
             var savedValuesList = [];
             var savedValue = {};
             if (typeof totalFilterCount['totalFilterCount'] !== 'undefined') {
@@ -154,6 +161,8 @@ var mpgSoftware = mpgSoftware || {};
                 }
             }
             //var savedValue = UTILS.extractValFromTextboxes(['savedValue']);
+            varsToSend = UTILS.concatMap(varsToSend,restrictToRegion) ;
+            varsToSend = UTILS.concatMap(varsToSend,missensePredictions) ;
             varsToSend = UTILS.concatMap(varsToSend,phenotypeInput) ;
             varsToSend = UTILS.concatMap(varsToSend,datasetInput) ;
             varsToSend = UTILS.concatMap(varsToSend,pvEquivalence) ;

@@ -877,37 +877,47 @@ class FilterManagementService {
 
 
     public LinkedHashMap processNewParameters ( String dataSet,
-            String gene,
-                                                      String geneExpander,
+                                                String esValue,
+                                                      String esValueInequality,
                                                       String phenotype,
                                                       String pValue,
                                                       String pValueInequality,
                                                       String orValue,
                                                       String orValueInequality,
-                                                      String filters,
+                                                      String filters,//?
                                                       String datasetExomeChip,
                                                       String datasetExomeSeq,
-                                                      String datasetGWAS) {
+                                                      String datasetGWAS,
+                                                      String regionStopInput,
+                                                      String regionStartInput,
+                                                      String regionChromosomeInput,
+                                                      String regionGeneInput,
+                                                      String predictedEffects,
+                                                      String condelSelect,
+                                                      String polyphenSelect,
+                                                      String siftSelect ) {
         LinkedHashMap returnValue = [:]
 
         if (dataSet) {
             returnValue['dataSet']  = dataSet
         }
 
-        if (gene) {
-            returnValue['gene']  = gene
+        if (regionGeneInput) {
+            returnValue['gene']  = regionGeneInput
         }
 
-        if (geneExpander) {
-            int expander = 0
-            try {
-                expander = Integer.parseInt(geneExpander)
-            } catch (e) {
-                ; // not really a big deal if we fail -- it just means there is no expansion defined
-            }
-            returnValue['geneExpander']  = expander
+        if (regionChromosomeInput) {
+            returnValue['regionChromosomeInput']  = regionChromosomeInput
         }
-
+        if (regionStartInput) {
+            returnValue['regionStartInput']  = regionStartInput
+        }
+        if (regionStopInput) {
+            returnValue['regionStopInput']  = regionStopInput
+        }
+        if (predictedEffects) {
+            returnValue['predictedEffects']  = predictedEffects
+        }
 
         if (phenotype) {
             returnValue['phenotype']  = phenotype
@@ -942,6 +952,21 @@ class FilterManagementService {
         if (orValueInequality) {
             returnValue['orValueInequality']  = orValueInequality
         }
+
+        if (esValue) {
+            float value = 0
+            try {
+                value = Float.parseFloat(esValue)
+                returnValue['esValue']  = value
+            } catch (e) {
+                ; // no or value defined if we fail the conversion
+            }
+        }
+
+        if (esValueInequality) {
+            returnValue['esValueInequality']  = esValueInequality
+        }
+
 
         if (filters) {
             returnValue['filters']  = filters

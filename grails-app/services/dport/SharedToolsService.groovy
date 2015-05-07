@@ -634,6 +634,39 @@ class SharedToolsService {
         if (((parametersToEncode.containsKey("pValueInequality")) && (parametersToEncode["pValueInequality"]))) {
             sb << ("6="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["pValueInequality"].toString())+"^")
         }
+        if (((parametersToEncode.containsKey("gene")) && (parametersToEncode["gene"]))) {
+            sb << ("7="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["gene"].toString())+"^")
+        }
+        if (((parametersToEncode.containsKey("regionChromosomeInput")) && (parametersToEncode["regionChromosomeInput"]))) {
+            sb << ("8="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["regionChromosomeInput"].toString())+"^")
+        }
+        if (((parametersToEncode.containsKey("regionStartInput")) && (parametersToEncode["regionStartInput"]))) {
+            sb << ("9="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["regionStartInput"].toString())+"^")
+        }
+        if (((parametersToEncode.containsKey("regionStopInput")) && (parametersToEncode["regionStopInput"]))) {
+            sb << ("10="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["regionStopInput"].toString())+"^")
+        }
+        if (((parametersToEncode.containsKey("predictedEffects")) && (parametersToEncode["predictedEffects"]))) {
+            sb << ("11="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["predictedEffects"].toString())+"^")
+        }
+        if (((parametersToEncode.containsKey("esValue")) && (parametersToEncode["esValue"]))) {
+            sb << ("12="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["esValue"].toString())+"^")
+        }
+        if (((parametersToEncode.containsKey("esValueInequality")) && (parametersToEncode["esValueInequality"]))) {
+            sb << ("13="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["esValueInequality"].toString())+"^")
+        }
+        if (((parametersToEncode.containsKey("condelSelect")) && (parametersToEncode["condelSelect"]))) {
+            sb << ("14="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["condelSelect"].toString())+"^")
+        }
+        if (((parametersToEncode.containsKey("polyphenSelect")) && (parametersToEncode["polyphenSelect"]))) {
+            sb << ("15="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["polyphenSelect"].toString())+"^")
+        }
+        if (((parametersToEncode.containsKey("siftSelect")) && (parametersToEncode["siftSelect"]))) {
+            sb << ("16="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["siftSelect"].toString())+"^")
+        }
+
+
+
         return  sb.toString()
     }
 
@@ -667,6 +700,27 @@ class SharedToolsService {
                             break
                         case 6:returnValue ["pValueInequality"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
                             break
+                        case 7:returnValue ["gene"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+                            break
+                        case 8:returnValue ["regionChromosomeInput"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+                            break
+                        case 9:returnValue ["regionStartInput"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+                            break
+                        case 10:returnValue ["regionStopInput"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+                            break
+                        case 11:returnValue ["predictedEffects"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+                            break
+                        case 12:returnValue ["esValue"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+                            break
+                        case 13:returnValue ["esValueInequality"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+                            break
+                        case 14:returnValue ["condelSelect"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+                            break
+                        case 15:returnValue ["polyphenSelect"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+                            break
+                        case 16:returnValue ["siftSelect"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+                            break
+
                         default:
                             log.info("Unexpected parameter key  = ${parameterKey}")
                     }

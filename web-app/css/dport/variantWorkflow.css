@@ -63,3 +63,6 @@
 .filterRefiner {
     padding-top: 13px;
 }
+.filterElement {
+    padding: 0 8px 0 3px;
+}
