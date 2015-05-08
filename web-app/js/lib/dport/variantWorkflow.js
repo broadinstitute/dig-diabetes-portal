@@ -67,6 +67,13 @@ var mpgSoftware = mpgSoftware || {};
             $('#phenotype').val(value)
         };
         var instantiateInputFields = function (clauseDefinition){
+            var extractString = function (fullString,marker){
+                var startIndex = fullString.indexOf(marker)+marker.length;
+                var remainingString = fullString.substr(startIndex);
+                var endIndex = remainingString.indexOf('^');
+                return fullString.substr(startIndex,endIndex);
+            };
+            var desiredValue;
             if (typeof clauseDefinition  !== 'undefined') {
                 var filters = clauseDefinition.split("^");
                 for ( var i = 0 ; i < filters.length ; i++ ){
@@ -77,6 +84,29 @@ var mpgSoftware = mpgSoftware || {};
                             switch (fieldVersusValue[0]) {
                                 case '1':instantiatePhenotype (fieldVersusValue[1]);
                                     break;
+                                case '2':mpgSoftware.firstResponders.displayDataSetChooser(fieldVersusValue[1]);
+                                    break;
+                                case '3':
+                                    desiredValue = extractString (clauseDefinition,'^4=');
+                                    mpgSoftware.firstResponders.respondToReviseFilters('oddsratio',desiredValue,fieldVersusValue[1]);
+                                    break;// or value and or inequality are handled together, so skip one
+                                case '4':break;// Ignore
+                                case '5':
+                                    // There are two fields we need to handle here.  Let's pull out the other one by hand
+                                    desiredValue = extractString (clauseDefinition,'^6=');
+//                                    var startIndex = clauseDefinition.indexOf('^6=')+3;
+//                                    var remainingString = clauseDefinition.substr(startIndex);
+//                                    var endIndex = remainingString.indexOf('^');
+//                                    var desiredValue = clauseDefinition.substr(startIndex,endIndex);
+                                    mpgSoftware.firstResponders.respondToReviseFilters('pvalue',desiredValue,fieldVersusValue[1]);
+                                    break;// or value and or inequality are handled together, so skip one
+                                case '6':break;
+                                case '12':
+                                    desiredValue = extractString (clauseDefinition,'^13=');
+                                    mpgSoftware.firstResponders.respondToReviseFilters('effectsize',desiredValue,fieldVersusValue[1]);
+                                    break;// or value and or inequality are handled together, so skip one
+                                case '4':break;// Ignore
+
                                 default: break;
                             }
                         }
@@ -261,14 +291,23 @@ var mpgSoftware = mpgSoftware || {};
         /***
          * private
          */
-        var appendValueWithEquivalenceChooser = function (currentDiv,holderId,sectionName,equivalenceId,valueId,helpTitle,helpText){
+        var appendValueWithEquivalenceChooser = function (currentDiv,holderId,sectionName,equivalenceId,valueId,helpTitle,helpText,equivalence,defaultValue){
+            var lessThanSelected = '';
+            var greaterThanSelected = '';
+            if (typeof equivalence !== 'undefined'){
+                if (equivalence === 'lessThan'){
+                    lessThanSelected = "selected";
+                } else {
+                    greaterThanSelected = "selected";
+                }
+            }
             currentDiv.append("<div id='"+holderId+"' class='row clearfix'>"+
                 "<div class='primarySectionSeparator'>"+
                 "<div class='col-sm-offset-1 col-md-3' style='text-align: right'>"+sectionName+"</div>"+
                 "<div class='col-md-2'>"+
                 "<select id='"+equivalenceId+"' class='form-control btn-group btn-input clearfix'>"+
-                "<option value='lessThan'>&lt;</option>"+
-                "<option value='greaterThan'>&gt;</option>"+
+                "<option "+lessThanSelected+" value='lessThan'>&lt;</option>"+
+                "<option "+greaterThanSelected+" value='greaterThan'>&gt;</option>"+
                 "</select>"+
                 "</div>"+
                 "<div class='col-md-3'><input type='text' class='form-control' id='"+valueId+"'></div>"+
@@ -280,7 +319,9 @@ var mpgSoftware = mpgSoftware || {};
                 "<span class='glyphicon glyphicon-remove-circle filterCanceler filterRefiner' aria-hidden='true' onclick='mpgSoftware.variantWF.removeThisFilter(this)' id='remove_"+holderId+"'></span>"+
                 "</div>"+
                 "</div>");
-
+            if (typeof defaultValue !== 'undefined'){
+                $('#'+valueId).val(defaultValue);
+            }
         };
 
 
@@ -409,18 +450,17 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
 
 
 
-        var displayPVChooser = function (holder){
-
+        var displayPVChooser = function (holder,equivalence,defaultValue){
             appendValueWithEquivalenceChooser (holder,'pvHolder','p value','pvEquivalence','pvValue',
-                'P value help title','everything there is to say about P values');
+                'P value help title','everything there is to say about P values',equivalence,defaultValue);
         };
-        var displayORChooser = function (holder){
+        var displayORChooser = function (holder,equivalence,defaultValue){
             appendValueWithEquivalenceChooser (holder,'pvHolder','odds ratio','orEquivalence','orValue',
-                'Odds ratio help title','everything there is to say about an odds ratio');
+                'Odds ratio help title','everything there is to say about an odds ratio',equivalence,defaultValue);
         };
-        var displayESChooser = function (holder){
+        var displayESChooser = function (holder,equivalence,defaultValue){
             appendValueWithEquivalenceChooser (holder,'esHolder','beta','esEquivalence','esValue',
-                'Effect size help title','everything there is to say about an effect sizes');
+                'Effect size help title','everything there is to say about an effect sizes',equivalence,defaultValue);
         };
         var displayGeneChooser = function (holder){
             appendGeneChooser(holder,'geneHolder','gene','region_gene_input',
@@ -463,16 +503,14 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             mpgSoftware.variantWF.currentInteractivityState(0);
         };
 
-        var respondToRequestForMoreFilters = function (x){
-            var holder = $('#filterHolder');
-            var choice = $("#additionalFilters option:selected");
-            var selection = choice.val();
+
+        var forceRequestForMoreFilters = function (selection,holder,equivalence,defaultValue){
             switch (selection){
-                case 'pvalue':displayPVChooser(holder);
-                        break;
-                case 'oddsratio':displayORChooser(holder);
+                case 'pvalue':displayPVChooser(holder,equivalence,defaultValue);
                     break;
-                case 'effectsize':displayESChooser(holder);
+                case 'oddsratio':displayORChooser(holder,equivalence,defaultValue);
+                    break;
+                case 'effectsize':displayESChooser(holder,equivalence,defaultValue);
                     break;
                 case 'gene':displayGeneChooser(holder);
                     break;
@@ -485,10 +523,24 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
 
             }
         };
+        var respondToReviseFilters = function (selection,equivalence,defaultValue){
+            var holder = $('#filterHolder');
+            var choice = $("#additionalFilters option:selected");
+            forceRequestForMoreFilters (selection, holder,equivalence,defaultValue);
+        };
+
+        var respondToRequestForMoreFilters = function (){
+            var holder = $('#filterHolder');
+            var choice = $("#additionalFilters option:selected");
+            var selection = choice.val();
+            forceRequestForMoreFilters (selection, holder);
+        };
         return {
             respondToPhenotypeSelection:respondToPhenotypeSelection,
             respondToDataSetSelection:respondToDataSetSelection,
-            respondToRequestForMoreFilters:respondToRequestForMoreFilters
+            respondToRequestForMoreFilters:respondToRequestForMoreFilters,
+            displayDataSetChooser:displayDataSetChooser,
+            respondToReviseFilters:respondToReviseFilters
         }
 
     }());
