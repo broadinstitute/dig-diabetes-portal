@@ -109,6 +109,23 @@ var mpgSoftware = mpgSoftware || {};
                 }
             }
         };
+        var editThisClause = function (currentObject){
+            if (currentInteractivityState()){
+                var filterIndex;
+                var label = 'remover';
+                var id = $(currentObject).attr ('id');
+                var desiredLocation = id.indexOf (label);
+                if ((desiredLocation > -1) &&
+                    (typeof id !== 'undefined') ){
+                    var filterIndexString = id.substring(id.indexOf(label)+ label.length);
+                    filterIndex = parseInt(filterIndexString);
+                    forgetThisFilter (filterIndex);
+                    numberExistingFilters(numberExistingFilters()-1);
+                    handleBlueBoxVisibility ();
+                }
+            }
+        };
+
         var removeThisFilter = function (currentObject){
             if (typeof currentObject !== 'undefined') {
                 var currentObjectId = currentObject.id;
@@ -139,7 +156,7 @@ var mpgSoftware = mpgSoftware || {};
             var datasetInput = UTILS.extractValsFromCombobox(['dataSet']);
             var pvEquivalence = UTILS.extractValsFromCombobox(['pvEquivalence']);
             var orEquivalence = UTILS.extractValsFromCombobox(['orEquivalence']);
-            var orEquivalence = UTILS.extractValsFromCombobox(['esEquivalence']);
+            var esEquivalence = UTILS.extractValsFromCombobox(['esEquivalence']);
             var variantFilters = UTILS.extractValFromTextboxes(['pvValue','orValue','esValue']);
             var totalFilterCount = UTILS.extractValFromTextboxes(['totalFilterCount']);
             var experimentChoice = UTILS.extractValFromCheckboxes(['datasetExomeChip','datasetExomeSeq','datasetGWAS']);
@@ -167,6 +184,7 @@ var mpgSoftware = mpgSoftware || {};
             varsToSend = UTILS.concatMap(varsToSend,datasetInput) ;
             varsToSend = UTILS.concatMap(varsToSend,pvEquivalence) ;
             varsToSend = UTILS.concatMap(varsToSend,orEquivalence) ;
+            varsToSend = UTILS.concatMap(varsToSend,esEquivalence) ;
             varsToSend = UTILS.concatMap(varsToSend,variantFilters) ;
             varsToSend = UTILS.concatMap(varsToSend,savedValue) ;
             varsToSend = UTILS.concatMap(varsToSend,experimentChoice) ;
@@ -200,6 +218,7 @@ var mpgSoftware = mpgSoftware || {};
             gatherFieldsAndPostResults:gatherFieldsAndPostResults,
             initializePage:initializePage,
             removeThisClause:removeThisClause,
+            editThisClause:editThisClause,
             removeThisFilter:removeThisFilter,
             existingFiltersManipulators:existingFiltersManipulators,
             currentInteractivityState:currentInteractivityState,

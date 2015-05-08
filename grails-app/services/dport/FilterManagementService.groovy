@@ -915,7 +915,8 @@ class FilterManagementService {
         if (regionStopInput) {
             returnValue['regionStopInput']  = regionStopInput
         }
-        if (predictedEffects) {
+        if ((predictedEffects) &&
+                (predictedEffects != "undefined")){
             returnValue['predictedEffects']  = predictedEffects
         }
 

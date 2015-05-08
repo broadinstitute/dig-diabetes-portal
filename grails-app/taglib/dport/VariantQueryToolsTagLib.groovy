@@ -53,77 +53,103 @@ class VariantQueryToolsTagLib {
                     <div class="variantWFsingleFilter">
                     <div class="row clearfix">
                     <div class="col-md-10">""".toString()
-                    if (map.phenotype) {
-                        out << """
-                                <span class="phenotype filterElement">${map.phenotype}</span>
-                    """.toString()
-
-                    }
                     if (map.dataSet) {
                         out << """
                     <span class="dataset filterElement">${map.dataSet},</span>
                     """.toString()
                     }
-                    if (map.orValue  || map.pValue) {
+                    if (map.phenotype) {
+                        out << """
+                                <span class="phenotype filterElement">${map.phenotype},</span>
+                    """.toString()
+
+                    }
+                    if ( map.orValue  ||
+                            map.pValue  ||
+                            map.esValue  ||
+                            map.regionChromosomeInput  ||
+                            map.regionStartInput  ||
+                            map.regionStopInput  ||
+                            map.gene  ||
+                            map.predictedEffects  ||
+                            map.polyphenSelect ) {
 
 
                             // a line to describe the odds ratio
                             if (map.orValue) {
+                                String inequality = "&gt;"
+                                if (map.orValueInequality == "lessThan"){
+                                    inequality = "&lt;"
+                                }
                                 out << """
-
-                        <span class="cc filterElement">OR &gt;&nbsp;&nbsp; ${map.orValue},</span>
+                        <span class="cc filterElement">OR ${inequality}&nbsp; ${map.orValue},</span>
                                             """.toString()
                             }  // a single line for the odds ratio
 
                             // a line to describe the P value
                             if (map.pValue) {
+                                String inequality = "&lt;"
+                                if (map.pValueInequality == "greaterThan"){
+                                    inequality = "&gt;"
+                                }
                                 out << """
-                            <span class="dd filterElement">p-value &lt&nbsp;&nbsp; ${map.pValue},</span>
+                            <span class="dd filterElement">p-value ${inequality}&nbsp; ${map.pValue},</span>
                             """.toString()
                             }// a single line for the P value
 
-                        // a line to describe the polyphen value
-                        if (map.regionChromosomeInput) {
-                            out << """
-                            <span class="dd filterElement">chromosome=&nbsp;&nbsp; ${map.regionChromosomeInput},</span>
-                            """.toString()
-                        }// a single line for the P value
+                                // a line to describe the P value
+                            if (map.esValue) {
+                                String inequality = "&lt;"
+                                if (map.esValueInequality == "greaterThan"){
+                                    inequality = "&gt;"
+                                }
+                                out << """
+                        <span class="dd filterElement">effect size ${inequality}&nbsp; ${map.esValue},</span>
+                        """.toString()
+                            }// a single line for the effect value
 
-                        // a line to describe the polyphen value
-                        if (map.regionStartInput) {
-                            out << """
-                            <span class="dd filterElement">start position:&nbsp;&nbsp; ${map.regionStartInput},</span>
-                            """.toString()
-                        }// a single line for the P value
+                            // a line to describe the polyphen value
+                            if (map.regionChromosomeInput) {
+                                out << """
+                                <span class="dd filterElement">chromosome=&nbsp;&nbsp; ${map.regionChromosomeInput},</span>
+                                """.toString()
+                            }// a single line for the P value
 
-                        // a line to describe the polyphen value
-                        if (map.regionStopInput) {
-                            out << """
-                            <span class="dd filterElement">end position:&nbsp;&nbsp; ${map.regionStopInput},</span>
-                            """.toString()
-                        }// a single line for the P value
+                            // a line to describe the polyphen value
+                            if (map.regionStartInput) {
+                                out << """
+                                <span class="dd filterElement">start position:&nbsp;&nbsp; ${map.regionStartInput},</span>
+                                """.toString()
+                            }// a single line for the P value
 
-                        // a line to describe the polyphen value
-                        if (map.gene) {
-                            out << """
-                            <span class="dd filterElement">gene=&nbsp;&nbsp; ${map.gene},</span>
-                            """.toString()
-                        }// a single line for the P value
+                            // a line to describe the polyphen value
+                            if (map.regionStopInput) {
+                                out << """
+                                <span class="dd filterElement">end position:&nbsp;&nbsp; ${map.regionStopInput},</span>
+                                """.toString()
+                            }// a single line for the P value
 
-                        // a line to describe the polyphen value
-                        if (map.predictedEffects) {
-                            out << """
-                            <span class="dd filterElement">predicted effects &nbsp;&nbsp; ${map.predictedEffects},</span>
-                            """.toString()
-                        }// a single line for the P value
+                            // a line to describe the polyphen value
+                            if (map.gene) {
+                                out << """
+                                <span class="dd filterElement">gene=&nbsp;&nbsp; ${map.gene},</span>
+                                """.toString()
+                            }// a single line for the P value
+
+                            // a line to describe the polyphen value
+                            if (map.predictedEffects) {
+                                out << """
+                                <span class="dd filterElement">predicted effects &nbsp;&nbsp; ${map.predictedEffects},</span>
+                                """.toString()
+                            }// a single line for the P value
 
 
-                        // a line to describe the P value
-                        if (map.polyphenSelect) {
-                            out << """
-                            <span class="dd filterElement">polyphen &lt&nbsp;&nbsp; ${map.polyphenSelect},</span>
-                            """.toString()
-                        }// a single line for the P value
+                            // a line to describe the P value
+                            if (map.polyphenSelect) {
+                                out << """
+                                <span class="dd filterElement">polyphen &lt&nbsp;&nbsp; ${map.polyphenSelect},</span>
+                                """.toString()
+                            }// a single line for the P value
 
 
                     }  // the section containing all filters
@@ -163,6 +189,8 @@ class VariantQueryToolsTagLib {
                                  orValueInequality: map.orValueInequality,
                                  pValue: map.pValue,
                                  pValueInequality: map.pValueInequality,
+                                 esValue: map.esValue,
+                                 esValueInequality: map.esValueInequality,
                                  regionStopInput: map.regionStopInput,
                                  regionStartInput: map.regionStartInput,
                                  regionChromosomeInput: map.regionChromosomeInput,
