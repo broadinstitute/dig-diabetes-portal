@@ -63,6 +63,37 @@ var mpgSoftware = mpgSoftware || {};
                 $('#filterBlock'+indexNumber).remove ();
             }
         };
+        var instantiatePhenotype = function (value) {
+            $('#phenotype').val(value)
+        };
+        var instantiateInputFields = function (clauseDefinition){
+            if (typeof clauseDefinition  !== 'undefined') {
+                var filters = clauseDefinition.split("^");
+                for ( var i = 0 ; i < filters.length ; i++ ){
+                    var oneFilter = filters [i];
+                    if (oneFilter){
+                        var fieldVersusValue =  oneFilter.split("=");
+                        if (fieldVersusValue.length === 2 ){
+                            switch (fieldVersusValue[0]) {
+                                case '1':instantiatePhenotype (fieldVersusValue[1]);
+                                    break;
+                                default: break;
+                            }
+                        }
+
+                    }
+
+                }
+            }
+        };
+        var makeClauseCurrent = function (indexNumber) {
+            if (typeof indexNumber !== 'undefined') {
+                var codedFilters = $('#savedValue'+indexNumber).val();
+                if (typeof codedFilters  !== 'undefined'){
+                    instantiateInputFields (codedFilters);
+                }
+            }
+        };
         var retrieveDataSets = function (phenotype, experiment) {
             var loading = $('#spinner').show();
             $.ajax({
@@ -87,45 +118,44 @@ var mpgSoftware = mpgSoftware || {};
                 }
             });
         };
+        var extractIndex = function (idLabel,currentObject){
+            var filterIndex = -1;
+            var id = $(currentObject).attr ('id');
+            var desiredLocation = id.indexOf (idLabel);
+            if ((desiredLocation > -1) &&
+                (typeof id !== 'undefined') ){
+                var filterIndexString = id.substring(id.indexOf(idLabel)+ idLabel.length);
+                filterIndex = parseInt(filterIndexString);
+            }
+            return filterIndex;
+        };
 
 
         /***
          * public methods
          * @param currentObject
          */
+
+
         var removeThisClause = function (currentObject){
             if (currentInteractivityState()){
-                var filterIndex;
-                var label = 'remover';
-                var id = $(currentObject).attr ('id');
-                var desiredLocation = id.indexOf (label);
-                if ((desiredLocation > -1) &&
-                    (typeof id !== 'undefined') ){
-                    var filterIndexString = id.substring(id.indexOf(label)+ label.length);
-                    filterIndex = parseInt(filterIndexString);
-                    forgetThisFilter (filterIndex);
-                    numberExistingFilters(numberExistingFilters()-1);
-                    handleBlueBoxVisibility ();
-                }
+                var filterIndex = extractIndex ('remover',currentObject);
+                forgetThisFilter (filterIndex);
+                numberExistingFilters(numberExistingFilters()-1);
+                handleBlueBoxVisibility ();
+
             }
         };
         var editThisClause = function (currentObject){
             if (currentInteractivityState()){
-                var filterIndex;
-                var label = 'remover';
-                var id = $(currentObject).attr ('id');
-                var desiredLocation = id.indexOf (label);
-                if ((desiredLocation > -1) &&
-                    (typeof id !== 'undefined') ){
-                    var filterIndexString = id.substring(id.indexOf(label)+ label.length);
-                    filterIndex = parseInt(filterIndexString);
-                    forgetThisFilter (filterIndex);
-                    numberExistingFilters(numberExistingFilters()-1);
-                    handleBlueBoxVisibility ();
-                }
+                var filterIndex = extractIndex ('editor',currentObject);
+                makeClauseCurrent (filterIndex);
+                forgetThisFilter (filterIndex);
+                numberExistingFilters(numberExistingFilters()-1);
+                handleBlueBoxVisibility ();
+
             }
         };
-
         var removeThisFilter = function (currentObject){
             if (typeof currentObject !== 'undefined') {
                 var currentObjectId = currentObject.id;
@@ -406,8 +436,15 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
                 'protein effect help title','everything there is to say about a protein effect');
         };
         var displayDSChooser = function (){
-
+            $('#dataSetChooser').show ();
         };
+        var displayDataSetChooser = function (initialValue){
+            var phenotypeComboBox = UTILS.extractValsFromCombobox(['phenotype']);
+            mpgSoftware.variantWF.retrieveDataSets(phenotypeComboBox['phenotype']);
+            $('#dataSetChooser').show ();
+        };
+
+
 
         /***
          * public

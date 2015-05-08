@@ -111,21 +111,21 @@ class VariantQueryToolsTagLib {
                             // a line to describe the polyphen value
                             if (map.regionChromosomeInput) {
                                 out << """
-                                <span class="dd filterElement">chromosome=&nbsp;&nbsp; ${map.regionChromosomeInput},</span>
+                                <span class="dd filterElement">chromosome=&nbsp; ${map.regionChromosomeInput},</span>
                                 """.toString()
                             }// a single line for the P value
 
                             // a line to describe the polyphen value
                             if (map.regionStartInput) {
                                 out << """
-                                <span class="dd filterElement">start position:&nbsp;&nbsp; ${map.regionStartInput},</span>
+                                <span class="dd filterElement">start position:&nbsp; ${map.regionStartInput},</span>
                                 """.toString()
                             }// a single line for the P value
 
                             // a line to describe the polyphen value
                             if (map.regionStopInput) {
                                 out << """
-                                <span class="dd filterElement">end position:&nbsp;&nbsp; ${map.regionStopInput},</span>
+                                <span class="dd filterElement">end position:&nbsp; ${map.regionStopInput},</span>
                                 """.toString()
                             }// a single line for the P value
 
@@ -139,7 +139,7 @@ class VariantQueryToolsTagLib {
                             // a line to describe the polyphen value
                             if (map.predictedEffects) {
                                 out << """
-                                <span class="dd filterElement">predicted effects &nbsp;&nbsp; ${map.predictedEffects},</span>
+                                <span class="dd filterElement">predicted effects: ${map.predictedEffects},</span>
                                 """.toString()
                             }// a single line for the P value
 
@@ -147,7 +147,7 @@ class VariantQueryToolsTagLib {
                             // a line to describe the P value
                             if (map.polyphenSelect) {
                                 out << """
-                                <span class="dd filterElement">polyphen &lt&nbsp;&nbsp; ${map.polyphenSelect},</span>
+                                <span class="dd filterElement">polyphen &lt&nbsp; ${map.polyphenSelect},</span>
                                 """.toString()
                             }// a single line for the P value
 
@@ -158,7 +158,7 @@ class VariantQueryToolsTagLib {
 
                     <div class="col-md-2">
                        <span class="pull-right developingQueryComponentsFilterIcons" style="margin: 4px 10px 0 auto;">
-                       <span class="glyphicon glyphicon-pencil filterEditor filterActivator" aria-hidden="true" id="editer${blockCount}"></span>
+                       <span class="glyphicon glyphicon-pencil filterEditor filterActivator" aria-hidden="true" onclick="mpgSoftware.variantWF.editThisClause(this)" id="editor${blockCount}"></span>
                        <span class="glyphicon glyphicon-plus-sign filterAdder filterActivator" aria-hidden="true" id="adder${blockCount}"></span>
                        <span class="glyphicon glyphicon-remove-circle filterCanceler filterActivator" aria-hidden="true" onclick="mpgSoftware.variantWF.removeThisClause(this)" id="remover${blockCount}"></span>
                     </span>
