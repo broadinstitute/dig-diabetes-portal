@@ -1,10 +1,23 @@
 <%@ page import="org.springframework.web.servlet.i18n.SessionLocaleResolver" %>
 
-<div class="row" style="vertical-align: middle;">
+<div class="row" style="vertical-align: middle;white-space: nowrap">
         <img class="sigmalogoholder col-md-2"
              src="${resource(dir: 'images/icons', file: 'SlimSigmaLogo234fromai-outlines.jpg')}"
              width="100%" alt="SIGMA logo"/>
-        <h1 class="col-md-8 text-center">SIGMA T2D</h1>
+        <div class="col-md-8">
+            <table class="center-block">
+                <tr>
+                    <td>
+                        <h1 style="font-size: 64pt;color:#003D5C">SIGMA</h1>
+                    </td>
+                    <td>
+                        <h1 style="font-size: 64pt;font-weight: 300;color:#406993">T2D</h1>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+
 
         <div class="col-md-2">
             <table>

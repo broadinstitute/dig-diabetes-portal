@@ -1,3 +1,3 @@
-<h3>
+<h4 style="font-weight: 300;">
     <g:message code="sigmasite.about.content"></g:message>
-</h3>
+</h4>

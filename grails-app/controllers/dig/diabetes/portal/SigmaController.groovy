@@ -3,7 +3,11 @@ package dig.diabetes.portal
 import org.codehaus.groovy.grails.web.util.WebUtils
 import org.springframework.web.servlet.support.RequestContextUtils
 
+
 class SigmaController {
+
+    WebRequestLanguageLookupService webRequestLanguageLookupService;
+
 
     def index() {
         render(view:'sigmahome',model:[isEnglish: isEnglish(),isSpanish:isSpanish()])
@@ -18,6 +22,6 @@ class SigmaController {
     }
 
     def getLanguage() {
-        return RequestContextUtils.getLocale(WebUtils.retrieveGrailsWebRequest().currentRequest).toLanguageTag();
+        return webRequestLanguageLookupService.getLanguageForCurrentWebRequest()
     }
 }
