@@ -920,6 +920,21 @@ class FilterManagementService {
             returnValue['predictedEffects']  = predictedEffects
         }
 
+        if ((condelSelect) &&
+                (condelSelect != "undefined")){
+            returnValue['condelSelect']  = condelSelect
+        }
+
+        if ((polyphenSelect) &&
+                (polyphenSelect != "undefined")){
+            returnValue['polyphenSelect']  = polyphenSelect
+        }
+
+        if ((siftSelect) &&
+                (siftSelect != "undefined")){
+            returnValue['siftSelect']  = siftSelect
+        }
+
         if (phenotype) {
             returnValue['phenotype']  = phenotype
         }

@@ -99,12 +99,16 @@ var mpgSoftware = mpgSoftware || {};
                                 case '9':break;// chromosome start, handled under 10
                                 case '10': // chromosome end -- handle a chromosome here
                                     mpgSoftware.firstResponders.respondToReviseFilters('position',extractString (clauseDefinition,'^9='),fieldVersusValue[1],extractString (clauseDefinition,'^8='));
-                                    break
+                                    break;
+                                case '11':
+                                    mpgSoftware.firstResponders.respondToReviseFilters('predictedeffect',fieldVersusValue[1],extractString (clauseDefinition,'^14='),extractString (clauseDefinition,'^15='),extractString (clauseDefinition,'^16='));
+                                    break;
                                 case '12': // There are two fields we need to handle here.  Let's pull out the other one by hand
                                     mpgSoftware.firstResponders.respondToReviseFilters('effectsize',extractString (clauseDefinition,'^13='),fieldVersusValue[1]);
                                     break;// or value and or inequality are handled together, so skip one
-                                case '4':break;// Ignore
-
+                                case '14':break;//  chromosome name, handled under 11
+                                case '15':break;//  chromosome name, handled under 11
+                                case '16':break;//  chromosome name, handled under 11
                                 default: break;
                             }
                         }
@@ -385,65 +389,113 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allFunctionsCheckbox,proteinTruncatingCheckbox,missenseCheckbox,missenseOptions,
-                                            polyphenSelect,siftSelect,condelSelect,synonymousCheckbox,noncodingCheckbox,    helpTitle,helpText){
-    currentDiv.append("<div id='"+holderId+"' class='row clearfix'>"+
+                                            polyphenSelect,siftSelect,condelSelect,synonymousCheckbox,noncodingCheckbox,    helpTitle,helpText,valueOne,valueTwo,valueThree,valueFour){
+    var allEffectsSelected = '',
+    proteinTruncatingSelected = '',
+    missenseSelected = '',
+    noEffectSynonymousSelected = '',
+    noEffectNoncodingSelected = '',
+        polyphen1='',polyphen2='',polyphen3='',
+        condel1='',condel2='',condel3='',
+        sift1='',sift2='',sift3='';
+    if (typeof valueOne !== 'undefined'){
+        if (valueOne === 'all-effects'){
+            allEffectsSelected = "'checked'";
+        } else if (valueOne === 'protein-truncating') {
+            proteinTruncatingSelected = "'checked'";
+        } else if (valueOne === 'missense') {
+            missenseSelected = "'checked'";
+        } else if (valueOne === 'noEffectSynonymous') {
+            noEffectSynonymousSelected = "'checked'";
+        } else if (valueOne === 'noEffectNoncoding') {
+            noEffectNoncodingSelected = "'checked'";
+        }
+    }
+    if (typeof valueTwo !== 'undefined') {
+        if (valueTwo === 'probably_damaging'){
+            condel1 = "'checked'";
+        } else if (valueTwo === 'possibly_damaging') {
+            condel2 = "'checked'";
+        } else if (valueTwo === 'benign') {
+            condel3 = "'checked'";
+        }
+    }
+    if (typeof valueThree !== 'undefined') {
+        if (valueThree === '---'){
+            polyphen1 = "'checked'";
+        } else if (valueThree === 'deleterious') {
+            polyphen2 = "'checked'";
+        } else if (valueThree === 'tolerated') {
+            polyphen3 = "'checked'";
+        }
+    }
+    if (typeof valueFour !== 'undefined') {
+        if (valueFour === '---'){
+            sift1 = "'checked'";
+        } else if (valueFour === 'deleterious') {
+            sift2 = "'checked'";
+        } else if (valueFour === 'benign') {
+            sift3 = "'checked'";
+        }
+    }
+        currentDiv.append("<div id='"+holderId+"' class='row clearfix'>"+
         "<div class='primarySectionSeparator'>"+
         "<div class='col-sm-offset-1 col-md-3' style='text-align: right'>"+sectionName+"</div>"+
         "<div class='col-md-5'>"+
-    "<div class='row clearfix'>"+
-    "<div class='col-md-12'>"+
-    "<div id='biology-form'>"+
-    "<div class='radio'>"+
-    "<input type='radio' name='predictedEffects' value='all-effects' id='" +allFunctionsCheckbox + "' onClick=\"chgRadioButton('all-effects')\" checked='checked'/>"+
-    "all effects"+
-    "</div>"+
-    "<div class='radio'>"+
-    "<input type='radio' name='predictedEffects' value='protein-truncating' id='" +proteinTruncatingCheckbox + "' onClick=\"chgRadioButton('protein-truncating')\"/>"+
-    "protein-truncating"+
-    "</div>"+
-    "<div class='radio'>"+
-    "<input type='radio' name='predictedEffects' value='missense'  id='" +missenseCheckbox + "' onClick=\"chgRadioButton('missense')\"/>"+
-    "missense"+
-    "</div>"+
-    "<div id='" + missenseOptions+ "' >"+
-    "<div class='checkbox'>"+
-    "PolyPhen-2 prediction"+
-    "<select name='polyphen' id='" +polyphenSelect+ "'>"+
-    "<option value=''>---</option>"+
-    "<option value='probably_damaging'>probably damaging</option>"+
-    "<option value='possibly_damaging'>possibly damaging</option>"+
-    "<option value='benign'>benign</option>"+
-    "</select>"+
-    "</div>"+
-    "<div class='checkbox'>"+
-    "SIFT prediction"+
-    "<select name='sift' id='" +siftSelect+ "'>"+
-    "<option value=''>---</option>"+
-    "<option value='deleterious'>deleterious</option>"+
-    "<option value='tolerated'>tolerated</option>"+
-    "</select>"+
-    "</div>"+
-    "<div class='checkbox'>"+
-    "CONDEL prediction"+
-    "<select name='condel' id='" +condelSelect+ "'>"+
-    "<option value=''>---</option>"+
-    "<option value='deleterious'>deleterious</option>"+
-    "<option value='benign'>benign</option>"+
-    "</select>"+
-    "</div>"+
-    "</div>"+
-    "<div class='radio'>"+
-    "<input type='radio' name='predictedEffects' value='noEffectSynonymous'  id='" +synonymousCheckbox + "' onClick=\"chgRadioButton('noEffectSynonymous')\"/>"+
-    "no effect (synonymous coding)"+
-    "</div>"+
-    "<div class='radio'>"+
-    "<input type='radio' name='predictedEffects' value='noEffectNoncoding'  id='" +noncodingCheckbox + " onClick=\"chgRadioButton('noEffectNoncoding')\"/>"+
-    "no effect (non-coding)"+
-    "</div>"+
-    "</div>"+
-    "</div>"+
-    "</div>"+
-    "</div>"+
+        "<div class='row clearfix'>"+
+        "<div class='col-md-12'>"+
+        "<div id='biology-form'>"+
+        "<div class='radio'>"+
+        "<input type='radio' name='predictedEffects' value='all-effects' id='" +allFunctionsCheckbox + "' onClick=\"chgRadioButton('all-effects')\" "+allEffectsSelected+"/>"+
+        "all effects"+
+        "</div>"+
+        "<div class='radio'>"+
+        "<input type='radio' name='predictedEffects' value='protein-truncating' id='" +proteinTruncatingCheckbox + "' onClick=\"chgRadioButton('protein-truncating')\" "+proteinTruncatingSelected+"/>"+
+        "protein-truncating"+
+        "</div>"+
+        "<div class='radio'>"+
+        "<input type='radio' name='predictedEffects' value='missense'  id='" +missenseCheckbox + "' onClick=\"chgRadioButton('missense')\" "+missenseSelected+"/>"+
+        "missense"+
+        "</div>"+
+        "<div id='" + missenseOptions+ "' >"+
+        "<div class='checkbox'>"+
+        "PolyPhen-2 prediction"+
+        "<select name='polyphen' id='" +polyphenSelect+ "'>"+
+        "<option value=''>---</option>"+
+        "<option value='probably_damaging' "+polyphen1+">probably damaging</option>"+
+        "<option value='possibly_damaging' "+polyphen2+">possibly damaging</option>"+
+        "<option value='benign' "+polyphen2+">benign</option>"+
+        "</select>"+
+        "</div>"+
+        "<div class='checkbox'>"+
+        "SIFT prediction"+
+        "<select name='sift' id='" +siftSelect+ "'>"+
+        "<option value=''>---</option>"+
+        "<option value='deleterious' "+sift2+">deleterious</option>"+
+        "<option value='tolerated' "+sift3+">tolerated</option>"+
+        "</select>"+
+        "</div>"+
+        "<div class='checkbox'>"+
+        "CONDEL prediction"+
+        "<select name='condel' id='" +condelSelect+ "'>"+
+        "<option value=''>---</option>"+
+        "<option value='deleterious' "+condel2+">deleterious</option>"+
+        "<option value='benign' "+condel3+">benign</option>"+
+        "</select>"+
+        "</div>"+
+        "</div>"+
+        "<div class='radio'>"+
+        "<input type='radio' name='predictedEffects' value='noEffectSynonymous'  id='" +synonymousCheckbox + "' onClick=\"chgRadioButton('noEffectSynonymous')\"  "+noEffectSynonymousSelected+"/>"+
+        "no effect (synonymous coding)"+
+        "</div>"+
+        "<div class='radio'>"+
+        "<input type='radio' name='predictedEffects' value='noEffectNoncoding'  id='" +noncodingCheckbox + " onClick=\"chgRadioButton('noEffectNoncoding')\"  "+noEffectNoncodingSelected+"/>"+
+        "no effect (non-coding)"+
+        "</div>"+
+        "</div>"+
+        "</div>"+
+        "</div>"+
+        "</div>"+
         "</div>"+
         "<div class='col-md-1'>"+
         "<span style='padding:10px 0 0 0' class='glyphicon glyphicon-question-sign pop-right' aria-hidden='true' data-toggle='popover' animation='true' "+
@@ -480,10 +532,10 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             appendPositionChooser(holder,'geneHolder','position','region_chrom_input','region_start_input','region_stop_input',
                 'position specification help title','everything there is to say about an specifying a position',valueOne,valueTwo,valueThree);
         };
-        var displayPEChooser = function (holder){
+        var displayPEChooser = function (holder,valueOne,valueTwo,valueThree,valueFour){
             appendProteinEffectsButtons (holder,'peHolder','proteinEffect','all_functions_checkbox','protein_truncating_checkbox','missense_checkbox',
                 'missense-options','polyphenSelect','siftSelect','condelSelect','synonymous_checkbox','noncoding_checkbox',
-                'protein effect help title','everything there is to say about a protein effect');
+                'protein effect help title','everything there is to say about a protein effect',valueOne,valueTwo,valueThree,valueFour);
         };
         var displayDSChooser = function (){
             $('#dataSetChooser').show ();
@@ -514,7 +566,7 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
         };
 
 
-        var forceRequestForMoreFilters = function (selection,holder,valueOne,valueTwo,valueThree){
+        var forceRequestForMoreFilters = function (selection,holder,valueOne,valueTwo,valueThree,valueFour){
             switch (selection){
                 case 'pvalue':displayPVChooser(holder,valueOne,valueTwo);
                     break;
@@ -526,17 +578,17 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
                     break;
                 case 'position':displayPosChooser(holder,valueOne,valueTwo,valueThree);
                     break;
-                case 'predictedeffect':displayPEChooser(holder);
+                case 'predictedeffect':displayPEChooser(holder,valueOne,valueTwo,valueThree,valueFour);
                     break;
                 case 'dataset':displayDSChooser();
                     break;
 
             }
         };
-        var respondToReviseFilters = function (selection,valueOne,valueTwo,valueThree){
+        var respondToReviseFilters = function (selection,valueOne,valueTwo,valueThree,valueFour){
             var holder = $('#filterHolder');
             var choice = $("#additionalFilters option:selected");
-            forceRequestForMoreFilters (selection, holder,valueOne,valueTwo,valueThree);
+            forceRequestForMoreFilters (selection, holder,valueOne,valueTwo,valueThree,valueFour);
         };
 
         var respondToRequestForMoreFilters = function (){

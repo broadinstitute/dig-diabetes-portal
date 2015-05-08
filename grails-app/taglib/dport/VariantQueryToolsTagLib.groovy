@@ -143,13 +143,21 @@ class VariantQueryToolsTagLib {
                                 """.toString()
                             }// a single line for the P value
 
-
-                            // a line to describe the P value
-                            if (map.polyphenSelect) {
-                                out << """
-                                <span class="dd filterElement">polyphen &lt&nbsp; ${map.polyphenSelect},</span>
+                        if (map.polyphenSelect) {
+                            out << """
+                                <span class="dd filterElement">polyphen prediction: ${map.polyphenSelect},</span>
                                 """.toString()
-                            }// a single line for the P value
+                        }// a single line for the P value
+                        if (map.siftSelect) {
+                            out << """
+                                <span class="dd filterElement">sift prediction: ${map.siftSelect},</span>
+                                """.toString()
+                        }// a single line for the P value
+                        if (map.condelSelect) {
+                            out << """
+                                <span class="dd filterElement">condel prediction: ${map.condelSelect},</span>
+                                """.toString()
+                        }// a single line for the P value
 
 
                     }  // the section containing all filters
@@ -195,7 +203,10 @@ class VariantQueryToolsTagLib {
                                  regionStartInput: map.regionStartInput,
                                  regionChromosomeInput: map.regionChromosomeInput,
                                  gene: map.gene,
-                                 predictedEffects: map.predictedEffects])
+                                 predictedEffects: map.predictedEffects,
+                                 polyphenSelect: map.polyphenSelect,
+                                 siftSelect: map.siftSelect,
+                                 condelSelect: map.condelSelect])
                         out << """<input type="text" class="form-control" id="savedValue${blockCount}" value="${
                             encodedFilterList
                         }" style="height:0px">""".toString()
