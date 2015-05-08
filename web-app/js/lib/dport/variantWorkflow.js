@@ -73,7 +73,6 @@ var mpgSoftware = mpgSoftware || {};
                 var endIndex = remainingString.indexOf('^');
                 return fullString.substr(startIndex,endIndex);
             };
-            var desiredValue;
             if (typeof clauseDefinition  !== 'undefined') {
                 var filters = clauseDefinition.split("^");
                 for ( var i = 0 ; i < filters.length ; i++ ){
@@ -86,24 +85,23 @@ var mpgSoftware = mpgSoftware || {};
                                     break;
                                 case '2':mpgSoftware.firstResponders.displayDataSetChooser(fieldVersusValue[1]);
                                     break;
-                                case '3':
-                                    desiredValue = extractString (clauseDefinition,'^4=');
-                                    mpgSoftware.firstResponders.respondToReviseFilters('oddsratio',desiredValue,fieldVersusValue[1]);
+                                case '3': // There are two fields we need to handle here.  Let's pull out the other one by hand
+                                    mpgSoftware.firstResponders.respondToReviseFilters('oddsratio',extractString (clauseDefinition,'^4='),fieldVersusValue[1]);
                                     break;// or value and or inequality are handled together, so skip one
                                 case '4':break;// Ignore
-                                case '5':
-                                    // There are two fields we need to handle here.  Let's pull out the other one by hand
-                                    desiredValue = extractString (clauseDefinition,'^6=');
-//                                    var startIndex = clauseDefinition.indexOf('^6=')+3;
-//                                    var remainingString = clauseDefinition.substr(startIndex);
-//                                    var endIndex = remainingString.indexOf('^');
-//                                    var desiredValue = clauseDefinition.substr(startIndex,endIndex);
-                                    mpgSoftware.firstResponders.respondToReviseFilters('pvalue',desiredValue,fieldVersusValue[1]);
+                                case '5': // There are two fields we need to handle here.  Let's pull out the other one by hand
+                                    mpgSoftware.firstResponders.respondToReviseFilters('pvalue',extractString (clauseDefinition,'^6='),fieldVersusValue[1]);
                                     break;// or value and or inequality are handled together, so skip one
                                 case '6':break;
-                                case '12':
-                                    desiredValue = extractString (clauseDefinition,'^13=');
-                                    mpgSoftware.firstResponders.respondToReviseFilters('effectsize',desiredValue,fieldVersusValue[1]);
+                                case '7':mpgSoftware.firstResponders.respondToReviseFilters('gene',fieldVersusValue[1]);
+                                    break;
+                                case '8':break;//  chromosome name, handled under 10
+                                case '9':break;// chromosome start, handled under 10
+                                case '10': // chromosome end -- handle a chromosome here
+                                    mpgSoftware.firstResponders.respondToReviseFilters('position',extractString (clauseDefinition,'^9='),fieldVersusValue[1],extractString (clauseDefinition,'^8='));
+                                    break
+                                case '12': // There are two fields we need to handle here.  Let's pull out the other one by hand
+                                    mpgSoftware.firstResponders.respondToReviseFilters('effectsize',extractString (clauseDefinition,'^13='),fieldVersusValue[1]);
                                     break;// or value and or inequality are handled together, so skip one
                                 case '4':break;// Ignore
 
@@ -325,7 +323,7 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
-        var appendGeneChooser = function (currentDiv,holderId,sectionName,geneInputId,valueId,helpTitle,helpText){
+        var appendGeneChooser = function (currentDiv,holderId,sectionName,geneInputId,helpTitle,helpText,geneName){
             currentDiv.append("<div id='"+holderId+"' class='row clearfix'>"+
                 "<div class='primarySectionSeparator'>"+
                 "<div class='col-sm-offset-1 col-md-3' style='text-align: right'>"+sectionName+"</div>"+
@@ -340,37 +338,49 @@ var mpgSoftware = mpgSoftware || {};
                 "<span class='glyphicon glyphicon-remove-circle filterCanceler filterRefiner' aria-hidden='true' onclick='mpgSoftware.variantWF.removeThisFilter(this)' id='remove_"+holderId+"'></span>"+
                 "</div>"+
                 "</div>");
+            if (typeof geneName !== 'undefined'){
+                $('#region_gene_input').val(geneName);
+            }
 
         };
 
 
-        var appendPositionChooser = function (currentDiv,holderId,sectionName,chromosomeId,startHere,endHere,helpTitle,helpText){
+        var appendPositionChooser = function (currentDiv,holderId,sectionName,chromosomeId,startHere,endHere,helpTitle,helpText,startingExtent,endingExtent,chromosomeName){
             currentDiv.append("<div id='"+holderId+"' class='row clearfix'>"+
                 "<div class='primarySectionSeparator'>"+
                 "<div class='col-sm-offset-1 col-md-3' style='text-align: right'>"+sectionName+"</div>"+
                 "<div class='col-md-5'>"+
-                "<div class='row'>"+
-                "<div class='col-xs-4'>"+
-                "<input class='form-control' type='text' id='" + chromosomeId+ "' placeholder='chrom'/>"+
-                "</div>"+
-                "<div class='col-xs-1'></div>"+
-                "<div class='col-xs-3'>"+
-                "<input class='form-control' type='text' id='" + startHere+ "' style='display: inline-block' placeholder='start'/>"+
-                "</div>"+
-                "<div class='col-xs-1'></div>"+
-                "<div class='col-xs-3'>"+
-                "<input class='form-control' type='text' id='" + endHere+ "' style='display: inline-block' placeholder='stop'/>"+
-                "</div>"+
+                    "<div class='row'>"+
+                        "<div class='col-xs-4'>"+
+                            "<input class='form-control' type='text' id='" + chromosomeId+ "' placeholder='chrom'/>"+
+                        "</div>"+
+                        "<div class='col-xs-1'></div>"+
+                        "<div class='col-xs-3'>"+
+                            "<input class='form-control' type='text' id='" + startHere+ "' style='display: inline-block' placeholder='start'/>"+
+                        "</div>"+
+                        "<div class='col-xs-1'></div>"+
+                        "<div class='col-xs-3'>"+
+                            "<input class='form-control' type='text' id='" + endHere+ "' style='display: inline-block' placeholder='stop'/>"+
+                        "</div>"+
+                    "</div>"+
                 "</div>"+
                 "<div class='col-md-1'>"+
-                "<span style='padding:10px 0 0 0' class='glyphicon glyphicon-question-sign pop-right' aria-hidden='true' data-toggle='popover' animation='true' "+
-                "trigger='hover' data-container='body' data-placement='right' title='' data-content='"+helpText + "' data-original-title='"+helpTitle + "'></span>"+
-                "</div>"+
+                    "<span style='padding:10px 0 0 0' class='glyphicon glyphicon-question-sign pop-right' aria-hidden='true' data-toggle='popover' animation='true' "+
+                    "trigger='hover' data-container='body' data-placement='right' title='' data-content='"+helpText + "' data-original-title='"+helpTitle + "'></span>"+
                 "</div>"+
                 "<div class='col-md-2'>"+
                 "<span class='glyphicon glyphicon-remove-circle filterCanceler filterRefiner' aria-hidden='true' onclick='mpgSoftware.variantWF.removeThisFilter(this)' id='remove_"+holderId+"'></span>"+
                 "</div>"+
                 "</div>");
+            if (typeof startingExtent !== 'undefined'){
+                $('#'+startHere).val(startingExtent);
+            }
+            if (typeof endingExtent !== 'undefined'){
+                $('#'+endHere).val(endingExtent);
+            }
+            if (typeof chromosomeName !== 'undefined'){
+                $('#'+chromosomeId).val(chromosomeName);
+            }
 
         };
 
@@ -462,13 +472,13 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             appendValueWithEquivalenceChooser (holder,'esHolder','beta','esEquivalence','esValue',
                 'Effect size help title','everything there is to say about an effect sizes',equivalence,defaultValue);
         };
-        var displayGeneChooser = function (holder){
+        var displayGeneChooser = function (holder,geneName){
             appendGeneChooser(holder,'geneHolder','gene','region_gene_input',
-                'Gene chooser help title','everything there is to say about choosing a gene');
+                'Gene chooser help title','everything there is to say about choosing a gene',geneName);
         };
-        var displayPosChooser = function (holder){
+        var displayPosChooser = function (holder,valueOne,valueTwo,valueThree){
             appendPositionChooser(holder,'geneHolder','position','region_chrom_input','region_start_input','region_stop_input',
-                'position specification help title','everything there is to say about an specifying a position');
+                'position specification help title','everything there is to say about an specifying a position',valueOne,valueTwo,valueThree);
         };
         var displayPEChooser = function (holder){
             appendProteinEffectsButtons (holder,'peHolder','proteinEffect','all_functions_checkbox','protein_truncating_checkbox','missense_checkbox',
@@ -504,17 +514,17 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
         };
 
 
-        var forceRequestForMoreFilters = function (selection,holder,equivalence,defaultValue){
+        var forceRequestForMoreFilters = function (selection,holder,valueOne,valueTwo,valueThree){
             switch (selection){
-                case 'pvalue':displayPVChooser(holder,equivalence,defaultValue);
+                case 'pvalue':displayPVChooser(holder,valueOne,valueTwo);
                     break;
-                case 'oddsratio':displayORChooser(holder,equivalence,defaultValue);
+                case 'oddsratio':displayORChooser(holder,valueOne,valueTwo);
                     break;
-                case 'effectsize':displayESChooser(holder,equivalence,defaultValue);
+                case 'effectsize':displayESChooser(holder,valueOne,valueTwo);
                     break;
-                case 'gene':displayGeneChooser(holder);
+                case 'gene':displayGeneChooser(holder,valueOne);
                     break;
-                case 'position':displayPosChooser(holder);
+                case 'position':displayPosChooser(holder,valueOne,valueTwo,valueThree);
                     break;
                 case 'predictedeffect':displayPEChooser(holder);
                     break;
@@ -523,10 +533,10 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
 
             }
         };
-        var respondToReviseFilters = function (selection,equivalence,defaultValue){
+        var respondToReviseFilters = function (selection,valueOne,valueTwo,valueThree){
             var holder = $('#filterHolder');
             var choice = $("#additionalFilters option:selected");
-            forceRequestForMoreFilters (selection, holder,equivalence,defaultValue);
+            forceRequestForMoreFilters (selection, holder,valueOne,valueTwo,valueThree);
         };
 
         var respondToRequestForMoreFilters = function (){

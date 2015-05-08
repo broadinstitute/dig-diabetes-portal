@@ -111,7 +111,7 @@ class VariantQueryToolsTagLib {
                             // a line to describe the polyphen value
                             if (map.regionChromosomeInput) {
                                 out << """
-                                <span class="dd filterElement">chromosome=&nbsp; ${map.regionChromosomeInput},</span>
+                                <span class="dd filterElement">chromosome: ${map.regionChromosomeInput},</span>
                                 """.toString()
                             }// a single line for the P value
 
