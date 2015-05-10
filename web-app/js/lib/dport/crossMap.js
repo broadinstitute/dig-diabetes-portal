@@ -42,7 +42,8 @@ var baget = baget || {};  // encapsulating variable
             xScale,
             yScale,
             xAxis,
-            yAxis;
+            yAxis,
+            orgData ;
 
 
         // indicate significance level with size
@@ -77,10 +78,15 @@ var baget = baget || {};  // encapsulating variable
             var variantArrayOfArrays; // arrays of each trait, all pointed to by the elements of an array
             var variantArrayOfArrayVariantPointers; // arrays of each trait, all pointed to by the elements of an array
             var variantMap;
+            var positionExtent = {max: undefined, min: undefined} ;
             var inverseVariantMap = {};  // given a number, give me a trait
             var extractUniqueLists = function (dd) {
                 var uniqueVariants=d3.nest()
-                    .key(function(d) {return d.ID;})
+                    .key(function(d) {
+                        positionExtent.max = d3.max([positionExtent.max,d.POS]);
+                        positionExtent.min = d3.min([positionExtent.min,d.POS]);
+                        return d.ID;
+                    })
                     .sortKeys(function(a,b) { return a.POS - b.POS; })
                     .rollup(function(d) {return d[0].DBSNP_ID;})
                     .entries(dd)
@@ -168,7 +174,8 @@ var baget = baget || {};  // encapsulating variable
                 getVariantsByTraitNumber: getVariantsByTraitNumber,
                 getTraitNameByTraitNumber: getTraitNameByTraitNumber,
                 variantArrayOfArrayVariantPointers: variantArrayOfArrayVariantPointers,
-                variantMap: variantMap
+                variantMap: variantMap,
+                positionExtent:positionExtent
             }
 
         };
@@ -176,28 +183,28 @@ var baget = baget || {};  // encapsulating variable
 
 
 
-        var createAxes = function (axisGroup,orgData,gridSize,xScale,yScale, width, height, margin){
+        var createAxes = function (axisGroup,orgData,gridSize,xScale,yScale, width, height, margin) {
             // draw the x axis
 
-            var traitLocal = orgData.traitIDArray.map(function(d,i){
+            var traitLocal = orgData.traitIDArray.map(function (d, i) {
                 return i * gridSize + 5;
-            }) ;
+            });
 
 
             yAxis = d3.svg.axis()
                 .scale(yScale)
                 .orient('left')
-
-          //  .ticks(0)
-                .tickFormat   (d3.requote(""))
+                .tickFormat(d3.requote(""));
+            //  .ticks(0)
+            //               .tickFormat   (d3.requote(""))
 //                .tickFormat(function(d,i) {
 //                    return orgData.traitIDArray[i];
 //                }) ;
 
-             //   .tickValues([10,100,500]);
+            //   .tickValues([10,100,500]);
 
             axisGroup.append('g')
-                .attr('id','yaxis')
+                .attr('id', 'yaxis')
                 .attr('transform', 'translate(' + margin.left + ',0)')
                 .attr('class', 'main axis pValue')
                 .call(yAxis);
@@ -205,36 +212,105 @@ var baget = baget || {};  // encapsulating variable
             xAxis = d3.svg.axis()
                 .scale(xScale)
                 .orient('top')
-                .ticks(orgData.variantNameArray.length)
-                .tickFormat(function(d,i) {
-                    return "";//orgData.variantNameArray[i];
-                });
+                .ticks(4);
+
 
             axisGroup.append('g')
-                .attr('id','xaxis x axis')
+                .attr('id', 'xaxis')
                 .attr('transform', 'translate(0,0)')
                 .attr('class', 'main axis chromosome')
-                .call(xAxis)
-                .selectAll("text")
-                    .attr("dx", "0.5em")
-                    .attr("dy", "0em")
-                    .style("text-anchor", "start")
-                    .attr("transform", function(d) {
-                        return "rotate(-65)"
-                    })
-                   .append('a')
-                .attr('class', 'boldlink')
-                .attr('xlink:href', function (d,i) {
-                    return variantLinkUrl + '/' + orgData.variantNameArray[i] ;
-                })
-                .attr("class", function (d, i) {
-                    return "variantlabel r" + i;
-                })
-                .text(function (d, i) {
-                    return '';//orgData.variantNameArray[i];
-                });
+                .call(xAxis);
+        };
+//
+//                .selectAll("text")
+//                    .attr("dx", "0.5em")
+//                    .attr("dy", "0em")
+//                    .style("text-anchor", "start")
+//                    .attr("transform", function(d) {
+//                        return "rotate(-65)"
+//                    });
+//        };
+
+
+        var onMouseOver = function(d){
+            var buildToolTip =   function (d)   {
+                var text = '<div class="header">' +orgData.getTraitNameByTraitNumber(d.t) + '</div>';
+                text += d.dbsnp + '<br/>';
+                text += 'chr' + d.chr + ':' + d.pos + '<br/>';
+                text += 'p-value: <strong>' + d.p.toPrecision(3) + '</strong><br/>';
+                if (d.o) text += 'odds ratio: <strong>' + d.o.toPrecision(3) + '</strong><br/>';
+                if (d.b) text += 'beta: <strong>' + d.b.toPrecision(3) + '</strong><br/>';
+                if (d.z) text += 'z-score: <strong>' + d.z.toPrecision(3) + '</strong><br/>';
+                return text;
+            };
+            d3.selectAll(".traitlabel").classed("text-highlight", function (r, ri) {
+                var oneWeWant = (ri == (d.t));
+                return  oneWeWant;
+            });
+            d3.selectAll(".variantlabel").classed("text-highlight", function (r, ri) {
+                var oneWeWant = (ri == (d.v));
+                if (oneWeWant){
+                    $('.variantlabel.r'+ d.v).text(d.dbsnp);
+                }
+                return  oneWeWant;
+            });
+            d3.select("#tooltip")
+                .style("left", xScale((d3.event.pageX + 10)))
+                .style("top", (d3.event.pageY - 10) + "px")
+                .select("#value")
+                .html(buildToolTip(d));
+            d3.select("#tooltip").classed("hidden", false);
 
         };
+
+
+
+
+        var drawIcon  = function(parent){
+            var grid_size = Math.floor(width / 25);
+            parent
+                .attr("x1", function (d, i) {
+                    return xScale(d.pos);
+                    // return xScale(d.v * grid_size + spaceForVariantLabel);
+                })
+                .attr("y1", function (d, i) {
+                    return d.t * grid_size ;
+                })
+                .attr("x2", function (d, i) {
+                    return xScale(d.pos);
+                    // return xScale(d.v * grid_size + spaceForVariantLabel);
+                })
+                .attr("y2", function (d, i) {
+                    return (d.t * grid_size)+circle_size(d) ;
+                })
+                .attr('stroke-width', 1)
+                .attr('class', function (d, i) {
+                    return circle_class(d);
+                })
+                .on("mouseover", function (d) {
+                    onMouseOver(d);
+                })
+                .on("mouseout", function (d) {
+                    d3.select("#tooltip").classed("hidden", true);
+                    d3.selectAll(".traitlabel").classed("text-highlight", false);
+                    d3.selectAll(".variantlabel").classed("text-highlight", false).text('');
+                });
+        };
+
+
+
+        var zoomed = function (local) {
+
+            d3.select("#xaxis").call(xAxis);
+          //  d3.select("#yaxis").call(yAxis);
+//            var group = svg
+//                .selectAll('g.axesHolder');
+//            var rows = group.selectAll('g.cellr');
+//            rows.selectAll('line.cellg')
+            d3.selectAll('.cellr').selectAll('line')
+                .call(drawIcon);
+        };
+
 
 
 
@@ -247,19 +323,33 @@ var baget = baget || {};  // encapsulating variable
 
             var grid_size = Math.floor(width / 25);
 
-            var orgData = buildInternalRepresentation(data);
+            orgData = buildInternalRepresentation(data);
             var traitName = orgData.getTraitNameByTraitNumber;
+
             var expandedWidth = orgData.variantNameArray.length * grid_size;
             var expandedHeight = orgData.traitIDArray.length * grid_size;
 
+
+
+
+
+
+
             // create the scales
             xScale = d3.scale.linear()
-                .domain([0,expandedWidth])
+                .domain([orgData.positionExtent.min,orgData.positionExtent.max])
                 .range([ margin.left, width ]);
 
             yScale = d3.scale.ordinal()
                 .domain([0,orgData.traitIDArray])
                 .range([ 0,height ]);
+
+            var zoom = d3.behavior.zoom()
+                .x(xScale)
+                .scaleExtent([1, 100])
+                .on("zoom", zoomed);
+
+            svg.call(zoom, drawIcon);
 
             var group = svg
                 .selectAll('g.axesHolder')
@@ -321,127 +411,20 @@ var baget = baget || {};  // encapsulating variable
 
 
 
-            var onMouseOver = function(d){
-                    var buildToolTip =   function (d)   {
-                        var text = '<div class="header">' + traitName(d.t) + '</div>';
-                        text += d.dbsnp + '<br/>';
-                        text += 'chr' + d.chr + ':' + d.pos + '<br/>';
-                        text += 'p-value: <strong>' + d.p.toPrecision(3) + '</strong><br/>';
-                        if (d.o) text += 'odds ratio: <strong>' + d.o.toPrecision(3) + '</strong><br/>';
-                        if (d.b) text += 'beta: <strong>' + d.b.toPrecision(3) + '</strong><br/>';
-                        if (d.z) text += 'z-score: <strong>' + d.z.toPrecision(3) + '</strong><br/>';
-                        return text;
-                    };
-                d3.selectAll(".traitlabel").classed("text-highlight", function (r, ri) {
-                    var oneWeWant = (ri == (d.t));
-                    return  oneWeWant;
-                });
-                d3.selectAll(".variantlabel").classed("text-highlight", function (r, ri) {
-                    var oneWeWant = (ri == (d.v));
-                    if (oneWeWant){
-                        $('.variantlabel.r'+ d.v).text(d.dbsnp);
-                    }
-                    return  oneWeWant;
-                });
-                d3.select("#tooltip")
-                    .style("left", xScale((d3.event.pageX + 10)))
-                    .style("top", (d3.event.pageY - 10) + "px")
-                    .select("#value")
-                    .html(buildToolTip(d));
-                d3.select("#tooltip").classed("hidden", false);
 
-            };
-
-
-
-            var drawIcon  = function(parent){
-                parent.append('line')
-                    .attr('class', 'cellg')
-                    .attr("x1", function (d, i) {
-                        return xScale(d.v * grid_size + spaceForVariantLabel);
-                    })
-                    .attr("y1", function (d, i) {
-                        return d.t * grid_size ;
-                    })
-                    .attr("x2", function (d, i) {
-                        return xScale(d.v * grid_size + spaceForVariantLabel);
-                    })
-                    .attr("y2", function (d, i) {
-                        return (d.t * grid_size)+circle_size(d) ;
-                    })
-                    .attr('stroke-width', 1)
-                     .attr('class', function (d, i) {
-                        return circle_class(d);
-                    })
-                    .on("mouseover", function (d) {
-                        onMouseOver(d);
-                    })
-                    .on("mouseout", function (d) {
-                        d3.select("#tooltip").classed("hidden", true);
-                        d3.selectAll(".traitlabel").classed("text-highlight", false);
-                        d3.selectAll(".variantlabel").classed("text-highlight", false).text('');
-                    });
-//                parent.append('circle')
-//                    .attr('class', 'cellg')
-//                    .attr("cx", function (d, i) {
-//                        return xScale(d.v * grid_size + spaceForVariantLabel);
-//                    })
-//                    .attr("cy", function (d, i) {
-//                        return d.t * grid_size ;
-//
-//                        //  return d.v * grid_size
-//                    })
-//                    .attr('r', function (d, i) {
-//                        return circle_size(d.p);
-//                    })
-//                    .attr('class', function (d, i) {
-//                        return circle_class(d);
-//                    })
-//                    .on("mouseover", function (d) {
-//                        onMouseOver(d);
-//                    })
-//                    .on("mouseout", function (d) {
-//                        d3.select("#tooltip").classed("hidden", true);
-//                        d3.selectAll(".traitlabel").classed("text-highlight", false);
-//                        d3.selectAll(".variantlabel").classed("text-highlight", false).text('');
-//                    });
-//
-            };
 
 
 
 
             // Now draw something for each trait
-            rows.selectAll('circle.cellg')
+            rows.selectAll('line.cg')
                 .data(function (d, i) {
                     return d
                 })
                 .enter()
+                .append('line')
+                .attr('class','cg')
                 .call(drawIcon);
-//                .append('circle')
-//                .attr('class', 'cellg')
-//                .attr("cx", function (d, i) {
-//                    return xScale(d.v * grid_size + spaceForVariantLabel);
-//                })
-//                .attr("cy", function (d, i) {
-//                    return d.t * grid_size ;
-//
-//                  //  return d.v * grid_size
-//                })
-//                .attr('r', function (d, i) {
-//                    return circle_size(d.p);
-//                })
-//                .attr('class', function (d, i) {
-//                    return circle_class(d);
-//                })
-//                .on("mouseover", function (d) {
-//                    onMouseOver(d);
-//                })
-//                .on("mouseout", function (d) {
-//                    d3.select("#tooltip").classed("hidden", true);
-//                    d3.selectAll(".traitlabel").classed("text-highlight", false);
-//                    d3.selectAll(".variantlabel").classed("text-highlight", false).text('');
-//                });
 
         };
 
