@@ -43,6 +43,44 @@
 
 </script>
 
+<style>
+/*.variantlabel {*/
+    /*font-weight: bold;*/
+    /*cursor: pointer;*/
+    /*text-decoration: underline;*/
+    /*color: #588fd3;*/
+    /*fill: #588fd3;*/
+/*}*/
+/*.variantlabel .text-highlight {*/
+    /*font-weight: bold;*/
+    /*cursor: pointer;*/
+    /*text-decoration: underline;*/
+    /*color: #588fd3;*/
+    /*fill: #588fd3;*/
+/*}*/
+.assoc-up {
+    fill: #0f0;
+    color: #00f;
+    stroke: #6fb7f7;
+}
+
+.assoc-down {
+    fill: red;
+    color: red;
+    stroke: red;
+}
+
+.assoc-none {
+    fill: white;
+}
+
+.axis {
+    stroke-width: 1px;
+    fill:none;
+    stroke: black;
+}
+
+</style>
 
 <div id="main">
 
