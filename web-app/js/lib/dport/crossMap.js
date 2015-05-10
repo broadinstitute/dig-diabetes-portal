@@ -43,15 +43,16 @@ var baget = baget || {};  // encapsulating variable
             yScale,
             xAxis,
             yAxis,
-            orgData ;
+            orgData,
+            maximumArrowSize=16;
 
 
         // indicate significance level with size
-        var circle_size = function (assoc) {
-            if (assoc > .05) return 3;
-            else if (assoc > .0001) return 5;
-            else if (assoc > 5e-8) return 8;
-            else return 16;
+        var arrowSize = function (node) {
+            if (node.p > .05) return maximumArrowSize/4;
+            else if (node.p > .0001) return maximumArrowSize/2;
+            else if (node.p > 5e-8) return (maximumArrowSize*3)/4;
+            else return maximumArrowSize;
         };
 
         // indicate direction of effect with color
@@ -182,26 +183,34 @@ var baget = baget || {};  // encapsulating variable
 
 
 
+        var defineBodyClip = function (bodyClip,id,xStart,yStart,xEnd,yEnd) {
+
+            var defHolder = bodyClip.append("defs");
+
+            defHolder.append("clipPath")
+                .attr("id", id)
+                .append("rect")
+                .attr("x", xStart)
+                .attr("y", yStart)
+                .attr("width", xEnd)
+                .attr("height", yEnd);
+
+        };
+
+
 
         var createAxes = function (axisGroup,orgData,gridSize,xScale,yScale, width, height, margin) {
             // draw the x axis
-
-            var traitLocal = orgData.traitIDArray.map(function (d, i) {
-                return i * gridSize + 5;
-            });
+//
+//            var traitLocal = orgData.traitIDArray.map(function (d, i) {
+//                return i * gridSize + 5;
+//            });
 
 
             yAxis = d3.svg.axis()
                 .scale(yScale)
                 .orient('left')
                 .tickFormat(d3.requote(""));
-            //  .ticks(0)
-            //               .tickFormat   (d3.requote(""))
-//                .tickFormat(function(d,i) {
-//                    return orgData.traitIDArray[i];
-//                }) ;
-
-            //   .tickValues([10,100,500]);
 
             axisGroup.append('g')
                 .attr('id', 'yaxis')
@@ -267,21 +276,20 @@ var baget = baget || {};  // encapsulating variable
 
 
         var drawIcon  = function(parent){
-            var grid_size = Math.floor(width / 25);
+            var grid_size = Math.floor((height-margin.top-margin.bottom) / 25);
             parent
                 .attr("x1", function (d, i) {
                     return xScale(d.pos);
-                    // return xScale(d.v * grid_size + spaceForVariantLabel);
                 })
                 .attr("y1", function (d, i) {
-                    return d.t * grid_size ;
+                    return (maximumArrowSize/2)+(d.t * grid_size)-(arrowSize(d)/2) ;
                 })
                 .attr("x2", function (d, i) {
                     return xScale(d.pos);
                     // return xScale(d.v * grid_size + spaceForVariantLabel);
                 })
                 .attr("y2", function (d, i) {
-                    return (d.t * grid_size)+circle_size(d) ;
+                    return (maximumArrowSize/2)+(d.t * grid_size)+arrowSize(d) ;
                 })
                 .attr('stroke-width', 1)
                 .attr('class', function (d, i) {
@@ -302,11 +310,6 @@ var baget = baget || {};  // encapsulating variable
         var zoomed = function (local) {
 
             d3.select("#xaxis").call(xAxis);
-          //  d3.select("#yaxis").call(yAxis);
-//            var group = svg
-//                .selectAll('g.axesHolder');
-//            var rows = group.selectAll('g.cellr');
-//            rows.selectAll('line.cellg')
             d3.selectAll('.cellr').selectAll('line')
                 .call(drawIcon);
         };
@@ -321,18 +324,13 @@ var baget = baget || {};  // encapsulating variable
             var data = svg.data()[0].variants;
 
 
-            var grid_size = Math.floor(width / 25);
+            var grid_size = Math.floor((height-margin.top-margin.bottom) / 25);
 
             orgData = buildInternalRepresentation(data);
             var traitName = orgData.getTraitNameByTraitNumber;
 
             var expandedWidth = orgData.variantNameArray.length * grid_size;
             var expandedHeight = orgData.traitIDArray.length * grid_size;
-
-
-
-
-
 
 
             // create the scales
@@ -342,7 +340,7 @@ var baget = baget || {};  // encapsulating variable
 
             yScale = d3.scale.ordinal()
                 .domain([0,orgData.traitIDArray])
-                .range([ 0,height ]);
+                .range([ 0,(height-margin.top-margin.bottom)]);
 
             var zoom = d3.behavior.zoom()
                 .x(xScale)
@@ -350,6 +348,15 @@ var baget = baget || {};  // encapsulating variable
                 .on("zoom", zoomed);
 
             svg.call(zoom, drawIcon);
+
+            svg
+                .selectAll('g.bodyClip')
+                .data([1])
+                .enter()
+                .append('g')
+                .attr('class', 'bodyClip')
+                .call(defineBodyClip ,"bodyClip",margin.left,0,width-margin.left,height+margin.top);
+
 
             var group = svg
                 .selectAll('g.axesHolder')
@@ -402,19 +409,21 @@ var baget = baget || {};  // encapsulating variable
                 })
                 .style("text-anchor", "start");
 
+
+            var dataHolder = group
+                .selectAll('g.dataHolder')
+                .data([1])
+                .enter()
+                .append('g')
+                .attr('class', 'dataHolder');
+
+
             // All the traits for a single variant
-            var rows = group.selectAll('g.cellr')
+            var rows = dataHolder.selectAll('g.cellr')
                 .data(orgData.variantArrayOfArrayVariantPointers)
                 .enter()
                 .append('g')
-                .attr('class', 'cellr')
-
-
-
-
-
-
-
+                .attr('class', 'cellr') ;
 
             // Now draw something for each trait
             rows.selectAll('line.cg')
@@ -424,6 +433,7 @@ var baget = baget || {};  // encapsulating variable
                 .enter()
                 .append('line')
                 .attr('class','cg')
+                .attr("clip-path", "url(#bodyClip)")
                 .call(drawIcon);
 
         };
