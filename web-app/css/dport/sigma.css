@@ -4,17 +4,27 @@ html *
     font-weight: 100; !important;
 }
 
-.sigma-about {
-    background: #207cca;
-    background: -moz-linear-gradient(top,  #207cca 0%, #1e5799 99%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#207cca), color-stop(99%,#1e5799));
-    background: -webkit-linear-gradient(top,  #207cca 0%,#1e5799 99%);
-    background: -o-linear-gradient(top,  #207cca 0%,#1e5799 99%);
-    background: -ms-linear-gradient(top,  #207cca 0%,#1e5799 99%);
-    background: linear-gradient(to bottom,  #207cca 0%,#1e5799 99%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#207cca', endColorstr='#1e5799',GradientType=0 );
+a.sigma-link {
+    color: #406993;
+    font-weight: 700;
+}
 
+.sigma-about {
+    background-image: linear-gradient(#5F94C9, #275D90);
     height: 70px;
+}
+
+ul.publication-list {
+    list-style: none;
+}
+
+ul.publication-list li {
+    margin-bottom: 10px;
+}
+
+.sigma-topic {
+    color:#ffffff;
+    font-weight: 300;
 }
 
 .sigma-nav h1 {
@@ -23,27 +33,34 @@ html *
 }
 
 .sigma-data {
-    background: #a4b357;
-    background: -moz-linear-gradient(top,  #a4b357 0%, #75890c 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a4b357), color-stop(100%,#75890c));
-    background: -webkit-linear-gradient(top,  #a4b357 0%,#75890c 100%);
-    background: -o-linear-gradient(top,  #a4b357 0%,#75890c 100%);
-    background: -ms-linear-gradient(top,  #a4b357 0%,#75890c 100%);
-    background: linear-gradient(to bottom,  #a4b357 0%,#75890c 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a4b357', endColorstr='#75890c',GradientType=0 );
-
-    height: 70px
+    background-image: linear-gradient(#00A099, #007D78);
+    height: 70px;
 }
 
 .sigma-papers {
-    background: #f0b7a1;
-    background: -moz-linear-gradient(top, #f0b7a1 0%, #8c3310 99%, #752201 100%, #bf6e4e 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f0b7a1), color-stop(99%, #8c3310), color-stop(100%, #752201), color-stop(100%, #bf6e4e));
-    background: -webkit-linear-gradient(top, #f0b7a1 0%, #8c3310 99%, #752201 100%, #bf6e4e 100%);
-    background: -o-linear-gradient(top, #f0b7a1 0%, #8c3310 99%, #752201 100%, #bf6e4e 100%);
-    background: -ms-linear-gradient(top, #f0b7a1 0%, #8c3310 99%, #752201 100%, #bf6e4e 100%);
-    background: linear-gradient(to bottom, #f0b7a1 0%, #8c3310 99%, #752201 100%, #bf6e4e 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f0b7a1', endColorstr='#bf6e4e', GradientType=0);
-
+    background-image: linear-gradient(#7A1979, #621046);
     height: 70px;
+}
+
+.language-table * td {
+    font-weight: 300;
+}
+
+.valign {
+    float:none; !important;
+    display:inline-block; !important;
+    vertical-align:middle; !important;
+}
+
+.sigma-detail * {
+    font-weight: 300;
+}
+
+div.sigma-detail {
+    padding-top: 20px;padding-left: 50px;
+}
+
+h4.sigma-data-detail-section-header {
+    color:#38867F;
+    font-weight: 400;
 }

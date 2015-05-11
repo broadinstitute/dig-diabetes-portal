@@ -25,28 +25,28 @@
     </g:if>
 </div>
 
-<div class="container-fluid sigma-nav">
+<div class="container-fluid">
     <div class="row clearfix">
         <div class="col-md-2 col-xs-4">
             <!-- topics go here -->
             <g:if test="${params.section != 'about' && params.section != null}">
-                <div class="row clearfix">
-                    <div class="sigma-about text-center">
-                        <g:link params="[section: 'about']"><h1>About  ${language}</h1></g:link>
+                <div class="row clearfix sigma-about">
+                    <div class="text-center">
+                        <g:link params="[section: 'about']"><h2 class="sigma-topic">ABOUT</h2></g:link>
                     </div>
                 </div>
             </g:if>
             <g:if test="${params.section != 'data'}">
-                <div class="row clearfix">
-                    <div class="sigma-data text-center">
-                        <g:link params="[section: 'data']"><h1>Data</h1></g:link>
+                <div class="row clearfix sigma-data">
+                    <div class="text-center">
+                        <g:link params="[section: 'data']"><h2 class="sigma-topic">DATA</h2></g:link>
                     </div>
                 </div>
             </g:if>
             <g:if test="${params.section != 'papers'}">
-                <div class="row clearfix">
-                    <div class="sigma-papers text-center">
-                        <g:link params="[section: 'papers']"><h1>Papers</h1></g:link>
+                <div class="row clearfix sigma-papers">
+                    <div class="text-center">
+                        <g:link params="[section: 'papers']"><h2 class="sigma-topic">RESEARCH</h2></g:link>
                     </div>
                 </div>
             </g:if>

@@ -1,5 +1,9 @@
-<div class="row clearfix" style="background-color: #add8e6">
-    <p class="col-md-12 text-center">
-        06.09.15: SIGMA’s international web portal for data on the genetics of type 2 diabetes launches today! Click to learn more.
-    </p>
+<div class="row sigma-about" style="height: 35px;">
+    <h4 class="col-md-12 text-center"
+        style="font-weight: 200;
+        margin:0;
+        color:#ffffff;vertical-align: middle;">
+        <div style="display:inline-block;color:#93CDDD;">06.09.15:</div> SIGMA’s international web portal for data on the genetics of type 2 diabetes launches today!
+        <a href="" target="_blank" class="sigma-link" style="color:#93CDDD;font-weight: 100;">Click</a> to learn more.
+    </h4>
 </div>
