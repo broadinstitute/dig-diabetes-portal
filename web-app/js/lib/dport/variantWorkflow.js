@@ -10,35 +10,86 @@ var mpgSoftware = mpgSoftware || {};
         var currentInteractivity = 1, // 0->defining a filter, 1-> potentially manipulating our  list of existing filters
         activeColor = '#0008b',
         inactiveColor = '#808080';
+
         /***
          * private methods
          * @param indexNumber
          */
-        // getter/setter
+
+        /***
+         *   true implies emphasize blue box and deemphasize clause development area.
+         *   False implies deemphasize blue box and emphasize clause development area.
+         */
+        var emphasizeBlueBox = function(hoorayBlueBox){
+            if(hoorayBlueBox){
+                $('.bluebox').addClass('inputGoesHere');
+                $('.panel').removeClass('inputGoesHere');
+            }else {
+                $('.panel').addClass('inputGoesHere');
+                $('.bluebox').removeClass('inputGoesHere');
+            }
+
+        };
+        /***
+         * add standard state dependent message unless there is an override text (and then display the override)
+         */
+        var whatToDoNext = function(state, override){
+            var suggestionField = $('.suggestionsVariable');
+            if (typeof override !== 'undefined') {
+                suggestionField.text (override);
+            }else {
+                switch (state){
+                    case 0:
+                        suggestionField.text ('Choose a trait from the drop-down box');
+                        break;
+                    case 1:
+                        suggestionField.text ('Choose one of the available data sets');
+                        break;
+                    case 2:
+                        suggestionField.text ('Add additional filters, or else click Build request button');
+                        break;
+                    case 3:
+                        suggestionField.text ('Editing existing clause.');
+                        break;
+                    case 101:
+                        suggestionField.text ('Clause added.  You may edit, or remove a clause in the blue box, or else begin building an additional clause in the white box.');
+                        break;
+                    case 102:
+                        suggestionField.text ('Clause canceled.  You may edit, or remove a clause in the blue box, or else begin building an additional clause in the white box.');
+                        break;
+                    default:
+                        suggestionField.text ('');
+                        break;
+                }
+            }
+        };
+
+
         var existingFiltersManipulators = function(x){ // 0 deactivates, 1 activates
             var filterActivator = $('.filterActivator');
             if (x){
+                emphasizeBlueBox(true);
                 filterActivator.css('color',activeColor);
                 filterActivator.css('cursor', 'pointer');
             }else {
+                emphasizeBlueBox(false);
                 filterActivator.css('color',inactiveColor);
                 filterActivator.css('cursor', 'default');
             }
         };
         var numberExistingFilters = function (x){
             var filterCount = $('#totalFilterCount');
+            var returnValue = 0;
             if (!arguments.length) {//no argument, this is a getter call
-                var returnValue = 0;
                 if (typeof filterCount !== 'undefined') {
                     returnValue =  parseInt (filterCount.attr('value'));
                 }
-                return returnValue;
             } else {// we received an argument, treat this as a setter
                 if (typeof filterCount !== 'undefined') {
                     filterCount.attr('value',x)
                 }
             }
-
+            return returnValue;
         };
          var handleBlueBoxVisibility = function (){
             var blueBox = $('.bluebox');
@@ -48,7 +99,7 @@ var mpgSoftware = mpgSoftware || {};
                 blueBox.hide();
             }
         };
-        // getter/setter.
+         // getter/setter.
         // 0 === we are working on a single filter
         // 1 === all of the existing filters can be manipulated, since single filter is not in play
         var currentInteractivityState = function(newValue){
@@ -175,6 +226,7 @@ var mpgSoftware = mpgSoftware || {};
                 forgetThisFilter (filterIndex);
                 numberExistingFilters(numberExistingFilters()-1);
                 handleBlueBoxVisibility ();
+                whatToDoNext(102);
 
             }
         };
@@ -185,7 +237,7 @@ var mpgSoftware = mpgSoftware || {};
                 forgetThisFilter (filterIndex);
                 numberExistingFilters(numberExistingFilters()-1);
                 handleBlueBoxVisibility ();
-
+                whatToDoNext(3);
             }
         };
         var removeThisFilter = function (currentObject){
@@ -270,9 +322,19 @@ var mpgSoftware = mpgSoftware || {};
             UTILS.postQuery('./variantVWRequest',varsToSend);
         };
         var initializePage = function (){
-            handleBlueBoxVisibility ();
-            currentInteractivityState(1);
+            if (numberExistingFilters() > 0){
+                handleBlueBoxVisibility ();
+                currentInteractivityState(1);
+                whatToDoNext(101);
+                emphasizeBlueBox(true);
+            } else {
+                handleBlueBoxVisibility ();
+                currentInteractivityState(0);
+                whatToDoNext(0);
+                emphasizeBlueBox(false);
+            }
             $("#phenotype").prepend("<option value='' selected='selected'></option>");
+
         };
         return {
             cancelThisFieldCollection:cancelThisFieldCollection,
@@ -284,11 +346,35 @@ var mpgSoftware = mpgSoftware || {};
             removeThisFilter:removeThisFilter,
             existingFiltersManipulators:existingFiltersManipulators,
             currentInteractivityState:currentInteractivityState,
-            retrieveDataSets:retrieveDataSets
+            retrieveDataSets:retrieveDataSets,
+            whatToDoNext:whatToDoNext
         }
 
     }());
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /***
+     * lots of callbacks, and other methods that respond directly to user interaction
+     */
     mpgSoftware.firstResponders = (function () {
         /***
          * private
@@ -557,12 +643,14 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             $('#dataSetChooser').show ();
             $('#filterInstructions').text('Choose a sample set  (or click GO for all sample sets):');
             mpgSoftware.variantWF.currentInteractivityState(0);  // but the other widgets know that the user is working on a single filter
+            mpgSoftware.variantWF.whatToDoNext(1);
         };
 
         var respondToDataSetSelection = function (){
             $('#additionalFilterSelection').show ();
             $('#filterInstructions').text('Add filters, if any:');
             mpgSoftware.variantWF.currentInteractivityState(0);
+            mpgSoftware.variantWF.whatToDoNext(2);
         };
 
 
@@ -597,12 +685,20 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             var selection = choice.val();
             forceRequestForMoreFilters (selection, holder);
         };
+        var requestToAddFilters = function (){
+            console.log('hello');
+            var holder = $('#filterHolder');
+            var choice = $("#additionalFilters option:selected");
+            var selection = choice.val();
+            forceRequestForMoreFilters (selection, holder);
+        };
         return {
             respondToPhenotypeSelection:respondToPhenotypeSelection,
             respondToDataSetSelection:respondToDataSetSelection,
             respondToRequestForMoreFilters:respondToRequestForMoreFilters,
             displayDataSetChooser:displayDataSetChooser,
-            respondToReviseFilters:respondToReviseFilters
+            respondToReviseFilters:respondToReviseFilters,
+            requestToAddFilters:requestToAddFilters
         }
 
     }());

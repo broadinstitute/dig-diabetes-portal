@@ -9,6 +9,14 @@
 </head>
 
 <body>
+<style>
+.panel.inputGoesHere {
+    border: 2px solid #052090;
+}
+.bluebox.inputGoesHere {
+    border: 2px solid #052090;
+}
+</style>
 <script>
     $(document).ready(function (){
         mpgSoftware.variantWF.initializePage();

@@ -10,9 +10,9 @@
 }
 </style>
 <div class='suggestions'>
-    <div class="row clearfix">
+    <div class="row clearfix" style="margin-bottom: 15px;">
         <div class="col-sm-12">
-            <span>Possible next steps:<span class='suggestionsVariable'>text goes here</span></span>
+            <span>Possible next steps:&nbsp;<span class='suggestionsVariable'></span></span>
         </div>
     </div>
 </div>
