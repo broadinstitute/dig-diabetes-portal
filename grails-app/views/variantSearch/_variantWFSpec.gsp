@@ -11,6 +11,9 @@ span.dataSetChoice{
 .dataSetOptions {
     margin: 0px 20px 0 20px;
 }
+.addFilterButton{
+    background-color: #eee;
+}
 </style>
 
 <script>
@@ -135,7 +138,7 @@ span.dataSetChoice{
         %{--Here is the drop-down that we will use to choose additional filters--}%
         <div class="primarySectionSeparator" id="additionalFilterSelection" style="display:none">
             <div class="col-sm-offset-1 col-md-3" style="text-align: right">
-                <button type="button" class="btn btn-default btn-md"  onclick="mpgSoftware.firstResponders.requestToAddFilters()">
+                <button type="button" class="btn btn-default btn-md addFilterButton"  onclick="mpgSoftware.firstResponders.requestToAddFilters()">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;add additional filters:
                 </button>
                 %{--<button type="button" class="btn btn-default btn-lg"  onclick="console.log('wtf')">--}%
@@ -146,13 +149,13 @@ span.dataSetChoice{
             <div class="col-md-5">
                 <select name="additionalFilters" id="additionalFilters" size="3"
                         class="form-control btn-group btn-input clearfix">
-                    <option value="pvalue">p-value</option>
+                    <option value="pvalue" selected>p-value</option>
                     <option value="oddsratio">odds ratio</option>
                     <option value="effectsize">effect size</option>
                     <option value="gene">gene</option>
                     <option value="position">position</option>
                     <option value="predictedeffect">predicted effect on protein</option>
-                    <option value="dataset">data set</option>
+                    <option value="ethnicity">continental ancestry</option>
                 </select>
 
             </span>

@@ -71,6 +71,17 @@ class GeneController {
 
 
 
+    def geneInfoCounts() {
+        String geneToStartWith = params.geneName
+        String pValue = params.pValue
+        if ((geneToStartWith) && (pValue))      {
+            JSONObject jsonObject =  restServerService.variantCountByGeneNameAndPValue (geneToStartWith.trim().toUpperCase(),pValue)
+            render(status:200, contentType:"application/json") {
+                [geneInfo:jsonObject['gene-info']]
+            }
+
+        }
+    }
 
 
 

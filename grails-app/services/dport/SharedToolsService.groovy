@@ -27,6 +27,7 @@ class SharedToolsService {
     Integer showSigma = -1
     Integer showGene = -1
     Integer showBeacon = -1
+    Integer showNewApi = -1
 
     String warningText = ""
 
@@ -63,6 +64,8 @@ class SharedToolsService {
         showSigma = (grailsApplication.config.portal.sections.show_sigma)?1:0
         showGene = (grailsApplication.config.portal.sections.show_gene)?1:0
         showBeacon = (grailsApplication.config.portal.sections.show_beacon)?1:0
+        showNewApi = (grailsApplication.config.portal.sections.show_new_api)?1:1
+
     }
 
     public enum TypeOfSection {
@@ -145,6 +148,17 @@ class SharedToolsService {
     public Boolean getApplicationIsBeacon() {
         return ((showBeacon)   &&
                 (!showSigma) )
+    }
+
+
+
+    public Boolean getNewApi() {
+        return (showNewApi==1)
+    }
+
+
+    public void setNewApi(showNewApi) {
+        this.showNewApi=showNewApi
     }
 
 

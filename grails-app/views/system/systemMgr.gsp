@@ -241,6 +241,66 @@
             </g:form>
 
 
+
+
+            <div class="separator"></div>
+
+
+            <g:form action='updateApiLevel' method='POST' class='form form-horizontal cssform' autocomplete='off'>
+                <h4>We can use the new API whenever possible, or we can funnel everything through the old API</h4>
+                <div class="row clearfix">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <div id="alternate-api-form">
+
+
+                            <div class="radio">
+                                <label>
+                                    <input id="newApi" type="radio" name="datatype" value="newApi"  <%=(newApi==1)?'checked':''%> />
+                                    Use the new API whenever possible
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input id="oldApi" type="radio" name="datatype" value="oldApi" <%=(newApi==0)?'checked':''%> />
+                                   Use our older API under all circumstances
+                                </label>
+                            </div>
+                         </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <div class="row clearfix">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <div >
+                            <div style="text-align:center; padding-top: 20px;">
+                                <input class="btn btn-primary btn-lg" type='submit' id="submitAlternateApi"
+                                       value='Commit'/>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row clearfix">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div >
+                            <g:if test='${flash.message}'>
+                                <div class="alert alert-danger">${flash.message}</div>
+                            </g:if>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+
+                </div>
+            </g:form>
+
+
+
+
+
             <div class="separator"></div>
 
             <g:form action='updateWarningText' method='POST' class='form form-horizontal cssform' autocomplete='off'>

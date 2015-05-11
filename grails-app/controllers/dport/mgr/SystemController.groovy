@@ -45,7 +45,8 @@ class SystemController {
         render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
                 currentRestServer:restServerService.currentRestServer(),
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
-                                          helpTextLevel:sharedToolsService.getHelpTextSetting()])
+                                          helpTextLevel:sharedToolsService.getHelpTextSetting(),
+                                          newApi:sharedToolsService.getNewApi()])
 
     }
 
@@ -80,7 +81,35 @@ class SystemController {
         render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
                                           currentRestServer:restServerService.currentRestServer(),
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
-                                          helpTextLevel:sharedToolsService.getHelpTextSetting()])
+                                          helpTextLevel:sharedToolsService.getHelpTextSetting(),
+                                          newApi:sharedToolsService.getNewApi()])
+    }
+
+
+
+    def updateApiLevel() {
+        String apiSetting = params.datatype
+        Boolean currentApiSetting = sharedToolsService.getNewApi ()
+        if (apiSetting == 'newApi') {
+            if (!(currentApiSetting == 0)) {
+                sharedToolsService.setNewApi(1)
+                flash.message = "You have turned on the new API"
+            } else {
+                flash.message = "But the new API was already turned on!"
+            }
+        } else if (apiSetting == 'oldApi') {
+            if (!(currentApiSetting == 1)) {
+                sharedToolsService.setNewApi(0)
+                flash.message = "you have turned to the old API"
+            } else {
+                flash.message = "But you were already using the old API!"
+            }
+        }
+        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
+                                          currentRestServer:restServerService.currentRestServer(),
+                                          currentApplicationIsSigma:sharedToolsService.applicationName(),
+                                          helpTextLevel:sharedToolsService.getHelpTextSetting(),
+                                          newApi:sharedToolsService.getNewApi()])
     }
 
 
@@ -142,7 +171,8 @@ class SystemController {
         render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
                                           currentRestServer:restServerService.currentRestServer(),
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
-                                          helpTextLevel:sharedToolsService.getHelpTextSetting()])
+                                          helpTextLevel:sharedToolsService.getHelpTextSetting(),
+                                          newApi:sharedToolsService.getNewApi()])
     }
 
     def switchSigmaT2d(){
@@ -167,7 +197,8 @@ class SystemController {
         render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
                                           currentRestServer:restServerService.currentRestServer(),
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
-                                          helpTextLevel:sharedToolsService.getHelpTextSetting()])
+                                          helpTextLevel:sharedToolsService.getHelpTextSetting(),
+                                          newApi:sharedToolsService.getNewApi()])
     }
 
 
@@ -176,7 +207,8 @@ class SystemController {
         render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
                                           currentRestServer:restServerService.currentRestServer(),
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
-                                          helpTextLevel:sharedToolsService.getHelpTextSetting()])
+                                          helpTextLevel:sharedToolsService.getHelpTextSetting(),
+                                          newApi:sharedToolsService.getNewApi()])
     }
 
 }

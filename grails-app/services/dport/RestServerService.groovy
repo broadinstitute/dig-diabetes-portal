@@ -29,6 +29,7 @@ class RestServerService {
     private  String TRAIT_INFO_URL = "trait-info"
     private  String VARIANT_SEARCH_URL = "variant-search"
     private  String TRAIT_SEARCH_URL = "trait-search"
+    private  String GET_DATA_URL = "getData"
     private  String DBT_URL = ""
     private  String EXPERIMENTAL_URL = ""
 
@@ -813,6 +814,22 @@ ${customFilterSet}""".toString()
                     ourNumbers["endExtent"])
         }
         return returnValue
+    }
+
+
+
+    public JSONObject variantCountByGeneNameAndPValue(){
+        String geneCount = """
+
+"""
+        postRestCallExperimental(geneCount,GET_DATA_URL)
+        LinkedHashMap<String, Integer> ourNumbers = extractNumbersWeNeed(userSpecifiedString)
+
+            returnValue = searchForTraitBySpecifiedRegion(ourNumbers["chromosomeNumber"],
+                    ourNumbers["startExtent"],
+                    ourNumbers["endExtent"])
+        return returnValue
+
     }
 
 
