@@ -237,6 +237,7 @@ var mpgSoftware = mpgSoftware || {};
                 forgetThisFilter (filterIndex);
                 numberExistingFilters(numberExistingFilters()-1);
                 handleBlueBoxVisibility ();
+                $('#additionalFilterSelection').show ();
                 whatToDoNext(3);
             }
         };
