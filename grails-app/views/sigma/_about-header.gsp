@@ -1,4 +1,4 @@
-<div class="row clearfix sigma-about">
+<div class="row clearfix sigma-about-gradient">
     <div class="col-md-2 col-xs-4 text-center">
        <h2 class="sigma-topic"><g:message code="sigmasite.about"></g:message></h2>
     </div>

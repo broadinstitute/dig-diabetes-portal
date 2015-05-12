@@ -26,11 +26,11 @@
 </div>
 
 <div class="container-fluid">
-    <div class="row clearfix">
+    <div class="row">
         <div class="col-md-2 col-xs-4">
             <!-- topics go here -->
             <g:if test="${params.section != 'about' && params.section != null}">
-                <div class="row clearfix sigma-about">
+                <div class="row sigma-about-gradient">
                     <div class="text-center">
                         <g:link params="[section: 'about']"><h2 class="sigma-topic">ABOUT</h2></g:link>
                     </div>
@@ -52,7 +52,7 @@
             </g:if>
 
         </div>
-        <div class="col-md-9">
+        <div class="col-md-10 col-xs-8">
             <g:if test="${params.section == 'data'}">
                 <g:render template="data"/>
             </g:if>

@@ -1,11 +1,12 @@
-<div class="container-fluid" style="height: 120px;">
+
     <div class="row clearfix">
         <!-- todo pull out vertical alignment style -->
         <div class="col-md-2"
              style="float:none;
              display:inline-block;
              vertical-align:middle;">
-            <img src="${resource(dir: 'images/icons', file: 'SlimSigmaLogo234fromai-outlines.jpg')}"
+            <img class="visible-md visible-lg visible-sm"
+                 src="${resource(dir: 'images/icons', file: 'SlimSigmaLogo234fromai-outlines.jpg')}"
                  alt="SIGMA logo"/>
         </div>
         <div class="col-md-7" style="float:none;
@@ -53,4 +54,3 @@
             </table>
         </div>
     </div>
-</div>

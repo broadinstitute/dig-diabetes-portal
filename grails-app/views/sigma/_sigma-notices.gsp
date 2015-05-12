@@ -1,4 +1,4 @@
-<div class="row sigma-about" style="height: 35px;">
+<div class="row sigma-about-gradient" style="padding-bottom: 5px;">
     <h4 class="col-md-12 text-center"
         style="font-weight: 200;
         margin:0;

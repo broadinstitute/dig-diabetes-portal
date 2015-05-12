@@ -1,18 +1,55 @@
-<h4 style="font-weight: 300;">
-The SIGMA consortium has made major discoveries about the genetics and biology of type 2 diabetes.
-</h4>
+<div class="sigma-detail">
+    <h4>
+        <g:message code="sigmasite.papers.leadin"></g:message>
+    </h4>
 
-<h4 style="color:#691640">Publications</h4>
+    <h3 style="color:#691640;font-weight: 400;"><g:message code="sigmasite.publications" /></h3>
 
     <div style="font-weight: 400">
         <ul class="publication-list">
 
             <li>
-                <a class="sigma-link" href="http://www.cell.com/cell-metabolism/abstract/S1550-4131%2815%2900109-6">Cell Metabolism, April 2015:</a> IGF2BP2/IMP2-Deficient Mice Resist Obesity through Enhanced Translation of Ucp1 mRNA and Other mRNAs Encoding Mitochondrial Proteins.
+                <h4><g:message code="sigmasite.paper1.sourcedate" /><a href="https://www.broadinstitute.org/publications/broad6721" target="_blank" class="sigma-link">
+                <g:message code="sigmasite.paper1.title"></g:message></a></h4>
             </li>
 
             <li>
-                <a class="sigma-link" href="http://www.cell.com/cell-metabolism/abstract/S1550-4131%2815%2900109-6">Cell Metabolism, April 2015:</a> IGF2BP2/IMP2-Deficient Mice Resist Obesity through Enhanced Translation of Ucp1 mRNA and Other mRNAs Encoding Mitochondrial Proteins.
+                <h4><g:message code="sigmasite.paper2.sourcedate" /><a href="https://www.broadinstitute.org/publications/broad6374" target="_blank" class="sigma-link">
+                    <g:message code="sigmasite.paper2.title" /></a></h4>
             </li>
-    </ul>
+
+            <li>
+                <h4><g:message code="sigmasite.paper3.sourcedate" /><a href="https://www.broadinstitute.org/publications/broad6010" target="_blank" class="sigma-link">
+                    <g:message code="sigmasite.paper3.title" /></a></h4>
+            </li>
+
+            <li>
+                <h4><g:message code="sigmasite.paper4.sourcedate" /><a href="https://www.broadinstitute.org/publications/broad5805" target="_blank" class="sigma-link">
+                    <g:message code="sigmasite.paper4.title" /></a></h4>
+            </li>
+
+            <li>
+                <h4><g:message code="sigmasite.paper5.sourcedate" /> <a href="https://www.broadinstitute.org/publications/broad5433" target="_blank" class="sigma-link">
+                    <g:message code="sigmasite.paper5.title" /></a></h4>
+            </li>
+        </ul>
+
+        </div>
+        <h3 style="color:#691640;font-weight: 400;"><g:message code="sigmasite.newsstories" /></h3>
+
+        <div style="font-weight: 400">
+            <ul class="publication-list">
+                <li>
+                    <h4><g:message code="sigmasite.story1.sourcedate" /><a href="https://www.broadinstitute.org/news/5804" target="_blank" class="sigma-link">
+                        <g:message code="sigmasite.story1.title" /></a></h4>
+                </li>
+
+                <li>
+                    <h4><g:message code="sigmasite.story2.sourcedate" /> <a href="https://www.broadinstitute.org/news/5413" target="_blank" class="sigma-link">
+                        <g:message code="sigmasite.story2.title" /></a></h4>
+                </li>
+
+            </ul>
+
+        </div>
 </div>
