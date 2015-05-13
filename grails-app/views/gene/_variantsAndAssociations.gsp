@@ -22,16 +22,16 @@
 
 
 <g:javascript>
-
-var nominalWideSignificance = function(total,gwasSignificance,locus){
-   $.ajax({
+$.ajax({
     cache: false,
     type: "post",
-    url: "${createLink(controller:'gene',action: 'geneInfoCounts')}",
-    data: {geneName: '<%=geneName%>',pValue:'0.0001',dataSet:'1'},
+    url: "${createLink(controller:'gene',action: 'genepValueCounts')}",
+    data: {geneName: '<%=geneName%>'},
         async: true,
         success: function (data) {
-            var variantsAndAssociationsTableHeaders = {
+
+
+                    var variantsAndAssociationsTableHeaders = {
                 hdr1:'<g:message code="gene.variantassociations.table.colhdr.1" default="data type" />',
                 hdr2:'<g:message code="gene.variantassociations.table.colhdr.2" default="sample size" />',
                 hdr3:'<g:message code="gene.variantassociations.table.colhdr.3" default="total variants" />',
@@ -89,89 +89,47 @@ var nominalWideSignificance = function(total,gwasSignificance,locus){
                         '<g:helpText title="gene.continentalancestry.datatype.exomeChip.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.datatype.exomeChip.help.text"/>'
 
             };
-            mpgSoftware.geneInfo.fillTheVariantAndAssociationsTableFromNewApi(data,
-    ${show_gwas},
-    ${show_exchp},
-    ${show_exseq},
-    ${show_sigma},
-                    '<g:createLink controller="region" action="regionInfo" />',
-                    '<g:createLink controller="trait" action="traitSearch" />',
-                    '<g:createLink controller="variantSearch" action="gene" />',
-                    {variantsAndAssociationsTableHeaders:variantsAndAssociationsTableHeaders,
-                     variantsAndAssociationsPhenotypeAssociations:variantsAndAssociationsPhenotypeAssociations,
-                     biologicalHypothesisTesting:biologicalHypothesisTesting,
-                     variantsAndAssociationsRowHelpText: variantsAndAssociationsRowHelpText,
-                     continentalAncestryText: continentalAncestryText},
-            '9',1,100,
-            total,gwasSignificance,locus,data.geneInfo.numRecords,
-            total,gwasSignificance,locus,data.geneInfo.numRecords,
-            total,gwasSignificance,locus,data.geneInfo.numRecords,
-            total,gwasSignificance,locus,data.geneInfo.numRecords,'<%=geneName%>'
+
+
+            if ((typeof data !== 'undefined') &&
+                (data)){
+                    if ((data.geneInfo) &&
+                        (data.geneInfo.results)){//assume we have data and process it
+                          var collector = {}
+                          for (var i = 0 ; i < data.geneInfo.results.length ; i++) {
+                               var d = [];
+                               for (var j = 0 ; j < data.geneInfo.results[i].pVals.length ; j++ ){
+                                  var contents={};
+                                  contents["level"] = data.geneInfo.results[i].pVals[j].level;
+                                  contents["count"] = data.geneInfo.results[i].pVals[j].count;
+                                  d.push(contents);
+                               }
+                               collector["d"+i] = d;
+                            }
+
+                            mpgSoftware.geneInfo.fillTheVariantAndAssociationsTableFromNewApi(data,
+                                ${show_gwas},
+                                ${show_exchp},
+                                ${show_exseq},
+                                ${show_sigma},
+                                '<g:createLink controller="region" action="regionInfo" />',
+                                '<g:createLink controller="trait" action="traitSearch" />',
+                                '<g:createLink controller="variantSearch" action="gene" />',
+                                {variantsAndAssociationsTableHeaders:variantsAndAssociationsTableHeaders,
+                                 variantsAndAssociationsPhenotypeAssociations:variantsAndAssociationsPhenotypeAssociations,
+                                 biologicalHypothesisTesting:biologicalHypothesisTesting,
+                                 variantsAndAssociationsRowHelpText: variantsAndAssociationsRowHelpText,
+                                 continentalAncestryText: continentalAncestryText},
+                                '9',1,100,
+                                collector["d0"][0].count,collector["d0"][1].count,collector["d0"][2].count,collector["d0"][3].count,
+                                collector["d0"][0].count,collector["d0"][1].count,collector["d0"][2].count,collector["d0"][3].count,
+                                collector["d0"][0].count,collector["d0"][1].count,collector["d0"][2].count,collector["d0"][3].count,
+                                collector["d0"][0].count,collector["d0"][1].count,collector["d0"][2].count,collector["d0"][3].count,
+                                '<%=geneName%>'
             );
-            },
-        error: function (jqXHR, exception) {
-            loading.hide();
-            core.errorReporter(jqXHR, exception);
-        }
-    });
-};
 
-var locusWideSignificance = function(total,gwasSignificance){
-   $.ajax({
-    cache: false,
-    type: "post",
-    url: "${createLink(controller:'gene',action: 'geneInfoCounts')}",
-    data: {geneName: '<%=geneName%>',pValue:'0.0001',dataSet:'1'},
-        async: true,
-        success: function (data) {
-            if ((typeof data !== 'undefined') &&
-                (data)){
-                    if (data.geneInfo.is_error=== false){
-                       nominalWideSignificance(total,gwasSignificance,data.geneInfo.numRecords);
-                    }
-                }
-        },
-        error: function (jqXHR, exception) {
-            loading.hide();
-            core.errorReporter(jqXHR, exception);
-        }
-    });
-};
 
-var genomeWideSignificance = function(total){
-   $.ajax({
-    cache: false,
-    type: "post",
-    url: "${createLink(controller:'gene',action: 'geneInfoCounts')}",
-    data: {geneName: '<%=geneName%>',pValue:'0.00000005',dataSet:'1'},
-        async: true,
-        success: function (data) {
-            if ((typeof data !== 'undefined') &&
-                (data)){
-                    if (data.geneInfo.is_error=== false){
-                       locusWideSignificance(total,data.geneInfo.numRecords);
-                    }
-                }
-        },
-        error: function (jqXHR, exception) {
-            loading.hide();
-            core.errorReporter(jqXHR, exception);
-        }
-    });
-};
-
-$.ajax({
-    cache: false,
-    type: "post",
-    url: "${createLink(controller:'gene',action: 'geneInfoCounts')}",
-    data: {geneName: '<%=geneName%>',pValue:'1',dataSet:'1'},
-        async: true,
-        success: function (data) {
-            if ((typeof data !== 'undefined') &&
-                (data)){
-                    if (data.geneInfo.is_error=== false){
-                       genomeWideSignificance(data.geneInfo.numRecords);
-                    }
+                        }
                 }
         },
         error: function (jqXHR, exception) {

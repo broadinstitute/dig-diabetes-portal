@@ -101,8 +101,17 @@ class GeneController {
     }
 
 
+    def genepValueCounts() {
+        String geneToStartWith = params.geneName
+        JSONObject jsonObject =  restServerService.combinedVariantCountByGeneNameAndPValue ( geneToStartWith.trim().toUpperCase())
+        render(status:200, contentType:"application/json") {
+            [geneInfo:jsonObject]
+        }
+    }
 
-    /***
+
+
+        /***
      *
      * @return
      */

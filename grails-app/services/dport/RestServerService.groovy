@@ -869,16 +869,33 @@ ${customFilterSet}""".toString()
      * @return
      */
     public JSONObject combinedVariantCountByGeneNameAndPValue(String geneName){
-        List <BigDecimal> pValueList = [0.00000005, 0.0001, 0.05]
+        JSONObject returnValue
+        List <Integer> dataSeteList = [1]
+        List <BigDecimal> pValueList = [1,0.00000005, 0.0001, 0.05]
+        StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()
-        for (pValue in pValueList){
-            String jsonSpec = requestGeneCountByPValue( geneName,  pValue,  dataSet)
-            if (jsonSpec.is_error == false){
-
+        for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
+            sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
+            for ( int  i = 0 ; i < pValueList.size () ; i++ ){
+                sb  << "{"
+                 String jsonSpec = requestGeneCountByPValue(geneName, pValueList[i], dataSeteList[j])
+                JSONObject apiData = postRestCall(jsonSpec,GET_DATA_URL)
+                if (apiData.is_error == false) {
+                    sb  << "\"level\":${pValueList[i]},\"count\":${apiData.numRecords}"
+                }
+                sb  << "}"
+                if (i<pValueList.size ()-1){
+                    sb  << ","
+                }
+            }
+            sb  << "]}"
+            if (j<dataSeteList.size ()-1){
+                sb  << ","
             }
         }
-
-        return postRestCall(jsonSpec,GET_DATA_URL)
+        sb  << "]}"
+        returnValue = slurper.parseText(sb.toString())
+        return returnValue
     }
 
 
