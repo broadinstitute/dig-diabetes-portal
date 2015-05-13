@@ -1,6 +1,7 @@
 package dport
 
 import grails.plugin.springsecurity.annotation.Secured
+import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
 
@@ -9,6 +10,7 @@ class GeneController {
     RestServerService restServerService
     GeneManagementService geneManagementService
     SharedToolsService sharedToolsService
+    private static final log = LogFactory.getLog(this)
 
 
     /***
@@ -74,10 +76,25 @@ class GeneController {
     def geneInfoCounts() {
         String geneToStartWith = params.geneName
         String pValue = params.pValue
-        if ((geneToStartWith) && (pValue))      {
-            JSONObject jsonObject =  restServerService.variantCountByGeneNameAndPValue (geneToStartWith.trim().toUpperCase(),pValue)
+        String dataSet = params.dataSet
+        if ((geneToStartWith) && (pValue) && (dataSet))      {
+            BigDecimal pValNumber
+            Integer dataSetInteger
+            try {
+                pValNumber = new BigDecimal(pValue);
+            }catch (Exception e){
+                log.error("ERROR: invalid P value = '${pValue}")
+            }
+            try {
+                dataSetInteger = new Integer(dataSet);
+            }catch (Exception e){
+                log.error("ERROR: invalid P value = '${dataSet}")
+            }
+            JSONObject jsonObject =  restServerService.variantCountByGeneNameAndPValue ( geneToStartWith.trim().toUpperCase(),
+                                                                                         pValNumber,
+                                                                                         dataSetInteger )
             render(status:200, contentType:"application/json") {
-                [geneInfo:jsonObject['gene-info']]
+                [geneInfo:jsonObject]
             }
 
         }

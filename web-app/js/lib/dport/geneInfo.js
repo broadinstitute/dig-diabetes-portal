@@ -440,25 +440,29 @@ var mpgSoftware = mpgSoftware || {};
                 displayableContents + "</a>");
             return  returnValue;
         };
-        var fillVariantsAndAssociationLine = function (geneInfo,// our gene record
+        var fillVariantsAndAssociationLine = function (geneName,// our gene record
                                                        dataSetName,// code for data set -- must be gwas,exomechip,exomeseq,or sigma
                                                        sampleSize, // listed sample size for this data set
                                                        genomicRegion, // region specified as in this example: chr1:209348715-210349783
-                                                       totalVariantsFieldIdentifier, // where in the gen record do we find the total number of variants
-                                                       genomeWideFieldIdentifier, // where in the gen record do we find the number of genome wide significant variants
-                                                       locusWideFieldIdentifier, // where in the gen record do we find the number of locus wide variants
-                                                       nominalFieldIdentifier,  // where in the gen record do we find the number of nominally significance variants
+                                                       totalVariants,
+                                                       genomeWideVariants,
+                                                       locusWideVariants,
+                                                       nominallySignificantVariants,
+//                                                       totalVariantsFieldIdentifier, // where in the gen record do we find the total number of variants
+//                                                       genomeWideFieldIdentifier, // where in the gen record do we find the number of genome wide significant variants
+//                                                       locusWideFieldIdentifier, // where in the gen record do we find the number of locus wide variants
+//                                                       nominalFieldIdentifier,  // where in the gen record do we find the number of nominally significance variants
                                                        anchorBuildingFunction,  // which anchor building function should we use
                                                        emphasizeGwas,    // 0->no emphasis, 1-> Emphasize middle row, 2-> Emphasize bottom row
                                                        rootVariantUrl, // root URL is the basis for callbacks
                                                        rowHelpText) { // help text for each row
-            if (geneInfo) {
-                var geneName = geneInfo["ID"];
+            if (geneName) {
+                //var geneName = geneInfo["ID"];
                 var dataSetNameForUser;
                 switch (dataSetName) {
                     case 'gwas':
                         dataSetNameForUser = rowHelpText.genomeWide+
-                                             rowHelpText.genomeWideQ;
+                            rowHelpText.genomeWideQ;
                         break;
                     case 'exomechip':
                         dataSetNameForUser = rowHelpText.exomeChip+
@@ -475,10 +479,10 @@ var mpgSoftware = mpgSoftware || {};
                     default:
                         dataSetNameForUser = 'unknown';
                 }
-                var totalVariants = geneFieldOrZero(geneInfo, totalVariantsFieldIdentifier);
-                var genomeWideVariants = geneFieldOrZero(geneInfo, genomeWideFieldIdentifier);
-                var locusWideVariants = geneFieldOrZero(geneInfo, locusWideFieldIdentifier);
-                var nominallySignificantVariants = geneFieldOrZero(geneInfo, nominalFieldIdentifier);
+//                var totalVariants = geneFieldOrZero(geneInfo, totalVariantsFieldIdentifier);
+//                var genomeWideVariants = geneFieldOrZero(geneInfo, genomeWideFieldIdentifier);
+//                var locusWideVariants = geneFieldOrZero(geneInfo, locusWideFieldIdentifier);
+//                var nominallySignificantVariants = geneFieldOrZero(geneInfo, nominalFieldIdentifier);
                 var tableRow = '';
                 tableRow += '<tr>' +
                     '<td>' + dataSetNameForUser + '</td>' +
@@ -532,12 +536,18 @@ var mpgSoftware = mpgSoftware || {};
                 $('#variantsAndAssociationsHead').append(headerRow);
                 if (show_gwas) {
                     fillVariantsAndAssociationLine(geneInfo, 'gwas', '69,033', regionSpecifier,
-                        geneInfoJsonMap.fieldSymbol().GWAS_T2D_VAR_TOTAL, geneInfoJsonMap.fieldSymbol().GWAS_T2D_GWS_TOTAL, geneInfoJsonMap.fieldSymbol().GWAS_T2D_LWS_TOTAL, geneInfoJsonMap.fieldSymbol().GWAS_T2D_NOM_TOTAL,
+                        geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol().GWAS_T2D_VAR_TOTAL),
+                        geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol().GWAS_T2D_GWS_TOTAL),
+                        geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol().GWAS_T2D_LWS_TOTAL),
+                        geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol().GWAS_T2D_NOM_TOTAL),
                         buildAnchorForRegionVariantSearches, emphasizeGwas, rootVariantUrl,rowHelpText);
                 }
                 if (show_exchp) {
                     fillVariantsAndAssociationLine(geneInfo, 'exomechip', '79,854', regionSpecifier,
-                        geneInfoJsonMap.fieldSymbol().EXCHP_T2D_VAR_TOTALS_EU_TOTAL, geneInfoJsonMap.fieldSymbol().EXCHP_T2D_GWS_TOTAL, geneInfoJsonMap.fieldSymbol().EXCHP_T2D_LWS_TOTAL, geneInfoJsonMap.fieldSymbol().EXCHP_T2D_NOM_TOTAL,
+                        geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol().EXCHP_T2D_VAR_TOTALS_EU_TOTAL),
+                        geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol().EXCHP_T2D_GWS_TOTAL),
+                        geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol().EXCHP_T2D_LWS_TOTAL),
+                        geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol().EXCHP_T2D_NOM_TOTAL),
                         buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl,rowHelpText);
                 }
                 if (show_exseq) {
@@ -547,7 +557,10 @@ var mpgSoftware = mpgSoftware || {};
                         }
                     }
                     fillVariantsAndAssociationLine(geneInfo, 'exomeseq', '12,940', regionSpecifier,
-                        geneInfoJsonMap.fieldSymbol()._13k_T2D_VAR_TOTAL, geneInfoJsonMap.fieldSymbol()._13k_T2D_GWS_TOTAL, geneInfoJsonMap.fieldSymbol()._13k_T2D_LWS_TOTAL, geneInfoJsonMap.fieldSymbol()._13k_T2D_NOM_TOTAL,
+                        geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol()._13k_T2D_VAR_TOTAL),
+                        geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol()._13k_T2D_GWS_TOTAL),
+                        geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol()._13k_T2D_LWS_TOTAL),
+                        geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol()._13k_T2D_NOM_TOTAL),
                         buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl,rowHelpText);
                 }
                 if (show_sigma) {
@@ -555,12 +568,83 @@ var mpgSoftware = mpgSoftware || {};
                         emphasizeGwas = 2;
                     }
                     fillVariantsAndAssociationLine(geneInfo, 'sigma', '8,658', regionSpecifier,// is there a SIGMA_T2D_LWS_TOTAL?
-                        geneInfoJsonMap.fieldSymbol().SIGMA_T2D_VAR_TOTAL, geneInfoJsonMap.fieldSymbol().SIGMA_T2D_GWS_TOTAL, geneInfoJsonMap.fieldSymbol().SIGMA_T2D_NOM_TOTAL, geneInfoJsonMap.fieldSymbol().SIGMA_T2D_NOM_TOTAL,
+                        geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol().SIGMA_T2D_VAR_TOTAL),
+                        geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol().SIGMA_T2D_GWS_TOTAL),
+                        geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol().SIGMA_T2D_NOM_TOTAL),
+                        geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol().SIGMA_T2D_NOM_TOTAL),
                         buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl,rowHelpText);
                 }
 
             }
         };
+
+
+
+        var fillVariantsAndAssociationsTable = function (emphasisRequired,show_gwas, show_exchp, show_exseq, show_sigma, rootVariantUrl, headers,rowHelpText,
+                                                         chromosomeNumber,extentBegin,extentEnd,
+                                                         gwasTotal,gwasGenomeWide,gwasLocusWide,gwasNominal,
+                                                         exChipTotal,exChipGenomeWide,exChipLocusWide,exChipNominal,
+                                                         exSeqTotal,exSeqGenomeWide,exSeqLocusWide,exSeqNominal,
+                                                         sigmaTotal,sigmaGenomeWide,sigmaLocusWide,sigmaNominal,
+                                                         geneName) {
+
+//            var regionSpecifier = "chr" + geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().CHROM) + ":" +
+//                expandRegionBegin(geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().BEG)) + "-" +
+//                expandRegionEnd(geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().END));
+            var geneInfo;
+            var regionSpecifier = "chr" + chromosomeNumber + ":" +
+                extentBegin + "-" +
+                extentEnd;
+
+           // var emphasisRequired = emphasisRecommended(geneInfo);
+            var emphasizeGwas = (emphasisRequired ? 1 : 0);
+            var headerRow = "<tr>" +
+                "<th>" + headers.hdr1 + "</th>" +
+                "<th>" + headers.hdr2 + "</th>" +
+                "<th>" + headers.hdr3 + "</th>";
+            if (emphasizeGwas) {
+                headerRow += "<th class='emphasizedTop' style='border-top: 3px solid #ee0'>";
+            } else {
+                headerRow += "<th>";
+            }
+            headerRow += headers.hdr4 + "</th>" +
+                "<th>" + headers.hdr5 + "</th>" +
+                "<th>" + headers.hdr6 + "</th>" +
+                "</tr>";
+            $('#variantsAndAssociationsHead').append(headerRow);
+            if (show_gwas) {
+                fillVariantsAndAssociationLine(geneName, 'gwas', '69,033', regionSpecifier,
+                    gwasTotal,gwasGenomeWide,gwasLocusWide,gwasNominal,
+                    buildAnchorForRegionVariantSearches, emphasizeGwas, rootVariantUrl,rowHelpText);
+            }
+            if (show_exchp) {
+                fillVariantsAndAssociationLine(geneName, 'exomechip', '79,854', regionSpecifier,
+                    exChipTotal,exChipGenomeWide,exChipLocusWide,exChipNominal,
+                    buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl,rowHelpText);
+            }
+            if (show_exseq) {
+                if (emphasisRequired) {
+                    if (!show_sigma) {
+                        emphasizeGwas = 2;
+                    }
+                }
+                fillVariantsAndAssociationLine(geneName, 'exomeseq', '12,940', regionSpecifier,
+                    exSeqTotal,exSeqGenomeWide,exSeqLocusWide,exSeqNominal,
+                    buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl,rowHelpText);
+            }
+            if (show_sigma) {
+                if (emphasisRequired) {
+                    emphasizeGwas = 2;
+                }
+                fillVariantsAndAssociationLine(geneName, 'sigma', '8,658', regionSpecifier,// is there a SIGMA_T2D_LWS_TOTAL?
+                    sigmaTotal,sigmaGenomeWide,sigmaLocusWide,sigmaNominal,
+                    buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl,rowHelpText);
+            }
+
+        };
+
+
+
 
         var fillUpBarChart = function (peopleWithDiseaseNumeratorString, peopleWithDiseaseDenominatorString, peopleWithoutDiseaseNumeratorString, peopleWithoutDiseaseDenominatorString) {
             var peopleWithDiseaseDenominator,
@@ -750,19 +834,81 @@ var mpgSoftware = mpgSoftware || {};
                 rootTraitUrl,
                 rootVariantUrl,
                 textStringObject.variantsAndAssociationsPhenotypeAssociations);
-            fillVariantsAndAssociations(rawGeneInfo, show_gwas, show_exchp, show_exseq,
-                show_sigma,
-                rootVariantUrl,
-                textStringObject.variantsAndAssociationsTableHeaders,
-                textStringObject.variantsAndAssociationsRowHelpText);
+//            fillVariantsAndAssociationsTable(emphasisRecommended(rawGeneInfo),show_gwas, show_exchp, show_exseq,
+//                show_sigma,
+//                rootVariantUrl,
+//                textStringObject.variantsAndAssociationsTableHeaders,
+//                textStringObject.variantsAndAssociationsRowHelpText,
+//                geneFieldOrZero(rawGeneInfo, geneInfoJsonMap.fieldSymbol().CHROM),
+//                expandRegionBegin(geneFieldOrZero(rawGeneInfo, geneInfoJsonMap.fieldSymbol().BEG)),
+//                expandRegionEnd(geneFieldOrZero(rawGeneInfo, geneInfoJsonMap.fieldSymbol().END)),
+//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().GWAS_T2D_VAR_TOTAL),
+//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().GWAS_T2D_GWS_TOTAL),
+//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().GWAS_T2D_LWS_TOTAL),
+//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().GWAS_T2D_NOM_TOTAL),
+//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().EXCHP_T2D_VAR_TOTALS_EU_TOTAL),
+//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().EXCHP_T2D_GWS_TOTAL),
+//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().EXCHP_T2D_LWS_TOTAL),
+//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().EXCHP_T2D_NOM_TOTAL),
+//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol()._13k_T2D_VAR_TOTAL),
+//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol()._13k_T2D_GWS_TOTAL),
+//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol()._13k_T2D_LWS_TOTAL),
+//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol()._13k_T2D_NOM_TOTAL),
+//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().SIGMA_T2D_VAR_TOTAL),
+//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().SIGMA_T2D_GWS_TOTAL),
+//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().SIGMA_T2D_NOM_TOTAL),
+//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().SIGMA_T2D_NOM_TOTAL),
+//                rawGeneInfo["ID"]);
             fillVariationAcrossEthnicity(rawGeneInfo, show_gwas, show_exchp, show_exseq, show_sigma,
-                                          rootVariantUrl,
-                                          textStringObject.continentalAncestryText);
+                rootVariantUrl,
+                textStringObject.continentalAncestryText);
             fillBiologicalHypothesisTesting(rawGeneInfo, show_gwas, show_exchp, show_exseq,
                 show_sigma,
                 rootVariantUrl,
                 textStringObject.biologicalHypothesisTesting);
-        }
+        };
+
+
+            var fillTheVariantAndAssociationsTableFromNewApi = function (data, show_gwas, show_exchp, show_exseq, show_sigma,
+                                                                         rootRegionUrl, rootTraitUrl, rootVariantUrl,
+                                                                         textStringObject,
+                                                                         chromosomeNumber,extentBegin,extentEnd,
+                                                                         gwasTotal,gwasGenomeWide,gwasLocusWide,gwasNominal,
+                                                                         exChipTotal,exChipGenomeWide,exChipLocusWide,exChipNominal,
+                                                                         exSeqTotal,exSeqGenomeWide,exSeqLocusWide,exSeqNominal,
+                                                                         sigmaTotal,sigmaGenomeWide,sigmaLocusWide,sigmaNominal,
+                                                                         geneName) {
+                fillVariantsAndAssociationsTable(false, show_gwas, show_exchp, show_exseq,
+                    show_sigma,
+                    rootVariantUrl,
+                    textStringObject.variantsAndAssociationsTableHeaders,
+                    textStringObject.variantsAndAssociationsRowHelpText,
+                    chromosomeNumber,
+                    extentBegin,
+                    extentEnd,
+                    gwasTotal,
+                    gwasGenomeWide,
+                    gwasLocusWide,
+                    gwasNominal,
+                    exChipTotal,
+                    exChipGenomeWide,
+                    exChipLocusWide,
+                    exChipNominal,
+                    exSeqTotal,
+                    exSeqGenomeWide,
+                    exSeqLocusWide,
+                    exSeqNominal,
+                    sigmaTotal,
+                    sigmaGenomeWide,
+                    sigmaLocusWide,
+                    sigmaNominal,
+                    geneName
+                );
+            }
+
+
+
+
 
 
         return {
@@ -778,7 +924,8 @@ var mpgSoftware = mpgSoftware || {};
 
             // public routines
             fillTheGeneFields: fillTheGeneFields,
-            retrieveDelayedBiologicalHypothesisOneDataPresenter: retrieveDelayedBiologicalHypothesisOneDataPresenter
+            retrieveDelayedBiologicalHypothesisOneDataPresenter: retrieveDelayedBiologicalHypothesisOneDataPresenter,
+            fillTheVariantAndAssociationsTableFromNewApi: fillTheVariantAndAssociationsTableFromNewApi
         }
 
 

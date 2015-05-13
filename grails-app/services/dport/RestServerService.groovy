@@ -818,20 +818,68 @@ ${customFilterSet}""".toString()
 
 
 
-    public JSONObject variantCountByGeneNameAndPValue(){
-        String geneCount = """
-
-"""
-        postRestCallExperimental(geneCount,GET_DATA_URL)
-        LinkedHashMap<String, Integer> ourNumbers = extractNumbersWeNeed(userSpecifiedString)
-
-            returnValue = searchForTraitBySpecifiedRegion(ourNumbers["chromosomeNumber"],
-                    ourNumbers["startExtent"],
-                    ourNumbers["endExtent"])
-        return returnValue
-
+    private String requestGeneCountByPValue (String geneName, BigDecimal pValue, Integer dataSet){
+        String dataSetId = ""
+        String pFieldName = ""
+        switch (dataSet){
+            case 1:
+                dataSetId = "ExSeq_26k_v2"
+                pFieldName = "P_EMMAX_FE_IV"
+                break;
+            default:
+                log.error("Trouble: user requested data set = ${dataSet} which I don't recognize")
+                defaults
+        }
+        String geneCountRequest = """
+{
+    "passback": "123abc",
+    "entity": "variant",
+    "page_number": 50,
+    "page_size": 100,
+    "limit": 1000,
+    "count": true,
+    "properties":    {
+                           "cproperty": ["VAR_ID"],
+                          "orderBy":    ["CHROM"],
+                          "dproperty":    {},
+                        "pproperty":    {}
+                    },
+    "filters":    [
+                    {"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${geneName}", "operand_type": "STRING"},
+                    {"dataset_id": "${dataSetId}", "phenotype": "T2D", "operand": "${pFieldName}", "operator": "LTE", "value": ${pValue}, "operand_type": "FLOAT"}
+                ]
+}
+""".toString()
+        return geneCountRequest
     }
 
+
+
+
+
+    public JSONObject variantCountByGeneNameAndPValue(String geneName, BigDecimal pValue, Integer dataSet){
+        String jsonSpec = requestGeneCountByPValue( geneName,  pValue,  dataSet)
+        return postRestCall(jsonSpec,GET_DATA_URL)
+    }
+
+    /***
+     * we don't want the logic in the JavaScript when we already know what calls we need. Just make one call
+     * from the browser and then I will cycle through at this level and get all the data
+     * @param geneName
+     * @return
+     */
+    public JSONObject combinedVariantCountByGeneNameAndPValue(String geneName){
+        List <BigDecimal> pValueList = [0.00000005, 0.0001, 0.05]
+        def slurper = new JsonSlurper()
+        for (pValue in pValueList){
+            String jsonSpec = requestGeneCountByPValue( geneName,  pValue,  dataSet)
+            if (jsonSpec.is_error == false){
+
+            }
+        }
+
+        return postRestCall(jsonSpec,GET_DATA_URL)
+    }
 
 
 
