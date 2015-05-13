@@ -111,6 +111,17 @@ class GeneController {
 
 
 
+
+
+    def geneEthnicityCounts (){
+        String geneToStartWith = params.geneName
+        JSONObject jsonObject =  restServerService.combinedEthnicityTable ( geneToStartWith.trim().toUpperCase())
+        render(status:200, contentType:"application/json") {
+            [ethnicityInfo:jsonObject]
+        }
+    }
+
+
         /***
      *
      * @return

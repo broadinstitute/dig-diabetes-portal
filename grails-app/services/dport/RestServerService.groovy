@@ -855,6 +855,143 @@ ${customFilterSet}""".toString()
 
 
 
+    private String requestEthnicityCountByPValue (String geneName, BigDecimal pValue, String dataSet){
+        String dataSetId = ""
+        String pFieldName = ""
+        switch (dataSet){
+            case "HS":
+                dataSetId = "ExSeq_26k_v2"
+                pFieldName = "P_EMMAX_FE_IV"
+                break;
+            case "AA":
+                dataSetId = "ExSeq_26k_v2"
+                pFieldName = "P_EMMAX_FE_IV"
+                break;
+            case "EA":
+                dataSetId = "ExSeq_26k_v2"
+                pFieldName = "P_EMMAX_FE_IV"
+                break;
+            case "SA":
+                dataSetId = "ExSeq_26k_v2"
+                pFieldName = "P_EMMAX_FE_IV"
+                break;
+            case "EU":
+                dataSetId = "ExSeq_26k_v2"
+                pFieldName = "P_EMMAX_FE_IV"
+                break;
+            case "chipEu":
+                dataSetId = "ExSeq_26k_v2"
+                pFieldName = "P_EMMAX_FE_IV"
+                break;
+            default:
+                log.error("Trouble: user requested data set = ${dataSet} which I don't recognize")
+                defaults
+        }
+        String geneCountRequest = """
+{
+    "passback": "123abc",
+    "entity": "variant",
+    "page_number": 50,
+    "page_size": 100,
+    "limit": 1000,
+    "count": true,
+    "properties":    {
+                           "cproperty": ["VAR_ID"],
+                          "orderBy":    ["CHROM"],
+                          "dproperty":    {},
+                        "pproperty":    {}
+                    },
+    "filters":    [
+                    {"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${geneName}", "operand_type": "STRING"},
+                    {"dataset_id": "${dataSetId}", "phenotype": "T2D", "operand": "${pFieldName}", "operator": "LTE", "value": ${pValue}, "operand_type": "FLOAT"}
+                ]
+}
+""".toString()
+        return geneCountRequest
+    }
+
+
+
+
+    private String diseaseRiskValue (String variantId){
+        String diseaseRiskRequest = """
+{
+    "passback": "123abc",
+    "entity": "variant",
+    "page_number": 50,
+    "page_size": 100,
+    "limit": 1000,
+    "count": false,
+    "properties":    {
+                           "cproperty": ["VAR_ID"],
+                          "orderBy":    ["CHROM"],
+                          "dproperty":    {
+                                            "HETA" : ["ExSeq_26k_v2"],
+                                            "HETU" : ["ExSeq_26k_v2"],
+                                            "HOMA" : ["ExSeq_26k_v2"],
+                                            "HOMU" : ["ExSeq_26k_v2"],
+                                            "OBSU" : ["ExSeq_26k_v2"],
+                                            "OBSA" : ["ExSeq_26k_v2"]
+                                        },
+                        "pproperty":    {
+                                             "P_EMMAX_FE_IV":    {
+
+                                                                      "ExSeq_26k_v2": ["T2D"]
+                                                                   },
+                                            "OR_WALD_DOS_FE_IV":    {
+
+                                                                        "ExSeq_26k_v2": ["T2D"]
+                                                                    }
+                                        }
+                    },
+    "filters":    [
+                          {"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${variantId}", "operand_type": "STRING"}
+
+                ]
+}
+""".toString()
+        return diseaseRiskRequest
+    }
+
+
+
+
+    public JSONObject variantDiseaseRisk(String variantId){
+        String jsonSpec = diseaseRiskValue( variantId)
+        return postRestCall(jsonSpec,GET_DATA_URL)
+    }
+
+    public JSONObject combinedVariantDiseaseRisk(String geneName){
+        JSONObject returnValue
+        List <Integer> dataSeteList = [1]
+        List <String> pValueList = ["HETA","HETU","HOMA","HOMU","OBSU","OBSA","P_EMMAX_FE_IV","OR_WALD_DOS_FE_IV"]
+        StringBuilder sb = new StringBuilder ("{\"results\":[")
+        def slurper = new JsonSlurper()
+        for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
+            sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
+            for ( int  i = 0 ; i < pValueList.size () ; i++ ){
+                sb  << "{"
+                String jsonSpec = variantDiseaseRisk(geneName, pValueList[i], dataSeteList[j])
+                JSONObject apiData = postRestCall(jsonSpec,GET_DATA_URL)
+                if (apiData.is_error == false) {
+                    sb  << "\"level\":${pValueList[i]},\"count\":${apiData.numRecords}"
+                }
+                sb  << "}"
+                if (i<pValueList.size ()-1){
+                    sb  << ","
+                }
+            }
+            sb  << "]}"
+            if (j<dataSeteList.size ()-1){
+                sb  << ","
+            }
+        }
+        sb  << "]}"
+        returnValue = slurper.parseText(sb.toString())
+        return returnValue
+    }
+
+
 
 
     public JSONObject variantCountByGeneNameAndPValue(String geneName, BigDecimal pValue, Integer dataSet){
@@ -897,6 +1034,42 @@ ${customFilterSet}""".toString()
         returnValue = slurper.parseText(sb.toString())
         return returnValue
     }
+
+
+
+
+
+
+    public JSONObject combinedEthnicityTable(String geneName){
+        JSONObject returnValue
+        List <String> dataSeteList = ["HS", "AA", "EA", "SA", "EU","chipEu"]
+        List <BigDecimal> pValueList = [1,0.05,0.005,0.0005]
+        StringBuilder sb = new StringBuilder ("{\"results\":[")
+        def slurper = new JsonSlurper()
+        for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
+            sb  << "{ \"dataset\": \"${dataSeteList[j]}\",\"pVals\": ["
+            for ( int  i = 0 ; i < pValueList.size () ; i++ ){
+                sb  << "{"
+                String jsonSpec = requestEthnicityCountByPValue(geneName, pValueList[i], dataSeteList[j])
+                JSONObject apiData = postRestCall(jsonSpec,GET_DATA_URL)
+                if (apiData.is_error == false) {
+                    sb  << "\"level\":${pValueList[i]},\"count\":${apiData.numRecords}"
+                }
+                sb  << "}"
+                if (i<pValueList.size ()-1){
+                    sb  << ","
+                }
+            }
+            sb  << "]}"
+            if (j<dataSeteList.size ()-1){
+                sb  << ","
+            }
+        }
+        sb  << "]}"
+        returnValue = slurper.parseText(sb.toString())
+        return returnValue
+    }
+
 
 
 
