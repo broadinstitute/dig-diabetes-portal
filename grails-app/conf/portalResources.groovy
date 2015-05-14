@@ -107,8 +107,5 @@ modules = {
         resource url: 'http://www.broadinstitute.org/igvdata/t2d/igv-all.min.css'
         resource url: 'http://www.broadinstitute.org/igvdata/t2d/igv-all.min.js'
     }
-    resultsFilter {
-        resource url: 'css/dport/chooser/custom.css'
-    }
 }
 

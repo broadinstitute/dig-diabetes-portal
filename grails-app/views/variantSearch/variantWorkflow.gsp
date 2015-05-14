@@ -22,6 +22,11 @@
         mpgSoftware.variantWF.initializePage();
     });
 
+    // todo arz remove me example callback from angular to set the columns
+    applyDatasetsFilter = function(columns) {
+        console.log(columns);
+    };
+
 </script>
 
 
@@ -62,6 +67,12 @@
                 .collapse('hide');
     });
 </script>
+
+<!-- todo arz remove me, this is just an example -->
+<div>
+    <g:render template="/resultsFilter/filtermodal"></g:render>
+    <a onclick="$('#columnChooserModal').modal('show')">Refine Query</a>
+</div>
 
 </body>
 </html>
