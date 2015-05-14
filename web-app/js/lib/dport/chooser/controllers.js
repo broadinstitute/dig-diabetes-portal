@@ -893,20 +893,19 @@
             $scope.propagateAttributes($scope.tree);
             return $scope.view.filters = $scope.getAllFilters($scope.tree);
         };
-        try {
-            throw $http.json('http://dig-dev.broadinstitute.org:8888/dev/gs/getMetadata').success(function(data, status, headers, config) {
+        $http.get('metadata')
+            .success(function(data, status, headers, config) {
                 $scope.tree = data.experiments;
                 $scope.initializeData();
-                console.log(angular.toJson(data));
-                return console.log("using live data");
+                console.log("using live data");
+                console.log(data);
+            })
+            .error(function(data, status, headers, config) {
+                console.log('Could not query metadata due to ' + status + ', using cached data.');
+                $scope.tree = root.tree;
+                $scope.initializeData();
             });
-        } catch (_error) {
-            e = _error;
-            $scope.tree = root.tree;
-            $scope.initializeData();
-            return console.log("using cached data");
         }
-    }
     ]);
 
 }).call(this);
