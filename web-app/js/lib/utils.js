@@ -523,6 +523,21 @@ var UTILS = {
         }
         return returnValue;
     },
+    nullSafetyTest: function (fieldArray) {
+        var returnValue = false;
+        //First take care of the pathological cases
+        if (typeof fieldArray === 'undefined') {
+            return false;
+        }
+        for (var i = 0; i < fieldArray.length; i++) {
+            if ((fieldArray[i] === null) ||
+                (typeof fieldArray[i] === 'undefined')) {
+                returnValue = true;
+                break;
+            }
+        }
+        return returnValue;
+    },
     /***
      * general-purpose way of posting a query. Fake a bunch of hidden variables to store
      * everything in the object params.

@@ -11,7 +11,8 @@ var mpgSoftware = mpgSoftware || {};
         var delayedHowCommonIsPresentation = {},
             delayedCarrierStatusDiseaseRiskPresentation = {},
             delayedBurdenTestPresentation = {},
-            delayedIgvLaunch = {};
+            delayedIgvLaunch = {},
+            externalCalculateDiseaseBurden;
 
         var cariantRec = {
             _13k_T2D_HET_CARRIERS: 1,
@@ -443,7 +444,8 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 },
 
-                fillDiseaseRiskBurdenTest = function (variant, show_gwas, show_exchp, show_exseq, show_sigma, rootVariantUrl, diseaseBurdenStrings) {
+                fillDiseaseRiskBurdenTest = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, PVALUE,ORVALUE,
+                                                      show_gwas, show_exchp, show_exseq, show_sigma, rootVariantUrl, diseaseBurdenStrings) {
                     var hetu = 0,
                         heta = 0,
                         homa = 0,
@@ -454,25 +456,15 @@ var mpgSoftware = mpgSoftware || {};
                         retainBarchartPtr,
                         oddsRatio;
                     if (show_exseq) {
-                        heta = parseFloat(variant["_13k_T2D_HETA"]);
-                        hetu = parseFloat(variant["_13k_T2D_HETU"]);
-                        homa = parseFloat(variant["_13k_T2D_HOMA"]);
-                        homu = parseFloat(variant["_13k_T2D_HOMU"]);
-                        totalUnaffected = parseFloat(variant["_13k_T2D_OBSU"]);
-                        totalAffected = parseFloat(variant["_13k_T2D_OBSA"]);
-                        pValue = parseFloat(variant["_13k_T2D_P_EMMAX_FE_IV"]);
-                        oddsRatio = parseFloat(variant["_13k_T2D_OR_WALD_DOS_FE_IV"]);
-                    } else if (show_sigma) {
-                        heta = parseFloat(variant["SIGMA_T2D_HETA"]);
-                        hetu = parseFloat(variant["SIGMA_T2D_HETU"]);
-                        homa = parseFloat(variant["SIGMA_T2D_HOMA"]);
-                        homu = parseFloat(variant["SIGMA_T2D_HOMU"]);
-                        totalUnaffected = parseFloat(variant["SIGMA_T2D_OBSU"]);
-                        totalAffected = parseFloat(variant["SIGMA_T2D_OBSA"]);
-                        pValue = parseFloat(variant["SIGMA_T2D_P"]);
-                        oddsRatio = parseFloat(variant["SIGMA_T2D_OR"]);
+                        heta = HETA;
+                        hetu = HETU;
+                        homa = HOMA;
+                        homu = HOMU;
+                        totalUnaffected = OBSU;
+                        totalAffected = OBSA;
+                        pValue = PVALUE;
+                        oddsRatio = ORVALUE;
                     }
-
                     // $('#bhtLossOfFunctionVariants').append(numberOfVariants);
 
                     // variables for bar chart
@@ -752,20 +744,25 @@ var mpgSoftware = mpgSoftware || {};
                         variantAssociationStrings));
 
                 },
-                calculateDiseaseBurden = function (variant, variantTitle, showSigma, showGwas, showExchp, showExseq, diseaseBurdenStrings) {// disease burden
+
+                calculateDiseaseBurden = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, PVALUE,ORVALUE,
+                    variantTitle, showSigma, showGwas, showExchp, showExseq, diseaseBurdenStrings) {// disease burden
                     var weHaveEnoughDataForRiskBurdenTest;
                     if (showSigma) {
-                        weHaveEnoughDataForRiskBurdenTest =  (!UTILS.nullsExist (variant,["SIGMA_T2D_HETA","SIGMA_T2D_HETU", "SIGMA_T2D_HOMA", "SIGMA_T2D_HOMU", "SIGMA_T2D_OBSU", "SIGMA_T2D_OBSA"  ]));
+                        weHaveEnoughDataForRiskBurdenTest =  (!UTILS.nullSafetyTest([OBSU, OBSA, HOMA, HETA, HOMU, HOMU  ]));
                     } else {
-                        weHaveEnoughDataForRiskBurdenTest =  (!UTILS.nullsExist (variant,["_13k_T2D_HETA","_13k_T2D_HETU", "_13k_T2D_HOMA", "_13k_T2D_HOMU", "_13k_T2D_OBSU", "_13k_T2D_OBSA"  ]));
+                        weHaveEnoughDataForRiskBurdenTest =  (!UTILS.nullSafetyTest ([OBSU, OBSA, HOMA, HETA, HOMU, HOMU ]));
                     }
                     UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataForRiskBurdenTest, $('#diseaseRiskExists'), $('#diseaseRiskNoExists'));
                     if (weHaveEnoughDataForRiskBurdenTest) {
-                        privateMethods.fillDiseaseRiskBurdenTest(variant, showGwas, showExchp, showExseq, showSigma, null, diseaseBurdenStrings);
+                        privateMethods.fillDiseaseRiskBurdenTest(OBSU, OBSA, HOMA, HETA, HOMU, HETU, PVALUE,ORVALUE, showGwas, showExchp, showExseq, showSigma, null, diseaseBurdenStrings);
                     }
                     $('#sigmaVariantCharacterization').append(UTILS.sigmaVariantCharacterization(variant, variantTitle));
-                },
-                howCommonIsThisVariantAcrossEthnicities = function (variant, alleleFrequencyStrings) {// how common is this allele across different ethnicities
+                };
+            // externalize!
+            // externalize!
+            externalCalculateDiseaseBurden = calculateDiseaseBurden;
+                var howCommonIsThisVariantAcrossEthnicities = function (variant, alleleFrequencyStrings) {// how common is this allele across different ethnicities
                     var weHaveEnoughDataToDescribeMinorAlleleFrequencies = (!UTILS.nullsExist (variant,["_13k_T2D_AA_MAF"]));
                     UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToDescribeMinorAlleleFrequencies, $('#howCommonIsExists'), $('#howCommonIsNoExists'));
                     if (weHaveEnoughDataToDescribeMinorAlleleFrequencies) {
@@ -798,7 +795,9 @@ var mpgSoftware = mpgSoftware || {};
             delayedIgvLaunch = prepareDelayedIgvLaunch(variant, showSigma, restServerRoot);
             variantAssociations(variant, showSigma, variantTitle, traitsStudiedUrlRoot, textStringObject.variantAssociationStrings);
 
-            calculateDiseaseBurden(variant, variantTitle, showSigma, showGwas, showExchp, showExseq, textStringObject.diseaseBurdenStrings);
+            calculateDiseaseBurden(parseFloat(variant["_13k_T2D_HETA"]),parseFloat(variant["_13k_T2D_HETU"]),parseFloat(variant["_13k_T2D_HOMA"]),parseFloat(variant["_13k_T2D_HOMU"]),
+                parseFloat(variant["_13k_T2D_OBSU"]),parseFloat(variant["_13k_T2D_OBSA"]),parseFloat(variant["_13k_T2D_P_EMMAX_FE_IV"]),parseFloat(variant["_13k_T2D_OR_WALD_DOS_FE_IV"]),
+                variantTitle, showSigma, showGwas, showExchp, showExseq, textStringObject.diseaseBurdenStrings);
             howCommonIsThisVariantAcrossEthnicities(variant, textStringObject.alleleFrequencyStrings);
             showHowCarriersAreDistributed(variant, showGwas, showExchp, showExseq, showSigma, textStringObject.carrierStatusImpact);
             describeImpactOfVariantOnProtein(variant, variantTitle, textStringObject.impactOnProtein);
@@ -813,6 +812,10 @@ var mpgSoftware = mpgSoftware || {};
             retrieveDelayedBurdenTestPresentation = function () {
                 return delayedBurdenTestPresentation;
             },
+            retrieveCalculateDiseaseBurden = function () {
+                return externalCalculateDiseaseBurden;
+            },
+
             retrieveDelayedIgvLaunch = function () {
                 return delayedIgvLaunch;
             };
@@ -821,6 +824,7 @@ var mpgSoftware = mpgSoftware || {};
             // private routines MADE PUBLIC FOR UNIT TESTING ONLY (find a way to do this in test mode only)
 
             // public routines
+            retrieveCalculateDiseaseBurden:retrieveCalculateDiseaseBurden,
             fillTheFields: fillTheFields,
             retrieveDelayedHowCommonIsPresentation: retrieveDelayedHowCommonIsPresentation,
             retrieveDelayedCarrierStatusDiseaseRiskPresentation: retrieveDelayedCarrierStatusDiseaseRiskPresentation,

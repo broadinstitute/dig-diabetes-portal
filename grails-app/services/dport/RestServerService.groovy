@@ -923,8 +923,8 @@ ${customFilterSet}""".toString()
     "limit": 1000,
     "count": false,
     "properties":    {
-                           "cproperty": ["VAR_ID"],
-                          "orderBy":    ["CHROM"],
+                           "cproperty": [],
+                          "orderBy":    [],
                           "dproperty":    {
                                             "HETA" : ["ExSeq_26k_v2"],
                                             "HETU" : ["ExSeq_26k_v2"],
@@ -961,22 +961,48 @@ ${customFilterSet}""".toString()
         return postRestCall(jsonSpec,GET_DATA_URL)
     }
 
-    public JSONObject combinedVariantDiseaseRisk(String geneName){
+    public JSONObject combinedVariantDiseaseRisk(String variantName){
+        String sample = "ExSeq_26k_v2"
         JSONObject returnValue
         List <Integer> dataSeteList = [1]
-        List <String> pValueList = ["HETA","HETU","HOMA","HOMU","OBSU","OBSA","P_EMMAX_FE_IV","OR_WALD_DOS_FE_IV"]
+        List <String> pValueList = [1]
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()
         for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
             sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
             for ( int  i = 0 ; i < pValueList.size () ; i++ ){
-                sb  << "{"
-                String jsonSpec = variantDiseaseRisk(geneName, pValueList[i], dataSeteList[j])
-                JSONObject apiData = postRestCall(jsonSpec,GET_DATA_URL)
-                if (apiData.is_error == false) {
-                    sb  << "\"level\":${pValueList[i]},\"count\":${apiData.numRecords}"
+                String apiData = variantDiseaseRisk(variantName)
+                JSONObject apiResults = slurper.parseText(apiData)
+                if (apiResults.is_error == false) {
+                    if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
+                        def variant = apiResults.variants[0];
+                        if (variant ["OBSU"]){
+                            sb  << "{\"level\":\"OBSU\",\"count\":${variant["OBSU"][sample]}},"
+                        }
+                        if (variant ["OBSA"]){
+                            sb  << "{\"level\":\"OBSA\",\"count\":${variant["OBSA"][sample]}},"
+                        }
+                        if (variant ["HOMA"]){
+                            sb  << "{\"level\":\"HOMA\",\"count\":${variant["HOMA"][sample]}},"
+                        }
+                        if (variant ["HETA"]){
+                            sb  << "{\"level\":\"HETA\",\"count\":${variant["HETA"][sample]}},"
+                        }
+                        if (variant ["HOMU"]){
+                            sb  << "{\"level\":\"HOMU\",\"count\":${variant["HOMU"][sample]}},"
+                        }
+                        if (variant ["HETU"]){
+                            sb  << "{\"level\":\"HETU\",\"count\":${variant["HETU"][sample]}},"
+                        }
+                        if (variant ["P_EMMAX_FE_IV"]){
+                            sb  << "{\"level\":\"PVALUE\",\"count\":${variant["P_EMMAX_FE_IV"][sample]["T2D"]}},"
+                        }
+                        if (variant ["OR_WALD_DOS_FE_IV"]){
+                            sb  << "{\"level\":\"ORVALUE\",\"count\":${variant["OR_WALD_DOS_FE_IV"][sample]["T2D"]}}"
+                        }
+                    }
+
                 }
-                sb  << "}"
                 if (i<pValueList.size ()-1){
                     sb  << ","
                 }
