@@ -12,7 +12,7 @@
 <g:javascript src="lib/dport/chooser/controllers.js"></g:javascript>
 <g:javascript src="lib/dport/chooser/datasets.js"></g:javascript>
 <g:javascript src="lib/dport/chooser/t.js"></g:javascript>
-<g:javascript src="lib/dport/chooser/tree2.js"></g:javascript>
+<g:javascript src="lib/dport/chooser/tree3.js"></g:javascript>
 
 <script id='column-chooser-directive' type='text/ng-template'>
 <div class='column-chooser-container container-fluid modal-dialog'>
@@ -132,21 +132,13 @@
                 <div class='col-xs-12'>
                     <button class='btn btn-primary btn-lg pull-right' data-dismiss='modal'
                             ng-click="setColumnFilter(getSelectedSetNames(tree))">Update Results</button>
-                    <button class='btn btn-lg pull-right'
-                            data-dismiss='modal'
-                            ng-click='view.showAdvancedSelector = false'>Cancel</button>
+                    <button class='btn btn-lg pull-right' data-dismiss='modal' ng-click='view.showAdvancedSelector = false'>Cancel</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 </script>
-
-%{--<script type="text/javascript">--}%
-    %{--$(window).load(function(){--}%
-        %{--$('#columnChooserModal').modal('show');--}%
-    %{--});--}%
-%{--</script>--}%
 
 <div class="modal fade" id="columnChooserModal">
     <link type="text/css" href="${resource(dir: 'css', file: 'dport/chooser/custom.css')}" />

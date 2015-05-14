@@ -228,7 +228,12 @@
                                     value = parent_v[_i];
                                     try {
                                         if (__indexOf.call(object[parent_k], value) < 0) {
-                                            object[parent_k] = object[parent_k].concat([value]);
+                                            if ($.isPlainObject(object[parent_k])) {
+                                                object[parent_k] = object[parent_k].name.concat([value]);
+                                            }
+                                            else {
+                                                object[parent_k] = object[parent_k].concat([value]);
+                                            }
                                         }
                                     } catch (_error) {
                                         e = _error;
@@ -490,10 +495,10 @@
                 return $scope.view.filters = $scope.getAllFilters($scope.tree);
             };
             // todo fix url
-            $http.get('/delberately-broken')
-            //$http.get('/dig-diabetes-portal/resultsFilter/metadata')
+            //$http.get('/delberately-broken')
+            $http.get('/dig-diabetes-portal/resultsFilter/metadata')
                 .success(function(data, status, headers, config) {
-                    $scope.tree = data.experiments;
+                    $scope.tree = data[0].experiments;
                     $scope.initializeData();
                     console.log("using live data");
                 })
