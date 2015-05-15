@@ -1,48 +1,10 @@
 (function() {
-    var testApp,
+    var datasetFilterApp,
         __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-    testApp = angular.module("ChooserApp", []);
+    datasetFilterApp = angular.module("ChooserApp", []);
 
-    testApp.factory("TimeFunctions", function() {
-        return {
-            HHMMSStoSeconds: function(HHMMSS) {
-                var c, multiples, seconds, splits, _i, _len;
-                if (HHMMSS == null) {
-                    return false;
-                }
-                seconds = 0;
-                splits = HHMMSS.split(":").reverse();
-                multiples = [3600, 60, 1];
-                for (_i = 0, _len = splits.length; _i < _len; _i++) {
-                    c = splits[_i];
-                    seconds += parseFloat(c) * multiples.pop();
-                }
-                return seconds;
-            },
-            lpad: function(value, totalLength) {
-                value = value.toString();
-                while (value.length < totalLength) {
-                    value = '0' + value;
-                }
-                return value;
-            },
-            secondsToHHMMSS: function(i) {
-                var h, m, s;
-                h = i / 3600;
-                m = (i % 3600) / 60;
-                s = i % 60;
-                return {
-                    "hours": h,
-                    "minutes": m,
-                    "seconds": s,
-                    "formatted": this.lpad(Math.floor(h), 1) + ":" + this.lpad(Math.floor(m), 2) + ":" + this.lpad(Math.floor(s), 2)
-                };
-            }
-        };
-    });
-
-    testApp.directive("columnChooser", function() {
+    datasetFilterApp.directive("columnChooser", function() {
         return {
             restrict: "E",
             scope: false,
@@ -53,8 +15,8 @@
         };
     });
 
-    testApp.controller("ChooserController", [
-        "$scope", "TimeFunctions", "$http", function($scope, TimeFunctions, $http) {
+    datasetFilterApp.controller("ChooserController", [
+        "$scope", "$http", function($scope, $http) {
             var e, fullTextRegexTokens;
             $scope.tree = [];
             $scope.$ = $;
@@ -491,7 +453,7 @@
             };
 
             $scope.loadMetadata = function() {
-                // todo fix url
+                // todo arz fix url
                 $http.get('/dig-diabetes-portal/resultsFilter/metadata')
                     .success(function (data, status, headers, config) {
                         $scope.tree = angular.fromJson(data[0].experiments);
