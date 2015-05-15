@@ -41,7 +41,8 @@ class VariantController {
                             show_gwas      : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                             show_exchp     : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                             show_exseq     : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                            show_sigma     : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma)])
+                            show_sigma     : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
+                            newApi: sharedToolsService.getNewApi()])
 
         }
     }
@@ -66,6 +67,15 @@ class VariantController {
     def variantDiseaseRisk (){
         String variantId = params.variantId
         JSONObject jsonObject =  restServerService.combinedVariantDiseaseRisk ( variantId.trim().toUpperCase())
+        render(status:200, contentType:"application/json") {
+            [variantInfo:jsonObject]
+        }
+    }
+
+
+    def variantDescriptiveStatistics (){
+        String variantId = params.variantId
+        JSONObject jsonObject =  restServerService.combinedVariantAssociationStatistics ( variantId.trim().toUpperCase())
         render(status:200, contentType:"application/json") {
             [variantInfo:jsonObject]
         }

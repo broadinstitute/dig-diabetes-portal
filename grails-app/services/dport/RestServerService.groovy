@@ -954,12 +954,102 @@ ${customFilterSet}""".toString()
     }
 
 
-
-
     public JSONObject variantDiseaseRisk(String variantId){
         String jsonSpec = diseaseRiskValue( variantId)
         return postRestCall(jsonSpec,GET_DATA_URL)
     }
+
+
+    private String variantAssociationStatisticsRequest (String variantId) {
+        String associationStatisticsRequest = """{
+    "passback": "123abc",
+    "entity": "variant",
+    "page_number": 0,
+    "page_size": 100,
+    "count": false,
+    "properties":    {
+                           "cproperty": ["VAR_ID"],
+                          "orderBy":    [],
+                          "dproperty":    {
+                                        },
+                        "pproperty":    {
+                                             "P_EMMAX_FE_IV":    {
+                                                                      "ExSeq_13k_v1": ["T2D"],
+                                                                      "ExSeq_26k_v2": ["T2D"]
+                                                                   },
+                                            "OR_WALD_DOS_FE_IV":    {
+                                                                        "ExSeq_13k_v1": ["T2D"],
+                                                                        "ExSeq_26k_v2": ["T2D"]
+                                                                    }
+                                        }
+                    },
+    "filters":    [ 
+                      {"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${
+            variantId
+        }", "operand_type": "STRING"}
+
+                ]
+}
+""".toString()
+        return associationStatisticsRequest
+    }
+
+
+    public JSONObject variantAssociationStatisticsSection(String variantId){
+        String jsonSpec = variantAssociationStatisticsRequest( variantId)
+        return postRestCall(jsonSpec,GET_DATA_URL)
+    }
+
+
+
+
+
+    public JSONObject combinedVariantAssociationStatistics(String variantName){
+        String sample = "ExSeq_26k_v2"
+        String attribute = "T2D"
+        JSONObject returnValue
+        List <Integer> dataSeteList = [1]
+        List <String> pValueList = [1]
+        StringBuilder sb = new StringBuilder ("{\"results\":[")
+        def slurper = new JsonSlurper()
+        for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
+            sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
+            for ( int  i = 0 ; i < pValueList.size () ; i++ ){
+                String apiData = variantAssociationStatisticsSection(variantName)
+                JSONObject apiResults = slurper.parseText(apiData)
+                if (apiResults.is_error == false) {
+                    if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
+                        def variant = apiResults.variants[0];
+                        if (variant ["P_EMMAX_FE_IV"]){
+                            sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${variant["P_EMMAX_FE_IV"][sample][attribute]}},"
+                        }
+                        if (variant ["OR_WALD_DOS_FE_IV"]){
+                            sb  << "{\"level\":\"OR_WALD_DOS_FE_IV\",\"count\":${variant["OR_WALD_DOS_FE_IV"][sample][attribute]}}"
+                        }
+                    }
+
+                }
+                if (i<pValueList.size ()-1){
+                    sb  << ","
+                }
+            }
+            sb  << "]}"
+            if (j<dataSeteList.size ()-1){
+                sb  << ","
+            }
+        }
+        sb  << "]}"
+        returnValue = slurper.parseText(sb.toString())
+        return returnValue
+    }
+
+
+
+
+
+
+
+
 
     public JSONObject combinedVariantDiseaseRisk(String variantName){
         String sample = "ExSeq_26k_v2"
@@ -1016,6 +1106,8 @@ ${customFilterSet}""".toString()
         returnValue = slurper.parseText(sb.toString())
         return returnValue
     }
+
+
 
 
 

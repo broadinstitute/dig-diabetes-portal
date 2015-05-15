@@ -13,7 +13,8 @@ var mpgSoftware = mpgSoftware || {};
             delayedBurdenTestPresentation = {},
             delayedIgvLaunch = {},
             externalCalculateDiseaseBurden,
-            externalizeCarrierStatusDiseaseRisk
+            externalizeCarrierStatusDiseaseRisk,
+            externalVariantAssociationStatistics
             ;
 
         var cariantRec = {
@@ -506,17 +507,16 @@ var mpgSoftware = mpgSoftware || {};
                     }
 
                 },
-                describeAssociationsStatistics = function (variant, vMap, availableData, pValue, orValue, strongCutOff, mediumCutOff, weakCutOff,
+                describeAssociationsStatistics = function (availableData, pValue, orValue, strongCutOff, mediumCutOff, weakCutOff,
                                                            variantTitle, datatype, includeCaseControlComparison, takeExpOfOr, variantAssociationStrings) {
                     var retVal = "";
                     var significanceDescriptor = "";
                     var orValueNumerical;
                     var orValueNumericalAdjusted;
                     var orValueText = "";
-                    var iMap = UTILS.invertMap(vMap);
-                    var pNumericalValue = variant[iMap[pValue]];
+                    var pNumericalValue = pValue;
                     var pTextValue = "";
-                    if (variant[iMap[availableData]]) {
+                    if (availableData) {
                         retVal += "<div class='boxyDisplay ";
                         // may or may not be bold
                         if (pNumericalValue <= strongCutOff) {
@@ -540,7 +540,7 @@ var mpgSoftware = mpgSoftware || {};
                         retVal += ("<div class='veryImportantText'>p = " + pTextValue +
                             variantAssociationStrings.associationPValueQ +"</div>");
                         retVal += ("<div class='notVeryImportantText'>" + significanceDescriptor + "</div>");
-                        orValueNumerical = variant[iMap[orValue]];
+                        orValueNumerical = orValue;
                         if ((orValueNumerical) &&
                             (orValueNumerical !== 'null')) {
                             orValueNumericalAdjusted = (takeExpOfOr === true) ? Math.exp(orValueNumerical) : orValueNumerical;
@@ -556,12 +556,11 @@ var mpgSoftware = mpgSoftware || {};
                     }
                     return retVal;
                 },
-                fillAssociationStatisticsLinkToTraitTable = function (variant, vMap, weHaveData, dbsnp, variantId, rootTraitUrl, variantAssociationStrings) {
+                fillAssociationStatisticsLinkToTraitTable = function (weHaveData, dbsnp, variantId, rootTraitUrl, variantAssociationStrings) {
                     var retVal = "";
-                    var iMap = UTILS.invertMap(vMap);
-                    if (variant[iMap[weHaveData]]) {
+                    if (weHaveData) {
                         retVal += ("<a class=\"boldlink\" href=\"" + rootTraitUrl + "/" +
-                            ((variant[iMap[weHaveData]]) ? (variant[iMap[dbsnp]]) : (variant[iMap[variantId]])) +
+                            ((weHaveData) ? (dbsnp) : (variantId)) +
                             "\">" + variantAssociationStrings.variantPValues);
                     }
                     return  retVal;
@@ -604,7 +603,8 @@ var mpgSoftware = mpgSoftware || {};
          * @param showExseq
          * @param showSigma
          */
-        function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot, restServerRoot, showGwas, showExchp, showExseq, showSigma, textStringObject) {
+        function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot, restServerRoot, showGwas,
+                               showExchp, showExseq, showSigma, textStringObject,newApi) {
             var variantObj = data['variant'],
                 variant = variantObj['variant-info'],
                 variantTitle = UTILS.get_variant_title(variant, variantToSearch),
@@ -636,25 +636,24 @@ var mpgSoftware = mpgSoftware || {};
                         }
                     };
                 },
-                variantAssociations = function (variant, showSigma, variantTitle, traitsStudiedUrlRoot, variantAssociationStrings) {
+                variantAssociations = function (variantRec, showSigma, variantTitle, traitsStudiedUrlRoot, variantAssociationStrings) {
                     var weHaveVariantsAndAssociations;
                     if (showSigma) {
-                        weHaveVariantsAndAssociations = ((variant["IN_GWAS"]) || (variant["GWAS_T2D_PVALUE"]) || (variant["GWAS_T2D_OR"]) ||
-                            (variant["SIGMA_T2D_P"]) || (variant["SIGMA_T2D_OR"])  );
+                        weHaveVariantsAndAssociations = ((variantRec.IN_GWAS) || (variantRec.GWAS_T2D_PVALUE) || (variantRec.GWAS_T2D_OR) ||
+                            (variantRec.SIGMA_T2D_P) || (variantRec.SIGMA_T2D_OR)  );
                     } else {
-                        weHaveVariantsAndAssociations = ((variant["IN_GWAS"]) || (variant["GWAS_T2D_PVALUE"]) || (variant["GWAS_T2D_OR"]) ||
-                            (variant["EXCHP_T2D_P_value"]) || (variant["EXCHP_T2D_BETA"]) ||
-                            (variant["_13k_T2D_P_EMMAX_FE_IV"]) || (variant["_13k_T2D_OR_WALD_DOS_FE_IV"]) );
+                        weHaveVariantsAndAssociations = ((variantRec.IN_GWAS) || (variantRec.GWAS_T2D_PVALUE) || (variantRec.GWAS_T2D_OR) ||
+                            (variantRec.EXCHP_T2D_P_value) || (variantRec.EXCHP_T2D_BETA) ||
+                            (variantRec._13k_T2D_P_EMMAX_FE_IV) || (variantRec._13k_T2D_OR_WALD_DOS_FE_IV) );
                     }
 
                     UTILS.verifyThatDisplayIsWarranted(weHaveVariantsAndAssociations, $('#VariantsAndAssociationsExist'), $('#VariantsAndAssociationsNoExist'));
                     if (weHaveVariantsAndAssociations) {
                         if (showGwas) {
-                            $('#gwasAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(variant,
-                                cariantRec,
-                                cariantRec.IN_GWAS,
-                                cariantRec.GWAS_T2D_PVALUE,
-                                cariantRec.GWAS_T2D_OR,
+                            $('#gwasAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
+                                variantRec.IN_GWAS,
+                                variantRec.GWAS_T2D_PVALUE,
+                                variantRec.GWAS_T2D_OR,
                                 5e-8,
                                 5e-4,
                                 5e-2,
@@ -666,11 +665,10 @@ var mpgSoftware = mpgSoftware || {};
                                 variantAssociationStrings));
                         }
                         if (showSigma) {
-                            $('#gwasSigmaAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(variant,
-                                cariantRec,
-                                cariantRec.IN_GWAS,
-                                cariantRec.GWAS_T2D_PVALUE,
-                                cariantRec.GWAS_T2D_OR,
+                            $('#gwasSigmaAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
+                                variantRec.IN_GWAS,
+                                variantRec.GWAS_T2D_PVALUE,
+                                variantRec.GWAS_T2D_OR,
                                 5e-8,
                                 5e-4,
                                 5e-2,
@@ -682,11 +680,10 @@ var mpgSoftware = mpgSoftware || {};
                                 variantAssociationStrings));
                         }
                         if (showExchp) {
-                            $('#exomeChipAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(variant,
-                                cariantRec,
-                                cariantRec.EXCHP_T2D_P_value,
-                                cariantRec.EXCHP_T2D_P_value,
-                                cariantRec.EXCHP_T2D_BETA,
+                            $('#exomeChipAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
+                                variantRec.EXCHP_T2D_P_value,
+                                variantRec.EXCHP_T2D_P_value,
+                                variantRec.EXCHP_T2D_BETA,
                                 5e-8,
                                 5e-4,
                                 5e-2,
@@ -698,11 +695,10 @@ var mpgSoftware = mpgSoftware || {};
                                 variantAssociationStrings));
                         }
                         if (showExseq) {
-                            $('#exomeSequenceAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(variant,
-                                cariantRec,
-                                cariantRec._13k_T2D_P_EMMAX_FE_IV,
-                                cariantRec._13k_T2D_P_EMMAX_FE_IV,
-                                cariantRec._13k_T2D_OR_WALD_DOS_FE_IV,
+                            $('#exomeSequenceAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
+                                variantRec._13k_T2D_P_EMMAX_FE_IV,
+                                variantRec._13k_T2D_P_EMMAX_FE_IV,
+                                variantRec._13k_T2D_OR_WALD_DOS_FE_IV,
                                 5e-8,
                                 5e-4,
                                 5e-2,
@@ -714,11 +710,10 @@ var mpgSoftware = mpgSoftware || {};
                                 variantAssociationStrings));
                         }
                         if (showSigma) {
-                            $('#sigmaAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(variant,
-                                cariantRec,
-                                cariantRec.SIGMA_T2D_P,
-                                cariantRec.SIGMA_T2D_P,
-                                cariantRec.SIGMA_T2D_OR,
+                            $('#sigmaAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
+                                variantRec.SIGMA_T2D_P,
+                                variantRec.SIGMA_T2D_P,
+                                variantRec.SIGMA_T2D_OR,
                                 5e-8,
                                 5e-4,
                                 5e-2,
@@ -730,17 +725,16 @@ var mpgSoftware = mpgSoftware || {};
                                 variantAssociationStrings));
                         }
                     }
-                    $('#variantInfoAssociationStatisticsLinkToTraitTable').append(privateMethods.fillAssociationStatisticsLinkToTraitTable(variant,
-                        cariantRec,
-                        cariantRec.IN_GWAS,
-                        cariantRec.DBSNP_ID,
-                        cariantRec.ID,
+                    $('#variantInfoAssociationStatisticsLinkToTraitTable').append(privateMethods.fillAssociationStatisticsLinkToTraitTable(
+                        variantRec.IN_GWAS,
+                        variantRec.DBSNP_ID,
+                        variantRec.ID,
                         traitsStudiedUrlRoot,
                         variantAssociationStrings));
 
-                },
-
-                calculateDiseaseBurden = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, PVALUE,ORVALUE,
+                };
+                externalVariantAssociationStatistics = variantAssociations;
+                var calculateDiseaseBurden = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, PVALUE,ORVALUE,
                     variantTitle, showSigma, showGwas, showExchp, showExseq, diseaseBurdenStrings) {// disease burden
                     var weHaveEnoughDataForRiskBurdenTest;
                     if (showSigma) {
@@ -789,7 +783,20 @@ var mpgSoftware = mpgSoftware || {};
              */
             setTitlesAndTheLikeFromData(variantTitle, variant);
             delayedIgvLaunch = prepareDelayedIgvLaunch(variant, showSigma, restServerRoot);
-            variantAssociations(variant, showSigma, variantTitle, traitsStudiedUrlRoot, textStringObject.variantAssociationStrings);
+            if (!newApi){
+                variantAssociations({"IN_GWAS":variant["IN_GWAS"],
+                        "DBSNP_ID":variant["DBSNP_ID"],
+                        "ID":variant["ID"],
+                        "GWAS_T2D_PVALUE":variant["GWAS_T2D_PVALUE"],
+                        "GWAS_T2D_OR":variant["GWAS_T2D_OR"],
+                        "EXCHP_T2D_P_value":variant["EXCHP_T2D_P_value"],
+                        "EXCHP_T2D_BETA":variant["EXCHP_T2D_BETA"],
+                        "_13k_T2D_P_EMMAX_FE_IV":variant["_13k_T2D_P_EMMAX_FE_IV"],
+                        "_13k_T2D_OR_WALD_DOS_FE_IV":variant["_13k_T2D_OR_WALD_DOS_FE_IV"],
+                        "SIGMA_T2D_P":variant["SIGMA_T2D_P"],
+                        "SIGMA_T2D_OR":variant["SIGMA_T2D_OR"]},
+                    showSigma, variantTitle, traitsStudiedUrlRoot, textStringObject.variantAssociationStrings);
+            }
 
             calculateDiseaseBurden(
                 parseFloat(variant["_13k_T2D_OBSU"]),
@@ -827,6 +834,9 @@ var mpgSoftware = mpgSoftware || {};
             retrieveCarrierStatusDiseaseRisk = function (){
                 return externalizeCarrierStatusDiseaseRisk;
             },
+            retrieveVariantAssociationStatistics = function (){
+                return externalVariantAssociationStatistics;
+            },
             retrieveDelayedIgvLaunch = function () {
                 return delayedIgvLaunch;
             };
@@ -837,6 +847,7 @@ var mpgSoftware = mpgSoftware || {};
             // public routines
             retrieveCalculateDiseaseBurden:retrieveCalculateDiseaseBurden,
             retrieveCarrierStatusDiseaseRisk: retrieveCarrierStatusDiseaseRisk,
+            retrieveVariantAssociationStatistics:retrieveVariantAssociationStatistics,
             fillTheFields: fillTheFields,
             retrieveDelayedHowCommonIsPresentation: retrieveDelayedHowCommonIsPresentation,
             retrieveDelayedCarrierStatusDiseaseRiskPresentation: retrieveDelayedCarrierStatusDiseaseRiskPresentation,
