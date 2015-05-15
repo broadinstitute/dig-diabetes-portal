@@ -27,6 +27,12 @@
         console.log(columns);
     };
 
+    showDatasetModal = function() {
+        var modal = '#columnChooserModal';
+        $(modal).modal('show');
+        angular.element(modal).scope().loadMetadata();
+    }
+
 </script>
 
 
@@ -71,7 +77,7 @@
 <!-- todo arz remove me, this is just an example -->
 <div>
     <g:render template="/resultsFilter/filtermodal"></g:render>
-    <a onclick="$('#columnChooserModal').modal('show')">Refine Query</a>
+    <a onclick="showDatasetModal()">Refine Query</a>
 </div>
 
 </body>

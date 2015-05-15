@@ -489,15 +489,20 @@
                 $scope.propagateAttributes($scope.tree);
                 return $scope.view.filters = $scope.getAllFilters($scope.tree);
             };
-            // todo fix url
-            $http.get('/dig-diabetes-portal/resultsFilter/metadata')
-                .success(function(data, status, headers, config) {
-                    $scope.tree = angular.fromJson(data[0].experiments);
-                    $scope.initializeData();
-                })
-                .error(function(data, status, headers, config) {
-                    alert('Unable to query metadata due to ' + status + '. Please report the problem and try again later.');
-                });
+
+            $scope.loadMetadata = function() {
+                // todo fix url
+                $http.get('/dig-diabetes-portal/resultsFilter/metadata')
+                    .success(function (data, status, headers, config) {
+                        $scope.tree = angular.fromJson(data[0].experiments);
+                        $scope.initializeData();
+                    })
+                    .error(function (data, status, headers, config) {
+                        if (status != 0) {
+                            alert('Unable to query metadata due to ' + status + '. Please report the problem and try again later.');
+                        }
+                    });
+            }
         }
     ]);
 
