@@ -77,14 +77,6 @@ class ResultsFilterController {
             parsePhenotypes(experiment,phenotypes);
         }
 
-        // todo arz fixme this is for ui testing
-        try {
-            Thread.sleep(5000)
-        }
-        catch(InterruptedException e) {
-
-        }
-
         render(status:200, contentType:"application/json") {
 
             [cachedMetadataResult.json]
