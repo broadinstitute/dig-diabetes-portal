@@ -112,7 +112,7 @@
                      variantsAndAssociationsPhenotypeAssociations:variantsAndAssociationsPhenotypeAssociations,
                      biologicalHypothesisTesting:biologicalHypothesisTesting,
                      variantsAndAssociationsRowHelpText: variantsAndAssociationsRowHelpText,
-                     continentalAncestryText: continentalAncestryText}
+                     continentalAncestryText: continentalAncestryText}, ${newApi}
             );
             $('[data-toggle="popover"]').popover({
                 animation: true,

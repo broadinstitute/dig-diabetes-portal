@@ -41,6 +41,7 @@ class GeneController {
                                              show_sigma:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma),
                                              geneName:geneUpperCase,
                                              phenotypeList:encodedString,
+                                             newApi:sharedToolsService.getNewApi()
             ] )
         }
      }

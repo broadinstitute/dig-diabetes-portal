@@ -22,6 +22,7 @@
 
 
 <g:javascript>
+var variantsAndAssociationTable = function (){
 $.ajax({
     cache: false,
     type: "post",
@@ -108,10 +109,10 @@ $.ajax({
                             }
 
                             mpgSoftware.geneInfo.fillTheVariantAndAssociationsTableFromNewApi(data,
-                                ${show_gwas},
-                                ${show_exchp},
-                                ${show_exseq},
-                                ${show_sigma},
+    ${show_gwas},
+    ${show_exchp},
+    ${show_exseq},
+    ${show_sigma},
                                 '<g:createLink controller="region" action="regionInfo" />',
                                 '<g:createLink controller="trait" action="traitSearch" />',
                                 '<g:createLink controller="variantSearch" action="gene" />',
@@ -137,6 +138,11 @@ $.ajax({
             core.errorReporter(jqXHR, exception);
         }
     });
+
+};
+if (${newApi}){
+variantsAndAssociationTable ();
+}
 </g:javascript>
 
 

@@ -50,7 +50,9 @@
                 }
             });
         };
-        loadDiseaseRisk();
+        if (${newApi}) {
+            loadDiseaseRisk();
+        }
     </script>
 
 
