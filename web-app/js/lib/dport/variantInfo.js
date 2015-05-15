@@ -12,7 +12,9 @@ var mpgSoftware = mpgSoftware || {};
             delayedCarrierStatusDiseaseRiskPresentation = {},
             delayedBurdenTestPresentation = {},
             delayedIgvLaunch = {},
-            externalCalculateDiseaseBurden;
+            externalCalculateDiseaseBurden,
+            externalizeCarrierStatusDiseaseRisk
+            ;
 
         var cariantRec = {
             _13k_T2D_HET_CARRIERS: 1,
@@ -282,25 +284,18 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 },
 
-                showCarrierStatusDiseaseRisk = function (variant, show_gwas, show_exchp, show_exseq, show_sigma, carrierStatusImpact) {
+                showCarrierStatusDiseaseRisk = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, show_gwas, show_exchp, show_exseq, show_sigma, carrierStatusImpact) {
                     var heta = 1, hetu = 1, totalCases = 1,
                         homa = 1, homu = 1, totalControls = 1,
                         retainBarchartPtr;
                     try {
                         if (show_exseq) {
-                            heta = parseFloat(variant["_13k_T2D_HETA"]);
-                            hetu = parseFloat(variant["_13k_T2D_HETU"]);
-                            homa = parseFloat(variant["_13k_T2D_HOMA"]);
-                            homu = parseFloat(variant["_13k_T2D_HOMU"]);
-                            totalCases = parseFloat(variant["_13k_T2D_OBSA"]);
-                            totalControls = parseFloat(variant["_13k_T2D_OBSU"]);
-                        } else if (show_sigma) {
-                            heta = parseFloat(variant["SIGMA_T2D_HETA"]);
-                            hetu = parseFloat(variant["SIGMA_T2D_HETU"]);
-                            homa = parseFloat(variant["SIGMA_T2D_HOMA"]);
-                            homu = parseFloat(variant["SIGMA_T2D_HOMU"]);
-                            totalCases = parseFloat(variant["SIGMA_T2D_OBSA"]);
-                            totalControls = parseFloat(variant["SIGMA_T2D_OBSU"]);
+                            heta = HETA;
+                            hetu = HETU;
+                            homa = HOMA;
+                            homu = HOMU;
+                            totalCases = OBSA;
+                            totalControls = OBSU;
                         }
 
 
@@ -749,9 +744,9 @@ var mpgSoftware = mpgSoftware || {};
                     variantTitle, showSigma, showGwas, showExchp, showExseq, diseaseBurdenStrings) {// disease burden
                     var weHaveEnoughDataForRiskBurdenTest;
                     if (showSigma) {
-                        weHaveEnoughDataForRiskBurdenTest =  (!UTILS.nullSafetyTest([OBSU, OBSA, HOMA, HETA, HOMU, HOMU  ]));
+                        weHaveEnoughDataForRiskBurdenTest =  (!UTILS.nullSafetyTest([OBSU, OBSA, HOMA, HETA, HOMU, HETU  ]));
                     } else {
-                        weHaveEnoughDataForRiskBurdenTest =  (!UTILS.nullSafetyTest ([OBSU, OBSA, HOMA, HETA, HOMU, HOMU ]));
+                        weHaveEnoughDataForRiskBurdenTest =  (!UTILS.nullSafetyTest ([OBSU, OBSA, HOMA, HETA, HOMU, HETU ]));
                     }
                     UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataForRiskBurdenTest, $('#diseaseRiskExists'), $('#diseaseRiskNoExists'));
                     if (weHaveEnoughDataForRiskBurdenTest) {
@@ -759,29 +754,30 @@ var mpgSoftware = mpgSoftware || {};
                     }
                     $('#sigmaVariantCharacterization').append(UTILS.sigmaVariantCharacterization(variant, variantTitle));
                 };
-            // externalize!
-            // externalize!
-            externalCalculateDiseaseBurden = calculateDiseaseBurden;
+                // externalize!
+                // externalize!
+                externalCalculateDiseaseBurden = calculateDiseaseBurden;
                 var howCommonIsThisVariantAcrossEthnicities = function (variant, alleleFrequencyStrings) {// how common is this allele across different ethnicities
                     var weHaveEnoughDataToDescribeMinorAlleleFrequencies = (!UTILS.nullsExist (variant,["_13k_T2D_AA_MAF"]));
                     UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToDescribeMinorAlleleFrequencies, $('#howCommonIsExists'), $('#howCommonIsNoExists'));
                     if (weHaveEnoughDataToDescribeMinorAlleleFrequencies) {
                         privateMethods.showEthnicityPercentageWithBarChart(variant, alleleFrequencyStrings);
                     }
-                },
-                showHowCarriersAreDistributed = function (variant, showGwas, showExchp, showExseq, showSigma, carrierStatusImpact) {// case control data set characterization
+                };
+                var showHowCarriersAreDistributed = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, showGwas, showExchp, showExseq, showSigma, carrierStatusImpact) {// case control data set characterization
                     var weHaveEnoughDataToCharacterizeCaseControls;
                     if (showSigma) {
-                        weHaveEnoughDataToCharacterizeCaseControls = (!UTILS.nullsExist (variant,["SIGMA_T2D_HETA","SIGMA_T2D_HETU", "SIGMA_T2D_HOMA", "SIGMA_T2D_HOMU", "SIGMA_T2D_OBSU", "SIGMA_T2D_OBSA"  ]));
+                        weHaveEnoughDataToCharacterizeCaseControls = (!UTILS.nullSafetyTest([OBSU, OBSA, HOMA, HETA, HOMU, HETU  ]));
                     } else {
-                        weHaveEnoughDataToCharacterizeCaseControls = (!UTILS.nullsExist (variant,["_13k_T2D_HETA","_13k_T2D_HETU", "_13k_T2D_HOMA", "_13k_T2D_HOMU", "_13k_T2D_OBSU", "_13k_T2D_OBSA"  ]));
+                        weHaveEnoughDataToCharacterizeCaseControls = (!UTILS.nullSafetyTest([OBSU, OBSA, HOMA, HETA, HOMU, HETU  ]));
                     }
                     UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToCharacterizeCaseControls, $('#carrierStatusExist'), $('#carrierStatusNoExist'));
                     if (weHaveEnoughDataToCharacterizeCaseControls) {
-                        privateMethods.showCarrierStatusDiseaseRisk(variant, showGwas, showExchp, showExseq, showSigma, carrierStatusImpact);
+                        privateMethods.showCarrierStatusDiseaseRisk(OBSU, OBSA, HOMA, HETA, HOMU, HETU, showGwas, showExchp, showExseq, showSigma, carrierStatusImpact);
                     }
-                },
-                describeImpactOfVariantOnProtein = function (variant, variantTitle, impactOnProtein) {
+                };
+                externalizeCarrierStatusDiseaseRisk = showHowCarriersAreDistributed;
+                var describeImpactOfVariantOnProtein = function (variant, variantTitle, impactOnProtein) {
                     $('#effectOfVariantOnProteinTitle').append(privateMethods.variantGenerateProteinsChooserTitle(variant, variantTitle, impactOnProtein));
                     $('#effectOfVariantOnProtein').append(privateMethods.variantGenerateProteinsChooser(variant, variantTitle, impactOnProtein));
                     UTILS.verifyThatDisplayIsWarranted(variant["_13k_T2D_TRANSCRIPT_ANNOT"], $('#variationInfoEncodedProtein'), $('#puntOnNoncodingVariant'));
@@ -795,11 +791,24 @@ var mpgSoftware = mpgSoftware || {};
             delayedIgvLaunch = prepareDelayedIgvLaunch(variant, showSigma, restServerRoot);
             variantAssociations(variant, showSigma, variantTitle, traitsStudiedUrlRoot, textStringObject.variantAssociationStrings);
 
-            calculateDiseaseBurden(parseFloat(variant["_13k_T2D_HETA"]),parseFloat(variant["_13k_T2D_HETU"]),parseFloat(variant["_13k_T2D_HOMA"]),parseFloat(variant["_13k_T2D_HOMU"]),
-                parseFloat(variant["_13k_T2D_OBSU"]),parseFloat(variant["_13k_T2D_OBSA"]),parseFloat(variant["_13k_T2D_P_EMMAX_FE_IV"]),parseFloat(variant["_13k_T2D_OR_WALD_DOS_FE_IV"]),
+            calculateDiseaseBurden(
+                parseFloat(variant["_13k_T2D_OBSU"]),
+                parseFloat(variant["_13k_T2D_OBSA"]),
+                parseFloat(variant["_13k_T2D_HOMA"]),
+                parseFloat(variant["_13k_T2D_HETA"]),
+                parseFloat(variant["_13k_T2D_HOMU"]),
+                parseFloat(variant["_13k_T2D_HETU"]),
+                parseFloat(variant["_13k_T2D_P_EMMAX_FE_IV"]),
+                parseFloat(variant["_13k_T2D_OR_WALD_DOS_FE_IV"]),
                 variantTitle, showSigma, showGwas, showExchp, showExseq, textStringObject.diseaseBurdenStrings);
             howCommonIsThisVariantAcrossEthnicities(variant, textStringObject.alleleFrequencyStrings);
-            showHowCarriersAreDistributed(variant, showGwas, showExchp, showExseq, showSigma, textStringObject.carrierStatusImpact);
+            showHowCarriersAreDistributed(
+                parseFloat(variant["_13k_T2D_OBSU"]),
+                parseFloat(variant["_13k_T2D_OBSA"]),
+                parseFloat(variant["_13k_T2D_HOMA"]),
+                parseFloat(variant["_13k_T2D_HETA"]),
+                parseFloat(variant["_13k_T2D_HOMU"]),
+                parseFloat(variant["_13k_T2D_HETU"]), showGwas, showExchp, showExseq, showSigma, textStringObject.carrierStatusImpact);
             describeImpactOfVariantOnProtein(variant, variantTitle, textStringObject.impactOnProtein);
         };
 
@@ -815,7 +824,9 @@ var mpgSoftware = mpgSoftware || {};
             retrieveCalculateDiseaseBurden = function () {
                 return externalCalculateDiseaseBurden;
             },
-
+            retrieveCarrierStatusDiseaseRisk = function (){
+                return externalizeCarrierStatusDiseaseRisk;
+            },
             retrieveDelayedIgvLaunch = function () {
                 return delayedIgvLaunch;
             };
@@ -825,6 +836,7 @@ var mpgSoftware = mpgSoftware || {};
 
             // public routines
             retrieveCalculateDiseaseBurden:retrieveCalculateDiseaseBurden,
+            retrieveCarrierStatusDiseaseRisk: retrieveCarrierStatusDiseaseRisk,
             fillTheFields: fillTheFields,
             retrieveDelayedHowCommonIsPresentation: retrieveDelayedHowCommonIsPresentation,
             retrieveDelayedCarrierStatusDiseaseRiskPresentation: retrieveDelayedCarrierStatusDiseaseRiskPresentation,
