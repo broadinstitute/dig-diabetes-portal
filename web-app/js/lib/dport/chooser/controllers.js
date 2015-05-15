@@ -55,8 +55,8 @@
 
     testApp.controller("ChooserController", [
         "$scope", "TimeFunctions", "$http", function($scope, TimeFunctions, $http) {
-            var e, fullTextRegexTokens, root;
-            root = typeof window !== "undefined" && window !== null ? window : global;
+            var e, fullTextRegexTokens;
+            $scope.tree = [];
             $scope.$ = $;
             $scope.view = {};
             $scope.view.showAdvancedSelector = true;
@@ -71,8 +71,8 @@
             $scope.getDatasetsFromQuery = function(query) {
                 var array, dataset, e, element, elementsToRemove, index, k, newarray, removed_elements, v, value, _i, _j, _len, _len1;
                 array = [];
-                array = $scope.flattenTree(tree);
-                newarray = $scope.flattenTree(tree);
+                array = $scope.flattenTree($scope.tree);
+                newarray = $scope.flattenTree($scope.tree);
                 elementsToRemove = [];
                 if (!$.isEmptyObject(query)) {
                     for (k in query) {
@@ -132,7 +132,6 @@
                 }
             };
             $scope.toggleItem = function(item) {
-                console.log("toggling " + item.name);
                 item.selected = (item.selected == null) || item.selected === false ? true : false;
             };
 
@@ -170,7 +169,6 @@
                 var collection, new_filters;
                 collection = $scope.getDatasetsFromQuery(query);
                 new_filters = $scope.getAllFilters(collection);
-                console.log("refined filters to " + (angular.toJson(new_filters)));
                 return new_filters;
             };
             $scope.assignAncestries = function(item) {
@@ -360,7 +358,6 @@
                 for (k in attributeObject) {
                     v = attributeObject[k];
                     if ((item.attributes[k] != null) && item.attributes[k] && item.attributes[k] === v) {
-                        console.log(("" + item.name + " match on") + v);
                         return true;
                     }
                 }
@@ -378,7 +375,6 @@
                     token = fullTextTokens[_i];
                     fullTextRegexTokens.push(new RegExp('\\b' + token.replace(/"/gi, ""), 'i'));
                 }
-                console.log(fullTextRegexTokens);
                 return fullTextRegexTokens;
             };
             $scope.checkSearchTextMatch = function(item) {
@@ -484,7 +480,6 @@
 
             $scope.initializeData = function() {
                 var item, _i, _len, _ref;
-                console.log("Initializing local data");
                 $scope.getLevels($scope.tree);
                 _ref = $scope.flattenTree($scope.tree);
                 for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -495,17 +490,13 @@
                 return $scope.view.filters = $scope.getAllFilters($scope.tree);
             };
             // todo fix url
-            //$http.get('/delberately-broken')
             $http.get('/dig-diabetes-portal/resultsFilter/metadata')
                 .success(function(data, status, headers, config) {
-                    $scope.tree = data[0].experiments;
+                    $scope.tree = angular.fromJson(data[0].experiments);
                     $scope.initializeData();
-                    console.log("using live data");
                 })
                 .error(function(data, status, headers, config) {
-                    console.log('Could not query metadata due to ' + status + ', using cached data.');
-                    $scope.tree = root.tree;
-                    $scope.initializeData();
+                    alert('Unable to query metadata due to ' + status + '. Please report the problem and try again later.');
                 });
         }
     ]);
