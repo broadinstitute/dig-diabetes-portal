@@ -9,6 +9,8 @@ import spock.lang.Specification
 @TestFor(ResultsFilterController)
 class ResultsFilterControllerSpec extends Specification {
 
+    // todo arz write real tests
+
     def setup() {
     }
 

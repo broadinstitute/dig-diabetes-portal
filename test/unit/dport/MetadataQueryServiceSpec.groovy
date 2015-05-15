@@ -9,6 +9,8 @@ import spock.lang.Specification
 @TestFor(MetadataQueryService)
 class MetadataQueryServiceSpec extends Specification {
 
+    // todo arz write real tests
+    
     def setup() {
     }
 
