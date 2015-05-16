@@ -60,7 +60,7 @@
 /*}*/
 .assoc-up {
     fill: #0f0;
-    color: #00f;
+    color: #6fb7f7;
     stroke: #6fb7f7;
 }
 
@@ -79,7 +79,60 @@
     fill:none;
     stroke: black;
 }
+.legend{
+    border: 1px solid black;
+}
+.legendTitle{
+    font-family: 'Lato';
+    font-weight: 400;
+    font-size: 12pt;
+    font-style: italic;
+    text-anchor: middle;
+}
+rect.legendHolder  {
+    fill:white;
+    stroke:black;
+    opacity:0.8;
+}
+.legendStylingCat {
+    font-size: 8pt;
+    font-weight: bold;
+    font-style: normal;
+    fill:black;
+}
+.legendStylingCat2 {
+    font-size: 8pt;
+    font-weight: bold;
+    font-style: normal;
+    fill:black;
+}
+.legendStylingSig {
+    font-size: 8pt;
+    font-weight: bold;
+    font-style: normal;
+    fill:black;
+}
+.legendStylingSig2 {
+    font-size: 8pt;
+    font-weight: bold;
+    font-style: normal;
+    fill:black;
+}
+.legendStyling {
+    font-size: 9pt;
+}
+.legendStyling0 {
 
+    display: none;
+}
+.legendStyling1 {
+    font-size: 8pt;
+    fill:#6fb7f7;
+}
+.legendStyling2 {
+    font-size: 8pt;
+    fill: red;
+}
 </style>
 
 <div id="main">

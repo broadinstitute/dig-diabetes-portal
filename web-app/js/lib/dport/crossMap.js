@@ -44,7 +44,8 @@ var baget = baget || {};  // encapsulating variable
             xAxis,
             yAxis,
             orgData,
-            maximumArrowSize=16;
+            maximumArrowSize=16,
+            legendHolderBoxWidth = 150;
 
 
         // indicate significance level with size
@@ -196,6 +197,132 @@ var baget = baget || {};  // encapsulating variable
                 .attr("height", yEnd);
 
         };
+
+
+        var drawLegend  = function(parent,data,legendPosX,legendPosY,spaceBetweenLegendEntries,set2) {
+            // add legend
+            var legendTextYPosition = 15,
+                spaceBetweenLegendColorAndLegendText = 30,
+                legendHolderBoxHeight = 120,
+                legendTitleYPositioning = 18,
+                legMapShift =  60;
+
+
+            var legend = parent.append("g")
+                .attr("class", "legendHolder")
+                .attr("x", legendPosX)
+                .attr("y", legendPosY)
+                .attr("height", 100)
+                .attr("width", 100) ;
+
+
+            legend.selectAll('rect')
+                .data([0])
+                .enter()
+                .append("rect")
+                .attr("x", legendPosX)
+                .attr("y", legendPosY)
+                .attr("width", legendHolderBoxWidth)
+                .attr("height", legendHolderBoxHeight)
+                .attr("class", "legendHolder");
+
+            legend.selectAll('text.legendTitle')
+                .data([0])
+                .enter()
+                .append("text")
+                .attr("class", "legendTitle")
+                .attr("x", legendPosX + (legendHolderBoxWidth / 2))
+                .attr("y", legendPosY+legendTitleYPositioning)
+                .attr("class", "legendTitle")
+                .text('Legend');
+
+            legend.selectAll('text.legendStylingCat')
+                .data([0])
+                .enter()
+                .append("text")
+                .attr("class", "legendStylingCat")
+                .attr("x", legendPosX+5)
+                .attr("y", (legendPosY+(3*(spaceBetweenLegendEntries + legendTextYPosition))/2)-7)
+                .text('Direction');
+            legend.selectAll('text.legendStylingCat2')
+                .data([0])
+                .enter()
+                .append("text")
+                .attr("class", "legendStylingCat2")
+                .attr("x", legendPosX+5)
+                .attr("y", (legendPosY+(3*(spaceBetweenLegendEntries + legendTextYPosition))/2)+7)
+                .text('(color)');
+
+
+            legend.selectAll('rect')
+                .data(data)
+                .enter()
+                .append("rect")
+                .attr("x", legMapShift+legendPosX + 10)
+                .attr("y", function (d, i) {
+                    return legendPosY+(i * spaceBetweenLegendEntries + legendTextYPosition);
+                })
+                .attr("width", 10)
+                .attr("height", 10)
+                .attr("class", function (d, i) {
+                    return 'legendStyling' + i;
+                })
+
+            legend.selectAll('text.elements1')
+                .data(data)
+                .enter()
+                .append("text")
+                .attr("class", "elements1")
+                .attr("x", legMapShift+legendPosX + spaceBetweenLegendColorAndLegendText)
+                .attr("y", function (d, i) {
+                    return legendPosY+(i * spaceBetweenLegendEntries + legendTextYPosition + 9);
+                })
+                .attr("class", "legendStyling")
+                .text(function (d) {
+                    if (typeof d.legendText !== 'undefined') {
+                        return d.legendText;
+                    } else {
+                        return '';
+                    }
+                });
+
+            legend.selectAll('text.legendStylingSig')
+                .data([0])
+                .enter()
+                .append("text")
+                .attr("class", "legendStylingSig")
+                .attr("x", legendPosX+5)
+                .attr("y", (legendPosY+(6*(spaceBetweenLegendEntries + legendTextYPosition))/2)-15)
+                .text('Significance');
+            legend.selectAll('text.legendStylingSig2')
+                .data([0])
+                .enter()
+                .append("text")
+                .attr("class", "legendStylingSig2")
+                .attr("x", legendPosX+5)
+                .attr("y", legendPosY+(6*(spaceBetweenLegendEntries + legendTextYPosition))/2)
+                .text('(size)');
+
+            legend.selectAll('text.elements2')
+                .data(set2)
+                .enter()
+                .append("text")
+                .attr("class", "elements2")
+                .attr("x", legMapShift/2+legendPosX + spaceBetweenLegendColorAndLegendText+10)
+                .attr("y", function (d, i) {
+                    return legendPosY+((i+5) * spaceBetweenLegendEntries/2 + legendTextYPosition + 9);
+                })
+                .attr("class", "legendStyling")
+                .text(function (d) {
+                    if (typeof d.legendText !== 'undefined') {
+                        return d.legendText;
+                    } else {
+                        return '';
+                    }
+                });
+
+
+        } ;
 
 
 
@@ -366,6 +493,26 @@ var baget = baget || {};  // encapsulating variable
                 .attr('class', 'axesHolder')
                 .attr('transform', 'translate('+margin.left+','+margin.top+')')
                 .call(createAxes ,orgData,grid_size,xScale,yScale,width, height, margin);
+
+            var legCol1 = [{legendText:''},
+                {legendText:'positive'},
+                {legendText:'negative'}] ;
+            var legCol2 = [{legendText:''},
+                {legendText:'p>.05=none'},
+                {legendText:'p<.05=small'},
+                {legendText:'p<.0001=med'},
+                {legendText:'p<10E-8=big'}
+            ] ;
+
+
+            svg
+                .selectAll('g.legend')
+                .data([1])
+                .enter()
+                .append('g')
+                .attr('class', 'legend')
+                .call(drawLegend,legCol1,  width-legendHolderBoxWidth,3,20, legCol2);
+
 
 
 //            var group = svg.attr("width", expandedWidth + margin.top + margin.bottom)
