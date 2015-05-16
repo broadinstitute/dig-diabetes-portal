@@ -28,7 +28,8 @@ var baget = baget || {};  // encapsulating variable
                width = 1080 - margin.left - margin.right,
             spaceForVariantLabel = 60,
             variantLinkUrl = '',
-            phenotypeArray = [];
+            phenotypeArray = [],
+            spaceForPhenotypeLabels  = 100;
 
 
 
@@ -98,6 +99,7 @@ var baget = baget || {};  // encapsulating variable
                     });
                 var uniqueTraits=d3.nest()
                     .key(function(d) {return d.TRAIT;})
+                    .sortKeys(d3.ascending)
                     .rollup(function(d) {return phenotypeMap.phenotypeMap[d[0].TRAIT];})
                     .entries(dd)
                     .map(function(d){
@@ -158,7 +160,7 @@ var baget = baget || {};  // encapsulating variable
             var  variantIdArray =  uniqueArrays.variants.map(function (d){return d.id});
             var  variantNameArray = uniqueArrays.variants.map(function (d){return d.rsname});
             var  traitIdArray =  uniqueArrays.traits.map(function (d){return d.id});
-            var  traitNameArray = uniqueArrays.traits.map(function (d){return d.rsname});
+            var  traitNameArray = uniqueArrays.traits.map(function (d){return d.name});
             traitMap = createAMap(traitIdArray);
             variantMap = createAMap(variantIdArray);
             for (var key in traitMap) {
@@ -336,12 +338,12 @@ var baget = baget || {};  // encapsulating variable
 
             yAxis = d3.svg.axis()
                 .scale(yScale)
-                .orient('left')
+                .orient('right')
                 .tickFormat(d3.requote(""));
 
             axisGroup.append('g')
                 .attr('id', 'yaxis')
-                .attr('transform', 'translate(' + margin.left + ',0)')
+              .attr('transform', 'translate(' + (width) + ',0)')
                 .attr('class', 'main axis pValue')
                 .call(yAxis);
 
@@ -463,7 +465,7 @@ var baget = baget || {};  // encapsulating variable
             // create the scales
             xScale = d3.scale.linear()
                 .domain([orgData.positionExtent.min,orgData.positionExtent.max])
-                .range([ margin.left, width ]);
+                .range([ margin.left, width-spaceForPhenotypeLabels ]);
 
             yScale = d3.scale.ordinal()
                 .domain([0,orgData.traitIDArray])
@@ -482,7 +484,7 @@ var baget = baget || {};  // encapsulating variable
                 .enter()
                 .append('g')
                 .attr('class', 'bodyClip')
-                .call(defineBodyClip ,"bodyClip",margin.left,0,width-margin.left,height+margin.top);
+                .call(defineBodyClip ,"bodyClip",margin.left,0,width-margin.left-spaceForPhenotypeLabels,height+margin.top);
 
 
             var group = svg
@@ -492,16 +494,16 @@ var baget = baget || {};  // encapsulating variable
                 .append('g')
                 .attr('class', 'axesHolder')
                 .attr('transform', 'translate('+margin.left+','+margin.top+')')
-                .call(createAxes ,orgData,grid_size,xScale,yScale,width, height, margin);
+                .call(createAxes ,orgData,grid_size,xScale,yScale,width-spaceForPhenotypeLabels, height, margin);
 
             var legCol1 = [{legendText:''},
                 {legendText:'positive'},
                 {legendText:'negative'}] ;
             var legCol2 = [{legendText:''},
-                {legendText:'p>.05=none'},
-                {legendText:'p<.05=small'},
-                {legendText:'p<.0001=med'},
-                {legendText:'p<10E-8=big'}
+                {legendText:'p> .05= [none]'},
+                {legendText:'p< .05=small'},
+                {legendText:'p< .0001=med'},
+                {legendText:'p< 10E-8=big'}
             ] ;
 
 
@@ -538,10 +540,10 @@ var baget = baget || {};  // encapsulating variable
 //                .attr('stroke', '#bbb')
 //                .attr('stroke-width', '1');
 
-            //label variant down the left side
+            //label variant down the right side
             group.append('g')
                 .selectAll(".row-g")
-                .data(orgData.traitIDArray)
+                .data(orgData.traitNameArray)
                 .enter()
                 .append('text')
                 .attr("class", function (d, i) {
@@ -550,7 +552,7 @@ var baget = baget || {};  // encapsulating variable
                 .text(function (d) {
                     return d;
                 })
-                .attr("x", 0 )
+                .attr("x", width-spaceForPhenotypeLabels+8 )
                 .attr("y", function (d, i) {
                     return i * grid_size + 15;
                 })
