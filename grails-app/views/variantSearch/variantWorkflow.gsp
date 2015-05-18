@@ -22,6 +22,17 @@
         mpgSoftware.variantWF.initializePage();
     });
 
+    // todo arz remove me example callback from angular to set the columns
+    applyDatasetsFilter = function(columns) {
+        console.log(columns);
+    };
+
+    showDatasetModal = function() {
+        var modal = '#columnChooserModal';
+        $(modal).modal('show');
+        angular.element(modal).scope().loadMetadata();
+    }
+
 </script>
 
 
@@ -36,6 +47,11 @@
                     <div class="col-md-12">
                         <h4>Find genetic variants of interest</h4>
                         <g:render template="variantWFSpec" />
+                        <!-- todo arz remove me, this is just an example -->
+                        <div>
+                            <g:render template="/resultsFilter/filtermodal"></g:render>
+                            <a onclick="showDatasetModal()">Refine Query</a>
+                        </div>
                     </div>
                     %{--<div  class="col-md-7">--}%
 
