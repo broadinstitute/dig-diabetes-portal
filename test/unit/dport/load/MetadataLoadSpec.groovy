@@ -70,6 +70,7 @@ class MetadataLoadSpec extends GroovyTestCase {
 
     void testStuff() {
 
+        println("Clients\tResponseTime\tResponseType")
         for (int numThreads = 1; numThreads < 20; numThreads++) {
             RESPONSES.clear();
             Collection<Thread> threads = new ArrayList<>();
@@ -86,9 +87,8 @@ class MetadataLoadSpec extends GroovyTestCase {
                 t.join();
             }
 
-            println("Clients\tResponseTime")
             for (ResponseMetrics responseMetrics : RESPONSES) {
-                println(numThreads + "\t" + responseMetrics.responseTime);
+                println(numThreads + "\t" + responseMetrics.responseTime + "\t" + responseMetrics.responseType);
             }
 
             try {
