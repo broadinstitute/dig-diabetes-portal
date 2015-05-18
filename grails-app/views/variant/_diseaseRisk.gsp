@@ -5,7 +5,11 @@
 
 
     <script>
-        var loadDiseaseRisk  = function(){
+        var mpgSoftware = mpgSoftware || {};
+        mpgSoftware.testCase  = function(){
+            console.log(' here I am');
+        };
+        mpgSoftware.loadDiseaseRisk  = function(){
             var variant;
             $.ajax({
                 cache: false,
@@ -34,7 +38,7 @@
                         collector["d"+i] = d;
                     }
                     var calculateDiseaseBurden = mpgSoftware.variantInfo.retrieveCalculateDiseaseBurden();
-                    calculateDiseaseBurden(parseInt(collector["d0"][0].count[0]),
+                    var rv = calculateDiseaseBurden(parseInt(collector["d0"][0].count[0]),
                             parseInt(collector["d0"][1].count[0]),
                             parseInt(collector["d0"][2].count[0]),
                             parseInt(collector["d0"][3].count[0]),
@@ -43,6 +47,7 @@
                             parseFloat(collector["d0"][6].count[0]),
                             parseFloat(collector["d0"][7].count[0]),
                             "<%=variantToSearch%>",${show_sigma},${show_gwas},${show_exchp},${show_exseq}, diseaseBurdenStrings);
+                    console.log('hi');
                 },
                 error: function (jqXHR, exception) {
                     loading.hide();
@@ -51,7 +56,7 @@
             });
         };
         if (${newApi}) {
-            loadDiseaseRisk();
+        //    mpgSoftware.loadDiseaseRisk();
         }
     </script>
 
