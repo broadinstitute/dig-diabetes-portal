@@ -6,57 +6,61 @@
 
     <script>
         var mpgSoftware = mpgSoftware || {};
-        mpgSoftware.testCase  = function(){
-            console.log(' here I am');
-        };
-        mpgSoftware.loadDiseaseRisk  = function(){
-            var variant;
-            $.ajax({
-                cache: false,
-                type: "get",
-                url: "${createLink(controller:'variant',action: 'variantDiseaseRisk')}",
-                data: {variantId: '<%=variantToSearch%>'},
-                async: true,
-                success: function (data) {
-                    var diseaseBurdenStrings = {
-                        caseBarName:'<g:message code="variant.diseaseBurden.case.barname" default="have T2D" />',
-                        caseBarSubName:'<g:message code="variant.diseaseBurden.case.barsubname" default="cases" />',
-                        controlBarName:'<g:message code="variant.diseaseBurden.control.barname" default="do not have T2D" />',
-                        controlBarSubName:'<g:message code="variant.diseaseBurden.control.barsubname" default="controls" />',
-                        diseaseBurdenPValueQ:'<g:helpText title="variant.diseaseBurden.control.pValue.help.header"  qplacer="2px 0 0 6px" placement="left" body="variant.variantAssociations.pValue.help.text"/>',
-                        diseaseBurdenOddsRatioQ:'<g:helpText title="variant.diseaseBurden.control.oddsRatio.help.header"  qplacer="2px 0 0 6px" placement="left" body="variant.variantAssociations.oddsRatio.help.text"/>'
-                    };
-                    var collector = {}
-                    for (var i = 0 ; i < data.variantInfo.results.length ; i++) {
-                        var d = [];
-                        for (var j = 0 ; j < data.variantInfo.results[i].pVals.length ; j++ ){
-                            var contents={};
-                            contents["level"] = data.variantInfo.results[i].pVals[j].level;
-                            contents["count"] = data.variantInfo.results[i].pVals[j].count;
-                            d.push(contents);
+
+        mpgSoftware.diseaseRisk  = (function() {
+            var loadDiseaseRisk = function () {
+                $.ajax({
+                    cache: false,
+                    type: "get",
+                    url: "${createLink(controller:'variant',action: 'variantDiseaseRisk')}",
+                    data: {variantId: '<%=variantToSearch%>'},
+                    async: true,
+                    success: function (data) {
+                        var diseaseBurdenStrings = {
+                            caseBarName: '<g:message code="variant.diseaseBurden.case.barname" default="have T2D" />',
+                            caseBarSubName: '<g:message code="variant.diseaseBurden.case.barsubname" default="cases" />',
+                            controlBarName: '<g:message code="variant.diseaseBurden.control.barname" default="do not have T2D" />',
+                            controlBarSubName: '<g:message code="variant.diseaseBurden.control.barsubname" default="controls" />',
+                            diseaseBurdenPValueQ: '<g:helpText title="variant.diseaseBurden.control.pValue.help.header"  qplacer="2px 0 0 6px" placement="left" body="variant.variantAssociations.pValue.help.text"/>',
+                            diseaseBurdenOddsRatioQ: '<g:helpText title="variant.diseaseBurden.control.oddsRatio.help.header"  qplacer="2px 0 0 6px" placement="left" body="variant.variantAssociations.oddsRatio.help.text"/>'
+                        };
+                        var collector = {}
+                        for (var i = 0; i < data.variantInfo.results.length; i++) {
+                            var d = [];
+                            for (var j = 0; j < data.variantInfo.results[i].pVals.length; j++) {
+                                var contents = {};
+                                contents["level"] = data.variantInfo.results[i].pVals[j].level;
+                                contents["count"] = data.variantInfo.results[i].pVals[j].count;
+                                d.push(contents);
+                            }
+                            collector["d" + i] = d;
                         }
-                        collector["d"+i] = d;
+                        var calculateDiseaseBurden = mpgSoftware.variantInfo.retrieveCalculateDiseaseBurden();
+                        var rv = calculateDiseaseBurden(parseInt(collector["d0"][0].count[0]),
+                                parseInt(collector["d0"][1].count[0]),
+                                parseInt(collector["d0"][2].count[0]),
+                                parseInt(collector["d0"][3].count[0]),
+                                parseInt(collector["d0"][4].count[0]),
+                                parseInt(collector["d0"][5].count[0]),
+                                parseFloat(collector["d0"][6].count[0]),
+                                parseFloat(collector["d0"][7].count[0]),
+                                "<%=variantToSearch%>", ${show_sigma}, ${show_gwas}, ${show_exchp}, ${show_exseq}, diseaseBurdenStrings);
+                        if ((typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation() !== 'undefined') &&
+                                (typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch !== 'undefined')) {
+                            mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch();
+                        }
+                    },
+                    error: function (jqXHR, exception) {
+                        loading.hide();
+                        core.errorReporter(jqXHR, exception);
                     }
-                    var calculateDiseaseBurden = mpgSoftware.variantInfo.retrieveCalculateDiseaseBurden();
-                    var rv = calculateDiseaseBurden(parseInt(collector["d0"][0].count[0]),
-                            parseInt(collector["d0"][1].count[0]),
-                            parseInt(collector["d0"][2].count[0]),
-                            parseInt(collector["d0"][3].count[0]),
-                            parseInt(collector["d0"][4].count[0]),
-                            parseInt(collector["d0"][5].count[0]),
-                            parseFloat(collector["d0"][6].count[0]),
-                            parseFloat(collector["d0"][7].count[0]),
-                            "<%=variantToSearch%>",${show_sigma},${show_gwas},${show_exchp},${show_exseq}, diseaseBurdenStrings);
-                    console.log('hi');
-                },
-                error: function (jqXHR, exception) {
-                    loading.hide();
-                    core.errorReporter(jqXHR, exception);
-                }
-            });
-        };
-        if (${newApi}) {
-        //    mpgSoftware.loadDiseaseRisk();
+                });
+
+            };
+            return {loadDiseaseRisk:loadDiseaseRisk}
+        }());
+        if (${newApi}) { // if we wanted to launch immediately, instead of delayed, use the following line
+        //    mpgSoftware.diseaseRisk.loadDiseaseRisk();
         }
     </script>
 

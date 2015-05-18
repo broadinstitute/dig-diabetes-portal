@@ -316,7 +316,7 @@
     $('#accordionVariant').on('show.bs.collapse', function (e) {
         if (e.target.id === "collapseDiseaseRisk") {
             if (${newApi}) {
-                mpgSoftware.loadDiseaseRisk();
+                mpgSoftware.diseaseRisk.loadDiseaseRisk();
             } else {
                 if ((typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation() !== 'undefined') &&
                         (typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch !== 'undefined')) {
