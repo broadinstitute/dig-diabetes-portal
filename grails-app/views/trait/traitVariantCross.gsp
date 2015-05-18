@@ -69,6 +69,28 @@
     color: red;
     stroke: red;
 }
+.assoc-down:hover {
+    stroke-width:2;
+}
+.assoc-up:hover {
+    stroke-width:2;
+}
+.bg {
+    fill: green;
+    fill-opacity: 0.0;
+    opacity: 0.0;
+    pointer-events: none;
+    color: white;
+    stroke: white;
+}
+.traitChosen {
+font-weight: bold;
+}
+line.chosen {
+    fill: green;
+    color: green;
+    stroke: green;
+}
 
 .assoc-none {
     fill: white;
@@ -151,14 +173,11 @@ rect.legendHolder  {
                 <p>
                     The table below shows all GWAS variants in this region available in this portal.
                     Columns represent each of the <a class="boldlink" href="${createLink(controller:'informational', action:'hgat')}">25 traits</a> that were studied in meta-analyses included in this portal.
-                Rows represent variants, in genomic order.
-                All variants are shown, regardless of association.
+                Rows represent traits, in alphabetic order.
                 </p>
 
                 <p>
-                    Hover over a circle to see the details of that association.
-                    Some cells won't have circles because no data is available,
-                    because they were not genotyped as part of the study and could not be adequately imputed.
+                    Hover over a variant to see the details of that association.
                 </p>
 
                 <p>

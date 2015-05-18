@@ -330,11 +330,6 @@ var baget = baget || {};  // encapsulating variable
 
         var createAxes = function (axisGroup,orgData,gridSize,xScale,yScale, width, height, margin) {
             // draw the x axis
-//
-//            var traitLocal = orgData.traitIDArray.map(function (d, i) {
-//                return i * gridSize + 5;
-//            });
-
 
             yAxis = d3.svg.axis()
                 .scale(yScale)
@@ -358,7 +353,7 @@ var baget = baget || {};  // encapsulating variable
                 .attr('transform', 'translate(0,0)')
                 .attr('class', 'main axis chromosome')
                 .call(xAxis);
-        };
+
 //
 //                .selectAll("text")
 //                    .attr("dx", "0.5em")
@@ -367,7 +362,7 @@ var baget = baget || {};  // encapsulating variable
 //                    .attr("transform", function(d) {
 //                        return "rotate(-65)"
 //                    });
-//        };
+        };
 
 
         var onMouseOver = function(d){
@@ -393,11 +388,48 @@ var baget = baget || {};  // encapsulating variable
                 return  oneWeWant;
             });
             d3.select("#tooltip")
-                .style("left", xScale((d3.event.pageX + 10)))
-                .style("top", (d3.event.pageY - 10) + "px")
+                .style("left", (d3.event.pageX + 20) + "px")
+                .style("top", (d3.event.pageY - 20) + "px")
                 .select("#value")
                 .html(buildToolTip(d));
             d3.select("#tooltip").classed("hidden", false);
+
+        };
+
+
+
+        var onClick = function(d){
+            var remCol = d3.selectAll('line.chosen');
+            remCol.remove();
+            var remRow = d3.selectAll('.rowHighlight');
+            remRow.style('opacity',0)
+                .style('fill-opacity',0) ;
+            var holdingRow =  d3.select('.b_'+d.t);
+            holdingRow.select('.bg').style('opacity',0.1)
+                .style('fill-opacity',1)
+                .classed('rowHighlight',true) ;
+            d3.selectAll(".traitlabel").classed("traitChosen", function (r, ri) {
+                var oneWeWant = (ri == (d.t));
+                return  oneWeWant;
+            });
+            holdingRow.selectAll('line.chosen')
+                .data([d])
+                .enter()
+                .append("line")
+                .attr("class", "chosen")
+                .attr("x1", function (d, i) {
+                    return xScale(d.pos);
+                })
+                .attr("y1", function (d, i) {
+                    return 1 ;
+                })
+                .attr("x2", function (d, i) {
+                    return xScale(d.pos);
+                })
+                .attr("y2", function (d, i) {
+                    return height-margin.top-margin.bottom ;
+                })
+                .attr('stroke-width', 2)
 
         };
 
@@ -415,7 +447,6 @@ var baget = baget || {};  // encapsulating variable
                 })
                 .attr("x2", function (d, i) {
                     return xScale(d.pos);
-                    // return xScale(d.v * grid_size + spaceForVariantLabel);
                 })
                 .attr("y2", function (d, i) {
                     return (maximumArrowSize/2)+(d.t * grid_size)+arrowSize(d) ;
@@ -431,7 +462,11 @@ var baget = baget || {};  // encapsulating variable
                     d3.select("#tooltip").classed("hidden", true);
                     d3.selectAll(".traitlabel").classed("text-highlight", false);
                     d3.selectAll(".variantlabel").classed("text-highlight", false).text('');
-                });
+                })
+                .on("click", function (d) {
+                    onClick(d);
+                })
+            ;
         };
 
 
@@ -513,7 +548,7 @@ var baget = baget || {};  // encapsulating variable
                 .enter()
                 .append('g')
                 .attr('class', 'legend')
-                .call(drawLegend,legCol1,  width-legendHolderBoxWidth,3,20, legCol2);
+                .call(drawLegend,legCol1,  25,3,20, legCol2);
 
 
 
@@ -521,24 +556,6 @@ var baget = baget || {};  // encapsulating variable
 //                           .append("g")
 //                           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 //
-//
-//            // draw a line along the top
-//            group.append('line')
-//                .attr('x1', xScale(spaceForVariantLabel-25))
-//                .attr('y1', '-15')
-//                .attr('x2', xScale(expandedWidth+(spaceForVariantLabel-25)))
-//                .attr('y2', '-15')
-//                .attr('stroke', '#bbb')
-//                .attr('stroke-width', '1');
-//
-//            // draw a line down the left side
-//            group.append('line')
-//                .attr('x1', xScale(spaceForVariantLabel-25))
-//                .attr('y1', '-15')
-//                .attr('x2', xScale(spaceForVariantLabel-25))
-//                .attr('y2', height)
-//                .attr('stroke', '#bbb')
-//                .attr('stroke-width', '1');
 
             //label variant down the right side
             group.append('g')
@@ -572,8 +589,22 @@ var baget = baget || {};  // encapsulating variable
                 .data(orgData.variantArrayOfArrayVariantPointers)
                 .enter()
                 .append('g')
-                .attr('class', 'cellr') ;
+                .attr('class', function(d,i){
+                    return 'cellr b_'+i;
+                }) ;
 
+            rows.selectAll('rect.bg').data([1])
+                .enter()
+                .append('rect')
+                .attr('class','bg')
+                .attr("x", 0)
+                .attr("y",  function (d, i) {
+                    var row=parseInt(this.parentNode.classList[1].split('_')[1]);
+                   // return row * grid_size + 15;
+                    return row * grid_size;
+                })
+                .attr("width", width-spaceForPhenotypeLabels)
+                .attr("height", grid_size);
             // Now draw something for each trait
             rows.selectAll('line.cg')
                 .data(function (d, i) {
