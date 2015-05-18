@@ -164,8 +164,8 @@ t2dNewDevRestServer {
     name =  'dev/'
     path = 'gs/'
 }
-//server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
-server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
+server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
+//server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
 dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
 //dbtRestServer.URL = 'http://diabetesgeneticsportal2.broadinstitute.org:8888/dev/burden/'
 //experimentalRestServer.URL = 'http://69.173.71.178:8888/dev2/server/'
@@ -256,8 +256,8 @@ environments {
     production {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
-      grails.serverURL = "http://type2diabetesgenetics.org"
-//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetesgenetics.org"
+      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2dqasrv2.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2ddev.elasticbeanstalk.com"
