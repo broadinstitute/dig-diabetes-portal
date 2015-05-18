@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="ChooserApp" ng-controller="ChooserController">
+<html lang="en"
+      ng-app="ChooserApp"
+      ng-controller="ChooserController"
+      ng-init="init('${createLink(controller:'ResultsFilter', action:'metadata')}')">
 
 <body>
 

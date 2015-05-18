@@ -26,6 +26,10 @@
             $scope.search.currentQuery = {};
             fullTextRegexTokens = [];
 
+            $scope.init = function(metadataUrl) {
+                $scope.metadataUrl = metadataUrl;
+            };
+
             $scope.setColumnFilter = function($columns) {
                 applyDatasetsFilter($columns);
             };
@@ -453,8 +457,7 @@
             };
 
             $scope.loadMetadata = function() {
-                // todo arz fix url
-                $http.get('/dig-diabetes-portal/resultsFilter/metadata')
+                $http.get($scope.metadataUrl)
                     .success(function (data, status, headers, config) {
                         $scope.tree = angular.fromJson(data[0].experiments);
                         $scope.initializeData();
