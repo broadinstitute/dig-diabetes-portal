@@ -8,7 +8,10 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-
+    <meta name="layout" content="sigma"/>
+    <r:require modules="core"/>
+    <r:require modules="sigma"/>
+    <r:layoutResources/>
 </head>
 
 <body>
@@ -25,6 +28,9 @@
     </g:if>
     <g:if test="${params.section == 'partners'}">
         <g:render template="partners-header"/>
+    </g:if>
+    <g:if test="${params.section == 'learn'}">
+        <g:render template="learn-header"/>
     </g:if>
 </div>
 
@@ -60,6 +66,13 @@
                     </div>
                 </div>
             </g:if>
+            <g:if test="${params.section != 'learn'}">
+                <div class="row clearfix sigma-learn">
+                    <div class="text-center">
+                        <g:link params="[section: 'learn']"><h2 class="sigma-topic">LEARN</h2></g:link>
+                    </div>
+                </div>
+            </g:if>
 
         </div>
         <div class="col-md-10 col-xs-8">
@@ -74,6 +87,9 @@
             </g:if>
             <g:if test="${params.section == 'partners'}">
                 <g:render template="partners"/>
+            </g:if>
+            <g:if test="${params.section == 'learn'}">
+                <g:render template="learn"/>
             </g:if>
         </div>
     </div>

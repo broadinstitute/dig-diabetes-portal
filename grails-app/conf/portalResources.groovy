@@ -109,6 +109,8 @@ modules = {
     }
     sigma {  // sigma site
         resource url: 'css/dport/sigma.css'
+        resource url: 'js/lib/jquery-1.11.0.min.js'
+        resource url: 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'
     }
 
 }
