@@ -8,6 +8,10 @@
 
 
     <script>
+        var mpgSoftware = mpgSoftware || {};
+
+
+        mpgSoftware.carrierStatusImpact  = (function() {
         var loadDiseaseRisk  = function(){
             var variant;
             $.ajax({
@@ -37,13 +41,20 @@
                         collector["d"+i] = d;
                     }
                     var carrierStatusDiseaseRisk = mpgSoftware.variantInfo.retrieveCarrierStatusDiseaseRisk();
-                    carrierStatusDiseaseRisk(parseInt(collector["d0"][0].count[0]),
-                            parseInt(collector["d0"][1].count[0]),
-                            parseInt(collector["d0"][2].count[0]),
-                            parseInt(collector["d0"][3].count[0]),
-                            parseInt(collector["d0"][4].count[0]),
+                    carrierStatusDiseaseRisk(parseInt(collector["d0"][4].count[0]),
                             parseInt(collector["d0"][5].count[0]),
+                            parseInt(collector["d0"][2].count[0]),
+                            parseInt(collector["d0"][0].count[0]),
+                            parseInt(collector["d0"][3].count[0]),
+                            parseInt(collector["d0"][1].count[0]),
+                            parseFloat(collector["d0"][6].count[0]),
+                            parseFloat(collector["d0"][7].count[0]),
                             ${show_gwas},${show_exchp},${show_exseq},${show_sigma}, carrierStatusImpact);
+
+                    if ((typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation() !== 'undefined') &&
+                            (typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch !== 'undefined')) {
+                        mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch();
+                    }
                 },
                 error: function (jqXHR, exception) {
                     loading.hide();
@@ -51,9 +62,11 @@
                 }
             });
         };
-        if (${newApi}) {
-            loadDiseaseRisk();
-        }
+        return {loadDiseaseRisk:loadDiseaseRisk}
+        }());
+        %{--if (${newApi}) {--}%
+            %{--loadDiseaseRisk();--}%
+        %{--}--}%
     </script>
 
 

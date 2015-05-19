@@ -823,8 +823,16 @@ ${customFilterSet}""".toString()
         String pFieldName = ""
         switch (dataSet){
             case 1:
-                dataSetId = "ExSeq_26k_v2"
+                dataSetId = "ExSeq_26k_dv2"
                 pFieldName = "P_EMMAX_FE_IV"
+                break;
+            case 2:
+                dataSetId = "ExChip_82k_dv1"
+                pFieldName = "P_VALUE"
+                break;
+            case 3:
+                dataSetId = "GWAS_DIAGRAM_dv1"
+                pFieldName = "P_VALUE"
                 break;
             default:
                 log.error("Trouble: user requested data set = ${dataSet} which I don't recognize")
@@ -860,27 +868,27 @@ ${customFilterSet}""".toString()
         String pFieldName = ""
         switch (dataSet){
             case "HS":
-                dataSetId = "ExSeq_26k_v2"
+                dataSetId = "ExSeq_26k_dv2"
                 pFieldName = "P_EMMAX_FE_IV"
                 break;
             case "AA":
-                dataSetId = "ExSeq_26k_v2"
+                dataSetId = "ExSeq_26k_dv2"
                 pFieldName = "P_EMMAX_FE_IV"
                 break;
             case "EA":
-                dataSetId = "ExSeq_26k_v2"
+                dataSetId = "ExSeq_26k_dv2"
                 pFieldName = "P_EMMAX_FE_IV"
                 break;
             case "SA":
-                dataSetId = "ExSeq_26k_v2"
+                dataSetId = "ExSeq_26k_dv2"
                 pFieldName = "P_EMMAX_FE_IV"
                 break;
             case "EU":
-                dataSetId = "ExSeq_26k_v2"
+                dataSetId = "ExSeq_26k_dv2"
                 pFieldName = "P_EMMAX_FE_IV"
                 break;
             case "chipEu":
-                dataSetId = "ExSeq_26k_v2"
+                dataSetId = "ExSeq_26k_dv2"
                 pFieldName = "P_EMMAX_FE_IV"
                 break;
             default:
@@ -922,27 +930,41 @@ ${customFilterSet}""".toString()
     "page_size": 100,
     "limit": 1000,
     "count": false,
-    "properties":    {
-                           "cproperty": [],
-                          "orderBy":    [],
-                          "dproperty":    {
-                                            "HETA" : ["ExSeq_26k_v2"],
-                                            "HETU" : ["ExSeq_26k_v2"],
-                                            "HOMA" : ["ExSeq_26k_v2"],
-                                            "HOMU" : ["ExSeq_26k_v2"],
-                                            "OBSU" : ["ExSeq_26k_v2"],
-                                            "OBSA" : ["ExSeq_26k_v2"]
-                                        },
-                        "pproperty":    {
-                                             "P_EMMAX_FE_IV":    {
+"properties": {
+"dproperty": {
+},
+"pproperty": {
+                   
+                       "HETA": {
+                        "ExSeq_26k_dv2": ["T2D"]
+                    },
+                       "HETU": {
+                        "ExSeq_26k_dv2": ["T2D"]
+                    },
+                       "HOMA": {
+                        "ExSeq_26k_dv2": ["T2D"]
+                    },
+                       "HOMU": {
+                        "ExSeq_26k_dv2": ["T2D"]
+                    },
+                       "OBSU": {
+                        "ExSeq_26k_dv2": ["T2D"]
+                    },
+                       "OBSA": {
+                        "ExSeq_26k_dv2": ["T2D"]
+                    },
+                       "HETA": {
+                        "ExSeq_26k_dv2": ["T2D"]
+                    },
+                       "P_EMMAX_FE_IV": {
+                        "ExSeq_26k_dv2": ["T2D"]
+                    },
+                       "OR_WALD_FE_IV": {
+                        "ExSeq_26k_dv2": ["T2D"]
+                    }
 
-                                                                      "ExSeq_26k_v2": ["T2D"]
-                                                                   },
-                                            "OR_WALD_DOS_FE_IV":    {
+                     }
 
-                                                                        "ExSeq_26k_v2": ["T2D"]
-                                                                    }
-                                        }
                     },
     "filters":    [
                           {"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${variantId}", "operand_type": "STRING"}
@@ -973,14 +995,25 @@ ${customFilterSet}""".toString()
                           "dproperty":    {
                                         },
                         "pproperty":    {
-                                             "P_EMMAX_FE_IV":    {
-                                                                      "ExSeq_13k_v1": ["T2D"],
-                                                                      "ExSeq_26k_v2": ["T2D"]
-                                                                   },
-                                            "OR_WALD_DOS_FE_IV":    {
-                                                                        "ExSeq_13k_v1": ["T2D"],
-                                                                        "ExSeq_26k_v2": ["T2D"]
-                                                                    }
+                                            "P_EMMAX_FE_IV": {
+                                                "ExSeq_26k_dv2": ["T2D"]
+                                            },
+
+                                             "P_VALUE":{
+                                                "GWAS_DIAGRAM_dv1":["T2D"],
+                                                "ExChip_82k_dv1":["T2D"]
+                                             },
+                                             "OR_WALD_FE_IV":    {
+                                                                   "ExSeq_26k_dv2": ["T2D"]
+                                                                },
+                                             "ODDS_RATIO":{
+                                                "GWAS_DIAGRAM_dv1":["T2D"]
+                                             },
+
+                                              "BETA":{
+                                                "ExChip_82k_dv1":["T2D"]
+                                              }
+
                                         }
                     },
     "filters":    [ 
@@ -1005,7 +1038,9 @@ ${customFilterSet}""".toString()
 
 
     public JSONObject combinedVariantAssociationStatistics(String variantName){
-        String sample = "ExSeq_26k_v2"
+        String exSeq2Sample = "ExSeq_26k_dv2"
+        String exChipSample = "ExChip_82k_dv1"
+        String gwasSample = "GWAS_DIAGRAM_dv1"
         String attribute = "T2D"
         JSONObject returnValue
         List <Integer> dataSeteList = [1]
@@ -1021,11 +1056,22 @@ ${customFilterSet}""".toString()
                     if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
                         def variant = apiResults.variants[0];
                         if (variant ["P_EMMAX_FE_IV"]){
-                            sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${variant["P_EMMAX_FE_IV"][sample][attribute]}},"
+                            sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${variant["P_EMMAX_FE_IV"][exSeq2Sample][attribute]}},"
                         }
-                        if (variant ["OR_WALD_DOS_FE_IV"]){
-                            sb  << "{\"level\":\"OR_WALD_DOS_FE_IV\",\"count\":${variant["OR_WALD_DOS_FE_IV"][sample][attribute]}}"
+                        if (variant ["P_VALUE"]){
+                            sb  << "{\"level\":\"P_VALUE_GWAS\",\"count\":${variant["P_VALUE"][gwasSample][attribute]}},"
+                            sb  << "{\"level\":\"P_VALUE_EXCHIP\",\"count\":${variant["P_VALUE"][exChipSample][attribute]}},"
                         }
+                        if (variant ["OR_WALD_FE_IV"]){
+                            sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${variant["OR_WALD_FE_IV"][exSeq2Sample][attribute]}},"
+                        }
+                        if (variant ["ODDS_RATIO"]){
+                            sb  << "{\"level\":\"ODDS_RATIO\",\"count\":${variant["ODDS_RATIO"][gwasSample][attribute]}},"
+                        }
+                        if (variant ["BETA"]){
+                            sb  << "{\"level\":\"BETA\",\"count\":${variant["BETA"][exChipSample][attribute]}}"
+                        }
+
                     }
 
                 }
@@ -1052,7 +1098,8 @@ ${customFilterSet}""".toString()
 
 
     public JSONObject combinedVariantDiseaseRisk(String variantName){
-        String sample = "ExSeq_26k_v2"
+        String exSeq2Sample = "ExSeq_26k_dv2"
+        String attribute = "T2D"
         JSONObject returnValue
         List <Integer> dataSeteList = [1]
         List <String> pValueList = [1]
@@ -1066,29 +1113,29 @@ ${customFilterSet}""".toString()
                 if (apiResults.is_error == false) {
                     if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
                         def variant = apiResults.variants[0];
-                        if (variant ["OBSU"]){
-                            sb  << "{\"level\":\"OBSU\",\"count\":${variant["OBSU"][sample]}},"
-                        }
-                        if (variant ["OBSA"]){
-                            sb  << "{\"level\":\"OBSA\",\"count\":${variant["OBSA"][sample]}},"
-                        }
-                        if (variant ["HOMA"]){
-                            sb  << "{\"level\":\"HOMA\",\"count\":${variant["HOMA"][sample]}},"
-                        }
                         if (variant ["HETA"]){
-                            sb  << "{\"level\":\"HETA\",\"count\":${variant["HETA"][sample]}},"
-                        }
-                        if (variant ["HOMU"]){
-                            sb  << "{\"level\":\"HOMU\",\"count\":${variant["HOMU"][sample]}},"
+                            sb  << "{\"level\":\"HETA\",\"count\":${variant["HETA"][exSeq2Sample][attribute]}},"
                         }
                         if (variant ["HETU"]){
-                            sb  << "{\"level\":\"HETU\",\"count\":${variant["HETU"][sample]}},"
+                            sb  << "{\"level\":\"HETU\",\"count\":${variant["HETU"][exSeq2Sample][attribute]}},"
+                        }
+                        if (variant ["HOMA"]){
+                            sb  << "{\"level\":\"HOMA\",\"count\":${variant["HOMA"][exSeq2Sample][attribute]}},"
+                        }
+                        if (variant ["HOMU"]){
+                            sb  << "{\"level\":\"HOMU\",\"count\":${variant["HOMU"][exSeq2Sample][attribute]}},"
+                        }
+                        if (variant ["OBSU"]){
+                            sb  << "{\"level\":\"OBSU\",\"count\":${variant["OBSU"][exSeq2Sample][attribute]}},"
+                        }
+                        if (variant ["OBSA"]){
+                            sb  << "{\"level\":\"OBSA\",\"count\":${variant["OBSA"][exSeq2Sample][attribute]}},"
                         }
                         if (variant ["P_EMMAX_FE_IV"]){
-                            sb  << "{\"level\":\"PVALUE\",\"count\":${variant["P_EMMAX_FE_IV"][sample]["T2D"]}},"
+                            sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${variant["P_EMMAX_FE_IV"][exSeq2Sample][attribute]}},"
                         }
-                        if (variant ["OR_WALD_DOS_FE_IV"]){
-                            sb  << "{\"level\":\"ORVALUE\",\"count\":${variant["OR_WALD_DOS_FE_IV"][sample]["T2D"]}}"
+                        if (variant ["OR_WALD_FE_IV"]){
+                            sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${variant["OR_WALD_FE_IV"][exSeq2Sample][attribute]}}"
                         }
                     }
 
@@ -1125,7 +1172,7 @@ ${customFilterSet}""".toString()
      */
     public JSONObject combinedVariantCountByGeneNameAndPValue(String geneName){
         JSONObject returnValue
-        List <Integer> dataSeteList = [1]
+        List <Integer> dataSeteList = [1, 2, 3]
         List <BigDecimal> pValueList = [1,0.00000005, 0.0001, 0.05]
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()

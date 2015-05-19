@@ -36,15 +36,16 @@
                             collector["d" + i] = d;
                         }
                         var calculateDiseaseBurden = mpgSoftware.variantInfo.retrieveCalculateDiseaseBurden();
-                        var rv = calculateDiseaseBurden(parseInt(collector["d0"][0].count[0]),
-                                parseInt(collector["d0"][1].count[0]),
-                                parseInt(collector["d0"][2].count[0]),
-                                parseInt(collector["d0"][3].count[0]),
-                                parseInt(collector["d0"][4].count[0]),
+                        var rv = calculateDiseaseBurden(parseInt(collector["d0"][4].count[0]),
                                 parseInt(collector["d0"][5].count[0]),
+                                parseInt(collector["d0"][2].count[0]),
+                                parseInt(collector["d0"][0].count[0]),
+                                parseInt(collector["d0"][3].count[0]),
+                                parseInt(collector["d0"][1].count[0]),
                                 parseFloat(collector["d0"][6].count[0]),
                                 parseFloat(collector["d0"][7].count[0]),
                                 "<%=variantToSearch%>", ${show_sigma}, ${show_gwas}, ${show_exchp}, ${show_exseq}, diseaseBurdenStrings);
+
                         if ((typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation() !== 'undefined') &&
                                 (typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch !== 'undefined')) {
                             mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch();
@@ -59,9 +60,6 @@
             };
             return {loadDiseaseRisk:loadDiseaseRisk}
         }());
-        if (${newApi}) { // if we wanted to launch immediately, instead of delayed, use the following line
-        //    mpgSoftware.diseaseRisk.loadDiseaseRisk();
-        }
     </script>
 
 

@@ -311,7 +311,6 @@
         if (e.target.id === "collapseIgv") {
 
         }
-        console.log('collapseIgv shown')
     });
     $('#accordionVariant').on('show.bs.collapse', function (e) {
         if (e.target.id === "collapseDiseaseRisk") {
@@ -350,10 +349,14 @@
         }
     });
     $('#accordionVariant').on('show.bs.collapse', function (e) {
-        if (e.target.id === "collapseCarrierStatusImpact") {
-            if ((typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation()  !== 'undefined') &&
-                    (typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch !== 'undefined')) {
-                mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch();
+        if (${newApi}) {
+            mpgSoftware.carrierStatusImpact.loadDiseaseRisk();
+        } else {
+            if (e.target.id === "collapseCarrierStatusImpact") {
+                if ((typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation() !== 'undefined') &&
+                        (typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch !== 'undefined')) {
+                    mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch();
+                }
             }
         }
     });

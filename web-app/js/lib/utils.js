@@ -38,8 +38,20 @@ var UTILS = {
      * @returns {string}
      */
     realNumberFormatter: function (incoming) {
-        var value = parseFloat(incoming);
-        return value.toPrecision(3);
+        var returnValue = "(null)";
+        if (incoming !=  null ){
+            var value = parseFloat(incoming);
+            returnValue = value.toPrecision(3);
+        }
+        return returnValue;
+    },
+    convertStringToNumber: function (incoming) {
+        var returnValue = null;
+        if (incoming !=  null ){
+             return parseFloat(incoming);
+        } else {
+            return  null;
+        }
     },
     /***
      * Take phenotype information delivered by the server and change it into a usable form.
