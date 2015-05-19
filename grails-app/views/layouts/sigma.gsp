@@ -10,6 +10,7 @@
     <g:layoutHead/>
 </head>
 
+<r:layoutResources/>
 <body>
     <div class="container-fluid" style="padding:0;">
         <div>

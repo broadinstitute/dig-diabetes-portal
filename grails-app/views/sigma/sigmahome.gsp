@@ -23,6 +23,9 @@
     <g:if test="${params.section == 'papers'}">
         <g:render template="papers-header"/>
     </g:if>
+    <g:if test="${params.section == 'partners'}">
+        <g:render template="partners-header"/>
+    </g:if>
 </div>
 
 <div class="container-fluid">
@@ -50,6 +53,13 @@
                     </div>
                 </div>
             </g:if>
+            <g:if test="${params.section != 'partners'}">
+                <div class="row clearfix sigma-partners">
+                    <div class="text-center">
+                        <g:link params="[section: 'partners']"><h2 class="sigma-topic">PARTNERS</h2></g:link>
+                    </div>
+                </div>
+            </g:if>
 
         </div>
         <div class="col-md-10 col-xs-8">
@@ -61,6 +71,9 @@
             </g:if>
             <g:if test="${params.section == 'about' || params.section == null}">
                 <g:render template="about"/>
+            </g:if>
+            <g:if test="${params.section == 'partners'}">
+                <g:render template="partners"/>
             </g:if>
         </div>
     </div>
