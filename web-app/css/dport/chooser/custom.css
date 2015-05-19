@@ -43,7 +43,8 @@
 }
 
 #columnChooserModal .column-chooser-container {
-    width: 80vw
+    width: 90vw;
+    max-width:970px;
 }
 
 #columnChooserModal .column-chooser-container {
