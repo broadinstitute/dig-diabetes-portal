@@ -2,11 +2,15 @@ package dport.load
 
 import grails.plugins.rest.client.RestResponse
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.concurrent.atomic.AtomicInteger;
 
 class LoadSpec extends GroovyTestCase {
 
-    private static final int METADATA_RESPONSE_TEXT_SIZE = 36685;
+    //private static final int METADATA_RESPONSE_TEXT_SIZE = 36685;
+
+    private static final int METADATA_RESPONSE_TEXT_SIZE = 27952;
 
     private static final int DATA_RESPONSE_TEXT_SIZE = 333669;
 
@@ -24,12 +28,15 @@ class LoadSpec extends GroovyTestCase {
 
         RESPONSE_TYPE responseType;
 
-        public ResponseMetrics(RESPONSE_TYPE responseType,long responseTime) {
+        long startTime;
+
+        public ResponseMetrics(RESPONSE_TYPE responseType,long duration,long startTime) {
             this.responseType = responseType;
-            if (responseTime < 0) {
+            if (duration < 0) {
                 throw new IllegalArgumentException("response time must be >= 0.");
             }
-            this.responseTime = responseTime;
+            this.responseTime = duration;
+            this.startTime = startTime;
         }
 
     }
@@ -45,7 +52,7 @@ class LoadSpec extends GroovyTestCase {
             def restResponse = rest.get("http://dig-dev.broadinstitute.org:8888/dev/gs/getMetadata");
             long duration = System.currentTimeMillis() - startTime;
 
-            RESPONSES.add(reportResponse(restResponse, duration, METADATA_RESPONSE_TEXT_SIZE));
+            RESPONSES.add(reportResponse(restResponse, duration, METADATA_RESPONSE_TEXT_SIZE,startTime));
         }
     }
 
@@ -129,20 +136,20 @@ class LoadSpec extends GroovyTestCase {
         }
     }
 
-    private ResponseMetrics reportResponse(RestResponse response,long responseTime, int expectedJsonTextSize) {
+    private ResponseMetrics reportResponse(RestResponse response,long responseTime, int expectedJsonTextSize,long startTime) {
         if (response == null) {
-            return new ResponseMetrics(RESPONSE_TYPE.UNACCOUNTED_FOR,responseTime);
+            return new ResponseMetrics(RESPONSE_TYPE.UNACCOUNTED_FOR,responseTime,startTime);
         }
         else {
             if (response.getStatus() == 200 && response.json.toString().length() == expectedJsonTextSize) {
-                return new ResponseMetrics(RESPONSE_TYPE.PASS,responseTime);
+                return new ResponseMetrics(RESPONSE_TYPE.PASS,responseTime,startTime);
             }
             else if (response.getStatus() != 200) {
-                return new ResponseMetrics(RESPONSE_TYPE.NON_200,responseTime);
+                return new ResponseMetrics(RESPONSE_TYPE.NON_200,responseTime,startTime);
             }
             else if (response.getStatus() == 200 && response.json.toString().length() != expectedJsonTextSize) {
                 println(response.json.toString().length())
-                return new ResponseMetrics(RESPONSE_TYPE.TRUNCATED_RESULT,responseTime);
+                return new ResponseMetrics(RESPONSE_TYPE.TRUNCATED_RESULT,responseTime,startTime);
             }
         }
         throw new IllegalStateException("Failed to generate metrics for response.");
@@ -150,7 +157,7 @@ class LoadSpec extends GroovyTestCase {
 
     void testGetData() {
 
-        println("Clients\tResponseTime\tResponseType")
+        println("Clients\tResponseTime\tResponseType\tStartTime")
         for (int numThreads = 1; numThreads < 20; numThreads++) {
             RESPONSES.clear();
             Collection<Thread> threads = new ArrayList<>();
@@ -167,8 +174,9 @@ class LoadSpec extends GroovyTestCase {
                 t.join();
             }
 
+            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss:SSS")
             for (ResponseMetrics responseMetrics : RESPONSES) {
-                println(numThreads + "\t" + responseMetrics.responseTime + "\t" + responseMetrics.responseType);
+                println(numThreads + "\t" + responseMetrics.responseTime + "\t" + responseMetrics.responseType + "\t" + dateFormat.format(responseMetrics.startTime));
             }
 
             try {
@@ -181,8 +189,8 @@ class LoadSpec extends GroovyTestCase {
 
     void testGetMetadata() {
 
-        println("Clients\tResponseTime\tResponseType")
-        for (int numThreads = 1; numThreads < 20; numThreads++) {
+        println("Clients\tResponseTime\tResponseType\tStartTime")
+        for (int numThreads = 50; numThreads < 51; numThreads++) {
             RESPONSES.clear();
             Collection<Thread> threads = new ArrayList<>();
             for (int i = 0; i < numThreads; i++) {
@@ -198,8 +206,9 @@ class LoadSpec extends GroovyTestCase {
                 t.join();
             }
 
+            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss:SSS")
             for (ResponseMetrics responseMetrics : RESPONSES) {
-                println(numThreads + "\t" + responseMetrics.responseTime + "\t" + responseMetrics.responseType);
+                println(numThreads + "\t" + responseMetrics.responseTime + "\t" + responseMetrics.responseType + "\t" + dateFormat.format(responseMetrics.startTime));
             }
 
             try {
