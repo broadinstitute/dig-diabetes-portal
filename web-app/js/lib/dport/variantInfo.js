@@ -306,6 +306,7 @@ var mpgSoftware = mpgSoftware || {};
                     delayedCarrierStatusDiseaseRiskPresentation = {
                         barchartPtr: retainBarchartPtr,
                         launch: function () {
+                            d3.select('#carrierStatusDiseaseRiskChart').select('svg').remove();
                             retainBarchartPtr = fillCarrierStatusDiseaseRisk(homa,
                                 heta,
                                 totalCases,
@@ -478,6 +479,18 @@ var mpgSoftware = mpgSoftware || {};
                             barchartPtr: retainBarchartPtr,
                             launch: function () {
                                 retainBarchartPtr = fillUpBarChart(numeratorUnaffected, denominatorUnaffected, numeratorAffected, denominatorAffected, diseaseBurdenStrings);
+                                if (pValue > 0) {
+                                    var degreeOfSignificance = '';
+                                    // TODO the p's below are piling up.  clean them out
+                                 //   $('#describePValueInDiseaseRisk').remove();
+                                    $('#describePValueInDiseaseRisk').append("<p class='slimDescription'>" + degreeOfSignificance + "</p>\n" +
+                                        "<p  id='bhtMetaBurdenForDiabetes' class='slimAndTallDescription'>p=" + (pValue.toPrecision(3)) +
+                                        diseaseBurdenStrings.diseaseBurdenPValueQ + "</p>");
+                                    if (typeof oddsRatio !== 'undefined') {
+                                        $('#describePValueInDiseaseRisk').append("<p  id='bhtOddsRatioForDiabetes' class='slimAndTallDescription'>OR=" +
+                                            UTILS.realNumberFormatter(oddsRatio) +diseaseBurdenStrings.diseaseBurdenOddsRatioQ + "</p>");
+                                    }
+                                }
                                 return retainBarchartPtr;
                             },
                             removeBarchart: function () {
@@ -488,23 +501,16 @@ var mpgSoftware = mpgSoftware || {};
                             }
                         };
                     }
-                    if (pValue > 0) {
-                        var degreeOfSignificance = '';
-                        /*
-                         if (pValue < 5e-8)  {
-                         degreeOfSignificance = 'significant difference';
-                         } else if (pValue < 5e-2)  {
-                         degreeOfSignificance = 'nominal difference';
-                         } ;
-                         */
-                        $('#describePValueInDiseaseRisk').append("<p class='slimDescription'>" + degreeOfSignificance + "</p>\n" +
-                            "<p  id='bhtMetaBurdenForDiabetes' class='slimAndTallDescription'>p=" + (pValue.toPrecision(3)) +
-                            diseaseBurdenStrings.diseaseBurdenPValueQ + "</p>");
-                        if (typeof oddsRatio !== 'undefined') {
-                            $('#describePValueInDiseaseRisk').append("<p  id='bhtOddsRatioForDiabetes' class='slimAndTallDescription'>OR=" +
-                                UTILS.realNumberFormatter(oddsRatio) +diseaseBurdenStrings.diseaseBurdenOddsRatioQ + "</p>");
-                        }
-                    }
+//                    if (pValue > 0) {
+//                        var degreeOfSignificance = '';
+//                        $('#describePValueInDiseaseRisk').append("<p class='slimDescription'>" + degreeOfSignificance + "</p>\n" +
+//                            "<p  id='bhtMetaBurdenForDiabetes' class='slimAndTallDescription'>p=" + (pValue.toPrecision(3)) +
+//                            diseaseBurdenStrings.diseaseBurdenPValueQ + "</p>");
+//                        if (typeof oddsRatio !== 'undefined') {
+//                            $('#describePValueInDiseaseRisk').append("<p  id='bhtOddsRatioForDiabetes' class='slimAndTallDescription'>OR=" +
+//                                UTILS.realNumberFormatter(oddsRatio) +diseaseBurdenStrings.diseaseBurdenOddsRatioQ + "</p>");
+//                        }
+//                    }
 
                 },
                 describeAssociationsStatistics = function (availableData, pValue, orValue, strongCutOff, mediumCutOff, weakCutOff,

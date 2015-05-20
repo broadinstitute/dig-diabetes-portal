@@ -47,8 +47,6 @@
                             parseInt(collector["d0"][0].count[0]),
                             parseInt(collector["d0"][3].count[0]),
                             parseInt(collector["d0"][1].count[0]),
-                            parseFloat(collector["d0"][6].count[0]),
-                            parseFloat(collector["d0"][7].count[0]),
                             ${show_gwas},${show_exchp},${show_exseq},${show_sigma}, carrierStatusImpact);
 
                     if ((typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation() !== 'undefined') &&
