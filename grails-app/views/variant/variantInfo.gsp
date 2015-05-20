@@ -334,9 +334,13 @@
     });
     $('#accordionVariant').on('show.bs.collapse', function (e) {
         if (e.target.id === "collapseHowCommonIsVariant") {
-            if ((typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation()  !== 'undefined') &&
-                    (typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().launch !== 'undefined')) {
-                mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().launch();
+            if (${newApi}) {
+                mpgSoftware.howCommonIsVariant.loadHowCommonIsVariant();
+            } else {
+                if ((typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation() !== 'undefined') &&
+                        (typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().launch !== 'undefined')) {
+                    mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().launch();
+                }
             }
         }
     });

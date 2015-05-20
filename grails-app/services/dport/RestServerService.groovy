@@ -1035,6 +1035,97 @@ ${customFilterSet}""".toString()
 
 
 
+    private String howCommonIsVariantRequest (String variantId) {
+        String associationStatisticsRequest = """{
+    "passback": "123abc",
+    "entity": "variant",
+    "page_number": 50,
+    "page_size": 100,
+    "limit": 1000,
+    "count": false,
+    "properties":    {
+                           "cproperty": ["VAR_ID", "CHROM", "POS"],
+                          "orderBy":    ["CHROM"],
+                          "dproperty":    {
+                                            "MAF" : ["ExSeq_13k_sa_genes_dv1",
+                                                      "ExSeq_13k_hs_genes_dv1",
+                                                      "ExSeq_13k_ea_genes_dv1",
+                                                      "ExSeq_13k_aa_genes_dv1",
+                                                      "ExSeq_13k_eu_genes_dv1",
+                                                      "ExSeq_13k_hs_genes_dv1",
+                                                      "ExChip_82k_dv2"
+                                                    ]
+                                        },
+                        "pproperty":    {
+                                                                                     }
+                    },
+    "filters":    [
+                      {"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${
+            variantId
+        }", "operand_type": "STRING"}
+
+                ]
+}
+""".toString()
+        return associationStatisticsRequest
+    }
+
+
+
+
+
+
+    public JSONObject howCommonIsVariantSection(String variantId){
+        String jsonSpec = howCommonIsVariantRequest( variantId)
+        return postRestCall(jsonSpec,GET_DATA_URL)
+    }
+
+
+
+    public JSONObject howCommonIsVariantAcrossEthnicities(String variantName){
+        String exSeqAASample = "ExSeq_13k_aa_genes_dv1"
+        String exSeqHSSample = "ExSeq_13k_hs_genes_dv1"
+        String exSeqEASample = "ExSeq_13k_ea_genes_dv1"
+        String exSeqSASample = "ExSeq_13k_sa_genes_dv1"
+        String exSeqEUSample = "ExSeq_13k_eu_genes_dv1"
+        String exChipSample = "ExChip_82k_dv2"
+        JSONObject returnValue
+        List <Integer> dataSeteList = [1]
+        List <String> pValueList = [1]
+        StringBuilder sb = new StringBuilder ("{\"results\":[")
+        def slurper = new JsonSlurper()
+        for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
+            sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
+            for ( int  i = 0 ; i < pValueList.size () ; i++ ){
+                String apiData = howCommonIsVariantSection(variantName)
+                JSONObject apiResults = slurper.parseText(apiData)
+                if (apiResults.is_error == false) {
+                    if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
+                        def variant = apiResults.variants[0];
+                        if (variant ["MAF"]){
+                            sb  << "{\"level\":\"AA\",\"count\":${variant["MAF"][exSeqAASample]}},"
+                            sb  << "{\"level\":\"HS\",\"count\":${variant["MAF"][exSeqHSSample]}},"
+                            sb  << "{\"level\":\"EA\",\"count\":${variant["MAF"][exSeqEASample]}},"
+                            sb  << "{\"level\":\"SA\",\"count\":${variant["MAF"][exSeqSASample]}},"
+                            sb  << "{\"level\":\"EUseq\",\"count\":${variant["MAF"][exSeqEUSample]}},"
+                            sb  << "{\"level\":\"Euchip\",\"count\":${variant["MAF"][exChipSample]}}"
+                        }
+                    }
+
+                }
+                if (i<pValueList.size ()-1){
+                    sb  << ","
+                }
+            }
+            sb  << "]}"
+            if (j<dataSeteList.size ()-1){
+                sb  << ","
+            }
+        }
+        sb  << "]}"
+        returnValue = slurper.parseText(sb.toString())
+        return returnValue
+    }
 
 
 

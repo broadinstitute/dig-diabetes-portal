@@ -207,7 +207,8 @@ var baget = baget || {};  // encapsulating variable
                     bars.transition()
                         .delay(100).duration(1400)
                         .attr("width", function (d, i) {
-                            if (typeof d.value === 'undefined') {
+                            if ((typeof d.value === 'undefined')||
+                                (d.value === null)){
                                 return 0;
                             } else {
                                 var boxWidth = x(d.value) - x(internalMin);
@@ -272,7 +273,8 @@ var baget = baget || {};  // encapsulating variable
                         .data(data)
                         .enter().append("text")
                         .attr("x", function (d) {
-                            if (typeof d.value !== 'undefined') {
+                            if ((typeof d.value !== 'undefined')&&
+                                (d.value !== null)) {
                                 return (x(d.value));
                             } else {
                                 return 0;
@@ -290,7 +292,8 @@ var baget = baget || {};  // encapsulating variable
                             // do we format the value to the right of the bar as a percentage or an integer
                             //  one other special case: if the label is inset then don't label anything
                             if (typeof d.inset === 'undefined') {
-                                if (typeof d.value !== 'undefined') {
+                                if ((typeof d.value !== 'undefined')&&
+                                    (d.value !== null)) {
                                     if (integerValues === 1) {
                                         return "" + (d.value);
                                     } else {
@@ -306,7 +309,8 @@ var baget = baget || {};  // encapsulating variable
                         .data(data)
                         .enter().append("text")
                         .attr("x", function (d) {
-                            if (typeof d.value !== 'undefined') {
+                            if ((typeof d.value !== 'undefined')&&
+                                (d.value !== null)) {
                                 return (x(d.value));
                             } else {
                                 return 0;

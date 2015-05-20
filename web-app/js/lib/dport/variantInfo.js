@@ -14,7 +14,8 @@ var mpgSoftware = mpgSoftware || {};
             delayedIgvLaunch = {},
             externalCalculateDiseaseBurden,
             externalizeCarrierStatusDiseaseRisk,
-            externalVariantAssociationStatistics
+            externalVariantAssociationStatistics,
+            externalizeShowHowCommonIsThisVariantAcrossEthnicities
             ;
 
         var cariantRec = {
@@ -237,39 +238,36 @@ var mpgSoftware = mpgSoftware || {};
 
                 },
 
-                showEthnicityPercentageWithBarChart = function (variant, alleleFrequencyStrings) {
-                    var retVal = "";
-                    var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
-                    var ethnicityPercentages = [];
+                showEthnicityPercentageWithBarChart = function (ethnicityPercentages, alleleFrequencyStrings) {
+//                    var retVal = "";
+//                    var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
+//                    var ethnicityPercentages = [];
                     var retainBarchartPtr;
-                    for (var i = 0; i < ethnicAbbreviation.length; i++) {
-                        var stringProportion = variant['_13k_T2D_' + ethnicAbbreviation[i] + '_MAF'];
-                        ethnicityPercentages.push(parseFloat(stringProportion) * 100);
-                    }
-                    // with a special case:  the chip data may be null, but we still want to show the rest of the plot.
-                    // Replace the value with 'undefined' and the bar chart machinery knows to not display a bar
-                    var euroValue;
-                    if (variant["EXCHP_T2D_MAF"] !==  null ){
-                        euroValue = parseFloat(variant["EXCHP_T2D_MAF"]);
-                        if (variant["EXCHP_T2D_P_value"]) {
-                            euroValue = parseFloat(euroValue) * 100;
-                        }
-                    }
-                    ethnicityPercentages.push(euroValue);
-//                    var euroValue = parseFloat(variant["EXCHP_T2D_MAF"]);
-//                    if (variant["EXCHP_T2D_P_value"]) {
-//                        ethnicityPercentages.push(parseFloat(euroValue) * 100);
+//                    for (var i = 0; i < ethnicAbbreviation.length; i++) {
+//                        var stringProportion = variant['_13k_T2D_' + ethnicAbbreviation[i] + '_MAF'];
+//                        ethnicityPercentages.push(parseFloat(stringProportion) * 100);
 //                    }
+//                    // with a special case:  the chip data may be null, but we still want to show the rest of the plot.
+//                    // Replace the value with 'undefined' and the bar chart machinery knows to not display a bar
+//                    var euroValue;
+//                    if (variant["EXCHP_T2D_MAF"] !==  null ){
+//                        euroValue = parseFloat(variant["EXCHP_T2D_MAF"]);
+//                        if (variant["EXCHP_T2D_P_value"]) {
+//                            euroValue = parseFloat(euroValue) * 100;
+//                        }
+//                    }
+//                    ethnicityPercentages.push(euroValue);
+
                     // We have everything we need to build the bar chart.  Store the functional reference in an object
                     // that we can call whenever we want
                     delayedHowCommonIsPresentation = {
                         barchartPtr: retainBarchartPtr,
                         launch: function () {
                             retainBarchartPtr = fillHowCommonIsUpBarChart(ethnicityPercentages[0],
-                                ethnicityPercentages[4],
                                 ethnicityPercentages[1],
                                 ethnicityPercentages[2],
                                 ethnicityPercentages[3],
+                                ethnicityPercentages[4],
                                 ethnicityPercentages[5],
                                 alleleFrequencyStrings
                             );
@@ -757,13 +755,14 @@ var mpgSoftware = mpgSoftware || {};
                 // externalize!
                 // externalize!
                 externalCalculateDiseaseBurden = calculateDiseaseBurden;
-                var howCommonIsThisVariantAcrossEthnicities = function (variant, alleleFrequencyStrings) {// how common is this allele across different ethnicities
-                    var weHaveEnoughDataToDescribeMinorAlleleFrequencies = (!UTILS.nullsExist (variant,["_13k_T2D_AA_MAF"]));
+                var howCommonIsThisVariantAcrossEthnicities = function (ethnicityPercentages, alleleFrequencyStrings) {// how common is this allele across different ethnicities
+                    var weHaveEnoughDataToDescribeMinorAlleleFrequencies = (!UTILS.nullSafetyTest([ethnicityPercentages[0], ethnicityPercentages[1]]));
                     UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToDescribeMinorAlleleFrequencies, $('#howCommonIsExists'), $('#howCommonIsNoExists'));
                     if (weHaveEnoughDataToDescribeMinorAlleleFrequencies) {
-                        privateMethods.showEthnicityPercentageWithBarChart(variant, alleleFrequencyStrings);
+                        privateMethods.showEthnicityPercentageWithBarChart(ethnicityPercentages, alleleFrequencyStrings);
                     }
                 };
+                externalizeShowHowCommonIsThisVariantAcrossEthnicities = howCommonIsThisVariantAcrossEthnicities;
                 var showHowCarriersAreDistributed = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, showGwas, showExchp, showExseq, showSigma, carrierStatusImpact) {// case control data set characterization
                     var weHaveEnoughDataToCharacterizeCaseControls;
                     if (showSigma) {
@@ -814,7 +813,24 @@ var mpgSoftware = mpgSoftware || {};
                 parseFloat(variant["_13k_T2D_P_EMMAX_FE_IV"]),
                 parseFloat(variant["_13k_T2D_OR_WALD_DOS_FE_IV"]),
                 variantTitle, showSigma, showGwas, showExchp, showExseq, textStringObject.diseaseBurdenStrings);
-            howCommonIsThisVariantAcrossEthnicities(variant, textStringObject.alleleFrequencyStrings);
+            var ethnicityPercentages = [];
+            ethnicityPercentages.push(parseFloat(variant['_13k_T2D_AA_MAF'])*100);
+            ethnicityPercentages.push(parseFloat(variant['_13k_T2D_HS_MAF'])*100);
+            ethnicityPercentages.push(parseFloat(variant['_13k_T2D_EA_MAF'])*100);
+            ethnicityPercentages.push( parseFloat(variant['_13k_T2D_SA_MAF'])*100);
+            ethnicityPercentages.push( parseFloat(variant['_13k_T2D_EU_MAF'])*100);
+            var euroValue;
+            if (variant["EXCHP_T2D_MAF"] !==  null ){
+                euroValue = parseFloat(variant["EXCHP_T2D_MAF"]);
+                if (variant["EXCHP_T2D_P_value"]) {
+                    euroValue = parseFloat(euroValue) * 100;
+                }
+            }
+            ethnicityPercentages.push(euroValue);
+            if (!newApi){
+                howCommonIsThisVariantAcrossEthnicities(ethnicityPercentages, textStringObject.alleleFrequencyStrings);
+            }
+
             showHowCarriersAreDistributed(
                 parseFloat(variant["_13k_T2D_OBSU"]),
                 parseFloat(variant["_13k_T2D_OBSA"]),
@@ -843,6 +859,10 @@ var mpgSoftware = mpgSoftware || {};
             retrieveVariantAssociationStatistics = function (){
                 return externalVariantAssociationStatistics;
             },
+            retrieveHowCommonIsThisVariantAcrossEthnicities = function (){
+                return externalizeShowHowCommonIsThisVariantAcrossEthnicities;
+            },
+
             retrieveDelayedIgvLaunch = function () {
                 return delayedIgvLaunch;
             };
@@ -858,6 +878,7 @@ var mpgSoftware = mpgSoftware || {};
             retrieveDelayedHowCommonIsPresentation: retrieveDelayedHowCommonIsPresentation,
             retrieveDelayedCarrierStatusDiseaseRiskPresentation: retrieveDelayedCarrierStatusDiseaseRiskPresentation,
             retrieveDelayedBurdenTestPresentation: retrieveDelayedBurdenTestPresentation,
+            retrieveHowCommonIsThisVariantAcrossEthnicities:retrieveHowCommonIsThisVariantAcrossEthnicities,
             retrieveDelayedIgvLaunch: retrieveDelayedIgvLaunch
         }
 
