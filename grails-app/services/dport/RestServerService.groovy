@@ -863,63 +863,6 @@ ${customFilterSet}""".toString()
 
 
 
-    private String requestEthnicityCountByPValue (String geneName, BigDecimal pValue, String dataSet){
-        String dataSetId = ""
-        String pFieldName = ""
-        switch (dataSet){
-            case "HS":
-                dataSetId = "ExSeq_26k_dv2"
-                pFieldName = "P_EMMAX_FE_IV"
-                break;
-            case "AA":
-                dataSetId = "ExSeq_26k_dv2"
-                pFieldName = "P_EMMAX_FE_IV"
-                break;
-            case "EA":
-                dataSetId = "ExSeq_26k_dv2"
-                pFieldName = "P_EMMAX_FE_IV"
-                break;
-            case "SA":
-                dataSetId = "ExSeq_26k_dv2"
-                pFieldName = "P_EMMAX_FE_IV"
-                break;
-            case "EU":
-                dataSetId = "ExSeq_26k_dv2"
-                pFieldName = "P_EMMAX_FE_IV"
-                break;
-            case "chipEu":
-                dataSetId = "ExSeq_26k_dv2"
-                pFieldName = "P_EMMAX_FE_IV"
-                break;
-            default:
-                log.error("Trouble: user requested data set = ${dataSet} which I don't recognize")
-                defaults
-        }
-        String geneCountRequest = """
-{
-    "passback": "123abc",
-    "entity": "variant",
-    "page_number": 50,
-    "page_size": 100,
-    "limit": 1000,
-    "count": true,
-    "properties":    {
-                           "cproperty": ["VAR_ID"],
-                          "orderBy":    ["CHROM"],
-                          "dproperty":    {},
-                        "pproperty":    {}
-                    },
-    "filters":    [
-                    {"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${geneName}", "operand_type": "STRING"},
-                    {"dataset_id": "${dataSetId}", "phenotype": "T2D", "operand": "${pFieldName}", "operator": "LTE", "value": ${pValue}, "operand_type": "FLOAT"}
-                ]
-}
-""".toString()
-        return geneCountRequest
-    }
-
-
-
 
     private String diseaseRiskValue (String variantId){
         String diseaseRiskRequest = """
@@ -1205,23 +1148,166 @@ ${customFilterSet}""".toString()
 
 
 
+
+    private String generateJsonVariantCountByGeneAndMaf (String variantId) {
+        String associationStatisticsRequest = """{
+    "passback": "123abc",
+    "entity": "variant",
+    "page_number": 0,
+    "page_size": 100,
+    "count": false,
+    "properties":    {
+                           "cproperty": ["VAR_ID"],
+                          "orderBy":    [],
+                          "dproperty":    {
+                                        },
+                        "pproperty":    {
+                                            "P_EMMAX_FE_IV": {
+                                                "ExSeq_26k_dv2": ["T2D"]
+                                            },
+
+                                             "P_VALUE":{
+                                                "GWAS_DIAGRAM_dv1":["T2D"],
+                                                "ExChip_82k_dv1":["T2D"]
+                                             },
+                                             "OR_WALD_FE_IV":    {
+                                                                   "ExSeq_26k_dv2": ["T2D"]
+                                                                },
+                                             "ODDS_RATIO":{
+                                                "GWAS_DIAGRAM_dv1":["T2D"]
+                                             },
+
+                                              "BETA":{
+                                                "ExChip_82k_dv1":["T2D"]
+                                              }
+
+                                        }
+                    },
+    "filters":    [
+                      {"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${
+            variantId
+        }", "operand_type": "STRING"}
+
+                ]
+}
+""".toString()
+        return associationStatisticsRequest
+    }
+
+
+
+
+
+
+
+    private String generateJsonVariantCountByGeneAndMaf(String geneName, String ethnicity, int cellNumber){
+        String dataSetId = ""
+        String minimumMaf = 0
+        String maximumMaf = 1
+        switch (ethnicity){
+            case "HS":
+                dataSetId = "ExSeq_13k_hs_genes_dv1"
+                break;
+            case "AA":
+                dataSetId = "ExSeq_13k_aa_genes_dv1"
+                break;
+            case "EA":
+                dataSetId = "ExSeq_13k_ea_genes_dv1"
+                break;
+            case "SA":
+                dataSetId = "ExSeq_13k_sa_genes_dv1"
+                break;
+            case "EU":
+                dataSetId = "ExSeq_13k_eu_genes_dv1"
+                break;
+            case "chipEu":
+                dataSetId = "ExChip_82k_dv2"
+                break;
+            default:
+                log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
+                dataSetId = "ExSeq_13k_aa_genes_dv1"
+        }
+        switch (cellNumber){
+            case 0:
+                minimumMaf = "0"
+                maximumMaf = "1"
+                break;
+            case 1:
+                minimumMaf = "0.05"
+                maximumMaf = "1"
+                break;
+            case 2:
+                minimumMaf = "0.0005"
+                maximumMaf = "0.05"
+                break;
+            case 3:
+                minimumMaf = "0.00000000000001"
+                maximumMaf = "0.0005"
+                break;
+            default:
+                log.error("Trouble: user requested cell number = ${cellNumber} which I don't recognize")
+                dataSetId = "ExSeq_13k_aa_genes_dv1"
+        }
+        String jsonVariantCountByGeneAndMaf = """
+{
+	"passback": "123abc",
+	"entity": "variant",
+	"page_number": 50,
+	"page_size": 100,
+	"limit": 1000,
+	"count": true,
+	"properties":	{
+           				"cproperty": ["VAR_ID"],
+                  		"orderBy":	[],
+                  		"dproperty":	{},
+                		"pproperty":	{}
+                	},
+	"filters":	[
+        			{"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${geneName}", "operand_type": "STRING"},
+                	{"dataset_id": "${dataSetId}", "phenotype": "blah", "operand": "MAF", "operator": "GT", "value": ${minimumMaf}, "operand_type": "FLOAT"},
+                    {"dataset_id": "${dataSetId}", "phenotype": "blah", "operand": "MAF", "operator": "LTE", "value": ${maximumMaf}, "operand_type": "FLOAT"}
+            	]
+}
+""".toString()
+        return jsonVariantCountByGeneAndMaf
+    }
+
+
+
+
+
+
+
+
+
+
+    public JSONObject findVariantCountByGeneAndMaf(String geneName, String ethnicity, int cellNumber){
+        String jsonSpec = generateJsonVariantCountByGeneAndMaf( geneName,  ethnicity,  cellNumber)
+        return postRestCall(jsonSpec,GET_DATA_URL)
+    }
+
+
+
+
+
+
     public JSONObject combinedEthnicityTable(String geneName){
         JSONObject returnValue
         List <String> dataSeteList = ["HS", "AA", "EA", "SA", "EU","chipEu"]
-        List <BigDecimal> pValueList = [1,0.05,0.005,0.0005]
+        List <Integer> cellNumberList = [0,1,2,3]
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()
         for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
             sb  << "{ \"dataset\": \"${dataSeteList[j]}\",\"pVals\": ["
-            for ( int  i = 0 ; i < pValueList.size () ; i++ ){
+            for ( int  i = 0 ; i < cellNumberList.size () ; i++ ){
                 sb  << "{"
-                String jsonSpec = requestEthnicityCountByPValue(geneName, pValueList[i], dataSeteList[j])
-                JSONObject apiData = postRestCall(jsonSpec,GET_DATA_URL)
-                if (apiData.is_error == false) {
-                    sb  << "\"level\":${pValueList[i]},\"count\":${apiData.numRecords}"
+                String apiData = findVariantCountByGeneAndMaf(geneName,  dataSeteList[j], cellNumberList[i])
+                JSONObject apiResults = slurper.parseText(apiData)
+                if (apiResults.is_error == false) {
+                    sb  << "\"level\":${cellNumberList[i]},\"count\":${apiResults.numRecords}"
                 }
                 sb  << "}"
-                if (i<pValueList.size ()-1){
+                if (i<cellNumberList.size ()-1){
                     sb  << ","
                 }
             }

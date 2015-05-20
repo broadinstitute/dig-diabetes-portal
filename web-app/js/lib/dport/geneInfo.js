@@ -1027,9 +1027,11 @@ var mpgSoftware = mpgSoftware || {};
                     geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().SIGMA_T2D_NOM_TOTAL),
                     rawGeneInfo["ID"]);
             }
-            fillVariationAcrossEthnicity(rawGeneInfo, show_gwas, show_exchp, show_exseq, show_sigma,
-                rootVariantUrl,
-                textStringObject.continentalAncestryText);
+            if (!newApi){
+                fillVariationAcrossEthnicity(rawGeneInfo, show_gwas, show_exchp, show_exseq, show_sigma,
+                    rootVariantUrl,
+                    textStringObject.continentalAncestryText);
+            }
             fillBiologicalHypothesisTesting(rawGeneInfo, show_gwas, show_exchp, show_exseq,
                 show_sigma,
                 rootVariantUrl,
@@ -1092,6 +1094,7 @@ var mpgSoftware = mpgSoftware || {};
 
             // public routines
             fillTheGeneFields: fillTheGeneFields,
+            fillVariationAcrossEthnicityTable:fillVariationAcrossEthnicityTable,
             retrieveDelayedBiologicalHypothesisOneDataPresenter: retrieveDelayedBiologicalHypothesisOneDataPresenter,
             fillTheVariantAndAssociationsTableFromNewApi: fillTheVariantAndAssociationsTableFromNewApi
         }
