@@ -56,6 +56,9 @@ grails.project.dependency.resolution = {
         test "org.grails:grails-datastore-test-support:1.0-grails-2.4"
         compile "com.google.api-client:google-api-client:1.16.0-rc"
         compile 'com.google.http-client:google-http-client-jackson2:1.16.0-rc'
+
+        compile 'org.apache.httpcomponents:httpclient:4.2.5' // DO NOT MERGE TO MASTER, THIS MAY CONFLICT
+        compile 'org.apache.httpcomponents:httpcore:4.2.5' // DO NOT MERGE TO MASTER, THIS MAY CONFLICT
     }
 
     plugins {
@@ -95,6 +98,8 @@ grails.project.dependency.resolution = {
        // compile ":clover:4.0.1"
         test ":code-coverage:2.0.3-2"
 
+        // webdriver UI tests
+        compile ":webdriver:0.4.2"
 
         // Uncomment these to enable additional asset-pipeline capabilities
         //compile ":sass-asset-pipeline:1.7.4"
