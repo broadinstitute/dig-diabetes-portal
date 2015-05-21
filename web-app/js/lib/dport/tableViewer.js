@@ -313,233 +313,6 @@ var variantProcessing = (function () {
         return retVal;
     },
 
-//    lineInVariantsTable =  function ( line,
-//                                                 show_gene,
-//                                                 show_sigma,
-//                                                 show_exseq,
-//                                                 show_exchp,
-//                                                 variantRootUrl,
-//                                                 geneRootUrl,
-//                                                 dataSetDetermination) {
-//        var retVal = "";
-//        if ((typeof line === 'undefined') ||
-//            (!line))  {
-//            return;
-//        }
-//
-//            retVal += "<tr>"
-//
-//            // nearest gene
-//            if (show_gene) {
-//                retVal += "<td><a  href='"+geneRootUrl+"/"+line.CLOSEST_GENE+"' class='boldItlink'>"+line.CLOSEST_GENE+"</td>";
-//            }
-//
-//            // variant
-//            if (line.ID) {
-//                retVal += "<td><a href='"+variantRootUrl+"/"+line.ID+"' class='boldlink'>"+line.CHROM+ ":" +line.POS+"</td>";
-//            } else {
-//                retVal += "<td></td>"
-//            }
-//            // rsid (DB SNP)
-//            if (line.DBSNP_ID) {
-//                retVal += "<td>"+line.DBSNP_ID+"</td>" ;
-//            } else {
-//                retVal += "<td></td>";
-//            }
-//
-//            // protein change
-//
-//            if (line.Protein_change) {
-//                retVal += "<td>"+line.Protein_change+"</td>" ;
-//            } else {
-//                retVal += "<td></td>";
-//            }
-//
-//            // effect on protein
-//            if (line.Consequence) {
-//                var proteinEffectRepresentation = "";
-//                if ((typeof proteinEffectList !== "undefined" ) &&
-//                    (proteinEffectList.proteinEffectMap) &&
-//                    (proteinEffectList.proteinEffectMap [line.Consequence])){
-//                    proteinEffectRepresentation =  proteinEffectList.proteinEffectMap[line.Consequence];
-//                } else {
-//                    proteinEffectRepresentation =  line.Consequence;
-//                }
-//                proteinEffectRepresentation = proteinEffectRepresentation.replace(/[;,]/g,'<br/>');
-//                retVal += "<td>"+proteinEffectRepresentation+"</td>" ;
-//            } else {
-//                retVal += "<td></td>";
-//            }
-//
-//            if (show_sigma) {
-//
-//                // Source
-//                if (line.SIGMA_SOURCE)  {
-//                    retVal += "<td>" +UTILS.prettyUpSigmaSource (line.SIGMA_SOURCE)+"</td>";
-//                } else {
-//                    retVal += "<td></td>";
-//                }
-//
-//                // P value
-//                if (line.SIGMA_T2D_P)  {
-//                    retVal += "<td>" +UTILS.realNumberFormatter(line.SIGMA_T2D_P)+"</td>";
-//                } else {
-//                    retVal += "<td></td>";
-//                }
-//
-//                // odds ratio
-//                if (line.SIGMA_T2D_OR)  {
-//                    if (line.SIGMA_T2D_P)  {
-//                        var pValue = parseFloat (line.SIGMA_T2D_P);
-//                        if (($.isNumeric(pValue))&&(pValue>0.05)) {
-//                            retVal += "<td class='greyedout'>" + UTILS.realNumberFormatter(line.SIGMA_T2D_OR) + "</td>";
-//                        } else {
-//                            retVal += "<td>" +UTILS.realNumberFormatter(line.SIGMA_T2D_OR)+"</td>";
-//                        }
-//                    } else {
-//                        retVal += "<td>" +UTILS.realNumberFormatter(line.SIGMA_T2D_OR)+"</td>";
-//                    }
-//
-//                } else {
-//                    retVal += "<td></td>";
-//                }
-//
-//                // Case-control
-//                if ((typeof line.SIGMA_T2D_MINA!== "undefined") && (typeof line.SIGMA_T2D_MINU!== "undefined")&&
-//                    (line.SIGMA_T2D_MINA!== null) && (line.SIGMA_T2D_MINU!== null)){
-//                    retVal += "<td>" +line.SIGMA_T2D_MINA + "/" +line.SIGMA_T2D_MINU+"</td>";
-//                } else {
-//                    retVal += "<td></td>";
-//                }
-//
-//                // frequency
-//                if (line.SIGMA_T2D_MAF)  {
-//                    retVal += "<td>" +UTILS.realNumberFormatter(line.SIGMA_T2D_MAF)+"</td>";
-//                } else {
-//                    retVal += "<td></td>";
-//                }
-//
-//            }
-//            if (show_exseq) {
-//
-//                var highFreq = determineHighestFrequencyEthnicity(line);
-//
-//                // P value
-//                // NOTE: we need to use trick here. We are going to present different columns
-//                //   depending on what data set the user is looking at
-//                var pValueToPresent = "";
-//                switch (2){
-//                    case 0:  pValueToPresent =  line.GWAS_T2D_PVALUE;
-//                        break;
-//                    case 1:  pValueToPresent =  line.SIGMA_T2D_P;
-//                        break;
-//                    case 2:  pValueToPresent =  line._13k_T2D_P_EMMAX_FE_IV;
-//                        break;
-//                    case 3:  pValueToPresent =  line.EXCHP_T2D_P_value;
-//                        break;
-//                }
-//                if (pValueToPresent)  {
-//                    retVal += "<td>" +UTILS.realNumberFormatter(pValueToPresent)+"</td>";
-//                } else {
-//                    retVal += "<td></td>";
-//                }
-//
-//                // odds ratio
-//                if (line._13k_T2D_OR_WALD_DOS_FE_IV)  {
-//                    if (line._13k_T2D_SE)  {
-//                        var pValue = parseFloat (line._13k_T2D_SE);
-//                        if (($.isNumeric(pValue))&&(pValue>1)) {
-//                            retVal += "<td class='greyedout'>" + UTILS.realNumberFormatter(line._13k_T2D_OR_WALD_DOS_FE_IV) + "</td>";
-//                        } else {
-//                            retVal += "<td>" +UTILS.realNumberFormatter(line._13k_T2D_OR_WALD_DOS_FE_IV)+"</td>";
-//                        }
-//                    } else {
-//                        retVal += "<td>" +UTILS.realNumberFormatter(line._13k_T2D_OR_WALD_DOS_FE_IV)+"</td>";
-//                    }
-//                } else {
-//                    retVal += "<td></td>";
-//                }
-//
-//                // case/control
-//                // don't rule out zeros here – they're perfectly legal.  Nulls however are bad
-//                if ((typeof line._13k_T2D_MINA!== "undefined") && (typeof line._13k_T2D_MINU!== "undefined") &&
-//                    ( line._13k_T2D_MINA!== null) && ( line._13k_T2D_MINU!== null)){
-//                    retVal += "<td>" +line._13k_T2D_MINA + "/" +line._13k_T2D_MINU+"</td>";
-//                } else {
-//                    retVal += "<td></td>";
-//                }
-//
-//                // highest frequency
-//                if (highFreq.highestFrequency)  {
-//                    retVal += "<td>" +UTILS.realNumberFormatter(highFreq.highestFrequency)+"</td>";
-//                } else {
-//                    retVal += "<td></td>";
-//                }
-//
-//                // P value
-//                if ((highFreq.populationWithHighestFrequency)&&
-//                    (!highFreq.noData)){
-//                    retVal += "<td>" +highFreq.populationWithHighestFrequency+"</td>";
-//                } else {
-//                    retVal += "<td></td>";
-//                }
-//
-//            }
-//
-//            if (show_exchp) {
-//
-//                var highFreq = determineHighestFrequencyEthnicity(line);
-//
-//                // P value
-//                if (line.EXCHP_T2D_P_value)  {
-//                    retVal += "<td>" +UTILS.realNumberFormatter(line.EXCHP_T2D_P_value)+"</td>";
-//                } else {
-//                    retVal += "<td></td>";
-//                }
-//
-//                // odds ratio
-//                if (line.EXCHP_T2D_BETA)  {
-//                    var logExchipOddsRatio  =   parseFloat(line.EXCHP_T2D_BETA);
-//                    if ($.isNumeric(logExchipOddsRatio))  {
-//
-//                        if (line.EXCHP_T2D_SE)  {
-//                            var pValue = parseFloat (line.EXCHP_T2D_SE);
-//                            if (($.isNumeric(pValue))&&(pValue>1)) {
-//                                retVal += "<td class='greyedout'>" + UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio)) + "</td>";
-//                            } else {
-//                                retVal += "<td>" +UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio))+"</td>";
-//                            }
-//                        } else {
-//                            retVal += "<td>" +UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio))+"</td>";
-//                        }
-//                    }  else {
-//                        retVal += "<td></td>";
-//                    }
-//                } else {
-//                    retVal += "<td></td>";
-//                }
-//
-//
-//            }
-//
-//            // P value TODO:  Referenced above as well. What's going on?
-//            if (line.GWAS_T2D_PVALUE)  {
-//                retVal += "<td>" +UTILS.realNumberFormatter(line.GWAS_T2D_PVALUE)+"</td>";
-//            } else {
-//                retVal += "<td></td>";
-//            }
-//
-//            // odds ratio
-//            if (line.GWAS_T2D_OR)  {
-//                retVal += "<td>" +UTILS.realNumberFormatter(line.GWAS_T2D_OR)+"</td>";
-//            } else {
-//                retVal += "<td></td>";
-//            }
-//
-//            retVal += "</tr>"
-//        }
-//        return retVal;
-//    },
 
      fillTheVariantTable = function (data, show_gene, show_sigma, show_exseq, show_exchp, variantRootUrl, geneRootUrl, dataSetDetermination, textStringObject) {
         $('#variantTableBody').append(fillCollectedVariantsTable(data,
@@ -641,10 +414,110 @@ var variantProcessing = (function () {
         }
         return retVal;
     }
+    var contentExists = function (field){
+        return ((typeof field !== 'undefined') && (field !== null) );
+    };
+    var noop = function (field){return field;};
+    var lineBreakSubstitution = function (field){
+        return (contentExists(field))?field.replace(/[;,]/g,'<br/>'):'';
+    };
+    var grayOutOnValue = function (displayField,contingencyField){
+        var retVal = "";
+        if (contingencyField) {
+            var pValue = parseFloat(contingencyField);
+            if (($.isNumeric(pValue)) && (pValue > 1)) {
+                retVal += "<span class='greyedout'>" + UTILS.realNumberFormatter(displayField) + "</span>";
+            } else {
+                retVal += "" +UTILS.realNumberFormatter(displayField);
+            }
+        }else{
+            retVal += "" +UTILS.realNumberFormatter(displayField);
+        }
+        return retVal;
+    };
+    var grayOutBetaValue = function (displayField,contingencyField){
+        var retVal = "";
+        var logExchipOddsRatio  =   parseFloat(displayField);
+        if ($.isNumeric(logExchipOddsRatio))  {
+            if (contingencyField)  {
+                var pValue = parseFloat (contingencyField);
+                if (($.isNumeric(pValue))&&(pValue>1)) {
+                    retVal += "<span class='greyedout'>" + UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio)) + "</span>";
+                } else {
+                    retVal += ""+UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio));
+                }
+            } else {
+                retVal += UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio));
+            }
+        }  else {
+            retVal += "";
+        }
 
+        return retVal;
+    };
+
+
+
+    var singleLineOfVariantTable = function( variant,show_gene,show_sigma,show_exseq,show_exchp,variantRootUrl,geneRootUrl,proteinEffectList) {
+       var arrayToBuild = [];
+       stringWithLink(arrayToBuild,geneRootUrl,(contentExists (geneRootUrl)),noop,variant.CLOSEST_GENE,variant.CLOSEST_GENE,"");
+       stringWithLink(arrayToBuild,variantRootUrl,((contentExists (variantRootUrl)) && (variant.ID)),noop,variant.ID,variant.CHROM+ ":" +variant.POS,"");
+       simpleString(arrayToBuild,(variant.DBSNP_ID),noop,variant.DBSNP_ID,"");
+       simpleString(arrayToBuild,(variant.Protein_change),noop,variant.Protein_change,"");
+       simpleString(arrayToBuild,((variant.Consequence)&&(contentExists(proteinEffectList))&&
+           (contentExists(proteinEffectList.proteinEffectMap))&&(contentExists(proteinEffectList.proteinEffectMap[variant.Consequence]))),
+           lineBreakSubstitution,variant.Protein_change,((variant.Consequence)?variant.Consequence:""));
+        if (show_sigma){;} //five fields
+        if (show_exseq){
+            var highFreq = determineHighestFrequencyEthnicity(variant);
+            simpleString(arrayToBuild,(variant._13k_T2D_P_EMMAX_FE_IV),UTILS.realNumberFormatter,variant._13k_T2D_P_EMMAX_FE_IV,"");
+            simpleString(arrayToBuild,(variant._13k_T2D_OR_WALD_DOS_FE_IV),noop,grayOutOnValue (variant._13k_T2D_OR_WALD_DOS_FE_IV,variant._13k_T2D_SE),"");
+            simpleString(arrayToBuild,(contentExists (variant._13k_T2D_MINA) && contentExists (typeof variant._13k_T2D_MINU)),noop,(""+variant._13k_T2D_MINA + "/" +variant._13k_T2D_MINU),"");
+            simpleString(arrayToBuild,(highFreq.highestFrequency),UTILS.realNumberFormatter,highFreq.highestFrequency,"");
+            simpleString(arrayToBuild,((highFreq.populationWithHighestFrequency)&&(!highFreq.noData)),noop,highFreq.populationWithHighestFrequency,"");
+        }
+        if (show_exchp){
+            var highFreq = determineHighestFrequencyEthnicity(variant);
+            simpleString(arrayToBuild,(variant.EXCHP_T2D_P_value),UTILS.realNumberFormatter,variant.EXCHP_T2D_P_value,"");
+            simpleString(arrayToBuild,(variant.EXCHP_T2D_BETA),noop,grayOutBetaValue (variant.EXCHP_T2D_BETA,variant.EXCHP_T2D_SE),"");
+            simpleString(arrayToBuild,(variant.GWAS_T2D_PVALUE),UTILS.realNumberFormatter,variant.GWAS_T2D_PVALUE,"");
+            simpleString(arrayToBuild,(variant.GWAS_T2D_OR),UTILS.realNumberFormatter,variant.GWAS_T2D_OR,"");
+        }
+        return arrayToBuild;
+   };
+    var iterativeVariantTableFiller = function  (data, divId, show_gene, show_sigma, show_exseq, show_exchp,variantRootUrl,geneRootUrl,proteinEffectList,dataSetDetermination)  {
+        var variantList =  data['variants'];
+        $(divId).dataTable({
+            iDisplayLength: 20,
+            bFilter: false,
+            aaSorting: [[ 5, "asc" ]],
+            aoColumnDefs: [{sType: "allnumeric", aTargets: [ 5, 6, 8, 10, 11, 12, 13 ] } ]
+        });
+        var dataLength = variantList.length;
+      //  var effectsField = UTILS.determineEffectsTypeString (effectTypeTitle);
+        for ( var i = 0 ; i < dataLength ; i++ ){
+            var array = singleLineOfVariantTable(variantList[i],show_gene, show_sigma, show_exseq, show_exchp,variantRootUrl,geneRootUrl,proteinEffectList);
+            $(divId).dataTable().fnAddData( array, (i==25) || (i==(dataLength-1)));
+        }
+    };
+    var stringWithLink  = function(arrayToBuild, urlRoot, contingent, modder, linkField,displayField, alternate){
+       var retVal = alternate;
+       if (contingent){
+           retVal = "<a  href='"+urlRoot+"/"+linkField+"' class='boldItlink'>"+modder(displayField);
+       }
+       arrayToBuild.push(retVal);
+   };
+    var simpleString  = function(arrayToBuild,  contingent,  modder,  displayField, alternate){
+        var retVal = alternate;
+        if (contingent){
+            retVal = ""+ modder (displayField);
+        }
+        arrayToBuild.push(retVal);
+    };
 
 
     return {
+        iterativeVariantTableFiller:iterativeVariantTableFiller,
         fillTheVariantTable: fillTheVariantTable,
         fillCollectedVariantsTable:fillCollectedVariantsTable,
         fillTraitsPerVariantTable:fillTraitsPerVariantTable
