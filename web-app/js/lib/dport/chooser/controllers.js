@@ -26,8 +26,10 @@
             $scope.search.currentQuery = {};
             fullTextRegexTokens = [];
 
-            $scope.init = function(metadataUrl) {
+            $scope.init = function(metadataUrl,datasetVersion) {
                 $scope.metadataUrl = metadataUrl;
+                $scope.datasetVersion = datasetVersion;
+                $scope.search.currentQuery = {version: $scope.datasetVersion};
             };
 
             $scope.setColumnFilter = function($columns) {
@@ -173,7 +175,7 @@
             };
             $scope.propagateAttributes = function(tree) {
                 var excludedAttributes, item, recursive, _i, _len;
-                excludedAttributes = ["name", "sample_groups", "id", "level", "$$hashKey", "selected", "properties"];
+                excludedAttributes = ["name", "sample_groups", "id", "level", "$$hashKey", "selected", "properties","ancestry"];
                 recursive = function(object, parent) {
                     var e, item, parent_k, parent_v, value, _i, _j, _len, _len1, _ref;
                     for (parent_k in parent) {
@@ -396,7 +398,7 @@
             };
 
             $scope.resetFilters = function() {
-                $scope.search.currentQuery = {};
+                $scope.search.currentQuery = {version: $scope.datasetVersion};
                 $scope.view.filters = $scope.refineFilters($scope.search.currentQuery);
                 $scope.queryDatasetText = null;
             };

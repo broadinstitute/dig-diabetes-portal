@@ -2,7 +2,7 @@
 <html lang="en"
       ng-app="ChooserApp"
       ng-controller="ChooserController"
-      ng-init="init('${createLink(controller:'ResultsFilter', action:'metadata')}')">
+      ng-init="init('${createLink(controller:'ResultsFilter', action:'metadata')}','mdv2')">
 
 <body>
 
@@ -47,20 +47,20 @@
                         </div>
                 </div>
                 <div class='row' ng-repeat='(filter_name, filter_values) in view.filters'>
-                    <div class='col-md-4'>By {{filter_name}}:</div>
-                    <div class='col-md-8'>
-                        <select class='form-control' ng-change='view.filters = refineFilters(search.currentQuery)' ng-init="search.currentQuery[filter_name] = ''" ng-model='search.currentQuery[filter_name]' ng-options="k for k in [''].concat(filter_values)"></select>
-                        <!-- .col-xs-2.control-group{:"ng-repeat" => "option in [''].concat(filter_values)"} -->
-                        <!-- %input{:"type" => "radio", :"ng-model" => "search.currentQuery[filter_name]", :"ng-value" => "option"} -->
-                        <!-- %label {{option}} -->
+                    <div ng-if="filter_name != 'version'">
+                        <div class='col-md-4'>By {{filter_name}}:</div>
+                        <div class='col-md-8'>
+                            <select class='form-control'
+                                    ng-change='view.filters = refineFilters(search.currentQuery)'
+                                    ng-init="search.currentQuery[filter_name] = ''"
+                                    ng-model='search.currentQuery[filter_name]'
+                                    ng-options="k for k in [''].concat(filter_values)"></select>
+
+                        </div>
                     </div>
+
                 </div>
-                <!-- .row -->
-                <!-- .col-xs-2 -->
-                <!-- Free text filter: -->
-                <!-- .col-xs-6.search-input.form-group -->
-                <!-- %input{:"type" => "text", :"ng-model" => "search.queryDatasetText", :"ng-change" => "updateSearchText()"} -->
-                <!-- %span.glyphicon.glyphicon-remove{:"ng-if" => "search.queryDatasetText", :"ng-click" => "search.queryDatasetText = null; updateSearchText()"} -->
+
                 <div class='row flex-container'>
                     <div class='col-xs-8'>
                         <h4>2. Select individual datasets ({{getDatasetsFromQuery(search.currentQuery).length}} found)</h4>
@@ -90,16 +90,11 @@
                                         <span ng-click='toggleItem(sampleGroup)'>{{sampleGroup.name}} ({{sampleGroup.version}}) - {{sampleGroup.ancestry}} / {{sampleGroup.technology}}</span>
                                         <!-- %span.glyphicon.glyphicon-list-alt{:"ng-click" => "view.showProperties = !view.showProperties", :"ng-if" => "sampleGroup.properties.length > 0"} -->
                                     </p>
-                                    <!-- %p{:"class" => "level{{sampleGroup.level + 1}}", :"ng-repeat" => "property in sampleGroup.properties", :"ng-click" => "toggleItem(property)", :"ng-if" => "view.showProperties"} -->
-                                    <!-- {{property}} -->
+
                                 </span>
-                                <!-- %p.level2{:"ng-repeat" => "subitem in getNodesAtLevel(3, item) track by $index"} -->
-                                <!-- {{subitem.name}} -->
-                                <!-- %p.level3{:"ng-repeat" => "subitem in getNodesAtLevel(4, item) track by $index"} -->
-                                <!-- {{subitem.name}} -->
+
                             </div>
                         </div>
-                        <!-- .fade_bottom -->
                     </div>
                 </div>
             </div>
