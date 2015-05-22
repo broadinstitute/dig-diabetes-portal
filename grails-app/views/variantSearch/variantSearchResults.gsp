@@ -11,10 +11,7 @@
 <script>
 
 
-    var variantTableProteinEffect = {
-        stop_gained:'<g:helpText title="variantTable.tableContent.proteinEffect.stop_gained.help.header" placement="top" body="variantTable.tableContent.proteinEffect.stop_gained.help.text" qplacer="2px 0 0 6px"/>'
-//    :'<g:helpText title="variantTable.tableContent.proteinEffect..help.header" placement="top" body="variantTable.tableContent.proteinEffect..help.text" qplacer="2px 0 0 6px"/>'
-    };
+
     var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
     var loading = $('#spinner').show();
     loading.show();
@@ -28,16 +25,20 @@
             var variantTableContext = {
                 tooManyResults:'<g:message code="variantTable.searchResults.tooManyResults" default="too many results, sharpen your search" />'
             };
+            if (${newApi}){
+                fillTheFields(data) ;
+            } else {
+                variantProcessing.fillTheVariantTable(data,
+                        ${show_gene},
+                        ${show_sigma},
+                        ${show_exseq},
+                        ${show_exchp},
+                        '<g:createLink controller="variant" action="variantInfo"  />',
+                        '<g:createLink controller="gene" action="geneInfo"  />',
+                        ${dataSetDetermination},
+                        {variantTableContext:variantTableContext});
+            }
 
-            variantProcessing.fillTheVariantTable(data,
-                    ${show_gene},
-                    ${show_sigma},
-                    ${show_exseq},
-                    ${show_exchp},
-                    '<g:createLink controller="variant" action="variantInfo"  />',
-                    '<g:createLink controller="gene" action="geneInfo"  />',
-                    ${dataSetDetermination},
-                    {variantTableContext:variantTableContext});
             loading.hide();
         },
         error:function(XMLHttpRequest,textStatus,errorThrown){
@@ -47,6 +48,80 @@
     });
     var uri_dec = decodeURIComponent("<%=filter%>");
     var encodedParameters = decodeURIComponent("<%=encodedParameters%>");
+
+
+    var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
+    function fillTheFields (data)  {
+        variantProcessing.iterativeVariantTableFiller(data,'#variantTable',
+                ${show_gene},
+                ${show_sigma},
+                ${show_exseq},
+                ${show_exchp},
+                '<g:createLink controller="variant" action="variantInfo" />',
+                '<g:createLink controller="gene" action="geneInfo" />',
+                proteinEffectList,{},${newApi});
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+//needed or not? From the results page...
+    %{--var regionSpec = "<%=regionSpecification%>";--}%
+    %{--jQuery.fn.dataTableExt.oSort['allnumeric-asc']  = function(a,b) {--}%
+        %{--var x = parseFloat(a);--}%
+        %{--var y = parseFloat(b);--}%
+        %{--if (!x) { x = 1; }--}%
+        %{--if (!y) { y = 1; }--}%
+        %{--return ((x < y) ? -1 : ((x > y) ?  1 : 0));--}%
+    %{--};--}%
+
+    %{--jQuery.fn.dataTableExt.oSort['allnumeric-desc']  = function(a,b) {--}%
+        %{--var x = parseFloat(a);--}%
+        %{--var y = parseFloat(b);--}%
+        %{--if (!x) { x = 1; }--}%
+        %{--if (!y) { y = 1; }--}%
+        %{--return ((x < y) ? 1 : ((x > y) ?  -1 : 0));--}%
+    %{--};--}%
+//    var loading = $('#spinner').show();
+//    $.ajax({
+//        cache:false,
+//        type:"get",
+//        url:"../regionAjax/"+regionSpec,
+//        async:true,
+//        success: function (data) {
+//            fillTheFields(data) ;
+//            loading.hide();
+//        },
+//        error: function(jqXHR, exception) {
+//            loading.hide();
+//            core.errorReporter(jqXHR, exception) ;
+//        }
+//    });
+    %{--var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;--}%
+    %{--function fillTheFields (data)  {--}%
+        %{--variantProcessing.iterativeVariantTableFiller(data,'#variantTable',--}%
+                %{--${show_gene},--}%
+                %{--${show_sigma},--}%
+                %{--${show_exseq},--}%
+                %{--${show_exchp},--}%
+                %{--'<g:createLink controller="variant" action="variantInfo" />',--}%
+                %{--'<g:createLink controller="gene" action="geneInfo" />',--}%
+                %{--proteinEffectList,{},(${newApi}));--}%
+
+    %{--}--}%
+
+
+
+
+
 
 </script>
 

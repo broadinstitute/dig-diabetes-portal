@@ -176,9 +176,19 @@ class VariantSearchController {
         String filtersRaw = params['keys']
         String filters = URLDecoder.decode(filtersRaw, "UTF-8")
         log.debug "variantSearch variantSearchAjax = ${filters}"
-        JSONObject jsonObject = restServerService.searchGenomicRegionByCustomFilters(filters)
-        render(status: 200, contentType: "application/json") {
-            [variants: jsonObject['variants']]
+        JSONObject jsonObject
+        if (sharedToolsService.getNewApi()){
+            jsonObject = restServerService.generalizedVariantTable(filters)
+            render(status: 200, contentType: "application/json") {
+                [variants: jsonObject['results']]
+            }
+        }else {
+
+            jsonObject = restServerService.searchGenomicRegionByCustomFilters(filters)
+            render(status: 200, contentType: "application/json") {
+                [variants: jsonObject['variants']]
+            }
+
         }
     }
 
@@ -211,7 +221,8 @@ class VariantSearchController {
                             filterDescriptions  : parsedFilterParameters.filterDescriptions,
                             proteinEffectsList  : encodedProteinEffects,
                             encodedParameters   : encodedParameters,
-                            dataSetDetermination: dataSetDetermination])
+                            dataSetDetermination: dataSetDetermination,
+                            newApi              : sharedToolsService.getNewApi()])
         }
     }
 

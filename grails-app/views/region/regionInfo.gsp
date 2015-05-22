@@ -53,31 +53,6 @@
 
     }
 
-        %{----}%
-        %{--$('#variantTableBody').append(variantProcessing.fillCollectedVariantsTable(data,--}%
-                %{--${show_gene},--}%
-                %{--${show_sigma},--}%
-                %{--${show_exseq},--}%
-                %{--${show_exchp},--}%
-                %{--'<g:createLink controller="variant" action="variantInfo" />',--}%
-                %{--'<g:createLink controller="gene" action="geneInfo" />'),--}%
-                %{--{});--}%
-%{--<g:if test="${show_sigma}">--}%
-        %{--$('#variantTable').dataTable({--}%
-            %{--iDisplayLength: 20,--}%
-            %{--bFilter: false,--}%
-            %{--aaSorting: [[ 6, "asc" ]],--}%
-            %{--aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 6, 7, 8, 9, 10, 11 ] } ]--}%
-        %{--});--}%
-%{--</g:if>--}%
-%{--<g:else>--}%
-        %{--$('#variantTable').dataTable({--}%
-            %{--iDisplayLength: 20,--}%
-            %{--bFilter: false,--}%
-            %{--aaSorting: [[ 5, "asc" ]],--}%
-            %{--aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 5, 6, 8, 10, 11, 12, 13 ] } ]--}%
-        %{--});--}%
-%{--</g:else>--}%
 
 </script>
 

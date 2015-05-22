@@ -63,9 +63,13 @@ class FilterManagementService {
     ]
 
 
-    String retrieveParameterizedFilterString (String filterName,
-                                              String parm1,
-                                              BigDecimal parm2) {
+
+
+
+
+    private String oldApi(String filterName,
+                  String parm1,
+                  BigDecimal parm2) {
         String returnValue = ""
         switch (filterName){
             case "setPValueThreshold" :
@@ -130,7 +134,100 @@ class FilterManagementService {
                 break;
             default: break;
         }
-         return  returnValue
+        return  returnValue
+
+    }
+
+
+
+
+
+
+
+    private String filtersForApi(String filterName,
+                  String parm1,
+                  BigDecimal parm2) {
+        String returnValue = ""
+        switch (filterName){
+            case "setPValueThreshold" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "${parm1}", "operator": "LTE", "value": ${parm2} }""".toString()
+                break;
+            case "setRegionGeneSpecification" :
+                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${parm1}", "operand_type": "STRING"}""".toString()
+                break;
+            case "setRegionChromosomeSpecification" :
+                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "EQ", "value": ${parm1}, "operand_type": "INTEGER"}""".toString()
+                break;
+            case "setRegionPositionStart" :
+                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "GTE", "value": ${parm1}, "operand_type": "INTEGER"}""".toString()
+                break;
+            case "setRegionPositionEnd" :
+                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "LTE", "value": ${parm1}, "operand_type": "INTEGER"}""".toString()
+                break;
+            case "setEthnicityMaximum" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "_13k_T2D_${parm1}_MAF", "operator": "LTE", "value": ${parm2} }""".toString()
+                break;
+            case "setEthnicityMaximumAbsolute" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "_13k_T2D_${parm1}_MAF", "operator": "LT", "value": ${parm2} }""".toString()
+                break;
+            case "setEthnicityMinimum" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "_13k_T2D_${parm1}_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
+                break;
+            case "setEthnicityMinimumAbsolute" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "_13k_T2D_${parm1}_MAF", "operator": "GT", "value": ${parm2} }""".toString()
+                break;
+            case "setExomeChipMinimum" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
+                break;
+            case "setExomeChipMinimumAbsolute" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "GT", "value": ${parm2} }""".toString()
+                break;
+            case "setExomeChipMaximum" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "LTE", "value": ${parm2} }""".toString()
+                break;
+            case "setExomeChipMaximumAbsolute" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "LT", "value": ${parm2} }""".toString()
+                break;
+            case "setSigmaMinorAlleleFrequencyMinimum" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
+                break;
+            case "setSigmaMinorAlleleFrequencyMaximum" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_MAF", "operator": "LTE", "value": ${parm2} }""".toString()
+                break;
+            case "polyphenSelect" :
+                returnValue = """{ "filter_type": "STRING", "operand": "PolyPhen_PRED", "operator": "EQ", "value": "${parm1}" }""".toString()
+                break;
+            case "condelSelect"        :
+                returnValue = """{ "filter_type": "STRING", "operand": "Condel_PRED", "operator": "EQ", "value": "${parm1}" }""".toString()
+                break;
+            case  "siftSelect"        :
+                returnValue = """{ "filter_type": "STRING", "operand": "SIFT_PRED", "operator": "EQ", "value": "${parm1}" }""".toString()
+                break;
+            case "setOrValueLTE" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "${parm1}", "operator": "LTE", "value": ${parm2} }""".toString()
+                break;
+            case "setOrValueGTE" :
+                returnValue = """{ "filter_type": "FLOAT", "operand": "${parm1}", "operator": "GTE", "value": ${parm2} }""".toString()
+                break;
+            default: break;
+        }
+        return  returnValue
+
+    }
+
+
+
+
+
+
+    String retrieveParameterizedFilterString (String filterName,
+                                              String parm1,
+                                              BigDecimal parm2) {
+        if ( sharedToolsService.getNewApi()){
+            return filtersForApi( filterName,parm1,parm2)
+        }else {
+            return oldApi( filterName,parm1,parm2)
+        }
     }
 
 
@@ -158,8 +255,11 @@ class FilterManagementService {
                                           filterDescriptions:new ArrayList<String>(),
                                           parameterEncoding:new ArrayList<String>()]
 
-
-        buildingFilters = determineDataSet (buildingFilters,incomingParameters)
+        if (sharedToolsService.getNewApi()){
+            buildingFilters = prepareToBeginAddingFilters (buildingFilters)
+        } else { // do it the old way
+            buildingFilters = determineDataSet (buildingFilters,incomingParameters)
+        }
 
         String datatypeOperand = buildingFilters.datatypeOperand
 
@@ -427,6 +527,10 @@ class FilterManagementService {
 
 
 
+    private  LinkedHashMap prepareToBeginAddingFilters (LinkedHashMap  buildingFilters){
+        buildingFilters["datatypeOperand"]  =  '_13k_T2D_P_EMMAX_FE_IV'  // unnec?
+        return buildingFilters
+    }
 
 
 
