@@ -21,13 +21,13 @@ a.sigma-link {
     background-image: linear-gradient(#72A43D, #72A43D);
 }
 
-.sigma-learn {
-    background-image: linear-gradient(#72A43D, #72A43D);
-    height: 70px;
-}
 
 .sigma-partners-gradient {
     background-image: linear-gradient(#EC8103, #AA5B02);
+}
+
+.sigma-data-gradient {
+    background-image: linear-gradient(#00A099, #007D78);
 }
 
 .sigma-partners {
@@ -35,10 +35,11 @@ a.sigma-link {
     height: 70px;
 }
 
-.sigma-contact {
-    background-image: linear-gradient(#275D90, #123250);
-    height: 70px;
+.sigma-papers-gradient {
+    background-image: linear-gradient(#7A1979, #621046);
 }
+
+
 
 ul.publication-list {
     list-style: none;
@@ -50,9 +51,21 @@ ul.publication-list li {
     padding-bottom: 20px;
 }
 
+.sigma-topic-header {
+    padding-left: 50px;
+    color:#ffffff;
+    font-weight: 300;
+    font-size: 3vmin;
+    height: 6vh;
+    margin:0;
+}
+
 .sigma-topic {
     color:#ffffff;
     font-weight: 300;
+    font-size: 3vmin;
+    height: 6vh;
+    margin:0;
 }
 
 .sigma-nav h1 {
@@ -60,18 +73,9 @@ ul.publication-list li {
     margin-top: 0px;
 }
 
-.sigma-data {
-    background-image: linear-gradient(#00A099, #007D78);
-    height: 70px;
-}
-
-.sigma-papers {
-    background-image: linear-gradient(#7A1979, #621046);
-    height: 70px;
-}
-
 .language-table * td {
     font-weight: 300;
+    font-size: 2vh;
 }
 
 .valign {
@@ -92,4 +96,11 @@ div.sigma-detail {
 h4.sigma-data-detail-section-header {
     color:#38867F;
     font-weight: 400;
+}
+
+.sigma-hvcenter {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;"
 }

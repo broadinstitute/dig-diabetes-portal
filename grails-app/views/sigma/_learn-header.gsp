@@ -1,4 +1,4 @@
-<div class="row clearfix sigma-learn-gradient">
+<div class="row clearfix sigma-learn-gradient" style="height:10vmin;">
     <div class="col-md-2 col-xs-4 text-center">
         <h2 class="sigma-topic"><g:message code="sigmasite.learn"></g:message></h2>
     </div>
