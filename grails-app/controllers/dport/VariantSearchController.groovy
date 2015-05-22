@@ -94,6 +94,46 @@ class VariantSearchController {
 
     }
 
+    def launchAVariantSearch(){
+        LinkedHashMap newParameters = filterManagementService.processNewParameters (params.dataSet,
+                params.esValue,
+                params.esEquivalence,
+                params.phenotype,
+                params.pvValue,
+                params.pvEquivalence,
+                params.orValue,
+                params.orEquivalence,
+                params.filters,
+                params.datasetExomeChip,
+                params.datasetExomeSeq,
+                params.datasetGWAS,
+                params.region_stop_input,
+                params.region_start_input,
+                params.region_chrom_input,
+                params.region_gene_input,
+                params.predictedEffects,
+                params.condelSelect,
+                params.polyphenSelect,
+                params.siftSelect
+        )
+
+        List <String> oldFilters=filterManagementService.observeMultipleFilters(params)
+        List <LinkedHashMap> combinedFilters = filterManagementService.combineNewAndOldParameters(newParameters,
+                oldFilters)
+        String geneId = params.id
+        String receivedParameters = params.filter
+        String significance = params.sig
+        String dataset = params.dataset
+        String region = params.region
+        String filter = params.filter
+        Map paramsMap = filterManagementService.storeCodedParametersInHashmap (geneId,significance,dataset,region,combinedFilters)
+
+        if (paramsMap) {
+            displayVariantSearchResults(paramsMap, false)
+        }
+
+
+    }
 
 
     /***

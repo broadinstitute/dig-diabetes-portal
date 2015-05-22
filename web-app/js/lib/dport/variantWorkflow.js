@@ -322,6 +322,24 @@ var mpgSoftware = mpgSoftware || {};
             varsToSend = UTILS.concatMap(varsToSend,savedValue) ;
             UTILS.postQuery('./variantVWRequest',varsToSend);
         };
+        var launchAVariantSearch = function (){
+            var varsToSend = {};
+            var savedValuesList = [];
+            var savedValue = {};
+            var totalFilterCount = UTILS.extractValFromTextboxes(['totalFilterCount']);
+            if (typeof totalFilterCount['totalFilterCount'] !== 'undefined') {
+                var valueCount = parseInt(totalFilterCount['totalFilterCount']);
+                if (valueCount>0){
+                    for ( var i = 0 ; i < valueCount ; i++ ){
+                        savedValuesList.push ('savedValue'+i);
+                    }
+                    savedValue = UTILS.extractValFromTextboxes(savedValuesList);
+                }
+            }
+            varsToSend = UTILS.concatMap(varsToSend,savedValue) ;
+            UTILS.postQuery('./launchAVariantSearch',varsToSend);
+        };
+
         var initializePage = function (){
             if (numberExistingFilters() > 0){
                 handleBlueBoxVisibility ();
@@ -341,6 +359,7 @@ var mpgSoftware = mpgSoftware || {};
             cancelThisFieldCollection:cancelThisFieldCollection,
             fillDataSetDropdown:fillDataSetDropdown,
             gatherFieldsAndPostResults:gatherFieldsAndPostResults,
+            launchAVariantSearch:launchAVariantSearch,
             initializePage:initializePage,
             removeThisClause:removeThisClause,
             editThisClause:editThisClause,

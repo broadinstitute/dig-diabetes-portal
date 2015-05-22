@@ -287,7 +287,7 @@ class FilterManagementService {
                                               String significance,
                                               String dataset,
                                               String region,
-                                              String filter ) {
+                                              String filter) {
         HashMap returnValue = [:]
 
         if (dataset) {
@@ -358,7 +358,62 @@ class FilterManagementService {
 
 
 
-     private HashMap interpretSpecialFilters(HashMap developingParameterCollection,String filter)  {
+
+
+
+
+
+
+    public HashMap storeCodedParametersInHashmap ( String gene,
+                                              String dataset,
+                                              String region,
+                                              String filter,
+                                              List <LinkedHashMap> combinedFilters
+                                              ) {
+        HashMap returnValue = [:]
+
+
+        for (LinkedHashMap map in combinedFilters){
+            if (map.containsKey("phenotype")  ){
+                String phenotype  = map["phenotype"]
+            }
+            if (map.containsKey("regionChromosomeInput")  ){
+                String chromosome  = map["regionChromosomeInput"]
+                returnValue["region_chrom_input"] = chromosome
+            }
+            if (map.containsKey("regionStartInput")  ){
+                String startExtent  = map["regionStartInput"]
+                returnValue["region_start_input"] = startExtent
+            }
+            if (map.containsKey("regionStopInput")  ){
+                String endExtent  = map["regionStopInput"]
+                returnValue["region_stop_input"] = endExtent
+            }
+            if (map.containsKey("gene")  ){
+                String endExtent  = map["gene"]
+                returnValue["region_gene_input"] = endExtent
+            }
+
+        }
+
+        return returnValue
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private HashMap interpretSpecialFilters(HashMap developingParameterCollection,String filter)  {
          LinkedHashMap returnValue = new LinkedHashMap()
          if (filter) {
              String[] requestPortionList =  filter.split("-")
