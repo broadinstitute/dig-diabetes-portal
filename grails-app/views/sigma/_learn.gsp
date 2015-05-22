@@ -26,5 +26,41 @@
         <h4>
             <g:message code="sigmasite.learn.rarevariant.4"></g:message>
         </h4>
+
+        <h4>
+            <g:message code="sigmasite.learn.rarevariant.5"></g:message>
+        </h4>
+
+        <h4>
+            <g:message code="sigmasite.learn.rarevariant.6"></g:message>
+        </h4>
+
+        <h4>
+            <g:message code="sigmasite.learn.rarevariant.7"></g:message>
+        </h4>
+
+        <h4>
+            <g:message code="sigmasite.learn.rarevariant.8"></g:message>
+        </h4>
+
+        <h4>
+            <g:message code="sigmasite.learn.rarevariant.9"></g:message>
+        </h4>
+
+        <h4>
+            <g:message code="sigmasite.learn.rarevariant.10"></g:message>
+        </h4>
+
+        <h4>
+            <g:message code="sigmasite.learn.rarevariant.11"></g:message>
+        </h4>
+
+        <h4>
+            <g:message code="sigmasite.learn.rarevariant.12"></g:message>
+        </h4>
+
+        <h4>
+            <g:message code="sigmasite.learn.rarevariant.13"></g:message>
+        </h4>
     </div>
 </div>

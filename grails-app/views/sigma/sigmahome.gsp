@@ -1,9 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: andrew
-  Date: 5/5/15
-  Time: 9:16 AM
---%>
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
@@ -32,6 +26,9 @@
     <g:if test="${params.section == 'learn'}">
         <g:render template="learn-header"/>
     </g:if>
+    <g:if test="${params.section == 'contact'}">
+        <g:render template="contact-header"/>
+    </g:if>
 </div>
 
 <div class="container-fluid">
@@ -41,35 +38,42 @@
             <g:if test="${params.section != 'about' && params.section != null}">
                 <div class="row sigma-about-gradient">
                     <div class="text-center">
-                        <g:link params="[section: 'about']"><h2 class="sigma-topic">ABOUT</h2></g:link>
+                        <g:link params="[section: 'about']"><h2 class="sigma-topic"> <g:message code="sigmasite.about"></g:message></h2></g:link>
                     </div>
                 </div>
             </g:if>
             <g:if test="${params.section != 'data'}">
                 <div class="row clearfix sigma-data">
                     <div class="text-center">
-                        <g:link params="[section: 'data']"><h2 class="sigma-topic">DATA</h2></g:link>
+                        <g:link params="[section: 'data']"><h2 class="sigma-topic"> <g:message code="sigmasite.data"></g:message></h2></g:link>
                     </div>
                 </div>
             </g:if>
             <g:if test="${params.section != 'papers'}">
                 <div class="row clearfix sigma-papers">
                     <div class="text-center">
-                        <g:link params="[section: 'papers']"><h2 class="sigma-topic">RESEARCH</h2></g:link>
+                        <g:link params="[section: 'papers']"><h2 class="sigma-topic"> <g:message code="sigmasite.research"></g:message></h2></g:link>
                     </div>
                 </div>
             </g:if>
             <g:if test="${params.section != 'partners'}">
                 <div class="row clearfix sigma-partners">
                     <div class="text-center">
-                        <g:link params="[section: 'partners']"><h2 class="sigma-topic">PARTNERS</h2></g:link>
+                        <g:link params="[section: 'partners']"><h2 class="sigma-topic"> <g:message code="sigmasite.partners"></g:message></h2></g:link>
                     </div>
                 </div>
             </g:if>
             <g:if test="${params.section != 'learn'}">
                 <div class="row clearfix sigma-learn">
                     <div class="text-center">
-                        <g:link params="[section: 'learn']"><h2 class="sigma-topic">LEARN</h2></g:link>
+                        <g:link params="[section: 'learn']"><h2 class="sigma-topic"> <g:message code="sigmasite.learn"></g:message></h2></g:link>
+                    </div>
+                </div>
+            </g:if>
+            <g:if test="${params.section != 'contact'}">
+                <div class="row clearfix sigma-contact">
+                    <div class="text-center">
+                        <g:link params="[section: 'contact']"><h2 class="sigma-topic"> <g:message code="sigmasite.contact"></g:message></h2></g:link>
                     </div>
                 </div>
             </g:if>
@@ -90,6 +94,9 @@
             </g:if>
             <g:if test="${params.section == 'learn'}">
                 <g:render template="learn"/>
+            </g:if>
+            <g:if test="${params.section == 'contact'}">
+                <g:render template="contact"/>
             </g:if>
         </div>
     </div>
