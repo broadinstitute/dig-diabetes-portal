@@ -260,6 +260,19 @@ class RestServerService {
     }
 
 
+   private filterByVariant(String variantName){
+       String returnValue
+       String uppercaseVariantName = variantName?.toUpperCase()
+       if (uppercaseVariantName?.startsWith("RS")){
+           returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "DBSNP_ID", "operator": "EQ", "value": "${uppercaseVariantName}", "operand_type": "STRING"}"""
+       }else {
+           returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${uppercaseVariantName}", "operand_type": "STRING"}"""
+       }
+       return returnValue
+   }
+
+
+
 
     private String jsonForGeneralApiSearch(String combinedFilterList){
         String inputJson = """
@@ -1010,7 +1023,7 @@ ${customFilterSet}""".toString()
 
                     },
     "filters":    [
-                          {"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${variantId}", "operand_type": "STRING"}
+                         ${filterByVariant (variantId)}
 
                 ]
 }
@@ -1060,9 +1073,7 @@ ${customFilterSet}""".toString()
                                         }
                     },
     "filters":    [ 
-                      {"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${
-            variantId
-        }", "operand_type": "STRING"}
+                      ${filterByVariant (variantId)}
 
                 ]
 }
@@ -1160,9 +1171,7 @@ ${customFilterSet}""".toString()
                                                                                      }
                     },
     "filters":    [
-                      {"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${
-            variantId
-        }", "operand_type": "STRING"}
+                      ${filterByVariant (variantId)}
 
                 ]
 }
@@ -1375,9 +1384,7 @@ ${customFilterSet}""".toString()
                                         }
                     },
     "filters":    [
-                      {"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${
-            variantId
-        }", "operand_type": "STRING"}
+                       ${filterByVariant (variantId)}
 
                 ]
 }
@@ -1700,13 +1707,13 @@ ${customFilterSet}""".toString()
 
                         sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${element[exSeq2Sample][attribute]}},"
 
-                        element = variant["OBSU"].findAll{it}[0]
+                        //element = variant["OBSU"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"OBSU\",\"count\":${element[exSeq2Sample][attribute]}},"
+                       // sb  << "{\"level\":\"OBSU\",\"count\":${element[exSeq2Sample][attribute]}},"
 
-                        element = variant["OBSA"].findAll{it}[0]
+                       // element = variant["OBSA"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"OBSA\",\"count\":${element[exSeq2Sample][attribute]}},"
+                       // sb  << "{\"level\":\"OBSA\",\"count\":${element[exSeq2Sample][attribute]}},"
 
                         element = variant["MINA"].findAll{it}[0]
 

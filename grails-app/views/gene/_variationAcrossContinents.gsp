@@ -158,7 +158,10 @@
         };
         return {loadAncestryTable: loadAncestryTable}
     }());
-    mpgSoftware.ancestryTable.loadAncestryTable();
+    if (${newApi}){
+        mpgSoftware.ancestryTable.loadAncestryTable();
+    }
+
 </script>
 
 
