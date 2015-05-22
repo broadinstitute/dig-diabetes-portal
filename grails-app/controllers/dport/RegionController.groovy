@@ -62,7 +62,8 @@ class RegionController {
                        show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
                        show_sigma:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma),
                        proteinEffectsList:encodedProteinEffects,
-                       geneNamesToDisplay:geneNamesToDisplay
+                       geneNamesToDisplay:geneNamesToDisplay,
+                        newApi: sharedToolsService.getNewApi()
                 ] )
     }
 
@@ -70,9 +71,16 @@ class RegionController {
         String regionsSpecification = params.id
         if (regionsSpecification)  {
             JSONObject jsonObject =  restServerService.searchGenomicRegionAsSpecifiedByUsers (regionsSpecification)
-            render(status:200, contentType:"application/json") {
-                [variants:jsonObject['results']]
+            if (sharedToolsService.getNewApi())    {
+                render(status:200, contentType:"application/json") {
+                    [variants:jsonObject['results']]
+                }
+            }   else {
+                render(status:200, contentType:"application/json") {
+                    [variants:jsonObject['variants']]
+                }
             }
+
         }
      }
 
