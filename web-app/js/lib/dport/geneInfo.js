@@ -524,6 +524,19 @@ var mpgSoftware = mpgSoftware || {};
                 };
                 return returnValue;
             };
+            var mapAncestryToLowercase = function (ethnicKey){// as a workaround let's flip the case locally to make the anchor we need
+                var returnValue = 'hs'; // should never happen, but for now we make this trod upon minority the default
+                switch (ethnicKey){
+                    case 'AA':returnValue = 'aa'; break;
+                    case 'EA':returnValue = 'ea'; break;
+                    case 'SA':returnValue = 'sa'; break;
+                    case 'EU':returnValue = 'eu'; break;
+                    case 'HS':returnValue = 'hs'; break;
+                    case 'EU':returnValue = 'eu'; break;
+                    default: break;
+                }
+                return returnValue;
+            }
                 if (ethnicitySequence) {
                     var ethnicityMap = ethnicitySequence;
                     for (var ethnicityKey in ethnicityMap) {
@@ -542,10 +555,10 @@ var mpgSoftware = mpgSoftware || {};
                                 ethnicity.helpText + '</td>' +
                                 '<td>' + ethnicity.datatype + '</td>' +
                                 '<td>' + ns + '</td>' +
-                                '<td>' + buildAnchorForVariantSearches(total, geneId, 'total-' + ethnicityKey, rootVariantUrl) + '</td>' +
-                                '<td>' + buildAnchorForVariantSearches(common, geneId, 'common-' + ethnicityKey, rootVariantUrl) + '</td>' +
-                                '<td>' + buildAnchorForVariantSearches(lowFrequency, geneId, 'lowfreq-' + ethnicityKey, rootVariantUrl) + '</td>' +
-                                '<td>' + buildAnchorForVariantSearches(displayableRare, geneId, 'rare-' + ethnicityKey, rootVariantUrl) + '</td>' +
+                                '<td>' + buildAnchorForVariantSearches(total, geneId, 'total-' + mapAncestryToLowercase (ethnicityKey), rootVariantUrl) + '</td>' +
+                                '<td>' + buildAnchorForVariantSearches(common, geneId, 'common-' + mapAncestryToLowercase (ethnicityKey), rootVariantUrl) + '</td>' +
+                                '<td>' + buildAnchorForVariantSearches(lowFrequency, geneId, 'lowfreq-' + mapAncestryToLowercase (ethnicityKey), rootVariantUrl) + '</td>' +
+                                '<td>' + buildAnchorForVariantSearches(displayableRare, geneId, 'rare-' + mapAncestryToLowercase (ethnicityKey), rootVariantUrl) + '</td>' +
                                 '</tr>');
                         }
                     }

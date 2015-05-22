@@ -109,10 +109,10 @@ $.ajax({
                             }
 
                             mpgSoftware.geneInfo.fillTheVariantAndAssociationsTableFromNewApi(data,
-    ${show_gwas},
-    ${show_exchp},
-    ${show_exseq},
-    ${show_sigma},
+                                ${show_gwas},
+                                ${show_exchp},
+                                ${show_exseq},
+                                ${show_sigma},
                                 '<g:createLink controller="region" action="regionInfo" />',
                                 '<g:createLink controller="trait" action="traitSearch" />',
                                 '<g:createLink controller="variantSearch" action="gene" />',
@@ -121,7 +121,7 @@ $.ajax({
                                  biologicalHypothesisTesting:biologicalHypothesisTesting,
                                  variantsAndAssociationsRowHelpText: variantsAndAssociationsRowHelpText,
                                  continentalAncestryText: continentalAncestryText},
-                                '9',1,100,
+                                '9',${geneExtentBegin},${geneExtentEnd},
                                 collector["d0"][0].count,collector["d0"][1].count,collector["d0"][2].count,collector["d0"][3].count,
                                 collector["d1"][0].count,collector["d1"][1].count,collector["d1"][2].count,collector["d1"][3].count,
                                 collector["d2"][0].count,collector["d2"][1].count,collector["d2"][2].count,collector["d2"][3].count,

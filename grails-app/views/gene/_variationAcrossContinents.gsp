@@ -119,7 +119,7 @@
                                     ${show_exchp},
                                     ${show_exseq},
                                     ${show_sigma},
-                                    '<g:createLink controller="region" action="regionInfo" />',
+                                    '<g:createLink controller="variantSearch" action="gene" />',
                                     continentalAncestryText,
                                     holdingStructure.ethnicitySequence,
                                     holdingStructure.ethnicityChip,

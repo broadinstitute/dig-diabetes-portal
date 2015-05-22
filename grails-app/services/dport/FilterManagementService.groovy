@@ -150,7 +150,7 @@ class FilterManagementService {
         String returnValue = ""
         switch (filterName){
             case "setPValueThreshold" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "${parm1}", "operator": "LTE", "value": ${parm2} }""".toString()
+                returnValue = """{"dataset_id": "ExSeq_26k_dv2", "phenotype": "T2D", "operand": "${parm1}", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setRegionGeneSpecification" :
                 returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${parm1}", "operand_type": "STRING"}""".toString()
@@ -165,16 +165,16 @@ class FilterManagementService {
                 returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "LTE", "value": ${parm1}, "operand_type": "INTEGER"}""".toString()
                 break;
             case "setEthnicityMaximum" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "_13k_T2D_${parm1}_MAF", "operator": "LTE", "value": ${parm2} }""".toString()
+                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_dv1", "phenotype": "blah", "operand": "MAF", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setEthnicityMaximumAbsolute" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "_13k_T2D_${parm1}_MAF", "operator": "LT", "value": ${parm2} }""".toString()
+                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_dv1", "phenotype": "blah", "operand": "MAF", "operator": "LT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setEthnicityMinimum" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "_13k_T2D_${parm1}_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
+                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_dv1", "phenotype": "blah", "operand": "MAF", "operator": "GTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setEthnicityMinimumAbsolute" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "_13k_T2D_${parm1}_MAF", "operator": "GT", "value": ${parm2} }""".toString()
+                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_dv1", "phenotype": "blah", "operand": "MAF", "operator": "GT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setExomeChipMinimum" :
                 returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
@@ -528,7 +528,7 @@ class FilterManagementService {
 
 
     private  LinkedHashMap prepareToBeginAddingFilters (LinkedHashMap  buildingFilters){
-        buildingFilters["datatypeOperand"]  =  '_13k_T2D_P_EMMAX_FE_IV'  // unnec?
+        buildingFilters["datatypeOperand"]  =  'P_EMMAX_FE_IV'  // unnec?
         return buildingFilters
     }
 
@@ -676,11 +676,19 @@ class FilterManagementService {
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
         //ethnicities and minor allele frequencies
        List <List<String>> ethnicities = []
-        ethnicities << ['African-Americans','AA']
-        ethnicities << ['East Asians','EA']
-        ethnicities << ['South Asians','SA']
-        ethnicities << ['Europeans','EU']
-        ethnicities << ['Hispanics','HS']
+        if (sharedToolsService.getNewApi()){
+            ethnicities << ['African-Americans','aa']
+            ethnicities << ['East Asians','ea']
+            ethnicities << ['South Asians','sa']
+            ethnicities << ['Europeans','eu']
+            ethnicities << ['Hispanics','hs']
+        }else {
+            ethnicities << ['African-Americans','AA']
+            ethnicities << ['East Asians','EA']
+            ethnicities << ['South Asians','SA']
+            ethnicities << ['Europeans','EU']
+            ethnicities << ['Hispanics','HS']
+        }
        List <String> minMax = ['min', 'max']
         int fieldSpecifier = 8
        for (List<String> ethnicity in ethnicities) {
