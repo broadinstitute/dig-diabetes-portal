@@ -25,7 +25,7 @@
     });
     var  phenotypeMap =  new UTILS.phenotypeListConstructor (decodeURIComponent("${phenotypeList}")) ;
     function fillTraitVariantCross (data)  {
-        var margin = { top: 175, right: 100, bottom: 25, left: 100 },
+        var margin = { top: 175, right: 100, bottom: 25, left: 10 },
                 width = 1080 - margin.left - margin.right,
                 height = 1050 - margin.top - margin.bottom;
 
@@ -60,7 +60,7 @@
 /*}*/
 .assoc-up {
     fill: #0f0;
-    color: #00f;
+    color: #6fb7f7;
     stroke: #6fb7f7;
 }
 
@@ -68,6 +68,28 @@
     fill: red;
     color: red;
     stroke: red;
+}
+.assoc-down:hover {
+    stroke-width:2;
+}
+.assoc-up:hover {
+    stroke-width:2;
+}
+.bg {
+    fill: green;
+    fill-opacity: 0.0;
+    opacity: 0.0;
+    pointer-events: none;
+    color: white;
+    stroke: white;
+}
+.traitChosen {
+font-weight: bold;
+}
+line.chosen {
+    fill: green;
+    color: green;
+    stroke: green;
 }
 
 .assoc-none {
@@ -79,7 +101,60 @@
     fill:none;
     stroke: black;
 }
+.legend{
+    border: 1px solid black;
+}
+.legendTitle{
+    font-family: 'Lato';
+    font-weight: 400;
+    font-size: 12pt;
+    font-style: italic;
+    text-anchor: middle;
+}
+rect.legendHolder  {
+    fill:white;
+    stroke:black;
+    opacity:0.8;
+}
+.legendStylingCat {
+    font-size: 8pt;
+    font-weight: bold;
+    font-style: normal;
+    fill:black;
+}
+.legendStylingCat2 {
+    font-size: 8pt;
+    font-weight: bold;
+    font-style: normal;
+    fill:black;
+}
+.legendStylingSig {
+    font-size: 8pt;
+    font-weight: bold;
+    font-style: normal;
+    fill:black;
+}
+.legendStylingSig2 {
+    font-size: 8pt;
+    font-weight: bold;
+    font-style: normal;
+    fill:black;
+}
+.legendStyling {
+    font-size: 9pt;
+}
+.legendStyling0 {
 
+    display: none;
+}
+.legendStyling1 {
+    font-size: 8pt;
+    fill:#6fb7f7;
+}
+.legendStyling2 {
+    font-size: 8pt;
+    fill: red;
+}
 </style>
 
 <div id="main">
@@ -98,14 +173,11 @@
                 <p>
                     The table below shows all GWAS variants in this region available in this portal.
                     Columns represent each of the <a class="boldlink" href="${createLink(controller:'informational', action:'hgat')}">25 traits</a> that were studied in meta-analyses included in this portal.
-                Rows represent variants, in genomic order.
-                All variants are shown, regardless of association.
+                Rows represent traits, in alphabetic order.
                 </p>
 
                 <p>
-                    Hover over a circle to see the details of that association.
-                    Some cells won't have circles because no data is available,
-                    because they were not genotyped as part of the study and could not be adequately imputed.
+                    Hover over a variant to see the details of that association.
                 </p>
 
                 <p>

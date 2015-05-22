@@ -28,7 +28,8 @@ var baget = baget || {};  // encapsulating variable
                width = 1080 - margin.left - margin.right,
             spaceForVariantLabel = 60,
             variantLinkUrl = '',
-            phenotypeArray = [];
+            phenotypeArray = [],
+            spaceForPhenotypeLabels  = 100;
 
 
 
@@ -44,7 +45,8 @@ var baget = baget || {};  // encapsulating variable
             xAxis,
             yAxis,
             orgData,
-            maximumArrowSize=16;
+            maximumArrowSize=16,
+            legendHolderBoxWidth = 150;
 
 
         // indicate significance level with size
@@ -97,6 +99,7 @@ var baget = baget || {};  // encapsulating variable
                     });
                 var uniqueTraits=d3.nest()
                     .key(function(d) {return d.TRAIT;})
+                    .sortKeys(d3.ascending)
                     .rollup(function(d) {return phenotypeMap.phenotypeMap[d[0].TRAIT];})
                     .entries(dd)
                     .map(function(d){
@@ -157,7 +160,7 @@ var baget = baget || {};  // encapsulating variable
             var  variantIdArray =  uniqueArrays.variants.map(function (d){return d.id});
             var  variantNameArray = uniqueArrays.variants.map(function (d){return d.rsname});
             var  traitIdArray =  uniqueArrays.traits.map(function (d){return d.id});
-            var  traitNameArray = uniqueArrays.traits.map(function (d){return d.rsname});
+            var  traitNameArray = uniqueArrays.traits.map(function (d){return d.name});
             traitMap = createAMap(traitIdArray);
             variantMap = createAMap(variantIdArray);
             for (var key in traitMap) {
@@ -198,23 +201,144 @@ var baget = baget || {};  // encapsulating variable
         };
 
 
+        var drawLegend  = function(parent,data,legendPosX,legendPosY,spaceBetweenLegendEntries,set2) {
+            // add legend
+            var legendTextYPosition = 15,
+                spaceBetweenLegendColorAndLegendText = 30,
+                legendHolderBoxHeight = 120,
+                legendTitleYPositioning = 18,
+                legMapShift =  60;
+
+
+            var legend = parent.append("g")
+                .attr("class", "legendHolder")
+                .attr("x", legendPosX)
+                .attr("y", legendPosY)
+                .attr("height", 100)
+                .attr("width", 100) ;
+
+
+            legend.selectAll('rect')
+                .data([0])
+                .enter()
+                .append("rect")
+                .attr("x", legendPosX)
+                .attr("y", legendPosY)
+                .attr("width", legendHolderBoxWidth)
+                .attr("height", legendHolderBoxHeight)
+                .attr("class", "legendHolder");
+
+            legend.selectAll('text.legendTitle')
+                .data([0])
+                .enter()
+                .append("text")
+                .attr("class", "legendTitle")
+                .attr("x", legendPosX + (legendHolderBoxWidth / 2))
+                .attr("y", legendPosY+legendTitleYPositioning)
+                .attr("class", "legendTitle")
+                .text('Legend');
+
+            legend.selectAll('text.legendStylingCat')
+                .data([0])
+                .enter()
+                .append("text")
+                .attr("class", "legendStylingCat")
+                .attr("x", legendPosX+5)
+                .attr("y", (legendPosY+(3*(spaceBetweenLegendEntries + legendTextYPosition))/2)-7)
+                .text('Direction');
+            legend.selectAll('text.legendStylingCat2')
+                .data([0])
+                .enter()
+                .append("text")
+                .attr("class", "legendStylingCat2")
+                .attr("x", legendPosX+5)
+                .attr("y", (legendPosY+(3*(spaceBetweenLegendEntries + legendTextYPosition))/2)+7)
+                .text('(color)');
+
+
+            legend.selectAll('rect')
+                .data(data)
+                .enter()
+                .append("rect")
+                .attr("x", legMapShift+legendPosX + 10)
+                .attr("y", function (d, i) {
+                    return legendPosY+(i * spaceBetweenLegendEntries + legendTextYPosition);
+                })
+                .attr("width", 10)
+                .attr("height", 10)
+                .attr("class", function (d, i) {
+                    return 'legendStyling' + i;
+                })
+
+            legend.selectAll('text.elements1')
+                .data(data)
+                .enter()
+                .append("text")
+                .attr("class", "elements1")
+                .attr("x", legMapShift+legendPosX + spaceBetweenLegendColorAndLegendText)
+                .attr("y", function (d, i) {
+                    return legendPosY+(i * spaceBetweenLegendEntries + legendTextYPosition + 9);
+                })
+                .attr("class", "legendStyling")
+                .text(function (d) {
+                    if (typeof d.legendText !== 'undefined') {
+                        return d.legendText;
+                    } else {
+                        return '';
+                    }
+                });
+
+            legend.selectAll('text.legendStylingSig')
+                .data([0])
+                .enter()
+                .append("text")
+                .attr("class", "legendStylingSig")
+                .attr("x", legendPosX+5)
+                .attr("y", (legendPosY+(6*(spaceBetweenLegendEntries + legendTextYPosition))/2)-15)
+                .text('Significance');
+            legend.selectAll('text.legendStylingSig2')
+                .data([0])
+                .enter()
+                .append("text")
+                .attr("class", "legendStylingSig2")
+                .attr("x", legendPosX+5)
+                .attr("y", legendPosY+(6*(spaceBetweenLegendEntries + legendTextYPosition))/2)
+                .text('(size)');
+
+            legend.selectAll('text.elements2')
+                .data(set2)
+                .enter()
+                .append("text")
+                .attr("class", "elements2")
+                .attr("x", legMapShift/2+legendPosX + spaceBetweenLegendColorAndLegendText+10)
+                .attr("y", function (d, i) {
+                    return legendPosY+((i+5) * spaceBetweenLegendEntries/2 + legendTextYPosition + 9);
+                })
+                .attr("class", "legendStyling")
+                .text(function (d) {
+                    if (typeof d.legendText !== 'undefined') {
+                        return d.legendText;
+                    } else {
+                        return '';
+                    }
+                });
+
+
+        } ;
+
+
 
         var createAxes = function (axisGroup,orgData,gridSize,xScale,yScale, width, height, margin) {
             // draw the x axis
-//
-//            var traitLocal = orgData.traitIDArray.map(function (d, i) {
-//                return i * gridSize + 5;
-//            });
-
 
             yAxis = d3.svg.axis()
                 .scale(yScale)
-                .orient('left')
+                .orient('right')
                 .tickFormat(d3.requote(""));
 
             axisGroup.append('g')
                 .attr('id', 'yaxis')
-                .attr('transform', 'translate(' + margin.left + ',0)')
+              .attr('transform', 'translate(' + (width) + ',0)')
                 .attr('class', 'main axis pValue')
                 .call(yAxis);
 
@@ -229,7 +353,7 @@ var baget = baget || {};  // encapsulating variable
                 .attr('transform', 'translate(0,0)')
                 .attr('class', 'main axis chromosome')
                 .call(xAxis);
-        };
+
 //
 //                .selectAll("text")
 //                    .attr("dx", "0.5em")
@@ -238,7 +362,7 @@ var baget = baget || {};  // encapsulating variable
 //                    .attr("transform", function(d) {
 //                        return "rotate(-65)"
 //                    });
-//        };
+        };
 
 
         var onMouseOver = function(d){
@@ -264,11 +388,48 @@ var baget = baget || {};  // encapsulating variable
                 return  oneWeWant;
             });
             d3.select("#tooltip")
-                .style("left", xScale((d3.event.pageX + 10)))
-                .style("top", (d3.event.pageY - 10) + "px")
+                .style("left", (d3.event.pageX + 20) + "px")
+                .style("top", (d3.event.pageY - 20) + "px")
                 .select("#value")
                 .html(buildToolTip(d));
             d3.select("#tooltip").classed("hidden", false);
+
+        };
+
+
+
+        var onClick = function(d){
+            var remCol = d3.selectAll('line.chosen');
+            remCol.remove();
+            var remRow = d3.selectAll('.rowHighlight');
+            remRow.style('opacity',0)
+                .style('fill-opacity',0) ;
+            var holdingRow =  d3.select('.b_'+d.t);
+            holdingRow.select('.bg').style('opacity',0.1)
+                .style('fill-opacity',1)
+                .classed('rowHighlight',true) ;
+            d3.selectAll(".traitlabel").classed("traitChosen", function (r, ri) {
+                var oneWeWant = (ri == (d.t));
+                return  oneWeWant;
+            });
+            holdingRow.selectAll('line.chosen')
+                .data([d])
+                .enter()
+                .append("line")
+                .attr("class", "chosen")
+                .attr("x1", function (d, i) {
+                    return xScale(d.pos);
+                })
+                .attr("y1", function (d, i) {
+                    return 1 ;
+                })
+                .attr("x2", function (d, i) {
+                    return xScale(d.pos);
+                })
+                .attr("y2", function (d, i) {
+                    return height-margin.top-margin.bottom ;
+                })
+                .attr('stroke-width', 2)
 
         };
 
@@ -286,7 +447,6 @@ var baget = baget || {};  // encapsulating variable
                 })
                 .attr("x2", function (d, i) {
                     return xScale(d.pos);
-                    // return xScale(d.v * grid_size + spaceForVariantLabel);
                 })
                 .attr("y2", function (d, i) {
                     return (maximumArrowSize/2)+(d.t * grid_size)+arrowSize(d) ;
@@ -302,7 +462,11 @@ var baget = baget || {};  // encapsulating variable
                     d3.select("#tooltip").classed("hidden", true);
                     d3.selectAll(".traitlabel").classed("text-highlight", false);
                     d3.selectAll(".variantlabel").classed("text-highlight", false).text('');
-                });
+                })
+                .on("click", function (d) {
+                    onClick(d);
+                })
+            ;
         };
 
 
@@ -336,7 +500,7 @@ var baget = baget || {};  // encapsulating variable
             // create the scales
             xScale = d3.scale.linear()
                 .domain([orgData.positionExtent.min,orgData.positionExtent.max])
-                .range([ margin.left, width ]);
+                .range([ margin.left, width-spaceForPhenotypeLabels ]);
 
             yScale = d3.scale.ordinal()
                 .domain([0,orgData.traitIDArray])
@@ -355,7 +519,7 @@ var baget = baget || {};  // encapsulating variable
                 .enter()
                 .append('g')
                 .attr('class', 'bodyClip')
-                .call(defineBodyClip ,"bodyClip",margin.left,0,width-margin.left,height+margin.top);
+                .call(defineBodyClip ,"bodyClip",margin.left,0,width-margin.left-spaceForPhenotypeLabels,height+margin.top);
 
 
             var group = svg
@@ -365,36 +529,38 @@ var baget = baget || {};  // encapsulating variable
                 .append('g')
                 .attr('class', 'axesHolder')
                 .attr('transform', 'translate('+margin.left+','+margin.top+')')
-                .call(createAxes ,orgData,grid_size,xScale,yScale,width, height, margin);
+                .call(createAxes ,orgData,grid_size,xScale,yScale,width-spaceForPhenotypeLabels, height, margin);
+
+            var legCol1 = [{legendText:''},
+                {legendText:'positive'},
+                {legendText:'negative'}] ;
+            var legCol2 = [{legendText:''},
+                {legendText:'p> .05= [none]'},
+                {legendText:'p< .05=small'},
+                {legendText:'p< .0001=med'},
+                {legendText:'p< 10E-8=big'}
+            ] ;
+
+
+            svg
+                .selectAll('g.legend')
+                .data([1])
+                .enter()
+                .append('g')
+                .attr('class', 'legend')
+                .call(drawLegend,legCol1,  25,3,20, legCol2);
+
 
 
 //            var group = svg.attr("width", expandedWidth + margin.top + margin.bottom)
 //                           .append("g")
 //                           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 //
-//
-//            // draw a line along the top
-//            group.append('line')
-//                .attr('x1', xScale(spaceForVariantLabel-25))
-//                .attr('y1', '-15')
-//                .attr('x2', xScale(expandedWidth+(spaceForVariantLabel-25)))
-//                .attr('y2', '-15')
-//                .attr('stroke', '#bbb')
-//                .attr('stroke-width', '1');
-//
-//            // draw a line down the left side
-//            group.append('line')
-//                .attr('x1', xScale(spaceForVariantLabel-25))
-//                .attr('y1', '-15')
-//                .attr('x2', xScale(spaceForVariantLabel-25))
-//                .attr('y2', height)
-//                .attr('stroke', '#bbb')
-//                .attr('stroke-width', '1');
 
-            //label variant down the left side
+            //label variant down the right side
             group.append('g')
                 .selectAll(".row-g")
-                .data(orgData.traitIDArray)
+                .data(orgData.traitNameArray)
                 .enter()
                 .append('text')
                 .attr("class", function (d, i) {
@@ -403,7 +569,7 @@ var baget = baget || {};  // encapsulating variable
                 .text(function (d) {
                     return d;
                 })
-                .attr("x", 0 )
+                .attr("x", width-spaceForPhenotypeLabels+8 )
                 .attr("y", function (d, i) {
                     return i * grid_size + 15;
                 })
@@ -423,8 +589,22 @@ var baget = baget || {};  // encapsulating variable
                 .data(orgData.variantArrayOfArrayVariantPointers)
                 .enter()
                 .append('g')
-                .attr('class', 'cellr') ;
+                .attr('class', function(d,i){
+                    return 'cellr b_'+i;
+                }) ;
 
+            rows.selectAll('rect.bg').data([1])
+                .enter()
+                .append('rect')
+                .attr('class','bg')
+                .attr("x", 0)
+                .attr("y",  function (d, i) {
+                    var row=parseInt(this.parentNode.classList[1].split('_')[1]);
+                   // return row * grid_size + 15;
+                    return row * grid_size;
+                })
+                .attr("width", width-spaceForPhenotypeLabels)
+                .attr("height", grid_size);
             // Now draw something for each trait
             rows.selectAll('line.cg')
                 .data(function (d, i) {

@@ -780,6 +780,38 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
 
 
 
+
+
+    String generateRangeFiltersPValueRestriction (String chromosome,
+                                 String beginSearch,
+                                 String endSearch,
+                                 Boolean dataRestriction,
+                                 BigDecimal pValue)    {
+        StringBuilder sb = new  StringBuilder ()
+        sb << """[
+                   { "filter_type": "STRING", "operand": "CHROM",  "operator": "EQ","value": "${chromosome}"  },
+                   {"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": ${beginSearch} },
+                   {"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": ${endSearch} }""".toString()
+        if (dataRestriction) {
+            sb <<   generateDataRestrictionFilters ()
+        }
+        if (pValue) {
+            sb <<   """,
+{"operand": "PVALUE", "operator": "LTE", "value": ${pValue.toString()}, "filter_type": "FLOAT"}"""
+        }
+
+        sb << """
+]""".toString()
+        return sb.toString()
+    }
+
+
+
+
+
+
+
+
     /***
      * Variant search on the basis of chromosome, start position, and end position.
      *
@@ -820,7 +852,7 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
         JSONObject returnValue = null
         String drivingJson = """{
 "user_group": "ui",
-"filters": ${generateRangeFilters (chromosome,beginSearch,endSearch,false)}
+"filters": ${generateRangeFiltersPValueRestriction (chromosome,beginSearch,endSearch,false,0.05)}
 }
 """.toString()
         returnValue = postRestCall( drivingJson, TRAIT_SEARCH_URL)
