@@ -209,6 +209,10 @@ class FilterManagementService {
             case "setOrValueGTE" :
                 returnValue = """{ "filter_type": "FLOAT", "operand": "${parm1}", "operator": "GTE", "value": ${parm2} }""".toString()
                 break;
+            case "setSpecificPValue" :
+                returnValue = """{"dataset_id": "ExSeq_26k_dv2", "phenotype": "${parm1}", "operand": "P_EMMAX_FE_IV", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                break;
+
             default: break;
         }
         return  returnValue
@@ -276,6 +280,8 @@ class FilterManagementService {
         buildingFilters = predictedEffectsOnProteins(buildingFilters, incomingParameters)
 
         buildingFilters = predictedImpactOfMissenseMutations(buildingFilters, incomingParameters)
+
+        buildingFilters = setSpecificPValue(buildingFilters, incomingParameters)
 
         return buildingFilters
 
@@ -376,7 +382,13 @@ class FilterManagementService {
         for (LinkedHashMap map in combinedFilters){
             if (map.containsKey("phenotype")  ){
                 String phenotype  = map["phenotype"]
+                returnValue["spec_pheno_ind"] = phenotype
             }
+            if (map.containsKey("pValue")  ){
+                String pValue  = map["pValue"]
+                returnValue["spec_p_value"] = pValue
+            }
+
             if (map.containsKey("regionChromosomeInput")  ){
                 String chromosome  = map["regionChromosomeInput"]
                 returnValue["region_chrom_input"] = chromosome
@@ -654,6 +666,33 @@ class FilterManagementService {
 
         return buildingFilters
     }
+
+
+
+
+
+
+
+
+    private  LinkedHashMap setSpecificPValue(LinkedHashMap  buildingFilters, HashMap incomingParameters) {
+        List <String> filters =  buildingFilters.filters
+        List <String> filterDescriptions =  buildingFilters.filterDescriptions
+        List <String> parameterEncoding =  buildingFilters.parameterEncoding
+        // set the search region
+        // set gene to search
+        if (incomingParameters.containsKey("spec_p_value") && (incomingParameters.containsKey("spec_pheno_ind"))) {
+            // P value for a particular phenotype
+            String stringPValue = incomingParameters["spec_p_value"]
+            String stringPhenotypeIndicator = incomingParameters["spec_pheno_ind"]
+            filters << retrieveParameterizedFilterString("setSpecificPValue",stringPhenotypeIndicator,stringPValue as BigDecimal)
+            filterDescriptions << "P value < ${stringPValue} for ${stringPhenotypeIndicator}"
+            parameterEncoding << "27:${stringPValue}"
+        }
+        return  buildingFilters
+
+    }
+
+
 
 
 
