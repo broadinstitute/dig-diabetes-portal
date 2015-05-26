@@ -1,6 +1,6 @@
 <div class="container-fluid sigma-about-gradient">
     <div class="row clearfix sigma-hvcenter" >
-        <div class="col-md-2 col-xs-1">
+        <div class="col-md-2 col-xs-1 sigma-hvcenter">
           <h2>
               <div class="sigma-topic text-center"><g:message code="sigmasite.about"></g:message></div>
           </h2>

@@ -98,9 +98,9 @@ h4.sigma-data-detail-section-header {
     font-weight: 400;
 }
 
-.sigma-hvcenter {
+.sigma-hvcenter  {
     display: flex;
     align-content: center;
     align-items: center;
-    justify-content: center;"
+    justify-content: center;
 }
