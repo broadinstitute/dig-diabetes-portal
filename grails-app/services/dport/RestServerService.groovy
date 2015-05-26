@@ -1426,6 +1426,33 @@ ${customFilterSet}""".toString()
 
 
 
+  private String ancestryDataSet (String ethnicity){
+      String dataSetId = ""
+      switch (ethnicity){
+          case "HS":
+              dataSetId = "ExSeq_13k_hs_genes_dv1"
+              break;
+          case "AA":
+              dataSetId = "ExSeq_13k_aa_genes_dv1"
+              break;
+          case "EA":
+              dataSetId = "ExSeq_13k_ea_genes_dv1"
+              break;
+          case "SA":
+              dataSetId = "ExSeq_13k_sa_genes_dv1"
+              break;
+          case "EU":
+              dataSetId = "ExSeq_13k_eu_genes_dv1"
+              break;
+          case "chipEu":
+              dataSetId = "ExChip_82k_dv2"
+              break;
+          default:
+              log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
+              dataSetId = "ExSeq_13k_aa_genes_dv1"
+      }
+      return dataSetId
+  }
 
 
 
@@ -1434,46 +1461,28 @@ ${customFilterSet}""".toString()
         String dataSetId = ""
         String minimumMaf = 0
         String maximumMaf = 1
-        switch (ethnicity){
-            case "HS":
-                dataSetId = "ExSeq_13k_hs_genes_dv1"
-                break;
-            case "AA":
-                dataSetId = "ExSeq_13k_aa_genes_dv1"
-                break;
-            case "EA":
-                dataSetId = "ExSeq_13k_ea_genes_dv1"
-                break;
-            case "SA":
-                dataSetId = "ExSeq_13k_sa_genes_dv1"
-                break;
-            case "EU":
-                dataSetId = "ExSeq_13k_eu_genes_dv1"
-                break;
-            case "chipEu":
-                dataSetId = "ExChip_82k_dv2"
-                break;
-            default:
-                log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
-                dataSetId = "ExSeq_13k_aa_genes_dv1"
-        }
+        dataSetId = ancestryDataSet ( ethnicity)
         switch (cellNumber){
             case 0:
                 minimumMaf = "0"
                 maximumMaf = "1"
                 break;
             case 1:
-                minimumMaf = "0.05"
+                minimumMaf = "0"
                 maximumMaf = "1"
                 break;
             case 2:
+                minimumMaf = "0.05"
+                maximumMaf = "1"
+                break;
+            case 3:
                 minimumMaf = "0.0005"
                 maximumMaf = "0.05"
                 break;
-            case 3:
-                minimumMaf = "0.00000000000001"
-                maximumMaf = "0.0005"
-                break;
+//            case 3:
+//                minimumMaf = "0.00000000000001"
+//                maximumMaf = "0.0005"
+//                break;
             default:
                 log.error("Trouble: user requested cell number = ${cellNumber} which I don't recognize")
                 dataSetId = "ExSeq_13k_aa_genes_dv1"
@@ -1490,7 +1499,10 @@ ${customFilterSet}""".toString()
            				"cproperty": ["VAR_ID"],
                   		"orderBy":	[],
                   		"dproperty":	{},
-                		"pproperty":	{}
+                		"pproperty":	{
+                           "OBSA":  { "ExSeq_26k_dv2": ["T2D"]},
+                           "OBSU":  { "ExSeq_26k_dv2": ["T2D"]}
+                         }
                 	},
 	"filters":	[
         			{"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${geneName}", "operand_type": "STRING"},
@@ -1499,7 +1511,36 @@ ${customFilterSet}""".toString()
             	]
 }
 """.toString()
-        return jsonVariantCountByGeneAndMaf
+        String jsonParticipantCount = """
+{
+	"passback": "123abc",
+	"entity": "variant",
+	"page_number": 50,
+	"page_size": 100,
+	"limit": 1,
+	"count": false,
+	"properties":	{
+           				"cproperty": ["VAR_ID"],
+                  		"orderBy":	[],
+                  		"dproperty":	{},
+                		"pproperty":	{
+                           "OBSA":  { "${dataSetId}": ["T2D"]},
+                           "OBSU":  { "${dataSetId}": ["T2D"]}
+                         }
+                	},
+	"filters":	[
+        			{"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${geneName}", "operand_type": "STRING"},
+                	{"dataset_id": "${dataSetId}", "phenotype": "blah", "operand": "MAF", "operator": "GT", "value": ${minimumMaf}, "operand_type": "FLOAT"},
+                    {"dataset_id": "${dataSetId}", "phenotype": "blah", "operand": "MAF", "operator": "LTE", "value": ${maximumMaf}, "operand_type": "FLOAT"}
+            	]
+}
+""".toString()
+        if (cellNumber==0){
+            return jsonParticipantCount
+        }else {
+            return jsonVariantCountByGeneAndMaf
+        }
+
     }
 
 
@@ -1523,18 +1564,46 @@ ${customFilterSet}""".toString()
 
     public JSONObject combinedEthnicityTable(String geneName){
         JSONObject returnValue
+        String exSeq2Sample = "ExSeq_26k_dv2"
+        String attribute = "T2D"
         List <String> dataSeteList = ["HS", "AA", "EA", "SA", "EU","chipEu"]
         List <Integer> cellNumberList = [0,1,2,3]
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()
         for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
+            String dataSetId =  ancestryDataSet ( dataSeteList[j] )
             sb  << "{ \"dataset\": \"${dataSeteList[j]}\",\"pVals\": ["
             for ( int  i = 0 ; i < cellNumberList.size () ; i++ ){
                 sb  << "{"
                 String apiData = findVariantCountByGeneAndMaf(geneName,  dataSeteList[j], cellNumberList[i])
                 JSONObject apiResults = slurper.parseText(apiData)
                 if (apiResults.is_error == false) {
-                    sb  << "\"level\":${cellNumberList[i]},\"count\":${apiResults.numRecords}"
+                    if (cellNumberList[i] == 0){
+                        // the first cell is different than the others. We need to pull back the number of participants,
+                        //  which can be found only by adding the OBSA and OBSU fields
+                        int unaffected = 0
+                        int affected =  0
+                        def variant = apiResults.variants[0]
+                        if ((variant) && (variant != 'null')){
+                            def element = variant["OBSU"].findAll{it}[0]
+                            if ((element) && (element != 'null')){
+                                if (element[dataSetId][attribute]!=null){
+                                    unaffected =  element[dataSetId][attribute]
+                                }
+
+                            }
+                            element = variant["OBSA"].findAll{it}[0]
+                            if ((element) && (element != 'null')) {
+                                if (element[dataSetId][attribute]!=null) {
+                                    affected = element[dataSetId][attribute]
+                                }
+                            }
+                        }
+                        sb  << "\"level\":${cellNumberList[i]},\"count\":${(unaffected +affected)}"
+                    }else {
+                        sb  << "\"level\":${cellNumberList[i]},\"count\":${apiResults.numRecords}"
+                    }
+
                 }
                 sb  << "}"
                 if (i<cellNumberList.size ()-1){
