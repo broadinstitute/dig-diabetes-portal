@@ -29,6 +29,7 @@ class RestServerService {
     private  String TRAIT_INFO_URL = "trait-info"
     private  String VARIANT_SEARCH_URL = "variant-search"
     private  String TRAIT_SEARCH_URL = "trait-search"
+    private  String METADATA_URL = "getMetadata"
     private  String GET_DATA_URL = "getData"
     private  String DBT_URL = ""
     private  String EXPERIMENTAL_URL = ""
@@ -548,6 +549,57 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
 
 
 
+
+    /***
+     * This is the underlying routine for every call to the rest backend.
+     * @param drivingJson
+     * @param targetUrl
+     * @return
+     */
+    private JSONObject getRestCallBase(String targetUrl, currentRestServer){
+        JSONObject returnValue = null
+        Date beforeCall  = new Date()
+        Date afterCall
+        RestResponse response
+        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
+        StringBuilder logStatus = new StringBuilder()
+        try {
+            response  = rest.get(currentRestServer+targetUrl)   {
+                contentType "application/json"
+            }
+            afterCall  = new Date()
+        } catch ( Exception exception){
+            log.error("NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}")
+            log.error(exception.toString())
+            logStatus <<  "NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}"
+            afterCall  = new Date()
+        }
+        logStatus << """
+SERVER CALL:
+url=${targetUrl},
+parm=${drivingJson},
+time required=${(afterCall.time-beforeCall.time)/1000} seconds
+""".toString()
+        if (response?.responseEntity?.statusCode?.value == 200) {
+            returnValue =  response.json
+            logStatus << """status: ok""".toString()
+        }  else {
+            JSONObject tempValue =  response.json
+            logStatus << """status: ${response.responseEntity.statusCode.value}""".toString()
+            if  (tempValue)  {
+                logStatus << """is_error: ${response.json["is_error"]}""".toString()
+            }  else {
+                logStatus << "no valid Json returned"
+            }
+        }
+        log.info(logStatus)
+        return returnValue
+    }
+
+
+
+
+
     private JSONObject postRestCallBurden(String drivingJson, String targetUrl){
         return postRestCallBase(drivingJson,targetUrl,DBT_URL)
     }
@@ -572,6 +624,11 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
 
     private JSONObject postRestCall(String drivingJson, String targetUrl){
         return postRestCallBase(drivingJson,targetUrl,currentRestServer())
+    }
+
+
+    private JSONObject getRestCall(String targetUrl){
+        return getRestCallBase(targetUrl,currentRestServer())
     }
 
 
@@ -1555,6 +1612,17 @@ ${customFilterSet}""".toString()
     public JSONObject findVariantCountByGeneAndMaf(String geneName, String ethnicity, int cellNumber){
         String jsonSpec = generateJsonVariantCountByGeneAndMaf( geneName,  ethnicity,  cellNumber)
         return postRestCall(jsonSpec,GET_DATA_URL)
+    }
+
+    /***
+     * Let's make this the common call for metadata which all callers can share
+     * @return
+     */
+    public JSONObject getMetadata(){
+        if (!sharedMetadata){
+            sharedMetadata =  getRestCall(METADATA_URL)
+        }
+        return sharedMetadata
     }
 
 

@@ -9,6 +9,7 @@ import grails.transaction.Transactional
 import groovy.json.StringEscapeUtils
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.web.json.JSONObject
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
 
@@ -18,6 +19,7 @@ class SharedToolsService {
      MailService mailService
     GrailsApplication grailsApplication
     LinkGenerator grailsLinkGenerator
+    RestServerService restServerService
      private static final log = LogFactory.getLog(this)
 
 
@@ -28,6 +30,7 @@ class SharedToolsService {
     Integer showGene = -1
     Integer showBeacon = -1
     Integer showNewApi = -1
+    JSONObject sharedMetadata
 
     String warningText = ""
 
@@ -175,6 +178,14 @@ class SharedToolsService {
         }
         return returnValue
     }
+
+
+    public JSONObject getMetadata (){
+        restServerService.getMetadata()
+    }
+
+
+
 
 
     /***
