@@ -1347,7 +1347,7 @@ ${customFilterSet}""".toString()
      */
     public JSONObject combinedVariantCountByGeneNameAndPValue(String geneName){
         JSONObject returnValue
-        List <Integer> dataSeteList = [1, 2, 3]
+        List <Integer> dataSeteList = [3, 2, 1]
         List <BigDecimal> pValueList = [1,0.00000005, 0.0001, 0.05]
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()

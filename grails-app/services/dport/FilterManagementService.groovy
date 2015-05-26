@@ -10,6 +10,15 @@ class FilterManagementService {
     RestServerService restServerService
     SharedToolsService sharedToolsService
 
+    private String exomeSequence  = "ExSeq_26k_dv2"
+    private String gwasData  = "GWAS_DIAGRAM_dv1"
+    private String exomeChip  = "ExChip_82k_dv2"
+    private String sigmaData  = "unknown"
+    private String exomeSequencePValue  = "P_EMMAX_FE_IV"
+    private String gwasDataPValue  = "P_VALUE"
+    private String exomeChipPValue  = "P_VALUE"
+    private String sigmaDataPValue  = "P_VALUE"
+
     LinkedHashMap<String, String> standardFilterStrings = [
             "t2d-genomewide"  :
                     """{ "filter_type": "FLOAT", "operand": "_13k_T2D_P_EMMAX_FE_IV", "operator": "LTE", "value": 5e-8 }""".toString(),
@@ -146,11 +155,32 @@ class FilterManagementService {
 
     private String filtersForApi(String filterName,
                   String parm1,
-                  BigDecimal parm2) {
+                  BigDecimal parm2,
+                  String parm3="junk") {
         String returnValue = ""
         switch (filterName){
+            case "dataSetGwas"        :
+                returnValue = """{"dataset_id": "GWAS_DIAGRAM_dv1", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
+                break;
+            case "dataSetSigma"        :
+                returnValue = """{"dataset_id": "ExSeq_26k_dv2", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
+                break;
+            case "dataSetExseq"        :
+                returnValue = """{"dataset_id": "ExSeq_26k_dv2", "phenotype": "T2D", "operand": "P_EMMAX_FE_IV", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
+                break;
+            case "dataSetExchp"        :
+                returnValue = """{"dataset_id": "ExChip_82k_dv2", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
+                break;
             case "setPValueThreshold" :
-                returnValue = """{"dataset_id": "ExSeq_26k_dv2", "phenotype": "T2D", "operand": "${parm1}", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                String dataset = exomeSequence
+                switch (parm3) {
+                    case "gwas": dataset = gwasData; break;
+                    case "sigma": dataset = sigmaData; break;
+                    case "exomeseq": dataset = exomeSequence; break;
+                    case "exomechip": dataset = exomeChip; break;
+                    default: break;
+                }
+                returnValue = """{"dataset_id": "${dataset}", "phenotype": "T2D", "operand": "${parm1}", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setRegionGeneSpecification" :
                 returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${parm1}", "operand_type": "STRING"}""".toString()
@@ -226,21 +256,27 @@ class FilterManagementService {
 
     String retrieveParameterizedFilterString (String filterName,
                                               String parm1,
-                                              BigDecimal parm2) {
+                                              BigDecimal parm2,
+                                              String parm3 = "junk") {
         if ( sharedToolsService.getNewApi()){
-            return filtersForApi( filterName,parm1,parm2)
+            return filtersForApi( filterName,parm1,parm2,parm3)
         }else {
             return oldApi( filterName,parm1,parm2)
         }
     }
 
 
-    String retrieveFilterString (String filterName) {
-        String returnValue = ""
-        if (standardFilterStrings.containsKey(filterName))     {
-            returnValue =  standardFilterStrings [filterName]
+    String retrieveFilterString (String filterName,
+                                 String parm3 = "junk") {
+        if ( sharedToolsService.getNewApi()){
+            return filtersForApi( filterName,"junk",0.0 as BigDecimal,parm3)
+        }else {
+            String returnValue = ""
+            if (standardFilterStrings.containsKey(filterName))     {
+                returnValue =  standardFilterStrings [filterName]
+            }
+            return  returnValue
         }
-        return  returnValue
     }
 
     /***
@@ -259,13 +295,10 @@ class FilterManagementService {
                                           filterDescriptions:new ArrayList<String>(),
                                           parameterEncoding:new ArrayList<String>()]
 
-        if (sharedToolsService.getNewApi()){
-            buildingFilters = prepareToBeginAddingFilters (buildingFilters)
-        } else { // do it the old way
-            buildingFilters = determineDataSet (buildingFilters,incomingParameters)
-        }
+       buildingFilters = determineDataSet (buildingFilters,incomingParameters)
 
-        String datatypeOperand = buildingFilters.datatypeOperand
+
+       String datatypeOperand = buildingFilters.datatypeOperand
 
         buildingFilters = determineThreshold (buildingFilters, incomingParameters, datatypeOperand)
 
@@ -558,26 +591,26 @@ class FilterManagementService {
 
             switch (dataSetDistinguisher)   {
                 case  0:
-                    datatypeOperand = 'GWAS_T2D_PVALUE'
+                    datatypeOperand = (sharedToolsService.getNewApi()?gwasDataPValue :"GWAS_T2D_PVALUE")
                     filters <<  retrieveFilterString("dataSetGwas")
                     filterDescriptions << "Is observed in Diagram GWAS"
                     parameterEncoding << "1:3"
                     break;
 
                 case  1:
-                    datatypeOperand = 'SIGMA_T2D_P'
+                    datatypeOperand = (sharedToolsService.getNewApi()?sigmaDataPValue:"SIGMA_T2D_P")
                     filters <<  retrieveFilterString("dataSetSigma") 
                     filterDescriptions << "Whether variant is included in SIGMA analysis is equal to 1"
                     parameterEncoding << "1:0"
                     break;
                 case  2:
-                    datatypeOperand = '_13k_T2D_P_EMMAX_FE_IV'
+                    datatypeOperand = (sharedToolsService.getNewApi()?exomeSequencePValue  :"_13k_T2D_P_EMMAX_FE_IV")
                     filters <<  retrieveFilterString("dataSetExseq")
                     filterDescriptions << "Is observed in exome sequencing"
                     parameterEncoding << "1:1"
                     break;
                 case  3:
-                    datatypeOperand = 'EXCHP_T2D_P_value'
+                    datatypeOperand = (sharedToolsService.getNewApi()?exomeChipPValue  :"EXCHP_T2D_P_value")
                     filters <<  retrieveFilterString("dataSetExchp") 
                     filterDescriptions << "Is observed in exome chip"
                     parameterEncoding << "1:2"
@@ -591,15 +624,6 @@ class FilterManagementService {
         return buildingFilters
 
     }
-
-
-
-    private  LinkedHashMap prepareToBeginAddingFilters (LinkedHashMap  buildingFilters){
-        buildingFilters["datatypeOperand"]  =  'P_EMMAX_FE_IV'  // unnec?
-        return buildingFilters
-    }
-
-
 
 
 
@@ -617,20 +641,21 @@ class FilterManagementService {
         // set threshold
         if  (incomingParameters.containsKey("significance"))  {      // user has requested a particular data set. Without explicit request what is the default?
             String requestedDataSet =  incomingParameters ["significance"]
+            String dataSetSpecifier = incomingParameters ["datatype"]
             switch (requestedDataSet)   {
                 case  "genomewide":
-                    filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,5e-8 as BigDecimal) 
+                    filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,5e-8 as BigDecimal,dataSetSpecifier)
                     filterDescriptions << "P-value for association with T2D is less than or equal to 5e-8"
                     parameterEncoding << "2:0"
                     break;
                 case  "locus":
-                    filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,1e-4 as BigDecimal)
+                    filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,1e-4 as BigDecimal,dataSetSpecifier)
                     filterDescriptions << "P-value for association with T2D is less than or equal to 0.0001"
                     parameterEncoding << "2:2"
                     parameterEncoding << "3:0.0001"
                     break;
                 case  "nominal":
-                    filters << retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,0.05 as BigDecimal) 
+                    filters << retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,0.05 as BigDecimal,dataSetSpecifier)
                     filterDescriptions << "P-value for association with T2D is less than or equal to 0.05"
                     parameterEncoding << "2:1"
                     break;
@@ -649,7 +674,7 @@ class FilterManagementService {
                             log.error("FilterManagementService.determineThreshold: nonnumeric threshold provided by user = ${stringCustomThreshold}")
                             break;
                         }
-                        filters << retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,numericCustomThreshold) 
+                        filters << retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,numericCustomThreshold,dataSetSpecifier)
                         filterDescriptions << "P-value for association with T2D is less than or equal to ${numericCustomThreshold}"
                     } else {
                         //TODO: this is an error condition. User requested a custom threshold but supplied no threshold
