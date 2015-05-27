@@ -15,7 +15,7 @@ class HelpTextTagLib {
                     String popupPlacement = (attrs.placement) ?: defaultPopupPlacement
                     String questionmarkPlacement = (attrs.qplacer) ?: defaultQuestionmarkPlacement
                 out <<  render(contextPath: "/home", template: "helpText",
-                        model: [title:attrs.title, body:attrs.body, qplacer:questionmarkPlacement, placement: popupPlacement ])
+                        model: [title:attrs.title, 'data-html':true, body:attrs.body, qplacer:questionmarkPlacement, placement: popupPlacement ])
                 }
 
     }
