@@ -111,7 +111,7 @@
                             <div class="helptext">examples:
                                 <a href='<g:createLink controller="gene" action="geneInfo"
                                                        params="[id: 'SLC30A8']"/>'>SLC30A8</a>
-                                <g:helpText title="input.searchTerm.geneExample.help.header" placement="left"
+                                <g:helpText title="input.searchTerm.geneExample.help.header" placement="bottom"
                                             body="input.searchTerm.geneExample.help.text"/>,
                                 <a href='<g:createLink controller="variant" action="variantInfo"
                                                        params="[id: 'rs13266634']"/>'>rs13266634</a>
