@@ -6,9 +6,11 @@ import dport.people.UserRole
 import dport.people.UserSession
 import grails.plugin.mail.MailService
 import grails.transaction.Transactional
+import groovy.json.JsonSlurper
 import groovy.json.StringEscapeUtils
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
@@ -21,8 +23,7 @@ class SharedToolsService {
     LinkGenerator grailsLinkGenerator
     RestServerService restServerService
      private static final log = LogFactory.getLog(this)
-
-
+    JSONObject sharedMetadata = null
     Integer showGwas = -1
     Integer showExomeChip = -1
     Integer showExomeSequence = -1
@@ -30,7 +31,6 @@ class SharedToolsService {
     Integer showGene = -1
     Integer showBeacon = -1
     Integer showNewApi = -1
-    JSONObject sharedMetadata
 
     String warningText = ""
 
@@ -180,10 +180,89 @@ class SharedToolsService {
     }
 
 
-    public JSONObject getMetadata (){
-        restServerService.getMetadata()
+    public JSONObject retrieveMetadata (){
+        if (!sharedMetadata){
+            String temporary = restServerService.getMetadata()
+            def slurper = new JsonSlurper()
+            sharedMetadata = slurper.parseText(temporary)
+        }
+        return sharedMetadata
     }
 
+    public LinkedHashMap processMetadata(JSONObject metadata){
+        LinkedHashMap returnValue = [:]
+        List <String> captured = []
+        LinkedHashMap<String, List <String>> annotatedPhenotypes = [:]
+        if (metadata){
+            for (def experiment in metadata.experiments){
+                captured << experiment.name
+                if (experiment.sample_groups){
+                    getDataSetsPerPhenotype (experiment.sample_groups, annotatedPhenotypes)
+                }
+            }
+        }
+        returnValue['rootSampleGroups'] = captured
+        returnValue['sampleGroupsPerPhenotype'] = annotatedPhenotypes
+        return returnValue
+    }
+
+    public String extractASingleList (String phenotype, LinkedHashMap<String, List <String>> annotatedList){
+        StringBuilder sb = new StringBuilder ()
+        StringBuilder tempSb = new StringBuilder ()
+        int numrec = 0
+        String retval
+        if (annotatedList){
+            if (annotatedList.containsKey(phenotype)){
+                List <String> listForThisPhenotype =  annotatedList [phenotype]
+                if (listForThisPhenotype) {
+                    numrec = listForThisPhenotype.size()
+                    for ( int  i = 0 ; i < listForThisPhenotype.size() ; i++ ){
+                        tempSb << """ "${listForThisPhenotype[i]}" """.toString()
+                        if (i<listForThisPhenotype.size()-1){
+                            tempSb << ","
+                        }
+
+                }
+                }
+            }
+
+             }
+        retval = """
+{"is_error": false,
+"numRecords":${numrec},
+"dataset":[${tempSb.toString()}]
+}""".toString()
+        return retval
+    }
+
+
+    // Start with a pointer to a sample group. Build up a list of IDs per phenotype
+    public LinkedHashMap<String, List <String>> getDataSetsPerPhenotype (def sampleGroups,LinkedHashMap<String, List <String>> annotatedPhenotypes){
+        for (def sampleGroup in sampleGroups){
+            String sampleGroupsId = sampleGroup.id
+             if (sampleGroup.phenotypes){
+                 for (def phenotype in sampleGroup.phenotypes){
+                     String phenotypeName = phenotype.name
+                     List <String> listOfSampleGroups
+                     if (annotatedPhenotypes.containsKey(phenotypeName)){
+                         listOfSampleGroups = annotatedPhenotypes[phenotypeName]
+                     } else {
+                         listOfSampleGroups = new ArrayList<String>()
+                         annotatedPhenotypes[phenotypeName]  =  listOfSampleGroups
+                     }
+                     // we have the list for this phenotype.  Add some more sample groups for it
+                     if (listOfSampleGroups.contains(sampleGroupsId)){
+                         // this should never happen, right? We have a second listing for this ID in this phenotype
+                         println "very strange : phenotype ${phenotypeName} already contained sample ID= ${sampleGroupsId}"
+                     } else {
+                         listOfSampleGroups << sampleGroupsId
+                     }
+                 }
+
+             }
+        }
+
+    }
 
 
 

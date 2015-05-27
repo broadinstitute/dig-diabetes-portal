@@ -191,21 +191,24 @@ class VariantSearchController {
             experimentList << params.experiment
         }
        // JSONObject jsonObject = restServerService.retrieveDatasets(phenotypeList, experimentList)
-        JSONObject jsonObject = restServerService.pseudoRetrieveDatasets(phenotypeList, experimentList)
+        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
 //        String v = """
 //{"is_error": false,
 // "numRecords":1,
 // "dataset":["MAGIC 2014"]
 //}""".toString()
-//        def slurper = new JsonSlurper()
-//        def result = slurper.parseText(v)
+
+        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
+        LinkedHashMap<String,List<String>> annotatedPhenotypes =  processedMetadata.sampleGroupsPerPhenotype
+        String dataSetsForThisPhenotype = sharedToolsService.extractASingleList(params.phenotype,annotatedPhenotypes)
+        def slurper = new JsonSlurper()
+        def result = slurper.parseText(dataSetsForThisPhenotype)
+
 
         render(status: 200, contentType: "application/json") {
-            [datasets: jsonObject]
+            [datasets: result]
         }
-//        render(status: 200, contentType: "application/json") {
-//            [datasets: jsonObject]
-//        }
+
     }
 
 

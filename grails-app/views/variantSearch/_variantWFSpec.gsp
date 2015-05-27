@@ -14,6 +14,9 @@ span.dataSetChoice{
 .addFilterButton{
     background-color: #eee;
 }
+.smallish input{
+height: 20px;
+}
 </style>
 
 <script>
@@ -53,31 +56,52 @@ span.dataSetChoice{
         %{--</div>--}%
 
 
-        <div class="row clearfix">
-            <div id="collapseOne" class="panel-collapse collapse">
-                <div class="dataSetOptions">
+        %{--<div class="row clearfix">--}%
+            %{--<div id="collapseOne" class="panel-collapse collapse">--}%
+                %{--<div class="dataSetOptions">--}%
 
-                    <ul style="list-style-type: none;">
-                        <li>
-                            <input id="datasetExomeChip" type="checkbox" aria-label="Exome chip"
-                                   value="datasetExomeChip"><span class="dataSetChoice">Exome chip</span>
-                        </li>
-                        <li>
-                            <input id="datasetExomeSeq" type="checkbox" aria-label="Exome sequence"
-                                   value="datasetExomeSeq"><span class="dataSetChoice">Exome sequence</span>
-                        </li>
-                        <li>
-                            <input id="datasetGWAS" type="checkbox" aria-label="GWAS" value="datasetGWAS"><span
-                                class="dataSetChoice">GWAS</span>
-                        </li>
-                    </ul>
+                    %{--<ul style="list-style-type: none;">--}%
+                        %{--<li>--}%
+                            %{--<input id="datasetExomeChip" type="checkbox" aria-label="Exome chip"--}%
+                                   %{--value="datasetExomeChip"><span class="dataSetChoice">Exome chip</span>--}%
+                        %{--</li>--}%
+                        %{--<li>--}%
+                            %{--<input id="datasetExomeSeq" type="checkbox" aria-label="Exome sequence"--}%
+                                   %{--value="datasetExomeSeq"><span class="dataSetChoice">Exome sequence</span>--}%
+                        %{--</li>--}%
+                        %{--<li>--}%
+                            %{--<input id="datasetGWAS" type="checkbox" aria-label="GWAS" value="datasetGWAS"><span--}%
+                                %{--class="dataSetChoice">GWAS</span>--}%
+                        %{--</li>--}%
+                    %{--</ul>--}%
 
-                </div>
-            </div>
+                %{--</div>--}%
+            %{--</div>--}%
 
+        %{--</div>--}%
+<div class="row clearfix" style="margin:0 0 15px 0">
+        <div class="col-md-1" style="text-align: right"></div>
+        <div class="col-md-4" style="text-align: right">
+            <g:render template="variantRestrictToRegion2"></g:render>
         </div>
+        <div class="col-md-2" style="text-align: right"></div>
+        %{--<div class="col-md-4" style="text-align: right">--}%
+            %{--<g:render template="variantRestrictToEthnicity2"></g:render>--}%
+        %{--</div>--}%
+        <div class="col-md-4" style="text-align: right">
+            <g:render template="variantEffectOnProteins2"></g:render>
+        </div>
+        <div class="col-md-1" style="text-align: right"></div>
 
-        <div class="row clearfix">
+
+
+</div>
+
+
+
+
+
+    <div class="row clearfix">
             %{--Here is the phenotype section--}%
             <div class="primarySectionSeparator">
                 <div class="col-sm-offset-1 col-md-3" style="text-align: right">
@@ -152,10 +176,6 @@ span.dataSetChoice{
                     <option value="pvalue" selected>p-value</option>
                     <option value="oddsratio">odds ratio</option>
                     <option value="effectsize">effect size</option>
-                    <option value="gene">gene</option>
-                    <option value="position">position</option>
-                    <option value="predictedeffect">predicted effect on protein</option>
-                    <option value="ethnicity">continental ancestry</option>
                 </select>
 
             </span>
@@ -192,3 +212,25 @@ span.dataSetChoice{
 
     </div>
 </div>
+
+
+<script>
+    $('#accordion').on('show.bs.collapse', function (e) {
+        if (e.target.id === "collapseDiseaseRisk") {
+                if ((typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation() !== 'undefined') &&
+                        (typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch !== 'undefined')) {
+                    mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch();
+                }
+
+        }
+    });
+    $('#accordion').on('hide.bs.collapse', function (e) {
+        if (e.target.id === "collapseDiseaseRisk") {
+            if ((typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation() !== 'undefined') &&
+                    (typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch !== 'undefined')) {
+                mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().removeBarchart();
+            }
+        }
+    });
+
+</script>

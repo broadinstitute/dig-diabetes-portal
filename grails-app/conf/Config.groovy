@@ -150,9 +150,9 @@ t2dDevRestServer {
     path = 'rest/server/'
 }
 t2dQaRestServer {
-    base = 'http://69.173.70.198:8080/'
+    base = 'dig-qa.broadinstitute.org:8090/'
     name =  'qa/'
-    path = 'rest/server/'
+    path = 'gs/'
 }
 t2dProdRestServer {
     base = 'http://69.173.71.179:8080/'

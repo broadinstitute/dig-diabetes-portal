@@ -15,39 +15,39 @@ class RestServerService {
     private static final log = LogFactory.getLog(this)
 
 
-    private  String MYSQL_REST_SERVER = ""
-    private  String BIGQUERY_REST_SERVER = ""
-    private  String TEST_REST_SERVER = ""
-    private  String DEV_REST_SERVER = ""
-    private  String QA_REST_SERVER = ""
-    private  String PROD_REST_SERVER = ""
-    private  String NEW_DEV_REST_SERVER = ""
-    private  String BASE_URL = ""
-    private  String GENE_INFO_URL = "gene-info"
-    private  String DATA_SET_URL = "getDatasets"
-    private  String VARIANT_INFO_URL = "variant-info"
-    private  String TRAIT_INFO_URL = "trait-info"
-    private  String VARIANT_SEARCH_URL = "variant-search"
-    private  String TRAIT_SEARCH_URL = "trait-search"
-    private  String METADATA_URL = "getMetadata"
-    private  String GET_DATA_URL = "getData"
-    private  String DBT_URL = ""
-    private  String EXPERIMENTAL_URL = ""
+    private String MYSQL_REST_SERVER = ""
+    private String BIGQUERY_REST_SERVER = ""
+    private String TEST_REST_SERVER = ""
+    private String DEV_REST_SERVER = ""
+    private String QA_REST_SERVER = ""
+    private String PROD_REST_SERVER = ""
+    private String NEW_DEV_REST_SERVER = ""
+    private String BASE_URL = ""
+    private String GENE_INFO_URL = "gene-info"
+    private String DATA_SET_URL = "getDatasets"
+    private String VARIANT_INFO_URL = "variant-info"
+    private String TRAIT_INFO_URL = "trait-info"
+    private String VARIANT_SEARCH_URL = "variant-search"
+    private String TRAIT_SEARCH_URL = "trait-search"
+    private String METADATA_URL = "getMetadata"
+    private String GET_DATA_URL = "getData"
+    private String DBT_URL = ""
+    private String EXPERIMENTAL_URL = ""
 
-    static List <String> VARIANT_SEARCH_COLUMNS = [
-    'ID',
-    'CHROM',
-    'POS',
-    'DBSNP_ID',
-    'CLOSEST_GENE',
-    'MOST_DEL_SCORE',
-    'Consequence',
-    'IN_GENE',
-    '_13k_T2D_TRANSCRIPT_ANNOT',
-    "Protein_change"
+    static List<String> VARIANT_SEARCH_COLUMNS = [
+            'ID',
+            'CHROM',
+            'POS',
+            'DBSNP_ID',
+            'CLOSEST_GENE',
+            'MOST_DEL_SCORE',
+            'Consequence',
+            'IN_GENE',
+            '_13k_T2D_TRANSCRIPT_ANNOT',
+            "Protein_change"
     ]
 
-    static List <String> VARIANT_INFO_SEARCH_COLUMNS = [
+    static List<String> VARIANT_INFO_SEARCH_COLUMNS = [
             'CLOSEST_GENE',
             'ID',
             'DBSNP_ID',
@@ -61,221 +61,225 @@ class RestServerService {
     ]
 
 
-    static List <String> EXSEQ_VARIANT_SEARCH_COLUMNS = [
-    'IN_EXSEQ',
-    '_13k_T2D_P_EMMAX_FE_IV',
-    '_13k_T2D_EU_MAF',
-    '_13k_T2D_HS_MAF',
-    '_13k_T2D_AA_MAF',
-    '_13k_T2D_EA_MAF',
-    '_13k_T2D_SA_MAF',
-    '_13k_T2D_MINA',
-    '_13k_T2D_MINU',
-    '_13k_T2D_OR_WALD_DOS_FE_IV',
-    '_13k_T2D_SE'
+    static List<String> EXSEQ_VARIANT_SEARCH_COLUMNS = [
+            'IN_EXSEQ',
+            '_13k_T2D_P_EMMAX_FE_IV',
+            '_13k_T2D_EU_MAF',
+            '_13k_T2D_HS_MAF',
+            '_13k_T2D_AA_MAF',
+            '_13k_T2D_EA_MAF',
+            '_13k_T2D_SA_MAF',
+            '_13k_T2D_MINA',
+            '_13k_T2D_MINU',
+            '_13k_T2D_OR_WALD_DOS_FE_IV',
+            '_13k_T2D_SE'
     ]
 
 
-    static List <String> EXCHP_VARIANT_SEARCH_COLUMNS = [
-    'IN_EXCHP',
-    'EXCHP_T2D_P_value',
-    'EXCHP_T2D_MAF',
-    'EXCHP_T2D_BETA',
-    'EXCHP_T2D_SE'
+    static List<String> EXCHP_VARIANT_SEARCH_COLUMNS = [
+            'IN_EXCHP',
+            'EXCHP_T2D_P_value',
+            'EXCHP_T2D_MAF',
+            'EXCHP_T2D_BETA',
+            'EXCHP_T2D_SE'
     ]
 
 
-    static List <String> GWAS_VARIANT_SEARCH_COLUMNS = [
-    'IN_GWAS',
-    'GWAS_T2D_PVALUE',
-    'GWAS_T2D_OR',
+    static List<String> GWAS_VARIANT_SEARCH_COLUMNS = [
+            'IN_GWAS',
+            'GWAS_T2D_PVALUE',
+            'GWAS_T2D_OR',
     ]
 
 
-    static List <String> SIGMA_VARIANT_SEARCH_COLUMNS = [
-    'SIGMA_T2D_P',
-    'SIGMA_T2D_OR',
-    'SIGMA_T2D_MINA',
-    'SIGMA_T2D_MINU',
-    'SIGMA_T2D_MAF',
-    'SIGMA_SOURCE',
-    'IN_SIGMA',
+    static List<String> SIGMA_VARIANT_SEARCH_COLUMNS = [
+            'SIGMA_T2D_P',
+            'SIGMA_T2D_OR',
+            'SIGMA_T2D_MINA',
+            'SIGMA_T2D_MINU',
+            'SIGMA_T2D_MAF',
+            'SIGMA_SOURCE',
+            'IN_SIGMA',
     ]
 
 
-
-
-
-    static List <String> EXSEQ_VARIANT_COLUMNS = EXSEQ_VARIANT_SEARCH_COLUMNS + [
-    '_13k_T2D_HET_ETHNICITIES',
-    '_13k_T2D_HET_CARRIERS',
-    '_13k_T2D_HETA',
-    '_13k_T2D_HETU',
-    '_13k_T2D_HOM_ETHNICITIES',
-    '_13k_T2D_HOM_CARRIERS',
-    '_13k_T2D_HOMA',
-    '_13k_T2D_HOMU',
-    '_13k_T2D_OBSA',
-    '_13k_T2D_OBSU',
+    static List<String> EXSEQ_VARIANT_COLUMNS = EXSEQ_VARIANT_SEARCH_COLUMNS + [
+            '_13k_T2D_HET_ETHNICITIES',
+            '_13k_T2D_HET_CARRIERS',
+            '_13k_T2D_HETA',
+            '_13k_T2D_HETU',
+            '_13k_T2D_HOM_ETHNICITIES',
+            '_13k_T2D_HOM_CARRIERS',
+            '_13k_T2D_HOMA',
+            '_13k_T2D_HOMU',
+            '_13k_T2D_OBSA',
+            '_13k_T2D_OBSU',
     ]
 
-    static List <String> SIGMA_VARIANT_COLUMNS = SIGMA_VARIANT_SEARCH_COLUMNS + [
-    'SIGMA_T2D_N',
-    'SIGMA_T2D_MAC',
-    'SIGMA_T2D_OBSA',
-    'SIGMA_T2D_OBSU',
-    'SIGMA_T2D_HETA',
-    'SIGMA_T2D_HETU',
-    'SIGMA_T2D_HOMA',
-    'SIGMA_T2D_HOMU',
-    'SIGMA_T2D_SE',
+    static List<String> SIGMA_VARIANT_COLUMNS = SIGMA_VARIANT_SEARCH_COLUMNS + [
+            'SIGMA_T2D_N',
+            'SIGMA_T2D_MAC',
+            'SIGMA_T2D_OBSA',
+            'SIGMA_T2D_OBSU',
+            'SIGMA_T2D_HETA',
+            'SIGMA_T2D_HETU',
+            'SIGMA_T2D_HOMA',
+            'SIGMA_T2D_HOMU',
+            'SIGMA_T2D_SE',
     ]
 
 
-    static List <String> GENE_COLUMNS = [
-    'ID',
-    'CHROM',
-    'BEG',
-    'END',
-    'Function_description',
+    static List<String> GENE_COLUMNS = [
+            'ID',
+            'CHROM',
+            'BEG',
+            'END',
+            'Function_description',
     ]
 
 
-    static List <String> EXSEQ_GENE_COLUMNS = [
-    '_13k_T2D_VAR_TOTAL',
-    '_13k_T2D_ORIGIN_VAR_TOTALS',
-    '_13k_T2D_lof_NVAR',
-    '_13k_T2D_lof_MINA_MINU_RET',
-    '_13k_T2D_lof_METABURDEN',
-    '_13k_T2D_GWS_TOTAL',
-    '_13k_T2D_LWS_TOTAL',
-    '_13k_T2D_NOM_TOTAL',
-    '_13k_T2D_lof_OBSA',
-    '_13k_T2D_lof_OBSU'
+    static List<String> EXSEQ_GENE_COLUMNS = [
+            '_13k_T2D_VAR_TOTAL',
+            '_13k_T2D_ORIGIN_VAR_TOTALS',
+            '_13k_T2D_lof_NVAR',
+            '_13k_T2D_lof_MINA_MINU_RET',
+            '_13k_T2D_lof_METABURDEN',
+            '_13k_T2D_GWS_TOTAL',
+            '_13k_T2D_LWS_TOTAL',
+            '_13k_T2D_NOM_TOTAL',
+            '_13k_T2D_lof_OBSA',
+            '_13k_T2D_lof_OBSU'
     ]
 
 
-    static List <String> EXCHP_GENE_COLUMNS = [
-    'EXCHP_T2D_VAR_TOTALS',
-    'EXCHP_T2D_GWS_TOTAL',
-    'EXCHP_T2D_LWS_TOTAL',
-    'EXCHP_T2D_NOM_TOTAL',
+    static List<String> EXCHP_GENE_COLUMNS = [
+            'EXCHP_T2D_VAR_TOTALS',
+            'EXCHP_T2D_GWS_TOTAL',
+            'EXCHP_T2D_LWS_TOTAL',
+            'EXCHP_T2D_NOM_TOTAL',
     ]
 
 
-    static List <String> GWAS_GENE_COLUMNS = [
-    'GWS_TRAITS',
-    'GWAS_T2D_GWS_TOTAL',
-    'GWAS_T2D_LWS_TOTAL',
-    'GWAS_T2D_NOM_TOTAL',
-    'GWAS_T2D_VAR_TOTAL',
+    static List<String> GWAS_GENE_COLUMNS = [
+            'GWS_TRAITS',
+            'GWAS_T2D_GWS_TOTAL',
+            'GWAS_T2D_LWS_TOTAL',
+            'GWAS_T2D_NOM_TOTAL',
+            'GWAS_T2D_VAR_TOTAL',
     ]
 
 
-    static List <String> SIGMA_GENE_COLUMNS = [
-    'SIGMA_T2D_VAR_TOTAL',
-    'SIGMA_T2D_VAR_TOTALS',
-    'SIGMA_T2D_NOM_TOTAL',
-    'SIGMA_T2D_GWS_TOTAL',
-    'SIGMA_T2D_lof_NVAR',
-    'SIGMA_T2D_lof_MAC',
-    'SIGMA_T2D_lof_MINA',
-    'SIGMA_T2D_lof_MINU',
-    'SIGMA_T2D_lof_P',
-    'SIGMA_T2D_lof_OBSA',
-    'SIGMA_T2D_lof_OBSU',
+    static List<String> SIGMA_GENE_COLUMNS = [
+            'SIGMA_T2D_VAR_TOTAL',
+            'SIGMA_T2D_VAR_TOTALS',
+            'SIGMA_T2D_NOM_TOTAL',
+            'SIGMA_T2D_GWS_TOTAL',
+            'SIGMA_T2D_lof_NVAR',
+            'SIGMA_T2D_lof_MAC',
+            'SIGMA_T2D_lof_MINA',
+            'SIGMA_T2D_lof_MINU',
+            'SIGMA_T2D_lof_P',
+            'SIGMA_T2D_lof_OBSA',
+            'SIGMA_T2D_lof_OBSU',
     ]
 
     // Did these old lines of Python do anything? Not that I can tell so far
-    static List <String> VARIANT_COLUMNS = VARIANT_SEARCH_COLUMNS
-    static List <String> EXCHP_VARIANT_COLUMNS = EXCHP_VARIANT_SEARCH_COLUMNS
-    static List <String> GWAS_VARIANT_COLUMNS = GWAS_VARIANT_SEARCH_COLUMNS
+    static List<String> VARIANT_COLUMNS = VARIANT_SEARCH_COLUMNS
+    static List<String> EXCHP_VARIANT_COLUMNS = EXCHP_VARIANT_SEARCH_COLUMNS
+    static List<String> GWAS_VARIANT_COLUMNS = GWAS_VARIANT_SEARCH_COLUMNS
 
     /***
      * plug together the different collections of column specifications we typically use
      */
-    public void initialize (){
-        MYSQL_REST_SERVER = grailsApplication.config.t2dRestServer.base+grailsApplication.config.t2dRestServer.mysql+grailsApplication.config.t2dRestServer.path
+    public void initialize() {
+        MYSQL_REST_SERVER = grailsApplication.config.t2dRestServer.base + grailsApplication.config.t2dRestServer.mysql + grailsApplication.config.t2dRestServer.path
         BIGQUERY_REST_SERVER = grailsApplication.config.server.URL
-        TEST_REST_SERVER = grailsApplication.config.t2dTestRestServer.base+grailsApplication.config.t2dTestRestServer.name+grailsApplication.config.t2dTestRestServer.path
-        DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base+grailsApplication.config.t2dDevRestServer.name+grailsApplication.config.t2dDevRestServer.path
-        NEW_DEV_REST_SERVER = grailsApplication.config.t2dNewDevRestServer.base+grailsApplication.config.t2dNewDevRestServer.name+grailsApplication.config.t2dNewDevRestServer.path
-        QA_REST_SERVER = grailsApplication.config.t2dQaRestServer.base+grailsApplication.config.t2dQaRestServer.name+grailsApplication.config.t2dQaRestServer.path
-        PROD_REST_SERVER = grailsApplication.config.t2dProdRestServer.base+grailsApplication.config.t2dProdRestServer.name+grailsApplication.config.t2dProdRestServer.path
-        BASE_URL =  grailsApplication.config.server.URL
-        DBT_URL   = grailsApplication.config.dbtRestServer.URL
+        TEST_REST_SERVER = grailsApplication.config.t2dTestRestServer.base + grailsApplication.config.t2dTestRestServer.name + grailsApplication.config.t2dTestRestServer.path
+        DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base + grailsApplication.config.t2dDevRestServer.name + grailsApplication.config.t2dDevRestServer.path
+        NEW_DEV_REST_SERVER = grailsApplication.config.t2dNewDevRestServer.base + grailsApplication.config.t2dNewDevRestServer.name + grailsApplication.config.t2dNewDevRestServer.path
+        QA_REST_SERVER = grailsApplication.config.t2dQaRestServer.base + grailsApplication.config.t2dQaRestServer.name + grailsApplication.config.t2dQaRestServer.path
+        PROD_REST_SERVER = grailsApplication.config.t2dProdRestServer.base + grailsApplication.config.t2dProdRestServer.name + grailsApplication.config.t2dProdRestServer.path
+        BASE_URL = grailsApplication.config.server.URL
+        DBT_URL = grailsApplication.config.dbtRestServer.URL
         EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URL
-        pickADifferentRestServer (NEW_DEV_REST_SERVER)
+        pickADifferentRestServer(NEW_DEV_REST_SERVER)
     }
 
 
-    public  String getBigQuery(){
+    public String getBigQuery() {
         return BIGQUERY_REST_SERVER;
     }
-    public  String getMysql(){
+
+    public String getMysql() {
         return MYSQL_REST_SERVER;
     }
-    public  String getDevserver(){
+
+    public String getDevserver() {
         return DEV_REST_SERVER;
     }
-    public  String getTestserver(){
+
+    public String getTestserver() {
         return TEST_REST_SERVER;
     }
-    public  String getQaserver(){
+
+    public String getQaserver() {
         return QA_REST_SERVER;
     }
-    public  String getProdserver(){
+
+    public String getProdserver() {
         return PROD_REST_SERVER;
     }
-    public  String getNewdevserver(){
+
+    public String getNewdevserver() {
         return NEW_DEV_REST_SERVER;
     }
 
 
-
-    private List <String> getGeneColumns () {
-        List <String> returnValue
+    private List<String> getGeneColumns() {
+        List<String> returnValue
         if (sharedToolsService.applicationName() == 'Sigma') {
             returnValue = (GENE_COLUMNS + SIGMA_GENE_COLUMNS + GWAS_GENE_COLUMNS)
         } else { // must be t2dGenes
             returnValue = (GENE_COLUMNS + EXSEQ_GENE_COLUMNS + EXCHP_GENE_COLUMNS + GWAS_GENE_COLUMNS)
         }
-        return  returnValue
+        return returnValue
     }
 
 
-    private List <String> getVariantColumns () {
-        List <String> returnValue
+    private List<String> getVariantColumns() {
+        List<String> returnValue
         if (sharedToolsService.applicationName() == 'Sigma') {
             returnValue = (VARIANT_COLUMNS + SIGMA_VARIANT_COLUMNS + GWAS_VARIANT_COLUMNS)
         } else {
             returnValue = (VARIANT_COLUMNS + EXSEQ_VARIANT_COLUMNS + EXCHP_VARIANT_COLUMNS + GWAS_VARIANT_COLUMNS)
         }
-        return  returnValue
+        return returnValue
     }
 
-    private List <String> getVariantInfoColumns () {
-        List <String> returnValue
+    private List<String> getVariantInfoColumns() {
+        List<String> returnValue
         returnValue = (VARIANT_INFO_SEARCH_COLUMNS)
-        return  returnValue
+        return returnValue
     }
 
 
-   private filterByVariant(String variantName){
-       String returnValue
-       String uppercaseVariantName = variantName?.toUpperCase()
-       if (uppercaseVariantName?.startsWith("RS")){
-           returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "DBSNP_ID", "operator": "EQ", "value": "${uppercaseVariantName}", "operand_type": "STRING"}"""
-       }else {
-           returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${uppercaseVariantName}", "operand_type": "STRING"}"""
-       }
-       return returnValue
-   }
+    private filterByVariant(String variantName) {
+        String returnValue
+        String uppercaseVariantName = variantName?.toUpperCase()
+        if (uppercaseVariantName?.startsWith("RS")) {
+            returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "DBSNP_ID", "operator": "EQ", "value": "${
+                uppercaseVariantName
+            }", "operand_type": "STRING"}"""
+        } else {
+            returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${
+                uppercaseVariantName
+            }", "operand_type": "STRING"}"""
+        }
+        return returnValue
+    }
 
 
-
-
-    private String jsonForGeneralApiSearch(String combinedFilterList){
+    private String jsonForGeneralApiSearch(String combinedFilterList) {
         String inputJson = """
 {
     "passback": "123abc",
@@ -321,11 +325,8 @@ class RestServerService {
     }
 
 
-
-
-
-   private String regionSearch (String chromosomeNumber,String extentBegin,String extentEnd){
-       String inputJson = """
+    private String regionSearch(String chromosomeNumber, String extentBegin, String extentEnd) {
+        String inputJson = """
 {
     "passback": "123abc",
     "entity": "variant",
@@ -363,82 +364,88 @@ class RestServerService {
                         }
                     },
     "filters":    [ 
-                    {"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "LTE", "value": ${chromosomeNumber}, "operand_type": "INTEGER"},
-                    {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "LTE", "value": ${extentEnd}, "operand_type": "INTEGER"},
-                    {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "GTE", "value": ${extentBegin}, "operand_type": "INTEGER"}
+                    {"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "LTE", "value": ${
+            chromosomeNumber
+        }, "operand_type": "INTEGER"},
+                    {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "LTE", "value": ${
+            extentEnd
+        }, "operand_type": "INTEGER"},
+                    {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "GTE", "value": ${
+            extentBegin
+        }, "operand_type": "INTEGER"}
                 ]
 }""".toString()
-       return inputJson
-   }
+        return inputJson
+    }
 
 
-    private List <String> getVariantSearchColumns () {
-        List <String> returnValue
+    private List<String> getVariantSearchColumns() {
+        List<String> returnValue
         if (sharedToolsService.applicationName() == 'Sigma') {
             returnValue = (VARIANT_SEARCH_COLUMNS + SIGMA_VARIANT_SEARCH_COLUMNS + GWAS_VARIANT_SEARCH_COLUMNS)
         } else {
             returnValue = (VARIANT_SEARCH_COLUMNS + EXSEQ_VARIANT_SEARCH_COLUMNS + EXCHP_VARIANT_SEARCH_COLUMNS + GWAS_VARIANT_SEARCH_COLUMNS)
         }
-        return  returnValue
+        return returnValue
     }
 
 
-    private void pickADifferentRestServer (String newRestServer)  {
-        if (!(newRestServer  == BASE_URL))  {
+    private void pickADifferentRestServer(String newRestServer) {
+        if (!(newRestServer == BASE_URL)) {
             log.info("NOTE: about to change from the old server = ${BASE_URL} to instead using = ${newRestServer}")
-            BASE_URL =  newRestServer
+            BASE_URL = newRestServer
             log.info("NOTE: change to server ${BASE_URL} is complete")
         }
     }
 
-    public String  getCurrentServer () {
-        return (BASE_URL?:"none")
+    public String getCurrentServer() {
+        return (BASE_URL ?: "none")
     }
 
-    public void  goWithTheMysqlServer () {
-        pickADifferentRestServer (MYSQL_REST_SERVER)
-    }
-
-
-    public void  goWithTheBigQueryServer () {
-        pickADifferentRestServer (BIGQUERY_REST_SERVER)
-    }
-
-    public void  goWithTheTestServer () {
-        pickADifferentRestServer (TEST_REST_SERVER)
-    }
-
-    public void  goWithTheDevServer () {
-        pickADifferentRestServer (DEV_REST_SERVER)
-    }
-
-    public void  goWithTheNewDevServer () {
-        pickADifferentRestServer (NEW_DEV_REST_SERVER)
-    }
-
-    public void  goWithTheQaServer () {
-        pickADifferentRestServer (QA_REST_SERVER)
-    }
-
-    public void  goWithTheProdServer () {
-        pickADifferentRestServer (PROD_REST_SERVER)
+    public void goWithTheMysqlServer() {
+        pickADifferentRestServer(MYSQL_REST_SERVER)
     }
 
 
-    public String  currentRestServer()  {
-        return   BASE_URL;
+    public void goWithTheBigQueryServer() {
+        pickADifferentRestServer(BIGQUERY_REST_SERVER)
     }
 
-    public String  whatIsMyCurrentServer () {
+    public void goWithTheTestServer() {
+        pickADifferentRestServer(TEST_REST_SERVER)
+    }
+
+    public void goWithTheDevServer() {
+        pickADifferentRestServer(DEV_REST_SERVER)
+    }
+
+    public void goWithTheNewDevServer() {
+        pickADifferentRestServer(NEW_DEV_REST_SERVER)
+    }
+
+    public void goWithTheQaServer() {
+        pickADifferentRestServer(QA_REST_SERVER)
+    }
+
+    public void goWithTheProdServer() {
+        pickADifferentRestServer(PROD_REST_SERVER)
+    }
+
+
+    public String currentRestServer() {
+        return BASE_URL;
+    }
+
+    public String whatIsMyCurrentServer() {
         String returnValue
-        String currentBaseUrl =  currentRestServer ()
+        String currentBaseUrl = currentRestServer()
         if (currentBaseUrl == "") {
             returnValue = 'uninitialized'
-        }  else if (MYSQL_REST_SERVER  == currentBaseUrl) {
+        } else if (MYSQL_REST_SERVER == currentBaseUrl) {
             returnValue = 'mysql'
-        }  else if  (BIGQUERY_REST_SERVER  == currentBaseUrl) {
+        } else if (BIGQUERY_REST_SERVER == currentBaseUrl) {
             returnValue = 'bigquery'
-        }  else {
+        } else {
             returnValue = 'unknown'
         }
         return returnValue
@@ -450,20 +457,20 @@ class RestServerService {
      * @param incoming
      * @return
      */
-    public LinkedHashMap<String, String> extractNumbersWeNeed (String incoming)  {
+    public LinkedHashMap<String, String> extractNumbersWeNeed(String incoming) {
         LinkedHashMap<String, String> returnValue = [:]
 
-        String commasRemoved=incoming.replace(/,/,"")
-        returnValue["chromosomeNumber"] =  sharedToolsService.parseChromosome(commasRemoved)
-        java.util.regex.Matcher  startExtent = commasRemoved =~ /:\d*/
-        if (startExtent.size() >  0){
-            returnValue ["startExtent"]  = sharedToolsService.parseExtent(startExtent[0])
-         }
-        java.util.regex.Matcher  endExtent = commasRemoved =~ /-\d*/
-        if (endExtent.size() >  0){
-            returnValue ["endExtent"]  = sharedToolsService.parseExtent(endExtent[0])
+        String commasRemoved = incoming.replace(/,/, "")
+        returnValue["chromosomeNumber"] = sharedToolsService.parseChromosome(commasRemoved)
+        java.util.regex.Matcher startExtent = commasRemoved =~ /:\d*/
+        if (startExtent.size() > 0) {
+            returnValue["startExtent"] = sharedToolsService.parseExtent(startExtent[0])
         }
-        return  returnValue
+        java.util.regex.Matcher endExtent = commasRemoved =~ /-\d*/
+        if (endExtent.size() > 0) {
+            returnValue["endExtent"] = sharedToolsService.parseExtent(endExtent[0])
+        }
+        return returnValue
     }
 
     /***
@@ -473,23 +480,23 @@ class RestServerService {
      * @param targetUrl
      * @return
      */
-    private String getRestCallBase(String targetUrl, String currentRestServer){
+    private String  getRestCallBase(String targetUrl, String currentRestServer) {
         String returnValue = null
         RestResponse response
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         StringBuilder logStatus = new StringBuilder()
         try {
-            response  = rest.get(currentRestServer+targetUrl) {
+            response = rest.get(currentRestServer + targetUrl) {
                 contentType "text/plain"
             }
-        } catch (Exception exception){
+        } catch (Exception exception) {
             log.error("NOTE: exception on post to backend. Target=${targetUrl}")
             log.error(exception.toString())
-            logStatus <<  "NOTE: exception on post to backend. Target=${targetUrl}"
+            logStatus << "NOTE: exception on post to backend. Target=${targetUrl}"
         }
 
         if (response?.responseEntity?.statusCode?.value == 200) {
-            returnValue =  response.text
+            returnValue = response.text
             logStatus << """status: ok""".toString()
         } else {
             logStatus << """status: failed""".toString()
@@ -504,51 +511,46 @@ class RestServerService {
      * @param targetUrl
      * @return
      */
-    private JSONObject postRestCallBase(String drivingJson, String targetUrl, currentRestServer){
+    private JSONObject postRestCallBase(String drivingJson, String targetUrl, currentRestServer) {
         JSONObject returnValue = null
-        Date beforeCall  = new Date()
+        Date beforeCall = new Date()
         Date afterCall
         RestResponse response
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         StringBuilder logStatus = new StringBuilder()
         try {
-            response  = rest.post(currentRestServer+targetUrl)   {
+            response = rest.post(currentRestServer + targetUrl) {
                 contentType "application/json"
                 json drivingJson
             }
-            afterCall  = new Date()
-        } catch ( Exception exception){
+            afterCall = new Date()
+        } catch (Exception exception) {
             log.error("NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}")
             log.error(exception.toString())
-            logStatus <<  "NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}"
-            afterCall  = new Date()
+            logStatus << "NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}"
+            afterCall = new Date()
         }
         logStatus << """
 SERVER CALL:
 url=${targetUrl},
 parm=${drivingJson},
-time required=${(afterCall.time-beforeCall.time)/1000} seconds
+time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 """.toString()
         if (response?.responseEntity?.statusCode?.value == 200) {
-            returnValue =  response.json
+            returnValue = response.json
             logStatus << """status: ok""".toString()
-        }  else {
-            JSONObject tempValue =  response.json
+        } else {
+            JSONObject tempValue = response.json
             logStatus << """status: ${response.responseEntity.statusCode.value}""".toString()
-            if  (tempValue)  {
+            if (tempValue) {
                 logStatus << """is_error: ${response.json["is_error"]}""".toString()
-            }  else {
+            } else {
                 logStatus << "no valid Json returned"
             }
         }
         log.info(logStatus)
         return returnValue
     }
-
-
-
-
-
 
     /***
      * This is the underlying routine for every call to the rest backend.
@@ -556,39 +558,39 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
      * @param targetUrl
      * @return
      */
-    private JSONObject getRestCallBase(String targetUrl, currentRestServer){
+    private JSONObject getRestCallBase(String targetUrl, currentRestServer) {
         JSONObject returnValue = null
-        Date beforeCall  = new Date()
+        Date beforeCall = new Date()
         Date afterCall
         RestResponse response
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         StringBuilder logStatus = new StringBuilder()
         try {
-            response  = rest.get(currentRestServer+targetUrl)   {
+            response = rest.get(currentRestServer + targetUrl) {
                 contentType "application/json"
             }
-            afterCall  = new Date()
-        } catch ( Exception exception){
+            afterCall = new Date()
+        } catch (Exception exception) {
             log.error("NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}")
             log.error(exception.toString())
-            logStatus <<  "NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}"
-            afterCall  = new Date()
+            logStatus << "NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}"
+            afterCall = new Date()
         }
         logStatus << """
 SERVER CALL:
 url=${targetUrl},
 parm=${drivingJson},
-time required=${(afterCall.time-beforeCall.time)/1000} seconds
+time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 """.toString()
         if (response?.responseEntity?.statusCode?.value == 200) {
-            returnValue =  response.json
+            returnValue = response.json
             logStatus << """status: ok""".toString()
-        }  else {
-            JSONObject tempValue =  response.json
+        } else {
+            JSONObject tempValue = response.json
             logStatus << """status: ${response.responseEntity.statusCode.value}""".toString()
-            if  (tempValue)  {
+            if (tempValue) {
                 logStatus << """is_error: ${response.json["is_error"]}""".toString()
-            }  else {
+            } else {
                 logStatus << "no valid Json returned"
             }
         }
@@ -597,41 +599,39 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
     }
 
 
-
-
-
-    private JSONObject postRestCallBurden(String drivingJson, String targetUrl){
-        return postRestCallBase(drivingJson,targetUrl,DBT_URL)
+    private JSONObject postRestCallBurden(String drivingJson, String targetUrl) {
+        return postRestCallBase(drivingJson, targetUrl, DBT_URL)
     }
 
 
-    private JSONObject postRestCallExperimental(String drivingJson, String targetUrl){
-        return postRestCallBase(drivingJson,targetUrl,EXPERIMENTAL_URL)
+    private JSONObject postRestCallExperimental(String drivingJson, String targetUrl) {
+        return postRestCallBase(drivingJson, targetUrl, EXPERIMENTAL_URL)
     }
-    JSONObject retrieveVariantInfoByName_Experimental (String variantId) {
+
+    JSONObject retrieveVariantInfoByName_Experimental(String variantId) {
         JSONObject returnValue = null
         String drivingJson = """{
 "variant_id": ${variantId},
 "user_group": "ui",
-"columns": [${"\""+getVariantInfoColumns () .join("\",\"")+"\""}]
+"columns": [${"\"" + getVariantInfoColumns().join("\",\"") + "\""}]
 }
 """.toString()
-        returnValue = postRestCallExperimental( drivingJson, VARIANT_INFO_URL)
+        returnValue = postRestCallExperimental(drivingJson, VARIANT_INFO_URL)
         return returnValue
     }
 
 
-
-    private JSONObject postRestCall(String drivingJson, String targetUrl){
-        return postRestCallBase(drivingJson,targetUrl,currentRestServer())
+    private JSONObject postRestCall(String drivingJson, String targetUrl) {
+        return postRestCallBase(drivingJson, targetUrl, currentRestServer())
     }
 
 
-    private JSONObject getRestCall(String targetUrl){
-        return getRestCallBase(targetUrl,currentRestServer())
+    private String getRestCall(String targetUrl) {
+        String retdat
+        retdat = getRestCallBase(targetUrl, currentRestServer())
+        return retdat
+
     }
-
-
 
     /***
      * used only for testing
@@ -639,35 +639,34 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
      * @param jsonString
      * @return
      */
-    JSONObject postServiceJson (String url,
-                                String jsonString) {
+    JSONObject postServiceJson(String url,
+                               String jsonString) {
         JSONObject returnValue = null
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
-        RestResponse response  = rest.post(url)   {
+        RestResponse response = rest.post(url) {
             contentType "application/json"
             json jsonString
         }
         if (response.responseEntity.statusCode.value == 200) {
-            returnValue =  response.json
+            returnValue = response.json
         }
         return returnValue
     }
 
 
-    LinkedHashMap<String, String> convertJsonToMap (JSONObject jsonObject)  {
+    LinkedHashMap<String, String> convertJsonToMap(JSONObject jsonObject) {
         LinkedHashMap returnValue = [:]
-        for (String sequenceKey in jsonObject.keySet()){
+        for (String sequenceKey in jsonObject.keySet()) {
             def intermediateObject = jsonObject[sequenceKey]
             if (intermediateObject) {
-                returnValue[sequenceKey] = intermediateObject.toString ()
+                returnValue[sequenceKey] = intermediateObject.toString()
             } else {
                 returnValue[sequenceKey] = null
             }
 
         }
-        return  returnValue
+        return returnValue
     }
-
 
     /***
      * retrieve everything from the data sets call. Take sample groups or experiments
@@ -676,22 +675,34 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
      * @param geneName
      * @return
      */
-    JSONObject retrieveDatasets (List <String> sampleGroupList,
-                                 List <String> experimentList) {
+    JSONObject retrieveDatasets(List<String> sampleGroupList,
+                                List<String> experimentList) {
         JSONObject returnValue = null
-        String sampleGroup = (sampleGroupList.size() > 0)?("\""+sampleGroupList.join("\",\"")+"\""):"";
-        String experimentGroup = (experimentList.size() > 0)?("\""+experimentList.join("\",\"")+"\""):"";
+        String sampleGroup = (sampleGroupList.size() > 0) ? ("\"" + sampleGroupList.join("\",\"") + "\"") : "";
+        String experimentGroup = (experimentList.size() > 0) ? ("\"" + experimentList.join("\",\"") + "\"") : "";
         String drivingJson = """{
 "sample_group": [${sampleGroup}],
 "experiment": [${experimentGroup}]
 
 }
 """.toString()
-        returnValue = postRestCall( drivingJson, DATA_SET_URL)
+        returnValue = postRestCall(drivingJson, DATA_SET_URL)
         return returnValue
     }
 
     // for now let's do a pseudo call
+    JSONObject retrieveDatasetsFromMetadata(List<String> sampleGroupList,
+                                      List<String> experimentList) {
+        JSONObject result
+        result = sharedToolsService.getMetadata()
+        println 'meta-data retrieved'
+    }
+
+
+
+
+
+
     JSONObject pseudoRetrieveDatasets (List <String> sampleGroupList,
                                  List <String> experimentList) {
         JSONObject result
@@ -1618,11 +1629,10 @@ ${customFilterSet}""".toString()
      * Let's make this the common call for metadata which all callers can share
      * @return
      */
-    public JSONObject getMetadata(){
-        if (!sharedMetadata){
-            sharedMetadata =  getRestCall(METADATA_URL)
-        }
-        return sharedMetadata
+    public String getMetadata(){
+        String retdat
+        retdat =  getRestCall(METADATA_URL)
+return retdat
     }
 
 
