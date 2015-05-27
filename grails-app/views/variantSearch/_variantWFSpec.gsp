@@ -187,8 +187,6 @@ span.dataSetChoice{
                     onclick="mpgSoftware.variantWF.cancelThisFieldCollection()">Cancel</button>
             <button class="btn btn-med btn-primary variant-filter-button"
                     onclick="mpgSoftware.variantWF.gatherFieldsAndPostResults()">Build request &gt;&gt;</button>
-            <button class="btn btn-lg btn-primary variant-filter-button"
-                    onclick="mpgSoftware.variantWF.launchAVariantSearch()">Submit search request</button>
 
         </span>
 

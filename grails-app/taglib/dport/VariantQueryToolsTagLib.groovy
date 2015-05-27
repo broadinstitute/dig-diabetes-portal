@@ -172,8 +172,8 @@ class VariantQueryToolsTagLib {
                     </span>
                     </div>
                     </div>
-
                     </div>
+
             </div>""".toString()
                             blockCount++;
                         }

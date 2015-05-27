@@ -19,6 +19,8 @@
 <div class='bluebox'>
     <div class="tab-pane fade in active developingQueryHolder" id="developingQuery">
         <g:renderEncodedFilters filterSet='${encodedFilterSets}'/>
+        <button class="btn btn-med btn-primary variant-filter-button pull-right"
+                onclick="mpgSoftware.variantWF.launchAVariantSearch()">Submit search request</button>
     </div>
 </div>
 %{--<div id="headerWF"></div>--}%

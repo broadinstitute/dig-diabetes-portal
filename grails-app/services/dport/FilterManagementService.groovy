@@ -322,6 +322,43 @@ class FilterManagementService {
 
 
 
+    public LinkedHashMap  parseExtendedVariantSearchParameters (HashMap incomingParameters,Boolean currentlySigma,LinkedHashMap  buildingFilters) {
+        if (!buildingFilters){
+            buildingFilters = [filters:new ArrayList<String>(),
+                               filterDescriptions:new ArrayList<String>(),
+                               parameterEncoding:new ArrayList<String>()]
+        }
+
+        buildingFilters = determineDataSet (buildingFilters,incomingParameters)
+
+        String datatypeOperand = buildingFilters.datatypeOperand
+
+        buildingFilters = determineThreshold (buildingFilters, incomingParameters, datatypeOperand)
+
+        buildingFilters = factorInTheOddsRatios(buildingFilters, incomingParameters, datatypeOperand)
+
+        buildingFilters = setRegion(buildingFilters, incomingParameters)
+
+        buildingFilters = setAlleleFrequencies(buildingFilters, incomingParameters)
+
+        buildingFilters = caseControlOnly(buildingFilters, incomingParameters,currentlySigma,datatypeOperand)
+
+        buildingFilters = predictedEffectsOnProteins(buildingFilters, incomingParameters)
+
+        buildingFilters = predictedImpactOfMissenseMutations(buildingFilters, incomingParameters)
+
+        buildingFilters = setSpecificPValue(buildingFilters, incomingParameters)
+
+        return buildingFilters
+
+    }
+
+
+
+
+
+
+
     public HashMap storeParametersInHashmap ( String gene,
                                               String significance,
                                               String dataset,
@@ -395,49 +432,61 @@ class FilterManagementService {
         return returnValue
     }
 
-
-
-
-
-
-
-
-
-    public HashMap storeCodedParametersInHashmap ( String gene,
-                                              String dataset,
-                                              String region,
-                                              String filter,
+    /***
+     * Here is an intermediate code for a filter. We have to read these somewhere else in this file and convert them
+     * into actual filters.
+     *
+     * @param combinedFilters
+     * @return
+     */
+    public List<LinkedHashMap> storeCodedParametersInHashmap (
                                               List <LinkedHashMap> combinedFilters
                                               ) {
-        HashMap returnValue = [:]
+        List<LinkedHashMap> returnValue = []
 
 
         for (LinkedHashMap map in combinedFilters){
+
+            LinkedHashMap singleFilterSet = [:]
+
             if (map.containsKey("phenotype")  ){
                 String phenotype  = map["phenotype"]
-                returnValue["spec_pheno_ind"] = phenotype
+                singleFilterSet["spec_pheno_ind"] = phenotype
             }
             if (map.containsKey("pValue")  ){
                 String pValue  = map["pValue"]
-                returnValue["spec_p_value"] = pValue
+                singleFilterSet["spec_p_value"] = pValue // float
+            }
+            if (map.containsKey("pValueInequality")  ){
+                singleFilterSet["spec_p_inequality"] = map["pValueInequality"]
+            }
+
+            if (map.containsKey("orValue")  ){
+              //  String pValue  = map["orValue"]
+                singleFilterSet["spec_or_value"] = map["orValue"]// must be a float
+            }
+            if (map.containsKey("orValueInequality")  ){
+                singleFilterSet["spec_or_inequality"] = map["orValueInequality"] // "lessThan" or "greaterThan"
             }
 
             if (map.containsKey("regionChromosomeInput")  ){
                 String chromosome  = map["regionChromosomeInput"]
-                returnValue["region_chrom_input"] = chromosome
+                singleFilterSet["region_chrom_input"] = chromosome
             }
             if (map.containsKey("regionStartInput")  ){
                 String startExtent  = map["regionStartInput"]
-                returnValue["region_start_input"] = startExtent
+                singleFilterSet["region_start_input"] = startExtent
             }
             if (map.containsKey("regionStopInput")  ){
                 String endExtent  = map["regionStopInput"]
-                returnValue["region_stop_input"] = endExtent
+                singleFilterSet["region_stop_input"] = endExtent
             }
             if (map.containsKey("gene")  ){
                 String endExtent  = map["gene"]
-                returnValue["region_gene_input"] = endExtent
+                singleFilterSet["region_gene_input"] = endExtent
             }
+
+            returnValue << singleFilterSet
 
         }
 
@@ -566,6 +615,43 @@ class FilterManagementService {
         return returnValue
 
     }
+
+/***
+ * This is a placeholder for a method yet to come
+ * @param incomingParameters
+ * @return
+ */
+    public  int identifyAllRequestedDataSets (List <HashMap> incomingParameters){
+        int returnValue = 0;
+        for (HashMap map in incomingParameters){
+            if  (map.containsKey("datatype"))  {      // user has requested a particular data set. Without explicit request what is the default?
+                String requestedDataSet =  incomingParameters ["datatype"]
+
+                switch (requestedDataSet)   {
+                    case  "gwas":
+                        returnValue += 0
+                        break;
+                    case  "sigma":
+                        returnValue += 1
+                        break;
+                    case  "exomeseq":
+                        returnValue += 2
+                        break;
+                    case  "exomechip":
+                        returnValue += 3
+                        break;
+
+                    default: break;
+                }
+            }
+
+        }
+        return returnValue
+
+    }
+
+
+
 
     /***
      * Like most of the other routines in this module we are mapping parameters to filters. There is one additional

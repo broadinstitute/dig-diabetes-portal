@@ -126,10 +126,13 @@ class VariantSearchController {
         String dataset = params.dataset
         String region = params.region
         String filter = params.filter
-        Map paramsMap = filterManagementService.storeCodedParametersInHashmap (geneId,significance,dataset,region,combinedFilters)
+       // Map paramsMap = filterManagementService.storeCodedParametersInHashmap (combinedFilters)
+        List <LinkedHashMap> listOfParameterMaps = filterManagementService.storeCodedParametersInHashmap (combinedFilters)
 
-        if (paramsMap) {
-            displayVariantSearchResults(paramsMap, false)
+
+        if ((listOfParameterMaps) &&
+                (listOfParameterMaps.size() > 0)){
+            displayCombinedVariantSearchResults(listOfParameterMaps, false)
         }
 
 
@@ -265,6 +268,48 @@ class VariantSearchController {
                             newApi              : sharedToolsService.getNewApi()])
         }
     }
+
+
+
+
+    private void displayCombinedVariantSearchResults(List <LinkedHashMap> listOfParameterMaps, boolean currentlySigma) {
+        // Let's start stepping through our big list of filters
+        LinkedHashMap  parsedFilterParameters
+        if (listOfParameterMaps){
+            for (LinkedHashMap singleParameterMap in listOfParameterMaps){
+                parsedFilterParameters =   filterManagementService.parseExtendedVariantSearchParameters (singleParameterMap,false,parsedFilterParameters)
+            }
+        }
+        if (parsedFilterParameters) {
+
+            Integer dataSetDetermination = filterManagementService.identifyAllRequestedDataSets(listOfParameterMaps)
+            String encodedFilters = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters)
+            String encodedParameters = sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
+            String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
+
+            render(view: 'variantSearchResults',
+                    model: [show_gene           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
+                            show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
+                            show_exchp          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
+                            show_exseq          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
+                            show_sigma          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
+                            filter              : encodedFilters,
+                            filterDescriptions  : parsedFilterParameters.filterDescriptions,
+                            proteinEffectsList  : encodedProteinEffects,
+                            encodedParameters   : encodedParameters,
+                            dataSetDetermination: dataSetDetermination,
+                            newApi              : sharedToolsService.getNewApi()])
+        }
+    }
+
+
+
+
+
+
+
+
+
 
 
 }
