@@ -293,28 +293,28 @@ class RestServerService {
                           "orderBy":    ["CHROM"],
                           "dproperty":    {
 
-                                            "MAF" : ["ExSeq_13k_sa_genes_dv1",
-                                                      "ExSeq_13k_hs_genes_dv1",
-                                                      "ExSeq_13k_ea_genes_dv1",
-                                                      "ExSeq_13k_aa_genes_dv1",
-                                                      "ExSeq_13k_eu_genes_dv1",
-                                                      "ExSeq_13k_hs_genes_dv1",
-                                                      "ExChip_82k_dv2"
+                                            "MAF" : ["ExSeq_13k_sa_genes_mdv2",
+                                                      "ExSeq_13k_hs_genes_mdv2",
+                                                      "ExSeq_13k_ea_genes_mdv2",
+                                                      "ExSeq_13k_aa_genes_mdv2",
+                                                      "ExSeq_13k_eu_genes_mdv2",
+                                                      "ExSeq_13k_hs_genes_mdv2",
+                                                      "ExChip_82k_mdv2"
                                                     ]
                                         },
                         "pproperty":    {
                                              "P_VALUE":    {
-                                                                       "GWAS_DIAGRAM_dv1": ["T2D"],
-                                                                    "ExChip_82k_dv2": ["T2D"]
+                                                                       "GWAS_DIAGRAM_mdv1": ["T2D"],
+                                                                    "ExChip_82k_mdv2": ["T2D"]
                                                                    },
-                          "ODDS_RATIO": { "GWAS_DIAGRAM_dv1": ["T2D"] },
-                          "OR_WALD_FE_IV":{"ExSeq_26k_dv2": ["T2D"]},
-                          "P_EMMAX_FE_IV":    { "ExSeq_26k_dv2": ["T2D"]},
-                           "OBSA":  { "ExSeq_26k_dv2": ["T2D"]},
-                           "OBSU":  { "ExSeq_26k_dv2": ["T2D"]},
-                          "MINA":    { "ExSeq_26k_dv2": ["T2D"]},
-                          "MINU":    { "ExSeq_26k_dv2": ["T2D"]},
-                          "BETA":    { "ExChip_82k_dv2": ["T2D"]}
+                          "ODDS_RATIO": { "GWAS_DIAGRAM_mdv1": ["T2D"] },
+                          "OR_WALD_FE_IV":{"ExSeq_17k_mdv2": ["T2D"]},
+                          "P_EMMAX_FE_IV":    { "ExSeq_17k_mdv2": ["T2D"]},
+                           "OBSA":  { "ExSeq_17k_mdv2": ["T2D"]},
+                           "OBSU":  { "ExSeq_17k_mdv2": ["T2D"]},
+                          "MINA":    { "ExSeq_17k_mdv2": ["T2D"]},
+                          "MINU":    { "ExSeq_17k_mdv2": ["T2D"]},
+                          "BETA":    { "ExChip_82k_mdv2": ["T2D"]}
                         }
                     },
     "filters":    [
@@ -339,28 +339,28 @@ class RestServerService {
                           "orderBy":    ["CHROM"],
                           "dproperty":    {
         
-                                            "MAF" : ["ExSeq_13k_sa_genes_dv1",
-                                                      "ExSeq_13k_hs_genes_dv1",
-                                                      "ExSeq_13k_ea_genes_dv1",
-                                                      "ExSeq_13k_aa_genes_dv1",
-                                                      "ExSeq_13k_eu_genes_dv1",
-                                                      "ExSeq_13k_hs_genes_dv1",
-                                                      "ExChip_82k_dv2"
+                                            "MAF" : ["ExSeq_13k_sa_genes_mdv2",
+                                                      "ExSeq_13k_hs_genes_mdv2",
+                                                      "ExSeq_13k_ea_genes_mdv2",
+                                                      "ExSeq_13k_aa_genes_mdv2",
+                                                      "ExSeq_13k_eu_genes_mdv2",
+                                                      "ExSeq_13k_hs_genes_mdv2",
+                                                      "ExChip_82k_mdv2"
                                                     ]
                                         },
                         "pproperty":    {
                                              "P_VALUE":    {                                                                   
-                                                                       "GWAS_DIAGRAM_dv1": ["T2D"],
-                                                                    "ExChip_82k_dv2": ["T2D"]
+                                                                       "GWAS_DIAGRAM_mdv1": ["T2D"],
+                                                                    "ExChip_82k_mdv2": ["T2D"]
                                                                    },
-                          "ODDS_RATIO": { "GWAS_DIAGRAM_dv1": ["T2D"] },
-                          "OR_WALD_FE_IV":{"ExSeq_26k_dv2": ["T2D"]},
-                          "P_EMMAX_FE_IV":    { "ExSeq_26k_dv2": ["T2D"]},
-                           "OBSA":  { "ExSeq_26k_dv2": ["T2D"]},
-                           "OBSU":  { "ExSeq_26k_dv2": ["T2D"]},
-                          "MINA":    { "ExSeq_26k_dv2": ["T2D"]},
-                          "MINU":    { "ExSeq_26k_dv2": ["T2D"]},
-                          "BETA":    { "ExChip_82k_dv2": ["T2D"]}
+                          "ODDS_RATIO": { "GWAS_DIAGRAM_mdv1": ["T2D"] },
+                          "OR_WALD_FE_IV":{"ExSeq_17k_mdv2": ["T2D"]},
+                          "P_EMMAX_FE_IV":    { "ExSeq_17k_mdv2": ["T2D"]},
+                           "OBSA":  { "ExSeq_17k_mdv2": ["T2D"]},
+                           "OBSU":  { "ExSeq_17k_mdv2": ["T2D"]},
+                          "MINA":    { "ExSeq_17k_mdv2": ["T2D"]},
+                          "MINU":    { "ExSeq_17k_mdv2": ["T2D"]},
+                          "BETA":    { "ExChip_82k_mdv2": ["T2D"]}
                         }
                     },
     "filters":    [ 
@@ -1036,15 +1036,15 @@ ${customFilterSet}""".toString()
         String pFieldName = ""
         switch (dataSet){
             case 1:
-                dataSetId = "ExSeq_26k_dv2"
+                dataSetId = "ExSeq_17k_mdv2"
                 pFieldName = "P_EMMAX_FE_IV"
                 break;
             case 2:
-                dataSetId = "ExChip_82k_dv1"
+                dataSetId = "ExChip_82k_mdv2"
                 pFieldName = "P_VALUE"
                 break;
             case 3:
-                dataSetId = "GWAS_DIAGRAM_dv1"
+                dataSetId = "GWAS_DIAGRAM_mdv1"
                 pFieldName = "P_VALUE"
                 break;
             default:
@@ -1092,31 +1092,31 @@ ${customFilterSet}""".toString()
 "pproperty": {
                    
                        "HETA": {
-                        "ExSeq_26k_dv2": ["T2D"]
+                        "ExSeq_17k_mdv2": ["T2D"]
                     },
                        "HETU": {
-                        "ExSeq_26k_dv2": ["T2D"]
+                        "ExSeq_17k_mdv2": ["T2D"]
                     },
                        "HOMA": {
-                        "ExSeq_26k_dv2": ["T2D"]
+                        "ExSeq_17k_mdv2": ["T2D"]
                     },
                        "HOMU": {
-                        "ExSeq_26k_dv2": ["T2D"]
+                        "ExSeq_17k_mdv2": ["T2D"]
                     },
                        "OBSU": {
-                        "ExSeq_26k_dv2": ["T2D"]
+                        "ExSeq_17k_mdv2": ["T2D"]
                     },
                        "OBSA": {
-                        "ExSeq_26k_dv2": ["T2D"]
+                        "ExSeq_17k_mdv2": ["T2D"]
                     },
                        "HETA": {
-                        "ExSeq_26k_dv2": ["T2D"]
+                        "ExSeq_17k_mdv2": ["T2D"]
                     },
                        "P_EMMAX_FE_IV": {
-                        "ExSeq_26k_dv2": ["T2D"]
+                        "ExSeq_17k_mdv2": ["T2D"]
                     },
                        "OR_WALD_FE_IV": {
-                        "ExSeq_26k_dv2": ["T2D"]
+                        "ExSeq_17k_mdv2": ["T2D"]
                     }
 
                      }
@@ -1152,22 +1152,22 @@ ${customFilterSet}""".toString()
                                         },
                         "pproperty":    {
                                             "P_EMMAX_FE_IV": {
-                                                "ExSeq_26k_dv2": ["T2D"]
+                                                "ExSeq_17k_mdv2": ["T2D"]
                                             },
 
                                              "P_VALUE":{
-                                                "GWAS_DIAGRAM_dv1":["T2D"],
-                                                "ExChip_82k_dv1":["T2D"]
+                                                "GWAS_DIAGRAM_mdv1":["T2D"],
+                                                "ExChip_82k_mdv2":["T2D"]
                                              },
                                              "OR_WALD_FE_IV":    {
-                                                                   "ExSeq_26k_dv2": ["T2D"]
+                                                                   "ExSeq_17k_mdv2": ["T2D"]
                                                                 },
                                              "ODDS_RATIO":{
-                                                "GWAS_DIAGRAM_dv1":["T2D"]
+                                                "GWAS_DIAGRAM_mdv1":["T2D"]
                                              },
 
                                               "BETA":{
-                                                "ExChip_82k_dv1":["T2D"]
+                                                "ExChip_82k_mdv2":["T2D"]
                                               }
 
                                         }
@@ -1192,9 +1192,9 @@ ${customFilterSet}""".toString()
 
 
     public JSONObject combinedVariantAssociationStatistics(String variantName){
-        String exSeq2Sample = "ExSeq_26k_dv2"
-        String exChipSample = "ExChip_82k_dv1"
-        String gwasSample = "GWAS_DIAGRAM_dv1"
+        String exSeq2Sample = "ExSeq_17k_mdv2"
+        String exChipSample = "ExChip_82k_mdv2"
+        String gwasSample = "GWAS_DIAGRAM_mdv1"
         String attribute = "T2D"
         JSONObject returnValue
         List <Integer> dataSeteList = [1]
@@ -1258,13 +1258,13 @@ ${customFilterSet}""".toString()
                            "cproperty": ["VAR_ID", "CHROM", "POS"],
                           "orderBy":    ["CHROM"],
                           "dproperty":    {
-                                            "MAF" : ["ExSeq_13k_sa_genes_dv1",
-                                                      "ExSeq_13k_hs_genes_dv1",
-                                                      "ExSeq_13k_ea_genes_dv1",
-                                                      "ExSeq_13k_aa_genes_dv1",
-                                                      "ExSeq_13k_eu_genes_dv1",
-                                                      "ExSeq_13k_hs_genes_dv1",
-                                                      "ExChip_82k_dv2"
+                                            "MAF" : ["ExSeq_13k_sa_genes_mdv2",
+                                                      "ExSeq_13k_hs_genes_mdv2",
+                                                      "ExSeq_13k_ea_genes_mdv2",
+                                                      "ExSeq_13k_aa_genes_mdv2",
+                                                      "ExSeq_13k_eu_genes_mdv2",
+                                                      "ExSeq_13k_hs_genes_mdv2",
+                                                      "ExChip_82k_mdv2"
                                                     ]
                                         },
                         "pproperty":    {
@@ -1292,12 +1292,12 @@ ${customFilterSet}""".toString()
 
 
     public JSONObject howCommonIsVariantAcrossEthnicities(String variantName){
-        String exSeqAASample = "ExSeq_13k_aa_genes_dv1"
-        String exSeqHSSample = "ExSeq_13k_hs_genes_dv1"
-        String exSeqEASample = "ExSeq_13k_ea_genes_dv1"
-        String exSeqSASample = "ExSeq_13k_sa_genes_dv1"
-        String exSeqEUSample = "ExSeq_13k_eu_genes_dv1"
-        String exChipSample = "ExChip_82k_dv2"
+        String exSeqAASample = "ExSeq_13k_aa_genes_mdv2"
+        String exSeqHSSample = "ExSeq_13k_hs_genes_mdv2"
+        String exSeqEASample = "ExSeq_13k_ea_genes_mdv2"
+        String exSeqSASample = "ExSeq_13k_sa_genes_mdv2"
+        String exSeqEUSample = "ExSeq_13k_eu_genes_mdv2"
+        String exChipSample = "ExChip_82k_mdv2"
         JSONObject returnValue
         List <Integer> dataSeteList = [1]
         List <String> pValueList = [1]
@@ -1341,7 +1341,7 @@ ${customFilterSet}""".toString()
 
 
     public JSONObject combinedVariantDiseaseRisk(String variantName){
-        String exSeq2Sample = "ExSeq_26k_dv2"
+        String exSeq2Sample = "ExSeq_17k_mdv2"
         String attribute = "T2D"
         JSONObject returnValue
         List <Integer> dataSeteList = [1]
@@ -1463,22 +1463,22 @@ ${customFilterSet}""".toString()
                                         },
                         "pproperty":    {
                                             "P_EMMAX_FE_IV": {
-                                                "ExSeq_26k_dv2": ["T2D"]
+                                                "ExSeq_17k_mdv2": ["T2D"]
                                             },
 
                                              "P_VALUE":{
-                                                "GWAS_DIAGRAM_dv1":["T2D"],
-                                                "ExChip_82k_dv1":["T2D"]
+                                                "GWAS_DIAGRAM_mdv1":["T2D"],
+                                                "ExChip_82k_mdv2":["T2D"]
                                              },
                                              "OR_WALD_FE_IV":    {
-                                                                   "ExSeq_26k_dv2": ["T2D"]
+                                                                   "ExSeq_17k_mdv2": ["T2D"]
                                                                 },
                                              "ODDS_RATIO":{
-                                                "GWAS_DIAGRAM_dv1":["T2D"]
+                                                "GWAS_DIAGRAM_mdv1":["T2D"]
                                              },
 
                                               "BETA":{
-                                                "ExChip_82k_dv1":["T2D"]
+                                                "ExChip_82k_mdv2":["T2D"]
                                               }
 
                                         }
@@ -1498,26 +1498,26 @@ ${customFilterSet}""".toString()
       String dataSetId = ""
       switch (ethnicity){
           case "HS":
-              dataSetId = "ExSeq_13k_hs_genes_dv1"
+              dataSetId = "ExSeq_13k_hs_genes_mdv2"
               break;
           case "AA":
-              dataSetId = "ExSeq_13k_aa_genes_dv1"
+              dataSetId = "ExSeq_13k_aa_genes_mdv2"
               break;
           case "EA":
-              dataSetId = "ExSeq_13k_ea_genes_dv1"
+              dataSetId = "ExSeq_13k_ea_genes_mdv2"
               break;
           case "SA":
-              dataSetId = "ExSeq_13k_sa_genes_dv1"
+              dataSetId = "ExSeq_13k_sa_genes_mdv2"
               break;
           case "EU":
-              dataSetId = "ExSeq_13k_eu_genes_dv1"
+              dataSetId = "ExSeq_13k_eu_genes_mdv2"
               break;
           case "chipEu":
-              dataSetId = "ExChip_82k_dv2"
+              dataSetId = "ExChip_82k_mdv2"
               break;
           default:
               log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
-              dataSetId = "ExSeq_13k_aa_genes_dv1"
+              dataSetId = "ExSeq_13k_aa_genes_mdv2"
       }
       return dataSetId
   }
@@ -1553,7 +1553,7 @@ ${customFilterSet}""".toString()
 //                break;
             default:
                 log.error("Trouble: user requested cell number = ${cellNumber} which I don't recognize")
-                dataSetId = "ExSeq_13k_aa_genes_dv1"
+                dataSetId = "ExSeq_13k_aa_genes_mdv2"
         }
         String jsonVariantCountByGeneAndMaf = """
 {
@@ -1568,8 +1568,8 @@ ${customFilterSet}""".toString()
                   		"orderBy":	[],
                   		"dproperty":	{},
                 		"pproperty":	{
-                           "OBSA":  { "ExSeq_26k_dv2": ["T2D"]},
-                           "OBSU":  { "ExSeq_26k_dv2": ["T2D"]}
+                           "OBSA":  { "ExSeq_17k_mdv2": ["T2D"]},
+                           "OBSU":  { "ExSeq_17k_mdv2": ["T2D"]}
                          }
                 	},
 	"filters":	[
@@ -1642,7 +1642,7 @@ return retdat
 
     public JSONObject combinedEthnicityTable(String geneName){
         JSONObject returnValue
-        String exSeq2Sample = "ExSeq_26k_dv2"
+        String exSeq2Sample = "ExSeq_17k_mdv2"
         String attribute = "T2D"
         List <String> dataSeteList = ["HS", "AA", "EA", "SA", "EU","chipEu"]
         List <Integer> cellNumberList = [0,1,2,3]
@@ -1703,14 +1703,14 @@ return retdat
     public JSONObject generateVariantTable(String chromosome,
                                            String beginSearch,
                                            String endSearch){//region
-            String exSeq2Sample = "ExSeq_26k_dv2"
-            String exSeqAASample = "ExSeq_13k_aa_genes_dv1"
-            String exSeqHSSample = "ExSeq_13k_hs_genes_dv1"
-            String exSeqEASample = "ExSeq_13k_ea_genes_dv1"
-            String exSeqSASample = "ExSeq_13k_sa_genes_dv1"
-            String exSeqEUSample = "ExSeq_13k_eu_genes_dv1"
-            String exChipSample = "ExChip_82k_dv2"
-            String exGwasDiagram = "GWAS_DIAGRAM_dv1"
+            String exSeq2Sample = "ExSeq_17k_mdv2"
+            String exSeqAASample = "ExSeq_13k_aa_genes_mdv2"
+            String exSeqHSSample = "ExSeq_13k_hs_genes_mdv2"
+            String exSeqEASample = "ExSeq_13k_ea_genes_mdv2"
+            String exSeqSASample = "ExSeq_13k_sa_genes_mdv2"
+            String exSeqEUSample = "ExSeq_13k_eu_genes_mdv2"
+            String exChipSample = "ExChip_82k_mdv2"
+            String exGwasDiagram = "GWAS_DIAGRAM_mdv1"
             String attribute = "T2D"
             def slurper = new JsonSlurper()
             JSONObject returnValue
@@ -1825,14 +1825,14 @@ return retdat
 
 
     public JSONObject generalizedVariantTable(String filters){//region
-        String exSeq2Sample = "ExSeq_26k_dv2"
-        String exSeqAASample = "ExSeq_13k_aa_genes_dv1"
-        String exSeqHSSample = "ExSeq_13k_hs_genes_dv1"
-        String exSeqEASample = "ExSeq_13k_ea_genes_dv1"
-        String exSeqSASample = "ExSeq_13k_sa_genes_dv1"
-        String exSeqEUSample = "ExSeq_13k_eu_genes_dv1"
-        String exChipSample = "ExChip_82k_dv2"
-        String exGwasDiagram = "GWAS_DIAGRAM_dv1"
+        String exSeq2Sample = "ExSeq_17k_mdv2"
+        String exSeqAASample = "ExSeq_13k_aa_genes_mdv2"
+        String exSeqHSSample = "ExSeq_13k_hs_genes_mdv2"
+        String exSeqEASample = "ExSeq_13k_ea_genes_mdv2"
+        String exSeqSASample = "ExSeq_13k_sa_genes_mdv2"
+        String exSeqEUSample = "ExSeq_13k_eu_genes_mdv2"
+        String exChipSample = "ExChip_82k_mdv2"
+        String exGwasDiagram = "GWAS_DIAGRAM_mdv1"
         String attribute = "T2D"
         def slurper = new JsonSlurper()
         JSONObject returnValue

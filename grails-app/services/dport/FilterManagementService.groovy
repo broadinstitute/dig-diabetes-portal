@@ -10,9 +10,9 @@ class FilterManagementService {
     RestServerService restServerService
     SharedToolsService sharedToolsService
 
-    private String exomeSequence  = "ExSeq_26k_dv2"
-    private String gwasData  = "GWAS_DIAGRAM_dv1"
-    private String exomeChip  = "ExChip_82k_dv2"
+    private String exomeSequence  = "ExSeq_17k_mdv2"
+    private String gwasData  = "GWAS_DIAGRAM_mdv1"
+    private String exomeChip  = "ExChip_82k_mdv2"
     private String sigmaData  = "unknown"
     private String exomeSequencePValue  = "P_EMMAX_FE_IV"
     private String gwasDataPValue  = "P_VALUE"
@@ -160,16 +160,16 @@ class FilterManagementService {
         String returnValue = ""
         switch (filterName){
             case "dataSetGwas"        :
-                returnValue = """{"dataset_id": "GWAS_DIAGRAM_dv1", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "${gwasData}", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
                 break;
             case "dataSetSigma"        :
-                returnValue = """{"dataset_id": "ExSeq_26k_dv2", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "${sigmaData}", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
                 break;
             case "dataSetExseq"        :
-                returnValue = """{"dataset_id": "ExSeq_26k_dv2", "phenotype": "T2D", "operand": "P_EMMAX_FE_IV", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "${exomeSequence}", "phenotype": "T2D", "operand": "P_EMMAX_FE_IV", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
                 break;
             case "dataSetExchp"        :
-                returnValue = """{"dataset_id": "ExChip_82k_dv2", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setPValueThreshold" :
                 String dataset = exomeSequence
@@ -195,16 +195,16 @@ class FilterManagementService {
                 returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "LTE", "value": ${parm1}, "operand_type": "INTEGER"}""".toString()
                 break;
             case "setEthnicityMaximum" :
-                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_dv1", "phenotype": "blah", "operand": "MAF", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setEthnicityMaximumAbsolute" :
-                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_dv1", "phenotype": "blah", "operand": "MAF", "operator": "LT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "LT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setEthnicityMinimum" :
-                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_dv1", "phenotype": "blah", "operand": "MAF", "operator": "GTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "GTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setEthnicityMinimumAbsolute" :
-                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_dv1", "phenotype": "blah", "operand": "MAF", "operator": "GT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "GT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setExomeChipMinimum" :
                 returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
@@ -240,7 +240,7 @@ class FilterManagementService {
                 returnValue = """{ "filter_type": "FLOAT", "operand": "${parm1}", "operator": "GTE", "value": ${parm2} }""".toString()
                 break;
             case "setSpecificPValue" :
-                returnValue = """{"dataset_id": "ExSeq_26k_dv2", "phenotype": "${parm1}", "operand": "P_EMMAX_FE_IV", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "${exomeSequence}", "phenotype": "${parm1}", "operand": "P_EMMAX_FE_IV", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
 
             default: break;
