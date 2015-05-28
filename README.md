@@ -348,8 +348,13 @@ Note: This entire process should be completed once per iteration (or more, if an
 couple of days before the user group, so that the group can help take a look at the newly minted production code.
 
 
+Install Jenkins Server
+----------------------
+eg
+make install JENKINS_HOME=/humgen/diabetes/portal/dig-jenkins/test_server/home/
+creates log in $JENKINS_HOME/Jenkins_${JENKINS_PORT}.log
 
-To restart Jenkins enter this url
-http://tgreen-vm.broadinstitute.org:9090/restart
 
-a
+
+
+
