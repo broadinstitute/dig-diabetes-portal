@@ -24,6 +24,7 @@ class SharedToolsService {
     RestServerService restServerService
      private static final log = LogFactory.getLog(this)
     JSONObject sharedMetadata = null
+    Integer forceMetadataOverride = -1
     Integer showGwas = -1
     Integer showExomeChip = -1
     Integer showExomeSequence = -1
@@ -154,6 +155,16 @@ class SharedToolsService {
     }
 
 
+    public Boolean getMetadataOverrideStatus() {
+        return (showNewApi==1)
+    }
+
+
+    public void setMetadataOverrideStatus(showNewApi) {
+        this.showNewApi=showNewApi
+    }
+
+
 
     public Boolean getNewApi() {
         return (showNewApi==1)
@@ -179,12 +190,18 @@ class SharedToolsService {
         return returnValue
     }
 
-
+    /***
+     * Here's a shareable method to retrieve the contents of the metadata. The first time it's called it will store and cache the result.
+     * After that every call draws from the cache,  UNLESS  the variable has been set to force a metadata override.
+     * @return
+     */
     public JSONObject retrieveMetadata (){
-        if (!sharedMetadata){
+        if ( (!sharedMetadata) ||
+             (forceMetadataOverride == 1) ){
             String temporary = restServerService.getMetadata()
             def slurper = new JsonSlurper()
             sharedMetadata = slurper.parseText(temporary)
+            forceMetadataOverride = 0
         }
         return sharedMetadata
     }

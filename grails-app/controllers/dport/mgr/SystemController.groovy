@@ -21,7 +21,9 @@ class SystemController {
         render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
                                           currentRestServer:restServerService.currentRestServer(),
         currentApplicationIsSigma:sharedToolsService.applicationName(),
-        helpTextLevel:sharedToolsService.getHelpTextSetting()])
+        helpTextLevel:sharedToolsService.getHelpTextSetting(),
+        newApi:sharedToolsService.getNewApi(),
+        forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus()])
     }
 
     def determineVersion = {
@@ -46,7 +48,8 @@ class SystemController {
                 currentRestServer:restServerService.currentRestServer(),
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
-                                          newApi:sharedToolsService.getNewApi()])
+                                          newApi:sharedToolsService.getNewApi(),
+                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus()])
 
     }
 
@@ -82,7 +85,8 @@ class SystemController {
                                           currentRestServer:restServerService.currentRestServer(),
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
-                                          newApi:sharedToolsService.getNewApi()])
+                                          newApi:sharedToolsService.getNewApi(),
+                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus()])
     }
 
 
@@ -109,8 +113,40 @@ class SystemController {
                                           currentRestServer:restServerService.currentRestServer(),
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
-                                          newApi:sharedToolsService.getNewApi()])
+                                          newApi:sharedToolsService.getNewApi(),
+                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus()])
     }
+
+
+
+
+    def submitForceMetadataCacheUpdate ()  {
+        String metadataOverrideStatus = params.datatype
+        Boolean metadataOverrideHasBeenRequested = sharedToolsService.getMetadataOverrideStatus ()
+        if (metadataOverrideStatus == true) {
+            if (!(metadataOverrideHasBeenRequested == false)) {
+                sharedToolsService.setMetadataOverrideStatus(1)
+                flash.message = "You have scheduled an override to the metadata cache. The next time the metadata is requested the cache will be reloaded"
+            } else {
+                flash.message = "But the metadata cache was already scheduled!"
+            }
+        } else if (apiSetting == 'false') {
+            if (!(metadataOverrideHasBeenRequested == true)) {
+                sharedToolsService.setForceMetadataOverride(0)
+                flash.message = "you have rejected the request to update the metadata. "
+            } else {
+                flash.message = "But there was no override in place to cancel!"
+            }
+        }
+        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
+                                          currentRestServer:restServerService.currentRestServer(),
+                                          currentApplicationIsSigma:sharedToolsService.applicationName(),
+                                          helpTextLevel:sharedToolsService.getHelpTextSetting(),
+                                          newApi:sharedToolsService.getNewApi(),
+                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus()])
+
+    }
+
 
 
 
@@ -172,7 +208,8 @@ class SystemController {
                                           currentRestServer:restServerService.currentRestServer(),
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
-                                          newApi:sharedToolsService.getNewApi()])
+                                          newApi:sharedToolsService.getNewApi(),
+                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus()])
     }
 
     def switchSigmaT2d(){
@@ -198,7 +235,8 @@ class SystemController {
                                           currentRestServer:restServerService.currentRestServer(),
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
-                                          newApi:sharedToolsService.getNewApi()])
+                                          newApi:sharedToolsService.getNewApi(),
+                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus()])
     }
 
 
@@ -208,7 +246,8 @@ class SystemController {
                                           currentRestServer:restServerService.currentRestServer(),
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
-                                          newApi:sharedToolsService.getNewApi()])
+                                          newApi:sharedToolsService.getNewApi(),
+                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus()])
     }
 
 }
