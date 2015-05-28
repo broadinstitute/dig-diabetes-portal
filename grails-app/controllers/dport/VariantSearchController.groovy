@@ -214,11 +214,19 @@ class VariantSearchController {
         if((params.dataset) && (params.dataset !=  null )){
             datasetList << params.dataset
         }
+        List <String> phenotypeList = []
+        if((params.phenotype) && (params.phenotype !=  null )){
+            phenotypeList << params.phenotype
+        }
+
         JSONObject jsonObject = sharedToolsService.retrieveMetadata()
 
         LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
         LinkedHashMap<String,List<String>> annotatedSampleGroups =  processedMetadata.propertiesPerSampleGroups
-        String propertiesForThisSampleGroup = sharedToolsService.extractASingleList(params.dataset,annotatedSampleGroups)
+        LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties = returnValue['phenotypeSpecificPropertiesPerSampleGroup']
+        String propertiesForThisSampleGroup = sharedToolsService.combineToCreateASingleList( params.phenotype, params.dataset,
+                                                                                             annotatedSampleGroups,
+                                                                                             phenotypeSpecificSampleGroupProperties )
         def slurper = new JsonSlurper()
         def result = slurper.parseText(propertiesForThisSampleGroup)
 

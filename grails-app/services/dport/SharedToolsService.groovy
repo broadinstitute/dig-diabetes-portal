@@ -216,18 +216,21 @@ class SharedToolsService {
         List <String> captured = []
         LinkedHashMap<String, List <String>> annotatedPhenotypes = [:]
         LinkedHashMap<String, List <String>> annotatedSampleGroups = [:]
+        LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties = [:]
         if (metadata){
             for (def experiment in metadata.experiments){
                 captured << experiment.name
                 if (experiment.sample_groups){
                     getDataSetsPerPhenotype (experiment.sample_groups, annotatedPhenotypes)
                     getPropertiesPerSampleGroupId (experiment.sample_groups, annotatedSampleGroups)
+                    getPhenotypeSpecificPropertiesPerSampleGroupId (experiment.sample_groups, phenotypeSpecificSampleGroupProperties)
                 }
             }
         }
         returnValue['rootSampleGroups'] = captured
         returnValue['sampleGroupsPerPhenotype'] = annotatedPhenotypes
         returnValue['propertiesPerSampleGroups'] = annotatedSampleGroups
+        returnValue['phenotypeSpecificPropertiesPerSampleGroup'] = phenotypeSpecificSampleGroupProperties
         return returnValue
     }
 
@@ -305,6 +308,67 @@ class SharedToolsService {
 
 
 
+
+
+
+
+    public LinkedHashMap<String, List <String>> getPhenotypeSpecificPropertiesPerSampleGroupId (def sampleGroups,LinkedHashMap<String, LinkedHashMap <String,String>> annotatedPhenotypeSpecificSampleGroupIds){
+        for (def sampleGroup in sampleGroups){
+            String sampleGroupsId = sampleGroup.id
+            if (sampleGroup.phenotypes){
+                for (def phenotype in sampleGroup.phenotypes){
+                    String phenotypeName = phenotype.name
+                    LinkedHashMap<String,String> hashOfPhenotypeSpecificSampleGroups
+                    if (annotatedPhenotypeSpecificSampleGroupIds.containsKey(phenotypeName)){
+                        hashOfPhenotypeSpecificSampleGroups = annotatedPhenotypeSpecificSampleGroupIds[phenotypeName]
+                    } else {
+                        hashOfPhenotypeSpecificSampleGroups = new LinkedHashMap()
+                        annotatedPhenotypeSpecificSampleGroupIds[phenotypeName]  =  hashOfPhenotypeSpecificSampleGroups
+                    }
+
+                    // we have the list for this phenotype.  Add some more sample groups for it, along with
+                    //  a place to put data set specific properties for each data set
+                    List <String> propertyList
+                    if (hashOfPhenotypeSpecificSampleGroups.containsKey(sampleGroupsId)){
+                        propertyList = hashOfPhenotypeSpecificSampleGroups[sampleGroupsId]
+                    } else {
+                        propertyList = new ArrayList<String>()
+                        hashOfPhenotypeSpecificSampleGroups[sampleGroupsId] = propertyList
+                    }
+
+                    // now let's store up the properties specific to this sample group & phenotype combination
+                    def phenotypeProperties = phenotype.properties
+                    if (phenotypeProperties){
+                        for (def property in phenotypeProperties){
+                            String propertyName = property.name
+                            if (propertyList.contains(propertyName)){
+                                println "That is a little odd. Sample group=${sampleGroupsId} in phenotype=${phenotypeName} already had property=${propertyName}"
+                            }else {
+                                propertyList<<propertyName
+                            }
+                        }
+                    }
+
+                    // we can descend further if there are sample groups within the sample group
+                    if (sampleGroup.sample_groups){
+                        getPhenotypeSpecificPropertiesPerSampleGroupId (sampleGroup.sample_groups, annotatedPhenotypeSpecificSampleGroupIds)
+                    }
+                }
+
+            }
+        }
+        return annotatedPhenotypeSpecificSampleGroupIds
+    }
+
+
+
+
+
+
+
+
+
+
     /***
      * Start with a list of lists and manufactures some legal JSON.  Extract a single linear list of every experiment name
      * @param phenotype
@@ -339,6 +403,64 @@ class SharedToolsService {
 }""".toString()
         return retval
     }
+
+
+
+
+    public String combineToCreateASingleList (String phenotype,String sampleGroup,
+                                              LinkedHashMap<String, List <String>> annotatedList,
+                                              LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties ){
+        // the list of properties specific to this data set
+        StringBuilder tempSb = new StringBuilder ()
+        int numrec = 0
+        String retval
+        if (annotatedList){
+            if (annotatedList.containsKey(sampleGroup)){
+                List <String> listForThisPhenotype =  annotatedList [sampleGroup]
+                if (listForThisPhenotype) {
+                    numrec = listForThisPhenotype.size()
+                    for ( int  i = 0 ; i < listForThisPhenotype.size() ; i++ ){
+                        tempSb << """ "${listForThisPhenotype[i]}" """.toString()
+                        if (i<listForThisPhenotype.size()-1){
+                            tempSb << ","
+                        }
+
+                    }
+                }
+            }
+
+        }
+        // now add in the properties that are specific to this phenotype for this data set
+        if (phenotypeSpecificSampleGroupProperties){
+            if (phenotypeSpecificSampleGroupProperties.containsKey(phenotype)){
+                LinkedHashMap hashForThisPhenotype = phenotypeSpecificSampleGroupProperties[phenotype]
+                if ((hashForThisPhenotype) && (hashForThisPhenotype.containsKey(sampleGroup))) {
+                    List<String> listForThisPhenotype = hashForThisPhenotype[phenotype]
+                    if (listForThisPhenotype) {
+                        numrec += listForThisPhenotype.size()
+                        for (int i = 0; i < listForThisPhenotype.size(); i++) {
+                            tempSb << """ "${listForThisPhenotype[i]}" """.toString()
+                            if (i < listForThisPhenotype.size() - 1) {
+                                tempSb << ","
+                            }
+
+                        }
+                    }
+                }
+            }
+
+        }
+
+        retval = """
+{"is_error": false,
+"numRecords":${numrec},
+"dataset":[${tempSb.toString()}]
+}""".toString()
+        return retval
+    }
+
+
+
 
 
 

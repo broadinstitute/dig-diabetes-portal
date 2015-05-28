@@ -201,13 +201,13 @@ var mpgSoftware = mpgSoftware || {};
                 }
             });
         };
-        var retrievePropertiesPerDataSet = function (dataset) {
+        var retrievePropertiesPerDataSet = function (phenotype,dataset) {
             var loading = $('#spinner').show();
             $.ajax({
                 cache: false,
                 type: "post",
                 url: "./retrievePropertiesAjax",
-                data: {dataset: dataset},
+                data: {phenotype: phenotype,dataset: dataset},
                 async: true,
                 success: function (data) {
                     if (( data !==  null ) &&
@@ -708,7 +708,8 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
 
         var respondToDataSetSelection = function (){
             var dataSetComboBox = UTILS.extractValsFromCombobox(['dataSet']);
-            mpgSoftware.variantWF.retrievePropertiesPerDataSet(dataSetComboBox['dataSet']);
+            var phenotypeComboBox = UTILS.extractValsFromCombobox(['phenotype']);
+            mpgSoftware.variantWF.retrievePropertiesPerDataSet(phenotypeComboBox['phenotype'],dataSetComboBox['dataSet']);
             $('#additionalFilterSelection').show ();
             $('#filterInstructions').text('Add filters, if any:');
             mpgSoftware.variantWF.currentInteractivityState(0);
