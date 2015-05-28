@@ -531,8 +531,8 @@ class RestServerService {
             afterCall = new Date()
         }
         logStatus << """
-SERVER CALL:
-url=${targetUrl},
+SERVER POST:
+url=${currentRestServer + targetUrl},
 parm=${drivingJson},
 time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 """.toString()
@@ -577,8 +577,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             afterCall = new Date()
         }
         logStatus << """
-SERVER CALL:
-url=${targetUrl},
+SERVER GET:
+url=${currentRestServer + targetUrl},
 parm=${drivingJson},
 time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 """.toString()
