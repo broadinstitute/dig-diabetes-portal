@@ -36,6 +36,22 @@
                 applyDatasetsFilter($columns);
             };
 
+            $scope.humanReadableDatasetName = function(id,unfriendlyName) {
+                var name;
+                var datasetMap = {
+                    'ExSeq_13k_ea_genes_dv2':'13K exome sequence analysis: East Asians'
+                };
+                if (datasetMap[id] != null) {
+                    name = datasetMap[id];
+                    console.log(id + '->' + name);
+                }
+                else {
+                    console.log('No friendly name for ' + id + ' and ' + unfriendlyName);
+                    name = unfriendlyName;
+                }
+                return name;
+            };
+
             $scope.getDatasetsFromQuery = function(query) {
                 var array, dataset, e, element, elementsToRemove, index, k, newarray, removed_elements, v, value, _i, _j, _len, _len1;
                 array = [];
@@ -461,8 +477,14 @@
             $scope.loadMetadata = function() {
                 $http.get($scope.metadataUrl)
                     .success(function (data, status, headers, config) {
-                        $scope.tree = angular.fromJson(data[0].experiments);
-                        $scope.initializeData();
+                        try {
+                            $scope.tree = angular.fromJson(data[0].experiments);
+                            $scope.initializeData();
+                        }
+                        catch(err) {
+                            console.error(err);
+                            alert('Unable to query metadata. Please report the problem and try again later.');
+                        }
                     })
                     .error(function (data, status, headers, config) {
                         if (status != 0) {

@@ -87,7 +87,9 @@
                                       ng-repeat='sampleGroup in getDatasetsFromQuery(search.currentQuery) | filter:checkSearchTextMatch'>
                                     <p class='level{{sampleGroup.level}}' ng-init='view = {}'>
                                         <input ng-model='sampleGroup.selected' type='checkbox'>
-                                        <span ng-click='toggleItem(sampleGroup)'>{{sampleGroup.name}} ({{sampleGroup.version}}) - {{sampleGroup.ancestry}} / {{sampleGroup.technology}}</span>
+                                        <span ng-click='toggleItem(sampleGroup)' ng-init="datasetName = humanReadableDatasetName(sampleGroup.id,sampleGroup.name + ' (' + sampleGroup.version + ') - ' + sampleGroup.ancestry + ' / ' + sampleGroup.technology)">
+                                                {{datasetName}}
+                                        </span>
                                         <!-- %span.glyphicon.glyphicon-list-alt{:"ng-click" => "view.showProperties = !view.showProperties", :"ng-if" => "sampleGroup.properties.length > 0"} -->
                                     </p>
 
