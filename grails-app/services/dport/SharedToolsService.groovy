@@ -206,54 +206,40 @@ class SharedToolsService {
         return sharedMetadata
     }
 
+    /***
+     * walk through the metadata tree and pull out things we need
+     * @param metadata
+     * @return
+     */
     public LinkedHashMap processMetadata(JSONObject metadata){
         LinkedHashMap returnValue = [:]
         List <String> captured = []
         LinkedHashMap<String, List <String>> annotatedPhenotypes = [:]
+        LinkedHashMap<String, List <String>> annotatedSampleGroups = [:]
         if (metadata){
             for (def experiment in metadata.experiments){
                 captured << experiment.name
                 if (experiment.sample_groups){
                     getDataSetsPerPhenotype (experiment.sample_groups, annotatedPhenotypes)
+                    getPropertiesPerSampleGroupId (experiment.sample_groups, annotatedSampleGroups)
                 }
             }
         }
         returnValue['rootSampleGroups'] = captured
         returnValue['sampleGroupsPerPhenotype'] = annotatedPhenotypes
+        returnValue['propertiesPerSampleGroups'] = annotatedSampleGroups
         return returnValue
     }
 
-    public String extractASingleList (String phenotype, LinkedHashMap<String, List <String>> annotatedList){
-        StringBuilder sb = new StringBuilder ()
-        StringBuilder tempSb = new StringBuilder ()
-        int numrec = 0
-        String retval
-        if (annotatedList){
-            if (annotatedList.containsKey(phenotype)){
-                List <String> listForThisPhenotype =  annotatedList [phenotype]
-                if (listForThisPhenotype) {
-                    numrec = listForThisPhenotype.size()
-                    for ( int  i = 0 ; i < listForThisPhenotype.size() ; i++ ){
-                        tempSb << """ "${listForThisPhenotype[i]}" """.toString()
-                        if (i<listForThisPhenotype.size()-1){
-                            tempSb << ","
-                        }
 
-                }
-                }
-            }
-
-             }
-        retval = """
-{"is_error": false,
-"numRecords":${numrec},
-"dataset":[${tempSb.toString()}]
-}""".toString()
-        return retval
-    }
-
-
-    // Start with a pointer to a sample group. Build up a list of IDs per phenotype
+    /***
+     * Start with a pointer to a sample group as we descend through the metadata tree.  Pullback a combined list
+     * of every sample group ID grouped by phenotype.
+     *
+     * @param sampleGroups
+     * @param annotatedPhenotypes
+     * @return
+     */
     public LinkedHashMap<String, List <String>> getDataSetsPerPhenotype (def sampleGroups,LinkedHashMap<String, List <String>> annotatedPhenotypes){
         for (def sampleGroup in sampleGroups){
             String sampleGroupsId = sampleGroup.id
@@ -278,8 +264,82 @@ class SharedToolsService {
 
              }
         }
-
+        return annotatedPhenotypes
     }
+
+
+    public LinkedHashMap<String, List <String>> getPropertiesPerSampleGroupId (def sampleGroups,LinkedHashMap<String, List <String>> annotatedSampleGroupIds){
+        for (def sampleGroup in sampleGroups){
+            String sampleGroupsId = sampleGroup.id
+            List <String> propertiesForTheSampleGroup
+            if (annotatedSampleGroupIds.containsKey(sampleGroupsId)){
+                propertiesForTheSampleGroup = annotatedSampleGroupIds
+            } else {
+                propertiesForTheSampleGroup = new ArrayList<String>()
+                annotatedSampleGroupIds [sampleGroupsId] = propertiesForTheSampleGroup
+            }
+
+            // we have a sample group with an associated list to fill. First let's put in all the properties
+            if (sampleGroup.properties){
+                for (def property in sampleGroup.properties){
+                    String propertyName = property.name
+                    propertiesForTheSampleGroup << propertyName
+                }
+
+            }
+
+            // Does this sample group have an associated ancestry? If so then let's stick that in and treated as if it is another property
+            if (sampleGroup.ancestry){
+                propertiesForTheSampleGroup << "ANCESTRY= ${sampleGroup.ancestry}"
+            }
+
+            // Finally, does this sample group have a sample group? If so then recursively descend
+            if (sampleGroup.sample_groups){
+                getPropertiesPerSampleGroupId (sampleGroup.sample_groups, annotatedSampleGroupIds)
+            }
+
+        }
+        return annotatedSampleGroupIds
+    }
+
+
+
+
+    /***
+     * Start with a list of lists and manufactures some legal JSON.  Extract a single linear list of every experiment name
+     * @param phenotype
+     * @param annotatedList
+     * @return
+     */
+    public String extractASingleList (String phenotype, LinkedHashMap<String, List <String>> annotatedList){
+        StringBuilder sb = new StringBuilder ()
+        StringBuilder tempSb = new StringBuilder ()
+        int numrec = 0
+        String retval
+        if (annotatedList){
+            if (annotatedList.containsKey(phenotype)){
+                List <String> listForThisPhenotype =  annotatedList [phenotype]
+                if (listForThisPhenotype) {
+                    numrec = listForThisPhenotype.size()
+                    for ( int  i = 0 ; i < listForThisPhenotype.size() ; i++ ){
+                        tempSb << """ "${listForThisPhenotype[i]}" """.toString()
+                        if (i<listForThisPhenotype.size()-1){
+                            tempSb << ","
+                        }
+
+                    }
+                }
+            }
+
+        }
+        retval = """
+{"is_error": false,
+"numRecords":${numrec},
+"dataset":[${tempSb.toString()}]
+}""".toString()
+        return retval
+    }
+
 
 
 

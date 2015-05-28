@@ -179,8 +179,10 @@ class VariantSearchController {
 
     }
 
-
-
+    /***
+     * get data sets given a phenotype
+     * @return
+     */
     def retrieveDatasetsAjax() {
         List <String> phenotypeList = []
         List <String> experimentList = []
@@ -190,13 +192,7 @@ class VariantSearchController {
         if ((params.experiment) && (params.experiment !=  null )){
             experimentList << params.experiment
         }
-       // JSONObject jsonObject = restServerService.retrieveDatasets(phenotypeList, experimentList)
         JSONObject jsonObject = sharedToolsService.retrieveMetadata()
-//        String v = """
-//{"is_error": false,
-// "numRecords":1,
-// "dataset":["MAGIC 2014"]
-//}""".toString()
 
         LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
         LinkedHashMap<String,List<String>> annotatedPhenotypes =  processedMetadata.sampleGroupsPerPhenotype
@@ -208,8 +204,32 @@ class VariantSearchController {
         render(status: 200, contentType: "application/json") {
             [datasets: result]
         }
+    }
+
+    /***
+     * get properties given a data set
+     */
+    def retrievePropertiesAjax(){
+        List <String> datasetList = []
+        if((params.dataset) && (params.dataset !=  null )){
+            datasetList << params.dataset
+        }
+        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
+
+        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
+        LinkedHashMap<String,List<String>> annotatedSampleGroups =  processedMetadata.propertiesPerSampleGroups
+        String propertiesForThisSampleGroup = sharedToolsService.extractASingleList(params.dataset,annotatedSampleGroups)
+        def slurper = new JsonSlurper()
+        def result = slurper.parseText(propertiesForThisSampleGroup)
+
+
+        render(status: 200, contentType: "application/json") {
+            [datasets: result]
+        }
 
     }
+
+
 
 
 

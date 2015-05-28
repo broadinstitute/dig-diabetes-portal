@@ -201,6 +201,30 @@ var mpgSoftware = mpgSoftware || {};
                 }
             });
         };
+        var retrievePropertiesPerDataSet = function (dataset) {
+            var loading = $('#spinner').show();
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "./retrievePropertiesAjax",
+                data: {dataset: dataset},
+                async: true,
+                success: function (data) {
+                    if (( data !==  null ) &&
+                        ( typeof data !== 'undefined') &&
+                        ( typeof data.datasets !== 'undefined' ) &&
+                        (  data.datasets !==  null ) ) {
+                        fillPropertiesDropdown(data.datasets);
+                    }
+                    loading.hide();
+                },
+                error: function (jqXHR, exception) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+        };
+
         var extractIndex = function (idLabel,currentObject){
             var filterIndex = -1;
             var id = $(currentObject).attr ('id');
@@ -258,6 +282,20 @@ var mpgSoftware = mpgSoftware || {};
             {
                 var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
                 var options = $("#dataSet");
+                options.empty();
+                var dataSetList = dataSetJson ["dataset"];
+                for ( var i = 0 ; i < numberOfRecords ; i++ ){
+                    options.append($("<option />").val(dataSetList[i]).text(dataSetList[i]));
+                }
+            }
+        };
+        var fillPropertiesDropdown = function (dataSetJson) { // help text for each row
+            if ((typeof dataSetJson !== 'undefined')  &&
+                (typeof dataSetJson["is_error"] !== 'undefined')&&
+                (dataSetJson["is_error"] === false))
+            {
+                var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
+                var options = $("#additionalFilters");
                 options.empty();
                 var dataSetList = dataSetJson ["dataset"];
                 for ( var i = 0 ; i < numberOfRecords ; i++ ){
@@ -358,6 +396,7 @@ var mpgSoftware = mpgSoftware || {};
         return {
             cancelThisFieldCollection:cancelThisFieldCollection,
             fillDataSetDropdown:fillDataSetDropdown,
+            fillPropertiesDropdown:fillPropertiesDropdown,
             gatherFieldsAndPostResults:gatherFieldsAndPostResults,
             launchAVariantSearch:launchAVariantSearch,
             initializePage:initializePage,
@@ -367,6 +406,7 @@ var mpgSoftware = mpgSoftware || {};
             existingFiltersManipulators:existingFiltersManipulators,
             currentInteractivityState:currentInteractivityState,
             retrieveDataSets:retrieveDataSets,
+            retrievePropertiesPerDataSet:retrievePropertiesPerDataSet,
             whatToDoNext:whatToDoNext
         }
 
@@ -667,6 +707,8 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
         };
 
         var respondToDataSetSelection = function (){
+            var dataSetComboBox = UTILS.extractValsFromCombobox(['dataSet']);
+            mpgSoftware.variantWF.retrievePropertiesPerDataSet(dataSetComboBox['dataSet']);
             $('#additionalFilterSelection').show ();
             $('#filterInstructions').text('Add filters, if any:');
             mpgSoftware.variantWF.currentInteractivityState(0);
