@@ -9,6 +9,8 @@ class TraitController {
     private static final log = LogFactory.getLog(this)
 
 
+
+
     /***
      * create page frame for association statistics across 25 traits for a single variant. The resulting Ajax call is  ajaxTraitsPerVariant
      * @return

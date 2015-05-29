@@ -223,7 +223,7 @@ class VariantSearchController {
 
         LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
         LinkedHashMap<String,List<String>> annotatedSampleGroups =  processedMetadata.propertiesPerSampleGroups
-        LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties = returnValue['phenotypeSpecificPropertiesPerSampleGroup']
+        LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties = processedMetadata['phenotypeSpecificPropertiesPerSampleGroup']
         String propertiesForThisSampleGroup = sharedToolsService.combineToCreateASingleList( params.phenotype, params.dataset,
                                                                                              annotatedSampleGroups,
                                                                                              phenotypeSpecificSampleGroupProperties )

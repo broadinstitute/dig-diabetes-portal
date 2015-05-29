@@ -33,6 +33,15 @@ class RestServerService {
     private String GET_DATA_URL = "getData"
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
+    private String EXOMESEQ_AA = "ExSeq_13k_aa_mdv2"
+    private String EXOMESEQ_HS = "ExSeq_13k_hs_mdv2"
+    private String EXOMESEQ_EA = "ExSeq_13k_ea_mdv2"
+    private String EXOMESEQ_SA = "ExSeq_13k_sa_mdv2"
+    private String EXOMESEQ_EU = "ExSeq_13k_eu_mdv2"
+    private String EXOMECHIP = "ExChip_82k_mdv2"
+    private String EXOMESEQ = "ExSeq_17k_mdv2"
+    private String GWASDIAGRAM  = "GWAS_DIAGRAM_mdv1"
+
 
     static List<String> VARIANT_SEARCH_COLUMNS = [
             'ID',
@@ -293,28 +302,27 @@ class RestServerService {
                           "orderBy":    ["CHROM"],
                           "dproperty":    {
 
-                                            "MAF" : ["ExSeq_13k_sa_genes_mdv2",
-                                                      "ExSeq_13k_hs_genes_mdv2",
-                                                      "ExSeq_13k_ea_genes_mdv2",
-                                                      "ExSeq_13k_aa_genes_mdv2",
-                                                      "ExSeq_13k_eu_genes_mdv2",
-                                                      "ExSeq_13k_hs_genes_mdv2",
-                                                      "ExChip_82k_mdv2"
+                                            "MAF" : ["${EXOMESEQ_SA}",
+                                                      "${EXOMESEQ_HS}",
+                                                      "${EXOMESEQ_EA}",
+                                                      "${EXOMESEQ_AA}",
+                                                      "${EXOMESEQ_EU}",
+                                                      "${EXOMECHIP}"
                                                     ]
                                         },
                         "pproperty":    {
                                              "P_VALUE":    {
                                                                        "GWAS_DIAGRAM_mdv1": ["T2D"],
-                                                                    "ExChip_82k_mdv2": ["T2D"]
+                                                                    "${EXOMECHIP}": ["T2D"]
                                                                    },
-                          "ODDS_RATIO": { "GWAS_DIAGRAM_mdv1": ["T2D"] },
-                          "OR_WALD_FE_IV":{"ExSeq_17k_mdv2": ["T2D"]},
-                          "P_EMMAX_FE_IV":    { "ExSeq_17k_mdv2": ["T2D"]},
-                           "OBSA":  { "ExSeq_17k_mdv2": ["T2D"]},
-                           "OBSU":  { "ExSeq_17k_mdv2": ["T2D"]},
-                          "MINA":    { "ExSeq_17k_mdv2": ["T2D"]},
-                          "MINU":    { "ExSeq_17k_mdv2": ["T2D"]},
-                          "BETA":    { "ExChip_82k_mdv2": ["T2D"]}
+                          "ODDS_RATIO": { "${GWASDIAGRAM}": ["T2D"] },
+                          "OR_WALD_FE_IV":{"${EXOMESEQ}": ["T2D"]},
+                          "P_EMMAX_FE_IV":    { "${EXOMESEQ}": ["T2D"]},
+                           "OBSA":  { "${EXOMESEQ}": ["T2D"]},
+                           "OBSU":  { "${EXOMESEQ}": ["T2D"]},
+                          "MINA":    { "${EXOMESEQ}": ["T2D"]},
+                          "MINU":    { "${EXOMESEQ}": ["T2D"]},
+                          "BETA":    { "${EXOMECHIP}": ["T2D"]}
                         }
                     },
     "filters":    [
@@ -338,32 +346,31 @@ class RestServerService {
                            "cproperty": ["VAR_ID", "CHROM", "POS","DBSNP_ID","CLOSEST_GENE","GENE","IN_GENE","Protein_change","Consequence"],
                           "orderBy":    ["CHROM"],
                           "dproperty":    {
-        
-                                            "MAF" : ["ExSeq_13k_sa_genes_mdv2",
-                                                      "ExSeq_13k_hs_genes_mdv2",
-                                                      "ExSeq_13k_ea_genes_mdv2",
-                                                      "ExSeq_13k_aa_genes_mdv2",
-                                                      "ExSeq_13k_eu_genes_mdv2",
-                                                      "ExSeq_13k_hs_genes_mdv2",
-                                                      "ExChip_82k_mdv2"
+
+                                            "MAF" : ["${EXOMESEQ_SA}",
+                                                      "${EXOMESEQ_HS}",
+                                                      "${EXOMESEQ_EA}",
+                                                      "${EXOMESEQ_AA}",
+                                                      "${EXOMESEQ_EU}",
+                                                      "${EXOMECHIP}"
                                                     ]
                                         },
                         "pproperty":    {
-                                             "P_VALUE":    {                                                                   
-                                                                       "GWAS_DIAGRAM_mdv1": ["T2D"],
-                                                                    "ExChip_82k_mdv2": ["T2D"]
+                                             "P_VALUE":    {
+                                                                       "${GWASDIAGRAM}": ["T2D"],
+                                                                    "${EXOMECHIP}": ["T2D"]
                                                                    },
-                          "ODDS_RATIO": { "GWAS_DIAGRAM_mdv1": ["T2D"] },
-                          "OR_WALD_FE_IV":{"ExSeq_17k_mdv2": ["T2D"]},
-                          "P_EMMAX_FE_IV":    { "ExSeq_17k_mdv2": ["T2D"]},
-                           "OBSA":  { "ExSeq_17k_mdv2": ["T2D"]},
-                           "OBSU":  { "ExSeq_17k_mdv2": ["T2D"]},
-                          "MINA":    { "ExSeq_17k_mdv2": ["T2D"]},
-                          "MINU":    { "ExSeq_17k_mdv2": ["T2D"]},
-                          "BETA":    { "ExChip_82k_mdv2": ["T2D"]}
+                          "ODDS_RATIO": { "${GWASDIAGRAM}": ["T2D"] },
+                          "OR_WALD_FE_IV":{"${EXOMESEQ}": ["T2D"]},
+                          "P_EMMAX_FE_IV":    { "${EXOMESEQ}": ["T2D"]},
+                           "OBSA":  { "${EXOMESEQ}": ["T2D"]},
+                           "OBSU":  { "${EXOMESEQ}": ["T2D"]},
+                          "MINA":    { "${EXOMESEQ}": ["T2D"]},
+                          "MINU":    { "${EXOMESEQ}": ["T2D"]},
+                          "BETA":    { "${EXOMECHIP}": ["T2D"]}
                         }
                     },
-    "filters":    [ 
+    "filters":    [
                     {"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "LTE", "value": ${
             chromosomeNumber
         }, "operand_type": "INTEGER"},
@@ -692,7 +699,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     // for now let's do a pseudo call
     JSONObject retrieveDatasetsFromMetadata(List<String> sampleGroupList,
-                                      List<String> experimentList) {
+                                            List<String> experimentList) {
         JSONObject result
         result = sharedToolsService.getMetadata()
         println 'meta-data retrieved'
@@ -704,10 +711,10 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     JSONObject pseudoRetrieveDatasets (List <String> sampleGroupList,
-                                 List <String> experimentList) {
+                                       List <String> experimentList) {
         JSONObject result
         if ((sampleGroupList) &&
-            (sampleGroupList.size()>0)){
+                (sampleGroupList.size()>0)){
             String magic = """
 {"is_error": false,
  "numRecords":1,
@@ -729,40 +736,40 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
  "dataset":["GLGC 2011"]
 }""".toString()
             String retval = ''
-           switch (sampleGroupList[0]) {
-               case 'T2D': retval = t2d; break;
-               case 'FastGlu': retval = magic; break;
-               case 'FastIns': retval = magic; break;
-               case 'ProIns': retval = magic; break;
-               case '2hrGLU_BMIAdj': retval = magic; break;
-               case '2hrIns_BMIAdj': retval = magic; break;
-               case 'HOMAIR': retval = magic; break;
-               case 'HOMAB': retval = magic; break;
-               case 'HbA1c': retval = magic; break;
-               case 'BMI': retval = magic; break;
-               case 'WHR': retval = giant; break;
-               case 'Height': retval = giant; break;
-               case 'TC': retval = glgc; break;
-               case 'HDL': retval = glgc; break;
-               case 'LDL': retval = glgc; break;
-               case 'TG': retval = glgc; break;
-               case 'CAD': retval = giant; break;
-               case 'CKD': retval = giant; break;
-               case 'eGFRcrea': retval = giant; break;
-               case 'eGFRcys': retval = giant; break;
-               case 'UACR': retval = giant; break;
-               case 'MA': retval = giant; break;
-               case 'BIP': retval = giant; break;
-               case 'SCZ': retval = giant; break;
-               case 'MDD': retval = giant; break;
-               default: retval = magic; break;
-           }
+            switch (sampleGroupList[0]) {
+                case 'T2D': retval = t2d; break;
+                case 'FastGlu': retval = magic; break;
+                case 'FastIns': retval = magic; break;
+                case 'ProIns': retval = magic; break;
+                case '2hrGLU_BMIAdj': retval = magic; break;
+                case '2hrIns_BMIAdj': retval = magic; break;
+                case 'HOMAIR': retval = magic; break;
+                case 'HOMAB': retval = magic; break;
+                case 'HbA1c': retval = magic; break;
+                case 'BMI': retval = magic; break;
+                case 'WHR': retval = giant; break;
+                case 'Height': retval = giant; break;
+                case 'TC': retval = glgc; break;
+                case 'HDL': retval = glgc; break;
+                case 'LDL': retval = glgc; break;
+                case 'TG': retval = glgc; break;
+                case 'CAD': retval = giant; break;
+                case 'CKD': retval = giant; break;
+                case 'eGFRcrea': retval = giant; break;
+                case 'eGFRcys': retval = giant; break;
+                case 'UACR': retval = giant; break;
+                case 'MA': retval = giant; break;
+                case 'BIP': retval = giant; break;
+                case 'SCZ': retval = giant; break;
+                case 'MDD': retval = giant; break;
+                default: retval = magic; break;
+            }
 
 
             def slurper = new JsonSlurper()
             result = slurper.parseText(retval)
-           }
-         return result
+        }
+        return result
     }
 
 
@@ -828,11 +835,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     String generateRangeFilters (String chromosome,
-                            String beginSearch,
-                            String endSearch,
-                            Boolean dataRestriction)    {
-           StringBuilder sb = new  StringBuilder ()
-           sb << """[
+                                 String beginSearch,
+                                 String endSearch,
+                                 Boolean dataRestriction)    {
+        StringBuilder sb = new  StringBuilder ()
+        sb << """[
                    { "filter_type": "STRING", "operand": "CHROM",  "operator": "EQ","value": "${chromosome}"  },
                    {"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": ${beginSearch} },
                    {"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": ${endSearch} }""".toString()
@@ -851,10 +858,10 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     String generateRangeFiltersPValueRestriction (String chromosome,
-                                 String beginSearch,
-                                 String endSearch,
-                                 Boolean dataRestriction,
-                                 BigDecimal pValue)    {
+                                                  String beginSearch,
+                                                  String endSearch,
+                                                  Boolean dataRestriction,
+                                                  BigDecimal pValue)    {
         StringBuilder sb = new  StringBuilder ()
         sb << """[
                    { "filter_type": "STRING", "operand": "CHROM",  "operator": "EQ","value": "${chromosome}"  },
@@ -1036,15 +1043,15 @@ ${customFilterSet}""".toString()
         String pFieldName = ""
         switch (dataSet){
             case 1:
-                dataSetId = "ExSeq_17k_mdv2"
+                dataSetId = "${EXOMESEQ}"
                 pFieldName = "P_EMMAX_FE_IV"
                 break;
             case 2:
-                dataSetId = "ExChip_82k_mdv2"
+                dataSetId = "${EXOMECHIP}"
                 pFieldName = "P_VALUE"
                 break;
             case 3:
-                dataSetId = "GWAS_DIAGRAM_mdv1"
+                dataSetId = "${GWASDIAGRAM}"
                 pFieldName = "P_VALUE"
                 break;
             default:
@@ -1090,33 +1097,33 @@ ${customFilterSet}""".toString()
 "dproperty": {
 },
 "pproperty": {
-                   
+
                        "HETA": {
-                        "ExSeq_17k_mdv2": ["T2D"]
+                        "${EXOMESEQ}": ["T2D"]
                     },
                        "HETU": {
-                        "ExSeq_17k_mdv2": ["T2D"]
+                        "${EXOMESEQ}": ["T2D"]
                     },
                        "HOMA": {
-                        "ExSeq_17k_mdv2": ["T2D"]
+                        "${EXOMESEQ}": ["T2D"]
                     },
                        "HOMU": {
-                        "ExSeq_17k_mdv2": ["T2D"]
+                        "${EXOMESEQ}": ["T2D"]
                     },
                        "OBSU": {
-                        "ExSeq_17k_mdv2": ["T2D"]
+                        "${EXOMESEQ}": ["T2D"]
                     },
                        "OBSA": {
-                        "ExSeq_17k_mdv2": ["T2D"]
+                        "${EXOMESEQ}": ["T2D"]
                     },
                        "HETA": {
-                        "ExSeq_17k_mdv2": ["T2D"]
+                        "${EXOMESEQ}": ["T2D"]
                     },
                        "P_EMMAX_FE_IV": {
-                        "ExSeq_17k_mdv2": ["T2D"]
+                        "${EXOMESEQ}": ["T2D"]
                     },
                        "OR_WALD_FE_IV": {
-                        "ExSeq_17k_mdv2": ["T2D"]
+                        "${EXOMESEQ}": ["T2D"]
                     }
 
                      }
@@ -1152,27 +1159,27 @@ ${customFilterSet}""".toString()
                                         },
                         "pproperty":    {
                                             "P_EMMAX_FE_IV": {
-                                                "ExSeq_17k_mdv2": ["T2D"]
+                                                "${EXOMESEQ}": ["T2D"]
                                             },
 
                                              "P_VALUE":{
-                                                "GWAS_DIAGRAM_mdv1":["T2D"],
-                                                "ExChip_82k_mdv2":["T2D"]
+                                                "${GWASDIAGRAM}":["T2D"],
+                                                "${EXOMECHIP}":["T2D"]
                                              },
                                              "OR_WALD_FE_IV":    {
-                                                                   "ExSeq_17k_mdv2": ["T2D"]
+                                                                   "${EXOMESEQ}": ["T2D"]
                                                                 },
                                              "ODDS_RATIO":{
-                                                "GWAS_DIAGRAM_mdv1":["T2D"]
+                                                "${GWASDIAGRAM}":["T2D"]
                                              },
 
                                               "BETA":{
-                                                "ExChip_82k_mdv2":["T2D"]
+                                                "${EXOMECHIP}":["T2D"]
                                               }
 
                                         }
                     },
-    "filters":    [ 
+    "filters":    [
                       ${filterByVariant (variantId)}
 
                 ]
@@ -1192,9 +1199,7 @@ ${customFilterSet}""".toString()
 
 
     public JSONObject combinedVariantAssociationStatistics(String variantName){
-        String exSeq2Sample = "ExSeq_17k_mdv2"
-        String exChipSample = "ExChip_82k_mdv2"
-        String gwasSample = "GWAS_DIAGRAM_mdv1"
+        String gwasSample = "${GWASDIAGRAM}"
         String attribute = "T2D"
         JSONObject returnValue
         List <Integer> dataSeteList = [1]
@@ -1210,20 +1215,20 @@ ${customFilterSet}""".toString()
                     if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
                         def variant = apiResults.variants[0];
                         if (variant ["P_EMMAX_FE_IV"]){
-                            sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${variant["P_EMMAX_FE_IV"][exSeq2Sample][attribute]}},"
+                            sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${variant["P_EMMAX_FE_IV"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["P_VALUE"]){
                             sb  << "{\"level\":\"P_VALUE_GWAS\",\"count\":${variant["P_VALUE"][gwasSample][attribute]}},"
-                            sb  << "{\"level\":\"P_VALUE_EXCHIP\",\"count\":${variant["P_VALUE"][exChipSample][attribute]}},"
+                            sb  << "{\"level\":\"P_VALUE_EXCHIP\",\"count\":${variant["P_VALUE"][EXOMECHIP][attribute]}},"
                         }
                         if (variant ["OR_WALD_FE_IV"]){
-                            sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${variant["OR_WALD_FE_IV"][exSeq2Sample][attribute]}},"
+                            sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${variant["OR_WALD_FE_IV"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["ODDS_RATIO"]){
                             sb  << "{\"level\":\"ODDS_RATIO\",\"count\":${variant["ODDS_RATIO"][gwasSample][attribute]}},"
                         }
                         if (variant ["BETA"]){
-                            sb  << "{\"level\":\"BETA\",\"count\":${variant["BETA"][exChipSample][attribute]}}"
+                            sb  << "{\"level\":\"BETA\",\"count\":${variant["BETA"][EXOMECHIP][attribute]}}"
                         }
 
                     }
@@ -1258,13 +1263,13 @@ ${customFilterSet}""".toString()
                            "cproperty": ["VAR_ID", "CHROM", "POS"],
                           "orderBy":    ["CHROM"],
                           "dproperty":    {
-                                            "MAF" : ["ExSeq_13k_sa_genes_mdv2",
-                                                      "ExSeq_13k_hs_genes_mdv2",
-                                                      "ExSeq_13k_ea_genes_mdv2",
-                                                      "ExSeq_13k_aa_genes_mdv2",
-                                                      "ExSeq_13k_eu_genes_mdv2",
-                                                      "ExSeq_13k_hs_genes_mdv2",
-                                                      "ExChip_82k_mdv2"
+                                            "MAF" : ["ExSeq_13k_sa_mdv2",
+                                                      "ExSeq_13k_hs_mdv2",
+                                                      "ExSeq_13k_ea_mdv2",
+                                                      "ExSeq_13k_aa_mdv2",
+                                                      "ExSeq_13k_eu_mdv2",
+                                                      "ExSeq_13k_hs_mdv2",
+                                                      "${EXOMECHIP}"
                                                     ]
                                         },
                         "pproperty":    {
@@ -1292,12 +1297,6 @@ ${customFilterSet}""".toString()
 
 
     public JSONObject howCommonIsVariantAcrossEthnicities(String variantName){
-        String exSeqAASample = "ExSeq_13k_aa_genes_mdv2"
-        String exSeqHSSample = "ExSeq_13k_hs_genes_mdv2"
-        String exSeqEASample = "ExSeq_13k_ea_genes_mdv2"
-        String exSeqSASample = "ExSeq_13k_sa_genes_mdv2"
-        String exSeqEUSample = "ExSeq_13k_eu_genes_mdv2"
-        String exChipSample = "ExChip_82k_mdv2"
         JSONObject returnValue
         List <Integer> dataSeteList = [1]
         List <String> pValueList = [1]
@@ -1312,12 +1311,12 @@ ${customFilterSet}""".toString()
                     if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
                         def variant = apiResults.variants[0];
                         if (variant ["MAF"]){
-                            sb  << "{\"level\":\"AA\",\"count\":${variant["MAF"][exSeqAASample]}},"
-                            sb  << "{\"level\":\"HS\",\"count\":${variant["MAF"][exSeqHSSample]}},"
-                            sb  << "{\"level\":\"EA\",\"count\":${variant["MAF"][exSeqEASample]}},"
-                            sb  << "{\"level\":\"SA\",\"count\":${variant["MAF"][exSeqSASample]}},"
-                            sb  << "{\"level\":\"EUseq\",\"count\":${variant["MAF"][exSeqEUSample]}},"
-                            sb  << "{\"level\":\"Euchip\",\"count\":${variant["MAF"][exChipSample]}}"
+                            sb  << "{\"level\":\"AA\",\"count\":${variant["MAF"][EXOMESEQ_AA]}},"
+                            sb  << "{\"level\":\"HS\",\"count\":${variant["MAF"][EXOMESEQ_HS]}},"
+                            sb  << "{\"level\":\"EA\",\"count\":${variant["MAF"][EXOMESEQ_EA]}},"
+                            sb  << "{\"level\":\"SA\",\"count\":${variant["MAF"][EXOMESEQ_SA]}},"
+                            sb  << "{\"level\":\"EUseq\",\"count\":${variant["MAF"][EXOMESEQ_EU]}},"
+                            sb  << "{\"level\":\"Euchip\",\"count\":${variant["MAF"][EXOMECHIP]}}"
                         }
                     }
 
@@ -1341,7 +1340,6 @@ ${customFilterSet}""".toString()
 
 
     public JSONObject combinedVariantDiseaseRisk(String variantName){
-        String exSeq2Sample = "ExSeq_17k_mdv2"
         String attribute = "T2D"
         JSONObject returnValue
         List <Integer> dataSeteList = [1]
@@ -1357,28 +1355,28 @@ ${customFilterSet}""".toString()
                     if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
                         def variant = apiResults.variants[0];
                         if (variant ["HETA"]){
-                            sb  << "{\"level\":\"HETA\",\"count\":${variant["HETA"][exSeq2Sample][attribute]}},"
+                            sb  << "{\"level\":\"HETA\",\"count\":${variant["HETA"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["HETU"]){
-                            sb  << "{\"level\":\"HETU\",\"count\":${variant["HETU"][exSeq2Sample][attribute]}},"
+                            sb  << "{\"level\":\"HETU\",\"count\":${variant["HETU"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["HOMA"]){
-                            sb  << "{\"level\":\"HOMA\",\"count\":${variant["HOMA"][exSeq2Sample][attribute]}},"
+                            sb  << "{\"level\":\"HOMA\",\"count\":${variant["HOMA"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["HOMU"]){
-                            sb  << "{\"level\":\"HOMU\",\"count\":${variant["HOMU"][exSeq2Sample][attribute]}},"
+                            sb  << "{\"level\":\"HOMU\",\"count\":${variant["HOMU"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["OBSU"]){
-                            sb  << "{\"level\":\"OBSU\",\"count\":${variant["OBSU"][exSeq2Sample][attribute]}},"
+                            sb  << "{\"level\":\"OBSU\",\"count\":${variant["OBSU"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["OBSA"]){
-                            sb  << "{\"level\":\"OBSA\",\"count\":${variant["OBSA"][exSeq2Sample][attribute]}},"
+                            sb  << "{\"level\":\"OBSA\",\"count\":${variant["OBSA"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["P_EMMAX_FE_IV"]){
-                            sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${variant["P_EMMAX_FE_IV"][exSeq2Sample][attribute]}},"
+                            sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${variant["P_EMMAX_FE_IV"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["OR_WALD_FE_IV"]){
-                            sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${variant["OR_WALD_FE_IV"][exSeq2Sample][attribute]}}"
+                            sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${variant["OR_WALD_FE_IV"][EXOMESEQ][attribute]}}"
                         }
                     }
 
@@ -1423,7 +1421,7 @@ ${customFilterSet}""".toString()
             sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
             for ( int  i = 0 ; i < pValueList.size () ; i++ ){
                 sb  << "{"
-                 String jsonSpec = requestGeneCountByPValue(geneName, pValueList[i], dataSeteList[j])
+                String jsonSpec = requestGeneCountByPValue(geneName, pValueList[i], dataSeteList[j])
                 JSONObject apiData = postRestCall(jsonSpec,GET_DATA_URL)
                 if (apiData.is_error == false) {
                     sb  << "\"level\":${pValueList[i]},\"count\":${apiData.numRecords}"
@@ -1463,22 +1461,22 @@ ${customFilterSet}""".toString()
                                         },
                         "pproperty":    {
                                             "P_EMMAX_FE_IV": {
-                                                "ExSeq_17k_mdv2": ["T2D"]
+                                                "${EXOMESEQ}": ["T2D"]
                                             },
 
                                              "P_VALUE":{
-                                                "GWAS_DIAGRAM_mdv1":["T2D"],
-                                                "ExChip_82k_mdv2":["T2D"]
+                                                "${GWASDIAGRAM}":["T2D"],
+                                                "${EXOMECHIP}":["T2D"]
                                              },
                                              "OR_WALD_FE_IV":    {
-                                                                   "ExSeq_17k_mdv2": ["T2D"]
+                                                                   "${EXOMESEQ}": ["T2D"]
                                                                 },
                                              "ODDS_RATIO":{
-                                                "GWAS_DIAGRAM_mdv1":["T2D"]
+                                                "${GWASDIAGRAM}":["T2D"]
                                              },
 
                                               "BETA":{
-                                                "ExChip_82k_mdv2":["T2D"]
+                                                "${EXOMECHIP}":["T2D"]
                                               }
 
                                         }
@@ -1494,33 +1492,33 @@ ${customFilterSet}""".toString()
 
 
 
-  private String ancestryDataSet (String ethnicity){
-      String dataSetId = ""
-      switch (ethnicity){
-          case "HS":
-              dataSetId = "ExSeq_13k_hs_genes_mdv2"
-              break;
-          case "AA":
-              dataSetId = "ExSeq_13k_aa_genes_mdv2"
-              break;
-          case "EA":
-              dataSetId = "ExSeq_13k_ea_genes_mdv2"
-              break;
-          case "SA":
-              dataSetId = "ExSeq_13k_sa_genes_mdv2"
-              break;
-          case "EU":
-              dataSetId = "ExSeq_13k_eu_genes_mdv2"
-              break;
-          case "chipEu":
-              dataSetId = "ExChip_82k_mdv2"
-              break;
-          default:
-              log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
-              dataSetId = "ExSeq_13k_aa_genes_mdv2"
-      }
-      return dataSetId
-  }
+    private String ancestryDataSet (String ethnicity){
+        String dataSetId = ""
+        switch (ethnicity){
+            case "HS":
+                dataSetId = EXOMESEQ_HS
+                break;
+            case "AA":
+                dataSetId = EXOMESEQ_AA
+                break;
+            case "EA":
+                dataSetId = EXOMESEQ_EA
+                break;
+            case "SA":
+                dataSetId = EXOMESEQ_SA
+                break;
+            case "EU":
+                dataSetId = EXOMESEQ_EU
+                break;
+            case "chipEu":
+                dataSetId = EXOMECHIP
+                break;
+            default:
+                log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
+                dataSetId = EXOMESEQ_AA
+        }
+        return dataSetId
+    }
 
 
 
@@ -1553,7 +1551,7 @@ ${customFilterSet}""".toString()
 //                break;
             default:
                 log.error("Trouble: user requested cell number = ${cellNumber} which I don't recognize")
-                dataSetId = "ExSeq_13k_aa_genes_mdv2"
+                dataSetId = EXOMESEQ_AA
         }
         String jsonVariantCountByGeneAndMaf = """
 {
@@ -1568,8 +1566,8 @@ ${customFilterSet}""".toString()
                   		"orderBy":	[],
                   		"dproperty":	{},
                 		"pproperty":	{
-                           "OBSA":  { "ExSeq_17k_mdv2": ["T2D"]},
-                           "OBSU":  { "ExSeq_17k_mdv2": ["T2D"]}
+                           "OBSA":  { "${EXOMESEQ}": ["T2D"]},
+                           "OBSU":  { "${EXOMESEQ}": ["T2D"]}
                          }
                 	},
 	"filters":	[
@@ -1632,7 +1630,7 @@ ${customFilterSet}""".toString()
     public String getMetadata(){
         String retdat
         retdat =  getRestCall(METADATA_URL)
-return retdat
+        return retdat
     }
 
 
@@ -1642,7 +1640,6 @@ return retdat
 
     public JSONObject combinedEthnicityTable(String geneName){
         JSONObject returnValue
-        String exSeq2Sample = "ExSeq_17k_mdv2"
         String attribute = "T2D"
         List <String> dataSeteList = ["HS", "AA", "EA", "SA", "EU","chipEu"]
         List <Integer> cellNumberList = [0,1,2,3]
@@ -1703,140 +1700,124 @@ return retdat
     public JSONObject generateVariantTable(String chromosome,
                                            String beginSearch,
                                            String endSearch){//region
-            String exSeq2Sample = "ExSeq_17k_mdv2"
-            String exSeqAASample = "ExSeq_13k_aa_genes_mdv2"
-            String exSeqHSSample = "ExSeq_13k_hs_genes_mdv2"
-            String exSeqEASample = "ExSeq_13k_ea_genes_mdv2"
-            String exSeqSASample = "ExSeq_13k_sa_genes_mdv2"
-            String exSeqEUSample = "ExSeq_13k_eu_genes_mdv2"
-            String exChipSample = "ExChip_82k_mdv2"
-            String exGwasDiagram = "GWAS_DIAGRAM_mdv1"
-            String attribute = "T2D"
-            def slurper = new JsonSlurper()
-            JSONObject returnValue
-            String jsonSpec = regionSearch(chromosome,beginSearch,endSearch)
-            String apiData = postRestCall(jsonSpec,GET_DATA_URL)
-            JSONObject apiResults = slurper.parseText(apiData)
-            List <Integer> dataSeteList = [1]
-            List <String> pValueList = [1]
-            int numberOfVariants = apiResults.numRecords
-            StringBuilder sb = new StringBuilder ("{\"results\":[")
-            for ( int  j = 0 ; j < numberOfVariants ; j++ ) {
-                sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
-                for ( int  i = 0 ; i < pValueList.size () ; i++ ){
-                    if (apiResults.is_error == false) {
-                        if ((apiResults.variants) && (apiResults.variants[j])  && (apiResults.variants[j][0])){
-                            def variant = apiResults.variants[j];
-                            def element = variant["DBSNP_ID"].findAll{it}[0]
+        String attribute = "T2D"
+        def slurper = new JsonSlurper()
+        JSONObject returnValue
+        String jsonSpec = regionSearch(chromosome,beginSearch,endSearch)
+        String apiData = postRestCall(jsonSpec,GET_DATA_URL)
+        JSONObject apiResults = slurper.parseText(apiData)
+        List <Integer> dataSeteList = [1]
+        List <String> pValueList = [1]
+        int numberOfVariants = apiResults.numRecords
+        StringBuilder sb = new StringBuilder ("{\"results\":[")
+        for ( int  j = 0 ; j < numberOfVariants ; j++ ) {
+            sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
+            for ( int  i = 0 ; i < pValueList.size () ; i++ ){
+                if (apiResults.is_error == false) {
+                    if ((apiResults.variants) && (apiResults.variants[j])  && (apiResults.variants[j][0])){
+                        def variant = apiResults.variants[j];
+                        def element = variant["DBSNP_ID"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"DBSNP_ID\",\"count\":\"${element}\"},"
+                        sb  << "{\"level\":\"DBSNP_ID\",\"count\":\"${element}\"},"
 
-                            element = variant["VAR_ID"].findAll{it}[0]
+                        element = variant["VAR_ID"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"VAR_ID\",\"count\":\"${element}\"},"
+                        sb  << "{\"level\":\"VAR_ID\",\"count\":\"${element}\"},"
 
-                            element = variant["CHROM"].findAll{it}[0]
+                        element = variant["CHROM"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"CHROM\",\"count\":\"${element}\"},"
+                        sb  << "{\"level\":\"CHROM\",\"count\":\"${element}\"},"
 
-                            element = variant["POS"].findAll{it}[0]
+                        element = variant["POS"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"POS\",\"count\":${element}},"
+                        sb  << "{\"level\":\"POS\",\"count\":${element}},"
 
-                            element = variant["CLOSEST_GENE"].findAll{it}[0]
+                        element = variant["CLOSEST_GENE"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"CLOSEST_GENE\",\"count\":\"${element}\"},"
+                        sb  << "{\"level\":\"CLOSEST_GENE\",\"count\":\"${element}\"},"
 
-                            element = variant["Protein_change"].findAll{it}[0]
+                        element = variant["Protein_change"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"Protein_change\",\"count\":\"${element}\"},"
+                        sb  << "{\"level\":\"Protein_change\",\"count\":\"${element}\"},"
 
-                            element = variant["Consequence"].findAll{it}[0]
+                        element = variant["Consequence"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"Consequence\",\"count\":\"${element}\"},"
+                        sb  << "{\"level\":\"Consequence\",\"count\":\"${element}\"},"
 
-                            element = variant["P_EMMAX_FE_IV"].findAll{it}[0]
+                        element = variant["P_EMMAX_FE_IV"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${element[EXOMESEQ][attribute]}},"
 
-                            element = variant["OR_WALD_FE_IV"].findAll{it}[0]
+                        element = variant["OR_WALD_FE_IV"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${element[EXOMESEQ][attribute]}},"
 
-                            element = variant["OBSU"].findAll{it}[0]
+                        element = variant["OBSU"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"OBSU\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"OBSU\",\"count\":${element[EXOMESEQ][attribute]}},"
 
-                            element = variant["OBSA"].findAll{it}[0]
+                        element = variant["OBSA"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"OBSA\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"OBSA\",\"count\":${element[EXOMESEQ][attribute]}},"
 
-                            element = variant["MINA"].findAll{it}[0]
+                        element = variant["MINA"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"MINA\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"MINA\",\"count\":${element[EXOMESEQ][attribute]}},"
 
-                            element = variant["MINU"].findAll{it}[0]
+                        element = variant["MINU"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"MINU\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"MINU\",\"count\":${element[EXOMESEQ][attribute]}},"
 
-                            element = variant["MAF"].findAll{it}[0]
+                        element = variant["MAF"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"AA\",\"count\":${element[exSeqAASample]}},"
-                                sb  << "{\"level\":\"HS\",\"count\":${element[exSeqHSSample]}},"
-                                sb  << "{\"level\":\"EA\",\"count\":${element[exSeqEASample]}},"
-                                sb  << "{\"level\":\"SA\",\"count\":${element[exSeqSASample]}},"
-                                sb  << "{\"level\":\"EUseq\",\"count\":${element[exSeqEUSample]}},"
-                                sb  << "{\"level\":\"Euchip\",\"count\":${element[exChipSample]}},"
+                        sb  << "{\"level\":\"AA\",\"count\":${element[EXOMESEQ_AA]}},"
+                        sb  << "{\"level\":\"HS\",\"count\":${element[EXOMESEQ_HS]}},"
+                        sb  << "{\"level\":\"EA\",\"count\":${element[EXOMESEQ_EA]}},"
+                        sb  << "{\"level\":\"SA\",\"count\":${element[EXOMESEQ_SA]}},"
+                        sb  << "{\"level\":\"EUseq\",\"count\":${element[EXOMESEQ_EU]}},"
+                        sb  << "{\"level\":\"Euchip\",\"count\":${element[EXOMECHIP]}},"
 
-                            element = variant["P_VALUE"].findAll{it}[0]
+                        element = variant["P_VALUE"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"EXCHP_T2D_P_value\",\"count\":${element[exChipSample][attribute]}},"
+                        sb  << "{\"level\":\"EXCHP_T2D_P_value\",\"count\":${element[EXOMECHIP][attribute]}},"
 
-                            element = variant["BETA"].findAll{it}[0]
+                        element = variant["BETA"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"EXCHP_T2D_BETA\",\"count\":${element[exChipSample][attribute]}},"
+                        sb  << "{\"level\":\"EXCHP_T2D_BETA\",\"count\":${element[EXOMECHIP][attribute]}},"
 
-                            element = variant["P_VALUE"].findAll{it}[0]
+                        element = variant["P_VALUE"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"GWAS_T2D_PVALUE\",\"count\":${element[exGwasDiagram][attribute]}},"
+                        sb  << "{\"level\":\"GWAS_T2D_PVALUE\",\"count\":${element[GWASDIAGRAM][attribute]}},"
 
-                            element = variant["ODDS_RATIO"].findAll{it}[0]
+                        element = variant["ODDS_RATIO"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"GWAS_T2D_OR\",\"count\":${element[exGwasDiagram][attribute]}}"
+                        sb  << "{\"level\":\"GWAS_T2D_OR\",\"count\":${element[GWASDIAGRAM][attribute]}}"
 
-                        }
-                    }
-                    if (i<pValueList.size ()-1){
-                        sb  << ","
                     }
                 }
-                sb  << "]}"
-                if (j<numberOfVariants-1){
+                if (i<pValueList.size ()-1){
                     sb  << ","
                 }
             }
             sb  << "]}"
-            returnValue = slurper.parseText(sb.toString())
-            return returnValue
+            if (j<numberOfVariants-1){
+                sb  << ","
+            }
         }
+        sb  << "]}"
+        returnValue = slurper.parseText(sb.toString())
+        return returnValue
+    }
 
 
 
 
 
     public JSONObject generalizedVariantTable(String filters){//region
-        String exSeq2Sample = "ExSeq_17k_mdv2"
-        String exSeqAASample = "ExSeq_13k_aa_genes_mdv2"
-        String exSeqHSSample = "ExSeq_13k_hs_genes_mdv2"
-        String exSeqEASample = "ExSeq_13k_ea_genes_mdv2"
-        String exSeqSASample = "ExSeq_13k_sa_genes_mdv2"
-        String exSeqEUSample = "ExSeq_13k_eu_genes_mdv2"
-        String exChipSample = "ExChip_82k_mdv2"
-        String exGwasDiagram = "GWAS_DIAGRAM_mdv1"
         String attribute = "T2D"
         def slurper = new JsonSlurper()
         JSONObject returnValue
-       // String jsonSpec = regionSearch(chromosome,beginSearch,endSearch)
+        // String jsonSpec = regionSearch(chromosome,beginSearch,endSearch)
         String jsonSpec = jsonForGeneralApiSearch(filters)
         String apiData = postRestCall(jsonSpec,GET_DATA_URL)
         JSONObject apiResults = slurper.parseText(apiData)
@@ -1880,52 +1861,52 @@ return retdat
 
                         element = variant["P_EMMAX_FE_IV"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${element[EXOMESEQ][attribute]}},"
 
                         element = variant["OR_WALD_FE_IV"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${element[EXOMESEQ][attribute]}},"
 
                         //element = variant["OBSU"].findAll{it}[0]
 
-                       // sb  << "{\"level\":\"OBSU\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        // sb  << "{\"level\":\"OBSU\",\"count\":${element[EXOMESEQ][attribute]}},"
 
-                       // element = variant["OBSA"].findAll{it}[0]
+                        // element = variant["OBSA"].findAll{it}[0]
 
-                       // sb  << "{\"level\":\"OBSA\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        // sb  << "{\"level\":\"OBSA\",\"count\":${element[EXOMESEQ][attribute]}},"
 
                         element = variant["MINA"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"MINA\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"MINA\",\"count\":${element[EXOMESEQ][attribute]}},"
 
                         element = variant["MINU"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"MINU\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"MINU\",\"count\":${element[EXOMESEQ][attribute]}},"
 
                         element = variant["MAF"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"AA\",\"count\":${element[exSeqAASample]}},"
-                        sb  << "{\"level\":\"HS\",\"count\":${element[exSeqHSSample]}},"
-                        sb  << "{\"level\":\"EA\",\"count\":${element[exSeqEASample]}},"
-                        sb  << "{\"level\":\"SA\",\"count\":${element[exSeqSASample]}},"
-                        sb  << "{\"level\":\"EUseq\",\"count\":${element[exSeqEUSample]}},"
-                        sb  << "{\"level\":\"Euchip\",\"count\":${element[exChipSample]}},"
+                        sb  << "{\"level\":\"AA\",\"count\":${element[EXOMESEQ_AA]}},"
+                        sb  << "{\"level\":\"HS\",\"count\":${element[EXOMESEQ_HS]}},"
+                        sb  << "{\"level\":\"EA\",\"count\":${element[EXOMESEQ_EA]}},"
+                        sb  << "{\"level\":\"SA\",\"count\":${element[EXOMESEQ_SA]}},"
+                        sb  << "{\"level\":\"EUseq\",\"count\":${element[EXOMESEQ_EU]}},"
+                        sb  << "{\"level\":\"Euchip\",\"count\":${element[EXOMECHIP]}},"
 
                         element = variant["P_VALUE"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"EXCHP_T2D_P_value\",\"count\":${element[exChipSample][attribute]}},"
+                        sb  << "{\"level\":\"EXCHP_T2D_P_value\",\"count\":${element[EXOMECHIP][attribute]}},"
 
                         element = variant["BETA"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"EXCHP_T2D_BETA\",\"count\":${element[exChipSample][attribute]}},"
+                        sb  << "{\"level\":\"EXCHP_T2D_BETA\",\"count\":${element[EXOMECHIP][attribute]}},"
 
                         element = variant["P_VALUE"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"GWAS_T2D_PVALUE\",\"count\":${element[exGwasDiagram][attribute]}},"
+                        sb  << "{\"level\":\"GWAS_T2D_PVALUE\",\"count\":${element[GWASDIAGRAM][attribute]}},"
 
                         element = variant["ODDS_RATIO"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"GWAS_T2D_OR\",\"count\":${element[exGwasDiagram][attribute]}}"
+                        sb  << "{\"level\":\"GWAS_T2D_OR\",\"count\":${element[GWASDIAGRAM][attribute]}}"
 
                     }
                 }
@@ -1942,7 +1923,6 @@ return retdat
         returnValue = slurper.parseText(sb.toString())
         return returnValue
     }
-
 
 
 }

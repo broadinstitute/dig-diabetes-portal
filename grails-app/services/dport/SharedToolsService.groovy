@@ -435,7 +435,7 @@ class SharedToolsService {
             if (phenotypeSpecificSampleGroupProperties.containsKey(phenotype)){
                 LinkedHashMap hashForThisPhenotype = phenotypeSpecificSampleGroupProperties[phenotype]
                 if ((hashForThisPhenotype) && (hashForThisPhenotype.containsKey(sampleGroup))) {
-                    List<String> listForThisPhenotype = hashForThisPhenotype[phenotype]
+                    List<String> listForThisPhenotype = hashForThisPhenotype[sampleGroup]
                     if (listForThisPhenotype) {
                         numrec += listForThisPhenotype.size()
                         for (int i = 0; i < listForThisPhenotype.size(); i++) {
