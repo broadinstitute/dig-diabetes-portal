@@ -1191,16 +1191,27 @@ class FilterManagementService {
 
     }
 
+   private String convertCustomFilters (String key,String value){
+       // first loop through and break everything into pairs
+       String returnValue = ""
+       List <String> filterPieces = key.tokenize ("^")
+       if (filterPieces.size()==5){
+           String phenotype = filterPieces [1]
+           String sample = filterPieces [2]
+           String inequivalence = filterPieces [3]
+           String propertyHolder = filterPieces [4]
+           String property = propertyHolder.substring(0,propertyHolder.indexOf("___valueId"))
+           String inequalitySignifier  = (inequivalence=="lessThan")?"<":">"
+           returnValue = "${phenotype}[${sample}]${property}${inequalitySignifier}${value}"
+       }
+       return returnValue
+   }
 
-
-    public LinkedHashMap processNewParameters ( String dataSet,
+    public LinkedHashMap processNewParameters ( LinkedHashMap <String,String> customFilters,
+                                                String dataSet,
                                                 String esValue,
                                                       String esValueInequality,
                                                       String phenotype,
-                                                      String pValue,
-                                                      String pValueInequality,
-                                                      String orValue,
-                                                      String orValueInequality,
                                                       String filters,//?
                                                       String datasetExomeChip,
                                                       String datasetExomeSeq,
@@ -1214,6 +1225,12 @@ class FilterManagementService {
                                                       String polyphenSelect,
                                                       String siftSelect ) {
         LinkedHashMap returnValue = [:]
+
+        int i = 0
+        customFilters.each{ String key, String value ->
+            returnValue["filter${i++}"] = convertCustomFilters (key, value)
+        }
+
 
         if (dataSet) {
             returnValue['dataSet']  = dataSet
@@ -1256,35 +1273,23 @@ class FilterManagementService {
             returnValue['phenotype']  = phenotype
         }
 
+//
+//        if (pValue) {
+//            float value = 0
+//            try {
+//                value = Float.parseFloat(pValue)
+//                returnValue['pValue']  = value
+//            } catch (e) {
+//                ; // no P value defined if we fail the conversion
+//            }
+//        }
+//
+//        if (pValueInequality) {
+//            returnValue['pValueInequality']  = pValueInequality
+//        }
 
-        if (pValue) {
-            float value = 0
-            try {
-                value = Float.parseFloat(pValue)
-                returnValue['pValue']  = value
-            } catch (e) {
-                ; // no P value defined if we fail the conversion
-            }
-        }
-
-        if (pValueInequality) {
-            returnValue['pValueInequality']  = pValueInequality
-        }
 
 
-        if (orValue) {
-            float value = 0
-            try {
-                value = Float.parseFloat(orValue)
-                returnValue['orValue']  = value
-            } catch (e) {
-                ; // no or value defined if we fail the conversion
-            }
-        }
-
-        if (orValueInequality) {
-            returnValue['orValueInequality']  = orValueInequality
-        }
 
         if (esValue) {
             float value = 0
@@ -1322,6 +1327,12 @@ class FilterManagementService {
        return returnValue
     }
 
+    // pull back only the parameters we want with the regex
+    public LinkedHashMap <String,String> retrieveCustomFilters (parameters){
+        LinkedHashMap savedValues = parameters.findAll{ it.key =~ /^custom47/ }
+        return savedValues
+    }
+
 
 
     public List <LinkedHashMap<String,String>> combineNewAndOldParameters ( LinkedHashMap newParameters,
@@ -1333,15 +1344,7 @@ class FilterManagementService {
 
         // It is possible to send back an null filter, which we can then drop from further processing
         // does perform that test right here
-        if ((newParameters) &&
-                // must have at least one of the following
-                (
-                          (newParameters.containsKey('phenotype')) ||
-                          (newParameters.containsKey('pValue') ) ||
-                          (newParameters.containsKey('orValue') ) ||
-                          (newParameters.containsKey('dataset') )
-                )
-        ){
+        if (newParameters){
             returnValue << newParameters
         }
 

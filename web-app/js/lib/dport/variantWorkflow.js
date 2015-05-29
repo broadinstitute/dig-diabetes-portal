@@ -341,16 +341,79 @@ var mpgSoftware = mpgSoftware || {};
                 }
             }
         };
+        var extractValsFromComboboxAndReturn = function (everyId) {
+            var returnValue = {};
+            for (var i = 0; i < everyId.length; i++) {
+                var domReference = $('#'+ everyId[i]);
+                if ((domReference) && (domReference.val())) {
+                    return domReference.val();
+                }
+            }
+            return returnValue;
+        };
+        var extractValFromTextboxesWithPrependedName = function (everyId,prepender,equivalenceMap) {
+            var returnValue = {};
+            for (var i = 0; i < everyId.length; i++) {
+                var domReference = $('#' + everyId[i]);
+                if ((domReference) && (domReference.val())) {
+                    var propertyNameHolder = everyId[i];
+                    var nameParts = propertyNameHolder.split("___");
+                    var propertyName = nameParts[0];
+                    var equiv = equivalenceMap[propertyName];
+                    returnValue [ prepender+equiv+'^'+everyId[i]] = domReference.val();
+                }
+            }
+            return returnValue;
+        };
+        var customIds = function (){
+            var element;
+            var returnValue = {customEquivalences:[],customTexts:[]};
+            var allEquivalentsBoxes =  $('.cusEquiv');
+            if (typeof allEquivalentsBoxes !== 'undefined') {
+                for ( var i = 0 ; i < allEquivalentsBoxes.length ; i++ ){
+                    element = $(allEquivalentsBoxes[i]);
+                    returnValue.customEquivalences.push (element.attr ('id'));
+                }
+            }
+            var allTextBoxes =  $('.cusText');
+            if (typeof allTextBoxes !== 'undefined') {
+                for ( var i = 0 ; i < allTextBoxes.length ; i++ ){
+                    element = $(allTextBoxes[i]);
+                    returnValue.customTexts.push (element.attr ('id'));
+                }
+            }
+            return returnValue;
+         };
+        var extractValsFromComboboxAbbrevName = function (everyId) {
+            var returnValue = {};
+            for (var i = 0; i < everyId.length; i++) {
+                var domReference = $('#' + everyId[i]);
+                if ((domReference) && (domReference.val())) {
+                    var nameParts = everyId[i].split("___");
+                    var abbreviatedName= nameParts[0];
+                    returnValue [abbreviatedName] = domReference.val();
+                }
+            }
+            return returnValue;
+        };
         var gatherFieldsAndPostResults = function (){
             var varsToSend = {};
+            var phenotypeExtractor = {};
+            var datasetExtractor = {};
             var phenotypeInput = UTILS.extractValsFromCombobox(['phenotype']);
+            phenotypeExtractor = UTILS.concatMap(phenotypeExtractor,phenotypeInput) ;
             var datasetInput = UTILS.extractValsFromCombobox(['dataSet']);
-            var pvEquivalence = UTILS.extractValsFromCombobox(['pvEquivalence']);
-            var orEquivalence = UTILS.extractValsFromCombobox(['orEquivalence']);
-            var esEquivalence = UTILS.extractValsFromCombobox(['esEquivalence']);
-            var variantFilters = UTILS.extractValFromTextboxes(['pvValue','orValue','esValue']);
-            var totalFilterCount = UTILS.extractValFromTextboxes(['totalFilterCount']);
-            var experimentChoice = UTILS.extractValFromCheckboxes(['datasetExomeChip','datasetExomeSeq','datasetGWAS']);
+            datasetExtractor = UTILS.concatMap(datasetExtractor,datasetInput) ;
+            var idsToCollect =  customIds();
+            var equivFields;
+            var textFields;
+            var prependerString = 'custom47^' +phenotypeExtractor ['phenotype']+'^'+datasetExtractor ['dataSet']+'^';
+            if ((typeof idsToCollect  !== 'undefined')  &&
+                (typeof idsToCollect.customTexts  !== 'undefined') &&
+                (idsToCollect.customTexts.length > 0)){
+                var equivalences = extractValsFromComboboxAbbrevName(idsToCollect.customEquivalences);
+                textFields =  extractValFromTextboxesWithPrependedName(idsToCollect.customTexts,prependerString,equivalences);
+            }
             var restrictToRegion = UTILS.extractValFromTextboxes(['region_gene_input','region_chrom_input','region_start_input','region_stop_input']);
             var missensePredictions = [];
             varsToSend["predictedEffects"]  = $("input:radio[name='predictedEffects']:checked").val();
@@ -373,12 +436,8 @@ var mpgSoftware = mpgSoftware || {};
             varsToSend = UTILS.concatMap(varsToSend,missensePredictions) ;
             varsToSend = UTILS.concatMap(varsToSend,phenotypeInput) ;
             varsToSend = UTILS.concatMap(varsToSend,datasetInput) ;
-            varsToSend = UTILS.concatMap(varsToSend,pvEquivalence) ;
-            varsToSend = UTILS.concatMap(varsToSend,orEquivalence) ;
-            varsToSend = UTILS.concatMap(varsToSend,esEquivalence) ;
-            varsToSend = UTILS.concatMap(varsToSend,variantFilters) ;
+            varsToSend = UTILS.concatMap(varsToSend,textFields) ;
             varsToSend = UTILS.concatMap(varsToSend,savedValue) ;
-            varsToSend = UTILS.concatMap(varsToSend,experimentChoice) ;
             UTILS.postQuery('./variantVWRequest',varsToSend);
         };
         var cancelThisFieldCollection = function (){
@@ -491,14 +550,14 @@ var mpgSoftware = mpgSoftware || {};
             }
             currentDiv.append("<div id='"+holderId+"' class='row clearfix'>"+
                 "<div class='primarySectionSeparator'>"+
-                "<div class='col-sm-offset-1 col-md-3' style='text-align: right'>"+sectionName+"</div>"+
+                "<div class='col-sm-offset-1 col-md-3'>"+sectionName+"</div>"+
                 "<div class='col-md-2'>"+
-                "<select id='"+equivalenceId+"' class='form-control btn-group btn-input clearfix'>"+
+                "<select id='"+equivalenceId+"' class='form-control btn-group btn-input clearfix cusEquiv'>"+
                 "<option "+lessThanSelected+" value='lessThan'>&lt;</option>"+
                 "<option "+greaterThanSelected+" value='greaterThan'>&gt;</option>"+
                 "</select>"+
                 "</div>"+
-                "<div class='col-md-3'><input type='text' class='form-control' id='"+valueId+"'></div>"+
+                "<div class='col-md-3'><input type='text' class='form-control cusText' id='"+valueId+"'></div>"+
                 "<div class='col-md-1'>"+
                 "<span style='padding:10px 0 0 0' class='glyphicon glyphicon-question-sign pop-right' aria-hidden='true' data-toggle='popover' animation='true' "+
                 "trigger='hover' data-container='body' data-placement='right' title='' data-content='"+helpText + "' data-original-title='"+helpTitle + "'></span>"+
@@ -765,15 +824,11 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
                     break;
                 case 'effectsize':displayESChooser(holder,valueOne,valueTwo);
                     break;
-                case 'gene':displayGeneChooser(holder,valueOne);
+                default:
+                    appendValueWithEquivalenceChooser (holder,selection+'Holder',selection+'name',
+                            selection+'___equivalenceId',selection+'___valueId',
+                        'help title','everything there is to say to help you out','lessThan',1);
                     break;
-                case 'position':displayPosChooser(holder,valueOne,valueTwo,valueThree);
-                    break;
-                case 'predictedeffect':displayPEChooser(holder,valueOne,valueTwo,valueThree,valueFour);
-                    break;
-                case 'dataset':displayDSChooser();
-                    break;
-
             }
         };
         var respondToReviseFilters = function (selection,valueOne,valueTwo,valueThree,valueFour){
@@ -789,7 +844,6 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             forceRequestForMoreFilters (selection, holder);
         };
         var requestToAddFilters = function (){
-            console.log('hello');
             var holder = $('#filterHolder');
             var choice = $("#additionalFilters option:selected");
             var selection = choice.val();
