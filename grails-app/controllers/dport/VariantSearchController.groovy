@@ -196,9 +196,10 @@ class VariantSearchController {
 
         LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
         LinkedHashMap<String,List<String>> annotatedPhenotypes =  processedMetadata.sampleGroupsPerPhenotype
-        String dataSetsForThisPhenotype = sharedToolsService.extractASingleList(params.phenotype,annotatedPhenotypes)
+        List <String> listOfDataSets  = sharedToolsService.extractASingleList(params.phenotype,annotatedPhenotypes)
+        String datasetsForTransmission = sharedToolsService.packageUpAListAsJson (listOfDataSets)
         def slurper = new JsonSlurper()
-        def result = slurper.parseText(dataSetsForThisPhenotype)
+        def result = slurper.parseText(datasetsForTransmission)
 
 
         render(status: 200, contentType: "application/json") {
@@ -224,11 +225,12 @@ class VariantSearchController {
         LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
         LinkedHashMap<String,List<String>> annotatedSampleGroups =  processedMetadata.propertiesPerSampleGroups
         LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties = processedMetadata['phenotypeSpecificPropertiesPerSampleGroup']
-        String propertiesForThisSampleGroup = sharedToolsService.combineToCreateASingleList( params.phenotype, params.dataset,
+        List <String> listOfProperties  = sharedToolsService.combineToCreateASingleList( params.phenotype, params.dataset,
                                                                                              annotatedSampleGroups,
                                                                                              phenotypeSpecificSampleGroupProperties )
+        String propertiesForTransmission = sharedToolsService.packageUpAListAsJson (listOfProperties)
         def slurper = new JsonSlurper()
-        def result = slurper.parseText(propertiesForThisSampleGroup)
+        def result = slurper.parseText(propertiesForTransmission)
 
 
         render(status: 200, contentType: "application/json") {
@@ -236,6 +238,28 @@ class VariantSearchController {
         }
 
     }
+
+
+
+
+    def retrievePhenotypesAjax(){
+
+        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
+
+        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
+        LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties = processedMetadata.phenotypeSpecificPropertiesPerSampleGroup
+        List <String> listOfPhenotypes = sharedToolsService.extractAPhenotypeList( phenotypeSpecificSampleGroupProperties )
+        String phenotypesForTransmission = sharedToolsService.packageUpAListAsJson (listOfPhenotypes)
+        def slurper = new JsonSlurper()
+        def result = slurper.parseText(phenotypesForTransmission)
+
+
+        render(status: 200, contentType: "application/json") {
+            [datasets: result]
+        }
+
+    }
+
 
 
 

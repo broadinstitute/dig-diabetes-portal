@@ -11,7 +11,7 @@ class FilterManagementService {
     SharedToolsService sharedToolsService
 
     private String exomeSequence  = "ExSeq_17k_mdv2"
-    private String gwasData  = "GWAS_DIAGRAM_mdv1"
+    private String gwasData  = "GWAS_DIAGRAM_mdv2"
     private String exomeChip  = "ExChip_82k_mdv2"
     private String sigmaData  = "unknown"
     private String exomeSequencePValue  = "P_EMMAX_FE_IV"

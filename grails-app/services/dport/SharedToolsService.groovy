@@ -366,6 +366,14 @@ class SharedToolsService {
 
 
 
+    public List <String> extractAPhenotypeList (LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties){
+        List <String> listOfProperties = []
+        if (phenotypeSpecificSampleGroupProperties){
+            phenotypeSpecificSampleGroupProperties.each{ k, v -> listOfProperties <<  "${k}" }
+            listOfProperties = listOfProperties.sort ()
+        }
+        return listOfProperties
+    }
 
 
 
@@ -375,43 +383,30 @@ class SharedToolsService {
      * @param annotatedList
      * @return
      */
-    public String extractASingleList (String phenotype, LinkedHashMap<String, List <String>> annotatedList){
-        StringBuilder sb = new StringBuilder ()
-        StringBuilder tempSb = new StringBuilder ()
-        int numrec = 0
-        String retval
+    public List <String> extractASingleList (String phenotype, LinkedHashMap<String, List <String>> annotatedList){
+        List <String> listOfProperties = []
         if (annotatedList){
             if (annotatedList.containsKey(phenotype)){
                 List <String> listForThisPhenotype =  annotatedList [phenotype]
                 if (listForThisPhenotype) {
-                    numrec = listForThisPhenotype.size()
                     for ( int  i = 0 ; i < listForThisPhenotype.size() ; i++ ){
-                        tempSb << """ "${listForThisPhenotype[i]}" """.toString()
-                        if (i<listForThisPhenotype.size()-1){
-                            tempSb << ","
-                        }
-
+                        listOfProperties << listForThisPhenotype[i]
                     }
                 }
             }
 
         }
-        retval = """
-{"is_error": false,
-"numRecords":${numrec},
-"dataset":[${tempSb.toString()}]
-}""".toString()
-        return retval
+        return listOfProperties
     }
 
 
 
 
-    public String combineToCreateASingleList (String phenotype,String sampleGroup,
+    public List <String> combineToCreateASingleList (String phenotype,String sampleGroup,
                                               LinkedHashMap<String, List <String>> annotatedList,
                                               LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties ){
         // the list of properties specific to this data set
-        StringBuilder tempSb = new StringBuilder ()
+        List <String> listOfProperties = []
         int numrec = 0
         String retval
         if (annotatedList){
@@ -420,11 +415,7 @@ class SharedToolsService {
                 if (listForThisPhenotype) {
                     numrec = listForThisPhenotype.size()
                     for ( int  i = 0 ; i < listForThisPhenotype.size() ; i++ ){
-                        tempSb << """ "${listForThisPhenotype[i]}" """.toString()
-                        if (i<listForThisPhenotype.size()-1){
-                            tempSb << ","
-                        }
-
+                        listOfProperties << listForThisPhenotype[i]
                     }
                 }
             }
@@ -439,11 +430,7 @@ class SharedToolsService {
                     if (listForThisPhenotype) {
                         numrec += listForThisPhenotype.size()
                         for (int i = 0; i < listForThisPhenotype.size(); i++) {
-                            tempSb << """ "${listForThisPhenotype[i]}" """.toString()
-                            if (i < listForThisPhenotype.size() - 1) {
-                                tempSb << ","
-                            }
-
+                            listOfProperties << listForThisPhenotype[i]
                         }
                     }
                 }
@@ -451,14 +438,31 @@ class SharedToolsService {
 
         }
 
-        retval = """
-{"is_error": false,
-"numRecords":${numrec},
-"dataset":[${tempSb.toString()}]
-}""".toString()
-        return retval
+        return listOfProperties
     }
 
+
+
+    public String packageUpAListAsJson (List <String> listOfStrings ){
+        // now that we have a list, build it into a string suitable for JSON
+        int numrec = 0
+        StringBuilder sb = new StringBuilder ()
+        if ((listOfStrings) && (listOfStrings?.size() > 0)){
+            numrec = listOfStrings.size()
+            for ( int  i = 0 ; i < numrec ; i++ ){
+                sb << "\"${listOfStrings[i]}\"".toString()
+                if (i < listOfStrings.size() - 1) {
+                    sb << ","
+                }
+            }
+        }
+
+        return  """
+{"is_error": false,
+"numRecords":${numrec},
+"dataset":[${sb.toString()}]
+}""".toString()
+    }
 
 
 

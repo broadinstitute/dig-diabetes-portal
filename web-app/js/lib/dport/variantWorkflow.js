@@ -177,6 +177,30 @@ var mpgSoftware = mpgSoftware || {};
                 }
             }
         };
+        var retrievePhenotypes = function () {
+            var loading = $('#spinner').show();
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "./retrievePhenotypesAjax",
+                data: {},
+                async: true,
+                success: function (data) {
+                    if (( data !==  null ) &&
+                        ( typeof data !== 'undefined') &&
+                        ( typeof data.datasets !== 'undefined' ) &&
+                        (  data.datasets !==  null ) ) {
+                        fillPhenotypeDropdown(data.datasets);
+                    }
+                    loading.hide();
+                },
+                error: function (jqXHR, exception) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+        };
+
         var retrieveDataSets = function (phenotype, experiment) {
             var loading = $('#spinner').show();
             $.ajax({
@@ -289,6 +313,20 @@ var mpgSoftware = mpgSoftware || {};
                 }
             }
         };
+        var fillPhenotypeDropdown = function (dataSetJson) { // help text for each row
+            if ((typeof dataSetJson !== 'undefined')  &&
+                (typeof dataSetJson["is_error"] !== 'undefined')&&
+                (dataSetJson["is_error"] === false))
+            {
+                var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
+                var options = $("#phenotype");
+                options.empty();
+                var dataSetList = dataSetJson ["dataset"];
+                for ( var i = 0 ; i < numberOfRecords ; i++ ){
+                    options.append($("<option />").val(dataSetList[i]).text(dataSetList[i]));
+                }
+            }
+        };
         var fillPropertiesDropdown = function (dataSetJson) { // help text for each row
             if ((typeof dataSetJson !== 'undefined')  &&
                 (typeof dataSetJson["is_error"] !== 'undefined')&&
@@ -390,7 +428,8 @@ var mpgSoftware = mpgSoftware || {};
                 whatToDoNext(0);
                 emphasizeBlueBox(false);
             }
-            $("#phenotype").prepend("<option value='' selected='selected'></option>");
+            retrievePhenotypes();
+//            $("#phenotype").prepend("<option value='' selected='selected'></option>");
 
         };
         return {
@@ -405,6 +444,7 @@ var mpgSoftware = mpgSoftware || {};
             removeThisFilter:removeThisFilter,
             existingFiltersManipulators:existingFiltersManipulators,
             currentInteractivityState:currentInteractivityState,
+            retrievePhenotypes:retrievePhenotypes,
             retrieveDataSets:retrieveDataSets,
             retrievePropertiesPerDataSet:retrievePropertiesPerDataSet,
             whatToDoNext:whatToDoNext

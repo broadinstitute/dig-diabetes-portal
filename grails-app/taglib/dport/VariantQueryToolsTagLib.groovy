@@ -10,19 +10,19 @@ class VariantQueryToolsTagLib {
     def renderPhenotypeOptions = { attrs,body ->
         LinkedHashMap<String,List<LinkedHashMap>> map = sharedToolsService.composePhenotypeOptions()
         if (map){
-            out <<  "<optgroup label='Cardiometabolic'>"
-            List <Map> cardioList = map["cardio"]
-            for (Map cardio in cardioList){
-               String selectionIndicator = (cardio.mkey == 'T2D')?"  selected":""
-               out <<  "<option value='${cardio.mkey}' ${selectionIndicator}>${cardio.name}</option>"
-            }
-            out <<  "</optgroup>"
-            out << "<optgroup label='Other'>"
-            List <Map> otherList = map["other"]
-            for (Map other in otherList){
-                out <<  "<option value='${other.mkey}'>${other.name}</option>"
-            }
-            out <<  "</optgroup>"
+//            out <<  "<optgroup label='Cardiometabolic'>"
+//            List <Map> cardioList = map["cardio"]
+//            for (Map cardio in cardioList){
+//               String selectionIndicator = (cardio.mkey == 'T2D')?"  selected":""
+//               out <<  "<option value='${cardio.mkey}' ${selectionIndicator}>${cardio.name}</option>"
+//            }
+//            out <<  "</optgroup>"
+//            out << "<optgroup label='Other'>"
+//            List <Map> otherList = map["other"]
+//            for (Map other in otherList){
+//                out <<  "<option value='${other.mkey}'>${other.name}</option>"
+//            }
+//            out <<  "</optgroup>"
             out << body()
         }
 

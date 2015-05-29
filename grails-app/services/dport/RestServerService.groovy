@@ -33,14 +33,14 @@ class RestServerService {
     private String GET_DATA_URL = "getData"
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
-    private String EXOMESEQ_AA = "ExSeq_13k_aa_mdv2"
-    private String EXOMESEQ_HS = "ExSeq_13k_hs_mdv2"
-    private String EXOMESEQ_EA = "ExSeq_13k_ea_mdv2"
-    private String EXOMESEQ_SA = "ExSeq_13k_sa_mdv2"
-    private String EXOMESEQ_EU = "ExSeq_13k_eu_mdv2"
+    private String EXOMESEQ_AA = "ExSeq_17k_aa_genes_mdv2"
+    private String EXOMESEQ_HS = "ExSeq_17k_hs_genes_mdv2"
+    private String EXOMESEQ_EA = "ExSeq_17k_ea_genes_mdv2"
+    private String EXOMESEQ_SA = "ExSeq_17k_sa_genes_mdv2"
+    private String EXOMESEQ_EU = "ExSeq_17k_eu_genes_mdv2"
     private String EXOMECHIP = "ExChip_82k_mdv2"
     private String EXOMESEQ = "ExSeq_17k_mdv2"
-    private String GWASDIAGRAM  = "GWAS_DIAGRAM_mdv1"
+    private String GWASDIAGRAM  = "GWAS_DIAGRAM_mdv2"
 
 
     static List<String> VARIANT_SEARCH_COLUMNS = [
@@ -312,11 +312,11 @@ class RestServerService {
                                         },
                         "pproperty":    {
                                              "P_VALUE":    {
-                                                                       "GWAS_DIAGRAM_mdv1": ["T2D"],
+                                                                       "${GWASDIAGRAM}": ["T2D"],
                                                                     "${EXOMECHIP}": ["T2D"]
                                                                    },
                           "ODDS_RATIO": { "${GWASDIAGRAM}": ["T2D"] },
-                          "OR_WALD_FE_IV":{"${EXOMESEQ}": ["T2D"]},
+                          "OR_FIRTH_FE_IV":{"${EXOMESEQ}": ["T2D"]},
                           "P_EMMAX_FE_IV":    { "${EXOMESEQ}": ["T2D"]},
                            "OBSA":  { "${EXOMESEQ}": ["T2D"]},
                            "OBSU":  { "${EXOMESEQ}": ["T2D"]},
@@ -361,7 +361,7 @@ class RestServerService {
                                                                     "${EXOMECHIP}": ["T2D"]
                                                                    },
                           "ODDS_RATIO": { "${GWASDIAGRAM}": ["T2D"] },
-                          "OR_WALD_FE_IV":{"${EXOMESEQ}": ["T2D"]},
+                          "OR_FIRTH_FE_IV":{"${EXOMESEQ}": ["T2D"]},
                           "P_EMMAX_FE_IV":    { "${EXOMESEQ}": ["T2D"]},
                            "OBSA":  { "${EXOMESEQ}": ["T2D"]},
                            "OBSU":  { "${EXOMESEQ}": ["T2D"]},
@@ -1122,7 +1122,7 @@ ${customFilterSet}""".toString()
                        "P_EMMAX_FE_IV": {
                         "${EXOMESEQ}": ["T2D"]
                     },
-                       "OR_WALD_FE_IV": {
+                       "OR_FIRTH_FE_IV": {
                         "${EXOMESEQ}": ["T2D"]
                     }
 
@@ -1166,7 +1166,7 @@ ${customFilterSet}""".toString()
                                                 "${GWASDIAGRAM}":["T2D"],
                                                 "${EXOMECHIP}":["T2D"]
                                              },
-                                             "OR_WALD_FE_IV":    {
+                                             "OR_FIRTH_FE_IV":    {
                                                                    "${EXOMESEQ}": ["T2D"]
                                                                 },
                                              "ODDS_RATIO":{
@@ -1221,8 +1221,8 @@ ${customFilterSet}""".toString()
                             sb  << "{\"level\":\"P_VALUE_GWAS\",\"count\":${variant["P_VALUE"][gwasSample][attribute]}},"
                             sb  << "{\"level\":\"P_VALUE_EXCHIP\",\"count\":${variant["P_VALUE"][EXOMECHIP][attribute]}},"
                         }
-                        if (variant ["OR_WALD_FE_IV"]){
-                            sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${variant["OR_WALD_FE_IV"][EXOMESEQ][attribute]}},"
+                        if (variant ["OR_FIRTH_FE_IV"]){
+                            sb  << "{\"level\":\"OR_FIRTH_FE_IV\",\"count\":${variant["OR_FIRTH_FE_IV"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["ODDS_RATIO"]){
                             sb  << "{\"level\":\"ODDS_RATIO\",\"count\":${variant["ODDS_RATIO"][gwasSample][attribute]}},"
@@ -1375,8 +1375,8 @@ ${customFilterSet}""".toString()
                         if (variant ["P_EMMAX_FE_IV"]){
                             sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${variant["P_EMMAX_FE_IV"][EXOMESEQ][attribute]}},"
                         }
-                        if (variant ["OR_WALD_FE_IV"]){
-                            sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${variant["OR_WALD_FE_IV"][EXOMESEQ][attribute]}}"
+                        if (variant ["OR_FIRTH_FE_IV"]){
+                            sb  << "{\"level\":\"OR_FIRTH_FE_IV\",\"count\":${variant["OR_FIRTH_FE_IV"][EXOMESEQ][attribute]}}"
                         }
                     }
 
@@ -1468,7 +1468,7 @@ ${customFilterSet}""".toString()
                                                 "${GWASDIAGRAM}":["T2D"],
                                                 "${EXOMECHIP}":["T2D"]
                                              },
-                                             "OR_WALD_FE_IV":    {
+                                             "OR_FIRTH_FE_IV":    {
                                                                    "${EXOMESEQ}": ["T2D"]
                                                                 },
                                              "ODDS_RATIO":{
@@ -1748,9 +1748,9 @@ ${customFilterSet}""".toString()
 
                         sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${element[EXOMESEQ][attribute]}},"
 
-                        element = variant["OR_WALD_FE_IV"].findAll{it}[0]
+                        element = variant["OR_FIRTH_FE_IV"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${element[EXOMESEQ][attribute]}},"
+                        sb  << "{\"level\":\"OR_FIRTH_FE_IV\",\"count\":${element[EXOMESEQ][attribute]}},"
 
                         element = variant["OBSU"].findAll{it}[0]
 
@@ -1863,9 +1863,9 @@ ${customFilterSet}""".toString()
 
                         sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${element[EXOMESEQ][attribute]}},"
 
-                        element = variant["OR_WALD_FE_IV"].findAll{it}[0]
+                        element = variant["OR_FIRTH_FE_IV"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${element[EXOMESEQ][attribute]}},"
+                        sb  << "{\"level\":\"OR_FIRTH_FE_IV\",\"count\":${element[EXOMESEQ][attribute]}},"
 
                         //element = variant["OBSU"].findAll{it}[0]
 
