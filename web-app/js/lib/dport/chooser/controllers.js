@@ -39,7 +39,38 @@
             $scope.humanReadableDatasetName = function(id,unfriendlyName) {
                 var name;
                 var datasetMap = {
-                    'ExSeq_13k_ea_genes_dv2':'13K exome sequence analysis: East Asians'
+                    'ExSeq_17k_mdv2':'17K exome sequence analysis',
+                    'ExSeq_17k_aa_mdv2':'17K exome sequence analysis: African-Americans',
+                    'ExSeq_17k_aa_genes_mdv2':'17K exome sequence analysis: African-Americans, T2D-GENES cohorts',
+                    'ExSeq_17k_aa_genes_aj_mdv2':'17K exome sequence analysis: African-Americans, Jackson Heart Study cohort',
+                    'ExSeq_17k_aa_genes_aw_mdv2':'17K exome sequence analysis: African-Americans, Wake Forest Study cohort',
+                    'ExSeq_17k_ea_genes_mdv2':'17K exome sequence analysis: East Asians',
+                    'ExSeq_17k_ea_genes_ek_mdv2':'17K exome sequence analysis: East Asians, Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH) cohort',
+                    'ExSeq_17k_ea_genes_es_mdv2':'17K exome sequence analysis: East Asians, Singapore Diabetes Cohort Study and Singapore Prospective Study Program cohort',
+                    'ExSeq_17k_eu_mdv2':'17K exome sequence analysis: Europeans',
+                    'ExSeq_17k_eu_genes_mdv2':'17K exome sequence analysis: Europeans, T2D-GENES cohorts',
+                    'ExSeq_17k_eu_genes_ua_mdv2':'17K exome sequence analysis: Europeans, Longevity Genes in Founder Populations (Ashkenazi) cohort',
+                    'ExSeq_17k_eu_genes_um_mdv2':'17K exome sequence analysis: Europeans, Metabolic Syndrome in Men (METSIM) Study cohort',
+                    'ExSeq_17k_eu_go_mdv2':'17K exome sequence analysis: Europeans, GoT2D cohorts',
+                    'ExSeq_17k_hs_mdv2':'17K exome sequence analysis: Latinos',
+                    'ExSeq_17k_hs_genes_mdv2':'17K exome sequence analysis: Latinos, T2D-GENES cohorts',
+                    'ExSeq_17k_hs_genes_ha_mdv2':'17K exome sequence analysis: Latinos, San Antonio cohort',
+                    'ExSeq_17k_hs_genes_hs_mdv2':'17K exome sequence analysis: Latinos, Starr County cohort',
+                    'ExSeq_17k_hs_sigma_mdv2':'17K exome sequence analysis: Latinos, SIGMA cohorts',
+                    'ExSeq_17k_hs_sigma_mec_mdv2':'17K exome sequence analysis: Multiethnic Cohort (MEC)',
+                    'ExSeq_17k_hs_sigma_mexb1_mdv2':'17K exome sequence analysis: UNAM/INCMNSZ Diabetes Study (UIDS) cohort',
+                    'ExSeq_17k_hs_sigma_mexb2_mdv2':'17K exome sequence analysis: Diabetes in Mexico Study (DMS) cohort',
+                    'ExSeq_17k_hs_sigma_mexb3_mdv2':'17K exome sequence analysis: Mexico City Diabetes Study (MCDS) cohort',
+                    'ExSeq_17k_sa_genes_mdv2':'17K exome sequence analysis: South Asians',
+                    'ExSeq_17k_sa_genes_sl_mdv2':'17K exome sequence analysis: South Asians, LOLIPOP cohort',
+                    'ExSeq_17k_sa_genes_ss_mdv2':'17K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort',
+                    'ExSeq_13k_mdv1':'13K exome sequence analysis',
+                    'ExSeq_13k_aa_genes_mdv2':'13K exome sequence analysis: African-Americans',
+                    'ExSeq_13k_ea_genes_mdv2':'13K exome sequence analysis: East Asians',
+                    'ExSeq_13k_eu_genes_mdv2':'13K exome sequence analysis: Europeans, T2D-GENES cohorts',
+                    'ExSeq_13k_hs_genes_mdv2':'13K exome sequence analysis: Latinos',
+                    'ExSeq_13k_sa_genes_mdv2':'13K exome sequence analysis: South Asians',
+                    'ExChip_82k_mdv2':'exome chip analysis'
                 };
                 if (datasetMap[id] != null) {
                     name = datasetMap[id];
