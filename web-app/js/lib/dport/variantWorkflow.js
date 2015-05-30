@@ -422,6 +422,7 @@ var mpgSoftware = mpgSoftware || {};
             }
             var savedValuesList = [];
             var savedValue = {};
+            var totalFilterCount = UTILS.extractValFromTextboxes(['totalFilterCount']);
             if (typeof totalFilterCount['totalFilterCount'] !== 'undefined') {
                 var valueCount = parseInt(totalFilterCount['totalFilterCount']);
                 if (valueCount>0){
@@ -431,7 +432,6 @@ var mpgSoftware = mpgSoftware || {};
                     savedValue = UTILS.extractValFromTextboxes(savedValuesList);
                 }
             }
-            //var savedValue = UTILS.extractValFromTextboxes(['savedValue']);
             varsToSend = UTILS.concatMap(varsToSend,restrictToRegion) ;
             varsToSend = UTILS.concatMap(varsToSend,missensePredictions) ;
             varsToSend = UTILS.concatMap(varsToSend,phenotypeInput) ;

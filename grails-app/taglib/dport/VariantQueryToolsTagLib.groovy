@@ -58,11 +58,12 @@ class VariantQueryToolsTagLib {
                     <span class="dataset filterElement">${map.dataSet},</span>
                     """.toString()
                     }
-                    if (map.phenotype) {
+                    // write out all the custom filters, identifiable in the map with a prefix
+                    LinkedHashMap customFilters = map.findAll{ it.key =~ /^filter/ }
+                    customFilters.each {String key, String value->
                         out << """
-                                <span class="phenotype filterElement">${map.phenotype},</span>
+                                <span class="phenotype filterElement">${value},</span>
                     """.toString()
-
                     }
                     if ( map.orValue  ||
                             map.pValue  ||
@@ -190,6 +191,7 @@ class VariantQueryToolsTagLib {
             int blockCount = 0
             for (LinkedHashMap map in attrs.filterSet) {
                     if (map.size()>0){
+                        LinkedHashMap customFilters = map.findAll{ it.key =~ /^filter/ }
                         String encodedFilterList = sharedToolsService.encodeAFilterList(
                                 [phenotype:map.phenotype,
                                  dataSet:map.dataSet,
@@ -206,7 +208,8 @@ class VariantQueryToolsTagLib {
                                  predictedEffects: map.predictedEffects,
                                  polyphenSelect: map.polyphenSelect,
                                  siftSelect: map.siftSelect,
-                                 condelSelect: map.condelSelect])
+                                 condelSelect: map.condelSelect], customFilters
+                        )
                         out << """<input type="text" class="form-control" id="savedValue${blockCount}" value="${
                             encodedFilterList
                         }" style="height:0px">""".toString()

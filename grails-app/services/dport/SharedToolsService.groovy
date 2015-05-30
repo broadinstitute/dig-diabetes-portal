@@ -921,7 +921,7 @@ class SharedToolsService {
 
 
 
-    public String encodeAFilterList(LinkedHashMap<String,String> parametersToEncode) {
+    public String encodeAFilterList(LinkedHashMap<String,String> parametersToEncode,LinkedHashMap<String,String> customFiltersToEncode) {
         StringBuilder sb   = new StringBuilder ("")
         if (((parametersToEncode.containsKey("phenotype")) && (parametersToEncode["phenotype"]))) {
             sb << ("1="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["phenotype"].toString())+"^")
@@ -971,7 +971,9 @@ class SharedToolsService {
         if (((parametersToEncode.containsKey("siftSelect")) && (parametersToEncode["siftSelect"]))) {
             sb << ("16="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["siftSelect"].toString())+"^")
         }
-
+        customFiltersToEncode?.each { String key, String value ->
+            sb << ("17=" + StringEscapeUtils.escapeJavaScript(value.toString()) + "^")
+        }
 
 
         return  sb.toString()
@@ -994,6 +996,7 @@ class SharedToolsService {
                     }catch (e){
                         log.info("Unexpected key when interpreting filter list = ${parametersList}")
                     }
+                    int filterCount = 0
                     switch (parameterKey){
                         case 1:returnValue ["phenotype"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
                             break
@@ -1027,7 +1030,8 @@ class SharedToolsService {
                             break
                         case 16:returnValue ["siftSelect"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
                             break
-
+                        case 17:returnValue ["filter${filterCount++}"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+                            break
                         default:
                             log.info("Unexpected parameter key  = ${parameterKey}")
                     }
