@@ -120,7 +120,7 @@ class SystemController {
 
 
 
-    def submitForceMetadataCacheUpdate ()  {
+    def forceMetadataCacheUpdate ()  {
         String metadataOverrideStatus = params.datatype
         Boolean metadataOverrideHasBeenRequested = sharedToolsService.getMetadataOverrideStatus ()
         if (metadataOverrideStatus == true) {

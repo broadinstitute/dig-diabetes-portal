@@ -291,10 +291,10 @@ class SharedToolsService {
 
             }
 
-            // Does this sample group have an associated ancestry? If so then let's stick that in and treated as if it is another property
-            if (sampleGroup.ancestry){
-                propertiesForTheSampleGroup << "ANCESTRY= ${sampleGroup.ancestry}"
-            }
+//            // Does this sample group have an associated ancestry? If so then let's stick that in and treated as if it is another property
+//            if (sampleGroup.ancestry){
+//                propertiesForTheSampleGroup << "ANCESTRY= ${sampleGroup.ancestry}"
+//            }
 
             // Finally, does this sample group have a sample group? If so then recursively descend
             if (sampleGroup.sample_groups){
@@ -342,7 +342,7 @@ class SharedToolsService {
                         for (def property in phenotypeProperties){
                             String propertyName = property.name
                             if (propertyList.contains(propertyName)){
-                                println "That is a little odd. Sample group=${sampleGroupsId} in phenotype=${phenotypeName} already had property=${propertyName}"
+                               // println "That is a little odd. Sample group=${sampleGroupsId} in phenotype=${phenotypeName} already had property=${propertyName}"
                             }else {
                                 propertyList<<propertyName
                             }
@@ -985,6 +985,7 @@ class SharedToolsService {
         LinkedHashMap<String,String> returnValue= [:]
         if (encodedFilterString){
             List <String> parametersList =  encodedFilterString.split("\\^")
+            int filterCount = 0
             for ( int  i = 0 ; i < parametersList.size() ; i++  > 0){
                 List <String> divKeys = parametersList[i].split("=")
                 if (divKeys.size() != 2){
@@ -996,7 +997,6 @@ class SharedToolsService {
                     }catch (e){
                         log.info("Unexpected key when interpreting filter list = ${parametersList}")
                     }
-                    int filterCount = 0
                     switch (parameterKey){
                         case 1:returnValue ["phenotype"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
                             break

@@ -252,6 +252,19 @@ class FilterManagementService {
 
 
 
+    String retrieveCustomizedFilterString (String dataSet,
+                                              String phenotype,
+                                              String property,
+                                              String equivalence,
+                                              String value,
+                                              String operandType = "FLOAT") {
+        String retval=""
+        BigDecimal bigDecimal =  value as  BigDecimal
+        retval= """{"dataset_id": "${dataSet}", "phenotype": "${phenotype}", "operand": "${property}", "operator": "${equivalence}", "value": ${bigDecimal}, "operand_type": "${operandType}"}""".toString()
+        return  retval
+       }
+
+
 
 
     String retrieveParameterizedFilterString (String filterName,
@@ -329,9 +342,14 @@ class FilterManagementService {
                                parameterEncoding:new ArrayList<String>()]
         }
 
+
+
+
         buildingFilters = determineDataSet (buildingFilters,incomingParameters)
 
         String datatypeOperand = buildingFilters.datatypeOperand
+
+        buildingFilters = processCustomFilters (buildingFilters, incomingParameters )
 
         buildingFilters = determineThreshold (buildingFilters, incomingParameters, datatypeOperand)
 
@@ -448,6 +466,14 @@ class FilterManagementService {
         for (LinkedHashMap map in combinedFilters){
 
             LinkedHashMap singleFilterSet = [:]
+
+            // let's get those custom filters
+            LinkedHashMap savedValues = map.findAll{ it.key =~ /^filter/ }
+            int cnt = 0
+            for (savedValue in savedValues){
+                singleFilterSet["customFilter${cnt++}"]  = savedValue.value as String
+            }
+
 
             if (map.containsKey("phenotype")  ){
                 String phenotype  = map["phenotype"]
@@ -780,6 +806,56 @@ class FilterManagementService {
 
 
 
+    private LinkedHashMap<String,String> parseCustomFilterString (String customFilterString)  {
+        LinkedHashMap<String,String> returnValue = [:]
+        List <String> filterPieces = customFilterString.tokenize ("[")
+        returnValue ["phenotype"]  =  filterPieces [0]
+        List <String> filterPieces2 = (filterPieces[1]).tokenize ("]")
+        returnValue ["sampleSet"]  =  filterPieces2 [0]
+        if (filterPieces2[1].indexOf("<") > -1){
+            int equivalencePosition = filterPieces2[1].indexOf("<")
+            returnValue ["property"]  = filterPieces2[1].substring(0,equivalencePosition)
+            returnValue ["value"]  = filterPieces2[1].substring(equivalencePosition+1)
+            returnValue ["equivalence"]  = "LT"
+        } else if (filterPieces2[1].indexOf(">") > -1){
+            int equivalencePosition = filterPieces2[1].indexOf(">")
+            returnValue ["property"]  = filterPieces2[1].substring(0,equivalencePosition)
+            returnValue ["value"]  = filterPieces2[1].substring(equivalencePosition+1)
+            returnValue ["equivalence"]  = "GT"
+        }  else if (filterPieces2[1].indexOf("=") > -1){
+            int equivalencePosition = filterPieces2[1].indexOf("=")
+            returnValue ["property"]  = filterPieces2[1].substring(0,equivalencePosition)
+            returnValue ["value"]  = filterPieces2[1].substring(equivalencePosition+1)
+            returnValue ["equivalence"]  = "EQ"
+        }
+        return returnValue
+    }
+
+
+
+
+    private  LinkedHashMap processCustomFilters(LinkedHashMap  buildingFilters, HashMap incomingParameters) {
+        List <String> filters =  buildingFilters.filters
+        List <String> filterDescriptions =  buildingFilters.filterDescriptions
+        List <String> parameterEncoding =  buildingFilters.parameterEncoding
+        // set the search region
+        // set gene to search
+        LinkedHashMap savedValues = incomingParameters.findAll{ it.key =~ /^customFilter/ }
+        for (savedValue in savedValues){
+            String customFilterString =   savedValue.value as String
+            LinkedHashMap<String,String> parsedFilterString = parseCustomFilterString (customFilterString)
+            filters << retrieveCustomizedFilterString(parsedFilterString.sampleSet,
+                    parsedFilterString.phenotype,
+                    parsedFilterString.property,
+                    parsedFilterString.equivalence,
+                    parsedFilterString.value,
+                    "FLOAT")
+            filterDescriptions << "${parsedFilterString.property} value ${parsedFilterString.equivalence} ${parsedFilterString.value} for ${parsedFilterString.sampleSet}"
+            parameterEncoding << "47:${customFilterString}"
+        }
+         return  buildingFilters
+
+    }
 
 
 

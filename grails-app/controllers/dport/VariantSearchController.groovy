@@ -95,14 +95,13 @@ class VariantSearchController {
     }
 
     def launchAVariantSearch(){
-        LinkedHashMap newParameters = filterManagementService.processNewParameters (params.dataSet,
+        LinkedHashMap <String,String> customFilters=filterManagementService.retrieveCustomFilters(params)
+        LinkedHashMap newParameters = filterManagementService.processNewParameters (
+                customFilters,
+                params.dataSet,
                 params.esValue,
                 params.esEquivalence,
                 params.phenotype,
-                params.pvValue,
-                params.pvEquivalence,
-                params.orValue,
-                params.orEquivalence,
                 params.filters,
                 params.datasetExomeChip,
                 params.datasetExomeSeq,
