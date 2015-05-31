@@ -242,7 +242,18 @@ class FilterManagementService {
             case "setSpecificPValue" :
                 returnValue = """{"dataset_id": "${exomeSequence}", "phenotype": "${parm1}", "operand": "P_EMMAX_FE_IV", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
-
+            case "proteinTruncatingCheckbox"        :
+                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 1, "operand_type": "FLOAT"}""".toString()
+                break;
+            case "missenseCheckbox"        :
+                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 2, "operand_type": "FLOAT"}""".toString()
+                break;
+            case "synonymousCheckbox"        :
+                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 3, "operand_type": "FLOAT"}""".toString()
+                break;
+            case "noncodingCheckbox"        :
+                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 4, "operand_type": "FLOAT"}""".toString()
+                break ;
             default: break;
         }
         return  returnValue
@@ -452,7 +463,11 @@ class FilterManagementService {
 
     /***
      * Here is an intermediate code for a filter. We have to read these somewhere else in this file and convert them
-     * into actual filters.
+     * into actual filters.    If the filters and recognized here then we aren't going to deal with it anywhere.
+     *
+     * The goal is to start with a list of maps, where each map references a collection of filters. By the time we
+     * leave this routine we should have a list of actionable maps -- these are the filters we care about and that we actually
+     * intend to deal with.
      *
      * @param combinedFilters
      * @return
@@ -473,28 +488,6 @@ class FilterManagementService {
             for (savedValue in savedValues){
                 singleFilterSet["customFilter${cnt++}"]  = savedValue.value as String
             }
-
-
-            if (map.containsKey("phenotype")  ){
-                String phenotype  = map["phenotype"]
-                singleFilterSet["spec_pheno_ind"] = phenotype
-            }
-            if (map.containsKey("pValue")  ){
-                String pValue  = map["pValue"]
-                singleFilterSet["spec_p_value"] = pValue // float
-            }
-            if (map.containsKey("pValueInequality")  ){
-                singleFilterSet["spec_p_inequality"] = map["pValueInequality"]
-            }
-
-            if (map.containsKey("orValue")  ){
-              //  String pValue  = map["orValue"]
-                singleFilterSet["spec_or_value"] = map["orValue"]// must be a float
-            }
-            if (map.containsKey("orValueInequality")  ){
-                singleFilterSet["spec_or_inequality"] = map["orValueInequality"] // "lessThan" or "greaterThan"
-            }
-
             if (map.containsKey("regionChromosomeInput")  ){
                 String chromosome  = map["regionChromosomeInput"]
                 singleFilterSet["region_chrom_input"] = chromosome
@@ -510,6 +503,11 @@ class FilterManagementService {
             if (map.containsKey("gene")  ){
                 String endExtent  = map["gene"]
                 singleFilterSet["region_gene_input"] = endExtent
+            }
+
+            if (map.containsKey("predictedEffects")  ){
+                String predictedEffects  = map["predictedEffects"]
+                singleFilterSet["predictedEffects"] = predictedEffects
             }
 
             returnValue << singleFilterSet
@@ -1445,24 +1443,49 @@ class FilterManagementService {
     }
 
 
-    public List <LinkedHashMap<String,String>> encodeAllFilters ( List <LinkedHashMap> allFilters ) {
-        // Each set of filters in the list now needs to be broken into three parts:
-        //   (displayable strings can be created dynamically with a taglib), so we return only
-        //   encoded (to go back and forth to the browser)
-        //   filters (the JSON we pass to the API to perform a query)
-        //
-        //Important note: combineNewAndOldParameters and encodeAllFilters both return
-        //  List <LinkedHashMap<String,String>>, but it's not the same data structure.
-        //  In the first case each map contains a collection of different keys and values,
-        //  one for each selectable filter. In the second case each map contains only two
-        //  elements: 1) encoded parameters, and 2) JSON filters ready for action
+    /***
+     * Process everything that the user has sent us as they try to build up their filter set for a search
+     * @param params
+     * @return
+     */
+  public handleFilterRequestFromBrowser (params)     {
 
-        List <LinkedHashMap> returnValue = []
-        returnValue << [encoded:"",jsonFilters:""]
+      // pull out the phenotype and data set dependent filter requests (such as P value or odds ratio or whatever else)
+      LinkedHashMap <String,String> customFilters=retrieveCustomFilters(params)
 
-        // For the purposes of demo let's take a Big shortcut
-        return allFilters
-    }
+      // pull out all the common requests, independent of   phenotype and data set. Add in the custom filters from above,
+      //  and store everything in one combined map
+      LinkedHashMap newParameters = processNewParameters (
+              customFilters,
+              params.dataSet,
+              params.esValue,
+              params.esEquivalence,
+              params.phenotype,
+              params.filters,
+              params.datasetExomeChip,
+              params.datasetExomeSeq,
+              params.datasetGWAS,
+              params.region_stop_input,
+              params.region_start_input,
+              params.region_chrom_input,
+              params.region_gene_input,
+              params.predictedEffects,
+              params.condelSelect,
+              params.polyphenSelect,
+              params.siftSelect
+      )
+
+      // pull out the saved requests, which need to be handled separately since they have to be decoded
+      List <String> oldFilters=observeMultipleFilters(params)
+
+      // finally combine the old filters (that is, the ones that would previously been saved) with whichever ones we've
+      //  just now processed.  Put them all into a list of hash maps
+      List <LinkedHashMap> combinedFilters = combineNewAndOldParameters(newParameters,
+              oldFilters)
+
+      return  combinedFilters
+  }
+
 
 
 

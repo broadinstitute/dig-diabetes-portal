@@ -548,12 +548,20 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             logStatus << """status: ok""".toString()
         } else {
             JSONObject tempValue = response.json
+            logStatus << """***************************************failed call***************************************************""".toString()
             logStatus << """status: ${response.responseEntity.statusCode.value}""".toString()
+            logStatus << """***************************************failed call***************************************************""".toString()
             if (tempValue) {
                 logStatus << """is_error: ${response.json["is_error"]}""".toString()
             } else {
                 logStatus << "no valid Json returned"
             }
+            logStatus << """
+FAILED CALL:
+url=${currentRestServer + targetUrl},
+parm=${drivingJson},
+time required=${(afterCall.time - beforeCall.time) / 1000} seconds
+""".toString()
         }
         log.info(logStatus)
         return returnValue

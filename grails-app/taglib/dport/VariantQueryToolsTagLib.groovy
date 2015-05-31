@@ -65,15 +65,7 @@ class VariantQueryToolsTagLib {
                                 <span class="phenotype filterElement">${value},</span>
                     """.toString()
                     }
-                    if ( map.orValue  ||
-                            map.pValue  ||
-                            map.esValue  ||
-                            map.regionChromosomeInput  ||
-                            map.regionStartInput  ||
-                            map.regionStopInput  ||
-                            map.gene  ||
-                            map.predictedEffects  ||
-                            map.polyphenSelect ) {
+                    if ( map ) {
 
 
                             // a line to describe the odds ratio
@@ -139,10 +131,12 @@ class VariantQueryToolsTagLib {
 
                             // a line to describe the polyphen value
                             if (map.predictedEffects) {
-                                out << """
+                                if (map.predictedEffects != "all-effects")  {  // don't display the default
+                                    out << """
                                 <span class="dd filterElement">predicted effects: ${map.predictedEffects},</span>
                                 """.toString()
-                            }// a single line for the P value
+                                }
+                             }// a single line for the P value
 
                         if (map.polyphenSelect) {
                             out << """

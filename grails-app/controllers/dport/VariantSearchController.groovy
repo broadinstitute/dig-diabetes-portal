@@ -57,35 +57,10 @@ class VariantSearchController {
 
 
     def variantVWRequest(){
-        LinkedHashMap <String,String> customFilters=filterManagementService.retrieveCustomFilters(params)
-        LinkedHashMap newParameters = filterManagementService.processNewParameters (
-                customFilters,
-                params.dataSet,
-                params.esValue,
-                params.esEquivalence,
-                params.phenotype,
-                params.filters,
-                params.datasetExomeChip,
-                params.datasetExomeSeq,
-                params.datasetGWAS,
-                params.region_stop_input,
-                params.region_start_input,
-                params.region_chrom_input,
-                params.region_gene_input,
-                params.predictedEffects,
-                params.condelSelect,
-                params.polyphenSelect,
-                params.siftSelect
-        )
 
-        List <String> oldFilters=filterManagementService.observeMultipleFilters(params)
+        List <LinkedHashMap> encodedFilterSets = filterManagementService.handleFilterRequestFromBrowser (params)
 
-        List <LinkedHashMap> combinedFilters = filterManagementService.combineNewAndOldParameters(newParameters,
-                oldFilters)
-        List <LinkedHashMap> encodedFilterSets = filterManagementService.encodeAllFilters (combinedFilters)
-
-
-        render(view: 'variantWorkflow',
+            render(view: 'variantWorkflow',
                 model: [show_gwas : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                         show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                         show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
@@ -94,38 +69,12 @@ class VariantSearchController {
 
     }
 
-    def launchAVariantSearch(){
-        LinkedHashMap <String,String> customFilters=filterManagementService.retrieveCustomFilters(params)
-        LinkedHashMap newParameters = filterManagementService.processNewParameters (
-                customFilters,
-                params.dataSet,
-                params.esValue,
-                params.esEquivalence,
-                params.phenotype,
-                params.filters,
-                params.datasetExomeChip,
-                params.datasetExomeSeq,
-                params.datasetGWAS,
-                params.region_stop_input,
-                params.region_start_input,
-                params.region_chrom_input,
-                params.region_gene_input,
-                params.predictedEffects,
-                params.condelSelect,
-                params.polyphenSelect,
-                params.siftSelect
-        )
 
-        List <String> oldFilters=filterManagementService.observeMultipleFilters(params)
-        List <LinkedHashMap> combinedFilters = filterManagementService.combineNewAndOldParameters(newParameters,
-                oldFilters)
-        String geneId = params.id
-        String receivedParameters = params.filter
-        String significance = params.sig
-        String dataset = params.dataset
-        String region = params.region
-        String filter = params.filter
-       // Map paramsMap = filterManagementService.storeCodedParametersInHashmap (combinedFilters)
+
+    def launchAVariantSearch(){
+
+        List <LinkedHashMap> combinedFilters =  filterManagementService.handleFilterRequestFromBrowser (params)
+
         List <LinkedHashMap> listOfParameterMaps = filterManagementService.storeCodedParametersInHashmap (combinedFilters)
 
 
@@ -323,9 +272,15 @@ class VariantSearchController {
         }
     }
 
-
-
-
+    /***
+     * This is the meat of dynamic filtering. Start with a list of filters (the filters are grouped into maps),
+     * and convert these into three different products:
+     * 1) a description of the filters that a user could understand
+     * 2) a coded form of the filters we can pass down to the browser and expect to get back again
+     * 3) the actual filters that were gonna send to the rest API, written out in JSON and ready to go
+     * @param listOfParameterMaps
+     * @param currentlySigma
+     */
     private void displayCombinedVariantSearchResults(List <LinkedHashMap> listOfParameterMaps, boolean currentlySigma) {
         // Let's start stepping through our big list of filters
         LinkedHashMap  parsedFilterParameters

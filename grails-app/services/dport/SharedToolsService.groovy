@@ -274,7 +274,7 @@ class SharedToolsService {
                      // we have the list for this phenotype.  Add some more sample groups for it
                      if (listOfSampleGroups.contains(sampleGroupsId)){
                          // this should never happen, right? We have a second listing for this ID in this phenotype
-                         println "very strange : phenotype ${phenotypeName} already contained sample ID= ${sampleGroupsId}"
+                        // println "very strange : phenotype ${phenotypeName} already contained sample ID= ${sampleGroupsId}"
                      } else {
                          listOfSampleGroups << sampleGroupsId
                      }

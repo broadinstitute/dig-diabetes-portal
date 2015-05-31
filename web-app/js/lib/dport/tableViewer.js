@@ -463,10 +463,10 @@ var variantProcessing = (function () {
        stringWithLink(arrayToBuild,geneRootUrl,(contentExists (geneRootUrl)),noop,variant.CLOSEST_GENE,variant.CLOSEST_GENE,"");
        stringWithLink(arrayToBuild,variantRootUrl,((contentExists (variantRootUrl)) && (variant.ID)),noop,variant.ID,variant.CHROM+ ":" +variant.POS,"");
        simpleString(arrayToBuild,(variant.DBSNP_ID),noop,variant.DBSNP_ID,"");
-       simpleString(arrayToBuild,(variant.Protein_change),noop,variant.Protein_change,"");
+       simpleString(arrayToBuild,(variant.Protein_change&& (variant.Protein_change !== 'null')),noop,variant.Protein_change,"");
        simpleString(arrayToBuild,((variant.Consequence)&&(contentExists(proteinEffectList))&&
            (contentExists(proteinEffectList.proteinEffectMap))&&(contentExists(proteinEffectList.proteinEffectMap[variant.Consequence]))),
-           lineBreakSubstitution,variant.Protein_change,((variant.Consequence)?variant.Consequence:""));
+           lineBreakSubstitution,proteinEffectList.proteinEffectMap[variant.Consequence],lineBreakSubstitution((variant.Consequence && (variant.Consequence !== 'null'))?variant.Consequence:""));
         if (show_sigma){;} //five fields
         if (show_exseq){
             var highFreq = determineHighestFrequencyEthnicity(variant);

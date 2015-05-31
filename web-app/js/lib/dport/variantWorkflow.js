@@ -160,6 +160,8 @@ var mpgSoftware = mpgSoftware || {};
                                 case '14':break;//  chromosome name, handled under 11
                                 case '15':break;//  chromosome name, handled under 11
                                 case '16':break;//  chromosome name, handled under 11
+                                case '17':
+                                    break;//  chromosome name, handled under 11
                                 default: break;
                             }
                         }

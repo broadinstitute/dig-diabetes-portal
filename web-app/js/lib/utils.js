@@ -27,8 +27,10 @@ var UTILS = {
         }
         if (mapFromWhichWeExtract)
             var keys = Object.keys(mapFromWhichWeExtract);
-        for (var i = 0; i < keys.length; i++) {
-            workingMap[keys[i]] = mapFromWhichWeExtract [keys[i]];
+        if (typeof keys !== 'undefined') {
+            for (var i = 0; i < keys.length; i++) {
+                workingMap[keys[i]] = mapFromWhichWeExtract [keys[i]];
+            }
         }
         return workingMap;
     },
