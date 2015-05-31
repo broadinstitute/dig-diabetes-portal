@@ -299,10 +299,50 @@
 
 
 
+
+
             <div class="separator"></div>
 
 
-            <g:form action='forceMetadataCacheReload' method='POST' class='form form-horizontal cssform' autocomplete='off'>
+            <g:form action='changeDataVersion' method='POST' class='form form-horizontal cssform' autocomplete='off'>
+                <h4>Which version should we draw the data from?</h4>
+                <input type="text" name="datatype" Value="${dataVersion}"><br>
+                <div class="row clearfix">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <div >
+                            <div style="text-align:center; padding-top: 20px;">
+                                <input class="btn btn-primary btn-lg" type='submit' id="submitDataVersionText"
+                                       value='Commit'/>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row clearfix">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div >
+                            <g:if test='${flash.message}'>
+                                <div class="alert alert-danger">${flash.message}</div>
+                            </g:if>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+
+                </div>
+          </g:form>
+
+
+
+
+
+
+            <div class="separator"></div>
+
+
+            <g:form action='forceMetadataCacheUpdate' method='POST' class='form form-horizontal cssform' autocomplete='off'>
                 <h4>We usually call the metadata once, cache that value, and then rely on</h4>
                 <div class="row clearfix">
                     <div class="col-md-3"></div>
@@ -312,13 +352,13 @@
 
                             <div class="radio">
                                 <label>
-                                    <input id="noOverrideIsNecessary" type="radio" name="datatype" value="newApi"  <%=(forceMetadataCacheOverride==true)?'checked':''%> />
+                                    <input id="noOverrideIsNecessary" type="radio" name="datatype" value="forceIt"  <%=(forceMetadataCacheOverride==true)?'checked':''%> />
                                     A metadata cache override has been scheduled
                                 </label>
                             </div>
                             <div class="radio">
                                 <label>
-                                    <input id="overrideIsNecessary" type="radio" name="datatype" value="oldApi" <%=(forceMetadataCacheOverride==false)?'checked':''%> />
+                                    <input id="overrideIsNecessary" type="radio" name="datatype" value="doNot" <%=(forceMetadataCacheOverride==false)?'checked':''%> />
                                     No metadata cache override has been scheduled
                                 </label>
                             </div>

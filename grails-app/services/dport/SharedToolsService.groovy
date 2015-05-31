@@ -32,8 +32,9 @@ class SharedToolsService {
     Integer showGene = -1
     Integer showBeacon = -1
     Integer showNewApi = -1
-
+    Integer dataVersion = 2
     String warningText = ""
+    String dataSetPrefix = "mdv"
 
     Integer helpTextSetting = 1 // 0== never display, 1== display conditionally, 2== always display
 
@@ -44,6 +45,18 @@ class SharedToolsService {
             log.error("Attempt to set help text to ${newHelpTextSetting}.  Should be 0, 1, or 2.")
         }
     }
+
+
+    public Integer getDataVersion() {
+        return dataVersion
+    }
+
+    public void setDataVersion(String dataVersionString) {
+        int dataVersion  =   dataVersionString as int
+        this.dataVersion = dataVersion
+    }
+
+
 
     public int getHelpTextSetting (){
         return helpTextSetting
@@ -156,12 +169,12 @@ class SharedToolsService {
 
 
     public Boolean getMetadataOverrideStatus() {
-        return (showNewApi==1)
+        return (forceMetadataOverride==1)
     }
 
 
-    public void setMetadataOverrideStatus(showNewApi) {
-        this.showNewApi=showNewApi
+    public void setMetadataOverrideStatus(int metadataOverride) {
+        this.forceMetadataOverride=metadataOverride
     }
 
 
@@ -217,10 +230,12 @@ class SharedToolsService {
         LinkedHashMap<String, List <String>> annotatedPhenotypes = [:]
         LinkedHashMap<String, List <String>> annotatedSampleGroups = [:]
         LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties = [:]
+        String dataSetVersionThatWeWant = "${dataSetPrefix}${getDataVersion()}"
         if (metadata){
             for (def experiment in metadata.experiments){
                 captured << experiment.name
-                if (experiment.sample_groups){
+                String dataSetVersion =  experiment.version
+                if ((experiment.sample_groups) && (dataSetVersionThatWeWant == dataSetVersion)){
                     getDataSetsPerPhenotype (experiment.sample_groups, annotatedPhenotypes)
                     getPropertiesPerSampleGroupId (experiment.sample_groups, annotatedSampleGroups)
                     getPhenotypeSpecificPropertiesPerSampleGroupId (experiment.sample_groups, phenotypeSpecificSampleGroupProperties)
@@ -263,7 +278,12 @@ class SharedToolsService {
                      } else {
                          listOfSampleGroups << sampleGroupsId
                      }
-                 }
+
+                     if (sampleGroup.sample_groups){
+                         getDataSetsPerPhenotype (sampleGroup.sample_groups, annotatedPhenotypes)
+                     }
+
+                     }
 
              }
         }

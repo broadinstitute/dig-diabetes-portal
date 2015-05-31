@@ -23,7 +23,8 @@ class SystemController {
         currentApplicationIsSigma:sharedToolsService.applicationName(),
         helpTextLevel:sharedToolsService.getHelpTextSetting(),
         newApi:sharedToolsService.getNewApi(),
-        forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus()])
+        forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
+        dataVersion:sharedToolsService.getDataVersion ()])
     }
 
     def determineVersion = {
@@ -49,7 +50,8 @@ class SystemController {
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
                                           newApi:sharedToolsService.getNewApi(),
-                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus()])
+                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
+                                          dataVersion:sharedToolsService.getDataVersion ()])
 
     }
 
@@ -86,7 +88,8 @@ class SystemController {
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
                                           newApi:sharedToolsService.getNewApi(),
-                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus()])
+                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
+                                          dataVersion:sharedToolsService.getDataVersion ()])
     }
 
 
@@ -114,7 +117,8 @@ class SystemController {
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
                                           newApi:sharedToolsService.getNewApi(),
-                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus()])
+                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
+                                          dataVersion:sharedToolsService.getDataVersion ()])
     }
 
 
@@ -123,14 +127,14 @@ class SystemController {
     def forceMetadataCacheUpdate ()  {
         String metadataOverrideStatus = params.datatype
         Boolean metadataOverrideHasBeenRequested = sharedToolsService.getMetadataOverrideStatus ()
-        if (metadataOverrideStatus == true) {
-            if (!(metadataOverrideHasBeenRequested == false)) {
+        if (metadataOverrideStatus == "forceIt") {
+            if (metadataOverrideHasBeenRequested == false) {
                 sharedToolsService.setMetadataOverrideStatus(1)
                 flash.message = "You have scheduled an override to the metadata cache. The next time the metadata is requested the cache will be reloaded"
             } else {
                 flash.message = "But the metadata cache was already scheduled!"
             }
-        } else if (apiSetting == 'false') {
+        } else {
             if (!(metadataOverrideHasBeenRequested == true)) {
                 sharedToolsService.setForceMetadataOverride(0)
                 flash.message = "you have rejected the request to update the metadata. "
@@ -143,7 +147,30 @@ class SystemController {
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
                                           newApi:sharedToolsService.getNewApi(),
-                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus()])
+                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
+                                          dataVersion:sharedToolsService.getDataVersion ()])
+
+    }
+
+
+    def changeDataVersion()  {
+        String requestedDataVersion = params.datatype
+        int currentDataVersion = sharedToolsService.getDataVersion ()
+        if (requestedDataVersion!=null) {
+            if (requestedDataVersion != currentDataVersion) {
+                sharedToolsService.setDataVersion(requestedDataVersion)
+                flash.message = "You have changed the data version to ${sharedToolsService.getDataVersion ()}"
+            } else {
+                flash.message = "But the data version was already ${currentDataVersion}"
+            }
+        }
+        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
+                                          currentRestServer:restServerService.currentRestServer(),
+                                          currentApplicationIsSigma:sharedToolsService.applicationName(),
+                                          helpTextLevel:sharedToolsService.getHelpTextSetting(),
+                                          newApi:sharedToolsService.getNewApi(),
+                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
+                                          dataVersion:sharedToolsService.getDataVersion ()])
 
     }
 
@@ -209,7 +236,8 @@ class SystemController {
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
                                           newApi:sharedToolsService.getNewApi(),
-                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus()])
+                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
+                                          dataVersion:sharedToolsService.getDataVersion ()])
     }
 
     def switchSigmaT2d(){
@@ -236,7 +264,8 @@ class SystemController {
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
                                           newApi:sharedToolsService.getNewApi(),
-                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus()])
+                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
+                                          dataVersion:sharedToolsService.getDataVersion ()])
     }
 
 
@@ -247,7 +276,8 @@ class SystemController {
                                           currentApplicationIsSigma:sharedToolsService.applicationName(),
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
                                           newApi:sharedToolsService.getNewApi(),
-                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus()])
+                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
+                                          dataVersion:sharedToolsService.getDataVersion ()])
     }
 
 }
