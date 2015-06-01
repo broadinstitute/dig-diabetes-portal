@@ -30,6 +30,7 @@
                 phenotypes:'',
                 technology:''
             };
+            $scope.selectedSets = [];
             fullTextRegexTokens = [];
 
             $scope.init = function(metadataUrl,

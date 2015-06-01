@@ -30,12 +30,21 @@
     showDatasetModal = function() {
         var modal = '#columnChooserModal';
         angular.element(modal).scope().setSelections({
-            datasetVersion:'mdv2',
-            selectedSets: ['ExSeq_17k_hs_genes_mdv2'],
-            ancestry:'Hispanic',
-            phenotypes:'T2D',
-            technology:'ExSeq'
+            datasetVersion:'',
+            selectedSets: [],
+            ancestry:'',
+            phenotypes:'',
+            technology:''
         });
+        /*
+         angular.element(modal).scope().setSelections({
+             datasetVersion:'mdv2',
+             selectedSets: ['ExSeq_17k_hs_genes_mdv2'],
+             ancestry:'Hispanic',
+             phenotypes:'T2D',
+             technology:'ExSeq'
+         });
+         */
         // todo arz pass in tree structure from getMetadata
         $(modal).modal('show');
         angular.element(modal).scope().loadMetadata();
