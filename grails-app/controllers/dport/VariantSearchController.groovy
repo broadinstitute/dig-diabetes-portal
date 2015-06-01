@@ -36,13 +36,20 @@ class VariantSearchController {
     }
 
 
-    def variantSearchWF(){
+    def variantSearchWF() {
         String encParams
         if (params.encParams) {
             encParams = params.encParams
             log.debug "variantSearch params.encParams = ${params.encParams}"
-        } else if (sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma))  {  // if sigma default data set is sigma
-            encParams = "1:0"
+        } else if (sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma)) {
+            // if sigma default data set is sigma
+            encParams = ""
+        }
+        List<LinkedHashMap> encodedFilterSets = [[:]]
+
+        if ((encParams) && (encParams.length())) {
+            LinkedHashMap simulatedParameters = filterManagementService.generateParamsForSearchRefinement(encParams)
+            encodedFilterSets = filterManagementService.handleFilterRequestFromBrowser(simulatedParameters)
         }
 
         render(view: 'variantWorkflow',
@@ -50,9 +57,8 @@ class VariantSearchController {
                         show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                         show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
                         show_sigma: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
-                        encParams : encParams,
                         variantWorkflowParmList:[],
-                        encodedFilterSets : [[:]]])
+                        encodedFilterSets : encodedFilterSets])
     }
 
 

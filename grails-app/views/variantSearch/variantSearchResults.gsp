@@ -153,7 +153,7 @@
 
                 <div id="warnIfMoreThan1000Results"></div>
 
-                <p><a href="<g:createLink controller='variantSearch' action='variantSearch' params='[encParams:"${encodedParameters}"]'/>" class='boldlink'>
+                <p><a href="<g:createLink controller='variantSearch' action='variantSearchWF' params='[encParams:"${encodedParameters}"]'/>" class='boldlink'>
                     <g:message code="variantTable.searchResults.clickToRefine" default="Click here to refine your results" /></a></p>
 
 

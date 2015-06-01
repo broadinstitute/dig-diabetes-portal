@@ -186,7 +186,7 @@ class FilterManagementService {
                 returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${parm1}", "operand_type": "STRING"}""".toString()
                 break;
             case "setRegionChromosomeSpecification" :
-                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "EQ", "value": ${parm1}, "operand_type": "INTEGER"}""".toString()
+                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "EQ", "value": "${parm1}", "operand_type": "STRING"}""".toString()
                 break;
             case "setRegionPositionStart" :
                 returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "GTE", "value": ${parm1}, "operand_type": "INTEGER"}""".toString()
@@ -1441,6 +1441,137 @@ class FilterManagementService {
         }
         return returnValue
     }
+
+    /***
+     * search parameters of been coded into a single string. Unpack that string and turn it into
+     * a hashmap that resembles the parameters the search builder passes to itself. That way I can
+     * use the same machinery to generate queries run during interactive search building
+     *
+     * @param codedParameters
+     * @return
+     */
+    public LinkedHashMap generateParamsForSearchRefinement(String codedParameters){
+        LinkedHashMap returnValue = [:]
+        if ( (codedParameters) &&
+             (codedParameters.length() > 0) ) {
+            List <String> listOfFilters = codedParameters.tokenize(",")
+            for (String oneFilter in listOfFilters){
+                if (oneFilter){
+                    List <String> typeOfFilter = oneFilter.tokenize (":")
+                    String value = (typeOfFilter[1]?.trim());
+                    switch (typeOfFilter [0]){
+                        case "1":break;
+                        case "2":break;
+                        case "3":break;
+                        case "4":
+                            returnValue ["region_gene_input"] = value
+                            break;
+                        case "5":
+                            returnValue ["region_chrom_input"] = value
+                            break;
+                        case "6":
+                            returnValue ["region_start_input"] = value
+                            break;
+                        case "7":
+                            returnValue ["region_stop_input"] = value
+                            break;
+                        case "8":break;
+                        case "9":break;
+                        case "10":break;
+                        case "11":
+                            break;
+//                        case 20:break;
+//                        case 21:break;
+//                        case 22:break;
+                        case "23":
+                            switch (value){
+                                case "0":
+                                    returnValue ["predictedEffects"] = "all-effects"
+                                    break;
+                                case "1":
+                                    returnValue ["predictedEffects"] = "protein-truncating"
+                                    break;
+                                case "2":
+                                    returnValue ["predictedEffects"] = "missense"
+                                    break;
+                                case "3":
+                                    returnValue ["predictedEffects"] = "noEffectSynonymous"
+                                    break;
+                                case "4":
+                                    returnValue ["predictedEffects"] = "noEffectNoncoding"
+                                    break;
+                                default:
+                                    returnValue ["predictedEffects"] = "all-effects"
+                                    break;
+                            }
+                            break;
+                        case "24":
+                            switch (value){
+                                case "0":
+                                    returnValue ["polyphenSelect"] = "probably_damaging"
+                                    break;
+                                case "1":
+                                    returnValue ["polyphenSelect"] = "possibly_damaging"
+                                    break;
+                                case "2":
+                                    returnValue ["polyphenSelect"] = "benign"
+                                    break;
+                                default:
+                                    returnValue ["polyphenSelect"] = "probably_damaging"
+                                    break;
+                            }
+                            break;
+                        case "25":
+                            switch (value){
+                                case "0":
+                                    returnValue ["sift"] = "probably_damaging"
+                                    break;
+                                case "1":
+                                    returnValue ["sift"] = "possibly_damaging"
+                                    break;
+                                default:
+                                    returnValue ["sift"] = "probably_damaging"
+                                    break;
+                            }
+                            break;
+                        case "26":
+                            switch (value){
+                                case "0":
+                                    returnValue ["condel"] = "deleterious"
+                                    break;
+                                case "1":
+                                    returnValue ["condel"] = "benign"
+                                    break;
+                                default:
+                                    returnValue ["condel"] = "deleterious"
+                                    break;
+                            }
+                            break;
+                        case "47":
+                            LinkedHashMap parsedFilterString = parseCustomFilterString(value)
+                            String equivalenceCode
+                            switch (parsedFilterString.equivalence){
+                                case "LT":equivalenceCode = "lessThan"; break;
+                                case "GT":equivalenceCode = "greaterThan"; break;
+                                case "EQ":equivalenceCode = "equalTo"; break;
+                                default:equivalenceCode = "lessThan";break;
+                            }
+                            String filterDefinition = "custom47^${parsedFilterString.phenotype}^${parsedFilterString.sampleSet}^${equivalenceCode}^${parsedFilterString.property}___valueId"
+                            returnValue [filterDefinition] = parsedFilterString.value
+                            break;
+
+                    }
+                }
+
+            }
+        }
+       return returnValue
+    }
+
+
+
+
+
 
 
     /***
