@@ -132,27 +132,29 @@ var mpgSoftware = mpgSoftware || {};
                         var fieldVersusValue =  oneFilter.split("=");
                         if (fieldVersusValue.length === 2 ){
                             switch (fieldVersusValue[0]) {
-                                case '1':instantiatePhenotype (fieldVersusValue[1]);
+                                case '1'://instantiatePhenotype (fieldVersusValue[1]);
                                     break;
                                 case '2':mpgSoftware.firstResponders.displayDataSetChooser(fieldVersusValue[1]);
                                     break;
                                 case '3': // There are two fields we need to handle here.  Let's pull out the other one by hand
-                                    mpgSoftware.firstResponders.respondToReviseFilters('oddsratio',extractString (clauseDefinition,'^4='),fieldVersusValue[1]);
                                     break;// or value and or inequality are handled together, so skip one
                                 case '4':break;// Ignore
                                 case '5': // There are two fields we need to handle here.  Let's pull out the other one by hand
-                                    mpgSoftware.firstResponders.respondToReviseFilters('pvalue',extractString (clauseDefinition,'^6='),fieldVersusValue[1]);
                                     break;// or value and or inequality are handled together, so skip one
                                 case '6':break;
-                                case '7':mpgSoftware.firstResponders.respondToReviseFilters('gene',fieldVersusValue[1]);
+                                case '7':
+                                    $('#region_gene_input').val(fieldVersusValue[1]);
                                     break;
-                                case '8':break;//  chromosome name, handled under 10
-                                case '9':break;// chromosome start, handled under 10
+                                case '8'://  chromosome name, handled under 10
+                                    $('#region_chrom_input').val(fieldVersusValue[1]);
+                                    break;
+                                case '9':// chromosome start, handled under 10
+                                    $('#region_start_input').val(fieldVersusValue[1]);
                                 case '10': // chromosome end -- handle a chromosome here
-                                    mpgSoftware.firstResponders.respondToReviseFilters('position',extractString (clauseDefinition,'^9='),fieldVersusValue[1],extractString (clauseDefinition,'^8='));
+                                    $('#region_stop_input').val(fieldVersusValue[1]);
                                     break;
                                 case '11':
-                                    mpgSoftware.firstResponders.respondToReviseFilters('predictedeffect',fieldVersusValue[1],extractString (clauseDefinition,'^14='),extractString (clauseDefinition,'^15='),extractString (clauseDefinition,'^16='));
+                                    $('[name="predictedEffects"]').filter ('[value ="'+fieldVersusValue[1]+'"]').prop('checked',true)
                                     break;
                                 case '12': // There are two fields we need to handle here.  Let's pull out the other one by hand
                                     mpgSoftware.firstResponders.respondToReviseFilters('effectsize',extractString (clauseDefinition,'^13='),fieldVersusValue[1]);
@@ -161,7 +163,8 @@ var mpgSoftware = mpgSoftware || {};
                                 case '15':break;//  chromosome name, handled under 11
                                 case '16':break;//  chromosome name, handled under 11
                                 case '17':
-                                    break;//  chromosome name, handled under 11
+                                    mpgSoftware.firstResponders.respondToReviseCustomFilter(extractString (clauseDefinition,'^17='));
+                                    break;
                                 default: break;
                             }
                         }
@@ -827,10 +830,51 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
                 case 'effectsize':displayESChooser(holder,valueOne,valueTwo);
                     break;
                 default:
-                    appendValueWithEquivalenceChooser (holder,selection+'Holder',selection+'name',
+                    appendValueWithEquivalenceChooser (holder,selection+'Holder',selection,
                             selection+'___equivalenceId',selection+'___valueId',
                         'help title','everything there is to say to help you out','lessThan',1);
                     break;
+            }
+        };
+        var parseCustomFilter = function(filterDefinition){
+            var returnValue = {phenotype:"",dataset:"",property: "",equiv:"",value:"", success: true};
+            if (typeof filterDefinition !== 'undefined')  {
+                var mainSplit  =   filterDefinition.split("]");
+                if (mainSplit.length === 2) {
+                    var secondarySplit =  (mainSplit[0]).split("[");
+                    returnValue.phenotype = secondarySplit [0];
+                    returnValue.dataset = secondarySplit [1];
+                    var partTwo = mainSplit[1];
+                    if (partTwo.indexOf("<") > -1){
+                        var  equivalencePosition = partTwo.indexOf("<");
+                        returnValue.property  = partTwo.substring(0,equivalencePosition);
+                        returnValue.value  = partTwo.substring(equivalencePosition+1);
+                        returnValue.equiv  = "lessThan"
+                    } else if (partTwo.indexOf(">") > -1){
+                        var  equivalencePosition = partTwo.indexOf(">");
+                        returnValue.property  = partTwo.substring(0,equivalencePosition);
+                        returnValue.value  = partTwo.substring(equivalencePosition+1);
+                        returnValue.equiv  = "greaterThan" ;
+                    } else if (partTwo.indexOf("=") > -1){
+                        var  equivalencePosition = partTwo.indexOf("=");
+                        returnValue.property  = partTwo.substring(0,equivalencePosition);
+                        returnValue.value  = partTwo.substring(equivalencePosition+1);
+                        returnValue.equiv  = "equalTo" ;
+                    }   else { returnValue.success = false; }
+                } else { returnValue.success = false; }
+            }  else { returnValue.success = false; }
+            return  returnValue;
+        } ;
+        var respondToReviseCustomFilter = function(filterDefinition){
+            var parsedFilter =  parseCustomFilter (filterDefinition);
+            if (parsedFilter.success) {
+                     $('phenotype').selected =  parsedFilter.phenotype ;
+                     $('dataSet').selected =  parsedFilter.dataset ;
+                var filterHolder = $('#filterHolder');
+                var selection = parsedFilter.property;
+                appendValueWithEquivalenceChooser ( filterHolder,selection+'Holder',selection,
+                        selection+'___equivalenceId',selection+'___valueId',
+                    'help title','everything there is to say to help you out','lessThan',parsedFilter.value);
             }
         };
         var respondToReviseFilters = function (selection,valueOne,valueTwo,valueThree,valueFour){
@@ -857,7 +901,9 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             respondToRequestForMoreFilters:respondToRequestForMoreFilters,
             displayDataSetChooser:displayDataSetChooser,
             respondToReviseFilters:respondToReviseFilters,
-            requestToAddFilters:requestToAddFilters
+            respondToReviseCustomFilter:respondToReviseCustomFilter,
+            requestToAddFilters:requestToAddFilters,
+            appendValueWithEquivalenceChooser:appendValueWithEquivalenceChooser
         }
 
     }());
