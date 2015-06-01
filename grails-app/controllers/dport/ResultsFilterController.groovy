@@ -59,4 +59,14 @@ class ResultsFilterController {
             [metadataQueryService.queryMetadata()]
         }
     }
+
+    def selections() {
+        render(status:200, contentType:"application/json") {
+            [datasetVersion:'mdv2',
+             selectedSets: ['ExSeq_17k_hs_genes_mdv2'],
+             ancestry:'Hispanic',
+             phenotypes:'T2D',
+             technology:'ExSeq']
+        }
+    }
 }

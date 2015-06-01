@@ -2,7 +2,13 @@
 <html lang="en"
       ng-app="ChooserApp"
       ng-controller="ChooserController"
-      ng-init="init('${createLink(controller:'ResultsFilter', action:'metadata')}','mdv2')">
+      ng-init="init('${createLink(controller:'ResultsFilter', action:'metadata')}',
+                    {   datasetVersion:'mdv2',
+                        selectedSets: ['ExSeq_17k_hs_genes_mdv2'],
+                        ancestry:'Hispanic',
+                        phenotypes:'T2D',
+                        technology:'ExSeq'
+                    })">
 
 <body>
 
@@ -52,7 +58,6 @@
                         <div class='col-md-8'>
                             <select class='form-control'
                                     ng-change='view.filters = refineFilters(search.currentQuery)'
-                                    ng-init="search.currentQuery[filter_name] = ''"
                                     ng-model='search.currentQuery[filter_name]'
                                     ng-options="k for k in [''].concat(filter_values)"></select>
 
@@ -137,7 +142,7 @@
             <div class='row'>
                 <div class='col-xs-12'>
                     <button class='btn btn-primary btn-lg pull-right' data-dismiss='modal'
-                            ng-click="setColumnFilter(getSelectedSetNames(tree))">Update Results</button>
+                            ng-click="setColumnFilter(getSelectedSetNames(tree),search.currentQuery)">Update Results</button>
                     <button class='btn btn-lg pull-right' data-dismiss='modal' ng-click='view.showAdvancedSelector = false'>Cancel</button>
                 </div>
             </div>

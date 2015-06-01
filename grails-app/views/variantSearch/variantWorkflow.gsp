@@ -23,8 +23,8 @@
     });
 
     // todo arz remove me example callback from angular to set the columns
-    applyDatasetsFilter = function(columns) {
-        console.log(columns);
+    applyDatasetsFilter = function(columns,filters) {
+        console.log(columns,filters);
     };
 
     showDatasetModal = function() {

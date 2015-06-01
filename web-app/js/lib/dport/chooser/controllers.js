@@ -23,17 +23,30 @@
             $scope.view = {};
             $scope.view.showAdvancedSelector = true;
             $scope.search = {};
-            $scope.search.currentQuery = {};
+            $scope.search.currentQuery = {
+                version:'',
+                ancestry:'',
+                phenotypes:'',
+                technology:''
+            };
             fullTextRegexTokens = [];
 
-            $scope.init = function(metadataUrl,datasetVersion) {
+            $scope.init = function(metadataUrl,
+                                   selections) {
                 $scope.metadataUrl = metadataUrl;
-                $scope.datasetVersion = datasetVersion;
-                $scope.search.currentQuery = {version: $scope.datasetVersion};
+                var selectionsObj = angular.fromJson(selections);
+                $scope.datasetVersion = selectionsObj.datasetVersion;
+                $scope.search.currentQuery.version = selectionsObj.datasetVersion;
+                $scope.search.currentQuery.ancestry = selectionsObj.ancestry;
+                $scope.search.currentQuery.phenotypes = selectionsObj.phenotypes;
+                $scope.search.currentQuery.technology = selectionsObj.technology;
+                $scope.selectedSets = selectionsObj.selectedSets;
+
+                var datasets = $scope.getDatasetsFromQuery($scope.search.currentQuery);
             };
 
-            $scope.setColumnFilter = function($columns) {
-                applyDatasetsFilter($columns);
+            $scope.setColumnFilter = function($columns,$filters) {
+                applyDatasetsFilter($columns,$filters);
             };
 
             $scope.humanReadableDatasetName = function(id,unfriendlyName) {
@@ -74,10 +87,8 @@
                 };
                 if (datasetMap[id] != null) {
                     name = datasetMap[id];
-                    console.log(id + '->' + name);
                 }
                 else {
-                    console.log('No friendly name for ' + id + ' and ' + unfriendlyName);
                     name = unfriendlyName;
                 }
                 return name;
@@ -445,7 +456,13 @@
             };
 
             $scope.resetFilters = function() {
-                $scope.search.currentQuery = {version: $scope.datasetVersion};
+                $scope.search.currentQuery = {
+                    version:'',
+                    ancestry:'',
+                    phenotypes:'',
+                    technology:''
+                };
+                $scope.search.currentQuery.version = $scope.datasetVersion;
                 $scope.view.filters = $scope.refineFilters($scope.search.currentQuery);
                 $scope.queryDatasetText = null;
             };
@@ -493,6 +510,15 @@
                 }
             };
 
+            // mark the dataset as selected if item.id was passed into ng-init
+            $scope.selectDatasetIfChosenInPreviousSession = function(item) {
+                $scope.selectedSets.forEach(function (selectedSet) {
+                    if (item.id === selectedSet) {
+                        item.selected = true;
+                    }
+                });
+            };
+
             $scope.initializeData = function() {
                 var item, _i, _len, _ref;
                 $scope.getLevels($scope.tree);
@@ -500,6 +526,7 @@
                 for (_i = 0, _len = _ref.length; _i < _len; _i++) {
                     item = _ref[_i];
                     $scope.assignAncestries(item);
+                    $scope.selectDatasetIfChosenInPreviousSession(item);
                 }
                 $scope.propagateAttributes($scope.tree);
                 return $scope.view.filters = $scope.getAllFilters($scope.tree);
