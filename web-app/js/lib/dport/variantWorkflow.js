@@ -157,13 +157,13 @@ var mpgSoftware = mpgSoftware || {};
                                     $('[name="predictedEffects"]').filter ('[value ="'+fieldVersusValue[1]+'"]').prop('checked',true)
                                     break;
                                 case '12': // There are two fields we need to handle here.  Let's pull out the other one by hand
-                                    mpgSoftware.firstResponders.respondToReviseFilters('effectsize',extractString (clauseDefinition,'^13='),fieldVersusValue[1]);
+                                    //mpgSoftware.firstResponders.respondToReviseFilters('effectsize',extractString (clauseDefinition,'^13='),fieldVersusValue[1]);
                                     break;// or value and or inequality are handled together, so skip one
                                 case '14':break;//  chromosome name, handled under 11
                                 case '15':break;//  chromosome name, handled under 11
                                 case '16':break;//  chromosome name, handled under 11
                                 case '17':
-                                    mpgSoftware.firstResponders.respondToReviseCustomFilter(extractString (clauseDefinition,'^17='));
+                                    mpgSoftware.firstResponders.respondToReviseCustomFilter(fieldVersusValue[1]);
                                     break;
                                 default: break;
                             }
@@ -297,7 +297,7 @@ var mpgSoftware = mpgSoftware || {};
         var removeThisFilter = function (currentObject){
             if (typeof currentObject !== 'undefined') {
                 var currentObjectId = currentObject.id;
-                var targetName = currentObjectId.split("_")[1];
+                var targetName = currentObjectId.split("___")[1];
                 var target = $('#'+targetName);
                 if (typeof target !== 'undefined')  {
                     target.remove ();
@@ -543,19 +543,41 @@ var mpgSoftware = mpgSoftware || {};
         /***
          * private
          */
-        var appendValueWithEquivalenceChooser = function (currentDiv,holderId,sectionName,equivalenceId,valueId,helpTitle,helpText,equivalence,defaultValue){
+        var appendValueWithEquivalenceChooser = function (currentDiv,holderId,sectionName,helpTitle,helpText,equivalence,defaultValue){
             var lessThanSelected = '';
             var greaterThanSelected = '';
+            var equalToSelected = '';
+            var equivalenceValue = '';
             if (typeof equivalence !== 'undefined'){
                 if (equivalence === 'lessThan'){
                     lessThanSelected = "selected";
-                } else {
+                    equivalenceValue = "<";
+                } else if (equivalence === 'greaterThan'){
                     greaterThanSelected = "selected";
+                    equivalenceValue = ">";
+                } else if (equivalence === 'greaterThan'){
+                    equalToSelected = "selected";
+                    equivalenceValue = "=";
                 }
             }
+            var labelId = sectionName+'___nameId';
+            var equivalenceId = sectionName+'___equivalenceId';
+            var valueId = sectionName+'___valueId';
+            // Does a box by this name already exist?If so, then just use that
+            if (($("#"+labelId).length>0) &&($("#"+equivalenceId).length>0) &&($("#"+valueId).length>0)){
+                $("#"+labelId).text (sectionName);
+                $("#"+equivalenceId).selected (equivalenceValue);
+                $("#"+valueId).val (defaultValue);
+                return; // We don't need to do anything else
+            }else if (($("#"+labelId).length>0)  ||($("#"+equivalenceId).length>0)  ||($("#"+valueId).length>0)){
+                $("#"+labelId).remove();
+                $("#"+equivalenceId).remove();
+                $("#"+valueId).remove();
+            }
+            // We need to create all of these fields and initialize them
             currentDiv.append("<div id='"+holderId+"' class='row clearfix'>"+
                 "<div class='primarySectionSeparator'>"+
-                "<div class='col-sm-offset-1 col-md-3'>"+sectionName+"</div>"+
+                "<div  id='"+labelId+"' class='col-sm-offset-1 col-md-3 text-right'>"+sectionName+"</div>"+
                 "<div class='col-md-2'>"+
                 "<select id='"+equivalenceId+"' class='form-control btn-group btn-input clearfix cusEquiv'>"+
                 "<option "+lessThanSelected+" value='lessThan'>&lt;</option>"+
@@ -568,7 +590,7 @@ var mpgSoftware = mpgSoftware || {};
                 "trigger='hover' data-container='body' data-placement='right' title='' data-content='"+helpText + "' data-original-title='"+helpTitle + "'></span>"+
                 "</div>"+
                 "<div class='col-md-2'>"+
-                "<span class='glyphicon glyphicon-remove-circle filterCanceler filterRefiner' aria-hidden='true' onclick='mpgSoftware.variantWF.removeThisFilter(this)' id='remove_"+holderId+"'></span>"+
+                "<span class='glyphicon glyphicon-remove-circle filterCanceler filterRefiner' aria-hidden='true' onclick='mpgSoftware.variantWF.removeThisFilter(this)' id='remove___"+holderId+"'></span>"+
                 "</div>"+
                 "</div>");
             if (typeof defaultValue !== 'undefined'){
@@ -762,18 +784,18 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
 
 
 
-        var displayPVChooser = function (holder,equivalence,defaultValue){
-            appendValueWithEquivalenceChooser (holder,'pvHolder','p value','pvEquivalence','pvValue',
-                'P value help title','everything there is to say about P values',equivalence,defaultValue);
-        };
-        var displayORChooser = function (holder,equivalence,defaultValue){
-            appendValueWithEquivalenceChooser (holder,'pvHolder','odds ratio','orEquivalence','orValue',
-                'Odds ratio help title','everything there is to say about an odds ratio',equivalence,defaultValue);
-        };
-        var displayESChooser = function (holder,equivalence,defaultValue){
-            appendValueWithEquivalenceChooser (holder,'esHolder','beta','esEquivalence','esValue',
-                'Effect size help title','everything there is to say about an effect sizes',equivalence,defaultValue);
-        };
+//        var displayPVChooser = function (holder,equivalence,defaultValue){
+//            appendValueWithEquivalenceChooser (holder,'pvHolder','p value','pvEquivalence','pvValue',
+//                'P value help title','everything there is to say about P values',equivalence,defaultValue);
+//        };
+//        var displayORChooser = function (holder,equivalence,defaultValue){
+//            appendValueWithEquivalenceChooser (holder,'pvHolder','odds ratio','orEquivalence','orValue',
+//                'Odds ratio help title','everything there is to say about an odds ratio',equivalence,defaultValue);
+//        };
+//        var displayESChooser = function (holder,equivalence,defaultValue){
+//            appendValueWithEquivalenceChooser (holder,'esHolder','beta','esEquivalence','esValue',
+//                'Effect size help title','everything there is to say about an effect sizes',equivalence,defaultValue);
+//        };
         var displayGeneChooser = function (holder,geneName){
             appendGeneChooser(holder,'geneHolder','gene','region_gene_input',
                 'Gene chooser help title','everything there is to say about choosing a gene',geneName);
@@ -823,15 +845,14 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
 
         var forceRequestForMoreFilters = function (selection,holder,valueOne,valueTwo,valueThree,valueFour){
             switch (selection){
-                case 'pvalue':displayPVChooser(holder,valueOne,valueTwo);
-                    break;
-                case 'oddsratio':displayORChooser(holder,valueOne,valueTwo);
-                    break;
-                case 'effectsize':displayESChooser(holder,valueOne,valueTwo);
-                    break;
+//                case 'pvalue':displayPVChooser(holder,valueOne,valueTwo);
+//                    break;
+//                case 'oddsratio':displayORChooser(holder,valueOne,valueTwo);
+//                    break;
+//                case 'effectsize':displayESChooser(holder,valueOne,valueTwo);
+//                    break;
                 default:
                     appendValueWithEquivalenceChooser (holder,selection+'Holder',selection,
-                            selection+'___equivalenceId',selection+'___valueId',
                         'help title','everything there is to say to help you out','lessThan',1);
                     break;
             }
@@ -873,7 +894,6 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
                 var filterHolder = $('#filterHolder');
                 var selection = parsedFilter.property;
                 appendValueWithEquivalenceChooser ( filterHolder,selection+'Holder',selection,
-                        selection+'___equivalenceId',selection+'___valueId',
                     'help title','everything there is to say to help you out','lessThan',parsedFilter.value);
             }
         };

@@ -53,11 +53,7 @@ class VariantQueryToolsTagLib {
                     <div class="variantWFsingleFilter">
                     <div class="row clearfix">
                     <div class="col-md-10">""".toString()
-                    if (map.dataSet) {
-                        out << """
-                    <span class="dataset filterElement">${map.dataSet},</span>
-                    """.toString()
-                    }
+
                     // write out all the custom filters, identifiable in the map with a prefix
                     LinkedHashMap customFilters = map.findAll{ it.key =~ /^filter/ }
                     customFilters.each {String key, String value->
