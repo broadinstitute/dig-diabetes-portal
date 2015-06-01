@@ -19,6 +19,7 @@
         "$scope", "$http", function($scope, $http) {
             var e, fullTextRegexTokens;
             $scope.tree = [];
+            $scope.treeLoading = true;
             $scope.$ = $;
             $scope.view = {};
             $scope.view.showAdvancedSelector = true;
@@ -34,15 +35,17 @@
             $scope.init = function(metadataUrl,
                                    selections) {
                 $scope.metadataUrl = metadataUrl;
-                var selectionsObj = angular.fromJson(selections);
-                $scope.datasetVersion = selectionsObj.datasetVersion;
-                $scope.search.currentQuery.version = selectionsObj.datasetVersion;
-                $scope.search.currentQuery.ancestry = selectionsObj.ancestry;
-                $scope.search.currentQuery.phenotypes = selectionsObj.phenotypes;
-                $scope.search.currentQuery.technology = selectionsObj.technology;
-                $scope.selectedSets = selectionsObj.selectedSets;
-
+                $scope.setSelections(angular.fromJson(selections));
                 var datasets = $scope.getDatasetsFromQuery($scope.search.currentQuery);
+            };
+
+            $scope.setSelections = function(selections) {
+                $scope.datasetVersion = selections.datasetVersion;
+                $scope.search.currentQuery.version = selections.datasetVersion;
+                $scope.search.currentQuery.ancestry = selections.ancestry;
+                $scope.search.currentQuery.phenotypes = selections.phenotypes;
+                $scope.search.currentQuery.technology = selections.technology;
+                $scope.selectedSets = selections.selectedSets;
             };
 
             $scope.setColumnFilter = function($columns,$filters) {
@@ -536,15 +539,21 @@
                 $http.get($scope.metadataUrl)
                     .success(function (data, status, headers, config) {
                         try {
+                            $scope.treeLoading = false;
                             $scope.tree = angular.fromJson(data[0].experiments);
                             $scope.initializeData();
+                            if ($scope.tree.length == 0) {
+                                alert('No data returned from metadata query.  Please report the problem and try again later.');
+                            }
                         }
                         catch(err) {
                             console.error(err);
                             alert('Unable to query metadata. Please report the problem and try again later.');
+
                         }
                     })
                     .error(function (data, status, headers, config) {
+                        $scope.treeLoading = false;
                         if (status != 0) {
                             alert('Unable to query metadata due to ' + status + '. Please report the problem and try again later.');
                         }

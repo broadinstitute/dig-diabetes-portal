@@ -4,14 +4,15 @@
       ng-controller="ChooserController"
       ng-init="init('${createLink(controller:'ResultsFilter', action:'metadata')}',
                     {   datasetVersion:'mdv2',
-                        selectedSets: ['ExSeq_17k_hs_genes_mdv2'],
-                        ancestry:'Hispanic',
-                        phenotypes:'T2D',
-                        technology:'ExSeq'
+                        selectedSets:null,
+                        ancestry:null,
+                        phenotypes:null,
+                        technology:null
                     })">
 
 <body>
 
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.js"></script>
 <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -35,7 +36,7 @@
                     <p>Your results include variants from the datasets you selected above. The table of these variants will automatically show results (e.g., p-value, effect size) from your selected datasets and, for comparison, the largest dataset for your data type that is available through this portal. If variants in your table were genotyped in other studies, you can view results from those studies as well by adding a column for each study using these tools.</p>
                 </div>
             </div>
-            <div ng-show="tree.length == 0" class="row">
+            <div ng-show="treeLoading" class="row">
                 <div id="spinner" style="background-color: #003300" class="text-center">
                     <img id="img-spinner" src="${resource(dir: 'images', file: 'ajaxLoadingAnimation.gif')}" alt="Loading"/>
                 </div>
