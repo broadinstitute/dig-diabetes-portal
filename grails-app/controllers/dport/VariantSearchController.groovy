@@ -36,13 +36,20 @@ class VariantSearchController {
     }
 
 
-    def variantSearchWF(){
+    def variantSearchWF() {
         String encParams
         if (params.encParams) {
             encParams = params.encParams
             log.debug "variantSearch params.encParams = ${params.encParams}"
-        } else if (sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma))  {  // if sigma default data set is sigma
-            encParams = "1:0"
+        } else if (sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma)) {
+            // if sigma default data set is sigma
+            encParams = ""
+        }
+        List<LinkedHashMap> encodedFilterSets = [[:]]
+
+        if ((encParams) && (encParams.length())) {
+            LinkedHashMap simulatedParameters = filterManagementService.generateParamsForSearchRefinement(encParams)
+            encodedFilterSets = filterManagementService.handleFilterRequestFromBrowser(simulatedParameters)
         }
 
         render(view: 'variantWorkflow',
@@ -50,42 +57,16 @@ class VariantSearchController {
                         show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                         show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
                         show_sigma: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
-                        encParams : encParams,
                         variantWorkflowParmList:[],
-                        encodedFilterSets : [[:]]])
+                        encodedFilterSets : encodedFilterSets])
     }
 
 
     def variantVWRequest(){
-        LinkedHashMap newParameters = filterManagementService.processNewParameters (params.dataSet,
-                params.esValue,
-                params.esEquivalence,
-                params.phenotype,
-                params.pvValue,
-                params.pvEquivalence,
-                params.orValue,
-                params.orEquivalence,
-                params.filters,
-                params.datasetExomeChip,
-                params.datasetExomeSeq,
-                params.datasetGWAS,
-                params.region_stop_input,
-                params.region_start_input,
-                params.region_chrom_input,
-                params.region_gene_input,
-                params.predictedEffects,
-                params.condelSelect,
-                params.polyphenSelect,
-                params.siftSelect
-        )
 
-        List <String> oldFilters=filterManagementService.observeMultipleFilters(params)
-        List <LinkedHashMap> combinedFilters = filterManagementService.combineNewAndOldParameters(newParameters,
-                oldFilters)
-        List <LinkedHashMap> encodedFilterSets = filterManagementService.encodeAllFilters (combinedFilters)
+        List <LinkedHashMap> encodedFilterSets = filterManagementService.handleFilterRequestFromBrowser (params)
 
-
-        render(view: 'variantWorkflow',
+            render(view: 'variantWorkflow',
                 model: [show_gwas : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                         show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                         show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
@@ -94,42 +75,18 @@ class VariantSearchController {
 
     }
 
+
+
     def launchAVariantSearch(){
-        LinkedHashMap newParameters = filterManagementService.processNewParameters (params.dataSet,
-                params.esValue,
-                params.esEquivalence,
-                params.phenotype,
-                params.pvValue,
-                params.pvEquivalence,
-                params.orValue,
-                params.orEquivalence,
-                params.filters,
-                params.datasetExomeChip,
-                params.datasetExomeSeq,
-                params.datasetGWAS,
-                params.region_stop_input,
-                params.region_start_input,
-                params.region_chrom_input,
-                params.region_gene_input,
-                params.predictedEffects,
-                params.condelSelect,
-                params.polyphenSelect,
-                params.siftSelect
-        )
 
-        List <String> oldFilters=filterManagementService.observeMultipleFilters(params)
-        List <LinkedHashMap> combinedFilters = filterManagementService.combineNewAndOldParameters(newParameters,
-                oldFilters)
-        String geneId = params.id
-        String receivedParameters = params.filter
-        String significance = params.sig
-        String dataset = params.dataset
-        String region = params.region
-        String filter = params.filter
-        Map paramsMap = filterManagementService.storeCodedParametersInHashmap (geneId,significance,dataset,region,combinedFilters)
+        List <LinkedHashMap> combinedFilters =  filterManagementService.handleFilterRequestFromBrowser (params)
 
-        if (paramsMap) {
-            displayVariantSearchResults(paramsMap, false)
+        List <LinkedHashMap> listOfParameterMaps = filterManagementService.storeCodedParametersInHashmap (combinedFilters)
+
+
+        if ((listOfParameterMaps) &&
+                (listOfParameterMaps.size() > 0)){
+            displayCombinedVariantSearchResults(listOfParameterMaps, false)
         }
 
 
@@ -176,8 +133,10 @@ class VariantSearchController {
 
     }
 
-
-
+    /***
+     * get data sets given a phenotype
+     * @return
+     */
     def retrieveDatasetsAjax() {
         List <String> phenotypeList = []
         List <String> experimentList = []
@@ -187,23 +146,76 @@ class VariantSearchController {
         if ((params.experiment) && (params.experiment !=  null )){
             experimentList << params.experiment
         }
-       // JSONObject jsonObject = restServerService.retrieveDatasets(phenotypeList, experimentList)
-        JSONObject jsonObject = restServerService.pseudoRetrieveDatasets(phenotypeList, experimentList)
-//        String v = """
-//{"is_error": false,
-// "numRecords":1,
-// "dataset":["MAGIC 2014"]
-//}""".toString()
-//        def slurper = new JsonSlurper()
-//        def result = slurper.parseText(v)
+        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
+
+        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
+        LinkedHashMap<String,List<String>> annotatedPhenotypes =  processedMetadata.sampleGroupsPerPhenotype
+        List <String> listOfDataSets  = sharedToolsService.extractASingleList(params.phenotype,annotatedPhenotypes)
+        String datasetsForTransmission = sharedToolsService.packageUpAListAsJson (listOfDataSets)
+        def slurper = new JsonSlurper()
+        def result = slurper.parseText(datasetsForTransmission)
+
 
         render(status: 200, contentType: "application/json") {
-            [datasets: jsonObject]
+            [datasets: result]
         }
-//        render(status: 200, contentType: "application/json") {
-//            [datasets: jsonObject]
-//        }
     }
+
+    /***
+     * get properties given a data set
+     */
+    def retrievePropertiesAjax(){
+        List <String> datasetList = []
+        if((params.dataset) && (params.dataset !=  null )){
+            datasetList << params.dataset
+        }
+        List <String> phenotypeList = []
+        if((params.phenotype) && (params.phenotype !=  null )){
+            phenotypeList << params.phenotype
+        }
+
+        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
+
+        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
+        LinkedHashMap<String,List<String>> annotatedSampleGroups =  processedMetadata.propertiesPerSampleGroups
+        LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties = processedMetadata['phenotypeSpecificPropertiesPerSampleGroup']
+        List <String> listOfProperties  = sharedToolsService.combineToCreateASingleList( params.phenotype, params.dataset,
+                                                                                             annotatedSampleGroups,
+                                                                                             phenotypeSpecificSampleGroupProperties )
+        String propertiesForTransmission = sharedToolsService.packageUpAListAsJson (listOfProperties)
+        def slurper = new JsonSlurper()
+        def result = slurper.parseText(propertiesForTransmission)
+
+
+        render(status: 200, contentType: "application/json") {
+            [datasets: result]
+        }
+
+    }
+
+
+
+
+    def retrievePhenotypesAjax(){
+
+        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
+
+        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
+        LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties = processedMetadata.phenotypeSpecificPropertiesPerSampleGroup
+        List <String> listOfPhenotypes = sharedToolsService.extractAPhenotypeList( phenotypeSpecificSampleGroupProperties )
+        String phenotypesForTransmission = sharedToolsService.packageUpAListAsJson (listOfPhenotypes)
+        def slurper = new JsonSlurper()
+        def result = slurper.parseText(phenotypesForTransmission)
+
+
+        render(status: 200, contentType: "application/json") {
+            [datasets: result]
+        }
+
+    }
+
+
+
 
 
 
@@ -265,6 +277,54 @@ class VariantSearchController {
                             newApi              : sharedToolsService.getNewApi()])
         }
     }
+
+    /***
+     * This is the meat of dynamic filtering. Start with a list of filters (the filters are grouped into maps),
+     * and convert these into three different products:
+     * 1) a description of the filters that a user could understand
+     * 2) a coded form of the filters we can pass down to the browser and expect to get back again
+     * 3) the actual filters that were gonna send to the rest API, written out in JSON and ready to go
+     * @param listOfParameterMaps
+     * @param currentlySigma
+     */
+    private void displayCombinedVariantSearchResults(List <LinkedHashMap> listOfParameterMaps, boolean currentlySigma) {
+        // Let's start stepping through our big list of filters
+        LinkedHashMap  parsedFilterParameters
+        if (listOfParameterMaps){
+            for (LinkedHashMap singleParameterMap in listOfParameterMaps){
+                parsedFilterParameters =   filterManagementService.parseExtendedVariantSearchParameters (singleParameterMap,false,parsedFilterParameters)
+            }
+        }
+        if (parsedFilterParameters) {
+
+            Integer dataSetDetermination = filterManagementService.identifyAllRequestedDataSets(listOfParameterMaps)
+            String encodedFilters = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters)
+            String encodedParameters = sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
+            String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
+
+            render(view: 'variantSearchResults',
+                    model: [show_gene           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
+                            show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
+                            show_exchp          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
+                            show_exseq          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
+                            show_sigma          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
+                            filter              : encodedFilters,
+                            filterDescriptions  : parsedFilterParameters.filterDescriptions,
+                            proteinEffectsList  : encodedProteinEffects,
+                            encodedParameters   : encodedParameters,
+                            dataSetDetermination: dataSetDetermination,
+                            newApi              : sharedToolsService.getNewApi()])
+        }
+    }
+
+
+
+
+
+
+
+
+
 
 
 }

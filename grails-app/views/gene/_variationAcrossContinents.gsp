@@ -148,6 +148,7 @@
 
                         }
                     }
+                    $('[data-toggle="popover"]').popover();
                 },
                 error: function (jqXHR, exception) {
                     loading.hide();

@@ -132,34 +132,39 @@ var mpgSoftware = mpgSoftware || {};
                         var fieldVersusValue =  oneFilter.split("=");
                         if (fieldVersusValue.length === 2 ){
                             switch (fieldVersusValue[0]) {
-                                case '1':instantiatePhenotype (fieldVersusValue[1]);
+                                case '1'://instantiatePhenotype (fieldVersusValue[1]);
                                     break;
                                 case '2':mpgSoftware.firstResponders.displayDataSetChooser(fieldVersusValue[1]);
                                     break;
                                 case '3': // There are two fields we need to handle here.  Let's pull out the other one by hand
-                                    mpgSoftware.firstResponders.respondToReviseFilters('oddsratio',extractString (clauseDefinition,'^4='),fieldVersusValue[1]);
                                     break;// or value and or inequality are handled together, so skip one
                                 case '4':break;// Ignore
                                 case '5': // There are two fields we need to handle here.  Let's pull out the other one by hand
-                                    mpgSoftware.firstResponders.respondToReviseFilters('pvalue',extractString (clauseDefinition,'^6='),fieldVersusValue[1]);
                                     break;// or value and or inequality are handled together, so skip one
                                 case '6':break;
-                                case '7':mpgSoftware.firstResponders.respondToReviseFilters('gene',fieldVersusValue[1]);
+                                case '7':
+                                    $('#region_gene_input').val(fieldVersusValue[1]);
                                     break;
-                                case '8':break;//  chromosome name, handled under 10
-                                case '9':break;// chromosome start, handled under 10
+                                case '8'://  chromosome name, handled under 10
+                                    $('#region_chrom_input').val(fieldVersusValue[1]);
+                                    break;
+                                case '9':// chromosome start, handled under 10
+                                    $('#region_start_input').val(fieldVersusValue[1]);
                                 case '10': // chromosome end -- handle a chromosome here
-                                    mpgSoftware.firstResponders.respondToReviseFilters('position',extractString (clauseDefinition,'^9='),fieldVersusValue[1],extractString (clauseDefinition,'^8='));
+                                    $('#region_stop_input').val(fieldVersusValue[1]);
                                     break;
                                 case '11':
-                                    mpgSoftware.firstResponders.respondToReviseFilters('predictedeffect',fieldVersusValue[1],extractString (clauseDefinition,'^14='),extractString (clauseDefinition,'^15='),extractString (clauseDefinition,'^16='));
+                                    $('[name="predictedEffects"]').filter ('[value ="'+fieldVersusValue[1]+'"]').prop('checked',true)
                                     break;
                                 case '12': // There are two fields we need to handle here.  Let's pull out the other one by hand
-                                    mpgSoftware.firstResponders.respondToReviseFilters('effectsize',extractString (clauseDefinition,'^13='),fieldVersusValue[1]);
+                                    //mpgSoftware.firstResponders.respondToReviseFilters('effectsize',extractString (clauseDefinition,'^13='),fieldVersusValue[1]);
                                     break;// or value and or inequality are handled together, so skip one
                                 case '14':break;//  chromosome name, handled under 11
                                 case '15':break;//  chromosome name, handled under 11
                                 case '16':break;//  chromosome name, handled under 11
+                                case '17':
+                                    mpgSoftware.firstResponders.respondToReviseCustomFilter(fieldVersusValue[1]);
+                                    break;
                                 default: break;
                             }
                         }
@@ -177,6 +182,30 @@ var mpgSoftware = mpgSoftware || {};
                 }
             }
         };
+        var retrievePhenotypes = function () {
+            var loading = $('#spinner').show();
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "./retrievePhenotypesAjax",
+                data: {},
+                async: true,
+                success: function (data) {
+                    if (( data !==  null ) &&
+                        ( typeof data !== 'undefined') &&
+                        ( typeof data.datasets !== 'undefined' ) &&
+                        (  data.datasets !==  null ) ) {
+                        fillPhenotypeDropdown(data.datasets);
+                    }
+                    loading.hide();
+                },
+                error: function (jqXHR, exception) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+        };
+
         var retrieveDataSets = function (phenotype, experiment) {
             var loading = $('#spinner').show();
             $.ajax({
@@ -201,6 +230,30 @@ var mpgSoftware = mpgSoftware || {};
                 }
             });
         };
+        var retrievePropertiesPerDataSet = function (phenotype,dataset) {
+            var loading = $('#spinner').show();
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "./retrievePropertiesAjax",
+                data: {phenotype: phenotype,dataset: dataset},
+                async: true,
+                success: function (data) {
+                    if (( data !==  null ) &&
+                        ( typeof data !== 'undefined') &&
+                        ( typeof data.datasets !== 'undefined' ) &&
+                        (  data.datasets !==  null ) ) {
+                        fillPropertiesDropdown(data.datasets);
+                    }
+                    loading.hide();
+                },
+                error: function (jqXHR, exception) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+        };
+
         var extractIndex = function (idLabel,currentObject){
             var filterIndex = -1;
             var id = $(currentObject).attr ('id');
@@ -244,7 +297,7 @@ var mpgSoftware = mpgSoftware || {};
         var removeThisFilter = function (currentObject){
             if (typeof currentObject !== 'undefined') {
                 var currentObjectId = currentObject.id;
-                var targetName = currentObjectId.split("_")[1];
+                var targetName = currentObjectId.split("___")[1];
                 var target = $('#'+targetName);
                 if (typeof target !== 'undefined')  {
                     target.remove ();
@@ -265,16 +318,107 @@ var mpgSoftware = mpgSoftware || {};
                 }
             }
         };
+        var fillPhenotypeDropdown = function (dataSetJson) { // help text for each row
+            if ((typeof dataSetJson !== 'undefined')  &&
+                (typeof dataSetJson["is_error"] !== 'undefined')&&
+                (dataSetJson["is_error"] === false))
+            {
+                var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
+                var options = $("#phenotype");
+                options.empty();
+                var dataSetList = dataSetJson ["dataset"];
+                for ( var i = 0 ; i < numberOfRecords ; i++ ){
+                    options.append($("<option />").val(dataSetList[i]).text(dataSetList[i]));
+                }
+            }
+        };
+        var fillPropertiesDropdown = function (dataSetJson) { // help text for each row
+            if ((typeof dataSetJson !== 'undefined')  &&
+                (typeof dataSetJson["is_error"] !== 'undefined')&&
+                (dataSetJson["is_error"] === false))
+            {
+                var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
+                var options = $("#additionalFilters");
+                options.empty();
+                var dataSetList = dataSetJson ["dataset"];
+                for ( var i = 0 ; i < numberOfRecords ; i++ ){
+                    options.append($("<option />").val(dataSetList[i]).text(dataSetList[i]));
+                }
+            }
+        };
+        var extractValsFromComboboxAndReturn = function (everyId) {
+            var returnValue = {};
+            for (var i = 0; i < everyId.length; i++) {
+                var domReference = $('#'+ everyId[i]);
+                if ((domReference) && (domReference.val())) {
+                    return domReference.val();
+                }
+            }
+            return returnValue;
+        };
+        var extractValFromTextboxesWithPrependedName = function (everyId,prepender,equivalenceMap) {
+            var returnValue = {};
+            for (var i = 0; i < everyId.length; i++) {
+                var domReference = $('#' + everyId[i]);
+                if ((domReference) && (domReference.val())) {
+                    var propertyNameHolder = everyId[i];
+                    var nameParts = propertyNameHolder.split("___");
+                    var propertyName = nameParts[0];
+                    var equiv = equivalenceMap[propertyName];
+                    returnValue [ prepender+equiv+'^'+everyId[i]] = domReference.val();
+                }
+            }
+            return returnValue;
+        };
+        var customIds = function (){
+            var element;
+            var returnValue = {customEquivalences:[],customTexts:[]};
+            var allEquivalentsBoxes =  $('.cusEquiv');
+            if (typeof allEquivalentsBoxes !== 'undefined') {
+                for ( var i = 0 ; i < allEquivalentsBoxes.length ; i++ ){
+                    element = $(allEquivalentsBoxes[i]);
+                    returnValue.customEquivalences.push (element.attr ('id'));
+                }
+            }
+            var allTextBoxes =  $('.cusText');
+            if (typeof allTextBoxes !== 'undefined') {
+                for ( var i = 0 ; i < allTextBoxes.length ; i++ ){
+                    element = $(allTextBoxes[i]);
+                    returnValue.customTexts.push (element.attr ('id'));
+                }
+            }
+            return returnValue;
+         };
+        var extractValsFromComboboxAbbrevName = function (everyId) {
+            var returnValue = {};
+            for (var i = 0; i < everyId.length; i++) {
+                var domReference = $('#' + everyId[i]);
+                if ((domReference) && (domReference.val())) {
+                    var nameParts = everyId[i].split("___");
+                    var abbreviatedName= nameParts[0];
+                    returnValue [abbreviatedName] = domReference.val();
+                }
+            }
+            return returnValue;
+        };
         var gatherFieldsAndPostResults = function (){
             var varsToSend = {};
+            var phenotypeExtractor = {};
+            var datasetExtractor = {};
             var phenotypeInput = UTILS.extractValsFromCombobox(['phenotype']);
+            phenotypeExtractor = UTILS.concatMap(phenotypeExtractor,phenotypeInput) ;
             var datasetInput = UTILS.extractValsFromCombobox(['dataSet']);
-            var pvEquivalence = UTILS.extractValsFromCombobox(['pvEquivalence']);
-            var orEquivalence = UTILS.extractValsFromCombobox(['orEquivalence']);
-            var esEquivalence = UTILS.extractValsFromCombobox(['esEquivalence']);
-            var variantFilters = UTILS.extractValFromTextboxes(['pvValue','orValue','esValue']);
-            var totalFilterCount = UTILS.extractValFromTextboxes(['totalFilterCount']);
-            var experimentChoice = UTILS.extractValFromCheckboxes(['datasetExomeChip','datasetExomeSeq','datasetGWAS']);
+            datasetExtractor = UTILS.concatMap(datasetExtractor,datasetInput) ;
+            var idsToCollect =  customIds();
+            var equivFields;
+            var textFields;
+            var prependerString = 'custom47^' +phenotypeExtractor ['phenotype']+'^'+datasetExtractor ['dataSet']+'^';
+            if ((typeof idsToCollect  !== 'undefined')  &&
+                (typeof idsToCollect.customTexts  !== 'undefined') &&
+                (idsToCollect.customTexts.length > 0)){
+                var equivalences = extractValsFromComboboxAbbrevName(idsToCollect.customEquivalences);
+                textFields =  extractValFromTextboxesWithPrependedName(idsToCollect.customTexts,prependerString,equivalences);
+            }
             var restrictToRegion = UTILS.extractValFromTextboxes(['region_gene_input','region_chrom_input','region_start_input','region_stop_input']);
             var missensePredictions = [];
             varsToSend["predictedEffects"]  = $("input:radio[name='predictedEffects']:checked").val();
@@ -283,6 +427,7 @@ var mpgSoftware = mpgSoftware || {};
             }
             var savedValuesList = [];
             var savedValue = {};
+            var totalFilterCount = UTILS.extractValFromTextboxes(['totalFilterCount']);
             if (typeof totalFilterCount['totalFilterCount'] !== 'undefined') {
                 var valueCount = parseInt(totalFilterCount['totalFilterCount']);
                 if (valueCount>0){
@@ -292,17 +437,12 @@ var mpgSoftware = mpgSoftware || {};
                     savedValue = UTILS.extractValFromTextboxes(savedValuesList);
                 }
             }
-            //var savedValue = UTILS.extractValFromTextboxes(['savedValue']);
             varsToSend = UTILS.concatMap(varsToSend,restrictToRegion) ;
             varsToSend = UTILS.concatMap(varsToSend,missensePredictions) ;
             varsToSend = UTILS.concatMap(varsToSend,phenotypeInput) ;
             varsToSend = UTILS.concatMap(varsToSend,datasetInput) ;
-            varsToSend = UTILS.concatMap(varsToSend,pvEquivalence) ;
-            varsToSend = UTILS.concatMap(varsToSend,orEquivalence) ;
-            varsToSend = UTILS.concatMap(varsToSend,esEquivalence) ;
-            varsToSend = UTILS.concatMap(varsToSend,variantFilters) ;
+            varsToSend = UTILS.concatMap(varsToSend,textFields) ;
             varsToSend = UTILS.concatMap(varsToSend,savedValue) ;
-            varsToSend = UTILS.concatMap(varsToSend,experimentChoice) ;
             UTILS.postQuery('./variantVWRequest',varsToSend);
         };
         var cancelThisFieldCollection = function (){
@@ -352,12 +492,14 @@ var mpgSoftware = mpgSoftware || {};
                 whatToDoNext(0);
                 emphasizeBlueBox(false);
             }
-            $("#phenotype").prepend("<option value='' selected='selected'></option>");
+            retrievePhenotypes();
+//            $("#phenotype").prepend("<option value='' selected='selected'></option>");
 
         };
         return {
             cancelThisFieldCollection:cancelThisFieldCollection,
             fillDataSetDropdown:fillDataSetDropdown,
+            fillPropertiesDropdown:fillPropertiesDropdown,
             gatherFieldsAndPostResults:gatherFieldsAndPostResults,
             launchAVariantSearch:launchAVariantSearch,
             initializePage:initializePage,
@@ -366,7 +508,9 @@ var mpgSoftware = mpgSoftware || {};
             removeThisFilter:removeThisFilter,
             existingFiltersManipulators:existingFiltersManipulators,
             currentInteractivityState:currentInteractivityState,
+            retrievePhenotypes:retrievePhenotypes,
             retrieveDataSets:retrieveDataSets,
+            retrievePropertiesPerDataSet:retrievePropertiesPerDataSet,
             whatToDoNext:whatToDoNext
         }
 
@@ -399,32 +543,54 @@ var mpgSoftware = mpgSoftware || {};
         /***
          * private
          */
-        var appendValueWithEquivalenceChooser = function (currentDiv,holderId,sectionName,equivalenceId,valueId,helpTitle,helpText,equivalence,defaultValue){
+        var appendValueWithEquivalenceChooser = function (currentDiv,holderId,sectionName,helpTitle,helpText,equivalence,defaultValue){
             var lessThanSelected = '';
             var greaterThanSelected = '';
+            var equalToSelected = '';
+            var equivalenceValue = '';
             if (typeof equivalence !== 'undefined'){
                 if (equivalence === 'lessThan'){
                     lessThanSelected = "selected";
-                } else {
+                    equivalenceValue = "<";
+                } else if (equivalence === 'greaterThan'){
                     greaterThanSelected = "selected";
+                    equivalenceValue = ">";
+                } else if (equivalence === 'greaterThan'){
+                    equalToSelected = "selected";
+                    equivalenceValue = "=";
                 }
             }
+            var labelId = sectionName+'___nameId';
+            var equivalenceId = sectionName+'___equivalenceId';
+            var valueId = sectionName+'___valueId';
+            // Does a box by this name already exist?If so, then just use that
+            if (($("#"+labelId).length>0) &&($("#"+equivalenceId).length>0) &&($("#"+valueId).length>0)){
+                $("#"+labelId).text (sectionName);
+                $("#"+equivalenceId).selected (equivalenceValue);
+                $("#"+valueId).val (defaultValue);
+                return; // We don't need to do anything else
+            }else if (($("#"+labelId).length>0)  ||($("#"+equivalenceId).length>0)  ||($("#"+valueId).length>0)){
+                $("#"+labelId).remove();
+                $("#"+equivalenceId).remove();
+                $("#"+valueId).remove();
+            }
+            // We need to create all of these fields and initialize them
             currentDiv.append("<div id='"+holderId+"' class='row clearfix'>"+
                 "<div class='primarySectionSeparator'>"+
-                "<div class='col-sm-offset-1 col-md-3' style='text-align: right'>"+sectionName+"</div>"+
+                "<div  id='"+labelId+"' class='col-sm-offset-1 col-md-3 text-right'>"+sectionName+"</div>"+
                 "<div class='col-md-2'>"+
-                "<select id='"+equivalenceId+"' class='form-control btn-group btn-input clearfix'>"+
+                "<select id='"+equivalenceId+"' class='form-control btn-group btn-input clearfix cusEquiv'>"+
                 "<option "+lessThanSelected+" value='lessThan'>&lt;</option>"+
                 "<option "+greaterThanSelected+" value='greaterThan'>&gt;</option>"+
                 "</select>"+
                 "</div>"+
-                "<div class='col-md-3'><input type='text' class='form-control' id='"+valueId+"'></div>"+
+                "<div class='col-md-3'><input type='text' class='form-control cusText' id='"+valueId+"'></div>"+
                 "<div class='col-md-1'>"+
                 "<span style='padding:10px 0 0 0' class='glyphicon glyphicon-question-sign pop-right' aria-hidden='true' data-toggle='popover' animation='true' "+
                 "trigger='hover' data-container='body' data-placement='right' title='' data-content='"+helpText + "' data-original-title='"+helpTitle + "'></span>"+
                 "</div>"+
                 "<div class='col-md-2'>"+
-                "<span class='glyphicon glyphicon-remove-circle filterCanceler filterRefiner' aria-hidden='true' onclick='mpgSoftware.variantWF.removeThisFilter(this)' id='remove_"+holderId+"'></span>"+
+                "<span class='glyphicon glyphicon-remove-circle filterCanceler filterRefiner' aria-hidden='true' onclick='mpgSoftware.variantWF.removeThisFilter(this)' id='remove___"+holderId+"'></span>"+
                 "</div>"+
                 "</div>");
             if (typeof defaultValue !== 'undefined'){
@@ -618,18 +784,18 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
 
 
 
-        var displayPVChooser = function (holder,equivalence,defaultValue){
-            appendValueWithEquivalenceChooser (holder,'pvHolder','p value','pvEquivalence','pvValue',
-                'P value help title','everything there is to say about P values',equivalence,defaultValue);
-        };
-        var displayORChooser = function (holder,equivalence,defaultValue){
-            appendValueWithEquivalenceChooser (holder,'pvHolder','odds ratio','orEquivalence','orValue',
-                'Odds ratio help title','everything there is to say about an odds ratio',equivalence,defaultValue);
-        };
-        var displayESChooser = function (holder,equivalence,defaultValue){
-            appendValueWithEquivalenceChooser (holder,'esHolder','beta','esEquivalence','esValue',
-                'Effect size help title','everything there is to say about an effect sizes',equivalence,defaultValue);
-        };
+//        var displayPVChooser = function (holder,equivalence,defaultValue){
+//            appendValueWithEquivalenceChooser (holder,'pvHolder','p value','pvEquivalence','pvValue',
+//                'P value help title','everything there is to say about P values',equivalence,defaultValue);
+//        };
+//        var displayORChooser = function (holder,equivalence,defaultValue){
+//            appendValueWithEquivalenceChooser (holder,'pvHolder','odds ratio','orEquivalence','orValue',
+//                'Odds ratio help title','everything there is to say about an odds ratio',equivalence,defaultValue);
+//        };
+//        var displayESChooser = function (holder,equivalence,defaultValue){
+//            appendValueWithEquivalenceChooser (holder,'esHolder','beta','esEquivalence','esValue',
+//                'Effect size help title','everything there is to say about an effect sizes',equivalence,defaultValue);
+//        };
         var displayGeneChooser = function (holder,geneName){
             appendGeneChooser(holder,'geneHolder','gene','region_gene_input',
                 'Gene chooser help title','everything there is to say about choosing a gene',geneName);
@@ -667,6 +833,9 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
         };
 
         var respondToDataSetSelection = function (){
+            var dataSetComboBox = UTILS.extractValsFromCombobox(['dataSet']);
+            var phenotypeComboBox = UTILS.extractValsFromCombobox(['phenotype']);
+            mpgSoftware.variantWF.retrievePropertiesPerDataSet(phenotypeComboBox['phenotype'],dataSetComboBox['dataSet']);
             $('#additionalFilterSelection').show ();
             $('#filterInstructions').text('Add filters, if any:');
             mpgSoftware.variantWF.currentInteractivityState(0);
@@ -676,21 +845,56 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
 
         var forceRequestForMoreFilters = function (selection,holder,valueOne,valueTwo,valueThree,valueFour){
             switch (selection){
-                case 'pvalue':displayPVChooser(holder,valueOne,valueTwo);
+//                case 'pvalue':displayPVChooser(holder,valueOne,valueTwo);
+//                    break;
+//                case 'oddsratio':displayORChooser(holder,valueOne,valueTwo);
+//                    break;
+//                case 'effectsize':displayESChooser(holder,valueOne,valueTwo);
+//                    break;
+                default:
+                    appendValueWithEquivalenceChooser (holder,selection+'Holder',selection,
+                        'help title','everything there is to say to help you out','lessThan',1);
                     break;
-                case 'oddsratio':displayORChooser(holder,valueOne,valueTwo);
-                    break;
-                case 'effectsize':displayESChooser(holder,valueOne,valueTwo);
-                    break;
-                case 'gene':displayGeneChooser(holder,valueOne);
-                    break;
-                case 'position':displayPosChooser(holder,valueOne,valueTwo,valueThree);
-                    break;
-                case 'predictedeffect':displayPEChooser(holder,valueOne,valueTwo,valueThree,valueFour);
-                    break;
-                case 'dataset':displayDSChooser();
-                    break;
-
+            }
+        };
+        var parseCustomFilter = function(filterDefinition){
+            var returnValue = {phenotype:"",dataset:"",property: "",equiv:"",value:"", success: true};
+            if (typeof filterDefinition !== 'undefined')  {
+                var mainSplit  =   filterDefinition.split("]");
+                if (mainSplit.length === 2) {
+                    var secondarySplit =  (mainSplit[0]).split("[");
+                    returnValue.phenotype = secondarySplit [0];
+                    returnValue.dataset = secondarySplit [1];
+                    var partTwo = mainSplit[1];
+                    if (partTwo.indexOf("<") > -1){
+                        var  equivalencePosition = partTwo.indexOf("<");
+                        returnValue.property  = partTwo.substring(0,equivalencePosition);
+                        returnValue.value  = partTwo.substring(equivalencePosition+1);
+                        returnValue.equiv  = "lessThan"
+                    } else if (partTwo.indexOf(">") > -1){
+                        var  equivalencePosition = partTwo.indexOf(">");
+                        returnValue.property  = partTwo.substring(0,equivalencePosition);
+                        returnValue.value  = partTwo.substring(equivalencePosition+1);
+                        returnValue.equiv  = "greaterThan" ;
+                    } else if (partTwo.indexOf("=") > -1){
+                        var  equivalencePosition = partTwo.indexOf("=");
+                        returnValue.property  = partTwo.substring(0,equivalencePosition);
+                        returnValue.value  = partTwo.substring(equivalencePosition+1);
+                        returnValue.equiv  = "equalTo" ;
+                    }   else { returnValue.success = false; }
+                } else { returnValue.success = false; }
+            }  else { returnValue.success = false; }
+            return  returnValue;
+        } ;
+        var respondToReviseCustomFilter = function(filterDefinition){
+            var parsedFilter =  parseCustomFilter (filterDefinition);
+            if (parsedFilter.success) {
+                     $('phenotype').selected =  parsedFilter.phenotype ;
+                     $('dataSet').selected =  parsedFilter.dataset ;
+                var filterHolder = $('#filterHolder');
+                var selection = parsedFilter.property;
+                appendValueWithEquivalenceChooser ( filterHolder,selection+'Holder',selection,
+                    'help title','everything there is to say to help you out','lessThan',parsedFilter.value);
             }
         };
         var respondToReviseFilters = function (selection,valueOne,valueTwo,valueThree,valueFour){
@@ -706,7 +910,6 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             forceRequestForMoreFilters (selection, holder);
         };
         var requestToAddFilters = function (){
-            console.log('hello');
             var holder = $('#filterHolder');
             var choice = $("#additionalFilters option:selected");
             var selection = choice.val();
@@ -718,7 +921,9 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             respondToRequestForMoreFilters:respondToRequestForMoreFilters,
             displayDataSetChooser:displayDataSetChooser,
             respondToReviseFilters:respondToReviseFilters,
-            requestToAddFilters:requestToAddFilters
+            respondToReviseCustomFilter:respondToReviseCustomFilter,
+            requestToAddFilters:requestToAddFilters,
+            appendValueWithEquivalenceChooser:appendValueWithEquivalenceChooser
         }
 
     }());

@@ -12,42 +12,52 @@ import org.codehaus.groovy.grails.web.json.JSONObject
 class RestServerService {
     GrailsApplication grailsApplication
     SharedToolsService sharedToolsService
+    FilterManagementService filterManagementService
     private static final log = LogFactory.getLog(this)
 
 
-    private  String MYSQL_REST_SERVER = ""
-    private  String BIGQUERY_REST_SERVER = ""
-    private  String TEST_REST_SERVER = ""
-    private  String DEV_REST_SERVER = ""
-    private  String QA_REST_SERVER = ""
-    private  String PROD_REST_SERVER = ""
-    private  String NEW_DEV_REST_SERVER = ""
-    private  String BASE_URL = ""
-    private  String GENE_INFO_URL = "gene-info"
-    private  String DATA_SET_URL = "getDatasets"
-    private  String VARIANT_INFO_URL = "variant-info"
-    private  String TRAIT_INFO_URL = "trait-info"
-    private  String VARIANT_SEARCH_URL = "variant-search"
-    private  String TRAIT_SEARCH_URL = "trait-search"
-    private  String METADATA_URL = "getMetadata"
-    private  String GET_DATA_URL = "getData"
-    private  String DBT_URL = ""
-    private  String EXPERIMENTAL_URL = ""
+    private String MYSQL_REST_SERVER = ""
+    private String BIGQUERY_REST_SERVER = ""
+    private String TEST_REST_SERVER = ""
+    private String DEV_REST_SERVER = ""
+    private String QA_REST_SERVER = ""
+    private String PROD_REST_SERVER = ""
+    private String NEW_DEV_REST_SERVER = ""
+    private String BASE_URL = ""
+    private String GENE_INFO_URL = "gene-info"
+    private String DATA_SET_URL = "getDatasets"
+    private String VARIANT_INFO_URL = "variant-info"
+    private String TRAIT_INFO_URL = "trait-info"
+    private String VARIANT_SEARCH_URL = "variant-search"
+    private String TRAIT_SEARCH_URL = "trait-search"
+    private String METADATA_URL = "getMetadata"
+    private String GET_DATA_URL = "getData"
+    private String DBT_URL = ""
+    private String EXPERIMENTAL_URL = ""
+    private String EXOMESEQ_AA = "ExSeq_17k_aa_genes_mdv2"
+    private String EXOMESEQ_HS = "ExSeq_17k_hs_genes_mdv2"
+    private String EXOMESEQ_EA = "ExSeq_17k_ea_genes_mdv2"
+    private String EXOMESEQ_SA = "ExSeq_17k_sa_genes_mdv2"
+    private String EXOMESEQ_EU = "ExSeq_17k_eu_genes_mdv2"
+    private String EXOMECHIP = "ExChip_82k_mdv2"
+    private String EXOMESEQ = "ExSeq_17k_mdv2"
+    private String GWASDIAGRAM  = "GWAS_DIAGRAM_mdv2"
 
-    static List <String> VARIANT_SEARCH_COLUMNS = [
-    'ID',
-    'CHROM',
-    'POS',
-    'DBSNP_ID',
-    'CLOSEST_GENE',
-    'MOST_DEL_SCORE',
-    'Consequence',
-    'IN_GENE',
-    '_13k_T2D_TRANSCRIPT_ANNOT',
-    "Protein_change"
+
+    static List<String> VARIANT_SEARCH_COLUMNS = [
+            'ID',
+            'CHROM',
+            'POS',
+            'DBSNP_ID',
+            'CLOSEST_GENE',
+            'MOST_DEL_SCORE',
+            'Consequence',
+            'IN_GENE',
+            '_13k_T2D_TRANSCRIPT_ANNOT',
+            "Protein_change"
     ]
 
-    static List <String> VARIANT_INFO_SEARCH_COLUMNS = [
+    static List<String> VARIANT_INFO_SEARCH_COLUMNS = [
             'CLOSEST_GENE',
             'ID',
             'DBSNP_ID',
@@ -61,221 +71,225 @@ class RestServerService {
     ]
 
 
-    static List <String> EXSEQ_VARIANT_SEARCH_COLUMNS = [
-    'IN_EXSEQ',
-    '_13k_T2D_P_EMMAX_FE_IV',
-    '_13k_T2D_EU_MAF',
-    '_13k_T2D_HS_MAF',
-    '_13k_T2D_AA_MAF',
-    '_13k_T2D_EA_MAF',
-    '_13k_T2D_SA_MAF',
-    '_13k_T2D_MINA',
-    '_13k_T2D_MINU',
-    '_13k_T2D_OR_WALD_DOS_FE_IV',
-    '_13k_T2D_SE'
+    static List<String> EXSEQ_VARIANT_SEARCH_COLUMNS = [
+            'IN_EXSEQ',
+            '_13k_T2D_P_EMMAX_FE_IV',
+            '_13k_T2D_EU_MAF',
+            '_13k_T2D_HS_MAF',
+            '_13k_T2D_AA_MAF',
+            '_13k_T2D_EA_MAF',
+            '_13k_T2D_SA_MAF',
+            '_13k_T2D_MINA',
+            '_13k_T2D_MINU',
+            '_13k_T2D_OR_WALD_DOS_FE_IV',
+            '_13k_T2D_SE'
     ]
 
 
-    static List <String> EXCHP_VARIANT_SEARCH_COLUMNS = [
-    'IN_EXCHP',
-    'EXCHP_T2D_P_value',
-    'EXCHP_T2D_MAF',
-    'EXCHP_T2D_BETA',
-    'EXCHP_T2D_SE'
+    static List<String> EXCHP_VARIANT_SEARCH_COLUMNS = [
+            'IN_EXCHP',
+            'EXCHP_T2D_P_value',
+            'EXCHP_T2D_MAF',
+            'EXCHP_T2D_BETA',
+            'EXCHP_T2D_SE'
     ]
 
 
-    static List <String> GWAS_VARIANT_SEARCH_COLUMNS = [
-    'IN_GWAS',
-    'GWAS_T2D_PVALUE',
-    'GWAS_T2D_OR',
+    static List<String> GWAS_VARIANT_SEARCH_COLUMNS = [
+            'IN_GWAS',
+            'GWAS_T2D_PVALUE',
+            'GWAS_T2D_OR',
     ]
 
 
-    static List <String> SIGMA_VARIANT_SEARCH_COLUMNS = [
-    'SIGMA_T2D_P',
-    'SIGMA_T2D_OR',
-    'SIGMA_T2D_MINA',
-    'SIGMA_T2D_MINU',
-    'SIGMA_T2D_MAF',
-    'SIGMA_SOURCE',
-    'IN_SIGMA',
+    static List<String> SIGMA_VARIANT_SEARCH_COLUMNS = [
+            'SIGMA_T2D_P',
+            'SIGMA_T2D_OR',
+            'SIGMA_T2D_MINA',
+            'SIGMA_T2D_MINU',
+            'SIGMA_T2D_MAF',
+            'SIGMA_SOURCE',
+            'IN_SIGMA',
     ]
 
 
-
-
-
-    static List <String> EXSEQ_VARIANT_COLUMNS = EXSEQ_VARIANT_SEARCH_COLUMNS + [
-    '_13k_T2D_HET_ETHNICITIES',
-    '_13k_T2D_HET_CARRIERS',
-    '_13k_T2D_HETA',
-    '_13k_T2D_HETU',
-    '_13k_T2D_HOM_ETHNICITIES',
-    '_13k_T2D_HOM_CARRIERS',
-    '_13k_T2D_HOMA',
-    '_13k_T2D_HOMU',
-    '_13k_T2D_OBSA',
-    '_13k_T2D_OBSU',
+    static List<String> EXSEQ_VARIANT_COLUMNS = EXSEQ_VARIANT_SEARCH_COLUMNS + [
+            '_13k_T2D_HET_ETHNICITIES',
+            '_13k_T2D_HET_CARRIERS',
+            '_13k_T2D_HETA',
+            '_13k_T2D_HETU',
+            '_13k_T2D_HOM_ETHNICITIES',
+            '_13k_T2D_HOM_CARRIERS',
+            '_13k_T2D_HOMA',
+            '_13k_T2D_HOMU',
+            '_13k_T2D_OBSA',
+            '_13k_T2D_OBSU',
     ]
 
-    static List <String> SIGMA_VARIANT_COLUMNS = SIGMA_VARIANT_SEARCH_COLUMNS + [
-    'SIGMA_T2D_N',
-    'SIGMA_T2D_MAC',
-    'SIGMA_T2D_OBSA',
-    'SIGMA_T2D_OBSU',
-    'SIGMA_T2D_HETA',
-    'SIGMA_T2D_HETU',
-    'SIGMA_T2D_HOMA',
-    'SIGMA_T2D_HOMU',
-    'SIGMA_T2D_SE',
+    static List<String> SIGMA_VARIANT_COLUMNS = SIGMA_VARIANT_SEARCH_COLUMNS + [
+            'SIGMA_T2D_N',
+            'SIGMA_T2D_MAC',
+            'SIGMA_T2D_OBSA',
+            'SIGMA_T2D_OBSU',
+            'SIGMA_T2D_HETA',
+            'SIGMA_T2D_HETU',
+            'SIGMA_T2D_HOMA',
+            'SIGMA_T2D_HOMU',
+            'SIGMA_T2D_SE',
     ]
 
 
-    static List <String> GENE_COLUMNS = [
-    'ID',
-    'CHROM',
-    'BEG',
-    'END',
-    'Function_description',
+    static List<String> GENE_COLUMNS = [
+            'ID',
+            'CHROM',
+            'BEG',
+            'END',
+            'Function_description',
     ]
 
 
-    static List <String> EXSEQ_GENE_COLUMNS = [
-    '_13k_T2D_VAR_TOTAL',
-    '_13k_T2D_ORIGIN_VAR_TOTALS',
-    '_13k_T2D_lof_NVAR',
-    '_13k_T2D_lof_MINA_MINU_RET',
-    '_13k_T2D_lof_METABURDEN',
-    '_13k_T2D_GWS_TOTAL',
-    '_13k_T2D_LWS_TOTAL',
-    '_13k_T2D_NOM_TOTAL',
-    '_13k_T2D_lof_OBSA',
-    '_13k_T2D_lof_OBSU'
+    static List<String> EXSEQ_GENE_COLUMNS = [
+            '_13k_T2D_VAR_TOTAL',
+            '_13k_T2D_ORIGIN_VAR_TOTALS',
+            '_13k_T2D_lof_NVAR',
+            '_13k_T2D_lof_MINA_MINU_RET',
+            '_13k_T2D_lof_METABURDEN',
+            '_13k_T2D_GWS_TOTAL',
+            '_13k_T2D_LWS_TOTAL',
+            '_13k_T2D_NOM_TOTAL',
+            '_13k_T2D_lof_OBSA',
+            '_13k_T2D_lof_OBSU'
     ]
 
 
-    static List <String> EXCHP_GENE_COLUMNS = [
-    'EXCHP_T2D_VAR_TOTALS',
-    'EXCHP_T2D_GWS_TOTAL',
-    'EXCHP_T2D_LWS_TOTAL',
-    'EXCHP_T2D_NOM_TOTAL',
+    static List<String> EXCHP_GENE_COLUMNS = [
+            'EXCHP_T2D_VAR_TOTALS',
+            'EXCHP_T2D_GWS_TOTAL',
+            'EXCHP_T2D_LWS_TOTAL',
+            'EXCHP_T2D_NOM_TOTAL',
     ]
 
 
-    static List <String> GWAS_GENE_COLUMNS = [
-    'GWS_TRAITS',
-    'GWAS_T2D_GWS_TOTAL',
-    'GWAS_T2D_LWS_TOTAL',
-    'GWAS_T2D_NOM_TOTAL',
-    'GWAS_T2D_VAR_TOTAL',
+    static List<String> GWAS_GENE_COLUMNS = [
+            'GWS_TRAITS',
+            'GWAS_T2D_GWS_TOTAL',
+            'GWAS_T2D_LWS_TOTAL',
+            'GWAS_T2D_NOM_TOTAL',
+            'GWAS_T2D_VAR_TOTAL',
     ]
 
 
-    static List <String> SIGMA_GENE_COLUMNS = [
-    'SIGMA_T2D_VAR_TOTAL',
-    'SIGMA_T2D_VAR_TOTALS',
-    'SIGMA_T2D_NOM_TOTAL',
-    'SIGMA_T2D_GWS_TOTAL',
-    'SIGMA_T2D_lof_NVAR',
-    'SIGMA_T2D_lof_MAC',
-    'SIGMA_T2D_lof_MINA',
-    'SIGMA_T2D_lof_MINU',
-    'SIGMA_T2D_lof_P',
-    'SIGMA_T2D_lof_OBSA',
-    'SIGMA_T2D_lof_OBSU',
+    static List<String> SIGMA_GENE_COLUMNS = [
+            'SIGMA_T2D_VAR_TOTAL',
+            'SIGMA_T2D_VAR_TOTALS',
+            'SIGMA_T2D_NOM_TOTAL',
+            'SIGMA_T2D_GWS_TOTAL',
+            'SIGMA_T2D_lof_NVAR',
+            'SIGMA_T2D_lof_MAC',
+            'SIGMA_T2D_lof_MINA',
+            'SIGMA_T2D_lof_MINU',
+            'SIGMA_T2D_lof_P',
+            'SIGMA_T2D_lof_OBSA',
+            'SIGMA_T2D_lof_OBSU',
     ]
 
     // Did these old lines of Python do anything? Not that I can tell so far
-    static List <String> VARIANT_COLUMNS = VARIANT_SEARCH_COLUMNS
-    static List <String> EXCHP_VARIANT_COLUMNS = EXCHP_VARIANT_SEARCH_COLUMNS
-    static List <String> GWAS_VARIANT_COLUMNS = GWAS_VARIANT_SEARCH_COLUMNS
+    static List<String> VARIANT_COLUMNS = VARIANT_SEARCH_COLUMNS
+    static List<String> EXCHP_VARIANT_COLUMNS = EXCHP_VARIANT_SEARCH_COLUMNS
+    static List<String> GWAS_VARIANT_COLUMNS = GWAS_VARIANT_SEARCH_COLUMNS
 
     /***
      * plug together the different collections of column specifications we typically use
      */
-    public void initialize (){
-        MYSQL_REST_SERVER = grailsApplication.config.t2dRestServer.base+grailsApplication.config.t2dRestServer.mysql+grailsApplication.config.t2dRestServer.path
+    public void initialize() {
+        MYSQL_REST_SERVER = grailsApplication.config.t2dRestServer.base + grailsApplication.config.t2dRestServer.mysql + grailsApplication.config.t2dRestServer.path
         BIGQUERY_REST_SERVER = grailsApplication.config.server.URL
-        TEST_REST_SERVER = grailsApplication.config.t2dTestRestServer.base+grailsApplication.config.t2dTestRestServer.name+grailsApplication.config.t2dTestRestServer.path
-        DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base+grailsApplication.config.t2dDevRestServer.name+grailsApplication.config.t2dDevRestServer.path
-        NEW_DEV_REST_SERVER = grailsApplication.config.t2dNewDevRestServer.base+grailsApplication.config.t2dNewDevRestServer.name+grailsApplication.config.t2dNewDevRestServer.path
-        QA_REST_SERVER = grailsApplication.config.t2dQaRestServer.base+grailsApplication.config.t2dQaRestServer.name+grailsApplication.config.t2dQaRestServer.path
-        PROD_REST_SERVER = grailsApplication.config.t2dProdRestServer.base+grailsApplication.config.t2dProdRestServer.name+grailsApplication.config.t2dProdRestServer.path
-        BASE_URL =  grailsApplication.config.server.URL
-        DBT_URL   = grailsApplication.config.dbtRestServer.URL
+        TEST_REST_SERVER = grailsApplication.config.t2dTestRestServer.base + grailsApplication.config.t2dTestRestServer.name + grailsApplication.config.t2dTestRestServer.path
+        DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base + grailsApplication.config.t2dDevRestServer.name + grailsApplication.config.t2dDevRestServer.path
+        NEW_DEV_REST_SERVER = grailsApplication.config.t2dNewDevRestServer.base + grailsApplication.config.t2dNewDevRestServer.name + grailsApplication.config.t2dNewDevRestServer.path
+        QA_REST_SERVER = grailsApplication.config.t2dQaRestServer.base + grailsApplication.config.t2dQaRestServer.name + grailsApplication.config.t2dQaRestServer.path
+        PROD_REST_SERVER = grailsApplication.config.t2dProdRestServer.base + grailsApplication.config.t2dProdRestServer.name + grailsApplication.config.t2dProdRestServer.path
+        BASE_URL = grailsApplication.config.server.URL
+        DBT_URL = grailsApplication.config.dbtRestServer.URL
         EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URL
-        pickADifferentRestServer (NEW_DEV_REST_SERVER)
+        pickADifferentRestServer(NEW_DEV_REST_SERVER)
     }
 
 
-    public  String getBigQuery(){
+    public String getBigQuery() {
         return BIGQUERY_REST_SERVER;
     }
-    public  String getMysql(){
+
+    public String getMysql() {
         return MYSQL_REST_SERVER;
     }
-    public  String getDevserver(){
+
+    public String getDevserver() {
         return DEV_REST_SERVER;
     }
-    public  String getTestserver(){
+
+    public String getTestserver() {
         return TEST_REST_SERVER;
     }
-    public  String getQaserver(){
+
+    public String getQaserver() {
         return QA_REST_SERVER;
     }
-    public  String getProdserver(){
+
+    public String getProdserver() {
         return PROD_REST_SERVER;
     }
-    public  String getNewdevserver(){
+
+    public String getNewdevserver() {
         return NEW_DEV_REST_SERVER;
     }
 
 
-
-    private List <String> getGeneColumns () {
-        List <String> returnValue
+    private List<String> getGeneColumns() {
+        List<String> returnValue
         if (sharedToolsService.applicationName() == 'Sigma') {
             returnValue = (GENE_COLUMNS + SIGMA_GENE_COLUMNS + GWAS_GENE_COLUMNS)
         } else { // must be t2dGenes
             returnValue = (GENE_COLUMNS + EXSEQ_GENE_COLUMNS + EXCHP_GENE_COLUMNS + GWAS_GENE_COLUMNS)
         }
-        return  returnValue
+        return returnValue
     }
 
 
-    private List <String> getVariantColumns () {
-        List <String> returnValue
+    private List<String> getVariantColumns() {
+        List<String> returnValue
         if (sharedToolsService.applicationName() == 'Sigma') {
             returnValue = (VARIANT_COLUMNS + SIGMA_VARIANT_COLUMNS + GWAS_VARIANT_COLUMNS)
         } else {
             returnValue = (VARIANT_COLUMNS + EXSEQ_VARIANT_COLUMNS + EXCHP_VARIANT_COLUMNS + GWAS_VARIANT_COLUMNS)
         }
-        return  returnValue
+        return returnValue
     }
 
-    private List <String> getVariantInfoColumns () {
-        List <String> returnValue
+    private List<String> getVariantInfoColumns() {
+        List<String> returnValue
         returnValue = (VARIANT_INFO_SEARCH_COLUMNS)
-        return  returnValue
+        return returnValue
     }
 
 
-   private filterByVariant(String variantName){
-       String returnValue
-       String uppercaseVariantName = variantName?.toUpperCase()
-       if (uppercaseVariantName?.startsWith("RS")){
-           returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "DBSNP_ID", "operator": "EQ", "value": "${uppercaseVariantName}", "operand_type": "STRING"}"""
-       }else {
-           returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${uppercaseVariantName}", "operand_type": "STRING"}"""
-       }
-       return returnValue
-   }
+    private filterByVariant(String variantName) {
+        String returnValue
+        String uppercaseVariantName = variantName?.toUpperCase()
+        if (uppercaseVariantName?.startsWith("RS")) {
+            returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "DBSNP_ID", "operator": "EQ", "value": "${
+                uppercaseVariantName
+            }", "operand_type": "STRING"}"""
+        } else {
+            returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${
+                uppercaseVariantName
+            }", "operand_type": "STRING"}"""
+        }
+        return returnValue
+    }
 
 
-
-
-    private String jsonForGeneralApiSearch(String combinedFilterList){
+    private String jsonForGeneralApiSearch(String combinedFilterList) {
         String inputJson = """
 {
     "passback": "123abc",
@@ -289,28 +303,27 @@ class RestServerService {
                           "orderBy":    ["CHROM"],
                           "dproperty":    {
 
-                                            "MAF" : ["ExSeq_13k_sa_genes_dv1",
-                                                      "ExSeq_13k_hs_genes_dv1",
-                                                      "ExSeq_13k_ea_genes_dv1",
-                                                      "ExSeq_13k_aa_genes_dv1",
-                                                      "ExSeq_13k_eu_genes_dv1",
-                                                      "ExSeq_13k_hs_genes_dv1",
-                                                      "ExChip_82k_dv2"
+                                            "MAF" : ["${EXOMESEQ_SA}",
+                                                      "${EXOMESEQ_HS}",
+                                                      "${EXOMESEQ_EA}",
+                                                      "${EXOMESEQ_AA}",
+                                                      "${EXOMESEQ_EU}",
+                                                      "${EXOMECHIP}"
                                                     ]
                                         },
                         "pproperty":    {
                                              "P_VALUE":    {
-                                                                       "GWAS_DIAGRAM_dv1": ["T2D"],
-                                                                    "ExChip_82k_dv2": ["T2D"]
+                                                                       "${GWASDIAGRAM}": ["T2D"],
+                                                                    "${EXOMECHIP}": ["T2D"]
                                                                    },
-                          "ODDS_RATIO": { "GWAS_DIAGRAM_dv1": ["T2D"] },
-                          "OR_WALD_FE_IV":{"ExSeq_26k_dv2": ["T2D"]},
-                          "P_EMMAX_FE_IV":    { "ExSeq_26k_dv2": ["T2D"]},
-                           "OBSA":  { "ExSeq_26k_dv2": ["T2D"]},
-                           "OBSU":  { "ExSeq_26k_dv2": ["T2D"]},
-                          "MINA":    { "ExSeq_26k_dv2": ["T2D"]},
-                          "MINU":    { "ExSeq_26k_dv2": ["T2D"]},
-                          "BETA":    { "ExChip_82k_dv2": ["T2D"]}
+                          "ODDS_RATIO": { "${GWASDIAGRAM}": ["T2D"] },
+                          "OR_FIRTH_FE_IV":{"${EXOMESEQ}": ["T2D"]},
+                          "P_EMMAX_FE_IV":    { "${EXOMESEQ}": ["T2D"]},
+                           "OBSA":  { "${EXOMESEQ}": ["T2D"]},
+                           "OBSU":  { "${EXOMESEQ}": ["T2D"]},
+                          "MINA":    { "${EXOMESEQ}": ["T2D"]},
+                          "MINU":    { "${EXOMESEQ}": ["T2D"]},
+                          "BETA":    { "${EXOMECHIP}": ["T2D"]}
                         }
                     },
     "filters":    [
@@ -321,11 +334,8 @@ class RestServerService {
     }
 
 
-
-
-
-   private String regionSearch (String chromosomeNumber,String extentBegin,String extentEnd){
-       String inputJson = """
+    private String regionSearch(String chromosomeNumber, String extentBegin, String extentEnd) {
+        String inputJson = """
 {
     "passback": "123abc",
     "entity": "variant",
@@ -337,108 +347,113 @@ class RestServerService {
                            "cproperty": ["VAR_ID", "CHROM", "POS","DBSNP_ID","CLOSEST_GENE","GENE","IN_GENE","Protein_change","Consequence"],
                           "orderBy":    ["CHROM"],
                           "dproperty":    {
-        
-                                            "MAF" : ["ExSeq_13k_sa_genes_dv1",
-                                                      "ExSeq_13k_hs_genes_dv1",
-                                                      "ExSeq_13k_ea_genes_dv1",
-                                                      "ExSeq_13k_aa_genes_dv1",
-                                                      "ExSeq_13k_eu_genes_dv1",
-                                                      "ExSeq_13k_hs_genes_dv1",
-                                                      "ExChip_82k_dv2"
+
+                                            "MAF" : ["${EXOMESEQ_SA}",
+                                                      "${EXOMESEQ_HS}",
+                                                      "${EXOMESEQ_EA}",
+                                                      "${EXOMESEQ_AA}",
+                                                      "${EXOMESEQ_EU}",
+                                                      "${EXOMECHIP}"
                                                     ]
                                         },
                         "pproperty":    {
-                                             "P_VALUE":    {                                                                   
-                                                                       "GWAS_DIAGRAM_dv1": ["T2D"],
-                                                                    "ExChip_82k_dv2": ["T2D"]
+                                             "P_VALUE":    {
+                                                                       "${GWASDIAGRAM}": ["T2D"],
+                                                                    "${EXOMECHIP}": ["T2D"]
                                                                    },
-                          "ODDS_RATIO": { "GWAS_DIAGRAM_dv1": ["T2D"] },
-                          "OR_WALD_FE_IV":{"ExSeq_26k_dv2": ["T2D"]},
-                          "P_EMMAX_FE_IV":    { "ExSeq_26k_dv2": ["T2D"]},
-                           "OBSA":  { "ExSeq_26k_dv2": ["T2D"]},
-                           "OBSU":  { "ExSeq_26k_dv2": ["T2D"]},
-                          "MINA":    { "ExSeq_26k_dv2": ["T2D"]},
-                          "MINU":    { "ExSeq_26k_dv2": ["T2D"]},
-                          "BETA":    { "ExChip_82k_dv2": ["T2D"]}
+                          "ODDS_RATIO": { "${GWASDIAGRAM}": ["T2D"] },
+                          "OR_FIRTH_FE_IV":{"${EXOMESEQ}": ["T2D"]},
+                          "P_EMMAX_FE_IV":    { "${EXOMESEQ}": ["T2D"]},
+                           "OBSA":  { "${EXOMESEQ}": ["T2D"]},
+                           "OBSU":  { "${EXOMESEQ}": ["T2D"]},
+                          "MINA":    { "${EXOMESEQ}": ["T2D"]},
+                          "MINU":    { "${EXOMESEQ}": ["T2D"]},
+                          "BETA":    { "${EXOMECHIP}": ["T2D"]}
                         }
                     },
-    "filters":    [ 
-                    {"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "LTE", "value": ${chromosomeNumber}, "operand_type": "INTEGER"},
-                    {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "LTE", "value": ${extentEnd}, "operand_type": "INTEGER"},
-                    {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "GTE", "value": ${extentBegin}, "operand_type": "INTEGER"}
+    "filters":    [
+                    {"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "LTE", "value": ${
+            chromosomeNumber
+        }, "operand_type": "INTEGER"},
+                    {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "LTE", "value": ${
+            extentEnd
+        }, "operand_type": "INTEGER"},
+                    {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "GTE", "value": ${
+            extentBegin
+        }, "operand_type": "INTEGER"}
                 ]
 }""".toString()
-       return inputJson
-   }
+        return inputJson
+    }
 
 
-    private List <String> getVariantSearchColumns () {
-        List <String> returnValue
+    private List<String> getVariantSearchColumns() {
+        List<String> returnValue
         if (sharedToolsService.applicationName() == 'Sigma') {
             returnValue = (VARIANT_SEARCH_COLUMNS + SIGMA_VARIANT_SEARCH_COLUMNS + GWAS_VARIANT_SEARCH_COLUMNS)
         } else {
             returnValue = (VARIANT_SEARCH_COLUMNS + EXSEQ_VARIANT_SEARCH_COLUMNS + EXCHP_VARIANT_SEARCH_COLUMNS + GWAS_VARIANT_SEARCH_COLUMNS)
         }
-        return  returnValue
+        return returnValue
     }
 
 
-    private void pickADifferentRestServer (String newRestServer)  {
-        if (!(newRestServer  == BASE_URL))  {
+    private void pickADifferentRestServer(String newRestServer) {
+        if (!(newRestServer == BASE_URL)) {
             log.info("NOTE: about to change from the old server = ${BASE_URL} to instead using = ${newRestServer}")
-            BASE_URL =  newRestServer
+            BASE_URL = newRestServer
             log.info("NOTE: change to server ${BASE_URL} is complete")
         }
     }
 
-    public String  getCurrentServer () {
-        return (BASE_URL?:"none")
+    public String getCurrentServer() {
+        return (BASE_URL ?: "none")
     }
 
-    public void  goWithTheMysqlServer () {
-        pickADifferentRestServer (MYSQL_REST_SERVER)
-    }
-
-
-    public void  goWithTheBigQueryServer () {
-        pickADifferentRestServer (BIGQUERY_REST_SERVER)
-    }
-
-    public void  goWithTheTestServer () {
-        pickADifferentRestServer (TEST_REST_SERVER)
-    }
-
-    public void  goWithTheDevServer () {
-        pickADifferentRestServer (DEV_REST_SERVER)
-    }
-
-    public void  goWithTheNewDevServer () {
-        pickADifferentRestServer (NEW_DEV_REST_SERVER)
-    }
-
-    public void  goWithTheQaServer () {
-        pickADifferentRestServer (QA_REST_SERVER)
-    }
-
-    public void  goWithTheProdServer () {
-        pickADifferentRestServer (PROD_REST_SERVER)
+    public void goWithTheMysqlServer() {
+        pickADifferentRestServer(MYSQL_REST_SERVER)
     }
 
 
-    public String  currentRestServer()  {
-        return   BASE_URL;
+    public void goWithTheBigQueryServer() {
+        pickADifferentRestServer(BIGQUERY_REST_SERVER)
     }
 
-    public String  whatIsMyCurrentServer () {
+    public void goWithTheTestServer() {
+        pickADifferentRestServer(TEST_REST_SERVER)
+    }
+
+    public void goWithTheDevServer() {
+        pickADifferentRestServer(DEV_REST_SERVER)
+    }
+
+    public void goWithTheNewDevServer() {
+        pickADifferentRestServer(NEW_DEV_REST_SERVER)
+    }
+
+    public void goWithTheQaServer() {
+        pickADifferentRestServer(QA_REST_SERVER)
+    }
+
+    public void goWithTheProdServer() {
+        pickADifferentRestServer(PROD_REST_SERVER)
+    }
+
+
+    public String currentRestServer() {
+        return BASE_URL;
+    }
+
+    public String whatIsMyCurrentServer() {
         String returnValue
-        String currentBaseUrl =  currentRestServer ()
+        String currentBaseUrl = currentRestServer()
         if (currentBaseUrl == "") {
             returnValue = 'uninitialized'
-        }  else if (MYSQL_REST_SERVER  == currentBaseUrl) {
+        } else if (MYSQL_REST_SERVER == currentBaseUrl) {
             returnValue = 'mysql'
-        }  else if  (BIGQUERY_REST_SERVER  == currentBaseUrl) {
+        } else if (BIGQUERY_REST_SERVER == currentBaseUrl) {
             returnValue = 'bigquery'
-        }  else {
+        } else {
             returnValue = 'unknown'
         }
         return returnValue
@@ -450,20 +465,20 @@ class RestServerService {
      * @param incoming
      * @return
      */
-    public LinkedHashMap<String, String> extractNumbersWeNeed (String incoming)  {
+    public LinkedHashMap<String, String> extractNumbersWeNeed(String incoming) {
         LinkedHashMap<String, String> returnValue = [:]
 
-        String commasRemoved=incoming.replace(/,/,"")
-        returnValue["chromosomeNumber"] =  sharedToolsService.parseChromosome(commasRemoved)
-        java.util.regex.Matcher  startExtent = commasRemoved =~ /:\d*/
-        if (startExtent.size() >  0){
-            returnValue ["startExtent"]  = sharedToolsService.parseExtent(startExtent[0])
-         }
-        java.util.regex.Matcher  endExtent = commasRemoved =~ /-\d*/
-        if (endExtent.size() >  0){
-            returnValue ["endExtent"]  = sharedToolsService.parseExtent(endExtent[0])
+        String commasRemoved = incoming.replace(/,/, "")
+        returnValue["chromosomeNumber"] = sharedToolsService.parseChromosome(commasRemoved)
+        java.util.regex.Matcher startExtent = commasRemoved =~ /:\d*/
+        if (startExtent.size() > 0) {
+            returnValue["startExtent"] = sharedToolsService.parseExtent(startExtent[0])
         }
-        return  returnValue
+        java.util.regex.Matcher endExtent = commasRemoved =~ /-\d*/
+        if (endExtent.size() > 0) {
+            returnValue["endExtent"] = sharedToolsService.parseExtent(endExtent[0])
+        }
+        return returnValue
     }
 
     /***
@@ -473,23 +488,23 @@ class RestServerService {
      * @param targetUrl
      * @return
      */
-    private String getRestCallBase(String targetUrl, String currentRestServer){
+    private String  getRestCallBase(String targetUrl, String currentRestServer) {
         String returnValue = null
         RestResponse response
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         StringBuilder logStatus = new StringBuilder()
         try {
-            response  = rest.get(currentRestServer+targetUrl) {
+            response = rest.get(currentRestServer + targetUrl) {
                 contentType "text/plain"
             }
-        } catch (Exception exception){
+        } catch (Exception exception) {
             log.error("NOTE: exception on post to backend. Target=${targetUrl}")
             log.error(exception.toString())
-            logStatus <<  "NOTE: exception on post to backend. Target=${targetUrl}"
+            logStatus << "NOTE: exception on post to backend. Target=${targetUrl}"
         }
 
         if (response?.responseEntity?.statusCode?.value == 200) {
-            returnValue =  response.text
+            returnValue = response.text
             logStatus << """status: ok""".toString()
         } else {
             logStatus << """status: failed""".toString()
@@ -504,51 +519,54 @@ class RestServerService {
      * @param targetUrl
      * @return
      */
-    private JSONObject postRestCallBase(String drivingJson, String targetUrl, currentRestServer){
+    private JSONObject postRestCallBase(String drivingJson, String targetUrl, currentRestServer) {
         JSONObject returnValue = null
-        Date beforeCall  = new Date()
+        Date beforeCall = new Date()
         Date afterCall
         RestResponse response
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         StringBuilder logStatus = new StringBuilder()
         try {
-            response  = rest.post(currentRestServer+targetUrl)   {
+            response = rest.post(currentRestServer + targetUrl) {
                 contentType "application/json"
                 json drivingJson
             }
-            afterCall  = new Date()
-        } catch ( Exception exception){
+            afterCall = new Date()
+        } catch (Exception exception) {
             log.error("NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}")
             log.error(exception.toString())
-            logStatus <<  "NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}"
-            afterCall  = new Date()
+            logStatus << "NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}"
+            afterCall = new Date()
         }
         logStatus << """
-SERVER CALL:
-url=${targetUrl},
+SERVER POST:
+url=${currentRestServer + targetUrl},
 parm=${drivingJson},
-time required=${(afterCall.time-beforeCall.time)/1000} seconds
+time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 """.toString()
         if (response?.responseEntity?.statusCode?.value == 200) {
-            returnValue =  response.json
+            returnValue = response.json
             logStatus << """status: ok""".toString()
-        }  else {
-            JSONObject tempValue =  response.json
+        } else {
+            JSONObject tempValue = response.json
+            logStatus << """***************************************failed call***************************************************""".toString()
             logStatus << """status: ${response.responseEntity.statusCode.value}""".toString()
-            if  (tempValue)  {
+            logStatus << """***************************************failed call***************************************************""".toString()
+            if (tempValue) {
                 logStatus << """is_error: ${response.json["is_error"]}""".toString()
-            }  else {
+            } else {
                 logStatus << "no valid Json returned"
             }
+            logStatus << """
+FAILED CALL:
+url=${currentRestServer + targetUrl},
+parm=${drivingJson},
+time required=${(afterCall.time - beforeCall.time) / 1000} seconds
+""".toString()
         }
         log.info(logStatus)
         return returnValue
     }
-
-
-
-
-
 
     /***
      * This is the underlying routine for every call to the rest backend.
@@ -556,39 +574,39 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
      * @param targetUrl
      * @return
      */
-    private JSONObject getRestCallBase(String targetUrl, currentRestServer){
+    private JSONObject getRestCallBase(String targetUrl, currentRestServer) {
         JSONObject returnValue = null
-        Date beforeCall  = new Date()
+        Date beforeCall = new Date()
         Date afterCall
         RestResponse response
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         StringBuilder logStatus = new StringBuilder()
         try {
-            response  = rest.get(currentRestServer+targetUrl)   {
+            response = rest.get(currentRestServer + targetUrl) {
                 contentType "application/json"
             }
-            afterCall  = new Date()
-        } catch ( Exception exception){
+            afterCall = new Date()
+        } catch (Exception exception) {
             log.error("NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}")
             log.error(exception.toString())
-            logStatus <<  "NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}"
-            afterCall  = new Date()
+            logStatus << "NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}"
+            afterCall = new Date()
         }
         logStatus << """
-SERVER CALL:
-url=${targetUrl},
+SERVER GET:
+url=${currentRestServer + targetUrl},
 parm=${drivingJson},
-time required=${(afterCall.time-beforeCall.time)/1000} seconds
+time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 """.toString()
         if (response?.responseEntity?.statusCode?.value == 200) {
-            returnValue =  response.json
+            returnValue = response.json
             logStatus << """status: ok""".toString()
-        }  else {
-            JSONObject tempValue =  response.json
+        } else {
+            JSONObject tempValue = response.json
             logStatus << """status: ${response.responseEntity.statusCode.value}""".toString()
-            if  (tempValue)  {
+            if (tempValue) {
                 logStatus << """is_error: ${response.json["is_error"]}""".toString()
-            }  else {
+            } else {
                 logStatus << "no valid Json returned"
             }
         }
@@ -597,41 +615,39 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
     }
 
 
-
-
-
-    private JSONObject postRestCallBurden(String drivingJson, String targetUrl){
-        return postRestCallBase(drivingJson,targetUrl,DBT_URL)
+    private JSONObject postRestCallBurden(String drivingJson, String targetUrl) {
+        return postRestCallBase(drivingJson, targetUrl, DBT_URL)
     }
 
 
-    private JSONObject postRestCallExperimental(String drivingJson, String targetUrl){
-        return postRestCallBase(drivingJson,targetUrl,EXPERIMENTAL_URL)
+    private JSONObject postRestCallExperimental(String drivingJson, String targetUrl) {
+        return postRestCallBase(drivingJson, targetUrl, EXPERIMENTAL_URL)
     }
-    JSONObject retrieveVariantInfoByName_Experimental (String variantId) {
+
+    JSONObject retrieveVariantInfoByName_Experimental(String variantId) {
         JSONObject returnValue = null
         String drivingJson = """{
 "variant_id": ${variantId},
 "user_group": "ui",
-"columns": [${"\""+getVariantInfoColumns () .join("\",\"")+"\""}]
+"columns": [${"\"" + getVariantInfoColumns().join("\",\"") + "\""}]
 }
 """.toString()
-        returnValue = postRestCallExperimental( drivingJson, VARIANT_INFO_URL)
+        returnValue = postRestCallExperimental(drivingJson, VARIANT_INFO_URL)
         return returnValue
     }
 
 
-
-    private JSONObject postRestCall(String drivingJson, String targetUrl){
-        return postRestCallBase(drivingJson,targetUrl,currentRestServer())
+    private JSONObject postRestCall(String drivingJson, String targetUrl) {
+        return postRestCallBase(drivingJson, targetUrl, currentRestServer())
     }
 
 
-    private JSONObject getRestCall(String targetUrl){
-        return getRestCallBase(targetUrl,currentRestServer())
+    private String getRestCall(String targetUrl) {
+        String retdat
+        retdat = getRestCallBase(targetUrl, currentRestServer())
+        return retdat
+
     }
-
-
 
     /***
      * used only for testing
@@ -639,35 +655,34 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
      * @param jsonString
      * @return
      */
-    JSONObject postServiceJson (String url,
-                                String jsonString) {
+    JSONObject postServiceJson(String url,
+                               String jsonString) {
         JSONObject returnValue = null
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
-        RestResponse response  = rest.post(url)   {
+        RestResponse response = rest.post(url) {
             contentType "application/json"
             json jsonString
         }
         if (response.responseEntity.statusCode.value == 200) {
-            returnValue =  response.json
+            returnValue = response.json
         }
         return returnValue
     }
 
 
-    LinkedHashMap<String, String> convertJsonToMap (JSONObject jsonObject)  {
+    LinkedHashMap<String, String> convertJsonToMap(JSONObject jsonObject) {
         LinkedHashMap returnValue = [:]
-        for (String sequenceKey in jsonObject.keySet()){
+        for (String sequenceKey in jsonObject.keySet()) {
             def intermediateObject = jsonObject[sequenceKey]
             if (intermediateObject) {
-                returnValue[sequenceKey] = intermediateObject.toString ()
+                returnValue[sequenceKey] = intermediateObject.toString()
             } else {
                 returnValue[sequenceKey] = null
             }
 
         }
-        return  returnValue
+        return returnValue
     }
-
 
     /***
      * retrieve everything from the data sets call. Take sample groups or experiments
@@ -676,27 +691,39 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
      * @param geneName
      * @return
      */
-    JSONObject retrieveDatasets (List <String> sampleGroupList,
-                                 List <String> experimentList) {
+    JSONObject retrieveDatasets(List<String> sampleGroupList,
+                                List<String> experimentList) {
         JSONObject returnValue = null
-        String sampleGroup = (sampleGroupList.size() > 0)?("\""+sampleGroupList.join("\",\"")+"\""):"";
-        String experimentGroup = (experimentList.size() > 0)?("\""+experimentList.join("\",\"")+"\""):"";
+        String sampleGroup = (sampleGroupList.size() > 0) ? ("\"" + sampleGroupList.join("\",\"") + "\"") : "";
+        String experimentGroup = (experimentList.size() > 0) ? ("\"" + experimentList.join("\",\"") + "\"") : "";
         String drivingJson = """{
 "sample_group": [${sampleGroup}],
 "experiment": [${experimentGroup}]
 
 }
 """.toString()
-        returnValue = postRestCall( drivingJson, DATA_SET_URL)
+        returnValue = postRestCall(drivingJson, DATA_SET_URL)
         return returnValue
     }
 
     // for now let's do a pseudo call
+    JSONObject retrieveDatasetsFromMetadata(List<String> sampleGroupList,
+                                            List<String> experimentList) {
+        JSONObject result
+        result = sharedToolsService.getMetadata()
+        println 'meta-data retrieved'
+    }
+
+
+
+
+
+
     JSONObject pseudoRetrieveDatasets (List <String> sampleGroupList,
-                                 List <String> experimentList) {
+                                       List <String> experimentList) {
         JSONObject result
         if ((sampleGroupList) &&
-            (sampleGroupList.size()>0)){
+                (sampleGroupList.size()>0)){
             String magic = """
 {"is_error": false,
  "numRecords":1,
@@ -718,40 +745,40 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
  "dataset":["GLGC 2011"]
 }""".toString()
             String retval = ''
-           switch (sampleGroupList[0]) {
-               case 'T2D': retval = t2d; break;
-               case 'FastGlu': retval = magic; break;
-               case 'FastIns': retval = magic; break;
-               case 'ProIns': retval = magic; break;
-               case '2hrGLU_BMIAdj': retval = magic; break;
-               case '2hrIns_BMIAdj': retval = magic; break;
-               case 'HOMAIR': retval = magic; break;
-               case 'HOMAB': retval = magic; break;
-               case 'HbA1c': retval = magic; break;
-               case 'BMI': retval = magic; break;
-               case 'WHR': retval = giant; break;
-               case 'Height': retval = giant; break;
-               case 'TC': retval = glgc; break;
-               case 'HDL': retval = glgc; break;
-               case 'LDL': retval = glgc; break;
-               case 'TG': retval = glgc; break;
-               case 'CAD': retval = giant; break;
-               case 'CKD': retval = giant; break;
-               case 'eGFRcrea': retval = giant; break;
-               case 'eGFRcys': retval = giant; break;
-               case 'UACR': retval = giant; break;
-               case 'MA': retval = giant; break;
-               case 'BIP': retval = giant; break;
-               case 'SCZ': retval = giant; break;
-               case 'MDD': retval = giant; break;
-               default: retval = magic; break;
-           }
+            switch (sampleGroupList[0]) {
+                case 'T2D': retval = t2d; break;
+                case 'FastGlu': retval = magic; break;
+                case 'FastIns': retval = magic; break;
+                case 'ProIns': retval = magic; break;
+                case '2hrGLU_BMIAdj': retval = magic; break;
+                case '2hrIns_BMIAdj': retval = magic; break;
+                case 'HOMAIR': retval = magic; break;
+                case 'HOMAB': retval = magic; break;
+                case 'HbA1c': retval = magic; break;
+                case 'BMI': retval = magic; break;
+                case 'WHR': retval = giant; break;
+                case 'Height': retval = giant; break;
+                case 'TC': retval = glgc; break;
+                case 'HDL': retval = glgc; break;
+                case 'LDL': retval = glgc; break;
+                case 'TG': retval = glgc; break;
+                case 'CAD': retval = giant; break;
+                case 'CKD': retval = giant; break;
+                case 'eGFRcrea': retval = giant; break;
+                case 'eGFRcys': retval = giant; break;
+                case 'UACR': retval = giant; break;
+                case 'MA': retval = giant; break;
+                case 'BIP': retval = giant; break;
+                case 'SCZ': retval = giant; break;
+                case 'MDD': retval = giant; break;
+                default: retval = magic; break;
+            }
 
 
             def slurper = new JsonSlurper()
             result = slurper.parseText(retval)
-           }
-         return result
+        }
+        return result
     }
 
 
@@ -817,11 +844,11 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
 
 
     String generateRangeFilters (String chromosome,
-                            String beginSearch,
-                            String endSearch,
-                            Boolean dataRestriction)    {
-           StringBuilder sb = new  StringBuilder ()
-           sb << """[
+                                 String beginSearch,
+                                 String endSearch,
+                                 Boolean dataRestriction)    {
+        StringBuilder sb = new  StringBuilder ()
+        sb << """[
                    { "filter_type": "STRING", "operand": "CHROM",  "operator": "EQ","value": "${chromosome}"  },
                    {"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": ${beginSearch} },
                    {"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": ${endSearch} }""".toString()
@@ -840,10 +867,10 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
 
 
     String generateRangeFiltersPValueRestriction (String chromosome,
-                                 String beginSearch,
-                                 String endSearch,
-                                 Boolean dataRestriction,
-                                 BigDecimal pValue)    {
+                                                  String beginSearch,
+                                                  String endSearch,
+                                                  Boolean dataRestriction,
+                                                  BigDecimal pValue)    {
         StringBuilder sb = new  StringBuilder ()
         sb << """[
                    { "filter_type": "STRING", "operand": "CHROM",  "operator": "EQ","value": "${chromosome}"  },
@@ -1020,26 +1047,44 @@ ${customFilterSet}""".toString()
 
 
 
-    private String requestGeneCountByPValue (String geneName, BigDecimal pValue, Integer dataSet){
+    private String requestGeneCountByPValue (String geneName, Integer significanceIndicator, Integer dataSet){
         String dataSetId = ""
-        String pFieldName = ""
+        String significance
+        String geneRegion
         switch (dataSet){
             case 1:
-                dataSetId = "ExSeq_26k_dv2"
-                pFieldName = "P_EMMAX_FE_IV"
+                dataSetId = "exomeseq"
                 break;
             case 2:
-                dataSetId = "ExChip_82k_dv1"
-                pFieldName = "P_VALUE"
+                dataSetId = "exomechip"
                 break;
             case 3:
-                dataSetId = "GWAS_DIAGRAM_dv1"
-                pFieldName = "P_VALUE"
+                dataSetId = "gwas"
+                geneRegion = sharedToolsService.getGeneExpandedRegionSpec(geneName)
                 break;
             default:
                 log.error("Trouble: user requested data set = ${dataSet} which I don't recognize")
                 defaults
         }
+        switch (significanceIndicator){
+            case 1:
+                significance = "everything"
+                break;
+            case 2:
+                significance = "genome-wide"
+                break;
+            case 3:
+                significance = "locus"
+                break;
+            case 4:
+                significance = "nominal"
+                break;
+            default:
+                log.error("Trouble: user requested data set = ${dataSet} which I don't recognize")
+                defaults
+        }
+        List <String> filterList= filterManagementService.retrieveFilters(geneName,significance,dataSetId,geneRegion,"")
+        String packagedFilters = sharedToolsService.packageUpEncodedParameters(filterList)
         String geneCountRequest = """
 {
     "passback": "123abc",
@@ -1055,8 +1100,7 @@ ${customFilterSet}""".toString()
                         "pproperty":    {}
                     },
     "filters":    [
-                    {"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${geneName}", "operand_type": "STRING"},
-                    {"dataset_id": "${dataSetId}", "phenotype": "T2D", "operand": "${pFieldName}", "operator": "LTE", "value": ${pValue}, "operand_type": "FLOAT"}
+                    ${packagedFilters}
                 ]
 }
 """.toString()
@@ -1079,33 +1123,33 @@ ${customFilterSet}""".toString()
 "dproperty": {
 },
 "pproperty": {
-                   
+
                        "HETA": {
-                        "ExSeq_26k_dv2": ["T2D"]
+                        "${EXOMESEQ}": ["T2D"]
                     },
                        "HETU": {
-                        "ExSeq_26k_dv2": ["T2D"]
+                        "${EXOMESEQ}": ["T2D"]
                     },
                        "HOMA": {
-                        "ExSeq_26k_dv2": ["T2D"]
+                        "${EXOMESEQ}": ["T2D"]
                     },
                        "HOMU": {
-                        "ExSeq_26k_dv2": ["T2D"]
+                        "${EXOMESEQ}": ["T2D"]
                     },
                        "OBSU": {
-                        "ExSeq_26k_dv2": ["T2D"]
+                        "${EXOMESEQ}": ["T2D"]
                     },
                        "OBSA": {
-                        "ExSeq_26k_dv2": ["T2D"]
+                        "${EXOMESEQ}": ["T2D"]
                     },
                        "HETA": {
-                        "ExSeq_26k_dv2": ["T2D"]
+                        "${EXOMESEQ}": ["T2D"]
                     },
                        "P_EMMAX_FE_IV": {
-                        "ExSeq_26k_dv2": ["T2D"]
+                        "${EXOMESEQ}": ["T2D"]
                     },
-                       "OR_WALD_FE_IV": {
-                        "ExSeq_26k_dv2": ["T2D"]
+                       "OR_FIRTH_FE_IV": {
+                        "${EXOMESEQ}": ["T2D"]
                     }
 
                      }
@@ -1141,27 +1185,27 @@ ${customFilterSet}""".toString()
                                         },
                         "pproperty":    {
                                             "P_EMMAX_FE_IV": {
-                                                "ExSeq_26k_dv2": ["T2D"]
+                                                "${EXOMESEQ}": ["T2D"]
                                             },
 
                                              "P_VALUE":{
-                                                "GWAS_DIAGRAM_dv1":["T2D"],
-                                                "ExChip_82k_dv1":["T2D"]
+                                                "${GWASDIAGRAM}":["T2D"],
+                                                "${EXOMECHIP}":["T2D"]
                                              },
-                                             "OR_WALD_FE_IV":    {
-                                                                   "ExSeq_26k_dv2": ["T2D"]
+                                             "OR_FIRTH_FE_IV":    {
+                                                                   "${EXOMESEQ}": ["T2D"]
                                                                 },
                                              "ODDS_RATIO":{
-                                                "GWAS_DIAGRAM_dv1":["T2D"]
+                                                "${GWASDIAGRAM}":["T2D"]
                                              },
 
                                               "BETA":{
-                                                "ExChip_82k_dv1":["T2D"]
+                                                "${EXOMECHIP}":["T2D"]
                                               }
 
                                         }
                     },
-    "filters":    [ 
+    "filters":    [
                       ${filterByVariant (variantId)}
 
                 ]
@@ -1181,9 +1225,7 @@ ${customFilterSet}""".toString()
 
 
     public JSONObject combinedVariantAssociationStatistics(String variantName){
-        String exSeq2Sample = "ExSeq_26k_dv2"
-        String exChipSample = "ExChip_82k_dv1"
-        String gwasSample = "GWAS_DIAGRAM_dv1"
+        String gwasSample = "${GWASDIAGRAM}"
         String attribute = "T2D"
         JSONObject returnValue
         List <Integer> dataSeteList = [1]
@@ -1199,20 +1241,20 @@ ${customFilterSet}""".toString()
                     if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
                         def variant = apiResults.variants[0];
                         if (variant ["P_EMMAX_FE_IV"]){
-                            sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${variant["P_EMMAX_FE_IV"][exSeq2Sample][attribute]}},"
+                            sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${variant["P_EMMAX_FE_IV"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["P_VALUE"]){
                             sb  << "{\"level\":\"P_VALUE_GWAS\",\"count\":${variant["P_VALUE"][gwasSample][attribute]}},"
-                            sb  << "{\"level\":\"P_VALUE_EXCHIP\",\"count\":${variant["P_VALUE"][exChipSample][attribute]}},"
+                            sb  << "{\"level\":\"P_VALUE_EXCHIP\",\"count\":${variant["P_VALUE"][EXOMECHIP][attribute]}},"
                         }
-                        if (variant ["OR_WALD_FE_IV"]){
-                            sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${variant["OR_WALD_FE_IV"][exSeq2Sample][attribute]}},"
+                        if (variant ["OR_FIRTH_FE_IV"]){
+                            sb  << "{\"level\":\"OR_FIRTH_FE_IV\",\"count\":${variant["OR_FIRTH_FE_IV"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["ODDS_RATIO"]){
                             sb  << "{\"level\":\"ODDS_RATIO\",\"count\":${variant["ODDS_RATIO"][gwasSample][attribute]}},"
                         }
                         if (variant ["BETA"]){
-                            sb  << "{\"level\":\"BETA\",\"count\":${variant["BETA"][exChipSample][attribute]}}"
+                            sb  << "{\"level\":\"BETA\",\"count\":${variant["BETA"][EXOMECHIP][attribute]}}"
                         }
 
                     }
@@ -1247,13 +1289,13 @@ ${customFilterSet}""".toString()
                            "cproperty": ["VAR_ID", "CHROM", "POS"],
                           "orderBy":    ["CHROM"],
                           "dproperty":    {
-                                            "MAF" : ["ExSeq_13k_sa_genes_dv1",
-                                                      "ExSeq_13k_hs_genes_dv1",
-                                                      "ExSeq_13k_ea_genes_dv1",
-                                                      "ExSeq_13k_aa_genes_dv1",
-                                                      "ExSeq_13k_eu_genes_dv1",
-                                                      "ExSeq_13k_hs_genes_dv1",
-                                                      "ExChip_82k_dv2"
+                                            "MAF" : ["ExSeq_13k_sa_mdv2",
+                                                      "ExSeq_13k_hs_mdv2",
+                                                      "ExSeq_13k_ea_mdv2",
+                                                      "ExSeq_13k_aa_mdv2",
+                                                      "ExSeq_13k_eu_mdv2",
+                                                      "ExSeq_13k_hs_mdv2",
+                                                      "${EXOMECHIP}"
                                                     ]
                                         },
                         "pproperty":    {
@@ -1281,12 +1323,6 @@ ${customFilterSet}""".toString()
 
 
     public JSONObject howCommonIsVariantAcrossEthnicities(String variantName){
-        String exSeqAASample = "ExSeq_13k_aa_genes_dv1"
-        String exSeqHSSample = "ExSeq_13k_hs_genes_dv1"
-        String exSeqEASample = "ExSeq_13k_ea_genes_dv1"
-        String exSeqSASample = "ExSeq_13k_sa_genes_dv1"
-        String exSeqEUSample = "ExSeq_13k_eu_genes_dv1"
-        String exChipSample = "ExChip_82k_dv2"
         JSONObject returnValue
         List <Integer> dataSeteList = [1]
         List <String> pValueList = [1]
@@ -1301,12 +1337,12 @@ ${customFilterSet}""".toString()
                     if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
                         def variant = apiResults.variants[0];
                         if (variant ["MAF"]){
-                            sb  << "{\"level\":\"AA\",\"count\":${variant["MAF"][exSeqAASample]}},"
-                            sb  << "{\"level\":\"HS\",\"count\":${variant["MAF"][exSeqHSSample]}},"
-                            sb  << "{\"level\":\"EA\",\"count\":${variant["MAF"][exSeqEASample]}},"
-                            sb  << "{\"level\":\"SA\",\"count\":${variant["MAF"][exSeqSASample]}},"
-                            sb  << "{\"level\":\"EUseq\",\"count\":${variant["MAF"][exSeqEUSample]}},"
-                            sb  << "{\"level\":\"Euchip\",\"count\":${variant["MAF"][exChipSample]}}"
+                            sb  << "{\"level\":\"AA\",\"count\":${variant["MAF"][EXOMESEQ_AA]}},"
+                            sb  << "{\"level\":\"HS\",\"count\":${variant["MAF"][EXOMESEQ_HS]}},"
+                            sb  << "{\"level\":\"EA\",\"count\":${variant["MAF"][EXOMESEQ_EA]}},"
+                            sb  << "{\"level\":\"SA\",\"count\":${variant["MAF"][EXOMESEQ_SA]}},"
+                            sb  << "{\"level\":\"EUseq\",\"count\":${variant["MAF"][EXOMESEQ_EU]}},"
+                            sb  << "{\"level\":\"Euchip\",\"count\":${variant["MAF"][EXOMECHIP]}}"
                         }
                     }
 
@@ -1330,7 +1366,6 @@ ${customFilterSet}""".toString()
 
 
     public JSONObject combinedVariantDiseaseRisk(String variantName){
-        String exSeq2Sample = "ExSeq_26k_dv2"
         String attribute = "T2D"
         JSONObject returnValue
         List <Integer> dataSeteList = [1]
@@ -1346,28 +1381,28 @@ ${customFilterSet}""".toString()
                     if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
                         def variant = apiResults.variants[0];
                         if (variant ["HETA"]){
-                            sb  << "{\"level\":\"HETA\",\"count\":${variant["HETA"][exSeq2Sample][attribute]}},"
+                            sb  << "{\"level\":\"HETA\",\"count\":${variant["HETA"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["HETU"]){
-                            sb  << "{\"level\":\"HETU\",\"count\":${variant["HETU"][exSeq2Sample][attribute]}},"
+                            sb  << "{\"level\":\"HETU\",\"count\":${variant["HETU"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["HOMA"]){
-                            sb  << "{\"level\":\"HOMA\",\"count\":${variant["HOMA"][exSeq2Sample][attribute]}},"
+                            sb  << "{\"level\":\"HOMA\",\"count\":${variant["HOMA"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["HOMU"]){
-                            sb  << "{\"level\":\"HOMU\",\"count\":${variant["HOMU"][exSeq2Sample][attribute]}},"
+                            sb  << "{\"level\":\"HOMU\",\"count\":${variant["HOMU"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["OBSU"]){
-                            sb  << "{\"level\":\"OBSU\",\"count\":${variant["OBSU"][exSeq2Sample][attribute]}},"
+                            sb  << "{\"level\":\"OBSU\",\"count\":${variant["OBSU"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["OBSA"]){
-                            sb  << "{\"level\":\"OBSA\",\"count\":${variant["OBSA"][exSeq2Sample][attribute]}},"
+                            sb  << "{\"level\":\"OBSA\",\"count\":${variant["OBSA"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["P_EMMAX_FE_IV"]){
-                            sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${variant["P_EMMAX_FE_IV"][exSeq2Sample][attribute]}},"
+                            sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${variant["P_EMMAX_FE_IV"][EXOMESEQ][attribute]}},"
                         }
-                        if (variant ["OR_WALD_FE_IV"]){
-                            sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${variant["OR_WALD_FE_IV"][exSeq2Sample][attribute]}}"
+                        if (variant ["OR_FIRTH_FE_IV"]){
+                            sb  << "{\"level\":\"OR_FIRTH_FE_IV\",\"count\":${variant["OR_FIRTH_FE_IV"][EXOMESEQ][attribute]}}"
                         }
                     }
 
@@ -1391,8 +1426,8 @@ ${customFilterSet}""".toString()
 
 
 
-    public JSONObject variantCountByGeneNameAndPValue(String geneName, BigDecimal pValue, Integer dataSet){
-        String jsonSpec = requestGeneCountByPValue( geneName,  pValue,  dataSet)
+    public JSONObject variantCountByGeneNameAndPValue(String geneName, Integer significance, Integer dataSet){
+        String jsonSpec = requestGeneCountByPValue( geneName,  significance,  dataSet)
         return postRestCall(jsonSpec,GET_DATA_URL)
     }
 
@@ -1405,20 +1440,20 @@ ${customFilterSet}""".toString()
     public JSONObject combinedVariantCountByGeneNameAndPValue(String geneName){
         JSONObject returnValue
         List <Integer> dataSeteList = [3, 2, 1]
-        List <BigDecimal> pValueList = [1,0.00000005, 0.0001, 0.05]
+        List <Integer> significanceList = [1,2,  3, 4]
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()
         for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
             sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
-            for ( int  i = 0 ; i < pValueList.size () ; i++ ){
+            for ( int  i = 0 ; i < significanceList.size () ; i++ ){
                 sb  << "{"
-                 String jsonSpec = requestGeneCountByPValue(geneName, pValueList[i], dataSeteList[j])
+                String jsonSpec = requestGeneCountByPValue(geneName, significanceList[i], dataSeteList[j])
                 JSONObject apiData = postRestCall(jsonSpec,GET_DATA_URL)
                 if (apiData.is_error == false) {
-                    sb  << "\"level\":${pValueList[i]},\"count\":${apiData.numRecords}"
+                    sb  << "\"level\":${significanceList[i]},\"count\":${apiData.numRecords}"
                 }
                 sb  << "}"
-                if (i<pValueList.size ()-1){
+                if (i<significanceList.size ()-1){
                     sb  << ","
                 }
             }
@@ -1431,6 +1466,35 @@ ${customFilterSet}""".toString()
         returnValue = slurper.parseText(sb.toString())
         return returnValue
     }
+//    public JSONObject combinedVariantCountByGeneNameAndPValue(String geneName){
+//        JSONObject returnValue
+//        List <Integer> dataSeteList = [3, 2, 1]
+//        List <BigDecimal> pValueList = [1,0.00000005, 0.0001, 0.05]
+//        StringBuilder sb = new StringBuilder ("{\"results\":[")
+//        def slurper = new JsonSlurper()
+//        for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
+//            sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
+//            for ( int  i = 0 ; i < pValueList.size () ; i++ ){
+//                sb  << "{"
+//                String jsonSpec = requestGeneCountByPValue(geneName, pValueList[i], dataSeteList[j])
+//                JSONObject apiData = postRestCall(jsonSpec,GET_DATA_URL)
+//                if (apiData.is_error == false) {
+//                    sb  << "\"level\":${pValueList[i]},\"count\":${apiData.numRecords}"
+//                }
+//                sb  << "}"
+//                if (i<pValueList.size ()-1){
+//                    sb  << ","
+//                }
+//            }
+//            sb  << "]}"
+//            if (j<dataSeteList.size ()-1){
+//                sb  << ","
+//            }
+//        }
+//        sb  << "]}"
+//        returnValue = slurper.parseText(sb.toString())
+//        return returnValue
+//    }
 
 
 
@@ -1452,22 +1516,22 @@ ${customFilterSet}""".toString()
                                         },
                         "pproperty":    {
                                             "P_EMMAX_FE_IV": {
-                                                "ExSeq_26k_dv2": ["T2D"]
+                                                "${EXOMESEQ}": ["T2D"]
                                             },
 
                                              "P_VALUE":{
-                                                "GWAS_DIAGRAM_dv1":["T2D"],
-                                                "ExChip_82k_dv1":["T2D"]
+                                                "${GWASDIAGRAM}":["T2D"],
+                                                "${EXOMECHIP}":["T2D"]
                                              },
-                                             "OR_WALD_FE_IV":    {
-                                                                   "ExSeq_26k_dv2": ["T2D"]
+                                             "OR_FIRTH_FE_IV":    {
+                                                                   "${EXOMESEQ}": ["T2D"]
                                                                 },
                                              "ODDS_RATIO":{
-                                                "GWAS_DIAGRAM_dv1":["T2D"]
+                                                "${GWASDIAGRAM}":["T2D"]
                                              },
 
                                               "BETA":{
-                                                "ExChip_82k_dv1":["T2D"]
+                                                "${EXOMECHIP}":["T2D"]
                                               }
 
                                         }
@@ -1483,33 +1547,33 @@ ${customFilterSet}""".toString()
 
 
 
-  private String ancestryDataSet (String ethnicity){
-      String dataSetId = ""
-      switch (ethnicity){
-          case "HS":
-              dataSetId = "ExSeq_13k_hs_genes_dv1"
-              break;
-          case "AA":
-              dataSetId = "ExSeq_13k_aa_genes_dv1"
-              break;
-          case "EA":
-              dataSetId = "ExSeq_13k_ea_genes_dv1"
-              break;
-          case "SA":
-              dataSetId = "ExSeq_13k_sa_genes_dv1"
-              break;
-          case "EU":
-              dataSetId = "ExSeq_13k_eu_genes_dv1"
-              break;
-          case "chipEu":
-              dataSetId = "ExChip_82k_dv2"
-              break;
-          default:
-              log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
-              dataSetId = "ExSeq_13k_aa_genes_dv1"
-      }
-      return dataSetId
-  }
+    private String ancestryDataSet (String ethnicity){
+        String dataSetId = ""
+        switch (ethnicity){
+            case "HS":
+                dataSetId = EXOMESEQ_HS
+                break;
+            case "AA":
+                dataSetId = EXOMESEQ_AA
+                break;
+            case "EA":
+                dataSetId = EXOMESEQ_EA
+                break;
+            case "SA":
+                dataSetId = EXOMESEQ_SA
+                break;
+            case "EU":
+                dataSetId = EXOMESEQ_EU
+                break;
+            case "chipEu":
+                dataSetId = EXOMECHIP
+                break;
+            default:
+                log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
+                dataSetId = EXOMESEQ_AA
+        }
+        return dataSetId
+    }
 
 
 
@@ -1542,7 +1606,7 @@ ${customFilterSet}""".toString()
 //                break;
             default:
                 log.error("Trouble: user requested cell number = ${cellNumber} which I don't recognize")
-                dataSetId = "ExSeq_13k_aa_genes_dv1"
+                dataSetId = EXOMESEQ_AA
         }
         String jsonVariantCountByGeneAndMaf = """
 {
@@ -1557,8 +1621,8 @@ ${customFilterSet}""".toString()
                   		"orderBy":	[],
                   		"dproperty":	{},
                 		"pproperty":	{
-                           "OBSA":  { "ExSeq_26k_dv2": ["T2D"]},
-                           "OBSU":  { "ExSeq_26k_dv2": ["T2D"]}
+                           "OBSA":  { "${EXOMESEQ}": ["T2D"]},
+                           "OBSU":  { "${EXOMESEQ}": ["T2D"]}
                          }
                 	},
 	"filters":	[
@@ -1618,11 +1682,10 @@ ${customFilterSet}""".toString()
      * Let's make this the common call for metadata which all callers can share
      * @return
      */
-    public JSONObject getMetadata(){
-        if (!sharedMetadata){
-            sharedMetadata =  getRestCall(METADATA_URL)
-        }
-        return sharedMetadata
+    public String getMetadata(){
+        String retdat
+        retdat =  getRestCall(METADATA_URL)
+        return retdat
     }
 
 
@@ -1632,7 +1695,6 @@ ${customFilterSet}""".toString()
 
     public JSONObject combinedEthnicityTable(String geneName){
         JSONObject returnValue
-        String exSeq2Sample = "ExSeq_26k_dv2"
         String attribute = "T2D"
         List <String> dataSeteList = ["HS", "AA", "EA", "SA", "EU","chipEu"]
         List <Integer> cellNumberList = [0,1,2,3]
@@ -1693,140 +1755,124 @@ ${customFilterSet}""".toString()
     public JSONObject generateVariantTable(String chromosome,
                                            String beginSearch,
                                            String endSearch){//region
-            String exSeq2Sample = "ExSeq_26k_dv2"
-            String exSeqAASample = "ExSeq_13k_aa_genes_dv1"
-            String exSeqHSSample = "ExSeq_13k_hs_genes_dv1"
-            String exSeqEASample = "ExSeq_13k_ea_genes_dv1"
-            String exSeqSASample = "ExSeq_13k_sa_genes_dv1"
-            String exSeqEUSample = "ExSeq_13k_eu_genes_dv1"
-            String exChipSample = "ExChip_82k_dv2"
-            String exGwasDiagram = "GWAS_DIAGRAM_dv1"
-            String attribute = "T2D"
-            def slurper = new JsonSlurper()
-            JSONObject returnValue
-            String jsonSpec = regionSearch(chromosome,beginSearch,endSearch)
-            String apiData = postRestCall(jsonSpec,GET_DATA_URL)
-            JSONObject apiResults = slurper.parseText(apiData)
-            List <Integer> dataSeteList = [1]
-            List <String> pValueList = [1]
-            int numberOfVariants = apiResults.numRecords
-            StringBuilder sb = new StringBuilder ("{\"results\":[")
-            for ( int  j = 0 ; j < numberOfVariants ; j++ ) {
-                sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
-                for ( int  i = 0 ; i < pValueList.size () ; i++ ){
-                    if (apiResults.is_error == false) {
-                        if ((apiResults.variants) && (apiResults.variants[j])  && (apiResults.variants[j][0])){
-                            def variant = apiResults.variants[j];
-                            def element = variant["DBSNP_ID"].findAll{it}[0]
+        String attribute = "T2D"
+        def slurper = new JsonSlurper()
+        JSONObject returnValue
+        String jsonSpec = regionSearch(chromosome,beginSearch,endSearch)
+        String apiData = postRestCall(jsonSpec,GET_DATA_URL)
+        JSONObject apiResults = slurper.parseText(apiData)
+        List <Integer> dataSeteList = [1]
+        List <String> pValueList = [1]
+        int numberOfVariants = apiResults.numRecords
+        StringBuilder sb = new StringBuilder ("{\"results\":[")
+        for ( int  j = 0 ; j < numberOfVariants ; j++ ) {
+            sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
+            for ( int  i = 0 ; i < pValueList.size () ; i++ ){
+                if (apiResults.is_error == false) {
+                    if ((apiResults.variants) && (apiResults.variants[j])  && (apiResults.variants[j][0])){
+                        def variant = apiResults.variants[j];
+                        def element = variant["DBSNP_ID"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"DBSNP_ID\",\"count\":\"${element}\"},"
+                        sb  << "{\"level\":\"DBSNP_ID\",\"count\":\"${element}\"},"
 
-                            element = variant["VAR_ID"].findAll{it}[0]
+                        element = variant["VAR_ID"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"VAR_ID\",\"count\":\"${element}\"},"
+                        sb  << "{\"level\":\"VAR_ID\",\"count\":\"${element}\"},"
 
-                            element = variant["CHROM"].findAll{it}[0]
+                        element = variant["CHROM"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"CHROM\",\"count\":\"${element}\"},"
+                        sb  << "{\"level\":\"CHROM\",\"count\":\"${element}\"},"
 
-                            element = variant["POS"].findAll{it}[0]
+                        element = variant["POS"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"POS\",\"count\":${element}},"
+                        sb  << "{\"level\":\"POS\",\"count\":${element}},"
 
-                            element = variant["CLOSEST_GENE"].findAll{it}[0]
+                        element = variant["CLOSEST_GENE"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"CLOSEST_GENE\",\"count\":\"${element}\"},"
+                        sb  << "{\"level\":\"CLOSEST_GENE\",\"count\":\"${element}\"},"
 
-                            element = variant["Protein_change"].findAll{it}[0]
+                        element = variant["Protein_change"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"Protein_change\",\"count\":\"${element}\"},"
+                        sb  << "{\"level\":\"Protein_change\",\"count\":\"${element}\"},"
 
-                            element = variant["Consequence"].findAll{it}[0]
+                        element = variant["Consequence"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"Consequence\",\"count\":\"${element}\"},"
+                        sb  << "{\"level\":\"Consequence\",\"count\":\"${element}\"},"
 
-                            element = variant["P_EMMAX_FE_IV"].findAll{it}[0]
+                        element = variant["P_EMMAX_FE_IV"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${element[EXOMESEQ][attribute]}},"
 
-                            element = variant["OR_WALD_FE_IV"].findAll{it}[0]
+                        element = variant["OR_FIRTH_FE_IV"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"OR_FIRTH_FE_IV\",\"count\":${element[EXOMESEQ][attribute]}},"
 
-                            element = variant["OBSU"].findAll{it}[0]
+                        element = variant["OBSU"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"OBSU\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"OBSU\",\"count\":${element[EXOMESEQ][attribute]}},"
 
-                            element = variant["OBSA"].findAll{it}[0]
+                        element = variant["OBSA"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"OBSA\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"OBSA\",\"count\":${element[EXOMESEQ][attribute]}},"
 
-                            element = variant["MINA"].findAll{it}[0]
+                        element = variant["MINA"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"MINA\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"MINA\",\"count\":${element[EXOMESEQ][attribute]}},"
 
-                            element = variant["MINU"].findAll{it}[0]
+                        element = variant["MINU"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"MINU\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"MINU\",\"count\":${element[EXOMESEQ][attribute]}},"
 
-                            element = variant["MAF"].findAll{it}[0]
+                        element = variant["MAF"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"AA\",\"count\":${element[exSeqAASample]}},"
-                                sb  << "{\"level\":\"HS\",\"count\":${element[exSeqHSSample]}},"
-                                sb  << "{\"level\":\"EA\",\"count\":${element[exSeqEASample]}},"
-                                sb  << "{\"level\":\"SA\",\"count\":${element[exSeqSASample]}},"
-                                sb  << "{\"level\":\"EUseq\",\"count\":${element[exSeqEUSample]}},"
-                                sb  << "{\"level\":\"Euchip\",\"count\":${element[exChipSample]}},"
+                        sb  << "{\"level\":\"AA\",\"count\":${element[EXOMESEQ_AA]}},"
+                        sb  << "{\"level\":\"HS\",\"count\":${element[EXOMESEQ_HS]}},"
+                        sb  << "{\"level\":\"EA\",\"count\":${element[EXOMESEQ_EA]}},"
+                        sb  << "{\"level\":\"SA\",\"count\":${element[EXOMESEQ_SA]}},"
+                        sb  << "{\"level\":\"EUseq\",\"count\":${element[EXOMESEQ_EU]}},"
+                        sb  << "{\"level\":\"Euchip\",\"count\":${element[EXOMECHIP]}},"
 
-                            element = variant["P_VALUE"].findAll{it}[0]
+                        element = variant["P_VALUE"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"EXCHP_T2D_P_value\",\"count\":${element[exChipSample][attribute]}},"
+                        sb  << "{\"level\":\"EXCHP_T2D_P_value\",\"count\":${element[EXOMECHIP][attribute]}},"
 
-                            element = variant["BETA"].findAll{it}[0]
+                        element = variant["BETA"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"EXCHP_T2D_BETA\",\"count\":${element[exChipSample][attribute]}},"
+                        sb  << "{\"level\":\"EXCHP_T2D_BETA\",\"count\":${element[EXOMECHIP][attribute]}},"
 
-                            element = variant["P_VALUE"].findAll{it}[0]
+                        element = variant["P_VALUE"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"GWAS_T2D_PVALUE\",\"count\":${element[exGwasDiagram][attribute]}},"
+                        sb  << "{\"level\":\"GWAS_T2D_PVALUE\",\"count\":${element[GWASDIAGRAM][attribute]}},"
 
-                            element = variant["ODDS_RATIO"].findAll{it}[0]
+                        element = variant["ODDS_RATIO"].findAll{it}[0]
 
-                                sb  << "{\"level\":\"GWAS_T2D_OR\",\"count\":${element[exGwasDiagram][attribute]}}"
+                        sb  << "{\"level\":\"GWAS_T2D_OR\",\"count\":${element[GWASDIAGRAM][attribute]}}"
 
-                        }
-                    }
-                    if (i<pValueList.size ()-1){
-                        sb  << ","
                     }
                 }
-                sb  << "]}"
-                if (j<numberOfVariants-1){
+                if (i<pValueList.size ()-1){
                     sb  << ","
                 }
             }
             sb  << "]}"
-            returnValue = slurper.parseText(sb.toString())
-            return returnValue
+            if (j<numberOfVariants-1){
+                sb  << ","
+            }
         }
+        sb  << "]}"
+        returnValue = slurper.parseText(sb.toString())
+        return returnValue
+    }
 
 
 
 
 
     public JSONObject generalizedVariantTable(String filters){//region
-        String exSeq2Sample = "ExSeq_26k_dv2"
-        String exSeqAASample = "ExSeq_13k_aa_genes_dv1"
-        String exSeqHSSample = "ExSeq_13k_hs_genes_dv1"
-        String exSeqEASample = "ExSeq_13k_ea_genes_dv1"
-        String exSeqSASample = "ExSeq_13k_sa_genes_dv1"
-        String exSeqEUSample = "ExSeq_13k_eu_genes_dv1"
-        String exChipSample = "ExChip_82k_dv2"
-        String exGwasDiagram = "GWAS_DIAGRAM_dv1"
         String attribute = "T2D"
         def slurper = new JsonSlurper()
         JSONObject returnValue
-       // String jsonSpec = regionSearch(chromosome,beginSearch,endSearch)
+        // String jsonSpec = regionSearch(chromosome,beginSearch,endSearch)
         String jsonSpec = jsonForGeneralApiSearch(filters)
         String apiData = postRestCall(jsonSpec,GET_DATA_URL)
         JSONObject apiResults = slurper.parseText(apiData)
@@ -1870,52 +1916,52 @@ ${customFilterSet}""".toString()
 
                         element = variant["P_EMMAX_FE_IV"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${element[EXOMESEQ][attribute]}},"
 
-                        element = variant["OR_WALD_FE_IV"].findAll{it}[0]
+                        element = variant["OR_FIRTH_FE_IV"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"OR_WALD_FE_IV\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"OR_FIRTH_FE_IV\",\"count\":${element[EXOMESEQ][attribute]}},"
 
                         //element = variant["OBSU"].findAll{it}[0]
 
-                       // sb  << "{\"level\":\"OBSU\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        // sb  << "{\"level\":\"OBSU\",\"count\":${element[EXOMESEQ][attribute]}},"
 
-                       // element = variant["OBSA"].findAll{it}[0]
+                        // element = variant["OBSA"].findAll{it}[0]
 
-                       // sb  << "{\"level\":\"OBSA\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        // sb  << "{\"level\":\"OBSA\",\"count\":${element[EXOMESEQ][attribute]}},"
 
                         element = variant["MINA"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"MINA\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"MINA\",\"count\":${element[EXOMESEQ][attribute]}},"
 
                         element = variant["MINU"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"MINU\",\"count\":${element[exSeq2Sample][attribute]}},"
+                        sb  << "{\"level\":\"MINU\",\"count\":${element[EXOMESEQ][attribute]}},"
 
                         element = variant["MAF"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"AA\",\"count\":${element[exSeqAASample]}},"
-                        sb  << "{\"level\":\"HS\",\"count\":${element[exSeqHSSample]}},"
-                        sb  << "{\"level\":\"EA\",\"count\":${element[exSeqEASample]}},"
-                        sb  << "{\"level\":\"SA\",\"count\":${element[exSeqSASample]}},"
-                        sb  << "{\"level\":\"EUseq\",\"count\":${element[exSeqEUSample]}},"
-                        sb  << "{\"level\":\"Euchip\",\"count\":${element[exChipSample]}},"
+                        sb  << "{\"level\":\"AA\",\"count\":${element[EXOMESEQ_AA]}},"
+                        sb  << "{\"level\":\"HS\",\"count\":${element[EXOMESEQ_HS]}},"
+                        sb  << "{\"level\":\"EA\",\"count\":${element[EXOMESEQ_EA]}},"
+                        sb  << "{\"level\":\"SA\",\"count\":${element[EXOMESEQ_SA]}},"
+                        sb  << "{\"level\":\"EUseq\",\"count\":${element[EXOMESEQ_EU]}},"
+                        sb  << "{\"level\":\"Euchip\",\"count\":${element[EXOMECHIP]}},"
 
                         element = variant["P_VALUE"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"EXCHP_T2D_P_value\",\"count\":${element[exChipSample][attribute]}},"
+                        sb  << "{\"level\":\"EXCHP_T2D_P_value\",\"count\":${element[EXOMECHIP][attribute]}},"
 
                         element = variant["BETA"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"EXCHP_T2D_BETA\",\"count\":${element[exChipSample][attribute]}},"
+                        sb  << "{\"level\":\"EXCHP_T2D_BETA\",\"count\":${element[EXOMECHIP][attribute]}},"
 
                         element = variant["P_VALUE"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"GWAS_T2D_PVALUE\",\"count\":${element[exGwasDiagram][attribute]}},"
+                        sb  << "{\"level\":\"GWAS_T2D_PVALUE\",\"count\":${element[GWASDIAGRAM][attribute]}},"
 
                         element = variant["ODDS_RATIO"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"GWAS_T2D_OR\",\"count\":${element[exGwasDiagram][attribute]}}"
+                        sb  << "{\"level\":\"GWAS_T2D_OR\",\"count\":${element[GWASDIAGRAM][attribute]}}"
 
                     }
                 }
@@ -1932,7 +1978,6 @@ ${customFilterSet}""".toString()
         returnValue = slurper.parseText(sb.toString())
         return returnValue
     }
-
 
 
 }

@@ -10,9 +10,9 @@ class FilterManagementService {
     RestServerService restServerService
     SharedToolsService sharedToolsService
 
-    private String exomeSequence  = "ExSeq_26k_dv2"
-    private String gwasData  = "GWAS_DIAGRAM_dv1"
-    private String exomeChip  = "ExChip_82k_dv2"
+    private String exomeSequence  = "ExSeq_17k_mdv2"
+    private String gwasData  = "GWAS_DIAGRAM_mdv2"
+    private String exomeChip  = "ExChip_82k_mdv2"
     private String sigmaData  = "unknown"
     private String exomeSequencePValue  = "P_EMMAX_FE_IV"
     private String gwasDataPValue  = "P_VALUE"
@@ -160,16 +160,16 @@ class FilterManagementService {
         String returnValue = ""
         switch (filterName){
             case "dataSetGwas"        :
-                returnValue = """{"dataset_id": "GWAS_DIAGRAM_dv1", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "${gwasData}", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
                 break;
             case "dataSetSigma"        :
-                returnValue = """{"dataset_id": "ExSeq_26k_dv2", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "${sigmaData}", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
                 break;
             case "dataSetExseq"        :
-                returnValue = """{"dataset_id": "ExSeq_26k_dv2", "phenotype": "T2D", "operand": "P_EMMAX_FE_IV", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "${exomeSequence}", "phenotype": "T2D", "operand": "P_EMMAX_FE_IV", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
                 break;
             case "dataSetExchp"        :
-                returnValue = """{"dataset_id": "ExChip_82k_dv2", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setPValueThreshold" :
                 String dataset = exomeSequence
@@ -186,7 +186,7 @@ class FilterManagementService {
                 returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${parm1}", "operand_type": "STRING"}""".toString()
                 break;
             case "setRegionChromosomeSpecification" :
-                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "EQ", "value": ${parm1}, "operand_type": "INTEGER"}""".toString()
+                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "EQ", "value": "${parm1}", "operand_type": "STRING"}""".toString()
                 break;
             case "setRegionPositionStart" :
                 returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "GTE", "value": ${parm1}, "operand_type": "INTEGER"}""".toString()
@@ -195,16 +195,16 @@ class FilterManagementService {
                 returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "LTE", "value": ${parm1}, "operand_type": "INTEGER"}""".toString()
                 break;
             case "setEthnicityMaximum" :
-                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_dv1", "phenotype": "blah", "operand": "MAF", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setEthnicityMaximumAbsolute" :
-                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_dv1", "phenotype": "blah", "operand": "MAF", "operator": "LT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "LT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setEthnicityMinimum" :
-                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_dv1", "phenotype": "blah", "operand": "MAF", "operator": "GTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "GTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setEthnicityMinimumAbsolute" :
-                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_dv1", "phenotype": "blah", "operand": "MAF", "operator": "GT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "GT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setExomeChipMinimum" :
                 returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
@@ -240,9 +240,20 @@ class FilterManagementService {
                 returnValue = """{ "filter_type": "FLOAT", "operand": "${parm1}", "operator": "GTE", "value": ${parm2} }""".toString()
                 break;
             case "setSpecificPValue" :
-                returnValue = """{"dataset_id": "ExSeq_26k_dv2", "phenotype": "${parm1}", "operand": "P_EMMAX_FE_IV", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "${exomeSequence}", "phenotype": "${parm1}", "operand": "P_EMMAX_FE_IV", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
-
+            case "proteinTruncatingCheckbox"        :
+                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 1, "operand_type": "FLOAT"}""".toString()
+                break;
+            case "missenseCheckbox"        :
+                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 2, "operand_type": "FLOAT"}""".toString()
+                break;
+            case "synonymousCheckbox"        :
+                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 3, "operand_type": "FLOAT"}""".toString()
+                break;
+            case "noncodingCheckbox"        :
+                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 4, "operand_type": "FLOAT"}""".toString()
+                break ;
             default: break;
         }
         return  returnValue
@@ -250,6 +261,19 @@ class FilterManagementService {
     }
 
 
+
+
+    String retrieveCustomizedFilterString (String dataSet,
+                                              String phenotype,
+                                              String property,
+                                              String equivalence,
+                                              String value,
+                                              String operandType = "FLOAT") {
+        String retval=""
+        BigDecimal bigDecimal =  value as  BigDecimal
+        retval= """{"dataset_id": "${dataSet}", "phenotype": "${phenotype}", "operand": "${property}", "operator": "${equivalence}", "value": ${bigDecimal}, "operand_type": "${operandType}"}""".toString()
+        return  retval
+       }
 
 
 
@@ -320,6 +344,59 @@ class FilterManagementService {
 
     }
 
+
+
+    public LinkedHashMap  parseExtendedVariantSearchParameters (HashMap incomingParameters,Boolean currentlySigma,LinkedHashMap  buildingFilters) {
+        if (!buildingFilters){
+            buildingFilters = [filters:new ArrayList<String>(),
+                               filterDescriptions:new ArrayList<String>(),
+                               parameterEncoding:new ArrayList<String>()]
+        }
+
+
+
+
+        buildingFilters = determineDataSet (buildingFilters,incomingParameters)
+
+        String datatypeOperand = buildingFilters.datatypeOperand
+
+        buildingFilters = processCustomFilters (buildingFilters, incomingParameters )
+
+        buildingFilters = determineThreshold (buildingFilters, incomingParameters, datatypeOperand)
+
+        buildingFilters = factorInTheOddsRatios(buildingFilters, incomingParameters, datatypeOperand)
+
+        buildingFilters = setRegion(buildingFilters, incomingParameters)
+
+        buildingFilters = setAlleleFrequencies(buildingFilters, incomingParameters)
+
+        buildingFilters = caseControlOnly(buildingFilters, incomingParameters,currentlySigma,datatypeOperand)
+
+        buildingFilters = predictedEffectsOnProteins(buildingFilters, incomingParameters)
+
+        buildingFilters = predictedImpactOfMissenseMutations(buildingFilters, incomingParameters)
+
+        buildingFilters = setSpecificPValue(buildingFilters, incomingParameters)
+
+        return buildingFilters
+
+    }
+
+    /***
+     * let's use the same machinery we use to launch a variant request in order to simply generate the filters upon request for a calling routine
+     *
+     * @param geneId
+     * @param receivedParameters
+     * @param significance
+     * @param dataset
+     * @param region
+     * @return
+     */
+  public  List<String> retrieveFilters (  String geneId, String significance,String dataset,String region,String receivedParameters )    {
+      Map paramsMap = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters)
+      LinkedHashMap<String, String> parsedFilterParameters = parseVariantSearchParameters(paramsMap, false)
+      return  parsedFilterParameters.filters
+  }
 
 
     public HashMap storeParametersInHashmap ( String gene,
@@ -395,49 +472,56 @@ class FilterManagementService {
         return returnValue
     }
 
-
-
-
-
-
-
-
-
-    public HashMap storeCodedParametersInHashmap ( String gene,
-                                              String dataset,
-                                              String region,
-                                              String filter,
+    /***
+     * Here is an intermediate code for a filter. We have to read these somewhere else in this file and convert them
+     * into actual filters.    If the filters and recognized here then we aren't going to deal with it anywhere.
+     *
+     * The goal is to start with a list of maps, where each map references a collection of filters. By the time we
+     * leave this routine we should have a list of actionable maps -- these are the filters we care about and that we actually
+     * intend to deal with.
+     *
+     * @param combinedFilters
+     * @return
+     */
+    public List<LinkedHashMap> storeCodedParametersInHashmap (
                                               List <LinkedHashMap> combinedFilters
                                               ) {
-        HashMap returnValue = [:]
+        List<LinkedHashMap> returnValue = []
 
 
         for (LinkedHashMap map in combinedFilters){
-            if (map.containsKey("phenotype")  ){
-                String phenotype  = map["phenotype"]
-                returnValue["spec_pheno_ind"] = phenotype
-            }
-            if (map.containsKey("pValue")  ){
-                String pValue  = map["pValue"]
-                returnValue["spec_p_value"] = pValue
-            }
 
+            LinkedHashMap singleFilterSet = [:]
+
+            // let's get those custom filters
+            LinkedHashMap savedValues = map.findAll{ it.key =~ /^filter/ }
+            int cnt = 0
+            for (savedValue in savedValues){
+                singleFilterSet["customFilter${cnt++}"]  = savedValue.value as String
+            }
             if (map.containsKey("regionChromosomeInput")  ){
                 String chromosome  = map["regionChromosomeInput"]
-                returnValue["region_chrom_input"] = chromosome
+                singleFilterSet["region_chrom_input"] = chromosome
             }
             if (map.containsKey("regionStartInput")  ){
                 String startExtent  = map["regionStartInput"]
-                returnValue["region_start_input"] = startExtent
+                singleFilterSet["region_start_input"] = startExtent
             }
             if (map.containsKey("regionStopInput")  ){
                 String endExtent  = map["regionStopInput"]
-                returnValue["region_stop_input"] = endExtent
+                singleFilterSet["region_stop_input"] = endExtent
             }
             if (map.containsKey("gene")  ){
                 String endExtent  = map["gene"]
-                returnValue["region_gene_input"] = endExtent
+                singleFilterSet["region_gene_input"] = endExtent
             }
+
+            if (map.containsKey("predictedEffects")  ){
+                String predictedEffects  = map["predictedEffects"]
+                singleFilterSet["predictedEffects"] = predictedEffects
+            }
+
+            returnValue << singleFilterSet
 
         }
 
@@ -567,6 +651,43 @@ class FilterManagementService {
 
     }
 
+/***
+ * This is a placeholder for a method yet to come
+ * @param incomingParameters
+ * @return
+ */
+    public  int identifyAllRequestedDataSets (List <HashMap> incomingParameters){
+        int returnValue = 0;
+        for (HashMap map in incomingParameters){
+            if  (map.containsKey("datatype"))  {      // user has requested a particular data set. Without explicit request what is the default?
+                String requestedDataSet =  incomingParameters ["datatype"]
+
+                switch (requestedDataSet)   {
+                    case  "gwas":
+                        returnValue += 0
+                        break;
+                    case  "sigma":
+                        returnValue += 1
+                        break;
+                    case  "exomeseq":
+                        returnValue += 2
+                        break;
+                    case  "exomechip":
+                        returnValue += 3
+                        break;
+
+                    default: break;
+                }
+            }
+
+        }
+        return returnValue
+
+    }
+
+
+
+
     /***
      * Like most of the other routines in this module we are mapping parameters to filters. There is one additional
      * level of interaction for this routine because other aspects of the filter set we are building our dependent
@@ -694,6 +815,56 @@ class FilterManagementService {
 
 
 
+    private LinkedHashMap<String,String> parseCustomFilterString (String customFilterString)  {
+        LinkedHashMap<String,String> returnValue = [:]
+        List <String> filterPieces = customFilterString.tokenize ("[")
+        returnValue ["phenotype"]  =  filterPieces [0]
+        List <String> filterPieces2 = (filterPieces[1]).tokenize ("]")
+        returnValue ["sampleSet"]  =  filterPieces2 [0]
+        if (filterPieces2[1].indexOf("<") > -1){
+            int equivalencePosition = filterPieces2[1].indexOf("<")
+            returnValue ["property"]  = filterPieces2[1].substring(0,equivalencePosition)
+            returnValue ["value"]  = filterPieces2[1].substring(equivalencePosition+1)
+            returnValue ["equivalence"]  = "LT"
+        } else if (filterPieces2[1].indexOf(">") > -1){
+            int equivalencePosition = filterPieces2[1].indexOf(">")
+            returnValue ["property"]  = filterPieces2[1].substring(0,equivalencePosition)
+            returnValue ["value"]  = filterPieces2[1].substring(equivalencePosition+1)
+            returnValue ["equivalence"]  = "GT"
+        }  else if (filterPieces2[1].indexOf("=") > -1){
+            int equivalencePosition = filterPieces2[1].indexOf("=")
+            returnValue ["property"]  = filterPieces2[1].substring(0,equivalencePosition)
+            returnValue ["value"]  = filterPieces2[1].substring(equivalencePosition+1)
+            returnValue ["equivalence"]  = "EQ"
+        }
+        return returnValue
+    }
+
+
+
+
+    private  LinkedHashMap processCustomFilters(LinkedHashMap  buildingFilters, HashMap incomingParameters) {
+        List <String> filters =  buildingFilters.filters
+        List <String> filterDescriptions =  buildingFilters.filterDescriptions
+        List <String> parameterEncoding =  buildingFilters.parameterEncoding
+        // set the search region
+        // set gene to search
+        LinkedHashMap savedValues = incomingParameters.findAll{ it.key =~ /^customFilter/ }
+        for (savedValue in savedValues){
+            String customFilterString =   savedValue.value as String
+            LinkedHashMap<String,String> parsedFilterString = parseCustomFilterString (customFilterString)
+            filters << retrieveCustomizedFilterString(parsedFilterString.sampleSet,
+                    parsedFilterString.phenotype,
+                    parsedFilterString.property,
+                    parsedFilterString.equivalence,
+                    parsedFilterString.value,
+                    "FLOAT")
+            filterDescriptions << "${parsedFilterString.property} value ${parsedFilterString.equivalence} ${parsedFilterString.value} for ${parsedFilterString.sampleSet}"
+            parameterEncoding << "47:${customFilterString}"
+        }
+         return  buildingFilters
+
+    }
 
 
 
@@ -1105,16 +1276,27 @@ class FilterManagementService {
 
     }
 
+   private String convertCustomFilters (String key,String value){
+       // first loop through and break everything into pairs
+       String returnValue = ""
+       List <String> filterPieces = key.tokenize ("^")
+       if (filterPieces.size()==5){
+           String phenotype = filterPieces [1]
+           String sample = filterPieces [2]
+           String inequivalence = filterPieces [3]
+           String propertyHolder = filterPieces [4]
+           String property = propertyHolder.substring(0,propertyHolder.indexOf("___valueId"))
+           String inequalitySignifier  = (inequivalence=="lessThan")?"<":">"
+           returnValue = "${phenotype}[${sample}]${property}${inequalitySignifier}${value}"
+       }
+       return returnValue
+   }
 
-
-    public LinkedHashMap processNewParameters ( String dataSet,
+    public LinkedHashMap processNewParameters ( LinkedHashMap <String,String> customFilters,
+                                                String dataSet,
                                                 String esValue,
                                                       String esValueInequality,
                                                       String phenotype,
-                                                      String pValue,
-                                                      String pValueInequality,
-                                                      String orValue,
-                                                      String orValueInequality,
                                                       String filters,//?
                                                       String datasetExomeChip,
                                                       String datasetExomeSeq,
@@ -1128,6 +1310,12 @@ class FilterManagementService {
                                                       String polyphenSelect,
                                                       String siftSelect ) {
         LinkedHashMap returnValue = [:]
+
+        int i = 0
+        customFilters.each{ String key, String value ->
+            returnValue["filter${i++}"] = convertCustomFilters (key, value)
+        }
+
 
         if (dataSet) {
             returnValue['dataSet']  = dataSet
@@ -1170,35 +1358,23 @@ class FilterManagementService {
             returnValue['phenotype']  = phenotype
         }
 
+//
+//        if (pValue) {
+//            float value = 0
+//            try {
+//                value = Float.parseFloat(pValue)
+//                returnValue['pValue']  = value
+//            } catch (e) {
+//                ; // no P value defined if we fail the conversion
+//            }
+//        }
+//
+//        if (pValueInequality) {
+//            returnValue['pValueInequality']  = pValueInequality
+//        }
 
-        if (pValue) {
-            float value = 0
-            try {
-                value = Float.parseFloat(pValue)
-                returnValue['pValue']  = value
-            } catch (e) {
-                ; // no P value defined if we fail the conversion
-            }
-        }
-
-        if (pValueInequality) {
-            returnValue['pValueInequality']  = pValueInequality
-        }
 
 
-        if (orValue) {
-            float value = 0
-            try {
-                value = Float.parseFloat(orValue)
-                returnValue['orValue']  = value
-            } catch (e) {
-                ; // no or value defined if we fail the conversion
-            }
-        }
-
-        if (orValueInequality) {
-            returnValue['orValueInequality']  = orValueInequality
-        }
 
         if (esValue) {
             float value = 0
@@ -1236,6 +1412,12 @@ class FilterManagementService {
        return returnValue
     }
 
+    // pull back only the parameters we want with the regex
+    public LinkedHashMap <String,String> retrieveCustomFilters (parameters){
+        LinkedHashMap savedValues = parameters.findAll{ it.key =~ /^custom47/ }
+        return savedValues
+    }
+
 
 
     public List <LinkedHashMap<String,String>> combineNewAndOldParameters ( LinkedHashMap newParameters,
@@ -1247,15 +1429,7 @@ class FilterManagementService {
 
         // It is possible to send back an null filter, which we can then drop from further processing
         // does perform that test right here
-        if ((newParameters) &&
-                // must have at least one of the following
-                (
-                          (newParameters.containsKey('phenotype')) ||
-                          (newParameters.containsKey('pValue') ) ||
-                          (newParameters.containsKey('orValue') ) ||
-                          (newParameters.containsKey('dataset') )
-                )
-        ){
+        if (newParameters){
             returnValue << newParameters
         }
 
@@ -1279,25 +1453,181 @@ class FilterManagementService {
         return returnValue
     }
 
+    /***
+     * search parameters of been coded into a single string. Unpack that string and turn it into
+     * a hashmap that resembles the parameters the search builder passes to itself. That way I can
+     * use the same machinery to generate queries run during interactive search building
+     *
+     * @param codedParameters
+     * @return
+     */
+    public LinkedHashMap generateParamsForSearchRefinement(String codedParameters){
+        LinkedHashMap returnValue = [:]
+        if ( (codedParameters) &&
+             (codedParameters.length() > 0) ) {
+            List <String> listOfFilters = codedParameters.tokenize(",")
+            for (String oneFilter in listOfFilters){
+                if (oneFilter){
+                    List <String> typeOfFilter = oneFilter.tokenize (":")
+                    String value = (typeOfFilter[1]?.trim());
+                    switch (typeOfFilter [0]){
+                        case "1":break;
+                        case "2":break;
+                        case "3":break;
+                        case "4":
+                            returnValue ["region_gene_input"] = value
+                            break;
+                        case "5":
+                            returnValue ["region_chrom_input"] = value
+                            break;
+                        case "6":
+                            returnValue ["region_start_input"] = value
+                            break;
+                        case "7":
+                            returnValue ["region_stop_input"] = value
+                            break;
+                        case "8":break;
+                        case "9":break;
+                        case "10":break;
+                        case "11":
+                            break;
+//                        case 20:break;
+//                        case 21:break;
+//                        case 22:break;
+                        case "23":
+                            switch (value){
+                                case "0":
+                                    returnValue ["predictedEffects"] = "all-effects"
+                                    break;
+                                case "1":
+                                    returnValue ["predictedEffects"] = "protein-truncating"
+                                    break;
+                                case "2":
+                                    returnValue ["predictedEffects"] = "missense"
+                                    break;
+                                case "3":
+                                    returnValue ["predictedEffects"] = "noEffectSynonymous"
+                                    break;
+                                case "4":
+                                    returnValue ["predictedEffects"] = "noEffectNoncoding"
+                                    break;
+                                default:
+                                    returnValue ["predictedEffects"] = "all-effects"
+                                    break;
+                            }
+                            break;
+                        case "24":
+                            switch (value){
+                                case "0":
+                                    returnValue ["polyphenSelect"] = "probably_damaging"
+                                    break;
+                                case "1":
+                                    returnValue ["polyphenSelect"] = "possibly_damaging"
+                                    break;
+                                case "2":
+                                    returnValue ["polyphenSelect"] = "benign"
+                                    break;
+                                default:
+                                    returnValue ["polyphenSelect"] = "probably_damaging"
+                                    break;
+                            }
+                            break;
+                        case "25":
+                            switch (value){
+                                case "0":
+                                    returnValue ["sift"] = "probably_damaging"
+                                    break;
+                                case "1":
+                                    returnValue ["sift"] = "possibly_damaging"
+                                    break;
+                                default:
+                                    returnValue ["sift"] = "probably_damaging"
+                                    break;
+                            }
+                            break;
+                        case "26":
+                            switch (value){
+                                case "0":
+                                    returnValue ["condel"] = "deleterious"
+                                    break;
+                                case "1":
+                                    returnValue ["condel"] = "benign"
+                                    break;
+                                default:
+                                    returnValue ["condel"] = "deleterious"
+                                    break;
+                            }
+                            break;
+                        case "47":
+                            LinkedHashMap parsedFilterString = parseCustomFilterString(value)
+                            String equivalenceCode
+                            switch (parsedFilterString.equivalence){
+                                case "LT":equivalenceCode = "lessThan"; break;
+                                case "GT":equivalenceCode = "greaterThan"; break;
+                                case "EQ":equivalenceCode = "equalTo"; break;
+                                default:equivalenceCode = "lessThan";break;
+                            }
+                            String filterDefinition = "custom47^${parsedFilterString.phenotype}^${parsedFilterString.sampleSet}^${equivalenceCode}^${parsedFilterString.property}___valueId"
+                            returnValue [filterDefinition] = parsedFilterString.value
+                            break;
 
-    public List <LinkedHashMap<String,String>> encodeAllFilters ( List <LinkedHashMap> allFilters ) {
-        // Each set of filters in the list now needs to be broken into three parts:
-        //   (displayable strings can be created dynamically with a taglib), so we return only
-        //   encoded (to go back and forth to the browser)
-        //   filters (the JSON we pass to the API to perform a query)
-        //
-        //Important note: combineNewAndOldParameters and encodeAllFilters both return
-        //  List <LinkedHashMap<String,String>>, but it's not the same data structure.
-        //  In the first case each map contains a collection of different keys and values,
-        //  one for each selectable filter. In the second case each map contains only two
-        //  elements: 1) encoded parameters, and 2) JSON filters ready for action
+                    }
+                }
 
-        List <LinkedHashMap> returnValue = []
-        returnValue << [encoded:"",jsonFilters:""]
-
-        // For the purposes of demo let's take a Big shortcut
-        return allFilters
+            }
+        }
+       return returnValue
     }
+
+
+
+
+
+
+
+    /***
+     * Process everything that the user has sent us as they try to build up their filter set for a search
+     * @param params
+     * @return
+     */
+  public handleFilterRequestFromBrowser (params)     {
+
+      // pull out the phenotype and data set dependent filter requests (such as P value or odds ratio or whatever else)
+      LinkedHashMap <String,String> customFilters=retrieveCustomFilters(params)
+
+      // pull out all the common requests, independent of   phenotype and data set. Add in the custom filters from above,
+      //  and store everything in one combined map
+      LinkedHashMap newParameters = processNewParameters (
+              customFilters,
+              params.dataSet,
+              params.esValue,
+              params.esEquivalence,
+              params.phenotype,
+              params.filters,
+              params.datasetExomeChip,
+              params.datasetExomeSeq,
+              params.datasetGWAS,
+              params.region_stop_input,
+              params.region_start_input,
+              params.region_chrom_input,
+              params.region_gene_input,
+              params.predictedEffects,
+              params.condelSelect,
+              params.polyphenSelect,
+              params.siftSelect
+      )
+
+      // pull out the saved requests, which need to be handled separately since they have to be decoded
+      List <String> oldFilters=observeMultipleFilters(params)
+
+      // finally combine the old filters (that is, the ones that would previously been saved) with whichever ones we've
+      //  just now processed.  Put them all into a list of hash maps
+      List <LinkedHashMap> combinedFilters = combineNewAndOldParameters(newParameters,
+              oldFilters)
+
+      return  combinedFilters
+  }
+
 
 
 

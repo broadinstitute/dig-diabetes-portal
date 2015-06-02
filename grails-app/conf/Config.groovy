@@ -150,9 +150,9 @@ t2dDevRestServer {
     path = 'rest/server/'
 }
 t2dQaRestServer {
-    base = 'http://69.173.70.198:8080/'
+    base = 'http://dig-qa.broadinstitute.org:8090/'
     name =  'qa/'
-    path = 'rest/server/'
+    path = 'gs/'
 }
 t2dProdRestServer {
     base = 'http://69.173.71.179:8080/'
@@ -257,14 +257,14 @@ environments {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgenetics.org"
-      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2dqasrv2.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2ddev.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2ddevsrv2.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //      grails.serverURL = "http://cidbtest-env.elasticbeanstalk.com"
-//      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
+      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //        grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 //      grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"

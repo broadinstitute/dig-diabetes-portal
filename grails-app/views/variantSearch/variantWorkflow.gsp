@@ -4,7 +4,7 @@
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
     <r:require modules="variantWF"/>
-    <r:require modules="tableViewer"/>
+
     <r:layoutResources/>
 </head>
 

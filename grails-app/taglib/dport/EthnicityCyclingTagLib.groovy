@@ -43,4 +43,31 @@ class EthnicityCyclingTagLib {
             </div>""".toString()
         }
     }
+
+
+    def alleleFrequencyRangeAbbreviated = {attrs, body ->
+
+
+        ethnicities.eachWithIndex() {  ethnicity, index ->
+            out << """<div class="checkbox smallish">
+            <div class="row">
+            <div class="col-xs-6">
+            <label>
+            <strong>${ethnicity[1]}</strong>:
+                            </label>
+            </div>
+                        <div class="col-xs-6">
+                            <input type="text" class="form-control" id="ethnicity_af_${ethnicity[0]}-min" style="width: 40%; display: inline-block"/>
+            to <input type="text" class="form-control" id="ethnicity_af_${ethnicity[0]}-max"  style="width: 40%; display: inline-block"/>""".toString()
+            out << """</div>
+                        </div>
+            </div>""".toString()
+        }
+    }
+
+
+
+
+
+
 }

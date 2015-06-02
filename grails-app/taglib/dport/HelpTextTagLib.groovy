@@ -12,10 +12,14 @@ class HelpTextTagLib {
                 ( (sharedToolsService?.getHelpTextSetting()==1) &&
                     ( ( g.message(code:attrs.title) ) ||
                       ( g.message(code:attrs.body) ) ) ) ){
+                    String encoding = "HTML"
+                    if (attrs.encodeAs != null) {
+                        encoding = attrs.encodeAs;
+                    }
                     String popupPlacement = (attrs.placement) ?: defaultPopupPlacement
                     String questionmarkPlacement = (attrs.qplacer) ?: defaultQuestionmarkPlacement
                 out <<  render(contextPath: "/home", template: "helpText",
-                        model: [title:attrs.title, 'data-html':true, body:attrs.body, qplacer:questionmarkPlacement, placement: popupPlacement ])
+                        model: [title:attrs.title,  body:attrs.body, encodeAs:encoding, qplacer:questionmarkPlacement, placement: popupPlacement ])
                 }
 
     }

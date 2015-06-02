@@ -10,19 +10,19 @@ class VariantQueryToolsTagLib {
     def renderPhenotypeOptions = { attrs,body ->
         LinkedHashMap<String,List<LinkedHashMap>> map = sharedToolsService.composePhenotypeOptions()
         if (map){
-            out <<  "<optgroup label='Cardiometabolic'>"
-            List <Map> cardioList = map["cardio"]
-            for (Map cardio in cardioList){
-               String selectionIndicator = (cardio.mkey == 'T2D')?"  selected":""
-               out <<  "<option value='${cardio.mkey}' ${selectionIndicator}>${cardio.name}</option>"
-            }
-            out <<  "</optgroup>"
-            out << "<optgroup label='Other'>"
-            List <Map> otherList = map["other"]
-            for (Map other in otherList){
-                out <<  "<option value='${other.mkey}'>${other.name}</option>"
-            }
-            out <<  "</optgroup>"
+//            out <<  "<optgroup label='Cardiometabolic'>"
+//            List <Map> cardioList = map["cardio"]
+//            for (Map cardio in cardioList){
+//               String selectionIndicator = (cardio.mkey == 'T2D')?"  selected":""
+//               out <<  "<option value='${cardio.mkey}' ${selectionIndicator}>${cardio.name}</option>"
+//            }
+//            out <<  "</optgroup>"
+//            out << "<optgroup label='Other'>"
+//            List <Map> otherList = map["other"]
+//            for (Map other in otherList){
+//                out <<  "<option value='${other.mkey}'>${other.name}</option>"
+//            }
+//            out <<  "</optgroup>"
             out << body()
         }
 
@@ -53,26 +53,15 @@ class VariantQueryToolsTagLib {
                     <div class="variantWFsingleFilter">
                     <div class="row clearfix">
                     <div class="col-md-10">""".toString()
-                    if (map.dataSet) {
-                        out << """
-                    <span class="dataset filterElement">${map.dataSet},</span>
-                    """.toString()
-                    }
-                    if (map.phenotype) {
-                        out << """
-                                <span class="phenotype filterElement">${map.phenotype},</span>
-                    """.toString()
 
+                    // write out all the custom filters, identifiable in the map with a prefix
+                    LinkedHashMap customFilters = map.findAll{ it.key =~ /^filter/ }
+                    customFilters.each {String key, String value->
+                        out << """
+                                <span class="phenotype filterElement">${value},</span>
+                    """.toString()
                     }
-                    if ( map.orValue  ||
-                            map.pValue  ||
-                            map.esValue  ||
-                            map.regionChromosomeInput  ||
-                            map.regionStartInput  ||
-                            map.regionStopInput  ||
-                            map.gene  ||
-                            map.predictedEffects  ||
-                            map.polyphenSelect ) {
+                    if ( map ) {
 
 
                             // a line to describe the odds ratio
@@ -138,10 +127,12 @@ class VariantQueryToolsTagLib {
 
                             // a line to describe the polyphen value
                             if (map.predictedEffects) {
-                                out << """
+                                if (map.predictedEffects != "all-effects")  {  // don't display the default
+                                    out << """
                                 <span class="dd filterElement">predicted effects: ${map.predictedEffects},</span>
                                 """.toString()
-                            }// a single line for the P value
+                                }
+                             }// a single line for the P value
 
                         if (map.polyphenSelect) {
                             out << """
@@ -172,8 +163,8 @@ class VariantQueryToolsTagLib {
                     </span>
                     </div>
                     </div>
-
                     </div>
+
             </div>""".toString()
                             blockCount++;
                         }
@@ -190,6 +181,7 @@ class VariantQueryToolsTagLib {
             int blockCount = 0
             for (LinkedHashMap map in attrs.filterSet) {
                     if (map.size()>0){
+                        LinkedHashMap customFilters = map.findAll{ it.key =~ /^filter/ }
                         String encodedFilterList = sharedToolsService.encodeAFilterList(
                                 [phenotype:map.phenotype,
                                  dataSet:map.dataSet,
@@ -206,7 +198,8 @@ class VariantQueryToolsTagLib {
                                  predictedEffects: map.predictedEffects,
                                  polyphenSelect: map.polyphenSelect,
                                  siftSelect: map.siftSelect,
-                                 condelSelect: map.condelSelect])
+                                 condelSelect: map.condelSelect], customFilters
+                        )
                         out << """<input type="text" class="form-control" id="savedValue${blockCount}" value="${
                             encodedFilterList
                         }" style="height:0px">""".toString()

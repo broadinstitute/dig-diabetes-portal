@@ -6,9 +6,11 @@ import dport.people.UserRole
 import dport.people.UserSession
 import grails.plugin.mail.MailService
 import grails.transaction.Transactional
+import groovy.json.JsonSlurper
 import groovy.json.StringEscapeUtils
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
@@ -21,8 +23,8 @@ class SharedToolsService {
     LinkGenerator grailsLinkGenerator
     RestServerService restServerService
      private static final log = LogFactory.getLog(this)
-
-
+    JSONObject sharedMetadata = null
+    Integer forceMetadataOverride = -1
     Integer showGwas = -1
     Integer showExomeChip = -1
     Integer showExomeSequence = -1
@@ -30,9 +32,9 @@ class SharedToolsService {
     Integer showGene = -1
     Integer showBeacon = -1
     Integer showNewApi = -1
-    JSONObject sharedMetadata
-
+    Integer dataVersion = 2
     String warningText = ""
+    String dataSetPrefix = "mdv"
 
     Integer helpTextSetting = 1 // 0== never display, 1== display conditionally, 2== always display
 
@@ -43,6 +45,18 @@ class SharedToolsService {
             log.error("Attempt to set help text to ${newHelpTextSetting}.  Should be 0, 1, or 2.")
         }
     }
+
+
+    public Integer getDataVersion() {
+        return dataVersion
+    }
+
+    public void setDataVersion(String dataVersionString) {
+        int dataVersion  =   dataVersionString as int
+        this.dataVersion = dataVersion
+    }
+
+
 
     public int getHelpTextSetting (){
         return helpTextSetting
@@ -154,6 +168,16 @@ class SharedToolsService {
     }
 
 
+    public Boolean getMetadataOverrideStatus() {
+        return (forceMetadataOverride==1)
+    }
+
+
+    public void setMetadataOverrideStatus(int metadataOverride) {
+        this.forceMetadataOverride=metadataOverride
+    }
+
+
 
     public Boolean getNewApi() {
         return (showNewApi==1)
@@ -179,10 +203,288 @@ class SharedToolsService {
         return returnValue
     }
 
-
-    public JSONObject getMetadata (){
-        restServerService.getMetadata()
+    /***
+     * Here's a shareable method to retrieve the contents of the metadata. The first time it's called it will store and cache the result.
+     * After that every call draws from the cache,  UNLESS  the variable has been set to force a metadata override.
+     * @return
+     */
+    public JSONObject retrieveMetadata (){
+        if ( (!sharedMetadata) ||
+             (forceMetadataOverride == 1) ){
+            String temporary = restServerService.getMetadata()
+            def slurper = new JsonSlurper()
+            sharedMetadata = slurper.parseText(temporary)
+            forceMetadataOverride = 0
+        }
+        return sharedMetadata
     }
+
+    /***
+     * walk through the metadata tree and pull out things we need
+     * @param metadata
+     * @return
+     */
+    public LinkedHashMap processMetadata(JSONObject metadata){
+        LinkedHashMap returnValue = [:]
+        List <String> captured = []
+        LinkedHashMap<String, List <String>> annotatedPhenotypes = [:]
+        LinkedHashMap<String, List <String>> annotatedSampleGroups = [:]
+        LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties = [:]
+        String dataSetVersionThatWeWant = "${dataSetPrefix}${getDataVersion()}"
+        if (metadata){
+            for (def experiment in metadata.experiments){
+                captured << experiment.name
+                String dataSetVersion =  experiment.version
+                if ((experiment.sample_groups) && (dataSetVersionThatWeWant == dataSetVersion)){
+                    getDataSetsPerPhenotype (experiment.sample_groups, annotatedPhenotypes)
+                    getPropertiesPerSampleGroupId (experiment.sample_groups, annotatedSampleGroups)
+                    getPhenotypeSpecificPropertiesPerSampleGroupId (experiment.sample_groups, phenotypeSpecificSampleGroupProperties)
+                }
+            }
+        }
+        returnValue['rootSampleGroups'] = captured
+        returnValue['sampleGroupsPerPhenotype'] = annotatedPhenotypes
+        returnValue['propertiesPerSampleGroups'] = annotatedSampleGroups
+        returnValue['phenotypeSpecificPropertiesPerSampleGroup'] = phenotypeSpecificSampleGroupProperties
+        return returnValue
+    }
+
+
+    /***
+     * Start with a pointer to a sample group as we descend through the metadata tree.  Pullback a combined list
+     * of every sample group ID grouped by phenotype.
+     *
+     * @param sampleGroups
+     * @param annotatedPhenotypes
+     * @return
+     */
+    public LinkedHashMap<String, List <String>> getDataSetsPerPhenotype (def sampleGroups,LinkedHashMap<String, List <String>> annotatedPhenotypes){
+        for (def sampleGroup in sampleGroups){
+            String sampleGroupsId = sampleGroup.id
+             if (sampleGroup.phenotypes){
+                 for (def phenotype in sampleGroup.phenotypes){
+                     String phenotypeName = phenotype.name
+                     List <String> listOfSampleGroups
+                     if (annotatedPhenotypes.containsKey(phenotypeName)){
+                         listOfSampleGroups = annotatedPhenotypes[phenotypeName]
+                     } else {
+                         listOfSampleGroups = new ArrayList<String>()
+                         annotatedPhenotypes[phenotypeName]  =  listOfSampleGroups
+                     }
+                     // we have the list for this phenotype.  Add some more sample groups for it
+                     if (listOfSampleGroups.contains(sampleGroupsId)){
+                         // this should never happen, right? We have a second listing for this ID in this phenotype
+                        // println "very strange : phenotype ${phenotypeName} already contained sample ID= ${sampleGroupsId}"
+                     } else {
+                         listOfSampleGroups << sampleGroupsId
+                     }
+
+                     if (sampleGroup.sample_groups){
+                         getDataSetsPerPhenotype (sampleGroup.sample_groups, annotatedPhenotypes)
+                     }
+
+                     }
+
+             }
+        }
+        return annotatedPhenotypes
+    }
+
+
+    public LinkedHashMap<String, List <String>> getPropertiesPerSampleGroupId (def sampleGroups,LinkedHashMap<String, List <String>> annotatedSampleGroupIds){
+        for (def sampleGroup in sampleGroups){
+            String sampleGroupsId = sampleGroup.id
+            List <String> propertiesForTheSampleGroup
+            if (annotatedSampleGroupIds.containsKey(sampleGroupsId)){
+                propertiesForTheSampleGroup = annotatedSampleGroupIds
+            } else {
+                propertiesForTheSampleGroup = new ArrayList<String>()
+                annotatedSampleGroupIds [sampleGroupsId] = propertiesForTheSampleGroup
+            }
+
+            // we have a sample group with an associated list to fill. First let's put in all the properties
+            if (sampleGroup.properties){
+                for (def property in sampleGroup.properties){
+                    String propertyName = property.name
+                    propertiesForTheSampleGroup << propertyName
+                }
+
+            }
+
+//            // Does this sample group have an associated ancestry? If so then let's stick that in and treated as if it is another property
+//            if (sampleGroup.ancestry){
+//                propertiesForTheSampleGroup << "ANCESTRY= ${sampleGroup.ancestry}"
+//            }
+
+            // Finally, does this sample group have a sample group? If so then recursively descend
+            if (sampleGroup.sample_groups){
+                getPropertiesPerSampleGroupId (sampleGroup.sample_groups, annotatedSampleGroupIds)
+            }
+
+        }
+        return annotatedSampleGroupIds
+    }
+
+
+
+
+
+
+
+
+    public LinkedHashMap<String, List <String>> getPhenotypeSpecificPropertiesPerSampleGroupId (def sampleGroups,LinkedHashMap<String, LinkedHashMap <String,String>> annotatedPhenotypeSpecificSampleGroupIds){
+        for (def sampleGroup in sampleGroups){
+            String sampleGroupsId = sampleGroup.id
+            if (sampleGroup.phenotypes){
+                for (def phenotype in sampleGroup.phenotypes){
+                    String phenotypeName = phenotype.name
+                    LinkedHashMap<String,String> hashOfPhenotypeSpecificSampleGroups
+                    if (annotatedPhenotypeSpecificSampleGroupIds.containsKey(phenotypeName)){
+                        hashOfPhenotypeSpecificSampleGroups = annotatedPhenotypeSpecificSampleGroupIds[phenotypeName]
+                    } else {
+                        hashOfPhenotypeSpecificSampleGroups = new LinkedHashMap()
+                        annotatedPhenotypeSpecificSampleGroupIds[phenotypeName]  =  hashOfPhenotypeSpecificSampleGroups
+                    }
+
+                    // we have the list for this phenotype.  Add some more sample groups for it, along with
+                    //  a place to put data set specific properties for each data set
+                    List <String> propertyList
+                    if (hashOfPhenotypeSpecificSampleGroups.containsKey(sampleGroupsId)){
+                        propertyList = hashOfPhenotypeSpecificSampleGroups[sampleGroupsId]
+                    } else {
+                        propertyList = new ArrayList<String>()
+                        hashOfPhenotypeSpecificSampleGroups[sampleGroupsId] = propertyList
+                    }
+
+                    // now let's store up the properties specific to this sample group & phenotype combination
+                    def phenotypeProperties = phenotype.properties
+                    if (phenotypeProperties){
+                        for (def property in phenotypeProperties){
+                            String propertyName = property.name
+                            if (propertyList.contains(propertyName)){
+                               // println "That is a little odd. Sample group=${sampleGroupsId} in phenotype=${phenotypeName} already had property=${propertyName}"
+                            }else {
+                                propertyList<<propertyName
+                            }
+                        }
+                    }
+
+                    // we can descend further if there are sample groups within the sample group
+                    if (sampleGroup.sample_groups){
+                        getPhenotypeSpecificPropertiesPerSampleGroupId (sampleGroup.sample_groups, annotatedPhenotypeSpecificSampleGroupIds)
+                    }
+                }
+
+            }
+        }
+        return annotatedPhenotypeSpecificSampleGroupIds
+    }
+
+
+
+
+
+
+
+    public List <String> extractAPhenotypeList (LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties){
+        List <String> listOfProperties = []
+        if (phenotypeSpecificSampleGroupProperties){
+            phenotypeSpecificSampleGroupProperties.each{ k, v -> listOfProperties <<  "${k}" }
+            listOfProperties = listOfProperties.sort ()
+        }
+        return listOfProperties
+    }
+
+
+
+    /***
+     * Start with a list of lists and manufactures some legal JSON.  Extract a single linear list of every experiment name
+     * @param phenotype
+     * @param annotatedList
+     * @return
+     */
+    public List <String> extractASingleList (String phenotype, LinkedHashMap<String, List <String>> annotatedList){
+        List <String> listOfProperties = []
+        if (annotatedList){
+            if (annotatedList.containsKey(phenotype)){
+                List <String> listForThisPhenotype =  annotatedList [phenotype]
+                if (listForThisPhenotype) {
+                    for ( int  i = 0 ; i < listForThisPhenotype.size() ; i++ ){
+                        listOfProperties << listForThisPhenotype[i]
+                    }
+                }
+            }
+
+        }
+        return listOfProperties
+    }
+
+
+
+
+    public List <String> combineToCreateASingleList (String phenotype,String sampleGroup,
+                                              LinkedHashMap<String, List <String>> annotatedList,
+                                              LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties ){
+        // the list of properties specific to this data set
+        List <String> listOfProperties = []
+        int numrec = 0
+        String retval
+        if (annotatedList){
+            if (annotatedList.containsKey(sampleGroup)){
+                List <String> listForThisPhenotype =  annotatedList [sampleGroup]
+                if (listForThisPhenotype) {
+                    numrec = listForThisPhenotype.size()
+                    for ( int  i = 0 ; i < listForThisPhenotype.size() ; i++ ){
+                        listOfProperties << listForThisPhenotype[i]
+                    }
+                }
+            }
+
+        }
+        // now add in the properties that are specific to this phenotype for this data set
+        if (phenotypeSpecificSampleGroupProperties){
+            if (phenotypeSpecificSampleGroupProperties.containsKey(phenotype)){
+                LinkedHashMap hashForThisPhenotype = phenotypeSpecificSampleGroupProperties[phenotype]
+                if ((hashForThisPhenotype) && (hashForThisPhenotype.containsKey(sampleGroup))) {
+                    List<String> listForThisPhenotype = hashForThisPhenotype[sampleGroup]
+                    if (listForThisPhenotype) {
+                        numrec += listForThisPhenotype.size()
+                        for (int i = 0; i < listForThisPhenotype.size(); i++) {
+                            listOfProperties << listForThisPhenotype[i]
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return listOfProperties
+    }
+
+
+
+    public String packageUpAListAsJson (List <String> listOfStrings ){
+        // now that we have a list, build it into a string suitable for JSON
+        int numrec = 0
+        StringBuilder sb = new StringBuilder ()
+        if ((listOfStrings) && (listOfStrings?.size() > 0)){
+            numrec = listOfStrings.size()
+            for ( int  i = 0 ; i < numrec ; i++ ){
+                sb << "\"${listOfStrings[i]}\"".toString()
+                if (i < listOfStrings.size() - 1) {
+                    sb << ","
+                }
+            }
+        }
+
+        return  """
+{"is_error": false,
+"numRecords":${numrec},
+"dataset":[${sb.toString()}]
+}""".toString()
+    }
+
+
 
 
 
@@ -639,7 +941,7 @@ class SharedToolsService {
 
 
 
-    public String encodeAFilterList(LinkedHashMap<String,String> parametersToEncode) {
+    public String encodeAFilterList(LinkedHashMap<String,String> parametersToEncode,LinkedHashMap<String,String> customFiltersToEncode) {
         StringBuilder sb   = new StringBuilder ("")
         if (((parametersToEncode.containsKey("phenotype")) && (parametersToEncode["phenotype"]))) {
             sb << ("1="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["phenotype"].toString())+"^")
@@ -689,18 +991,58 @@ class SharedToolsService {
         if (((parametersToEncode.containsKey("siftSelect")) && (parametersToEncode["siftSelect"]))) {
             sb << ("16="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["siftSelect"].toString())+"^")
         }
-
+        customFiltersToEncode?.each { String key, String value ->
+            sb << ("17=" + StringEscapeUtils.escapeJavaScript(value.toString()) + "^")
+        }
 
 
         return  sb.toString()
     }
 
 
+    public LinkedHashMap<String, Integer> getGeneExtent (String geneName){
+        LinkedHashMap<String, Integer> returnValue  = [startExtent:0,endExtent:3000000000]
+        if (geneName)   {
+            String geneUpperCase =   geneName.toUpperCase()
+            Gene gene = Gene.findByName2(geneUpperCase)
+            returnValue.startExtent= gene?.addrStart ?: 0
+            returnValue.endExtent= gene?.addrEnd ?: 0
+        }
+        return returnValue
+    }
+
+
+    public LinkedHashMap<String, Integer> getGeneExpandedExtent (String geneName){
+        LinkedHashMap<String, Integer> returnValue  = [startExtent:0,endExtent:3000000000]
+        if (geneName)   {
+            LinkedHashMap<String, Integer> geneExtent = getGeneExtent (geneName)
+            Integer addrStart =  geneExtent.startExtent
+            if (addrStart){
+                returnValue.startExtent = ((addrStart > 100000)?(addrStart - 100000):0)
+            }
+            returnValue.endExtent= geneExtent.endExtent+ 100000
+        }
+        return returnValue
+    }
+
+
+    public String getGeneExpandedRegionSpec(String geneName){
+        String returnValue = ""
+        if (geneName)   {
+            String geneUpperCase =   geneName.toUpperCase()
+            Gene gene = Gene.findByName2(geneUpperCase)
+            LinkedHashMap<String, Integer> geneExtent = getGeneExpandedExtent (geneName)
+            returnValue = "chr${gene.chromosome}:${geneExtent.startExtent}-${geneExtent.endExtent}"
+          }
+        return returnValue
+    }
+
 
     public LinkedHashMap<String,String>  decodeAFilterList(String encodedFilterString) {
         LinkedHashMap<String,String> returnValue= [:]
         if (encodedFilterString){
             List <String> parametersList =  encodedFilterString.split("\\^")
+            int filterCount = 0
             for ( int  i = 0 ; i < parametersList.size() ; i++  > 0){
                 List <String> divKeys = parametersList[i].split("=")
                 if (divKeys.size() != 2){
@@ -745,7 +1087,8 @@ class SharedToolsService {
                             break
                         case 16:returnValue ["siftSelect"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
                             break
-
+                        case 17:returnValue ["filter${filterCount++}"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+                            break
                         default:
                             log.info("Unexpected parameter key  = ${parameterKey}")
                     }
