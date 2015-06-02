@@ -5,7 +5,7 @@ import groovy.json.JsonSlurper
 
 class ResultsFilterController {
 
-    MetadataQueryService metadataQueryService
+    SharedToolsService sharedToolsService
 
     def index() {}
 
@@ -15,13 +15,13 @@ class ResultsFilterController {
 
     def metadata() {
         render(status:200, contentType:"application/json") {
-            [metadataQueryService.queryMetadata()]
+            [sharedToolsService.retrieveMetadata()]
         }
     }
 
     def dataversion() {
         render(status:200, contentType:"application/json") {
-            ['mdv2']
+            [sharedToolsService.getDatasetVersion()]
         }
     }
 }

@@ -46,6 +46,12 @@ class SharedToolsService {
         }
     }
 
+    /**
+     * Returns the full dataset version, for example "mdv2"
+     */
+    public String getDatasetVersion() {
+        return dataSetPrefix + dataVersion
+    }
 
     public Integer getDataVersion() {
         return dataVersion

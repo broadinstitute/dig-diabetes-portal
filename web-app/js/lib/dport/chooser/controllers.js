@@ -41,6 +41,8 @@
                 $scope.datasetVersion = selections.datasetVersion;
                 $scope.search.currentQuery.version = selections.datasetVersion;
                 $scope.selectedSets = selections.selectedSets;
+                //$scope.tree = angular.fromJson(selections.metadata);
+                //$scope.initializeData();
             };
 
             $scope.setColumnFilter = function($columns) {

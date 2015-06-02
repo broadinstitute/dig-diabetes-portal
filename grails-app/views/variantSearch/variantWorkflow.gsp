@@ -30,7 +30,7 @@
     showDatasetModal = function() {
         var modal = '#columnChooserModal';
         angular.element(modal).scope().setSelections({
-            datasetVersion:'mdv2',
+            datasetVersion:'mdv2', // todo arz replace this with ws call
             selectedSets: ['ExSeq_17k_aa_genes_aj_mdv2','ExSeq_17k_eu_genes_um_mdv2']
         });
         /*
