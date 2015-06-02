@@ -173,9 +173,6 @@ height: 20px;
             <div class="col-md-5">
                 <select name="additionalFilters" id="additionalFilters" size="3"
                         class="form-control btn-group btn-input clearfix">
-                    <option value="pvalue" selected>p-value</option>
-                    <option value="oddsratio">odds ratio</option>
-                    <option value="effectsize">effect size</option>
                 </select>
 
             </span>
