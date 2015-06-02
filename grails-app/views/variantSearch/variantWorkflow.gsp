@@ -23,18 +23,15 @@
     });
 
     // todo arz remove me example callback from angular to set the columns
-    applyDatasetsFilter = function(columns,filters) {
-        console.log(columns,filters);
+    applyDatasetsFilter = function(columns) {
+        console.log(columns);
     };
 
     showDatasetModal = function() {
         var modal = '#columnChooserModal';
         angular.element(modal).scope().setSelections({
-            datasetVersion:'',
-            selectedSets: [],
-            ancestry:'',
-            phenotypes:'',
-            technology:''
+            datasetVersion:'mdv2',
+            selectedSets: ['ExSeq_17k_aa_genes_aj_mdv2','ExSeq_17k_eu_genes_um_mdv2']
         });
         /*
          angular.element(modal).scope().setSelections({

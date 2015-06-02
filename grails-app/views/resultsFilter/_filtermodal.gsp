@@ -2,13 +2,7 @@
 <html lang="en"
       ng-app="ChooserApp"
       ng-controller="ChooserController"
-      ng-init="init('${createLink(controller:'ResultsFilter', action:'metadata')}',
-                    {   datasetVersion:'mdv2',
-                        selectedSets:null,
-                        ancestry:null,
-                        phenotypes:null,
-                        technology:null
-                    })">
+      ng-init="init('${createLink(controller:'ResultsFilter', action:'metadata')}')">
 
 <body>
 
@@ -143,7 +137,7 @@
             <div class='row'>
                 <div class='col-xs-12'>
                     <button class='btn btn-primary btn-lg pull-right' data-dismiss='modal'
-                            ng-click="setColumnFilter(getSelectedSetNames(tree),search.currentQuery)">Update Results</button>
+                            ng-click="setColumnFilter(getSelectedSetNames(tree))">Update Results</button>
                     <button class='btn btn-lg pull-right' data-dismiss='modal' ng-click='view.showAdvancedSelector = false'>Cancel</button>
                 </div>
             </div>

@@ -33,24 +33,18 @@
             $scope.selectedSets = [];
             fullTextRegexTokens = [];
 
-            $scope.init = function(metadataUrl,
-                                   selections) {
+            $scope.init = function(metadataUrl) {
                 $scope.metadataUrl = metadataUrl;
-                $scope.setSelections(angular.fromJson(selections));
-                var datasets = $scope.getDatasetsFromQuery($scope.search.currentQuery);
             };
 
             $scope.setSelections = function(selections) {
                 $scope.datasetVersion = selections.datasetVersion;
                 $scope.search.currentQuery.version = selections.datasetVersion;
-                $scope.search.currentQuery.ancestry = selections.ancestry;
-                $scope.search.currentQuery.phenotypes = selections.phenotypes;
-                $scope.search.currentQuery.technology = selections.technology;
                 $scope.selectedSets = selections.selectedSets;
             };
 
-            $scope.setColumnFilter = function($columns,$filters) {
-                applyDatasetsFilter($columns,$filters);
+            $scope.setColumnFilter = function($columns) {
+                applyDatasetsFilter($columns);
             };
 
             $scope.humanReadableDatasetName = function(id,unfriendlyName) {
