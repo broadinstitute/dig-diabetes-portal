@@ -254,6 +254,10 @@ class FilterManagementService {
             case "noncodingCheckbox"        :
                 returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 4, "operand_type": "FLOAT"}""".toString()
                 break ;
+            case "lessThan_noEffectNoncoding"        :
+                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "LT", "value": 4, "operand_type": "FLOAT"}""".toString()
+                break ;
+
             default: break;
         }
         return  returnValue
@@ -416,9 +420,11 @@ class FilterManagementService {
                     break;
                 case 'exomeseq' :
                     returnValue['datatype']  = 'exomeseq'
+                    returnValue['predictedEffects'] = 'lessThan_noEffectNoncoding';
                     break;
                 case 'exomechip' :
                     returnValue['datatype']  = 'exomechip'
+                    returnValue['predictedEffects'] = 'lessThan_noEffectNoncoding';
                     break;
                 default:
                     break;
@@ -1138,6 +1144,12 @@ class FilterManagementService {
                     //filterDescriptions <<  "Estimated classification for no effects (non-coding)"
                     filterDescriptions <<  "No predicted effect (non-coding)"
                     parameterEncoding << "23:4"
+                    break;
+                case  "lessThan_noEffectNoncoding":
+                    filters <<  retrieveFilterString("lessThan_noEffectNoncoding")
+                    //filterDescriptions <<  "Estimated classification for no effects (non-coding)"
+                    filterDescriptions <<  "Protein truncating,missense, and synonymous variants"
+                    parameterEncoding << "23:5"
                     break;
 
                 default:

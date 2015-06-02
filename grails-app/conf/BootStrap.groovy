@@ -104,6 +104,7 @@ class BootStrap {
                             (username=='tjordan@broadinstitute.org')||
                             (username=='flannick@broadinstitute.org')||
                             (username=='andrew@broadinstitute.org')||
+                            (username=='mduby@broadinstitute.org')||
                             (username=='dsiedzik@broadinstitute.org')){
                         UserRole.create user,adminRole
                         UserRole.create user,systemRole
