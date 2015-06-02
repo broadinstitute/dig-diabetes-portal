@@ -705,3 +705,7 @@ div.veryImportantText {
     max-height: 100px;
     max-width: 160px;
 }
+
+div.column-center div {
+    margin: 0 auto;
+}
