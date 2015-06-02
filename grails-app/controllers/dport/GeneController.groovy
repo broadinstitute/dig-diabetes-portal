@@ -33,22 +33,16 @@ class GeneController {
         String geneToStartWith = params.id
         def locale = RequestContextUtils.getLocale(request)
         if (geneToStartWith)  {
-            String geneUpperCase =   geneToStartWith.toUpperCase()
-            Gene gene = Gene.findByName2(geneUpperCase)
-            Integer addrStart  =  gene?.addrStart ?: 0
-            if (addrStart){
-                addrStart = ((addrStart > 100000)?(addrStart - 100000):addrStart)
-            }
-            Integer addrEnd  =  gene?.addrEnd ?: 0
-            addrEnd += 100000
+            String  geneUpperCase =   geneToStartWith.toUpperCase()
+            LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
             String encodedString = sharedToolsService.urlEncodedListOfPhenotypes ()
             render (view: 'geneInfo', model:[show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                              show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
                                              show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
                                              show_sigma:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma),
                                              geneName:geneUpperCase,
-                                             geneExtentBegin:addrStart,
-                                             geneExtentEnd:addrEnd,
+                                             geneExtentBegin:geneExtent.startExtent,
+                                             geneExtentEnd:geneExtent.endExtent,
                                              phenotypeList:encodedString,
                                              newApi:sharedToolsService.getNewApi()
             ] )

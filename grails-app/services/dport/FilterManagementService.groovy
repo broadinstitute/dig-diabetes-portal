@@ -382,10 +382,21 @@ class FilterManagementService {
 
     }
 
-
-
-
-
+    /***
+     * let's use the same machinery we use to launch a variant request in order to simply generate the filters upon request for a calling routine
+     *
+     * @param geneId
+     * @param receivedParameters
+     * @param significance
+     * @param dataset
+     * @param region
+     * @return
+     */
+  public  List<String> retrieveFilters (  String geneId, String significance,String dataset,String region,String receivedParameters )    {
+      Map paramsMap = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters)
+      LinkedHashMap<String, String> parsedFilterParameters = parseVariantSearchParameters(paramsMap, false)
+      return  parsedFilterParameters.filters
+  }
 
 
     public HashMap storeParametersInHashmap ( String gene,

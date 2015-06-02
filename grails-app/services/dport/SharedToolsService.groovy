@@ -1000,6 +1000,43 @@ class SharedToolsService {
     }
 
 
+    public LinkedHashMap<String, Integer> getGeneExtent (String geneName){
+        LinkedHashMap<String, Integer> returnValue  = [startExtent:0,endExtent:3000000000]
+        if (geneName)   {
+            String geneUpperCase =   geneName.toUpperCase()
+            Gene gene = Gene.findByName2(geneUpperCase)
+            returnValue.startExtent= gene?.addrStart ?: 0
+            returnValue.endExtent= gene?.addrEnd ?: 0
+        }
+        return returnValue
+    }
+
+
+    public LinkedHashMap<String, Integer> getGeneExpandedExtent (String geneName){
+        LinkedHashMap<String, Integer> returnValue  = [startExtent:0,endExtent:3000000000]
+        if (geneName)   {
+            LinkedHashMap<String, Integer> geneExtent = getGeneExtent (geneName)
+            Integer addrStart =  geneExtent.startExtent
+            if (addrStart){
+                returnValue.startExtent = ((addrStart > 100000)?(addrStart - 100000):0)
+            }
+            returnValue.endExtent= geneExtent.endExtent+ 100000
+        }
+        return returnValue
+    }
+
+
+    public String getGeneExpandedRegionSpec(String geneName){
+        String returnValue = ""
+        if (geneName)   {
+            String geneUpperCase =   geneName.toUpperCase()
+            Gene gene = Gene.findByName2(geneUpperCase)
+            LinkedHashMap<String, Integer> geneExtent = getGeneExpandedExtent (geneName)
+            returnValue = "chr${gene.chromosome}:${geneExtent.startExtent}-${geneExtent.endExtent}"
+          }
+        return returnValue
+    }
+
 
     public LinkedHashMap<String,String>  decodeAFilterList(String encodedFilterString) {
         LinkedHashMap<String,String> returnValue= [:]

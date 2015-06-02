@@ -12,6 +12,7 @@ import org.codehaus.groovy.grails.web.json.JSONObject
 class RestServerService {
     GrailsApplication grailsApplication
     SharedToolsService sharedToolsService
+    FilterManagementService filterManagementService
     private static final log = LogFactory.getLog(this)
 
 
@@ -1046,26 +1047,44 @@ ${customFilterSet}""".toString()
 
 
 
-    private String requestGeneCountByPValue (String geneName, BigDecimal pValue, Integer dataSet){
+    private String requestGeneCountByPValue (String geneName, Integer significanceIndicator, Integer dataSet){
         String dataSetId = ""
-        String pFieldName = ""
+        String significance
+        String geneRegion
         switch (dataSet){
             case 1:
-                dataSetId = "${EXOMESEQ}"
-                pFieldName = "P_EMMAX_FE_IV"
+                dataSetId = "exomeseq"
                 break;
             case 2:
-                dataSetId = "${EXOMECHIP}"
-                pFieldName = "P_VALUE"
+                dataSetId = "exomechip"
                 break;
             case 3:
-                dataSetId = "${GWASDIAGRAM}"
-                pFieldName = "P_VALUE"
+                dataSetId = "gwas"
+                geneRegion = sharedToolsService.getGeneExpandedRegionSpec(geneName)
                 break;
             default:
                 log.error("Trouble: user requested data set = ${dataSet} which I don't recognize")
                 defaults
         }
+        switch (significanceIndicator){
+            case 1:
+                significance = "everything"
+                break;
+            case 2:
+                significance = "genome-wide"
+                break;
+            case 3:
+                significance = "locus"
+                break;
+            case 4:
+                significance = "nominal"
+                break;
+            default:
+                log.error("Trouble: user requested data set = ${dataSet} which I don't recognize")
+                defaults
+        }
+        List <String> filterList= filterManagementService.retrieveFilters(geneName,significance,dataSetId,geneRegion,"")
+        String packagedFilters = sharedToolsService.packageUpEncodedParameters(filterList)
         String geneCountRequest = """
 {
     "passback": "123abc",
@@ -1081,8 +1100,7 @@ ${customFilterSet}""".toString()
                         "pproperty":    {}
                     },
     "filters":    [
-                    {"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${geneName}", "operand_type": "STRING"},
-                    {"dataset_id": "${dataSetId}", "phenotype": "T2D", "operand": "${pFieldName}", "operator": "LTE", "value": ${pValue}, "operand_type": "FLOAT"}
+                    ${packagedFilters}
                 ]
 }
 """.toString()
@@ -1408,8 +1426,8 @@ ${customFilterSet}""".toString()
 
 
 
-    public JSONObject variantCountByGeneNameAndPValue(String geneName, BigDecimal pValue, Integer dataSet){
-        String jsonSpec = requestGeneCountByPValue( geneName,  pValue,  dataSet)
+    public JSONObject variantCountByGeneNameAndPValue(String geneName, Integer significance, Integer dataSet){
+        String jsonSpec = requestGeneCountByPValue( geneName,  significance,  dataSet)
         return postRestCall(jsonSpec,GET_DATA_URL)
     }
 
@@ -1422,20 +1440,20 @@ ${customFilterSet}""".toString()
     public JSONObject combinedVariantCountByGeneNameAndPValue(String geneName){
         JSONObject returnValue
         List <Integer> dataSeteList = [3, 2, 1]
-        List <BigDecimal> pValueList = [1,0.00000005, 0.0001, 0.05]
+        List <Integer> significanceList = [1,2,  3, 4]
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()
         for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
             sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
-            for ( int  i = 0 ; i < pValueList.size () ; i++ ){
+            for ( int  i = 0 ; i < significanceList.size () ; i++ ){
                 sb  << "{"
-                String jsonSpec = requestGeneCountByPValue(geneName, pValueList[i], dataSeteList[j])
+                String jsonSpec = requestGeneCountByPValue(geneName, significanceList[i], dataSeteList[j])
                 JSONObject apiData = postRestCall(jsonSpec,GET_DATA_URL)
                 if (apiData.is_error == false) {
-                    sb  << "\"level\":${pValueList[i]},\"count\":${apiData.numRecords}"
+                    sb  << "\"level\":${significanceList[i]},\"count\":${apiData.numRecords}"
                 }
                 sb  << "}"
-                if (i<pValueList.size ()-1){
+                if (i<significanceList.size ()-1){
                     sb  << ","
                 }
             }
@@ -1448,6 +1466,35 @@ ${customFilterSet}""".toString()
         returnValue = slurper.parseText(sb.toString())
         return returnValue
     }
+//    public JSONObject combinedVariantCountByGeneNameAndPValue(String geneName){
+//        JSONObject returnValue
+//        List <Integer> dataSeteList = [3, 2, 1]
+//        List <BigDecimal> pValueList = [1,0.00000005, 0.0001, 0.05]
+//        StringBuilder sb = new StringBuilder ("{\"results\":[")
+//        def slurper = new JsonSlurper()
+//        for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
+//            sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
+//            for ( int  i = 0 ; i < pValueList.size () ; i++ ){
+//                sb  << "{"
+//                String jsonSpec = requestGeneCountByPValue(geneName, pValueList[i], dataSeteList[j])
+//                JSONObject apiData = postRestCall(jsonSpec,GET_DATA_URL)
+//                if (apiData.is_error == false) {
+//                    sb  << "\"level\":${pValueList[i]},\"count\":${apiData.numRecords}"
+//                }
+//                sb  << "}"
+//                if (i<pValueList.size ()-1){
+//                    sb  << ","
+//                }
+//            }
+//            sb  << "]}"
+//            if (j<dataSeteList.size ()-1){
+//                sb  << ","
+//            }
+//        }
+//        sb  << "]}"
+//        returnValue = slurper.parseText(sb.toString())
+//        return returnValue
+//    }
 
 
 
