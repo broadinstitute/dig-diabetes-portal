@@ -59,10 +59,12 @@
 
 <div class="container">
     <div class="row column-center">
+        <div class="text-center" style="padding-top:10px;"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="mainpage.send.feedback"/></a><div>
+    </div>
+    <div class="row column-center"  style="padding-top:10px;">
         <div>Built  on ${BuildInfo?.buildHost} at ${BuildInfo?.buildTime}.  Version=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}</div>
     </div>
 </div>
-
 
 <g:applyLayout name="activatePopups"/>
 
