@@ -302,6 +302,12 @@ class VariantSearchController {
             String encodedParameters = sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
             String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
 
+            Collection<String> datasetIds = new HashSet<>()
+            JsonSlurper jsonParser = new JsonSlurper()
+            for (Object filter  : parsedFilterParameters.filters) {
+                datasetIds.add(jsonParser.parseText(filter).dataset_id)
+            }
+
             render(view: 'variantSearchResults',
                     model: [show_gene           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
                             show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),

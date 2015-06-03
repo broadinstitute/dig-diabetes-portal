@@ -10,6 +10,28 @@
 <body>
 <script>
 
+    applyDatasetsFilter = function(columns) {
+        console.log(columns);
+    };
+
+    showDatasetModal = function() {
+        var modal = '#columnChooserModal';
+        angular.element(modal).scope().setSelections({
+            selectedSets: ['ExSeq_17k_aa_genes_aj_mdv2', 'ExSeq_17k_eu_genes_um_mdv2']
+        });
+        /*
+         angular.element(modal).scope().setSelections({
+         datasetVersion:'mdv2',
+         selectedSets: ['ExSeq_17k_hs_genes_mdv2'],
+         ancestry:'Hispanic',
+         phenotypes:'T2D',
+         technology:'ExSeq'
+         });
+         */
+        // todo arz pass in tree structure from getMetadata
+        $(modal).modal('show');
+        angular.element(modal).scope().loadMetadata();
+    };
 
 
     var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
@@ -166,6 +188,11 @@
         </div>
     </div>
 
+</div>
+
+<div>
+    <g:render template="/resultsFilter/filtermodal"></g:render>
+    <a onclick="showDatasetModal()">Refine Query</a>
 </div>
 
 </body>
