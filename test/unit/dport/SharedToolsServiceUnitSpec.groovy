@@ -137,7 +137,7 @@ p
         String encoded = service.encodeAFilterList([phenotype:'t2d',
         'dataSet':'ExSeq',
         'orValue':'123',
-        'pValue':'0.123'])
+        'pValue':'0.123'],[:])
         LinkedHashMap<String,String>  decoded = service.decodeAFilterList(encoded)
         then:
         decoded['phenotype']=='t2d'

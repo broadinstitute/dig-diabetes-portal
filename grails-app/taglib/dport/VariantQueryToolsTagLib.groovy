@@ -58,7 +58,7 @@ class VariantQueryToolsTagLib {
                     LinkedHashMap customFilters = map.findAll{ it.key =~ /^filter/ }
                     customFilters.each {String key, String value->
                         out << """
-                                <span class="phenotype filterElement">${value},</span>
+                                <span class="phenotype filterElement">${sharedToolsService.makeFiltersPrettier(value)},</span>
                     """.toString()
                     }
                     if ( map ) {

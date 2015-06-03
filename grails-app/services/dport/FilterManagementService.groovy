@@ -821,7 +821,7 @@ class FilterManagementService {
 
 
 
-    private LinkedHashMap<String,String> parseCustomFilterString (String customFilterString)  {
+    public LinkedHashMap<String,String> parseCustomFilterString (String customFilterString)  {
         LinkedHashMap<String,String> returnValue = [:]
         List <String> filterPieces = customFilterString.tokenize ("[")
         returnValue ["phenotype"]  =  filterPieces [0]
@@ -865,7 +865,8 @@ class FilterManagementService {
                     parsedFilterString.equivalence,
                     parsedFilterString.value,
                     "FLOAT")
-            filterDescriptions << "${parsedFilterString.property} value ${parsedFilterString.equivalence} ${parsedFilterString.value} for ${parsedFilterString.sampleSet}"
+            //filterDescriptions << "${parsedFilterString.property} value ${parsedFilterString.equivalence} ${parsedFilterString.value} for ${parsedFilterString.sampleSet}"
+            filterDescriptions << "${sharedToolsService.makeFiltersPrettier(customFilterString)}"
             parameterEncoding << "47:${customFilterString}"
         }
          return  buildingFilters
