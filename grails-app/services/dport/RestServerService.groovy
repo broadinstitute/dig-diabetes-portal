@@ -372,15 +372,9 @@ class RestServerService {
                         }
                     },
     "filters":    [
-                    {"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "LTE", "value": ${
-            chromosomeNumber
-        }, "operand_type": "INTEGER"},
-                    {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "LTE", "value": ${
-            extentEnd
-        }, "operand_type": "INTEGER"},
-                    {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "GTE", "value": ${
-            extentBegin
-        }, "operand_type": "INTEGER"}
+                    {"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "EQ", "value": "${chromosomeNumber}", "operand_type": "STRING"},
+                    {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "LTE", "value": ${extentEnd}, "operand_type": "INTEGER"},
+                    {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "GTE", "value": ${extentBegin}, "operand_type": "INTEGER"}
                 ]
 }""".toString()
         return inputJson

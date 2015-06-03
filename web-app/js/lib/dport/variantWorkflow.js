@@ -68,10 +68,12 @@ var mpgSoftware = mpgSoftware || {};
         var existingFiltersManipulators = function(x){ // 0 deactivates, 1 activates
             var filterActivator = $('.filterActivator');
             if (x){
+                currentInteractivity=1;
                 emphasizeBlueBox(true);
                 filterActivator.css('color',activeColor);
                 filterActivator.css('cursor', 'pointer');
             }else {
+                currentInteractivity=0;
                 emphasizeBlueBox(false);
                 filterActivator.css('color',inactiveColor);
                 filterActivator.css('cursor', 'default');
@@ -314,6 +316,7 @@ var mpgSoftware = mpgSoftware || {};
                 options.empty();
                 var dataSetList = dataSetJson ["dataset"];
                 for ( var i = 0 ; i < numberOfRecords ; i++ ){
+                    console.log('dataSetList[i], val='+dataSetList[i]+'.');
                     options.append($("<option />").val(dataSetList[i]).text(dataSetList[i]));
                 }
             }
@@ -402,6 +405,15 @@ var mpgSoftware = mpgSoftware || {};
             return returnValue;
         };
         var gatherFieldsAndPostResults = function (){
+            var numberOfProperties = function(potMap){
+                var count = 0;
+                for (var prop in potMap) {
+                    if (potMap.hasOwnProperty(prop)) {
+                        count++;
+                    }
+                }
+                return count;
+            }
             var varsToSend = {};
             var phenotypeExtractor = {};
             var datasetExtractor = {};
@@ -439,11 +451,11 @@ var mpgSoftware = mpgSoftware || {};
             }
             varsToSend = UTILS.concatMap(varsToSend,restrictToRegion) ;
             varsToSend = UTILS.concatMap(varsToSend,missensePredictions) ;
-            varsToSend = UTILS.concatMap(varsToSend,phenotypeInput) ;
-            varsToSend = UTILS.concatMap(varsToSend,datasetInput) ;
             varsToSend = UTILS.concatMap(varsToSend,textFields) ;
             varsToSend = UTILS.concatMap(varsToSend,savedValue) ;
-            UTILS.postQuery('./variantVWRequest',varsToSend);
+            if (numberOfProperties(varsToSend)>1) {
+                UTILS.postQuery('./variantVWRequest',varsToSend);
+            }
         };
         var cancelThisFieldCollection = function (){
             var varsToSend = {};
@@ -823,23 +835,31 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
         /***
          * public
          */
-        var respondToPhenotypeSelection = function (){
-            var phenotypeComboBox = UTILS.extractValsFromCombobox(['phenotype']);
-            mpgSoftware.variantWF.retrieveDataSets(phenotypeComboBox['phenotype']);
+        var forceToPhenotypeSelection = function (phenotypeComboBox){
+            mpgSoftware.variantWF.retrieveDataSets(phenotypeComboBox);
             $('#dataSetChooser').show ();
             $('#filterInstructions').text('Choose a sample set  (or click GO for all sample sets):');
             mpgSoftware.variantWF.currentInteractivityState(0);  // but the other widgets know that the user is working on a single filter
             mpgSoftware.variantWF.whatToDoNext(1);
         };
-
-        var respondToDataSetSelection = function (){
-            var dataSetComboBox = UTILS.extractValsFromCombobox(['dataSet']);
+        var respondToPhenotypeSelection = function (){
             var phenotypeComboBox = UTILS.extractValsFromCombobox(['phenotype']);
-            mpgSoftware.variantWF.retrievePropertiesPerDataSet(phenotypeComboBox['phenotype'],dataSetComboBox['dataSet']);
+            forceToPhenotypeSelection(phenotypeComboBox['phenotype']);
+        };
+
+        var forceToDataSetSelection = function (dataSetComboBox,phenotypeComboBox){
+            mpgSoftware.variantWF.retrievePropertiesPerDataSet(phenotypeComboBox,dataSetComboBox);
+         //   mpgSoftware.variantWF.retrievePropertiesPerDataSet(phenotypeComboBox["phenotype"],dataSetComboBox["dataSet"]);
             $('#additionalFilterSelection').show ();
             $('#filterInstructions').text('Add filters, if any:');
             mpgSoftware.variantWF.currentInteractivityState(0);
             mpgSoftware.variantWF.whatToDoNext(2);
+        };
+
+        var respondToDataSetSelection = function (){
+            var dataSetComboBox = UTILS.extractValsFromCombobox(['dataSet']);
+            var phenotypeComboBox = UTILS.extractValsFromCombobox(['phenotype']);
+            forceToDataSetSelection(dataSetComboBox["dataSet"],phenotypeComboBox["phenotype"]);
         };
 
 
@@ -889,8 +909,12 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
         var respondToReviseCustomFilter = function(filterDefinition){
             var parsedFilter =  parseCustomFilter (filterDefinition);
             if (parsedFilter.success) {
-                     $('phenotype').selected =  parsedFilter.phenotype ;
-                     $('dataSet').selected =  parsedFilter.dataset ;
+                //$('#phenotype').selected =  parsedFilter.phenotype ;
+                //$('#dataSet').selected =  parsedFilter.dataset ;
+                $('#phenotype').val(parsedFilter.phenotype)  ;
+                $('#dataSet').val(parsedFilter.dataset) ;
+                forceToPhenotypeSelection(parsedFilter.phenotype);
+                forceToDataSetSelection(parsedFilter.dataset,parsedFilter.phenotype);
                 var filterHolder = $('#filterHolder');
                 var selection = parsedFilter.property;
                 appendValueWithEquivalenceChooser ( filterHolder,selection+'Holder',selection,
@@ -916,7 +940,9 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             forceRequestForMoreFilters (selection, holder);
         };
         return {
+            forceToPhenotypeSelection:forceToPhenotypeSelection,
             respondToPhenotypeSelection:respondToPhenotypeSelection,
+            forceToDataSetSelection:forceToDataSetSelection,
             respondToDataSetSelection:respondToDataSetSelection,
             respondToRequestForMoreFilters:respondToRequestForMoreFilters,
             displayDataSetChooser:displayDataSetChooser,

@@ -254,6 +254,10 @@ class FilterManagementService {
             case "noncodingCheckbox"        :
                 returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 4, "operand_type": "FLOAT"}""".toString()
                 break ;
+            case "lessThan_noEffectNoncoding"        :
+                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "LT", "value": 4, "operand_type": "FLOAT"}""".toString()
+                break ;
+
             default: break;
         }
         return  returnValue
@@ -416,9 +420,11 @@ class FilterManagementService {
                     break;
                 case 'exomeseq' :
                     returnValue['datatype']  = 'exomeseq'
+                    returnValue['predictedEffects'] = 'lessThan_noEffectNoncoding';
                     break;
                 case 'exomechip' :
                     returnValue['datatype']  = 'exomechip'
+                    returnValue['predictedEffects'] = 'lessThan_noEffectNoncoding';
                     break;
                 default:
                     break;
@@ -1139,6 +1145,12 @@ class FilterManagementService {
                     filterDescriptions <<  "No predicted effect (non-coding)"
                     parameterEncoding << "23:4"
                     break;
+                case  "lessThan_noEffectNoncoding":
+                    filters <<  retrieveFilterString("lessThan_noEffectNoncoding")
+                    //filterDescriptions <<  "Estimated classification for no effects (non-coding)"
+                    filterDescriptions <<  "Protein truncating,missense, and synonymous variants"
+                    parameterEncoding << "23:5"
+                    break;
 
                 default:
                     log.error("FilterManagementService.predictedEffectsOnProteins: unexpected predictedEffects = ${predictedEffects}")
@@ -1627,6 +1639,80 @@ class FilterManagementService {
 
       return  combinedFilters
   }
+
+
+
+  private int positioner(LinkedHashMap<String, LinkedHashMap> holder, LinkedHashMap<String, String> parsedFilter)   {
+      int returnValue = 0
+        if (parsedFilter !=  null ){
+            LinkedHashMap phenotypeHolder
+           if (holder.containsKey(parsedFilter.phenotype)) {// we have seen this phenotype before
+               phenotypeHolder = holder [parsedFilter.phenotype]
+           } else {// we haven't seen this phenotype before
+               phenotypeHolder = new LinkedHashMap()
+               holder [parsedFilter.phenotype] = phenotypeHolder
+           }
+            if (phenotypeHolder.containsKey(parsedFilter.sampleSet)) {// we have seen this phenotype before
+                returnValue = phenotypeHolder [parsedFilter.sampleSet]
+            } else {// we haven't seen this phenotype before
+                int highestCurrentValue = holder ["highestCurrentValue"]
+                highestCurrentValue++
+                holder ["highestCurrentValue"] = highestCurrentValue
+                phenotypeHolder [parsedFilter.sampleSet] = highestCurrentValue
+                returnValue = highestCurrentValue
+            }
+        }
+      return returnValue
+  }
+
+    /***
+     * Add something to a hash map in the prescribed position. Create one if none exists already
+     * @param growingList
+     * @param index
+     * @param key
+     * @param value
+     */
+  private addOrExtend(List<LinkedHashMap<String, String>> growingList,int index,String key,String value){
+      LinkedHashMap currentGatherer
+      if (growingList[index] ==  null ){
+          currentGatherer = new LinkedHashMap()
+          growingList << currentGatherer
+      } else {
+          currentGatherer = growingList[index]
+      }
+      currentGatherer[key]=value
+  }
+
+    /***
+     * The idea is to take a map of filters and to group them by unique combinations of phenotype
+     * and sample group. This unique grouping is done by the positioner method
+     * @param unorderedFilters
+     * @return
+     */
+    public List <LinkedHashMap<String, String>> grouper(LinkedHashMap<String, String> unorderedFilters)   {
+        LinkedHashMap<String, LinkedHashMap> holder = [:]
+        holder["highestCurrentValue"] = -1
+        List<LinkedHashMap<String, String>> returnValue = []
+        for (Map.Entry<String, Object> entry : unorderedFilters.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue() as String;
+            if (!(key =~ /^filter/)) {// not a complex filter. Put it in the first group
+                addOrExtend(returnValue,0, key, value)
+            } else { // complex filter. Need to figure out where it goes
+                LinkedHashMap parsedFilter = parseCustomFilterString (value)
+                int assignedLocation = positioner (holder,parsedFilter)
+                addOrExtend(returnValue,assignedLocation, key, value)
+            }
+
+        }
+        return  returnValue
+    }
+
+
+
+
+
+
 
 
 
