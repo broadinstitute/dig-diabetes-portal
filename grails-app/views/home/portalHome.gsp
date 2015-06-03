@@ -259,13 +259,13 @@
 </div>
 
 <div class="row column-center" style="display: flex; align-content: center; align-items: center;margin-top:15px;">
-    <div style="width:20vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
+    <div style="width:40vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
         <div class="wide-separator"></div>
     </div>
     <div class="text-center funders-color" style="margin-left:5px;margin-right: 5px;">
         The following organizations provide funding and/or governance for this knowledge portal as part of the AMP T2D Program:
     </div>
-    <div style="width:20vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
+    <div style="width:40vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
         <div class="wide-separator"></div>
     </div>
 </div>
@@ -307,13 +307,13 @@
 
 
 <div class="row column-center" style="display: flex; align-content: center; align-items: center;">
-    <div style="width:40vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
+    <div style="width:45vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
         <div class="wide-separator"></div>
     </div>
     <div class="text-center funders-color" style="margin-left:5px;margin-right: 5px;">
         Funding and guidance are also provided by:
     </div>
-    <div style="width:40vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
+    <div style="width:45vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
         <div class="wide-separator"></div>
     </div>
 </div>
