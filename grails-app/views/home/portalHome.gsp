@@ -324,9 +324,5 @@
     </div>
 </div>
 
-<div class="row column-center" style="background-color: #65A1DC;padding-top:7px;padding-bottom: 7px;">
-    <div class="text-center" style="color: #ffffff;">Please use the following citation when referring to data from this portal: AMP T2D-GENES Program, SIGMA; Year Month Date of Access; URL of page you are citing. </div>
-</div>
-
 </body>
 </html>
