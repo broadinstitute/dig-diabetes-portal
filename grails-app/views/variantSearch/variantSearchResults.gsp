@@ -9,26 +9,19 @@
 
 <body>
 <script>
-
     applyDatasetsFilter = function(columns) {
         console.log(columns);
     };
 
-    showDatasetModal = function() {
+    setDatasetsForFilter = function(datasets) {
         var modal = '#columnChooserModal';
         angular.element(modal).scope().setSelections({
-            selectedSets: ['ExSeq_17k_aa_genes_aj_mdv2', 'ExSeq_17k_eu_genes_um_mdv2']
+            selectedSets: datasets
         });
-        /*
-         angular.element(modal).scope().setSelections({
-         datasetVersion:'mdv2',
-         selectedSets: ['ExSeq_17k_hs_genes_mdv2'],
-         ancestry:'Hispanic',
-         phenotypes:'T2D',
-         technology:'ExSeq'
-         });
-         */
-        // todo arz pass in tree structure from getMetadata
+    };
+
+    showDatasetModal = function() {
+        var modal = '#columnChooserModal';
         $(modal).modal('show');
         angular.element(modal).scope().loadMetadata();
     };
@@ -60,7 +53,8 @@
                         ${dataSetDetermination},
                         {variantTableContext:variantTableContext});
             }
-
+            var datasets = ${raw(datasetIds)};
+            setDatasetsForFilter(datasets);
             loading.hide();
         },
         error:function(XMLHttpRequest,textStatus,errorThrown){
@@ -178,6 +172,12 @@
                 <p><a href="<g:createLink controller='variantSearch' action='variantSearchWF' params='[encParams:"${encodedParameters}"]'/>" class='boldlink'>
                     <g:message code="variantTable.searchResults.clickToRefine" default="Click here to refine your results" /></a></p>
 
+                <p>
+                    <g:render template="/resultsFilter/filtermodal"></g:render>
+                    <a class="boldlink" onclick="showDatasetModal()">Filter datasets...</a>
+                </p>
+                </div>
+
 
                 <g:render template="../region/collectedVariantsForRegion" />
 
@@ -190,10 +190,6 @@
 
 </div>
 
-<div>
-    <g:render template="/resultsFilter/filtermodal"></g:render>
-    <a onclick="showDatasetModal()">Refine Query</a>
-</div>
 
 </body>
 </html>

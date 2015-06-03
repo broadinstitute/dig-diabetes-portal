@@ -8,7 +8,6 @@
 
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.js"></script>
-<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic" rel="stylesheet" type="text/css"/>
 <link type="text/css" rel="stylesheet" href="${resource(dir: 'css', file: 'dport/chooser/custom.css')}" />
@@ -136,7 +135,7 @@
         <div class='modal-footer'>
             <div class='row'>
                 <div class='col-xs-12'>
-                    <button class='btn btn-primary btn-lg pull-right' data-dismiss='modal'
+                    <button disabled class='btn btn-primary btn-lg pull-right' data-dismiss='modal'
                             ng-click="setColumnFilter(getSelectedSetNames(tree))">Update Results</button>
                     <button class='btn btn-lg pull-right' data-dismiss='modal' ng-click='view.showAdvancedSelector = false'>Cancel</button>
                 </div>

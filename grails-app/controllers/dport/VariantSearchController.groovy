@@ -309,8 +309,11 @@ class VariantSearchController {
             Collection<String> datasetIds = new HashSet<>()
             JsonSlurper jsonParser = new JsonSlurper()
             for (Object filter  : parsedFilterParameters.filters) {
-                datasetIds.add(jsonParser.parseText(filter).dataset_id)
+                datasetIds.add("'" + jsonParser.parseText(filter).dataset_id + "'")
             }
+            String javascriptListOfDatasets = datasetIds.join(",")
+            javascriptListOfDatasets = "[" + javascriptListOfDatasets + "]"
+
 
             render(view: 'variantSearchResults',
                     model: [show_gene           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
@@ -323,7 +326,8 @@ class VariantSearchController {
                             proteinEffectsList  : encodedProteinEffects,
                             encodedParameters   : encodedParameters,
                             dataSetDetermination: dataSetDetermination,
-                            newApi              : sharedToolsService.getNewApi()])
+                            newApi              : sharedToolsService.getNewApi(),
+                            datasetIds          : javascriptListOfDatasets])
         }
     }
 
