@@ -37,12 +37,13 @@
                 $scope.metadataUrl = metadataUrl;
             };
 
+            $scope.restrictVersionTo = function(version) {
+                $scope.datasetVersion = version;
+                $scope.search.currentQuery.version = version;
+            };
+
             $scope.setSelections = function(selections) {
-                $scope.datasetVersion = selections.datasetVersion;
-                $scope.search.currentQuery.version = selections.datasetVersion;
                 $scope.selectedSets = selections.selectedSets;
-                //$scope.tree = angular.fromJson(selections.metadata);
-                //$scope.initializeData();
             };
 
             $scope.setColumnFilter = function($columns) {
@@ -537,7 +538,9 @@
                     .success(function (data, status, headers, config) {
                         try {
                             $scope.treeLoading = false;
-                            $scope.tree = angular.fromJson(data[0].experiments);
+                            var metadata = angular.fromJson(data[0]);
+                            $scope.tree = metadata.experiments;
+                            $scope.restrictVersionTo(metadata.restrictDatasetVersionTo);
                             $scope.initializeData();
                             if ($scope.tree.length == 0) {
                                 alert('No data returned from metadata query.  Please report the problem and try again later.');
