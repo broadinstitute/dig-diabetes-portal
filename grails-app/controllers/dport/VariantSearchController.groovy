@@ -46,10 +46,14 @@ class VariantSearchController {
             encParams = ""
         }
         List<LinkedHashMap> encodedFilterSets = [[:]]
+        List<LinkedHashMap> reconstitutedFilterSets = [[:]]
+
 
         if ((encParams) && (encParams.length())) {
             LinkedHashMap simulatedParameters = filterManagementService.generateParamsForSearchRefinement(encParams)
             encodedFilterSets = filterManagementService.handleFilterRequestFromBrowser(simulatedParameters)
+            reconstitutedFilterSets = filterManagementService.grouper(encodedFilterSets)
+            encodedFilterSets = reconstitutedFilterSets
         }
 
         render(view: 'variantWorkflow',

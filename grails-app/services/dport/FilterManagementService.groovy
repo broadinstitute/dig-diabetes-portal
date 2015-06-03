@@ -1642,8 +1642,45 @@ class FilterManagementService {
 
 
 
-  public int positioner(LinkedHashMap<String, LinkedHashMap> holder, LinkedHashMap<String, String> parsedFilter)   {
+  private int positioner(LinkedHashMap<String, LinkedHashMap> holder, LinkedHashMap<String, String> parsedFilter)   {
+      int returnValue = 0
+        if (parsedFilter !=  null ){
+            LinkedHashMap phenotypeHolder
+           if (holder.containsKey(parsedFilter.phenotype)) {// we have seen this phenotype before
+               phenotypeHolder = holder [parsedFilter.phenotype]
+           } else {// we haven't seen this phenotype before
+               phenotypeHolder = new LinkedHashMap()
+               holder [parsedFilter.phenotype] = phenotypeHolder
+           }
+            if (phenotypeHolder.containsKey(parsedFilter.sampleSet)) {// we have seen this phenotype before
+                returnValue = phenotypeHolder [parsedFilter.sampleSet]
+            } else {// we haven't seen this phenotype before
+                int highestCurrentValue = holder ["highestCurrentValue"]
+                highestCurrentValue++
+                holder ["highestCurrentValue"] = highestCurrentValue
+                phenotypeHolder [parsedFilter.sampleSet] = highestCurrentValue
+                returnValue = highestCurrentValue
+            }
+        }
+      return returnValue
+  }
 
+    /***
+     * Add something to a hash map in the prescribed position. Create one if none exists already
+     * @param growingList
+     * @param index
+     * @param key
+     * @param value
+     */
+  private addOrExtend(List<LinkedHashMap<String, String>> growingList,int index,String key,String value){
+      LinkedHashMap currentGatherer
+      if (growingList[index] ==  null ){
+          currentGatherer = new LinkedHashMap()
+          growingList << currentGatherer
+      } else {
+          currentGatherer = growingList[index]
+      }
+      currentGatherer[key]=value
   }
 
     /***
@@ -1654,7 +1691,20 @@ class FilterManagementService {
      */
     public List <LinkedHashMap<String, String>> grouper(LinkedHashMap<String, String> unorderedFilters)   {
         LinkedHashMap<String, LinkedHashMap> holder = [:]
+        holder["highestCurrentValue"] = -1
         List<LinkedHashMap<String, String>> returnValue = []
+        for (Map.Entry<String, Object> entry : unorderedFilters.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue() as String;
+            if (!(key =~ /^filter/)) {// not a complex filter. Put it in the first group
+                addOrExtend(returnValue,0, key, value)
+            } else { // complex filter. Need to figure out where it goes
+                LinkedHashMap parsedFilter = parseCustomFilterString (value)
+                int assignedLocation = positioner (holder,parsedFilter)
+                addOrExtend(returnValue,assignedLocation, key, value)
+            }
+
+        }
         return  returnValue
     }
 
