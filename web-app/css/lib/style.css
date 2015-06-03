@@ -709,3 +709,19 @@ div.veryImportantText {
 div.column-center div {
     margin: 0 auto;
 }
+
+div.column-center {
+    display: flex;
+    align-content: center;
+    align-items: center;
+}
+
+.funders-color {
+    color:#6099D2;
+}
+
+div.wide-separator {
+    background-color: #6099D2;
+    height: 5px;
+    border:0;
+}

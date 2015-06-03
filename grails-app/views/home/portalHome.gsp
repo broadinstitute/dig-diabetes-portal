@@ -258,9 +258,15 @@
     </div>
 </div>
 
-<div class="row column-center" style="display: flex; align-content: center; align-items: center;">
-    <div class="text-center">
+<div class="row column-center" style="display: flex; align-content: center; align-items: center;margin-top:15px;">
+    <div style="width:20vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
+        <div class="wide-separator"></div>
+    </div>
+    <div class="text-center funders-color" style="margin-left:5px;margin-right: 5px;">
         The following organizations provide funding and/or governance for this knowledge portal as part of the AMP T2D Program:
+    </div>
+    <div style="width:20vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
+        <div class="wide-separator"></div>
     </div>
 </div>
 
@@ -300,16 +306,26 @@
 
 
 
-<div class="row column-center" style="display: flex; align-content: center; align-items: center;padding-bottom: 10px;">
-    <div class="text-center">
+<div class="row column-center" style="display: flex; align-content: center; align-items: center;">
+    <div style="width:40vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
+        <div class="wide-separator"></div>
+    </div>
+    <div class="text-center funders-color" style="margin-left:5px;margin-right: 5px;">
         Funding and guidance are also provided by:
+    </div>
+    <div style="width:40vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
+        <div class="wide-separator"></div>
     </div>
 </div>
 
-<div class="row column-center" style="display: flex; align-content: center; align-items: center;">
+<div class="row column-center" style="display: flex; align-content: center; align-items: center;margin-top:10px;margin-bottom: 30px;">
     <div class="col-xs-1">
         <img class="img-responsive" src="${resource(dir: 'images/icons', file: 'Slim2015Logo.png')}">
     </div>
+</div>
+
+<div class="row column-center" style="background-color: #65A1DC;padding-top:7px;padding-bottom: 7px;">
+    <div class="text-center" style="color: #ffffff;">Please use the following citation when referring to data from this portal: AMP T2D-GENES Program, SIGMA; Year Month Date of Access; URL of page you are citing. </div>
 </div>
 
 </body>
