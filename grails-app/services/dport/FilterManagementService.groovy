@@ -1642,5 +1642,29 @@ class FilterManagementService {
 
 
 
+  public int positioner(LinkedHashMap<String, LinkedHashMap> holder, LinkedHashMap<String, String> parsedFilter)   {
+
+  }
+
+    /***
+     * The idea is to take a map of filters and to group them by unique combinations of phenotype
+     * and sample group. This unique grouping is done by the positioner method
+     * @param unorderedFilters
+     * @return
+     */
+    public List <LinkedHashMap<String, String>> grouper(LinkedHashMap<String, String> unorderedFilters)   {
+        LinkedHashMap<String, LinkedHashMap> holder = [:]
+        List<LinkedHashMap<String, String>> returnValue = []
+        return  returnValue
+    }
+
+
+
+
+
+
+
+
+
 
 }

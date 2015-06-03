@@ -34,51 +34,7 @@ height: 20px;
 <div class="panel panel-default">
 
     <div class="panel-body">
-        %{--<div class="row clearfix">--}%
-            %{--<div class="col-sm-6" style="text-align: left" style="margin: 0 0 20px 0">--}%
-                %{--<span id="filterInstructions" class="filterInstructions">Choose a phenotype to begin:</span>--}%
-            %{--</div>--}%
 
-            %{--<div class="col-sm-6" style="text-align: left" style="margin: 0 0 20px 0">--}%
-
-                %{--<div class="panel-group" id="accordion">--}%
-                    %{--<div class="dataSetOptions">--}%
-                        %{--<div class="subtlePanelHeading">--}%
-                            %{--<h4 class="panel-title">--}%
-                                %{--<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"--}%
-                                   %{--style="float: right;" title="By default search all data sets">Specify data set</a>--}%
-                            %{--</h4>--}%
-                        %{--</div>--}%
-                    %{--</div>--}%
-                %{--</div>--}%
-
-            %{--</div>--}%
-        %{--</div>--}%
-
-
-        %{--<div class="row clearfix">--}%
-            %{--<div id="collapseOne" class="panel-collapse collapse">--}%
-                %{--<div class="dataSetOptions">--}%
-
-                    %{--<ul style="list-style-type: none;">--}%
-                        %{--<li>--}%
-                            %{--<input id="datasetExomeChip" type="checkbox" aria-label="Exome chip"--}%
-                                   %{--value="datasetExomeChip"><span class="dataSetChoice">Exome chip</span>--}%
-                        %{--</li>--}%
-                        %{--<li>--}%
-                            %{--<input id="datasetExomeSeq" type="checkbox" aria-label="Exome sequence"--}%
-                                   %{--value="datasetExomeSeq"><span class="dataSetChoice">Exome sequence</span>--}%
-                        %{--</li>--}%
-                        %{--<li>--}%
-                            %{--<input id="datasetGWAS" type="checkbox" aria-label="GWAS" value="datasetGWAS"><span--}%
-                                %{--class="dataSetChoice">GWAS</span>--}%
-                        %{--</li>--}%
-                    %{--</ul>--}%
-
-                %{--</div>--}%
-            %{--</div>--}%
-
-        %{--</div>--}%
 <div class="row clearfix" style="margin:0 0 15px 0">
         <div class="col-md-1" style="text-align: right"></div>
         <div class="col-md-4" style="text-align: right">
