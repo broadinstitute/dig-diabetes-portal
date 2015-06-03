@@ -568,7 +568,7 @@ var mpgSoftware = mpgSoftware || {};
                         if (excomeChip["EU"]) {
                             var excomeChipEuropean = excomeChip["EU"];
                             var ethnicity = chooseAncestryStrings("EU", continentalAncestryText, 'chip');
-                            if (excomeChipEuropean["NS"]) {
+                            if (excomeChipEuropean["NS"]||excomeChipEuropean["total"]||excomeChipEuropean["common"]||excomeChipEuropean["lowFrequency"]||excomeChipEuropean["rare"]) {
                                 $('#continentalVariationTableBody').append('<tr>' +
                                     '<td>' + ethnicity.ancestry +
                                     ethnicity.helpText + '</td>' +

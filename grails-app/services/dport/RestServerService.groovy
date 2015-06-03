@@ -35,10 +35,10 @@ class RestServerService {
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
     private String EXOMESEQ_AA = "ExSeq_17k_aa_genes_mdv2"
-    private String EXOMESEQ_HS = "ExSeq_17k_hs_genes_mdv2"
+    private String EXOMESEQ_HS = "ExSeq_17k_hs_mdv2"
     private String EXOMESEQ_EA = "ExSeq_17k_ea_genes_mdv2"
     private String EXOMESEQ_SA = "ExSeq_17k_sa_genes_mdv2"
-    private String EXOMESEQ_EU = "ExSeq_17k_eu_genes_mdv2"
+    private String EXOMESEQ_EU = "ExSeq_17k_eu_mdv2"
     private String EXOMECHIP = "ExChip_82k_mdv2"
     private String EXOMESEQ = "ExSeq_17k_mdv2"
     private String GWASDIAGRAM  = "GWAS_DIAGRAM_mdv2"
@@ -1283,12 +1283,12 @@ ${customFilterSet}""".toString()
                            "cproperty": ["VAR_ID", "CHROM", "POS"],
                           "orderBy":    ["CHROM"],
                           "dproperty":    {
-                                            "MAF" : ["ExSeq_13k_sa_mdv2",
-                                                      "ExSeq_13k_hs_mdv2",
-                                                      "ExSeq_13k_ea_mdv2",
-                                                      "ExSeq_13k_aa_mdv2",
-                                                      "ExSeq_13k_eu_mdv2",
-                                                      "ExSeq_13k_hs_mdv2",
+
+                                           "MAF" : ["${EXOMESEQ_SA}",
+                                                      "${EXOMESEQ_HS}",
+                                                      "${EXOMESEQ_EA}",
+                                                      "${EXOMESEQ_AA}",
+                                                      "${EXOMESEQ_EU}",
                                                       "${EXOMECHIP}"
                                                     ]
                                         },
@@ -1622,7 +1622,8 @@ ${customFilterSet}""".toString()
 	"filters":	[
         			{"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${geneName}", "operand_type": "STRING"},
                 	{"dataset_id": "${dataSetId}", "phenotype": "blah", "operand": "MAF", "operator": "GT", "value": ${minimumMaf}, "operand_type": "FLOAT"},
-                    {"dataset_id": "${dataSetId}", "phenotype": "blah", "operand": "MAF", "operator": "LTE", "value": ${maximumMaf}, "operand_type": "FLOAT"}
+                    {"dataset_id": "${dataSetId}", "phenotype": "blah", "operand": "MAF", "operator": "LTE", "value": ${maximumMaf}, "operand_type": "FLOAT"},
+                    {"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "LT", "value": 4, "operand_type": "FLOAT"}
             	]
 }
 """.toString()
@@ -1646,7 +1647,8 @@ ${customFilterSet}""".toString()
 	"filters":	[
         			{"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${geneName}", "operand_type": "STRING"},
                 	{"dataset_id": "${dataSetId}", "phenotype": "blah", "operand": "MAF", "operator": "GT", "value": ${minimumMaf}, "operand_type": "FLOAT"},
-                    {"dataset_id": "${dataSetId}", "phenotype": "blah", "operand": "MAF", "operator": "LTE", "value": ${maximumMaf}, "operand_type": "FLOAT"}
+                    {"dataset_id": "${dataSetId}", "phenotype": "blah", "operand": "MAF", "operator": "LTE", "value": ${maximumMaf}, "operand_type": "FLOAT"},
+                    {"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "LT", "value": 4, "operand_type": "FLOAT"}
             	]
 }
 """.toString()
