@@ -43,27 +43,11 @@
                     <div class="col-md-3"></div>
                     <div class="col-md-6">
                         <div id="datatypes-form">
-
-
-                                <div class="radio">
-                                    <label>
-                                        <input id="mySqlRestServer" type="radio" name="datatype" value="mysql"
-                                        <%=restServer.getCurrentServer()==restServer.getMysql()?" checked ":"" %> />
-                                        my SQL Server (${restServer.getMysql()})
-                                    </label>
-                                </div>
                             <div class="radio">
                                 <label>
                                     <input id="newdevserver" type="radio" name="datatype" value="newdevserver"
                                         <%=restServer.getCurrentServer()==restServer.getNewdevserver()?" checked ":"" %> />
                                     new dev server (${restServer.getNewdevserver()})
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input id="devserver" type="radio" name="datatype" value="devserver"
-                                        <%=restServer.getCurrentServer()==restServer.getDevserver()?" checked ":"" %> />
-                                    dev server (${restServer.getDevserver()})
                                 </label>
                             </div>
                             <div class="radio">

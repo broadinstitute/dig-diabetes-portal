@@ -139,27 +139,27 @@ t2dRestServer {
     bigquery =  'dev/'
     path = 'rest/server/'
 }
-t2dTestRestServer {
-    base = 'http://69.173.70.52:8080/'
-    name =  'test/'
-    path = 'rest/server/'
-}
 t2dDevRestServer {
     base = 'http://69.173.71.178:8080/'
     name =  'dev/'
     path = 'rest/server/'
 }
-t2dQaRestServer {
+t2dTestRestServer {//current 'dedicated'
+    base = 'http://dig-test.broadinstitute.org:8080/'
+    name =  'test/'
+    path = 'rest/server/'
+}
+t2dQaRestServer {// current 'qa'
     base = 'http://dig-qa.broadinstitute.org:8090/'
     name =  'qa/'
     path = 'gs/'
 }
-t2dProdRestServer {
-    base = 'http://69.173.71.179:8080/'
+t2dProdRestServer {//current 'prod'
+    base = 'http://dig-prod.broadinstitute.org:8080/'
     name =  'prod/'
     path = 'rest/server/'
 }
-t2dNewDevRestServer {
+t2dNewDevRestServer { //current 'dev'
     base = 'http://dig-dev.broadinstitute.org:8888/'
     name =  'dev/'
     path = 'gs/'

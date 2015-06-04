@@ -202,13 +202,25 @@ class RestServerService {
      * plug together the different collections of column specifications we typically use
      */
     public void initialize() {
+        // old servers, to be removed
         MYSQL_REST_SERVER = grailsApplication.config.t2dRestServer.base + grailsApplication.config.t2dRestServer.mysql + grailsApplication.config.t2dRestServer.path
         BIGQUERY_REST_SERVER = grailsApplication.config.server.URL
-        TEST_REST_SERVER = grailsApplication.config.t2dTestRestServer.base + grailsApplication.config.t2dTestRestServer.name + grailsApplication.config.t2dTestRestServer.path
         DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base + grailsApplication.config.t2dDevRestServer.name + grailsApplication.config.t2dDevRestServer.path
+
+        //current
+        // 'dedicated'
+        TEST_REST_SERVER = grailsApplication.config.t2dTestRestServer.base + grailsApplication.config.t2dTestRestServer.name + grailsApplication.config.t2dTestRestServer.path
+
+        // 'dev'
         NEW_DEV_REST_SERVER = grailsApplication.config.t2dNewDevRestServer.base + grailsApplication.config.t2dNewDevRestServer.name + grailsApplication.config.t2dNewDevRestServer.path
+
+        // qa
         QA_REST_SERVER = grailsApplication.config.t2dQaRestServer.base + grailsApplication.config.t2dQaRestServer.name + grailsApplication.config.t2dQaRestServer.path
+
+        // prod
         PROD_REST_SERVER = grailsApplication.config.t2dProdRestServer.base + grailsApplication.config.t2dProdRestServer.name + grailsApplication.config.t2dProdRestServer.path
+
+        //
         BASE_URL = grailsApplication.config.server.URL
         DBT_URL = grailsApplication.config.dbtRestServer.URL
         EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URL
@@ -228,6 +240,9 @@ class RestServerService {
         return DEV_REST_SERVER;
     }
 
+
+
+    // current below
     public String getTestserver() {
         return TEST_REST_SERVER;
     }

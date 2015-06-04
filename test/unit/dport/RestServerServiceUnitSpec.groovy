@@ -12,43 +12,50 @@ class RestServerServiceUnitSpec extends Specification {
     SharedToolsService sharedToolsService
 
 
-    void "test that there is no service  before  initialization"() {
-        when:
-        int i=1 // no-op
-        then:
-        assert service.whatIsMyCurrentServer ()  == "uninitialized"
-    }
 
-    void "test that initialize gives us a server"() {
-        when:
-        service.initialize ()
-        then:
-        assertNotNull( service.whatIsMyCurrentServer () )
-    }
-
-
-    void "test that changing the server string gives an expected result "() {
+    void "test that we can change to test"() {
         given:
         service.initialize ()
         when:
-        service.goWithTheBigQueryServer ()
+        service.goWithTheTestServer ()
         then:
-        assert service.whatIsMyCurrentServer ()   == "bigquery"
+        assert service.getCurrentServer ()   == service.getTestserver()
 
     }
 
-    void "test that we can change the server then change it back "() {
+
+    void "test that we can change to qa"() {
         given:
         service.initialize ()
         when:
-        service.goWithTheBigQueryServer ()
-        service.goWithTheMysqlServer ()
+        service.goWithTheQaServer ()
         then:
-        assert service.whatIsMyCurrentServer ()   == "mysql"
+        assert service.getCurrentServer ()   == service.getQaserver()
 
     }
 
 
+
+    void "test that we can change to newdev"() {
+        given:
+        service.initialize ()
+        when:
+        service.goWithTheNewDevServer ()
+        then:
+        assert service.getCurrentServer ()   == service.getNewdevserver()
+
+    }
+
+
+    void "test that we can change to prod"() {
+        given:
+        service.initialize ()
+        when:
+        service.goWithTheProdServer ()
+        then:
+        assert service.getCurrentServer ()   == service.getProdserver()
+
+    }
 
 
 }

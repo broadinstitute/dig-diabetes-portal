@@ -180,30 +180,9 @@ class SystemController {
     def updateRestServer() {
         String restServer = params.datatype
         String currentServer =  restServerService.whatIsMyCurrentServer()
-        if (restServer == 'mysql')  {
-            if (!(currentServer == 'mysql')) {
-                restServerService.goWithTheMysqlServer ()
-                flash.message = "You are now using the ${restServer} server!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        }  else  if (restServer == 'bigquery')  {
-            if (!(currentServer == 'bigquery')) {
-                restServerService.goWithTheBigQueryServer()
-                flash.message = "You are now using the ${restServer} server!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        }   else  if (restServer == 'testserver')  {
+        if  (restServer == 'testserver')  {
             if (!(currentServer == 'testserver')) {
                 restServerService.goWithTheTestServer()
-                flash.message = "You are now using the ${restServer} server!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        } else  if (restServer == 'devserver')  {
-            if (!(currentServer == 'devserver')) {
-                restServerService.goWithTheDevServer()
                 flash.message = "You are now using the ${restServer} server!"
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"
