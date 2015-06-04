@@ -146,8 +146,8 @@ t2dDevRestServer {
 }
 t2dTestRestServer {//current 'dedicated'
     base = 'http://dig-test.broadinstitute.org:8080/'
-    name =  'test/'
-    path = 'rest/server/'
+    name =  'dedicated/'
+    path = 'gs/'
 }
 t2dQaRestServer {// current 'qa'
     base = 'http://dig-qa.broadinstitute.org:8090/'
@@ -155,7 +155,7 @@ t2dQaRestServer {// current 'qa'
     path = 'gs/'
 }
 t2dProdRestServer {//current 'prod'
-    base = 'http://dig-prod.broadinstitute.org:8080/'
+    base = 'http://69.173.71.179:8080/'
     name =  'prod/'
     path = 'rest/server/'
 }

@@ -1121,7 +1121,12 @@ class SharedToolsService {
         }
     }
 
-public String translator(String stringToTranslate){
+/***
+ * Clearly these belong somewhere other than hardcoded in the middle of this method
+ * @param stringToTranslate
+ * @return
+ */
+    public String translator(String stringToTranslate){
     if (stringToTranslate){
         if (trans.size()>0){
             if (trans.containsKey("v${stringToTranslate}".toString())){
