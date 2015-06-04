@@ -242,7 +242,7 @@
     </div>
 </div>
 
-<div class="row column-center" style="display: flex; align-content: center; align-items: center;margin-top:15px;">
+<div class="row column-center" style="display: flex; align-content: center; align-items: center;margin-top:25px;">
     <div style="width:40vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
         <div class="wide-separator"></div>
     </div>
