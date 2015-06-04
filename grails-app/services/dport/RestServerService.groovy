@@ -1609,10 +1609,10 @@ ${customFilterSet}""".toString()
                 minimumMaf = "0.0005"
                 maximumMaf = "0.05"
                 break;
-//            case 3:
-//                minimumMaf = "0.00000000000001"
-//                maximumMaf = "0.0005"
-//                break;
+            case 4:
+                minimumMaf = "0.00000000000001"
+                maximumMaf = "0.0005"
+                break;
             default:
                 log.error("Trouble: user requested cell number = ${cellNumber} which I don't recognize")
                 dataSetId = EXOMESEQ_AA
@@ -1642,6 +1642,13 @@ ${customFilterSet}""".toString()
             	]
 }
 """.toString()
+        String retrieveParticipantCount = ""
+        if (ethnicity != "chipEu"){  // there is no participant count in the chip data, so special case it
+            retrieveParticipantCount = """
+                           "OBSA":  { "${dataSetId}": ["T2D"]},
+                           "OBSU":  { "${dataSetId}": ["T2D"]}
+""".toString()
+        }
         String jsonParticipantCount = """
 {
 	"passback": "123abc",
@@ -1655,8 +1662,7 @@ ${customFilterSet}""".toString()
                   		"orderBy":	[],
                   		"dproperty":	{},
                 		"pproperty":	{
-                           "OBSA":  { "${dataSetId}": ["T2D"]},
-                           "OBSU":  { "${dataSetId}": ["T2D"]}
+${retrieveParticipantCount}
                          }
                 	},
 	"filters":	[
@@ -1708,7 +1714,7 @@ ${customFilterSet}""".toString()
         JSONObject returnValue
         String attribute = "T2D"
         List <String> dataSeteList = ["HS", "AA", "EA", "SA", "EU","chipEu"]
-        List <Integer> cellNumberList = [0,1,2,3]
+        List <Integer> cellNumberList = [0,1,2,3,4]
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()
         for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
@@ -1724,23 +1730,28 @@ ${customFilterSet}""".toString()
                         //  which can be found only by adding the OBSA and OBSU fields
                         int unaffected = 0
                         int affected =  0
-                        def variant = apiResults.variants[0]
-                        if ((variant) && (variant != 'null')){
-                            def element = variant["OBSU"].findAll{it}[0]
-                            if ((element) && (element != 'null')){
-                                if (element[dataSetId][attribute]!=null){
-                                    unaffected =  element[dataSetId][attribute]
-                                }
+                        if (dataSeteList[j]!="chipEu"){
+                            def variant = apiResults.variants[0]
+                            if ((variant) && (variant != 'null')){
+                                def element = variant["OBSU"].findAll{it}[0]
+                                if ((element) && (element != 'null')){
+                                    if (element[dataSetId][attribute]!=null){
+                                        unaffected =  element[dataSetId][attribute]
+                                    }
 
-                            }
-                            element = variant["OBSA"].findAll{it}[0]
-                            if ((element) && (element != 'null')) {
-                                if (element[dataSetId][attribute]!=null) {
-                                    affected = element[dataSetId][attribute]
+                                }
+                                element = variant["OBSA"].findAll{it}[0]
+                                if ((element) && (element != 'null')) {
+                                    if (element[dataSetId][attribute]!=null) {
+                                        affected = element[dataSetId][attribute]
+                                    }
                                 }
                             }
+                            sb  << "\"level\":${cellNumberList[i]},\"count\":${(unaffected +affected)}"
+
+                        } else {
+                            sb  << "\"level\":${cellNumberList[i]},\"count\":${(16760)}"// We don't have this number.  Special case it
                         }
-                        sb  << "\"level\":${cellNumberList[i]},\"count\":${(unaffected +affected)}"
                     }else {
                         sb  << "\"level\":${cellNumberList[i]},\"count\":${apiResults.numRecords}"
                     }

@@ -734,7 +734,7 @@ var mpgSoftware = mpgSoftware || {};
                             emphasizeGwas = 2;
                         }
                     }
-                    fillVariantsAndAssociationLine(geneInfo, 'exomeseq', '12,940', regionSpecifier,
+                    fillVariantsAndAssociationLine(geneInfo, 'exomeseq', '16,760', regionSpecifier,
                         geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol()._13k_T2D_VAR_TOTAL),
                         geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol()._13k_T2D_GWS_TOTAL),
                         geneFieldOrZero(geneInfo,geneInfoJsonMap.fieldSymbol()._13k_T2D_LWS_TOTAL),
@@ -806,7 +806,7 @@ var mpgSoftware = mpgSoftware || {};
                         emphasizeGwas = 2;
                     }
                 }
-                fillVariantsAndAssociationLine(geneName, 'exomeseq', '12,940', regionSpecifier,
+                fillVariantsAndAssociationLine(geneName, 'exomeseq', '16,760', regionSpecifier,
                     exSeqTotal,exSeqGenomeWide,exSeqLocusWide,exSeqNominal,
                     buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl,rowHelpText);
             }
