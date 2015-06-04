@@ -68,6 +68,11 @@ h2 small {
     font-size: 20px;
     font-weight: 300;
 }
+.smallText {
+    font-size: 18px;
+    font-weight: 300;
+}
+
 .medTextDark {
     font-size: 24px;
     font-weight: 300;
@@ -704,4 +709,26 @@ div.veryImportantText {
     vertical-align: middle;
     max-height: 100px;
     max-width: 160px;
+}
+
+div.column-center div {
+    margin: 0 auto;
+}
+
+div.column-center {
+    display: flex;
+    display: -webkit-flex;
+    align-content: center;
+    align-items: center;
+    -webkit-align-items: center;
+}
+
+.funders-color {
+    color:#6099D2;
+}
+
+div.wide-separator {
+    background-color: #6099D2;
+    height: 5px;
+    border:0;
 }

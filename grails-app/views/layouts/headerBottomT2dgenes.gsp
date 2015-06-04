@@ -20,7 +20,7 @@
         </sec:ifLoggedIn>
         <sec:ifNotLoggedIn>
             <div class="rightlinks">
-                <oauth:connect provider="google" id="google-connect-link"><g:message code="google.log.in"/></oauth:connect>
+                <a href="${createLink(controller:'login',action:'auth')}"><g:message code="google.log.in"/></a>
             </div>
         </sec:ifNotLoggedIn>
         <g:renderSigmaSection>

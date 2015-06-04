@@ -1,3 +1,10 @@
+<div style="background-color: #457BAE">
+    <div class="container">
+        <div style="margin-left: -20px;">
+            <img style="width:100%;" src="${resource(dir: 'images/icons', file: 'amp-banner.png')}">
+        </div>
+    </div>
+</div>
 <div id="header-top">
     <div class="container">
         <g:renderSigmaSection>
