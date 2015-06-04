@@ -353,13 +353,15 @@
         }
     });
     $('#accordionVariant').on('show.bs.collapse', function (e) {
-        if (${newApi}) {
-            mpgSoftware.carrierStatusImpact.loadDiseaseRisk();
-        } else {
-            if (e.target.id === "collapseCarrierStatusImpact") {
-                if ((typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation() !== 'undefined') &&
-                        (typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch !== 'undefined')) {
-                    mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch();
+        if (e.target.id === "collapseCarrierStatusImpact") {
+            if (${newApi}) {
+                mpgSoftware.carrierStatusImpact.loadDiseaseRisk();
+            } else {
+                if (e.target.id === "collapseCarrierStatusImpact") {
+                    if ((typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation() !== 'undefined') &&
+                            (typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch !== 'undefined')) {
+                        mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch();
+                    }
                 }
             }
         }
