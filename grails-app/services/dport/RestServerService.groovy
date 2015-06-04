@@ -347,8 +347,67 @@ class RestServerService {
                 ]
 }""".toString()
         return inputJson
+
     }
 
+    private String jsonForCustomColumnApiSearch(String combinedFilterList) {
+        LinkedHashMap resultColumnsToFetch = getColumnsToFetch("[" + combinedFilterList + "]")
+        String inputJson = """
+{
+    "passback": "123abc",
+    "entity": "variant",
+    "page_number": 50,
+    "page_size": 100,
+    "limit": 1000,
+    "count": false,
+    "properties":    {
+                           "cproperty": ["VAR_ID", "CHROM", "POS","DBSNP_ID","CLOSEST_GENE","GENE","IN_GENE","Protein_change","Consequence"],
+                          "orderBy":    ["CHROM"],
+""".toString()
+
+        inputJson += '"dproperty" : {'
+        String curJson = ""
+        for (String property in resultColumnsToFetch.dproperty.keySet()) {
+            if (curJson) {
+                curJson += ","
+            }
+            if (resultColumnsToFetch.dproperty[property]) {
+                curJson += ' "${property}" : [ ' + resultColumnsToFetch.dproperty[property].collect({"\"${it}\""}).join(' , ') + ']'
+            }
+        }
+
+        inputJson += curJson + ' } , "pproperty" : {'
+
+        curJson = ""
+        for (String property in resultColumnsToFetch.pproperty.keySet()) {
+            if (resultColumnsToFetch.pproperty[property]) {
+                if (curJson) {
+                    curJson += ","
+                }
+                curJson += ' "' + property + '" : { '
+                String curJson2 = ""
+                for (String dataset in resultColumnsToFetch.pproperty[property].keySet()) {
+                    if (resultColumnsToFetch.pproperty[property][dataset]) {
+                        if (curJson2) {
+                            curJson2 += ","
+                        }
+                        curJson2 += ' "' + dataset + '" : [ ' + resultColumnsToFetch.pproperty[property][dataset].collect({"\"${it}\""}).join(' , ') + ']'
+                    }
+                }
+                curJson += curJson2 + " } ";
+            }
+        }
+        inputJson += curJson + ' } } ,'
+
+        inputJson += """
+
+    "filters":    [
+                    ${combinedFilterList}
+                ]
+}""".toString()
+
+        return inputJson
+    }
 
     private String regionSearch(String chromosomeNumber, String extentBegin, String extentEnd) {
         String inputJson = """
@@ -1740,7 +1799,7 @@ ${retrieveParticipantCount}
                             sb  << "\"level\":${cellNumberList[i]},\"count\":${(unaffected +affected)}"
 
                         } else {
-                            sb  << "\"level\":${cellNumberList[i]},\"count\":${(16760)}"// We don't have this number.  Special case it
+                            sb  << "\"level\":${cellNumberList[i]},\"count\":${(79854)}"// We don't have this number.  Special case it
                         }
                     }else {
                         sb  << "\"level\":${cellNumberList[i]},\"count\":${apiResults.numRecords}"
@@ -1878,14 +1937,88 @@ ${retrieveParticipantCount}
     }
 
 
+    public LinkedHashMap getColumnsToDisplay(String filterJson) {
 
+        //Get the structure to control the columns we want to display
+        JSONObject metadata = sharedToolsService.retrieveMetadata()
+        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(metadata)
 
+        //Get the sample groups and phenotypes from the filters
+        List<String> datasetsToFetch = []
+        List<String> phenotypesToFetch = []
+
+        JsonSlurper slurper = new JsonSlurper()
+        for (def parsedFilter in slurper.parseText(filterJson)) {
+            datasetsToFetch << parsedFilter.dataset_id
+            phenotypesToFetch << parsedFilter.phenotype
+        }
+
+        List<String> propertiesToFetch = []
+        //HACK HACK HACK HACK HACK
+        for (String pheno in phenotypesToFetch) {
+            for (String ds in datasetsToFetch) {
+                if (processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno]) {
+                    propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^MINA/})
+                    propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^MINU/})
+                    propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^(OR|ODDS|BETA)/})
+                    propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^P_(EMMAX|FE|VALUE)/})
+                }
+            }
+        }
+        println(phenotypesToFetch)
+        println(datasetsToFetch)
+        println(propertiesToFetch)
+
+        LinkedHashMap columnsToDisplayStructure = sharedToolsService.getColumnsToDisplayStructure(processedMetadata, phenotypesToFetch, datasetsToFetch, propertiesToFetch)
+        println(columnsToDisplayStructure)
+        return columnsToDisplayStructure
+    }
+
+    public LinkedHashMap getColumnsToFetch(String filterJson) {
+        LinkedHashMap columnsToDisplay = getColumnsToDisplay(filterJson)
+        LinkedHashMap returnValue = [:]
+        returnValue.dproperty = [:]
+        returnValue.pproperty = [:]
+        if (columnsToDisplay.pproperty) {
+            for (String phenotype in columnsToDisplay.pproperty.keySet()) {
+                for (String dataset in columnsToDisplay.pproperty[phenotype].keySet()) {
+                    for (String property in columnsToDisplay.pproperty[phenotype][dataset]) {
+                        if (!returnValue.pproperty[property]) {
+                            returnValue.pproperty[property] = [:]
+                        }
+                        if (!returnValue.pproperty[property][dataset]) {
+                            returnValue.pproperty[property][dataset] = []
+                        }
+                        returnValue.pproperty[property][dataset] << phenotype
+                    }
+                }
+            }
+        }
+        if (columnsToDisplay.dproperty) {
+            for (String phenotype in columnsToDisplay.dproperty.keySet()) {
+                for (String dataset in columnsToDisplay.dproperty[phenotype].keySet()) {
+                    for (String property in columnsToDisplay.dproperty[phenotype][dataset]) {
+                        if (!returnValue.dproperty[property]) {
+                            returnValue.dproperty[property] = []
+                        }
+                        returnValue.dproperty[property] << dataset
+                    }
+                }
+            }
+        }
+        return returnValue
+    }
+
+    public String postRestCallFromFilters(String filters) {
+        String jsonSpec = jsonForCustomColumnApiSearch(filters)
+        String apiData = postRestCall(jsonSpec,GET_DATA_URL)
+        return apiData
+    }
 
     public JSONObject generalizedVariantTable(String filters){//region
         String attribute = "T2D"
         def slurper = new JsonSlurper()
         JSONObject returnValue
-        // String jsonSpec = regionSearch(chromosome,beginSearch,endSearch)
         String jsonSpec = jsonForGeneralApiSearch(filters)
         String apiData = postRestCall(jsonSpec,GET_DATA_URL)
         JSONObject apiResults = slurper.parseText(apiData)

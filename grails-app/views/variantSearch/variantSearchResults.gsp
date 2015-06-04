@@ -4,13 +4,12 @@
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
     <r:require modules="tableViewer"/>
+    <r:require modules="variantWF"/>
     <r:layoutResources/>
 </head>
 
 <body>
 <script>
-
-
 
     var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
     var loading = $('#spinner').show();
@@ -19,14 +18,14 @@
         type:'POST',
         cache:false,
         data:{'keys':"<%=filter%>"},
-        url:'<g:createLink controller="variantSearch" action="variantSearchAjax" />',
+        url:'<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsAjax" />',
         async:true,
         success:function(data,textStatus){
             var variantTableContext = {
                 tooManyResults:'<g:message code="variantTable.searchResults.tooManyResults" default="too many results, sharpen your search" />'
             };
             if (${newApi}){
-                fillTheFields(data) ;
+	          dynamicFillTheFields(data) ;
             } else {
                 variantProcessing.fillTheVariantTable(data,
                         ${show_gene},
@@ -46,13 +45,16 @@
             errorReporter(XMLHttpRequest, exception) ;
         }
     });
+
+
     var uri_dec = decodeURIComponent("<%=filter%>");
     var encodedParameters = decodeURIComponent("<%=encodedParameters%>");
 
 
     var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
+
     function fillTheFields (data)  {
-        variantProcessing.iterativeVariantTableFiller(data,'#variantTable',
+        variantProcessing.oldIterativeVariantTableFiller(data,'#variantTable',
                 ${show_gene},
                 ${show_sigma},
                 ${show_exseq},
@@ -63,10 +65,75 @@
 
     }
 
+    var contentExists = function (field){
+        return ((typeof field !== 'undefined') && (field !== null) );
+    };
+    var noop = function (field){return field;};
+    var lineBreakSubstitution = function (field){
+        return (contentExists(field))?field.replace(/[;,]/g,'<br/>'):'';
+    };
 
 
+    function dynamicFillTheFields (data)  {
 
+        var sortCol = 0
+        var totCol = 0
+        for (var pheno in data.columns.dproperty) {
+            var pheno_width = 0
 
+            for (var dataset in data.columns.dproperty[pheno]) {
+                var dataset_width = 0
+                var datasetDisp = mpgSoftware.trans.translator(dataset)
+                for (var i = 0; i < data.columns.dproperty[pheno][dataset].length; i++) {
+                    var column = data.columns.dproperty[pheno][dataset][i]
+                    var columnDisp = mpgSoftware.trans.translator(column)
+                    pheno_width++
+                    dataset_width++
+                    $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + columnDisp + "</th>")
+                }
+                if (dataset_width > 0) {
+                    $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp + "</th>")
+                }
+            }
+            if (pheno_width > 0) {
+                $('#variantTableHeaderRow').append("<th colspan=" + pheno_width + " class=\"datatype-header\"></th>")
+            }
+            totCol += pheno_width
+        }
+
+        for (var pheno in data.columns.pproperty) {
+            var pheno_width = 0
+            var phenoDisp = mpgSoftware.trans.translator(pheno)
+            for (var dataset in data.columns.pproperty[pheno]) {
+                var dataset_width = 0
+                var datasetDisp = mpgSoftware.trans.translator(dataset)
+                for (var i = 0; i < data.columns.pproperty[pheno][dataset].length; i++) {
+                    var column = data.columns.pproperty[pheno][dataset][i]
+                    var columnDisp = mpgSoftware.trans.translator(column)
+                    pheno_width++
+                    dataset_width++
+                    //HACK HACK HACK HACK HACK
+                    if (column.substring(0,2) == "P_") {
+                        sortCol = totCol + pheno_width - 1
+                    }
+                    $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + columnDisp + "</th>")
+                }
+                if (dataset_width > 0) {
+                    $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp + "</th>")
+                }
+            }
+            if (pheno_width > 0) {
+                $('#variantTableHeaderRow').append("<th colspan=" + pheno_width + " class=\"datatype-header\">" + phenoDisp + "</th>")
+            }
+            totCol += pheno_width
+        }
+
+        variantProcessing.iterativeVariantTableFiller(data,totCol,sortCol,'#variantTable',
+                '<g:createLink controller="variant" action="variantInfo" />',
+                '<g:createLink controller="gene" action="geneInfo" />',
+                proteinEffectList,{},${newApi});
+
+    }
 
 
 
@@ -157,7 +224,7 @@
                     <g:message code="variantTable.searchResults.clickToRefine" default="Click here to refine your results" /></a></p>
 
 
-                <g:render template="../region/collectedVariantsForRegion" />
+                <g:render template="../region/newCollectedVariantsForRegion" />
 
 
 

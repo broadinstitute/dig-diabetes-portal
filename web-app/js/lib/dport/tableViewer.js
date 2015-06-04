@@ -28,7 +28,6 @@
 }());
 var variantProcessing = (function () {
 
-
     /***
      * private functions
      */
@@ -86,334 +85,334 @@ var variantProcessing = (function () {
      * @returns {string}
      */
     var fillCollectedVariantsTable =  function ( fullJson,
-                                            show_gene,
-                                            show_sigma,
-                                            show_exseq,
-                                            show_exchp,
-                                            variantRootUrl,
-                                            geneRootUrl,
-                                            dataSetDetermination) {
-        var retVal = "";
-        var vRec = fullJson.variants;
-        if (!vRec)  {   // error condition
-            return;
-        }
-        for ( var i=0 ; i<vRec.length ; i++ )    {
-            retVal += "<tr>"
-
-            // nearest gene
-            if (show_gene) {
-                retVal += "<td><a  href='"+geneRootUrl+"/"+vRec[i].CLOSEST_GENE+"' class='boldItlink'>"+vRec[i].CLOSEST_GENE+"</td>";
+                                                 show_gene,
+                                                 show_sigma,
+                                                 show_exseq,
+                                                 show_exchp,
+                                                 variantRootUrl,
+                                                 geneRootUrl,
+                                                 dataSetDetermination) {
+            var retVal = "";
+            var vRec = fullJson.variants;
+            if (!vRec)  {   // error condition
+                return;
             }
+            for ( var i=0 ; i<vRec.length ; i++ )    {
+                retVal += "<tr>"
 
-            // variant
-            if (vRec[i].ID) {
-                retVal += "<td><a href='"+variantRootUrl+"/"+vRec[i].ID+"' class='boldlink'>"+vRec[i].CHROM+ ":" +vRec[i].POS+"</td>";
-            } else {
-                retVal += "<td></td>"
-            }
-            // rsid (DB SNP)
-            if (vRec[i].DBSNP_ID) {
-                retVal += "<td>"+vRec[i].DBSNP_ID+"</td>" ;
-            } else {
-                retVal += "<td></td>";
-            }
-
-            // protein change
-
-            if (vRec[i].Protein_change) {
-                retVal += "<td>"+vRec[i].Protein_change+"</td>" ;
-            } else {
-                retVal += "<td></td>";
-            }
-
-            // effect on protein
-            if (vRec[i].Consequence) {
-                var proteinEffectRepresentation = "";
-                if ((typeof proteinEffectList !== "undefined" ) &&
-                    (proteinEffectList.proteinEffectMap) &&
-                    (proteinEffectList.proteinEffectMap [vRec[i].Consequence])){
-                    proteinEffectRepresentation =  proteinEffectList.proteinEffectMap[vRec[i].Consequence];
-                } else {
-                    proteinEffectRepresentation =  vRec[i].Consequence;
+                // nearest gene
+                if (show_gene) {
+                    retVal += "<td><a  href='"+geneRootUrl+"/"+vRec[i].CLOSEST_GENE+"' class='boldItlink'>"+vRec[i].CLOSEST_GENE+"</td>";
                 }
-                proteinEffectRepresentation = proteinEffectRepresentation.replace(/[;,]/g,'<br/>');
-                retVal += "<td>"+proteinEffectRepresentation+"</td>" ;
-            } else {
-                retVal += "<td></td>";
-            }
 
-            if (show_sigma) {
-
-                // Source
-                if (vRec[i].SIGMA_SOURCE)  {
-                    retVal += "<td>" +UTILS.prettyUpSigmaSource (vRec[i].SIGMA_SOURCE)+"</td>";
+                // variant
+                if (vRec[i].ID) {
+                    retVal += "<td><a href='"+variantRootUrl+"/"+vRec[i].ID+"' class='boldlink'>"+vRec[i].CHROM+ ":" +vRec[i].POS+"</td>";
+                } else {
+                    retVal += "<td></td>"
+                }
+                // rsid (DB SNP)
+                if (vRec[i].DBSNP_ID) {
+                    retVal += "<td>"+vRec[i].DBSNP_ID+"</td>" ;
                 } else {
                     retVal += "<td></td>";
                 }
 
-                // P value
-                if (vRec[i].SIGMA_T2D_P)  {
-                    retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_P)+"</td>";
+                // protein change
+
+                if (vRec[i].Protein_change) {
+                    retVal += "<td>"+vRec[i].Protein_change+"</td>" ;
                 } else {
                     retVal += "<td></td>";
                 }
 
-                // odds ratio
-                if (vRec[i].SIGMA_T2D_OR)  {
+                // effect on protein
+                if (vRec[i].Consequence) {
+                    var proteinEffectRepresentation = "";
+                    if ((typeof proteinEffectList !== "undefined" ) &&
+                        (proteinEffectList.proteinEffectMap) &&
+                        (proteinEffectList.proteinEffectMap [vRec[i].Consequence])){
+                        proteinEffectRepresentation =  proteinEffectList.proteinEffectMap[vRec[i].Consequence];
+                    } else {
+                        proteinEffectRepresentation =  vRec[i].Consequence;
+                    }
+                    proteinEffectRepresentation = proteinEffectRepresentation.replace(/[;,]/g,'<br/>');
+                    retVal += "<td>"+proteinEffectRepresentation+"</td>" ;
+                } else {
+                    retVal += "<td></td>";
+                }
+
+                if (show_sigma) {
+
+                    // Source
+                    if (vRec[i].SIGMA_SOURCE)  {
+                        retVal += "<td>" +UTILS.prettyUpSigmaSource (vRec[i].SIGMA_SOURCE)+"</td>";
+                    } else {
+                        retVal += "<td></td>";
+                    }
+
+                    // P value
                     if (vRec[i].SIGMA_T2D_P)  {
-                        var pValue = parseFloat (vRec[i].SIGMA_T2D_P);
-                        if (($.isNumeric(pValue))&&(pValue>0.05)) {
-                            retVal += "<td class='greyedout'>" + UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_OR) + "</td>";
+                        retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_P)+"</td>";
+                    } else {
+                        retVal += "<td></td>";
+                    }
+
+                    // odds ratio
+                    if (vRec[i].SIGMA_T2D_OR)  {
+                        if (vRec[i].SIGMA_T2D_P)  {
+                            var pValue = parseFloat (vRec[i].SIGMA_T2D_P);
+                            if (($.isNumeric(pValue))&&(pValue>0.05)) {
+                                retVal += "<td class='greyedout'>" + UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_OR) + "</td>";
+                            } else {
+                                retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_OR)+"</td>";
+                            }
                         } else {
                             retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_OR)+"</td>";
                         }
+
                     } else {
-                        retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_OR)+"</td>";
+                        retVal += "<td></td>";
                     }
 
-                } else {
-                    retVal += "<td></td>";
+                    // Case-control
+                    if ((typeof vRec[i].SIGMA_T2D_MINA!== "undefined") && (typeof vRec[i].SIGMA_T2D_MINU!== "undefined")&&
+                        (vRec[i].SIGMA_T2D_MINA!== null) && (vRec[i].SIGMA_T2D_MINU!== null)){
+                        retVal += "<td>" +vRec[i].SIGMA_T2D_MINA + "/" +vRec[i].SIGMA_T2D_MINU+"</td>";
+                    } else {
+                        retVal += "<td></td>";
+                    }
+
+                    // frequency
+                    if (vRec[i].SIGMA_T2D_MAF)  {
+                        retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_MAF)+"</td>";
+                    } else {
+                        retVal += "<td></td>";
+                    }
+
                 }
+                if (show_exseq) {
 
-                // Case-control
-                if ((typeof vRec[i].SIGMA_T2D_MINA!== "undefined") && (typeof vRec[i].SIGMA_T2D_MINU!== "undefined")&&
-                    (vRec[i].SIGMA_T2D_MINA!== null) && (vRec[i].SIGMA_T2D_MINU!== null)){
-                    retVal += "<td>" +vRec[i].SIGMA_T2D_MINA + "/" +vRec[i].SIGMA_T2D_MINU+"</td>";
-                } else {
-                    retVal += "<td></td>";
-                }
+                    var highFreq = determineHighestFrequencyEthnicity(vRec[i]);
 
-                // frequency
-                if (vRec[i].SIGMA_T2D_MAF)  {
-                    retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_MAF)+"</td>";
-                } else {
-                    retVal += "<td></td>";
-                }
+                    // P value
+                    // NOTE: we need to use trick here. We are going to present different columns
+                    //   depending on what data set the user is looking at
+                    var pValueToPresent = "";
+                    switch (2){
+                        case 0:  pValueToPresent =  vRec[i].GWAS_T2D_PVALUE;
+                            break;
+                        case 1:  pValueToPresent =  vRec[i].SIGMA_T2D_P;
+                            break;
+                        case 2:  pValueToPresent =  vRec[i]._13k_T2D_P_EMMAX_FE_IV;
+                            break;
+                        case 3:  pValueToPresent =  vRec[i].EXCHP_T2D_P_value;
+                            break;
+                    }
+                    if (pValueToPresent)  {
+                        retVal += "<td>" +UTILS.realNumberFormatter(pValueToPresent)+"</td>";
+                    } else {
+                        retVal += "<td></td>";
+                    }
 
-            }
-            if (show_exseq) {
-
-                var highFreq = determineHighestFrequencyEthnicity(vRec[i]);
-
-                // P value
-                // NOTE: we need to use trick here. We are going to present different columns
-                //   depending on what data set the user is looking at
-                var pValueToPresent = "";
-                switch (2){
-                    case 0:  pValueToPresent =  vRec[i].GWAS_T2D_PVALUE;
-                        break;
-                    case 1:  pValueToPresent =  vRec[i].SIGMA_T2D_P;
-                        break;
-                    case 2:  pValueToPresent =  vRec[i]._13k_T2D_P_EMMAX_FE_IV;
-                        break;
-                    case 3:  pValueToPresent =  vRec[i].EXCHP_T2D_P_value;
-                        break;
-                }
-                if (pValueToPresent)  {
-                    retVal += "<td>" +UTILS.realNumberFormatter(pValueToPresent)+"</td>";
-                } else {
-                    retVal += "<td></td>";
-                }
-
-                // odds ratio
-                if (vRec[i]._13k_T2D_OR_WALD_DOS_FE_IV)  {
-                    if (vRec[i]._13k_T2D_SE)  {
-                        var pValue = parseFloat (vRec[i]._13k_T2D_SE);
-                        if (($.isNumeric(pValue))&&(pValue>1)) {
-                            retVal += "<td class='greyedout'>" + UTILS.realNumberFormatter(vRec[i]._13k_T2D_OR_WALD_DOS_FE_IV) + "</td>";
+                    // odds ratio
+                    if (vRec[i]._13k_T2D_OR_WALD_DOS_FE_IV)  {
+                        if (vRec[i]._13k_T2D_SE)  {
+                            var pValue = parseFloat (vRec[i]._13k_T2D_SE);
+                            if (($.isNumeric(pValue))&&(pValue>1)) {
+                                retVal += "<td class='greyedout'>" + UTILS.realNumberFormatter(vRec[i]._13k_T2D_OR_WALD_DOS_FE_IV) + "</td>";
+                            } else {
+                                retVal += "<td>" +UTILS.realNumberFormatter(vRec[i]._13k_T2D_OR_WALD_DOS_FE_IV)+"</td>";
+                            }
                         } else {
                             retVal += "<td>" +UTILS.realNumberFormatter(vRec[i]._13k_T2D_OR_WALD_DOS_FE_IV)+"</td>";
                         }
                     } else {
-                        retVal += "<td>" +UTILS.realNumberFormatter(vRec[i]._13k_T2D_OR_WALD_DOS_FE_IV)+"</td>";
+                        retVal += "<td></td>";
                     }
-                } else {
-                    retVal += "<td></td>";
+
+                    // case/control
+                    // don't rule out zeros here – they're perfectly legal.  Nulls however are bad
+                    if ((typeof vRec[i]._13k_T2D_MINA!== "undefined") && (typeof vRec[i]._13k_T2D_MINU!== "undefined") &&
+                        ( vRec[i]._13k_T2D_MINA!== null) && ( vRec[i]._13k_T2D_MINU!== null)){
+                        retVal += "<td>" +vRec[i]._13k_T2D_MINA + "/" +vRec[i]._13k_T2D_MINU+"</td>";
+                    } else {
+                        retVal += "<td></td>";
+                    }
+
+                    // highest frequency
+                    if (highFreq.highestFrequency)  {
+                        retVal += "<td>" +UTILS.realNumberFormatter(highFreq.highestFrequency)+"</td>";
+                    } else {
+                        retVal += "<td></td>";
+                    }
+
+                    // P value
+                    if ((highFreq.populationWithHighestFrequency)&&
+                        (!highFreq.noData)){
+                        retVal += "<td>" +highFreq.populationWithHighestFrequency+"</td>";
+                    } else {
+                        retVal += "<td></td>";
+                    }
+
                 }
 
-                // case/control
-                // don't rule out zeros here – they're perfectly legal.  Nulls however are bad
-                if ((typeof vRec[i]._13k_T2D_MINA!== "undefined") && (typeof vRec[i]._13k_T2D_MINU!== "undefined") &&
-                    ( vRec[i]._13k_T2D_MINA!== null) && ( vRec[i]._13k_T2D_MINU!== null)){
-                    retVal += "<td>" +vRec[i]._13k_T2D_MINA + "/" +vRec[i]._13k_T2D_MINU+"</td>";
-                } else {
-                    retVal += "<td></td>";
+                if (show_exchp) {
+
+                    var highFreq = determineHighestFrequencyEthnicity(vRec[i]);
+
+                    // P value
+                    if (vRec[i].EXCHP_T2D_P_value)  {
+                        retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].EXCHP_T2D_P_value)+"</td>";
+                    } else {
+                        retVal += "<td></td>";
+                    }
+
+                    // odds ratio
+                    if (vRec[i].EXCHP_T2D_BETA)  {
+                        var logExchipOddsRatio  =   parseFloat(vRec[i].EXCHP_T2D_BETA);
+                        if ($.isNumeric(logExchipOddsRatio))  {
+
+                            if (vRec[i].EXCHP_T2D_SE)  {
+                                var pValue = parseFloat (vRec[i].EXCHP_T2D_SE);
+                                if (($.isNumeric(pValue))&&(pValue>1)) {
+                                    retVal += "<td class='greyedout'>" + UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio)) + "</td>";
+                                } else {
+                                    retVal += "<td>" +UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio))+"</td>";
+                                }
+                            } else {
+                                retVal += "<td>" +UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio))+"</td>";
+                            }
+                        }  else {
+                            retVal += "<td></td>";
+                        }
+                    } else {
+                        retVal += "<td></td>";
+                    }
+
+
                 }
 
-                // highest frequency
-                if (highFreq.highestFrequency)  {
-                    retVal += "<td>" +UTILS.realNumberFormatter(highFreq.highestFrequency)+"</td>";
-                } else {
-                    retVal += "<td></td>";
-                }
-
-                // P value
-                if ((highFreq.populationWithHighestFrequency)&&
-                    (!highFreq.noData)){
-                    retVal += "<td>" +highFreq.populationWithHighestFrequency+"</td>";
-                } else {
-                    retVal += "<td></td>";
-                }
-
-            }
-
-            if (show_exchp) {
-
-                var highFreq = determineHighestFrequencyEthnicity(vRec[i]);
-
-                // P value
-                if (vRec[i].EXCHP_T2D_P_value)  {
-                    retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].EXCHP_T2D_P_value)+"</td>";
+                // P value TODO:  Referenced above as well. What's going on?
+                if (vRec[i].GWAS_T2D_PVALUE)  {
+                    retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].GWAS_T2D_PVALUE)+"</td>";
                 } else {
                     retVal += "<td></td>";
                 }
 
                 // odds ratio
-                if (vRec[i].EXCHP_T2D_BETA)  {
-                    var logExchipOddsRatio  =   parseFloat(vRec[i].EXCHP_T2D_BETA);
-                    if ($.isNumeric(logExchipOddsRatio))  {
-
-                        if (vRec[i].EXCHP_T2D_SE)  {
-                            var pValue = parseFloat (vRec[i].EXCHP_T2D_SE);
-                            if (($.isNumeric(pValue))&&(pValue>1)) {
-                                retVal += "<td class='greyedout'>" + UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio)) + "</td>";
-                            } else {
-                                retVal += "<td>" +UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio))+"</td>";
-                            }
-                        } else {
-                            retVal += "<td>" +UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio))+"</td>";
-                        }
-                    }  else {
-                        retVal += "<td></td>";
-                    }
+                if (vRec[i].GWAS_T2D_OR)  {
+                    retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].GWAS_T2D_OR)+"</td>";
                 } else {
                     retVal += "<td></td>";
                 }
 
+                retVal += "</tr>"
+            }
+            return retVal;
+        },
+
+
+        fillTheVariantTable = function (data, show_gene, show_sigma, show_exseq, show_exchp, variantRootUrl, geneRootUrl, dataSetDetermination, textStringObject) {
+            $('#variantTableBody').append(fillCollectedVariantsTable(data,
+                show_gene,
+                show_sigma,
+                show_exseq,
+                show_exchp,
+                variantRootUrl,
+                geneRootUrl,
+                dataSetDetermination, textStringObject));
+
+            if (data.variants) {
+                var totalNumberOfResults = data.variants.length;
+                $('#numberOfVariantsDisplayed').append('' + totalNumberOfResults);
+                if (show_sigma) {
+                    $('#variantTable').dataTable({
+                        iDisplayLength: 20,
+                        bFilter: false,
+                        aaSorting: [
+                            [ 6, "asc" ]
+                        ],
+                        aoColumnDefs: [
+                            { sType: "allnumeric", aTargets: [ 6, 7, 8, 9, 10, 11 ] }
+                        ]
+                    });
+                } else {
+                    $('#variantTable').dataTable({
+                        iDisplayLength: 20,
+                        bFilter: false,
+                        aaSorting: [
+                            [ 5, "asc" ]
+                        ],
+                        aoColumnDefs: [
+                            { sType: "allnumeric", aTargets: [ 5, 6, 8, 10, 11, 12, 13 ] }
+                        ]
+                    });
+                }
+                if (totalNumberOfResults >= 1000) {
+                    $('#warnIfMoreThan1000Results').html( textStringObject.variantTableContext.tooManyResults );
+                }
 
             }
+        },
 
-            // P value TODO:  Referenced above as well. What's going on?
-            if (vRec[i].GWAS_T2D_PVALUE)  {
-                retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].GWAS_T2D_PVALUE)+"</td>";
-            } else {
-                retVal += "<td></td>";
+
+        fillTraitsPerVariantTable = function ( vRec, show_gene, show_sigma, show_exseq, show_exchp,phenotypeMap,traitRootUrl ) {
+            var retVal = "";
+            if (!vRec) {   // error condition
+                return;
             }
 
-            // odds ratio
-            if (vRec[i].GWAS_T2D_OR)  {
-                retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].GWAS_T2D_OR)+"</td>";
-            } else {
-                retVal += "<td></td>";
-            }
+            for (var i = 0; i < vRec.length; i++) {
 
-            retVal += "</tr>"
+                var trait = vRec [i] ;
+                retVal += "<tr>"
+
+                var convertedTrait=trait.TRAIT;
+                if ((phenotypeMap) &&
+                    (phenotypeMap.phenotypeMap) &&
+                    (typeof phenotypeMap.phenotypeMap[trait.TRAIT] !== "undefined")) {
+                    convertedTrait=phenotypeMap.phenotypeMap[trait.TRAIT];
+                }
+                retVal += "<td><a href='"+traitRootUrl+"?trait="+trait.TRAIT+"&significance=5e-8'>"+convertedTrait+"</a></td>";
+
+                retVal += "<td>" +(trait.PVALUE.toPrecision(3))+"</td>";
+
+                retVal += "<td>";
+                if (trait.DIR === "up") {
+                    retVal += "<span class='assoc-up'>&uarr;</span>";
+                } else if (trait.DIR === "down") {
+                    retVal += "<span class='assoc-down'>&darr;</span>";
+                }
+                retVal += "</td>";
+
+                retVal += "<td>";
+                if (trait.ODDS_RATIO) {
+                    retVal += (trait.ODDS_RATIO.toPrecision(3));
+                }
+                retVal += "</td>";
+
+
+                retVal += "<td>";
+                if (trait.MAF) {
+                    retVal += (trait.MAF.toPrecision(3));
+                }
+                retVal += "</td>";
+
+
+                retVal += "<td>";
+                if (trait.BETA) {
+                    retVal += "beta: " + trait.BETA.toPrecision(3);
+                } else if (trait.Z_SCORE){
+                    retVal += "z-score: " + trait.ZSCORE.toPrecision(3);
+                }
+                retVal += "</td>";
+
+
+                retVal += "</tr>";
+            }
+            return retVal;
         }
-        return retVal;
-    },
-
-
-     fillTheVariantTable = function (data, show_gene, show_sigma, show_exseq, show_exchp, variantRootUrl, geneRootUrl, dataSetDetermination, textStringObject) {
-        $('#variantTableBody').append(fillCollectedVariantsTable(data,
-            show_gene,
-            show_sigma,
-            show_exseq,
-            show_exchp,
-            variantRootUrl,
-            geneRootUrl,
-            dataSetDetermination, textStringObject));
-
-        if (data.variants) {
-            var totalNumberOfResults = data.variants.length;
-            $('#numberOfVariantsDisplayed').append('' + totalNumberOfResults);
-            if (show_sigma) {
-                $('#variantTable').dataTable({
-                    iDisplayLength: 20,
-                    bFilter: false,
-                    aaSorting: [
-                        [ 6, "asc" ]
-                    ],
-                    aoColumnDefs: [
-                        { sType: "allnumeric", aTargets: [ 6, 7, 8, 9, 10, 11 ] }
-                    ]
-                });
-            } else {
-                $('#variantTable').dataTable({
-                    iDisplayLength: 20,
-                    bFilter: false,
-                    aaSorting: [
-                        [ 5, "asc" ]
-                    ],
-                    aoColumnDefs: [
-                        { sType: "allnumeric", aTargets: [ 5, 6, 8, 10, 11, 12, 13 ] }
-                    ]
-                });
-            }
-            if (totalNumberOfResults >= 1000) {
-                $('#warnIfMoreThan1000Results').html( textStringObject.variantTableContext.tooManyResults );
-            }
-
-        }
-    },
-
-
-    fillTraitsPerVariantTable = function ( vRec, show_gene, show_sigma, show_exseq, show_exchp,phenotypeMap,traitRootUrl ) {
-        var retVal = "";
-        if (!vRec) {   // error condition
-            return;
-        }
-
-        for (var i = 0; i < vRec.length; i++) {
-
-            var trait = vRec [i] ;
-            retVal += "<tr>"
-
-            var convertedTrait=trait.TRAIT;
-            if ((phenotypeMap) &&
-                (phenotypeMap.phenotypeMap) &&
-                (typeof phenotypeMap.phenotypeMap[trait.TRAIT] !== "undefined")) {
-                convertedTrait=phenotypeMap.phenotypeMap[trait.TRAIT];
-            }
-            retVal += "<td><a href='"+traitRootUrl+"?trait="+trait.TRAIT+"&significance=5e-8'>"+convertedTrait+"</a></td>";
-
-            retVal += "<td>" +(trait.PVALUE.toPrecision(3))+"</td>";
-
-            retVal += "<td>";
-            if (trait.DIR === "up") {
-                retVal += "<span class='assoc-up'>&uarr;</span>";
-            } else if (trait.DIR === "down") {
-                retVal += "<span class='assoc-down'>&darr;</span>";
-            }
-            retVal += "</td>";
-
-            retVal += "<td>";
-            if (trait.ODDS_RATIO) {
-                retVal += (trait.ODDS_RATIO.toPrecision(3));
-            }
-            retVal += "</td>";
-
-
-            retVal += "<td>";
-            if (trait.MAF) {
-                retVal += (trait.MAF.toPrecision(3));
-            }
-            retVal += "</td>";
-
-
-            retVal += "<td>";
-            if (trait.BETA) {
-                retVal += "beta: " + trait.BETA.toPrecision(3);
-            } else if (trait.Z_SCORE){
-                retVal += "z-score: " + trait.ZSCORE.toPrecision(3);
-            }
-            retVal += "</td>";
-
-
-            retVal += "</tr>";
-        }
-        return retVal;
-    }
     var contentExists = function (field){
         return ((typeof field !== 'undefined') && (field !== null) );
     };
@@ -459,14 +458,14 @@ var variantProcessing = (function () {
 
 
     var singleLineOfVariantTable = function( variant,show_gene,show_sigma,show_exseq,show_exchp,variantRootUrl,geneRootUrl,proteinEffectList) {
-       var arrayToBuild = [];
-       stringWithLink(arrayToBuild,geneRootUrl,(contentExists (geneRootUrl)),noop,variant.CLOSEST_GENE,variant.CLOSEST_GENE,"");
-       stringWithLink(arrayToBuild,variantRootUrl,((contentExists (variantRootUrl)) && (variant.ID)),noop,variant.ID,variant.CHROM+ ":" +variant.POS,"");
-       simpleString(arrayToBuild,(variant.DBSNP_ID),noop,variant.DBSNP_ID,"");
-       simpleString(arrayToBuild,(variant.Protein_change&& (variant.Protein_change !== 'null')),noop,variant.Protein_change,"");
-       simpleString(arrayToBuild,((variant.Consequence)&&(contentExists(proteinEffectList))&&
-           (contentExists(proteinEffectList.proteinEffectMap))&&(contentExists(proteinEffectList.proteinEffectMap[variant.Consequence]))),
-           lineBreakSubstitution,proteinEffectList.proteinEffectMap[variant.Consequence],lineBreakSubstitution((variant.Consequence && (variant.Consequence !== 'null'))?variant.Consequence:""));
+        var arrayToBuild = [];
+        stringWithLink(arrayToBuild,geneRootUrl,(contentExists (geneRootUrl)),noop,variant.CLOSEST_GENE,variant.CLOSEST_GENE,"");
+        stringWithLink(arrayToBuild,variantRootUrl,((contentExists (variantRootUrl)) && (variant.ID)),noop,variant.ID,variant.CHROM+ ":" +variant.POS,"");
+        simpleString(arrayToBuild,(variant.DBSNP_ID),noop,variant.DBSNP_ID,"");
+        simpleString(arrayToBuild,(variant.Protein_change&& (variant.Protein_change !== 'null')),noop,variant.Protein_change,"");
+        simpleString(arrayToBuild,((variant.Consequence)&&(contentExists(proteinEffectList))&&
+            (contentExists(proteinEffectList.proteinEffectMap))&&(contentExists(proteinEffectList.proteinEffectMap[variant.Consequence]))),
+            lineBreakSubstitution,proteinEffectList.proteinEffectMap[variant.Consequence],lineBreakSubstitution((variant.Consequence && (variant.Consequence !== 'null'))?variant.Consequence:""));
         if (show_sigma){;} //five fields
         if (show_exseq){
             var highFreq = determineHighestFrequencyEthnicity(variant);
@@ -484,8 +483,71 @@ var variantProcessing = (function () {
             simpleString(arrayToBuild,(variant.GWAS_T2D_OR),UTILS.realNumberFormatter,variant.GWAS_T2D_OR,"");
         }
         return arrayToBuild;
-   };
-    var iterativeVariantTableFiller = function  (data, divId, show_gene, show_sigma, show_exseq, show_exchp,variantRootUrl,geneRootUrl,proteinEffectList,dataSetDetermination,newApi)  {
+    };
+
+
+
+
+
+
+    /* Sort col is *relative* to dynamic columns */
+    var iterativeVariantTableFiller = function  (data, totCol, sortCol, divId,variantRootUrl,geneRootUrl,proteinEffectList,dataSetDetermination,newApi)  {
+
+        var fixedCol = 5
+        var numericCol = []
+        for (var i = 5; i < fixedCol + totCol; i++) {
+            numericCol.push(i)
+        }
+
+        //need to figure out how to add aaSorting and aoColumnDefs
+        $(divId).dataTable({
+            iDisplayLength: 20,
+            bFilter: false,
+            aaSorting: [[ sortCol + fixedCol, "asc" ]],
+            aoColumnDefs: [{sType: "allnumeric", aTargets: numericCol } ]
+        });
+
+        var variantList =  data.variants
+        var dataLength = variantList ? variantList.length : 0;
+
+        for ( var i = 0 ; i < dataLength ; i++ ){
+            var array = []
+            var variant = {}
+            for (var j = 0; j < variantList[i].length; j++) {
+                for (prop in variantList[i][j]) {
+                    variant[prop] = variantList[i][j][prop]
+                }
+            }
+            array.push(getStringWithLink(geneRootUrl,(contentExists (geneRootUrl)),noop,variant.CLOSEST_GENE,variant.CLOSEST_GENE,""));
+            array.push(getStringWithLink(variantRootUrl,((contentExists (variantRootUrl)) && (variant.VAR_ID)),noop,variant.VAR_ID,variant.CHROM+ ":" +variant.POS,""));
+            array.push(getSimpleString((variant.DBSNP_ID),noop,variant.DBSNP_ID,""));
+            array.push(getSimpleString((variant.Protein_change&& (variant.Protein_change !== 'null')),noop,variant.Protein_change,""));
+            array.push(getSimpleString(((variant.Consequence)&&(contentExists(proteinEffectList))&&
+                (contentExists(proteinEffectList.proteinEffectMap))&&(contentExists(proteinEffectList.proteinEffectMap[variant.Consequence]))),
+                lineBreakSubstitution,proteinEffectList.proteinEffectMap[variant.Consequence],lineBreakSubstitution((variant.Consequence && (variant.Consequence !== 'null'))?variant.Consequence:"")));
+
+            for (var pheno in data.columns.dproperty) {
+                for (var dataset in data.columns.dproperty[pheno]) {
+                    for (var k = 0; k < data.columns.dproperty[pheno][dataset].length; k++) {
+                        var column = data.columns.dproperty[pheno][dataset][k]
+                        array.push(getSimpleString((variant[column][dataset]),Math.round(variant[column][dataset][pheno]) == variant[column][dataset][pheno] ? noop : UTILS.realNumberFormatter,variant[column][dataset],""));
+                    }
+                }
+            }
+
+            for (var pheno in data.columns.pproperty) {
+                for (var dataset in data.columns.pproperty[pheno]) {
+                    for (var k = 0; k < data.columns.pproperty[pheno][dataset].length; k++) {
+                        var column = data.columns.pproperty[pheno][dataset][k]
+                        array.push(getSimpleString((variant[column][dataset][pheno]),Math.round(variant[column][dataset][pheno]) == variant[column][dataset][pheno] ? noop : UTILS.realNumberFormatter,variant[column][dataset][pheno],""));
+                    }
+                }
+            }
+            $(divId).dataTable().fnAddData( array, (i==25) || (i==(dataLength-1)));
+        }
+    };
+
+    var oldIterativeVariantTableFiller = function  (data, divId, show_gene, show_sigma, show_exseq, show_exchp,variantRootUrl,geneRootUrl,proteinEffectList,dataSetDetermination,newApi)  {
         var variantList =  data['variants'];
         $(divId).dataTable({
             iDisplayLength: 20,
@@ -527,29 +589,37 @@ var variantProcessing = (function () {
             }  else {
                 array = singleLineOfVariantTable(variantList[i],show_gene, show_sigma, show_exseq, show_exchp,variantRootUrl,geneRootUrl,proteinEffectList);
             }
-           $(divId).dataTable().fnAddData( array, (i==25) || (i==(dataLength-1)));
+            $(divId).dataTable().fnAddData( array, (i==25) || (i==(dataLength-1)));
         }
     };
+
+    var getStringWithLink  = function(urlRoot, contingent, modder, linkField,displayField, alternate){
+        var retVal = alternate;
+        if (contingent){
+            retVal = "<a  href='"+urlRoot+"/"+linkField+"' class='boldItlink'>"+modder(displayField);
+        }
+        return retVal
+    };
     var stringWithLink  = function(arrayToBuild, urlRoot, contingent, modder, linkField,displayField, alternate){
-       var retVal = alternate;
-       if (contingent){
-           retVal = "<a  href='"+urlRoot+"/"+linkField+"' class='boldItlink'>"+modder(displayField);
-       }
-       arrayToBuild.push(retVal);
-   };
-    var simpleString  = function(arrayToBuild,  contingent,  modder,  displayField, alternate){
+        arrayToBuild.push(getStringWithLink(urlRoot, contingent, modder, linkField,displayField, alternate))
+    };
+    var getSimpleString  = function(contingent,  modder,  displayField, alternate){
         var retVal = alternate;
         if (contingent){
             retVal = ""+ modder (displayField);
         }
-        arrayToBuild.push(retVal);
+        return retVal
     };
-
+    var simpleString  = function(arrayToBuild,  contingent,  modder,  displayField, alternate){
+        arrayToBuild.push(getSimpleString(contingent,  modder,  displayField, alternate));
+    };
 
     return {
         iterativeVariantTableFiller:iterativeVariantTableFiller,
+        oldIterativeVariantTableFiller:oldIterativeVariantTableFiller,
         fillTheVariantTable: fillTheVariantTable,
         fillCollectedVariantsTable:fillCollectedVariantsTable,
         fillTraitsPerVariantTable:fillTraitsPerVariantTable
     }
+
 }());

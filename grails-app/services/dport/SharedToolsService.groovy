@@ -252,6 +252,7 @@ class SharedToolsService {
     }
 
 
+
     /***
      * Start with a pointer to a sample group as we descend through the metadata tree.  Pullback a combined list
      * of every sample group ID grouped by phenotype.
@@ -382,9 +383,65 @@ class SharedToolsService {
     }
 
 
+    /***
+     * Subset the metadata to only columns we want to display
+     * @param processedMetadata The output of processMetadata
+     * @param phenotypesToKeep The phenotypes to keep 
+     * @param sampleGroupsToKeep The sample groups to keep 
+     * @param propertiesToKeep The properties to keep 
+     * @return
+     */
+    public LinkedHashMap getColumnsToDisplayStructure(LinkedHashMap processedMetadata, List <String> phenotypesToKeep=null, List <String> sampleGroupsToKeep=null, List <String> propertiesToKeep=null){
 
+        if (phenotypesToKeep) {
+            phenotypesToKeep = phenotypesToKeep.unique()
+        }
+        if (sampleGroupsToKeep) {
+            sampleGroupsToKeep = sampleGroupsToKeep.unique()
+        }
+        if (propertiesToKeep) {
+            propertiesToKeep = propertiesToKeep.unique()
+        }
 
+        LinkedHashMap returnValue = [:]
+        returnValue["dproperty"] = [:]
+        returnValue["pproperty"] = [:]
+        if (processedMetadata) {
+            if (phenotypesToKeep == null) {
+                phenotypesToKeep = processedMetadata.sampleGroupsPerPhenotype.keySet()
+            } else
+            {
+                phenotypesToKeep = phenotypesToKeep.findAll({processedMetadata.sampleGroupsPerPhenotype.containsKey(it)})
+            }
 
+            for (String phenotype in phenotypesToKeep) {
+                returnValue.pproperty[phenotype] = [:]
+                returnValue.dproperty[phenotype] = [:]
+                List<String> curSampleGroups = []
+                if (sampleGroupsToKeep == null) {
+                    curSampleGroups.addAll(processedMetadata.sampleGroupsPerPhenotype[phenotype])
+                } else {
+                    curSampleGroups.addAll(sampleGroupsToKeep.findAll({processedMetadata.sampleGroupsPerPhenotype[phenotype].contains(it)}))
+                }
+                for (String sampleGroup in curSampleGroups) {
+                    returnValue.dproperty[phenotype][sampleGroup] = []
+                    returnValue.pproperty[phenotype][sampleGroup] = []
+                    if (propertiesToKeep == null) {
+                        returnValue.dproperty[phenotype][sampleGroup].addAll(processedMetadata.propertiesPerSampleGroups[sampleGroup])
+                        if (processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[phenotype]) {
+                            returnValue.pproperty[phenotype][sampleGroup].addAll(processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[phenotype][sampleGroup])
+                        }
+                    } else {
+                        returnValue.dproperty[phenotype][sampleGroup].addAll(propertiesToKeep.findAll({processedMetadata.propertiesPerSampleGroups[sampleGroup].contains(it)}))
+                        if (processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[phenotype]) {
+                            returnValue.pproperty[phenotype][sampleGroup].addAll(propertiesToKeep.findAll({processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[phenotype][sampleGroup].contains(it)}))
+                        }
+                    }
+                }
+            }
+        }
+        return returnValue
+    }
 
 
     public List <String> extractAPhenotypeList (LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties){

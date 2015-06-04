@@ -1,5 +1,7 @@
 package dport
 
+import grails.rest.render.json.JsonRenderer
+import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -248,6 +250,39 @@ class VariantSearchController {
         }
     }
 
+    /***
+     *
+     */
+    def variantSearchAndResultColumnsAjax() {
+        String filtersRaw = params['keys']
+        String filters = URLDecoder.decode(filtersRaw, "UTF-8")
+
+        log.debug "variantSearch variantSearchAjax = ${filters}"
+
+        if (sharedToolsService.getNewApi()){
+            JsonSlurper slurper = new JsonSlurper()
+            String dataJsonObjectString = restServerService.postRestCallFromFilters(filters)
+            JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+
+            LinkedHashMap resultColumnsToDisplay= restServerService.getColumnsToDisplay("[" + filters + "]")
+            JsonOutput resultColumnsJsonOutput = new JsonOutput()
+            String resultColumnsJsonObjectString = resultColumnsJsonOutput.toJson(resultColumnsToDisplay)
+            JSONObject resultColumnsJsonObject = slurper.parseText(resultColumnsJsonObjectString)
+
+            render(status: 200, contentType: "application/json") {
+                [variants: dataJsonObject.variants,
+                columns: resultColumnsJsonObject
+                ]
+            }
+        }else {
+            JSONObject jsonObject = restServerService.searchGenomicRegionByCustomFilters(filters)
+            render(status: 200, contentType: "application/json") {
+                [variants: jsonObject['variants']]
+            }
+
+        }
+
+    }
 
 
     /***
@@ -305,6 +340,7 @@ class VariantSearchController {
             String encodedFilters = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters)
             String encodedParameters = sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
             String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
+
 
             render(view: 'variantSearchResults',
                     model: [show_gene           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),

@@ -42,7 +42,7 @@
     });
     var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
     function fillTheFields (data)  {
-        variantProcessing.iterativeVariantTableFiller(data,'#variantTable',
+        variantProcessing.oldIterativeVariantTableFiller(data,'#variantTable',
                 ${show_gene},
                 ${show_sigma},
                 ${show_exseq},

@@ -195,16 +195,16 @@ class FilterManagementService {
                 returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "LTE", "value": ${parm1}, "operand_type": "INTEGER"}""".toString()
                 break;
             case "setEthnicityMaximum" :
-                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "ExSeq_17k_""" + (parm1.equals("eu") || parm1.equals("hs") ? parm1 : "${parm1}_genes") + """_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setEthnicityMaximumAbsolute" :
-                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "LT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "ExSeq_17k_""" + (parm1.equals("eu") || parm1.equals("hs") ? parm1 : "${parm1}_genes") + """_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "LT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setEthnicityMinimum" :
-                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "GTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "ExSeq_17k_""" + (parm1.equals("eu") || parm1.equals("hs") ? parm1 : "${parm1}_genes") + """_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "GTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setEthnicityMinimumAbsolute" :
-                returnValue = """{"dataset_id": "ExSeq_13k_${parm1}_genes_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "GT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "ExSeq_17k_""" + (parm1.equals("eu") || parm1.equals("hs") ? parm1 : "${parm1}_genes") + """_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "GT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setExomeChipMinimum" :
                 returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
@@ -348,7 +348,8 @@ class FilterManagementService {
 
     }
 
-
+			
+				
 
     public LinkedHashMap  parseExtendedVariantSearchParameters (HashMap incomingParameters,Boolean currentlySigma,LinkedHashMap  buildingFilters) {
         if (!buildingFilters){
