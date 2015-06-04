@@ -405,14 +405,22 @@ var mpgSoftware = mpgSoftware || {};
             return returnValue;
         };
         var gatherFieldsAndPostResults = function (){
-            var numberOfProperties = function(potMap){
-                var count = 0;
-                for (var prop in potMap) {
-                    if (potMap.hasOwnProperty(prop)) {
-                        count++;
+            var weHaveFiltersWorthAdding = function(potMap){
+                var returnValue = false;
+                for (var key in potMap) {
+                    if (potMap.hasOwnProperty(key)) {
+                        // are there filters worth adding? Predicted effects has a default. SavedValues don't count.
+                        var value = potMap[key];
+                        if ( ( key === 'predictedEffects')  &&
+                            ( value !== 'all-effects')  ) {
+                            returnValue = true;
+                        }  else if ( ( !key.startsWith('savedValue') ) &&
+                                     ( key !== 'predictedEffects' ) ){
+                            returnValue = true;
+                        }
                     }
                 }
-                return count;
+                return returnValue;
             }
             var varsToSend = {};
             var phenotypeExtractor = {};
@@ -453,7 +461,7 @@ var mpgSoftware = mpgSoftware || {};
             varsToSend = UTILS.concatMap(varsToSend,missensePredictions) ;
             varsToSend = UTILS.concatMap(varsToSend,textFields) ;
             varsToSend = UTILS.concatMap(varsToSend,savedValue) ;
-            if (numberOfProperties(varsToSend)>1) {
+            if (weHaveFiltersWorthAdding(varsToSend)) {
                 UTILS.postQuery('./variantVWRequest',varsToSend);
             }
         };
@@ -931,13 +939,17 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             var holder = $('#filterHolder');
             var choice = $("#additionalFilters option:selected");
             var selection = choice.val();
-            forceRequestForMoreFilters (selection, holder);
+            if (typeof selection !== 'undefined') {
+                forceRequestForMoreFilters(selection, holder);
+            }
         };
         var requestToAddFilters = function (){
             var holder = $('#filterHolder');
             var choice = $("#additionalFilters option:selected");
             var selection = choice.val();
-            forceRequestForMoreFilters (selection, holder);
+            if (typeof selection !== 'undefined')  {
+                forceRequestForMoreFilters (selection, holder);
+            }
         };
         return {
             forceToPhenotypeSelection:forceToPhenotypeSelection,
