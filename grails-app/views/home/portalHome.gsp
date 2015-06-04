@@ -226,7 +226,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-offset-1 col-md-10 medText">
+                    <div class="col-md-offset-1 col-md-10 smallText">
 
 
 
@@ -239,22 +239,6 @@
             </div>
         </div>
 
-        %{--video--}%
-
-
-
-        <div class="row sectionBuffer">
-            <div class="col-md-6">
-                <a href="${createLink(controller: 'home', action: 'introVideoHolder')}">
-                    <div class="medTextDark"><g:message code="mainpage.video.link.enticement" default="how to use the portal"/></div>
-                </a>
-
-            </div>
-
-            <div class="col-md-6">
-            </div>
-
-        </div>
     </div>
 </div>
 

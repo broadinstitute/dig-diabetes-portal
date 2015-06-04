@@ -68,6 +68,11 @@ h2 small {
     font-size: 20px;
     font-weight: 300;
 }
+.smallText {
+    font-size: 18px;
+    font-weight: 300;
+}
+
 .medTextDark {
     font-size: 24px;
     font-weight: 300;

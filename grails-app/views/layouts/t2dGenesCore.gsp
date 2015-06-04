@@ -69,13 +69,13 @@
         <div class="col-xs-5"></div>
     </div>
 
-    <div class="row column-center" style="display: flex; align-content: center; align-items: center;padding-bottom: 10px;">
+    <div class="row column-center" style="display: flex; align-content: center; align-items: center;">
         <div class="col-xs-5"></div>
         <img class="img-responsive col-xs-2" src="${resource(dir: 'images', file: 'BroadInstLogoforDigitalRGB.png')}" alt="Broad Institute"/>
         <div class="col-xs-5"></div>
     </div>
-    <div class="row column-center"  style="padding-top:10px;">
-        <div>Built  on ${BuildInfo?.buildHost} at ${BuildInfo?.buildTime}.  Version=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}</div>
+    <div class="row column-center"  style="padding-top:5px;">
+        <div style="font-size: 10px;">Built  on ${BuildInfo?.buildHost} at ${BuildInfo?.buildTime}.  Version=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}</div>
     </div>
 </div>
 
