@@ -57,9 +57,22 @@
     <div class="text-center" style="color: #ffffff;">Please use the following citation when referring to data from this portal: AMP T2D-GENES Program, SIGMA; Year Month Date of Access; URL of page you are citing. </div>
 </div>
 
-<div class="container">
+<div>
     <div class="row column-center">
         <div class="text-center" style="padding-top:10px;"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="mainpage.send.feedback"/></a><div>
+    </div>
+
+
+    <div class="row column-center" style="display: flex;  display: -webkit-flex;align-content: center; align-items: center;padding-top: 10px;">
+        <div class="col-xs-5"></div>
+        <div class="col-xs-2">Built at</div>
+        <div class="col-xs-5"></div>
+    </div>
+
+    <div class="row column-center" style="display: flex; align-content: center; align-items: center;padding-bottom: 10px;">
+        <div class="col-xs-5"></div>
+        <img class="img-responsive col-xs-2" src="${resource(dir: 'images', file: 'BroadInstLogoforDigitalRGB.png')}" alt="Broad Institute"/>
+        <div class="col-xs-5"></div>
     </div>
     <div class="row column-center"  style="padding-top:10px;">
         <div>Built  on ${BuildInfo?.buildHost} at ${BuildInfo?.buildTime}.  Version=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}</div>

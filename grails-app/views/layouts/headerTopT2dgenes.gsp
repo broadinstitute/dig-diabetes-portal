@@ -1,3 +1,6 @@
+<div class="row">
+    <img class="col-xs-12" src="${resource(dir: 'images/icons', file: 'amp-banner.png')}">
+</div>
 <div id="header-top">
     <div class="container">
         <g:renderSigmaSection>

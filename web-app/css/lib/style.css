@@ -712,8 +712,10 @@ div.column-center div {
 
 div.column-center {
     display: flex;
+    display: -webkit-flex;
     align-content: center;
     align-items: center;
+    -webkit-align-items: center;
 }
 
 .funders-color {
