@@ -442,12 +442,12 @@ var variantProcessing = (function () {
             if (contingencyField)  {
                 var pValue = parseFloat (contingencyField);
                 if (($.isNumeric(pValue))&&(pValue>1)) {
-                    retVal += "<span class='greyedout'>" + UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio)) + "</span>";
+                    retVal += "<span class='greyedout'>" + UTILS.realNumberFormatter(logExchipOddsRatio) + "</span>";
                 } else {
-                    retVal += ""+UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio));
+                    retVal += ""+UTILS.realNumberFormatter(logExchipOddsRatio);
                 }
             } else {
-                retVal += UTILS.realNumberFormatter(Math.exp(logExchipOddsRatio));
+                retVal += UTILS.realNumberFormatter(logExchipOddsRatio);
             }
         }  else {
             retVal += "";

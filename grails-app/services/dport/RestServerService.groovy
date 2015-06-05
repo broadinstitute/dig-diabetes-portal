@@ -42,6 +42,7 @@ class RestServerService {
     private String EXOMECHIP = "ExChip_82k_mdv2"
     private String EXOMESEQ = "ExSeq_17k_mdv2"
     private String GWASDIAGRAM  = "GWAS_DIAGRAM_mdv2"
+    private String ORCHIP  = "ODDS_RATIO"
 
 
     static List<String> VARIANT_SEARCH_COLUMNS = [
@@ -331,14 +332,14 @@ class RestServerService {
                                                                        "${GWASDIAGRAM}": ["T2D"],
                                                                     "${EXOMECHIP}": ["T2D"]
                                                                    },
-                          "ODDS_RATIO": { "${GWASDIAGRAM}": ["T2D"] },
+                          "ODDS_RATIO": { "${GWASDIAGRAM}": ["T2D"],
+                                          "${EXOMECHIP}": ["T2D"] },
                           "OR_FIRTH_FE_IV":{"${EXOMESEQ}": ["T2D"]},
                           "P_EMMAX_FE_IV":    { "${EXOMESEQ}": ["T2D"]},
                            "OBSA":  { "${EXOMESEQ}": ["T2D"]},
                            "OBSU":  { "${EXOMESEQ}": ["T2D"]},
                           "MINA":    { "${EXOMESEQ}": ["T2D"]},
-                          "MINU":    { "${EXOMESEQ}": ["T2D"]},
-                          "BETA":    { "${EXOMECHIP}": ["T2D"]}
+                          "MINU":    { "${EXOMESEQ}": ["T2D"]}
                         }
                     },
     "filters":    [
@@ -376,14 +377,14 @@ class RestServerService {
                                                                        "${GWASDIAGRAM}": ["T2D"],
                                                                     "${EXOMECHIP}": ["T2D"]
                                                                    },
-                          "ODDS_RATIO": { "${GWASDIAGRAM}": ["T2D"] },
+                          "ODDS_RATIO": { "${GWASDIAGRAM}": ["T2D"],
+                                                  "${EXOMECHIP}": ["T2D"]},
                           "OR_FIRTH_FE_IV":{"${EXOMESEQ}": ["T2D"]},
                           "P_EMMAX_FE_IV":    { "${EXOMESEQ}": ["T2D"]},
                            "OBSA":  { "${EXOMESEQ}": ["T2D"]},
                            "OBSU":  { "${EXOMESEQ}": ["T2D"]},
                           "MINA":    { "${EXOMESEQ}": ["T2D"]},
-                          "MINU":    { "${EXOMESEQ}": ["T2D"]},
-                          "BETA":    { "${EXOMECHIP}": ["T2D"]}
+                          "MINU":    { "${EXOMESEQ}": ["T2D"]}
                         }
                     },
     "filters":    [
@@ -1204,13 +1205,8 @@ ${customFilterSet}""".toString()
                                              "OR_FIRTH_FE_IV":    {
                                                                    "${EXOMESEQ}": ["T2D"]
                                                                 },
-                                             "ODDS_RATIO":{
-                                                "${GWASDIAGRAM}":["T2D"]
-                                             },
-
-                                              "BETA":{
-                                                "${EXOMECHIP}":["T2D"]
-                                              }
+                                              "ODDS_RATIO": { "${GWASDIAGRAM}": ["T2D"],
+                                                              "${EXOMECHIP}": ["T2D"]}
 
                                         }
                     },
@@ -1262,8 +1258,8 @@ ${customFilterSet}""".toString()
                         if (variant ["ODDS_RATIO"]){
                             sb  << "{\"level\":\"ODDS_RATIO\",\"count\":${variant["ODDS_RATIO"][gwasSample][attribute]}},"
                         }
-                        if (variant ["BETA"]){
-                            sb  << "{\"level\":\"BETA\",\"count\":${variant["BETA"][EXOMECHIP][attribute]}}"
+                        if (variant ["${ORCHIP}"]){
+                            sb  << "{\"level\":\"${ORCHIP}\",\"count\":${variant["${ORCHIP}"][EXOMECHIP][attribute]}}"
                         }
 
                     }
@@ -1535,14 +1531,8 @@ ${customFilterSet}""".toString()
                                              "OR_FIRTH_FE_IV":    {
                                                                    "${EXOMESEQ}": ["T2D"]
                                                                 },
-                                             "ODDS_RATIO":{
-                                                "${GWASDIAGRAM}":["T2D"]
-                                             },
-
-                                              "BETA":{
-                                                "${EXOMECHIP}":["T2D"]
-                                              }
-
+                                              "ODDS_RATIO": { "${GWASDIAGRAM}": ["T2D"],
+                                                              "${EXOMECHIP}": ["T2D"]}
                                         }
                     },
     "filters":    [
@@ -1858,7 +1848,8 @@ ${retrieveParticipantCount}
 
                         sb  << "{\"level\":\"EXCHP_T2D_P_value\",\"count\":${element[EXOMECHIP][attribute]}},"
 
-                        element = variant["BETA"].findAll{it}[0]
+                       // element = variant["BETA"].findAll{it}[0]
+                        element = variant["${ORCHIP}"].findAll{it}[0]
 
                         sb  << "{\"level\":\"EXCHP_T2D_BETA\",\"count\":${element[EXOMECHIP][attribute]}},"
 
@@ -1973,7 +1964,8 @@ ${retrieveParticipantCount}
 
                         sb  << "{\"level\":\"EXCHP_T2D_P_value\",\"count\":${element[EXOMECHIP][attribute]}},"
 
-                        element = variant["BETA"].findAll{it}[0]
+                        // element = variant["BETA"].findAll{it}[0]
+                        element = variant["${ORCHIP}"].findAll{it}[0]
 
                         sb  << "{\"level\":\"EXCHP_T2D_BETA\",\"count\":${element[EXOMECHIP][attribute]}},"
 

@@ -985,7 +985,6 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
                     returnValue = incoming;
                 } else {
                     returnValue = newForm;
-                    console.log('translation for ' + incoming);
                 }
             }
             return returnValue;

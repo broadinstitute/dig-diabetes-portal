@@ -695,7 +695,7 @@ var mpgSoftware = mpgSoftware || {};
                                 textStringObject.variantAssociationStrings.sourceExomeChip+
                                     textStringObject.variantAssociationStrings.sourceExomeChipQ,
                                 false,
-                                true,
+                                false,
                                 variantAssociationStrings));
                         }
                         if (showExseq) {

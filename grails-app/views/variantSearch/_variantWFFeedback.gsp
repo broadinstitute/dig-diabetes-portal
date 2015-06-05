@@ -2,6 +2,7 @@
 .suggestions{
     font-size: 20px;
     color: red;
+    display:none;
 }
 .bluebox{
     background-color: #add8e6;

@@ -136,8 +136,8 @@ height: 20px;
             </div>
 
             <div class="col-md-1">
-                <g:helpText title="variantSearch.wfRequest.dataSet.help.header" placement="right"
-                            body="variantSearch.wfRequest.dataSet.help.text" qplacer="10px 0 0 0"/>
+                <g:helpText title="variantSearch.wfRequest.property.help.header" placement="right"
+                            body="variantSearch.wfRequest.property.help.text" qplacer="10px 0 0 0"/>
             </div>
 
             <div class="col-md-2">
