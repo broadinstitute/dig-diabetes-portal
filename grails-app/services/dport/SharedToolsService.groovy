@@ -307,16 +307,13 @@ class SharedToolsService {
             // we have a sample group with an associated list to fill. First let's put in all the properties
             if (sampleGroup.properties){
                 for (def property in sampleGroup.properties){
-                    String propertyName = property.name
-                    propertiesForTheSampleGroup << propertyName
+                    if (property.searchable == "TRUE"){
+                        String propertyName = property.name
+                        propertiesForTheSampleGroup << propertyName
+                    }
                 }
 
             }
-
-//            // Does this sample group have an associated ancestry? If so then let's stick that in and treated as if it is another property
-//            if (sampleGroup.ancestry){
-//                propertiesForTheSampleGroup << "ANCESTRY= ${sampleGroup.ancestry}"
-//            }
 
             // Finally, does this sample group have a sample group? If so then recursively descend
             if (sampleGroup.sample_groups){
@@ -366,7 +363,9 @@ class SharedToolsService {
                             if (propertyList.contains(propertyName)){
                                // println "That is a little odd. Sample group=${sampleGroupsId} in phenotype=${phenotypeName} already had property=${propertyName}"
                             }else {
-                                propertyList<<propertyName
+                                if (property.searchable == "TRUE") {
+                                    propertyList << propertyName
+                                }
                             }
                         }
                     }
@@ -1123,6 +1122,7 @@ class SharedToolsService {
 
 /***
  * Clearly these belong somewhere other than hardcoded in the middle of this method
+ * TODO remove this gross hack
  * @param stringToTranslate
  * @return
  */
