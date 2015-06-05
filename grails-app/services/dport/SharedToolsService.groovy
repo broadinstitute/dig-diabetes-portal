@@ -1033,7 +1033,7 @@ class SharedToolsService {
             String geneUpperCase =   geneName.toUpperCase()
             Gene gene = Gene.findByName2(geneUpperCase)
             LinkedHashMap<String, Integer> geneExtent = getGeneExpandedExtent (geneName)
-            returnValue = "chr${gene.chromosome}:${geneExtent.startExtent}-${geneExtent.endExtent}"
+            returnValue = "${gene.chromosome}:${geneExtent.startExtent}-${geneExtent.endExtent}"
           }
         return returnValue
     }
