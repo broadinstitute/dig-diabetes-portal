@@ -60,9 +60,8 @@ class  InformationalController {
     def sharingPolicy()  {
             String fileLocation = grailsApplication.mainContext.getResource("/WEB-INF/resources/AMP_KP_DAT_incoming.pdf").file.toString()
             File file = new File(fileLocation)
-            response.setHeader "Content-disposition", "attachment; filename=${file.name}"
-            response.contentType = 'text/json'
-            response.outputStream << file.text
+            response.contentType = "application/pdf"
+            response.outputStream << file.getBytes()
             response.outputStream.flush()
     }
 
