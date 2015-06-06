@@ -1058,19 +1058,20 @@ class SharedToolsService {
     }
 
 
-    public LinkedHashMap<String, Integer> getGeneExtent (String geneName){
-        LinkedHashMap<String, Integer> returnValue  = [startExtent:0,endExtent:3000000000]
+    public LinkedHashMap getGeneExtent (String geneName){
+        LinkedHashMap<String, Integer> returnValue  = [startExtent:0,endExtent:3000000000,chrom:"1"]
         if (geneName)   {
             String geneUpperCase =   geneName.toUpperCase()
             Gene gene = Gene.findByName2(geneUpperCase)
             returnValue.startExtent= gene?.addrStart ?: 0
             returnValue.endExtent= gene?.addrEnd ?: 0
+            returnValue.chrom=gene?.chromosome
         }
         return returnValue
     }
 
 
-    public LinkedHashMap<String, Integer> getGeneExpandedExtent (String geneName){
+    public LinkedHashMap getGeneExpandedExtent (String geneName){
         LinkedHashMap<String, Integer> returnValue  = [startExtent:0,endExtent:3000000000]
         if (geneName)   {
             LinkedHashMap<String, Integer> geneExtent = getGeneExtent (geneName)
@@ -1079,6 +1080,7 @@ class SharedToolsService {
                 returnValue.startExtent = ((addrStart > 100000)?(addrStart - 100000):0)
             }
             returnValue.endExtent= geneExtent.endExtent+ 100000
+            returnValue.chrom=geneExtent.chrom
         }
         return returnValue
     }

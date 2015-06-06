@@ -770,7 +770,7 @@ var mpgSoftware = mpgSoftware || {};
 //                expandRegionBegin(geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().BEG)) + "-" +
 //                expandRegionEnd(geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().END));
             var geneInfo;
-            var regionSpecifier = "chr" + chromosomeNumber + ":" +
+            var regionSpecifier =  chromosomeNumber + ":" +
                 extentBegin + "-" +
                 extentEnd;
 

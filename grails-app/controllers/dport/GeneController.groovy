@@ -43,6 +43,7 @@ class GeneController {
                                              geneName:geneUpperCase,
                                              geneExtentBegin:geneExtent.startExtent,
                                              geneExtentEnd:geneExtent.endExtent,
+                                             geneChromosome:geneExtent.chrom,
                                              phenotypeList:encodedString,
                                              newApi:sharedToolsService.getNewApi()
             ] )
