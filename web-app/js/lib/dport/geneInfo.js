@@ -384,9 +384,10 @@ var mpgSoftware = mpgSoftware || {};
                     for (var ethnicityKey in ethnicityMap) {
                         if (ethnicityMap.hasOwnProperty(ethnicityKey)) {
                             var ethnicityRec = ethnicityMap[ethnicityKey];
+                            //not using sing right now
                             var sing = (ethnicityRec ["SING"]) ? (ethnicityRec ["SING"]) : 0;
                             var rare = (ethnicityRec ["RARE"]) ? (ethnicityRec ["RARE"]) : 0;
-                            var displayableRare = rare + sing;
+                            var displayableRare = rare;
                             var lowFrequency = (ethnicityRec ["LOW_FREQUENCY"]) ? (ethnicityRec ["LOW_FREQUENCY"]) : 0;
                             var common = (ethnicityRec ["COMMON"]) ? (ethnicityRec ["COMMON"]) : 0;
                             var total = (ethnicityRec ["TOTAL"]) ? (ethnicityRec ["TOTAL"]) : 0;
@@ -438,9 +439,10 @@ var mpgSoftware = mpgSoftware || {};
                     for (var ethnicityKey in ethnicityMap) {
                         if (ethnicityMap.hasOwnProperty(ethnicityKey)) {
                             var ethnicityRec = ethnicityMap[ethnicityKey];
+                            //not using sing right now
                             var sing = (ethnicityRec["sing"]) ? (ethnicityRec ["sing"]) : 0;
                             var rare = (ethnicityRec ["rare"]) ? (ethnicityRec ["rare"]) : 0;
-                            var displayableRare = rare + sing;
+                            var displayableRare = rare;
                             var lowFrequency = (ethnicityRec ["lowFrequency"]) ? (ethnicityRec ["lowFrequency"]) : 0;
                             var common = (ethnicityRec ["common"]) ? (ethnicityRec ["common"]) : 0;
                             var total = (ethnicityRec ["total"]) ? (ethnicityRec ["total"]) : 0;
@@ -542,9 +544,10 @@ var mpgSoftware = mpgSoftware || {};
                     for (var ethnicityKey in ethnicityMap) {
                         if (ethnicityMap.hasOwnProperty(ethnicityKey)) {
                             var ethnicityRec = ethnicityMap[ethnicityKey];
+                            //not using sing right now
                             var sing = (ethnicityRec["sing"]) ? (ethnicityRec ["sing"]) : 0;
                             var rare = (ethnicityRec ["rare"]) ? (ethnicityRec ["rare"]) : 0;
-                            var displayableRare = rare + sing;
+                            var displayableRare = rare;
                             var lowFrequency = (ethnicityRec ["lowFrequency"]) ? (ethnicityRec ["lowFrequency"]) : 0;
                             var common = (ethnicityRec ["common"]) ? (ethnicityRec ["common"]) : 0;
                             var total = (ethnicityRec ["total"]) ? (ethnicityRec ["total"]) : 0;

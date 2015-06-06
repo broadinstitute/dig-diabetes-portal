@@ -106,8 +106,8 @@
         </p>
         <p>Results from studies included in the Portal will be available genome-wide (i.e., not limited to "top hits"), and results from different studies and types will be integrated and presented simultaneously. Metadata and other technical details (e.g., analysis parameters, explanations of terms, documentation of methods) will be available at lower levels of drilldown.
         </p>
-        <p>f you would like to review a copy of our DTA,
-        then a link will be made publicly available.
+        <p>A copy of our DTA is available <a href='${createLink(controller:"informational", action:"sharingPolicy")}'>here</a>
+    </p>
         %{--please click here (INSERT LINK) --}%
         </p>
 
@@ -163,14 +163,6 @@
     </ol>
         <p>Agreeing to these provisions is a requirement of Portal use. Violating them may result in an NIH investigation and sanctions including revocation of access to the Portal.
         </p>
-
-
-
-        <p>
-            <h4><a href='${createLink(controller:"informational", action:"sharingPolicy")}'>AMP data use policy</a></h4>
-         </p>
-
-
 
     </div>
 

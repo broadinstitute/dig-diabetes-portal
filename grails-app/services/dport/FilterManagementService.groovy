@@ -567,12 +567,12 @@ class FilterManagementService {
                              returnValue['ethnicity_af_EU-max'] = 1.0
                              break;
                          case "lowfreq":
-                             returnValue['ethnicity_af_EU-min'] = 0.005
+                             returnValue['ethnicity_af_EU-min'] = 0.0005
                              returnValue['ethnicity_af_EU-max'] = 0.05
                              break;
                          case "rare":
                              returnValue['ethnicity_af_EU-min'] = 0.0
-                             returnValue['ethnicity_af_EU-max'] = 0.005
+                             returnValue['ethnicity_af_EU-max'] = 0.0005
                              break;
                          default:
                              log.error("FilterManagementService:interpretSpecialFilters. Unexpected string 1 = ${requestPortionList[0]}")
@@ -591,12 +591,12 @@ class FilterManagementService {
                              returnValue[baseEthnicityMarker  +'max'] = 1.0
                              break;
                          case "lowfreq":
-                             returnValue[baseEthnicityMarker  +'min'] = 0.005
+                             returnValue[baseEthnicityMarker  +'min'] = 0.0005
                              returnValue[baseEthnicityMarker  +'max'] = 0.05
                              break;
                          case "rare":
                              returnValue[baseEthnicityMarker  +'min'] = 0.0
-                             returnValue[baseEthnicityMarker  +'max'] = 0.005
+                             returnValue[baseEthnicityMarker  +'max'] = 0.0005
                              break;
                          default:
                              log.error("FilterManagementService:interpretSpecialFilters. Unexpected string 2 = ${requestPortionList[0]}")
