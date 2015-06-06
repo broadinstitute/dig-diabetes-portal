@@ -16,13 +16,6 @@ class  InformationalController {
     def aboutSigma (){
         String defaultDisplay = 'about'
         render (view:'homeHolder', model:[specifics:defaultDisplay])
-
-//        if (locale.language == 'en'){
-//            render (view:'sigma/en/about')
-//        }else if (locale.language == 'es'){
-//            render (view:'sigma/es/about')
-//        }
-
     }
 
 
@@ -62,6 +55,16 @@ class  InformationalController {
         render (template: "got2dsection/${params.id}" )
     }
 
+
+    // the AMP ddata sharing policy.  We want a PDF to show up in the user's browser, live if possible, otherwise is download
+    def sharingPolicy()  {
+            String fileLocation = grailsApplication.mainContext.getResource("/WEB-INF/resources/AMP_KP_DAT_incoming.pdf").file.toString()
+            File file = new File(fileLocation)
+            response.setHeader "Content-disposition", "attachment; filename=${file.name}"
+            response.contentType = 'text/json'
+            response.outputStream << file.text
+            response.outputStream.flush()
+    }
 
     // the root page for contact.  This page recruits underlying pages via Ajax calls
     def contact()  {
