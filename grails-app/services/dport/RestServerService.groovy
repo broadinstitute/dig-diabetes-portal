@@ -372,7 +372,7 @@ class RestServerService {
                 curJson += ","
             }
             if (resultColumnsToFetch.dproperty[property]) {
-                curJson += ' "${property}" : [ ' + resultColumnsToFetch.dproperty[property].collect({"\"${it}\""}).join(' , ') + ']'
+                curJson += " \"${property}\" : [ " + resultColumnsToFetch.dproperty[property].collect({"\"${it}\""}).join(' , ') + ']'
             }
         }
 
@@ -1946,14 +1946,15 @@ ${retrieveParticipantCount}
         //Get the sample groups and phenotypes from the filters
         List<String> datasetsToFetch = []
         List<String> phenotypesToFetch = []
+        List<String> propertiesToFetch = []
 
         JsonSlurper slurper = new JsonSlurper()
         for (def parsedFilter in slurper.parseText(filterJson)) {
             datasetsToFetch << parsedFilter.dataset_id
             phenotypesToFetch << parsedFilter.phenotype
+            propertiesToFetch << parsedFilter.operand
         }
 
-        List<String> propertiesToFetch = []
         //HACK HACK HACK HACK HACK
         for (String pheno in phenotypesToFetch) {
             for (String ds in datasetsToFetch) {
@@ -1965,9 +1966,6 @@ ${retrieveParticipantCount}
                 }
             }
         }
-        println(phenotypesToFetch)
-        println(datasetsToFetch)
-        println(propertiesToFetch)
 
         LinkedHashMap columnsToDisplayStructure = sharedToolsService.getColumnsToDisplayStructure(processedMetadata, phenotypesToFetch, datasetsToFetch, propertiesToFetch)
         println(columnsToDisplayStructure)
