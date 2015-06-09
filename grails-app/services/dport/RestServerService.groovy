@@ -352,8 +352,7 @@ class RestServerService {
     }
 
     private String jsonForCustomColumnApiSearch(String combinedFilterList,Collection<String> datasets) {
-        LinkedHashMap resultColumnsToFetch = getColumnsToFetch("[" + combinedFilterList + "]")
-        Collection<String> datasetsToQuery = datasets
+        LinkedHashMap resultColumnsToFetch = getColumnsToFetch("[" + combinedFilterList + "]", datasets)
         String inputJson = """
 {
     "passback": "123abc",
@@ -388,10 +387,7 @@ class RestServerService {
                 }
                 curJson += ' "' + property + '" : { '
                 String curJson2 = ""
-                if (datasetsToQuery.isEmpty()) {
-                    datasetsToQuery = resultColumnsToFetch.pproperty[property].keySet()
-                }
-                for (String dataset in datasetsToQuery) {
+                for (String dataset in resultColumnsToFetch.pproperty[property].keySet()) {
                     if (resultColumnsToFetch.pproperty[property][dataset]) {
                         if (curJson2) {
                             curJson2 += ","
@@ -1980,14 +1976,16 @@ ${retrieveParticipantCount}
                 }
             }
         }
-
+        println(datasetsToFetch)
+        println(propertiesToFetch)
+        println(phenotypesToFetch)
         LinkedHashMap columnsToDisplayStructure = sharedToolsService.getColumnsToDisplayStructure(processedMetadata, phenotypesToFetch, datasetsToFetch, propertiesToFetch)
         println(columnsToDisplayStructure)
         return columnsToDisplayStructure
     }
 
-    public LinkedHashMap getColumnsToFetch(String filterJson) {
-        LinkedHashMap columnsToDisplay = getColumnsToDisplay(filterJson,Collections.emptyList())
+    public LinkedHashMap getColumnsToFetch(String filterJson, Collection<String> datasetsOverride) {
+        LinkedHashMap columnsToDisplay = getColumnsToDisplay(filterJson, datasetsOverride)
         LinkedHashMap returnValue = [:]
         returnValue.dproperty = [:]
         returnValue.pproperty = [:]

@@ -246,7 +246,7 @@
 
 </div>
 
-<a onclick="loadTable(['ExSeq_13k_sa_genes_mdv2','ExSeq_13k_hs_genes_mdv2']);">Load me again!</a>
+<a onclick="loadTable(['ExSeq_17k_sa_genes_mdv2','ExSeq_17k_hs_genes_mdv2']);">Load me again!</a>
 
 </body>
 </html>
