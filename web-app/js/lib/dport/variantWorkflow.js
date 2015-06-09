@@ -856,7 +856,7 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             var equivalenceId = sectionName+'___equivalenceId';
             var valueId = sectionName+'___valueId';
            // $("#"+labelId).text (sectionName);
-           // $("#"+equivalenceId).selected (equivalence);
+            $("#"+equivalenceId).val (equivalence);
             $("#"+valueId).val (value);
         };
         var forceToPhenotypeSelection = function (phenotypeComboBox){
