@@ -13,38 +13,49 @@
 
     var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
     var loading = $('#spinner').show();
-    loading.show();
-    $.ajax({
-        type:'POST',
-        cache:false,
-        data:{'keys':"<%=filter%>"},
-        url:'<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsAjax" />',
-        async:true,
-        success:function(data,textStatus){
-            var variantTableContext = {
-                tooManyResults:'<g:message code="variantTable.searchResults.tooManyResults" default="too many results, sharpen your search" />'
-            };
-            if (${newApi}){
-	          dynamicFillTheFields(data) ;
-            } else {
-                variantProcessing.fillTheVariantTable(data,
-                        ${show_gene},
-                        ${show_sigma},
-                        ${show_exseq},
-                        ${show_exchp},
-                        '<g:createLink controller="variant" action="variantInfo"  />',
-                        '<g:createLink controller="gene" action="geneInfo"  />',
-                        ${dataSetDetermination},
-                        {variantTableContext:variantTableContext});
-            }
 
-            loading.hide();
-        },
-        error:function(XMLHttpRequest,textStatus,errorThrown){
-            loading.hide();
-            errorReporter(XMLHttpRequest, exception) ;
-        }
-    });
+    var removeDynamicColumnsFromVariantTable = function() {
+        $(".dynamic-col").remove();
+        $('#variantTableBody').remove();
+    };
+
+    var loadTable = function(datasets) {
+        loading.show();
+        removeDynamicColumnsFromVariantTable();
+
+        $.ajax({
+            type:'POST',
+            cache:false,
+            data:{'keys':"<%=filter%>",'datasets':JSON.stringify(datasets)},
+            url:'<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsAjax" />',
+            async:true,
+            success:function(data,textStatus){
+                var variantTableContext = {
+                    tooManyResults:'<g:message code="variantTable.searchResults.tooManyResults" default="too many results, sharpen your search" />'
+                };
+                if (${newApi}){
+                    dynamicFillTheFields(data) ;
+                } else {
+                    variantProcessing.fillTheVariantTable(data,
+                            ${show_gene},
+                            ${show_sigma},
+                            ${show_exseq},
+                            ${show_exchp},
+                            '<g:createLink controller="variant" action="variantInfo"  />',
+                            '<g:createLink controller="gene" action="geneInfo"  />',
+                            ${dataSetDetermination},
+                            {variantTableContext:variantTableContext});
+                }
+                loading.hide();
+            },
+            error:function(XMLHttpRequest,textStatus,errorThrown){
+                loading.hide();
+                errorReporter(XMLHttpRequest, exception) ;
+            }
+        });
+    };
+
+    loadTable();
 
 
     var uri_dec = decodeURIComponent("<%=filter%>");
@@ -89,14 +100,14 @@
                     var columnDisp = mpgSoftware.trans.translator(column)
                     pheno_width++
                     dataset_width++
-                    $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + columnDisp + "</th>")
+                    $('#variantTableHeaderRow3').append("<th class=\"dynamic-col\" \"datatype-header\">" + columnDisp + "</th>")
                 }
                 if (dataset_width > 0) {
-                    $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp + "</th>")
+                    $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"dynamic-col\" \"datatype-header\">" + datasetDisp + "</th>")
                 }
             }
             if (pheno_width > 0) {
-                $('#variantTableHeaderRow').append("<th colspan=" + pheno_width + " class=\"datatype-header\"></th>")
+                $('#variantTableHeaderRow').append("<th colspan=" + pheno_width + " class=\"dynamic-col\" \"datatype-header\"></th>")
             }
             totCol += pheno_width
         }
@@ -116,14 +127,14 @@
                     if (column.substring(0,2) == "P_") {
                         sortCol = totCol + pheno_width - 1
                     }
-                    $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + columnDisp + "</th>")
+                    $('#variantTableHeaderRow3').append("<th class=\"dynamic-col\" \"datatype-header\">" + columnDisp + "</th>")
                 }
                 if (dataset_width > 0) {
-                    $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp + "</th>")
+                    $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"dynamic-col\" \"datatype-header\">" + datasetDisp + "</th>")
                 }
             }
             if (pheno_width > 0) {
-                $('#variantTableHeaderRow').append("<th colspan=" + pheno_width + " class=\"datatype-header\">" + phenoDisp + "</th>")
+                $('#variantTableHeaderRow').append("<th colspan=" + pheno_width + " class=\"dynamic-col\" \"datatype-header\">" + phenoDisp + "</th>")
             }
             totCol += pheno_width
         }
@@ -234,6 +245,8 @@
     </div>
 
 </div>
+
+<a onclick="loadTable(['ExSeq_13k_sa_genes_mdv2','ExSeq_13k_hs_genes_mdv2']);">Load me again!</a>
 
 </body>
 </html>

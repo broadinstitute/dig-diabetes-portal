@@ -256,15 +256,20 @@ class VariantSearchController {
     def variantSearchAndResultColumnsAjax() {
         String filtersRaw = params['keys']
         String filters = URLDecoder.decode(filtersRaw, "UTF-8")
+        Collection<String> datasets = Collections.emptyList();
 
         log.debug "variantSearch variantSearchAjax = ${filters}"
 
         if (sharedToolsService.getNewApi()){
             JsonSlurper slurper = new JsonSlurper()
-            String dataJsonObjectString = restServerService.postRestCallFromFilters(filters)
+            if (params['datasets'] != null) {
+                datasets = slurper.parseText(params['datasets'])
+            }
+            String dataJsonObjectString = restServerService.postRestCallFromFilters(filters,datasets)
             JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
 
-            LinkedHashMap resultColumnsToDisplay= restServerService.getColumnsToDisplay("[" + filters + "]")
+
+            LinkedHashMap resultColumnsToDisplay= restServerService.getColumnsToDisplay("[" + filters + "]",datasets)
             JsonOutput resultColumnsJsonOutput = new JsonOutput()
             String resultColumnsJsonObjectString = resultColumnsJsonOutput.toJson(resultColumnsToDisplay)
             JSONObject resultColumnsJsonObject = slurper.parseText(resultColumnsJsonObjectString)

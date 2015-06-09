@@ -330,6 +330,7 @@ var variantProcessing = (function () {
                     $('#variantTable').dataTable({
                         iDisplayLength: 20,
                         bFilter: false,
+                        bDestroy:true,
                         aaSorting: [
                             [ 6, "asc" ]
                         ],
@@ -341,6 +342,7 @@ var variantProcessing = (function () {
                     $('#variantTable').dataTable({
                         iDisplayLength: 20,
                         bFilter: false,
+                        bDestroy:true,
                         aaSorting: [
                             [ 5, "asc" ]
                         ],
@@ -503,6 +505,7 @@ var variantProcessing = (function () {
         $(divId).dataTable({
             iDisplayLength: 20,
             bFilter: false,
+            bDestroy:true,
             aaSorting: [[ sortCol + fixedCol, "asc" ]],
             aoColumnDefs: [{sType: "allnumeric", aTargets: numericCol } ]
         });
@@ -530,7 +533,9 @@ var variantProcessing = (function () {
                 for (var dataset in data.columns.dproperty[pheno]) {
                     for (var k = 0; k < data.columns.dproperty[pheno][dataset].length; k++) {
                         var column = data.columns.dproperty[pheno][dataset][k]
-                        array.push(getSimpleString((variant[column][dataset]),Math.round(variant[column][dataset][pheno]) == variant[column][dataset][pheno] ? noop : UTILS.realNumberFormatter,variant[column][dataset],""));
+                        if (variant[column] != null && variant[column][dataset] != null) {
+                            array.push(getSimpleString((variant[column][dataset]),Math.round(variant[column][dataset][pheno]) == variant[column][dataset][pheno] ? noop : UTILS.realNumberFormatter,variant[column][dataset],""));
+                        }
                     }
                 }
             }
@@ -539,7 +544,10 @@ var variantProcessing = (function () {
                 for (var dataset in data.columns.pproperty[pheno]) {
                     for (var k = 0; k < data.columns.pproperty[pheno][dataset].length; k++) {
                         var column = data.columns.pproperty[pheno][dataset][k]
-                        array.push(getSimpleString((variant[column][dataset][pheno]),Math.round(variant[column][dataset][pheno]) == variant[column][dataset][pheno] ? noop : UTILS.realNumberFormatter,variant[column][dataset][pheno],""));
+
+                        if (variant[column] != null && variant[column][dataset] != null) {
+                            array.push(getSimpleString((variant[column][dataset][pheno]), Math.round(variant[column][dataset][pheno]) == variant[column][dataset][pheno] ? noop : UTILS.realNumberFormatter, variant[column][dataset][pheno], ""));
+                        }
                     }
                 }
             }
