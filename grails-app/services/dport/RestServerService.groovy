@@ -4,6 +4,7 @@ import grails.plugins.rest.client.RestBuilder
 import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
 import groovy.json.JsonSlurper
+import org.apache.commons.collections.CollectionUtils
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -350,8 +351,9 @@ class RestServerService {
 
     }
 
-    private String jsonForCustomColumnApiSearch(String combinedFilterList) {
+    private String jsonForCustomColumnApiSearch(String combinedFilterList,Collection<String> datasets) {
         LinkedHashMap resultColumnsToFetch = getColumnsToFetch("[" + combinedFilterList + "]")
+        Collection<String> datasetsToQuery = datasets
         String inputJson = """
 {
     "passback": "123abc",
@@ -386,7 +388,10 @@ class RestServerService {
                 }
                 curJson += ' "' + property + '" : { '
                 String curJson2 = ""
-                for (String dataset in resultColumnsToFetch.pproperty[property].keySet()) {
+                if (datasetsToQuery.isEmpty()) {
+                    datasetsToQuery = resultColumnsToFetch.pproperty[property].keySet()
+                }
+                for (String dataset in datasetsToQuery) {
                     if (resultColumnsToFetch.pproperty[property][dataset]) {
                         if (curJson2) {
                             curJson2 += ","
@@ -1936,8 +1941,13 @@ ${retrieveParticipantCount}
         return returnValue
     }
 
-
-    public LinkedHashMap getColumnsToDisplay(String filterJson) {
+    /**
+     * @param filterJson
+     * @param datasetsOverride when non-empty, instead of using the "datasets" field in
+     * filterJson, this parameter controls which datasets are used
+     * @return
+     */
+    public LinkedHashMap getColumnsToDisplay(String filterJson,Collection<String> datasetsOverride) {
 
         //Get the structure to control the columns we want to display
         JSONObject metadata = sharedToolsService.retrieveMetadata()
@@ -1953,6 +1963,10 @@ ${retrieveParticipantCount}
             datasetsToFetch << parsedFilter.dataset_id
             phenotypesToFetch << parsedFilter.phenotype
             propertiesToFetch << parsedFilter.operand
+        }
+
+        if (CollectionUtils.isNotEmpty(datasetsOverride)) {
+            datasetsToFetch = datasetsOverride;
         }
 
         //HACK HACK HACK HACK HACK
@@ -1973,7 +1987,7 @@ ${retrieveParticipantCount}
     }
 
     public LinkedHashMap getColumnsToFetch(String filterJson) {
-        LinkedHashMap columnsToDisplay = getColumnsToDisplay(filterJson)
+        LinkedHashMap columnsToDisplay = getColumnsToDisplay(filterJson,Collections.emptyList())
         LinkedHashMap returnValue = [:]
         returnValue.dproperty = [:]
         returnValue.pproperty = [:]
@@ -2007,8 +2021,8 @@ ${retrieveParticipantCount}
         return returnValue
     }
 
-    public String postRestCallFromFilters(String filters) {
-        String jsonSpec = jsonForCustomColumnApiSearch(filters)
+    public String postRestCallFromFilters(String filters,Collection<String> datasets) {
+        String jsonSpec = jsonForCustomColumnApiSearch(filters,datasets)
         String apiData = postRestCall(jsonSpec,GET_DATA_URL)
         return apiData
     }
