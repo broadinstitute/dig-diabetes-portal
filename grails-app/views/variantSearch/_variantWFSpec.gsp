@@ -66,7 +66,8 @@ height: 20px;
 
                 <div class="col-md-5">
                     <select name="" id="phenotype" class="form-control btn-group btn-input clearfix"
-                            onchange="mpgSoftware.firstResponders.respondToPhenotypeSelection()">
+                            onchange="mpgSoftware.firstResponders.respondToPhenotypeSelection()"
+                            onclick="mpgSoftware.firstResponders.respondToPhenotypeSelection()">
                         <g:renderPhenotypeOptions/>
                     </select>
 

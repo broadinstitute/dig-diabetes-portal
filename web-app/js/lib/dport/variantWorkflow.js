@@ -247,6 +247,7 @@ var mpgSoftware = mpgSoftware || {};
                             ( typeof data !== 'undefined') &&
                             ( typeof data.datasets !== 'undefined' ) &&
                             (  data.datasets !==  null ) ) {
+                            var dropdownAlreadyPresent = ($('.cusText').is(":visible"));// Are there any properties already specified
                             if (!dropdownAlreadyPresent) { // it may be that we already did this round-trip, in which case we don't need to do it again
                                 fillPropertiesDropdown(data.datasets);
                             }
