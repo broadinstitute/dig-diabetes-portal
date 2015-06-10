@@ -43,3 +43,5 @@ out/production/dport-grailsPlugins/messages.properties
 *.class
 
 **/BuildInfo.groovy
+
+.idea
