@@ -53,7 +53,7 @@
                         "EXCHP_T2D_P_value":UTILS.convertStringToNumber(collector["d0"][2].count[0]),
                         "EXCHP_T2D_BETA":UTILS.convertStringToNumber(collector["d0"][5].count[0]),
                         "_13k_T2D_P_EMMAX_FE_IV":UTILS.convertStringToNumber(collector["d0"][0].count[0]),
-                        "_13k_T2D_OR_WALD_DOS_FE_IV":UTILS.convertStringToNumber(collector["d0"][4].count[0]),
+                        "_13k_T2D_OR_WALD_DOS_FE_IV":UTILS.convertStringToNumber(collector["d0"][3].count[0]),
                         "SIGMA_T2D_P":UTILS.convertStringToNumber(collector["d0"][0].count[0]),
                         "SIGMA_T2D_OR":UTILS.convertStringToNumber(collector["d0"][0].count[0])},
                         ${show_sigma},
