@@ -66,7 +66,8 @@ height: 20px;
 
                 <div class="col-md-5">
                     <select name="" id="phenotype" class="form-control btn-group btn-input clearfix"
-                            onchange="mpgSoftware.firstResponders.respondToPhenotypeSelection()">
+                            onchange="mpgSoftware.firstResponders.respondToPhenotypeSelection()"
+                            onclick="mpgSoftware.firstResponders.respondToPhenotypeSelection()">
                         <g:renderPhenotypeOptions/>
                     </select>
 
@@ -114,38 +115,38 @@ height: 20px;
 
 
 
-    <div class="row clearfix">
+    %{--<div class="row clearfix">--}%
         %{--Here is the drop-down that we will use to choose additional filters--}%
-        <div class="primarySectionSeparator" id="additionalFilterSelection" style="display:none">
-            <div class="col-sm-offset-1 col-md-3" style="text-align: right">
-                <button type="button" class="btn btn-default btn-md addFilterButton"  onclick="mpgSoftware.firstResponders.requestToAddFilters()">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;add additional filters:
-                </button>
+        %{--<div class="primarySectionSeparator" id="additionalFilterSelection" style="display:none">--}%
+            %{--<div class="col-sm-offset-1 col-md-3" style="text-align: right">--}%
+                %{--<button type="button" class="btn btn-default btn-md addFilterButton"  onclick="mpgSoftware.firstResponders.requestToAddFilters()">--}%
+                    %{--<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;add additional filters:--}%
+                %{--</button>--}%
                 %{--<button type="button" class="btn btn-default btn-lg"  onclick="console.log('wtf')">--}%
                      %{--<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;add additional filters:--}%
                 %{--</button>--}%
-            </div>
+            %{--</div>--}%
 
-            <div class="col-md-5">
-                <select name="additionalFilters" id="additionalFilters" size="3"
-                        class="form-control btn-group btn-input clearfix">
-                </select>
+            %{--<div class="col-md-5">--}%
+                %{--<select name="additionalFilters" id="additionalFilters" size="3"--}%
+                        %{--class="form-control btn-group btn-input clearfix">--}%
+                %{--</select>--}%
 
-            </span>
+            %{--</span>--}%
 
-            </div>
+            %{--</div>--}%
 
-            <div class="col-md-1">
-                <g:helpText title="variantSearch.wfRequest.property.help.header" placement="right"
-                            body="variantSearch.wfRequest.property.help.text" qplacer="10px 0 0 0"/>
-            </div>
+            %{--<div class="col-md-1">--}%
+                %{--<g:helpText title="variantSearch.wfRequest.property.help.header" placement="right"--}%
+                            %{--body="variantSearch.wfRequest.property.help.text" qplacer="10px 0 0 0"/>--}%
+            %{--</div>--}%
 
-            <div class="col-md-2">
+            %{--<div class="col-md-2">--}%
 
-            </div>
+            %{--</div>--}%
 
-        </div>
-    </div>
+        %{--</div>--}%
+    %{--</div>--}%
 
 
 

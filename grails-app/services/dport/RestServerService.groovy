@@ -152,14 +152,14 @@ class RestServerService {
     static List<String> EXSEQ_GENE_COLUMNS = [
             '_13k_T2D_VAR_TOTAL',
             '_13k_T2D_ORIGIN_VAR_TOTALS',
-            '_13k_T2D_lof_NVAR',
-            '_13k_T2D_lof_MINA_MINU_RET',
-            '_13k_T2D_lof_METABURDEN',
+            '_17k_T2D_lof_NVAR',
+            '_17k_T2D_lof_MINA_MINU_RET',
+            '_17k_T2D_lof_P_METABURDEN',
             '_13k_T2D_GWS_TOTAL',
             '_13k_T2D_LWS_TOTAL',
             '_13k_T2D_NOM_TOTAL',
-            '_13k_T2D_lof_OBSA',
-            '_13k_T2D_lof_OBSU'
+            '_17k_T2D_lof_OBSA',
+            '_17k_T2D_lof_OBSU'
     ]
 
 
@@ -372,7 +372,7 @@ class RestServerService {
                 curJson += ","
             }
             if (resultColumnsToFetch.dproperty[property]) {
-                curJson += ' "${property}" : [ ' + resultColumnsToFetch.dproperty[property].collect({"\"${it}\""}).join(' , ') + ']'
+                curJson += " \"${property}\" : [ " + resultColumnsToFetch.dproperty[property].collect({"\"${it}\""}).join(' , ') + ']'
             }
         }
 
@@ -1946,14 +1946,15 @@ ${retrieveParticipantCount}
         //Get the sample groups and phenotypes from the filters
         List<String> datasetsToFetch = []
         List<String> phenotypesToFetch = []
+        List<String> propertiesToFetch = []
 
         JsonSlurper slurper = new JsonSlurper()
         for (def parsedFilter in slurper.parseText(filterJson)) {
             datasetsToFetch << parsedFilter.dataset_id
             phenotypesToFetch << parsedFilter.phenotype
+            propertiesToFetch << parsedFilter.operand
         }
 
-        List<String> propertiesToFetch = []
         //HACK HACK HACK HACK HACK
         for (String pheno in phenotypesToFetch) {
             for (String ds in datasetsToFetch) {
@@ -1965,9 +1966,6 @@ ${retrieveParticipantCount}
                 }
             }
         }
-        println(phenotypesToFetch)
-        println(datasetsToFetch)
-        println(propertiesToFetch)
 
         LinkedHashMap columnsToDisplayStructure = sharedToolsService.getColumnsToDisplayStructure(processedMetadata, phenotypesToFetch, datasetsToFetch, propertiesToFetch)
         println(columnsToDisplayStructure)

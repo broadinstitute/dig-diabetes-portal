@@ -208,52 +208,59 @@ var mpgSoftware = mpgSoftware || {};
             });
         };
 
-        var retrieveDataSets = function (phenotype, experiment) {
-            var loading = $('#spinner').show();
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: "./retrieveDatasetsAjax",
-                data: {phenotype: phenotype,
-                    experiment:experiment},
-                async: true,
-                success: function (data) {
-                    if (( data !==  null ) &&
-                        ( typeof data !== 'undefined') &&
-                        ( typeof data.datasets !== 'undefined' ) &&
-                        (  data.datasets !==  null ) ) {
-                        fillDataSetDropdown(data.datasets);
+        var retrieveDataSets = function (phenotype, experiment,dropdownAlreadyPresent) {
+            if (!dropdownAlreadyPresent) { // it may be that we already did this round-trip, in which case we don't need to do it again
+                var loading = $('#spinner').show();
+                $.ajax({
+                    cache: false,
+                    type: "post",
+                    url: "./retrieveDatasetsAjax",
+                    data: {phenotype: phenotype,
+                        experiment: experiment},
+                    async: true,
+                    success: function (data) {
+                        if (( data !== null ) &&
+                            ( typeof data !== 'undefined') &&
+                            ( typeof data.datasets !== 'undefined' ) &&
+                            (  data.datasets !== null )) {
+                            fillDataSetDropdown(data.datasets);
+                        }
+                        loading.hide();
+                    },
+                    error: function (jqXHR, exception) {
+                        loading.hide();
+                        core.errorReporter(jqXHR, exception);
                     }
-                    loading.hide();
-                },
-                error: function (jqXHR, exception) {
-                    loading.hide();
-                    core.errorReporter(jqXHR, exception);
-                }
-            });
+                });
+            }
         };
-        var retrievePropertiesPerDataSet = function (phenotype,dataset) {
-            var loading = $('#spinner').show();
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: "./retrievePropertiesAjax",
-                data: {phenotype: phenotype,dataset: dataset},
-                async: true,
-                success: function (data) {
-                    if (( data !==  null ) &&
-                        ( typeof data !== 'undefined') &&
-                        ( typeof data.datasets !== 'undefined' ) &&
-                        (  data.datasets !==  null ) ) {
-                        fillPropertiesDropdown(data.datasets);
+        var retrievePropertiesPerDataSet = function (phenotype,dataset,property,equiv,value,dropdownAlreadyPresent) {
+                var loading = $('#spinner').show();
+                $.ajax({
+                    cache: false,
+                    type: "post",
+                    url: "./retrievePropertiesAjax",
+                    data: {phenotype: phenotype,dataset: dataset},
+                    async: true,
+                    success: function (data) {
+                        if (( data !==  null ) &&
+                            ( typeof data !== 'undefined') &&
+                            ( typeof data.datasets !== 'undefined' ) &&
+                            (  data.datasets !==  null ) ) {
+                            var dropdownAlreadyPresent = ($('.cusText').is(":visible"));// Are there any properties already specified
+                            if (!dropdownAlreadyPresent) { // it may be that we already did this round-trip, in which case we don't need to do it again
+                                fillPropertiesDropdown(data.datasets);
+                            }
+                            mpgSoftware.firstResponders.forceToPropertySelection (property, equiv, value);
+                        }
+                        loading.hide();
+                    },
+                    error: function (jqXHR, exception) {
+                        loading.hide();
+                        core.errorReporter(jqXHR, exception);
                     }
-                    loading.hide();
-                },
-                error: function (jqXHR, exception) {
-                    loading.hide();
-                    core.errorReporter(jqXHR, exception);
-                }
-            });
+                });
+
         };
 
         var extractIndex = function (idLabel,currentObject){
@@ -341,11 +348,13 @@ var mpgSoftware = mpgSoftware || {};
                 (dataSetJson["is_error"] === false))
             {
                 var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
-                var options = $("#additionalFilters");
-                options.empty();
+//                var options = $("#additionalFilters");
+//                options.empty();
                 var dataSetList = dataSetJson ["dataset"];
+                var holder = $('#filterHolder');
                 for ( var i = 0 ; i < numberOfRecords ; i++ ){
-                    options.append($("<option />").val(dataSetList[i]).text(mpgSoftware.trans.translator(dataSetList[i])));
+                    mpgSoftware.firstResponders.addOnePropertyFilter(holder,dataSetList[i]);
+                   // options.append($("<option />").val(dataSetList[i]).text(mpgSoftware.trans.translator(dataSetList[i])));
                 }
             }
         };
@@ -584,27 +593,27 @@ var mpgSoftware = mpgSoftware || {};
             var equivalenceId = sectionName+'___equivalenceId';
             var valueId = sectionName+'___valueId';
             // Does a box by this name already exist?If so, then just use that
-            if (($("#"+labelId).length>0) &&($("#"+equivalenceId).length>0) &&($("#"+valueId).length>0)){
-                $("#"+labelId).text (sectionName);
-                $("#"+equivalenceId).selected (equivalenceValue);
-                $("#"+valueId).val (defaultValue);
-                return; // We don't need to do anything else
-            }else if (($("#"+labelId).length>0)  ||($("#"+equivalenceId).length>0)  ||($("#"+valueId).length>0)){
-                $("#"+labelId).remove();
-                $("#"+equivalenceId).remove();
-                $("#"+valueId).remove();
-            }
+//            if (($("#"+labelId).length>0) &&($("#"+equivalenceId).length>0) &&($("#"+valueId).length>0)){
+//                $("#"+labelId).text (sectionName);
+//                $("#"+equivalenceId).selected (equivalence);
+//                $("#"+valueId).val (defaultValue);
+//                return; // We don't need to do anything else
+//            }else if (($("#"+labelId).length>0)  ||($("#"+equivalenceId).length>0)  ||($("#"+valueId).length>0)){
+//                $("#"+labelId).remove();
+//                $("#"+equivalenceId).remove();
+//                $("#"+valueId).remove();
+//            }
             // We need to create all of these fields and initialize them
             currentDiv.append("<div id='"+holderId+"' class='row clearfix'>"+
                 "<div class='primarySectionSeparator'>"+
                 "<div  id='"+labelId+"' class='col-sm-offset-1 col-md-3 text-right'>"+mpgSoftware.trans.translator(sectionName)+"</div>"+
-                "<div class='col-md-2'>"+
+                "<div class='col-md-1'>"+
                 "<select id='"+equivalenceId+"' class='form-control btn-group btn-input clearfix cusEquiv'>"+
                 "<option "+lessThanSelected+" value='lessThan'>&lt;</option>"+
                 "<option "+greaterThanSelected+" value='greaterThan'>&gt;</option>"+
                 "</select>"+
                 "</div>"+
-                "<div class='col-md-3'><input type='text' class='form-control cusText' id='"+valueId+"'></div>"+
+                "<div class='col-md-4'><input type='text' class='form-control cusText' id='"+valueId+"'></div>"+
                 "<div class='col-md-1'>"+
                 "<span style='padding:10px 0 0 0' class='glyphicon glyphicon-question-sign pop-right' aria-hidden='true' data-toggle='popover' animation='true' "+
                 "trigger='hover' data-container='body' data-placement='right' title='' data-content='"+helpText + "' data-original-title='"+helpTitle + "'></span>"+
@@ -843,6 +852,14 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
         /***
          * public
          */
+        var forceToPropertySelection = function (sectionName, equivalence, value){
+            var labelId = sectionName+'___nameId';
+            var equivalenceId = sectionName+'___equivalenceId';
+            var valueId = sectionName+'___valueId';
+           // $("#"+labelId).text (sectionName);
+            $("#"+equivalenceId).val (equivalence);
+            $("#"+valueId).val (value);
+        };
         var forceToPhenotypeSelection = function (phenotypeComboBox){
             mpgSoftware.variantWF.retrieveDataSets(phenotypeComboBox);
             $('#dataSetChooser').show ();
@@ -855,10 +872,10 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             forceToPhenotypeSelection(phenotypeComboBox['phenotype']);
         };
 
-        var forceToDataSetSelection = function (dataSetComboBox,phenotypeComboBox){
-            mpgSoftware.variantWF.retrievePropertiesPerDataSet(phenotypeComboBox,dataSetComboBox);
+        var forceToDataSetSelection = function (dataSetComboBox,phenotypeComboBox,property,equiv,value,dropdownAlreadyPresent ){
+            mpgSoftware.variantWF.retrievePropertiesPerDataSet(phenotypeComboBox,dataSetComboBox,property,equiv,value,dropdownAlreadyPresent);
          //   mpgSoftware.variantWF.retrievePropertiesPerDataSet(phenotypeComboBox["phenotype"],dataSetComboBox["dataSet"]);
-            $('#additionalFilterSelection').show ();
+          //  $('#additionalFilterSelection').show ();
             $('#filterInstructions').text('Add filters, if any:');
             mpgSoftware.variantWF.currentInteractivityState(0);
             mpgSoftware.variantWF.whatToDoNext(2);
@@ -881,7 +898,7 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
 //                    break;
                 default:
                     appendValueWithEquivalenceChooser (holder,selection+'Holder',selection,
-                        'help title','everything there is to say to help you out','lessThan',1);
+                        'help title','everything there is to say to help you out','lessThan','');
                     break;
             }
         };
@@ -919,21 +936,20 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             if (parsedFilter.success) {
                 //$('#phenotype').selected =  parsedFilter.phenotype ;
                 //$('#dataSet').selected =  parsedFilter.dataset ;
+                var dropdownAlreadyPresent = ($('#dataSet').is(":visible"));
                 $('#phenotype').val(parsedFilter.phenotype)  ;
                 $('#dataSet').val(parsedFilter.dataset) ;
-                forceToPhenotypeSelection(parsedFilter.phenotype);
-                forceToDataSetSelection(parsedFilter.dataset,parsedFilter.phenotype);
-                var filterHolder = $('#filterHolder');
-                var selection = parsedFilter.property;
-                appendValueWithEquivalenceChooser ( filterHolder,selection+'Holder',selection,
-                    'help title','everything there is to say to help you out','lessThan',parsedFilter.value);
+                forceToPhenotypeSelection(parsedFilter.phenotype,dropdownAlreadyPresent);
+                forceToDataSetSelection(parsedFilter.dataset,parsedFilter.phenotype,parsedFilter.property,parsedFilter.equiv,parsedFilter.value,dropdownAlreadyPresent );
+
             }
         };
         var respondToReviseFilters = function (selection,valueOne,valueTwo,valueThree,valueFour){
             var holder = $('#filterHolder');
-            var choice = $("#additionalFilters option:selected");
+         //   var choice = $("#additionalFilters option:selected");
             forceRequestForMoreFilters (selection, holder,valueOne,valueTwo,valueThree,valueFour);
         };
+
 
         var respondToRequestForMoreFilters = function (){
             var holder = $('#filterHolder');
@@ -943,13 +959,17 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
                 forceRequestForMoreFilters(selection, holder);
             }
         };
+        var addOnePropertyFilter = function (holder,selection){
+            if ((typeof selection !== 'undefined') &&
+                (typeof holder !== 'undefined'))  {
+                forceRequestForMoreFilters (selection, holder);
+            }
+        };
         var requestToAddFilters = function (){
             var holder = $('#filterHolder');
             var choice = $("#additionalFilters option:selected");
             var selection = choice.val();
-            if (typeof selection !== 'undefined')  {
-                forceRequestForMoreFilters (selection, holder);
-            }
+            addOnePropertyFilter (holder,selection);
         };
         return {
             forceToPhenotypeSelection:forceToPhenotypeSelection,
@@ -961,7 +981,9 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             respondToReviseFilters:respondToReviseFilters,
             respondToReviseCustomFilter:respondToReviseCustomFilter,
             requestToAddFilters:requestToAddFilters,
-            appendValueWithEquivalenceChooser:appendValueWithEquivalenceChooser
+            addOnePropertyFilter:addOnePropertyFilter,
+            appendValueWithEquivalenceChooser:appendValueWithEquivalenceChooser,
+            forceToPropertySelection:forceToPropertySelection
         }
 
     }());
