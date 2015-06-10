@@ -32,9 +32,9 @@ var mpgSoftware = mpgSoftware || {};
                         COMMON: 16,
                         TOTAL: 17,
                         NS: 18,
-                        _13k_T2D_lof_NVAR: 19,
-                        _13k_T2D_lof_MINA_MINU_RET: 20,
-                        _13k_T2D_lof_METABURDEN: 21,
+                        _17k_T2D_lof_NVAR: 19,
+                        _17k_T2D_lof_MINA_MINU_RET: 20,
+                        _17k_T2D_lof_P_METABURDEN: 21,
                         _13k_T2D_GWS_TOTAL: 22,
                         _13k_T2D_NOM_TOTAL: 23,
                         EXCHP_T2D_VAR_TOTALS: 24,
@@ -48,8 +48,8 @@ var mpgSoftware = mpgSoftware || {};
                         SIGMA_T2D_VAR_TOTAL: 32,
                         SIGMA_T2D_GWS_TOTAL: 33,
                         SIGMA_T2D_NOM_TOTAL: 34,
-                        _13k_T2D_lof_OBSA: 35,
-                        _13k_T2D_lof_OBSU: 36,
+                        _17k_T2D_lof_OBSA: 35,
+                        _17k_T2D_lof_OBSU: 36,
                         GWAS_T2D_LWS_TOTAL: 37,
                         EXCHP_T2D_LWS_TOTAL: 38,
                         _13k_T2D_LWS_TOTAL: 39,
@@ -118,13 +118,13 @@ var mpgSoftware = mpgSoftware || {};
                                 v = "NS";
                                 break;
                             case  19:
-                                v = "_13k_T2D_lof_NVAR";
+                                v = "_17k_T2D_lof_NVAR";
                                 break;
                             case  20:
-                                v = "_13k_T2D_lof_MINA_MINU_RET";
+                                v = "_17k_T2D_lof_MINA_MINU_RET";
                                 break;
                             case  21:
-                                v = "_13k_T2D_lof_METABURDEN";
+                                v = "_17k_T2D_lof_P_METABURDEN";
                                 break;
                             case  22:
                                 v = "_13k_T2D_GWS_TOTAL";
@@ -166,10 +166,10 @@ var mpgSoftware = mpgSoftware || {};
                                 v = "SIGMA_T2D_NOM_TOTAL";
                                 break;
                             case  35:
-                                v = "_13k_T2D_lof_OBSA";
+                                v = "_17k_T2D_lof_OBSA";
                                 break;
                             case  36:
-                                v = "_13k_T2D_lof_OBSU";
+                                v = "_17k_T2D_lof_OBSU";
                                 break;
                             case  37:
                                 v = "GWAS_T2D_LWS_TOTAL";
@@ -904,11 +904,11 @@ var mpgSoftware = mpgSoftware || {};
                 retainBarchartPtr;
 
             if (show_exseq) {
-                numberOfVariants = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._13k_T2D_lof_NVAR);
-                proportionsWithDisease = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._13k_T2D_lof_MINA_MINU_RET);
-                bhtPeopleWithVariant = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._13k_T2D_lof_OBSA);
-                bhtPeopleWithoutVariant = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._13k_T2D_lof_OBSU);
-                bhtMetaBurdenForDiabetes = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._13k_T2D_lof_METABURDEN);
+                numberOfVariants = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._17k_T2D_lof_NVAR);
+                proportionsWithDisease = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._17k_T2D_lof_MINA_MINU_RET);
+                bhtPeopleWithVariant = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._17k_T2D_lof_OBSA);
+                bhtPeopleWithoutVariant = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._17k_T2D_lof_OBSU);
+                bhtMetaBurdenForDiabetes = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._17k_T2D_lof_P_METABURDEN);
 
                 // this one value comes back in the form of a very inconvenient string.  Break it down.
                 if (proportionsWithDisease) {
