@@ -551,6 +551,10 @@ class FilterManagementService {
 
     private HashMap interpretSpecialFilters(HashMap developingParameterCollection,String filter)  {
          LinkedHashMap returnValue = new LinkedHashMap()
+
+        // KDUXTD-38: adding default filter for 'variation across continental ancestry' drill down
+        developingParameterCollection['predictedEffects'] = 'lessThan_noEffectNoncoding';
+
          if (filter) {
              String[] requestPortionList =  filter.split("-")
              if (requestPortionList.size() > 1) {  //  multipiece searches

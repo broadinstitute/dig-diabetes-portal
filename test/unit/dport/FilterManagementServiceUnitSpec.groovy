@@ -20,7 +20,21 @@ class FilterManagementServiceUnitSpec extends Specification {
 
     }
 
+
+    void "test ancestry group variation filters"() {
+
+        given: "prepare the inputs"
+            String filter = "lowfreq-ea"
+            Map hashMap = ["region_gene_input": "SLC30A8"]
+
+        when:
+            Map resultMap = service.interpretSpecialFilters(hashMap, filter)
+
+        then:
+            resultMap.containsValue("test")
+    }
 }
+
 //
 //    Closure<List <Gene>> retrieveGene = { String searchString, int numberOfMatches ->
 //        return  returnValue

@@ -411,7 +411,7 @@ log4j = { root ->
     environments {
         development {
             appenders {
-                console name: 'stdout', layout: pattern(conversionPattern: "%d [%t] %-5p %c %x - %m%n")
+                console name: 'stdout', layout: pattern(conversionPattern: "%d [%t] %-5p %c %l %x - %m%n")
             }
         }
 
