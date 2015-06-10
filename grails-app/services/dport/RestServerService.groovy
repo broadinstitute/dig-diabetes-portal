@@ -152,14 +152,14 @@ class RestServerService {
     static List<String> EXSEQ_GENE_COLUMNS = [
             '_13k_T2D_VAR_TOTAL',
             '_13k_T2D_ORIGIN_VAR_TOTALS',
-            '_13k_T2D_lof_NVAR',
-            '_13k_T2D_lof_MINA_MINU_RET',
-            '_13k_T2D_lof_METABURDEN',
+            '_17k_T2D_lof_NVAR',
+            '_17k_T2D_lof_MINA_MINU_RET',
+            '_17k_T2D_lof_P_METABURDEN',
             '_13k_T2D_GWS_TOTAL',
             '_13k_T2D_LWS_TOTAL',
             '_13k_T2D_NOM_TOTAL',
-            '_13k_T2D_lof_OBSA',
-            '_13k_T2D_lof_OBSU'
+            '_17k_T2D_lof_OBSA',
+            '_17k_T2D_lof_OBSU'
     ]
 
 
