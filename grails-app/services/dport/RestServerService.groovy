@@ -1823,6 +1823,71 @@ ${retrieveParticipantCount}
 
 
 
+
+private String generateProteinEffectJson (String variantName){
+    String jsonSpec = """
+{
+        "passback": "123abc",
+        "entity": "variant",
+        "page_number": 50,
+        "page_size": 100,
+        "limit": 1,
+        "count": false,
+        "properties":   {
+                                        "cproperty": ["TRANSCRIPT_ANNOT","MOST_DEL_SCORE"],
+                                "orderBy":      [],
+                                "dproperty":    { },
+                                "pproperty":    { }
+                        },
+        "filters":      [
+        ${filterByVariant(variantName)}
+]
+}
+
+""".toString()
+    return jsonSpec
+}
+
+
+
+
+    private JSONObject gatherProteinEffectResults(String variantName){
+        String jsonSpec = generateProteinEffectJson( variantName)
+        return postRestCall(jsonSpec,GET_DATA_URL)
+    }
+
+
+
+
+    public JSONObject gatherProteinEffect(String variantName){
+        def slurper = new JsonSlurper()
+        String apiData = gatherProteinEffectResults(variantName)
+        JSONObject apiResults = slurper.parseText(apiData)
+        return apiResults
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public JSONObject generateVariantTable(String chromosome,
                                            String beginSearch,
                                            String endSearch){//region

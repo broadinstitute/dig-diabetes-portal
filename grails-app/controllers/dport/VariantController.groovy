@@ -64,6 +64,17 @@ class VariantController {
 
 
 
+    def proteinEffect (){
+        String variantId = params.variantId
+        JSONObject jsonObject =  restServerService.gatherProteinEffect ( variantId.trim().toUpperCase())
+        render(status:200, contentType:"application/json") {
+            [variantInfo:jsonObject]
+        }
+    }
+
+
+
+
     def variantDiseaseRisk (){
         String variantId = params.variantId
         JSONObject jsonObject =  restServerService.combinedVariantDiseaseRisk ( variantId.trim().toUpperCase())

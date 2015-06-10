@@ -1,6 +1,51 @@
 <div id="effectOfVariantOnProtein"></div>
 
 
+
+<script>
+    var mpgSoftware = mpgSoftware || {};
+
+    mpgSoftware.proteinEffect  = (function() {
+        var loadProteinEffect = function () {
+            $.ajax({
+                cache: false,
+                type: "get",
+                url: "${createLink(controller:'variant',action: 'proteinEffect')}",
+                data: {variantId: '<%=variantToSearch%>'},
+                async: true,
+                success: function (data) {
+                    var impactOnProtein = {
+                        chooseOneTranscript:'<g:message code="variant.impactOnProtein.chooseOneTranscript" default="choose one transcript" />',
+                        subtitle1:'<g:message code="variant.impactOnProtein.subtitle1" default="what effect does" />',
+                        subtitle2:'<g:message code="variant.impactOnProtein.subtitle2" default="have on the encoded protein" />'
+                    };
+                    var variant = data.variantInfo;
+                    var variantProteinInfo = {};
+                    variantProteinInfo._13k_T2D_TRANSCRIPT_ANNOT = variant.variants[0][1]["TRANSCRIPT_ANNOT"];
+                    variantProteinInfo.MOST_DEL_SCORE = variant.variants[0][0]["MOST_DEL_SCORE"];
+                    var describeImpactOfVariantOnProtein = mpgSoftware.variantInfo.retrieveDescribeImpactOfVariantOnProtein();
+                    describeImpactOfVariantOnProtein(variantProteinInfo, "<%=variantToSearch%>", impactOnProtein)
+                },
+                error: function (jqXHR, exception) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+
+        };
+        return {loadProteinEffect:loadProteinEffect}
+    }());
+    mpgSoftware.proteinEffect.loadProteinEffect();
+</script>
+
+
+
+
+
+
+
+
+
 <div id="variationInfoEncodedProtein" style="display:block;">
 
     <div class="panel-group" id="accordion">

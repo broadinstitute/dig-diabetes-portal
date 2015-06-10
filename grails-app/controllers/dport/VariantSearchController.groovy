@@ -139,6 +139,9 @@ class VariantSearchController {
 
     }
 
+
+
+
     /***
      * get data sets given a phenotype
      * @return
