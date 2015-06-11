@@ -227,7 +227,8 @@ class VariantSearchController {
 
         JSONObject jsonObject = sharedToolsService.retrieveMetadata()
         LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
-        List <String> listOfPhenotypes = processedMetadata.gwasSpecificPhenotypes
+        LinkedHashMap phenotypeMap = processedMetadata.gwasSpecificPhenotypes
+        List <String> listOfPhenotypes = sharedToolsService.extractAPhenotypeList( phenotypeMap )
         String phenotypesForTransmission = sharedToolsService.packageUpAListAsJson (listOfPhenotypes)
         def slurper = new JsonSlurper()
         def result = slurper.parseText(phenotypesForTransmission)

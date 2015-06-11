@@ -238,7 +238,7 @@ class SharedToolsService {
                 (forceProcessedMetadataOverride == 1)) {
             sharedProcessedMetadata = [:]
             List<String> captured = []
-            List<String> gwasSpecificPhenotype = []
+            LinkedHashMap<String, List<String>>  gwasSpecificPhenotype = [:]
             LinkedHashMap<String, List<String>> annotatedPhenotypes = [:]
             LinkedHashMap<String, List<String>> annotatedSampleGroups = [:]
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> phenotypeSpecificSampleGroupProperties = [:]
@@ -251,7 +251,9 @@ class SharedToolsService {
                         getDataSetsPerPhenotype(experiment.sample_groups, annotatedPhenotypes)
                         getPropertiesPerSampleGroupId(experiment.sample_groups, annotatedSampleGroups)
                         getPhenotypeSpecificPropertiesPerSampleGroupId(experiment.sample_groups, phenotypeSpecificSampleGroupProperties)
-                        getTechnologySpecificPhenotype(experiment.sample_groups, "GWAS",gwasSpecificPhenotype)
+                        if (experiment.technology == "GWAS"){
+                            getTechnologySpecificPhenotype(experiment.sample_groups,gwasSpecificPhenotype)
+                        }
                     }
                 }
             }
@@ -305,25 +307,26 @@ class SharedToolsService {
         return annotatedPhenotypes
     }
 
-
-    public LinkedHashMap<String, List <String>> getTechnologySpecificPhenotype (def sampleGroups,String technology,List <String> phenotypeList){
+    // Need a map where phenotypes point to data sets.  This will allow me to ask people what phenotype they want,
+    // and upon response = that phenotype to the data set we need
+    public LinkedHashMap<String, List <String>> getTechnologySpecificPhenotype (def sampleGroups, LinkedHashMap<String,String> phenotypeMap){
         for (def sampleGroup in sampleGroups){
-            if ((sampleGroup.phenotypes) &&
-                 (sampleGroup.technology == technology)){
+            if (sampleGroup.phenotypes){
+                String sampleGroupId = sampleGroup.id
                 for (def phenotype in sampleGroup.phenotypes){
                     String phenotypeName = phenotype.name
-                    if (!phenotypeList.contains (phenotypeName)){
-                        phenotypeList << phenotypeName
+                    if (!phenotypeMap.containsKey (phenotypeName)){
+                        phenotypeMap[phenotypeName] = sampleGroupId
                     }
                     if (sampleGroup.sample_groups){
-                        getTechnologySpecificPhenotype (sampleGroup.sample_groups,technology, phenotypeList)
+                        getTechnologySpecificPhenotype (sampleGroup.sample_groups,phenotypeMap)
                     }
 
                 }
 
             }
         }
-        return phenotypeList
+        return phenotypeMap
     }
 
 
@@ -490,6 +493,11 @@ class SharedToolsService {
         if (phenotypeSpecificSampleGroupProperties){
             phenotypeSpecificSampleGroupProperties.each{ k, v -> listOfProperties <<  "${k}" }
             listOfProperties = listOfProperties.sort ()
+        }
+        int locationOfDiabetes = listOfProperties.indexOf("T2D")
+        if (locationOfDiabetes>-1){
+            listOfProperties.remove(locationOfDiabetes)
+            listOfProperties.push("T2D")
         }
         return listOfProperties
     }
