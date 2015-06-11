@@ -208,10 +208,26 @@ class VariantSearchController {
     def retrievePhenotypesAjax(){
 
         JSONObject jsonObject = sharedToolsService.retrieveMetadata()
-
         LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
         LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties = processedMetadata.phenotypeSpecificPropertiesPerSampleGroup
         List <String> listOfPhenotypes = sharedToolsService.extractAPhenotypeList( phenotypeSpecificSampleGroupProperties )
+        String phenotypesForTransmission = sharedToolsService.packageUpAListAsJson (listOfPhenotypes)
+        def slurper = new JsonSlurper()
+        def result = slurper.parseText(phenotypesForTransmission)
+
+
+        render(status: 200, contentType: "application/json") {
+            [datasets: result]
+        }
+
+    }
+
+
+    def retrieveGwasSpecificPhenotypesAjax(){
+
+        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
+        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
+        List <String> listOfPhenotypes = processedMetadata.gwasSpecificPhenotypes
         String phenotypesForTransmission = sharedToolsService.packageUpAListAsJson (listOfPhenotypes)
         def slurper = new JsonSlurper()
         def result = slurper.parseText(phenotypesForTransmission)

@@ -64,6 +64,34 @@
             }
         });
 
+        var retrievePhenotypes = function () {
+            var loading = $('#spinner').show();
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "${createLink(controller:'VariantSearch', action:'retrieveGwasSpecificPhenotypesAjax')}",
+                data: {},
+                async: true,
+                success: function (data) {
+                    if (( data !==  null ) &&
+                            ( typeof data !== 'undefined') &&
+                            ( typeof data.datasets !== 'undefined' ) &&
+                            (  data.datasets !==  null ) ) {
+                        UTILS.fillPhenotypeDropdown(data.datasets,'#trait-input');
+                    }
+                    loading.hide();
+                },
+                error: function (jqXHR, exception) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+        };
+        retrievePhenotypes();
+
+
+
+
 
     });
 
@@ -175,7 +203,7 @@
                         </h3>
 
                         <select name="" id="trait-input" class="form-control btn-group btn-input clearfix">
-                            <g:renderPhenotypeOptions/>
+                            %{--<g:renderPhenotypeOptions/>--}%
                             %{--<optgroup label="Cardiometabolic">--}%
                                 %{--<g:each in="${Phenotype.findByName('fasting glucose')}" var="phenotype">--}%
                                     %{--<option value= ${phenotype.databaseKey}>${phenotype.name}</option>--}%

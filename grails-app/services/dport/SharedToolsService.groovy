@@ -238,6 +238,7 @@ class SharedToolsService {
                 (forceProcessedMetadataOverride == 1)) {
             sharedProcessedMetadata = [:]
             List<String> captured = []
+            List<String> gwasSpecificPhenotype = []
             LinkedHashMap<String, List<String>> annotatedPhenotypes = [:]
             LinkedHashMap<String, List<String>> annotatedSampleGroups = [:]
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> phenotypeSpecificSampleGroupProperties = [:]
@@ -250,10 +251,12 @@ class SharedToolsService {
                         getDataSetsPerPhenotype(experiment.sample_groups, annotatedPhenotypes)
                         getPropertiesPerSampleGroupId(experiment.sample_groups, annotatedSampleGroups)
                         getPhenotypeSpecificPropertiesPerSampleGroupId(experiment.sample_groups, phenotypeSpecificSampleGroupProperties)
+                        getTechnologySpecificPhenotype(experiment.sample_groups, "GWAS",gwasSpecificPhenotype)
                     }
                 }
             }
             sharedProcessedMetadata['rootSampleGroups'] = captured
+            sharedProcessedMetadata['gwasSpecificPhenotypes'] = gwasSpecificPhenotype
             sharedProcessedMetadata['sampleGroupsPerPhenotype'] = annotatedPhenotypes
             sharedProcessedMetadata['propertiesPerSampleGroups'] = annotatedSampleGroups
             sharedProcessedMetadata['phenotypeSpecificPropertiesPerSampleGroup'] = phenotypeSpecificSampleGroupProperties
@@ -301,6 +304,35 @@ class SharedToolsService {
         }
         return annotatedPhenotypes
     }
+
+
+    public LinkedHashMap<String, List <String>> getTechnologySpecificPhenotype (def sampleGroups,String technology,List <String> phenotypeList){
+        for (def sampleGroup in sampleGroups){
+            if ((sampleGroup.phenotypes) &&
+                 (sampleGroup.technology == technology)){
+                for (def phenotype in sampleGroup.phenotypes){
+                    String phenotypeName = phenotype.name
+                    if (!phenotypeList.contains (phenotypeName)){
+                        phenotypeList << phenotypeName
+                    }
+                    if (sampleGroup.sample_groups){
+                        getTechnologySpecificPhenotype (sampleGroup.sample_groups,technology, phenotypeList)
+                    }
+
+                }
+
+            }
+        }
+        return phenotypeList
+    }
+
+
+
+
+
+
+
+
 
 
     public LinkedHashMap<String, List <String>> getPropertiesPerSampleGroupId (def sampleGroups,LinkedHashMap<String, List <String>> annotatedSampleGroupIds){

@@ -1,3 +1,5 @@
+var mpgSoftware = mpgSoftware || {};
+
 var UTILS = {
     /***
      * General-purpose utility that JavaScript ought to have.
@@ -513,7 +515,22 @@ var UTILS = {
         }
         return returnValue;
     },
-    /***
+    fillPhenotypeDropdown: function (dataSetJson,phenotypeDropDownIdentifier) { // help text for each row
+        if ((typeof dataSetJson !== 'undefined')  &&
+            (typeof dataSetJson["is_error"] !== 'undefined')&&
+            (dataSetJson["is_error"] === false))
+        {
+            var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
+            var options = $(phenotypeDropDownIdentifier);
+            options.empty();
+            var dataSetList = dataSetJson ["dataset"];
+            for ( var i = 0 ; i < numberOfRecords ; i++ ){
+                options.append($("<option />").val(dataSetList[i]).text(mpgSoftware.trans.translator(dataSetList[i])));
+            }
+        }
+    },
+
+/***
      * We need to make sure that all the fields have values before starting the plotting routines. I'll formalize
      * this check, and cover both nulls and undefined
      * @param variant
@@ -673,3 +690,304 @@ var UTILS = {
 
 
 };
+
+
+(function () {
+    "use strict";
+
+
+    mpgSoftware.trans = (function () {
+
+        var translations;
+        var translator = function (incoming) {
+            var returnValue='';
+            if (typeof incoming !== 'undefined') {
+                var newForm = translations['v' + incoming];
+                if (typeof newForm === 'undefined') {
+                    console.log('No translation for ' + incoming);
+                    returnValue = incoming;
+                } else {
+                    returnValue = newForm;
+                }
+            }
+            return returnValue;
+        };
+        var abbrevtrans = function (incoming, sizeLimit) {
+            var returnValue=translator(incoming);
+            if ((typeof returnValue !== 'undefined') &&
+                (returnValue !== null) &&
+                (returnValue))
+                return returnValue;
+        };
+
+        translations = {
+            vT2D: "Type 2 diabetes",
+            vBMI: "BMI",
+            vCHOL: "Cholesterol",
+            vDBP: "Diastolic blood pressure",
+            vFG: "Fasting glucose",
+            vFI: "Fasting insulin",
+            vHBA1C: "HbA1c",
+            vHDL: "HDL cholesterol",
+            vHEIGHT: "Height",
+            vHIPC: "Hip circumference",
+            vLDL: "LDL cholesterol",
+            vSBP: "Systolic blood pressure",
+            vTG: "Triglycerides",
+            vWAIST: "Waist circumference",
+            vWHR: "Waist-hip ratio",
+            vCAD: "Coronary artery disease",
+            vCKD: "Chronic kidney disease",
+            vUACR: "Urinary albumin-to-creatinine ratio",
+            veGFRcrea: "eGFR-creat (serum creatinine)",
+            veGFRcys: "eGFR-cys (serum cystatin C)",
+            vTC: "Total cholesterol",
+            v2hrG: "Two-hour glucose",
+            v2hrI: "Two-hour insulin",
+            vHOMAB: "HOMA-B",
+            vHOMAIR: "HOMA-IR",
+            vMA: "Microalbuminuria",
+            vPI: "Proinsulin levels",
+            vBIP: "Bipolar disorder",
+            vMDD: "Major depressive disorder",
+            vSCZ: "Schizophrenia",
+            v13k: "13K exome sequence analysis",
+            v13k_aa_genes: "13K exome sequence analysis: African-Americans",
+            v13k_ea_genes: "13K exome sequence analysis: East Asians",
+            v13k_eu: "13K exome sequence analysis: Europeans",
+            v13k_eu_genes: "13K exome sequence analysis: Europeans, T2D-GENES cohorts",
+            v13k_eu_go: "13K exome sequence analysis: Europeans, GoT2D cohorts",
+            v13k_hs_genes: "13K exome sequence analysis: Latinos",
+            v13k_sa_genes: "13K exome sequence analysis: South Asians",
+            v17k: "17K exome sequence analysis",
+            v17k_aa: "17K exome sequence analysis: African-Americans",
+            v17k_aa_genes: "17K exome sequence analysis: African-Americans, T2D-GENES cohorts",
+            v17k_aa_genes_aj: "17K exome sequence analysis: African-Americans, Jackson Heart Study cohort",
+            v17k_aa_genes_aw: "17K exome sequence analysis: African-Americans, Wake Forest Study cohort",
+            v17k_ea_genes: "17K exome sequence analysis: East Asians",
+            v17k_ea_genes_ek: "17K exome sequence analysis: East Asians, Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH) cohort",
+            v17k_ea_genes_es: "17K exome sequence analysis: East Asians, Singapore Diabetes Cohort Study and Singapore Prospective Study Program cohort",
+            v17k_eu: "17K exome sequence analysis: Europeans",
+            v17k_eu_genes: "17K exome sequence analysis: Europeans, T2D-GENES cohorts",
+            v17k_eu_genes_ua: "17K exome sequence analysis: Europeans, Longevity Genes in Founder Populations (Ashkenazi) cohort",
+            v17k_eu_genes_um: "17K exome sequence analysis: Europeans, Metabolic Syndrome in Men (METSIM) Study cohort",
+            v17k_eu_go: "17K exome sequence analysis: Europeans, GoT2D cohorts",
+            v17k_hs: "17K exome sequence analysis: Latinos",
+            v17k_hs_genes: "17K exome sequence analysis: Latinos, T2D-GENES cohorts",
+            v17k_hs_genes_ha: "17K exome sequence analysis: Latinos, San Antonio cohort",
+            v17k_hs_genes_hs: "17K exome sequence analysis: Latinos, Starr County cohort",
+            v17k_hs_sigma: "17K exome sequence analysis: Latinos, SIGMA cohorts",
+            v17k_hs_sigma_mec: "17K exome sequence analysis: Multiethnic Cohort (MEC)",
+            v17k_hs_sigma_mexb1: "17K exome sequence analysis: UNAM/INCMNSZ Diabetes Study (UIDS) cohort",
+            v17k_hs_sigma_mexb2: "17K exome sequence analysis: Diabetes in Mexico Study (DMS) cohort",
+            v17k_hs_sigma_mexb3: "17K exome sequence analysis: Mexico City Diabetes Study (MCDS) cohort",
+            v17k_sa_genes: "17K exome sequence analysis: South Asians",
+            v17k_sa_genes_sl: "17K exome sequence analysis: South Asians, LOLIPOP cohort",
+            v17k_sa_genes_ss: "17K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort",
+            v26k: "26K exome sequence analysis",
+            v26k_aa: "26K exome sequence analysis: all African-Americans",
+            v26k_aa_esp: "26K exome sequence analysis: African-Americans, all ESP cohorts",
+            v26k_aa_genes: "26K exome sequence analysis: African-Americans, T2D-GENES cohorts",
+            v26k_aa_genes_aj: "26K exome sequence analysis: African-Americans, Jackson Heart Study cohort",
+            v26k_aa_genes_aw: "26K exome sequence analysis: African-Americans, Wake Forest Study cohort",
+            v26k_ea_genes: "26K exome sequence analysis: East Asians",
+            v26k_ea_genes_ek: "26K exome sequence analysis: East Asians, Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH) cohort",
+            v26k_ea_genes_es: "26K exome sequence analysis: East Asians, Singapore Diabetes Cohort Study and Singapore Prospective Study Program cohort",
+            v26k_eu: "26K exome sequence analysis: Europeans",
+            v26k_eu_esp: "26K exome sequence analysis: Europeans, all ESP cohorts",
+            v26k_eu_genes: "26K exome sequence analysis: Europeans, T2D-GENES cohorts",
+            v26k_eu_genes_ua: "26K exome sequence analysis: Europeans, Longevity Genes in Founder Populations (Ashkenazi) cohort",
+            v26k_eu_genes_um: "26K exome sequence analysis: Europeans, Metabolic Syndrome in Men (METSIM) Study cohort",
+            v26k_eu_go: "26K exome sequence analysis: Europeans, GoT2D cohorts",
+            v26k_eu_lucamp: "26K exome sequence analysis: Europeans, LuCamp cohort",
+            v26k_hs: "26K exome sequence analysis: Latinos",
+            v26k_hs_genes: "26K exome sequence analysis: Latinos, T2D-GENES cohorts",
+            v26k_hs_genes_ha: "26K exome sequence analysis: Latinos, San Antonio cohort",
+            v26k_hs_genes_hs: "26K exome sequence analysis: Latinos, Starr County cohort",
+            v26k_hs_sigma: "26K exome sequence analysis: Latinos, SIGMA cohorts",
+            v26k_hs_sigma_mec: "26K exome sequence analysis: Multiethnic Cohort (MEC)",
+            v26k_hs_sigma_mexb1: "26K exome sequence analysis: UNAM/INCMNSZ Diabetes Study (UIDS) cohort",
+            v26k_hs_sigma_mexb2: "26K exome sequence analysis: Diabetes in Mexico Study (DMS) cohort",
+            v26k_hs_sigma_mexb3: "26K exome sequence analysis: Mexico City Diabetes Study (MCDS) cohort",
+            v26k_sa_genes: "26K exome sequence analysis: South Asians",
+            v26k_sa_genes_sl: "26K exome sequence analysis: South Asians, LOLIPOP cohort",
+            v26k_sa_genes_ss: "26K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort",
+            v82k: "82K exome chip analysis",
+            vAfrican_American: "African-American",
+            vBETA: "Effect size (beta)",
+            vCARDIoGRAM: "CARDIoGRAM GWAS",
+            vCHROM: "Chromosome",
+            vCKDGenConsortium: "CKDGen GWAS",
+            vCLOSEST_GENE: "Nearest gene",
+            vCondel_PRED: "Condel prediction",
+            vConsequence: "Consequence",
+            vDBSNP_ID: "dbSNP ID",
+            vDIAGRAM: "DIAGRAM GWAS",
+            vDirection: "Direction of effect",
+            vEAC_PH: "Effect allele count",
+            vEAF: "Effect allele frequency",
+            vEast_Asian: "East Asian",
+            vEuropean: "European",
+            vExChip: "Exome chip",
+            vExChip_82k: "82k exome chip analysis",
+            vExChip_82k_mdv1: "82k exome chip analysis",
+            vExChip_82k_mdv2: "82k exome chip analysis",
+            vExSeq: "Exome sequencing",
+            vExSeq_13k: "13K exome sequence analysis",
+            vExSeq_13k_aa_genes_mdv1: "13K exome sequence analysis: African-Americans",
+            vExSeq_13k_aa_genes_mdv2: "13K exome sequence analysis: African-Americans",
+            vExSeq_13k_aa_genes_mdv3: "13K exome sequence analysis: African-Americans",
+            vExSeq_13k_ea_genes_mdv1: "13K exome sequence analysis: East Asians",
+            vExSeq_13k_ea_genes_mdv2: "13K exome sequence analysis: East Asians",
+            vExSeq_13k_ea_genes_mdv3: "13K exome sequence analysis: East Asians",
+            vExSeq_13k_eu_genes_mdv1: "13K exome sequence analysis: Europeans, T2D-GENES cohorts",
+            vExSeq_13k_eu_go_mdv1: "13K exome sequence analysis: Europeans, GoT2D cohorts",
+            vExSeq_13k_eu_mdv1: "13K exome sequence analysis: Europeans",
+            vExSeq_13k_eu_mdv2: "13K exome sequence analysis: Europeans",
+            vExSeq_13k_eu_mdv3: "13K exome sequence analysis: Europeans",
+            vExSeq_13k_hs_genes_mdv1: "13K exome sequence analysis: Latinos",
+            vExSeq_13k_hs_genes_mdv2: "13K exome sequence analysis: Latinos",
+            vExSeq_13k_hs_genes_mdv3: "13K exome sequence analysis: Latinos",
+            vExSeq_13k_mdv1: "13K exome sequence analysis",
+            vExSeq_13k_mdv2: "13K exome sequence analysis",
+            vExSeq_13k_mdv3: "13K exome sequence analysis",
+            vExSeq_13k_sa_genes_mdv1: "13K exome sequence analysis: South Asians",
+            vExSeq_13k_sa_genes_mdv2: "13K exome sequence analysis: South Asians",
+            vExSeq_13k_sa_genes_mdv3: "13K exome sequence analysis: South Asians",
+            vExSeq_17k: "17K exome sequence analysis",
+            vExSeq_17k_aa_genes_aj_mdv2: "17K exome sequence analysis: African-Americans, Jackson Heart Study cohort",
+            vExSeq_17k_aa_genes_aw_mdv2: "17K exome sequence analysis: African-Americans, Wake Forest Study cohort",
+            vExSeq_17k_aa_genes_mdv2: "17K exome sequence analysis: African-Americans, T2D-GENES cohorts",
+            vExSeq_17k_aa_mdv2: "17K exome sequence analysis: African-Americans",
+            vExSeq_17k_ea_genes_ek_mdv2: "17K exome sequence analysis: East Asians, Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH) cohort",
+            vExSeq_17k_ea_genes_es_mdv2: "17K exome sequence analysis: East Asians, Singapore Diabetes Cohort Study and Singapore Prospective Study Program cohort",
+            vExSeq_17k_ea_genes_mdv2: "17K exome sequence analysis: East Asians",
+            vExSeq_17k_eu_genes_mdv2: "17K exome sequence analysis: Europeans, T2D-GENES cohorts",
+            vExSeq_17k_eu_genes_ua_mdv2: "17K exome sequence analysis: Europeans, Longevity Genes in Founder Populations (Ashkenazi) cohort",
+            vExSeq_17k_eu_genes_um_mdv2: "17K exome sequence analysis: Europeans, Metabolic Syndrome in Men (METSIM) Study cohort",
+            vExSeq_17k_eu_go_mdv2: "17K exome sequence analysis: Europeans, GoT2D cohorts",
+            vExSeq_17k_eu_mdv2: "17K exome sequence analysis: Europeans",
+            vExSeq_17k_hs_genes_ha_mdv2: "17K exome sequence analysis: Latinos, San Antonio cohort",
+            vExSeq_17k_hs_genes_hs_mdv2: "17K exome sequence analysis: Latinos, Starr County cohort",
+            vExSeq_17k_hs_genes_mdv2: "17K exome sequence analysis: Latinos, T2D-GENES cohorts",
+            vExSeq_17k_hs_mdv2: "17K exome sequence analysis: Latinos",
+            vExSeq_17k_hs_sigma_mdv2: "17K exome sequence analysis: Latinos, SIGMA cohorts",
+            vExSeq_17k_hs_sigma_mec_mdv2: "17K exome sequence analysis: Multiethnic Cohort (MEC)",
+            vExSeq_17k_hs_sigma_mexb1_mdv2: "17K exome sequence analysis: UNAM/INCMNSZ Diabetes Study (UIDS) cohort",
+            vExSeq_17k_hs_sigma_mexb2_mdv2: "17K exome sequence analysis: Diabetes in Mexico Study (DMS) cohort",
+            vExSeq_17k_hs_sigma_mexb3_mdv2: "17K exome sequence analysis: Mexico City Diabetes Study (MCDS) cohort",
+            vExSeq_17k_mdv2: "17K exome sequence analysis",
+            vExSeq_17k_sa_genes_mdv2: "17K exome sequence analysis: South Asians",
+            vExSeq_17k_sa_genes_sl_mdv2: "17K exome sequence analysis: South Asians, LOLIPOP cohort",
+            vExSeq_17k_sa_genes_ss_mdv2: "17K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort",
+            vExSeq_26k_mdv3: "26K exome sequence analysis",
+            vExSeq_26k_aa_mdv3: "26K exome sequence analysis: all African-Americans",
+            vExSeq_26k_aa_esp_mdv3: "26K exome sequence analysis: African-Americans, all ESP cohorts",
+            vExSeq_26k_aa_genes_mdv3: "26K exome sequence analysis: African-Americans, T2D-GENES cohorts",
+            vExSeq_26k_aa_genes_aj_mdv3: "26K exome sequence analysis: African-Americans, Jackson Heart Study cohort",
+            vExSeq_26k_aa_genes_aw_mdv3: "26K exome sequence analysis: African-Americans, Wake Forest Study cohort",
+            vExSeq_26k_ea_genes_mdv3: "26K exome sequence analysis: East Asians",
+            vExSeq_26k_ea_genes_ek_mdv3: "26K exome sequence analysis: East Asians, Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH) cohort",
+            vExSeq_26k_ea_genes_es_mdv3: "26K exome sequence analysis: East Asians, Singapore Diabetes Cohort Study and Singapore Prospective Study Program cohort",
+            vExSeq_26k_eu_mdv3: "26K exome sequence analysis: Europeans",
+            vExSeq_26k_eu_esp_mdv3: "26K exome sequence analysis: Europeans, all ESP cohorts",
+            vExSeq_26k_eu_genes_mdv3: "26K exome sequence analysis: Europeans, T2D-GENES cohorts",
+            vExSeq_26k_eu_genes_ua_mdv3: "26K exome sequence analysis: Europeans, Longevity Genes in Founder Populations (Ashkenazi) cohort",
+            vExSeq_26k_eu_genes_um_mdv3: "26K exome sequence analysis: Europeans, Metabolic Syndrome in Men (METSIM) Study cohort",
+            vExSeq_26k_eu_go_mdv3: "26K exome sequence analysis: Europeans, GoT2D cohorts",
+            vExSeq_26k_eu_lucamp_mdv3: "26K exome sequence analysis: Europeans, LuCamp cohort",
+            vExSeq_26k_hs_mdv3: "26K exome sequence analysis: Latinos",
+            vExSeq_26k_hs_genes_mdv3: "26K exome sequence analysis: Latinos, T2D-GENES cohorts",
+            vExSeq_26k_hs_genes_ha_mdv3: "26K exome sequence analysis: Latinos, San Antonio cohort",
+            vExSeq_26k_hs_genes_hs_mdv3: "26K exome sequence analysis: Latinos, Starr County cohort",
+            vExSeq_26k_hs_sigma_mdv3: "26K exome sequence analysis: Latinos, SIGMA cohorts",
+            vExSeq_26k_hs_sigma_mec_mdv3: "26K exome sequence analysis: Multiethnic Cohort (MEC)",
+            vExSeq_26k_hs_sigma_mexb1_mdv3: "26K exome sequence analysis: UNAM/INCMNSZ Diabetes Study (UIDS) cohort",
+            vExSeq_26k_hs_sigma_mexb2_mdv3: "26K exome sequence analysis: Diabetes in Mexico Study (DMS) cohort",
+            vExSeq_26k_hs_sigma_mexb3_mdv3: "26K exome sequence analysis: Mexico City Diabetes Study (MCDS) cohort",
+            vExSeq_26k_sa_genes_mdv3: "26K exome sequence analysis: South Asians",
+            vExSeq_26k_sa_genes_sl_mdv3: "26K exome sequence analysis: South Asians, LOLIPOP cohort",
+            vExSeq_26k_sa_genes_ss_mdv3: "26K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort",
+            vFMISS_17k: "Missing genotype rate, 17K exome sequence analysis",
+            vFMISS_19k: "Missing genotype rate, 19K exome sequence analysis",
+            vF_MISS: "Missing genotype rate",
+            vGENE: "Gene",
+            vGENO_26k: "Call rate, 26K Exome sequencing analysis",
+            vGIANT: "GIANT GWAS",
+            vGLGC: "GLGC GWAS",
+            vGWAS: "GWAS",
+            vGWAS_CARDIoGRAM: "CARDIoGRAM GWAS",
+            vGWAS_CARDIoGRAM_mdv1: "CARDIoGRAM GWAS",
+            vGWAS_CARDIoGRAM_mdv2: "CARDIoGRAM GWAS",
+            vGWAS_CKDGenConsortium: "CKDGen GWAS",
+            vGWAS_CKDGenConsortium_mdv1: "CKDGen GWAS",
+            vGWAS_CKDGenConsortium_mdv2: "CKDGen GWAS",
+            vGWAS_DIAGRAM: "DIAGRAM GWAS",
+            vGWAS_DIAGRAM_mdv1: "DIAGRAM GWAS",
+            vGWAS_DIAGRAM_mdv2: "DIAGRAM GWAS",
+            vGWAS_GIANT: "GIANT GWAS",
+            vGWAS_GIANT_mdv1: "GIANT GWAS",
+            vGWAS_GIANT_mdv2: "GIANT GWAS",
+            vGWAS_GLGC: "GLGC GWAS",
+            vGWAS_GLGC_mdv1: "GLGC GWAS",
+            vGWAS_GLGC_mdv2: "GLGC GWAS",
+            vGWAS_MAGIC: "MAGIC GWAS",
+            vGWAS_MAGIC_mdv1: "MAGIC GWAS",
+            vGWAS_MAGIC_mdv2: "MAGIC GWAS",
+            vGWAS_PGC: "PGC GWAS",
+            vGWAS_PGC_mdv1: "PGC GWAS",
+            vGWAS_PGC_mdv2: "PGC GWAS",
+            vHETA: "Number of heterozygous cases",
+            vHETU: "Number of heterozygous controls",
+            vHOMA: "Number of homozygous cases",
+            vHOMU: "Number of homozygous controls",
+            vHispanic: "Latino",
+            vIN_EXSEQ: "In exome sequencing",
+            vIN_GENE: "Enclosing gene",
+            vLOG_P_HWE_MAX_ORIGIN: "Log(p-value), hardy-weinberg equilibrium",
+            vMAC: "Minor allele count",
+            vMAC_PH: "Minor allele count",
+            vMAF: "Minor allele frequency",
+            vMAGIC: "MAGIC GWAS",
+            vMINA: "Case minor allele counts",
+            vMINU: "Control minor allele counts",
+            vMOST_DEL_SCORE: "Deleteriousness category",
+            vMixed: "Mixed",
+            vNEFF: "Effective sample size",
+            vN_PH: "Sample size",
+            vOBSA: "Number of cases genotyped",
+            vOBSU: "Number of controls genotyped",
+            vODDS_RATIO: "Odds ratio",
+            vOR_FIRTH: "Odds ratio",
+            vOR_FIRTH_FE_IV: "Odds ratio",
+            vOR_FISH: "Odds ratio",
+            vOR_WALD: "Odds ratio",
+            vOR_WALD_DOS: "Odds ratio",
+            vOR_WALD_DOS_FE_IV: "Odds ratio",
+            vOR_WALD_FE_IV: "Odds ratio",
+            vPGC: "PGC GWAS",
+            vPOS: "Position",
+            vP_EMMAX: "P-value",
+            vP_EMMAX_FE_IV: "P-value",
+            vP_FE_INV: "P-value",
+            vP_VALUE: "P-value",
+            vPolyPhen_PRED: "PolyPhen prediction",
+            vProtein_change: "Protein change",
+            vQCFAIL: "Failed quality control",
+            vSE: "Std. Error",
+            vSIFT_PRED: "SIFT prediction",
+            vSouth_Asian: "South association",
+            vTRANSCRIPT_ANNOT: "Annotations across transcripts",
+            vVAR_ID: "Variant ID",
+            vmdv1: "Version 1",
+            vmdv2: "Version 2",
+            vmdv3: "Version 3"
+        };
+        return {translator:translator}
+    }());
+
+}());
+
+
+
+
