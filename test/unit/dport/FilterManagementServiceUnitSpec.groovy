@@ -31,7 +31,9 @@ class FilterManagementServiceUnitSpec extends Specification {
             Map resultMap = service.interpretSpecialFilters(hashMap, filter)
 
         then:
-            resultMap.containsValue("test")
+        resultMap.containsValue("SLC30A8")
+        resultMap.containsValue("lessThan_noEffectNoncoding")
+        resultMap.containsKey("datatype")
     }
 }
 
