@@ -256,8 +256,8 @@ environments {
     production {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
-//      grails.serverURL = "http://type2diabetesgenetics.org"
-      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+      grails.serverURL = "http://type2diabetesgenetics.org"
+//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2dqasrv2.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2ddev.elasticbeanstalk.com"

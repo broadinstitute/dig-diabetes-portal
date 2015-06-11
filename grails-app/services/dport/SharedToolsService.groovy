@@ -25,6 +25,8 @@ class SharedToolsService {
     FilterManagementService filterManagementService
      private static final log = LogFactory.getLog(this)
     JSONObject sharedMetadata = null
+    LinkedHashMap sharedProcessedMetadata = null
+    Integer forceProcessedMetadataOverride = -1
     Integer forceMetadataOverride = -1
     Integer showGwas = -1
     Integer showExomeChip = -1
@@ -84,7 +86,7 @@ class SharedToolsService {
         showGene = (grailsApplication.config.portal.sections.show_gene)?1:0
         showBeacon = (grailsApplication.config.portal.sections.show_beacon)?1:0
         showNewApi = (grailsApplication.config.portal.sections.show_new_api)?1:1
-
+        retrieveMetadata()  // may as well get this early.  The value is stored in
     }
 
     public enum TypeOfSection {
@@ -217,6 +219,10 @@ class SharedToolsService {
             def slurper = new JsonSlurper()
             sharedMetadata = slurper.parseText(temporary)
             forceMetadataOverride = 0
+
+            // whenever we update the metadata then let's go through the processing step
+            forceProcessedMetadataOverride = 1
+            processMetadata(sharedMetadata)
         }
         return sharedMetadata
     }
@@ -226,32 +232,35 @@ class SharedToolsService {
      * @param metadata
      * @return
      */
-    public LinkedHashMap processMetadata(JSONObject metadata){
-        LinkedHashMap returnValue = [:]
-        List <String> captured = []
-        LinkedHashMap<String, List <String>> annotatedPhenotypes = [:]
-        LinkedHashMap<String, List <String>> annotatedSampleGroups = [:]
-        LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties = [:]
-        String dataSetVersionThatWeWant = "${dataSetPrefix}${getDataVersion()}"
-        if (metadata){
-            for (def experiment in metadata.experiments){
-                captured << experiment.name
-                String dataSetVersion =  experiment.version
-                if ((experiment.sample_groups) && (dataSetVersionThatWeWant == dataSetVersion)){
-                    getDataSetsPerPhenotype (experiment.sample_groups, annotatedPhenotypes)
-                    getPropertiesPerSampleGroupId (experiment.sample_groups, annotatedSampleGroups)
-                    getPhenotypeSpecificPropertiesPerSampleGroupId (experiment.sample_groups, phenotypeSpecificSampleGroupProperties)
+    public LinkedHashMap processMetadata(JSONObject metadata) {
+        if ((!sharedProcessedMetadata) ||
+                (sharedProcessedMetadata.size() == 0) ||
+                (forceProcessedMetadataOverride == 1)) {
+            sharedProcessedMetadata = [:]
+            List<String> captured = []
+            LinkedHashMap<String, List<String>> annotatedPhenotypes = [:]
+            LinkedHashMap<String, List<String>> annotatedSampleGroups = [:]
+            LinkedHashMap<String, LinkedHashMap<String, List<String>>> phenotypeSpecificSampleGroupProperties = [:]
+            String dataSetVersionThatWeWant = "${dataSetPrefix}${getDataVersion()}"
+            if (metadata) {
+                for (def experiment in metadata.experiments) {
+                    captured << experiment.name
+                    String dataSetVersion = experiment.version
+                    if ((experiment.sample_groups) && (dataSetVersionThatWeWant == dataSetVersion)) {
+                        getDataSetsPerPhenotype(experiment.sample_groups, annotatedPhenotypes)
+                        getPropertiesPerSampleGroupId(experiment.sample_groups, annotatedSampleGroups)
+                        getPhenotypeSpecificPropertiesPerSampleGroupId(experiment.sample_groups, phenotypeSpecificSampleGroupProperties)
+                    }
                 }
             }
+            sharedProcessedMetadata['rootSampleGroups'] = captured
+            sharedProcessedMetadata['sampleGroupsPerPhenotype'] = annotatedPhenotypes
+            sharedProcessedMetadata['propertiesPerSampleGroups'] = annotatedSampleGroups
+            sharedProcessedMetadata['phenotypeSpecificPropertiesPerSampleGroup'] = phenotypeSpecificSampleGroupProperties
+            forceProcessedMetadataOverride = 0
         }
-        returnValue['rootSampleGroups'] = captured
-        returnValue['sampleGroupsPerPhenotype'] = annotatedPhenotypes
-        returnValue['propertiesPerSampleGroups'] = annotatedSampleGroups
-        returnValue['phenotypeSpecificPropertiesPerSampleGroup'] = phenotypeSpecificSampleGroupProperties
-        return returnValue
+        return sharedProcessedMetadata
     }
-
-
 
     /***
      * Start with a pointer to a sample group as we descend through the metadata tree.  Pullback a combined list

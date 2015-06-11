@@ -874,6 +874,8 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
         };
         var respondToPhenotypeSelection = function (){
             var phenotypeComboBox = UTILS.extractValsFromCombobox(['phenotype']);
+            // phenotype is changed.  Before we get to the asynchronous parts let's wipe out the properties
+            $('.propertyHolderBox').remove();
             forceToPhenotypeSelection(phenotypeComboBox['phenotype']);
         };
 
@@ -939,7 +941,7 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             if (parsedFilter.success) {
                 $('#phenotype').val(parsedFilter.phenotype)  ;
                 $('#dataSet').val(parsedFilter.dataset) ;
-                forceToPhenotypeSelection(parsedFilter.phenotype,dropdownAlreadyPresent);
+                forceToPhenotypeSelection(parsedFilter.phenotype);
                 forceToDataSetSelection(parsedFilter.dataset,parsedFilter.phenotype,parsedFilter.property,parsedFilter.equiv,parsedFilter.value );
 
             }
