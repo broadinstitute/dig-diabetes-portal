@@ -16,7 +16,7 @@ class RestServerService {
     private static final log = LogFactory.getLog(this)
 
 
-    private String MYSQL_REST_SERVER = ""
+    private String LOAD_BALANCED_SERVER = ""
     private String BIGQUERY_REST_SERVER = ""
     private String TEST_REST_SERVER = ""
     private String DEV_REST_SERVER = ""
@@ -204,11 +204,14 @@ class RestServerService {
      */
     public void initialize() {
         // old servers, to be removed
-        MYSQL_REST_SERVER = grailsApplication.config.t2dRestServer.base + grailsApplication.config.t2dRestServer.mysql + grailsApplication.config.t2dRestServer.path
         BIGQUERY_REST_SERVER = grailsApplication.config.server.URL
         DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base + grailsApplication.config.t2dDevRestServer.name + grailsApplication.config.t2dDevRestServer.path
 
         //current
+
+        // load balanced
+        LOAD_BALANCED_SERVER = grailsApplication.config.t2dLoadBalancedServer.base + grailsApplication.config.t2dLoadBalancedServer.name + grailsApplication.config.t2dLoadBalancedServer.path
+
         // 'dedicated'
         TEST_REST_SERVER = grailsApplication.config.t2dTestRestServer.base + grailsApplication.config.t2dTestRestServer.name + grailsApplication.config.t2dTestRestServer.path
 
@@ -233,17 +236,17 @@ class RestServerService {
         return BIGQUERY_REST_SERVER;
     }
 
-    public String getMysql() {
-        return MYSQL_REST_SERVER;
-    }
-
-    public String getDevserver() {
+     public String getDevserver() {
         return DEV_REST_SERVER;
     }
 
 
 
     // current below
+    public String getLoadBalanced() {
+        return LOAD_BALANCED_SERVER;
+    }
+
     public String getTestserver() {
         return TEST_REST_SERVER;
     }
@@ -479,10 +482,6 @@ class RestServerService {
         return (BASE_URL ?: "none")
     }
 
-    public void goWithTheMysqlServer() {
-        pickADifferentRestServer(MYSQL_REST_SERVER)
-    }
-
 
     public void goWithTheBigQueryServer() {
         pickADifferentRestServer(BIGQUERY_REST_SERVER)
@@ -494,6 +493,10 @@ class RestServerService {
 
     public void goWithTheDevServer() {
         pickADifferentRestServer(DEV_REST_SERVER)
+    }
+
+    public void goWithTheLoadBalancedServer() {
+        pickADifferentRestServer(LOAD_BALANCED_SERVER)
     }
 
     public void goWithTheNewDevServer() {
@@ -515,17 +518,7 @@ class RestServerService {
 
     public String whatIsMyCurrentServer() {
         String returnValue
-        String currentBaseUrl = currentRestServer()
-        if (currentBaseUrl == "") {
-            returnValue = 'uninitialized'
-        } else if (MYSQL_REST_SERVER == currentBaseUrl) {
-            returnValue = 'mysql'
-        } else if (BIGQUERY_REST_SERVER == currentBaseUrl) {
-            returnValue = 'bigquery'
-        } else {
-            returnValue = 'unknown'
-        }
-        return returnValue
+        return currentRestServer()
     }
 
     /***
