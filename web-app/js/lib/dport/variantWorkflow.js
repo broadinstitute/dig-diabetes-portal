@@ -234,8 +234,24 @@ var mpgSoftware = mpgSoftware || {};
                 });
             }
         };
-        var retrievePropertiesPerDataSet = function (phenotype,dataset,property,equiv,value,dropdownAlreadyPresent) {
+        /***
+         * we need to go back to the server to get a list of properties. This can happen
+         * into conditions:
+         * 1) when the user has specified a phenotype and we need to pull back all associated properties.
+         *    In this case none of the properties have values
+         * 2) when the user is seeking to edit an existing filter.  In this case one or more of those properties
+         *    may have an associated value. In this case this routine will be called once for each property
+         * @param phenotype
+         * @param dataset
+         * @param property
+         * @param equiv
+         * @param value
+         */
+        var retrievePropertiesPerDataSet = function (phenotype,dataset,property,equiv,value) {
                 var loading = $('#spinner').show();
+                if (typeof property  === 'undefined') { // we are in case #1 as described above, and should therefore wipe out all existing properties
+                    $('.propertyHolderBox').remove();
+                }
                 $.ajax({
                     cache: false,
                     type: "post",
@@ -323,7 +339,6 @@ var mpgSoftware = mpgSoftware || {};
                 options.empty();
                 var dataSetList = dataSetJson ["dataset"];
                 for ( var i = 0 ; i < numberOfRecords ; i++ ){
-                    console.log('dataSetList[i], val='+dataSetList[i]+'.');
                     options.append($("<option />").val(dataSetList[i]).text(mpgSoftware.trans.translator(dataSetList[i])));
                 }
             }
@@ -592,19 +607,9 @@ var mpgSoftware = mpgSoftware || {};
             var labelId = sectionName+'___nameId';
             var equivalenceId = sectionName+'___equivalenceId';
             var valueId = sectionName+'___valueId';
-            // Does a box by this name already exist?If so, then just use that
-//            if (($("#"+labelId).length>0) &&($("#"+equivalenceId).length>0) &&($("#"+valueId).length>0)){
-//                $("#"+labelId).text (sectionName);
-//                $("#"+equivalenceId).selected (equivalence);
-//                $("#"+valueId).val (defaultValue);
-//                return; // We don't need to do anything else
-//            }else if (($("#"+labelId).length>0)  ||($("#"+equivalenceId).length>0)  ||($("#"+valueId).length>0)){
-//                $("#"+labelId).remove();
-//                $("#"+equivalenceId).remove();
-//                $("#"+valueId).remove();
-//            }
+
             // We need to create all of these fields and initialize them
-            currentDiv.append("<div id='"+holderId+"' class='row clearfix'>"+
+            currentDiv.append("<div id='"+holderId+"' class='row clearfix propertyHolderBox'>"+
                 "<div class='primarySectionSeparator'>"+
                 "<div  id='"+labelId+"' class='col-sm-offset-1 col-md-3 text-right'>"+mpgSoftware.trans.translator(sectionName)+"</div>"+
                 "<div class='col-md-1'>"+
@@ -872,10 +877,8 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             forceToPhenotypeSelection(phenotypeComboBox['phenotype']);
         };
 
-        var forceToDataSetSelection = function (dataSetComboBox,phenotypeComboBox,property,equiv,value,dropdownAlreadyPresent ){
-            mpgSoftware.variantWF.retrievePropertiesPerDataSet(phenotypeComboBox,dataSetComboBox,property,equiv,value,dropdownAlreadyPresent);
-         //   mpgSoftware.variantWF.retrievePropertiesPerDataSet(phenotypeComboBox["phenotype"],dataSetComboBox["dataSet"]);
-          //  $('#additionalFilterSelection').show ();
+        var forceToDataSetSelection = function (dataSetComboBox,phenotypeComboBox,property,equiv,value ){
+            mpgSoftware.variantWF.retrievePropertiesPerDataSet(phenotypeComboBox,dataSetComboBox,property,equiv,value);
             $('#filterInstructions').text('Add filters, if any:');
             mpgSoftware.variantWF.currentInteractivityState(0);
             mpgSoftware.variantWF.whatToDoNext(2);
@@ -934,13 +937,10 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
         var respondToReviseCustomFilter = function(filterDefinition){
             var parsedFilter =  parseCustomFilter (filterDefinition);
             if (parsedFilter.success) {
-                //$('#phenotype').selected =  parsedFilter.phenotype ;
-                //$('#dataSet').selected =  parsedFilter.dataset ;
-                var dropdownAlreadyPresent = ($('#dataSet').is(":visible"));
                 $('#phenotype').val(parsedFilter.phenotype)  ;
                 $('#dataSet').val(parsedFilter.dataset) ;
                 forceToPhenotypeSelection(parsedFilter.phenotype,dropdownAlreadyPresent);
-                forceToDataSetSelection(parsedFilter.dataset,parsedFilter.phenotype,parsedFilter.property,parsedFilter.equiv,parsedFilter.value,dropdownAlreadyPresent );
+                forceToDataSetSelection(parsedFilter.dataset,parsedFilter.phenotype,parsedFilter.property,parsedFilter.equiv,parsedFilter.value );
 
             }
         };
