@@ -133,11 +133,10 @@ if (grails.config.locations.isEmpty()){
 //
 //server.URL = 'http://t2dgenetics.org/mysql/rest/server/'
 server.URL = 'http://69.173.71.178:8080/dev/rest/server/'
-t2dRestServer {
-    base = 'http://t2dgenetics.org/'
-    mysql =  'mysql/'
-    bigquery =  'dev/'
-    path = 'rest/server/'
+t2dLoadBalancedServer {
+    base = 'http://dig-api-prod.broadinstitute.org/'
+    name =  'prod/'
+    path = 'gs/'
 }
 t2dDevRestServer {
     base = 'http://69.173.71.178:8080/'

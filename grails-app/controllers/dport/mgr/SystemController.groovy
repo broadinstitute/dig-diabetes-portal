@@ -208,7 +208,15 @@ class SystemController {
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"
             }
+        } else  if (restServer == 'loadbalanced')  {
+            if (!(currentServer == 'loadbalanced')) {
+                restServerService.goWithTheLoadBalancedServer()
+                flash.message = "You are now using the ${restServer} server!"
+            }  else {
+                flash.message = "But you were already using the ${currentServer} server!"
+            }
         }
+
 
         render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
                                           currentRestServer:restServerService.currentRestServer(),

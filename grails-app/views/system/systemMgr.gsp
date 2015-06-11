@@ -71,6 +71,13 @@
                                     prod server (${restServer.getProdserver()})
                                 </label>
                             </div>
+                            <div class="radio">
+                                <label>
+                                    <input id="prodserver" type="radio" name="datatype" value="loadbalanced"
+                                        <%=restServer.getCurrentServer()==restServer.getLoadBalanced()?" checked ":"" %>  />
+                                    load balanced server (${restServer.getLoadBalanced()})
+                                </label>
+                            </div>
 
 
                          </div>
