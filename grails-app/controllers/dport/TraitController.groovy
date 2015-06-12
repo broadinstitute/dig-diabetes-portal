@@ -38,11 +38,10 @@ class TraitController {
         String requestedSignificance=params.significance
         String phenotypeName = ''
         String phenotypeDataSet = ''
-        Phenotype phenotype = Phenotype.findByDatabaseKey(phenotypeKey)
-        if (phenotype)  {
-            phenotypeName =  phenotype.name
-            phenotypeDataSet = phenotype.dataSet
-        }
+        String phenotypeTranslation = sharedToolsService.translator(phenotypeKey)
+            phenotypeName =  phenotypeTranslation
+            phenotypeDataSet = ""
+
         render(view: 'phenotype',
                 model: [show_gwas            : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                         show_exchp           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
@@ -71,9 +70,24 @@ class TraitController {
                 // TODO: error condition.  Go with GWAS significance
                 significanceValue = 0.00000005
             }
-            JSONObject jsonObject = restServerService.searchTraitByName(phenotypicTrait,significanceValue)
-            render(status:200, contentType:"application/json") {
-                [variant:jsonObject['variants']]
+         LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
+         LinkedHashMap phenotypeMap = processedMetadata.gwasSpecificPhenotypes
+         String dataSetName
+         LinkedHashMap properties
+         if (phenotypeMap.containsKey(phenotypicTrait)){
+             LinkedHashMap traitHolderMap = phenotypeMap[phenotypicTrait]
+             dataSetName = traitHolderMap.sampleGroupId
+             properties = traitHolderMap.properties
+         } else  {
+             log.info("Unknown GWAS specific phenotype = '${phenotypicTrait}")
+             // nothing we can do with this
+             render(status:200, contentType:"application/json") {
+                 [variant:[]]
+             }
+         }
+         JSONObject jsonObject = restServerService.getTraitSpecificInformation(phenotypicTrait, dataSetName,properties,significanceValue,0.0)
+         render(status:200, contentType:"application/json") {
+                [variant:jsonObject]
             }
 
     }
