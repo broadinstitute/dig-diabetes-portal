@@ -180,16 +180,23 @@ class SystemController {
     def updateRestServer() {
         String restServer = params.datatype
         String currentServer =  restServerService.whatIsMyCurrentServer()
-        if  (restServer == 'testserver')  {
-            if (!(currentServer == 'testserver')) {
-                restServerService.goWithTheTestServer()
+        if  (restServer == 'prodloadbalancedserver')  {
+            if (!(currentServer == 'prodloadbalancedserver')) {
+                restServerService.goWithTheProdLoadBalancedServer()
                 flash.message = "You are now using the ${restServer} server!"
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"
             }
-        } else  if (restServer == 'qaserver')  {
-            if (!(currentServer == 'qaserver')) {
-                restServerService.goWithTheQaServer()
+        } else  if (restServer == 'qaloadbalancedserver')  {
+            if (!(currentServer == 'qaloadbalancedserver')) {
+                restServerService.goWithTheQaLoadBalancedServer()
+                flash.message = "You are now using the ${restServer} server!"
+            }  else {
+                flash.message = "But you were already using the ${currentServer} server!"
+            }
+        } else  if (restServer == 'devloadbalancedserver')  {
+            if (!(currentServer == 'devloadbalancedserver')) {
+                restServerService.goWithTheDevLoadBalancedServer()
                 flash.message = "You are now using the ${restServer} server!"
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"
@@ -204,13 +211,6 @@ class SystemController {
         } else  if (restServer == 'prodserver')  {
             if (!(currentServer == 'prodserver')) {
                 restServerService.goWithTheProdServer()
-                flash.message = "You are now using the ${restServer} server!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        } else  if (restServer == 'loadbalanced')  {
-            if (!(currentServer == 'loadbalanced')) {
-                restServerService.goWithTheLoadBalancedServer()
                 flash.message = "You are now using the ${restServer} server!"
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"

@@ -133,25 +133,29 @@ if (grails.config.locations.isEmpty()){
 //
 //server.URL = 'http://t2dgenetics.org/mysql/rest/server/'
 server.URL = 'http://69.173.71.178:8080/dev/rest/server/'
-t2dLoadBalancedServer {
+
+// load balancers with multiple servers behind them
+t2dProdLoadBalancedServer {
     base = 'http://dig-api-prod.broadinstitute.org/'
     name =  'prod/'
     path = 'gs/'
 }
+t2dQaLoadBalancedServer {
+    base = 'http://dig-api-qa.broadinstitute.org/'
+    name =  'qa/'
+    path = 'gs/'
+}
+t2dDevLoadBalancedServer {
+    base = 'http://dig-api-dev.broadinstitute.org/'
+    name =  'dev/'
+    path = 'gs/'
+}
+
+// individual servers
 t2dDevRestServer {
     base = 'http://69.173.71.178:8080/'
     name =  'dev/'
     path = 'rest/server/'
-}
-t2dTestRestServer {//current 'dedicated'
-    base = 'http://dig-test.broadinstitute.org:8080/'
-    name =  'dedicated/'
-    path = 'gs/'
-}
-t2dQaRestServer {// current 'qa'
-    base = 'http://dig-qa.broadinstitute.org:8090/'
-    name =  'qa/'
-    path = 'gs/'
 }
 t2dProdRestServer {//current 'prod'
     base = 'http://69.173.71.179:8080/'
@@ -163,6 +167,7 @@ t2dNewDevRestServer { //current 'dev'
     name =  'dev/'
     path = 'gs/'
 }
+
 server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
 //server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
 dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'

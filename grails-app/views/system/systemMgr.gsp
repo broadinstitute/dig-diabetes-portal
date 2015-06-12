@@ -40,9 +40,30 @@
                 <g:form action='updateRestServer' method='POST' id='updateRestServer' class='form form-horizontal cssform' autocomplete='off'>
                 <h4>Choose your backend REST server (<em>current server = <a href="${currentRestServer}">${currentRestServer}</a></em>)</h4>
                 <div class="row clearfix">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-7">
                         <div id="datatypes-form">
+                            <div class="radio">
+                                <label>
+                                    <input id="testserver" type="radio" name="datatype" value="devloadbalancedserver"
+                                        <%=restServer.getCurrentServer()==restServer.getDevLoadBalanced()?" checked ":"" %> />
+                                    dev load balanced server(s) (${restServer.getDevLoadBalanced()})
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input id="qaserver" type="radio" name="datatype" value="qaloadbalancedserver"
+                                        <%=restServer.getCurrentServer()==restServer.getQaLoadBalanced()?" checked ":"" %>  />
+                                    qa load balanced server(s) (${restServer.getQaLoadBalanced()})
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input id="prodserver" type="radio" name="datatype" value="prodloadbalancedserver"
+                                        <%=restServer.getCurrentServer()==restServer.getProdLoadBalanced()?" checked ":"" %>  />
+                                    prod load balanced server(s) (${restServer.getProdLoadBalanced()})
+                                </label>
+                            </div>
                             <div class="radio">
                                 <label>
                                     <input id="newdevserver" type="radio" name="datatype" value="newdevserver"
@@ -52,30 +73,9 @@
                             </div>
                             <div class="radio">
                                 <label>
-                                    <input id="testserver" type="radio" name="datatype" value="testserver"
-                                        <%=restServer.getCurrentServer()==restServer.getTestserver()?" checked ":"" %> />
-                                    test server (${restServer.getTestserver()})
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input id="qaserver" type="radio" name="datatype" value="qaserver"
-                                        <%=restServer.getCurrentServer()==restServer.getQaserver()?" checked ":"" %>  />
-                                    qa server (${restServer.getQaserver()})
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
                                     <input id="prodserver" type="radio" name="datatype" value="prodserver"
                                         <%=restServer.getCurrentServer()==restServer.getProdserver()?" checked ":"" %>  />
                                     prod server (${restServer.getProdserver()})
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input id="prodserver" type="radio" name="datatype" value="loadbalanced"
-                                        <%=restServer.getCurrentServer()==restServer.getLoadBalanced()?" checked ":"" %>  />
-                                    load balanced server (${restServer.getLoadBalanced()})
                                 </label>
                             </div>
 
