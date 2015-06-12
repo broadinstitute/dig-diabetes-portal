@@ -2308,6 +2308,12 @@ private String generateProteinEffectJson (String variantName){
 
     private String generateTraitPerVariantJson (String variantName){
         String filterForParticularVariant = filterByVariant (variantName)
+        String magic = "GWAS_MAGIC_mdv2"
+        String pgc = "GWAS_PGC_mdv2"
+        String giant = "GWAS_GIANT_mdv2"
+        String cardiogram = "GWAS_CARDIoGRAM_mdv2"
+        String glgc = "GWAS_GLGC_mdv2"
+        String cdkgen = "GWAS_CKDGenConsortium_mdv2"
         String jsonSpec = """
 {
         "passback": "123abc",
@@ -2320,58 +2326,58 @@ private String generateProteinEffectJson (String variantName){
                                         "cproperty": ["VAR_ID", "DBSNP_ID", "CHROM", "POS"],
                                 "orderBy":      ["P_VALUE"],
                                 "dproperty":    {
-                                                    "MAF" : ["GWAS_MAGIC_mdv2",
-                                                              "GWAS_PGC_mdv2",
-                                                              "GWAS_GIANT_mdv2",
-                                                              "GWAS_CARDIoGRAM_mdv2",
-                                                              "GWAS_GLGC_mdv2",
-                                                              "GWAS_CKDGenConsortium_mdv2"]
+                                                    "MAF" : ["${magic}",
+                                                              "${pgc}",
+                                                              "${giant}",
+                                                              "${cardiogram}",
+                                                              "${glgc}",
+                                                              "${cdkgen}"]
                                                 },
                                 "pproperty":    {
                                                      "BETA":         {
-                                                       "GWAS_MAGIC_mdv2": ["2hrG"],
-                                                       "GWAS_MAGIC_mdv2": ["2hrI"],
-                                                       "GWAS_GIANT_mdv2": ["BMI"],
-                                                       "GWAS_MAGIC_mdv2": ["FG"],
-                                                       "GWAS_MAGIC_mdv2": ["FI"],
-                                                       "GWAS_MAGIC_mdv2": ["HBA1C"],
-                                                       "GWAS_MAGIC_mdv2": ["HOMAB"],
-                                                       "GWAS_MAGIC_mdv2": ["HOMAIR"],
-                                                       "GWAS_MAGIC_mdv2": ["PI"]
+                                                       "${magic}": ["2hrG"],
+                                                       "${magic}": ["2hrI"],
+                                                       "${giant}": ["BMI"],
+                                                       "${magic}": ["FG"],
+                                                       "${magic}": ["FI"],
+                                                       "${magic}": ["HBA1C"],
+                                                       "${magic}": ["HOMAB"],
+                                                       "${magic}": ["HOMAIR"],
+                                                       "${magic}": ["PI"]
                                                      },
 
                                                      "ODDS_RATIO":   {
-                                                       "GWAS_PGC_mdv2": ["BIP"],
-                                                       "GWAS_CARDIoGRAM_mdv2": ["CAD"],
-                                                       "GWAS_PGC_mdv2": ["MDD"],
-                                                       "GWAS_PGC_mdv2": ["SCZ"]
+                                                       "${pgc}": ["BIP"],
+                                                       "${cardiogram}": ["CAD"],
+                                                       "${pgc}": ["MDD"],
+                                                       "${pgc}": ["SCZ"]
                                                      },
 
                                                      "P_VALUE":      {
-                                                       "GWAS_MAGIC_mdv2": ["2hrG"],
-                                                       "GWAS_MAGIC_mdv2": ["2hrI"],
-                                                       "GWAS_PGC_mdv2": ["BIP"],
-                                                       "GWAS_GIANT_mdv2": ["BMI"],
-                                                       "GWAS_CARDIoGRAM_mdv2": ["CAD"],
-                                                       "GWAS_GLGC_mdv2": ["CHOL"],
-                                                       "GWAS_CKDGenConsortium_mdv2": ["CKD"],
-                                                       "GWAS_MAGIC_mdv2": ["FG"],
-                                                       "GWAS_MAGIC_mdv2": ["FI"],
-                                                       "GWAS_MAGIC_mdv2": ["HBA1C"],
-                                                       "GWAS_GLGC_mdv2": ["HDL"],
-                                                       "GWAS_GIANT_mdv2": ["HEIGHT"],
-                                                       "GWAS_MAGIC_mdv2": ["HOMAB"],
-                                                       "GWAS_MAGIC_mdv2": ["HOMAIR"],
-                                                       "GWAS_GLGC_mdv2": ["LDL"],
-                                                       "GWAS_MAGIC_mdv2": ["MA"],
-                                                       "GWAS_PGC_mdv2": ["MDD"],
-                                                       "GWAS_MAGIC_mdv2": ["PI"],
-                                                       "GWAS_PGC_mdv2": ["SCZ"],
-                                                       "GWAS_GLGC_mdv2": ["TG"],
-                                                       "GWAS_CKDGenConsortium_mdv2": ["UACR"],
-                                                       "GWAS_GIANT_mdv2": ["WHR"],
-                                                       "GWAS_CKDGenConsortium_mdv2": ["eGFRcrea"],
-                                                       "GWAS_CKDGenConsortium_mdv2": ["eGFRcys"]
+                                                       "${magic}": ["2hrG"],
+                                                       "${magic}": ["2hrI"],
+                                                       "${pgc}": ["BIP"],
+                                                       "${giant}": ["BMI"],
+                                                       "${cardiogram}": ["CAD"],
+                                                       "${glgc}": ["CHOL"],
+                                                       "${cdkgen}": ["CKD"],
+                                                       "${magic}": ["FG"],
+                                                       "${magic}": ["FI"],
+                                                       "${magic}": ["HBA1C"],
+                                                       "${glgc}": ["HDL"],
+                                                       "${giant}": ["HEIGHT"],
+                                                       "${magic}": ["HOMAB"],
+                                                       "${magic}": ["HOMAIR"],
+                                                       "${glgc}": ["LDL"],
+                                                       "${magic}": ["MA"],
+                                                       "${pgc}": ["MDD"],
+                                                       "${magic}": ["PI"],
+                                                       "${pgc}": ["SCZ"],
+                                                       "${glgc}": ["TG"],
+                                                       "${cdkgen}": ["UACR"],
+                                                       "${giant}": ["WHR"],
+                                                       "${cdkgen}": ["eGFRcrea"],
+                                                       "${cdkgen}": ["eGFRcys"]
                                                      }
                                 }
                         },
@@ -2395,6 +2401,12 @@ private String generateProteinEffectJson (String variantName){
 
 
     public JSONObject getTraitPerVariant(String variantName) {//region
+        String magic = "GWAS_MAGIC_mdv2"
+        String pgc = "GWAS_MAGIC_mdv2"
+        String giant = "GWAS_MAGIC_mdv2"
+        String cardiogram = "GWAS_MAGIC_mdv2"
+        String glgc = "GWAS_MAGIC_mdv2"
+        String cdkgen = "GWAS_MAGIC_mdv2"
         JSONObject returnValue
         String orValue = orSubstitute( properties)
         def slurper = new JsonSlurper()
