@@ -2295,4 +2295,181 @@ private String generateProteinEffectJson (String variantName){
 
 
 
+
+
+
+
+
+
+
+
+
+    private String generateTraitPerVariantJson (String variantName){
+        String filterForParticularVariant = filterByVariant (variantName)
+        String jsonSpec = """
+{
+        "passback": "123abc",
+        "entity": "variant",
+        "page_number": 50,
+        "page_size": 100,
+        "limit": 10,
+        "count": false,
+        "properties":   {
+                                        "cproperty": ["VAR_ID", "DBSNP_ID", "CHROM", "POS"],
+                                "orderBy":      ["P_VALUE"],
+                                "dproperty":    {
+                                                    "MAF" : ["GWAS_MAGIC_mdv2",
+                                                              "GWAS_PGC_mdv2",
+                                                              "GWAS_GIANT_mdv2",
+                                                              "GWAS_CARDIoGRAM_mdv2",
+                                                              "GWAS_GLGC_mdv2",
+                                                              "GWAS_CKDGenConsortium_mdv2"]
+                                                },
+                                "pproperty":    {
+                                                     "BETA":         {
+                                                       "GWAS_MAGIC_mdv2": ["2hrG"],
+                                                       "GWAS_MAGIC_mdv2": ["2hrI"],
+                                                       "GWAS_GIANT_mdv2": ["BMI"],
+                                                       "GWAS_MAGIC_mdv2": ["FG"],
+                                                       "GWAS_MAGIC_mdv2": ["FI"],
+                                                       "GWAS_MAGIC_mdv2": ["HBA1C"],
+                                                       "GWAS_MAGIC_mdv2": ["HOMAB"],
+                                                       "GWAS_MAGIC_mdv2": ["HOMAIR"],
+                                                       "GWAS_MAGIC_mdv2": ["PI"]
+                                                     },
+
+                                                     "ODDS_RATIO":   {
+                                                       "GWAS_PGC_mdv2": ["BIP"],
+                                                       "GWAS_CARDIoGRAM_mdv2": ["CAD"],
+                                                       "GWAS_PGC_mdv2": ["MDD"],
+                                                       "GWAS_PGC_mdv2": ["SCZ"]
+                                                     },
+
+                                                     "P_VALUE":      {
+                                                       "GWAS_MAGIC_mdv2": ["2hrG"],
+                                                       "GWAS_MAGIC_mdv2": ["2hrI"],
+                                                       "GWAS_PGC_mdv2": ["BIP"],
+                                                       "GWAS_GIANT_mdv2": ["BMI"],
+                                                       "GWAS_CARDIoGRAM_mdv2": ["CAD"],
+                                                       "GWAS_GLGC_mdv2": ["CHOL"],
+                                                       "GWAS_CKDGenConsortium_mdv2": ["CKD"],
+                                                       "GWAS_MAGIC_mdv2": ["FG"],
+                                                       "GWAS_MAGIC_mdv2": ["FI"],
+                                                       "GWAS_MAGIC_mdv2": ["HBA1C"],
+                                                       "GWAS_GLGC_mdv2": ["HDL"],
+                                                       "GWAS_GIANT_mdv2": ["HEIGHT"],
+                                                       "GWAS_MAGIC_mdv2": ["HOMAB"],
+                                                       "GWAS_MAGIC_mdv2": ["HOMAIR"],
+                                                       "GWAS_GLGC_mdv2": ["LDL"],
+                                                       "GWAS_MAGIC_mdv2": ["MA"],
+                                                       "GWAS_PGC_mdv2": ["MDD"],
+                                                       "GWAS_MAGIC_mdv2": ["PI"],
+                                                       "GWAS_PGC_mdv2": ["SCZ"],
+                                                       "GWAS_GLGC_mdv2": ["TG"],
+                                                       "GWAS_CKDGenConsortium_mdv2": ["UACR"],
+                                                       "GWAS_GIANT_mdv2": ["WHR"],
+                                                       "GWAS_CKDGenConsortium_mdv2": ["eGFRcrea"],
+                                                       "GWAS_CKDGenConsortium_mdv2": ["eGFRcys"]
+                                                     }
+                                }
+                        },
+        "filters":      [
+                               ${filterForParticularVariant}
+                        ]
+}""".toString()
+        return jsonSpec
     }
+
+
+
+
+
+
+    private JSONObject gatherTraitPerVariantResults(String variantName){
+        String jsonSpec = generateTraitPerVariantJson( variantName)
+        return postRestCall(jsonSpec,GET_DATA_URL)
+    }
+
+
+
+    public JSONObject getTraitPerVariant(String variantName) {//region
+        JSONObject returnValue
+        String orValue = orSubstitute( properties)
+        def slurper = new JsonSlurper()
+        String apiData = gatherTraitPerVariantResults(variantName)
+        JSONObject apiResults = slurper.parseText(apiData)
+        int numberOfVariants = apiResults.numRecords
+        StringBuilder sb = new StringBuilder ("{\"results\":[")
+        for ( int  j = 0 ; j < numberOfVariants ; j++ ) {
+            sb  << "{ \"dataset\": \"traits\",\"pVals\": ["
+
+            if (apiResults.is_error == false) {
+                if ((apiResults.variants) && (apiResults.variants[j])  && (apiResults.variants[j][0])){
+                    def variant = apiResults.variants[j];
+
+                    def element = variant["VAR_ID"].findAll{it}[0]
+                    sb  << "{\"level\":\"VAR_ID\",\"count\":\"${element}\"},"
+
+                    element = variant["DBSNP_ID"].findAll{it}[0]
+                    sb  << "{\"level\":\"DBSNP_ID\",\"count\":\"${element}\"},"
+
+                    element = variant["CHROM"].findAll{it}[0]
+                    sb  << "{\"level\":\"CHROM\",\"count\":\"${element}\"},"
+
+                    element = variant["POS"].findAll{it}[0]
+                    sb  << "{\"level\":\"POS\",\"count\":${element}},"
+
+                    element = variant["MAF"].findAll{it}[0]
+
+                    sb  << "{\"level\":\"AA\",\"count\":${element[EXOMESEQ_AA]}},"
+                    sb  << "{\"level\":\"HS\",\"count\":${element[EXOMESEQ_HS]}},"
+                    sb  << "{\"level\":\"EA\",\"count\":${element[EXOMESEQ_EA]}},"
+                    sb  << "{\"level\":\"SA\",\"count\":${element[EXOMESEQ_SA]}},"
+                    sb  << "{\"level\":\"EUseq\",\"count\":${element[EXOMESEQ_EU]}},"
+                    sb  << "{\"level\":\"Euchip\",\"count\":${element[EXOMECHIP]}},"
+
+                    element = variant["P_VALUE"].findAll{it}[0]
+                    sb  << "{\"level\":\"P_VALUE\",\"count\":${element[dataSet][phenotypeName]}},"
+
+                    if (orValue.length()>0){
+                        element = variant["${orValue}"].findAll{it}[0]
+                        sb  << "{\"level\":\"${orValue}\",\"count\":\"${element[dataSet][phenotypeName]}\"},"
+                    } else {
+                        sb  << "{\"level\":\"BETA\",\"count\":\"--\"},"
+                    }
+
+                    element = variant["MAF"].findAll{it}[0]
+                    sb  << "{\"level\":\"MAF\",\"count\":${element[dataSet]}}"
+
+                }
+            }
+            sb  << "]}"
+            if (j<numberOfVariants-1){
+                sb  << ","
+            }
+        }
+        sb  << "]}"
+        returnValue = slurper.parseText(sb.toString())
+
+        return returnValue
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
