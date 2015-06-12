@@ -16,11 +16,11 @@ class RestServerService {
     private static final log = LogFactory.getLog(this)
 
 
-    private String LOAD_BALANCED_SERVER = ""
+    private String PROD_LOAD_BALANCED_SERVER = ""
+    private String QA_LOAD_BALANCED_SERVER = ""
+    private String DEV_LOAD_BALANCED_SERVER = ""
     private String BIGQUERY_REST_SERVER = ""
-    private String TEST_REST_SERVER = ""
     private String DEV_REST_SERVER = ""
-    private String QA_REST_SERVER = ""
     private String PROD_REST_SERVER = ""
     private String NEW_DEV_REST_SERVER = ""
     private String BASE_URL = ""
@@ -205,25 +205,27 @@ class RestServerService {
     public void initialize() {
         // old servers, to be removed
         BIGQUERY_REST_SERVER = grailsApplication.config.server.URL
-        DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base + grailsApplication.config.t2dDevRestServer.name + grailsApplication.config.t2dDevRestServer.path
-
         //current
 
-        // load balanced
-        LOAD_BALANCED_SERVER = grailsApplication.config.t2dLoadBalancedServer.base + grailsApplication.config.t2dLoadBalancedServer.name + grailsApplication.config.t2dLoadBalancedServer.path
+        // load balancer with rest server(s) behind it
+        PROD_LOAD_BALANCED_SERVER = grailsApplication.config.t2dProdLoadBalancedServer.base + grailsApplication.config.t2dProdLoadBalancedServer.name + grailsApplication.config.t2dProdLoadBalancedServer.path
 
-        // 'dedicated'
-        TEST_REST_SERVER = grailsApplication.config.t2dTestRestServer.base + grailsApplication.config.t2dTestRestServer.name + grailsApplication.config.t2dTestRestServer.path
+        // qa load balancer with rest server(s) behind it
+        QA_LOAD_BALANCED_SERVER = grailsApplication.config.t2dQaLoadBalancedServer.base + grailsApplication.config.t2dQaLoadBalancedServer.name + grailsApplication.config.t2dQaLoadBalancedServer.path
+
+        // test load balancer with rest server(s) behind it
+        DEV_LOAD_BALANCED_SERVER = grailsApplication.config.t2dDevLoadBalancedServer.base + grailsApplication.config.t2dDevLoadBalancedServer.name + grailsApplication.config.t2dDevLoadBalancedServer.path
+
+        // prod rest server, not load balanced
+        PROD_REST_SERVER = grailsApplication.config.t2dProdRestServer.base + grailsApplication.config.t2dProdRestServer.name + grailsApplication.config.t2dProdRestServer.path
 
         // 'dev'
         NEW_DEV_REST_SERVER = grailsApplication.config.t2dNewDevRestServer.base + grailsApplication.config.t2dNewDevRestServer.name + grailsApplication.config.t2dNewDevRestServer.path
 
-        // qa
-        QA_REST_SERVER = grailsApplication.config.t2dQaRestServer.base + grailsApplication.config.t2dQaRestServer.name + grailsApplication.config.t2dQaRestServer.path
+        // dev rest server, not oad baalnecd
+        DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base + grailsApplication.config.t2dDevRestServer.name + grailsApplication.config.t2dDevRestServer.path
 
-        // prod
-        PROD_REST_SERVER = grailsApplication.config.t2dProdRestServer.base + grailsApplication.config.t2dProdRestServer.name + grailsApplication.config.t2dProdRestServer.path
-
+        //
         //
         BASE_URL = grailsApplication.config.server.URL
         DBT_URL = grailsApplication.config.dbtRestServer.URL
@@ -243,16 +245,16 @@ class RestServerService {
 
 
     // current below
-    public String getLoadBalanced() {
-        return LOAD_BALANCED_SERVER;
+    public String getProdLoadBalanced() {
+        return PROD_LOAD_BALANCED_SERVER;
     }
 
-    public String getTestserver() {
-        return TEST_REST_SERVER;
+    public String getQaLoadBalanced() {
+        return QA_LOAD_BALANCED_SERVER;
     }
 
-    public String getQaserver() {
-        return QA_REST_SERVER;
+    public String getDevLoadBalanced() {
+        return DEV_LOAD_BALANCED_SERVER;
     }
 
     public String getProdserver() {
@@ -487,28 +489,28 @@ class RestServerService {
         pickADifferentRestServer(BIGQUERY_REST_SERVER)
     }
 
-    public void goWithTheTestServer() {
-        pickADifferentRestServer(TEST_REST_SERVER)
+    public void goWithTheProdLoadBalancedServer() {
+        pickADifferentRestServer(PROD_LOAD_BALANCED_SERVER)
+    }
+
+    public void goWithTheQaLoadBalancedServer() {
+        pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
+    }
+
+    public void goWithTheDevLoadBalancedServer() {
+        pickADifferentRestServer(DEV_LOAD_BALANCED_SERVER)
+    }
+
+    public void goWithTheProdServer() {
+        pickADifferentRestServer(PROD_REST_SERVER)
     }
 
     public void goWithTheDevServer() {
         pickADifferentRestServer(DEV_REST_SERVER)
     }
 
-    public void goWithTheLoadBalancedServer() {
-        pickADifferentRestServer(LOAD_BALANCED_SERVER)
-    }
-
     public void goWithTheNewDevServer() {
         pickADifferentRestServer(NEW_DEV_REST_SERVER)
-    }
-
-    public void goWithTheQaServer() {
-        pickADifferentRestServer(QA_REST_SERVER)
-    }
-
-    public void goWithTheProdServer() {
-        pickADifferentRestServer(PROD_REST_SERVER)
     }
 
 
