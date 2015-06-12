@@ -19,6 +19,8 @@ class RestServerService {
     private String PROD_LOAD_BALANCED_SERVER = ""
     private String QA_LOAD_BALANCED_SERVER = ""
     private String DEV_LOAD_BALANCED_SERVER = ""
+    private String DEV01_BEHIND_LOAD_BALANCER = ""
+    private String DEV02_BEHIND_LOAD_BALANCER = ""
     private String BIGQUERY_REST_SERVER = ""
     private String DEV_REST_SERVER = ""
     private String PROD_REST_SERVER = ""
@@ -216,13 +218,19 @@ class RestServerService {
         // test load balancer with rest server(s) behind it
         DEV_LOAD_BALANCED_SERVER = grailsApplication.config.t2dDevLoadBalancedServer.base + grailsApplication.config.t2dDevLoadBalancedServer.name + grailsApplication.config.t2dDevLoadBalancedServer.path
 
+        // test rest server 01 bypassing load balancer
+        DEV01_BEHIND_LOAD_BALANCER = grailsApplication.config.t2dDev01BehindLoadBalancer.base + grailsApplication.config.t2dDev01BehindLoadBalancer.name + grailsApplication.config.t2dDev01BehindLoadBalancer.path
+
+        // test rest server 01 bypassing load balancer
+        DEV02_BEHIND_LOAD_BALANCER = grailsApplication.config.t2dDev02BehindLoadBalancer.base + grailsApplication.config.t2dDev02BehindLoadBalancer.name + grailsApplication.config.t2dDev02BehindLoadBalancer.path
+
         // prod rest server, not load balanced
         PROD_REST_SERVER = grailsApplication.config.t2dProdRestServer.base + grailsApplication.config.t2dProdRestServer.name + grailsApplication.config.t2dProdRestServer.path
 
         // 'dev'
         NEW_DEV_REST_SERVER = grailsApplication.config.t2dNewDevRestServer.base + grailsApplication.config.t2dNewDevRestServer.name + grailsApplication.config.t2dNewDevRestServer.path
 
-        // dev rest server, not oad baalnecd
+        // dev rest server, not load balanced
         DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base + grailsApplication.config.t2dDevRestServer.name + grailsApplication.config.t2dDevRestServer.path
 
         //
@@ -255,6 +263,14 @@ class RestServerService {
 
     public String getDevLoadBalanced() {
         return DEV_LOAD_BALANCED_SERVER;
+    }
+
+    public String getDev01BehindLoadBalancer() {
+        return DEV01_BEHIND_LOAD_BALANCER;
+    }
+
+    public String getDev02BehindLoadBalancer() {
+        return DEV02_BEHIND_LOAD_BALANCER;
     }
 
     public String getProdserver() {
@@ -495,6 +511,14 @@ class RestServerService {
 
     public void goWithTheQaLoadBalancedServer() {
         pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
+    }
+
+    public void goWithTheDev01BehindLoadBalancer() {
+        pickADifferentRestServer(DEV01_BEHIND_LOAD_BALANCER)
+    }
+
+    public void goWithTheDev02BehindLoadBalancer() {
+        pickADifferentRestServer(DEV02_BEHIND_LOAD_BALANCER)
     }
 
     public void goWithTheDevLoadBalancedServer() {

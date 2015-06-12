@@ -45,6 +45,20 @@
                         <div id="datatypes-form">
                             <div class="radio">
                                 <label>
+                                    <input id="testserver" type="radio" name="datatype" value="dev01behindloadbalancer"
+                                        <%=restServer.getCurrentServer()==restServer.getDev01BehindLoadBalancer()?" checked ":"" %> />
+                                    dev01 behind the load balancer (${restServer.getDev01BehindLoadBalancer()})
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input id="testserver" type="radio" name="datatype" value="dev02behindloadbalancer"
+                                        <%=restServer.getCurrentServer()==restServer.getDev02BehindLoadBalancer()?" checked ":"" %> />
+                                    dev02 behind the load balancer (${restServer.getDev02BehindLoadBalancer()})
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
                                     <input id="testserver" type="radio" name="datatype" value="devloadbalancedserver"
                                         <%=restServer.getCurrentServer()==restServer.getDevLoadBalanced()?" checked ":"" %> />
                                     dev load balanced server(s) (${restServer.getDevLoadBalanced()})

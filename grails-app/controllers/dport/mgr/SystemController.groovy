@@ -201,6 +201,20 @@ class SystemController {
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"
             }
+        } else  if (restServer == 'dev01behindloadbalancer')  {
+            if (!(currentServer == 'dev01behindloadbalancer')) {
+                restServerService.goWithTheDev01BehindLoadBalancer()
+                flash.message = "You are now using the ${restServer} server!"
+            }  else {
+                flash.message = "But you were already using the ${currentServer} server!"
+            }
+        } else  if (restServer == 'dev02behindloadbalancer')  {
+            if (!(currentServer == 'dev02behindloadbalancer')) {
+                restServerService.goWithTheDev02BehindLoadBalancer()
+                flash.message = "You are now using the ${restServer} server!"
+            }  else {
+                flash.message = "But you were already using the ${currentServer} server!"
+            }
         } else  if (restServer == 'newdevserver')  {
             if (!(currentServer == 'newdevserver')) {
                 restServerService.goWithTheNewDevServer()
