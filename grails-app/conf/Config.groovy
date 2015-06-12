@@ -150,6 +150,16 @@ t2dDevLoadBalancedServer {
     name =  'dev/'
     path = 'gs/'
 }
+t2dDev01BehindLoadBalancer {
+    base = 'http://dig-dev-01.broadinstitute.org:8888/'
+    name =  'dev/'
+    path = 'gs/'
+}
+t2dDev02BehindLoadBalancer {
+    base = 'http://dig-dev-02.broadinstitute.org:8888/'
+    name =  'dev/'
+    path = 'gs/'
+}
 
 // individual servers
 t2dDevRestServer {

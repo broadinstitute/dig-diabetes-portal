@@ -13,24 +13,24 @@ class RestServerServiceUnitSpec extends Specification {
 
 
 
-    void "test that we can change to test"() {
+    void "test that we can change to load balanced dev"() {
         given:
         service.initialize ()
         when:
-        service.goWithTheTestServer ()
+        service.goWithTheDevLoadBalancedServer ()
         then:
-        assert service.getCurrentServer ()   == service.getTestserver()
+        assert service.getCurrentServer ()   == service.getDevLoadBalanced()
 
     }
 
 
-    void "test that we can change to qa"() {
+    void "test that we can change to load balanced qa"() {
         given:
         service.initialize ()
         when:
-        service.goWithTheQaServer ()
+        service.goWithTheQaLoadBalancedServer()
         then:
-        assert service.getCurrentServer ()   == service.getQaserver()
+        assert service.getCurrentServer ()   == service.getQaLoadBalanced()
 
     }
 
