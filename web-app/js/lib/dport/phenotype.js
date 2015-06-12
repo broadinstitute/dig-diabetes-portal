@@ -19,11 +19,17 @@ var mpgSoftware = mpgSoftware || {};
          */
         var convertLineForPhenotypicTraitTable = function ( variant, effectsField ) {
             var retVal = [];
-            var pValueGreyedOut = (variant.PVALUE > .05)? "greyedout" :"normal";
+            var pValueGreyedOut = (variant.P_VALUE > .05)? "greyedout" :"normal";
             retVal.push("<a class='boldlink' href='../variant/variantInfo/"+ variant.DBSNP_ID+"'>"+ variant.DBSNP_ID+"</a>");
             retVal.push("<a class='boldItlink' href='../gene/geneInfo/"+ variant.CLOSEST_GENE+"'>"+ variant.CLOSEST_GENE+"</a>");
-            retVal.push(""+ variant.PVALUE.toPrecision(3));
-            retVal.push("<span class='" +pValueGreyedOut+ "'>"+variant[effectsField].toPrecision(3)+"</span>");
+            retVal.push(""+ variant.P_VALUE.toPrecision(3));
+            var betaVal;
+            if ($.isNumeric(variant[effectsField])){
+                betaVal = parseFloat(variant[effectsField]);
+                retVal.push("<span class='" +pValueGreyedOut+ "'>"+betaVal.toPrecision(3)+"</span>");
+            } else {
+                retVal.push("<span class='" +pValueGreyedOut+ "'>--</span>");
+            }
             retVal.push((variant.MAF)?(""+variant.MAF.toPrecision(3)):"");
             retVal.push("<a class='boldlink' href='./traitInfo/"+ variant.DBSNP_ID+"'>click here</a>");
             return retVal;
@@ -33,8 +39,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var iterativeTableFiller = function  (data, show_gene, show_sigma, show_exseq, show_exchp)  {
-            var variant =  data['variant'];
+        var iterativeTableFiller = function  (variant, show_gene, show_sigma, show_exseq, show_exchp)  {
             var effectTypeTitle =  UTILS.determineEffectsTypeHeader(variant);
             var effectTypeString =  UTILS.determineEffectsTypeString(effectTypeTitle);
             $('#effectTypeHeader').append(effectTypeTitle);
