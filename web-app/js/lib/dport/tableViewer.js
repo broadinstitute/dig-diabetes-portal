@@ -617,7 +617,7 @@ var variantProcessing = (function () {
                 for (var dataset in data.columns.dproperty[pheno]) {
                     for (var k = 0; k < data.columns.dproperty[pheno][dataset].length; k++) {
                         var column = data.columns.dproperty[pheno][dataset][k]
-                        array.push(getSimpleString((variant[column][dataset]),Math.round(variant[column][dataset][pheno]) == variant[column][dataset][pheno] ? noop : UTILS.realNumberFormatter,variant[column][dataset],""));
+                        array.push(getSimpleString((variant[column][dataset]),Math.round(variant[column][dataset]) == variant[column][dataset] ? noop : UTILS.realNumberFormatter,variant[column][dataset],""));
                     }
                 }
             }

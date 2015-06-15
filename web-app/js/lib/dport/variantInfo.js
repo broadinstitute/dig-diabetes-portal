@@ -614,9 +614,11 @@ var mpgSoftware = mpgSoftware || {};
                     $('#variantTitleInAssociationStatistics').append(variantTitle);
                     $('#variantCharacterization').append(UTILS.getSimpleVariantsEffect(variant.MOST_DEL_SCORE));
                     $('#describingVariantAssociation').append(UTILS.variantInfoHeaderSentence(variant));
+
+                    // KDUXTD-52: Now set by the variant association statistics REST call (see _variantAssociationStatistics.gsp)
                     var pVal = UTILS.get_lowest_p_value(variant);
-                    $('#variantPValue').append((parseFloat(pVal[0])).toPrecision(4));
-                    $('#variantInfoGeneratingDataSet').append(pVal[1]);
+//                   $('#variantPValue').append((parseFloat(pVal[0])).toPrecision(4));
+//                    $('#variantInfoGeneratingDataSet').append(pVal[1]);
                     $('#variantTitle').append(variantTitle);
                     $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
                     $('#populationsHowCommonIs').append(variantTitle);
