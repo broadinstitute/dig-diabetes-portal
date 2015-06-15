@@ -242,6 +242,7 @@ class SharedToolsService {
             LinkedHashMap<String, List<String>> annotatedPhenotypes = [:]
             LinkedHashMap<String, List<String>> annotatedSampleGroups = [:]
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> phenotypeSpecificSampleGroupProperties = [:]
+            LinkedHashMap<String, LinkedHashMap<String, List<String>>> experimentSpecificSampleGroupProperties = [:]
             String dataSetVersionThatWeWant = "${dataSetPrefix}${getDataVersion()}"
             if (metadata) {
                 for (def experiment in metadata.experiments) {
@@ -253,6 +254,7 @@ class SharedToolsService {
                         getPhenotypeSpecificPropertiesPerSampleGroupId(experiment.sample_groups, phenotypeSpecificSampleGroupProperties)
                         if (experiment.technology == "GWAS"){
                             getTechnologySpecificPhenotype(experiment.sample_groups,gwasSpecificPhenotype)
+                            getTechnologySpecificExperiment(experiment.sample_groups,experimentSpecificSampleGroupProperties)
                         }
                     }
                 }
@@ -262,6 +264,7 @@ class SharedToolsService {
             sharedProcessedMetadata['sampleGroupsPerPhenotype'] = annotatedPhenotypes
             sharedProcessedMetadata['propertiesPerSampleGroups'] = annotatedSampleGroups
             sharedProcessedMetadata['phenotypeSpecificPropertiesPerSampleGroup'] = phenotypeSpecificSampleGroupProperties
+            sharedProcessedMetadata['sampleGroupSpecificProperties'] = phenotypeSpecificSampleGroupProperties
             forceProcessedMetadataOverride = 0
         }
         return sharedProcessedMetadata
@@ -313,16 +316,24 @@ class SharedToolsService {
         return annotatedPhenotypes
     }
 
-    // Need a map where phenotypes point to data sets.  This will allow me to ask people what phenotype they want,
-    // and upon response = that phenotype to the data set we need
-    public LinkedHashMap<String, List <LinkedHashMap>> getTechnologySpecificPhenotype (def sampleGroups, LinkedHashMap<String,String> phenotypeMap){
+
+    /***
+     *  Need a map where phenotypes point to data sets.  This will allow me to ask people what phenotype they want,
+     *  and upon response = that phenotype to the data set we need
+     *
+     * @param sampleGroups
+     * @param phenotypeMap
+     * @return
+     */
+    public LinkedHashMap<String, List <LinkedHashMap>> getTechnologySpecificPhenotype (def sampleGroups, LinkedHashMap<String, List<String>> phenotypeMap){
         for (def sampleGroup in sampleGroups){
             if (sampleGroup.phenotypes){
+                String sampleGroupName = sampleGroup.name
                 String sampleGroupId = sampleGroup.id
                 for (def phenotype in sampleGroup.phenotypes){
                     String phenotypeName = phenotype.name
                     if (!phenotypeMap.containsKey (phenotypeName)){
-                        phenotypeMap[phenotypeName] = [sampleGroupId:sampleGroupId]
+                        phenotypeMap[phenotypeName] = [sampleGroupId:sampleGroupId,sampleGroupName:sampleGroupName]
                         if (phenotype.properties) {
                             LinkedHashMap properties = [:]
                             for (def property in phenotype.properties){
@@ -348,6 +359,68 @@ class SharedToolsService {
 
 
 
+    /***
+     *  Need a map where phenotypes point to data sets.  This will allow me to ask people what phenotype they want,
+     *  and upon response = that phenotype to the data set we need
+     *
+     * @param sampleGroups
+     * @param phenotypeMap
+     * @return
+     */
+    public LinkedHashMap<String, List <LinkedHashMap>> getTechnologySpecificExperiment (def sampleGroups, LinkedHashMap<String, List<String>> sampleGroupHolder){
+        for (def sampleGroup in sampleGroups){
+            String sampleGroupId = sampleGroup.id
+            String sampleGroupName = sampleGroup.name
+            LinkedHashMap sampleGroupMap = [sampleGroupId:sampleGroupId]
+            if (sampleGroup.properties){
+                for (def property in sampleGroup.properties){
+                    String propertyName = property.name
+                    String propertyType = property.type
+                    if (!sampleGroupMap.containsKey(propertyName)){
+                        sampleGroupMap[propertyName] = propertyType
+                    }
+                     if (sampleGroup.sample_groups){
+                         getTechnologySpecificExperiment (sampleGroup.sample_groups,sampleGroupHolder)
+                    }
+                }
+            }
+            if (!sampleGroupHolder.containsKey(sampleGroupName)){
+                sampleGroupHolder[sampleGroupName] = sampleGroupMap
+            }
+        }
+        return sampleGroupHolder
+    }
+
+
+
+
+    /***
+     * We have a data structure indexed by phenotype where values correspond to maps. These maps at a minimum contain
+     * a pointer to a sample group ID (key = sampleGroupId), but they may also contain an arbitrary number of other key value
+     * pairs, where the key is the name of the property and the value is the property type. This structure should allow me to
+     * ask questions such as "does this phenotype have a beta property? If so then tell me the sample ID.  Note that this
+     * approach depends on the uniqueness of the phenotype/property combination, which is true only within a
+     * specific version/technology combination.
+     *
+     * @param phenotype
+     * @param property
+     * @param holder
+     * @return
+     */
+    public LinkedHashMap<String, String> pullBackSampleGroup (String phenotype,String property,LinkedHashMap<String, List<String>> holder)  {
+        LinkedHashMap<String, String>  returnValue = [phenotypeFound: false]
+        if (holder.containsKey (phenotype)){
+            LinkedHashMap phenotypeSpecificProperties = holder [phenotype]
+            returnValue ["phenotypeFound"] = true
+            returnValue ["propertyFound"] = false
+            returnValue ["sampleGroupId"] = phenotypeSpecificProperties.sampleGroupId
+            if (phenotypeSpecificProperties.containsKey(property))  {
+                returnValue ["propertyFound"] = false
+                returnValue ["propertyType"] =  phenotypeSpecificProperties [property]
+             }
+        }
+        return returnValue
+    }
 
 
 
@@ -1253,275 +1326,273 @@ class SharedToolsService {
  */
     public String translator(String stringToTranslate){
     if (stringToTranslate){
-        if (trans.size()>0){
-            if (trans.containsKey("v${stringToTranslate}".toString())){
-                return trans ["v${stringToTranslate}".toString()]
-            } else {
-                return stringToTranslate
-            }
+         if (trans.size()<=0) {
+             trans["vT2D"]="Type 2 diabetes"
+             trans["vBMI"]="BMI"
+             trans["vCHOL"]="Cholesterol"
+             trans["vDBP"]="Diastolic blood pressure"
+             trans["vFG"]="Fasting glucose"
+             trans["vFI"]="Fasting insulin"
+             trans["vHBA1C"]="HbA1c"
+             trans["vHDL"]="HDL cholesterol"
+             trans["vHEIGHT"]="Height"
+             trans["vHIPC"]="Hip circumference"
+             trans["vLDL"]="LDL cholesterol"
+             trans["vSBP"]="Systolic blood pressure"
+             trans["vTG"]="Triglycerides"
+             trans["vWAIST"]="Waist circumference"
+             trans["vWHR"]="Waist-hip ratio"
+             trans["vCAD"]="Coronary artery disease"
+             trans["vCKD"]="Chronic kidney disease"
+             trans["vUACR"]="Urinary albumin-to-creatinine ratio"
+             trans["veGFRcrea"]="eGFR-creat (serum creatinine)"
+             trans["veGFRcys"]="eGFR-cys (serum cystatin C)"
+             trans["vTC"]="Total cholesterol"
+             trans["v2hrG"]="Two-hour glucose"
+             trans["v2hrI"]="Two-hour insulin"
+             trans["vHOMAB"]="HOMA-B"
+             trans["vHOMAIR"]="HOMA-IR"
+             trans["vMA"]="Microalbuminuria"
+             trans["vPI"]="Proinsulin levels"
+             trans["vBIP"]="Bipolar disorder"
+             trans["vMDD"]="Major depressive disorder"
+             trans["vSCZ"]="Schizophrenia"
+             trans["v13k"]= "13K exome sequence analysis"
+             trans["v13k_aa_genes"]= "13K exome sequence analysis: African-Americans"
+             trans["v13k_ea_genes"]= "13K exome sequence analysis: East Asians"
+             trans["v13k_eu"]= "13K exome sequence analysis: Europeans"
+             trans["v13k_eu_genes"]= "13K exome sequence analysis: Europeans, T2D-GENES cohorts"
+             trans["v13k_eu_go"]= "13K exome sequence analysis: Europeans, GoT2D cohorts"
+             trans["v13k_hs_genes"]= "13K exome sequence analysis: Latinos"
+             trans["v13k_sa_genes"]= "13K exome sequence analysis: South Asians"
+             trans["v17k"]= "17K exome sequence analysis"
+             trans["v17k_aa"]= "17K exome sequence analysis: African-Americans"
+             trans["v17k_aa_genes"]= "17K exome sequence analysis: African-Americans, T2D-GENES cohorts"
+             trans["v17k_aa_genes_aj"]= "17K exome sequence analysis: African-Americans, Jackson Heart Study cohort"
+             trans["v17k_aa_genes_aw"]= "17K exome sequence analysis: African-Americans, Wake Forest Study cohort"
+             trans["v17k_ea_genes"]= "17K exome sequence analysis: East Asians"
+             trans["v17k_ea_genes_ek"]= "17K exome sequence analysis: East Asians, Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH) cohort"
+             trans["v17k_ea_genes_es"]= "17K exome sequence analysis: East Asians, Singapore Diabetes Cohort Study and Singapore Prospective Study Program cohort"
+             trans["v17k_eu"]= "17K exome sequence analysis: Europeans"
+             trans["v17k_eu_genes"]= "17K exome sequence analysis: Europeans, T2D-GENES cohorts"
+             trans["v17k_eu_genes_ua"]= "17K exome sequence analysis: Europeans, Longevity Genes in Founder Populations (Ashkenazi) cohort"
+             trans["v17k_eu_genes_um"]= "17K exome sequence analysis: Europeans, Metabolic Syndrome in Men (METSIM) Study cohort"
+             trans["v17k_eu_go"]= "17K exome sequence analysis: Europeans, GoT2D cohorts"
+             trans["v17k_hs"]= "17K exome sequence analysis: Latinos"
+             trans["v17k_hs_genes"]= "17K exome sequence analysis: Latinos, T2D-GENES cohorts"
+             trans["v17k_hs_genes_ha"]= "17K exome sequence analysis: Latinos, San Antonio cohort"
+             trans["v17k_hs_genes_hs"]= "17K exome sequence analysis: Latinos, Starr County cohort"
+             trans["v17k_hs_sigma"]= "17K exome sequence analysis: Latinos, SIGMA cohorts"
+             trans["v17k_hs_sigma_mec"]= "17K exome sequence analysis: Multiethnic Cohort (MEC)"
+             trans["v17k_hs_sigma_mexb1"]= "17K exome sequence analysis: UNAM/INCMNSZ Diabetes Study (UIDS) cohort"
+             trans["v17k_hs_sigma_mexb2"]= "17K exome sequence analysis: Diabetes in Mexico Study (DMS) cohort"
+             trans["v17k_hs_sigma_mexb3"]= "17K exome sequence analysis: Mexico City Diabetes Study (MCDS) cohort"
+             trans["v17k_sa_genes"]= "17K exome sequence analysis: South Asians"
+             trans["v17k_sa_genes_sl"]= "17K exome sequence analysis: South Asians, LOLIPOP cohort"
+             trans["v17k_sa_genes_ss"]= "17K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort"
+             trans["v26k"]= "26K exome sequence analysis"
+             trans["v26k_aa"]= "26K exome sequence analysis: all African-Americans"
+             trans["v26k_aa_esp"]= "26K exome sequence analysis: African-Americans, all ESP cohorts"
+             trans["v26k_aa_genes"]= "26K exome sequence analysis: African-Americans, T2D-GENES cohorts"
+             trans["v26k_aa_genes_aj"]= "26K exome sequence analysis: African-Americans, Jackson Heart Study cohort"
+             trans["v26k_aa_genes_aw"]= "26K exome sequence analysis: African-Americans, Wake Forest Study cohort"
+             trans["v26k_ea_genes"]= "26K exome sequence analysis: East Asians"
+             trans["v26k_ea_genes_ek"]= "26K exome sequence analysis: East Asians, Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH) cohort"
+             trans["v26k_ea_genes_es"]= "26K exome sequence analysis: East Asians, Singapore Diabetes Cohort Study and Singapore Prospective Study Program cohort"
+             trans["v26k_eu"]= "26K exome sequence analysis: Europeans"
+             trans["v26k_eu_esp"]= "26K exome sequence analysis: Europeans, all ESP cohorts"
+             trans["v26k_eu_genes"]= "26K exome sequence analysis: Europeans, T2D-GENES cohorts"
+             trans["v26k_eu_genes_ua"]= "26K exome sequence analysis: Europeans, Longevity Genes in Founder Populations (Ashkenazi) cohort"
+             trans["v26k_eu_genes_um"]= "26K exome sequence analysis: Europeans, Metabolic Syndrome in Men (METSIM) Study cohort"
+             trans["v26k_eu_go"]= "26K exome sequence analysis: Europeans, GoT2D cohorts"
+             trans["v26k_eu_lucamp"]= "26K exome sequence analysis: Europeans, LuCamp cohort"
+             trans["v26k_hs"]= "26K exome sequence analysis: Latinos"
+             trans["v26k_hs_genes"]= "26K exome sequence analysis: Latinos, T2D-GENES cohorts"
+             trans["v26k_hs_genes_ha"]= "26K exome sequence analysis: Latinos, San Antonio cohort"
+             trans["v26k_hs_genes_hs"]= "26K exome sequence analysis: Latinos, Starr County cohort"
+             trans["v26k_hs_sigma"]= "26K exome sequence analysis: Latinos, SIGMA cohorts"
+             trans["v26k_hs_sigma_mec"]= "26K exome sequence analysis: Multiethnic Cohort (MEC)"
+             trans["v26k_hs_sigma_mexb1"]= "26K exome sequence analysis: UNAM/INCMNSZ Diabetes Study (UIDS) cohort"
+             trans["v26k_hs_sigma_mexb2"]= "26K exome sequence analysis: Diabetes in Mexico Study (DMS) cohort"
+             trans["v26k_hs_sigma_mexb3"]= "26K exome sequence analysis: Mexico City Diabetes Study (MCDS) cohort"
+             trans["v26k_sa_genes"]= "26K exome sequence analysis: South Asians"
+             trans["v26k_sa_genes_sl"]= "26K exome sequence analysis: South Asians, LOLIPOP cohort"
+             trans["v26k_sa_genes_ss"]= "26K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort"
+             trans["v82k"]= "82K exome chip analysis"
+             trans["vAfrican_American"]= "African-American"
+             trans["vBETA"]= "Effect size (beta)"
+             trans["vCARDIoGRAM"]= "CARDIoGRAM GWAS"
+             trans["vCHROM"]= "Chromosome"
+             trans["vCKDGenConsortium"]= "CKDGen GWAS"
+             trans["vCLOSEST_GENE"]= "Nearest gene"
+             trans["vCondel_PRED"]= "Condel prediction"
+             trans["vConsequence"]= "Consequence"
+             trans["vDBSNP_ID"]= "dbSNP ID"
+             trans["vDIAGRAM"]= "DIAGRAM GWAS"
+             trans["vDirection"]= "Direction of effect"
+             trans["vEAC_PH"]= "Effect allele count"
+             trans["vEAF"]= "Effect allele frequency"
+             trans["vEast_Asian"]= "East Asian"
+             trans["vEuropean"]= "European"
+             trans["vExChip"]= "Exome chip"
+             trans["vExChip_82k"]= "82k exome chip analysis"
+             trans["vExChip_82k_mdv1"]= "82k exome chip analysis"
+             trans["vExChip_82k_mdv2"]= "82k exome chip analysis"
+             trans["vExSeq"]= "Exome sequencing"
+             trans["vExSeq_13k"]= "13K exome sequence analysis"
+             trans["vExSeq_13k_aa_genes_mdv1"]= "13K exome sequence analysis: African-Americans"
+             trans["vExSeq_13k_aa_genes_mdv2"]= "13K exome sequence analysis: African-Americans"
+             trans["vExSeq_13k_aa_genes_mdv3"]= "13K exome sequence analysis: African-Americans"
+             trans["vExSeq_13k_ea_genes_mdv1"]= "13K exome sequence analysis: East Asians"
+             trans["vExSeq_13k_ea_genes_mdv2"]= "13K exome sequence analysis: East Asians"
+             trans["vExSeq_13k_ea_genes_mdv3"]= "13K exome sequence analysis: East Asians"
+             trans["vExSeq_13k_eu_genes_mdv1"]= "13K exome sequence analysis: Europeans, T2D-GENES cohorts"
+             trans["vExSeq_13k_eu_go_mdv1"]= "13K exome sequence analysis: Europeans, GoT2D cohorts"
+             trans["vExSeq_13k_eu_mdv1"]= "13K exome sequence analysis: Europeans"
+             trans["vExSeq_13k_eu_mdv2"]= "13K exome sequence analysis: Europeans"
+             trans["vExSeq_13k_eu_mdv3"]= "13K exome sequence analysis: Europeans"
+             trans["vExSeq_13k_hs_genes_mdv1"]= "13K exome sequence analysis: Latinos"
+             trans["vExSeq_13k_hs_genes_mdv2"]= "13K exome sequence analysis: Latinos"
+             trans["vExSeq_13k_hs_genes_mdv3"]= "13K exome sequence analysis: Latinos"
+             trans["vExSeq_13k_mdv1"]= "13K exome sequence analysis"
+             trans["vExSeq_13k_mdv2"]= "13K exome sequence analysis"
+             trans["vExSeq_13k_mdv3"]= "13K exome sequence analysis"
+             trans["vExSeq_13k_sa_genes_mdv1"]= "13K exome sequence analysis: South Asians"
+             trans["vExSeq_13k_sa_genes_mdv2"]= "13K exome sequence analysis: South Asians"
+             trans["vExSeq_13k_sa_genes_mdv3"]= "13K exome sequence analysis: South Asians"
+             trans["vExSeq_17k"]= "17K exome sequence analysis"
+             trans["vExSeq_17k_aa_genes_aj_mdv2"]= "17K exome sequence analysis: African-Americans, Jackson Heart Study cohort"
+             trans["vExSeq_17k_aa_genes_aw_mdv2"]= "17K exome sequence analysis: African-Americans, Wake Forest Study cohort"
+             trans["vExSeq_17k_aa_genes_mdv2"]= "17K exome sequence analysis: African-Americans, T2D-GENES cohorts"
+             trans["vExSeq_17k_aa_mdv2"]= "17K exome sequence analysis: African-Americans"
+             trans["vExSeq_17k_ea_genes_ek_mdv2"]= "17K exome sequence analysis: East Asians, Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH) cohort"
+             trans["vExSeq_17k_ea_genes_es_mdv2"]= "17K exome sequence analysis: East Asians, Singapore Diabetes Cohort Study and Singapore Prospective Study Program cohort"
+             trans["vExSeq_17k_ea_genes_mdv2"]= "17K exome sequence analysis: East Asians"
+             trans["vExSeq_17k_eu_genes_mdv2"]= "17K exome sequence analysis: Europeans, T2D-GENES cohorts"
+             trans["vExSeq_17k_eu_genes_ua_mdv2"]= "17K exome sequence analysis: Europeans, Longevity Genes in Founder Populations (Ashkenazi) cohort"
+             trans["vExSeq_17k_eu_genes_um_mdv2"]= "17K exome sequence analysis: Europeans, Metabolic Syndrome in Men (METSIM) Study cohort"
+             trans["vExSeq_17k_eu_go_mdv2"]= "17K exome sequence analysis: Europeans, GoT2D cohorts"
+             trans["vExSeq_17k_eu_mdv2"]= "17K exome sequence analysis: Europeans"
+             trans["vExSeq_17k_hs_genes_ha_mdv2"]= "17K exome sequence analysis: Latinos, San Antonio cohort"
+             trans["vExSeq_17k_hs_genes_hs_mdv2"]= "17K exome sequence analysis: Latinos, Starr County cohort"
+             trans["vExSeq_17k_hs_genes_mdv2"]= "17K exome sequence analysis: Latinos, T2D-GENES cohorts"
+             trans["vExSeq_17k_hs_mdv2"]= "17K exome sequence analysis: Latinos"
+             trans["vExSeq_17k_hs_sigma_mdv2"]= "17K exome sequence analysis: Latinos, SIGMA cohorts"
+             trans["vExSeq_17k_hs_sigma_mec_mdv2"]= "17K exome sequence analysis: Multiethnic Cohort (MEC)"
+             trans["vExSeq_17k_hs_sigma_mexb1_mdv2"]= "17K exome sequence analysis: UNAM/INCMNSZ Diabetes Study (UIDS) cohort"
+             trans["vExSeq_17k_hs_sigma_mexb2_mdv2"]= "17K exome sequence analysis: Diabetes in Mexico Study (DMS) cohort"
+             trans["vExSeq_17k_hs_sigma_mexb3_mdv2"]= "17K exome sequence analysis: Mexico City Diabetes Study (MCDS) cohort"
+             trans["vExSeq_17k_mdv2"]= "17K exome sequence analysis"
+             trans["vExSeq_17k_sa_genes_mdv2"]= "17K exome sequence analysis: South Asians"
+             trans["vExSeq_17k_sa_genes_sl_mdv2"]= "17K exome sequence analysis: South Asians, LOLIPOP cohort"
+             trans["vExSeq_17k_sa_genes_ss_mdv2"]= "17K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort"
+             trans["vExSeq_26k_mdv3"]= "26K exome sequence analysis"
+             trans["vExSeq_26k_aa_mdv3"]= "26K exome sequence analysis: all African-Americans"
+             trans["vExSeq_26k_aa_esp_mdv3"]= "26K exome sequence analysis: African-Americans, all ESP cohorts"
+             trans["vExSeq_26k_aa_genes_mdv3"]= "26K exome sequence analysis: African-Americans, T2D-GENES cohorts"
+             trans["vExSeq_26k_aa_genes_aj_mdv3"]= "26K exome sequence analysis: African-Americans, Jackson Heart Study cohort"
+             trans["vExSeq_26k_aa_genes_aw_mdv3"]= "26K exome sequence analysis: African-Americans, Wake Forest Study cohort"
+             trans["vExSeq_26k_ea_genes_mdv3"]= "26K exome sequence analysis: East Asians"
+             trans["vExSeq_26k_ea_genes_ek_mdv3"]= "26K exome sequence analysis: East Asians, Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH) cohort"
+             trans["vExSeq_26k_ea_genes_es_mdv3"]= "26K exome sequence analysis: East Asians, Singapore Diabetes Cohort Study and Singapore Prospective Study Program cohort"
+             trans["vExSeq_26k_eu_mdv3"]= "26K exome sequence analysis: Europeans"
+             trans["vExSeq_26k_eu_esp_mdv3"]= "26K exome sequence analysis: Europeans, all ESP cohorts"
+             trans["vExSeq_26k_eu_genes_mdv3"]= "26K exome sequence analysis: Europeans, T2D-GENES cohorts"
+             trans["vExSeq_26k_eu_genes_ua_mdv3"]= "26K exome sequence analysis: Europeans, Longevity Genes in Founder Populations (Ashkenazi) cohort"
+             trans["vExSeq_26k_eu_genes_um_mdv3"]= "26K exome sequence analysis: Europeans, Metabolic Syndrome in Men (METSIM) Study cohort"
+             trans["vExSeq_26k_eu_go_mdv3"]= "26K exome sequence analysis: Europeans, GoT2D cohorts"
+             trans["vExSeq_26k_eu_lucamp_mdv3"]= "26K exome sequence analysis: Europeans, LuCamp cohort"
+             trans["vExSeq_26k_hs_mdv3"]= "26K exome sequence analysis: Latinos"
+             trans["vExSeq_26k_hs_genes_mdv3"]= "26K exome sequence analysis: Latinos, T2D-GENES cohorts"
+             trans["vExSeq_26k_hs_genes_ha_mdv3"]= "26K exome sequence analysis: Latinos, San Antonio cohort"
+             trans["vExSeq_26k_hs_genes_hs_mdv3"]= "26K exome sequence analysis: Latinos, Starr County cohort"
+             trans["vExSeq_26k_hs_sigma_mdv3"]= "26K exome sequence analysis: Latinos, SIGMA cohorts"
+             trans["vExSeq_26k_hs_sigma_mec_mdv3"]= "26K exome sequence analysis: Multiethnic Cohort (MEC)"
+             trans["vExSeq_26k_hs_sigma_mexb1_mdv3"]= "26K exome sequence analysis: UNAM/INCMNSZ Diabetes Study (UIDS) cohort"
+             trans["vExSeq_26k_hs_sigma_mexb2_mdv3"]= "26K exome sequence analysis: Diabetes in Mexico Study (DMS) cohort"
+             trans["vExSeq_26k_hs_sigma_mexb3_mdv3"]= "26K exome sequence analysis: Mexico City Diabetes Study (MCDS) cohort"
+             trans["vExSeq_26k_sa_genes_mdv3"]= "26K exome sequence analysis: South Asians"
+             trans["vExSeq_26k_sa_genes_sl_mdv3"]= "26K exome sequence analysis: South Asians, LOLIPOP cohort"
+             trans["vExSeq_26k_sa_genes_ss_mdv3"]= "26K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort"
+             trans["vFMISS_17k"]= "Missing genotype rate, 17K exome sequence analysis"
+             trans["vFMISS_19k"]= "Missing genotype rate, 19K exome sequence analysis"
+             trans["vF_MISS"]= "Missing genotype rate"
+             trans["vGENE"]= "Gene"
+             trans["vGENO_26k"]= "Call rate, 26K Exome sequencing analysis"
+             trans["vGIANT"]= "GIANT GWAS"
+             trans["vGLGC"]= "GLGC GWAS"
+             trans["vGWAS"]= "GWAS"
+             trans["vGWAS_CARDIoGRAM"]= "CARDIoGRAM GWAS"
+             trans["vGWAS_CARDIoGRAM_mdv1"]= "CARDIoGRAM GWAS"
+             trans["vGWAS_CARDIoGRAM_mdv2"]= "CARDIoGRAM GWAS"
+             trans["vGWAS_CKDGenConsortium"]= "CKDGen GWAS"
+             trans["vGWAS_CKDGenConsortium_mdv1"]= "CKDGen GWAS"
+             trans["vGWAS_CKDGenConsortium_mdv2"]= "CKDGen GWAS"
+             trans["vGWAS_DIAGRAM"]= "DIAGRAM GWAS"
+             trans["vGWAS_DIAGRAM_mdv1"]= "DIAGRAM GWAS"
+             trans["vGWAS_DIAGRAM_mdv2"]= "DIAGRAM GWAS"
+             trans["vGWAS_GIANT"]= "GIANT GWAS"
+             trans["vGWAS_GIANT_mdv1"]= "GIANT GWAS"
+             trans["vGWAS_GIANT_mdv2"]= "GIANT GWAS"
+             trans["vGWAS_GLGC"]= "GLGC GWAS"
+             trans["vGWAS_GLGC_mdv1"]= "GLGC GWAS"
+             trans["vGWAS_GLGC_mdv2"]= "GLGC GWAS"
+             trans["vGWAS_MAGIC"]= "MAGIC GWAS"
+             trans["vGWAS_MAGIC_mdv1"]= "MAGIC GWAS"
+             trans["vGWAS_MAGIC_mdv2"]= "MAGIC GWAS"
+             trans["vGWAS_PGC"]= "PGC GWAS"
+             trans["vGWAS_PGC_mdv1"]= "PGC GWAS"
+             trans["vGWAS_PGC_mdv2"]= "PGC GWAS"
+             trans["vHETA"]= "Number of heterozygous cases"
+             trans["vHETU"]= "Number of heterozygous controls"
+             trans["vHOMA"]= "Number of homozygous cases"
+             trans["vHOMU"]= "Number of homozygous controls"
+             trans["vHispanic"]= "Latino"
+             trans["vIN_EXSEQ"]= "In exome sequencing"
+             trans["vIN_GENE"]= "Enclosing gene"
+             trans["vLOG_P_HWE_MAX_ORIGIN"]= "Log(p-value), hardy-weinberg equilibrium"
+             trans["vMAC"]= "Minor allele count"
+             trans["vMAC_PH"]= "Minor allele count"
+             trans["vMAF"]= "Minor allele frequency"
+             trans["vMAGIC"]= "MAGIC GWAS"
+             trans["vMINA"]= "Case minor allele counts"
+             trans["vMINU"]= "Control minor allele counts"
+             trans["vMOST_DEL_SCORE"]= "Deleteriousness category"
+             trans["vMixed"]= "Mixed"
+             trans["vNEFF"]= "Effective sample size"
+             trans["vN_PH"]= "Sample size"
+             trans["vOBSA"]= "Number of cases genotyped"
+             trans["vOBSU"]= "Number of controls genotyped"
+             trans["vODDS_RATIO"]= "Odds ratio"
+             trans["vOR_FIRTH"]= "Odds ratio"
+             trans["vOR_FIRTH_FE_IV"]= "Odds ratio"
+             trans["vOR_FISH"]= "Odds ratio"
+             trans["vOR_WALD"]= "Odds ratio"
+             trans["vOR_WALD_DOS"]= "Odds ratio"
+             trans["vOR_WALD_DOS_FE_IV"]= "Odds ratio"
+             trans["vOR_WALD_FE_IV"]= "Odds ratio"
+             trans["vPGC"]= "PGC GWAS"
+             trans["vPOS"]= "Position"
+             trans["vP_EMMAX"]= "P-value"
+             trans["vP_EMMAX_FE_IV"]= "P-value"
+             trans["vP_FE_INV"]= "P-value"
+             trans["vP_VALUE"]= "P-value"
+             trans["vPolyPhen_PRED"]= "PolyPhen prediction"
+             trans["vProtein_change"]= "Protein change"
+             trans["vQCFAIL"]= "Failed quality control"
+             trans["vSE"]= "Std. Error"
+             trans["vSIFT_PRED"]= "SIFT prediction"
+             trans["vSouth_Asian"]= "South association"
+             trans["vTRANSCRIPT_ANNOT"]= "Annotations across transcripts"
+             trans["vVAR_ID"]= "Variant ID"
+             trans["vmdv1"]= "Version 1"
+             trans["vmdv2"]= "Version 2"
+             trans["vmdv3"]= "Version 3"
+         }
+        if (trans.containsKey("v${stringToTranslate}".toString())){
+            return trans ["v${stringToTranslate}".toString()]
         } else {
-            trans["vT2D"]="Type 2 diabetes"
-            trans["vBMI"]="BMI"
-            trans["vCHOL"]="Cholesterol"
-            trans["vDBP"]="Diastolic blood pressure"
-            trans["vFG"]="Fasting glucose"
-            trans["vFI"]="Fasting insulin"
-            trans["vHBA1C"]="HbA1c"
-            trans["vHDL"]="HDL cholesterol"
-            trans["vHEIGHT"]="Height"
-            trans["vHIPC"]="Hip circumference"
-            trans["vLDL"]="LDL cholesterol"
-            trans["vSBP"]="Systolic blood pressure"
-            trans["vTG"]="Triglycerides"
-            trans["vWAIST"]="Waist circumference"
-            trans["vWHR"]="Waist-hip ratio"
-            trans["vCAD"]="Coronary artery disease"
-            trans["vCKD"]="Chronic kidney disease"
-            trans["vUACR"]="Urinary albumin-to-creatinine ratio"
-            trans["veGFRcrea"]="eGFR-creat (serum creatinine)"
-            trans["veGFRcys"]="eGFR-cys (serum cystatin C)"
-            trans["vTC"]="Total cholesterol"
-            trans["v2hrG"]="Two-hour glucose"
-            trans["v2hrI"]="Two-hour insulin"
-            trans["vHOMAB"]="HOMA-B"
-            trans["vHOMAIR"]="HOMA-IR"
-            trans["vMA"]="Microalbuminuria"
-            trans["vPI"]="Proinsulin levels"
-            trans["vBIP"]="Bipolar disorder"
-            trans["vMDD"]="Major depressive disorder"
-            trans["vSCZ"]="Schizophrenia"
-            trans["v13k"]= "13K exome sequence analysis"
-            trans["v13k_aa_genes"]= "13K exome sequence analysis: African-Americans"
-            trans["v13k_ea_genes"]= "13K exome sequence analysis: East Asians"
-            trans["v13k_eu"]= "13K exome sequence analysis: Europeans"
-            trans["v13k_eu_genes"]= "13K exome sequence analysis: Europeans, T2D-GENES cohorts"
-            trans["v13k_eu_go"]= "13K exome sequence analysis: Europeans, GoT2D cohorts"
-            trans["v13k_hs_genes"]= "13K exome sequence analysis: Latinos"
-            trans["v13k_sa_genes"]= "13K exome sequence analysis: South Asians"
-            trans["v17k"]= "17K exome sequence analysis"
-            trans["v17k_aa"]= "17K exome sequence analysis: African-Americans"
-            trans["v17k_aa_genes"]= "17K exome sequence analysis: African-Americans, T2D-GENES cohorts"
-            trans["v17k_aa_genes_aj"]= "17K exome sequence analysis: African-Americans, Jackson Heart Study cohort"
-            trans["v17k_aa_genes_aw"]= "17K exome sequence analysis: African-Americans, Wake Forest Study cohort"
-            trans["v17k_ea_genes"]= "17K exome sequence analysis: East Asians"
-            trans["v17k_ea_genes_ek"]= "17K exome sequence analysis: East Asians, Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH) cohort"
-            trans["v17k_ea_genes_es"]= "17K exome sequence analysis: East Asians, Singapore Diabetes Cohort Study and Singapore Prospective Study Program cohort"
-            trans["v17k_eu"]= "17K exome sequence analysis: Europeans"
-            trans["v17k_eu_genes"]= "17K exome sequence analysis: Europeans, T2D-GENES cohorts"
-            trans["v17k_eu_genes_ua"]= "17K exome sequence analysis: Europeans, Longevity Genes in Founder Populations (Ashkenazi) cohort"
-            trans["v17k_eu_genes_um"]= "17K exome sequence analysis: Europeans, Metabolic Syndrome in Men (METSIM) Study cohort"
-            trans["v17k_eu_go"]= "17K exome sequence analysis: Europeans, GoT2D cohorts"
-            trans["v17k_hs"]= "17K exome sequence analysis: Latinos"
-            trans["v17k_hs_genes"]= "17K exome sequence analysis: Latinos, T2D-GENES cohorts"
-            trans["v17k_hs_genes_ha"]= "17K exome sequence analysis: Latinos, San Antonio cohort"
-            trans["v17k_hs_genes_hs"]= "17K exome sequence analysis: Latinos, Starr County cohort"
-            trans["v17k_hs_sigma"]= "17K exome sequence analysis: Latinos, SIGMA cohorts"
-            trans["v17k_hs_sigma_mec"]= "17K exome sequence analysis: Multiethnic Cohort (MEC)"
-            trans["v17k_hs_sigma_mexb1"]= "17K exome sequence analysis: UNAM/INCMNSZ Diabetes Study (UIDS) cohort"
-            trans["v17k_hs_sigma_mexb2"]= "17K exome sequence analysis: Diabetes in Mexico Study (DMS) cohort"
-            trans["v17k_hs_sigma_mexb3"]= "17K exome sequence analysis: Mexico City Diabetes Study (MCDS) cohort"
-            trans["v17k_sa_genes"]= "17K exome sequence analysis: South Asians"
-            trans["v17k_sa_genes_sl"]= "17K exome sequence analysis: South Asians, LOLIPOP cohort"
-            trans["v17k_sa_genes_ss"]= "17K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort"
-            trans["v26k"]= "26K exome sequence analysis"
-            trans["v26k_aa"]= "26K exome sequence analysis: all African-Americans"
-            trans["v26k_aa_esp"]= "26K exome sequence analysis: African-Americans, all ESP cohorts"
-            trans["v26k_aa_genes"]= "26K exome sequence analysis: African-Americans, T2D-GENES cohorts"
-            trans["v26k_aa_genes_aj"]= "26K exome sequence analysis: African-Americans, Jackson Heart Study cohort"
-            trans["v26k_aa_genes_aw"]= "26K exome sequence analysis: African-Americans, Wake Forest Study cohort"
-            trans["v26k_ea_genes"]= "26K exome sequence analysis: East Asians"
-            trans["v26k_ea_genes_ek"]= "26K exome sequence analysis: East Asians, Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH) cohort"
-            trans["v26k_ea_genes_es"]= "26K exome sequence analysis: East Asians, Singapore Diabetes Cohort Study and Singapore Prospective Study Program cohort"
-            trans["v26k_eu"]= "26K exome sequence analysis: Europeans"
-            trans["v26k_eu_esp"]= "26K exome sequence analysis: Europeans, all ESP cohorts"
-            trans["v26k_eu_genes"]= "26K exome sequence analysis: Europeans, T2D-GENES cohorts"
-            trans["v26k_eu_genes_ua"]= "26K exome sequence analysis: Europeans, Longevity Genes in Founder Populations (Ashkenazi) cohort"
-            trans["v26k_eu_genes_um"]= "26K exome sequence analysis: Europeans, Metabolic Syndrome in Men (METSIM) Study cohort"
-            trans["v26k_eu_go"]= "26K exome sequence analysis: Europeans, GoT2D cohorts"
-            trans["v26k_eu_lucamp"]= "26K exome sequence analysis: Europeans, LuCamp cohort"
-            trans["v26k_hs"]= "26K exome sequence analysis: Latinos"
-            trans["v26k_hs_genes"]= "26K exome sequence analysis: Latinos, T2D-GENES cohorts"
-            trans["v26k_hs_genes_ha"]= "26K exome sequence analysis: Latinos, San Antonio cohort"
-            trans["v26k_hs_genes_hs"]= "26K exome sequence analysis: Latinos, Starr County cohort"
-            trans["v26k_hs_sigma"]= "26K exome sequence analysis: Latinos, SIGMA cohorts"
-            trans["v26k_hs_sigma_mec"]= "26K exome sequence analysis: Multiethnic Cohort (MEC)"
-            trans["v26k_hs_sigma_mexb1"]= "26K exome sequence analysis: UNAM/INCMNSZ Diabetes Study (UIDS) cohort"
-            trans["v26k_hs_sigma_mexb2"]= "26K exome sequence analysis: Diabetes in Mexico Study (DMS) cohort"
-            trans["v26k_hs_sigma_mexb3"]= "26K exome sequence analysis: Mexico City Diabetes Study (MCDS) cohort"
-            trans["v26k_sa_genes"]= "26K exome sequence analysis: South Asians"
-            trans["v26k_sa_genes_sl"]= "26K exome sequence analysis: South Asians, LOLIPOP cohort"
-            trans["v26k_sa_genes_ss"]= "26K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort"
-            trans["v82k"]= "82K exome chip analysis"
-            trans["vAfrican_American"]= "African-American"
-            trans["vBETA"]= "Effect size (beta)"
-            trans["vCARDIoGRAM"]= "CARDIoGRAM GWAS"
-            trans["vCHROM"]= "Chromosome"
-            trans["vCKDGenConsortium"]= "CKDGen GWAS"
-            trans["vCLOSEST_GENE"]= "Nearest gene"
-            trans["vCondel_PRED"]= "Condel prediction"
-            trans["vConsequence"]= "Consequence"
-            trans["vDBSNP_ID"]= "dbSNP ID"
-            trans["vDIAGRAM"]= "DIAGRAM GWAS"
-            trans["vDirection"]= "Direction of effect"
-            trans["vEAC_PH"]= "Effect allele count"
-            trans["vEAF"]= "Effect allele frequency"
-            trans["vEast_Asian"]= "East Asian"
-            trans["vEuropean"]= "European"
-            trans["vExChip"]= "Exome chip"
-            trans["vExChip_82k"]= "82k exome chip analysis"
-            trans["vExChip_82k_mdv1"]= "82k exome chip analysis"
-            trans["vExChip_82k_mdv2"]= "82k exome chip analysis"
-            trans["vExSeq"]= "Exome sequencing"
-            trans["vExSeq_13k"]= "13K exome sequence analysis"
-            trans["vExSeq_13k_aa_genes_mdv1"]= "13K exome sequence analysis: African-Americans"
-            trans["vExSeq_13k_aa_genes_mdv2"]= "13K exome sequence analysis: African-Americans"
-            trans["vExSeq_13k_aa_genes_mdv3"]= "13K exome sequence analysis: African-Americans"
-            trans["vExSeq_13k_ea_genes_mdv1"]= "13K exome sequence analysis: East Asians"
-            trans["vExSeq_13k_ea_genes_mdv2"]= "13K exome sequence analysis: East Asians"
-            trans["vExSeq_13k_ea_genes_mdv3"]= "13K exome sequence analysis: East Asians"
-            trans["vExSeq_13k_eu_genes_mdv1"]= "13K exome sequence analysis: Europeans, T2D-GENES cohorts"
-            trans["vExSeq_13k_eu_go_mdv1"]= "13K exome sequence analysis: Europeans, GoT2D cohorts"
-            trans["vExSeq_13k_eu_mdv1"]= "13K exome sequence analysis: Europeans"
-            trans["vExSeq_13k_eu_mdv2"]= "13K exome sequence analysis: Europeans"
-            trans["vExSeq_13k_eu_mdv3"]= "13K exome sequence analysis: Europeans"
-            trans["vExSeq_13k_hs_genes_mdv1"]= "13K exome sequence analysis: Latinos"
-            trans["vExSeq_13k_hs_genes_mdv2"]= "13K exome sequence analysis: Latinos"
-            trans["vExSeq_13k_hs_genes_mdv3"]= "13K exome sequence analysis: Latinos"
-            trans["vExSeq_13k_mdv1"]= "13K exome sequence analysis"
-            trans["vExSeq_13k_mdv2"]= "13K exome sequence analysis"
-            trans["vExSeq_13k_mdv3"]= "13K exome sequence analysis"
-            trans["vExSeq_13k_sa_genes_mdv1"]= "13K exome sequence analysis: South Asians"
-            trans["vExSeq_13k_sa_genes_mdv2"]= "13K exome sequence analysis: South Asians"
-            trans["vExSeq_13k_sa_genes_mdv3"]= "13K exome sequence analysis: South Asians"
-            trans["vExSeq_17k"]= "17K exome sequence analysis"
-            trans["vExSeq_17k_aa_genes_aj_mdv2"]= "17K exome sequence analysis: African-Americans, Jackson Heart Study cohort"
-            trans["vExSeq_17k_aa_genes_aw_mdv2"]= "17K exome sequence analysis: African-Americans, Wake Forest Study cohort"
-            trans["vExSeq_17k_aa_genes_mdv2"]= "17K exome sequence analysis: African-Americans, T2D-GENES cohorts"
-            trans["vExSeq_17k_aa_mdv2"]= "17K exome sequence analysis: African-Americans"
-            trans["vExSeq_17k_ea_genes_ek_mdv2"]= "17K exome sequence analysis: East Asians, Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH) cohort"
-            trans["vExSeq_17k_ea_genes_es_mdv2"]= "17K exome sequence analysis: East Asians, Singapore Diabetes Cohort Study and Singapore Prospective Study Program cohort"
-            trans["vExSeq_17k_ea_genes_mdv2"]= "17K exome sequence analysis: East Asians"
-            trans["vExSeq_17k_eu_genes_mdv2"]= "17K exome sequence analysis: Europeans, T2D-GENES cohorts"
-            trans["vExSeq_17k_eu_genes_ua_mdv2"]= "17K exome sequence analysis: Europeans, Longevity Genes in Founder Populations (Ashkenazi) cohort"
-            trans["vExSeq_17k_eu_genes_um_mdv2"]= "17K exome sequence analysis: Europeans, Metabolic Syndrome in Men (METSIM) Study cohort"
-            trans["vExSeq_17k_eu_go_mdv2"]= "17K exome sequence analysis: Europeans, GoT2D cohorts"
-            trans["vExSeq_17k_eu_mdv2"]= "17K exome sequence analysis: Europeans"
-            trans["vExSeq_17k_hs_genes_ha_mdv2"]= "17K exome sequence analysis: Latinos, San Antonio cohort"
-            trans["vExSeq_17k_hs_genes_hs_mdv2"]= "17K exome sequence analysis: Latinos, Starr County cohort"
-            trans["vExSeq_17k_hs_genes_mdv2"]= "17K exome sequence analysis: Latinos, T2D-GENES cohorts"
-            trans["vExSeq_17k_hs_mdv2"]= "17K exome sequence analysis: Latinos"
-            trans["vExSeq_17k_hs_sigma_mdv2"]= "17K exome sequence analysis: Latinos, SIGMA cohorts"
-            trans["vExSeq_17k_hs_sigma_mec_mdv2"]= "17K exome sequence analysis: Multiethnic Cohort (MEC)"
-            trans["vExSeq_17k_hs_sigma_mexb1_mdv2"]= "17K exome sequence analysis: UNAM/INCMNSZ Diabetes Study (UIDS) cohort"
-            trans["vExSeq_17k_hs_sigma_mexb2_mdv2"]= "17K exome sequence analysis: Diabetes in Mexico Study (DMS) cohort"
-            trans["vExSeq_17k_hs_sigma_mexb3_mdv2"]= "17K exome sequence analysis: Mexico City Diabetes Study (MCDS) cohort"
-            trans["vExSeq_17k_mdv2"]= "17K exome sequence analysis"
-            trans["vExSeq_17k_sa_genes_mdv2"]= "17K exome sequence analysis: South Asians"
-            trans["vExSeq_17k_sa_genes_sl_mdv2"]= "17K exome sequence analysis: South Asians, LOLIPOP cohort"
-            trans["vExSeq_17k_sa_genes_ss_mdv2"]= "17K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort"
-            trans["vExSeq_26k_mdv3"]= "26K exome sequence analysis"
-            trans["vExSeq_26k_aa_mdv3"]= "26K exome sequence analysis: all African-Americans"
-            trans["vExSeq_26k_aa_esp_mdv3"]= "26K exome sequence analysis: African-Americans, all ESP cohorts"
-            trans["vExSeq_26k_aa_genes_mdv3"]= "26K exome sequence analysis: African-Americans, T2D-GENES cohorts"
-            trans["vExSeq_26k_aa_genes_aj_mdv3"]= "26K exome sequence analysis: African-Americans, Jackson Heart Study cohort"
-            trans["vExSeq_26k_aa_genes_aw_mdv3"]= "26K exome sequence analysis: African-Americans, Wake Forest Study cohort"
-            trans["vExSeq_26k_ea_genes_mdv3"]= "26K exome sequence analysis: East Asians"
-            trans["vExSeq_26k_ea_genes_ek_mdv3"]= "26K exome sequence analysis: East Asians, Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH) cohort"
-            trans["vExSeq_26k_ea_genes_es_mdv3"]= "26K exome sequence analysis: East Asians, Singapore Diabetes Cohort Study and Singapore Prospective Study Program cohort"
-            trans["vExSeq_26k_eu_mdv3"]= "26K exome sequence analysis: Europeans"
-            trans["vExSeq_26k_eu_esp_mdv3"]= "26K exome sequence analysis: Europeans, all ESP cohorts"
-            trans["vExSeq_26k_eu_genes_mdv3"]= "26K exome sequence analysis: Europeans, T2D-GENES cohorts"
-            trans["vExSeq_26k_eu_genes_ua_mdv3"]= "26K exome sequence analysis: Europeans, Longevity Genes in Founder Populations (Ashkenazi) cohort"
-            trans["vExSeq_26k_eu_genes_um_mdv3"]= "26K exome sequence analysis: Europeans, Metabolic Syndrome in Men (METSIM) Study cohort"
-            trans["vExSeq_26k_eu_go_mdv3"]= "26K exome sequence analysis: Europeans, GoT2D cohorts"
-            trans["vExSeq_26k_eu_lucamp_mdv3"]= "26K exome sequence analysis: Europeans, LuCamp cohort"
-            trans["vExSeq_26k_hs_mdv3"]= "26K exome sequence analysis: Latinos"
-            trans["vExSeq_26k_hs_genes_mdv3"]= "26K exome sequence analysis: Latinos, T2D-GENES cohorts"
-            trans["vExSeq_26k_hs_genes_ha_mdv3"]= "26K exome sequence analysis: Latinos, San Antonio cohort"
-            trans["vExSeq_26k_hs_genes_hs_mdv3"]= "26K exome sequence analysis: Latinos, Starr County cohort"
-            trans["vExSeq_26k_hs_sigma_mdv3"]= "26K exome sequence analysis: Latinos, SIGMA cohorts"
-            trans["vExSeq_26k_hs_sigma_mec_mdv3"]= "26K exome sequence analysis: Multiethnic Cohort (MEC)"
-            trans["vExSeq_26k_hs_sigma_mexb1_mdv3"]= "26K exome sequence analysis: UNAM/INCMNSZ Diabetes Study (UIDS) cohort"
-            trans["vExSeq_26k_hs_sigma_mexb2_mdv3"]= "26K exome sequence analysis: Diabetes in Mexico Study (DMS) cohort"
-            trans["vExSeq_26k_hs_sigma_mexb3_mdv3"]= "26K exome sequence analysis: Mexico City Diabetes Study (MCDS) cohort"
-            trans["vExSeq_26k_sa_genes_mdv3"]= "26K exome sequence analysis: South Asians"
-            trans["vExSeq_26k_sa_genes_sl_mdv3"]= "26K exome sequence analysis: South Asians, LOLIPOP cohort"
-            trans["vExSeq_26k_sa_genes_ss_mdv3"]= "26K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort"
-            trans["vFMISS_17k"]= "Missing genotype rate, 17K exome sequence analysis"
-            trans["vFMISS_19k"]= "Missing genotype rate, 19K exome sequence analysis"
-            trans["vF_MISS"]= "Missing genotype rate"
-            trans["vGENE"]= "Gene"
-            trans["vGENO_26k"]= "Call rate, 26K Exome sequencing analysis"
-            trans["vGIANT"]= "GIANT GWAS"
-            trans["vGLGC"]= "GLGC GWAS"
-            trans["vGWAS"]= "GWAS"
-            trans["vGWAS_CARDIoGRAM"]= "CARDIoGRAM GWAS"
-            trans["vGWAS_CARDIoGRAM_mdv1"]= "CARDIoGRAM GWAS"
-            trans["vGWAS_CARDIoGRAM_mdv2"]= "CARDIoGRAM GWAS"
-            trans["vGWAS_CKDGenConsortium"]= "CKDGen GWAS"
-            trans["vGWAS_CKDGenConsortium_mdv1"]= "CKDGen GWAS"
-            trans["vGWAS_CKDGenConsortium_mdv2"]= "CKDGen GWAS"
-            trans["vGWAS_DIAGRAM"]= "DIAGRAM GWAS"
-            trans["vGWAS_DIAGRAM_mdv1"]= "DIAGRAM GWAS"
-            trans["vGWAS_DIAGRAM_mdv2"]= "DIAGRAM GWAS"
-            trans["vGWAS_GIANT"]= "GIANT GWAS"
-            trans["vGWAS_GIANT_mdv1"]= "GIANT GWAS"
-            trans["vGWAS_GIANT_mdv2"]= "GIANT GWAS"
-            trans["vGWAS_GLGC"]= "GLGC GWAS"
-            trans["vGWAS_GLGC_mdv1"]= "GLGC GWAS"
-            trans["vGWAS_GLGC_mdv2"]= "GLGC GWAS"
-            trans["vGWAS_MAGIC"]= "MAGIC GWAS"
-            trans["vGWAS_MAGIC_mdv1"]= "MAGIC GWAS"
-            trans["vGWAS_MAGIC_mdv2"]= "MAGIC GWAS"
-            trans["vGWAS_PGC"]= "PGC GWAS"
-            trans["vGWAS_PGC_mdv1"]= "PGC GWAS"
-            trans["vGWAS_PGC_mdv2"]= "PGC GWAS"
-            trans["vHETA"]= "Number of heterozygous cases"
-            trans["vHETU"]= "Number of heterozygous controls"
-            trans["vHOMA"]= "Number of homozygous cases"
-            trans["vHOMU"]= "Number of homozygous controls"
-            trans["vHispanic"]= "Latino"
-            trans["vIN_EXSEQ"]= "In exome sequencing"
-            trans["vIN_GENE"]= "Enclosing gene"
-            trans["vLOG_P_HWE_MAX_ORIGIN"]= "Log(p-value), hardy-weinberg equilibrium"
-            trans["vMAC"]= "Minor allele count"
-            trans["vMAC_PH"]= "Minor allele count"
-            trans["vMAF"]= "Minor allele frequency"
-            trans["vMAGIC"]= "MAGIC GWAS"
-            trans["vMINA"]= "Case minor allele counts"
-            trans["vMINU"]= "Control minor allele counts"
-            trans["vMOST_DEL_SCORE"]= "Deleteriousness category"
-            trans["vMixed"]= "Mixed"
-            trans["vNEFF"]= "Effective sample size"
-            trans["vN_PH"]= "Sample size"
-            trans["vOBSA"]= "Number of cases genotyped"
-            trans["vOBSU"]= "Number of controls genotyped"
-            trans["vODDS_RATIO"]= "Odds ratio"
-            trans["vOR_FIRTH"]= "Odds ratio"
-            trans["vOR_FIRTH_FE_IV"]= "Odds ratio"
-            trans["vOR_FISH"]= "Odds ratio"
-            trans["vOR_WALD"]= "Odds ratio"
-            trans["vOR_WALD_DOS"]= "Odds ratio"
-            trans["vOR_WALD_DOS_FE_IV"]= "Odds ratio"
-            trans["vOR_WALD_FE_IV"]= "Odds ratio"
-            trans["vPGC"]= "PGC GWAS"
-            trans["vPOS"]= "Position"
-            trans["vP_EMMAX"]= "P-value"
-            trans["vP_EMMAX_FE_IV"]= "P-value"
-            trans["vP_FE_INV"]= "P-value"
-            trans["vP_VALUE"]= "P-value"
-            trans["vPolyPhen_PRED"]= "PolyPhen prediction"
-            trans["vProtein_change"]= "Protein change"
-            trans["vQCFAIL"]= "Failed quality control"
-            trans["vSE"]= "Std. Error"
-            trans["vSIFT_PRED"]= "SIFT prediction"
-            trans["vSouth_Asian"]= "South association"
-            trans["vTRANSCRIPT_ANNOT"]= "Annotations across transcripts"
-            trans["vVAR_ID"]= "Variant ID"
-            trans["vmdv1"]= "Version 1"
-            trans["vmdv2"]= "Version 2"
-            trans["vmdv3"]= "Version 3"
-
+            return stringToTranslate
         }
     }
 

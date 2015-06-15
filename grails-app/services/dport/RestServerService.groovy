@@ -2321,6 +2321,88 @@ private String generateProteinEffectJson (String variantName){
 
 
 
+    private String generatePhenotypeSpecificReferencesForProperty (String property,LinkedHashMap<String, List<String>> holder) {
+        StringBuilder sb = new StringBuilder()
+        boolean firstTime = true
+        if ((property) && (holder) ) {
+            holder.each{ String phenotypeName, LinkedHashMap map ->
+                LinkedHashMap<String, String>  matchingDescriptor = sharedToolsService.pullBackSampleGroup (phenotypeName, property, holder)
+                if ((matchingDescriptor.phenotypeFound)  &&
+                    (matchingDescriptor.propertyFound)) {
+                    if (firstTime)   {
+                        firstTime = false
+                    }  else {
+                        sb << """,
+""".toString()
+                    }
+                    sb << """      "${matchingDescriptor.sampleGroupId}": ["${property}"]"""
+                }
+            }
+        }
+        return sb.toString()
+    }
+
+
+
+
+
+//    "cproperty": ["VAR_ID", "DBSNP_ID", "CHROM", "POS"],
+//    "orderBy":      ["P_VALUE"],
+//    "dproperty":    {
+//        "MAF" : ["${magic}",
+//                 "${pgc}",
+//                 "${giant}",
+//                 "${cardiogram}",
+//                 "${glgc}",
+//                 "${cdkgen}"]
+//    },
+//    "pproperty":    {
+//        "BETA":         {
+//            "${magic}": ["2hrG"],
+//            "${magic}": ["2hrI"],
+//            "${giant}": ["BMI"],
+//            "${magic}": ["FG"],
+//            "${magic}": ["FI"],
+//            "${magic}": ["HBA1C"],
+//            "${magic}": ["HOMAB"],
+//            "${magic}": ["HOMAIR"],
+//            "${magic}": ["PI"]
+//        },
+//
+//        "ODDS_RATIO":   {
+//            "${pgc}": ["BIP"],
+//            "${cardiogram}": ["CAD"],
+//            "${pgc}": ["MDD"],
+//            "${pgc}": ["SCZ"]
+//        },
+//
+//        "P_VALUE":      {
+//            "${magic}": ["2hrG"],
+//            "${magic}": ["2hrI"],
+//            "${pgc}": ["BIP"],
+//            "${giant}": ["BMI"],
+//            "${cardiogram}": ["CAD"],
+//            "${glgc}": ["CHOL"],
+//            "${cdkgen}": ["CKD"],
+//            "${magic}": ["FG"],
+//            "${magic}": ["FI"],
+//            "${magic}": ["HBA1C"],
+//            "${glgc}": ["HDL"],
+//            "${giant}": ["HEIGHT"],
+//            "${magic}": ["HOMAB"],
+//            "${magic}": ["HOMAIR"],
+//            "${glgc}": ["LDL"],
+//            "${magic}": ["MA"],
+//            "${pgc}": ["MDD"],
+//            "${magic}": ["PI"],
+//            "${pgc}": ["SCZ"],
+//            "${glgc}": ["TG"],
+//            "${cdkgen}": ["UACR"],
+//            "${giant}": ["WHR"],
+//            "${cdkgen}": ["eGFRcrea"],
+//            "${cdkgen}": ["eGFRcys"]
+//        }
+//    }
 
 
 
@@ -2328,16 +2410,18 @@ private String generateProteinEffectJson (String variantName){
 
 
 
-
-
-    private String generateTraitPerVariantJson (String variantName){
-        String filterForParticularVariant = filterByVariant (variantName)
+    private String generateTraitPerVariantJson (String variantName,LinkedHashMap<String, List<String>> holder){
+        String filterForParticularVariant = filterByVariant (variantName, holder)
         String magic = "GWAS_MAGIC_mdv2"
         String pgc = "GWAS_PGC_mdv2"
         String giant = "GWAS_GIANT_mdv2"
         String cardiogram = "GWAS_CARDIoGRAM_mdv2"
         String glgc = "GWAS_GLGC_mdv2"
         String cdkgen = "GWAS_CKDGenConsortium_mdv2"
+        String betaMatchers =  generatePhenotypeSpecificReferencesForProperty ("BETA", holder)
+        String orMatchers =  generatePhenotypeSpecificReferencesForProperty ("ODDS_RATIO", holder)
+        String pValueMatchers =  generatePhenotypeSpecificReferencesForProperty ("pValueMatchers", holder)
+
         String jsonSpec = """
 {
         "passback": "123abc",
@@ -2359,50 +2443,16 @@ private String generateProteinEffectJson (String variantName){
                                                 },
                                 "pproperty":    {
                                                      "BETA":         {
-                                                       "${magic}": ["2hrG"],
-                                                       "${magic}": ["2hrI"],
-                                                       "${giant}": ["BMI"],
-                                                       "${magic}": ["FG"],
-                                                       "${magic}": ["FI"],
-                                                       "${magic}": ["HBA1C"],
-                                                       "${magic}": ["HOMAB"],
-                                                       "${magic}": ["HOMAIR"],
-                                                       "${magic}": ["PI"]
+                                                         ${betaMatchers}
                                                      },
 
                                                      "ODDS_RATIO":   {
-                                                       "${pgc}": ["BIP"],
-                                                       "${cardiogram}": ["CAD"],
-                                                       "${pgc}": ["MDD"],
-                                                       "${pgc}": ["SCZ"]
+                                                          ${orMatchers}
                                                      },
 
                                                      "P_VALUE":      {
-                                                       "${magic}": ["2hrG"],
-                                                       "${magic}": ["2hrI"],
-                                                       "${pgc}": ["BIP"],
-                                                       "${giant}": ["BMI"],
-                                                       "${cardiogram}": ["CAD"],
-                                                       "${glgc}": ["CHOL"],
-                                                       "${cdkgen}": ["CKD"],
-                                                       "${magic}": ["FG"],
-                                                       "${magic}": ["FI"],
-                                                       "${magic}": ["HBA1C"],
-                                                       "${glgc}": ["HDL"],
-                                                       "${giant}": ["HEIGHT"],
-                                                       "${magic}": ["HOMAB"],
-                                                       "${magic}": ["HOMAIR"],
-                                                       "${glgc}": ["LDL"],
-                                                       "${magic}": ["MA"],
-                                                       "${pgc}": ["MDD"],
-                                                       "${magic}": ["PI"],
-                                                       "${pgc}": ["SCZ"],
-                                                       "${glgc}": ["TG"],
-                                                       "${cdkgen}": ["UACR"],
-                                                       "${giant}": ["WHR"],
-                                                       "${cdkgen}": ["eGFRcrea"],
-                                                       "${cdkgen}": ["eGFRcys"]
-                                                     }
+                                                          ${pValueMatchers}
+                                                      }
                                 }
                         },
         "filters":      [
@@ -2417,14 +2467,14 @@ private String generateProteinEffectJson (String variantName){
 
 
 
-    private JSONObject gatherTraitPerVariantResults(String variantName){
-        String jsonSpec = generateTraitPerVariantJson( variantName)
+    private JSONObject gatherTraitPerVariantResults(String variantName,LinkedHashMap<String, List<String>> holder){
+        String jsonSpec = generateTraitPerVariantJson( variantName, holder)
         return postRestCall(jsonSpec,GET_DATA_URL)
     }
 
 
 
-    public JSONObject getTraitPerVariant(String variantName) {//region
+    public JSONObject getTraitPerVariant(String variantName,LinkedHashMap<String, List<String>> holder) {//region
         String magic = "GWAS_MAGIC_mdv2"
         String pgc = "GWAS_MAGIC_mdv2"
         String giant = "GWAS_MAGIC_mdv2"
@@ -2434,7 +2484,7 @@ private String generateProteinEffectJson (String variantName){
         JSONObject returnValue
         String orValue = orSubstitute( properties)
         def slurper = new JsonSlurper()
-        String apiData = gatherTraitPerVariantResults(variantName)
+        String apiData = gatherTraitPerVariantResults(variantName,holder)
         JSONObject apiResults = slurper.parseText(apiData)
         int numberOfVariants = apiResults.numRecords
         StringBuilder sb = new StringBuilder ("{\"results\":[")

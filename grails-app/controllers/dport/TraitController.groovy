@@ -36,11 +36,17 @@ class TraitController {
     def traitSearch() {
         String phenotypeKey=params.trait
         String requestedSignificance=params.significance
+        LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
+        LinkedHashMap phenotypeMap = processedMetadata.gwasSpecificPhenotypes
+        String sampleGroupOwner = ""
+        if (phenotypeMap.containsKey(phenotypeKey))  {
+            sampleGroupOwner  = phenotypeMap[phenotypeKey]?.sampleGroupName
+        }
         String phenotypeName = ''
         String phenotypeDataSet = ''
         String phenotypeTranslation = sharedToolsService.translator(phenotypeKey)
-            phenotypeName =  phenotypeTranslation
-            phenotypeDataSet = ""
+        phenotypeName =  phenotypeTranslation
+        phenotypeDataSet = ""
 
         render(view: 'phenotype',
                 model: [show_gwas            : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
@@ -51,6 +57,7 @@ class TraitController {
                         phenotypeKey         : phenotypeKey,
                         phenotypeName        : phenotypeName,
                         phenotypeDataSet     : phenotypeDataSet,
+                        sampleGroupOwner     : sampleGroupOwner,
                         requestedSignificance: requestedSignificance])
 
     }
@@ -94,6 +101,7 @@ class TraitController {
 
 
 
+
     def genomeBrowser ()  {
         String geneName = params.id
         render (view: 'genomeBrowser',
@@ -108,7 +116,11 @@ class TraitController {
      */
     def ajaxTraitsPerVariant()  {
         String variant = params["variantIdentifier"]
+        LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
+//        LinkedHashMap phenotypeMap = processedMetadata.gwasSpecificPhenotypes
+//        LinkedHashMap sampleGroupSpecificProperties = processedMetadata.sharedProcessedMetadata.sampleGroupSpecificProperties
         JSONObject jsonObject = restServerService.retrieveTraitInfoByVariant(variant)
+        //restServerService.getTraitPerVariant(String variantName,phenotypeMap,sampleGroupSpecificProperties)
         render(status:200, contentType:"application/json") {
             [traitInfo:jsonObject['trait-info']]
         }
