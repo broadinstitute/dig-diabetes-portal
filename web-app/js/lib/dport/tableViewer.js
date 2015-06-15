@@ -356,27 +356,114 @@ var variantProcessing = (function () {
             }
         },
 
+      deconvoluteVariantInfo = function(vRec){
+          var retstat = [];
 
-        fillTraitsPerVariantTable = function ( vRec, show_gene, show_sigma, show_exseq, show_exchp,phenotypeMap,traitRootUrl ) {
+          if ((typeof vRec !== 'undefined') &&
+              (typeof vRec.results !== 'undefined')  &&
+              (typeof vRec.results[0] !== 'undefined')  &&
+              (typeof vRec.results[0]["pVals"] !== 'undefined')  &&
+              (vRec.results[0]["pVals"].length > 0) ){
+              var data =  vRec.results[0]["pVals"];
+              // first let's go through and process the metadata. For example we can make a data structure  with one
+              // row for each phenotype (eventually these will correspond to the rows of the table).  as well, figure out
+              //
+              var phenotypeShortcut = {}; // shortcut to the right line
+              var phenotypeCounter = 0;
+              var phenoStruct = [];
+              var mafValues = {};
+              for ( var i = 0 ; i < data.length ; i++ ){
+                  var key = data [i].level;
+                  var splitKey = key.split("^");
+                  if (splitKey.length>1){
+                      // P value handling
+                      if (splitKey[0] === 'P_VALUE'){
+                          var phenotypeMap = {'phenotype':splitKey[1],'pValue':data [i].count};
+                          phenotypeShortcut[splitKey[1]] = phenotypeCounter++;
+                          phenoStruct.push(phenotypeMap);
+                       }
+
+                      // maf value handling
+                      if (splitKey[0] === 'MAF'){
+                          var sampleGroup = splitKey[1];
+                          var splitSampleGroup = sampleGroup.split("_");
+                          if (splitSampleGroup.length>2){
+                              mafValues[splitSampleGroup[1]]  = data [i].count;
+                          }
+                      }
+
+                  }
+              }
+
+
+              var currentPhenotype;
+              var phenotypeRow;
+              var rowPointer;
+              var currentPhenotypeList;
+              var splitPhenotypeList;
+              var mafGroup;
+              var mafValue = 0;
+
+              // ow we go through the list again.  Now we can use the list of phenotypes we compiled the first time through
+              //  and assign all of the values we find to somewhere in that phenotype list
+              for ( var i = 0 ; i < data.length ; i++ ){
+                  var key = data [i].level;
+                  var splitKey = key.split("^");
+                  if (splitKey.length>1) {
+                      if ((splitKey[0] === 'P_VALUE') || (splitKey[0] === 'MAF')) continue;
+                      if (splitKey[0] === 'ODDS_RATIO'){
+                          currentPhenotype = splitKey[1];
+                          phenotypeRow = phenotypeShortcut[currentPhenotype];
+                          rowPointer = phenoStruct[phenotypeRow];
+                          rowPointer['oddsRatio'] = data [i].count;
+                      }
+                      if (splitKey[0] === 'BETA'){
+                          currentPhenotype = splitKey[1];
+                          phenotypeRow = phenotypeShortcut[currentPhenotype];
+                          rowPointer = phenoStruct[phenotypeRow];
+                          rowPointer['beta'] = data [i].count;
+                      }
+                      if (splitKey[0] === 'MAPPER'){
+                          mafGroup = splitKey[1];
+                          mafValue = mafValues[mafGroup];
+                          phenotypeRow = phenotypeShortcut[currentPhenotype];
+                          rowPointer = phenoStruct[phenotypeRow];
+                          currentPhenotypeList = data [i].count;
+                          splitPhenotypeList = currentPhenotypeList.split(',');
+                          for ( var j = 0 ; j < splitPhenotypeList.length ; j++ ) {
+                              phenotypeRow = phenotypeShortcut[splitPhenotypeList[j]];
+                              rowPointer = phenoStruct[phenotypeRow];
+                              rowPointer['maf'] = mafValue;
+                          }
+                      }
+                  }
+              }
+
+          }
+          return phenoStruct;
+      }
+
+
+
+
+        fillTraitsPerVariantTable = function ( vRecO, show_gene, show_sigma, show_exseq, show_exchp,phenotypeMap,traitRootUrl ) {
             var retVal = "";
-            if (!vRec) {   // error condition
+            if (!vRecO) {   // error condition
                 return;
             }
+
+            var vRec = deconvoluteVariantInfo(vRecO);
 
             for (var i = 0; i < vRec.length; i++) {
 
                 var trait = vRec [i] ;
                 retVal += "<tr>"
 
-                var convertedTrait=trait.TRAIT;
-                if ((phenotypeMap) &&
-                    (phenotypeMap.phenotypeMap) &&
-                    (typeof phenotypeMap.phenotypeMap[trait.TRAIT] !== "undefined")) {
-                    convertedTrait=phenotypeMap.phenotypeMap[trait.TRAIT];
-                }
-                retVal += "<td><a href='"+traitRootUrl+"?trait="+trait.TRAIT+"&significance=5e-8'>"+convertedTrait+"</a></td>";
+                var convertedTrait=mpgSoftware.trans.translator(trait.phenotype);
 
-                retVal += "<td>" +(trait.PVALUE.toPrecision(3))+"</td>";
+                retVal += "<td><a href='"+traitRootUrl+"?trait="+trait.phenotype+"&significance=5e-8'>"+convertedTrait+"</a></td>";
+
+                retVal += "<td>" +((trait.pValue !== null)?trait.pValue.toPrecision(3):'')+"</td>";
 
                 retVal += "<td>";
                 if (trait.DIR === "up") {
@@ -387,22 +474,22 @@ var variantProcessing = (function () {
                 retVal += "</td>";
 
                 retVal += "<td>";
-                if (trait.ODDS_RATIO) {
-                    retVal += (trait.ODDS_RATIO.toPrecision(3));
+                if (trait.oddsRatio) {
+                    retVal += (trait.oddsRatio.toPrecision(3));
                 }
                 retVal += "</td>";
 
 
                 retVal += "<td>";
-                if (trait.MAF) {
-                    retVal += (trait.MAF.toPrecision(3));
+                if (trait.maf) {
+                    retVal += (trait.maf.toPrecision(3));
                 }
                 retVal += "</td>";
 
 
                 retVal += "<td>";
-                if (trait.BETA) {
-                    retVal += "beta: " + trait.BETA.toPrecision(3);
+                if (trait.beta) {
+                    retVal += "beta: " + trait.beta.toPrecision(3);
                 } else if (trait.Z_SCORE){
                     retVal += "z-score: " + trait.ZSCORE.toPrecision(3);
                 }

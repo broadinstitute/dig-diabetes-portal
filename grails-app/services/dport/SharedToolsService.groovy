@@ -264,7 +264,7 @@ class SharedToolsService {
             sharedProcessedMetadata['sampleGroupsPerPhenotype'] = annotatedPhenotypes
             sharedProcessedMetadata['propertiesPerSampleGroups'] = annotatedSampleGroups
             sharedProcessedMetadata['phenotypeSpecificPropertiesPerSampleGroup'] = phenotypeSpecificSampleGroupProperties
-            sharedProcessedMetadata['sampleGroupSpecificProperties'] = phenotypeSpecificSampleGroupProperties
+            sharedProcessedMetadata['sampleGroupSpecificProperties'] = experimentSpecificSampleGroupProperties
             forceProcessedMetadataOverride = 0
         }
         return sharedProcessedMetadata
@@ -383,6 +383,12 @@ class SharedToolsService {
                          getTechnologySpecificExperiment (sampleGroup.sample_groups,sampleGroupHolder)
                     }
                 }
+                if (sampleGroup.phenotypes){
+                    sampleGroupMap["phenotypeList"] = []
+                    for (def phenotype in sampleGroup.phenotypes){
+                        sampleGroupMap["phenotypeList"] << phenotype.name
+                    }
+                }
             }
             if (!sampleGroupHolder.containsKey(sampleGroupName)){
                 sampleGroupHolder[sampleGroupName] = sampleGroupMap
@@ -410,14 +416,18 @@ class SharedToolsService {
     public LinkedHashMap<String, String> pullBackSampleGroup (String phenotype,String property,LinkedHashMap<String, List<String>> holder)  {
         LinkedHashMap<String, String>  returnValue = [phenotypeFound: false]
         if (holder.containsKey (phenotype)){
-            LinkedHashMap phenotypeSpecificProperties = holder [phenotype]
+            LinkedHashMap phenotypeSpecificHolder = holder [phenotype]
             returnValue ["phenotypeFound"] = true
             returnValue ["propertyFound"] = false
-            returnValue ["sampleGroupId"] = phenotypeSpecificProperties.sampleGroupId
-            if (phenotypeSpecificProperties.containsKey(property))  {
-                returnValue ["propertyFound"] = false
-                returnValue ["propertyType"] =  phenotypeSpecificProperties [property]
-             }
+            returnValue ["sampleGroupId"] = phenotypeSpecificHolder.sampleGroupId
+            if ((phenotypeSpecificHolder)&&(phenotypeSpecificHolder.size()>0)){
+                LinkedHashMap phenotypeSpecificProperties = phenotypeSpecificHolder.properties
+                if (phenotypeSpecificProperties.containsKey(property))  {
+                    returnValue ["propertyFound"] = true
+                    returnValue ["propertyType"] =  phenotypeSpecificProperties [property]
+                }
+
+            }
         }
         return returnValue
     }

@@ -2321,24 +2321,68 @@ private String generateProteinEffectJson (String variantName){
 
 
 
-    private String generatePhenotypeSpecificReferencesForProperty (String property,LinkedHashMap<String, List<String>> holder) {
-        StringBuilder sb = new StringBuilder()
-        boolean firstTime = true
+
+    private LinkedHashMap <String, String>  generatePhenotypeSpecificReferencesForPropertyMap (String property,LinkedHashMap<String, List<String>> holder) {
+        LinkedHashMap <String, String> returnValue = [:]
         if ((property) && (holder) ) {
             holder.each{ String phenotypeName, LinkedHashMap map ->
                 LinkedHashMap<String, String>  matchingDescriptor = sharedToolsService.pullBackSampleGroup (phenotypeName, property, holder)
                 if ((matchingDescriptor.phenotypeFound)  &&
-                    (matchingDescriptor.propertyFound)) {
-                    if (firstTime)   {
-                        firstTime = false
-                    }  else {
-                        sb << """,
-""".toString()
-                    }
-                    sb << """      "${matchingDescriptor.sampleGroupId}": ["${property}"]"""
+                        (matchingDescriptor.propertyFound)) {
+                    returnValue["${phenotypeName}"] = matchingDescriptor.sampleGroupId
                 }
             }
         }
+        return returnValue
+    }
+
+    /***
+     * This is tricky only because the phenotypes have to be grouped by unique sample groups.  So after you get the map
+     * phenotype -> sample group (repeated for all phenotypes)
+     * you then need to swap it into
+     * sample group -> [phenotype1, phenotype2,...], (repeated for all distinct sample groups)
+     * @param property
+     * @param holder
+     * @return
+     */
+    private String packagePhenotypeSpecificReferencesForProperty (String property,LinkedHashMap<String, List<String>> holder) {
+        StringBuilder sb = new StringBuilder()
+        LinkedHashMap <String, String>  phenotypeSpecificReferencesForPropertyMap =   generatePhenotypeSpecificReferencesForPropertyMap(property,holder)
+        boolean firstTime = true
+        LinkedHashMap<String, List<String>> invertedHolder = [:]
+        if ((property) && (phenotypeSpecificReferencesForPropertyMap) ) {
+            phenotypeSpecificReferencesForPropertyMap.each{ String phenotypeName, String sampleGroupId  ->
+                if (!invertedHolder.containsKey(sampleGroupId)){
+                    invertedHolder[sampleGroupId] = []
+                }
+                invertedHolder[sampleGroupId] << phenotypeName
+            }
+        }
+        if (invertedHolder.size()>0 ) {
+            invertedHolder.each{ String sampleGroupId, List<String> phenotypeList  ->
+                if (firstTime)   {
+                    firstTime = false
+                }  else {
+                    sb << """,
+""".toString()
+                }
+                boolean firstTimeInThisSampleGroup = true
+                StringBuilder subsb = new StringBuilder()
+                for (String phenotype in phenotypeList){
+                    if (firstTimeInThisSampleGroup)   {
+                        firstTimeInThisSampleGroup = false
+                    }  else {
+                        subsb << ",".toString()
+                    }
+                    subsb << """ "${phenotype}" """.toString()
+                }
+                sb << """      "${sampleGroupId}": [${subsb.toString()}]"""
+            }
+        }
+
+
+
+
         return sb.toString()
     }
 
@@ -2407,21 +2451,50 @@ private String generateProteinEffectJson (String variantName){
 
 
 
+    private List<String> generateSampleGroupsContainingProperty (String propertyOfInterest,LinkedHashMap<String, List<String>> sampleGroupSpecificProperties){
+        List<String> returnValue = []
+        sampleGroupSpecificProperties.each{ String sampleGroupName, LinkedHashMap map ->
+            String sampleGroupId = map.sampleGroupId
+            if (map.containsKey(propertyOfInterest)){
+                returnValue << sampleGroupId
+            }
+        }
+        return returnValue
+    }
 
 
 
-    private String generateTraitPerVariantJson (String variantName,LinkedHashMap<String, List<String>> holder){
-        String filterForParticularVariant = filterByVariant (variantName, holder)
-        String magic = "GWAS_MAGIC_mdv2"
-        String pgc = "GWAS_PGC_mdv2"
-        String giant = "GWAS_GIANT_mdv2"
-        String cardiogram = "GWAS_CARDIoGRAM_mdv2"
-        String glgc = "GWAS_GLGC_mdv2"
-        String cdkgen = "GWAS_CKDGenConsortium_mdv2"
-        String betaMatchers =  generatePhenotypeSpecificReferencesForProperty ("BETA", holder)
-        String orMatchers =  generatePhenotypeSpecificReferencesForProperty ("ODDS_RATIO", holder)
-        String pValueMatchers =  generatePhenotypeSpecificReferencesForProperty ("pValueMatchers", holder)
 
+
+
+
+
+
+    private String packageSampleGroupsContainingProperty (String propertyOfInterest,LinkedHashMap<String, List<String>> sampleGroupSpecificProperties){
+       List<String> sampleGroupsContainingPropertyList  =  generateSampleGroupsContainingProperty(propertyOfInterest,sampleGroupSpecificProperties)
+       StringBuilder sb  = new StringBuilder()
+       Boolean firstTime = true
+       for (String sampleGroupsContainingProperty in sampleGroupsContainingPropertyList) {
+           if (firstTime)   {
+               firstTime = false
+           }  else {
+               sb << """,
+""".toString()
+           }
+           sb << """      "${sampleGroupsContainingProperty}" """.toString()
+       }
+       return sb.toString()
+   }
+
+
+
+
+    private String generateTraitPerVariantJson (String variantName,LinkedHashMap<String, List<String>> holder,LinkedHashMap<String, List<String>> sampleGroupSpecificProperties){
+        String betaMatchers =  packagePhenotypeSpecificReferencesForProperty ("BETA", holder)
+        String orMatchers =  packagePhenotypeSpecificReferencesForProperty ("ODDS_RATIO", holder)
+        String pValueMatchers =  packagePhenotypeSpecificReferencesForProperty ("P_VALUE", holder)
+        String sampleGroupsWithMaf =  packageSampleGroupsContainingProperty ("MAF",sampleGroupSpecificProperties)
+        String filterForParticularVariant = filterByVariant(variantName)
         String jsonSpec = """
 {
         "passback": "123abc",
@@ -2434,12 +2507,7 @@ private String generateProteinEffectJson (String variantName){
                                         "cproperty": ["VAR_ID", "DBSNP_ID", "CHROM", "POS"],
                                 "orderBy":      ["P_VALUE"],
                                 "dproperty":    {
-                                                    "MAF" : ["${magic}",
-                                                              "${pgc}",
-                                                              "${giant}",
-                                                              "${cardiogram}",
-                                                              "${glgc}",
-                                                              "${cdkgen}"]
+                                                    "MAF" : [${sampleGroupsWithMaf}]
                                                 },
                                 "pproperty":    {
                                                      "BETA":         {
@@ -2467,24 +2535,26 @@ private String generateProteinEffectJson (String variantName){
 
 
 
-    private JSONObject gatherTraitPerVariantResults(String variantName,LinkedHashMap<String, List<String>> holder){
-        String jsonSpec = generateTraitPerVariantJson( variantName, holder)
+    private JSONObject gatherTraitPerVariantResults(String variantName,
+                                                    LinkedHashMap<String, List<String>> holder,
+                                                    LinkedHashMap<String, List<String>> sampleGroupSpecificProperties){
+        String jsonSpec = generateTraitPerVariantJson( variantName, holder,sampleGroupSpecificProperties)
         return postRestCall(jsonSpec,GET_DATA_URL)
     }
 
 
 
-    public JSONObject getTraitPerVariant(String variantName,LinkedHashMap<String, List<String>> holder) {//region
-        String magic = "GWAS_MAGIC_mdv2"
-        String pgc = "GWAS_MAGIC_mdv2"
-        String giant = "GWAS_MAGIC_mdv2"
-        String cardiogram = "GWAS_MAGIC_mdv2"
-        String glgc = "GWAS_MAGIC_mdv2"
-        String cdkgen = "GWAS_MAGIC_mdv2"
+    public JSONObject getTraitPerVariant(String variantName,
+                                         LinkedHashMap<String, List<String>> holder,
+                                         LinkedHashMap<String, List<String>> sampleGroupSpecificProperties) {//region
+
         JSONObject returnValue
-        String orValue = orSubstitute( properties)
         def slurper = new JsonSlurper()
-        String apiData = gatherTraitPerVariantResults(variantName,holder)
+        String apiData = gatherTraitPerVariantResults(variantName,holder,sampleGroupSpecificProperties)
+        List<String> sampleGroupsContainingMafList = generateSampleGroupsContainingProperty("MAF",sampleGroupSpecificProperties)
+        LinkedHashMap <String, String> betaMatchersMap =  generatePhenotypeSpecificReferencesForPropertyMap ("BETA", holder)
+        LinkedHashMap <String, String>  orMatchersMap =  generatePhenotypeSpecificReferencesForPropertyMap ("ODDS_RATIO", holder)
+        LinkedHashMap <String, String>  pValueMatchersMap =  generatePhenotypeSpecificReferencesForPropertyMap ("P_VALUE", holder)
         JSONObject apiResults = slurper.parseText(apiData)
         int numberOfVariants = apiResults.numRecords
         StringBuilder sb = new StringBuilder ("{\"results\":[")
@@ -2504,37 +2574,39 @@ private String generateProteinEffectJson (String variantName){
                     element = variant["CHROM"].findAll{it}[0]
                     sb  << "{\"level\":\"CHROM\",\"count\":\"${element}\"},"
 
-                    element = variant["POS"].findAll{it}[0]
-                    sb  << "{\"level\":\"POS\",\"count\":${element}},"
-
                     element = variant["MAF"].findAll{it}[0]
 
-                    sb  << "{\"level\":\"AA\",\"count\":${element[EXOMESEQ_AA]}},"
-                    sb  << "{\"level\":\"HS\",\"count\":${element[EXOMESEQ_HS]}},"
-                    sb  << "{\"level\":\"EA\",\"count\":${element[EXOMESEQ_EA]}},"
-                    sb  << "{\"level\":\"SA\",\"count\":${element[EXOMESEQ_SA]}},"
-                    sb  << "{\"level\":\"EUseq\",\"count\":${element[EXOMESEQ_EU]}},"
-                    sb  << "{\"level\":\"Euchip\",\"count\":${element[EXOMECHIP]}},"
-
-                    element = variant["P_VALUE"].findAll{it}[0]
-                    sb  << "{\"level\":\"P_VALUE\",\"count\":${element[dataSet][phenotypeName]}},"
-
-                    if (orValue.length()>0){
-                        element = variant["${orValue}"].findAll{it}[0]
-                        sb  << "{\"level\":\"${orValue}\",\"count\":\"${element[dataSet][phenotypeName]}\"},"
-                    } else {
-                        sb  << "{\"level\":\"BETA\",\"count\":\"--\"},"
+                    for (String sampleGroupsContainingMaf in sampleGroupsContainingMafList){
+                        sb  << "{\"level\":\"MAF^${sampleGroupsContainingMaf}\",\"count\":${element[sampleGroupsContainingMaf]}},"
                     }
 
-                    element = variant["MAF"].findAll{it}[0]
-                    sb  << "{\"level\":\"MAF\",\"count\":${element[dataSet]}}"
+                    element = variant["P_VALUE"].findAll{it}[0]
+                    pValueMatchersMap.each{ String phenotypeName, String sampleGroupId ->
+                        sb  << "{\"level\":\"P_VALUE^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
+                    }
+
+                    element = variant["ODDS_RATIO"].findAll{it}[0]
+                    orMatchersMap.each{ String phenotypeName, String sampleGroupId ->
+                        sb  << "{\"level\":\"ODDS_RATIO^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
+                    }
+
+                    element = variant["BETA"].findAll{it}[0]
+                    betaMatchersMap.each{ String phenotypeName, String sampleGroupId ->
+                        sb  << "{\"level\":\"BETA^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
+                    }
+
+                    sampleGroupSpecificProperties.each { String sampleGroupId, LinkedHashMap sgHolder ->
+                        if ((sgHolder["phenotypeList"]) && (sgHolder["phenotypeList"].size()>0)){
+                            sb << "{\"level\":\"MAPPER^${sampleGroupId}\",\"count\":\"${sgHolder["phenotypeList"].join(",")}\"},"
+                        }
+                    }
+
+                    element = variant["POS"].findAll{it}[0]
+                    sb  << "{\"level\":\"POS\",\"count\":${element}}"
 
                 }
             }
             sb  << "]}"
-            if (j<numberOfVariants-1){
-                sb  << ","
-            }
         }
         sb  << "]}"
         returnValue = slurper.parseText(sb.toString())
