@@ -216,6 +216,29 @@ var UTILS = {
         }
     },
 
+    // KDUXTD-52: function to set gather the minimum p-value number from gwas/ExChip/ExSeq p-value array
+    get_lowest_p_value_from_array: function (pValueArray) {
+        // collector has p-values at index: [GWAS: 0, ExChip: 1, ExSeq: 2]
+        var pValue = 1;
+        var dataType = '';
+
+        if (pValueArray[0] < pValue) {
+            pValue = pValueArray[0];
+            dataType = 'GWAS';
+        }
+
+        if (pValueArray[1] < pValue) {
+            pValue = pValueArray[1];
+            dataType = 'exome chip';
+        }
+
+        if (pValueArray[2] < pValue) {
+            pValue = pValueArray[2];
+            dataType = 'exome sequencing';
+        }
+        return [pValue, dataType];
+    },
+
     get_lowest_p_value: function (variant) {
         var pval = 1;
         var datatype = '';

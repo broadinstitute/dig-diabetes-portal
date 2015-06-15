@@ -61,6 +61,11 @@
                         "<g:createLink controller='trait' action='traitInfo' />",
                         variantAssociationStrings);
 
+                // KDUXTD-52: set the header text based on the new API call p-values
+                var pVal = UTILS.get_lowest_p_value_from_array([collector["d0"][1].count[0], collector["d0"][2].count[0], collector["d0"][0].count[0]]);
+                   $('#variantPValue').append((parseFloat(pVal[0])).toPrecision(4));
+                   $('#variantInfoGeneratingDataSet').append(pVal[1]);
+
                 // KDUXTD-47: adding call to enable popovers
                 $('[data-toggle="popover"]').popover();
 
