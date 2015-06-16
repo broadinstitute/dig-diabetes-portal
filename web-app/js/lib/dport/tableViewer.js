@@ -660,6 +660,7 @@ var variantProcessing = (function () {
                 variant["_13k_T2D_P_EMMAX_FE_IV"]=variantList[i].pVals[row++].count;
                 variant["_13k_T2D_OR_WALD_DOS_FE_IV"]=variantList[i].pVals[row++].count;
                 variant["_13k_T2D_SE"]=1;//variantList[i].pVals[row++].count;
+                row++; row++;
                 variant["_13k_T2D_MINA"]=variantList[i].pVals[row++].count;
                 variant["_13k_T2D_MINU"]=variantList[i].pVals[row++].count;
                 variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
