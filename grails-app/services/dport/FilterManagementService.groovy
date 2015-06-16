@@ -781,10 +781,10 @@ class FilterManagementService {
                     parameterEncoding << "2:0"
                     break;
                 case  "locus":
-                    filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,1e-4 as BigDecimal,dataSetSpecifier)
-                    filterDescriptions << "P-value for association with T2D is less than or equal to 0.0001"
+                    filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,5e-4 as BigDecimal,dataSetSpecifier)
+                    filterDescriptions << "P-value for association with T2D is less than or equal to 0.0005"
                     parameterEncoding << "2:2"
-                    parameterEncoding << "3:0.0001"
+                    parameterEncoding << "3:0.0005"
                     break;
                 case  "nominal":
                     filters << retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,0.05 as BigDecimal,dataSetSpecifier)
