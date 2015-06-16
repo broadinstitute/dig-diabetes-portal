@@ -325,11 +325,11 @@ var mpgSoftware = mpgSoftware || {};
                     }
 
                 },
-                variantGenerateProteinsChooserTitle = function (variant, title, impactOnProtein) {
-                    var retVal = "";
-                    retVal += "<h2><strong>" + impactOnProtein.subtitle1 + " " + title + " " + impactOnProtein.subtitle2 + "</strong></h2>";
-                    return retVal;
-                },
+//                variantGenerateProteinsChooserTitle = function (variant, title, impactOnProtein) {
+//                    var retVal = "";
+//                    retVal += ""+impactOnProtein.subtitle;
+//                    return retVal;
+//                },
                 variantGenerateProteinsChooser = function (variant, title, impactOnProtein) {
                     var retVal = "";
                     if (variant.MOST_DEL_SCORE && variant.MOST_DEL_SCORE < 4) {
@@ -581,7 +581,7 @@ var mpgSoftware = mpgSoftware || {};
                 calculateSearchRegion: calculateSearchRegion,
                 showEthnicityPercentageWithBarChart: showEthnicityPercentageWithBarChart,
                 showCarrierStatusDiseaseRisk: showCarrierStatusDiseaseRisk,
-                variantGenerateProteinsChooserTitle: variantGenerateProteinsChooserTitle,
+               // variantGenerateProteinsChooserTitle: variantGenerateProteinsChooserTitle,
                 variantGenerateProteinsChooser: variantGenerateProteinsChooser,
                 fillDiseaseRiskBurdenTest: fillDiseaseRiskBurdenTest,
                 describeAssociationsStatistics: describeAssociationsStatistics,
@@ -619,6 +619,7 @@ var mpgSoftware = mpgSoftware || {};
                     var pVal = UTILS.get_lowest_p_value(variant);
 //                   $('#variantPValue').append((parseFloat(pVal[0])).toPrecision(4));
 //                    $('#variantInfoGeneratingDataSet').append(pVal[1]);
+                    $('#effectOnCommonProteinsTitle').append(variantTitle);
                     $('#variantTitle').append(variantTitle);
                     $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
                     $('#populationsHowCommonIs').append(variantTitle);
@@ -776,7 +777,7 @@ var mpgSoftware = mpgSoftware || {};
             };
             externalizeCarrierStatusDiseaseRisk = showHowCarriersAreDistributed;
             describeImpactOfVariantOnProtein = function (variant, variantTitle, impactOnProtein) {
-                $('#effectOfVariantOnProteinTitle').append(privateMethods.variantGenerateProteinsChooserTitle(variant, variantTitle, impactOnProtein));
+                //$('#effectOfVariantOnProteinTitle').append(privateMethods.variantGenerateProteinsChooserTitle(variant, variantTitle, impactOnProtein));
                 $('#effectOfVariantOnProtein').append(privateMethods.variantGenerateProteinsChooser(variant, variantTitle, impactOnProtein));
                 UTILS.verifyThatDisplayIsWarranted(variant["_13k_T2D_TRANSCRIPT_ANNOT"], $('#variationInfoEncodedProtein'), $('#puntOnNoncodingVariant'));
             };

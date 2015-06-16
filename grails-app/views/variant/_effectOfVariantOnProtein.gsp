@@ -23,8 +23,14 @@
                     var variantProteinInfo = {};
                     variantProteinInfo._13k_T2D_TRANSCRIPT_ANNOT = variant.variants[0][1]["TRANSCRIPT_ANNOT"];
                     variantProteinInfo.MOST_DEL_SCORE = variant.variants[0][0]["MOST_DEL_SCORE"];
+                    var varId = variant.variants[0][0]["VAR_ID"];
+                    var dbsnp_id = variant.variants[0][0]["DBSNP_ID"];
+                    var describeThisSnp = varId;
+                    if ((dbsnp_id) && (dbsnp_id !== '') && (dbsnp_id !==  null )){
+                        describeThisSnp = dbsnp_id ;
+                    }
                     var describeImpactOfVariantOnProtein = mpgSoftware.variantInfo.retrieveDescribeImpactOfVariantOnProtein();
-                    describeImpactOfVariantOnProtein(variantProteinInfo, "<%=variantToSearch%>", impactOnProtein)
+                    describeImpactOfVariantOnProtein(variantProteinInfo, describeThisSnp, impactOnProtein)
                 },
                 error: function (jqXHR, exception) {
                     loading.hide();

@@ -1853,7 +1853,7 @@ private String generateProteinEffectJson (String variantName){
         "limit": 1,
         "count": false,
         "properties":   {
-                                        "cproperty": ["TRANSCRIPT_ANNOT","MOST_DEL_SCORE"],
+                                        "cproperty": ["TRANSCRIPT_ANNOT","MOST_DEL_SCORE","VAR_ID","DBSNP_ID"],
                                 "orderBy":      [],
                                 "dproperty":    { },
                                 "pproperty":    { }

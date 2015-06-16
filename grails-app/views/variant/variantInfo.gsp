@@ -109,8 +109,7 @@
             };
             var impactOnProtein = {
                 chooseOneTranscript:'<g:message code="variant.impactOnProtein.chooseOneTranscript" default="choose one transcript" />',
-                subtitle1:'<g:message code="variant.impactOnProtein.subtitle1" default="what effect does" />',
-                subtitle2:'<g:message code="variant.impactOnProtein.subtitle2" default="have on the encoded protein" />'
+                subtitle:'<g:message code="variant.impactOnProtein.subtitle" default="have on the encoded protein" />'
             };
             if ( typeof data !== 'undefined')  {
                 mpgSoftware.variantInfo.fillTheFields(data,
@@ -243,7 +242,7 @@
                             <a class="accordion-toggle  collapsed" data-toggle="collapse"
                                data-parent="#accordionVariant"
                                href="#collapseAffectOfVariantOnProtein">
-                                <g:message code="variant.effectOfVariantOnProtein.title" default="What is the effect of this variant on the associated protein"/>
+                                <h2><strong><g:message code="variant.effectOfVariantOnProtein.title" default="What is the effect of this variant on the associated protein"/></strong></h2>
                             </a>
                         </div>
 
