@@ -38,7 +38,7 @@
                 phenotypeMap,
                 '<g:createLink controller="trait" action="traitSearch" />'));
         $('#traitsPerVariantTable').dataTable({
-            iDisplayLength: 20,
+            iDisplayLength: 25,
             bFilter: false,
             aaSorting: [[ 1, "asc" ]],
             aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 1, 3, 4 ] } ]
