@@ -313,15 +313,8 @@
     });
     $('#accordionVariant').on('show.bs.collapse', function (e) {
         if (e.target.id === "collapseDiseaseRisk") {
-            if (${newApi}) {
                 mpgSoftware.diseaseRisk.loadDiseaseRisk();
-            } else {
-                if ((typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation() !== 'undefined') &&
-                        (typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch !== 'undefined')) {
-                    mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch();
-                }
-            }
-        }
+         }
     });
     $('#accordionVariant').on('hide.bs.collapse', function (e) {
         if (e.target.id === "collapseDiseaseRisk") {
@@ -333,15 +326,9 @@
     });
     $('#accordionVariant').on('show.bs.collapse', function (e) {
         if (e.target.id === "collapseHowCommonIsVariant") {
-            if (${newApi}) {
-                mpgSoftware.howCommonIsVariant.loadHowCommonIsVariant();
-            } else {
-                if ((typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation() !== 'undefined') &&
-                        (typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().launch !== 'undefined')) {
-                    mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().launch();
-                }
-            }
-        }
+
+             mpgSoftware.howCommonIsVariant.loadHowCommonIsVariant();
+       }
     });
     $('#accordionVariant').on('hide.bs.collapse', function (e) {
         if (e.target.id === "collapseHowCommonIsVariant") {
