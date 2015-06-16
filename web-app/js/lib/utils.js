@@ -581,7 +581,8 @@ var UTILS = {
         }
         for (var i = 0; i < fieldArray.length; i++) {
             if ((fieldArray[i] === null) ||
-                (typeof fieldArray[i] === 'undefined')) {
+                (typeof fieldArray[i] === 'undefined') ||
+                isNaN(fieldArray[i])) {
                 returnValue = true;
                 break;
             }
