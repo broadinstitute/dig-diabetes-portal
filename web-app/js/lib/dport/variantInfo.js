@@ -519,7 +519,7 @@ var mpgSoftware = mpgSoftware || {};
                     var orValueText = "";
                     var pNumericalValue = pValue;
                     var pTextValue = "";
-                    if (availableData) {
+                    if (availableData && (pValue!==null) && (orValue!==null)) {
                         retVal += "<div class='boxyDisplay ";
                         // may or may not be bold
                         if (pNumericalValue <= strongCutOff) {
