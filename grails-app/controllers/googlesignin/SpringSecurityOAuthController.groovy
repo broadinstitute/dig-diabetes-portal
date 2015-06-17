@@ -72,9 +72,14 @@ class SpringSecurityOAuthController {
        String accessKey = oauthService.findSessionKeyForAccessToken(authProvider)
        session[accessKey] = new org.scribe.model.Token(accessToken, grailsApplication.config.oauth.providers.google.secret,jsonObject.toString())
 
-        springManipService.forceLogin(jsonObject,session)
+        Boolean weHaveSeenYouBefore = springManipService.forceLogin(jsonObject,session)
+        if (weHaveSeenYouBefore){
+            redirect( controller: 'home', action: 'portalHome' )
+        } else {
+            redirect( controller: 'home', action: 'signAContract' )
+        }
 
-       redirect( controller: 'home', action: 'portalHome' )
+
    }
 
 
