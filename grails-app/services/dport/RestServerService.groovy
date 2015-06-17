@@ -460,7 +460,7 @@ class RestServerService {
                           "ODDS_RATIO": { "${GWASDIAGRAM}": ["T2D"],
                                                   "${EXOMECHIP}": ["T2D"]},
                           "OR_FIRTH_FE_IV":{"${EXOMESEQ}": ["T2D"]},
-                          "P_EMMAX_FE_IV":    { "${EXOMESEQ}": ["T2D"]},
+                          "P_FIRTH_FE_IV":    { "${EXOMESEQ}": ["T2D"]},
                            "OBSA":  { "${EXOMESEQ}": ["T2D"]},
                            "OBSU":  { "${EXOMESEQ}": ["T2D"]},
                           "MINA":    { "${EXOMESEQ}": ["T2D"]},
@@ -1614,7 +1614,7 @@ ${customFilterSet}""".toString()
                           "dproperty":    {
                                         },
                         "pproperty":    {
-                                            "P_EMMAX_FE_IV": {
+                                            "P_FIRTH_FE_IV": {
                                                 "${EXOMESEQ}": ["T2D"]
                                             },
 
@@ -1970,9 +1970,9 @@ private String generateProteinEffectJson (String variantName){
 
                         sb  << "{\"level\":\"Consequence\",\"count\":\"${element}\"},"
 
-                        element = variant["P_EMMAX_FE_IV"].findAll{it}[0]
+                        element = variant["P_FIRTH_FE_IV"].findAll{it}[0]
 
-                        sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${element[EXOMESEQ][attribute]}},"
+                        sb  << "{\"level\":\"P_FIRTH_FE_IV\",\"count\":${element[EXOMESEQ][attribute]}},"
 
                         element = variant["OR_FIRTH_FE_IV"].findAll{it}[0]
 
