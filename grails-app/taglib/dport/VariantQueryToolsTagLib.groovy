@@ -121,7 +121,7 @@ class VariantQueryToolsTagLib {
                             // a line to describe the polyphen value
                             if (map.gene) {
                                 out << """
-                                <span class="dd filterElement">gene=&nbsp;&nbsp; ${map.gene},</span>
+                                <span class="dd filterElement">${map.gene},</span>
                                 """.toString()
                             }// a single line for the P value
 
