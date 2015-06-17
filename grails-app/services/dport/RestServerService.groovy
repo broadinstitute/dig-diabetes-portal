@@ -1267,7 +1267,7 @@ ${customFilterSet}""".toString()
     "page_size": 100,
     "count": false,
     "properties":    {
-                           "cproperty": ["VAR_ID","DBSNP_ID","CLOSEST_GENE","IN_GENE","MOST_DEL_SCORE"],
+                           "cproperty": ["VAR_ID","DBSNP_ID","CLOSEST_GENE","GENE","MOST_DEL_SCORE"],
                           "orderBy":    [],
                           "dproperty":    {
                                         },
@@ -1330,8 +1330,8 @@ ${customFilterSet}""".toString()
                         element = variant["VAR_ID"].findAll{it}[0]
                         sb  << "{\"level\":\"VAR_ID\",\"count\":\"${element}\"},"
 
-                        element = variant["IN_GENE"].findAll{it}[0]
-                        sb  << "{\"level\":\"IN_GENE\",\"count\":\"${element}\"},"
+                        element = variant["GENE"].findAll{it}[0]
+                        sb  << "{\"level\":\"GENE\",\"count\":\"${element}\"},"
 
                         element = variant["CLOSEST_GENE"].findAll{it}[0]
                         sb  << "{\"level\":\"CLOSEST_GENE\",\"count\":\"${element}\"},"

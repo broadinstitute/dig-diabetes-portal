@@ -152,10 +152,10 @@ var UTILS = {
         }
         return variantName;
     },
-    variantInfoHeaderSentence: function (inGene,closestGene) {
+    variantInfoHeaderSentence: function (inGene,closestGene,gene) {
         var returnValue = "";
         if (inGene) {
-            returnValue += "lies in the gene <em>" + inGene + "</em>";
+            returnValue += "lies in the gene <em>" + gene + "</em>";
         } else {
             returnValue += "is nearest to the gene <em>" + closestGene + "</em>";
         }

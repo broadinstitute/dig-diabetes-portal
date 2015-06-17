@@ -149,8 +149,8 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
-        var setTitlesAndTheLikeFromData = function (varId,dbsnpId,mostdelscore,inGene,closestGene, searchString) {
-            var variantTitle = "searchString";
+        var setTitlesAndTheLikeFromData = function (varId,dbsnpId,mostdelscore,gene,closestGene, searchString) {
+            var variantTitle = searchString;
             if ((typeof dbsnpId !== 'undefined')  &&
                  (dbsnpId !== null) &&
                 (dbsnpId.length > 0)){
@@ -160,10 +160,10 @@ var mpgSoftware = mpgSoftware || {};
                 (varId.length > 0)){
                 variantTitle = varId;
             }
-            var variantTitle = UTILS.get_variant_title(variant, searchString)
+            var inGene = ((gene != null) && (mostdelscore<4));
             $('#variantTitleInAssociationStatistics').append(variantTitle);
             $('#variantCharacterization').append(UTILS.getSimpleVariantsEffect(mostdelscore));
-            $('#describingVariantAssociation').append(UTILS.variantInfoHeaderSentence(inGene,closestGene));
+            $('#describingVariantAssociation').append(UTILS.variantInfoHeaderSentence(inGene,closestGene,gene));
             $('#effectOnCommonProteinsTitle').append(variantTitle);
             $('#variantTitle').append(variantTitle);
             $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
