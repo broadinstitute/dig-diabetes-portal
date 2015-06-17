@@ -1797,7 +1797,7 @@ ${retrieveParticipantCount}
     public JSONObject combinedEthnicityTable(String geneName){
         JSONObject returnValue
         String attribute = "T2D"
-        List <String> dataSeteList = ["HS", "AA", "EA", "SA", "EU","chipEu"]
+        List <String> dataSeteList = ["AA", "HS", "EA", "SA", "EU","chipEu"]
         List <Integer> cellNumberList = [0,1,2,3,4]
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()
