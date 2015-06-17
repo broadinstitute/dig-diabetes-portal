@@ -85,37 +85,36 @@ class BootStrap {
         def users = User.list () ?: []
         if (!users){
             samples.each {username, attributes->
-                def user  = new User (
-                        username: username,
-                        password: attributes.password,
-                        fullName: attributes.fullName,
-                        nickname: attributes.nickname,
-                        email: attributes.email,
-                        hasLoggedIn: false,
-                        enabled: true)
-                if (user.validate ()) {
-                    log.info( "Creating user ${username}")
-                    user.save(flush: true)
-                    UserRole.create user,userRole
-                    if ((username=='ben')||
-                            (username=='balexand@broadinstitute.org')||
-                            (username=='tgreen@broadinstitute.org')||
-                            (username=='kyuksel@broadinstitute.org')||
-                            (username=='tjordan@broadinstitute.org')||
-                            (username=='flannick@broadinstitute.org')||
-                            (username=='andrew@broadinstitute.org')||
-                            (username=='mduby@broadinstitute.org')||
-                            (username=='dsiedzik@broadinstitute.org')){
-                        UserRole.create user,adminRole
-                        UserRole.create user,systemRole
+                    def user = new User(
+                            username: username,
+                            password: attributes.password,
+                            fullName: attributes.fullName,
+                            nickname: attributes.nickname,
+                            email: attributes.email,
+                            hasLoggedIn: false,
+                            enabled: true)
+                    if (user.validate()) {
+                        log.info("Creating user ${username}")
+                        user.save(flush: true)
+                        UserRole.create user, userRole
+                        if ((username == 'ben') ||
+                                (username == 'balexand@broadinstitute.org') ||
+                                (username == 'tgreen@broadinstitute.org') ||
+                                (username == 'kyuksel@broadinstitute.org') ||
+                                (username == 'tjordan@broadinstitute.org') ||
+                                (username == 'flannick@broadinstitute.org') ||
+                                (username == 'andrew@broadinstitute.org') ||
+                                (username == 'mduby@broadinstitute.org') ||
+                                (username == 'dsiedzik@broadinstitute.org')) {
+                            UserRole.create user, adminRole
+                            UserRole.create user, systemRole
+                        }
+                        if (username == 'maryc@broadinstitute.org') {
+                            UserRole.create user, adminRole
+                        }
+                    } else {
+                        log.error("problem in bootstrap for username ${username}")
                     }
-                    if (username=='maryc@broadinstitute.org'){
-                        UserRole.create user,adminRole
-                    }
-                }  else {
-                    log.error( "problem in bootstrap for username ${username}" )
-                }
-
             }
         }
         log.error( "# of users = ${User.list().size()}")

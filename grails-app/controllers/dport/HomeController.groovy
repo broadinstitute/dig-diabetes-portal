@@ -35,6 +35,9 @@ class HomeController {
                                                                show_sigma:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma),
                                                                newApi              : sharedToolsService.getNewApi()])
     }
+    def signAContract = {
+        render(controller: 'home', view: 'signAContract')
+    }
 
     def introVideoHolder = {
         render(controller: 'home', view: 'introVideoHolder')

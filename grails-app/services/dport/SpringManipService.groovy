@@ -48,12 +48,13 @@ class SpringManipService {
      * @param identityInformation
      * @param session
      */
-    public void forceLogin(JSONObject identityInformation,javax.servlet.http.HttpSession session) {
+    public Boolean forceLogin(JSONObject identityInformation,javax.servlet.http.HttpSession session) {
         if ((!identityInformation) ||
             (!identityInformation.emails) ||
             (identityInformation.emails.size()<1) ) {
             return  // no email.  This is the one identifier we cannot do without
         }
+        Boolean weHaveSeenYouBefore = false
         String email = identityInformation.emails[0]['value']
         String username = email
         String password = 'bloodglucose'
@@ -95,6 +96,7 @@ class SpringManipService {
         User user = User.findByUsername(email)
         if (user){ // we arty have a user.  Connect to it
             signIn(email,'bloodglucose')
+            weHaveSeenYouBefore = true
         } else { // we don't have a user record.  Create one
 
             user = new User (
@@ -118,7 +120,7 @@ class SpringManipService {
             }
             signIn(email,'bloodglucose')
         }
-        return
+        return weHaveSeenYouBefore
 
     }
 
