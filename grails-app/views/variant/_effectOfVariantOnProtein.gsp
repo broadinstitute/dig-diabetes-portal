@@ -20,17 +20,21 @@
                         subtitle2:'<g:message code="variant.impactOnProtein.subtitle2" default="have on the encoded protein" />'
                     };
                     var variant = data.variantInfo;
+                    var remappedFields = mpgSoftware.variantInfo.retrieveFieldsByName(variant.variants[0],["TRANSCRIPT_ANNOT","MOST_DEL_SCORE","VAR_ID","DBSNP_ID"]);
                     var variantProteinInfo = {};
-                    variantProteinInfo._13k_T2D_TRANSCRIPT_ANNOT = variant.variants[0][1]["TRANSCRIPT_ANNOT"];
-                    variantProteinInfo.MOST_DEL_SCORE = variant.variants[0][0]["MOST_DEL_SCORE"];
-                    var varId = variant.variants[0][0]["VAR_ID"];
-                    var dbsnp_id = variant.variants[0][0]["DBSNP_ID"];
+                    variantProteinInfo._13k_T2D_TRANSCRIPT_ANNOT = remappedFields["TRANSCRIPT_ANNOT"];
+                    variantProteinInfo.MOST_DEL_SCORE = remappedFields["MOST_DEL_SCORE"];
+//                    variantProteinInfo._13k_T2D_TRANSCRIPT_ANNOT = variant.variants[0][1]["TRANSCRIPT_ANNOT"];
+//                    variantProteinInfo.MOST_DEL_SCORE = variant.variants[0][0]["MOST_DEL_SCORE"];
+
+                    var varId = remappedFields["VAR_ID"];
+                    var dbsnp_id = remappedFields["DBSNP_ID"];
                     var describeThisSnp = varId;
                     if ((dbsnp_id) && (dbsnp_id !== '') && (dbsnp_id !==  null )){
                         describeThisSnp = dbsnp_id ;
                     }
                     var describeImpactOfVariantOnProtein = mpgSoftware.variantInfo.retrieveDescribeImpactOfVariantOnProtein();
-                    describeImpactOfVariantOnProtein(variantProteinInfo, describeThisSnp, impactOnProtein)
+                    describeImpactOfVariantOnProtein(variantProteinInfo, describeThisSnp, impactOnProtein);
                 },
                 error: function (jqXHR, exception) {
                     loading.hide();

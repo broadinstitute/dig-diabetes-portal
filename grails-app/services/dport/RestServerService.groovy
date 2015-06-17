@@ -1267,12 +1267,12 @@ ${customFilterSet}""".toString()
     "page_size": 100,
     "count": false,
     "properties":    {
-                           "cproperty": ["VAR_ID"],
+                           "cproperty": ["VAR_ID","DBSNP_ID","CLOSEST_GENE","GENE","MOST_DEL_SCORE"],
                           "orderBy":    [],
                           "dproperty":    {
                                         },
                         "pproperty":    {
-                                            "P_EMMAX_FE_IV": {
+                                            "P_FIRTH_FE_IV": {
                                                 "${EXOMESEQ}": ["T2D"]
                                             },
 
@@ -1323,8 +1323,24 @@ ${customFilterSet}""".toString()
                 if (apiResults.is_error == false) {
                     if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
                         def variant = apiResults.variants[0];
-                        if (variant ["P_EMMAX_FE_IV"]){
-                            sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${variant["P_EMMAX_FE_IV"][EXOMESEQ][attribute]}},"
+
+                        def element = variant["DBSNP_ID"].findAll{it}[0]
+                        sb  << "{\"level\":\"DBSNP_ID\",\"count\":\"${element}\"},"
+
+                        element = variant["VAR_ID"].findAll{it}[0]
+                        sb  << "{\"level\":\"VAR_ID\",\"count\":\"${element}\"},"
+
+                        element = variant["GENE"].findAll{it}[0]
+                        sb  << "{\"level\":\"GENE\",\"count\":\"${element}\"},"
+
+                        element = variant["CLOSEST_GENE"].findAll{it}[0]
+                        sb  << "{\"level\":\"CLOSEST_GENE\",\"count\":\"${element}\"},"
+
+                        element = variant["MOST_DEL_SCORE"].findAll{it}[0]
+                        sb  << "{\"level\":\"MOST_DEL_SCORE\",\"count\":\"${element}\"},"
+
+                        if (variant ["P_FIRTH_FE_IV"]){
+                            sb  << "{\"level\":\"P_FIRTH_FE_IV\",\"count\":${variant["P_FIRTH_FE_IV"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["P_VALUE"]){
                             sb  << "{\"level\":\"P_VALUE_GWAS\",\"count\":${variant["P_VALUE"][gwasSample][attribute]}},"
@@ -1781,7 +1797,7 @@ ${retrieveParticipantCount}
     public JSONObject combinedEthnicityTable(String geneName){
         JSONObject returnValue
         String attribute = "T2D"
-        List <String> dataSeteList = ["HS", "AA", "EA", "SA", "EU","chipEu"]
+        List <String> dataSeteList = ["AA", "HS", "EA", "SA", "EU","chipEu"]
         List <Integer> cellNumberList = [0,1,2,3,4]
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()
