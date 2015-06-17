@@ -18,9 +18,12 @@ class RestServerService {
 
     private String PROD_LOAD_BALANCED_SERVER = ""
     private String QA_LOAD_BALANCED_SERVER = ""
+    private String QA01_BEHIND_LOAD_BALANCER = ""
+    private String QA02_BEHIND_LOAD_BALANCER = ""
     private String DEV_LOAD_BALANCED_SERVER = ""
     private String DEV01_BEHIND_LOAD_BALANCER = ""
     private String DEV02_BEHIND_LOAD_BALANCER = ""
+    private String AWS01_REST_SERVER = ""
     private String BIGQUERY_REST_SERVER = ""
     private String DEV_REST_SERVER = ""
     private String PROD_REST_SERVER = ""
@@ -215,6 +218,12 @@ class RestServerService {
         // qa load balancer with rest server(s) behind it
         QA_LOAD_BALANCED_SERVER = grailsApplication.config.t2dQaLoadBalancedServer.base + grailsApplication.config.t2dQaLoadBalancedServer.name + grailsApplication.config.t2dQaLoadBalancedServer.path
 
+        // test rest server 01 bypassing load balancer
+        QA01_BEHIND_LOAD_BALANCER = grailsApplication.config.t2dQa01BehindLoadBalancer.base + grailsApplication.config.t2dQa01BehindLoadBalancer.name + grailsApplication.config.t2dQa01BehindLoadBalancer.path
+
+        // test rest server 01 bypassing load balancer
+        QA02_BEHIND_LOAD_BALANCER = grailsApplication.config.t2dQa02BehindLoadBalancer.base + grailsApplication.config.t2dQa02BehindLoadBalancer.name + grailsApplication.config.t2dQa02BehindLoadBalancer.path
+
         // test load balancer with rest server(s) behind it
         DEV_LOAD_BALANCED_SERVER = grailsApplication.config.t2dDevLoadBalancedServer.base + grailsApplication.config.t2dDevLoadBalancedServer.name + grailsApplication.config.t2dDevLoadBalancedServer.path
 
@@ -232,6 +241,9 @@ class RestServerService {
 
         // dev rest server, not load balanced
         DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base + grailsApplication.config.t2dDevRestServer.name + grailsApplication.config.t2dDevRestServer.path
+
+        // 'aws01'
+        AWS01_REST_SERVER = grailsApplication.config.t2dAws01RestServer.base + grailsApplication.config.t2dAws01RestServer.name + grailsApplication.config.t2dAws01RestServer.path
 
         //
         //
@@ -261,6 +273,14 @@ class RestServerService {
         return QA_LOAD_BALANCED_SERVER;
     }
 
+    public String getQa01BehindLoadBalancer() {
+        return QA01_BEHIND_LOAD_BALANCER;
+    }
+
+    public String getQa02BehindLoadBalancer() {
+        return QA02_BEHIND_LOAD_BALANCER;
+    }
+
     public String getDevLoadBalanced() {
         return DEV_LOAD_BALANCED_SERVER;
     }
@@ -271,6 +291,10 @@ class RestServerService {
 
     public String getDev02BehindLoadBalancer() {
         return DEV02_BEHIND_LOAD_BALANCER;
+    }
+
+    public String getAws01RestServer() {
+        return AWS01_REST_SERVER;
     }
 
     public String getProdserver() {
@@ -509,6 +533,14 @@ class RestServerService {
         pickADifferentRestServer(PROD_LOAD_BALANCED_SERVER)
     }
 
+    public void goWithTheQa01BehindLoadBalancer() {
+        pickADifferentRestServer(QA01_BEHIND_LOAD_BALANCER)
+    }
+
+    public void goWithTheQa02BehindLoadBalancer() {
+        pickADifferentRestServer(QA02_BEHIND_LOAD_BALANCER)
+    }
+
     public void goWithTheQaLoadBalancedServer() {
         pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
     }
@@ -523,6 +555,10 @@ class RestServerService {
 
     public void goWithTheDevLoadBalancedServer() {
         pickADifferentRestServer(DEV_LOAD_BALANCED_SERVER)
+    }
+
+    public void goWithTheAws01RestServer() {
+        pickADifferentRestServer(AWS01_REST_SERVER)
     }
 
     public void goWithTheProdServer() {

@@ -45,6 +45,14 @@
                         <div id="datatypes-form">
                             <div class="radio">
                                 <label>
+                                    <input id="testserver" type="radio" name="datatype" value="aws01restserver"
+                                        <%=restServer.getCurrentServer()==restServer.getAws01RestServer()?" checked ":"" %> />
+                                    AWS01 rest server (${restServer.getAws01RestServer()})
+                                </label>
+                            </div>
+                            <hr>
+                            <div class="radio">
+                                <label>
                                     <input id="testserver" type="radio" name="datatype" value="dev01behindloadbalancer"
                                         <%=restServer.getCurrentServer()==restServer.getDev01BehindLoadBalancer()?" checked ":"" %> />
                                     dev01 behind the load balancer (${restServer.getDev01BehindLoadBalancer()})
@@ -66,23 +74,39 @@
                             </div>
                             <div class="radio">
                                 <label>
+                                    <input id="newdevserver" type="radio" name="datatype" value="newdevserver"
+                                        <%=restServer.getCurrentServer()==restServer.getNewdevserver()?" checked ":"" %> />
+                                    new dev server (${restServer.getNewdevserver()})
+                                </label>
+                            </div>
+                            <hr>
+                            <div class="radio">
+                                <label>
+                                    <input id="testserver" type="radio" name="datatype" value="qa01behindloadbalancer"
+                                        <%=restServer.getCurrentServer()==restServer.getQa01BehindLoadBalancer()?" checked ":"" %> />
+                                    qa01 behind the load balancer (${restServer.getQa01BehindLoadBalancer()})
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input id="testserver" type="radio" name="datatype" value="qa02behindloadbalancer"
+                                        <%=restServer.getCurrentServer()==restServer.getQa02BehindLoadBalancer()?" checked ":"" %> />
+                                    qa02 behind the load balancer (${restServer.getQa02BehindLoadBalancer()})
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
                                     <input id="qaserver" type="radio" name="datatype" value="qaloadbalancedserver"
                                         <%=restServer.getCurrentServer()==restServer.getQaLoadBalanced()?" checked ":"" %>  />
                                     qa load balanced server(s) (${restServer.getQaLoadBalanced()})
                                 </label>
                             </div>
+                            <hr>
                             <div class="radio">
                                 <label>
                                     <input id="prodserver" type="radio" name="datatype" value="prodloadbalancedserver"
                                         <%=restServer.getCurrentServer()==restServer.getProdLoadBalanced()?" checked ":"" %>  />
                                     prod load balanced server(s) (${restServer.getProdLoadBalanced()})
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input id="newdevserver" type="radio" name="datatype" value="newdevserver"
-                                        <%=restServer.getCurrentServer()==restServer.getNewdevserver()?" checked ":"" %> />
-                                    new dev server (${restServer.getNewdevserver()})
                                 </label>
                             </div>
                             <div class="radio">

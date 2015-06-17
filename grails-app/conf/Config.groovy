@@ -145,6 +145,16 @@ t2dQaLoadBalancedServer {
     name =  'qa/'
     path = 'gs/'
 }
+t2dQa01BehindLoadBalancer {
+    base = 'http://dig-qa-01.broadinstitute.org:8888/'
+    name =  'qa/'
+    path = 'gs/'
+}
+t2dQa02BehindLoadBalancer {
+    base = 'http://dig-qa-02.broadinstitute.org:8888/'
+    name =  'qa/'
+    path = 'gs/'
+}
 t2dDevLoadBalancedServer {
     base = 'http://dig-api-dev.broadinstitute.org/'
     name =  'dev/'
@@ -158,6 +168,13 @@ t2dDev01BehindLoadBalancer {
 t2dDev02BehindLoadBalancer {
     base = 'http://dig-dev-02.broadinstitute.org:8888/'
     name =  'dev/'
+    path = 'gs/'
+}
+
+// individual servers
+t2dAws01RestServer {
+    base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
+    name =  'aws/'
     path = 'gs/'
 }
 
