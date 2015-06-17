@@ -152,12 +152,12 @@ var UTILS = {
         }
         return variantName;
     },
-    variantInfoHeaderSentence: function (variant) {
+    variantInfoHeaderSentence: function (inGene,closestGene) {
         var returnValue = "";
-        if (variant.IN_GENE) {
-            returnValue += "lies in the gene <em>" + variant.IN_GENE + "</em>";
+        if (inGene) {
+            returnValue += "lies in the gene <em>" + inGene + "</em>";
         } else {
-            returnValue += "is nearest to the gene <em>" + variant.CLOSEST_GENE + "</em>";
+            returnValue += "is nearest to the gene <em>" + closestGene + "</em>";
         }
         return  returnValue;
     },

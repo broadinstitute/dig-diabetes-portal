@@ -44,25 +44,31 @@
                     }
                     collector["d"+i] = d;
                 }
-                var variantAssociationStatistics = mpgSoftware.variantInfo.retrieveVariantAssociationStatistics();
+                var inGene = collector["d0"][2].count;
+                var closestGene = collector["d0"][3].count;
+                var mostdelscore= UTILS.convertStringToNumber(collector["d0"][4].count[0]);
+                var varId = collector["d0"][0].count;
+                var dbsnpId = collector["d0"][1].count;
+                mpgSoftware.variantInfo.setTitlesAndTheLikeFromData(varId,dbsnpId,mostdelscore,inGene,closestGene,  '<%=variantToSearch%>');
+                var variantAssociationStatistics = mpgSoftware.variantInfo.variantAssociations;
                 variantAssociationStatistics({"IN_GWAS":true,
-                        "DBSNP_ID":"<%=variantToSearch%>",
-                        "ID":"<%=variantToSearch%>",
-                        "GWAS_T2D_PVALUE":UTILS.convertStringToNumber(collector["d0"][1].count[0]),
-                        "GWAS_T2D_OR":UTILS.convertStringToNumber(collector["d0"][4].count[0]),
-                        "EXCHP_T2D_P_value":UTILS.convertStringToNumber(collector["d0"][2].count[0]),
-                        "EXCHP_T2D_BETA":UTILS.convertStringToNumber(collector["d0"][5].count[0]),
-                        "_13k_T2D_P_EMMAX_FE_IV":UTILS.convertStringToNumber(collector["d0"][0].count[0]),
-                        "_13k_T2D_OR_WALD_DOS_FE_IV":UTILS.convertStringToNumber(collector["d0"][3].count[0]),
-                        "SIGMA_T2D_P":UTILS.convertStringToNumber(collector["d0"][0].count[0]),
-                        "SIGMA_T2D_OR":UTILS.convertStringToNumber(collector["d0"][0].count[0])},
+                        "DBSNP_ID":dbsnpId,
+                        "ID":varId,
+                        "GWAS_T2D_PVALUE":UTILS.convertStringToNumber(collector["d0"][6].count[0]),
+                        "GWAS_T2D_OR":UTILS.convertStringToNumber(collector["d0"][9].count[0]),
+                        "EXCHP_T2D_P_value":UTILS.convertStringToNumber(collector["d0"][7].count[0]),
+                        "EXCHP_T2D_BETA":UTILS.convertStringToNumber(collector["d0"][10].count[0]),
+                        "_13k_T2D_P_EMMAX_FE_IV":UTILS.convertStringToNumber(collector["d0"][5].count[0]),
+                        "_13k_T2D_OR_WALD_DOS_FE_IV":UTILS.convertStringToNumber(collector["d0"][8].count[0]),
+                        "SIGMA_T2D_P":UTILS.convertStringToNumber(collector["d0"][5].count[0]),
+                        "SIGMA_T2D_OR":UTILS.convertStringToNumber(collector["d0"][5].count[0])},
                         ${show_sigma},
                         "<%=variantToSearch%>",
                         "<g:createLink controller='trait' action='traitInfo' />",
                         variantAssociationStrings);
 
                 // KDUXTD-52: set the header text based on the new API call p-values
-                var pValueAndKey = UTILS.get_lowest_p_value_from_map({"GWAS": collector["d0"][1].count[0], "exome chip": collector["d0"][2].count[0], "exome sequence": collector["d0"][0].count[0]});
+                var pValueAndKey = UTILS.get_lowest_p_value_from_map({"GWAS": collector["d0"][6].count[0], "exome chip": collector["d0"][7].count[0], "exome sequence": collector["d0"][8].count[0]});
                    $('#variantPValue').append((parseFloat(pValueAndKey[0])).toPrecision(4));
                    $('#variantInfoGeneratingDataSet').append(pValueAndKey[1]);
 

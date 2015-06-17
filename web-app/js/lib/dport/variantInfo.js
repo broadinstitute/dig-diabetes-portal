@@ -19,6 +19,159 @@ var mpgSoftware = mpgSoftware || {};
             describeImpactOfVariantOnProtein
             ;
 
+
+        var retrieveFieldsByName = function (mapFromApi, listOfFieldNames) {
+            // walk through and find out which field fits where
+
+            var returnValue = {};
+            if ((mapFromApi) && (mapFromApi.length > 0) &&
+                (listOfFieldNames) && (listOfFieldNames.length > 0)) {
+                var mapToTheFields = {};
+                var lengthOfMap = mapFromApi.length;
+                for (var i = 0; i < lengthOfMap; i++) {
+                    // walk through the map to find the keys.  Expecting exactly one
+                    for (var key in mapFromApi[i]) {
+                        if (mapFromApi[i].hasOwnProperty(key)) {
+                            mapToTheFields[key] = i;
+                        }
+                    }
+                }
+                for (var i = 0; i < listOfFieldNames.length; i++) {
+                    var currentName = listOfFieldNames[i];
+                    returnValue[currentName] = mapFromApi[mapToTheFields[currentName]][currentName];
+                }
+            }
+            return returnValue;
+        };
+
+        var variantAssociations = function (variantRec, showSigma, variantTitle, traitsStudiedUrlRoot, variantAssociationStrings) {
+            var weHaveVariantsAndAssociations;
+            if (showSigma) {
+                weHaveVariantsAndAssociations = ((variantRec.IN_GWAS) || (variantRec.GWAS_T2D_PVALUE) || (variantRec.GWAS_T2D_OR) ||
+                    (variantRec.SIGMA_T2D_P) || (variantRec.SIGMA_T2D_OR)  );
+            } else {
+                weHaveVariantsAndAssociations = ((variantRec.IN_GWAS) || (variantRec.GWAS_T2D_PVALUE) || (variantRec.GWAS_T2D_OR) ||
+                    (variantRec.EXCHP_T2D_P_value) || (variantRec.EXCHP_T2D_BETA) ||
+                    (variantRec._13k_T2D_P_EMMAX_FE_IV) || (variantRec._13k_T2D_OR_WALD_DOS_FE_IV) );
+            }
+            var showGwas=true,showExchp=true,showExchp=true,showExseq=true,showSigma=false;
+
+            UTILS.verifyThatDisplayIsWarranted(weHaveVariantsAndAssociations, $('#VariantsAndAssociationsExist'), $('#VariantsAndAssociationsNoExist'));
+            if (weHaveVariantsAndAssociations) {
+                if (showGwas) {
+                    $('#gwasAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
+                        variantRec.IN_GWAS,
+                        variantRec.GWAS_T2D_PVALUE,
+                        variantRec.GWAS_T2D_OR,
+                        5e-8,
+                        5e-4,
+                        5e-2,
+                        variantTitle,
+                            variantAssociationStrings.sourceDiagram +
+                            variantAssociationStrings.sourceDiagramQ,
+                        false,
+                        false,
+                        variantAssociationStrings));
+                }
+                if (showSigma) {
+                    $('#gwasSigmaAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
+                        variantRec.IN_GWAS,
+                        variantRec.GWAS_T2D_PVALUE,
+                        variantRec.GWAS_T2D_OR,
+                        5e-8,
+                        5e-4,
+                        5e-2,
+                        variantTitle,
+                            variantAssociationStrings.sourceDiagram +
+                            variantAssociationStrings.sourceDiagramQ,
+                        false,
+                        false,
+                        variantAssociationStrings));
+                }
+                if (showExchp) {
+                    $('#exomeChipAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
+                        variantRec.EXCHP_T2D_P_value,
+                        variantRec.EXCHP_T2D_P_value,
+                        variantRec.EXCHP_T2D_BETA,
+                        5e-8,
+                        5e-4,
+                        5e-2,
+                        variantTitle,
+                            variantAssociationStrings.sourceExomeChip +
+                            variantAssociationStrings.sourceExomeChipQ,
+                        false,
+                        false,
+                        variantAssociationStrings));
+                }
+                if (showExseq) {
+                    $('#exomeSequenceAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
+                        variantRec._13k_T2D_P_EMMAX_FE_IV,
+                        variantRec._13k_T2D_P_EMMAX_FE_IV,
+                        variantRec._13k_T2D_OR_WALD_DOS_FE_IV,
+                        5e-8,
+                        5e-4,
+                        5e-2,
+                        variantTitle,
+                            variantAssociationStrings.sourceExomeSequence +
+                            variantAssociationStrings.sourceExomeSequenceQ,
+                        false,
+                        false,
+                        variantAssociationStrings));
+                }
+                if (showSigma) {
+                    $('#sigmaAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
+                        variantRec.SIGMA_T2D_P,
+                        variantRec.SIGMA_T2D_P,
+                        variantRec.SIGMA_T2D_OR,
+                        5e-8,
+                        5e-4,
+                        5e-2,
+                        variantTitle,
+                            variantAssociationStrings.sourceSigma +
+                            variantAssociationStrings.sourceSigmaQ,
+                        false,
+                        false,
+                        variantAssociationStrings));
+                }
+            }
+            $('#variantInfoAssociationStatisticsLinkToTraitTable').append(privateMethods.fillAssociationStatisticsLinkToTraitTable(
+                variantRec.IN_GWAS,
+                variantRec.DBSNP_ID,
+                variantRec.ID,
+                traitsStudiedUrlRoot,
+                variantAssociationStrings));
+
+        };
+
+        var describeImpactOfVariantOnProtein = function (variant, variantTitle, impactOnProtein) {
+            $('#effectOfVariantOnProtein').append(privateMethods.variantGenerateProteinsChooser(variant, variantTitle, impactOnProtein));
+            UTILS.verifyThatDisplayIsWarranted(variant["_13k_T2D_TRANSCRIPT_ANNOT"], $('#variationInfoEncodedProtein'), $('#puntOnNoncodingVariant'));
+        };
+
+
+        var setTitlesAndTheLikeFromData = function (varId,dbsnpId,mostdelscore,inGene,closestGene, searchString) {
+            var variantTitle = "searchString";
+            if ((typeof dbsnpId !== 'undefined')  &&
+                 (dbsnpId !== null) &&
+                (dbsnpId.length > 0)){
+                variantTitle = dbsnpId;
+            } else if ((typeof varId !== 'undefined')  &&
+                (varId !== null) &&
+                (varId.length > 0)){
+                variantTitle = varId;
+            }
+            var variantTitle = UTILS.get_variant_title(variant, searchString)
+            $('#variantTitleInAssociationStatistics').append(variantTitle);
+            $('#variantCharacterization').append(UTILS.getSimpleVariantsEffect(mostdelscore));
+            $('#describingVariantAssociation').append(UTILS.variantInfoHeaderSentence(inGene,closestGene));
+            $('#effectOnCommonProteinsTitle').append(variantTitle);
+            $('#variantTitle').append(variantTitle);
+            $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
+            $('#populationsHowCommonIs').append(variantTitle);
+            $('#exploreSurroundingSequenceTitle').append(variantTitle);
+        };
+
+
         var cariantRec = {
             _13k_T2D_HET_CARRIERS: 1,
             _13k_T2D_HOM_CARRIERS: 2,
@@ -519,7 +672,7 @@ var mpgSoftware = mpgSoftware || {};
                     var orValueText = "";
                     var pNumericalValue = pValue;
                     var pTextValue = "";
-                    if (availableData && (pValue!==null) && (orValue!==null)) {
+                    if (availableData && (pValue !== null) && (orValue !== null)) {
                         retVal += "<div class='boxyDisplay ";
                         // may or may not be bold
                         if (pNumericalValue <= strongCutOff) {
@@ -581,7 +734,7 @@ var mpgSoftware = mpgSoftware || {};
                 calculateSearchRegion: calculateSearchRegion,
                 showEthnicityPercentageWithBarChart: showEthnicityPercentageWithBarChart,
                 showCarrierStatusDiseaseRisk: showCarrierStatusDiseaseRisk,
-               // variantGenerateProteinsChooserTitle: variantGenerateProteinsChooserTitle,
+                // variantGenerateProteinsChooserTitle: variantGenerateProteinsChooserTitle,
                 variantGenerateProteinsChooser: variantGenerateProteinsChooser,
                 fillDiseaseRiskBurdenTest: fillDiseaseRiskBurdenTest,
                 describeAssociationsStatistics: describeAssociationsStatistics,
@@ -609,22 +762,20 @@ var mpgSoftware = mpgSoftware || {};
         function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot, restServerRoot, showGwas, showExchp, showExseq, showSigma, textStringObject, newApi) {
             var variantObj = data['variant'],
                 variant = variantObj['variant-info'],
-                variantTitle = UTILS.get_variant_title(variant, variantToSearch),
-                setTitlesAndTheLikeFromData = function (variantTitle, variant) {
-                    $('#variantTitleInAssociationStatistics').append(variantTitle);
-                    $('#variantCharacterization').append(UTILS.getSimpleVariantsEffect(variant.MOST_DEL_SCORE));
-                    $('#describingVariantAssociation').append(UTILS.variantInfoHeaderSentence(variant));
-
-                    // KDUXTD-52: Now set by the variant association statistics REST call (see _variantAssociationStatistics.gsp)
-                    var pVal = UTILS.get_lowest_p_value(variant);
-//                   $('#variantPValue').append((parseFloat(pVal[0])).toPrecision(4));
-//                    $('#variantInfoGeneratingDataSet').append(pVal[1]);
-                    $('#effectOnCommonProteinsTitle').append(variantTitle);
-                    $('#variantTitle').append(variantTitle);
-                    $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
-                    $('#populationsHowCommonIs').append(variantTitle);
-                    $('#exploreSurroundingSequenceTitle').append(variantTitle);
-                },
+//                variantTitle = UTILS.get_variant_title(variant, variantToSearch),
+//                setTitlesAndTheLikeFromData = function (variantTitle, variant) {
+//                    $('#variantTitleInAssociationStatistics').append(variantTitle);
+//                    $('#variantCharacterization').append(UTILS.getSimpleVariantsEffect(variant.MOST_DEL_SCORE));
+//                    $('#describingVariantAssociation').append(UTILS.variantInfoHeaderSentence(variant));
+//
+//                    // KDUXTD-52: Now set by the variant association statistics REST call (see _variantAssociationStatistics.gsp)
+//                    var pVal = UTILS.get_lowest_p_value(variant);
+//                    $('#effectOnCommonProteinsTitle').append(variantTitle);
+//                    $('#variantTitle').append(variantTitle);
+//                    $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
+//                    $('#populationsHowCommonIs').append(variantTitle);
+//                    $('#exploreSurroundingSequenceTitle').append(variantTitle);
+//                },
                 prepareDelayedIgvLaunch = function (variant, showSigma, restServerRoot) {
                     /***
                      * store everything we need to launch IGV
@@ -641,104 +792,7 @@ var mpgSoftware = mpgSoftware || {};
                         }
                     };
                 },
-                variantAssociations = function (variantRec, showSigma, variantTitle, traitsStudiedUrlRoot, variantAssociationStrings) {
-                    var weHaveVariantsAndAssociations;
-                    if (showSigma) {
-                        weHaveVariantsAndAssociations = ((variantRec.IN_GWAS) || (variantRec.GWAS_T2D_PVALUE) || (variantRec.GWAS_T2D_OR) ||
-                            (variantRec.SIGMA_T2D_P) || (variantRec.SIGMA_T2D_OR)  );
-                    } else {
-                        weHaveVariantsAndAssociations = ((variantRec.IN_GWAS) || (variantRec.GWAS_T2D_PVALUE) || (variantRec.GWAS_T2D_OR) ||
-                            (variantRec.EXCHP_T2D_P_value) || (variantRec.EXCHP_T2D_BETA) ||
-                            (variantRec._13k_T2D_P_EMMAX_FE_IV) || (variantRec._13k_T2D_OR_WALD_DOS_FE_IV) );
-                    }
-
-                    UTILS.verifyThatDisplayIsWarranted(weHaveVariantsAndAssociations, $('#VariantsAndAssociationsExist'), $('#VariantsAndAssociationsNoExist'));
-                    if (weHaveVariantsAndAssociations) {
-                        if (showGwas) {
-                            $('#gwasAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
-                                variantRec.IN_GWAS,
-                                variantRec.GWAS_T2D_PVALUE,
-                                variantRec.GWAS_T2D_OR,
-                                5e-8,
-                                5e-4,
-                                5e-2,
-                                variantTitle,
-                                    textStringObject.variantAssociationStrings.sourceDiagram +
-                                    textStringObject.variantAssociationStrings.sourceDiagramQ,
-                                false,
-                                false,
-                                variantAssociationStrings));
-                        }
-                        if (showSigma) {
-                            $('#gwasSigmaAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
-                                variantRec.IN_GWAS,
-                                variantRec.GWAS_T2D_PVALUE,
-                                variantRec.GWAS_T2D_OR,
-                                5e-8,
-                                5e-4,
-                                5e-2,
-                                variantTitle,
-                                    textStringObject.variantAssociationStrings.sourceDiagram +
-                                    textStringObject.variantAssociationStrings.sourceDiagramQ,
-                                false,
-                                false,
-                                variantAssociationStrings));
-                        }
-                        if (showExchp) {
-                            $('#exomeChipAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
-                                variantRec.EXCHP_T2D_P_value,
-                                variantRec.EXCHP_T2D_P_value,
-                                variantRec.EXCHP_T2D_BETA,
-                                5e-8,
-                                5e-4,
-                                5e-2,
-                                variantTitle,
-                                    textStringObject.variantAssociationStrings.sourceExomeChip +
-                                    textStringObject.variantAssociationStrings.sourceExomeChipQ,
-                                false,
-                                false,
-                                variantAssociationStrings));
-                        }
-                        if (showExseq) {
-                            $('#exomeSequenceAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
-                                variantRec._13k_T2D_P_EMMAX_FE_IV,
-                                variantRec._13k_T2D_P_EMMAX_FE_IV,
-                                variantRec._13k_T2D_OR_WALD_DOS_FE_IV,
-                                5e-8,
-                                5e-4,
-                                5e-2,
-                                variantTitle,
-                                    textStringObject.variantAssociationStrings.sourceExomeSequence +
-                                    textStringObject.variantAssociationStrings.sourceExomeSequenceQ,
-                                false,
-                                false,
-                                variantAssociationStrings));
-                        }
-                        if (showSigma) {
-                            $('#sigmaAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
-                                variantRec.SIGMA_T2D_P,
-                                variantRec.SIGMA_T2D_P,
-                                variantRec.SIGMA_T2D_OR,
-                                5e-8,
-                                5e-4,
-                                5e-2,
-                                variantTitle,
-                                    textStringObject.variantAssociationStrings.sourceSigma +
-                                    textStringObject.variantAssociationStrings.sourceSigmaQ,
-                                false,
-                                false,
-                                variantAssociationStrings));
-                        }
-                    }
-                    $('#variantInfoAssociationStatisticsLinkToTraitTable').append(privateMethods.fillAssociationStatisticsLinkToTraitTable(
-                        variantRec.IN_GWAS,
-                        variantRec.DBSNP_ID,
-                        variantRec.ID,
-                        traitsStudiedUrlRoot,
-                        variantAssociationStrings));
-
-                };
-            externalVariantAssociationStatistics = variantAssociations;
+             externalVariantAssociationStatistics = variantAssociations;
             var calculateDiseaseBurden = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, PVALUE, ORVALUE, variantTitle, showSigma, showGwas, showExchp, showExseq, diseaseBurdenStrings) {// disease burden
                 var weHaveEnoughDataForRiskBurdenTest;
                 if (showSigma) {
@@ -776,11 +830,11 @@ var mpgSoftware = mpgSoftware || {};
                 }
             };
             externalizeCarrierStatusDiseaseRisk = showHowCarriersAreDistributed;
-            describeImpactOfVariantOnProtein = function (variant, variantTitle, impactOnProtein) {
-                //$('#effectOfVariantOnProteinTitle').append(privateMethods.variantGenerateProteinsChooserTitle(variant, variantTitle, impactOnProtein));
-                $('#effectOfVariantOnProtein').append(privateMethods.variantGenerateProteinsChooser(variant, variantTitle, impactOnProtein));
-                UTILS.verifyThatDisplayIsWarranted(variant["_13k_T2D_TRANSCRIPT_ANNOT"], $('#variationInfoEncodedProtein'), $('#puntOnNoncodingVariant'));
-            };
+//            describeImpactOfVariantOnProtein = function (variant, variantTitle, impactOnProtein) {
+//                //$('#effectOfVariantOnProteinTitle').append(privateMethods.variantGenerateProteinsChooserTitle(variant, variantTitle, impactOnProtein));
+//                $('#effectOfVariantOnProtein').append(privateMethods.variantGenerateProteinsChooser(variant, variantTitle, impactOnProtein));
+//                UTILS.verifyThatDisplayIsWarranted(variant["_13k_T2D_TRANSCRIPT_ANNOT"], $('#variationInfoEncodedProtein'), $('#puntOnNoncodingVariant'));
+//            };
             var oldDescribeImpactOfVariantOnProtein = function (variant, variantTitle, impactOnProtein) {
                 $('#effectOfVariantOnProteinTitle').append(privateMethods.variantGenerateProteinsChooserTitle(variant, variantTitle, impactOnProtein));
                 $('#effectOfVariantOnProtein').append(privateMethods.variantGenerateProteinsChooser(variant, variantTitle, impactOnProtein));
@@ -791,7 +845,7 @@ var mpgSoftware = mpgSoftware || {};
             /***
              * the following top-level routines do all the work in fillTheFields
              */
-            setTitlesAndTheLikeFromData(variantTitle, variant);
+            //setTitlesAndTheLikeFromData(variantTitle, variant);
             delayedIgvLaunch = prepareDelayedIgvLaunch(variant, showSigma, restServerRoot);
             if (!newApi) {
                 variantAssociations({"IN_GWAS": variant["IN_GWAS"],
@@ -843,7 +897,7 @@ var mpgSoftware = mpgSoftware || {};
                 parseFloat(variant["_13k_T2D_HETA"]),
                 parseFloat(variant["_13k_T2D_HOMU"]),
                 parseFloat(variant["_13k_T2D_HETU"]), showGwas, showExchp, showExseq, showSigma, textStringObject.carrierStatusImpact);
-           // describeImpactOfVariantOnProtein(variant, variantTitle, textStringObject.impactOnProtein);
+            // describeImpactOfVariantOnProtein(variant, variantTitle, textStringObject.impactOnProtein);
         };
 
         var retrieveDelayedHowCommonIsPresentation = function () {
@@ -880,7 +934,7 @@ var mpgSoftware = mpgSoftware || {};
 
             // public routines
             retrieveDescribeImpactOfVariantOnProtein: retrieveDescribeImpactOfVariantOnProtein,
-            describeImpactOfVariantOnProtein: describeImpactOfVariantOnProtein,
+//            describeImpactOfVariantOnProtein: describeImpactOfVariantOnProtein,
             retrieveCalculateDiseaseBurden: retrieveCalculateDiseaseBurden,
             retrieveCarrierStatusDiseaseRisk: retrieveCarrierStatusDiseaseRisk,
             retrieveVariantAssociationStatistics: retrieveVariantAssociationStatistics,
@@ -889,7 +943,11 @@ var mpgSoftware = mpgSoftware || {};
             retrieveDelayedCarrierStatusDiseaseRiskPresentation: retrieveDelayedCarrierStatusDiseaseRiskPresentation,
             retrieveDelayedBurdenTestPresentation: retrieveDelayedBurdenTestPresentation,
             retrieveHowCommonIsThisVariantAcrossEthnicities: retrieveHowCommonIsThisVariantAcrossEthnicities,
-            retrieveDelayedIgvLaunch: retrieveDelayedIgvLaunch
+            retrieveDelayedIgvLaunch: retrieveDelayedIgvLaunch,
+            retrieveFieldsByName: retrieveFieldsByName,
+            variantAssociations:variantAssociations,
+            describeImpactOfVariantOnProtein:describeImpactOfVariantOnProtein,
+            setTitlesAndTheLikeFromData:setTitlesAndTheLikeFromData
         }
 
 

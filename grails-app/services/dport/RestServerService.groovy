@@ -1267,7 +1267,7 @@ ${customFilterSet}""".toString()
     "page_size": 100,
     "count": false,
     "properties":    {
-                           "cproperty": ["VAR_ID"],
+                           "cproperty": ["VAR_ID","DBSNP_ID","CLOSEST_GENE","IN_GENE","MOST_DEL_SCORE"],
                           "orderBy":    [],
                           "dproperty":    {
                                         },
@@ -1323,6 +1323,22 @@ ${customFilterSet}""".toString()
                 if (apiResults.is_error == false) {
                     if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
                         def variant = apiResults.variants[0];
+
+                        def element = variant["DBSNP_ID"].findAll{it}[0]
+                        sb  << "{\"level\":\"DBSNP_ID\",\"count\":\"${element}\"},"
+
+                        element = variant["VAR_ID"].findAll{it}[0]
+                        sb  << "{\"level\":\"VAR_ID\",\"count\":\"${element}\"},"
+
+                        element = variant["IN_GENE"].findAll{it}[0]
+                        sb  << "{\"level\":\"IN_GENE\",\"count\":\"${element}\"},"
+
+                        element = variant["CLOSEST_GENE"].findAll{it}[0]
+                        sb  << "{\"level\":\"CLOSEST_GENE\",\"count\":\"${element}\"},"
+
+                        element = variant["MOST_DEL_SCORE"].findAll{it}[0]
+                        sb  << "{\"level\":\"MOST_DEL_SCORE\",\"count\":\"${element}\"},"
+
                         if (variant ["P_EMMAX_FE_IV"]){
                             sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${variant["P_EMMAX_FE_IV"][EXOMESEQ][attribute]}},"
                         }
