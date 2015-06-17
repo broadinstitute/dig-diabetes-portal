@@ -1272,7 +1272,7 @@ ${customFilterSet}""".toString()
                           "dproperty":    {
                                         },
                         "pproperty":    {
-                                            "P_EMMAX_FE_IV": {
+                                            "P_FIRTH_FE_IV": {
                                                 "${EXOMESEQ}": ["T2D"]
                                             },
 
@@ -1339,8 +1339,8 @@ ${customFilterSet}""".toString()
                         element = variant["MOST_DEL_SCORE"].findAll{it}[0]
                         sb  << "{\"level\":\"MOST_DEL_SCORE\",\"count\":\"${element}\"},"
 
-                        if (variant ["P_EMMAX_FE_IV"]){
-                            sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${variant["P_EMMAX_FE_IV"][EXOMESEQ][attribute]}},"
+                        if (variant ["P_FIRTH_FE_IV"]){
+                            sb  << "{\"level\":\"P_FIRTH_FE_IV\",\"count\":${variant["P_FIRTH_FE_IV"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["P_VALUE"]){
                             sb  << "{\"level\":\"P_VALUE_GWAS\",\"count\":${variant["P_VALUE"][gwasSample][attribute]}},"
