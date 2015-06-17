@@ -1269,7 +1269,7 @@ ${customFilterSet}""".toString()
                        "HETA": {
                         "${EXOMESEQ}": ["T2D"]
                     },
-                       "P_EMMAX_FE_IV": {
+                       "P_FIRTH_FE_IV": {
                         "${EXOMESEQ}": ["T2D"]
                     },
                        "OR_FIRTH_FE_IV": {
@@ -1533,8 +1533,8 @@ ${customFilterSet}""".toString()
                         if (variant ["OBSA"]){
                             sb  << "{\"level\":\"OBSA\",\"count\":${variant["OBSA"][EXOMESEQ][attribute]}},"
                         }
-                        if (variant ["P_EMMAX_FE_IV"]){
-                            sb  << "{\"level\":\"P_EMMAX_FE_IV\",\"count\":${variant["P_EMMAX_FE_IV"][EXOMESEQ][attribute]}},"
+                        if (variant ["P_FIRTH_FE_IV"]){
+                            sb  << "{\"level\":\"P_FIRTH_FE_IV\",\"count\":${variant["P_FIRTH_FE_IV"][EXOMESEQ][attribute]}},"
                         }
                         if (variant ["OR_FIRTH_FE_IV"]){
                             sb  << "{\"level\":\"OR_FIRTH_FE_IV\",\"count\":${variant["OR_FIRTH_FE_IV"][EXOMESEQ][attribute]}}"
