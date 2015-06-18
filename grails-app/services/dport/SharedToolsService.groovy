@@ -1722,6 +1722,8 @@ class SharedToolsService {
              trans["vPOS"]= "Position"
              trans["vP_EMMAX"]= "P-value"
              trans["vP_EMMAX_FE_IV"]= "P-value"
+             trans["vP_FIRTH"]= "P-value"
+             trans["vP_FIRTH_FE_IV"]= "P-value"
              trans["vP_FE_INV"]= "P-value"
              trans["vP_VALUE"]= "P-value"
              trans["vPolyPhen_PRED"]= "PolyPhen prediction"
