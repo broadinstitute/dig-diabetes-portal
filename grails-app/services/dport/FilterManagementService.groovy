@@ -14,7 +14,8 @@ class FilterManagementService {
     private String gwasData  = "GWAS_DIAGRAM_mdv2"
     private String exomeChip  = "ExChip_82k_mdv2"
     private String sigmaData  = "unknown"
-    private String exomeSequencePValue  = "P_EMMAX_FE_IV"
+    // KDUXTD-33: switching from EMMAX to FIRTH p-values
+    private String exomeSequencePValue  = "P_FIRTH_FE_IV"
     private String gwasDataPValue  = "P_VALUE"
     private String exomeChipPValue  = "P_VALUE"
     private String sigmaDataPValue  = "P_VALUE"
@@ -166,7 +167,7 @@ class FilterManagementService {
                 returnValue = """{"dataset_id": "${sigmaData}", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
                 break;
             case "dataSetExseq"        :
-                returnValue = """{"dataset_id": "${exomeSequence}", "phenotype": "T2D", "operand": "P_EMMAX_FE_IV", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "${exomeSequence}", "phenotype": "T2D", "operand": "P_FIRTH_FE_IV", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
                 break;
             case "dataSetExchp"        :
                 returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
@@ -240,7 +241,7 @@ class FilterManagementService {
                 returnValue = """{ "filter_type": "FLOAT", "operand": "${parm1}", "operator": "GTE", "value": ${parm2} }""".toString()
                 break;
             case "setSpecificPValue" :
-                returnValue = """{"dataset_id": "${exomeSequence}", "phenotype": "${parm1}", "operand": "P_EMMAX_FE_IV", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "${exomeSequence}", "phenotype": "${parm1}", "operand": "P_FIRTH_FE_IV", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "proteinTruncatingCheckbox"        :
                 returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 1, "operand_type": "FLOAT"}""".toString()
