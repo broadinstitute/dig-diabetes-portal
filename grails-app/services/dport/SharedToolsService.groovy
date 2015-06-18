@@ -332,8 +332,12 @@ class SharedToolsService {
                 String sampleGroupId = sampleGroup.id
                 for (def phenotype in sampleGroup.phenotypes){
                     String phenotypeName = phenotype.name
+                    String phenotypeGroup = phenotype.group
+                    String phenotypeSortOrder = phenotype.sort_order
                     if (!phenotypeMap.containsKey (phenotypeName)){
                         phenotypeMap[phenotypeName] = [sampleGroupId:sampleGroupId,sampleGroupName:sampleGroupName]
+
+                        // Build up a list of phenotype properties that we can store in one map
                         if (phenotype.properties) {
                             LinkedHashMap properties = [:]
                             for (def property in phenotype.properties){
@@ -345,6 +349,24 @@ class SharedToolsService {
                             }
                             (phenotypeMap[phenotypeName])["properties"] = properties
                         }
+
+                        // we want to store some properties that are specific to each phenotype. Let's create
+                        // a special-purpose key called 'phenotypeProperties' which sits adjacent to all of the sample group names
+                        // Inside we can have a map that holds these special-purpose properties
+                        LinkedHashMap <String,String> phenotypeSpecificFields
+                        if ((phenotypeMap[phenotypeName]).containsKey("phenotypeProperties")){
+                            phenotypeSpecificFields = (phenotypeMap[phenotypeName])["phenotypeProperties"]
+                        } else {
+                            phenotypeSpecificFields = new LinkedHashMap <String,String> ()
+                            (phenotypeMap[phenotypeName])["phenotypeProperties"] = phenotypeSpecificFields
+                        }
+                        // and let's fill this structure.  We should only have to do it once
+                        if (phenotypeSpecificFields.size()==0){
+                            phenotypeSpecificFields ["group"] = phenotypeGroup
+                            phenotypeSpecificFields ["sort_order"] = phenotypeSortOrder
+                        }
+
+
                     }
                     if (sampleGroup.sample_groups){
                         getTechnologySpecificPhenotype (sampleGroup.sample_groups,phenotypeMap)
@@ -482,6 +504,8 @@ class SharedToolsService {
             if (sampleGroup.phenotypes){
                 for (def phenotype in sampleGroup.phenotypes){
                     String phenotypeName = phenotype.name
+                    String phenotypeGroup = phenotype.group
+                    String phenotypeSortOrder = phenotype.sort_order
                     LinkedHashMap<String,String> hashOfPhenotypeSpecificSampleGroups
                     if (annotatedPhenotypeSpecificSampleGroupIds.containsKey(phenotypeName)){
                         hashOfPhenotypeSpecificSampleGroups = annotatedPhenotypeSpecificSampleGroupIds[phenotypeName]
@@ -489,6 +513,23 @@ class SharedToolsService {
                         hashOfPhenotypeSpecificSampleGroups = new LinkedHashMap()
                         annotatedPhenotypeSpecificSampleGroupIds[phenotypeName]  =  hashOfPhenotypeSpecificSampleGroups
                     }
+
+                    // we want to store some properties that are specific to each phenotype. Let's create
+                    // a special-purpose key called 'phenotypeProperties' which sits adjacent to all of the sample group names
+                    // Inside we can have a map that holds these special-purpose properties
+                    LinkedHashMap <String,String> phenotypeSpecificProperties
+                    if (hashOfPhenotypeSpecificSampleGroups.containsKey("phenotypeProperties")){
+                        phenotypeSpecificProperties = hashOfPhenotypeSpecificSampleGroups["phenotypeProperties"]
+                    } else {
+                        phenotypeSpecificProperties = new LinkedHashMap <String,String> ()
+                        hashOfPhenotypeSpecificSampleGroups["phenotypeProperties"] = phenotypeSpecificProperties
+                    }
+                    // and let's fill this structure.  We should only have to do it once
+                    if (phenotypeSpecificProperties.size()==0){
+                        phenotypeSpecificProperties ["group"] = phenotypeGroup
+                        phenotypeSpecificProperties ["sort_order"] = phenotypeSortOrder
+                    }
+
 
                     // we have the list for this phenotype.  Add some more sample groups for it, along with
                     //  a place to put data set specific properties for each data set
@@ -603,6 +644,69 @@ class SharedToolsService {
     }
 
 
+    public LinkedHashMap <String,List<String>> extractAPhenotypeListofGroups (LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties){
+        List <String> uniqueGroups = []
+        LinkedHashMap <String,LinkedHashMap> listOfPhenotypesWithGroups = [:]
+        LinkedHashMap <String,LinkedHashMap> intermediateStructure = [:]
+        LinkedHashMap <String,List<String>> returnValue = [:]
+
+        if (phenotypeSpecificSampleGroupProperties){
+            // first collapse the data structure a little, make sure that we have group and sort order numbers for everything,
+            // and generate a distinct list of groups
+            phenotypeSpecificSampleGroupProperties.each { String k, LinkedHashMap v ->
+                String groupName
+                int sortOrder
+                if (v.containsKey("phenotypeProperties")) {
+                    LinkedHashMap<String> phenotypeSpecificProperties = v["phenotypeProperties"]
+                    if (phenotypeSpecificProperties.containsKey("group")) {
+                        groupName = phenotypeSpecificProperties["group"]
+                    } else {
+                        groupName = "default"
+                    }
+                    if (phenotypeSpecificProperties.containsKey("sort_order")) {
+                        sortOrder = phenotypeSpecificProperties["sort_order"] as int
+                    } else {
+                        sortOrder = 1
+                    }
+                } else {
+                    log.error("big trouble -- we found no phenotype properties in ${k}")
+                }
+                listOfPhenotypesWithGroups["${k}"] = [group: groupName, sortOrder: sortOrder]
+                if (!uniqueGroups.contains(groupName)){
+                    uniqueGroups <<  groupName
+                }
+            }
+
+            // now walk through our intermediate data structure and group phenotypes together
+            listOfPhenotypesWithGroups.each { String phenotypeName, LinkedHashMap v ->
+                String groupName = v["group"]
+                int sortOrder = v["sortOrder"]
+                LinkedHashMap groupedPhenotypes
+                if (intermediateStructure.containsKey(groupName)){
+                    groupedPhenotypes = intermediateStructure[groupName]
+                } else {
+                    groupedPhenotypes = [:]
+                    intermediateStructure[groupName] = groupedPhenotypes
+                }
+                if (!groupedPhenotypes.containsKey(phenotypeName)){
+                    groupedPhenotypes[phenotypeName] = sortOrder
+                }
+            }
+
+            // finally walk through the intermediate structure and sort within each group, assigning
+            // the results to our return value
+            intermediateStructure.each { String groupName, LinkedHashMap v ->
+                LinkedHashMap sortedList = v.sort { a, b -> a.value <=> b.value }
+                List sortedSubgroup = []
+                sortedList.each { k, val -> sortedSubgroup << k }
+                returnValue[groupName] = sortedSubgroup
+            }
+        }
+
+        return returnValue
+    }
+
+
 
     /***
      * Start with a list of lists and manufactures some legal JSON.  Extract a single linear list of every experiment name
@@ -692,6 +796,39 @@ class SharedToolsService {
     }
 
 
+
+
+    public String packageUpAHierarchicalListAsJson (LinkedHashMap mapOfStrings ){
+        // now that we have a list, build it into a string suitable for JSON
+        int numberOfGroups = 0
+        StringBuilder sb = new StringBuilder ()
+
+        if ((mapOfStrings) && (mapOfStrings?.size() > 0)){
+            numberOfGroups = mapOfStrings.size()
+            int groupCounter  = 0
+            mapOfStrings.each{k,List v->
+                sb <<  "\"${k}\":[".toString()
+                int individualGroupLength  = v.size()
+                    for ( int  i = 0 ; i < individualGroupLength ; i++ ){
+                        sb << "\"${v[i]}\"".toString()
+                        if (i < individualGroupLength - 1) {
+                            sb << ","
+                        }
+                    }
+                sb <<  "]"
+                groupCounter++
+                if (numberOfGroups > groupCounter) {
+                    sb << ","
+                }
+            }
+        }
+
+        return  """
+{"is_error": false,
+"numRecords":${numberOfGroups},
+"dataset":{${sb.toString()}}
+}""".toString()
+    }
 
 
 

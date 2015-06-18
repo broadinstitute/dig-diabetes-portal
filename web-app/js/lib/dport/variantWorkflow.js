@@ -197,7 +197,8 @@ var mpgSoftware = mpgSoftware || {};
                         ( typeof data !== 'undefined') &&
                         ( typeof data.datasets !== 'undefined' ) &&
                         (  data.datasets !==  null ) ) {
-                        UTILS.fillPhenotypeDropdown(data.datasets,'#phenotype');
+                        UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#phenotype');
+                       // UTILS.fillPhenotypeDropdown(data.datasets,'#phenotype');
                     }
                     loading.hide();
                 },

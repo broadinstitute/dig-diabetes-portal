@@ -210,8 +210,8 @@ class VariantSearchController {
         JSONObject jsonObject = sharedToolsService.retrieveMetadata()
         LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
         LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties = processedMetadata.phenotypeSpecificPropertiesPerSampleGroup
-        List <String> listOfPhenotypes = sharedToolsService.extractAPhenotypeList( phenotypeSpecificSampleGroupProperties )
-        String phenotypesForTransmission = sharedToolsService.packageUpAListAsJson (listOfPhenotypes)
+        LinkedHashMap<String, List<String>> listOfPhenotypes = sharedToolsService.extractAPhenotypeListofGroups( phenotypeSpecificSampleGroupProperties )
+       String phenotypesForTransmission = sharedToolsService.packageUpAHierarchicalListAsJson (listOfPhenotypes)
         def slurper = new JsonSlurper()
         def result = slurper.parseText(phenotypesForTransmission)
 
@@ -228,8 +228,8 @@ class VariantSearchController {
         JSONObject jsonObject = sharedToolsService.retrieveMetadata()
         LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
         LinkedHashMap phenotypeMap = processedMetadata.gwasSpecificPhenotypes
-        List <String> listOfPhenotypes = sharedToolsService.extractAPhenotypeList( phenotypeMap )
-        String phenotypesForTransmission = sharedToolsService.packageUpAListAsJson (listOfPhenotypes)
+        LinkedHashMap<String, List<String>> listOfPhenotypes = sharedToolsService.extractAPhenotypeListofGroups( phenotypeMap )
+        String phenotypesForTransmission = sharedToolsService.packageUpAHierarchicalListAsJson (listOfPhenotypes)
         def slurper = new JsonSlurper()
         def result = slurper.parseText(phenotypesForTransmission)
 
