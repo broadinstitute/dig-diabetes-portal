@@ -36,15 +36,21 @@ class RegionController {
                 log.info("RegionController.regionInfo: User supplied nonnumeric start extent= ${endExtentString}")
             }
             if (!encounteredErrors){
-                List<Gene>  geneList = Gene.findAllByChromosome("chr"+chromosomeNumber)
-                for ( Gene gene in geneList) {
-                    if (((gene.addrStart>startExtent) &&(gene.addrStart<endExtent)) ||
-                            ((gene.addrEnd>startExtent) &&(gene.addrEnd<endExtent))) {
-                        identifiedGenes << gene
-                    }
-
-                }
+                String searchParms = "5:${chromosomeNumber},6:${startExtent},7:${endExtent},23:0".toString()
+                redirect(controller:'variantSearch',action:'variantSearchWF', params: [encParams: searchParms])
             }
+
+
+//            if (!encounteredErrors){
+//                List<Gene>  geneList = Gene.findAllByChromosome("chr"+chromosomeNumber)
+//                for ( Gene gene in geneList) {
+//                    if (((gene.addrStart>startExtent) &&(gene.addrStart<endExtent)) ||
+//                            ((gene.addrEnd>startExtent) &&(gene.addrEnd<endExtent))) {
+//                        identifiedGenes << gene
+//                    }
+//
+//                }
+//            }
 
         }
 
