@@ -34,7 +34,7 @@ class TraitController {
      * @return
      */
     def traitSearch() {
-        String phenotypeKey=params.trait
+        String phenotypeKey=sharedToolsService.convertOldPhenotypeStringsToNewOnes (params.trait)
         String requestedSignificance=params.significance
         LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
         LinkedHashMap phenotypeMap = processedMetadata.gwasSpecificPhenotypes

@@ -39,6 +39,34 @@ class SharedToolsService {
     String warningText = ""
     String dataSetPrefix = "mdv"
     LinkedHashMap trans = [:]
+    // TODO remove hack: currently we get phenotypes from the old geneinfo call, but
+    // we need to interpret them with the new API, which uses different strings in some cases.
+    //  Eventually we will pull the strings from the new API and then throw away this conversion utility
+    LinkedHashMap convertPhenotypes = ["T2D":"T2D",
+                                       "FastGlu":"FG",
+                                       "FastIns":"FI",
+                                       "ProIns":"PI",
+                                       "2hrGLU_BMIAdj":"2hrG",
+                                       "2hrIns_BMIAdj":"2hrI",
+                                       "HOMAIR":"HOMAIR",
+                                       "HOMAB":"HOMAB",
+                                       "HbA1c":"HBA1C",
+                                       "BMI":"BMI",
+                                       "WHR":"WHR",
+                                       "Height":"HEIGHT",
+                                       "TC":"CHOL",
+                                       "HDL":"HDL",
+                                       "LDL":"LDL",
+                                       "TG":"TG",
+                                       "CAD":"CAD",
+                                       "CKD":"CKD",
+                                       "eGFRcrea":"eGFRcrea",
+                                       "eGFRcys":"eGFRcys",
+                                       "UACR":"UACR",
+                                       "MA":"MA",
+                                       "BIP":"BIP",
+                                       "SCZ":"SCZ",
+                                       "MDD":"MDD"   ]
 
     Integer helpTextSetting = 1 // 0== never display, 1== display conditionally, 2== always display
 
@@ -206,6 +234,28 @@ class SharedToolsService {
         }
         return returnValue
     }
+
+    /***
+     * This is a hack that we have to use because we still do a few things with the old API calls.
+     * @param oldKey
+     * @return
+     */
+    public String convertOldPhenotypeStringsToNewOnes (String oldKey){
+        String returnValue = ""
+        if ((oldKey) && (oldKey.length ()> 0)){
+            if (convertPhenotypes.containsKey(oldKey)){
+                returnValue = convertPhenotypes [oldKey]
+            } else { // this should presumably never happen, but in case it does will guess that the string hasn't changed
+                returnValue = oldKey
+            }
+        }
+        return returnValue
+    }
+
+
+
+
+
 
     /***
      * Here's a shareable method to retrieve the contents of the metadata. The first time it's called it will store and cache the result.
