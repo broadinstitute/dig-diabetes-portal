@@ -322,7 +322,8 @@ class FilterManagementService {
     public LinkedHashMap  parseVariantSearchParameters (HashMap incomingParameters,Boolean currentlySigma) {
         LinkedHashMap  buildingFilters = [filters:new ArrayList<String>(),
                                           filterDescriptions:new ArrayList<String>(),
-                                          parameterEncoding:new ArrayList<String>()]
+                                          parameterEncoding:new ArrayList<String>(),
+                                          positioningInformation :new LinkedHashMap <String,String> ()]
 
        buildingFilters = determineDataSet (buildingFilters,incomingParameters)
 
@@ -356,7 +357,8 @@ class FilterManagementService {
         if (!buildingFilters){
             buildingFilters = [filters:new ArrayList<String>(),
                                filterDescriptions:new ArrayList<String>(),
-                               parameterEncoding:new ArrayList<String>()]
+                               parameterEncoding:new ArrayList<String>(),
+                               positioningInformation :new LinkedHashMap <String,String> ()]
         }
 
 
@@ -915,6 +917,7 @@ class FilterManagementService {
         List <String> filters =  buildingFilters.filters
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
+        LinkedHashMap <String,String> positioningInformation =  buildingFilters.positioningInformation
         // set the search region
         // set gene to search
         if (incomingParameters.containsKey("region_gene_input")) {
@@ -936,6 +939,7 @@ class FilterManagementService {
                 filters << retrieveParameterizedFilterString("setRegionChromosomeSpecification", chromosomeString, 0)
                 filterDescriptions << "Chromosome is equal to ${chromosomeString}"
                 parameterEncoding << "5:${chromosomeString}"
+                positioningInformation["chromosomeSpecified"] = "${chromosomeString}"
             } else {
                 log.error("FilterManagementService.setRegion: no numeric portion of chromosome specifier = ${stringParameter}")
                 // TODO: ERROR CONDITION.  DEFAULT?
@@ -952,6 +956,7 @@ class FilterManagementService {
                 parameterEncoding << "6:${stringParameter}"
                 filters << retrieveParameterizedFilterString("setRegionPositionStart", startExtentString, 0)
                 filterDescriptions << "Chromosomal position is greater than or equal to ${startExtentString}"
+                positioningInformation["beginningExtentSpecified"] = "${startExtentString}"
             }
          }
 
@@ -964,6 +969,7 @@ class FilterManagementService {
                 filters << retrieveParameterizedFilterString("setRegionPositionEnd", endExtentString, 0)
                 filterDescriptions << "Chromosomal position is less than or equal to ${endExtentString}"
                 parameterEncoding << "7:${endExtentString}"
+                positioningInformation["endingExtentSpecified"] = "${endExtentString}"
             }
 
         }

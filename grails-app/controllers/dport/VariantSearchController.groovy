@@ -346,12 +346,12 @@ class VariantSearchController {
      * @param listOfParameterMaps
      * @param currentlySigma
      */
-    private void displayCombinedVariantSearchResults(List <LinkedHashMap> listOfParameterMaps, boolean currentlySigma) {
+    private void displayCombinedVariantSearchResults(List<LinkedHashMap> listOfParameterMaps, boolean currentlySigma) {
         // Let's start stepping through our big list of filters
-        LinkedHashMap  parsedFilterParameters
-        if (listOfParameterMaps){
-            for (LinkedHashMap singleParameterMap in listOfParameterMaps){
-                parsedFilterParameters =   filterManagementService.parseExtendedVariantSearchParameters (singleParameterMap,false,parsedFilterParameters)
+        LinkedHashMap parsedFilterParameters
+        if (listOfParameterMaps) {
+            for (LinkedHashMap singleParameterMap in listOfParameterMaps) {
+                parsedFilterParameters = filterManagementService.parseExtendedVariantSearchParameters(singleParameterMap, false, parsedFilterParameters)
             }
         }
         if (parsedFilterParameters) {
@@ -360,6 +360,21 @@ class VariantSearchController {
             String encodedFilters = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters)
             String encodedParameters = sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
             String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
+            String regionSpecifier = ""
+            List<String> identifiedGenes = []
+            if (parsedFilterParameters.positioningInformation.size() > 2) {
+                regionSpecifier = "chr${parsedFilterParameters.positioningInformation.chromosomeSpecified}:${parsedFilterParameters.positioningInformation.beginningExtentSpecified}-${parsedFilterParameters.positioningInformation.endingExtentSpecified}"
+                List<Gene> geneList = Gene.findAllByChromosome("chr" + parsedFilterParameters.positioningInformation.chromosomeSpecified)
+                for (Gene gene in geneList) {
+                    int startExtent = parsedFilterParameters.positioningInformation.beginningExtentSpecified as int
+                    int endExtent = parsedFilterParameters.positioningInformation.endingExtentSpecified as int
+                    if (((gene.addrStart > startExtent) && (gene.addrStart < endExtent)) ||
+                            ((gene.addrEnd > startExtent) && (gene.addrEnd < endExtent))) {
+                        identifiedGenes << gene.name1 as String
+                    }
+
+                }
+            }
 
 
             render(view: 'variantSearchResults',
@@ -373,17 +388,13 @@ class VariantSearchController {
                             proteinEffectsList  : encodedProteinEffects,
                             encodedParameters   : encodedParameters,
                             dataSetDetermination: dataSetDetermination,
-                            newApi              : sharedToolsService.getNewApi()])
+                            newApi              : sharedToolsService.getNewApi(),
+                            regionSearch        : (parsedFilterParameters.positioningInformation.size() > 2),
+                            regionSpecification : regionSpecifier,
+                            geneNamesToDisplay  : identifiedGenes
+                    ])
         }
     }
-
-
-
-
-
-
-
-
 
 
 

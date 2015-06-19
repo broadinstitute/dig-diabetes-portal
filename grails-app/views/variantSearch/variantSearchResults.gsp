@@ -136,10 +136,6 @@
     }
 
 
-
-
-
-
 //needed or not? From the results page...
     %{--var regionSpec = "<%=regionSpecification%>";--}%
     %{--jQuery.fn.dataTableExt.oSort['allnumeric-asc']  = function(a,b) {--}%
@@ -223,6 +219,10 @@
                 <p><a href="<g:createLink controller='variantSearch' action='variantSearchWF' params='[encParams:"${encodedParameters}"]'/>" class='boldlink'>
                     <g:message code="variantTable.searchResults.clickToRefine" default="Click here to refine your results" /></a></p>
 
+
+                <g:if test="${regionSearch}">
+                    <g:render template="geneSummaryForRegion" />
+                </g:if>
 
                 <g:render template="../region/newCollectedVariantsForRegion" />
 

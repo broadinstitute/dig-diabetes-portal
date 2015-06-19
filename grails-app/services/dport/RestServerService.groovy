@@ -1038,7 +1038,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             String drivingJson = """{
 "user_group": "ui",
 "filters": ${generateRangeFilters (chromosome,beginSearch,endSearch,true)},
-"columns": [${"\""+getVariantSearchColumns ().join("\",\"")+"\""}]
+"columns": [\"GWS_TRAITS\"]
 }
 """.toString()
             returnValue = postRestCall( drivingJson, VARIANT_SEARCH_URL)
