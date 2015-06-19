@@ -548,6 +548,29 @@ var UTILS = {
             }
         }
     },
+    fillPhenotypeCompoundDropdown: function (dataSetJson,phenotypeDropDownIdentifier) { // help text for each row
+        if ((typeof dataSetJson !== 'undefined')  &&
+            (typeof dataSetJson["is_error"] !== 'undefined')&&
+            (dataSetJson["is_error"] === false))
+        {
+            var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
+            var options = $(phenotypeDropDownIdentifier);
+            options.empty();
+            var groupList = dataSetJson ["dataset"];
+
+            for (var key in groupList) {
+                if (groupList.hasOwnProperty(key)) {
+                    var groupName = key;
+                    var groupContents = groupList[key];
+                    options.append("<optgroup label='"+key+"'>");
+                    for (var j = 0; j < groupContents.length; j++) {
+                        options.append($("<option />").val(groupContents[j]).text(mpgSoftware.trans.translator(groupContents[j])));
+                    }
+                    options.append("</optgroup>");
+                }
+            }
+        }
+    },
 
 /***
      * We need to make sure that all the fields have values before starting the plotting routines. I'll formalize

@@ -28,8 +28,8 @@ class RegionControllerIntegrationSpec extends IntegrationSpec {
         controller.params.id='chr1:209348715-210349783'
         controller.regionInfo()
 
-        then: 'verify that we get valid responses back'
-        assert controller.response.status==200
+        then: 'verify that we get perform a redirection'
+        assert controller.response.status==302
 
     }
 

@@ -17,6 +17,12 @@ span.dataSetChoice{
 .smallish input{
 height: 20px;
 }
+select optgroup{
+    background:#444;
+    color:#fff;
+    font-style:normal;
+    font-weight:normal;
+}
 </style>
 
 <script>

@@ -14,7 +14,8 @@ class FilterManagementService {
     private String gwasData  = "GWAS_DIAGRAM_mdv2"
     private String exomeChip  = "ExChip_82k_mdv2"
     private String sigmaData  = "unknown"
-    private String exomeSequencePValue  = "P_EMMAX_FE_IV"
+    // KDUXTD-33: switching from EMMAX to FIRTH p-values
+    private String exomeSequencePValue  = "P_FIRTH_FE_IV"
     private String gwasDataPValue  = "P_VALUE"
     private String exomeChipPValue  = "P_VALUE"
     private String sigmaDataPValue  = "P_VALUE"
@@ -166,7 +167,7 @@ class FilterManagementService {
                 returnValue = """{"dataset_id": "${sigmaData}", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
                 break;
             case "dataSetExseq"        :
-                returnValue = """{"dataset_id": "${exomeSequence}", "phenotype": "T2D", "operand": "P_EMMAX_FE_IV", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "${exomeSequence}", "phenotype": "T2D", "operand": "P_FIRTH_FE_IV", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
                 break;
             case "dataSetExchp"        :
                 returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
@@ -240,7 +241,7 @@ class FilterManagementService {
                 returnValue = """{ "filter_type": "FLOAT", "operand": "${parm1}", "operator": "GTE", "value": ${parm2} }""".toString()
                 break;
             case "setSpecificPValue" :
-                returnValue = """{"dataset_id": "${exomeSequence}", "phenotype": "${parm1}", "operand": "P_EMMAX_FE_IV", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "${exomeSequence}", "phenotype": "${parm1}", "operand": "P_FIRTH_FE_IV", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "proteinTruncatingCheckbox"        :
                 returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 1, "operand_type": "FLOAT"}""".toString()
@@ -321,7 +322,8 @@ class FilterManagementService {
     public LinkedHashMap  parseVariantSearchParameters (HashMap incomingParameters,Boolean currentlySigma) {
         LinkedHashMap  buildingFilters = [filters:new ArrayList<String>(),
                                           filterDescriptions:new ArrayList<String>(),
-                                          parameterEncoding:new ArrayList<String>()]
+                                          parameterEncoding:new ArrayList<String>(),
+                                          positioningInformation :new LinkedHashMap <String,String> ()]
 
        buildingFilters = determineDataSet (buildingFilters,incomingParameters)
 
@@ -355,7 +357,8 @@ class FilterManagementService {
         if (!buildingFilters){
             buildingFilters = [filters:new ArrayList<String>(),
                                filterDescriptions:new ArrayList<String>(),
-                               parameterEncoding:new ArrayList<String>()]
+                               parameterEncoding:new ArrayList<String>(),
+                               positioningInformation :new LinkedHashMap <String,String> ()]
         }
 
 
@@ -914,6 +917,7 @@ class FilterManagementService {
         List <String> filters =  buildingFilters.filters
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
+        LinkedHashMap <String,String> positioningInformation =  buildingFilters.positioningInformation
         // set the search region
         // set gene to search
         if (incomingParameters.containsKey("region_gene_input")) {
@@ -935,6 +939,7 @@ class FilterManagementService {
                 filters << retrieveParameterizedFilterString("setRegionChromosomeSpecification", chromosomeString, 0)
                 filterDescriptions << "Chromosome is equal to ${chromosomeString}"
                 parameterEncoding << "5:${chromosomeString}"
+                positioningInformation["chromosomeSpecified"] = "${chromosomeString}"
             } else {
                 log.error("FilterManagementService.setRegion: no numeric portion of chromosome specifier = ${stringParameter}")
                 // TODO: ERROR CONDITION.  DEFAULT?
@@ -951,6 +956,7 @@ class FilterManagementService {
                 parameterEncoding << "6:${stringParameter}"
                 filters << retrieveParameterizedFilterString("setRegionPositionStart", startExtentString, 0)
                 filterDescriptions << "Chromosomal position is greater than or equal to ${startExtentString}"
+                positioningInformation["beginningExtentSpecified"] = "${startExtentString}"
             }
          }
 
@@ -963,6 +969,7 @@ class FilterManagementService {
                 filters << retrieveParameterizedFilterString("setRegionPositionEnd", endExtentString, 0)
                 filterDescriptions << "Chromosomal position is less than or equal to ${endExtentString}"
                 parameterEncoding << "7:${endExtentString}"
+                positioningInformation["endingExtentSpecified"] = "${endExtentString}"
             }
 
         }

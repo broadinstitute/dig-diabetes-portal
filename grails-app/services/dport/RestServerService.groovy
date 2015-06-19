@@ -1038,7 +1038,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             String drivingJson = """{
 "user_group": "ui",
 "filters": ${generateRangeFilters (chromosome,beginSearch,endSearch,true)},
-"columns": [${"\""+getVariantSearchColumns ().join("\",\"")+"\""}]
+"columns": [\"GWS_TRAITS\"]
 }
 """.toString()
             returnValue = postRestCall( drivingJson, VARIANT_SEARCH_URL)
@@ -2542,6 +2542,7 @@ private String generateProteinEffectJson (String variantName){
 
 
     private String generateTraitPerVariantJson (String variantName,LinkedHashMap<String, List<String>> holder,LinkedHashMap<String, List<String>> sampleGroupSpecificProperties){
+        String dirMatchers =  packagePhenotypeSpecificReferencesForProperty ("DIR", holder)
         String betaMatchers =  packagePhenotypeSpecificReferencesForProperty ("BETA", holder)
         String orMatchers =  packagePhenotypeSpecificReferencesForProperty ("ODDS_RATIO", holder)
         String pValueMatchers =  packagePhenotypeSpecificReferencesForProperty ("P_VALUE", holder)
@@ -2572,7 +2573,12 @@ private String generateProteinEffectJson (String variantName){
 
                                                      "P_VALUE":      {
                                                           ${pValueMatchers}
-                                                      }
+                                                      },
+
+                                                    "DIR":         {
+                                                         ${dirMatchers}
+                                                     }
+
                                 }
                         },
         "filters":      [
@@ -2645,6 +2651,11 @@ private String generateProteinEffectJson (String variantName){
                     element = variant["BETA"].findAll{it}[0]
                     betaMatchersMap.each{ String phenotypeName, String sampleGroupId ->
                         sb  << "{\"level\":\"BETA^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
+                    }
+
+                    element = variant["DIR"].findAll{it}[0]
+                    betaMatchersMap.each{ String phenotypeName, String sampleGroupId ->
+                        sb  << "{\"level\":\"DIR^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
                     }
 
                     sampleGroupSpecificProperties.each { String sampleGroupId, LinkedHashMap sgHolder ->

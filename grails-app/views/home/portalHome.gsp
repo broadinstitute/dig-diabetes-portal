@@ -77,7 +77,7 @@
                             ( typeof data !== 'undefined') &&
                             ( typeof data.datasets !== 'undefined' ) &&
                             (  data.datasets !==  null ) ) {
-                        UTILS.fillPhenotypeDropdown(data.datasets,'#trait-input');
+                        UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#trait-input');
                     }
                     loading.hide();
                 },

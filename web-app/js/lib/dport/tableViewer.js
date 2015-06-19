@@ -423,6 +423,12 @@ var variantProcessing = (function () {
                           rowPointer = phenoStruct[phenotypeRow];
                           rowPointer['beta'] = data [i].count;
                       }
+                      if (splitKey[0] === 'DIR'){
+                          currentPhenotype = splitKey[1];
+                          phenotypeRow = phenotypeShortcut[currentPhenotype];
+                          rowPointer = phenoStruct[phenotypeRow];
+                          rowPointer['DIR'] = data [i].count;
+                      }
                       if (splitKey[0] === 'MAPPER'){
                           mafGroup = splitKey[1];
                           mafValue = mafValues[mafGroup];
@@ -466,9 +472,9 @@ var variantProcessing = (function () {
                 retVal += "<td>" +((trait.pValue !== null)?trait.pValue.toPrecision(3):'')+"</td>";
 
                 retVal += "<td>";
-                if (trait.DIR === "up") {
+                if (trait.DIR === 1) {
                     retVal += "<span class='assoc-up'>&uarr;</span>";
-                } else if (trait.DIR === "down") {
+                } else if (trait.DIR === -1) {
                     retVal += "<span class='assoc-down'>&darr;</span>";
                 }
                 retVal += "</td>";
