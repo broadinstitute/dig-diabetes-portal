@@ -172,23 +172,19 @@ rect.legendHolder  {
 
                 <p>
                     The table below shows all GWAS variants in this region available in this portal.
-                    Columns represent each of the <a class="boldlink" href="${createLink(controller:'informational', action:'hgat')}">25 traits</a> that were studied in meta-analyses included in this portal.
-                Rows represent traits, in alphabetic order.
+                    Rows represent each of the <a class="boldlink" href="${createLink(controller:'informational', action:'hgat')}">25 traits</a> that were studied in meta-analyses included in this portal.
                 </p>
 
                 <p>
-                    Hover over a variant to see the details of that association.
+                    Hover over a variant to see the additional details of that association.
                 </p>
 
-                <p>
-                    This portal contains studies that use different measures of effect on phenotype (odds ratio, beta, z-score), and currently displays only the statistics reported in the original papers.
-                </p>
 
                 <div class="row">
                     <div class="col-md-3">
-                        <p>
-                            Total variants: <strong><span id="displayCountOfIdentifiedTraits"></span></strong>
-                        </p>
+
+                             <strong><span id="displayCountOfIdentifiedTraits"></span></strong>
+
                     </div>
 
 
