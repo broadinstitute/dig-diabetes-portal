@@ -1398,7 +1398,7 @@ class SharedToolsService {
         LinkedHashMap<String, Integer> returnValue  = [startExtent:0,endExtent:3000000000,chrom:"1"]
         if (geneName)   {
             String geneUpperCase =   geneName.toUpperCase()
-            Gene gene = Gene.findByName2(geneUpperCase)
+            Gene gene = Gene.retrieveGene(geneUpperCase)
             returnValue.startExtent= gene?.addrStart ?: 0
             returnValue.endExtent= gene?.addrEnd ?: 0
             returnValue.chrom=gene?.chromosome
@@ -1426,7 +1426,7 @@ class SharedToolsService {
         String returnValue = ""
         if (geneName)   {
             String geneUpperCase =   geneName.toUpperCase()
-            Gene gene = Gene.findByName2(geneUpperCase)
+            Gene gene = Gene.retrieveGene(geneUpperCase)
             LinkedHashMap<String, Integer> geneExtent = getGeneExpandedExtent (geneName)
             returnValue = "${gene.chromosome}:${geneExtent.startExtent}-${geneExtent.endExtent}"
           }

@@ -66,7 +66,7 @@ class GeneController {
         if (possibleGene){
             possibleGene = possibleGene.trim().toUpperCase()
         }
-        Gene gene = Gene.findByName2(possibleGene)
+        Gene gene = Gene.retrieveGene(possibleGene)
         if (gene){
             redirect(controller:'gene',action:'geneInfo', params: [id: params.id])
             return

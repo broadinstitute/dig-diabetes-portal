@@ -13,4 +13,17 @@ class Gene {
         name2 blank: true
         chromosome blank: true
     }
+
+
+
+    static Gene retrieveGene(String geneName){
+        Gene gene = null
+        if (geneName)   {
+           List<Gene> geneList = Gene.findAllByName2Ilike(geneName)
+           if (geneList?.size()>0){
+               gene =  geneList.first()
+           }
+        }
+        return gene
+    }
 }
