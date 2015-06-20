@@ -3,21 +3,19 @@
  */
 package dport
 
-
-import dport.TraitController
 import grails.converters.JSON
 import grails.test.spock.IntegrationSpec
 
 /**
  *
  */
-class VariantControllerIntegrationSpec extends IntegrationSpec {
+class VariantInfoControllerIntegrationSpec extends IntegrationSpec {
 
-    VariantController controller
+    VariantInfoController controller
 
 
     def setup() {
-        controller = new  VariantController()
+        controller = new  VariantInfoController()
     }
 
     def cleanup() {

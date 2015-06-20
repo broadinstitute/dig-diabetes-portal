@@ -54,7 +54,7 @@ div.helix::after {
         $('#variant-go').on('click', function () {
             var variant_id = $('#variant-input').val();
             if (variant_id) {
-                window.location.href = "${createLink(controller:'variant',action:'variantInfo')}/" + variant_id;
+                window.location.href = "${createLink(controller:'variantInfo',action:'variantInfo')}/" + variant_id;
             }
         });
 

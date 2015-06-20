@@ -10,7 +10,7 @@
             $.ajax({
                 cache: false,
                 type: "get",
-                url: "${createLink(controller:'variant',action: 'proteinEffect')}",
+                url: "${createLink(controller:'variantInfo',action: 'proteinEffect')}",
                 data: {variantId: '<%=variantToSearch%>'},
                 async: true,
                 success: function (data) {

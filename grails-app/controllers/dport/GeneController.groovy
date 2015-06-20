@@ -1,6 +1,5 @@
 package dport
 
-import grails.plugin.springsecurity.annotation.Secured
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
@@ -72,7 +71,7 @@ class GeneController {
             redirect(controller:'gene',action:'geneInfo', params: [id: params.id])
             return
         }
-        redirect(controller: 'variant', action: 'variantInfo', params: [id: params.id])
+        redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: params.id])
         return
     }
 

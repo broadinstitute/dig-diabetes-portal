@@ -17,7 +17,7 @@
             $.ajax({
                 cache: false,
                 type: "get",
-                url: "${createLink(controller:'variant',action: 'variantDiseaseRisk')}",
+                url: "${createLink(controller:'variantInfo',action: 'variantDiseaseRisk')}",
                 data: {variantId: '<%=variantToSearch%>'},
                 async: true,
                 success: function (data) {

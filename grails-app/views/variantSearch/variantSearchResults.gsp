@@ -32,7 +32,7 @@
                         ${show_sigma},
                         ${show_exseq},
                         ${show_exchp},
-                        '<g:createLink controller="variant" action="variantInfo"  />',
+                        '<g:createLink controller="variantInfo" action="variantInfo"  />',
                         '<g:createLink controller="gene" action="geneInfo"  />',
                         ${dataSetDetermination},
                         {variantTableContext:variantTableContext});
@@ -59,7 +59,7 @@
                 ${show_sigma},
                 ${show_exseq},
                 ${show_exchp},
-                '<g:createLink controller="variant" action="variantInfo" />',
+                '<g:createLink controller="variantInfo" action="variantInfo" />',
                 '<g:createLink controller="gene" action="geneInfo" />',
                 proteinEffectList,{},${newApi});
 
@@ -129,7 +129,7 @@
         }
 
         variantProcessing.iterativeVariantTableFiller(data,totCol,sortCol,'#variantTable',
-                '<g:createLink controller="variant" action="variantInfo" />',
+                '<g:createLink controller="variantInfo" action="variantInfo" />',
                 '<g:createLink controller="gene" action="geneInfo" />',
                 proteinEffectList,{},${newApi});
 

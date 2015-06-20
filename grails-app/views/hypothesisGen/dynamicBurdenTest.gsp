@@ -609,7 +609,7 @@
                         ${show_sigma},
                         ${show_exseq},
                         ${show_exchp},
-                        '<g:createLink controller="variant" action="variantInfo"  />',
+                        '<g:createLink controller="variantInfo" action="variantInfo"  />',
                         '<g:createLink controller="gene" action="geneInfo"  />',
                         '<g:createLink controller="HypothesisGen" action="variantDbtSearchAjax" />',
                         1 );

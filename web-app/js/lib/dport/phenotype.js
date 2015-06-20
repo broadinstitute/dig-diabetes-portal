@@ -20,7 +20,7 @@ var mpgSoftware = mpgSoftware || {};
         var convertLineForPhenotypicTraitTable = function ( variant, effectsField ) {
             var retVal = [];
             var pValueGreyedOut = (variant.P_VALUE > .05)? "greyedout" :"normal";
-            retVal.push("<a class='boldlink' href='../variant/variantInfo/"+ variant.DBSNP_ID+"'>"+ variant.DBSNP_ID+"</a>");
+            retVal.push("<a class='boldlink' href='../variantInfo/variantInfo/"+ variant.DBSNP_ID+"'>"+ variant.DBSNP_ID+"</a>");
             retVal.push("<a class='boldItlink' href='../gene/geneInfo/"+ variant.CLOSEST_GENE+"'>"+ variant.CLOSEST_GENE+"</a>");
             retVal.push(""+ variant.P_VALUE.toPrecision(3));
             var betaVal;

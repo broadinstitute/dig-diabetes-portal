@@ -34,7 +34,7 @@
                 .width(width)
                 .height (height)
                 .margin (margin)
-                .variantLinkUrl ('<g:createLink controller="variant" action="variantInfo" />')
+                .variantLinkUrl ('<g:createLink controller="variantInfo" action="variantInfo" />')
                 .phenotypeArray (phenotypeMap.phenotypeArray);
 
         crossMap.dataHanger("#vis",data)

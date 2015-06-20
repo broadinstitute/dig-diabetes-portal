@@ -8,9 +8,9 @@ import spock.lang.Specification
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
-@TestFor(VariantController)
+@TestFor(VariantInfoController)
 @Mock([SharedToolsService])
-class VariantControllerUnitSpec extends Specification {
+class VariantInfoControllerUnitSpec extends Specification {
 
 
     def setup() {
@@ -35,7 +35,7 @@ class VariantControllerUnitSpec extends Specification {
         controller.variantInfo()
 
         then:
-        view=="/variant/variantInfo"
+        view=="/variantInfo/variantInfo"
         model.variantToSearch=="1"
         response.status == 200
 

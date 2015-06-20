@@ -8,7 +8,7 @@
             $.ajax({
                 cache: false,
                 type: "get",
-                url: "${createLink(controller:'variant',action: 'howCommonIsVariant')}",
+                url: "${createLink(controller:'variantInfo',action: 'howCommonIsVariant')}",
                 data: {variantId: '<%=variantToSearch%>'},
                 async: true,
                 success: function (data) {

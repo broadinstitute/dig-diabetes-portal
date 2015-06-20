@@ -129,7 +129,7 @@
                                       title="<g:message code='input.searchTerm.geneExample.help.header'/>"
                                       data-content="<g:message code='input.searchTerm.geneExample.help.text'/>"
                                 ></span>,
-                                <a href='<g:createLink controller="variant" action="variantInfo"
+                                <a href='<g:createLink controller="variantInfo" action="variantInfo"
                                                        params="[id: 'rs13342232']"/>'>rs13342232</a>,
                                 <a href='<g:createLink controller="region" action="regionInfo"
                                                        params="[id: 'chr9:21,940,000-22,190,000']"/>'>chr9:21,940,000-22,190,000</a>
@@ -141,7 +141,7 @@
                                                        params="[id: 'SLC30A8']"/>'>SLC30A8</a>
                                 <g:helpText title="input.searchTerm.geneExample.help.header" placement="bottom"
                                             body="input.searchTerm.geneExample.help.text"/>,
-                                <a href='<g:createLink controller="variant" action="variantInfo"
+                                <a href='<g:createLink controller="variantInfo" action="variantInfo"
                                                        params="[id: 'rs13266634']"/>'>rs13266634</a>
                                 <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
                                             body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
