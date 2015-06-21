@@ -26,4 +26,36 @@ class Gene {
         }
         return gene
     }
+
+
+    static void refresh(String geneName,String chromosome,Long  startPosition,Long  endPosition) {
+        Gene gene = retrieveGene( geneName)
+        if ((gene?.name2!= geneName) &&
+                (gene?.chromosome != chromosome) &&
+                (gene?.addrStart != startPosition) &&
+                (gene?.addrEnd != endPosition) ){
+            if (gene!=null)  {
+                gene.delete(flush: true)
+            }
+            new Gene(name1:geneName,
+                    name2:geneName,
+                    chromosome: chromosome,
+                    addrStart: startPosition,
+                    addrEnd: endPosition).save()
+        }
+    }
+
+
+
+    static void deleteGenesForChromosome(String chromosome) {
+        List<Gene> geneList = Gene.findAllByChromosome('chr'+chromosome) //whole data set.  TODO we can remove this line once all the old data is gone
+        if (geneList?. size()==0) {
+            geneList = Gene.findAllByChromosome(chromosome)
+        }
+        for ( Gene  gene in geneList) {
+            gene.delete(flush: true)
+        }
+     }
+
+
 }

@@ -30,6 +30,7 @@ class RestServerService {
     private String NEW_DEV_REST_SERVER = ""
     private String BASE_URL = ""
     private String GENE_INFO_URL = "gene-info"
+    private String GENE_SEARCH_URL = "gene-search"
     private String DATA_SET_URL = "getDatasets"
     private String VARIANT_INFO_URL = "variant-info"
     private String TRAIT_INFO_URL = "trait-info"
@@ -250,7 +251,8 @@ class RestServerService {
         BASE_URL = grailsApplication.config.server.URL
         DBT_URL = grailsApplication.config.dbtRestServer.URL
         EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URL
-        pickADifferentRestServer(NEW_DEV_REST_SERVER)
+  //      pickADifferentRestServer(NEW_DEV_REST_SERVER)
+        pickADifferentRestServer(AWS01_REST_SERVER)
     }
 
 
@@ -1601,35 +1603,6 @@ ${customFilterSet}""".toString()
         returnValue = slurper.parseText(sb.toString())
         return returnValue
     }
-//    public JSONObject combinedVariantCountByGeneNameAndPValue(String geneName){
-//        JSONObject returnValue
-//        List <Integer> dataSeteList = [3, 2, 1]
-//        List <BigDecimal> pValueList = [1,0.00000005, 0.0001, 0.05]
-//        StringBuilder sb = new StringBuilder ("{\"results\":[")
-//        def slurper = new JsonSlurper()
-//        for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
-//            sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
-//            for ( int  i = 0 ; i < pValueList.size () ; i++ ){
-//                sb  << "{"
-//                String jsonSpec = requestGeneCountByPValue(geneName, pValueList[i], dataSeteList[j])
-//                JSONObject apiData = postRestCall(jsonSpec,GET_DATA_URL)
-//                if (apiData.is_error == false) {
-//                    sb  << "\"level\":${pValueList[i]},\"count\":${apiData.numRecords}"
-//                }
-//                sb  << "}"
-//                if (i<pValueList.size ()-1){
-//                    sb  << ","
-//                }
-//            }
-//            sb  << "]}"
-//            if (j<dataSeteList.size ()-1){
-//                sb  << ","
-//            }
-//        }
-//        sb  << "]}"
-//        returnValue = slurper.parseText(sb.toString())
-//        return returnValue
-//    }
 
 
 
@@ -2673,6 +2646,93 @@ private String generateProteinEffectJson (String variantName){
         }
         sb  << "]}"
         returnValue = slurper.parseText(sb.toString())
+
+        return returnValue
+    }
+
+
+
+
+
+    private JSONObject gatherGenesForChromosomeResults(String chromosomeName){
+        String jsonSpec =  """{
+    "filters":    [
+                    {"operand": "CHROM", "operator": "EQ", "value": "${chromosomeName}", "filter_type": "STRING"},
+                      {"operand": "BEG", "operator": "GTE", "value": 1, "filter_type": "INTEGER"},
+                    {"operand": "END", "operator": "LTE", "value": 1000000000, "filter_type": "INTEGER"}
+                ],
+  "columns": ["ID","BEG","END","CHROM"],
+      "limit":3000
+}
+}
+""".toString()
+        return postRestCall(jsonSpec,GENE_SEARCH_URL)
+    }
+
+
+
+
+    public int  refreshGenesForChromosome(String chromosomeName) {//region
+        int  returnValue    = 1
+        Gene.deleteGenesForChromosome(chromosomeName)
+        JSONObject apiResults = gatherGenesForChromosomeResults( chromosomeName)
+        if (!apiResults.is_error)  {
+            int numberOfGenes = apiResults.numRecords
+            def genes =  apiResults.genes
+            for ( int  i = 0 ; i < numberOfGenes ; i++ )  {
+                String geneName =   genes[i].ID
+                Long startPosition =   genes[i].BEG
+                Long  endPosition =   genes[i].END
+                String  chromosome =   genes[i].CHROM
+                Gene.refresh(geneName,chromosome,startPosition,endPosition)
+            }
+        }
+
+        return returnValue
+    }
+
+
+
+
+
+
+
+
+
+
+
+    private JSONObject gatherVariantsForChromosomeResults(String chromosomeName){
+        String jsonSpec =  """{
+    "filters":    [
+                    {"operand": "CHROM", "operator": "EQ", "value": "${chromosomeName}", "filter_type": "STRING"},
+                    {"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": 1},
+                    {"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": 3000000000 }                ],
+      "columns": ["ID","DBSNP_ID","CHROM","POS"],
+      "limit":1000000
+}
+}
+""".toString()
+        return postRestCall(jsonSpec,VARIANT_SEARCH_URL)
+    }
+
+
+
+
+    public int  refreshVariantsForChromosome(String chromosomeName) {//region
+        int  returnValue    = 1
+        Variant.deleteVariantsForChromosome(chromosomeName)
+        JSONObject apiResults = gatherVariantsForChromosomeResults( chromosomeName)
+        if (!apiResults.is_error)  {
+            int numberOfVariants = apiResults.numRecords
+            def variants =  apiResults.variants
+            for ( int  i = 0 ; i < numberOfVariants ; i++ )  {
+                String varId =   variants[i].ID
+                String dbSnpId =   variants[i].DBSNP_ID
+                Long position =   variants[i].POS
+                String  chromosome =   variants[i].CHROM
+                Variant.refresh(varId,dbSnpId,chromosome,position)
+            }
+        }
 
         return returnValue
     }

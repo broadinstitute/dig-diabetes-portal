@@ -39,6 +39,8 @@ class SharedToolsService {
     String warningText = ""
     String dataSetPrefix = "mdv"
     LinkedHashMap trans = [:]
+    String currentGeneChromosome = "1"
+    String currentVariantChromosome = "1"
     // TODO remove hack: currently we get phenotypes from the old geneinfo call, but
     // we need to interpret them with the new API, which uses different strings in some cases.
     //  Eventually we will pull the strings from the new API and then throw away this conversion utility
@@ -69,6 +71,38 @@ class SharedToolsService {
                                        "MDD":"MDD"   ]
 
     Integer helpTextSetting = 1 // 0== never display, 1== display conditionally, 2== always display
+
+    public String retrieveCurrentGeneChromosome ()  {
+        return  currentGeneChromosome
+    }
+    public String retrieveCurrentVariantChromosome ()  {
+        return  currentVariantChromosome
+    }
+    private String determineNextChromosome (String currentChromosome) {
+        String returnValue
+        if (currentChromosome == 'X')  {
+            returnValue = 'Y'
+        }  else  if (currentChromosome == 'Y')  {
+            returnValue = ''
+        }   else {
+            int chromosomeNumber =  currentChromosome as int
+            if (chromosomeNumber == 23 )  {
+                returnValue = 'X'
+            }   else {
+                returnValue =  (++chromosomeNumber)
+            }
+        }
+        return  returnValue
+    }
+
+    public void incrementCurrentGeneChromosome ()  {
+        currentGeneChromosome =   determineNextChromosome (retrieveCurrentGeneChromosome () )
+    }
+    public void incrementCurrentVariantChromosome ()  {
+        currentVariantChromosome =   determineNextChromosome (retrieveCurrentVariantChromosome () )
+    }
+
+
 
     public void setHelpTextSetting(int newHelpTextSetting){
         if ((newHelpTextSetting>-1) && (newHelpTextSetting < 3)) {

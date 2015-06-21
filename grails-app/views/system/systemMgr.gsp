@@ -13,7 +13,38 @@
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
     <r:layoutResources/>
-
+    <script>
+    var refreshGenesForChromosome = function ()  {
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: "${createLink(action:"refreshGeneCache")}",
+            data: {chromosome: '1'},
+            async: true,
+            success: function (data) {
+                console.log('done')
+            },
+            error: function (jqXHR, exception) {
+                // core.errorReporter(jqXHR, exception);
+            }
+        });
+    } ;
+    var refreshVariantsForChromosome = function ()  {
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: "${createLink(action:"refreshVariantsForChromosome")}",
+            data: {chromosome: '1'},
+            async: true,
+            success: function (data) {
+                console.log('done')
+            },
+            error: function (jqXHR, exception) {
+                // core.errorReporter(jqXHR, exception);
+            }
+        });
+    } ;
+    </script>
 </head>
 
 <body>
@@ -150,7 +181,66 @@
                 </g:form>
 
 
-                <div class="separator"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="separator"></div>
+
+
+                 <div class="row clearfix">
+                     <div class="col-md-2"></div>
+                     <div class="col-md-3"> <div><a class='btn btn-primary btn-lg' onclick="refreshGenesForChromosome()" href="#">Refresh gene cache</a></div>
+                             <g:if test="${(currentGeneChromosome=='1')}">
+                                  <h5>Genes have not been refreshed since last reboot</h5>
+                             </g:if>
+                             <g:elseif test="${((currentGeneChromosome!='1') && (currentGeneChromosome?.length()>0))}">
+                                 Currently refreshing genes for chromosome ${currentGeneChromosome}
+                             </g:elseif>
+                             <g:elseif test="${(currentGeneChromosome?.length()==0)}">
+                                 Genes cache has been refreshed
+                             </g:elseif>
+                     </div>
+                     <div class="col-md-2"></div>
+                     <div class="col-md-3"> <div><a class='btn btn-primary btn-lg' onclick="refreshVariantsForChromosome()">Refresh variant cache</a> </div>
+                         <g:if test="${(currentVariantChromosome=='1')}">
+                             <h5>Genes have not been refreshed since last reboot</h5>
+                         </g:if>
+                         <g:elseif test="${((currentVariantChromosome!='1') && (currentVariantChromosome?.length()>0))}">
+                             Currently refreshing genes for chromosome ${currentVariantChromosome}
+                         </g:elseif>
+                         <g:elseif test="${(currentVariantChromosome?.length()==0)}">
+                             Genes cache has been refreshed
+                         </g:elseif>
+                     </div>
+                     <div class="col-md-2"></div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="separator"></div>
 
                 <g:form action='switchSigmaT2d' method='POST' class='form form-horizontal cssform' autocomplete='off'>
                     <h4>Choose your application(<em>current application = <strong>${currentApplicationIsSigma}</strong></em>)</h4>
@@ -271,65 +361,6 @@
 
 
 
-
-            <div class="separator"></div>
-
-
-            <g:form action='updateApiLevel' method='POST' class='form form-horizontal cssform' autocomplete='off'>
-                <h4>We can use the new API whenever possible, or we can funnel everything through the old API</h4>
-                <div class="row clearfix">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6">
-                        <div id="alternate-api-form">
-
-
-                            <div class="radio">
-                                <label>
-                                    <input id="newApi" type="radio" name="datatype" value="newApi"  <%=(newApi==true)?'checked':''%> />
-                                    Use the new API whenever possible
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input id="oldApi" type="radio" name="datatype" value="oldApi" <%=(newApi==false)?'checked':''%> />
-                                   Use our older API under all circumstances
-                                </label>
-                            </div>
-                         </div>
-                    </div>
-                    <div class="col-md-3"></div>
-                </div>
-                <div class="row clearfix">
-                    <div class="col-md-6"></div>
-                    <div class="col-md-6">
-                        <div >
-                            <div style="text-align:center; padding-top: 20px;">
-                                <input class="btn btn-primary btn-lg" type='submit' id="submitAlternateApi"
-                                       value='Commit'/>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-                <div class="row clearfix">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8">
-                        <div >
-                            <g:if test='${flash.message}'>
-                                <div class="alert alert-danger">${flash.message}</div>
-                            </g:if>
-                        </div>
-                    </div>
-                    <div class="col-md-2"></div>
-
-                </div>
-            </g:form>
-
-
-
-
-
             <div class="separator"></div>
 
 
@@ -421,6 +452,11 @@
 
                 </div>
             </g:form>
+
+
+
+
+
 
 
 

@@ -24,7 +24,9 @@ class SystemController {
         helpTextLevel:sharedToolsService.getHelpTextSetting(),
         newApi:sharedToolsService.getNewApi(),
         forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
-        dataVersion:sharedToolsService.getDataVersion ()])
+        dataVersion:sharedToolsService.getDataVersion (),
+        currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
+        currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome()])
     }
 
     def determineVersion = {
@@ -51,7 +53,9 @@ class SystemController {
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
                                           newApi:sharedToolsService.getNewApi(),
                                           forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
-                                          dataVersion:sharedToolsService.getDataVersion ()])
+                                          dataVersion:sharedToolsService.getDataVersion (),
+                                          currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
+                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome()])
 
     }
 
@@ -89,7 +93,9 @@ class SystemController {
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
                                           newApi:sharedToolsService.getNewApi(),
                                           forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
-                                          dataVersion:sharedToolsService.getDataVersion ()])
+                                          dataVersion:sharedToolsService.getDataVersion (),
+                                          currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
+                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome()])
     }
 
 
@@ -118,9 +124,59 @@ class SystemController {
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
                                           newApi:sharedToolsService.getNewApi(),
                                           forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
-                                          dataVersion:sharedToolsService.getDataVersion ()])
+                                          dataVersion:sharedToolsService.getDataVersion (),
+                                          currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
+                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome()])
     }
+    def refreshGeneCache()  {
+        redirect(controller:'system',action:'refreshGenesForChromosome', params: [chromosome: "1"])
+    }
+    def refreshVariantCache()  {
+        redirect(controller:'system',action:'refreshVariantsForChromosome', params: [chromosome: "1"])
+    }
+    def refreshGenesForChromosome()  {
+        String chromosomeName = params.chromosome
+        String endChromosomeName = params.endChromosome
+        if ((!chromosomeName)||(chromosomeName?.length()==0)) {
+            render(status:200)
+        } else {
+            Boolean allDone=false
+            String  nextChromosomeToProcess   =   chromosomeName
+            while (!allDone) {
+                restServerService.refreshGenesForChromosome(nextChromosomeToProcess)
+                sharedToolsService.incrementCurrentGeneChromosome()
+                nextChromosomeToProcess = sharedToolsService.retrieveCurrentGeneChromosome()
+                if ((nextChromosomeToProcess?.length() == 0)  ||
+                     (endChromosomeName == nextChromosomeToProcess)){
+                    allDone = true
+                    render(status: 200)
+                }
+            }
+         }
+        render(status: 200)
 
+    }
+    def refreshVariantsForChromosome()  {
+        String chromosomeName = params.chromosome
+        String endChromosomeName = params.endChromosome
+        if ((!chromosomeName)||(chromosomeName?.length()==0)) {
+            render(status:200)
+        } else {
+            Boolean allDone=false
+            String  nextChromosomeToProcess   =   chromosomeName
+            while (!allDone) {
+                restServerService.refreshVariantsForChromosome(nextChromosomeToProcess)
+                sharedToolsService.incrementCurrentVariantChromosome()
+                nextChromosomeToProcess = sharedToolsService.retrieveCurrentVariantChromosome()
+                if ((nextChromosomeToProcess?.length() == 0)  ||
+                        (endChromosomeName == nextChromosomeToProcess)){
+                    allDone = true
+                    render(status: 200)
+                }
+            }
+        }
+        render(status: 200)
+    }
 
 
 
@@ -148,7 +204,9 @@ class SystemController {
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
                                           newApi:sharedToolsService.getNewApi(),
                                           forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
-                                          dataVersion:sharedToolsService.getDataVersion ()])
+                                          dataVersion:sharedToolsService.getDataVersion (),
+                                          currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
+                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome()])
 
     }
 
@@ -170,7 +228,9 @@ class SystemController {
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
                                           newApi:sharedToolsService.getNewApi(),
                                           forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
-                                          dataVersion:sharedToolsService.getDataVersion ()])
+                                          dataVersion:sharedToolsService.getDataVersion (),
+                                          currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
+                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome()])
 
     }
 
@@ -259,7 +319,9 @@ class SystemController {
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
                                           newApi:sharedToolsService.getNewApi(),
                                           forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
-                                          dataVersion:sharedToolsService.getDataVersion ()])
+                                          dataVersion:sharedToolsService.getDataVersion (),
+                                          currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
+                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome()])
     }
 
     def switchSigmaT2d(){
@@ -287,7 +349,9 @@ class SystemController {
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
                                           newApi:sharedToolsService.getNewApi(),
                                           forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
-                                          dataVersion:sharedToolsService.getDataVersion ()])
+                                          dataVersion:sharedToolsService.getDataVersion (),
+                                          currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
+                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome()])
     }
 
 
@@ -299,7 +363,9 @@ class SystemController {
                                           helpTextLevel:sharedToolsService.getHelpTextSetting(),
                                           newApi:sharedToolsService.getNewApi(),
                                           forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
-                                          dataVersion:sharedToolsService.getDataVersion ()])
+                                          dataVersion:sharedToolsService.getDataVersion (),
+                                          currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
+                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome()])
     }
 
 }
