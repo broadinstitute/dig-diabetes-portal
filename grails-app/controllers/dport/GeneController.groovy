@@ -17,7 +17,7 @@ class GeneController {
      * @return
      */
     def index() {
-        String partialMatches = geneManagementService.partialGeneMatches(params.query,20)
+        String partialMatches = geneManagementService.partialGeneMatches(params.query,27)
         response.setContentType("application/json")
         render ("${partialMatches}")
     }

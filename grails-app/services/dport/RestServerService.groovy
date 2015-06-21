@@ -2697,10 +2697,6 @@ private String generateProteinEffectJson (String variantName){
 
 
 
-
-
-
-
     private JSONObject gatherVariantsForChromosomeResults(String chromosomeName){
         String jsonSpec =  """{
     "filters":    [
@@ -2740,6 +2736,46 @@ private String generateProteinEffectJson (String variantName){
 
 
 
+
+
+    private JSONObject gatherVariantsForChromosomeByChunkResults(String chromosomeName,int chunkSize,int startingPosition){
+        String jsonSpec =  """{
+    "filters":    [
+                    {"operand": "CHROM", "operator": "EQ", "value": "${chromosomeName}", "filter_type": "STRING"},
+                    {"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": ${startingPosition} },
+                    {"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": 3200000000 }                ],
+      "columns": ["ID","DBSNP_ID","CHROM","POS"],
+      "limit":${ chunkSize}
+}
+}
+""".toString()
+        return postRestCall(jsonSpec,VARIANT_SEARCH_URL)
+    }
+
+
+
+
+
+
+    public LinkedHashMap<String, Integer>  refreshVariantsForChromosomeByChunk(String chromosomeName,int chunkSize,int startingPosition) {//region
+        LinkedHashMap<String, Integer>  returnValue    = [numberOfVariants:0,lastPosition:0]
+        JSONObject apiResults = gatherVariantsForChromosomeByChunkResults( chromosomeName, chunkSize,  startingPosition)
+        if (!apiResults.is_error)  {
+            int numberOfVariants = apiResults.numRecords
+            returnValue.numberOfVariants =  numberOfVariants
+            def variants =  apiResults.variants
+            for ( int  i = 0 ; i < numberOfVariants ; i++ )  {
+                String varId =   variants[i].ID
+                String dbSnpId =   variants[i].DBSNP_ID
+                Long position =   variants[i].POS
+                String  chromosome =   variants[i].CHROM
+                returnValue.lastPosition =  position
+                Variant.refresh(varId,dbSnpId,chromosome,position)
+            }
+        }
+
+        return returnValue
+    }
 
 
 

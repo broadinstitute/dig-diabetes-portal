@@ -19,6 +19,22 @@ class GeneManagementService {
                 [], [max: numberOfMatches, offset: 0] ))
     }
 
+
+    private Closure<List <Variant>> retrieveVariantDbSnp = { String searchString, int numberOfMatches ->
+        return  (Variant.findAll(
+                "from Variant as b where b.dbSnpId like '"+searchString+"%' order by b.dbSnpId",
+                [], [max: numberOfMatches, offset: 0] ))
+    }
+
+    private Closure<List <Variant>> retrieveVariantVarId = { String searchString, int numberOfMatches ->
+        return  (Variant.findAll(
+                "from Variant as b where b.varId like '"+searchString+"%' order by b.varId",
+                [], [max: numberOfMatches, offset: 0] ))
+    }
+
+
+
+
     /***
      * Before we can deliver a list of partial matches we want first to uppercase the incoming
      * parameter. For return values we need only the name -- we don't care about the rest of the
@@ -31,15 +47,26 @@ class GeneManagementService {
      */
     private List <String> deliverPartialMatches(String firstCharacters,
                                                int maximumMatches,
-                                               Closure retrieveGene) {
+                                               Closure retrieveGene,
+                                               Closure retrieveVariantDbSnp,
+                                               Closure retrieveVariantVarId) {
         List <String> returnValue = []
         if ((firstCharacters  !=  null) &&
             (firstCharacters.length() > 0))   {
             String upperCasedCharacters = firstCharacters.toUpperCase()
-            List <Gene> rawGeneRecords = retrieveGene (upperCasedCharacters, maximumMatches)
+            List <Gene> rawGeneRecords = retrieveGene (upperCasedCharacters, maximumMatches/3 as int)
             rawGeneRecords.each {  Gene gene ->
                 returnValue.add(gene.name2)
             }
+            List <Variant> rawVariantRecords1 = retrieveVariantDbSnp (upperCasedCharacters, maximumMatches/3 as int)
+            rawVariantRecords1.each {  Variant variant ->
+                returnValue.add(variant.dbSnpId)
+            }
+            List <Variant> rawVariantRecords2 = retrieveVariantVarId (upperCasedCharacters, maximumMatches/3 as int)
+            rawVariantRecords2.each {  Variant variant ->
+                returnValue.add(variant.varId)
+            }
+
         }
         return  returnValue
     }
@@ -56,9 +83,11 @@ class GeneManagementService {
      */
     private String deliverPartialMatchesInJson( String firstCharacters,
                                                int maximumMatches,
-                                               Closure retrieveGene) {
+                                               Closure retrieveGene,
+                                               Closure retrieveVariantDbSnp,
+                                               Closure retrieveVariantVarId) {
         StringBuilder sb = new StringBuilder("[")
-        List <String> partialMatchList = deliverPartialMatches(firstCharacters,maximumMatches,retrieveGene)
+        List <String> partialMatchList = deliverPartialMatches(firstCharacters,maximumMatches,retrieveGene,retrieveVariantDbSnp,retrieveVariantVarId)
         int numberOfMatches = partialMatchList.size()
         for ( int i=0 ; i<numberOfMatches ; i++ ) {
              sb << "\"${partialMatchList[i]}\""
@@ -84,7 +113,9 @@ class GeneManagementService {
                                                int maximumMatches) {
         return   deliverPartialMatchesInJson(  firstCharacters,
                  maximumMatches,
-                 retrieveGene)
+                 retrieveGene,
+                retrieveVariantDbSnp,
+                retrieveVariantVarId )
 
     }
 

@@ -58,4 +58,12 @@ class Gene {
      }
 
 
+
+    static int totalNumberOfGenes() {
+        return Gene.count()
+    }
+
+
+
+
 }

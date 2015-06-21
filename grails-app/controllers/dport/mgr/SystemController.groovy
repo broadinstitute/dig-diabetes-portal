@@ -1,7 +1,9 @@
 package dport.mgr
 
+import dport.Gene
 import dport.RestServerService
 import  dport.SharedToolsService
+import dport.Variant
 import dport.people.User;
 import temporary.BuildInfo;
 import org.codehaus.groovy.grails.commons.GrailsApplication
@@ -26,7 +28,9 @@ class SystemController {
         forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
         dataVersion:sharedToolsService.getDataVersion (),
         currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
-        currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome()])
+        currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
+        totalNumberOfGenes:Gene.totalNumberOfGenes(),
+        totalNumberOfVariants:Variant.totalNumberOfVariants()])
     }
 
     def determineVersion = {
@@ -55,7 +59,9 @@ class SystemController {
                                           forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
                                           dataVersion:sharedToolsService.getDataVersion (),
                                           currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
-                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome()])
+                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
+                                          totalNumberOfGenes:Gene.totalNumberOfGenes(),
+                                          totalNumberOfVariants:Variant.totalNumberOfVariants()])
 
     }
 
@@ -95,7 +101,9 @@ class SystemController {
                                           forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
                                           dataVersion:sharedToolsService.getDataVersion (),
                                           currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
-                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome()])
+                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
+                                          totalNumberOfGenes:Gene.totalNumberOfGenes(),
+                                          totalNumberOfVariants:Variant.totalNumberOfVariants()])
     }
 
 
@@ -126,7 +134,9 @@ class SystemController {
                                           forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
                                           dataVersion:sharedToolsService.getDataVersion (),
                                           currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
-                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome()])
+                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
+                                          totalNumberOfGenes:Gene.totalNumberOfGenes(),
+                                          totalNumberOfVariants:Variant.totalNumberOfVariants()])
     }
     def refreshGeneCache()  {
         redirect(controller:'system',action:'refreshGenesForChromosome', params: [chromosome: "1"])
@@ -165,7 +175,17 @@ class SystemController {
             Boolean allDone=false
             String  nextChromosomeToProcess   =   chromosomeName
             while (!allDone) {
-                restServerService.refreshVariantsForChromosome(nextChromosomeToProcess)
+                Boolean chromosomeFinished=false
+                int nextPosition = 0
+                int chunkSize = 1000
+                while (!chromosomeFinished)  {
+                    LinkedHashMap variantsRetrieved = restServerService.refreshVariantsForChromosomeByChunk( nextChromosomeToProcess, chunkSize, nextPosition)
+                    if (variantsRetrieved.numberOfVariants<1)  {
+                        chromosomeFinished = true
+                    }  else {
+                        nextPosition =  variantsRetrieved.lastPosition
+                    }
+                }
                 sharedToolsService.incrementCurrentVariantChromosome()
                 nextChromosomeToProcess = sharedToolsService.retrieveCurrentVariantChromosome()
                 if ((nextChromosomeToProcess?.length() == 0)  ||
@@ -206,7 +226,9 @@ class SystemController {
                                           forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
                                           dataVersion:sharedToolsService.getDataVersion (),
                                           currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
-                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome()])
+                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
+                                          totalNumberOfGenes:Gene.totalNumberOfGenes(),
+                                          totalNumberOfVariants:Variant.totalNumberOfVariants()])
 
     }
 
@@ -230,7 +252,9 @@ class SystemController {
                                           forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
                                           dataVersion:sharedToolsService.getDataVersion (),
                                           currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
-                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome()])
+                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
+                                          totalNumberOfGenes:Gene.totalNumberOfGenes(),
+                                          totalNumberOfVariants:Variant.totalNumberOfVariants()])
 
     }
 
@@ -321,7 +345,9 @@ class SystemController {
                                           forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
                                           dataVersion:sharedToolsService.getDataVersion (),
                                           currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
-                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome()])
+                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
+                                          totalNumberOfGenes:Gene.totalNumberOfGenes(),
+                                          totalNumberOfVariants:Variant.totalNumberOfVariants()])
     }
 
     def switchSigmaT2d(){
@@ -351,7 +377,9 @@ class SystemController {
                                           forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
                                           dataVersion:sharedToolsService.getDataVersion (),
                                           currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
-                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome()])
+                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
+                                          totalNumberOfGenes:Gene.totalNumberOfGenes(),
+                                          totalNumberOfVariants:Variant.totalNumberOfVariants()])
     }
 
 
@@ -365,7 +393,9 @@ class SystemController {
                                           forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
                                           dataVersion:sharedToolsService.getDataVersion (),
                                           currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
-                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome()])
+                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
+                                          totalNumberOfGenes:Gene.totalNumberOfGenes(),
+                                          totalNumberOfVariants:Variant.totalNumberOfVariants()])
     }
 
 }

@@ -206,20 +206,26 @@
                                  Currently refreshing genes for chromosome ${currentGeneChromosome}
                              </g:elseif>
                              <g:elseif test="${(currentGeneChromosome?.length()==0)}">
-                                 Genes cache has been refreshed
+                                 Gene cache has been refreshed
                              </g:elseif>
+                             <div class="text-center" style="font-weight: bold">
+                                 Cached genes: ${totalNumberOfGenes}
+                             </div>
                      </div>
                      <div class="col-md-2"></div>
                      <div class="col-md-3"> <div><a class='btn btn-primary btn-lg' onclick="refreshVariantsForChromosome()">Refresh variant cache</a> </div>
                          <g:if test="${(currentVariantChromosome=='1')}">
-                             <h5>Genes have not been refreshed since last reboot</h5>
+                             <h5>Variants have not been refreshed since last reboot</h5>
                          </g:if>
                          <g:elseif test="${((currentVariantChromosome!='1') && (currentVariantChromosome?.length()>0))}">
-                             Currently refreshing genes for chromosome ${currentVariantChromosome}
+                             Currently refreshing variants for chromosome ${currentVariantChromosome}
                          </g:elseif>
                          <g:elseif test="${(currentVariantChromosome?.length()==0)}">
-                             Genes cache has been refreshed
+                             Variant cache has been refreshed
                          </g:elseif>
+                         <div class="text-center" style="font-weight: bold">
+                             Cached variants: ${totalNumberOfVariants}
+                         </div>
                      </div>
                      <div class="col-md-2"></div>
                 </div>

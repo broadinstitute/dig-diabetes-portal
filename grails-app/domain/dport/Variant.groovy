@@ -51,5 +51,11 @@ class Variant {
             }
         }
 
-
+    static int totalNumberOfVariants() {
+        return Variant.count()
     }
+
+
+
+
+}
