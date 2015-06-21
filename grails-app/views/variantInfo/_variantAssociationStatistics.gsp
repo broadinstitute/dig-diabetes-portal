@@ -44,7 +44,10 @@
                     }
                     collector["d"+i] = d;
                 }
-                var gene = collector["d0"][2].count;
+                var gene = '';
+                if (collector["d0"][2]!==null) {
+                    gene =  collector["d0"][2].count;
+                }
                 var closestGene = collector["d0"][3].count;
                 var mostdelscore= UTILS.convertStringToNumber(collector["d0"][4].count[0]);
                 var varId = collector["d0"][1].count;

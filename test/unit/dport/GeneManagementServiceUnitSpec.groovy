@@ -25,13 +25,17 @@ class GeneManagementServiceUnitSpec extends Specification {
         return  returnValue
     }
 
+    Closure<List <Variant>> retrieveVar = { String searchString, int numberOfMatches ->
+        List <Variant> mockedVariantRecords = []
+        return  mockedVariantRecords
+    }
 
     void "test deliverPartialMatches"() {
          given:
          String firstCharacters = "PP"
          int  maximumMatches = 20
          when:
-         List <String> results = service.deliverPartialMatches(firstCharacters,maximumMatches,retrieveGene)
+         List <String> results = service.deliverPartialMatches(firstCharacters,maximumMatches,retrieveGene,retrieveVar,retrieveVar)
          then:
          assert results.size()==7
     }
@@ -41,7 +45,7 @@ class GeneManagementServiceUnitSpec extends Specification {
         String firstCharacters = "PP"
         int  maximumMatches = 20
         when:
-        String results = service.deliverPartialMatchesInJson(firstCharacters,maximumMatches,retrieveGene)
+        String results = service.deliverPartialMatchesInJson(firstCharacters,maximumMatches,retrieveGene,retrieveVar,retrieveVar)
         then:
         def userJson = new JsonSlurper().parseText(results )
         assert  userJson.getClass().name == 'java.util.ArrayList'
