@@ -179,11 +179,11 @@ class SystemController {
                 int nextPosition = 0
                 int chunkSize = 1000
                 while (!chromosomeFinished)  {
-                    LinkedHashMap variantsRetrieved = restServerService.refreshVariantsForChromosomeByChunk( nextChromosomeToProcess, chunkSize, nextPosition)
+                    LinkedHashMap variantsRetrieved = restServerService.refreshVariantsForChromosomeByChunkNew( nextChromosomeToProcess, chunkSize, nextPosition)
                     if (variantsRetrieved.numberOfVariants<1)  {
                         chromosomeFinished = true
                     }  else {
-                        nextPosition =  variantsRetrieved.lastPosition
+                        nextPosition =  variantsRetrieved.lastPosition + 1
                     }
                 }
                 sharedToolsService.incrementCurrentVariantChromosome()

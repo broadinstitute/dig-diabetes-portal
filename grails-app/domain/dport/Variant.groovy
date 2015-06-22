@@ -14,6 +14,10 @@ class Variant {
             position position: true
         }
 
+// this will help set column sizes to more than default
+//        static mapping = {
+//            varId column: "var_id", length: 1000
+//        }
 
         static Variant retrieveVariant(String variantName) {
             Variant variant = null
