@@ -286,8 +286,38 @@ class SharedToolsService {
         return returnValue
     }
 
-
-
+    /***
+     * take whatever weird string the user comes up with and try to turn it into a variant name that we recognize
+     * @param rawString
+     * @return
+     */
+    public String createCanonicalVariantName (String  rawString){
+        String canonicalForm = rawString
+        if (rawString){
+            String chromosome
+            String position
+            String reference
+            String alternate
+            if (rawString.indexOf(':')){
+                List <String> dividedByColons = rawString.tokenize(":")
+                if (dividedByColons.size()>1){
+                    chromosome = dividedByColons[0]
+                    position = dividedByColons[1]
+                    canonicalForm = "${chromosome}_${position}"
+                }
+                if (dividedByColons.size()>2){
+                    reference = dividedByColons[2]
+                    canonicalForm += "_${reference}"
+                }
+                if (dividedByColons.size()>3){
+                    alternate = dividedByColons[3]
+                    canonicalForm += "_${alternate}"
+                }
+            }
+            canonicalForm = rawString.replaceAll('-','_')
+        }
+        return canonicalForm
+    }
 
 
 

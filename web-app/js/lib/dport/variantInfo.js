@@ -152,11 +152,13 @@ var mpgSoftware = mpgSoftware || {};
         var setTitlesAndTheLikeFromData = function (varId,dbsnpId,mostdelscore,gene,closestGene, searchString) {
             var variantTitle = searchString;
             if ((typeof dbsnpId !== 'undefined')  &&
-                 (dbsnpId !== null) &&
+                (dbsnpId !== null) &&
+                (dbsnpId !== "null") &&
                 (dbsnpId.length > 0)){
                 variantTitle = dbsnpId;
             } else if ((typeof varId !== 'undefined')  &&
                 (varId !== null) &&
+                (varId !== "null") &&
                 (varId.length > 0)){
                 variantTitle = varId;
             }

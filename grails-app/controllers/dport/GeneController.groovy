@@ -54,6 +54,7 @@ class GeneController {
      */
     def findTheRightDataPage () {
         String uncharacterizedString = params.id
+        // Is our string a region?
         LinkedHashMap extractedNumbers =  restServerService.extractNumbersWeNeed(uncharacterizedString)
         if ((extractedNumbers)   &&
                 (extractedNumbers["startExtent"])   &&
@@ -62,6 +63,7 @@ class GeneController {
             redirect(controller:'region',action:'regionInfo', params: [id: params.id])
             return
         }
+        // It's not a region.  Is our string a gene?
         String possibleGene = params.id
         if (possibleGene){
             possibleGene = possibleGene.trim().toUpperCase()
@@ -71,8 +73,24 @@ class GeneController {
             redirect(controller:'gene',action:'geneInfo', params: [id: params.id])
             return
         }
-        redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: params.id])
-        return
+        // Is our string a variant?  Build an identifying string and test
+        String canonicalVariant = sharedToolsService.createCanonicalVariantName(params.id)
+        if (false){ // once we have the variant database complete we can use this
+            Variant variant = Variant.retrieveVariant(canonicalVariant)
+            if (variant) {
+                redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: params.id])
+                return
+            } else {
+                redirect(controller: 'home', action: 'portalHome', params: [id: params.id])
+            }
+        } else {// for now we don't have to verify of variant's existence
+            redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: canonicalVariant])
+            return
+        }
+        // this is an error condition -- we should never get here in the code
+        log.error("why did we never finish parsing '${uncharacterizedString}'?")
+        redirect(controller: 'home', action: 'portalHome', params: [id: params.id])
+       return
     }
 
 

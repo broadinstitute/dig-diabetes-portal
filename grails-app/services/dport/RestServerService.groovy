@@ -344,9 +344,19 @@ class RestServerService {
                 uppercaseVariantName
             }", "operand_type": "STRING"}"""
         } else {
-            returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${
-                uppercaseVariantName
-            }", "operand_type": "STRING"}"""
+            List<String> variantNamePieces = variantName.tokenize('_')
+            if (variantNamePieces.size() > 2) {
+                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "EQ", "value": "${
+                    variantNamePieces[0]
+                }", "operand_type": "STRING"},
+                      {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "EQ", "value": ${
+                    variantNamePieces[1]
+                }, "operand_type": "INTEGER"}
+""".toString()
+            }
+//            returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${
+//                uppercaseVariantName
+//            }", "operand_type": "STRING"}"""
         }
         return returnValue
     }
@@ -2716,7 +2726,7 @@ private String generateProteinEffectJson (String variantName){
 
     public int  refreshVariantsForChromosome(String chromosomeName) {//region
         int  returnValue    = 1
-        Variant.deleteVariantsForChromosome(chromosomeName)
+       // Variant.deleteVariantsForChromosome(chromosomeName)   TODO: bring this back when speed of processing is acceptable
         JSONObject apiResults = gatherVariantsForChromosomeResults( chromosomeName)
         if (!apiResults.is_error)  {
             int numberOfVariants = apiResults.numRecords
