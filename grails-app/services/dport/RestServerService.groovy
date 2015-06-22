@@ -344,19 +344,19 @@ class RestServerService {
                 uppercaseVariantName
             }", "operand_type": "STRING"}"""
         } else {
-            List<String> variantNamePieces = variantName.tokenize('_')
-            if (variantNamePieces.size() > 2) {
-                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "EQ", "value": "${
-                    variantNamePieces[0]
-                }", "operand_type": "STRING"},
-                      {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "EQ", "value": ${
-                    variantNamePieces[1]
-                }, "operand_type": "INTEGER"}
-""".toString()
-            }
-//            returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${
-//                uppercaseVariantName
-//            }", "operand_type": "STRING"}"""
+//            List<String> variantNamePieces = variantName.tokenize('_')
+//            if (variantNamePieces.size() > 2) {
+//                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "EQ", "value": "${
+//                    variantNamePieces[0]
+//                }", "operand_type": "STRING"},
+//                      {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "EQ", "value": ${
+//                    variantNamePieces[1]
+//                }, "operand_type": "INTEGER"}
+//""".toString()
+//            }
+            returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${
+                uppercaseVariantName
+            }", "operand_type": "STRING"}"""
         }
         return returnValue
     }
@@ -2726,7 +2726,7 @@ private String generateProteinEffectJson (String variantName){
 
     public int  refreshVariantsForChromosome(String chromosomeName) {//region
         int  returnValue    = 1
-       // Variant.deleteVariantsForChromosome(chromosomeName)   TODO: bring this back when speed of processing is acceptable
+        Variant.deleteVariantsForChromosome(chromosomeName)
         JSONObject apiResults = gatherVariantsForChromosomeResults( chromosomeName)
         if (!apiResults.is_error)  {
             int numberOfVariants = apiResults.numRecords
@@ -2749,17 +2749,38 @@ private String generateProteinEffectJson (String variantName){
 
 
     private JSONObject gatherVariantsForChromosomeByChunkResults(String chromosomeName,int chunkSize,int startingPosition){
+//        String jsonSpec =  """{
+//    "filters":    [
+//                    {"operand": "CHROM", "operator": "EQ", "value": "${chromosomeName}", "filter_type": "STRING"},
+//                    {"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": ${startingPosition} },
+//                    {"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": 3200000000 }                ],
+//      "columns": ["ID","DBSNP_ID","CHROM","POS"],
+//      "limit":${ chunkSize}
+//}
+//}
+//""".toString()
         String jsonSpec =  """{
+    "passback": "123abc",
+    "entity": "variant",
+    "page_number": 0,
+    "page_size": 100,
+    "count": false,
+    "properties":    {
+                           "cproperty": ["VAR_ID","DBSNP_ID","POS", "CHROM"],
+                          "orderBy":    ["POS"],
+                          "dproperty":    {
+                                        },
+                        "pproperty":    {
+                                        }
+                    },
     "filters":    [
-                    {"operand": "CHROM", "operator": "EQ", "value": "${chromosomeName}", "filter_type": "STRING"},
-                    {"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": ${startingPosition} },
-                    {"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": 3200000000 }                ],
-      "columns": ["ID","DBSNP_ID","CHROM","POS"],
-      "limit":${ chunkSize}
-}
+                      {"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "EQ", "value": "${chromosomeName}", "operand_type": "STRING"},
+                      {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "GTE", "value": ${startingPosition}, "operand_type": "INTEGER"}
+
+                ]
 }
 """.toString()
-        return postRestCall(jsonSpec,VARIANT_SEARCH_URL)
+        return postRestCall(jsonSpec,GET_DATA_URL)
     }
 
 
@@ -2775,10 +2796,12 @@ private String generateProteinEffectJson (String variantName){
             returnValue.numberOfVariants =  numberOfVariants
             def variants =  apiResults.variants
             for ( int  i = 0 ; i < numberOfVariants ; i++ )  {
-                String varId =   variants[i].ID
-                String dbSnpId =   variants[i].DBSNP_ID
-                Long position =   variants[i].POS
-                String  chromosome =   variants[i].CHROM
+                def variant = apiResults.variants[i];
+
+                String varId =   variant["VAR_ID"].findAll{it}[0]
+                String dbSnpId =   variant["DBSNP_ID"].findAll{it}[0]
+                Long position =   variant["POS"].findAll{it}[0]
+                String  chromosome =   variant["CHROM"].findAll{it}[0]
                 returnValue.lastPosition =  position
                 Variant.refresh(varId,dbSnpId,chromosome,position)
             }
