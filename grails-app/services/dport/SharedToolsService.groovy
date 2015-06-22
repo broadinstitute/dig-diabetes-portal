@@ -1559,26 +1559,6 @@ class SharedToolsService {
     }
 
 
-    public String makeFiltersPrettier (String customFilter){
-        StringBuilder sb = new StringBuilder()
-        if (customFilter){
-            LinkedHashMap mappedFilter = filterManagementService.parseCustomFilterString(customFilter)
-            if ((mappedFilter.property) && (mappedFilter.equivalence)) {// parsing successful
-                sb << "${translator (mappedFilter.phenotype)}["
-                sb << "${translator (mappedFilter.sampleSet)}]"
-                sb << "${translator (mappedFilter.property)}"
-                if (mappedFilter.equivalence == "LT"){
-                    sb << "<"
-                }else if (mappedFilter.equivalence == "GT"){
-                    sb << ">"
-                }else if (mappedFilter.equivalence == "EQ") {
-                    sb << "="
-                }
-                sb << "${translator (mappedFilter.value)}"
-            }
-        }
-    }
-
 /***
  * Clearly these belong somewhere other than hardcoded in the middle of this method
  * TODO remove this gross hack

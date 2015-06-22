@@ -9,6 +9,7 @@ class FilterManagementService {
     private static final log = LogFactory.getLog(this)
     RestServerService restServerService
     SharedToolsService sharedToolsService
+    SearchBuilderService searchBuilderService
 
     private String exomeSequence  = "ExSeq_17k_mdv2"
     private String gwasData  = "GWAS_DIAGRAM_mdv2"
@@ -874,7 +875,7 @@ class FilterManagementService {
                     parsedFilterString.value,
                     "FLOAT")
             //filterDescriptions << "${parsedFilterString.property} value ${parsedFilterString.equivalence} ${parsedFilterString.value} for ${parsedFilterString.sampleSet}"
-            filterDescriptions << "${sharedToolsService.makeFiltersPrettier(customFilterString)}"
+            filterDescriptions << "${searchBuilderService.makeFiltersPrettier(customFilterString)}"
             parameterEncoding << "47:${customFilterString}"
         }
          return  buildingFilters
