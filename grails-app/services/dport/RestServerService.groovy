@@ -14,7 +14,7 @@ class RestServerService {
     SharedToolsService sharedToolsService
     FilterManagementService filterManagementService
     private static final log = LogFactory.getLog(this)
-
+    SqlService sqlService
 
     private String PROD_LOAD_BALANCED_SERVER = ""
     private String QA_LOAD_BALANCED_SERVER = ""
@@ -2811,6 +2811,18 @@ private String generateProteinEffectJson (String variantName){
     }
 
 
+    public LinkedHashMap<String, Integer>  refreshVariantsForChromosomeByChunkNew(String chromosomeName,int chunkSize,int startingPosition) {//region
+        LinkedHashMap<String, Integer>  returnValue    = [numberOfVariants:0,lastPosition:0]
+        JSONObject apiResults = gatherVariantsForChromosomeByChunkResults( chromosomeName, chunkSize,  startingPosition)
+        if (!apiResults.is_error)  {
+            int numberOfVariants = apiResults.numRecords
+            returnValue.numberOfVariants =  numberOfVariants
+            def variants =  apiResults.variants
+            returnValue.lastPosition =  sqlService.insertArrayOfVariants(variants, numberOfVariants)
+        }
+
+        return returnValue
+    }
 
 
 

@@ -116,6 +116,15 @@ var mpgSoftware = mpgSoftware || {};
                 $('#filterBlock'+indexNumber).remove ();
             }
         };
+        // we have removed one filter. Remember the others to be contiguous
+        var renumberFilters = function  (indexNumber,highestNumberFilter){
+            for (  var i = indexNumber; i < highestNumberFilter-1 ; i++ ){
+                var codedFilters = $('#savedValue'+(i+1)).val();
+                if (typeof codedFilters !== 'undefined')  {
+                    $('#savedValue'+i).val(codedFilters) ;
+                }
+            }
+         };
         var instantiatePhenotype = function (value) {
             $('#phenotype').val(value)
         };
@@ -314,6 +323,7 @@ var mpgSoftware = mpgSoftware || {};
                 var filterIndex = extractIndex ('editor',currentObject);
                 makeClauseCurrent (filterIndex);
                 forgetThisFilter (filterIndex);
+                renumberFilters (filterIndex,numberExistingFilters());
                 numberExistingFilters(numberExistingFilters()-1);
                 handleBlueBoxVisibility ();
                 $('#additionalFilterSelection').show ();

@@ -1453,29 +1453,20 @@ class FilterManagementService {
         //  and subsequent parameter lists following
         List <LinkedHashMap> returnValue = []
 
+        if (encodedOldParameterList){
+            for (String value in encodedOldParameterList){
+                returnValue << sharedToolsService.decodeAFilterList(value)
+            }
+        }
+
+
         // It is possible to send back an null filter, which we can then drop from further processing
         // does perform that test right here
         if (newParameters){
             returnValue << newParameters
         }
 
-        if (encodedOldParameterList){
-            for (String value in encodedOldParameterList){
-                returnValue << sharedToolsService.decodeAFilterList(value)
-            }
-          //  returnValue << sharedToolsService.decodeAFilterList(encodedOldParameters)
-//            List <String> savedParameters =  encodedOldParameters.split("\\^")
-//            if (savedParameters.size() > 3){
-//                LinkedHashMap savedParms = [:]
-//                savedParms['phenotype'] = savedParameters[0]
-//                savedParms['dataSet'] = savedParameters[1]
-//                savedParms['orValue'] = savedParameters[2]
-//                savedParms['pValue'] = savedParameters[3]
-//                savedParms['encoded'] = 1
-//                returnValue << savedParms
-//            }
 
-        }
         return returnValue
     }
 
