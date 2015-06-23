@@ -251,8 +251,8 @@ class RestServerService {
         BASE_URL = grailsApplication.config.server.URL
         DBT_URL = grailsApplication.config.dbtRestServer.URL
         EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URL
-  //      pickADifferentRestServer(NEW_DEV_REST_SERVER)
-        pickADifferentRestServer(AWS01_REST_SERVER)
+        pickADifferentRestServer(NEW_DEV_REST_SERVER)
+  //      pickADifferentRestServer(AWS01_REST_SERVER)
     }
 
 

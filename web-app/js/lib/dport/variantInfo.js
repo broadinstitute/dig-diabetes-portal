@@ -764,20 +764,6 @@ var mpgSoftware = mpgSoftware || {};
         function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot, restServerRoot, showGwas, showExchp, showExseq, showSigma, textStringObject, newApi) {
             var variantObj = data['variant'],
                 variant = variantObj['variant-info'],
-//                variantTitle = UTILS.get_variant_title(variant, variantToSearch),
-//                setTitlesAndTheLikeFromData = function (variantTitle, variant) {
-//                    $('#variantTitleInAssociationStatistics').append(variantTitle);
-//                    $('#variantCharacterization').append(UTILS.getSimpleVariantsEffect(variant.MOST_DEL_SCORE));
-//                    $('#describingVariantAssociation').append(UTILS.variantInfoHeaderSentence(variant));
-//
-//                    // KDUXTD-52: Now set by the variant association statistics REST call (see _variantAssociationStatistics.gsp)
-//                    var pVal = UTILS.get_lowest_p_value(variant);
-//                    $('#effectOnCommonProteinsTitle').append(variantTitle);
-//                    $('#variantTitle').append(variantTitle);
-//                    $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
-//                    $('#populationsHowCommonIs').append(variantTitle);
-//                    $('#exploreSurroundingSequenceTitle').append(variantTitle);
-//                },
                 prepareDelayedIgvLaunch = function (variant, showSigma, restServerRoot) {
                     /***
                      * store everything we need to launch IGV
@@ -832,11 +818,6 @@ var mpgSoftware = mpgSoftware || {};
                 }
             };
             externalizeCarrierStatusDiseaseRisk = showHowCarriersAreDistributed;
-//            describeImpactOfVariantOnProtein = function (variant, variantTitle, impactOnProtein) {
-//                //$('#effectOfVariantOnProteinTitle').append(privateMethods.variantGenerateProteinsChooserTitle(variant, variantTitle, impactOnProtein));
-//                $('#effectOfVariantOnProtein').append(privateMethods.variantGenerateProteinsChooser(variant, variantTitle, impactOnProtein));
-//                UTILS.verifyThatDisplayIsWarranted(variant["_13k_T2D_TRANSCRIPT_ANNOT"], $('#variationInfoEncodedProtein'), $('#puntOnNoncodingVariant'));
-//            };
             var oldDescribeImpactOfVariantOnProtein = function (variant, variantTitle, impactOnProtein) {
                 $('#effectOfVariantOnProteinTitle').append(privateMethods.variantGenerateProteinsChooserTitle(variant, variantTitle, impactOnProtein));
                 $('#effectOfVariantOnProtein').append(privateMethods.variantGenerateProteinsChooser(variant, variantTitle, impactOnProtein));
@@ -849,58 +830,10 @@ var mpgSoftware = mpgSoftware || {};
              */
             //setTitlesAndTheLikeFromData(variantTitle, variant);
             delayedIgvLaunch = prepareDelayedIgvLaunch(variant, showSigma, restServerRoot);
-            if (!newApi) {
-                variantAssociations({"IN_GWAS": variant["IN_GWAS"],
-                        "DBSNP_ID": variant["DBSNP_ID"],
-                        "ID": variant["ID"],
-                        "GWAS_T2D_PVALUE": variant["GWAS_T2D_PVALUE"],
-                        "GWAS_T2D_OR": variant["GWAS_T2D_OR"],
-                        "EXCHP_T2D_P_value": variant["EXCHP_T2D_P_value"],
-                        "EXCHP_T2D_BETA": variant["EXCHP_T2D_BETA"],
-                        "_13k_T2D_P_EMMAX_FE_IV": variant["_13k_T2D_P_EMMAX_FE_IV"],
-                        "_13k_T2D_OR_WALD_DOS_FE_IV": variant["_13k_T2D_OR_WALD_DOS_FE_IV"],
-                        "SIGMA_T2D_P": variant["SIGMA_T2D_P"],
-                        "SIGMA_T2D_OR": variant["SIGMA_T2D_OR"]},
-                    showSigma, variantTitle, traitsStudiedUrlRoot, textStringObject.variantAssociationStrings);
-            }
 
-            calculateDiseaseBurden(
-                parseFloat(variant["_13k_T2D_OBSU"]),
-                parseFloat(variant["_13k_T2D_OBSA"]),
-                parseFloat(variant["_13k_T2D_HOMA"]),
-                parseFloat(variant["_13k_T2D_HETA"]),
-                parseFloat(variant["_13k_T2D_HOMU"]),
-                parseFloat(variant["_13k_T2D_HETU"]),
-                parseFloat(variant["_13k_T2D_P_EMMAX_FE_IV"]),
-                parseFloat(variant["_13k_T2D_OR_WALD_DOS_FE_IV"]),
-                variantTitle, showSigma, showGwas, showExchp, showExseq, textStringObject.diseaseBurdenStrings);
-            var ethnicityPercentages = [];
-            ethnicityPercentages.push(parseFloat(variant['_13k_T2D_AA_MAF']) * 100);
-            ethnicityPercentages.push(parseFloat(variant['_13k_T2D_HS_MAF']) * 100);
-            ethnicityPercentages.push(parseFloat(variant['_13k_T2D_EA_MAF']) * 100);
-            ethnicityPercentages.push(parseFloat(variant['_13k_T2D_SA_MAF']) * 100);
-            ethnicityPercentages.push(parseFloat(variant['_13k_T2D_EU_MAF']) * 100);
-            var euroValue;
-            if (variant["EXCHP_T2D_MAF"] !== null) {
-                euroValue = parseFloat(variant["EXCHP_T2D_MAF"]);
-                if (variant["EXCHP_T2D_P_value"]) {
-                    euroValue = parseFloat(euroValue) * 100;
-                }
-            }
-            ethnicityPercentages.push(euroValue);
-            if (!newApi) {
-                howCommonIsThisVariantAcrossEthnicities(ethnicityPercentages, textStringObject.alleleFrequencyStrings);
-            }
 
-            showHowCarriersAreDistributed(
-                parseFloat(variant["_13k_T2D_OBSU"]),
-                parseFloat(variant["_13k_T2D_OBSA"]),
-                parseFloat(variant["_13k_T2D_HOMA"]),
-                parseFloat(variant["_13k_T2D_HETA"]),
-                parseFloat(variant["_13k_T2D_HOMU"]),
-                parseFloat(variant["_13k_T2D_HETU"]), showGwas, showExchp, showExseq, showSigma, textStringObject.carrierStatusImpact);
-            // describeImpactOfVariantOnProtein(variant, variantTitle, textStringObject.impactOnProtein);
-        };
+
+       };
 
         var retrieveDelayedHowCommonIsPresentation = function () {
                 return delayedHowCommonIsPresentation;

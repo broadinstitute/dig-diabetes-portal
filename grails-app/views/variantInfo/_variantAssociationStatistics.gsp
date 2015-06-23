@@ -70,12 +70,10 @@
                         "<g:createLink controller='trait' action='traitInfo' />",
                         variantAssociationStrings);
 
-                // KDUXTD-52: set the header text based on the new API call p-values
                 var pValueAndKey = UTILS.get_lowest_p_value_from_map({"GWAS": collector["d0"][6].count[0], "exome chip": collector["d0"][7].count[0], "exome sequence": collector["d0"][8].count[0]});
                    $('#variantPValue').append((parseFloat(pValueAndKey[0])).toPrecision(4));
                    $('#variantInfoGeneratingDataSet').append(pValueAndKey[1]);
 
-                // KDUXTD-47: adding call to enable popovers
                 $('[data-toggle="popover"]').popover();
 
             },
