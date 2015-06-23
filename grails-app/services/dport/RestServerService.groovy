@@ -407,8 +407,8 @@ class RestServerService {
 
     }
 
-    private String jsonForCustomColumnApiSearch(String combinedFilterList) {
-        LinkedHashMap resultColumnsToFetch = getColumnsToFetch("[" + combinedFilterList + "]")
+    private String jsonForCustomColumnApiSearch(String combinedFilterList,List<String> additionalProperties) {
+        LinkedHashMap resultColumnsToFetch = getColumnsToFetch("[" + combinedFilterList + "]", additionalProperties)
         String inputJson = """
 {
     "passback": "123abc",
@@ -2056,7 +2056,7 @@ private String generateProteinEffectJson (String variantName){
     }
 
 
-    public LinkedHashMap getColumnsToDisplay(String filterJson) {
+    public LinkedHashMap getColumnsToDisplay(String filterJson,List<String> additionalProperties) {
 
         //Get the structure to control the columns we want to display
         JSONObject metadata = sharedToolsService.retrieveMetadata()
@@ -2091,8 +2091,8 @@ private String generateProteinEffectJson (String variantName){
         return columnsToDisplayStructure
     }
 
-    public LinkedHashMap getColumnsToFetch(String filterJson) {
-        LinkedHashMap columnsToDisplay = getColumnsToDisplay(filterJson)
+    public LinkedHashMap getColumnsToFetch(String filterJson,List<String> additionalProperties) {
+        LinkedHashMap columnsToDisplay = getColumnsToDisplay(filterJson, additionalProperties)
         LinkedHashMap returnValue = [:]
         returnValue.dproperty = [:]
         returnValue.pproperty = [:]
@@ -2126,8 +2126,8 @@ private String generateProteinEffectJson (String variantName){
         return returnValue
     }
 
-    public String postRestCallFromFilters(String filters) {
-        String jsonSpec = jsonForCustomColumnApiSearch(filters)
+    public String postRestCallFromFilters(String filters,List<String> additionalProperties) {
+        String jsonSpec = jsonForCustomColumnApiSearch(filters, additionalProperties)
         String apiData = postRestCall(jsonSpec,GET_DATA_URL)
         return apiData
     }

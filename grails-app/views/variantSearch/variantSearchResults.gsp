@@ -6,11 +6,35 @@
     <r:require modules="tableViewer"/>
     <r:require modules="variantWF"/>
     <r:layoutResources/>
+    <style>
+    .propertyAdder{
+        margin: 0 0 0 15px;
+    }
+    .propertyHolder {
+        position: absolute;
+        background-color: white;
+        height:150px;
+        width:150px;
+        overflow-y: auto;
+    }
+    </style>
+
 </head>
 
 <body>
-<script>
 
+
+<script>
+var lookAtProperties = function (here){
+    if ($('#propertyWindow').is(":visible")){
+        $('#propertyWindow').remove ();
+    } else {
+        $(here).append("<div id='propertyWindow' class ='propertyHolder' onclick='stopLookingAtProperties()'> hello</div>");
+    }
+};
+var stopLookingAtProperties = function (){
+    $('#propertyWindow').hide()
+};
     var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
     var loading = $('#spinner').show();
     loading.show();
@@ -92,7 +116,9 @@
                     $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + columnDisp + "</th>")
                 }
                 if (dataset_width > 0) {
-                    $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp + "</th>")
+                    $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp +
+                            "<span class='glyphicon glyphicon-plus filterEditor filterActivator' aria-hidden='true' onclick='lookAtProperties(this)'></span>"+
+                    "</th>")
                 }
             }
             if (pheno_width > 0) {
@@ -118,9 +144,36 @@
                     }
                     $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + columnDisp + "</th>")
                 }
+//                if (dataset_width > 0) {
+//                    $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp +
+//                            "<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"+
+//                    "<span class='caret'></span>" +
+//                    "<span class='sr-only'>Toggle Dropdown</span>" +
+//                    "</button>" +
+//                    "<ul class='dropdown-menu'>" +
+//                            "<li>one</li>" +
+//                    "<li>two</li>" +
+//                    "</ul>"+
+//                            "</th>")
+//                }
                 if (dataset_width > 0) {
-                    $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp + "</th>")
+                    $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp +
+                            "<span class='glyphicon glyphicon-plus filterEditor propertyAdder' aria-hidden='true' onclick='lookAtProperties(this)'></span>"+
+                            "</th>")
                 }
+//                if (dataset_width > 0) {
+//                    $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp +
+//                            "<span class='glyphicon glyphicon-plus filterEditor propertyAdder' aria-hidden='true' onclick='mpgSoftware.variantWF.editThisClause(this)'></span>"+
+//                            "<span style='padding:2px 0 0 6px' class='glyphicon glyphicon-question-sign pop-auto'  data-toggle='popover' animation='true' "+
+//                            " data-container='body'  title='' code='title' data-html='true' data-content='This annotation indicates' code='stuff'/></span>"+
+//                            "<a href='#' data-toggle='tooltip' title='Hooray!'><div style='background-color: #fff'>Hover over me</div></a>"+
+//                            "</th>")
+//                }
+//                if (dataset_width > 0) {
+//                    $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp +
+//                            "<span style='padding:2px 0 0 6px' class='glyphicon glyphicon-question-sign pop-top'  data-toggle='popover' animation='true'  data-container='body'  data-placement='top' title='' data-html='true' data-content='This annotad chain' data-original-title='protein change'></span>"+
+//                            "</th>")
+//                }
             }
             if (pheno_width > 0) {
                 $('#variantTableHeaderRow').append("<th colspan=" + pheno_width + " class=\"datatype-header\">" + phenoDisp + "</th>")
@@ -234,6 +287,12 @@
     </div>
 
 </div>
+
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
 
 </body>
 </html>

@@ -276,31 +276,27 @@ class VariantSearchController {
      */
     def variantSearchAndResultColumnsAjax() {
         String filtersRaw = params['keys']
+        String propertiesRaw = params['props']
         String filters = URLDecoder.decode(filtersRaw, "UTF-8")
+        List<String> additionalProperties = []
 
         log.debug "variantSearch variantSearchAjax = ${filters}"
 
-        if (sharedToolsService.getNewApi()){
-            JsonSlurper slurper = new JsonSlurper()
-            String dataJsonObjectString = restServerService.postRestCallFromFilters(filters)
-            JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
 
-            LinkedHashMap resultColumnsToDisplay= restServerService.getColumnsToDisplay("[" + filters + "]")
-            JsonOutput resultColumnsJsonOutput = new JsonOutput()
-            String resultColumnsJsonObjectString = resultColumnsJsonOutput.toJson(resultColumnsToDisplay)
-            JSONObject resultColumnsJsonObject = slurper.parseText(resultColumnsJsonObjectString)
+        JsonSlurper slurper = new JsonSlurper()
+        String dataJsonObjectString = restServerService.postRestCallFromFilters(filters,additionalProperties)
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
 
-            render(status: 200, contentType: "application/json") {
-                [variants: dataJsonObject.variants,
-                columns: resultColumnsJsonObject
-                ]
-            }
-        }else {
-            JSONObject jsonObject = restServerService.searchGenomicRegionByCustomFilters(filters)
-            render(status: 200, contentType: "application/json") {
-                [variants: jsonObject['variants']]
-            }
+        LinkedHashMap resultColumnsToDisplay= restServerService.getColumnsToDisplay("[" + filters + "]",additionalProperties)
+        JsonOutput resultColumnsJsonOutput = new JsonOutput()
+        String resultColumnsJsonObjectString = resultColumnsJsonOutput.toJson(resultColumnsToDisplay)
+        JSONObject resultColumnsJsonObject = slurper.parseText(resultColumnsJsonObjectString)
 
+        render(status: 200, contentType: "application/json") {
+            [variants: dataJsonObject.variants,
+            columns: resultColumnsJsonObject,
+            filters:filtersRaw
+            ]
         }
 
     }
