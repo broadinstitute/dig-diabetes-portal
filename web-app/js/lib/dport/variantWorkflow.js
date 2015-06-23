@@ -625,7 +625,6 @@ var mpgSoftware = mpgSoftware || {};
                 "trigger='hover' data-container='body' data-placement='right' title='' data-content='"+helpText + "' data-original-title='"+helpTitle + "'></span>"+
                 "</div>"+
                 "<div class='col-md-2'>"+
-                "<span class='glyphicon glyphicon-remove-circle filterCanceler filterRefiner' aria-hidden='true' onclick='mpgSoftware.variantWF.removeThisFilter(this)' id='remove___"+holderId+"'></span>"+
                 "</div>"+
                 "</div>");
             if (typeof defaultValue !== 'undefined'){
@@ -646,7 +645,6 @@ var mpgSoftware = mpgSoftware || {};
                 "trigger='hover' data-container='body' data-placement='right' title='' data-content='"+helpText + "' data-original-title='"+helpTitle + "'></span>"+
                 "</div>"+
                 "<div class='col-md-2'>"+
-                "<span class='glyphicon glyphicon-remove-circle filterCanceler filterRefiner' aria-hidden='true' onclick='mpgSoftware.variantWF.removeThisFilter(this)' id='remove_"+holderId+"'></span>"+
                 "</div>"+
                 "</div>");
             if (typeof geneName !== 'undefined'){
@@ -680,7 +678,6 @@ var mpgSoftware = mpgSoftware || {};
                     "trigger='hover' data-container='body' data-placement='right' title='' data-content='"+helpText + "' data-original-title='"+helpTitle + "'></span>"+
                 "</div>"+
                 "<div class='col-md-2'>"+
-                "<span class='glyphicon glyphicon-remove-circle filterCanceler filterRefiner' aria-hidden='true' onclick='mpgSoftware.variantWF.removeThisFilter(this)' id='remove_"+holderId+"'></span>"+
                 "</div>"+
                 "</div>");
             if (typeof startingExtent !== 'undefined'){
@@ -809,7 +806,6 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
         "trigger='hover' data-container='body' data-placement='right' title='' data-content='"+helpText + "' data-original-title='"+helpTitle + "'></span>"+
         "</div>"+
         "<div class='col-md-2'>"+
-        "<span class='glyphicon glyphicon-remove-circle filterCanceler filterRefiner' aria-hidden='true' onclick='mpgSoftware.variantWF.removeThisFilter(this)' id='remove_"+holderId+"'></span>"+
         "</div>"+
         "</div>");
     $('#all_functions_checkbox').click()
