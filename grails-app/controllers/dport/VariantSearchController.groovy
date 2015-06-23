@@ -174,9 +174,9 @@ class VariantSearchController {
      * get properties given a data set
      */
     def retrievePropertiesAjax(){
-        List <String> datasetList = []
+        String datasetChoice = []
         if((params.dataset) && (params.dataset !=  null )){
-            datasetList << params.dataset
+            datasetChoice = params.dataset
         }
         List <String> phenotypeList = []
         if((params.phenotype) && (params.phenotype !=  null )){
@@ -188,7 +188,7 @@ class VariantSearchController {
         LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
         LinkedHashMap<String,List<String>> annotatedSampleGroups =  processedMetadata.propertiesPerSampleGroups
         LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties = processedMetadata['phenotypeSpecificPropertiesPerSampleGroup']
-        List <String> listOfProperties  = sharedToolsService.combineToCreateASingleList( params.phenotype, params.dataset,
+        List <String> listOfProperties  = sharedToolsService.combineToCreateASingleList( params.phenotype, datasetChoice,
                                                                                              annotatedSampleGroups,
                                                                                              phenotypeSpecificSampleGroupProperties )
         String propertiesForTransmission = sharedToolsService.packageUpAListAsJson (listOfProperties)
@@ -197,7 +197,8 @@ class VariantSearchController {
 
 
         render(status: 200, contentType: "application/json") {
-            [datasets: result]
+            [datasets: result,
+            chosenDataset:datasetChoice]
         }
 
     }

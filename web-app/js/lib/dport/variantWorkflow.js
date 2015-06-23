@@ -295,6 +295,10 @@ var mpgSoftware = mpgSoftware || {};
                                 fillPropertiesDropdown(data.datasets);
                             }
                             mpgSoftware.firstResponders.forceToPropertySelection (property, equiv, value);
+                            // make sure that the data set drop-down choice points to the right thing
+                            if (typeof data.chosenDataset !== 'undefined'){
+                                $('#dataSet').val(data.chosenDataset);
+                            }
                         }
                         loading.hide();
                     },
