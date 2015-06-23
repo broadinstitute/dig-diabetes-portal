@@ -117,14 +117,31 @@ var mpgSoftware = mpgSoftware || {};
             }
         };
         // we have removed one filter. Remember the others to be contiguous
-        var renumberFilters = function  (indexNumber,highestNumberFilter){
+        var renumberHiddenFilters = function  (indexNumber,highestNumberFilter){
             for (  var i = indexNumber; i < highestNumberFilter-1 ; i++ ){
-                var codedFilters = $('#savedValue'+(i+1)).val();
-                if (typeof codedFilters !== 'undefined')  {
-                    $('#savedValue'+i).val(codedFilters) ;
-                }
+                $('#savedValue'+(i+1)).attr('id','savedValue'+i);
+//                var codedFilters = $('#savedValue'+(i+1)).val();
+//                if (typeof codedFilters !== 'undefined')  {
+//                    var textOfSavedField = '<input type="text" class="form-control" id="savedValue'+i+'" value="'+codedFilters+'" style="height:0px">';
+//                    $('#hiddenFields').append(textOfSavedField); // add a filter
+//                    $('#savedValue'+(i+1)).remove(); // remove the old one
+//                }
             }
          };
+        var renumberFilterBlocks = function  (indexNumber,highestNumberFilter){
+            // Rename the blocks that hold each filter ( and think these IDs do anything, but let's be consistent)
+            for (  var i = indexNumber; i < highestNumberFilter-1 ; i++ ){
+                $('#filterBlock'+(i+1)).attr('id','filterBlock'+i);
+            }
+            // This id allows each pencil To know which filter it refers to
+            for (  var i = indexNumber; i < highestNumberFilter-1 ; i++ ){
+                $('#editor'+(i+1)).attr('id','editor'+i);
+            }
+            // This ID allows each the leader icon to know which filter it refers to
+            for (  var i = indexNumber; i < highestNumberFilter-1 ; i++ ){
+                $('#remover'+(i+1)).attr('id','remover'+i);
+            }
+        };
         var instantiatePhenotype = function (value) {
             $('#phenotype').val(value)
         };
@@ -312,6 +329,8 @@ var mpgSoftware = mpgSoftware || {};
             if (currentInteractivityState()){
                 var filterIndex = extractIndex ('remover',currentObject);
                 forgetThisFilter (filterIndex);
+                renumberHiddenFilters (filterIndex,numberExistingFilters());
+                renumberFilterBlocks (filterIndex,numberExistingFilters());
                 numberExistingFilters(numberExistingFilters()-1);
                 handleBlueBoxVisibility ();
                 whatToDoNext(102);
@@ -323,7 +342,8 @@ var mpgSoftware = mpgSoftware || {};
                 var filterIndex = extractIndex ('editor',currentObject);
                 makeClauseCurrent (filterIndex);
                 forgetThisFilter (filterIndex);
-                renumberFilters (filterIndex,numberExistingFilters());
+                renumberHiddenFilters (filterIndex,numberExistingFilters());
+                renumberFilterBlocks (filterIndex,numberExistingFilters());
                 numberExistingFilters(numberExistingFilters()-1);
                 handleBlueBoxVisibility ();
                 $('#additionalFilterSelection').show ();
