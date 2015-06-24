@@ -167,6 +167,9 @@ class SystemController {
 
     }
     def refreshVariantsForChromosome()  {
+        int variantCount = 0
+        int variantForChromosomeCount = 0
+
         String chromosomeName = params.chromosome
         String endChromosomeName = params.endChromosome
         if ((!chromosomeName)||(chromosomeName?.length()==0)) {
@@ -180,12 +183,18 @@ class SystemController {
                 int chunkSize = 1000
                 while (!chromosomeFinished)  {
                     LinkedHashMap variantsRetrieved = restServerService.refreshVariantsForChromosomeByChunkNew( nextChromosomeToProcess, chunkSize, nextPosition)
+                    variantForChromosomeCount = variantForChromosomeCount + variantsRetrieved.numberOfVariants;
+
                     if (variantsRetrieved.numberOfVariants<1)  {
                         chromosomeFinished = true
                     }  else {
                         nextPosition =  variantsRetrieved.lastPosition + 1
                     }
                 }
+                log.info("got: " + variantForChromosomeCount + " variant count for chromosome: " + nextChromosomeToProcess)
+                variantCount = variantCount + variantForChromosomeCount
+                log.info("got: " + variantCount + " total variants so far")
+
                 sharedToolsService.incrementCurrentVariantChromosome()
                 nextChromosomeToProcess = sharedToolsService.retrieveCurrentVariantChromosome()
                 if ((nextChromosomeToProcess?.length() == 0)  ||

@@ -6,6 +6,8 @@ class Variant {
         String varId = ''
         String chromosome = ''
         Long position = 0l
+        String dbSnpIdFirstCharacters = ''
+        String varIdFirstCharacters = ''
 
         static constraints = {
             varId blank: false
@@ -14,10 +16,10 @@ class Variant {
             position position: true
         }
 
-// this will help set column sizes to more than default
-//        static mapping = {
-//            varId column: "var_id", length: 1000
-//        }
+        // this will help set column sizes to more than default
+        static mapping = {
+            varId column: "var_id", length: 1000
+        }
 
         static Variant retrieveVariant(String variantName) {
             Variant variant = null
@@ -60,6 +62,25 @@ class Variant {
     }
 
 
+    static namedQueries = {
+        searchByVarId { String snippet, String smallSnippet ->
+            searchByVarIdFirstCharacters(smallSnippet)
+            like 'varId', "${snippet}%"
+        }
+
+        searchByVarIdFirstCharacters { String snippet ->
+            like 'varIdFirstCharacters', "${snippet}%"
+        }
+
+        searchByDbSnpId { String snippet, String smallSnippet ->
+            searchByDbSnpIdFirstCharacters(smallSnippet)
+            like 'dbSnpId', "${snippet}%"
+        }
+
+        searchByDbSnpIdFirstCharacters { String snippet ->
+            like 'dbSnpIdFirstCharacters', "${snippet}%"
+        }
+    }
 
 
 }
