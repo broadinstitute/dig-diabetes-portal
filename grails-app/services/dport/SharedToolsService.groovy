@@ -912,6 +912,62 @@ class SharedToolsService {
 
 
 
+
+
+    public String packageUpATreeAsJson (LinkedHashMap <String,LinkedHashMap<String,List<String>>> bigTree ){
+        // now that we have a multilevel tree, build it into a string suitable for JSON
+        StringBuilder returnValue = new StringBuilder ()
+        if ((bigTree) && (bigTree?.size() > 0)){
+            List <String> phenotypeHolder = []
+            bigTree.each {String phenotype,  LinkedHashMap phenotypeSpecificSampleGroups->
+                StringBuilder sb = new StringBuilder ()
+                sb << """  \"${phenotype}\":
+    {""".toString()
+                if (phenotypeSpecificSampleGroups?.size() > 0){
+                    int sampleGroupCount = 0
+                    phenotypeSpecificSampleGroups.each { sampleGroupName, propertyNames ->
+                        // there is one element that we always need to skip, namely "phenotypeProperties", which contains meta-properties not directly relevant to users
+                        if (sampleGroupName == "phenotypeProperties"){
+                            sampleGroupCount++
+                        }else { // otherwise it's a property users might care about
+                            sb << """        \"${sampleGroupName}\":[""".toString()
+                            for ( int  i = 0 ; i < propertyNames.size() ; i++ ){
+                                sb << "\"${propertyNames[i]}\"".toString()
+                                if (i+1<propertyNames.size()){
+                                    sb << ","
+                                }
+                            }
+                            sb << """ ]""".toString()
+                            sampleGroupCount++
+                            if (sampleGroupCount<phenotypeSpecificSampleGroups?.size()){
+                                sb << ",".toString()
+                            }
+                        }
+                     }
+                }
+                sb << """
+  }""".toString()
+                phenotypeHolder << sb.toString()
+            }
+            returnValue << "{"
+            for ( int  i = 0 ; i < phenotypeHolder.size() ; i++ ){
+                returnValue << phenotypeHolder[i]
+                if (i+1<phenotypeHolder.size()){
+                    returnValue << ","
+                }
+            }
+            returnValue << "}"
+        }
+        return returnValue.toString()
+    }
+
+
+
+
+
+
+
+
     public String packageUpAHierarchicalListAsJson (LinkedHashMap mapOfStrings ){
         // now that we have a list, build it into a string suitable for JSON
         int numberOfGroups = 0
@@ -1557,6 +1613,62 @@ class SharedToolsService {
         }
         return  returnValue
     }
+
+
+
+
+
+
+
+
+
+
+public List <LinkedHashMap> convertFormOfFilters(String rawFilters){
+    List <LinkedHashMap> returnValue = []
+    if (rawFilters){
+        List <String> filters = rawFilters.tokenize(',')
+        int filterCount = 0
+        for (String codedFilter in filters){
+            LinkedHashMap dividedFilter = [:]
+            List <String> filter = codedFilter.tokenize(':')
+            switch (filter[0]){
+                case "23":
+                    if (filter[1]!="0"){
+                        switch (filter[1]){
+                            case "1":dividedFilter["predictedEffects"]="protein-truncating"; break;
+                            case "2":dividedFilter["predictedEffects"]="missense"; break;
+                            case "3":dividedFilter["predictedEffects"]="noEffectSynonymous"; break;
+                            case "4":dividedFilter["predictedEffects"]="noEffectNoncoding"; break;
+                            default:break
+                        }
+                    }
+                    break;
+                case "47":
+                    dividedFilter["filter"+(filterCount++)] = filter[1];
+                    break;
+                default: break;
+            }
+            if (dividedFilter.size()>0){
+                returnValue << dividedFilter
+            }
+        }
+    }
+
+    return returnValue
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /***

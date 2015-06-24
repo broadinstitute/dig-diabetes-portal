@@ -89,14 +89,60 @@ class VariantSearchController {
 
         List <LinkedHashMap> listOfParameterMaps = filterManagementService.storeCodedParametersInHashmap (combinedFilters)
 
+        List <LinkedHashMap> listOfProperties = []
 
         if ((listOfParameterMaps) &&
                 (listOfParameterMaps.size() > 0)){
-            displayCombinedVariantSearchResults(listOfParameterMaps, false)
+            displayCombinedVariantSearchResults(listOfParameterMaps, listOfProperties)
         }
 
 
     }
+
+
+
+
+    def relaunchAVariantSearch(){
+        String encodedParameters =params.encodedParameters
+
+        LinkedHashMap propertiesToDisplay = params.findAll{ it.key =~ /^propId/ }
+        List <LinkedHashMap> listOfProperties = []
+        if ((propertiesToDisplay) &&
+                (propertiesToDisplay.size()>0)){
+            propertiesToDisplay.each{String key, String value ->
+                    List <String> disambiguator = key.tokenize("^")
+                    LinkedHashMap valuePasser = [:]
+                    valuePasser["phenotype"] = disambiguator[0]
+                    valuePasser["dataset"] = disambiguator[1]
+                    valuePasser["property"] = value
+                    listOfProperties << valuePasser
+                 }
+        }
+
+
+        // now convert these coded parameters into a form we can handle, combine in the properties, and reproduce the table
+        List <LinkedHashMap> combinedFilters = sharedToolsService.convertFormOfFilters(encodedParameters)
+        List <LinkedHashMap> listOfParameterMaps = filterManagementService.storeCodedParametersInHashmap (combinedFilters)
+
+
+        if ((listOfParameterMaps) &&
+                (listOfParameterMaps.size() > 0)){
+            displayCombinedVariantSearchResults(listOfParameterMaps, listOfProperties)
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
     /***
@@ -292,10 +338,16 @@ class VariantSearchController {
         String resultColumnsJsonObjectString = resultColumnsJsonOutput.toJson(resultColumnsToDisplay)
         JSONObject resultColumnsJsonObject = slurper.parseText(resultColumnsJsonObjectString)
 
+        JsonSlurper slurper2 = new JsonSlurper()
+        String jsonFormOfRelevantMetadata = sharedToolsService.packageUpATreeAsJson(sharedToolsService.getProcessedMetadata()?.phenotypeSpecificPropertiesPerSampleGroup)
+        JSONObject metadataJsonObject = slurper2.parseText(jsonFormOfRelevantMetadata)
+
+
         render(status: 200, contentType: "application/json") {
             [variants: dataJsonObject.variants,
             columns: resultColumnsJsonObject,
-            filters:filtersRaw
+            filters:filtersRaw,
+            metadata:metadataJsonObject
             ]
         }
 
@@ -334,6 +386,12 @@ class VariantSearchController {
         }
     }
 
+
+
+
+
+
+
     /***
      * This is the meat of dynamic filtering. Start with a list of filters (the filters are grouped into maps),
      * and convert these into three different products:
@@ -343,7 +401,7 @@ class VariantSearchController {
      * @param listOfParameterMaps
      * @param currentlySigma
      */
-    private void displayCombinedVariantSearchResults(List<LinkedHashMap> listOfParameterMaps, boolean currentlySigma) {
+    private void displayCombinedVariantSearchResults(List<LinkedHashMap> listOfParameterMaps, List <LinkedHashMap> listOfProperties) {
         // Let's start stepping through our big list of filters
         LinkedHashMap parsedFilterParameters
         if (listOfParameterMaps) {

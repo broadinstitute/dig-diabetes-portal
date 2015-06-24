@@ -593,12 +593,12 @@ var variantProcessing = (function () {
         }
 
         //need to figure out how to add aaSorting and aoColumnDefs
-        $(divId).dataTable({
-            iDisplayLength: 20,
-            bFilter: false,
-            aaSorting: [[ sortCol + fixedCol, "asc" ]],
-            aoColumnDefs: [{sType: "allnumeric", aTargets: numericCol } ]
-        });
+            $(divId).dataTable({
+                iDisplayLength: 20,
+                bFilter: false,
+                aaSorting: [[ sortCol + fixedCol, "asc" ]],
+                aoColumnDefs: [{sType: "allnumeric", aTargets: numericCol } ]
+            });
 
         var variantList =  data.variants
         var dataLength = variantList ? variantList.length : 0;
@@ -640,14 +640,15 @@ var variantProcessing = (function () {
         }
     };
 
-    var oldIterativeVariantTableFiller = function  (data, divId, show_gene, show_sigma, show_exseq, show_exchp,variantRootUrl,geneRootUrl,proteinEffectList,dataSetDetermination,newApi)  {
+    var oldIterativeVariantTableFiller = function  (data, divId, show_gene, show_sigma, show_exseq, show_exchp,variantRootUrl,geneRootUrl,proteinEffectList,dataSetDetermination,newApi,skipInitialization)  {
         var variantList =  data['variants'];
-        $(divId).dataTable({
-            iDisplayLength: 20,
-            bFilter: false,
-            aaSorting: [[ 5, "asc" ]],
-            aoColumnDefs: [{sType: "allnumeric", aTargets: [ 5, 6, 8, 10, 11, 12, 13 ] } ]
-        });
+            $(divId).dataTable({
+                iDisplayLength: 20,
+                bFilter: false,
+                bDestroy:true,
+                aaSorting: [[ 5, "asc" ]],
+                aoColumnDefs: [{sType: "allnumeric", aTargets: [ 5, 6, 8, 10, 11, 12, 13 ] } ]
+            });
         var dataLength = variantList.length;
 
 
