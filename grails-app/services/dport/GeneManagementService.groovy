@@ -32,6 +32,33 @@ class GeneManagementService {
                 [], [max: numberOfMatches, offset: 0] ))
     }
 
+    private Closure<List <Variant>> retrieveVariantVarIdUsingNamedQueries = { String searchString, int numberOfMatches ->
+        List <Variant> returnList
+
+        if (searchString?.length() < 7) {
+            returnList = (Variant.searchByVarIdFirstCharacters(searchString).list(max: numberOfMatches))
+            log.info("using new varId shortened search column for term: " + searchString + " and got number of results: " + returnList.size())
+        } else {
+            returnList = (Variant.searchByVarId(searchString, searchString[0..6]).list(max: numberOfMatches))
+            log.info("using varId full search column for term: " + searchString + " and got number of results: " + returnList.size())
+        }
+
+        return returnList
+    }
+
+    private Closure<List <Variant>> retrieveVariantDbSnpUsingNamedQueries = { String searchString, int numberOfMatches ->
+        List <Variant> returnList
+
+        if (searchString?.length() < 7) {
+            returnList = (Variant.searchByDbSnpIdFirstCharacters(searchString).list(max: numberOfMatches))
+            log.info("using new dbSnpId shortened search column for term: " + searchString + " and got number of results: " + returnList.size())
+        } else {
+            returnList = (Variant.searchByDbSnpId(searchString, searchString[0..6]).list(max: numberOfMatches))
+            log.info("using dbSnpId full search column for term: " + searchString + " and got number of results: " + returnList.size())
+        }
+
+        return returnList
+    }
 
 
 
@@ -62,6 +89,7 @@ class GeneManagementService {
             rawVariantRecords1.each {  Variant variant ->
                 returnValue.add(variant.dbSnpId)
             }
+
             List <Variant> rawVariantRecords2 = retrieveVariantVarId (upperCasedCharacters, maximumMatches/3 as int)
             rawVariantRecords2.each {  Variant variant ->
                 returnValue.add(variant.varId)
@@ -114,8 +142,8 @@ class GeneManagementService {
         return   deliverPartialMatchesInJson(  firstCharacters,
                  maximumMatches,
                  retrieveGene,
-                retrieveVariantDbSnp,
-                retrieveVariantVarId )
+                retrieveVariantDbSnpUsingNamedQueries,
+                retrieveVariantVarIdUsingNamedQueries )
 
     }
 

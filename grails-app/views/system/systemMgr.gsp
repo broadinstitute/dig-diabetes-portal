@@ -209,7 +209,7 @@
                                  Gene cache has been refreshed
                              </g:elseif>
                              <div class="text-center" style="font-weight: bold">
-                                 Cached genes: ${totalNumberOfGenes}
+                                 Cached genes: <g:formatNumber number="${totalNumberOfGenes}" format="###,###,###"/>
                              </div>
                      </div>
                      <div class="col-md-2"></div>
@@ -224,7 +224,7 @@
                              Variant cache has been refreshed
                          </g:elseif>
                          <div class="text-center" style="font-weight: bold">
-                             Cached variants: ${totalNumberOfVariants}
+                             Cached variants: <g:formatNumber number="${totalNumberOfVariants}" format="###,###,###"/>
                          </div>
                      </div>
                      <div class="col-md-2"></div>
