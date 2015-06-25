@@ -50,16 +50,21 @@
         console.log('t='+t+', this='+this);
         t.checked=false;
     } ;
-var lookAtProperties = function (here,phenotype,dataSet,propertyList){
+var lookAtProperties = function (here,phenotype,dataSet,propertyList,currentPropertyList){
     var propId = "propId^"+phenotype+"^"+dataSet;
     var propDivName = "propId_"+phenotype+"_"+dataSet;
     if ($('#'+propDivName).is(":visible")){
+        console.log("div click 3");
         $('#'+propDivName).hide();
     } else {
         if ($('#'+propDivName).size()===0){//we haven't made this window before
             var expandedProperties = "";
             for ( var i = 0 ; i < propertyList.length ; i++ ){
-                expandedProperties += ('<input  class="propertyHolderChk" type="checkbox" name="'+propId+'" value="'+propertyList[i]+'" checked><label class="chkBoxText">'+propertyList[i]+'</label></input><br/>');
+                var propertyAlreadyExists = "";
+                if (currentPropertyList.indexOf(propertyList[i])>-1){
+                    propertyAlreadyExists = " checked";
+                }
+                expandedProperties += ('<input  class="propertyHolderChk" type="checkbox" name="'+propId+'" value="'+propertyList[i]+'" '+propertyAlreadyExists+'><label class="chkBoxText">'+propertyList[i]+'</label></input><br/>');
             }
             $(here).append("<div id='"+propDivName+"' class ='propertyHolder'><form action=\"./relaunchAVariantSearch\">"+
                     "<input type=\"hidden\"  name=\"encodedParameters\" value=\"<%=encodedParameters%>\">"+
@@ -72,12 +77,15 @@ var lookAtProperties = function (here,phenotype,dataSet,propertyList){
                 event.stopPropagation();
                 event.stopImmediatePropagation() ;
                 event.preventDefault()  ;
-                console.log("div clicked");
+                console.log("div click 1");
             });
 
             $("input[type=checkbox]").change(function(event) {
-                $('#propertyWindow').show();
-                console.log("checkbox clicked");
+                $('#'+propDivName).show();
+                event.stopPropagation();
+                event.stopImmediatePropagation() ;
+                event.preventDefault()  ;
+                console.log("div click 2");
             });
         } else {
             $('#'+propDivName).show();
@@ -85,13 +93,14 @@ var lookAtProperties = function (here,phenotype,dataSet,propertyList){
     }
 };
     var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
-var loadVariantTableViaAjax = function(filterDefinitions){
+var loadVariantTableViaAjax = function(filterDefinitions,additionalProperties){
     var loading = $('#spinner').show();
     loading.show();
     $.ajax({
         type:'POST',
         cache:false,
-        data:{'keys':filterDefinitions},
+        data:{'keys':filterDefinitions,
+              'properties':additionalProperties},
         url:'<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsAjax" />',
         async:true,
         success:function(data,textStatus){
@@ -108,25 +117,14 @@ var loadVariantTableViaAjax = function(filterDefinitions){
         }
     });
 }
-loadVariantTableViaAjax("<%=filter%>");
+loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
 
     var uri_dec = decodeURIComponent("<%=filter%>");
     var encodedParameters = decodeURIComponent("<%=encodedParameters%>");
 
 
     var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
-    function buildPropertyInteractor(data,phenotype,dataSet){
-//        var returnValue="";
-//        // get our property list
-//        var propertyList = [];
-//        if ( (typeof data !== 'undefined') &&
-//                (data) && (data.metadata) && (data.metadata[phenotype]) &&
-//                (data.metadata[phenotype][dataSet]) && ((data.metadata[phenotype][dataSet]).length>0)) {
-//            propertyList = data.metadata[phenotype][dataSet];
-//            returnValue = "<span class='glyphicon glyphicon-plus filterEditor propertyAdder' aria-hidden='true' onclick='lookAtProperties(this,\""+phenotype+"\",\""+dataSet+"\",[\""+
-//                    propertyList.join('\",\"')+"\"])'></span>";
-//        }
-//        return returnValue;
+    function buildPropertyInteractor(data,phenotype,dataSet,existingCols){
         var returnValue="";
         // get our property list
         var propertyList = [];
@@ -135,7 +133,7 @@ loadVariantTableViaAjax("<%=filter%>");
                 (data.metadata[phenotype][dataSet]) && ((data.metadata[phenotype][dataSet]).length>0)) {
             propertyList = data.metadata[phenotype][dataSet];
             returnValue = "<span class='glyphicon glyphicon-plus filterEditor propertyAdder' aria-hidden='true' onclick='lookAtProperties(this,\""+phenotype+"\",\""+dataSet+"\",[\""+
-                    propertyList.join('\",\"')+"\"])'></span>";
+                    propertyList.join('\",\"')+"\"],[\""+ existingCols.join('\",\"')+"\"])'></span>";
         }
         return returnValue;
     }
@@ -178,11 +176,8 @@ loadVariantTableViaAjax("<%=filter%>");
                     $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + columnDisp + "</th>")
                 }
                 if (dataset_width > 0) {
-//                    $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp +
-//                    "<span class='glyphicon glyphicon-plus filterEditor filterActivator' aria-hidden='true' onclick='lookAtProperties(this)'></span>"+
-//                    "</th>")
                     $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp +
-                            buildPropertyInteractor(data,pheno,dataset)+
+                            buildPropertyInteractor(data,pheno,dataset,data.columns.dproperty[pheno][dataset])+
                     "</th>")
                 }
             }
@@ -211,7 +206,7 @@ loadVariantTableViaAjax("<%=filter%>");
                 }
                 if (dataset_width > 0) {
                     $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp +
-                            buildPropertyInteractor(data,pheno,dataset)+
+                            buildPropertyInteractor(data,pheno,dataset,data.columns.pproperty[pheno][dataset])+
                             "</th>")
                 }
             }

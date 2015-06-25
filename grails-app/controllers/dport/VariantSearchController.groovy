@@ -114,8 +114,8 @@ class VariantSearchController {
                 if (value?.size()>0){
                     for (String oneProperty in value){
                         LinkedHashMap valuePasser = [:]
-                        valuePasser["phenotype"] = disambiguator[0]
-                        valuePasser["dataset"] = disambiguator[1]
+                        valuePasser["phenotype"] = disambiguator[1]
+                        valuePasser["dataset"] = disambiguator[2]
                         valuePasser["property"] = oneProperty
                         listOfProperties << valuePasser
                     }
@@ -333,18 +333,21 @@ class VariantSearchController {
      */
     def variantSearchAndResultColumnsAjax() {
         String filtersRaw = params['keys']
-        String propertiesRaw = params['props']
+        String propertiesRaw = params['properties']
         String filters = URLDecoder.decode(filtersRaw, "UTF-8")
+        String properties = URLDecoder.decode(propertiesRaw, "UTF-8")
+        LinkedHashMap requestedProperties = sharedToolsService.putPropertiesIntoHierarchy(properties)
+
         List<String> additionalProperties = []
 
         log.debug "variantSearch variantSearchAjax = ${filters}"
 
 
         JsonSlurper slurper = new JsonSlurper()
-        String dataJsonObjectString = restServerService.postRestCallFromFilters(filters,additionalProperties)
+        String dataJsonObjectString = restServerService.postRestCallFromFilters(filters,requestedProperties)
         JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
 
-        LinkedHashMap resultColumnsToDisplay= restServerService.getColumnsToDisplay("[" + filters + "]",additionalProperties)
+        LinkedHashMap resultColumnsToDisplay= restServerService.getColumnsToDisplay("[" + filters + "]",requestedProperties)
         JsonOutput resultColumnsJsonOutput = new JsonOutput()
         String resultColumnsJsonObjectString = resultColumnsJsonOutput.toJson(resultColumnsToDisplay)
         JSONObject resultColumnsJsonObject = slurper.parseText(resultColumnsJsonObjectString)
@@ -421,7 +424,7 @@ class VariantSearchController {
             }
         }
         if (parsedFilterParameters) {
-
+            String requestForAdditionalProperties = filterManagementService.convertPropertyListToTransferableString(listOfProperties)
             Integer dataSetDetermination = filterManagementService.identifyAllRequestedDataSets(listOfParameterMaps)
             String encodedFilters = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters)
             String encodedParameters = sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
@@ -443,6 +446,7 @@ class VariantSearchController {
             }
 
 
+
             render(view: 'variantSearchResults',
                     model: [show_gene           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
                             show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
@@ -454,6 +458,7 @@ class VariantSearchController {
                             proteinEffectsList  : encodedProteinEffects,
                             encodedParameters   : encodedParameters,
                             dataSetDetermination: dataSetDetermination,
+                            additionalProperties: requestForAdditionalProperties,
                             newApi              : sharedToolsService.getNewApi(),
                             regionSearch        : (parsedFilterParameters.positioningInformation.size() > 2),
                             regionSpecification : regionSpecifier,

@@ -310,6 +310,36 @@ class FilterManagementService {
     }
 
     /***
+     * turn a list of properties (which may be empty) into a string that can go down to the browser (and then come back
+     * during an Ajax call)
+     * @param propertyList
+     * @return
+     */
+    public String convertPropertyListToTransferableString (List<LinkedHashMap> propertyList){
+        String returnValue
+        List<String> tempForm = []
+        for (LinkedHashMap propertyRecord in propertyList){
+            tempForm << "${propertyRecord.phenotype}:${propertyRecord.dataset}:${propertyRecord.property}".toString()
+        }
+        returnValue = tempForm.join("^")
+        return java.net.URLEncoder.encode( returnValue)
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /***
      * take the parameters from the variant search page and build a call to the REST API. You need to
      * end up generating three things:
      * 1) a list of the filters that are part of the API call  itself

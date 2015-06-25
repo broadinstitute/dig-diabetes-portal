@@ -409,8 +409,8 @@ class RestServerService {
 
     }
 
-    private String jsonForCustomColumnApiSearch(String combinedFilterList,List<String> additionalProperties) {
-        LinkedHashMap resultColumnsToFetch = getColumnsToFetch("[" + combinedFilterList + "]", additionalProperties)
+    private String jsonForCustomColumnApiSearch(String combinedFilterList, LinkedHashMap requestedProperties) {
+        LinkedHashMap resultColumnsToFetch = getColumnsToFetch("[" + combinedFilterList + "]",  requestedProperties)
         String inputJson = """
 {
     "passback": "123abc",
@@ -2058,7 +2058,28 @@ private String generateProteinEffectJson (String variantName){
     }
 
 
-    public LinkedHashMap getColumnsToDisplay(String filterJson,List<String> additionalProperties) {
+// Add in the additionally requested properties
+    private List<String> expandPropertyList(List<String> propertiesToFetch, LinkedHashMap requestedProperties){
+        if (requestedProperties){
+            requestedProperties.each{phenotype,LinkedHashMap dataset->
+                dataset.each{ String dataSetName,List propertyList->
+                    for(String property in propertyList){
+                        if (!propertiesToFetch.contains(property)){
+                            propertiesToFetch << property
+                        }
+                    }
+                }
+            }
+        }
+        return propertiesToFetch
+    }
+
+
+
+
+
+
+    public LinkedHashMap getColumnsToDisplay(String filterJson,LinkedHashMap requestedProperties) {
 
         //Get the structure to control the columns we want to display
         JSONObject metadata = sharedToolsService.retrieveMetadata()
@@ -2087,14 +2108,16 @@ private String generateProteinEffectJson (String variantName){
                 }
             }
         }
+        // Adding properties
+        propertiesToFetch = expandPropertyList( propertiesToFetch,  requestedProperties)
 
         LinkedHashMap columnsToDisplayStructure = sharedToolsService.getColumnsToDisplayStructure(processedMetadata, phenotypesToFetch, datasetsToFetch, propertiesToFetch)
         println(columnsToDisplayStructure)
         return columnsToDisplayStructure
     }
 
-    public LinkedHashMap getColumnsToFetch(String filterJson,List<String> additionalProperties) {
-        LinkedHashMap columnsToDisplay = getColumnsToDisplay(filterJson, additionalProperties)
+    public LinkedHashMap getColumnsToFetch(String filterJson,LinkedHashMap requestedProperties) {
+        LinkedHashMap columnsToDisplay = getColumnsToDisplay(filterJson, requestedProperties)
         LinkedHashMap returnValue = [:]
         returnValue.dproperty = [:]
         returnValue.pproperty = [:]
@@ -2125,11 +2148,12 @@ private String generateProteinEffectJson (String variantName){
                 }
             }
         }
+
         return returnValue
     }
 
-    public String postRestCallFromFilters(String filters,List<String> additionalProperties) {
-        String jsonSpec = jsonForCustomColumnApiSearch(filters, additionalProperties)
+    public String postRestCallFromFilters(String filters,LinkedHashMap requestedProperties) {
+        String jsonSpec = jsonForCustomColumnApiSearch(filters,  requestedProperties)
         String apiData = postRestCall(jsonSpec,GET_DATA_URL)
         return apiData
     }
