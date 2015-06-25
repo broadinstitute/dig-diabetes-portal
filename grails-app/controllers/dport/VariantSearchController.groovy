@@ -352,16 +352,19 @@ class VariantSearchController {
         String resultColumnsJsonObjectString = resultColumnsJsonOutput.toJson(resultColumnsToDisplay)
         JSONObject resultColumnsJsonObject = slurper.parseText(resultColumnsJsonObjectString)
 
-        JsonSlurper slurper2 = new JsonSlurper()
+        //JsonSlurper slurper2 = new JsonSlurper()
         String jsonFormOfRelevantMetadata = sharedToolsService.packageUpATreeAsJson(sharedToolsService.getProcessedMetadata()?.phenotypeSpecificPropertiesPerSampleGroup)
-        JSONObject metadataJsonObject = slurper2.parseText(jsonFormOfRelevantMetadata)
+        JSONObject metadataJsonObject = slurper.parseText(jsonFormOfRelevantMetadata)
 
+        String jsonFormOfCommonProperties = sharedToolsService.sortAndPackageAMapOfListsAsJson(sharedToolsService.getProcessedMetadata()?.commonProperties)
+        JSONObject commonPropertiesJsonObject = slurper.parseText(jsonFormOfCommonProperties)
 
         render(status: 200, contentType: "application/json") {
             [variants: dataJsonObject.variants,
             columns: resultColumnsJsonObject,
             filters:filtersRaw,
-            metadata:metadataJsonObject
+            metadata:metadataJsonObject,
+            cProperties:commonPropertiesJsonObject
             ]
         }
 

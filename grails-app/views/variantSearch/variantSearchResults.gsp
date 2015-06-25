@@ -13,14 +13,26 @@
     div.propertyHolder {
         position: absolute;
         background-color: white;
-        height:150px;
-        width:170px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        border: 2px solid red;
-        margin: 10px 5px 5px 10px;
+        height:160px;
+        width:240px;
+        border: 2px solid green;
+        margin: 5px;
         padding: 10px;
         text-align: left;
+    }
+    div.propertySubHolder{
+        position: relative;
+        margin: 3px;
+        height:100px;
+        width:220px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background-color: #eee;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -khtml-border-radius: 5px;
+        border-radius: 5px;
+
     }
     div.propertyHolder .propertyHolderChk {
         color:black;
@@ -46,16 +58,25 @@
 
 
 <script>
+    var skipBubbleUp = false;
     var radbut = function(t,e,f){
         console.log('t='+t+', this='+this);
         t.checked=false;
     } ;
+    var closer = function(that){
+        $(that).parent().parent().hide();
+        skipBubbleUp = true;
+    } ;
 var lookAtProperties = function (here,phenotype,dataSet,propertyList,currentPropertyList){
+    if (skipBubbleUp){
+        skipBubbleUp = false;
+        return;
+    }
     var propId = "propId^"+phenotype+"^"+dataSet;
     var propDivName = "propId_"+phenotype+"_"+dataSet;
     if ($('#'+propDivName).is(":visible")){
-        console.log("div click 3");
-        $('#'+propDivName).hide();
+//        console.log("div click 3");
+//        $('#'+propDivName).hide();
     } else {
         if ($('#'+propDivName).size()===0){//we haven't made this window before
             var expandedProperties = "";
@@ -67,10 +88,13 @@ var lookAtProperties = function (here,phenotype,dataSet,propertyList,currentProp
                 expandedProperties += ('<input  class="propertyHolderChk" type="checkbox" name="'+propId+'" value="'+propertyList[i]+'" '+propertyAlreadyExists+'><label class="chkBoxText">'+propertyList[i]+'</label></input><br/>');
             }
             $(here).append("<div id='"+propDivName+"' class ='propertyHolder'><form action=\"./relaunchAVariantSearch\">"+
+                    "<a style='float:right' onclick='closer(this)'>X</a>"+
+                    "<div class='propertySubHolder'>"+
                     "<input type=\"hidden\"  name=\"encodedParameters\" value=\"<%=encodedParameters%>\">"+
                     "<input type=\"hidden\"  name=\"filters\" value=\"<%=filter%>\">"+
                     expandedProperties+
-                    "<input type=\"submit\" class=\"propBox btn btn-xs btn-primary center-block\" value=\"Submit\">"+
+                    "</div>"+
+                    "<input type=\"submit\" class=\"propBox btn btn-xs btn-primary center-block\" value=\"Display properties\">"+
                     "</form>"+
                     "</div>");
             $('#'+propDivName).change(function(event) {
@@ -137,6 +161,16 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
         }
         return returnValue;
     }
+    function buildCPropertyInteractor(propertyList,existingCols){
+        var returnValue="";
+        // get our property list
+        if (typeof propertyList !== 'undefined') {
+            returnValue = "<span style='float:right' class='glyphicon glyphicon-plus filterEditor propertyAdder' aria-hidden='true' onclick='lookAtProperties(this,\"common\",\"common\",[\""+
+                    propertyList.join('\",\"')+"\"],[\""+ existingCols.join('\",\"')+"\"])'></span>";
+        }
+        return returnValue;
+    }
+
     function fillTheFields (data)  {
         variantProcessing.oldIterativeVariantTableFiller(data,'#variantTable',
                 ${show_gene},
@@ -160,8 +194,21 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
 
     function dynamicFillTheFields (data)  {
 
-        var sortCol = 0
-        var totCol = 0
+        var sortCol = 0;
+        var totCol = 0;
+        $('#variantTableHeaderRow2').children().first().append(buildCPropertyInteractor(data.cProperties.dataset,['NEAREST_GENE','VAR_ID','DBSNP_ID','Protein_change','SIFT_PRED']));
+//        var commonWidth = 0;
+//        for (var common in data.columns.cproperty) {
+//            var colName = data.columns.cproperty[common];
+//            $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + colName + "</th>")
+//            commonWidth++;
+//         }
+//        $('#variantTableHeaderRow1').append("<th colspan=" + commonWidth +" class=\"datatype-header\"></th>");
+//        $('#variantTableHeaderRow2').append("<th colspan=" + commonWidth +"class=\"datatype-header\"></th>");
+//        totCol += commonWidth;
+
+
+
         for (var pheno in data.columns.dproperty) {
             var pheno_width = 0
 

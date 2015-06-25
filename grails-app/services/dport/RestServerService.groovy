@@ -409,6 +409,9 @@ class RestServerService {
 
     }
 
+//  "cproperty": ["VAR_ID", "CHROM", "POS","DBSNP_ID","CLOSEST_GENE","GENE","IN_GENE","Protein_change","Consequence"],
+
+
     private String jsonForCustomColumnApiSearch(String combinedFilterList, LinkedHashMap requestedProperties) {
         LinkedHashMap resultColumnsToFetch = getColumnsToFetch("[" + combinedFilterList + "]",  requestedProperties)
         String inputJson = """
@@ -420,7 +423,7 @@ class RestServerService {
     "limit": 1000,
     "count": false,
     "properties":    {
-                           "cproperty": ["VAR_ID", "CHROM", "POS","DBSNP_ID","CLOSEST_GENE","GENE","IN_GENE","Protein_change","Consequence"],
+                           "cproperty": [${ resultColumnsToFetch.cproperty.collect({"\"${it}\""}).join(' , ')}],
                           "orderBy":    ["CHROM"],
 """.toString()
 
@@ -2062,10 +2065,31 @@ private String generateProteinEffectJson (String variantName){
     private List<String> expandPropertyList(List<String> propertiesToFetch, LinkedHashMap requestedProperties){
         if (requestedProperties){
             requestedProperties.each{phenotype,LinkedHashMap dataset->
-                dataset.each{ String dataSetName,List propertyList->
-                    for(String property in propertyList){
-                        if (!propertiesToFetch.contains(property)){
-                            propertiesToFetch << property
+                if (phenotype != 'common'){
+                    dataset.each{ String dataSetName,List propertyList->
+                        for(String property in propertyList){
+                            if (!propertiesToFetch.contains(property)){
+                                propertiesToFetch << property
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return propertiesToFetch
+    }
+
+    private List<String> expandCommonPropertyList(List<String> propertiesToFetch, LinkedHashMap requestedProperties){
+        if (requestedProperties) {
+            requestedProperties.each { phenotype, LinkedHashMap dataset ->
+                if (phenotype == 'common') {
+                    dataset.each { String dataSetName, List propertyList ->
+                        if (dataSetName == 'common') {
+                            for (String property in propertyList) {
+                                if (!propertiesToFetch.contains(property)) {
+                                    propertiesToFetch << property
+                                }
+                            }
                         }
                     }
                 }
@@ -2089,6 +2113,7 @@ private String generateProteinEffectJson (String variantName){
         List<String> datasetsToFetch = []
         List<String> phenotypesToFetch = []
         List<String> propertiesToFetch = []
+        List<String> commonProperties = ["VAR_ID", "CHROM", "POS","DBSNP_ID","CLOSEST_GENE","GENE","IN_GENE","Protein_change","Consequence"]
 
         JsonSlurper slurper = new JsonSlurper()
         for (def parsedFilter in slurper.parseText(filterJson)) {
@@ -2108,10 +2133,11 @@ private String generateProteinEffectJson (String variantName){
                 }
             }
         }
-        // Adding properties
+        // Adding Phenotype specific properties
         propertiesToFetch = expandPropertyList( propertiesToFetch,  requestedProperties)
+        commonProperties = expandCommonPropertyList( commonProperties,  requestedProperties)
 
-        LinkedHashMap columnsToDisplayStructure = sharedToolsService.getColumnsToDisplayStructure(processedMetadata, phenotypesToFetch, datasetsToFetch, propertiesToFetch)
+        LinkedHashMap columnsToDisplayStructure = sharedToolsService.getColumnsToDisplayStructure(processedMetadata, phenotypesToFetch, datasetsToFetch, propertiesToFetch,commonProperties)
         println(columnsToDisplayStructure)
         return columnsToDisplayStructure
     }
@@ -2121,6 +2147,7 @@ private String generateProteinEffectJson (String variantName){
         LinkedHashMap returnValue = [:]
         returnValue.dproperty = [:]
         returnValue.pproperty = [:]
+        returnValue.cproperty = columnsToDisplay.cproperty
         if (columnsToDisplay.pproperty) {
             for (String phenotype in columnsToDisplay.pproperty.keySet()) {
                 for (String dataset in columnsToDisplay.pproperty[phenotype].keySet()) {

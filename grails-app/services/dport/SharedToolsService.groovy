@@ -357,6 +357,7 @@ class SharedToolsService {
             LinkedHashMap<String, List<String>> annotatedSampleGroups = [:]
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> phenotypeSpecificSampleGroupProperties = [:]
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> experimentSpecificSampleGroupProperties = [:]
+            LinkedHashMap<String, LinkedHashMap<String, String>> commonProperties = [:]
             String dataSetVersionThatWeWant = "${dataSetPrefix}${getDataVersion()}"
             if (metadata) {
                 for (def experiment in metadata.experiments) {
@@ -372,6 +373,16 @@ class SharedToolsService {
                         }
                     }
                 }
+                for (def cProperty in metadata.properties) {
+                    if (!commonProperties.containsKey(cProperty.name)){
+                        if (cProperty.searchable){
+                            LinkedHashMap cPropertyStuff = [:]
+                            cPropertyStuff["type"] = cProperty.type
+                            cPropertyStuff["sort_order"] = cProperty.sort_order
+                            commonProperties [cProperty.name] = cPropertyStuff
+                        }
+                    }
+                }
             }
             sharedProcessedMetadata['rootSampleGroups'] = captured
             sharedProcessedMetadata['gwasSpecificPhenotypes'] = gwasSpecificPhenotype
@@ -379,6 +390,7 @@ class SharedToolsService {
             sharedProcessedMetadata['propertiesPerSampleGroups'] = annotatedSampleGroups
             sharedProcessedMetadata['phenotypeSpecificPropertiesPerSampleGroup'] = phenotypeSpecificSampleGroupProperties
             sharedProcessedMetadata['sampleGroupSpecificProperties'] = experimentSpecificSampleGroupProperties
+            sharedProcessedMetadata['commonProperties'] = commonProperties
             forceProcessedMetadataOverride = 0
         }
         return sharedProcessedMetadata
@@ -690,7 +702,9 @@ class SharedToolsService {
      * @param propertiesToKeep The properties to keep 
      * @return
      */
-    public LinkedHashMap getColumnsToDisplayStructure(LinkedHashMap processedMetadata, List <String> phenotypesToKeep=null, List <String> sampleGroupsToKeep=null, List <String> propertiesToKeep=null){
+    public LinkedHashMap getColumnsToDisplayStructure(LinkedHashMap processedMetadata, List <String> phenotypesToKeep=null,
+                                                      List <String> sampleGroupsToKeep=null, List <String> propertiesToKeep=null,
+                                                      List <String> commonProperties=null  ){
 
         if (phenotypesToKeep) {
             phenotypesToKeep = phenotypesToKeep.unique()
@@ -703,8 +717,10 @@ class SharedToolsService {
         }
 
         LinkedHashMap returnValue = [:]
+        returnValue["cproperty"] = commonProperties
         returnValue["dproperty"] = [:]
         returnValue["pproperty"] = [:]
+
         if (processedMetadata) {
             if (phenotypesToKeep == null) {
                 phenotypesToKeep = processedMetadata.sampleGroupsPerPhenotype.keySet()
@@ -902,6 +918,30 @@ class SharedToolsService {
             }
         }
 
+        return  """
+{"is_error": false,
+"numRecords":${numrec},
+"dataset":[${sb.toString()}]
+}""".toString()
+    }
+
+
+
+    public String sortAndPackageAMapOfListsAsJson (LinkedHashMap listOfCommonProperties ){
+        // now that we have a list, build it into a string suitable for JSON
+        int numberOfProperties = listOfCommonProperties.size()
+        int numrec = 0
+        StringBuilder sb = new StringBuilder ()
+        listOfCommonProperties.sort{it.value.sort_order}.each{String name, v->
+            if (name){
+                sb << "\"${name}\"".toString()
+                if (numrec < numberOfProperties - 1) {
+                    sb << ","
+                }
+            }
+            numrec++
+
+        }
         return  """
 {"is_error": false,
 "numRecords":${numrec},
