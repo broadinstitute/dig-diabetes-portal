@@ -109,13 +109,24 @@ class VariantSearchController {
         List <LinkedHashMap> listOfProperties = []
         if ((propertiesToDisplay) &&
                 (propertiesToDisplay.size()>0)){
-            propertiesToDisplay.each{String key, String value ->
+            propertiesToDisplay.each{String key, value ->
                     List <String> disambiguator = key.tokenize("^")
+                if (value?.size()>0){
+                    for (String oneProperty in value){
+                        LinkedHashMap valuePasser = [:]
+                        valuePasser["phenotype"] = disambiguator[0]
+                        valuePasser["dataset"] = disambiguator[1]
+                        valuePasser["property"] = oneProperty
+                        listOfProperties << valuePasser
+                    }
+                }else{
                     LinkedHashMap valuePasser = [:]
                     valuePasser["phenotype"] = disambiguator[0]
                     valuePasser["dataset"] = disambiguator[1]
                     valuePasser["property"] = value
                     listOfProperties << valuePasser
+                }
+
                  }
         }
 

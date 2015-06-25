@@ -10,18 +10,19 @@
     .propertyAdder{
         margin: 0 0 0 15px;
     }
-    .propertyHolder {
+    div.propertyHolder {
         position: absolute;
         background-color: white;
         height:150px;
-        width:150px;
+        width:170px;
         overflow-y: auto;
+        overflow-x: hidden;
         border: 2px solid red;
         margin: 10px 5px 5px 10px;
         padding: 10px;
         text-align: left;
     }
-    #propertyWindow .propertyHolderChk {
+    div.propertyHolder .propertyHolderChk {
         color:black;
         margin: 5px 0 5px 0;
     }
@@ -45,26 +46,43 @@
 
 
 <script>
+    var radbut = function(t,e,f){
+        console.log('t='+t+', this='+this);
+        t.checked=false;
+    } ;
 var lookAtProperties = function (here,phenotype,dataSet,propertyList){
-    if ($('#propertyWindow').is(":visible")){
-        $('#propertyWindow').remove ();
+    var propId = "propId^"+phenotype+"^"+dataSet;
+    var propDivName = "propId_"+phenotype+"_"+dataSet;
+    if ($('#'+propDivName).is(":visible")){
+        $('#'+propDivName).hide();
     } else {
-        var expandedProperties = "";
-        var propId = "propId^"+phenotype+"^"+dataSet;
-        for ( var i = 0 ; i < propertyList.length ; i++ ){
-            expandedProperties += ('<input  class="propertyHolderChk" type="checkbox" name="'+propId+'" value="'+propertyList[i]+'" checked><label class="chkBoxText">'+propertyList[i]+'</label></input><br/>');
+        if ($('#'+propDivName).size()===0){//we haven't made this window before
+            var expandedProperties = "";
+            for ( var i = 0 ; i < propertyList.length ; i++ ){
+                expandedProperties += ('<input  class="propertyHolderChk" type="checkbox" name="'+propId+'" value="'+propertyList[i]+'" checked><label class="chkBoxText">'+propertyList[i]+'</label></input><br/>');
+            }
+            $(here).append("<div id='"+propDivName+"' class ='propertyHolder'><form action=\"./relaunchAVariantSearch\">"+
+                    "<input type=\"hidden\"  name=\"encodedParameters\" value=\"<%=encodedParameters%>\">"+
+                    "<input type=\"hidden\"  name=\"filters\" value=\"<%=filter%>\">"+
+                    expandedProperties+
+                    "<input type=\"submit\" class=\"propBox btn btn-xs btn-primary center-block\" value=\"Submit\">"+
+                    "</form>"+
+                    "</div>");
+            $('#'+propDivName).change(function(event) {
+                event.stopPropagation();
+                event.stopImmediatePropagation() ;
+                event.preventDefault()  ;
+                console.log("div clicked");
+            });
+
+            $("input[type=checkbox]").change(function(event) {
+                $('#propertyWindow').show();
+                console.log("checkbox clicked");
+            });
+        } else {
+            $('#'+propDivName).show();
         }
-        $(here).append("<div id='propertyWindow' class ='propertyHolder' onclick='stopLookingAtProperties()'><form action=\"./relaunchAVariantSearch\">"+
-        "<input type=\"hidden\"  name=\"encodedParameters\" value=\"<%=encodedParameters%>\">"+
-        "<input type=\"hidden\"  name=\"filters\" value=\"<%=filter%>\">"+
-        expandedProperties+
-        "<input type=\"submit\" class=\"propBox btn btn-xs btn-primary center-block\" value=\"Submit\">"+
-        "</form>"+
-        "</div>");
     }
-};
-var stopLookingAtProperties = function (){
-    $('#propertyWindow').hide()
 };
     var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
 var loadVariantTableViaAjax = function(filterDefinitions){
@@ -98,6 +116,17 @@ loadVariantTableViaAjax("<%=filter%>");
 
     var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
     function buildPropertyInteractor(data,phenotype,dataSet){
+//        var returnValue="";
+//        // get our property list
+//        var propertyList = [];
+//        if ( (typeof data !== 'undefined') &&
+//                (data) && (data.metadata) && (data.metadata[phenotype]) &&
+//                (data.metadata[phenotype][dataSet]) && ((data.metadata[phenotype][dataSet]).length>0)) {
+//            propertyList = data.metadata[phenotype][dataSet];
+//            returnValue = "<span class='glyphicon glyphicon-plus filterEditor propertyAdder' aria-hidden='true' onclick='lookAtProperties(this,\""+phenotype+"\",\""+dataSet+"\",[\""+
+//                    propertyList.join('\",\"')+"\"])'></span>";
+//        }
+//        return returnValue;
         var returnValue="";
         // get our property list
         var propertyList = [];
@@ -106,7 +135,7 @@ loadVariantTableViaAjax("<%=filter%>");
                 (data.metadata[phenotype][dataSet]) && ((data.metadata[phenotype][dataSet]).length>0)) {
             propertyList = data.metadata[phenotype][dataSet];
             returnValue = "<span class='glyphicon glyphicon-plus filterEditor propertyAdder' aria-hidden='true' onclick='lookAtProperties(this,\""+phenotype+"\",\""+dataSet+"\",[\""+
-                          propertyList.join('\",\"')+"\"])'></span>";
+                    propertyList.join('\",\"')+"\"])'></span>";
         }
         return returnValue;
     }
@@ -198,53 +227,6 @@ loadVariantTableViaAjax("<%=filter%>");
                 proteinEffectList,{},${newApi});
 
     }
-
-
-//needed or not? From the results page...
-    %{--var regionSpec = "<%=regionSpecification%>";--}%
-    %{--jQuery.fn.dataTableExt.oSort['allnumeric-asc']  = function(a,b) {--}%
-        %{--var x = parseFloat(a);--}%
-        %{--var y = parseFloat(b);--}%
-        %{--if (!x) { x = 1; }--}%
-        %{--if (!y) { y = 1; }--}%
-        %{--return ((x < y) ? -1 : ((x > y) ?  1 : 0));--}%
-    %{--};--}%
-
-    %{--jQuery.fn.dataTableExt.oSort['allnumeric-desc']  = function(a,b) {--}%
-        %{--var x = parseFloat(a);--}%
-        %{--var y = parseFloat(b);--}%
-        %{--if (!x) { x = 1; }--}%
-        %{--if (!y) { y = 1; }--}%
-        %{--return ((x < y) ? 1 : ((x > y) ?  -1 : 0));--}%
-    %{--};--}%
-//    var loading = $('#spinner').show();
-//    $.ajax({
-//        cache:false,
-//        type:"get",
-//        url:"../regionAjax/"+regionSpec,
-//        async:true,
-//        success: function (data) {
-//            fillTheFields(data) ;
-//            loading.hide();
-//        },
-//        error: function(jqXHR, exception) {
-//            loading.hide();
-//            core.errorReporter(jqXHR, exception) ;
-//        }
-//    });
-    %{--var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;--}%
-    %{--function fillTheFields (data)  {--}%
-        %{--variantProcessing.iterativeVariantTableFiller(data,'#variantTable',--}%
-                %{--${show_gene},--}%
-                %{--${show_sigma},--}%
-                %{--${show_exseq},--}%
-                %{--${show_exchp},--}%
-                %{--'<g:createLink controller="variant" action="variantInfo" />',--}%
-                %{--'<g:createLink controller="gene" action="geneInfo" />',--}%
-                %{--proteinEffectList,{},(${newApi}));--}%
-
-    %{--}--}%
-
 
 
 
