@@ -10,11 +10,14 @@
     .propertyAdder{
         margin: 0 0 0 15px;
     }
+    span.singprop{
+        white-space:nowrap;
+    }
     div.propertyHolder {
         position: absolute;
         background-color: white;
         height:160px;
-        width:240px;
+        width:290px;
         border: 2px solid green;
         margin: 5px;
         padding: 10px;
@@ -24,7 +27,7 @@
         position: relative;
         margin: 3px;
         height:100px;
-        width:220px;
+        width:270px;
         overflow-y: auto;
         overflow-x: hidden;
         background-color: #eee;
@@ -42,6 +45,7 @@
         color:black;
         margin: 5px 0 5px 0;
         padding: 0 0 0 10px;
+        white-space:normal;
     }
     .propBox {
         color:white;
@@ -85,7 +89,8 @@ var lookAtProperties = function (here,phenotype,dataSet,propertyList,currentProp
                 if (currentPropertyList.indexOf(propertyList[i])>-1){
                     propertyAlreadyExists = " checked";
                 }
-                expandedProperties += ('<input  class="propertyHolderChk" type="checkbox" name="'+propId+'" value="'+propertyList[i]+'" '+propertyAlreadyExists+'><label class="chkBoxText">'+propertyList[i]+'</label></input><br/>');
+                expandedProperties += ('<span class="singprop"><input  class="propertyHolderChk" type="checkbox" name="'+propId+'" value="'+propertyList[i]+
+                        '" '+propertyAlreadyExists+'><label class="chkBoxText">'+mpgSoftware.trans.translator(propertyList[i])+'</label></input><br/></span>');
             }
             $(here).append("<div id='"+propDivName+"' class ='propertyHolder'><form action=\"./relaunchAVariantSearch\">"+
                     "<a style='float:right' onclick='closer(this)'>X</a>"+
@@ -152,13 +157,18 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
         var returnValue="";
         // get our property list
         var propertyList = [];
-        if ( (typeof data !== 'undefined') &&
-                (data) && (data.metadata) && (data.metadata[phenotype]) &&
-                (data.metadata[phenotype][dataSet]) && ((data.metadata[phenotype][dataSet]).length>0)) {
-            propertyList = data.metadata[phenotype][dataSet];
+        if ((typeof data !== 'undefined') &&
+             (data) && (data.metadata) && (data.metadata[phenotype])) {
+            if (dataSet == 'common') {
+                propertyList = Object.keys(data.metadata[phenotype]);
+            } else if ((data.metadata[phenotype][dataSet]) && ((data.metadata[phenotype][dataSet]).length > 0)) {
+                propertyList = data.metadata[phenotype][dataSet];
+            } else {// error
+                propertyList = [];
+            }
             returnValue = "<span class='glyphicon glyphicon-plus filterEditor propertyAdder' aria-hidden='true' onclick='lookAtProperties(this,\""+phenotype+"\",\""+dataSet+"\",[\""+
                     propertyList.join('\",\"')+"\"],[\""+ existingCols.join('\",\"')+"\"])'></span>";
-        }
+            }
         return returnValue;
     }
     function buildCPropertyInteractor(propertyList,existingCols){
@@ -194,23 +204,23 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
 
     function dynamicFillTheFields (data)  {
 
+        // common props section
         var sortCol = 0;
         var totCol = 0;
         $('#variantTableHeaderRow2').children().first().append(buildCPropertyInteractor(data.cProperties.dataset,data.columns.cproperty));
         var commonWidth = 0;
         for (var common in data.columns.cproperty) {
             var colName = data.columns.cproperty[common];
-            $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + colName + "</th>")
+            $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + mpgSoftware.trans.translator(colName) + "</th>")
             commonWidth++;
          }
-
         $('#variantTableHeaderRow').children().first().attr('colspan',commonWidth) ;
         $('#variantTableHeaderRow2').children().first().attr('colspan',commonWidth) ;
 
         totCol += commonWidth;
 
 
-
+        // dataset specific props
         for (var pheno in data.columns.dproperty) {
             var pheno_width = 0
 
@@ -260,7 +270,9 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
                 }
             }
             if (pheno_width > 0) {
-                $('#variantTableHeaderRow').append("<th colspan=" + pheno_width + " class=\"datatype-header\">" + phenoDisp + "</th>")
+                $('#variantTableHeaderRow').append("<th colspan=" + pheno_width + " class=\"datatype-header\">" + phenoDisp +
+                        buildPropertyInteractor(data,pheno,'common',Object.keys(data.columns.pproperty[pheno]))+
+                        "</th>")
             }
             totCol += pheno_width
         }

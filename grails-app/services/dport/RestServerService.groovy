@@ -252,7 +252,8 @@ class RestServerService {
         DBT_URL = grailsApplication.config.dbtRestServer.URL
         EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URL
  //       pickADifferentRestServer(NEW_DEV_REST_SERVER)
-        pickADifferentRestServer(AWS01_REST_SERVER)
+        pickADifferentRestServer(DEV_LOAD_BALANCED_SERVER)
+ //       pickADifferentRestServer(AWS01_REST_SERVER)
   //      pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
 
     }
@@ -2106,20 +2107,38 @@ private String generateProteinEffectJson (String variantName){
     public LinkedHashMap getColumnsToDisplay(String filterJson,LinkedHashMap requestedProperties) {
 
         //Get the structure to control the columns we want to display
-        JSONObject metadata = sharedToolsService.retrieveMetadata()
-        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(metadata)
+        LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
 
         //Get the sample groups and phenotypes from the filters
         List<String> datasetsToFetch = []
         List<String> phenotypesToFetch = []
         List<String> propertiesToFetch = []
-        List<String> commonProperties = ["VAR_ID", "CHROM", "POS","DBSNP_ID","CLOSEST_GENE","GENE","IN_GENE","Protein_change","Consequence"]
+     //   List<String> commonProperties = ["VAR_ID", "CHROM", "POS","DBSNP_ID","CLOSEST_GENE","GENE","IN_GENE","Protein_change","Consequence"]
+        List<String> commonProperties = ["CLOSEST_GENE","VAR_ID","DBSNP_ID","Protein_change","Consequence","CHROM", "POS"] // default common properties
 
+        // old logic -- if we filter on it, then we want to display it
         JsonSlurper slurper = new JsonSlurper()
         for (def parsedFilter in slurper.parseText(filterJson)) {
             datasetsToFetch << parsedFilter.dataset_id
             phenotypesToFetch << parsedFilter.phenotype
             propertiesToFetch << parsedFilter.operand
+        }
+
+        // if specific data sets are requested then add them to the list
+        if (requestedProperties)   {
+            requestedProperties?.each{ String phenotype, LinkedHashMap phenotypeProperties ->
+                phenotypeProperties?.each { String datasetName, v ->
+                    if (datasetName == 'common') {
+                        if (v?.size() > 0) {
+                            for (String dataset in v) {
+                                if (!datasetsToFetch.contains(dataset)) {
+                                    datasetsToFetch << dataset
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         //HACK HACK HACK HACK HACK
