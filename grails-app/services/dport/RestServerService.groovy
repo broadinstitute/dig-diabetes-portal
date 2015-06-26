@@ -2141,6 +2141,26 @@ private String generateProteinEffectJson (String variantName){
             }
         }
 
+        // Add properties specific to a data set
+        if (requestedProperties)   {
+            requestedProperties?.each{ String phenotype, LinkedHashMap phenotypeProperties ->
+                if (phenotype == 'common') {
+                    phenotypeProperties?.each { String datasetName, v ->
+                        if (v?.size() > 0) {
+                            for (String property in v) {
+                                if (!propertiesToFetch.contains(property)) {
+                                    propertiesToFetch << property
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+
         //HACK HACK HACK HACK HACK
         for (String pheno in phenotypesToFetch) {
             for (String ds in datasetsToFetch) {
