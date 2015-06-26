@@ -251,8 +251,10 @@ class RestServerService {
         BASE_URL = grailsApplication.config.server.URL
         DBT_URL = grailsApplication.config.dbtRestServer.URL
         EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URL
-        pickADifferentRestServer(NEW_DEV_REST_SERVER)
-  //      pickADifferentRestServer(AWS01_REST_SERVER)
+ //       pickADifferentRestServer(NEW_DEV_REST_SERVER)
+        pickADifferentRestServer(AWS01_REST_SERVER)
+  //      pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
+
     }
 
 
@@ -407,8 +409,11 @@ class RestServerService {
 
     }
 
-    private String jsonForCustomColumnApiSearch(String combinedFilterList) {
-        LinkedHashMap resultColumnsToFetch = getColumnsToFetch("[" + combinedFilterList + "]")
+//  "cproperty": ["VAR_ID", "CHROM", "POS","DBSNP_ID","CLOSEST_GENE","GENE","IN_GENE","Protein_change","Consequence"],
+
+
+    private String jsonForCustomColumnApiSearch(String combinedFilterList, LinkedHashMap requestedProperties) {
+        LinkedHashMap resultColumnsToFetch = getColumnsToFetch("[" + combinedFilterList + "]",  requestedProperties)
         String inputJson = """
 {
     "passback": "123abc",
@@ -418,7 +423,7 @@ class RestServerService {
     "limit": 1000,
     "count": false,
     "properties":    {
-                           "cproperty": ["VAR_ID", "CHROM", "POS","DBSNP_ID","CLOSEST_GENE","GENE","IN_GENE","Protein_change","Consequence"],
+                           "cproperty": [${ resultColumnsToFetch.cproperty.collect({"\"${it}\""}).join(' , ')}],
                           "orderBy":    ["CHROM"],
 """.toString()
 
@@ -2056,7 +2061,49 @@ private String generateProteinEffectJson (String variantName){
     }
 
 
-    public LinkedHashMap getColumnsToDisplay(String filterJson) {
+// Add in the additionally requested properties
+    private List<String> expandPropertyList(List<String> propertiesToFetch, LinkedHashMap requestedProperties){
+        if (requestedProperties){
+            requestedProperties.each{phenotype,LinkedHashMap dataset->
+                if (phenotype != 'common'){
+                    dataset.each{ String dataSetName,List propertyList->
+                        for(String property in propertyList){
+                            if (!propertiesToFetch.contains(property)){
+                                propertiesToFetch << property
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return propertiesToFetch
+    }
+
+    private List<String> expandCommonPropertyList(List<String> propertiesToFetch, LinkedHashMap requestedProperties){
+        if (requestedProperties) {
+            requestedProperties.each { phenotype, LinkedHashMap dataset ->
+                if (phenotype == 'common') {
+                    dataset.each { String dataSetName, List propertyList ->
+                        if (dataSetName == 'common') {
+                            for (String property in propertyList) {
+                                if (!propertiesToFetch.contains(property)) {
+                                    propertiesToFetch << property
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return propertiesToFetch
+    }
+
+
+
+
+
+
+    public LinkedHashMap getColumnsToDisplay(String filterJson,LinkedHashMap requestedProperties) {
 
         //Get the structure to control the columns we want to display
         JSONObject metadata = sharedToolsService.retrieveMetadata()
@@ -2066,6 +2113,7 @@ private String generateProteinEffectJson (String variantName){
         List<String> datasetsToFetch = []
         List<String> phenotypesToFetch = []
         List<String> propertiesToFetch = []
+        List<String> commonProperties = ["VAR_ID", "CHROM", "POS","DBSNP_ID","CLOSEST_GENE","GENE","IN_GENE","Protein_change","Consequence"]
 
         JsonSlurper slurper = new JsonSlurper()
         for (def parsedFilter in slurper.parseText(filterJson)) {
@@ -2085,17 +2133,21 @@ private String generateProteinEffectJson (String variantName){
                 }
             }
         }
+        // Adding Phenotype specific properties
+        propertiesToFetch = expandPropertyList( propertiesToFetch,  requestedProperties)
+        commonProperties = expandCommonPropertyList( commonProperties,  requestedProperties)
 
-        LinkedHashMap columnsToDisplayStructure = sharedToolsService.getColumnsToDisplayStructure(processedMetadata, phenotypesToFetch, datasetsToFetch, propertiesToFetch)
+        LinkedHashMap columnsToDisplayStructure = sharedToolsService.getColumnsToDisplayStructure(processedMetadata, phenotypesToFetch, datasetsToFetch, propertiesToFetch,commonProperties)
         println(columnsToDisplayStructure)
         return columnsToDisplayStructure
     }
 
-    public LinkedHashMap getColumnsToFetch(String filterJson) {
-        LinkedHashMap columnsToDisplay = getColumnsToDisplay(filterJson)
+    public LinkedHashMap getColumnsToFetch(String filterJson,LinkedHashMap requestedProperties) {
+        LinkedHashMap columnsToDisplay = getColumnsToDisplay(filterJson, requestedProperties)
         LinkedHashMap returnValue = [:]
         returnValue.dproperty = [:]
         returnValue.pproperty = [:]
+        returnValue.cproperty = columnsToDisplay.cproperty
         if (columnsToDisplay.pproperty) {
             for (String phenotype in columnsToDisplay.pproperty.keySet()) {
                 for (String dataset in columnsToDisplay.pproperty[phenotype].keySet()) {
@@ -2123,11 +2175,12 @@ private String generateProteinEffectJson (String variantName){
                 }
             }
         }
+
         return returnValue
     }
 
-    public String postRestCallFromFilters(String filters) {
-        String jsonSpec = jsonForCustomColumnApiSearch(filters)
+    public String postRestCallFromFilters(String filters,LinkedHashMap requestedProperties) {
+        String jsonSpec = jsonForCustomColumnApiSearch(filters,  requestedProperties)
         String apiData = postRestCall(jsonSpec,GET_DATA_URL)
         return apiData
     }

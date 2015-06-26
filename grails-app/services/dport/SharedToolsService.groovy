@@ -357,6 +357,7 @@ class SharedToolsService {
             LinkedHashMap<String, List<String>> annotatedSampleGroups = [:]
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> phenotypeSpecificSampleGroupProperties = [:]
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> experimentSpecificSampleGroupProperties = [:]
+            LinkedHashMap<String, LinkedHashMap<String, String>> commonProperties = [:]
             String dataSetVersionThatWeWant = "${dataSetPrefix}${getDataVersion()}"
             if (metadata) {
                 for (def experiment in metadata.experiments) {
@@ -372,6 +373,16 @@ class SharedToolsService {
                         }
                     }
                 }
+                for (def cProperty in metadata.properties) {
+                    if (!commonProperties.containsKey(cProperty.name)){
+                        if (cProperty.searchable){
+                            LinkedHashMap cPropertyStuff = [:]
+                            cPropertyStuff["type"] = cProperty.type
+                            cPropertyStuff["sort_order"] = cProperty.sort_order
+                            commonProperties [cProperty.name] = cPropertyStuff
+                        }
+                    }
+                }
             }
             sharedProcessedMetadata['rootSampleGroups'] = captured
             sharedProcessedMetadata['gwasSpecificPhenotypes'] = gwasSpecificPhenotype
@@ -379,6 +390,7 @@ class SharedToolsService {
             sharedProcessedMetadata['propertiesPerSampleGroups'] = annotatedSampleGroups
             sharedProcessedMetadata['phenotypeSpecificPropertiesPerSampleGroup'] = phenotypeSpecificSampleGroupProperties
             sharedProcessedMetadata['sampleGroupSpecificProperties'] = experimentSpecificSampleGroupProperties
+            sharedProcessedMetadata['commonProperties'] = commonProperties
             forceProcessedMetadataOverride = 0
         }
         return sharedProcessedMetadata
@@ -690,7 +702,9 @@ class SharedToolsService {
      * @param propertiesToKeep The properties to keep 
      * @return
      */
-    public LinkedHashMap getColumnsToDisplayStructure(LinkedHashMap processedMetadata, List <String> phenotypesToKeep=null, List <String> sampleGroupsToKeep=null, List <String> propertiesToKeep=null){
+    public LinkedHashMap getColumnsToDisplayStructure(LinkedHashMap processedMetadata, List <String> phenotypesToKeep=null,
+                                                      List <String> sampleGroupsToKeep=null, List <String> propertiesToKeep=null,
+                                                      List <String> commonProperties=null  ){
 
         if (phenotypesToKeep) {
             phenotypesToKeep = phenotypesToKeep.unique()
@@ -703,8 +717,10 @@ class SharedToolsService {
         }
 
         LinkedHashMap returnValue = [:]
+        returnValue["cproperty"] = commonProperties
         returnValue["dproperty"] = [:]
         returnValue["pproperty"] = [:]
+
         if (processedMetadata) {
             if (phenotypesToKeep == null) {
                 phenotypesToKeep = processedMetadata.sampleGroupsPerPhenotype.keySet()
@@ -911,6 +927,86 @@ class SharedToolsService {
 
 
 
+    public String sortAndPackageAMapOfListsAsJson (LinkedHashMap listOfCommonProperties ){
+        // now that we have a list, build it into a string suitable for JSON
+        int numberOfProperties = listOfCommonProperties.size()
+        int numrec = 0
+        StringBuilder sb = new StringBuilder ()
+        listOfCommonProperties.sort{it.value.sort_order}.each{String name, v->
+            if (name){
+                sb << "\"${name}\"".toString()
+                if (numrec < numberOfProperties - 1) {
+                    sb << ","
+                }
+            }
+            numrec++
+
+        }
+        return  """
+{"is_error": false,
+"numRecords":${numrec},
+"dataset":[${sb.toString()}]
+}""".toString()
+    }
+
+
+
+
+
+
+    public String packageUpATreeAsJson (LinkedHashMap <String,LinkedHashMap<String,List<String>>> bigTree ){
+        // now that we have a multilevel tree, build it into a string suitable for JSON
+        StringBuilder returnValue = new StringBuilder ()
+        if ((bigTree) && (bigTree?.size() > 0)){
+            List <String> phenotypeHolder = []
+            bigTree.each {String phenotype,  LinkedHashMap phenotypeSpecificSampleGroups->
+                StringBuilder sb = new StringBuilder ()
+                sb << """  \"${phenotype}\":
+    {""".toString()
+                if (phenotypeSpecificSampleGroups?.size() > 0){
+                    int sampleGroupCount = 0
+                    phenotypeSpecificSampleGroups.each { sampleGroupName, propertyNames ->
+                        // there is one element that we always need to skip, namely "phenotypeProperties", which contains meta-properties not directly relevant to users
+                        if (sampleGroupName == "phenotypeProperties"){
+                            sampleGroupCount++
+                        }else { // otherwise it's a property users might care about
+                            sb << """        \"${sampleGroupName}\":[""".toString()
+                            for ( int  i = 0 ; i < propertyNames.size() ; i++ ){
+                                sb << "\"${propertyNames[i]}\"".toString()
+                                if (i+1<propertyNames.size()){
+                                    sb << ","
+                                }
+                            }
+                            sb << """ ]""".toString()
+                            sampleGroupCount++
+                            if (sampleGroupCount<phenotypeSpecificSampleGroups?.size()){
+                                sb << ",".toString()
+                            }
+                        }
+                     }
+                }
+                sb << """
+  }""".toString()
+                phenotypeHolder << sb.toString()
+            }
+            returnValue << "{"
+            for ( int  i = 0 ; i < phenotypeHolder.size() ; i++ ){
+                returnValue << phenotypeHolder[i]
+                if (i+1<phenotypeHolder.size()){
+                    returnValue << ","
+                }
+            }
+            returnValue << "}"
+        }
+        return returnValue.toString()
+    }
+
+
+
+
+
+
+
 
     public String packageUpAHierarchicalListAsJson (LinkedHashMap mapOfStrings ){
         // now that we have a list, build it into a string suitable for JSON
@@ -943,6 +1039,42 @@ class SharedToolsService {
 "dataset":{${sb.toString()}}
 }""".toString()
     }
+
+
+
+    LinkedHashMap<String, LinkedHashMap<String, List <String>>> putPropertiesIntoHierarchy(String rawProperties){
+        LinkedHashMap phenotypeHolder = [:]
+        if ((rawProperties) &&
+            (rawProperties.length())){
+            List <String> listOfProperties = rawProperties.tokenize("^")
+            for (String property in listOfProperties){
+                List <String> propertyPieces = property.tokenize(":") // 0=Phenotype,1= data set,2= property
+                LinkedHashMap datasetHolder
+                if (phenotypeHolder.containsKey(propertyPieces[0])){
+                    datasetHolder = phenotypeHolder[propertyPieces[0]]
+                } else{
+                    datasetHolder = [:]
+                    phenotypeHolder[propertyPieces[0]] = datasetHolder
+                }
+                List propertyHolder
+                if (datasetHolder.containsKey(propertyPieces[1])){
+                    propertyHolder = datasetHolder[propertyPieces[1]]
+                }else{
+                    propertyHolder = []
+                    datasetHolder[propertyPieces[1]] = propertyHolder
+                }
+                if (!propertyHolder.contains(propertyPieces[2])){
+                    propertyHolder << propertyPieces[2]
+               }
+
+            }
+        }
+        return phenotypeHolder
+    }
+
+
+
+
 
 
 
@@ -1557,6 +1689,62 @@ class SharedToolsService {
         }
         return  returnValue
     }
+
+
+
+
+
+
+
+
+
+
+public List <LinkedHashMap> convertFormOfFilters(String rawFilters){
+    List <LinkedHashMap> returnValue = []
+    if (rawFilters){
+        List <String> filters = rawFilters.tokenize(',')
+        int filterCount = 0
+        for (String codedFilter in filters){
+            LinkedHashMap dividedFilter = [:]
+            List <String> filter = codedFilter.tokenize(':')
+            switch (filter[0]){
+                case "23":
+                    if (filter[1]!="0"){
+                        switch (filter[1]){
+                            case "1":dividedFilter["predictedEffects"]="protein-truncating"; break;
+                            case "2":dividedFilter["predictedEffects"]="missense"; break;
+                            case "3":dividedFilter["predictedEffects"]="noEffectSynonymous"; break;
+                            case "4":dividedFilter["predictedEffects"]="noEffectNoncoding"; break;
+                            default:break
+                        }
+                    }
+                    break;
+                case "47":
+                    dividedFilter["filter"+(filterCount++)] = filter[1];
+                    break;
+                default: break;
+            }
+            if (dividedFilter.size()>0){
+                returnValue << dividedFilter
+            }
+        }
+    }
+
+    return returnValue
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /***

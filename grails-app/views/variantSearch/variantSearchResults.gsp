@@ -6,37 +6,132 @@
     <r:require modules="tableViewer"/>
     <r:require modules="variantWF"/>
     <r:layoutResources/>
+    <style>
+    .propertyAdder{
+        margin: 0 0 0 15px;
+    }
+    div.propertyHolder {
+        position: absolute;
+        background-color: white;
+        height:160px;
+        width:240px;
+        border: 2px solid green;
+        margin: 5px;
+        padding: 10px;
+        text-align: left;
+    }
+    div.propertySubHolder{
+        position: relative;
+        margin: 3px;
+        height:100px;
+        width:220px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background-color: #eee;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -khtml-border-radius: 5px;
+        border-radius: 5px;
+
+    }
+    div.propertyHolder .propertyHolderChk {
+        color:black;
+        margin: 5px 0 5px 0;
+    }
+    .chkBoxText{
+        color:black;
+        margin: 5px 0 5px 0;
+        padding: 0 0 0 10px;
+    }
+    .propBox {
+        color:white;
+        margin: 5px 0 5px 0;
+        position: absolute;
+        bottom: 0;
+    }
+
+</style>
+
 </head>
 
 <body>
-<script>
 
+
+<script>
+    var skipBubbleUp = false;
+    var radbut = function(t,e,f){
+        console.log('t='+t+', this='+this);
+        t.checked=false;
+    } ;
+    var closer = function(that){
+        $(that).parent().parent().hide();
+        skipBubbleUp = true;
+    } ;
+var lookAtProperties = function (here,phenotype,dataSet,propertyList,currentPropertyList){
+    if (skipBubbleUp){
+        skipBubbleUp = false;
+        return;
+    }
+    var propId = "propId^"+phenotype+"^"+dataSet;
+    var propDivName = "propId_"+phenotype+"_"+dataSet;
+    if ($('#'+propDivName).is(":visible")){
+//        console.log("div click 3");
+//        $('#'+propDivName).hide();
+    } else {
+        if ($('#'+propDivName).size()===0){//we haven't made this window before
+            var expandedProperties = "";
+            for ( var i = 0 ; i < propertyList.length ; i++ ){
+                var propertyAlreadyExists = "";
+                if (currentPropertyList.indexOf(propertyList[i])>-1){
+                    propertyAlreadyExists = " checked";
+                }
+                expandedProperties += ('<input  class="propertyHolderChk" type="checkbox" name="'+propId+'" value="'+propertyList[i]+'" '+propertyAlreadyExists+'><label class="chkBoxText">'+propertyList[i]+'</label></input><br/>');
+            }
+            $(here).append("<div id='"+propDivName+"' class ='propertyHolder'><form action=\"./relaunchAVariantSearch\">"+
+                    "<a style='float:right' onclick='closer(this)'>X</a>"+
+                    "<div class='propertySubHolder'>"+
+                    "<input type=\"hidden\"  name=\"encodedParameters\" value=\"<%=encodedParameters%>\">"+
+                    "<input type=\"hidden\"  name=\"filters\" value=\"<%=filter%>\">"+
+                    expandedProperties+
+                    "</div>"+
+                    "<input type=\"submit\" class=\"propBox btn btn-xs btn-primary center-block\" value=\"Display properties\">"+
+                    "</form>"+
+                    "</div>");
+            $('#'+propDivName).change(function(event) {
+                event.stopPropagation();
+                event.stopImmediatePropagation() ;
+                event.preventDefault()  ;
+                console.log("div click 1");
+            });
+
+            $("input[type=checkbox]").change(function(event) {
+                $('#'+propDivName).show();
+                event.stopPropagation();
+                event.stopImmediatePropagation() ;
+                event.preventDefault()  ;
+                console.log("div click 2");
+            });
+        } else {
+            $('#'+propDivName).show();
+        }
+    }
+};
     var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
+var loadVariantTableViaAjax = function(filterDefinitions,additionalProperties){
     var loading = $('#spinner').show();
     loading.show();
     $.ajax({
         type:'POST',
         cache:false,
-        data:{'keys':"<%=filter%>"},
+        data:{'keys':filterDefinitions,
+              'properties':additionalProperties},
         url:'<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsAjax" />',
         async:true,
         success:function(data,textStatus){
             var variantTableContext = {
                 tooManyResults:'<g:message code="variantTable.searchResults.tooManyResults" default="too many results, sharpen your search" />'
             };
-            if (${newApi}){
-	          dynamicFillTheFields(data) ;
-            } else {
-                variantProcessing.fillTheVariantTable(data,
-                        ${show_gene},
-                        ${show_sigma},
-                        ${show_exseq},
-                        ${show_exchp},
-                        '<g:createLink controller="variantInfo" action="variantInfo"  />',
-                        '<g:createLink controller="gene" action="geneInfo"  />',
-                        ${dataSetDetermination},
-                        {variantTableContext:variantTableContext});
-            }
+            dynamicFillTheFields(data) ;
 
             loading.hide();
         },
@@ -45,13 +140,36 @@
             errorReporter(XMLHttpRequest, exception) ;
         }
     });
-
+}
+loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
 
     var uri_dec = decodeURIComponent("<%=filter%>");
     var encodedParameters = decodeURIComponent("<%=encodedParameters%>");
 
 
     var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
+    function buildPropertyInteractor(data,phenotype,dataSet,existingCols){
+        var returnValue="";
+        // get our property list
+        var propertyList = [];
+        if ( (typeof data !== 'undefined') &&
+                (data) && (data.metadata) && (data.metadata[phenotype]) &&
+                (data.metadata[phenotype][dataSet]) && ((data.metadata[phenotype][dataSet]).length>0)) {
+            propertyList = data.metadata[phenotype][dataSet];
+            returnValue = "<span class='glyphicon glyphicon-plus filterEditor propertyAdder' aria-hidden='true' onclick='lookAtProperties(this,\""+phenotype+"\",\""+dataSet+"\",[\""+
+                    propertyList.join('\",\"')+"\"],[\""+ existingCols.join('\",\"')+"\"])'></span>";
+        }
+        return returnValue;
+    }
+    function buildCPropertyInteractor(propertyList,existingCols){
+        var returnValue="";
+        // get our property list
+        if (typeof propertyList !== 'undefined') {
+            returnValue = "<span style='float:right' class='glyphicon glyphicon-plus filterEditor propertyAdder' aria-hidden='true' onclick='lookAtProperties(this,\"common\",\"common\",[\""+
+                    propertyList.join('\",\"')+"\"],[\""+ existingCols.join('\",\"')+"\"])'></span>";
+        }
+        return returnValue;
+    }
 
     function fillTheFields (data)  {
         variantProcessing.oldIterativeVariantTableFiller(data,'#variantTable',
@@ -76,8 +194,23 @@
 
     function dynamicFillTheFields (data)  {
 
-        var sortCol = 0
-        var totCol = 0
+        var sortCol = 0;
+        var totCol = 0;
+        $('#variantTableHeaderRow2').children().first().append(buildCPropertyInteractor(data.cProperties.dataset,data.columns.cproperty));
+        var commonWidth = 0;
+        for (var common in data.columns.cproperty) {
+            var colName = data.columns.cproperty[common];
+            $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + colName + "</th>")
+            commonWidth++;
+         }
+
+        $('#variantTableHeaderRow').children().first().attr('colspan',commonWidth) ;
+        $('#variantTableHeaderRow2').children().first().attr('colspan',commonWidth) ;
+
+        totCol += commonWidth;
+
+
+
         for (var pheno in data.columns.dproperty) {
             var pheno_width = 0
 
@@ -92,7 +225,9 @@
                     $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + columnDisp + "</th>")
                 }
                 if (dataset_width > 0) {
-                    $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp + "</th>")
+                    $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp +
+                            buildPropertyInteractor(data,pheno,dataset,data.columns.dproperty[pheno][dataset])+
+                    "</th>")
                 }
             }
             if (pheno_width > 0) {
@@ -119,7 +254,9 @@
                     $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + columnDisp + "</th>")
                 }
                 if (dataset_width > 0) {
-                    $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp + "</th>")
+                    $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp +
+                            buildPropertyInteractor(data,pheno,dataset,data.columns.pproperty[pheno][dataset])+
+                            "</th>")
                 }
             }
             if (pheno_width > 0) {
@@ -134,53 +271,6 @@
                 proteinEffectList,{},${newApi});
 
     }
-
-
-//needed or not? From the results page...
-    %{--var regionSpec = "<%=regionSpecification%>";--}%
-    %{--jQuery.fn.dataTableExt.oSort['allnumeric-asc']  = function(a,b) {--}%
-        %{--var x = parseFloat(a);--}%
-        %{--var y = parseFloat(b);--}%
-        %{--if (!x) { x = 1; }--}%
-        %{--if (!y) { y = 1; }--}%
-        %{--return ((x < y) ? -1 : ((x > y) ?  1 : 0));--}%
-    %{--};--}%
-
-    %{--jQuery.fn.dataTableExt.oSort['allnumeric-desc']  = function(a,b) {--}%
-        %{--var x = parseFloat(a);--}%
-        %{--var y = parseFloat(b);--}%
-        %{--if (!x) { x = 1; }--}%
-        %{--if (!y) { y = 1; }--}%
-        %{--return ((x < y) ? 1 : ((x > y) ?  -1 : 0));--}%
-    %{--};--}%
-//    var loading = $('#spinner').show();
-//    $.ajax({
-//        cache:false,
-//        type:"get",
-//        url:"../regionAjax/"+regionSpec,
-//        async:true,
-//        success: function (data) {
-//            fillTheFields(data) ;
-//            loading.hide();
-//        },
-//        error: function(jqXHR, exception) {
-//            loading.hide();
-//            core.errorReporter(jqXHR, exception) ;
-//        }
-//    });
-    %{--var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;--}%
-    %{--function fillTheFields (data)  {--}%
-        %{--variantProcessing.iterativeVariantTableFiller(data,'#variantTable',--}%
-                %{--${show_gene},--}%
-                %{--${show_sigma},--}%
-                %{--${show_exseq},--}%
-                %{--${show_exchp},--}%
-                %{--'<g:createLink controller="variant" action="variantInfo" />',--}%
-                %{--'<g:createLink controller="gene" action="geneInfo" />',--}%
-                %{--proteinEffectList,{},(${newApi}));--}%
-
-    %{--}--}%
-
 
 
 
@@ -234,6 +324,12 @@
     </div>
 
 </div>
+
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
 
 </body>
 </html>
