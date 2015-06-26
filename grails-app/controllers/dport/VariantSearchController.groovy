@@ -105,25 +105,25 @@ class VariantSearchController {
     def relaunchAVariantSearch(){
         String encodedParameters =params.encodedParameters
 
-        LinkedHashMap propertiesToDisplay = params.findAll{ it.key =~ /^propId/ }
+        LinkedHashMap propertiesToDisplay = params.findAll{ it.key =~ /^savedValue/ }
         List <LinkedHashMap> listOfProperties = []
         if ((propertiesToDisplay) &&
                 (propertiesToDisplay.size()>0)){
             propertiesToDisplay.each{String key, value ->
-                    List <String> disambiguator = key.tokenize("^")
+                    List <String> disambiguator = value.tokenize("^")
                 if (value?.size()>0){
-                    for (String oneProperty in value){
+//                    for (String oneProperty in value){
                         LinkedHashMap valuePasser = [:]
                         valuePasser["phenotype"] = disambiguator[1]
                         valuePasser["dataset"] = disambiguator[2]
-                        valuePasser["property"] = oneProperty
+                        valuePasser["property"] = disambiguator[3]
                         listOfProperties << valuePasser
-                    }
+//                    }
                 }else{
                     LinkedHashMap valuePasser = [:]
                     valuePasser["phenotype"] = disambiguator[0]
                     valuePasser["dataset"] = disambiguator[1]
-                    valuePasser["property"] = value
+                    valuePasser["property"] = disambiguator[2]
                     listOfProperties << valuePasser
                 }
 

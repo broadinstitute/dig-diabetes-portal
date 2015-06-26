@@ -62,6 +62,23 @@
 
 
 <script>
+    var getPropData = function (){
+        var varsToSend = {};
+        var savedValuesList = [];
+        var savedValue = {};
+        var totalFilterCount = UTILS.extractValFromTextboxes(['totalFilterCount']);
+        if (typeof totalFilterCount['totalFilterCount'] !== 'undefined') {
+            var valueCount = parseInt(totalFilterCount['totalFilterCount']);
+            if (valueCount>0){
+                for ( var i = 0 ; i < valueCount ; i++ ){
+                    savedValuesList.push ('savedValue'+i);
+                }
+                savedValue = UTILS.extractValFromTextboxes(savedValuesList);
+            }
+        }
+        varsToSend = UTILS.concatMap(varsToSend,savedValue) ;
+        return varsToSend;
+    };
     var skipBubbleUp = false;
     var radbut = function(t,e,f){
         console.log('t='+t+', this='+this);
@@ -71,7 +88,36 @@
         $(that).parent().parent().hide();
         skipBubbleUp = true;
     } ;
-var lookAtProperties = function (here,phenotype,dataSet,propertyList,currentPropertyList){
+var rememberProperty = function(phenotype,dataSet,propertyList, addIt){
+    var mapOfExistingProperties = {};
+    var numberOfFields = 0;
+    for ( var i = 0 ; i < 200 ; i++ ){
+        var savedField = $('#savedValue'+i);
+        if (savedField.length > 0){
+            mapOfExistingProperties[savedField.val()]=savedField.attr('id');
+            numberOfFields++;
+        }
+    }
+    var hiddenFields = $('#hiddenFields');
+     if ((hiddenFields.size()>0) && (propertyList) && (propertyList.length>0)){
+         for ( var i = 0 ; i < propertyList.length ; i++ ){
+             var totalFilterCount = parseInt($('#totalFilterCount').val());
+             var codedValue = 'propId^'+phenotype +'^'+dataSet +'^'+ propertyList[i];
+             if (addIt){// add the field of it doesn't exist already
+                 if (!mapOfExistingProperties[codedValue]) {
+                     hiddenFields.append('<input type="text" class="form-control" name="savedValue'+(totalFilterCount +1)+'" id="savedValue'+(totalFilterCount +1)+'" value="'+codedValue+'" style="height:0px">');
+                 }
+                 $('#totalFilterCount').val(totalFilterCount +1);
+             } else { // remove it
+                 var existingField = mapOfExistingProperties[codedValue];
+                 $('#'+existingField).remove();
+                 $('#totalFilterCount').val(totalFilterCount -1);
+             }
+         }
+     }
+
+}
+    var lookAtProperties = function (here,phenotype,dataSet,propertyList,currentPropertyList){
     if (skipBubbleUp){
         skipBubbleUp = false;
         return;
@@ -92,15 +138,16 @@ var lookAtProperties = function (here,phenotype,dataSet,propertyList,currentProp
                 expandedProperties += ('<span class="singprop"><input  class="propertyHolderChk" type="checkbox" name="'+propId+'" value="'+propertyList[i]+
                         '" '+propertyAlreadyExists+'><label class="chkBoxText">'+mpgSoftware.trans.translator(propertyList[i])+'</label></input><br/></span>');
             }
-            $(here).append("<div id='"+propDivName+"' class ='propertyHolder'><form action=\"./relaunchAVariantSearch\">"+
+            $(here).append("<div id='"+propDivName+"' class ='propertyHolder'>"+//<form action=\"./relaunchAVariantSearch\">"+
                     "<a style='float:right' onclick='closer(this)'>X</a>"+
                     "<div class='propertySubHolder'>"+
                     "<input type=\"hidden\"  name=\"encodedParameters\" value=\"<%=encodedParameters%>\">"+
                     "<input type=\"hidden\"  name=\"filters\" value=\"<%=filter%>\">"+
                     expandedProperties+
                     "</div>"+
-                    "<input type=\"submit\" class=\"propBox btn btn-xs btn-primary center-block\" value=\"Display properties\">"+
-                    "</form>"+
+//                    "<input type=\"submit\" class=\"propBox btn btn-xs btn-primary center-block\" value=\"Display properties\">"+
+                    "<button onclick=\"$('#relauncher').click()\" class=\"propBox btn btn-xs btn-primary center-block\">Launch refined search</button>"+
+                 //   "</form>"+
                     "</div>");
             $('#'+propDivName).change(function(event) {
                 event.stopPropagation();
@@ -115,6 +162,10 @@ var lookAtProperties = function (here,phenotype,dataSet,propertyList,currentProp
                 event.stopImmediatePropagation() ;
                 event.preventDefault()  ;
                 console.log("div click 2");
+                var fieldName = $(this).attr('name');
+                var dividedFields = fieldName.split('^');
+                var property = $(this).val();
+                rememberProperty(dividedFields[1],dividedFields[2],[property], $(this)[0].checked);
             });
         } else {
             $('#'+propDivName).show();
@@ -216,6 +267,7 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
             $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + mpgSoftware.trans.translator(colName) + "</th>")
             commonWidth++;
          }
+        rememberProperty('common','common',data.columns.cproperty, true);
         $('#variantTableHeaderRow').children().first().attr('colspan',commonWidth) ;
         $('#variantTableHeaderRow2').children().first().attr('colspan',commonWidth) ;
 
@@ -237,8 +289,9 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
                     $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + columnDisp + "</th>")
                 }
                 if (dataset_width > 0) {
+                    rememberProperty('common',dataset,data.columns.dproperty[pheno][dataset], true);
                     $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp +
-                            buildPropertyInteractor(data,'common',dataset,[])+
+                            buildPropertyInteractor(data,'common',dataset,data.columns.dproperty[pheno][dataset])+
                     "</th>")
                 }
             }
@@ -267,6 +320,7 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
                     $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + columnDisp + "</th>")
                 }
                 if (dataset_width > 0) {
+                    rememberProperty(pheno,dataset,data.columns.pproperty[pheno][dataset], true);
                     $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp +
                             buildPropertyInteractor(data,pheno,dataset,data.columns.pproperty[pheno][dataset])+
                             "</th>")
@@ -339,7 +393,16 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
     </div>
 
 </div>
-
+<div style="display: hidden">
+    <form action="./relaunchAVariantSearch">
+        <input type="hidden"  name="encodedParameters" value="<%=encodedParameters%>">
+        <input type="hidden"  name="filters" value="<%=filter%>">
+    <div id="hiddenFields">
+        <input type="text" class="form-control" name="totalFilterCount" id="totalFilterCount" value="0" style="height:0px">
+    </div>
+    <input id='relauncher' type="submit" class="propBox btn btn-xs btn-primary center-block" value="Display properties">
+    </form>
+</div>
 <script>
     $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();
