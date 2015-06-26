@@ -158,9 +158,11 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
         // get our property list
         var propertyList = [];
         if ((typeof data !== 'undefined') &&
-             (data) && (data.metadata) && (data.metadata[phenotype])) {
-            if (dataSet == 'common') {
+             (data) && (data.metadata)) {
+            if ((dataSet == 'common') && (data.metadata[phenotype])) {
                 propertyList = Object.keys(data.metadata[phenotype]);
+            } else if (phenotype == 'common') {
+                propertyList = data.propertiesPerSampleGroup.dataset[dataSet];
             } else if ((data.metadata[phenotype][dataSet]) && ((data.metadata[phenotype][dataSet]).length > 0)) {
                 propertyList = data.metadata[phenotype][dataSet];
             } else {// error
@@ -236,7 +238,7 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
                 }
                 if (dataset_width > 0) {
                     $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp +
-                            buildPropertyInteractor(data,pheno,dataset,data.columns.dproperty[pheno][dataset])+
+                            buildPropertyInteractor(data,'common',dataset,[])+
                     "</th>")
                 }
             }
@@ -246,6 +248,7 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
             totCol += pheno_width
         }
 
+        // pheno specific props
         for (var pheno in data.columns.pproperty) {
             var pheno_width = 0
             var phenoDisp = mpgSoftware.trans.translator(pheno)

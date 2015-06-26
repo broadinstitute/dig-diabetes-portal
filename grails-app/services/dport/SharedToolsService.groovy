@@ -927,12 +927,18 @@ class SharedToolsService {
 
 
 
-    public String sortAndPackageAMapOfListsAsJson (LinkedHashMap listOfCommonProperties ){
+    public String sortAndPackageAMapOfListsAsJson (LinkedHashMap listOfCommonProperties,Boolean sortFirst ){
         // now that we have a list, build it into a string suitable for JSON
         int numberOfProperties = listOfCommonProperties.size()
         int numrec = 0
         StringBuilder sb = new StringBuilder ()
-        listOfCommonProperties.sort{it.value.sort_order}.each{String name, v->
+        LinkedHashMap mapToWorkThrough
+        if (sortFirst){
+            mapToWorkThrough = listOfCommonProperties.sort{it.value.sort_order}
+        } else {
+            mapToWorkThrough = listOfCommonProperties
+        }
+        mapToWorkThrough.each{String name, v->
             if (name){
                 sb << "\"${name}\"".toString()
                 if (numrec < numberOfProperties - 1) {
