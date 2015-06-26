@@ -30,13 +30,13 @@ class RestServerService {
     private String NEW_DEV_REST_SERVER = ""
     private String BASE_URL = ""
     private String GENE_INFO_URL = "gene-info"
-    private String GENE_SEARCH_URL = "gene-search"
-    private String DATA_SET_URL = "getDatasets"
-    private String VARIANT_INFO_URL = "variant-info"
-    private String TRAIT_INFO_URL = "trait-info"
-    private String VARIANT_SEARCH_URL = "variant-search"
-    private String TRAIT_SEARCH_URL = "trait-search"
-    private String METADATA_URL = "getMetadata"
+    private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out
+    private String DATA_SET_URL = "getDatasets" // TODO: Wipe out
+    private String VARIANT_INFO_URL = "variant-info" // TODO: Wipe out
+    private String TRAIT_INFO_URL = "trait-info" // TODO: Wipe out
+    private String VARIANT_SEARCH_URL = "variant-search" // TODO: Wipe out
+    private String TRAIT_SEARCH_URL = "trait-search" // TODO: Wipe out
+    private String METADATA_URL = "getMetadata" // TODO: Wipe out
     private String GET_DATA_URL = "getData"
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
@@ -2676,7 +2676,7 @@ private String generateProteinEffectJson (String variantName){
 }
 }
 """.toString()
-        return postRestCall(jsonSpec,GENE_SEARCH_URL)
+        return postRestCall(jsonSpec,GENE_SEARCH_URL) // TODO: change to new API
     }
 
 
