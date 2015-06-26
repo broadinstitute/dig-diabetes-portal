@@ -2117,14 +2117,14 @@ private String generateProteinEffectJson (String variantName){
         List<String> commonProperties = ["CLOSEST_GENE","VAR_ID","DBSNP_ID","Protein_change","Consequence","CHROM", "POS"] // default common properties
 
         //  if we don't have a better idea then launch the search based on the filters.  Otherwise used our stored criteria
- //       if (!requestedProperties) {
+       // if (!requestedProperties) {
             JsonSlurper slurper = new JsonSlurper()
             for (def parsedFilter in slurper.parseText(filterJson)) {
                 datasetsToFetch << parsedFilter.dataset_id
                 phenotypesToFetch << parsedFilter.phenotype
                 propertiesToFetch << parsedFilter.operand
             }
-   //     }
+      // }
 
         // if specific data sets are requested then add them to the list
         if (requestedProperties)   {
