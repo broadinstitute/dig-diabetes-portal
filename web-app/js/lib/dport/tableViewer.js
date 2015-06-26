@@ -593,12 +593,18 @@ var variantProcessing = (function () {
         }
 
         //need to figure out how to add aaSorting and aoColumnDefs
-            $(divId).dataTable({
-                iDisplayLength: 20,
-                bFilter: false,
-                aaSorting: [[ sortCol + fixedCol, "asc" ]],
-                aoColumnDefs: [{sType: "allnumeric", aTargets: numericCol } ]
-            });
+//        $(divId).dataTable({
+//            iDisplayLength: 20,
+//            bFilter: false,
+//            aaSorting: [[ sortCol + fixedCol, "asc" ]],
+//            aoColumnDefs: [{sType: "allnumeric", aTargets: numericCol } ]
+//        });
+        // need to be more flexible now that the number of rows is variable
+        $(divId).dataTable({
+            iDisplayLength: 20,
+            bFilter: false,
+            aaSorting: [[ sortCol + fixedCol, "asc" ]]
+        });
 
         var variantList =  data.variants
         var dataLength = variantList ? variantList.length : 0;
@@ -611,13 +617,64 @@ var variantProcessing = (function () {
                     variant[prop] = variantList[i][j][prop]
                 }
             }
-            array.push(getStringWithLink(geneRootUrl,(contentExists (geneRootUrl)),noop,variant.CLOSEST_GENE,variant.CLOSEST_GENE,""));
-            array.push(getStringWithLink(variantRootUrl,((contentExists (variantRootUrl)) && (variant.VAR_ID)),noop,variant.VAR_ID,variant.CHROM+ ":" +variant.POS,""));
-            array.push(getSimpleString((variant.DBSNP_ID),noop,variant.DBSNP_ID,""));
-            array.push(getSimpleString((variant.Protein_change&& (variant.Protein_change !== 'null')),noop,variant.Protein_change,""));
-            array.push(getSimpleString(((variant.Consequence)&&(contentExists(proteinEffectList))&&
-                (contentExists(proteinEffectList.proteinEffectMap))&&(contentExists(proteinEffectList.proteinEffectMap[variant.Consequence]))),
-                lineBreakSubstitution,proteinEffectList.proteinEffectMap[variant.Consequence],lineBreakSubstitution((variant.Consequence && (variant.Consequence !== 'null'))?variant.Consequence:"")));
+//            array.push(getStringWithLink(geneRootUrl,(contentExists (geneRootUrl)),noop,variant.CLOSEST_GENE,variant.CLOSEST_GENE,""));
+//            array.push(getStringWithLink(variantRootUrl,((contentExists (variantRootUrl)) && (variant.VAR_ID)),noop,variant.VAR_ID,variant.CHROM+ ":" +variant.POS,""));
+//            array.push(getSimpleString((variant.DBSNP_ID),noop,variant.DBSNP_ID,""));
+//            array.push(getSimpleString((variant.Protein_change&& (variant.Protein_change !== 'null')),noop,variant.Protein_change,""));
+//            array.push(getSimpleString(((variant.Consequence)&&(contentExists(proteinEffectList))&&
+//                    (contentExists(proteinEffectList.proteinEffectMap))&&(contentExists(proteinEffectList.proteinEffectMap[variant.Consequence]))),
+//                lineBreakSubstitution,proteinEffectList.proteinEffectMap[variant.Consequence],lineBreakSubstitution((variant.Consequence && (variant.Consequence !== 'null'))?variant.Consequence:"")));
+
+            for (var cpropIndex in data.columns.cproperty) {
+                var cprop =  data.columns.cproperty[cpropIndex];
+                var value = variant[cprop];
+                if (cprop === "VAR_ID")  {
+                    array.push(getStringWithLink(variantRootUrl,((contentExists (variantRootUrl)) && (variant.VAR_ID)),noop,variant.VAR_ID,variant.CHROM+ ":" +variant.POS,""));
+                } else if (cprop === "CHROM") {
+                    array.push(getSimpleString((variant.CHROM),noop,variant.CHROM,""));
+                }  else if (cprop === "POS") {
+                    array.push(getSimpleString((variant.POS),noop,variant.POS,""));
+                }  else if (cprop === "DBSNP_ID") {
+                    array.push(getSimpleString((variant.DBSNP_ID),noop,variant.DBSNP_ID,""));
+                }  else if (cprop === "CLOSEST_GENE") {
+                    array.push(getStringWithLink(geneRootUrl,(contentExists (geneRootUrl)),noop,variant.CLOSEST_GENE,variant.CLOSEST_GENE,""));
+                }  else if (cprop === "GENE") {
+                    array.push(getStringWithLink(geneRootUrl,(contentExists (geneRootUrl)),noop,variant.GENE,variant.GENE,""));
+                }  else if (cprop === "IN_GENE") {
+                    array.push(getSimpleString((variant.IN_GENE),noop,variant.IN_GENE,""));
+                }  else if (cprop === "Protein_change") {
+                    array.push(getSimpleString((variant.Protein_change&& (variant.Protein_change !== 'null')),noop,variant.Protein_change,""));
+                }  else if (cprop === "Consequence") {
+                    array.push(getSimpleString(((variant.Consequence)&&(contentExists(proteinEffectList))&&
+                            (contentExists(proteinEffectList.proteinEffectMap))&&(contentExists(proteinEffectList.proteinEffectMap[variant.Consequence]))),
+                        lineBreakSubstitution,proteinEffectList.proteinEffectMap[variant.Consequence],lineBreakSubstitution((variant.Consequence && (variant.Consequence !== 'null'))?variant.Consequence:"")));
+                }  else if (cprop === "IN_EXSEQ") {
+                    array.push(getSimpleString((variant.IN_EXSEQ),noop,variant.IN_EXSEQ,""));
+                }  else if (cprop === "SIFT_PRED") {
+                    array.push(getSimpleString((variant.SIFT_PRED),noop,variant.SIFT_PRED,""));
+//                }  else if (cprop === ) {
+                }
+                else if (cprop === "Condel_PRED") {
+                    array.push(getSimpleString((variant.Condel_PRED),noop,variant.Condel_PRED,""));
+                }
+                else if (cprop === "MOST_DEL_SCORE") {
+                    array.push(getSimpleString((variant.MOST_DEL_SCORE),noop,variant.MOST_DEL_SCORE,""));
+                }
+                else if (cprop === "PolyPhen_PRED") {
+                    array.push(getSimpleString((variant.PolyPhen_PRED),noop,variant.PolyPhen_PRED,""));
+                }
+                else if (cprop === "SIFT_PRED") {
+                    array.push(getSimpleString((variant.SIFT_PRED),noop,variant.SIFT_PRED,""));
+                }
+                else if (cprop === "TRANSCRIPT_ANNOT") {
+                    array.push(getSimpleString((variant.TRANSCRIPT_ANNOT),noop,variant.TRANSCRIPT_ANNOT,""));
+                }
+                else {
+                    array.push(getSimpleString((variant[cprop]),noop,variant[cprop],""));
+                }
+            }
+
+
 
             for (var pheno in data.columns.dproperty) {
                 for (var dataset in data.columns.dproperty[pheno]) {
