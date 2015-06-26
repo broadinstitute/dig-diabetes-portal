@@ -400,7 +400,7 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
     <div id="hiddenFields">
         <input type="text" class="form-control" name="totalFilterCount" id="totalFilterCount" value="0" style="height:0px">
     </div>
-    <input id='relauncher' type="submit" class="propBox btn btn-xs btn-primary center-block" value="Display properties">
+    <input id='relauncher' type="submit" class="propBox btn btn-xs btn-primary center-block" value="1" style="height:0px">
     </form>
 </div>
 <script>

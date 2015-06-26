@@ -2117,24 +2117,28 @@ private String generateProteinEffectJson (String variantName){
         List<String> commonProperties = ["CLOSEST_GENE","VAR_ID","DBSNP_ID","Protein_change","Consequence","CHROM", "POS"] // default common properties
 
         //  if we don't have a better idea then launch the search based on the filters.  Otherwise used our stored criteria
-       // if (!requestedProperties) {
+        if (!requestedProperties) {
             JsonSlurper slurper = new JsonSlurper()
             for (def parsedFilter in slurper.parseText(filterJson)) {
                 datasetsToFetch << parsedFilter.dataset_id
                 phenotypesToFetch << parsedFilter.phenotype
                 propertiesToFetch << parsedFilter.operand
             }
-      // }
+       }
 
         // if specific data sets are requested then add them to the list
         if (requestedProperties)   {
             requestedProperties?.each{ String phenotype, LinkedHashMap phenotypeProperties ->
-                phenotypeProperties?.each { String datasetName, v ->
-                    if (datasetName == 'common') {
-                        if (v?.size() > 0) {
-                            for (String dataset in v) {
-                                if (!datasetsToFetch.contains(dataset)) {
-                                    datasetsToFetch << dataset
+                if (phenotype!='common'){
+                    phenotypeProperties?.each { String datasetName, v ->
+                        if (datasetName != 'common') {
+                            datasetsToFetch << datasetName
+                        } else {
+                            if (v?.size() > 0) {
+                                for (String dataset in v) {
+                                    if (dataset != 'common') {
+                                        datasetsToFetch << dataset
+                                    }
                                 }
                             }
                         }
@@ -2159,35 +2163,56 @@ private String generateProteinEffectJson (String variantName){
                 }
             }
         }
+        if (requestedProperties)   {
+            requestedProperties?.each{ String phenotype, LinkedHashMap phenotypeProperties ->
+                if (phenotype == 'common') {
+                    phenotypeProperties?.each { String datasetName, v ->
+                        if (datasetName == 'common'){
+                            commonProperties = []
+                            if (v?.size() > 0) {
+                                for (String property in v) {
+                                         commonProperties << property
+                                }
+                            }
 
-
-
-//        if (requestedProperties)   {
-//            requestedProperties?.each{ String phenotype, LinkedHashMap phenotypeProperties ->
-//                if (phenotype != 'common') {
-//                    if (!phenotypesToFetch.contains(property)) {
-//                    //    phenotypesToFetch << property
-//                    }
-//                }
-//            }
-//        }
-
-
-
-        //HACK HACK HACK HACK HACK
-        for (String pheno in phenotypesToFetch) {
-            for (String ds in datasetsToFetch) {
-                if (processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno]) {
-                    propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^MINA/})
-                    propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^MINU/})
-                    propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^(OR|ODDS|BETA)/})
-                    propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^P_(EMMAX|FE|VALUE)/})
+                        }
+                    }
                 }
             }
         }
+
+
+
+        if (requestedProperties)   {
+            requestedProperties?.each{ String phenotype, LinkedHashMap phenotypeProperties ->
+                if (phenotype != 'common') {
+                    if (!phenotypesToFetch.contains(phenotype)) {
+                        phenotypesToFetch << phenotype
+                    }
+                }
+            }
+        }
+
+
+        if (!requestedProperties)   {
+            //HACK HACK HACK HACK HACK
+            for (String pheno in phenotypesToFetch) {
+                for (String ds in datasetsToFetch) {
+                    if (processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno]) {
+                        propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^MINA/})
+                        propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^MINU/})
+                        propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^(OR|ODDS|BETA)/})
+                        propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^P_(EMMAX|FE|VALUE)/})
+                    }
+                }
+            }
+        }
+
         // Adding Phenotype specific properties
         propertiesToFetch = expandPropertyList( propertiesToFetch,  requestedProperties)
-        commonProperties = expandCommonPropertyList( commonProperties,  requestedProperties)
+        if (!requestedProperties) {
+            commonProperties = expandCommonPropertyList(commonProperties, requestedProperties)
+        }
 
         LinkedHashMap columnsToDisplayStructure = sharedToolsService.getColumnsToDisplayStructure(processedMetadata, phenotypesToFetch, datasetsToFetch, propertiesToFetch,commonProperties)
         println(columnsToDisplayStructure)
