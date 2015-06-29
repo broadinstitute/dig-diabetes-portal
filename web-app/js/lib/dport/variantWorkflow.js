@@ -634,7 +634,7 @@ var mpgSoftware = mpgSoftware || {};
                 } else if (equivalence === 'greaterThan'){
                     greaterThanSelected = "selected";
                     equivalenceValue = ">";
-                } else if (equivalence === 'greaterThan'){
+                } else if (equivalence === 'equalTo'){
                     equalToSelected = "selected";
                     equivalenceValue = "=";
                 }
@@ -646,17 +646,16 @@ var mpgSoftware = mpgSoftware || {};
             // We need to create all of these fields and initialize them
             currentDiv.append("<div id='"+holderId+"' class='row clearfix propertyHolderBox'>"+
                 "<div class='primarySectionSeparator'>"+
-                "<div  id='"+labelId+"' class='col-sm-offset-1 col-md-3 text-right'>"+mpgSoftware.trans.translator(sectionName)+"</div>"+
+                "<div  id='"+labelId+"' class='col-sm-offset-1 col-md-3 text-right searchBuilderPrompt'>"+mpgSoftware.trans.translator(sectionName)+"</div>"+
                 "<div class='col-md-1'>"+
                 "<select id='"+equivalenceId+"' class='form-control btn-group btn-input clearfix cusEquiv'>"+
                 "<option "+lessThanSelected+" value='lessThan'>&lt;</option>"+
                 "<option "+greaterThanSelected+" value='greaterThan'>&gt;</option>"+
+                "<option "+equalToSelected+" value='equalTo'>=</option>"+
                 "</select>"+
                 "</div>"+
                 "<div class='col-md-4'><input type='text' class='form-control cusText' id='"+valueId+"'></div>"+
                 "<div class='col-md-1'>"+
-                "<span style='padding:10px 0 0 0' class='glyphicon glyphicon-question-sign pop-right' aria-hidden='true' data-toggle='popover' animation='true' "+
-                "trigger='hover' data-container='body' data-placement='right' title='' data-content='"+helpText + "' data-original-title='"+helpTitle + "'></span>"+
                 "</div>"+
                 "<div class='col-md-2'>"+
                 "</div>"+
@@ -670,7 +669,7 @@ var mpgSoftware = mpgSoftware || {};
         var appendGeneChooser = function (currentDiv,holderId,sectionName,geneInputId,helpTitle,helpText,geneName){
             currentDiv.append("<div id='"+holderId+"' class='row clearfix'>"+
                 "<div class='primarySectionSeparator'>"+
-                "<div class='col-sm-offset-1 col-md-3' style='text-align: right'>"+sectionName+"</div>"+
+                "<div class='col-sm-offset-1 col-md-3'>"+sectionName+"</div>"+
                 "<div class='col-md-5'>"+
                 "<input type='text' class='form-control' id='region_gene_input' style='display: inline-block'/>"+
                 "</div>"+
@@ -848,19 +847,6 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
 
 
 
-
-//        var displayPVChooser = function (holder,equivalence,defaultValue){
-//            appendValueWithEquivalenceChooser (holder,'pvHolder','p value','pvEquivalence','pvValue',
-//                'P value help title','everything there is to say about P values',equivalence,defaultValue);
-//        };
-//        var displayORChooser = function (holder,equivalence,defaultValue){
-//            appendValueWithEquivalenceChooser (holder,'pvHolder','odds ratio','orEquivalence','orValue',
-//                'Odds ratio help title','everything there is to say about an odds ratio',equivalence,defaultValue);
-//        };
-//        var displayESChooser = function (holder,equivalence,defaultValue){
-//            appendValueWithEquivalenceChooser (holder,'esHolder','beta','esEquivalence','esValue',
-//                'Effect size help title','everything there is to say about an effect sizes',equivalence,defaultValue);
-//        };
         var displayGeneChooser = function (holder,geneName){
             appendGeneChooser(holder,'geneHolder','gene','region_gene_input',
                 'Gene chooser help title','everything there is to say about choosing a gene',geneName);

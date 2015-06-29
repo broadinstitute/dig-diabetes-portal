@@ -12,9 +12,19 @@
 <style>
 .panel.inputGoesHere {
     border: 2px solid #052090;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -khtml-border-radius: 10px;
+    border-radius: 10px;
+    box-shadow: 8px 8px 5px #888888;
 }
 .bluebox.inputGoesHere {
-    border: 2px solid #052090;
+    border: 3px solid #052090;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -khtml-border-radius: 10px;
+    border-radius: 10px;
+
 }
 </style>
 <script>
@@ -48,16 +58,7 @@
                         <h4>Find genetic variants of interest</h4>
                         <g:render template="variantWFSpec" />
                         <!-- todo arz remove me, this is just an example -->
-                        <div>
-                            <g:render template="/resultsFilter/filtermodal"></g:render>
-                            <a onclick="showDatasetModal()">Refine Query</a>
-                        </div>
                     </div>
-                    %{--<div  class="col-md-7">--}%
-
-                        %{--<g:render template="variantWFDescr" />--}%
-
-                    %{--</div>--}%
                 </div>
 
 

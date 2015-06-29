@@ -3,6 +3,9 @@ package dport
 import grails.plugins.rest.client.RestResponse
 import groovy.json.JsonSlurper
 
+/***
+ * TODO this controller needs to be entirely removed!  Let's do it by stages...
+ */
 class ResultsFilterController {
 
     MetadataQueryService metadataQueryService

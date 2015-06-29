@@ -13,15 +13,15 @@
         <div id="biology-form">
             <div class="radio">
                 <div class="row clearfix">
-                   <div class="col-md-10"> <span class="text-left">all effects</span></div>
+                   <div class="col-md-10"> <span class="text-left searchBuilderPrompt"><g:message code="variantSearch.proteinEffectRestrictions.allEffects" default="all effects" /></span></div>
                    <div class="col-md-2"><input type="radio" name="predictedEffects" value="all-effects"  id="all_functions_checkbox" onClick="chgRadioButton('all-effects')" checked="checked"/></div>
                 </div>
                 <div class="row clearfix">
-                    <div class="col-md-10"><span class="text-left">protein-truncating</span></div>
+                    <div class="col-md-10"><span class="text-left searchBuilderPrompt"><g:message code="variantSearch.proteinEffectRestrictions.proteinTruncating" default="protein-truncating" /></span></div>
                     <div class="col-md-2"><input type="radio" name="predictedEffects" value="protein-truncating"  id="protein_truncating_checkbox" onClick="chgRadioButton('protein-truncating')"/></div>
                 </div>
                 <div class="row clearfix">
-                    <div class="col-md-10"><span class="text-left">missense</span></div>
+                    <div class="col-md-10"><span class="text-left searchBuilderPrompt"><g:message code="variantSearch.proteinEffectRestrictions.missense" default="missense" /></span></div>
                     <div class="col-md-2"><input type="radio" name="predictedEffects" value="missense"  id="missense_checkbox" onClick="chgRadioButton('missense')"/></div>
                 </div>
 
@@ -57,11 +57,11 @@
 
 
                 <div class="row clearfix">
-                    <div class="col-md-10"><span class="text-left">no effect (synonymous coding)</span></div>
+                    <div class="col-md-10"><span class="text-left  searchBuilderPrompt"><g:message code="variantSearch.proteinEffectRestrictions.synonymousCoding" default="no effect (synonymous coding)" /></span></div>
                     <div class="col-md-2"><input type="radio" name="predictedEffects" value="noEffectSynonymous"    id="synonymous_checkbox" onClick="chgRadioButton('noEffectSynonymous')"/></div>
                 </div>
                 <div class="row clearfix">
-                    <div class="col-md-10"><span class="text-left">no effect (non-coding)</span></div>
+                    <div class="col-md-10"><span class="text-left searchBuilderPrompt"><g:message code="variantSearch.proteinEffectRestrictions.noncoding" default="no effect (non-coding)" /></span></div>
                     <div class="col-md-2"><input type="radio" name="predictedEffects" value="noEffectNoncoding"   id="noncoding_checkbox" onClick="chgRadioButton('noEffectNoncoding')"/></div>
                 </div>
 

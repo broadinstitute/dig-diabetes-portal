@@ -3,71 +3,59 @@ div.subtlePanelHeading {
     font-size: 10px;
     color: green;
     font-style: italic;
-    font-decoration:none;
+    font-decoration: none;
 }
-span.dataSetChoice{
+
+span.dataSetChoice {
     padding: 0 0 0 10px;
 }
+
 .dataSetOptions {
     margin: 0px 20px 0 20px;
 }
-.addFilterButton{
+
+.addFilterButton {
     background-color: #eee;
 }
-.smallish input{
-height: 20px;
+
+.smallish input {
+    height: 20px;
 }
-select optgroup{
-    background:#444;
-    color:#fff;
-    font-style:normal;
-    font-weight:normal;
+.searchBuilderPrompt {
+   font-size: 14pt;
+    font-weight: bold;
+}
+select optgroup {
+    background: #444;
+    color: #fff;
+    font-style: normal;
+    font-weight: normal;
 }
 </style>
 
 <script>
-    function chgRadioButton(buttonLabel){
-        if (buttonLabel ==='missense')  {
+    function chgRadioButton(buttonLabel) {
+        if (buttonLabel === 'missense') {
             $('#missense-options').show();
-        }  else {
+        } else {
             $('#missense-options').hide();
         }
-    };
+    }
+    ;
 </script>
 
-<g:render template="variantWFFeedback" />
+<g:render template="variantWFFeedback"/>
 
 <div class="panel panel-default">
 
     <div class="panel-body">
 
-<div class="row clearfix" style="margin:0 0 15px 0">
-        <div class="col-md-1" style="text-align: right"></div>
-        <div class="col-md-4" style="text-align: right">
-            <g:render template="variantRestrictToRegion2"></g:render>
-        </div>
-        <div class="col-md-2" style="text-align: right"></div>
-        %{--<div class="col-md-4" style="text-align: right">--}%
-            %{--<g:render template="variantRestrictToEthnicity2"></g:render>--}%
-        %{--</div>--}%
-        <div class="col-md-4" style="text-align: right">
-            <g:render template="variantEffectOnProteins2"></g:render>
-        </div>
-        <div class="col-md-1" style="text-align: right"></div>
 
-
-
-</div>
-
-
-
-
-
-    <div class="row clearfix">
+        <div class="row clearfix">
             %{--Here is the phenotype section--}%
             <div class="primarySectionSeparator">
                 <div class="col-sm-offset-1 col-md-3" style="text-align: right">
-                    trait or disease of interest:
+                    <span class="searchBuilderPrompt"><g:message code="searchBuilder.traitOrDisease.prompt" default="trait or disease of interest" /></span>
                 </div>
 
                 <div class="col-md-5">
@@ -94,7 +82,7 @@ select optgroup{
             %{--Here is the data set section--}%
             <div class="primarySectionSeparator" id="dataSetChooser" style="display:none">
                 <div class="col-sm-offset-1 col-md-3" style="text-align: right">
-                    data set:
+                    <span class="searchBuilderPrompt"><g:message code="searchBuilder.dataset.prompt" default="data set" /></span>
                 </div>
 
                 <div class="col-md-5">
@@ -120,45 +108,26 @@ select optgroup{
         </div>
 
 
+        <div id="filterHolder">
 
-    %{--<div class="row clearfix">--}%
-        %{--Here is the drop-down that we will use to choose additional filters--}%
-        %{--<div class="primarySectionSeparator" id="additionalFilterSelection" style="display:none">--}%
-            %{--<div class="col-sm-offset-1 col-md-3" style="text-align: right">--}%
-                %{--<button type="button" class="btn btn-default btn-md addFilterButton"  onclick="mpgSoftware.firstResponders.requestToAddFilters()">--}%
-                    %{--<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;add additional filters:--}%
-                %{--</button>--}%
-                %{--<button type="button" class="btn btn-default btn-lg"  onclick="console.log('wtf')">--}%
-                     %{--<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;add additional filters:--}%
-                %{--</button>--}%
-            %{--</div>--}%
+        </div>
 
-            %{--<div class="col-md-5">--}%
-                %{--<select name="additionalFilters" id="additionalFilters" size="3"--}%
-                        %{--class="form-control btn-group btn-input clearfix">--}%
-                %{--</select>--}%
+        <div class="row clearfix" style="margin:0 0 15px 0">
+            <div class="col-md-1" style="text-align: right"></div>
 
-            %{--</span>--}%
+            <div class="col-md-5" style="text-align: right">
+                <g:render template="variantRestrictToRegion2"></g:render>
+            </div>
 
-            %{--</div>--}%
+            <div class="col-md-5" style="text-align: right">
+                <g:render template="variantEffectOnProteins2"></g:render>
+            </div>
 
-            %{--<div class="col-md-1">--}%
-                %{--<g:helpText title="variantSearch.wfRequest.property.help.header" placement="right"--}%
-                            %{--body="variantSearch.wfRequest.property.help.text" qplacer="10px 0 0 0"/>--}%
-            %{--</div>--}%
+            <div class="col-md-1" style="text-align: right"></div>
 
-            %{--<div class="col-md-2">--}%
-
-            %{--</div>--}%
-
-        %{--</div>--}%
-    %{--</div>--}%
+        </div>
 
 
-
-    <div id="filterHolder">
-
-    </div>
 
 
 
