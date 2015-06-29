@@ -30,10 +30,11 @@
             Noel Burtt<br/>
             Ben Alexander<br/>
             Kaan Yuksel<br/>
-            Marcin von Grothuss<br/>
+            Marcin von Grotthuss<br/>
+            Marc Duby<br/>
+            Oliver Ruebenacker<br/>
             Tad Jordan<br/>
             Todd Green<br/>
-            Oliver Ruebenacker<br/>
         </p>
 
     </div>
