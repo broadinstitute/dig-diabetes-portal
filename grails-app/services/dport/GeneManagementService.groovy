@@ -4,6 +4,7 @@ import grails.transaction.Transactional
 
 @Transactional
 class GeneManagementService {
+    SqlService sqlService
 
     /***
      * Return a list of all the genes that satisfy our partial match criteria. Note that
@@ -60,6 +61,34 @@ class GeneManagementService {
         return returnList
     }
 
+    /**
+     * closure to call gene search closure and return string list
+     */
+    private Closure<List <String>> retrieveGeneStrings = { String searchString, int numberOfMatches ->
+        List<String> geneStringList = []
+        this.retrieveGene(searchString, numberOfMatches).each { Gene gene ->
+            geneStringList << gene.name2
+        }
+        return  geneStringList
+    }
+
+    /**
+     * closure to return var id string list using sql rlike mysql call
+     */
+    private Closure<List <String>> retrieveVariantVarIdStringList = { String searchString, int numberOfMatches ->
+        return this.sqlService.getStringListFromSnippetUsingRLikeQuery(searchString, numberOfMatches)
+    }
+
+    /**
+     * closure to return variant db snp id string list
+     */
+    private Closure<List <String>> retrieveVariantDbSnpStringList = { String searchString, int numberOfMatches ->
+        List<String> variantDnSnpStringList = []
+        this.retrieveVariantDbSnpUsingNamedQueries(searchString, numberOfMatches).each{ Variant variant ->
+            variantDnSnpStringList << variant.dbSnpId
+        }
+        return variantDnSnpStringList
+    }
 
 
     /***
@@ -100,6 +129,39 @@ class GeneManagementService {
     }
 
     /***
+     * Before we can deliver a list of partial matches we want first to uppercase the incoming
+     * parameter. For return values we need only the name -- we don't care about the rest of the
+     * record.  The actual choice of database records is performed by the supplied closure
+     *
+     * @param firstCharacters
+     * @param maximumMatches
+     * @param retrieveGene
+     * @return
+     */
+    private List <String> deliverPartialMatchesUsingStringLists(String firstCharacters,
+                                                int maximumMatches,
+                                                Closure retrieveGeneStringList,
+                                                Closure retrieveVariantDbSnpStringList,
+                                                Closure retrieveVariantVarIdStringList) {
+        List <String> returnValue = []
+        if ((firstCharacters  !=  null) &&
+                (firstCharacters.length() > 0))   {
+            String upperCasedCharacters = firstCharacters.toUpperCase()
+
+            // add gene strings
+            returnValue.addAll(retrieveGeneStringList(upperCasedCharacters, maximumMatches/3 as int))
+
+            // add variant dbsnp id strings
+            returnValue.addAll(retrieveVariantDbSnpStringList(upperCasedCharacters, maximumMatches/3 as int))
+
+            // add variant var id strings
+            returnValue.addAll(retrieveVariantVarIdStringList(upperCasedCharacters, maximumMatches/3 as int))
+        }
+
+        return returnValue
+    }
+
+    /***
      * Take the list of results (which happened me gene names) we get from deliverPartialMatches
      * and wrap it up in Json. We pass in the closure which will ultimately do the lookup of the values
      * we need
@@ -116,9 +178,43 @@ class GeneManagementService {
                                                Closure retrieveVariantVarId) {
         StringBuilder sb = new StringBuilder("[")
         List <String> partialMatchList = deliverPartialMatches(firstCharacters,maximumMatches,retrieveGene,retrieveVariantDbSnp,retrieveVariantVarId)
+
         int numberOfMatches = partialMatchList.size()
         for ( int i=0 ; i<numberOfMatches ; i++ ) {
              sb << "\"${partialMatchList[i]}\""
+            if ((i+1)<numberOfMatches){
+                sb << ",\n"
+            } else {
+                sb << "\n"
+            }
+        }
+        sb << "]"
+        return sb.toString()
+    }
+
+    /**
+     * TODO - fix so don't repeat logic; this doesn't follow DRY
+     * TODO - need to add method to Bootstrap to add 'rlike' function to h2db for tests (will do this after vacation)
+     *
+     * @param firstCharacters
+     * @param maximumMatches
+     * @param retrieveGene
+     * @param retrieveVariantDbSnp
+     * @param retrieveVariantVarId
+     * @return
+     */
+    private String deliverPartialMatchesInJsonUsingStringLists( String firstCharacters,
+                                                int maximumMatches,
+                                                Closure retrieveGene,
+                                                Closure retrieveVariantDbSnp,
+                                                Closure retrieveVariantVarId) {
+        StringBuilder sb = new StringBuilder("[")
+        // KDUXTD-83: try to speed up type ahead of gene search
+        List <String> partialMatchList = deliverPartialMatchesUsingStringLists(firstCharacters,maximumMatches,retrieveGene,retrieveVariantDbSnp,retrieveVariantVarId)
+
+        int numberOfMatches = partialMatchList.size()
+        for ( int i=0 ; i<numberOfMatches ; i++ ) {
+            sb << "\"${partialMatchList[i]}\""
             if ((i+1)<numberOfMatches){
                 sb << ",\n"
             } else {
@@ -147,4 +243,21 @@ class GeneManagementService {
 
     }
 
+    /**
+     * same method as above but using String lists and one sql service call to use MySQL specific call
+     *
+     * @param firstCharacters
+     * @param maximumMatches
+     * @return
+     */
+    public String partialGeneMatchesUsingStringLists( String firstCharacters,
+                                      int maximumMatches) {
+        // KDUXTD-83: try to speed up type ahead for search input
+        return   this.deliverPartialMatchesInJsonUsingStringLists(  firstCharacters,
+                maximumMatches,
+                retrieveGeneStrings,
+                retrieveVariantDbSnpStringList,
+                retrieveVariantVarIdStringList )
+
+    }
 }

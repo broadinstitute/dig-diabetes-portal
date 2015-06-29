@@ -2,7 +2,8 @@ package dport
 
 import grails.transaction.Transactional
 
-import groovy.sql.Sql;
+import groovy.sql.Sql
+import org.codehaus.groovy.grails.web.json.JSONArray;
 
 @Transactional
 class SqlService {
@@ -13,6 +14,12 @@ class SqlService {
 
     }
 
+    // sql selection strings
+    public static final String SEARCH_VARIANT_VAR_ID_SQL_STRING =
+    """
+    select var_id as returnStr from variant where (var_id rlike ':snippet') limit :limit
+    """
+
     /**
      * insert a set of variants give a collection
      *
@@ -20,10 +27,9 @@ class SqlService {
      * @param numberOfVariants
      * @return
      */
-    Integer insertArrayOfVariants(def variants, Integer numberOfVariants) {
+    Integer insertArrayOfVariants(JSONArray variants, Integer numberOfVariants) {
         // create local variables
         Sql sql = new Sql( sessionFactory.currentSession.connection() )
-        Integer returnPosition = 0;
         String varId, dbSnpId, chromosome, varIdFirstCharacters, dbSnpIdFirstCharacters
         Long position
         Long minPosition = -1, maxPosition = -1
@@ -38,7 +44,7 @@ class SqlService {
 
         // find max and min positions to delete first
         // hack for now
-        for ( int  i = 0 ; i < numberOfVariants ; i++ ) {
+        for ( int  i = 0 ; i < variants?.size() ; i++ ) {
             def variant = variants[i];
             position = variant["POS"].findAll { it }[0]
             chromosome = variant["CHROM"].findAll { it }[0]
@@ -55,14 +61,13 @@ class SqlService {
         sql.execute(deleteSqlString, [chromosome, maxPosition, minPosition])
 
         // loop and insert variants
-        for ( int  i = 0 ; i < numberOfVariants ; i++ ) {
+        for ( int  i = 0 ; i < variants?.size() ; i++ ) {
             def variant = variants[i];
 
             varId = variant["VAR_ID"].findAll { it }[0]
             dbSnpId = (variant["DBSNP_ID"].findAll { it }[0] ? variant["DBSNP_ID"].findAll { it }[0] : "")
             position = (variant["POS"].findAll { it }[0] ? variant["POS"].findAll { it }[0] : "")
             chromosome = variant["CHROM"].findAll { it }[0]
-            returnPosition = position
             varIdFirstCharacters = (varId?.length() > 7 ? varId[0..6] : varId)
             dbSnpIdFirstCharacters = (dbSnpId?.length() > 7 ? dbSnpId[0..6] : dbSnpId)
 
@@ -85,10 +90,10 @@ class SqlService {
         }
 
         // log
-        log.info("added array of variants for chromosome: " + chromosome + " of size: " + numberOfVariants + " with return position: " + returnPosition)
+        log.info("added array of variants for chromosome: " + chromosome + " of size: " + numberOfVariants + " with max position: " + maxPosition)
 
         // return
-        return returnPosition
+        return maxPosition
     }
 
     /**
@@ -154,6 +159,31 @@ class SqlService {
         return returnPosition
     }
 
+
+    /**
+     * search variant table for string in either name or snp id
+     *
+     * @param snippet                       string to search for
+     * @param limitNumber                   number of elements to return
+     * @return                              a list of string
+     */
+    List<String> getVariantListFromSnippetUsingRLike(String snippet, Integer limitNumber) {
+        Sql sql = new Sql( sessionFactory.currentSession.connection() )
+        List<String> stringList = new ArrayList<String>();
+
+        String sqlString = """
+        select var_id as returnStr from variant where (var_id rlike '^:snippet')
+        union
+        select db_snp_id as returnStr from variant where (db_snp_id rlike '^:snippet')
+        limit :limit
+        """
+
+        stringList = this.getStringListFromSnippetUsingSqlString(sqlString, snippet, limitNumber);
+
+        log.info("found: " + stringList.size() + " variants for rlike search of term: '" + snippet + "'")
+        return stringList
+    }
+
     /**
      * search variant table for string in either name or snp id
      *
@@ -189,4 +219,48 @@ class SqlService {
         return stringList
     }
 
+    /**
+     * generic method to run sql string query and return list of strings
+     *
+     * @param sqlString
+     * @param snippet
+     * @param limitNumber
+     * @return
+     */
+    List<String> getStringListFromSnippetUsingSqlString(String sqlString, String snippet, Integer limitNumber) {
+        Sql sql = new Sql( sessionFactory.currentSession.connection() )
+        List<String> stringList = new ArrayList<String>();
+
+        def params = [snippet: "${snippet}", limit: "${limitNumber}"]
+        log.info("params are: " + params)
+
+        // execute sql and build list
+        sql.eachRow("select var_id as returnStr from variant where (var_id rlike '?1.snippet') limit ?2.limit", params) { row ->
+            stringList << row.returnStr
+        }
+
+        log.info("found: " + stringList.size() + " for snippet: " + snippet + " and limit: " + limitNumber + " and SQL: " + sqlString)
+
+        return stringList
+    }
+
+    List<String> getStringListFromSnippetUsingRLikeQuery(String snippet, Integer limitNumber) {
+        Sql sql = new Sql( sessionFactory.currentSession.connection() )
+        List<String> stringList = new ArrayList<String>();
+
+         String sqlString =
+        """
+        select var_id as returnStr from variant where var_id rlike '^${snippet}' limit ${limitNumber}
+        """
+        // execute sql and build list
+        sql.eachRow(sqlString) { row ->
+            stringList << row.returnStr
+        }
+
+        log.info("found: " + stringList.size() + " for snippet: " + snippet + " and limit: " + limitNumber + " and SQL: " + sqlString)
+
+        return stringList
+    }
+
 }
+
