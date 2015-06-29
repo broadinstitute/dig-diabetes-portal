@@ -105,7 +105,7 @@ var rememberProperty = function(phenotype,dataSet,propertyList, addIt){
              var codedValue = 'propId^'+phenotype +'^'+dataSet +'^'+ propertyList[i];
              if (addIt){// add the field of it doesn't exist already
                  if (!mapOfExistingProperties[codedValue]) {
-                     hiddenFields.append('<input type="text" class="form-control" name="savedValue'+(totalFilterCount +1)+'" id="savedValue'+(totalFilterCount +1)+'" value="'+codedValue+'" style="height:0px">');
+                     hiddenFields.append('<input type="hidden" class="form-control" name="savedValue'+(totalFilterCount +1)+'" id="savedValue'+(totalFilterCount +1)+'" value="'+codedValue+'" style="height:0px">');
                  }
                  $('#totalFilterCount').val(totalFilterCount +1);
              } else { // remove it
@@ -398,7 +398,7 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
         <input type="hidden"  name="encodedParameters" value="<%=encodedParameters%>">
         <input type="hidden"  name="filters" value="<%=filter%>">
     <div id="hiddenFields">
-        <input type="text" class="form-control" name="totalFilterCount" id="totalFilterCount" value="0" style="height:0px">
+        <input type="hidden" class="form-control" name="totalFilterCount" id="totalFilterCount" value="0" style="height:0px">
     </div>
     <input id='relauncher' type="submit" class="propBox btn btn-xs btn-primary center-block" value="1" style="height:0px">
     </form>
