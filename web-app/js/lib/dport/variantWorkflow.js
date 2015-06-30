@@ -373,8 +373,20 @@ var mpgSoftware = mpgSoftware || {};
                 var options = $("#dataSet");
                 options.empty();
                 var dataSetList = dataSetJson ["dataset"];
+                var rememberLastValue;
                 for ( var i = 0 ; i < numberOfRecords ; i++ ){
-                    options.append($("<option />").val(dataSetList[i]).text(mpgSoftware.trans.translator(dataSetList[i])));
+                    var preceedingUnderscores = 0;
+                    for (var j=0; j<dataSetList[i].length;j++ ){
+                        if (dataSetList[i][j]!='_') break;
+                        preceedingUnderscores++;
+                    }
+                    var replaceUnderscores = dataSetList[i].substr(0,preceedingUnderscores);
+                    rememberLastValue = dataSetList[i].substr(preceedingUnderscores);
+                    options.append($("<option />").val(dataSetList[i].substr(preceedingUnderscores)).text(replaceUnderscores+mpgSoftware.trans.translator(dataSetList[i].substr(preceedingUnderscores))));
+                }
+                if (numberOfRecords===1){
+                    $("#dataSet").val(rememberLastValue);
+                    $("#dataSet").click();
                 }
             }
         };

@@ -85,7 +85,7 @@
         t.checked=false;
     } ;
     var closer = function(that){
-        $(that).parent().parent().hide();
+        $(that).parent().parent().children().first().hide();
         skipBubbleUp = true;
     } ;
 var rememberProperty = function(phenotype,dataSet,propertyList, addIt){
@@ -145,15 +145,12 @@ var rememberProperty = function(phenotype,dataSet,propertyList, addIt){
                     "<input type=\"hidden\"  name=\"filters\" value=\"<%=filter%>\">"+
                     expandedProperties+
                     "</div>"+
-//                    "<input type=\"submit\" class=\"propBox btn btn-xs btn-primary center-block\" value=\"Display properties\">"+
                     "<button onclick=\"$('#relauncher').click()\" class=\"propBox btn btn-xs btn-primary center-block\">Launch refined search</button>"+
-                 //   "</form>"+
                     "</div>");
             $('#'+propDivName).change(function(event) {
                 event.stopPropagation();
                 event.stopImmediatePropagation() ;
                 event.preventDefault()  ;
-                console.log("div click 1");
             });
 
             $("input[type=checkbox]").change(function(event) {

@@ -349,6 +349,7 @@ class SharedToolsService {
             List<String> captured = []
             LinkedHashMap<String, List <LinkedHashMap>>  gwasSpecificPhenotype = [:]
             LinkedHashMap<String, List<String>> annotatedPhenotypes = [:]
+            LinkedHashMap<PhenoKey, List<PhenoKey>> temporaryAnnotatedPhenotypes = [:]
             LinkedHashMap<String, List<String>> annotatedSampleGroups = [:]
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> phenotypeSpecificSampleGroupProperties = [:]
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> experimentSpecificSampleGroupProperties = [:]
@@ -360,6 +361,7 @@ class SharedToolsService {
                     String dataSetVersion = experiment.version
                     if ((experiment.sample_groups) && (dataSetVersionThatWeWant == dataSetVersion)) {
                         getDataSetsPerPhenotype(experiment.sample_groups, annotatedPhenotypes)
+                        getDataSetsPerAnnotatedPhenotype(experiment.sample_groups, temporaryAnnotatedPhenotypes,1)
                         getPropertiesPerSampleGroupId(experiment.sample_groups, annotatedSampleGroups)
                         getPhenotypeSpecificPropertiesPerSampleGroupId(experiment.sample_groups, phenotypeSpecificSampleGroupProperties)
                         if (experiment.technology == "GWAS"){
@@ -382,6 +384,7 @@ class SharedToolsService {
             sharedProcessedMetadata['rootSampleGroups'] = captured
             sharedProcessedMetadata['gwasSpecificPhenotypes'] = gwasSpecificPhenotype
             sharedProcessedMetadata['sampleGroupsPerPhenotype'] = annotatedPhenotypes
+            sharedProcessedMetadata['sampleGroupsPerAnnotatedPhenotype'] =  temporaryAnnotatedPhenotypes
             sharedProcessedMetadata['propertiesPerSampleGroups'] = annotatedSampleGroups
             sharedProcessedMetadata['phenotypeSpecificPropertiesPerSampleGroup'] = phenotypeSpecificSampleGroupProperties
             sharedProcessedMetadata['sampleGroupSpecificProperties'] = experimentSpecificSampleGroupProperties
@@ -436,6 +439,52 @@ class SharedToolsService {
         }
         return annotatedPhenotypes
     }
+
+
+
+// make key LinkedHashMap, with (name:string,sort_order:int,depth:int)
+    public LinkedHashMap<PhenoKey, List <PhenoKey>> getDataSetsPerAnnotatedPhenotype (def sampleGroups,LinkedHashMap<PhenoKey, List <PhenoKey>> annotatedPhenotypes, int currentDepth){
+        for (def sampleGroup in sampleGroups){
+            String sampleGroupsId = sampleGroup.id
+            int sampleGroupsSortOrder = sampleGroup.sort_order
+            if (sampleGroup.phenotypes){
+                for (def phenotype in sampleGroup.phenotypes){
+                    String phenotypeName = phenotype.name
+                    int sortOrder = phenotype.sort_order
+                    int depth = currentDepth
+                    PhenoKey phenoKey = new PhenoKey(phenotypeName,sortOrder, depth)
+
+                    List <PhenoKey> listOfSampleGroups
+                    if (annotatedPhenotypes.containsKey((phenoKey))){
+                        listOfSampleGroups = annotatedPhenotypes[(phenoKey)]
+                    } else {
+                        listOfSampleGroups = new ArrayList<PhenoKey>()
+                        annotatedPhenotypes[(phenoKey)]  =  listOfSampleGroups
+                    }
+
+                    PhenoKey sampleGroupHolder = new PhenoKey(sampleGroupsId,sampleGroupsSortOrder, depth )
+                    // we have the list for this phenotype.  Add some more sample groups for it
+                    if (listOfSampleGroups.contains(sampleGroupHolder)){
+                        // this should never happen, right? We have a second listing for this ID in this phenotype
+                        // println "very strange : phenotype ${phenotypeName} already contained sample ID= ${sampleGroupsId}"
+                    } else {
+                        listOfSampleGroups <<  sampleGroupHolder
+                    }
+
+                    if (sampleGroup.sample_groups){
+                        getDataSetsPerAnnotatedPhenotype (sampleGroup.sample_groups, annotatedPhenotypes,currentDepth+1)
+                    }
+
+                }
+
+            }
+        }
+        return annotatedPhenotypes
+    }
+
+
+
+
 
 
     /***
@@ -839,14 +888,17 @@ class SharedToolsService {
      * @param annotatedList
      * @return
      */
-    public List <String> extractASingleList (String phenotype, LinkedHashMap<String, List <String>> annotatedList){
-        List <String> listOfProperties = []
+    public List <PhenoKey> extractASingleList (String phenotype, LinkedHashMap<PhenoKey, List <String>> annotatedList){
+        LinkedHashMap<PhenoKey, List <String>> sortedAnnotatedList = annotatedList.sort{ it.key.sort_order }
+        List <PhenoKey> listOfProperties = []
         if (annotatedList){
-            if (annotatedList.containsKey(phenotype)){
-                List <String> listForThisPhenotype =  annotatedList [phenotype]
+            PhenoKey phenoKey = new PhenoKey(phenotype,0,0)
+            if (annotatedList.containsKey(phenoKey)){
+                List <PhenoKey> listForThisPhenotype =  annotatedList [(phenoKey)]
                 if (listForThisPhenotype) {
-                    for ( int  i = 0 ; i < listForThisPhenotype.size() ; i++ ){
-                        listOfProperties << listForThisPhenotype[i]
+                    List <PhenoKey> sortedListForThisPhenotype = listForThisPhenotype.sort{ it.sort_order }
+                    for ( int  i = 0 ; i < sortedListForThisPhenotype.size() ; i++ ){
+                        listOfProperties << sortedListForThisPhenotype[i]
                     }
                 }
             }
@@ -896,6 +948,43 @@ class SharedToolsService {
 
         return listOfProperties
     }
+
+
+
+
+    //  Create a list, but shift over the elements to reflect depth
+    public String packageUpAStaggeredListAsJson ( List <PhenoKey> listOfDataSets  ){
+        // now that we have a list, build it into a string suitable for JSON
+        int numrec = 0
+        StringBuilder sb = new StringBuilder ()
+        if ((listOfDataSets) && (listOfDataSets?.size() > 0)){
+            numrec = listOfDataSets.size()
+            for ( int  i = 0 ; i < numrec ; i++ ){
+
+                StringBuffer scooterBuffer = new StringBuffer();
+                for (int j = 0; j < listOfDataSets[i].depth; j++){
+                    scooterBuffer.append("_");
+                }
+
+                sb << "\"${scooterBuffer.toString()+listOfDataSets[i].toString()}\"".toString()
+                if (i < listOfDataSets.size() - 1) {
+                    sb << ","
+                }
+            }
+        }
+
+        return  """
+{"is_error": false,
+"numRecords":${numrec},
+"dataset":[${sb.toString()}]
+}""".toString()
+    }
+
+
+
+
+
+
 
 
 
@@ -2035,5 +2124,39 @@ public List <LinkedHashMap> convertFormOfFilters(String rawFilters){
 
 
 
+
+}
+
+
+
+class PhenoKey {
+    String name
+    int sort_order
+    int depth
+
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (!(o instanceof PhenoKey)) return false
+
+        PhenoKey phenoKey = (PhenoKey) o
+
+        if (name != phenoKey.name) return false
+
+        return true
+    }
+
+    int hashCode() {
+        return name.hashCode()
+    }
+
+    PhenoKey(String name,int sort_order,int depth) {
+        this.name=name
+        this.sort_order=sort_order
+        this.depth=depth
+    }
+
+    String toString(){
+        return name.toString()
+    }
 
 }
