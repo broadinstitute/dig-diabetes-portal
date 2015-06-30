@@ -170,10 +170,6 @@
                     <div class="col-xs-1 col-md-1 col-lg-1 unpaddedSection" style="margin-top: 20px; padding: 0">
                         <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}"
                                class="btn btn-primary btn-lg"><g:message code="mainpage.button.imperative"/></a>
-                        <g:else>
-                            <a href="${createLink(controller: 'variantSearch', action: 'variantSearch')}"
-                               class="btn btn-primary btn-lg"><g:message code="mainpage.button.imperative"/></a>
-                        </g:else>
 
                     </div>
 
