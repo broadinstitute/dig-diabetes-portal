@@ -24,17 +24,16 @@
                     var variantProteinInfo = {};
                     variantProteinInfo._13k_T2D_TRANSCRIPT_ANNOT = remappedFields["TRANSCRIPT_ANNOT"];
                     variantProteinInfo.MOST_DEL_SCORE = remappedFields["MOST_DEL_SCORE"];
-//                    variantProteinInfo._13k_T2D_TRANSCRIPT_ANNOT = variant.variants[0][1]["TRANSCRIPT_ANNOT"];
-//                    variantProteinInfo.MOST_DEL_SCORE = variant.variants[0][0]["MOST_DEL_SCORE"];
-
                     var varId = remappedFields["VAR_ID"];
                     var dbsnp_id = remappedFields["DBSNP_ID"];
                     var describeThisSnp = varId;
                     if ((dbsnp_id) && (dbsnp_id !== '') && (dbsnp_id !==  null )){
                         describeThisSnp = dbsnp_id ;
                     }
-                    var describeImpactOfVariantOnProtein = mpgSoftware.variantInfo.retrieveDescribeImpactOfVariantOnProtein();
-                    describeImpactOfVariantOnProtein(variantProteinInfo, describeThisSnp, impactOnProtein);
+                    if (variantProteinInfo._13k_T2D_TRANSCRIPT_ANNOT !== null){
+                        var describeImpactOfVariantOnProtein = mpgSoftware.variantInfo.retrieveDescribeImpactOfVariantOnProtein();
+                        describeImpactOfVariantOnProtein(variantProteinInfo, describeThisSnp, impactOnProtein);
+                    }
                 },
                 error: function (jqXHR, exception) {
                     loading.hide();
