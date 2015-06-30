@@ -4,8 +4,7 @@
     </h4>
 
     <div class="embed-responsive embed-responsive-4by3">
-        <!-- todo switch based on language -->
-        <img src="${resource(dir: 'images', file: 'sigma-video-screenshot.png')}" alt="video for site" class="dk-sigma-data-video"/>
+        <iframe src="//player.vimeo.com/video/119352074" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
     </div>
 
     <h4 class="sigma-data-detail-section-header">

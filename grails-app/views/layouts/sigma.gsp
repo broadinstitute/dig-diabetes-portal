@@ -13,9 +13,6 @@
 <r:layoutResources/>
 <body>
 <div class="container-fluid" style="padding:0;">
-    <div>
-        <g:render template="sigma-notices"/>
-    </div>
     <div><g:render template="sigma-header"/></div>
     <g:layoutBody/>
 </div>
