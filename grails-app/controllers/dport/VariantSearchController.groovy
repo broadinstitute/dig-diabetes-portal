@@ -313,18 +313,9 @@ class VariantSearchController {
         String filters = URLDecoder.decode(filtersRaw, "UTF-8")
         log.debug "variantSearch variantSearchAjax = ${filters}"
         JSONObject jsonObject
-        if (sharedToolsService.getNewApi()){
-            jsonObject = restServerService.generalizedVariantTable(filters)
-            render(status: 200, contentType: "application/json") {
-                [variants: jsonObject['results']]
-            }
-        }else {
-
-            jsonObject = restServerService.searchGenomicRegionByCustomFilters(filters)
-            render(status: 200, contentType: "application/json") {
-                [variants: jsonObject['variants']]
-            }
-
+        jsonObject = restServerService.generalizedVariantTable(filters)
+        render(status: 200, contentType: "application/json") {
+            [variants: jsonObject['results']]
         }
     }
 
@@ -402,8 +393,7 @@ class VariantSearchController {
                             filterDescriptions  : parsedFilterParameters.filterDescriptions,
                             proteinEffectsList  : encodedProteinEffects,
                             encodedParameters   : encodedParameters,
-                            dataSetDetermination: dataSetDetermination,
-                            newApi              : sharedToolsService.getNewApi()])
+                            dataSetDetermination: dataSetDetermination])
         }
     }
 
@@ -466,7 +456,6 @@ class VariantSearchController {
                             encodedParameters   : encodedParameters,
                             dataSetDetermination: dataSetDetermination,
                             additionalProperties: requestForAdditionalProperties,
-                            newApi              : sharedToolsService.getNewApi(),
                             regionSearch        : (parsedFilterParameters.positioningInformation.size() > 2),
                             regionSpecification : regionSpecifier,
                             geneNamesToDisplay  : identifiedGenes

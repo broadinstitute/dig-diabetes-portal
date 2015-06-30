@@ -244,12 +244,6 @@ class SharedToolsService {
     }
 
 
-
-    public Boolean getNewApi() { // TODO wipe out
-        return true
-    }
-
-
     public String  applicationName () {
         String returnValue = ""
         if (getApplicationIsT2dgenes())   {

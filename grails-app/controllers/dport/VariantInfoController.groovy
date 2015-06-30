@@ -41,27 +41,10 @@ class VariantInfoController {
                             show_gwas      : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                             show_exchp     : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                             show_exseq     : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                            show_sigma     : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
-                            newApi: sharedToolsService.getNewApi()])
+                            show_sigma     : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma)])
 
         }
     }
-
-    /***
-     * provide  a nice collection of information about a single variant. This is the Ajax call associated with variantInfo
-     * @return
-     */
-    def variantAjax() {
-        String variantToStartWith = params.id
-        if (variantToStartWith)      {
-            JSONObject jsonObject =  restServerService.retrieveVariantInfoByName (variantToStartWith.trim())
-            render(status:200, contentType:"application/json") {
-                [variant:jsonObject]
-            }
-
-        }
-    }
-
 
 
     def proteinEffect (){
@@ -71,9 +54,6 @@ class VariantInfoController {
             [variantInfo:jsonObject]
         }
     }
-
-
-
 
     def variantDiseaseRisk (){
         String variantId = params.variantId

@@ -34,54 +34,6 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
     }
 
 
-
-
-
-
-
-    void "test retrieveTraitAsSpecifiedByGenomicRegion"() {
-        when:
-        JSONObject jsonObject = restServerService.searchForTraitBySpecifiedRegion("9","21940000","22190000")
-        then:
-        jsonObject["is_error"] == false
-        jsonObject["variants"].size() > 0
-    }
-
-
-    void "test retrieveTreatByUnparsedGenomicRegion"() {
-        when:
-        JSONObject jsonObject = restServerService.searchTraitByUnparsedRegion("chr9:21,940,000-22,190,000")
-        then:
-        jsonObject["is_error"] == false
-        jsonObject["variants"].size() > 0
-    }
-
-
-
-
-
-    void "test searchTraitByName"() {
-        when:
-        JSONObject jsonObject = restServerService.searchTraitByName("BMI",0.000005)
-        then:
-        assert jsonObject
-        jsonObject["is_error"] == false
-        jsonObject["variants"].size() > 0
-    }
-
-
-    void "test retrieveTraitInfoByVariant"() {
-        when:
-        JSONObject jsonObject = restServerService.retrieveTraitInfoByVariant("rs4457676")
-        then:
-        assert jsonObject
-        jsonObject["is_error"] == false
-        jsonObject["trait-info"].size() > 0
-    }
-
-
-
-
     void "test connection to diabetes server"() {
         given:
         String testJson = """{
@@ -108,14 +60,6 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
         then:
         assert jsonObject
     }
-
-    void "test retrieveVariantInfoByName"() {
-        when:
-        JSONObject jsonObject = restServerService.retrieveVariantInfoByName("rs13266634")
-        then:
-        assert jsonObject
-    }
-
 
 
     void "test retrieveGenomicRegionBySpecifiedRegion"() {
