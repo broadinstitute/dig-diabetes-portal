@@ -1049,19 +1049,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     JSONObject searchGenomicRegionBySpecifiedRegion (String chromosome,
                                                      String beginSearch,
                                                      String endSearch) {
-        JSONObject returnValue = null
-        if (sharedToolsService.getNewApi()){
-            returnValue = generateVariantTable( chromosome,beginSearch,endSearch)
-        } else {
-            String drivingJson = """{
-"user_group": "ui",
-"filters": ${generateRangeFilters (chromosome,beginSearch,endSearch,true)},
-"columns": [\"GWS_TRAITS\"]
-}
-""".toString()
-            returnValue = postRestCall( drivingJson, VARIANT_SEARCH_URL)
-        }
-        return returnValue
+        return generateVariantTable( chromosome,beginSearch,endSearch)
     }
 
 
