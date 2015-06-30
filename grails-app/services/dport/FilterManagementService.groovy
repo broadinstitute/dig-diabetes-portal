@@ -74,87 +74,6 @@ class FilterManagementService {
     ]
 
 
-
-
-
-
-    private String oldApi(String filterName,
-                  String parm1,
-                  BigDecimal parm2) {
-        String returnValue = ""
-        switch (filterName){
-            case "setPValueThreshold" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "${parm1}", "operator": "LTE", "value": ${parm2} }""".toString()
-                break;
-            case "setRegionGeneSpecification" :
-                returnValue = """{ "filter_type": "STRING", "operand": "IN_GENE", "operator": "EQ", "value": "${parm1}" }""".toString()
-                break;
-            case "setRegionChromosomeSpecification" :
-                returnValue = """{ "filter_type": "STRING", "operand": "CHROM", "operator": "EQ", "value": "${parm1}" }""".toString()
-                break;
-            case "setRegionPositionStart" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "POS", "operator": "GTE", "value": ${parm1} }""".toString()
-                break;
-            case "setRegionPositionEnd" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "POS", "operator": "LTE", "value": ${parm1} }""".toString()
-                break;
-            case "setEthnicityMaximum" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "_13k_T2D_${parm1}_MAF", "operator": "LTE", "value": ${parm2} }""".toString()
-                break;
-            case "setEthnicityMaximumAbsolute" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "_13k_T2D_${parm1}_MAF", "operator": "LT", "value": ${parm2} }""".toString()
-                break;
-            case "setEthnicityMinimum" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "_13k_T2D_${parm1}_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
-                break;
-            case "setEthnicityMinimumAbsolute" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "_13k_T2D_${parm1}_MAF", "operator": "GT", "value": ${parm2} }""".toString()
-                break;
-            case "setExomeChipMinimum" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
-                break;
-            case "setExomeChipMinimumAbsolute" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "GT", "value": ${parm2} }""".toString()
-                break;
-            case "setExomeChipMaximum" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "LTE", "value": ${parm2} }""".toString()
-                break;
-            case "setExomeChipMaximumAbsolute" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "LT", "value": ${parm2} }""".toString()
-                break;
-            case "setSigmaMinorAlleleFrequencyMinimum" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
-                break;
-            case "setSigmaMinorAlleleFrequencyMaximum" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_MAF", "operator": "LTE", "value": ${parm2} }""".toString()
-                break;
-            case "polyphenSelect" :
-                returnValue = """{ "filter_type": "STRING", "operand": "PolyPhen_PRED", "operator": "EQ", "value": "${parm1}" }""".toString()
-                break;
-            case "condelSelect"        :
-                returnValue = """{ "filter_type": "STRING", "operand": "Condel_PRED", "operator": "EQ", "value": "${parm1}" }""".toString()
-                break;
-            case  "siftSelect"        :
-                returnValue = """{ "filter_type": "STRING", "operand": "SIFT_PRED", "operator": "EQ", "value": "${parm1}" }""".toString()
-                break;
-            case "setOrValueLTE" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "${parm1}", "operator": "LTE", "value": ${parm2} }""".toString()
-                break;
-            case "setOrValueGTE" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "${parm1}", "operator": "GTE", "value": ${parm2} }""".toString()
-                break;
-            default: break;
-        }
-        return  returnValue
-
-    }
-
-
-
-
-
-
-
     private String filtersForApi(String filterName,
                   String parm1,
                   BigDecimal parm2,
@@ -288,25 +207,13 @@ class FilterManagementService {
                                               String parm1,
                                               BigDecimal parm2,
                                               String parm3 = "junk") {
-        if ( sharedToolsService.getNewApi()){
-            return filtersForApi( filterName,parm1,parm2,parm3)
-        }else {
-            return oldApi( filterName,parm1,parm2)
-        }
+        return filtersForApi( filterName,parm1,parm2,parm3)
     }
 
 
     String retrieveFilterString (String filterName,
                                  String parm3 = "junk") {
-        if ( sharedToolsService.getNewApi()){
-            return filtersForApi( filterName,"junk",0.0 as BigDecimal,parm3)
-        }else {
-            String returnValue = ""
-            if (standardFilterStrings.containsKey(filterName))     {
-                returnValue =  standardFilterStrings [filterName]
-            }
-            return  returnValue
-        }
+        return filtersForApi( filterName,"junk",0.0 as BigDecimal,parm3)
     }
 
     /***
@@ -757,26 +664,26 @@ class FilterManagementService {
 
             switch (dataSetDistinguisher)   {
                 case  0:
-                    datatypeOperand = (sharedToolsService.getNewApi()?gwasDataPValue :"GWAS_T2D_PVALUE")
+                    datatypeOperand = gwasDataPValue
                     filters <<  retrieveFilterString("dataSetGwas")
                     filterDescriptions << "Is observed in Diagram GWAS"
                     parameterEncoding << "1:3"
                     break;
 
                 case  1:
-                    datatypeOperand = (sharedToolsService.getNewApi()?sigmaDataPValue:"SIGMA_T2D_P")
+                    datatypeOperand = sigmaDataPValue
                     filters <<  retrieveFilterString("dataSetSigma") 
                     filterDescriptions << "Whether variant is included in SIGMA analysis is equal to 1"
                     parameterEncoding << "1:0"
                     break;
                 case  2:
-                    datatypeOperand = (sharedToolsService.getNewApi()?exomeSequencePValue  :"_13k_T2D_P_EMMAX_FE_IV")
+                    datatypeOperand = exomeSequencePValue
                     filters <<  retrieveFilterString("dataSetExseq")
                     filterDescriptions << "Is observed in exome sequencing"
                     parameterEncoding << "1:1"
                     break;
                 case  3:
-                    datatypeOperand = (sharedToolsService.getNewApi()?exomeChipPValue  :"EXCHP_T2D_P_value")
+                    datatypeOperand = exomeChipPValue
                     filters <<  retrieveFilterString("dataSetExchp") 
                     filterDescriptions << "Is observed in exome chip"
                     parameterEncoding << "1:2"
@@ -1016,19 +923,11 @@ class FilterManagementService {
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
         //ethnicities and minor allele frequencies
        List <List<String>> ethnicities = []
-        if (sharedToolsService.getNewApi()){
-            ethnicities << ['African-Americans','aa']
-            ethnicities << ['East Asians','ea']
-            ethnicities << ['South Asians','sa']
-            ethnicities << ['Europeans','eu']
-            ethnicities << ['Hispanics','hs']
-        }else {
-            ethnicities << ['African-Americans','AA']
-            ethnicities << ['East Asians','EA']
-            ethnicities << ['South Asians','SA']
-            ethnicities << ['Europeans','EU']
-            ethnicities << ['Hispanics','HS']
-        }
+        ethnicities << ['African-Americans','aa']
+        ethnicities << ['East Asians','ea']
+        ethnicities << ['South Asians','sa']
+        ethnicities << ['Europeans','eu']
+        ethnicities << ['Hispanics','hs']
        List <String> minMax = ['min', 'max']
         int fieldSpecifier = 8
        for (List<String> ethnicity in ethnicities) {

@@ -106,38 +106,6 @@ class SystemController {
                                           totalNumberOfVariants:Variant.totalNumberOfVariants()])
     }
 
-
-
-    def updateApiLevel() {
-        String apiSetting = params.datatype
-        Boolean currentApiSetting = sharedToolsService.getNewApi ()
-        if (apiSetting == 'newApi') {
-            if (!(currentApiSetting == 0)) {
-                sharedToolsService.setNewApi(1)
-                flash.message = "You have turned on the new API"
-            } else {
-                flash.message = "But the new API was already turned on!"
-            }
-        } else if (apiSetting == 'oldApi') {
-            if (!(currentApiSetting == 1)) {
-                sharedToolsService.setNewApi(0)
-                flash.message = "you have turned to the old API"
-            } else {
-                flash.message = "But you were already using the old API!"
-            }
-        }
-        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
-                                          currentRestServer:restServerService.currentRestServer(),
-                                          currentApplicationIsSigma:sharedToolsService.applicationName(),
-                                          helpTextLevel:sharedToolsService.getHelpTextSetting(),
-                                          newApi:sharedToolsService.getNewApi(),
-                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
-                                          dataVersion:sharedToolsService.getDataVersion (),
-                                          currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
-                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
-                                          totalNumberOfGenes:Gene.totalNumberOfGenes(),
-                                          totalNumberOfVariants:Variant.totalNumberOfVariants()])
-    }
     def refreshGeneCache()  {
         redirect(controller:'system',action:'refreshGenesForChromosome', params: [chromosome: "1"])
     }

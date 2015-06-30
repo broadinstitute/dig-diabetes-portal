@@ -34,7 +34,7 @@ class SharedToolsService {
     Integer showSigma = -1
     Integer showGene = -1
     Integer showBeacon = -1
-    Integer showNewApi = -1
+    Integer showNewApi = 1
     Integer dataVersion = 2
     String warningText = ""
     String dataSetPrefix = "mdv"
@@ -147,7 +147,7 @@ class SharedToolsService {
         showSigma = (grailsApplication.config.portal.sections.show_sigma)?1:0
         showGene = (grailsApplication.config.portal.sections.show_gene)?1:0
         showBeacon = (grailsApplication.config.portal.sections.show_beacon)?1:0
-        showNewApi = (grailsApplication.config.portal.sections.show_new_api)?1:1
+        showNewApi = 1
         retrieveMetadata()  // may as well get this early.  The value is stored in
     }
 
@@ -245,13 +245,8 @@ class SharedToolsService {
 
 
 
-    public Boolean getNewApi() {
-        return (showNewApi==1)
-    }
-
-
-    public void setNewApi(showNewApi) {
-        this.showNewApi=showNewApi
+    public Boolean getNewApi() { // TODO wipe out
+        return true
     }
 
 
