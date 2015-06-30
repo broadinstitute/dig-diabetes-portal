@@ -243,7 +243,7 @@ class VariantSearchController {
         JSONObject jsonObject = sharedToolsService.retrieveMetadata()
 
         LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
-        LinkedHashMap<String,List<String>> annotatedSampleGroups =  processedMetadata.propertiesPerSampleGroups
+        LinkedHashMap<PhenoKey,List<String>> annotatedSampleGroups =  processedMetadata.propertiesPerOrderedSampleGroups
         LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties = processedMetadata['phenotypeSpecificPropertiesPerSampleGroup']
         List <String> listOfProperties  = sharedToolsService.combineToCreateASingleList( params.phenotype, datasetChoice,
                                                                                              annotatedSampleGroups,
@@ -359,7 +359,7 @@ class VariantSearchController {
         String jsonFormOfCommonProperties = sharedToolsService.sortAndPackageAMapOfListsAsJson(sharedToolsService.getProcessedMetadata()?.commonProperties, true)
         JSONObject commonPropertiesJsonObject = slurper.parseText(jsonFormOfCommonProperties)
 
-        String jsonFormPropertiesPerSampleGroup = sharedToolsService.packageUpAHierarchicalListAsJson(sharedToolsService.getProcessedMetadata()?.propertiesPerSampleGroups)
+        String jsonFormPropertiesPerSampleGroup = sharedToolsService.packageUpSortedHierarchicalListAsJson(sharedToolsService.getProcessedMetadata()?.propertiesPerOrderedSampleGroups)
         JSONObject propertiesPerSampleGroupJsonObject = slurper.parseText(jsonFormPropertiesPerSampleGroup)
 
         render(status: 200, contentType: "application/json") {
