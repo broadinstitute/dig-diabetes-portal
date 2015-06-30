@@ -85,20 +85,5 @@ class TraitControllerIntegrationSpec extends IntegrationSpec {
 
     }
 
-    void "test traitVariantCrossAjax"() {
-        when:
-        controller.params.id='chr1:209348715-210349783'
-        controller.traitVariantCrossAjax()
-
-        then: 'verify that we get valid responses back'
-        assert controller.response.status==200
-        def controllerResponse = controller.response.contentAsString
-        def jsonResult = JSON.parse(controllerResponse)
-        assert jsonResult.size()>0
-
-    }
-
-
-
 
 }

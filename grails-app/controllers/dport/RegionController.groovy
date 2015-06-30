@@ -72,14 +72,5 @@ class RegionController {
                 ] )
     }
 
-    def regionAjax() {
-        String regionsSpecification = params.id
-        if (regionsSpecification)  {
-            JSONObject jsonObject =  restServerService.searchGenomicRegionAsSpecifiedByUsers (regionsSpecification)
-            render(status:200, contentType:"application/json") {
-                [variants:jsonObject['results']]
-            }
-        }
-     }
 
 }

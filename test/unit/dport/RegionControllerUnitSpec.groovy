@@ -18,18 +18,4 @@ class RegionControllerUnitSpec extends Specification {
     }
 
 
-
-    void "test regionAjax"() {
-        when:
-        params.id=""
-        controller.restServerService  = restServerService
-        controller.restServerService  = restServerService.metaClass.searchGenomicRegionAsSpecifiedByUsers{-> ""}
-        controller.regionAjax()
-
-        then:
-        response.status == 200
-    }
-
-
-
 }

@@ -30,13 +30,8 @@ class RestServerService {
     private String NEW_DEV_REST_SERVER = ""
     private String BASE_URL = ""
     private String GENE_INFO_URL = "gene-info"
-    private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out
-    private String DATA_SET_URL = "getDatasets" // TODO: Wipe out
-    private String VARIANT_INFO_URL = "variant-info" // TODO: Wipe out
-    private String TRAIT_INFO_URL = "trait-info" // TODO: Wipe out
-    private String VARIANT_SEARCH_URL = "variant-search" // TODO: Wipe out
-    private String TRAIT_SEARCH_URL = "trait-search" // TODO: Wipe out
-    private String METADATA_URL = "getMetadata" // TODO: Wipe out
+    private String GENE_SEARCH_URL = "gene-search"
+    private String METADATA_URL = "getMetadata"
     private String GET_DATA_URL = "getData"
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
@@ -766,18 +761,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return postRestCallBase(drivingJson, targetUrl, EXPERIMENTAL_URL)
     }
 
-    JSONObject retrieveVariantInfoByName_Experimental(String variantId) {
-        JSONObject returnValue = null
-        String drivingJson = """{
-"variant_id": ${variantId},
-"user_group": "ui",
-"columns": [${"\"" + getVariantInfoColumns().join("\",\"") + "\""}]
-}
-""".toString()
-        returnValue = postRestCallExperimental(drivingJson, VARIANT_INFO_URL)
-        return returnValue
-    }
-
 
     private JSONObject postRestCall(String drivingJson, String targetUrl) {
         return postRestCallBase(drivingJson, targetUrl, currentRestServer())
@@ -826,27 +809,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return returnValue
     }
 
-    /***
-     * retrieve everything from the data sets call. Take sample groups or experiments
-     * if provided, but if these parameters are empty then get every data set
-     *
-     * @param geneName
-     * @return
-     */
-    JSONObject retrieveDatasets(List<String> sampleGroupList,
-                                List<String> experimentList) {
-        JSONObject returnValue = null
-        String sampleGroup = (sampleGroupList.size() > 0) ? ("\"" + sampleGroupList.join("\",\"") + "\"") : "";
-        String experimentGroup = (experimentList.size() > 0) ? ("\"" + experimentList.join("\",\"") + "\"") : "";
-        String drivingJson = """{
-"sample_group": [${sampleGroup}],
-"experiment": [${experimentGroup}]
-
-}
-""".toString()
-        returnValue = postRestCall(drivingJson, DATA_SET_URL)
-        return returnValue
-    }
 
     // for now let's do a pseudo call
     JSONObject retrieveDatasetsFromMetadata(List<String> sampleGroupList,
@@ -855,10 +817,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         result = sharedToolsService.getMetadata()
         println 'meta-data retrieved'
     }
-
-
-
-
 
 
     JSONObject pseudoRetrieveDatasets (List <String> sampleGroupList,
@@ -943,27 +901,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         returnValue = postRestCall( drivingJson, GENE_INFO_URL)
         return returnValue
     }
-
-    /***
-     * retrieve information about a variant specified by name. Note that the backend routine
-     * can support variant name aliases
-     *
-     * @param variantId
-     * @return
-     */
-    JSONObject retrieveVariantInfoByName (String variantId) {
-        JSONObject returnValue = null
-        String drivingJson = """{
-"variant_id": "${variantId}",
-"user_group": "ui",
-"columns": [${"\""+getVariantColumns () .join("\",\"")+"\""}]
-}
-""".toString()
-        returnValue = postRestCall( drivingJson, VARIANT_INFO_URL)
-        return returnValue
-    }
-
-
 
 
     String generateDataRestrictionFilters (){
@@ -1054,90 +991,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     /***
-     *   search for a trait on the basis of a region specification
-     * @param chromosome
-     * @param beginSearch
-     * @param endSearch
-     * @return
-     */
-    JSONObject searchForTraitBySpecifiedRegion (String chromosome,
-                                                String beginSearch,
-                                                String endSearch) {
-        JSONObject returnValue = null
-        String drivingJson = """{
-"user_group": "ui",
-"filters": ${generateRangeFiltersPValueRestriction (chromosome,beginSearch,endSearch,false,0.05)}
-}
-""".toString()
-        returnValue = postRestCall( drivingJson, TRAIT_SEARCH_URL)
-        return returnValue
-    }
-
-    /***
-     * search for a treat specified by name
-     * @param traitName
-     * @param significance
-     * @return
-     */
-    JSONObject searchTraitByName (String traitName,
-                                  BigDecimal significance) {
-        JSONObject returnValue = null
-        StringBuilder sb = new  StringBuilder ()
-        sb << """{
-"user_group": "ui",
-"filters": [
-    {"operand": "PVALUE", "operator": "LTE", "value": ${significance.toString ()}, "filter_type": "FLOAT"}""".toString()
-        sb << """],
-"trait": "${traitName}"
-}
-""".toString()
-        returnValue = postRestCall( sb.toString(), TRAIT_SEARCH_URL)
-        return returnValue
-    }
-
-    /***
-     * retrieved trait information based on a variant name
-     * @param variantName
-     * @return
-     */
-    JSONObject retrieveTraitInfoByVariant (String variantName) {
-        JSONObject returnValue = null
-        String drivingJson = """{
-"user_group": "ui",
-"variant_id": "${variantName}"
-}
-""".toString()
-        returnValue = postRestCall( drivingJson, TRAIT_INFO_URL)
-        return returnValue
-    }
-
-
-    /***
-     * Employ a set of filters to perform a variant search. In practice  I'm using this
-     * when I compose the filter set on the client ( browser), and thereby allow user-specified
-     * filtering on the basis of form.
-     *
-     * @param customFilterSet
-     * @return
-     */
-    JSONObject searchGenomicRegionByCustomFilters (String customFilterSet) {
-        JSONObject returnValue = null
-        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
-        StringBuilder sb = new  StringBuilder ()
-        sb << """{
-"user_group": "ui",
-"filters": [
-${customFilterSet}""".toString()
-//        sb <<   generateDataRestrictionFilters ()
-        sb << """],
-"columns": [${"\""+getVariantSearchColumns ().join("\",\"")+"\""}]
-}
-""".toString()
-        returnValue = postRestCall( sb.toString(), VARIANT_SEARCH_URL)
-        return returnValue
-    }
-
-    /***
      * Take a string specifying a region in the form ->  "chr9:21,940,000-22,190,000"
      * Purse this string and then perform a variant search using these three parameters
      *
@@ -1156,25 +1009,6 @@ ${customFilterSet}""".toString()
         }
         return returnValue
     }
-
-    /***
-     * retrieve a trait starting with the  raw region specification string we get from users
-     * @param userSpecifiedString
-     * @return
-     */
-    public JSONObject searchTraitByUnparsedRegion(String userSpecifiedString) {
-        JSONObject returnValue = null
-        LinkedHashMap<String, Integer> ourNumbers = extractNumbersWeNeed(userSpecifiedString)
-        if (ourNumbers.containsKey("chromosomeNumber") &&
-                ourNumbers.containsKey("startExtent") &&
-                ourNumbers.containsKey("endExtent")) {
-            returnValue = searchForTraitBySpecifiedRegion(ourNumbers["chromosomeNumber"],
-                    ourNumbers["startExtent"],
-                    ourNumbers["endExtent"])
-        }
-        return returnValue
-    }
-
 
 
     private String requestGeneCountByPValue (String geneName, Integer significanceIndicator, Integer dataSet){
@@ -2794,7 +2628,7 @@ private String generateProteinEffectJson (String variantName){
 }
 }
 """.toString()
-        return postRestCall(jsonSpec,GENE_SEARCH_URL) // TODO: change to new API
+        return postRestCall(jsonSpec,GENE_SEARCH_URL)
     }
 
 
@@ -2818,52 +2652,6 @@ private String generateProteinEffectJson (String variantName){
 
         return returnValue
     }
-
-
-
-
-
-
-
-    private JSONObject gatherVariantsForChromosomeResults(String chromosomeName){
-        String jsonSpec =  """{
-    "filters":    [
-                    {"operand": "CHROM", "operator": "EQ", "value": "${chromosomeName}", "filter_type": "STRING"},
-                    {"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": 1},
-                    {"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": 3000000000 }                ],
-      "columns": ["ID","DBSNP_ID","CHROM","POS"],
-      "limit":1000000
-}
-}
-""".toString()
-        return postRestCall(jsonSpec,VARIANT_SEARCH_URL)
-    }
-
-
-
-
-    public int  refreshVariantsForChromosome(String chromosomeName) {//region
-        int  returnValue    = 1
-        Variant.deleteVariantsForChromosome(chromosomeName)
-        JSONObject apiResults = gatherVariantsForChromosomeResults( chromosomeName)
-        if (!apiResults.is_error)  {
-            int numberOfVariants = apiResults.numRecords
-            def variants =  apiResults.variants
-            for ( int  i = 0 ; i < numberOfVariants ; i++ )  {
-                String varId =   variants[i].ID
-                String dbSnpId =   variants[i].DBSNP_ID
-                Long position =   variants[i].POS
-                String  chromosome =   variants[i].CHROM
-                Variant.refresh(varId,dbSnpId,chromosome,position)
-            }
-        }
-
-        return returnValue
-    }
-
-
-
-
 
 
     private JSONObject gatherVariantsForChromosomeByChunkResults(String chromosomeName,int chunkSize,int startingPosition){

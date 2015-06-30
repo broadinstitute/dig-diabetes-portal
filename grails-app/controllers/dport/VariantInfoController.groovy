@@ -46,22 +46,6 @@ class VariantInfoController {
         }
     }
 
-    /***
-     * provide  a nice collection of information about a single variant. This is the Ajax call associated with variantInfo
-     * @return
-     */
-    def variantAjax() {
-        String variantToStartWith = params.id
-        if (variantToStartWith)      {
-            JSONObject jsonObject =  restServerService.retrieveVariantInfoByName (variantToStartWith.trim())
-            render(status:200, contentType:"application/json") {
-                [variant:jsonObject]
-            }
-
-        }
-    }
-
-
 
     def proteinEffect (){
         String variantId = params.variantId
@@ -70,9 +54,6 @@ class VariantInfoController {
             [variantInfo:jsonObject]
         }
     }
-
-
-
 
     def variantDiseaseRisk (){
         String variantId = params.variantId

@@ -144,24 +144,5 @@ class TraitController {
                         show_sigma         : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma)])
     }
 
-    /***
-     *
-     * @return
-     */
-    def traitVariantCrossAjax() {
-        String regionsSpecification = params.id
-
-        JSONObject jsonObject =  restServerService.searchTraitByUnparsedRegion (regionsSpecification)
-        if (jsonObject) {
-            render(status: 200, contentType: "application/json") {
-                [variants: jsonObject['variants']]
-            }
-        } else {
-            render(status:300, contentType:"application/json")
-        }
-
-     }
-
-
 
 }

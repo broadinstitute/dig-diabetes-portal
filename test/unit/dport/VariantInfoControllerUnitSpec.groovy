@@ -41,21 +41,4 @@ class VariantInfoControllerUnitSpec extends Specification {
 
     }
 
-
-    void "Test that index renders template for ajax calls"() {
-        given:
-        request.makeAjaxRequest()
-        JSONObject jsonObject = new  JSONObject("{'a':'mockData'}")
-        controller.params.id="1"
-        controller.restServerService = Mock(RestServerService)
-        controller.restServerService.metaClass.retrieveVariantInfoByName = {String x->return jsonObject}
-
-        when:
-        controller.variantAjax()
-
-        then:
-        response.status == 200
-        response.contentAsString.contains('variant')
-        response.contentAsString.contains('mockData')
-    }
 }
