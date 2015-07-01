@@ -79,6 +79,17 @@ class SharedToolsService {
     public String retrieveCurrentVariantChromosome ()  {
         return  currentVariantChromosome
     }
+
+
+    public Integer getRecognizedStringsOnly() {
+        return recognizedStringsOnly
+    }
+
+    public void setRecognizedStringsOnly(Integer recognizedStringsOnly) {
+        this.recognizedStringsOnly = recognizedStringsOnly
+    }
+
+
     private String determineNextChromosome (String currentChromosome) {
         String returnValue
         if (currentChromosome == 'X')  {
@@ -103,13 +114,7 @@ class SharedToolsService {
         currentVariantChromosome =   determineNextChromosome (retrieveCurrentVariantChromosome () )
     }
 
-    public Integer getRecognizedStringsOnly() {
-        return recognizedStringsOnly
-    }
 
-    public void setRecognizedStringsOnly(Integer recognizedStringsOnly) {
-        this.recognizedStringsOnly = recognizedStringsOnly
-    }
 
     public void setHelpTextSetting(int newHelpTextSetting){
         if ((newHelpTextSetting>-1) && (newHelpTextSetting < 3)) {
@@ -240,6 +245,9 @@ class SharedToolsService {
                 (!showSigma) )
     }
 
+    public Boolean getNewApi() { // TODO wipe out
+        return true
+    }
 
     public Boolean getMetadataOverrideStatus() {
         return (forceMetadataOverride==1)
@@ -248,12 +256,6 @@ class SharedToolsService {
 
     public void setMetadataOverrideStatus(int metadataOverride) {
         this.forceMetadataOverride=metadataOverride
-    }
-
-
-
-    public Boolean getNewApi() { // TODO wipe out
-        return true
     }
 
 
@@ -358,7 +360,9 @@ class SharedToolsService {
             LinkedHashMap<String, List<String>> annotatedPhenotypes = [:]
             LinkedHashMap<PhenoKey, List<PhenoKey>> temporaryAnnotatedPhenotypes = [:]
             LinkedHashMap<String, List<String>> annotatedSampleGroups = [:]
+            LinkedHashMap<PhenoKey, List<String>> annotatedOrderedSampleGroups = [:]
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> phenotypeSpecificSampleGroupProperties = [:]
+            LinkedHashMap<String, LinkedHashMap<PhenoKey, List<String>>> phenotypeSpecificAnnotatedSampleGroupProperties = [:]
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> experimentSpecificSampleGroupProperties = [:]
             LinkedHashMap<String, LinkedHashMap<String, String>> commonProperties = [:]
             String dataSetVersionThatWeWant = "${dataSetPrefix}${getDataVersion()}"
@@ -370,7 +374,9 @@ class SharedToolsService {
                         getDataSetsPerPhenotype(experiment.sample_groups, annotatedPhenotypes)
                         getDataSetsPerAnnotatedPhenotype(experiment.sample_groups, temporaryAnnotatedPhenotypes,1)
                         getPropertiesPerSampleGroupId(experiment.sample_groups, annotatedSampleGroups)
+                        getPropertiesPerAnnotatedSampleGroupId(experiment.sample_groups, annotatedOrderedSampleGroups)
                         getPhenotypeSpecificPropertiesPerSampleGroupId(experiment.sample_groups, phenotypeSpecificSampleGroupProperties)
+                        getPhenotypeSpecificAnnotatedPropertiesPerSampleGroupId(experiment.sample_groups, phenotypeSpecificAnnotatedSampleGroupProperties)
                         if (experiment.technology == "GWAS"){
                             getTechnologySpecificPhenotype(experiment.sample_groups,gwasSpecificPhenotype)
                             getTechnologySpecificExperiment(experiment.sample_groups,experimentSpecificSampleGroupProperties)
@@ -393,7 +399,9 @@ class SharedToolsService {
             sharedProcessedMetadata['sampleGroupsPerPhenotype'] = annotatedPhenotypes
             sharedProcessedMetadata['sampleGroupsPerAnnotatedPhenotype'] =  temporaryAnnotatedPhenotypes
             sharedProcessedMetadata['propertiesPerSampleGroups'] = annotatedSampleGroups
+            sharedProcessedMetadata['propertiesPerOrderedSampleGroups'] = annotatedOrderedSampleGroups
             sharedProcessedMetadata['phenotypeSpecificPropertiesPerSampleGroup'] = phenotypeSpecificSampleGroupProperties
+            sharedProcessedMetadata['phenotypeSpecificPropertiesAnnotatedPerSampleGroup'] = phenotypeSpecificAnnotatedSampleGroupProperties
             sharedProcessedMetadata['sampleGroupSpecificProperties'] = experimentSpecificSampleGroupProperties
             sharedProcessedMetadata['commonProperties'] = commonProperties
             forceProcessedMetadataOverride = 0
@@ -673,6 +681,43 @@ class SharedToolsService {
 
 
 
+    public LinkedHashMap<String, List <String>> getPropertiesPerAnnotatedSampleGroupId (def sampleGroups,LinkedHashMap<PhenoKey, List <String>> annotatedSampleGroupIds){
+        for (def sampleGroup in sampleGroups){
+            String sampleGroupsId = sampleGroup.id
+            int  sortOrder = sampleGroup.sort_order
+            List <String> propertiesForTheSampleGroup
+            PhenoKey phenoKey = new PhenoKey(sampleGroupsId,sortOrder,1)
+            if (annotatedSampleGroupIds.containsKey(phenoKey)){
+                propertiesForTheSampleGroup = annotatedSampleGroupIds
+            } else {
+                propertiesForTheSampleGroup = new ArrayList<String>()
+                annotatedSampleGroupIds [phenoKey] = propertiesForTheSampleGroup
+            }
+
+            // we have a sample group with an associated list to fill. First let's put in all the properties
+            if (sampleGroup.properties){
+                for (def property in sampleGroup.properties){
+                    if (property.searchable == "TRUE"){
+                        String propertyName = property.name
+                        propertiesForTheSampleGroup << propertyName
+                    }
+                }
+
+            }
+
+            // Finally, does this sample group have a sample group? If so then recursively descend
+            if (sampleGroup.sample_groups){
+                getPropertiesPerAnnotatedSampleGroupId (sampleGroup.sample_groups, annotatedSampleGroupIds)
+            }
+
+        }
+        return annotatedSampleGroupIds
+    }
+
+
+
+
+
 
 
     public LinkedHashMap<String, List <String>> getPhenotypeSpecificPropertiesPerSampleGroupId (def sampleGroups,LinkedHashMap<String, LinkedHashMap <String,String>> annotatedPhenotypeSpecificSampleGroupIds){
@@ -745,6 +790,125 @@ class SharedToolsService {
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public LinkedHashMap<String, List <String>> getPhenotypeSpecificAnnotatedPropertiesPerSampleGroupId (def sampleGroups,LinkedHashMap<PhenoKey, LinkedHashMap <String,String>> annotatedPhenotypeSpecificSampleGroupIds){
+        for (def sampleGroup in sampleGroups){
+            String sampleGroupsId = sampleGroup.id
+            int sampleGroupSortOrder = sampleGroup?.sort_order
+            if (sampleGroup.phenotypes){
+                for (def phenotype in sampleGroup.phenotypes){
+                    String phenotypeName = phenotype.name
+                    String phenotypeGroup = phenotype.group
+                    String phenotypeSortOrder = phenotype.sort_order
+                    LinkedHashMap<String,String> hashOfPhenotypeSpecificSampleGroups
+                    if (annotatedPhenotypeSpecificSampleGroupIds.containsKey(phenotypeName)){
+                        hashOfPhenotypeSpecificSampleGroups = annotatedPhenotypeSpecificSampleGroupIds[phenotypeName]
+                    } else {
+                        hashOfPhenotypeSpecificSampleGroups = new LinkedHashMap()
+                        annotatedPhenotypeSpecificSampleGroupIds[phenotypeName]  =  hashOfPhenotypeSpecificSampleGroups
+                    }
+
+                    // we want to store some properties that are specific to each phenotype. Let's create
+                    // a special-purpose key called 'phenotypeProperties' which sits adjacent to all of the sample group names
+                    // Inside we can have a map that holds these special-purpose properties
+                    LinkedHashMap <String,String> phenotypeSpecificProperties
+                    PhenoKey sampleGroupPhenoKeyForProperties = new PhenoKey("phenotypeProperties", 99, 0)
+                    if (hashOfPhenotypeSpecificSampleGroups.containsKey(sampleGroupPhenoKeyForProperties)){
+                        phenotypeSpecificProperties = hashOfPhenotypeSpecificSampleGroups[(sampleGroupPhenoKeyForProperties)]
+                    } else {
+                        phenotypeSpecificProperties = new LinkedHashMap <String,String> ()
+                        hashOfPhenotypeSpecificSampleGroups[(sampleGroupPhenoKeyForProperties)] = phenotypeSpecificProperties
+                    }
+                    // and let's fill this structure.  We should only have to do it once
+                    if (phenotypeSpecificProperties.size()==0){
+                        phenotypeSpecificProperties ["group"] = phenotypeGroup
+                        phenotypeSpecificProperties ["sort_order"] = phenotypeSortOrder
+                    }
+
+
+                    // we have the list for this phenotype.  Add some more sample groups for it, along with
+                    //  a place to put data set specific properties for each data set
+                    List <String> propertyList
+                    PhenoKey sampleGroupPhenoKey = new PhenoKey(sampleGroupsId, sampleGroupSortOrder, 0)
+                    if (hashOfPhenotypeSpecificSampleGroups.containsKey(sampleGroupPhenoKey)){
+                        propertyList = hashOfPhenotypeSpecificSampleGroups[(sampleGroupPhenoKey)]
+                    } else {
+                        propertyList = new ArrayList<String>()
+                        hashOfPhenotypeSpecificSampleGroups[sampleGroupPhenoKey] = propertyList
+                    }
+
+                    // now let's store up the properties specific to this sample group & phenotype combination
+                    def phenotypeProperties = phenotype.properties
+                    if (phenotypeProperties){
+                        for (def property in phenotypeProperties){
+                            String propertyName = property.name
+                            if (propertyList.contains(propertyName)){
+                                // println "That is a little odd. Sample group=${sampleGroupsId} in phenotype=${phenotypeName} already had property=${propertyName}"
+                            }else {
+                                if (property.searchable == "TRUE") {
+                                    propertyList << propertyName
+                                }
+                            }
+                        }
+                    }
+
+                    // we can descend further if there are sample groups within the sample group
+                    if (sampleGroup.sample_groups){
+                        getPhenotypeSpecificPropertiesPerSampleGroupId (sampleGroup.sample_groups, annotatedPhenotypeSpecificSampleGroupIds)
+                    }
+                }
+
+            }
+        }
+        return annotatedPhenotypeSpecificSampleGroupIds
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /***
      * Subset the metadata to only columns we want to display
      * @param processedMetadata The output of processMetadata
@@ -774,6 +938,7 @@ class SharedToolsService {
 
         if (processedMetadata) {
             if (phenotypesToKeep == null) {
+
                 phenotypesToKeep = processedMetadata.sampleGroupsPerPhenotype.keySet()
             } else
             {
@@ -918,19 +1083,20 @@ class SharedToolsService {
 
 
     public List <String> combineToCreateASingleList (String phenotype,String sampleGroup,
-                                              LinkedHashMap<String, List <String>> annotatedList,
-                                              LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties ){
+                                                     LinkedHashMap<PhenoKey,List<String>> annotatedList,
+                                                     LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties ){
         // the list of properties specific to this data set
         List <String> listOfProperties = []
         int numrec = 0
         String retval
         if (annotatedList){
             if (annotatedList.containsKey(sampleGroup)){
-                List <String> listForThisPhenotype =  annotatedList [sampleGroup]
+                List <PhenoKey> listForThisPhenotype =  annotatedList [sampleGroup]
                 if (listForThisPhenotype) {
-                    numrec = listForThisPhenotype.size()
-                    for ( int  i = 0 ; i < listForThisPhenotype.size() ; i++ ){
-                        listOfProperties << listForThisPhenotype[i]
+                    List <PhenoKey> orderedListOfSampleGroups = listForThisPhenotype.sort{ it.sort_order }
+                    numrec = orderedListOfSampleGroups.size()
+                    for ( int  i = 0 ; i < orderedListOfSampleGroups.size() ; i++ ){
+                        listOfProperties << orderedListOfSampleGroups[i]
                     }
                 }
             }
@@ -1105,15 +1271,58 @@ class SharedToolsService {
 
 
 
+    public String packageUpSortedHierarchicalListAsJson (LinkedHashMap mapOfStrings ){
+        // now that we have a list, build it into a string suitable for JSON
+        int numberOfGroups = 0
+        StringBuilder sb = new StringBuilder ()
+
+        if ((mapOfStrings) && (mapOfStrings?.size() > 0)){
+            LinkedHashMap sortedMapOfStrings = mapOfStrings.sort{ it.key?.sort_order }
+            numberOfGroups = sortedMapOfStrings.size()
+            int groupCounter  = 0
+            sortedMapOfStrings.each{k,List v->
+                sb <<  "\"${k}\":[".toString()
+                int individualGroupLength  = v.size()
+                for ( int  i = 0 ; i < individualGroupLength ; i++ ){
+                    sb << "\"${v[i]}\"".toString()
+                    if (i < individualGroupLength - 1) {
+                        sb << ","
+                    }
+                }
+                sb <<  "]"
+                groupCounter++
+                if (numberOfGroups > groupCounter) {
+                    sb << ","
+                }
+            }
+        }
+
+        return  """
+{"is_error": false,
+"numRecords":${numberOfGroups},
+"dataset":{${sb.toString()}}
+}""".toString()
+    }
+
+
+
+
+
+
+
+
+
+
     public String packageUpAHierarchicalListAsJson (LinkedHashMap mapOfStrings ){
         // now that we have a list, build it into a string suitable for JSON
         int numberOfGroups = 0
         StringBuilder sb = new StringBuilder ()
 
         if ((mapOfStrings) && (mapOfStrings?.size() > 0)){
-            numberOfGroups = mapOfStrings.size()
+            LinkedHashMap sortedMapOfStrings = mapOfStrings
+            numberOfGroups = sortedMapOfStrings.size()
             int groupCounter  = 0
-            mapOfStrings.each{k,List v->
+            sortedMapOfStrings.each{k,List v->
                 sb <<  "\"${k}\":[".toString()
                 int individualGroupLength  = v.size()
                     for ( int  i = 0 ; i < individualGroupLength ; i++ ){
@@ -1853,36 +2062,36 @@ public List <LinkedHashMap> convertFormOfFilters(String rawFilters){
     public String translator(String stringToTranslate){
     if (stringToTranslate){
          if (trans.size()<=0) {
-             trans["vT2D"]="type 2 diabetes"
+             trans["vT2D"]="Type 2 diabetes"
              trans["vBMI"]="BMI"
-             trans["vCHOL"]="cholesterol"
-             trans["vDBP"]="diastolic blood pressure"
-             trans["vFG"]="fasting glucose"
-             trans["vFI"]="fasting insulin"
+             trans["vCHOL"]="Cholesterol"
+             trans["vDBP"]="Diastolic blood pressure"
+             trans["vFG"]="Fasting glucose"
+             trans["vFI"]="Fasting insulin"
              trans["vHBA1C"]="HbA1c"
              trans["vHDL"]="HDL cholesterol"
-             trans["vHEIGHT"]="height"
-             trans["vHIPC"]="hip circumference"
+             trans["vHEIGHT"]="Height"
+             trans["vHIPC"]="Hip circumference"
              trans["vLDL"]="LDL cholesterol"
-             trans["vSBP"]="systolic blood pressure"
-             trans["vTG"]="triglycerides"
-             trans["vWAIST"]="waist circumference"
-             trans["vWHR"]="waist-hip ratio"
-             trans["vCAD"]="coronary artery disease"
-             trans["vCKD"]="chronic kidney disease"
-             trans["vUACR"]="urinary albumin-to-creatinine ratio"
+             trans["vSBP"]="Systolic blood pressure"
+             trans["vTG"]="Triglycerides"
+             trans["vWAIST"]="Waist circumference"
+             trans["vWHR"]="Waist-hip ratio"
+             trans["vCAD"]="Coronary artery disease"
+             trans["vCKD"]="Chronic kidney disease"
+             trans["vUACR"]="Urinary albumin-to-creatinine ratio"
              trans["veGFRcrea"]="eGFR-creat (serum creatinine)"
              trans["veGFRcys"]="eGFR-cys (serum cystatin C)"
-             trans["vTC"]="total cholesterol"
-             trans["v2hrG"]="two-hour glucose"
-             trans["v2hrI"]="two-hour insulin"
+             trans["vTC"]="Total cholesterol"
+             trans["v2hrG"]="Two-hour glucose"
+             trans["v2hrI"]="Two-hour insulin"
              trans["vHOMAB"]="HOMA-B"
              trans["vHOMAIR"]="HOMA-IR"
-             trans["vMA"]="microalbuminuria"
-             trans["vPI"]="proinsulin levels"
-             trans["vBIP"]="bipolar disorder"
-             trans["vMDD"]="major depressive disorder"
-             trans["vSCZ"]="schizophrenia"
+             trans["vMA"]="Microalbuminuria"
+             trans["vPI"]="Proinsulin levels"
+             trans["vBIP"]="Bipolar disorder"
+             trans["vMDD"]="Major depressive disorder"
+             trans["vSCZ"]="Schizophrenia"
              trans["v13k"]= "13K exome sequence analysis"
              trans["v13k_aa_genes"]= "13K exome sequence analysis: African-Americans"
              trans["v13k_ea_genes"]= "13K exome sequence analysis: East Asians"
@@ -1946,26 +2155,25 @@ public List <LinkedHashMap> convertFormOfFilters(String rawFilters){
              trans["v26k_sa_genes_ss"]= "26K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort"
              trans["v82k"]= "82K exome chip analysis"
              trans["vAfrican_American"]= "African-American"
-             trans["vBETA"]= "effect size (beta)"
+             trans["vBETA"]= "Effect size (beta)"
              trans["vCARDIoGRAM"]= "CARDIoGRAM GWAS"
-             trans["vCHROM"]= "chromosome"
+             trans["vCHROM"]= "Chromosome"
              trans["vCKDGenConsortium"]= "CKDGen GWAS"
-             trans["vCLOSEST_GENE"]= "nearest gene"
-             trans["vCondel_PRED"]= "condel prediction"
-             trans["vConsequence"]= "consequence"
+             trans["vCLOSEST_GENE"]= "Nearest gene"
+             trans["vCondel_PRED"]= "Condel prediction"
+             trans["vConsequence"]= "Consequence"
              trans["vDBSNP_ID"]= "dbSNP ID"
              trans["vDIAGRAM"]= "DIAGRAM GWAS"
-             trans["vDirection"]= "direction of effect"
-             trans["vDIR"]= "direction of effect"
-             trans["vEAC_PH"]= "effect allele count"
-             trans["vEAF"]= "effect allele frequency"
+             trans["vDirection"]= "Direction of effect"
+             trans["vEAC_PH"]= "Effect allele count"
+             trans["vEAF"]= "Effect allele frequency"
              trans["vEast_Asian"]= "East Asian"
              trans["vEuropean"]= "European"
-             trans["vExChip"]= "exome chip"
+             trans["vExChip"]= "Exome chip"
              trans["vExChip_82k"]= "82k exome chip analysis"
              trans["vExChip_82k_mdv1"]= "82k exome chip analysis"
              trans["vExChip_82k_mdv2"]= "82k exome chip analysis"
-             trans["vExSeq"]= "exome sequencing"
+             trans["vExSeq"]= "Exome sequencing"
              trans["vExSeq_13k"]= "13K exome sequence analysis"
              trans["vExSeq_13k_aa_genes_mdv1"]= "13K exome sequence analysis: African-Americans"
              trans["vExSeq_13k_aa_genes_mdv2"]= "13K exome sequence analysis: African-Americans"
@@ -2041,11 +2249,11 @@ public List <LinkedHashMap> convertFormOfFilters(String rawFilters){
              trans["vExSeq_26k_sa_genes_mdv3"]= "26K exome sequence analysis: South Asians"
              trans["vExSeq_26k_sa_genes_sl_mdv3"]= "26K exome sequence analysis: South Asians, LOLIPOP cohort"
              trans["vExSeq_26k_sa_genes_ss_mdv3"]= "26K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort"
-             trans["vFMISS_17k"]= "missing genotype rate, 17K exome sequence analysis"
-             trans["vFMISS_19k"]= "missing genotype rate, 19K exome sequence analysis"
-             trans["vF_MISS"]= "missing genotype rate"
-             trans["vGENE"]= "gene"
-             trans["vGENO_26k"]= "call rate, 26K exome sequencing analysis"
+             trans["vFMISS_17k"]= "Missing genotype rate, 17K exome sequence analysis"
+             trans["vFMISS_19k"]= "Missing genotype rate, 19K exome sequence analysis"
+             trans["vF_MISS"]= "Missing genotype rate"
+             trans["vGENE"]= "Gene"
+             trans["vGENO_26k"]= "Call rate, 26K Exome sequencing analysis"
              trans["vGIANT"]= "GIANT GWAS"
              trans["vGLGC"]= "GLGC GWAS"
              trans["vGWAS"]= "GWAS"
@@ -2070,55 +2278,53 @@ public List <LinkedHashMap> convertFormOfFilters(String rawFilters){
              trans["vGWAS_PGC"]= "PGC GWAS"
              trans["vGWAS_PGC_mdv1"]= "PGC GWAS"
              trans["vGWAS_PGC_mdv2"]= "PGC GWAS"
-             trans["vHETA"]= "number of heterozygous cases"
-             trans["vHETU"]= "number of heterozygous controls"
-             trans["vHOMA"]= "number of homozygous cases"
-             trans["vHOMU"]= "number of homozygous controls"
+             trans["vHETA"]= "Number of heterozygous cases"
+             trans["vHETU"]= "Number of heterozygous controls"
+             trans["vHOMA"]= "Number of homozygous cases"
+             trans["vHOMU"]= "Number of homozygous controls"
              trans["vHispanic"]= "Latino"
-             trans["vIN_EXSEQ"]= "in exome sequencing"
-             trans["vIN_GENE"]= "enclosing gene"
-             trans["vLOG_P_HWE_MAX_ORIGIN"]= "log(p-value), hardy-weinberg equilibrium"
-             trans["vMAC"]= "minor allele count"
-             trans["vMAC_PH"]= "minor allele count"
-             trans["vMAF"]= "minor allele frequency"
+             trans["vIN_EXSEQ"]= "In exome sequencing"
+             trans["vIN_GENE"]= "Enclosing gene"
+             trans["vLOG_P_HWE_MAX_ORIGIN"]= "Log(p-value), hardy-weinberg equilibrium"
+             trans["vMAC"]= "Minor allele count"
+             trans["vMAC_PH"]= "Minor allele count"
+             trans["vMAF"]= "Minor allele frequency"
              trans["vMAGIC"]= "MAGIC GWAS"
-             trans["vMINA"]= "case minor allele counts"
-             trans["vMINU"]= "control minor allele counts"
-             trans["vMOST_DEL_SCORE"]= "deleteriousness category"
+             trans["vMINA"]= "Case minor allele counts"
+             trans["vMINU"]= "Control minor allele counts"
+             trans["vMOST_DEL_SCORE"]= "Deleteriousness category"
              trans["vMixed"]= "Mixed"
-             trans["vNEFF"]= "effective sample size"
-             trans["vN_PH"]= "sample size"
-             trans["vOBSA"]= "number of cases genotyped"
-             trans["vOBSU"]= "number of controls genotyped"
-             trans["vODDS_RATIO"]= "odds ratio"
-             trans["vOR_FIRTH"]= "odds ratio"
-             trans["vOR_FIRTH_FE_IV"]= "odds ratio"
-             trans["vOR_FISH"]= "odds ratio"
-             trans["vOR_WALD"]= "odds ratio"
-             trans["vOR_WALD_DOS"]= "odds ratio"
-             trans["vOR_WALD_DOS_FE_IV"]= "odds ratio"
-             trans["vOR_WALD_FE_IV"]= "odds ratio"
+             trans["vNEFF"]= "Effective sample size"
+             trans["vN_PH"]= "Sample size"
+             trans["vOBSA"]= "Number of cases genotyped"
+             trans["vOBSU"]= "Number of controls genotyped"
+             trans["vODDS_RATIO"]= "Odds ratio"
+             trans["vOR_FIRTH"]= "Odds ratio"
+             trans["vOR_FIRTH_FE_IV"]= "Odds ratio"
+             trans["vOR_FISH"]= "Odds ratio"
+             trans["vOR_WALD"]= "Odds ratio"
+             trans["vOR_WALD_DOS"]= "Odds ratio"
+             trans["vOR_WALD_DOS_FE_IV"]= "Odds ratio"
+             trans["vOR_WALD_FE_IV"]= "Odds ratio"
              trans["vPGC"]= "PGC GWAS"
-             trans["vPOS"]= "position"
-             trans["vP_EMMAX"]= "p-value"
-             trans["vP_EMMAX_FE_IV"]= "p-value"
-             trans["vP_EMMAX_FE_IV_AW"]= "p-value"
-             trans["vP_FIRTH"]= "p-value"
-             trans["vP_FIRTH_FE_IV"]= "p-value"
-             trans["vP_FIRTH_FE_IV_AW"]= "p-value"
-             trans["vP_FE_INV"]= "p-value"
-             trans["vP_VALUE"]= "p-value"
+             trans["vPOS"]= "Position"
+             trans["vP_EMMAX"]= "P-value"
+             trans["vP_EMMAX_FE_IV"]= "P-value"
+             trans["vP_FIRTH"]= "P-value"
+             trans["vP_FIRTH_FE_IV"]= "P-value"
+             trans["vP_FE_INV"]= "P-value"
+             trans["vP_VALUE"]= "P-value"
              trans["vPolyPhen_PRED"]= "PolyPhen prediction"
-             trans["vProtein_change"]= "protein change"
-             trans["vQCFAIL"]= "failed quality control"
-             trans["vSE"]= "std. error"
+             trans["vProtein_change"]= "Protein change"
+             trans["vQCFAIL"]= "Failed quality control"
+             trans["vSE"]= "Std. Error"
              trans["vSIFT_PRED"]= "SIFT prediction"
-             trans["vSouth_Asian"]= "South Asian"
-             trans["vTRANSCRIPT_ANNOT"]= "annotations across transcripts"
-             trans["vVAR_ID"]= "variant ID"
-             trans["vmdv1"]= "version 1"
-             trans["vmdv2"]= "version 2"
-             trans["vmdv3"]= "version 3"
+             trans["vSouth_Asian"]= "South association"
+             trans["vTRANSCRIPT_ANNOT"]= "Annotations across transcripts"
+             trans["vVAR_ID"]= "Variant ID"
+             trans["vmdv1"]= "Version 1"
+             trans["vmdv2"]= "Version 2"
+             trans["vmdv3"]= "Version 3"
          }
         if (trans.containsKey("v${stringToTranslate}".toString())){
             return trans ["v${stringToTranslate}".toString()]
