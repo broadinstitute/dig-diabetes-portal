@@ -2014,6 +2014,18 @@ public List <LinkedHashMap> convertFormOfFilters(String rawFilters){
             LinkedHashMap dividedFilter = [:]
             List <String> filter = codedFilter.tokenize(':')
             switch (filter[0]){
+                case "4":
+                    dividedFilter["gene"]=filter[1];
+                    break;
+                case "5":
+                    dividedFilter["regionChromosomeInput"]=filter[1];
+                    break;
+                case "6":
+                    dividedFilter["regionStartInput"]=filter[1];
+                    break;
+                case "7":
+                    dividedFilter["regionStopInput"]=filter[1];
+                    break;
                 case "23":
                     if (filter[1]!="0"){
                         switch (filter[1]){
@@ -2021,6 +2033,38 @@ public List <LinkedHashMap> convertFormOfFilters(String rawFilters){
                             case "2":dividedFilter["predictedEffects"]="missense"; break;
                             case "3":dividedFilter["predictedEffects"]="noEffectSynonymous"; break;
                             case "4":dividedFilter["predictedEffects"]="noEffectNoncoding"; break;
+                            case "5":dividedFilter["predictedEffects"]="noEffectNoncoding"; break;
+                            default:break
+                        }
+                    }
+                    break;
+                case "24":
+                    if (filter[1]!="0"){
+                        switch (filter[1]){
+                            case "1":dividedFilter["polyphenSelect"]="probably_damaging"; break;
+                            case "2":dividedFilter["polyphenSelect"]="possibly_damaging"; break;
+                            case "3":dividedFilter["polyphenSelect"]="benign"; break;
+                            case "4":dividedFilter["polyphenSelect"]="probably_damaging"; break;
+                            default:break
+                        }
+                    }
+                    break;
+                case "25":
+                    if (filter[1]!="0"){
+                        switch (filter[1]){
+                            case "1":dividedFilter["sift"]="probably_damaging"; break;
+                            case "2":dividedFilter["sift"]="possibly_damaging"; break;
+                            case "3":dividedFilter["sift"]="probably_damaging"; break;
+                            default:break
+                        }
+                    }
+                    break;
+                case "26":
+                    if (filter[1]!="0"){
+                        switch (filter[1]){
+                            case "1":dividedFilter["condel"]="deleterious"; break;
+                            case "2":dividedFilter["condel"]="benign"; break;
+                            case "3":dividedFilter["condel"]="deleterious"; break;
                             default:break
                         }
                     }

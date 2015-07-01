@@ -141,6 +141,10 @@ class VariantSearchController {
             displayCombinedVariantSearchResults(listOfParameterMaps, listOfProperties)
         }
 
+        // NOTE: we should never get here. Error condition, but a better way to fail
+        log.error("relaunchAVariantSearch Was unable to process encoded parameters = ${encodedParameters}.")
+        displayCombinedVariantSearchResults(listOfParameterMaps, listOfProperties)
+
 
     }
 
@@ -191,7 +195,11 @@ class VariantSearchController {
         Map paramsMap = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters)
 
         if (paramsMap) {
-            displayVariantSearchResults(paramsMap, false)
+
+            List <LinkedHashMap> listOfProperties = []
+
+            displayCombinedVariantSearchResults([paramsMap], listOfProperties)
+           // displayVariantSearchResults(paramsMap, false)
         }
 
     }
