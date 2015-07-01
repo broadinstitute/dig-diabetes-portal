@@ -929,6 +929,7 @@ class FilterManagementService {
         List <String> filters =  buildingFilters.filters
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
+        List <String> transferableFilter =  buildingFilters.transferableFilter
         //ethnicities and minor allele frequencies
        List <List<String>> ethnicities = []
         ethnicities << ['African-Americans','aa']
@@ -962,8 +963,12 @@ class FilterManagementService {
                                // if we are searching exome chip data then use a different filter. Everything else is the same
                                if (incomingParameters.datatype=="exomechip"){
                                    filters << retrieveParameterizedFilterString("setExomeChipMinimumAbsolute", ethnicity[1], alleleFrequency)
+                                   String p1 = ethnicity[1]
+                                   transferableFilter << "47:T2D[ExSeq_17k_${(p1.equals("eu") || p1.equals("hs") ? p1 : "${p1}_genes")}_mdv2]MAF<${alleleFrequency}"
                                } else {
                                    filters << retrieveParameterizedFilterString("setEthnicityMinimumAbsolute", ethnicity[1], alleleFrequency)
+                                   String p1 = ethnicity[1]
+                                   transferableFilter << "47:T2D[ExSeq_17k_${(p1.equals("eu") || p1.equals("hs") ? p1 : "${p1}_genes")}_mdv2]MAF>${alleleFrequency}"
                                }
                                filterDescriptions << "Minor allele frequency in ${ethnicity[0]} is greater than ${alleleFrequency}"
                                parameterEncoding << "${fieldSpecifier}:${alleleFrequency}"
@@ -971,7 +976,9 @@ class FilterManagementService {
                                if (incomingParameters.datatype=="exomechip"){
                                    filters << retrieveParameterizedFilterString("setExomeChipMaximum", ethnicity[1], alleleFrequency)
                                } else {
+                                   String p1 = ethnicity[1]
                                    filters << retrieveParameterizedFilterString("setEthnicityMaximum", ethnicity[1], alleleFrequency)
+                                   transferableFilter << "47:T2D[ExSeq_17k_${(p1.equals("eu") || p1.equals("hs") ? p1 : "${p1}_genes")}_mdv2]MAF<${alleleFrequency}"
                                }
 
                                filterDescriptions << "Minor allele frequency in ${ethnicity[0]} is less than or equal to  ${alleleFrequency}"
