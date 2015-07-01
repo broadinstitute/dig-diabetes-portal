@@ -41,6 +41,7 @@ class SharedToolsService {
     LinkedHashMap trans = [:]
     String currentGeneChromosome = "1"
     String currentVariantChromosome = "1"
+    Integer recognizedStringsOnly = 0
     // TODO remove hack: currently we get phenotypes from the old geneinfo call, but
     // we need to interpret them with the new API, which uses different strings in some cases.
     //  Eventually we will pull the strings from the new API and then throw away this conversion utility
@@ -102,7 +103,13 @@ class SharedToolsService {
         currentVariantChromosome =   determineNextChromosome (retrieveCurrentVariantChromosome () )
     }
 
+    public Integer getRecognizedStringsOnly() {
+        return recognizedStringsOnly
+    }
 
+    public void setRecognizedStringsOnly(Integer recognizedStringsOnly) {
+        this.recognizedStringsOnly = recognizedStringsOnly
+    }
 
     public void setHelpTextSetting(int newHelpTextSetting){
         if ((newHelpTextSetting>-1) && (newHelpTextSetting < 3)) {
