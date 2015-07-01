@@ -30,13 +30,11 @@ class RestServerService {
     private String NEW_DEV_REST_SERVER = ""
     private String BASE_URL = ""
     private String GENE_INFO_URL = "gene-info"
-    private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out
-    private String DATA_SET_URL = "getDatasets" // TODO: Wipe out
+    private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out - or maybe not
     private String VARIANT_INFO_URL = "variant-info" // TODO: Wipe out
-    private String TRAIT_INFO_URL = "trait-info" // TODO: Wipe out
     private String VARIANT_SEARCH_URL = "variant-search" // TODO: Wipe out
     private String TRAIT_SEARCH_URL = "trait-search" // TODO: Wipe out
-    private String METADATA_URL = "getMetadata" // TODO: Wipe out
+    private String METADATA_URL = "getMetadata"
     private String GET_DATA_URL = "getData"
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
@@ -826,28 +824,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return returnValue
     }
 
-    /***
-     * retrieve everything from the data sets call. Take sample groups or experiments
-     * if provided, but if these parameters are empty then get every data set
-     *
-     * @param geneName
-     * @return
-     */
-    JSONObject retrieveDatasets(List<String> sampleGroupList,
-                                List<String> experimentList) {
-        JSONObject returnValue = null
-        String sampleGroup = (sampleGroupList.size() > 0) ? ("\"" + sampleGroupList.join("\",\"") + "\"") : "";
-        String experimentGroup = (experimentList.size() > 0) ? ("\"" + experimentList.join("\",\"") + "\"") : "";
-        String drivingJson = """{
-"sample_group": [${sampleGroup}],
-"experiment": [${experimentGroup}]
-
-}
-""".toString()
-        returnValue = postRestCall(drivingJson, DATA_SET_URL)
-        return returnValue
-    }
-
     // for now let's do a pseudo call
     JSONObject retrieveDatasetsFromMetadata(List<String> sampleGroupList,
                                             List<String> experimentList) {
@@ -1104,22 +1080,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 }
 """.toString()
         returnValue = postRestCall( sb.toString(), TRAIT_SEARCH_URL)
-        return returnValue
-    }
-
-    /***
-     * retrieved trait information based on a variant name
-     * @param variantName
-     * @return
-     */
-    JSONObject retrieveTraitInfoByVariant (String variantName) {
-        JSONObject returnValue = null
-        String drivingJson = """{
-"user_group": "ui",
-"variant_id": "${variantName}"
-}
-""".toString()
-        returnValue = postRestCall( drivingJson, TRAIT_INFO_URL)
         return returnValue
     }
 
