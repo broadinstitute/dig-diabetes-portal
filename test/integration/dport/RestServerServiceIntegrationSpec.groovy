@@ -70,18 +70,6 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
     }
 
 
-    void "test retrieveTraitInfoByVariant"() {
-        when:
-        JSONObject jsonObject = restServerService.retrieveTraitInfoByVariant("rs4457676")
-        then:
-        assert jsonObject
-        jsonObject["is_error"] == false
-        jsonObject["trait-info"].size() > 0
-    }
-
-
-
-
     void "test connection to diabetes server"() {
         given:
         String testJson = """{

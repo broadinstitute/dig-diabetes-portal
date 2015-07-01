@@ -30,9 +30,8 @@ class RestServerService {
     private String NEW_DEV_REST_SERVER = ""
     private String BASE_URL = ""
     private String GENE_INFO_URL = "gene-info"
-    private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out
+    private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out - or maybe not
     private String VARIANT_INFO_URL = "variant-info" // TODO: Wipe out
-    private String TRAIT_INFO_URL = "trait-info" // TODO: Wipe out
     private String VARIANT_SEARCH_URL = "variant-search" // TODO: Wipe out
     private String TRAIT_SEARCH_URL = "trait-search" // TODO: Wipe out
     private String METADATA_URL = "getMetadata"
@@ -1081,22 +1080,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 }
 """.toString()
         returnValue = postRestCall( sb.toString(), TRAIT_SEARCH_URL)
-        return returnValue
-    }
-
-    /***
-     * retrieved trait information based on a variant name
-     * @param variantName
-     * @return
-     */
-    JSONObject retrieveTraitInfoByVariant (String variantName) {
-        JSONObject returnValue = null
-        String drivingJson = """{
-"user_group": "ui",
-"variant_id": "${variantName}"
-}
-""".toString()
-        returnValue = postRestCall( drivingJson, TRAIT_INFO_URL)
         return returnValue
     }
 
