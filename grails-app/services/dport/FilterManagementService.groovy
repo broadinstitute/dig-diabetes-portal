@@ -72,7 +72,17 @@ class FilterManagementService {
                     """{ "filter_type": "STRING", "operand": "IN_SIGMA", "operator": "EQ", "value": 1 }""".toString()
 
     ]
-
+    private String chooseDataSet(String dataSetCode){
+        String returnValue = exomeSequence
+        switch (dataSetCode) {
+            case "gwas": returnValue = gwasData; break;
+            case "sigma": returnValue = sigmaData; break;
+            case "exomeseq": returnValue = exomeSequence; break;
+            case "exomechip": returnValue = exomeChip; break;
+            default: break;
+        }
+        return returnValue
+    }
 
     private String filtersForApi(String filterName,
                   String parm1,
@@ -93,15 +103,7 @@ class FilterManagementService {
                 returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setPValueThreshold" :
-                String dataset = exomeSequence
-                switch (parm3) {
-                    case "gwas": dataset = gwasData; break;
-                    case "sigma": dataset = sigmaData; break;
-                    case "exomeseq": dataset = exomeSequence; break;
-                    case "exomechip": dataset = exomeChip; break;
-                    default: break;
-                }
-                returnValue = """{"dataset_id": "${dataset}", "phenotype": "T2D", "operand": "${parm1}", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "${chooseDataSet(parm3)}", "phenotype": "T2D", "operand": "${parm1}", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setRegionGeneSpecification" :
                 returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${parm1}", "operand_type": "STRING"}""".toString()
@@ -261,7 +263,8 @@ class FilterManagementService {
         LinkedHashMap  buildingFilters = [filters:new ArrayList<String>(),
                                           filterDescriptions:new ArrayList<String>(),
                                           parameterEncoding:new ArrayList<String>(),
-                                          positioningInformation :new LinkedHashMap <String,String> ()]
+                                          positioningInformation :new LinkedHashMap <String,String> (),
+                                          transferableFilter: new ArrayList<String>()]
 
        buildingFilters = determineDataSet (buildingFilters,incomingParameters)
 
@@ -296,7 +299,8 @@ class FilterManagementService {
             buildingFilters = [filters:new ArrayList<String>(),
                                filterDescriptions:new ArrayList<String>(),
                                parameterEncoding:new ArrayList<String>(),
-                               positioningInformation :new LinkedHashMap <String,String> ()]
+                               positioningInformation :new LinkedHashMap <String,String> (),
+                               transferableFilter: new ArrayList<String>()]
         }
 
 
@@ -711,6 +715,7 @@ class FilterManagementService {
         List <String> filters =  buildingFilters.filters
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
+        List <String> transferableFilter =  buildingFilters.transferableFilter
         // set threshold
         if  (incomingParameters.containsKey("significance"))  {      // user has requested a particular data set. Without explicit request what is the default?
             String requestedDataSet =  incomingParameters ["significance"]
@@ -720,17 +725,20 @@ class FilterManagementService {
                     filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,5e-8 as BigDecimal,dataSetSpecifier)
                     filterDescriptions << "P-value for association with T2D is less than or equal to 5e-8"
                     parameterEncoding << "2:0"
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<${5e-8}"
                     break;
                 case  "locus":
                     filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,5e-4 as BigDecimal,dataSetSpecifier)
                     filterDescriptions << "P-value for association with T2D is less than or equal to 0.0005"
                     parameterEncoding << "2:2"
                     parameterEncoding << "3:0.0005"
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<0.0005"
                     break;
                 case  "nominal":
                     filters << retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,0.05 as BigDecimal,dataSetSpecifier)
                     filterDescriptions << "P-value for association with T2D is less than or equal to 0.05"
                     parameterEncoding << "2:1"
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<0.05"
                     break;
                 case  "custom":
                     if (incomingParameters.containsKey("custom_significance_input")) {
@@ -1162,6 +1170,7 @@ class FilterManagementService {
         List <String> filters =  buildingFilters.filters
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
+        List <String> transferableFilter =  buildingFilters.transferableFilter
         boolean greaterThanInequality = false
 
         if  (( incomingParameters.containsKey("or-select")  ) &&
