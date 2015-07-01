@@ -29,7 +29,8 @@ class SystemController {
         currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
         currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
         totalNumberOfGenes:Gene.totalNumberOfGenes(),
-        totalNumberOfVariants:Variant.totalNumberOfVariants()])
+        totalNumberOfVariants:Variant.totalNumberOfVariants(),
+        recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
     }
 
     def determineVersion = {
@@ -59,7 +60,8 @@ class SystemController {
                                           currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
                                           currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
                                           totalNumberOfGenes:Gene.totalNumberOfGenes(),
-                                          totalNumberOfVariants:Variant.totalNumberOfVariants()])
+                                          totalNumberOfVariants:Variant.totalNumberOfVariants(),
+                                          recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
 
     }
 
@@ -100,7 +102,8 @@ class SystemController {
                                           currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
                                           currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
                                           totalNumberOfGenes:Gene.totalNumberOfGenes(),
-                                          totalNumberOfVariants:Variant.totalNumberOfVariants()])
+                                          totalNumberOfVariants:Variant.totalNumberOfVariants(),
+                                          recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
     }
 
     def refreshGeneCache()  {
@@ -201,7 +204,8 @@ class SystemController {
                                           currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
                                           currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
                                           totalNumberOfGenes:Gene.totalNumberOfGenes(),
-                                          totalNumberOfVariants:Variant.totalNumberOfVariants()])
+                                          totalNumberOfVariants:Variant.totalNumberOfVariants(),
+                                          recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
 
     }
 
@@ -226,7 +230,8 @@ class SystemController {
                                           currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
                                           currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
                                           totalNumberOfGenes:Gene.totalNumberOfGenes(),
-                                          totalNumberOfVariants:Variant.totalNumberOfVariants()])
+                                          totalNumberOfVariants:Variant.totalNumberOfVariants(),
+                                          recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
 
     }
 
@@ -318,7 +323,8 @@ class SystemController {
                                           currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
                                           currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
                                           totalNumberOfGenes:Gene.totalNumberOfGenes(),
-                                          totalNumberOfVariants:Variant.totalNumberOfVariants()])
+                                          totalNumberOfVariants:Variant.totalNumberOfVariants(),
+                                          recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
     }
 
     def switchSigmaT2d(){
@@ -349,7 +355,8 @@ class SystemController {
                                           currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
                                           currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
                                           totalNumberOfGenes:Gene.totalNumberOfGenes(),
-                                          totalNumberOfVariants:Variant.totalNumberOfVariants()])
+                                          totalNumberOfVariants:Variant.totalNumberOfVariants(),
+                                          recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
     }
 
 
@@ -364,7 +371,40 @@ class SystemController {
                                           currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
                                           currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
                                           totalNumberOfGenes:Gene.totalNumberOfGenes(),
-                                          totalNumberOfVariants:Variant.totalNumberOfVariants()])
+                                          totalNumberOfVariants:Variant.totalNumberOfVariants(),
+                                          recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
     }
+
+
+
+    def changeRecognizedStringsOnly()  {
+        String recognizeStringsOnly = params.datatype
+        int currentRecognizedStringsOnly = sharedToolsService.getRecognizedStringsOnly ()
+        if (recognizeStringsOnly!=null) {
+            int  recognizeStringsOnlyInteger = recognizeStringsOnly as Integer
+            if (recognizeStringsOnlyInteger != currentRecognizedStringsOnly) {
+                sharedToolsService.setRecognizedStringsOnly(recognizeStringsOnlyInteger)
+                flash.message = "You have changed the recognizeStringsOnly to ${sharedToolsService.getRecognizedStringsOnly ()}"
+            } else {
+                flash.message = "But recognizeStringsOnly was already ${currentRecognizedStringsOnly}"
+            }
+        }
+        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
+                                          currentRestServer:restServerService.currentRestServer(),
+                                          currentApplicationIsSigma:sharedToolsService.applicationName(),
+                                          helpTextLevel:sharedToolsService.getHelpTextSetting(),
+                                          newApi:sharedToolsService.getNewApi(),
+                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
+                                          dataVersion:sharedToolsService.getDataVersion (),
+                                          currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
+                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
+                                          totalNumberOfGenes:Gene.totalNumberOfGenes(),
+                                          totalNumberOfVariants:Variant.totalNumberOfVariants(),
+                                          recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
+
+    }
+
+
+
 
 }

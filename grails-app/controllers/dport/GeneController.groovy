@@ -76,13 +76,14 @@ class GeneController {
         }
         // Is our string a variant?  Build an identifying string and test
         String canonicalVariant = sharedToolsService.createCanonicalVariantName(params.id)
-        if (false){ // once we have the variant database complete we can use this
+        if (sharedToolsService.getRecognizedStringsOnly()!=0){ // once we have the variant database complete we can use this
             Variant variant = Variant.retrieveVariant(canonicalVariant)
             if (variant) {
                 redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: params.id])
                 return
             } else {
                 redirect(controller: 'home', action: 'portalHome', params: [id: params.id])
+                return
             }
         } else {// for now we don't have to verify of variant's existence
             redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: canonicalVariant])
