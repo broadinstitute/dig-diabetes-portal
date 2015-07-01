@@ -100,44 +100,46 @@ class VariantSearchController {
     }
 
 
+    def relaunchAVariantSearch() {
+        String encodedParameters = params.encodedParameters
 
-
-    def relaunchAVariantSearch(){
-        String encodedParameters =params.encodedParameters
-
-        LinkedHashMap propertiesToDisplay = params.findAll{ it.key =~ /^savedValue/ }
-        List <LinkedHashMap> listOfProperties = []
+        LinkedHashMap propertiesToDisplay = params.findAll { it.key =~ /^savedValue/ }
+        List<LinkedHashMap> listOfProperties = []
         if ((propertiesToDisplay) &&
-                (propertiesToDisplay.size()>0)){
-            propertiesToDisplay.each{String key, value ->
-                    List <String> disambiguator = value.tokenize("^")
-                if (value?.size()>0){
-//                    for (String oneProperty in value){
+                (propertiesToDisplay.size() > 0)) {
+            propertiesToDisplay.each { String key, value ->
+                if ((value) &&
+                        (value != null)) {
+                    if (value.class.isArray()) {  // two identical keys will result in an array of keys
+                        for (String oneProperty in value) {
+                            List<String> disambiguator = oneProperty.tokenize("^")
+                            LinkedHashMap valuePasser = [:]
+                            valuePasser["phenotype"] = disambiguator[1]
+                            valuePasser["dataset"] = disambiguator[2]
+                            valuePasser["property"] = disambiguator[3]
+                            listOfProperties << valuePasser
+                        }
+                    } else {
+                        List<String> disambiguator = value.tokenize("^")
                         LinkedHashMap valuePasser = [:]
                         valuePasser["phenotype"] = disambiguator[1]
                         valuePasser["dataset"] = disambiguator[2]
                         valuePasser["property"] = disambiguator[3]
                         listOfProperties << valuePasser
-//                    }
-                }else{
-                    LinkedHashMap valuePasser = [:]
-                    valuePasser["phenotype"] = disambiguator[0]
-                    valuePasser["dataset"] = disambiguator[1]
-                    valuePasser["property"] = disambiguator[2]
-                    listOfProperties << valuePasser
+                    }
+
                 }
 
-                 }
+            }
         }
 
-
         // now convert these coded parameters into a form we can handle, combine in the properties, and reproduce the table
-        List <LinkedHashMap> combinedFilters = sharedToolsService.convertFormOfFilters(encodedParameters)
-        List <LinkedHashMap> listOfParameterMaps = filterManagementService.storeCodedParametersInHashmap (combinedFilters)
+        List<LinkedHashMap> combinedFilters = sharedToolsService.convertFormOfFilters(encodedParameters)
+        List<LinkedHashMap> listOfParameterMaps = filterManagementService.storeCodedParametersInHashmap(combinedFilters)
 
 
         if ((listOfParameterMaps) &&
-                (listOfParameterMaps.size() > 0)){
+                (listOfParameterMaps.size() > 0)) {
             displayCombinedVariantSearchResults(listOfParameterMaps, listOfProperties)
         }
 
@@ -147,18 +149,6 @@ class VariantSearchController {
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
     /***
      * User has posted a search request.  The search was made through a traditional form (the GO button on the variant search page).
