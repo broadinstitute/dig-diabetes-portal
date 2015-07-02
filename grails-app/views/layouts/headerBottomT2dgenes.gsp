@@ -35,8 +35,9 @@
             <a href="${createLink(controller: 'home', action: 'introVideoHolder')}"><g:message code="portal.header.nav.tutorials"/></a> &middot;
             <a href="${createLink(controller:'informational', action:'policies')}"><g:message code="portal.header.nav.policies"/></a> &middot;
             <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact"/></a>&middot;
-            <a href="${createLink(controller:'informational', action:'forum')}"><g:message code="portal.header.nav.forum"/></a>&middot;
-            <a href="${createLink(controller:'informational', action:'blog')}"><g:message code="portal.header.nav.blog"/></a>
+            <a href="${createLink(controller:'informational', action:'forum')}"><g:message code="portal.header.nav.forum"/></a>
+            %{--&middot;--}%
+            %{--<a href="${createLink(controller:'informational', action:'blog')}"><g:message code="portal.header.nav.blog"/></a>--}%
         </g:renderT2dGenesSection>
     </div>
 </div>
