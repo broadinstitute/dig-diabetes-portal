@@ -658,6 +658,7 @@ class FilterManagementService {
         List <String> filters =  buildingFilters.filters
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
+        List <String> transferableFilter =  buildingFilters.transferableFilter
         String datatypeOperand = ""
 
         // datatype: Sigma, exome sequencing, exome chip, or diagram GWAS
@@ -963,8 +964,7 @@ class FilterManagementService {
                                // if we are searching exome chip data then use a different filter. Everything else is the same
                                if (incomingParameters.datatype=="exomechip"){
                                    filters << retrieveParameterizedFilterString("setExomeChipMinimumAbsolute", ethnicity[1], alleleFrequency)
-                                   String p1 = ethnicity[1]
-                                   transferableFilter << "47:T2D[ExSeq_17k_${(p1.equals("eu") || p1.equals("hs") ? p1 : "${p1}_genes")}_mdv2]MAF<${alleleFrequency}"
+                                   transferableFilter << "47:T2D[ExChip_82k_mdv2]MAF>${alleleFrequency}"
                                } else {
                                    filters << retrieveParameterizedFilterString("setEthnicityMinimumAbsolute", ethnicity[1], alleleFrequency)
                                    String p1 = ethnicity[1]
@@ -975,6 +975,7 @@ class FilterManagementService {
                            } else {
                                if (incomingParameters.datatype=="exomechip"){
                                    filters << retrieveParameterizedFilterString("setExomeChipMaximum", ethnicity[1], alleleFrequency)
+                                   transferableFilter << "47:T2D[ExChip_82k_mdv2]MAF<${alleleFrequency}"
                                } else {
                                    String p1 = ethnicity[1]
                                    filters << retrieveParameterizedFilterString("setEthnicityMaximum", ethnicity[1], alleleFrequency)

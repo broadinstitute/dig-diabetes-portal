@@ -362,7 +362,7 @@ class SharedToolsService {
             LinkedHashMap<String, List<String>> annotatedSampleGroups = [:]
             LinkedHashMap<PhenoKey, List<String>> annotatedOrderedSampleGroups = [:]
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> phenotypeSpecificSampleGroupProperties = [:]
-            LinkedHashMap<String, LinkedHashMap<PhenoKey, List<String>>> phenotypeSpecificAnnotatedSampleGroupProperties = [:]
+            LinkedHashMap<String, LinkedHashMap <PhenoKey,List <String>>> phenotypeSpecificAnnotatedSampleGroupProperties = [:]
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> experimentSpecificSampleGroupProperties = [:]
             LinkedHashMap<String, LinkedHashMap<String, String>> commonProperties = [:]
             String dataSetVersionThatWeWant = "${dataSetPrefix}${getDataVersion()}"
@@ -804,7 +804,7 @@ class SharedToolsService {
 
 
 
-    public LinkedHashMap<String, List <String>> getPhenotypeSpecificAnnotatedPropertiesPerSampleGroupId (def sampleGroups,LinkedHashMap<PhenoKey, LinkedHashMap <String,String>> annotatedPhenotypeSpecificSampleGroupIds){
+    public LinkedHashMap<String, LinkedHashMap <PhenoKey,List <String>>> getPhenotypeSpecificAnnotatedPropertiesPerSampleGroupId (def sampleGroups,LinkedHashMap<String, LinkedHashMap <PhenoKey,List <String>>> annotatedPhenotypeSpecificSampleGroupIds){
         for (def sampleGroup in sampleGroups){
             String sampleGroupsId = sampleGroup.id
             int sampleGroupSortOrder = sampleGroup?.sort_order
@@ -864,6 +864,24 @@ class SharedToolsService {
                             }
                         }
                     }
+
+                    // One more thing:  Every phenotype also inherits the properties from its sample group.  Let's add those in too
+                    // now let's store up the properties specific to this sample group & phenotype combination
+                    def sampleGroupProperties = sampleGroup.properties
+                    if (sampleGroupProperties){
+                        for (def property in sampleGroupProperties){
+                            String propertyName = property.name
+                            if (propertyList.contains(propertyName)){
+                                // println "That is a little odd. Sample group=${sampleGroupsId} in phenotype=${phenotypeName} already had property=${propertyName}"
+                            }else {
+                                if (property.searchable == "TRUE") {
+                                    propertyList << propertyName
+                                }
+                            }
+                        }
+                    }
+
+
 
                     // we can descend further if there are sample groups within the sample group
                     if (sampleGroup.sample_groups){
@@ -1084,7 +1102,7 @@ class SharedToolsService {
 
     public List <String> combineToCreateASingleList (String phenotype,String sampleGroup,
                                                      LinkedHashMap<PhenoKey,List<String>> annotatedList,
-                                                     LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties ){
+                                                     LinkedHashMap<String, LinkedHashMap <PhenoKey,List <String>>> phenotypeSpecificSampleGroupProperties ){
         // the list of properties specific to this data set
         List <String> listOfProperties = []
         int numrec = 0
@@ -1106,10 +1124,10 @@ class SharedToolsService {
         if (phenotypeSpecificSampleGroupProperties){
             if (phenotypeSpecificSampleGroupProperties.containsKey(phenotype)){
                 LinkedHashMap hashForThisPhenotype = phenotypeSpecificSampleGroupProperties[phenotype]
-                if ((hashForThisPhenotype) && (hashForThisPhenotype.containsKey(sampleGroup))) {
-                    List<String> listForThisPhenotype = hashForThisPhenotype[sampleGroup]
+                PhenoKey sampleGroupLookup = new PhenoKey(sampleGroup,0,0)
+                if ((hashForThisPhenotype) && (hashForThisPhenotype.containsKey(sampleGroupLookup))) {
+                    List<String> listForThisPhenotype = hashForThisPhenotype[(sampleGroupLookup)]
                     if (listForThisPhenotype) {
-                        numrec += listForThisPhenotype.size()
                         for (int i = 0; i < listForThisPhenotype.size(); i++) {
                             listOfProperties << listForThisPhenotype[i]
                         }
