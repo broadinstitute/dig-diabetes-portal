@@ -124,8 +124,7 @@
                          diseaseBurdenStrings:diseaseBurdenStrings,
                          alleleFrequencyStrings:alleleFrequencyStrings,
                          carrierStatusImpact:carrierStatusImpact,
-                         impactOnProtein:impactOnProtein},
-                        ${newApi});
+                         impactOnProtein:impactOnProtein});
             }
             $(".pop-top").popover({placement : 'top'});
             $(".pop-right").popover({placement : 'right'});

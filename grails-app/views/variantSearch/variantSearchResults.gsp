@@ -241,7 +241,7 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
                 ${show_exchp},
                 '<g:createLink controller="variantInfo" action="variantInfo" />',
                 '<g:createLink controller="gene" action="geneInfo" />',
-                proteinEffectList,{},${newApi});
+                proteinEffectList);
 
     }
 
@@ -336,7 +336,7 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
         variantProcessing.iterativeVariantTableFiller(data,totCol,sortCol,'#variantTable',
                 '<g:createLink controller="variantInfo" action="variantInfo" />',
                 '<g:createLink controller="gene" action="geneInfo" />',
-                proteinEffectList,{},${newApi});
+                proteinEffectList,{});
 
     }
 
