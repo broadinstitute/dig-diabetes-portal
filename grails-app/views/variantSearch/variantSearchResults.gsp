@@ -401,15 +401,6 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
         </div>
         <input id='relauncher' type="submit" class="propBox btn btn-xs btn-primary center-block" value="1" style="height:0px">
     </g:form>
-    %{--<form action="./relaunchAVariantSearch">--}%
-    %{--<form action="./relaunchAVariantSearch">--}%
-        %{--<input type="hidden"  name="encodedParameters" value="<%=encodedParameters%>">--}%
-        %{--<input type="hidden"  name="filters" value="<%=filter%>">--}%
-    %{--<div id="hiddenFields">--}%
-        %{--<input type="hidden" class="form-control" name="totalFilterCount" id="totalFilterCount" value="0" style="height:0px">--}%
-    %{--</div>--}%
-    %{--<input id='relauncher' type="submit" class="propBox btn btn-xs btn-primary center-block" value="1" style="height:0px">--}%
-    %{--</form>--}%
 </div>
 <script>
     $(document).ready(function(){
