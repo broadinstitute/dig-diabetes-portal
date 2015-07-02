@@ -764,18 +764,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return postRestCallBase(drivingJson, targetUrl, EXPERIMENTAL_URL)
     }
 
-    JSONObject retrieveVariantInfoByName_Experimental(String variantId) {
-        JSONObject returnValue = null
-        String drivingJson = """{
-"variant_id": ${variantId},
-"user_group": "ui",
-"columns": [${"\"" + getVariantInfoColumns().join("\",\"") + "\""}]
-}
-""".toString()
-        returnValue = postRestCallExperimental(drivingJson, VARIANT_INFO_URL)
-        return returnValue
-    }
-
 
     private JSONObject postRestCall(String drivingJson, String targetUrl) {
         return postRestCallBase(drivingJson, targetUrl, currentRestServer())
