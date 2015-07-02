@@ -245,10 +245,6 @@ class SharedToolsService {
                 (!showSigma) )
     }
 
-    public Boolean getNewApi() { // TODO wipe out
-        return true
-    }
-
     public Boolean getMetadataOverrideStatus() {
         return (forceMetadataOverride==1)
     }

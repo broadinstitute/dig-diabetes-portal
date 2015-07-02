@@ -339,16 +339,7 @@
     });
     $('#accordionVariant').on('show.bs.collapse', function (e) {
         if (e.target.id === "collapseCarrierStatusImpact") {
-            if (${newApi}) {
-                mpgSoftware.carrierStatusImpact.loadDiseaseRisk();
-            } else {
-                if (e.target.id === "collapseCarrierStatusImpact") {
-                    if ((typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation() !== 'undefined') &&
-                            (typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch !== 'undefined')) {
-                        mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch();
-                    }
-                }
-            }
+            mpgSoftware.carrierStatusImpact.loadDiseaseRisk();
         }
     });
     $('#accordionVariant').on('hide.bs.collapse', function (e) {
