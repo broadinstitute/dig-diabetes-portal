@@ -697,7 +697,7 @@ var variantProcessing = (function () {
         }
     };
 
-    var oldIterativeVariantTableFiller = function  (data, divId, show_gene, show_sigma, show_exseq, show_exchp,variantRootUrl,geneRootUrl,proteinEffectList,dataSetDetermination,newApi,skipInitialization)  {
+    var oldIterativeVariantTableFiller = function  (data, divId, show_gene, show_sigma, show_exseq, show_exchp,variantRootUrl,geneRootUrl,proteinEffectList)  {
         var variantList =  data['variants'];
             $(divId).dataTable({
                 iDisplayLength: 20,
@@ -713,34 +713,30 @@ var variantProcessing = (function () {
             var variant = {};
             var row = 0;
             var array;
-            if (newApi){
-                variant["DBSNP_ID"]=variantList[i].pVals[row++].count;
-                variant["ID"]=variantList[i].pVals[row++].count;
-                variant["CHROM"]=variantList[i].pVals[row++].count;
-                variant["POS"]=variantList[i].pVals[row++].count;
-                variant["CLOSEST_GENE"]=variantList[i].pVals[row++].count;
-                variant["Protein_change"]=variantList[i].pVals[row++].count;
-                variant["Consequence"]=variantList[i].pVals[row++].count;
-                variant["_13k_T2D_P_EMMAX_FE_IV"]=variantList[i].pVals[row++].count;
-                variant["_13k_T2D_OR_WALD_DOS_FE_IV"]=variantList[i].pVals[row++].count;
-                variant["_13k_T2D_SE"]=1;//variantList[i].pVals[row++].count;
-                row++; row++;
-                variant["_13k_T2D_MINA"]=variantList[i].pVals[row++].count;
-                variant["_13k_T2D_MINU"]=variantList[i].pVals[row++].count;
-                variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
-                variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
-                variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
-                variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
-                variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
-                variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
-                variant["EXCHP_T2D_P_value"]=variantList[i].pVals[row++].count;
-                variant["EXCHP_T2D_BETA"]=variantList[i].pVals[row++].count;
-                variant["GWAS_T2D_PVALUE"]=variantList[i].pVals[row++].count;
-                variant["GWAS_T2D_OR"]=variantList[i].pVals[row++].count;
-                array = singleLineOfVariantTable(variant,show_gene, show_sigma, show_exseq, show_exchp,variantRootUrl,geneRootUrl,proteinEffectList);
-            }  else {
-                array = singleLineOfVariantTable(variantList[i],show_gene, show_sigma, show_exseq, show_exchp,variantRootUrl,geneRootUrl,proteinEffectList);
-            }
+            variant["DBSNP_ID"]=variantList[i].pVals[row++].count;
+            variant["ID"]=variantList[i].pVals[row++].count;
+            variant["CHROM"]=variantList[i].pVals[row++].count;
+            variant["POS"]=variantList[i].pVals[row++].count;
+            variant["CLOSEST_GENE"]=variantList[i].pVals[row++].count;
+            variant["Protein_change"]=variantList[i].pVals[row++].count;
+            variant["Consequence"]=variantList[i].pVals[row++].count;
+            variant["_13k_T2D_P_EMMAX_FE_IV"]=variantList[i].pVals[row++].count;
+            variant["_13k_T2D_OR_WALD_DOS_FE_IV"]=variantList[i].pVals[row++].count;
+            variant["_13k_T2D_SE"]=1;//variantList[i].pVals[row++].count;
+            row++; row++;
+            variant["_13k_T2D_MINA"]=variantList[i].pVals[row++].count;
+            variant["_13k_T2D_MINU"]=variantList[i].pVals[row++].count;
+            variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
+            variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
+            variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
+            variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
+            variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
+            variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
+            variant["EXCHP_T2D_P_value"]=variantList[i].pVals[row++].count;
+            variant["EXCHP_T2D_BETA"]=variantList[i].pVals[row++].count;
+            variant["GWAS_T2D_PVALUE"]=variantList[i].pVals[row++].count;
+            variant["GWAS_T2D_OR"]=variantList[i].pVals[row++].count;
+            array = singleLineOfVariantTable(variant,show_gene, show_sigma, show_exseq, show_exchp,variantRootUrl,geneRootUrl,proteinEffectList);
             $(divId).dataTable().fnAddData( array, (i==25) || (i==(dataLength-1)));
         }
     };
