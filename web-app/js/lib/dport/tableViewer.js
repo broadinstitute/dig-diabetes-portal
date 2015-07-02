@@ -584,7 +584,7 @@ var variantProcessing = (function () {
 
 
     /* Sort col is *relative* to dynamic columns */
-    var iterativeVariantTableFiller = function  (data, totCol, sortCol, divId,variantRootUrl,geneRootUrl,proteinEffectList,dataSetDetermination,newApi)  {
+    var iterativeVariantTableFiller = function  (data, totCol, sortCol, divId,variantRootUrl,geneRootUrl,proteinEffectList,dataSetDetermination)  {
 
         var fixedCol = 5
         var numericCol = []

@@ -761,7 +761,7 @@ var mpgSoftware = mpgSoftware || {};
          * @param showExseq
          * @param showSigma
          */
-        function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot, restServerRoot, showGwas, showExchp, showExseq, showSigma, textStringObject, newApi) {
+        function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot, restServerRoot, showGwas, showExchp, showExseq, showSigma, textStringObject) {
             var variantObj = data['variant'],
                 variant = variantObj['variant-info'],
                 prepareDelayedIgvLaunch = function (variant, showSigma, restServerRoot) {
