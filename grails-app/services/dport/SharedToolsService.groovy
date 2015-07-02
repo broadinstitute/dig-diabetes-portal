@@ -385,7 +385,7 @@ class SharedToolsService {
                 }
                 for (def cProperty in metadata.properties) {
                     if (!commonProperties.containsKey(cProperty.name)){
-                        if (cProperty.searchable){
+                        if (cProperty.searchable == "TRUE"){
                             LinkedHashMap cPropertyStuff = [:]
                             cPropertyStuff["type"] = cProperty.type
                             cPropertyStuff["sort_order"] = cProperty.sort_order
@@ -526,10 +526,12 @@ class SharedToolsService {
                         if (phenotype.properties) {
                             LinkedHashMap properties = [:]
                             for (def property in phenotype.properties){
-                                String propertyName = property.name
-                                String propertyType = property.type
-                                if (!properties.containsKey(propertyName)){
-                                    properties[propertyName] = propertyType
+                                if (property.searchable == "TRUE"){
+                                    String propertyName = property.name
+                                    String propertyType = property.type
+                                    if (!properties.containsKey(propertyName)) {
+                                        properties[propertyName] = propertyType
+                                    }
                                 }
                             }
                             (phenotypeMap[phenotypeName])["properties"] = properties
@@ -581,13 +583,15 @@ class SharedToolsService {
             LinkedHashMap sampleGroupMap = [sampleGroupId:sampleGroupId]
             if (sampleGroup.properties){
                 for (def property in sampleGroup.properties){
-                    String propertyName = property.name
-                    String propertyType = property.type
-                    if (!sampleGroupMap.containsKey(propertyName)){
-                        sampleGroupMap[propertyName] = propertyType
-                    }
-                     if (sampleGroup.sample_groups){
-                         getTechnologySpecificExperiment (sampleGroup.sample_groups,sampleGroupHolder)
+                    if (property.searchable == "TRUE"){
+                        String propertyName = property.name
+                        String propertyType = property.type
+                        if (!sampleGroupMap.containsKey(propertyName)){
+                            sampleGroupMap[propertyName] = propertyType
+                        }
+                        if (sampleGroup.sample_groups){
+                            getTechnologySpecificExperiment (sampleGroup.sample_groups,sampleGroupHolder)
+                        }
                     }
                 }
                 if (sampleGroup.phenotypes){
@@ -771,12 +775,33 @@ class SharedToolsService {
                             if (propertyList.contains(propertyName)){
                                // println "That is a little odd. Sample group=${sampleGroupsId} in phenotype=${phenotypeName} already had property=${propertyName}"
                             }else {
-                                if (property.searchable == "TRUE") {
+                                if (property.searchable == "TRUE"){
                                     propertyList << propertyName
                                 }
                             }
                         }
                     }
+
+
+                    // One more thing:  Every phenotype also inherits the properties from its sample group.  Let's add those in too
+                    // now let's store up the properties specific to this sample group & phenotype combination
+                    def sampleGroupProperties = sampleGroup.properties
+                    if (sampleGroupProperties){
+                        for (def property in sampleGroupProperties){
+                            String propertyName = property.name
+                            if (propertyList.contains(propertyName)){
+                                // println "That is a little odd. Sample group=${sampleGroupsId} in phenotype=${phenotypeName} already had property=${propertyName}"
+                            }else {
+                                if (property.searchable == "TRUE"){
+                                    propertyList << propertyName
+                                }
+                            }
+                        }
+                    }
+
+
+
+
 
                     // we can descend further if there are sample groups within the sample group
                     if (sampleGroup.sample_groups){
@@ -880,8 +905,6 @@ class SharedToolsService {
                             }
                         }
                     }
-
-
 
                     // we can descend further if there are sample groups within the sample group
                     if (sampleGroup.sample_groups){
@@ -1107,14 +1130,13 @@ class SharedToolsService {
         List <String> listOfProperties = []
         int numrec = 0
         String retval
+        PhenoKey sampleGroupLookup = new PhenoKey(sampleGroup,0,0)
         if (annotatedList){
-            if (annotatedList.containsKey(sampleGroup)){
-                List <PhenoKey> listForThisPhenotype =  annotatedList [sampleGroup]
-                if (listForThisPhenotype) {
-                    List <PhenoKey> orderedListOfSampleGroups = listForThisPhenotype.sort{ it.sort_order }
-                    numrec = orderedListOfSampleGroups.size()
-                    for ( int  i = 0 ; i < orderedListOfSampleGroups.size() ; i++ ){
-                        listOfProperties << orderedListOfSampleGroups[i]
+            if (annotatedList.containsKey(sampleGroupLookup)){
+                List <String> listForThisPhenotype =  annotatedList [(sampleGroupLookup)]
+                if (listForThisPhenotype?.size()>0) {
+                    for ( int  i = 0 ; i < listForThisPhenotype.size() ; i++ ){
+                        listOfProperties << listForThisPhenotype[i]
                     }
                 }
             }
@@ -1124,7 +1146,6 @@ class SharedToolsService {
         if (phenotypeSpecificSampleGroupProperties){
             if (phenotypeSpecificSampleGroupProperties.containsKey(phenotype)){
                 LinkedHashMap hashForThisPhenotype = phenotypeSpecificSampleGroupProperties[phenotype]
-                PhenoKey sampleGroupLookup = new PhenoKey(sampleGroup,0,0)
                 if ((hashForThisPhenotype) && (hashForThisPhenotype.containsKey(sampleGroupLookup))) {
                     List<String> listForThisPhenotype = hashForThisPhenotype[(sampleGroupLookup)]
                     if (listForThisPhenotype) {
@@ -2374,6 +2395,7 @@ public List <LinkedHashMap> convertFormOfFilters(String rawFilters){
              trans["vP_EMMAX_FE_IV"]= "P-value"
              trans["vP_FIRTH"]= "P-value"
              trans["vP_FIRTH_FE_IV"]= "P-value"
+             trans["vP_FIRTH_FE_IV_AW"]= "P-value"
              trans["vP_FE_INV"]= "P-value"
              trans["vP_VALUE"]= "P-value"
              trans["vPolyPhen_PRED"]= "PolyPhen prediction"
