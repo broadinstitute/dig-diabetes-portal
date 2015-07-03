@@ -362,7 +362,7 @@ class SharedToolsService {
             LinkedHashMap<String, List<String>> annotatedSampleGroups = [:]
             LinkedHashMap<PhenoKey, List<String>> annotatedOrderedSampleGroups = [:]
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> phenotypeSpecificSampleGroupProperties = [:]
-            LinkedHashMap<String, LinkedHashMap <PhenoKey,List <String>>> phenotypeSpecificAnnotatedSampleGroupProperties = [:]
+            LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> phenotypeSpecificAnnotatedSampleGroupProperties = [:]
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> experimentSpecificSampleGroupProperties = [:]
             LinkedHashMap<String, LinkedHashMap<String, String>> commonProperties = [:]
             String dataSetVersionThatWeWant = "${dataSetPrefix}${getDataVersion()}"
@@ -829,7 +829,7 @@ class SharedToolsService {
 
 
 
-    public LinkedHashMap<String, LinkedHashMap <PhenoKey,List <String>>> getPhenotypeSpecificAnnotatedPropertiesPerSampleGroupId (def sampleGroups,LinkedHashMap<String, LinkedHashMap <PhenoKey,List <String>>> annotatedPhenotypeSpecificSampleGroupIds){
+    public LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> getPhenotypeSpecificAnnotatedPropertiesPerSampleGroupId (def sampleGroups,LinkedHashMap<String, LinkedHashMap <PhenoKey,List <String>>> annotatedPhenotypeSpecificSampleGroupIds){
         for (def sampleGroup in sampleGroups){
             String sampleGroupsId = sampleGroup.id
             int sampleGroupSortOrder = sampleGroup?.sort_order
@@ -866,12 +866,12 @@ class SharedToolsService {
 
                     // we have the list for this phenotype.  Add some more sample groups for it, along with
                     //  a place to put data set specific properties for each data set
-                    List <String> propertyList
+                    List <PhenoKey> propertyList
                     PhenoKey sampleGroupPhenoKey = new PhenoKey(sampleGroupsId, sampleGroupSortOrder, 0)
                     if (hashOfPhenotypeSpecificSampleGroups.containsKey(sampleGroupPhenoKey)){
                         propertyList = hashOfPhenotypeSpecificSampleGroups[(sampleGroupPhenoKey)]
                     } else {
-                        propertyList = new ArrayList<String>()
+                        propertyList = new ArrayList<PhenoKey>()
                         hashOfPhenotypeSpecificSampleGroups[sampleGroupPhenoKey] = propertyList
                     }
 
@@ -879,12 +879,13 @@ class SharedToolsService {
                     def phenotypeProperties = phenotype.properties
                     if (phenotypeProperties){
                         for (def property in phenotypeProperties){
-                            String propertyName = property.name
-                            if (propertyList.contains(propertyName)){
+                            int sortOrder =  property.sort_order as int
+                            PhenoKey phenoKeyPropertyName = new PhenoKey(property.name,sortOrder,1)    // mark depth as 1 for pprop
+                            if (propertyList.contains(phenoKeyPropertyName)){
                                 // println "That is a little odd. Sample group=${sampleGroupsId} in phenotype=${phenotypeName} already had property=${propertyName}"
                             }else {
                                 if (property.searchable == "TRUE") {
-                                    propertyList << propertyName
+                                    propertyList << phenoKeyPropertyName
                                 }
                             }
                         }
@@ -895,12 +896,13 @@ class SharedToolsService {
                     def sampleGroupProperties = sampleGroup.properties
                     if (sampleGroupProperties){
                         for (def property in sampleGroupProperties){
-                            String propertyName = property.name
-                            if (propertyList.contains(propertyName)){
+                            int sortOrder =  property.sort_order as int
+                            PhenoKey phenoKeyPropertyName = new PhenoKey(property.name,sortOrder,0)    // mark depth as 0 for dprop
+                            if (propertyList.contains(phenoKeyPropertyName)){
                                 // println "That is a little odd. Sample group=${sampleGroupsId} in phenotype=${phenotypeName} already had property=${propertyName}"
                             }else {
                                 if (property.searchable == "TRUE") {
-                                    propertyList << propertyName
+                                    propertyList << phenoKeyPropertyName
                                 }
                             }
                         }
@@ -908,7 +910,7 @@ class SharedToolsService {
 
                     // we can descend further if there are sample groups within the sample group
                     if (sampleGroup.sample_groups){
-                        getPhenotypeSpecificPropertiesPerSampleGroupId (sampleGroup.sample_groups, annotatedPhenotypeSpecificSampleGroupIds)
+                        getPhenotypeSpecificAnnotatedPropertiesPerSampleGroupId (sampleGroup.sample_groups, annotatedPhenotypeSpecificSampleGroupIds)
                     }
                 }
 
@@ -922,23 +924,80 @@ class SharedToolsService {
 
 
 
+    /***
+     * Control the order in which the columns appear on the screen after a sort.  Here we take the tree
+     * containing the meta information describing the columns and sort it using the data structures
+     * we have already extracted from the metadata.
+     *
+     * @param processedMetadata
+     * @param unsortedTree
+     * @return
+     */
+    private LinkedHashMap sortEverything(LinkedHashMap processedMetadata, LinkedHashMap unsortedTree) {
+
+        // sort common
+        if ((unsortedTree?.cproperty) && (unsortedTree?.cproperty?.size() > 0)) {
+            LinkedHashMap temporaryHolder = [:]
+            for (String property in unsortedTree.cproperty) {
+                if (processedMetadata.commonProperties.containsKey(property)) {
+                    temporaryHolder[property] = processedMetadata.commonProperties[property]["sort_order"]
+                }
+            }
+            unsortedTree.cproperty = temporaryHolder.sort { it.value }.keySet()
+        }
+
+        // sort dproperty
+        if ((unsortedTree?.dproperty) && (unsortedTree?.dproperty?.size() > 0)) {
+            for (String phenotype in unsortedTree.dproperty.keySet()) {
+                for (String sampleGroup in unsortedTree.dproperty[phenotype].keySet()) {
+                    List<String> properties =   unsortedTree.dproperty[phenotype][sampleGroup]
+                    if (processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup.containsKey(phenotype)) {
+                        PhenoKey sampleGroupPK = new PhenoKey(sampleGroup,0,0)
+                        if (processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype].containsKey(sampleGroupPK))  {
+                            List pks = processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype][sampleGroupPK]
+                            LinkedHashMap temporaryHolder = [:]
+                            for (String property in properties) {
+                                PhenoKey singlePK = new PhenoKey(property,0,0)
+                                if (pks.contains(singlePK))  {
+                                    temporaryHolder[property]=(pks.find{it==singlePK}).sort_order
+                                }
+                            }
+                            unsortedTree.dproperty[phenotype][sampleGroup] = temporaryHolder.sort{it.value}.keySet()
+                        }
+                    }
+                }
+
+            }
+
+        }
 
 
+        // sort pproperty
+        if ((unsortedTree?.pproperty) && (unsortedTree?.pproperty?.size() > 0)) {
+            for (String phenotype in unsortedTree.pproperty.keySet()) {
+                for (String sampleGroup in unsortedTree.pproperty[phenotype].keySet()) {
+                    List<String> properties =   unsortedTree.pproperty[phenotype][sampleGroup]
+                    if (processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup.containsKey(phenotype)) {
+                        PhenoKey sampleGroupPK = new PhenoKey(sampleGroup,0,0)
+                        if (processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype].containsKey(sampleGroupPK))  {
+                            List pks = processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype][sampleGroupPK]
+                            LinkedHashMap temporaryHolder = [:]
+                            for (String property in properties) {
+                                PhenoKey singlePK = new PhenoKey(property,0,0)
+                                if (pks.contains(singlePK))  {
+                                    temporaryHolder[property]=(pks.find{it==singlePK}).sort_order
+                                }
+                            }
+                            unsortedTree.pproperty[phenotype][sampleGroup] = temporaryHolder.sort{it.value}.keySet()
+                        }
+                    }
+                }
 
+            }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        }
+        return unsortedTree
+    }
 
 
 
@@ -1000,19 +1059,27 @@ class SharedToolsService {
                     returnValue.pproperty[phenotype][sampleGroup] = []
                     if (propertiesToKeep == null) {
                         returnValue.dproperty[phenotype][sampleGroup].addAll(processedMetadata.propertiesPerSampleGroups[sampleGroup])
-                        if (processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[phenotype]) {
-                            returnValue.pproperty[phenotype][sampleGroup].addAll(processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[phenotype][sampleGroup])
+                        if (processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype]) {
+                            returnValue.pproperty[phenotype][sampleGroup].addAll(processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype][(new PhenoKey(sampleGroup,0,0))])
                         }
+//                        if (processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[phenotype]) {
+//                            returnValue.pproperty[phenotype][sampleGroup].addAll(processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[phenotype][sampleGroup])
+//                        }
                     } else {
                         returnValue.dproperty[phenotype][sampleGroup].addAll(propertiesToKeep.findAll({processedMetadata.propertiesPerSampleGroups[sampleGroup].contains(it)}))
-                        if (processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[phenotype]) {
-                            returnValue.pproperty[phenotype][sampleGroup].addAll(propertiesToKeep.findAll({processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[phenotype][sampleGroup].contains(it)}))
+                        if (processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype]) {
+                            returnValue.pproperty[phenotype][sampleGroup].addAll(propertiesToKeep.findAll({processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype][(new PhenoKey(sampleGroup,0,0))].findAll({it?.depth==1}).contains(new PhenoKey(it,0,0))}))
                         }
+//                        if (processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[phenotype]) {
+//                            returnValue.pproperty[phenotype][sampleGroup].addAll(propertiesToKeep.findAll({processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[phenotype][sampleGroup].contains(it)}))
+//                        }
                     }
                 }
             }
         }
         return returnValue
+
+//        return sortEverything(processedMetadata,returnValue)
     }
 
 
@@ -1125,7 +1192,7 @@ class SharedToolsService {
 
     public List <String> combineToCreateASingleList (String phenotype,String sampleGroup,
                                                      LinkedHashMap<PhenoKey,List<String>> annotatedList,
-                                                     LinkedHashMap<String, LinkedHashMap <PhenoKey,List <String>>> phenotypeSpecificSampleGroupProperties ){
+                                                     LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> phenotypeSpecificSampleGroupProperties ){
         // the list of properties specific to this data set
         List <String> listOfProperties = []
         int numrec = 0
@@ -1149,8 +1216,9 @@ class SharedToolsService {
                 if ((hashForThisPhenotype) && (hashForThisPhenotype.containsKey(sampleGroupLookup))) {
                     List<String> listForThisPhenotype = hashForThisPhenotype[(sampleGroupLookup)]
                     if (listForThisPhenotype) {
-                        for (int i = 0; i < listForThisPhenotype.size(); i++) {
-                            listOfProperties << listForThisPhenotype[i]
+                        List sortedList = listForThisPhenotype.sort{it?.sort_order}
+                        for (int i = 0; i < sortedList.size(); i++) {
+                            listOfProperties << sortedList[i].toString()
                         }
                     }
                 }
@@ -1256,7 +1324,7 @@ class SharedToolsService {
 
 
 
-    public String packageUpATreeAsJson (LinkedHashMap <String,LinkedHashMap<String,List<String>>> bigTree ){
+    public String packageUpATreeAsJson (LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> bigTree, Boolean pdata, Boolean ddata ){
         // now that we have a multilevel tree, build it into a string suitable for JSON
         StringBuilder returnValue = new StringBuilder ()
         if ((bigTree) && (bigTree?.size() > 0)){
@@ -1269,13 +1337,21 @@ class SharedToolsService {
                     int sampleGroupCount = 0
                     phenotypeSpecificSampleGroups.each { sampleGroupName, propertyNames ->
                         // there is one element that we always need to skip, namely "phenotypeProperties", which contains meta-properties not directly relevant to users
-                        if (sampleGroupName == "phenotypeProperties"){
+                        if (sampleGroupName.toString() == "phenotypeProperties"){
                             sampleGroupCount++
                         }else { // otherwise it's a property users might care about
                             sb << """        \"${sampleGroupName}\":[""".toString()
-                            for ( int  i = 0 ; i < propertyNames.size() ; i++ ){
-                                sb << "\"${propertyNames[i]}\"".toString()
-                                if (i+1<propertyNames.size()){
+                            List<PhenoKey> propertyList =   []
+                            if  ( (pdata)  && (ddata) ){
+                                propertyList =   propertyNames
+                            }   else if (pdata) {
+                                propertyList =   propertyNames.findAll{it.depth==1}
+                            }    else if (ddata) {
+                                propertyList =   propertyNames.findAll{it.depth==0}
+                            }
+                                for ( int  i = 0 ; i < propertyList.size() ; i++ ){
+                                sb << "\"${propertyList[i].toString()}\"".toString()
+                                if (i+1<propertyList.size()){
                                     sb << ","
                                 }
                             }

@@ -207,8 +207,7 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
         var returnValue="";
         // get our property list
         var propertyList = [];
-        if ((typeof data !== 'undefined') &&
-             (data) && (data.metadata)) {
+        if ((typeof data !== 'undefined') &&(data) ) {
             if ((dataSet == 'common') && (data.metadata[phenotype])) {
                 propertyList = Object.keys(data.metadata[phenotype]);
             } else if (phenotype == 'common') {
