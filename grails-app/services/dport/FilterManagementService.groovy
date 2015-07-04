@@ -197,7 +197,12 @@ class FilterManagementService {
                                               String value,
                                               String operandType = "FLOAT") {
         String retval=""
-        BigDecimal bigDecimal =  value as  BigDecimal
+        BigDecimal bigDecimal = 1  //  emergency default, so that at least we don't pass garbage to the rest API
+        try{
+            bigDecimal =  value as  BigDecimal
+        } catch(e) {
+            log.error("Received nonnumeric value in retrieveCustomizedFilterString = ${value}.  Shouldn't this have been filtered on the front end?")
+        }
         retval= """{"dataset_id": "${dataSet}", "phenotype": "${phenotype}", "operand": "${property}", "operator": "${equivalence}", "value": ${bigDecimal}, "operand_type": "${operandType}"}""".toString()
         return  retval
        }
