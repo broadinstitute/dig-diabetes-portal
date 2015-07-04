@@ -1413,7 +1413,7 @@ class FilterManagementService {
 
         // It is possible to send back an null filter, which we can then drop from further processing
         // does perform that test right here
-        if (newParameters){
+        if ((newParameters)&&(newParameters.findAll{ it.key =~ /^filter/ }?.size()>0)){
             returnValue << newParameters
         }
 

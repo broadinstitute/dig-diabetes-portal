@@ -16,18 +16,19 @@
     div.propertyHolder {
         position: absolute;
         background-color: white;
-        height:160px;
+        height:170px;
         width:290px;
-        border: 2px solid green;
+        border: 2px outset rgba(43, 117, 207, 0.68);
         margin: 5px;
-        padding: 10px;
+        padding: 5px 10px 10px 10px;
         text-align: left;
     }
     div.propertySubHolder{
         position: relative;
         margin: 3px;
+        padding: 3px;
         height:100px;
-        width:270px;
+        width:260px;
         overflow-y: auto;
         overflow-x: hidden;
         background-color: #eee;
@@ -35,7 +36,7 @@
         -webkit-border-radius: 5px;
         -khtml-border-radius: 5px;
         border-radius: 5px;
-
+        border: 2px inset;
     }
     div.propertyHolder .propertyHolderChk {
         color:black;
@@ -49,9 +50,18 @@
     }
     .propBox {
         color:white;
-        margin: 5px 0 5px 0;
-        position: absolute;
         bottom: 0;
+        background-color: rgba(43, 117, 207, 0.68);
+        border-style: double;
+        font-weight: bold;
+        margin: 8px 0 0 auto;
+    }
+    span.propboxtitle  {
+        color:black;
+        text-align: center;
+        font-weight: bold;
+        line-height: 20px;
+        padding-left: 40px;
     }
 
 </style>
@@ -85,7 +95,7 @@
         t.checked=false;
     } ;
     var closer = function(that){
-        $(that).parent().parent().children().first().hide();
+        $(that).parent().parent().parent().children().first().hide();
         skipBubbleUp = true;
     } ;
 var rememberProperty = function(phenotype,dataSet,propertyList, addIt){
@@ -118,7 +128,7 @@ var rememberProperty = function(phenotype,dataSet,propertyList, addIt){
      }
 
 }
-    var lookAtProperties = function (here,phenotype,dataSet,propertyList,currentPropertyList){
+    var lookAtProperties = function (here,phenotype,dataSet,propertyList,currentPropertyList,title){
     if (skipBubbleUp){
         skipBubbleUp = false;
         return;
@@ -140,7 +150,7 @@ var rememberProperty = function(phenotype,dataSet,propertyList, addIt){
                         '" '+propertyAlreadyExists+'><label class="chkBoxText">'+mpgSoftware.trans.translator(propertyList[i])+'</label></input><br/></span>');
             }
             $(here).append("<div id='"+propDivName+"' class ='propertyHolder'>"+//<form action=\"./relaunchAVariantSearch\">"+
-                    "<a style='float:right' onclick='closer(this)'>X</a>"+
+                    "<span class='propboxtitle text-center'>"+title+"<a style='float:right' onclick='closer(this)'>X</a></span>"+
                     "<div class='propertySubHolder'>"+
                     "<input type=\"hidden\"  name=\"encodedParameters\" value=\"<%=encodedParameters%>\">"+
                     "<input type=\"hidden\"  name=\"filters\" value=\"<%=filter%>\">"+
@@ -201,7 +211,7 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
 
 
     var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
-    function buildPropertyInteractor(data,phenotype,dataSet,existingCols){
+    function buildPropertyInteractor(data,phenotype,dataSet,existingCols,title){
         var returnValue="";
         // get our property list
         var propertyList = [];
@@ -216,7 +226,7 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
                 propertyList = [];
             }
             returnValue = "<span class='glyphicon glyphicon-plus filterEditor propertyAdder' aria-hidden='true' onclick='lookAtProperties(this,\""+phenotype+"\",\""+dataSet+"\",[\""+
-                    propertyList.join('\",\"')+"\"],[\""+ existingCols.join('\",\"')+"\"])'></span>";
+                    propertyList.join('\",\"')+"\"],[\""+ existingCols.join('\",\"')+"\"],\""+title+"\")'></span>";
             }
         return returnValue;
     }
@@ -225,7 +235,7 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
         // get our property list
         if (typeof propertyList !== 'undefined') {
             returnValue = "<span style='float:right' class='glyphicon glyphicon-plus filterEditor propertyAdder' aria-hidden='true' onclick='lookAtProperties(this,\"common\",\"common\",[\""+
-                    propertyList.join('\",\"')+"\"],[\""+ existingCols.join('\",\"')+"\"])'></span>";
+                    propertyList.join('\",\"')+"\"],[\""+ existingCols.join('\",\"')+"\"],\"Choose common properties\")'></span>";
         }
         return returnValue;
     }
@@ -287,7 +297,7 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
                 if (dataset_width > 0) {
                     rememberProperty('common',dataset,data.columns.dproperty[pheno][dataset], true);
                     $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp +
-                            buildPropertyInteractor(data,'common',dataset,data.columns.dproperty[pheno][dataset])+
+                            buildPropertyInteractor(data,'common',dataset,data.columns.dproperty[pheno][dataset],"Choose data set properties")+
                     "</th>")
                 }
             }
@@ -318,13 +328,13 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
                 if (dataset_width > 0) {
                     rememberProperty(pheno,dataset,data.columns.pproperty[pheno][dataset], true);
                     $('#variantTableHeaderRow2').append("<th colspan=" + dataset_width + " class=\"datatype-header\">" + datasetDisp +
-                            buildPropertyInteractor(data,pheno,dataset,data.columns.pproperty[pheno][dataset])+
+                            buildPropertyInteractor(data,pheno,dataset,data.columns.pproperty[pheno][dataset],"Choose dataset properties")+
                             "</th>")
                 }
             }
             if (pheno_width > 0) {
                 $('#variantTableHeaderRow').append("<th colspan=" + pheno_width + " class=\"datatype-header\">" + phenoDisp +
-                        buildPropertyInteractor(data,pheno,'common',Object.keys(data.columns.pproperty[pheno]))+
+                        buildPropertyInteractor(data,pheno,'common',Object.keys(data.columns.pproperty[pheno]),"     Choose datasets")+
                         "</th>")
             }
             totCol += pheno_width
