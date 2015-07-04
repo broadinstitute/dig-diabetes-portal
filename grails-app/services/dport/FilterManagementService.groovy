@@ -505,10 +505,10 @@ class FilterManagementService {
         // KDUXTD-38: adding default filter for 'variation across continental ancestry' drill down
         developingParameterCollection['predictedEffects'] = 'lessThan_noEffectNoncoding';
 
-         if (filter) {
+        if (filter) {
              String[] requestPortionList =  filter.split("-")
              if (requestPortionList.size() > 1) {  //  multipiece searches
-                 String ethnicity = requestPortionList[1]
+                 String ethnicity = (requestPortionList[1]).toLowerCase()
                  if (ethnicity == 'exchp') { // we have no ethnicity. Everything comes from the European exome chipset
                      returnValue['datatype'] = 'exomechip'
                      switch ( requestPortionList[0] ){
