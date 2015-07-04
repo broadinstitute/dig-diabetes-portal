@@ -91,14 +91,12 @@
 var rememberProperty = function(phenotype,dataSet,propertyList, addIt){
     var mapOfExistingProperties = {};
     var numberOfFields = 0;
-    var highestPropertyCurrentlyUsed = 0;
     for ( var i = 0 ; i < 500 ; i++ ){
         var savedField = $('#savedValue'+i);
         if (savedField.length > 0){
             mapOfExistingProperties[savedField.val()]=savedField.attr('id');
             savedField.attr('id').substr(10,savedField.attr('id').length-10)
             numberOfFields++;
-            highestPropertyCurrentlyUsed = i;
         }
     }
     var hiddenFields = $('#hiddenFields');
@@ -108,7 +106,7 @@ var rememberProperty = function(phenotype,dataSet,propertyList, addIt){
              var codedValue = 'propId^'+phenotype +'^'+dataSet +'^'+ propertyList[i];
              if (addIt){// add the field of it doesn't exist already
                  if (!mapOfExistingProperties[codedValue]) {
-                     hiddenFields.append('<input type="hidden" class="form-control" name="savedValue'+(highestPropertyCurrentlyUsed +1)+'" id="savedValue'+(highestPropertyCurrentlyUsed +1)+'" value="'+codedValue+'" style="height:0px">');
+                     hiddenFields.append('<input type="hidden" class="form-control" name="savedValue'+(totalFilterCount +1)+'" id="savedValue'+(totalFilterCount +1)+'" value="'+codedValue+'" style="height:0px">');
                  }
                  $('#totalFilterCount').val(totalFilterCount +1);
              } else { // remove it

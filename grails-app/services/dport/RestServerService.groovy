@@ -2051,8 +2051,17 @@ private String generateProteinEffectJson (String variantName){
         List<String> datasetsToFetch = []
         List<String> phenotypesToFetch = []
         List<String> propertiesToFetch = []
-     //   List<String> commonProperties = ["VAR_ID", "CHROM", "POS","DBSNP_ID","CLOSEST_GENE","GENE","IN_GENE","Protein_change","Consequence"]
-        List<String> commonProperties = ["CLOSEST_GENE","VAR_ID","DBSNP_ID","Protein_change","Consequence","CHROM", "POS"] // default common properties
+        List<String> commonProperties = [] // default common properties
+
+        if (!requestedProperties){
+            commonProperties << "CLOSEST_GENE"
+            commonProperties << "VAR_ID"
+            commonProperties << "DBSNP_ID"
+            commonProperties << "Protein_change"
+            commonProperties << "Consequence"
+            commonProperties << "CHROM"
+            commonProperties << "POS"
+        }
 
         //  if we don't have a better idea then launch the search based on the filters.  Otherwise used our stored criteria
         if (!requestedProperties) {
