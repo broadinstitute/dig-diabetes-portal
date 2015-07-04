@@ -130,16 +130,16 @@ class FilterManagementService {
                 returnValue = """{"dataset_id": "ExSeq_17k_""" + (parm1.equals("eu") || parm1.equals("hs") ? parm1 : "${parm1}_genes") + """_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "GT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setExomeChipMinimum" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
+                returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "blah", "operand": "MAF", "operator": "GTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setExomeChipMinimumAbsolute" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "GT", "value": ${parm2} }""".toString()
+                returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "blah", "operand": "MAF", "operator": "GT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setExomeChipMaximum" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "LTE", "value": ${parm2} }""".toString()
+                returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "blah", "operand": "MAF", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setExomeChipMaximumAbsolute" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "LT", "value": ${parm2} }""".toString()
+                returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "blah", "operand": "MAF", "operator": "LT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setSigmaMinorAlleleFrequencyMinimum" :
                 returnValue = """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
@@ -513,20 +513,20 @@ class FilterManagementService {
                      returnValue['datatype'] = 'exomechip'
                      switch ( requestPortionList[0] ){
                          case "total":
-                             returnValue['ethnicity_af_EU-min'] = 0.0
-                             returnValue['ethnicity_af_EU-max'] = 1.0
+                             returnValue['ethnicity_af_eu-min'] = 0.0
+                             returnValue['ethnicity_af_eu-max'] = 1.0
                              break;
                          case "common":
-                             returnValue['ethnicity_af_EU-min'] = 0.05
-                             returnValue['ethnicity_af_EU-max'] = 1.0
+                             returnValue['ethnicity_af_eu-min'] = 0.05
+                             returnValue['ethnicity_af_eu-max'] = 1.0
                              break;
                          case "lowfreq":
-                             returnValue['ethnicity_af_EU-min'] = 0.0005
-                             returnValue['ethnicity_af_EU-max'] = 0.05
+                             returnValue['ethnicity_af_eu-min'] = 0.0005
+                             returnValue['ethnicity_af_eu-max'] = 0.05
                              break;
                          case "rare":
-                             returnValue['ethnicity_af_EU-min'] = 0.0
-                             returnValue['ethnicity_af_EU-max'] = 0.0005
+                             returnValue['ethnicity_af_eu-min'] = 0.0
+                             returnValue['ethnicity_af_eu-max'] = 0.0005
                              break;
                          default:
                              log.error("FilterManagementService:interpretSpecialFilters. Unexpected string 1 = ${requestPortionList[0]}")
