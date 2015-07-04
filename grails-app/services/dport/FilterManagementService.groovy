@@ -668,7 +668,7 @@ class FilterManagementService {
 
         // datatype: Sigma, exome sequencing, exome chip, or diagram GWAS
         if  (incomingParameters.containsKey("datatype"))  {      // user has requested a particular data set. Without explicit request what is the default?
-
+            String dataSetSpecifier = incomingParameters ["datatype"]
             int dataSetDistinguisher =   distinguishBetweenDataSets ( incomingParameters)
 
 
@@ -678,6 +678,7 @@ class FilterManagementService {
                     filters <<  retrieveFilterString("dataSetGwas")
                     filterDescriptions << "Is observed in Diagram GWAS"
                     parameterEncoding << "1:3"
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1"
                     break;
 
                 case  1:
@@ -685,18 +686,21 @@ class FilterManagementService {
                     filters <<  retrieveFilterString("dataSetSigma") 
                     filterDescriptions << "Whether variant is included in SIGMA analysis is equal to 1"
                     parameterEncoding << "1:0"
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1"
                     break;
                 case  2:
                     datatypeOperand = exomeSequencePValue
                     filters <<  retrieveFilterString("dataSetExseq")
                     filterDescriptions << "Is observed in exome sequencing"
                     parameterEncoding << "1:1"
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1"
                     break;
                 case  3:
                     datatypeOperand = exomeChipPValue
                     filters <<  retrieveFilterString("dataSetExchp") 
                     filterDescriptions << "Is observed in exome chip"
                     parameterEncoding << "1:2"
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1"
                     break;
                 default:
                     log.error("FilterManagementService.determineDataSet: unexpected dataSetDistinguisher = ${dataSetDistinguisher}")
@@ -1079,6 +1083,7 @@ class FilterManagementService {
         List <String> filters =  buildingFilters.filters
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
+        List <String> transferableFilter =  buildingFilters.transferableFilter
         if  (incomingParameters.containsKey("predictedEffects"))  {      // user has requested a particular data set. Without explicit request what is the default?
             String predictedEffects =  incomingParameters ["predictedEffects"]
 
@@ -1091,29 +1096,34 @@ class FilterManagementService {
                     filters <<  retrieveFilterString("proteinTruncatingCheckbox") 
                     filterDescriptions << "Predicted effect: protein-truncating"
                     parameterEncoding << "23:1"
+                    transferableFilter << "23:1"
                     break;
                 case  "missense":
                     filters <<  retrieveFilterString("missenseCheckbox") 
                     filterDescriptions << "Predicted effect: missense"
                     parameterEncoding << "23:2"
+                    transferableFilter << "23:2"
                     break;
                 case  "noEffectSynonymous":
                     filters <<  retrieveFilterString("synonymousCheckbox")
                     //filterDescriptions << "Estimated classification for no effects (synonymous)"
                     filterDescriptions << "No predicted effect (synonymous)"
                     parameterEncoding << "23:3"
+                    transferableFilter << "23:3"
                     break;
                 case  "noEffectNoncoding":
                     filters <<  retrieveFilterString("noncodingCheckbox")
                     //filterDescriptions <<  "Estimated classification for no effects (non-coding)"
                     filterDescriptions <<  "No predicted effect (non-coding)"
                     parameterEncoding << "23:4"
+                    transferableFilter << "23:4"
                     break;
                 case  "lessThan_noEffectNoncoding":
                     filters <<  retrieveFilterString("lessThan_noEffectNoncoding")
                     //filterDescriptions <<  "Estimated classification for no effects (non-coding)"
                     filterDescriptions <<  "Protein truncating,missense, and synonymous variants"
                     parameterEncoding << "23:5"
+                    transferableFilter << "23:5"
                     break;
 
                 default:
@@ -1413,7 +1423,8 @@ class FilterManagementService {
 
         // It is possible to send back an null filter, which we can then drop from further processing
         // does perform that test right here
-        if ((newParameters)&&(newParameters.findAll{ it.key =~ /^filter/ }?.size()>0)){
+//        if ((newParameters)&&(newParameters.findAll{ it.key =~ /^filter/ }?.size()>0)){
+        if (newParameters){
             returnValue << newParameters
         }
 
@@ -1478,6 +1489,9 @@ class FilterManagementService {
                                     break;
                                 case "4":
                                     returnValue ["predictedEffects"] = "noEffectNoncoding"
+                                    break;
+                                case "5":
+                                    returnValue ["predictedEffects"] = "lessThan_noEffectNoncoding"
                                     break;
                                 default:
                                     returnValue ["predictedEffects"] = "all-effects"

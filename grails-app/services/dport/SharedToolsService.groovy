@@ -2148,7 +2148,7 @@ public List <LinkedHashMap> convertFormOfFilters(String rawFilters){
                             case "2":dividedFilter["predictedEffects"]="missense"; break;
                             case "3":dividedFilter["predictedEffects"]="noEffectSynonymous"; break;
                             case "4":dividedFilter["predictedEffects"]="noEffectNoncoding"; break;
-                            case "5":dividedFilter["predictedEffects"]="noEffectNoncoding"; break;
+                            case "5":dividedFilter["predictedEffects"]="lessThan_noEffectNoncoding"; break;
                             default:break
                         }
                     }
