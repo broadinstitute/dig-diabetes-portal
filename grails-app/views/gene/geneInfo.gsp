@@ -100,20 +100,20 @@
                         '<g:helpText title="gene.continentalancestry.datatype.exomeChip.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.datatype.exomeChip.help.text"/>'
 
             };
-            mpgSoftware.geneInfo.fillTheGeneFields(data,
-                    ${show_gwas},
-                    ${show_exchp},
-                    ${show_exseq},
-                    ${show_sigma},
-                    '<g:createLink controller="region" action="regionInfo" />',
-                    '<g:createLink controller="trait" action="traitSearch" />',
-                    '<g:createLink controller="variantSearch" action="gene" />',
-                    {variantsAndAssociationsTableHeaders:variantsAndAssociationsTableHeaders,
-                     variantsAndAssociationsPhenotypeAssociations:variantsAndAssociationsPhenotypeAssociations,
-                     biologicalHypothesisTesting:biologicalHypothesisTesting,
-                     variantsAndAssociationsRowHelpText: variantsAndAssociationsRowHelpText,
-                     continentalAncestryText: continentalAncestryText}
-            );
+            %{--mpgSoftware.geneInfo.fillTheGeneFields(data,--}%
+                    %{--${show_gwas},--}%
+                    %{--${show_exchp},--}%
+                    %{--${show_exseq},--}%
+                    %{--${show_sigma},--}%
+                    %{--'<g:createLink controller="region" action="regionInfo" />',--}%
+                    %{--'<g:createLink controller="trait" action="traitSearch" />',--}%
+                    %{--'<g:createLink controller="variantSearch" action="gene" />',--}%
+                    %{--{variantsAndAssociationsTableHeaders:variantsAndAssociationsTableHeaders,--}%
+                     %{--variantsAndAssociationsPhenotypeAssociations:variantsAndAssociationsPhenotypeAssociations,--}%
+                     %{--biologicalHypothesisTesting:biologicalHypothesisTesting,--}%
+                     %{--variantsAndAssociationsRowHelpText: variantsAndAssociationsRowHelpText,--}%
+                     %{--continentalAncestryText: continentalAncestryText}--}%
+            %{--);--}%
             $('[data-toggle="popover"]').popover({
                 animation: true,
                 html: true,
