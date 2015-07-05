@@ -1077,7 +1077,7 @@ class SharedToolsService {
                 }
             }
         }
-        return returnValue
+//        return returnValue
 
         return sortEverything(processedMetadata,returnValue)
     }
