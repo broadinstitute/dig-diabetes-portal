@@ -655,7 +655,7 @@ var mpgSoftware = mpgSoftware || {};
                     equivalenceValue = ">";
                 } else if (equivalence === 'equalTo'){
                     equalToSelected = "selected";
-                    equivalenceValue = "=";
+                    equivalenceValue = "|";
                 }
             }
             var labelId = sectionName+'___nameId';

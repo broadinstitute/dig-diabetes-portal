@@ -103,7 +103,7 @@ class FilterManagementService {
                 returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setPValueThreshold" :
-                returnValue = """{"dataset_id": "${chooseDataSet(parm3)}", "phenotype": "T2D", "operand": "${parm1}", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "${chooseDataSet(parm3)}", "phenotype": "T2D", "operand": "${parm1}", "operator": "LT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setRegionGeneSpecification" :
                 returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${parm1}", "operand_type": "STRING"}""".toString()
@@ -801,8 +801,8 @@ class FilterManagementService {
             returnValue ["property"]  = filterPieces2[1].substring(0,equivalencePosition)
             returnValue ["value"]  = filterPieces2[1].substring(equivalencePosition+1)
             returnValue ["equivalence"]  = "GT"
-        }  else if (filterPieces2[1].indexOf("=") > -1){
-            int equivalencePosition = filterPieces2[1].indexOf("=")
+        }  else if (filterPieces2[1].indexOf("|") > -1){
+            int equivalencePosition = filterPieces2[1].indexOf("|")
             returnValue ["property"]  = filterPieces2[1].substring(0,equivalencePosition)
             returnValue ["value"]  = filterPieces2[1].substring(equivalencePosition+1)
             returnValue ["equivalence"]  = "EQ"
@@ -1273,7 +1273,21 @@ class FilterManagementService {
            String inequivalence = filterPieces [3]
            String propertyHolder = filterPieces [4]
            String property = propertyHolder.substring(0,propertyHolder.indexOf("___valueId"))
-           String inequalitySignifier  = (inequivalence=="lessThan")?"<":">"
+           String inequalitySignifier
+           switch(inequivalence){
+               case "lessThan" :
+                   inequalitySignifier =  "<"
+                   break
+               case "greaterThan" :
+                   inequalitySignifier = ">"
+                   break
+               case "equalTo" :
+                   inequalitySignifier =  "|"
+                   break
+               default:
+                   inequalitySignifier =  "<"
+                   break
+           }
            returnValue = "${phenotype}[${sample}]${property}${inequalitySignifier}${value}"
        }
        return returnValue

@@ -160,9 +160,9 @@
         return {loadAncestryTable: loadAncestryTable}
     }());
 
-    if (false){
+
         mpgSoftware.ancestryTable.loadAncestryTable();
-    }
+
 
 
 
