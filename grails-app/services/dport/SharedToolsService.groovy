@@ -1079,7 +1079,7 @@ class SharedToolsService {
         }
         return returnValue
 
-//        return sortEverything(processedMetadata,returnValue)
+        return sortEverything(processedMetadata,returnValue)
     }
 
 
