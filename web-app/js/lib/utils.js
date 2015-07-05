@@ -560,15 +560,29 @@ var UTILS = {
 
             for (var key in groupList) {
                 if (groupList.hasOwnProperty(key)) {
-                    var groupName = key;
-                    var groupContents = groupList[key];
-                    options.append("<optgroup label='"+key+"'>");
-                    for (var j = 0; j < groupContents.length; j++) {
-                        options.append($("<option />").val(groupContents[j]).text(mpgSoftware.trans.translator(groupContents[j])));
+                    if (key==='GLYCEMIC')  {
+                        var groupContents = groupList[key];
+                        options.append("<optgroup label='"+key+"'>");
+                        for (var j = 0; j < groupContents.length; j++) {
+                            options.append($("<option />").val(groupContents[j]).text(mpgSoftware.trans.translator(groupContents[j])));
+                        }
+                        options.append("</optgroup>");
                     }
-                    options.append("</optgroup>");
                 }
             }
+            for (var key in groupList) {
+                if (groupList.hasOwnProperty(key)) {
+                    if (key!=='GLYCEMIC')  {
+                        var groupContents = groupList[key];
+                        options.append("<optgroup label='"+key+"'>");
+                        for (var j = 0; j < groupContents.length; j++) {
+                            options.append($("<option />").val(groupContents[j]).text(mpgSoftware.trans.translator(groupContents[j])));
+                        }
+                        options.append("</optgroup>");
+                    }
+                }
+            }
+
         }
     },
 

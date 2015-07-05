@@ -18,6 +18,10 @@
         background-color: white;
         height:170px;
         width:290px;
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -khtml-border-radius: 3px;
+        border-radius: 3px;
         border: 2px outset rgba(43, 117, 207, 0.68);
         margin: 5px;
         padding: 5px 10px 10px 10px;
@@ -72,6 +76,8 @@
 
 
 <script>
+
+
     var getPropData = function (){
         var varsToSend = {};
         var savedValuesList = [];

@@ -196,24 +196,6 @@
                         </h3>
 
                         <select name="" id="trait-input" class="form-control btn-group btn-input clearfix">
-                            %{--<g:renderPhenotypeOptions/>--}%
-                            %{--<optgroup label="Cardiometabolic">--}%
-                                %{--<g:each in="${Phenotype.findByName('fasting glucose')}" var="phenotype">--}%
-                                    %{--<option value= ${phenotype.databaseKey}>${phenotype.name}</option>--}%
-                                %{--</g:each>--}%
-                                %{--<g:each in="${Phenotype.list()}" var="phenotype">--}%
-                                    %{--<g:if test="${(phenotype.category == 'cardiometabolic') && (phenotype.name != 'fasting glucose')}">--}%
-                                        %{--<option value= ${phenotype.databaseKey}>${phenotype.name}</option>--}%
-                                    %{--</g:if>--}%
-                                %{--</g:each>--}%
-                            %{--</optgroup>--}%
-                            %{--<optgroup label="Other">--}%
-                                %{--<g:each in="${Phenotype.list()}" var="phenotype">--}%
-                                    %{--<g:if test="${phenotype.category == 'other'}">--}%
-                                        %{--<option value="${phenotype.databaseKey}">${phenotype.name}</option>--}%
-                                    %{--</g:if>--}%
-                                %{--</g:each>--}%
-                            %{--</optgroup>--}%
 
                         </select>
 
