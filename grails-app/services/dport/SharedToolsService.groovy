@@ -1242,8 +1242,8 @@ class SharedToolsService {
             for ( int  i = 0 ; i < numrec ; i++ ){
 
                 StringBuffer scooterBuffer = new StringBuffer();
-                for (int j = 0; j < listOfDataSets[i].depth; j++){
-                    scooterBuffer.append("_");
+                for (int j = 1; j < listOfDataSets[i].depth; j++){
+                    scooterBuffer.append("-");
                 }
 
                 sb << "\"${scooterBuffer.toString()+listOfDataSets[i].toString()}\"".toString()

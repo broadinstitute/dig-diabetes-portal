@@ -377,7 +377,7 @@ var mpgSoftware = mpgSoftware || {};
                 for ( var i = 0 ; i < numberOfRecords ; i++ ){
                     var preceedingUnderscores = 0;
                     for (var j=0; j<dataSetList[i].length;j++ ){
-                        if (dataSetList[i][j]!='_') break;
+                        if (dataSetList[i][j]!='-') break;
                         preceedingUnderscores++;
                     }
                     var replaceUnderscores = dataSetList[i].substr(0,preceedingUnderscores);
