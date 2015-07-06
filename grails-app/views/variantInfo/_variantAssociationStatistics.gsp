@@ -84,9 +84,7 @@
         });
 
     };
-    if (${newApi}){
-        fillVariantStatistics();
-    }
+    fillVariantStatistics();
 
 </script>
 
