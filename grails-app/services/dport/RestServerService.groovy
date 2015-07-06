@@ -112,7 +112,7 @@ class RestServerService {
             'SIGMA_T2D_OR',
             'SIGMA_T2D_MINA',
             'SIGMA_T2D_MINU',
-            'SIGMA_T2D_MAF',
+            'SIGMA_T2D_MAF', // Used for variant info
             'SIGMA_SOURCE',
             'IN_SIGMA',
     ]
@@ -323,11 +323,11 @@ class RestServerService {
     private List<String> getVariantColumns() {
         List<String> returnValue
         if (sharedToolsService.applicationName() == 'Sigma') {
-            returnValue = (VARIANT_COLUMNS + SIGMA_VARIANT_COLUMNS + GWAS_VARIANT_COLUMNS)
+            returnValue = ['CHROM', 'POS', 'SIGMA_T2D_MAF']
         } else {
-            returnValue = (VARIANT_COLUMNS + EXSEQ_VARIANT_COLUMNS + EXCHP_VARIANT_COLUMNS + GWAS_VARIANT_COLUMNS)
+            returnValue = ['CHROM', 'POS']
         }
-        return returnValue
+        return returnValue // Only need CHROM, POS and SIGMA_T2D_MAF
     }
 
     private List<String> getVariantInfoColumns() {
