@@ -10,7 +10,7 @@ class GeneController {
     GeneManagementService geneManagementService
     SharedToolsService sharedToolsService
     private static final log = LogFactory.getLog(this)
-
+    SqlService sqlService
 
     /***
      * return partial matches as Json for the purposes of the twitter typeahead handler
@@ -79,6 +79,21 @@ class GeneController {
             redirect(controller:'gene',action:'geneInfo', params: [id: params.id])
             return
         }
+
+        // KDUXTD-99: check to see if dbSnpId provided so that it gets past search box filter
+        if (sharedToolsService.getRecognizedStringsOnly()!=0) {
+            // once we have the variant database complete we can use this
+            String inputString = params.id
+            if (sqlService?.isDbSnpIdString(inputString)) {
+                // search for the variant by dbSnpId and if found, return; if not found, drop down to below test (just in case for now)
+                Variant variant = Variant.findByDbSnpId(inputString)
+                if (variant) {
+                    redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: params.id])
+                    return
+                }
+            }
+        }
+
         // Is our string a variant?  Build an identifying string and test
         String canonicalVariant = sharedToolsService.createCanonicalVariantName(params.id)
         if (sharedToolsService.getRecognizedStringsOnly()!=0){ // once we have the variant database complete we can use this

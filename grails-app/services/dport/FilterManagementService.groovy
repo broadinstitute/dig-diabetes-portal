@@ -430,6 +430,56 @@ class FilterManagementService {
     }
 
     /***
+     * Assign each new source filter into the target list UNLESS the filter is already there, in which case
+     * the assignment can be skipped.
+     *
+     * @param targetList
+     * @param sourceFilter
+     * @return
+     */
+    private List<LinkedHashMap> assignUniqueFilters(List<LinkedHashMap> targetList,LinkedHashMap sourceFilter){
+        boolean skipIt = false;
+        if (
+                ((sourceFilter?.containsKey("region_chrom_input")) &&
+                        (targetList?.findAll{LinkedHashMap map->map?.containsKey('region_chrom_input')}))
+                ||
+                ((sourceFilter.containsKey("region_start_input")) &&
+                        (targetList?.findAll{LinkedHashMap map->map?.containsKey("region_start_input")}))
+                ||
+                ((sourceFilter.containsKey("region_stop_input")) &&
+                        (targetList?.findAll{LinkedHashMap map->map?.containsKey("region_stop_input")}))
+                ||
+                ((sourceFilter.containsKey("region_gene_input")) &&
+                        (targetList?.findAll{LinkedHashMap map->map?.containsKey("region_gene_input")}))
+                ||
+                ((sourceFilter.containsKey("predictedEffects")) &&
+                        (targetList?.findAll{LinkedHashMap map->map?.containsKey("predictedEffects")}))
+
+        ){
+            skipIt = true; // it was a repeated filter -- no need to include it
+        }
+        sourceFilter.each{String key,String value->
+            if ((skipIt==false)&&(key?.startsWith('customFilter'))){
+                if (targetList.findAll{LinkedHashMap map->map.containsValue(value)}) {
+                    skipIt = true;
+                }
+            }
+        }
+        if (!skipIt){
+            targetList << sourceFilter
+        }
+        return targetList
+    }
+
+
+
+
+
+
+
+
+
+    /***
      * Here is an intermediate code for a filter. We have to read these somewhere else in this file and convert them
      * into actual filters.    If the filters and recognized here then we aren't going to deal with it anywhere.
      *
@@ -478,7 +528,9 @@ class FilterManagementService {
                 singleFilterSet["predictedEffects"] = predictedEffects
             }
 
-            returnValue << singleFilterSet
+            returnValue = assignUniqueFilters(returnValue,singleFilterSet)
+
+            //returnValue << singleFilterSet
 
         }
 
@@ -676,31 +728,31 @@ class FilterManagementService {
                 case  0:
                     datatypeOperand = gwasDataPValue
                     filters <<  retrieveFilterString("dataSetGwas")
-                    filterDescriptions << "Is observed in Diagram GWAS"
-                    parameterEncoding << "1:3"
-                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1"
+                    filterDescriptions << "Is observed in Diagram GWAS".toString()
+                    parameterEncoding << "1:3".toString()
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1".toString()
                     break;
 
                 case  1:
                     datatypeOperand = sigmaDataPValue
                     filters <<  retrieveFilterString("dataSetSigma") 
-                    filterDescriptions << "Whether variant is included in SIGMA analysis is equal to 1"
-                    parameterEncoding << "1:0"
-                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1"
+                    filterDescriptions << "Whether variant is included in SIGMA analysis is equal to 1".toString()
+                    parameterEncoding << "1:0".toString()
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1".toString()
                     break;
                 case  2:
                     datatypeOperand = exomeSequencePValue
                     filters <<  retrieveFilterString("dataSetExseq")
-                    filterDescriptions << "Is observed in exome sequencing"
-                    parameterEncoding << "1:1"
-                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1"
+                    filterDescriptions << "Is observed in exome sequencing".toString()
+                    parameterEncoding << "1:1".toString()
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1".toString()
                     break;
                 case  3:
                     datatypeOperand = exomeChipPValue
                     filters <<  retrieveFilterString("dataSetExchp") 
-                    filterDescriptions << "Is observed in exome chip"
-                    parameterEncoding << "1:2"
-                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1"
+                    filterDescriptions << "Is observed in exome chip".toString()
+                    parameterEncoding << "1:2".toString()
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1".toString()
                     break;
                 default:
                     log.error("FilterManagementService.determineDataSet: unexpected dataSetDistinguisher = ${dataSetDistinguisher}")
@@ -733,26 +785,26 @@ class FilterManagementService {
             switch (requestedDataSet)   {
                 case  "genomewide":
                     filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,5e-8 as BigDecimal,dataSetSpecifier)
-                    filterDescriptions << "P-value for association with T2D is less than or equal to 5e-8"
-                    parameterEncoding << "2:0"
-                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<${5e-8}"
+                    filterDescriptions << "P-value for association with T2D is less than or equal to 5e-8".toString()
+                    parameterEncoding << "2:0".toString()
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<${5e-8}".toString()
                     break;
                 case  "locus":
                     filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,5e-4 as BigDecimal,dataSetSpecifier)
-                    filterDescriptions << "P-value for association with T2D is less than or equal to 0.0005"
-                    parameterEncoding << "2:2"
-                    parameterEncoding << "3:0.0005"
-                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<0.0005"
+                    filterDescriptions << "P-value for association with T2D is less than or equal to 0.0005".toString()
+                    parameterEncoding << "2:2".toString()
+                    parameterEncoding << "3:0.0005".toString()
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<0.0005".toString()
                     break;
                 case  "nominal":
                     filters << retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,0.05 as BigDecimal,dataSetSpecifier)
-                    filterDescriptions << "P-value for association with T2D is less than or equal to 0.05"
-                    parameterEncoding << "2:1"
-                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<0.05"
+                    filterDescriptions << "P-value for association with T2D is less than or equal to 0.05".toString()
+                    parameterEncoding << "2:1".toString()
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<0.05".toString()
                     break;
                 case  "custom":
                     if (incomingParameters.containsKey("custom_significance_input")) {
-                        parameterEncoding << "2:2"
+                        parameterEncoding << "2:2".toString()
                         String stringCustomThreshold = incomingParameters["custom_significance_input"]
                         BigDecimal numericCustomThreshold = 0.05
                         try {
@@ -766,7 +818,7 @@ class FilterManagementService {
                             break;
                         }
                         filters << retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,numericCustomThreshold,dataSetSpecifier)
-                        filterDescriptions << "P-value for association with T2D is less than or equal to ${numericCustomThreshold}"
+                        filterDescriptions << "P-value for association with T2D is less than or equal to ${numericCustomThreshold}".toString()
                     } else {
                         //TODO: this is an error condition. User requested a custom threshold but supplied no threshold
                         // description of that threshold. We need a specification of what to do ( from Mary?)
@@ -830,8 +882,8 @@ class FilterManagementService {
                     parsedFilterString.value,
                     "FLOAT")
             //filterDescriptions << "${parsedFilterString.property} value ${parsedFilterString.equivalence} ${parsedFilterString.value} for ${parsedFilterString.sampleSet}"
-            filterDescriptions << "${searchBuilderService.makeFiltersPrettier(customFilterString)}"
-            parameterEncoding << "47:${customFilterString}"
+            filterDescriptions << "${searchBuilderService.makeFiltersPrettier(customFilterString)}".toString()
+            parameterEncoding << "47:${customFilterString}".toString()
         }
          return  buildingFilters
 
@@ -852,8 +904,8 @@ class FilterManagementService {
             String stringPValue = incomingParameters["spec_p_value"]
             String stringPhenotypeIndicator = incomingParameters["spec_pheno_ind"]
             filters << retrieveParameterizedFilterString("setSpecificPValue",stringPhenotypeIndicator,stringPValue as BigDecimal)
-            filterDescriptions << "P value < ${stringPValue} for ${stringPhenotypeIndicator}"
-            parameterEncoding << "27:${stringPValue}"
+            filterDescriptions << "P value < ${stringPValue} for ${stringPhenotypeIndicator}".toString()
+            parameterEncoding << "27:${stringPValue}".toString()
         }
         return  buildingFilters
 
@@ -880,8 +932,8 @@ class FilterManagementService {
             // user has requested a particular data set. Without explicit request what is the default?
             String stringParameter = incomingParameters["region_gene_input"]
             filters << retrieveParameterizedFilterString("setRegionGeneSpecification", stringParameter, 0) 
-            filterDescriptions << "In the gene ${stringParameter}"
-            parameterEncoding << "4:${stringParameter}"
+            filterDescriptions << "In the gene ${stringParameter}".toString()
+            parameterEncoding << "4:${stringParameter}".toString()
         }
 
         // set gene to search
@@ -893,9 +945,9 @@ class FilterManagementService {
             //java.util.regex.Matcher chromosomeNumber = stringParameter =~ /\d+/
             if (chromosomeString != "")   {
                 filters << retrieveParameterizedFilterString("setRegionChromosomeSpecification", chromosomeString, 0)
-                filterDescriptions << "Chromosome is equal to ${chromosomeString}"
-                parameterEncoding << "5:${chromosomeString}"
-                positioningInformation["chromosomeSpecified"] = "${chromosomeString}"
+                filterDescriptions << "Chromosome is equal to ${chromosomeString}".toString()
+                parameterEncoding << "5:${chromosomeString}".toString()
+                positioningInformation["chromosomeSpecified"] = "${chromosomeString}".toString()
             } else {
                 log.error("FilterManagementService.setRegion: no numeric portion of chromosome specifier = ${stringParameter}")
                 // TODO: ERROR CONDITION.  DEFAULT?
@@ -909,10 +961,10 @@ class FilterManagementService {
             String stringParameter = incomingParameters["region_start_input"]
             String startExtentString =   sharedToolsService.parseExtent(stringParameter)
             if (startExtentString  != "")  {
-                parameterEncoding << "6:${stringParameter}"
+                parameterEncoding << "6:${stringParameter}".toString()
                 filters << retrieveParameterizedFilterString("setRegionPositionStart", startExtentString, 0)
-                filterDescriptions << "Chromosomal position is greater than or equal to ${startExtentString}"
-                positioningInformation["beginningExtentSpecified"] = "${startExtentString}"
+                filterDescriptions << "Chromosomal position is greater than or equal to ${startExtentString}".toString()
+                positioningInformation["beginningExtentSpecified"] = "${startExtentString}".toString()
             }
          }
 
@@ -923,9 +975,9 @@ class FilterManagementService {
             String endExtentString =   sharedToolsService.parseExtent(stringParameter)
             if (endExtentString  != "")  {
                 filters << retrieveParameterizedFilterString("setRegionPositionEnd", endExtentString, 0)
-                filterDescriptions << "Chromosomal position is less than or equal to ${endExtentString}"
-                parameterEncoding << "7:${endExtentString}"
-                positioningInformation["endingExtentSpecified"] = "${endExtentString}"
+                filterDescriptions << "Chromosomal position is less than or equal to ${endExtentString}".toString()
+                parameterEncoding << "7:${endExtentString}".toString()
+                positioningInformation["endingExtentSpecified"] = "${endExtentString}".toString()
             }
 
         }
@@ -973,26 +1025,26 @@ class FilterManagementService {
                                // if we are searching exome chip data then use a different filter. Everything else is the same
                                if (incomingParameters.datatype=="exomechip"){
                                    filters << retrieveParameterizedFilterString("setExomeChipMinimumAbsolute", ethnicity[1], alleleFrequency)
-                                   transferableFilter << "47:T2D[ExChip_82k_mdv2]MAF>${alleleFrequency}"
+                                   transferableFilter << "47:T2D[ExChip_82k_mdv2]MAF>${alleleFrequency}".toString()
                                } else {
                                    filters << retrieveParameterizedFilterString("setEthnicityMinimumAbsolute", ethnicity[1], alleleFrequency)
                                    String p1 = ethnicity[1]
-                                   transferableFilter << "47:T2D[ExSeq_17k_${(p1.equals("eu") || p1.equals("hs") ? p1 : "${p1}_genes")}_mdv2]MAF>${alleleFrequency}"
+                                   transferableFilter << "47:T2D[ExSeq_17k_${(p1.equals("eu") || p1.equals("hs") ? p1 : "${p1}_genes")}_mdv2]MAF>${alleleFrequency}".toString()
                                }
                                filterDescriptions << "Minor allele frequency in ${ethnicity[0]} is greater than ${alleleFrequency}"
-                               parameterEncoding << "${fieldSpecifier}:${alleleFrequency}"
+                               parameterEncoding << "${fieldSpecifier}:${alleleFrequency}".toString()
                            } else {
                                if (incomingParameters.datatype=="exomechip"){
                                    filters << retrieveParameterizedFilterString("setExomeChipMaximum", ethnicity[1], alleleFrequency)
-                                   transferableFilter << "47:T2D[ExChip_82k_mdv2]MAF<${alleleFrequency}"
+                                   transferableFilter << "47:T2D[ExChip_82k_mdv2]MAF<${alleleFrequency}".toString()
                                } else {
                                    String p1 = ethnicity[1]
                                    filters << retrieveParameterizedFilterString("setEthnicityMaximum", ethnicity[1], alleleFrequency)
-                                   transferableFilter << "47:T2D[ExSeq_17k_${(p1.equals("eu") || p1.equals("hs") ? p1 : "${p1}_genes")}_mdv2]MAF<${alleleFrequency}"
+                                   transferableFilter << "47:T2D[ExSeq_17k_${(p1.equals("eu") || p1.equals("hs") ? p1 : "${p1}_genes")}_mdv2]MAF<${alleleFrequency}".toString()
                                }
 
                                filterDescriptions << "Minor allele frequency in ${ethnicity[0]} is less than or equal to  ${alleleFrequency}"
-                               parameterEncoding << "${fieldSpecifier}:${alleleFrequency}"
+                               parameterEncoding << "${fieldSpecifier}:${alleleFrequency}".toString()
                            }
 
                        }

@@ -2590,10 +2590,19 @@ private String generateProteinEffectJson (String variantName){
            if (firstTime)   {
                firstTime = false
            }  else {
-               sb << """,
+               // KDUXTD-98: temporary fix for pulling OMNI data which isn't there yet
+               if (!sampleGroupsContainingProperty?.equals("GWAS_SIGMA1_mdv2")) {
+                   sb << """,
 """.toString()
+               }
            }
-           sb << """      "${sampleGroupsContainingProperty}" """.toString()
+           // KDUXTD-98: temporary fix for pulling OMNI data which isn't there yet
+           if (!sampleGroupsContainingProperty?.equals("GWAS_SIGMA1_mdv2")) {
+               sb << """      "${sampleGroupsContainingProperty}" """.toString()
+           } else {
+               log.info("skipping sample group: " + sampleGroupsContainingProperty)
+           }
+
        }
        return sb.toString()
    }
@@ -2714,8 +2723,10 @@ private String generateProteinEffectJson (String variantName){
                     }
 
                     element = variant["DIR"].findAll{it}[0]
-                    betaMatchersMap.each{ String phenotypeName, String sampleGroupId ->
-                        sb  << "{\"level\":\"DIR^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
+                    if (element) {
+                        betaMatchersMap.each{ String phenotypeName, String sampleGroupId ->
+                            sb  << "{\"level\":\"DIR^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
+                        }
                     }
 
                     sampleGroupSpecificProperties.each { String sampleGroupId, LinkedHashMap sgHolder ->
