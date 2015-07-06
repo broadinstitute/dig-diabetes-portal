@@ -377,7 +377,7 @@ var mpgSoftware = mpgSoftware || {};
                 for ( var i = 0 ; i < numberOfRecords ; i++ ){
                     var preceedingUnderscores = 0;
                     for (var j=0; j<dataSetList[i].length;j++ ){
-                        if (dataSetList[i][j]!='_') break;
+                        if (dataSetList[i][j]!='-') break;
                         preceedingUnderscores++;
                     }
                     var replaceUnderscores = dataSetList[i].substr(0,preceedingUnderscores);
@@ -430,16 +430,22 @@ var mpgSoftware = mpgSoftware || {};
             }
             return returnValue;
         };
-        var extractValFromTextboxesWithPrependedName = function (everyId,prepender,equivalenceMap) {
+        var extractValFromTextboxesWithPrependedName = function (everyId,prepender,equivalenceMap,forceNumeric) {
             var returnValue = {};
             for (var i = 0; i < everyId.length; i++) {
                 var domReference = $('#' + everyId[i]);
                 if ((domReference) && (domReference.val())) {
-                    var propertyNameHolder = everyId[i];
-                    var nameParts = propertyNameHolder.split("___");
-                    var propertyName = nameParts[0];
-                    var equiv = equivalenceMap[propertyName];
-                    returnValue [ prepender+equiv+'^'+everyId[i]] = domReference.val();
+                    var propertyValue =  domReference.val();
+                    if  ((forceNumeric)  &&  (!($.isNumeric(propertyValue))) )  {
+                        alert("Error.  Numeric value required. Cannot accept value ='"+propertyValue+"'");
+                        return {};
+                    }  else {
+                        var propertyNameHolder = everyId[i];
+                        var nameParts = propertyNameHolder.split("___");
+                        var propertyName = nameParts[0];
+                        var equiv = equivalenceMap[propertyName];
+                        returnValue [ prepender+equiv+'^'+everyId[i]] = domReference.val();
+                    }
                 }
             }
             return returnValue;
@@ -508,7 +514,8 @@ var mpgSoftware = mpgSoftware || {};
                 (typeof idsToCollect.customTexts  !== 'undefined') &&
                 (idsToCollect.customTexts.length > 0)){
                 var equivalences = extractValsFromComboboxAbbrevName(idsToCollect.customEquivalences);
-                textFields =  extractValFromTextboxesWithPrependedName(idsToCollect.customTexts,prependerString,equivalences);
+                textFields =  extractValFromTextboxesWithPrependedName(idsToCollect.customTexts,prependerString,equivalences,true);
+                if ($.isEmptyObject(textFields)) { return 0; }
             }
             var restrictToRegion = UTILS.extractValFromTextboxes(['region_gene_input','region_chrom_input','region_start_input','region_stop_input']);
             var missensePredictions = [];
@@ -648,7 +655,7 @@ var mpgSoftware = mpgSoftware || {};
                     equivalenceValue = ">";
                 } else if (equivalence === 'equalTo'){
                     equalToSelected = "selected";
-                    equivalenceValue = "=";
+                    equivalenceValue = "|";
                 }
             }
             var labelId = sectionName+'___nameId';

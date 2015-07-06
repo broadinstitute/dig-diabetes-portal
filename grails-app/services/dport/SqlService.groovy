@@ -244,22 +244,98 @@ class SqlService {
         return stringList
     }
 
-    List<String> getStringListFromSnippetUsingRLikeQuery(String snippet, Integer limitNumber) {
+    List<String> getVariantStringListFromSnippetUsingRLikeQuery(String snippet, Integer limitNumber) {
         Sql sql = new Sql( sessionFactory.currentSession.connection() )
         List<String> stringList = new ArrayList<String>();
 
-         String sqlString =
-        """
-        select var_id as returnStr from variant where var_id rlike '^${snippet}' limit ${limitNumber}
-        """
-        // execute sql and build list
-        sql.eachRow(sqlString) { row ->
-            stringList << row.returnStr
+        String sqlString
+
+        if (isVarIdString(snippet)) {
+            if (snippet?.length() > 5) {
+                String smallSnippet = snippet[0..4]
+
+                sqlString =
+                        """
+            select var_id as returnStr from variant where var_id_first_characters = '${smallSnippet}' and var_id rlike '^${snippet}' limit ${limitNumber}
+            """
+
+            } else {
+                sqlString =
+                        """
+            select var_id as returnStr from variant where var_id_first_characters rlike '^${snippet}' limit ${limitNumber}
+            """
+            }
+
+            // execute sql and build list
+            sql.eachRow(sqlString) { row ->
+                stringList << row.returnStr
+            }
+
+            log.info("found variant: " + stringList.size() + " for snippet: " + snippet + " and limit: " + limitNumber + " and SQL: " + sqlString)
+
+        } else {
+            log.info("skipped variant sql query for search string: " + snippet)
         }
 
-        log.info("found: " + stringList.size() + " for snippet: " + snippet + " and limit: " + limitNumber + " and SQL: " + sqlString)
+        return stringList
+    }
+
+    List<String> getDbSnpIdStringListFromSnippetUsingRLikeQuery(String snippet, Integer limitNumber) {
+        Sql sql = new Sql( sessionFactory.currentSession.connection() )
+        List<String> stringList = new ArrayList<String>();
+
+        String sqlString
+
+        if (this.isDbSnpIdString(snippet)) {
+            // pick what query based on size of input
+            if (snippet?.length() > 4) {
+                String smallSnippet = snippet[0..3]
+
+                sqlString =
+                        """
+                select db_snp_id as returnStr from variant where db_snp_id_first_characters = '${smallSnippet}' and db_snp_id rlike '^${snippet}' limit ${limitNumber}
+                """
+
+            } else {
+                sqlString =
+                        """
+                select db_snp_id as returnStr from variant where db_snp_id_first_characters rlike '^${snippet}' limit ${limitNumber}
+                """
+            }
+
+            // execute sql and build list
+            sql.eachRow(sqlString) { row ->
+                stringList << row.returnStr
+            }
+
+            log.info("found dbSnp size: " + stringList.size() + " for snippet: " + snippet + " and limit: " + limitNumber + " and SQL: " + sqlString)
+        } else {
+            log.info("skip sbSnpId search for snippet: " + snippet)
+        }
+
 
         return stringList
+    }
+
+    /**
+     * test to see if string given could be a dbSnpId search string
+     *
+     * @param snippet
+     * @return
+     */
+    public boolean isDbSnpIdString(String snippet) {
+        // assumption that all dbSnpId string start with 'rs'
+        def match = /^[rR][sS].*/
+        return ((snippet?.length() > 1) && (snippet =~ match))
+    }
+
+    /**
+     * test to see if string given is start of variant
+     */
+    public boolean isVarIdString(String snippet) {
+        // assumption that all varId strings start with number and then underscore
+        def match = /^[1-9XYMxym].*/
+        return (snippet =~ match)
     }
 
 }

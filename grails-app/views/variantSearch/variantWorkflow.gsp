@@ -30,6 +30,13 @@
 <script>
     $(document).ready(function (){
         mpgSoftware.variantWF.initializePage();
+        $('#region_gene_input').typeahead({
+            source: function (query, process) {
+                $.get('<g:createLink controller="gene" action="index"/>', {query: query}, function (data) {
+                    process(data);
+                })
+            }
+        });
     });
 
     // todo arz remove me example callback from angular to set the columns
@@ -41,7 +48,11 @@
         var modal = '#columnChooserModal';
         $(modal).modal('show');
         angular.element(modal).scope().loadMetadata();
-    }
+    };
+
+    %{--$.get('<g:createLink controller="gene" action="geneOnlyTypeAhead"/>', {query: query}, function (data) {--}%
+
+
 
 </script>
 

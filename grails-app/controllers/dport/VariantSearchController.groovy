@@ -242,7 +242,7 @@ class VariantSearchController {
 
         LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
         LinkedHashMap<PhenoKey,List<String>> annotatedSampleGroups =  processedMetadata.propertiesPerOrderedSampleGroups
-        LinkedHashMap<String, LinkedHashMap <PhenoKey,List <String>>> phenotypeSpecificSampleGroupProperties = processedMetadata['phenotypeSpecificPropertiesAnnotatedPerSampleGroup']
+        LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> phenotypeSpecificSampleGroupProperties = processedMetadata['phenotypeSpecificPropertiesAnnotatedPerSampleGroup']
         List <String> listOfProperties  = sharedToolsService.combineToCreateASingleList( params.phenotype, datasetChoice,
                                                                                              annotatedSampleGroups,
                                                                                              phenotypeSpecificSampleGroupProperties )
@@ -340,9 +340,11 @@ class VariantSearchController {
         String resultColumnsJsonObjectString = resultColumnsJsonOutput.toJson(resultColumnsToDisplay)
         JSONObject resultColumnsJsonObject = slurper.parseText(resultColumnsJsonObjectString)
 
-        //JsonSlurper slurper2 = new JsonSlurper()
-        String jsonFormOfRelevantMetadata = sharedToolsService.packageUpATreeAsJson(sharedToolsService.getProcessedMetadata()?.phenotypeSpecificPropertiesPerSampleGroup)
-        JSONObject metadataJsonObject = slurper.parseText(jsonFormOfRelevantMetadata)
+        String jsonFormOfRelevantMetadataPhenotype = sharedToolsService.packageUpATreeAsJson(sharedToolsService.getProcessedMetadata()?.phenotypeSpecificPropertiesAnnotatedPerSampleGroup,true, true)
+        JSONObject metadata = slurper.parseText(jsonFormOfRelevantMetadataPhenotype)
+
+//        String jsonFormOfRelevantMetadataSamplegroup = sharedToolsService.packageUpATreeAsJson(sharedToolsService.getProcessedMetadata()?.phenotypeSpecificPropertiesAnnotatedPerSampleGroup, false, true)
+//        JSONObject dmetadata = slurper.parseText(jsonFormOfRelevantMetadataSamplegroup)
 
         String jsonFormOfCommonProperties = sharedToolsService.sortAndPackageAMapOfListsAsJson(sharedToolsService.getProcessedMetadata()?.commonProperties, true)
         JSONObject commonPropertiesJsonObject = slurper.parseText(jsonFormOfCommonProperties)
@@ -354,7 +356,8 @@ class VariantSearchController {
             [variants: dataJsonObject.variants,
             columns: resultColumnsJsonObject,
             filters:filtersRaw,
-            metadata:metadataJsonObject,
+            metadata:metadata,
+//            dmetadata:dmetadata,
             propertiesPerSampleGroup:propertiesPerSampleGroupJsonObject,
             cProperties:commonPropertiesJsonObject
             ]

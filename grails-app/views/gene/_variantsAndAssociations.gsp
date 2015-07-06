@@ -181,9 +181,12 @@ $.ajax({
     });
 
 };
-if (${newApi}){
+
+
 variantsAndAssociationTable ();
-}
+
+
+
 </g:javascript>
 
 

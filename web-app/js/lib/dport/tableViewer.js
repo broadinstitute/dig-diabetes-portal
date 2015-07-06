@@ -629,7 +629,7 @@ var variantProcessing = (function () {
                 var cprop =  data.columns.cproperty[cpropIndex];
                 var value = variant[cprop];
                 if (cprop === "VAR_ID")  {
-                    array.push(getStringWithLink(variantRootUrl,((contentExists (variantRootUrl)) && (variant.VAR_ID)),noop,variant.VAR_ID,variant.CHROM+ ":" +variant.POS,""));
+                    array.push(getStringWithLinkForVarId(variantRootUrl,((contentExists (variantRootUrl)) && (variant.VAR_ID)),noop,variant.VAR_ID,variant.CHROM+ ":" +variant.POS,variant.VAR_ID));
                 } else if (cprop === "CHROM") {
                     array.push(getSimpleString((variant.CHROM),noop,variant.CHROM,""));
                 }  else if (cprop === "POS") {
@@ -745,6 +745,20 @@ var variantProcessing = (function () {
         var retVal = alternate;
         if (contingent){
             retVal = "<a  href='"+urlRoot+"/"+linkField+"' class='boldItlink'>"+modder(displayField);
+        }
+        return retVal
+
+    };
+    var getStringWithLinkForVarId  = function(urlRoot, contingent, modder, linkField,displayField, alternate){
+        var retVal = alternate;
+        if (contingent){
+            if (displayField) {
+                if (displayField.indexOf('undefined') === -1)   {
+                    retVal = "<a  href='" + urlRoot + "/" + linkField + "' class='boldItlink'>" + modder(displayField);
+                }  else {
+                    retVal = "<a  href='" + urlRoot + "/" + linkField + "' class='boldItlink'>" + modder(alternate);
+                }
+            }
         }
         return retVal
     };

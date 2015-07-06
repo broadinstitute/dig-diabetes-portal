@@ -76,18 +76,14 @@ class GeneManagementService {
      * closure to return var id string list using sql rlike mysql call
      */
     private Closure<List <String>> retrieveVariantVarIdStringList = { String searchString, int numberOfMatches ->
-        return this.sqlService.getStringListFromSnippetUsingRLikeQuery(searchString, numberOfMatches)
+        return this.sqlService.getVariantStringListFromSnippetUsingRLikeQuery(searchString, numberOfMatches)
     }
 
     /**
      * closure to return variant db snp id string list
      */
     private Closure<List <String>> retrieveVariantDbSnpStringList = { String searchString, int numberOfMatches ->
-        List<String> variantDnSnpStringList = []
-        this.retrieveVariantDbSnpUsingNamedQueries(searchString, numberOfMatches).each{ Variant variant ->
-            variantDnSnpStringList << variant.dbSnpId
-        }
-        return variantDnSnpStringList
+        return this.sqlService.getDbSnpIdStringListFromSnippetUsingRLikeQuery(searchString, numberOfMatches)
     }
 
 
@@ -225,6 +221,32 @@ class GeneManagementService {
         return sb.toString()
     }
 
+
+
+    private String deliverPartialMatchesInJsonGenesOnly( String firstCharacters,
+                                                                int maximumMatches,
+                                                                Closure retrieveGene) {
+        StringBuilder sb = new StringBuilder("[")
+        // KDUXTD-83: try to speed up type ahead of gene search
+        List <String> partialMatchList = deliverPartialMatchesUsingStringLists(firstCharacters,maximumMatches,retrieveGene,{},{})
+
+        int numberOfMatches = partialMatchList.size()
+        for ( int i=0 ; i<numberOfMatches ; i++ ) {
+            sb << "\"${partialMatchList[i]}\""
+            if ((i+1)<numberOfMatches){
+                sb << ",\n"
+            } else {
+                sb << "\n"
+            }
+        }
+        sb << "]"
+        return sb.toString()
+    }
+
+
+
+
+
     /***
      * Encapsulate the private closure that generates the database calls. This is the public facing portion
      * of the partial match functionality -- everything else is hidden.
@@ -242,6 +264,15 @@ class GeneManagementService {
                 retrieveVariantVarIdUsingNamedQueries )
 
     }
+
+    public String partialGeneOnlyMatches( String firstCharacters,
+                                      int maximumMatches) {
+        return   deliverPartialMatchesInJsonGenesOnly(  firstCharacters,
+                maximumMatches,
+                retrieveGene )
+
+    }
+
 
     /**
      * same method as above but using String lists and one sql service call to use MySQL specific call

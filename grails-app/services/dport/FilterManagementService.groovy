@@ -103,7 +103,7 @@ class FilterManagementService {
                 returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setPValueThreshold" :
-                returnValue = """{"dataset_id": "${chooseDataSet(parm3)}", "phenotype": "T2D", "operand": "${parm1}", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                returnValue = """{"dataset_id": "${chooseDataSet(parm3)}", "phenotype": "T2D", "operand": "${parm1}", "operator": "LT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setRegionGeneSpecification" :
                 returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${parm1}", "operand_type": "STRING"}""".toString()
@@ -130,16 +130,16 @@ class FilterManagementService {
                 returnValue = """{"dataset_id": "ExSeq_17k_""" + (parm1.equals("eu") || parm1.equals("hs") ? parm1 : "${parm1}_genes") + """_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "GT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setExomeChipMinimum" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
+                returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "blah", "operand": "MAF", "operator": "GTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setExomeChipMinimumAbsolute" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "GT", "value": ${parm2} }""".toString()
+                returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "blah", "operand": "MAF", "operator": "GT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setExomeChipMaximum" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "LTE", "value": ${parm2} }""".toString()
+                returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "blah", "operand": "MAF", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setExomeChipMaximumAbsolute" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_MAF", "operator": "LT", "value": ${parm2} }""".toString()
+                returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "blah", "operand": "MAF", "operator": "LT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setSigmaMinorAlleleFrequencyMinimum" :
                 returnValue = """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
@@ -197,7 +197,12 @@ class FilterManagementService {
                                               String value,
                                               String operandType = "FLOAT") {
         String retval=""
-        BigDecimal bigDecimal =  value as  BigDecimal
+        BigDecimal bigDecimal = 1  //  emergency default, so that at least we don't pass garbage to the rest API
+        try{
+            bigDecimal =  value as  BigDecimal
+        } catch(e) {
+            log.error("Received nonnumeric value in retrieveCustomizedFilterString = ${value}.  Shouldn't this have been filtered on the front end?")
+        }
         retval= """{"dataset_id": "${dataSet}", "phenotype": "${phenotype}", "operand": "${property}", "operator": "${equivalence}", "value": ${bigDecimal}, "operand_type": "${operandType}"}""".toString()
         return  retval
        }
@@ -500,28 +505,28 @@ class FilterManagementService {
         // KDUXTD-38: adding default filter for 'variation across continental ancestry' drill down
         developingParameterCollection['predictedEffects'] = 'lessThan_noEffectNoncoding';
 
-         if (filter) {
+        if (filter) {
              String[] requestPortionList =  filter.split("-")
              if (requestPortionList.size() > 1) {  //  multipiece searches
-                 String ethnicity = requestPortionList[1]
+                 String ethnicity = (requestPortionList[1]).toLowerCase()
                  if (ethnicity == 'exchp') { // we have no ethnicity. Everything comes from the European exome chipset
                      returnValue['datatype'] = 'exomechip'
                      switch ( requestPortionList[0] ){
                          case "total":
-                             returnValue['ethnicity_af_EU-min'] = 0.0
-                             returnValue['ethnicity_af_EU-max'] = 1.0
+                             returnValue['ethnicity_af_eu-min'] = 0.0
+                             returnValue['ethnicity_af_eu-max'] = 1.0
                              break;
                          case "common":
-                             returnValue['ethnicity_af_EU-min'] = 0.05
-                             returnValue['ethnicity_af_EU-max'] = 1.0
+                             returnValue['ethnicity_af_eu-min'] = 0.05
+                             returnValue['ethnicity_af_eu-max'] = 1.0
                              break;
                          case "lowfreq":
-                             returnValue['ethnicity_af_EU-min'] = 0.0005
-                             returnValue['ethnicity_af_EU-max'] = 0.05
+                             returnValue['ethnicity_af_eu-min'] = 0.0005
+                             returnValue['ethnicity_af_eu-max'] = 0.05
                              break;
                          case "rare":
-                             returnValue['ethnicity_af_EU-min'] = 0.0
-                             returnValue['ethnicity_af_EU-max'] = 0.0005
+                             returnValue['ethnicity_af_eu-min'] = 0.0
+                             returnValue['ethnicity_af_eu-max'] = 0.0005
                              break;
                          default:
                              log.error("FilterManagementService:interpretSpecialFilters. Unexpected string 1 = ${requestPortionList[0]}")
@@ -663,7 +668,7 @@ class FilterManagementService {
 
         // datatype: Sigma, exome sequencing, exome chip, or diagram GWAS
         if  (incomingParameters.containsKey("datatype"))  {      // user has requested a particular data set. Without explicit request what is the default?
-
+            String dataSetSpecifier = incomingParameters ["datatype"]
             int dataSetDistinguisher =   distinguishBetweenDataSets ( incomingParameters)
 
 
@@ -673,6 +678,7 @@ class FilterManagementService {
                     filters <<  retrieveFilterString("dataSetGwas")
                     filterDescriptions << "Is observed in Diagram GWAS"
                     parameterEncoding << "1:3"
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1"
                     break;
 
                 case  1:
@@ -680,18 +686,21 @@ class FilterManagementService {
                     filters <<  retrieveFilterString("dataSetSigma") 
                     filterDescriptions << "Whether variant is included in SIGMA analysis is equal to 1"
                     parameterEncoding << "1:0"
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1"
                     break;
                 case  2:
                     datatypeOperand = exomeSequencePValue
                     filters <<  retrieveFilterString("dataSetExseq")
                     filterDescriptions << "Is observed in exome sequencing"
                     parameterEncoding << "1:1"
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1"
                     break;
                 case  3:
                     datatypeOperand = exomeChipPValue
                     filters <<  retrieveFilterString("dataSetExchp") 
                     filterDescriptions << "Is observed in exome chip"
                     parameterEncoding << "1:2"
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1"
                     break;
                 default:
                     log.error("FilterManagementService.determineDataSet: unexpected dataSetDistinguisher = ${dataSetDistinguisher}")
@@ -792,8 +801,8 @@ class FilterManagementService {
             returnValue ["property"]  = filterPieces2[1].substring(0,equivalencePosition)
             returnValue ["value"]  = filterPieces2[1].substring(equivalencePosition+1)
             returnValue ["equivalence"]  = "GT"
-        }  else if (filterPieces2[1].indexOf("=") > -1){
-            int equivalencePosition = filterPieces2[1].indexOf("=")
+        }  else if (filterPieces2[1].indexOf("|") > -1){
+            int equivalencePosition = filterPieces2[1].indexOf("|")
             returnValue ["property"]  = filterPieces2[1].substring(0,equivalencePosition)
             returnValue ["value"]  = filterPieces2[1].substring(equivalencePosition+1)
             returnValue ["equivalence"]  = "EQ"
@@ -1074,6 +1083,7 @@ class FilterManagementService {
         List <String> filters =  buildingFilters.filters
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
+        List <String> transferableFilter =  buildingFilters.transferableFilter
         if  (incomingParameters.containsKey("predictedEffects"))  {      // user has requested a particular data set. Without explicit request what is the default?
             String predictedEffects =  incomingParameters ["predictedEffects"]
 
@@ -1086,29 +1096,34 @@ class FilterManagementService {
                     filters <<  retrieveFilterString("proteinTruncatingCheckbox") 
                     filterDescriptions << "Predicted effect: protein-truncating"
                     parameterEncoding << "23:1"
+                    transferableFilter << "23:1"
                     break;
                 case  "missense":
                     filters <<  retrieveFilterString("missenseCheckbox") 
                     filterDescriptions << "Predicted effect: missense"
                     parameterEncoding << "23:2"
+                    transferableFilter << "23:2"
                     break;
                 case  "noEffectSynonymous":
                     filters <<  retrieveFilterString("synonymousCheckbox")
                     //filterDescriptions << "Estimated classification for no effects (synonymous)"
                     filterDescriptions << "No predicted effect (synonymous)"
                     parameterEncoding << "23:3"
+                    transferableFilter << "23:3"
                     break;
                 case  "noEffectNoncoding":
                     filters <<  retrieveFilterString("noncodingCheckbox")
                     //filterDescriptions <<  "Estimated classification for no effects (non-coding)"
                     filterDescriptions <<  "No predicted effect (non-coding)"
                     parameterEncoding << "23:4"
+                    transferableFilter << "23:4"
                     break;
                 case  "lessThan_noEffectNoncoding":
                     filters <<  retrieveFilterString("lessThan_noEffectNoncoding")
                     //filterDescriptions <<  "Estimated classification for no effects (non-coding)"
                     filterDescriptions <<  "Protein truncating,missense, and synonymous variants"
                     parameterEncoding << "23:5"
+                    transferableFilter << "23:5"
                     break;
 
                 default:
@@ -1258,7 +1273,21 @@ class FilterManagementService {
            String inequivalence = filterPieces [3]
            String propertyHolder = filterPieces [4]
            String property = propertyHolder.substring(0,propertyHolder.indexOf("___valueId"))
-           String inequalitySignifier  = (inequivalence=="lessThan")?"<":">"
+           String inequalitySignifier
+           switch(inequivalence){
+               case "lessThan" :
+                   inequalitySignifier =  "<"
+                   break
+               case "greaterThan" :
+                   inequalitySignifier = ">"
+                   break
+               case "equalTo" :
+                   inequalitySignifier =  "|"
+                   break
+               default:
+                   inequalitySignifier =  "<"
+                   break
+           }
            returnValue = "${phenotype}[${sample}]${property}${inequalitySignifier}${value}"
        }
        return returnValue
@@ -1408,7 +1437,14 @@ class FilterManagementService {
 
         // It is possible to send back an null filter, which we can then drop from further processing
         // does perform that test right here
-        if (newParameters){
+        if ((newParameters)&&
+                (
+                        (newParameters.findAll{ it.key =~ /^filter/ }?.size()>0)  ||
+                        (newParameters.findAll{ it.key =~ /^gene/ }?.size()>0)  ||
+                        (newParameters.findAll{ it.key =~ /^predictedEffects/ }?.size()>0)  ||
+                        (newParameters.findAll{ it.key =~ /^region/ }?.size()>0)
+                )
+        ){
             returnValue << newParameters
         }
 
@@ -1473,6 +1509,9 @@ class FilterManagementService {
                                     break;
                                 case "4":
                                     returnValue ["predictedEffects"] = "noEffectNoncoding"
+                                    break;
+                                case "5":
+                                    returnValue ["predictedEffects"] = "lessThan_noEffectNoncoding"
                                     break;
                                 default:
                                     returnValue ["predictedEffects"] = "all-effects"

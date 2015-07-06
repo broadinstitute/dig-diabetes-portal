@@ -23,6 +23,11 @@ class GeneController {
         response.setContentType("application/json")
         render ("${partialMatches}")
     }
+    def geneOnlyTypeAhead() {
+        String partialMatches = geneManagementService.partialGeneOnlyMatches(params.query,27)
+        response.setContentType("application/json")
+        render ("${partialMatches}")
+    }
 
 
     /***

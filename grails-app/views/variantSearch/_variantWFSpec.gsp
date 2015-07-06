@@ -22,8 +22,8 @@ span.dataSetChoice {
     height: 20px;
 }
 .searchBuilderPrompt {
-   font-size: 14pt;
-    font-weight: bold;
+   font-size: 13pt;
+    font-weight: 400;
 }
 select optgroup {
     background: #444;

@@ -560,15 +560,29 @@ var UTILS = {
 
             for (var key in groupList) {
                 if (groupList.hasOwnProperty(key)) {
-                    var groupName = key;
-                    var groupContents = groupList[key];
-                    options.append("<optgroup label='"+key+"'>");
-                    for (var j = 0; j < groupContents.length; j++) {
-                        options.append($("<option />").val(groupContents[j]).text(mpgSoftware.trans.translator(groupContents[j])));
+                    if (key==='GLYCEMIC')  {
+                        var groupContents = groupList[key];
+                        options.append("<optgroup label='"+key+"'>");
+                        for (var j = 0; j < groupContents.length; j++) {
+                            options.append($("<option />").val(groupContents[j]).text(mpgSoftware.trans.translator(groupContents[j])));
+                        }
+                        options.append("</optgroup>");
                     }
-                    options.append("</optgroup>");
                 }
             }
+            for (var key in groupList) {
+                if (groupList.hasOwnProperty(key)) {
+                    if (key!=='GLYCEMIC')  {
+                        var groupContents = groupList[key];
+                        options.append("<optgroup label='"+key+"'>");
+                        for (var j = 0; j < groupContents.length; j++) {
+                            options.append($("<option />").val(groupContents[j]).text(mpgSoftware.trans.translator(groupContents[j])));
+                        }
+                        options.append("</optgroup>");
+                    }
+                }
+            }
+
         }
     },
 
@@ -867,7 +881,7 @@ var UTILS = {
             vDBSNP_ID: "dbSNP ID",
             vDIAGRAM: "DIAGRAM GWAS",
             vDirection: "direction of effect",
-						vDIR: "direction of effect",
+			vDIR: "direction of effect",
             vEAC_PH: "effect allele count",
             vEAF: "effect allele frequency",
             vEast_Asian: "East Asian",
@@ -876,6 +890,9 @@ var UTILS = {
             vExChip_82k: "82k exome chip analysis",
             vExChip_82k_mdv1: "82k exome chip analysis",
             vExChip_82k_mdv2: "82k exome chip analysis",
+            vExChip_SIGMA1_mdv1: "SIGMA exome chip analysis",
+            vExChip_SIGMA1_mdv2: "SIGMA exome chip analysis",
+            vExChip_SIGMA1_mdv3: "SIGMA exome chip analysis",
             vExSeq: "exome sequencing",
             vExSeq_13k: "13K exome sequence analysis",
             vExSeq_13k_aa_genes_mdv1: "13K exome sequence analysis: African-Americans",
@@ -981,6 +998,9 @@ var UTILS = {
             vGWAS_PGC: "PGC GWAS",
             vGWAS_PGC_mdv1: "PGC GWAS",
             vGWAS_PGC_mdv2: "PGC GWAS",
+            vGWAS_SIGMA1_mdv1: "GWAS SIGMA",
+            vGWAS_SIGMA1_mdv2: "GWAS SIGMA",
+            vGWAS_SIGMA1_mdv3: "GWAS SIGMA",
             vHETA: "number of heterozygous cases",
             vHETU: "number of heterozygous controls",
             vHOMA: "number of homozygous cases",
