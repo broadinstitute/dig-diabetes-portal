@@ -435,11 +435,15 @@ class VariantSearchController {
                 regionSpecifier = "chr${parsedFilterParameters.positioningInformation.chromosomeSpecified}:${parsedFilterParameters.positioningInformation.beginningExtentSpecified}-${parsedFilterParameters.positioningInformation.endingExtentSpecified}"
                 List<Gene> geneList = Gene.findAllByChromosome("chr" + parsedFilterParameters.positioningInformation.chromosomeSpecified)
                 for (Gene gene in geneList) {
-                    int startExtent = parsedFilterParameters.positioningInformation.beginningExtentSpecified as int
-                    int endExtent = parsedFilterParameters.positioningInformation.endingExtentSpecified as int
-                    if (((gene.addrStart > startExtent) && (gene.addrStart < endExtent)) ||
-                            ((gene.addrEnd > startExtent) && (gene.addrEnd < endExtent))) {
-                        identifiedGenes << gene.name1 as String
+                    try {
+                        int startExtent = parsedFilterParameters.positioningInformation.beginningExtentSpecified as Long
+                        int endExtent = parsedFilterParameters.positioningInformation.endingExtentSpecified as Long
+                        if (((gene.addrStart > startExtent) && (gene.addrStart < endExtent)) ||
+                                ((gene.addrEnd > startExtent) && (gene.addrEnd < endExtent))) {
+                            identifiedGenes << gene.name1 as String
+                        }
+                    } catch (e){
+                        redirect(controller:'home',action:'portalHome')
                     }
 
                 }
