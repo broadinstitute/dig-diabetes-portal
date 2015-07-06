@@ -2590,10 +2590,19 @@ private String generateProteinEffectJson (String variantName){
            if (firstTime)   {
                firstTime = false
            }  else {
-               sb << """,
+               // KDUXTD-98: temporary fix for pulling OMNI data which isn't there yet
+               if (!sampleGroupsContainingProperty?.equals("GWAS_SIGMA1_mdv2")) {
+                   sb << """,
 """.toString()
+               }
            }
-           sb << """      "${sampleGroupsContainingProperty}" """.toString()
+           // KDUXTD-98: temporary fix for pulling OMNI data which isn't there yet
+           if (!sampleGroupsContainingProperty?.equals("GWAS_SIGMA1_mdv2")) {
+               sb << """      "${sampleGroupsContainingProperty}" """.toString()
+           } else {
+               log.info("skipping sample group: " + sampleGroupsContainingProperty)
+           }
+
        }
        return sb.toString()
    }
