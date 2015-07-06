@@ -2723,8 +2723,10 @@ private String generateProteinEffectJson (String variantName){
                     }
 
                     element = variant["DIR"].findAll{it}[0]
-                    betaMatchersMap.each{ String phenotypeName, String sampleGroupId ->
-                        sb  << "{\"level\":\"DIR^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
+                    if (element) {
+                        betaMatchersMap.each{ String phenotypeName, String sampleGroupId ->
+                            sb  << "{\"level\":\"DIR^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
+                        }
                     }
 
                     sampleGroupSpecificProperties.each { String sampleGroupId, LinkedHashMap sgHolder ->
