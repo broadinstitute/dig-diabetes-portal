@@ -35,7 +35,7 @@
         width:260px;
         overflow-y: auto;
         overflow-x: hidden;
-        background-color: #eee;
+        background-color: #fefefe;
         -moz-border-radius: 5px;
         -webkit-border-radius: 5px;
         -khtml-border-radius: 5px;
@@ -52,6 +52,13 @@
         padding: 0 0 0 10px;
         white-space:normal;
     }
+    .chkBoxTextGrey{
+        color:#777;
+        margin: 5px 0 5px 0;
+        padding: 0 0 0 10px;
+        white-space:normal;
+    }
+
     .propBox {
         color:white;
         bottom: 0;
@@ -134,7 +141,7 @@ var rememberProperty = function(phenotype,dataSet,propertyList, addIt){
      }
 
 }
-    var lookAtProperties = function (here,phenotype,dataSet,propertyList,currentPropertyList,title){
+    var lookAtProperties = function (here,phenotype,dataSet,propertyList,currentPropertyList,title,greyedOptions){
     if (skipBubbleUp){
         skipBubbleUp = false;
         return;
@@ -147,6 +154,12 @@ var rememberProperty = function(phenotype,dataSet,propertyList, addIt){
     } else {
         if ($('#'+propDivName).size()===0){//we haven't made this window before
             var expandedProperties = "";
+            if (typeof greyedOptions !== 'undefined')   {
+                for ( var i = 0 ; i < greyedOptions.length ; i++ ){
+                    expandedProperties += ('<span class="singprop"><input  class="propertyHolderChk" type="checkbox" name="'+greyedOptions[i]+'" value="'+greyedOptions[i]+
+                            '"  checked disabled><label class="chkBoxTextGrey">'+mpgSoftware.trans.translator(greyedOptions[i])+'</label></input><br/></span>');
+                }
+            }
             for ( var i = 0 ; i < propertyList.length ; i++ ){
                 var propertyAlreadyExists = "";
                 if (currentPropertyList.indexOf(propertyList[i])>-1){
@@ -241,7 +254,7 @@ loadVariantTableViaAjax("<%=filter%>","<%=additionalProperties%>");
         // get our property list
         if (typeof propertyList !== 'undefined') {
             returnValue = "<span style='float:right' class='glyphicon glyphicon-plus filterEditor propertyAdder' aria-hidden='true' onclick='lookAtProperties(this,\"common\",\"common\",[\""+
-                    propertyList.join('\",\"')+"\"],[\""+ existingCols.join('\",\"')+"\"],\"Choose common properties\")'></span>";
+                    propertyList.join('\",\"')+"\"],[\""+ existingCols.join('\",\"')+"\"],\"Choose common properties\",[\"VAR_ID\"])'></span>";
         }
         return returnValue;
     }

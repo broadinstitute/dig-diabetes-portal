@@ -943,7 +943,7 @@ class SharedToolsService {
                     temporaryHolder[property] = processedMetadata.commonProperties[property]["sort_order"]
                 }
             }
-            unsortedTree.cproperty = temporaryHolder.sort { it.value }.keySet()
+            unsortedTree.cproperty = ["VAR_ID"]+temporaryHolder.sort { it.value }.keySet()
         }
 
         // sort dproperty
@@ -1032,7 +1032,10 @@ class SharedToolsService {
         }
 
         LinkedHashMap returnValue = [:]
+
         returnValue["cproperty"] = commonProperties
+
+
         returnValue["dproperty"] = [:]
         returnValue["pproperty"] = [:]
 
@@ -1062,22 +1065,15 @@ class SharedToolsService {
                         if (processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype]) {
                             returnValue.pproperty[phenotype][sampleGroup].addAll(processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype][(new PhenoKey(sampleGroup,0,0))])
                         }
-//                        if (processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[phenotype]) {
-//                            returnValue.pproperty[phenotype][sampleGroup].addAll(processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[phenotype][sampleGroup])
-//                        }
                     } else {
                         returnValue.dproperty[phenotype][sampleGroup].addAll(propertiesToKeep.findAll({processedMetadata.propertiesPerSampleGroups[sampleGroup].contains(it)}))
                         if (processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype]) {
                             returnValue.pproperty[phenotype][sampleGroup].addAll(propertiesToKeep.findAll({processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype][(new PhenoKey(sampleGroup,0,0))].findAll({it?.depth==1}).contains(new PhenoKey(it,0,0))}))
                         }
-//                        if (processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[phenotype]) {
-//                            returnValue.pproperty[phenotype][sampleGroup].addAll(propertiesToKeep.findAll({processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[phenotype][sampleGroup].contains(it)}))
-//                        }
                     }
                 }
             }
         }
-//        return returnValue
 
         return sortEverything(processedMetadata,returnValue)
     }

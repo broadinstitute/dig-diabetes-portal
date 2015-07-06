@@ -2171,7 +2171,10 @@ private String generateProteinEffectJson (String variantName){
         LinkedHashMap returnValue = [:]
         returnValue.dproperty = [:]
         returnValue.pproperty = [:]
-        returnValue.cproperty = columnsToDisplay.cproperty
+        // var id is required
+        returnValue.cproperty = columnsToDisplay.cproperty+"VAR_ID"
+
+
         if (columnsToDisplay.pproperty) {
             for (String phenotype in columnsToDisplay.pproperty.keySet()) {
                 for (String dataset in columnsToDisplay.pproperty[phenotype].keySet()) {
