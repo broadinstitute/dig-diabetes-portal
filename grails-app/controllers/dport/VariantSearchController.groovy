@@ -426,7 +426,7 @@ class VariantSearchController {
             String encodedFilters = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters)
             String encodedParameters = sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
             if (parsedFilterParameters.transferableFilter){
-                encodedParameters += "${encodedParameters},${parsedFilterParameters.transferableFilter.join(',')}"
+                encodedParameters = "${encodedParameters},${parsedFilterParameters.transferableFilter.join(',')}"
             }
             String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
             String regionSpecifier = ""
