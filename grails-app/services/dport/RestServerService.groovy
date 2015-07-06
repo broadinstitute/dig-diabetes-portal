@@ -321,13 +321,7 @@ class RestServerService {
 
 
     private List<String> getVariantColumns() {
-        List<String> returnValue
-        if (sharedToolsService.applicationName() == 'Sigma') {
-            returnValue = ['CHROM', 'POS', 'SIGMA_T2D_MAF']
-        } else {
-            returnValue = ['CHROM', 'POS']
-        }
-        return returnValue // Only need CHROM, POS and SIGMA_T2D_MAF
+        return ['CHROM', 'POS']
     }
 
     private List<String> getVariantInfoColumns() {

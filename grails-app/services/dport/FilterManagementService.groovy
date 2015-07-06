@@ -141,12 +141,6 @@ class FilterManagementService {
             case "setExomeChipMaximumAbsolute" :
                 returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "blah", "operand": "MAF", "operator": "LT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
-            case "setSigmaMinorAlleleFrequencyMinimum" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_MAF", "operator": "GTE", "value": ${parm2} }""".toString()
-                break;
-            case "setSigmaMinorAlleleFrequencyMaximum" :
-                returnValue = """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_MAF", "operator": "LTE", "value": ${parm2} }""".toString()
-                break;
             case "polyphenSelect" :
                 returnValue = """{ "filter_type": "STRING", "operand": "PolyPhen_PRED", "operator": "EQ", "value": "${parm1}" }""".toString()
                 break;
