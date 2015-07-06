@@ -30,8 +30,8 @@ class RestServerService {
     private String NEW_DEV_REST_SERVER = ""
     private String BASE_URL = ""
     private String GENE_INFO_URL = "gene-info"
-    private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out - or maybe not
-    private String VARIANT_INFO_URL = "variant-info" // TODO: Wipe out
+    private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out, but used for (inefficiently) obtaining gene list.
+    private String VARIANT_INFO_URL = "variant-info" // TODO: Wipe out, but still used to feed IGV.
     private String VARIANT_SEARCH_URL = "variant-search" // TODO: Wipe out
     private String TRAIT_SEARCH_URL = "trait-search" // TODO: Wipe out
     private String METADATA_URL = "getMetadata"
