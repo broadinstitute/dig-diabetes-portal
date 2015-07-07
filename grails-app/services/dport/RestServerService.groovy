@@ -31,7 +31,6 @@ class RestServerService {
     private String BASE_URL = ""
     private String GENE_INFO_URL = "gene-info"
     private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out, but used for (inefficiently) obtaining gene list.
-    private String VARIANT_INFO_URL = "variant-info" // TODO: Wipe out, but still used to feed IGV.
     private String VARIANT_SEARCH_URL = "variant-search" // TODO: Wipe out
     private String TRAIT_SEARCH_URL = "trait-search" // TODO: Wipe out
     private String METADATA_URL = "getMetadata"
@@ -859,17 +858,26 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     JSONObject retrieveVariantInfoByName (String variantId) {
         JSONObject returnValue = null
-        String drivingJson = """{
-"variant_id": "${variantId}",
-"user_group": "ui",
-"columns": [${"\""+getVariantColumns () .join("\",\"")+"\""}]
-}
-""".toString()
-        returnValue = postRestCall( drivingJson, VARIANT_INFO_URL)
+        String drivingJson =
+                """
+{
+  "passback" : "1234abc",
+  "entity" : "variant",
+  "limit" : 1,
+  "count" : false,
+  "properties" : {
+    "cproperty" : ["CHROM", "POS"],
+    "orderBy" : ["CHROM"],
+    "dproperty" : {},
+    "pproperty" : {}
+  },
+  "filters" : [
+    {"operand" : "DBSNP_ID", "operator" : "EQ", "value" : "${variantId}", "operand_type" : "STRING"}
+  ]
+}""".toString()
+        returnValue = postRestCall( drivingJson, GET_DATA_URL)
         return returnValue
     }
-
-
 
 
     String generateDataRestrictionFilters (){

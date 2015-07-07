@@ -182,10 +182,16 @@ var mpgSoftware = mpgSoftware || {};
      * fillDiseaseRiskBurdenTest: fillDiseaseRiskBurdenTest}}
          */
         var privateMethods = (function () {
-            var calculateSearchRegion = function (variant) {
+            var calculateSearchRegion = function (data) {
                     var searchBand = 50000;// 50 kb
                     var returnValue = "";
-                    if (variant) {
+                    if (data) {
+                        var variant = {}
+                        var i;
+                        for(i = 0; i < data.length; i++) {
+                            if(typeof data[i]["CHROM"] !== 'undefined') { variant["CHROM"] = data[i]["CHROM"]; }
+                            if(typeof data[i]["POS"] !== 'undefined') { variant["POS"] = data[i]["POS"]; }
+                        }
                         if ((typeof variant["CHROM"] !== 'undefined') &&
                             (typeof variant["POS"] !== 'undefined')) { // an't do anything without chromosome number and sequence position
                             var chromosomeIdentifier = variant["CHROM"];  // String
@@ -727,7 +733,7 @@ var mpgSoftware = mpgSoftware || {};
          */
         function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot, restServerRoot) {
             var variantObj = data['variant'],
-                variant = variantObj['variant-info'],
+                variant = variantObj['variants'][0],
                 prepareDelayedIgvLaunch = function (variant, restServerRoot) {
                     /***
                      * store everything we need to launch IGV
