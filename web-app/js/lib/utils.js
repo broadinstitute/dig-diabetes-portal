@@ -696,12 +696,11 @@ var UTILS = {
      * I don't think this is used anymore
      * @param vRec
      * @param show_gene
-     * @param show_sigma
      * @param show_exseq
      * @param show_exchp
      * @returns {string}
      */
-    fillPhenotypicTraitTable: function (vRec, show_gene, show_sigma, show_exseq, show_exchp) {
+    fillPhenotypicTraitTable: function (vRec, show_gene, show_exseq, show_exchp) {
         var retVal = "";
         if (!vRec) {   // error condition
             return;

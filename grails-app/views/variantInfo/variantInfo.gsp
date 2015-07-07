@@ -115,16 +115,7 @@
                 mpgSoftware.variantInfo.fillTheFields(data,
                         "<%=variantToSearch%>",
                         "<g:createLink controller='trait' action='traitInfo' />",
-                        "${restServer.currentRestServer()}",
-                        ${show_gwas},
-                        ${show_exchp},
-                        ${show_exseq},
-                        ${show_sigma},
-                        {variantAssociationStrings:variantAssociationStrings,
-                         diseaseBurdenStrings:diseaseBurdenStrings,
-                         alleleFrequencyStrings:alleleFrequencyStrings,
-                         carrierStatusImpact:carrierStatusImpact,
-                         impactOnProtein:impactOnProtein});
+                        "${restServer.currentRestServer()}");
             }
             $(".pop-top").popover({placement : 'top'});
             $(".pop-right").popover({placement : 'right'});
@@ -171,7 +162,7 @@
                         </div>
                     </div>
 
-<g:if test="${show_exseq || show_sigma}">
+<g:if test="${show_exseq}">
 
                     <div class="separator"></div>
 
@@ -213,7 +204,7 @@
                         </div>
                     </div>
 </g:if>
-<g:if test="${show_exseq || show_sigma}">
+<g:if test="${show_exseq}">
 
                     <div class="separator"></div>
 

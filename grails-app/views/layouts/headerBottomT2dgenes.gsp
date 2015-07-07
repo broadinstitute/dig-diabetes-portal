@@ -23,12 +23,6 @@
             <oauth:connect provider="google" id="google-connect-link"><g:message code="google.log.in"/></oauth:connect>
             </div>
         </sec:ifNotLoggedIn>
-        <g:renderSigmaSection>
-            <a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a> &middot;
-            <a href="${createLink(controller:'informational', action:'aboutSigma')}"><g:message code="localized.aboutTheData"/></a> &middot;
-            <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="localized.contact"/></a>
-            <a href="${createLink(controller:'informational', action:'forum')}"><g:message code="portal.header.nav.forum"/></a>
-        </g:renderSigmaSection>
         <g:renderT2dGenesSection>
             <a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a> &middot;
             <a href="${createLink(controller:'informational', action:'about')}"><g:message code="portal.header.nav.about"/></a> &middot;

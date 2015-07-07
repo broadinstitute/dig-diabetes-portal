@@ -104,7 +104,6 @@
                     ${show_gwas},
                     ${show_exchp},
                     ${show_exseq},
-                    ${show_sigma},
                     '<g:createLink controller="region" action="regionInfo" />',
                     '<g:createLink controller="trait" action="traitSearch" />',
                     '<g:createLink controller="variantSearch" action="gene" />',
@@ -232,9 +231,6 @@
     <script>
         $('#accordion2').on('shown.bs.collapse', function (e) {
             if (e.target.id === "collapseIgv") {
- <g:renderSigmaSection>
-                igvLauncher.launch("#myDiv", "${geneName}","${restServer.currentRestServer()}",[1,0,0,1]);
- </g:renderSigmaSection>
  <g:renderT2dGenesSection>
                 igvLauncher.launch("#myDiv", "${geneName}","${restServer.currentRestServer()}",[1,1,1,0]);
  </g:renderT2dGenesSection>
@@ -282,7 +278,7 @@
 
     </g:if>
 
-<g:if test="${show_exseq || show_sigma}">
+<g:if test="${show_exseq}">
 
     <div class="separator"></div>
 

@@ -23,7 +23,6 @@ class TraitController {
                  model: [show_gwas        : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                          show_exchp       : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                          show_exseq       : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                         show_sigma       : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
                          show_gene        : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
                          variantIdentifier: variantIdentifier,
                          phenotypeList    : encodedString])
@@ -52,7 +51,6 @@ class TraitController {
                 model: [show_gwas            : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                         show_exchp           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                         show_exseq           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                        show_sigma           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
                         show_gene            : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
                         phenotypeKey         : phenotypeKey,
                         phenotypeName        : phenotypeName,
@@ -140,8 +138,7 @@ class TraitController {
                         show_gene          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
                         show_gwas          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                         show_exchp         : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
-                        show_exseq         : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                        show_sigma         : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma)])
+                        show_exseq         : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq)])
     }
 
     /***

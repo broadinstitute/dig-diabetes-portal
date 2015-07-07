@@ -32,7 +32,6 @@
         var variant =  data['traitInfo'];
         $('#traitsPerVariantTableBody').append(variantProcessing.fillTraitsPerVariantTable(variant,
                 ${show_gene},
-                ${show_sigma},
                 ${show_exseq},
                 ${show_exchp},
                 phenotypeMap,

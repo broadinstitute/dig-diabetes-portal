@@ -330,11 +330,7 @@ class SystemController {
     def switchSigmaT2d(){
        // String restServer = params
         String requestedApplication = params.datatype
-        if ( requestedApplication == 'sigma')  {
-            sharedToolsService.setApplicationToSigma  ()
-            redirect(controller:'home', action:'index')
-            return
-        }  else if  ( requestedApplication == 't2dgenes')  {
+        if  ( requestedApplication == 't2dgenes')  {
             sharedToolsService.setApplicationToT2dgenes  ()
             redirect(controller:'home', action:'index')
             return

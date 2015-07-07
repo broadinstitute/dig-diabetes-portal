@@ -1,5 +1,5 @@
 
-<g:if test="${show_exseq || show_sigma}">
+<g:if test="${show_exseq}">
 
 
     <a name="biology"></a>

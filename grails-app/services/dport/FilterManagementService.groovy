@@ -258,7 +258,7 @@ class FilterManagementService {
      * @param currentlySigma
      * @return
      */
-    public LinkedHashMap  parseVariantSearchParameters (HashMap incomingParameters,Boolean currentlySigma) {
+    public LinkedHashMap  parseVariantSearchParameters (HashMap incomingParameters) {
         LinkedHashMap  buildingFilters = [filters:new ArrayList<String>(),
                                           filterDescriptions:new ArrayList<String>(),
                                           parameterEncoding:new ArrayList<String>(),
@@ -278,7 +278,7 @@ class FilterManagementService {
 
         buildingFilters = setAlleleFrequencies(buildingFilters, incomingParameters)
 
-        buildingFilters = caseControlOnly(buildingFilters, incomingParameters,currentlySigma,datatypeOperand)
+        buildingFilters = caseControlOnly(buildingFilters, incomingParameters)
 
         buildingFilters = predictedEffectsOnProteins(buildingFilters, incomingParameters)
 
@@ -319,7 +319,7 @@ class FilterManagementService {
 
         buildingFilters = setAlleleFrequencies(buildingFilters, incomingParameters)
 
-        buildingFilters = caseControlOnly(buildingFilters, incomingParameters,currentlySigma,datatypeOperand)
+        buildingFilters = caseControlOnly(buildingFilters, incomingParameters)
 
         buildingFilters = predictedEffectsOnProteins(buildingFilters, incomingParameters)
 
@@ -343,7 +343,7 @@ class FilterManagementService {
      */
   public  List<String> retrieveFilters (  String geneId, String significance,String dataset,String region,String receivedParameters )    {
       Map paramsMap = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters)
-      LinkedHashMap<String, String> parsedFilterParameters = parseVariantSearchParameters(paramsMap, false)
+      LinkedHashMap<String, String> parsedFilterParameters = parseVariantSearchParameters(paramsMap)
       return  parsedFilterParameters.filters
   }
 
@@ -1087,32 +1087,20 @@ class FilterManagementService {
 
 
 
-    private  LinkedHashMap caseControlOnly (LinkedHashMap  buildingFilters, HashMap incomingParameters, Boolean usingSigma,caseControlOnly){
+    private  LinkedHashMap caseControlOnly (LinkedHashMap  buildingFilters, HashMap incomingParameters){
         List <String> filters =  buildingFilters.filters
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
         // datatype: Sigma, exome sequencing, exome chip, or diagram GWAS
         if  (incomingParameters.containsKey("t2dcases")) {
-            if (usingSigma) {
-                filters << retrieveFilterString("onlySeenCaseSigma") 
-                filterDescriptions << "Number of minor alleles observed in controls in SIGMA analysis is equal to 0"
-                parameterEncoding << "20:0"
-            } else {
-                filters << retrieveFilterString("onlySeenCaseT2d") 
-                filterDescriptions << "Number of observations in controls is equal to 0"
-                parameterEncoding << "20:1"
-            }
+            filters << retrieveFilterString("onlySeenCaseT2d")
+            filterDescriptions << "Number of observations in controls is equal to 0"
+            parameterEncoding << "20:1"
         }
         if  (incomingParameters.containsKey("t2dcontrols")) {
-            if (usingSigma) {
-                filters << retrieveFilterString("onlySeenControlSigma") 
-                filterDescriptions << "Number of minor alleles observed in cases in SIGMA analysis is equal to 0"
-                parameterEncoding << "21:0"
-            } else {
-                filters << retrieveFilterString("onlySeenControlT2d") 
-                filterDescriptions << "Number of observations in cases is equal to 0"
-                parameterEncoding << "21:1"
-            }
+            filters << retrieveFilterString("onlySeenControlT2d")
+            filterDescriptions << "Number of observations in cases is equal to 0"
+            parameterEncoding << "21:1"
         }
         if  (incomingParameters.containsKey("homozygotes")) {
             filters << retrieveFilterString("onlySeenHomozygotes") 

@@ -310,13 +310,7 @@ class RestServerService {
 
 
     private List<String> getGeneColumns() {
-        List<String> returnValue
-        if (sharedToolsService.applicationName() == 'Sigma') {
-            returnValue = (GENE_COLUMNS + SIGMA_GENE_COLUMNS + GWAS_GENE_COLUMNS)
-        } else { // must be t2dGenes
-            returnValue = (GENE_COLUMNS + EXSEQ_GENE_COLUMNS + EXCHP_GENE_COLUMNS + GWAS_GENE_COLUMNS)
-        }
-        return returnValue
+        return GENE_COLUMNS + EXSEQ_GENE_COLUMNS + EXCHP_GENE_COLUMNS + GWAS_GENE_COLUMNS
     }
 
 
@@ -325,9 +319,7 @@ class RestServerService {
     }
 
     private List<String> getVariantInfoColumns() {
-        List<String> returnValue
-        returnValue = (VARIANT_INFO_SEARCH_COLUMNS)
-        return returnValue
+        return VARIANT_INFO_SEARCH_COLUMNS
     }
 
 
@@ -512,13 +504,7 @@ class RestServerService {
 
 
     private List<String> getVariantSearchColumns() {
-        List<String> returnValue
-        if (sharedToolsService.applicationName() == 'Sigma') {
-            returnValue = (VARIANT_SEARCH_COLUMNS + SIGMA_VARIANT_SEARCH_COLUMNS + GWAS_VARIANT_SEARCH_COLUMNS)
-        } else {
-            returnValue = (VARIANT_SEARCH_COLUMNS + EXSEQ_VARIANT_SEARCH_COLUMNS + EXCHP_VARIANT_SEARCH_COLUMNS + GWAS_VARIANT_SEARCH_COLUMNS)
-        }
-        return returnValue
+        return VARIANT_SEARCH_COLUMNS + EXSEQ_VARIANT_SEARCH_COLUMNS + EXCHP_VARIANT_SEARCH_COLUMNS + GWAS_VARIANT_SEARCH_COLUMNS
     }
 
 
@@ -926,10 +912,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     String generateDataRestrictionFilters (){
         StringBuilder sb = new  StringBuilder ()
-        if (sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma)) {
-            sb << """,
-{ "filter_type": "STRING", "operand": "IN_SIGMA",  "operator": "EQ","value": "1"  }""".toString()
-        }
         if (sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq)) {
             sb << """,
 { "filter_type": "STRING", "operand": "IN_EXSEQ",  "operator": "EQ","value": "1"  }

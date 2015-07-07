@@ -153,7 +153,6 @@ $.ajax({
                                 ${show_gwas},
                                 ${show_exchp},
                                 ${show_exseq},
-                                ${show_sigma},
                                 '<g:createLink controller="region" action="regionInfo"/>',
                                 '<g:createLink controller="trait" action="traitSearch"/>',
                                 '<g:createLink controller="variantSearch" action="gene"/>',

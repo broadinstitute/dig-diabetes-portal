@@ -44,37 +44,17 @@ var mpgSoftware = mpgSoftware || {};
             return returnValue;
         };
 
-        var variantAssociations = function (variantRec, showSigma, variantTitle, traitsStudiedUrlRoot, variantAssociationStrings) {
+        var variantAssociations = function (variantRec, variantTitle, traitsStudiedUrlRoot, variantAssociationStrings) {
             var weHaveVariantsAndAssociations;
-            if (showSigma) {
-                weHaveVariantsAndAssociations = ((variantRec.IN_GWAS) || (variantRec.GWAS_T2D_PVALUE) || (variantRec.GWAS_T2D_OR) ||
-                    (variantRec.SIGMA_T2D_P) || (variantRec.SIGMA_T2D_OR)  );
-            } else {
-                weHaveVariantsAndAssociations = ((variantRec.IN_GWAS) || (variantRec.GWAS_T2D_PVALUE) || (variantRec.GWAS_T2D_OR) ||
-                    (variantRec.EXCHP_T2D_P_value) || (variantRec.EXCHP_T2D_BETA) ||
-                    (variantRec._13k_T2D_P_EMMAX_FE_IV) || (variantRec._13k_T2D_OR_WALD_DOS_FE_IV) );
-            }
-            var showGwas=true,showExchp=true,showExchp=true,showExseq=true,showSigma=false;
+            weHaveVariantsAndAssociations = ((variantRec.IN_GWAS) || (variantRec.GWAS_T2D_PVALUE) || (variantRec.GWAS_T2D_OR) ||
+            (variantRec.EXCHP_T2D_P_value) || (variantRec.EXCHP_T2D_BETA) ||
+            (variantRec._13k_T2D_P_EMMAX_FE_IV) || (variantRec._13k_T2D_OR_WALD_DOS_FE_IV) );
+            var showGwas=true,showExchp=true,showExchp=true,showExseq=true;
 
             UTILS.verifyThatDisplayIsWarranted(weHaveVariantsAndAssociations, $('#VariantsAndAssociationsExist'), $('#VariantsAndAssociationsNoExist'));
             if (weHaveVariantsAndAssociations) {
                 if (showGwas) {
                     $('#gwasAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
-                        variantRec.IN_GWAS,
-                        variantRec.GWAS_T2D_PVALUE,
-                        variantRec.GWAS_T2D_OR,
-                        5e-8,
-                        5e-4,
-                        5e-2,
-                        variantTitle,
-                            variantAssociationStrings.sourceDiagram +
-                            variantAssociationStrings.sourceDiagramQ,
-                        false,
-                        false,
-                        variantAssociationStrings));
-                }
-                if (showSigma) {
-                    $('#gwasSigmaAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
                         variantRec.IN_GWAS,
                         variantRec.GWAS_T2D_PVALUE,
                         variantRec.GWAS_T2D_OR,
@@ -114,21 +94,6 @@ var mpgSoftware = mpgSoftware || {};
                         variantTitle,
                             variantAssociationStrings.sourceExomeSequence +
                             variantAssociationStrings.sourceExomeSequenceQ,
-                        false,
-                        false,
-                        variantAssociationStrings));
-                }
-                if (showSigma) {
-                    $('#sigmaAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
-                        variantRec.SIGMA_T2D_P,
-                        variantRec.SIGMA_T2D_P,
-                        variantRec.SIGMA_T2D_OR,
-                        5e-8,
-                        5e-4,
-                        5e-2,
-                        variantTitle,
-                            variantAssociationStrings.sourceSigma +
-                            variantAssociationStrings.sourceSigmaQ,
                         false,
                         false,
                         variantAssociationStrings));
@@ -439,7 +404,7 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 },
 
-                showCarrierStatusDiseaseRisk = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, show_gwas, show_exchp, show_exseq, show_sigma, carrierStatusImpact) {
+                showCarrierStatusDiseaseRisk = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, show_gwas, show_exchp, show_exseq, carrierStatusImpact) {
                     var heta = 1, hetu = 1, totalCases = 1,
                         homa = 1, homu = 1, totalControls = 1,
                         retainBarchartPtr;
@@ -595,7 +560,7 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 },
 
-                fillDiseaseRiskBurdenTest = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, PVALUE, ORVALUE, show_gwas, show_exchp, show_exseq, show_sigma, rootVariantUrl, diseaseBurdenStrings) {
+                fillDiseaseRiskBurdenTest = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, PVALUE, ORVALUE, show_gwas, show_exchp, show_exseq, rootVariantUrl, diseaseBurdenStrings) {
                     var hetu = 0,
                         heta = 0,
                         homa = 0,
@@ -759,12 +724,11 @@ var mpgSoftware = mpgSoftware || {};
          * @param showGwas
          * @param showExchp
          * @param showExseq
-         * @param showSigma
          */
-        function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot, restServerRoot, showGwas, showExchp, showExseq, showSigma, textStringObject) {
+        function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot, restServerRoot) {
             var variantObj = data['variant'],
                 variant = variantObj['variant-info'],
-                prepareDelayedIgvLaunch = function (variant, showSigma, restServerRoot) {
+                prepareDelayedIgvLaunch = function (variant, restServerRoot) {
                     /***
                      * store everything we need to launch IGV
                      */
@@ -772,25 +736,17 @@ var mpgSoftware = mpgSoftware || {};
                     return {
                         rememberRegion: regionforIgv,
                         launch: function () {
-                            if (showSigma) {
-                                igvLauncher.launch("#myVariantDiv", regionforIgv, restServerRoot, [1, 0, 0, 1]);
-                            } else {
-                                igvLauncher.launch("#myVariantDiv", regionforIgv, restServerRoot, [1, 1, 1, 0]);
-                            }
+                            igvLauncher.launch("#myVariantDiv", regionforIgv, restServerRoot, [1, 1, 1, 0]);
                         }
                     };
                 },
              externalVariantAssociationStatistics = variantAssociations;
-            var calculateDiseaseBurden = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, PVALUE, ORVALUE, variantTitle, showSigma, showGwas, showExchp, showExseq, diseaseBurdenStrings) {// disease burden
+            var calculateDiseaseBurden = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, PVALUE, ORVALUE, variantTitle, showGwas, showExchp, showExseq, diseaseBurdenStrings) {// disease burden
                 var weHaveEnoughDataForRiskBurdenTest;
-                if (showSigma) {
-                    weHaveEnoughDataForRiskBurdenTest = (!UTILS.nullSafetyTest([OBSU, OBSA, HOMA, HETA, HOMU, HETU  ]));
-                } else {
-                    weHaveEnoughDataForRiskBurdenTest = (!UTILS.nullSafetyTest([OBSU, OBSA, HOMA, HETA, HOMU, HETU ]));
-                }
+                weHaveEnoughDataForRiskBurdenTest = (!UTILS.nullSafetyTest([OBSU, OBSA, HOMA, HETA, HOMU, HETU ]));
                 UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataForRiskBurdenTest, $('#diseaseRiskExists'), $('#diseaseRiskNoExists'));
                 if (weHaveEnoughDataForRiskBurdenTest) {
-                    privateMethods.fillDiseaseRiskBurdenTest(OBSU, OBSA, HOMA, HETA, HOMU, HETU, PVALUE, ORVALUE, showGwas, showExchp, showExseq, showSigma, null, diseaseBurdenStrings);
+                    privateMethods.fillDiseaseRiskBurdenTest(OBSU, OBSA, HOMA, HETA, HOMU, HETU, PVALUE, ORVALUE, showGwas, showExchp, showExseq, null, diseaseBurdenStrings);
                 }
                 $('#sigmaVariantCharacterization').append(UTILS.sigmaVariantCharacterization(variant, variantTitle));
             };
@@ -805,16 +761,12 @@ var mpgSoftware = mpgSoftware || {};
                 }
             };
             externalizeShowHowCommonIsThisVariantAcrossEthnicities = howCommonIsThisVariantAcrossEthnicities;
-            var showHowCarriersAreDistributed = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, showGwas, showExchp, showExseq, showSigma, carrierStatusImpact) {// case control data set characterization
+            var showHowCarriersAreDistributed = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, showGwas, showExchp, showExseq, carrierStatusImpact) {// case control data set characterization
                 var weHaveEnoughDataToCharacterizeCaseControls;
-                if (showSigma) {
-                    weHaveEnoughDataToCharacterizeCaseControls = (!UTILS.nullSafetyTest([OBSU, OBSA, HOMA, HETA, HOMU, HETU  ]));
-                } else {
-                    weHaveEnoughDataToCharacterizeCaseControls = (!UTILS.nullSafetyTest([OBSU, OBSA, HOMA, HETA, HOMU, HETU  ]));
-                }
+                weHaveEnoughDataToCharacterizeCaseControls = (!UTILS.nullSafetyTest([OBSU, OBSA, HOMA, HETA, HOMU, HETU  ]));
                 UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToCharacterizeCaseControls, $('#carrierStatusExist'), $('#carrierStatusNoExist'));
                 if (weHaveEnoughDataToCharacterizeCaseControls) {
-                    privateMethods.showCarrierStatusDiseaseRisk(OBSU, OBSA, HOMA, HETA, HOMU, HETU, showGwas, showExchp, showExseq, showSigma, carrierStatusImpact);
+                    privateMethods.showCarrierStatusDiseaseRisk(OBSU, OBSA, HOMA, HETA, HOMU, HETU, showGwas, showExchp, showExseq, carrierStatusImpact);
                 }
             };
             externalizeCarrierStatusDiseaseRisk = showHowCarriersAreDistributed;
@@ -829,7 +781,7 @@ var mpgSoftware = mpgSoftware || {};
              * the following top-level routines do all the work in fillTheFields
              */
             //setTitlesAndTheLikeFromData(variantTitle, variant);
-            delayedIgvLaunch = prepareDelayedIgvLaunch(variant, showSigma, restServerRoot);
+            delayedIgvLaunch = prepareDelayedIgvLaunch(variant, restServerRoot);
 
 
 

@@ -2,27 +2,6 @@
 <div class="row clearfix">
     <div class="col-md-6">
         <div id="frequencies-form">
-        <g:if test="${show_sigma}">
-            <div class="checkbox">
-                        <div class="row">
-                            <div class="col-xs-4">
-                                <label>
-                                    <strong>Allele frequency:</strong>
-                                </label>
-                            </div>
-                            <div class="col-xs-2" style="text-align: right">from</div>
-                            <div class="col-xs-2">
-                                <input type="text" class="form-control" id="ethnicity_af_sigma" />
-                            </div>
-                            <div class="col-xs-1" style="text-align: right">
-                                to
-                            </div>
-                            <div class="col-xs-2">
-                                <input type="text" class="form-control" id="ethnicity_af_sigma"/>
-                            </div>
-                        </div>
-                    </div>
-       </g:if>
        <g:if test="${show_exseq}">
            <g:alleleFrequencyRange></g:alleleFrequencyRange>
         </g:if>
@@ -37,16 +16,6 @@
         however, the variants are low-frequency or rare in other ancestry groups,
         and appear to play little to no role in T2D in Europeans.
         Thus, <em>SLC16A11</em> was not implicated in early GWAS of type 2 diabetes, which focused on people of European ancestry.
-        </p>
-      </g:if>
-      <g:if test="${show_sigma}">
-        <p>
-            Allele frequencies are derived from both exome sequencing and exome chip datasets.
-            If a variant is in exome chip, its frequency from that study is used, since the sample size of exome chip studies is much larger.
-            If a variant is in exome sequencing but not exome chip (as is the case with most rare variants), its frequency from exome chip.
-            You can see whether a variant is from exome sequencing or exome chip from the <em>SIGMA source</em> column in the variant table.
-        Finally, note that if a variant is not seen in either exome sequencing or exome chip data, it is assigned an allele frequency of 0.0.
-        There is currently no way to identify whether a variant was genotyped and not seen, or was not in a part of the genome included in these studies.
         </p>
       </g:if>
     </div>

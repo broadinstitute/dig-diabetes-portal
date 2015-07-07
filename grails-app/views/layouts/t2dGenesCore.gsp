@@ -18,9 +18,6 @@
 
 
     <g:layoutHead/>
-<g:renderSigmaSection>
-    <g:applyLayout name="analyticsSigma"/>
-</g:renderSigmaSection>
 <g:renderT2dGenesSection>
     <g:applyLayout name="analyticsT2dGenes"/>
 </g:renderT2dGenesSection>

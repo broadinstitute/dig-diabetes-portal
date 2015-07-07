@@ -19,7 +19,6 @@ class HypothesisGenController {
                                                   show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                                                   show_exchp          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                                                   show_exseq          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                                                  show_sigma          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
         ])
     }
 
@@ -81,7 +80,7 @@ class HypothesisGenController {
              encodedVariantList = sharedToolsService.packageUpFiltersForRoundTrip(explicitVariantList)
              encodedVariantList2 = sharedToolsService.packageUpEncodedParameters(explicitVariantList)
         }else {
-            parsedFilterParameters = filterManagementService.parseVariantSearchParameters(paramsMap, false)
+            parsedFilterParameters = filterManagementService.parseVariantSearchParameters(paramsMap)
             encodedFilters = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters)
             encodedParameters = sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
         }
@@ -97,7 +96,6 @@ class HypothesisGenController {
                             show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                             show_exchp          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                             show_exseq          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                            show_sigma          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
                             variants            : encodedVariantList,
                             variants2           : encodedVariantList2,
 //                            variantInfo         : jsonObject['variant-info'],

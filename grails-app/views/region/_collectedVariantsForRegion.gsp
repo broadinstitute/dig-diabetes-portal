@@ -11,11 +11,6 @@
 <th></th>
 <th></th>
 <th></th>
-<g:if test="${show_sigma}">
-<th colspan="5" class="datatype-header"><g:message code="variantTable.columnHeaders.sigma.title" default="SIGMA" />
-    <g:helpText title="variantTable.columnHeaders.sigma.titleQ.help.header"  qplacer="2px 0 0 6px" placement="top" body="variantTable.columnHeaders.sigma.titleQ.help.text"/>
-</th>
-</g:if>
 <g:if test="${show_exseq}">
 <th colspan="5" class="datatype-header"><g:message code="variantTable.columnHeaders.exomeSequencing.title" default="exome sequencing" />
 <g:helpText title="variantTable.columnHeaders.exomeSequencing.titleQ.help.header"  qplacer="2px 0 0 6px" placement="top" body="variantTable.columnHeaders.exomeSequencing.titleQ.help.text"/>
@@ -46,23 +41,6 @@
     <th><g:message code="variantTable.columnHeaders.shared.effectOnProtein" default="effectOnProtein" />
     <g:helpText title="variantTable.columnHeaders.shared.effectOnProteinQ.help.header"  qplacer="2px 0 0 6px" placement="top" body="variantTable.columnHeaders.shared.effectOnProteinQ.help.text"/>
     </th>
-<g:if test="${show_sigma}">
-    <th style="min-width: 80px;"><g:message code="variantTable.columnHeaders.sigma.source" default="source" />
-    <g:helpText title="variantTable.columnHeaders.sigma.sourceQ.help.header"  qplacer="2px 0 0 6px" placement="top" body="variantTable.columnHeaders.sigma.sourceQ.help.text"/>
-    </th>
-    <th style="min-width: 80px;"><g:message code="variantTable.columnHeaders.sigma.pValue" default="p-value" />
-    <g:helpText title="variantTable.columnHeaders.sigma.pValue.help.header"  qplacer="2px 0 0 6px" placement="top" body="variantTable.columnHeaders.sigma.pValue.help.text"/>
-    </th>
-    <th style="min-width: 80px;"><g:message code="variantTable.columnHeaders.sigma.oddsRatio" default="odds ratio" />
-    <g:helpText title="variantTable.columnHeaders.sigma.oddsRatioQ.help.header"  qplacer="2px 0 0 6px" placement="top" body="variantTable.columnHeaders.sigma.oddsRatioQ.help.text"/>
-    </th>
-    <th><g:message code="variantTable.columnHeaders.exomeSequencing.caseControl" default="case/control" />
-    <g:helpText title="variantTable.columnHeaders.exomeSequencing.caseControlQ.help.header"  qplacer="2px 0 0 6px" placement="top" body="variantTable.columnHeaders.exomeSequencing.caseControlQ.help.text"/>
-    </th>
-    <th><g:message code="variantTable.columnHeaders.sigma.frequency" default="frequency" />
-    <g:helpText title="variantTable.columnHeaders.sigma.frequencyQ.help.header"  qplacer="2px 0 0 6px" placement="top" body="variantTable.columnHeaders.sigma.frequencyQ.help.text"/>
-    </th>
-</g:if>
 <g:if test="${show_exseq}">
     <th style="min-width: 80px;"><g:message code="variantTable.columnHeaders.exomeSequencing.pValue" default="p-value" />
     <g:helpText title="variantTable.columnHeaders.exomeSequencing.pValueQ.help.header"  qplacer="2px 0 0 6px" placement="top" body="variantTable.columnHeaders.exomeSequencing.pValueQ.help.text"/>

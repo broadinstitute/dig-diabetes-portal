@@ -12,7 +12,6 @@ var mpgSoftware = mpgSoftware || {};
          * @param variant
          * @param effectsField
          * @param show_gene
-         * @param show_sigma
          * @param show_exseq
          * @param show_exchp
          * @returns {Array}
@@ -39,7 +38,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var iterativeTableFiller = function  (variant, show_gene, show_sigma, show_exseq, show_exchp)  {
+        var iterativeTableFiller = function  (variant, show_gene, show_exseq, show_exchp)  {
             var effectTypeTitle =  UTILS.determineEffectsTypeHeader(variant);
             var effectTypeString =  UTILS.determineEffectsTypeString(effectTypeTitle);
             $('#effectTypeHeader').append(effectTypeTitle);
@@ -52,7 +51,7 @@ var mpgSoftware = mpgSoftware || {};
             var dataLength = variant.length;
             var effectsField = UTILS.determineEffectsTypeString (effectTypeTitle);
             for ( var i = 0 ; i < dataLength ; i++ ){
-                var array = convertLineForPhenotypicTraitTable(variant[i],effectsField,show_gene, show_sigma, show_exseq, show_exchp);
+                var array = convertLineForPhenotypicTraitTable(variant[i],effectsField,show_gene, show_exseq, show_exchp);
                 $('#phenotypeTraits').dataTable().fnAddData( array, (i==25) || (i==(dataLength-1)));
             }
         };

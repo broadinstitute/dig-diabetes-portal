@@ -3,7 +3,7 @@
 
 
 
-<g:if test="${show_exseq || show_sigma}">
+<g:if test="${show_exseq}">
 
 
 
@@ -47,7 +47,7 @@
                             parseInt(collector["d0"][0].count[0]),
                             parseInt(collector["d0"][3].count[0]),
                             parseInt(collector["d0"][1].count[0]),
-                            ${show_gwas},${show_exchp},${show_exseq},${show_sigma}, carrierStatusImpact);
+                            ${show_gwas},${show_exchp},${show_exseq}, carrierStatusImpact);
 
                     if ((typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation() !== 'undefined') &&
                             (typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch !== 'undefined')) {
@@ -89,12 +89,6 @@
 
 </g:if>
 
-<g:if test="${show_sigma}">
-
-
-    <span id="sigmaVariantCharacterization"></span>
-
-</g:if>
 
 
 

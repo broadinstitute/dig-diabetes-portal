@@ -308,7 +308,6 @@
     function fillTheFields(data) {
         variantProcessing.oldIterativeVariantTableFiller(data, '#variantTable',
                 ${show_gene},
-                ${show_sigma},
                 ${show_exseq},
                 ${show_exchp},
                 '<g:createLink controller="variantInfo" action="variantInfo" />',

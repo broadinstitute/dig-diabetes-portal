@@ -297,12 +297,6 @@
                                 </div>
                                 <div class="radio">
                                     <label>
-                                        <input id="sigma" type="radio" name="datatype" value="sigma" <%=(currentApplicationIsSigma=='Sigma')?'checked':''%> />
-                                        Sigma
-                                    </label>
-                                </div>
-                                <div class="radio">
-                                    <label>
                                         <input id="beacon" type="radio" name="datatype" value="beacon"  <%=(currentApplicationIsSigma=='Beacon')?'checked':''%> />
                                         beacon
                                     </label>

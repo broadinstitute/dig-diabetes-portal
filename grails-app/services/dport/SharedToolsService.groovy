@@ -31,7 +31,6 @@ class SharedToolsService {
     Integer showGwas = -1
     Integer showExomeChip = -1
     Integer showExomeSequence = -1
-    Integer showSigma = -1
     Integer showGene = -1
     Integer showBeacon = -1
     Integer showNewApi = 1
@@ -156,7 +155,6 @@ class SharedToolsService {
         showGwas = (grailsApplication.config.portal.sections.show_gwas)?1:0
         showExomeChip = (grailsApplication.config.portal.sections.show_exchp)?1:0
         showExomeSequence = (grailsApplication.config.portal.sections.show_exseq)?1:0
-        showSigma = (grailsApplication.config.portal.sections.show_sigma)?1:0
         showGene = (grailsApplication.config.portal.sections.show_gene)?1:0
         showBeacon = (grailsApplication.config.portal.sections.show_beacon)?1:0
         showNewApi = 1
@@ -164,7 +162,7 @@ class SharedToolsService {
     }
 
     public enum TypeOfSection {
-        show_gwas, show_exchp, show_exseq, show_sigma,show_gene, show_beacon
+        show_gwas, show_exchp, show_exseq, show_gene, show_beacon
     }
 
 
@@ -172,7 +170,6 @@ class SharedToolsService {
         showGwas = (showGwas==-1)?grailsApplication.config.portal.sections.show_gwas:showGwas
         showExomeChip = (showExomeChip==-1)?grailsApplication.config.portal.sections.show_exchp:showExomeChip
         showExomeSequence = (showExomeSequence==-1)?grailsApplication.config.portal.sections.show_exseq:showExomeSequence
-        showSigma = (showSigma==-1)?grailsApplication.config.portal.sections.show_sigma:showSigma
         showGene = (showGene==-1)?grailsApplication.config.portal.sections.show_gene:showGene
         showBeacon = (showBeacon==-1)?grailsApplication.config.portal.sections.show_beacon:showBeacon
         Boolean returnValue = false
@@ -186,9 +183,6 @@ class SharedToolsService {
             case TypeOfSection.show_exseq:
                 returnValue = showExomeSequence
                 break;
-            case TypeOfSection.show_sigma:
-                returnValue = showSigma
-                break;
             case TypeOfSection.show_gene:
                 returnValue = showGene
                 break;
@@ -201,33 +195,16 @@ class SharedToolsService {
     }
 
 
-
-    public Boolean setApplicationToSigma() {
-        showGwas = 1
-        showExomeChip = 0
-        showExomeSequence = 0
-        showSigma = 1
-        showBeacon = 0
-    }
-
-    public Boolean getApplicationIsSigma() {
-        return ((showSigma) &&
-                (!showBeacon) &&
-                (showGwas || showExomeChip  || showExomeSequence))
-    }
-
     public Boolean setApplicationToT2dgenes() {
         showGwas = 1
         showExomeChip = 1
         showExomeSequence = 1
-        showSigma = 0
         showBeacon = 0
     }
 
 
     public Boolean getApplicationIsT2dgenes() {
-        return ((!showSigma) &&
-                (!showBeacon) &&
+        return ((!showBeacon) &&
                 (showGwas || showExomeChip  || showExomeSequence))
     }
 
@@ -236,13 +213,11 @@ class SharedToolsService {
         showGwas = 0
         showExomeChip = 0
         showExomeSequence = 0
-        showSigma = 0
         showBeacon = 1
     }
 
     public Boolean getApplicationIsBeacon() {
-        return ((showBeacon)   &&
-                (!showSigma) )
+        return showBeacon
     }
 
     public Boolean getMetadataOverrideStatus() {
@@ -259,8 +234,6 @@ class SharedToolsService {
         String returnValue = ""
         if (getApplicationIsT2dgenes())   {
             returnValue = "t2dGenes"
-        }  else  if (getApplicationIsSigma())   {
-            returnValue = "Sigma"
         }  else  if (getApplicationIsBeacon())   {
             returnValue = "Beacon"
         }  else  {

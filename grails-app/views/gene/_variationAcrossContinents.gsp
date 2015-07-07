@@ -113,12 +113,11 @@
                         if ((data.ethnicityInfo) &&
                                 (data.ethnicityInfo.results)) {//assume we have data and process it
                             var holdingStructure = buildDataStructure(data);
-//                            mpgSoftware.geneInfo.fillVariationAcrossEthnicityTable( show_gwas, show_exchp, show_exseq, show_sigma, rootVariantUrl,
+//                            mpgSoftware.geneInfo.fillVariationAcrossEthnicityTable( show_gwas, show_exchp, show_exseq, rootVariantUrl,
 //                                    continentalAncestryText,ethnicitySequence,ethnicityChip,geneId);
                             mpgSoftware.geneInfo.fillVariationAcrossEthnicityTable(${show_gwas},
                                     ${show_exchp},
                                     ${show_exseq},
-                                    ${show_sigma},
                                     '<g:createLink controller="variantSearch" action="gene" />',
                                     continentalAncestryText,
                                     holdingStructure.ethnicitySequence,
@@ -128,7 +127,6 @@
                                     %{--${show_gwas},--}%
                                     %{--${show_exchp},--}%
                                     %{--${show_exseq},--}%
-                                    %{--${show_sigma},--}%
                                     %{--'<g:createLink controller="region" action="regionInfo" />',--}%
                                     %{--'<g:createLink controller="trait" action="traitSearch" />',--}%
                                     %{--'<g:createLink controller="variantSearch" action="gene" />',--}%

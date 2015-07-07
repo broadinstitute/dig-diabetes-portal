@@ -135,9 +135,6 @@ div.helix::after {
                                     code="mainpage.button.imperative"/></button>
                         </span>
                     </div>
-                    <g:renderSigmaSection>
-                        <div class="helptext"><g:message code="mainpage.start.with.variant.subtext.sigma"/></div>
-                    </g:renderSigmaSection>
                     <g:renderNotSigmaSection>
                         <div class="helptext"><g:message code="mainpage.start.with.variant.subtext"/></div>
                     </g:renderNotSigmaSection>

@@ -2,15 +2,6 @@
 <div class="row clearfix">
     <div class="col-md-6">
         <div id="datatypes-form">
-<g:if test="${show_sigma}">
-            <div class="radio">
-                <label>
-                    <input id="id_datatype_sigma" type="radio" name="datatype" value="sigma" />
-                    <g:message code="variantSearch.dataTypes.sigmaSequencing" default="SIGMA sequencing" />
-                    <g:helpText title="variantSearch.dataTypes.sigmaSequencingQ.help.header"  qplacer="2px 0 0 6px 0 0" placement="right" body="variantSearch.dataTypes.sigmaSequencingQ.help.text"/>
-                </label>
-            </div>
-</g:if>
 <g:if test="${show_exseq}">
             <div class="radio">
                 <label>
@@ -42,9 +33,6 @@
     </div>
     <div class="col-md-6">
 
-        <g:renderSigmaSection>
-            <g:message code="variantSearch.dataTypes.sigmaHelpText" default="Select SIGMA to see results" />
-        </g:renderSigmaSection>
         <g:renderT2dGenesSection>
             <g:message code="variantSearch.dataTypes.exomeSequencingHelpText" default="Select exome sequencing data" />
         </g:renderT2dGenesSection>

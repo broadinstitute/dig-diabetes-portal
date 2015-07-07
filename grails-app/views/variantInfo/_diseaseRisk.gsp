@@ -1,5 +1,5 @@
 
-<g:if test="${show_exseq || show_sigma}">
+<g:if test="${show_exseq}">
 
 
 
@@ -44,7 +44,7 @@
                                 parseInt(collector["d0"][1].count[0]),
                                 parseFloat(collector["d0"][6].count[0]),
                                 parseFloat(collector["d0"][7].count[0]),
-                                "<%=variantToSearch%>", ${show_sigma}, ${show_gwas}, ${show_exchp}, ${show_exseq}, diseaseBurdenStrings);
+                                "<%=variantToSearch%>", ${show_gwas}, ${show_exchp}, ${show_exseq}, diseaseBurdenStrings);
 
                         if ((typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation() !== 'undefined') &&
                                 (typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch !== 'undefined')) {

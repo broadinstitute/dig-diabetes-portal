@@ -72,7 +72,6 @@ var variantProcessing = (function () {
      *
      * @param fullJson
      * @param show_gene
-     * @param show_sigma
      * @param show_exseq
      * @param show_exchp
      * @param variantRootUrl
@@ -86,7 +85,6 @@ var variantProcessing = (function () {
      */
     var fillCollectedVariantsTable =  function ( fullJson,
                                                  show_gene,
-                                                 show_sigma,
                                                  show_exseq,
                                                  show_exchp,
                                                  variantRootUrl,
@@ -142,55 +140,6 @@ var variantProcessing = (function () {
                     retVal += "<td></td>";
                 }
 
-                if (show_sigma) {
-
-                    // Source
-                    if (vRec[i].SIGMA_SOURCE)  {
-                        retVal += "<td>" +UTILS.prettyUpSigmaSource (vRec[i].SIGMA_SOURCE)+"</td>";
-                    } else {
-                        retVal += "<td></td>";
-                    }
-
-                    // P value
-                    if (vRec[i].SIGMA_T2D_P)  {
-                        retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_P)+"</td>";
-                    } else {
-                        retVal += "<td></td>";
-                    }
-
-                    // odds ratio
-                    if (vRec[i].SIGMA_T2D_OR)  {
-                        if (vRec[i].SIGMA_T2D_P)  {
-                            var pValue = parseFloat (vRec[i].SIGMA_T2D_P);
-                            if (($.isNumeric(pValue))&&(pValue>0.05)) {
-                                retVal += "<td class='greyedout'>" + UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_OR) + "</td>";
-                            } else {
-                                retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_OR)+"</td>";
-                            }
-                        } else {
-                            retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_OR)+"</td>";
-                        }
-
-                    } else {
-                        retVal += "<td></td>";
-                    }
-
-                    // Case-control
-                    if ((typeof vRec[i].SIGMA_T2D_MINA!== "undefined") && (typeof vRec[i].SIGMA_T2D_MINU!== "undefined")&&
-                        (vRec[i].SIGMA_T2D_MINA!== null) && (vRec[i].SIGMA_T2D_MINU!== null)){
-                        retVal += "<td>" +vRec[i].SIGMA_T2D_MINA + "/" +vRec[i].SIGMA_T2D_MINU+"</td>";
-                    } else {
-                        retVal += "<td></td>";
-                    }
-
-                    // frequency
-                    if (vRec[i].SIGMA_T2D_MAF)  {
-                        retVal += "<td>" +UTILS.realNumberFormatter(vRec[i].SIGMA_T2D_MAF)+"</td>";
-                    } else {
-                        retVal += "<td></td>";
-                    }
-
-                }
                 if (show_exseq) {
 
                     var highFreq = determineHighestFrequencyEthnicity(vRec[i]);
@@ -313,10 +262,9 @@ var variantProcessing = (function () {
         },
 
 
-        fillTheVariantTable = function (data, show_gene, show_sigma, show_exseq, show_exchp, variantRootUrl, geneRootUrl, dataSetDetermination, textStringObject) {
+        fillTheVariantTable = function (data, show_gene, show_exseq, show_exchp, variantRootUrl, geneRootUrl, dataSetDetermination, textStringObject) {
             $('#variantTableBody').append(fillCollectedVariantsTable(data,
                 show_gene,
-                show_sigma,
                 show_exseq,
                 show_exchp,
                 variantRootUrl,
@@ -326,29 +274,16 @@ var variantProcessing = (function () {
             if (data.variants) {
                 var totalNumberOfResults = data.variants.length;
                 $('#numberOfVariantsDisplayed').append('' + totalNumberOfResults);
-                if (show_sigma) {
-                    $('#variantTable').dataTable({
-                        iDisplayLength: 20,
-                        bFilter: false,
-                        aaSorting: [
-                            [ 6, "asc" ]
-                        ],
-                        aoColumnDefs: [
-                            { sType: "allnumeric", aTargets: [ 6, 7, 8, 9, 10, 11 ] }
-                        ]
-                    });
-                } else {
-                    $('#variantTable').dataTable({
-                        iDisplayLength: 20,
-                        bFilter: false,
-                        aaSorting: [
-                            [ 5, "asc" ]
-                        ],
-                        aoColumnDefs: [
-                            { sType: "allnumeric", aTargets: [ 5, 6, 8, 10, 11, 12, 13 ] }
-                        ]
-                    });
-                }
+                $('#variantTable').dataTable({
+                    iDisplayLength: 20,
+                    bFilter: false,
+                    aaSorting: [
+                        [ 5, "asc" ]
+                    ],
+                    aoColumnDefs: [
+                        { sType: "allnumeric", aTargets: [ 5, 6, 8, 10, 11, 12, 13 ] }
+                    ]
+                });
                 if (totalNumberOfResults >= 1000) {
                     $('#warnIfMoreThan1000Results').html( textStringObject.variantTableContext.tooManyResults );
                 }
@@ -452,7 +387,7 @@ var variantProcessing = (function () {
 
 
 
-        fillTraitsPerVariantTable = function ( vRecO, show_gene, show_sigma, show_exseq, show_exchp,phenotypeMap,traitRootUrl ) {
+        fillTraitsPerVariantTable = function ( vRecO, show_gene, show_exseq, show_exchp,phenotypeMap,traitRootUrl ) {
             var retVal = "";
             if (!vRecO) {   // error condition
                 return;
@@ -550,7 +485,7 @@ var variantProcessing = (function () {
 
 
 
-    var singleLineOfVariantTable = function( variant,show_gene,show_sigma,show_exseq,show_exchp,variantRootUrl,geneRootUrl,proteinEffectList) {
+    var singleLineOfVariantTable = function( variant,show_gene,show_exseq,show_exchp,variantRootUrl,geneRootUrl,proteinEffectList) {
         var arrayToBuild = [];
         stringWithLink(arrayToBuild,geneRootUrl,(contentExists (geneRootUrl)),noop,variant.CLOSEST_GENE,variant.CLOSEST_GENE,"");
         stringWithLink(arrayToBuild,variantRootUrl,((contentExists (variantRootUrl)) && (variant.ID)),noop,variant.ID,variant.CHROM+ ":" +variant.POS,"");
@@ -559,7 +494,6 @@ var variantProcessing = (function () {
         simpleString(arrayToBuild,((variant.Consequence)&&(contentExists(proteinEffectList))&&
             (contentExists(proteinEffectList.proteinEffectMap))&&(contentExists(proteinEffectList.proteinEffectMap[variant.Consequence]))),
             lineBreakSubstitution,proteinEffectList.proteinEffectMap[variant.Consequence],lineBreakSubstitution((variant.Consequence && (variant.Consequence !== 'null'))?variant.Consequence:""));
-        if (show_sigma){;} //five fields
         if (show_exseq){
             var highFreq = determineHighestFrequencyEthnicity(variant);
             simpleString(arrayToBuild,(variant._13k_T2D_P_EMMAX_FE_IV),UTILS.realNumberFormatter,variant._13k_T2D_P_EMMAX_FE_IV,"");
@@ -697,7 +631,7 @@ var variantProcessing = (function () {
         }
     };
 
-    var oldIterativeVariantTableFiller = function  (data, divId, show_gene, show_sigma, show_exseq, show_exchp,variantRootUrl,geneRootUrl,proteinEffectList)  {
+    var oldIterativeVariantTableFiller = function  (data, divId, show_gene, show_exseq, show_exchp,variantRootUrl,geneRootUrl,proteinEffectList)  {
         var variantList =  data['variants'];
             $(divId).dataTable({
                 iDisplayLength: 20,
@@ -736,7 +670,7 @@ var variantProcessing = (function () {
             variant["EXCHP_T2D_BETA"]=variantList[i].pVals[row++].count;
             variant["GWAS_T2D_PVALUE"]=variantList[i].pVals[row++].count;
             variant["GWAS_T2D_OR"]=variantList[i].pVals[row++].count;
-            array = singleLineOfVariantTable(variant,show_gene, show_sigma, show_exseq, show_exchp,variantRootUrl,geneRootUrl,proteinEffectList);
+            array = singleLineOfVariantTable(variant,show_gene, show_exseq, show_exchp,variantRootUrl,geneRootUrl,proteinEffectList);
             $(divId).dataTable().fnAddData( array, (i==25) || (i==(dataLength-1)));
         }
     };

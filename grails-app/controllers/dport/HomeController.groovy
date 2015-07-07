@@ -11,13 +11,11 @@ class HomeController {
     def mailService
 
     def index = {
-        if  ((sharedToolsService.getApplicationIsT2dgenes()) ||
-                (sharedToolsService.getApplicationIsSigma())) {
+        if  ((sharedToolsService.getApplicationIsT2dgenes())) {
             render(view:'portalHome', model: [ticker:"${sharedToolsService.getWarningText()}",
                                               show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                               show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
-                                              show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
-                                              show_sigma:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma)])
+                                              show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq)])
         }  else if (sharedToolsService.getApplicationIsBeacon()) {
             redirect(controller:'beacon', action:'beaconDisplay')
         } else {
@@ -30,8 +28,7 @@ class HomeController {
         render(controller: 'home', view: 'portalHome', model: [ticker:"${sharedToolsService.getWarningText()}",
                                                                show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                                                show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
-                                                               show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
-                                                               show_sigma:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_sigma)])
+                                                               show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq)])
     }
     def signAContract = {
         render(controller: 'home', view: 'signAContract')

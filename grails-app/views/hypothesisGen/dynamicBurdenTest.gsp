@@ -444,7 +444,6 @@
      * Request  a variant-search look up.
      * @param params
      * @param show_gene
-     * @param show_sigma
      * @param show_exseq
      * @param show_exchp
      * @param variantRootUrl
@@ -454,7 +453,6 @@
      */
     var requestDbtSearch =   function (params,
                                    show_gene,
-                                   show_sigma,
                                    show_exseq,
                                    show_exchp,
                                    variantRootUrl,
@@ -606,7 +604,6 @@
                 var  proteinEffectList =  new UTILS.proteinEffectListConstructor (decodeURIComponent("${proteinEffectsList}")) ;
                 requestDbtSearch("<%=filter%>",
                         ${show_gene},
-                        ${show_sigma},
                         ${show_exseq},
                         ${show_exchp},
                         '<g:createLink controller="variantInfo" action="variantInfo"  />',

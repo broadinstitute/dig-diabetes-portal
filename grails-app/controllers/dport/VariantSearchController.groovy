@@ -25,14 +25,11 @@ class VariantSearchController {
         if (params.encParams) {
             encParams = params.encParams
             log.debug "variantSearch params.encParams = ${params.encParams}"
-        } else if (sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma))  {  // if sigma default data set is sigma
-            encParams = "1:0"
         }
         render(view: 'variantSearch',
                 model: [show_gwas : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                         show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                         show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                        show_sigma: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
                         encParams : encParams])
 
     }
@@ -43,9 +40,6 @@ class VariantSearchController {
         if (params.encParams) {
             encParams = params.encParams
             log.debug "variantSearch params.encParams = ${params.encParams}"
-        } else if (sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma)) {
-            // if sigma default data set is sigma
-            encParams = ""
         }
         List<LinkedHashMap> encodedFilterSets = [[:]]
         List<LinkedHashMap> reconstitutedFilterSets = [[:]]
@@ -62,7 +56,6 @@ class VariantSearchController {
                 model: [show_gwas : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                         show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                         show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                        show_sigma: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
                         variantWorkflowParmList:[],
                         encodedFilterSets : encodedFilterSets])
     }
@@ -76,7 +69,6 @@ class VariantSearchController {
                 model: [show_gwas : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                         show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                         show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                        show_sigma: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
                         encodedFilterSets : encodedFilterSets])
 
     }
@@ -163,7 +155,7 @@ class VariantSearchController {
             paramsMap.put(key, value)
         }
         if (paramsMap) {
-            displayVariantSearchResults(paramsMap, sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma))
+            displayVariantSearchResults(paramsMap)
         }
 
     }
@@ -374,8 +366,8 @@ class VariantSearchController {
      * @param paramsMap
      * @param currentlySigma
      */
-    private void displayVariantSearchResults(HashMap paramsMap, boolean currentlySigma) {
-        LinkedHashMap<String, String> parsedFilterParameters = filterManagementService.parseVariantSearchParameters(paramsMap, currentlySigma)
+    private void displayVariantSearchResults(HashMap paramsMap) {
+        LinkedHashMap<String, String> parsedFilterParameters = filterManagementService.parseVariantSearchParameters(paramsMap)
         if (parsedFilterParameters) {
 
             Integer dataSetDetermination = filterManagementService.distinguishBetweenDataSets(paramsMap)
@@ -388,7 +380,6 @@ class VariantSearchController {
                             show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                             show_exchp          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                             show_exseq          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                            show_sigma          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
                             filter              : encodedFilters,
                             filterDescriptions  : parsedFilterParameters.filterDescriptions,
                             proteinEffectsList  : encodedProteinEffects,
@@ -456,7 +447,6 @@ class VariantSearchController {
                             show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                             show_exchp          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                             show_exseq          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                            show_sigma          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_sigma),
                             filter              : encodedFilters,
                             filterDescriptions  : parsedFilterParameters.filterDescriptions,
                             proteinEffectsList  : encodedProteinEffects,

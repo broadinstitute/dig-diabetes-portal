@@ -79,7 +79,7 @@ describe("fillVarianceAndAssociations", function() {
     var anchorDom = document.createElement("div");
     anchorDom.setAttribute('id','gwasTraits');
     it("testing fillVarianceAndAssociations", function() {
-        mpgSoftware.geneInfo.fillVarianceAndAssociations(simulatedJsonReturn,true,'show_exchp','show_exseq','show_sigma','rootRegionUrl','rootTraitUrl','rootVariantUrl',phenotype);
+        mpgSoftware.geneInfo.fillVarianceAndAssociations(simulatedJsonReturn,true,'show_exchp','show_exseq','rootRegionUrl','rootTraitUrl','rootVariantUrl',phenotype);
         expect(typeof anchorDom !== 'undefined').toBe(true);
     });
 });

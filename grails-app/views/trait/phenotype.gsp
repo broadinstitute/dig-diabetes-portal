@@ -81,8 +81,7 @@
             mpgSoftware.phenotype.iterativeTableFiller(collector,
                     ${show_gwas},
                     ${show_exchp},
-                    ${show_exseq},
-                    ${show_sigma});
+                    ${show_exseq});
             loading.hide();
         },
         error: function(jqXHR, exception) {

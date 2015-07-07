@@ -65,7 +65,6 @@
                         "_13k_T2D_OR_WALD_DOS_FE_IV":UTILS.convertStringToNumber(collector["d0"][8].count[0]),
                         "SIGMA_T2D_P":UTILS.convertStringToNumber(collector["d0"][5].count[0]),
                         "SIGMA_T2D_OR":UTILS.convertStringToNumber(collector["d0"][5].count[0])},
-                        ${show_sigma},
                         "<%=variantToSearch%>",
                         "<g:createLink controller='trait' action='traitInfo' />",
                         variantAssociationStrings);
@@ -94,18 +93,6 @@
 <div id="VariantsAndAssociationsExist" style="display: block">
     <div class="row clearfix">
 
-        <g:renderSigmaSection>
-            <div class="col-md-1">
-            </div>
-            <div class="col-md-4">
-                 <div id="gwasSigmaAssociationStatisticsBox"></div>
-            </div>
-            <div class="col-md-2"></div>
-            <div class="col-md-4">
-                <div id="sigmaAssociationStatisticsBox"></div>
-            </div>
-            <div class="col-md-1"></div>
-        </g:renderSigmaSection>
         <g:renderT2dGenesSection>
             <div class="col-md-3">
                 <div id="gwasAssociationStatisticsBox"></div>
