@@ -388,7 +388,7 @@
                     dataset_width++
                     //HACK HACK HACK HACK HACK
                     if (column.substring(0, 2) == "P_") {
-                        sortCol = totCol + pheno_width - 1
+                        sortCol = totCol + pheno_width-1;
                     }
                     $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + columnDisp + "</th>")
                 }

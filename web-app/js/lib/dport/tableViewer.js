@@ -582,15 +582,38 @@ var variantProcessing = (function () {
 
 
 
-
     /* Sort col is *relative* to dynamic columns */
     var iterativeVariantTableFiller = function  (data, totCol, sortCol, divId,variantRootUrl,geneRootUrl,proteinEffectList,dataSetDetermination)  {
 
-        var fixedCol = 5
+        // Some of the common properties are nonnumeric.  We have type information but for right now I'm going to kludge it.
+        //  TODO: Passed down the type information for each common property and use it to determine which are numeric and which aren't
+        // Then, assume all remaining columns are numeric.
+
+        var stringColumns = []
         var numericCol = []
-        for (var i = 5; i < fixedCol + totCol; i++) {
-            numericCol.push(i)
+        var colIndex;
+        for (colIndex = 0; colIndex < data.columns.cproperty.length; colIndex++) {
+           var prop = data.columns.cproperty[colIndex];
+            if ((prop === 'VAR_ID')||
+                (prop === 'DBSNP_ID')||
+                (prop === 'CHROM')||         // technically the datatype is a string, but we usually want to treat it like an integer
+                (prop === 'CLOSEST_GENE')||
+                (prop === 'Condel_PRED')||
+                (prop === 'Consequence')||
+                (prop === 'GENE')||
+                (prop === 'PolyPhen_PRED')||
+                (prop === 'SIFT_PRED')||
+                (prop === 'TRANSCRIPT_ANNOT')){
+                stringColumns.push(colIndex);
+            } else {
+                numericCol.push(colIndex);
+            }
         }
+        while (colIndex<totCol){
+            numericCol.push(colIndex++);
+        }
+
+
 
         //need to figure out how to add aaSorting and aoColumnDefs
 //        $(divId).dataTable({
@@ -603,7 +626,8 @@ var variantProcessing = (function () {
         $(divId).dataTable({
             iDisplayLength: 20,
             bFilter: false,
-            aaSorting: [[ sortCol + fixedCol, "asc" ]]
+            aaSorting: [[ sortCol, "asc" ]],
+            aoColumnDefs: [{sType: "allnumeric", aTargets: numericCol } ]
         });
 
         var variantList =  data.variants
