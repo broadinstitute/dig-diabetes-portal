@@ -2140,12 +2140,12 @@ private String generateProteinEffectJson (String variantName){
             }
         }
 
-
-        if (!requestedProperties)   {
-            //HACK HACK HACK HACK HACK
+ // If you include the below conditional on (!requestedProperties) then you have the ability to remove properties, but
+ //  it can be difficult to add new sample groups.
+ //       if (!requestedProperties)   {
             for (String pheno in phenotypesToFetch) {
                 for (String ds in datasetsToFetch) {
-                    if (processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno]) {
+                    if (processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno]) {//HACK HACK HACK HACK HACK
                         propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^MINA/})
                         propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^MINU/})
                         propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^(OR|ODDS|BETA)/})
@@ -2153,7 +2153,7 @@ private String generateProteinEffectJson (String variantName){
                     }
                 }
             }
-        }
+      //  }
 
         // Adding Phenotype specific properties
         propertiesToFetch = expandPropertyList( propertiesToFetch,  requestedProperties)
