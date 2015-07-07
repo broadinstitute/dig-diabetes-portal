@@ -107,17 +107,6 @@ class RestServerService {
     ]
 
 
-    static List<String> SIGMA_VARIANT_SEARCH_COLUMNS = [
-            'SIGMA_T2D_P',
-            'SIGMA_T2D_OR',
-            'SIGMA_T2D_MINA',
-            'SIGMA_T2D_MINU',
-            'SIGMA_T2D_MAF', // Used for variant info
-            'SIGMA_SOURCE',
-            'IN_SIGMA',
-    ]
-
-
     static List<String> EXSEQ_VARIANT_COLUMNS = EXSEQ_VARIANT_SEARCH_COLUMNS + [
             '_13k_T2D_HET_ETHNICITIES',
             '_13k_T2D_HET_CARRIERS',
@@ -130,19 +119,6 @@ class RestServerService {
             '_13k_T2D_OBSA',
             '_13k_T2D_OBSU',
     ]
-
-    static List<String> SIGMA_VARIANT_COLUMNS = SIGMA_VARIANT_SEARCH_COLUMNS + [
-            'SIGMA_T2D_N',
-            'SIGMA_T2D_MAC',
-            'SIGMA_T2D_OBSA',
-            'SIGMA_T2D_OBSU',
-            'SIGMA_T2D_HETA',
-            'SIGMA_T2D_HETU',
-            'SIGMA_T2D_HOMA',
-            'SIGMA_T2D_HOMU',
-            'SIGMA_T2D_SE',
-    ]
-
 
     static List<String> GENE_COLUMNS = [
             'ID',
@@ -183,20 +159,6 @@ class RestServerService {
             'GWAS_T2D_VAR_TOTAL',
     ]
 
-
-    static List<String> SIGMA_GENE_COLUMNS = [
-            'SIGMA_T2D_VAR_TOTAL',
-            'SIGMA_T2D_VAR_TOTALS',
-            'SIGMA_T2D_NOM_TOTAL',
-            'SIGMA_T2D_GWS_TOTAL',
-            'SIGMA_T2D_lof_NVAR',
-            'SIGMA_T2D_lof_MAC',
-            'SIGMA_T2D_lof_MINA',
-            'SIGMA_T2D_lof_MINU',
-            'SIGMA_T2D_lof_P',
-            'SIGMA_T2D_lof_OBSA',
-            'SIGMA_T2D_lof_OBSU',
-    ]
 
     // Did these old lines of Python do anything? Not that I can tell so far
     static List<String> VARIANT_COLUMNS = VARIANT_SEARCH_COLUMNS
