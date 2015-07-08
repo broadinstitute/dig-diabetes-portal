@@ -134,12 +134,12 @@ var mpgSoftware = mpgSoftware || {};
                         variantAssociationStrings));
                 }
             }
-            $('#variantInfoAssociationStatisticsLinkToTraitTable').append(privateMethods.fillAssociationStatisticsLinkToTraitTable(
-                variantRec.IN_GWAS,
-                variantRec.DBSNP_ID,
-                variantRec.ID,
-                traitsStudiedUrlRoot,
-                variantAssociationStrings));
+//            $('#variantInfoAssociationStatisticsLinkToTraitTable').append(privateMethods.fillAssociationStatisticsLinkToTraitTable(
+//                variantRec.IN_GWAS,
+//                variantRec.DBSNP_ID,
+//                variantRec.ID,
+//                traitsStudiedUrlRoot,
+//                variantAssociationStrings));
 
         };
 
@@ -147,9 +147,18 @@ var mpgSoftware = mpgSoftware || {};
             $('#effectOfVariantOnProtein').append(privateMethods.variantGenerateProteinsChooser(variant, variantTitle, impactOnProtein));
             UTILS.verifyThatDisplayIsWarranted(variant["_13k_T2D_TRANSCRIPT_ANNOT"], $('#variationInfoEncodedProtein'), $('#puntOnNoncodingVariant'));
         };
+        var fillAssociationStatisticsLinkToTraitTable = function (weHaveData, dbsnp, variantId, rootTraitUrl, variantAssociationStrings) {
+            var retVal = "";
+
+                retVal += ("<a class=\"boldlink\" href=\"" + rootTraitUrl + "/" +
+                    ((weHaveData) ? (dbsnp) : (variantId)) +
+                    "\">" + variantAssociationStrings);
+
+            return  retVal;
+        };
 
 
-        var setTitlesAndTheLikeFromData = function (varId,dbsnpId,mostdelscore,gene,closestGene, searchString) {
+        var setTitlesAndTheLikeFromData = function (varId,dbsnpId,mostdelscore,gene,closestGene, searchString,traitInfoUrl,variantTraitLinkDescription) {
             var variantTitle = searchString;
             if ((typeof dbsnpId !== 'undefined')  &&
                 (dbsnpId !== null) &&
@@ -171,6 +180,7 @@ var mpgSoftware = mpgSoftware || {};
             $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
             $('#populationsHowCommonIs').append(variantTitle);
             $('#exploreSurroundingSequenceTitle').append(variantTitle);
+            $('#variantInfoAssociationStatisticsLinkToTraitTable').append(fillAssociationStatisticsLinkToTraitTable((dbsnpId!=="null"),dbsnpId,varId,traitInfoUrl,variantTraitLinkDescription));
         };
 
 
