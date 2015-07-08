@@ -203,12 +203,12 @@ class VariantSearchController {
      */
     def retrieveDatasetsAjax() {
         List <String> phenotypeList = []
-        List <String> experimentList = []
+        String dataset = ""
         if((params.phenotype) && (params.phenotype !=  null )){
             phenotypeList << params.phenotype
         }
-        if ((params.experiment) && (params.experiment !=  null )){
-            experimentList << params.experiment
+        if ((params.dataset) && (params.dataset !=  null )){
+            dataset = params.dataset
         }
         JSONObject jsonObject = sharedToolsService.retrieveMetadata()
 
@@ -218,10 +218,12 @@ class VariantSearchController {
         String datasetsForTransmission = sharedToolsService.packageUpAStaggeredListAsJson (listOfDataSets)
         def slurper = new JsonSlurper()
         def result = slurper.parseText(datasetsForTransmission)
-
+        String sampleGroupForTransmission  = """{"sampleGroup":"${dataset}"}"""
+        def defaultSampleGroup = slurper.parseText(sampleGroupForTransmission)
 
         render(status: 200, contentType: "application/json") {
-            [datasets: result]
+            [datasets: result,
+             sampleGroup:defaultSampleGroup]
         }
     }
 
