@@ -76,14 +76,14 @@ class GeneManagementService {
      * closure to return var id string list using sql rlike mysql call
      */
     private Closure<List <String>> retrieveVariantVarIdStringList = { String searchString, int numberOfMatches ->
-        return this.sqlService.getVariantStringListFromSnippetUsingRLikeQuery(searchString, numberOfMatches)
+        return this.sqlService.getVariantStringListFromSnippetUsingForcedIndexQuery(searchString, numberOfMatches)
     }
 
     /**
      * closure to return variant db snp id string list
      */
     private Closure<List <String>> retrieveVariantDbSnpStringList = { String searchString, int numberOfMatches ->
-        return this.sqlService.getDbSnpIdStringListFromSnippetUsingRLikeQuery(searchString, numberOfMatches)
+        return this.sqlService.getDbSnpIdStringListFromSnippetUsingForcedIndexQuery(searchString, numberOfMatches)
     }
 
 

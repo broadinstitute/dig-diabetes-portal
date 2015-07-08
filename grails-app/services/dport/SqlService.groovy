@@ -280,6 +280,48 @@ class SqlService {
         return stringList
     }
 
+    /**
+     * var id search sql using forced index syntax and _ escaping
+     * @param snippet
+     * @param limitNumber
+     * @return
+     */
+    List<String> getVariantStringListFromSnippetUsingForcedIndexQuery(String snippet, Integer limitNumber) {
+        Sql sql = new Sql( sessionFactory.currentSession.connection() )
+        List<String> stringList = new ArrayList<String>();
+
+        String sqlString
+
+        if (isVarIdString(snippet)) {
+            if (snippet?.length() > 5) {
+                String smallSnippet = snippet[0..4]
+
+                sqlString =
+                        """
+            select var_id as returnStr from variant use index(var_varidfirstchars) where var_id_first_characters = '${smallSnippet}' and var_id like replace('${snippet}%', '_', '\\_') limit ${limitNumber}
+            """
+
+            } else {
+                sqlString =
+                        """
+            select var_id as returnStr from variant use index(var_varidfirstchars) where var_id_first_characters like replace('${snippet}%', '_', '\\_') limit ${limitNumber}
+            """
+            }
+
+            // execute sql and build list
+            sql.eachRow(sqlString) { row ->
+                stringList << row.returnStr
+            }
+
+            log.info("found (forced index) variant: " + stringList.size() + " for snippet: " + snippet + " and limit: " + limitNumber + " and SQL: " + sqlString)
+
+        } else {
+            log.info("skipped (forced index) variant sql query for search string: " + snippet)
+        }
+
+        return stringList
+    }
+
     List<String> getDbSnpIdStringListFromSnippetUsingRLikeQuery(String snippet, Integer limitNumber) {
         Sql sql = new Sql( sessionFactory.currentSession.connection() )
         List<String> stringList = new ArrayList<String>();
@@ -308,9 +350,52 @@ class SqlService {
                 stringList << row.returnStr
             }
 
-            log.info("found dbSnp size: " + stringList.size() + " for snippet: " + snippet + " and limit: " + limitNumber + " and SQL: " + sqlString)
+            log.info("found (rlike) dbSnp size: " + stringList.size() + " for snippet: " + snippet + " and limit: " + limitNumber + " and SQL: " + sqlString)
         } else {
-            log.info("skip sbSnpId search for snippet: " + snippet)
+            log.info("skip (rlike) sbSnpId search for snippet: " + snippet)
+        }
+
+
+        return stringList
+    }
+
+    /**
+     * new query using forced index searches
+     * @param snippet
+     * @param limitNumber
+     * @return
+     */
+    List<String> getDbSnpIdStringListFromSnippetUsingForcedIndexQuery(String snippet, Integer limitNumber) {
+        Sql sql = new Sql( sessionFactory.currentSession.connection() )
+        List<String> stringList = new ArrayList<String>();
+
+        String sqlString
+
+        if (this.isDbSnpIdString(snippet)) {
+            // pick what query based on size of input
+            if (snippet?.length() > 4) {
+                String smallSnippet = snippet[0..3]
+
+                sqlString =
+                        """
+                select db_snp_id as returnStr from variant use index(var_dbsnpidfirstchars) where db_snp_id_first_characters = '${smallSnippet}' and db_snp_id like '${snippet}%' limit ${limitNumber}
+                """
+
+            } else {
+                sqlString =
+                        """
+                select db_snp_id as returnStr from variant use index(var_dbsnpidfirstchars) where db_snp_id_first_characters like '${snippet}%' limit ${limitNumber}
+                """
+            }
+
+            // execute sql and build list
+            sql.eachRow(sqlString) { row ->
+                stringList << row.returnStr
+            }
+
+            log.info("found (forced index) dbSnp size: " + stringList.size() + " for snippet: " + snippet + " and limit: " + limitNumber + " and SQL: " + sqlString)
+        } else {
+            log.info("skip (forced index) sbSnpId search for snippet: " + snippet)
         }
 
 

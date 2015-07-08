@@ -434,8 +434,8 @@ class FilterManagementService {
     private List<LinkedHashMap> assignUniqueFilters(List<LinkedHashMap> targetList,LinkedHashMap sourceFilter){
         boolean skipIt = false;
         if (
-                ((sourceFilter?.containsKey("region_chrom_input")) &&
-                        (targetList?.findAll{LinkedHashMap map->map?.containsKey('region_chrom_input')}))
+        ((sourceFilter?.containsKey("region_chrom_input")) &&
+                (targetList?.findAll{LinkedHashMap map->map?.containsKey('region_chrom_input')}))
                 ||
                 ((sourceFilter.containsKey("region_start_input")) &&
                         (targetList?.findAll{LinkedHashMap map->map?.containsKey("region_start_input")}))
@@ -522,9 +522,9 @@ class FilterManagementService {
                 singleFilterSet["predictedEffects"] = predictedEffects
             }
 
-            returnValue = assignUniqueFilters(returnValue,singleFilterSet)
+           // returnValue = assignUniqueFilters(returnValue,singleFilterSet)
 
-            //returnValue << singleFilterSet
+            returnValue << singleFilterSet
 
         }
 
