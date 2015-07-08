@@ -2739,52 +2739,6 @@ private String generateProteinEffectJson (String variantName){
     }
 
 
-
-
-
-
-
-    private JSONObject gatherVariantsForChromosomeResults(String chromosomeName){
-        String jsonSpec =  """{
-    "filters":    [
-                    {"operand": "CHROM", "operator": "EQ", "value": "${chromosomeName}", "filter_type": "STRING"},
-                    {"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": 1},
-                    {"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": 3000000000 }                ],
-      "columns": ["ID","DBSNP_ID","CHROM","POS"],
-      "limit":1000000
-}
-}
-""".toString()
-        return postRestCall(jsonSpec,VARIANT_SEARCH_URL)
-    }
-
-
-
-
-    public int  refreshVariantsForChromosome(String chromosomeName) {//region
-        int  returnValue    = 1
-        Variant.deleteVariantsForChromosome(chromosomeName)
-        JSONObject apiResults = gatherVariantsForChromosomeResults( chromosomeName)
-        if (!apiResults.is_error)  {
-            int numberOfVariants = apiResults.numRecords
-            def variants =  apiResults.variants
-            for ( int  i = 0 ; i < numberOfVariants ; i++ )  {
-                String varId =   variants[i].ID
-                String dbSnpId =   variants[i].DBSNP_ID
-                Long position =   variants[i].POS
-                String  chromosome =   variants[i].CHROM
-                Variant.refresh(varId,dbSnpId,chromosome,position)
-            }
-        }
-
-        return returnValue
-    }
-
-
-
-
-
-
     private JSONObject gatherVariantsForChromosomeByChunkResults(String chromosomeName,int chunkSize,int startingPosition){
 //        String jsonSpec =  """{
 //    "filters":    [
