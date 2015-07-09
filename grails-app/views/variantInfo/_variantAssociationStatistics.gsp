@@ -126,7 +126,8 @@
 </div>
 
 <div id="VariantsAndAssociationsNoExist"  style="display: none">
-    <h4><g:message code="variant.insufficientdata" default="Insufficient data to draw conclusion"/></h4>
+    <h4><g:message code="variant.insufficientdata" default="Insufficient data to draw conclusion"/> <g:helpText title="insufficient.variant.data.help.header" placement="bottom"
+                                                                                                                body="insufficient.variant.data.help.text"/></h4>
 </div>
 
 <br/>

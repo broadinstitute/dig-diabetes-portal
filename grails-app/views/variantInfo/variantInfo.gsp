@@ -37,8 +37,10 @@
     <g:javascript src="lib/igv/vendor/zlib_and_gzip.min.js"/>
 
     <!-- IGV js  and css code -->
-    <link href="http://www.broadinstitute.org/igvdata/t2d/igv.css" type="text/css" rel="stylesheet">
-    <g:javascript base="http://www.broadinstitute.org/" src="/igvdata/t2d/igv-all.min.js"/>
+    %{--<link href="http://www.broadinstitute.org/igvdata/t2d/igv.css" type="text/css" rel="stylesheet">It's great that you have programs that run programs and programs you can just to carry the passwords through or they like stored some don't you like from--}%
+    %{--<g:javascript base="http://www.broadinstitute.org/" src="/igvdata/t2d/igv-all.min.js"/>--}%
+    <link href="http://igv.org/web/beta/igv.css" type="text/css" rel="stylesheet">
+    <g:javascript base="http://igv.org/" src="/web/beta/igv-all.min.js"/>
     <g:set var="restServer" bean="restServerService"/>
 
 
@@ -301,7 +303,7 @@
 <script>
     $('#accordionVariant').on('shown.bs.collapse', function (e) {
         if (e.target.id === "collapseIgv") {
-            mpgSoftware.variantInfo.retrieveDelayedIgvLaunch().launch();
+           // mpgSoftware.variantInfo.retrieveDelayedIgvLaunch().launch();
         }
 
     });
