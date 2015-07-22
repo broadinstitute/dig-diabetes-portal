@@ -262,7 +262,7 @@
             <img class="img-responsive" src="${resource(dir: 'images/icons', file: 'merck_3282.png')}">
         </div>
         <div class="col-xs-1">
-            <img class="img-responsive" src="${resource(dir: 'images/icons', file: 'pfizer-logo.png')}">
+            <img class="img-responsive" src="${resource(dir: 'images/icons', file: 'pfizer_rgb_pos.png')}">
         </div>
         <div class="col-xs-1">
             <img class="img-responsive" src="${resource(dir: 'images/icons', file: 'sanofi-logo.png')}">

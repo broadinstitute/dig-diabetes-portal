@@ -99,12 +99,12 @@ var mpgSoftware = mpgSoftware || {};
                         variantAssociationStrings));
                 }
             }
-            $('#variantInfoAssociationStatisticsLinkToTraitTable').append(privateMethods.fillAssociationStatisticsLinkToTraitTable(
-                variantRec.IN_GWAS,
-                variantRec.DBSNP_ID,
-                variantRec.ID,
-                traitsStudiedUrlRoot,
-                variantAssociationStrings));
+//            $('#variantInfoAssociationStatisticsLinkToTraitTable').append(privateMethods.fillAssociationStatisticsLinkToTraitTable(
+//                variantRec.IN_GWAS,
+//                variantRec.DBSNP_ID,
+//                variantRec.ID,
+//                traitsStudiedUrlRoot,
+//                variantAssociationStrings));
 
         };
 
@@ -114,7 +114,7 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
-        var setTitlesAndTheLikeFromData = function (varId,dbsnpId,mostdelscore,gene,closestGene, searchString) {
+        var setTitlesAndTheLikeFromData = function (varId,dbsnpId,mostdelscore,gene,closestGene, searchString,traitsStudiedUrlRoot,variantAssociationStrings) {
             var variantTitle = searchString;
             if ((typeof dbsnpId !== 'undefined')  &&
                 (dbsnpId !== null) &&
@@ -136,6 +136,12 @@ var mpgSoftware = mpgSoftware || {};
             $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
             $('#populationsHowCommonIs').append(variantTitle);
             $('#exploreSurroundingSequenceTitle').append(variantTitle);
+            $('#variantInfoAssociationStatisticsLinkToTraitTable').append(privateMethods.fillAssociationStatisticsLinkToTraitTable(
+                true,
+                dbsnpId,
+                varId,
+                traitsStudiedUrlRoot,
+                variantAssociationStrings));
         };
 
 
@@ -689,7 +695,7 @@ var mpgSoftware = mpgSoftware || {};
                     var retVal = "";
                     if (weHaveData) {
                         retVal += ("<a class=\"boldlink\" href=\"" + rootTraitUrl + "/" +
-                            ((weHaveData) ? (dbsnp) : (variantId)) +
+                            ((dbsnp!=="null") ? (dbsnp) : (variantId)) +
                             "\">" + variantAssociationStrings.variantPValues);
                     }
                     return  retVal;
