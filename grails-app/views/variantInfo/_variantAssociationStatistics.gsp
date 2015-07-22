@@ -52,7 +52,8 @@
                 var mostdelscore= UTILS.convertStringToNumber(collector["d0"][4].count[0]);
                 var varId = collector["d0"][1].count;
                 var dbsnpId = collector["d0"][0].count;
-                mpgSoftware.variantInfo.setTitlesAndTheLikeFromData(varId,dbsnpId,mostdelscore,gene,closestGene,  '<%=variantToSearch%>');
+                mpgSoftware.variantInfo.setTitlesAndTheLikeFromData(varId,dbsnpId,mostdelscore,gene,closestGene,  '<%=variantToSearch%>',
+                        "<g:createLink controller='trait' action='traitInfo' />",variantAssociationStrings);
                 var variantAssociationStatistics = mpgSoftware.variantInfo.variantAssociations;
                 variantAssociationStatistics({"IN_GWAS":true,
                         "DBSNP_ID":dbsnpId,
