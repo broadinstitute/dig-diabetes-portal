@@ -261,7 +261,17 @@
 
     <div class="separator"></div>
 
-    <g:render template="variationAcrossContinents"/>
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle  collapsed" data-toggle="collapse" data-parent="#accordion2"
+               href="#collapseTwo">
+                <h2><strong><g:message code="gene.continentalancestry.title" default="variation across continental ancestry"/></strong></h2>
+            </a>
+        </div>
+
+        <g:render template="variationAcrossContinents"/>
+
+    </div>
 
 </g:if>
 

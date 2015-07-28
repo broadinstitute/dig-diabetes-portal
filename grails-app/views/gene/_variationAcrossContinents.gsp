@@ -1,15 +1,7 @@
 
 
-<div class="accordion-group">
-<div class="accordion-heading">
-    <a class="accordion-toggle  collapsed" data-toggle="collapse" data-parent="#accordion2"
-       href="#collapseTwo">
-        <h2><strong><g:message code="gene.continentalancestry.title" default="variation across continental ancestry"/></strong></h2>
-    </a>
-</div>
-
 <div id="collapseTwo" class="accordion-body collapse">
-    <div class="accordion-inner">
+    <div class="accordion-inner" id="ancestryInner">
 
 <g:if test="${show_exseq}">
 
@@ -176,6 +168,9 @@
         mpgSoftware.ancestryTable.loadAncestryTable();
     });
 
+    $('#collapseHowCommonIsVariant').on('hide.bs.collapse', function (e) {
+            $("#ancestryInner").html('');
+    });
 
 
 </script>
@@ -205,6 +200,5 @@
 
 </g:if>
 
-</div>
 </div>
 </div>

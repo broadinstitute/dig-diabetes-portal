@@ -166,7 +166,18 @@
 
     <div class="separator"></div>
 
-    <g:render template="diseaseRisk"/>
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle  collapsed" data-toggle="collapse"
+               data-parent="#accordionVariant"
+               href="#collapseDiseaseRisk">
+                <h2><strong><g:message code="variant.diseaseRisk.title" default="How does carrier status impact risk"/></strong></h2>
+            </a>
+        </div>
+
+        <g:render template="diseaseRisk"/>
+
+    </div>
 
 </g:if>
 
@@ -174,14 +185,36 @@
 
       <div class="separator"></div>
 
-      <g:render template="howCommonIsVariant"/>
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle  collapsed" data-toggle="collapse"
+               data-parent="#accordionVariant"
+               href="#collapseHowCommonIsVariant">
+                <h2><strong><g:message code="variant.howCommonIsVariant.title" default="How common is variant"/></strong></h2>
+            </a>
+        </div>
+
+        <g:render template="howCommonIsVariant"/>
+
+    </div>
 
 </g:if>
 <g:if test="${show_exseq}">
 
     <div class="separator"></div>
 
-    <g:render template="carrierStatusImpact"/>
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle  collapsed" data-toggle="collapse"
+               data-parent="#accordionVariant"
+               href="#collapseCarrierStatusImpact">
+                <h2><strong><g:message code="variant.carrierStatusImpact.title" default="How many carriers in the data set"/></strong></h2>
+            </a>
+        </div>
+
+        <g:render template="carrierStatusImpact"/>
+
+    </div>
 
 </g:if>
                     <div class="separator"></div>

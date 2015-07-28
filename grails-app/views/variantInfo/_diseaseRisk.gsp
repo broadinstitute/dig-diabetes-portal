@@ -1,12 +1,4 @@
 
-<div class="accordion-group">
-    <div class="accordion-heading">
-        <a class="accordion-toggle  collapsed" data-toggle="collapse"
-           data-parent="#accordionVariant"
-           href="#collapseDiseaseRisk">
-            <h2><strong><g:message code="variant.diseaseRisk.title" default="How does carrier status impact risk"/></strong></h2>
-        </a>
-    </div>
 
     <div id="collapseDiseaseRisk" class="accordion-body collapse">
         <div class="accordion-inner">
@@ -145,4 +137,4 @@
 
         </div>
     </div>
-</div>
+

@@ -1,12 +1,3 @@
-<div class="accordion-group">
-    <div class="accordion-heading">
-        <a class="accordion-toggle  collapsed" data-toggle="collapse"
-           data-parent="#accordionVariant"
-           href="#collapseHowCommonIsVariant">
-            <h2><strong><g:message code="variant.howCommonIsVariant.title" default="How common is variant"/>
-            </strong></h2>
-        </a>
-    </div>
 
     <div id="collapseHowCommonIsVariant" class="accordion-body collapse">
         <div class="accordion-inner">
@@ -128,6 +119,6 @@
 
         </div>
     </div>
-</div>
+
 
 
