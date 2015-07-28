@@ -164,30 +164,18 @@
 
 <g:if test="${show_exseq}">
 
+    <div class="separator"></div>
+
     <g:render template="diseaseRisk"/>
 
 </g:if>
 
 <g:if test="${show_exseq}">
 
-                    <div class="separator"></div>
+      <div class="separator"></div>
 
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle  collapsed" data-toggle="collapse"
-                               data-parent="#accordionVariant"
-                               href="#collapseHowCommonIsVariant">
-                                <h2><strong><g:message code="variant.howCommonIsVariant.title" default="How common is variant"/>
-                                </strong></h2>
-                            </a>
-                        </div>
+      <g:render template="howCommonIsVariant"/>
 
-                        <div id="collapseHowCommonIsVariant" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <g:render template="howCommonIsVariant"/>
-                            </div>
-                        </div>
-                    </div>
 </g:if>
 <g:if test="${show_exseq}">
 
@@ -287,20 +275,6 @@
         }
     });
 
-    $('#accordionVariant').on('show.bs.collapse', function (e) {
-        if (e.target.id === "collapseHowCommonIsVariant") {
-
-             mpgSoftware.howCommonIsVariant.loadHowCommonIsVariant();
-       }
-    });
-    $('#accordionVariant').on('hide.bs.collapse', function (e) {
-        if (e.target.id === "collapseHowCommonIsVariant") {
-            if ((typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation()  !== 'undefined') &&
-                    (typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().launch !== 'undefined')) {
-                mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().removeBarchart();
-            }
-        }
-    });
     $('#accordionVariant').on('show.bs.collapse', function (e) {
         if (e.target.id === "collapseCarrierStatusImpact") {
             mpgSoftware.carrierStatusImpact.loadDiseaseRisk();

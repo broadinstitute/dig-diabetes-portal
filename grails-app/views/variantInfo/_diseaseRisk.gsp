@@ -1,6 +1,4 @@
 
-<div class="separator"></div>
-
 <div class="accordion-group">
     <div class="accordion-heading">
         <a class="accordion-toggle  collapsed" data-toggle="collapse"

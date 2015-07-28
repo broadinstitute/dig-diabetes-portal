@@ -1,6 +1,18 @@
+<div class="accordion-group">
+    <div class="accordion-heading">
+        <a class="accordion-toggle  collapsed" data-toggle="collapse"
+           data-parent="#accordionVariant"
+           href="#collapseHowCommonIsVariant">
+            <h2><strong><g:message code="variant.howCommonIsVariant.title" default="How common is variant"/>
+            </strong></h2>
+        </a>
+    </div>
+
+    <div id="collapseHowCommonIsVariant" class="accordion-body collapse">
+        <div class="accordion-inner">
 
 
-<script>
+            <script>
     var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.howCommonIsVariant  = (function() {
@@ -69,6 +81,18 @@
         };
         return {loadHowCommonIsVariant:loadHowCommonIsVariant}
     }());
+
+    $('#collapseHowCommonIsVariant').on('show.bs.collapse', function (e) {
+            mpgSoftware.howCommonIsVariant.loadHowCommonIsVariant();
+    });
+
+    $('#collapseHowCommonIsVariant').on('hide.bs.collapse', function (e) {
+            if ((typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation()  !== 'undefined') &&
+                    (typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().launch !== 'undefined')) {
+                mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().removeBarchart();
+            }
+    });
+
 </script>
 
 
@@ -102,5 +126,8 @@
 
 </g:if>
 
+        </div>
+    </div>
+</div>
 
 

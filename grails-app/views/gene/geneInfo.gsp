@@ -257,12 +257,13 @@
         $('#collapseOne').collapse({hide: true})
     </script>
 
-    <g:if test="${show_exseq}">
+<g:if test="${show_exseq}">
 
-                <g:render template="variationAcrossContinents"/>
+    <div class="separator"></div>
 
+    <g:render template="variationAcrossContinents"/>
 
-    </g:if>
+</g:if>
 
 <g:if test="${show_exseq}">
 
