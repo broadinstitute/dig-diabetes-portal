@@ -179,23 +179,9 @@
 </g:if>
 <g:if test="${show_exseq}">
 
-                    <div class="separator"></div>
+    <div class="separator"></div>
 
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle  collapsed" data-toggle="collapse"
-                               data-parent="#accordionVariant"
-                               href="#collapseCarrierStatusImpact">
-                                <h2><strong><g:message code="variant.carrierStatusImpact.title" default="How many carriers in the data set"/></strong></h2>
-                            </a>
-                        </div>
-
-                        <div id="collapseCarrierStatusImpact" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <g:render template="carrierStatusImpact"/>
-                            </div>
-                        </div>
-                    </div>
+    <g:render template="carrierStatusImpact"/>
 
 </g:if>
                     <div class="separator"></div>
@@ -272,20 +258,6 @@
     $('#accordionVariant').on('show.bs.collapse', function (e) {
         if (e.target.id === "collapseIgv") {
 
-        }
-    });
-
-    $('#accordionVariant').on('show.bs.collapse', function (e) {
-        if (e.target.id === "collapseCarrierStatusImpact") {
-            mpgSoftware.carrierStatusImpact.loadDiseaseRisk();
-        }
-    });
-    $('#accordionVariant').on('hide.bs.collapse', function (e) {
-        if (e.target.id === "collapseCarrierStatusImpact") {
-            if ((typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation()  !== 'undefined') &&
-                    (typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch !== 'undefined')) {
-                mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().removeBarchart();
-            }
         }
     });
 

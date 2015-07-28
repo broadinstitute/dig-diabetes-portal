@@ -1,9 +1,16 @@
+<div class="accordion-group">
+    <div class="accordion-heading">
+        <a class="accordion-toggle  collapsed" data-toggle="collapse"
+           data-parent="#accordionVariant"
+           href="#collapseCarrierStatusImpact">
+            <h2><strong><g:message code="variant.carrierStatusImpact.title" default="How many carriers in the data set"/></strong></h2>
+        </a>
+    </div>
 
+    <div id="collapseCarrierStatusImpact" class="accordion-body collapse">
+        <div class="accordion-inner">
 
-
-
-
-<g:if test="${show_exseq}">
+            <g:if test="${show_exseq}">
 
 
 
@@ -65,6 +72,18 @@
         %{--if (${newApi}) {--}%
             %{--loadDiseaseRisk();--}%
         %{--}--}%
+
+        $('#collapseCarrierStatusImpact').on('show.bs.collapse', function (e) {
+                mpgSoftware.carrierStatusImpact.loadDiseaseRisk();
+        });
+        $('#collapseCarrierStatusImpact').on('hide.bs.collapse', function (e) {
+                if ((typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation()  !== 'undefined') &&
+                        (typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch !== 'undefined')) {
+                    mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().removeBarchart();
+                }
+        });
+
+
     </script>
 
 
@@ -89,6 +108,9 @@
 
 </g:if>
 
+        </div>
+    </div>
+</div>
 
 
 
