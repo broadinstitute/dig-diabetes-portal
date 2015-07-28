@@ -22,30 +22,51 @@ class HomeControllerUnitSpec extends Specification {
     }
 
     void "test index"() {
+        setup:
+        controller.sharedToolsService = sharedToolsService
+
         when:
-        int i = 1
-        //controller.index()
+        sharedToolsService.metaClass.getApplicationIsT2dgenes = {->true}
+        sharedToolsService.metaClass.getSectionToDisplay = {unused->true}
+        controller.index()
 
         then:
-        i == 1
-    //    response.status == 200
+        response.status == 200
 
-//        expect:
-//        grailsApplication != null
+        expect:
+        grailsApplication != null
 
     }
 
-//
-//    void "test portalHome"() {
-//        setup:
-//        controller.sharedToolsService = sharedToolsService
-//
-//        when:
-//        controller.portalHome()
-//
-//        then:
-//        response.status == 200
-//        view == '/home/portalHome'
-//
-//    }
+    void "test index for beacon"() {
+        setup:
+        controller.sharedToolsService = sharedToolsService
+
+        when:
+        sharedToolsService.metaClass.getApplicationIsT2dgenes = {->false}
+        sharedToolsService.metaClass.getApplicationIsBeacon = {->true}
+        sharedToolsService.metaClass.getSectionToDisplay = {unused->true}
+        controller.index()
+
+        then:
+        response.status == 302
+
+    }
+
+
+    void "test portalHome"() {
+        setup:
+        sharedToolsService.metaClass.getApplicationIsT2dgenes = {->true}
+        sharedToolsService.metaClass.getSectionToDisplay = {unused->true}
+        controller.sharedToolsService = sharedToolsService
+
+        when:
+        controller.portalHome()
+
+        then:
+        response.status == 200
+        view == '/home/portalHome'
+
+    }
+
 }
