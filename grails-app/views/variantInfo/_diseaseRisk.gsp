@@ -1,4 +1,18 @@
 
+<div class="separator"></div>
+
+<div class="accordion-group">
+    <div class="accordion-heading">
+        <a class="accordion-toggle  collapsed" data-toggle="collapse"
+           data-parent="#accordionVariant"
+           href="#collapseDiseaseRisk">
+            <h2><strong><g:message code="variant.diseaseRisk.title" default="How does carrier status impact risk"/></strong></h2>
+        </a>
+    </div>
+
+    <div id="collapseDiseaseRisk" class="accordion-body collapse">
+        <div class="accordion-inner">
+
 <g:if test="${show_exseq}">
 
 
@@ -60,6 +74,17 @@
             };
             return {loadDiseaseRisk:loadDiseaseRisk}
         }());
+
+
+        $("#collapseDiseaseRisk").on("show.bs.collapse", function() {
+                mpgSoftware.diseaseRisk.loadDiseaseRisk();
+        });
+        $('#collapseDiseaseRisk').on('hide.bs.collapse', function (e) {
+                if ((typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation() !== 'undefined') &&
+                        (typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch !== 'undefined')) {
+                    mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().removeBarchart();
+                }
+            });
     </script>
 
 
@@ -119,3 +144,7 @@
 
 
 </g:if>
+
+        </div>
+    </div>
+</div>
