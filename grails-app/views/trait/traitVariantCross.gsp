@@ -44,20 +44,6 @@
 </script>
 
 <style>
-/*.variantlabel {*/
-    /*font-weight: bold;*/
-    /*cursor: pointer;*/
-    /*text-decoration: underline;*/
-    /*color: #588fd3;*/
-    /*fill: #588fd3;*/
-/*}*/
-/*.variantlabel .text-highlight {*/
-    /*font-weight: bold;*/
-    /*cursor: pointer;*/
-    /*text-decoration: underline;*/
-    /*color: #588fd3;*/
-    /*fill: #588fd3;*/
-/*}*/
 .assoc-up {
     fill: #0f0;
     color: #6fb7f7;

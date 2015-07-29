@@ -388,8 +388,8 @@ var baget = baget || {};  // encapsulating variable
                 return  oneWeWant;
             });
             d3.select("#tooltip")
-                .style("left", (d3.event.pageX + 20) + "px")
-                .style("top", (d3.event.pageY - 20) + "px")
+                .style("left", (d3.event.layerX + 20) + "px")
+                .style("top", (d3.event.layerY - 20) + "px")
                 .select("#value")
                 .html(buildToolTip(d));
             d3.select("#tooltip").classed("hidden", false);
