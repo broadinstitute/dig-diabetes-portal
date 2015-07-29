@@ -1,9 +1,8 @@
 
+    <div id="collapseCarrierStatusImpact" class="accordion-body collapse">
+        <div class="accordion-inner">
 
-
-
-
-<g:if test="${show_exseq}">
+            <g:if test="${show_exseq}">
 
 
 
@@ -65,6 +64,18 @@
         %{--if (${newApi}) {--}%
             %{--loadDiseaseRisk();--}%
         %{--}--}%
+
+        $('#collapseCarrierStatusImpact').on('show.bs.collapse', function (e) {
+                mpgSoftware.carrierStatusImpact.loadDiseaseRisk();
+        });
+        $('#collapseCarrierStatusImpact').on('hide.bs.collapse', function (e) {
+                if ((typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation()  !== 'undefined') &&
+                        (typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch !== 'undefined')) {
+                    mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().removeBarchart();
+                }
+        });
+
+
     </script>
 
 
@@ -88,6 +99,9 @@
 
 
 </g:if>
+
+        </div>
+    </div>
 
 
 

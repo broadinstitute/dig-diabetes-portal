@@ -1,3 +1,8 @@
+
+
+<div id="collapseTwo" class="accordion-body collapse">
+    <div class="accordion-inner" id="ancestryInner">
+
 <g:if test="${show_exseq}">
 
 
@@ -159,9 +164,13 @@
     }());
 
 
+    $("#collapseTwo").on("show.bs.collapse", function() {
         mpgSoftware.ancestryTable.loadAncestryTable();
+    });
 
-
+    $('#collapseHowCommonIsVariant').on('hide.bs.collapse', function (e) {
+            $("#ancestryInner").html('');
+    });
 
 
 </script>
@@ -190,3 +199,6 @@
         </table>
 
 </g:if>
+
+</div>
+</div>

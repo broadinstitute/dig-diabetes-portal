@@ -164,65 +164,57 @@
 
 <g:if test="${show_exseq}">
 
-                    <div class="separator"></div>
+    <div class="separator"></div>
 
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle  collapsed" data-toggle="collapse"
-                               data-parent="#accordionVariant"
-                               href="#collapseDiseaseRisk">
-                                <h2><strong><g:message code="variant.diseaseRisk.title" default="How does carrier status impact risk"/></strong></h2>
-                            </a>
-                        </div>
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle  collapsed" data-toggle="collapse"
+               data-parent="#accordionVariant"
+               href="#collapseDiseaseRisk">
+                <h2><strong><g:message code="variant.diseaseRisk.title" default="How does carrier status impact risk"/></strong></h2>
+            </a>
+        </div>
 
-                        <div id="collapseDiseaseRisk" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <g:render template="diseaseRisk"/>
-                            </div>
-                        </div>
-                    </div>
+        <g:render template="diseaseRisk"/>
+
+    </div>
+
 </g:if>
 
 <g:if test="${show_exseq}">
 
-                    <div class="separator"></div>
+      <div class="separator"></div>
 
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle  collapsed" data-toggle="collapse"
-                               data-parent="#accordionVariant"
-                               href="#collapseHowCommonIsVariant">
-                                <h2><strong><g:message code="variant.howCommonIsVariant.title" default="How common is variant"/>
-                                </strong></h2>
-                            </a>
-                        </div>
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle  collapsed" data-toggle="collapse"
+               data-parent="#accordionVariant"
+               href="#collapseHowCommonIsVariant">
+                <h2><strong><g:message code="variant.howCommonIsVariant.title" default="How common is variant"/></strong></h2>
+            </a>
+        </div>
 
-                        <div id="collapseHowCommonIsVariant" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <g:render template="howCommonIsVariant"/>
-                            </div>
-                        </div>
-                    </div>
+        <g:render template="howCommonIsVariant"/>
+
+    </div>
+
 </g:if>
 <g:if test="${show_exseq}">
 
-                    <div class="separator"></div>
+    <div class="separator"></div>
 
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle  collapsed" data-toggle="collapse"
-                               data-parent="#accordionVariant"
-                               href="#collapseCarrierStatusImpact">
-                                <h2><strong><g:message code="variant.carrierStatusImpact.title" default="How many carriers in the data set"/></strong></h2>
-                            </a>
-                        </div>
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle  collapsed" data-toggle="collapse"
+               data-parent="#accordionVariant"
+               href="#collapseCarrierStatusImpact">
+                <h2><strong><g:message code="variant.carrierStatusImpact.title" default="How many carriers in the data set"/></strong></h2>
+            </a>
+        </div>
 
-                        <div id="collapseCarrierStatusImpact" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <g:render template="carrierStatusImpact"/>
-                            </div>
-                        </div>
-                    </div>
+        <g:render template="carrierStatusImpact"/>
+
+    </div>
 
 </g:if>
                     <div class="separator"></div>
@@ -299,46 +291,6 @@
     $('#accordionVariant').on('show.bs.collapse', function (e) {
         if (e.target.id === "collapseIgv") {
 
-        }
-    });
-    $('#accordionVariant').on('show.bs.collapse', function (e) {
-        if (e.target.id === "collapseDiseaseRisk") {
-                mpgSoftware.diseaseRisk.loadDiseaseRisk();
-         }
-    });
-    $('#accordionVariant').on('hide.bs.collapse', function (e) {
-        if (e.target.id === "collapseDiseaseRisk") {
-            if ((typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation() !== 'undefined') &&
-                    (typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch !== 'undefined')) {
-                mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().removeBarchart();
-            }
-        }
-    });
-    $('#accordionVariant').on('show.bs.collapse', function (e) {
-        if (e.target.id === "collapseHowCommonIsVariant") {
-
-             mpgSoftware.howCommonIsVariant.loadHowCommonIsVariant();
-       }
-    });
-    $('#accordionVariant').on('hide.bs.collapse', function (e) {
-        if (e.target.id === "collapseHowCommonIsVariant") {
-            if ((typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation()  !== 'undefined') &&
-                    (typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().launch !== 'undefined')) {
-                mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().removeBarchart();
-            }
-        }
-    });
-    $('#accordionVariant').on('show.bs.collapse', function (e) {
-        if (e.target.id === "collapseCarrierStatusImpact") {
-            mpgSoftware.carrierStatusImpact.loadDiseaseRisk();
-        }
-    });
-    $('#accordionVariant').on('hide.bs.collapse', function (e) {
-        if (e.target.id === "collapseCarrierStatusImpact") {
-            if ((typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation()  !== 'undefined') &&
-                    (typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch !== 'undefined')) {
-                mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().removeBarchart();
-            }
         }
     });
 

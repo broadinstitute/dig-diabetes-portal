@@ -1,6 +1,9 @@
 
+    <div id="collapseHowCommonIsVariant" class="accordion-body collapse">
+        <div class="accordion-inner">
 
-<script>
+
+            <script>
     var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.howCommonIsVariant  = (function() {
@@ -69,6 +72,18 @@
         };
         return {loadHowCommonIsVariant:loadHowCommonIsVariant}
     }());
+
+    $('#collapseHowCommonIsVariant').on('show.bs.collapse', function (e) {
+            mpgSoftware.howCommonIsVariant.loadHowCommonIsVariant();
+    });
+
+    $('#collapseHowCommonIsVariant').on('hide.bs.collapse', function (e) {
+            if ((typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation()  !== 'undefined') &&
+                    (typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().launch !== 'undefined')) {
+                mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().removeBarchart();
+            }
+    });
+
 </script>
 
 
@@ -101,6 +116,9 @@
 
 
 </g:if>
+
+        </div>
+    </div>
 
 
 

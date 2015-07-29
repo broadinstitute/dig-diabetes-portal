@@ -257,7 +257,7 @@
         $('#collapseOne').collapse({hide: true})
     </script>
 
-    <g:if test="${show_exseq}">
+<g:if test="${show_exseq}">
 
     <div class="separator"></div>
 
@@ -269,14 +269,11 @@
             </a>
         </div>
 
-        <div id="collapseTwo" class="accordion-body collapse">
-            <div class="accordion-inner">
-                <g:render template="variationAcrossContinents"/>
-            </div>
-        </div>
+        <g:render template="variationAcrossContinents"/>
+
     </div>
 
-    </g:if>
+</g:if>
 
 <g:if test="${show_exseq}">
 
