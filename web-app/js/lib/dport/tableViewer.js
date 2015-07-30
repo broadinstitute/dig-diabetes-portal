@@ -557,12 +557,23 @@ var variantProcessing = (function () {
 //            aoColumnDefs: [{sType: "allnumeric", aTargets: numericCol } ]
 //        });
         // need to be more flexible now that the number of rows is variable
-        $(divId).dataTable({
+        var table = $(divId).dataTable({
             iDisplayLength: 20,
             bFilter: false,
             aaSorting: [[ sortCol, "asc" ]],
             aoColumnDefs: [{sType: "allnumeric", aTargets: numericCol } ]
         });
+        var tableTools = new $.fn.dataTable.TableTools( table, {
+            "buttons": [
+                "copy",
+                "csv",
+                "xls",
+                "pdf",
+                { "type": "print", "buttonText": "Print me!" }
+            ],
+            "sSwfPath": "../../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
+        } );
+        $( tableTools.fnContainer() ).insertAfter(divId);
 
         var variantList =  data.variants
         var dataLength = variantList ? variantList.length : 0;
