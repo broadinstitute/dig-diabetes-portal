@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="t2dGenesCore"/>
-    <r:require modules="core, crossMap"/>
+    <r:require modules="core, crossMap,traitInfo"/>
     <r:layoutResources/>
 </head>
 

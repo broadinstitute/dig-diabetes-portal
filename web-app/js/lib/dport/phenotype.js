@@ -32,24 +32,31 @@ var mpgSoftware = mpgSoftware || {};
             retVal.push((variant.MAF)?(""+variant.MAF.toPrecision(3)):"");
             retVal.push("<a class='boldlink' href='./traitInfo/"+ variant.DBSNP_ID+"'>click here</a>");
             return retVal;
-        };
+         },
 
-
-
-
-
-        var iterativeTableFiller = function  (variant, show_gene, show_exseq, show_exchp)  {
+         iterativeTableFiller = function  (variant, show_gene, show_exseq, show_exchp)  {
             var effectTypeTitle =  UTILS.determineEffectsTypeHeader(variant);
             var effectTypeString =  UTILS.determineEffectsTypeString(effectTypeTitle);
             $('#effectTypeHeader').append(effectTypeTitle);
-            $('#phenotypeTraits').dataTable({
+            var table = $('#phenotypeTraits').dataTable({
                 iDisplayLength: 25,
                 bFilter: false,
                 aaSorting: [[ 2, "asc" ]],
                 aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 2, 3, 4 ] } ]
             });
+            var tableTools = new $.fn.dataTable.TableTools( table, {
+                "buttons": [
+                    "copy",
+                    "csv",
+                    "xls",
+                    "pdf",
+                    { "type": "print", "buttonText": "Print me!" }
+                ],
+                "sSwfPath": "../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
+            } );
+            $( tableTools.fnContainer() ).insertAfter('#phenotypeTraits');
             var dataLength = variant.length;
-            var effectsField = UTILS.determineEffectsTypeString (effectTypeTitle);
+            var effectsField = UTILS.determineEffectsTypeString ('#phenotypeTraits');
             for ( var i = 0 ; i < dataLength ; i++ ){
                 var array = convertLineForPhenotypicTraitTable(variant[i],effectsField,show_gene, show_exseq, show_exchp);
                 $('#phenotypeTraits').dataTable().fnAddData( array, (i==25) || (i==(dataLength-1)));

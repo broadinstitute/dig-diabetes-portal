@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="t2dGenesCore"/>
-    <r:require modules="core,phenotype"/>
+    <r:require modules="core,phenotype,traitInfo"/>
     <r:layoutResources/>
     <%@ page import="dport.RestServerService" %>
 </head>
@@ -40,16 +40,9 @@
             }
 
 
-
-
-
-
-
-
-
-            var margin = {top: 50, right: 20, bottom: 10, left: 70},
+            var margin = {top: 0, right: 20, bottom: 0, left: 70},
                     width = 1050 - margin.left - margin.right,
-                    height = 650 - margin.top - margin.bottom;
+                    height = 600 - margin.top - margin.bottom;
 
             var manhattan = baget.manhattan()
                     .width(width)

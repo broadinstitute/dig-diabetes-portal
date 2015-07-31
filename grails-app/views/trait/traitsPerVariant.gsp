@@ -1,7 +1,7 @@
 <head>
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
-    <r:require modules="tableViewer"/>
+    <r:require modules="tableViewer,traitInfo"/>
     <r:layoutResources/>
 </head>
 
@@ -17,7 +17,14 @@
         data:{variantIdentifier:'<%=variantIdentifier%>'},
         async:true,
         success: function (data) {
-            fillTheTraitsPerVariantFields(data) ;
+            mpgSoftware.trait.fillTheTraitsPerVariantFields(data,
+                    '#traitsPerVariantTableBody',
+                    '#traitsPerVariantTable',
+                    ${show_gene},
+                    ${show_exseq},
+                    ${show_exchp},
+                    phenotypeMap,
+                    '<g:createLink controller="trait" action="traitSearch" />');
             loading.hide();
         },
         error: function(jqXHR, exception) {
@@ -25,24 +32,6 @@
             core.errorReporter(jqXHR, exception) ;
         }
     });
-
-
-
-    function fillTheTraitsPerVariantFields (data)  {
-        var variant =  data['traitInfo'];
-        $('#traitsPerVariantTableBody').append(variantProcessing.fillTraitsPerVariantTable(variant,
-                ${show_gene},
-                ${show_exseq},
-                ${show_exchp},
-                phenotypeMap,
-                '<g:createLink controller="trait" action="traitSearch" />'));
-        $('#traitsPerVariantTable').dataTable({
-            iDisplayLength: 25,
-            bFilter: false,
-            aaSorting: [[ 1, "asc" ]],
-            aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 1, 3, 4 ] } ]
-        });
-    }
 </script>
 
 

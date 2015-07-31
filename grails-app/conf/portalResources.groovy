@@ -7,8 +7,6 @@ modules = {
         resource url: 'js/DataTables-1.10.7/media/css/jquery.dataTables.min.css'
         resource url: 'js/lib/dataTables.tableTools.min.js'
         resource url: 'css/lib/dataTables.tableTools.min.css'
-//        resource url: 'js/DataTables-1.10.7/media/css/jquery.dataTables.min.css'
-//        resource url: 'js/DataTables-1.10.7/media/js/jquery.dataTables.min.js'
     }
     scroller {
         resource url: 'js/lib/dport/jquery.li-scroller.1.0.js'
@@ -19,6 +17,10 @@ modules = {
     }
     informational {
         resource url: 'js/lib/dport/informational.js'
+    }
+    traitInfo {
+        resource url: 'css/dport/trait.css'
+        resource url: 'js/lib/dport/trait.js'
     }
     d3tooltip {
         resource url: 'js/lib/dport/d3tooltip.js'
@@ -82,7 +84,7 @@ modules = {
     }
     tableViewer {
         resource url: 'js/lib/dport/tableViewer.js'
-
+        resource url: 'css/dport/tableViewer.css'
     }
 
     core {
