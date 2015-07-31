@@ -760,7 +760,6 @@ var mpgSoftware = mpgSoftware || {};
                 if (weHaveEnoughDataForRiskBurdenTest) {
                     privateMethods.fillDiseaseRiskBurdenTest(OBSU, OBSA, HOMA, HETA, HOMU, HETU, PVALUE, ORVALUE, showGwas, showExchp, showExseq, null, diseaseBurdenStrings);
                 }
-                $('#sigmaVariantCharacterization').append(UTILS.sigmaVariantCharacterization(variant, variantTitle));
             };
             // externalize!
             // externalize!

@@ -872,7 +872,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     "pproperty" : {}
   },
   "filters" : [
-    {"operand" : "DBSNP_ID", "operator" : "EQ", "value" : "${variantId}", "operand_type" : "STRING"}
+    ${filterByVariant(variantId)}
   ]
 }""".toString()
         returnValue = postRestCall( drivingJson, GET_DATA_URL)

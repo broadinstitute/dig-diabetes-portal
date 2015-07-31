@@ -317,19 +317,6 @@ var UTILS = {
         }
         return retVal;
     },
-
-
-    sigmaVariantCharacterization: function (variant, title) {
-        var retVal = "";
-        var euroValue = parseFloat(variant["SIGMA_T2D_MAF"]);
-        if (variant["SIGMA_T2D_MAF"]) {
-            retVal += ("<p>The minor allele frequency of " + title + " in <em>SIGMA</em> sequencing data is: " +
-                (euroValue * 100).toPrecision(3) + " (" + UTILS.frequencyCharacterization(euroValue, [0.000001, 0.005, 0.05]) + ")");
-        } else {
-            retVal += ( "<p>This variant is not observed in SIGMA sequencing data.</p>");
-        }
-        return retVal;
-    },
     verifyThatDisplayIsWarranted: function (fieldToTest, divToDisplayIfWeHaveData, giveToDisplayIfWeHaveNoData) {
         if (!fieldToTest) {
             divToDisplayIfWeHaveData.hide();
