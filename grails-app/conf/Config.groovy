@@ -398,8 +398,8 @@ grails.plugin.springsecurity.logout.postOnly = false
 grails.plugin.springsecurity.rememberMe.cookieName="td2PortalRememberMe"
 grails.plugin.springsecurity.rememberMe.key="td2PortalKey"
 grails.plugin.springsecurity.rememberMe.rememberMe.persistent=true
-grails.plugin.springsecurity.successHandler.alwaysUseDefault = true
-//grails.plugin.springsecurity.successHandler.defaultTargetUrl = "/home/index"
+grails.plugin.springsecurity.successHandler.alwaysUseDefault = false
+grails.plugin.springsecurity.successHandler.defaultTargetUrl = "/home/portalHome"
 grails.plugin.springsecurity.rejectIfNoRule = true     // pessimistic rule -- no rule means access rejected if true
 grails.plugin.springsecurity.fii.rejectPublicInvocations = false  // if true then un-mapped URLs will trigger an IllegalArgumentException
 

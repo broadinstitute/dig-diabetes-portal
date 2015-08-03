@@ -16,15 +16,41 @@
 
 <body>
 <script>
+    var mpgSoftware = mpgSoftware || {};
+
+    $( document ).ready(function() {
+        var field = $('#generalized-input');
+
+        if (sessionStorage.getItem("autosave")) {
+            // Restore the contents of the text field
+            console.log("retrieve from autosave");
+            field.val(sessionStorage.getItem("autosave"));
+        } else {
+            console.log("nothing in autosave");
+        }
+        console.log("autosave considered");
+
+//        field.onkeyup("change", function() {
+//            // And save the results into the session storage object
+//            sessionStorage.setItem("autosave", field.value);
+//        });
+    });
 
     $(function () {
         "use strict";
+
+
+        mpgSoftware.saveKeystrokesAsWeGo =  function() {
+            // And save the results into the session storage object
+            sessionStorage.setItem("autosave", field.value);
+        }
 
         /***
          * type ahead recognizing genes
          */
         $('#generalized-input').typeahead({
             source: function (query, process) {
+                sessionStorage.setItem("autosave", query);
                 $.get('<g:createLink controller="gene" action="index"/>', {query: query}, function (data) {
                     process(data);
                 })
@@ -112,7 +138,7 @@
                         </h3>
 
                         <div class="input-group input-group-lg">
-                            <input type="text" class="form-control" id="generalized-input"></span>
+                            <input type="text" class="form-control" id="generalized-input" onkeypress="mpgSoftware.saveKeystrokesAsWeGo"></span>
                             <span class="input-group-btn">
                                 %{--<span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>--}%
                                 <button id="generalized-go" class="btn btn-primary btn-lg" type="button">
