@@ -118,8 +118,6 @@
                         if ((data.ethnicityInfo) &&
                                 (data.ethnicityInfo.results)) {//assume we have data and process it
                             var holdingStructure = buildDataStructure(data);
-//                            mpgSoftware.geneInfo.fillVariationAcrossEthnicityTable( show_gwas, show_exchp, show_exseq, rootVariantUrl,
-//                                    continentalAncestryText,ethnicitySequence,ethnicityChip,geneId);
                             mpgSoftware.geneInfo.fillVariationAcrossEthnicityTable(${show_gwas},
                                     ${show_exchp},
                                     ${show_exseq},
@@ -128,27 +126,6 @@
                                     holdingStructure.ethnicitySequence,
                                     holdingStructure.ethnicityChip,
                                     '<%=geneName%>');
-                            %{--mpgSoftware.geneInfo.fillTheVariantAndAssociationsTableFromNewApi(data,--}%
-                                    %{--${show_gwas},--}%
-                                    %{--${show_exchp},--}%
-                                    %{--${show_exseq},--}%
-                                    %{--'<g:createLink controller="region" action="regionInfo" />',--}%
-                                    %{--'<g:createLink controller="trait" action="traitSearch" />',--}%
-                                    %{--'<g:createLink controller="variantSearch" action="gene" />',--}%
-                                    %{--{variantsAndAssociationsTableHeaders: variantsAndAssociationsTableHeaders,--}%
-                                        %{--variantsAndAssociationsPhenotypeAssociations: variantsAndAssociationsPhenotypeAssociations,--}%
-                                        %{--biologicalHypothesisTesting: biologicalHypothesisTesting,--}%
-                                        %{--variantsAndAssociationsRowHelpText: variantsAndAssociationsRowHelpText,--}%
-                                        %{--continentalAncestryText: continentalAncestryText},--}%
-                                    %{--'9', 1, 100,--}%
-                                    %{--collector["d0"][0].count, collector["d0"][1].count, collector["d0"][2].count, collector["d0"][3].count,--}%
-                                    %{--collector["d0"][0].count, collector["d0"][1].count, collector["d0"][2].count, collector["d0"][3].count,--}%
-                                    %{--collector["d0"][0].count, collector["d0"][1].count, collector["d0"][2].count, collector["d0"][3].count,--}%
-                                    %{--collector["d0"][0].count, collector["d0"][1].count, collector["d0"][2].count, collector["d0"][3].count,--}%
-                                    %{--'<%=geneName%>'--}%
-
-
-
                         }
                     }
                     $('[data-toggle="popover"]').popover();

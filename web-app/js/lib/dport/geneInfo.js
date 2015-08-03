@@ -928,6 +928,8 @@ var mpgSoftware = mpgSoftware || {};
                             (typeof retainBarchartPtr.clear !== 'undefined')) {
                             retainBarchartPtr.clear();
                         }
+                        $('#significanceDescriptorFormatter').empty();
+                        $('#possibleCarrierVariantsLink').empty();
                     }
                 };
             }
@@ -951,7 +953,7 @@ var mpgSoftware = mpgSoftware || {};
             }
 
         };
-        var fillUniprotSummary = function (geneInfo, show_gwas, show_exchp, show_exseq) {
+        var fillUniprotSummary = function (geneInfo) {
             var funcDescrLine = "";
             if ((geneInfo) && (geneInfo["Function_description"])) {
                 funcDescrLine += ("<strong>Uniprot Summary:</strong> " + geneInfo['Function_description']);
@@ -972,42 +974,10 @@ var mpgSoftware = mpgSoftware || {};
         var fillTheGeneFields = function ( data, show_gwas, show_exchp, show_exseq,
                                           rootRegionUrl, rootTraitUrl, rootVariantUrl, textStringObject) {
             var rawGeneInfo = data['geneInfo'];
-            fillUniprotSummary(rawGeneInfo, show_gwas, show_exchp, show_exseq);
-//            fillVarianceAndAssociations(rawGeneInfo, show_gwas, show_exchp, show_exseq,
-//                rootRegionUrl,
-//                rootTraitUrl,
+            fillUniprotSummary(rawGeneInfo);
+//            fillBiologicalHypothesisTesting(rawGeneInfo, show_gwas, show_exchp, show_exseq,
 //                rootVariantUrl,
-//                textStringObject.variantsAndAssociationsPhenotypeAssociations);
-//            fillVariantsAndAssociationsTable(emphasisRecommended(rawGeneInfo),show_gwas, show_exchp, show_exseq,
-//                rootVariantUrl,
-//                textStringObject.variantsAndAssociationsTableHeaders,
-//                textStringObject.variantsAndAssociationsRowHelpText,
-//                geneFieldOrZero(rawGeneInfo, geneInfoJsonMap.fieldSymbol().CHROM),
-//                expandRegionBegin(geneFieldOrZero(rawGeneInfo, geneInfoJsonMap.fieldSymbol().BEG)),
-//                expandRegionEnd(geneFieldOrZero(rawGeneInfo, geneInfoJsonMap.fieldSymbol().END)),
-//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().GWAS_T2D_VAR_TOTAL),
-//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().GWAS_T2D_GWS_TOTAL),
-//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().GWAS_T2D_LWS_TOTAL),
-//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().GWAS_T2D_NOM_TOTAL),
-//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().EXCHP_T2D_VAR_TOTALS_EU_TOTAL),
-//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().EXCHP_T2D_GWS_TOTAL),
-//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().EXCHP_T2D_LWS_TOTAL),
-//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().EXCHP_T2D_NOM_TOTAL),
-//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol()._13k_T2D_VAR_TOTAL),
-//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol()._13k_T2D_GWS_TOTAL),
-//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol()._13k_T2D_LWS_TOTAL),
-//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol()._13k_T2D_NOM_TOTAL),
-//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().SIGMA_T2D_VAR_TOTAL),
-//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().SIGMA_T2D_GWS_TOTAL),
-//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().SIGMA_T2D_NOM_TOTAL),
-//                geneFieldOrZero(rawGeneInfo,geneInfoJsonMap.fieldSymbol().SIGMA_T2D_NOM_TOTAL),
-//                rawGeneInfo["ID"]);
-//            fillVariationAcrossEthnicity(rawGeneInfo, show_gwas, show_exchp, show_exseq,
-//                rootVariantUrl,
-//                textStringObject.continentalAncestryText);
-            fillBiologicalHypothesisTesting(rawGeneInfo, show_gwas, show_exchp, show_exseq,
-                rootVariantUrl,
-                textStringObject.biologicalHypothesisTesting);
+//                textStringObject.biologicalHypothesisTesting);
         };
 
 
@@ -1065,6 +1035,7 @@ var mpgSoftware = mpgSoftware || {};
 
             // public routines
             fillTheGeneFields: fillTheGeneFields,
+            fillBiologicalHypothesisTesting: fillBiologicalHypothesisTesting,
             fillVariationAcrossEthnicityTable:fillVariationAcrossEthnicityTable,
             retrieveDelayedBiologicalHypothesisOneDataPresenter: retrieveDelayedBiologicalHypothesisOneDataPresenter,
             fillTheVariantAndAssociationsTableFromNewApi: fillTheVariantAndAssociationsTableFromNewApi
