@@ -45,24 +45,15 @@ class SystemController {
         }
       }
 
-
-
-
+    /**
+     * updates the warning text of the application; text display in running banner ont he home page
+     *
+     * @return
+     */
     def updateWarningText() {
         String warningText = params.warningText
         sharedToolsService.setWarningText(warningText)
-        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
-                currentRestServer:restServerService.currentRestServer(),
-                                          currentApplicationIsSigma:sharedToolsService.applicationName(),
-                                          helpTextLevel:sharedToolsService.getHelpTextSetting(),
-                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
-                                          dataVersion:sharedToolsService.getDataVersion (),
-                                          currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
-                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
-                                          totalNumberOfGenes:Gene.totalNumberOfGenes(),
-                                          totalNumberOfVariants:Variant.totalNumberOfVariants(),
-                                          recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
-
+        forward(action: "systemManager")
     }
 
 
@@ -93,17 +84,7 @@ class SystemController {
                 flash.message = "But you had already set the help text to always display!"
             }
         }
-        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
-                                          currentRestServer:restServerService.currentRestServer(),
-                                          currentApplicationIsSigma:sharedToolsService.applicationName(),
-                                          helpTextLevel:sharedToolsService.getHelpTextSetting(),
-                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
-                                          dataVersion:sharedToolsService.getDataVersion (),
-                                          currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
-                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
-                                          totalNumberOfGenes:Gene.totalNumberOfGenes(),
-                                          totalNumberOfVariants:Variant.totalNumberOfVariants(),
-                                          recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
+        forward(action: "systemManager")
     }
 
     def refreshGeneCache()  {
@@ -175,8 +156,11 @@ class SystemController {
         render(status: 200)
     }
 
-
-
+    /**
+     * forces a getMetadata() call to the API and caches the results; metadata will be refreshed next time home page is hit(?)
+     *
+     * @return
+     */
     def forceMetadataCacheUpdate ()  {
         String metadataOverrideStatus = params.datatype
         Boolean metadataOverrideHasBeenRequested = sharedToolsService.getMetadataOverrideStatus ()
@@ -195,18 +179,7 @@ class SystemController {
                 flash.message = "But there was no override in place to cancel!"
             }
         }
-        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
-                                          currentRestServer:restServerService.currentRestServer(),
-                                          currentApplicationIsSigma:sharedToolsService.applicationName(),
-                                          helpTextLevel:sharedToolsService.getHelpTextSetting(),
-                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
-                                          dataVersion:sharedToolsService.getDataVersion (),
-                                          currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
-                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
-                                          totalNumberOfGenes:Gene.totalNumberOfGenes(),
-                                          totalNumberOfVariants:Variant.totalNumberOfVariants(),
-                                          recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
-
+        forward(action: "systemManager")
     }
 
 
@@ -221,17 +194,7 @@ class SystemController {
                 flash.message = "But the data version was already ${currentDataVersion}"
             }
         }
-        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
-                                          currentRestServer:restServerService.currentRestServer(),
-                                          currentApplicationIsSigma:sharedToolsService.applicationName(),
-                                          helpTextLevel:sharedToolsService.getHelpTextSetting(),
-                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
-                                          dataVersion:sharedToolsService.getDataVersion (),
-                                          currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
-                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
-                                          totalNumberOfGenes:Gene.totalNumberOfGenes(),
-                                          totalNumberOfVariants:Variant.totalNumberOfVariants(),
-                                          recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
+        forward(action: "systemManager")
 
     }
 
@@ -313,18 +276,7 @@ class SystemController {
             }
         }
 
-
-        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
-                                          currentRestServer:restServerService.currentRestServer(),
-                                          currentApplicationIsSigma:sharedToolsService.applicationName(),
-                                          helpTextLevel:sharedToolsService.getHelpTextSetting(),
-                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
-                                          dataVersion:sharedToolsService.getDataVersion (),
-                                          currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
-                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
-                                          totalNumberOfGenes:Gene.totalNumberOfGenes(),
-                                          totalNumberOfVariants:Variant.totalNumberOfVariants(),
-                                          recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
+        forward(action: "systemManager")
     }
 
     def switchSigmaT2d(){
@@ -342,33 +294,13 @@ class SystemController {
             flash.message = "Internal error: you requested server = ${requestedApplication} which I do not recognize!"
         }
 
-        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
-                                          currentRestServer:restServerService.currentRestServer(),
-                                          currentApplicationIsSigma:sharedToolsService.applicationName(),
-                                          helpTextLevel:sharedToolsService.getHelpTextSetting(),
-                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
-                                          dataVersion:sharedToolsService.getDataVersion (),
-                                          currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
-                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
-                                          totalNumberOfGenes:Gene.totalNumberOfGenes(),
-                                          totalNumberOfVariants:Variant.totalNumberOfVariants(),
-                                          recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
+        forward(action: "systemManager")
     }
 
 
     def switchApplicationToT2dgenes(){
         sharedToolsService.setApplicationToT2dgenes()
-        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
-                                          currentRestServer:restServerService.currentRestServer(),
-                                          currentApplicationIsSigma:sharedToolsService.applicationName(),
-                                          helpTextLevel:sharedToolsService.getHelpTextSetting(),
-                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
-                                          dataVersion:sharedToolsService.getDataVersion (),
-                                          currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
-                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
-                                          totalNumberOfGenes:Gene.totalNumberOfGenes(),
-                                          totalNumberOfVariants:Variant.totalNumberOfVariants(),
-                                          recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
+        forward(action: "systemManager")
     }
 
 
@@ -385,21 +317,8 @@ class SystemController {
                 flash.message = "But recognizeStringsOnly was already ${currentRecognizedStringsOnly}"
             }
         }
-        render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
-                                          currentRestServer:restServerService.currentRestServer(),
-                                          currentApplicationIsSigma:sharedToolsService.applicationName(),
-                                          helpTextLevel:sharedToolsService.getHelpTextSetting(),
-                                          forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
-                                          dataVersion:sharedToolsService.getDataVersion (),
-                                          currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
-                                          currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
-                                          totalNumberOfGenes:Gene.totalNumberOfGenes(),
-                                          totalNumberOfVariants:Variant.totalNumberOfVariants(),
-                                          recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
-
+        forward(action: "systemManager")
     }
-
-
 
 
 }
