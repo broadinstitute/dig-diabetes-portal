@@ -4,6 +4,9 @@ import groovy.json.JsonSlurper
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.transaction.annotation.Transactional
 
+/**
+ * Controller class to control the /variantInfo section of the T2D site
+ */
 class VariantInfoController {
     RestServerService   restServerService
     FilterManagementService filterManagementService
@@ -60,8 +63,11 @@ class VariantInfoController {
         }
     }
 
-
-
+    /**
+     * method to service ajax call for the 'What effect on the encoded protein' section/accordion
+     *
+     * @return
+     */
     def proteinEffect (){
         String variantId = params.variantId
         JSONObject jsonObject =  restServerService.gatherProteinEffect ( variantId.trim().toUpperCase())
@@ -70,9 +76,11 @@ class VariantInfoController {
         }
     }
 
-
-
-
+    /**
+     * method to service ajax call for the 'Variant frequency difference for patients with disease' section/accordion
+     *
+     * @return
+     */
     def variantDiseaseRisk (){
         String variantId = params.variantId
         JSONObject jsonObject =  restServerService.combinedVariantDiseaseRisk ( variantId.trim().toUpperCase())
@@ -81,7 +89,11 @@ class VariantInfoController {
         }
     }
 
-
+    /**
+     * method to service the ajax call for the 'variant association statistics (pvalue/OR)' section/accordion
+     *
+     * @return
+     */
     def variantDescriptiveStatistics (){
         String variantId = params.variantId
         JSONObject jsonObject =  restServerService.combinedVariantAssociationStatistics ( variantId.trim().toUpperCase())
@@ -90,7 +102,11 @@ class VariantInfoController {
         }
     }
 
-
+    /**
+     * method to service the ajax call for the 'How common is' section/accordion
+     *
+     * @return
+     */
     def howCommonIsVariant(){
         String variantId = params.variantId
         JSONObject jsonObject =  restServerService.howCommonIsVariantAcrossEthnicities ( variantId.trim().toUpperCase())
@@ -98,9 +114,4 @@ class VariantInfoController {
             [variantInfo:jsonObject]
         }
     }
-
-
-
-
-
 }
