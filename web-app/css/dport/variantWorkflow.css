@@ -1,4 +1,35 @@
+div.subtlePanelHeading {
+    font-size: 10px;
+    color: green;
+    font-style: italic;
+    font-decoration: none;
+}
 
+span.dataSetChoice {
+    padding: 0 0 0 10px;
+}
+
+.dataSetOptions {
+    margin: 0px 20px 0 20px;
+}
+
+.addFilterButton {
+    background-color: #eee;
+}
+
+.smallish input {
+    height: 20px;
+}
+.searchBuilderPrompt {
+    font-size: 13pt;
+    font-weight: 400;
+}
+select optgroup {
+    background: #444;
+    color: #fff;
+    font-style: normal;
+    font-weight: normal;
+}
 .variantWF-container {
     font-weight: 400;
 }
