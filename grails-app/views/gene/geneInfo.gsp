@@ -238,22 +238,6 @@
             }
 
         });
-//        $('#accordion2').on('show.bs.collapse', function (e) {
-//            if (e.target.id === "collapseThree") {
-//                if ((typeof mpgSoftware.geneInfo.retrieveDelayedBiologicalHypothesisOneDataPresenter() !== 'undefined') &&
-//                        (typeof mpgSoftware.geneInfo.retrieveDelayedBiologicalHypothesisOneDataPresenter().launch !== 'undefined')) {
-//                    mpgSoftware.geneInfo.retrieveDelayedBiologicalHypothesisOneDataPresenter().launch();
-//                }
-//            }
-//        });
-//        $('#accordion2').on('hide.bs.collapse', function (e) {
-//            if (e.target.id === "collapseThree") {
-//                if ((typeof mpgSoftware.geneInfo.retrieveDelayedBiologicalHypothesisOneDataPresenter() !== 'undefined') &&
-//                        (typeof mpgSoftware.geneInfo.retrieveDelayedBiologicalHypothesisOneDataPresenter().launch !== 'undefined')) {
-//                    mpgSoftware.geneInfo.retrieveDelayedBiologicalHypothesisOneDataPresenter().removeBarchart();
-//                }
-//            }
-//        });
         $('#collapseOne').collapse({hide: true})
     </script>
 

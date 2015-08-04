@@ -8,6 +8,3 @@
     </p>
 
 </g:if>
-
-
-%{--<div class="separator"></div>--}%

@@ -1,3 +1,4 @@
+<%@ page import="temporary.BuildInfo" %>
 
 <div id="footer">
     <div class="container">

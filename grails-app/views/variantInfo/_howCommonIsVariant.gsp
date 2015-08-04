@@ -43,13 +43,6 @@
                         collector["d" + i] = d;
                     }
                     var howCommonIsThisVariantAcrossEthnicities = mpgSoftware.variantInfo.retrieveHowCommonIsThisVariantAcrossEthnicities();
-//                    var rv = howCommonIsThisVariantAcrossEthnicities(UTILS.convertStringToNumber(collector["d0"][0].count[0]),
-//                            UTILS.convertStringToNumber(collector["d0"][1].count[0]),
-//                            UTILS.convertStringToNumber(collector["d0"][2].count[0]),
-//                            UTILS.convertStringToNumber(collector["d0"][3].count[0]),
-//                            UTILS.convertStringToNumber(collector["d0"][4].count[0]),
-//                            UTILS.convertStringToNumber(collector["d0"][5].count[0]),
-//                            alleleFrequencyStrings);
                     var rv = howCommonIsThisVariantAcrossEthnicities([collector["d0"][0].count[0],
                             collector["d0"][1].count[0],
                             collector["d0"][2].count[0],
