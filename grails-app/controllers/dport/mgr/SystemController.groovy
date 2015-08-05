@@ -28,8 +28,8 @@ class SystemController {
         dataVersion:sharedToolsService.getDataVersion (),
         currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
         currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
-        totalNumberOfGenes:Gene.totalNumberOfGenes(),
-        totalNumberOfVariants:Variant.totalNumberOfVariants(),
+        totalNumberOfGenes: sharedToolsService.getCachedGeneNumber(false),
+        totalNumberOfVariants: sharedToolsService.getCachedVariantNumber(false),
         recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
     }
 
@@ -112,9 +112,18 @@ class SystemController {
                 }
             }
          }
+        // refresh gene cache number
+        sharedToolsService.getCachedGeneNumber(true);
+
         render(status: 200)
 
     }
+
+    /**
+     * refresh the variant count number that is displayed on the systems web page
+     *
+     * @return
+     */
     def refreshVariantsForChromosome()  {
         int variantCount = 0
         int variantForChromosomeCount = 0
@@ -153,6 +162,10 @@ class SystemController {
                 }
             }
         }
+
+        // force reload of the cached variant number
+        sharedToolsService.getCachedVariantNumber(true);
+
         render(status: 200)
     }
 

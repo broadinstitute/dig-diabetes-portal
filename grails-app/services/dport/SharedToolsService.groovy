@@ -41,6 +41,8 @@ class SharedToolsService {
     String currentGeneChromosome = "1"
     String currentVariantChromosome = "1"
     Integer recognizedStringsOnly = 0
+    Integer cachedVariantNumber;
+    Integer cachedGeneNumber;
     // TODO remove hack: currently we get phenotypes from the old geneinfo call, but
     // we need to interpret them with the new API, which uses different strings in some cases.
     //  Eventually we will pull the strings from the new API and then throw away this conversion utility
@@ -88,6 +90,31 @@ class SharedToolsService {
         this.recognizedStringsOnly = recognizedStringsOnly
     }
 
+    /**
+     * retrieve cached number of variants in the portal DB; pass in true for the cached number to be refreshed
+     *
+     * @param forceReload               whether to refresh the number
+     * @return                          the total number of cached variants in the portal DB
+     */
+    public Integer getCachedVariantNumber(Boolean forceReload) {
+        if ((this.cachedVariantNumber == null) || forceReload) {
+            this.cachedVariantNumber = Variant.totalNumberOfVariants();
+        }
+        return this.cachedVariantNumber;
+    }
+
+    /**
+     * retrieve cached number of genes in the portal DB; pass in true for the cached number to be refreshed
+     *
+     * @param forceReload               whether to refresh the number
+     * @return                          the total number of cached genes in the portal DB
+     */
+    public Integer getCachedGeneNumber(Boolean forceReload) {
+        if ((this.cachedGeneNumber == null) || forceReload) {
+            this.cachedGeneNumber = Gene.totalNumberOfGenes();
+        }
+        return this.cachedGeneNumber;
+    }
 
     private String determineNextChromosome (String currentChromosome) {
         String returnValue
