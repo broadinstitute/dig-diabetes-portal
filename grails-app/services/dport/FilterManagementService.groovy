@@ -1,5 +1,6 @@
 package dport
 
+import dport.meta.UserQueryContext
 import grails.transaction.Transactional
 import org.apache.juli.logging.LogFactory
 
@@ -21,57 +22,6 @@ class FilterManagementService {
     private String exomeChipPValue  = "P_VALUE"
     private String sigmaDataPValue  = "P_VALUE"
 
-    LinkedHashMap<String, String> standardFilterStrings = [
-            "t2d-genomewide"  :
-                    """{ "filter_type": "FLOAT", "operand": "_13k_T2D_P_EMMAX_FE_IV", "operator": "LTE", "value": 5e-8 }""".toString(),
-            "t2d-nominal"     :
-                    """{ "filter_type": "FLOAT", "operand": "_13k_T2D_P_EMMAX_FE_IV", "operator": "LTE", "value": 5e-2 }""".toString(),
-            "exchp-genomewide":
-                    """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_P_value", "operator": "LTE", "value": 5e-8 }""".toString(),
-            "exchp-nominal"   :
-                    """{ "filter_type": "FLOAT", "operand": "EXCHP_T2D_P_value", "operator": "LTE", "value": 5e-2 }""".toString(),
-            "lof"             :
-                    """{ "filter_type": "FLOAT", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 1 }""".toString(),
-            "gwas-genomewide" :
-                    """{ "filter_type": "FLOAT", "operand": "GWAS_T2D_PVALUE", "operator": "LTE", "value": 5e-8 }""".toString(),
-            "gwas-nominal"    :
-                    """{ "filter_type": "FLOAT", "operand": "GWAS_T2D_PVALUE", "operator": "LTE", "value": 5e-2 }""".toString(),
-            "dataSetExseq"        :
-                    """{ "filter_type": "STRING", "operand": "IN_EXSEQ", "operator": "EQ", "value": "1" }""".toString(),
-            "dataSetExchp"        :
-                    """{ "filter_type": "STRING", "operand": "IN_EXCHP", "operator": "EQ", "value": "1" }""".toString(),
-            "dataSetGwas"    :
-                    """{ "filter_type": "STRING", "operand": "IN_GWAS", "operator": "EQ", "value": "1" }""".toString(),
-            "dataSetDiagramGwas"    :
-                    """{ "filter_type": "FLOAT", "operand": "GWAS_T2D_PVALUE", "operator": "GTE", "value": 0 }""".toString(),
-            "dataSetSigma"   :
-                    """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_P", "operator": "GTE", "value":  0 }""".toString(),
-            "sigma-genomewide":
-                    """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_P", "operator": "LTE", "value": 5e-8 }""".toString(),
-            "sigma-nominal"   :
-                    """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_P", "operator": "LTE", "value": 5e-2 }""".toString(),
-            "onlySeenCaseT2d"        :
-                    """{ "filter_type": "FLOAT", "operand": "_13k_T2D_MINU", "operator": "EQ", "value": 0 }""".toString(),
-            "onlySeenCaseSigma"        :
-                    """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_MINU", "operator": "EQ", "value": 0 }""".toString(),
-            "onlySeenControlT2d"        :
-                    """{ "filter_type": "FLOAT", "operand": "_13k_T2D_MINA", "operator": "EQ", "value": 0 }""".toString(),
-            "onlySeenControlSigma"        :
-                    """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_MINA", "operator": "EQ", "value": 0 }""".toString(),
-            "onlySeenHomozygotes"        :
-                    """{ "filter_type": "FLOAT", "operand": "SIGMA_T2D_MINA", "operator": "EQ", "value": 0 }""".toString(),
-            "proteinTruncatingCheckbox"        :
-                    """{ "filter_type": "FLOAT", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 1 }""".toString(),
-            "missenseCheckbox"        :
-                    """{ "filter_type": "FLOAT", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 2 }""".toString(),
-            "synonymousCheckbox"        :
-                    """{ "filter_type": "FLOAT", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 3 }""".toString(),
-            "noncodingCheckbox"        :
-                    """{ "filter_type": "FLOAT", "operand": "MOST_DEL_SCORE", "operator": "EQ", "value": 4 }""".toString(),
-            "in-sigma"        :
-                    """{ "filter_type": "STRING", "operand": "IN_SIGMA", "operator": "EQ", "value": 1 }""".toString()
-
-    ]
     private String chooseDataSet(String dataSetCode){
         String returnValue = exomeSequence
         switch (dataSetCode) {
@@ -84,6 +34,36 @@ class FilterManagementService {
         return returnValue
     }
 
+
+   private String formatFilter (String dataSetId,
+                                String phenotype,
+                                String operand,
+                                String operator,
+                                String value,
+                                String operandType){
+       String returnValue = ""
+       if ( ("FLOAT".equals(operandType)) || ("INTEGER".equals(operandType))){
+           returnValue =  """{"dataset_id": "${dataSetId}", "phenotype": "${phenotype}", "operand": "${operand}", "operator": "${operator}", "value": ${value}, "operand_type": "${operandType}"}""".toString()
+       } else if  ("STRING".equals(operandType)) {
+           returnValue =  """{"dataset_id": "${dataSetId}", "phenotype": "${phenotype}", "operand": "${operand}", "operator": "${operator}", "value": "${value}", "operand_type": "${operandType}"}""".toString()
+       } else {
+           log.error("FilterManagementService:formatFilter. Unexpected operandType = ${dataSetId}")
+       }
+       return returnValue
+   }
+
+
+
+
+    private String generateFilterForApi (UserQueryContext userQueryContext){
+        return formatFilter (userQueryContext.getDataSetId (),userQueryContext.getPhenotype(),userQueryContext.getOperand (),
+                userQueryContext.getOperator(),userQueryContext.getValue (),userQueryContext.getOperandType())
+    }
+
+
+
+
+
     private String filtersForApi(String filterName,
                   String parm1,
                   BigDecimal parm2,
@@ -91,16 +71,24 @@ class FilterManagementService {
         String returnValue = ""
         switch (filterName){
             case "dataSetGwas"        :
-                returnValue = """{"dataset_id": "${gwasData}", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
+                UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:"gwas"])
+                returnValue =  generateFilterForApi (userQueryContext)
+              //  returnValue =  formatFilter ("${gwasData}","T2D", "P_VALUE","LTE","1","FLOAT")
                 break;
-            case "dataSetSigma"        :
-                returnValue = """{"dataset_id": "${sigmaData}", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
+            case "dataSetSigma" :
+                UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:"sigma"])
+                returnValue =  generateFilterForApi (userQueryContext)
+               // returnValue =  formatFilter ("${sigmaData}","T2D", "P_VALUE","LTE","1","FLOAT")
                 break;
             case "dataSetExseq"        :
-                returnValue = """{"dataset_id": "${exomeSequence}", "phenotype": "T2D", "operand": "P_FIRTH_FE_IV", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
+                UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:"exomeseq"])
+                returnValue =  generateFilterForApi (userQueryContext)
+             //   returnValue =  formatFilter ("${exomeSequence}","T2D", "P_FIRTH_FE_IV","LTE","1","FLOAT")
                 break;
             case "dataSetExchp"        :
-                returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
+                UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:"exomechip"])
+                returnValue =  generateFilterForApi (userQueryContext)
+               // returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setPValueThreshold" :
                 returnValue = """{"dataset_id": "${chooseDataSet(parm3)}", "phenotype": "T2D", "operand": "${parm1}", "operator": "LT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
@@ -234,63 +222,6 @@ class FilterManagementService {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /***
-     * take the parameters from the variant search page and build a call to the REST API. You need to
-     * end up generating three things:
-     * 1) a list of the filters that are part of the API call  itself
-     * 2) a textbased representation of those same filters for human consumption
-     * 3) a list of front-end widget settings  which we will use if the user goes to rrefine their search
-     *
-     * @param incomingParameters
-     * @param currentlySigma
-     * @return
-     */
-    public LinkedHashMap  parseVariantSearchParameters (HashMap incomingParameters) {
-        LinkedHashMap  buildingFilters = [filters:new ArrayList<String>(),
-                                          filterDescriptions:new ArrayList<String>(),
-                                          parameterEncoding:new ArrayList<String>(),
-                                          positioningInformation :new LinkedHashMap <String,String> (),
-                                          transferableFilter: new ArrayList<String>()]
-
-       buildingFilters = determineDataSet (buildingFilters,incomingParameters)
-
-
-       String datatypeOperand = buildingFilters.datatypeOperand
-
-        buildingFilters = determineThreshold (buildingFilters, incomingParameters, datatypeOperand)
-
-        buildingFilters = factorInTheOddsRatios(buildingFilters, incomingParameters, datatypeOperand)
-
-        buildingFilters = setRegion(buildingFilters, incomingParameters)
-
-        buildingFilters = setAlleleFrequencies(buildingFilters, incomingParameters)
-
-        buildingFilters = caseControlOnly(buildingFilters, incomingParameters)
-
-        buildingFilters = predictedEffectsOnProteins(buildingFilters, incomingParameters)
-
-        buildingFilters = predictedImpactOfMissenseMutations(buildingFilters, incomingParameters)
-
-        buildingFilters = setSpecificPValue(buildingFilters, incomingParameters)
-
-        return buildingFilters
-
-    }
-
-			
 				
 
     public LinkedHashMap  parseExtendedVariantSearchParameters (HashMap incomingParameters,Boolean currentlySigma,LinkedHashMap  buildingFilters) {
@@ -319,8 +250,6 @@ class FilterManagementService {
 
         buildingFilters = setAlleleFrequencies(buildingFilters, incomingParameters)
 
-        buildingFilters = caseControlOnly(buildingFilters, incomingParameters)
-
         buildingFilters = predictedEffectsOnProteins(buildingFilters, incomingParameters)
 
         buildingFilters = predictedImpactOfMissenseMutations(buildingFilters, incomingParameters)
@@ -343,7 +272,7 @@ class FilterManagementService {
      */
   public  List<String> retrieveFilters (  String geneId, String significance,String dataset,String region,String receivedParameters )    {
       Map paramsMap = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters)
-      LinkedHashMap<String, String> parsedFilterParameters = parseVariantSearchParameters(paramsMap)
+      LinkedHashMap<String, String> parsedFilterParameters = parseExtendedVariantSearchParameters(paramsMap,false,[:])
       return  parsedFilterParameters.filters
   }
 
@@ -1086,33 +1015,6 @@ class FilterManagementService {
     }
 
 
-
-    private  LinkedHashMap caseControlOnly (LinkedHashMap  buildingFilters, HashMap incomingParameters){
-        List <String> filters =  buildingFilters.filters
-        List <String> filterDescriptions =  buildingFilters.filterDescriptions
-        List <String> parameterEncoding =  buildingFilters.parameterEncoding
-        // datatype: Sigma, exome sequencing, exome chip, or diagram GWAS
-        if  (incomingParameters.containsKey("t2dcases")) {
-            filters << retrieveFilterString("onlySeenCaseT2d")
-            filterDescriptions << "Number of observations in controls is equal to 0"
-            parameterEncoding << "20:1"
-        }
-        if  (incomingParameters.containsKey("t2dcontrols")) {
-            filters << retrieveFilterString("onlySeenControlT2d")
-            filterDescriptions << "Number of observations in cases is equal to 0"
-            parameterEncoding << "21:1"
-        }
-        if  (incomingParameters.containsKey("homozygotes")) {
-            filters << retrieveFilterString("onlySeenHomozygotes") 
-            filterDescriptions << "Number of minor alleles observed in homozygotes is equal to 0"
-            parameterEncoding << "22:0"
-        }
-
-        return buildingFilters
-
-    }
-
-
     private  LinkedHashMap predictedEffectsOnProteins (LinkedHashMap  buildingFilters, HashMap incomingParameters){
         List <String> filters =  buildingFilters.filters
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
@@ -1392,23 +1294,6 @@ class FilterManagementService {
         if (phenotype) {
             returnValue['phenotype']  = phenotype
         }
-
-//
-//        if (pValue) {
-//            float value = 0
-//            try {
-//                value = Float.parseFloat(pValue)
-//                returnValue['pValue']  = value
-//            } catch (e) {
-//                ; // no P value defined if we fail the conversion
-//            }
-//        }
-//
-//        if (pValueInequality) {
-//            returnValue['pValueInequality']  = pValueInequality
-//        }
-
-
 
 
         if (esValue) {

@@ -80,7 +80,8 @@ class HypothesisGenController {
              encodedVariantList = sharedToolsService.packageUpFiltersForRoundTrip(explicitVariantList)
              encodedVariantList2 = sharedToolsService.packageUpEncodedParameters(explicitVariantList)
         }else {
-            parsedFilterParameters = filterManagementService.parseVariantSearchParameters(paramsMap)
+          //  parsedFilterParameters = filterManagementService.parseVariantSearchParameters(paramsMap)
+            parsedFilterParameters = filterManagementService.parseExtendedVariantSearchParameters(paramsMap,false,[:])
             encodedFilters = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters)
             encodedParameters = sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
         }

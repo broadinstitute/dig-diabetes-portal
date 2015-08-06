@@ -143,24 +143,6 @@ class VariantSearchController {
     }
 
     /***
-     * User has posted a search request.  The search was made through a traditional form (the GO button on the variant search page).
-     * A service then laboriously parses the request, thereby generating filters which we can pass to the backend. The associated Ajax
-     * retrieval for this call is -->  variantSearchAjax
-     * @return
-     */
-    def variantSearchRequest() {
-         Map paramsMap = new HashMap()
-
-        params.each { key, value ->
-            paramsMap.put(key, value)
-        }
-        if (paramsMap) {
-            displayVariantSearchResults(paramsMap)
-        }
-
-    }
-
-    /***
      * A collection of specialized searches are handled here, mostly from the geneinfo page. The idea is that we interpret those
      * special requests in storeParametersInHashmap and convert them into  a parameter map, which can then be interpreted
      * with our usual machinery.
@@ -358,40 +340,6 @@ class VariantSearchController {
         }
 
     }
-
-
-    /***
-     *  This method launches a table presenting all of the variants that match the user specified search criteria.  Note that there are two ways
-     *  to get to this point: 1) the user can specify the individual parameters that want using a form; or else 2) the user clicks on an anchor
-     *  that contains a prebuilt search.  The idea of this routine is that both of those paths should lead to exactly the same result.
-     *
-     * @param paramsMap
-     * @param currentlySigma
-     */
-    private void displayVariantSearchResults(HashMap paramsMap) {
-        LinkedHashMap<String, String> parsedFilterParameters = filterManagementService.parseVariantSearchParameters(paramsMap)
-        if (parsedFilterParameters) {
-
-            Integer dataSetDetermination = filterManagementService.distinguishBetweenDataSets(paramsMap)
-            String encodedFilters = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters)
-            String encodedParameters = sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
-            String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
-
-            render(view: 'variantSearchResults',
-                    model: [show_gene           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
-                            show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
-                            show_exchp          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
-                            show_exseq          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                            filter              : encodedFilters,
-                            filterDescriptions  : parsedFilterParameters.filterDescriptions,
-                            proteinEffectsList  : encodedProteinEffects,
-                            encodedParameters   : encodedParameters,
-                            dataSetDetermination: dataSetDetermination])
-        }
-    }
-
-
-
 
 
 
