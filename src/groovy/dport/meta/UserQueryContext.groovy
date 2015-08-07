@@ -1,6 +1,12 @@
 package dport.meta
 /**
  * Created by balexand on 8/6/2015.
+ *
+ * This class is intended to serve two purposes:
+ * short-term: let's pull out all of the static Definition/dependencies
+ *       that are necessary to construct filters into one place
+ * longer-term: will require some metadata changes, but this is the place to
+ *       derive specifics such as sample group IDs based on the information in the metadata
  */
 class UserQueryContext {
     private String exomeSequence  = "ExSeq_17k_mdv2"

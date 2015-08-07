@@ -73,24 +73,21 @@ class FilterManagementService {
             case "dataSetGwas"        :
                 UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:"gwas"])
                 returnValue =  generateFilterForApi (userQueryContext)
-              //  returnValue =  formatFilter ("${gwasData}","T2D", "P_VALUE","LTE","1","FLOAT")
                 break;
             case "dataSetSigma" :
                 UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:"sigma"])
                 returnValue =  generateFilterForApi (userQueryContext)
-               // returnValue =  formatFilter ("${sigmaData}","T2D", "P_VALUE","LTE","1","FLOAT")
                 break;
             case "dataSetExseq"        :
                 UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:"exomeseq"])
                 returnValue =  generateFilterForApi (userQueryContext)
-             //   returnValue =  formatFilter ("${exomeSequence}","T2D", "P_FIRTH_FE_IV","LTE","1","FLOAT")
                 break;
             case "dataSetExchp"        :
                 UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:"exomechip"])
                 returnValue =  generateFilterForApi (userQueryContext)
-               // returnValue = """{"dataset_id": "${exomeChip}", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LTE", "value": 1, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setPValueThreshold" :
+                UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:parm3])
                 returnValue = """{"dataset_id": "${chooseDataSet(parm3)}", "phenotype": "T2D", "operand": "${parm1}", "operator": "LT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
                 break;
             case "setRegionGeneSpecification" :
@@ -241,8 +238,6 @@ class FilterManagementService {
         String datatypeOperand = buildingFilters.datatypeOperand
 
         buildingFilters = processCustomFilters (buildingFilters, incomingParameters )
-
-        buildingFilters = determineThreshold (buildingFilters, incomingParameters, datatypeOperand)
 
         buildingFilters = factorInTheOddsRatios(buildingFilters, incomingParameters, datatypeOperand)
 
@@ -641,6 +636,49 @@ class FilterManagementService {
         List <String> transferableFilter =  buildingFilters.transferableFilter
         String datatypeOperand = ""
 
+        BigDecimal significance = 1
+        // it is possible to set significance explicitly with a key value.  Attend to that parameter right here:
+        switch (incomingParameters ["significance"])   {
+            case  "genomewide":
+                significance = 5e-8
+                break;
+            case  "locus":
+                significance = 5e-4
+                break;
+            case  "nominal":
+                significance = 0.05
+                break;
+            case  "custom": // this is an antiquated approach, but still used by Beacon.  We need to get rid of it eventually
+                if (incomingParameters.containsKey("custom_significance_input")) {
+                    parameterEncoding << "2:2".toString()
+                    String stringCustomThreshold = incomingParameters["custom_significance_input"]
+                    BigDecimal numericCustomThreshold = 0.05
+                    try {
+                        numericCustomThreshold = new BigDecimal(stringCustomThreshold)
+                        parameterEncoding << ("3:"+numericCustomThreshold.toString())
+                    }  catch (exception)  {
+                        // presumably we have a nonnumeric value in the custom threshold
+                        // ignore the request for custom threshold altogether in this case
+                        //TODO: this is an error condition. User supplied a nonnumeric custom threshold
+                        log.error("FilterManagementService.determineDataSet: nonnumeric threshold provided by user = ${stringCustomThreshold}")
+                        break;
+                    }
+                    filters << retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,numericCustomThreshold,dataSetSpecifier)
+                    filterDescriptions << "P-value for association with T2D is less than or equal to ${numericCustomThreshold}".toString()
+                } else {
+                    //TODO: this is an error condition. User requested a custom threshold but supplied no threshold
+                    // description of that threshold. We need a specification of what to do ( from Mary?)
+                    log.error("FilterManagementService.determineDataSet: no threshold provided by user ")
+                    break;
+                }
+                break;
+            default:
+                log.error("FilterManagementService.determineDataSet: no threshold provided by user ")
+                break;
+        }
+
+
+
         // datatype: Sigma, exome sequencing, exome chip, or diagram GWAS
         if  (incomingParameters.containsKey("datatype"))  {      // user has requested a particular data set. Without explicit request what is the default?
             String dataSetSpecifier = incomingParameters ["datatype"]
@@ -650,32 +688,52 @@ class FilterManagementService {
             switch (dataSetDistinguisher)   {
                 case  0:
                     datatypeOperand = gwasDataPValue
-                    filters <<  retrieveFilterString("dataSetGwas")
-                    filterDescriptions << "Is observed in Diagram GWAS".toString()
-                    parameterEncoding << "1:3".toString()
-                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1".toString()
+                    filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,significance,dataSetSpecifier)
+                    if (significance == 1){
+                        filterDescriptions << "GWAS p-value for association with T2D is not null".toString()
+                    }else {
+                        filterDescriptions << "GWAS p-value for association with T2D is less than or equal to ${significance}".toString()
+                    }
+                    parameterEncoding << "2:2".toString()
+                    parameterEncoding << "3:${significance}".toString()
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<${significance}".toString()
                     break;
 
                 case  1:
                     datatypeOperand = sigmaDataPValue
-                    filters <<  retrieveFilterString("dataSetSigma") 
-                    filterDescriptions << "Whether variant is included in SIGMA analysis is equal to 1".toString()
-                    parameterEncoding << "1:0".toString()
-                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1".toString()
+                    filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,significance,dataSetSpecifier)
+                    if (significance == 1){
+                        filterDescriptions << "SIGMA p-value for association with T2D is not null".toString()
+                    }else {
+                        filterDescriptions << "SIGMA p-value for association with T2D is less than or equal to ${significance}".toString()
+                    }
+                    parameterEncoding << "2:2".toString()
+                    parameterEncoding << "3:${significance}".toString()
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<${significance}".toString()
                     break;
                 case  2:
                     datatypeOperand = exomeSequencePValue
-                    filters <<  retrieveFilterString("dataSetExseq")
-                    filterDescriptions << "Is observed in exome sequencing".toString()
-                    parameterEncoding << "1:1".toString()
-                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1".toString()
+                    filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,significance,dataSetSpecifier)
+                    if (significance == 1){
+                        filterDescriptions << "Exome sequencing p-value for association with T2D is not null".toString()
+                    }else {
+                        filterDescriptions << "Exome sequencing p-value for association with T2D is less than or equal to ${significance}".toString()
+                    }
+                    parameterEncoding << "2:2".toString()
+                    parameterEncoding << "3:${significance}".toString()
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<${significance}".toString()
                     break;
                 case  3:
                     datatypeOperand = exomeChipPValue
-                    filters <<  retrieveFilterString("dataSetExchp") 
-                    filterDescriptions << "Is observed in exome chip".toString()
-                    parameterEncoding << "1:2".toString()
-                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<1".toString()
+                    filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,significance,dataSetSpecifier)
+                    if (significance == 1){
+                        filterDescriptions << "Exome chip p-value for association with T2D is not null".toString()
+                    }else {
+                        filterDescriptions << "Exome chip p-value for association with T2D is less than or equal to ${significance}".toString()
+                    }
+                    parameterEncoding << "2:2".toString()
+                    parameterEncoding << "3:${significance}".toString()
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<${significance}".toString()
                     break;
                 default:
                     log.error("FilterManagementService.determineDataSet: unexpected dataSetDistinguisher = ${dataSetDistinguisher}")
@@ -688,75 +746,6 @@ class FilterManagementService {
     }
 
 
-
-
-
-
-
-
-
-
-    private  LinkedHashMap  determineThreshold (LinkedHashMap  buildingFilters, HashMap incomingParameters,String datatypeOperand){
-        List <String> filters =  buildingFilters.filters
-        List <String> filterDescriptions =  buildingFilters.filterDescriptions
-        List <String> parameterEncoding =  buildingFilters.parameterEncoding
-        List <String> transferableFilter =  buildingFilters.transferableFilter
-        // set threshold
-        if  (incomingParameters.containsKey("significance"))  {      // user has requested a particular data set. Without explicit request what is the default?
-            String requestedDataSet =  incomingParameters ["significance"]
-            String dataSetSpecifier = incomingParameters ["datatype"]
-            switch (requestedDataSet)   {
-                case  "genomewide":
-                    filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,5e-8 as BigDecimal,dataSetSpecifier)
-                    filterDescriptions << "P-value for association with T2D is less than or equal to 5e-8".toString()
-                    parameterEncoding << "2:0".toString()
-                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<${5e-8}".toString()
-                    break;
-                case  "locus":
-                    filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,5e-4 as BigDecimal,dataSetSpecifier)
-                    filterDescriptions << "P-value for association with T2D is less than or equal to 0.0005".toString()
-                    parameterEncoding << "2:2".toString()
-                    parameterEncoding << "3:0.0005".toString()
-                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<0.0005".toString()
-                    break;
-                case  "nominal":
-                    filters << retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,0.05 as BigDecimal,dataSetSpecifier)
-                    filterDescriptions << "P-value for association with T2D is less than or equal to 0.05".toString()
-                    parameterEncoding << "2:1".toString()
-                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<0.05".toString()
-                    break;
-                case  "custom":
-                    if (incomingParameters.containsKey("custom_significance_input")) {
-                        parameterEncoding << "2:2".toString()
-                        String stringCustomThreshold = incomingParameters["custom_significance_input"]
-                        BigDecimal numericCustomThreshold = 0.05
-                        try {
-                            numericCustomThreshold = new BigDecimal(stringCustomThreshold)
-                            parameterEncoding << ("3:"+numericCustomThreshold.toString())
-                        }  catch (exception)  {
-                            // presumably we have a nonnumeric value in the custom threshold
-                            // ignore the request for custom threshold altogether in this case
-                            //TODO: this is an error condition. User supplied a nonnumeric custom threshold
-                            log.error("FilterManagementService.determineThreshold: nonnumeric threshold provided by user = ${stringCustomThreshold}")
-                            break;
-                        }
-                        filters << retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,numericCustomThreshold,dataSetSpecifier)
-                        filterDescriptions << "P-value for association with T2D is less than or equal to ${numericCustomThreshold}".toString()
-                    } else {
-                        //TODO: this is an error condition. User requested a custom threshold but supplied no threshold
-                        // description of that threshold. We need a specification of what to do ( from Mary?)
-                        log.error("FilterManagementService.determineThreshold: no threshold provided by user ")
-                        break;
-                    }
-                    break;
-                default:
-                    log.error("FilterManagementService.determineThreshold: no threshold provided by user ")
-                    break;
-            }
-        }
-
-        return buildingFilters
-    }
 
 
 
