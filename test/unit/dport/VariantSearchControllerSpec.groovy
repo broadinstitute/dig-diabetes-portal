@@ -44,6 +44,7 @@ class VariantSearchControllerSpec extends Specification {
         model.encParams == "20:1"
     }
 
+<<<<<<< HEAD
     /***
      * This test cuts short and is only testing on null branch deeper within the controller. I need to return to this one.
      */
@@ -72,6 +73,8 @@ class VariantSearchControllerSpec extends Specification {
 //    }
 
 
+=======
+>>>>>>> 6e9f349df0806845d122103efa83c17c28a247f0
 
     void "test gene"() {
         given:
