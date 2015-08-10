@@ -71,36 +71,40 @@ class FilterManagementService {
         String returnValue = ""
         switch (filterName){
             case "dataSetGwas"        :
-                UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:"gwas"])
+                UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:"gwas", phenotype:"T2D"])
                 returnValue =  generateFilterForApi (userQueryContext)
                 break;
             case "dataSetSigma" :
-                UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:"sigma"])
+                UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:"sigma", phenotype:"T2D"])
                 returnValue =  generateFilterForApi (userQueryContext)
                 break;
             case "dataSetExseq"        :
-                UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:"exomeseq"])
+                UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:"exomeseq", phenotype:"T2D"])
                 returnValue =  generateFilterForApi (userQueryContext)
                 break;
             case "dataSetExchp"        :
-                UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:"exomechip"])
+                UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:"exomechip", phenotype:"T2D"])
                 returnValue =  generateFilterForApi (userQueryContext)
                 break;
             case "setPValueThreshold" :
-                UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:parm3])
-                returnValue = """{"dataset_id": "${chooseDataSet(parm3)}", "phenotype": "T2D", "operand": "${parm1}", "operator": "LT", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
+                UserQueryContext userQueryContext = new UserQueryContext([sampleGroup:parm3,value:parm2.toString(), phenotype:"T2D"])
+                returnValue =  generateFilterForApi (userQueryContext)
                 break;
             case "setRegionGeneSpecification" :
-                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${parm1}", "operand_type": "STRING"}""".toString()
+                UserQueryContext userQueryContext = new UserQueryContext([propertyCategory:"GENE", value:parm1])
+                returnValue =  generateFilterForApi (userQueryContext)
                 break;
             case "setRegionChromosomeSpecification" :
-                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "EQ", "value": "${parm1}", "operand_type": "STRING"}""".toString()
+                UserQueryContext userQueryContext = new UserQueryContext([propertyCategory:"CHROM", value:parm1])
+                returnValue =  generateFilterForApi (userQueryContext)
                 break;
             case "setRegionPositionStart" :
-                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "GTE", "value": ${parm1}, "operand_type": "INTEGER"}""".toString()
+                UserQueryContext userQueryContext = new UserQueryContext([propertyCategory:"POS_GTE", value:parm1.toString()])
+                returnValue =  generateFilterForApi (userQueryContext)
                 break;
             case "setRegionPositionEnd" :
-                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "LTE", "value": ${parm1}, "operand_type": "INTEGER"}""".toString()
+                UserQueryContext userQueryContext = new UserQueryContext([propertyCategory:"POS_LTE", value:parm1.toString()])
+                returnValue =  generateFilterForApi (userQueryContext)
                 break;
             case "setEthnicityMaximum" :
                 returnValue = """{"dataset_id": "ExSeq_17k_""" + (parm1.equals("eu") || parm1.equals("hs") ? parm1 : "${parm1}_genes") + """_mdv2", "phenotype": "blah", "operand": "MAF", "operator": "LTE", "value": ${parm2}, "operand_type": "FLOAT"}""".toString()
