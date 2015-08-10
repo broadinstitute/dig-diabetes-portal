@@ -19,12 +19,28 @@ public class PhenotypeBean implements Phenotype {
     private List<Property> propertyList;
     private DataSet parent;
 
+    /**
+     * return a list of all the object's dataset children
+     *
+     * @return
+     */
+    public List<DataSet> getAllChildren() {
+        // local variable
+        List<DataSet> allChildrenList = new ArrayList<DataSet>();
+
+        // add all children lists
+        allChildrenList.addAll(this.getProperties());
+
+        // return the resulting list
+        return allChildrenList;
+    }
+
     public String getType() {
         return PortalConstants.TYPE_PHENOTYPE_KEY;
     }
 
     public String getId() {
-        return (this.parent == null ? "" : this.parent.getId()) + this.getId();
+        return (this.parent == null ? "" : this.parent.getId()) + this.name;
     }
 
     public DataSet getParent() {
@@ -94,8 +110,10 @@ public class PhenotypeBean implements Phenotype {
     public void acceptVisitor(DataSetVisitor visitor) {
         visitor.visit(this);
 
+        /*
         for (Property property: this.getProperties()) {
             property.acceptVisitor(visitor);
         }
+        */
     }
 }

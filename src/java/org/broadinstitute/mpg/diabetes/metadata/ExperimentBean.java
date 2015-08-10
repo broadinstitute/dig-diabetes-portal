@@ -15,6 +15,23 @@ public class ExperimentBean implements Experiment {
     private String technology;
     private String version;
     private List<SampleGroup> sampleGroupList;
+    private DataSet parent;
+
+    /**
+     * return a list of all the object's dataset children
+     *
+     * @return
+     */
+    public List<DataSet> getAllChildren() {
+        // local variable
+        List<DataSet> allChildrenList = new ArrayList<DataSet>();
+
+        // add all children lists
+        allChildrenList.addAll(this.getSampleGroups());
+
+        // return the resulting list
+        return allChildrenList;
+    }
 
     public String getName() {
         return name;
@@ -49,8 +66,10 @@ public class ExperimentBean implements Experiment {
     }
 
     public DataSet getParent() {
-        return null;
+        return this.parent;
     }
+
+    public void setParent(DataSet parent) {this.parent = parent;}
 
     public List<SampleGroup> getSampleGroups() {
         if (this.sampleGroupList == null) {
@@ -60,6 +79,7 @@ public class ExperimentBean implements Experiment {
         return sampleGroupList;
     }
 
+
     /**
      * implement the visitor pattern
      *
@@ -68,8 +88,10 @@ public class ExperimentBean implements Experiment {
     public void acceptVisitor(DataSetVisitor visitor) {
         visitor.visit(this);
 
+        /*
         for (SampleGroup sampleGroup: this.getSampleGroups()) {
             sampleGroup.acceptVisitor(visitor);
         }
+        */
     }
 }

@@ -21,6 +21,24 @@ public class SampleGroupBean implements SampleGroup {
     private DataSet parent;
     private String systemId;
 
+    /**
+     * return a list of all the object's dataset children
+     *
+     * @return
+     */
+    public List<DataSet> getAllChildren() {
+        // local variable
+        List<DataSet> allChildrenList = new ArrayList<DataSet>();
+
+        // add all children lists
+        allChildrenList.addAll(this.getSampleGroups());
+        allChildrenList.addAll(this.getPhenotypes());
+        allChildrenList.addAll(this.getProperties());
+
+        // return the resulting list
+        return allChildrenList;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -38,14 +56,14 @@ public class SampleGroupBean implements SampleGroup {
     }
 
     public String getId() {
-        return (this.parent == null ? "" : this.parent.getId()) + this.getId();
+        return (this.parent == null ? "" : this.parent.getId()) + this.systemId;
     }
 
     public DataSet getParent() {
         return this.parent;
     }
 
-    public List<SampleGroup> getChildren() {
+    public List<SampleGroup> getSampleGroups() {
         if (this.sampleGroupList == null) {
             this.sampleGroupList = new ArrayList<SampleGroup>();
         }
@@ -60,7 +78,7 @@ public class SampleGroupBean implements SampleGroup {
     public List<SampleGroup> getRecursiveChildren() {
         // create a new list from the direct children
         List<SampleGroup> tempList = new ArrayList<SampleGroup>();
-        tempList.addAll(this.getChildren());
+        tempList.addAll(this.getSampleGroups());
 
         // add in the children's children
         for (SampleGroup sampleGroup : this.sampleGroupList) {
@@ -118,6 +136,7 @@ public class SampleGroupBean implements SampleGroup {
     public void acceptVisitor(DataSetVisitor visitor) {
         visitor.visit(this);
 
+        /*
         for (Property property: this.getProperties()) {
             property.acceptVisitor(visitor);
         }
@@ -126,9 +145,10 @@ public class SampleGroupBean implements SampleGroup {
             phenotype.acceptVisitor(visitor);
         }
 
-        for (SampleGroup group: this.getChildren()) {
+        for (SampleGroup group: this.getSampleGroups()) {
             group.acceptVisitor(visitor);
         }
+        */
     }
 
     public String getSystemId() {

@@ -3,6 +3,9 @@ package org.broadinstitute.mpg.diabetes.metadata;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.DataSetVisitor;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class to represent the metadata properties
  *
@@ -14,6 +17,16 @@ public class PropertyBean implements Property {
     private int sortOrder;
     private boolean searchable;
     private DataSet parent;
+
+    /**
+     * return a list of all the object's dataset children
+     *
+     * @return
+     */
+    public List<DataSet> getAllChildren() {
+        // return the resulting list (empty list)
+        return new ArrayList<DataSet>();
+    }
 
     public void setParent(DataSet parent) {
         this.parent = parent;
@@ -38,7 +51,7 @@ public class PropertyBean implements Property {
     }
 
     public String getId() {
-        return (this.parent == null ? "" : this.parent.getId()) + this.getId();
+        return (this.parent == null ? "" : this.parent.getId()) + this.name;
     }
 
     public DataSet getParent() {

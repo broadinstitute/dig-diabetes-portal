@@ -15,6 +15,23 @@ public class MetaDataRootBean implements MetaDataRoot {
     private List<Experiment> experimentList;
     private List<Property> propertyList;
 
+    /**
+     * return a list of all the object's dataset children
+     *
+     * @return
+     */
+    public List<DataSet> getAllChildren() {
+        // local variable
+        List<DataSet> allChildrenList = new ArrayList<DataSet>();
+
+        // add all children lists
+        allChildrenList.addAll(this.getExperiments());
+        allChildrenList.addAll(this.getProperties());
+
+        // return the resulting list
+        return allChildrenList;
+    }
+
     public List<Experiment> getExperiments() {
         if (this.experimentList == null) {
             this.experimentList = new ArrayList<Experiment>();
@@ -46,6 +63,7 @@ public class MetaDataRootBean implements MetaDataRoot {
     public void acceptVisitor(DataSetVisitor visitor) {
         visitor.visit(this);
 
+        /*
         for (Experiment experiment: this.getExperiments()) {
             experiment.acceptVisitor(visitor);
         }
@@ -53,6 +71,7 @@ public class MetaDataRootBean implements MetaDataRoot {
         for (Property property: this.getProperties()) {
             property.acceptVisitor(visitor);
         }
+        */
     }
 
     public String getName() {

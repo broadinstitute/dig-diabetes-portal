@@ -2,7 +2,9 @@ package org.broadinstitute.mpg.diabetes.metadata.parser;
 
 import org.broadinstitute.mpg.diabetes.metadata.*;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeNameVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupByIdSelectingVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupForPhenotypeVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchablePropertyVisitor;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
 import org.codehaus.groovy.grails.web.json.JSONArray;
@@ -10,7 +12,6 @@ import org.codehaus.groovy.grails.web.json.JSONException;
 import org.codehaus.groovy.grails.web.json.JSONObject;
 import org.codehaus.groovy.grails.web.json.JSONTokener;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -104,7 +105,7 @@ public class JsonParser {
             rootJson = new JSONObject(tokener);
 
             // parse the experiments
-            this.parseExperiments(metaDataBean.getExperiments(), rootJson);
+            this.parseExperiments(metaDataBean.getExperiments(), rootJson, metaDataBean);
 
             // parse the common properties
             // get the sub properties
@@ -169,7 +170,7 @@ public class JsonParser {
      * @param experimentList                a not null experiment list
      * @throws PortalException              if there are any errors
      */
-    protected void parseExperiments(List<Experiment> experimentList, JSONObject rootJson) throws PortalException {
+    protected void parseExperiments(List<Experiment> experimentList, JSONObject rootJson, DataSet parent) throws PortalException {
         // local variables
         JSONObject tempJson;
         JSONArray experimentArray, dataSetArray;
@@ -190,12 +191,13 @@ public class JsonParser {
                 experiment.setTechnology(tempJson.getString(PortalConstants.JSON_TECHNOLOGY_KEY));
                 experiment.setVersion(tempJson.getString(PortalConstants.JSON_VERSION_KEY));
                 experimentList.add(experiment);
+                experiment.setParent(parent);
 
                 // look for sample groups
                 dataSetArray = tempJson.getJSONArray(PortalConstants.JSON_DATASETS_KEY);
                 for (int j = 0; j < dataSetArray.length(); j++) {
                     // for each dataset, create a dataset object and add to experiment
-                    sampleGroup = this.createDataSetFromJson(dataSetArray.getJSONObject(j), experiment);
+                    sampleGroup = this.createSampleGroupFromJson(dataSetArray.getJSONObject(j), experiment);
                     experiment.getSampleGroups().add(sampleGroup);
                 }
             }
@@ -213,7 +215,7 @@ public class JsonParser {
      * @return
      * @throws PortalException
      */
-    protected SampleGroup createDataSetFromJson(JSONObject jsonObject, DataSet parent) throws PortalException {
+    protected SampleGroup createSampleGroupFromJson(JSONObject jsonObject, DataSet parent) throws PortalException {
         // local variables
         SampleGroupBean sampleGroup = new SampleGroupBean();
         JSONArray tempArray;
@@ -245,8 +247,8 @@ public class JsonParser {
             // recursively add in any other child sample groups
             tempArray = jsonObject.getJSONArray(PortalConstants.JSON_DATASETS_KEY);
             for (int i = 0; i < tempArray.length(); i++) {
-                tempSampleGroup = this.createDataSetFromJson(tempArray.getJSONObject(i), sampleGroup);
-                sampleGroup.getChildren().add(tempSampleGroup);
+                tempSampleGroup = this.createSampleGroupFromJson(tempArray.getJSONObject(i), sampleGroup);
+                sampleGroup.getSampleGroups().add(tempSampleGroup);
             }
 
         } catch (JSONException exception) {
@@ -267,11 +269,20 @@ public class JsonParser {
     protected Property createPropertyFromJson(JSONObject jsonObject, DataSet parent) throws PortalException {
         // local variables
         PropertyBean property = new PropertyBean();
+        String tempJsonValue;
 
         // get values and put in new object
         try {
             property.setName(jsonObject.getString(PortalConstants.JSON_NAME_KEY));
             property.setVariableType(jsonObject.getString(PortalConstants.JSON_TYPE_KEY));
+            tempJsonValue = jsonObject.getString(PortalConstants.JSON_SEARCHABLE_KEY);
+            if (tempJsonValue != null) {
+                property.setSearchable(Boolean.valueOf(tempJsonValue));
+            }
+            tempJsonValue = jsonObject.getString(PortalConstants.JSON_SORT_ORDER_KEY);
+            if (tempJsonValue != null) {
+                property.setSortOrder(Integer.valueOf(tempJsonValue));
+            }
             property.setParent(parent);
 
         } catch (JSONException exception) {
@@ -308,7 +319,7 @@ public class JsonParser {
             }
 
         } catch (JSONException exception) {
-            throw new PortalException("Got phenotype parsign error: " + exception.getMessage());
+            throw new PortalException("Got phenotype parsing error: " + exception.getMessage());
         }
 
         return phenotype;
@@ -336,6 +347,42 @@ public class JsonParser {
         // sort and return
         Collections.sort(sampleGroupNameList);
         return sampleGroupNameList;
+    }
+
+    /**
+     * returns the list of searchable properties for a given sample group id
+     *
+     * @param sampleGroupId
+     * @return
+     * @throws PortalException
+     */
+    public List<Property> getSearchablePropertiesForSampleGroupId(String sampleGroupId) throws PortalException {
+        // local variables
+        List<Property> propertyList = new ArrayList<Property>();
+        SampleGroup sampleGroup;
+
+        // find the sample group
+        // create the visitor
+        SampleGroupByIdSelectingVisitor finderVisitor = new SampleGroupByIdSelectingVisitor(sampleGroupId);
+
+        // visit the metadata root
+        this.getMetaDataRoot().acceptVisitor(finderVisitor);
+        sampleGroup = finderVisitor.getSampleGroup();
+
+        // get the list of searchable properties for the sample group
+        if (sampleGroup != null) {
+            // create new searchable property visitor
+           SearchablePropertyVisitor propertyVisitor = new SearchablePropertyVisitor();
+
+            // visit the sample group
+            sampleGroup.acceptVisitor(propertyVisitor);
+
+            // get the list back
+            propertyList = propertyVisitor.getPropertyList();
+        }
+
+        // return the list
+        return propertyList;
     }
 
     /*

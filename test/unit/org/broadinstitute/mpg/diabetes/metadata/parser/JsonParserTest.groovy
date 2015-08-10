@@ -3,6 +3,8 @@ package org.broadinstitute.mpg.diabetes.metadata.parser
 import org.broadinstitute.mpg.diabetes.metadata.DataSet
 import org.broadinstitute.mpg.diabetes.metadata.Experiment
 import org.broadinstitute.mpg.diabetes.metadata.MetaDataRoot
+import org.broadinstitute.mpg.diabetes.metadata.MetaDataRootBean
+import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.web.json.JSONException
@@ -40,6 +42,7 @@ class JsonParserTest extends GroovyTestCase {
         String simpleJsonString = "{\"experiments\": []}";
         JSONTokener tokener;
         JSONObject rootJson = null;
+        MetaDataRootBean metaDataRootBean = new MetaDataRootBean();
 
         // get the json strong to test
         try {
@@ -54,7 +57,7 @@ class JsonParserTest extends GroovyTestCase {
 
         // parse the experiments
         try {
-            this.jsonParser.parseExperiments(experimentList, rootJson);
+            this.jsonParser.parseExperiments(experimentList, rootJson, metaDataRootBean);
 
         } catch (PortalException exception) {
             fail("got json parsing exception: " + exception.getMessage());
@@ -73,11 +76,11 @@ class JsonParserTest extends GroovyTestCase {
         // test the grandchildren datasets
         SampleGroup sampleGroup = experiment.getSampleGroups().get(0);
         assertNotNull(sampleGroup);
-        assertTrue(sampleGroup.getChildren().size() > 0);
-        assertTrue(sampleGroup.getRecursiveChildren().size() > sampleGroup.getChildren().size());
+        assertTrue(sampleGroup.getSampleGroups().size() > 0);
+        assertTrue(sampleGroup.getRecursiveChildren().size() > sampleGroup.getSampleGroups().size());
 
         // get first child of sampe group; make sure it has parent
-        DataSet firstChild = sampleGroup.getChildren().get(0);
+        DataSet firstChild = sampleGroup.getSampleGroups().get(0);
         assertNotNull(firstChild);
         assertNotNull(firstChild.getParent());
 
@@ -153,8 +156,24 @@ class JsonParserTest extends GroovyTestCase {
         assertEquals(13, metaData.getProperties().size());
     }
 
+    /**
+     * test for the search for the searchable property list for a sample group id
+     *
+     */
+    @Test
+    public void testGetSearchablePropertiesForSampleGroupId() {
+        // local variables
+        String sampleGroupId = "ExSeq_13k_hs_genes_mdv1";
+        List<Property> propertyList;
 
+        // search for the searchable properties
+        propertyList = this.jsonParser.getSearchablePropertiesForSampleGroupId(sampleGroupId);
 
+        // test
+        assertNotNull(propertyList);
+        assertTrue(propertyList.size() > 0);
+        assertEquals(4, propertyList.size());
+    }
 
 
 }

@@ -44,6 +44,11 @@ public class SampleGroupForPhenotypeVisitor implements DataSetVisitor {
             }
        }
 
+        for (DataSet child : dataSet.getAllChildren()) {
+            child.acceptVisitor(this);
+        }
+
+
     }
 
     public List<String> getSampleGroupNameList() {
