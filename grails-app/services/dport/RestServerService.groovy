@@ -1576,6 +1576,33 @@ ${customFilterSet}""".toString()
         }
         return dataSetId
     }
+    private String generalizedAncestryDataSet (String ethnicity){
+        String dataSetId = ""
+        switch (ethnicity){
+            case "HS":
+                dataSetId = "hs"
+                break;
+            case "AA":
+                dataSetId = "aa"
+                break;
+            case "EA":
+                dataSetId = "ea"
+                break;
+            case "SA":
+                dataSetId = "sa"
+                break;
+            case "EU":
+                dataSetId = "eu"
+                break;
+            case "chipEu":
+                dataSetId = "exchp"
+                break;
+            default:
+                log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
+                dataSetId = EXOMESEQ_AA
+        }
+        return dataSetId
+    }
 
 
 
@@ -1584,25 +1611,32 @@ ${customFilterSet}""".toString()
         String dataSetId = ""
         String minimumMaf = 0
         String maximumMaf = 1
+        String codeForMafSlice = ""
+        String codeForEthnicity = generalizedAncestryDataSet ( ethnicity)
         dataSetId = ancestryDataSet ( ethnicity)
         switch (cellNumber){
             case 0:
+                codeForMafSlice = "total"
                 minimumMaf = "0"
                 maximumMaf = "1"
                 break;
             case 1:
+                codeForMafSlice = "total"
                 minimumMaf = "0"
                 maximumMaf = "1"
                 break;
             case 2:
+                codeForMafSlice = "common"
                 minimumMaf = "0.05"
                 maximumMaf = "1"
                 break;
             case 3:
+                codeForMafSlice = "lowfreq"
                 minimumMaf = "0.0005"
                 maximumMaf = "0.05"
                 break;
             case 4:
+                codeForMafSlice = "rare"
                 minimumMaf = "0.00000000000001"
                 maximumMaf = "0.0005"
                 break;
@@ -1610,6 +1644,8 @@ ${customFilterSet}""".toString()
                 log.error("Trouble: user requested cell number = ${cellNumber} which I don't recognize")
                 dataSetId = EXOMESEQ_AA
         }
+        List <String> filterList= filterManagementService.retrieveFilters(geneName,"","","","${codeForMafSlice}-${codeForEthnicity}")
+        String packagedFilters = sharedToolsService.packageUpEncodedParameters(filterList)
         String jsonVariantCountByGeneAndMaf = """
 {
 	"passback": "123abc",
