@@ -33,7 +33,6 @@ class FilterManagementServiceUnitSpec extends Specification {
         then:
         resultMap.containsValue("SLC30A8")
         resultMap.containsValue("lessThan_noEffectNoncoding")
-        resultMap.containsKey("datatype")
     }
 }
 

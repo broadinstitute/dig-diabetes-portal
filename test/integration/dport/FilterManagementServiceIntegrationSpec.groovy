@@ -65,7 +65,6 @@ class FilterManagementServiceIntegrationSpec  extends IntegrationSpec {
         "gwas"      |   'gwas'              |  "GWAS"
         "sigma"     |   'sigma'             |  "SIGMA"
         "exomeseq"  |   'exomeseq'          |  "Exome sequencing"
-        "exomechip" | 'exomechip'           |  "Exome chip"
     }
 
 

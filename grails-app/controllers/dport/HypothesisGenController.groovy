@@ -112,23 +112,6 @@ class HypothesisGenController {
 
 
 
-    /***
-     * a variant display table is on screen and the page is now asking for data. Perform the search.  This call retrieves the data
-     * for the original page format call -> variantSearchRequest
-     * @return                                                                                         to
-     */
-    def variantDbtSearchAjax() {
-        String filtersRaw = params['keys']
-        String filters = URLDecoder.decode(filtersRaw)
-        log.debug "variantSearch variantSearchAjax = ${filters}"
-        JSONObject jsonObject = restServerService.searchGenomicRegionByCustomFilters(filters)
-        render(status: 200, contentType: "application/json") {
-            [variants: jsonObject['variants']]
-        }
-    }
-
-
-
 
 
     /***

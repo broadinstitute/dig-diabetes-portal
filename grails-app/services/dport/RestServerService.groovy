@@ -106,19 +106,8 @@ class RestServerService {
     ]
 
 
-    static List<String> EXSEQ_VARIANT_COLUMNS = EXSEQ_VARIANT_SEARCH_COLUMNS + [
-            '_13k_T2D_HET_ETHNICITIES',
-            '_13k_T2D_HET_CARRIERS',
-            '_13k_T2D_HETA',
-            '_13k_T2D_HETU',
-            '_13k_T2D_HOM_ETHNICITIES',
-            '_13k_T2D_HOM_CARRIERS',
-            '_13k_T2D_HOMA',
-            '_13k_T2D_HOMU',
-            '_13k_T2D_OBSA',
-            '_13k_T2D_OBSU',
-    ]
 
+   // okay
     static List<String> GENE_COLUMNS = [
             'ID',
             'CHROM',
@@ -127,7 +116,7 @@ class RestServerService {
             'Function_description',
     ]
 
-
+    //okay
     static List<String> EXSEQ_GENE_COLUMNS = [
             '_13k_T2D_VAR_TOTAL',
             '_13k_T2D_ORIGIN_VAR_TOTALS',
@@ -141,7 +130,7 @@ class RestServerService {
             '_17k_T2D_lof_OBSU'
     ]
 
-
+    //okay
     static List<String> EXCHP_GENE_COLUMNS = [
             'EXCHP_T2D_VAR_TOTALS',
             'EXCHP_T2D_GWS_TOTAL',
@@ -149,7 +138,7 @@ class RestServerService {
             'EXCHP_T2D_NOM_TOTAL',
     ]
 
-
+    // okay
     static List<String> GWAS_GENE_COLUMNS = [
             'GWS_TRAITS',
             'GWAS_T2D_GWS_TOTAL',
@@ -158,11 +147,6 @@ class RestServerService {
             'GWAS_T2D_VAR_TOTAL',
     ]
 
-
-    // Did these old lines of Python do anything? Not that I can tell so far
-    static List<String> VARIANT_COLUMNS = VARIANT_SEARCH_COLUMNS
-    static List<String> EXCHP_VARIANT_COLUMNS = EXCHP_VARIANT_SEARCH_COLUMNS
-    static List<String> GWAS_VARIANT_COLUMNS = GWAS_VARIANT_SEARCH_COLUMNS
 
     /***
      * plug together the different collections of column specifications we typically use
@@ -1008,30 +992,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
-    /***
-     * Employ a set of filters to perform a variant search. In practice  I'm using this
-     * when I compose the filter set on the client ( browser), and thereby allow user-specified
-     * filtering on the basis of form.
-     *
-     * @param customFilterSet
-     * @return
-     */
-    JSONObject searchGenomicRegionByCustomFilters (String customFilterSet) {
-        JSONObject returnValue = null
-        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
-        StringBuilder sb = new  StringBuilder ()
-        sb << """{
-"user_group": "ui",
-"filters": [
-${customFilterSet}""".toString()
-//        sb <<   generateDataRestrictionFilters ()
-        sb << """],
-"columns": [${"\""+getVariantSearchColumns ().join("\",\"")+"\""}]
-}
-""".toString()
-        returnValue = postRestCall( sb.toString(), VARIANT_SEARCH_URL)
-        return returnValue
-    }
+
 
     /***
      * Take a string specifying a region in the form ->  "chr9:21,940,000-22,190,000"
@@ -1664,10 +1625,7 @@ ${customFilterSet}""".toString()
                          }
                 	},
 	"filters":	[
-        			{"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${geneName}", "operand_type": "STRING"},
-                	{"dataset_id": "${dataSetId}", "phenotype": "blah", "operand": "MAF", "operator": "GT", "value": ${minimumMaf}, "operand_type": "FLOAT"},
-                    {"dataset_id": "${dataSetId}", "phenotype": "blah", "operand": "MAF", "operator": "LTE", "value": ${maximumMaf}, "operand_type": "FLOAT"},
-                    {"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "LT", "value": 4, "operand_type": "FLOAT"}
+	              ${packagedFilters}
             	]
 }
 """.toString()
@@ -1695,10 +1653,7 @@ ${retrieveParticipantCount}
                          }
                 	},
 	"filters":	[
-        			{"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "${geneName}", "operand_type": "STRING"},
-                	{"dataset_id": "${dataSetId}", "phenotype": "blah", "operand": "MAF", "operator": "GT", "value": ${minimumMaf}, "operand_type": "FLOAT"},
-                    {"dataset_id": "${dataSetId}", "phenotype": "blah", "operand": "MAF", "operator": "LTE", "value": ${maximumMaf}, "operand_type": "FLOAT"},
-                    {"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "LT", "value": 4, "operand_type": "FLOAT"}
+                ${packagedFilters}
             	]
 }
 """.toString()

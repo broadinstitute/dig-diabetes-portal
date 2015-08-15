@@ -507,7 +507,7 @@ class FilterManagementService {
                              break;
                      }
                  } else {   // we have ethnicity data
-                     developingParameterCollection['datatype']  = 'exomeseq'
+//                     developingParameterCollection['datatype']  = 'exomeseq'
                      String baseEthnicityMarker =  "ethnicity_af_"+ ethnicity  + "-"
                      switch ( requestPortionList[0]){
                          case "total":
@@ -728,16 +728,16 @@ class FilterManagementService {
                     transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<${significance}".toString()
                     break;
                 case  3:
-                    datatypeOperand = exomeChipPValue
-                    filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,significance,dataSetSpecifier)
-                    if (significance == 1){
-                        filterDescriptions << "Exome chip p-value for association with T2D is not null".toString()
-                    }else {
-                        filterDescriptions << "Exome chip p-value for association with T2D is less than or equal to ${significance}".toString()
-                    }
-                    parameterEncoding << "2:2".toString()
-                    parameterEncoding << "3:${significance}".toString()
-                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<${significance}".toString()
+//                    datatypeOperand = exomeChipPValue
+//                    filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,significance,dataSetSpecifier)
+//                    if (significance == 1){
+//                        filterDescriptions << "Exome chip p-value for association with T2D is not null".toString()
+//                    }else {
+//                        filterDescriptions << "Exome chip p-value for association with T2D is less than or equal to ${significance}".toString()
+//                    }
+//                    parameterEncoding << "2:2".toString()
+//                    parameterEncoding << "3:${significance}".toString()
+//                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<${significance}".toString()
                     break;
                 default:
                     log.error("FilterManagementService.determineDataSet: unexpected dataSetDistinguisher = ${dataSetDistinguisher}")
