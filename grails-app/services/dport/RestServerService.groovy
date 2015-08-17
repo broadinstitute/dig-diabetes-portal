@@ -1,5 +1,6 @@
 package dport
 
+import dport.meta.UserQueryContext
 import grails.plugins.rest.client.RestBuilder
 import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
@@ -31,7 +32,6 @@ class RestServerService {
     private String BASE_URL = ""
     private String GENE_INFO_URL = "gene-info"
     private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out, but used for (inefficiently) obtaining gene list.
-    private String VARIANT_SEARCH_URL = "variant-search" // TODO: Wipe out
     private String TRAIT_SEARCH_URL = "trait-search" // TODO: Wipe out
     private String METADATA_URL = "getMetadata"
     private String GET_DATA_URL = "getData"
@@ -276,16 +276,6 @@ class RestServerService {
                 uppercaseVariantName
             }", "operand_type": "STRING"}"""
         } else {
-//            List<String> variantNamePieces = variantName.tokenize('_')
-//            if (variantNamePieces.size() > 2) {
-//                returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "EQ", "value": "${
-//                    variantNamePieces[0]
-//                }", "operand_type": "STRING"},
-//                      {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "EQ", "value": ${
-//                    variantNamePieces[1]
-//                }, "operand_type": "INTEGER"}
-//""".toString()
-//            }
             returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${
                 uppercaseVariantName
             }", "operand_type": "STRING"}"""
@@ -401,54 +391,7 @@ class RestServerService {
         return inputJson
     }
 
-    private String regionSearch(String chromosomeNumber, String extentBegin, String extentEnd) {
-        String inputJson = """
-{
-    "passback": "123abc",
-    "entity": "variant",
-    "page_number": 50,
-    "page_size": 100,
-    "limit": 1000,
-    "count": false,
-    "properties":    {
-                           "cproperty": ["VAR_ID", "CHROM", "POS","DBSNP_ID","CLOSEST_GENE","GENE","IN_GENE","Protein_change","Consequence"],
-                          "orderBy":    ["CHROM"],
-                          "dproperty":    {
-
-                                            "MAF" : ["${EXOMESEQ_SA}",
-                                                      "${EXOMESEQ_HS}",
-                                                      "${EXOMESEQ_EA}",
-                                                      "${EXOMESEQ_AA}",
-                                                      "${EXOMESEQ_EU}",
-                                                      "${EXOMECHIP}"
-                                                    ]
-                                        },
-                        "pproperty":    {
-                                             "P_VALUE":    {
-                                                                       "${GWASDIAGRAM}": ["T2D"],
-                                                                    "${EXOMECHIP}": ["T2D"]
-                                                                   },
-                          "ODDS_RATIO": { "${GWASDIAGRAM}": ["T2D"],
-                                                  "${EXOMECHIP}": ["T2D"]},
-                          "OR_FIRTH_FE_IV":{"${EXOMESEQ}": ["T2D"]},
-                          "P_FIRTH_FE_IV":    { "${EXOMESEQ}": ["T2D"]},
-                           "OBSA":  { "${EXOMESEQ}": ["T2D"]},
-                           "OBSU":  { "${EXOMESEQ}": ["T2D"]},
-                          "MINA":    { "${EXOMESEQ}": ["T2D"]},
-                          "MINU":    { "${EXOMESEQ}": ["T2D"]}
-                        }
-                    },
-    "filters":    [
-                    {"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "EQ", "value": "${chromosomeNumber}", "operand_type": "STRING"},
-                    {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "LTE", "value": ${extentEnd}, "operand_type": "INTEGER"},
-                    {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "GTE", "value": ${extentBegin}, "operand_type": "INTEGER"}
-                ]
-}""".toString()
-        return inputJson
-    }
-
-
-    private List<String> getVariantSearchColumns() {
+  private List<String> getVariantSearchColumns() {
         return VARIANT_SEARCH_COLUMNS + EXSEQ_VARIANT_SEARCH_COLUMNS + EXCHP_VARIANT_SEARCH_COLUMNS + GWAS_VARIANT_SEARCH_COLUMNS
     }
 
@@ -680,16 +623,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
-    private JSONObject postRestCallBurden(String drivingJson, String targetUrl) {
-        return postRestCallBase(drivingJson, targetUrl, DBT_URL)
-    }
-
-
-    private JSONObject postRestCallExperimental(String drivingJson, String targetUrl) {
-        return postRestCallBase(drivingJson, targetUrl, EXPERIMENTAL_URL)
-    }
-
-
     private JSONObject postRestCall(String drivingJson, String targetUrl) {
         return postRestCallBase(drivingJson, targetUrl, currentRestServer())
     }
@@ -745,72 +678,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         println 'meta-data retrieved'
     }
 
-
-
-
-
-
-    JSONObject pseudoRetrieveDatasets (List <String> sampleGroupList,
-                                       List <String> experimentList) {
-        JSONObject result
-        if ((sampleGroupList) &&
-                (sampleGroupList.size()>0)){
-            String magic = """
-{"is_error": false,
- "numRecords":1,
- "dataset":["MAGIC 2014"]
-}""".toString()
-            String t2d = """
-{"is_error": false,
- "numRecords":4,
- "dataset":["exome sequence: 26K","exome sequence: 13K","exome array","DIAGRAM GWAS"]
-}""".toString()
-            String giant = """
-{"is_error": false,
- "numRecords":1,
- "dataset":["GIANT 2014"]
-}""".toString()
-            String glgc = """
-{"is_error": false,
- "numRecords":1,
- "dataset":["GLGC 2011"]
-}""".toString()
-            String retval = ''
-            switch (sampleGroupList[0]) {
-                case 'T2D': retval = t2d; break;
-                case '2hrG': retval = magic; break;
-                case '2hrI': retval = magic; break;
-                case 'ProIns': retval = magic; break;
-                case '2hrGLU_BMIAdj': retval = magic; break;
-                case '2hrIns_BMIAdj': retval = magic; break;
-                case 'HOMAIR': retval = magic; break;
-                case 'HOMAB': retval = magic; break;
-                case 'HbA1c': retval = magic; break;
-                case 'BMI': retval = magic; break;
-                case 'WHR': retval = giant; break;
-                case 'Height': retval = giant; break;
-                case 'TC': retval = glgc; break;
-                case 'HDL': retval = glgc; break;
-                case 'CHOL': retval = glgc; break;
-                case 'TG': retval = glgc; break;
-                case 'CAD': retval = giant; break;
-                case 'CKD': retval = giant; break;
-                case 'eGFRcrea': retval = giant; break;
-                case 'eGFRcys': retval = giant; break;
-                case 'UACR': retval = giant; break;
-                case 'MA': retval = giant; break;
-                case 'BIP': retval = giant; break;
-                case 'SCZ': retval = giant; break;
-                case 'MDD': retval = giant; break;
-                default: retval = magic; break;
-            }
-
-
-            def slurper = new JsonSlurper()
-            result = slurper.parseText(retval)
-        }
-        return result
-    }
 
 
 
@@ -874,32 +741,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return sb.toString()
     }
 
-//    { "filter_type": "STRING", "operand": "IN_EXCHIP",  "operator": "EQ","value": "1"  },
-//    { "filter_type": "STRING", "operand": "IN_GWAS",  "operator": "EQ","value": "1"  }
-
-
-
-    String generateRangeFilters (String chromosome,
-                                 String beginSearch,
-                                 String endSearch,
-                                 Boolean dataRestriction)    {
-        StringBuilder sb = new  StringBuilder ()
-        sb << """[
-                   { "filter_type": "STRING", "operand": "CHROM",  "operator": "EQ","value": "${chromosome}"  },
-                   {"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": ${beginSearch} },
-                   {"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": ${endSearch} }""".toString()
-        if (dataRestriction) {
-            sb <<   generateDataRestrictionFilters ()
-        }
-        sb << """
-]""".toString()
-        return sb.toString()
-    }
-
-
-
-
-
 
 
     String generateRangeFiltersPValueRestriction (String chromosome,
@@ -925,28 +766,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return sb.toString()
     }
 
-
-
-
-
-
-
-
-    /***
-     * Variant search on the basis of chromosome, start position, and end position.
-     *
-     * @param chromosome
-     * @param beginSearch
-     * @param endSearch
-     * @return
-     */
-    JSONObject searchGenomicRegionBySpecifiedRegion (String chromosome,
-                                                     String beginSearch,
-                                                     String endSearch) {
-        JSONObject returnValue = null
-        returnValue = generateVariantTable( chromosome,beginSearch,endSearch)
-        return returnValue
-    }
 
 
     /***
@@ -1823,120 +1642,6 @@ private String generateProteinEffectJson (String variantName){
 
 
 
-    public JSONObject generateVariantTable(String chromosome,
-                                           String beginSearch,
-                                           String endSearch){//region
-        String attribute = "T2D"
-        def slurper = new JsonSlurper()
-        JSONObject returnValue
-        String jsonSpec = regionSearch(chromosome,beginSearch,endSearch)
-        String apiData = postRestCall(jsonSpec,GET_DATA_URL)
-        JSONObject apiResults = slurper.parseText(apiData)
-        List <Integer> dataSeteList = [1]
-        List <String> pValueList = [1]
-        int numberOfVariants = apiResults.numRecords
-        StringBuilder sb = new StringBuilder ("{\"results\":[")
-        for ( int  j = 0 ; j < numberOfVariants ; j++ ) {
-            sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
-            for ( int  i = 0 ; i < pValueList.size () ; i++ ){
-                if (apiResults.is_error == false) {
-                    if ((apiResults.variants) && (apiResults.variants[j])  && (apiResults.variants[j][0])){
-                        def variant = apiResults.variants[j];
-                        def element = variant["DBSNP_ID"].findAll{it}[0]
-
-                        sb  << "{\"level\":\"DBSNP_ID\",\"count\":\"${element}\"},"
-
-                        element = variant["VAR_ID"].findAll{it}[0]
-
-                        sb  << "{\"level\":\"VAR_ID\",\"count\":\"${element}\"},"
-
-                        element = variant["CHROM"].findAll{it}[0]
-
-                        sb  << "{\"level\":\"CHROM\",\"count\":\"${element}\"},"
-
-                        element = variant["POS"].findAll{it}[0]
-
-                        sb  << "{\"level\":\"POS\",\"count\":${element}},"
-
-                        element = variant["CLOSEST_GENE"].findAll{it}[0]
-
-                        sb  << "{\"level\":\"CLOSEST_GENE\",\"count\":\"${element}\"},"
-
-                        element = variant["Protein_change"].findAll{it}[0]
-
-                        sb  << "{\"level\":\"Protein_change\",\"count\":\"${element}\"},"
-
-                        element = variant["Consequence"].findAll{it}[0]
-
-                        sb  << "{\"level\":\"Consequence\",\"count\":\"${element}\"},"
-
-                        element = variant["P_FIRTH_FE_IV"].findAll{it}[0]
-
-                        sb  << "{\"level\":\"P_FIRTH_FE_IV\",\"count\":${element[EXOMESEQ][attribute]}},"
-
-                        element = variant["OR_FIRTH_FE_IV"].findAll{it}[0]
-
-                        sb  << "{\"level\":\"OR_FIRTH_FE_IV\",\"count\":${element[EXOMESEQ][attribute]}},"
-
-                        element = variant["OBSU"].findAll{it}[0]
-
-                        sb  << "{\"level\":\"OBSU\",\"count\":${element[EXOMESEQ][attribute]}},"
-
-                        element = variant["OBSA"].findAll{it}[0]
-
-                        sb  << "{\"level\":\"OBSA\",\"count\":${element[EXOMESEQ][attribute]}},"
-
-                        element = variant["MINA"].findAll{it}[0]
-
-                        sb  << "{\"level\":\"MINA\",\"count\":${element[EXOMESEQ][attribute]}},"
-
-                        element = variant["MINU"].findAll{it}[0]
-
-                        sb  << "{\"level\":\"MINU\",\"count\":${element[EXOMESEQ][attribute]}},"
-
-                        element = variant["MAF"].findAll{it}[0]
-
-                        sb  << "{\"level\":\"AA\",\"count\":${element[EXOMESEQ_AA]}},"
-                        sb  << "{\"level\":\"HS\",\"count\":${element[EXOMESEQ_HS]}},"
-                        sb  << "{\"level\":\"EA\",\"count\":${element[EXOMESEQ_EA]}},"
-                        sb  << "{\"level\":\"SA\",\"count\":${element[EXOMESEQ_SA]}},"
-                        sb  << "{\"level\":\"EUseq\",\"count\":${element[EXOMESEQ_EU]}},"
-                        sb  << "{\"level\":\"Euchip\",\"count\":${element[EXOMECHIP]}},"
-
-                        element = variant["P_VALUE"].findAll{it}[0]
-
-                        sb  << "{\"level\":\"EXCHP_T2D_P_value\",\"count\":${element[EXOMECHIP][attribute]}},"
-
-                       // element = variant["BETA"].findAll{it}[0]
-                        element = variant["${ORCHIP}"].findAll{it}[0]
-
-                        sb  << "{\"level\":\"EXCHP_T2D_BETA\",\"count\":${element[EXOMECHIP][attribute]}},"
-
-                        element = variant["P_VALUE"].findAll{it}[0]
-
-                        sb  << "{\"level\":\"GWAS_T2D_PVALUE\",\"count\":${element[GWASDIAGRAM][attribute]}},"
-
-                        element = variant["ODDS_RATIO"].findAll{it}[0]
-
-                        sb  << "{\"level\":\"GWAS_T2D_OR\",\"count\":${element[GWASDIAGRAM][attribute]}}"
-
-                    }
-                }
-                if (i<pValueList.size ()-1){
-                    sb  << ","
-                }
-            }
-            sb  << "]}"
-            if (j<numberOfVariants-1){
-                sb  << ","
-            }
-        }
-        sb  << "]}"
-        returnValue = slurper.parseText(sb.toString())
-        return returnValue
-    }
-
-
 // Add in the additionally requested properties
     private List<String> expandPropertyList(List<String> propertiesToFetch, LinkedHashMap requestedProperties){
         if (requestedProperties){
@@ -2272,7 +1977,11 @@ private String generateProteinEffectJson (String variantName){
         if (orValue.length()>0){
             propertyRequest = """ "${orValue}":   {"${dataSet}": ["${phenotypeName}"]  },"""
         }
-         String jsonSpec = """
+        List <UserQueryContext> userQueryContextList = []
+        userQueryContextList << new UserQueryContext([propertyCategory:"PVALUE_LTE", phenotype:phenotypeName,sampleGroup: "custom",customSampleGroup:dataSet, value:maximumPValue.toString()])
+        userQueryContextList << new UserQueryContext([propertyCategory:"PVALUE_GTE", phenotype:phenotypeName,sampleGroup: "custom",customSampleGroup:dataSet, value:minimumPValue.toString()])
+        String filters = filterManagementService.generateMultipleFilters(userQueryContextList)
+        String jsonSpec = """
 {
         "passback": "123abc",
         "entity": "variant",
@@ -2293,13 +2002,10 @@ private String generateProteinEffectJson (String variantName){
                                 }
                         },
         "filters":      [
-                                {"dataset_id": "${dataSet}", "phenotype": "${phenotypeName}", "operand": "P_VALUE", "operator": "LTE", "value": ${maximumPValue}, "operand_type": "FLOAT"},
-                                {"dataset_id": "${dataSet}", "phenotype": "${phenotypeName}", "operand": "P_VALUE", "operator": "GTE", "value": ${minimumPValue}, "operand_type": "FLOAT"}
-
+                  ${filters}
         ]
 }
 """.toString()
-        return jsonSpec
     }
 
 

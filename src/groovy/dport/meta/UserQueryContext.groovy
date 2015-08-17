@@ -21,6 +21,7 @@ class UserQueryContext {
 
     String technology = ""
     String sampleGroup = ""
+    String customSampleGroup = ""
     String version = ""
     String ancestry = ""
     String value = "1"
@@ -39,6 +40,7 @@ class UserQueryContext {
             case "sigma": returnValue = sigmaData; break;
             case "exomeseq": returnValue = exomeSequence; break;
             case "exomechip": returnValue = exomeChip; break;
+            case "custom": returnValue = customSampleGroup; break;
             default:
                 returnValue = "blah";
                 break;
@@ -53,11 +55,14 @@ class UserQueryContext {
         String returnValue
         switch (propertyCategory){
             case "PVALUE":
+            case "PVALUE_LTE":
+            case "PVALUE_GTE":
                 switch (this.sampleGroup) {
                     case "gwas": returnValue = "P_VALUE"; break;
                     case "sigma": returnValue = "P_VALUE"; break;
                     case "exomeseq": returnValue = "P_FIRTH_FE_IV"; break;
                     case "exomechip": returnValue = "P_VALUE"; break;
+                    case "custom": returnValue = "P_VALUE"; break;
                     default:
                         log.error("unknown getOperand sampleGroup ${this.sampleGroup}")
                         break;
@@ -83,6 +88,7 @@ class UserQueryContext {
         String returnValue
         switch (propertyCategory){
             case "PVALUE":
+            case "PVALUE_LTE":
             case "POS_LTE":
                 returnValue = "LTE";
                 break;
@@ -91,6 +97,7 @@ class UserQueryContext {
                 returnValue = "EQ";
                 break;
             case "POS_GTE":
+            case "PVALUE_GTE":
                 returnValue = "GTE";
                 break;
             default:
@@ -110,6 +117,8 @@ class UserQueryContext {
                 returnValue = "INTEGER";
                 break;
             case "PVALUE":
+            case "PVALUE_LTE":
+            case "PVALUE_GTE":
                 returnValue = "FLOAT";
                 break;
             case "GENE":

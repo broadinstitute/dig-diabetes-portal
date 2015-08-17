@@ -105,23 +105,6 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
     }
 
 
-
-    void "test retrieveGenomicRegionBySpecifiedRegion"() {
-        when:
-        JSONObject jsonObject = restServerService.searchGenomicRegionBySpecifiedRegion("9","21940000","22190000")
-        then:
-        assert jsonObject
-    }
-
-    void "test retrieveGenomicRegionAsSpecifiedByUsers"() {
-        when:
-        JSONObject jsonObject = restServerService.searchGenomicRegionAsSpecifiedByUsers("chr9:21,940,000-22,190,000")
-        then:
-        assert jsonObject
-    }
-
-
-
     @Unroll("testing  extractNumbersWeNeed with #label")
     void "test extractNumbersWeNeed"() {
 

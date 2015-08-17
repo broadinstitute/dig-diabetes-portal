@@ -61,7 +61,11 @@ class FilterManagementService {
     }
 
 
+    public String generateMultipleFilters (List <UserQueryContext> userQueryContextList){
+        userQueryContextList.collect{userQueryContext->formatFilter (userQueryContext.getDataSetId (),userQueryContext.getPhenotype(),
+                userQueryContext.getOperand (),userQueryContext.getOperator(),userQueryContext.getValue (),userQueryContext.getOperandType())}.join(",")
 
+    }
 
 
     private String filtersForApi(String filterName,
@@ -270,7 +274,7 @@ class FilterManagementService {
      * @param region
      * @return
      */
-  public  List<String> retrieveFilters (  String geneId, String significance,String dataset,String region,String receivedParameters )    {
+  public  List<String> retrieveFilters (  String geneId, String significance,String dataset,String region,String receivedParameters, String customSampleGroup = "" )    {
       Map paramsMap = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters)
       LinkedHashMap<String, String> parsedFilterParameters = parseExtendedVariantSearchParameters(paramsMap,false,[:])
       return  parsedFilterParameters.filters

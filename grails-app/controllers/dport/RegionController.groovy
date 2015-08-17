@@ -38,48 +38,13 @@ class RegionController {
             if (!encounteredErrors){
                 String searchParms = "8=${chromosomeNumber}^9=${startExtent}^10=${endExtent}^11=all-effects^17=T2D[GWAS_DIAGRAM_mdv2]P_VALUE<1^".toString()
                 redirect(controller:'variantSearch',action:'launchAVariantSearch', params: [savedValue0: searchParms])
+                return
             }
 
-//
-//            if (!encounteredErrors){
-//                List<Gene>  geneList = Gene.findAllByChromosome("chr"+chromosomeNumber)
-//                for ( Gene gene in geneList) {
-//                    if (((gene.addrStart>startExtent) &&(gene.addrStart<endExtent)) ||
-//                            ((gene.addrEnd>startExtent) &&(gene.addrEnd<endExtent))) {
-//                        identifiedGenes << gene
-//                    }
-//
-//                }
-//            }
-
         }
 
-
-        List<String> geneNamesToDisplay = []
-        for ( Gene gene in identifiedGenes) {
-            geneNamesToDisplay <<  gene.name1
-        }
-        String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
-        render (view: 'regionInfo',
-                model:[regionSpecification: regionSpecification,
-                       show_gene:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gene),
-                       show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
-                       show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
-                       show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
-                       proteinEffectsList:encodedProteinEffects,
-                       geneNamesToDisplay:geneNamesToDisplay
-                ] )
+        redirect(controller: 'home', action: 'portalHome') //   We should never get here, but in case the previous parsing fails
     }
 
-    def regionAjax() {
-        String regionsSpecification = params.id
-        if (regionsSpecification)  {
-            JSONObject jsonObject =  restServerService.searchGenomicRegionAsSpecifiedByUsers (regionsSpecification)
-            render(status:200, contentType:"application/json") {
-                [variants:jsonObject['results']]
-            }
-
-        }
-     }
 
 }
