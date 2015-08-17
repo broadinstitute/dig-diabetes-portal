@@ -234,10 +234,11 @@ class FilterManagementService {
                                transferableFilter: new ArrayList<String>()]
         }
 
+        // some parameters impact one another.  If you ask about ethnicity then we know that you are looking at Exome sequencing,
+        // and there is no need therefore to designate the data set by stating p < 1
+        Boolean addingDataSetRestrictionsUnnecessary = incomingParameters.any{entry->entry.key =~ "^ethnicity"}
 
-
-
-        buildingFilters = determineDataSet (buildingFilters,incomingParameters)
+        buildingFilters = determineDataSet (buildingFilters,incomingParameters,addingDataSetRestrictionsUnnecessary)
 
         String datatypeOperand = buildingFilters.datatypeOperand
 
@@ -633,7 +634,7 @@ class FilterManagementService {
      * @param incomingParameters
      * @return
      */
-    private  LinkedHashMap determineDataSet (LinkedHashMap  buildingFilters, HashMap incomingParameters){
+    private  LinkedHashMap determineDataSet (LinkedHashMap  buildingFilters, HashMap incomingParameters, Boolean noNewFiltersNecessary){
         List <String> filters =  buildingFilters.filters
         List <String> filterDescriptions =  buildingFilters.filterDescriptions
         List <String> parameterEncoding =  buildingFilters.parameterEncoding
@@ -684,7 +685,8 @@ class FilterManagementService {
 
 
         // datatype: Sigma, exome sequencing, exome chip, or diagram GWAS
-        if  (incomingParameters.containsKey("datatype"))  {      // user has requested a particular data set. Without explicit request what is the default?
+        if  ((incomingParameters.containsKey("datatype")) &&
+                (!noNewFiltersNecessary)){      // user has requested a particular data set. Without explicit request what is the default?
             String dataSetSpecifier = incomingParameters ["datatype"]
             int dataSetDistinguisher =   distinguishBetweenDataSets ( incomingParameters)
 
@@ -728,16 +730,16 @@ class FilterManagementService {
                     transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<${significance}".toString()
                     break;
                 case  3:
-//                    datatypeOperand = exomeChipPValue
-//                    filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,significance,dataSetSpecifier)
-//                    if (significance == 1){
-//                        filterDescriptions << "Exome chip p-value for association with T2D is not null".toString()
-//                    }else {
-//                        filterDescriptions << "Exome chip p-value for association with T2D is less than or equal to ${significance}".toString()
-//                    }
-//                    parameterEncoding << "2:2".toString()
-//                    parameterEncoding << "3:${significance}".toString()
-//                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<${significance}".toString()
+                    datatypeOperand = exomeChipPValue
+                    filters <<  retrieveParameterizedFilterString("setPValueThreshold",datatypeOperand,significance,dataSetSpecifier)
+                    if (significance == 1){
+                        filterDescriptions << "Exome chip p-value for association with T2D is not null".toString()
+                    }else {
+                        filterDescriptions << "Exome chip p-value for association with T2D is less than or equal to ${significance}".toString()
+                    }
+                    parameterEncoding << "2:2".toString()
+                    parameterEncoding << "3:${significance}".toString()
+                    transferableFilter << "47:T2D[${chooseDataSet(dataSetSpecifier)}]${datatypeOperand}<${significance}".toString()
                     break;
                 default:
                     log.error("FilterManagementService.determineDataSet: unexpected dataSetDistinguisher = ${dataSetDistinguisher}")

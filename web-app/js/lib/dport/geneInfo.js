@@ -537,56 +537,58 @@ var mpgSoftware = mpgSoftware || {};
                 }
                 return returnValue;
             }
-                if (ethnicitySequence) {
-                    var ethnicityMap = ethnicitySequence;
-                    for (var ethnicityKey in ethnicityMap) {
-                        if (ethnicityMap.hasOwnProperty(ethnicityKey)) {
-                            var ethnicityRec = ethnicityMap[ethnicityKey];
-                            //not using sing right now
-                            var sing = (ethnicityRec["sing"]) ? (ethnicityRec ["sing"]) : 0;
-                            var rare = (ethnicityRec ["rare"]) ? (ethnicityRec ["rare"]) : 0;
-                            var displayableRare = rare;
-                            var lowFrequency = (ethnicityRec ["lowFrequency"]) ? (ethnicityRec ["lowFrequency"]) : 0;
-                            var common = (ethnicityRec ["common"]) ? (ethnicityRec ["common"]) : 0;
-                            var total = (ethnicityRec ["total"]) ? (ethnicityRec ["total"]) : 0;
-                            var ns = (ethnicityRec ["ns"]) ? (ethnicityRec ["ns"]) : 0;
-                            var ethnicity = chooseAncestryStrings(ethnicityKey, continentalAncestryText, 'sequence');
+            //  directly executed code begins below this line
+            $('#continentalVariationTableBody tr').remove() // start by removing any existing records (since we launched every time the accordion opens)
+            if (ethnicitySequence) {
+                var ethnicityMap = ethnicitySequence;
+                for (var ethnicityKey in ethnicityMap) {
+                    if (ethnicityMap.hasOwnProperty(ethnicityKey)) {
+                        var ethnicityRec = ethnicityMap[ethnicityKey];
+                        //not using sing right now
+                        var sing = (ethnicityRec["sing"]) ? (ethnicityRec ["sing"]) : 0;
+                        var rare = (ethnicityRec ["rare"]) ? (ethnicityRec ["rare"]) : 0;
+                        var displayableRare = rare;
+                        var lowFrequency = (ethnicityRec ["lowFrequency"]) ? (ethnicityRec ["lowFrequency"]) : 0;
+                        var common = (ethnicityRec ["common"]) ? (ethnicityRec ["common"]) : 0;
+                        var total = (ethnicityRec ["total"]) ? (ethnicityRec ["total"]) : 0;
+                        var ns = (ethnicityRec ["ns"]) ? (ethnicityRec ["ns"]) : 0;
+                        var ethnicity = chooseAncestryStrings(ethnicityKey, continentalAncestryText, 'sequence');
+                        $('#continentalVariationTableBody').append('<tr>' +
+                            '<td>' + ethnicity.ancestry +
+                            ethnicity.helpText + '</td>' +
+                            '<td>' + ethnicity.datatype + '</td>' +
+                            '<td>' + ns + '</td>' +
+                            '<td>' + buildAnchorForVariantSearches(total, geneId, 'total-' + mapAncestryToLowercase (ethnicityKey), rootVariantUrl) + '</td>' +
+                            '<td>' + buildAnchorForVariantSearches(common, geneId, 'common-' + mapAncestryToLowercase (ethnicityKey), rootVariantUrl) + '</td>' +
+                            '<td>' + buildAnchorForVariantSearches(lowFrequency, geneId, 'lowfreq-' + mapAncestryToLowercase (ethnicityKey), rootVariantUrl) + '</td>' +
+                            '<td>' + buildAnchorForVariantSearches(displayableRare, geneId, 'rare-' + mapAncestryToLowercase (ethnicityKey), rootVariantUrl) + '</td>' +
+                            '</tr>');
+                    }
+                }
+
+                if (ethnicityChip ) {
+                    var excomeChip = ethnicityChip;
+                    if (excomeChip["EU"]) {
+                        var excomeChipEuropean = excomeChip["EU"];
+                        var ethnicity = chooseAncestryStrings("EU", continentalAncestryText, 'chip');
+                        if (excomeChipEuropean["NS"]||excomeChipEuropean["total"]||excomeChipEuropean["common"]||excomeChipEuropean["lowFrequency"]||excomeChipEuropean["rare"]) {
                             $('#continentalVariationTableBody').append('<tr>' +
                                 '<td>' + ethnicity.ancestry +
                                 ethnicity.helpText + '</td>' +
                                 '<td>' + ethnicity.datatype + '</td>' +
-                                '<td>' + ns + '</td>' +
-                                '<td>' + buildAnchorForVariantSearches(total, geneId, 'total-' + mapAncestryToLowercase (ethnicityKey), rootVariantUrl) + '</td>' +
-                                '<td>' + buildAnchorForVariantSearches(common, geneId, 'common-' + mapAncestryToLowercase (ethnicityKey), rootVariantUrl) + '</td>' +
-                                '<td>' + buildAnchorForVariantSearches(lowFrequency, geneId, 'lowfreq-' + mapAncestryToLowercase (ethnicityKey), rootVariantUrl) + '</td>' +
-                                '<td>' + buildAnchorForVariantSearches(displayableRare, geneId, 'rare-' + mapAncestryToLowercase (ethnicityKey), rootVariantUrl) + '</td>' +
+                                '<td>' + excomeChipEuropean["ns"] + '</td>' +
+                                '<td>' + buildAnchorForVariantSearches(excomeChipEuropean["total"], geneId, 'total-exchp', rootVariantUrl) + '</td>' +
+                                '<td>' + buildAnchorForVariantSearches(excomeChipEuropean["common"], geneId, 'common-exchp', rootVariantUrl) + '</td>' +
+                                '<td>' + buildAnchorForVariantSearches(excomeChipEuropean["lowFrequency"], geneId, 'lowfreq-exchp', rootVariantUrl) + '</td>' +
+                                '<td>' + buildAnchorForVariantSearches(excomeChipEuropean["rare"], geneId, 'rare-exchp', rootVariantUrl) + '</td>' +
                                 '</tr>');
+
                         }
-                    }
-
-                    if (ethnicityChip ) {
-                        var excomeChip = ethnicityChip;
-                        if (excomeChip["EU"]) {
-                            var excomeChipEuropean = excomeChip["EU"];
-                            var ethnicity = chooseAncestryStrings("EU", continentalAncestryText, 'chip');
-                            if (excomeChipEuropean["NS"]||excomeChipEuropean["total"]||excomeChipEuropean["common"]||excomeChipEuropean["lowFrequency"]||excomeChipEuropean["rare"]) {
-                                $('#continentalVariationTableBody').append('<tr>' +
-                                    '<td>' + ethnicity.ancestry +
-                                    ethnicity.helpText + '</td>' +
-                                    '<td>' + ethnicity.datatype + '</td>' +
-                                    '<td>' + excomeChipEuropean["ns"] + '</td>' +
-                                    '<td>' + buildAnchorForVariantSearches(excomeChipEuropean["total"], geneId, 'total-exchp', rootVariantUrl) + '</td>' +
-                                    '<td>' + buildAnchorForVariantSearches(excomeChipEuropean["common"], geneId, 'common-exchp', rootVariantUrl) + '</td>' +
-                                    '<td>' + buildAnchorForVariantSearches(excomeChipEuropean["lowFrequency"], geneId, 'lowfreq-exchp', rootVariantUrl) + '</td>' +
-                                    '<td>' + buildAnchorForVariantSearches(excomeChipEuropean["rare"], geneId, 'rare-exchp', rootVariantUrl) + '</td>' +
-                                    '</tr>');
-
-                            }
-                        }
-
                     }
 
                 }
+
+            }
 
         };
 
