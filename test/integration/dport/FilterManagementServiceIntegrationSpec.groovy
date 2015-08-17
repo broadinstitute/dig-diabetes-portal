@@ -55,7 +55,7 @@ class FilterManagementServiceIntegrationSpec  extends IntegrationSpec {
         buildingFilters.filterDescriptions = []
         buildingFilters.parameterEncoding = []
         buildingFilters.transferableFilter  = []
-        LinkedHashMap  returnValue  =  filterManagementService.determineDataSet(buildingFilters,incomingParameters)
+        LinkedHashMap  returnValue  =  filterManagementService.determineDataSet(buildingFilters,incomingParameters,false)
         then:
         returnValue.filterDescriptions[0].contains(description)
 
