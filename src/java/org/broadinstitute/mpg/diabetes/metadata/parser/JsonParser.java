@@ -4,6 +4,7 @@ import org.broadinstitute.mpg.diabetes.metadata.*;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeNameVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupByIdSelectingVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupForPhenotypeVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchableCommonPropertyVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchablePropertyVisitor;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
@@ -84,6 +85,22 @@ public class JsonParser {
         return metaDataRoot;
     }
 
+    /**
+     * force a reload of the metadata, normally after having reset the metadata string to parse
+     *
+     * @throws PortalException
+     */
+    public void forceMetadataReload(String jsonString) throws PortalException {
+        this.jsonString = jsonString;
+        this.metaDataRoot = this.populateMetaDataRoot();
+    }
+
+    /**
+     * create and populate the metadata root object from the given json string
+     *
+     * @return
+     * @throws PortalException
+     */
     protected MetaDataRoot populateMetaDataRoot() throws PortalException {
         // local variables
         String jsonString;
@@ -123,7 +140,7 @@ public class JsonParser {
     }
 
     /**
-     * return all the disctint phneotype names in the metadata
+     * return all the distinct phenotype names in the metadata
      *
      * @return
      */
@@ -281,7 +298,7 @@ public class JsonParser {
             }
             tempJsonValue = jsonObject.getString(PortalConstants.JSON_SORT_ORDER_KEY);
             if (tempJsonValue != null) {
-                property.setSortOrder(Integer.valueOf(tempJsonValue));
+                property.setSortOrder(Float.valueOf(tempJsonValue).intValue());
             }
             property.setParent(parent);
 
@@ -393,6 +410,29 @@ public class JsonParser {
 
     public void setJsonString(String jsonString) {
         this.jsonString = jsonString;
+    }
+
+    /**
+     * return the searchable common properties
+     *
+     * @return
+     * @throws PortalException
+     */
+    public List<Property> getSearchableCommonProperties() throws PortalException {
+        // local variables
+        List<Property> commonPropertyList;
+
+        // get the searchable common property visitor
+        SearchableCommonPropertyVisitor visitor = new SearchableCommonPropertyVisitor();
+
+        // set the visitor on the metadata root
+        this.getMetaDataRoot().acceptVisitor(visitor);
+
+        // get the common property list
+        commonPropertyList = visitor.getProperties();
+
+        // return the result
+        return commonPropertyList;
     }
 
 }

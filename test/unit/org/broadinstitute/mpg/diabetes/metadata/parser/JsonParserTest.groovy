@@ -1,11 +1,6 @@
 package org.broadinstitute.mpg.diabetes.metadata.parser
 
-import org.broadinstitute.mpg.diabetes.metadata.DataSet
-import org.broadinstitute.mpg.diabetes.metadata.Experiment
-import org.broadinstitute.mpg.diabetes.metadata.MetaDataRoot
-import org.broadinstitute.mpg.diabetes.metadata.MetaDataRootBean
-import org.broadinstitute.mpg.diabetes.metadata.Property
-import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
+import org.broadinstitute.mpg.diabetes.metadata.*
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.web.json.JSONException
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -173,7 +168,37 @@ class JsonParserTest extends GroovyTestCase {
         assertNotNull(propertyList);
         assertTrue(propertyList.size() > 0);
         assertEquals(4, propertyList.size());
+
+        // test sorting
+        Collections.sort(propertyList);
+        assertNotNull(propertyList);
+        assertTrue(propertyList.size() > 0);
+        assertEquals(4, propertyList.size());
+        PropertyBean newBean;
+        for (Property prop : propertyList) {
+            PropertyBean secondBean = (PropertyBean)prop;
+            if (newBean != null) {
+                assertTrue(secondBean.getSortOrder() >= newBean.getSortOrder());
+            }
+            newBean = secondBean;
+        }
     }
 
+    /**
+     * test the searchable property visitor result
+     *
+     */
+    @Test
+    public void testGetSearchableCommonProperties() {
+        List<Property> propertyList;
+
+        // get the common searchable properties
+        propertyList = this.jsonParser.getSearchableCommonProperties();
+
+        // test
+        assertNotNull(propertyList);
+        assertTrue(propertyList.size() > 0);
+        assertEquals(10, propertyList.size());
+    }
 
 }

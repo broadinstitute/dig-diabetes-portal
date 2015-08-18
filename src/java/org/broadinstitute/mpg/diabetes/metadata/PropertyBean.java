@@ -10,7 +10,7 @@ import java.util.List;
  * Class to represent the metadata properties
  *
  */
-public class PropertyBean implements Property {
+public class PropertyBean implements Property, Comparable {
     private String name;
     private String description;
     private String variableType;
@@ -105,5 +105,25 @@ public class PropertyBean implements Property {
      */
     public void acceptVisitor(DataSetVisitor visitor) {
         visitor.visit(this);
+    }
+
+    /**
+     * returns sort int of objects; compares first on sort order, then name
+     *
+     * @param object
+     * @return
+     */
+    public int compareTo(Object object) {
+        if (object == null) {
+            return 1;
+        } else {
+            PropertyBean otherBean = (PropertyBean)object;
+
+            if (this.getSortOrder() == otherBean.getSortOrder()) {
+                return this.getName().compareTo(otherBean.getName());
+            } else {
+                return (this.getSortOrder() < otherBean.getSortOrder() ? -1 : 1);
+            }
+        }
     }
 }
