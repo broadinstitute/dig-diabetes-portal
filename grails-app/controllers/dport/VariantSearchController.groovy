@@ -1,15 +1,16 @@
 package dport
 
-import grails.rest.render.json.JsonRenderer
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
+import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class VariantSearchController {
     FilterManagementService filterManagementService
     RestServerService restServerService
     SharedToolsService sharedToolsService
+    MetaDataService metaDataService
     private static final log = LogFactory.getLog(this)
 
     def index() {}
@@ -322,7 +323,9 @@ class VariantSearchController {
 //        String jsonFormOfRelevantMetadataSamplegroup = sharedToolsService.packageUpATreeAsJson(sharedToolsService.getProcessedMetadata()?.phenotypeSpecificPropertiesAnnotatedPerSampleGroup, false, true)
 //        JSONObject dmetadata = slurper.parseText(jsonFormOfRelevantMetadataSamplegroup)
 
-        String jsonFormOfCommonProperties = sharedToolsService.sortAndPackageAMapOfListsAsJson(sharedToolsService.getProcessedMetadata()?.commonProperties, true)
+        // DIGP-47: common properties json created using new metadata data structure
+//        String jsonFormOfCommonProperties = sharedToolsService.sortAndPackageAMapOfListsAsJson(sharedToolsService.getProcessedMetadata()?.commonProperties, true)
+        String jsonFormOfCommonProperties = this.metaDataService.getCommonPropertiesAsJson(true);
         JSONObject commonPropertiesJsonObject = slurper.parseText(jsonFormOfCommonProperties)
 
         String jsonFormPropertiesPerSampleGroup = sharedToolsService.packageUpSortedHierarchicalListAsJson(sharedToolsService.getProcessedMetadata()?.propertiesPerOrderedSampleGroups)

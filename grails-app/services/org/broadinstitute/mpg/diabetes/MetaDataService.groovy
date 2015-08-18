@@ -17,20 +17,23 @@ class MetaDataService {
 
     }
 
-    /**
+    public void setForceProcessedMetadataOverride(Integer forceProcessedMetadataOverride) {
+        this.forceProcessedMetadataOverride = forceProcessedMetadataOverride
+    }
+/**
      * returns th parser after first checking that the metadata hadn't been set to be reloaded
      *
      * @return
      */
     private JsonParser getJsonParser() {
         // reload the metadata if scheduled
-        if (this.forceProcessedMetadataOverride < 1) {
+        if (this.forceProcessedMetadataOverride != 0) {
             String jsonString = this.restServerService.getMetadata();
             this.jsonParser.forceMetadataReload(jsonString);
         }
 
         // reset reload indicator
-        this.forceProcessedMetadataOverride = 1;
+        this.forceProcessedMetadataOverride = 0;
 
         // return
         return this.jsonParser;
@@ -76,5 +79,20 @@ class MetaDataService {
             "dataset":[${builder.toString()}]
         }""";
         return groovyString.toString();
+    }
+
+    public String getGwasSampleGroupNameForPhenotype(String phenotypeString) {
+        // local variables
+        String sampleGroupName = "";
+
+        // get the sample group string
+        try {
+            sampleGroupName = this.getJsonParser().getGwasSampleGroupNameForPhenotype(phenotypeString);
+
+        } catch (PortalException exception) {
+            log.error("Got metadata parsing exception getting gwas sample group name by phenotype: " + exception.getMessage());
+        }
+
+        return sampleGroupName;
     }
 }

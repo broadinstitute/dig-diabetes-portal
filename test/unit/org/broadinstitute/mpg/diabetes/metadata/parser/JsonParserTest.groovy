@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg.diabetes.metadata.parser
 
+import junit.framework.TestCase
 import org.broadinstitute.mpg.diabetes.metadata.*
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.web.json.JSONException
@@ -11,7 +12,7 @@ import org.junit.Test
 /**
  * Test class to test the json parsing service for the metadata objects
  */
-class JsonParserTest extends GroovyTestCase {
+class JsonParserTest extends TestCase {
     JsonParser jsonParser;
     String jsonString;
 
@@ -201,4 +202,20 @@ class JsonParserTest extends GroovyTestCase {
         assertEquals(10, propertyList.size());
     }
 
+    /**
+     * test searching for the GWAS sample group based on phenotype
+     *
+     */
+    @Test
+    public void testGetGwasSampleGroupNameForPhenotype() {
+        String sampleGroupName;
+        String phenotypeName = "UACR";
+
+        // get the sample group
+        sampleGroupName = this.jsonParser.getGwasSampleGroupNameForPhenotype(phenotypeName);
+
+        // test
+        assertNotNull(sampleGroupName);
+        assertEquals("CKDGenConsortium", sampleGroupName);
+    }
 }

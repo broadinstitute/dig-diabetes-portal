@@ -1,12 +1,14 @@
 package dport
 
 import org.apache.juli.logging.LogFactory
+import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class TraitController {
     RestServerService restServerService
     SharedToolsService sharedToolsService
     private static final log = LogFactory.getLog(this)
+    MetaDataService metaDataService
 
 
 
@@ -35,12 +37,14 @@ class TraitController {
     def traitSearch() {
         String phenotypeKey=sharedToolsService.convertOldPhenotypeStringsToNewOnes (params.trait)
         String requestedSignificance=params.significance
-        LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
-        LinkedHashMap phenotypeMap = processedMetadata.gwasSpecificPhenotypes
-        String sampleGroupOwner = ""
-        if (phenotypeMap.containsKey(phenotypeKey))  {
-            sampleGroupOwner  = phenotypeMap[phenotypeKey]?.sampleGroupName
-        }
+        // DIGP-47: switch metadata traversal to new data structure
+//        LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
+//        LinkedHashMap phenotypeMap = processedMetadata.gwasSpecificPhenotypes
+//        String sampleGroupOwner = ""
+//        if (phenotypeMap.containsKey(phenotypeKey))  {
+//            sampleGroupOwner  = phenotypeMap[phenotypeKey]?.sampleGroupName
+//        }
+        String sampleGroupOwner = this.metaDataService.getGwasSampleGroupNameForPhenotype(phenotypeKey)
         String phenotypeName = ''
         String phenotypeDataSet = ''
         String phenotypeTranslation = sharedToolsService.translator(phenotypeKey)

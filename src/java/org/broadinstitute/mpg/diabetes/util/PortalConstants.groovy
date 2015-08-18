@@ -31,4 +31,8 @@ class PortalConstants {
     public final static String TYPE_COMMON_PROPERTY_KEY                 = "cproperty";
     public final static String TYPE_PHENOTYPE_PROPERTY_KEY              = "pproperty";
     public final static String TYPE_SAMPLE_GROUP_PROPERTY_KEY           = "dproperty";
+
+    // constant string for the experiment technology type
+    public final static String TECHNOLOGY_GWAS_KEY                      = "GWAS";
+
 }

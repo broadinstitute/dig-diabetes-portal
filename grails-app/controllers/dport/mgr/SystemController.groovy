@@ -1,19 +1,17 @@
 package dport.mgr
 
-import dport.Gene
 import dport.RestServerService
-import  dport.SharedToolsService
-import dport.Variant
-import dport.people.User;
-import temporary.BuildInfo;
+import dport.SharedToolsService
+import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.codehaus.groovy.grails.commons.GrailsApplication
+import temporary.BuildInfo
 
 class SystemController {
 
     GrailsApplication grailsApplication
     SharedToolsService sharedToolsService
     RestServerService restServerService
-
+    MetaDataService metaDataService
 
     def index = {
         render "<h1>hi</h1>"
@@ -180,6 +178,8 @@ class SystemController {
         if (metadataOverrideStatus == "forceIt") {
             if (metadataOverrideHasBeenRequested == false) {
                 sharedToolsService.setMetadataOverrideStatus(1)
+                // DIGP_47: adding in new medatata data structure service
+                this.metaDataService.setForceProcessedMetadataOverride(1)
                 flash.message = "You have scheduled an override to the metadata cache. The next time the metadata is requested the cache will be reloaded"
             } else {
                 flash.message = "But the metadata cache was already scheduled!"
@@ -187,6 +187,8 @@ class SystemController {
         } else {
             if (!(metadataOverrideHasBeenRequested == true)) {
                 sharedToolsService.setForceMetadataOverride(0)
+                // DIGP_47: adding in new medatata data structure service
+                this.metaDataService.setForceProcessedMetadataOverride(0)
                 flash.message = "you have rejected the request to update the metadata. "
             } else {
                 flash.message = "But there was no override in place to cancel!"

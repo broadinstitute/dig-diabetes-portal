@@ -1,4 +1,5 @@
 package org.broadinstitute.mpg.diabetes
+
 import dport.SharedToolsService
 import grails.test.spock.IntegrationSpec
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -91,6 +92,22 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
         assert oldJson.toString() ==  newJson.toString()
     }
 
+    void "test trait controller gwas sample group by phenotype search"() {
+        when:
+        String phenotypeToSearchOn = "eGFRcys"
+        String oldPhenotypeKey = sharedToolsService.convertOldPhenotypeStringsToNewOnes (phenotypeToSearchOn)
+        String oldSampleGroupName = ""
+        LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
+        LinkedHashMap phenotypeMap = processedMetadata.gwasSpecificPhenotypes
+        if (phenotypeMap.containsKey(phenotypeToSearchOn))  {
+            oldSampleGroupName  = phenotypeMap[phenotypeToSearchOn]?.sampleGroupName
+        }
+        String newSampleGroupName = this.metaDataService.getGwasSampleGroupNameForPhenotype(phenotypeToSearchOn);
+
+        then:
+        assert oldSampleGroupName == newSampleGroupName
+
+    }
 
 
 }

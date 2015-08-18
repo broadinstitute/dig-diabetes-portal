@@ -1,6 +1,7 @@
 package org.broadinstitute.mpg.diabetes.metadata.parser;
 
 import org.broadinstitute.mpg.diabetes.metadata.*;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.GwasTechSampleGroupByPhenotypeVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeNameVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupByIdSelectingVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupForPhenotypeVisitor;
@@ -435,4 +436,25 @@ public class JsonParser {
         return commonPropertyList;
     }
 
+    /**
+     * return the GWAS first level sample group with the phenotype name
+     *
+     * @param phenotypeString
+     * @return
+     * @throws PortalException
+     */
+    public String getGwasSampleGroupNameForPhenotype(String phenotypeString) throws PortalException {
+        // local variables
+        String sampleGroupName;
+
+        // get the gwas phenotype visitor
+        GwasTechSampleGroupByPhenotypeVisitor visitor = new GwasTechSampleGroupByPhenotypeVisitor(phenotypeString);
+
+        // set the visitor on the metadata root
+        this.getMetaDataRoot().acceptVisitor(visitor);
+
+        // retrieve the sample group name and return
+        sampleGroupName = visitor.getSampleGroupName();
+        return sampleGroupName;
+    }
 }
