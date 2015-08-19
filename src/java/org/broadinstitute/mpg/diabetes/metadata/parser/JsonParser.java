@@ -3,9 +3,11 @@ package org.broadinstitute.mpg.diabetes.metadata.parser;
 import org.broadinstitute.mpg.diabetes.metadata.*;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.GwasTechSampleGroupByPhenotypeVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeNameVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyByNameFinderVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupByIdSelectingVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupForPhenotypeVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchableCommonPropertyVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchablePropertyIncludingChildrenVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchablePropertyVisitor;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
@@ -328,6 +330,7 @@ public class JsonParser {
             // get the primitive variables
             phenotype.setName(jsonObject.getString(PortalConstants.JSON_NAME_KEY));
             phenotype.setGroup(jsonObject.getString(PortalConstants.JSON_GROUP_KEY));
+            phenotype.setParent(parent);
 
             // get the sub properties
             tempArray = jsonObject.getJSONArray(PortalConstants.JSON_PROPERTIES_KEY);
@@ -456,5 +459,54 @@ public class JsonParser {
         // retrieve the sample group name and return
         sampleGroupName = visitor.getSampleGroupName();
         return sampleGroupName;
+    }
+
+    /**
+     * find all the seaechable properties for a sample group and all its children
+     *
+     * @param sampleGroupId
+     * @return
+     * @throws PortalException
+     */
+    public List<String> getSearchablePropertiesForSampleGroupAndChildren(String sampleGroupId) throws PortalException {
+        // local variables
+        SampleGroup sampleGroup;
+        List<String> propertyNameList = new ArrayList<String>();
+
+        // find the sample group
+        SampleGroupByIdSelectingVisitor finderVisitor = new SampleGroupByIdSelectingVisitor(sampleGroupId);
+        this.getMetaDataRoot().acceptVisitor(finderVisitor);
+        sampleGroup = finderVisitor.getSampleGroup();
+
+        // if the sample group exists, find all searchable properties
+        if (sampleGroup != null) {
+            SearchablePropertyIncludingChildrenVisitor propertyVisitor = new SearchablePropertyIncludingChildrenVisitor();
+            sampleGroup.acceptVisitor(propertyVisitor);
+            propertyNameList = propertyVisitor.getDistinctPropertyNameList();
+        }
+
+        // return the property string
+        return propertyNameList;
+    }
+
+    /**
+     * find the first property by its name
+     *
+     * @param propertyName
+     * @return
+     * @throws PortalException
+     */
+    public Property findPropertyByName(String propertyName) throws PortalException {
+        Property property;
+
+        // create the visitor and traverse from root
+        PropertyByNameFinderVisitor propertyVisitor = new PropertyByNameFinderVisitor(propertyName);
+        this.getMetaDataRoot().acceptVisitor(propertyVisitor);
+
+        // get the property
+        property = propertyVisitor.getProperty();
+
+        // return
+        return property;
     }
 }
