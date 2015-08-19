@@ -215,17 +215,18 @@ class VariantSearchController {
             phenotypeList << params.phenotype
         }
 
-        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
 
-        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
-        LinkedHashMap<PhenoKey,List<String>> annotatedSampleGroups =  processedMetadata.propertiesPerOrderedSampleGroups
-        LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> phenotypeSpecificSampleGroupProperties = processedMetadata['phenotypeSpecificPropertiesAnnotatedPerSampleGroup']
-        List <String> listOfProperties  = sharedToolsService.combineToCreateASingleList( params.phenotype, datasetChoice,
-                                                                                             annotatedSampleGroups,
-                                                                                             phenotypeSpecificSampleGroupProperties )
-        String propertiesForTransmission = sharedToolsService.packageUpAListAsJson (listOfProperties)
+        // DIGP_47: comment out shared tool service DS for new one for now
+//        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
+//        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
+//        LinkedHashMap<PhenoKey,List<String>> annotatedSampleGroups =  processedMetadata.propertiesPerOrderedSampleGroups
+//        LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> phenotypeSpecificSampleGroupProperties = processedMetadata['phenotypeSpecificPropertiesAnnotatedPerSampleGroup']
+//        List <String> listOfProperties  = sharedToolsService.combineToCreateASingleList( params.phenotype, datasetChoice,
+//                                                                                             annotatedSampleGroups,
+//                                                                                             phenotypeSpecificSampleGroupProperties )
+//        String propertiesForTransmission = sharedToolsService.packageUpAListAsJson (listOfProperties)
         def slurper = new JsonSlurper()
-        def result = slurper.parseText(propertiesForTransmission)
+//        def result = slurper.parseText(propertiesForTransmission)
         def result2 = slurper.parseText(this.metaDataService.getSearchablePropertyNameListAsJson(datasetChoice))
 
         render(status: 200, contentType: "application/json") {

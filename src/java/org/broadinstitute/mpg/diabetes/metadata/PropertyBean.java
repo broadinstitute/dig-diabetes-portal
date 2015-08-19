@@ -127,12 +127,12 @@ public class PropertyBean implements Property, Comparable {
         }
 
         // build the filter string
-        builder.append("{\"dataset_id: \"");
+        builder.append("{\"dataset_id\": \"");
         builder.append(dataset);
         builder.append("\", \"phenotype\": \"");
         builder.append(phenotype);
         builder.append("\", \"operand\": \"");
-        builder.append(this.getId());
+        builder.append(this.getName());
         builder.append("\", \"operator\": \"");
         builder.append(operator);
         builder.append("\", \"value\": \"");
