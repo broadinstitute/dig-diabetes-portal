@@ -1,5 +1,4 @@
 package dport
-
 import dport.people.Role
 import dport.people.User
 import dport.people.UserRole
@@ -10,10 +9,8 @@ import groovy.json.JsonSlurper
 import groovy.json.StringEscapeUtils
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.commons.GrailsApplication
-import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
-
 
 @Transactional
 class SharedToolsService {
@@ -390,7 +387,7 @@ class SharedToolsService {
                     }
                 }
             }
-            sharedProcessedMetadata['rootSampleGroups'] = captured
+            sharedProcessedMetadata['rootSampleGroups'] = captured                  // not used anywhere
             sharedProcessedMetadata['gwasSpecificPhenotypes'] = gwasSpecificPhenotype
             sharedProcessedMetadata['sampleGroupsPerPhenotype'] = annotatedPhenotypes
             sharedProcessedMetadata['sampleGroupsPerAnnotatedPhenotype'] =  temporaryAnnotatedPhenotypes
@@ -399,7 +396,7 @@ class SharedToolsService {
             sharedProcessedMetadata['phenotypeSpecificPropertiesPerSampleGroup'] = phenotypeSpecificSampleGroupProperties
             sharedProcessedMetadata['phenotypeSpecificPropertiesAnnotatedPerSampleGroup'] = phenotypeSpecificAnnotatedSampleGroupProperties
             sharedProcessedMetadata['sampleGroupSpecificProperties'] = experimentSpecificSampleGroupProperties
-            sharedProcessedMetadata['commonProperties'] = commonProperties
+            sharedProcessedMetadata['commonProperties'] = commonProperties          // DIGP_47: still used for rest server post calls for props to display
             forceProcessedMetadataOverride = 0
         }
         return sharedProcessedMetadata
@@ -1284,6 +1281,7 @@ class SharedToolsService {
 
 
     public String sortAndPackageAMapOfListsAsJson (LinkedHashMap listOfCommonProperties,Boolean sortFirst ){
+        // TODO - DIGP-47: modify this
         // now that we have a list, build it into a string suitable for JSON
         int numberOfProperties = listOfCommonProperties.size()
         int numrec = 0

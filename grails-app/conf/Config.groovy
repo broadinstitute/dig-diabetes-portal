@@ -282,11 +282,10 @@ grails.hibernate.osiv.readonly = false
 
 environments {
     development {
+//        grails.serverURL = "http://portaldev.sph.umich.edu/digs-diabetes-portal"
         grails.logging.jul.usebridge = true
     }
     production {
-//      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
-//      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
       grails.serverURL = "http://type2diabetesgenetics.org"
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
@@ -499,3 +498,5 @@ grails.plugin.springsecurity.userLookup.userDomainClassName = 'dport.people.User
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'dport.people.UserRole'
 grails.plugin.springsecurity.authority.className = 'dport.people.Role'
 
+// change for University of Michigan development server
+// grails.serverURL = "http://portaldev.sph.umich.edu/digs-diabetes-portal"
