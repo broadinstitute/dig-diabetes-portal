@@ -47,66 +47,6 @@ class RestServerService {
     private String GWASDIAGRAM  = "GWAS_DIAGRAM_mdv2"
     private String ORCHIP  = "ODDS_RATIO"
 
-
-    static List<String> VARIANT_SEARCH_COLUMNS = [
-            'ID',
-            'CHROM',
-            'POS',
-            'DBSNP_ID',
-            'CLOSEST_GENE',
-            'MOST_DEL_SCORE',
-            'Consequence',
-            'IN_GENE',
-            '_13k_T2D_TRANSCRIPT_ANNOT',
-            "Protein_change"
-    ]
-
-    static List<String> VARIANT_INFO_SEARCH_COLUMNS = [
-            'CLOSEST_GENE',
-            'ID',
-            'DBSNP_ID',
-            'Protein_change',
-            'Consequence',
-            '_13k_T2D_EU_MAF',
-            '_13k_T2D_HS_MAF',
-            '_13k_T2D_AA_MAF',
-            '_13k_T2D_EA_MAF',
-            '_13k_T2D_SA_MAF'
-    ]
-
-
-    static List<String> EXSEQ_VARIANT_SEARCH_COLUMNS = [
-            'IN_EXSEQ',
-            '_13k_T2D_P_EMMAX_FE_IV',
-            '_13k_T2D_EU_MAF',
-            '_13k_T2D_HS_MAF',
-            '_13k_T2D_AA_MAF',
-            '_13k_T2D_EA_MAF',
-            '_13k_T2D_SA_MAF',
-            '_13k_T2D_MINA',
-            '_13k_T2D_MINU',
-            '_13k_T2D_OR_WALD_DOS_FE_IV',
-            '_13k_T2D_SE'
-    ]
-
-
-    static List<String> EXCHP_VARIANT_SEARCH_COLUMNS = [
-            'IN_EXCHP',
-            'EXCHP_T2D_P_value',
-            'EXCHP_T2D_MAF',
-            'EXCHP_T2D_BETA',
-            'EXCHP_T2D_SE'
-    ]
-
-
-    static List<String> GWAS_VARIANT_SEARCH_COLUMNS = [
-            'IN_GWAS',
-            'GWAS_T2D_PVALUE',
-            'GWAS_T2D_OR',
-    ]
-
-
-
    // okay
     static List<String> GENE_COLUMNS = [
             'ID',
@@ -194,40 +134,13 @@ class RestServerService {
         BASE_URL = grailsApplication.config.server.URL
         DBT_URL = grailsApplication.config.dbtRestServer.URL
         EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URL
- //       pickADifferentRestServer(NEW_DEV_REST_SERVER)
- //       pickADifferentRestServer(DEV_LOAD_BALANCED_SERVER)
- //       pickADifferentRestServer(AWS01_REST_SERVER)
+
         pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
 
     }
 
 
-    public String getBigQuery() {
-        return BIGQUERY_REST_SERVER;
-    }
-
-     public String getDevserver() {
-        return DEV_REST_SERVER;
-    }
-
-
-
     // current below
-    public String getProdLoadBalanced() {
-        return PROD_LOAD_BALANCED_SERVER;
-    }
-
-    public String getQaLoadBalanced() {
-        return QA_LOAD_BALANCED_SERVER;
-    }
-
-    public String getQa01BehindLoadBalancer() {
-        return QA01_BEHIND_LOAD_BALANCER;
-    }
-
-    public String getQa02BehindLoadBalancer() {
-        return QA02_BEHIND_LOAD_BALANCER;
-    }
 
     public String getDevLoadBalanced() {
         return DEV_LOAD_BALANCED_SERVER;
@@ -239,10 +152,6 @@ class RestServerService {
 
     public String getDev02BehindLoadBalancer() {
         return DEV02_BEHIND_LOAD_BALANCER;
-    }
-
-    public String getAws01RestServer() {
-        return AWS01_REST_SERVER;
     }
 
     public String getProdserver() {
@@ -259,13 +168,19 @@ class RestServerService {
     }
 
 
-    private List<String> getVariantColumns() {
-        return ['CHROM', 'POS']
+    private String getDataHeader (Integer pageNumber,
+                                  Integer pageSize,
+                                  Integer limit,
+                                  Boolean count){
+        return """    "passback": "123abc",
+    "entity": "variant",
+    "page_number": ${pageNumber.toString()},
+    "page_size": ${pageSize.toString()},
+    "limit": ${limit.toString()},
+    "count": ${(count)?"true": "false"},""".toString()
     }
 
-    private List<String> getVariantInfoColumns() {
-        return VARIANT_INFO_SEARCH_COLUMNS
-    }
+
 
 
     private filterByVariant(String variantName) {
@@ -287,12 +202,7 @@ class RestServerService {
     private String jsonForGeneralApiSearch(String combinedFilterList) {
         String inputJson = """
 {
-    "passback": "123abc",
-    "entity": "variant",
-    "page_number": 50,
-    "page_size": 100,
-    "limit": 1000,
-    "count": false,
+${getDataHeader (0, 100, 1000, false)}
     "properties":    {
                            "cproperty": ["VAR_ID", "CHROM", "POS","DBSNP_ID","CLOSEST_GENE","GENE","IN_GENE","Protein_change","Consequence"],
                           "orderBy":    ["CHROM"],
@@ -329,19 +239,12 @@ class RestServerService {
 
     }
 
-//  "cproperty": ["VAR_ID", "CHROM", "POS","DBSNP_ID","CLOSEST_GENE","GENE","IN_GENE","Protein_change","Consequence"],
-
 
     private String jsonForCustomColumnApiSearch(String combinedFilterList, LinkedHashMap requestedProperties) {
         LinkedHashMap resultColumnsToFetch = getColumnsToFetch("[" + combinedFilterList + "]",  requestedProperties)
         String inputJson = """
 {
-    "passback": "123abc",
-    "entity": "variant",
-    "page_number": 50,
-    "page_size": 100,
-    "limit": 1000,
-    "count": false,
+${getDataHeader (0, 100, 1000, false)}
     "properties":    {
                            "cproperty": [${ resultColumnsToFetch.cproperty.collect({"\"${it}\""}).join(' , ')}],
                           "orderBy":    ["CHROM"],
@@ -391,10 +294,6 @@ class RestServerService {
         return inputJson
     }
 
-  private List<String> getVariantSearchColumns() {
-        return VARIANT_SEARCH_COLUMNS + EXSEQ_VARIANT_SEARCH_COLUMNS + EXCHP_VARIANT_SEARCH_COLUMNS + GWAS_VARIANT_SEARCH_COLUMNS
-    }
-
 
     private void pickADifferentRestServer(String newRestServer) {
         if (!(newRestServer == BASE_URL)) {
@@ -408,10 +307,6 @@ class RestServerService {
         return (BASE_URL ?: "none")
     }
 
-
-    public void goWithTheBigQueryServer() {
-        pickADifferentRestServer(BIGQUERY_REST_SERVER)
-    }
 
     public void goWithTheProdLoadBalancedServer() {
         pickADifferentRestServer(PROD_LOAD_BALANCED_SERVER)
@@ -463,7 +358,6 @@ class RestServerService {
     }
 
     public String whatIsMyCurrentServer() {
-        String returnValue
         return currentRestServer()
     }
 
@@ -712,10 +606,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String drivingJson =
                 """
 {
-  "passback" : "1234abc",
-  "entity" : "variant",
-  "limit" : 1,
-  "count" : false,
+${getDataHeader (0, 100, 1, false)}
   "properties" : {
     "cproperty" : ["CHROM", "POS"],
     "orderBy" : ["CHROM"],
@@ -811,28 +702,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
-
-
-    /***
-     * Take a string specifying a region in the form ->  "chr9:21,940,000-22,190,000"
-     * Purse this string and then perform a variant search using these three parameters
-     *
-     * @param userSpecifiedString
-     * @return
-     */
-    JSONObject searchGenomicRegionAsSpecifiedByUsers(String userSpecifiedString) {
-        JSONObject returnValue = null
-        LinkedHashMap<String, Integer> ourNumbers = extractNumbersWeNeed(userSpecifiedString)
-        if (ourNumbers.containsKey("chromosomeNumber") &&
-                ourNumbers.containsKey("startExtent") &&
-                ourNumbers.containsKey("endExtent")) {
-            returnValue = searchGenomicRegionBySpecifiedRegion(ourNumbers["chromosomeNumber"],
-                    ourNumbers["startExtent"],
-                    ourNumbers["endExtent"])
-        }
-        return returnValue
-    }
-
     /***
      * retrieve a trait starting with the  raw region specification string we get from users
      * @param userSpecifiedString
@@ -893,12 +762,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String packagedFilters = sharedToolsService.packageUpEncodedParameters(filterList)
         String geneCountRequest = """
 {
-    "passback": "123abc",
-    "entity": "variant",
-    "page_number": 50,
-    "page_size": 100,
-    "limit": 1000,
-    "count": true,
+${getDataHeader (0, 100, 1000, true)}
     "properties":    {
                            "cproperty": ["VAR_ID"],
                           "orderBy":    ["CHROM"],
@@ -919,12 +783,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     private String diseaseRiskValue (String variantId){
         String diseaseRiskRequest = """
 {
-    "passback": "123abc",
-    "entity": "variant",
-    "page_number": 50,
-    "page_size": 100,
-    "limit": 1000,
-    "count": false,
+${getDataHeader (0, 100, 1000, false)}
 "properties": {
 "dproperty": {
 },
@@ -979,11 +838,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     private String variantAssociationStatisticsRequest (String variantId) {
         String associationStatisticsRequest = """{
-    "passback": "123abc",
-    "entity": "variant",
-    "page_number": 0,
-    "page_size": 100,
-    "count": false,
+${getDataHeader (0, 100, 1000, false)}
     "properties":    {
                            "cproperty": ["VAR_ID","DBSNP_ID","CLOSEST_GENE","GENE","MOST_DEL_SCORE"],
                           "orderBy":    [],
@@ -1096,12 +951,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     private String howCommonIsVariantRequest (String variantId) {
         String associationStatisticsRequest = """{
-    "passback": "123abc",
-    "entity": "variant",
-    "page_number": 50,
-    "page_size": 100,
-    "limit": 1000,
-    "count": false,
+${getDataHeader (0, 100, 1000, false)}
     "properties":    {
                            "cproperty": ["VAR_ID", "CHROM", "POS"],
                           "orderBy":    ["CHROM"],
@@ -1287,48 +1137,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-
-
-
-    private String generateJsonVariantCountByGeneAndMaf (String variantId) {
-        String associationStatisticsRequest = """{
-    "passback": "123abc",
-    "entity": "variant",
-    "page_number": 0,
-    "page_size": 100,
-    "count": false,
-    "properties":    {
-                           "cproperty": ["VAR_ID"],
-                          "orderBy":    [],
-                          "dproperty":    {
-                                        },
-                        "pproperty":    {
-                                            "P_FIRTH_FE_IV": {
-                                                "${EXOMESEQ}": ["T2D"]
-                                            },
-
-                                             "P_VALUE":{
-                                                "${GWASDIAGRAM}":["T2D"],
-                                                "${EXOMECHIP}":["T2D"]
-                                             },
-                                             "OR_FIRTH_FE_IV":    {
-                                                                   "${EXOMESEQ}": ["T2D"]
-                                                                },
-                                              "ODDS_RATIO": { "${GWASDIAGRAM}": ["T2D"],
-                                                              "${EXOMECHIP}": ["T2D"]}
-                                        }
-                    },
-    "filters":    [
-                       ${filterByVariant (variantId)}
-
-                ]
-}
-""".toString()
-        return associationStatisticsRequest
-    }
-
-
-
     private String ancestryDataSet (String ethnicity){
         String dataSetId = ""
         switch (ethnicity){
@@ -1397,28 +1205,18 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         switch (cellNumber){
             case 0:
                 codeForMafSlice = "total"
-                minimumMaf = "0"
-                maximumMaf = "1"
                 break;
             case 1:
                 codeForMafSlice = "total"
-                minimumMaf = "0"
-                maximumMaf = "1"
                 break;
             case 2:
                 codeForMafSlice = "common"
-                minimumMaf = "0.05"
-                maximumMaf = "1"
                 break;
             case 3:
                 codeForMafSlice = "lowfreq"
-                minimumMaf = "0.0005"
-                maximumMaf = "0.05"
                 break;
             case 4:
                 codeForMafSlice = "rare"
-                minimumMaf = "0.00000000000001"
-                maximumMaf = "0.0005"
                 break;
             default:
                 log.error("Trouble: user requested cell number = ${cellNumber} which I don't recognize")
@@ -1428,12 +1226,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String packagedFilters = sharedToolsService.packageUpEncodedParameters(filterList)
         String jsonVariantCountByGeneAndMaf = """
 {
-	"passback": "123abc",
-	"entity": "variant",
-	"page_number": 50,
-	"page_size": 100,
-	"limit": 1000,
-	"count": true,
+${getDataHeader (0, 100, 1000, true)}
 	"properties":	{
            				"cproperty": ["VAR_ID"],
                   		"orderBy":	[],
@@ -1457,12 +1250,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         }
         String jsonParticipantCount = """
 {
-	"passback": "123abc",
-	"entity": "variant",
-	"page_number": 50,
-	"page_size": 100,
-	"limit": 1,
-	"count": false,
+${getDataHeader (0, 100, 1, false)}
 	"properties":	{
            				"cproperty": ["VAR_ID"],
                   		"orderBy":	[],
@@ -1581,12 +1369,7 @@ ${retrieveParticipantCount}
 private String generateProteinEffectJson (String variantName){
     String jsonSpec = """
 {
-        "passback": "123abc",
-        "entity": "variant",
-        "page_number": 50,
-        "page_size": 100,
-        "limit": 1,
-        "count": false,
+${getDataHeader (0, 100, 1, false)}
         "properties":   {
                                         "cproperty": ["TRANSCRIPT_ANNOT","MOST_DEL_SCORE","VAR_ID","DBSNP_ID"],
                                 "orderBy":      [],
@@ -1983,12 +1766,7 @@ private String generateProteinEffectJson (String variantName){
         String filters = filterManagementService.generateMultipleFilters(userQueryContextList)
         String jsonSpec = """
 {
-        "passback": "123abc",
-        "entity": "variant",
-        "page_number": 50,
-        "page_size": 100,
-        "limit": 3000,
-        "count": false,
+${getDataHeader (0, 100, 3000, false)}
         "properties":   {
                                         "cproperty": ["VAR_ID", "DBSNP_ID", "CLOSEST_GENE", "CHROM", "POS"],
                                 "orderBy":      ["P_VALUE"],
@@ -2265,12 +2043,7 @@ private String generateProteinEffectJson (String variantName){
         String filterForParticularVariant = filterByVariant(variantName)
         String jsonSpec = """
 {
-        "passback": "123abc",
-        "entity": "variant",
-        "page_number": 50,
-        "page_size": 100,
-        "limit": 10,
-        "count": false,
+${getDataHeader (0, 100, 10, false)}
         "properties":   {
                                         "cproperty": ["VAR_ID", "DBSNP_ID", "CHROM", "POS"],
                                 "orderBy":      ["P_VALUE"],
@@ -2437,22 +2210,8 @@ private String generateProteinEffectJson (String variantName){
 
 
     private JSONObject gatherVariantsForChromosomeByChunkResults(String chromosomeName,int chunkSize,int startingPosition){
-//        String jsonSpec =  """{
-//    "filters":    [
-//                    {"operand": "CHROM", "operator": "EQ", "value": "${chromosomeName}", "filter_type": "STRING"},
-//                    {"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": ${startingPosition} },
-//                    {"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": 3200000000 }                ],
-//      "columns": ["ID","DBSNP_ID","CHROM","POS"],
-//      "limit":${ chunkSize}
-//}
-//}
-//""".toString()
         String jsonSpec =  """{
-    "passback": "123abc",
-    "entity": "variant",
-    "page_number": 0,
-    "page_size": 100,
-    "count": false,
+${getDataHeader (0, 100, 1000, false)}
     "properties":    {
                            "cproperty": ["VAR_ID","DBSNP_ID","POS", "CHROM"],
                           "orderBy":    ["POS"],

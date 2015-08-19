@@ -46,18 +46,6 @@ class RestServerServiceUnitSpec extends Specification {
     }
 
 
-    void "test that we can change to load balanced qa"() {
-        given:
-        service.initialize ()
-        when:
-        service.goWithTheQaLoadBalancedServer()
-        then:
-        assert service.getCurrentServer ()   == service.getQaLoadBalanced()
-
-    }
-
-
-
     void "test that we can change to newdev"() {
         given:
         service.initialize ()
