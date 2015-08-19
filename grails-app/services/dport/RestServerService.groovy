@@ -6,6 +6,8 @@ import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
+import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONObject
 
@@ -2037,6 +2039,7 @@ ${getDataHeader (0, 100, 3000, false)}
 
 
     private String generateTraitPerVariantJson (String variantName,LinkedHashMap<String, List<String>> holder,LinkedHashMap<String, List<String>> sampleGroupSpecificProperties){
+        List<Property> propertyList = JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("P_VALUE", "mdv2");
         String dirMatchers =  packagePhenotypeSpecificReferencesForProperty ("DIR", holder)
         String betaMatchers =  packagePhenotypeSpecificReferencesForProperty ("BETA", holder)
         String orMatchers =  packagePhenotypeSpecificReferencesForProperty ("ODDS_RATIO", holder)

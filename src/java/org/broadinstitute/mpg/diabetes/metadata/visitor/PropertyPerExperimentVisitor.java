@@ -19,6 +19,10 @@ public class PropertyPerExperimentVisitor implements DataSetVisitor {
         this.propertyName = propertyName;
     }
 
+    public List<Property> getPropertyList() {
+        return propertyList;
+    }
+
     public void visit(DataSet dataSet) {
         if (dataSet.getType().equals(PortalConstants.TYPE_PROPERTY_KEY)) {
             if (dataSet.getName().equalsIgnoreCase(this.propertyName)){

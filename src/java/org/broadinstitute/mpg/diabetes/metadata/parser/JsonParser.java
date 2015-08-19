@@ -1,14 +1,9 @@
 package org.broadinstitute.mpg.diabetes.metadata.parser;
 
 import org.broadinstitute.mpg.diabetes.metadata.*;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.GwasTechSampleGroupByPhenotypeVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeNameVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.*;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyByNameFinderVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupByIdSelectingVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupForPhenotypeVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchableCommonPropertyVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchablePropertyIncludingChildrenVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchablePropertyVisitor;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
 import org.codehaus.groovy.grails.web.json.JSONArray;
@@ -170,6 +165,26 @@ public class JsonParser {
         return nameList;
     }
 
+    public List<Property> getAllPropertiesWithNameForExperimentOfVersion(String propertyName, String version) throws PortalException {
+        List<Property> propertyList = new ArrayList<Property>();
+        List<Experiment> experimentList;
+        List<Property> finalPropertyList = new ArrayList<Property>();
+
+        // find the experiment
+        ExperimentByVersionVisitor experimentVisitor = new ExperimentByVersionVisitor(version);
+        this.getMetaDataRoot().acceptVisitor(experimentVisitor);
+        experimentList = experimentVisitor.getExperimentList();
+
+        // for experiment, find the property list
+        for (Experiment experiment : experimentList) {
+            PropertyPerExperimentVisitor propertyPerExperimentVisitor = new PropertyPerExperimentVisitor(propertyName);
+            experiment.acceptVisitor(propertyPerExperimentVisitor);
+            propertyList = propertyPerExperimentVisitor.getPropertyList();
+            finalPropertyList.addAll(propertyList);
+        }
+
+        return finalPropertyList;
+    }
 
     /**
      * get the json metadata
