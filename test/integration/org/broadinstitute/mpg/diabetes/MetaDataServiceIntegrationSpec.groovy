@@ -1,7 +1,9 @@
 package org.broadinstitute.mpg.diabetes
 
+import dport.PhenoKey
 import dport.SharedToolsService
 import grails.test.spock.IntegrationSpec
+import groovy.json.JsonSlurper
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.codehaus.groovy.grails.web.json.JSONTokener
 import org.junit.After
@@ -110,4 +112,23 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
+    void "test variant search properties json building"() {
+        when:
+        String datasetChoice = "GWAS_MAGIC_mdv2"
+        String phenotype = "HBA1C"
+        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
+        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
+        LinkedHashMap<PhenoKey,List<String>> annotatedSampleGroups =  processedMetadata.propertiesPerOrderedSampleGroups
+        LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> phenotypeSpecificSampleGroupProperties = processedMetadata['phenotypeSpecificPropertiesAnnotatedPerSampleGroup']
+        List <String> listOfProperties  = sharedToolsService.combineToCreateASingleList(phenotype , datasetChoice, annotatedSampleGroups, phenotypeSpecificSampleGroupProperties )
+        String propertiesForTransmission = sharedToolsService.packageUpAListAsJson (listOfProperties)
+        def slurper = new JsonSlurper()
+        JSONObject oldJson = slurper.parseText(propertiesForTransmission)
+
+        String newString = this.metaDataService.getSearchablePropertyNameListAsJson(datasetChoice);
+        JSONObject newJson = slurper.parseText(newString)
+
+        then:
+        assert oldJson == newJson
+    }
 }

@@ -81,6 +81,12 @@ class MetaDataService {
         return groovyString.toString();
     }
 
+    /**
+     * return the root gwas sample group for a given phenotype
+     *
+     * @param phenotypeString
+     * @return
+     */
     public String getGwasSampleGroupNameForPhenotype(String phenotypeString) {
         // local variables
         String sampleGroupName = "";
@@ -94,5 +100,31 @@ class MetaDataService {
         }
 
         return sampleGroupName;
+    }
+
+    public String getSearchablePropertyNameListAsJson(String sampleGroupId) throws PortalException {
+        // local variables
+        List<String> propertyNameList;
+        StringBuilder propertyBuilder = new StringBuilder();
+
+        // get the list if strings from the json parser
+        propertyNameList = this.getJsonParser().getSearchablePropertiesForSampleGroupAndChildren(sampleGroupId);
+
+        // create a json compatible string list
+        for (int i = 0; i < propertyNameList.size(); i++) {
+            propertyBuilder.append("\"");
+            propertyBuilder.append(propertyNameList.get(i));
+            propertyBuilder.append("\"");
+
+            if (i < propertyNameList.size() -1) {
+                propertyBuilder.append(", ");
+            }
+        }
+
+        // create a json string
+        GString groovyString = "{\"dataset\": [${propertyBuilder.toString()}], \"numRecords\":${propertyNameList.size()}, \"is_error\": false}";
+
+        // return the json string
+        return groovyString;
     }
 }

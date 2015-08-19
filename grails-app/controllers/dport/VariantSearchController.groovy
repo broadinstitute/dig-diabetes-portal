@@ -226,10 +226,10 @@ class VariantSearchController {
         String propertiesForTransmission = sharedToolsService.packageUpAListAsJson (listOfProperties)
         def slurper = new JsonSlurper()
         def result = slurper.parseText(propertiesForTransmission)
-
+        def result2 = slurper.parseText(this.metaDataService.getSearchablePropertyNameListAsJson(datasetChoice))
 
         render(status: 200, contentType: "application/json") {
-            [datasets: result,
+            [datasets: result2,
             chosenDataset:datasetChoice]
         }
 
