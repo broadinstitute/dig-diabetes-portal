@@ -146,23 +146,25 @@ class RestServerService {
         return DEV_LOAD_BALANCED_SERVER;
     }
 
-    public String getDev01BehindLoadBalancer() {
-        return DEV01_BEHIND_LOAD_BALANCER;
-    }
-
-    public String getDev02BehindLoadBalancer() {
-        return DEV02_BEHIND_LOAD_BALANCER;
+    public String getAws01RestServer() {
+        return AWS01_REST_SERVER;
     }
 
     public String getProdserver() {
         return PROD_REST_SERVER;
     }
 
+    public String getProdLoadBalanced() {
+        return PROD_LOAD_BALANCED_SERVER;
+    }
+
     public String getNewdevserver() {
         return NEW_DEV_REST_SERVER;
     }
 
-
+    public String getQaLoadBalanced() {
+        return QA_LOAD_BALANCED_SERVER;
+    }
     private List<String> getGeneColumns() {
         return GENE_COLUMNS + EXSEQ_GENE_COLUMNS + EXCHP_GENE_COLUMNS + GWAS_GENE_COLUMNS
     }
