@@ -218,4 +218,34 @@ class JsonParserTest extends TestCase {
         assertNotNull(sampleGroupName);
         assertEquals("CKDGenConsortium", sampleGroupName);
     }
+
+    @Test
+    public void testGetSearchablePropertiesForSampleGroupAndChildren() {
+        String sampleGroupId = "GWAS_MAGIC_mdv2";
+        List<String> propertyNameList;
+
+        // get the searchable property list from the parser
+        propertyNameList = this.jsonParser.getSearchablePropertiesForSampleGroupAndChildren(sampleGroupId);
+
+        // test
+        assertNotNull(propertyNameList);
+        assertTrue(propertyNameList.size() > 0);
+        assertEquals(4, propertyNameList.size());
+    }
+
+    @Test
+    public void testFindPropertyByName() {
+        // local variables
+        String propertyName = "SE";
+        Property property;
+
+        // find the property
+        property = this.jsonParser.findPropertyByName(propertyName);
+
+        // test
+        assertNotNull(property);
+        assertEquals(propertyName, property.getName());
+        assertEquals("{}", property.getWebServiceFilterString("<", "45"));
+    }
+
 }

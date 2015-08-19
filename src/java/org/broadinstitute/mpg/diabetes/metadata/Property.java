@@ -16,4 +16,6 @@ public interface Property extends DataSet {
     public boolean isSearchable();
 
     public int getSortOrder();
+
+    public String getWebServiceFilterString(String operand, String value);
 }

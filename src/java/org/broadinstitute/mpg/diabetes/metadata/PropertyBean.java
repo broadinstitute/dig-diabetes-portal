@@ -99,6 +99,53 @@ public class PropertyBean implements Property, Comparable {
     }
 
     /**
+     * returns the filter string based on what type of property it is (common, dataset or phenotype property)
+     *
+     * @param operator
+     * @param value
+     * @return
+     */
+    public String getWebServiceFilterString(String operator, String value) {
+        // local variables
+        StringBuilder builder = new StringBuilder();
+        String dataset = "blah";
+        String phenotype = "blah";
+
+        // based on what type of property you are, add in dataset and phenotype
+        if (this.getPropertyType() == PortalConstants.TYPE_SAMPLE_GROUP_PROPERTY_KEY) {
+            if (this.getParent() != null) {
+                SampleGroup parentGroup = (SampleGroup)this.getParent();
+                dataset = parentGroup.getSystemId();
+            }
+
+        } else if (this.getPropertyType() == PortalConstants.TYPE_PHENOTYPE_PROPERTY_KEY) {
+            if (this.getParent().getParent() != null) {
+                SampleGroup parentGroup = (SampleGroup)this.getParent().getParent();
+                dataset = parentGroup.getSystemId();
+            }
+            phenotype = (this.getParent() != null ? this.getParent().getName() : "blah");
+        }
+
+        // build the filter string
+        builder.append("{\"dataset_id: \"");
+        builder.append(dataset);
+        builder.append("\", \"phenotype\": \"");
+        builder.append(phenotype);
+        builder.append("\", \"operand\": \"");
+        builder.append(this.getId());
+        builder.append("\", \"operator\": \"");
+        builder.append(operator);
+        builder.append("\", \"value\": \"");
+        builder.append(value);
+        builder.append("\", \"operand_type\": \"");
+        builder.append(this.getVariableType());
+        builder.append("\"}");
+
+        // return the string
+        return builder.toString();
+    }
+
+    /**
      * implement the visitor pattern
      *
      * @param visitor
