@@ -282,6 +282,8 @@ grails.hibernate.osiv.readonly = false
 
 environments {
     development {
+        // DIGKB-23: keep this here as plceholder for U Michigan setup
+//        grails.serverURL = "http://portaldev.sph.umich.edu/digs-diabetes-portal"
         grails.logging.jul.usebridge = true
     }
     production {
