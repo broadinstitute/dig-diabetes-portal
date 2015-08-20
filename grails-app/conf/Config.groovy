@@ -501,3 +501,5 @@ grails.plugin.springsecurity.userLookup.userDomainClassName = 'dport.people.User
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'dport.people.UserRole'
 grails.plugin.springsecurity.authority.className = 'dport.people.Role'
 
+// placeholder for data version
+diabetes.data.version = "mdv2";

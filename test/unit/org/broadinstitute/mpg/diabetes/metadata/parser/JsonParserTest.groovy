@@ -111,18 +111,18 @@ class JsonParserTest extends TestCase {
     public void testGetSamplesGroupsForPhenotype() {
         // local variables
         String phenotype = "T2D";
-        List<String> nameList = null;
+        List<SampleGroup> groupList = null;
 
         // get the phenotype name list
         try {
-            nameList = this.jsonParser.getSamplesGroupsForPhenotype(phenotype);
+            groupList = this.jsonParser.getSamplesGroupsForPhenotype(phenotype, "mdv2");
 
         } catch (PortalException exception) {
             fail("Got portal exception: " + exception.getMessage());
         }
-        assertNotNull(nameList);
-        assertTrue(nameList.size() > 0);
-        assertEquals(69, nameList.size());
+        assertNotNull(groupList);
+        assertTrue(groupList.size() > 0);
+        assertEquals(29, groupList.size());
     }
 
     /**

@@ -259,6 +259,7 @@ public class JsonParser {
         SampleGroup tempSampleGroup;
         Property tempProperty;
         Phenotype tempPhenotype;
+        String tempJsonValue;
 
         try {
             // create the object and add the primitive variables
@@ -266,6 +267,12 @@ public class JsonParser {
             sampleGroup.setAncestry(jsonObject.getString(PortalConstants.JSON_ANCESTRY_KEY));
             sampleGroup.setSystemId(jsonObject.getString(PortalConstants.JSON_ID_KEY));
             sampleGroup.setParent(parent);
+
+            // add in sort order
+            tempJsonValue = jsonObject.getString(PortalConstants.JSON_SORT_ORDER_KEY);
+            if (tempJsonValue != null) {
+                sampleGroup.setSortOrder(Float.valueOf(tempJsonValue).intValue());
+            }
 
             // add in properties
             tempArray = jsonObject.getJSONArray(PortalConstants.JSON_PROPERTIES_KEY);
@@ -369,22 +376,29 @@ public class JsonParser {
      * @param phenotypeName
      * @return
      */
-    public List<String> getSamplesGroupsForPhenotype(String phenotypeName) throws PortalException {
+    public List<SampleGroup> getSamplesGroupsForPhenotype(String phenotypeName, String dataVersion) throws PortalException {
         // local variables
         SampleGroupForPhenotypeVisitor sampleGroupVisitor = new SampleGroupForPhenotypeVisitor(phenotypeName);
-        List<String> sampleGroupNameList;
+        List<SampleGroup> groupList;
 
         // pass in visitor looking for sample groups with the selected phenotype
         for (Experiment experiment: this.getMetaDataRoot().getExperiments()) {
-            experiment.acceptVisitor(sampleGroupVisitor);
+            // if no version, then go through all experiments
+            if (dataVersion == null) {
+                experiment.acceptVisitor(sampleGroupVisitor);
+
+            // if version, first filter experiment on version
+            } else {
+                if (experiment.getVersion().equalsIgnoreCase(dataVersion)) {
+                    experiment.acceptVisitor(sampleGroupVisitor);
+                }
+            }
         }
 
         // return the resulting string list
-        sampleGroupNameList = sampleGroupVisitor.getSampleGroupNameList();
+        groupList = sampleGroupVisitor.getSampleGroupList();
 
-        // sort and return
-        Collections.sort(sampleGroupNameList);
-        return sampleGroupNameList;
+        return groupList;
     }
 
     /**

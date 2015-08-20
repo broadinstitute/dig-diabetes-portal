@@ -29,4 +29,11 @@ public interface SampleGroup extends DataSet {
     public int getSortOrder();
 
     public String getSystemId();
+
+    /**
+     * returns how many levels down this sample grou is nested in other sample groups
+     *
+     * @return
+     */
+    public Integer getNestedLevel();
 }
