@@ -16,6 +16,7 @@ class RestServerService {
     GrailsApplication grailsApplication
     SharedToolsService sharedToolsService
     FilterManagementService filterManagementService
+    MetadataUtilityService metadataUtilityService
     private static final log = LogFactory.getLog(this)
     SqlService sqlService
 
@@ -2038,13 +2039,17 @@ ${getDataHeader (0, 100, 3000, false)}
 
 
 
-    private String generateTraitPerVariantJson (String variantName,LinkedHashMap<String, List<String>> holder,LinkedHashMap<String, List<String>> sampleGroupSpecificProperties){
-        List<Property> propertyList = JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("P_VALUE", "mdv2");
-        String dirMatchers =  packagePhenotypeSpecificReferencesForProperty ("DIR", holder)
-        String betaMatchers =  packagePhenotypeSpecificReferencesForProperty ("BETA", holder)
-        String orMatchers =  packagePhenotypeSpecificReferencesForProperty ("ODDS_RATIO", holder)
-        String pValueMatchers =  packagePhenotypeSpecificReferencesForProperty ("P_VALUE", holder)
-        String sampleGroupsWithMaf =  packageSampleGroupsContainingProperty ("MAF",sampleGroupSpecificProperties)
+    private String generateTraitPerVariantJson (String variantName){
+        String dirMatchers =   metadataUtilityService.createPhenotypePropertyFieldRequester(
+                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("DIR", sharedToolsService.getCurrentDataVersion (), "GWAS"))
+        String betaMatchers =  metadataUtilityService.createPhenotypePropertyFieldRequester(
+                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("BETA", sharedToolsService.getCurrentDataVersion (), "GWAS"))
+        String orMatchers = metadataUtilityService.createPhenotypePropertyFieldRequester(
+                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("ODDS_RATIO", sharedToolsService.getCurrentDataVersion (), "GWAS"))
+        String pValueMatchers =  metadataUtilityService.createPhenotypePropertyFieldRequester(
+                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("P_VALUE", sharedToolsService.getCurrentDataVersion (), "GWAS"))
+        String sampleGroupsWithMaf =  metadataUtilityService.createSampleGroupPropertyFieldRequester(
+                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("MAF", sharedToolsService.getCurrentDataVersion (), "GWAS"))
         String filterForParticularVariant = filterByVariant(variantName)
         String jsonSpec = """
 {
@@ -2086,10 +2091,8 @@ ${getDataHeader (0, 100, 10, false)}
 
 
 
-    private JSONObject gatherTraitPerVariantResults(String variantName,
-                                                    LinkedHashMap<String, List<String>> holder,
-                                                    LinkedHashMap<String, List<String>> sampleGroupSpecificProperties){
-        String jsonSpec = generateTraitPerVariantJson( variantName, holder,sampleGroupSpecificProperties)
+    private JSONObject gatherTraitPerVariantResults(String variantName){
+        String jsonSpec = generateTraitPerVariantJson( variantName)
         return postRestCall(jsonSpec,GET_DATA_URL)
     }
 
@@ -2101,7 +2104,7 @@ ${getDataHeader (0, 100, 10, false)}
 
         JSONObject returnValue
         def slurper = new JsonSlurper()
-        String apiData = gatherTraitPerVariantResults(variantName,holder,sampleGroupSpecificProperties)
+        String apiData = gatherTraitPerVariantResults(variantName)
         List<String> sampleGroupsContainingMafList = generateSampleGroupsContainingProperty("MAF",sampleGroupSpecificProperties)
         LinkedHashMap <String, String> betaMatchersMap =  generatePhenotypeSpecificReferencesForPropertyMap ("BETA", holder)
         LinkedHashMap <String, String>  orMatchersMap =  generatePhenotypeSpecificReferencesForPropertyMap ("ODDS_RATIO", holder)

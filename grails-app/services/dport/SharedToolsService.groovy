@@ -78,6 +78,9 @@ class SharedToolsService {
         return  currentVariantChromosome
     }
 
+    public String getCurrentDataVersion (){
+        return "${dataSetPrefix}${getDataVersion()}"
+    }
 
     public Integer getRecognizedStringsOnly() {
         return recognizedStringsOnly
@@ -358,7 +361,7 @@ class SharedToolsService {
             LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> phenotypeSpecificAnnotatedSampleGroupProperties = [:]
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> experimentSpecificSampleGroupProperties = [:]
             LinkedHashMap<String, LinkedHashMap<String, String>> commonProperties = [:]
-            String dataSetVersionThatWeWant = "${dataSetPrefix}${getDataVersion()}"
+            String dataSetVersionThatWeWant = getCurrentDataVersion()
             if (metadata) {
                 for (def experiment in metadata.experiments) {
                     captured << experiment.name
