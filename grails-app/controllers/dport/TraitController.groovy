@@ -119,10 +119,7 @@ class TraitController {
     def ajaxTraitsPerVariant()  {
         String variant = params["variantIdentifier"]
         LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
-        LinkedHashMap phenotypeMap = processedMetadata.gwasSpecificPhenotypes
-        LinkedHashMap sampleGroupSpecificProperties = processedMetadata.sampleGroupSpecificProperties
-       // JSONObject jsonObject = restServerService.retrieveTraitInfoByVariant(variant)
-        JSONObject jsonObject = restServerService.getTraitPerVariant( variant,phenotypeMap,sampleGroupSpecificProperties)
+        JSONObject jsonObject = restServerService.getTraitPerVariant( variant)
         render(status:200, contentType:"application/json") {
             [traitInfo:jsonObject]
         }

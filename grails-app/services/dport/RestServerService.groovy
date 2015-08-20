@@ -2098,17 +2098,21 @@ ${getDataHeader (0, 100, 10, false)}
 
 
 
-    public JSONObject getTraitPerVariant(String variantName,
-                                         LinkedHashMap<String, List<String>> holder,
-                                         LinkedHashMap<String, List<String>> sampleGroupSpecificProperties) {//region
+    public JSONObject getTraitPerVariant(String variantName ) {//region
 
         JSONObject returnValue
         def slurper = new JsonSlurper()
         String apiData = gatherTraitPerVariantResults(variantName)
-        List<String> sampleGroupsContainingMafList = generateSampleGroupsContainingProperty("MAF",sampleGroupSpecificProperties)
-        LinkedHashMap <String, String> betaMatchersMap =  generatePhenotypeSpecificReferencesForPropertyMap ("BETA", holder)
-        LinkedHashMap <String, String>  orMatchersMap =  generatePhenotypeSpecificReferencesForPropertyMap ("ODDS_RATIO", holder)
-        LinkedHashMap <String, String>  pValueMatchersMap =  generatePhenotypeSpecificReferencesForPropertyMap ("P_VALUE", holder)
+        LinkedHashMap <String, String> betaMatchersMap =   metadataUtilityService.createPhenotypeSampleGroupMap(
+                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("BETA", sharedToolsService.getCurrentDataVersion (), "GWAS"))
+        LinkedHashMap <String, String> orMatchersMap =   metadataUtilityService.createPhenotypeSampleGroupMap(
+                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("ODDS_RATIO", sharedToolsService.getCurrentDataVersion (), "GWAS"))
+        LinkedHashMap <String, String> pValueMatchersMap =   metadataUtilityService.createPhenotypeSampleGroupMap(
+                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("P_VALUE", sharedToolsService.getCurrentDataVersion (), "GWAS"))
+        List<String> sampleGroupsContainingMafList =   metadataUtilityService.createSampleGroupPropertyList(
+                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("MAF", sharedToolsService.getCurrentDataVersion (), "GWAS"))
+        LinkedHashMap<String,List<String>> phenotypeSampleGroupNameMap =   metadataUtilityService.createPhenotypeSampleNameMapper(
+                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("P_VALUE", sharedToolsService.getCurrentDataVersion (), "GWAS"))
         JSONObject apiResults = slurper.parseText(apiData)
         int numberOfVariants = apiResults.numRecords
         StringBuilder sb = new StringBuilder ("{\"results\":[")
@@ -2156,11 +2160,17 @@ ${getDataHeader (0, 100, 10, false)}
                         }
                     }
 
-                    sampleGroupSpecificProperties.each { String sampleGroupId, LinkedHashMap sgHolder ->
-                        if ((sgHolder["phenotypeList"]) && (sgHolder["phenotypeList"].size()>0)){
-                            sb << "{\"level\":\"MAPPER^${sampleGroupId}\",\"count\":\"${sgHolder["phenotypeList"].join(",")}\"},"
+                    phenotypeSampleGroupNameMap.each { String sampleGroupId, List sgHolder ->
+                        if ((sgHolder) && (sgHolder.size()>0)){
+                            sb << "{\"level\":\"MAPPER^${sampleGroupId}\",\"count\":\"${sgHolder.join(",")}\"},"
                         }
                     }
+
+//                    sampleGroupSpecificProperties.each { String sampleGroupId, LinkedHashMap sgHolder ->
+//                        if ((sgHolder["phenotypeList"]) && (sgHolder["phenotypeList"].size()>0)){
+//                            sb << "{\"level\":\"MAPPER^${sampleGroupId}\",\"count\":\"${sgHolder["phenotypeList"].join(",")}\"},"
+//                        }
+//                    }
 
                     element = variant["POS"].findAll{it}[0]
                     sb  << "{\"level\":\"POS\",\"count\":${element}}"
