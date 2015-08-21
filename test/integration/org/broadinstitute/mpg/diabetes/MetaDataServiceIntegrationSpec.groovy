@@ -132,4 +132,22 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
         assert true
 //        assert oldJson == newJson         // taking out for now until know what to expect
     }
+
+    void "test variant search dataset drop down upon phenotype selection"() {
+        when:
+        String phenotype = "HBA1C"
+        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
+        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
+        List <PhenoKey> listOfDataSets  = sharedToolsService.extractASingleList(phenotype, processedMetadata.sampleGroupsPerAnnotatedPhenotype)
+        String datasetsForTransmission = sharedToolsService.packageUpAStaggeredListAsJson (listOfDataSets)
+        def slurper = new JsonSlurper()
+        def oldJson = slurper.parseText(datasetsForTransmission)
+
+        // create json of new data structure
+        String newJsonString = this.metaDataService.getSampleGroupNameListForPhenotypeAsJson(phenotype);
+        JSONObject newJson = slurper.parseText(newJsonString);
+
+        then:
+        assert oldJson == newJson
+    }
 }

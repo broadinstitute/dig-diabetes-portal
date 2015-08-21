@@ -185,14 +185,18 @@ class VariantSearchController {
         if ((params.dataset) && (params.dataset !=  null )){
             dataset = params.dataset
         }
-        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
+//        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
+//        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
+        // LinkedHashMap<String,List<String>> annotatedPhenotypes =  processedMetadata.sampleGroupsPerPhenotype
+//        List <PhenoKey> listOfDataSets  = sharedToolsService.extractASingleList(params.phenotype,processedMetadata.sampleGroupsPerAnnotatedPhenotype)
+//        String datasetsForTransmission = sharedToolsService.packageUpAStaggeredListAsJson (listOfDataSets)
+//        def slurper = new JsonSlurper()
+//        def result = slurper.parseText(datasetsForTransmission)
 
-        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
-       // LinkedHashMap<String,List<String>> annotatedPhenotypes =  processedMetadata.sampleGroupsPerPhenotype
-        List <PhenoKey> listOfDataSets  = sharedToolsService.extractASingleList(params.phenotype,processedMetadata.sampleGroupsPerAnnotatedPhenotype)
-        String datasetsForTransmission = sharedToolsService.packageUpAStaggeredListAsJson (listOfDataSets)
+        // DIGP_60: using new medatata data structure to retrieve datasets
+        String dataSetString = this.metaDataService.getSampleGroupNameListForPhenotypeAsJson(params.phenotype);
         def slurper = new JsonSlurper()
-        def result = slurper.parseText(datasetsForTransmission)
+        def result = slurper.parseText(dataSetString)
         String sampleGroupForTransmission  = """{"sampleGroup":"${dataset}"}"""
         def defaultSampleGroup = slurper.parseText(sampleGroupForTransmission)
 
@@ -217,20 +221,20 @@ class VariantSearchController {
 
 
         // DIGP_47: comment out shared tool service DS for new one for now
-//        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
-//        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
-//        LinkedHashMap<PhenoKey,List<String>> annotatedSampleGroups =  processedMetadata.propertiesPerOrderedSampleGroups
-//        LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> phenotypeSpecificSampleGroupProperties = processedMetadata['phenotypeSpecificPropertiesAnnotatedPerSampleGroup']
-//        List <String> listOfProperties  = sharedToolsService.combineToCreateASingleList( params.phenotype, datasetChoice,
-//                                                                                             annotatedSampleGroups,
-//                                                                                             phenotypeSpecificSampleGroupProperties )
-//        String propertiesForTransmission = sharedToolsService.packageUpAListAsJson (listOfProperties)
+        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
+        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
+        LinkedHashMap<PhenoKey,List<String>> annotatedSampleGroups =  processedMetadata.propertiesPerOrderedSampleGroups
+        LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> phenotypeSpecificSampleGroupProperties = processedMetadata['phenotypeSpecificPropertiesAnnotatedPerSampleGroup']
+        List <String> listOfProperties  = sharedToolsService.combineToCreateASingleList( params.phenotype, datasetChoice,
+                                                                                             annotatedSampleGroups,
+                                                                                             phenotypeSpecificSampleGroupProperties )
+        String propertiesForTransmission = sharedToolsService.packageUpAListAsJson (listOfProperties)
         def slurper = new JsonSlurper()
-//        def result = slurper.parseText(propertiesForTransmission)
-        def result2 = slurper.parseText(this.metaDataService.getSearchablePropertyNameListAsJson(datasetChoice))
+        def result = slurper.parseText(propertiesForTransmission)
+//        def result = slurper.parseText(this.metaDataService.getSearchablePropertyNameListAsJson(datasetChoice))
 
         render(status: 200, contentType: "application/json") {
-            [datasets: result2,
+            [datasets: result,
             chosenDataset:datasetChoice]
         }
 

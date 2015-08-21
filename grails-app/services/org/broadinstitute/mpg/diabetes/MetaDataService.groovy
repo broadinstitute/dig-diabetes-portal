@@ -3,6 +3,7 @@ package org.broadinstitute.mpg.diabetes
 import dport.RestServerService
 import grails.transaction.Transactional
 import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.util.PortalException
 
@@ -12,9 +13,19 @@ class MetaDataService {
     JsonParser jsonParser = JsonParser.getService();
     Integer forceProcessedMetadataOverride = -1
     RestServerService restServerService;
+    def grailsApplication
 
     def serviceMethod() {
 
+    }
+
+    /**
+     * returns the data version to use
+     *
+     * @return
+     */
+    public String getDataVersion() {
+        return this.grailsApplication.config.diabetes.data.version;
     }
 
     public void setForceProcessedMetadataOverride(Integer forceProcessedMetadataOverride) {
@@ -102,13 +113,29 @@ class MetaDataService {
         return sampleGroupName;
     }
 
-    public String getSearchablePropertyNameListAsJson(String sampleGroupId) throws PortalException {
+    /**
+     * returns the searchable properties for a sample group and all it's children
+     *
+     * TODO - split this into retrieve and then format method so it can be reused somewhere else if need be
+     *
+     * @param sampleGroupId
+     * @return
+     * @throws PortalException
+     */
+    public String getSearchablePropertyNameListAsJson(String sampleGroupId) {
         // local variables
         List<String> propertyNameList;
         StringBuilder propertyBuilder = new StringBuilder();
 
         // get the list if strings from the json parser
-        propertyNameList = this.getJsonParser().getSearchablePropertiesForSampleGroupAndChildren(sampleGroupId);
+        try {
+            propertyNameList = this.getJsonParser().getSearchablePropertiesForSampleGroupAndChildren(sampleGroupId);
+
+        } catch (PortalException exception) {
+            log.error("Got exception retrieving property name list for selected sample group: " + sampleGroupId + " : " + exception.getMessage());
+            // create empty list
+            propertyNameList = new ArrayList<String>();
+        }
 
         // create a json compatible string list
         for (int i = 0; i < propertyNameList.size(); i++) {
@@ -126,5 +153,47 @@ class MetaDataService {
 
         // return the json string
         return groovyString;
+    }
+
+    public String getSampleGroupNameListForPhenotypeAsJson(String phenotypeName) {
+        // local variables
+        GString jsonString;
+        List<SampleGroup> groupList;
+        StringBuilder builder = new StringBuilder();
+        List<String> nameList = new ArrayList<String>();
+
+        // get the sample group list for the phenotype
+        try {
+            groupList = this.getJsonParser().getSamplesGroupsForPhenotype(phenotypeName, this.getDataVersion());
+
+            // sort the group list
+            Collections.sort(groupList);
+
+            // add all the names to the name list
+            for (SampleGroup group : groupList) {
+                StringBuilder depthBuilder = new StringBuilder();
+                for (int i = 0; i < group.getNestedLevel(); i++) {
+                    depthBuilder.append("-");
+                }
+
+                nameList.add(depthBuilder.toString() + group.getSystemId());
+            }
+
+        } catch (PortalException exception) {
+            log.error("Got exception retrieving sample group name list for selected phenotype: " + phenotypeName + " : " + exception.getMessage());
+        }
+
+        //create the json string
+        for (String nameString : nameList) {
+            builder.append("\"" + nameString + "\"");
+
+            if (!nameList.get(nameList.size() - 1).equalsIgnoreCase(nameString)) {
+                builder.append(",");
+            }
+        }
+        jsonString ="{\"is_error\": false, \"numRecords\":${nameList.size()}, \"dataset\":[${builder.toString()}]}";
+
+        // return
+        return jsonString;
     }
 }
