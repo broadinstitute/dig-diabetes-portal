@@ -1992,53 +1992,6 @@ ${getDataHeader (0, 100, 3000, false)}
 
 
 
-    private List<String> generateSampleGroupsContainingProperty (String propertyOfInterest,LinkedHashMap<String, List<String>> sampleGroupSpecificProperties){
-        List<String> returnValue = []
-        sampleGroupSpecificProperties.each{ String sampleGroupName, LinkedHashMap map ->
-            String sampleGroupId = map.sampleGroupId
-            if (map.containsKey(propertyOfInterest)){
-                returnValue << sampleGroupId
-            }
-        }
-        return returnValue
-    }
-
-
-
-
-
-
-
-
-
-    private String packageSampleGroupsContainingProperty (String propertyOfInterest,LinkedHashMap<String, List<String>> sampleGroupSpecificProperties){
-       List<String> sampleGroupsContainingPropertyList  =  generateSampleGroupsContainingProperty(propertyOfInterest,sampleGroupSpecificProperties)
-       StringBuilder sb  = new StringBuilder()
-       Boolean firstTime = true
-       for (String sampleGroupsContainingProperty in sampleGroupsContainingPropertyList) {
-           if (firstTime)   {
-               firstTime = false
-           }  else {
-               // KDUXTD-98: temporary fix for pulling OMNI data which isn't there yet
-               if (!sampleGroupsContainingProperty?.equals("GWAS_SIGMA1_mdv2")) {
-                   sb << """,
-""".toString()
-               }
-           }
-           // KDUXTD-98: temporary fix for pulling OMNI data which isn't there yet
-           if (!sampleGroupsContainingProperty?.equals("GWAS_SIGMA1_mdv2")) {
-               sb << """      "${sampleGroupsContainingProperty}" """.toString()
-           } else {
-               log.info("skipping sample group: " + sampleGroupsContainingProperty)
-           }
-
-       }
-       return sb.toString()
-   }
-
-
-
-
     private String generateTraitPerVariantJson (String variantName){
         String dirMatchers =   metadataUtilityService.createPhenotypePropertyFieldRequester(
                 JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("DIR", sharedToolsService.getCurrentDataVersion (), "GWAS"))

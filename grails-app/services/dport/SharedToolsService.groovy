@@ -359,7 +359,7 @@ class SharedToolsService {
             LinkedHashMap<PhenoKey, List<String>> annotatedOrderedSampleGroups = [:]
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> phenotypeSpecificSampleGroupProperties = [:]
             LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> phenotypeSpecificAnnotatedSampleGroupProperties = [:]
-            LinkedHashMap<String, LinkedHashMap<String, List<String>>> experimentSpecificSampleGroupProperties = [:]
+           // LinkedHashMap<String, LinkedHashMap<String, List<String>>> experimentSpecificSampleGroupProperties = [:]
             LinkedHashMap<String, LinkedHashMap<String, String>> commonProperties = [:]
             String dataSetVersionThatWeWant = getCurrentDataVersion()
             if (metadata) {
@@ -375,7 +375,7 @@ class SharedToolsService {
                         getPhenotypeSpecificAnnotatedPropertiesPerSampleGroupId(experiment.sample_groups, phenotypeSpecificAnnotatedSampleGroupProperties)
                         if (experiment.technology == "GWAS"){
                             getTechnologySpecificPhenotype(experiment.sample_groups,gwasSpecificPhenotype)
-                            getTechnologySpecificExperiment(experiment.sample_groups,experimentSpecificSampleGroupProperties)
+                          //  getTechnologySpecificExperiment(experiment.sample_groups,experimentSpecificSampleGroupProperties)
                         }
                     }
                 }
@@ -398,7 +398,7 @@ class SharedToolsService {
             sharedProcessedMetadata['propertiesPerOrderedSampleGroups'] = annotatedOrderedSampleGroups
             sharedProcessedMetadata['phenotypeSpecificPropertiesPerSampleGroup'] = phenotypeSpecificSampleGroupProperties
             sharedProcessedMetadata['phenotypeSpecificPropertiesAnnotatedPerSampleGroup'] = phenotypeSpecificAnnotatedSampleGroupProperties
-            sharedProcessedMetadata['sampleGroupSpecificProperties'] = experimentSpecificSampleGroupProperties
+           // sharedProcessedMetadata['sampleGroupSpecificProperties'] = experimentSpecificSampleGroupProperties
             sharedProcessedMetadata['commonProperties'] = commonProperties          // DIGP_47: still used for rest server post calls for props to display
             forceProcessedMetadataOverride = 0
         }
@@ -572,37 +572,37 @@ class SharedToolsService {
      * @param phenotypeMap
      * @return
      */
-    public LinkedHashMap<String, List <LinkedHashMap>> getTechnologySpecificExperiment (def sampleGroups, LinkedHashMap<String, List<String>> sampleGroupHolder){
-        for (def sampleGroup in sampleGroups){
-            String sampleGroupId = sampleGroup.id
-            String sampleGroupName = sampleGroup.name
-            LinkedHashMap sampleGroupMap = [sampleGroupId:sampleGroupId]
-            if (sampleGroup.properties){
-                for (def property in sampleGroup.properties){
-                    if (property.searchable == "TRUE"){
-                        String propertyName = property.name
-                        String propertyType = property.type
-                        if (!sampleGroupMap.containsKey(propertyName)){
-                            sampleGroupMap[propertyName] = propertyType
-                        }
-                        if (sampleGroup.sample_groups){
-                            getTechnologySpecificExperiment (sampleGroup.sample_groups,sampleGroupHolder)
-                        }
-                    }
-                }
-                if (sampleGroup.phenotypes){
-                    sampleGroupMap["phenotypeList"] = []
-                    for (def phenotype in sampleGroup.phenotypes){
-                        sampleGroupMap["phenotypeList"] << phenotype.name
-                    }
-                }
-            }
-            if (!sampleGroupHolder.containsKey(sampleGroupName)){
-                sampleGroupHolder[sampleGroupName] = sampleGroupMap
-            }
-        }
-        return sampleGroupHolder
-    }
+//    public LinkedHashMap<String, List <LinkedHashMap>> getTechnologySpecificExperiment (def sampleGroups, LinkedHashMap<String, List<String>> sampleGroupHolder){
+//        for (def sampleGroup in sampleGroups){
+//            String sampleGroupId = sampleGroup.id
+//            String sampleGroupName = sampleGroup.name
+//            LinkedHashMap sampleGroupMap = [sampleGroupId:sampleGroupId]
+//            if (sampleGroup.properties){
+//                for (def property in sampleGroup.properties){
+//                    if (property.searchable == "TRUE"){
+//                        String propertyName = property.name
+//                        String propertyType = property.type
+//                        if (!sampleGroupMap.containsKey(propertyName)){
+//                            sampleGroupMap[propertyName] = propertyType
+//                        }
+//                        if (sampleGroup.sample_groups){
+//                            getTechnologySpecificExperiment (sampleGroup.sample_groups,sampleGroupHolder)
+//                        }
+//                    }
+//                }
+//                if (sampleGroup.phenotypes){
+//                    sampleGroupMap["phenotypeList"] = []
+//                    for (def phenotype in sampleGroup.phenotypes){
+//                        sampleGroupMap["phenotypeList"] << phenotype.name
+//                    }
+//                }
+//            }
+//            if (!sampleGroupHolder.containsKey(sampleGroupName)){
+//                sampleGroupHolder[sampleGroupName] = sampleGroupMap
+//            }
+//        }
+//        return sampleGroupHolder
+//    }
 
 
 
