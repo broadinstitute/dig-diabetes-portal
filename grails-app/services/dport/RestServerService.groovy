@@ -1,12 +1,10 @@
 package dport
-
 import dport.meta.UserQueryContext
 import grails.plugins.rest.client.RestBuilder
 import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
-import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -362,6 +360,16 @@ ${getDataHeader (0, 100, 1000, false)}
         return BASE_URL;
     }
 
+    /**
+     * get the current burden rest server
+     *
+     * @return
+     */
+    public String getCurrentBurdenServer() {
+        // TODO - DIGP-72: Need to set this in Config and maker it toggable by the systems controller
+        return "http://dig-dev.broadinstitute.org:8888/dev/burden/v2"
+    }
+
     public String whatIsMyCurrentServer() {
         return currentRestServer()
     }
@@ -521,6 +529,16 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return returnValue
     }
 
+    /**
+     * burden call to the REST server
+     *
+     * @param jsonString
+     * @return
+     */
+    public JSONObject postBurdenRestCall(String jsonString) {
+        JSONObject tempObject = this.postRestCallBase(jsonString, "", this.getCurrentBurdenServer());
+        return tempObject;
+    }
 
     private JSONObject postRestCall(String drivingJson, String targetUrl) {
         return postRestCallBase(drivingJson, targetUrl, currentRestServer())

@@ -1,0 +1,67 @@
+package org.broadinstitute.mpg.diabetes.burden.parser;
+
+import junit.framework.TestCase;
+import org.broadinstitute.mpg.diabetes.util.PortalException;
+import org.codehaus.groovy.grails.web.json.JSONObject;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+/**
+ * Created by mduby on 8/21/15.
+ */
+public class BurdenJsonBuilderTest extends TestCase {
+    // instance variables
+    BurdenJsonBuilder burdenJsonBuilder;
+    String jsonString = null;
+
+    @Before
+    public void setUp() throws Exception {
+        // set up the service
+        this.burdenJsonBuilder = BurdenJsonBuilder.getBurdenJsonBuilder();
+        InputStream inputStream = getClass().getResourceAsStream("burdenRequest.json");
+        jsonString = new Scanner(inputStream).useDelimiter("\\A").next();
+    }
+
+    @Test
+    public void testGetBurdenPostJsonString() {
+        // local variables
+        List<String> variantList = new ArrayList<String>();
+        JSONObject referenceJson = null;
+        JSONObject generatedJson = null;
+
+        // add 10 variants to the list
+        variantList.add("1_2522446_");
+        variantList.add("1_2522529_");
+        variantList.add("1_2523027_");
+        variantList.add("1_2524110_");
+        variantList.add("1_2524271_");
+        variantList.add("1_2526245_");
+        variantList.add("1_2529663_");
+        variantList.add("1_2530211_");
+        variantList.add("1_2530219_");
+        variantList.add("1_2535651_");
+
+        // read in the test file
+        referenceJson = new JSONObject(this.jsonString);
+
+        // test to make sure reference works
+        assertNotNull(referenceJson);
+
+        // create the new json object from the builder call
+        try {
+            generatedJson = this.burdenJsonBuilder.getBurdenPostJson(variantList, null);
+
+        } catch (PortalException exception) {
+            fail("Got exception generating burden call json payload: " + exception.getMessage());
+        }
+
+        // test
+        assertNotNull(generatedJson);
+        assertEquals(referenceJson.toString(), generatedJson.toString());
+    }
+}

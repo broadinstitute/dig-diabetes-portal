@@ -133,7 +133,7 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
 //        assert oldJson == newJson         // taking out for now until know what to expect
     }
 
-    void "test variant search dataset drop down upon phenotype selection"() {
+    void "test variant search dataset drop down population upon phenotype selection"() {
         when:
         String phenotype = "HBA1C"
         JSONObject jsonObject = sharedToolsService.retrieveMetadata()
@@ -150,4 +150,23 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
         then:
         assert oldJson == newJson
     }
+
+    // TODO - table this for now to work on burden test front end
+    /*
+    void "test variant search phenotype drop down populating"() {
+        when:
+        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
+        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
+        LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties = processedMetadata.phenotypeSpecificPropertiesPerSampleGroup
+        LinkedHashMap<String, List<String>> listOfPhenotypes = sharedToolsService.extractAPhenotypeListofGroups( phenotypeSpecificSampleGroupProperties )
+        String phenotypesForTransmission = sharedToolsService.packageUpAHierarchicalListAsJson (listOfPhenotypes)
+        def slurper = new JsonSlurper()
+        def oldJson = slurper.parseText(phenotypesForTransmission)
+
+        JSONObject newJson
+
+        then:
+        assert oldJson == newJson
+    }
+    */
 }
