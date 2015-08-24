@@ -2,6 +2,9 @@ package dport
 
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
+import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class TraitController {
@@ -9,6 +12,7 @@ class TraitController {
     SharedToolsService sharedToolsService
     private static final log = LogFactory.getLog(this)
     MetaDataService metaDataService
+    MetadataUtilityService metadataUtilityService
 
 
 
@@ -72,11 +76,14 @@ class TraitController {
          LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
          LinkedHashMap phenotypeMap = processedMetadata.gwasSpecificPhenotypes
          String dataSetName
-         LinkedHashMap properties
+         LinkedHashMap properties = [:]
          if (phenotypeMap.containsKey(phenotypicTrait)){
-             LinkedHashMap traitHolderMap = phenotypeMap[phenotypicTrait]
-             dataSetName = traitHolderMap.sampleGroupId
-             properties = traitHolderMap.properties
+             List<PhenotypeBean> phenotypeList = JsonParser.getService().getAllPhenotypesWithName(phenotypicTrait, sharedToolsService.getCurrentDataVersion (), "GWAS")
+             List<Property> propertyList =  metadataUtilityService.retrievePhenotypeProperties(phenotypeList)
+             dataSetName = metadataUtilityService.retrievePhenotypeSampleGroupId(phenotypeList)
+             for (Property property in propertyList){
+                 properties[property.getName()] = property.getPropertyType()
+             }
          } else  {
              log.info("Unknown GWAS specific phenotype = '${phenotypicTrait}")
              // nothing we can do with this

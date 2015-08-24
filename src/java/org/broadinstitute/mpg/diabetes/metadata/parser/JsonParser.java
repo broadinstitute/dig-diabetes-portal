@@ -10,6 +10,7 @@ import org.codehaus.groovy.grails.web.json.JSONArray;
 import org.codehaus.groovy.grails.web.json.JSONException;
 import org.codehaus.groovy.grails.web.json.JSONObject;
 import org.codehaus.groovy.grails.web.json.JSONTokener;
+import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -186,6 +187,30 @@ public class JsonParser {
         }
 
         return finalPropertyList;
+    }
+
+
+    public List<Phenotype> getAllPhenotypesWithName(String phenotypeName, String version, String technology) throws PortalException {
+        List<Phenotype> phenotypeList = new ArrayList<Phenotype>();
+        List<Experiment> experimentList;
+        List<Phenotype> finalPhenotypeList = new ArrayList<Phenotype>();
+
+        // find the experiment
+        ExperimentByVersionVisitor experimentVisitor = new ExperimentByVersionVisitor(version);
+        this.getMetaDataRoot().acceptVisitor(experimentVisitor);
+        experimentList = experimentVisitor.getExperimentList();
+
+        // for experiment, find the property list
+        for (Experiment experiment : experimentList) {
+            if (experiment.getTechnology().equalsIgnoreCase(technology)){
+                PhenotypeByNameVisitor phenotypeByNameVisitor = new PhenotypeByNameVisitor(phenotypeName);
+                experiment.acceptVisitor(phenotypeByNameVisitor);
+                phenotypeList = phenotypeByNameVisitor.getPhenotypeList();
+                finalPhenotypeList.addAll(phenotypeList);
+            }
+        }
+
+        return finalPhenotypeList;
     }
 
     /**

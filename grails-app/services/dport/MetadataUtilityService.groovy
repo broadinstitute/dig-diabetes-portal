@@ -91,24 +91,56 @@ class MetadataUtilityService {
         return returnValue
     }
 
-
-    public LinkedHashMap<String,String> createPhenotypeSampleGroupNameMap(List<Property>  propertyList) {
-        LinkedHashMap<String,String>  returnValue = [:]
-        if (propertyList){
-            // we will mostly iterate over this parent list
-            List<PhenotypeBean> phenotypeBeanList = propertyList.collect{PropertyBean pb->return pb.parent}
-            // create a list of sample groups associated with our property
-            for (PhenotypeBean phenotypeBean in phenotypeBeanList){
-                if (!returnValue.containsKey(phenotypeBean.name)){
-                    returnValue [phenotypeBean.name]  = phenotypeBean?.parent?.systemId
-                } else {
-                    log.error("NOTE: Phenotype = ${phenotypeBean.name} Unexpectedly found in multiple sample groups: createPhenotypeSampleGroupMap")
-                }
-            }
+    /***
+     * we need one phenotype record to draw from.  If we get two pick one.  If we get zero amounts a problem
+     * @param phenotypeList
+     * @return
+     */
+    private PhenotypeBean filterPhenotypeList(List<PhenotypeBean>  phenotypeList) {
+        PhenotypeBean  returnValue = []
+        if (phenotypeList){
+             if (phenotypeList.size()>1){ // if we have multiple phenotype lists, then favor DIAGRAM GWAS
+                 List <PhenotypeBean> listHolder = phenotypeList.findAll{it.parent.name== "DIAGRAM"}
+                 if (listHolder.size()==1){
+                     returnValue = listHolder[0]
+                 } else {
+                     log.error("Expected to find DIAGRAM as one of the data sets in filterPhenotypeList.  Choosing arbitrarily!")
+                     returnValue = phenotypeList[0]
+                 }
+             }else  if (phenotypeList.size()>0){ // otherwise take whatever we have
+                 returnValue = phenotypeList[0]
+             }
         }
         return returnValue
     }
 
+    /***
+     * Pull out the searchable properties from a phenotype record
+     * @param phenotypeList
+     * @return
+     */
+    public List<Property> retrievePhenotypeProperties(List<PhenotypeBean>  phenotypeList) {
+        List<PhenotypeBean>  returnValue = []
+        PhenotypeBean phenotype = filterPhenotypeList(phenotypeList)
+        if (phenotype){
+            returnValue = phenotype?.propertyList?.findAll{it.searchable}
+        }
+        return returnValue
+    }
+
+    /***
+     * Pull out the sample group from a phenotype
+     * @param phenotypeList
+     * @return
+     */
+    public String retrievePhenotypeSampleGroupId(List<PhenotypeBean>  phenotypeList) {
+        String  returnValue = ""
+        PhenotypeBean phenotype = filterPhenotypeList(phenotypeList)
+        if (phenotype){
+            returnValue = phenotype?.parent?.systemId
+        }
+        return returnValue
+    }
 
     public LinkedHashMap<String,String> createPhenotypeSampleGroupMap(List<Property>  propertyList) {
         LinkedHashMap<String,String>  returnValue = [:]

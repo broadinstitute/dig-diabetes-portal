@@ -4,6 +4,9 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
+import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class VariantSearchController {
@@ -11,6 +14,7 @@ class VariantSearchController {
     RestServerService restServerService
     SharedToolsService sharedToolsService
     MetaDataService metaDataService
+    MetadataUtilityService metadataUtilityService
     private static final log = LogFactory.getLog(this)
 
     def index() {}
@@ -265,6 +269,9 @@ class VariantSearchController {
 
         JSONObject jsonObject = sharedToolsService.retrieveMetadata()
         LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
+//        List<PhenotypeBean> phenotypeList = JsonParser.getService().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "GWAS")
+//        List<Property> propertyList =  metadataUtilityService.retrievePhenotypeProperties(phenotypeList)
+
         LinkedHashMap phenotypeMap = processedMetadata.gwasSpecificPhenotypes
         LinkedHashMap<String, List<String>> listOfPhenotypes = sharedToolsService.extractAPhenotypeListofGroups( phenotypeMap )
         String phenotypesForTransmission = sharedToolsService.packageUpAHierarchicalListAsJson (listOfPhenotypes)
