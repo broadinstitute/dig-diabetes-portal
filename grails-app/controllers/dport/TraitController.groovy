@@ -37,19 +37,9 @@ class TraitController {
     def traitSearch() {
         String phenotypeKey=sharedToolsService.convertOldPhenotypeStringsToNewOnes (params.trait)
         String requestedSignificance=params.significance
-        // DIGP-47: switch metadata traversal to new data structure
-//        LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
-//        LinkedHashMap phenotypeMap = processedMetadata.gwasSpecificPhenotypes
-//        String sampleGroupOwner = ""
-//        if (phenotypeMap.containsKey(phenotypeKey))  {
-//            sampleGroupOwner  = phenotypeMap[phenotypeKey]?.sampleGroupName
-//        }
         String sampleGroupOwner = this.metaDataService.getGwasSampleGroupNameForPhenotype(phenotypeKey)
-        String phenotypeName = ''
         String phenotypeDataSet = ''
         String phenotypeTranslation = sharedToolsService.translator(phenotypeKey)
-        phenotypeName =  phenotypeTranslation
-        phenotypeDataSet = ""
 
         render(view: 'phenotype',
                 model: [show_gwas            : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
@@ -57,7 +47,7 @@ class TraitController {
                         show_exseq           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
                         show_gene            : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
                         phenotypeKey         : phenotypeKey,
-                        phenotypeName        : phenotypeName,
+                        phenotypeName        : phenotypeTranslation,
                         phenotypeDataSet     : phenotypeDataSet,
                         sampleGroupOwner     : sampleGroupOwner,
                         requestedSignificance: requestedSignificance])

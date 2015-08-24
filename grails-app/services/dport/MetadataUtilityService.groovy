@@ -92,6 +92,24 @@ class MetadataUtilityService {
     }
 
 
+    public LinkedHashMap<String,String> createPhenotypeSampleGroupNameMap(List<Property>  propertyList) {
+        LinkedHashMap<String,String>  returnValue = [:]
+        if (propertyList){
+            // we will mostly iterate over this parent list
+            List<PhenotypeBean> phenotypeBeanList = propertyList.collect{PropertyBean pb->return pb.parent}
+            // create a list of sample groups associated with our property
+            for (PhenotypeBean phenotypeBean in phenotypeBeanList){
+                if (!returnValue.containsKey(phenotypeBean.name)){
+                    returnValue [phenotypeBean.name]  = phenotypeBean?.parent?.systemId
+                } else {
+                    log.error("NOTE: Phenotype = ${phenotypeBean.name} Unexpectedly found in multiple sample groups: createPhenotypeSampleGroupMap")
+                }
+            }
+        }
+        return returnValue
+    }
+
+
     public LinkedHashMap<String,String> createPhenotypeSampleGroupMap(List<Property>  propertyList) {
         LinkedHashMap<String,String>  returnValue = [:]
         if (propertyList){

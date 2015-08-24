@@ -351,7 +351,6 @@ class SharedToolsService {
                 (sharedProcessedMetadata.size() == 0) ||
                 (forceProcessedMetadataOverride == 1)) {
             sharedProcessedMetadata = [:]
-            List<String> captured = []
             LinkedHashMap<String, List <LinkedHashMap>>  gwasSpecificPhenotype = [:]
             LinkedHashMap<String, List<String>> annotatedPhenotypes = [:]
             LinkedHashMap<PhenoKey, List<PhenoKey>> temporaryAnnotatedPhenotypes = [:]
@@ -364,7 +363,6 @@ class SharedToolsService {
             String dataSetVersionThatWeWant = getCurrentDataVersion()
             if (metadata) {
                 for (def experiment in metadata.experiments) {
-                    captured << experiment.name
                     String dataSetVersion = experiment.version
                     if ((experiment.sample_groups) && (dataSetVersionThatWeWant == dataSetVersion)) {
                         getDataSetsPerPhenotype(experiment.sample_groups, annotatedPhenotypes)
@@ -390,7 +388,6 @@ class SharedToolsService {
                     }
                 }
             }
-            sharedProcessedMetadata['rootSampleGroups'] = captured                  // not used anywhere
             sharedProcessedMetadata['gwasSpecificPhenotypes'] = gwasSpecificPhenotype
             sharedProcessedMetadata['sampleGroupsPerPhenotype'] = annotatedPhenotypes
             sharedProcessedMetadata['sampleGroupsPerAnnotatedPhenotype'] =  temporaryAnnotatedPhenotypes
