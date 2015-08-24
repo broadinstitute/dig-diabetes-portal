@@ -102,4 +102,42 @@ public class BurdenJsonBuilder {
         // return
         return stringBuilder.toString();
     }
+
+    /**
+     * return a bruce force constrcuted string for the getData query to return all variants for a gene with a certain most del score
+     *
+     * @param geneString
+     * @param mostDelScore
+     * @return
+     * @throws PortalException
+     */
+    public String getKnowledgeBaseQueryPayloadForVariantSearch(String sampleGroup, String geneString, int mostDelScore) throws PortalException {
+        // local variables
+        StringBuilder stringBuilder = new StringBuilder();
+
+        // build the header of the search query
+        stringBuilder.append("{\"passback\": \"123abc\", \"entity\": \"variant\", \"page_number\": 0, \"page_size\": 100, \"limit\": 1000, \"count\": false,");
+
+        // add in the properties
+       stringBuilder.append("\"properties\": { \"cproperty\": [\"VAR_ID\"], \"orderBy\": [\"CHROM\"], \"dproperty\": {}, \"pproperty\": {}},");
+
+        // add in the filters
+        // phenotype filter
+        stringBuilder.append("\"filters\": [{\"dataset_id\": \"");
+        stringBuilder.append(sampleGroup);
+        stringBuilder.append("\", \"phenotype\": \"T2D\", \"operand\": \"P_FIRTH_FE_IV\", \"operator\": \"LTE\", \"value\": 0.05, \"operand_type\": \"FLOAT\"},");
+
+        // gene filter
+        stringBuilder.append("{\"dataset_id\": \"blah\", \"phenotype\": \"blah\", \"operand\": \"GENE\", \"operator\": \"EQ\", \"value\": \"");
+        stringBuilder.append(geneString);
+        stringBuilder.append("\", \"operand_type\": \"STRING\"},");
+
+        // most del score filter
+        stringBuilder.append("{\"dataset_id\": \"blah\", \"phenotype\": \"blah\", \"operand\": \"MOST_DEL_SCORE\", \"operator\": \"LT\", \"value\": ");
+        stringBuilder.append(mostDelScore);
+        stringBuilder.append(", \"operand_type\": \"FLOAT\"}]}");
+
+        // return
+        return stringBuilder.toString();
+    }
 }

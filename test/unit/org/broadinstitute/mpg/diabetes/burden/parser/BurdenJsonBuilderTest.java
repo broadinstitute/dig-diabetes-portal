@@ -64,4 +64,32 @@ public class BurdenJsonBuilderTest extends TestCase {
         assertNotNull(generatedJson);
         assertEquals(referenceJson.toString(), generatedJson.toString());
     }
+
+    public void testGetKnowledgeBaseQueryPayloadForVariantSearch() {
+        // local variables
+        JSONObject referenceJson = null;
+        JSONObject generatedJson = null;
+        String sampleGroup = "ExSeq_17k_mdv2";
+        String geneString = "SLC30A8";
+        int mostDelScore = 4;
+
+        // read the reference json from the stored file
+        InputStream inputStream = getClass().getResourceAsStream("variantQuery.json");
+        String readJsonString = new Scanner(inputStream).useDelimiter("\\A").next();
+        referenceJson = new JSONObject(readJsonString);
+
+        // create the json from the builder
+        try {
+            String generatedJsonString = this.burdenJsonBuilder.getKnowledgeBaseQueryPayloadForVariantSearch(sampleGroup, geneString, mostDelScore);
+            generatedJson = new JSONObject(generatedJsonString);
+
+        } catch (PortalException exception) {
+            fail("Got error creating getData for variant search: " + exception.getMessage());
+        }
+
+        // test
+        assertNotNull(generatedJson);
+        assertEquals(referenceJson.toString(), generatedJson.toString());
+    }
+
 }

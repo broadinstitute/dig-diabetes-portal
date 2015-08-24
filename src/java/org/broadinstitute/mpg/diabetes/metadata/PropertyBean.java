@@ -2,6 +2,7 @@ package org.broadinstitute.mpg.diabetes.metadata;
 
 import org.broadinstitute.mpg.diabetes.metadata.visitor.DataSetVisitor;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
+import org.broadinstitute.mpg.diabetes.util.PortalException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,6 +144,44 @@ public class PropertyBean implements Property, Comparable {
 
         // return the string
         return builder.toString();
+    }
+
+    /**
+     * returns the property query string in json format
+     *
+     * @return
+     * @throws PortalException
+     */
+    public String getWebServiceQueryString() throws PortalException {
+        // local variables
+        StringBuilder stringBuilder = new StringBuilder();
+
+        // return different property string based on what type of property it is
+        if (this.getPropertyType() == PortalConstants.TYPE_COMMON_PROPERTY_KEY) {
+            // simply return the name
+            stringBuilder.append("\"");
+            stringBuilder.append(this.getName());
+            stringBuilder.append("\"");
+
+        } else if (this.getPropertyType() == PortalConstants.TYPE_COMMON_PROPERTY_KEY) {
+            // TODO - need to implement
+
+        } else if (this.getPropertyType() == PortalConstants.TYPE_COMMON_PROPERTY_KEY) {
+            // build data structure based on sample group and phenotype
+            stringBuilder.append("\"");
+            stringBuilder.append(this.getName());
+            stringBuilder.append("\" : { \"");
+            stringBuilder.append(this.getParent().getParent().getName());
+            stringBuilder.append("\" : [ \"");
+            stringBuilder.append(this.getParent().getName());
+            stringBuilder.append("\" ] }");
+
+        } else {
+            throw new PortalException("got invalid property type: " + this.getPropertyType());
+        }
+
+        // return the property query string
+        return stringBuilder.toString();
     }
 
     /**
