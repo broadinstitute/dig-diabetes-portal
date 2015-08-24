@@ -3,6 +3,7 @@ package org.broadinstitute.mpg.diabetes.burden.parser;
 import junit.framework.TestCase;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
 import org.codehaus.groovy.grails.web.json.JSONObject;
+import org.codehaus.groovy.grails.web.json.JSONTokener;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -90,6 +91,36 @@ public class BurdenJsonBuilderTest extends TestCase {
         // test
         assertNotNull(generatedJson);
         assertEquals(referenceJson.toString(), generatedJson.toString());
+    }
+
+    /**
+     * test parsing the getData variant list return json object
+     *
+     */
+    @Test
+    public void testGetVariantListFromJson() {
+        // local variables
+        JSONObject inputJsonObject;
+        JSONTokener tokener;
+        String referenceString = "{\"is_error\": false, \"numRecords\": 2, \"variants\": [[{\"VAR_ID\": \"8_118184783_C_T\"}],[{\"VAR_ID\": \"8_118170004_C_T\"}]], \"passback\": \"123abc\"}";
+        List<String> variantList = null;
+
+        // create the reference to input to the builder
+        tokener = new JSONTokener(referenceString);
+        inputJsonObject = new JSONObject(tokener);
+
+        // call the builder
+        try {
+            variantList = this.burdenJsonBuilder.getVariantListFromJson(inputJsonObject);
+
+        } catch (PortalException exception) {
+            fail("got variant list parsing error: " + exception.getMessage());
+        }
+
+        // test
+        assertNotNull(variantList);
+        assertTrue(variantList.size() > 0);
+        assertEquals("[8_118184783_C_T, 8_118170004_C_T]", variantList.toString());
     }
 
 }

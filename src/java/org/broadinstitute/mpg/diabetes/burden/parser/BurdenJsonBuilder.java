@@ -2,9 +2,11 @@ package org.broadinstitute.mpg.diabetes.burden.parser;
 
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
+import org.codehaus.groovy.grails.web.json.JSONArray;
 import org.codehaus.groovy.grails.web.json.JSONException;
 import org.codehaus.groovy.grails.web.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -139,5 +141,46 @@ public class BurdenJsonBuilder {
 
         // return
         return stringBuilder.toString();
+    }
+
+    /**
+     * get the variant list from the getData variant search json result
+     *
+     * @param jsonObject
+     * @return
+     * @throws PortalException
+     */
+    public List<String> getVariantListFromJson(JSONObject jsonObject) throws PortalException {
+        // local variables
+        List<String> variantList = new ArrayList<String>();
+        JSONObject tempObject;
+        JSONArray tempArray, tempArray2;
+        String varId;
+
+        // get the variants object
+        if (jsonObject != null) {
+            tempArray = jsonObject.getJSONArray(PortalConstants.JSON_VARIANTS_KEY);
+
+            // get the array under the variants object
+            if ((tempArray != null) && (tempArray.size() > 0)) {
+                for (int i = 0; i < tempArray.size(); i++) {
+                    tempArray2 = (JSONArray)tempArray.get(i);
+                    if ((tempArray2 != null) && (tempArray2.size() > 0)) {
+                        tempObject = (JSONObject) tempArray2.get(0);
+
+                        // get the var_id
+                        varId = tempObject.getString(PortalConstants.JSON_VARIANT_ID_KEY);
+                        variantList.add(varId);
+                    }
+                }
+            } else {
+                throw new PortalException("got no variants json object for burden test variant list building");
+            }
+        } else {
+            throw new PortalException("got null json object for burden test variant list building");
+        }
+
+        // return the list
+        return variantList;
     }
 }

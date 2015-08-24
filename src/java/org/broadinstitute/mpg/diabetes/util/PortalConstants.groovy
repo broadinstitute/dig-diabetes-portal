@@ -16,6 +16,11 @@ class PortalConstants {
     public final static String JSON_ID_KEY              = "id";
     public final static String JSON_SEARCHABLE_KEY      = "searchable";
     public final static String JSON_SORT_ORDER_KEY      = "sort_order";
+    public final static String JSON_VARIANTS_KEY        = "variants";
+    public final static String JSON_VARIANT_ID_KEY      = "VAR_ID";
+    public final static String JSON_NUMBER_RECORDS_KEY  = "numRecords";
+    public final static String JSON_ERROR_KEY           = "is_error";
+    public final static String JSON_PASSBACK_KEY        = "passback";
 
     // json mapping array key values
     public final static String JSON_DATASETS_KEY        = "sample_groups";
