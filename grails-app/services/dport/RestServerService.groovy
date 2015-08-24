@@ -540,6 +540,16 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return tempObject;
     }
 
+    /**
+     * post a getData call with the given json string
+     *
+     * @param jsonString
+     * @return
+     */
+    public JSONObject postGetDataCall(String jsonString) {
+        return this.postRestCall(jsonString, this.GET_DATA_URL);
+    }
+
     private JSONObject postRestCall(String drivingJson, String targetUrl) {
         return postRestCallBase(drivingJson, targetUrl, currentRestServer())
     }
