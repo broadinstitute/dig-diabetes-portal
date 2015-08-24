@@ -1,5 +1,6 @@
 package dport
 
+import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
@@ -180,5 +181,21 @@ class GeneController {
         }
     }
 
+    def burdenTestAjax() {
+        // log paeameters received
+        log.info("got parameters: " + params);
+
+        // create dummy string for dummy call, for now
+        // TODO - DIGP-78: implement call when back end service ready
+        String resultString = "{\"is_error\": false, \"oddsRatio\": \"1.0138318997464533\", \"pValue\": \"0.4437344659074216\"}";
+
+        // create the json object
+        def slurper = new JsonSlurper()
+        def result = slurper.parseText(resultString)
+//        def result = slurper.parseText(this.metaDataService.getSearchablePropertyNameListAsJson(datasetChoice))
+
+        // send json response back
+        render(status: 200, contentType: "application/json") {result}
+    }
 
 }

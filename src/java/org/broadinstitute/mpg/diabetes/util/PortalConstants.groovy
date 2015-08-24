@@ -35,4 +35,10 @@ class PortalConstants {
     // constant string for the experiment technology type
     public final static String TECHNOLOGY_GWAS_KEY                      = "GWAS";
 
+    // burden test json keys
+    public final static String JSON_BURDEN_VARIANTS_KEY                 = "variants";
+    public final static String JSON_BURDEN_COVARIATES_KEY               = "covariates";
+    public final static String JSON_BURDEN_FILTERS_KEY                  = "filters";
+
+
 }

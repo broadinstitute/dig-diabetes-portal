@@ -1,0 +1,19 @@
+{
+    "passback": "123abc",
+    "entity": "variant",
+    "page_number": 0,
+    "page_size": 100,
+    "limit": 1000,
+    "count": false,
+    "properties":    {
+        "cproperty": ["VAR_ID"],
+        "orderBy":    ["CHROM"],
+        "dproperty":    {},
+        "pproperty":    {}
+    },
+    "filters":    [
+        {"dataset_id": "ExSeq_17k_mdv2", "phenotype": "T2D", "operand": "P_FIRTH_FE_IV", "operator": "LTE", "value": 0.05, "operand_type": "FLOAT"},
+        {"dataset_id": "blah", "phenotype": "blah", "operand": "GENE", "operator": "EQ", "value": "SLC30A8", "operand_type": "STRING"},
+        {"dataset_id": "blah", "phenotype": "blah", "operand": "MOST_DEL_SCORE", "operator": "LT", "value": 4, "operand_type": "FLOAT"}
+    ]
+}
