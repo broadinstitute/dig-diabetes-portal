@@ -74,11 +74,10 @@ class TraitController {
                 significanceValue = 0.00000005
             }
          LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
-         LinkedHashMap phenotypeMap = processedMetadata.gwasSpecificPhenotypes
          String dataSetName
          LinkedHashMap properties = [:]
-         if (phenotypeMap.containsKey(phenotypicTrait)){
-             List<PhenotypeBean> phenotypeList = JsonParser.getService().getAllPhenotypesWithName(phenotypicTrait, sharedToolsService.getCurrentDataVersion (), "GWAS")
+         List<PhenotypeBean> phenotypeList = metaDataService.getAllPhenotypesWithName(phenotypicTrait)
+         if (phenotypeList?.size()>0){
              List<Property> propertyList =  metadataUtilityService.retrievePhenotypeProperties(phenotypeList)
              dataSetName = metadataUtilityService.retrievePhenotypeSampleGroupId(phenotypeList)
              for (Property property in propertyList){

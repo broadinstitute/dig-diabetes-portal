@@ -248,12 +248,8 @@ class VariantSearchController {
 
 
     def retrievePhenotypesAjax(){
-
-        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
-        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
-        LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties = processedMetadata.phenotypeSpecificPropertiesPerSampleGroup
-        LinkedHashMap<String, List<String>> listOfPhenotypes = sharedToolsService.extractAPhenotypeListofGroups( phenotypeSpecificSampleGroupProperties )
-       String phenotypesForTransmission = sharedToolsService.packageUpAHierarchicalListAsJson (listOfPhenotypes)
+        LinkedHashMap<String, List<String>> propertyTree = metaDataService.getHierarchicalPhenotypeTree()
+       String phenotypesForTransmission = sharedToolsService.packageUpAHierarchicalListAsJson (propertyTree)
         def slurper = new JsonSlurper()
         def result = slurper.parseText(phenotypesForTransmission)
 
@@ -266,15 +262,8 @@ class VariantSearchController {
 
 
     def retrieveGwasSpecificPhenotypesAjax(){
-
-        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
-        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
-//        List<PhenotypeBean> phenotypeList = JsonParser.getService().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "GWAS")
-//        List<Property> propertyList =  metadataUtilityService.retrievePhenotypeProperties(phenotypeList)
-
-        LinkedHashMap phenotypeMap = processedMetadata.gwasSpecificPhenotypes
-        LinkedHashMap<String, List<String>> listOfPhenotypes = sharedToolsService.extractAPhenotypeListofGroups( phenotypeMap )
-        String phenotypesForTransmission = sharedToolsService.packageUpAHierarchicalListAsJson (listOfPhenotypes)
+        LinkedHashMap<String, List<String>> propertyTree = metaDataService.getHierarchicalPhenotypeTree()
+        String phenotypesForTransmission = sharedToolsService.packageUpAHierarchicalListAsJson (propertyTree)
         def slurper = new JsonSlurper()
         def result = slurper.parseText(phenotypesForTransmission)
 

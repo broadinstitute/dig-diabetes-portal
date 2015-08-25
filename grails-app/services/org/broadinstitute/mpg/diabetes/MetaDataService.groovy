@@ -1,7 +1,10 @@
 package org.broadinstitute.mpg.diabetes
 
+import dport.MetadataUtilityService
 import dport.RestServerService
+import dport.SharedToolsService
 import grails.transaction.Transactional
+import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
@@ -12,7 +15,9 @@ class MetaDataService {
     // instance variables
     JsonParser jsonParser = JsonParser.getService();
     Integer forceProcessedMetadataOverride = -1
-    RestServerService restServerService;
+    RestServerService restServerService
+    SharedToolsService sharedToolsService
+    MetadataUtilityService metadataUtilityService
     def grailsApplication
 
     def serviceMethod() {
@@ -195,5 +200,21 @@ class MetaDataService {
 
         // return
         return jsonString;
+    }
+
+
+
+
+
+    public List<PhenotypeBean> getAllPhenotypesWithName(String phenotypicTrait){
+        List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName(phenotypicTrait, sharedToolsService.getCurrentDataVersion (), "GWAS")
+        return phenotypeList
+    }
+
+
+    public LinkedHashMap<String, List<String>> getHierarchicalPhenotypeTree(){
+        List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "GWAS")
+        LinkedHashMap<String, List<String>> propertyTree =  metadataUtilityService.hierarchicalPhenotypeTree(phenotypeList)
+        return propertyTree
     }
 }

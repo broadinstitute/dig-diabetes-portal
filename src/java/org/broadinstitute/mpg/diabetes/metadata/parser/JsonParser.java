@@ -373,12 +373,18 @@ public class JsonParser {
         PhenotypeBean phenotype = new PhenotypeBean();
         JSONArray tempArray;
         Property tempProperty;
+        String tempJsonValue;
 
         // get values from json object and put in new phenotype object
         try {
             // get the primitive variables
             phenotype.setName(jsonObject.getString(PortalConstants.JSON_NAME_KEY));
             phenotype.setGroup(jsonObject.getString(PortalConstants.JSON_GROUP_KEY));
+            tempJsonValue = jsonObject.getString(PortalConstants.JSON_SORT_ORDER_KEY);
+            if (tempJsonValue != null) {
+                phenotype.setSortOrder(Float.valueOf(tempJsonValue).intValue());
+            }
+
             phenotype.setParent(parent);
 
             // get the sub properties

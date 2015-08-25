@@ -142,6 +142,33 @@ class MetadataUtilityService {
         return returnValue
     }
 
+
+    /***
+     * Order the phenotypes by group.  The first group must be GLYCEMIC.  The others I will order alphabetically
+     * @param phenotypeList
+     * @return
+     */
+    public LinkedHashMap<String, List<String>> hierarchicalPhenotypeTree(List<PhenotypeBean>  phenotypeList) {
+        LinkedHashMap<String, List<String>>  returnValue = [:]
+        if (phenotypeList){
+            List<String> phenotypeGroup = phenotypeList.collect{ return it.group }.unique()
+            List<String> tempPhenotypeGroup = []
+            tempPhenotypeGroup << phenotypeGroup.findAll{it=='GLYCEMIC'}
+            tempPhenotypeGroup << phenotypeGroup.findAll{it!='GLYCEMIC'}?.sort()
+            List<String> orderedPhenotypeGroup = tempPhenotypeGroup.flatten()
+            for (String singlePhenotypeGroup in orderedPhenotypeGroup){
+                returnValue[singlePhenotypeGroup] = phenotypeList.findAll{it.group==singlePhenotypeGroup}?.sort{ a, b -> a.sortOrder <=> b.sortOrder }?.name?.unique()
+            }
+        }
+        return returnValue
+    }
+
+
+
+
+
+
+
     public LinkedHashMap<String,String> createPhenotypeSampleGroupMap(List<Property>  propertyList) {
         LinkedHashMap<String,String>  returnValue = [:]
         if (propertyList){

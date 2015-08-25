@@ -351,7 +351,7 @@ class SharedToolsService {
                 (sharedProcessedMetadata.size() == 0) ||
                 (forceProcessedMetadataOverride == 1)) {
             sharedProcessedMetadata = [:]
-            LinkedHashMap<String, List <LinkedHashMap>>  gwasSpecificPhenotype = [:]
+           // LinkedHashMap<String, List <LinkedHashMap>>  gwasSpecificPhenotype = [:]
             LinkedHashMap<String, List<String>> annotatedPhenotypes = [:]
             LinkedHashMap<PhenoKey, List<PhenoKey>> temporaryAnnotatedPhenotypes = [:]
             LinkedHashMap<String, List<String>> annotatedSampleGroups = [:]
@@ -372,7 +372,7 @@ class SharedToolsService {
                         getPhenotypeSpecificPropertiesPerSampleGroupId(experiment.sample_groups, phenotypeSpecificSampleGroupProperties)
                         getPhenotypeSpecificAnnotatedPropertiesPerSampleGroupId(experiment.sample_groups, phenotypeSpecificAnnotatedSampleGroupProperties)
                         if (experiment.technology == "GWAS"){
-                            getTechnologySpecificPhenotype(experiment.sample_groups,gwasSpecificPhenotype)
+                           // getTechnologySpecificPhenotype(experiment.sample_groups,gwasSpecificPhenotype)
                           //  getTechnologySpecificExperiment(experiment.sample_groups,experimentSpecificSampleGroupProperties)
                         }
                     }
@@ -388,7 +388,7 @@ class SharedToolsService {
                     }
                 }
             }
-            sharedProcessedMetadata['gwasSpecificPhenotypes'] = gwasSpecificPhenotype
+          //  sharedProcessedMetadata['gwasSpecificPhenotypes'] = gwasSpecificPhenotype
             sharedProcessedMetadata['sampleGroupsPerPhenotype'] = annotatedPhenotypes
             sharedProcessedMetadata['sampleGroupsPerAnnotatedPhenotype'] =  temporaryAnnotatedPhenotypes
             sharedProcessedMetadata['propertiesPerSampleGroups'] = annotatedSampleGroups
