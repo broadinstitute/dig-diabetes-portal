@@ -20,6 +20,8 @@ class SystemController {
     def systemManager = {
         render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
                                           currentRestServer:restServerService.currentRestServer(),
+                                          burdenCurrentRestServer: restServerService?.getCurrentBurdenServer(),
+                                          burdenRestServerList: this.restServerService?.getBurdenServerList(),
         currentApplicationIsSigma:sharedToolsService.applicationName(),
         helpTextLevel:sharedToolsService.getHelpTextSetting(),
         forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
@@ -213,7 +215,24 @@ class SystemController {
 
     }
 
+    /**
+     * method to update the burden rest server
+     *
+     * @return
+     */
+    def updateBurdenRestServer() {
+        String restServer = params.datatype
+        String currentServer =  restServerService?.getCurrentBurdenServer()?.getName()
 
+        if  (!(restServer == currentServer)) {
+            restServerService.changeBurdenServer(restServer)
+            flash.message = "You are now using the ${restServer} server!"
+        } else {
+            flash.message = "But you were already using the ${currentServer} server!"
+        }
+
+        forward(action: "systemManager")
+    }
 
 
     def updateRestServer() {

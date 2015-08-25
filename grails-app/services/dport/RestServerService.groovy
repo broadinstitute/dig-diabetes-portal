@@ -5,6 +5,7 @@ import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
+import org.broadinstitute.mpg.diabetes.bean.ServerBean
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -47,6 +48,9 @@ class RestServerService {
     private String EXOMESEQ = "ExSeq_17k_mdv2"
     private String GWASDIAGRAM  = "GWAS_DIAGRAM_mdv2"
     private String ORCHIP  = "ODDS_RATIO"
+    private List<ServerBean> burdenServerList;
+
+    private ServerBean BURDEN_REST_SERVER = null;
 
    // okay
     static List<String> GENE_COLUMNS = [
@@ -135,6 +139,8 @@ class RestServerService {
         BASE_URL = grailsApplication.config.server.URL
         DBT_URL = grailsApplication.config.dbtRestServer.URL
         EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URL
+
+        this.BURDEN_REST_SERVER = grailsApplication.config.burdenRestServer;
 
         pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
 
@@ -360,14 +366,35 @@ ${getDataHeader (0, 100, 1000, false)}
         return BASE_URL;
     }
 
+    public List<ServerBean> getBurdenServerList() {
+        if (this.burdenServerList == null) {
+            // add in all known servers
+            // could do this in config.groovy
+            this.burdenServerList = new ArrayList<ServerBean>();
+            this.burdenServerList.add(this.BURDEN_REST_SERVER);
+            this.burdenServerList.add(new ServerBean("dummy server", this.BURDEN_REST_SERVER?.getUrl()));
+        }
+
+        return this.burdenServerList;
+    }
+
+    public void changeBurdenServer(String serverName) {
+        for (ServerBean serverBean : this.burdenServerList) {
+            if (serverBean.getName().equals(serverName)) {
+                log.info("changing burden rest server from: " + this.BURDEN_REST_SERVER.getUrl() + " to: " + serverBean.getUrl());
+                this.BURDEN_REST_SERVER = serverBean;
+                break;
+            }
+        }
+    }
+
     /**
      * get the current burden rest server
      *
      * @return
      */
-    public String getCurrentBurdenServer() {
-        // TODO - DIGP-72: Need to set this in Config and maker it toggable by the systems controller
-        return "http://dig-dev.broadinstitute.org:8888/dev/burden/v2"
+    public ServerBean getCurrentBurdenServer() {
+        return this.BURDEN_REST_SERVER
     }
 
     public String whatIsMyCurrentServer() {
@@ -536,7 +563,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @return
      */
     public JSONObject postBurdenRestCall(String jsonString) {
-        JSONObject tempObject = this.postRestCallBase(jsonString, "", this.getCurrentBurdenServer());
+        JSONObject tempObject = this.postRestCallBase(jsonString, "", this.getCurrentBurdenServer()?.getUrl());
         return tempObject;
     }
 
