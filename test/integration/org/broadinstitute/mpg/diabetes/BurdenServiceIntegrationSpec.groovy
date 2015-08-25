@@ -3,6 +3,7 @@ import grails.test.spock.IntegrationSpec
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.burden.parser.BurdenJsonBuilder
 import org.codehaus.groovy.grails.web.json.JSONObject
+import org.codehaus.groovy.grails.web.json.JSONTokener
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
@@ -74,6 +75,21 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
         assert generatedJson != null
         // will need to change this when data changes
 //        assert referenceJson == generatedJson
+    }
+
+    void "test burden test final call"() {
+        when:
+        JSONTokener tokener = new JSONTokener("{\"pValue\":\"6.620497734940387E-4\",\"oddsRatio\":\"1.0202208335901333\",\"is_error\":false}");
+        JSONObject referenceJson = new JSONObject(tokener);
+        String sampleGroup = "ExSeq_17k_mdv2";
+        String geneString = "SLC11A1";
+        int mostDelScore = 3;
+        JSONObject generatedJson = this.burdenService.callBurdenTest(sampleGroup, geneString, mostDelScore);
+
+        then:
+        // will need to change as data changes
+//        assert referenceJson == generatedJson
+        assert generatedJson != null
     }
 
 }
