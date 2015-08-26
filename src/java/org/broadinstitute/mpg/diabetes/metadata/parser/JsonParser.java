@@ -202,7 +202,14 @@ public class JsonParser {
 
         // for experiment, find the property list
         for (Experiment experiment : experimentList) {
-            if (experiment.getTechnology().equalsIgnoreCase(technology)){
+            if ((technology != null) && (technology.length()>0)) { // we are filtering on technology
+                if (experiment.getTechnology().equalsIgnoreCase(technology)){
+                    PhenotypeByNameVisitor phenotypeByNameVisitor = new PhenotypeByNameVisitor(phenotypeName);
+                    experiment.acceptVisitor(phenotypeByNameVisitor);
+                    phenotypeList = phenotypeByNameVisitor.getPhenotypeList();
+                    finalPhenotypeList.addAll(phenotypeList);
+                }
+            } else { // any old technology is good
                 PhenotypeByNameVisitor phenotypeByNameVisitor = new PhenotypeByNameVisitor(phenotypeName);
                 experiment.acceptVisitor(phenotypeByNameVisitor);
                 phenotypeList = phenotypeByNameVisitor.getPhenotypeList();

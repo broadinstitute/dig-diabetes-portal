@@ -165,6 +165,39 @@ class MetadataUtilityService {
 
 
 
+    /***
+     * Order the phenotypes by group.  The first group must be GLYCEMIC.  The others I will order alphabetically
+     * @param phenotypeList
+     * @return
+     */
+    public LinkedHashMap<String, LinkedHashMap<List<String>>> fullPropertyTree(List<PhenotypeBean>  phenotypeList, Boolean dprops, Boolean pprops) {
+        LinkedHashMap<String, List<String>>  returnValue = [:]
+        if (phenotypeList){
+            List<String> allUniquePhenotypes = phenotypeList.sort{ a, b -> a.sortOrder <=> b.sortOrder }.name.unique()
+            for (String phenotype in allUniquePhenotypes) {
+                returnValue [phenotype] = [:]
+                List<String> sampleGroupsPerPhenotype = phenotypeList.findAll{it.name==phenotype}.sort{ a, b -> a.sortOrder <=> b.sortOrder }.parent.systemId.unique()
+                for (String sampleGroup in sampleGroupsPerPhenotype){
+                    List <PropertyBean> propertyBeanList = []
+                    (returnValue [phenotype])[sampleGroup]
+//                    (returnValue [phenotype])[sampleGroup] = phenotypeList.findAll{it.name==phenotype}?.findAll{it.parent.systemId==sampleGroup}?.
+//                            propertyList[0]?.findAll{it.searchable}?.sort{ a, b -> a.sortOrder <=> b.sortOrder }?.name
+                    if (dprops){
+                        propertyBeanList << phenotypeList.findAll{it.parent.systemId==sampleGroup}?.parent?.propertyList[0]?.findAll{it.searchable}
+                    }
+                    if (pprops){
+                        propertyBeanList << phenotypeList.findAll{it.name==phenotype}?.findAll{it.parent.systemId==sampleGroup}?.propertyList[0]?.findAll{it.searchable}
+                    }
+                    (returnValue [phenotype])[sampleGroup] = propertyBeanList?.flatten()?.sort{ a, b -> a.sortOrder <=> b.sortOrder }?.name
+
+                }
+
+            }
+        }
+        return returnValue
+    }
+
+
 
 
 

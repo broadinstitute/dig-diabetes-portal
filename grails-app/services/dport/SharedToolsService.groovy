@@ -351,14 +351,12 @@ class SharedToolsService {
                 (sharedProcessedMetadata.size() == 0) ||
                 (forceProcessedMetadataOverride == 1)) {
             sharedProcessedMetadata = [:]
-           // LinkedHashMap<String, List <LinkedHashMap>>  gwasSpecificPhenotype = [:]
             LinkedHashMap<String, List<String>> annotatedPhenotypes = [:]
             LinkedHashMap<PhenoKey, List<PhenoKey>> temporaryAnnotatedPhenotypes = [:]
             LinkedHashMap<String, List<String>> annotatedSampleGroups = [:]
             LinkedHashMap<PhenoKey, List<String>> annotatedOrderedSampleGroups = [:]
             LinkedHashMap<String, LinkedHashMap<String, List<String>>> phenotypeSpecificSampleGroupProperties = [:]
             LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> phenotypeSpecificAnnotatedSampleGroupProperties = [:]
-           // LinkedHashMap<String, LinkedHashMap<String, List<String>>> experimentSpecificSampleGroupProperties = [:]
             LinkedHashMap<String, LinkedHashMap<String, String>> commonProperties = [:]
             String dataSetVersionThatWeWant = getCurrentDataVersion()
             if (metadata) {
@@ -371,10 +369,6 @@ class SharedToolsService {
                         getPropertiesPerAnnotatedSampleGroupId(experiment.sample_groups, annotatedOrderedSampleGroups)
                         getPhenotypeSpecificPropertiesPerSampleGroupId(experiment.sample_groups, phenotypeSpecificSampleGroupProperties)
                         getPhenotypeSpecificAnnotatedPropertiesPerSampleGroupId(experiment.sample_groups, phenotypeSpecificAnnotatedSampleGroupProperties)
-                        if (experiment.technology == "GWAS"){
-                           // getTechnologySpecificPhenotype(experiment.sample_groups,gwasSpecificPhenotype)
-                          //  getTechnologySpecificExperiment(experiment.sample_groups,experimentSpecificSampleGroupProperties)
-                        }
                     }
                 }
                 for (def cProperty in metadata.properties) {
@@ -388,14 +382,12 @@ class SharedToolsService {
                     }
                 }
             }
-          //  sharedProcessedMetadata['gwasSpecificPhenotypes'] = gwasSpecificPhenotype
             sharedProcessedMetadata['sampleGroupsPerPhenotype'] = annotatedPhenotypes
             sharedProcessedMetadata['sampleGroupsPerAnnotatedPhenotype'] =  temporaryAnnotatedPhenotypes
             sharedProcessedMetadata['propertiesPerSampleGroups'] = annotatedSampleGroups
             sharedProcessedMetadata['propertiesPerOrderedSampleGroups'] = annotatedOrderedSampleGroups
             sharedProcessedMetadata['phenotypeSpecificPropertiesPerSampleGroup'] = phenotypeSpecificSampleGroupProperties
             sharedProcessedMetadata['phenotypeSpecificPropertiesAnnotatedPerSampleGroup'] = phenotypeSpecificAnnotatedSampleGroupProperties
-           // sharedProcessedMetadata['sampleGroupSpecificProperties'] = experimentSpecificSampleGroupProperties
             sharedProcessedMetadata['commonProperties'] = commonProperties          // DIGP_47: still used for rest server post calls for props to display
             forceProcessedMetadataOverride = 0
         }
@@ -1309,6 +1301,54 @@ class SharedToolsService {
 }""".toString()
     }
 
+
+
+
+
+    public String packageUpATreeAsJson2 (LinkedHashMap<String, LinkedHashMap <String,List <String>>> bigTree ){
+        // now that we have a multilevel tree, build it into a string suitable for JSON
+        StringBuilder returnValue = new StringBuilder ()
+        if ((bigTree) && (bigTree?.size() > 0)){
+            List <String> phenotypeHolder = []
+            bigTree.each {String phenotype,  LinkedHashMap phenotypeSpecificSampleGroups->
+                StringBuilder sb = new StringBuilder ()
+                sb << """  \"${phenotype}\":
+    {""".toString()
+                List <String> sampleGroupList = []
+                if (phenotypeSpecificSampleGroups?.size() > 0){
+                    phenotypeSpecificSampleGroups.each { String sampleGroupName, List<String> propertyNames ->
+                        sampleGroupList << """        \"${sampleGroupName}\":[
+      ${propertyNames.collect {return "\"$it\""}.join(",")}
+ ]""".toString()
+                    }
+                }
+                sb << """
+          ${sampleGroupList.join(",")}
+  }""".toString()
+                phenotypeHolder << sb.toString()
+            }
+//            bigTree.each {String phenotype,  LinkedHashMap phenotypeSpecificSampleGroups->
+//                StringBuilder sb = new StringBuilder ()
+//                sb << """  \"${phenotype}\":
+//    {""".toString()
+//                if (phenotypeSpecificSampleGroups?.size() > 0){
+//                    int sampleGroupCount = 0
+//                    phenotypeSpecificSampleGroups.each { String sampleGroupName, List<String> propertyNames ->
+//                        sb << """        \"${sampleGroupName}\":[
+//      ${propertyNames.collect {return "\"$it\""}.join(",")}
+// ]""".toString()
+//                    }
+//                }
+//                sb << """
+//  }""".toString()
+//                phenotypeHolder << sb.toString()
+//            }
+            returnValue << """{
+            ${phenotypeHolder.join(",")}
+            }"""
+        }
+        return returnValue.toString()
+    }
 
 
 

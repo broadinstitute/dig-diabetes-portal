@@ -318,14 +318,11 @@ class VariantSearchController {
         String resultColumnsJsonObjectString = resultColumnsJsonOutput.toJson(resultColumnsToDisplay)
         JSONObject resultColumnsJsonObject = slurper.parseText(resultColumnsJsonObjectString)
 
-        String jsonFormOfRelevantMetadataPhenotype = sharedToolsService.packageUpATreeAsJson(sharedToolsService.getProcessedMetadata()?.phenotypeSpecificPropertiesAnnotatedPerSampleGroup,true, true)
+        LinkedHashMap fullPropertyTree = metaDataService.getFullPropertyTree()
+
+        String jsonFormOfRelevantMetadataPhenotype = sharedToolsService.packageUpATreeAsJson2(fullPropertyTree)
         JSONObject metadata = slurper.parseText(jsonFormOfRelevantMetadataPhenotype)
 
-//        String jsonFormOfRelevantMetadataSamplegroup = sharedToolsService.packageUpATreeAsJson(sharedToolsService.getProcessedMetadata()?.phenotypeSpecificPropertiesAnnotatedPerSampleGroup, false, true)
-//        JSONObject dmetadata = slurper.parseText(jsonFormOfRelevantMetadataSamplegroup)
-
-        // DIGP-47: common properties json created using new metadata data structure
-//        String jsonFormOfCommonProperties = sharedToolsService.sortAndPackageAMapOfListsAsJson(sharedToolsService.getProcessedMetadata()?.commonProperties, true)
         String jsonFormOfCommonProperties = this.metaDataService.getCommonPropertiesAsJson(true);
         JSONObject commonPropertiesJsonObject = slurper.parseText(jsonFormOfCommonProperties)
 
@@ -337,7 +334,6 @@ class VariantSearchController {
             columns: resultColumnsJsonObject,
             filters:filtersRaw,
             metadata:metadata,
-//            dmetadata:dmetadata,
             propertiesPerSampleGroup:propertiesPerSampleGroupJsonObject,
             cProperties:commonPropertiesJsonObject
             ]

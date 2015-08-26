@@ -217,4 +217,15 @@ class MetaDataService {
         LinkedHashMap<String, List<String>> propertyTree =  metadataUtilityService.hierarchicalPhenotypeTree(phenotypeList)
         return propertyTree
     }
+
+    public LinkedHashMap<String, LinkedHashMap<String,List<String>>> getFullPropertyTree(){
+        List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
+        LinkedHashMap<String, List<String>> propertyTree =  metadataUtilityService.fullPropertyTree(phenotypeList,true,true)
+        return propertyTree
+    }
+
+
+
+
 }
+
