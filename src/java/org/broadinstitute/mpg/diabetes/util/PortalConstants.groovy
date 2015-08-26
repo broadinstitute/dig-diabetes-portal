@@ -46,4 +46,11 @@ class PortalConstants {
     public final static String JSON_BURDEN_FILTERS_KEY                  = "filters";
 
 
+    // constants for getData calls
+    public final static String OPERATOR_LESS_THAN_EQUALS                 = "LTE";
+    public final static String OPERATOR_LESS_THAN_NOT_EQUALS             = "LT";
+    public final static String OPERATOR_MORE_THAN_EQUALS                 = "GTE";
+    public final static String OPERATOR_MORE_THAN_NOT_EQUALS             = "GT";
+    public final static String OPERATOR_EQUALS                           = "EQ";
+
 }

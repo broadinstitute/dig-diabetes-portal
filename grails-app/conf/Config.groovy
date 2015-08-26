@@ -1,6 +1,7 @@
 import grails.util.Environment
 import org.apache.log4j.DailyRollingFileAppender
 import org.apache.log4j.PatternLayout
+import org.broadinstitute.mpg.diabetes.bean.ServerBean
 
 // locations to search for config files that get merged into the main config;
 // config files can be ConfigSlurper scripts, Java properties files, or classes
@@ -202,9 +203,12 @@ dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/
 //experimentalRestServer.URL = 'http://69.173.71.178:8888/dev2/server/'
 experimentalRestServer.URL = 'http://dig-dev.broadinstitute.org:8888/dev/gs/'
 
+burdenRestServer = new ServerBean("dev burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden/v2");
 
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
+
+
 
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination

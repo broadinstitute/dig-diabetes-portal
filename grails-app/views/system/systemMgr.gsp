@@ -154,6 +154,55 @@
                 </g:form>
 
 
+            <div class="separator"></div>
+
+            <g:form action='updateBurdenRestServer' method='POST' id='updateBurdenRestServer' class='form form-horizontal cssform' autocomplete='off'>
+                <h4>Choose your backend burden test REST server (<em>current server = <a href="${burdenCurrentRestServer?.url}">${burdenCurrentRestServer?.name}</a></em>)</h4>
+                <div class="row clearfix">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-7">
+                        <div id="datatypes-forma">
+                            <g:each var="server" in="${burdenRestServerList}">
+                                <div class="radio">
+                                    <label>
+                                        <input id="burdenRestServer" type="radio" name="datatype" value="${server?.name}"
+                                            <%=burdenCurrentRestServer==server?" checked ":"" %> />
+                                        ${server?.name} (${server.url})
+                                    </label>
+                                </div>
+                            </g:each>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <div class="row clearfix">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <div >
+                            <div style="text-align:center; padding-top: 20px;">
+                                <input class="btn btn-primary btn-lg" type='submit' id="submitBurden"
+                                       value='Commit'/>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row clearfix">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div >
+                            <g:if test='${flash.message}'>
+                                <div class="alert alert-danger">${flash.message}</div>
+                            </g:if>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+
+                </div>
+            </g:form>
+
+
 
 
 
