@@ -1,21 +1,40 @@
 package org.broadinstitute.mpg.diabetes.metadata.parser;
 
-import org.broadinstitute.mpg.diabetes.metadata.*;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.*;
+import org.broadinstitute.mpg.diabetes.metadata.DataSet;
+import org.broadinstitute.mpg.diabetes.metadata.Experiment;
+import org.broadinstitute.mpg.diabetes.metadata.ExperimentBean;
+import org.broadinstitute.mpg.diabetes.metadata.MetaDataRoot;
+import org.broadinstitute.mpg.diabetes.metadata.MetaDataRootBean;
+import org.broadinstitute.mpg.diabetes.metadata.Phenotype;
+import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean;
+import org.broadinstitute.mpg.diabetes.metadata.Property;
+import org.broadinstitute.mpg.diabetes.metadata.PropertyBean;
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup;
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.AllDataSetHashSetVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.ExperimentByVersionVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.GwasTechSampleGroupByPhenotypeVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeByNameVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeNameVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyByNameFinderVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyPerExperimentVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupByIdSelectingVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupForPhenotypeVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchableCommonPropertyVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchablePropertyIncludingChildrenVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchablePropertyVisitor;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
 import org.codehaus.groovy.grails.web.json.JSONArray;
 import org.codehaus.groovy.grails.web.json.JSONException;
 import org.codehaus.groovy.grails.web.json.JSONObject;
 import org.codehaus.groovy.grails.web.json.JSONTokener;
-import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class to parse the json input string into a metadata tree structure
@@ -577,5 +596,33 @@ public class JsonParser {
 
         // return
         return property;
+    }
+
+    /**
+     * method to build the map of all data set nodes
+     *
+     * @return
+     * @throws PortalException
+     */
+    public Map<String, DataSet> getMapOfAllDataSetNodes() throws PortalException {
+        // local variables
+        Map<String, DataSet> dataSetMap = null;
+
+        // create the visitor
+        AllDataSetHashSetVisitor visitor = new AllDataSetHashSetVisitor();
+
+        // visit the metadata root
+        this.getMetaDataRoot().acceptVisitor(visitor);
+
+        // make sure there were no errors
+        if (visitor.getError() != null) {
+            throw new PortalException("there was a duplicate map key: " + visitor.getError());
+        }
+
+        // if not, then get map
+        dataSetMap = visitor.getDataSetMap();
+
+        // return the map
+        return dataSetMap;
     }
 }

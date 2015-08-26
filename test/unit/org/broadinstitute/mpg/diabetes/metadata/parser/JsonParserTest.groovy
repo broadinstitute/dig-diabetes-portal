@@ -252,4 +252,22 @@ class JsonParserTest extends TestCase {
         assertEquals(correctFilter, generatedFilter);
     }
 
+    @Test
+    public void testGetMapOfAllDataSetNodes() {
+        // local variables
+        Map<String, DataSet> dataSetMap = null;
+
+        // get the map
+        try {
+            dataSetMap = this.jsonParser.getMapOfAllDataSetNodes();
+
+        } catch (PortalException exception) {
+            fail("got data set map error: " + exception.getMessage());
+        }
+
+        // test
+        assertNotNull(dataSetMap);
+        assertTrue(dataSetMap.size() > 0);
+        assertEquals(3088, dataSetMap.size());
+    }
 }

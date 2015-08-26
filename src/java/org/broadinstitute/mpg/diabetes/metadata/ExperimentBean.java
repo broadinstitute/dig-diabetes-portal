@@ -62,7 +62,7 @@ public class ExperimentBean implements Experiment {
     }
 
     public String getId() {
-        return this.getName();
+        return (this.getParent() == null ? "" : this.getParent().getId() + "_") + this.getName() + "_" + this.getVersion();
     }
 
     public DataSet getParent() {
