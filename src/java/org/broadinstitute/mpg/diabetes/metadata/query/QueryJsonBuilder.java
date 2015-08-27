@@ -1,6 +1,7 @@
 package org.broadinstitute.mpg.diabetes.metadata.query;
 
 import org.broadinstitute.mpg.diabetes.metadata.Property;
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup;
 import org.broadinstitute.mpg.diabetes.metadata.sort.PropertyListForQueryComparator;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 
@@ -56,9 +57,10 @@ public class QueryJsonBuilder {
         String oldPropertyName = " ";
         String propertyComma = "";
         String sampleGroupComma = "";
+        String propertyClosureClose = "";
 
         // start the dproperty header
-        builder.append("\"dproperty\": {");
+        builder.append("\"dproperty\" : {");
 
         // properties are grouped by sample group
         // so loop through properties, pick the dproperties out, then build json based on new property parents
@@ -69,14 +71,26 @@ public class QueryJsonBuilder {
                    builder.append(propertyComma);
                    builder.append("\"");
                    builder.append(property.getName());
-                   builder.append("\"");
-
+                   builder.append("\" : [ ");
+                   propertyComma = "], ";
+                   propertyClosureClose = "] ";
+                   sampleGroupComma = "";
+                   oldPropertyName = property.getName();
                }
+
+               builder.append(sampleGroupComma);
+               builder.append("\"");
+               builder.append(((SampleGroup)property.getParent()).getSystemId());
+               builder.append("\"");
+               sampleGroupComma = " , ";
             }
         }
 
+        // close the property closure
+        builder.append(propertyClosureClose);
+
         // close the dproperty header
-        builder.append("}");
+        builder.append("} , ");
 
         // return
         return builder.toString();

@@ -34,21 +34,21 @@ public class QueryJsonBuilderTest extends TestCase {
 
         // build map and populate it for the tests
         this.propertyList = new ArrayList<Property>();
-        this.propertyList.add((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME));
-        this.propertyList.add((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CLOSEST_GENE));
-        this.propertyList.add((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CONSEQUENCE));
-        this.propertyList.add((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_DBSNP_ID));
-        this.propertyList.add((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION));
-        this.propertyList.add((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
+        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME));
+        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CLOSEST_GENE));
+        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CONSEQUENCE));
+        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_DBSNP_ID));
+        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION));
+        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
 
-        this.propertyList.add((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_SG_MAF_82K));
-        this.propertyList.add((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_SG_MAF_SIGMA1));
+        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_SG_MAF_82K));
+        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_SG_MAF_SIGMA1));
 
-        this.propertyList.add((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_MINA_SIGMA1_T2D));
-        this.propertyList.add((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_MINU_SIGMA1_T2D));
-        this.propertyList.add((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_OR_FIRTH_SIGNA1_T2D));
-        this.propertyList.add((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_P_VALUE_82K_T2D));
-        this.propertyList.add((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_P_VALUE_GWAS_DIAGRAM));
+        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_MINA_SIGMA1_T2D));
+        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_MINU_SIGMA1_T2D));
+        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_OR_FIRTH_SIGNA1_T2D));
+        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_P_VALUE_82K_T2D));
+        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_P_VALUE_GWAS_DIAGRAM));
 
         // sort the list
         Collections.sort(this.propertyList, new PropertyListForQueryComparator());
@@ -62,6 +62,21 @@ public class QueryJsonBuilderTest extends TestCase {
 
         // generate the string
         generatedString = this.queryJsonBuilder.getCpropertiesString(this.propertyList);
+
+        // test
+        assertNotNull(generatedString);
+        assertTrue(generatedString.length() > 0);
+        assertEquals(compareString, generatedString);
+    }
+
+    @Test
+    public void testGetDpropertiesString() {
+        // local variables
+        String compareString = "\"dproperty\" : {\"MAF\" : [ \"ExChip_82k_mdv2\" , \"ExChip_SIGMA1_mdv2\"] } , ";
+        String generatedString = null;
+
+        // generate the string
+        generatedString = this.queryJsonBuilder.getDpropertiesString(this.propertyList);
 
         // test
         assertNotNull(generatedString);
