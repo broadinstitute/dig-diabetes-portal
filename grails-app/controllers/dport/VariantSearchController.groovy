@@ -319,6 +319,7 @@ class VariantSearchController {
         JSONObject resultColumnsJsonObject = slurper.parseText(resultColumnsJsonObjectString)
 
         LinkedHashMap fullPropertyTree = metaDataService.getFullPropertyTree()
+        LinkedHashMap fullSampleTree = metaDataService.getSampleGroupTree()
 
         String jsonFormOfRelevantMetadataPhenotype = sharedToolsService.packageUpATreeAsJson2(fullPropertyTree)
         JSONObject metadata = slurper.parseText(jsonFormOfRelevantMetadataPhenotype)
@@ -326,8 +327,11 @@ class VariantSearchController {
         String jsonFormOfCommonProperties = this.metaDataService.getCommonPropertiesAsJson(true);
         JSONObject commonPropertiesJsonObject = slurper.parseText(jsonFormOfCommonProperties)
 
-        String jsonFormPropertiesPerSampleGroup = sharedToolsService.packageUpSortedHierarchicalListAsJson(sharedToolsService.getProcessedMetadata()?.propertiesPerOrderedSampleGroups)
+        String jsonFormPropertiesPerSampleGroup = sharedToolsService.packageUpSortedHierarchicalListAsJson2(fullSampleTree)
+       // String jsonFormPropertiesPerSampleGroup = sharedToolsService.packageUpSortedHierarchicalListAsJson(sharedToolsService.getProcessedMetadata()?.propertiesPerOrderedSampleGroups)
         JSONObject propertiesPerSampleGroupJsonObject = slurper.parseText(jsonFormPropertiesPerSampleGroup)
+
+//        sampleGroupBasedPropertyTree
 
         render(status: 200, contentType: "application/json") {
             [variants: dataJsonObject.variants,

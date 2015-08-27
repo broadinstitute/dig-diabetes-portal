@@ -1411,6 +1411,51 @@ class SharedToolsService {
 
 
 
+    public String packageUpSortedHierarchicalListAsJson2 (LinkedHashMap mapOfSampleGroups ){
+        // now that we have a list, build it into a string suitable for JSON
+        int numberOfGroups = 0
+        StringBuilder sb = new StringBuilder ()
+
+
+        List <String> sampleGroupList = []
+        if (mapOfSampleGroups?.size() > 0){
+            mapOfSampleGroups.each { String sampleGroupName, List<String> propertyNames ->
+                sampleGroupList << """        \"${sampleGroupName}\":[
+      ${propertyNames.collect {return "\"$it\""}.join(",")}
+ ]""".toString()
+            }
+        }
+        sb << """
+          ${sampleGroupList.join(",")}
+""".toString()
+
+//        if ((mapOfStrings) && (mapOfStrings?.size() > 0)){
+//            LinkedHashMap sortedMapOfStrings = mapOfStrings.sort{ it.key?.sort_order }
+//            numberOfGroups = sortedMapOfStrings.size()
+//            int groupCounter  = 0
+//            sortedMapOfStrings.each{k,List v->
+//                sb <<  "\"${k}\":[".toString()
+//                int individualGroupLength  = v.size()
+//                for ( int  i = 0 ; i < individualGroupLength ; i++ ){
+//                    sb << "\"${v[i]}\"".toString()
+//                    if (i < individualGroupLength - 1) {
+//                        sb << ","
+//                    }
+//                }
+//                sb <<  "]"
+//                groupCounter++
+//                if (numberOfGroups > groupCounter) {
+//                    sb << ","
+//                }
+//            }
+//        }
+
+        return  """
+{"is_error": false,
+"numRecords":${numberOfGroups},
+"dataset":{${sb.toString()}}
+}""".toString()
+    }
 
 
 

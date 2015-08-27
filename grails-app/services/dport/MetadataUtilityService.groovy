@@ -170,32 +170,105 @@ class MetadataUtilityService {
      * @param phenotypeList
      * @return
      */
+//    public LinkedHashMap<String, LinkedHashMap<List<String>>> fullPropertyTree(List<PhenotypeBean>  phenotypeList, Boolean dprops, Boolean pprops) {
+//        LinkedHashMap<String, List<String>>  returnValue = [:]
+//        if (phenotypeList){
+//            List<String> allUniquePhenotypes = phenotypeList.sort{ a, b -> a.sortOrder <=> b.sortOrder }.name.unique()
+//            for (String phenotype in allUniquePhenotypes) {
+//                returnValue [phenotype] = [:]
+//                List<String> sampleGroupsPerPhenotype = phenotypeList.findAll{it.name==phenotype}.sort{ a, b -> a.sortOrder <=> b.sortOrder }.parent.systemId.unique()
+//                for (String sampleGroup in sampleGroupsPerPhenotype){
+//                    List <PropertyBean> propertyBeanList = []
+//                    if (dprops){
+//                        propertyBeanList << phenotypeList.findAll{it.parent.systemId==sampleGroup}?.parent?.propertyList[0]?.findAll{it.searchable}
+//                    }
+//                    if (pprops){
+//                        propertyBeanList << phenotypeList.findAll{it.name==phenotype}?.findAll{it.parent.systemId==sampleGroup}?.propertyList[0]?.findAll{it.searchable}
+//                    }
+//                    (returnValue [phenotype])[sampleGroup] = propertyBeanList?.flatten()?.sort{ a, b -> a.sortOrder <=> b.sortOrder }?.name
+//
+//                }
+//
+//            }
+//        }
+//        return returnValue
+//    }
+
+    /***
+     * Given a group of phenotypes in a sample group name, retrieve
+     * @param phenotypeList
+     * @param sampleGroup
+     * @param dprops
+     * @param pprops
+     * @return
+     */
+    private List<String> propertiesPerSampleGroup(List<PhenotypeBean>  phenotypeList, String sampleGroup, String phenotypeName, Boolean dprops, Boolean pprops) {
+        List<String>  returnValue = []
+        List <PropertyBean> propertyBeanList = []
+        if (dprops){
+            propertyBeanList << phenotypeList.findAll{it.parent.systemId==sampleGroup}?.parent?.propertyList[0]?.findAll{it.searchable}
+        }
+        if (pprops){
+            propertyBeanList << phenotypeList.findAll{it.name==phenotypeName}?.findAll{it.parent.systemId==sampleGroup}?.propertyList[0]?.findAll{it.searchable}
+        }
+        returnValue = propertyBeanList?.flatten()?.sort{ a, b -> a.sortOrder <=> b.sortOrder }?.name
+
+        return returnValue
+    }
+
+
+
+    /***
+     *   Make a map of maps, where phenotypes point to sample groups which point to properties
+     * @param phenotypeList
+     * @param dprops
+     * @param pprops
+     * @return
+     */
     public LinkedHashMap<String, LinkedHashMap<List<String>>> fullPropertyTree(List<PhenotypeBean>  phenotypeList, Boolean dprops, Boolean pprops) {
         LinkedHashMap<String, List<String>>  returnValue = [:]
         if (phenotypeList){
             List<String> allUniquePhenotypes = phenotypeList.sort{ a, b -> a.sortOrder <=> b.sortOrder }.name.unique()
             for (String phenotype in allUniquePhenotypes) {
+                List <PhenotypeBean> phenotypeBeanList = phenotypeList.findAll{it.name==phenotype}.sort{ a, b -> a.sortOrder <=> b.sortOrder }
+
                 returnValue [phenotype] = [:]
                 List<String> sampleGroupsPerPhenotype = phenotypeList.findAll{it.name==phenotype}.sort{ a, b -> a.sortOrder <=> b.sortOrder }.parent.systemId.unique()
                 for (String sampleGroup in sampleGroupsPerPhenotype){
-                    List <PropertyBean> propertyBeanList = []
-                    (returnValue [phenotype])[sampleGroup]
-//                    (returnValue [phenotype])[sampleGroup] = phenotypeList.findAll{it.name==phenotype}?.findAll{it.parent.systemId==sampleGroup}?.
-//                            propertyList[0]?.findAll{it.searchable}?.sort{ a, b -> a.sortOrder <=> b.sortOrder }?.name
-                    if (dprops){
-                        propertyBeanList << phenotypeList.findAll{it.parent.systemId==sampleGroup}?.parent?.propertyList[0]?.findAll{it.searchable}
-                    }
-                    if (pprops){
-                        propertyBeanList << phenotypeList.findAll{it.name==phenotype}?.findAll{it.parent.systemId==sampleGroup}?.propertyList[0]?.findAll{it.searchable}
-                    }
-                    (returnValue [phenotype])[sampleGroup] = propertyBeanList?.flatten()?.sort{ a, b -> a.sortOrder <=> b.sortOrder }?.name
-
+                    (returnValue [phenotype])[sampleGroup] = propertiesPerSampleGroup(phenotypeBeanList,  sampleGroup,  phenotype, dprops,  pprops)
                 }
 
             }
         }
         return returnValue
     }
+
+
+
+
+    /***
+     *   Make a map, where sample groups which point to properties
+     * @param phenotypeList
+     * @param dprops
+     * @param pprops
+     * @return
+     */
+    public LinkedHashMap<String,List<String>> sampleGroupBasedPropertyTree(List<PhenotypeBean>  phenotypeList, Boolean dprops ) {
+        LinkedHashMap<String, List<String>>  returnValue = [:]
+        List <String> sampleGroupList = phenotypeList.collect{return it.parent}.sort{ a, b -> a.sortOrder <=> b.sortOrder }.systemId.unique()
+        if ((phenotypeList) &&
+             (sampleGroupList)){
+            for (String sampleGroup in sampleGroupList){
+                returnValue[sampleGroup] = propertiesPerSampleGroup(phenotypeList,  sampleGroup, "",  dprops,  false)
+            }
+
+
+        }
+        return returnValue
+    }
+
+
+
 
 
 

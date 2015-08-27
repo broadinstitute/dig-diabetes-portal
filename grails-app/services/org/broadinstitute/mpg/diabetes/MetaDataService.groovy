@@ -225,6 +225,13 @@ class MetaDataService {
     }
 
 
+    public LinkedHashMap<String, LinkedHashMap<String,List<String>>> getSampleGroupTree(){
+        List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
+        LinkedHashMap<String, List<String>> propertyTree =  metadataUtilityService.sampleGroupBasedPropertyTree(phenotypeList,true)
+        return propertyTree
+    }
+
+
 
 
 }
