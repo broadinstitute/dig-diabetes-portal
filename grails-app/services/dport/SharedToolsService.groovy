@@ -8,6 +8,7 @@ import grails.transaction.Transactional
 import groovy.json.JsonSlurper
 import groovy.json.StringEscapeUtils
 import org.apache.juli.logging.LogFactory
+import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
@@ -19,6 +20,7 @@ class SharedToolsService {
     GrailsApplication grailsApplication
     LinkGenerator grailsLinkGenerator
     RestServerService restServerService
+    MetaDataService metaDataService
     FilterManagementService filterManagementService
      private static final log = LogFactory.getLog(this)
     JSONObject sharedMetadata = null
@@ -936,19 +938,10 @@ class SharedToolsService {
             for (String phenotype in unsortedTree.dproperty.keySet()) {
                 for (String sampleGroup in unsortedTree.dproperty[phenotype].keySet()) {
                     List<String> properties =   unsortedTree.dproperty[phenotype][sampleGroup]
-                    if (processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup.containsKey(phenotype)) {
-                        PhenoKey sampleGroupPK = new PhenoKey(sampleGroup,0,0)
-                        if (processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype].containsKey(sampleGroupPK))  {
-                            List pks = processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype][sampleGroupPK]
-                            LinkedHashMap temporaryHolder = [:]
-                            for (String property in properties) {
-                                PhenoKey singlePK = new PhenoKey(property,0,0)
-                                if (pks.contains(singlePK))  {
-                                    temporaryHolder[property]=(pks.find{it==singlePK}).sort_order
-                                }
-                            }
-                            unsortedTree.dproperty[phenotype][sampleGroup] = temporaryHolder.sort{it.value}.keySet()
-                        }
+                    List<String> props = metaDataService.getPhenotypeSpecificSampleGroupPropertyList(sampleGroup,phenotype)
+                    List<String> props2 = props.findAll{properties.contains(it)}
+                    if ((props2)&&(props2.size()>0)){
+                        unsortedTree.dproperty[phenotype][sampleGroup] = props2
                     }
                 }
 
@@ -962,19 +955,10 @@ class SharedToolsService {
             for (String phenotype in unsortedTree.pproperty.keySet()) {
                 for (String sampleGroup in unsortedTree.pproperty[phenotype].keySet()) {
                     List<String> properties =   unsortedTree.pproperty[phenotype][sampleGroup]
-                    if (processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup.containsKey(phenotype)) {
-                        PhenoKey sampleGroupPK = new PhenoKey(sampleGroup,0,0)
-                        if (processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype].containsKey(sampleGroupPK))  {
-                            List pks = processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype][sampleGroupPK]
-                            LinkedHashMap temporaryHolder = [:]
-                            for (String property in properties) {
-                                PhenoKey singlePK = new PhenoKey(property,0,0)
-                                if (pks.contains(singlePK))  {
-                                    temporaryHolder[property]=(pks.find{it==singlePK}).sort_order
-                                }
-                            }
-                            unsortedTree.pproperty[phenotype][sampleGroup] = temporaryHolder.sort{it.value}.keySet()
-                        }
+                    List<String> props = metaDataService.getSpecificPhenotypePropertyList(sampleGroup,phenotype)
+                    List<String> props2 = props.findAll{properties.contains(it)}
+                    if ((props2)&&(props2.size()>0)){
+                        unsortedTree.pproperty[phenotype][sampleGroup] = props2
                     }
                 }
 
@@ -1046,14 +1030,18 @@ class SharedToolsService {
                     returnValue.dproperty[phenotype][sampleGroup] = []
                     returnValue.pproperty[phenotype][sampleGroup] = []
                     if (propertiesToKeep == null) {
-                        returnValue.dproperty[phenotype][sampleGroup].addAll(processedMetadata.propertiesPerSampleGroups[sampleGroup])
-                        if (processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype]) {
-                            returnValue.pproperty[phenotype][sampleGroup].addAll(processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype][(new PhenoKey(sampleGroup,0,0))])
+                        // I'm not sure that this branch is ever called
+                        returnValue.dproperty[phenotype][sampleGroup].addAll(metaDataService.getSampleGroupPropertyList(sampleGroup).contains(it))
+                        List<String> propertiesToAdd= metaDataService.getSpecificPhenotypePropertyList(sampleGroup,phenotype)
+                        if ((propertiesToAdd) && (propertiesToAdd.size()>0)) {
+                            returnValue.pproperty[phenotype][sampleGroup].addAll(propertiesToAdd)
                         }
                     } else {
-                        returnValue.dproperty[phenotype][sampleGroup].addAll(propertiesToKeep.findAll({processedMetadata.propertiesPerSampleGroups[sampleGroup].contains(it)}))
-                        if (processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype]) {
-                            returnValue.pproperty[phenotype][sampleGroup].addAll(propertiesToKeep.findAll({processedMetadata.phenotypeSpecificPropertiesAnnotatedPerSampleGroup[phenotype][(new PhenoKey(sampleGroup,0,0))].findAll({it?.depth==1}).contains(new PhenoKey(it,0,0))}))
+                        returnValue.dproperty[phenotype][sampleGroup].addAll(propertiesToKeep.findAll({metaDataService.getSampleGroupPropertyList(sampleGroup).contains(it)}))
+                        List<String> phenotypeProperties =metaDataService.getSpecificPhenotypePropertyList(sampleGroup,phenotype)
+                        List<String> propertiesToAdd= propertiesToKeep.findAll{phenotypeProperties}
+                        if ((propertiesToAdd) && (propertiesToAdd.size()>0)) {
+                            returnValue.pproperty[phenotype][sampleGroup].addAll(propertiesToAdd)
                         }
                     }
                 }
@@ -1061,84 +1049,6 @@ class SharedToolsService {
         }
 
         return sortEverything(processedMetadata,returnValue)
-    }
-
-
-    public List <String> extractAPhenotypeList (LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties){
-        List <String> listOfProperties = []
-        if (phenotypeSpecificSampleGroupProperties){
-            phenotypeSpecificSampleGroupProperties.each{ k, v -> listOfProperties <<  "${k}".toString() }
-            listOfProperties = listOfProperties.sort ()
-        }
-        int locationOfDiabetes = listOfProperties.indexOf("T2D")
-        if (locationOfDiabetes>-1){
-            listOfProperties.remove(locationOfDiabetes)
-            listOfProperties.add(0,"T2D")
-        }
-        return listOfProperties
-    }
-
-
-    public LinkedHashMap <String,List<String>> extractAPhenotypeListofGroups (LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties){
-        List <String> uniqueGroups = []
-        LinkedHashMap <String,LinkedHashMap> listOfPhenotypesWithGroups = [:]
-        LinkedHashMap <String,LinkedHashMap> intermediateStructure = [:]
-        LinkedHashMap <String,List<String>> returnValue = [:]
-
-        if (phenotypeSpecificSampleGroupProperties){
-            // first collapse the data structure a little, make sure that we have group and sort order numbers for everything,
-            // and generate a distinct list of groups
-            phenotypeSpecificSampleGroupProperties.each { String k, LinkedHashMap v ->
-                String groupName
-                int sortOrder
-                if (v.containsKey("phenotypeProperties")) {
-                    LinkedHashMap<String> phenotypeSpecificProperties = v["phenotypeProperties"]
-                    if (phenotypeSpecificProperties.containsKey("group")) {
-                        groupName = phenotypeSpecificProperties["group"]
-                    } else {
-                        groupName = "default"
-                    }
-                    if (phenotypeSpecificProperties.containsKey("sort_order")) {
-                        sortOrder = phenotypeSpecificProperties["sort_order"] as int
-                    } else {
-                        sortOrder = 1
-                    }
-                } else {
-                    log.error("big trouble -- we found no phenotype properties in ${k}")
-                }
-                listOfPhenotypesWithGroups["${k}"] = [group: groupName, sortOrder: sortOrder]
-                if (!uniqueGroups.contains(groupName)){
-                    uniqueGroups <<  groupName
-                }
-            }
-
-            // now walk through our intermediate data structure and group phenotypes together
-            listOfPhenotypesWithGroups.each { String phenotypeName, LinkedHashMap v ->
-                String groupName = v["group"]
-                int sortOrder = v["sortOrder"]
-                LinkedHashMap groupedPhenotypes
-                if (intermediateStructure.containsKey(groupName)){
-                    groupedPhenotypes = intermediateStructure[groupName]
-                } else {
-                    groupedPhenotypes = [:]
-                    intermediateStructure[groupName] = groupedPhenotypes
-                }
-                if (!groupedPhenotypes.containsKey(phenotypeName)){
-                    groupedPhenotypes[phenotypeName] = sortOrder
-                }
-            }
-
-            // finally walk through the intermediate structure and sort within each group, assigning
-            // the results to our return value
-            intermediateStructure.each { String groupName, LinkedHashMap v ->
-                LinkedHashMap sortedList = v.sort { a, b -> a.value <=> b.value }
-                List sortedSubgroup = []
-                sortedList.each { k, val -> sortedSubgroup << k }
-                returnValue[groupName] = sortedSubgroup
-            }
-        }
-
-        return returnValue
     }
 
 
@@ -1305,7 +1215,7 @@ class SharedToolsService {
 
 
 
-    public String packageUpATreeAsJson2 (LinkedHashMap<String, LinkedHashMap <String,List <String>>> bigTree ){
+    public String packageUpATreeAsJson (LinkedHashMap<String, LinkedHashMap <String,List <String>>> bigTree ){
         // now that we have a multilevel tree, build it into a string suitable for JSON
         StringBuilder returnValue = new StringBuilder ()
         if ((bigTree) && (bigTree?.size() > 0)){
@@ -1327,22 +1237,6 @@ class SharedToolsService {
   }""".toString()
                 phenotypeHolder << sb.toString()
             }
-//            bigTree.each {String phenotype,  LinkedHashMap phenotypeSpecificSampleGroups->
-//                StringBuilder sb = new StringBuilder ()
-//                sb << """  \"${phenotype}\":
-//    {""".toString()
-//                if (phenotypeSpecificSampleGroups?.size() > 0){
-//                    int sampleGroupCount = 0
-//                    phenotypeSpecificSampleGroups.each { String sampleGroupName, List<String> propertyNames ->
-//                        sb << """        \"${sampleGroupName}\":[
-//      ${propertyNames.collect {return "\"$it\""}.join(",")}
-// ]""".toString()
-//                    }
-//                }
-//                sb << """
-//  }""".toString()
-//                phenotypeHolder << sb.toString()
-//            }
             returnValue << """{
             ${phenotypeHolder.join(",")}
             }"""
@@ -1353,65 +1247,7 @@ class SharedToolsService {
 
 
 
-
-    public String packageUpATreeAsJson (LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> bigTree, Boolean pdata, Boolean ddata ){
-        // now that we have a multilevel tree, build it into a string suitable for JSON
-        StringBuilder returnValue = new StringBuilder ()
-        if ((bigTree) && (bigTree?.size() > 0)){
-            List <String> phenotypeHolder = []
-            bigTree.each {String phenotype,  LinkedHashMap phenotypeSpecificSampleGroups->
-                StringBuilder sb = new StringBuilder ()
-                sb << """  \"${phenotype}\":
-    {""".toString()
-                if (phenotypeSpecificSampleGroups?.size() > 0){
-                    int sampleGroupCount = 0
-                    phenotypeSpecificSampleGroups.each { sampleGroupName, propertyNames ->
-                        // there is one element that we always need to skip, namely "phenotypeProperties", which contains meta-properties not directly relevant to users
-                        if (sampleGroupName.toString() == "phenotypeProperties"){
-                            sampleGroupCount++
-                        }else { // otherwise it's a property users might care about
-                            sb << """        \"${sampleGroupName}\":[""".toString()
-                            List<PhenoKey> propertyList =   []
-                            if  ( (pdata)  && (ddata) ){
-                                propertyList =   propertyNames
-                            }   else if (pdata) {
-                                propertyList =   propertyNames.findAll{it.depth==1}
-                            }    else if (ddata) {
-                                propertyList =   propertyNames.findAll{it.depth==0}
-                            }
-                                for ( int  i = 0 ; i < propertyList.size() ; i++ ){
-                                sb << "\"${propertyList[i].toString()}\"".toString()
-                                if (i+1<propertyList.size()){
-                                    sb << ","
-                                }
-                            }
-                            sb << """ ]""".toString()
-                            sampleGroupCount++
-                            if (sampleGroupCount<phenotypeSpecificSampleGroups?.size()){
-                                sb << ",".toString()
-                            }
-                        }
-                     }
-                }
-                sb << """
-  }""".toString()
-                phenotypeHolder << sb.toString()
-            }
-            returnValue << "{"
-            for ( int  i = 0 ; i < phenotypeHolder.size() ; i++ ){
-                returnValue << phenotypeHolder[i]
-                if (i+1<phenotypeHolder.size()){
-                    returnValue << ","
-                }
-            }
-            returnValue << "}"
-        }
-        return returnValue.toString()
-    }
-
-
-
-    public String packageUpSortedHierarchicalListAsJson2 (LinkedHashMap mapOfSampleGroups ){
+    public String packageUpSortedHierarchicalListAsJson (LinkedHashMap mapOfSampleGroups ){
         // now that we have a list, build it into a string suitable for JSON
         int numberOfGroups = 0
         StringBuilder sb = new StringBuilder ()
@@ -1429,72 +1265,12 @@ class SharedToolsService {
           ${sampleGroupList.join(",")}
 """.toString()
 
-//        if ((mapOfStrings) && (mapOfStrings?.size() > 0)){
-//            LinkedHashMap sortedMapOfStrings = mapOfStrings.sort{ it.key?.sort_order }
-//            numberOfGroups = sortedMapOfStrings.size()
-//            int groupCounter  = 0
-//            sortedMapOfStrings.each{k,List v->
-//                sb <<  "\"${k}\":[".toString()
-//                int individualGroupLength  = v.size()
-//                for ( int  i = 0 ; i < individualGroupLength ; i++ ){
-//                    sb << "\"${v[i]}\"".toString()
-//                    if (i < individualGroupLength - 1) {
-//                        sb << ","
-//                    }
-//                }
-//                sb <<  "]"
-//                groupCounter++
-//                if (numberOfGroups > groupCounter) {
-//                    sb << ","
-//                }
-//            }
-//        }
-
         return  """
 {"is_error": false,
 "numRecords":${numberOfGroups},
 "dataset":{${sb.toString()}}
 }""".toString()
     }
-
-
-
-
-
-    public String packageUpSortedHierarchicalListAsJson (LinkedHashMap mapOfStrings ){
-        // now that we have a list, build it into a string suitable for JSON
-        int numberOfGroups = 0
-        StringBuilder sb = new StringBuilder ()
-
-        if ((mapOfStrings) && (mapOfStrings?.size() > 0)){
-            LinkedHashMap sortedMapOfStrings = mapOfStrings.sort{ it.key?.sort_order }
-            numberOfGroups = sortedMapOfStrings.size()
-            int groupCounter  = 0
-            sortedMapOfStrings.each{k,List v->
-                sb <<  "\"${k}\":[".toString()
-                int individualGroupLength  = v.size()
-                for ( int  i = 0 ; i < individualGroupLength ; i++ ){
-                    sb << "\"${v[i]}\"".toString()
-                    if (i < individualGroupLength - 1) {
-                        sb << ","
-                    }
-                }
-                sb <<  "]"
-                groupCounter++
-                if (numberOfGroups > groupCounter) {
-                    sb << ","
-                }
-            }
-        }
-
-        return  """
-{"is_error": false,
-"numRecords":${numberOfGroups},
-"dataset":{${sb.toString()}}
-}""".toString()
-    }
-
-
 
 
 

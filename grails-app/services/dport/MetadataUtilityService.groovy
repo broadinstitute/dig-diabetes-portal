@@ -91,6 +91,29 @@ class MetadataUtilityService {
         return returnValue
     }
 
+
+
+
+    public LinkedHashMap<String,String> createPhenotypeSampleGroupMap(List<Property>  propertyList) {
+        LinkedHashMap<String,String>  returnValue = [:]
+        if (propertyList){
+            // we will mostly iterate over this parent list
+            List<PhenotypeBean> phenotypeBeanList = propertyList.collect{PropertyBean pb->return pb.parent}
+            // create a list of sample groups associated with our property
+            for (PhenotypeBean phenotypeBean in phenotypeBeanList){
+                if (!returnValue.containsKey(phenotypeBean.name)){
+                    returnValue [phenotypeBean.name]  = phenotypeBean?.parent?.systemId
+                } else {
+                    log.error("NOTE: Phenotype = ${phenotypeBean.name} Unexpectedly found in multiple sample groups: createPhenotypeSampleGroupMap")
+                }
+            }
+        }
+        return returnValue
+    }
+
+
+
+
     /***
      * we need one phenotype record to draw from.  If we get two pick one.  If we get zero amounts a problem
      * @param phenotypeList
@@ -164,38 +187,12 @@ class MetadataUtilityService {
     }
 
 
-
     /***
-     * Order the phenotypes by group.  The first group must be GLYCEMIC.  The others I will order alphabetically
-     * @param phenotypeList
-     * @return
-     */
-//    public LinkedHashMap<String, LinkedHashMap<List<String>>> fullPropertyTree(List<PhenotypeBean>  phenotypeList, Boolean dprops, Boolean pprops) {
-//        LinkedHashMap<String, List<String>>  returnValue = [:]
-//        if (phenotypeList){
-//            List<String> allUniquePhenotypes = phenotypeList.sort{ a, b -> a.sortOrder <=> b.sortOrder }.name.unique()
-//            for (String phenotype in allUniquePhenotypes) {
-//                returnValue [phenotype] = [:]
-//                List<String> sampleGroupsPerPhenotype = phenotypeList.findAll{it.name==phenotype}.sort{ a, b -> a.sortOrder <=> b.sortOrder }.parent.systemId.unique()
-//                for (String sampleGroup in sampleGroupsPerPhenotype){
-//                    List <PropertyBean> propertyBeanList = []
-//                    if (dprops){
-//                        propertyBeanList << phenotypeList.findAll{it.parent.systemId==sampleGroup}?.parent?.propertyList[0]?.findAll{it.searchable}
-//                    }
-//                    if (pprops){
-//                        propertyBeanList << phenotypeList.findAll{it.name==phenotype}?.findAll{it.parent.systemId==sampleGroup}?.propertyList[0]?.findAll{it.searchable}
-//                    }
-//                    (returnValue [phenotype])[sampleGroup] = propertyBeanList?.flatten()?.sort{ a, b -> a.sortOrder <=> b.sortOrder }?.name
-//
-//                }
-//
-//            }
-//        }
-//        return returnValue
-//    }
-
-    /***
-     * Given a group of phenotypes in a sample group name, retrieve
+     * Given a group of phenotypes, retrieve a list of property names.  Based on the two Booleans you can
+     * choose to pull back only D properties, or only P properties, or both. Note that the property retrieval
+     * requires a valid sample group name, while P property retrieval requires both a valid phenotype and a valid
+     * sample group name.
+     *
      * @param phenotypeList
      * @param sampleGroup
      * @param dprops
@@ -205,6 +202,18 @@ class MetadataUtilityService {
     private List<String> propertiesPerSampleGroup(List<PhenotypeBean>  phenotypeList, String sampleGroup, String phenotypeName, Boolean dprops, Boolean pprops) {
         List<String>  returnValue = []
         List <PropertyBean> propertyBeanList = []
+
+        // Consistency check
+        if ((dprops) &&
+                (!(sampleGroup?.length()>0))) {
+            log.error("Failed internal consistency check in propertiesPerSampleGroup.  Looking for a dproperty but without a sample name!")
+        }
+
+        if ((pprops) &&
+                ((!(sampleGroup?.length()>0))||(!(phenotypeName?.length()>0)))) {
+            log.error("Failed internal consistency check in propertiesPerSampleGroup.  Looking for a pproperty but missing either a sample name or a phenotype name!")
+        }
+
         if (dprops){
             propertyBeanList << phenotypeList.findAll{it.parent.systemId==sampleGroup}?.parent?.propertyList[0]?.findAll{it.searchable}
         }
@@ -270,26 +279,85 @@ class MetadataUtilityService {
 
 
 
+    /***
+     *   Create a list of properties that match a particular phenotype and sample group name, including D properties and P properties
+     * @param phenotypeList
+     * @param dprops
+     * @param pprops
+     * @return
+     */
+    public List<String> sampleGroupAndPhenotypeBasedPropertyList(List<PhenotypeBean>  phenotypeList,String phenotypeName,String sampleGroupName ) {
+        List<String>  returnValue = []
+        if ((phenotypeList) &&
+                (phenotypeName) &&
+                (sampleGroupName)){
 
-
-
-
-
-    public LinkedHashMap<String,String> createPhenotypeSampleGroupMap(List<Property>  propertyList) {
-        LinkedHashMap<String,String>  returnValue = [:]
-        if (propertyList){
-            // we will mostly iterate over this parent list
-            List<PhenotypeBean> phenotypeBeanList = propertyList.collect{PropertyBean pb->return pb.parent}
-            // create a list of sample groups associated with our property
-            for (PhenotypeBean phenotypeBean in phenotypeBeanList){
-                if (!returnValue.containsKey(phenotypeBean.name)){
-                    returnValue [phenotypeBean.name]  = phenotypeBean?.parent?.systemId
-                } else {
-                    log.error("NOTE: Phenotype = ${phenotypeBean.name} Unexpectedly found in multiple sample groups: createPhenotypeSampleGroupMap")
-                }
-            }
+            returnValue = propertiesPerSampleGroup(phenotypeList,  sampleGroupName, phenotypeName,  true,  true)
         }
         return returnValue
     }
+
+
+    /***
+     *   Create a list of properties that match a particular phenotype and sample group name, including only P properties
+     * @param phenotypeList
+     * @param dprops
+     * @param pprops
+     * @return
+     */
+    public List<String> phenotypeBasedPropertyList(List<PhenotypeBean>  phenotypeList,String phenotypeName,String sampleGroupName ) {
+        List<String>  returnValue = []
+        if ((phenotypeList) &&
+                (phenotypeName) &&
+                (sampleGroupName)){
+
+            returnValue = propertiesPerSampleGroup(phenotypeList,  sampleGroupName, phenotypeName,  false,  true)
+        }
+        return returnValue
+    }
+
+
+
+    /***
+     *   Create a list of properties that match a  sample group name
+     * @param phenotypeList
+     * @param dprops
+     * @param pprops
+     * @return
+     */
+    public List<String> sampleGroupBasedPropertyList(List<PhenotypeBean>  phenotypeList,String sampleGroupName ) {
+        List<String>  returnValue = []
+        if ((phenotypeList) &&
+                (sampleGroupName)){
+
+            returnValue = propertiesPerSampleGroup(phenotypeList,  sampleGroupName, "",  true,  false)
+        }
+        return returnValue
+    }
+
+    /***
+     * First make sure that we are only looking at a single phenotype worth of trees. Then pull back all the properties
+     *  for a single sample group. I think this result will often be the same as simply choosing by sample group, but if
+     *  a sample group is used in multiple phenotypes then potentially the answers could be different
+     * @param phenotypeList
+     * @param phenotypeName
+     * @param sampleGroupName
+     * @return
+     */
+    public List<String> phenotypeSpecificSampleGroupBasedPropertyList(List<PhenotypeBean>  phenotypeList,String phenotypeName,String sampleGroupName ) {
+        List<String>  returnValue = []
+
+        if ((phenotypeList) && (phenotypeName)){
+            List <PhenotypeBean> phenotypeBeanList = phenotypeList.findAll{it.name==phenotypeName}.sort{ a, b -> a.sortOrder <=> b.sortOrder }
+            returnValue = propertiesPerSampleGroup(phenotypeBeanList,  sampleGroupName, "",  true,  false)
+        }
+
+        return returnValue
+    }
+
+
+
+
+
 
 }

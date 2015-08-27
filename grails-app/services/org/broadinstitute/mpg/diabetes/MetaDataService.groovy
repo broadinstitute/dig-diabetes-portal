@@ -231,6 +231,34 @@ class MetaDataService {
         return propertyTree
     }
 
+    // D and P properties
+    public List<String> getAllMatchingPropertyList(String sampleGroupName,String  phenotypeName){
+        List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
+        List<String> propertyList =  metadataUtilityService.sampleGroupAndPhenotypeBasedPropertyList(phenotypeList,phenotypeName,sampleGroupName)
+        return propertyList
+    }
+
+    // P properties only
+    public List<String> getSpecificPhenotypePropertyList(String sampleGroupName,String  phenotypeName){
+        List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
+        List<String> propertyList =  metadataUtilityService.phenotypeBasedPropertyList(phenotypeList,phenotypeName,sampleGroupName)
+        return propertyList
+    }
+
+    // D properties only
+    public List<String> getSampleGroupPropertyList(String sampleGroupName){
+        List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
+        List<String> propertyList =  metadataUtilityService.sampleGroupBasedPropertyList(phenotypeList,sampleGroupName)
+        return propertyList
+    }
+
+    // D properties only
+    public List<String> getPhenotypeSpecificSampleGroupPropertyList(String sampleGroupName,String  phenotypeName){
+        List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
+        List<String> propertyList =  metadataUtilityService.phenotypeSpecificSampleGroupBasedPropertyList(phenotypeList,phenotypeName,sampleGroupName)
+        return propertyList
+    }
+
 
 
 

@@ -223,19 +223,11 @@ class VariantSearchController {
             phenotypeList << params.phenotype
         }
 
+        List <String> listOfProperties = metaDataService.getAllMatchingPropertyList(datasetChoice,params.phenotype)
 
-        // DIGP_47: comment out shared tool service DS for new one for now
-        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
-        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
-        LinkedHashMap<PhenoKey,List<String>> annotatedSampleGroups =  processedMetadata.propertiesPerOrderedSampleGroups
-        LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> phenotypeSpecificSampleGroupProperties = processedMetadata['phenotypeSpecificPropertiesAnnotatedPerSampleGroup']
-        List <String> listOfProperties  = sharedToolsService.combineToCreateASingleList( params.phenotype, datasetChoice,
-                                                                                             annotatedSampleGroups,
-                                                                                             phenotypeSpecificSampleGroupProperties )
         String propertiesForTransmission = sharedToolsService.packageUpAListAsJson (listOfProperties)
         def slurper = new JsonSlurper()
         def result = slurper.parseText(propertiesForTransmission)
-//        def result = slurper.parseText(this.metaDataService.getSearchablePropertyNameListAsJson(datasetChoice))
 
         render(status: 200, contentType: "application/json") {
             [datasets: result,
@@ -304,8 +296,6 @@ class VariantSearchController {
         String properties = URLDecoder.decode(propertiesRaw, "UTF-8")
         LinkedHashMap requestedProperties = sharedToolsService.putPropertiesIntoHierarchy(properties)
 
-        List<String> additionalProperties = []
-
         log.debug "variantSearch variantSearchAjax = ${filters}"
 
 
@@ -321,17 +311,14 @@ class VariantSearchController {
         LinkedHashMap fullPropertyTree = metaDataService.getFullPropertyTree()
         LinkedHashMap fullSampleTree = metaDataService.getSampleGroupTree()
 
-        String jsonFormOfRelevantMetadataPhenotype = sharedToolsService.packageUpATreeAsJson2(fullPropertyTree)
+        String jsonFormOfRelevantMetadataPhenotype = sharedToolsService.packageUpATreeAsJson(fullPropertyTree)
         JSONObject metadata = slurper.parseText(jsonFormOfRelevantMetadataPhenotype)
 
         String jsonFormOfCommonProperties = this.metaDataService.getCommonPropertiesAsJson(true);
         JSONObject commonPropertiesJsonObject = slurper.parseText(jsonFormOfCommonProperties)
 
-        String jsonFormPropertiesPerSampleGroup = sharedToolsService.packageUpSortedHierarchicalListAsJson2(fullSampleTree)
-       // String jsonFormPropertiesPerSampleGroup = sharedToolsService.packageUpSortedHierarchicalListAsJson(sharedToolsService.getProcessedMetadata()?.propertiesPerOrderedSampleGroups)
+        String jsonFormPropertiesPerSampleGroup = sharedToolsService.packageUpSortedHierarchicalListAsJson(fullSampleTree)
         JSONObject propertiesPerSampleGroupJsonObject = slurper.parseText(jsonFormPropertiesPerSampleGroup)
-
-//        sampleGroupBasedPropertyTree
 
         render(status: 200, contentType: "application/json") {
             [variants: dataJsonObject.variants,

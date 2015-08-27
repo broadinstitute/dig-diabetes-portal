@@ -94,22 +94,7 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
         assert oldJson.toString() ==  newJson.toString()
     }
 
-//    void "test trait controller gwas sample group by phenotype search"() {
-//        when:
-//        String phenotypeToSearchOn = "eGFRcys"
-//        String oldPhenotypeKey = sharedToolsService.convertOldPhenotypeStringsToNewOnes (phenotypeToSearchOn)
-//        String oldSampleGroupName = ""
-//        LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
-//        LinkedHashMap phenotypeMap = processedMetadata.gwasSpecificPhenotypes
-//        if (phenotypeMap.containsKey(phenotypeToSearchOn))  {
-//            oldSampleGroupName  = phenotypeMap[phenotypeToSearchOn]?.sampleGroupName
-//        }
-//        String newSampleGroupName = this.metaDataService.getGwasSampleGroupNameForPhenotype(phenotypeToSearchOn);
-//
-//        then:
-//        assert oldSampleGroupName == newSampleGroupName
-//
-//    }
+
 
 
     void "test variant search properties json building"() {
@@ -151,22 +136,4 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
         assert oldJson == newJson
     }
 
-    // TODO - table this for now to work on burden test front end
-    /*
-    void "test variant search phenotype drop down populating"() {
-        when:
-        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
-        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
-        LinkedHashMap<String, LinkedHashMap <String,List<String>>> phenotypeSpecificSampleGroupProperties = processedMetadata.phenotypeSpecificPropertiesPerSampleGroup
-        LinkedHashMap<String, List<String>> listOfPhenotypes = sharedToolsService.extractAPhenotypeListofGroups( phenotypeSpecificSampleGroupProperties )
-        String phenotypesForTransmission = sharedToolsService.packageUpAHierarchicalListAsJson (listOfPhenotypes)
-        def slurper = new JsonSlurper()
-        def oldJson = slurper.parseText(phenotypesForTransmission)
-
-        JSONObject newJson
-
-        then:
-        assert oldJson == newJson
-    }
-    */
 }
