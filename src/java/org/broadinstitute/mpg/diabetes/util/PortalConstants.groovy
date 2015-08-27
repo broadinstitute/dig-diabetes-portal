@@ -53,4 +53,23 @@ class PortalConstants {
     public final static String OPERATOR_MORE_THAN_NOT_EQUALS             = "GT";
     public final static String OPERATOR_EQUALS                           = "EQ";
 
+    // constants of property id keys (these are automatically generated, but caching often used ones here)
+    public final static String PROPERTY_KEY_COMMON_VAR_ID                 = "metadata_rootVAR_ID";
+    public final static String PROPERTY_KEY_COMMON_CLOSEST_GENE           = "metadata_rootCLOSEST_GENE";
+    public final static String PROPERTY_KEY_COMMON_CHROMOSOME             = "metadata_rootCHROM";
+    public final static String PROPERTY_KEY_COMMON_CONSEQUENCE            = "metadata_rootConsequence";
+    public final static String PROPERTY_KEY_COMMON_POSITION               = "metadata_rootPOS";
+    public final static String PROPERTY_KEY_COMMON_DBSNP_ID               = "metadata_rootDBSNP_ID";
+
+    public final static String PROPERTY_KEY_SG_MAF_82K                    = "metadata_root_ExChip_82k_mdv2_82kMAF";
+    public final static String PROPERTY_KEY_SG_MAF_SIGMA1                 = "metadata_root_ExChip_SIGMA1_mdv1_SIGMA1MAF";
+
+    public final static String PROPERTY_KEY_PH_MINA_SIGMA1_T2D            = "metadata_root_ExChip_SIGMA1_mdv2_SIGMA1T2DMINA";
+    public final static String PROPERTY_KEY_PH_MINU_SIGMA1_T2D            = "metadata_root_ExChip_SIGMA1_mdv2_SIGMA1T2DMINU";
+    public final static String PROPERTY_KEY_PH_OR_FIRTH_SIGNA1_T2D        = "metadata_root_ExChip_SIGMA1_mdv2_SIGMA1T2DOR_FIRTH";
+    public final static String PROPERTY_KEY_PH_P_VALUE_GWAS_DIAGRAM       = "metadata_root_GWAS_DIAGRAM_mdv2_DIAGRAMT2DP_VALUE";
+    public final static String PROPERTY_KEY_PH_P_VALUE_82K_T2D            = "metadata_root_ExChip_82k_mdv1_82kT2DP_VALUE";
+
+
+
 }

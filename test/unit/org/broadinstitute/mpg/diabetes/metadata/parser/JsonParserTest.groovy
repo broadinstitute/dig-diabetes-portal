@@ -2,6 +2,7 @@ package org.broadinstitute.mpg.diabetes.metadata.parser
 
 import junit.framework.TestCase
 import org.broadinstitute.mpg.diabetes.metadata.*
+import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.web.json.JSONException
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -269,5 +270,45 @@ class JsonParserTest extends TestCase {
         assertNotNull(dataSetMap);
         assertTrue(dataSetMap.size() > 0);
         assertEquals(3088, dataSetMap.size());
+    }
+
+    @Test
+    void testGetPropertyListOfPropertyType() {
+        // local variables
+        List<Property> propertyList = null;
+        String tempString = "";
+
+        // get the common properties
+        propertyList = this.jsonParser.getPropertyListOfPropertyType(this.jsonParser.getMetaDataRoot(), PortalConstants.TYPE_COMMON_PROPERTY_KEY);
+
+        // test
+        assertNotNull(propertyList);
+        assertTrue(propertyList.size() > 0);
+        assertEquals(13, propertyList.size());
+
+        // get the sample group properties
+        propertyList = this.jsonParser.getPropertyListOfPropertyType(this.jsonParser.getMetaDataRoot(), PortalConstants.TYPE_SAMPLE_GROUP_PROPERTY_KEY);
+
+        // test
+        assertNotNull(propertyList);
+        assertTrue(propertyList.size() > 0);
+        assertEquals(225, propertyList.size());
+
+        // get the phenotype properties
+        propertyList = this.jsonParser.getPropertyListOfPropertyType(this.jsonParser.getMetaDataRoot(), PortalConstants.TYPE_PHENOTYPE_PROPERTY_KEY);
+
+        /* USED TO CAPTURE PROPERTY ID
+        for (Property property: propertyList) {
+            tempString = property.getId();
+            System.out.println(tempString);
+        }
+        */
+
+        // test
+        assertNotNull(propertyList);
+        assertTrue(propertyList.size() > 0);
+        assertEquals(2362, propertyList.size());
+
+
     }
 }

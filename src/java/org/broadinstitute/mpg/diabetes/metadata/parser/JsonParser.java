@@ -17,6 +17,7 @@ import org.broadinstitute.mpg.diabetes.metadata.visitor.GwasTechSampleGroupByPhe
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeByNameVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeNameVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyByNameFinderVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyByPropertyTypeVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyPerExperimentVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupByIdSelectingVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupForPhenotypeVisitor;
@@ -32,6 +33,7 @@ import org.codehaus.groovy.grails.web.json.JSONTokener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +49,9 @@ public class JsonParser {
     // private cached results
     private MetaDataRoot metaDataRoot = null;
     private String jsonString;
+
+    // cached data set map
+    Map<String, DataSet> dataSetMap = new HashMap<String, DataSet>();
 
     /**
      * singleton service to parse metadata
@@ -111,6 +116,7 @@ public class JsonParser {
     public void forceMetadataReload(String jsonString) throws PortalException {
         this.jsonString = jsonString;
         this.metaDataRoot = this.populateMetaDataRoot();
+        this.dataSetMap.clear();
     }
 
     /**
@@ -605,24 +611,53 @@ public class JsonParser {
      * @throws PortalException
      */
     public Map<String, DataSet> getMapOfAllDataSetNodes() throws PortalException {
-        // local variables
-        Map<String, DataSet> dataSetMap = null;
+        if ((this.dataSetMap == null) || (this.dataSetMap.size() < 1)) {
+            // local variables
+            Map<String, DataSet> dataSetMap = null;
 
-        // create the visitor
-        AllDataSetHashSetVisitor visitor = new AllDataSetHashSetVisitor();
+            // create the visitor
+            AllDataSetHashSetVisitor visitor = new AllDataSetHashSetVisitor();
 
-        // visit the metadata root
-        this.getMetaDataRoot().acceptVisitor(visitor);
+            // visit the metadata root
+            this.getMetaDataRoot().acceptVisitor(visitor);
 
-        // make sure there were no errors
-        if (visitor.getError() != null) {
-            throw new PortalException("there was a duplicate map key: " + visitor.getError());
+            // make sure there were no errors
+            if (visitor.getError() != null) {
+                throw new PortalException("there was a duplicate map key: " + visitor.getError());
+            }
+
+            // if not, then get map
+            dataSetMap = visitor.getDataSetMap();
+
+            // set the dataSetMap
+            this.dataSetMap = dataSetMap;
         }
 
-        // if not, then get map
-        dataSetMap = visitor.getDataSetMap();
-
         // return the map
-        return dataSetMap;
+        return this.dataSetMap;
+    }
+
+    /**
+     * returns a list of all the properties of a given type
+     *
+     * @param propertyType
+     * @return
+     * @throws PortalException
+     */
+    public List<Property> getPropertyListOfPropertyType(DataSet dataSetNodeToStartFrom, String propertyType) throws PortalException {
+        // local variables
+        List<Property> propertyList = null;
+
+        // create the visitor
+        PropertyByPropertyTypeVisitor visitor = new PropertyByPropertyTypeVisitor(propertyType);
+
+        // visit the metadata root
+        dataSetNodeToStartFrom.acceptVisitor(visitor);
+
+        // get the property list
+        propertyList = visitor.getPropertyList();
+
+        // return
+        return propertyList;
     }
 }

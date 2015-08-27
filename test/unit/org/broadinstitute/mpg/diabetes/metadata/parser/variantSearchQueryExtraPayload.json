@@ -1,0 +1,23 @@
+{
+    "passback": "123abc",
+    "entity": "variant",
+    "page_number": 0,
+    "page_size": 100,
+    "limit": 1000,
+    "count": false,
+    "properties":    {
+        "cproperty": ["VAR_ID" , "CLOSEST_GENE" , "DBSNP_ID" , "Consequence" , "CHROM" , "POS" , "VAR_ID"],
+        "orderBy":    ["CHROM"],
+        "dproperty" : { "MAF" : [ "ExChip_SIGMA1_mdv2" , "ExChip_82k_mdv2"] } ,
+        "pproperty" : { "P_FIRTH" : {  "ExChip_SIGMA1_mdv2" : [ "T2D"] } ,
+            "OR_FIRTH" : {  "ExChip_SIGMA1_mdv2" : [ "T2D"] } ,
+            "MINA" : {  "ExChip_SIGMA1_mdv2" : [ "T2D"] } ,
+            "MINU" : {  "ExChip_SIGMA1_mdv2" : [ "T2D"] } ,
+            "P_VALUE" : {  "ExChip_82k_mdv2" : [ "T2D"], "GWAS_DIAGRAM_mdv2" : [ "T2D"] } ,
+            "NEFF" : {  "ExChip_82k_mdv2" : [ "T2D"] } ,
+            "ODDS_RATIO" : {  "ExChip_82k_mdv2" : [ "T2D"], "GWAS_DIAGRAM_mdv2" : [ "T2D"] }  } } ,
+
+    "filters":    [
+        {"dataset_id": "GWAS_DIAGRAM_mdv2", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LT", "value": 1, "operand_type": "FLOAT"},{"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "EQ", "value": "9", "operand_type": "STRING"},{"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "GTE", "value": 21940000, "operand_type": "INTEGER"},{"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "LTE", "value": 22190000, "operand_type": "INTEGER"}
+    ]
+}
