@@ -259,7 +259,11 @@ class MetaDataService {
         return propertyList
     }
 
-
+    public List<String> getPhenotypeSpecificSampleGroupPropertyList(String phenotypeName,String sampleGroupName, List <String> propertyTemplates){
+        List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName(phenotypeName, sharedToolsService.getCurrentDataVersion (), "")
+        List<String> propertyList =  metadataUtilityService.phenotypeSpecificSampleGroupBasedPropertyList(phenotypeList,sampleGroupName,propertyTemplates)
+        return propertyList
+    }
 
 
 }

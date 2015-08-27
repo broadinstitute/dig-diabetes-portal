@@ -5,6 +5,7 @@ import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
+import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.codehaus.groovy.grails.commons.GrailsApplication
@@ -15,6 +16,7 @@ class RestServerService {
     GrailsApplication grailsApplication
     SharedToolsService sharedToolsService
     FilterManagementService filterManagementService
+    MetaDataService metaDataService
     MetadataUtilityService metadataUtilityService
     private static final log = LogFactory.getLog(this)
     SqlService sqlService
@@ -1630,12 +1632,7 @@ ${getDataHeader (0, 100, 1, false)}
  //       if (!requestedProperties)   {
             for (String pheno in phenotypesToFetch) {
                 for (String ds in datasetsToFetch) {
-                    if (processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno]) {//HACK HACK HACK HACK HACK
-                        propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^MINA/})
-                        propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^MINU/})
-                        propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^(OR|ODDS|BETA)/})
-                        propertiesToFetch += processedMetadata.phenotypeSpecificPropertiesPerSampleGroup[pheno][ds].findAll({it =~ /^P_(EMMAX|FE|VALUE)/})
-                    }
+                    propertiesToFetch += metaDataService.getPhenotypeSpecificSampleGroupPropertyList(pheno,ds,[/^MINA/,/^MINU/,/^(OR|ODDS|BETA)/,/^P_(EMMAX|FIRTH|FE|VALUE)/])
                 }
             }
       //  }

@@ -97,26 +97,6 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
 
 
 
-    void "test variant search properties json building"() {
-        when:
-        String datasetChoice = "GWAS_MAGIC_mdv2"
-        String phenotype = "HBA1C"
-        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
-        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
-        LinkedHashMap<PhenoKey,List<String>> annotatedSampleGroups =  processedMetadata.propertiesPerOrderedSampleGroups
-        LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> phenotypeSpecificSampleGroupProperties = processedMetadata['phenotypeSpecificPropertiesAnnotatedPerSampleGroup']
-        List <String> listOfProperties  = sharedToolsService.combineToCreateASingleList(phenotype , datasetChoice, annotatedSampleGroups, phenotypeSpecificSampleGroupProperties )
-        String propertiesForTransmission = sharedToolsService.packageUpAListAsJson (listOfProperties)
-        def slurper = new JsonSlurper()
-        JSONObject oldJson = slurper.parseText(propertiesForTransmission)
-
-        String newString = this.metaDataService.getSearchablePropertyNameListAsJson(datasetChoice);
-        JSONObject newJson = slurper.parseText(newString)
-
-        then:
-        assert true
-//        assert oldJson == newJson         // taking out for now until know what to expect
-    }
 
     void "test variant search dataset drop down population upon phenotype selection"() {
         when:

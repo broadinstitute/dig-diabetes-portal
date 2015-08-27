@@ -357,6 +357,19 @@ class MetadataUtilityService {
 
 
 
+    public List<String> phenotypeSpecificSampleGroupBasedPropertyList(List<PhenotypeBean>  phenotypeList,String sampleGroupName,List <String> propertyTemplates ) {
+        List<String>  returnValue = []
+        if ((phenotypeList) && (propertyTemplates) &&  (propertyTemplates.size ()) ){
+            // retrieve the filtered property list that we will use for the subsequent searches
+            List<String> propertyNameList =   phenotypeList.findAll{it.parent.systemId==sampleGroupName}?.collect{return it.propertyList}?.flatten()?.findAll{it.searchable}?.unique()?.name
+            for (String propertyTemplate in propertyTemplates){
+                returnValue << propertyNameList.findAll{it =~ propertyTemplate}
+            }
+        }
+        return returnValue.flatten()
+    }
+
+
 
 
 

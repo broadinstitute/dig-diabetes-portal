@@ -357,8 +357,6 @@ class SharedToolsService {
             LinkedHashMap<PhenoKey, List<PhenoKey>> temporaryAnnotatedPhenotypes = [:]
             LinkedHashMap<String, List<String>> annotatedSampleGroups = [:]
             LinkedHashMap<PhenoKey, List<String>> annotatedOrderedSampleGroups = [:]
-            LinkedHashMap<String, LinkedHashMap<String, List<String>>> phenotypeSpecificSampleGroupProperties = [:]
-            LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> phenotypeSpecificAnnotatedSampleGroupProperties = [:]
             LinkedHashMap<String, LinkedHashMap<String, String>> commonProperties = [:]
             String dataSetVersionThatWeWant = getCurrentDataVersion()
             if (metadata) {
@@ -369,8 +367,6 @@ class SharedToolsService {
                         getDataSetsPerAnnotatedPhenotype(experiment.sample_groups, temporaryAnnotatedPhenotypes,1)
                         getPropertiesPerSampleGroupId(experiment.sample_groups, annotatedSampleGroups)
                         getPropertiesPerAnnotatedSampleGroupId(experiment.sample_groups, annotatedOrderedSampleGroups)
-                        getPhenotypeSpecificPropertiesPerSampleGroupId(experiment.sample_groups, phenotypeSpecificSampleGroupProperties)
-                        getPhenotypeSpecificAnnotatedPropertiesPerSampleGroupId(experiment.sample_groups, phenotypeSpecificAnnotatedSampleGroupProperties)
                     }
                 }
                 for (def cProperty in metadata.properties) {
@@ -388,8 +384,6 @@ class SharedToolsService {
             sharedProcessedMetadata['sampleGroupsPerAnnotatedPhenotype'] =  temporaryAnnotatedPhenotypes
             sharedProcessedMetadata['propertiesPerSampleGroups'] = annotatedSampleGroups
             sharedProcessedMetadata['propertiesPerOrderedSampleGroups'] = annotatedOrderedSampleGroups
-            sharedProcessedMetadata['phenotypeSpecificPropertiesPerSampleGroup'] = phenotypeSpecificSampleGroupProperties
-            sharedProcessedMetadata['phenotypeSpecificPropertiesAnnotatedPerSampleGroup'] = phenotypeSpecificAnnotatedSampleGroupProperties
             sharedProcessedMetadata['commonProperties'] = commonProperties          // DIGP_47: still used for rest server post calls for props to display
             forceProcessedMetadataOverride = 0
         }
@@ -709,202 +703,6 @@ class SharedToolsService {
 
 
 
-
-
-    public LinkedHashMap<String, List <String>> getPhenotypeSpecificPropertiesPerSampleGroupId (def sampleGroups,LinkedHashMap<String, LinkedHashMap <String,String>> annotatedPhenotypeSpecificSampleGroupIds){
-        for (def sampleGroup in sampleGroups){
-            String sampleGroupsId = sampleGroup.id
-            if (sampleGroup.phenotypes){
-                for (def phenotype in sampleGroup.phenotypes){
-                    String phenotypeName = phenotype.name
-                    String phenotypeGroup = phenotype.group
-                    String phenotypeSortOrder = phenotype.sort_order
-                    LinkedHashMap<String,String> hashOfPhenotypeSpecificSampleGroups
-                    if (annotatedPhenotypeSpecificSampleGroupIds.containsKey(phenotypeName)){
-                        hashOfPhenotypeSpecificSampleGroups = annotatedPhenotypeSpecificSampleGroupIds[phenotypeName]
-                    } else {
-                        hashOfPhenotypeSpecificSampleGroups = new LinkedHashMap()
-                        annotatedPhenotypeSpecificSampleGroupIds[phenotypeName]  =  hashOfPhenotypeSpecificSampleGroups
-                    }
-
-                    // we want to store some properties that are specific to each phenotype. Let's create
-                    // a special-purpose key called 'phenotypeProperties' which sits adjacent to all of the sample group names
-                    // Inside we can have a map that holds these special-purpose properties
-                    LinkedHashMap <String,String> phenotypeSpecificProperties
-                    if (hashOfPhenotypeSpecificSampleGroups.containsKey("phenotypeProperties")){
-                        phenotypeSpecificProperties = hashOfPhenotypeSpecificSampleGroups["phenotypeProperties"]
-                    } else {
-                        phenotypeSpecificProperties = new LinkedHashMap <String,String> ()
-                        hashOfPhenotypeSpecificSampleGroups["phenotypeProperties"] = phenotypeSpecificProperties
-                    }
-                    // and let's fill this structure.  We should only have to do it once
-                    if (phenotypeSpecificProperties.size()==0){
-                        phenotypeSpecificProperties ["group"] = phenotypeGroup
-                        phenotypeSpecificProperties ["sort_order"] = phenotypeSortOrder
-                    }
-
-
-                    // we have the list for this phenotype.  Add some more sample groups for it, along with
-                    //  a place to put data set specific properties for each data set
-                    List <String> propertyList
-                    if (hashOfPhenotypeSpecificSampleGroups.containsKey(sampleGroupsId)){
-                        propertyList = hashOfPhenotypeSpecificSampleGroups[sampleGroupsId]
-                    } else {
-                        propertyList = new ArrayList<String>()
-                        hashOfPhenotypeSpecificSampleGroups[sampleGroupsId] = propertyList
-                    }
-
-                    // now let's store up the properties specific to this sample group & phenotype combination
-                    def phenotypeProperties = phenotype.properties
-                    if (phenotypeProperties){
-                        for (def property in phenotypeProperties){
-                            String propertyName = property.name
-                            if (propertyList.contains(propertyName)){
-                               // println "That is a little odd. Sample group=${sampleGroupsId} in phenotype=${phenotypeName} already had property=${propertyName}"
-                            }else {
-                                if (property.searchable == "TRUE"){
-                                    propertyList << propertyName
-                                }
-                            }
-                        }
-                    }
-
-
-                    // One more thing:  Every phenotype also inherits the properties from its sample group.  Let's add those in too
-                    // now let's store up the properties specific to this sample group & phenotype combination
-                    def sampleGroupProperties = sampleGroup.properties
-                    if (sampleGroupProperties){
-                        for (def property in sampleGroupProperties){
-                            String propertyName = property.name
-                            if (propertyList.contains(propertyName)){
-                                // println "That is a little odd. Sample group=${sampleGroupsId} in phenotype=${phenotypeName} already had property=${propertyName}"
-                            }else {
-                                if (property.searchable == "TRUE"){
-                                    propertyList << propertyName
-                                }
-                            }
-                        }
-                    }
-
-
-
-
-
-                    // we can descend further if there are sample groups within the sample group
-                    if (sampleGroup.sample_groups){
-                        getPhenotypeSpecificPropertiesPerSampleGroupId (sampleGroup.sample_groups, annotatedPhenotypeSpecificSampleGroupIds)
-                    }
-                }
-
-            }
-        }
-        return annotatedPhenotypeSpecificSampleGroupIds
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> getPhenotypeSpecificAnnotatedPropertiesPerSampleGroupId (def sampleGroups,LinkedHashMap<String, LinkedHashMap <PhenoKey,List <String>>> annotatedPhenotypeSpecificSampleGroupIds){
-        for (def sampleGroup in sampleGroups){
-            String sampleGroupsId = sampleGroup.id
-            int sampleGroupSortOrder = sampleGroup?.sort_order
-            if (sampleGroup.phenotypes){
-                for (def phenotype in sampleGroup.phenotypes){
-                    String phenotypeName = phenotype.name
-                    String phenotypeGroup = phenotype.group
-                    String phenotypeSortOrder = phenotype.sort_order
-                    LinkedHashMap<String,String> hashOfPhenotypeSpecificSampleGroups
-                    if (annotatedPhenotypeSpecificSampleGroupIds.containsKey(phenotypeName)){
-                        hashOfPhenotypeSpecificSampleGroups = annotatedPhenotypeSpecificSampleGroupIds[phenotypeName]
-                    } else {
-                        hashOfPhenotypeSpecificSampleGroups = new LinkedHashMap()
-                        annotatedPhenotypeSpecificSampleGroupIds[phenotypeName]  =  hashOfPhenotypeSpecificSampleGroups
-                    }
-
-                    // we want to store some properties that are specific to each phenotype. Let's create
-                    // a special-purpose key called 'phenotypeProperties' which sits adjacent to all of the sample group names
-                    // Inside we can have a map that holds these special-purpose properties
-                    LinkedHashMap <String,String> phenotypeSpecificProperties
-                    PhenoKey sampleGroupPhenoKeyForProperties = new PhenoKey("phenotypeProperties", 99, 0)
-                    if (hashOfPhenotypeSpecificSampleGroups.containsKey(sampleGroupPhenoKeyForProperties)){
-                        phenotypeSpecificProperties = hashOfPhenotypeSpecificSampleGroups[(sampleGroupPhenoKeyForProperties)]
-                    } else {
-                        phenotypeSpecificProperties = new LinkedHashMap <String,String> ()
-                        hashOfPhenotypeSpecificSampleGroups[(sampleGroupPhenoKeyForProperties)] = phenotypeSpecificProperties
-                    }
-                    // and let's fill this structure.  We should only have to do it once
-                    if (phenotypeSpecificProperties.size()==0){
-                        phenotypeSpecificProperties ["group"] = phenotypeGroup
-                        phenotypeSpecificProperties ["sort_order"] = phenotypeSortOrder
-                    }
-
-
-                    // we have the list for this phenotype.  Add some more sample groups for it, along with
-                    //  a place to put data set specific properties for each data set
-                    List <PhenoKey> propertyList
-                    PhenoKey sampleGroupPhenoKey = new PhenoKey(sampleGroupsId, sampleGroupSortOrder, 0)
-                    if (hashOfPhenotypeSpecificSampleGroups.containsKey(sampleGroupPhenoKey)){
-                        propertyList = hashOfPhenotypeSpecificSampleGroups[(sampleGroupPhenoKey)]
-                    } else {
-                        propertyList = new ArrayList<PhenoKey>()
-                        hashOfPhenotypeSpecificSampleGroups[sampleGroupPhenoKey] = propertyList
-                    }
-
-                    // now let's store up the properties specific to this sample group & phenotype combination
-                    def phenotypeProperties = phenotype.properties
-                    if (phenotypeProperties){
-                        for (def property in phenotypeProperties){
-                            int sortOrder =  property.sort_order as int
-                            PhenoKey phenoKeyPropertyName = new PhenoKey(property.name,sortOrder,1)    // mark depth as 1 for pprop
-                            if (propertyList.contains(phenoKeyPropertyName)){
-                                // println "That is a little odd. Sample group=${sampleGroupsId} in phenotype=${phenotypeName} already had property=${propertyName}"
-                            }else {
-                                if (property.searchable == "TRUE") {
-                                    propertyList << phenoKeyPropertyName
-                                }
-                            }
-                        }
-                    }
-
-                    // One more thing:  Every phenotype also inherits the properties from its sample group.  Let's add those in too
-                    // now let's store up the properties specific to this sample group & phenotype combination
-                    def sampleGroupProperties = sampleGroup.properties
-                    if (sampleGroupProperties){
-                        for (def property in sampleGroupProperties){
-                            int sortOrder =  property.sort_order as int
-                            PhenoKey phenoKeyPropertyName = new PhenoKey(property.name,sortOrder,0)    // mark depth as 0 for dprop
-                            if (propertyList.contains(phenoKeyPropertyName)){
-                                // println "That is a little odd. Sample group=${sampleGroupsId} in phenotype=${phenotypeName} already had property=${propertyName}"
-                            }else {
-                                if (property.searchable == "TRUE") {
-                                    propertyList << phenoKeyPropertyName
-                                }
-                            }
-                        }
-                    }
-
-                    // we can descend further if there are sample groups within the sample group
-                    if (sampleGroup.sample_groups){
-                        getPhenotypeSpecificAnnotatedPropertiesPerSampleGroupId (sampleGroup.sample_groups, annotatedPhenotypeSpecificSampleGroupIds)
-                    }
-                }
-
-            }
-        }
-        return annotatedPhenotypeSpecificSampleGroupIds
-    }
 
 
 
