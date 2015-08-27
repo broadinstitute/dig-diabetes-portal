@@ -56,7 +56,7 @@ public class SampleGroupBean implements SampleGroup, Comparable {
     }
 
     public String getId() {
-        return (this.parent == null ? "" : this.parent.getId()) + this.systemId;
+        return (this.parent == null ? "" : this.parent.getId() + "_") + this.getName();
     }
 
     public DataSet getParent() {

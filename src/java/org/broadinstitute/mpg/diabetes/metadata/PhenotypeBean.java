@@ -40,7 +40,7 @@ public class PhenotypeBean implements Phenotype {
     }
 
     public String getId() {
-        return (this.parent == null ? "" : this.parent.getId()) + this.name;
+        return (this.parent == null ? "" : this.parent.getId()) + this.getName();
     }
 
     public DataSet getParent() {
