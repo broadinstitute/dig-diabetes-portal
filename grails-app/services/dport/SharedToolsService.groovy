@@ -354,9 +354,6 @@ class SharedToolsService {
                 (forceProcessedMetadataOverride == 1)) {
             sharedProcessedMetadata = [:]
             LinkedHashMap<String, List<String>> annotatedPhenotypes = [:]
-            LinkedHashMap<PhenoKey, List<PhenoKey>> temporaryAnnotatedPhenotypes = [:]
-            LinkedHashMap<String, List<String>> annotatedSampleGroups = [:]
-            LinkedHashMap<PhenoKey, List<String>> annotatedOrderedSampleGroups = [:]
             LinkedHashMap<String, LinkedHashMap<String, String>> commonProperties = [:]
             String dataSetVersionThatWeWant = getCurrentDataVersion()
             if (metadata) {
@@ -364,9 +361,6 @@ class SharedToolsService {
                     String dataSetVersion = experiment.version
                     if ((experiment.sample_groups) && (dataSetVersionThatWeWant == dataSetVersion)) {
                         getDataSetsPerPhenotype(experiment.sample_groups, annotatedPhenotypes)
-                        getDataSetsPerAnnotatedPhenotype(experiment.sample_groups, temporaryAnnotatedPhenotypes,1)
-                        getPropertiesPerSampleGroupId(experiment.sample_groups, annotatedSampleGroups)
-                        getPropertiesPerAnnotatedSampleGroupId(experiment.sample_groups, annotatedOrderedSampleGroups)
                     }
                 }
                 for (def cProperty in metadata.properties) {
@@ -381,9 +375,6 @@ class SharedToolsService {
                 }
             }
             sharedProcessedMetadata['sampleGroupsPerPhenotype'] = annotatedPhenotypes
-            sharedProcessedMetadata['sampleGroupsPerAnnotatedPhenotype'] =  temporaryAnnotatedPhenotypes
-            sharedProcessedMetadata['propertiesPerSampleGroups'] = annotatedSampleGroups
-            sharedProcessedMetadata['propertiesPerOrderedSampleGroups'] = annotatedOrderedSampleGroups
             sharedProcessedMetadata['commonProperties'] = commonProperties          // DIGP_47: still used for rest server post calls for props to display
             forceProcessedMetadataOverride = 0
         }
@@ -435,52 +426,6 @@ class SharedToolsService {
         }
         return annotatedPhenotypes
     }
-
-
-
-// make key LinkedHashMap, with (name:string,sort_order:int,depth:int)
-    public LinkedHashMap<PhenoKey, List <PhenoKey>> getDataSetsPerAnnotatedPhenotype (def sampleGroups,LinkedHashMap<PhenoKey, List <PhenoKey>> annotatedPhenotypes, int currentDepth){
-        for (def sampleGroup in sampleGroups){
-            String sampleGroupsId = sampleGroup.id
-            int sampleGroupsSortOrder = sampleGroup.sort_order
-            if (sampleGroup.phenotypes){
-                for (def phenotype in sampleGroup.phenotypes){
-                    String phenotypeName = phenotype.name
-                    int sortOrder = phenotype.sort_order
-                    int depth = currentDepth
-                    PhenoKey phenoKey = new PhenoKey(phenotypeName,sortOrder, depth)
-
-                    List <PhenoKey> listOfSampleGroups
-                    if (annotatedPhenotypes.containsKey((phenoKey))){
-                        listOfSampleGroups = annotatedPhenotypes[(phenoKey)]
-                    } else {
-                        listOfSampleGroups = new ArrayList<PhenoKey>()
-                        annotatedPhenotypes[(phenoKey)]  =  listOfSampleGroups
-                    }
-
-                    PhenoKey sampleGroupHolder = new PhenoKey(sampleGroupsId,sampleGroupsSortOrder, depth )
-                    // we have the list for this phenotype.  Add some more sample groups for it
-                    if (listOfSampleGroups.contains(sampleGroupHolder)){
-                        // this should never happen, right? We have a second listing for this ID in this phenotype
-                        // println "very strange : phenotype ${phenotypeName} already contained sample ID= ${sampleGroupsId}"
-                    } else {
-                        listOfSampleGroups <<  sampleGroupHolder
-                    }
-
-                    if (sampleGroup.sample_groups){
-                        getDataSetsPerAnnotatedPhenotype (sampleGroup.sample_groups, annotatedPhenotypes,currentDepth+1)
-                    }
-
-                }
-
-            }
-        }
-        return annotatedPhenotypes
-    }
-
-
-
-
 
 
     /***
@@ -623,84 +568,6 @@ class SharedToolsService {
         }
         return returnValue
     }
-
-
-
-
-
-
-
-    public LinkedHashMap<String, List <String>> getPropertiesPerSampleGroupId (def sampleGroups,LinkedHashMap<String, List <String>> annotatedSampleGroupIds){
-        for (def sampleGroup in sampleGroups){
-            String sampleGroupsId = sampleGroup.id
-            List <String> propertiesForTheSampleGroup
-            if (annotatedSampleGroupIds.containsKey(sampleGroupsId)){
-                propertiesForTheSampleGroup = annotatedSampleGroupIds
-            } else {
-                propertiesForTheSampleGroup = new ArrayList<String>()
-                annotatedSampleGroupIds [sampleGroupsId] = propertiesForTheSampleGroup
-            }
-
-            // we have a sample group with an associated list to fill. First let's put in all the properties
-            if (sampleGroup.properties){
-                for (def property in sampleGroup.properties){
-                    if (property.searchable == "TRUE"){
-                        String propertyName = property.name
-                        propertiesForTheSampleGroup << propertyName
-                    }
-                }
-
-            }
-
-            // Finally, does this sample group have a sample group? If so then recursively descend
-            if (sampleGroup.sample_groups){
-                getPropertiesPerSampleGroupId (sampleGroup.sample_groups, annotatedSampleGroupIds)
-            }
-
-        }
-        return annotatedSampleGroupIds
-    }
-
-
-
-
-
-
-    public LinkedHashMap<String, List <String>> getPropertiesPerAnnotatedSampleGroupId (def sampleGroups,LinkedHashMap<PhenoKey, List <String>> annotatedSampleGroupIds){
-        for (def sampleGroup in sampleGroups){
-            String sampleGroupsId = sampleGroup.id
-            int  sortOrder = sampleGroup.sort_order
-            List <String> propertiesForTheSampleGroup
-            PhenoKey phenoKey = new PhenoKey(sampleGroupsId,sortOrder,1)
-            if (annotatedSampleGroupIds.containsKey(phenoKey)){
-                propertiesForTheSampleGroup = annotatedSampleGroupIds
-            } else {
-                propertiesForTheSampleGroup = new ArrayList<String>()
-                annotatedSampleGroupIds [phenoKey] = propertiesForTheSampleGroup
-            }
-
-            // we have a sample group with an associated list to fill. First let's put in all the properties
-            if (sampleGroup.properties){
-                for (def property in sampleGroup.properties){
-                    if (property.searchable == "TRUE"){
-                        String propertyName = property.name
-                        propertiesForTheSampleGroup << propertyName
-                    }
-                }
-
-            }
-
-            // Finally, does this sample group have a sample group? If so then recursively descend
-            if (sampleGroup.sample_groups){
-                getPropertiesPerAnnotatedSampleGroupId (sampleGroup.sample_groups, annotatedSampleGroupIds)
-            }
-
-        }
-        return annotatedSampleGroupIds
-    }
-
-
-
 
 
 

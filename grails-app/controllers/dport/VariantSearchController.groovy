@@ -189,13 +189,6 @@ class VariantSearchController {
         if ((params.dataset) && (params.dataset !=  null )){
             dataset = params.dataset
         }
-//        JSONObject jsonObject = sharedToolsService.retrieveMetadata()
-//        LinkedHashMap processedMetadata = sharedToolsService.processMetadata(jsonObject)
-        // LinkedHashMap<String,List<String>> annotatedPhenotypes =  processedMetadata.sampleGroupsPerPhenotype
-//        List <PhenoKey> listOfDataSets  = sharedToolsService.extractASingleList(params.phenotype,processedMetadata.sampleGroupsPerAnnotatedPhenotype)
-//        String datasetsForTransmission = sharedToolsService.packageUpAStaggeredListAsJson (listOfDataSets)
-//        def slurper = new JsonSlurper()
-//        def result = slurper.parseText(datasetsForTransmission)
 
         // DIGP_60: using new medatata data structure to retrieve datasets
         String dataSetString = this.metaDataService.getSampleGroupNameListForPhenotypeAsJson(params.phenotype);
