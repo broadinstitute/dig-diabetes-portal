@@ -28,12 +28,20 @@ public class QueryJsonBuilder {
         return queryJsonBuilder;
     }
 
+    /**
+     * return the json payload string for the getData call, according to the format needed
+     *
+     * @param requestPropertyList
+     * @param orderByPropertyList
+     * @param queryFilterList
+     * @return
+     */
     public String getQueryJsonPayloadString(List<Property> requestPropertyList, List<Property> orderByPropertyList, List<QueryFilter> queryFilterList) {
         // local variables
         StringBuilder stringBuilder = new StringBuilder();
 
         // add in the query header
-        stringBuilder.append("\"passback\": \"123abc\", \"entity\": \"variant\", \"page_number\": 0, \"page_size\": 100, \"limit\": 1000, \"count\": false, \"properties\": {");
+        stringBuilder.append("{\"passback\": \"123abc\", \"entity\": \"variant\", \"page_number\": 0, \"page_size\": 100, \"limit\": 1000, \"count\": false, \"properties\": {");
 
         // first sort the properties based on the query comparator logic
         Collections.sort(requestPropertyList, new PropertyListForQueryComparator());
@@ -45,8 +53,10 @@ public class QueryJsonBuilder {
         stringBuilder.append(this.getDpropertiesString(requestPropertyList));
 
         // add in the pproperties string
+        stringBuilder.append(this.getPpropertiesString(requestPropertyList));
 
         // add in the filter string
+        stringBuilder.append(this.getFilterString(queryFilterList));
 
         // close out the query
         stringBuilder.append("} ");
@@ -55,6 +65,12 @@ public class QueryJsonBuilder {
         return stringBuilder.toString();
     }
 
+    /**
+     * return the pproperties string in the format needed for the getData call
+     *
+     * @param propertyList
+     * @return
+     */
     protected String getPpropertiesString(List<Property> propertyList) {
         // local instances
         StringBuilder builder = new StringBuilder();

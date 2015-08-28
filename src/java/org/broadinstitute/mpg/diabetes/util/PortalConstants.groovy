@@ -69,6 +69,8 @@ class PortalConstants {
 
     public final static String PROPERTY_KEY_SG_MAF_82K                    = "metadata_root_ExChip_82k_mdv2_82kMAF";
     public final static String PROPERTY_KEY_SG_MAF_SIGMA1                 = "metadata_root_ExChip_SIGMA1_mdv2_SIGMA1MAF";
+    public final static String PROPERTY_KEY_SG_EAF_GWAS_GIANT             = "metadata_root_GWAS_GIANT_mdv2_GIANTEAF";
+    public final static String PROPERTY_KEY_SG_EAF_GWAS_PGC               = "metadata_root_GWAS_PGC_mdv2_PGCEAF";
 
     public final static String PROPERTY_KEY_PH_MINA_SIGMA1_T2D            = "metadata_root_ExChip_SIGMA1_mdv2_SIGMA1T2DMINA";
     public final static String PROPERTY_KEY_PH_MINU_SIGMA1_T2D            = "metadata_root_ExChip_SIGMA1_mdv2_SIGMA1T2DMINU";
