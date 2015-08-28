@@ -42,15 +42,48 @@ public class QueryJsonBuilder {
         stringBuilder.append(this.getCpropertiesString(requestPropertyList));
 
         // add in the dproperties string
+        stringBuilder.append(this.getDpropertiesString(requestPropertyList));
 
         // add in the pproperties string
 
         // add in the filter string
 
+        // close out the query
+        stringBuilder.append("} ");
+
         // return the string
         return stringBuilder.toString();
     }
 
+    protected String getFilterString(List<QueryFilter> filterList) {
+        // local variables
+        StringBuilder stringBuilder = new StringBuilder();
+        String queryComma = "";
+
+        // add in the query header
+        stringBuilder.append("\"filters\": [ ");
+
+        // add in the filters
+        for (QueryFilter filter: filterList) {
+            stringBuilder.append(queryComma);
+            stringBuilder.append(filter.getFilterString());
+            queryComma = ", ";
+        }
+
+        // close out the query header
+        stringBuilder.append(" ] ");
+
+        // return
+        return stringBuilder.toString();
+    }
+
+
+    /**
+     * returns the dproperty json
+     *
+     * @param propertyList
+     * @return
+     */
     protected String getDpropertiesString(List<Property> propertyList) {
         // local instances
         StringBuilder builder = new StringBuilder();

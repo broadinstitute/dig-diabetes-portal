@@ -239,7 +239,7 @@ class JsonParserTest extends TestCase {
         // local variables
         String propertyName = "SE";
         Property property;
-        String correctFilter = "{\"dataset_id\": \"ExSeq_13k_aa_genes_mdv1\", \"phenotype\": \"BMI\", \"operand\": \"SE\", \"operator\": \"<\", \"value\": \"45\", \"operand_type\": \"FLOAT\"}";
+        String correctFilter = "{\"dataset_id\": \"ExSeq_13k_aa_genes_mdv1\", \"phenotype\": \"BMI\", \"operand\": \"SE\", \"operator\": \"<\", \"value\": 45, \"operand_type\": \"FLOAT\"}";
         String generatedFilter;
 
         // find the property
