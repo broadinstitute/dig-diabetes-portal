@@ -53,6 +53,12 @@ class PortalConstants {
     public final static String OPERATOR_MORE_THAN_NOT_EQUALS             = "GT";
     public final static String OPERATOR_EQUALS                           = "EQ";
 
+    // constants for operator type
+    public final static String OPERATOR_TYPE_FLOAT                        = "FLOAT";
+    public final static String OPERATOR_TYPE_INTEGER                      = "INTEGER";
+    public final static String OPERATOR_TYPE_STRING                       = "STRING";
+
+
     // constants of property id keys (these are automatically generated, but caching often used ones here)
     public final static String PROPERTY_KEY_COMMON_VAR_ID                 = "metadata_rootVAR_ID";
     public final static String PROPERTY_KEY_COMMON_CLOSEST_GENE           = "metadata_rootCLOSEST_GENE";

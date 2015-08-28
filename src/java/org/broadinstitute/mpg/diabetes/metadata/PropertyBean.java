@@ -136,9 +136,20 @@ public class PropertyBean implements Property, Comparable {
         builder.append(this.getName());
         builder.append("\", \"operator\": \"");
         builder.append(operator);
-        builder.append("\", \"value\": \"");
-        builder.append(value);
-        builder.append("\", \"operand_type\": \"");
+        builder.append("\", \"value\": ");
+
+        // no quotes for numbers
+        if (this.getVariableType().equals(PortalConstants.OPERATOR_TYPE_FLOAT) || this.getVariableType().equals(PortalConstants.OPERATOR_TYPE_INTEGER)) {
+            builder.append(value);
+            builder.append(", ");
+
+        } else {
+            builder.append("\"");
+            builder.append(value);
+            builder.append("\", ");
+        }
+
+        builder.append("\"operand_type\": \"");
         builder.append(this.getVariableType());
         builder.append("\"}");
 

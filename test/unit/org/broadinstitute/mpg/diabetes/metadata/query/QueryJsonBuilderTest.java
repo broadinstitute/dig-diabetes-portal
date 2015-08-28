@@ -5,6 +5,7 @@ import org.broadinstitute.mpg.diabetes.metadata.Property;
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser;
 import org.broadinstitute.mpg.diabetes.metadata.sort.PropertyListForQueryComparator;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
+import org.broadinstitute.mpg.diabetes.util.PortalException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -82,5 +83,38 @@ public class QueryJsonBuilderTest extends TestCase {
         assertNotNull(generatedString);
         assertTrue(generatedString.length() > 0);
         assertEquals(compareString, generatedString);
+    }
+
+    @Test
+    public void testGetFilterString() {
+        // local variables
+        List<QueryFilter> filterList = new ArrayList<QueryFilter>();
+        StringBuilder builder = new StringBuilder();
+        String referenceString = null;
+        String generatedString = null;
+
+        // build the reference string
+        builder.append("\"filters\": [ {\"dataset_id\": \"GWAS_DIAGRAM_mdv2\", \"phenotype\": \"T2D\", \"operand\": \"P_VALUE\", \"operator\": \"LT\", \"value\": 1, \"operand_type\": \"FLOAT\"}, ");
+        builder.append("{\"dataset_id\": \"blah\", \"phenotype\": \"blah\", \"operand\": \"CHROM\", \"operator\": \"EQ\", \"value\": \"9\", \"operand_type\": \"STRING\"}, ");
+        builder.append("{\"dataset_id\": \"blah\", \"phenotype\": \"blah\", \"operand\": \"POS\", \"operator\": \"GTE\", \"value\": 21940000, \"operand_type\": \"INTEGER\"}, ");
+        builder.append("{\"dataset_id\": \"blah\", \"phenotype\": \"blah\", \"operand\": \"POS\", \"operator\": \"LTE\", \"value\": 22190000, \"operand_type\": \"INTEGER\"} ] ");
+        referenceString = builder.toString();
+
+        // build the genererated string
+        try {
+            filterList.add(new QueryFilterBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_P_VALUE_GWAS_DIAGRAM), PortalConstants.OPERATOR_LESS_THAN_NOT_EQUALS, "1"));
+            filterList.add(new QueryFilterBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME), PortalConstants.OPERATOR_EQUALS, "9"));
+            filterList.add(new QueryFilterBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION), PortalConstants.OPERATOR_MORE_THAN_EQUALS, "21940000"));
+            filterList.add(new QueryFilterBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION), PortalConstants.OPERATOR_LESS_THAN_EQUALS, "22190000"));
+
+        } catch (PortalException exception) {
+            fail("got error building filter bean: " + exception.getMessage());
+        }
+        generatedString = this.queryJsonBuilder.getFilterString(filterList);
+
+        // test
+        assertNotNull(generatedString);
+        assertTrue(generatedString.length() > 0);
+        assertEquals(referenceString, generatedString);
     }
 }
