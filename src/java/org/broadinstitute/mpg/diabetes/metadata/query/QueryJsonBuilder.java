@@ -55,6 +55,80 @@ public class QueryJsonBuilder {
         return stringBuilder.toString();
     }
 
+    protected String getPpropertiesString(List<Property> propertyList) {
+        // local instances
+        StringBuilder builder = new StringBuilder();
+        String oldPropertyName = " ";
+        String oldSampleGroupName = " ";
+        String propertyComma = "";
+        String sampleGroupComma = "";
+        String phenotypeComma = "";
+        String propertyClosureClose = "";
+
+        // start the dproperty header
+        builder.append("\"pproperty\" : {");
+
+        // properties are grouped by property name
+        // so loop through properties, pick the dproperties out, then build json based on new property parents
+        for (Property property: propertyList) {
+            if (property.getPropertyType() == PortalConstants.TYPE_PHENOTYPE_PROPERTY_KEY) {
+                if (!property.getName().equals(oldPropertyName)) {
+                    // if different property name, start new property closure
+                    builder.append(propertyComma);
+                    builder.append("\"");
+                    builder.append(property.getName());
+                    builder.append("\" : { ");
+
+                    // set the comma values
+                    propertyComma = "]}, ";
+                    propertyClosureClose = "] } ";
+
+                    // reset the temp compare values
+                    sampleGroupComma = "";
+                    phenotypeComma = "";
+                    oldPropertyName = property.getName();
+                    oldSampleGroupName = "";
+                }
+
+                if (!property.getParent().getParent().getId().equals(oldSampleGroupName)) {
+                    // if different property name, start new sample closure
+                    builder.append(sampleGroupComma);
+                    builder.append("\"");
+                    builder.append(((SampleGroup)property.getParent().getParent()).getSystemId());
+                    builder.append("\" : [ ");
+
+                    // set the comma values
+                    sampleGroupComma = " ], ";
+                    phenotypeComma = "";
+
+                    // reset the temp compare values
+                    oldSampleGroupName = property.getParent().getParent().getId();
+
+                }
+
+                builder.append(phenotypeComma);
+                builder.append("\"");
+                builder.append(property.getParent().getName());
+                builder.append("\"");
+                phenotypeComma = " , ";
+            }
+        }
+
+        // close the property closure
+        builder.append(propertyClosureClose);
+
+        // close the dproperty header
+        builder.append("} }, ");
+
+        // return
+        return builder.toString();
+    }
+
+    /**
+     * get the filter string for the getData call
+     * @param filterList
+     * @return
+     */
     protected String getFilterString(List<QueryFilter> filterList) {
         // local variables
         StringBuilder stringBuilder = new StringBuilder();
@@ -95,7 +169,7 @@ public class QueryJsonBuilder {
         // start the dproperty header
         builder.append("\"dproperty\" : {");
 
-        // properties are grouped by sample group
+        // properties are grouped by property name
         // so loop through properties, pick the dproperties out, then build json based on new property parents
         for (Property property: propertyList) {
             if (property.getPropertyType() == PortalConstants.TYPE_SAMPLE_GROUP_PROPERTY_KEY) {

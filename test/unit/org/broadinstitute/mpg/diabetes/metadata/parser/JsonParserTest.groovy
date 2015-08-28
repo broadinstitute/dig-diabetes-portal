@@ -297,12 +297,11 @@ class JsonParserTest extends TestCase {
         // get the phenotype properties
         propertyList = this.jsonParser.getPropertyListOfPropertyType(this.jsonParser.getMetaDataRoot(), PortalConstants.TYPE_PHENOTYPE_PROPERTY_KEY);
 
-        /* USED TO CAPTURE PROPERTY ID
+        // USED TO CAPTURE PROPERTY ID
         for (Property property: propertyList) {
             tempString = property.getId();
             System.out.println(tempString);
         }
-        */
 
         // test
         assertNotNull(propertyList);

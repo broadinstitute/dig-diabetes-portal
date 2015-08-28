@@ -45,11 +45,15 @@ public class QueryJsonBuilderTest extends TestCase {
         this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_SG_MAF_82K));
         this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_SG_MAF_SIGMA1));
 
-        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_MINA_SIGMA1_T2D));
-        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_MINU_SIGMA1_T2D));
-        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_OR_FIRTH_SIGNA1_T2D));
+//        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_MINA_SIGMA1_T2D));
+//        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_MINU_SIGMA1_T2D));
+//        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_OR_FIRTH_SIGNA1_T2D));
+//        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_P_VALUE_82K_T2D));
+        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_BETA_GWAS_MAGIC_2HRG));
+        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_P_VALUE_GWAS_DIAGRAM_T2D));
         this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_P_VALUE_82K_T2D));
-        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_P_VALUE_GWAS_DIAGRAM));
+        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_BETA_13K_FG));
+        this.propertyList.add((Property) this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_BETA_13K_HBA1C));
 
         // sort the list
         Collections.sort(this.propertyList, new PropertyListForQueryComparator());
@@ -102,7 +106,7 @@ public class QueryJsonBuilderTest extends TestCase {
 
         // build the genererated string
         try {
-            filterList.add(new QueryFilterBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_P_VALUE_GWAS_DIAGRAM), PortalConstants.OPERATOR_LESS_THAN_NOT_EQUALS, "1"));
+            filterList.add(new QueryFilterBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_P_VALUE_GWAS_DIAGRAM_T2D), PortalConstants.OPERATOR_LESS_THAN_NOT_EQUALS, "1"));
             filterList.add(new QueryFilterBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME), PortalConstants.OPERATOR_EQUALS, "9"));
             filterList.add(new QueryFilterBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION), PortalConstants.OPERATOR_MORE_THAN_EQUALS, "21940000"));
             filterList.add(new QueryFilterBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION), PortalConstants.OPERATOR_LESS_THAN_EQUALS, "22190000"));
@@ -112,6 +116,31 @@ public class QueryJsonBuilderTest extends TestCase {
         }
         generatedString = this.queryJsonBuilder.getFilterString(filterList);
 
+        // test
+        assertNotNull(generatedString);
+        assertTrue(generatedString.length() > 0);
+        assertEquals(referenceString, generatedString);
+    }
+
+    public void testGetPpropertiesString() {
+        // local variables
+        StringBuilder builder = new StringBuilder();
+        String referenceString = null;
+        String generatedString = null;
+
+        // build the reference string
+        builder.append("\"pproperty\" : {");
+        builder.append("\"BETA\" : { \"ExSeq_13k_mdv2\" : [ \"FG\" , \"HBA1C\" ], \"GWAS_MAGIC_mdv2\" : [ \"2hrG\"]}");
+        builder.append(", ");
+        builder.append("\"P_VALUE\" : { \"ExChip_82k_mdv2\" : [ \"T2D\" ], \"GWAS_DIAGRAM_mdv2\" : [ \"T2D\"] } ");
+        builder.append("} },");
+//        builder.append("\"EAC_PH\" : {  \"ExSeq_13k_mdv2\" : [ \"FG\" , \"HBA1C\"] }  } } ,");
+        referenceString = builder.toString();
+
+        // build the generated string
+        generatedString = this.queryJsonBuilder.getPpropertiesString(this.propertyList);
+
+        // test
         // test
         assertNotNull(generatedString);
         assertTrue(generatedString.length() > 0);

@@ -1,6 +1,7 @@
 package org.broadinstitute.mpg.diabetes.metadata.sort;
 
 import org.broadinstitute.mpg.diabetes.metadata.Property;
+import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 
 import java.util.Comparator;
 
@@ -18,8 +19,17 @@ public class PropertyListForQueryComparator implements Comparator<Property> {
 
         // if the properties are of the same type
         } else {
-            // then simply order each by name
-            returnInt = property1.getName().compareTo(property2.getName());
+            // then simply order each by name except for pproperties
+            if (property1.getPropertyType() != PortalConstants.TYPE_PHENOTYPE_PROPERTY_KEY) {
+                returnInt = property1.getName().compareTo(property2.getName());
+
+            } else if (!property1.getName().equals(property2.getName())) {
+                returnInt = property1.getName().compareTo(property2.getName());
+
+            } else {
+                // if both pproperties and same name, then sort by sample group grandparent (parent will be phenotype)
+                returnInt = property1.getParent().getParent().getId().compareTo(property2.getParent().getParent().getId());
+            }
 
             /* bogus code, could save for later
             // common properties

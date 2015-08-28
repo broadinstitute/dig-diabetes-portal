@@ -18,6 +18,9 @@
             "ODDS_RATIO" : {  "ExChip_82k_mdv2" : [ "T2D"], "GWAS_DIAGRAM_mdv2" : [ "T2D"] }  } } ,
 
     "filters":    [
-        {"dataset_id": "GWAS_DIAGRAM_mdv2", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LT", "value": 1, "operand_type": "FLOAT"},{"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "EQ", "value": "9", "operand_type": "STRING"},{"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "GTE", "value": 21940000, "operand_type": "INTEGER"},{"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "LTE", "value": 22190000, "operand_type": "INTEGER"}
+        {"dataset_id": "GWAS_DIAGRAM_mdv2", "phenotype": "T2D", "operand": "P_VALUE", "operator": "LT", "value": 1, "operand_type": "FLOAT"},
+        {"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "EQ", "value": "9", "operand_type": "STRING"},
+        {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "GTE", "value": 21940000, "operand_type": "INTEGER"},
+        {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "LTE", "value": 22190000, "operand_type": "INTEGER"}
     ]
 }
