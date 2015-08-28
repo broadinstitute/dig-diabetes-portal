@@ -80,18 +80,12 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
     }
     */
 
-    void "test compare common properties new and old data structure json"() {
+    // I think we need one non-null test to avoid a compilation error(?)
+    void "placeholder"() {
         when:
-        String oldDataStructure = this.sharedToolsService.sortAndPackageAMapOfListsAsJson(sharedToolsService.getProcessedMetadata()?.commonProperties, true);
-        String newDataStructure = this.metaDataService.getCommonPropertiesAsJson(true);
-        JSONTokener oldTokener = new JSONTokener(oldDataStructure);
-        JSONObject oldJson = new JSONObject(oldTokener);
-        JSONTokener newTokener = new JSONTokener(newDataStructure);
-        JSONObject newJson = new JSONObject(newTokener);
-
+        int i =1
         then:
-//        assert oldDataStructure == newDataStructure                   // some basic whitespace errors
-        assert oldJson.toString() ==  newJson.toString()
+        i==1
     }
 
 

@@ -252,6 +252,23 @@ class MetadataUtilityService {
         return returnValue
     }
 
+    /***
+     * For a list of phenotypes, return an array of every sample group
+     * @param phenotypeList
+     * @return
+     */
+    public List<String> sampleGroupsPerPhenotypeList(List<PhenotypeBean>  phenotypeList ) {
+        List<String>  returnValue = []
+        List <String> sampleGroupList = phenotypeList.collect{return it.parent}.sort{ a, b -> a.sortOrder <=> b.sortOrder }.systemId.unique()
+        if ((phenotypeList) &&
+                (sampleGroupList)){
+            returnValue = sampleGroupList
+        }
+        return returnValue
+    }
+
+
+
 
 
 
@@ -264,13 +281,13 @@ class MetadataUtilityService {
      */
     public LinkedHashMap<String,List<String>> sampleGroupBasedPropertyTree(List<PhenotypeBean>  phenotypeList, Boolean dprops ) {
         LinkedHashMap<String, List<String>>  returnValue = [:]
-        List <String> sampleGroupList = phenotypeList.collect{return it.parent}.sort{ a, b -> a.sortOrder <=> b.sortOrder }.systemId.unique()
+
+        List <String> sampleGroupList = sampleGroupsPerPhenotypeList (phenotypeList)
         if ((phenotypeList) &&
              (sampleGroupList)){
             for (String sampleGroup in sampleGroupList){
                 returnValue[sampleGroup] = propertiesPerSampleGroup(phenotypeList,  sampleGroup, "",  dprops,  false)
             }
-
 
         }
         return returnValue
@@ -329,7 +346,6 @@ class MetadataUtilityService {
         List<String>  returnValue = []
         if ((phenotypeList) &&
                 (sampleGroupName)){
-
             returnValue = propertiesPerSampleGroup(phenotypeList,  sampleGroupName, "",  true,  false)
         }
         return returnValue

@@ -97,6 +97,19 @@ class MetaDataService {
         return groovyString.toString();
     }
 
+
+
+    public List <Property> getCommonProperties() {
+        List<Property> propertyList;
+
+        propertyList = this.getJsonParser().getSearchableCommonProperties();
+
+        return propertyList.sort{ a, b -> a.sortOrder <=> b.sortOrder };
+    }
+
+
+
+
     /**
      * return the root gwas sample group for a given phenotype
      *
@@ -202,22 +215,30 @@ class MetaDataService {
         return jsonString;
     }
 
-
-
-
-
+    /***
+     * Retrieve a list of PhenotypeBeans on the basis of phenotype name. Restrict the results by technology==GWAS
+     * @param phenotypicTrait
+     * @return
+     */
     public List<PhenotypeBean> getAllPhenotypesWithName(String phenotypicTrait){
         List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName(phenotypicTrait, sharedToolsService.getCurrentDataVersion (), "GWAS")
         return phenotypeList
     }
 
-
+    /***
+     * Return a tree in which every phenotype name points to a list of sample groups, restricted by technology==GWAS
+     * @return
+     */
     public LinkedHashMap<String, List<String>> getHierarchicalPhenotypeTree(){
         List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "GWAS")
         LinkedHashMap<String, List<String>> propertyTree =  metadataUtilityService.hierarchicalPhenotypeTree(phenotypeList)
         return propertyTree
     }
 
+    /***
+     * Build a tree, so that every phenotype points to its sample groups, and every sample group points to its properties (D and P)
+     * @return
+     */
     public LinkedHashMap<String, LinkedHashMap<String,List<String>>> getFullPropertyTree(){
         List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
         LinkedHashMap<String, List<String>> propertyTree =  metadataUtilityService.fullPropertyTree(phenotypeList,true,true)
@@ -225,45 +246,100 @@ class MetaDataService {
     }
 
 
-    public LinkedHashMap<String, LinkedHashMap<String,List<String>>> getSampleGroupTree(){
+    /***
+     * Build a tree, so that every phenotype points to its sample groups, and every sample group points to its properties (D and P)
+     * @return
+     */
+    public List<String> getEveryPhenotype(){
+        List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
+        return phenotypeList.sort{ a, b -> a.sortOrder <=> b.sortOrder }.collect{it.name}.unique()
+    }
+
+
+
+    /***
+     * Create a tree, so that every sample group contains a list of every D property that belongs to it
+     * @return
+     */
+    public LinkedHashMap<String, List<String>> getSampleGroupTree(){
         List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
         LinkedHashMap<String, List<String>> propertyTree =  metadataUtilityService.sampleGroupBasedPropertyTree(phenotypeList,true)
         return propertyTree
     }
 
-    // D and P properties
+
+    /***
+     * For every sample group/phenotype combination, return a list of all D and P properties
+     * @param sampleGroupName
+     * @param phenotypeName
+     * @return
+     */
     public List<String> getAllMatchingPropertyList(String sampleGroupName,String  phenotypeName){
         List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
         List<String> propertyList =  metadataUtilityService.sampleGroupAndPhenotypeBasedPropertyList(phenotypeList,phenotypeName,sampleGroupName)
         return propertyList
     }
 
-    // P properties only
+    /***
+     * For every sample group/phenotype combination, return a list of all P properties
+     * @param sampleGroupName
+     * @param phenotypeName
+     * @return
+     */
     public List<String> getSpecificPhenotypePropertyList(String sampleGroupName,String  phenotypeName){
         List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
         List<String> propertyList =  metadataUtilityService.phenotypeBasedPropertyList(phenotypeList,phenotypeName,sampleGroupName)
         return propertyList
     }
 
-    // D properties only
+
+    /***
+     * For every sample group, return a list of all D properties
+     * @param sampleGroupName
+     * @return
+     */
     public List<String> getSampleGroupPropertyList(String sampleGroupName){
         List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
         List<String> propertyList =  metadataUtilityService.sampleGroupBasedPropertyList(phenotypeList,sampleGroupName)
         return propertyList
     }
 
-    // D properties only
+
+    /***
+     * For every sample group/phenotype combination, return a list of all D properties
+     * @param sampleGroupName
+     * @param phenotypeName
+     * @return
+     */
     public List<String> getPhenotypeSpecificSampleGroupPropertyList(String sampleGroupName,String  phenotypeName){
         List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
         List<String> propertyList =  metadataUtilityService.phenotypeSpecificSampleGroupBasedPropertyList(phenotypeList,phenotypeName,sampleGroupName)
         return propertyList
     }
 
+    /***
+     * For every sample group/phenotype combination, return a list of all D and P properties that map to any of the array of RegEx's
+     * in the propertyTemplates array.  Currently we are using the stove pull back defaults properties, but this is a stopgap until the
+     * metadata can tell us which properties should show up by default
+     *
+     * @param phenotypeName
+     * @param sampleGroupName
+     * @param propertyTemplates
+     * @return
+     */
     public List<String> getPhenotypeSpecificSampleGroupPropertyList(String phenotypeName,String sampleGroupName, List <String> propertyTemplates){
         List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName(phenotypeName, sharedToolsService.getCurrentDataVersion (), "")
         List<String> propertyList =  metadataUtilityService.phenotypeSpecificSampleGroupBasedPropertyList(phenotypeList,sampleGroupName,propertyTemplates)
         return propertyList
     }
+
+
+    public List<String> getSampleGroupPerPhenotype(String phenotypeName){
+        List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName(phenotypeName, sharedToolsService.getCurrentDataVersion (), "")
+        List<String> sampleGroupList =  metadataUtilityService.sampleGroupsPerPhenotypeList(phenotypeList)
+        return sampleGroupList
+    }
+
 
 
 }

@@ -9,6 +9,7 @@ import groovy.json.JsonSlurper
 import groovy.json.StringEscapeUtils
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
@@ -353,29 +354,6 @@ class SharedToolsService {
                 (sharedProcessedMetadata.size() == 0) ||
                 (forceProcessedMetadataOverride == 1)) {
             sharedProcessedMetadata = [:]
-            LinkedHashMap<String, List<String>> annotatedPhenotypes = [:]
-            LinkedHashMap<String, LinkedHashMap<String, String>> commonProperties = [:]
-            String dataSetVersionThatWeWant = getCurrentDataVersion()
-            if (metadata) {
-                for (def experiment in metadata.experiments) {
-                    String dataSetVersion = experiment.version
-                    if ((experiment.sample_groups) && (dataSetVersionThatWeWant == dataSetVersion)) {
-                        getDataSetsPerPhenotype(experiment.sample_groups, annotatedPhenotypes)
-                    }
-                }
-                for (def cProperty in metadata.properties) {
-                    if (!commonProperties.containsKey(cProperty.name)){
-                        if (cProperty.searchable == "TRUE"){
-                            LinkedHashMap cPropertyStuff = [:]
-                            cPropertyStuff["type"] = cProperty.type
-                            cPropertyStuff["sort_order"] = cProperty.sort_order
-                            commonProperties [cProperty.name] = cPropertyStuff
-                        }
-                    }
-                }
-            }
-            sharedProcessedMetadata['sampleGroupsPerPhenotype'] = annotatedPhenotypes
-            sharedProcessedMetadata['commonProperties'] = commonProperties          // DIGP_47: still used for rest server post calls for props to display
             forceProcessedMetadataOverride = 0
         }
         return sharedProcessedMetadata
@@ -386,153 +364,6 @@ class SharedToolsService {
         JSONObject jsonObject = retrieveMetadata()
         return processMetadata(jsonObject)
     }
-
-    /***
-     * Start with a pointer to a sample group as we descend through the metadata tree.  Pullback a combined list
-     * of every sample group ID grouped by phenotype.
-     *
-     * @param sampleGroups
-     * @param annotatedPhenotypes
-     * @return
-     */
-    public LinkedHashMap<String, List <String>> getDataSetsPerPhenotype (def sampleGroups,LinkedHashMap<String, List <String>> annotatedPhenotypes){
-        for (def sampleGroup in sampleGroups){
-            String sampleGroupsId = sampleGroup.id
-             if (sampleGroup.phenotypes){
-                 for (def phenotype in sampleGroup.phenotypes){
-                     String phenotypeName = phenotype.name
-                     List <String> listOfSampleGroups
-                     if (annotatedPhenotypes.containsKey(phenotypeName)){
-                         listOfSampleGroups = annotatedPhenotypes[phenotypeName]
-                     } else {
-                         listOfSampleGroups = new ArrayList<String>()
-                         annotatedPhenotypes[phenotypeName]  =  listOfSampleGroups
-                     }
-                     // we have the list for this phenotype.  Add some more sample groups for it
-                     if (listOfSampleGroups.contains(sampleGroupsId)){
-                         // this should never happen, right? We have a second listing for this ID in this phenotype
-                        // println "very strange : phenotype ${phenotypeName} already contained sample ID= ${sampleGroupsId}"
-                     } else {
-                         listOfSampleGroups << sampleGroupsId
-                     }
-
-                     if (sampleGroup.sample_groups){
-                         getDataSetsPerPhenotype (sampleGroup.sample_groups, annotatedPhenotypes)
-                     }
-
-                     }
-
-             }
-        }
-        return annotatedPhenotypes
-    }
-
-
-    /***
-     *  Need a map where phenotypes point to data sets.  This will allow me to ask people what phenotype they want,
-     *  and upon response = that phenotype to the data set we need
-     *
-     * @param sampleGroups
-     * @param phenotypeMap
-     * @return
-     */
-    public LinkedHashMap<String, List <LinkedHashMap>> getTechnologySpecificPhenotype (def sampleGroups, LinkedHashMap<String, List<String>> phenotypeMap){
-        for (def sampleGroup in sampleGroups){
-            if (sampleGroup.phenotypes){
-                String sampleGroupName = sampleGroup.name
-                String sampleGroupId = sampleGroup.id
-                for (def phenotype in sampleGroup.phenotypes){
-                    String phenotypeName = phenotype.name
-                    String phenotypeGroup = phenotype.group
-                    String phenotypeSortOrder = phenotype.sort_order
-                    if (!phenotypeMap.containsKey (phenotypeName)){
-                        phenotypeMap[phenotypeName] = [sampleGroupId:sampleGroupId,sampleGroupName:sampleGroupName]
-
-                        // Build up a list of phenotype properties that we can store in one map
-                        if (phenotype.properties) {
-                            LinkedHashMap properties = [:]
-                            for (def property in phenotype.properties){
-                                if (property.searchable == "TRUE"){
-                                    String propertyName = property.name
-                                    String propertyType = property.type
-                                    if (!properties.containsKey(propertyName)) {
-                                        properties[propertyName] = propertyType
-                                    }
-                                }
-                            }
-                            (phenotypeMap[phenotypeName])["properties"] = properties
-                        }
-
-                        // we want to store some properties that are specific to each phenotype. Let's create
-                        // a special-purpose key called 'phenotypeProperties' which sits adjacent to all of the sample group names
-                        // Inside we can have a map that holds these special-purpose properties
-                        LinkedHashMap <String,String> phenotypeSpecificFields
-                        if ((phenotypeMap[phenotypeName]).containsKey("phenotypeProperties")){
-                            phenotypeSpecificFields = (phenotypeMap[phenotypeName])["phenotypeProperties"]
-                        } else {
-                            phenotypeSpecificFields = new LinkedHashMap <String,String> ()
-                            (phenotypeMap[phenotypeName])["phenotypeProperties"] = phenotypeSpecificFields
-                        }
-                        // and let's fill this structure.  We should only have to do it once
-                        if (phenotypeSpecificFields.size()==0){
-                            phenotypeSpecificFields ["group"] = phenotypeGroup
-                            phenotypeSpecificFields ["sort_order"] = phenotypeSortOrder
-                        }
-
-
-                    }
-                    if (sampleGroup.sample_groups){
-                        getTechnologySpecificPhenotype (sampleGroup.sample_groups,phenotypeMap)
-                    }
-
-                }
-
-            }
-        }
-        return phenotypeMap
-    }
-
-
-
-    /***
-     *  Need a map where phenotypes point to data sets.  This will allow me to ask people what phenotype they want,
-     *  and upon response = that phenotype to the data set we need
-     *
-     * @param sampleGroups
-     * @param phenotypeMap
-     * @return
-     */
-//    public LinkedHashMap<String, List <LinkedHashMap>> getTechnologySpecificExperiment (def sampleGroups, LinkedHashMap<String, List<String>> sampleGroupHolder){
-//        for (def sampleGroup in sampleGroups){
-//            String sampleGroupId = sampleGroup.id
-//            String sampleGroupName = sampleGroup.name
-//            LinkedHashMap sampleGroupMap = [sampleGroupId:sampleGroupId]
-//            if (sampleGroup.properties){
-//                for (def property in sampleGroup.properties){
-//                    if (property.searchable == "TRUE"){
-//                        String propertyName = property.name
-//                        String propertyType = property.type
-//                        if (!sampleGroupMap.containsKey(propertyName)){
-//                            sampleGroupMap[propertyName] = propertyType
-//                        }
-//                        if (sampleGroup.sample_groups){
-//                            getTechnologySpecificExperiment (sampleGroup.sample_groups,sampleGroupHolder)
-//                        }
-//                    }
-//                }
-//                if (sampleGroup.phenotypes){
-//                    sampleGroupMap["phenotypeList"] = []
-//                    for (def phenotype in sampleGroup.phenotypes){
-//                        sampleGroupMap["phenotypeList"] << phenotype.name
-//                    }
-//                }
-//            }
-//            if (!sampleGroupHolder.containsKey(sampleGroupName)){
-//                sampleGroupHolder[sampleGroupName] = sampleGroupMap
-//            }
-//        }
-//        return sampleGroupHolder
-//    }
 
 
 
@@ -585,14 +416,15 @@ class SharedToolsService {
      * @param unsortedTree
      * @return
      */
-    private LinkedHashMap sortEverything(LinkedHashMap processedMetadata, LinkedHashMap unsortedTree) {
+    private LinkedHashMap sortEverything(LinkedHashMap unsortedTree) {
 
         // sort common
         if ((unsortedTree?.cproperty) && (unsortedTree?.cproperty?.size() > 0)) {
             LinkedHashMap temporaryHolder = [:]
+            List <Property> commonProperties = metaDataService.getCommonProperties()
             for (String property in unsortedTree.cproperty) {
-                if (processedMetadata.commonProperties.containsKey(property)) {
-                    temporaryHolder[property] = processedMetadata.commonProperties[property]["sort_order"]
+                if (commonProperties.collect{return it.name}?.contains(property)) {
+                    temporaryHolder[property] = commonProperties.find{it.name==property}.sortOrder
                 }
             }
             unsortedTree.cproperty = ["VAR_ID"]+temporaryHolder.sort { it.value }.keySet()
@@ -673,13 +505,13 @@ class SharedToolsService {
         returnValue["dproperty"] = [:]
         returnValue["pproperty"] = [:]
 
-        if (processedMetadata) {
+
             if (phenotypesToKeep == null) {
 
-                phenotypesToKeep = processedMetadata.sampleGroupsPerPhenotype.keySet()
+                phenotypesToKeep = metaDataService.getEveryPhenotype()
             } else
             {
-                phenotypesToKeep = phenotypesToKeep.findAll({processedMetadata.sampleGroupsPerPhenotype.containsKey(it)})
+                phenotypesToKeep = phenotypesToKeep.findAll({metaDataService.getEveryPhenotype().contains(it)})
             }
 
             for (String phenotype in phenotypesToKeep) {
@@ -687,9 +519,9 @@ class SharedToolsService {
                 returnValue.dproperty[phenotype] = [:]
                 List<String> curSampleGroups = []
                 if (sampleGroupsToKeep == null) {
-                    curSampleGroups.addAll(processedMetadata.sampleGroupsPerPhenotype[phenotype])
+                    curSampleGroups.addAll(metaDataService.getSampleGroupPerPhenotype(phenotype))
                 } else {
-                    curSampleGroups.addAll(sampleGroupsToKeep.findAll({processedMetadata.sampleGroupsPerPhenotype[phenotype].contains(it)}))
+                      curSampleGroups.addAll(sampleGroupsToKeep.findAll({metaDataService.getSampleGroupPerPhenotype(phenotype)?.contains(it)}))
                 }
                 for (String sampleGroup in curSampleGroups) {
                     returnValue.dproperty[phenotype][sampleGroup] = []
@@ -710,10 +542,10 @@ class SharedToolsService {
                         }
                     }
                 }
-            }
+
         }
 
-        return sortEverything(processedMetadata,returnValue)
+        return sortEverything(returnValue)
     }
 
 
@@ -746,81 +578,6 @@ class SharedToolsService {
 
 
 
-    public List <String> combineToCreateASingleList (String phenotype,String sampleGroup,
-                                                     LinkedHashMap<PhenoKey,List<String>> annotatedList,
-                                                     LinkedHashMap<String, LinkedHashMap <PhenoKey,List <PhenoKey>>> phenotypeSpecificSampleGroupProperties ){
-        // the list of properties specific to this data set
-        List <String> listOfProperties = []
-        int numrec = 0
-        String retval
-        PhenoKey sampleGroupLookup = new PhenoKey(sampleGroup,0,0)
-        if (annotatedList){
-            if (annotatedList.containsKey(sampleGroupLookup)){
-                List <String> listForThisPhenotype =  annotatedList [(sampleGroupLookup)]
-                if (listForThisPhenotype?.size()>0) {
-                    for ( int  i = 0 ; i < listForThisPhenotype.size() ; i++ ){
-                        listOfProperties << listForThisPhenotype[i]
-                    }
-                }
-            }
-
-        }
-        // now add in the properties that are specific to this phenotype for this data set
-        if (phenotypeSpecificSampleGroupProperties){
-            if (phenotypeSpecificSampleGroupProperties.containsKey(phenotype)){
-                LinkedHashMap hashForThisPhenotype = phenotypeSpecificSampleGroupProperties[phenotype]
-                if ((hashForThisPhenotype) && (hashForThisPhenotype.containsKey(sampleGroupLookup))) {
-                    List<String> listForThisPhenotype = hashForThisPhenotype[(sampleGroupLookup)]
-                    if (listForThisPhenotype) {
-                        List sortedList = listForThisPhenotype.sort{it?.sort_order}
-                        for (int i = 0; i < sortedList.size(); i++) {
-                            listOfProperties << sortedList[i].toString()
-                        }
-                    }
-                }
-            }
-
-        }
-
-        return listOfProperties
-    }
-
-
-
-
-    //  Create a list, but shift over the elements to reflect depth
-    public String packageUpAStaggeredListAsJson ( List <PhenoKey> listOfDataSets  ){
-        // now that we have a list, build it into a string suitable for JSON
-        int numrec = 0
-        StringBuilder sb = new StringBuilder ()
-        if ((listOfDataSets) && (listOfDataSets?.size() > 0)){
-            numrec = listOfDataSets.size()
-            for ( int  i = 0 ; i < numrec ; i++ ){
-
-                StringBuffer scooterBuffer = new StringBuffer();
-                for (int j = 1; j < listOfDataSets[i].depth; j++){
-                    scooterBuffer.append("-");
-                }
-
-                sb << "\"${scooterBuffer.toString()+listOfDataSets[i].toString()}\"".toString()
-                if (i < listOfDataSets.size() - 1) {
-                    sb << ","
-                }
-            }
-        }
-
-        return  """
-{"is_error": false,
-"numRecords":${numrec},
-"dataset":[${sb.toString()}]
-}""".toString()
-    }
-
-
-
-
-
-
 
 
 
@@ -844,38 +601,6 @@ class SharedToolsService {
 "dataset":[${sb.toString()}]
 }""".toString()
     }
-
-
-
-    public String sortAndPackageAMapOfListsAsJson (LinkedHashMap listOfCommonProperties,Boolean sortFirst ){
-        // TODO - DIGP-47: modify this
-        // now that we have a list, build it into a string suitable for JSON
-        int numberOfProperties = listOfCommonProperties.size()
-        int numrec = 0
-        StringBuilder sb = new StringBuilder ()
-        LinkedHashMap mapToWorkThrough
-        if (sortFirst){
-            mapToWorkThrough = listOfCommonProperties.sort{it.value.sort_order}
-        } else {
-            mapToWorkThrough = listOfCommonProperties
-        }
-        mapToWorkThrough.each{String name, v->
-            if (name){
-                sb << "\"${name}\"".toString()
-                if (numrec < numberOfProperties - 1) {
-                    sb << ","
-                }
-            }
-            numrec++
-
-        }
-        return  """
-{"is_error": false,
-"numRecords":${numrec},
-"dataset":[${sb.toString()}]
-}""".toString()
-    }
-
 
 
 
