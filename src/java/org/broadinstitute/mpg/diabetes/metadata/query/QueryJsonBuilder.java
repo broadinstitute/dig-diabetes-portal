@@ -29,6 +29,39 @@ public class QueryJsonBuilder {
     }
 
     /**
+     * return the json payload for the getData call using the query bean
+     *
+     * @param query
+     * @return
+     */
+    public String getQueryJsonPayloadString(GetDataQuery query) {
+        // local variables
+        StringBuilder stringBuilder = new StringBuilder();
+        String finalString;
+
+        // get the header data
+        stringBuilder.append("\"passback\": \"");
+        stringBuilder.append(query.getPassback());
+        stringBuilder.append("\", \"entity\": \"");
+        stringBuilder.append(query.getEntity());
+        stringBuilder.append("\", \"page_number\":");
+        stringBuilder.append(query.getPageNumber());
+        stringBuilder.append(", \"page_size\": ");
+        stringBuilder.append(query.getPageSize());
+        stringBuilder.append(", \"limit\": ");
+        stringBuilder.append(query.getLimit());
+        stringBuilder.append(", \"count\": ");
+        stringBuilder.append(query.isCount());
+        stringBuilder.append(", ");
+
+        // get the rest of the payload
+        finalString = this.getQueryJsonPayloadString(stringBuilder.toString(), query.getQueryPropertyList(), null, query.getFilterList());
+
+        // return
+        return finalString;
+    }
+
+    /**
      * return the json payload string for the getData call, according to the format needed
      *
      * @param requestPropertyList
@@ -36,12 +69,18 @@ public class QueryJsonBuilder {
      * @param queryFilterList
      * @return
      */
-    public String getQueryJsonPayloadString(List<Property> requestPropertyList, List<Property> orderByPropertyList, List<QueryFilter> queryFilterList) {
+    public String getQueryJsonPayloadString(String headerData, List<Property> requestPropertyList, List<Property> orderByPropertyList, List<QueryFilter> queryFilterList) {
         // local variables
         StringBuilder stringBuilder = new StringBuilder();
 
         // add in the query header
-        stringBuilder.append("{\"passback\": \"123abc\", \"entity\": \"variant\", \"page_number\": 0, \"page_size\": 100, \"limit\": 1000, \"count\": false, \"properties\": {");
+        stringBuilder.append("{");
+
+        // add in header data
+        stringBuilder.append(headerData);
+
+        // add in properties header
+        stringBuilder.append("\"properties\": {");
 
         // first sort the properties based on the query comparator logic
         Collections.sort(requestPropertyList, new PropertyListForQueryComparator());

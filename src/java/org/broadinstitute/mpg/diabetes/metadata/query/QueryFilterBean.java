@@ -32,4 +32,16 @@ public class QueryFilterBean implements QueryFilter {
     public String getFilterString() {
         return (this.property == null ? "" : property.getWebServiceFilterString(operator, value));
     }
+
+    public Property getProperty() {
+        return property;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }
