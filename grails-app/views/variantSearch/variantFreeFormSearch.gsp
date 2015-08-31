@@ -57,24 +57,31 @@
 
         <div class="row clearfix">
             <div class="col-md-12">
+                <strong>Select at least one of the c/d/p properties and at least one filter property</strong>
+                <hr/>
+            </div>
+        </div>
+
+        <div class="row clearfix">
+            <div class="col-md-12">
                 <div class="row clearfix">
                     <form method=""post>
 
                         <div class="col-md-3">
-                            Select your common properties<br/>
+                            <strong>Select your common properties</strong><br/>
                             <g:render template='propertiesOptionList' model="[propertyList: cPropertyList]"/>
                             <input type="submit"/>
                         </div>
                         <div class="col-md-3">
-                            Select your sample group properties<br/>
+                            <strong>Select your sample group propertie</strong>s<br/>
                             <g:render template="propertiesOptionList" model="[propertyList: dPropertyList]"/>
                         </div>
                         <div class="col-md-3">
-                            Select your phenotype properties<br/>
+                            <strong>Select your phenotype properties</strong><br/>
                             <g:render template="propertiesOptionList" model="[propertyList: pPropertyList]"/>
                         </div>
                         <div class="col-md-3">
-                            Select your filter properties<br/>
+                            <strong>Select your filter properties</strong><br/>
                             <g:render template="propertiesOptionList" model="[propertyList: filterPropertyList, isFilter: true]"/>
                         </div>
                     </form>
