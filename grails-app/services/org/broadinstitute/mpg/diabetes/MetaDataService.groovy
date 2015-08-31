@@ -1,5 +1,4 @@
 package org.broadinstitute.mpg.diabetes
-
 import dport.MetadataUtilityService
 import dport.RestServerService
 import dport.SharedToolsService
@@ -8,12 +7,17 @@ import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
+import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
+import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryBean
+import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
+import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
 
 @Transactional
 class MetaDataService {
     // instance variables
     JsonParser jsonParser = JsonParser.getService();
+    QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder();
     Integer forceProcessedMetadataOverride = -1
     RestServerService restServerService
     SharedToolsService sharedToolsService
@@ -340,7 +344,62 @@ class MetaDataService {
         return sampleGroupList
     }
 
+    /**
+     * demo method to return properties based on types, as well as a max number input
+     *
+     * @param propertyTypeId
+     * @param numberReturn
+     * @return
+     */
+    public List<Property> getPropertyListByPropertyType(String propertyTypeId, int numberReturn) {
+        // local variables
+        List<Property> propertyList = new ArrayList<Property>();
 
+        // get the metadata hash map
+        propertyList = this.jsonParser.getPropertyListOfPropertyType(this.jsonParser.getMetaDataRoot(), propertyTypeId);
+
+        if (propertyList.size() > numberReturn) {
+            propertyList = new ArrayList<>(propertyList.subList(0, numberReturn))
+        }
+
+        // return the list
+        return propertyList
+    }
+
+    /**
+     * demo method to show how to build getData json payload string based on a few inputs
+     *
+     * @param queryList
+     * @param filterList
+     * @return
+     */
+    public String getGetDataPayloadString(List<String> queryList, List<String> filterList) {
+        // local variables
+        String payloadString = "";
+        GetDataQuery queryBean = new GetDataQueryBean();
+
+        // build the filter
+        for (String propertyId: filterList) {
+            Property property = this.jsonParser.getMapOfAllDataSetNodes().get(propertyId);
+
+            // TODO - defaults to EQ for strings for demo purposes
+            if (property?.getVariableType() == PortalConstants.OPERATOR_TYPE_STRING) {
+                queryBean.addFilterProperty(property, PortalConstants.OPERATOR_EQUALS, "1");
+            } else {
+                queryBean.addFilterProperty(property, PortalConstants.OPERATOR_LESS_THAN_EQUALS, "1");
+            }
+        }
+
+        // add in the query properties
+        for (String propertyId: queryList) {
+            Property property = this.jsonParser.getMapOfAllDataSetNodes().get(propertyId);
+            queryBean.addQueryProperty(property);
+        }
+
+        // return the built string
+        payloadString = this.queryJsonBuilder.getQueryJsonPayloadString(queryBean);
+        return payloadString;
+    }
 
 }
 

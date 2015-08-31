@@ -81,6 +81,12 @@ class PortalConstants {
     public final static String PROPERTY_KEY_PH_BETA_13K_HBA1C             = "metadata_root_ExSeq_13k_mdv2_13kHBA1CBETA";
     public final static String PROPERTY_KEY_PH_BETA_GWAS_MAGIC_2HRG       = "metadata_root_GWAS_MAGIC_mdv2_MAGIC2hrGBETA";
 
+    // burden test variant selection options
+    public static final int BURDEN_VARIANT_OPTION_ALL_CODING                     = 1;
+    public static final int BURDEN_VARIANT_OPTION_ALL_MISSENSE                   = 2;
+    public static final int BURDEN_VARIANT_OPTION_ALL_MISSENSE_POSS_DELETERIOUS  = 3;
+    public static final int BURDEN_VARIANT_OPTION_ALL_MISSENSE_PROB_DELETERIOUS  = 4;
+    public static final int BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING         = 5;
 
 
 }
