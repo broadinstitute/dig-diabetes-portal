@@ -196,7 +196,8 @@ t2dNewDevRestServer { //current 'dev'
     path = 'gs/'
 }
 
-server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
+//server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
+server.URL = t2dAws01RestServer.base+t2dAws01RestServer.name+t2dAws01RestServer.path
 //server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
 dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
 //dbtRestServer.URL = 'http://diabetesgeneticsportal2.broadinstitute.org:8888/dev/burden/'
