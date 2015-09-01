@@ -1,12 +1,10 @@
 package dport
-
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
-import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.Property
-import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
+import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class VariantSearchController {
@@ -81,6 +79,7 @@ class VariantSearchController {
 
 
     def launchAVariantSearch(){
+        log.info("got params: " + params);
 
         List <LinkedHashMap> combinedFilters =  filterManagementService.handleFilterRequestFromBrowser (params)
 
@@ -325,7 +324,46 @@ class VariantSearchController {
 
     }
 
+    /**
+     * method to test the building of getData queries from the metadata data structure
+     *
+     * @return
+     */
+    def variantFreeFormSearch() {
+        // log params
+        log.info("got params: " + params)
 
+        // local variables
+        String getDataPayload = "";
+        String getDataResult = "";
+
+        // get the property lists from the params if they are there
+        if (params.queryProperty && params.filterProperty) {
+            List<String> filterProperty = params.filterProperty;
+            List<String> queryProperty = params.queryProperty;
+
+            // get the payload json
+            getDataPayload = this.metaDataService.getGetDataPayloadString(queryProperty, filterProperty);
+
+            // call the rest server with the json
+            JSONObject jsonObject = this.restServerService.postGetDataCall(getDataPayload);
+            getDataResult = jsonObject.toString();
+        }
+
+        // build the property lists
+        List<Property> cPropertyList = this.metaDataService.getPropertyListByPropertyType(PortalConstants.TYPE_COMMON_PROPERTY_KEY, 20);
+        List<Property> dPropertyList = this.metaDataService.getPropertyListByPropertyType(PortalConstants.TYPE_SAMPLE_GROUP_PROPERTY_KEY, 20);
+        List<Property> pPropertyList = this.metaDataService.getPropertyListByPropertyType(PortalConstants.TYPE_PHENOTYPE_PROPERTY_KEY, 20);
+
+        // for filter, add last 2 lists
+        List<Property> filterPropertyList = new ArrayList<Property>();
+        filterPropertyList.addAll(dPropertyList);
+        filterPropertyList.addAll(pPropertyList);
+
+        render(view: "variantFreeFormSearch", model: ["cPropertyList": cPropertyList, "dPropertyList": dPropertyList,
+                                                      "pPropertyList": pPropertyList, "filterPropertyList": filterPropertyList,
+                                                        "getDataPayload": getDataPayload, "getDataResult": getDataResult])
+    }
 
 
     /***
