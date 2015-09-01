@@ -64,13 +64,20 @@ h1 {
 h2 small {
   font-weight: 300;
 }
+.medTextStrong {
+    font-size: 20px;
+    font-weight: 400;
+}
 .medText {
     font-size: 20px;
     font-weight: 300;
 }
+span.medTextEmphasize {
+    font-weight: 600;
+}
 .smallText {
     font-size: 18px;
-    font-weight: 300;
+    font-weight: 400;
 }
 
 .medTextDark {
