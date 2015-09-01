@@ -2,6 +2,7 @@ package dport
 
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
+import org.broadinstitute.mpg.diabetes.BurdenService
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
 
@@ -12,6 +13,7 @@ class GeneController {
     SharedToolsService sharedToolsService
     private static final log = LogFactory.getLog(this)
     SqlService sqlService
+    BurdenService burdenService
 
     /***
      * return partial matches as Json for the purposes of the twitter typeahead handler
@@ -181,8 +183,30 @@ class GeneController {
         }
     }
 
+    def burdenTestExample() {
+        String gene="SLC30A8";
+        int mostDelScore = 4;
+        String sampleGroup = "ExSeq_17k_mdv2";
+        log.info("got params: " + params);
+
+        if (params.gene) {
+            gene = params.gene;
+        }
+
+        if (params.mostDelScore) {
+            mostDelScore = Integer.parseInt(params.mostDelScore);
+        }
+
+        // call the service
+        JSONObject burdenJson = this.burdenService.callBurdenTest(sampleGroup, gene, mostDelScore);
+
+        // send json response back
+        render(status: 200, contentType: "application/json") {burdenJson}
+    }
+
+
     def burdenTestAjax() {
-        // log paeameters received
+        // log parameters received
         log.info("got parameters: " + params);
 
         // create dummy string for dummy call, for now
@@ -196,6 +220,13 @@ class GeneController {
 
         // send json response back
         render(status: 200, contentType: "application/json") {result}
+    }
+
+    def burdenTestVariantSelectionOptionsAjax() {
+        JSONObject jsonObject = this.burdenService.getBurdenVariantSelectionOptions()
+
+        // send json response back
+        render(status: 200, contentType: "application/json") {jsonObject}
     }
 
 }

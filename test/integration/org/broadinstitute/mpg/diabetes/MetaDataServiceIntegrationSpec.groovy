@@ -1,14 +1,15 @@
 package org.broadinstitute.mpg.diabetes
 
-import dport.PhenoKey
+import dport.RestServerService
 import dport.SharedToolsService
 import grails.test.spock.IntegrationSpec
-import groovy.json.JsonSlurper
-import org.codehaus.groovy.grails.web.json.JSONObject
-import org.codehaus.groovy.grails.web.json.JSONTokener
+import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
+import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
+import org.broadinstitute.mpg.diabetes.metadata.Property
+
 /**
  * Created by balexand on 8/18/2014.
  */
@@ -16,11 +17,12 @@ import spock.lang.Unroll
 class MetaDataServiceIntegrationSpec extends IntegrationSpec {
     SharedToolsService sharedToolsService
     MetaDataService metaDataService
-
+    RestServerService restServerService
 
     @Before
     void setup() {
-
+        JsonParser jsonParser = JsonParser.getService()
+        jsonParser.setJsonString(this.restServerService.getMetadata())
     }
 
     @After
@@ -81,11 +83,13 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
     */
 
     // I think we need one non-null test to avoid a compilation error(?)
-    void "placeholder"() {
+    void "get property by type list"() {
         when:
-        int i =1
+        List<Property> commonPropertyList = this.metaDataService.getPropertyListByPropertyType(PortalConstants.TYPE_COMMON_PROPERTY_KEY, 20);
+
         then:
-        i==1
+        assert commonPropertyList != null
+        assert commonPropertyList.size() < 20
     }
 
 

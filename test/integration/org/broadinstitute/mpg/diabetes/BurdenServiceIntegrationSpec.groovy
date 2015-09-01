@@ -92,4 +92,12 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
         assert generatedJson != null
     }
 
+    void "test burden variant selecting option call"() {
+        when:
+        JSONObject object = this.burdenService.getBurdenVariantSelectionOptions()
+
+        then:
+        assert object != null
+        assert object.size() > 0
+    }
 }

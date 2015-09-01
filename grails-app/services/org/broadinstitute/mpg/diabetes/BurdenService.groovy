@@ -2,6 +2,7 @@ package org.broadinstitute.mpg.diabetes
 import dport.RestServerService
 import grails.transaction.Transactional
 import org.broadinstitute.mpg.diabetes.burden.parser.BurdenJsonBuilder
+import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.codehaus.groovy.grails.web.json.JSONTokener
@@ -104,5 +105,43 @@ class BurdenService {
 
         // return
         return returnJson;
+    }
+
+    public JSONObject getBurdenVariantSelectionOptions() {
+        StringBuilder builder = new StringBuilder();
+
+        // build the default options string
+        builder.append("{\"options\": [ ");
+        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING, "All coding variants", true));
+        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE, "All missense variants", true));
+        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE_POSS_DELETERIOUS, "All missense possibly deletrious variants", true));
+        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE_PROB_DELETERIOUS, "All missense probably deletrious variants", true));
+        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING, "All protein truncating variants", false));
+        builder.append(" ]}");
+
+        // create the json object and return
+        JSONTokener tokener = new JSONTokener(builder.toString());
+        JSONObject returnObject = new JSONObject(tokener);
+
+        // return
+        return returnObject;
+    }
+
+
+    protected String buildOptionString(int optionId, String optionName, boolean addComma) {
+        StringBuilder builder = new StringBuilder();
+
+        // build the default options string
+        builder.append("{ \"id\": ");
+        builder.append(optionId);
+        builder.append(" , \"name\": \"");
+        builder.append(optionName);
+        builder.append("\"}");
+        if (addComma) {
+            builder.append(", ");
+        }
+
+        // return
+        return builder.toString()
     }
 }
