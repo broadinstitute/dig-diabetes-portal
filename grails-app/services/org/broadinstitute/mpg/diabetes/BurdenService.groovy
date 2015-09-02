@@ -44,14 +44,25 @@ class BurdenService {
      * @param mostDelScore
      * @return
      */
-    protected JSONObject getVariantsForGene(String sampleGroup, String geneString, int mostDelScore) {
+    protected JSONObject getVariantsForGene(String geneString, int variantSelectionOptionId) {
         // local variables
         String jsonString = "";
         JSONObject resultJson;
+        int mostDelScore = 2;
+        String operand = PortalConstants.OPERATOR_LESS_THAN_EQUALS;
+
+        // set the most del score based on the variant filtering option given
+        // TODO - possibly combine this and polyphen/sift filtering into one mwethod for clarity
+        if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING) {
+            mostDelScore = 1;
+            operand = PortalConstants.OPERATOR_EQUALS;
+        } else if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING) {
+            mostDelScore = 3;
+        }
 
         // get the json string to send to the getData call
         try {
-            jsonString = this.getBurdenJsonBuilder().getKnowledgeBaseQueryPayloadForVariantSearch(sampleGroup, geneString, mostDelScore);
+            jsonString = this.getBurdenJsonBuilder().getKnowledgeBaseQueryPayloadForVariantSearch(geneString, operand, mostDelScore);
 
         } catch (PortalException exception) {
             log.error("Got json building error for getData payload creation: " + exception.getMessage());
@@ -72,14 +83,14 @@ class BurdenService {
      * @param mostDelScore
      * @return
      */
-    public JSONObject callBurdenTest(String sampleGroup, String geneString, int mostDelScore) {
+    public JSONObject callBurdenTest(String sampleGroup, String geneString, int variantSelectionOptionId) {
         // local variables
         JSONObject jsonObject, returnJson;
         List<String> variantList;
 
         try {
             // get the getData results payload
-            jsonObject = this.getVariantsForGene(sampleGroup, geneString, mostDelScore);
+            jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId);
             log.info("got burden getData results: " + jsonObject);
 
             // get the list of variants back
@@ -107,6 +118,11 @@ class BurdenService {
         return returnJson;
     }
 
+    /**
+     * returns final hard coded variant selection options
+     *
+     * @return
+     */
     public JSONObject getBurdenVariantSelectionOptions() {
         StringBuilder builder = new StringBuilder();
 
@@ -127,7 +143,14 @@ class BurdenService {
         return returnObject;
     }
 
-
+    /**
+     * protected method to help building an option list json string
+     *
+     * @param optionId
+     * @param optionName
+     * @param addComma
+     * @return
+     */
     protected String buildOptionString(int optionId, String optionName, boolean addComma) {
         StringBuilder builder = new StringBuilder();
 

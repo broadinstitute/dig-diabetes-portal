@@ -1,5 +1,10 @@
 package org.broadinstitute.mpg.diabetes.burden.parser;
 
+import org.broadinstitute.mpg.diabetes.metadata.Property;
+import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser;
+import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery;
+import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryBean;
+import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
 import org.codehaus.groovy.grails.web.json.JSONArray;
@@ -45,6 +50,7 @@ public class BurdenJsonBuilder {
         // create the json object
         try {
             finalObject = new JSONObject(this.getBurdenPostJsonString(variantList, covariatesList));
+
         } catch (JSONException exception) {
             throw new PortalException(("got json creation exception for burden test payload geneeration: " + exception.getMessage()));
         }
@@ -106,15 +112,39 @@ public class BurdenJsonBuilder {
     }
 
     /**
-     * return a bruce force constrcuted string for the getData query to return all variants for a gene with a certain most del score
+     * return a bruce force constructed string for the getData query to return all variants for a gene with a certain most del score
      *
      * @param geneString
      * @param mostDelScore
      * @return
      * @throws PortalException
      */
-    public String getKnowledgeBaseQueryPayloadForVariantSearch(String sampleGroup, String geneString, int mostDelScore) throws PortalException {
+    public String getKnowledgeBaseQueryPayloadForVariantSearch(String geneString, String mostDelScoreOperand, int mostDelScore) throws PortalException {
         // local variables
+        String jsonString = "";
+        JsonParser parser = JsonParser.getService();
+        QueryJsonBuilder jsonBuilder = QueryJsonBuilder.getQueryJsonBuilder();
+
+        // build the metadata query object
+        GetDataQuery query = new GetDataQueryBean();
+
+        // add in the query properties
+        query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
+        query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME));
+        query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POLYPHEN_PRED));
+        query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_SIFT_PRED));
+
+        // add in the filters
+        query.addFilterProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_GENE), PortalConstants.OPERATOR_EQUALS, geneString);
+        query.addFilterProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOST_DEL_SCORE), mostDelScoreOperand, String.valueOf(mostDelScore));
+
+        // get the payload string
+        jsonString = jsonBuilder.getQueryJsonPayloadString(query);
+
+        // return
+        return jsonString;
+
+        /*
         StringBuilder stringBuilder = new StringBuilder();
 
         // build the header of the search query
@@ -141,6 +171,7 @@ public class BurdenJsonBuilder {
 
         // return
         return stringBuilder.toString();
+        */
     }
 
     /**
@@ -166,7 +197,8 @@ public class BurdenJsonBuilder {
                 for (int i = 0; i < tempArray.size(); i++) {
                     tempArray2 = (JSONArray)tempArray.get(i);
                     if ((tempArray2 != null) && (tempArray2.size() > 0)) {
-                        tempObject = (JSONObject) tempArray2.get(0);
+                        // TODO - hack - need to figure out how to do this better then hard coding position
+                        tempObject = (JSONObject) tempArray2.get(3);
 
                         // get the var_id
                         varId = tempObject.getString(PortalConstants.JSON_VARIANT_ID_KEY);

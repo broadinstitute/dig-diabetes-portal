@@ -1,6 +1,8 @@
 package org.broadinstitute.mpg.diabetes.burden.parser;
 
 import junit.framework.TestCase;
+import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser;
+import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
 import org.codehaus.groovy.grails.web.json.JSONObject;
 import org.codehaus.groovy.grails.web.json.JSONTokener;
@@ -19,13 +21,21 @@ public class BurdenJsonBuilderTest extends TestCase {
     // instance variables
     BurdenJsonBuilder burdenJsonBuilder;
     String jsonString = null;
+    String burdenJsonString = null;
+    JsonParser jsonParser;
 
     @Before
     public void setUp() throws Exception {
         // set up the service
         this.burdenJsonBuilder = BurdenJsonBuilder.getBurdenJsonBuilder();
         InputStream inputStream = getClass().getResourceAsStream("burdenRequest.json");
-        jsonString = new Scanner(inputStream).useDelimiter("\\A").next();
+        burdenJsonString = new Scanner(inputStream).useDelimiter("\\A").next();
+
+        // this is to make sure the parser is initialized
+        jsonParser = JsonParser.getService();
+        InputStream metadataInputStream = getClass().getResourceAsStream("../../metadata/parser/metadata.json");
+        this.jsonString = new Scanner(metadataInputStream).useDelimiter("\\A").next();
+        this.jsonParser.setJsonString(this.jsonString);
     }
 
     @Test
@@ -48,7 +58,7 @@ public class BurdenJsonBuilderTest extends TestCase {
         variantList.add("1_2535651_");
 
         // read in the test file
-        referenceJson = new JSONObject(this.jsonString);
+        referenceJson = new JSONObject(this.burdenJsonString);
 
         // test to make sure reference works
         assertNotNull(referenceJson);
@@ -70,9 +80,9 @@ public class BurdenJsonBuilderTest extends TestCase {
         // local variables
         JSONObject referenceJson = null;
         JSONObject generatedJson = null;
-        String sampleGroup = "ExSeq_17k_mdv2";
         String geneString = "SLC30A8";
-        int mostDelScore = 4;
+        String mostDelScoreOperand = PortalConstants.OPERATOR_LESS_THAN_EQUALS;
+        int mostDelScore = 3;
 
         // read the reference json from the stored file
         InputStream inputStream = getClass().getResourceAsStream("variantQuery.json");
@@ -81,7 +91,7 @@ public class BurdenJsonBuilderTest extends TestCase {
 
         // create the json from the builder
         try {
-            String generatedJsonString = this.burdenJsonBuilder.getKnowledgeBaseQueryPayloadForVariantSearch(sampleGroup, geneString, mostDelScore);
+            String generatedJsonString = this.burdenJsonBuilder.getKnowledgeBaseQueryPayloadForVariantSearch(geneString, mostDelScoreOperand, mostDelScore);
             generatedJson = new JSONObject(generatedJsonString);
 
         } catch (PortalException exception) {

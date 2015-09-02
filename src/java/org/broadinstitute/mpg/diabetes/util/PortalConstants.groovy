@@ -61,11 +61,15 @@ class PortalConstants {
 
     // constants of property id keys (these are automatically generated, but caching often used ones here)
     public final static String PROPERTY_KEY_COMMON_VAR_ID                 = "metadata_rootVAR_ID";
+    public final static String PROPERTY_KEY_COMMON_GENE                   = "metadata_rootGENE";
     public final static String PROPERTY_KEY_COMMON_CLOSEST_GENE           = "metadata_rootCLOSEST_GENE";
     public final static String PROPERTY_KEY_COMMON_CHROMOSOME             = "metadata_rootCHROM";
     public final static String PROPERTY_KEY_COMMON_CONSEQUENCE            = "metadata_rootConsequence";
     public final static String PROPERTY_KEY_COMMON_POSITION               = "metadata_rootPOS";
     public final static String PROPERTY_KEY_COMMON_DBSNP_ID               = "metadata_rootDBSNP_ID";
+    public final static String PROPERTY_KEY_COMMON_POLYPHEN_PRED          = "metadata_rootPolyPhen_PRED";
+    public final static String PROPERTY_KEY_COMMON_SIFT_PRED              = "metadata_rootSIFT_PRED";
+    public final static String PROPERTY_KEY_COMMON_MOST_DEL_SCORE         = "metadata_rootMOST_DEL_SCORE";
 
     public final static String PROPERTY_KEY_SG_MAF_82K                    = "metadata_root_ExChip_82k_mdv2_82kMAF";
     public final static String PROPERTY_KEY_SG_MAF_SIGMA1                 = "metadata_root_ExChip_SIGMA1_mdv2_SIGMA1MAF";
