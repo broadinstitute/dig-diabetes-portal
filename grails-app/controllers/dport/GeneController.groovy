@@ -207,6 +207,10 @@ class GeneController {
 
     def burdenTestAjax() {
         // log parameters received
+        // Here are some example parameters, as they show up in the params variable
+        // params.filterNum=="2" // value=id from burdenTestVariantSelectionOptionsAjax, or 0 if no selection was made (which is a legal choice)
+        // params.dataSet=="1" // where 1->13k, 2->26k"
+        // params.geneName=="SLC30A8" // string representing gene name
         log.info("got parameters: " + params);
 
         // create dummy string for dummy call, for now

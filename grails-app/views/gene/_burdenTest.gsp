@@ -33,47 +33,121 @@
 
 
 <g:javascript>
-var runBurdenTest = function (){
-$.ajax({
-    cache: false,
-    type: "post",
-    url: "${createLink(controller:'gene',action: 'burdenTestAjax')}",
-    data: {geneName: '<%=geneName%>'},
-        async: true,
-        success: function (data) {
+    var mpgSoftware = mpgSoftware || {};
 
+    mpgSoftware.burdenTest = (function () {
 
-                    var variantsAndAssociationsTableHeaders = {};
+        /***
+        *  Fill the drop down list with values.  Presumably we need to run this method right after the page load completes.
+        *
+        */
+        var fillFilterDropDown = function (){
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "${createLink(controller:'gene',action: 'burdenTestVariantSelectionOptionsAjax')}",
+                data: {},
+                    async: true,
+                    success: function (data) {
 
+                       if ((typeof data !== 'undefined') && (data)){
+                               console.log('successfully retrieved data from burdenTestVariantSelectionOptionsAjax');
+                               //first check for error conditions
+                                if (!data){
+                                    console.log('null return data from burdenTestVariantSelectionOptionsAjax');
+                                } else if (data.is_error) {
+                                    console.log('burdenTestAjax returned is_error ='+data.is_error +'.');
+                                }
+                                else if ((typeof data.options === 'undefined') ||
+                                         (data.options.length <= 0)){
+                                     console.log('burdenTestAjax returned undefined (or length = 0) for options.');
+                               }else {
+                                   var optionList = data.options;
+                                   var dropDownHolder = $('.proteinEffectFilter');
+                                   for ( var i = 0 ; i < optionList.length ; i++ ){
+                                        dropDownHolder.append('<option value="'+optionList[i].id+'">'+optionList[i].name+'</option>')
+                                   }
+                                }
+                            }
 
-            if ((typeof data !== 'undefined') && (data)){
-                   console.log('successfully retrieved data from burdenTestAjax');
-                   //first check for error conditions
-                    if (!data){
-                        console.log('null return data from burdenTestAjax');
-                    } else if (data.is_error) {
-                        console.log('burdenTestAjax returned is_error ='+data.is_error +'.');
+                    },
+                    error: function (jqXHR, exception) {
+                        loading.hide();
+                        core.errorReporter(jqXHR, exception);
                     }
-                    else if ((typeof data.pValue === 'undefined') ||
-                             (typeof data.oddsRatio === 'undefined')){
-                         console.log('burdenTestAjax returned undefined for P value or odds ratio.');
-                   }else {
-                       var pValue = data.pValue;
-                       var oddsRatio = data.oddsRatio;
-                       $('.burden-test-result .pValue').append('p-Value = '+UTILS.realNumberFormatter(pValue));
-                       $('.burden-test-result .orValue').append('odds ratio = ' +UTILS.realNumberFormatter(oddsRatio));
-                   }
-                }
-            $('[data-toggle="popover"]').popover();
-        },
-        error: function (jqXHR, exception) {
-            loading.hide();
-            core.errorReporter(jqXHR, exception);
+                });
+        }; // fillFilterDropDown
+
+
+        /**
+         *  run the burden test, then display the results.  We will need to start by extracting
+         *  the data fields we need from the DOM.
+         *
+         *
+         */
+        var runBurdenTest = function (){
+             var selectedFilterValue = $('.proteinEffectFilter option:selected').val(),
+             selectedFilterValueId = parseInt(selectedFilterValue),
+             selectedDataSetValue = $('input[name=dataset]:checked').val(),
+             selectedDataSetValueId = parseInt(selectedDataSetValue);
+             if (isNaN(selectedFilterValueId)){
+                selectedFilterValueId = 0;
+             }
+             if (isNaN(selectedDataSetValueId)){
+                selectedDataSetValueId = 0;
+             }
+             $('input[name=dataset]:checked').val();
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "${createLink(controller:'gene',action: 'burdenTestAjax')}",
+                data: {geneName: '<%=geneName%>',
+                       filterNum: selectedFilterValueId,
+                       dataSet: selectedDataSetValueId },
+                    async: true,
+                    success: function (data) {
+
+                       if ((typeof data !== 'undefined') && (data)){
+                               console.log('successfully retrieved data from burdenTestAjax');
+                               //first check for error conditions
+                                if (!data){
+                                    console.log('null return data from burdenTestAjax');
+                                } else if (data.is_error) {
+                                    console.log('burdenTestAjax returned is_error ='+data.is_error +'.');
+                                }
+                                else if ((typeof data.pValue === 'undefined') ||
+                                         (typeof data.oddsRatio === 'undefined')){
+                                     console.log('burdenTestAjax returned undefined for P value or odds ratio.');
+                               }else {
+                                   var pValue = data.pValue;
+                                   var oddsRatio = data.oddsRatio;
+                                   $('.burden-test-result .pValue').append('p-Value = '+UTILS.realNumberFormatter(pValue));
+                                   $('.burden-test-result .orValue').append('odds ratio = ' +UTILS.realNumberFormatter(oddsRatio));
+                               }
+                            }
+                        $('[data-toggle="popover"]').popover();
+                    },
+                    error: function (jqXHR, exception) {
+                        loading.hide();
+                        core.errorReporter(jqXHR, exception);
+                    }
+                });
+        }; // runBurdenTest
+
+        // constructor statements go here
+        //fillFilterDropDown();
+
+        // public routines are declared below
+        return {
+            runBurdenTest:runBurdenTest,
+            fillFilterDropDown:fillFilterDropDown
         }
-    });
 
-};
+    }());
 
+$( document ).ready( function (){
+   mpgSoftware.burdenTest.fillFilterDropDown ();
+} );
 
 //runBurdenTest ();
 
@@ -91,27 +165,22 @@ $.ajax({
             <label>Select data set:&nbsp;&nbsp;</label>
             <div class="form-inline">
                 <div class="radio">
-                    <label><input type="radio" name="dataset" checked>&nbsp;17k&nbsp;&nbsp;</label>
+                    <label><input type="radio" name="dataset" value="1" checked>&nbsp;13k&nbsp;&nbsp;</label>
                 </div>
                 <div class="radio">
-                    <label><input type="radio" name="dataset" />&nbsp;26k</label>
+                    <label><input type="radio" name="dataset"  value="2" />&nbsp;26k</label>
                 </div>
             </div>
         </div>
         <div class="col-md-5 col-sm-5 col-xs-5">
             <label>Available variant filter:
-                <select class="form-control">
+                <select class="proteinEffectFilter form-control">
                     <option selected hidden>Select a filter</option>
-                    <option>All coding variants</option>
-                    <option>All missense variants</option>
-                    <option>All <span class="medTextEmphasize">possibly</span> deleterious missense variants</option>
-                    <option>All <span class="medTextEmphasize">probably</span> deleterious missense variants</option>
-                    <option>Protein truncating variants</option>
                 </select>
             </label>
         </div>
         <div class="col-md-4 col-sm-4 col-xs-43 burden-test-btn-wrapper">
-            <button id="singlebutton" name="singlebutton" class="btn btn-primary btn-lg burden-test-btn" onclick="runBurdenTest()">Run burden test</button>
+            <button id="singlebutton" name="singlebutton" class="btn btn-primary btn-lg burden-test-btn" onclick="mpgSoftware.burdenTest.runBurdenTest()">Run burden test</button>
         </div>
 
     </div>
