@@ -96,6 +96,7 @@ modules = {
         resource url: 'css/lib/bootstrap.min.css'
 
         resource url: 'css/lib/style.css'
+        resource url: 'css/lib/dkstyle.css'
 
         resource url: 'js/lib/d3.min.js'
         resource url: 'js/lib/utils.js'

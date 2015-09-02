@@ -36,6 +36,7 @@
     var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.burdenTest = (function () {
+         var loading = $('#rSpinner');
 
         /***
         *  Fill the drop down list with values.  Presumably we need to run this method right after the page load completes.
@@ -51,7 +52,6 @@
                     success: function (data) {
 
                        if ((typeof data !== 'undefined') && (data)){
-                               console.log('successfully retrieved data from burdenTestVariantSelectionOptionsAjax');
                                //first check for error conditions
                                 if (!data){
                                     console.log('null return data from burdenTestVariantSelectionOptionsAjax');
@@ -72,7 +72,6 @@
 
                     },
                     error: function (jqXHR, exception) {
-                        loading.hide();
                         core.errorReporter(jqXHR, exception);
                     }
                 });
@@ -86,10 +85,12 @@
          *
          */
         var runBurdenTest = function (){
+
              var selectedFilterValue = $('.proteinEffectFilter option:selected').val(),
              selectedFilterValueId = parseInt(selectedFilterValue),
              selectedDataSetValue = $('input[name=dataset]:checked').val(),
              selectedDataSetValueId = parseInt(selectedDataSetValue);
+             $('#rSpinner').show();
              if (isNaN(selectedFilterValueId)){
                 selectedFilterValueId = 0;
              }
@@ -108,7 +109,6 @@
                     success: function (data) {
 
                        if ((typeof data !== 'undefined') && (data)){
-                               console.log('successfully retrieved data from burdenTestAjax');
                                //first check for error conditions
                                 if (!data){
                                     console.log('null return data from burdenTestAjax');
@@ -121,14 +121,16 @@
                                }else {
                                    var pValue = data.pValue;
                                    var oddsRatio = data.oddsRatio;
+                                   $('.burden-test-result .pValue').text("");
                                    $('.burden-test-result .pValue').append('p-Value = '+UTILS.realNumberFormatter(pValue));
+                                   $('.burden-test-result .orValue').text("");
                                    $('.burden-test-result .orValue').append('odds ratio = ' +UTILS.realNumberFormatter(oddsRatio));
                                }
                             }
-                        $('[data-toggle="popover"]').popover();
+                        $('#rSpinner').hide();
                     },
                     error: function (jqXHR, exception) {
-                        loading.hide();
+                        $('#rSpinner').hide();
                         core.errorReporter(jqXHR, exception);
                     }
                 });
