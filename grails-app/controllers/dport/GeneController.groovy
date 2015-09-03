@@ -1,6 +1,5 @@
 package dport
 
-import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -213,14 +212,19 @@ class GeneController {
         // params.geneName=="SLC30A8" // string representing gene name
         log.info("got parameters: " + params);
 
+        // cast the parameters
+        String geneName = params.geneName;
+        int variantFilterOptionId = (params.filterNum ? Integer.valueOf(params.filterNum) : 0);
+
         // create dummy string for dummy call, for now
         // TODO - DIGP-78: implement call when back end service ready
-        String resultString = "{\"is_error\": false, \"oddsRatio\": \"1.0138318997464533\", \"pValue\": \"0.4437344659074216\"}";
-
+//        String resultString = "{\"is_error\": false, \"oddsRatio\": \"1.0138318997464533\", \"pValue\": \"0.4437344659074216\"}";
         // create the json object
-        def slurper = new JsonSlurper()
-        def result = slurper.parseText(resultString)
+//        def slurper = new JsonSlurper()
+ //       def result = slurper.parseText(resultString)
 //        def result = slurper.parseText(this.metaDataService.getSearchablePropertyNameListAsJson(datasetChoice))
+
+        JSONObject result = this.burdenService.callBurdenTest("blah", geneName, variantFilterOptionId);
 
         // send json response back
         render(status: 200, contentType: "application/json") {result}

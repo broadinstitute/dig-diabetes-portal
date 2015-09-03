@@ -1,7 +1,10 @@
 package org.broadinstitute.mpg.diabetes
+
+import dport.RestServerService
 import grails.test.spock.IntegrationSpec
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.burden.parser.BurdenJsonBuilder
+import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.codehaus.groovy.grails.web.json.JSONTokener
 import org.junit.After
@@ -13,11 +16,12 @@ import spock.lang.Unroll
 @Unroll
 class BurdenServiceIntegrationSpec extends IntegrationSpec {
     BurdenService burdenService
-
+    RestServerService restServerService
 
     @Before
     void setup() {
-
+        JsonParser jsonParser = JsonParser.getService()
+        jsonParser.setJsonString(this.restServerService.getMetadata())
     }
 
     @After
@@ -64,11 +68,11 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
         when:
         String sampleGroup = "ExSeq_17k_mdv2";
         String geneString = "SLC30A8";
-        int mostDelScore = 4;
+        int variantSelectionOptionId = 3;
         String referenceJsonString = "{\"is_error\": false, \"numRecords\": 2, \"variants\": [[{\"VAR_ID\": \"8_118184783_C_T\"}],[{\"VAR_ID\": \"8_118170004_C_T\"}]], \"passback\": \"123abc\"}";
         JsonSlurper slurper = new JsonSlurper()
         JSONObject referenceJson = slurper.parseText(referenceJsonString);
-        String generatedJsonString = this.burdenService.getVariantsForGene(sampleGroup, geneString, mostDelScore);
+        String generatedJsonString = this.burdenService.getVariantsForGene(geneString, variantSelectionOptionId);
         JSONObject generatedJson = slurper.parseText(generatedJsonString);
 
         then:

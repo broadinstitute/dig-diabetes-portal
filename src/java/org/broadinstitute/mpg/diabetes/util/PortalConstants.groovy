@@ -18,6 +18,10 @@ class PortalConstants {
     public final static String JSON_SORT_ORDER_KEY      = "sort_order";
     public final static String JSON_VARIANTS_KEY        = "variants";
     public final static String JSON_VARIANT_ID_KEY      = "VAR_ID";
+    public final static String JSON_VARIANT_MOST_DEL_SCORE_KEY      = "MOST_DEL_SCORE";
+    public final static String JSON_VARIANT_CHROMOSOME_KEY      = "CHROM";
+    public final static String JSON_VARIANT_POLYPHEN_PRED_KEY      = "PolyPhen_PRED";
+    public final static String JSON_VARIANT_SIFT_PRED_KEY      = "SIFT_PRED";
     public final static String JSON_NUMBER_RECORDS_KEY  = "numRecords";
     public final static String JSON_ERROR_KEY           = "is_error";
     public final static String JSON_PASSBACK_KEY        = "passback";
@@ -61,11 +65,15 @@ class PortalConstants {
 
     // constants of property id keys (these are automatically generated, but caching often used ones here)
     public final static String PROPERTY_KEY_COMMON_VAR_ID                 = "metadata_rootVAR_ID";
+    public final static String PROPERTY_KEY_COMMON_GENE                   = "metadata_rootGENE";
     public final static String PROPERTY_KEY_COMMON_CLOSEST_GENE           = "metadata_rootCLOSEST_GENE";
     public final static String PROPERTY_KEY_COMMON_CHROMOSOME             = "metadata_rootCHROM";
     public final static String PROPERTY_KEY_COMMON_CONSEQUENCE            = "metadata_rootConsequence";
     public final static String PROPERTY_KEY_COMMON_POSITION               = "metadata_rootPOS";
     public final static String PROPERTY_KEY_COMMON_DBSNP_ID               = "metadata_rootDBSNP_ID";
+    public final static String PROPERTY_KEY_COMMON_POLYPHEN_PRED          = "metadata_rootPolyPhen_PRED";
+    public final static String PROPERTY_KEY_COMMON_SIFT_PRED              = "metadata_rootSIFT_PRED";
+    public final static String PROPERTY_KEY_COMMON_MOST_DEL_SCORE         = "metadata_rootMOST_DEL_SCORE";
 
     public final static String PROPERTY_KEY_SG_MAF_82K                    = "metadata_root_ExChip_82k_mdv2_82kMAF";
     public final static String PROPERTY_KEY_SG_MAF_SIGMA1                 = "metadata_root_ExChip_SIGMA1_mdv2_SIGMA1MAF";
@@ -87,6 +95,12 @@ class PortalConstants {
     public static final int BURDEN_VARIANT_OPTION_ALL_MISSENSE_POSS_DELETERIOUS  = 3;
     public static final int BURDEN_VARIANT_OPTION_ALL_MISSENSE_PROB_DELETERIOUS  = 4;
     public static final int BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING         = 5;
+    public static final int BURDEN_VARIANT_OPTION_ALL                            = 0;
+
+    // burden test constants
+    public static final String POLYPHEN_PRED_POSSIBLY_DAMAGING              = "possibly_damaging";
+    public static final String POLYPHEN_PRED_PROBABLY_DAMAGING              = "probably_damaging";
+    public static final String SIFT_PRED_PROBABLY_DAMAGING                  = "deleterious";
 
 
 }
