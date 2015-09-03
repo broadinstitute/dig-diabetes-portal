@@ -3,6 +3,7 @@
 <html>
 <head>
     <meta name="layout" content="t2dGenesCore"/>
+    <meta name="wot-verification" content="9fd2c3983c1837397ff8"/>
     <r:require modules="core"/>
     <r:require modules="scroller"/>
     <r:layoutResources/>
@@ -15,6 +16,7 @@
 </style>
 
 <body>
+
 <script>
 
     $(function () {
