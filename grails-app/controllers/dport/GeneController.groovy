@@ -214,7 +214,8 @@ class GeneController {
 
         // cast the parameters
         String geneName = params.geneName;
-        int variantFilterOptionId = (params.filterNum ? Integer.valueOf(params.filterNum) : 0);
+        int variantFilterOptionId = (params.filterNum ? Integer.valueOf(params.filterNum) : 0);     // default to all variants if none given
+        int datasetOptionId = (params.dataSet ? Integer.valueOf(params.dataSet) : 1);               // default ot 1 if none given
 
         // create dummy string for dummy call, for now
         // TODO - DIGP-78: implement call when back end service ready
@@ -224,7 +225,7 @@ class GeneController {
  //       def result = slurper.parseText(resultString)
 //        def result = slurper.parseText(this.metaDataService.getSearchablePropertyNameListAsJson(datasetChoice))
 
-        JSONObject result = this.burdenService.callBurdenTest("blah", geneName, variantFilterOptionId);
+        JSONObject result = this.burdenService.callBurdenTest(datasetOptionId, geneName, variantFilterOptionId);
 
         // send json response back
         render(status: 200, contentType: "application/json") {result}

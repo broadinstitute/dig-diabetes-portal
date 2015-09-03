@@ -45,6 +45,7 @@ public class BurdenJsonBuilderTest extends TestCase {
         List<String> variantList = new ArrayList<String>();
         JSONObject referenceJson = null;
         JSONObject generatedJson = null;
+        String dataset = "13k";
 
         // add 10 variants to the list
         variantList.add("1_2522446_");
@@ -66,7 +67,7 @@ public class BurdenJsonBuilderTest extends TestCase {
 
         // create the new json object from the builder call
         try {
-            generatedJson = this.burdenJsonBuilder.getBurdenPostJson(variantList, null);
+            generatedJson = this.burdenJsonBuilder.getBurdenPostJson(dataset, variantList, null);
 
         } catch (PortalException exception) {
             fail("Got exception generating burden call json payload: " + exception.getMessage());

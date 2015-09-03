@@ -47,13 +47,13 @@ public class BurdenJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public JSONObject getBurdenPostJson(List<String> variantList, List<String> covariatesList) throws PortalException {
+    public JSONObject getBurdenPostJson(String dataset, List<String> variantList, List<String> covariatesList) throws PortalException {
         // local variables
         JSONObject finalObject;
 
         // create the json object
         try {
-            finalObject = new JSONObject(this.getBurdenPostJsonString(variantList, covariatesList));
+            finalObject = new JSONObject(this.getBurdenPostJsonString(dataset, variantList, covariatesList));
 
         } catch (JSONException exception) {
             throw new PortalException(("got json creation exception for burden test payload geneeration: " + exception.getMessage()));
@@ -71,13 +71,23 @@ public class BurdenJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public String getBurdenPostJsonString(List<String> variantList, List<String> covariatesList) throws PortalException {
+    public String getBurdenPostJsonString(String dataset, List<String> variantList, List<String> covariatesList) throws PortalException {
         // local variables
         String finalString;
         StringBuilder stringBuilder = new StringBuilder();
 
+        // open the json object
+        stringBuilder.append("{");
+
+        // add in the dataset/study key
+        stringBuilder.append("\"");
+        stringBuilder.append(PortalConstants.JSON_BURDEN_DATASET_KEY);
+        stringBuilder.append("\": \"");
+        stringBuilder.append(dataset);
+        stringBuilder.append("\", ");
+
         // create the variant list json object string
-        stringBuilder.append("{\"");
+        stringBuilder.append("\"");
         stringBuilder.append(PortalConstants.JSON_BURDEN_VARIANTS_KEY);
         stringBuilder.append("\" : [");
         if (variantList == null) {

@@ -48,6 +48,13 @@ class PortalConstants {
     public final static String JSON_BURDEN_VARIANTS_KEY                 = "variants";
     public final static String JSON_BURDEN_COVARIATES_KEY               = "covariates";
     public final static String JSON_BURDEN_FILTERS_KEY                  = "filters";
+    public final static String JSON_BURDEN_DATASET_KEY                  = "study";
+
+    // burden sample group options
+    public final static String BURDEN_DATASET_OPTION_13K                  = "13k";
+    public final static String BURDEN_DATASET_OPTION_26K                  = "26k";
+    public final static int BURDEN_DATASET_OPTION_ID_13K                  = 1;
+    public final static int BURDEN_DATASET_OPTION_ID_26K                  = 2;
 
 
     // constants for getData calls

@@ -86,14 +86,21 @@ class BurdenService {
      * @param mostDelScore
      * @return
      */
-    public JSONObject callBurdenTest(String sampleGroup, String geneString, int variantSelectionOptionId) {
+    public JSONObject callBurdenTest(int sampleGroupOptionId, String geneString, int variantSelectionOptionId) {
         // local variables
         JSONObject jsonObject, returnJson;
         List<Variant> variantList;
         List<String> burdenVariantList;
+        String sampleGroupName = PortalConstants.BURDEN_DATASET_OPTION_13K;
 
         // log
-        log.info("called burden test for gene: " + geneString + " and variant select option: " + variantSelectionOptionId + " and sample group: " + sampleGroup);
+        log.info("called burden test for gene: " + geneString + " and variant select option: " + variantSelectionOptionId + " and sample group id: " + sampleGroupOptionId);
+
+        // translate the sample group selection option
+        // only set 26k if specifically asked for it; all others assume 13k
+        if (sampleGroupOptionId == PortalConstants.BURDEN_DATASET_OPTION_ID_26K) {
+            sampleGroupName = PortalConstants.BURDEN_DATASET_OPTION_26K;
+        }
 
         try {
             // get the getData results payload
@@ -109,7 +116,7 @@ class BurdenService {
             log.info("got filtered variant list of size: " + burdenVariantList.size());
 
             // create the json payload for the burden call
-            jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(burdenVariantList, null);
+            jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(sampleGroupName, burdenVariantList, null);
             log.info("created burden rest payload: " + jsonObject);
 
             // get the results of the burden call
