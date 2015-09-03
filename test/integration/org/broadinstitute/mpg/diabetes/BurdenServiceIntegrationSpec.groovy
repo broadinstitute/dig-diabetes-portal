@@ -5,6 +5,7 @@ import grails.test.spock.IntegrationSpec
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.burden.parser.BurdenJsonBuilder
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
+import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.codehaus.groovy.grails.web.json.JSONTokener
 import org.junit.After
@@ -51,7 +52,7 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
 
         // get the json payload for the burden call
         BurdenJsonBuilder jsonBuilder = BurdenJsonBuilder.getBurdenJsonBuilder();
-        String burdenJsonString = jsonBuilder.getBurdenPostJson(variantList, null);
+        String burdenJsonString = jsonBuilder.getBurdenPostJson(PortalConstants.BURDEN_DATASET_OPTION_13K, variantList, null);
         generatedJson = this.burdenService.getBurdenRestCallResults(burdenJsonString);
 
         // reference result string
@@ -85,10 +86,10 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
         when:
         JSONTokener tokener = new JSONTokener("{\"pValue\":\"6.620497734940387E-4\",\"oddsRatio\":\"1.0202208335901333\",\"is_error\":false}");
         JSONObject referenceJson = new JSONObject(tokener);
-        String sampleGroup = "ExSeq_17k_mdv2";
         String geneString = "SLC11A1";
         int mostDelScore = 3;
-        JSONObject generatedJson = this.burdenService.callBurdenTest(sampleGroup, geneString, mostDelScore);
+        int sampleGroupOptionId = PortalConstants.BURDEN_DATASET_OPTION_ID_13K;
+        JSONObject generatedJson = this.burdenService.callBurdenTest(sampleGroupOptionId, geneString, mostDelScore);
 
         then:
         // will need to change as data changes
