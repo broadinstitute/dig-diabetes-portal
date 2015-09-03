@@ -18,6 +18,10 @@ class PortalConstants {
     public final static String JSON_SORT_ORDER_KEY      = "sort_order";
     public final static String JSON_VARIANTS_KEY        = "variants";
     public final static String JSON_VARIANT_ID_KEY      = "VAR_ID";
+    public final static String JSON_VARIANT_MOST_DEL_SCORE_KEY      = "MOST_DEL_SCORE";
+    public final static String JSON_VARIANT_CHROMOSOME_KEY      = "CHROM";
+    public final static String JSON_VARIANT_POLYPHEN_PRED_KEY      = "PolyPhen_PRED";
+    public final static String JSON_VARIANT_SIFT_PRED_KEY      = "SIFT_PRED";
     public final static String JSON_NUMBER_RECORDS_KEY  = "numRecords";
     public final static String JSON_ERROR_KEY           = "is_error";
     public final static String JSON_PASSBACK_KEY        = "passback";
@@ -91,6 +95,12 @@ class PortalConstants {
     public static final int BURDEN_VARIANT_OPTION_ALL_MISSENSE_POSS_DELETERIOUS  = 3;
     public static final int BURDEN_VARIANT_OPTION_ALL_MISSENSE_PROB_DELETERIOUS  = 4;
     public static final int BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING         = 5;
+    public static final int BURDEN_VARIANT_OPTION_ALL                            = 0;
+
+    // burden test constants
+    public static final String POLYPHEN_PRED_POSSIBLY_DAMAGING              = "possibly_damaging";
+    public static final String POLYPHEN_PRED_PROBABLY_DAMAGING              = "probably_damaging";
+    public static final String SIFT_PRED_PROBABLY_DAMAGING                  = "deleterious";
 
 
 }

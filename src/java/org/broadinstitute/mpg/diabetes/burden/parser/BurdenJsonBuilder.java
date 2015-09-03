@@ -1,5 +1,7 @@
 package org.broadinstitute.mpg.diabetes.burden.parser;
 
+import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant;
+import org.broadinstitute.mpg.diabetes.knowledgebase.result.VariantBean;
 import org.broadinstitute.mpg.diabetes.metadata.Property;
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser;
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery;
@@ -12,7 +14,9 @@ import org.codehaus.groovy.grails.web.json.JSONException;
 import org.codehaus.groovy.grails.web.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mduby on 8/21/15.
@@ -181,12 +185,11 @@ public class BurdenJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public List<String> getVariantListFromJson(JSONObject jsonObject) throws PortalException {
+    public List<Variant> getVariantListFromJson(JSONObject jsonObject) throws PortalException {
         // local variables
-        List<String> variantList = new ArrayList<String>();
+        List<Variant> variantList = new ArrayList<Variant>();
         JSONObject tempObject;
         JSONArray tempArray, tempArray2;
-        String varId;
 
         // get the variants object
         if (jsonObject != null) {
@@ -196,14 +199,13 @@ public class BurdenJsonBuilder {
             if ((tempArray != null) && (tempArray.size() > 0)) {
                 for (int i = 0; i < tempArray.size(); i++) {
                     tempArray2 = (JSONArray)tempArray.get(i);
-                    if ((tempArray2 != null) && (tempArray2.size() > 0)) {
-                        // TODO - hack - need to figure out how to do this better then hard coding position
-                        tempObject = (JSONObject) tempArray2.get(3);
-
-                        // get the var_id
-                        varId = tempObject.getString(PortalConstants.JSON_VARIANT_ID_KEY);
-                        variantList.add(varId);
-                    }
+                    Variant variant = new VariantBean();
+                    Map<String, String> map = this.getHashMapOfJsonArray(tempArray2);
+                    variant.setVariantId(map.get(PortalConstants.JSON_VARIANT_ID_KEY));
+                    variant.setChromosome(map.get(PortalConstants.JSON_VARIANT_CHROMOSOME_KEY));
+                    variant.setPolyphenPredictor(map.get(PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY));
+                    variant.setSiftPredictor(map.get(PortalConstants.JSON_VARIANT_SIFT_PRED_KEY));
+                    variantList.add(variant);
                 }
             } else {
                 throw new PortalException("got no variants json object for burden test variant list building");
@@ -214,5 +216,23 @@ public class BurdenJsonBuilder {
 
         // return the list
         return variantList;
+    }
+
+    protected Map<String, String> getHashMapOfJsonArray(JSONArray jsonArray) {
+        // local variables
+        Map<String, String> map = new HashMap<String, String>();
+
+        // loop through the array and put the values in a hash map
+        if (jsonArray != null) {
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String key = (String)jsonObject.keySet().iterator().next();
+                if (!jsonObject.isNull(key)) {
+                    map.put(key, (String)jsonObject.get(key));
+                }
+            }
+        }
+
+        return map;
     }
 }

@@ -1,6 +1,7 @@
 package org.broadinstitute.mpg.diabetes.burden.parser;
 
 import junit.framework.TestCase;
+import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant;
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
@@ -113,7 +114,7 @@ public class BurdenJsonBuilderTest extends TestCase {
         JSONObject inputJsonObject;
         JSONTokener tokener;
         String referenceString = "{\"is_error\": false, \"numRecords\": 2, \"variants\": [[{\"VAR_ID\": \"8_118184783_C_T\"}],[{\"VAR_ID\": \"8_118170004_C_T\"}]], \"passback\": \"123abc\"}";
-        List<String> variantList = null;
+        List<Variant> variantList = null;
 
         // create the reference to input to the builder
         tokener = new JSONTokener(referenceString);
