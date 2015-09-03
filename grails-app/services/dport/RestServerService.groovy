@@ -202,6 +202,21 @@ class RestServerService {
                 uppercaseVariantName
             }", "operand_type": "STRING"}"""
         } else {
+            // be prepared to substitute underscores for dashes, since dashes are an alternate form
+            //  for naming variants, but in the database we use only underscores
+            List <String> dividedByDashes = uppercaseVariantName?.split("-")
+            if ((dividedByDashes) &&
+                    (dividedByDashes.size()>2)){
+                int isThisANumber = 0
+                try {
+                    isThisANumber = Integer.parseInt(dividedByDashes[0])
+                }catch(e){
+                    // his is only a test. An exception here is not a problem
+                }
+                if (isThisANumber > 0){// okay -- let's do the substitution
+                    uppercaseVariantName = uppercaseVariantName.replaceAll('-','_')
+                }
+            }
             returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${
                 uppercaseVariantName
             }", "operand_type": "STRING"}"""
