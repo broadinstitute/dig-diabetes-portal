@@ -99,23 +99,6 @@ class TraitControllerUnitSpec extends Specification {
 
 
 
-
-    void "test genomeBrowser"() {
-        setup:
-        params.id = 'TP53'
-
-        when:
-        controller.genomeBrowser()
-
-        then:
-        response.status == 200
-        view == '/trait/genomeBrowser'
-        model.geneName == 'TP53'
-
-    }
-
-
-
 //    void "test ajaxTraitsPerVariant"() {
 //        given:
 //        request.makeAjaxRequest()

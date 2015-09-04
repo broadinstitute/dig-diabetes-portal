@@ -73,7 +73,6 @@ class TraitController {
                 // TODO: error condition.  Go with GWAS significance
                 significanceValue = 0.00000005
             }
-         LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
          String dataSetName
          LinkedHashMap properties = [:]
          List<PhenotypeBean> phenotypeList = metaDataService.getAllPhenotypesWithName(phenotypicTrait)
@@ -99,15 +98,6 @@ class TraitController {
 
 
 
-
-    def genomeBrowser ()  {
-        String geneName = params.id
-        render (view: 'genomeBrowser',
-                model:[geneName:geneName] )
-    }
-
-
-
     /***
      * Returns association statistics across 25 traits for a single variant.  The launching page is traitInfo
      * @return
@@ -123,7 +113,7 @@ class TraitController {
     }
 
     /***
-     * get here from 'SEE P  values and other statistics across 25 traits' on the gene info page. Associated Ajax call is traitVariantCrossAjax
+     * Get here from the "Click here to see a GWAS summary of this region" link. Associated Ajax call is traitVariantCrossAjax
      * @return
      */
     def regionInfo() {
@@ -139,7 +129,8 @@ class TraitController {
     }
 
     /***
-     *
+     * called by regionInfo, this provides information across 25 phenotypes. Use it to populate our big region graphic (the one that
+     * may one day be supplanted by LocusZoom?)
      * @return
      */
     def traitVariantCrossAjax() {
