@@ -550,35 +550,6 @@ class SharedToolsService {
 
 
 
-    /***
-     * Start with a list of lists and manufactures some legal JSON.  Extract a single linear list of every experiment name
-     * @param phenotype
-     * @param annotatedList
-     * @return
-     */
-    public List <PhenoKey> extractASingleList (String phenotype, LinkedHashMap<PhenoKey, List <String>> annotatedList){
-        LinkedHashMap<PhenoKey, List <String>> sortedAnnotatedList = annotatedList.sort{ it.key.sort_order }
-        List <PhenoKey> listOfProperties = []
-        if (annotatedList){
-            PhenoKey phenoKey = new PhenoKey(phenotype,0,0)
-            if (annotatedList.containsKey(phenoKey)){
-                List <PhenoKey> listForThisPhenotype =  annotatedList [(phenoKey)]
-                if (listForThisPhenotype) {
-                    List <PhenoKey> sortedListForThisPhenotype = listForThisPhenotype.sort{ it.sort_order }
-                    for ( int  i = 0 ; i < sortedListForThisPhenotype.size() ; i++ ){
-                        listOfProperties << sortedListForThisPhenotype[i]
-                    }
-                }
-            }
-
-        }
-        return listOfProperties
-    }
-
-
-
-
-
 
 
     public String packageUpAListAsJson (List <String> listOfStrings ){
@@ -1280,6 +1251,23 @@ class SharedToolsService {
     }
 
 
+
+
+    public Long convertRegionString(String incomingExtent){
+        Long returnValue = -1
+        try {
+            returnValue = Long.parseLong(incomingExtent)
+        } catch (NumberFormatException nfe) {
+            log.info("convertRegionString failed to convert= ${incomingExtent}")
+            returnValue = -1
+        }
+        return returnValue
+    }
+
+
+
+
+
     public String getGeneExpandedRegionSpec(String geneName){
         String returnValue = ""
         if (geneName)   {
@@ -1747,39 +1735,5 @@ public List <LinkedHashMap> convertFormOfFilters(String rawFilters){
 
 
 
-
-}
-
-
-
-class PhenoKey {
-    String name
-    int sort_order
-    int depth
-
-    boolean equals(o) {
-        if (this.is(o)) return true
-        if (!(o instanceof PhenoKey)) return false
-
-        PhenoKey phenoKey = (PhenoKey) o
-
-        if (name != phenoKey.name) return false
-
-        return true
-    }
-
-    int hashCode() {
-        return name.hashCode()
-    }
-
-    PhenoKey(String name,int sort_order,int depth) {
-        this.name=name
-        this.sort_order=sort_order
-        this.depth=depth
-    }
-
-    String toString(){
-        return name.toString()
-    }
 
 }

@@ -5,10 +5,14 @@ import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class RegionController {
-    private static final log = LogFactory.getLog(this)
+
     RestServerService   restServerService
     SharedToolsService sharedToolsService
 
+    /***
+     * This is where we go to process a region.
+     * @return
+     */
     def regionInfo() {
         String regionSpecification = params.id
         LinkedHashMap extractedNumbers =  restServerService.extractNumbersWeNeed(regionSpecification)
@@ -17,26 +21,14 @@ class RegionController {
                 (extractedNumbers["startExtent"])   &&
                 (extractedNumbers["endExtent"])&&
                 (extractedNumbers["chromosomeNumber"]) ){
-            String startExtentString = extractedNumbers["startExtent"]
-            String endExtentString = extractedNumbers["endExtent"]
-            String chromosomeNumber = extractedNumbers["chromosomeNumber"]
-            Long  startExtent
-            Long  endExtent
             boolean encounteredErrors = false
-            try {
-                startExtent = Long.parseLong(startExtentString)
-            } catch (NumberFormatException nfe) {
+            Long  startExtent  = sharedToolsService.convertRegionString(extractedNumbers["startExtent"])
+            Long  endExtent  = sharedToolsService.convertRegionString(extractedNumbers["endExtent"])
+            if ((startExtent<0) ||(endExtent<0)) {
                 encounteredErrors = true
-                log.info("RegionController.regionInfo: User supplied nonnumeric start extent= ${startExtentString}")
-            }
-            try {
-                endExtent = Long.parseLong(endExtentString)
-            } catch (NumberFormatException nfe) {
-                encounteredErrors = true
-                log.info("RegionController.regionInfo: User supplied nonnumeric start extent= ${endExtentString}")
             }
             if (!encounteredErrors){
-                String searchParms = "8=${chromosomeNumber}^9=${startExtent}^10=${endExtent}^11=all-effects^17=T2D[GWAS_DIAGRAM_mdv2]P_VALUE<1^".toString()
+                String searchParms = "8=${extractedNumbers["chromosomeNumber"]}^9=${startExtent}^10=${endExtent}^11=all-effects^17=T2D[GWAS_DIAGRAM_mdv2]P_VALUE<1^".toString()
                 redirect(controller:'variantSearch',action:'launchAVariantSearch', params: [savedValue0: searchParms])
                 return
             }
@@ -44,6 +36,7 @@ class RegionController {
         }
 
         redirect(controller: 'home', action: 'portalHome') //   We should never get here, but in case the previous parsing fails
+        return
     }
 
 
