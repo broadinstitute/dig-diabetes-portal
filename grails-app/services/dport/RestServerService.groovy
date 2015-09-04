@@ -298,30 +298,14 @@ ${getDataHeader (0, 100, 1000, false)}
         return (BASE_URL ?: "none")
     }
 
-
     public void goWithTheProdLoadBalancedServer() {
         pickADifferentRestServer(PROD_LOAD_BALANCED_SERVER)
-    }
-
-    public void goWithTheQa01BehindLoadBalancer() {
-        pickADifferentRestServer(QA01_BEHIND_LOAD_BALANCER)
-    }
-
-    public void goWithTheQa02BehindLoadBalancer() {
-        pickADifferentRestServer(QA02_BEHIND_LOAD_BALANCER)
     }
 
     public void goWithTheQaLoadBalancedServer() {
         pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
     }
 
-    public void goWithTheDev01BehindLoadBalancer() {
-        pickADifferentRestServer(DEV01_BEHIND_LOAD_BALANCER)
-    }
-
-    public void goWithTheDev02BehindLoadBalancer() {
-        pickADifferentRestServer(DEV02_BEHIND_LOAD_BALANCER)
-    }
 
     public void goWithTheDevLoadBalancedServer() {
         pickADifferentRestServer(DEV_LOAD_BALANCED_SERVER)
@@ -329,10 +313,6 @@ ${getDataHeader (0, 100, 1000, false)}
 
     public void goWithTheAws01RestServer() {
         pickADifferentRestServer(AWS01_REST_SERVER)
-    }
-
-    public void goWithTheProdServer() {
-        pickADifferentRestServer(PROD_REST_SERVER)
     }
 
     public void goWithTheDevServer() {
