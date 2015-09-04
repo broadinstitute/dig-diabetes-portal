@@ -1113,13 +1113,6 @@ ${getDataHeader (0, 100, 1000, false)}
 
 
 
-
-
-    public JSONObject variantCountByGeneNameAndPValue(String geneName, Integer significance, Integer dataSet){
-        String jsonSpec = requestGeneCountByPValue( geneName,  significance,  dataSet)
-        return postRestCall(jsonSpec,GET_DATA_URL)
-    }
-
     /***
      * we don't want the logic in the JavaScript when we already know what calls we need. Just make one call
      * from the browser and then I will cycle through at this level and get all the data

@@ -23,6 +23,11 @@ class GeneController {
         response.setContentType("application/json")
         render ("${partialMatches}")
     }
+
+    /***
+     * We want to be able to do a type ahead in a gene name only field
+     * @return
+     */
     def geneOnlyTypeAhead() {
         String partialMatches = geneManagementService.partialGeneOnlyMatches(params.query,27)
         response.setContentType("application/json")
@@ -55,7 +60,8 @@ class GeneController {
      }
 
     /***
-     * we've been asked to search, but we don't know what kind of string. Here is how we can figure it out:
+     * we've been asked to search, but we don't know what kind of string. Figure it out, and then
+     * go to the right page.  gene info? Variant info? or punt, and re-display the main home page
      */
     def findTheRightDataPage () {
         String uncharacterizedString = params.id
@@ -114,36 +120,10 @@ class GeneController {
        return
     }
 
-
-
-    def geneInfoCounts() {
-        String geneToStartWith = params.geneName
-        String pValue = params.pValue
-        String dataSet = params.dataSet
-        if ((geneToStartWith) && (pValue) && (dataSet))      {
-            BigDecimal pValNumber
-            Integer dataSetInteger
-            try {
-                pValNumber = new BigDecimal(pValue);
-            }catch (Exception e){
-                log.error("ERROR: invalid P value = '${pValue}")
-            }
-            try {
-                dataSetInteger = new Integer(dataSet);
-            }catch (Exception e){
-                log.error("ERROR: invalid P value = '${dataSet}")
-            }
-            JSONObject jsonObject =  restServerService.variantCountByGeneNameAndPValue ( geneToStartWith.trim().toUpperCase(),
-                                                                                         pValNumber,
-                                                                                         dataSetInteger )
-            render(status:200, contentType:"application/json") {
-                [geneInfo:jsonObject]
-            }
-
-        }
-    }
-
-
+    /***
+     * Get the information for the variants and association tables on the gene info page
+     * @return
+     */
     def genepValueCounts() {
         String geneToStartWith = params.geneName
         JSONObject jsonObject =  restServerService.combinedVariantCountByGeneNameAndPValue ( geneToStartWith.trim().toUpperCase())
@@ -153,9 +133,10 @@ class GeneController {
     }
 
 
-
-
-
+    /***
+     * get the information needed for the Variants across Continental Ancestry table on the gene info page
+     * @return
+     */
     def geneEthnicityCounts (){
         String geneToStartWith = params.geneName
         JSONObject jsonObject =  restServerService.combinedEthnicityTable ( geneToStartWith.trim().toUpperCase())
@@ -165,7 +146,12 @@ class GeneController {
     }
 
 
-        /***
+    /***
+     * Returns the information necessary to fill the Biological Hypothesis Testing section of the
+     * gene info page. NOTE: this is the only place in the entire application where we need to call
+     * gene-info, which is otherwise a vestigial call from the old API.  We should probably find a way
+     * to merge this call into the new API, or else embrace gene-info altogether, and be willing to use it
+     * in other places as well.
      *
      * @return
      */
@@ -180,28 +166,10 @@ class GeneController {
         }
     }
 
-    def burdenTestExample() {
-        String gene="SLC30A8";
-        int mostDelScore = 4;
-        String sampleGroup = "ExSeq_17k_mdv2";
-        log.info("got params: " + params);
-
-        if (params.gene) {
-            gene = params.gene;
-        }
-
-        if (params.mostDelScore) {
-            mostDelScore = Integer.parseInt(params.mostDelScore);
-        }
-
-        // call the service
-        JSONObject burdenJson = this.burdenService.callBurdenTest(sampleGroup, gene, mostDelScore);
-
-        // send json response back
-        render(status: 200, contentType: "application/json") {burdenJson}
-    }
-
-
+    /***
+     * This call supports the burden test on the gene info page
+     * @return
+     */
     def burdenTestAjax() {
         // log parameters received
         // Here are some example parameters, as they show up in the params variable
@@ -215,20 +183,18 @@ class GeneController {
         int variantFilterOptionId = (params.filterNum ? Integer.valueOf(params.filterNum) : 0);     // default to all variants if none given
         int datasetOptionId = (params.dataSet ? Integer.valueOf(params.dataSet) : 1);               // default ot 1 if none given
 
-        // create dummy string for dummy call, for now
-        // TODO - DIGP-78: implement call when back end service ready
-//        String resultString = "{\"is_error\": false, \"oddsRatio\": \"1.0138318997464533\", \"pValue\": \"0.4437344659074216\"}";
-        // create the json object
-//        def slurper = new JsonSlurper()
- //       def result = slurper.parseText(resultString)
-//        def result = slurper.parseText(this.metaDataService.getSearchablePropertyNameListAsJson(datasetChoice))
-
         JSONObject result = this.burdenService.callBurdenTest(datasetOptionId, geneName, variantFilterOptionId);
 
         // send json response back
         render(status: 200, contentType: "application/json") {result}
     }
 
+
+
+    /***
+     * Get the contents for the filter drop-down box on the burden test section of the gene info page
+     * @return
+     */
     def burdenTestVariantSelectionOptionsAjax() {
         JSONObject jsonObject = this.burdenService.getBurdenVariantSelectionOptions()
 
