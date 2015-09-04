@@ -81,7 +81,7 @@
                                     AWS01 rest server (${restServer.getAws01RestServer()})
                                 </label>
                             </div>
-                            <hr>
+
                             <div class="radio">
                                 <label>
                                     <input id="testserver" type="radio" name="datatype" value="devloadbalancedserver"
@@ -89,14 +89,6 @@
                                     dev load balanced server(s) (${restServer.getDevLoadBalanced()})
                                 </label>
                             </div>
-                            <div class="radio">
-                                <label>
-                                    <input id="newdevserver" type="radio" name="datatype" value="newdevserver"
-                                        <%=restServer.getCurrentServer()==restServer.getNewdevserver()?" checked ":"" %> />
-                                    new dev server (${restServer.getNewdevserver()})
-                                </label>
-                            </div>
-                            <hr>
 
                             <div class="radio">
                                 <label>
@@ -105,7 +97,7 @@
                                     qa load balanced server(s) (${restServer.getQaLoadBalanced()})
                                 </label>
                             </div>
-                            <hr>
+
                             <div class="radio">
                                 <label>
                                     <input id="prodserver" type="radio" name="datatype" value="prodloadbalancedserver"
@@ -113,14 +105,6 @@
                                     prod load balanced server(s) (${restServer.getProdLoadBalanced()})
                                 </label>
                             </div>
-                            <div class="radio">
-                                <label>
-                                    <input id="prodserver" type="radio" name="datatype" value="prodserver"
-                                        <%=restServer.getCurrentServer()==restServer.getProdserver()?" checked ":"" %>  />
-                                    prod server (${restServer.getProdserver()})
-                                </label>
-                            </div>
-
 
                          </div>
                     </div>

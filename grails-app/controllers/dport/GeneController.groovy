@@ -19,8 +19,6 @@ class GeneController {
      * @return
      */
     def index() {
-        // KDUXTD-83: try to speed up gene search type ahead
-//        String partialMatches = geneManagementService.partialGeneMatches(params.query,27)
         String partialMatches = geneManagementService.partialGeneMatchesUsingStringLists(params.query,27)
         response.setContentType("application/json")
         render ("${partialMatches}")

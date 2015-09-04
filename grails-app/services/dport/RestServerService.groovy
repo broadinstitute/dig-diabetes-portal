@@ -23,16 +23,9 @@ class RestServerService {
 
     private String PROD_LOAD_BALANCED_SERVER = ""
     private String QA_LOAD_BALANCED_SERVER = ""
-    private String QA01_BEHIND_LOAD_BALANCER = ""
-    private String QA02_BEHIND_LOAD_BALANCER = ""
     private String DEV_LOAD_BALANCED_SERVER = ""
-    private String DEV01_BEHIND_LOAD_BALANCER = ""
-    private String DEV02_BEHIND_LOAD_BALANCER = ""
     private String AWS01_REST_SERVER = ""
-    private String BIGQUERY_REST_SERVER = ""
     private String DEV_REST_SERVER = ""
-    private String PROD_REST_SERVER = ""
-    private String NEW_DEV_REST_SERVER = ""
     private String BASE_URL = ""
     private String GENE_INFO_URL = "gene-info"
     private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out, but used for (inefficiently) obtaining gene list.
@@ -99,8 +92,6 @@ class RestServerService {
      * plug together the different collections of column specifications we typically use
      */
     public void initialize() {
-        // old servers, to be removed
-        BIGQUERY_REST_SERVER = grailsApplication.config.server.URL
         //current
 
         // load balancer with rest server(s) behind it
@@ -109,26 +100,8 @@ class RestServerService {
         // qa load balancer with rest server(s) behind it
         QA_LOAD_BALANCED_SERVER = grailsApplication.config.t2dQaLoadBalancedServer.base + grailsApplication.config.t2dQaLoadBalancedServer.name + grailsApplication.config.t2dQaLoadBalancedServer.path
 
-        // test rest server 01 bypassing load balancer
-        QA01_BEHIND_LOAD_BALANCER = grailsApplication.config.t2dQa01BehindLoadBalancer.base + grailsApplication.config.t2dQa01BehindLoadBalancer.name + grailsApplication.config.t2dQa01BehindLoadBalancer.path
-
-        // test rest server 01 bypassing load balancer
-        QA02_BEHIND_LOAD_BALANCER = grailsApplication.config.t2dQa02BehindLoadBalancer.base + grailsApplication.config.t2dQa02BehindLoadBalancer.name + grailsApplication.config.t2dQa02BehindLoadBalancer.path
-
         // test load balancer with rest server(s) behind it
         DEV_LOAD_BALANCED_SERVER = grailsApplication.config.t2dDevLoadBalancedServer.base + grailsApplication.config.t2dDevLoadBalancedServer.name + grailsApplication.config.t2dDevLoadBalancedServer.path
-
-        // test rest server 01 bypassing load balancer
-        DEV01_BEHIND_LOAD_BALANCER = grailsApplication.config.t2dDev01BehindLoadBalancer.base + grailsApplication.config.t2dDev01BehindLoadBalancer.name + grailsApplication.config.t2dDev01BehindLoadBalancer.path
-
-        // test rest server 01 bypassing load balancer
-        DEV02_BEHIND_LOAD_BALANCER = grailsApplication.config.t2dDev02BehindLoadBalancer.base + grailsApplication.config.t2dDev02BehindLoadBalancer.name + grailsApplication.config.t2dDev02BehindLoadBalancer.path
-
-        // prod rest server, not load balanced
-        PROD_REST_SERVER = grailsApplication.config.t2dProdRestServer.base + grailsApplication.config.t2dProdRestServer.name + grailsApplication.config.t2dProdRestServer.path
-
-        // 'dev'
-        NEW_DEV_REST_SERVER = grailsApplication.config.t2dNewDevRestServer.base + grailsApplication.config.t2dNewDevRestServer.name + grailsApplication.config.t2dNewDevRestServer.path
 
         // dev rest server, not load balanced
         DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base + grailsApplication.config.t2dDevRestServer.name + grailsApplication.config.t2dDevRestServer.path
@@ -159,16 +132,8 @@ class RestServerService {
         return AWS01_REST_SERVER;
     }
 
-    public String getProdserver() {
-        return PROD_REST_SERVER;
-    }
-
     public String getProdLoadBalanced() {
         return PROD_LOAD_BALANCED_SERVER;
-    }
-
-    public String getNewdevserver() {
-        return NEW_DEV_REST_SERVER;
     }
 
     public String getQaLoadBalanced() {
