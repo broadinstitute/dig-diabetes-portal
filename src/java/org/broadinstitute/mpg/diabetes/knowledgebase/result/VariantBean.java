@@ -9,6 +9,7 @@ public class VariantBean implements Variant {
     private String variantId;
     private String polyphenPredictor;
     private String siftPredictor;
+    private Integer mostDelScore;
 
 
     public String getChromosome() {
@@ -44,4 +45,12 @@ public class VariantBean implements Variant {
     }
 
     public String toString() {return this.variantId;}
+
+    public Integer getMostDelScore() {
+        return mostDelScore;
+    }
+
+    public void setMostDelScore(Integer mostDelScore) {
+        this.mostDelScore = mostDelScore;
+    }
 }

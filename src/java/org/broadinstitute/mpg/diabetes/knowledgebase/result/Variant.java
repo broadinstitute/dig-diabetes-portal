@@ -6,18 +6,11 @@ package org.broadinstitute.mpg.diabetes.knowledgebase.result;
 public interface Variant {
     public String getChromosome();
 
-    public void setChromosome(String chromosome);
-
     public String getVariantId();
-
-    public void setVariantId(String variantId);
 
     public String getPolyphenPredictor();
 
-    public void setPolyphenPredictor(String polyphenPredictor);
-
     public String getSiftPredictor();
 
-    public void setSiftPredictor(String siftPredictor);
-
+    public Integer getMostDelScore();
 }

@@ -147,6 +147,7 @@ public class BurdenJsonBuilder {
         query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME));
         query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POLYPHEN_PRED));
         query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_SIFT_PRED));
+        query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOST_DEL_SCORE));
 
         // add in the filters
         query.addFilterProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_GENE), PortalConstants.OPERATOR_EQUALS, geneString);
@@ -209,12 +210,13 @@ public class BurdenJsonBuilder {
             if ((tempArray != null) && (tempArray.size() > 0)) {
                 for (int i = 0; i < tempArray.size(); i++) {
                     tempArray2 = (JSONArray)tempArray.get(i);
-                    Variant variant = new VariantBean();
-                    Map<String, String> map = this.getHashMapOfJsonArray(tempArray2);
-                    variant.setVariantId(map.get(PortalConstants.JSON_VARIANT_ID_KEY));
-                    variant.setChromosome(map.get(PortalConstants.JSON_VARIANT_CHROMOSOME_KEY));
-                    variant.setPolyphenPredictor(map.get(PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY));
-                    variant.setSiftPredictor(map.get(PortalConstants.JSON_VARIANT_SIFT_PRED_KEY));
+                    VariantBean variant = new VariantBean();
+                    Map<String, Object> map = this.getHashMapOfJsonArray(tempArray2);
+                    variant.setVariantId((String)map.get(PortalConstants.JSON_VARIANT_ID_KEY));
+                    variant.setChromosome((String)map.get(PortalConstants.JSON_VARIANT_CHROMOSOME_KEY));
+                    variant.setPolyphenPredictor((String)map.get(PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY));
+                    variant.setSiftPredictor((String)map.get(PortalConstants.JSON_VARIANT_SIFT_PRED_KEY));
+                    variant.setMostDelScore((Integer)map.get(PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY));
                     variantList.add(variant);
                 }
             } else {
@@ -228,9 +230,15 @@ public class BurdenJsonBuilder {
         return variantList;
     }
 
-    protected Map<String, String> getHashMapOfJsonArray(JSONArray jsonArray) {
+    /**
+     * read in the json array of key/value pairs
+     *
+     * @param jsonArray
+     * @return
+     */
+    protected Map<String, Object> getHashMapOfJsonArray(JSONArray jsonArray) {
         // local variables
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, Object> map = new HashMap<String, Object>();
 
         // loop through the array and put the values in a hash map
         if (jsonArray != null) {
@@ -238,7 +246,7 @@ public class BurdenJsonBuilder {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String key = (String)jsonObject.keySet().iterator().next();
                 if (!jsonObject.isNull(key)) {
-                    map.put(key, (String)jsonObject.get(key));
+                    map.put(key, jsonObject.get(key));
                 }
             }
         }

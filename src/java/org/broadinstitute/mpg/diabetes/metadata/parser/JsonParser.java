@@ -14,6 +14,7 @@ import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.AllDataSetHashSetVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.ExperimentByVersionVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.GwasTechSampleGroupByPhenotypeVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.JsNameTranslationVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeByNameVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeNameVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyByNameFinderVisitor;
@@ -659,5 +660,29 @@ public class JsonParser {
 
         // return
         return propertyList;
+    }
+
+    /**
+     * retrieve a property based on the JS naming schema
+     *
+     * @param jsNameString
+     * @return
+     * @throws PortalException
+     */
+    public Property getPropertyFromJavaScriptNamingScheme(String jsNameString) throws PortalException {
+        // local variables
+        Property property;
+
+        // create the visitor
+        JsNameTranslationVisitor visitor = new JsNameTranslationVisitor(jsNameString);
+
+        // visit the root bean
+        this.getMetaDataRoot().acceptVisitor(visitor);
+
+        // get the property from the visitor
+        property = visitor.getProperty();
+
+        // return the property
+        return property;
     }
 }

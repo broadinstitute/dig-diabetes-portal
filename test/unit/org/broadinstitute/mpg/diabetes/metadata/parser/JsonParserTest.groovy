@@ -315,7 +315,61 @@ class JsonParserTest extends TestCase {
         assertNotNull(propertyList);
         assertTrue(propertyList.size() > 0);
         assertEquals(2362, propertyList.size());
+    }
 
+    @Test
+    void testGetPropertyFromJavaScriptNamingScheme() {
+        // local variables
+        Property property;
+        String inputJsName, expectedPropertyId;
+
+        try {
+            // set the variables
+            inputJsName = "T2D[ExSeq_17k_mdv2]P_FIRTH_FE_IV";
+            expectedPropertyId = "metadata_root_ExSeq_17k_mdv2_17kT2DP_FIRTH_FE_IV";
+
+            // get the property
+            property = this.jsonParser.getPropertyFromJavaScriptNamingScheme(inputJsName);
+
+            // test
+            assertNotNull(property);
+            assertEquals(expectedPropertyId, property.getId());
+
+        } catch (PortalException exception) {
+            fail("got exception finding property: " + inputJsName + ": " + exception.getMessage());
+        }
+
+        try {
+            // set the variables
+            inputJsName = "HOMAB[GWAS_MAGIC_mdv2]MAF";
+            expectedPropertyId = "metadata_root_GWAS_MAGIC_mdv2_MAGICMAF";
+
+            // get the property
+            property = this.jsonParser.getPropertyFromJavaScriptNamingScheme(inputJsName);
+
+            // test
+            assertNotNull(property);
+            assertEquals(expectedPropertyId, property.getId());
+
+        } catch (PortalException exception) {
+            fail("got exception finding property: " + inputJsName + ": " + exception.getMessage());
+        }
+
+        try {
+            // set the variables
+            inputJsName = "FG[GWAS_MAGIC_mdv2]BETA";
+            expectedPropertyId = "metadata_root_GWAS_MAGIC_mdv2_MAGICFGBETA";
+
+            // get the property
+            property = this.jsonParser.getPropertyFromJavaScriptNamingScheme(inputJsName);
+
+            // test
+            assertNotNull(property);
+            assertEquals(expectedPropertyId, property.getId());
+
+        } catch (PortalException exception) {
+            fail("got exception finding property: " + inputJsName + ": " + exception.getMessage());
+        }
 
     }
 }

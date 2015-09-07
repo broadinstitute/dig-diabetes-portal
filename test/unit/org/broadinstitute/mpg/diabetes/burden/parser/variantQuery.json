@@ -6,7 +6,7 @@
     "limit": 1000,
     "count": false,
     "properties":    {
-        "cproperty": ["CHROM","PolyPhen_PRED","SIFT_PRED","VAR_ID"],
+        "cproperty": ["CHROM","MOST_DEL_SCORE", "PolyPhen_PRED","SIFT_PRED","VAR_ID"],
         "dproperty":    {},
         "pproperty":    {}
     },
