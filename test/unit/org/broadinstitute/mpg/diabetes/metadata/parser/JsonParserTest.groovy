@@ -357,6 +357,22 @@ class JsonParserTest extends TestCase {
 
         try {
             // set the variables
+            inputJsName = "HOMAB[GWAS_MAGIC_mdv1]MAF";
+            expectedPropertyId = "metadata_root_GWAS_MAGIC_mdv1_MAGICMAF";
+
+            // get the property
+            property = this.jsonParser.getPropertyFromJavaScriptNamingScheme(inputJsName);
+
+            // test
+            assertNotNull(property);
+            assertEquals(expectedPropertyId, property.getId());
+
+        } catch (PortalException exception) {
+            fail("got exception finding property: " + inputJsName + ": " + exception.getMessage());
+        }
+
+        try {
+            // set the variables
             inputJsName = "FG[GWAS_MAGIC_mdv2]BETA";
             expectedPropertyId = "metadata_root_GWAS_MAGIC_mdv2_MAGICFGBETA";
 
