@@ -25,10 +25,25 @@
         white-space: nowrap;
     }
 
+    div.labelAndInput {
+        white-space: nowrap;
+    }
+
+    div.labelAndInput > input {
+        width: 150px;
+    }
+
     .burden-test-result .orValue {
         white-space: nowrap;
     }
 
+    .mafOptionChooser div.radio {
+        padding: 0 20px 0 0;
+    }
+
+    .vcenter {
+        margin-top: 2em;
+    }
 </style>
 
 
@@ -89,13 +104,36 @@
              var selectedFilterValue = $('.proteinEffectFilter option:selected').val(),
              selectedFilterValueId = parseInt(selectedFilterValue),
              selectedDataSetValue = $('input[name=dataset]:checked').val(),
-             selectedDataSetValueId = parseInt(selectedDataSetValue);
+             selectedDataSetValueId = parseInt(selectedDataSetValue),
+             selectedMafOption = $('input[name=mafOption]').val(),
+             selectedMafOptionId =  parseInt(selectedMafOption),
+             specifiedMafValue = $('#mafInput').val(),
+             specifiedMafValueId = parseInt(specifiedMafValue);
              $('#rSpinner').show();
              if (isNaN(selectedFilterValueId)){
                 selectedFilterValueId = 0;
              }
              if (isNaN(selectedDataSetValueId)){
                 selectedDataSetValueId = 0;
+             }
+             if (isNaN(selectedMafOptionId)){
+                selectedMafOptionId = 0;
+             }
+             if (specifiedMafValue){
+                 if (isNaN(specifiedMafValueId)){
+                    alert('Please specify a numeric value for the minor allele frequency (MAF).  The value "'+specifiedMafValue+'" is invalid');
+                    $('#rSpinner').hide();
+                    return;
+                  } else if (specifiedMafValueId < 0) {
+                    alert('Please specify a nonnegative value for the minor allele frequency (MAF).  The value "'+specifiedMafValue+'" is invalid');
+                    $('#rSpinner').hide();
+                    return;
+                  }
+                  else if (specifiedMafValueId > 1) {
+                    alert('Please specify a value less than or equal to one for the minor allele frequency (MAF).  The value "'+specifiedMafValue+'" is invalid');
+                    $('#rSpinner').hide();
+                    return;
+                  }
              }
              $('input[name=dataset]:checked').val();
             $.ajax({
@@ -104,7 +142,10 @@
                 url: "${createLink(controller:'gene',action: 'burdenTestAjax')}",
                 data: {geneName: '<%=geneName%>',
                        filterNum: selectedFilterValueId,
-                       dataSet: selectedDataSetValueId },
+                       dataSet: selectedDataSetValueId,
+                       mafValue: specifiedMafValueId,
+                       mafOption: selectedMafOptionId
+                     },
                     async: true,
                     success: function (data) {
 
@@ -162,29 +203,84 @@ $( document ).ready( function (){
 <div class="container">
     <h3>Preparing to run a burden test based on the variants in gene <%=geneName%>.</h3>
 
+
+    %{--<div class="row burden-test-wrapper-options">--}%
+        %{--<div class="col-md-3 col-sm-3 col-xs-3">--}%
+            %{--<label>Select data set:&nbsp;&nbsp;</label>--}%
+            %{--<div class="form-inline">--}%
+                %{--<div class="radio">--}%
+                    %{--<label><input type="radio" name="dataset" value="1" checked>&nbsp;13k&nbsp;&nbsp;</label>--}%
+                %{--</div>--}%
+                %{--<div class="radio">--}%
+                    %{--<label><input type="radio" name="dataset"  value="2" />&nbsp;26k</label>--}%
+                %{--</div>--}%
+            %{--</div>--}%
+        %{--</div>--}%
+        %{--<div class="col-md-5 col-sm-5 col-xs-5">--}%
+            %{--<label>Available variant filter:--}%
+                %{--<select class="proteinEffectFilter form-control">--}%
+                    %{--<option selected hidden>Select a filter</option>--}%
+                %{--</select>--}%
+            %{--</label>--}%
+        %{--</div>--}%
+        %{--<div class="col-md-4 col-sm-4 col-xs-43 burden-test-btn-wrapper">--}%
+            %{--<button id="singlebutton" name="singlebutton" class="btn btn-primary btn-lg burden-test-btn" onclick="mpgSoftware.burdenTest.runBurdenTest()">Run burden test</button>--}%
+        %{--</div>--}%
+    %{--</div>--}%
+
+
+
     <div class="row burden-test-wrapper-options">
-        <div class="col-md-3 col-sm-3 col-xs-3">
-            <label>Select data set:&nbsp;&nbsp;</label>
-            <div class="form-inline">
-                <div class="radio">
-                    <label><input type="radio" name="dataset" value="1" checked>&nbsp;13k&nbsp;&nbsp;</label>
+        <div class="col-md-8 col-sm-8 col-xs-12">
+            <div  class="row">
+                <div class="col-md-4 col-sm-4 col-xs-4">
+                    <label>Select data set:&nbsp;&nbsp;</label>
+                    <div class="form-inline">
+                        <div class="radio">
+                            <label><input type="radio" name="dataset" value="1" checked>&nbsp;13k&nbsp;&nbsp;</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="dataset"  value="2" />&nbsp;26k</label>
+                        </div>
+                    </div>
                 </div>
-                <div class="radio">
-                    <label><input type="radio" name="dataset"  value="2" />&nbsp;26k</label>
+                <div class="col-md-8 col-sm-8 col-xs-8">
+                    <label>Available variant filter:
+                        <select class="proteinEffectFilter form-control">
+                            <option selected hidden>Select a filter</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <div  class="row">
+                <div class="separator"></div>
+            </div>
+            <div  class="row">
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                    <label for="mafInput">Minor Allele Frequency:</label>
+                    <div class="labelAndInput">
+                        MAF &lt;&nbsp;
+                        <input style="display: inline-block" type="text" class="form-control" id="mafInput" placeholder="value">
+                    </div>
+
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                    <label>Apply MAF across:&nbsp;&nbsp;</label>
+                    <div class="form-inline mafOptionChooser">
+                        <div class="radio">
+                            <label><input type="radio" name="mafOption" value="1" checked>&nbsp;All samples</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="mafOption"  value="2" />&nbsp;Each ancestry</label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-5 col-sm-5 col-xs-5">
-            <label>Available variant filter:
-                <select class="proteinEffectFilter form-control">
-                    <option selected hidden>Select a filter</option>
-                </select>
-            </label>
+        <div  class="col-md-4 col-sm-4 col-xs-12 burden-test-btn-wrapper vcenter">
+            <button id="singlebutton" name="singlebutton" style="height: 80px"
+                    class="btn btn-primary btn-lg burden-test-btn" onclick="mpgSoftware.burdenTest.runBurdenTest()">Run burden test</button>
         </div>
-        <div class="col-md-4 col-sm-4 col-xs-43 burden-test-btn-wrapper">
-            <button id="singlebutton" name="singlebutton" class="btn btn-primary btn-lg burden-test-btn" onclick="mpgSoftware.burdenTest.runBurdenTest()">Run burden test</button>
-        </div>
-
     </div>
 
     <div class="row burden-test-result">
