@@ -108,7 +108,13 @@
              selectedMafOption = $('input[name=mafOption]').val(),
              selectedMafOptionId =  parseInt(selectedMafOption),
              specifiedMafValue = $('#mafInput').val(),
-             specifiedMafValueId = parseInt(specifiedMafValue);
+             specifiedMafValueId;
+             // JavaScript can't understand a number of it starts with a decimal.  Prepend a zero just to be safe, since that will never hurt
+             if ((specifiedMafValue)&&
+                 (specifiedMafValue.length> 0)){
+                 specifiedMafValue = '0'+specifiedMafValue;
+             }
+             specifiedMafValueId = parseFloat(specifiedMafValue);
              $('#rSpinner').show();
              if (isNaN(selectedFilterValueId)){
                 selectedFilterValueId = 0;
@@ -237,10 +243,10 @@ $( document ).ready( function (){
                     <label>Select data set:&nbsp;&nbsp;</label>
                     <div class="form-inline">
                         <div class="radio">
-                            <label><input type="radio" name="dataset" value="1" checked>&nbsp;13k&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="dataset" value="1">&nbsp;13k&nbsp;&nbsp;</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="dataset"  value="2" />&nbsp;26k</label>
+                            <label><input type="radio" name="dataset"  value="2" checked>&nbsp;26k</label>
                         </div>
                     </div>
                 </div>
