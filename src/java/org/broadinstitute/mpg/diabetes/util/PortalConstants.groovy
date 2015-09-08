@@ -107,7 +107,7 @@ class PortalConstants {
     // burden test constants
     public static final String POLYPHEN_PRED_POSSIBLY_DAMAGING              = "possibly_damaging";
     public static final String POLYPHEN_PRED_PROBABLY_DAMAGING              = "probably_damaging";
-    public static final String SIFT_PRED_PROBABLY_DAMAGING                  = "deleterious";
+    public static final String SIFT_PRED_DELETERIOUS                        = "deleterious";
 
 
 }
