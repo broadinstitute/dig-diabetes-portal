@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -200,7 +201,134 @@ public class JsNamingQueryTranslatorTest extends TestCase {
     }
 
     @Test
-    public void testGetQueryFilters() {
+    public void testMostDelScoreEqualsFilter() {
+        // local variables
+        String inputString = "11=MOST_DEL_SCORE|1";
+        QueryFilter queryFilter = null;
+        Property property = null;
 
+        try {
+            // get the comparing property
+            property = (Property)this.jsonParser.getMapOfAllDataSetNodes().get("metadata_rootMOST_DEL_SCORE");
+
+            // get the filter
+            queryFilter = this.jsNamingQueryTranslator.convertJsNamingQuery(inputString);
+
+        } catch (PortalException exception) {
+            fail("got filter creation exception: " + exception.getMessage());
+        }
+
+        // test
+        assertNotNull(queryFilter);
+        assertNotNull(queryFilter.getOperator());
+        assertNotNull(queryFilter.getValue());
+        assertNotNull(queryFilter.getProperty());
+        assertEquals(PortalConstants.OPERATOR_EQUALS, queryFilter.getOperator());
+        assertEquals(property.getId(), queryFilter.getProperty().getId());
+        assertEquals("1", queryFilter.getValue());
+    }
+
+    @Test
+    public void testPolyphenEqualsFilter() {
+        // local variables
+        String inputString = "11=PolyPhen_PRED|1";
+        QueryFilter queryFilter = null;
+        Property property = null;
+
+        try {
+            // get the comparing property
+            property = (Property)this.jsonParser.getMapOfAllDataSetNodes().get("metadata_rootPolyPhen_PRED");
+
+            // get the filter
+            queryFilter = this.jsNamingQueryTranslator.convertJsNamingQuery(inputString);
+
+        } catch (PortalException exception) {
+            fail("got filter creation exception: " + exception.getMessage());
+        }
+
+        // test
+        assertNotNull(queryFilter);
+        assertNotNull(queryFilter.getOperator());
+        assertNotNull(queryFilter.getValue());
+        assertNotNull(queryFilter.getProperty());
+        assertEquals(PortalConstants.OPERATOR_EQUALS, queryFilter.getOperator());
+        assertEquals(property.getId(), queryFilter.getProperty().getId());
+        assertEquals("1", queryFilter.getValue());
+    }
+
+    @Test
+    public void testSiftPredictorEqualsFilter() {
+        // local variables
+        String inputString = "11=SIFT_PRED|1";
+        QueryFilter queryFilter = null;
+        Property property = null;
+
+        try {
+            // get the comparing property
+            property = (Property)this.jsonParser.getMapOfAllDataSetNodes().get("metadata_rootSIFT_PRED");
+
+            // get the filter
+            queryFilter = this.jsNamingQueryTranslator.convertJsNamingQuery(inputString);
+
+        } catch (PortalException exception) {
+            fail("got filter creation exception: " + exception.getMessage());
+        }
+
+        // test
+        assertNotNull(queryFilter);
+        assertNotNull(queryFilter.getOperator());
+        assertNotNull(queryFilter.getValue());
+        assertNotNull(queryFilter.getProperty());
+        assertEquals(PortalConstants.OPERATOR_EQUALS, queryFilter.getOperator());
+        assertEquals(property.getId(), queryFilter.getProperty().getId());
+        assertEquals("1", queryFilter.getValue());
+    }
+
+    @Test
+    public void testCondelPredictorEqualsFilter() {
+        // local variables
+        String inputString = "11=Condel_PRED|1";
+        QueryFilter queryFilter = null;
+        Property property = null;
+
+        try {
+            // get the comparing property
+            property = (Property)this.jsonParser.getMapOfAllDataSetNodes().get("metadata_rootCondel_PRED");
+
+            // get the filter
+            queryFilter = this.jsNamingQueryTranslator.convertJsNamingQuery(inputString);
+
+        } catch (PortalException exception) {
+            fail("got filter creation exception: " + exception.getMessage());
+        }
+
+        // test
+        assertNotNull(queryFilter);
+        assertNotNull(queryFilter.getOperator());
+        assertNotNull(queryFilter.getValue());
+        assertNotNull(queryFilter.getProperty());
+        assertEquals(PortalConstants.OPERATOR_EQUALS, queryFilter.getOperator());
+        assertEquals(property.getId(), queryFilter.getProperty().getId());
+        assertEquals("1", queryFilter.getValue());
+    }
+
+    @Test
+    public void testGetMultipleQueryFilters() {
+        // local variables
+        String inputString = "17=T2D[ExSeq_17k_mdv2]P_FIRTH_FE_IV<.1^17=T2D[ExSeq_17k_mdv2]MAF<.5^8=8^9=117862462^10=118289003^11=MOST_DEL_SCORE|1^11=Condel_PRED|1^";
+        List<QueryFilter> queryFilterList = null;
+        Property property = null;
+
+        try {
+            // get the filter
+            queryFilterList = this.jsNamingQueryTranslator.getQueryFilters(inputString);
+
+        } catch (PortalException exception) {
+            fail("got filter list creation exception: " + exception.getMessage());
+        }
+
+        // test
+        assertNotNull(queryFilterList);
+        assertEquals(7, queryFilterList.size());
     }
 }

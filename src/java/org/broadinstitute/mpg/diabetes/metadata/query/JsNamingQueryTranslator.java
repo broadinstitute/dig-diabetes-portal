@@ -45,7 +45,7 @@ public class JsNamingQueryTranslator {
 
         if (jsNamingFilterString != null) {
             // split the string on the query delimiter character
-            tempArray = jsNamingFilterString.split(this.QUERY_DELIMITER_STRING);
+            tempArray = jsNamingFilterString.split(Pattern.quote(this.QUERY_DELIMITER_STRING));
 
             if (tempArray.length > 0) {
                 for (int i = 0; i < tempArray.length; i++) {
@@ -66,7 +66,13 @@ public class JsNamingQueryTranslator {
         return filterList;
     }
 
-
+    /**
+     * create a query filter given a js naming property filter; throws exception if formatting is not as expected
+     *
+     * @param inputFilterString
+     * @return
+     * @throws PortalException
+     */
     protected QueryFilter convertJsNamingQuery(String inputFilterString) throws PortalException {
         // local variables
         QueryFilter queryFilter;
@@ -97,11 +103,7 @@ public class JsNamingQueryTranslator {
                 } else if (lineNumberString.equals(this.QUERY_END_POSITION_LINE_NUMBER)) {
                     queryFilter = new QueryFilterBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION), PortalConstants.OPERATOR_LESS_THAN_EQUALS, tempString);
 
-                } else if (lineNumberString.equals(this.QUERY_PROTEIN_EFFECT_LINE_NUMBER)) {
-                    // not supported for now
-                    throw new PortalException("Got (UNSUPPORTED FOR NOW) protein effect line number string: " + lineNumberString);
-
-                } else if (lineNumberString.equals(this.QUERY_PROPERTY_FILTER_LINE_NUMBER)) {
+                } else if (lineNumberString.equals(this.QUERY_PROPERTY_FILTER_LINE_NUMBER) || lineNumberString.equals(this.QUERY_PROTEIN_EFFECT_LINE_NUMBER)) {
                     // find out what the operator is
                     if (tempString.contains(this.QUERY_OPERATOR_EQUALS_STRING)) {
                         operator = PortalConstants.OPERATOR_EQUALS;
@@ -131,8 +133,16 @@ public class JsNamingQueryTranslator {
                         throw new PortalException("Got null operand in query string: " + tempString);
                     }
 
+                    // get the property
+                    Property propertyForFilter = null;
+                    if (lineNumberString.equals(this.QUERY_PROTEIN_EFFECT_LINE_NUMBER)) {
+                        propertyForFilter = this.jsonParser.findPropertyByName(propertyString);
+                    } else {
+                        propertyForFilter = this.jsonParser.getPropertyFromJavaScriptNamingScheme(propertyString);
+                    }
+
                     // create the query
-                    queryFilter = new QueryFilterBean(this.jsonParser.getPropertyFromJavaScriptNamingScheme(propertyString), operator, operand);
+                    queryFilter = new QueryFilterBean(propertyForFilter, operator, operand);
 
                 } else {
                     throw new PortalException("Got incorrect line number string: " + lineNumberString);
