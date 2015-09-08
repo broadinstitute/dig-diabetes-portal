@@ -53,14 +53,14 @@ class BurdenService {
         String operand = PortalConstants.OPERATOR_LESS_THAN_EQUALS;
 
         // set the most del score based on the variant filtering option given
-        // TODO - possibly combine this and polyphen/sift filtering into one mwethod for clarity
+        // TODO - possibly combine this and polyphen/sift filtering into one method for clarity
         if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING) {
             mostDelScore = 1;
             operand = PortalConstants.OPERATOR_EQUALS;
         } else if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING) {
             mostDelScore = 3;
         } else if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL) {
-            mostDelScore = 4;
+            mostDelScore = 5;
         }
 
         // get the json string to send to the getData call
@@ -148,21 +148,40 @@ class BurdenService {
         List<String> variantStringList = new ArrayList<String>();
         boolean qualifyingVariant = false;
 
+        // for logic, see DIGP-102
         // loop through all variants in the list
         for (Variant variant: variantList) {
             // depending on the variant selection option passed in, add appropriate variants to the list
             if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE_POSS_DELETERIOUS) {
-                if (variant.getPolyphenPredictor()?.equals(PortalConstants.POLYPHEN_PRED_POSSIBLY_DAMAGING)) {
+                // include for following conditions
+                // MDS == 2 and polyphen predictor = 'possibly_damaging'
+                // MDS == 2 and SIFT predictor = 'deleterious'
+                // MDS == 1
+                if (variant.getMostDelScore() == 2) {
+                    if (variant.getPolyphenPredictor()?.equalsIgnoreCase(PortalConstants.POLYPHEN_PRED_POSSIBLY_DAMAGING)) {
+                        qualifyingVariant = true;
+                    } else if (variant.getSiftPredictor()?.equalsIgnoreCase(PortalConstants.SIFT_PRED_DELETERIOUS)) {
+                        qualifyingVariant = true;
+                    }
+                } else if (variant.getMostDelScore() == 1) {
                     qualifyingVariant = true;
                 }
 
             } else if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE_PROB_DELETERIOUS) {
-                if (variant.getPolyphenPredictor()?.equals(PortalConstants.POLYPHEN_PRED_PROBABLY_DAMAGING) &&
-                    variant.getSiftPredictor()?.equals(PortalConstants.SIFT_PRED_PROBABLY_DAMAGING)) {
+                // include for following conditions
+                // MDS == 2 and polyphen predictor = 'probably_damaging' and SIFT predictor = 'deleterious'
+                // MDS == 1
+                if (variant.getMostDelScore() == 2) {
+                    if (variant.getPolyphenPredictor()?.equalsIgnoreCase(PortalConstants.POLYPHEN_PRED_PROBABLY_DAMAGING) &&
+                        variant.getSiftPredictor()?.equalsIgnoreCase(PortalConstants.SIFT_PRED_DELETERIOUS)) {
+                        qualifyingVariant = true;
+                    }
+                } else if (variant.getMostDelScore() == 1) {
                     qualifyingVariant = true;
                 }
 
             } else {
+                // for any other call, all the variants are included, so simply set to true
                 qualifyingVariant = true;
             }
 
