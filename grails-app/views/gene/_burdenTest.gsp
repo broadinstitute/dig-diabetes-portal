@@ -259,7 +259,7 @@ $( document ).ready( function (){
                 </div>
             </div>
             <div  class="row">
-                <div class="separator"></div>
+                  <div style="margin:15px 8px 15px 10px" class="separator"></div>
             </div>
             <div  class="row">
                 <div class="col-md-6 col-sm-6 col-xs-6">

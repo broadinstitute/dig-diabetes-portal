@@ -16,7 +16,6 @@ class FilterManagementService {
     private String gwasData  = "GWAS_DIAGRAM_mdv2"
     private String exomeChip  = "ExChip_82k_mdv2"
     private String sigmaData  = "unknown"
-    // KDUXTD-33: switching from EMMAX to FIRTH p-values
     private String exomeSequencePValue  = "P_FIRTH_FE_IV"
     private String gwasDataPValue  = "P_VALUE"
     private String exomeChipPValue  = "P_VALUE"

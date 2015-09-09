@@ -47,17 +47,14 @@ public class JsNamingQueryTranslator {
             // split the string on the query delimiter character
             tempArray = jsNamingFilterString.split(Pattern.quote(this.QUERY_DELIMITER_STRING));
 
-            if (tempArray.length > 0) {
-                for (int i = 0; i < tempArray.length; i++) {
-                    // for each filter string, convert to a query filter
-                    queryFilter = this.convertJsNamingQuery(tempArray[i]);
+            for (int i = 0; i < tempArray.length; i++) {
+                // for each filter string, convert to a query filter
+                queryFilter = this.convertJsNamingQuery(tempArray[i]);
 
-                    // add to the list
-                    filterList.add(queryFilter);
-                }
-            } else {
-                throw new PortalException("Got incorrect formatted query string: " + jsNamingFilterString);
+                // add to the list
+                filterList.add(queryFilter);
             }
+
         } else {
             throw new PortalException("Got null query string: " + jsNamingFilterString);
         }
