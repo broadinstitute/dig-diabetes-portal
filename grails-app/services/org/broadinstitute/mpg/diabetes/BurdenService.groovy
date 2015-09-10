@@ -6,6 +6,7 @@ import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
+import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.codehaus.groovy.grails.web.json.JSONTokener
 
@@ -123,6 +124,11 @@ class BurdenService {
             burdenVariantList = this.transformAndFilterVariantList(variantList, variantSelectionOptionId);
             log.info("got filtered variant list of size: " + burdenVariantList.size());
 
+            // check to make sure we have at least one variant
+            if (burdenVariantList.size() < 1) {
+                throw new PortalException("Got no variants to match filters");
+            }
+
             // create the json payload for the burden call
             jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(sampleGroupName, burdenVariantList, null);
             log.info("created burden rest payload: " + jsonObject);
@@ -131,13 +137,20 @@ class BurdenService {
             returnJson = this.getBurdenRestCallResults(jsonObject.toString());
             log.info("got burden rest result: " + returnJson);
 
+            // add json array of variant strings to the return json
+            Collections.sort(burdenVariantList);
+            JSONArray variantArray = new JSONArray(burdenVariantList);
+            returnJson.put(PortalConstants.JSON_VARIANTS_KEY, variantArray);
+            log.info("passing enhanced burden rest result: " + returnJson);
+
         } catch (PortalException exception) {
-            log.error("Got error creating burden test for gene: " + geneString + " and sample group: " + sampleGroup + ": " + exception.getMessage());
+            log.error("Got error creating burden test for gene: " + geneString + " and sample group option: " + sampleGroupOptionId + ": " + exception.getMessage());
         }
 
         if (returnJson == null) {
-            JSONTokener tokener = new JSONTokener("{\"pValue\": \"0.0\", \"oddsRatio\": \"0.0\", \"is_error\": false}");
+            JSONTokener tokener = new JSONTokener("{\"pValue\": \"0.0\", \"oddsRatio\": \"0.0\", \"is_error\": false, \"variants\": []}");
             returnJson = new JSONObject(tokener);
+            log.info("returning empty burden rest result: " + returnJson);
         }
 
         // return
