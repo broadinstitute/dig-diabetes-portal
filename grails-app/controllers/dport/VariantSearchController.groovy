@@ -12,7 +12,6 @@ class VariantSearchController {
     RestServerService restServerService
     SharedToolsService sharedToolsService
     MetaDataService metaDataService
-    MetadataUtilityService metadataUtilityService
     private static final log = LogFactory.getLog(this)
 
     def index() {}
@@ -38,6 +37,45 @@ class VariantSearchController {
     }
 
 
+    /***
+     *   Pull back a phenotype hierarchy across all data sets
+     * @return
+     */
+    def retrievePhenotypesAjax(){
+        LinkedHashMap<String, List<String>> propertyTree = metaDataService.getHierarchicalPhenotypeTree()
+        String phenotypesForTransmission = sharedToolsService.packageUpAHierarchicalListAsJson (propertyTree)
+        def slurper = new JsonSlurper()
+        def result = slurper.parseText(phenotypesForTransmission)
+
+
+        render(status: 200, contentType: "application/json") {
+            [datasets: result]
+        }
+
+    }
+
+    /***
+     * Pullback of phenotypes hierarchy, though only for GWAS data
+     * @return
+     */
+    def retrieveGwasSpecificPhenotypesAjax(){
+        LinkedHashMap<String, List<String>> propertyTree = metaDataService.getHierarchicalPhenotypeTree()
+        String phenotypesForTransmission = sharedToolsService.packageUpAHierarchicalListAsJson (propertyTree)
+        def slurper = new JsonSlurper()
+        def result = slurper.parseText(phenotypesForTransmission)
+
+
+        render(status: 200, contentType: "application/json") {
+            [datasets: result]
+        }
+
+    }
+
+    /***
+     * Build the 'build request' button, which is intended to add a new clause
+     * to the developing set of filter criteria
+     * @return
+     */
     def variantSearchWF() {
         String encParams
         if (params.encParams) {
@@ -64,20 +102,11 @@ class VariantSearchController {
     }
 
 
-    def variantVWRequest(){
 
-        List <LinkedHashMap> encodedFilterSets = filterManagementService.handleFilterRequestFromBrowser (params)
-
-            render(view: 'variantWorkflow',
-                model: [show_gwas : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
-                        show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
-                        show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                        encodedFilterSets : encodedFilterSets])
-
-    }
-
-
-
+    /***
+     * Build up the variant table
+     * @return
+     */
     def launchAVariantSearch(){
         log.info("got params: " + params);
 
@@ -94,6 +123,7 @@ class VariantSearchController {
 
 
     }
+
 
 
     def relaunchAVariantSearch() {
@@ -173,10 +203,9 @@ class VariantSearchController {
     }
 
 
-
-
     /***
-     * get data sets given a phenotype
+     * get data sets given a phenotype.  This Ajax call takes place on the search builder page after
+     * choosing a phenotype
      * @return
      */
     def retrieveDatasetsAjax() {
@@ -202,8 +231,13 @@ class VariantSearchController {
         }
     }
 
+
+
+
+
     /***
-     * get properties given a data set
+     * get properties given a data set. This Ajax call takes place on the search builder
+     * after selecting a data set.
      */
     def retrievePropertiesAjax(){
         String datasetChoice = []
@@ -223,63 +257,33 @@ class VariantSearchController {
 
         render(status: 200, contentType: "application/json") {
             [datasets: result,
-            chosenDataset:datasetChoice]
+             chosenDataset:datasetChoice]
         }
 
     }
-
-
-
-
-    def retrievePhenotypesAjax(){
-        LinkedHashMap<String, List<String>> propertyTree = metaDataService.getHierarchicalPhenotypeTree()
-       String phenotypesForTransmission = sharedToolsService.packageUpAHierarchicalListAsJson (propertyTree)
-        def slurper = new JsonSlurper()
-        def result = slurper.parseText(phenotypesForTransmission)
-
-
-        render(status: 200, contentType: "application/json") {
-            [datasets: result]
-        }
-
-    }
-
-
-    def retrieveGwasSpecificPhenotypesAjax(){
-        LinkedHashMap<String, List<String>> propertyTree = metaDataService.getHierarchicalPhenotypeTree()
-        String phenotypesForTransmission = sharedToolsService.packageUpAHierarchicalListAsJson (propertyTree)
-        def slurper = new JsonSlurper()
-        def result = slurper.parseText(phenotypesForTransmission)
-
-
-        render(status: 200, contentType: "application/json") {
-            [datasets: result]
-        }
-
-    }
-
-
-
-
-
 
     /***
-     * a variant display table is on screen and the page is now asking for data. Perform the search.  This call retrieves the data
-     * for the original page format call -> variantSearchRequest
+     * This call happens when you press the 'start a search' button on the search builder page
      * @return
      */
-    def variantSearchAjax() {
-        String filtersRaw = params['keys']
-        String filters = URLDecoder.decode(filtersRaw, "UTF-8")
-        log.debug "variantSearch variantSearchAjax = ${filters}"
-        JSONObject jsonObject = restServerService.generalizedVariantTable(filters)
-        render(status: 200, contentType: "application/json") {
-            [variants: jsonObject['results']]
-        }
+    def variantVWRequest(){
+
+        List <LinkedHashMap> encodedFilterSets = filterManagementService.handleFilterRequestFromBrowser (params)
+
+        render(view: 'variantWorkflow',
+                model: [show_gwas : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
+                        show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
+                        show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
+                        encodedFilterSets : encodedFilterSets])
+
     }
 
+
+
+
+
     /***
-     *
+     *  This is the main variant page. Wait a minute: how does this differ from launch a variant search?
      */
     def variantSearchAndResultColumnsAjax() {
         String filtersRaw = params['keys']
@@ -324,46 +328,6 @@ class VariantSearchController {
 
     }
 
-    /**
-     * method to test the building of getData queries from the metadata data structure
-     *
-     * @return
-     */
-    def variantFreeFormSearch() {
-        // log params
-        log.info("got params: " + params)
-
-        // local variables
-        String getDataPayload = "";
-        String getDataResult = "";
-
-        // get the property lists from the params if they are there
-        if (params.queryProperty && params.filterProperty) {
-            List<String> filterProperty = params.filterProperty;
-            List<String> queryProperty = params.queryProperty;
-
-            // get the payload json
-            getDataPayload = this.metaDataService.getGetDataPayloadString(queryProperty, filterProperty);
-
-            // call the rest server with the json
-            JSONObject jsonObject = this.restServerService.postGetDataCall(getDataPayload);
-            getDataResult = jsonObject.toString();
-        }
-
-        // build the property lists
-        List<Property> cPropertyList = this.metaDataService.getPropertyListByPropertyType(PortalConstants.TYPE_COMMON_PROPERTY_KEY, 20);
-        List<Property> dPropertyList = this.metaDataService.getPropertyListByPropertyType(PortalConstants.TYPE_SAMPLE_GROUP_PROPERTY_KEY, 20);
-        List<Property> pPropertyList = this.metaDataService.getPropertyListByPropertyType(PortalConstants.TYPE_PHENOTYPE_PROPERTY_KEY, 20);
-
-        // for filter, add last 2 lists
-        List<Property> filterPropertyList = new ArrayList<Property>();
-        filterPropertyList.addAll(dPropertyList);
-        filterPropertyList.addAll(pPropertyList);
-
-        render(view: "variantFreeFormSearch", model: ["cPropertyList": cPropertyList, "dPropertyList": dPropertyList,
-                                                      "pPropertyList": pPropertyList, "filterPropertyList": filterPropertyList,
-                                                        "getDataPayload": getDataPayload, "getDataResult": getDataResult])
-    }
 
 
     /***
