@@ -536,17 +536,20 @@ class FilterManagementService {
                      }
                  }
 
+             } else if ((requestPortionList.size() == 1)&&(requestPortionList[0]=='ptv')) {  // specialized search logic for demo.
+                 developingParameterCollection['datatype'] = 'exomeseq';
+                 developingParameterCollection['predictedEffects'] = 'protein-truncating';
              } else {  // we can put specialized searches here
-                 switch (requestPortionList[0]) {
-                     case "lof":
-                         returnValue['datatype']  = 'exomeseq'
-                         returnValue['predictedEffects']  = 'protein-truncating'
-                         break;
-                     default:
-                         log.error("FilterManagementService:interpretSpecialFilters. Unexpected string 3 = ${requestPortionList[0]}")
-                         break;
-                 }
-             }
+                switch (requestPortionList[0]) {/// completely unused, I think
+                    case "lof":
+                        returnValue['datatype']  = 'exomeseq'
+                        returnValue['predictedEffects']  = 'protein-truncating'
+                        break;
+                    default:
+                        log.error("FilterManagementService:interpretSpecialFilters. Unexpected string 3 = ${requestPortionList[0]}")
+                        break;
+                }
+        }
 
          }
          if (developingParameterCollection)  {

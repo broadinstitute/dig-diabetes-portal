@@ -29,20 +29,20 @@ class VariantSearchControllerSpec extends Specification {
 
 
 
-    void "test variantSearch"() {
-        given:
-        controller.sharedToolsService = Mock(SharedToolsService)
-
-        when:
-        params.encParams = '20:1'
-        controller.sharedToolsService.metaClass.urlEncodedListOfPhenotypes = {->return "20:1"}
-        controller.variantSearch()
-
-        then:
-        response.status == 200
-        view == '/variantSearch/variantSearch'
-        model.encParams == "20:1"
-    }
+//    void "test variantSearch"() {
+//        given:
+//        controller.sharedToolsService = Mock(SharedToolsService)
+//
+//        when:
+//        params.encParams = '20:1'
+//        controller.sharedToolsService.metaClass.urlEncodedListOfPhenotypes = {->return "20:1"}
+//        controller.variantSearch()
+//
+//        then:
+//        response.status == 200
+//        view == '/variantSearch/variantSearch'
+//        model.encParams == "20:1"
+//    }
 
 
     /***

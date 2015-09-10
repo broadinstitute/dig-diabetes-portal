@@ -902,7 +902,7 @@ var mpgSoftware = mpgSoftware || {};
             // String describing whether or not we have variants.  If we do then provide a link.
             if (numberOfVariants > 0) {
                 $('#possibleCarrierVariantsLink').append("<a class='variantlink' id='linkToVariantsPredictedToTruncate' " +
-                        "href='" + rootVariantUrl + "/" + (geneInfo["ID"]) + "?filter=lof" + "'>" +
+                        "href='" + rootVariantUrl + "/" + (geneInfo["ID"]) + "?filter=ptv" + "'>" +
                         numberOfVariants + "</a> " + fillBiologicalHypothesisTesting.question1explanation
                 );
             } else {
