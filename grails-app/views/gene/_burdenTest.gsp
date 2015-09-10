@@ -105,7 +105,7 @@
              selectedFilterValueId = parseInt(selectedFilterValue),
              selectedDataSetValue = $('input[name=dataset]:checked').val(),
              selectedDataSetValueId = parseInt(selectedDataSetValue),
-             selectedMafOption = $('input[name=mafOption]').val(),
+             selectedMafOption = $('input[name=mafOption]:checked').val(),
              selectedMafOptionId =  parseInt(selectedMafOption),
              specifiedMafValue = $('#mafInput').val(),
              specifiedMafValueId;
