@@ -12,6 +12,7 @@ import org.broadinstitute.mpg.diabetes.metadata.PropertyBean;
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup;
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.AllDataSetHashSetVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.DataSetDirectChildByTypeVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.ExperimentByVersionVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.GwasTechSampleGroupByPhenotypeVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.JsNameTranslationVisitor;
@@ -684,5 +685,28 @@ public class JsonParser {
 
         // return the property
         return property;
+    }
+
+    /**
+     * get the list of immediate children of a certain type for a given data set node
+     *
+     * @param rootDataSet
+     * @param childrenType
+     * @return
+     * @throws PortalException
+     */
+    public List<DataSet> getImmediateChildrenOfType(DataSet rootDataSet, String childrenType) throws PortalException {
+        // local variables
+        List<DataSet> childSet;
+
+        // create the visitor
+        DataSetDirectChildByTypeVisitor visitor = new DataSetDirectChildByTypeVisitor(childrenType);
+        rootDataSet.acceptVisitor(visitor);
+
+        // get the list of children
+        childSet = visitor.getDataSetList();
+
+        // return
+        return childSet;
     }
 }

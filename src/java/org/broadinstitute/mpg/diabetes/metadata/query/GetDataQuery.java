@@ -13,6 +13,8 @@ public interface GetDataQuery {
 
     public void addFilterProperty(Property property, String operator, String value);
 
+    public void addQueryFilter(QueryFilter queryFilter);
+
     public void addOrderByProperty(Property property);
 
     public void isCount(boolean isCountQuery);

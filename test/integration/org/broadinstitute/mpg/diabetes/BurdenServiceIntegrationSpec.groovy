@@ -5,6 +5,7 @@ import grails.test.spock.IntegrationSpec
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.burden.parser.BurdenJsonBuilder
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
+import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.codehaus.groovy.grails.web.json.JSONTokener
@@ -70,10 +71,11 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
         String sampleGroup = "ExSeq_17k_mdv2";
         String geneString = "SLC30A8";
         int variantSelectionOptionId = 3;
+        List<QueryFilter> queryFilterList = new ArrayList<QueryFilter>();
         String referenceJsonString = "{\"is_error\": false, \"numRecords\": 2, \"variants\": [[{\"VAR_ID\": \"8_118184783_C_T\"}],[{\"VAR_ID\": \"8_118170004_C_T\"}]], \"passback\": \"123abc\"}";
         JsonSlurper slurper = new JsonSlurper()
         JSONObject referenceJson = slurper.parseText(referenceJsonString);
-        String generatedJsonString = this.burdenService.getVariantsForGene(geneString, variantSelectionOptionId);
+        String generatedJsonString = this.burdenService.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList);
         JSONObject generatedJson = slurper.parseText(generatedJsonString);
 
         then:
@@ -87,9 +89,11 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
         JSONTokener tokener = new JSONTokener("{\"pValue\":\"6.620497734940387E-4\",\"oddsRatio\":\"1.0202208335901333\",\"is_error\":false}");
         JSONObject referenceJson = new JSONObject(tokener);
         String geneString = "SLC11A1";
-        int mostDelScore = 3;
+        int variantSelectionOptionId = 2;
+        int ancestryOptionId = PortalConstants.BURDEN_MAF_OPTION_ID_ANCESTRY;
+        Float mafValue = new Float("0.5");
         int sampleGroupOptionId = PortalConstants.BURDEN_DATASET_OPTION_ID_13K;
-        JSONObject generatedJson = this.burdenService.callBurdenTest(sampleGroupOptionId, geneString, mostDelScore);
+        JSONObject generatedJson = this.burdenService.callBurdenTest(sampleGroupOptionId, geneString, variantSelectionOptionId, variantSelectionOptionId, mafValue);
 
         then:
         // will need to change as data changes

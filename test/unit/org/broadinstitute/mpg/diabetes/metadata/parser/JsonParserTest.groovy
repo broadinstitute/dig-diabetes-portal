@@ -386,6 +386,36 @@ class JsonParserTest extends TestCase {
         } catch (PortalException exception) {
             fail("got exception finding property: " + inputJsName + ": " + exception.getMessage());
         }
+    }
 
+    @Test
+    public void testGetImmediateChildrenOfType() {
+        // local variables
+        List<DataSet> childList = null;
+        DataSet rootDataSet = null;
+
+        // get the 26k root data set to search from
+        rootDataSet = this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.BURDEN_SAMPLE_GROUP_ROOT_26k_ID);
+        assertNotNull(rootDataSet);
+
+        // get the children
+        childList = this.jsonParser.getImmediateChildrenOfType(rootDataSet, PortalConstants.TYPE_SAMPLE_GROUP_KEY);
+
+        // test
+        assertNotNull(childList);
+        assertTrue(childList.size() > 0);
+        assertEquals(5, childList.size());
+
+        // get the 26k root data set to search from
+        rootDataSet = this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.BURDEN_SAMPLE_GROUP_ROOT_13k_ID);
+        assertNotNull(rootDataSet);
+
+        // get the children
+        childList = this.jsonParser.getImmediateChildrenOfType(rootDataSet, PortalConstants.TYPE_SAMPLE_GROUP_KEY);
+
+        // test
+        assertNotNull(childList);
+        assertTrue(childList.size() > 0);
+        assertEquals(5, childList.size());
     }
 }

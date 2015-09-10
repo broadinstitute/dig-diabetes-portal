@@ -50,13 +50,6 @@ class PortalConstants {
     public final static String JSON_BURDEN_FILTERS_KEY                  = "filters";
     public final static String JSON_BURDEN_DATASET_KEY                  = "study";
 
-    // burden sample group options
-    public final static String BURDEN_DATASET_OPTION_13K                  = "13k";
-    public final static String BURDEN_DATASET_OPTION_26K                  = "26k";
-    public final static int BURDEN_DATASET_OPTION_ID_13K                  = 1;
-    public final static int BURDEN_DATASET_OPTION_ID_26K                  = 2;
-
-
     // constants for getData calls
     public final static String OPERATOR_LESS_THAN_EQUALS                 = "LTE";
     public final static String OPERATOR_LESS_THAN_NOT_EQUALS             = "LT";
@@ -96,6 +89,21 @@ class PortalConstants {
     public final static String PROPERTY_KEY_PH_BETA_13K_HBA1C             = "metadata_root_ExSeq_13k_mdv2_13kHBA1CBETA";
     public final static String PROPERTY_KEY_PH_BETA_GWAS_MAGIC_2HRG       = "metadata_root_GWAS_MAGIC_mdv2_MAGIC2hrGBETA";
 
+
+
+    // START - BURDEN TEST SECTION
+    // burden sample group options
+    public final static String BURDEN_DATASET_OPTION_13K                  = "13k";
+    public final static String BURDEN_DATASET_OPTION_26K                  = "26k";
+    public final static int BURDEN_DATASET_OPTION_ID_13K                  = 1;
+    public final static int BURDEN_DATASET_OPTION_ID_26K                  = 2;
+    public final static int BURDEN_MAF_OPTION_ID_ALL                      = 1;
+    public final static int BURDEN_MAF_OPTION_ID_ANCESTRY                 = 2;
+
+    // burden root datasets for the 13k/26k MAF filtering = TEMP FOR NOW until further factoring
+    public static final String BURDEN_SAMPLE_GROUP_ROOT_26k_ID                   = "metadata_root_ExSeq_26k_mdv3_26k";
+    public static final String BURDEN_SAMPLE_GROUP_ROOT_13k_ID                   = "metadata_root_ExSeq_13k_mdv1_13k";
+
     // burden test variant selection options
     public static final int BURDEN_VARIANT_OPTION_ALL_CODING                     = 1;
     public static final int BURDEN_VARIANT_OPTION_ALL_MISSENSE                   = 2;
@@ -108,6 +116,7 @@ class PortalConstants {
     public static final String POLYPHEN_PRED_POSSIBLY_DAMAGING              = "possibly_damaging";
     public static final String POLYPHEN_PRED_PROBABLY_DAMAGING              = "probably_damaging";
     public static final String SIFT_PRED_DELETERIOUS                        = "deleterious";
+    // START - BURDEN TEST SECTION
 
 
 }

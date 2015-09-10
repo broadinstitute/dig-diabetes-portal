@@ -3,6 +3,7 @@ package org.broadinstitute.mpg.diabetes.burden.parser;
 import junit.framework.TestCase;
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant;
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser;
+import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
 import org.codehaus.groovy.grails.web.json.JSONObject;
@@ -93,7 +94,7 @@ public class BurdenJsonBuilderTest extends TestCase {
 
         // create the json from the builder
         try {
-            String generatedJsonString = this.burdenJsonBuilder.getKnowledgeBaseQueryPayloadForVariantSearch(geneString, mostDelScoreOperand, mostDelScore);
+            String generatedJsonString = this.burdenJsonBuilder.getKnowledgeBaseQueryPayloadForVariantSearch(geneString, mostDelScoreOperand, mostDelScore, new ArrayList<QueryFilter>());
             generatedJson = new JSONObject(generatedJsonString);
 
         } catch (PortalException exception) {
@@ -135,4 +136,61 @@ public class BurdenJsonBuilderTest extends TestCase {
         assertEquals("[8_118184783_C_T, 8_118170004_C_T]", variantList.toString());
     }
 
+    @Test
+    public void testGetMinorAlleleFrequencyFilters() {
+        // local variables
+        List<QueryFilter> queryFilterList = null;
+
+        // get the query filter list
+        try {
+            queryFilterList = this.burdenJsonBuilder.getMinorAlleleFrequencyFilters(PortalConstants.BURDEN_DATASET_OPTION_ID_13K, PortalConstants.BURDEN_MAF_OPTION_ID_ALL, new Float("0.5"));
+
+        } catch (PortalException exception) {
+            fail("got exception creating burden MAF filters: " + exception.getMessage());
+        }
+
+        // test
+        assertNotNull(queryFilterList);
+        assertTrue(queryFilterList.size() > 0);
+        assertEquals(1, queryFilterList.size());
+
+        // get the query filter list
+        try {
+            queryFilterList = this.burdenJsonBuilder.getMinorAlleleFrequencyFilters(PortalConstants.BURDEN_DATASET_OPTION_ID_26K, PortalConstants.BURDEN_MAF_OPTION_ID_ALL, new Float("0.5"));
+
+        } catch (PortalException exception) {
+            fail("got exception creating burden MAF filters: " + exception.getMessage());
+        }
+
+        // test
+        assertNotNull(queryFilterList);
+        assertTrue(queryFilterList.size() > 0);
+        assertEquals(1, queryFilterList.size());
+
+        // get the query filter list
+        try {
+            queryFilterList = this.burdenJsonBuilder.getMinorAlleleFrequencyFilters(PortalConstants.BURDEN_DATASET_OPTION_ID_13K, PortalConstants.BURDEN_MAF_OPTION_ID_ANCESTRY, new Float("0.5"));
+
+        } catch (PortalException exception) {
+            fail("got exception creating burden MAF filters: " + exception.getMessage());
+        }
+
+        // test
+        assertNotNull(queryFilterList);
+        assertTrue(queryFilterList.size() > 0);
+        assertEquals(5, queryFilterList.size());
+
+        // get the query filter list
+        try {
+            queryFilterList = this.burdenJsonBuilder.getMinorAlleleFrequencyFilters(PortalConstants.BURDEN_DATASET_OPTION_ID_26K, PortalConstants.BURDEN_MAF_OPTION_ID_ANCESTRY, new Float("0.5"));
+
+        } catch (PortalException exception) {
+            fail("got exception creating burden MAF filters: " + exception.getMessage());
+        }
+
+        // test
+        assertNotNull(queryFilterList);
+        assertTrue(queryFilterList.size() > 0);
+        assertEquals(5, queryFilterList.size());
+    }
 }
