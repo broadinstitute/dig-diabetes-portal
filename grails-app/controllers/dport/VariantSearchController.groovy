@@ -16,26 +16,6 @@ class VariantSearchController {
 
     def index() {}
 
-    /***
-     * set up the search page. There may or may not be parameters, but there is no immediate follow-up Ajax call
-     * encParams can be null (in which case we take on the default values in the search page) or else they can
-     * tell us what the last known form values were "1:3,23:0"
-     * @return
-     */
-    def variantSearch() {
-        String encParams
-        if (params.encParams) {
-            encParams = params.encParams
-            log.debug "variantSearch params.encParams = ${params.encParams}"
-        }
-        render(view: 'variantSearch',
-                model: [show_gwas : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
-                        show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
-                        show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                        encParams : encParams])
-
-    }
-
 
     /***
      *   Pull back a phenotype hierarchy across all data sets
