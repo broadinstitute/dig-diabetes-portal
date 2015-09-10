@@ -3,6 +3,7 @@ import dport.RestServerService
 import grails.transaction.Transactional
 import org.broadinstitute.mpg.diabetes.burden.parser.BurdenJsonBuilder
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
+import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -45,7 +46,7 @@ class BurdenService {
      * @param mostDelScore
      * @return
      */
-    protected JSONObject getVariantsForGene(String geneString, int variantSelectionOptionId) {
+    protected JSONObject getVariantsForGene(String geneString, int variantSelectionOptionId, List<QueryFilter> additionalQueryFilterList) {
         // local variables
         String jsonString = "";
         JSONObject resultJson;
@@ -65,7 +66,7 @@ class BurdenService {
 
         // get the json string to send to the getData call
         try {
-            jsonString = this.getBurdenJsonBuilder().getKnowledgeBaseQueryPayloadForVariantSearch(geneString, operand, mostDelScore);
+            jsonString = this.getBurdenJsonBuilder().getKnowledgeBaseQueryPayloadForVariantSearch(geneString, operand, mostDelScore, additionalQueryFilterList);
 
         } catch (PortalException exception) {
             log.error("Got json building error for getData payload creation: " + exception.getMessage());
@@ -86,15 +87,17 @@ class BurdenService {
      * @param mostDelScore
      * @return
      */
-    public JSONObject callBurdenTest(int sampleGroupOptionId, String geneString, int variantSelectionOptionId) {
+    public JSONObject callBurdenTest(int sampleGroupOptionId, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue) {
         // local variables
         JSONObject jsonObject, returnJson;
         List<Variant> variantList;
         List<String> burdenVariantList;
         String sampleGroupName = PortalConstants.BURDEN_DATASET_OPTION_13K;
+        List<QueryFilter> queryFilterList;
 
         // log
         log.info("called burden test for gene: " + geneString + " and variant select option: " + variantSelectionOptionId + " and sample group id: " + sampleGroupOptionId);
+        log.info("also had MAF option: " + mafSampleGroupOption + " and MAF value: " + mafValue);
 
         // translate the sample group selection option
         // only set 26k if specifically asked for it; all others assume 13k
@@ -103,8 +106,13 @@ class BurdenService {
         }
 
         try {
+            // DIGP-104: create new MAF filters if needed
+            // log for clarity
+            queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFilters(sampleGroupOptionId, mafSampleGroupOption, mafValue);
+            log.info("returning query MAF filter list of size: " + queryFilterList.size() + " for mafValue: " + mafValue + " and sample group ancestry option: " + mafSampleGroupOption);
+
             // get the getData results payload
-            jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId);
+            jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList);
             log.info("got burden getData results: " + jsonObject);
 
             // get the list of variants back
