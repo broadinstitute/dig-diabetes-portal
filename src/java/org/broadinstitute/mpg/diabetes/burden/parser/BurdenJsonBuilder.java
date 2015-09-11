@@ -278,16 +278,22 @@ public class BurdenJsonBuilder {
         DataSet rootDataSet = null;
         JsonParser parser = JsonParser.getService();
         List<Property> propertyList = new ArrayList<Property>();
+        Property rootProperty = null;
+
+        // get root data set
+        if (samplegGroupId == PortalConstants.BURDEN_DATASET_OPTION_ID_13K) {
+            rootDataSet = parser.getMapOfAllDataSetNodes().get(PortalConstants.BURDEN_SAMPLE_GROUP_ROOT_13k_ID);
+        } else {
+            rootDataSet = parser.getMapOfAllDataSetNodes().get(PortalConstants.BURDEN_SAMPLE_GROUP_ROOT_26k_ID);
+        }
+
+        // always add a check that MAF is greater than 0 for the root data set specified to make sure we are not pulling variants that do not occur
+        rootProperty = this.getExpectedUniquePropertyFromSampleGroup("MAF", rootDataSet);
+        queryFilterList.add(new QueryFilterBean(rootProperty, PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS, "0.0"));
+
 
         // if mafValue not null, then look at mafSampleGroupOption
         if (mafValue != null) {
-            // get root data set
-            if (samplegGroupId == PortalConstants.BURDEN_DATASET_OPTION_ID_13K) {
-                rootDataSet = parser.getMapOfAllDataSetNodes().get(PortalConstants.BURDEN_SAMPLE_GROUP_ROOT_13k_ID);
-            } else {
-                rootDataSet = parser.getMapOfAllDataSetNodes().get(PortalConstants.BURDEN_SAMPLE_GROUP_ROOT_26k_ID);
-            }
-
             // populate the sample group list
             if (mafSampleGroupOption == PortalConstants.BURDEN_MAF_OPTION_ID_ANCESTRY) {
                 // if ancestry, get the list of child sample groups
@@ -300,14 +306,7 @@ public class BurdenJsonBuilder {
 
             // for all sample groups in the list, find their MAF property and add it to the list
             for (DataSet sampleGroup: dataSetList) {
-                List<DataSet> childPropertyList = parser.getImmediateChildrenOfType(sampleGroup, PortalConstants.TYPE_PROPERTY_KEY);
-
-                // get MAF property
-                for (DataSet property: childPropertyList) {
-                    if (property.getName().equalsIgnoreCase("MAF")) {
-                        propertyList.add((Property)property);
-                    }
-                }
+                propertyList.add(this.getExpectedUniquePropertyFromSampleGroup("MAF", sampleGroup));
             }
 
             // for all properties, add a new filter
@@ -322,6 +321,44 @@ public class BurdenJsonBuilder {
 
         // return
         return queryFilterList;
+    }
+
+    /**
+     * returns an expected unique property of given name from a sample group
+     *
+     * @param name
+     * @param dataSet
+     * @return
+     * @throws PortalException
+     */
+    protected Property getExpectedUniquePropertyFromSampleGroup(String name, DataSet dataSet) throws PortalException {
+        // local variables
+        JsonParser parser = JsonParser.getService();
+        List<DataSet> childPropertyList = null;
+        Property property = null;
+
+        // get the list of properties to iterate through
+        childPropertyList = parser.getImmediateChildrenOfType(dataSet, PortalConstants.TYPE_PROPERTY_KEY);
+
+        // loop through and find the property with given name
+        for (DataSet childProperty: childPropertyList) {
+            if (childProperty.getName().equalsIgnoreCase(name)) {
+                if (property != null) {
+                    throw new PortalException("Found duplicate property: " + name + " for sample group: " + dataSet.getName());
+                } else {
+                    property = (Property) childProperty;
+                }
+            }
+        }
+
+        // check that not null
+        if (property == null) {
+            throw new PortalException("Found no property: " + name + " for sample group: " + dataSet.getName());
+        }
+
+        // return
+        return property;
+
     }
 
 }
