@@ -44,6 +44,22 @@
     .vcenter {
         margin-top: 2em;
     }
+    .vertical-center {
+        margin-top: 1em;
+    }
+    .variantList {
+        border: 1px solid darkgrey;
+        padding: 2px;
+        max-height: 140px;
+        overflow-y: auto;
+        font-size: 14px;
+    }
+    .variantsListLabel {
+        text-align: right;
+    }
+    .burdenTestResultHolder {
+        height: 140px;
+    }
 </style>
 
 
@@ -101,6 +117,39 @@
          */
         var runBurdenTest = function (){
 
+             var fillInResultsSection = function (pValue,oddsRatio,variantArray,urlLink){
+                 $('.burden-test-result').empty();  // clear out whatever was there before
+                 if ((typeof variantArray === 'undefined') ||
+                     (variantArray.length <= 0)){
+                      $('.burden-test-result').append(
+                        '<div class="col-sm-6 col-sm-offset-3 ">'+
+                            'No variants matched your filter criteria'+
+                        '</div>'+
+                        '<div class="col-sm-3 "></div>');
+                  } else {
+                     var variantAnchors = [];
+                     for ( var i = 0 ; i < variantArray.length ; i++ ) {
+                        variantAnchors.push("<div><a href='"+urlLink+"/"+variantArray[i]+"'>"+variantArray[i]+"</a></div>");
+                     }
+                     $('.burden-test-result').append('<div class="col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-1  col-sm-3 col-sm-offset-1 burdenTestResultHolder">'+
+            '<div class="vertical-center">'+
+                '<div class="pValue">'+pValue+'</div>'+
+                '<div class="orValue">'+oddsRatio+'</div>'+
+                '<div class="ciValue"></div>'+
+            '</div>'+
+        '</div>'+
+        '<div class="col-sm-3"></div>'+
+        '<div class="col-sm-2 variantsListLabel">variants:</div>'+
+        '<div class="col-md-2 col-sm-3">'+
+            '<div class="variantList">'+
+            variantAnchors.join('\n')+
+            '</div>'+
+        '</div>'+
+        '<div class="col-sm-1"></div>');
+                  }
+
+             };
+
              var selectedFilterValue = $('.proteinEffectFilter option:selected').val(),
              selectedFilterValueId = parseInt(selectedFilterValue),
              selectedDataSetValue = $('input[name=dataset]:checked').val(),
@@ -112,7 +161,10 @@
              // JavaScript can't understand a number of it starts with a decimal.  Prepend a zero just to be safe, since that will never hurt
              if ((specifiedMafValue)&&
                  (specifiedMafValue.length> 0)){
-                 specifiedMafValue = '0'+specifiedMafValue;
+                    var trimmedMafValue = specifiedMafValue.trim();
+                    if (trimmedMafValue.charAt(0) === '.'){
+                       specifiedMafValue = '0'+trimmedMafValue;
+                    }
              }
              specifiedMafValueId = parseFloat(specifiedMafValue);
              $('#rSpinner').show();
@@ -130,8 +182,8 @@
                     alert('Please specify a numeric value for the minor allele frequency (MAF).  The value "'+specifiedMafValue+'" is invalid');
                     $('#rSpinner').hide();
                     return;
-                  } else if (specifiedMafValueId < 0) {
-                    alert('Please specify a nonnegative value for the minor allele frequency (MAF).  The value "'+specifiedMafValue+'" is invalid');
+                  } else if (specifiedMafValueId <= 0) {
+                    alert('Please specify a minor allele frequency (MAF) value greater than 0.  The value "'+specifiedMafValue+'" is invalid');
                     $('#rSpinner').hide();
                     return;
                   }
@@ -166,12 +218,22 @@
                                          (typeof data.oddsRatio === 'undefined')){
                                      console.log('burdenTestAjax returned undefined for P value or odds ratio.');
                                }else {
+//    <div class="col-md-7 col-sm-7 col-xs-3 col-md-offset-5 col-sm-offset-5 col-xs-offset-3">
+//        <div class="pValue"></div>
+//        <div class="orValue"></div>
+//        <div class="ciValue"></div>
+//    </div>
                                    var pValue = data.pValue;
                                    var oddsRatio = data.oddsRatio;
+//                                   $('.burden-test-result').empty();
                                    $('.burden-test-result .pValue').text("");
                                    $('.burden-test-result .pValue').append('p-Value = '+UTILS.realNumberFormatter(pValue));
                                    $('.burden-test-result .orValue').text("");
                                    $('.burden-test-result .orValue').append('odds ratio = ' +UTILS.realNumberFormatter(oddsRatio));
+                                   fillInResultsSection('p-Value = '+UTILS.realNumberFormatter(data.pValue),
+                                   'odds ratio = ' +UTILS.realNumberFormatter(data.oddsRatio),
+                                   data.variants,"${createLink(controller: 'variantInfo', action: 'variantInfo')}");
+
                                }
                             }
                         $('#rSpinner').hide();
@@ -182,9 +244,6 @@
                     }
                 });
         }; // runBurdenTest
-
-        // constructor statements go here
-        //fillFilterDropDown();
 
         // public routines are declared below
         return {
@@ -208,33 +267,6 @@ $( document ).ready( function (){
 
 <div class="container">
     <h3>Preparing to run a burden test based on the variants in gene <%=geneName%>.</h3>
-
-
-    %{--<div class="row burden-test-wrapper-options">--}%
-        %{--<div class="col-md-3 col-sm-3 col-xs-3">--}%
-            %{--<label>Select data set:&nbsp;&nbsp;</label>--}%
-            %{--<div class="form-inline">--}%
-                %{--<div class="radio">--}%
-                    %{--<label><input type="radio" name="dataset" value="1" checked>&nbsp;13k&nbsp;&nbsp;</label>--}%
-                %{--</div>--}%
-                %{--<div class="radio">--}%
-                    %{--<label><input type="radio" name="dataset"  value="2" />&nbsp;26k</label>--}%
-                %{--</div>--}%
-            %{--</div>--}%
-        %{--</div>--}%
-        %{--<div class="col-md-5 col-sm-5 col-xs-5">--}%
-            %{--<label>Available variant filter:--}%
-                %{--<select class="proteinEffectFilter form-control">--}%
-                    %{--<option selected hidden>Select a filter</option>--}%
-                %{--</select>--}%
-            %{--</label>--}%
-        %{--</div>--}%
-        %{--<div class="col-md-4 col-sm-4 col-xs-43 burden-test-btn-wrapper">--}%
-            %{--<button id="singlebutton" name="singlebutton" class="btn btn-primary btn-lg burden-test-btn" onclick="mpgSoftware.burdenTest.runBurdenTest()">Run burden test</button>--}%
-        %{--</div>--}%
-    %{--</div>--}%
-
-
 
     <div class="row burden-test-wrapper-options">
         <div class="col-md-8 col-sm-8 col-xs-12">
@@ -274,10 +306,10 @@ $( document ).ready( function (){
                     <label>Apply MAF across:&nbsp;&nbsp;</label>
                     <div class="form-inline mafOptionChooser">
                         <div class="radio">
-                            <label><input type="radio" name="mafOption" value="1" checked>&nbsp;All samples</label>
+                            <label><input type="radio" name="mafOption" value="1" />&nbsp;All samples</label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="mafOption"  value="2" />&nbsp;Each ancestry</label>
+                            <label><input type="radio" name="mafOption"  value="2" checked />&nbsp;Each ancestry</label>
                         </div>
                     </div>
                 </div>
@@ -290,11 +322,36 @@ $( document ).ready( function (){
     </div>
 
     <div class="row burden-test-result">
-        <div class="col-md-7 col-sm-7 col-xs-3 col-md-offset-5 col-sm-offset-5 col-xs-offset-3">
-            <div class="pValue"></div>
-            <div class="orValue"></div>
-            <div class="ciValue"></div>
-        </div>
+        %{--<div class="col-sm-6 col-sm-offset-3 ">--}%
+            %{--No variants matched your filter criteria--}%
+        %{--</div>--}%
+        %{--<div class="col-sm-3 ">--}%
+        %{--</div>--}%
+
+
+
+
+        %{--<div class="col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-1  col-sm-3 col-sm-offset-1 burdenTestResultHolder">--}%
+            %{--<div class="vertical-center">--}%
+                %{--<div class="pValue"></div>--}%
+                %{--<div class="orValue"></div>--}%
+                %{--<div class="ciValue"></div>--}%
+            %{--</div>--}%
+        %{--</div>--}%
+        %{--<div class="col-sm-3"></div>--}%
+        %{--<div class="col-sm-2 variantsListLabel">variants:</div>--}%
+        %{--<div class="col-md-2 col-sm-3">--}%
+            %{--<div class="variantList">--}%
+                %{--<div><a href="${createLink(controller: 'variantInfo', action: 'variantInfo', id:'rs13266634')}">rs13266634</a></div>--}%
+                %{--<div><a href="${createLink(controller: 'variantInfo', action: 'variantInfo', id:'rs13266634')}">rs13266634</a></div>--}%
+                %{--<div><a href="${createLink(controller: 'variantInfo', action: 'variantInfo', id:'rs13266634')}">rs13266634</a></div>--}%
+                %{--<div><a href="${createLink(controller: 'variantInfo', action: 'variantInfo', id:'rs13266634')}">rs13266634</a></div>--}%
+                %{--<div><a href="${createLink(controller: 'variantInfo', action: 'variantInfo', id:'rs13266634')}">rs13266634</a></div>--}%
+                %{--<div><a href="${createLink(controller: 'variantInfo', action: 'variantInfo', id:'rs13266634')}">rs13266634</a></div>--}%
+                %{--<div><a href="${createLink(controller: 'variantInfo', action: 'variantInfo', id:'rs13266634')}">rs13266634</a></div>--}%
+            %{--</div>--}%
+        %{--</div>--}%
+        %{--<div class="col-sm-1"></div>--}%
     </div>
 </div>
 
