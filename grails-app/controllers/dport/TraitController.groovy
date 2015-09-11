@@ -149,4 +149,33 @@ class TraitController {
 
 
 
+    /***
+     * called by regionInfo, this provides information across 25 phenotypes. Use it to populate our big region graphic (the one that
+     * may one day be supplanted by LocusZoom?)
+     * @return
+     */
+    def traitVariantCrossByGeneAjax() {
+        String geneName = params.geneName
+        LinkedHashMap<String, Integer> geneExtents   = sharedToolsService.getGeneExpandedExtent(geneName)
+        JSONObject jsonObject =  restServerService.searchForTraitBySpecifiedRegion (geneExtents.chrom as String,
+                geneExtents.startExtent as String,
+                geneExtents.endExtent as String)
+        if (jsonObject) {
+            render(status: 200, contentType: "application/json") {
+                [variants: jsonObject['variants']]
+            }
+        } else {
+            render(status:300, contentType:"application/json")
+        }
+
+    }
+
+
+
+
+
+
+
+
+
 }
