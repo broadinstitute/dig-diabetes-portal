@@ -709,32 +709,6 @@ class SharedToolsService {
 
 
 
-
-
-
-
-    /***
-     *  urlEncodedListOfPhenotypes delivers the information in the Phenotype domain object
-     *  for convenient delivery to the browser
-     * @return
-     */
-    public String urlEncodedListOfPhenotypes() {
-        List<Phenotype> phenotypeList=Phenotype.list()
-        StringBuilder sb   = new StringBuilder ("")
-        int numberOfPhenotypes  =  phenotypeList.size()
-        int iterationCount  = 0
-        for (Phenotype phenotype in phenotypeList){
-            sb<< (phenotype.databaseKey + ":" + phenotype.name )
-            iterationCount++
-            if (iterationCount  < numberOfPhenotypes){
-                sb<< ","
-            }
-        }
-        return java.net.URLEncoder.encode( sb.toString())
-    }
-
-
-
     public String  parseChromosome (String rawChromosomeString) {
         String returnValue = ""
         java.util.regex.Matcher chromosome = rawChromosomeString =~ /chr[\dXY]*/
@@ -1022,30 +996,23 @@ class SharedToolsService {
 
     }
 
-/***
- * build up a phenotype list
- * @return
- */
-    public LinkedHashMap<String,List<LinkedHashMap>> composePhenotypeOptions (){
-        LinkedHashMap returnValue = [:]
-        List cardioList = []
-        Phenotype singlePhenotype = Phenotype.findByName('fasting glucose')
-        cardioList << ['mkey':singlePhenotype.databaseKey,'name':singlePhenotype.name]
-        for (Phenotype phenotype in Phenotype.list()){
-            if ((phenotype.category == 'cardiometabolic') && (phenotype.name != 'fasting glucose')){
-                cardioList << ['mkey':phenotype.databaseKey,'name':phenotype.name]
+
+
+
+    public LinkedHashMap<String,List<LinkedHashMap>> composePhenotypeOptions () {
+        LinkedHashMap<String,List<LinkedHashMap>> returnValue = [:]
+        LinkedHashMap<String, List<String>> propertyTree = metaDataService.getHierarchicalPhenotypeTree()
+        propertyTree.each{String categoryName,List<String> phenotypeList->
+            List<LinkedHashMap>  phenotypesAndTranslations = []
+            for (String phenotype in phenotypeList) {
+                phenotypesAndTranslations << ['mkey':phenotype,'name':translator(phenotype)]
             }
+            returnValue[categoryName] =  phenotypesAndTranslations
         }
-        returnValue ["cardio"] = cardioList
-        List otherList = []
-        for (Phenotype phenotype in Phenotype.list()){
-            if ( phenotype.category == 'other'){
-                otherList << ['mkey':phenotype.databaseKey,'name':phenotype.name]
-            }
-        }
-        returnValue ["other"] = otherList
-        return returnValue
+        return  returnValue
     }
+
+
 
 
 

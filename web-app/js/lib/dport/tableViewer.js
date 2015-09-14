@@ -387,7 +387,7 @@ var variantProcessing = (function () {
 
 
 
-        fillTraitsPerVariantTable = function ( vRecO, show_gene, show_exseq, show_exchp,phenotypeMap,traitRootUrl ) {
+        fillTraitsPerVariantTable = function ( vRecO, show_gene, show_exseq, show_exchp,traitRootUrl ) {
             var retVal = "";
             if (!vRecO) {   // error condition
                 return;

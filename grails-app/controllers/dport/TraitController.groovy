@@ -23,15 +23,13 @@ class TraitController {
      */
      def traitInfo (){
           String variantIdentifier = params.getIdentifier()
-         String encodedString = sharedToolsService.urlEncodedListOfPhenotypes ()
 
          render(view: 'traitsPerVariant',
                  model: [show_gwas        : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                          show_exchp       : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                          show_exseq       : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
                          show_gene        : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
-                         variantIdentifier: variantIdentifier,
-                         phenotypeList    : encodedString])
+                         variantIdentifier: variantIdentifier])
      }
 
     /***
@@ -118,10 +116,8 @@ class TraitController {
      */
     def regionInfo() {
         String regionSpecification = params.id
-        String encodedString = sharedToolsService.urlEncodedListOfPhenotypes ()
         render(view: 'traitVariantCross',
                 model: [regionSpecification: regionSpecification,
-                        phenotypeList      : encodedString,
                         show_gene          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
                         show_gwas          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                         show_exchp         : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),

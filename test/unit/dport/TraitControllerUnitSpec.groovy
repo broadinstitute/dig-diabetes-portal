@@ -39,14 +39,12 @@ class TraitControllerUnitSpec extends Specification {
 
         when:
         params.id = 'rs560887'
-        controller.sharedToolsService.metaClass.urlEncodedListOfPhenotypes = {->return "20:1"}
         controller.traitInfo()
 
         then:
         response.status == 200
         view == '/trait/traitsPerVariant'
         model.variantIdentifier == 'rs560887'
-        model.phenotypeList == '20:1'
 
     }
 
@@ -126,14 +124,12 @@ class TraitControllerUnitSpec extends Specification {
 
         when:
         params.id = 'rs560887'
-        controller.sharedToolsService.metaClass.urlEncodedListOfPhenotypes = {->return "20:1"}
         controller.regionInfo()
 
         then:
         response.status == 200
         view == '/trait/traitVariantCross'
         model.regionSpecification == 'rs560887'
-        model.phenotypeList == '20:1'
 
     }
 

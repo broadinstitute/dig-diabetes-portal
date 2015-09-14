@@ -9,7 +9,6 @@
 <script>
     var variant;
     var loading = $('#spinner').show();
-    var  phenotypeMap =  new UTILS.phenotypeListConstructor (decodeURIComponent("${phenotypeList}")) ;
     $.ajax({
         cache:false,
         type:"post",
@@ -23,7 +22,6 @@
                     ${show_gene},
                     ${show_exseq},
                     ${show_exchp},
-                    phenotypeMap,
                     '<g:createLink controller="trait" action="traitSearch" />');
             loading.hide();
         },

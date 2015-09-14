@@ -13,7 +13,6 @@ import spock.lang.Unroll
  */
 @Unroll
 @TestFor(SharedToolsService)
-@Mock(Phenotype)
 class SharedToolsServiceUnitSpec extends Specification {
 
 
@@ -89,29 +88,6 @@ p
     }
 
 
-
-
-//    void "test convertMultipartFileToString"() {
-//        when:
-//        DiskFileItem diskFileItem = new DiskFileItem("a","txt",false,"fileName",10,new File("path"))
-//        CommonsMultipartFile incomingFile = new CommonsMultipartFile(diskFileItem)
-//        then:
-//        service.convertMultipartFileToString(incomingFile)
-//    }
-
-
-
-
-        /***
-     * We can call the service method  but with mocked data  we are really only testing the behavior
-     * in the case of an empty domain object
-     */
-    void "test urlEncodedListOfPhenotypes"() {
-        when:
-        String status = service.urlEncodedListOfPhenotypes()
-        then:
-        assertNotNull status
-    }
 
     /***
      * Distinguish good chromosome specifications from bad?

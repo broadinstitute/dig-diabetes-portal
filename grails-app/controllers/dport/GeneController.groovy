@@ -42,19 +42,16 @@ class GeneController {
      */
     def geneInfo() {
         String geneToStartWith = params.id
-        def locale = RequestContextUtils.getLocale(request)
         if (geneToStartWith)  {
             String  geneUpperCase =   geneToStartWith.toUpperCase()
             LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
-            String encodedString = sharedToolsService.urlEncodedListOfPhenotypes ()
             render (view: 'geneInfo', model:[show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                              show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
                                              show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
                                              geneName:geneUpperCase,
                                              geneExtentBegin:geneExtent.startExtent,
                                              geneExtentEnd:geneExtent.endExtent,
-                                             geneChromosome:geneExtent.chrom,
-                                             phenotypeList:encodedString
+                                             geneChromosome:geneExtent.chrom
             ] )
         }
      }

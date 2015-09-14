@@ -13,14 +13,12 @@ var mpgSoftware = mpgSoftware || {};
                                                        showGene,
                                                        showExomeSequence,
                                                        showExomeChip,
-                                                       phenotypeMap,
                                                        traitUrl)  {
             var variant =  data['traitInfo'];
             $(traitsPerVariantTableBody).append(variantProcessing.fillTraitsPerVariantTable(variant,
                 showGene,
                 showExomeSequence,
                 showExomeChip,
-                phenotypeMap,
                 traitUrl));
             var table = $(traitsPerVariantTable).dataTable({
                 iDisplayLength: 25,

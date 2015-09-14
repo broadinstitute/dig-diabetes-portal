@@ -1,4 +1,3 @@
-<%@ page import="dport.Phenotype" %>
 <!DOCTYPE html>
 <html>
 <head>

@@ -23,12 +23,6 @@ class SharedToolsServiceIntegrationSpec  extends IntegrationSpec {
 
     }
 
-    void "test urlEncodedListOfPhenotypes smoke"() {
-        when:
-        String encodedPhenotypes = sharedToolsService.urlEncodedListOfPhenotypes()
-        then:
-        assert !encodedPhenotypes.isEmpty()
-    }
 
     void "test urlEncodedListOfProteinEffect smoke"() {
         when:

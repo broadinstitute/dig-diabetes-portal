@@ -1,4 +1,4 @@
-<%@ page import="dport.Phenotype" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -189,26 +189,26 @@ div.helix::after {
                     <small><g:message code="mainpage.search.variant.related.traits.subtext"/></small>
                 </h2>
 
-                <div class="input-group input-group-lg">
-                    <select name="" id="trait-input" class="form-control" style="width:95%;">
-                        <option value=""><g:message code="mainpage.search.variant.related.traits.subtext2"/></option>
-                        <optgroup label="Cardiometabolic">
-                            <g:each in="${Phenotype.list()}" var="phenotype">
-                                <g:if test="${phenotype.category == 'cardiometabolic'}">
-                                    <option value= ${phenotype.databaseKey}>${phenotype.name}</option>
-                                </g:if>
-                            </g:each>
-                        </optgroup>
-                        <optgroup label="Other">
-                            <g:each in="${Phenotype.list()}" var="phenotype">
-                                <g:if test="${phenotype.category == 'other'}">
-                                    <option value="${phenotype.databaseKey}">${phenotype.name}</option>
-                                </g:if>
-                            </g:each>
-                        </optgroup>
-                    </select>
-                </div>
-                <h4><g:message code="mainpage.set.association.threshold"/></h4>
+                %{--<div class="input-group input-group-lg">--}%
+                    %{--<select name="" id="trait-input" class="form-control" style="width:95%;">--}%
+                        %{--<option value=""><g:message code="mainpage.search.variant.related.traits.subtext2"/></option>--}%
+                        %{--<optgroup label="Cardiometabolic">--}%
+                            %{--<g:each in="${Phenotype.list()}" var="phenotype">--}%
+                                %{--<g:if test="${phenotype.category == 'cardiometabolic'}">--}%
+                                    %{--<option value= ${phenotype.databaseKey}>${phenotype.name}</option>--}%
+                                %{--</g:if>--}%
+                            %{--</g:each>--}%
+                        %{--</optgroup>--}%
+                        %{--<optgroup label="Other">--}%
+                            %{--<g:each in="${Phenotype.list()}" var="phenotype">--}%
+                                %{--<g:if test="${phenotype.category == 'other'}">--}%
+                                    %{--<option value="${phenotype.databaseKey}">${phenotype.name}</option>--}%
+                                %{--</g:if>--}%
+                            %{--</g:each>--}%
+                        %{--</optgroup>--}%
+                    %{--</select>--}%
+                %{--</div>--}%
+                %{--<h4><g:message code="mainpage.set.association.threshold"/></h4>--}%
 
                 <div class="row">
                     <g:form name="trait" action="traitSearch">
