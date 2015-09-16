@@ -4,6 +4,8 @@ import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
+import org.broadinstitute.mpg.diabetes.metadata.query.JsNamingQueryTranslator
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONObject
 
@@ -84,28 +86,36 @@ class VariantSearchController {
 
 
     /***
-     * Build up the variant table
+     * This call occurs when you press the 'submit search request' button.
      * @return
      */
     def launchAVariantSearch(){
         log.info("got params: " + params);
-
-        List <LinkedHashMap> combinedFilters =  filterManagementService.handleFilterRequestFromBrowser (params)
-
-        List <LinkedHashMap> listOfParameterMaps = filterManagementService.storeCodedParametersInHashmap (combinedFilters)
-
-        List <LinkedHashMap> listOfProperties = []
-
-        if ((listOfParameterMaps) &&
-                (listOfParameterMaps.size() > 0)){
-            displayCombinedVariantSearchResults(listOfParameterMaps, listOfProperties)
+        List <String> listOfCodedFilters = filterManagementService.observeMultipleFilters (params)
+        if ((listOfCodedFilters) &&
+                (listOfCodedFilters.size() > 0)){
+            displayCombinedVariantSearch(listOfCodedFilters,[])
         }
+
+//
+//        List <LinkedHashMap> combinedFilters =  filterManagementService.handleFilterRequestFromBrowser (params)
+//
+//        List <LinkedHashMap> listOfParameterMaps = filterManagementService.storeCodedParametersInHashmap (combinedFilters)
+//
+//        List <LinkedHashMap> listOfProperties = []
+//
+//        if ((listOfParameterMaps) &&
+//                (listOfParameterMaps.size() > 0)){
+//            displayCombinedVariantSearchResults(listOfParameterMaps, listOfProperties)
+//        }
 
 
     }
 
-
-
+    /***
+     * I think the action below is never, ever used.
+     * @return
+     */
     def relaunchAVariantSearch() {
         String encodedParameters = params.encodedParameters
 
@@ -243,7 +253,8 @@ class VariantSearchController {
     }
 
     /***
-     * This call happens when you press the 'start a search' button on the search builder page
+     * This call occurs when you press the 'build request' button, causing a raw, user-specified
+     * query to be compiled into a query the system can remember.
      * @return
      */
     def variantVWRequest(){
@@ -307,6 +318,52 @@ class VariantSearchController {
         }
 
     }
+
+
+
+
+
+
+    private void displayCombinedVariantSearch(List <String> listOfCodedFilters, List <LinkedHashMap> listOfProperties) {
+        GetDataQuery getDataQuery = sharedToolsService.generateGetDataQuery(listOfCodedFilters)
+        // Let's start stepping through our big list of filters
+        if (getDataQuery) {
+            String requestForAdditionalProperties = filterManagementService.convertPropertyListToTransferableString(listOfProperties)
+            String encodedFilters = filterManagementService.convertFilterListToTransferableString(getDataQuery)
+            //List<String> displayableFilters = filterManagementService.convertFilterListToDisplayableString(getDataQuery)
+            JsNamingQueryTranslator jsNamingQueryTranslator = new JsNamingQueryTranslator()
+            List<String> displayableFilters = jsNamingQueryTranslator.encodeGetFilterData(getDataQuery)
+            LinkedHashMap genomicExtents = sharedToolsService.validGenomicExtents (getDataQuery)
+            List<String> identifiedGenes = sharedToolsService.allEncompassedGenes(genomicExtents)
+            String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
+            String regionSpecifier = ""
+
+
+
+
+            render(view: 'variantSearchResults',
+                    model: [show_gene           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
+                            show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
+                            show_exchp          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
+                            show_exseq          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
+                            filter              : encodedFilters,
+                            filterDescriptions  : displayableFilters,
+                            proteinEffectsList  : encodedProteinEffects,
+                            encodedParameters   : encodedFilters,
+                            dataSetDetermination: 2,
+                            additionalProperties: requestForAdditionalProperties,
+                            regionSearch        : (genomicExtents.size() > 0),
+                            regionSpecification : regionSpecifier,
+                            geneNamesToDisplay  : identifiedGenes
+                    ])
+        }
+    }
+
+
+
+
+
+
 
 
 

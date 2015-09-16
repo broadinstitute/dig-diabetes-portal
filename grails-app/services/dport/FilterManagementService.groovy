@@ -3,6 +3,8 @@ package dport
 import dport.meta.UserQueryContext
 import grails.transaction.Transactional
 import org.apache.juli.logging.LogFactory
+import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
+import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 
 @Transactional
 class FilterManagementService {
@@ -226,7 +228,29 @@ class FilterManagementService {
     }
 
 
-				
+    public String convertFilterListToTransferableString (GetDataQuery getDataQuery){
+        List<QueryFilter> filterList = getDataQuery.getFilterList()
+        String returnValue
+        List<String> tempForm = []
+        for (QueryFilter queryFilter in filterList){
+            tempForm << queryFilter.getFilterString()
+        }
+        returnValue = tempForm.join("^")
+        return java.net.URLEncoder.encode( returnValue)
+    }
+
+
+    public List<String> convertFilterListToDisplayableString (GetDataQuery getDataQuery){
+        List<QueryFilter> filterList = getDataQuery.getFilterList()
+        List<String> tempForm = []
+        for (QueryFilter queryFilter in filterList){
+            tempForm << queryFilter.getFilterString()
+        }
+        return tempForm
+    }
+
+
+
 
     public LinkedHashMap  parseExtendedVariantSearchParameters (HashMap incomingParameters,Boolean currentlySigma,LinkedHashMap  buildingFilters) {
         if (!buildingFilters){

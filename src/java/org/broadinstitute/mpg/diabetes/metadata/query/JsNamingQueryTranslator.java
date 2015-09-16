@@ -1,5 +1,7 @@
 package org.broadinstitute.mpg.diabetes.metadata.query;
 
+import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean;
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean;
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser;
 import org.broadinstitute.mpg.diabetes.metadata.Property;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
@@ -24,11 +26,59 @@ public class JsNamingQueryTranslator {
     private final String QUERY_OPERATOR_MORE_THAN_STRING            = ">";
     private final String QUERY_OPERATOR_LESS_THAN_STRING            = "<";
 
+    private final String QUERY_GENE_LINE_NUMBER                             = "7";
     private final String QUERY_CHROMOSOME_LINE_NUMBER                       = "8";
     private final String QUERY_START_POSITION_LINE_NUMBER                   = "9";
     private final String QUERY_END_POSITION_LINE_NUMBER                     = "10";
     private final String QUERY_PROTEIN_EFFECT_LINE_NUMBER                   = "11";
     private final String QUERY_PROPERTY_FILTER_LINE_NUMBER                  = "17";
+
+
+
+    public String encodeFilters(QueryFilter queryFilter){
+        String returnValue = "";
+        // cProperties are a little simpler, while pProps and dProps require an extra step
+        Property property = queryFilter.getProperty();
+        String value = queryFilter.getValue();
+        if (property.getParent().getParent()==null) { // cprop
+            if (property.getId()==PortalConstants.PROPERTY_KEY_COMMON_GENE){
+                returnValue =  QUERY_GENE_LINE_NUMBER+
+                               QUERY_NUMBER_DELIMITER_STRING+
+                               value;
+            } else if (property.getId()==PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME){
+                returnValue =  QUERY_CHROMOSOME_LINE_NUMBER+
+                        QUERY_NUMBER_DELIMITER_STRING+
+                        value;
+            }
+        } else {
+            PhenotypeBean phenotypeBean = (PhenotypeBean) property.getParent();
+            SampleGroupBean sampleGroupBean = (SampleGroupBean) property.getParent().getParent();
+            String systemId = ((SampleGroupBean) property.getParent().getParent()).getSystemId();
+            returnValue =  QUERY_PROPERTY_FILTER_LINE_NUMBER+
+                    QUERY_NUMBER_DELIMITER_STRING+
+                    phenotypeBean.getName()+"["+
+                    systemId+"]"+
+                    property.getName()+
+                    queryFilter.getOperator()+
+                    value;
+        }
+        return returnValue;
+    }
+
+
+
+    public List<String> encodeGetFilterData(GetDataQuery getDataQuery ){
+        List <String> allFilters = new ArrayList<String>();
+        for (QueryFilter queryFilter : getDataQuery.getFilterList()){
+            allFilters.add(encodeFilters(queryFilter));
+        }
+        return allFilters;
+    }
+
+
+
+
+
 
     /**
      * convert the js naming filter string into query filter objects
@@ -91,8 +141,11 @@ public class JsNamingQueryTranslator {
                 if (lineNumberString == null) {
                     throw new PortalException("Got null line number string: " + lineNumberString);
 
-                } else if (lineNumberString.equals(this.QUERY_CHROMOSOME_LINE_NUMBER)) {
+                } else if (lineNumberString.equals(this.QUERY_GENE_LINE_NUMBER)) {
                     queryFilter = new QueryFilterBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_GENE), PortalConstants.OPERATOR_EQUALS, tempString);
+
+                }else if (lineNumberString.equals(this.QUERY_CHROMOSOME_LINE_NUMBER)) {
+                    queryFilter = new QueryFilterBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME), PortalConstants.OPERATOR_EQUALS, tempString);
 
                 } else if (lineNumberString.equals(this.QUERY_START_POSITION_LINE_NUMBER)) {
                     queryFilter = new QueryFilterBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION), PortalConstants.OPERATOR_MORE_THAN_EQUALS, tempString);

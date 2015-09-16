@@ -109,4 +109,21 @@ public class GetDataQueryBean implements GetDataQuery {
     public List<QueryFilter> getFilterList() {
         return filterList;
     }
+
+
+    public List <Integer> getPropertyIndexList(String propertyName){
+        List <Integer> returnValue = new ArrayList<Integer>();
+        if (propertyName!=null) {
+            List<Property> propertyList = getQueryPropertyList();
+            for (int i = 0; i < propertyList.size(); i++) {
+                Property property = propertyList.get(i);
+                if (propertyName.equals(property)) {
+                    returnValue.add(new Integer(i));
+                }
+            }
+        }
+        return returnValue;
+    }
+
+
 }

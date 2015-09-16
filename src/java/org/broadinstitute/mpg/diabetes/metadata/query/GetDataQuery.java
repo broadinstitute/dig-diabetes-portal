@@ -44,4 +44,7 @@ public interface GetDataQuery {
     public int getLimit();
 
     public boolean isCount();
+
+    public List <Integer> getPropertyIndexList(String propertyName);
+
 }

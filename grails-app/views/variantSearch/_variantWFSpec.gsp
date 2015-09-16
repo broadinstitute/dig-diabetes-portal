@@ -1,7 +1,7 @@
-
+<%@ page import="org.broadinstitute.mpg.diabetes.util.PortalConstants" %>
 <script>
     function chgRadioButton(buttonLabel) {
-        if (buttonLabel === 'missense') {
+        if (buttonLabel === '${PortalConstants.PROTEIN_PREDICTION_EFFECT_MISSENSE_CODE}') {
             $('#missense-options').show();
         } else {
             $('#missense-options').hide();

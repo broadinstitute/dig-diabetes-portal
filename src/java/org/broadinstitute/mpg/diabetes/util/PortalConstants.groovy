@@ -18,10 +18,11 @@ class PortalConstants {
     public final static String JSON_SORT_ORDER_KEY      = "sort_order";
     public final static String JSON_VARIANTS_KEY        = "variants";
     public final static String JSON_VARIANT_ID_KEY      = "VAR_ID";
-    public final static String JSON_VARIANT_MOST_DEL_SCORE_KEY      = "MOST_DEL_SCORE";
+    public final static String JSON_VARIANT_MOST_DEL_SCORE_KEY  = "MOST_DEL_SCORE";
     public final static String JSON_VARIANT_CHROMOSOME_KEY      = "CHROM";
-    public final static String JSON_VARIANT_POLYPHEN_PRED_KEY      = "PolyPhen_PRED";
-    public final static String JSON_VARIANT_SIFT_PRED_KEY      = "SIFT_PRED";
+    public final static String JSON_VARIANT_POLYPHEN_PRED_KEY   = "PolyPhen_PRED";
+    public final static String JSON_VARIANT_SIFT_PRED_KEY       = "SIFT_PRED";
+    public final static String JSON_VARIANT_CONDEL_PRED_KEY     = "CONDEL_PRED";
     public final static String JSON_NUMBER_RECORDS_KEY  = "numRecords";
     public final static String JSON_ERROR_KEY           = "is_error";
     public final static String JSON_PASSBACK_KEY        = "passback";
@@ -89,6 +90,47 @@ class PortalConstants {
     public final static String PROPERTY_KEY_PH_BETA_13K_HBA1C             = "metadata_root_ExSeq_13k_mdv2_13kHBA1CBETA";
     public final static String PROPERTY_KEY_PH_BETA_GWAS_MAGIC_2HRG       = "metadata_root_GWAS_MAGIC_mdv2_MAGIC2hrGBETA";
 
+    public final static int PROTEIN_PREDICTION_TYPE_PROTEINEFFECT                   = 1;
+    public final static int PROTEIN_PREDICTION_TYPE_POLYPHEN                        = 2;
+    public final static int PROTEIN_PREDICTION_TYPE_SIFT                            = 3;
+    public final static int PROTEIN_PREDICTION_TYPE_CONDEL                          = 4;
+
+
+    public final static String PROTEIN_PREDICTION_POLYPHEN_NONE_NAME                = "---";
+    public final static int PROTEIN_PREDICTION_POLYPHEN_NONE_CODE                   = 0;
+    public final static String PROTEIN_PREDICTION_POLYPHEN_PROBABLYDAMAGING_NAME    = "probably damaging";
+    public final static int PROTEIN_PREDICTION_POLYPHEN_PROBABLYDAMAGING_CODE       = 1;
+    public final static String PROTEIN_PREDICTION_POLYPHEN_POSSIBLYDAMAGING_NAME    = "possibly damaging";
+    public final static int PROTEIN_PREDICTION_POLYPHEN_POSSIBLYDAMAGING_CODE       = 2;
+    public final static String PROTEIN_PREDICTION_POLYPHEN_BENIGN_NAME              = "benign";
+    public final static int PROTEIN_PREDICTION_POLYPHEN_BENIGN_CODE                 = 3;
+
+    public final static String PROTEIN_PREDICTION_SIFT_NONE_NAME                    = "---";
+    public final static int PROTEIN_PREDICTION_SIFT_NONE_CODE                       = 0;
+    public final static String PROTEIN_PREDICTION_SIFT_DELETERIOUS_NAME             = "deleterious";
+    public final static int PROTEIN_PREDICTION_SIFT_DELETERIOUS_CODE                = 1;
+    public final static String PROTEIN_PREDICTION_SIFT_TOLERATED_NAME               = "tolerated";
+    public final static int PROTEIN_PREDICTION_SIFT_TOLERATED_CODE                  = 2;
+
+    public final static String PROTEIN_PREDICTION_CONDEL_NONE_NAME                  = "---";
+    public final static int PROTEIN_PREDICTION_CONDEL_NONE_CODE                     = 0;
+    public final static String PROTEIN_PREDICTION_CONDEL_DELETERIOUS_NAME           = "deleterious";
+    public final static int PROTEIN_PREDICTION_CONDEL_DELETERIOUS_CODE              = 1;
+    public final static String PROTEIN_PREDICTION_CONDEL_BENIGN_NAME                = "benign";
+    public final static int PROTEIN_PREDICTION_CONDEL_BENIGN_CODE                   = 2;
+
+    public final static String PROTEIN_PREDICTION_EFFECT_ALL_NAME                   = "all-effects";
+    public final static int PROTEIN_PREDICTION_EFFECT_ALL_CODE                      = 0;
+    public final static String PROTEIN_PREDICTION_EFFECT_PTV_NAME                   = "protein-truncating";
+    public final static int PROTEIN_PREDICTION_EFFECT_PTV_CODE                      = 1;
+    public final static String PROTEIN_PREDICTION_EFFECT_MISSENSE_NAME              = "missense";
+    public final static int PROTEIN_PREDICTION_EFFECT_MISSENSE_CODE                 = 2;
+    public final static String PROTEIN_PREDICTION_EFFECT_SYNONYMOUS_NAME            = "no effect (synonymous coding)";
+    public final static int PROTEIN_PREDICTION_EFFECT_SYNONYMOUS_CODE               = 3;
+    public final static String PROTEIN_PREDICTION_EFFECT_NONCODING_NAME             = "no effect (non-coding)";
+    public final static int PROTEIN_PREDICTION_EFFECT_NONCODING_CODE                = 4;
+    public final static String PROTEIN_PREDICTION_EFFECT_CODING_NAME                = "coding variant";
+    public final static int PROTEIN_PREDICTION_EFFECT_CODING_CODE                   = 5;
 
 
     // START - BURDEN TEST SECTION
@@ -117,6 +159,9 @@ class PortalConstants {
     public static final String POLYPHEN_PRED_PROBABLY_DAMAGING              = "probably_damaging";
     public static final String SIFT_PRED_DELETERIOUS                        = "deleterious";
     // START - BURDEN TEST SECTION
+
+
+
 
 
 }

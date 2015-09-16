@@ -10,6 +10,11 @@ import groovy.json.StringEscapeUtils
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
+import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryBean
+import org.broadinstitute.mpg.diabetes.metadata.query.JsNamingQueryTranslator
+import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
+import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
@@ -975,6 +980,76 @@ class SharedToolsService {
     }
 
     /***
+     * did we get enough information to find a spot on the genome? We need at least a chromosome specifier and
+     * a position greater than and a position less than OR a gene (allowing us to infer the position).
+     *
+     * @param getDataQuery
+     * @return
+     */
+    public LinkedHashMap validGenomicExtents (GetDataQuery getDataQuery) {
+        LinkedHashMap returnValue = [:]
+        List <Integer> geneIndex = getDataQuery.getPropertyIndexList(PortalConstants.PROPERTY_KEY_COMMON_GENE)
+        List <Integer> chromosomeIndex = getDataQuery.getPropertyIndexList(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME)
+        List <Integer> positionIndex = getDataQuery.getPropertyIndexList(PortalConstants.PROPERTY_KEY_COMMON_POSITION)
+        if (geneIndex?.size()==1){
+            Property property = getDataQuery.getFilterList()[geneIndex[0]]?.property
+            Gene geneList = Gene.retrieveGene(property?.getName())
+            if (geneList){
+                returnValue["addrStart"] = geneList.addrStart
+                returnValue["addrEnd"] = geneList.addrEnd
+                returnValue["chromosome"] = geneList.chromosome
+                returnValue["geneName"] = geneList.name2
+            }
+        } else if ((chromosomeIndex?.size()==1) &&
+                   (positionIndex.size()==2) ){
+            QueryFilter queryFilter0 = getDataQuery.getFilterList()[positionIndex[0]]
+            QueryFilter queryFilter1 = getDataQuery.getFilterList()[positionIndex[1]]
+            returnValue["addrStart"] = 0L
+            returnValue["addrEnd"] = 3200000000L
+            if ((queryFilter0.operator==PortalConstants.OPERATOR_LESS_THAN_EQUALS)  ||
+                (queryFilter0.operator==PortalConstants.OPERATOR_LESS_THAN_NOT_EQUALS)){
+                returnValue["addrEnd"] = queryFilter0.value as Long
+            }
+            if ((queryFilter1.operator==PortalConstants.OPERATOR_MORE_THAN_EQUALS)  ||
+                    (queryFilter1.operator==PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS)){
+                returnValue["addrStart"] = queryFilter1.value as Long
+            }
+            returnValue["chromosome"] = getDataQuery.getFilterList()[chromosomeIndex[0]]?.property
+        }
+        return returnValue
+    }
+
+
+
+
+    List <String> allEncompassedGenes (LinkedHashMap genomicExtents){
+        List <String> returnValue = []
+        if (genomicExtents.size()>0){
+            List<Gene> geneList = Gene.findAllByChromosome("chr"+genomicExtents["chromosome"])
+            for (Gene gene in geneList) {
+                int startExtent = genomicExtents["addrStart"] as Long
+                int endExtent = genomicExtents["addrEnd"] as Long
+                if (((gene.addrStart >startExtent) && (gene.addrStart < endExtent)) ||
+                        ((gene.addrEnd > startExtent) && (gene.addrEnd <endExtent))) {
+                    returnValue << gene.name1 as String
+                }
+            }
+        }
+        return returnValue
+    }
+
+
+    List <String> allEncompassedGenes (GetDataQuery getDataQuery){
+        LinkedHashMap genomicExtents = validGenomicExtents ( getDataQuery)
+        return allEncompassedGenes (genomicExtents)
+    }
+
+
+
+
+
+
+    /***
      * packageUpFiltersForRoundTrip get back a list of filters that we need to pass to the backend. We package them up for a round trip to the client
      * and back via the Ajax call
      *
@@ -1163,8 +1238,11 @@ class SharedToolsService {
         if (((parametersToEncode.containsKey("regionStopInput")) && (parametersToEncode["regionStopInput"]))) {
             sb << ("10="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["regionStopInput"].toString())+"^")
         }
-        if (((parametersToEncode.containsKey("predictedEffects")) && (parametersToEncode["predictedEffects"]))) {
-            sb << ("11="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["predictedEffects"].toString())+"^")
+        if (((parametersToEncode.containsKey("predictedEffects")) && (parametersToEncode["predictedEffects"]))&&
+                (parametersToEncode["predictedEffects"]!="0")) {
+//            sb << ("11="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["predictedEffects"].toString())+"^")
+            sb << ("11="+
+             StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY}|${parametersToEncode["predictedEffects"]}")+"^")
         }
         if (((parametersToEncode.containsKey("esValue")) && (parametersToEncode["esValue"]))) {
             sb << ("12="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["esValue"].toString())+"^")
@@ -1173,13 +1251,19 @@ class SharedToolsService {
             sb << ("13="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["esValueInequality"].toString())+"^")
         }
         if (((parametersToEncode.containsKey("condelSelect")) && (parametersToEncode["condelSelect"]))) {
-            sb << ("14="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["condelSelect"].toString())+"^")
+//            sb << ("14="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["condelSelect"].toString())+"^")
+            sb << ("11="+
+                    StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY}|${parametersToEncode["condelSelect"]}")+"^")
         }
         if (((parametersToEncode.containsKey("polyphenSelect")) && (parametersToEncode["polyphenSelect"]))) {
-            sb << ("15="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["polyphenSelect"].toString())+"^")
+//            sb << ("15="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["polyphenSelect"].toString())+"^")
+            sb << ("11="+
+            StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY}|${parametersToEncode["polyphenSelect"]}")+"^")
         }
         if (((parametersToEncode.containsKey("siftSelect")) && (parametersToEncode["siftSelect"]))) {
-            sb << ("16="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["siftSelect"].toString())+"^")
+//            sb << ("16="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["siftSelect"].toString())+"^")
+            sb << ("11="+
+                    StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_SIFT_PRED_KEY}|${parametersToEncode["siftSelect"]}")+"^")
         }
         customFiltersToEncode?.each { String key, String value ->
             sb << ("17=" + StringEscapeUtils.escapeJavaScript(value.toString()) + "^")
@@ -1232,7 +1316,21 @@ class SharedToolsService {
     }
 
 
-
+   public GetDataQuery generateGetDataQuery(List <String> listOfCodedFilters){
+       GetDataQuery query = new GetDataQueryBean();
+       JsNamingQueryTranslator jsNamingQueryTranslator = new JsNamingQueryTranslator()
+       List<QueryFilter> combinedQueryFilterList = []
+       for (String codedFilters in listOfCodedFilters){
+           List<QueryFilter> queryFilterList = jsNamingQueryTranslator.getQueryFilters(codedFilters)
+           for (QueryFilter queryFilter in queryFilterList) {
+               combinedQueryFilterList << queryFilter
+           }
+       }
+       for (QueryFilter queryFilter in combinedQueryFilterList){
+           query.addQueryFilter(queryFilter)
+       }
+       return query
+   }
 
 
     public String getGeneExpandedRegionSpec(String geneName){

@@ -15,6 +15,11 @@ var mpgSoftware = mpgSoftware || {};
          * private methods
          * @param indexNumber
          */
+        var JSON_VARIANT_MOST_DEL_SCORE_KEY      = "MOST_DEL_SCORE",
+            JSON_VARIANT_CHROMOSOME_KEY      = "CHROM",
+            JSON_VARIANT_POLYPHEN_PRED_KEY      = "PolyPhen_PRED",
+            JSON_VARIANT_SIFT_PRED_KEY      = "SIFT_PRED";
+
 
         /***
          *   true implies emphasize blue box and deemphasize clause development area.
@@ -396,20 +401,6 @@ var mpgSoftware = mpgSoftware || {};
 
             }
         };
-//        var fillPhenotypeDropdown = function (dataSetJson) { // help text for each row
-//            if ((typeof dataSetJson !== 'undefined')  &&
-//                (typeof dataSetJson["is_error"] !== 'undefined')&&
-//                (dataSetJson["is_error"] === false))
-//            {
-//                var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
-//                var options = $("#phenotype");
-//                options.empty();
-//                var dataSetList = dataSetJson ["dataset"];
-//                for ( var i = 0 ; i < numberOfRecords ; i++ ){
-//                    options.append($("<option />").val(dataSetList[i]).text(mpgSoftware.trans.translator(dataSetList[i])));
-//                }
-//            }
-//        };
         var fillPropertiesDropdown = function (dataSetJson) { // help text for each row
             if ((typeof dataSetJson !== 'undefined')  &&
                 (typeof dataSetJson["is_error"] !== 'undefined')&&
@@ -526,7 +517,7 @@ var mpgSoftware = mpgSoftware || {};
             var restrictToRegion = UTILS.extractValFromTextboxes(['region_gene_input','region_chrom_input','region_start_input','region_stop_input']);
             var missensePredictions = [];
             varsToSend["predictedEffects"]  = $("input:radio[name='predictedEffects']:checked").val();
-            if (varsToSend["predictedEffects"]==='missense'){
+            if (varsToSend["predictedEffects"]==='2'){
                 missensePredictions = UTILS.extractValsFromCombobox(['polyphenSelect','siftSelect','condelSelect']);
             }
             var savedValuesList = [];
