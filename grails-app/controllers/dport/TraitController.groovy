@@ -23,10 +23,7 @@ class TraitController {
           String variantIdentifier = params.getIdentifier()
 
          render(view: 'traitsPerVariant',
-                 model: [show_gwas        : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
-                         show_exchp       : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
-                         show_exseq       : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                         show_gene        : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
+                 model: [dnSnpId: variantIdentifier,
                          variantIdentifier: variantIdentifier])
      }
 

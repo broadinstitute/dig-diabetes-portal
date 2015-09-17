@@ -1,17 +1,18 @@
-<!-- 51 input needed
+<!-- 2 inputs needed
     variantIdentifier: the variant id
+    dbSnpId: for the snp id, if provided (from the trait info page)
+    collapsed: if accordion closed at start
 -->
 <div class="accordion-group">
     <div class="accordion-heading">
         <a class="accordion-toggle  collapsed" data-toggle="collapse" href="#collapseVariantTraitAssociation">
-            <h2><strong><g:message code="widgets.variant.trait.associations.title" default="Association statistics across 25 traits"/></strong></h2>
+            <h2><strong><g:message code="widgets.variant.trait.associations.title" default="Association statistics across 25 traits"/><g:if test="${dnSnpId}"> for ${dnSnpId}</g:if></strong></h2>
         </a>
     </div>
 
 
 <div id="collapseVariantTraitAssociation" class="accordion-body collapse">
     <div class="accordion-inner" id="traitAssociationInner">
-
 
         <r:require modules="core"/>
         <r:require modules="tableViewer,traitInfo"/>
@@ -21,6 +22,7 @@
 
     // track if data table loaded yet; get reinitialization error
     var tableNotLoaded = true;
+    var dbSnpId;
 
     mpgSoftware.widgets = (function () {
         var loadAssociationTable = function () {
