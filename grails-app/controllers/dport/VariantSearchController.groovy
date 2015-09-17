@@ -5,6 +5,7 @@ import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
+import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.metadata.query.JsNamingQueryTranslator
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -285,6 +286,7 @@ class VariantSearchController {
 
         log.debug "variantSearch variantSearchAjax = ${filters}"
 
+        GetDataQueryHolder getDataQueryHolder = new GetDataQueryHolder(filters)
 
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = restServerService.postRestCallFromFilters(filters,requestedProperties)
@@ -325,15 +327,16 @@ class VariantSearchController {
 
 
     private void displayCombinedVariantSearch(List <String> listOfCodedFilters, List <LinkedHashMap> listOfProperties) {
-        GetDataQuery getDataQuery = sharedToolsService.generateGetDataQuery(listOfCodedFilters)
+        GetDataQueryHolder getDataQueryHolder = new GetDataQueryHolder(listOfCodedFilters)
         // Let's start stepping through our big list of filters
-        if (getDataQuery) {
+        if (getDataQueryHolder.isValid()) {
             String requestForAdditionalProperties = filterManagementService.convertPropertyListToTransferableString(listOfProperties)
-            String encodedFilters = filterManagementService.convertFilterListToTransferableString(getDataQuery)
+            //String encodedFilters = filterManagementService.convertFilterListToTransferableString(getDataQuery)
             //List<String> displayableFilters = filterManagementService.convertFilterListToDisplayableString(getDataQuery)
-            JsNamingQueryTranslator jsNamingQueryTranslator = new JsNamingQueryTranslator()
-            List<String> displayableFilters = jsNamingQueryTranslator.encodeGetFilterData(getDataQuery)
-            LinkedHashMap genomicExtents = sharedToolsService.validGenomicExtents (getDataQuery)
+            List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
+            List<String> urlEncodedFilters = getDataQueryHolder.listOfUrlEncodedFilters(encodedFilters)
+            List<String> displayableFilters = getDataQueryHolder.listOfReadableFilters(encodedFilters)
+            LinkedHashMap genomicExtents = sharedToolsService.validGenomicExtents (getDataQueryHolder.retrieveGetDataQuery())
             List<String> identifiedGenes = sharedToolsService.allEncompassedGenes(genomicExtents)
             String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
             String regionSpecifier = ""
@@ -346,10 +349,10 @@ class VariantSearchController {
                             show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                             show_exchp          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                             show_exseq          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                            filter              : encodedFilters,
+                            filter              : urlEncodedFilters, //encodedFilters,
                             filterDescriptions  : displayableFilters,
                             proteinEffectsList  : encodedProteinEffects,
-                            encodedParameters   : encodedFilters,
+                            encodedParameters   : urlEncodedFilters,
                             dataSetDetermination: 2,
                             additionalProperties: requestForAdditionalProperties,
                             regionSearch        : (genomicExtents.size() > 0),

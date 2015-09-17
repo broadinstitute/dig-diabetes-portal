@@ -19,62 +19,174 @@ public class JsNamingQueryTranslator {
     JsonParser jsonParser = JsonParser.getService();
 
     // constants
-    private final String QUERY_DELIMITER_STRING                 = "^";
-    private final String QUERY_NUMBER_DELIMITER_STRING          = "=";
+    public final static String QUERY_DELIMITER_STRING                 = "^";
+    public final static String QUERY_NUMBER_DELIMITER_STRING          = "=";
 
-    private final String QUERY_OPERATOR_EQUALS_STRING               = "|";
-    private final String QUERY_OPERATOR_MORE_THAN_STRING            = ">";
-    private final String QUERY_OPERATOR_LESS_THAN_STRING            = "<";
+    public final static String QUERY_OPERATOR_EQUALS_STRING               = "|";
+    public final static String QUERY_OPERATOR_MORE_THAN_STRING            = ">";
+    public final static String QUERY_OPERATOR_LESS_THAN_STRING            = "<";
 
-    private final String QUERY_GENE_LINE_NUMBER                             = "7";
-    private final String QUERY_CHROMOSOME_LINE_NUMBER                       = "8";
-    private final String QUERY_START_POSITION_LINE_NUMBER                   = "9";
-    private final String QUERY_END_POSITION_LINE_NUMBER                     = "10";
-    private final String QUERY_PROTEIN_EFFECT_LINE_NUMBER                   = "11";
-    private final String QUERY_PROPERTY_FILTER_LINE_NUMBER                  = "17";
+    public final static String QUERY_GENE_LINE_NUMBER                             = "7";
+    public final static String QUERY_CHROMOSOME_LINE_NUMBER                       = "8";
+    public final static String QUERY_START_POSITION_LINE_NUMBER                   = "9";
+    public final static String QUERY_END_POSITION_LINE_NUMBER                     = "10";
+    public final static String QUERY_PROTEIN_EFFECT_LINE_NUMBER                   = "11";
+    public final static String QUERY_PROPERTY_FILTER_LINE_NUMBER                  = "17";
 
 
 
-    public String encodeFilters(QueryFilter queryFilter){
+
+    private String determineOperatorSplitCharacter(String holdingString) throws PortalException {
+        String operatorSplitCharacter="";
+        if (holdingString.contains(this.QUERY_OPERATOR_EQUALS_STRING)) {
+            operatorSplitCharacter = Pattern.quote(this.QUERY_OPERATOR_EQUALS_STRING);      // '|' string is special regexp string
+
+        } else if (holdingString.contains(this.QUERY_OPERATOR_LESS_THAN_STRING)) {
+            operatorSplitCharacter = this.QUERY_OPERATOR_LESS_THAN_STRING;
+
+        } else if (holdingString.contains(this.QUERY_OPERATOR_MORE_THAN_STRING)) {
+            operatorSplitCharacter = this.QUERY_OPERATOR_MORE_THAN_STRING;
+
+        } else {
+            throw new PortalException("did not find expected operator in query string: " + holdingString);
+        }
+        return operatorSplitCharacter;
+    }
+
+
+
+    private String convertSymbolicOperatorToString(String symbolicOperator) throws PortalException{
+        String operator="";
+        if (Pattern.quote(this.QUERY_OPERATOR_EQUALS_STRING).equals(symbolicOperator)) {
+            operator = PortalConstants.OPERATOR_EQUALS;
+        } else if (this.QUERY_OPERATOR_LESS_THAN_STRING.equals(symbolicOperator)) {
+            operator = PortalConstants.OPERATOR_LESS_THAN_NOT_EQUALS;
+        } else if (this.QUERY_OPERATOR_MORE_THAN_STRING.equals(symbolicOperator)) {
+            operator = PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS;
+       } else {
+            throw new PortalException("Got unsupported operator in query string: " + symbolicOperator);
+        }
+       return operator;
+    }
+
+
+    private String convertStringOperatorToSymbol(String stringOperator) throws PortalException{
+        String operator="";
+        if (PortalConstants.OPERATOR_EQUALS.equals(stringOperator)) {
+            operator = this.QUERY_OPERATOR_EQUALS_STRING;
+        } else if (PortalConstants.OPERATOR_LESS_THAN_NOT_EQUALS.equals(stringOperator)) {
+            operator = this.QUERY_OPERATOR_LESS_THAN_STRING;
+        } else if (PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS.equals(stringOperator)) {
+            operator = this.QUERY_OPERATOR_MORE_THAN_STRING;
+        } else {
+            throw new PortalException("Got unsupported string operator : " + stringOperator);
+        }
+        return operator;
+    }
+
+
+
+
+
+
+
+    public String encodeFilters(QueryFilter queryFilter)  throws PortalException {
         String returnValue = "";
         // cProperties are a little simpler, while pProps and dProps require an extra step
         Property property = queryFilter.getProperty();
         String value = queryFilter.getValue();
+        String operator = queryFilter.getOperator();
         if (property.getParent().getParent()==null) { // cprop
-            if (property.getId()==PortalConstants.PROPERTY_KEY_COMMON_GENE){
+            if (PortalConstants.PROPERTY_KEY_COMMON_GENE.equals(property.getId())){ // gene specifier
                 returnValue =  QUERY_GENE_LINE_NUMBER+
                                QUERY_NUMBER_DELIMITER_STRING+
                                value;
-            } else if (property.getId()==PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME){
+            } else if (PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME.equals(property.getId())){ // chromosome specifier
                 returnValue =  QUERY_CHROMOSOME_LINE_NUMBER+
                         QUERY_NUMBER_DELIMITER_STRING+
                         value;
+            } else if (PortalConstants.PROPERTY_KEY_COMMON_POSITION.equals(property.getId())){ // one of the two position specifiers
+                if ((PortalConstants.OPERATOR_LESS_THAN_EQUALS.equals(operator)) ||
+                        (PortalConstants.OPERATOR_LESS_THAN_EQUALS.equals(operator))) {
+                    returnValue = QUERY_END_POSITION_LINE_NUMBER +
+                            QUERY_NUMBER_DELIMITER_STRING +
+                            value;
+                } else {
+                    returnValue = QUERY_START_POSITION_LINE_NUMBER +
+                            QUERY_NUMBER_DELIMITER_STRING +
+                            value;
+
+                }
+            } else { // everything else is marked as a type 11
+                returnValue =  QUERY_PROTEIN_EFFECT_LINE_NUMBER +
+                        QUERY_NUMBER_DELIMITER_STRING+
+                        property.getName()+
+                        convertStringOperatorToSymbol(operator)+
+                        value;
             }
         } else {
-            PhenotypeBean phenotypeBean = (PhenotypeBean) property.getParent();
-            SampleGroupBean sampleGroupBean = (SampleGroupBean) property.getParent().getParent();
-            String systemId = ((SampleGroupBean) property.getParent().getParent()).getSystemId();
-            returnValue =  QUERY_PROPERTY_FILTER_LINE_NUMBER+
-                    QUERY_NUMBER_DELIMITER_STRING+
-                    phenotypeBean.getName()+"["+
-                    systemId+"]"+
-                    property.getName()+
-                    queryFilter.getOperator()+
-                    value;
+            String identifyParentType = property.getParent().getClass().getName(); // parent dependent on pProp vs dProp
+            if (identifyParentType.contains("SampleGroupBean")){ // we have a dProp
+                SampleGroupBean sampleGroupBean =  (SampleGroupBean) property.getParent();
+                String systemId = sampleGroupBean.getSystemId();
+                returnValue =  QUERY_PROPERTY_FILTER_LINE_NUMBER+
+                        QUERY_NUMBER_DELIMITER_STRING+
+                        "T2D"+"["+                 // phenotype field ignored
+                        systemId+"]"+
+                        property.getName()+
+                        convertStringOperatorToSymbol(operator)+
+                        value;
+
+            } else { // pProp
+                PhenotypeBean phenotypeBean = (PhenotypeBean) property.getParent();
+                SampleGroupBean sampleGroupBean = (SampleGroupBean) property.getParent().getParent();
+                String systemId = sampleGroupBean.getSystemId();
+                returnValue =  QUERY_PROPERTY_FILTER_LINE_NUMBER+
+                        QUERY_NUMBER_DELIMITER_STRING+
+                        phenotypeBean.getName()+"["+
+                        systemId+"]"+
+                        property.getName()+
+                        convertStringOperatorToSymbol(operator)+
+                        value;
+            }
         }
         return returnValue;
     }
 
 
 
-    public List<String> encodeGetFilterData(GetDataQuery getDataQuery ){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public List<String> encodeGetFilterData(GetDataQuery getDataQuery ) throws PortalException{
         List <String> allFilters = new ArrayList<String>();
         for (QueryFilter queryFilter : getDataQuery.getFilterList()){
-            allFilters.add(encodeFilters(queryFilter));
+            String encodedFilter = encodeFilters(queryFilter);
+            if ((encodedFilter !=  null ) &&
+                (encodedFilter.length() > 0)){
+                allFilters.add(encodedFilter);
+            }
         }
         return allFilters;
     }
-
 
 
 
@@ -155,21 +267,23 @@ public class JsNamingQueryTranslator {
 
                 } else if (lineNumberString.equals(this.QUERY_PROPERTY_FILTER_LINE_NUMBER) || lineNumberString.equals(this.QUERY_PROTEIN_EFFECT_LINE_NUMBER)) {
                     // find out what the operator is
-                    if (tempString.contains(this.QUERY_OPERATOR_EQUALS_STRING)) {
-                        operator = PortalConstants.OPERATOR_EQUALS;
-                        operatorSplitCharacter = Pattern.quote(this.QUERY_OPERATOR_EQUALS_STRING);      // '|' string is special regexp string
-
-                    } else if (tempString.contains(this.QUERY_OPERATOR_LESS_THAN_STRING)) {
-                        operator = PortalConstants.OPERATOR_LESS_THAN_NOT_EQUALS;
-                        operatorSplitCharacter = this.QUERY_OPERATOR_LESS_THAN_STRING;
-
-                    } else if (tempString.contains(this.QUERY_OPERATOR_MORE_THAN_STRING)) {
-                        operator = PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS;
-                        operatorSplitCharacter = this.QUERY_OPERATOR_MORE_THAN_STRING;
-
-                    } else {
-                        throw new PortalException("Got unsupported operator in query string: " + tempString);
-                    }
+                    operatorSplitCharacter = determineOperatorSplitCharacter(tempString);
+                    operator = convertSymbolicOperatorToString (operatorSplitCharacter);
+//                    if (tempString.contains(this.QUERY_OPERATOR_EQUALS_STRING)) {
+//                        operator = PortalConstants.OPERATOR_EQUALS;
+//                        operatorSplitCharacter = Pattern.quote(this.QUERY_OPERATOR_EQUALS_STRING);      // '|' string is special regexp string
+//
+//                    } else if (tempString.contains(this.QUERY_OPERATOR_LESS_THAN_STRING)) {
+//                        operator = PortalConstants.OPERATOR_LESS_THAN_NOT_EQUALS;
+//                        operatorSplitCharacter = this.QUERY_OPERATOR_LESS_THAN_STRING;
+//
+//                    } else if (tempString.contains(this.QUERY_OPERATOR_MORE_THAN_STRING)) {
+//                        operator = PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS;
+//                        operatorSplitCharacter = this.QUERY_OPERATOR_MORE_THAN_STRING;
+//
+//                    } else {
+//                        throw new PortalException("Got unsupported operator in query string: " + tempString);
+//                    }
 
                     // split the string
                     tempArray = tempString.split(operatorSplitCharacter);

@@ -1316,22 +1316,6 @@ class SharedToolsService {
     }
 
 
-   public GetDataQuery generateGetDataQuery(List <String> listOfCodedFilters){
-       GetDataQuery query = new GetDataQueryBean();
-       JsNamingQueryTranslator jsNamingQueryTranslator = new JsNamingQueryTranslator()
-       List<QueryFilter> combinedQueryFilterList = []
-       for (String codedFilters in listOfCodedFilters){
-           List<QueryFilter> queryFilterList = jsNamingQueryTranslator.getQueryFilters(codedFilters)
-           for (QueryFilter queryFilter in queryFilterList) {
-               combinedQueryFilterList << queryFilter
-           }
-       }
-       for (QueryFilter queryFilter in combinedQueryFilterList){
-           query.addQueryFilter(queryFilter)
-       }
-       return query
-   }
-
 
     public String getGeneExpandedRegionSpec(String geneName){
         String returnValue = ""
