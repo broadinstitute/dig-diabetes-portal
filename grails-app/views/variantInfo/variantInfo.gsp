@@ -4,6 +4,7 @@
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
     <r:require modules="variantInfo"/>
+    <r:require modules="tableViewer,traitInfo"/>
     <r:layoutResources/>
     <%@ page import="dport.RestServerService" %>
     <%
@@ -201,8 +202,10 @@
                         </div>
                     </div>
 
+                <div class="separator"></div>
+                <g:render template="/widgets/associatedStatisticsTraitsPerVariant" model="['variantIdentifier': variantToSearch]"/>
 
-                    <div class="separator"></div>
+                <div class="separator"></div>
 
                     <div class="accordion-group">
                         <div class="accordion-heading">
