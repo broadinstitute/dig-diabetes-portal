@@ -1,10 +1,8 @@
 package dport
-
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.Property
-import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class TraitController {
@@ -25,12 +23,35 @@ class TraitController {
           String variantIdentifier = params.getIdentifier()
 
          render(view: 'traitsPerVariant',
-                 model: [show_gwas        : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
-                         show_exchp       : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
-                         show_exseq       : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                         show_gene        : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
+                 model: [dnSnpId: variantIdentifier,
                          variantIdentifier: variantIdentifier])
      }
+
+    /**
+     * serves the associatedStatisticsTraitsPerVariant.gsp fragment; should be independent widget
+     *
+     * @return
+     */
+    def ajaxAssociatedStatisticsTraitPerVariant () {
+        // log
+        log.info("got params: " + params);
+
+        // parse
+        String variant = params["variantIdentifier"]
+        LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
+        JSONObject jsonObject = restServerService.getTraitPerVariant( variant)
+
+        // log result
+        log.info("variant json: " + jsonObject);
+
+        def showExomeChip = sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp);
+        def showExomeSequence = sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq);
+        def showGene = sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene);
+
+        render(status:200, contentType:"application/json") {
+            [show_gene: showGene, show_exseq: showExomeSequence, show_exchp: showExomeChip, traitInfo: jsonObject]
+        }
+    }
 
     /***
      *  search for a single trait from the main page and this will be the page frame.  The resulting Ajax call is  phenotypeAjax

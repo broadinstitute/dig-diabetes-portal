@@ -40,11 +40,33 @@ var mpgSoftware = mpgSoftware || {};
             };
 
 
+        var getDbSnpId = function (data) {
+            var dbSnpId;
 
+            if ((typeof data !== 'undefined') &&
+                (typeof data.results !== 'undefined')  &&
+                (typeof data.results[0] !== 'undefined')  &&
+                (typeof data.results[0]["pVals"] !== 'undefined')  &&
+                (data.results[0]["pVals"].length > 0) ) {
+
+                // loop through and find the 'DBSNP_ID' level key to get the dbSnpId
+                for ( var i = 0 ; i < data.results[0]["pVals"].length ; i++ ) {
+                    var key = data.results[0]["pVals"][i].level;
+                    if (key === 'DBSNP_ID') {
+                        dbSnpId = data.results[0]["pVals"][i].count;
+                        // alert('DB SNP is: ' + dbSnpId);
+                        break;
+                    }
+                }
+            }
+
+            return dbSnpId;
+        };
 
         return {
             // private routines MADE PUBLIC FOR UNIT TESTING ONLY (find a way to do this in test mode only)
-            fillTheTraitsPerVariantFields: fillTheTraitsPerVariantFields
+            fillTheTraitsPerVariantFields: fillTheTraitsPerVariantFields,
+            getDbSnpId: getDbSnpId
         }
 
 
