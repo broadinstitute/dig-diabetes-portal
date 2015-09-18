@@ -31,7 +31,7 @@
             $.ajax({
                 cache: false,
                 type: "get",
-                url: "/dig-diabetes-portal/trait/ajaxAssociatedStatisticsTraitPerVariant",
+                url: "../../trait/ajaxAssociatedStatisticsTraitPerVariant",
                 data: {variantIdentifier: '<%=variantIdentifier%>'},
                 async: true,
                 success: function (data) {
