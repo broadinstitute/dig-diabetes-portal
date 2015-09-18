@@ -110,6 +110,9 @@
                         </div>
                     </div>
 
+                <div class="separator"></div>
+                <g:render template="/widgets/associatedStatisticsTraitsPerVariant" model="['variantIdentifier': variantToSearch]"/>
+
 <g:if test="${show_exseq}">
 
     <div class="separator"></div>
@@ -201,9 +204,6 @@
                             </div>
                         </div>
                     </div>
-
-                <div class="separator"></div>
-                <g:render template="/widgets/associatedStatisticsTraitsPerVariant" model="['variantIdentifier': variantToSearch]"/>
 
                 <div class="separator"></div>
 
