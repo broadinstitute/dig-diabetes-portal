@@ -1224,6 +1224,12 @@ class FilterManagementService {
 
     }
 
+    /***
+     *
+     * @param key
+     * @param value
+     * @return
+     */
    private String convertCustomFilters (String key,String value){
        // first loop through and break everything into pairs
        String returnValue = ""
@@ -1249,10 +1255,17 @@ class FilterManagementService {
                    inequalitySignifier =  "<"
                    break
            }
-           returnValue = "${phenotype}[${sample}]${property}${inequalitySignifier}${value}"
+           Double valueAsDouble = 0d
+           try {
+               valueAsDouble =new Double(value)
+           }catch (e){
+               return ""
+           }
+           returnValue = "${phenotype}[${sample}]${property}${inequalitySignifier}${valueAsDouble.toString()}"
        }
        return returnValue
    }
+
 
     public LinkedHashMap processNewParameters ( LinkedHashMap <String,String> customFilters,
                                                 String dataSet,

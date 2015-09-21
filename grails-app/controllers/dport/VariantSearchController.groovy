@@ -15,6 +15,7 @@ class VariantSearchController {
     RestServerService restServerService
     SharedToolsService sharedToolsService
     MetaDataService metaDataService
+    SearchBuilderService searchBuilderService
     private static final log = LogFactory.getLog(this)
 
     def index() {}
@@ -55,8 +56,7 @@ class VariantSearchController {
     }
 
     /***
-     * Build the 'build request' button, which is intended to add a new clause
-     * to the developing set of filter criteria
+     *  Someone hit the 'search builder' page -- let's set it up for them
      * @return
      */
     def variantSearchWF() {
@@ -254,8 +254,7 @@ class VariantSearchController {
     }
 
     /***
-     * This call occurs when you press the 'build request' button, causing a raw, user-specified
-     * query to be compiled into a query the system can remember.
+     * this is the action associated with the 'build a request' button
      * @return
      */
     def variantVWRequest(){
@@ -286,13 +285,18 @@ class VariantSearchController {
 
         log.debug "variantSearch variantSearchAjax = ${filters}"
 
-        GetDataQueryHolder getDataQueryHolder = new GetDataQueryHolder(filters)
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters,searchBuilderService,metaDataService)
 
-        JsonSlurper slurper = new JsonSlurper()
-        String dataJsonObjectString = restServerService.postRestCallFromFilters(filters,requestedProperties)
+        List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
+
+        String revisedFiltersRaw = java.net.URLEncoder.encode(getDataQueryHolder.retrieveAllFiltersAsJson())
+
+                JsonSlurper slurper = new JsonSlurper()
+        String dataJsonObjectString = restServerService.postDataQueryRestCall(getDataQueryHolder)
+       // String dataJsonObjectString = restServerService.postRestCallFromFilters(filters,requestedProperties)
         JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
 
-        LinkedHashMap resultColumnsToDisplay= restServerService.getColumnsToDisplay("[" + filters + "]",requestedProperties)
+        LinkedHashMap resultColumnsToDisplay= restServerService.getColumnsToDisplay("[${getDataQueryHolder.retrieveAllFiltersAsJson()}]",requestedProperties)
         JsonOutput resultColumnsJsonOutput = new JsonOutput()
         String resultColumnsJsonObjectString = resultColumnsJsonOutput.toJson(resultColumnsToDisplay)
         JSONObject resultColumnsJsonObject = slurper.parseText(resultColumnsJsonObjectString)
@@ -312,7 +316,8 @@ class VariantSearchController {
         render(status: 200, contentType: "application/json") {
             [variants: dataJsonObject.variants,
             columns: resultColumnsJsonObject,
-            filters:filtersRaw,
+           // filters:filtersRaw,
+            filters:revisedFiltersRaw,
             metadata:metadata,
             propertiesPerSampleGroup:propertiesPerSampleGroupJsonObject,
             cProperties:commonPropertiesJsonObject
@@ -327,10 +332,11 @@ class VariantSearchController {
 
 
     private void displayCombinedVariantSearch(List <String> listOfCodedFilters, List <LinkedHashMap> listOfProperties) {
-        GetDataQueryHolder getDataQueryHolder = new GetDataQueryHolder(listOfCodedFilters)
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters,searchBuilderService,metaDataService)
         // Let's start stepping through our big list of filters
         if (getDataQueryHolder.isValid()) {
             String requestForAdditionalProperties = filterManagementService.convertPropertyListToTransferableString(listOfProperties)
+            String revisedFiltersRaw = java.net.URLEncoder.encode(getDataQueryHolder.retrieveAllFiltersAsJson())
             //String encodedFilters = filterManagementService.convertFilterListToTransferableString(getDataQuery)
             //List<String> displayableFilters = filterManagementService.convertFilterListToDisplayableString(getDataQuery)
             List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
@@ -349,7 +355,8 @@ class VariantSearchController {
                             show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                             show_exchp          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                             show_exseq          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                            filter              : urlEncodedFilters, //encodedFilters,
+                            filterForResend     : urlEncodedFilters.join("^"), //encodedFilters,
+                            filter              : revisedFiltersRaw, //encodedFilters,
                             filterDescriptions  : displayableFilters,
                             proteinEffectsList  : encodedProteinEffects,
                             encodedParameters   : urlEncodedFilters,

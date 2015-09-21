@@ -14,7 +14,7 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- IGV Bootstrap css -->
-    <link href="//www.broadinstitute.org/igvdata/t2d/igv.css" type="text/css" rel="stylesheet">
+    <link href="//data.broadinstitute.org/igvdata/t2d/igv.css" type="text/css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
     <script  src="../js/lib/igv/vendor/zlib_and_gzip.min.js"></script>
 
     <!-- IGV js code -->
-    <script src="http://www.broadinstitute.org/igvdata/t2d/igv-all.min.js"></script>
+    <script src="http://data.broadinstitute.org/igvdata/t2d/igv-all.min.js"></script>
     %{--<script src=" http://iwww.broadinstitute.org/igvdata/t2d/igv-all.jss"></script>--}%
 
 

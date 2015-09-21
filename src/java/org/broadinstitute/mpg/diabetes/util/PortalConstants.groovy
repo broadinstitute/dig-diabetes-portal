@@ -71,6 +71,7 @@ class PortalConstants {
     public final static String PROPERTY_KEY_COMMON_CHROMOSOME             = "metadata_rootCHROM";
     public final static String PROPERTY_KEY_COMMON_CONSEQUENCE            = "metadata_rootConsequence";
     public final static String PROPERTY_KEY_COMMON_POSITION               = "metadata_rootPOS";
+    public final static String PROPERTY_KEY_COMMON_PROTEIN_CHANGE         = "metadata_rootProtein_change";
     public final static String PROPERTY_KEY_COMMON_DBSNP_ID               = "metadata_rootDBSNP_ID";
     public final static String PROPERTY_KEY_COMMON_POLYPHEN_PRED          = "metadata_rootPolyPhen_PRED";
     public final static String PROPERTY_KEY_COMMON_SIFT_PRED              = "metadata_rootSIFT_PRED";

@@ -8,6 +8,8 @@ import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
+import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
+import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONObject
 
@@ -117,7 +119,7 @@ class RestServerService {
 
         this.BURDEN_REST_SERVER = grailsApplication.config.burdenRestServer;
 
-        pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
+       // pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
 
     }
 
@@ -541,6 +543,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     private JSONObject postRestCall(String drivingJson, String targetUrl) {
         return postRestCallBase(drivingJson, targetUrl, currentRestServer())
+    }
+
+    public JSONObject postDataQueryRestCall(GetDataQueryHolder getDataQueryHolder) {
+        QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder()
+        String drivingJson = queryJsonBuilder.getQueryJsonPayloadString(getDataQueryHolder.getGetDataQuery())
+        return postRestCallBase(drivingJson, this.GET_DATA_URL, currentRestServer())
     }
 
 

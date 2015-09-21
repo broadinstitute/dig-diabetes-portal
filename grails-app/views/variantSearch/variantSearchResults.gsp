@@ -218,7 +218,7 @@
                         "<span class='propboxtitle text-center'>" + title + "<a style='float:right' onclick='closer(this)'>X</a></span>" +
                         "<div class='propertySubHolder'>" +
                         "<input type=\"hidden\"  name=\"encodedParameters\" value=\"<%=encodedParameters%>\">" +
-                        "<input type=\"hidden\"  name=\"filters\" value=\"<%=filter%>\">" +
+                        "<input type=\"hidden\"  name=\"filters\" value=\"<%=filterForResend%>\">" +
                         expandedProperties +
                         "</div>" +
                         "<button onclick=\"$('#relauncher').click()\" class=\"propBox btn btn-xs btn-primary center-block\">Launch refined search</button>" +
@@ -269,7 +269,7 @@
             }
         });
     }
-    loadVariantTableViaAjax("<%=filter%>", "<%=additionalProperties%>");
+    loadVariantTableViaAjax("<%=filterForResend%>", "<%=additionalProperties%>");
 
     var uri_dec = decodeURIComponent("<%=filter%>");
     var encodedParameters = decodeURIComponent("<%=encodedParameters%>");

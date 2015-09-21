@@ -1,18 +1,28 @@
 package org.broadinstitute.mpg.diabetes.metadata.query
 
+import dport.RestServerService
 import dport.SearchBuilderService
+import grails.transaction.Transactional
+import groovy.json.JsonSlurper
+import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
+import org.springframework.beans.factory.annotation.Autowired
 
 /**
  * Created by balexand on 9/17/2015.
  */
+
 class GetDataQueryHolder {
 
     GetDataQuery getDataQuery
-    SearchBuilderService searchBuilderService
 
-    public GetDataQueryHolder(String filterString) {
+    SearchBuilderService searchBuilderService
+    MetaDataService metaDataService
+
+    public static GetDataQueryHolder createGetDataQueryHolder(String filterString,SearchBuilderService searchBuilderService,MetaDataService metaDataService) {
         if ( (filterString) &&
              (filterString.size() > 0)) {
             String refinedFilterString = filterString
@@ -22,27 +32,48 @@ class GetDataQueryHolder {
                 refinedFilterString = filterString.replaceFirst(~/\[/, "")[0..-2]
             }
             List<String> filterList = refinedFilterString.tokenize("^")
-            this(filterList) // call the list of filters constructor
+            return createGetDataQueryHolder(filterList,searchBuilderService,metaDataService) // call the list of filters constructor
         } else {
-            this(); // if the string is empty then call the no parameter constructor
+            return createGetDataQueryHolder(); // if the string is empty then call the no parameter constructor
         }
     }
 
 
-    public GetDataQueryHolder(List<String> filterList){
+    public static GetDataQueryHolder createGetDataQueryHolder(GetDataQuery getDataQuery){
+        return new GetDataQueryHolder(getDataQuery)
+    }
+
+
+    public static GetDataQueryHolder createGetDataQueryHolder(List<String> filterList,SearchBuilderService searchBuilderService,MetaDataService metaDataService){
+        return new GetDataQueryHolder(filterList,searchBuilderService,metaDataService)
+    }
+
+    public static GetDataQueryHolder createGetDataQueryHolder(){
+        return new GetDataQueryHolder()
+    }
+
+
+
+    public GetDataQueryHolder(List<String> filterList,SearchBuilderService searchBuilderService,MetaDataService metaDataService){
+        this()
+        this.searchBuilderService = searchBuilderService
+        this.metaDataService = metaDataService
         getDataQuery = generateGetDataQuery(filterList)
     }
 
     public GetDataQueryHolder(GetDataQuery getDataQuery){
+        this()
         this.getDataQuery = getDataQuery
     }
+
     public GetDataQueryHolder(){
         this.getDataQuery = new GetDataQueryBean()
     }
 
 
     public GetDataQuery generateGetDataQuery(List <String> listOfCodedFilters){
-        GetDataQuery query = new GetDataQueryBean();
+        GetDataQuery query = new GetDataQueryBean()
+        addDefaultCProperties(query)
         JsNamingQueryTranslator jsNamingQueryTranslator = new JsNamingQueryTranslator()
         List<QueryFilter> combinedQueryFilterList = []
         for (String codedFilters in listOfCodedFilters){
@@ -54,11 +85,55 @@ class GetDataQueryHolder {
         for (QueryFilter queryFilter in combinedQueryFilterList){
             query.addQueryFilter(queryFilter)
         }
+        addDefaultPProperties(query)
         return query
     }
 
 
+    private addDefaultCProperties(GetDataQuery getDataQuery){
+        JsonParser jsonParser = JsonParser.getService();
+        getDataQuery.addQueryProperty((Property) jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CLOSEST_GENE));
+        getDataQuery.addQueryProperty((Property) jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
+        getDataQuery.addQueryProperty((Property) jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_DBSNP_ID));
+        getDataQuery.addQueryProperty((Property) jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_PROTEIN_CHANGE));
+        getDataQuery.addQueryProperty((Property) jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CONSEQUENCE));
+        getDataQuery.addQueryProperty((Property) jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME));
+        getDataQuery.addQueryProperty((Property) jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION));
+    }
 
+
+//getPhenotypeSpecificSampleGroupPropertyList(String phenotypeName,String sampleGroupName, List <String> propertyTemplates)
+
+    private addDefaultPProperties(GetDataQuery getDataQuery ){
+        List<Property> propertyList = getDataQuery.getQueryPropertyList()
+        List<QueryFilter> queryFilterList = getDataQuery.getFilterList()
+        JsonSlurper slurper = new JsonSlurper()
+        for (QueryFilter queryFilter in queryFilterList){
+            if (!(queryFilter.property in propertyList)){
+                String filterStringAsJson = queryFilter.property.getWebServiceFilterString("OP", "0")
+                def parsedFilter = slurper.parseText(filterStringAsJson)
+                String phenotypeName = parsedFilter.phenotype
+                String sampleGroupName = parsedFilter.dataset_id
+                List<Property> defaultDisplayProperties = metaDataService.getPhenotypeSpecificSampleGroupPropertyCollection( phenotypeName, sampleGroupName, [/^MINA/,/^MINU/,/^(OR|ODDS|BETA)/,/^P_(EMMAX|FIRTH|FE|VALUE)/])
+                for (Property defaultDisplayProperty in defaultDisplayProperties) {
+                    getDataQuery.addQueryProperty(defaultDisplayProperty)
+                }
+
+
+            }
+        }
+    }
+
+
+
+
+
+
+    public String retrieveAllFiltersAsJson (){
+        List<QueryFilter> filterList = getDataQuery.getFilterList()
+        List<String> filtersAsJson = filterList.collect{it->it.getFilterString()}
+        return "${filtersAsJson.join(',')}"
+    }
 
 
     public List <String> listOfEncodedFilters() {
