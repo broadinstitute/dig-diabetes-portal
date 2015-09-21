@@ -93,6 +93,13 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
+    void "test url encoded phenotype string"() {
+        when:
+        String phenotypeUrlString = this.metaDataService.urlEncodedListOfPhenotypes();
 
+        then:
+        assert phenotypeUrlString != null
+        assert phenotypeUrlString.length() > 0
+    }
 
 }

@@ -418,4 +418,18 @@ class JsonParserTest extends TestCase {
         assertTrue(childList.size() > 0);
         assertEquals(5, childList.size());
     }
+
+    @Test
+    public void testGetAllPhenotypesWithName() {
+        // local variables
+        List<Phenotype> phenotypeList;
+
+        // get the phenotype list
+        phenotypeList = this.jsonParser.getAllPhenotypesWithName("", "mdv2", "");
+
+        // test
+        assertNotNull(phenotypeList);
+        assertTrue(phenotypeList.size() > 0);
+        assertEquals(137, phenotypeList.size())
+    }
 }
