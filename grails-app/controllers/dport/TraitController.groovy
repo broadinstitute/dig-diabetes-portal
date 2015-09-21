@@ -137,7 +137,7 @@ class TraitController {
      */
     def regionInfo() {
         String regionSpecification = params.id
-        String encodedString = metaDataService.urlEncodedListOfPhenotypes ()
+        String encodedString = this.metaDataService.urlEncodedListOfPhenotypes();
         render(view: 'traitVariantCross',
                 model: [regionSpecification: regionSpecification,
                         phenotypeList      : encodedString,
