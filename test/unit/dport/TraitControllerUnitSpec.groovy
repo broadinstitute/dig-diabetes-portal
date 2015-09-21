@@ -122,6 +122,7 @@ class TraitControllerUnitSpec extends Specification {
     void "test regionInfo"() {
         given:
         controller.metaDataService = Mock(MetaDataService)
+        controller.sharedToolsService = Mock(SharedToolsService)
 
         when:
         params.id = 'rs560887'
