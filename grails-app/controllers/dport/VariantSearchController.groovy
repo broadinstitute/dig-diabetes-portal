@@ -56,7 +56,10 @@ class VariantSearchController {
     }
 
     /***
-     *  Someone hit the 'search builder' page -- let's set it up for them
+     *  Someone has requested the 'search builder' page.  If they are coming to this page without a search
+     *  context then encParamswill be empty.   If instead they are trying to revise their search then
+     *  encParams is going to hold a list of every encoded filter that they want to use.
+     *
      * @return
      */
     def variantSearchWF() {
@@ -67,13 +70,17 @@ class VariantSearchController {
         }
         List<LinkedHashMap> encodedFilterSets = [[:]]
         List<LinkedHashMap> reconstitutedFilterSets = [[:]]
+        GetDataQueryHolder getDataQueryHolder
 
-
-        if ((encParams) && (encParams.length())) {
-            LinkedHashMap simulatedParameters = filterManagementService.generateParamsForSearchRefinement(encParams)
-            encodedFilterSets = filterManagementService.handleFilterRequestFromBrowser(simulatedParameters)
-            reconstitutedFilterSets = filterManagementService.grouper(encodedFilterSets)
-            encodedFilterSets = reconstitutedFilterSets
+        if ((encParams) && (encParams.length()>0)) {
+            String urlDecodedEncParams = URLDecoder.decode(encParams.trim())
+            getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(urlDecodedEncParams, searchBuilderService, metaDataService)
+            List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
+            for ()
+//            LinkedHashMap simulatedParameters = filterManagementService.generateParamsForSearchRefinement(urlDecodedEncParams)
+//            encodedFilterSets = filterManagementService.handleFilterRequestFromBrowser(simulatedParameters)
+//            reconstitutedFilterSets = filterManagementService.grouper(encodedFilterSets)
+//            encodedFilterSets = reconstitutedFilterSets
         }
 
         render(view: 'variantWorkflow',
