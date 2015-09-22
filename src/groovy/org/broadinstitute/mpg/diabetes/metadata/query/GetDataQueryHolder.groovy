@@ -86,6 +86,7 @@ class GetDataQueryHolder {
             query.addQueryFilter(queryFilter)
         }
         addDefaultPProperties(query)
+        addDefaultDProperties(query)
         return query
     }
 
@@ -121,6 +122,20 @@ class GetDataQueryHolder {
 
 
             }
+        }
+    }
+
+
+    private addDefaultDProperties(GetDataQuery getDataQuery ){
+        List<Property> propertyList = getDataQuery.getQueryPropertyList()
+        List<QueryFilter> queryFilterList = getDataQuery.getFilterList()
+        JsonSlurper slurper = new JsonSlurper()
+        for (QueryFilter queryFilter in queryFilterList){
+            if (!(queryFilter.property in propertyList)){
+                if (queryFilter.property.parent?.getClass().getName().contains("SampleGroupBean")){
+                    getDataQuery.addQueryProperty(queryFilter.property)
+                }
+             }
         }
     }
 
