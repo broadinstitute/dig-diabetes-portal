@@ -137,8 +137,10 @@ class TraitController {
      */
     def regionInfo() {
         String regionSpecification = params.id
+        String encodedString = this.metaDataService.urlEncodedListOfPhenotypes();
         render(view: 'traitVariantCross',
                 model: [regionSpecification: regionSpecification,
+                        phenotypeList      : encodedString,
                         show_gene          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
                         show_gwas          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                         show_exchp         : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
@@ -153,7 +155,14 @@ class TraitController {
     def traitVariantCrossAjax() {
         String regionsSpecification = params.id
 
+        // log
+        log.info("for traitVariantCrossAjax call, got params: " + params)
+
         JSONObject jsonObject =  restServerService.searchTraitByUnparsedRegion (regionsSpecification)
+
+        // log
+        log.info("for traitVariantCrossAjax, got json results object: " + jsonObject);
+
         if (jsonObject) {
             render(status: 200, contentType: "application/json") {
                 [variants: jsonObject['variants']]
