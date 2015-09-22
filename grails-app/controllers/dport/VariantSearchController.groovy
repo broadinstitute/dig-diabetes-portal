@@ -68,15 +68,23 @@ class VariantSearchController {
             encParams = params.encParams
             log.debug "variantSearch params.encParams = ${params.encParams}"
         }
-        List<LinkedHashMap> encodedFilterSets = [[:]]
-        List<LinkedHashMap> reconstitutedFilterSets = [[:]]
+        List<LinkedHashMap> encodedFilterSets = []
         GetDataQueryHolder getDataQueryHolder
 
         if ((encParams) && (encParams.length()>0)) {
             String urlDecodedEncParams = URLDecoder.decode(encParams.trim())
-            getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(urlDecodedEncParams, searchBuilderService, metaDataService)
+            getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(urlDecodedEncParams?.replaceAll(~/,/,"^") , searchBuilderService, metaDataService)
             List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
-            for ()
+            for ( int  i = 0 ; i < encodedFilters.size() ; i++ ) {
+
+                String encodedFilter = encodedFilters[i];
+                List<String> decodedPieces=  encodedFilter.split("=");
+
+                // make sure we have two parts
+                if (decodedPieces.size() > 1) {
+                    encodedFilterSets << ["filter${i}": decodedPieces[1]]
+                }
+            }
 //            LinkedHashMap simulatedParameters = filterManagementService.generateParamsForSearchRefinement(urlDecodedEncParams)
 //            encodedFilterSets = filterManagementService.handleFilterRequestFromBrowser(simulatedParameters)
 //            reconstitutedFilterSets = filterManagementService.grouper(encodedFilterSets)

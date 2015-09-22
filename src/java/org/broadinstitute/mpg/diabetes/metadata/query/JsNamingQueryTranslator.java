@@ -246,8 +246,8 @@ public class JsNamingQueryTranslator {
 
             // make sure we have two parts
             if (tempArray.length > 1) {
-                lineNumberString = tempArray[0];
-                tempString = tempArray[1];
+                lineNumberString = tempArray[0].trim();
+                tempString = tempArray[1].trim();
 
                 // get the line number and create the query
                 if (lineNumberString == null) {
