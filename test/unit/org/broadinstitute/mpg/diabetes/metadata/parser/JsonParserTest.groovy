@@ -244,7 +244,7 @@ class JsonParserTest extends TestCase {
 
         // find the property
         property = this.jsonParser.findPropertyByName(propertyName);
-        generatedFilter  = property.getWebServiceFilterString("<", "45");
+        generatedFilter  = property.getWebServiceFilterString("<", "45","");
 
         // test
         assertNotNull(property);

@@ -526,7 +526,8 @@ class SharedToolsService {
                 if (sampleGroupsToKeep == null) {
                     curSampleGroups.addAll(metaDataService.getSampleGroupPerPhenotype(phenotype))
                 } else {
-                      curSampleGroups.addAll(sampleGroupsToKeep.findAll({metaDataService.getSampleGroupPerPhenotype(phenotype)?.contains(it)}))
+                    curSampleGroups.addAll(sampleGroupsToKeep)
+                    //curSampleGroups.addAll(sampleGroupsToKeep.findAll({metaDataService.getSampleGroupPerPhenotype(phenotype)?.contains(it)}))
                 }
                 for (String sampleGroup in curSampleGroups) {
                     returnValue.dproperty[phenotype][sampleGroup] = []

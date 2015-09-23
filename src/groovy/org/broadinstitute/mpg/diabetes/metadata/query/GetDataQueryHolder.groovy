@@ -103,15 +103,13 @@ class GetDataQueryHolder {
     }
 
 
-//getPhenotypeSpecificSampleGroupPropertyList(String phenotypeName,String sampleGroupName, List <String> propertyTemplates)
-
     private addDefaultPProperties(GetDataQuery getDataQuery ){
         List<Property> propertyList = getDataQuery.getQueryPropertyList()
         List<QueryFilter> queryFilterList = getDataQuery.getFilterList()
         JsonSlurper slurper = new JsonSlurper()
         for (QueryFilter queryFilter in queryFilterList){
             if (!(queryFilter.property in propertyList)){
-                String filterStringAsJson = queryFilter.property.getWebServiceFilterString("OP", "0")
+                String filterStringAsJson = queryFilter.property.getWebServiceFilterString("OP", "0","")
                 def parsedFilter = slurper.parseText(filterStringAsJson)
                 String phenotypeName = parsedFilter.phenotype
                 String sampleGroupName = parsedFilter.dataset_id
@@ -142,6 +140,43 @@ class GetDataQueryHolder {
 
 
 
+
+
+    private addDefaultDProperties(LinkedHashMap resultColumnsToDisplay ){
+        if ((resultColumnsToDisplay) &&
+                (resultColumnsToDisplay['dproperty'])){
+           LinkedHashMap dProperties =  resultColumnsToDisplay['dproperty']
+           dProperties.each{String phenoKey, LinkedHashMap dataSets->
+               dataSets?.each{String dataSetKey, List props ->
+                   for(String prop in props){
+                       List<Property> defaultDisplayProperties = metaDataService.getPhenotypeSpecificSampleGroupPropertyCollection( phenoKey, dataSetKey, ["^${prop}"])
+                       for (Property defaultDisplayProperty in defaultDisplayProperties) {
+                           getDataQuery.addQueryProperty(defaultDisplayProperty)
+                       }
+                   }
+               }
+           }
+        }
+        List<Property> propertyList = getDataQuery.getQueryPropertyList()
+        List<QueryFilter> queryFilterList = getDataQuery.getFilterList()
+        JsonSlurper slurper = new JsonSlurper()
+        for (QueryFilter queryFilter in queryFilterList){
+            if (!(queryFilter.property in propertyList)){
+                if (queryFilter.property.parent?.getClass().getName().contains("SampleGroupBean")){
+                    getDataQuery.addQueryProperty(queryFilter.property)
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+    public void addAnyAdditionalProperties (LinkedHashMap columnsToDisplay){
+
+    }
 
 
     public String retrieveAllFiltersAsJson (){

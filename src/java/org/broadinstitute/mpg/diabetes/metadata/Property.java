@@ -19,7 +19,7 @@ public interface Property extends DataSet {
 
     public int getSortOrder();
 
-    public String getWebServiceFilterString(String operand, String value);
+    public String getWebServiceFilterString(String operand, String value,String requestedPhenotype);
 
     /**
      * returns the property query string in json format

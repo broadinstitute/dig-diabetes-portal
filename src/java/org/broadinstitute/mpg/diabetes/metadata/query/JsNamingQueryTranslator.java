@@ -26,6 +26,9 @@ public class JsNamingQueryTranslator {
     public final static String QUERY_OPERATOR_MORE_THAN_STRING            = ">";
     public final static String QUERY_OPERATOR_LESS_THAN_STRING            = "<";
 
+    public final static String QUERY_SAMPLE_GROUP_BEGIN_STRING            = "\\[";
+    public final static String QUERY_SAMPLE_GROUP_AND_STRING            = "\\]";
+
     public final static String QUERY_GENE_LINE_NUMBER                             = "7";
     public final static String QUERY_CHROMOSOME_LINE_NUMBER                       = "8";
     public final static String QUERY_START_POSITION_LINE_NUMBER                   = "9";
@@ -129,13 +132,24 @@ public class JsNamingQueryTranslator {
             if (identifyParentType.contains("SampleGroupBean")){ // we have a dProp
                 SampleGroupBean sampleGroupBean =  (SampleGroupBean) property.getParent();
                 String systemId = sampleGroupBean.getSystemId();
-                returnValue =  QUERY_PROPERTY_FILTER_LINE_NUMBER+
-                        QUERY_NUMBER_DELIMITER_STRING+
-                        "T2D"+"["+                 // phenotype field ignored
-                        systemId+"]"+
-                        property.getName()+
-                        convertStringOperatorToSymbol(operator)+
-                        value;
+                String requestedPhenotype = queryFilter.getRequestedPhenotype();
+                if ((requestedPhenotype !=  null ) && (requestedPhenotype.length() > 0)) {
+                    returnValue = QUERY_PROPERTY_FILTER_LINE_NUMBER +
+                            QUERY_NUMBER_DELIMITER_STRING +
+                            requestedPhenotype + "[" +
+                            systemId + "]" +
+                            property.getName() +
+                            convertStringOperatorToSymbol(operator) +
+                            value;
+                } else {
+                    returnValue =  QUERY_PROPERTY_FILTER_LINE_NUMBER+
+                            QUERY_NUMBER_DELIMITER_STRING+
+                            "T2D"+"["+                 // default phenotype-- this should never be used, I think
+                            systemId+"]"+
+                            property.getName()+
+                            convertStringOperatorToSymbol(operator)+
+                            value;
+                }
 
             } else { // pProp
                 PhenotypeBean phenotypeBean = (PhenotypeBean) property.getParent();
@@ -269,21 +283,6 @@ public class JsNamingQueryTranslator {
                     // find out what the operator is
                     operatorSplitCharacter = determineOperatorSplitCharacter(tempString);
                     operator = convertSymbolicOperatorToString (operatorSplitCharacter);
-//                    if (tempString.contains(this.QUERY_OPERATOR_EQUALS_STRING)) {
-//                        operator = PortalConstants.OPERATOR_EQUALS;
-//                        operatorSplitCharacter = Pattern.quote(this.QUERY_OPERATOR_EQUALS_STRING);      // '|' string is special regexp string
-//
-//                    } else if (tempString.contains(this.QUERY_OPERATOR_LESS_THAN_STRING)) {
-//                        operator = PortalConstants.OPERATOR_LESS_THAN_NOT_EQUALS;
-//                        operatorSplitCharacter = this.QUERY_OPERATOR_LESS_THAN_STRING;
-//
-//                    } else if (tempString.contains(this.QUERY_OPERATOR_MORE_THAN_STRING)) {
-//                        operator = PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS;
-//                        operatorSplitCharacter = this.QUERY_OPERATOR_MORE_THAN_STRING;
-//
-//                    } else {
-//                        throw new PortalException("Got unsupported operator in query string: " + tempString);
-//                    }
 
                     // split the string
                     tempArray = tempString.split(operatorSplitCharacter);
@@ -299,14 +298,32 @@ public class JsNamingQueryTranslator {
 
                     // get the property
                     Property propertyForFilter = null;
+                    String requestedPhenotype = null;
                     if (lineNumberString.equals(this.QUERY_PROTEIN_EFFECT_LINE_NUMBER)) {
                         propertyForFilter = this.jsonParser.findPropertyByName(propertyString);
                     } else {
                         propertyForFilter = this.jsonParser.getPropertyFromJavaScriptNamingScheme(propertyString);
+                        // when the user has requested a sample group, we need to remember which phenotype they are asking about
+                        String[] tempArray2 = propertyString.split(QUERY_SAMPLE_GROUP_BEGIN_STRING);
+                        if ((tempArray2  !=  null ) &&
+                                (tempArray2.length == 2)){
+                            requestedPhenotype = tempArray2[0];
+                        }
                     }
 
                     // create the query
-                    queryFilter = new QueryFilterBean(propertyForFilter, operator, operand);
+                    if ((requestedPhenotype !=  null ) &&
+                        (requestedPhenotype.length() > 0))   {
+                        // if this is a P property- based filter then we can get the information from the property, and we will
+                        //  at the point of filter generation, thereby ignoring the requestedPhenotype parameter. If however
+                        //  this is a D property then currently we need to know, since every query made by user exists within
+                        //  the context of a phenotype.  In the long run we will have a better solution, I'm sure, but for now
+                        //  letter D properties and P properties are used interchangeably from the user's perspective
+                        queryFilter = new QueryFilterBean(propertyForFilter, operator, operand,requestedPhenotype);
+                    } else {
+                        queryFilter = new QueryFilterBean(propertyForFilter, operator, operand);
+                    }
+
 
                 } else {
                     throw new PortalException("Got incorrect line number string: " + lineNumberString);

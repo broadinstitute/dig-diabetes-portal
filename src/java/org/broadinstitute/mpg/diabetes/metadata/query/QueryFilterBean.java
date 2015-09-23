@@ -10,6 +10,7 @@ public class QueryFilterBean implements QueryFilter {
     Property property;
     String operator;
     String value;
+    String requestedPhenotype;
 
     /**
      * default constructor
@@ -24,13 +25,20 @@ public class QueryFilterBean implements QueryFilter {
         this.value = value;
     }
 
+    public QueryFilterBean(Property property, String operator, String value,  String requestedPhenotype) {
+        this.property = property;
+        this.operator = operator;
+        this.value = value;
+        this.requestedPhenotype = requestedPhenotype;
+    }
+
     /**
      * returns the filter string for the property and values given
      *
      * @return
      */
     public String getFilterString() {
-        return (this.property == null ? "" : property.getWebServiceFilterString(operator, value));
+        return (this.property == null ? "" : property.getWebServiceFilterString(operator, value,requestedPhenotype));
     }
 
     public Property getProperty() {
@@ -44,4 +52,6 @@ public class QueryFilterBean implements QueryFilter {
     public String getValue() {
         return value;
     }
+
+    public String getRequestedPhenotype() { return requestedPhenotype; }
 }

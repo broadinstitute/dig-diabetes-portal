@@ -106,7 +106,7 @@ public class PropertyBean implements Property, Comparable {
      * @param value
      * @return
      */
-    public String getWebServiceFilterString(String operator, String value) {
+    public String getWebServiceFilterString(String operator, String value, String requestedPhenotype) {
         // local variables
         StringBuilder builder = new StringBuilder();
         String dataset = "blah";
@@ -117,6 +117,9 @@ public class PropertyBean implements Property, Comparable {
             if (this.getParent() != null) {
                 SampleGroup parentGroup = (SampleGroup)this.getParent();
                 dataset = parentGroup.getSystemId();
+                if ((requestedPhenotype !=  null ) && (requestedPhenotype.length()>0)){
+                    phenotype = requestedPhenotype;
+                }
             }
 
         } else if (this.getPropertyType() == PortalConstants.TYPE_PHENOTYPE_PROPERTY_KEY) {

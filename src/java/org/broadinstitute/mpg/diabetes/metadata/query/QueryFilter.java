@@ -19,4 +19,6 @@ public interface QueryFilter {
     public String getOperator();
 
     public String getValue();
+
+    public String getRequestedPhenotype();
 }

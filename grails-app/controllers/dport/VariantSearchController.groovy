@@ -300,18 +300,19 @@ class VariantSearchController {
 
         log.debug "variantSearch variantSearchAjax = ${filters}"
 
+        // build up filters our data query
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters,searchBuilderService,metaDataService)
-
-        List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
-
         String revisedFiltersRaw = java.net.URLEncoder.encode(getDataQueryHolder.retrieveAllFiltersAsJson())
 
-                JsonSlurper slurper = new JsonSlurper()
+        // determine columns to display
+        LinkedHashMap resultColumnsToDisplay= restServerService.getColumnsToDisplay("[${getDataQueryHolder.retrieveAllFiltersAsJson()}]",requestedProperties)
+
+        // make the call to REST server
+        JsonSlurper slurper = new JsonSlurper()
+        getDataQueryHolder.addAnyAdditionalProperties(resultColumnsToDisplay)
         String dataJsonObjectString = restServerService.postDataQueryRestCall(getDataQueryHolder)
-       // String dataJsonObjectString = restServerService.postRestCallFromFilters(filters,requestedProperties)
         JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
 
-        LinkedHashMap resultColumnsToDisplay= restServerService.getColumnsToDisplay("[${getDataQueryHolder.retrieveAllFiltersAsJson()}]",requestedProperties)
         JsonOutput resultColumnsJsonOutput = new JsonOutput()
         String resultColumnsJsonObjectString = resultColumnsJsonOutput.toJson(resultColumnsToDisplay)
         JSONObject resultColumnsJsonObject = slurper.parseText(resultColumnsJsonObjectString)

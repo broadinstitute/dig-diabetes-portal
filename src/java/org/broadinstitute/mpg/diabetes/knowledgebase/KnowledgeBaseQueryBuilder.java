@@ -129,7 +129,7 @@ public class KnowledgeBaseQueryBuilder {
         for (Property property: filterPropertyList) {
             stringBuilder.append(commaString);
             // TODO - error here - scrap this method for now, make it prettier and useful later
-            stringBuilder.append(property.getWebServiceFilterString(null, null));
+            stringBuilder.append(property.getWebServiceFilterString(null, null,null));
             commaString = ",";
         }
         stringBuilder.append("]}");
