@@ -350,6 +350,41 @@ class MetaDataService {
         return sampleGroupList
     }
 
+
+
+    public Property getSampleGroupProperty(String sampleGroupName,String propertyName){
+        Property returnValue
+        List<Property> propertyList =  this.getJsonParser().getSearchablePropertiesForSampleGroupId( sampleGroupName )
+        if (propertyList){
+            for (Property property in propertyList){
+                if (property.name == propertyName){
+                    returnValue = property
+                    break
+                }
+            }
+        }
+        return returnValue
+    }
+
+
+
+    public Property getCommonPropertyByName (String commonPropertyName){
+        Property returnValue
+        List<Property> commonProperties =  this.getJsonParser().getAllCommonProperties()
+        if (commonProperties){
+            for (Property property in commonProperties){
+                if (property.name == commonPropertyName){
+                    returnValue = property
+                    break
+                }
+            }
+        }
+        return returnValue
+    }
+
+
+
+
     /**
      * demo method to return properties based on types, as well as a max number input
      *

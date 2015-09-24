@@ -25,7 +25,9 @@ public class GetDataQueryBean implements GetDataQuery {
 
 
     public void addQueryProperty(Property property) {
-        this.queryPropertyMap.put(property.getId(), property);
+        if (!(this.queryPropertyMap.containsKey(property.getId()))){
+            this.queryPropertyMap.put(property.getId(), property);
+        }
     }
 
     public void addFilterProperty(Property property, String operator, String value) {

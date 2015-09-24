@@ -309,7 +309,7 @@ class VariantSearchController {
 
         // make the call to REST server
         JsonSlurper slurper = new JsonSlurper()
-        getDataQueryHolder.addAnyAdditionalProperties(resultColumnsToDisplay)
+        getDataQueryHolder.addProperties(resultColumnsToDisplay)
         String dataJsonObjectString = restServerService.postDataQueryRestCall(getDataQueryHolder)
         JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
 

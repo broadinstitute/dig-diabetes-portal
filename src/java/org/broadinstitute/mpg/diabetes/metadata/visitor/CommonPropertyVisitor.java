@@ -11,8 +11,17 @@ import java.util.List;
 /**
  * Created by mduby on 8/17/15.
  */
-public class SearchableCommonPropertyVisitor implements DataSetVisitor {
+public class CommonPropertyVisitor implements DataSetVisitor {
     List<Property> propertyList = new ArrayList<Property>();
+    Boolean searchableOnly = new Boolean(Boolean.TRUE);
+
+
+    /***
+     * constructor to allow us to set the searchable switch
+     * @param searchableOnly
+     */
+    public CommonPropertyVisitor(Boolean searchableOnly){this.searchableOnly = searchableOnly;}
+
 
     /**
      * only visit the metadata root and return the searchable properties
@@ -24,10 +33,12 @@ public class SearchableCommonPropertyVisitor implements DataSetVisitor {
             MetaDataRoot dataRoot = (MetaDataRoot)dataSet;
 
             for (Property property : ((MetaDataRoot) dataSet).getProperties()) {
-                if (property.isSearchable()) {
+                if (searchableOnly && property.isSearchable()) {
+                    this.propertyList.add(property);
+                } else {
                     this.propertyList.add(property);
                 }
-            }
+             }
         }
     }
 

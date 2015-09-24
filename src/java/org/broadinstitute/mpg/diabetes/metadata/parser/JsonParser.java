@@ -11,21 +11,8 @@ import org.broadinstitute.mpg.diabetes.metadata.Property;
 import org.broadinstitute.mpg.diabetes.metadata.PropertyBean;
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup;
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.AllDataSetHashSetVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.DataSetDirectChildByTypeVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.ExperimentByVersionVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.GwasTechSampleGroupByPhenotypeVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.JsNameTranslationVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeByNameVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeNameVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyByNameFinderVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyByPropertyTypeVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyPerExperimentVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupByIdSelectingVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupForPhenotypeVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchableCommonPropertyVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchablePropertyIncludingChildrenVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchablePropertyVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.*;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.CommonPropertyVisitor;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
 import org.codehaus.groovy.grails.web.json.JSONArray;
@@ -523,7 +510,7 @@ public class JsonParser {
         List<Property> commonPropertyList;
 
         // get the searchable common property visitor
-        SearchableCommonPropertyVisitor visitor = new SearchableCommonPropertyVisitor();
+        CommonPropertyVisitor visitor = new CommonPropertyVisitor(Boolean.TRUE);
 
         // set the visitor on the metadata root
         this.getMetaDataRoot().acceptVisitor(visitor);
@@ -534,6 +521,31 @@ public class JsonParser {
         // return the result
         return commonPropertyList;
     }
+
+
+    /***
+     * return all common properties, searchable or otherwise
+     * @return
+     * @throws PortalException
+     */
+    public List<Property> getAllCommonProperties() throws PortalException {
+        // local variables
+        List<Property> commonPropertyList;
+
+        // get the searchable common property visitor
+        CommonPropertyVisitor visitor = new CommonPropertyVisitor(Boolean.FALSE);
+
+        // set the visitor on the metadata root
+        this.getMetaDataRoot().acceptVisitor(visitor);
+
+        // get the common property list
+        commonPropertyList = visitor.getProperties();
+
+        // return the result
+        return commonPropertyList;
+    }
+
+
 
     /**
      * return the GWAS first level sample group with the phenotype name
