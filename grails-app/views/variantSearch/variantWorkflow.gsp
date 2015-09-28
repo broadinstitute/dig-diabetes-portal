@@ -39,7 +39,6 @@
         });
     });
 
-    // todo arz remove me example callback from angular to set the columns
     applyDatasetsFilter = function(columns) {
         console.log(columns);
     };
@@ -68,7 +67,6 @@
                     <div class="col-md-12">
                         <h4>Find genetic variants of interest</h4>
                         <g:render template="variantWFSpec" />
-                        <!-- todo arz remove me, this is just an example -->
                     </div>
                 </div>
 

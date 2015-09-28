@@ -1,6 +1,7 @@
 package dport
 
 import grails.transaction.Transactional
+import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 
 @Transactional
@@ -45,15 +46,22 @@ class SearchBuilderService {
      * @param allFilters
      * @return
      */
-    public List<String> composeCustomFiltersForClause(LinkedHashMap allFilters) {
+    public List<String> composeCustomFiltersForClause( String aFilter ) {
         List<String> returnValue = []
-        LinkedHashMap customFilters = allFilters.findAll{ it.key =~ /^filter/ }
-        int numberOfCustomFiltersLeft = customFilters.size()
-        customFilters.each {String key, String value->
-            returnValue << """
-                                <div class="phenotype filterElement">${makeFiltersPrettier(value)}</div>
+
+            if (aFilter.contains("[")) {//we only want to handle custom filters
+                returnValue << """
+                                <div class="phenotype filterElement">${makeFiltersPrettier(aFilter)}</div>
                     """.toString()
-        }
+            }
+
+//        LinkedHashMap customFilters = allFilters.findAll{ it.key =~ /^filter/ }
+//        int numberOfCustomFiltersLeft = customFilters.size()
+//        customFilters.each {String key, String value->
+//            returnValue << """
+//                                <div class="phenotype filterElement">${makeFiltersPrettier(value)}</div>
+//                    """.toString()
+//        }
         return returnValue
 
     }
@@ -167,99 +175,73 @@ class SearchBuilderService {
      * @param allFilters
      * @return
      */
-    public List<String> composeFiltersForClause(LinkedHashMap allFilters) {
+    public List<String> composeFiltersForClause(String aFilter) {
         List<String> returnValue = []
-        if ( allFilters ) {
-
-
-            // a line to describe the odds ratio
-            if (allFilters.orValue) {
-                String inequality = "&gt;"
-                if (allFilters.orValueInequality == "lessThan"){
-                    inequality = "&lt;"
-                }
-                returnValue << """
-                        <span class="cc filterElement">OR ${inequality}&nbsp; ${allFilters.orValue}</span>
-                                            """.toString()
-            }  // a single line for the odds ratio
-
-            // a line to describe the P value
-            if (allFilters.pValue) {
-                String inequality = "&lt;"
-                if (allFilters.pValueInequality == "greaterThan"){
-                    inequality = "&gt;"
-                }
-                returnValue << """
-                            <span class="dd filterElement">p-value ${inequality}&nbsp; ${allFilters.pValue}</span>
-                            """.toString()
-            }// a single line for the P value
-
-            // a line to describe the P value
-            if (allFilters.esValue) {
-                String inequality = "&lt;"
-                if (allFilters.esValueInequality == "greaterThan"){
-                    inequality = "&gt;"
-                }
-                returnValue << """
-                        <span class="dd filterElement">effect size ${inequality}&nbsp; ${allFilters.esValue}</span>
-                        """.toString()
-            }// a single line for the effect value
-
-            // a line to describe the polyphen value
-            if (allFilters.regionChromosomeInput) {
-                returnValue << """
-                                <span class="dd filterElement">chromosome: ${allFilters.regionChromosomeInput}</span>
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder()
+        String aDecodedFilter = getDataQueryHolder.decodeFilter(aFilter)
+        if (!aDecodedFilter.contains("[")){
+            returnValue << """
+                                <span class="dd filterElement">${getDataQueryHolder.decodeFilter(aFilter)}</span>
                                 """.toString()
-            }// a single line for the P value
+        }
 
-            // a line to describe the polyphen value
-            if (allFilters.regionStartInput) {
-                returnValue << """
-                                <span class="dd filterElement">start position:&nbsp; ${allFilters.regionStartInput}</span>
-                                """.toString()
-            }// a single line for the P value
+      //  }
 
-            // a line to describe the polyphen value
-            if (allFilters.regionStopInput) {
-                returnValue << """
-                                <span class="dd filterElement">end position:&nbsp; ${allFilters.regionStopInput}</span>
-                                """.toString()
-            }// a single line for the P value
-
-            // a line to describe the polyphen value
-            if (allFilters.gene) {
-                returnValue << """
-                                <span class="dd filterElement">${allFilters.gene}</span>
-                                """.toString()
-            }// a single line for the P value
-
-            // a line to describe the polyphen value
-            if (allFilters.predictedEffects) {
-                if (allFilters.predictedEffects != "${PortalConstants.PROTEIN_PREDICTION_EFFECT_ALL_CODE}")  {  // don't display the default
-                    returnValue << """
-                                <span class="dd filterElement">predicted effects: ${prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_PROTEINEFFECT,allFilters.predictedEffects)}</span>
-                                """.toString()
-                }
-            }// a single line for the P value
-
-            if (allFilters.polyphenSelect) {
-                returnValue << """
-                                <span class="dd filterElement">polyphen prediction: ${prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_POLYPHEN,allFilters.polyphenSelect)}</span>
-                                """.toString()
-            }// a single line for the P value
-            if (allFilters.siftSelect) {
-                returnValue << """
-                                <span class="dd filterElement">sift prediction: ${prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_SIFT,allFilters.siftSelect)}</span>
-                                """.toString()
-            }// a single line for the P value
-            if (allFilters.condelSelect) {
-                returnValue << """
-                                <span class="dd filterElement">condel prediction: ${prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_CONDEL,allFilters.condelSelect)}</span>
-                                """.toString()
-            }// a single line for the P value
-
-
-        }  // the section containing all filters
+//            // a line to describe the polyphen value
+//            if (allFilters.regionChromosomeInput) {
+//                returnValue << """
+//                                <span class="dd filterElement">chromosome: ${allFilters.regionChromosomeInput}</span>
+//                                """.toString()
+//            }// a single line for the P value
+//
+//            // a line to describe the polyphen value
+//            if (allFilters.regionStartInput) {
+//                returnValue << """
+//                                <span class="dd filterElement">start position:&nbsp; ${allFilters.regionStartInput}</span>
+//                                """.toString()
+//            }// a single line for the P value
+//
+//            // a line to describe the polyphen value
+//            if (allFilters.regionStopInput) {
+//                returnValue << """
+//                                <span class="dd filterElement">end position:&nbsp; ${allFilters.regionStopInput}</span>
+//                                """.toString()
+//            }// a single line for the P value
+//
+//            // a line to describe the polyphen value
+//            if (allFilters.gene) {
+//                returnValue << """
+//                                <span class="dd filterElement">${allFilters.gene}</span>
+//                                """.toString()
+//            }// a single line for the P value
+//
+//            // a line to describe the polyphen value
+//            if (allFilters.predictedEffects) {
+//                if (allFilters.predictedEffects != "${PortalConstants.PROTEIN_PREDICTION_EFFECT_ALL_CODE}")  {  // don't display the default
+//                    returnValue << """
+//                                <span class="dd filterElement">predicted effects: ${prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_PROTEINEFFECT,allFilters.predictedEffects)}</span>
+//                                """.toString()
+//                }
+//            }// a single line for the P value
+//
+//            if (allFilters.polyphenSelect) {
+//                returnValue << """
+//                                <span class="dd filterElement">polyphen prediction: ${prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_POLYPHEN,allFilters.polyphenSelect)}</span>
+//                                """.toString()
+//            }// a single line for the P value
+//            if (allFilters.siftSelect) {
+//                returnValue << """
+//                                <span class="dd filterElement">sift prediction: ${prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_SIFT,allFilters.siftSelect)}</span>
+//                                """.toString()
+//            }// a single line for the P value
+//            if (allFilters.condelSelect) {
+//                returnValue << """
+//                                <span class="dd filterElement">condel prediction: ${prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_CONDEL,allFilters.condelSelect)}</span>
+//                                """.toString()
+//            }// a single line for the P value
+//
+//
+//        }  // the section containing all filters
         
         return returnValue
 
@@ -267,9 +249,9 @@ class SearchBuilderService {
 
 
 
-    public String writeOutFiltersAsHtml( out, LinkedHashMap allFilters ){
-        List<String> listOfCustomFilters = composeCustomFiltersForClause( allFilters )
-        List<String> listOfFilters =  composeFiltersForClause( allFilters )
+    public String writeOutFiltersAsHtml( out, String aFilter ){
+        List<String> listOfCustomFilters = composeCustomFiltersForClause( aFilter )
+        List<String> listOfFilters =  composeFiltersForClause( aFilter )
         for (String customFilter in listOfCustomFilters){ // no need to count, since all are handled the same way
             out << customFilter
         }

@@ -210,6 +210,8 @@ class GetDataQueryHolder {
     }
 
 
+
+
     public Boolean isValid() {
         return ((getDataQuery) &&
                 (getDataQuery.filterList))
@@ -226,7 +228,7 @@ class GetDataQueryHolder {
     }
 
 
-    private String decodeFilter(String encodedFilter) throws PortalException {
+    public String decodeFilter(String encodedFilter) throws PortalException {
         String returnValue = ""
         if ((encodedFilter != null) &&
                 (encodedFilter.length() > 0)) {

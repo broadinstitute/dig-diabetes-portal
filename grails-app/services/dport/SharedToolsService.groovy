@@ -1330,8 +1330,8 @@ class SharedToolsService {
     }
 
 
-    public LinkedHashMap<String,String>  decodeAFilterList(String encodedFilterString) {
-        LinkedHashMap<String,String> returnValue= [:]
+    public void decodeAFilterList(String encodedFilterString,LinkedHashMap<String,String> returnValue) {
+        //LinkedHashMap<String,String> returnValue= [:]
         if (encodedFilterString){
             List <String> parametersList =  encodedFilterString.split("\\^")
             int filterCount = 0
@@ -1387,7 +1387,7 @@ class SharedToolsService {
                 }
             }
         }
-        return  returnValue
+        return
     }
 
 

@@ -4,7 +4,9 @@ import dport.meta.UserQueryContext
 import grails.transaction.Transactional
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
+import org.broadinstitute.mpg.diabetes.metadata.query.JsNamingQueryTranslator
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
+import org.broadinstitute.mpg.diabetes.util.PortalConstants
 
 @Transactional
 class FilterManagementService {
@@ -1291,71 +1293,59 @@ class FilterManagementService {
             returnValue["filter${i++}"] = convertCustomFilters (key, value)
         }
 
-
-        if (dataSet) {
-            returnValue['dataSet']  = dataSet
-        }
+        int cFilterCount = 0
+//        if (dataSet) {
+//            returnValue['dataSet']  = dataSet
+//        }
 
         if (regionGeneInput) {
-            returnValue['gene']  = regionGeneInput
+            returnValue["cfilter${cFilterCount++}"] = "${JsNamingQueryTranslator.QUERY_GENE_LINE_NUMBER}${JsNamingQueryTranslator.QUERY_NUMBER_DELIMITER_STRING}${regionGeneInput}"
         }
 
         if (regionChromosomeInput) {
-            returnValue['regionChromosomeInput']  = regionChromosomeInput
+            returnValue["cfilter${cFilterCount++}"] = "${JsNamingQueryTranslator.QUERY_CHROMOSOME_LINE_NUMBER}${JsNamingQueryTranslator.QUERY_NUMBER_DELIMITER_STRING}${regionChromosomeInput}"
         }
         if (regionStartInput) {
-            returnValue['regionStartInput']  = regionStartInput
+            returnValue["cfilter${cFilterCount++}"] = "${JsNamingQueryTranslator.QUERY_START_POSITION_LINE_NUMBER}${JsNamingQueryTranslator.QUERY_NUMBER_DELIMITER_STRING}${regionStartInput}"
         }
         if (regionStopInput) {
-            returnValue['regionStopInput']  = regionStopInput
+            returnValue["cfilter${cFilterCount++}"] = "${JsNamingQueryTranslator.QUERY_END_POSITION_LINE_NUMBER}${JsNamingQueryTranslator.QUERY_NUMBER_DELIMITER_STRING}${regionStopInput}"
         }
         if ((predictedEffects) &&
-                (predictedEffects != "undefined")){
-            returnValue['predictedEffects']  = predictedEffects
+                (predictedEffects != "undefined")&&
+                (predictedEffects != "0")){
+            returnValue["cfilter${cFilterCount++}"] = "${JsNamingQueryTranslator.QUERY_PROTEIN_EFFECT_LINE_NUMBER}${JsNamingQueryTranslator.QUERY_NUMBER_DELIMITER_STRING}"+
+                    "${PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY}${JsNamingQueryTranslator.QUERY_OPERATOR_EQUALS_STRING}${predictedEffects}"
         }
 
         if ((condelSelect) &&
-                (condelSelect != "undefined")){
-            returnValue['condelSelect']  = condelSelect
+                (condelSelect != "undefined")&&
+                (condelSelect != "0")){
+            returnValue["cfilter${cFilterCount++}"] = "${JsNamingQueryTranslator.QUERY_PROTEIN_EFFECT_LINE_NUMBER}${JsNamingQueryTranslator.QUERY_NUMBER_DELIMITER_STRING}"+
+                    "${PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY}${JsNamingQueryTranslator.QUERY_OPERATOR_EQUALS_STRING}${condelSelect}"
         }
 
         if ((polyphenSelect) &&
-                (polyphenSelect != "undefined")){
-            returnValue['polyphenSelect']  = polyphenSelect
+                (polyphenSelect != "undefined")&&
+                (polyphenSelect != "0")){
+            returnValue["cfilter${cFilterCount++}"] = "${JsNamingQueryTranslator.QUERY_PROTEIN_EFFECT_LINE_NUMBER}${JsNamingQueryTranslator.QUERY_NUMBER_DELIMITER_STRING}"+
+                    "${PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY}${JsNamingQueryTranslator.QUERY_OPERATOR_EQUALS_STRING}${polyphenSelect}"
         }
 
         if ((siftSelect) &&
-                (siftSelect != "undefined")){
-            returnValue['siftSelect']  = siftSelect
+                (siftSelect != "undefined")&&
+                (siftSelect != "0")){
+            returnValue["cfilter${cFilterCount++}"] = "${JsNamingQueryTranslator.QUERY_PROTEIN_EFFECT_LINE_NUMBER}${JsNamingQueryTranslator.QUERY_NUMBER_DELIMITER_STRING}"+
+                    "${PortalConstants.JSON_VARIANT_SIFT_PRED_KEY}${JsNamingQueryTranslator.QUERY_OPERATOR_EQUALS_STRING}${siftSelect}"
         }
-
-        if (phenotype) {
-            returnValue['phenotype']  = phenotype
-        }
-
-
-        if (esValue) {
-            float value = 0
-            try {
-                value = Float.parseFloat(esValue)
-                returnValue['esValue']  = value
-            } catch (e) {
-                ; // no or value defined if we fail the conversion
-            }
-        }
-
-        if (esValueInequality) {
-            returnValue['esValueInequality']  = esValueInequality
-        }
-
 
         if (filters) {
             returnValue['filters']  = filters
         }
 
-        returnValue['datasetExomeChip']  = (datasetExomeChip)?Boolean.TRUE:Boolean.FALSE
-        returnValue['datasetExomeSeq']  = (datasetExomeSeq)?Boolean.TRUE:Boolean.FALSE
-        returnValue['datasetGWAS']  = (datasetGWAS)?Boolean.TRUE:Boolean.FALSE
+//        returnValue['datasetExomeChip']  = (datasetExomeChip)?Boolean.TRUE:Boolean.FALSE
+//        returnValue['datasetExomeSeq']  = (datasetExomeSeq)?Boolean.TRUE:Boolean.FALSE
+//        returnValue['datasetGWAS']  = (datasetGWAS)?Boolean.TRUE:Boolean.FALSE
 
         return returnValue
     }
@@ -1378,31 +1368,41 @@ class FilterManagementService {
 
 
 
-    public List <LinkedHashMap<String,String>> combineNewAndOldParameters ( LinkedHashMap newParameters,
+    public LinkedHashMap<String,String> combineNewAndOldParameters ( LinkedHashMap newParameters,
                                                 List <String> encodedOldParameterList) {
         // decode the old parameters and make them into a map
         // create a new list, with new parameters as the first element
         //  and subsequent parameter lists following
-        List <LinkedHashMap> returnValue = []
+        LinkedHashMap returnValue = []
 
         if (encodedOldParameterList){
             for (String value in encodedOldParameterList){
-                returnValue << sharedToolsService.decodeAFilterList(value)
+                sharedToolsService.decodeAFilterList(value,returnValue)
             }
         }
 
 
         // It is possible to send back an null filter, which we can then drop from further processing
         // does perform that test right here
-        if ((newParameters)&&
-                (
-                        (newParameters.findAll{ it.key =~ /^filter/ }?.size()>0)  ||
-                        (newParameters.findAll{ it.key =~ /^gene/ }?.size()>0)  ||
-                        (newParameters.findAll{ it.key =~ /^predictedEffects/ }?.size()>0)  ||
-                        (newParameters.findAll{ it.key =~ /^region/ }?.size()>0)
-                )
-        ){
-            returnValue << newParameters
+        if (newParameters){
+//            List <String> cFilters = newParameters.keySet().findAll{ it =~ /^cfilter/ } as List
+//            for (String cFilter in cFilters){
+//                returnValue << newParameters[cFilter]
+//            }
+            List <String> cFilters = newParameters.keySet().findAll{ it =~ /^cfilter/ } as List
+            for (String cFilter in cFilters){
+                if (!returnValue.containsKey(cFilter)){
+                    returnValue[cFilter] = newParameters[cFilter]
+                }
+
+            }
+            List <String> pFilters = newParameters.keySet().findAll{ it =~ /^filter/ } as List
+            for (String pFilter in pFilters){
+                if (!returnValue.containsKey(pFilter)){
+                    returnValue[pFilter] = "17=${newParameters[pFilter]}"
+                }
+
+            }
         }
 
 
@@ -1549,7 +1549,7 @@ class FilterManagementService {
      * @param params
      * @return
      */
-  public handleFilterRequestFromBrowser (params)     {
+  public LinkedHashMap<String,String> handleFilterRequestFromBrowser (params)     {
 
       // pull out the phenotype and data set dependent filter requests (such as P value or odds ratio or whatever else)
       LinkedHashMap <String,String> customFilters=retrieveCustomFilters(params)
@@ -1581,7 +1581,7 @@ class FilterManagementService {
 
       // finally combine the old filters (that is, the ones that would previously been saved) with whichever ones we've
       //  just now processed.  Put them all into a list of hash maps
-      List <LinkedHashMap> combinedFilters = combineNewAndOldParameters(newParameters,
+      LinkedHashMap<String,String> combinedFilters = combineNewAndOldParameters(newParameters,
               oldFilters)
 
       return  combinedFilters
