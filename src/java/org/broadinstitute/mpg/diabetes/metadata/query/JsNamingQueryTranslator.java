@@ -181,6 +181,23 @@ public class JsNamingQueryTranslator {
 
 
 
+    public List<String> encodeGetFilterData(GetDataQuery getDataQuery, String propertyType ) throws PortalException{
+        List <String> allFilters = new ArrayList<String>();
+        for (QueryFilter queryFilter : getDataQuery.getFilterList()){
+            if (queryFilter.getProperty().getPropertyType() == propertyType){
+                String encodedFilter = encodeFilters(queryFilter);
+                if ((encodedFilter !=  null ) &&
+                        (encodedFilter.length() > 0)){
+                    allFilters.add(encodedFilter);
+                }
+            }
+        }
+        return allFilters;
+    }
+
+
+
+
 
 
 

@@ -1481,7 +1481,46 @@ public List <LinkedHashMap> convertFormOfFilters(String rawFilters){
 
 
 
+public String translatorFilter (String filterToTranslate){
+    //break apart the filter, substitute human readable strings
+    String returnValue
+    List <String> breakoutProperty = filterToTranslate.tokenize(JsNamingQueryTranslator.QUERY_SAMPLE_GROUP_AND_STRING)
+    if (breakoutProperty.size ()==2){
+        List <String> breakoutPhenotype = breakoutProperty [0].tokenize(JsNamingQueryTranslator.QUERY_SAMPLE_GROUP_BEGIN_STRING)
+        if (breakoutPhenotype.size ()==2) {
+            String comparator = ""
+            String displayableComparator = ""
+            if (breakoutProperty [1].contains (JsNamingQueryTranslator.QUERY_OPERATOR_EQUALS_STRING)){
+                comparator = JsNamingQueryTranslator.QUERY_OPERATOR_EQUALS_STRING
+                displayableComparator = "="
+            } else if (breakoutProperty [1].contains (JsNamingQueryTranslator.QUERY_OPERATOR_MORE_THAN_STRING)){
+                comparator = JsNamingQueryTranslator.QUERY_OPERATOR_MORE_THAN_STRING
+                displayableComparator = "&gt;"
+            } else if (breakoutProperty [1].contains (JsNamingQueryTranslator.QUERY_OPERATOR_LESS_THAN_STRING)){
+                comparator = JsNamingQueryTranslator.QUERY_OPERATOR_LESS_THAN_STRING
+                displayableComparator = "&lt;"
+            } else {
+                returnValue = filterToTranslate
+            }
+            if (comparator.length () > 0){
+                // try for the fully expanded description
+                List <String> valueComparisonBreakout = breakoutProperty [1].tokenize(comparator)
+                if (valueComparisonBreakout.size () == 2){
+                    returnValue = "${translator (breakoutPhenotype[0])}[${translator (breakoutPhenotype[1])}"+
+                            "]${translator (valueComparisonBreakout[0])}${displayableComparator}${valueComparisonBreakout[1]}"
+                }
+            }
+        }else {
+            // something surprising happened. Let's take our best shot at a filter
+            returnValue = filterToTranslate
+        }
+    }else {
+        // something surprising happened. Let's take our best shot at a filter
+        returnValue = filterToTranslate
+    }
+return returnValue
 
+}
 
 
 

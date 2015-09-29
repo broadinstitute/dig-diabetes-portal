@@ -205,6 +205,16 @@ class GetDataQueryHolder {
         return jsNamingQueryTranslator.encodeGetFilterData(this.getDataQuery)
     }
 
+
+
+    public List<String> listOfEncodedFilters(String propertyType) {
+        JsNamingQueryTranslator jsNamingQueryTranslator = new JsNamingQueryTranslator()
+        return jsNamingQueryTranslator.encodeGetFilterData(this.getDataQuery,propertyType)
+    }
+
+
+
+
     public List<String> listOfUrlEncodedFilters(List<String> encodedFilters) {
         return encodedFilters.collect { it -> java.net.URLEncoder.encode(it) }
     }
@@ -232,14 +242,14 @@ class GetDataQueryHolder {
         String returnValue = ""
         if ((encodedFilter != null) &&
                 (encodedFilter.length() > 0)) {
-            String[] tempArray
-            tempArray = encodedFilter.split(JsNamingQueryTranslator.QUERY_NUMBER_DELIMITER_STRING);
-            if (tempArray.length != 2) {
+            List<String> tempArray
+            tempArray = encodedFilter.tokenize(JsNamingQueryTranslator.QUERY_NUMBER_DELIMITER_STRING);
+            if (tempArray.size() != 2) {
                 throw new PortalException("Expected '" + JsNamingQueryTranslator.QUERY_NUMBER_DELIMITER_STRING + "' in " + encodedFilter);
             } else {
                 switch (tempArray[0]) {
                     case JsNamingQueryTranslator.QUERY_GENE_LINE_NUMBER:
-                        returnValue = "gene = " + tempArray[1]
+                        returnValue =  tempArray[1]
                         break
                     case JsNamingQueryTranslator.QUERY_CHROMOSOME_LINE_NUMBER:
                         returnValue = "chromosome = " + tempArray[1];
@@ -251,27 +261,28 @@ class GetDataQueryHolder {
                         returnValue = "position < " + tempArray[1];
                         break
                     case JsNamingQueryTranslator.QUERY_PROTEIN_EFFECT_LINE_NUMBER:
-                        String[] proteinEffect;
-                        proteinEffect = encodedFilter.split(JsNamingQueryTranslator.QUERY_OPERATOR_EQUALS_STRING);
-                        switch (proteinEffect[0]) {
-                            case PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY:
-                                returnValue = "predicted effects: ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_PROTEINEFFECT, proteinEffect[1])}"
-                                break;
-                            case PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY:
-                                returnValue = "predicted effects: ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_POLYPHEN, proteinEffect[1])}"
-                                break;
-                            case PortalConstants.JSON_VARIANT_SIFT_PRED_KEY:
-                                returnValue = "predicted effects: ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_SIFT, proteinEffect[1])}"
-                                break;
-                            case PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY:
-                                returnValue = "predicted effects: ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_CONDEL, proteinEffect[1])}"
-                                break;
+                        List<String> proteinEffect
+                        proteinEffect = tempArray[1].tokenize(JsNamingQueryTranslator.QUERY_OPERATOR_EQUALS_STRING);
+                        if (proteinEffect.size()>0){
+                            switch (proteinEffect[0]) {
+                                case PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY:
+                                    returnValue = "predicted effects: ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_PROTEINEFFECT, proteinEffect[1])}"
+                                    break;
+                                case PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY:
+                                    returnValue = "predicted effects: ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_POLYPHEN, proteinEffect[1])}"
+                                    break;
+                                case PortalConstants.JSON_VARIANT_SIFT_PRED_KEY:
+                                    returnValue = "predicted effects: ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_SIFT, proteinEffect[1])}"
+                                    break;
+                                case PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY:
+                                    returnValue = "predicted effects: ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_CONDEL, proteinEffect[1])}"
+                                    break;
+                            }
+
                         }
-
-
                         break
                     case JsNamingQueryTranslator.QUERY_PROPERTY_FILTER_LINE_NUMBER:
-                        returnValue = "${tempArray[1]}"
+                        returnValue = "${tempArray[1]}".trim()
                         break
                 }
             }

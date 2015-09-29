@@ -18,7 +18,8 @@ var mpgSoftware = mpgSoftware || {};
         var JSON_VARIANT_MOST_DEL_SCORE_KEY      = "MOST_DEL_SCORE",
             JSON_VARIANT_CHROMOSOME_KEY      = "CHROM",
             JSON_VARIANT_POLYPHEN_PRED_KEY      = "PolyPhen_PRED",
-            JSON_VARIANT_SIFT_PRED_KEY      = "SIFT_PRED";
+            JSON_VARIANT_SIFT_PRED_KEY      = "SIFT_PRED",
+            JSON_VARIANT_CONDEL_PRED_KEY    = "CONDEL_PRED";
 
 
         /***
@@ -177,17 +178,37 @@ var mpgSoftware = mpgSoftware || {};
                                 case '6':break;
                                 case '7':
                                     $('#region_gene_input').val(fieldVersusValue[1]);
+                                    $('#cPropertiesSection').collapse('show');
                                     break;
                                 case '8'://  chromosome name, handled under 10
                                     $('#region_chrom_input').val(fieldVersusValue[1]);
+                                    $('#cPropertiesSection').collapse('show');
                                     break;
                                 case '9':// chromosome start, handled under 10
                                     $('#region_start_input').val(fieldVersusValue[1]);
+                                    $('#cPropertiesSection').collapse('show');
                                 case '10': // chromosome end -- handle a chromosome here
                                     $('#region_stop_input').val(fieldVersusValue[1]);
+                                    $('#cPropertiesSection').collapse('show');
                                     break;
                                 case '11':
-                                    $('[name="predictedEffects"]').filter ('[value ="'+fieldVersusValue[1]+'"]').prop('checked',true)
+                                    var predictedValues = fieldVersusValue[1].split('|');
+                                    if ((typeof predictedValues !== 'undefined') &&
+                                        (predictedValues.length > 1)){
+                                        if ((predictedValues [0] === JSON_VARIANT_MOST_DEL_SCORE_KEY)){
+                                            $('[name="predictedEffects"]').filter ('[value ="'+predictedValues[1]+'"]').prop('checked',true);
+                                            if (predictedValues[1]==='2') {
+                                                chgRadioButton('2');
+                                            }
+                                        } else  if ((predictedValues [0] === JSON_VARIANT_POLYPHEN_PRED_KEY)){
+                                            $('[name="polyphen"]').val (predictedValues[1]);
+                                        } else if ((predictedValues [0] === JSON_VARIANT_SIFT_PRED_KEY)){
+                                            $('[name="sift"]').val (predictedValues[1]);
+                                        } else if ((predictedValues [0] === JSON_VARIANT_CONDEL_PRED_KEY)){
+                                            $('[name="condel"]').val (predictedValues[1]);
+                                        }
+                                        $('#cPropertiesSection').collapse('show');
+                                    }
                                     break;
                                 case '12': // There are two fields we need to handle here.  Let's pull out the other one by hand
                                     //mpgSoftware.firstResponders.respondToReviseFilters('effectsize',extractString (clauseDefinition,'^13='),fieldVersusValue[1]);

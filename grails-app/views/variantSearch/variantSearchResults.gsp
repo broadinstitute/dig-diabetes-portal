@@ -440,11 +440,13 @@
                         $('#tempfilter').append(uri_dec.split('+').join());
                     }
                 </script>
-                <ul>
-                    <g:each in="${filterDescriptions}">
-                        <li>${it}</li>
-                    </g:each>
-                </ul>
+
+                <g:renderUlFilters  encodedFilters='${encodedFilters}'/>
+                %{--<ul>--}%
+                    %{--<g:each in="${filterDescriptions}">--}%
+                        %{--<li>${it}</li>--}%
+                    %{--</g:each>--}%
+                %{--</ul>--}%
 
                 <div id="warnIfMoreThan1000Results"></div>
 

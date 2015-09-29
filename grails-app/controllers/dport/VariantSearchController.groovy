@@ -382,6 +382,7 @@ class VariantSearchController {
                             filter              : revisedFiltersRaw, //encodedFilters,
                             filterDescriptions  : displayableFilters,
                             proteinEffectsList  : encodedProteinEffects,
+                            encodedFilters      : encodedFilters,
                             encodedParameters   : urlEncodedFilters,
                             dataSetDetermination: 2,
                             additionalProperties: requestForAdditionalProperties,

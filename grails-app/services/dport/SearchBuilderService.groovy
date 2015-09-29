@@ -1,6 +1,7 @@
 package dport
 
 import grails.transaction.Transactional
+import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 
@@ -10,6 +11,8 @@ class SearchBuilderService {
 
     SharedToolsService sharedToolsService
     FilterManagementService filterManagementService
+    SearchBuilderService searchBuilderService
+    MetaDataService metaDataService
 
 
     /***
@@ -250,19 +253,16 @@ class SearchBuilderService {
 
 
     public String writeOutFiltersAsHtml( out, String aFilter ){
-        List<String> listOfCustomFilters = composeCustomFiltersForClause( aFilter )
-        List<String> listOfFilters =  composeFiltersForClause( aFilter )
-        for (String customFilter in listOfCustomFilters){ // no need to count, since all are handled the same way
-            out << customFilter
-        }
-        String filtersWithCommas = listOfFilters.join(",")     //we need to count these, since the last one doesn't get a comma
-        out << filtersWithCommas
-//        for ( int  i = 0 ; i < numberOfFilters ; i++ ){
-//            out << listOfFilters [i]
-//            if (i <  numberOfFilters-1){
-//                out << ","
-//            }
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([],searchBuilderService,metaDataService)
+        String aDecodedFilter = getDataQueryHolder.decodeFilter(aFilter)
+        return aDecodedFilter
+//        List<String> listOfCustomFilters = composeCustomFiltersForClause( aFilter )
+//        List<String> listOfFilters =  composeFiltersForClause( aFilter )
+//        for (String customFilter in listOfCustomFilters){ // no need to count, since all are handled the same way
+//            out << customFilter
 //        }
+//        String filtersWithCommas = listOfFilters.join(",")     //we need to count these, since the last one doesn't get a comma
+//        out << filtersWithCommas
 
     }
 
