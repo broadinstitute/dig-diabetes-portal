@@ -223,4 +223,52 @@ public class PropertyBean implements Property, Comparable {
             }
         }
     }
+
+    /**
+     * returns true if the property matches the 3 criteria names given
+     * <br/>
+     * its name, its sample group name and its phenotype name (the latter 2 can be null)
+     *
+     * @param propertyName
+     * @param sampleGroupName
+     * @param phenotypeName
+     * @return
+     */
+    public boolean isTheMatchingProperty(String propertyName, String sampleGroupName, String phenotypeName) {
+        // local variables
+        boolean isTheMatchingProperty = false;
+
+        // test to see if the passed in terms match
+        if ((phenotypeName != null) && (phenotypeName.length() > 0)) {
+            // looking for a phenotype property
+            if (this.getPropertyType() == PortalConstants.TYPE_PHENOTYPE_PROPERTY_KEY) {
+                SampleGroup parent = (SampleGroup)this.getParent().getParent();
+                if (parent.getSystemId().equals(sampleGroupName) &&
+                        this.getParent().getName().equals(phenotypeName) &&
+                        this.getName().equals(propertyName)) {
+                    isTheMatchingProperty = true;
+                }
+            }
+
+        } else if ((sampleGroupName != null) && (sampleGroupName.length() > 0)) {
+            // looking for sample group property
+            if (this.getPropertyType() == PortalConstants.TYPE_SAMPLE_GROUP_PROPERTY_KEY) {
+                SampleGroup parent = (SampleGroup)this.getParent();
+                if (parent.getSystemId().equals(sampleGroupName) &&
+                        this.getName().equals(propertyName)) {
+                    isTheMatchingProperty = true;
+                }
+            }
+        } else {
+            // looking for a common property
+            if (this.getPropertyType() == PortalConstants.TYPE_COMMON_PROPERTY_KEY) {
+                if (this.getName().equals(propertyName)) {
+                    isTheMatchingProperty = true;
+                }
+            }
+        }
+
+        // return
+        return isTheMatchingProperty;
+    }
 }

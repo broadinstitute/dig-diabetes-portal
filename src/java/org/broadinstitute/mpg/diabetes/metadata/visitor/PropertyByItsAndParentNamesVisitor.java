@@ -2,7 +2,6 @@ package org.broadinstitute.mpg.diabetes.metadata.visitor;
 
 import org.broadinstitute.mpg.diabetes.metadata.DataSet;
 import org.broadinstitute.mpg.diabetes.metadata.Property;
-import org.broadinstitute.mpg.diabetes.metadata.SampleGroup;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 
 /**
@@ -39,6 +38,12 @@ public class PropertyByItsAndParentNamesVisitor implements DataSetVisitor {
             if (dataSet.getType() == PortalConstants.TYPE_PROPERTY_KEY) {
                 Property tempProperty = (Property)dataSet;
 
+                // see if this is the matching property
+                if (tempProperty.isTheMatchingProperty(propertyName, sampleGroupName, phenotypeName)) {
+                    this.property = tempProperty;
+                }
+
+                /* moved to property bean for better reuse
                 if ((phenotypeName != null) && (phenotypeName.length() > 0)) {
                     // looking for a phenotype property
                     if (tempProperty.getPropertyType() == PortalConstants.TYPE_PHENOTYPE_PROPERTY_KEY) {
@@ -67,6 +72,8 @@ public class PropertyByItsAndParentNamesVisitor implements DataSetVisitor {
                         }
                     }
                 }
+                */
+
             } else {
                 for (DataSet child : dataSet.getAllChildren()) {
                     child.acceptVisitor(this);
