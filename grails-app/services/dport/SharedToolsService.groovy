@@ -1330,59 +1330,61 @@ class SharedToolsService {
     }
 
 
-    public void decodeAFilterList(String encodedFilterString,LinkedHashMap<String,String> returnValue) {
-        //LinkedHashMap<String,String> returnValue= [:]
-        if (encodedFilterString){
-            List <String> parametersList =  encodedFilterString.split("\\^")
-            int filterCount = 0
-            for ( int  i = 0 ; i < parametersList.size() ; i++  > 0){
-                List <String> divKeys = parametersList[i].split("=")
-                if (divKeys.size() != 2){
-                    log.info("Problem interpreting filter list = ${parametersList}")
-                }else {
-                    int parameterKey
-                    try {
-                        parameterKey = Integer.parseInt(divKeys [0])
-                    }catch (e){
-                        log.info("Unexpected key when interpreting filter list = ${parametersList}")
-                    }
-                    switch (parameterKey){
-                        case 1:returnValue ["phenotype"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
-                            break
-                        case 2:returnValue ["dataSet"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
-                            break
-                        case 3:returnValue ["orValue"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
-                            break
-                        case 4:returnValue ["orValueInequality"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
-                            break
-                        case 5:returnValue ["pValue"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
-                            break
-                        case 6:returnValue ["pValueInequality"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
-                            break
-                        case 7:returnValue ["gene"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
-                            break
-                        case 8:returnValue ["regionChromosomeInput"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
-                            break
-                        case 9:returnValue ["regionStartInput"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
-                            break
-                        case 10:returnValue ["regionStopInput"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
-                            break
-                        case 11:returnValue ["predictedEffects"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
-                            break
-                        case 12:returnValue ["esValue"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
-                            break
-                        case 13:returnValue ["esValueInequality"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
-                            break
-                        case 14:returnValue ["condelSelect"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
-                            break
-                        case 15:returnValue ["polyphenSelect"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
-                            break
-                        case 16:returnValue ["siftSelect"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
-                            break
-                        case 17:returnValue ["filter${filterCount++}"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
-                            break
-                        default:
-                            log.info("Unexpected parameter key  = ${parameterKey}")
+    public void decodeAFilterList(List <String> encodedOldParameterList,LinkedHashMap<String,String> returnValue) {
+        int filterCount = 0
+        for (String encodedFilterString in encodedOldParameterList){
+            if (encodedFilterString){
+                List <String> parametersList =  encodedFilterString.split("\\^")
+                for ( int  i = 0 ; i < parametersList.size() ; i++  > 0){
+                    List <String> divKeys = parametersList[i].split("=")
+                    if (divKeys.size() != 2){
+                        log.info("Problem interpreting filter list = ${parametersList}")
+                    }else {
+                        int parameterKey
+                        try {
+                            parameterKey = Integer.parseInt(divKeys [0])
+                        }catch (e){
+                            log.info("Unexpected key when interpreting filter list = ${parametersList}")
+                        }
+                        returnValue ["ofilter${filterCount++}"] = StringEscapeUtils.unescapeJavaScript(parametersList[i]);
+//                        switch (parameterKey){
+//                            case 1:returnValue ["phenotype"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+//                                break
+//                            case 2:returnValue ["dataSet"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+//                                break
+//                            case 3:returnValue ["orValue"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+//                                break
+//                            case 4:returnValue ["orValueInequality"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+//                                break
+//                            case 5:returnValue ["pValue"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+//                                break
+//                            case 6:returnValue ["pValueInequality"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+//                                break
+//                            case 7:returnValue ["gene"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+//                                break
+//                            case 8:returnValue ["regionChromosomeInput"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+//                                break
+//                            case 9:returnValue ["regionStartInput"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+//                                break
+//                            case 10:returnValue ["regionStopInput"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+//                                break
+//                            case 11:returnValue ["predictedEffects"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+//                                break
+//                            case 12:returnValue ["esValue"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+//                                break
+//                            case 13:returnValue ["esValueInequality"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+//                                break
+//                            case 14:returnValue ["condelSelect"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+//                                break
+//                            case 15:returnValue ["polyphenSelect"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+//                                break
+//                            case 16:returnValue ["siftSelect"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
+//                                break
+//                            case 17:returnValue ["ofilter${filterCount++}"] = StringEscapeUtils.unescapeJavaScript(parametersList[i]);
+//                                break
+//                            default:
+//                                log.info("Unexpected parameter key  = ${parameterKey}")
+//                        }
                     }
                 }
             }

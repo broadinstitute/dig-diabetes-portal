@@ -102,33 +102,6 @@ class VariantQueryToolsTagLib {
 
                 }
 
-
-//            for (LinkedHashMap map in attrs.filterSet) {
-//                    if (map.size()>0){
-//                        LinkedHashMap customFilters = map.findAll{ it.key =~ /^filter/ }
-//                        String encodedFilterList = sharedToolsService.encodeAFilterList(
-//                                [phenotype:map.phenotype,
-//                                 dataSet:map.dataSet,
-//                                 orValue: map.orValue,
-//                                 orValueInequality: map.orValueInequality,
-//                                 pValue: map.pValue,
-//                                 pValueInequality: map.pValueInequality,
-//                                 esValue: map.esValue,
-//                                 esValueInequality: map.esValueInequality,
-//                                 regionStopInput: map.regionStopInput,
-//                                 regionStartInput: map.regionStartInput,
-//                                 regionChromosomeInput: map.regionChromosomeInput,
-//                                 gene: map.gene,
-//                                 predictedEffects: map.predictedEffects,
-//                                 polyphenSelect: map.polyphenSelect,
-//                                 siftSelect: map.siftSelect,
-//                                 condelSelect: map.condelSelect], customFilters
-//                        )
-//                        out << """<input type="text" class="form-control" id="savedValue${blockCount}" value="${
-//                            encodedFilterList
-//                        }" style="height:0px">""".toString()
-//                        blockCount++;
-//                    }
              }
             out << """<input type="text" class="form-control" id="totalFilterCount" value="${
                 blockCount

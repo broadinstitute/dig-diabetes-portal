@@ -1373,22 +1373,19 @@ class FilterManagementService {
         // decode the old parameters and make them into a map
         // create a new list, with new parameters as the first element
         //  and subsequent parameter lists following
-        LinkedHashMap returnValue = []
+        LinkedHashMap returnValue = [:]
 
         if (encodedOldParameterList){
-            for (String value in encodedOldParameterList){
-                sharedToolsService.decodeAFilterList(value,returnValue)
-            }
+            //for (String value in encodedOldParameterList){
+                sharedToolsService.decodeAFilterList(encodedOldParameterList,returnValue)
+            //}
         }
 
 
         // It is possible to send back an null filter, which we can then drop from further processing
         // does perform that test right here
         if (newParameters){
-//            List <String> cFilters = newParameters.keySet().findAll{ it =~ /^cfilter/ } as List
-//            for (String cFilter in cFilters){
-//                returnValue << newParameters[cFilter]
-//            }
+
             List <String> cFilters = newParameters.keySet().findAll{ it =~ /^cfilter/ } as List
             for (String cFilter in cFilters){
                 if (!returnValue.containsKey(cFilter)){
