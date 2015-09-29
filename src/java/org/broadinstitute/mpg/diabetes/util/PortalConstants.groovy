@@ -6,25 +6,25 @@ package org.broadinstitute.mpg.diabetes.util
  */
 class PortalConstants {
     // json mapping keys
-    public final static String JSON_EXPERIMENT_KEY      = "experiments";
-    public final static String JSON_VERSION_KEY         = "version";
-    public final static String JSON_NAME_KEY            = "name";
-    public final static String JSON_TYPE_KEY            = "type";
-    public final static String JSON_GROUP_KEY            = "group";
-    public final static String JSON_TECHNOLOGY_KEY      = "technology";
-    public final static String JSON_ANCESTRY_KEY        = "ancestry";
-    public final static String JSON_ID_KEY              = "id";
-    public final static String JSON_SEARCHABLE_KEY      = "searchable";
-    public final static String JSON_SORT_ORDER_KEY      = "sort_order";
-    public final static String JSON_VARIANTS_KEY        = "variants";
-    public final static String JSON_VARIANT_ID_KEY      = "VAR_ID";
+    public final static String JSON_EXPERIMENT_KEY                  = "experiments";
+    public final static String JSON_VERSION_KEY                     = "version";
+    public final static String JSON_NAME_KEY                        = "name";
+    public final static String JSON_TYPE_KEY                        = "type";
+    public final static String JSON_GROUP_KEY                       = "group";
+    public final static String JSON_TECHNOLOGY_KEY                  = "technology";
+    public final static String JSON_ANCESTRY_KEY                    = "ancestry";
+    public final static String JSON_ID_KEY                          = "id";
+    public final static String JSON_SEARCHABLE_KEY                  = "searchable";
+    public final static String JSON_SORT_ORDER_KEY                  = "sort_order";
+    public final static String JSON_VARIANTS_KEY                    = "variants";
+    public final static String JSON_VARIANT_ID_KEY                  = "VAR_ID";
     public final static String JSON_VARIANT_MOST_DEL_SCORE_KEY      = "MOST_DEL_SCORE";
-    public final static String JSON_VARIANT_CHROMOSOME_KEY      = "CHROM";
-    public final static String JSON_VARIANT_POLYPHEN_PRED_KEY      = "PolyPhen_PRED";
-    public final static String JSON_VARIANT_SIFT_PRED_KEY      = "SIFT_PRED";
-    public final static String JSON_NUMBER_RECORDS_KEY  = "numRecords";
-    public final static String JSON_ERROR_KEY           = "is_error";
-    public final static String JSON_PASSBACK_KEY        = "passback";
+    public final static String JSON_VARIANT_CHROMOSOME_KEY          = "CHROM";
+    public final static String JSON_VARIANT_POLYPHEN_PRED_KEY       = "PolyPhen_PRED";
+    public final static String JSON_VARIANT_SIFT_PRED_KEY           = "SIFT_PRED";
+    public final static String JSON_NUMBER_RECORDS_KEY              = "numRecords";
+    public final static String JSON_ERROR_KEY                       = "is_error";
+    public final static String JSON_PASSBACK_KEY                    = "passback";
 
     // json mapping array key values
     public final static String JSON_DATASETS_KEY        = "sample_groups";

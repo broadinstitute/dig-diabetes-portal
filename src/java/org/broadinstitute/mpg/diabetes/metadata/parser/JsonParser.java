@@ -18,6 +18,7 @@ import org.broadinstitute.mpg.diabetes.metadata.visitor.GwasTechSampleGroupByPhe
 import org.broadinstitute.mpg.diabetes.metadata.visitor.JsNameTranslationVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeByNameVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeNameVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyByItsAndParentNamesVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyByNameFinderVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyByPropertyTypeVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyPerExperimentVisitor;
@@ -708,5 +709,32 @@ public class JsonParser {
 
         // return
         return childSet;
+    }
+
+    /**
+     * find the property given its name, sample group and phenotype name (latter 2 could be null)
+     *
+     * @param propertyName
+     * @param phenotypeName
+     * @param sampleGroupName
+     * @return
+     * @throws PortalException
+     */
+    public Property getPropertyGivenItsAndPhenotypeAndSampleGroupNames(String propertyName, String phenotypeName, String sampleGroupName) throws PortalException {
+        // local variables
+        Property property = null;
+
+        // create the visitor and visit from the root
+        PropertyByItsAndParentNamesVisitor visitor = new PropertyByItsAndParentNamesVisitor(propertyName, sampleGroupName, phenotypeName);
+        this.getMetaDataRoot().acceptVisitor(visitor);
+
+        // get the property; throw exception if not found
+        property = visitor.getProperty();
+        if (property == null) {
+            throw new PortalException("Did not find property for name: " + propertyName + " and sample group: " + sampleGroupName + " and phenotype: " + phenotypeName);
+        }
+
+        // return
+        return property;
     }
 }
