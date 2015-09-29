@@ -152,7 +152,7 @@ class KnowledgeBaseResultsParserTest extends TestCase {
 
         // loop and test properties on variants
         for (Variant variant : variantList) {
-            assertEquals(13, variant.propertyValues.size());
+            assertEquals(13, variant.getPropertyValues().size());
         }
     }
 }
