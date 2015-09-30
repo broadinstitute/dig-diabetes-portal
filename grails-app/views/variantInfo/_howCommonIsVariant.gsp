@@ -43,12 +43,12 @@
                         collector["d" + i] = d;
                     }
                     var howCommonIsThisVariantAcrossEthnicities = mpgSoftware.variantInfo.retrieveHowCommonIsThisVariantAcrossEthnicities();
-                    var rv = howCommonIsThisVariantAcrossEthnicities([collector["d0"][0].count[0],
-                            collector["d0"][1].count[0],
-                            collector["d0"][2].count[0],
-                            collector["d0"][3].count[0],
-                            collector["d0"][4].count[0],
-                            collector["d0"][5].count[0]],
+                    var rv = howCommonIsThisVariantAcrossEthnicities([(collector["d0"][0].count[0]*100.0),
+                                (collector["d0"][1].count[0]*100.0),
+                                (collector["d0"][2].count[0]*100.0),
+                                (collector["d0"][3].count[0]*100.0),
+                                (collector["d0"][4].count[0]*100.0),
+                                (collector["d0"][5].count[0]*100.0)],
                             alleleFrequencyStrings);
 
                     if ((typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation()  !== 'undefined') &&

@@ -200,7 +200,7 @@ class JsonParserTest extends TestCase {
         // test
         assertNotNull(propertyList);
         assertTrue(propertyList.size() > 0);
-        assertEquals(10, propertyList.size());
+        assertEquals(13, propertyList.size());
     }
 
     /**

@@ -24,49 +24,6 @@ class FilterManagementServiceIntegrationSpec  extends IntegrationSpec {
 
     }
 
-    @Unroll("testing  distinguishBetweenDataSets with #label")
-    void "test  distinguishBetweenDataSets"() {
-        given:
-        HashMap  incomingParameters = [datatype:incoming]
-
-        when:
-        int varAssign = filterManagementService.distinguishBetweenDataSets(incomingParameters)
-        then:
-        varAssign ==  variableAssignment
-
-        where:
-        label       |   incoming            | variableAssignment
-        "gwas"      |   'gwas'              |  0
-        "sigma"     |   'sigma'             |  1
-        "exomeseq"  |   'exomeseq'          |  2
-        "exomechip" | 'exomechip'           |  3
-    }
-
-
-
-    @Unroll("testing  determineDataSet with #label")
-    void "test  determineDataSet"() {
-        given:
-        HashMap  incomingParameters = [datatype:incoming]
-
-        when:
-        LinkedHashMap  buildingFilters  = [:]
-        buildingFilters.filters = []
-        buildingFilters.filterDescriptions = []
-        buildingFilters.parameterEncoding = []
-        buildingFilters.transferableFilter  = []
-        LinkedHashMap  returnValue  =  filterManagementService.determineDataSet(buildingFilters,incomingParameters,false)
-        then:
-        returnValue.filterDescriptions[0].contains(description)
-
-
-        where:
-        label       |   incoming            | description
-        "gwas"      |   'gwas'              |  "GWAS"
-        "sigma"     |   'sigma'             |  "SIGMA"
-        "exomeseq"  |   'exomeseq'          |  "Exome sequencing"
-    }
-
 
 
 
