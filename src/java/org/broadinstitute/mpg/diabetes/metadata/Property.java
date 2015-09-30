@@ -29,4 +29,15 @@ public interface Property extends DataSet {
      */
     public String getWebServiceQueryString() throws PortalException;
 
+    /**
+     * returns true if the property matches the 3 criteria names given
+     * <br/>
+     * its name, its sample group name and its phenotype name (the latter 2 can be null)
+     *
+     * @param propertyName
+     * @param sampleGroupName
+     * @param phenotypeName
+     * @return
+     */
+    public boolean isTheMatchingProperty(String propertyName, String sampleGroupName, String phenotypeName);
 }

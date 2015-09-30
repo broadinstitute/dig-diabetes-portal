@@ -418,4 +418,63 @@ class JsonParserTest extends TestCase {
         assertTrue(childList.size() > 0);
         assertEquals(5, childList.size());
     }
+
+    @Test
+    public void testGetAllPhenotypesWithName() {
+        // local variables
+        List<Phenotype> phenotypeList;
+
+        // get the phenotype list
+        phenotypeList = this.jsonParser.getAllPhenotypesWithName("", "mdv2", "");
+
+        // test
+        assertNotNull(phenotypeList);
+        assertTrue(phenotypeList.size() > 0);
+        assertEquals(137, phenotypeList.size())
+    }
+
+    @Test
+    public void testGetPropertyGivenItsAndPhenotypeAndSampleGroupNames() {
+        // local variables
+        String sampleGroupName = "";
+        String phenotypeName = "";
+        String propertyName = "";
+        Property property = null;
+
+        // test for common property
+        propertyName = "CLOSEST_GENE";
+        try {
+            property = this.jsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames(propertyName, phenotypeName, sampleGroupName);
+        } catch (PortalException exception) {
+            fail("Got error: " + exception.getMessage());
+        }
+        assertNotNull(property);
+        assertEquals(propertyName, property.getName());
+        assertEquals("metadata_rootCLOSEST_GENE", property.getId());
+
+        // test for sample group property
+        propertyName = "MAF";
+        sampleGroupName = "ExSeq_17k_eu_mdv2";
+        try {
+            property = this.jsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames(propertyName, phenotypeName, sampleGroupName);
+        } catch (PortalException exception) {
+            fail("Got error: " + exception.getMessage());
+        }
+        assertNotNull(property);
+        assertEquals(propertyName, property.getName());
+        assertEquals("metadata_root_ExSeq_17k_mdv2_17k_17k_euMAF", property.getId());
+
+        // test for phenotype property
+        propertyName = "OR_FIRTH_FE_IV";
+        sampleGroupName = "ExSeq_17k_eu_mdv2";
+        phenotypeName = "T2D";
+        try {
+            property = this.jsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames(propertyName, phenotypeName, sampleGroupName);
+        } catch (PortalException exception) {
+            fail("Got error: " + exception.getMessage());
+        }
+        assertNotNull(property);
+        assertEquals(propertyName, property.getName());
+        assertEquals("metadata_root_ExSeq_17k_mdv2_17k_17k_euT2DOR_FIRTH_FE_IV", property.getId());
+    }
 }

@@ -259,7 +259,33 @@ class MetaDataService {
         return phenotypeList.sort{ a, b -> a.sortOrder <=> b.sortOrder }.collect{it.name}.unique()
     }
 
+    /**
+     * for trait server use, GWAS
+     *
+     * @return
+     */
+    public String urlEncodedListOfPhenotypes() {
+        List<String> phenotypeList =  this.getJsonParser().getAllDistinctPhenotypeNames();
+        StringBuilder sb   = new StringBuilder ("")
+        for (int i = 0; i < phenotypeList.size(); i++){
+            String phenotypeCode = phenotypeList.get(i)
+            sb<< (phenotypeCode + ":" + this.sharedToolsService.translator(phenotypeCode))
+            sb<< ","
 
+            // also add old keys from trait-search call if exists
+            String oldCode = this.sharedToolsService?.convertNewPhenotypeStringsToOldOnes(phenotypeCode)
+            if (!oldCode?.equals(phenotypeCode)) {
+                sb<< (oldCode + ":" + this.sharedToolsService.translator(phenotypeCode))
+                sb<< ","
+            }
+        }
+
+        // remove the last comma
+        sb.deleteCharAt(sb.length() - 1);
+
+        // return
+        return java.net.URLEncoder.encode( sb.toString())
+    }
 
     /***
      * Create a tree, so that every sample group contains a list of every D property that belongs to it

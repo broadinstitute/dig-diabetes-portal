@@ -213,6 +213,8 @@
         </div>
     </div>
 
+<g:if test="${0}">
+
     <div class="separator"></div>
 
     <div class="accordion-group">
@@ -242,6 +244,15 @@
         });
         $('#collapseOne').collapse({hide: true})
     </script>
+
+</g:if>
+    <script>
+        $('#collapseOne').collapse({hide: true})
+    </script>
+
+
+
+
 
 <g:if test="${show_exseq}">
 

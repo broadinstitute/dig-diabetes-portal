@@ -1,0 +1,37 @@
+{
+    "is_error": false,
+    "numRecords": 2,
+    "variants": [
+        [
+            {"CHROM": "7"},
+            {"CLOSEST_GENE": "ZPBP"},
+            {"Consequence": "missense_variant"},
+            {"DBSNP_ID": null},
+            {"POS": 50121444},
+            {"VAR_ID": "7_50121444_G_A"},
+            {"MAF": {"ExSeq_17k_eu_mdv2": 0.000441209 }},
+            {"OR_FIRTH_FE_IV": {"ExSeq_17k_eu_mdv2": { "T2D": 27.8295943657392}}},
+            {"MINU": {"ExSeq_17k_eu_mdv2": {"T2D": 2}} },
+            {"P_FE_INV": {"ExSeq_13k_eu_mdv2": {"HBA1C": 0.1857} }},
+            {"MINA": {"ExSeq_17k_eu_mdv2": { "T2D": 2}}},
+            {"P_FIRTH_FE_IV": {"ExSeq_17k_eu_mdv2": {"T2D": 0.002108}}},
+            {"BETA": {"ExSeq_13k_eu_mdv2": { "HBA1C": -0.5902}}}
+        ],
+        [
+            {"CHROM": "13"},
+            {"CLOSEST_GENE": "GAS6"},
+            {"Consequence": "intron_variant,feature_elongation"},
+            {"DBSNP_ID": null},
+            {"POS": 114550011},
+            {"VAR_ID": "13_114550011_A_ATCCC"},
+            { "MAF": {"ExSeq_17k_eu_mdv2": 0.000505561}},
+            {"OR_FIRTH_FE_IV": {"ExSeq_17k_eu_mdv2": {"T2D": 16.3201411761837 }}},
+            {"MINU": {"ExSeq_17k_eu_mdv2": { "T2D": 2} }},
+            {"P_FE_INV": {"ExSeq_13k_eu_mdv2": {"HBA1C": 0.4729} }},
+            {"MINA": {"ExSeq_17k_eu_mdv2": {"T2D": 2} } },
+            {"P_FIRTH_FE_IV": { "ExSeq_17k_eu_mdv2": { "T2D": 0.02395 } }},
+            {"BETA": { "ExSeq_13k_eu_mdv2": {"HBA1C": -0.2593} }}
+        ]
+    ],
+    "passback": "123abc"
+}

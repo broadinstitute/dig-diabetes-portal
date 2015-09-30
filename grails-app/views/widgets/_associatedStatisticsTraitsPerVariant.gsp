@@ -1,7 +1,7 @@
 <!-- 2 inputs needed
     variantIdentifier: the variant id
     dbSnpId: for the snp id, if provided (from the trait info page)
-    collapsed: if accordion closed at start
+    openOnLoad: if accordion closed at start
 -->
 <div class="accordion-group">
     <div class="accordion-heading">
@@ -31,7 +31,7 @@
             $.ajax({
                 cache: false,
                 type: "get",
-                url: "/dig-diabetes-portal/trait/ajaxAssociatedStatisticsTraitPerVariant",
+                url: "../../trait/ajaxAssociatedStatisticsTraitPerVariant",
                 data: {variantIdentifier: '<%=variantIdentifier%>'},
                 async: true,
                 success: function (data) {
@@ -84,3 +84,8 @@
 </div>
 </div>
 
+<g:if test="${openOnLoad}">
+    <script>
+        $('#collapseVariantTraitAssociation').collapse({hide: false})
+    </script>
+</g:if>
