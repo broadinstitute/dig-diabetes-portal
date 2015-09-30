@@ -97,7 +97,7 @@ class VariantQueryToolsTagLib {
                 List<String> listOfFilters = []
                 for (String filter in commonEncodedFilterList) {
                     if (filter) {
-                        listOfFilters << searchBuilderService.writeOutFiltersAsHtml( out, filter )
+                        listOfFilters << sharedToolsService.translatorFilter (searchBuilderService.writeOutFiltersAsHtml( out, filter ))
                     }
                 }
                 out << listOfFilters.join(", ")

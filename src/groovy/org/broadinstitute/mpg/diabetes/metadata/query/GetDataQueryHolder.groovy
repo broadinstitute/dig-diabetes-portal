@@ -246,6 +246,9 @@ class GetDataQueryHolder {
                     case JsNamingQueryTranslator.QUERY_PROTEIN_EFFECT_LINE_NUMBER:
                         List<String> proteinEffect
                         String operatorSplitCharacter = JsNamingQueryTranslator.determineOperatorSplitCharacter(tempArray[1]);
+                        if (operatorSplitCharacter.contains("|")){
+                            operatorSplitCharacter = "|" //
+                        }
                         proteinEffect = tempArray[1].tokenize(operatorSplitCharacter);
                         if (proteinEffect.size()>0){
                             switch (proteinEffect[0]) {
@@ -253,13 +256,13 @@ class GetDataQueryHolder {
                                     returnValue = "predicted effects ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_PROTEINEFFECT, proteinEffect[1],operatorSplitCharacter)}"
                                     break;
                                 case PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY:
-                                    returnValue = "predicted effects ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_POLYPHEN, proteinEffect[1],operatorSplitCharacter)}"
+                                    returnValue = "Polyphen-2 prediction ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_POLYPHEN, proteinEffect[1],operatorSplitCharacter)}"
                                     break;
                                 case PortalConstants.JSON_VARIANT_SIFT_PRED_KEY:
-                                    returnValue = "predicted effects ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_SIFT, proteinEffect[1],operatorSplitCharacter)}"
+                                    returnValue = "SIFT prediction ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_SIFT, proteinEffect[1],operatorSplitCharacter)}"
                                     break;
                                 case PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY:
-                                    returnValue = "predicted effects ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_CONDEL, proteinEffect[1],operatorSplitCharacter)}"
+                                    returnValue = "CONDEL prediction ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_CONDEL, proteinEffect[1],operatorSplitCharacter)}"
                                     break;
                             }
 
