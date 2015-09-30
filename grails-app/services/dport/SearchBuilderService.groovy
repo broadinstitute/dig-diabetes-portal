@@ -72,7 +72,7 @@ class SearchBuilderService {
 
 
 
-    private String prettyPrintPredictedEffect (int typeOfPrediction, String codedValueAsString){
+    private String prettyPrintPredictedEffect (int typeOfPrediction, String codedValueAsString,String operatorSplitCharacter){
         String returnValue = ""
         int codedValue = 0
         try {
@@ -161,7 +161,17 @@ class SearchBuilderService {
                 log.error("Internal inconsistency: no typeOfPrediction = ${typeOfPrediction}")
                 break;
         }
-        return returnValue
+        String operatorPresentation = "="
+        switch (operatorSplitCharacter){
+            case "=":operatorPresentation = " : "
+                break;
+            case "<":operatorPresentation = " less than "
+                break;
+            case ">":operatorPresentation = " greater than "
+                break;
+            default: break
+        }
+        return "${operatorPresentation}${returnValue}"
     }
 
 

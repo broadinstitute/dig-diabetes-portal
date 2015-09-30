@@ -39,16 +39,16 @@ public class JsNamingQueryTranslator {
 
 
 
-    private String determineOperatorSplitCharacter(String holdingString) throws PortalException {
+    public static String determineOperatorSplitCharacter(String holdingString) throws PortalException {
         String operatorSplitCharacter="";
-        if (holdingString.contains(this.QUERY_OPERATOR_EQUALS_STRING)) {
-            operatorSplitCharacter = Pattern.quote(this.QUERY_OPERATOR_EQUALS_STRING);      // '|' string is special regexp string
+        if (holdingString.contains(QUERY_OPERATOR_EQUALS_STRING)) {
+            operatorSplitCharacter = Pattern.quote(QUERY_OPERATOR_EQUALS_STRING);      // '|' string is special regexp string
 
-        } else if (holdingString.contains(this.QUERY_OPERATOR_LESS_THAN_STRING)) {
-            operatorSplitCharacter = this.QUERY_OPERATOR_LESS_THAN_STRING;
+        } else if (holdingString.contains(QUERY_OPERATOR_LESS_THAN_STRING)) {
+            operatorSplitCharacter = QUERY_OPERATOR_LESS_THAN_STRING;
 
-        } else if (holdingString.contains(this.QUERY_OPERATOR_MORE_THAN_STRING)) {
-            operatorSplitCharacter = this.QUERY_OPERATOR_MORE_THAN_STRING;
+        } else if (holdingString.contains(QUERY_OPERATOR_MORE_THAN_STRING)) {
+            operatorSplitCharacter = QUERY_OPERATOR_MORE_THAN_STRING;
 
         } else {
             throw new PortalException("did not find expected operator in query string: " + holdingString);
@@ -58,13 +58,13 @@ public class JsNamingQueryTranslator {
 
 
 
-    private String convertSymbolicOperatorToString(String symbolicOperator) throws PortalException{
+    public static  String convertSymbolicOperatorToString(String symbolicOperator) throws PortalException{
         String operator="";
-        if (Pattern.quote(this.QUERY_OPERATOR_EQUALS_STRING).equals(symbolicOperator)) {
+        if (Pattern.quote(QUERY_OPERATOR_EQUALS_STRING).equals(symbolicOperator)) {
             operator = PortalConstants.OPERATOR_EQUALS;
-        } else if (this.QUERY_OPERATOR_LESS_THAN_STRING.equals(symbolicOperator)) {
+        } else if (QUERY_OPERATOR_LESS_THAN_STRING.equals(symbolicOperator)) {
             operator = PortalConstants.OPERATOR_LESS_THAN_NOT_EQUALS;
-        } else if (this.QUERY_OPERATOR_MORE_THAN_STRING.equals(symbolicOperator)) {
+        } else if (QUERY_OPERATOR_MORE_THAN_STRING.equals(symbolicOperator)) {
             operator = PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS;
        } else {
             throw new PortalException("Got unsupported operator in query string: " + symbolicOperator);
@@ -298,8 +298,8 @@ public class JsNamingQueryTranslator {
 
                 } else if (lineNumberString.equals(this.QUERY_PROPERTY_FILTER_LINE_NUMBER) || lineNumberString.equals(this.QUERY_PROTEIN_EFFECT_LINE_NUMBER)) {
                     // find out what the operator is
-                    operatorSplitCharacter = determineOperatorSplitCharacter(tempString);
-                    operator = convertSymbolicOperatorToString (operatorSplitCharacter);
+                    operatorSplitCharacter = JsNamingQueryTranslator.determineOperatorSplitCharacter(tempString);
+                    operator = JsNamingQueryTranslator.convertSymbolicOperatorToString (operatorSplitCharacter);
 
                     // split the string
                     tempArray = tempString.split(operatorSplitCharacter);

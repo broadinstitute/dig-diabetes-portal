@@ -27,7 +27,7 @@ class UserQueryContext {
     String value = "1"
     String propertyCategory = "PVALUE"
     String phenotype = "blah"
-    String operator = "LTE"
+    String operator = "LT"
     public UserQueryContext(){
     }
     public static generateUserQueryContext(){

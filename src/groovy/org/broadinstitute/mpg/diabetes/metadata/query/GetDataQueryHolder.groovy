@@ -75,7 +75,6 @@ class GetDataQueryHolder {
 
     public GetDataQuery generateGetDataQuery(List<String> listOfCodedFilters) {
         GetDataQuery query = new GetDataQueryBean()
-        //addDefaultCProperties(query)
         JsNamingQueryTranslator jsNamingQueryTranslator = new JsNamingQueryTranslator()
         List<QueryFilter> combinedQueryFilterList = []
         for (String codedFilters in listOfCodedFilters) {
@@ -87,57 +86,9 @@ class GetDataQueryHolder {
         for (QueryFilter queryFilter in combinedQueryFilterList) {
             query.addQueryFilter(queryFilter)
         }
-       // addDefaultPProperties(query)
-       // addDefaultDProperties(query)
         return query
     }
 
-
-    private addDefaultCProperties(GetDataQuery getDataQuery) {
-        JsonParser jsonParser = JsonParser.getService();
-        getDataQuery.addQueryProperty((Property) jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CLOSEST_GENE));
-        getDataQuery.addQueryProperty((Property) jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
-        getDataQuery.addQueryProperty((Property) jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_DBSNP_ID));
-        getDataQuery.addQueryProperty((Property) jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_PROTEIN_CHANGE));
-        getDataQuery.addQueryProperty((Property) jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CONSEQUENCE));
-        getDataQuery.addQueryProperty((Property) jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME));
-        getDataQuery.addQueryProperty((Property) jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION));
-    }
-
-
-    private addDefaultPProperties(GetDataQuery getDataQuery) {
-        List<Property> propertyList = getDataQuery.getQueryPropertyList()
-        List<QueryFilter> queryFilterList = getDataQuery.getFilterList()
-        JsonSlurper slurper = new JsonSlurper()
-        for (QueryFilter queryFilter in queryFilterList) {
-            if (!(queryFilter.property in propertyList)) {
-                String filterStringAsJson = queryFilter.property.getWebServiceFilterString("OP", "0", "")
-                def parsedFilter = slurper.parseText(filterStringAsJson)
-                String phenotypeName = parsedFilter.phenotype
-                String sampleGroupName = parsedFilter.dataset_id
-                List<Property> defaultDisplayProperties = metaDataService.getPhenotypeSpecificSampleGroupPropertyCollection(phenotypeName, sampleGroupName, [/^MINA/, /^MINU/, /^(OR|ODDS|BETA)/, /^P_(EMMAX|FIRTH|FE|VALUE)/])
-                for (Property defaultDisplayProperty in defaultDisplayProperties) {
-                    getDataQuery.addQueryProperty(defaultDisplayProperty)
-                }
-
-
-            }
-        }
-    }
-
-
-    private addDefaultDProperties(GetDataQuery getDataQuery) {
-        List<Property> propertyList = getDataQuery.getQueryPropertyList()
-        List<QueryFilter> queryFilterList = getDataQuery.getFilterList()
-        JsonSlurper slurper = new JsonSlurper()
-        for (QueryFilter queryFilter in queryFilterList) {
-            if (!(queryFilter.property in propertyList)) {
-                if (queryFilter.property.parent?.getClass().getName().contains("SampleGroupBean")) {
-                    getDataQuery.addQueryProperty(queryFilter.property)
-                }
-            }
-        }
-    }
 
 
     private addSpecificCProperties(LinkedHashMap resultColumnsToDisplay) {
@@ -262,20 +213,21 @@ class GetDataQueryHolder {
                         break
                     case JsNamingQueryTranslator.QUERY_PROTEIN_EFFECT_LINE_NUMBER:
                         List<String> proteinEffect
-                        proteinEffect = tempArray[1].tokenize(JsNamingQueryTranslator.QUERY_OPERATOR_EQUALS_STRING);
+                        String operatorSplitCharacter = JsNamingQueryTranslator.determineOperatorSplitCharacter(tempArray[1]);
+                        proteinEffect = tempArray[1].tokenize(operatorSplitCharacter);
                         if (proteinEffect.size()>0){
                             switch (proteinEffect[0]) {
                                 case PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY:
-                                    returnValue = "predicted effects: ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_PROTEINEFFECT, proteinEffect[1])}"
+                                    returnValue = "predicted effects ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_PROTEINEFFECT, proteinEffect[1],operatorSplitCharacter)}"
                                     break;
                                 case PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY:
-                                    returnValue = "predicted effects: ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_POLYPHEN, proteinEffect[1])}"
+                                    returnValue = "predicted effects ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_POLYPHEN, proteinEffect[1],operatorSplitCharacter)}"
                                     break;
                                 case PortalConstants.JSON_VARIANT_SIFT_PRED_KEY:
-                                    returnValue = "predicted effects: ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_SIFT, proteinEffect[1])}"
+                                    returnValue = "predicted effects ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_SIFT, proteinEffect[1],operatorSplitCharacter)}"
                                     break;
                                 case PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY:
-                                    returnValue = "predicted effects: ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_CONDEL, proteinEffect[1])}"
+                                    returnValue = "predicted effects ${searchBuilderService.prettyPrintPredictedEffect(PortalConstants.PROTEIN_PREDICTION_TYPE_CONDEL, proteinEffect[1],operatorSplitCharacter)}"
                                     break;
                             }
 

@@ -3,7 +3,9 @@ package dport
 import dport.meta.UserQueryContext
 import grails.transaction.Transactional
 import org.apache.juli.logging.LogFactory
+import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
+import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.metadata.query.JsNamingQueryTranslator
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
@@ -15,6 +17,7 @@ class FilterManagementService {
     RestServerService restServerService
     SharedToolsService sharedToolsService
     SearchBuilderService searchBuilderService
+    MetaDataService metaDataService
 
     private String exomeSequence  = "ExSeq_17k_mdv2"
     private String gwasData  = "GWAS_DIAGRAM_mdv2"
@@ -276,10 +279,16 @@ class FilterManagementService {
      * @param region
      * @return
      */
-  public  List<String> retrieveFilters (  String geneId, String significance,String dataset,String region,String receivedParameters, String customSampleGroup = "" )    {
+  public  String retrieveFilters (  String geneId, String significance,String dataset,String region,String receivedParameters)    {
+      String returnValue = ""
       Map paramsMap = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters)
-      LinkedHashMap<String, String> parsedFilterParameters = parseExtendedVariantSearchParameters(paramsMap,false,[:])
-      return  parsedFilterParameters.filters
+      List <String> listOfCodedFilters = observeMultipleFilters (paramsMap)
+      if ((listOfCodedFilters) &&
+              (listOfCodedFilters.size() > 0)){
+          GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters,searchBuilderService,metaDataService)
+          returnValue = getDataQueryHolder.retrieveAllFiltersAsJson()
+      }
+      return  returnValue
   }
 
 
@@ -290,21 +299,33 @@ class FilterManagementService {
                                               String filter) {
         HashMap returnValue = [:]
 
+        String dataSet =  ""
+        String pValueSpec = ""
         if (dataset) {
             switch (dataset) {
                 case 'gwas' :
                     returnValue['datatype']  = 'gwas'
+                    dataSet = 'GWAS_DIAGRAM_mdv2'
+                    pValueSpec = "P_VALUE"
                     break;
                 case 'sigma' :
                     returnValue['datatype']  = 'sigma'
+                    dataSet = 'GWAS_DIAGRAM_mdv2'
+                    pValueSpec = "P_VALUE"
                     break;
                 case 'exomeseq' :
                     returnValue['datatype']  = 'exomeseq'
-                    returnValue['predictedEffects'] = 'lessThan_noEffectNoncoding';
+                    returnValue['predictedEffects'] = 'lessThan_noEffectNoncoding'
+                    dataSet = 'ExSeq_17k_mdv2'
+                    pValueSpec = "P_FIRTH_FE_IV"
+                    returnValue['savedValue0'] = "11=MOST_DEL_SCORE<4"
                     break;
                 case 'exomechip' :
                     returnValue['datatype']  = 'exomechip'
                     returnValue['predictedEffects'] = 'lessThan_noEffectNoncoding';
+                    dataSet = 'ExChip_82k_mdv2'
+                    pValueSpec = "P_VALUE"
+                    returnValue['savedValue0'] = "11=MOST_DEL_SCORE<4"
                     break;
                 default:
                     break;
@@ -315,16 +336,19 @@ class FilterManagementService {
         if (significance) {
             switch (significance) {
                 case 'everything' : // this is equivalent to P>0,
-                    // is it also equivalent to P not specified?
+                    returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<1"
                     break;
                 case 'genome-wide' :
                     returnValue['significance']  = 'genomewide'
+                    returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<0.5E-8"
                     break;
                 case 'locus' :
                     returnValue['significance']  = 'locus'
+                    returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<0.5E-4"
                     break;
                 case 'nominal' : // this is equivalent to P>0,
                     returnValue['significance']  = 'nominal'
+                    returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<0.05"
                     break;
                 default:
                     break;
@@ -333,19 +357,25 @@ class FilterManagementService {
 
         if (region) { // If there's a region then use it. Otherwise depend on the gene name. Don't use both
             LinkedHashMap extractedNumbers = restServerService.extractNumbersWeNeed(region)
+            List <String> regionSpecifierList = []
             if (extractedNumbers) {
                 if (extractedNumbers["chromosomeNumber"]) {
                     returnValue["region_chrom_input"] = extractedNumbers["chromosomeNumber"]
+                    regionSpecifierList << "8=${extractedNumbers['chromosomeNumber']}"
                 }
                 if (extractedNumbers["startExtent"]) {
                     returnValue["region_start_input"] = extractedNumbers["startExtent"]
+                    regionSpecifierList << "9=${extractedNumbers['startExtent']}"
                 }
                 if (extractedNumbers["endExtent"]) {
                     returnValue["region_stop_input"] = extractedNumbers["endExtent"]
+                    regionSpecifierList << "10=${extractedNumbers['endExtent']}"
                 }
+                returnValue['savedValue2'] = "${regionSpecifierList.join('^')}"
             }
         } else if (gene) {
             returnValue['region_gene_input']  = gene
+            returnValue['savedValue3'] = "7=${gene}"
         }
 
 
@@ -367,7 +397,6 @@ class FilterManagementService {
     private HashMap interpretSpecialFilters(HashMap developingParameterCollection,String filter)  {
          LinkedHashMap returnValue = new LinkedHashMap()
 
-        // KDUXTD-38: adding default filter for 'variation across continental ancestry' drill down
         developingParameterCollection['predictedEffects'] = 'lessThan_noEffectNoncoding';
 
         if (filter) {
@@ -378,18 +407,26 @@ class FilterManagementService {
                      returnValue['datatype'] = 'exomechip'
                      switch ( requestPortionList[0] ){
                          case "total":
+                             returnValue['savedValue5'] = "17=T2D[ExChip_82k_mdv2]MAF>0.0"
+                             returnValue['savedValue6'] = "17=T2D[ExChip_82k_mdv2]MAF<1.0"
                              returnValue['ethnicity_af_eu-min'] = 0.0
                              returnValue['ethnicity_af_eu-max'] = 1.0
                              break;
                          case "common":
+                             returnValue['savedValue5'] = "17=T2D[ExChip_82k_mdv2]MAF>0.05"
+                             returnValue['savedValue6'] = "17=T2D[ExChip_82k_mdv2]MAF<1.0"
                              returnValue['ethnicity_af_eu-min'] = 0.05
                              returnValue['ethnicity_af_eu-max'] = 1.0
                              break;
                          case "lowfreq":
+                             returnValue['savedValue5'] = "17=T2D[ExChip_82k_mdv2]MAF>0.0005"
+                             returnValue['savedValue6'] = "17=T2D[ExChip_82k_mdv2]MAF<0.05"
                              returnValue['ethnicity_af_eu-min'] = 0.0005
                              returnValue['ethnicity_af_eu-max'] = 0.05
                              break;
                          case "rare":
+                             returnValue['savedValue5'] = "17=T2D[ExChip_82k_mdv2]MAF>0.0"
+                             returnValue['savedValue6'] = "17=T2D[ExChip_82k_mdv2]MAF<0.0005"
                              returnValue['ethnicity_af_eu-min'] = 0.0
                              returnValue['ethnicity_af_eu-max'] = 0.0005
                              break;
@@ -400,20 +437,42 @@ class FilterManagementService {
                  } else {   // we have ethnicity data
 //                     developingParameterCollection['datatype']  = 'exomeseq'
                      String baseEthnicityMarker =  "ethnicity_af_"+ ethnicity  + "-"
+                     String sampleGroup = ""
+                     switch (ethnicity){
+                         case "aa":sampleGroup = "ExSeq_17k_aa_genes_mdv2"
+                             break;
+                         case "ea":sampleGroup = "ExSeq_17k_ea_genes_mdv2"
+                             break;
+                         case "sa":sampleGroup = "ExSeq_17k_sa_genes_mdv2"
+                             break;
+                         case "eu":sampleGroup = "ExSeq_17k_eu_mdv2"
+                             break;
+                         case "hs":sampleGroup = "ExSeq_17k_hs_mdv2"
+                             break;
+                         default: break
+                     }
                      switch ( requestPortionList[0]){
                          case "total":
+                             returnValue['savedValue5'] = "17=T2D[${sampleGroup}]MAF>0.0"
+                             returnValue['savedValue6'] = "17=T2D[${sampleGroup}]MAF<1.0"
                              returnValue[baseEthnicityMarker  +'min'] = 0.0
                              returnValue[baseEthnicityMarker  +'max'] = 1.0
                              break;
                          case "common":
+                             returnValue['savedValue5'] = "17=T2D[${sampleGroup}]MAF>0.05"
+                             returnValue['savedValue6'] = "17=T2D[${sampleGroup}]MAF<1.0"
                              returnValue[baseEthnicityMarker  +'min'] = 0.05
                              returnValue[baseEthnicityMarker  +'max'] = 1.0
                              break;
                          case "lowfreq":
+                             returnValue['savedValue5'] = "17=T2D[${sampleGroup}]MAF>0.0005"
+                             returnValue['savedValue6'] = "17=T2D[${sampleGroup}]MAF<0.05"
                              returnValue[baseEthnicityMarker  +'min'] = 0.0005
                              returnValue[baseEthnicityMarker  +'max'] = 0.05
                              break;
                          case "rare":
+                             returnValue['savedValue5'] = "17=T2D[${sampleGroup}]MAF>0.0"
+                             returnValue['savedValue6'] = "17=T2D[${sampleGroup}]MAF<0.0005"
                              returnValue[baseEthnicityMarker  +'min'] = 0.0
                              returnValue[baseEthnicityMarker  +'max'] = 0.0005
                              break;
@@ -421,6 +480,7 @@ class FilterManagementService {
                              log.error("FilterManagementService:interpretSpecialFilters. Unexpected string 2 = ${requestPortionList[0]}")
                              break;
                      }
+                     returnValue['savedValue7'] = "11=MOST_DEL_SCORE<4"
                  }
 
              } else if ((requestPortionList.size() == 1)&&(requestPortionList[0]=='ptv')) {  // specialized search logic for demo.

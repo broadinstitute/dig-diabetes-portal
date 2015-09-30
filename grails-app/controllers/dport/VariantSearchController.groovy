@@ -202,13 +202,22 @@ class VariantSearchController {
 
         Map paramsMap = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters)
 
-        if (paramsMap) {
 
-            List <LinkedHashMap> listOfProperties = []
-
-            displayCombinedVariantSearchResults([paramsMap], listOfProperties)
-           // displayVariantSearchResults(paramsMap, false)
+        List <String> listOfCodedFilters = filterManagementService.observeMultipleFilters (paramsMap)
+        if ((listOfCodedFilters) &&
+                (listOfCodedFilters.size() > 0)){
+            displayCombinedVariantSearch(listOfCodedFilters,[])
+            return
         }
+
+
+//        if (paramsMap) {
+//
+//            List <LinkedHashMap> listOfProperties = []
+//
+//            displayCombinedVariantSearchResults([paramsMap], listOfProperties)
+//           // displayVariantSearchResults(paramsMap, false)
+//        }
 
     }
 

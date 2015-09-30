@@ -373,42 +373,6 @@ class SharedToolsService {
 
 
 
-    /***
-     * We have a data structure indexed by phenotype where values correspond to maps. These maps at a minimum contain
-     * a pointer to a sample group ID (key = sampleGroupId), but they may also contain an arbitrary number of other key value
-     * pairs, where the key is the name of the property and the value is the property type. This structure should allow me to
-     * ask questions such as "does this phenotype have a beta property? If so then tell me the sample ID.  Note that this
-     * approach depends on the uniqueness of the phenotype/property combination, which is true only within a
-     * specific version/technology combination.
-     *
-     * @param phenotype
-     * @param property
-     * @param holder
-     * @return
-     */
-    public LinkedHashMap<String, String> pullBackSampleGroup (String phenotype,String property,LinkedHashMap<String, List<String>> holder)  {
-        LinkedHashMap<String, String>  returnValue = [phenotypeFound: false]
-        if (holder.containsKey (phenotype)){
-            LinkedHashMap phenotypeSpecificHolder = holder [phenotype]
-            returnValue ["phenotypeFound"] = true
-            returnValue ["propertyFound"] = false
-            returnValue ["sampleGroupId"] = phenotypeSpecificHolder.sampleGroupId
-            if ((phenotypeSpecificHolder)&&(phenotypeSpecificHolder.size()>0)){
-                LinkedHashMap phenotypeSpecificProperties = phenotypeSpecificHolder.properties
-                if (phenotypeSpecificProperties.containsKey(property))  {
-                    returnValue ["propertyFound"] = true
-                    returnValue ["propertyType"] =  phenotypeSpecificProperties [property]
-                }
-
-            }
-        }
-        return returnValue
-    }
-
-
-
-
-
 
 
 
@@ -1394,90 +1358,6 @@ class SharedToolsService {
 
 
 
-
-
-
-
-
-
-
-public List <LinkedHashMap> convertFormOfFilters(String rawFilters){
-    List <LinkedHashMap> returnValue = []
-    if (rawFilters){
-        List <String> filters = rawFilters.tokenize(',')
-        int filterCount = 0
-        for (String codedFilter in filters){
-            LinkedHashMap dividedFilter = [:]
-            List <String> filter = codedFilter.tokenize(':')
-            switch (filter[0]){
-                case "4":
-                    dividedFilter["gene"]=filter[1];
-                    break;
-                case "5":
-                    dividedFilter["regionChromosomeInput"]=filter[1];
-                    break;
-                case "6":
-                    dividedFilter["regionStartInput"]=filter[1];
-                    break;
-                case "7":
-                    dividedFilter["regionStopInput"]=filter[1];
-                    break;
-                case "23":
-                    if (filter[1]!="0"){
-                        switch (filter[1]){
-                            case "1":dividedFilter["predictedEffects"]="protein-truncating"; break;
-                            case "2":dividedFilter["predictedEffects"]="missense"; break;
-                            case "3":dividedFilter["predictedEffects"]="noEffectSynonymous"; break;
-                            case "4":dividedFilter["predictedEffects"]="noEffectNoncoding"; break;
-                            case "5":dividedFilter["predictedEffects"]="lessThan_noEffectNoncoding"; break;
-                            default:break
-                        }
-                    }
-                    break;
-                case "24":
-                    if (filter[1]!="0"){
-                        switch (filter[1]){
-                            case "1":dividedFilter["polyphenSelect"]="probably_damaging"; break;
-                            case "2":dividedFilter["polyphenSelect"]="possibly_damaging"; break;
-                            case "3":dividedFilter["polyphenSelect"]="benign"; break;
-                            case "4":dividedFilter["polyphenSelect"]="probably_damaging"; break;
-                            default:break
-                        }
-                    }
-                    break;
-                case "25":
-                    if (filter[1]!="0"){
-                        switch (filter[1]){
-                            case "1":dividedFilter["sift"]="probably_damaging"; break;
-                            case "2":dividedFilter["sift"]="possibly_damaging"; break;
-                            case "3":dividedFilter["sift"]="probably_damaging"; break;
-                            default:break
-                        }
-                    }
-                    break;
-                case "26":
-                    if (filter[1]!="0"){
-                        switch (filter[1]){
-                            case "1":dividedFilter["condel"]="deleterious"; break;
-                            case "2":dividedFilter["condel"]="benign"; break;
-                            case "3":dividedFilter["condel"]="deleterious"; break;
-                            default:break
-                        }
-                    }
-                    break;
-                case "47":
-                    dividedFilter["filter"+(filterCount++)] = filter[1];
-                    break;
-                default: break;
-            }
-            if (dividedFilter.size()>0){
-                returnValue << dividedFilter
-            }
-        }
-    }
-
-    return returnValue
-}
 
 
 

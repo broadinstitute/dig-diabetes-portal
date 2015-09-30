@@ -788,8 +788,10 @@ ${getDataHeader (0, 100, 1, false)}
                 log.error("Trouble: user requested data set = ${dataSet} which I don't recognize")
                 defaults
         }
-        List <String> filterList= filterManagementService.retrieveFilters(geneName,significance,dataSetId,geneRegion,"")
-        String packagedFilters = sharedToolsService.packageUpEncodedParameters(filterList)
+//        List <String> filterList= filterManagementService.retrieveFilters(geneName,significance,dataSetId,geneRegion,"")
+//        String packagedFilters = sharedToolsService.packageUpEncodedParameters(filterList)
+
+        String packagedFilters = filterManagementService.retrieveFilters(geneName,significance,dataSetId,geneRegion,"")
         String geneCountRequest = """
 {
 ${getDataHeader (0, 100, 1000, true)}
@@ -1245,8 +1247,9 @@ ${getDataHeader (0, 100, 1000, false)}
                 log.error("Trouble: user requested cell number = ${cellNumber} which I don't recognize")
                 dataSetId = EXOMESEQ_AA
         }
-        List <String> filterList= filterManagementService.retrieveFilters(geneName,"","","","${codeForMafSlice}-${codeForEthnicity}")
-        String packagedFilters = sharedToolsService.packageUpEncodedParameters(filterList)
+//        List <String> filterList= filterManagementService.retrieveFilters(geneName,"","","","${codeForMafSlice}-${codeForEthnicity}")
+//        String packagedFilters = sharedToolsService.packageUpEncodedParameters(filterList)
+        String packagedFilters = filterManagementService.retrieveFilters(geneName,"","","","${codeForMafSlice}-${codeForEthnicity}")
         String jsonVariantCountByGeneAndMaf = """
 {
 ${getDataHeader (0, 100, 1000, true)}
