@@ -69,49 +69,6 @@ class HypothesisGenController {
     }
 
 
-    private void buildVariantListRequest(HashMap paramsMap, List <String> explicitVariantList) {
-        LinkedHashMap<String, String> parsedFilterParameters
-        String encodedProteinEffects
-        String encodedVariantList
-        String encodedVariantList2
-        String encodedFilters = ""
-        String encodedParameters = ""
-        if (paramsMap.isEmpty()){
-             encodedVariantList = sharedToolsService.packageUpFiltersForRoundTrip(explicitVariantList)
-             encodedVariantList2 = sharedToolsService.packageUpEncodedParameters(explicitVariantList)
-        }else {
-          //  parsedFilterParameters = filterManagementService.parseVariantSearchParameters(paramsMap)
-            parsedFilterParameters = filterManagementService.parseExtendedVariantSearchParameters(paramsMap,false,[:])
-            encodedFilters = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters)
-            encodedParameters = sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
-        }
-
-        encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
-
-
-
-
-            render(view: 'dynamicBurdenTest',
-                    model: [caller:3,
-                            show_gene           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
-                            show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
-                            show_exchp          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
-                            show_exseq          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                            variants            : encodedVariantList,
-                            variants2           : encodedVariantList2,
-//                            variantInfo         : jsonObject['variant-info'],
-                            filter              : encodedFilters,
-                            filterDescriptions  : parsedFilterParameters?.filterDescriptions,
-                            proteinEffectsList  : encodedProteinEffects,
-                            encodedParameters   : encodedParameters,
-//                            dataSetDetermination: dataSetDetermination
-                    ])
-      //  }
-    }
-
-
-
-
 
 
     /***

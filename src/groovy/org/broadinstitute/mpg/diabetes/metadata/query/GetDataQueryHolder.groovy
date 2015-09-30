@@ -151,6 +151,38 @@ class GetDataQueryHolder {
     }
 
 
+
+    public LinkedHashMap<String,String> positioningInformation() {
+        LinkedHashMap<String, String> returnValue = [:]
+        List<QueryFilter> filterList = getDataQuery.getFilterList()
+        for (QueryFilter queryFilter in filterList) {
+            switch (queryFilter.property.getName()) {
+                case "POS":
+                    if ((queryFilter.operator == PortalConstants.OPERATOR_LESS_THAN_EQUALS) ||
+                            (queryFilter.operator == PortalConstants.OPERATOR_LESS_THAN_NOT_EQUALS)) {
+                        returnValue["endingExtentSpecified"] = queryFilter.value
+                    } else if ((queryFilter.operator == PortalConstants.OPERATOR_MORE_THAN_EQUALS) ||
+                            (queryFilter.operator == PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS)) {
+                        returnValue["beginningExtentSpecified" ] = queryFilter.value
+                    } else if (queryFilter.operator == PortalConstants.OPERATOR_EQUALS) {
+                        returnValue["beginningExtentSpecified"] = queryFilter.value
+                        returnValue["endingExtentSpecified"] = queryFilter.value
+                    }
+                    break;
+                case "CHROM":
+                    returnValue["chromosomeSpecified"] = queryFilter.value
+                    break
+                default:
+                    break
+            }
+
+        }
+        return returnValue
+    }
+
+
+
+
     public List<String> listOfEncodedFilters() {
         JsNamingQueryTranslator jsNamingQueryTranslator = new JsNamingQueryTranslator()
         return jsNamingQueryTranslator.encodeGetFilterData(this.getDataQuery)

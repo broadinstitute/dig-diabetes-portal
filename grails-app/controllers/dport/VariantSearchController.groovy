@@ -365,20 +365,34 @@ class VariantSearchController {
 
     private void displayCombinedVariantSearch(List <String> listOfCodedFilters, List <LinkedHashMap> listOfProperties) {
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters,searchBuilderService,metaDataService)
-        // Let's start stepping through our big list of filters
         if (getDataQueryHolder.isValid()) {
             String requestForAdditionalProperties = filterManagementService.convertPropertyListToTransferableString(listOfProperties)
             String revisedFiltersRaw = java.net.URLEncoder.encode(getDataQueryHolder.retrieveAllFiltersAsJson())
-            //String encodedFilters = filterManagementService.convertFilterListToTransferableString(getDataQuery)
-            //List<String> displayableFilters = filterManagementService.convertFilterListToDisplayableString(getDataQuery)
-            List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
+             List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
             List<String> urlEncodedFilters = getDataQueryHolder.listOfUrlEncodedFilters(encodedFilters)
             List<String> displayableFilters = getDataQueryHolder.listOfReadableFilters(encodedFilters)
             LinkedHashMap genomicExtents = sharedToolsService.validGenomicExtents (getDataQueryHolder.retrieveGetDataQuery())
             List<String> identifiedGenes = sharedToolsService.allEncompassedGenes(genomicExtents)
             String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
             String regionSpecifier = ""
+            LinkedHashMap<String,String> positioningInformation = getDataQueryHolder.positioningInformation()
+            if (positioningInformation.size() > 2) {
+                regionSpecifier = "chr${positioningInformation.chromosomeSpecified}:${positioningInformation.beginningExtentSpecified}-${positioningInformation.endingExtentSpecified}"
+                List<Gene> geneList = Gene.findAllByChromosome("chr" + positioningInformation.chromosomeSpecified)
+                for (Gene gene in geneList) {
+                    try {
+                        int startExtent = positioningInformation.beginningExtentSpecified as Long
+                        int endExtent = positioningInformation.endingExtentSpecified as Long
+                        if (((gene.addrStart > startExtent) && (gene.addrStart < endExtent)) ||
+                                ((gene.addrEnd > startExtent) && (gene.addrEnd < endExtent))) {
+                            identifiedGenes << gene.name1 as String
+                        }
+                    } catch (e) {
+                        redirect(controller: 'home', action: 'portalHome')
+                    }
 
+                }
+            }
 
 
 
@@ -395,86 +409,13 @@ class VariantSearchController {
                             encodedParameters   : urlEncodedFilters,
                             dataSetDetermination: 2,
                             additionalProperties: requestForAdditionalProperties,
-                            regionSearch        : (genomicExtents.size() > 0),
+                            regionSearch        : (positioningInformation.size() > 2),
                             regionSpecification : regionSpecifier,
                             geneNamesToDisplay  : identifiedGenes
                     ])
         }
     }
 
-
-
-
-
-
-
-
-
-    /***
-     * This is the meat of dynamic filtering. Start with a list of filters (the filters are grouped into maps),
-     * and convert these into three different products:
-     * 1) a description of the filters that a user could understand
-     * 2) a coded form of the filters we can pass down to the browser and expect to get back again
-     * 3) the actual filters that were gonna send to the rest API, written out in JSON and ready to go
-     * @param listOfParameterMaps
-     * @param currentlySigma
-     */
-    private void displayCombinedVariantSearchResults(List<LinkedHashMap> listOfParameterMaps, List <LinkedHashMap> listOfProperties) {
-        // Let's start stepping through our big list of filters
-        LinkedHashMap parsedFilterParameters
-        if (listOfParameterMaps) {
-            for (LinkedHashMap singleParameterMap in listOfParameterMaps) {
-                parsedFilterParameters = filterManagementService.parseExtendedVariantSearchParameters(singleParameterMap, false, parsedFilterParameters)
-            }
-        }
-        if (parsedFilterParameters) {
-            String requestForAdditionalProperties = filterManagementService.convertPropertyListToTransferableString(listOfProperties)
-            Integer dataSetDetermination = filterManagementService.identifyAllRequestedDataSets(listOfParameterMaps)
-            String encodedFilters = sharedToolsService.packageUpFiltersForRoundTrip(parsedFilterParameters.filters)
-            String encodedParameters = sharedToolsService.packageUpEncodedParameters(parsedFilterParameters.parameterEncoding)
-            if (parsedFilterParameters.transferableFilter){
-                encodedParameters = "${encodedParameters},${parsedFilterParameters.transferableFilter.join(',')}"
-            }
-            String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
-            String regionSpecifier = ""
-            List<String> identifiedGenes = []
-            if (parsedFilterParameters.positioningInformation.size() > 2) {
-                regionSpecifier = "chr${parsedFilterParameters.positioningInformation.chromosomeSpecified}:${parsedFilterParameters.positioningInformation.beginningExtentSpecified}-${parsedFilterParameters.positioningInformation.endingExtentSpecified}"
-                List<Gene> geneList = Gene.findAllByChromosome("chr" + parsedFilterParameters.positioningInformation.chromosomeSpecified)
-                for (Gene gene in geneList) {
-                    try {
-                        int startExtent = parsedFilterParameters.positioningInformation.beginningExtentSpecified as Long
-                        int endExtent = parsedFilterParameters.positioningInformation.endingExtentSpecified as Long
-                        if (((gene.addrStart > startExtent) && (gene.addrStart < endExtent)) ||
-                                ((gene.addrEnd > startExtent) && (gene.addrEnd < endExtent))) {
-                            identifiedGenes << gene.name1 as String
-                        }
-                    } catch (e){
-                        redirect(controller:'home',action:'portalHome')
-                    }
-
-                }
-            }
-
-
-
-            render(view: 'variantSearchResults',
-                    model: [show_gene           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
-                            show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
-                            show_exchp          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
-                            show_exseq          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                            filter              : encodedFilters,
-                            filterDescriptions  : parsedFilterParameters.filterDescriptions,
-                            proteinEffectsList  : encodedProteinEffects,
-                            encodedParameters   : encodedParameters,
-                            dataSetDetermination: dataSetDetermination,
-                            additionalProperties: requestForAdditionalProperties,
-                            regionSearch        : (parsedFilterParameters.positioningInformation.size() > 2),
-                            regionSpecification : regionSpecifier,
-                            geneNamesToDisplay  : identifiedGenes
-                    ])
-        }
-    }
 
 
 

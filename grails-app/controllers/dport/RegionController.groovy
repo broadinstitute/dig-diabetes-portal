@@ -28,7 +28,7 @@ class RegionController {
                 encounteredErrors = true
             }
             if (!encounteredErrors){
-                String searchParms = "8=${extractedNumbers["chromosomeNumber"]}^9=${startExtent}^10=${endExtent}^11=all-effects^17=T2D[GWAS_DIAGRAM_mdv2]P_VALUE<1^".toString()
+                String searchParms = "8=${extractedNumbers["chromosomeNumber"]}^9=${startExtent}^10=${endExtent}^17=T2D[GWAS_DIAGRAM_mdv2]P_VALUE<1^".toString()
                 redirect(controller:'variantSearch',action:'launchAVariantSearch', params: [savedValue0: searchParms])
                 return
             }
