@@ -15,15 +15,27 @@ import org.springframework.beans.factory.annotation.Autowired
  * Created by balexand on 9/17/2015.
  */
 
+/***
+ * Here is a wrapper around GetDataQuery allowing us to provide some additional functionality without messing with the underlying class unnecessarily.
+ * (Also allowing me to program in Groovy instead of Java!)
+ */
 class GetDataQueryHolder {
 
     GetDataQuery getDataQuery
 
+    //  a couple of services. We pass these in through the constructor
     SearchBuilderService searchBuilderService
     MetaDataService metaDataService
 
-    public
-    static GetDataQueryHolder createGetDataQueryHolder(String filterString, SearchBuilderService searchBuilderService, MetaDataService metaDataService) {
+    /***
+     * factory constructor to build a GetDataQueryHolder given a set of filters defined on a single line
+     *
+     * @param filterString
+     * @param searchBuilderService
+     * @param metaDataService
+     * @return
+     */
+    public static GetDataQueryHolder createGetDataQueryHolder(String filterString, SearchBuilderService searchBuilderService, MetaDataService metaDataService) {
         if ((filterString) &&
                 (filterString.size() > 0)) {
             String refinedFilterString = filterString
@@ -40,22 +52,44 @@ class GetDataQueryHolder {
         }
     }
 
-
+    /***
+     * If you already have a GetDataQuery then you could pass it into this factory constructor
+     * @param getDataQuery
+     * @return
+     */
     public static GetDataQueryHolder createGetDataQueryHolder(GetDataQuery getDataQuery) {
         return new GetDataQueryHolder(getDataQuery)
     }
 
-
-    public
-    static GetDataQueryHolder createGetDataQueryHolder(List<String> filterList, SearchBuilderService searchBuilderService, MetaDataService metaDataService) {
+    /***
+     *   Build a GetDataQueryHolder using a list of filter definitions. Note that these are the same filter definitions that are provided by
+     *   the method listOfEncodedFilters, and that these filters can (and regularly are) passed down into the GSP machinery. This provides
+     *   a convenient way to collapse a GetDataQueryHolder into something that can be passed to the browser, and then re-create an equivalent
+     *   object using strings that the browser passes back up.
+     *
+     * @param filterList
+     * @param searchBuilderService
+     * @param metaDataService
+     * @return
+     */
+    public static GetDataQueryHolder createGetDataQueryHolder(List<String> filterList, SearchBuilderService searchBuilderService, MetaDataService metaDataService) {
         return new GetDataQueryHolder(filterList, searchBuilderService, metaDataService)
     }
 
+    /***
+     * Sometimes we don't need the full object, so we can use this abbreviated factory method
+     * @return
+     */
     public static GetDataQueryHolder createGetDataQueryHolder() {
         return new GetDataQueryHolder()
     }
 
-
+    /***
+     * this is the primary constructor method
+     * @param filterList
+     * @param searchBuilderService
+     * @param metaDataService
+     */
     public GetDataQueryHolder(List<String> filterList, SearchBuilderService searchBuilderService, MetaDataService metaDataService) {
         this()
         this.searchBuilderService = searchBuilderService
@@ -63,16 +97,27 @@ class GetDataQueryHolder {
         getDataQuery = generateGetDataQuery(filterList)
     }
 
+    /***
+     * constructor
+     * @param getDataQuery
+     */
     public GetDataQueryHolder(GetDataQuery getDataQuery) {
         this()
         this.getDataQuery = getDataQuery
     }
 
+    /***
+     * constructor
+     */
     public GetDataQueryHolder() {
         this.getDataQuery = new GetDataQueryBean()
     }
 
-
+    /***
+     * This method is used by the constructor to build a GetDataQuery out of a set of filters
+     * @param listOfCodedFilters
+     * @return
+     */
     public GetDataQuery generateGetDataQuery(List<String> listOfCodedFilters) {
         GetDataQuery query = new GetDataQueryBean()
         JsNamingQueryTranslator jsNamingQueryTranslator = new JsNamingQueryTranslator()
@@ -89,8 +134,10 @@ class GetDataQueryHolder {
         return query
     }
 
-
-
+    /***
+     * add C properties. The incoming data structure is built by the getColumnsToDisplayStructure method in SharedToolsService
+     * @param resultColumnsToDisplay
+     */
     private addSpecificCProperties(LinkedHashMap resultColumnsToDisplay) {
         if ((resultColumnsToDisplay) &&
                 (resultColumnsToDisplay['cproperty'])) {
@@ -102,7 +149,10 @@ class GetDataQueryHolder {
         }
     }
 
-
+    /***
+     * add D properties. The incoming data structure is built by the getColumnsToDisplayStructure method in SharedToolsService
+     * @param resultColumnsToDisplay
+     */
     private addSpecificDProperties(LinkedHashMap resultColumnsToDisplay) {
         if ((resultColumnsToDisplay) &&
                 (resultColumnsToDisplay['dproperty'])) {
@@ -119,6 +169,10 @@ class GetDataQueryHolder {
     }
 
 
+    /***
+     * add P properties. The incoming data structure is built by the getColumnsToDisplayStructure method in SharedToolsService
+     * @param resultColumnsToDisplay
+     */
     private addSpecificPProperties(LinkedHashMap resultColumnsToDisplay) {
         if ((resultColumnsToDisplay) &&
                 (resultColumnsToDisplay['pproperty'])) {
@@ -136,22 +190,33 @@ class GetDataQueryHolder {
         }
     }
 
-
+    /***
+     * Convenience routine to call the three different types of property builders
+     * @param columnsWeWant
+     */
     public void addProperties(LinkedHashMap columnsWeWant) {
         addSpecificCProperties(columnsWeWant)
         addSpecificDProperties(columnsWeWant)
         addSpecificPProperties(columnsWeWant)
     }
 
-
+    /***
+     * write out all the filters into a string, suitable for passing to the REST server.  It would be nice if this method
+     * becomes unnecessary because all of the JSON is handled behind the scenes, but we aren't there yet.  Consider this a
+     * bridge routine until we can achieve that goal
+     * @return
+     */
     public String retrieveAllFiltersAsJson() {
         List<QueryFilter> filterList = getDataQuery.getFilterList()
         List<String> filtersAsJson = filterList.collect { it -> it.getFilterString() }
         return "${filtersAsJson.join(',')}"
     }
 
-
-
+    /***
+     * Sometimes we need to know if a given set of filters provides a definition of a genomic range. If it does
+     * then pass back the three parts (start here, end here, and chromosome name) in a map
+     * @return
+     */
     public LinkedHashMap<String,String> positioningInformation() {
         LinkedHashMap<String, String> returnValue = [:]
         List<QueryFilter> filterList = getDataQuery.getFilterList()
@@ -180,47 +245,68 @@ class GetDataQueryHolder {
         return returnValue
     }
 
-
-
-
+    /***
+     * Take all of the filters that make up this holder and convert them into a list. This list is then
+     * read by some of the other methods, or else may be used to reconstruct an equivalent object from scratch
+     * @return
+     */
     public List<String> listOfEncodedFilters() {
         JsNamingQueryTranslator jsNamingQueryTranslator = new JsNamingQueryTranslator()
         return jsNamingQueryTranslator.encodeGetFilterData(this.getDataQuery)
     }
 
-
-
+    /***
+     * Sometimes it's useful to take a subset of the properties.  Specifically it's nice to be able to
+     * breakout common properties from d and p properties
+     * @param propertyType
+     * @return
+     */
     public List<String> listOfEncodedFilters(String propertyType) {
         JsNamingQueryTranslator jsNamingQueryTranslator = new JsNamingQueryTranslator()
         return jsNamingQueryTranslator.encodeGetFilterData(this.getDataQuery,propertyType)
     }
 
-
-
-
+    /***
+     * uuencode a list of filters
+     * @param encodedFilters
+     * @return
+     */
     public List<String> listOfUrlEncodedFilters(List<String> encodedFilters) {
         return encodedFilters.collect { it -> java.net.URLEncoder.encode(it) }
     }
 
-
-
-
+    /***
+     * Could we go to the REST server with this getDataQuery?
+     * @return
+     */
     public Boolean isValid() {
         return ((getDataQuery) &&
                 (getDataQuery.filterList))
     }
 
-
+    /***
+     * accessor
+     * @return
+     */
     public GetDataQuery retrieveGetDataQuery() {
         return getDataQuery
     }
 
-
+    /***
+     * Take one of our list of encoded filters and turn it into something that people could read
+     * @param encodedFilters
+     * @return
+     */
     public List<String> listOfReadableFilters(List<String> encodedFilters) {
         return decodeEncodedFilters(encodedFilters)
     }
 
-
+    /***
+     * write a filter out in a form that humans can understand
+     * @param encodedFilter
+     * @return
+     * @throws PortalException
+     */
     public String decodeFilter(String encodedFilter) throws PortalException {
         String returnValue = ""
         if ((encodedFilter != null) &&
@@ -278,7 +364,12 @@ class GetDataQueryHolder {
         return returnValue;
     }
 
-
+    /***
+     * write out a whole list of filters in a form that humans can understand
+     * @param encodedFilterList
+     * @return
+     * @throws PortalException
+     */
     private List<String> decodeEncodedFilters(List<String> encodedFilterList) throws PortalException {
         List<String> allFilters = new ArrayList<String>();
         for (String encodedFilter : encodedFilterList) {
