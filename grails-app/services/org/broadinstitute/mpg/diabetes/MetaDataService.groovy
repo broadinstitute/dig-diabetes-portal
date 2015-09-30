@@ -270,10 +270,20 @@ class MetaDataService {
         for (int i = 0; i < phenotypeList.size(); i++){
             String phenotypeCode = phenotypeList.get(i)
             sb<< (phenotypeCode + ":" + this.sharedToolsService.translator(phenotypeCode))
-            if (i < (phenotypeList.size() - 1)){
+            sb<< ","
+
+            // also add old keys from trait-search call if exists
+            String oldCode = this.sharedToolsService?.convertNewPhenotypeStringsToOldOnes(phenotypeCode)
+            if (!oldCode?.equals(phenotypeCode)) {
+                sb<< (oldCode + ":" + this.sharedToolsService.translator(phenotypeCode))
                 sb<< ","
             }
         }
+
+        // remove the last comma
+        sb.deleteCharAt(sb.length() - 1);
+
+        // return
         return java.net.URLEncoder.encode( sb.toString())
     }
 

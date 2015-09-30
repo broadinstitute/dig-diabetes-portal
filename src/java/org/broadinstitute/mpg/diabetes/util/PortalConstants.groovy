@@ -6,6 +6,7 @@ package org.broadinstitute.mpg.diabetes.util
  */
 class PortalConstants {
     // json mapping keys
+
     public final static String JSON_EXPERIMENT_KEY      = "experiments";
     public final static String JSON_VERSION_KEY         = "version";
     public final static String JSON_NAME_KEY            = "name";
@@ -26,6 +27,7 @@ class PortalConstants {
     public final static String JSON_NUMBER_RECORDS_KEY  = "numRecords";
     public final static String JSON_ERROR_KEY           = "is_error";
     public final static String JSON_PASSBACK_KEY        = "passback";
+
 
     // json mapping array key values
     public final static String JSON_DATASETS_KEY        = "sample_groups";

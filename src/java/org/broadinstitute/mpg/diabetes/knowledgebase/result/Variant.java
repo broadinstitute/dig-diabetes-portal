@@ -1,5 +1,8 @@
 package org.broadinstitute.mpg.diabetes.knowledgebase.result;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Created by mduby on 9/2/15.
  */
@@ -13,4 +16,20 @@ public interface Variant {
     public String getSiftPredictor();
 
     public Integer getMostDelScore();
+
+    public List<PropertyValue> getPropertyValues();
+
+    public void addAllToPropertyValues(Collection<PropertyValue> values);
+
+    public void addToPropertyValues(PropertyValue value);
+
+    /**
+     * returns the given property value if the given property search terms find one; null otherwise
+     *
+     * @param propertyName
+     * @param sampleGroupName
+     * @param phenotypeName
+     * @return
+     */
+    public PropertyValue getPropertyValueFromCollection(String propertyName, String sampleGroupName, String phenotypeName);
 }

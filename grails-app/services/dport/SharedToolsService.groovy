@@ -77,6 +77,8 @@ class SharedToolsService {
                                        "SCZ":"SCZ",
                                        "MDD":"MDD"   ]
 
+    LinkedHashMap convertPhenotypesFlipped = null;
+
     Integer helpTextSetting = 1 // 0== never display, 1== display conditionally, 2== always display
 
     public String retrieveCurrentGeneChromosome ()  {
@@ -292,6 +294,29 @@ class SharedToolsService {
             }
         }
         return returnValue
+    }
+
+    /**
+     * hack to fix trait id mismatch between old trait-search call and new getData and getMetadata trait ids
+     *
+     * @param newKey
+     * @return
+     */
+    public String convertNewPhenotypeStringsToOldOnes (String newKey){
+        if (this.convertPhenotypesFlipped == null) {
+            this.convertPhenotypesFlipped = [];
+            for (String key in this.convertPhenotypes.keySet()) {
+                if (!this.convertPhenotypes.get(key).equals(key)) {
+                    this.convertPhenotypesFlipped.put(this.convertPhenotypes.get(key), key);
+                }
+            }
+        }
+
+        if (this.convertPhenotypesFlipped.get(newKey)) {
+            return this.convertPhenotypesFlipped.get(newKey)
+        } else {
+            return newKey
+        }
     }
 
     /***
