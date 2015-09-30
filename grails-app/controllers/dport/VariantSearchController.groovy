@@ -77,17 +77,6 @@ class VariantSearchController {
             String urlDecodedEncParams = URLDecoder.decode(encParams.trim())
             getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(urlDecodedEncParams?.replaceAll(~/,/,"^") , searchBuilderService, metaDataService)
             encodedFilters = getDataQueryHolder.listOfEncodedFilters()
-            urlEncodedFilters = getDataQueryHolder.listOfUrlEncodedFilters(encodedFilters)
-//            for ( int  i = 0 ; i < encodedFilters.size() ; i++ ) {
-//
-//                String encodedFilter = encodedFilters[i];
-//                List<String> decodedPieces=  encodedFilter.split("=");
-//
-//                // make sure we have two parts
-//                if (decodedPieces.size() > 1) {
-//                    encodedFilterSets << ["filter${i}": decodedPieces[1]]
-//                }
-//            }
         }
 
         render(view: 'variantWorkflow',
@@ -112,19 +101,6 @@ class VariantSearchController {
             displayCombinedVariantSearch(listOfCodedFilters,[])
             return
         }
-
-//
-//        List <LinkedHashMap> combinedFilters =  filterManagementService.handleFilterRequestFromBrowser (params)
-//
-//        List <LinkedHashMap> listOfParameterMaps = filterManagementService.storeCodedParametersInHashmap (combinedFilters)
-//
-//        List <LinkedHashMap> listOfProperties = []
-//
-//        if ((listOfParameterMaps) &&
-//                (listOfParameterMaps.size() > 0)){
-//            displayCombinedVariantSearchResults(listOfParameterMaps, listOfProperties)
-//        }
-
 
     }
 
@@ -169,8 +145,6 @@ class VariantSearchController {
         }
 
         // now convert these coded parameters into a form we can handle, combine in the properties, and reproduce the table
-//        List<LinkedHashMap> combinedFilters = sharedToolsService.convertFormOfFilters(encodedParameters)
-//        List<LinkedHashMap> listOfParameterMaps = filterManagementService.storeCodedParametersInHashmap(combinedFilters)
         List<String> listOfFilters = getDataQueryHolder.listOfEncodedFilters()
 
         if ((listOfFilters) &&
@@ -181,8 +155,6 @@ class VariantSearchController {
 
         // NOTE: we should never get here. Error condition, but a better way to fail
         log.error("relaunchAVariantSearch Was unable to process encoded parameters = ${encodedParameters}.")
-      //  displayCombinedVariantSearchResults(listOfParameterMaps, listOfProperties)
-
 
     }
 
@@ -209,15 +181,6 @@ class VariantSearchController {
             displayCombinedVariantSearch(listOfCodedFilters,[])
             return
         }
-
-
-//        if (paramsMap) {
-//
-//            List <LinkedHashMap> listOfProperties = []
-//
-//            displayCombinedVariantSearchResults([paramsMap], listOfProperties)
-//           // displayVariantSearchResults(paramsMap, false)
-//        }
 
     }
 
@@ -348,7 +311,6 @@ class VariantSearchController {
         render(status: 200, contentType: "application/json") {
             [variants: dataJsonObject.variants,
             columns: resultColumnsJsonObject,
-           // filters:filtersRaw,
             filters:revisedFiltersRaw,
             metadata:metadata,
             propertiesPerSampleGroup:propertiesPerSampleGroupJsonObject,

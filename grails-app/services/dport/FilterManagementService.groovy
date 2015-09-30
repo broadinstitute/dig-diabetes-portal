@@ -508,10 +508,6 @@ class FilterManagementService {
             returnValue['filters']  = filters
         }
 
-//        returnValue['datasetExomeChip']  = (datasetExomeChip)?Boolean.TRUE:Boolean.FALSE
-//        returnValue['datasetExomeSeq']  = (datasetExomeSeq)?Boolean.TRUE:Boolean.FALSE
-//        returnValue['datasetGWAS']  = (datasetGWAS)?Boolean.TRUE:Boolean.FALSE
-
         return returnValue
     }
 
