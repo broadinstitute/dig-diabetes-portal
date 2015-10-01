@@ -180,16 +180,19 @@ t2dAws01RestServer {
 }
 
 // individual servers
+// DIGP-136: changed to load balanced development machine
 t2dDevRestServer {
-    base = 'http://69.173.71.178:8080/'
+    base = 'http://dig-api-dev.broadinstitute.org/'
     name =  'dev/'
-    path = 'rest/server/'
+    path = 'gs/'
 }
+// DIGP-136: changed to load balanced production machine
 t2dProdRestServer {//current 'prod'
-    base = 'http://69.173.71.179:8080/'
+    base = 'http://dig-api-prod.broadinstitute.org/'
     name =  'prod/'
-    path = 'rest/server/'
+    path = 'gs/'
 }
+// DIGP-136: changed to load balanced development machine
 t2dNewDevRestServer { //current 'dev'
     base = 'http://dig-api-dev.broadinstitute.org/'
     name =  'dev/'
