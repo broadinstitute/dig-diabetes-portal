@@ -26,6 +26,9 @@
     border-radius: 10px;
 
 }
+    .cusEquiv {
+        min-width: 60px;
+    }
 </style>
 <script>
     $(document).ready(function (){
