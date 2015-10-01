@@ -191,7 +191,7 @@ t2dProdRestServer {//current 'prod'
     path = 'rest/server/'
 }
 t2dNewDevRestServer { //current 'dev'
-    base = 'http://dig-dev.broadinstitute.org:8888/'
+    base = 'http://dig-api-dev.broadinstitute.org:8888/'
     name =  'dev/'
     path = 'gs/'
 }
