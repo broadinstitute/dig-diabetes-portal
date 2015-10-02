@@ -18,18 +18,22 @@
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <!--<script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>-->
+    <!--<script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>-->
     <![endif]-->
 
     <!-- Bootstrap -->
-    <g:javascript src="lib/igv/vendor/inflate.js"/>
-    <g:javascript src="lib/igv/vendor/zlib_and_gzip.min.js"/>
+    %{--<g:javascript src="lib/igv/vendor/inflate.js"/>--}%
+    %{--<g:javascript src="lib/igv/vendor/zlib_and_gzip.min.js"/>--}%
 
     <!-- IGV js  and css code -->
-    <link href="http://data.broadinstitute.org/igvdata/t2d/igv.css" type="text/css" rel="stylesheet">
-    %{--<g:javascript base="http://iwww.broadinstitute.org/" src="/igvdata/t2d/igv-all.js" />--}%
-    <g:javascript base="http://data.broadinstitute.org/" src="/igvdata/t2d/igv-all.min.js"/>
+    <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css"/>
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="//igv.org/web/beta/igv-beta.css">
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="//igv.org/web/beta/igv-beta.js"></script>
+    %{--<g:javascript src="lib/dport/igv-beta2.js"></g:javascript>--}%
     <g:set var="restServer" bean="restServerService"/>
 </head>
 
@@ -214,10 +218,15 @@
         </div>
     </div>
 
+
+<g:if test="${1}">
+
     <div class="separator"></div>
     <g:render template="/widgets/gwasRegionSummary" model="['phenotypeList': phenotypeList, 'regionSpecification': regionSpecification]"/>
 
-<g:if test="${0}">
+</g:if>
+<g:if test="${1}">
+
 
     <div class="separator"></div>
 
@@ -240,7 +249,7 @@
         $('#accordion2').on('shown.bs.collapse', function (e) {
             if (e.target.id === "collapseIgv") {
  <g:renderT2dGenesSection>
-                igvLauncher.launch("#myDiv", "${geneName}","${restServer.currentRestServer()}",[1,1,1,0]);
+                %{--igvLauncher.launch("#myDiv", "${geneName}","${restServer.currentRestServer()}",[1,1,1,0]);--}%
  </g:renderT2dGenesSection>
 
             }
@@ -250,9 +259,9 @@
     </script>
 
 </g:if>
-    <script>
-        $('#collapseOne').collapse({hide: true})
-    </script>
+    %{--<script>--}%
+        %{--$('#collapseOne').collapse({hide: true})--}%
+    %{--</script>--}%
 
 
 
