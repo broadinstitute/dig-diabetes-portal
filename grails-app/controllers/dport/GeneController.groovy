@@ -47,7 +47,7 @@ class GeneController {
         String phenotypeList = this.metaDataService?.urlEncodedListOfPhenotypes();
         String regionSpecification = null
         if (geneToStartWith != null) {
-            this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 0)
+            regionSpecification = this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 0)
         }
 
         if (geneToStartWith)  {
