@@ -44,8 +44,11 @@ class GeneController {
         String geneToStartWith = params.id
 
         // DIGP-112: needed for the gwas region summary
-        String phenotypeList = this.metaDataService.urlEncodedListOfPhenotypes();
-        String regionSpecification = this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 0);
+        String phenotypeList = this.metaDataService?.urlEncodedListOfPhenotypes();
+        String regionSpecification = null
+        if (geneToStartWith != null) {
+            this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 0)
+        }
 
         if (geneToStartWith)  {
             String  geneUpperCase =   geneToStartWith.toUpperCase()
