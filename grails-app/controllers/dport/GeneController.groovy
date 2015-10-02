@@ -46,6 +46,8 @@ class GeneController {
         // DIGP-112: needed for the gwas region summary
         String phenotypeList = this.metaDataService?.urlEncodedListOfPhenotypes();
         String regionSpecification = null
+
+        // added test for unit test error
         if (geneToStartWith != null) {
             regionSpecification = this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 0)
         }
