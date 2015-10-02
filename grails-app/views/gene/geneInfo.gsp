@@ -4,6 +4,7 @@
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
     <r:require modules="geneInfo"/>
+    <r:require modules="crossMap"/>
     <r:layoutResources/>
     <%@ page import="dport.RestServerService" %>
 
@@ -212,6 +213,9 @@
             </div>
         </div>
     </div>
+
+    <div class="separator"></div>
+    <g:render template="/widgets/gwasRegionSummary" model="['phenotypeList': phenotypeList, 'regionSpecification': regionSpecification]"/>
 
 <g:if test="${0}">
 

@@ -1,15 +1,15 @@
 package dport
-
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.BurdenService
+import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.codehaus.groovy.grails.web.json.JSONObject
-import org.springframework.web.servlet.support.RequestContextUtils
 
 class GeneController {
 
     RestServerService restServerService
     GeneManagementService geneManagementService
     SharedToolsService sharedToolsService
+    MetaDataService metaDataService
     private static final log = LogFactory.getLog(this)
     SqlService sqlService
     BurdenService burdenService
@@ -42,12 +42,19 @@ class GeneController {
      */
     def geneInfo() {
         String geneToStartWith = params.id
+
+        // DIGP-112: needed for the gwas region summary
+        String phenotypeList = this.metaDataService.urlEncodedListOfPhenotypes();
+        String regionSpecification = this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 0);
+
         if (geneToStartWith)  {
             String  geneUpperCase =   geneToStartWith.toUpperCase()
             LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
             render (view: 'geneInfo', model:[show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                              show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
                                              show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
+                                             phenotypeList: phenotypeList,
+                                             regionSpecification: regionSpecification,
                                              geneName:geneUpperCase,
                                              geneExtentBegin:geneExtent.startExtent,
                                              geneExtentEnd:geneExtent.endExtent,

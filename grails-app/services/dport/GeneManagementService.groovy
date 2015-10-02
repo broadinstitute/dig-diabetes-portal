@@ -291,4 +291,40 @@ class GeneManagementService {
                 retrieveVariantVarIdStringList )
 
     }
+
+    /**
+     * return the region specification for a given gene and given buffer space in bases
+     *
+     * @param geneId
+     * @param bufferSpace
+     * @return
+     */
+    public String getRegionSpecificationForGene(String geneId, int bufferSpace) {
+        // local variables
+        Gene gene = null
+        Long startPosition = 0;
+        Long endPosition = 0;
+        String chromosome  = null;
+        String regionSpecification = null;
+
+        // get the gene
+        gene = Gene.findByName2(geneId);
+        if (gene != null) {
+            startPosition = gene?.addrStart;
+            endPosition = gene?.addrEnd;
+            chromosome = gene?.chromosome
+
+            // increment start/end positions of need be
+            if ((bufferSpace != null) && (bufferSpace != 0)) {
+                startPosition = startPosition - bufferSpace;
+                endPosition = endPosition + bufferSpace;
+            }
+
+            // create the region specification
+            regionSpecification = chromosome + ":" + startPosition?.toString() + "-" + endPosition?.toString();
+        }
+
+        // return
+        return regionSpecification;
+    }
 }
