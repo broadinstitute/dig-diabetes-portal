@@ -6,7 +6,7 @@ var igvLauncher = igvLauncher || {};  // encapsulating variable
         if (!igv.browser) {
             var div, options, browser,
             potentialTracks = [
-                new igv.T2dTrack({
+                new igv.Browser.T2dTrack({
                     url: rootServer + "trait-search",
                     type: "t2d",
                     trait: "T2D",
@@ -17,64 +17,6 @@ var igvLauncher = igvLauncher || {};  // encapsulating variable
                         colors: ["rgb(0,102,51)", "rgb(122,179,23)", "rgb(158,213,76)", "rgb(227,238,249)"]
                     },
                     description: '<strong>Type 2 diabetes: GWAS</strong><br/>Results in this track are from a GWAS meta-analysis of 69,033 people conducted by the DIAGRAM consortium.'
-                }),
-                new igv.T2dTrack({
-                    url: rootServer + "variant-search",
-                    trait: "T2D",
-                    label: "Type 2 Diabetes: Exome Chip",
-                    pvalue: "EXCHP_T2D_P_value",
-                    colorScale:  {
-                        thresholds: [5e-8, 5e-4, 0.05],
-                        colors: ["rgb(0,102,51)", "rgb(122,179,23)", "rgb(158,213,76)", "rgb(227,238,249)"]
-                    },
-                    description: '<strong>Type 2 diabetes: exome chip</strong><br/>Results in this track are from a study of 79,854 people conducted by the GoT2D consortium.'
-
-                }),
-                new igv.T2dTrack({
-                    url: rootServer + "variant-search",
-                    trait: "T2D",
-                    label: "Type 2 Diabetes: Exome Sequencing",
-                    pvalue: "_13k_T2D_P_EMMAX_FE_IV",
-                    colorScale:  {
-                        thresholds: [5e-8, 5e-4, 0.05],
-                        colors: ["rgb(0,102,51)", "rgb(122,179,23)", "rgb(158,213,76)", "rgb(227,238,249)"]
-                    },
-                    description: '<strong>Type 2 diabetes: exome sequencing</strong><br/>Results in this track are from a study of 12,940 people conducted by the T2D-GENES and GoT2D consortia.'
-
-                }),
-                new igv.T2dTrack({
-                    url: rootServer + "variant-search",
-                    trait: "Sigma T2D",
-                    label: "Type 2 Diabetes: Sigma Sequencing",
-                    pvalue: "SIGMA_T2D_P",
-                    colorScale:  {
-                        thresholds: [5e-8, 5e-4, 0.05],
-                        colors: ["rgb(0,102,51)", "rgb(122,179,23)", "rgb(158,213,76)", "rgb(227,238,249)"]
-                    },
-                    description: '<strong>Type 2 diabetes: Sigma sequencing</strong><br/>Results in this track are from a study of 2000 people conducted by the Sigma consortia.'
-
-                }),
-
-
-                new igv.WIGTrack({
-                    url: "//www.broadinstitute.org/igvdata/t2d/recomb_decode.bedgraph",
-                    label: "Recombination rate",
-                    order: 9998,
-                    colorScale:  {
-                        thresholds: [5e-8, 5e-4, 0.05],
-                        colors: ["rgb(0,102,51)", "rgb(122,179,23)", "rgb(158,213,76)", "rgb(227,238,249)"]
-                    }
-                }),
-                new igv.SequenceTrack({order: 9999}),
-                new igv.GeneTrack({
-                    url: "//igvdata.broadinstitute.org/annotations/hg19/genes/gencode.v18.collapsed.bed",
-                    label: "Genes",
-                    order: 9998,
-                    colorScale:  {
-                        thresholds: [5e-8, 5e-4, 0.05],
-                        colors: ["rgb(0,102,51)", "rgb(122,179,23)", "rgb(158,213,76)", "rgb(227,238,249)"]
-                    }
-
                 })
             ];
 

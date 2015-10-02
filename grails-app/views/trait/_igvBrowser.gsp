@@ -24,7 +24,308 @@
 </p>
 
 <br/>
+<script>
+    /*
+     * The MIT License (MIT)
+     *
+     * Copyright (c) 2014 Broad Institute
+     *
+     * Permission is hereby granted, free of charge, to any person obtaining a copy
+     * of this software and associated documentation files (the "Software"), to deal
+     * in the Software without restriction, including without limitation the rights
+     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+     * copies of the Software, and to permit persons to whom the Software is
+     * furnished to do so, subject to the following conditions:
+     *
+     * The above copyright notice and this permission notice shall be included in
+     * all copies or substantial portions of the Software.
+     *
+     *
+     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+     * THE SOFTWARE.
+     */
 
+    // Experimental class for fetching features from an mpg webservice.
+
+
+    var igv = (function (igv) {
+
+
+        const VARIANT = "VARIANT";
+        const TRAIT = "TRAIT";
+        /**
+         * @param url - url to the webservice
+         * @constructor
+         */
+        igv.T2DVariantSource = function (config) {
+
+            this.config = config;
+            this.url = config.url;
+            this.trait = config.trait;
+            this.dataset = config.dataset;
+            this.pvalue = config.pvalue;
+
+            // Hack for old service that is missing CORS headers
+            if (config.dataset === undefined && config.proxy === undefined) {
+                config.proxy = "//data.broadinstitute.org/igvdata/t2d/postJson.php";
+            }
+
+            if (config.valueThreshold === undefined) {
+                config.valueThreshold = 5E-2;
+            }
+
+            if (config.dataset === undefined) {
+                this.queryJson = config.queryJson || queryJsonV1;
+                this.jsonToVariants = config.jsonToVariants || jsonToVariantsV1;
+            } else {
+                this.queryJson = config.queryJson || queryJsonV2;
+                this.jsonToVariants = config.jsonToVariants || jsonToVariantsV2;
+            }
+
+        };
+
+        /**
+         * Required function fo all data source objects.  Fetches features for the
+         * range requested and passes them on to the success function.  Usually this is
+         * a function that renders the features on the canvas
+         *
+         * @param queryChr
+         * @param bpStart
+         * @param bpEnd
+         * @param success -- function that takes an array of features as an argument
+         */
+        igv.T2DVariantSource.prototype.getFeatures = function (chr, bpStart, bpEnd, success, task) {
+
+            var self = this;
+
+            if (this.cache && this.cache.chr === chr && this.cache.end > bpEnd && this.cache.start < bpStart) {
+                success(this.cache.featuresBetween(bpStart, bpEnd));
+            }
+
+            else {
+
+                // Get a minimum 10mb window around the requested locus
+                var window = Math.max(bpEnd - bpStart, 10000000) / 2,
+                        center = (bpEnd + bpStart) / 2,
+                        queryChr = (chr.startsWith("chr") ? chr.substring(3) : chr), // Webservice uses "1,2,3..." convention
+                        queryStart = Math.max(0, center - window),
+                        queryEnd = center + window,
+                        queryURL = this.config.proxy ? this.config.proxy : this.url,
+                        body = this.queryJson(queryChr, queryStart, queryEnd, self.config);
+
+                igvxhr.loadJson(queryURL, {
+                    sendData: body,
+                    task: task,
+                    success: function (json) {
+                        var variants;
+
+                        if (json) {
+
+                            if (json.error_code) {
+                                alert("Error querying trait " + self.trait + "  (error_code=" + json.error_code + ")");
+                                success(null);
+                            }
+                            else {
+                                variants = self.jsonToVariants(json, self.config);
+
+                                variants.sort(function (a, b) {
+                                    return a.POS - b.POS;
+                                });
+
+                                // TODO -- extract pvalue
+
+                                self.cache = new FeatureCache(chr, queryStart, queryEnd, variants);
+
+                                success(variants);
+                            }
+                        }
+                        else {
+                            success(null);
+                        }
+                    }
+                });
+
+            }
+
+        }
+
+        // Experimental linear index feature cache.
+        var FeatureCache = function (chr, start, end, features) {
+
+            var i, bin, lastBin;
+
+            this.chr = chr;
+            this.start = start;
+            this.end = end;
+            this.binSize = (end - start) / 100;
+            this.binIndeces = [0];
+            this.features = features;
+
+            lastBin = 0;
+            for (i = 0; i < features.length; i++) {
+                bin = Math.max(0, Math.floor((features[i].POS - this.start) / this.binSize));
+                if (bin > lastBin) {
+                    this.binIndeces.push(i);
+                    lastBin = bin;
+                }
+            }
+        }
+
+        FeatureCache.prototype.featuresBetween = function (start, end) {
+
+
+            var startBin = Math.max(0, Math.min(Math.floor((start - this.start) / this.binSize) - 1, this.binIndeces.length - 1)),
+                    endBin = Math.max(0, Math.min(Math.floor((end - this.start) / this.binSize), this.binIndeces.length - 1)),
+                    startIdx = this.binIndeces[startBin],
+                    endIdx = this.binIndeces[endBin];
+
+            return this.features; //.slice(startIdx, endIdx);
+
+        }
+
+
+        //
+        //
+        /**
+         * Default json -> variant converter function.  Can be overriden.
+         * Convert webservice json to an array of variants
+         *
+         * @param json
+         * @param config
+         * @returns {Array|*}
+         */
+        function jsonToVariantsV2(json, config) {
+
+            variants = [];
+            json.variants.forEach(function (record) {
+
+                var variant = {};
+                record.forEach(function (object) {
+                    for (var property in object) {
+                        if (object.hasOwnProperty(property)) {
+                            if ("POS" === property) {
+                                variant.start = object[property] - 1;
+                            }
+                            variant[property] = object[property];
+
+                        }
+                    }
+
+                });
+
+                // "unwind" the pvalue, then null the nested array to save memory
+                variant.pvalue = variant[config.pvalue][config.dataset][config.trait];
+                variant[config.pvalue] = undefined;
+
+                variants.push(variant);
+            })
+            return variants;
+        }
+
+
+        function queryJsonV2(queryChr, queryStart, queryEnd, config) {
+            var phenotype = config.trait,
+                    pvalue = config.pvalue,
+                    dataset = config.dataset,
+                    properties = {
+                        "cproperty": ["VAR_ID", "DBSNP_ID", "CHROM", "POS"],
+                        "orderBy": ["CHROM"],
+                        "dproperty": {},
+                        "pproperty": JSON.parse('{"' + pvalue + '": {"' + dataset + '": ["' + phenotype + '"]}}')
+                    },
+
+                    filters =
+                            [
+                                {
+                                    "dataset_id": "x",
+                                    "phenotype": "x",
+                                    "operand": "CHROM",
+                                    "operator": "EQ",
+                                    "value": queryChr,
+                                    "operand_type": "STRING"
+                                },
+                                {
+                                    "dataset_id": "x",
+                                    "phenotype": "x",
+                                    "operand": "POS",
+                                    "operator": "GTE",
+                                    "value": queryStart,
+                                    "operand_type": "INTEGER"
+                                },
+                                {
+                                    "dataset_id": "x",
+                                    "phenotype": "x",
+                                    "operand": "POS",
+                                    "operator": "LTE",
+                                    "value": queryEnd,
+                                    "operand_type": "INTEGER"
+                                },
+                                {
+                                    "dataset_id": dataset,
+                                    "phenotype": phenotype,
+                                    "operand": pvalue,
+                                    "operator": "LT",
+                                    "value": config.valueThreshold,
+                                    "operand_type": "FLOAT"
+                                }
+                            ],
+                    data = {
+                        "passback": "x",
+                        "entity": "variant",
+                        "properties": properties,
+                        "filters": filters
+                    };
+
+            return JSON.stringify(data);
+        }
+
+
+        function queryJsonV1(queryChr, queryStart, queryEnd, config) {
+
+            var type = config.url.contains("variant") ? VARIANT : TRAIT,
+                    pvalue = config.pvalue ? config.pvalue : "PVALUE",
+
+                    filters =
+                            [
+                                {"operand": "CHROM", "operator": "EQ", "value": queryChr, "filter_type": "STRING"},
+                                {"operand": "POS", "operator": "GT", "value": queryStart, "filter_type": "FLOAT"},
+                                {"operand": "POS", "operator": "LT", "value": queryEnd, "filter_type": "FLOAT"},
+                                {"operand": pvalue, "operator": "LTE", "value": config.valueThreshold, "filter_type": "FLOAT"}
+                            ],
+                    columns = type === TRAIT ?
+                            ["CHROM", "POS", "DBSNP_ID", "PVALUE", "ZSCORE"] :
+                            ["CHROM", "POS", pvalue, "DBSNP_ID"],
+                    data = {
+                        "user_group": "ui",
+                        "filters": filters,
+                        "columns": columns
+                    };
+
+
+            if (type === TRAIT) data.trait = config.trait;
+
+            return config.proxy ? "url=" + config.url + "&data=" + JSON.stringify(data) : JSON.stringify(data);
+
+        }
+
+        function jsonToVariantsV1(json, config) {
+
+            json.variants.forEach(function (variant) {
+                variant.chr = variant.CHROM;
+                variant.start = variant.POS - 1;
+            })
+            return json.variants;
+        }
+
+
+        return igv;
+    })(igv || {});
+</script>
 <nav class="navbar" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -50,365 +351,6 @@
                                     description: ('<strong>fasting glucose</strong><br/>'+
                                             'Results in this track are from a study of 79,854 people conducted by the GoT2D consortium.')
                                 })">fasting glucose</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: '2hrGLU_BMIAdj',
-                                    label: 'two-hour glucose',
-                                    order: 9981,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>two-hour glucose</strong><br/>'+
-                                            'Results in this track are from a study of 79,854 people conducted by the GoT2D consortium.')
-                                })">two-hour glucose</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: '2hrIns_BMIAdj',
-                                    label: 'two-hour insulin',
-                                    order: 9981,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>two-hour insulin</strong><br/>'+
-                                            'Results in this track are from a study of 79,854 people conducted by the GoT2D consortium.')
-                                })">two-hour insulin</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'FastIns',
-                                    label: 'fasting insulin',
-                                    order: 9997,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>fasting insulin</strong><br/>'+
-                                            'Results in this track are from a study of 79,854 people conducted by the GoT2D consortium.')
-                                })">fasting insulin</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'ProIns',
-                                    label: 'fasting proinsulin',
-                                    order: 9982,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>fasting proinsulin</strong><br/>'+
-                                            'Results in this track are from a study of 79,854 people conducted by the GoT2D consortium.')
-                                })">fasting proinsulin</a>
-                            </li>                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'HbA1c',
-                                    label: 'HBA1C',
-                                    order: 9996,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>HbA1c</strong><br/>'+
-                                            'Results in this track are from a study of 79,854 people conducted by the GoT2D consortium.')
-                                })">HBA1C</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'HOMAIR',
-                                    label: 'HOMA-IR',
-                                    order: 9995,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>HOMA-IR</strong><br/>'+
-                                            'Results in this track are from a study of 79,854 people conducted by the GoT2D consortium.')
-                                })">HOMA_IR</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'HOMAB',
-                                    label: 'HOMA-B',
-                                    order: 9994,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>HOMA-B</strong><br/>'+
-                                            'Results in this track are from a study of 79,854 people conducted by the GoT2D consortium.')
-                                })">HOMA_B</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'BMI',
-                                    label: 'BMI',
-                                    order: 9993,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>BMI</strong><br/>'+
-                                            'Results in this track are from a GWAS meta-analysis of as many as 123,865 people conducted by the GIANT Consortium.')
-                                })">BMI</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'WAIST_CIRCUMFRENCE',
-                                    label: 'waist circumference',
-                                    order: 9992,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>waist circumference</strong><br/>'+
-                                            'Results in this track are from a GWAS meta-analysis of people conducted by the GIANT Consortium.')
-                                })">waist circumference</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'HIP_CIRCUMFRENCE',
-                                    label: 'hip circumference',
-                                    order: 9991,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>hip circumference</strong><br/>'+
-                                            'Results in this track are from a GWAS meta-analysis of people conducted by the GIANT Consortium.')
-                                })">hip circumference</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'WHR',
-                                    label: 'waist-hip ratio',
-                                    order: 9990,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>waist-hip ratio</strong><br/>'+
-                                            'Results in this track are from a GWAS meta-analysis of as many as 77,167 people conducted by the GIANT Consortium.')
-                                })">waist-hip ratio</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'Height',
-                                    label: 'height',
-                                    order: 9990,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>height</strong><br/>'+
-                                            'Results in this track are from a GWAS meta-analysis of as many as 183,727 people conducted by the GIANT Consortium.')
-                                })">height</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'HDL',
-                                    label: 'HDL',
-                                    order: 9989,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>HDL cholesterol</strong><br/>'+
-                                            'Results in this track are from a GWAS meta-analysis of as many as 99,900 people conducted by the Global Lipid Genetics Consortium.')
-                                })">HDL</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'LDL',
-                                    label: 'LDL',
-                                    order: 9988,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>LDL cholesterol</strong><br/>'+
-                                            'Results in this track are from a GWAS meta-analysis of as many as 95,454 people conducted by the Global Lipid Genetics Consortium.')
-                                })">LDL</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'TG',
-                                    label: 'triglycerides',
-                                    order: 9987,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>triglycerides</strong><br/>'+
-                                            'Results in this track are from a GWAS meta-analysis of as many as 96,598 people conducted by the Global Lipid Genetics Consortium.')
-                                })">triglycerides</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'CAD',
-                                    label: 'coronary artery disease',
-                                    order: 9978,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>coronary artery disease</strong><br/>'+
-                                            'Results in this track are from a GWAS meta-analysis of as many as 86,995 people conducted by the CARDIoGRAM Consortium.')
-                                })">coronary artery disease</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'CKD',
-                                    label: 'chronic kidney disease',
-                                    order: 9977,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>chronic kidney disease</strong><br/>'+
-                                            'Results in this track are from a GWAS meta-analysis of as many as 67,093 people conducted by the CKDGen Consortium.')
-                                })">chronic kidney disease</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'eGFRcrea',
-                                    label: 'eGFR-creat (serum creatinine)',
-                                    order: 9976,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>eGFR-creat (serum creatinine)</strong><br/>'+
-                                            'Results in this track are from a GWAS meta-analysis of as many as 67,093 people conducted by the CKDGen Consortium.')
-                                })">eGFR-creat (serum creatinine)</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'eGFRcys',
-                                    label: 'eGFR-cys (serum cystatin C)',
-                                    order: 9975,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>eGFR-cys (serum cystatin C)</strong><br/>'+
-                                            'Results in this track are from a GWAS meta-analysis of as many as 67,093 people conducted by the CKDGen Consortium.')
-                                })">eGFR-cys (serum cystatin C)</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'MA',
-                                    label: 'microalbuminuria',
-                                    order: 9974,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>microalbuminuria</strong><br/>'+
-                                            'Results in this track are from a GWAS meta-analysis of as many as 67,093 people conducted by the CKDGen Consortium.')
-                                })">microalbuminuria</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'UACR',
-                                    label: 'urinary albumin-to-creatinine ratio',
-                                    order: 9973,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>urinary albumin-to-creatinine ratio</strong><br/>'+
-                                            'Results in this track are from a GWAS meta-analysis of as many as 67,093 people conducted by the CKDGen Consortium.')
-                                })">urinary albumin-to-creatinine ratio</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'SCZ',
-                                    label: 'schizophrenia',
-                                    order: 9972,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>schizophrenia</strong><br/>'+
-                                            'Results in this track are from a GWAS Psychiatric Genetics Consortium.')
-                                })">schizophrenia</a>
-                            </li>
-                            <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'MDD',
-                                    label: 'major depressive disorder',
-                                    order: 9971,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>major depressive disorder</strong><br/>'+
-                                            'Results in this track are from a GWAS meta-analysis of many as 18,759 people conducted by the Psychiatric Genetics Consortium.')
-                                })">major depressive disorder</a>
-                            </li>
-                                <li>
-                                <a onclick="igv.browser.loadTrack({
-                                    type: 't2d',
-                                    url: '${restServer.currentRestServer()}trait-search',
-                                    trait: 'BIP',
-                                    label: 'bipolar disorder',
-                                    order: 9972,
-                                    colorScale:  {
-                                        thresholds: [5e-8, 5e-4, 0.05],
-                                        colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
-                                    },
-                                    description: ('<strong>bipolar disorder</strong><br/>'+
-                                            'Results in this track are from a GWAS meta-analysis of many as 16,731 people conducted by the Psychiatric Genetics Consortium.')
-                                })">bipolar disorder</a>
                             </li>
                          </ul>
                     </li>
@@ -441,3 +383,91 @@
     </nav>
 
 </div>
+<script>
+    $(document).ready(function () {
+
+            const VARIANT = "VARIANT";
+            const TRAIT = "TRAIT";
+            /**
+             * @param url - url to the webservice
+             * @constructor
+             */
+
+        var div,
+                options,
+                browser;
+
+        div = $("#myDiv")[0];
+        options = {
+            showKaryo: false,
+            showCommandBar: false,
+            fastaURL: "//dn7ywbm9isq8j.cloudfront.net/genomes/seq/hg19/hg19.fasta",
+            cytobandURL: "//dn7ywbm9isq8j.cloudfront.net/genomes/seq/hg19/cytoBand.txt",
+            locus: 'slc30a8',
+            flanking: 100000,
+            tracks: [
+                {
+                    type: 't2d',
+                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                    trait: 'FastGlu',
+                    name: 'fasting glucose',
+                    dataset: "ExSeq_17k_mdv2",
+                    pvalue: "P_EMMAX_FE_IV_17k",
+                    description: ('<strong>fasting glucose</strong><br/>' +
+                            'Results in this track are from a study of 79,854 people conducted by the GoT2D consortium.'),
+                    variantURL: "http://www.type2diabetesgenetics.org/variant/variantInfo/",
+                    traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
+                },
+                {
+                    type: "t2d",
+                    url: "http://dig-api-qa.broadinstitute.org/qa/gs/getData",
+                    trait: "T2D",
+                    dataset: "ExSeq_17k_mdv2",
+                    pvalue: "P_EMMAX_FE_IV_17k",
+                    name: "Type II Diabetes",
+                    variantURL: "http://www.type2diabetesgenetics.org/variant/variantInfo/",
+                    traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
+                },
+                {
+                    type: "t2d",
+                    featureType: "gwas",
+                    url: "http://dig-api-qa.broadinstitute.org/qa/gs/getData",
+                    trait: "T2D",
+                    dataset: "ExSeq_17k_mdv2",
+                    pvalue: "P_EMMAX_FE_IV_17k",
+                    name: "Exome Chip",
+                    pvalue: "EXCHP_T2D_P_value"
+                },
+                {
+                    type: "t2d",
+                    url: "http://dig-api-qa.broadinstitute.org/qa/gs/getData",
+                    trait: "T2D",
+                    dataset: "ExSeq_17k_mdv2",
+                    pvalue: "P_EMMAX_FE_IV_17k",
+                    name: "Exome Sequencing",
+                    pvalue: "_13k_T2D_P_EMMAX_FE_IV"
+                },
+                {
+                    url: "http://data.broadinstitute.org/igvdata/t2d/recomb_decode.bedgraph",
+                    min: 0,
+                    max: 7,
+                    name: "Recombination rate",
+                    order: 9998
+                },
+                {
+                    type: "sequence",
+                    order: -9999
+                },
+                {
+                    url: "//dn7ywbm9isq8j.cloudfront.net/annotations/hg19/genes/gencode.v18.collapsed.bed",
+                    name: "Genes",
+                    order: 10000
+                }
+            ]
+        };
+
+        browser = igv.createBrowser(div, options);
+    });
+
+</script>
+

@@ -17,18 +17,58 @@
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <!--<script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>-->
+    <!--<script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>-->
     <![endif]-->
 
     <!-- Bootstrap -->
-    <g:javascript src="lib/igv/vendor/inflate.js"/>
-    <g:javascript src="lib/igv/vendor/zlib_and_gzip.min.js"/>
+    %{--<g:javascript src="lib/igv/vendor/inflate.js"/>--}%
+    %{--<g:javascript src="lib/igv/vendor/zlib_and_gzip.min.js"/>--}%
 
     <!-- IGV js  and css code -->
-    <link href="http://data.broadinstitute.org/igvdata/t2d/igv.css" type="text/css" rel="stylesheet">
+
     %{--<g:javascript base="http://iwww.broadinstitute.org/" src="/igvdata/t2d/igv-all.js" />--}%
-    <g:javascript base="http://data.broadinstitute.org/" src="/igvdata/t2d/igv-all.min.js"/>
+
+
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" type="text/css"
+          href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css"/>
+
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" type="text/css"
+          href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"/>
+
+    <!-- jQuery JS -->
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+
+    <!-- Bootstrap JS - for demo only, NOT REQUIRED FOR IGV -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" type="text/css"
+          href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/redmond/jquery-ui.css"/>
+
+    <!-- Google fonts -->
+    <link rel="stylesheet" type="text/css" href='//fonts.googleapis.com/css?family=PT+Sans:400,700'>
+    <link rel="stylesheet" type="text/css" href='//fonts.googleapis.com/css?family=Open+Sans'>
+
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
+    <!-- IGV CSS -->
+    <link rel="stylesheet" type="text/css" href="//igv.org/web/beta/igv-beta.css">
+
+    <!-- jQuery JS -->
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <!-- jQuery UI JS -->
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+
+    <g:javascript base="http://igv.org/" src="/web/beta/igv-beta.min.js"/>
+
     <g:set var="restServer" bean="restServerService"/>
 </head>
 
@@ -213,7 +253,7 @@
         </div>
     </div>
 
-<g:if test="${0}">
+<g:if test="${1}">
 
     <div class="separator"></div>
 
@@ -246,9 +286,9 @@
     </script>
 
 </g:if>
-    <script>
-        $('#collapseOne').collapse({hide: true})
-    </script>
+    %{--<script>--}%
+        %{--$('#collapseOne').collapse({hide: true})--}%
+    %{--</script>--}%
 
 
 
