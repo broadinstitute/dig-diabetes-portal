@@ -170,8 +170,6 @@ rect.legendHolder {
 <div class="variant-info-container">
     <div class="variant-info-view">
 
-        <h1>GWAS Results Summary</h1>
-
         <h2>Region: <strong><%=regionSpecification%></strong></h2>
 
         <div class="separator"></div>
