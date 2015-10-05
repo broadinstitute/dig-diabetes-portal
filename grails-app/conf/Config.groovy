@@ -182,8 +182,8 @@ t2dAws01RestServer {
 // individual servers
 // DIGP-136: changed to load balanced development machine
 t2dDevRestServer {
-    base = 'http://dig-api-dev.broadinstitute.org/'
-    name =  'dev/'
+    base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
+    name =  'aws/'
     path = 'gs/'
 }
 // DIGP-136: changed to load balanced production machine
