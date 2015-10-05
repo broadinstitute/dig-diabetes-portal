@@ -180,10 +180,11 @@ t2dAws01RestServer {
 }
 
 // individual servers
+// NOTE: the bottom two are most likely used for the CI build testing, so keep them at steady AWS pointer for CI testing
 // DIGP-136: changed to load balanced development machine
 t2dDevRestServer {
-    base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
-    name =  'aws/'
+    base = 'http://dig-api-dev.broadinstitute.org/'
+    name =  'dev/'
     path = 'gs/'
 }
 // DIGP-136: changed to load balanced production machine
@@ -194,8 +195,8 @@ t2dProdRestServer {//current 'prod'
 }
 // DIGP-136: changed to load balanced development machine
 t2dNewDevRestServer { //current 'dev'
-    base = 'http://dig-api-dev.broadinstitute.org/'
-    name =  'dev/'
+    base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
+    name =  'aws/'
     path = 'gs/'
 }
 
