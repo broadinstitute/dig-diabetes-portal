@@ -231,6 +231,8 @@
         <li><u>Open-Access Period</u>: After 6-months, the Early Access Period (phase 1 and 2) ends, and there is Open Access to the finalized and fully integrated datasets. The results from analyses on the data are now freely available for use in publications, based on the terms of User Responsibilities and Citing Guidelines.</li>
     </ol>
 
+    <h4>Data release timeline:</h4>
+
     <img src="../static/images/dataReleaseTimeline.png"/>
 
     <h4><u>Accessing the Portal and Terms of Conduct</u></h4>
@@ -253,6 +255,41 @@
         they should cite both the Portal and the relevant paper for that dataset (if one has been published).
     </p>
 
+    <h4>User Responsibilities</h4>
+
+    <p>
+        Portal users are expected to abide by the following provisions on data use:
+    </p>
+
+    <ol>
+        <li>
+            Users will not attempt to download any dataset in bulk from the Portal
+        </li>
+        <li>
+            Users will not attempt to identify or contact research participants
+        </li>
+        <li>
+            Users will protect data confidentiality
+        </li>
+        <li>
+            Users will not share any of the data with unauthorized users
+        </li>
+        <li>
+            Users will report any inadvertent data release, security breach, or other data management incidents of which they become aware
+        </li>
+        <li>
+            Users will abide by all applicable laws and regulations for handling genomic data
+        </li>
+        <li>
+            Users will not submit a manuscript for publication until the Early Access Period is over (6 months after the clean dataset becomes available in the Portal),
+            to allow for beta testing on the integrity of the dataset, finalization of the results on the Portal, and for the AMP Consortium and data submitters to analyze
+            and submit publications during this period.
+        </li>
+    </ol>
+
+    <p>
+        Agreeing to these provisions is a requirement of Portal use. Violating them may result in an NIH investigation and sanctions including revocation of access to the Portal.
+    </p>
 
     </div>
 
