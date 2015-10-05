@@ -1,4 +1,4 @@
-<!-- 2 inputs needed
+<!-- inputs needed
     variantIdentifier: the variant id
     dbSnpId: for the snp id, if provided (from the trait info page)
     openOnLoad: if accordion closed at start
