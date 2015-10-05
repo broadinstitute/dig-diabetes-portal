@@ -19,7 +19,7 @@ var mpgSoftware = mpgSoftware || {};
             JSON_VARIANT_CHROMOSOME_KEY      = "CHROM",
             JSON_VARIANT_POLYPHEN_PRED_KEY      = "PolyPhen_PRED",
             JSON_VARIANT_SIFT_PRED_KEY      = "SIFT_PRED",
-            JSON_VARIANT_CONDEL_PRED_KEY    = "CONDEL_PRED";
+            JSON_VARIANT_CONDEL_PRED_KEY    = "Condel_PRED";
 
 
         /***

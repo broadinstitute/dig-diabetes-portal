@@ -75,9 +75,14 @@ class SearchBuilderService {
     private String prettyPrintPredictedEffect (int typeOfPrediction, String codedValueAsString,String operatorSplitCharacter){
         String returnValue = ""
         int codedValue = 0
+
+        // DIGP-140: now account for non integer input for coded value, so check for that
+        boolean gotNonIntCodedValue = false;
+
         try {
             codedValue = Integer.parseInt(codedValueAsString)
         } catch(e){
+            gotNonIntCodedValue = true;
             log.error("Internal inconsistency: non integer codedValue = '${codedValueAsString}'")
         }
         switch (typeOfPrediction){
@@ -107,54 +112,66 @@ class SearchBuilderService {
                 }
                 break;
             case PortalConstants.PROTEIN_PREDICTION_TYPE_POLYPHEN:
-                switch (codedValue){
-                    case PortalConstants.PROTEIN_PREDICTION_POLYPHEN_NONE_CODE:
-                        returnValue = PortalConstants.PROTEIN_PREDICTION_POLYPHEN_NONE_NAME
-                        break;
-                    case PortalConstants.PROTEIN_PREDICTION_POLYPHEN_PROBABLYDAMAGING_CODE:
-                        returnValue = PortalConstants.PROTEIN_PREDICTION_POLYPHEN_PROBABLYDAMAGING_NAME
-                        break;
-                    case PortalConstants.PROTEIN_PREDICTION_POLYPHEN_POSSIBLYDAMAGING_CODE:
-                        returnValue = PortalConstants.PROTEIN_PREDICTION_POLYPHEN_POSSIBLYDAMAGING_NAME
-                        break;
-                    case PortalConstants.PROTEIN_PREDICTION_POLYPHEN_BENIGN_CODE:
-                        returnValue = PortalConstants.PROTEIN_PREDICTION_POLYPHEN_BENIGN_NAME
-                        break;
-                    default:
-                        log.error("Internal inconsistency: no POLYPHEN codedValue = ${codedValue}")
-                        break;
+                if (gotNonIntCodedValue) {
+                    return returnValue = codedValueAsString
+                } else {
+                    switch (codedValue){
+                        case PortalConstants.PROTEIN_PREDICTION_POLYPHEN_NONE_CODE:
+                            returnValue = PortalConstants.PROTEIN_PREDICTION_POLYPHEN_NONE_NAME
+                            break;
+                        case PortalConstants.PROTEIN_PREDICTION_POLYPHEN_PROBABLYDAMAGING_CODE:
+                            returnValue = PortalConstants.PROTEIN_PREDICTION_POLYPHEN_PROBABLYDAMAGING_NAME
+                            break;
+                        case PortalConstants.PROTEIN_PREDICTION_POLYPHEN_POSSIBLYDAMAGING_CODE:
+                            returnValue = PortalConstants.PROTEIN_PREDICTION_POLYPHEN_POSSIBLYDAMAGING_NAME
+                            break;
+                        case PortalConstants.PROTEIN_PREDICTION_POLYPHEN_BENIGN_CODE:
+                            returnValue = PortalConstants.PROTEIN_PREDICTION_POLYPHEN_BENIGN_NAME
+                            break;
+                        default:
+                            log.error("Internal inconsistency: no POLYPHEN codedValue = ${codedValue}")
+                            break;
+                    }
                 }
                 break;
             case PortalConstants.PROTEIN_PREDICTION_TYPE_SIFT:
-                switch (codedValue){
-                    case PortalConstants.PROTEIN_PREDICTION_SIFT_NONE_CODE:
-                        returnValue = PortalConstants.PROTEIN_PREDICTION_SIFT_NONE_NAME
-                        break;
-                    case PortalConstants.PROTEIN_PREDICTION_SIFT_DELETERIOUS_CODE:
-                        returnValue = PortalConstants.PROTEIN_PREDICTION_SIFT_DELETERIOUS_NAME
-                        break;
-                    case PortalConstants.PROTEIN_PREDICTION_SIFT_TOLERATED_CODE:
-                        returnValue = PortalConstants.PROTEIN_PREDICTION_SIFT_TOLERATED_NAME
-                        break;
-                    default:
-                        log.error("Internal inconsistency: no SIFT codedValue = ${codedValue}")
-                        break;
+                if (gotNonIntCodedValue) {
+                    return returnValue = codedValueAsString
+                } else {
+                    switch (codedValue){
+                        case PortalConstants.PROTEIN_PREDICTION_SIFT_NONE_CODE:
+                            returnValue = PortalConstants.PROTEIN_PREDICTION_SIFT_NONE_NAME
+                            break;
+                        case PortalConstants.PROTEIN_PREDICTION_SIFT_DELETERIOUS_CODE:
+                            returnValue = PortalConstants.PROTEIN_PREDICTION_SIFT_DELETERIOUS_NAME
+                            break;
+                        case PortalConstants.PROTEIN_PREDICTION_SIFT_TOLERATED_CODE:
+                            returnValue = PortalConstants.PROTEIN_PREDICTION_SIFT_TOLERATED_NAME
+                            break;
+                        default:
+                            log.error("Internal inconsistency: no SIFT codedValue = ${codedValue}")
+                            break;
+                    }
                 }
                 break;
             case PortalConstants.PROTEIN_PREDICTION_TYPE_CONDEL:
-                switch (codedValue){
-                    case PortalConstants.PROTEIN_PREDICTION_CONDEL_NONE_CODE:
-                        returnValue = PortalConstants.PROTEIN_PREDICTION_CONDEL_NONE_NAME
-                        break;
-                    case PortalConstants.PROTEIN_PREDICTION_CONDEL_DELETERIOUS_CODE:
-                        returnValue = PortalConstants.PROTEIN_PREDICTION_CONDEL_DELETERIOUS_NAME
-                        break;
-                    case PortalConstants.PROTEIN_PREDICTION_CONDEL_BENIGN_CODE:
-                        returnValue = PortalConstants.PROTEIN_PREDICTION_CONDEL_BENIGN_NAME
-                        break;
-                    default:
-                        log.error("Internal inconsistency: no CONDEL codedValue = ${codedValue}")
-                        break;
+                if (gotNonIntCodedValue) {
+                    return returnValue = codedValueAsString
+                } else {
+                    switch (codedValue){
+                        case PortalConstants.PROTEIN_PREDICTION_CONDEL_NONE_CODE:
+                            returnValue = PortalConstants.PROTEIN_PREDICTION_CONDEL_NONE_NAME
+                            break;
+                        case PortalConstants.PROTEIN_PREDICTION_CONDEL_DELETERIOUS_CODE:
+                            returnValue = PortalConstants.PROTEIN_PREDICTION_CONDEL_DELETERIOUS_NAME
+                            break;
+                        case PortalConstants.PROTEIN_PREDICTION_CONDEL_BENIGN_CODE:
+                            returnValue = PortalConstants.PROTEIN_PREDICTION_CONDEL_BENIGN_NAME
+                            break;
+                        default:
+                            log.error("Internal inconsistency: no CONDEL codedValue = ${codedValue}")
+                            break;
+                    }
                 }
                 break;
             default:

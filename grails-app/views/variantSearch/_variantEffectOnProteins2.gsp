@@ -39,9 +39,9 @@
                     %{--<option value="probably_damaging"><g:message code="variantSearch.proteinEffectRestrictions.missense.polyphen.probablyDamaging" default="probably damaging" /></option>--}%
                     %{--<option value="possibly_damaging"><g:message code="variantSearch.proteinEffectRestrictions.missense.polyphen.possiblyDamaging" default="possibly damaging" /></option>--}%
                     %{--<option value="benign"><g:message code="variantSearch.proteinEffectRestrictions.missense.polyphen.benign" default="benign" /></option>--}%
-                    <option value="${PortalConstants.PROTEIN_PREDICTION_POLYPHEN_PROBABLYDAMAGING_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.polyphen.probablyDamaging" default="probably damaging" /></option>
-                    <option value="${PortalConstants.PROTEIN_PREDICTION_POLYPHEN_POSSIBLYDAMAGING_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.polyphen.possiblyDamaging" default="possibly damaging" /></option>
-                    <option value="${PortalConstants.PROTEIN_PREDICTION_POLYPHEN_BENIGN_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.polyphen.benign" default="benign" /></option>
+                    <option value="${PortalConstants.PROTEIN_PREDICTION_POLYPHEN_PROBABLYDAMAGING_STRING_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.polyphen.probablyDamaging" default="probably damaging" /></option>
+                    <option value="${PortalConstants.PROTEIN_PREDICTION_POLYPHEN_POSSIBLYDAMAGING_STRING_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.polyphen.possiblyDamaging" default="possibly damaging" /></option>
+                    <option value="${PortalConstants.PROTEIN_PREDICTION_POLYPHEN_BENIGN_STRING_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.polyphen.benign" default="benign" /></option>
                     </select>
                 </div>
                 <div class="checkbox">
@@ -50,8 +50,8 @@
                         <option value="">${PortalConstants.PROTEIN_PREDICTION_SIFT_NONE_NAME}</option>
                     %{--<option value="deleterious"><g:message code="variantSearch.proteinEffectRestrictions.missense.sift.deleterious" default="deleterious" /></option>--}%
                     %{--<option value="tolerated"><g:message code="variantSearch.proteinEffectRestrictions.missense.sift.tolerated" default="tolerated" /></option>--}%
-                    <option value="${PortalConstants.PROTEIN_PREDICTION_SIFT_DELETERIOUS_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.sift.deleterious" default="deleterious" /></option>
-                    <option value="${PortalConstants.PROTEIN_PREDICTION_SIFT_TOLERATED_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.sift.tolerated" default="tolerated" /></option>
+                    <option value="${PortalConstants.PROTEIN_PREDICTION_SIFT_DELETERIOUS_STRING_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.sift.deleterious" default="deleterious" /></option>
+                    <option value="${PortalConstants.PROTEIN_PREDICTION_SIFT_TOLERATED_STRING_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.sift.tolerated" default="tolerated" /></option>
                     </select>
                 </div>
                 <div class="checkbox">
@@ -60,8 +60,8 @@
                         <option value="">---</option>
                     %{--<option value="deleterious"><g:message code="variantSearch.proteinEffectRestrictions.missense.condel.deleterious" default="deleterious" /></option>--}%
                     %{--<option value="benign"><g:message code="variantSearch.proteinEffectRestrictions.missense.condel.benign" default="benign" /></option>--}%
-                    <option value="${PortalConstants.PROTEIN_PREDICTION_CONDEL_DELETERIOUS_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.condel.deleterious" default="deleterious" /></option>
-                    <option value="${PortalConstants.PROTEIN_PREDICTION_CONDEL_BENIGN_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.condel.benign" default="benign" /></option>
+                    <option value="${PortalConstants.PROTEIN_PREDICTION_CONDEL_DELETERIOUS_STRING_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.condel.deleterious" default="deleterious" /></option>
+                    <option value="${PortalConstants.PROTEIN_PREDICTION_CONDEL_BENIGN_STRING_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.condel.benign" default="benign" /></option>
                     </select>
                 </div>
             </div>

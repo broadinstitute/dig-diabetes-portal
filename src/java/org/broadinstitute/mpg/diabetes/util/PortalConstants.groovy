@@ -23,7 +23,7 @@ class PortalConstants {
     public final static String JSON_VARIANT_CHROMOSOME_KEY      = "CHROM";
     public final static String JSON_VARIANT_POLYPHEN_PRED_KEY   = "PolyPhen_PRED";
     public final static String JSON_VARIANT_SIFT_PRED_KEY       = "SIFT_PRED";
-    public final static String JSON_VARIANT_CONDEL_PRED_KEY     = "CONDEL_PRED";
+    public final static String JSON_VARIANT_CONDEL_PRED_KEY     = "Condel_PRED";
     public final static String JSON_NUMBER_RECORDS_KEY  = "numRecords";
     public final static String JSON_ERROR_KEY           = "is_error";
     public final static String JSON_PASSBACK_KEY        = "passback";
@@ -100,26 +100,36 @@ class PortalConstants {
 
 
     public final static String PROTEIN_PREDICTION_POLYPHEN_NONE_NAME                = "---";
+    public final static String PROTEIN_PREDICTION_POLYPHEN_NONE_STRING_CODE                = "---";
     public final static int PROTEIN_PREDICTION_POLYPHEN_NONE_CODE                   = 0;
     public final static String PROTEIN_PREDICTION_POLYPHEN_PROBABLYDAMAGING_NAME    = "probably damaging";
+    public final static String PROTEIN_PREDICTION_POLYPHEN_PROBABLYDAMAGING_STRING_CODE    = "probably_damaging";
     public final static int PROTEIN_PREDICTION_POLYPHEN_PROBABLYDAMAGING_CODE       = 1;
     public final static String PROTEIN_PREDICTION_POLYPHEN_POSSIBLYDAMAGING_NAME    = "possibly damaging";
+    public final static String PROTEIN_PREDICTION_POLYPHEN_POSSIBLYDAMAGING_STRING_CODE    = "possibly_damaging";
     public final static int PROTEIN_PREDICTION_POLYPHEN_POSSIBLYDAMAGING_CODE       = 2;
     public final static String PROTEIN_PREDICTION_POLYPHEN_BENIGN_NAME              = "benign";
+    public final static String PROTEIN_PREDICTION_POLYPHEN_BENIGN_STRING_CODE              = "benign";
     public final static int PROTEIN_PREDICTION_POLYPHEN_BENIGN_CODE                 = 3;
 
     public final static String PROTEIN_PREDICTION_SIFT_NONE_NAME                    = "---";
+    public final static String PROTEIN_PREDICTION_SIFT_NONE_STRING_CODE                    = "---";
     public final static int PROTEIN_PREDICTION_SIFT_NONE_CODE                       = 0;
     public final static String PROTEIN_PREDICTION_SIFT_DELETERIOUS_NAME             = "deleterious";
+    public final static String PROTEIN_PREDICTION_SIFT_DELETERIOUS_STRING_CODE             = "deleterious";
     public final static int PROTEIN_PREDICTION_SIFT_DELETERIOUS_CODE                = 1;
     public final static String PROTEIN_PREDICTION_SIFT_TOLERATED_NAME               = "tolerated";
+    public final static String PROTEIN_PREDICTION_SIFT_TOLERATED_STRING_CODE               = "tolerated";
     public final static int PROTEIN_PREDICTION_SIFT_TOLERATED_CODE                  = 2;
 
     public final static String PROTEIN_PREDICTION_CONDEL_NONE_NAME                  = "---";
+    public final static String PROTEIN_PREDICTION_CONDEL_NONE_STRING_CODE                  = "---";
     public final static int PROTEIN_PREDICTION_CONDEL_NONE_CODE                     = 0;
     public final static String PROTEIN_PREDICTION_CONDEL_DELETERIOUS_NAME           = "deleterious";
+    public final static String PROTEIN_PREDICTION_CONDEL_DELETERIOUS_STRING_CODE           = "deleterious";
     public final static int PROTEIN_PREDICTION_CONDEL_DELETERIOUS_CODE              = 1;
     public final static String PROTEIN_PREDICTION_CONDEL_BENIGN_NAME                = "benign";
+    public final static String PROTEIN_PREDICTION_CONDEL_BENIGN_STRING_CODE                = "neutral";
     public final static int PROTEIN_PREDICTION_CONDEL_BENIGN_CODE                   = 2;
 
     public final static String PROTEIN_PREDICTION_EFFECT_ALL_NAME                   = "all-effects";
