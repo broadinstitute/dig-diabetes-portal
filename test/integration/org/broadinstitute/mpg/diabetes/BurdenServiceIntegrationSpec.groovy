@@ -1,5 +1,4 @@
 package org.broadinstitute.mpg.diabetes
-
 import dport.RestServerService
 import grails.test.spock.IntegrationSpec
 import groovy.json.JsonSlurper
@@ -8,7 +7,6 @@ import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONObject
-import org.codehaus.groovy.grails.web.json.JSONTokener
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
@@ -84,6 +82,7 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
 //        assert referenceJson == generatedJson
     }
 
+    /*
     void "test burden test final call"() {
         when:
         String geneString = "SLC30A8";
@@ -98,6 +97,7 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
 //        assert referenceJson == generatedJson
         assert generatedJson != null
     }
+    */
 
     void "test burden variant selecting option call"() {
         when:
