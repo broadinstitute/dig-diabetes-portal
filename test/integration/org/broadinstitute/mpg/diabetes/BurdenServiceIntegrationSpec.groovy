@@ -86,9 +86,7 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
 
     void "test burden test final call"() {
         when:
-        JSONTokener tokener = new JSONTokener("{\"pValue\":\"6.620497734940387E-4\",\"oddsRatio\":\"1.0202208335901333\",\"is_error\":false}");
-        JSONObject referenceJson = new JSONObject(tokener);
-        String geneString = "SLC11A1";
+        String geneString = "SLC30A8";
         int variantSelectionOptionId = 2;
         int ancestryOptionId = PortalConstants.BURDEN_MAF_OPTION_ID_ANCESTRY;
         Float mafValue = new Float("0.5");
