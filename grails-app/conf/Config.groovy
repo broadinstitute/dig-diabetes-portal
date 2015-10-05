@@ -195,8 +195,8 @@ t2dProdRestServer {//current 'prod'
 }
 // DIGP-136: changed to load balanced development machine
 t2dNewDevRestServer { //current 'dev'
-    base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
-    name =  'aws/'
+    base = 'http://dig-api-prod.broadinstitute.org/'
+    name =  'prod/'
     path = 'gs/'
 }
 
