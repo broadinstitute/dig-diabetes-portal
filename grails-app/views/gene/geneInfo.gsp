@@ -225,7 +225,7 @@
     <g:render template="/widgets/gwasRegionSummary" model="['phenotypeList': phenotypeList, 'regionSpecification': regionSpecification]"/>
 
 </g:if>
-<g:if test="${1}">
+<g:if test="${0}">
 
 
     <div class="separator"></div>
@@ -259,9 +259,9 @@
     </script>
 
 </g:if>
-    %{--<script>--}%
-        %{--$('#collapseOne').collapse({hide: true})--}%
-    %{--</script>--}%
+    <script>
+        $('#collapseOne').collapse({hide: true})
+    </script>
 
 
 
