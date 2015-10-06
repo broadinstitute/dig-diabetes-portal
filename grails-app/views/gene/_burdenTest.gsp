@@ -275,11 +275,13 @@ $( document ).ready( function (){
                     <label>Select data set:&nbsp;&nbsp;</label>
                     <div class="form-inline">
                         <div class="radio">
-                            <label><input type="radio" name="dataset" value="1">&nbsp;13k&nbsp;&nbsp;</label>
+                            <label><input type="radio" name="dataset" value="1" checked>&nbsp;13k&nbsp;&nbsp;</label>
                         </div>
+                        <!-- remove the 26k for the ACHG demo
                         <div class="radio">
                             <label><input type="radio" name="dataset"  value="2" checked>&nbsp;26k</label>
                         </div>
+                        -->
                     </div>
                 </div>
                 <div class="col-md-8 col-sm-8 col-xs-8">
