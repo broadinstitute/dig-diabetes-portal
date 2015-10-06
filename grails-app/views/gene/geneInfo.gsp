@@ -24,7 +24,7 @@
 
     <!-- Bootstrap -->
     %{--<g:javascript src="lib/igv/vendor/inflate.js"/>--}%
-    %{--<g:javascript src="lib/igv/vendor/zlib_and_gzip.min.js"/>--}%
+    %{--<g:javascript src="lib/igv/vendor/zlib_and_gzip.minOctober 6.js"/>--}%
 
     <!-- IGV js  and css code -->
     <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css"/>
