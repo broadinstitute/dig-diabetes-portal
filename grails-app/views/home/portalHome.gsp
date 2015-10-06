@@ -294,7 +294,7 @@
 
 <div class="row column-center" style="display: flex; align-content: center; align-items: center;margin-top:10px;margin-bottom: 30px;">
     <div class="col-xs-2">
-        <img class="img-responsive" src="${resource(dir: 'images/icons', file: 'Slim2015Logo.png')}">
+        <img class="img-responsive" src="${resource(dir: 'images/icons', file: 'logotipo_Fundacion_CarlosSlim.png')}">
     </div>
 </div>
 

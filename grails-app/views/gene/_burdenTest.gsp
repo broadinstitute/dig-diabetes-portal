@@ -279,7 +279,7 @@ $( document ).ready( function (){
                         </div>
                         <!-- remove the 26k for the ACHG demo
                         <div class="radio">
-                            <label><input type="radio" name="dataset"  value="2" checked>&nbsp;26k</label>
+                            <label><input type="radio" name="dataset"  value="2" disabled>&nbsp;<span style="color: DarkGray">26k</span></label>
                         </div>
                         -->
                     </div>
@@ -324,36 +324,7 @@ $( document ).ready( function (){
     </div>
 
     <div class="row burden-test-result">
-        %{--<div class="col-sm-6 col-sm-offset-3 ">--}%
-            %{--No variants matched your filter criteria--}%
-        %{--</div>--}%
-        %{--<div class="col-sm-3 ">--}%
-        %{--</div>--}%
 
-
-
-
-        %{--<div class="col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-1  col-sm-3 col-sm-offset-1 burdenTestResultHolder">--}%
-            %{--<div class="vertical-center">--}%
-                %{--<div class="pValue"></div>--}%
-                %{--<div class="orValue"></div>--}%
-                %{--<div class="ciValue"></div>--}%
-            %{--</div>--}%
-        %{--</div>--}%
-        %{--<div class="col-sm-3"></div>--}%
-        %{--<div class="col-sm-2 variantsListLabel">variants:</div>--}%
-        %{--<div class="col-md-2 col-sm-3">--}%
-            %{--<div class="variantList">--}%
-                %{--<div><a href="${createLink(controller: 'variantInfo', action: 'variantInfo', id:'rs13266634')}">rs13266634</a></div>--}%
-                %{--<div><a href="${createLink(controller: 'variantInfo', action: 'variantInfo', id:'rs13266634')}">rs13266634</a></div>--}%
-                %{--<div><a href="${createLink(controller: 'variantInfo', action: 'variantInfo', id:'rs13266634')}">rs13266634</a></div>--}%
-                %{--<div><a href="${createLink(controller: 'variantInfo', action: 'variantInfo', id:'rs13266634')}">rs13266634</a></div>--}%
-                %{--<div><a href="${createLink(controller: 'variantInfo', action: 'variantInfo', id:'rs13266634')}">rs13266634</a></div>--}%
-                %{--<div><a href="${createLink(controller: 'variantInfo', action: 'variantInfo', id:'rs13266634')}">rs13266634</a></div>--}%
-                %{--<div><a href="${createLink(controller: 'variantInfo', action: 'variantInfo', id:'rs13266634')}">rs13266634</a></div>--}%
-            %{--</div>--}%
-        %{--</div>--}%
-        %{--<div class="col-sm-1"></div>--}%
     </div>
 </div>
 
