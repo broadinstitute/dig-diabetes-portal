@@ -389,6 +389,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/trait/**':            ['ROLE_USER'],
         '/variant/**':          ['ROLE_USER'],
         '/variantInfo/**':      ['ROLE_USER'],
+        '/dataPass/**':         ['ROLE_USER'],
         '/variantSearch/retrieveGwasSpecificPhenotypesAjax':    ['permitAll'],
         '/variantSearch/**':    ['ROLE_USER'],
         '/beacon/*':          ['permitAll'],
