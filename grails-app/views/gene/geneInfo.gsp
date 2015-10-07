@@ -37,13 +37,6 @@
     <link rel="stylesheet" type="text/css"
           href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"/>
 
-    <!-- jQuery JS -->
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
-
-    <!-- Bootstrap JS - for demo only, NOT REQUIRED FOR IGV -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-
     <!-- jQuery UI CSS -->
     <link rel="stylesheet" type="text/css"
           href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/redmond/jquery-ui.css"/>
@@ -57,9 +50,6 @@
 
     <!-- IGV CSS -->
     <link rel="stylesheet" type="text/css" href="//igv.org/web/beta/igv-beta.css">
-
-    <!-- jQuery JS -->
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
     <!-- jQuery UI JS -->
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
