@@ -80,15 +80,9 @@
     </nav>
 
 </div>
-<script>
-    $(document).ready(function () {
+<script type="text/javascript">
 
-            const VARIANT = "VARIANT";
-            const TRAIT = "TRAIT";
-            /**
-             * @param url - url to the webservice
-             * @constructor
-             */
+   var setUpIgv = function (){
 
         var div,
                 options,
@@ -100,20 +94,40 @@
             showCommandBar: false,
             fastaURL: "//dn7ywbm9isq8j.cloudfront.net/genomes/seq/hg19/hg19.fasta",
             cytobandURL: "//dn7ywbm9isq8j.cloudfront.net/genomes/seq/hg19/cytoBand.txt",
-            locus: '${geneName}',
+            locus: 'slc30a8',
             flanking: 100000,
             tracks: [
                 {
+                    type: "t2d",
+                    url: "http://dig-api-prod.broadinstitute.org/prod/gs/getData",
+                    trait: "T2D",
+                    dataset: "ExSeq_17k_mdv2",
+                    pvalue: "P_EMMAX_FE_IV_17k",
+                    name: "Type II Diabetes",
+                    variantURL: "http://www.type2diabetesgenetics.org/variantInfo/variantInfo/",
+                    traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
+                },
+                {
+                    url: "http://data.broadinstitute.org/igvdata/t2d/recomb_decode.bedgraph",
+                    min: 0,
+                    max: 7,
+                    name: "Recombination rate",
+                    order: 9998
+                },
+                {
+                    type: "sequence",
+                    order: -9999
+                },
+                {
                     url: "//dn7ywbm9isq8j.cloudfront.net/annotations/hg19/genes/gencode.v18.collapsed.bed",
-                    label: "Genes",
+                    name: "Genes",
                     order: 10000
                 }
             ]
         };
 
         browser = igv.createBrowser(div, options);
-
-    });
+    };
 
 </script>
 
