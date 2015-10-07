@@ -38,17 +38,39 @@
                     <li class="dropdown" id="tracks-menu-dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tracks<b class="caret"></b></a>
                         <ul id="trackList" class="dropdown-menu">
-                            <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
-                                    trait: 'FG',
-                                    dataset: 'GWAS_MAGIC_mdv2',
-                                    pvalue: 'P_VALUE',
-                                    name: 'fasting glucose',
-                                    variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
-                                    traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">fasting glucose</a>
-                            </li>
+                        <li>
+                            <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                trait: 'T2D',
+                                dataset: 'ExSeq_17k_mdv2',
+                                pvalue: 'P_EMMAX_FE_IV_17k',
+                                name: 'T2D (exome sequencing)',
+                                variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
+                                traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
+                            })">T2D (exome sequencing)</a>
+                        </li>
+                        <li>
+                            <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                trait: 'T2D',
+                                dataset: 'ExChip_82k_mdv2',
+                                pvalue: 'P_VALUE',
+                                name: 'T2D (exome chip)',
+                                variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
+                                traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
+                            })">T2D (exome chip)</a>
+                        </li>
+                        <li>
+                            <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                trait: 'FG',
+                                dataset: 'GWAS_MAGIC_mdv2',
+                                pvalue: 'P_VALUE',
+                                name: 'fasting glucose',
+                                variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
+                                traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
+                            })">fasting glucose</a>
+                        </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
                                     url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
@@ -344,9 +366,29 @@
                     type: "t2d",
                     url: "http://dig-api-prod.broadinstitute.org/prod/gs/getData",
                     trait: "T2D",
-                    dataset: "ExSeq_17k_mdv2",
-                    pvalue: "P_EMMAX_FE_IV_17k",
-                    name: "Type II Diabetes",
+                    dataset: "GWAS_DIAGRAM_mdv2",
+                    pvalue: "P_VALUE",
+                    name: "Type 2 Diabetes",
+                    variantURL: "http://www.type2diabetesgenetics.org/variantInfo/variantInfo/",
+                    traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
+                },
+                {
+                    type: "t2d",
+                    url: "http://dig-api-prod.broadinstitute.org/prod/gs/getData",
+                    trait: "FG",
+                    dataset: "GWAS_MAGIC_mdv2",
+                    pvalue: "P_VALUE",
+                    name: "fasting glucose",
+                    variantURL: "http://www.type2diabetesgenetics.org/variantInfo/variantInfo/",
+                    traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
+                },
+                {
+                    type: "t2d",
+                    url: "http://dig-api-prod.broadinstitute.org/prod/gs/getData",
+                    trait: "FI",
+                    dataset: "GWAS_MAGIC_mdv2",
+                    pvalue: "P_VALUE",
+                    name: "fasting insulin",
                     variantURL: "http://www.type2diabetesgenetics.org/variantInfo/variantInfo/",
                     traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
                 },
