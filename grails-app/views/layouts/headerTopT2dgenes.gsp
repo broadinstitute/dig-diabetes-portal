@@ -9,7 +9,7 @@
     <div class="container">
         <g:renderT2dGenesSection>
             <div id="branding">
-                Type 2 Diabetes <strong>Genetics</strong> <small>beta</small>
+                Type 2 Diabetes <strong style="color:white">Genetics</strong> <small>beta</small>
             </div>
         </g:renderT2dGenesSection>
     </div>

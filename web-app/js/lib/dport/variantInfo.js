@@ -737,6 +737,7 @@ var mpgSoftware = mpgSoftware || {};
          * @param showExchp
          * @param showExseq
          */
+        var variantPosition;
         function fillTheFields(data, variantToSearch, traitsStudiedUrlRoot, restServerRoot) {
             var variantObj = data['variant'],
                 variant = variantObj['variants'][0],
@@ -751,6 +752,10 @@ var mpgSoftware = mpgSoftware || {};
                             igvLauncher.launch("#myVariantDiv", regionforIgv, restServerRoot, [1, 1, 1, 0]);
                         }
                     };
+                },
+                prepareIgvLaunch = function (variant, restServerRoot) {
+                   return {locus:privateMethods.calculateSearchRegion(variant),
+                           server:restServerRoot};
                 },
              externalVariantAssociationStatistics = variantAssociations;
             var calculateDiseaseBurden = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, PVALUE, ORVALUE, variantTitle, showGwas, showExchp, showExseq, diseaseBurdenStrings) {// disease burden
@@ -793,6 +798,7 @@ var mpgSoftware = mpgSoftware || {};
              */
             //setTitlesAndTheLikeFromData(variantTitle, variant);
             delayedIgvLaunch = prepareDelayedIgvLaunch(variant, restServerRoot);
+            variantPosition = prepareIgvLaunch(variant, restServerRoot);
 
 
 
@@ -825,6 +831,9 @@ var mpgSoftware = mpgSoftware || {};
 
             retrieveDelayedIgvLaunch = function () {
                 return delayedIgvLaunch;
+            },
+            retrieveVariantPosition = function () {
+                return variantPosition;
             };
 
         return {
@@ -843,6 +852,7 @@ var mpgSoftware = mpgSoftware || {};
             retrieveHowCommonIsThisVariantAcrossEthnicities: retrieveHowCommonIsThisVariantAcrossEthnicities,
             retrieveDelayedIgvLaunch: retrieveDelayedIgvLaunch,
             retrieveFieldsByName: retrieveFieldsByName,
+            retrieveVariantPosition: retrieveVariantPosition,
             variantAssociations:variantAssociations,
             describeImpactOfVariantOnProtein:describeImpactOfVariantOnProtein,
             setTitlesAndTheLikeFromData:setTitlesAndTheLikeFromData
