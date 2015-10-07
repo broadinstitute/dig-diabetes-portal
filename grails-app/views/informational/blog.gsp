@@ -13,8 +13,6 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <h1><g:message code="blog.title" default="blog" /></h1>
-                <h2><g:message code="blog.subtitle" default="this is the blog" /></h2>
                 <iframe id="blog_embed"
                         src="javascript:void(0)"
                         scrolling="no"

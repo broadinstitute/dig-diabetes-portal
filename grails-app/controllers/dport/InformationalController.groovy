@@ -34,6 +34,12 @@ class  InformationalController {
     def hgat (){
         render (view: 'hgat')
     }
+    def ashg (){
+        forward(action:'blog')
+    }
+    def ASHG (){
+        forward(action:'blog')
+    }
 
     // the root page for t2dgenes.  This page recruits underlying pages via Ajax calls
     def t2dgenes ()  {

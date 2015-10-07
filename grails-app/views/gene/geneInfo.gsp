@@ -16,25 +16,43 @@
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css"
           rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <!--<script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>-->
-    <!--<script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>-->
-    <![endif]-->
-
-    <!-- Bootstrap -->
-    %{--<g:javascript src="lib/igv/vendor/inflate.js"/>--}%
-    %{--<g:javascript src="lib/igv/vendor/zlib_and_gzip.min.js"/>--}%
-
     <!-- IGV js  and css code -->
-    <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css"/>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" type="text/css"
+          href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css"/>
+
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" type="text/css"
+          href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"/>
+
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" type="text/css"
+          href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/redmond/jquery-ui.css"/>
+
+    <!-- Google fonts -->
+    <link rel="stylesheet" type="text/css" href='//fonts.googleapis.com/css?family=PT+Sans:400,700'>
+    <link rel="stylesheet" type="text/css" href='//fonts.googleapis.com/css?family=Open+Sans'>
+
+    <!-- Font Awesome CSS -->
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
+    <!-- IGV CSS -->
     <link rel="stylesheet" type="text/css" href="//igv.org/web/beta/igv-beta.css">
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <!-- jQuery UI JS -->
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="//igv.org/web/beta/igv-beta.js"></script>
-    %{--<g:javascript src="lib/dport/igv-beta2.js"></g:javascript>--}%
-    <g:set var="restServer" bean="restServerService"/>
+
+    <!-- IGV JS -->
+    <script type="text/javascript" src="//igv.org/web/beta/igv-beta.min.js"></script>    <g:set var="restServer" bean="restServerService"/>
+
+
+    <style>
+    b, strong {
+        color: #052090;
+    }
+    </style>
 </head>
 
 <body>
@@ -225,7 +243,7 @@
     <g:render template="/widgets/gwasRegionSummary" model="['phenotypeList': phenotypeList, 'regionSpecification': regionSpecification]"/>
 
 </g:if>
-<g:if test="${0}">
+<g:if test="${1}">
 
 
     <div class="separator"></div>
@@ -248,6 +266,7 @@
     <script>
         $('#accordion2').on('shown.bs.collapse', function (e) {
             if (e.target.id === "collapseIgv") {
+                setUpIgv('<%=geneName%>');
  <g:renderT2dGenesSection>
                 %{--igvLauncher.launch("#myDiv", "${geneName}","${restServer.currentRestServer()}",[1,1,1,0]);--}%
  </g:renderT2dGenesSection>
