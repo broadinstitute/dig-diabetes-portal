@@ -107,6 +107,14 @@
                     url: "//dn7ywbm9isq8j.cloudfront.net/annotations/hg19/genes/gencode.v18.collapsed.bed",
                     label: "Genes",
                     order: 10000
+                },
+                {
+                    type: "t2d",
+                    url: "http://dig-api-prod.broadinstitute.org/prod/gs/getData",
+                    trait: "T2D",
+                    dataset: "ExSeq_17k_mdv2",
+                    pvalue: "P_EMMAX_FE_IV_17k",
+                    name: "Type II Diabetes"
                 }
             ]
         };

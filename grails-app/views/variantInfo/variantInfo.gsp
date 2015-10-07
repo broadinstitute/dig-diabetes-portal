@@ -187,7 +187,7 @@
 
                     </div>
 
-<g:if test="${0}">
+<g:if test="${1}">
                     <div class="separator"></div>
 
                     <div class="accordion-group">
