@@ -17,10 +17,10 @@
                 <h2><g:message code="blog.subtitle" default="this is the blog" /></h2>
                 <iframe id="blog_embed"
                         src="javascript:void(0)"
-                        scrolling="no"
+                        scrolling="yes"
                         frameborder="0"
-                        width="900"
-                        height="700">
+                        width="1200"
+                        height="2500">
                 </iframe>
                 <script type="text/javascript">
                     document.getElementById('blog_embed').src = 'http://t2d-genetics-portal.blogspot.com/';
