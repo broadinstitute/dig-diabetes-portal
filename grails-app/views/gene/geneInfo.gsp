@@ -16,16 +16,6 @@
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css"
           rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <!--<script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>-->
-    <!--<script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>-->
-    <![endif]-->
-
-    <!-- Bootstrap -->
-    %{--<g:javascript src="lib/igv/vendor/inflate.js"/>--}%
-    %{--<g:javascript src="lib/igv/vendor/zlib_and_gzip.minOctober 6.js"/>--}%
-
     <!-- IGV js  and css code -->
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
@@ -56,6 +46,13 @@
 
     <!-- IGV JS -->
     <script type="text/javascript" src="//igv.org/web/beta/igv-beta.min.js"></script>    <g:set var="restServer" bean="restServerService"/>
+
+
+    <style>
+    b, strong {
+        color: #052090;
+    }
+    </style>
 </head>
 
 <body>
@@ -269,7 +266,7 @@
     <script>
         $('#accordion2').on('shown.bs.collapse', function (e) {
             if (e.target.id === "collapseIgv") {
-                setUpIgv();
+                setUpIgv('<%=geneName%>');
  <g:renderT2dGenesSection>
                 %{--igvLauncher.launch("#myDiv", "${geneName}","${restServer.currentRestServer()}",[1,1,1,0]);--}%
  </g:renderT2dGenesSection>

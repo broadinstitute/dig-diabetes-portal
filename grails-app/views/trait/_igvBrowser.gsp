@@ -40,7 +40,7 @@
                         <ul id="trackList" class="dropdown-menu">
                         <li>
                             <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                url: '${restServer.currentRestServer()}getData',
                                 trait: 'T2D',
                                 dataset: 'ExSeq_17k_mdv2',
                                 pvalue: 'P_EMMAX_FE_IV_17k',
@@ -51,7 +51,7 @@
                         </li>
                         <li>
                             <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                url: '${restServer.currentRestServer()}getData',
                                 trait: 'T2D',
                                 dataset: 'ExChip_82k_mdv2',
                                 pvalue: 'P_VALUE',
@@ -62,7 +62,7 @@
                         </li>
                         <li>
                             <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                url: '${restServer.currentRestServer()}getData',
                                 trait: 'FG',
                                 dataset: 'GWAS_MAGIC_mdv2',
                                 pvalue: 'P_VALUE',
@@ -73,7 +73,7 @@
                         </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: '2hrG',
                                     dataset: 'GWAS_MAGIC_mdv2',
                                     pvalue: 'P_VALUE',
@@ -84,7 +84,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: '2hrI',
                                     dataset: 'GWAS_MAGIC_mdv2',
                                     pvalue: 'P_VALUE',
@@ -95,7 +95,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'FI',
                                     dataset: 'GWAS_MAGIC_mdv2',
                                     pvalue: 'P_VALUE',
@@ -106,7 +106,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'PI',
                                     dataset: 'GWAS_MAGIC_mdv2',
                                     pvalue: 'P_VALUE',
@@ -117,7 +117,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'HBA1C',
                                     dataset: 'GWAS_MAGIC_mdv2',
                                     pvalue: 'P_VALUE',
@@ -128,7 +128,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'HOMAIR',
                                     dataset: 'GWAS_MAGIC_mdv2',
                                     pvalue: 'P_VALUE',
@@ -139,7 +139,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'HOMAB',
                                     dataset: 'GWAS_MAGIC_mdv2',
                                     pvalue: 'P_VALUE',
@@ -150,7 +150,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'BMI',
                                     dataset: 'GWAS_GIANT_mdv2',
                                     pvalue: 'P_VALUE',
@@ -161,7 +161,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'WHR',
                                     dataset: 'GWAS_GIANT_mdv2',
                                     pvalue: 'P_VALUE',
@@ -172,7 +172,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'HEIGHT',
                                     dataset: 'GWAS_GIANT_mdv2',
                                     pvalue: 'P_VALUE',
@@ -183,7 +183,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'HDL',
                                     dataset: 'GWAS_GLGC_mdv2',
                                     pvalue: 'P_VALUE',
@@ -194,7 +194,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'LDL',
                                     dataset: 'GWAS_GLGC_mdv2',
                                     pvalue: 'P_VALUE',
@@ -205,7 +205,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'TG',
                                     dataset: 'GWAS_GLGC_mdv2',
                                     pvalue: 'P_VALUE',
@@ -216,7 +216,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'CAD',
                                     dataset: 'GWAS_CARDIoGRAM_mdv2',
                                     pvalue: 'P_VALUE',
@@ -227,7 +227,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'CKD',
                                     dataset: 'GWAS_CKDGenConsortium_mdv2',
                                     pvalue: 'P_VALUE',
@@ -238,7 +238,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'eGFRcrea',
                                     dataset: 'GWAS_CKDGenConsortium_mdv2',
                                     pvalue: 'P_VALUE',
@@ -249,7 +249,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'eGFRcys',
                                     dataset: 'GWAS_CKDGenConsortium_mdv2',
                                     pvalue: 'P_VALUE',
@@ -260,7 +260,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'MA',
                                     dataset: 'GWAS_MAGIC_mdv2',
                                     pvalue: 'P_VALUE',
@@ -271,7 +271,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'UACR',
                                     dataset: 'GWAS_CKDGenConsortium_mdv2',
                                     pvalue: 'P_VALUE',
@@ -282,7 +282,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'SCZ',
                                     dataset: 'GWAS_PGC_mdv2',
                                     pvalue: 'P_VALUE',
@@ -293,7 +293,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'MDD',
                                     dataset: 'GWAS_PGC_mdv2',
                                     pvalue: 'P_VALUE',
@@ -304,7 +304,7 @@
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
-                                    url: 'http://dig-api-qa.broadinstitute.org/qa/gs/getData',
+                                    url: '${restServer.currentRestServer()}getData',
                                     trait: 'BIP',
                                     dataset: 'GWAS_PGC_mdv2',
                                     pvalue: 'P_VALUE',
@@ -347,7 +347,7 @@
 </div>
 <script type="text/javascript">
 
-   var setUpIgv = function (){
+   var setUpIgv = function (locusName, serverName){
 
         var div,
                 options,
@@ -359,12 +359,12 @@
             showCommandBar: false,
             fastaURL: "//dn7ywbm9isq8j.cloudfront.net/genomes/seq/hg19/hg19.fasta",
             cytobandURL: "//dn7ywbm9isq8j.cloudfront.net/genomes/seq/hg19/cytoBand.txt",
-            locus: 'slc30a8',
+            locus: locusName,
             flanking: 100000,
             tracks: [
                 {
                     type: "t2d",
-                    url: "http://dig-api-prod.broadinstitute.org/prod/gs/getData",
+                    url: "${restServer.currentRestServer()}getData",
                     trait: "T2D",
                     dataset: "GWAS_DIAGRAM_mdv2",
                     pvalue: "P_VALUE",
@@ -374,7 +374,7 @@
                 },
                 {
                     type: "t2d",
-                    url: "http://dig-api-prod.broadinstitute.org/prod/gs/getData",
+                    url: "${restServer.currentRestServer()}getData",
                     trait: "FG",
                     dataset: "GWAS_MAGIC_mdv2",
                     pvalue: "P_VALUE",
@@ -384,7 +384,7 @@
                 },
                 {
                     type: "t2d",
-                    url: "http://dig-api-prod.broadinstitute.org/prod/gs/getData",
+                    url: "${restServer.currentRestServer()}getData",
                     trait: "FI",
                     dataset: "GWAS_MAGIC_mdv2",
                     pvalue: "P_VALUE",
