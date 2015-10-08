@@ -113,6 +113,13 @@ public class GetDataQueryBean implements GetDataQuery {
     }
 
 
+    /**
+     * would it really hurt to put some comments here to know what this is for ???????????????
+     *
+     *
+     * @param propertyName
+     * @return
+     */
     public List <Integer> getPropertyIndexList(String propertyName){
         List <Integer> returnValue = new ArrayList<Integer>();
         if (propertyName!=null) {

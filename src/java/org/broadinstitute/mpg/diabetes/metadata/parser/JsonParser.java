@@ -11,14 +11,14 @@ import org.broadinstitute.mpg.diabetes.metadata.Property;
 import org.broadinstitute.mpg.diabetes.metadata.PropertyBean;
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup;
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.*;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.CommonPropertyVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.AllDataSetHashSetVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.CommonPropertyVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.DataSetDirectChildByTypeVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.ExperimentByVersionVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.GwasTechSampleGroupByPhenotypeVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.JsNameTranslationVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeByNameVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeByTechAndVersionVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeNameVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyByItsAndParentNamesVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyByNameFinderVisitor;
@@ -26,10 +26,8 @@ import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyByPropertyTypeVi
 import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyPerExperimentVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupByIdSelectingVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupForPhenotypeVisitor;
-
 import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchablePropertyIncludingChildrenVisitor;
 import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchablePropertyVisitor;
-
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
 import org.codehaus.groovy.grails.web.json.JSONArray;
@@ -764,5 +762,53 @@ public class JsonParser {
 
         // return
         return property;
+    }
+
+    /**
+     * find all the phenotypes objects given a technology and data version
+     *
+     * @param technology
+     * @param dataVersion
+     * @return
+     * @throws PortalException
+     */
+    public List<Phenotype> getPhenotypeListByTechnologyAndVersion(String technology, String dataVersion) throws PortalException {
+        // local variables
+        List<Phenotype> phenotypeList = null;
+
+        // create the visitor and visit on root
+        PhenotypeByTechAndVersionVisitor visitor = new PhenotypeByTechAndVersionVisitor(technology, dataVersion);
+        this.getMetaDataRoot().acceptVisitor(visitor);
+        phenotypeList = visitor.getPhenotypeList();
+
+        // return
+        return phenotypeList;
+    }
+
+    /**
+     * find all the distinct phenotypes; return the first one found for duplicates
+     *
+     * @param technology
+     * @param dataVersion
+     * @return
+     * @throws PortalException
+     */
+    public Map<String, Phenotype> getPhenotypeMapByTechnologyAndVersion(String technology, String dataVersion) throws PortalException {
+        // local variables
+        Map<String, Phenotype> phenotypeMap = new HashMap<String, Phenotype>();
+        List<Phenotype> phenotypeList = null;
+
+        // get the list of phenotypes
+        phenotypeList = this.getPhenotypeListByTechnologyAndVersion(technology, dataVersion);
+
+        // map them
+        for (Phenotype phenotype : phenotypeList) {
+            if (phenotypeMap.get(phenotype.getName()) == null) {
+                phenotypeMap.put(phenotype.getName(), phenotype);
+            }
+        }
+
+        // return
+        return phenotypeMap;
     }
 }
