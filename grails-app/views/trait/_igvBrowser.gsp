@@ -364,8 +364,8 @@
             tracks: [
                 {
                     type: "t2d",
-                    url: "${restServer.currentRestServer()}getData",
-                    %{--url: "${createLink(controller:'trait', action:'getData')}",--}%
+                    %{--url: "${restServer.currentRestServer()}getData",--}%
+                    url: "${createLink(controller:'trait', action:'getData')}",
                     trait: "T2D",
                     dataset: "GWAS_DIAGRAM_mdv2",
                     pvalue: "P_VALUE",

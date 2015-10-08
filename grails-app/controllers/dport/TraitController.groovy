@@ -179,17 +179,21 @@ class TraitController {
      * @return
      */
     def getData() {
-        String regionsSpecification = params.jsonSpec
+        String requestPayload = request.JSON
 
+        request.headerNames.each{
+            println "hdr=${it}"
+        }
         // log
+        println "payload=${requestPayload}"
         log.info("for getData call, got params: " + params)
 
-         if (jsonObject) {
-            render(status: 200, contentType: "application/json") {
-                [variants: jsonObject['variants']]
-            }
-        } else {
-            render(status:300, contentType:"application/json")
+        header 'Allow', "HEAD,GET,PUT,DELETE,OPTIONS"
+
+        JSONObject jsonObject = restServerService.postGetDataCall(requestPayload)
+
+        render(status: 200, contentType: "application/json") {
+             jsonObject
         }
 
     }
