@@ -365,6 +365,7 @@
                 {
                     type: "t2d",
                     url: "${restServer.currentRestServer()}getData",
+                    %{--url: "${createLink(controller:'trait', action:'getData')}",--}%
                     trait: "T2D",
                     dataset: "GWAS_DIAGRAM_mdv2",
                     pvalue: "P_VALUE",
@@ -392,13 +393,13 @@
                     variantURL: "http://www.type2diabetesgenetics.org/variantInfo/variantInfo/",
                     traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
                 },
-                {
-                    url: "http://data.broadinstitute.org/igvdata/t2d/recomb_decode.bedgraph",
-                    min: 0,
-                    max: 7,
-                    name: "Recombination rate",
-                    order: 9998
-                },
+//                {
+//                    url: "http://data.broadinstitute.org/igvdata/t2d/recomb_decode.bedgraph",
+//                    min: 0,
+//                    max: 7,
+//                    name: "Recombination rate",
+//                    order: 9998
+//                },
                 {
                     type: "sequence",
                     order: -9999

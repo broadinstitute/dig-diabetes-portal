@@ -171,7 +171,28 @@ class TraitController {
             render(status:300, contentType:"application/json")
         }
 
-     }
+    }
+
+    /***
+     * called by regionInfo, this provides information across 25 phenotypes. Use it to populate our big region graphic (the one that
+     * may one day be supplanted by LocusZoom?)
+     * @return
+     */
+    def getData() {
+        String regionsSpecification = params.jsonSpec
+
+        // log
+        log.info("for getData call, got params: " + params)
+
+         if (jsonObject) {
+            render(status: 200, contentType: "application/json") {
+                [variants: jsonObject['variants']]
+            }
+        } else {
+            render(status:300, contentType:"application/json")
+        }
+
+    }
 
 
 
