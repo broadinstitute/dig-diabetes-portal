@@ -7,7 +7,7 @@ import org.broadinstitute.mpg.diabetes.util.PortalException;
 import java.util.List;
 
 /**
- * Created by mduby on 8/23/15.
+ * LOOKS LIKE THIS IS DEPRECATED; WILL KEEP AROUND FOR NOW JUST IN CASE
  */
 public class KnowledgeBaseQueryBuilder {
     // static variables
