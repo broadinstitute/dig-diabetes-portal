@@ -33,9 +33,9 @@
     });
     var phenotypeMap = new UTILS.phenotypeListConstructor(decodeURIComponent("${phenotypeList}"));
     function fillTraitVariantCross(data) {
-        var margin = { top: 175, right: 100, bottom: 25, left: 10 },
+        var margin = { top: 175, right: 100, bottom: -50, left: 10 },
                 width = 1080 - margin.left - margin.right,
-                height = 1050 - margin.top - margin.bottom;
+                height = 950 - margin.top - margin.bottom;
 
 
         var crossMap = baget.crossMap()

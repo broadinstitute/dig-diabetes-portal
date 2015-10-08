@@ -23,18 +23,17 @@
     <div class="col-md-5">
 
         <p>
-            David Altshuler<br/>
             Jose Florez<br/>
             Jason Flannick<br/>
-            Mary Carmichael<br/>
             Noel Burtt<br/>
             Ben Alexander<br/>
             Kaan Yuksel<br/>
             Marcin von Grotthuss<br/>
             Marc Duby<br/>
             Oliver Ruebenacker<br/>
-            Tad Jordan<br/>
             Todd Green<br/>
+            Tad Jordan<br/>
+
         </p>
 
     </div>

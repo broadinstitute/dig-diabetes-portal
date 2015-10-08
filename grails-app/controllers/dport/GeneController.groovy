@@ -49,7 +49,7 @@ class GeneController {
 
         // added test for unit test error
         if (geneToStartWith != null) {
-            regionSpecification = this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 0)
+            regionSpecification = this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 100000)
         }
 
         if (geneToStartWith)  {

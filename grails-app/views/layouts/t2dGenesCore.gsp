@@ -59,18 +59,6 @@
         <div class="text-center" style="padding-top:10px;"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="mainpage.send.feedback"/></a><div>
     </div>
 
-
-    <div class="row column-center" style="display: flex;  display: -webkit-flex;align-content: center; align-items: center;padding-top: 10px;">
-        <div class="col-xs-5"></div>
-        <div class="col-xs-2">Built at</div>
-        <div class="col-xs-5"></div>
-    </div>
-
-    <div class="row column-center" style="display: flex; align-content: center; align-items: center;">
-        <div class="col-xs-5"></div>
-        <img class="img-responsive col-xs-2" src="${resource(dir: 'images', file: 'BroadInstLogoforDigitalRGB.png')}" alt="Broad Institute"/>
-        <div class="col-xs-5"></div>
-    </div>
     <div class="row column-center"  style="padding-top:5px;">
         <div style="font-size: 10px;">Built  on ${BuildInfo?.buildHost} at ${BuildInfo?.buildTime}.  Version=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}</div>
     </div>
