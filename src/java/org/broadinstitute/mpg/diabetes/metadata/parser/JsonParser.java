@@ -784,4 +784,31 @@ public class JsonParser {
         // return
         return phenotypeList;
     }
+
+    /**
+     * find all the distinct phenotypes; return the first one found for duplicates
+     *
+     * @param technology
+     * @param dataVersion
+     * @return
+     * @throws PortalException
+     */
+    public Map<String, Phenotype> getPhenotypeMapByTechnologyAndVersion(String technology, String dataVersion) throws PortalException {
+        // local variables
+        Map<String, Phenotype> phenotypeMap = new HashMap<String, Phenotype>();
+        List<Phenotype> phenotypeList = null;
+
+        // get the list of phenotypes
+        phenotypeList = this.getPhenotypeListByTechnologyAndVersion(technology, dataVersion);
+
+        // map them
+        for (Phenotype phenotype : phenotypeList) {
+            if (phenotypeMap.get(phenotype.getName()) == null) {
+                phenotypeMap.put(phenotype.getName(), phenotype);
+            }
+        }
+
+        // return
+        return phenotypeMap;
+    }
 }

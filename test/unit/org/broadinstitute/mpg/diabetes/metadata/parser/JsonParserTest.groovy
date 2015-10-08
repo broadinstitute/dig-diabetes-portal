@@ -485,12 +485,38 @@ class JsonParserTest extends TestCase {
         String technology = "GWAS";
         String dataVersion = "mdv2";
 
-        // get the trait/phenotype list
-        phenotypeList = this.jsonParser.getPhenotypeListByTechnologyAndVersion(technology, dataVersion);
+        try {
+            // get the trait/phenotype list
+            phenotypeList = this.jsonParser.getPhenotypeListByTechnologyAndVersion(technology, dataVersion);
+
+        } catch (PortalException exception) {
+            fail("got error: " + exception.getMessage());
+        }
 
         // test
         assertNotNull(phenotypeList);
         assertTrue(phenotypeList.size() > 0);
         assertEquals(26, phenotypeList.size());
+    }
+
+    @Test
+    public void testGetPhenotypeMapByTechnologyAndVersion() {
+        // local variables
+        Map<String, Phenotype> phenotypeMap = null;
+        String technology = "GWAS";
+        String dataVersion = "mdv2";
+
+        try {
+            // get the trait/phenotype map
+            phenotypeMap = this.jsonParser.getPhenotypeMapByTechnologyAndVersion(technology, dataVersion);
+
+        } catch (PortalException exception) {
+            fail("got error: " + exception.getMessage());
+        }
+
+        // test
+        assertNotNull(phenotypeMap);
+        assertTrue(phenotypeMap.size() > 0);
+        assertEquals(25, phenotypeMap.size());
     }
 }
