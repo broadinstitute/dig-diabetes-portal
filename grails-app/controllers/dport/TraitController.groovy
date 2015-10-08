@@ -181,9 +181,6 @@ class TraitController {
     def getData() {
         String requestPayload = request.JSON
 
-        request.headerNames.each{
-            println "hdr=${it}"
-        }
         // log
         println "payload=${requestPayload}"
         log.info("for getData call, got params: " + params)
