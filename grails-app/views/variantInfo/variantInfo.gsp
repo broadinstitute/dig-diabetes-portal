@@ -139,7 +139,7 @@
                 <div class="separator"></div>
                 <g:render template="/widgets/associatedStatisticsTraitsPerVariant" model="['variantIdentifier': variantToSearch]"/>
 
-<g:if test="${show_exseq}">
+
 
     <div class="separator"></div>
 
@@ -156,9 +156,9 @@
 
     </div>
 
-</g:if>
+<
 
-<g:if test="${show_exseq}">
+
 
       <div class="separator"></div>
 
@@ -175,8 +175,7 @@
 
     </div>
 
-</g:if>
-<g:if test="${show_exseq}">
+
 
     <div class="separator"></div>
 
@@ -193,7 +192,7 @@
 
     </div>
 
-</g:if>
+
                     <div class="separator"></div>
 
                     <div class="accordion-group">
@@ -213,7 +212,7 @@
 
                     </div>
 
-<g:if test="${1}">
+
                     <div class="separator"></div>
 
                     <div class="accordion-group">
@@ -231,7 +230,7 @@
                             </div>
                         </div>
                     </div>
-</g:if>
+
                 <div class="separator"></div>
 
                     <div class="accordion-group">

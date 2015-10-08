@@ -155,9 +155,9 @@ var UTILS = {
     variantInfoHeaderSentence: function (inGene,closestGene,gene) {
         var returnValue = "";
         if (inGene) {
-            returnValue += "lies in the gene <em>" + gene + "</em>";
+            returnValue += "lies in the gene <a href='../../gene/geneInfo/"+gene+"'>" + gene + "</a>";
         } else {
-            returnValue += "is nearest to the gene <em>" + closestGene + "</em>";
+            returnValue += "is nearest to the gene <a href='../../gene/geneInfo/"+closestGene+"'>" + closestGene + "</a>";
         }
         return  returnValue;
     },

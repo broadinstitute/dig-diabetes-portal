@@ -45,7 +45,9 @@
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
 
     <!-- IGV JS -->
-    <script type="text/javascript" src="//igv.org/web/beta/igv-beta.min.js"></script>    <g:set var="restServer" bean="restServerService"/>
+    <script type="text/javascript" src="//igv.org/web/beta/igv-beta.min.js"></script>
+
+    <g:set var="restServer" bean="restServerService"/>
 
 
     <style>
