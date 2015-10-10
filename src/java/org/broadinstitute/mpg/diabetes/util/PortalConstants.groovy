@@ -47,6 +47,12 @@ class PortalConstants {
     // constant string for the experiment technology type
     public final static String TECHNOLOGY_GWAS_KEY                      = "GWAS";
 
+    // constant strings for the commonly used properties
+    public final static String NAME_COMMON_PROPERTY_POSITION            = "POS";
+    public final static String NAME_COMMON_PROPERTY_CHROMOSOME          = "CHROM";
+    public final static String NAME_PHENOTYPE_PROPERTY_P_VALUE          = "P_VALUE";
+
+
     // burden test json keys
     public final static String JSON_BURDEN_VARIANTS_KEY                 = "variants";
     public final static String JSON_BURDEN_COVARIATES_KEY               = "covariates";
