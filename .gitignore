@@ -48,3 +48,5 @@ out/production/dport-grailsPlugins/messages.properties
 
 /out/**
 
+.DS_Store
+
