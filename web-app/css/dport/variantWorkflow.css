@@ -39,6 +39,21 @@ select optgroup {
 .primarySectionSeparator {
     margin: 15px 0 15px 0;
 }
+.searchBuilderIntentionSeparator{
+    margin: -20px 0 20px 0;
+    color: black;
+    font-style: italic;
+}
+.searchBuilderIntentionBox {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    background-color: #cdf8ff
+}
 .variant-filter-button {
     margin: 20px 20px 20px 0;
 }

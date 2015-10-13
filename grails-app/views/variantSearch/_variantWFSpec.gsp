@@ -20,6 +20,36 @@
             <div>
 
                     <div class="panel-body">
+
+                        <div class="row clearfix" id="clauseCreation" style="display: none">
+                            %{--Help the user remember whether they are creating--}%
+                            <div class="searchBuilderIntentionSeparator">
+
+                                <div class="col-sm-offset-3 col-sm-6 searchBuilderIntentionBox">
+                                    <span class="searchBuilderIntentionPrompt">
+                                        <g:message code="searchBuilder.clauseCreation.reminder" default="creating a new data filter" />
+                                    </span>
+                                </div>
+                                <div class="col-sm-3"></div>
+
+                            </div>
+                        </div>
+
+                        <div class="row clearfix" id="clauseEdit" style="display: none">
+                            %{--Help the user remember whether they are editing or creating--}%
+                            <div class="searchBuilderIntentionSeparator">
+
+                                <div class="col-sm-offset-3 col-sm-6 searchBuilderIntentionBox">
+                                    <span class="searchBuilderIntentionPrompt">
+                                        <g:message code="searchBuilder.clauseEditing.reminder" default="creating a new data filter" />
+                                    </span>
+                                </div>
+                                <div class="col-sm-3"></div>
+
+                            </div>
+                        </div>
+
+
                         <div class="row clearfix">
                             %{--Here is the phenotype section--}%
                             <div class="primarySectionSeparator">

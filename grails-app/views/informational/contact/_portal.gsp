@@ -41,7 +41,7 @@
         <div class="emphasize-block">
             Not sure who to talk to?
             Try our group email address:<br/>
-            <a href="mailto:t2dgenetics@broadinstitute.org">t2dgenetics@broadinstitute.org</a>
+            <a href="mailto:help@type2diabetesgenetics.org">help@type2diabetesgenetics.org</a>
         </div>
 
     </div>

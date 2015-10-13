@@ -47,21 +47,31 @@ var mpgSoftware = mpgSoftware || {};
                 switch (state){
                     case 0:
                         suggestionField.text ('Choose a trait from the drop-down box');
+                        $('#clauseEdit').hide();
+                        $('#clauseCreation').hide();
                         break;
                     case 1:
                         suggestionField.text ('Choose one of the available data sets');
+                        $('#clauseEdit').hide();
+                        $('#clauseCreation').show();
                         break;
                     case 2:
                         suggestionField.text ('Add additional filters, or else click Build request button');
                         break;
                     case 3:
                         suggestionField.text ('Editing existing clause.');
+                        $('#clauseEdit').show();
+                        $('#clauseCreation').hide();
                         break;
                     case 101:
                         suggestionField.text ('Clause added.  You may edit, or remove a clause in the blue box, or else begin building an additional clause in the white box.');
+                        $('#clauseEdit').hide();
+                        $('#clauseCreation').hide();
                         break;
                     case 102:
                         suggestionField.text ('Clause canceled.  You may edit, or remove a clause in the blue box, or else begin building an additional clause in the white box.');
+                        $('#clauseEdit').hide();
+                        $('#clauseCreation').hide();
                         break;
                     default:
                         suggestionField.text ('');
