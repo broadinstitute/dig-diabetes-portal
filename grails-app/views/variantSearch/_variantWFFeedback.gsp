@@ -17,7 +17,7 @@
         </div>
     </div>
 </div>
-<div class='bluebox'>
+<div class='bluebox' tabindex='1'>
     <div class="tab-pane fade in active developingQueryHolder" id="developingQuery">
         <g:renderEncodedFilters filterSet='${encodedFilterSets}'/>
         <button class="btn btn-med btn-primary variant-filter-button pull-right"

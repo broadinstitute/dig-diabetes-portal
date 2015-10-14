@@ -257,8 +257,21 @@ var mpgSoftware = mpgSoftware || {};
                     $.data ($('#developingQuery')[0],'currentlyBeingEdited',{'index':indexNumber,
                                                                        'displayableFilter':displayableFilter,
                                                                        'codedFilters':codedFilters});
-//                    instantiateInputFields (codedFilters);
                 }
+            }
+        };
+        var hideThisClauseForNow = function (indexNumber) {
+            if (typeof indexNumber !== 'undefined') {
+                var displayableFilter = $('#filterBlock'+indexNumber);
+                displayableFilter.hide();
+                displayableFilter.addClass('temporarilyHiding');
+//                var codedFilters = $('#savedValue'+indexNumber).val();
+//                if ((typeof displayableFilter  !== 'undefined') &&
+//                    (typeof codedFilters  !== 'undefined')){
+//                    $.data ($('#developingQuery')[0],'currentlyBeingEdited',{'index':indexNumber,
+//                        'displayableFilter':displayableFilter,
+//                        'codedFilters':codedFilters});
+//                }
             }
         };
         var forgetClauseWeWereEditing = function () {
@@ -340,23 +353,35 @@ var mpgSoftware = mpgSoftware || {};
             }
         };
         var resuscitateClauseWeWereEditing = function () {
-            var anythingHere = $.data ($('#developingQuery')[0],'currentlyBeingEdited');
-            if (typeof anythingHere  !== 'undefined')  {
-                var index = anythingHere.index;
-                var displayableFilter = anythingHere.displayableFilter;
-                var codedFilters = anythingHere.codedFilters;
-                if ((typeof index  !== 'undefined') &&
-                    (typeof displayableFilter  !== 'undefined') &&
-                    (typeof codedFilters  !== 'undefined')){  // we have everything we need. Let's do this...
-                    insertCodedFilter (index,codedFilters,numberExistingFilters());
-                    insertDisplayableFilter (index,displayableFilter,numberExistingFilters());
-                    numberExistingFilters(numberExistingFilters()+1);
-                }
-                $.removeData($('#developingQuery')[0],'currentlyBeingEdited');
-            }
+            var clauseToBringBack = jQuery( ".temporarilyHiding:hidden" );
+            clauseToBringBack.show();
+//            var anythingHere = $.data ($('#developingQuery')[0],'currentlyBeingEdited');
+//            if (typeof anythingHere  !== 'undefined')  {
+//                var index = anythingHere.index;
+//                var displayableFilter = anythingHere.displayableFilter;
+//                var codedFilters = anythingHere.codedFilters;
+//                if ((typeof index  !== 'undefined') &&
+//                    (typeof displayableFilter  !== 'undefined') &&
+//                    (typeof codedFilters  !== 'undefined')){  // we have everything we need. Let's do this...
+//                    insertCodedFilter (index,codedFilters,numberExistingFilters());
+//                    insertDisplayableFilter (index,displayableFilter,numberExistingFilters());
+//                    numberExistingFilters(numberExistingFilters()+1);
+//                }
+//                $.removeData($('#developingQuery')[0],'currentlyBeingEdited');
+//            }
         };
+        var removeClauseWeWereEditing = function () {
+            var clauseToBringBack = jQuery( ".temporarilyHiding:hidden" );
+            clauseToBringBack.show();
+            var filterIndex = extractIndex ('filterBlock',clauseToBringBack);
+            forgetThisFilter (filterIndex);
+            renumberHiddenFilters (filterIndex,numberExistingFilters());
+            renumberFilterBlocks (filterIndex,numberExistingFilters());
+            numberExistingFilters(numberExistingFilters()-1);
+        };
+
         var weAreClauseEditing = function (){
-            return $('#clauseEdit').is(":visible")
+            return $('#clauseEdit').is(":visible");
         };
         var retrievePhenotypes = function () {
             var loading = $('#spinner').show();
@@ -492,12 +517,14 @@ var mpgSoftware = mpgSoftware || {};
         var editThisClause = function (currentObject){
             if (currentInteractivityState()){
                 var filterIndex = extractIndex ('editor',currentObject);
-                rememberClauseWeAreEditing(filterIndex);
+               // rememberClauseWeAreEditing(filterIndex);
+                hideThisClauseForNow(filterIndex);
                 makeClauseCurrent (filterIndex);
-                forgetThisFilter (filterIndex);
-                renumberHiddenFilters (filterIndex,numberExistingFilters());
-                renumberFilterBlocks (filterIndex,numberExistingFilters());
-                numberExistingFilters(numberExistingFilters()-1);
+                // Here is how we delete clause
+//                forgetThisFilter (filterIndex);
+//                renumberHiddenFilters (filterIndex,numberExistingFilters());
+//                renumberFilterBlocks (filterIndex,numberExistingFilters());
+//                numberExistingFilters(numberExistingFilters()-1);
                 handleBlueBoxVisibility ();
                 $('#additionalFilterSelection').show ();
                 whatToDoNext(3);
@@ -640,6 +667,10 @@ var mpgSoftware = mpgSoftware || {};
                 }
                 return returnValue;
             }
+            // before doing anything else we need to erase any hidden old filters
+            if (weAreClauseEditing()){
+                removeClauseWeWereEditing();
+            }
             var varsToSend = {};
             var phenotypeExtractor = {};
             var datasetExtractor = {};
@@ -691,6 +722,14 @@ var mpgSoftware = mpgSoftware || {};
             // we have to treat canceling an existing query differently from canceling a new query
             if (weAreClauseEditing()){
                 resuscitateClauseWeWereEditing();
+                // reset the screen
+                $('#dataSetChooser').hide();
+                var filterHolder = $('#filterHolder');
+                filterHolder.empty();
+                $('.bluebox').focus();
+                handleBlueBoxVisibility ();
+                currentInteractivityState(1);
+                whatToDoNext(102);
             } else {
                 var totalFilterCount = UTILS.extractValFromTextboxes(['totalFilterCount']);
                 if (typeof totalFilterCount['totalFilterCount'] !== 'undefined') {
@@ -713,15 +752,16 @@ var mpgSoftware = mpgSoftware || {};
             var totalFilterCount = UTILS.extractValFromTextboxes(['totalFilterCount']);
             if (typeof totalFilterCount['totalFilterCount'] !== 'undefined') {
                 var valueCount = parseInt(totalFilterCount['totalFilterCount']);
-                if (valueCount>0){
-                    for ( var i = 0 ; i < valueCount ; i++ ){
-                        savedValuesList.push ('savedValue'+i);
+                if (valueCount > 0) {
+                    for (var i = 0; i < valueCount; i++) {
+                        savedValuesList.push('savedValue' + i);
                     }
                     savedValue = UTILS.extractValFromTextboxes(savedValuesList);
                 }
             }
-            varsToSend = UTILS.concatMap(varsToSend,savedValue) ;
-            UTILS.postQuery('./launchAVariantSearch',varsToSend);
+            varsToSend = UTILS.concatMap(varsToSend, savedValue);
+            UTILS.postQuery('./launchAVariantSearch', varsToSend);
+
         };
 
         var initializePage = function (){
