@@ -811,4 +811,37 @@ public class JsonParser {
         // return
         return phenotypeMap;
     }
+
+    /**
+     * retrieves the property with the given name
+     *
+     * @param propertyName
+     * @return
+     * @throws PortalException
+     */
+    public Property findCommonPropertyWithName(String propertyName) throws PortalException {
+        // local variables
+        Property property = null;
+        List<Property> propertyList = null;
+
+        if (propertyName != null) {
+            // get the list of common properties
+            propertyList = this.getAllCommonProperties();
+
+            // find the property with the given name
+            for (Property tempProperty : propertyList) {
+                if (propertyName.equals(tempProperty.getName())) {
+                    property = tempProperty;
+                    break;
+                }
+            }
+
+        } else {
+            throw new PortalException("Got null common property name to search for");
+        }
+
+        // return
+        return property;
+    }
+
 }

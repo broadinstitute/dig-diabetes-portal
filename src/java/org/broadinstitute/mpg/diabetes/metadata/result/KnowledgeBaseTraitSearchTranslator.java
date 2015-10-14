@@ -2,6 +2,7 @@ package org.broadinstitute.mpg.diabetes.metadata.result;
 
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.PropertyValue;
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant;
+import org.broadinstitute.mpg.diabetes.metadata.Phenotype;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
 import org.codehaus.groovy.grails.web.json.JSONArray;
@@ -61,16 +62,30 @@ public class KnowledgeBaseTraitSearchTranslator implements KnowledgeBaseResultTr
         // for each property, add in a key/value property to the json object
         for (PropertyValue propertyValue: variant.getPropertyValues()) {
             if (propertyValue.getProperty().getVariableType().equals(PortalConstants.OPERATOR_TYPE_FLOAT)) {
-                jsonObject.put(propertyValue.getProperty().getName(), Float.valueOf(propertyValue.getValue()).floatValue());
+                try {
+                    jsonObject.put(propertyValue.getProperty().getName(), (propertyValue.getValue() == null ? null : Float.valueOf(propertyValue.getValue()).floatValue()));
+                } catch (NumberFormatException exception) {
+                    jsonObject.put(propertyValue.getProperty().getName(), null);
+                }
 
             } else if (propertyValue.getProperty().getVariableType().equals(PortalConstants.OPERATOR_TYPE_INTEGER)) {
-                jsonObject.put(propertyValue.getProperty().getName(), Integer.valueOf(propertyValue.getValue()).intValue());
+                try {
+                    jsonObject.put(propertyValue.getProperty().getName(), (propertyValue.getValue() == null ? null : Integer.valueOf(propertyValue.getValue()).intValue()));
+                } catch (NumberFormatException exception) {
+                    jsonObject.put(propertyValue.getProperty().getName(), null);
+                }
 
             } else if (propertyValue.getProperty().getVariableType().equals(PortalConstants.OPERATOR_TYPE_STRING)) {
                 jsonObject.put(propertyValue.getProperty().getName(), propertyValue.getValue());
 
             } else {
                 throw new PortalException("Got property value with incorrect property value type: " + propertyValue.getProperty().getVariableType());
+            }
+
+            // if the property is a phenotype property, then also add in the phenotype name as well as a 'trait'
+            if (propertyValue.getProperty().getPropertyType().equals(PortalConstants.TYPE_PHENOTYPE_PROPERTY_KEY)) {
+                Phenotype phenotype = (Phenotype)propertyValue.getProperty().getParent();
+                jsonObject.put(PortalConstants.KEY_PHENOTYPE_FOR_TRAIT_SEARCH, phenotype.getName());
             }
         }
 

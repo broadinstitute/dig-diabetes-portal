@@ -51,7 +51,10 @@ class PortalConstants {
     public final static String NAME_COMMON_PROPERTY_POSITION            = "POS";
     public final static String NAME_COMMON_PROPERTY_CHROMOSOME          = "CHROM";
     public final static String NAME_PHENOTYPE_PROPERTY_P_VALUE          = "P_VALUE";
+    public final static String NAME_PHENOTYPE_PROPERTY_TRANSCRIPT_ANNOT = "TRANSCRIPT_ANNOT";
 
+    // trait-search emulation keys
+    public final static String KEY_PHENOTYPE_FOR_TRAIT_SEARCH            = "TRAIT";
 
     // burden test json keys
     public final static String JSON_BURDEN_VARIANTS_KEY                 = "variants";
@@ -180,7 +183,7 @@ class PortalConstants {
     // START - BURDEN TEST SECTION
 
 
-
+    //
 
 
 }

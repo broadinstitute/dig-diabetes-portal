@@ -53,27 +53,32 @@ public class KnowledgeBaseTraitSearchTranslatorTest extends TestCase {
         // local variables
         Property chromosomeProperty = null;
         Property positionProperty = null;
+        Property t2dProperty = null;
         Variant variant;
         List<Variant> variantList = new ArrayList<Variant>();
         JSONObject result = null;
-        JSONObject compareJson = new JSONObject("{\"variants\": [{\"CHROM\": \"8\", \"POS\": 1000000}, {\"CHROM\": \"9\", \"POS\": 200000}], \"is_error\": false, \"numRecords\": 2}");
+        JSONObject compareJson = new JSONObject("{\"variants\": [{\"CHROM\":\"8\",\"P_VALUE\":0.5,\"POS\":1000000,\"TRAIT\":\"T2D\"}, {\"CHROM\":\"9\",\"P_VALUE\":0.2,\"POS\":200000,\"TRAIT\":\"T2D\"}], \"is_error\": false, \"numRecords\": 2}");
 
         // test
         try {
-            // create the variant
-            variant = new VariantBean();
+            // set commonly used properties
             chromosomeProperty = (Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME);
             positionProperty = (Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION);
-            variant.addToPropertyValues(new PropertyValueBean(chromosomeProperty, "8"));
-            variant.addToPropertyValues(new PropertyValueBean(positionProperty, "1000000"));
-            variantList.add(variant);
+            t2dProperty = (Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_P_VALUE_GWAS_DIAGRAM_T2D);
 
             // create the variant
             variant = new VariantBean();
-            chromosomeProperty = (Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME);
-            positionProperty = (Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION);
+            variant.addToPropertyValues(new PropertyValueBean(chromosomeProperty, "8"));
+            variant.addToPropertyValues(new PropertyValueBean(positionProperty, "1000000"));
+            variant.addToPropertyValues(new PropertyValueBean(t2dProperty, ".5"));
+            variantList.add(variant);
+
+
+            // create the variant
+            variant = new VariantBean();
             variant.addToPropertyValues(new PropertyValueBean(chromosomeProperty, "9"));
             variant.addToPropertyValues(new PropertyValueBean(positionProperty, "200000"));
+            variant.addToPropertyValues(new PropertyValueBean(t2dProperty, ".2"));
             variantList.add(variant);
 
             // create the json object
@@ -85,7 +90,7 @@ public class KnowledgeBaseTraitSearchTranslatorTest extends TestCase {
 
         // test
         assertNotNull(result);
-        assertEquals(compareJson, result);
+        assertEquals(compareJson.toString(), result.toString());
     }
 
 
