@@ -9,7 +9,8 @@ var mpgSoftware = mpgSoftware || {};
         // private variables
         var currentInteractivity = 1, // 0->defining a filter, 1-> potentially manipulating our  list of existing filters
         activeColor = '#0008b',
-        inactiveColor = '#808080';
+        inactiveColor = '#808080',
+        MAXIMUM_NUMBER_OF_FILTERS=1000;
 
         /***
          * private methods
@@ -246,6 +247,117 @@ var mpgSoftware = mpgSoftware || {};
                 }
             }
         };
+        // Remember a filter so that we could re-create it
+        var rememberClauseWeAreEditing = function (indexNumber) {
+            if (typeof indexNumber !== 'undefined') {
+                var displayableFilter = $('#filterBlock'+indexNumber).html();
+                var codedFilters = $('#savedValue'+indexNumber).val();
+                if ((typeof displayableFilter  !== 'undefined') &&
+                    (typeof codedFilters  !== 'undefined')){
+                    $.data ($('#developingQuery')[0],'currentlyBeingEdited',{'index':indexNumber,
+                                                                       'displayableFilter':displayableFilter,
+                                                                       'codedFilters':codedFilters});
+//                    instantiateInputFields (codedFilters);
+                }
+            }
+        };
+        var forgetClauseWeWereEditing = function () {
+           var anythingHere = $.data ($('#developingQuery')[0],'currentlyBeingEdited');
+            if (typeof anythingHere  !== 'undefined')  {
+                $.removeData($('#developingQuery')[0],'currentlyBeingEdited');
+            }
+        };
+        var extractEnumeratedValuesFromDom= function (identifyingString,numberExistingFilters) {
+            var intermediateValue = [];
+            var returnValue = [];
+            if (typeof identifyingString !== 'undefined'){
+                for( var i = 0 ; i < MAXIMUM_NUMBER_OF_FILTERS ; i++ ){
+                    var lookUpString = identifyingString +i;
+                    var domElement =  $(lookUpString);
+                    if (typeof domElement !== 'undefined') {
+                        var associatedValue = domElement.val();
+                        domElement.remove();
+                        if (typeof associatedValue !== 'undefined') {
+                            intermediateValue.push(associatedValue);
+                        }
+                    }
+                }
+            }
+            var numberOfIntermediateValues = intermediateValue.length;
+            for ( var i = 0 ; (i < numberExistingFilters) && (i < numberOfIntermediateValues) ; i++ ){
+                returnValue.push(numberOfIntermediateValues [i]);
+            }
+            return returnValue;
+        };
+        var extractEnumeratedHtmlFromDom= function (identifyingString,numberExistingFilters) {
+            var intermediateValue = [];
+            var returnValue = [];
+            if (typeof identifyingString !== 'undefined'){
+                for( var i = 0 ; i < MAXIMUM_NUMBER_OF_FILTERS ; i++ ){
+                    var lookUpString = identifyingString +i;
+                    var domElement =  $(lookUpString);
+                    if (typeof domElement !== 'undefined') {
+                        var associatedValue = domElement.html();
+                        domElement.remove();
+                        if (typeof associatedValue !== 'undefined') {
+                            intermediateValue.push(associatedValue);
+                        }
+                    }
+                }
+            }
+            var numberOfIntermediateValues = intermediateValue.length;
+            for ( var i = 0 ; (i < numberExistingFilters) && (i < numberOfIntermediateValues) ; i++ ){
+                returnValue.push(numberOfIntermediateValues [i]);
+            }
+            return returnValue;
+        };
+        var insertCodedFilter = function (index,codedFilters,numberExistingFilters) {
+            if ((typeof index  !== 'undefined') &&
+                (typeof codedFilters  !== 'undefined') &&
+                (typeof numberExistingFilters  !== 'undefined')){
+                   var allCodedFilters = extractEnumeratedValuesFromDom ('savedValue',numberExistingFilters);
+                   for ( var i = 0 ; ((i < index)  && (i < allCodedFilters.length)) ; i++ ){
+                       $('#hiddenFields').append('<input type="text" class="form-control" id="savedValue'+i+'" value="'+allCodedFilters[i]+'" style="height:0px">');
+                   }
+                $('#hiddenFields').append('<input type="text" class="form-control" id="savedValue'+index+'" value="'+codedFilters+'" style="height:0px">');
+                for ( var i = index+1 ; (i < allCodedFilters.length) ; i++ ){
+                    $('#hiddenFields').append('<input type="text" class="form-control" id="savedValue'+i+'" value="'+allCodedFilters[i-1]+'" style="height:0px">');
+                }
+            }
+        };
+        var insertDisplayableFilter = function (index,codedFilters,numberExistingFilters) {
+            if ((typeof index  !== 'undefined') &&
+                (typeof codedFilters  !== 'undefined') &&
+                (typeof numberExistingFilters  !== 'undefined')){
+                var allCodedFilters = extractEnumeratedHtmlFromDom ('savedValue',numberExistingFilters);
+                for ( var i = 0 ; ((i < index)  && (i < allCodedFilters.length)) ; i++ ){
+                    $('#developingQuery').append('<input type="text" class="form-control" id="savedValue'+i+'" value="'+allCodedFilters[i]+'" style="height:0px">');
+                }
+                $('#developingQuery').append('<input type="text" class="form-control" id="savedValue'+index+'" value="'+codedFilters+'" style="height:0px">');
+                for ( var i = index+1 ; (i < allCodedFilters.length) ; i++ ){
+                    $('#developingQuery').append('<input type="text" class="form-control" id="savedValue'+i+'" value="'+allCodedFilters[i-1]+'" style="height:0px">');
+                }
+            }
+        };
+        var resuscitateClauseWeWereEditing = function () {
+            var anythingHere = $.data ($('#developingQuery')[0],'currentlyBeingEdited');
+            if (typeof anythingHere  !== 'undefined')  {
+                var index = anythingHere.index;
+                var displayableFilter = anythingHere.displayableFilter;
+                var codedFilters = anythingHere.codedFilters;
+                if ((typeof index  !== 'undefined') &&
+                    (typeof displayableFilter  !== 'undefined') &&
+                    (typeof codedFilters  !== 'undefined')){  // we have everything we need. Let's do this...
+                    insertCodedFilter (index,codedFilters,numberExistingFilters());
+                    insertDisplayableFilter (index,displayableFilter,numberExistingFilters());
+                    numberExistingFilters(numberExistingFilters()+1);
+                }
+                $.removeData($('#developingQuery')[0],'currentlyBeingEdited');
+            }
+        };
+        var weAreClauseEditing = function (){
+            return $('#clauseEdit').is(":visible")
+        };
         var retrievePhenotypes = function () {
             var loading = $('#spinner').show();
             $.ajax({
@@ -380,6 +492,7 @@ var mpgSoftware = mpgSoftware || {};
         var editThisClause = function (currentObject){
             if (currentInteractivityState()){
                 var filterIndex = extractIndex ('editor',currentObject);
+                rememberClauseWeAreEditing(filterIndex);
                 makeClauseCurrent (filterIndex);
                 forgetThisFilter (filterIndex);
                 renumberHiddenFilters (filterIndex,numberExistingFilters());
@@ -575,19 +688,24 @@ var mpgSoftware = mpgSoftware || {};
             var varsToSend = {};
             var savedValue = {};
             var savedValuesList = [];
-            var totalFilterCount = UTILS.extractValFromTextboxes(['totalFilterCount']);
-            if (typeof totalFilterCount['totalFilterCount'] !== 'undefined') {
-                var valueCount = parseInt(totalFilterCount['totalFilterCount']);
-                if (valueCount>0){
-                    for ( var i = 0 ; i < valueCount ; i++ ){
-                        savedValuesList.push ('savedValue'+i);
+            // we have to treat canceling an existing query differently from canceling a new query
+            if (weAreClauseEditing()){
+                resuscitateClauseWeWereEditing();
+            } else {
+                var totalFilterCount = UTILS.extractValFromTextboxes(['totalFilterCount']);
+                if (typeof totalFilterCount['totalFilterCount'] !== 'undefined') {
+                    var valueCount = parseInt(totalFilterCount['totalFilterCount']);
+                    if (valueCount>0){
+                        for ( var i = 0 ; i < valueCount ; i++ ){
+                            savedValuesList.push ('savedValue'+i);
+                        }
+                        savedValue = UTILS.extractValFromTextboxes(savedValuesList);
                     }
-                    savedValue = UTILS.extractValFromTextboxes(savedValuesList);
                 }
+                varsToSend = UTILS.concatMap(varsToSend,savedValue) ;
+                UTILS.postQuery('./variantVWRequest',varsToSend);
             }
-            varsToSend = UTILS.concatMap(varsToSend,savedValue) ;
-            UTILS.postQuery('./variantVWRequest',varsToSend);
-        };
+         };
         var launchAVariantSearch = function (){
             var varsToSend = {};
             var savedValuesList = [];
