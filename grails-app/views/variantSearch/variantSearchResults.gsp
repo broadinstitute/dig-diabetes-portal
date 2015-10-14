@@ -28,6 +28,7 @@
         margin: 5px;
         padding: 5px 10px 10px 10px;
         text-align: left;
+        z-index: 10;
     }
 
     div.propertySubHolder {
@@ -44,11 +45,13 @@
         -khtml-border-radius: 5px;
         border-radius: 5px;
         border: 2px inset;
+        z-index: 10;
     }
 
     div.propertyHolder .propertyHolderChk {
         color: black;
         margin: 5px 0 5px 0;
+        z-index: 10;
     }
 
     .chkBoxText {
