@@ -2,9 +2,9 @@ package org.broadinstitute.mpg.diabetes.metadata.result;
 
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.PropertyValue;
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.PropertyValueBean;
-import org.broadinstitute.mpg.diabetes.metadata.Property;
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant;
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.VariantBean;
+import org.broadinstitute.mpg.diabetes.metadata.Property;
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
@@ -121,50 +121,57 @@ public class KnowledgeBaseResultParser {
         Iterator<String> keyIterator = jsonObject.keys();
         propertyName = keyIterator.next();
 
-        // now find out if is is a complex object
-        try {
-            tempObject = jsonObject.getJSONObject(propertyName);
+        // if transcript annotation, do not parse (too complicated)
+        if (PortalConstants.NAME_PHENOTYPE_PROPERTY_TRANSCRIPT_ANNOT.equals(propertyName)) {
+            value = jsonObject.get (propertyName).toString();
+            property = this.jsonParser.findCommonPropertyWithName(PortalConstants.NAME_PHENOTYPE_PROPERTY_TRANSCRIPT_ANNOT);
 
-        } catch (JSONException exception) {
-            // do nothing, not a key/value object
-        }
-
-        // if temp object is still null, then the value is a string
-        if (tempObject == null) {
-            tempString = jsonObject.getString(propertyName);
-            value = tempString;
-
-        } else  {
-            // try again to see if the object is more complex than a sample group property
-            // key of new object will be sample group
-            keyIterator = tempObject.keys();
-            sampleGroupName = keyIterator.next();
-            JSONObject tempObject2 = null;
-
-            // if this sub object is simple key value pair, then only sample group property
+        } else {
+            // now find out if is is a complex object
             try {
-                tempObject2 = tempObject.getJSONObject(sampleGroupName);
+                tempObject = jsonObject.getJSONObject(propertyName);
 
             } catch (JSONException exception) {
                 // do nothing, not a key/value object
             }
 
-            // if string still null, then it is a sample group property
-            if (tempObject2 == null) {
-                tempString = tempObject.getString(sampleGroupName);
+            // if temp object is still null, then the value is a string
+            if (tempObject == null) {
+                tempString = jsonObject.getString(propertyName);
                 value = tempString;
 
-            } else {
-                // this time, should be simple key/value pair
-                // key of new object will be phenotype
-                keyIterator = tempObject2.keys();
-                phenotypeName = keyIterator.next();
-                value = tempObject2.getString(phenotypeName);
-            }
-        }
+            } else  {
+                // try again to see if the object is more complex than a sample group property
+                // key of new object will be sample group
+                keyIterator = tempObject.keys();
+                sampleGroupName = keyIterator.next();
+                JSONObject tempObject2 = null;
 
-        // get the property from the parser
-        property = this.jsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames(propertyName, phenotypeName, sampleGroupName);
+                // if this sub object is simple key value pair, then only sample group property
+                try {
+                    tempObject2 = tempObject.getJSONObject(sampleGroupName);
+
+                } catch (JSONException exception) {
+                    // do nothing, not a key/value object
+                }
+
+                // if string still null, then it is a sample group property
+                if (tempObject2 == null) {
+                    tempString = tempObject.getString(sampleGroupName);
+                    value = tempString;
+
+                } else {
+                    // this time, should be simple key/value pair
+                    // key of new object will be phenotype
+                    keyIterator = tempObject2.keys();
+                    phenotypeName = keyIterator.next();
+                    value = tempObject2.getString(phenotypeName);
+                }
+            }
+
+            // get the property from the parser
+            property = this.jsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames(propertyName, phenotypeName, sampleGroupName);
+        }
 
         // create property value
         propertyValue = new PropertyValueBean(property, value);
@@ -172,4 +179,5 @@ public class KnowledgeBaseResultParser {
         // return
         return propertyValue;
     }
+
 }
