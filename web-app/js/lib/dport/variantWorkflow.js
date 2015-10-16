@@ -49,7 +49,7 @@ var mpgSoftware = mpgSoftware || {};
                     case 0:
                         suggestionField.text ('Choose a trait from the drop-down box');
                         $('#clauseEdit').hide();
-                        $('#clauseCreation').hide();
+                        $('#clauseCreation').show();
                         break;
                     case 1:
                         suggestionField.text ('Choose one of the available data sets');
@@ -74,6 +74,12 @@ var mpgSoftware = mpgSoftware || {};
                         $('#clauseEdit').hide();
                         $('#clauseCreation').hide();
                         break;
+                    case 103:
+                        suggestionField.text ('You may create a new data filter.  No filters currently exist that might be edited');
+                        $('#clauseEdit').hide();
+                        $('#clauseCreation').show();
+                        break;
+
                     default:
                         suggestionField.text ('');
                         break;
@@ -247,37 +253,11 @@ var mpgSoftware = mpgSoftware || {};
                 }
             }
         };
-        // Remember a filter so that we could re-create it
-        var rememberClauseWeAreEditing = function (indexNumber) {
-            if (typeof indexNumber !== 'undefined') {
-                var displayableFilter = $('#filterBlock'+indexNumber).html();
-                var codedFilters = $('#savedValue'+indexNumber).val();
-                if ((typeof displayableFilter  !== 'undefined') &&
-                    (typeof codedFilters  !== 'undefined')){
-                    $.data ($('#developingQuery')[0],'currentlyBeingEdited',{'index':indexNumber,
-                                                                       'displayableFilter':displayableFilter,
-                                                                       'codedFilters':codedFilters});
-                }
-            }
-        };
         var hideThisClauseForNow = function (indexNumber) {
             if (typeof indexNumber !== 'undefined') {
                 var displayableFilter = $('#filterBlock'+indexNumber);
                 displayableFilter.hide();
                 displayableFilter.addClass('temporarilyHiding');
-//                var codedFilters = $('#savedValue'+indexNumber).val();
-//                if ((typeof displayableFilter  !== 'undefined') &&
-//                    (typeof codedFilters  !== 'undefined')){
-//                    $.data ($('#developingQuery')[0],'currentlyBeingEdited',{'index':indexNumber,
-//                        'displayableFilter':displayableFilter,
-//                        'codedFilters':codedFilters});
-//                }
-            }
-        };
-        var forgetClauseWeWereEditing = function () {
-           var anythingHere = $.data ($('#developingQuery')[0],'currentlyBeingEdited');
-            if (typeof anythingHere  !== 'undefined')  {
-                $.removeData($('#developingQuery')[0],'currentlyBeingEdited');
             }
         };
         var extractEnumeratedValuesFromDom= function (identifyingString,numberExistingFilters) {
@@ -355,20 +335,6 @@ var mpgSoftware = mpgSoftware || {};
         var resuscitateClauseWeWereEditing = function () {
             var clauseToBringBack = jQuery( ".temporarilyHiding:hidden" );
             clauseToBringBack.show();
-//            var anythingHere = $.data ($('#developingQuery')[0],'currentlyBeingEdited');
-//            if (typeof anythingHere  !== 'undefined')  {
-//                var index = anythingHere.index;
-//                var displayableFilter = anythingHere.displayableFilter;
-//                var codedFilters = anythingHere.codedFilters;
-//                if ((typeof index  !== 'undefined') &&
-//                    (typeof displayableFilter  !== 'undefined') &&
-//                    (typeof codedFilters  !== 'undefined')){  // we have everything we need. Let's do this...
-//                    insertCodedFilter (index,codedFilters,numberExistingFilters());
-//                    insertDisplayableFilter (index,displayableFilter,numberExistingFilters());
-//                    numberExistingFilters(numberExistingFilters()+1);
-//                }
-//                $.removeData($('#developingQuery')[0],'currentlyBeingEdited');
-//            }
         };
         var removeClauseWeWereEditing = function () {
             var clauseToBringBack = jQuery( ".temporarilyHiding:hidden" );
@@ -396,8 +362,7 @@ var mpgSoftware = mpgSoftware || {};
                         ( typeof data !== 'undefined') &&
                         ( typeof data.datasets !== 'undefined' ) &&
                         (  data.datasets !==  null ) ) {
-                        UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#phenotype');
-                       // UTILS.fillPhenotypeDropdown(data.datasets,'#phenotype');
+                        UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#phenotype',true);
                     }
                     loading.hide();
                 },
@@ -517,7 +482,6 @@ var mpgSoftware = mpgSoftware || {};
         var editThisClause = function (currentObject){
             if (currentInteractivityState()){
                 var filterIndex = extractIndex ('editor',currentObject);
-               // rememberClauseWeAreEditing(filterIndex);
                 hideThisClauseForNow(filterIndex);
                 makeClauseCurrent (filterIndex);
                 // Here is how we delete clause
@@ -578,8 +542,6 @@ var mpgSoftware = mpgSoftware || {};
                 (dataSetJson["is_error"] === false))
             {
                 var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
-//                var options = $("#additionalFilters");
-//                options.empty();
                 var dataSetList = dataSetJson ["dataset"];
                 var holder = $('#filterHolder');
                 for ( var i = 0 ; i < numberOfRecords ; i++ ){

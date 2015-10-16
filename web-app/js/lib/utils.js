@@ -535,7 +535,7 @@ var UTILS = {
             }
         }
     },
-    fillPhenotypeCompoundDropdown: function (dataSetJson,phenotypeDropDownIdentifier) { // help text for each row
+    fillPhenotypeCompoundDropdown: function (dataSetJson,phenotypeDropDownIdentifier,includeDefault) { // help text for each row
         if ((typeof dataSetJson !== 'undefined')  &&
             (typeof dataSetJson["is_error"] !== 'undefined')&&
             (dataSetJson["is_error"] === false))
@@ -544,6 +544,11 @@ var UTILS = {
             var options = $(phenotypeDropDownIdentifier);
             options.empty();
             var groupList = dataSetJson ["dataset"];
+
+            if ((typeof includeDefault !== 'undefined') &&
+                (includeDefault)){
+                options.append("<option selected hidden>-- &nbsp;&nbsp;select a phenotype&nbsp;&nbsp; --</option>");
+            }
 
             for (var key in groupList) {
                 if (groupList.hasOwnProperty(key)) {

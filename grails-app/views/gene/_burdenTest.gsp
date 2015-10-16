@@ -277,11 +277,9 @@ $( document ).ready( function (){
                         <div class="radio">
                             <label><input type="radio" name="dataset" value="1" checked>&nbsp;13k&nbsp;&nbsp;</label>
                         </div>
-                        <!-- remove the 26k for the ACHG demo
                         <div class="radio">
                             <label><input type="radio" name="dataset"  value="2" disabled>&nbsp;<span style="color: DarkGray">26k</span></label>
                         </div>
-                        -->
                     </div>
                 </div>
                 <div class="col-md-8 col-sm-8 col-xs-8">

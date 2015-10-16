@@ -52,7 +52,8 @@ select optgroup {
     -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
     text-align: center;
-    background-color: #cdf8ff
+    background-color: #add8e6;
+    border: 1px solid grey;
 }
 .variant-filter-button {
     margin: 20px 20px 20px 0;

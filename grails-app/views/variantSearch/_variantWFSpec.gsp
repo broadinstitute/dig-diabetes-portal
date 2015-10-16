@@ -61,7 +61,7 @@
                                     <select name="" id="phenotype" class="form-control btn-group btn-input clearfix"
                                             onchange="mpgSoftware.firstResponders.respondToPhenotypeSelection()"
                                             onclick="mpgSoftware.firstResponders.respondToPhenotypeSelection()">
-                                        <g:renderPhenotypeOptions/>
+                                        %{--<g:renderPhenotypeOptions/>--}%
                                     </select>
 
                                 </div>
