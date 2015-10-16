@@ -1,16 +1,22 @@
 package org.broadinstitute.mpg.diabetes
 import dport.RestServerService
 import grails.test.spock.IntegrationSpec
+import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
+import org.broadinstitute.mpg.diabetes.metadata.Phenotype
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.*
+import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseResultTranslator
+import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseTraitSearchTranslator
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
+
 /**
- * Created by balexand on 8/18/2014.
+ * Spock tests to try various permutations of the getDataQuery and other new REST interfacing data structures
+ *
  */
 @Unroll
 class RestCallsIntegrationSpec extends IntegrationSpec {
@@ -57,7 +63,33 @@ class RestCallsIntegrationSpec extends IntegrationSpec {
 
         then:
         assert resultJson != null
-        assert jsonObject.toString() == resultJson.toString()
+//        assert jsonObject.toString() == resultJson.toString()
     }
 
+    void "test common property query builder call"() {
+        setup:
+        Phenotype phenotype = this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", "mdv2").get("T2D")
+        String chromosome = "9";
+        int startPosition = 100000;
+        int endPosition = 2000000;
+        JSONObject resultJson = null;
+        String inputJsonString = null;
+        GetDataQuery getDataQuery = null;
+        CommonGetDataQueryBuilder commonGetDataQueryBuilder = new CommonGetDataQueryBuilder();
+        List<Variant> variantList = new ArrayList<Variant>();
+        KnowledgeBaseResultTranslator knowledgeBaseResultTranslator = new KnowledgeBaseTraitSearchTranslator();
+        JSONObject jsonObject = new JSONObject("{\"is_error\": false,\"passback\": \"123abc\",\"numRecords\": 207}");
+
+        when:
+        getDataQuery = commonGetDataQueryBuilder.getDataQueryForPhenotype(phenotype, chromosome, startPosition, endPosition);
+
+        // call the rest server
+        inputJsonString = this.queryJsonBuilder.getQueryJsonPayloadString(getDataQuery)
+        resultJson = this.restServerService.postGetDataCall(inputJsonString);
+
+        then:
+        assert resultJson != null
+        assert resultJson.toString().length() > 0
+//        assert jsonObject.toString() == resultJson.toString()
+    }
 }

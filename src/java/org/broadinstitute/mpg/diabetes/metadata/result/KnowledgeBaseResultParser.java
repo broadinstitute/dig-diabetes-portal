@@ -43,32 +43,37 @@ public class KnowledgeBaseResultParser {
         JSONArray jsonArray;
         List<Variant> variantList = new ArrayList<Variant>();
 
-        if (this.jsonString != null) {
-            // get the json object
-            jsonObject = new JSONObject(this.jsonString);
+        try {
+            if (this.jsonString != null) {
+                // get the json object
+                jsonObject = new JSONObject(this.jsonString);
 
-            // get the property count given
-            tempString = jsonObject.getString(PortalConstants.JSON_NUMBER_RECORDS_KEY);
-            recordCountIndicated = Integer.parseInt(tempString);
+                // get the property count given
+                tempString = jsonObject.getString(PortalConstants.JSON_NUMBER_RECORDS_KEY);
+                recordCountIndicated = Integer.parseInt(tempString);
 
-            // get the property json array
-            jsonArray = jsonObject.getJSONArray(PortalConstants.JSON_VARIANTS_KEY);
+                // get the property json array
+                jsonArray = jsonObject.getJSONArray(PortalConstants.JSON_VARIANTS_KEY);
 
-            // the variants json array is a series of json object arrays
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONArray tempArray = jsonArray.getJSONArray(i);
+                // the variants json array is a series of json object arrays
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONArray tempArray = jsonArray.getJSONArray(i);
 
-                // create variant
-                Variant variant = new VariantBean();
+                    // create variant
+                    Variant variant = new VariantBean();
 
-                // parse
-                variant.addAllToPropertyValues(this.parsePropertyValues(tempArray));
+                    // parse
+                    variant.addAllToPropertyValues(this.parsePropertyValues(tempArray));
 
-                // add variant to the list
-                variantList.add(variant);
+                    // add variant to the list
+                    variantList.add(variant);
+                }
+            } else {
+                throw new PortalException("Got null getData string to parse");
             }
-        } else {
-            throw new PortalException("Got null getData string to parse");
+
+        } catch (JSONException exception) {
+            throw new PortalException("Got json parsing exception: " + exception.getMessage());
         }
 
         // return
