@@ -20,6 +20,7 @@ class RestServerService {
     FilterManagementService filterManagementService
     MetaDataService metaDataService
     MetadataUtilityService metadataUtilityService
+    SearchBuilderService searchBuilderService
     private static final log = LogFactory.getLog(this)
     SqlService sqlService
 
@@ -187,6 +188,31 @@ class RestServerService {
             returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${
                 uppercaseVariantName
             }", "operand_type": "STRING"}"""
+        }
+        return returnValue
+    }
+    private codedfilterByVariant(String variantName) {
+        String returnValue
+        String uppercaseVariantName = variantName?.toUpperCase()
+        if (uppercaseVariantName?.startsWith("RS")) {
+            returnValue = """11=DBSNP_ID|${uppercaseVariantName}"""
+        } else {
+            // be prepared to substitute underscores for dashes, since dashes are an alternate form
+            //  for naming variants, but in the database we use only underscores
+            List <String> dividedByDashes = uppercaseVariantName?.split("-")
+            if ((dividedByDashes) &&
+                    (dividedByDashes.size()>2)){
+                int isThisANumber = 0
+                try {
+                    isThisANumber = Integer.parseInt(dividedByDashes[0])
+                }catch(e){
+                    // his is only a test. An exception here is not a problem
+                }
+                if (isThisANumber > 0){// okay -- let's do the substitution
+                    uppercaseVariantName = uppercaseVariantName.replaceAll('-','_')
+                }
+            }
+            returnValue = """11=VAR_ID|${uppercaseVariantName}"""
         }
         return returnValue
     }
@@ -632,23 +658,14 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @return
      */
     JSONObject retrieveVariantInfoByName (String variantId) {
-        JSONObject returnValue = null
-        String drivingJson =
-                """
-{
-${getDataHeader (0, 100, 1, false)}
-  "properties" : {
-    "cproperty" : ["CHROM", "POS"],
-    "orderBy" : ["CHROM"],
-    "dproperty" : {},
-    "pproperty" : {}
-  },
-  "filters" : [
-    ${filterByVariant(variantId)}
-  ]
-}""".toString()
-        returnValue = postRestCall( drivingJson, GET_DATA_URL)
-        return returnValue
+        String filters = codedfilterByVariant(variantId)
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["CHROM", "POS"])
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filters],searchBuilderService,metaDataService)
+        JsonSlurper slurper = new JsonSlurper()
+        getDataQueryHolder.addProperties(resultColumnsToDisplay)
+        String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        return dataJsonObject
     }
 
 
@@ -1472,6 +1489,21 @@ ${getDataHeader (0, 100, 1, false)}
 
 
 
+    public LinkedHashMap getColumnsForCProperties(List<String> cProperties) {
+        LinkedHashMap returnValue = [:]
+        List<String> commonProperties = []
+        returnValue.cproperty = commonProperties
+        returnValue.dproperty = [:]
+        returnValue.pproperty = [:]
+
+        if (cProperties) {
+            for (String cProperty in cProperties) {
+                commonProperties << cProperty
+            }
+        }
+
+        return returnValue
+    }
 
 
     public LinkedHashMap getColumnsToDisplay(String filterJson,LinkedHashMap requestedProperties) {
