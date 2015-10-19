@@ -46,6 +46,14 @@ public class CommonGetDataQueryBuilder {
         // add in all the default query properties
         this.addInAllCommonAndParentAndSelfProperties(queryBean, phenotype);
 
+        // add in the phenotype's parent sample group properties
+        sampleGroup = (SampleGroup)phenotype.getParent();
+        if (sampleGroup != null) {
+            for (Property sampleGroupProperty: sampleGroup.getProperties()) {
+                queryBean.addQueryProperty(sampleGroupProperty);
+            }
+        }
+
         // add in the filter properties
         property = this.getPropertyByNameAndPropertyType(commonProperties, PortalConstants.NAME_COMMON_PROPERTY_CHROMOSOME, PortalConstants.TYPE_COMMON_PROPERTY_KEY);
         queryBean.addFilterProperty(property, PortalConstants.OPERATOR_EQUALS, chromosome);
@@ -60,7 +68,7 @@ public class CommonGetDataQueryBuilder {
                 break;
             }
         }
-        // if p-value property found, the add filter property that will ensure we only get variants that have p values for this trait/phenotype
+        // if p-value property found, the add filter property that will ensure we only get variants that have p values for this trait/phenotype (don't want null p values)
         if (property != null) {
             queryBean.addFilterProperty(property, PortalConstants.OPERATOR_LESS_THAN_EQUALS, "2");
         }
