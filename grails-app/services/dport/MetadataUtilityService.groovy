@@ -390,7 +390,7 @@ class MetadataUtilityService {
         List<String>  returnValue = []
         if ((phenotypeList) && (propertyTemplates) &&  (propertyTemplates.size ()) ){
             // retrieve the filtered property list that we will use for the subsequent searches
-            List<Property> propertyNameList =   phenotypeList.findAll{it.parent.systemId==sampleGroupName}?.collect{return it.propertyList}?.flatten()?.findAll{it.searchable}?.unique()
+            List<Property> propertyNameList =   phenotypeList.findAll{it.parent.systemId==sampleGroupName}?.collect{return it.propertyList}?.flatten()?.unique()
             for (String propertyTemplate in propertyTemplates){
                 returnValue << propertyNameList.findAll{it.name =~ propertyTemplate}
             }

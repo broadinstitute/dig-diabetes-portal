@@ -1150,6 +1150,7 @@ ${getDataHeader (0, 100, 1000, false)}
         }
         return dataSetId
     }
+
     private String generalizedAncestryDataSet (String ethnicity){
         String dataSetId = ""
         switch (ethnicity){
@@ -1178,13 +1179,16 @@ ${getDataHeader (0, 100, 1000, false)}
         return dataSetId
     }
 
-
-
-
-    private String generateJsonVariantCountByGeneAndMaf(String geneName, String ethnicity, int cellNumber){
+    /***
+     * Used to fill the 'variation across continental ancestry' table on the gene info page
+     *
+     * @param geneName
+     * @param ethnicity
+     * @param cellNumber
+     * @return
+     */
+    private JSONObject generateJsonVariantCountByGeneAndMaf(String geneName, String ethnicity, int cellNumber){
         String dataSetId = ""
-        String minimumMaf = 0
-        String maximumMaf = 1
         String codeForMafSlice = ""
         String codeForEthnicity = generalizedAncestryDataSet ( ethnicity)
         dataSetId = ancestryDataSet ( ethnicity)
@@ -1208,70 +1212,27 @@ ${getDataHeader (0, 100, 1000, false)}
                 log.error("Trouble: user requested cell number = ${cellNumber} which I don't recognize")
                 dataSetId = EXOMESEQ_AA
         }
-//        List <String> filterList= filterManagementService.retrieveFilters(geneName,"","","","${codeForMafSlice}-${codeForEthnicity}")
-//        String packagedFilters = sharedToolsService.packageUpEncodedParameters(filterList)
-        String packagedFilters = filterManagementService.retrieveFilters(geneName,"","","","${codeForMafSlice}-${codeForEthnicity}")
-        String jsonVariantCountByGeneAndMaf = """
-{
-${getDataHeader (0, 100, 1000, true)}
-	"properties":	{
-           				"cproperty": ["VAR_ID"],
-                  		"orderBy":	[],
-                  		"dproperty":	{},
-                		"pproperty":	{
-                           "OBSA":  { "${EXOMESEQ}": ["T2D"]},
-                           "OBSU":  { "${EXOMESEQ}": ["T2D"]}
-                         }
-                	},
-	"filters":	[
-	              ${packagedFilters}
-            	]
-}
-""".toString()
-        String retrieveParticipantCount = ""
-        if (ethnicity != "chipEu"){  // there is no participant count in the chip data, so special case it
-            retrieveParticipantCount = """
-                           "OBSA":  { "${dataSetId}": ["T2D"]},
-                           "OBSU":  { "${dataSetId}": ["T2D"]}
-""".toString()
-        }
-        String jsonParticipantCount = """
-{
-${getDataHeader (0, 100, 1, false)}
-	"properties":	{
-           				"cproperty": ["VAR_ID"],
-                  		"orderBy":	[],
-                  		"dproperty":	{},
-                		"pproperty":	{
-${retrieveParticipantCount}
-                         }
-                	},
-	"filters":	[
-                ${packagedFilters}
-            	]
-}
-""".toString()
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID"])
+        List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName,"","","","${codeForMafSlice}-${codeForEthnicity}")
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters,searchBuilderService,metaDataService)
         if (cellNumber==0){
-            return jsonParticipantCount
+            if (ethnicity != "chipEu"){
+                addColumnsForPProperties(resultColumnsToDisplay,"T2D","${dataSetId}","OBSA")
+                addColumnsForPProperties(resultColumnsToDisplay,"T2D","${dataSetId}","OBSU")
+            }
         }else {
-            return jsonVariantCountByGeneAndMaf
+            addColumnsForPProperties(resultColumnsToDisplay,"T2D","${EXOMESEQ}","OBSA")
+            addColumnsForPProperties(resultColumnsToDisplay,"T2D","${EXOMESEQ}","OBSU")
         }
-
+        JsonSlurper slurper = new JsonSlurper()
+        getDataQueryHolder.addProperties(resultColumnsToDisplay)
+        String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        return dataJsonObject
     }
 
 
 
-
-
-
-
-
-
-
-    public JSONObject findVariantCountByGeneAndMaf(String geneName, String ethnicity, int cellNumber){
-        String jsonSpec = generateJsonVariantCountByGeneAndMaf( geneName,  ethnicity,  cellNumber)
-        return postRestCall(jsonSpec,GET_DATA_URL)
-    }
 
     /***
      * Let's make this the common call for metadata which all callers can share
@@ -1285,9 +1246,13 @@ ${retrieveParticipantCount}
 
 
 
-
-
-
+    /***
+     * Make multiple calls to fill up the 'variation across continental ancestries' table, then combine all of those
+     * numbers into a single JSON structure which we can return to the browser
+     *
+     * @param geneName
+     * @return
+     */
     public JSONObject combinedEthnicityTable(String geneName){
         JSONObject returnValue
         String attribute = "T2D"
@@ -1300,8 +1265,7 @@ ${retrieveParticipantCount}
             sb  << "{ \"dataset\": \"${dataSeteList[j]}\",\"pVals\": ["
             for ( int  i = 0 ; i < cellNumberList.size () ; i++ ){
                 sb  << "{"
-                String apiData = findVariantCountByGeneAndMaf(geneName,  dataSeteList[j], cellNumberList[i])
-                JSONObject apiResults = slurper.parseText(apiData)
+                JSONObject apiResults =  generateJsonVariantCountByGeneAndMaf( geneName,  dataSeteList[j], cellNumberList[i])
                 if (apiResults.is_error == false) {
                     if (cellNumberList[i] == 0){
                         // the first cell is different than the others. We need to pull back the number of participants,
@@ -1443,6 +1407,36 @@ ${getDataHeader (0, 100, 1, false)}
         if (cProperties) {
             for (String cProperty in cProperties) {
                 commonProperties << cProperty
+            }
+        }
+
+        return returnValue
+    }
+
+
+    public LinkedHashMap addColumnsForPProperties(LinkedHashMap existingMap,String phenotype,String dataSet,String property) {
+        LinkedHashMap returnValue = [:]
+        LinkedHashMap<String,LinkedHashMap> phenotypeProperties = [:]
+        if (!existingMap){
+            returnValue.cproperty = []
+            returnValue.dproperty = [:]
+            returnValue.pproperty = [:]
+        } else {
+            returnValue = existingMap
+        }
+        phenotypeProperties = returnValue.pproperty
+
+        if ((phenotype) &&
+            (dataSet) &&
+            (property)){
+            if (!phenotypeProperties.containsKey(phenotype)){
+                phenotypeProperties[phenotype] = [:]
+            }
+            if (!phenotypeProperties[phenotype].containsKey(dataSet)){
+                phenotypeProperties[phenotype][dataSet] = []
+            }
+            if (!(phenotypeProperties[phenotype][dataSet] in property)){
+                phenotypeProperties[phenotype][dataSet] << property
             }
         }
 
