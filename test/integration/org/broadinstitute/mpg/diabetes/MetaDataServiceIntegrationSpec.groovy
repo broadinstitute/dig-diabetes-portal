@@ -1,15 +1,15 @@
 package org.broadinstitute.mpg.diabetes
-
 import dport.RestServerService
 import dport.SharedToolsService
 import grails.test.spock.IntegrationSpec
+import org.broadinstitute.mpg.diabetes.metadata.Phenotype
+import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
+import org.codehaus.groovy.grails.web.json.JSONObject
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
-import org.broadinstitute.mpg.diabetes.metadata.Property
-
 /**
  * Created by balexand on 8/18/2014.
  */
@@ -18,11 +18,12 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
     SharedToolsService sharedToolsService
     MetaDataService metaDataService
     RestServerService restServerService
+    JsonParser jsonParser
 
     @Before
     void setup() {
-        JsonParser jsonParser = JsonParser.getService()
-        jsonParser.setJsonString(this.restServerService.getMetadata())
+        this.jsonParser = JsonParser.getService()
+        this.jsonParser.setJsonString(this.restServerService.getMetadata())
     }
 
     @After
@@ -102,4 +103,32 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
         assert phenotypeUrlString.length() > 0
     }
 
+    /*
+    void "test 25 trait metadata service call"() {
+        when:
+        String chromosome = "9";
+        int startPosition = 21000000;
+        int endPosition = 22000000;
+        JSONObject resultJson = this.metaDataService.getTraitSearchResultForChromosomeAndPosition(chromosome, startPosition, endPosition);
+
+        then:
+        assert resultJson != null;
+        assert "dude" == resultJson.toString()
+    }
+    */
+
+    void "test trait search call given phenotype list"() {
+        when:
+        List<Phenotype> phenotypeList = new ArrayList<Phenotype>();
+        String chromosome = "9";
+        int startPosition = 21000000;
+        int endPosition = 21050000;
+        phenotypeList.add(this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", "mdv2").get("T2D"));
+        JSONObject resultJson = this.metaDataService.getTraitSearchResultForChromosomeAndPositionAndPhenotypes(phenotypeList, chromosome, startPosition, endPosition);
+
+        then:
+        assert resultJson != null;
+        assert resultJson.toString().length() > 0
+//        assert "dude" == resultJson.toString()
+    }
 }

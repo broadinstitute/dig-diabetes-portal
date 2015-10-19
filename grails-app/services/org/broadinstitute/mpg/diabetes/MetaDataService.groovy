@@ -3,15 +3,22 @@ import dport.MetadataUtilityService
 import dport.RestServerService
 import dport.SharedToolsService
 import grails.transaction.Transactional
+import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
+import org.broadinstitute.mpg.diabetes.metadata.Phenotype
 import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
+import org.broadinstitute.mpg.diabetes.metadata.query.CommonGetDataQueryBuilder
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryBean
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
+import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseResultParser
+import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseResultTranslator
+import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseTraitSearchTranslator
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
+import org.codehaus.groovy.grails.web.json.JSONObject
 
 @Transactional
 class MetaDataService {
@@ -41,7 +48,7 @@ class MetaDataService {
         this.forceProcessedMetadataOverride = forceProcessedMetadataOverride
     }
 /**
-     * returns th parser after first checking that the metadata hadn't been set to be reloaded
+     * returns the json parser after first checking that the metadata hadn't been set to be reloaded
      *
      * @return
      */
@@ -466,6 +473,72 @@ class MetaDataService {
         // return the built string
         payloadString = this.queryJsonBuilder.getQueryJsonPayloadString(queryBean);
         return payloadString;
+    }
+
+    /**
+     * returns translated trait search query call
+     *
+     * @param chromosome
+     * @param startPosition
+     * @param endPosition
+     * @return
+     */
+    public JSONObject getTraitSearchResultForChromosomeAndPosition(String chromosome, int startPosition, int endPosition) {
+        // local variables
+        JSONObject jsonObject = null;
+
+//        try {
+            // get the 25 traits
+            List<Phenotype> phenotypeList = this.jsonParser.getPhenotypeListByTechnologyAndVersion("GWAS", "mdv2");
+
+            // get the json object
+            jsonObject = this.getgetTraitSearchResultForChromosomeAndPositionAndPhenotypes(phenotypeList, chromosome, startPosition, endPosition);
+
+//        } catch (PortalException exception) {
+            // got error
+//            log.error("Got error for trait-search wrapper query: " + exception.getMessage());
+//        }
+
+        // return
+        return jsonObject;
+    }
+
+    /**
+     * return the json object emulating a trait-search call given a phenotype list
+     *
+     * @param phenotypeList
+     * @param chromosome
+     * @param startPosition
+     * @param endPosition
+     * @return
+     * @throws PortalException
+     */
+    public JSONObject getTraitSearchResultForChromosomeAndPositionAndPhenotypes(List<Phenotype> phenotypeList, String chromosome, int startPosition, int endPosition) throws PortalException {
+        // local variables
+        JSONObject jsonObject = null;
+        GetDataQuery getDataQuery = null;
+        CommonGetDataQueryBuilder commonGetDataQueryBuilder = new CommonGetDataQueryBuilder();
+        List<Variant> variantList = new ArrayList<Variant>();
+        KnowledgeBaseResultTranslator knowledgeBaseResultTranslator = new KnowledgeBaseTraitSearchTranslator();
+
+        // for each trait, get the getData query
+        for (Phenotype phenotype : phenotypeList) {
+            getDataQuery = commonGetDataQueryBuilder.getDataQueryForPhenotype(phenotype, chromosome, startPosition, endPosition);
+
+            // call the rest server
+            jsonObject = this.restServerService.postGetDataCall(this.queryJsonBuilder.getQueryJsonPayloadString(getDataQuery));
+
+            // for the result, translate into a variant and add to the list
+            KnowledgeBaseResultParser knowledgeBaseResultParser = new KnowledgeBaseResultParser(jsonObject.toString());
+            List<Variant> tempList = knowledgeBaseResultParser.parseResult();
+            variantList.addAll(tempList);
+        }
+
+        // for all the variants found, translate into trait-search format
+        jsonObject = knowledgeBaseResultTranslator.translate(variantList);
+
+        // return
+        return jsonObject
     }
 
 }
