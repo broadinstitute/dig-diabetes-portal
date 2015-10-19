@@ -23,6 +23,11 @@ class FilterManagementService {
     private String gwasData  = "GWAS_DIAGRAM_mdv2"
     private String exomeChip  = "ExChip_82k_mdv2"
     private String sigmaData  = "unknown"
+    private String exomeSequenceAA = "ExSeq_17k_aa_genes_mdv2"
+    private String exomeSequenceEA = "ExSeq_17k_ea_genes_mdv2"
+    private String exomeSequenceSA = "ExSeq_17k_sa_genes_mdv2"
+    private String exomeSequenceEU = "ExSeq_17k_eu_genes_mdv2"
+    private String exomeSequenceHS = "ExSeq_17k_hs_genes_mdv2"
     private String exomeSequencePValue  = "P_FIRTH_FE_IV"
     private String gwasDataPValue  = "P_VALUE"
     private String exomeChipPValue  = "P_VALUE"
@@ -86,28 +91,16 @@ class FilterManagementService {
 
 
 
+
     /***
-     * let's use the same machinery we use to launch a variant request in order to simply generate the filters upon request for a calling routine
-     *
+     * Build a few specialized filters based on known parameters. The originating searches come from the gene info and/or variant info pages
      * @param geneId
-     * @param receivedParameters
      * @param significance
      * @param dataset
      * @param region
+     * @param receivedParameters
      * @return
      */
-  public  String retrieveFilters (  String geneId, String significance,String dataset,String region,String receivedParameters)    {
-      String returnValue = ""
-      Map paramsMap = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters)
-      List <String> listOfCodedFilters = observeMultipleFilters (paramsMap)
-      if ((listOfCodedFilters) &&
-              (listOfCodedFilters.size() > 0)){
-          GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters,searchBuilderService,metaDataService)
-          returnValue = getDataQueryHolder.retrieveAllFiltersAsJson()
-      }
-      return  returnValue
-  }
-
     public  List <String>  retrieveFiltersCodedFilters (  String geneId, String significance,String dataset,String region,String receivedParameters)    {
         Map paramsMap = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters)
         List <String> listOfCodedFilters = observeMultipleFilters (paramsMap)
@@ -116,7 +109,15 @@ class FilterManagementService {
 
 
 
-
+    /***
+     * Assign those filters
+     * @param gene
+     * @param significance
+     * @param dataset
+     * @param region
+     * @param filter
+     * @return
+     */
     public HashMap storeParametersInHashmap ( String gene,
                                               String significance,
                                               String dataset,
@@ -129,26 +130,20 @@ class FilterManagementService {
         if (dataset) {
             switch (dataset) {
                 case 'gwas' :
-                    returnValue['datatype']  = 'gwas'
-                    dataSet = 'GWAS_DIAGRAM_mdv2'
+                    dataSet = "${gwasData}"
                     pValueSpec = "P_VALUE"
                     break;
                 case 'sigma' :
-                    returnValue['datatype']  = 'sigma'
-                    dataSet = 'GWAS_DIAGRAM_mdv2'
+                    dataSet = "${sigmaData}"
                     pValueSpec = "P_VALUE"
                     break;
                 case 'exomeseq' :
-                    returnValue['datatype']  = 'exomeseq'
-                    returnValue['predictedEffects'] = 'lessThan_noEffectNoncoding'
-                    dataSet = 'ExSeq_17k_mdv2'
+                    dataSet = "${exomeSequence}"
                     pValueSpec = "P_FIRTH_FE_IV"
                     returnValue['savedValue0'] = "11=MOST_DEL_SCORE<4"
                     break;
                 case 'exomechip' :
-                    returnValue['datatype']  = 'exomechip'
-                    returnValue['predictedEffects'] = 'lessThan_noEffectNoncoding';
-                    dataSet = 'ExChip_82k_mdv2'
+                    dataSet = "${exomeChip}"
                     pValueSpec = "P_VALUE"
                     returnValue['savedValue0'] = "11=MOST_DEL_SCORE<4"
                     break;
@@ -199,7 +194,6 @@ class FilterManagementService {
                 returnValue['savedValue2'] = "${regionSpecifierList.join('^')}"
             }
         } else if (gene) {
-            returnValue['region_gene_input']  = gene
             returnValue['savedValue3'] = "7=${gene}"
         }
 
@@ -232,26 +226,26 @@ class FilterManagementService {
                      returnValue['datatype'] = 'exomechip'
                      switch ( requestPortionList[0] ){
                          case "total":
-                             returnValue['savedValue5'] = "17=T2D[ExChip_82k_mdv2]MAF>0.0"
-                             returnValue['savedValue6'] = "17=T2D[ExChip_82k_mdv2]MAF<1.0"
+                             returnValue['savedValue5'] = "17=T2D[${exomeChip}]MAF>0.0"
+                             returnValue['savedValue6'] = "17=T2D[${exomeChip}]MAF<1.0"
                              returnValue['ethnicity_af_eu-min'] = 0.0
                              returnValue['ethnicity_af_eu-max'] = 1.0
                              break;
                          case "common":
-                             returnValue['savedValue5'] = "17=T2D[ExChip_82k_mdv2]MAF>0.05"
-                             returnValue['savedValue6'] = "17=T2D[ExChip_82k_mdv2]MAF<1.0"
+                             returnValue['savedValue5'] = "17=T2D[${exomeChip}]MAF>0.05"
+                             returnValue['savedValue6'] = "17=T2D[${exomeChip}]MAF<1.0"
                              returnValue['ethnicity_af_eu-min'] = 0.05
                              returnValue['ethnicity_af_eu-max'] = 1.0
                              break;
                          case "lowfreq":
-                             returnValue['savedValue5'] = "17=T2D[ExChip_82k_mdv2]MAF>0.0005"
-                             returnValue['savedValue6'] = "17=T2D[ExChip_82k_mdv2]MAF<0.05"
+                             returnValue['savedValue5'] = "17=T2D[${exomeChip}]MAF>0.0005"
+                             returnValue['savedValue6'] = "17=T2D[${exomeChip}]MAF<0.05"
                              returnValue['ethnicity_af_eu-min'] = 0.0005
                              returnValue['ethnicity_af_eu-max'] = 0.05
                              break;
                          case "rare":
-                             returnValue['savedValue5'] = "17=T2D[ExChip_82k_mdv2]MAF>0.0"
-                             returnValue['savedValue6'] = "17=T2D[ExChip_82k_mdv2]MAF<0.0005"
+                             returnValue['savedValue5'] = "17=T2D[${exomeChip}]MAF>0.0"
+                             returnValue['savedValue6'] = "17=T2D[${exomeChip}]MAF<0.0005"
                              returnValue['ethnicity_af_eu-min'] = 0.0
                              returnValue['ethnicity_af_eu-max'] = 0.0005
                              break;
@@ -264,15 +258,15 @@ class FilterManagementService {
                      String baseEthnicityMarker =  "ethnicity_af_"+ ethnicity  + "-"
                      String sampleGroup = ""
                      switch (ethnicity){
-                         case "aa":sampleGroup = "ExSeq_17k_aa_genes_mdv2"
+                         case "aa":sampleGroup = "${exomeSequenceAA}"
                              break;
-                         case "ea":sampleGroup = "ExSeq_17k_ea_genes_mdv2"
+                         case "ea":sampleGroup = "${exomeSequenceEA}"
                              break;
-                         case "sa":sampleGroup = "ExSeq_17k_sa_genes_mdv2"
+                         case "sa":sampleGroup = "${exomeSequenceSA}"
                              break;
-                         case "eu":sampleGroup = "ExSeq_17k_eu_mdv2"
+                         case "eu":sampleGroup = "${exomeSequenceEU}"
                              break;
-                         case "hs":sampleGroup = "ExSeq_17k_hs_mdv2"
+                         case "hs":sampleGroup = "${exomeSequenceHS}"
                              break;
                          default: break
                      }

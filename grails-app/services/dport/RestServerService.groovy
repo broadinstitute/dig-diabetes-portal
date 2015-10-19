@@ -1375,6 +1375,8 @@ ${getDataHeader (0, 100, 1, false)}
         return propertiesToFetch
     }
 
+
+
     private List<String> expandCommonPropertyList(List<String> propertiesToFetch, LinkedHashMap requestedProperties){
         if (requestedProperties) {
             requestedProperties.each { phenotype, LinkedHashMap dataset ->
@@ -1394,9 +1396,11 @@ ${getDataHeader (0, 100, 1, false)}
         return propertiesToFetch
     }
 
-
-
-
+    /***
+     * Create a column map and throw in some C properties
+     * @param cProperties
+     * @return
+     */
     public LinkedHashMap getColumnsForCProperties(List<String> cProperties) {
         LinkedHashMap returnValue = [:]
         List<String> commonProperties = []
@@ -1413,7 +1417,14 @@ ${getDataHeader (0, 100, 1, false)}
         return returnValue
     }
 
-
+    /***
+     * Add an existing p Property to a column map
+     * @param existingMap
+     * @param phenotype
+     * @param dataSet
+     * @param property
+     * @return
+     */
     public LinkedHashMap addColumnsForPProperties(LinkedHashMap existingMap,String phenotype,String dataSet,String property) {
         LinkedHashMap returnValue = [:]
         LinkedHashMap<String,LinkedHashMap> phenotypeProperties = [:]
@@ -1443,7 +1454,15 @@ ${getDataHeader (0, 100, 1, false)}
         return returnValue
     }
 
-
+    /***
+     * Given filters, choose which columns to display by default. Alternatively, if requestedProperties
+     * is not empty, then choose only those columns that are specifically requested.
+     * Note: this method originally written by JF
+     *
+     * @param filterJson
+     * @param requestedProperties
+     * @return
+     */
     public LinkedHashMap getColumnsToDisplay(String filterJson,LinkedHashMap requestedProperties) {
 
         //Get the structure to control the columns we want to display
@@ -1603,11 +1622,6 @@ ${getDataHeader (0, 100, 1, false)}
         return returnValue
     }
 
-    public String postRestCallFromFilters(String filters,LinkedHashMap requestedProperties) {
-        String jsonSpec = jsonForCustomColumnApiSearch(filters,  requestedProperties)
-        String apiData = postRestCall(jsonSpec,GET_DATA_URL)
-        return apiData
-    }
 
 
     private String orSubstitute(LinkedHashMap properties){
@@ -1870,8 +1884,12 @@ ${getDataHeader (0, 100, 10, false)}
 
 
 
-
-
+    /***
+     * Note: this call is not used interactively, but used instead to fill the grails domain object that holds
+     * all of our genes and extents.
+     * @param chromosomeName
+     * @return
+     */
     private JSONObject gatherGenesForChromosomeResults(String chromosomeName){
         String jsonSpec =  """{
     "filters":    [
@@ -1887,9 +1905,13 @@ ${getDataHeader (0, 100, 10, false)}
         return postRestCall(jsonSpec,GENE_SEARCH_URL) // TODO: change to new API
     }
 
-
-
-
+    /***
+     * Note: this call is not used interactively, but used instead to fill the grails domain object that holds
+     * all of our genes and extents.
+     *
+     * @param chromosomeName
+     * @return
+     */
     public int  refreshGenesForChromosome(String chromosomeName) {//region
         int  returnValue    = 1
         Gene.deleteGenesForChromosome(chromosomeName)
@@ -1909,7 +1931,15 @@ ${getDataHeader (0, 100, 10, false)}
         return returnValue
     }
 
-
+    /***
+     * Note: this call is not used interactively, but used instead to fill the grails domain object that holds
+     * all of our genes and extents.
+     *
+     * @param chromosomeName
+     * @param chunkSize
+     * @param startingPosition
+     * @return
+     */
     private JSONObject gatherVariantsForChromosomeByChunkResults(String chromosomeName,int chunkSize,int startingPosition){
         String jsonSpec =  """{
 ${getDataHeader (0, 100, 1000, false)}
@@ -1931,32 +1961,6 @@ ${getDataHeader (0, 100, 1000, false)}
         return postRestCall(jsonSpec,GET_DATA_URL)
     }
 
-
-
-
-
-
-    public LinkedHashMap<String, Integer>  refreshVariantsForChromosomeByChunk(String chromosomeName,int chunkSize,int startingPosition) {//region
-        LinkedHashMap<String, Integer>  returnValue    = [numberOfVariants:0,lastPosition:0]
-        JSONObject apiResults = gatherVariantsForChromosomeByChunkResults( chromosomeName, chunkSize,  startingPosition)
-        if (!apiResults.is_error)  {
-            int numberOfVariants = apiResults.numRecords
-            returnValue.numberOfVariants =  numberOfVariants
-            def variants =  apiResults.variants
-            for ( int  i = 0 ; i < numberOfVariants ; i++ )  {
-                def variant = apiResults.variants[i];
-
-                String varId =   variant["VAR_ID"].findAll{it}[0]
-                String dbSnpId =   variant["DBSNP_ID"].findAll{it}[0]
-                Long position =   variant["POS"].findAll{it}[0]
-                String  chromosome =   variant["CHROM"].findAll{it}[0]
-                returnValue.lastPosition =  position
-                Variant.refresh(varId,dbSnpId,chromosome,position)
-            }
-        }
-
-        return returnValue
-    }
 
 
     public LinkedHashMap<String, Integer>  refreshVariantsForChromosomeByChunkNew(String chromosomeName,int chunkSize,int startingPosition) {//region
