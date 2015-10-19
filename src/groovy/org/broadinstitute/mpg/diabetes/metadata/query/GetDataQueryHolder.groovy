@@ -301,6 +301,16 @@ class GetDataQueryHolder {
         return decodeEncodedFilters(encodedFilters)
     }
 
+
+
+    public void isCount(boolean isCountQuery){
+        getDataQuery.isCount(isCountQuery)
+    }
+
+
+
+
+
     /***
      * write a filter out in a form that humans can understand
      * @param encodedFilter

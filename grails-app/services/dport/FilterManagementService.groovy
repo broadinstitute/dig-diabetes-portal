@@ -108,6 +108,12 @@ class FilterManagementService {
       return  returnValue
   }
 
+    public  List <String>  retrieveFiltersCodedFilters (  String geneId, String significance,String dataset,String region,String receivedParameters)    {
+        Map paramsMap = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters)
+        List <String> listOfCodedFilters = observeMultipleFilters (paramsMap)
+        return  listOfCodedFilters
+    }
+
 
 
 

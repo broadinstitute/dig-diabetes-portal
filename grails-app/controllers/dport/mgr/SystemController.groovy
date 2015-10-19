@@ -252,20 +252,6 @@ class SystemController {
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"
             }
-        } else  if (restServer == 'qa01behindloadbalancer')  {
-            if (!(currentServer == 'qa01behindloadbalancer')) {
-                restServerService.goWithTheQa01BehindLoadBalancer()
-                flash.message = "You are now using the ${restServer} server!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        } else  if (restServer == 'qa02behindloadbalancer')  {
-            if (!(currentServer == 'qa02behindloadbalancer')) {
-                restServerService.goWithTheQa02BehindLoadBalancer()
-                flash.message = "You are now using the ${restServer} server!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
         } else  if (restServer == 'devloadbalancedserver')  {
             if (!(currentServer == 'devloadbalancedserver')) {
                 restServerService.goWithTheDevLoadBalancedServer()
@@ -273,37 +259,9 @@ class SystemController {
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"
             }
-        } else  if (restServer == 'dev01behindloadbalancer')  {
-            if (!(currentServer == 'dev01behindloadbalancer')) {
-                restServerService.goWithTheDev01BehindLoadBalancer()
-                flash.message = "You are now using the ${restServer} server!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        } else  if (restServer == 'dev02behindloadbalancer')  {
-            if (!(currentServer == 'dev02behindloadbalancer')) {
-                restServerService.goWithTheDev02BehindLoadBalancer()
-                flash.message = "You are now using the ${restServer} server!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        } else  if (restServer == 'newdevserver')  {
-            if (!(currentServer == 'newdevserver')) {
-                restServerService.goWithTheNewDevServer()
-                flash.message = "You are now using the ${restServer} server!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
         } else  if (restServer == 'aws01restserver')  {
             if (!(currentServer == 'aws01restserver')) {
                 restServerService.goWithTheAws01RestServer()
-                flash.message = "You are now using the ${restServer} server!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        } else  if (restServer == 'prodserver')  {
-            if (!(currentServer == 'prodserver')) {
-                restServerService.goWithTheProdServer()
                 flash.message = "You are now using the ${restServer} server!"
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"

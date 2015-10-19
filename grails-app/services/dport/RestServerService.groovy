@@ -8,6 +8,7 @@ import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
+import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
 import org.codehaus.groovy.grails.commons.GrailsApplication
@@ -218,46 +219,6 @@ class RestServerService {
     }
 
 
-    private String jsonForGeneralApiSearch(String combinedFilterList) {
-        String inputJson = """
-{
-${getDataHeader (0, 100, 1000, false)}
-    "properties":    {
-                           "cproperty": ["VAR_ID", "CHROM", "POS","DBSNP_ID","CLOSEST_GENE","GENE","IN_GENE","Protein_change","Consequence"],
-                          "orderBy":    ["CHROM"],
-                          "dproperty":    {
-
-                                            "MAF" : ["${EXOMESEQ_SA}",
-                                                      "${EXOMESEQ_HS}",
-                                                      "${EXOMESEQ_EA}",
-                                                      "${EXOMESEQ_AA}",
-                                                      "${EXOMESEQ_EU}",
-                                                      "${EXOMECHIP}"
-                                                    ]
-                                        },
-                        "pproperty":    {
-                                             "P_VALUE":    {
-                                                                       "${GWASDIAGRAM}": ["T2D"],
-                                                                    "${EXOMECHIP}": ["T2D"]
-                                                                   },
-                          "ODDS_RATIO": { "${GWASDIAGRAM}": ["T2D"],
-                                          "${EXOMECHIP}": ["T2D"] },
-                          "OR_FIRTH_FE_IV":{"${EXOMESEQ}": ["T2D"]},
-                          "P_FIRTH_FE_IV":    { "${EXOMESEQ}": ["T2D"]},
-                           "OBSA":  { "${EXOMESEQ}": ["T2D"]},
-                           "OBSU":  { "${EXOMESEQ}": ["T2D"]},
-                          "MINA":    { "${EXOMESEQ}": ["T2D"]},
-                          "MINU":    { "${EXOMESEQ}": ["T2D"]}
-                        }
-                    },
-    "filters":    [
-                    ${combinedFilterList}
-                ]
-}""".toString()
-        return inputJson
-
-    }
-
 
     private String jsonForCustomColumnApiSearch(String combinedFilterList, LinkedHashMap requestedProperties) {
         LinkedHashMap resultColumnsToFetch = getColumnsToFetch("[" + combinedFilterList + "]",  requestedProperties)
@@ -346,11 +307,6 @@ ${getDataHeader (0, 100, 1000, false)}
     public void goWithTheDevServer() {
         pickADifferentRestServer(DEV_REST_SERVER)
     }
-
-    public void goWithTheNewDevServer() {
-        pickADifferentRestServer(NEW_DEV_REST_SERVER)
-    }
-
 
     public String currentRestServer() {
         return BASE_URL;
@@ -769,7 +725,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    private String requestGeneCountByPValue (String geneName, Integer significanceIndicator, Integer dataSet){
+    private JSONObject  requestGeneCountByPValue (String geneName, Integer significanceIndicator, Integer dataSet){
         String dataSetId = ""
         String significance
         String geneRegion
@@ -786,7 +742,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 break;
             default:
                 log.error("Trouble: user requested data set = ${dataSet} which I don't recognize")
-                defaults
         }
         switch (significanceIndicator){
             case 1:
@@ -803,27 +758,17 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 break;
             default:
                 log.error("Trouble: user requested data set = ${dataSet} which I don't recognize")
-                defaults
         }
-//        List <String> filterList= filterManagementService.retrieveFilters(geneName,significance,dataSetId,geneRegion,"")
-//        String packagedFilters = sharedToolsService.packageUpEncodedParameters(filterList)
-
-        String packagedFilters = filterManagementService.retrieveFilters(geneName,significance,dataSetId,geneRegion,"")
-        String geneCountRequest = """
-{
-${getDataHeader (0, 100, 1000, true)}
-    "properties":    {
-                           "cproperty": ["VAR_ID"],
-                          "orderBy":    ["CHROM"],
-                          "dproperty":    {},
-                        "pproperty":    {}
-                    },
-    "filters":    [
-                    ${packagedFilters}
-                ]
-}
-""".toString()
-        return geneCountRequest
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["CHROM", "POS"])
+        List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName,significance,dataSetId,geneRegion,"")
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters,searchBuilderService,metaDataService)
+        Boolean isCount = true;
+        getDataQueryHolder.addProperties(resultColumnsToDisplay)
+        getDataQueryHolder.isCount(isCount);
+        JsonSlurper slurper = new JsonSlurper()
+        String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        return dataJsonObject
     }
 
 
@@ -1156,8 +1101,7 @@ ${getDataHeader (0, 100, 1000, false)}
             sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
             for ( int  i = 0 ; i < significanceList.size () ; i++ ){
                 sb  << "{"
-                String jsonSpec = requestGeneCountByPValue(geneName, significanceList[i], dataSeteList[j])
-                JSONObject apiData = postRestCall(jsonSpec,GET_DATA_URL)
+                JSONObject apiData = requestGeneCountByPValue(geneName, significanceList[i], dataSeteList[j])
                 if (apiData.is_error == false) {
                     sb  << "\"level\":${significanceList[i]},\"count\":${apiData.numRecords}"
                 }
