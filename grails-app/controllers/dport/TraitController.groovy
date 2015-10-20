@@ -139,7 +139,7 @@ class TraitController {
         String regionSpecification = params.id
 
         // test of whether to use the new getData emulated call instead
-        String getData = param.getData
+        String getData = params.getData
 
         String encodedString = this.metaDataService.urlEncodedListOfPhenotypes();
         render(view: 'traitVariantCross',
