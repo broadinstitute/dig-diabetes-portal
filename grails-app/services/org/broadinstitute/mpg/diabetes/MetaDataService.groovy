@@ -492,7 +492,7 @@ class MetaDataService {
             List<Phenotype> phenotypeList = this.jsonParser.getPhenotypeListByTechnologyAndVersion("GWAS", "mdv2");
 
             // get the json object
-            jsonObject = this.getgetTraitSearchResultForChromosomeAndPositionAndPhenotypes(phenotypeList, chromosome, startPosition, endPosition);
+            jsonObject = this.getTraitSearchResultForChromosomeAndPositionAndPhenotypes(phenotypeList, chromosome, startPosition, endPosition);
 
 //        } catch (PortalException exception) {
             // got error
@@ -501,6 +501,67 @@ class MetaDataService {
 
         // return
         return jsonObject;
+    }
+
+    /***
+     * retrieve a trait starting with the  raw region specification string we get from users
+     * @param userSpecifiedString
+     * @return
+     */
+    public JSONObject searchTraitByUnparsedRegion(String userSpecifiedString, List<Phenotype> phenotypeList) {
+        JSONObject returnValue = null
+        LinkedHashMap<String, Integer> ourNumbers = extractTraitSearchNumbersWeNeed(userSpecifiedString)
+        if (ourNumbers.containsKey("chromosomeNumber") &&
+                ourNumbers.containsKey("startExtent") &&
+                ourNumbers.containsKey("endExtent")) {
+            returnValue = getTraitSearchResultForChromosomeAndPositionAndPhenotypes(phenotypeList, ourNumbers["chromosomeNumber"], Integer.valueOf(ourNumbers["startExtent"]).intValue(),
+                    Integer.valueOf(ourNumbers["endExtent"]).intValue());
+        }
+        return returnValue
+    }
+
+    /***
+     * The point is to extract the relevant numbers from a string that looks something like this:
+     *      String s="chr19:21,940,000-22,190,000"
+     * @param incoming
+     * @return
+     */
+    public LinkedHashMap<String, String> extractTraitSearchNumbersWeNeed(String incoming) {
+        LinkedHashMap<String, String> returnValue = [:]
+
+        String commasRemoved = incoming.replace(/,/, "")
+        returnValue["chromosomeNumber"] = sharedToolsService.parseChromosome(commasRemoved)
+        java.util.regex.Matcher startExtent = commasRemoved =~ /:\d*/
+        if (startExtent.size() > 0) {
+            returnValue["startExtent"] = sharedToolsService.parseExtent(startExtent[0])
+        }
+        java.util.regex.Matcher endExtent = commasRemoved =~ /-\d*/
+        if (endExtent.size() > 0) {
+            returnValue["endExtent"] = sharedToolsService.parseExtent(endExtent[0])
+        }
+        return returnValue
+    }
+
+    /**
+     * method accessible from the controllers to retrieve a keyed map of phenotypes
+     *
+     * @param technology
+     * @param dataVersion
+     * @return
+     */
+    public Map<String, Phenotype> getPhenotypeMapByTechnologyAndVersion(String technology, String dataVersion) {
+        return this.jsonParser.getPhenotypeMapByTechnologyAndVersion(technology, dataVersion);
+    }
+
+    /**
+     * method accessible from the controllers to retrieve a list of phenotypes
+     *
+     * @param technology
+     * @param dataVersion
+     * @return
+     */
+    public List<Phenotype> getPhenotypeListByTechnologyAndVersion(String technology, String dataVersion) {
+        return this.jsonParser.getPhenotypeListByTechnologyAndVersion(technology, dataVersion);
     }
 
     /**

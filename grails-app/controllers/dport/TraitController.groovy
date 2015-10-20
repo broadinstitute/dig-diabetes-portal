@@ -173,6 +173,74 @@ class TraitController {
 
     }
 
+    /**
+     * new method to use the getData call to get the data in trait-search REST call result format
+     *
+     * @return
+     */
+    def traitVariantCrossGetDataAjaxTest() {
+        String regionsSpecification = params.id
+        List<Phenotype> phenotypeList = new ArrayList<Phenotype>();
+        Map<String, Phenotype> phenotypeMap;
+
+        // log
+        log.info("for traitVariantCrossGetDataAjaxTest call, got params: " + params)
+
+        // get the phenotype list
+        phenotypeMap = this.metaDataService.getPhenotypeMapByTechnologyAndVersion("GWAS", "mdv2");
+
+        // select the phenotypes to search for
+        phenotypeList.add(phenotypeMap.get("T2D"));
+        phenotypeList.add(phenotypeMap.get("WHR"));
+        phenotypeList.add(phenotypeMap.get("BMI"));
+
+        // submit query
+        JSONObject jsonObject =  this.metaDataService.searchTraitByUnparsedRegion(regionsSpecification, phenotypeList);
+
+        // log
+        log.info("for traitVariantCrossAjaxTest, got json results object: " + jsonObject);
+
+        if (jsonObject) {
+            render(status: 200, contentType: "application/json") {
+                [variants: jsonObject['variants']]
+            }
+        } else {
+            render(status:300, contentType:"application/json")
+        }
+
+    }
+
+    /**
+     * new method to use the getData call to get the data in trait-search REST call result format
+     *
+     * @return
+     */
+    def traitVariantCrossGetDataAjax() {
+        String regionsSpecification = params.id
+        List<Phenotype> phenotypeList = null;
+
+        // log
+        log.info("for traitVariantCrossGetDataAjax call, got params: " + params)
+
+        // get the phenotype list
+        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", "mdv2");
+
+        // submit query
+        JSONObject jsonObject =  this.metaDataService.searchTraitByUnparsedRegion(regionsSpecification, phenotypeList);
+
+        // log
+        log.info("for traitVariantCrossAjax, got json results object: " + jsonObject);
+
+        if (jsonObject) {
+            render(status: 200, contentType: "application/json") {
+                [variants: jsonObject['variants']]
+            }
+        } else {
+            render(status:300, contentType:"application/json")
+        }
+
+    }
+
     /***
      * called by regionInfo, this provides information across 25 phenotypes. Use it to populate our big region graphic (the one that
      * may one day be supplanted by LocusZoom?)
