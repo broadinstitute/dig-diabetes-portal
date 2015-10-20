@@ -12,7 +12,12 @@
     $.ajax({
         cache: false,
         type: "get",
+        <g:if test="getData">
         url: "../traitVariantCrossGetDataAjax/" + "${regionSpecification}",
+        </g:if>
+        <g:else>
+        url: "../traitVariantCrossAjax/" + "${regionSpecification}",
+        </g:else>
         async: true,
         success: function (data) {
             fillTraitVariantCross(data);
