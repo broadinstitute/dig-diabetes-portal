@@ -1336,22 +1336,30 @@ ${getDataHeader (0, 100, 1, false)}
     return jsonSpec
 }
 
-
-
-
+    /***
+     * private counterpart to gatherProteinEffect, which gathers protein transcript information
+     * @param variantName
+     * @return
+     */
     private JSONObject gatherProteinEffectResults(String variantName){
-        String jsonSpec = generateProteinEffectJson( variantName)
-        return postRestCall(jsonSpec,GET_DATA_URL)
+        String filterByVariantName = codedfilterByVariant(variantName)
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["TRANSCRIPT_ANNOT","MOST_DEL_SCORE","VAR_ID","DBSNP_ID"])
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName],searchBuilderService,metaDataService)
+        getDataQueryHolder.addProperties(resultColumnsToDisplay)
+        JsonSlurper slurper = new JsonSlurper()
+        String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        return dataJsonObject
     }
 
 
-
-
+    /***
+     * Provide a variant name and get back a description of the different isoforms
+     * @param variantName
+     * @return
+     */
     public JSONObject gatherProteinEffect(String variantName){
-        def slurper = new JsonSlurper()
-        String apiData = gatherProteinEffectResults(variantName)
-        JSONObject apiResults = slurper.parseText(apiData)
-        return apiResults
+        return gatherProteinEffectResults(variantName)
     }
 
 
