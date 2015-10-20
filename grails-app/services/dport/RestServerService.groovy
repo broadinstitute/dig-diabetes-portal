@@ -47,6 +47,15 @@ class RestServerService {
     private String EXOMESEQ = "ExSeq_17k_mdv2"
     private String GWASDIAGRAM  = "GWAS_DIAGRAM_mdv2"
     private String ORCHIP  = "ODDS_RATIO"
+    private String EXOMESEQUENCEPVALUE  = "P_FIRTH_FE_IV"
+    private String GWASDATAPVALUE  = "P_VALUE"
+    private String EXOMECHIPPVALUE  = "P_VALUE"
+    private String SIGMADATAPVALUE  = "P_VALUE"
+    private String DEFAULTPHENOTYPE = "T2D"
+    private String GWASDATAOR  = "ODDS_RATIO"
+    private String EXOMECHIPOR  = "ODDS_RATIO"
+    private String EXOMESEQUENCEOR  = "OR_FIRTH_FE_IV"
+
     private List<ServerBean> burdenServerList;
 
     private ServerBean BURDEN_REST_SERVER = null;
@@ -829,51 +838,37 @@ ${getDataHeader (0, 100, 1000, false)}
         return postRestCall(jsonSpec,GET_DATA_URL)
     }
 
-
-    private String variantAssociationStatisticsRequest (String variantId) {
-        String associationStatisticsRequest = """{
-${getDataHeader (0, 100, 1000, false)}
-    "properties":    {
-                           "cproperty": ["VAR_ID","DBSNP_ID","CLOSEST_GENE","GENE","MOST_DEL_SCORE"],
-                          "orderBy":    [],
-                          "dproperty":    {
-                                        },
-                        "pproperty":    {
-                                            "P_FIRTH_FE_IV": {
-                                                "${EXOMESEQ}": ["T2D"]
-                                            },
-
-                                             "P_VALUE":{
-                                                "${GWASDIAGRAM}":["T2D"],
-                                                "${EXOMECHIP}":["T2D"]
-                                             },
-                                             "OR_FIRTH_FE_IV":    {
-                                                                   "${EXOMESEQ}": ["T2D"]
-                                                                },
-                                              "ODDS_RATIO": { "${GWASDIAGRAM}": ["T2D"],
-                                                              "${EXOMECHIP}": ["T2D"]}
-
-                                        }
-                    },
-    "filters":    [
-                      ${filterByVariant (variantId)}
-
-                ]
-}
-""".toString()
-        return associationStatisticsRequest
+    /***
+     * Private counterpart for combinedVariantAssociationStatistics, which gets the numbers for the
+     * variant and associations boxes across the top of the variant info page
+     *
+     * @param variantId
+     * @return
+     */
+    private JSONObject variantAssociationStatisticsSection(String variantId){
+        String filterByVariantName = codedfilterByVariant(variantId)
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID","DBSNP_ID","CLOSEST_GENE","GENE","MOST_DEL_SCORE"])
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName],searchBuilderService,metaDataService)
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${EXOMESEQUENCEPVALUE}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${GWASDIAGRAM}","${GWASDATAPVALUE}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMECHIP}","${EXOMECHIPPVALUE}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${EXOMESEQUENCEOR}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${GWASDIAGRAM}","${GWASDATAOR}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMECHIP}","${EXOMECHIPOR}")
+        getDataQueryHolder.addProperties(resultColumnsToDisplay)
+        JsonSlurper slurper = new JsonSlurper()
+        String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        return dataJsonObject
     }
 
 
-    public JSONObject variantAssociationStatisticsSection(String variantId){
-        String jsonSpec = variantAssociationStatisticsRequest( variantId)
-        return postRestCall(jsonSpec,GET_DATA_URL)
-    }
-
-
-
-
-
+    /***
+     * Numbers for the variant and associations boxes across the top of the variant info page
+     *
+     * @param variantName
+     * @return
+     */
     public JSONObject combinedVariantAssociationStatistics(String variantName){
         String gwasSample = "${GWASDIAGRAM}"
         String attribute = "T2D"
@@ -885,8 +880,10 @@ ${getDataHeader (0, 100, 1000, false)}
         for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
             sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
             for ( int  i = 0 ; i < pValueList.size () ; i++ ){
-                String apiData = variantAssociationStatisticsSection(variantName)
-                JSONObject apiResults = slurper.parseText(apiData)
+
+                JSONObject apiResults = variantAssociationStatisticsSection(variantName)
+//                String apiData = variantAssociationStatisticsSection(variantName)
+//                JSONObject apiResults = slurper.parseText(apiData)
                 if (apiResults.is_error == false) {
                     if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
                         def variant = apiResults.variants[0];
