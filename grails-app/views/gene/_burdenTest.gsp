@@ -214,8 +214,8 @@
                                 } else if (data.is_error) {
                                     console.log('burdenTestAjax returned is_error ='+data.is_error +'.');
                                 }
-                                else if ((typeof data.pValue === 'undefined') ||
-                                         (typeof data.oddsRatio === 'undefined')){
+                                else if ((typeof data.stats.pValue === 'undefined') ||
+                                         (typeof data.stats.oddsRatio === 'undefined')){
                                      console.log('burdenTestAjax returned undefined for P value or odds ratio.');
                                }else {
 //    <div class="col-md-7 col-sm-7 col-xs-3 col-md-offset-5 col-sm-offset-5 col-xs-offset-3">
@@ -223,15 +223,15 @@
 //        <div class="orValue"></div>
 //        <div class="ciValue"></div>
 //    </div>
-                                   var pValue = data.pValue;
-                                   var oddsRatio = data.oddsRatio;
+                                   var pValue = data.stats.pValue;
+                                   var oddsRatio = data.stats.oddsRatio;
 //                                   $('.burden-test-result').empty();
                                    $('.burden-test-result .pValue').text("");
                                    $('.burden-test-result .pValue').append('p-Value = '+UTILS.realNumberFormatter(pValue));
                                    $('.burden-test-result .orValue').text("");
                                    $('.burden-test-result .orValue').append('odds ratio = ' +UTILS.realNumberFormatter(oddsRatio));
-                                   fillInResultsSection('p-Value = '+UTILS.realNumberFormatter(data.pValue),
-                                   'odds ratio = ' +UTILS.realNumberFormatter(data.oddsRatio),
+                                   fillInResultsSection('p-Value = '+UTILS.realNumberFormatter(data.stats.pValue),
+                                   'odds ratio = ' +UTILS.realNumberFormatter(data.stats.oddsRatio),
                                    data.variants,"${createLink(controller: 'variantInfo', action: 'variantInfo')}");
 
                                }
