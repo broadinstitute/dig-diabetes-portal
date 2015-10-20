@@ -131,20 +131,20 @@ class FilterManagementService {
             switch (dataset) {
                 case 'gwas' :
                     dataSet = "${gwasData}"
-                    pValueSpec = "P_VALUE"
+                    pValueSpec = "${gwasDataPValue}"
                     break;
                 case 'sigma' :
                     dataSet = "${sigmaData}"
-                    pValueSpec = "P_VALUE"
+                    pValueSpec = "${sigmaDataPValue}"
                     break;
                 case 'exomeseq' :
                     dataSet = "${exomeSequence}"
-                    pValueSpec = "P_FIRTH_FE_IV"
+                    pValueSpec = "${exomeSequencePValue}"
                     returnValue['savedValue0'] = "11=MOST_DEL_SCORE<4"
                     break;
                 case 'exomechip' :
                     dataSet = "${exomeChip}"
-                    pValueSpec = "P_VALUE"
+                    pValueSpec = "${exomeChipPValue}"
                     returnValue['savedValue0'] = "11=MOST_DEL_SCORE<4"
                     break;
                 default:
