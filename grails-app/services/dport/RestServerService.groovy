@@ -55,6 +55,12 @@ class RestServerService {
     private String GWASDATAOR  = "ODDS_RATIO"
     private String EXOMECHIPOR  = "ODDS_RATIO"
     private String EXOMESEQUENCEOR  = "OR_FIRTH_FE_IV"
+    private String HETEROZYGOTE_AFFECTED  = "HETA"
+    private String HETEROZYGOTE_UNAFFECTED  = "HETU"
+    private String HOMOZYGOTE_AFFECTED  = "HOMA"
+    private String HOMOZYGOTE_UNAFFECTED  = "HOMU"
+    private String OBSERVED_AFFECTED  = "OBSA"
+    private String OBSERVED_UNAFFECTED  = "OBSU"
 
     private List<ServerBean> burdenServerList;
 
@@ -783,61 +789,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    private String diseaseRiskValue (String variantId){
-        String diseaseRiskRequest = """
-{
-${getDataHeader (0, 100, 1000, false)}
-"properties": {
-"dproperty": {
-},
-"pproperty": {
-
-                       "HETA": {
-                        "${EXOMESEQ}": ["T2D"]
-                    },
-                       "HETU": {
-                        "${EXOMESEQ}": ["T2D"]
-                    },
-                       "HOMA": {
-                        "${EXOMESEQ}": ["T2D"]
-                    },
-                       "HOMU": {
-                        "${EXOMESEQ}": ["T2D"]
-                    },
-                       "OBSU": {
-                        "${EXOMESEQ}": ["T2D"]
-                    },
-                       "OBSA": {
-                        "${EXOMESEQ}": ["T2D"]
-                    },
-                       "HETA": {
-                        "${EXOMESEQ}": ["T2D"]
-                    },
-                       "P_FIRTH_FE_IV": {
-                        "${EXOMESEQ}": ["T2D"]
-                    },
-                       "OR_FIRTH_FE_IV": {
-                        "${EXOMESEQ}": ["T2D"]
-                    }
-
-                     }
-
-                    },
-    "filters":    [
-                         ${filterByVariant (variantId)}
-
-                ]
-}
-""".toString()
-        return diseaseRiskRequest
-    }
-
-
-    public JSONObject variantDiseaseRisk(String variantId){
-        String jsonSpec = diseaseRiskValue( variantId)
-        return postRestCall(jsonSpec,GET_DATA_URL)
-    }
-
     /***
      * Private counterpart for combinedVariantAssociationStatistics, which gets the numbers for the
      * variant and associations boxes across the top of the variant info page
@@ -1019,10 +970,41 @@ ${getDataHeader (0, 100, 1000, false)}
         return returnValue
     }
 
+    /***
+     * Private counterpart to combinedVariantDiseaseRisk, which is used to fill the "is variant frequency different for patients with the disease" section
+     * of the variant info page
+     *
+     * @param variantId
+     * @return
+     */
+    private JSONObject variantDiseaseRisk(String variantId){
+        String filterByVariantName = codedfilterByVariant(variantId)
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID"])
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName],searchBuilderService,metaDataService)
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${HETEROZYGOTE_AFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${HETEROZYGOTE_UNAFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${HOMOZYGOTE_AFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${HOMOZYGOTE_UNAFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${OBSERVED_AFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${OBSERVED_UNAFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${EXOMESEQUENCEPVALUE}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${EXOMESEQUENCEOR}")
+        getDataQueryHolder.addProperties(resultColumnsToDisplay)
+        JsonSlurper slurper = new JsonSlurper()
+        String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        return dataJsonObject
+    }
 
 
 
 
+    /***
+     * Provide the numbers to fill the "is variant frequency different for patients with the disease" section
+     * of the variant info page
+     * @param variantName
+     * @return
+     */
     public JSONObject combinedVariantDiseaseRisk(String variantName){
         String attribute = "T2D"
         JSONObject returnValue
@@ -1033,8 +1015,7 @@ ${getDataHeader (0, 100, 1000, false)}
         for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
             sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
             for ( int  i = 0 ; i < pValueList.size () ; i++ ){
-                String apiData = variantDiseaseRisk(variantName)
-                JSONObject apiResults = slurper.parseText(apiData)
+                JSONObject apiResults = variantDiseaseRisk(variantName)
                 if (apiResults.is_error == false) {
                     if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
                         def variant = apiResults.variants[0];
