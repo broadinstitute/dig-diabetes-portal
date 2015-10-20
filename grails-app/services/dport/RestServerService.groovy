@@ -52,6 +52,7 @@ class RestServerService {
     private String EXOMECHIPPVALUE  = "P_VALUE"
     private String SIGMADATAPVALUE  = "P_VALUE"
     private String DEFAULTPHENOTYPE = "T2D"
+    private String MAFPHENOTYPE = "MAF"
     private String GWASDATAOR  = "ODDS_RATIO"
     private String EXOMECHIPOR  = "ODDS_RATIO"
     private String EXOMESEQUENCEOR  = "OR_FIRTH_FE_IV"
@@ -235,61 +236,6 @@ class RestServerService {
 
 
 
-    private String jsonForCustomColumnApiSearch(String combinedFilterList, LinkedHashMap requestedProperties) {
-        LinkedHashMap resultColumnsToFetch = getColumnsToFetch("[" + combinedFilterList + "]",  requestedProperties)
-        String inputJson = """
-{
-${getDataHeader (0, 100, 1000, false)}
-    "properties":    {
-                           "cproperty": [${ resultColumnsToFetch.cproperty.collect({"\"${it}\""}).join(' , ')}],
-                          "orderBy":    ["CHROM"],
-""".toString()
-
-        inputJson += '"dproperty" : {'
-        String curJson = ""
-        for (String property in resultColumnsToFetch.dproperty.keySet()) {
-            if (curJson) {
-                curJson += ","
-            }
-            if (resultColumnsToFetch.dproperty[property]) {
-                curJson += " \"${property}\" : [ " + resultColumnsToFetch.dproperty[property].collect({"\"${it}\""}).join(' , ') + ']'
-            }
-        }
-
-        inputJson += curJson + ' } , "pproperty" : {'
-
-        curJson = ""
-        for (String property in resultColumnsToFetch.pproperty.keySet()) {
-            if (resultColumnsToFetch.pproperty[property]) {
-                if (curJson) {
-                    curJson += ","
-                }
-                curJson += ' "' + property + '" : { '
-                String curJson2 = ""
-                for (String dataset in resultColumnsToFetch.pproperty[property].keySet()) {
-                    if (resultColumnsToFetch.pproperty[property][dataset]) {
-                        if (curJson2) {
-                            curJson2 += ","
-                        }
-                        curJson2 += ' "' + dataset + '" : [ ' + resultColumnsToFetch.pproperty[property][dataset].collect({"\"${it}\""}).join(' , ') + ']'
-                    }
-                }
-                curJson += curJson2 + " } ";
-            }
-        }
-        inputJson += curJson + ' } } ,'
-
-        inputJson += """
-
-    "filters":    [
-                    ${combinedFilterList}
-                ]
-}""".toString()
-
-        return inputJson
-    }
-
-
     private void pickADifferentRestServer(String newRestServer) {
         if (!(newRestServer == BASE_URL)) {
             log.info("NOTE: about to change from the old server = ${BASE_URL} to instead using = ${newRestServer}")
@@ -471,51 +417,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return returnValue
     }
 
-    /***
-     * This is the underlying routine for every call to the rest backend.
-     * @param drivingJson
-     * @param targetUrl
-     * @return
-     */
-    private JSONObject getRestCallBase(String targetUrl, currentRestServer) {
-        JSONObject returnValue = null
-        Date beforeCall = new Date()
-        Date afterCall
-        RestResponse response
-        RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
-        StringBuilder logStatus = new StringBuilder()
-        try {
-            response = rest.get(currentRestServer + targetUrl) {
-                contentType "application/json"
-            }
-            afterCall = new Date()
-        } catch (Exception exception) {
-            log.error("NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}")
-            log.error(exception.toString())
-            logStatus << "NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}"
-            afterCall = new Date()
-        }
-        logStatus << """
-SERVER GET:
-url=${currentRestServer + targetUrl},
-parm=${drivingJson},
-time required=${(afterCall.time - beforeCall.time) / 1000} seconds
-""".toString()
-        if (response?.responseEntity?.statusCode?.value == 200) {
-            returnValue = response.json
-            logStatus << """status: ok""".toString()
-        } else {
-            JSONObject tempValue = response.json
-            logStatus << """status: ${response.responseEntity.statusCode.value}""".toString()
-            if (tempValue) {
-                logStatus << """is_error: ${response.json["is_error"]}""".toString()
-            } else {
-                logStatus << "no valid Json returned"
-            }
-        }
-        log.info(logStatus)
-        return returnValue
-    }
 
     /**
      * burden call to the REST server
@@ -833,8 +734,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             for ( int  i = 0 ; i < pValueList.size () ; i++ ){
 
                 JSONObject apiResults = variantAssociationStatisticsSection(variantName)
-//                String apiData = variantAssociationStatisticsSection(variantName)
-//                JSONObject apiResults = slurper.parseText(apiData)
                 if (apiResults.is_error == false) {
                     if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
                         def variant = apiResults.variants[0];
@@ -888,49 +787,38 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return returnValue
     }
 
-
-
-
-    private String howCommonIsVariantRequest (String variantId) {
-        String associationStatisticsRequest = """{
-${getDataHeader (0, 100, 1000, false)}
-    "properties":    {
-                           "cproperty": ["VAR_ID", "CHROM", "POS"],
-                          "orderBy":    ["CHROM"],
-                          "dproperty":    {
-
-                                           "MAF" : ["${EXOMESEQ_SA}",
-                                                      "${EXOMESEQ_HS}",
-                                                      "${EXOMESEQ_EA}",
-                                                      "${EXOMESEQ_AA}",
-                                                      "${EXOMESEQ_EU}",
-                                                      "${EXOMECHIP}"
-                                                    ]
-                                        },
-                        "pproperty":    {
-                                                                                     }
-                    },
-    "filters":    [
-                      ${filterByVariant (variantId)}
-
-                ]
-}
-""".toString()
-        return associationStatisticsRequest
+    /***
+     * Private section associated with howCommonIsVariantAcrossEthnicities, used to fill up the "how common is"
+     *  section in variant info
+     *
+     * @param variantId
+     * @return
+     */
+    private JSONObject howCommonIsVariantSection(String variantId){
+        String filterByVariantName = codedfilterByVariant(variantId)
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID", "CHROM", "POS"])
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName],searchBuilderService,metaDataService)
+        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}","${EXOMESEQ_SA}")
+        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}","${EXOMESEQ_HS}")
+        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}","${EXOMESEQ_EA}")
+        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}","${EXOMESEQ_AA}")
+        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}","${EXOMESEQ_EU}")
+        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}","${EXOMECHIP}")
+        getDataQueryHolder.addProperties(resultColumnsToDisplay)
+        JsonSlurper slurper = new JsonSlurper()
+        String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        return dataJsonObject
     }
 
 
 
-
-
-
-    public JSONObject howCommonIsVariantSection(String variantId){
-        String jsonSpec = howCommonIsVariantRequest( variantId)
-        return postRestCall(jsonSpec,GET_DATA_URL)
-    }
-
-
-
+    /***
+     * Retrieve all the numbers necessary to fill up the "how common is" section in variant info
+     *
+     * @param variantName
+     * @return
+     */
     public JSONObject howCommonIsVariantAcrossEthnicities(String variantName){
         JSONObject returnValue
         List <Integer> dataSeteList = [1]
@@ -940,8 +828,7 @@ ${getDataHeader (0, 100, 1000, false)}
         for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
             sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
             for ( int  i = 0 ; i < pValueList.size () ; i++ ){
-                String apiData = howCommonIsVariantSection(variantName)
-                JSONObject apiResults = slurper.parseText(apiData)
+                JSONObject apiResults = howCommonIsVariantSection(variantName)
                 if (apiResults.is_error == false) {
                     if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
                         def variant = apiResults.variants[0];
@@ -1294,26 +1181,6 @@ ${getDataHeader (0, 100, 1000, false)}
 
 
 
-
-private String generateProteinEffectJson (String variantName){
-    String jsonSpec = """
-{
-${getDataHeader (0, 100, 1, false)}
-        "properties":   {
-                                        "cproperty": ["TRANSCRIPT_ANNOT","MOST_DEL_SCORE","VAR_ID","DBSNP_ID"],
-                                "orderBy":      [],
-                                "dproperty":    { },
-                                "pproperty":    { }
-                        },
-        "filters":      [
-        ${filterByVariant(variantName)}
-]
-}
-
-""".toString()
-    return jsonSpec
-}
-
     /***
      * private counterpart to gatherProteinEffect, which gathers protein transcript information
      * @param variantName
@@ -1403,6 +1270,41 @@ ${getDataHeader (0, 100, 1, false)}
         return returnValue
     }
 
+
+
+
+    public LinkedHashMap addColumnsForDProperties(LinkedHashMap existingMap,String property,String dataSet) {
+        LinkedHashMap returnValue = [:]
+        LinkedHashMap<String> dataSetProperties = [:]
+        if (!existingMap){
+            returnValue.cproperty = []
+            returnValue.dproperty = [:]
+            returnValue.pproperty = [:]
+        } else {
+            returnValue = existingMap
+        }
+        dataSetProperties = returnValue.dproperty
+
+        if ((property) &&
+                (dataSet)){
+            if (!dataSetProperties.containsKey("T2D")){
+                dataSetProperties["T2D"] = [:]
+            }
+            if (!dataSetProperties["T2D"].containsKey(dataSet)){
+                dataSetProperties["T2D"][dataSet] = []
+            }
+            if (!(dataSetProperties["T2D"][dataSet] in property)){
+                dataSetProperties["T2D"][dataSet] << property
+            }
+        }
+
+        return returnValue
+    }
+
+
+
+
+
     /***
      * Add an existing p Property to a column map
      * @param existingMap
@@ -1439,6 +1341,7 @@ ${getDataHeader (0, 100, 1, false)}
 
         return returnValue
     }
+
 
     /***
      * Given filters, choose which columns to display by default. Alternatively, if requestedProperties
