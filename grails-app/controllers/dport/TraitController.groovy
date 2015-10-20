@@ -138,8 +138,31 @@ class TraitController {
     def regionInfo() {
         String regionSpecification = params.id
 
+        // log params
+        log.info("regionInfo got params: " + params);
+
+        String encodedString = this.metaDataService.urlEncodedListOfPhenotypes();
+        render(view: 'traitVariantCross',
+                model: [regionSpecification: regionSpecification,
+                        phenotypeList      : encodedString,
+                        show_gene          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
+                        show_gwas          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
+                        show_exchp         : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
+                        show_exseq         : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq)])
+    }
+
+    /***
+     * Get here from the "Click here to see a GWAS summary of this region" link. Associated Ajax call is traitVariantCrossAjax
+     * @return
+     */
+    def regionInfoGetData() {
+        String regionSpecification = params.id
+
         // test of whether to use the new getData emulated call instead
-        String getData = params.getData
+        String getData = "getData"
+
+        // log params
+        log.info("regionInfoGetData got params: " + params);
 
         String encodedString = this.metaDataService.urlEncodedListOfPhenotypes();
         render(view: 'traitVariantCross',

@@ -12,7 +12,7 @@
     $.ajax({
         cache: false,
         type: "get",
-        <g:if test="getData">
+        <g:if test="${getData}">
         url: "../traitVariantCrossGetDataAjax/" + "${regionSpecification}",
         </g:if>
         <g:else>
