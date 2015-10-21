@@ -81,7 +81,7 @@ class RestCallsIntegrationSpec extends IntegrationSpec {
         JSONObject jsonObject = new JSONObject("{\"is_error\": false,\"passback\": \"123abc\",\"numRecords\": 207}");
 
         when:
-        getDataQuery = commonGetDataQueryBuilder.getDataQueryForPhenotype(phenotype, chromosome, startPosition, endPosition);
+        getDataQuery = commonGetDataQueryBuilder.getDataQueryForPhenotype(phenotype, chromosome, startPosition, endPosition, "0.005");
 
         // call the rest server
         inputJsonString = this.queryJsonBuilder.getQueryJsonPayloadString(getDataQuery)

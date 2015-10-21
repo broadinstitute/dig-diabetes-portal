@@ -59,7 +59,7 @@ public class CommonGetDataQueryBuilderTest extends TestCase {
             }
 
             // get the query
-            getDataQuery = this.commonGetDataQueryBuilder.getDataQueryForPhenotype(phenotype, "9", 1000000, 2000000);
+            getDataQuery = this.commonGetDataQueryBuilder.getDataQueryForPhenotype(phenotype, "9", 1000000, 2000000, "0.005");
 
         } catch (PortalException exception) {
             fail("Got error: " + exception.getMessage());
