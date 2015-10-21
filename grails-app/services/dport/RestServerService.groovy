@@ -1550,8 +1550,15 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return orValue
     }
 
-
-
+    /***
+     * private method that generates the REST API call necessary to gather the datafor the Manhattan plot
+     * @param phenotypeName
+     * @param dataSet
+     * @param properties
+     * @param maximumPValue
+     * @param minimumPValue
+     * @return
+     */
     private JSONObject gatherTraitSpecificResults(String phenotypeName,String dataSet,LinkedHashMap properties,BigDecimal maximumPValue,BigDecimal minimumPValue){
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID", "DBSNP_ID", "CLOSEST_GENE", "CHROM", "POS"])
         List<String> filters = []
@@ -1571,14 +1578,20 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return dataJsonObject
     }
 
-
-
+    /***
+     * Gather up the data that is used in the Manhattan plot
+     *
+     * @param phenotypeName
+     * @param dataSet
+     * @param properties
+     * @param maximumPValue
+     * @param minimumPValue
+     * @return
+     */
     public JSONObject getTraitSpecificInformation(String phenotypeName,String dataSet,LinkedHashMap properties, BigDecimal maximumPValue,BigDecimal minimumPValue) {//region
         JSONObject returnValue
         String orValue = orSubstitute( properties)
         def slurper = new JsonSlurper()
-//        String apiData = gatherTraitSpecificResults(phenotypeName,dataSet, properties, maximumPValue, minimumPValue)
-//        JSONObject apiResults = slurper.parseText(apiData)
         JSONObject apiResults = gatherTraitSpecificResults(phenotypeName,dataSet, properties, maximumPValue, minimumPValue)
 
         int numberOfVariants = apiResults.numRecords
@@ -1632,74 +1645,53 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
-
-
-
-
-    private String generateTraitPerVariantJson (String variantName){
-        String dirMatchers =   metadataUtilityService.createPhenotypePropertyFieldRequester(
-                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("DIR", sharedToolsService.getCurrentDataVersion (), "GWAS"))
-        String betaMatchers =  metadataUtilityService.createPhenotypePropertyFieldRequester(
-                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("BETA", sharedToolsService.getCurrentDataVersion (), "GWAS"))
-        String orMatchers = metadataUtilityService.createPhenotypePropertyFieldRequester(
-                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("ODDS_RATIO", sharedToolsService.getCurrentDataVersion (), "GWAS"))
-        String pValueMatchers =  metadataUtilityService.createPhenotypePropertyFieldRequester(
-                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("P_VALUE", sharedToolsService.getCurrentDataVersion (), "GWAS"))
-        String sampleGroupsWithMaf =  metadataUtilityService.createSampleGroupPropertyFieldRequester(
-                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("MAF", sharedToolsService.getCurrentDataVersion (), "GWAS"))
-        String filterForParticularVariant = filterByVariant(variantName)
-        String jsonSpec = """
-{
-${getDataHeader (0, 100, 10, false)}
-        "properties":   {
-                                        "cproperty": ["VAR_ID", "DBSNP_ID", "CHROM", "POS"],
-                                "orderBy":      ["P_VALUE"],
-                                "dproperty":    {
-                                                    "MAF" : [${sampleGroupsWithMaf}]
-                                                },
-                                "pproperty":    {
-                                                     "BETA":         {
-                                                         ${betaMatchers}
-                                                     },
-
-                                                     "ODDS_RATIO":   {
-                                                          ${orMatchers}
-                                                     },
-
-                                                     "P_VALUE":      {
-                                                          ${pValueMatchers}
-                                                      },
-
-                                                    "DIR":         {
-                                                         ${dirMatchers}
-                                                     }
-
-                                }
-                        },
-        "filters":      [
-                               ${filterForParticularVariant}
-                        ]
-}""".toString()
-        return jsonSpec
+private LinkedHashMap buildColumnsRequestForPProperties(LinkedHashMap resultColumnsToDisplay,String property){
+    List <LinkedHashMap<String,String>> matchers =
+            JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion(property, sharedToolsService.getCurrentDataVersion (), "GWAS").
+                    collect{['pheno':it.parent.name,'ds':it.parent.parent.systemId]}
+    for (LinkedHashMap dirMatcher in matchers) {
+        addColumnsForPProperties(resultColumnsToDisplay,dirMatcher.pheno,dirMatcher.ds,property)
     }
+    return resultColumnsToDisplay
+}
 
-
-
-
-
-
+    /***
+     * private method that does REST API generation for 'Association statistics across 25 traits'
+     * @param variantName
+     * @return
+     */
     private JSONObject gatherTraitPerVariantResults(String variantName){
-        String jsonSpec = generateTraitPerVariantJson( variantName)
-        return postRestCall(jsonSpec,GET_DATA_URL)
+        String filterByVariantName = codedfilterByVariant(variantName)
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID", "DBSNP_ID", "CHROM", "POS"])
+        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay,"DIR")
+        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay,"BETA")
+        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay,"ODDS_RATIO")
+        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay,"P_VALUE")
+        List<String> sampleGroupsWithMaf =
+                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("MAF", sharedToolsService.getCurrentDataVersion (), "GWAS").collect{it.parent.systemId}
+        for (String sampleGroupWithMaf in sampleGroupsWithMaf) {
+            addColumnsForDProperties(resultColumnsToDisplay,MAFPHENOTYPE,sampleGroupWithMaf)
+        }
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName],searchBuilderService,metaDataService)
+        getDataQueryHolder.addProperties(resultColumnsToDisplay)
+        JsonSlurper slurper = new JsonSlurper()
+        String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        return dataJsonObject
     }
 
 
 
+    /***
+     * Generate the numbers for the 'Association statistics across 25 traits', which is displayed on the variant info page (elsewhere as well)
+     * @param variantName
+     * @return
+     */
     public JSONObject getTraitPerVariant(String variantName ) {//region
 
         JSONObject returnValue
         def slurper = new JsonSlurper()
-        String apiData = gatherTraitPerVariantResults(variantName)
+        JSONObject apiResults = gatherTraitPerVariantResults(variantName)
         LinkedHashMap <String, String> betaMatchersMap =   metadataUtilityService.createPhenotypeSampleGroupMap(
                 JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("BETA", sharedToolsService.getCurrentDataVersion (), "GWAS"))
         LinkedHashMap <String, String> orMatchersMap =   metadataUtilityService.createPhenotypeSampleGroupMap(
@@ -1710,7 +1702,7 @@ ${getDataHeader (0, 100, 10, false)}
                 JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("MAF", sharedToolsService.getCurrentDataVersion (), "GWAS"))
         LinkedHashMap<String,List<String>> phenotypeSampleGroupNameMap =   metadataUtilityService.createPhenotypeSampleNameMapper(
                 JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("P_VALUE", sharedToolsService.getCurrentDataVersion (), "GWAS"))
-        JSONObject apiResults = slurper.parseText(apiData)
+        //JSONObject apiResults = slurper.parseText(apiData)
         int numberOfVariants = apiResults.numRecords
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         for ( int  j = 0 ; j < numberOfVariants ; j++ ) {
