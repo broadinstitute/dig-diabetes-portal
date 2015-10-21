@@ -138,9 +138,9 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
         String chromosome = "9";
         int startPosition = 21000000;
         int endPosition = 21050000;
+        phenotypeList.add(this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", "mdv2").get("WHR"));
         phenotypeList.add(this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", "mdv2").get("T2D"));
         phenotypeList.add(this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", "mdv2").get("BMI"));
-        phenotypeList.add(this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", "mdv2").get("WHR"));
         JSONObject resultJson = this.metaDataService.getTraitSearchResultForChromosomeAndPositionAndPhenotypes(phenotypeList, chromosome, startPosition, endPosition);
 
         then:

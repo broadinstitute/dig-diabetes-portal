@@ -105,7 +105,7 @@ public class KnowledgeBaseTraitSearchTranslator implements KnowledgeBaseResultTr
                             if (tempPropertyValue == null) {
                                 return null;
                             } else if (Integer.valueOf(tempPropertyValue).intValue() == 0) {
-                                return null;
+                                jsonObject.put(this.KEY_DIR, JSONObject.NULL);
                             } else if (Integer.valueOf(tempPropertyValue).intValue() > 0) {
                                 jsonObject.put(this.KEY_DIR, "up");
                             } else {
