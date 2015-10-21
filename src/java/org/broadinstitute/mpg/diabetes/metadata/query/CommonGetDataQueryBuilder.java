@@ -35,7 +35,7 @@ public class CommonGetDataQueryBuilder {
      * @return
      * @throws PortalException
      */
-    public GetDataQuery getDataQueryForPhenotype(Phenotype phenotype, String chromosome, int startPosition, int endPosition) throws PortalException {
+    public GetDataQuery getDataQueryForPhenotype(Phenotype phenotype, String chromosome, int startPosition, int endPosition, String pValueString) throws PortalException {
         // local variables
         GetDataQuery queryBean = new GetDataQueryBean();
         List<Property> propertyList = null;
@@ -70,7 +70,7 @@ public class CommonGetDataQueryBuilder {
         }
         // if p-value property found, the add filter property that will ensure we only get variants that have p values for this trait/phenotype (don't want null p values)
         if (property != null) {
-            queryBean.addFilterProperty(property, PortalConstants.OPERATOR_LESS_THAN_EQUALS, "2");
+            queryBean.addFilterProperty(property, PortalConstants.OPERATOR_LESS_THAN_EQUALS, pValueString);
         }
 
         // return

@@ -584,7 +584,7 @@ class MetaDataService {
 
         // for each trait, get the getData query
         for (Phenotype phenotype : phenotypeList) {
-            getDataQuery = commonGetDataQueryBuilder.getDataQueryForPhenotype(phenotype, chromosome, startPosition, endPosition);
+            getDataQuery = commonGetDataQueryBuilder.getDataQueryForPhenotype(phenotype, chromosome, startPosition, endPosition, "0.05");
 
             // call the rest server
             jsonObject = this.restServerService.postGetDataCall(this.queryJsonBuilder.getQueryJsonPayloadString(getDataQuery));
