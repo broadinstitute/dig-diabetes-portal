@@ -38,16 +38,16 @@ class RestServerService {
     private String GET_DATA_URL = "getData"
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
-    private String TECHNOLOGY_GWAS = "GWAS"
-    private String TECHNOLOGY_EXOME_SEQ = "ExSeq"
-    private String TECHNOLOGY_EXOME_CHIP = "ExChip"
-    private String ANCESTRY_AA = "AA"
-    private String ANCESTRY_HS = "HS"
-    private String ANCESTRY_EA = "EA"
-    private String ANCESTRY_SA = "SA"
-    private String ANCESTRY_EU = "EU"
-    private String ANCESTRY_NONE = "none"
-    private String EXPERIMENT_DIAGRAM = "DIAGRAM"
+    public static String TECHNOLOGY_GWAS = "GWAS"
+    public static String TECHNOLOGY_EXOME_SEQ = "ExSeq"
+    public static String TECHNOLOGY_EXOME_CHIP = "ExChip"
+    public static String ANCESTRY_AA = "AA"
+    public static String ANCESTRY_HS = "HS"
+    public static String ANCESTRY_EA = "EA"
+    public static String ANCESTRY_SA = "SA"
+    public static String ANCESTRY_EU = "EU"
+    public static String ANCESTRY_NONE = "none"
+    public static String EXPERIMENT_DIAGRAM = "DIAGRAM"
     private String ORCHIP  = "ODDS_RATIO"
     private String EXOMESEQUENCEPVALUE  = "P_FIRTH_FE_IV"
     private String GWASDATAPVALUE  = "P_VALUE"
@@ -1551,46 +1551,24 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
-    private String generateTraitSpecificJson (String phenotypeName,String dataSet,LinkedHashMap properties,BigDecimal maximumPValue,BigDecimal minimumPValue=0){
-        String orValue = orSubstitute( properties)
-        String propertyRequest = ""
-        if (orValue.length()>0){
-            propertyRequest = """ "${orValue}":   {"${dataSet}": ["${phenotypeName}"]  },"""
-        }
-        List <UserQueryContext> userQueryContextList = []
-        userQueryContextList << new UserQueryContext([propertyCategory:"PVALUE_LTE", phenotype:phenotypeName,sampleGroup: "custom",customSampleGroup:dataSet, value:maximumPValue.toString()])
-        userQueryContextList << new UserQueryContext([propertyCategory:"PVALUE_GTE", phenotype:phenotypeName,sampleGroup: "custom",customSampleGroup:dataSet, value:minimumPValue.toString()])
-        String filters = filterManagementService.generateMultipleFilters(userQueryContextList)
-        String jsonSpec = """
-{
-${getDataHeader (0, 100, 3000, false)}
-        "properties":   {
-                                        "cproperty": ["VAR_ID", "DBSNP_ID", "CLOSEST_GENE", "CHROM", "POS"],
-                                "orderBy":      ["P_VALUE"],
-                                "dproperty":    {
-                                                    "MAF" : ["${dataSet}"]
-                                                },
-                                "pproperty":    {
-                                                     ${propertyRequest}
-                                                     "P_VALUE":      {"${dataSet}": ["${phenotypeName}"]  }
-
-                                }
-                        },
-        "filters":      [
-                  ${filters}
-        ]
-}
-""".toString()
-    }
-
-
-
-
-
 
     private JSONObject gatherTraitSpecificResults(String phenotypeName,String dataSet,LinkedHashMap properties,BigDecimal maximumPValue,BigDecimal minimumPValue){
-        String jsonSpec = generateTraitSpecificJson(phenotypeName,dataSet, properties, maximumPValue, minimumPValue)
-        return postRestCall(jsonSpec,GET_DATA_URL)
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID", "DBSNP_ID", "CLOSEST_GENE", "CHROM", "POS"])
+        List<String> filters = []
+        String orValue = orSubstitute( properties)
+        if (orValue.length()>0){
+            addColumnsForPProperties(resultColumnsToDisplay,phenotypeName,dataSet,orValue)
+        }
+        filters<<"17=${phenotypeName}[${dataSet}]P_VALUE<${maximumPValue.toString()}"
+        filters<<"17=${phenotypeName}[${dataSet}]P_VALUE>${minimumPValue.toString()}"
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters,searchBuilderService,metaDataService)
+        addColumnsForPProperties(resultColumnsToDisplay,phenotypeName,dataSet,"P_VALUE")
+        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}",dataSet)
+        getDataQueryHolder.addProperties(resultColumnsToDisplay)
+        JsonSlurper slurper = new JsonSlurper()
+        String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        return dataJsonObject
     }
 
 
@@ -1599,8 +1577,10 @@ ${getDataHeader (0, 100, 3000, false)}
         JSONObject returnValue
         String orValue = orSubstitute( properties)
         def slurper = new JsonSlurper()
-        String apiData = gatherTraitSpecificResults(phenotypeName,dataSet, properties, maximumPValue, minimumPValue)
-        JSONObject apiResults = slurper.parseText(apiData)
+//        String apiData = gatherTraitSpecificResults(phenotypeName,dataSet, properties, maximumPValue, minimumPValue)
+//        JSONObject apiResults = slurper.parseText(apiData)
+        JSONObject apiResults = gatherTraitSpecificResults(phenotypeName,dataSet, properties, maximumPValue, minimumPValue)
+
         int numberOfVariants = apiResults.numRecords
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         for ( int  j = 0 ; j < numberOfVariants ; j++ ) {

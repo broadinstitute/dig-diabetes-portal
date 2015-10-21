@@ -19,57 +19,13 @@ class FilterManagementService {
     SearchBuilderService searchBuilderService
     MetaDataService metaDataService
 
-    private String exomeSequence  = "ExSeq_17k_mdv2"
-    private String gwasData  = "GWAS_DIAGRAM_mdv2"
-    private String exomeChip  = "ExChip_82k_mdv2"
+
     private String sigmaData  = "unknown"
-    private String exomeSequenceAA = "ExSeq_17k_aa_genes_mdv2"
-    private String exomeSequenceEA = "ExSeq_17k_ea_genes_mdv2"
-    private String exomeSequenceSA = "ExSeq_17k_sa_genes_mdv2"
-    private String exomeSequenceEU = "ExSeq_17k_eu_genes_mdv2"
-    private String exomeSequenceHS = "ExSeq_17k_hs_genes_mdv2"
     private String exomeSequencePValue  = "P_FIRTH_FE_IV"
     private String gwasDataPValue  = "P_VALUE"
     private String exomeChipPValue  = "P_VALUE"
     private String sigmaDataPValue  = "P_VALUE"
 
-    private String chooseDataSet(String dataSetCode){
-        String returnValue = exomeSequence
-        switch (dataSetCode) {
-            case "gwas": returnValue = gwasData; break;
-            case "sigma": returnValue = sigmaData; break;
-            case "exomeseq": returnValue = exomeSequence; break;
-            case "exomechip": returnValue = exomeChip; break;
-            default: break;
-        }
-        return returnValue
-    }
-
-
-   private String formatFilter (String dataSetId,
-                                String phenotype,
-                                String operand,
-                                String operator,
-                                String value,
-                                String operandType){
-       String returnValue = ""
-       if ( ("FLOAT".equals(operandType)) || ("INTEGER".equals(operandType))){
-           returnValue =  """{"dataset_id": "${dataSetId}", "phenotype": "${phenotype}", "operand": "${operand}", "operator": "${operator}", "value": ${value}, "operand_type": "${operandType}"}""".toString()
-       } else if  ("STRING".equals(operandType)) {
-           returnValue =  """{"dataset_id": "${dataSetId}", "phenotype": "${phenotype}", "operand": "${operand}", "operator": "${operator}", "value": "${value}", "operand_type": "${operandType}"}""".toString()
-       } else {
-           log.error("FilterManagementService:formatFilter. Unexpected operandType = ${dataSetId}")
-       }
-       return returnValue
-   }
-
-
-
-    public String generateMultipleFilters (List <UserQueryContext> userQueryContextList){
-        userQueryContextList.collect{userQueryContext->formatFilter (userQueryContext.getDataSetId (),userQueryContext.getPhenotype(),
-                userQueryContext.getOperand (),userQueryContext.getOperator(),userQueryContext.getValue (),userQueryContext.getOperandType())}.join(",")
-
-    }
 
 
 
@@ -130,7 +86,7 @@ class FilterManagementService {
         if (dataset) {
             switch (dataset) {
                 case 'gwas' :
-                    dataSet = "${gwasData}"
+                    dataSet = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_GWAS,RestServerService.EXPERIMENT_DIAGRAM,RestServerService.ANCESTRY_NONE)
                     pValueSpec = "${gwasDataPValue}"
                     break;
                 case 'sigma' :
@@ -138,12 +94,12 @@ class FilterManagementService {
                     pValueSpec = "${sigmaDataPValue}"
                     break;
                 case 'exomeseq' :
-                    dataSet = "${exomeSequence}"
+                    dataSet = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_SEQ,"none",RestServerService.ANCESTRY_NONE)
                     pValueSpec = "${exomeSequencePValue}"
                     returnValue['savedValue0'] = "11=MOST_DEL_SCORE<4"
                     break;
                 case 'exomechip' :
-                    dataSet = "${exomeChip}"
+                    dataSet = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)
                     pValueSpec = "${exomeChipPValue}"
                     returnValue['savedValue0'] = "11=MOST_DEL_SCORE<4"
                     break;
@@ -226,26 +182,26 @@ class FilterManagementService {
                      returnValue['datatype'] = 'exomechip'
                      switch ( requestPortionList[0] ){
                          case "total":
-                             returnValue['savedValue5'] = "17=T2D[${exomeChip}]MAF>0.0"
-                             returnValue['savedValue6'] = "17=T2D[${exomeChip}]MAF<1.0"
+                             returnValue['savedValue5'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF>0.0"
+                             returnValue['savedValue6'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF<1.0"
                              returnValue['ethnicity_af_eu-min'] = 0.0
                              returnValue['ethnicity_af_eu-max'] = 1.0
                              break;
                          case "common":
-                             returnValue['savedValue5'] = "17=T2D[${exomeChip}]MAF>0.05"
-                             returnValue['savedValue6'] = "17=T2D[${exomeChip}]MAF<1.0"
+                             returnValue['savedValue5'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF>0.05"
+                             returnValue['savedValue6'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF<1.0"
                              returnValue['ethnicity_af_eu-min'] = 0.05
                              returnValue['ethnicity_af_eu-max'] = 1.0
                              break;
                          case "lowfreq":
-                             returnValue['savedValue5'] = "17=T2D[${exomeChip}]MAF>0.0005"
-                             returnValue['savedValue6'] = "17=T2D[${exomeChip}]MAF<0.05"
+                             returnValue['savedValue5'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF>0.0005"
+                             returnValue['savedValue6'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF<0.05"
                              returnValue['ethnicity_af_eu-min'] = 0.0005
                              returnValue['ethnicity_af_eu-max'] = 0.05
                              break;
                          case "rare":
-                             returnValue['savedValue5'] = "17=T2D[${exomeChip}]MAF>0.0"
-                             returnValue['savedValue6'] = "17=T2D[${exomeChip}]MAF<0.0005"
+                             returnValue['savedValue5'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF>0.0"
+                             returnValue['savedValue6'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF<0.0005"
                              returnValue['ethnicity_af_eu-min'] = 0.0
                              returnValue['ethnicity_af_eu-max'] = 0.0005
                              break;
@@ -254,19 +210,18 @@ class FilterManagementService {
                              break;
                      }
                  } else {   // we have ethnicity data
-//                     developingParameterCollection['datatype']  = 'exomeseq'
                      String baseEthnicityMarker =  "ethnicity_af_"+ ethnicity  + "-"
                      String sampleGroup = ""
                      switch (ethnicity){
-                         case "aa":sampleGroup = "${exomeSequenceAA}"
+                         case "aa":sampleGroup = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_AA)
                              break;
-                         case "ea":sampleGroup = "${exomeSequenceEA}"
+                         case "ea":sampleGroup = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_SEQ,"none",RestServerService.ANCESTRY_EA)
                              break;
-                         case "sa":sampleGroup = "${exomeSequenceSA}"
+                         case "sa":sampleGroup = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_SEQ,"none",RestServerService.ANCESTRY_SA)
                              break;
-                         case "eu":sampleGroup = "${exomeSequenceEU}"
+                         case "eu":sampleGroup = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_SEQ,"none",RestServerService.ANCESTRY_EU)
                              break;
-                         case "hs":sampleGroup = "${exomeSequenceHS}"
+                         case "hs":sampleGroup = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_SEQ,"none",RestServerService.ANCESTRY_HS)
                              break;
                          default: break
                      }
@@ -324,41 +279,6 @@ class FilterManagementService {
 
          return returnValue
      }
-
-
-
-    /***
-     * Here's the string matching that is usually done inside the filter compilation methods below. We also call this one routine directly from
-     * the VariantController, however, so it makes sense to perform this comparison in its own module
-     * @param incomingParameters
-     * @return
-     */
-    public  int distinguishBetweenDataSets (HashMap incomingParameters){
-        int returnValue = 0;
-        if  (incomingParameters.containsKey("datatype"))  {      // user has requested a particular data set. Without explicit request what is the default?
-            String requestedDataSet =  incomingParameters ["datatype"]
-
-            switch (requestedDataSet)   {
-                case  "gwas":
-                    returnValue = 0
-                    break;
-                case  "sigma":
-                    returnValue = 1
-                    break;
-                case  "exomeseq":
-                    returnValue = 2
-                    break;
-                case  "exomechip":
-                    returnValue = 3
-                    break;
-
-                default: break;
-            }
-        }
-        return returnValue
-
-    }
-
 
 
 
