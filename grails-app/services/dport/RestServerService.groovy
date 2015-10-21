@@ -38,14 +38,16 @@ class RestServerService {
     private String GET_DATA_URL = "getData"
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
-    private String EXOMESEQ_AA = "ExSeq_17k_aa_genes_mdv2"
-    private String EXOMESEQ_HS = "ExSeq_17k_hs_mdv2"
-    private String EXOMESEQ_EA = "ExSeq_17k_ea_genes_mdv2"
-    private String EXOMESEQ_SA = "ExSeq_17k_sa_genes_mdv2"
-    private String EXOMESEQ_EU = "ExSeq_17k_eu_mdv2"
-    private String EXOMECHIP = "ExChip_82k_mdv2"
-    private String EXOMESEQ = "ExSeq_17k_mdv2"
-    private String GWASDIAGRAM  = "GWAS_DIAGRAM_mdv2"
+    private String TECHNOLOGY_GWAS = "GWAS"
+    private String TECHNOLOGY_EXOME_SEQ = "ExSeq"
+    private String TECHNOLOGY_EXOME_CHIP = "ExChip"
+    private String ANCESTRY_AA = "AA"
+    private String ANCESTRY_HS = "HS"
+    private String ANCESTRY_EA = "EA"
+    private String ANCESTRY_SA = "SA"
+    private String ANCESTRY_EU = "EU"
+    private String ANCESTRY_NONE = "none"
+    private String EXPERIMENT_DIAGRAM = "DIAGRAM"
     private String ORCHIP  = "ODDS_RATIO"
     private String EXOMESEQUENCEPVALUE  = "P_FIRTH_FE_IV"
     private String GWASDATAPVALUE  = "P_VALUE"
@@ -330,6 +332,56 @@ class RestServerService {
         return returnValue
     }
 
+
+    public String getSampleGroup (String technology, String experiment,String ethnicity){
+        String dataSize = "17k"
+        String returnValue = ""
+        switch (technology){
+            case TECHNOLOGY_GWAS:
+                returnValue = "${TECHNOLOGY_GWAS}_${experiment}_${sharedToolsService.getCurrentDataVersion()}"
+                break;
+            case TECHNOLOGY_EXOME_SEQ:
+                switch (ethnicity){
+                    case ANCESTRY_AA:
+                        returnValue = "${TECHNOLOGY_EXOME_SEQ}_${dataSize}_aa_genes_${sharedToolsService.getCurrentDataVersion()}"
+                        break;
+                    case ANCESTRY_HS:
+                        returnValue = "${TECHNOLOGY_EXOME_SEQ}_${dataSize}_hs_${sharedToolsService.getCurrentDataVersion()}"
+                        break;
+                    case ANCESTRY_EA:
+                        returnValue = "${TECHNOLOGY_EXOME_SEQ}_${dataSize}_ea_genes_${sharedToolsService.getCurrentDataVersion()}"
+                        break;
+                    case ANCESTRY_SA:
+                        returnValue = "${TECHNOLOGY_EXOME_SEQ}_${dataSize}_sa_genes_${sharedToolsService.getCurrentDataVersion()}"
+                        break;
+                    case ANCESTRY_EU:
+                        returnValue = "${TECHNOLOGY_EXOME_SEQ}_${dataSize}_eu_${sharedToolsService.getCurrentDataVersion()}"
+                        break;
+                    case ANCESTRY_NONE:
+                        returnValue = "${TECHNOLOGY_EXOME_SEQ}_${dataSize}_${sharedToolsService.getCurrentDataVersion()}"
+                        break;
+                    default:
+                        log.error("Unexpected ethnicity=${ethnicity}")
+                        break
+                }
+                break;
+            case TECHNOLOGY_EXOME_CHIP:
+                returnValue = "${TECHNOLOGY_EXOME_CHIP}_82k_${sharedToolsService.getCurrentDataVersion()}"
+                break;
+            default:
+                log.error("Unexpected technology=${technology}")
+                break
+
+        }
+        return returnValue
+    }
+
+
+
+
+
+
+
     /***
      * This is the underlying routine for every GET request to the REST backend
      * where response is text/plain type.
@@ -478,31 +530,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
-    LinkedHashMap<String, String> convertJsonToMap(JSONObject jsonObject) {
-        LinkedHashMap returnValue = [:]
-        for (String sequenceKey in jsonObject.keySet()) {
-            def intermediateObject = jsonObject[sequenceKey]
-            if (intermediateObject) {
-                returnValue[sequenceKey] = intermediateObject.toString()
-            } else {
-                returnValue[sequenceKey] = null
-            }
-
-        }
-        return returnValue
-    }
-
-    // for now let's do a pseudo call
-    JSONObject retrieveDatasetsFromMetadata(List<String> sampleGroupList,
-                                            List<String> experimentList) {
-        JSONObject result
-        result = sharedToolsService.getMetadata()
-        println 'meta-data retrieved'
-    }
-
-
-
-
 
     /***
      * retrieve information about a gene specified by name
@@ -541,17 +568,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
-    String generateDataRestrictionFilters (){
-        StringBuilder sb = new  StringBuilder ()
-        if (sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq)) {
-            sb << """,
-{ "filter_type": "STRING", "operand": "IN_EXSEQ",  "operator": "EQ","value": "1"  }
-""".toString()
-        }
-        return sb.toString()
-    }
-
-
 
     String generateRangeFiltersPValueRestriction (String chromosome,
                                                   String beginSearch,
@@ -563,9 +579,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                    { "filter_type": "STRING", "operand": "CHROM",  "operator": "EQ","value": "${chromosome}"  },
                    {"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": ${beginSearch} },
                    {"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": ${endSearch} }""".toString()
-        if (dataRestriction) {
-            sb <<   generateDataRestrictionFilters ()
-        }
+
         if (pValue) {
             sb <<   """,
 {"operand": "PVALUE", "operator": "LTE", "value": ${pValue.toString()}, "filter_type": "FLOAT"}"""
@@ -701,12 +715,24 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String filterByVariantName = codedfilterByVariant(variantId)
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID","DBSNP_ID","CLOSEST_GENE","GENE","MOST_DEL_SCORE"])
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName],searchBuilderService,metaDataService)
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${EXOMESEQUENCEPVALUE}")
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${GWASDIAGRAM}","${GWASDATAPVALUE}")
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMECHIP}","${EXOMECHIPPVALUE}")
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${EXOMESEQUENCEOR}")
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${GWASDIAGRAM}","${GWASDATAOR}")
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMECHIP}","${EXOMECHIPOR}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}",
+                "${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}",
+                "${EXOMESEQUENCEPVALUE}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}",
+                "${getSampleGroup(TECHNOLOGY_GWAS,EXPERIMENT_DIAGRAM,ANCESTRY_NONE)}",
+                "${GWASDATAPVALUE}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}",
+                "${getSampleGroup(TECHNOLOGY_EXOME_CHIP,"none",ANCESTRY_NONE)}",
+                "${EXOMECHIPPVALUE}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}",
+                "${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}",
+                "${EXOMESEQUENCEOR}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}",
+                "${getSampleGroup(TECHNOLOGY_GWAS,EXPERIMENT_DIAGRAM,ANCESTRY_NONE)}",
+                "${GWASDATAOR}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}",
+                "${getSampleGroup(TECHNOLOGY_EXOME_CHIP,"none",ANCESTRY_NONE)}",
+                "${EXOMECHIPOR}")
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
@@ -722,7 +748,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @return
      */
     public JSONObject combinedVariantAssociationStatistics(String variantName){
-        String gwasSample = "${GWASDIAGRAM}"
         String attribute = "T2D"
         JSONObject returnValue
         List <Integer> dataSeteList = [1]
@@ -754,20 +779,20 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                         sb  << "{\"level\":\"MOST_DEL_SCORE\",\"count\":\"${element}\"},"
 
                         if (variant ["P_FIRTH_FE_IV"]){
-                            sb  << "{\"level\":\"P_FIRTH_FE_IV\",\"count\":${variant["P_FIRTH_FE_IV"][EXOMESEQ][attribute]}},"
+                            sb  << "{\"level\":\"P_FIRTH_FE_IV\",\"count\":${variant["P_FIRTH_FE_IV"]["${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}"][attribute]}},"
                         }
                         if (variant ["P_VALUE"]){
-                            sb  << "{\"level\":\"P_VALUE_GWAS\",\"count\":${variant["P_VALUE"][gwasSample][attribute]}},"
-                            sb  << "{\"level\":\"P_VALUE_EXCHIP\",\"count\":${variant["P_VALUE"][EXOMECHIP][attribute]}},"
+                            sb  << "{\"level\":\"P_VALUE_GWAS\",\"count\":${variant["P_VALUE"][getSampleGroup(TECHNOLOGY_GWAS,EXPERIMENT_DIAGRAM,ANCESTRY_NONE)][attribute]}},"
+                            sb  << "{\"level\":\"P_VALUE_EXCHIP\",\"count\":${variant["P_VALUE"][getSampleGroup(TECHNOLOGY_EXOME_CHIP,"none",ANCESTRY_NONE)][attribute]}},"
                         }
                         if (variant ["OR_FIRTH_FE_IV"]){
-                            sb  << "{\"level\":\"OR_FIRTH_FE_IV\",\"count\":${variant["OR_FIRTH_FE_IV"][EXOMESEQ][attribute]}},"
+                            sb  << "{\"level\":\"OR_FIRTH_FE_IV\",\"count\":${variant["OR_FIRTH_FE_IV"][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)][attribute]}},"
                         }
                         if (variant ["ODDS_RATIO"]){
-                            sb  << "{\"level\":\"ODDS_RATIO\",\"count\":${variant["ODDS_RATIO"][gwasSample][attribute]}},"
+                            sb  << "{\"level\":\"ODDS_RATIO\",\"count\":${variant["ODDS_RATIO"][getSampleGroup(TECHNOLOGY_GWAS,EXPERIMENT_DIAGRAM,ANCESTRY_NONE)][attribute]}},"
                         }
                         if (variant ["${ORCHIP}"]){
-                            sb  << "{\"level\":\"${ORCHIP}\",\"count\":${variant["${ORCHIP}"][EXOMECHIP][attribute]}}"
+                            sb  << "{\"level\":\"${ORCHIP}\",\"count\":${variant["${ORCHIP}"][getSampleGroup(TECHNOLOGY_EXOME_CHIP,"none",ANCESTRY_NONE)][attribute]}}"
                         }
 
                     }
@@ -798,12 +823,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String filterByVariantName = codedfilterByVariant(variantId)
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID", "CHROM", "POS"])
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName],searchBuilderService,metaDataService)
-        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}","${EXOMESEQ_SA}")
-        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}","${EXOMESEQ_HS}")
-        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}","${EXOMESEQ_EA}")
-        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}","${EXOMESEQ_AA}")
-        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}","${EXOMESEQ_EU}")
-        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}","${EXOMECHIP}")
+        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_SA)}")
+        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_HS)}")
+        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_EA)}")
+        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_AA)}")
+        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_EU)}")
+        addColumnsForDProperties(resultColumnsToDisplay,"${MAFPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_CHIP,"none",ANCESTRY_NONE)}")
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
@@ -833,12 +858,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                     if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
                         def variant = apiResults.variants[0];
                         if (variant ["MAF"]){
-                            sb  << "{\"level\":\"AA\",\"count\":${variant["MAF"][EXOMESEQ_AA]}},"
-                            sb  << "{\"level\":\"HS\",\"count\":${variant["MAF"][EXOMESEQ_HS]}},"
-                            sb  << "{\"level\":\"EA\",\"count\":${variant["MAF"][EXOMESEQ_EA]}},"
-                            sb  << "{\"level\":\"SA\",\"count\":${variant["MAF"][EXOMESEQ_SA]}},"
-                            sb  << "{\"level\":\"EUseq\",\"count\":${variant["MAF"][EXOMESEQ_EU]}},"
-                            sb  << "{\"level\":\"Euchip\",\"count\":${variant["MAF"][EXOMECHIP]}}"
+                            sb  << "{\"level\":\"AA\",\"count\":${variant["MAF"][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_AA)]}},"
+                            sb  << "{\"level\":\"HS\",\"count\":${variant["MAF"][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_HS)]}},"
+                            sb  << "{\"level\":\"EA\",\"count\":${variant["MAF"][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_EA)]}},"
+                            sb  << "{\"level\":\"SA\",\"count\":${variant["MAF"][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_SA)]}},"
+                            sb  << "{\"level\":\"EUseq\",\"count\":${variant["MAF"][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_EU)]}},"
+                            sb  << "{\"level\":\"Euchip\",\"count\":${variant["MAF"][getSampleGroup(TECHNOLOGY_EXOME_CHIP,"none",ANCESTRY_NONE)]}}"
                         }
                     }
 
@@ -868,14 +893,14 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String filterByVariantName = codedfilterByVariant(variantId)
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID"])
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName],searchBuilderService,metaDataService)
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${HETEROZYGOTE_AFFECTED}")
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${HETEROZYGOTE_UNAFFECTED}")
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${HOMOZYGOTE_AFFECTED}")
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${HOMOZYGOTE_UNAFFECTED}")
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${OBSERVED_AFFECTED}")
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${OBSERVED_UNAFFECTED}")
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${EXOMESEQUENCEPVALUE}")
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${EXOMESEQ}","${EXOMESEQUENCEOR}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","${HETEROZYGOTE_AFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","${HETEROZYGOTE_UNAFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","${HOMOZYGOTE_AFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","${HOMOZYGOTE_UNAFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","${OBSERVED_AFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","${OBSERVED_UNAFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","${EXOMESEQUENCEPVALUE}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","${EXOMESEQUENCEOR}")
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
@@ -907,28 +932,28 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                     if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
                         def variant = apiResults.variants[0];
                         if (variant ["HETA"]){
-                            sb  << "{\"level\":\"HETA\",\"count\":${variant["HETA"][EXOMESEQ][attribute]}},"
+                            sb  << "{\"level\":\"HETA\",\"count\":${variant["HETA"][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)][attribute]}},"
                         }
                         if (variant ["HETU"]){
-                            sb  << "{\"level\":\"HETU\",\"count\":${variant["HETU"][EXOMESEQ][attribute]}},"
+                            sb  << "{\"level\":\"HETU\",\"count\":${variant["HETU"][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)][attribute]}},"
                         }
                         if (variant ["HOMA"]){
-                            sb  << "{\"level\":\"HOMA\",\"count\":${variant["HOMA"][EXOMESEQ][attribute]}},"
+                            sb  << "{\"level\":\"HOMA\",\"count\":${variant["HOMA"][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)][attribute]}},"
                         }
                         if (variant ["HOMU"]){
-                            sb  << "{\"level\":\"HOMU\",\"count\":${variant["HOMU"][EXOMESEQ][attribute]}},"
+                            sb  << "{\"level\":\"HOMU\",\"count\":${variant["HOMU"][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)][attribute]}},"
                         }
                         if (variant ["OBSU"]){
-                            sb  << "{\"level\":\"OBSU\",\"count\":${variant["OBSU"][EXOMESEQ][attribute]}},"
+                            sb  << "{\"level\":\"OBSU\",\"count\":${variant["OBSU"][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)][attribute]}},"
                         }
                         if (variant ["OBSA"]){
-                            sb  << "{\"level\":\"OBSA\",\"count\":${variant["OBSA"][EXOMESEQ][attribute]}},"
+                            sb  << "{\"level\":\"OBSA\",\"count\":${variant["OBSA"][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)][attribute]}},"
                         }
                         if (variant ["P_FIRTH_FE_IV"]){
-                            sb  << "{\"level\":\"P_FIRTH_FE_IV\",\"count\":${variant["P_FIRTH_FE_IV"][EXOMESEQ][attribute]}},"
+                            sb  << "{\"level\":\"P_FIRTH_FE_IV\",\"count\":${variant["P_FIRTH_FE_IV"][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)][attribute]}},"
                         }
                         if (variant ["OR_FIRTH_FE_IV"]){
-                            sb  << "{\"level\":\"OR_FIRTH_FE_IV\",\"count\":${variant["OR_FIRTH_FE_IV"][EXOMESEQ][attribute]}}"
+                            sb  << "{\"level\":\"OR_FIRTH_FE_IV\",\"count\":${variant["OR_FIRTH_FE_IV"][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)][attribute]}}"
                         }
                     }
 
@@ -992,26 +1017,26 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String dataSetId = ""
         switch (ethnicity){
             case "HS":
-                dataSetId = EXOMESEQ_HS
+                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_HS)
                 break;
             case "AA":
-                dataSetId = EXOMESEQ_AA
+                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_AA)
                 break;
             case "EA":
-                dataSetId = EXOMESEQ_EA
+                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_EA)
                 break;
             case "SA":
-                dataSetId = EXOMESEQ_SA
+                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_SA)
                 break;
             case "EU":
-                dataSetId = EXOMESEQ_EU
+                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_EU)
                 break;
             case "chipEu":
-                dataSetId = EXOMECHIP
+                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_CHIP,"none",ANCESTRY_NONE)
                 break;
             default:
                 log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
-                dataSetId = EXOMESEQ_AA
+                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_AA)
         }
         return dataSetId
     }
@@ -1039,7 +1064,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 break;
             default:
                 log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
-                dataSetId = EXOMESEQ_AA
+                dataSetId = "aa"
         }
         return dataSetId
     }
@@ -1075,7 +1100,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 break;
             default:
                 log.error("Trouble: user requested cell number = ${cellNumber} which I don't recognize")
-                dataSetId = EXOMESEQ_AA
+                dataSetId = "total"
         }
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID"])
         List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName,"","","","${codeForMafSlice}-${codeForEthnicity}")
@@ -1086,8 +1111,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 addColumnsForPProperties(resultColumnsToDisplay,"T2D","${dataSetId}","OBSU")
             }
         }else {
-            addColumnsForPProperties(resultColumnsToDisplay,"T2D","${EXOMESEQ}","OBSA")
-            addColumnsForPProperties(resultColumnsToDisplay,"T2D","${EXOMESEQ}","OBSU")
+            addColumnsForPProperties(resultColumnsToDisplay,"T2D","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","OBSA")
+            addColumnsForPProperties(resultColumnsToDisplay,"T2D","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","OBSU")
         }
         JsonSlurper slurper = new JsonSlurper()
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
@@ -1791,7 +1816,8 @@ ${getDataHeader (0, 100, 10, false)}
 }
 }
 """.toString()
-        return postRestCall(jsonSpec,GENE_SEARCH_URL) // TODO: change to new API
+        return postRestCall(jsonSpec,GENE_SEARCH_URL) // This is an old API call, but we don't have an analogous
+                                                      //  : the new API
     }
 
     /***
