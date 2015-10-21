@@ -20,7 +20,7 @@
     $.ajax({
         cache: false,
         type: "get",
-        url: "../../trait/traitVariantCrossAjax/" + "${regionSpecification}",
+        url: "../../trait/traitVariantCrossGetDataAjax/" + "${regionSpecification}",
         async: true,
         success: function (data) {
             fillTraitVariantCross(data);
