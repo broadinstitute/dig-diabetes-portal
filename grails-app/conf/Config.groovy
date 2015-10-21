@@ -183,8 +183,8 @@ t2dAws01RestServer {
 // NOTE: the bottom two are most likely used for the CI build testing, so keep them at steady AWS pointer for CI testing
 // DIGP-136: changed to load balanced development machine
 t2dDevRestServer {
-    base = 'http://dig-api-dev.broadinstitute.org/'
-    name =  'dev/'
+    base = 'http://dig-api-prod.broadinstitute.org/'
+    name =  'prod/'
     path = 'gs/'
 }
 // DIGP-136: changed to load balanced production machine
@@ -201,8 +201,8 @@ t2dNewDevRestServer { //current 'dev'
 }
 
 //server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
-server.URL = t2dAws01RestServer.base+t2dAws01RestServer.name+t2dAws01RestServer.path
-//server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
+//server.URL = t2dAws01RestServer.base+t2dAws01RestServer.name+t2dAws01RestServer.path
+server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
 dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
 //dbtRestServer.URL = 'http://diabetesgeneticsportal2.broadinstitute.org:8888/dev/burden/'
 //experimentalRestServer.URL = 'http://69.173.71.178:8888/dev2/server/'
