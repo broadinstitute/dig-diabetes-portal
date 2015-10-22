@@ -38,21 +38,13 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
     }
 
 
-    void "test retrieveTreatByUnparsedGenomicRegion"() {
-        when:
-        JSONObject jsonObject = restServerService.searchTraitByUnparsedRegion("chr9:21,940,000-22,190,000")
-        then:
-        jsonObject["is_error"] == false
-        jsonObject["variants"].size() > 0
-    }
-
-
-
     void "test retrieveGeneInfoByName"() {
         when:
         JSONObject jsonObject = restServerService.retrieveGeneInfoByName("PANX1")
         then:
         assert jsonObject
+        jsonObject["is_error"] == false
+
     }
 
     void "test retrieveVariantInfoByName"() {
@@ -60,7 +52,31 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
         JSONObject jsonObject = restServerService.retrieveVariantInfoByName("rs13266634")
         then:
         assert jsonObject
+        jsonObject["is_error"] == false
     }
+
+
+    @Unroll("testing  requestGeneCountByPValue with #label")
+    void "test requestGeneCountByPValue"() {
+        when:
+        JSONObject jsonObject = restServerService.requestGeneCountByPValue("PTEN",significance,dataset)
+
+        then:
+        assert jsonObject
+        jsonObject["is_error"] == false
+
+        where:
+        label                       | significance      |   dataset
+        "query exome seq all"       |   1               |   1
+        "query exome chip gws"      |   2               |   2
+        "query gwas locus sig"      |   3               |   3
+        "query exome seq nominal"   |   4               |   1
+
+    }
+
+
+
+
 
 
     @Unroll("testing  extractNumbersWeNeed with #label")

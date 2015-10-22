@@ -135,37 +135,6 @@ class TraitControllerUnitSpec extends Specification {
 
     }
 
-    void "test traitVariantCrossAjax"() {
-        given:
-        request.makeAjaxRequest()
-        controller.restServerService = Mock(RestServerService)
-        JSONObject jsonObject = new  JSONObject("{'variants':'mockData'}")
-        params.id = 'rs560887'
-        controller.restServerService.metaClass.searchTraitByUnparsedRegion = {String variant->return jsonObject}
-
-        when:
-        controller.traitVariantCrossAjax()
-
-        then:
-        response.status == 200
-        response.contentAsString.contains('variants')
-        response.contentAsString.contains('mockData')
-    }
-
-    void "test traitVariantCrossAjax failed lookup"() {
-        given:
-        request.makeAjaxRequest()
-        params.id = 'rs560887'
-        controller.restServerService = Mock(RestServerService)
-        controller.restServerService.metaClass.searchTraitByUnparsedRegion = {String variant->}
-
-        when:
-        controller.traitVariantCrossAjax()
-
-        then:
-        response.status == 300
-    }
-
 
 
 

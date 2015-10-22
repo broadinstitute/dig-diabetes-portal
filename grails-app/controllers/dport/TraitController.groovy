@@ -175,31 +175,6 @@ class TraitController {
                         show_exseq         : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq)])
     }
 
-    /***
-     * called by regionInfo, this provides information across 25 phenotypes. Use it to populate our big region graphic (the one that
-     * may one day be supplanted by LocusZoom?)
-     * @return
-     */
-    def traitVariantCrossAjax() {
-        String regionsSpecification = params.id
-
-        // log
-        log.info("for traitVariantCrossAjax call, got params: " + params)
-
-        JSONObject jsonObject =  restServerService.searchTraitByUnparsedRegion (regionsSpecification)
-
-        // log
-        log.info("for traitVariantCrossAjax, got json results object: " + jsonObject);
-
-        if (jsonObject) {
-            render(status: 200, contentType: "application/json") {
-                [variants: jsonObject['variants']]
-            }
-        } else {
-            render(status:300, contentType:"application/json")
-        }
-
-    }
 
     /**
      * new method to use the getData call to get the data in trait-search REST call result format

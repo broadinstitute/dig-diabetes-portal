@@ -528,29 +528,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    String generateRangeFiltersPValueRestriction (String chromosome,
-                                                  String beginSearch,
-                                                  String endSearch,
-                                                  Boolean dataRestriction,
-                                                  BigDecimal pValue)    {
-        StringBuilder sb = new  StringBuilder ()
-        sb << """[
-                   { "filter_type": "STRING", "operand": "CHROM",  "operator": "EQ","value": "${chromosome}"  },
-                   {"filter_type": "FLOAT","operand": "POS","operator": "GTE","value": ${beginSearch} },
-                   {"filter_type":  "FLOAT","operand": "POS","operator": "LTE","value": ${endSearch} }""".toString()
-
-        if (pValue) {
-            sb <<   """,
-{"operand": "PVALUE", "operator": "LTE", "value": ${pValue.toString()}, "filter_type": "FLOAT"}"""
-        }
-
-        sb << """
-]""".toString()
-        return sb.toString()
-    }
-
-
-
     /***
      *   search for a trait on the basis of a region specification
      * @param chromosome
@@ -578,39 +555,17 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         // return
         return jsonObject;
-        /*
-        JSONObject returnValue = null
-        String drivingJson = """{
-"user_group": "ui",
-"filters": ${generateRangeFiltersPValueRestriction (chromosome,beginSearch,endSearch,false,0.05)}
-}
-""".toString()
-        returnValue = postRestCall( drivingJson, TRAIT_SEARCH_URL)
-        return returnValue
-        */
-    }
 
+    }
 
     /***
-     * retrieve a trait starting with the  raw region specification string we get from users
-     * @param userSpecifiedString
+     * Generate the numbers for the 'variants and associations' table on the gene info page
+     *
+     * @param geneName
+     * @param significanceIndicator
+     * @param dataSet
      * @return
      */
-    public JSONObject searchTraitByUnparsedRegion(String userSpecifiedString) {
-        JSONObject returnValue = null
-        LinkedHashMap<String, Integer> ourNumbers = extractNumbersWeNeed(userSpecifiedString)
-        if (ourNumbers.containsKey("chromosomeNumber") &&
-                ourNumbers.containsKey("startExtent") &&
-                ourNumbers.containsKey("endExtent")) {
-            returnValue = searchForTraitBySpecifiedRegion(ourNumbers["chromosomeNumber"],
-                    ourNumbers["startExtent"],
-                    ourNumbers["endExtent"])
-        }
-        return returnValue
-    }
-
-
-
     private JSONObject  requestGeneCountByPValue (String geneName, Integer significanceIndicator, Integer dataSet){
         String dataSetId = ""
         String significance
