@@ -1230,7 +1230,6 @@ class SharedToolsService {
         }
         if (((parametersToEncode.containsKey("predictedEffects")) && (parametersToEncode["predictedEffects"]))&&
                 (parametersToEncode["predictedEffects"]!="0")) {
-//            sb << ("11="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["predictedEffects"].toString())+"^")
             sb << ("11="+
              StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY}|${parametersToEncode["predictedEffects"]}")+"^")
         }
@@ -1241,17 +1240,14 @@ class SharedToolsService {
             sb << ("13="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["esValueInequality"].toString())+"^")
         }
         if (((parametersToEncode.containsKey("condelSelect")) && (parametersToEncode["condelSelect"]))) {
-//            sb << ("14="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["condelSelect"].toString())+"^")
             sb << ("11="+
                     StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY}|${parametersToEncode["condelSelect"]}")+"^")
         }
         if (((parametersToEncode.containsKey("polyphenSelect")) && (parametersToEncode["polyphenSelect"]))) {
-//            sb << ("15="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["polyphenSelect"].toString())+"^")
             sb << ("11="+
             StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY}|${parametersToEncode["polyphenSelect"]}")+"^")
         }
         if (((parametersToEncode.containsKey("siftSelect")) && (parametersToEncode["siftSelect"]))) {
-//            sb << ("16="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["siftSelect"].toString())+"^")
             sb << ("11="+
                     StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_SIFT_PRED_KEY}|${parametersToEncode["siftSelect"]}")+"^")
         }

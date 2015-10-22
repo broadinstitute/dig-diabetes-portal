@@ -16,6 +16,7 @@ import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseResultTransl
 import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseTraitSearchTranslator
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 @Transactional
@@ -37,7 +38,6 @@ class RestServerService {
     private String BASE_URL = ""
     private String GENE_INFO_URL = "gene-info"
     private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out, but used for (inefficiently) obtaining gene list.
-    private String TRAIT_SEARCH_URL = "trait-search" // TODO: Wipe out
     private String METADATA_URL = "getMetadata"
     private String GET_DATA_URL = "getData"
     private String DBT_URL = ""
@@ -169,51 +169,6 @@ class RestServerService {
         return GENE_COLUMNS + EXSEQ_GENE_COLUMNS + EXCHP_GENE_COLUMNS + GWAS_GENE_COLUMNS
     }
 
-
-    private String getDataHeader (Integer pageNumber,
-                                  Integer pageSize,
-                                  Integer limit,
-                                  Boolean count){
-        return """    "passback": "123abc",
-    "entity": "variant",
-    "page_number": ${pageNumber.toString()},
-    "page_size": ${pageSize.toString()},
-    "limit": ${limit.toString()},
-    "count": ${(count)?"true": "false"},""".toString()
-    }
-
-
-
-
-    private filterByVariant(String variantName) {
-        String returnValue
-        String uppercaseVariantName = variantName?.toUpperCase()
-        if (uppercaseVariantName?.startsWith("RS")) {
-            returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "DBSNP_ID", "operator": "EQ", "value": "${
-                uppercaseVariantName
-            }", "operand_type": "STRING"}"""
-        } else {
-            // be prepared to substitute underscores for dashes, since dashes are an alternate form
-            //  for naming variants, but in the database we use only underscores
-            List <String> dividedByDashes = uppercaseVariantName?.split("-")
-            if ((dividedByDashes) &&
-                    (dividedByDashes.size()>2)){
-                int isThisANumber = 0
-                try {
-                    isThisANumber = Integer.parseInt(dividedByDashes[0])
-                }catch(e){
-                    // his is only a test. An exception here is not a problem
-                }
-                if (isThisANumber > 0){// okay -- let's do the substitution
-                    uppercaseVariantName = uppercaseVariantName.replaceAll('-','_')
-                }
-            }
-            returnValue = """{"dataset_id": "blah", "phenotype": "blah", "operand": "VAR_ID", "operator": "EQ", "value": "${
-                uppercaseVariantName
-            }", "operand_type": "STRING"}"""
-        }
-        return returnValue
-    }
     private codedfilterByVariant(String variantName) {
         String returnValue
         String uppercaseVariantName = variantName?.toUpperCase()
@@ -633,54 +588,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         returnValue = postRestCall( drivingJson, TRAIT_SEARCH_URL)
         return returnValue
         */
-    }
-
-
-    /***
-     * search for a treat specified by name
-     * @param traitName
-     * @param significance
-     * @return
-     */
-    JSONObject searchTraitByName (String traitName, BigDecimal significance) throws PortalException {
-        // local variables
-        JSONObject jsonObject = null;
-        GetDataQuery getDataQuery = null;
-        CommonGetDataQueryBuilder commonGetDataQueryBuilder = new CommonGetDataQueryBuilder();
-        List<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant> variantList = new ArrayList<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant>();
-        KnowledgeBaseResultTranslator knowledgeBaseResultTranslator = new KnowledgeBaseTraitSearchTranslator();
-        org.broadinstitute.mpg.diabetes.metadata.Phenotype phenotype = null;
-        JsonParser parser = JsonParser.getService();
-        QueryJsonBuilder queryJsonBuilder = new QueryJsonBuilder();
-
-        // get the phenotype
-        phenotype = parser.getPhenotypeMapByTechnologyAndVersion("GWAS", "mdv2").get(traitName);
-
-        // check for errors
-        if (phenotype == null) {
-            throw new PortalException("Could not find phenotype: " + traitName + " in the metadata");
-
-        } else if (significance == null) {
-            throw new PortalException("Got null significance: " + significance);
-
-        } else {
-            // for each trait, get the getData query
-            getDataQuery = commonGetDataQueryBuilder.getDataQueryForPhenotype(phenotype, significance.toString());
-
-            // call the rest server
-            jsonObject = this.postGetDataCall(queryJsonBuilder.getQueryJsonPayloadString(getDataQuery));
-
-            // for the result, translate into a variant and add to the list
-            KnowledgeBaseResultParser knowledgeBaseResultParser = new KnowledgeBaseResultParser(jsonObject.toString());
-            List<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant> tempList = knowledgeBaseResultParser.parseResult();
-            variantList.addAll(tempList);
-
-            // for all the variants found, translate into trait-search format
-            jsonObject = knowledgeBaseResultTranslator.translate(variantList);
-        }
-
-        // return
-        return jsonObject
     }
 
 
@@ -1822,6 +1729,10 @@ private LinkedHashMap buildColumnsRequestForPProperties(LinkedHashMap resultColu
     /***
      * Note: this call is not used interactively, but used instead to fill the grails domain object that holds
      * all of our genes and extents.
+     *
+     * Note also: This is the only instance in the portal that calls the gene_search API.  We should find a way to update
+     * this call to a regular, maintained API call
+     *
      * @param chromosomeName
      * @return
      */
@@ -1877,24 +1788,14 @@ private LinkedHashMap buildColumnsRequestForPProperties(LinkedHashMap resultColu
      * @return
      */
     private JSONObject gatherVariantsForChromosomeByChunkResults(String chromosomeName,int chunkSize,int startingPosition){
-        String jsonSpec =  """{
-${getDataHeader (0, 100, 1000, false)}
-    "properties":    {
-                           "cproperty": ["VAR_ID","DBSNP_ID","POS", "CHROM"],
-                          "orderBy":    ["POS"],
-                          "dproperty":    {
-                                        },
-                        "pproperty":    {
-                                        }
-                    },
-    "filters":    [
-                      {"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "EQ", "value": "${chromosomeName}", "operand_type": "STRING"},
-                      {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "GTE", "value": ${startingPosition}, "operand_type": "INTEGER"}
-
-                ]
-}
-""".toString()
-        return postRestCall(jsonSpec,GET_DATA_URL)
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID","DBSNP_ID","POS", "CHROM"])
+        List<String> codedFilters = ["8=${chromosomeName}","9=${startingPosition}"]
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters,searchBuilderService,metaDataService)
+        getDataQueryHolder.addProperties(resultColumnsToDisplay)
+        JsonSlurper slurper = new JsonSlurper()
+        String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        return dataJsonObject
     }
 
 
@@ -1905,7 +1806,7 @@ ${getDataHeader (0, 100, 1000, false)}
         if (!apiResults.is_error)  {
             int numberOfVariants = apiResults.numRecords
             returnValue.numberOfVariants =  numberOfVariants
-            def variants =  apiResults.variants
+            JSONArray variants =  apiResults.variants as JSONArray
             returnValue.lastPosition =  sqlService.insertArrayOfVariants(variants, numberOfVariants)
         }
 

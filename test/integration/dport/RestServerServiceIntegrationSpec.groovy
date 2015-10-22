@@ -1,6 +1,7 @@
 package dport
 
 import grails.test.spock.IntegrationSpec
+import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.junit.After
 import org.junit.Before
@@ -13,29 +14,18 @@ import spock.lang.Unroll
 class RestServerServiceIntegrationSpec  extends IntegrationSpec {
     RestServerService restServerService
     SharedToolsService sharedToolsService
+    MetaDataService metaDataService // Initialize metadata if necessary
 
 
     @Before
     void setup() {
-
+        metaDataService.getCommonPropertiesAsJson(false)
     }
 
     @After
     void tearDown() {
 
     }
-
-
-    void "test  smoke"() {
-        when:
-        int i = 1
-        then:
-        assert i==1
-    }
-
-
-
-
 
 
 
@@ -55,38 +45,6 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
         jsonObject["is_error"] == false
         jsonObject["variants"].size() > 0
     }
-
-
-
-
-
-    void "test searchTraitByName"() {
-        when:
-        JSONObject jsonObject = restServerService.searchTraitByName("BMI",0.000005)
-        then:
-        assert jsonObject
-        jsonObject["is_error"] == false
-        jsonObject["variants"].size() > 0
-    }
-
-
-    void "test connection to diabetes server"() {
-        given:
-        String testJson = """{
-"gene_symbol": "SLC30A8",
-"columns": ["ID", "CHROM", "BEG", "END", "Function_description", "_13k_T2D_VAR_TOTAL", "_13k_T2D_ORIGIN_VAR_TOTALS", "_13k_T2D_lof_NVAR", "_13k_T2D_lof_MINA_MINU_RET",
-"_13k_T2D_lof_METABURDEN", "_13k_T2D_GWS_TOTAL", "_13k_T2D_NOM_TOTAL", "EXCHP_T2D_VAR_TOTALS", "EXCHP_T2D_GWS_TOTAL", "EXCHP_T2D_NOM_TOTAL", "GWS_TRAITS",
-"GWAS_T2D_GWS_TOTAL", "GWAS_T2D_NOM_TOTAL", "GWAS_T2D_VAR_TOTAL"],
-"user_group": "ui"
-}
-""".toString()
-        when:
-        JSONObject jsonObject = restServerService.postServiceJson(restServerService.currentRestServer()+"gene-info",
-                testJson)
-        then:
-        assert jsonObject
-    }
-
 
 
 
