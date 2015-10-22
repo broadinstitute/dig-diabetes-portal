@@ -1,10 +1,10 @@
 /**
  * Created by ben on 8/16/2014.
  */
-package dport
+package org.broadinstitute.mpg
 
-import grails.converters.JSON
 import grails.test.spock.IntegrationSpec
+import org.broadinstitute.mpg.TraitController
 
 /**
  *

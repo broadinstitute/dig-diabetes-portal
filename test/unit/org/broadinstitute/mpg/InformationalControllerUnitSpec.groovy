@@ -1,8 +1,9 @@
-package dport
+package org.broadinstitute.mpg
 
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
+import org.broadinstitute.mpg.InformationalController
 import spock.lang.Specification
 
 /**
