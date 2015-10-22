@@ -1164,17 +1164,6 @@ class SharedToolsService {
 
 
 
-    public String sendTestEmail(){
-        mailService.sendMail {
-            from "t2dPortal@gmail.com"
-            to "t2d-error@googlegroups.com"
-            subject "Hello"
-            body "Test"
-        }
-
-    }
-
-
 
 
     public String sendForgottenPasswordEmail(String userEmailAddress){

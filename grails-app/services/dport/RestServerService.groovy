@@ -1407,47 +1407,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return columnsToDisplayStructure
     }
 
-    public LinkedHashMap getColumnsToFetch(String filterJson,LinkedHashMap requestedProperties) {
-        LinkedHashMap columnsToDisplay = getColumnsToDisplay(filterJson, requestedProperties)
-        LinkedHashMap returnValue = [:]
-        returnValue.dproperty = [:]
-        returnValue.pproperty = [:]
-        // var id is required
-        returnValue.cproperty = columnsToDisplay.cproperty+"VAR_ID"
-
-
-        if (columnsToDisplay.pproperty) {
-            for (String phenotype in columnsToDisplay.pproperty.keySet()) {
-                for (String dataset in columnsToDisplay.pproperty[phenotype].keySet()) {
-                    for (String property in columnsToDisplay.pproperty[phenotype][dataset]) {
-                        if (!returnValue.pproperty[property]) {
-                            returnValue.pproperty[property] = [:]
-                        }
-                        if (!returnValue.pproperty[property][dataset]) {
-                            returnValue.pproperty[property][dataset] = []
-                        }
-                        returnValue.pproperty[property][dataset] << phenotype
-                    }
-                }
-            }
-        }
-        if (columnsToDisplay.dproperty) {
-            for (String phenotype in columnsToDisplay.dproperty.keySet()) {
-                for (String dataset in columnsToDisplay.dproperty[phenotype].keySet()) {
-                    for (String property in columnsToDisplay.dproperty[phenotype][dataset]) {
-                        if (!returnValue.dproperty[property]) {
-                            returnValue.dproperty[property] = []
-                        }
-                        returnValue.dproperty[property] << dataset
-                    }
-                }
-            }
-        }
-
-        return returnValue
-    }
-
-
 
     private String orSubstitute(LinkedHashMap properties){
         String orValue = ""

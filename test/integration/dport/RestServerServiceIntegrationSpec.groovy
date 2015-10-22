@@ -2,6 +2,8 @@ package dport
 
 import grails.test.spock.IntegrationSpec
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
+import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.junit.After
 import org.junit.Before
@@ -15,7 +17,7 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
     RestServerService restServerService
     SharedToolsService sharedToolsService
     MetaDataService metaDataService // Initialize metadata if necessary
-
+    MetadataUtilityService metadataUtilityService
 
     @Before
     void setup() {
@@ -74,6 +76,61 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
 
     }
 
+
+    void "test combinedVariantAssociationStatistics"() {
+        when:
+        JSONObject jsonObject = restServerService.combinedVariantAssociationStatistics("rs13266634")
+        then:
+        assert jsonObject
+    }
+
+
+
+
+
+    void "test howCommonIsVariantAcrossEthnicities"() {
+        when:
+        JSONObject jsonObject = restServerService.howCommonIsVariantAcrossEthnicities("rs13266634")
+        then:
+        assert jsonObject
+    }
+
+
+
+    void "test combinedVariantDiseaseRisk"() {
+        when:
+        JSONObject jsonObject = restServerService.combinedVariantDiseaseRisk("rs13266634")
+        then:
+        assert jsonObject
+    }
+
+
+
+    void "test combinedEthnicityTable"() {
+        when:
+        JSONObject jsonObject = restServerService.combinedEthnicityTable("FAT1")
+        then:
+        assert jsonObject
+    }
+
+
+
+    void "test gatherProteinEffect"() {
+        when:
+        JSONObject jsonObject = restServerService.gatherProteinEffect("rs13266634")
+        then:
+        assert jsonObject
+    }
+
+
+
+
+    void "test getTraitPerVariant"() {
+        when:
+        JSONObject jsonObject = restServerService.getTraitPerVariant("rs13266634")
+        then:
+        assert jsonObject
+    }
 
 
 
