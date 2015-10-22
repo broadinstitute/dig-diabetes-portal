@@ -1,5 +1,5 @@
-package dport
-import dport.GeneController
+package org.broadinstitute.mpg
+import org.broadinstitute.mpg.GeneController
 import grails.converters.JSON
 import grails.test.spock.IntegrationSpec
 /**
