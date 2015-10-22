@@ -1,13 +1,8 @@
 package dport
-
-import dport.meta.UserQueryContext
 import grails.transaction.Transactional
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
-import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
-import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.metadata.query.JsNamingQueryTranslator
-import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 
 @Transactional
