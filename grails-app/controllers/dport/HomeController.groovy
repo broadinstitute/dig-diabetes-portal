@@ -2,7 +2,6 @@ package dport
 
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.apache.juli.logging.LogFactory
-import temporary.BuildInfo
 
 class HomeController {
     private static final log = LogFactory.getLog(this)

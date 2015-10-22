@@ -1,7 +1,8 @@
-package dport
+package org.broadinstitute.mpg
 
 import grails.test.spock.IntegrationSpec
 import groovy.json.JsonBuilder
+import org.broadinstitute.mpg.BeaconController
 import spock.lang.Unroll
 
 /**

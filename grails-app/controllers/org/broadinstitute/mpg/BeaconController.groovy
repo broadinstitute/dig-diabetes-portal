@@ -1,4 +1,6 @@
-package dport
+package org.broadinstitute.mpg
+
+import dport.RestServerService
 
 class BeaconController {
     RestServerService restServerService
