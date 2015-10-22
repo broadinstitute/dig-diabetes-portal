@@ -1,4 +1,6 @@
 package dport
+
+import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -7,8 +9,9 @@ import spock.lang.Unroll
  */
 @Unroll
 @TestFor(FilterManagementService)
+@Mock([RestServerService, SharedToolsService])
 class FilterManagementServiceUnitSpec extends Specification {
-
+//    RestServerService restServerService = new RestServerService()
 
     void "test something"() {
         given:
@@ -22,8 +25,8 @@ class FilterManagementServiceUnitSpec extends Specification {
 
 
     void "test ancestry group variation filters"() {
-
         given: "prepare the inputs"
+//            service.restServerService = this.restServerService
             String filter = "lowfreq-ea"
             Map hashMap = ["region_gene_input": "SLC30A8"]
 

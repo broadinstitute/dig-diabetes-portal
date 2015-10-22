@@ -43,7 +43,7 @@ public class CommonGetDataQueryBuilderTest extends TestCase {
     }
 
     @Test
-    public void testGetDataQueryForPhenotype() {
+    public void testGetDataQueryForPhenotypeAndPosition() {
         // local variables
         GetDataQuery getDataQuery = null;
         Phenotype phenotype = null;
@@ -70,6 +70,37 @@ public class CommonGetDataQueryBuilderTest extends TestCase {
         assertTrue(getDataQuery.getFilterList().size() > 0);
         assertTrue(getDataQuery.getQueryPropertyList().size() > 0);
         assertEquals(4, getDataQuery.getFilterList().size());
+        assertEquals(18, getDataQuery.getQueryPropertyList().size());
+    }
+
+    @Test
+    public void testGetDataQueryForPhenotype() {
+        // local variables
+        GetDataQuery getDataQuery = null;
+        Phenotype phenotype = null;
+
+        try {
+            // get the phenotype to test
+            List<Phenotype> phenotypeList = this.jsonParser.getPhenotypeListByTechnologyAndVersion("GWAS", "mdv2");
+            if (phenotypeList.size() > 0) {
+                phenotype = phenotypeList.get(0);
+
+            } else {
+                fail("Got no phenotypes for gwas/mdv2 search");
+            }
+
+            // get the query
+            getDataQuery = this.commonGetDataQueryBuilder.getDataQueryForPhenotype(phenotype, "0.005");
+
+        } catch (PortalException exception) {
+            fail("Got error: " + exception.getMessage());
+        }
+
+        // test
+        assertNotNull(getDataQuery);
+        assertTrue(getDataQuery.getFilterList().size() > 0);
+        assertTrue(getDataQuery.getQueryPropertyList().size() > 0);
+        assertEquals(1, getDataQuery.getFilterList().size());
         assertEquals(18, getDataQuery.getQueryPropertyList().size());
     }
 }

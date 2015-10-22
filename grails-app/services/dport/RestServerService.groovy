@@ -1,5 +1,4 @@
 package dport
-import dport.meta.UserQueryContext
 import grails.plugins.rest.client.RestBuilder
 import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
@@ -8,9 +7,14 @@ import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
+import org.broadinstitute.mpg.diabetes.metadata.query.CommonGetDataQueryBuilder
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
+import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseResultParser
+import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseResultTranslator
+import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseTraitSearchTranslator
+import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONObject
 
@@ -599,9 +603,27 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param endSearch
      * @return
      */
-    JSONObject searchForTraitBySpecifiedRegion (String chromosome,
-                                                String beginSearch,
-                                                String endSearch) {
+    JSONObject searchForTraitBySpecifiedRegion (String chromosome, String beginSearch, String endSearch) throws PortalException {
+        // local variables
+        List<Phenotype> phenotypeList = null;
+        int beginSearchNumber, endSearchNumber;
+
+        // get the phenotype list
+        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", "mdv2");
+
+        try {
+            beginSearchNumber = Integer.valueOf(beginSearch).intValue();
+            endSearchNumber = Integer.valueOf(endSearch).intValue();
+        } catch (NumberFormatException exception) {
+            throw new PortalException("searchForTraitBySpecifiedRegion: Got number format exception for start: " + beginSearch + " and end: " + endSearch);
+        }
+
+        // submit query
+        JSONObject jsonObject =  this.metaDataService.getTraitSearchResultForChromosomeAndPositionAndPhenotypes(phenotypeList, chromosome, beginSearchNumber, endSearchNumber);
+
+        // return
+        return jsonObject;
+        /*
         JSONObject returnValue = null
         String drivingJson = """{
 "user_group": "ui",
@@ -610,7 +632,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 """.toString()
         returnValue = postRestCall( drivingJson, TRAIT_SEARCH_URL)
         return returnValue
+        */
     }
+
 
     /***
      * search for a treat specified by name
@@ -618,20 +642,45 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param significance
      * @return
      */
-    JSONObject searchTraitByName (String traitName,
-                                  BigDecimal significance) {
-        JSONObject returnValue = null
-        StringBuilder sb = new  StringBuilder ()
-        sb << """{
-"user_group": "ui",
-"filters": [
-    {"operand": "PVALUE", "operator": "LTE", "value": ${significance.toString ()}, "filter_type": "FLOAT"}""".toString()
-        sb << """],
-"trait": "${traitName}"
-}
-""".toString()
-        returnValue = postRestCall( sb.toString(), TRAIT_SEARCH_URL)
-        return returnValue
+    JSONObject searchTraitByName (String traitName, BigDecimal significance) throws PortalException {
+        // local variables
+        JSONObject jsonObject = null;
+        GetDataQuery getDataQuery = null;
+        CommonGetDataQueryBuilder commonGetDataQueryBuilder = new CommonGetDataQueryBuilder();
+        List<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant> variantList = new ArrayList<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant>();
+        KnowledgeBaseResultTranslator knowledgeBaseResultTranslator = new KnowledgeBaseTraitSearchTranslator();
+        org.broadinstitute.mpg.diabetes.metadata.Phenotype phenotype = null;
+        JsonParser parser = JsonParser.getService();
+        QueryJsonBuilder queryJsonBuilder = new QueryJsonBuilder();
+
+        // get the phenotype
+        phenotype = parser.getPhenotypeMapByTechnologyAndVersion("GWAS", "mdv2").get(traitName);
+
+        // check for errors
+        if (phenotype == null) {
+            throw new PortalException("Could not find phenotype: " + traitName + " in the metadata");
+
+        } else if (significance == null) {
+            throw new PortalException("Got null significance: " + significance);
+
+        } else {
+            // for each trait, get the getData query
+            getDataQuery = commonGetDataQueryBuilder.getDataQueryForPhenotype(phenotype, significance.toString());
+
+            // call the rest server
+            jsonObject = this.postGetDataCall(queryJsonBuilder.getQueryJsonPayloadString(getDataQuery));
+
+            // for the result, translate into a variant and add to the list
+            KnowledgeBaseResultParser knowledgeBaseResultParser = new KnowledgeBaseResultParser(jsonObject.toString());
+            List<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant> tempList = knowledgeBaseResultParser.parseResult();
+            variantList.addAll(tempList);
+
+            // for all the variants found, translate into trait-search format
+            jsonObject = knowledgeBaseResultTranslator.translate(variantList);
+        }
+
+        // return
+        return jsonObject
     }
 
 

@@ -32,10 +32,41 @@ public class CommonGetDataQueryBuilder {
      * @param chromosome
      * @param startPosition
      * @param endPosition
+     * @param pValueString
      * @return
      * @throws PortalException
      */
     public GetDataQuery getDataQueryForPhenotype(Phenotype phenotype, String chromosome, int startPosition, int endPosition, String pValueString) throws PortalException {
+        // local variables
+        GetDataQuery queryBean = new GetDataQueryBean();
+        List<Property> propertyList = null;
+        SampleGroup sampleGroup = null;
+        List<Property> commonProperties = this.jsonParser.getAllCommonProperties();
+        Property property = null;
+
+        // build the getData query for the phenotype first
+        queryBean = this.getDataQueryForPhenotype(phenotype, pValueString);
+
+        // add in the filter properties
+        property = this.getPropertyByNameAndPropertyType(commonProperties, PortalConstants.NAME_COMMON_PROPERTY_CHROMOSOME, PortalConstants.TYPE_COMMON_PROPERTY_KEY);
+        queryBean.addFilterProperty(property, PortalConstants.OPERATOR_EQUALS, chromosome);
+        property = this.getPropertyByNameAndPropertyType(commonProperties, PortalConstants.NAME_COMMON_PROPERTY_POSITION, PortalConstants.TYPE_COMMON_PROPERTY_KEY);
+        queryBean.addFilterProperty(property, PortalConstants.OPERATOR_MORE_THAN_EQUALS, String.valueOf(startPosition));
+        queryBean.addFilterProperty(property, PortalConstants.OPERATOR_LESS_THAN_EQUALS, String.valueOf(endPosition));
+
+        // return
+        return queryBean;
+    }
+
+    /**
+     * builds a getData query object for a given phenotype object search
+     *
+     * @param phenotype
+     * @param pValueString
+     * @return
+     * @throws PortalException
+     */
+    public GetDataQuery getDataQueryForPhenotype(Phenotype phenotype, String pValueString) throws PortalException {
         // local variables
         GetDataQuery queryBean = new GetDataQueryBean();
         List<Property> propertyList = null;
@@ -53,13 +84,6 @@ public class CommonGetDataQueryBuilder {
                 queryBean.addQueryProperty(sampleGroupProperty);
             }
         }
-
-        // add in the filter properties
-        property = this.getPropertyByNameAndPropertyType(commonProperties, PortalConstants.NAME_COMMON_PROPERTY_CHROMOSOME, PortalConstants.TYPE_COMMON_PROPERTY_KEY);
-        queryBean.addFilterProperty(property, PortalConstants.OPERATOR_EQUALS, chromosome);
-        property = this.getPropertyByNameAndPropertyType(commonProperties, PortalConstants.NAME_COMMON_PROPERTY_POSITION, PortalConstants.TYPE_COMMON_PROPERTY_KEY);
-        queryBean.addFilterProperty(property, PortalConstants.OPERATOR_MORE_THAN_EQUALS, String.valueOf(startPosition));
-        queryBean.addFilterProperty(property, PortalConstants.OPERATOR_LESS_THAN_EQUALS, String.valueOf(endPosition));
 
         // make sure there is a match for the phenotype
         for (Property tempProperty : phenotype.getProperties()) {
