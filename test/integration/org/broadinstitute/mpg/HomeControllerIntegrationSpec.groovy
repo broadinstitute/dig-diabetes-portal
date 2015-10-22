@@ -1,7 +1,7 @@
-package dport
+package org.broadinstitute.mpg
 
-import grails.converters.JSON
 import grails.test.spock.IntegrationSpec
+import org.broadinstitute.mpg.HomeController
 
 /**
  *

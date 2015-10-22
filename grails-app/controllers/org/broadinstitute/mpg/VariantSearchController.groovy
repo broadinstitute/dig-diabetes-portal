@@ -9,11 +9,7 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
-import org.broadinstitute.mpg.diabetes.metadata.Property
-import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
-import org.broadinstitute.mpg.diabetes.metadata.query.JsNamingQueryTranslator
-import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class VariantSearchController {
