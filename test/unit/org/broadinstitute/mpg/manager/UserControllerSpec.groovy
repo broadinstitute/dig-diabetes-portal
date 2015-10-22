@@ -1,6 +1,7 @@
-package dport.mgr
+package org.broadinstitute.mpg.manager
 
 import grails.test.mixin.TestFor
+import org.broadinstitute.mpg.manager.UserController
 import spock.lang.Specification
 
 /**
