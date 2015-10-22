@@ -1,8 +1,5 @@
 package dport
 
-
-import dport.TraitController
-import grails.converters.JSON
 import grails.test.spock.IntegrationSpec
 import spock.lang.Unroll
 

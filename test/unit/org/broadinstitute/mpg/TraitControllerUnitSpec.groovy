@@ -1,10 +1,10 @@
-package dport
+package org.broadinstitute.mpg
 
+import dport.SharedToolsService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.domain.DomainClassUnitTestMixin
 import org.broadinstitute.mpg.diabetes.MetaDataService
-import org.codehaus.groovy.grails.web.json.JSONObject
 import spock.lang.Specification
 
 /**
