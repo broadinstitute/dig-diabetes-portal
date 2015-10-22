@@ -1,6 +1,7 @@
-package dport
+package org.broadinstitute.mpg
 
 import grails.test.spock.IntegrationSpec
+import org.broadinstitute.mpg.VariantSearchController
 import spock.lang.Unroll
 
 /**

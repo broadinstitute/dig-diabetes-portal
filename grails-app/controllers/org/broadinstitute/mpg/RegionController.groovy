@@ -3,9 +3,6 @@ package org.broadinstitute.mpg
 import dport.Gene
 import dport.RestServerService
 import dport.SharedToolsService
-import grails.plugin.springsecurity.annotation.Secured
-import org.apache.juli.logging.LogFactory
-import org.codehaus.groovy.grails.web.json.JSONObject
 
 class RegionController {
 
