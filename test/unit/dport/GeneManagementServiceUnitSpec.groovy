@@ -2,6 +2,8 @@ package dport
 
 import grails.test.mixin.TestFor
 import groovy.json.JsonSlurper
+import org.broadinstitute.mpg.Gene
+import org.broadinstitute.mpg.Variant
 import spock.lang.Specification
 import spock.lang.Unroll
 

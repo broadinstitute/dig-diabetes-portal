@@ -2,6 +2,7 @@ package dport
 
 import grails.test.spock.IntegrationSpec
 import groovy.json.JsonSlurper
+import org.broadinstitute.mpg.Gene
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll

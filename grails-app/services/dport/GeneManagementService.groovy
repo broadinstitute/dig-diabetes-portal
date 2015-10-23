@@ -1,6 +1,8 @@
 package dport
 
 import grails.transaction.Transactional
+import org.broadinstitute.mpg.Gene
+import org.broadinstitute.mpg.Variant
 
 @Transactional
 class GeneManagementService {

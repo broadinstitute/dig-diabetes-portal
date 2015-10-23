@@ -10,6 +10,7 @@ import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.springframework.beans.factory.annotation.Autowired
+import org.apache.commons.logging.LogFactory
 
 /**
  * Created by balexand on 9/17/2015.
@@ -20,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired
  * (Also allowing me to program in Groovy instead of Java!)
  */
 class GetDataQueryHolder {
+    // log class
+    private static final log = LogFactory.getLog(this)
 
     GetDataQuery getDataQuery
 
@@ -163,7 +166,13 @@ class GetDataQueryHolder {
                 dataSets?.each { String dataSetKey, List props ->
                     for (String prop in props) {
                         Property displayProperty = metaDataService.getSampleGroupProperty(dataSetKey, prop)
-                        getDataQuery.addQueryProperty(displayProperty)
+
+                        // avoid null pointers and log whenever null properties are added (unclear why this is not finding properties, so not sure if bug)
+                        if (displayProperty != null) {
+                            getDataQuery.addQueryProperty(displayProperty)
+                        } else {
+                            log.info("Got null dproperty, so can't add to getDataQuery: " + dProperties);
+                        }
                     }
                 }
             }

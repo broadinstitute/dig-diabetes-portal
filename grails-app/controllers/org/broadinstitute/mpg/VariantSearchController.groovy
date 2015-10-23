@@ -1,7 +1,6 @@
 package org.broadinstitute.mpg
 
 import dport.FilterManagementService
-import dport.Gene
 import dport.RestServerService
 import dport.SearchBuilderService
 import dport.SharedToolsService

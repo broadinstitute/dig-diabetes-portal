@@ -8,10 +8,11 @@ import grails.transaction.Transactional
 import groovy.json.JsonSlurper
 import groovy.json.StringEscapeUtils
 import org.apache.juli.logging.LogFactory
+import org.broadinstitute.mpg.Gene
+import org.broadinstitute.mpg.Variant
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
-import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryBean
 import org.broadinstitute.mpg.diabetes.metadata.query.JsNamingQueryTranslator
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
