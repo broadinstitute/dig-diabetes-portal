@@ -25,9 +25,12 @@ class RegionControllerIntegrationSpec extends IntegrationSpec {
 
     void "test the search a region by ajax page"() {
         when:
- int i =1
+        controller.params.id="chr9:21,940,000-22,190,000"
+        controller.regionInfo()
         then: 'verify that we get valid responses back'
-i==1
+        controller.response.status==302
+        controller.response.redirectedUrl.contains("launchAVariantSearch")
+
     }
 
 
