@@ -1,7 +1,5 @@
 package dport
 
-import dport.Gene
-import dport.ProteinEffect
 import grails.test.spock.IntegrationSpec
 
 /**

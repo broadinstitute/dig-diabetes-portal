@@ -1,4 +1,4 @@
-import dport.Gene
+import org.broadinstitute.mpg.Gene
 import dport.ProteinEffect
 import dport.RestServerService
 import dport.SharedToolsService

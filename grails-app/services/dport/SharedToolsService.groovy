@@ -8,6 +8,7 @@ import grails.transaction.Transactional
 import groovy.json.JsonSlurper
 import groovy.json.StringEscapeUtils
 import org.apache.juli.logging.LogFactory
+import org.broadinstitute.mpg.Gene
 import org.broadinstitute.mpg.Variant
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Property

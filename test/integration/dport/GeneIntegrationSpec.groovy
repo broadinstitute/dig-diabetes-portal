@@ -1,6 +1,6 @@
 package dport
 
-import dport.Gene
+import org.broadinstitute.mpg.Gene
 import grails.test.spock.IntegrationSpec
 
 /**
