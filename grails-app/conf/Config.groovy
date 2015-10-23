@@ -508,7 +508,7 @@ grails.resources.adhoc.includes = [
 // Added by the Spring Security Core plugin:
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'org.broadinstitute.mpg.people.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinstitute.mpg.people.UserRole'
-grails.plugin.springsecurity.authority.className = 'dport.people.Role'
+grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 // placeholder for data version
 diabetes.data.version = "mdv2";

@@ -1,8 +1,8 @@
 package dport
-import dport.people.Role
+import org.broadinstitute.mpg.people.Role
 import org.broadinstitute.mpg.people.User
 import org.broadinstitute.mpg.people.UserRole
-import dport.people.UserSession
+import org.broadinstitute.mpg.people.UserSession
 import grails.plugin.mail.MailService
 import grails.transaction.Transactional
 import groovy.json.JsonSlurper

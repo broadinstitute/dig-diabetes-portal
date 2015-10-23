@@ -1,4 +1,4 @@
-package dport.people
+package org.broadinstitute.mpg.people
 
 class Role {
 

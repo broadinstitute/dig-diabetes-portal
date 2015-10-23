@@ -1,7 +1,5 @@
 package org.broadinstitute.mpg.people
 
-import dport.people.Role
-
 class User {
 
 	transient springSecurityService

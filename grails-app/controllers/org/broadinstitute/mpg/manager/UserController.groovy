@@ -2,7 +2,7 @@ package org.broadinstitute.mpg.manager
 import dport.SharedToolsService
 import org.broadinstitute.mpg.people.User
 import org.broadinstitute.mpg.people.UserRole
-import dport.people.UserSession
+import org.broadinstitute.mpg.people.UserSession
 import grails.transaction.Transactional
 
 import static org.springframework.http.HttpStatus.*

@@ -2,7 +2,7 @@ import org.broadinstitute.mpg.Gene
 import org.broadinstitute.mpg.ProteinEffect
 import dport.RestServerService
 import dport.SharedToolsService
-import dport.people.Role
+import org.broadinstitute.mpg.people.Role
 import org.broadinstitute.mpg.people.User
 import org.broadinstitute.mpg.people.UserRole
 import org.apache.juli.logging.LogFactory

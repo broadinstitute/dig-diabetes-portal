@@ -1,6 +1,6 @@
 package dport
 
-import dport.people.Role
+import org.broadinstitute.mpg.people.Role
 import org.broadinstitute.mpg.people.UserRole
 import grails.plugin.springsecurity.SpringSecurityService
 import grails.transaction.Transactional
