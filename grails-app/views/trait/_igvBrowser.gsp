@@ -234,7 +234,7 @@
                                     name: 'coronary kidney disease',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">coronary kidney disease</a>
+                                })">chronic kidney disease</a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -256,7 +256,7 @@
                                     name: 'eGFR-creat (serum creatinine)',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">eGFR-creat (serum creatinine)</a>
+                                })">eGFR-cys (serum cystatin C)</a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',

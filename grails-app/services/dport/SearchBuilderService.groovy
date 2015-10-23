@@ -10,42 +10,18 @@ class SearchBuilderService {
 
 
     SharedToolsService sharedToolsService
-    FilterManagementService filterManagementService
     SearchBuilderService searchBuilderService
     MetaDataService metaDataService
 
-
     /***
-     * write out the custom filters in a human readable form
-     * @param customFilter
+     * Printing the protein predictions is a bit of a bother. Here's the routine
+     *
+     * @param typeOfPrediction
+     * @param codedValueAsString
+     * @param operatorSplitCharacter
      * @return
      */
-    public String makeFiltersPrettier (String customFilter){
-        StringBuilder sb = new StringBuilder()
-        if (customFilter){
-            LinkedHashMap mappedFilter = filterManagementService.parseCustomFilterString(customFilter)
-            if ((mappedFilter.property) && (mappedFilter.equivalence)) {// parsing successful
-                sb << "${sharedToolsService.translator (mappedFilter.phenotype)}["
-                sb << "${sharedToolsService.translator (mappedFilter.sampleSet)}]"
-                sb << "${sharedToolsService.translator (mappedFilter.property)}"
-                if (mappedFilter.equivalence == "LT"){
-                    sb << "<"
-                }else if (mappedFilter.equivalence == "GT"){
-                    sb << ">"
-                }else if (mappedFilter.equivalence == "EQ") {
-                    sb << "="
-                }
-                sb << "${sharedToolsService.translator (mappedFilter.value)}"
-            }
-        }
-    }
-
-
-
-
-
-
-    private String prettyPrintPredictedEffect (int typeOfPrediction, String codedValueAsString,String operatorSplitCharacter){
+    public String prettyPrintPredictedEffect (int typeOfPrediction, String codedValueAsString,String operatorSplitCharacter){
         String returnValue = ""
         int codedValue = 0
 

@@ -512,6 +512,3 @@ grails.plugin.springsecurity.authority.className = 'dport.people.Role'
 
 // placeholder for data version
 diabetes.data.version = "mdv2";
-
-//auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
-//oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'

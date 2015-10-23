@@ -335,12 +335,19 @@
         // common props section
         var sortCol = 0;
         var totCol = 0;
+        var varIdIndex = data.columns.cproperty.indexOf('VAR_ID');
+        if (varIdIndex > 0) {
+            data.columns.cproperty.splice(varIdIndex, 1);
+        }
         $('#variantTableHeaderRow2').children().first().append(buildCPropertyInteractor(data.cProperties.dataset, data.columns.cproperty));
         var commonWidth = 0;
         for (var common in data.columns.cproperty) {
             var colName = data.columns.cproperty[common];
-            $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + mpgSoftware.trans.translator(colName) + "</th>")
-            commonWidth++;
+            if (!((colName==='VAR_ID')&&(commonWidth>0))){ // VAR_ID never shows up other than in the first column
+                $('#variantTableHeaderRow3').append("<th class=\"datatype-header\">" + mpgSoftware.trans.translator(colName) + "</th>")
+                commonWidth++;
+            }
+
         }
         rememberProperty('common', 'common', data.columns.cproperty, true);
         $('#variantTableHeaderRow').children().first().attr('colspan', commonWidth);

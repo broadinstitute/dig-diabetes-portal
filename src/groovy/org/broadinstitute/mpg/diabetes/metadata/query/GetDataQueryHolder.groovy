@@ -142,9 +142,11 @@ class GetDataQueryHolder {
         if ((resultColumnsToDisplay) &&
                 (resultColumnsToDisplay['cproperty'])) {
             List<String> cProperties = resultColumnsToDisplay['cproperty']
-            for (String cProperty in cProperties) {
+            for (String cProperty in cProperties?.unique()) {
                 Property displayProperty = metaDataService.getCommonPropertyByName(cProperty)
-                getDataQuery.addQueryProperty(displayProperty)
+                if (!(cProperty in getDataQuery.getQueryPropertyList()?.name)){
+                    getDataQuery.addQueryProperty(displayProperty)
+                }
             }
         }
     }
