@@ -1,7 +1,6 @@
 package org.broadinstitute.mpg.people
 
 import dport.people.Role
-import dport.people.UserRole
 
 class User {
 

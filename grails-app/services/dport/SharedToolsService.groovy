@@ -1,7 +1,7 @@
 package dport
 import dport.people.Role
 import org.broadinstitute.mpg.people.User
-import dport.people.UserRole
+import org.broadinstitute.mpg.people.UserRole
 import dport.people.UserSession
 import grails.plugin.mail.MailService
 import grails.transaction.Transactional

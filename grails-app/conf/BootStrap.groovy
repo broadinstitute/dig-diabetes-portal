@@ -4,7 +4,7 @@ import dport.RestServerService
 import dport.SharedToolsService
 import dport.people.Role
 import org.broadinstitute.mpg.people.User
-import dport.people.UserRole
+import org.broadinstitute.mpg.people.UserRole
 import org.apache.juli.logging.LogFactory
 
 class BootStrap {
