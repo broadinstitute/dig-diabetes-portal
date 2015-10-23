@@ -1,13 +1,11 @@
-package dport.mgr
-
+package org.broadinstitute.mpg
 import grails.test.mixin.TestFor
 import spock.lang.Specification
-
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
-@TestFor(UserController)
-class UserControllerSpec extends Specification {
+@TestFor(HypothesisGenController)
+class HypothesisGenControllerSpec extends Specification {
 
     def setup() {
     }

@@ -1,5 +1,6 @@
-package dport
+package org.broadinstitute.mpg
 
+import dport.MetadataQueryService
 import grails.plugins.rest.client.RestResponse
 import groovy.json.JsonSlurper
 

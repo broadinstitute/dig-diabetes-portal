@@ -1,15 +1,14 @@
-package dport
+package org.broadinstitute.mpg.manager
 
 import grails.test.mixin.TestFor
+import org.broadinstitute.mpg.manager.UserController
 import spock.lang.Specification
 
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
-@TestFor(ResultsFilterController)
-class ResultsFilterControllerSpec extends Specification {
-
-    // todo arz write real tests
+@TestFor(UserController)
+class UserControllerSpec extends Specification {
 
     def setup() {
     }

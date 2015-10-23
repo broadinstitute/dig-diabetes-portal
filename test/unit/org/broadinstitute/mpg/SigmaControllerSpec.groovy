@@ -1,6 +1,8 @@
-package dport
+package org.broadinstitute.mpg
 
+import dport.WebRequestLanguageLookupService
 import grails.test.mixin.TestFor
+import org.broadinstitute.mpg.SigmaController
 import spock.lang.Specification
 
 /**
