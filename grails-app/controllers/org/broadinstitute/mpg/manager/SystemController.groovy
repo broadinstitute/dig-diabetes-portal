@@ -1,4 +1,4 @@
-package dport.mgr
+package org.broadinstitute.mpg.manager
 
 import dport.RestServerService
 import dport.SharedToolsService
