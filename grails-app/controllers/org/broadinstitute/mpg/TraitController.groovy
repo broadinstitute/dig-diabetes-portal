@@ -1,7 +1,6 @@
 package org.broadinstitute.mpg
 
 import dport.MetadataUtilityService
-import dport.Phenotype
 import dport.RestServerService
 import dport.SharedToolsService
 import org.apache.juli.logging.LogFactory
@@ -225,7 +224,7 @@ class TraitController {
      */
     def traitVariantCrossGetDataAjax() {
         String regionsSpecification = params.id
-        List<Phenotype> phenotypeList = null;
+        List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = null;
 
         // log
         log.info("for traitVariantCrossGetDataAjax call, got params: " + params)

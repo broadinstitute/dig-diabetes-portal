@@ -533,7 +533,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     JSONObject searchForTraitBySpecifiedRegion (String chromosome, String beginSearch, String endSearch) throws PortalException {
         // local variables
-        List<Phenotype> phenotypeList = null;
+        List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = null;
         int beginSearchNumber, endSearchNumber;
 
         // get the phenotype list
