@@ -1,5 +1,5 @@
 import org.broadinstitute.mpg.Gene
-import dport.ProteinEffect
+import org.broadinstitute.mpg.ProteinEffect
 import dport.RestServerService
 import dport.SharedToolsService
 import dport.people.Role

@@ -1,6 +1,7 @@
-package dport
+package org.broadinstitute.mpg
 
 import grails.test.mixin.TestFor
+import org.broadinstitute.mpg.ProteinEffect
 import spock.lang.Specification
 
 /**
