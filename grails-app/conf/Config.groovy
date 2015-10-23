@@ -506,7 +506,7 @@ grails.resources.adhoc.includes = [
 
 
 // Added by the Spring Security Core plugin:
-grails.plugin.springsecurity.userLookup.userDomainClassName = 'dport.people.User'
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'org.broadinstitute.mpg.people.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'dport.people.UserRole'
 grails.plugin.springsecurity.authority.className = 'dport.people.Role'
 

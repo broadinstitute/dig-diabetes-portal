@@ -1,6 +1,7 @@
 package dport.people
 
 import org.apache.commons.lang.builder.HashCodeBuilder
+import org.broadinstitute.mpg.people.User
 
 class UserRole implements Serializable {
 

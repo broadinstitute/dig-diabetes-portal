@@ -1,12 +1,10 @@
 package dport
 
 import dport.people.Role
-import dport.people.User
 import dport.people.UserRole
 import grails.plugin.springsecurity.SpringSecurityService
-import grails.plugin.springsecurity.oauth.OAuthToken
 import grails.transaction.Transactional
-import dport.people.User
+import org.broadinstitute.mpg.people.User
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.security.authentication.AuthenticationManager

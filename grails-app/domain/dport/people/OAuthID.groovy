@@ -1,5 +1,7 @@
 package dport.people
 
+import org.broadinstitute.mpg.people.User
+
 class OAuthID implements Serializable {
 
     String provider

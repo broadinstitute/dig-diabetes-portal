@@ -1,15 +1,13 @@
 package grails.plugin.springsecurity
 
 import grails.test.mixin.TestFor
-import org.hibernate.Session
+import org.broadinstitute.mpg.people.User
 import org.springframework.security.authentication.AccountExpiredException
 import org.springframework.security.authentication.AuthenticationTrustResolver
 import org.springframework.security.authentication.CredentialsExpiredException
 import org.springframework.security.authentication.DisabledException
 import org.springframework.security.authentication.LockedException
-import org.springframework.security.web.WebAttributes
 import spock.lang.Specification
-import grails.test.mixin.web.GroovyPageUnitTestMixin
 
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
@@ -29,7 +27,7 @@ class LoginControllerUnitSpec extends Specification {
         AuthenticationTrustResolver authenticationTrustResolverMock = Mock(AuthenticationTrustResolver)
         controller.authenticationTrustResolver = authenticationTrustResolverMock
 
-        dport.people.User userMock = Mock(dport.people.User)
+        User userMock = Mock(User)
 
     }
 

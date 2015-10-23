@@ -1,7 +1,7 @@
 package org.broadinstitute.mpg.manager
 
 //import dport.people.LoginTracking
-import dport.people.User
+import org.broadinstitute.mpg.people.User
 import dport.people.UserSession
 import org.apache.commons.logging.LogFactory
 import org.springframework.context.ApplicationListener
