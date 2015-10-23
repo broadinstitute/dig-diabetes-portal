@@ -5,7 +5,6 @@ import dport.GeneManagementService
 import dport.RestServerService
 import dport.SharedToolsService
 import dport.SqlService
-import dport.Variant
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
