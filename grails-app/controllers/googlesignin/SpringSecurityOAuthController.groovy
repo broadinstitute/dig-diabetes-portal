@@ -15,7 +15,7 @@
  */
 package googlesignin
 
-import dport.GoogleRestService
+import org.broadinstitute.mpg.GoogleRestService
 import org.broadinstitute.mpg.SpringManipService
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.commons.GrailsApplication

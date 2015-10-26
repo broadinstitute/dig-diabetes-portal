@@ -1,6 +1,6 @@
 package googlesignin
 
-import dport.GoogleRestService
+import org.broadinstitute.mpg.GoogleRestService
 import org.broadinstitute.mpg.SpringManipService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
