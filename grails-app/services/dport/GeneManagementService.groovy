@@ -2,6 +2,7 @@ package dport
 
 import grails.transaction.Transactional
 import org.broadinstitute.mpg.Gene
+import org.broadinstitute.mpg.SqlService
 import org.broadinstitute.mpg.Variant
 
 @Transactional
