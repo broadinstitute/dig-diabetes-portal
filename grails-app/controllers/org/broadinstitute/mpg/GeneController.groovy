@@ -1,6 +1,5 @@
 package org.broadinstitute.mpg
 
-import dport.GeneManagementService
 import dport.RestServerService
 import dport.SharedToolsService
 import org.apache.juli.logging.LogFactory
