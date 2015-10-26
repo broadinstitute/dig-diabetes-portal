@@ -1,6 +1,7 @@
 package org.broadinstitute.mpg
 
 import dport.SharedToolsService
+import grails.plugin.mail.MailService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
@@ -15,6 +16,7 @@ import spock.lang.Specification
 class HomeControllerUnitSpec extends Specification {
 
     SharedToolsService sharedToolsService = new SharedToolsService()
+    MailService mailService = new MailService()
 
     def setup() {
 
@@ -70,5 +72,30 @@ class HomeControllerUnitSpec extends Specification {
         view == '/home/portalHome'
 
     }
+
+
+
+    void "test empty message for beaconHome"() {
+        when:
+        controller.beaconHome()
+
+        then:
+        response.status == 200
+
+    }
+
+
+
+    void "test introVideoHolder"() {
+        when:
+        controller.introVideoHolder()
+
+        then:
+        response.status == 200
+
+    }
+
+
+
 
 }
