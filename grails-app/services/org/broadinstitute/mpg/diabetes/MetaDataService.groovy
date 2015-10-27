@@ -1,5 +1,5 @@
 package org.broadinstitute.mpg.diabetes
-import dport.MetadataUtilityService
+import org.broadinstitute.mpg.MetadataUtilityService
 import dport.RestServerService
 import dport.SharedToolsService
 import grails.transaction.Transactional

@@ -1,12 +1,10 @@
 package org.broadinstitute.mpg
 
-import dport.GeneManagementService
 import dport.RestServerService
 import dport.SharedToolsService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
-import org.broadinstitute.mpg.GeneController
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import spock.lang.Specification
 /**

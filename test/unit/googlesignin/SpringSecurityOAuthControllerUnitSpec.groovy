@@ -1,12 +1,10 @@
 package googlesignin
 
-import dport.GoogleRestService
-import dport.SharedToolsService
-import dport.SpringManipService
+import org.broadinstitute.mpg.GoogleRestService
+import org.broadinstitute.mpg.SpringManipService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.domain.DomainClassUnitTestMixin
-import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification
 import uk.co.desirableobjects.oauth.scribe.OauthService
 

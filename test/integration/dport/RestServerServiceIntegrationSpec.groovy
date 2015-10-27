@@ -1,9 +1,8 @@
 package dport
 
 import grails.test.spock.IntegrationSpec
+import org.broadinstitute.mpg.MetadataUtilityService
 import org.broadinstitute.mpg.diabetes.MetaDataService
-import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
-import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.junit.After
 import org.junit.Before

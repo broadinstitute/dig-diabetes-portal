@@ -1,6 +1,7 @@
-package dport
+package org.broadinstitute.mpg
 
 import grails.test.mixin.TestFor
+import org.broadinstitute.mpg.SqlService
 import spock.lang.Specification
 
 /**
