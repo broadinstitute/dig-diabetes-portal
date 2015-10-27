@@ -255,11 +255,14 @@ class FilterManagementService {
              } else if ((requestPortionList.size() == 1)&&(requestPortionList[0]=='ptv')) {  // specialized search logic for demo.
                  developingParameterCollection['datatype'] = 'exomeseq';
                  developingParameterCollection['predictedEffects'] = 'protein-truncating';
+                 returnValue['savedValue8'] = "11=MOST_DEL_SCORE|1"
+                 returnValue['savedValue9'] = "17=T2D[${dataSet}]${pValueSpec}<1"
              } else {  // we can put specialized searches here
                 switch (requestPortionList[0]) {/// completely unused, I think
                     case "lof":
                         returnValue['datatype']  = 'exomeseq'
                         returnValue['predictedEffects']  = 'protein-truncating'
+                        returnValue['savedValue8'] = "11=MOST_DEL_SCORE|1"
                         break;
                     default:
                         log.error("FilterManagementService:interpretSpecialFilters. Unexpected string 3 = ${requestPortionList[0]}")
