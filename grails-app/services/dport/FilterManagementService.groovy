@@ -252,17 +252,15 @@ class FilterManagementService {
                      returnValue['savedValue7'] = "11=MOST_DEL_SCORE<4"
                  }
 
-             } else if ((requestPortionList.size() == 1)&&(requestPortionList[0]=='ptv')) {  // specialized search logic for demo.
-                 developingParameterCollection['datatype'] = 'exomeseq';
-                 developingParameterCollection['predictedEffects'] = 'protein-truncating';
-                 returnValue['savedValue8'] = "11=MOST_DEL_SCORE|1"
-                 returnValue['savedValue9'] = "17=T2D[${dataSet}]${pValueSpec}<1"
              } else {  // we can put specialized searches here
                 switch (requestPortionList[0]) {/// completely unused, I think
                     case "lof":
-                        returnValue['datatype']  = 'exomeseq'
-                        returnValue['predictedEffects']  = 'protein-truncating'
                         returnValue['savedValue8'] = "11=MOST_DEL_SCORE|1"
+                        returnValue['savedValue9'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_SEQ,"none",RestServerService.ANCESTRY_NONE)}]${exomeSequencePValue}<1"
+                        break;
+                    case "ptv":
+                        returnValue['savedValue8'] = "11=MOST_DEL_SCORE|1"
+                        returnValue['savedValue9'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_SEQ,"none",RestServerService.ANCESTRY_NONE)}]${exomeSequencePValue}<1"
                         break;
                     default:
                         log.error("FilterManagementService:interpretSpecialFilters. Unexpected string 3 = ${requestPortionList[0]}")
@@ -277,35 +275,6 @@ class FilterManagementService {
 
          return returnValue
      }
-
-
-
-
-    public LinkedHashMap<String,String> parseCustomFilterString (String customFilterString)  {
-        LinkedHashMap<String,String> returnValue = [:]
-        List <String> filterPieces = customFilterString.tokenize ("[")
-        returnValue ["phenotype"]  =  filterPieces [0]
-        List <String> filterPieces2 = (filterPieces[1]).tokenize ("]")
-        returnValue ["sampleSet"]  =  filterPieces2 [0]
-        if (filterPieces2[1].indexOf("<") > -1){
-            int equivalencePosition = filterPieces2[1].indexOf("<")
-            returnValue ["property"]  = filterPieces2[1].substring(0,equivalencePosition)
-            returnValue ["value"]  = filterPieces2[1].substring(equivalencePosition+1)
-            returnValue ["equivalence"]  = "LT"
-        } else if (filterPieces2[1].indexOf(">") > -1){
-            int equivalencePosition = filterPieces2[1].indexOf(">")
-            returnValue ["property"]  = filterPieces2[1].substring(0,equivalencePosition)
-            returnValue ["value"]  = filterPieces2[1].substring(equivalencePosition+1)
-            returnValue ["equivalence"]  = "GT"
-        }  else if (filterPieces2[1].indexOf("|") > -1){
-            int equivalencePosition = filterPieces2[1].indexOf("|")
-            returnValue ["property"]  = filterPieces2[1].substring(0,equivalencePosition)
-            returnValue ["value"]  = filterPieces2[1].substring(equivalencePosition+1)
-            returnValue ["equivalence"]  = "EQ"
-        }
-        return returnValue
-    }
-
 
 
 

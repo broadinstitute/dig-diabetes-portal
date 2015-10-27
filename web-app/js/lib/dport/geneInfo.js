@@ -892,8 +892,8 @@ var mpgSoftware = mpgSoftware || {};
                     if (arrayOfProportionsWithDisease.length > 1) {
                         peopleWithDiseaseNumerator = arrayOfProportionsWithDisease[0];
                         peopleWithoutDiseaseNumerator = arrayOfProportionsWithDisease[1];
-                        peopleWithDiseaseDenominator = bhtPeopleWithVariant;
-                        peopleWithoutDiseaseDenominator = bhtPeopleWithoutVariant;
+                        peopleWithDiseaseDenominator = bhtPeopleWithVariant*2;
+                        peopleWithoutDiseaseDenominator = bhtPeopleWithoutVariant*2;
                     }
                 }
 
