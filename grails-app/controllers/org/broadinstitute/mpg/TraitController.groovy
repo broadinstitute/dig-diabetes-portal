@@ -41,8 +41,10 @@ class TraitController {
 
         // parse
         String variant = params["variantIdentifier"]
-        LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
         JSONObject jsonObject = restServerService.getTraitPerVariant( variant)
+
+        // DIGP_170: commenting out for final push to move to new metadata data structure (10/18/2015)
+        //LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
 
         // log result
         log.info("variant json: " + jsonObject);
@@ -126,7 +128,10 @@ class TraitController {
      */
     def ajaxTraitsPerVariant()  {
         String variant = params["variantIdentifier"]
-        LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
+
+        // DIGP_170: commenting out for final push to move to new metadata data structure (10/18/2015)
+        //LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
+
         JSONObject jsonObject = restServerService.getTraitPerVariant( variant)
         render(status:200, contentType:"application/json") {
             [traitInfo:jsonObject]

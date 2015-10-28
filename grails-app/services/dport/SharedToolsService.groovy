@@ -1,11 +1,6 @@
 package dport
-import org.broadinstitute.mpg.people.Role
-import org.broadinstitute.mpg.people.User
-import org.broadinstitute.mpg.people.UserRole
-import org.broadinstitute.mpg.people.UserSession
 import grails.plugin.mail.MailService
 import grails.transaction.Transactional
-import groovy.json.JsonSlurper
 import groovy.json.StringEscapeUtils
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.Gene
@@ -17,6 +12,10 @@ import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
 import org.broadinstitute.mpg.diabetes.metadata.query.JsNamingQueryTranslator
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
+import org.broadinstitute.mpg.people.Role
+import org.broadinstitute.mpg.people.User
+import org.broadinstitute.mpg.people.UserRole
+import org.broadinstitute.mpg.people.UserSession
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
@@ -197,7 +196,9 @@ class SharedToolsService {
         showGene = (grailsApplication.config.portal.sections.show_gene)?1:0
         showBeacon = (grailsApplication.config.portal.sections.show_beacon)?1:0
         showNewApi = 1
-        retrieveMetadata()  // may as well get this early.  The value is stored in
+
+        // DIGP_170: commenting out for final push to move to new metadata data structure (10/18/2015)
+        // retrieveMetadata()  // may as well get this early.  The value is stored in
     }
 
     public enum TypeOfSection {
@@ -259,14 +260,22 @@ class SharedToolsService {
         return showBeacon
     }
 
+    /**
+     * returns whether a metadada override has been set but not run yet
+     *
+     * @return
+     */
+    // DIGP-170: switch looking for the override from the SharedToolService to the new metadata object
+    /*
     public Boolean getMetadataOverrideStatus() {
-        return (forceMetadataOverride==1)
+        return (this.metaDataService.forceProcessedMetadataOverride == 1)
+//        return (forceMetadataOverride==1)
     }
-
 
     public void setMetadataOverrideStatus(int metadataOverride) {
         this.forceMetadataOverride=metadataOverride
     }
+    */
 
 
     public String  applicationName () {
@@ -361,6 +370,8 @@ class SharedToolsService {
      * After that every call draws from the cache,  UNLESS  the variable has been set to force a metadata override.
      * @return
      */
+    // DIGP_170: commenting out for final push to move to new metadata data structure (10/18/2015)
+    /*
     public JSONObject retrieveMetadata (){
         if ( (!sharedMetadata) ||
              (forceMetadataOverride == 1) ){
@@ -375,12 +386,15 @@ class SharedToolsService {
         }
         return sharedMetadata
     }
+    */
 
     /***
      * walk through the metadata tree and pull out things we need
      * @param metadata
      * @return
      */
+    // DIGP_170: commenting out for final push to move to new metadata data structure (10/18/2015)
+    /*
     public LinkedHashMap processMetadata(JSONObject metadata) {
         if ((!sharedProcessedMetadata) ||
                 (sharedProcessedMetadata.size() == 0) ||
@@ -390,13 +404,15 @@ class SharedToolsService {
         }
         return sharedProcessedMetadata
     }
+    */
 
-
+    // DIGP_170: commenting out for final push to move to new metadata data structure (10/18/2015)
+    /*
     public LinkedHashMap getProcessedMetadata(){
         JSONObject jsonObject = retrieveMetadata()
         return processMetadata(jsonObject)
     }
-
+    */
 
 
 
@@ -473,16 +489,16 @@ class SharedToolsService {
 
     /***
      * Subset the metadata to only columns we want to display
-     * @param processedMetadata The output of processMetadata
-     * @param phenotypesToKeep The phenotypes to keep 
+     * @param phenotypesToKeep The phenotypes to keep
      * @param sampleGroupsToKeep The sample groups to keep 
      * @param propertiesToKeep The properties to keep 
      * @return
      */
-    public LinkedHashMap getColumnsToDisplayStructure(LinkedHashMap processedMetadata, List <String> phenotypesToKeep=null,
+    public LinkedHashMap getColumnsToDisplayStructure(List <String> phenotypesToKeep=null,
                                                       List <String> sampleGroupsToKeep=null, List <String> propertiesToKeep=null,
                                                       List <String> commonProperties=null  ){
 
+        // DIGP-170: modified method signature for final push to move to dynamic metadata structure
         if (phenotypesToKeep) {
             phenotypesToKeep = phenotypesToKeep.unique()
         }

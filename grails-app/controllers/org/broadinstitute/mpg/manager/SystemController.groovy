@@ -24,7 +24,7 @@ class SystemController {
                                           burdenRestServerList: this.restServerService?.getBurdenServerList(),
         currentApplicationIsSigma:sharedToolsService.applicationName(),
         helpTextLevel:sharedToolsService.getHelpTextSetting(),
-        forceMetadataCacheOverride:sharedToolsService.getMetadataOverrideStatus(),
+        forceMetadataCacheOverride: this.metaDataService?.getMetadataOverrideStatus(),
         dataVersion:sharedToolsService.getDataVersion (),
         currentGeneChromosome:sharedToolsService.retrieveCurrentGeneChromosome(),
         currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
@@ -176,6 +176,30 @@ class SystemController {
      */
     def forceMetadataCacheUpdate ()  {
         String metadataOverrideStatus = params.datatype
+
+        // DIGP_170: commenting out for final push to move to new metadata data structure (10/18/2015)
+        Boolean metadataOverrideHasBeenRequested = this.metaDataService?.getMetadataOverrideStatus ()
+
+        if (metadataOverrideStatus == "forceIt") {
+            if (metadataOverrideHasBeenRequested == false) {
+                // DIGP_47: adding in new medatata data structure service
+                this.metaDataService.setForceProcessedMetadataOverride(1)
+                flash.message = "You have scheduled an override to the metadata cache. The next time the metadata is requested the cache will be reloaded"
+            } else {
+                flash.message = "But the metadata cache was already scheduled!"
+            }
+        } else {
+            // DIGP-170: switching test below to (metadataOverrideHasBeenRequested == true)
+            if (metadataOverrideHasBeenRequested == true) {
+                // DIGP_47: adding in new medatata data structure service
+                this.metaDataService.setForceProcessedMetadataOverride(0)
+                flash.message = "you have rejected the request to update the metadata. "
+            } else {
+                flash.message = "But there was no override in place to cancel!"
+            }
+        }
+
+        /*
         Boolean metadataOverrideHasBeenRequested = sharedToolsService.getMetadataOverrideStatus ()
         if (metadataOverrideStatus == "forceIt") {
             if (metadataOverrideHasBeenRequested == false) {
@@ -187,7 +211,8 @@ class SystemController {
                 flash.message = "But the metadata cache was already scheduled!"
             }
         } else {
-            if (!(metadataOverrideHasBeenRequested == true)) {
+            // DIGP-170: switching test below to (metadataOverrideHasBeenRequested == true)
+            if (metadataOverrideHasBeenRequested == true) {
                 sharedToolsService.setForceMetadataOverride(0)
                 // DIGP_47: adding in new medatata data structure service
                 this.metaDataService.setForceProcessedMetadataOverride(0)
@@ -196,6 +221,7 @@ class SystemController {
                 flash.message = "But there was no override in place to cancel!"
             }
         }
+        */
         forward(action: "systemManager")
     }
 

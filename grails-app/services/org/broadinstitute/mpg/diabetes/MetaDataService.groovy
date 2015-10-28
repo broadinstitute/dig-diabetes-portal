@@ -47,7 +47,18 @@ class MetaDataService {
     public void setForceProcessedMetadataOverride(Integer forceProcessedMetadataOverride) {
         this.forceProcessedMetadataOverride = forceProcessedMetadataOverride
     }
-/**
+
+    /**
+     * returns whether a metadada override has been set but not run yet
+     *
+     * @return
+     */
+    public Boolean getMetadataOverrideStatus() {
+        // DIGP-170: switch looking for the override from the SharedToolService to the new metadata object
+        return (this.forceProcessedMetadataOverride == 1)
+    }
+
+    /**
      * returns the json parser after first checking that the metadata hadn't been set to be reloaded
      *
      * @return

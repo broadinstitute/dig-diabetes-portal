@@ -1289,7 +1289,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     public LinkedHashMap getColumnsToDisplay(String filterJson,LinkedHashMap requestedProperties) {
 
         //Get the structure to control the columns we want to display
-        LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
+        // DIGP-170: modified method signature for final push to move to dynamic metadata structure
+        // LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
 
         //Get the sample groups and phenotypes from the filters
         List<String> datasetsToFetch = []
@@ -1400,7 +1401,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             commonProperties = expandCommonPropertyList(commonProperties, requestedProperties)
         }
 
-        LinkedHashMap columnsToDisplayStructure = sharedToolsService.getColumnsToDisplayStructure(processedMetadata, phenotypesToFetch, datasetsToFetch, propertiesToFetch,commonProperties)
+        LinkedHashMap columnsToDisplayStructure = sharedToolsService.getColumnsToDisplayStructure(phenotypesToFetch, datasetsToFetch, propertiesToFetch,commonProperties)
         println(columnsToDisplayStructure)
         return columnsToDisplayStructure
     }
