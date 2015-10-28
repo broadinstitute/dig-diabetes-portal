@@ -1,6 +1,6 @@
 package dport
 import grails.test.mixin.TestFor
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.broadinstitute.mpg.SharedToolsService
 import spock.lang.Specification
 import spock.lang.Unroll
 /**

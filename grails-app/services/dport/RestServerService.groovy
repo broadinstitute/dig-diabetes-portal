@@ -6,6 +6,7 @@ import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.Gene
 import org.broadinstitute.mpg.MetadataUtilityService
+import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.SqlService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.bean.ServerBean

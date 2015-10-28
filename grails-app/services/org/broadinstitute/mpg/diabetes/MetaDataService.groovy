@@ -1,7 +1,7 @@
 package org.broadinstitute.mpg.diabetes
 import org.broadinstitute.mpg.MetadataUtilityService
 import dport.RestServerService
-import dport.SharedToolsService
+import org.broadinstitute.mpg.SharedToolsService
 import grails.transaction.Transactional
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
 import org.broadinstitute.mpg.diabetes.metadata.Phenotype

@@ -1,5 +1,5 @@
 package org.broadinstitute.mpg.manager
-import dport.SharedToolsService
+import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.people.User
 import org.broadinstitute.mpg.people.UserRole
 import org.broadinstitute.mpg.people.UserSession

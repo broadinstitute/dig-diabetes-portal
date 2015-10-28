@@ -2,6 +2,7 @@ package dport
 
 import grails.test.spock.IntegrationSpec
 import org.broadinstitute.mpg.MetadataUtilityService
+import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.junit.After

@@ -1,7 +1,6 @@
 package org.broadinstitute.mpg
 
 import dport.RestServerService
-import dport.SharedToolsService
 
 class RegionController {
 

@@ -1,5 +1,7 @@
 package dport
 
+import org.broadinstitute.mpg.SharedToolsService
+
 class HelpTextTagLib {
    // static defaultEncodeAs = [taglib: 'html']
     static String defaultPopupPlacement = "left"

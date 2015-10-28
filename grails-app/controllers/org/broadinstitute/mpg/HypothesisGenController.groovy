@@ -2,10 +2,8 @@ package org.broadinstitute.mpg
 
 import dport.FilterManagementService
 import dport.RestServerService
-import dport.SharedToolsService
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.web.json.JSONObject
-import java.net.URLDecoder;
 
 class HypothesisGenController {
     RestServerService   restServerService

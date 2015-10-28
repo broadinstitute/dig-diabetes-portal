@@ -1,10 +1,8 @@
 package org.broadinstitute.mpg
 
 import dport.RestServerService
-import dport.SharedToolsService
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
-import org.broadinstitute.mpg.VariantInfoController
 import org.codehaus.groovy.grails.web.json.JSONObject
 import spock.lang.Specification
 

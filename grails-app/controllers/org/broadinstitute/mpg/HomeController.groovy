@@ -1,6 +1,5 @@
 package org.broadinstitute.mpg
 
-import dport.SharedToolsService
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.apache.juli.logging.LogFactory
 

@@ -1,6 +1,6 @@
 package dport
 
-import dport.SharedToolsService
+import org.broadinstitute.mpg.SharedToolsService
 
 class SectionSelectorTagLib {
 

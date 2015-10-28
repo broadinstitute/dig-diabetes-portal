@@ -1,6 +1,6 @@
 package org.broadinstitute.mpg.manager
 
-import dport.SharedToolsService
+import org.broadinstitute.mpg.SharedToolsService
 import org.springframework.context.ApplicationListener
 import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent
 /**

@@ -2,7 +2,7 @@ package dport
 
 import grails.test.mixin.TestFor
 import spock.lang.Specification
-import dport.SharedToolsService
+import org.broadinstitute.mpg.SharedToolsService
 
 /**
  * See the API for {@link grails.test.mixin.web.GroovyPageUnitTestMixin} for usage instructions
@@ -10,7 +10,7 @@ import dport.SharedToolsService
 @TestFor(EthnicityCyclingTagLib)
 class EthnicityCyclingTagLibUnitSpec extends Specification {
 
-    def sharedToolsService = mockFor(dport.SharedToolsService)
+    def sharedToolsService = mockFor(SharedToolsService)
 
     void "test selectAllItemsInPage #label"() {
         given:

@@ -1,10 +1,8 @@
-package dport
+package org.broadinstitute.mpg
 
-import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import groovy.json.JsonSlurper
-import org.apache.commons.fileupload.disk.DiskFileItem
-import org.springframework.web.multipart.commons.CommonsMultipartFile
+import org.broadinstitute.mpg.SharedToolsService
 import spock.lang.Specification
 import spock.lang.Unroll
 

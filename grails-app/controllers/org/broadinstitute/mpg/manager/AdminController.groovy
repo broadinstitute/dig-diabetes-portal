@@ -1,5 +1,5 @@
 package org.broadinstitute.mpg.manager
-import dport.SharedToolsService
+import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.people.User
 import grails.transaction.Transactional
 import org.codehaus.groovy.grails.commons.GrailsApplication

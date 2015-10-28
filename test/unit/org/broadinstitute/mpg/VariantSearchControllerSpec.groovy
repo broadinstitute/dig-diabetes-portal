@@ -65,7 +65,7 @@ class VariantSearchControllerSpec extends Specification {
 //        // For now we will have to settle for testing the branch that returns null
 //        controller.filterManagementService.metaClass.parseVariantSearchParameters = { paramsMap, currentlySigma->return null}
 //        controller.filterManagementService.metaClass.distinguishBetweenDataSets = {HashMap paramsMap->return 1}
-//        controller.sharedToolsService.metaClass.getSectionToDisplay = {dport.SharedToolsService.TypeOfSection x->return true}
+//        controller.sharedToolsService.metaClass.getSectionToDisplay = {org.broadinstitute.mpg.SharedToolsService.TypeOfSection x->return true}
 //        controller.variantSearchRequest()
 //
 //        then:

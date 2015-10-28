@@ -3,7 +3,6 @@ package org.broadinstitute.mpg
 import dport.FilterManagementService
 import dport.RestServerService
 import dport.SearchBuilderService
-import dport.SharedToolsService
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory

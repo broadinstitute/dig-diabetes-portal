@@ -1,10 +1,7 @@
 package org.broadinstitute.mpg
 
 import dport.RestServerService
-import dport.SharedToolsService
-import groovy.json.JsonSlurper
 import org.codehaus.groovy.grails.web.json.JSONObject
-import org.springframework.transaction.annotation.Transactional
 
 /**
  * Controller class to control the /variantInfo section of the T2D site

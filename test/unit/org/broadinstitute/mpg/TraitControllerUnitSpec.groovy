@@ -1,6 +1,5 @@
 package org.broadinstitute.mpg
 
-import dport.SharedToolsService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.domain.DomainClassUnitTestMixin
