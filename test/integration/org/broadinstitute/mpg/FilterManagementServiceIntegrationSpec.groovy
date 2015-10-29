@@ -1,7 +1,7 @@
-package dport
+package org.broadinstitute.mpg
 
 import grails.test.spock.IntegrationSpec
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.broadinstitute.mpg.FilterManagementService
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll

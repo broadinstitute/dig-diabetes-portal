@@ -1,6 +1,5 @@
 package org.broadinstitute.mpg
 
-import dport.FilterManagementService
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.web.json.JSONObject
 

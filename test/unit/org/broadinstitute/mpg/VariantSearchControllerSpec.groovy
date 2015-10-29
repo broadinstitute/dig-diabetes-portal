@@ -1,8 +1,6 @@
 package org.broadinstitute.mpg
 
-import dport.FilterManagementService
 import grails.test.mixin.TestFor
-import org.broadinstitute.mpg.VariantSearchController
 import spock.lang.Specification
 
 /**

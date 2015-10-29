@@ -1,16 +1,10 @@
 package org.broadinstitute.mpg
 
-import dport.FilterManagementService
 import grails.plugins.rest.client.RestBuilder
 import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
-import org.broadinstitute.mpg.Gene
-import org.broadinstitute.mpg.MetadataUtilityService
-import org.broadinstitute.mpg.SearchBuilderService
-import org.broadinstitute.mpg.SharedToolsService
-import org.broadinstitute.mpg.SqlService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser

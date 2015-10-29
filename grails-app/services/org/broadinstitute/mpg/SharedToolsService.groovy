@@ -1,6 +1,5 @@
 package org.broadinstitute.mpg
 
-import dport.FilterManagementService
 import grails.plugin.mail.MailService
 import grails.transaction.Transactional
 import groovy.json.StringEscapeUtils
