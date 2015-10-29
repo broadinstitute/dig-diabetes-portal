@@ -1,15 +1,10 @@
 package org.broadinstitute.mpg.diabetes.metadata.query
 
-import dport.RestServerService
-import dport.SearchBuilderService
-import grails.transaction.Transactional
-import groovy.json.JsonSlurper
+import org.broadinstitute.mpg.SearchBuilderService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Property
-import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
-import org.springframework.beans.factory.annotation.Autowired
 import org.apache.commons.logging.LogFactory
 
 /**

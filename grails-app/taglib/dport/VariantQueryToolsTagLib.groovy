@@ -1,5 +1,6 @@
 package dport
 
+import org.broadinstitute.mpg.SearchBuilderService
 import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder

@@ -1,6 +1,7 @@
 package dport
 import grails.transaction.Transactional
 import org.apache.juli.logging.LogFactory
+import org.broadinstitute.mpg.SearchBuilderService
 import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.query.JsNamingQueryTranslator
