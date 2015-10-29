@@ -1,7 +1,6 @@
 package org.broadinstitute.mpg
 
 import dport.FilterManagementService
-import dport.RestServerService
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory

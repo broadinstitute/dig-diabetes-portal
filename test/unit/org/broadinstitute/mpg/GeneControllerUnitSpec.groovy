@@ -1,6 +1,5 @@
 package org.broadinstitute.mpg
 
-import dport.RestServerService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin

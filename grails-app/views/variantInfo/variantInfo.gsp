@@ -6,9 +6,9 @@
     <r:require modules="variantInfo"/>
     <r:require modules="tableViewer,traitInfo"/>
     <r:layoutResources/>
-    <%@ page import="dport.RestServerService" %>
+    <%@ page import="org.broadinstitute.mpg.RestServerService" %>
     <%
-        RestServerService restServerService = grailsApplication.classLoader.loadClass('dport.RestServerService').newInstance()
+        RestServerService restServerService = grailsApplication.classLoader.loadClass('org.broadinstitute.mpg.RestServerService').newInstance()
     %>
     <style>
     .parentsFont {

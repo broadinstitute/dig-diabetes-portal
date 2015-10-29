@@ -5,7 +5,7 @@
     <r:require modules="core"/>
     <r:require modules="geneInfo"/>
     <r:layoutResources/>
-    <%@ page import="dport.RestServerService" %>
+    <%@ page import="org.broadinstitute.mpg.RestServerService" %>
 
     <link type="application/font-woff">
     <link type="application/vnd.ms-fontobject">

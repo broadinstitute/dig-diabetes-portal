@@ -1,14 +1,10 @@
 package org.broadinstitute.mpg
 
 import dport.FilterManagementService
-import dport.RestServerService
 import grails.plugin.mail.MailService
 import grails.transaction.Transactional
 import groovy.json.StringEscapeUtils
 import org.apache.juli.logging.LogFactory
-import org.broadinstitute.mpg.Gene
-import org.broadinstitute.mpg.ProteinEffect
-import org.broadinstitute.mpg.Variant
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery

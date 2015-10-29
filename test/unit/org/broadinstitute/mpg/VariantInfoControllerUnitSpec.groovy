@@ -1,6 +1,5 @@
 package org.broadinstitute.mpg
 
-import dport.RestServerService
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import org.codehaus.groovy.grails.web.json.JSONObject

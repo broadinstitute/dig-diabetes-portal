@@ -1,6 +1,5 @@
 package org.broadinstitute.mpg
 
-import dport.RestServerService
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 /**

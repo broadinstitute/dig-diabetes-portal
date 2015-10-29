@@ -6,7 +6,7 @@
     <r:require modules="geneInfo"/>
     <r:require modules="crossMap"/>
     <r:layoutResources/>
-    <%@ page import="dport.RestServerService" %>
+    <%@ page import="org.broadinstitute.mpg.RestServerService" %>
 
     <link type="application/font-woff">
     <link type="application/vnd.ms-fontobject">

@@ -1,6 +1,6 @@
 import org.broadinstitute.mpg.Gene
 import org.broadinstitute.mpg.ProteinEffect
-import dport.RestServerService
+import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.people.Role
 import org.broadinstitute.mpg.people.User

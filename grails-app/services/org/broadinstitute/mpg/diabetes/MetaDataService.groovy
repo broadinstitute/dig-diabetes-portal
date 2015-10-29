@@ -1,6 +1,6 @@
 package org.broadinstitute.mpg.diabetes
 import org.broadinstitute.mpg.MetadataUtilityService
-import dport.RestServerService
+import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SharedToolsService
 import grails.transaction.Transactional
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant

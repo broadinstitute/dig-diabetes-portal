@@ -1,5 +1,5 @@
 package org.broadinstitute.mpg.diabetes
-import dport.RestServerService
+import org.broadinstitute.mpg.RestServerService
 import grails.test.spock.IntegrationSpec
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
 import org.broadinstitute.mpg.diabetes.metadata.Phenotype

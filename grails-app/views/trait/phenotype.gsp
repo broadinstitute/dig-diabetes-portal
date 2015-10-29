@@ -4,7 +4,7 @@
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core,phenotype,traitInfo"/>
     <r:layoutResources/>
-    <%@ page import="dport.RestServerService" %>
+    <%@ page import="org.broadinstitute.mpg.RestServerService" %>
 </head>
 
 <body>

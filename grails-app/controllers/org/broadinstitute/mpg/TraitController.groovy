@@ -1,6 +1,5 @@
 package org.broadinstitute.mpg
 
-import dport.RestServerService
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean

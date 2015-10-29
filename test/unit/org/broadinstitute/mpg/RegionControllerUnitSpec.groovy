@@ -1,8 +1,6 @@
 package org.broadinstitute.mpg
 
-import dport.RestServerService
 import grails.test.mixin.TestFor
-import org.broadinstitute.mpg.RegionController
 import spock.lang.Specification
 
 /**

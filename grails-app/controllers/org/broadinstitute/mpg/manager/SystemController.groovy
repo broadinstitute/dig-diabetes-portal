@@ -1,6 +1,6 @@
 package org.broadinstitute.mpg.manager
 
-import dport.RestServerService
+import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.codehaus.groovy.grails.commons.GrailsApplication

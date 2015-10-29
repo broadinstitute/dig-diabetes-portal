@@ -5,7 +5,7 @@
   Time: 5:09 PM
 --%>
 <%@ page import="temporary.BuildInfo" %>
-<%@ page import="dport.RestServerService" %>
+<%@ page import="org.broadinstitute.mpg.RestServerService" %>
 %{--Use RestServerService--}%
 <!DOCTYPE html>
 <html>

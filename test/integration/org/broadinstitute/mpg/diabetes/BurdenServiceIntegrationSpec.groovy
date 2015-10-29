@@ -1,5 +1,5 @@
 package org.broadinstitute.mpg.diabetes
-import dport.RestServerService
+import org.broadinstitute.mpg.RestServerService
 import grails.test.spock.IntegrationSpec
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.burden.parser.BurdenJsonBuilder
