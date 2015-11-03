@@ -1,3 +1,5 @@
+
+%{--<g:set var="vAndARows" value="${new GspToJavascript(rowInformation as List)}" />--}%
 <a name="associations"></a>
 
 %{--<h2><strong>Variants and associations</strong></h2>--}%
@@ -27,7 +29,9 @@ $.ajax({
     cache: false,
     type: "post",
     url: "${createLink(controller:'gene',action: 'genepValueCounts')}",
-    data: {geneName: '<%=geneName%>'},
+    data: {geneName: '<%=geneName%>',
+           rowNames:<g:renderRowValues data='${rowInformation}'/>,
+           colNames:<g:renderColValues data='${columnInformation}'/>},
         async: true,
         success: function (data) {
 
@@ -162,10 +166,12 @@ $.ajax({
                                  variantsAndAssociationsRowHelpText: variantsAndAssociationsRowHelpText,
                                  continentalAncestryText: continentalAncestryText},
                                 '${geneChromosome}',${geneExtentBegin},${geneExtentEnd},
-                                collector["d0"][0].count,collector["d0"][1].count,collector["d0"][2].count,collector["d0"][3].count,
-                                collector["d1"][0].count,collector["d1"][1].count,collector["d1"][2].count,collector["d1"][3].count,
-                                collector["d2"][0].count,collector["d2"][1].count,collector["d2"][2].count,collector["d2"][3].count,
-                                collector["d0"][0].count,collector["d0"][1].count,collector["d0"][2].count,collector["d0"][3].count,
+                                <g:renderRowMaps data='${rowInformation}'/>,
+                                <g:renderColMaps data='${columnInformation}'/>,
+                                [[collector["d0"][0].count,collector["d0"][1].count,collector["d0"][2].count,collector["d0"][3].count],
+                                [collector["d1"][0].count,collector["d1"][1].count,collector["d1"][2].count,collector["d1"][3].count],
+                                [collector["d2"][0].count,collector["d2"][1].count,collector["d2"][2].count,collector["d2"][3].count],
+                                [collector["d0"][0].count,collector["d0"][1].count,collector["d0"][2].count,collector["d0"][3].count]],
                                 '<%=geneName%>'
                             );
 

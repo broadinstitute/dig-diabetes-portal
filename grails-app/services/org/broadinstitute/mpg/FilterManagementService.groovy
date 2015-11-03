@@ -55,7 +55,7 @@ class FilterManagementService {
      * @param receivedParameters
      * @return
      */
-    public  List <String>  retrieveFiltersCodedFilters (  String geneId, String significance,String dataset,String region,String receivedParameters)    {
+    public  List <String>  retrieveFiltersCodedFilters (  String geneId, Float significance,String dataset,String region,String receivedParameters)    {
         Map paramsMap = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters)
         List <String> listOfCodedFilters = observeMultipleFilters (paramsMap)
         return  listOfCodedFilters
@@ -73,7 +73,7 @@ class FilterManagementService {
      * @return
      */
     public HashMap storeParametersInHashmap ( String gene,
-                                              String significance,
+                                              Float significance,
                                               String dataset,
                                               String region,
                                               String filter) {
@@ -83,21 +83,21 @@ class FilterManagementService {
         String pValueSpec = ""
         if (dataset) {
             switch (dataset) {
-                case 'gwas' :
-                    dataSet = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_GWAS,RestServerService.EXPERIMENT_DIAGRAM,RestServerService.ANCESTRY_NONE)
+                case RestServerService.TECHNOLOGY_GWAS :
+                    dataSet = restServerService.getSampleGroup(dataset,RestServerService.EXPERIMENT_DIAGRAM,RestServerService.ANCESTRY_NONE)
                     pValueSpec = "${gwasDataPValue}"
                     break;
                 case 'sigma' :
                     dataSet = "${sigmaData}"
                     pValueSpec = "${sigmaDataPValue}"
                     break;
-                case 'exomeseq' :
-                    dataSet = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_SEQ,"none",RestServerService.ANCESTRY_NONE)
+                case RestServerService.TECHNOLOGY_EXOME_SEQ :
+                    dataSet = restServerService.getSampleGroup(dataset,"none",RestServerService.ANCESTRY_NONE)
                     pValueSpec = "${exomeSequencePValue}"
                     returnValue['savedValue0'] = "11=MOST_DEL_SCORE<4"
                     break;
-                case 'exomechip' :
-                    dataSet = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)
+                case RestServerService.TECHNOLOGY_EXOME_CHIP :
+                    dataSet = restServerService.getSampleGroup(dataset,"none",RestServerService.ANCESTRY_NONE)
                     pValueSpec = "${exomeChipPValue}"
                     returnValue['savedValue0'] = "11=MOST_DEL_SCORE<4"
                     break;
@@ -107,27 +107,29 @@ class FilterManagementService {
         }
 
 
-        if (significance) {
-            switch (significance) {
-                case 'everything' : // this is equivalent to P>0,
-                    returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<1"
-                    break;
-                case 'genome-wide' :
-                    returnValue['significance']  = 'genomewide'
-                    returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<0.5E-8"
-                    break;
-                case 'locus' :
-                    returnValue['significance']  = 'locus'
-                    returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<0.5E-4"
-                    break;
-                case 'nominal' : // this is equivalent to P>0,
-                    returnValue['significance']  = 'nominal'
-                    returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<0.05"
-                    break;
-                default:
-                    break;
-            }
-        }
+//        if (significance) {
+//            switch (significance) {
+//                case 'everything' : // this is equivalent to P>0,
+//                    returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<1"
+//                    break;
+//                case 'genome-wide' :
+//                    returnValue['significance']  = 'genomewide'
+//                    returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<0.5E-8"
+//                    break;
+//                case 'locus' :
+//                    returnValue['significance']  = 'locus'
+//                    returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<0.5E-4"
+//                    break;
+//                case 'nominal' : // this is equivalent to P>0,
+//                    returnValue['significance']  = 'nominal'
+//                    returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<0.05"
+//                    break;
+//                default:
+//                    break;
+//            }
+//        }
+
+        returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<${significance}"
 
         if (region) { // If there's a region then use it. Otherwise depend on the gene name. Don't use both
             LinkedHashMap extractedNumbers = restServerService.extractNumbersWeNeed(region)

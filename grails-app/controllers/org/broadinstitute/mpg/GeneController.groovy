@@ -53,6 +53,16 @@ class GeneController {
             regionSpecification = this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 100000)
         }
 
+        List <LinkedHashMap<String,String>> rowInformation = []
+        rowInformation << [name:'GWAS', value:RestServerService.TECHNOLOGY_GWAS]
+        rowInformation << [name:'exome chip', value:RestServerService.TECHNOLOGY_EXOME_CHIP]
+        rowInformation << [name:'exome sequence', value:RestServerService.TECHNOLOGY_EXOME_SEQ]
+        List <LinkedHashMap<String,String>> columnInformation = []
+        columnInformation << [name:'total variants', significance:'1']
+        columnInformation << [name:'genome-wide significant variants', value:'0.00000005']
+        columnInformation << [name:'locus-wide significant variants', value:'0.00005']
+        columnInformation << [name:'nominal significant variants', value:'0.05']
+
         if (geneToStartWith)  {
             String  geneUpperCase =   geneToStartWith.toUpperCase()
             LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
@@ -64,7 +74,9 @@ class GeneController {
                                              geneName:geneUpperCase,
                                              geneExtentBegin:geneExtent.startExtent,
                                              geneExtentEnd:geneExtent.endExtent,
-                                             geneChromosome:geneExtent.chrom
+                                             geneChromosome:geneExtent.chrom,
+                                             rowInformation:rowInformation,
+                                             columnInformation:columnInformation
             ] )
         }
      }
@@ -136,7 +148,9 @@ class GeneController {
      */
     def genepValueCounts() {
         String geneToStartWith = params.geneName
-        JSONObject jsonObject =  restServerService.combinedVariantCountByGeneNameAndPValue ( geneToStartWith.trim().toUpperCase())
+        JSONObject jsonObject =  restServerService.combinedVariantCountByGeneNameAndPValue ( geneToStartWith.trim().toUpperCase(),
+        [RestServerService.TECHNOLOGY_GWAS,RestServerService.TECHNOLOGY_EXOME_CHIP,RestServerService.TECHNOLOGY_EXOME_SEQ],
+        [1f,0.00000005f,0.00005f,0.05f])
         render(status:200, contentType:"application/json") {
             [geneInfo:jsonObject]
         }

@@ -562,42 +562,43 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param dataSet
      * @return
      */
-    private JSONObject  requestGeneCountByPValue (String geneName, Integer significanceIndicator, Integer dataSet){
+    private JSONObject  requestGeneCountByPValue (String geneName, Float significanceIndicator, String dataSet){
         String dataSetId = ""
-        String significance
+        //String significance
         String geneRegion
         switch (dataSet){
-            case 1:
-                dataSetId = "exomeseq"
+            case RestServerService.TECHNOLOGY_EXOME_SEQ:
+             //   dataSetId = "exomeseq"
                 break;
-            case 2:
-                dataSetId = "exomechip"
+            case RestServerService.EXPERIMENT_DIAGRAM:
+              //  dataSetId = "exomechip"
                 break;
-            case 3:
-                dataSetId = "gwas"
+            case RestServerService.TECHNOLOGY_GWAS:
+               // dataSetId = "gwas"
                 geneRegion = sharedToolsService.getGeneExpandedRegionSpec(geneName)
                 break;
             default:
                 log.error("Trouble: user requested data set = ${dataSet} which I don't recognize")
         }
-        switch (significanceIndicator){
-            case 1:
-                significance = "everything"
-                break;
-            case 2:
-                significance = "genome-wide"
-                break;
-            case 3:
-                significance = "locus"
-                break;
-            case 4:
-                significance = "nominal"
-                break;
-            default:
-                log.error("Trouble: user requested data set = ${dataSet} which I don't recognize")
-        }
+//        switch (significanceIndicator){
+//            case 1:
+//                significance = "everything"
+//                break;
+//            case 2:
+//                significance = "genome-wide"
+//                break;
+//            case 3:
+//                significance = "locus"
+//                break;
+//            case 4:
+//                significance = "nominal"
+//                break;
+//            default:
+//                log.error("Trouble: user requested data set = ${dataSet} which I don't recognize")
+//        }
+        Float significance = significanceIndicator
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["CHROM", "POS"])
-        List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName,significance,dataSetId,geneRegion,"")
+        List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName, significance, dataSet, geneRegion,"")
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters,searchBuilderService,metaDataService)
         Boolean isCount = true;
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
@@ -888,19 +889,21 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param geneName
      * @return
      */
-    public JSONObject combinedVariantCountByGeneNameAndPValue(String geneName){
+    public JSONObject combinedVariantCountByGeneNameAndPValue(String geneName,
+                                                              List <String> dataSeteList,
+                                                              List <Float> significanceList){
         JSONObject returnValue
-        List <Integer> dataSeteList = [3, 2, 1]
-        List <Integer> significanceList = [1,2,  3, 4]
+       // List <Integer> dataSeteList = [3, 2, 1]
+       // List <Integer> significanceList = [1,2,  3, 4]
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()
         for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
-            sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
+            sb  << "{ \"dataset\": \"${dataSeteList[j]}\",\"pVals\": ["
             for ( int  i = 0 ; i < significanceList.size () ; i++ ){
                 sb  << "{"
                 JSONObject apiData = requestGeneCountByPValue(geneName, significanceList[i], dataSeteList[j])
                 if (apiData.is_error == false) {
-                    sb  << "\"level\":${significanceList[i]},\"count\":${apiData.numRecords}"
+                    sb  << "\"level\":\"${significanceList[i]}\",\"count\":${apiData.numRecords}"
                 }
                 sb  << "}"
                 if (i<significanceList.size ()-1){
