@@ -54,14 +54,14 @@ class GeneController {
         }
 
         List <LinkedHashMap<String,String>> rowInformation = []
-        rowInformation << [name:'GWAS', value:RestServerService.TECHNOLOGY_GWAS]
-        rowInformation << [name:'exome chip', value:RestServerService.TECHNOLOGY_EXOME_CHIP]
-        rowInformation << [name:'exome sequence', value:RestServerService.TECHNOLOGY_EXOME_SEQ]
+        rowInformation << [name:'GWAS', value:RestServerService.TECHNOLOGY_GWAS, count:'69,033']
+        rowInformation << [name:'exome chip', value:RestServerService.TECHNOLOGY_EXOME_CHIP, count:'79,854']
+        rowInformation << [name:'exome sequence', value:RestServerService.TECHNOLOGY_EXOME_SEQ, count:'16,760']
         List <LinkedHashMap<String,String>> columnInformation = []
-        columnInformation << [name:'total variants', significance:'1']
-        columnInformation << [name:'genome-wide significant variants', value:'0.00000005']
-        columnInformation << [name:'locus-wide significant variants', value:'0.00005']
-        columnInformation << [name:'nominal significant variants', value:'0.05']
+        columnInformation << [name:'total variants', value:'1', count:'0']
+        columnInformation << [name:'genome-wide', value:'0.00000005', count:'0']
+        columnInformation << [name:'locus-wide', value:'0.00005', count:'0']
+        columnInformation << [name:'nominal', value:'0.05', count:'0']
 
         if (geneToStartWith)  {
             String  geneUpperCase =   geneToStartWith.toUpperCase()

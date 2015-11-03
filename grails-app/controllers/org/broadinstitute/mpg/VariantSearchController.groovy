@@ -165,9 +165,15 @@ class VariantSearchController {
     def gene() {
         String geneId = params.id
         String receivedParameters = params.filter
-        String significance = params.sig
+        String significanceString = params.sig
         String dataset = params.dataset
         String region = params.region
+        Float significance = 0f
+        try {
+            significance = Float.parseFloat(significanceString)
+        } catch (ex) {
+            log.error("receive nonnumeric significance value = (${params.sig}) in action=gene, VariantSearchController")
+        }
 
         Map paramsMap = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters)
 

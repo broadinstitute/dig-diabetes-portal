@@ -622,31 +622,28 @@ var mpgSoftware = mpgSoftware || {};
             return  returnValue;
         };
         var fillVariantsAndAssociationLine = function (geneName,// our gene record
+                                                       dataSetCode,// code for data set -- must be gwas,exomechip,exomeseq,or sigma
                                                        dataSetName,// code for data set -- must be gwas,exomechip,exomeseq,or sigma
                                                        sampleSize, // listed sample size for this data set
                                                        genomicRegion, // region specified as in this example: chr1:209348715-210349783
-                                                       valueArray,
-//                                                       totalVariants,
-//                                                       genomeWideVariants,
-//                                                       locusWideVariants,
-//                                                       nominallySignificantVariants,
+                                                       valueArray, // data for this row
+                                                       columnMap, // since we are doing a whole row we need to know about all columns
                                                        anchorBuildingFunction,  // which anchor building function should we use
                                                        emphasizeGwas,    // 0->no emphasis, 1-> Emphasize middle row, 2-> Emphasize bottom row
                                                        rootVariantUrl, // root URL is the basis for callbacks
                                                        rowHelpText) { // help text for each row
             if (geneName) {
-                //var geneName = geneInfo["ID"];
                 var dataSetNameForUser;
-                switch (dataSetName) {
-                    case 'gwas':
+                switch (dataSetCode) {
+                    case 'GWAS':
                         dataSetNameForUser = rowHelpText.genomeWide+
                             rowHelpText.genomeWideQ;
                         break;
-                    case 'exomechip':
+                    case 'ExChip':
                         dataSetNameForUser = rowHelpText.exomeChip+
                             rowHelpText.exomeChipQ;
                         break;
-                    case 'exomeseq':
+                    case 'ExSeq':
                         dataSetNameForUser =  rowHelpText.exomeSequence+
                             rowHelpText.exomeSequenceQ;
                         break;
@@ -660,22 +657,17 @@ var mpgSoftware = mpgSoftware || {};
                 var tableRow = '';
                 tableRow += '<tr>' +
                     '<td>' + dataSetNameForUser + '</td>' +
-                    '<td>' + sampleSize + '</td>' +
-                    '<td>' + anchorBuildingFunction(valueArray[0], geneName, 'everything', dataSetName, genomicRegion, rootVariantUrl) + '</td>';
-                if (emphasizeGwas == 2) {
-                    tableRow += '<td class="emphasizedBottom">';
-                } else if (emphasizeGwas == 1) {
-                    tableRow += '<td class="emphasized">';
-                } else {
+                    '<td>' + sampleSize + '</td>';
+                for ( var i = 0 ; i < columnMap.length ; i++ ) {
                     tableRow += '<td>';
+                    tableRow += anchorBuildingFunction(valueArray[i], geneName, columnMap[i].value, dataSetCode, genomicRegion, rootVariantUrl)
+                    tableRow += '</td>';
                 }
-                tableRow += anchorBuildingFunction(valueArray[1], geneName, '0.00000005', dataSetName, genomicRegion, rootVariantUrl) + '</td>';
-                tableRow += '<td>' + anchorBuildingFunction(valueArray[2], geneName, '0.00005', dataSetName, genomicRegion, rootVariantUrl) + '</td>' +   // TODO: should be locus wide
-                    '<td>' + anchorBuildingFunction(valueArray[3], geneName, '0.05', dataSetName, genomicRegion, rootVariantUrl) + '</td>' +
-                    '</tr>';
-//                tableRow += anchorBuildingFunction(genomeWideVariants, geneName, 'genome-wide', dataSetName, genomicRegion, rootVariantUrl) + '</td>';
-//                tableRow += '<td>' + anchorBuildingFunction(locusWideVariants, geneName, 'locus', dataSetName, genomicRegion, rootVariantUrl) + '</td>' +   // TODO: should be locus wide
-//                    '<td>' + anchorBuildingFunction(nominallySignificantVariants, geneName, 'nominal', dataSetName, genomicRegion, rootVariantUrl) + '</td>' +
+                tableRow += '</tr>';
+//                tableRow += '<td>';
+//                tableRow += anchorBuildingFunction(valueArray[1], geneName, '0.00000005', dataSetName, genomicRegion, rootVariantUrl) + '</td>';
+//                tableRow += '<td>' + anchorBuildingFunction(valueArray[2], geneName, '0.00005', dataSetName, genomicRegion, rootVariantUrl) + '</td>' +
+//                    '<td>' + anchorBuildingFunction(valueArray[3], geneName, '0.05', dataSetName, genomicRegion, rootVariantUrl) + '</td>' +
 //                    '</tr>';
                 $('#variantsAndAssociationsTableBody').append(tableRow);
             }
@@ -686,49 +678,59 @@ var mpgSoftware = mpgSoftware || {};
                                                          valueHolder,
                                                          geneName) {
 
-//            var regionSpecifier = "chr" + geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().CHROM) + ":" +
-//                expandRegionBegin(geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().BEG)) + "-" +
-//                expandRegionEnd(geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol().END));
             var geneInfo;
             var regionSpecifier =  chromosomeNumber + ":" +
                 extentBegin + "-" +
                 extentEnd;
 
            // var emphasisRequired = emphasisRecommended(geneInfo);
-            var emphasizeGwas = (emphasisRequired ? 1 : 0);
+            var emphasizeGwas = (0);
             var headerRow = "<tr>" +
                 "<th>" + headers.hdr1 + "</th>" +
-                "<th>" + headers.hdr2 + "</th>" +
-                "<th>" + headers.hdr3 + "</th>";
-            if (emphasizeGwas) {
-                headerRow += "<th class='emphasizedTop' style='border-top: 3px solid #ee0'>";
-            } else {
-                headerRow += "<th>";
-            }
-            headerRow += headers.hdr4 + "</th>" +
-                "<th>" + headers.hdr5 + "</th>" +
-                "<th>" + headers.hdr6 + "</th>" +
-                "</tr>";
-            $('#variantsAndAssociationsHead').append(headerRow);
-            if (show_gwas) {
-                fillVariantsAndAssociationLine(geneName, 'gwas', '69,033', regionSpecifier,
-                    valueHolder[0],
-                    buildAnchorForRegionVariantSearches, emphasizeGwas, rootVariantUrl,rowHelpText);
-            }
-            if (show_exchp) {
-                fillVariantsAndAssociationLine(geneName, 'exomechip', '79,854', regionSpecifier,
-                    valueHolder[1],
-                    buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl,rowHelpText);
-            }
-            if (show_exseq) {
-                if (emphasisRequired) {
-                    emphasizeGwas = 2;
+                "<th>" + headers.hdr2 + "</th>";
+            for ( var i = 0 ; i < columnInformation.length ; i++ ) {
+                var significanceString =  columnInformation[i].value;
+                var significance =  parseFloat(significanceString);
+                headerRow += "<th>" + columnInformation[i].name;
+                if (significance===0.00000005){
+                    headerRow += headers.gwasSig;
+                } else if (significance===0.00005){
+                    headerRow += headers.locusSig;
+                } else if (significance===0.05){
+                    headerRow += headers.nominalSig;
+                } else if ((significance > 0)  && (significance < 1)){
+                    headerRow +=  "<br/><span class='headersubtext'>p&nbsp;&lt;&nbsp;"+significance.toPrecision(2)+"</span>";
                 }
-                fillVariantsAndAssociationLine(geneName, 'exomeseq', '16,760', regionSpecifier,
-                    valueHolder[2],
-                    buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl,rowHelpText);
+                headerRow += "</th>";
             }
+            headerRow += "</tr>";
+            $('#variantsAndAssociationsHead').append(headerRow);
+            for ( var row = 0 ; row < rowInformation.length ; row++ ) {
+                var rowName = rowInformation[row].name;
+                var rowCode = rowInformation[row].value;
+                var rowCount = rowInformation[row].count;
+                var rowProcessorFunction;
+                // we either search by region or by gene name.  We need to decide which reference to build
+                if ((typeof rowCode !== 'undefined') &&
+                    (rowCode.indexOf('GWAS')>-1)){
+                    rowProcessorFunction = buildAnchorForRegionVariantSearches;
+                } else {
+                    rowProcessorFunction = buildAnchorForGeneVariantSearches;
+                }
+                fillVariantsAndAssociationLine(geneName, rowCode, rowName, rowCount, regionSpecifier,
+                    valueHolder[row],columnInformation,
+                    rowProcessorFunction, emphasizeGwas, rootVariantUrl, rowHelpText);
+//                fillVariantsAndAssociationLine(geneName, 'gwas', '69,033', regionSpecifier,
+//                        valueHolder[0],
+//                        buildAnchorForRegionVariantSearches, emphasizeGwas, rootVariantUrl, rowHelpText);
+//                    fillVariantsAndAssociationLine(geneName, 'exomechip', '79,854', regionSpecifier,
+//                        valueHolder[1],
+//                        buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl, rowHelpText);
+//                    fillVariantsAndAssociationLine(geneName, 'exomeseq', '16,760', regionSpecifier,
+//                        valueHolder[2],
+//                        buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl, rowHelpText);
 
+            }
         };
 
 

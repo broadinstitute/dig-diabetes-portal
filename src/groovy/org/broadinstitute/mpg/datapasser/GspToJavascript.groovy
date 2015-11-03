@@ -10,6 +10,7 @@ class GspToJavascript {
 
     private List<LinkedHashMap> storedValues = []
     private int transType = TRANSTYPE_NONE
+    private int count = 0
 
     public GspToJavascript(List<LinkedHashMap> storedValues, int transType ) {
         this.storedValues = storedValues
@@ -40,7 +41,8 @@ class GspToJavascript {
         for ( int  i = 0 ; i < storedValues?.size() ; i++ ){
             if ((storedValues[i].value)&&((storedValues[i].name))){
                 returnValue << "{'name':'${storedValues[i].name}',"
-                returnValue << "'value':'${storedValues[i].value}'}"
+                returnValue << "'value':'${storedValues[i].value}',"
+                returnValue << "'count':'${storedValues[i].count}'}"
                 if (i+1 < storedValues?.size()){
                     returnValue << ","
                 }

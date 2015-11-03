@@ -40,16 +40,13 @@ $.ajax({
                 hdr1:'<g:message code="gene.variantassociations.table.colhdr.1" default="data type"/>',
                 hdr2:'<g:message code="gene.variantassociations.table.colhdr.2" default="sample size"/>',
                 hdr3:'<g:message code="gene.variantassociations.table.colhdr.3" default="total variants"/>',
-                hdr4:'<g:message code="gene.variantassociations.table.colhdr.4a" default="genome wide"/>'+
-                        '<g:helpText title="gene.variantassociations.table.colhdr.4.help.header" placement="top"
+                gwasSig:'<g:helpText title="gene.variantassociations.table.colhdr.4.help.header" placement="top"
                                      body="gene.variantassociations.table.colhdr.4.help.text" qplacer="2px 0 0 6px"/>'+
                         '<g:message code="gene.variantassociations.table.colhdr.4b" default="genome wide"/>',
-                hdr5:'<g:message code="gene.variantassociations.table.colhdr.5a" default="locus wide"/>'+
-                        '<g:helpText title="gene.variantassociations.table.colhdr.5.help.header" placement="top"
+                locusSig:'<g:helpText title="gene.variantassociations.table.colhdr.5.help.header" placement="top"
                                      body="gene.variantassociations.table.colhdr.5.help.text" qplacer="2px 0 0 6px"/>'+
                         '<g:message code="gene.variantassociations.table.colhdr.5b" default="locus wide"/>',
-                hdr6:'<g:message code="gene.variantassociations.table.colhdr.6a" default="nominal"/>'+
-                     '<g:helpText title="gene.variantassociations.table.colhdr.6.help.header" placement="top"
+                nominalSig:'<g:helpText title="gene.variantassociations.table.colhdr.6.help.header" placement="top"
                                   body="gene.variantassociations.table.colhdr.6.help.text" qplacer="2px 0 0 6px"/>'+
                      '<g:message code="gene.variantassociations.table.colhdr.6b" default="nominal"/>'
             };
