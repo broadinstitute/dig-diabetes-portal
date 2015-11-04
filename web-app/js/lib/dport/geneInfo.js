@@ -652,7 +652,7 @@ var mpgSoftware = mpgSoftware || {};
                             rowHelpText.sigmaQ;
                         break;
                     default:
-                        dataSetNameForUser = 'unknown';
+                        dataSetNameForUser = dataSetName;
                 }
                 var tableRow = '';
                 tableRow += '<tr>' +

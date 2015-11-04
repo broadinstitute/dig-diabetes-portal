@@ -323,8 +323,8 @@ class RestServerService {
             case TECHNOLOGY_EXOME_CHIP:
                 returnValue = "${TECHNOLOGY_EXOME_CHIP}_82k_${sharedToolsService.getCurrentDataVersion()}"
                 break;
-            default:
-                log.error("Unexpected technology=${technology}")
+            default: // if we don't recognize the data set then assume the reference verbatim
+                returnValue = technology
                 break
 
         }

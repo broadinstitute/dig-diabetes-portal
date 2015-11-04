@@ -102,32 +102,11 @@ class FilterManagementService {
                     returnValue['savedValue0'] = "11=MOST_DEL_SCORE<4"
                     break;
                 default:
+                    dataSet = restServerService.getSampleGroup(dataset,"none",RestServerService.ANCESTRY_NONE)
+                    pValueSpec = "P_FIRTH_FE_IV"
                     break;
             }
         }
-
-
-//        if (significance) {
-//            switch (significance) {
-//                case 'everything' : // this is equivalent to P>0,
-//                    returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<1"
-//                    break;
-//                case 'genome-wide' :
-//                    returnValue['significance']  = 'genomewide'
-//                    returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<0.5E-8"
-//                    break;
-//                case 'locus' :
-//                    returnValue['significance']  = 'locus'
-//                    returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<0.5E-4"
-//                    break;
-//                case 'nominal' : // this is equivalent to P>0,
-//                    returnValue['significance']  = 'nominal'
-//                    returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<0.05"
-//                    break;
-//                default:
-//                    break;
-//            }
-//        }
 
         returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<${significance}"
 
