@@ -60,6 +60,8 @@ class GeneController {
         List <LinkedHashMap<String,String>> columnInformation = []
         columnInformation << [name:'total variants', value:'1', count:'0']
         columnInformation << [name:'genome-wide', value:'0.00000005', count:'0']
+// example of additional column
+//        columnInformation << [name:'exome wide <br>significance', value:'0.000009', count:'0']
         columnInformation << [name:'locus-wide', value:'0.00005', count:'0']
         columnInformation << [name:'nominal', value:'0.05', count:'0']
 
@@ -148,9 +150,18 @@ class GeneController {
      */
     def genepValueCounts() {
         String geneToStartWith = params.geneName
+        List<String> rowNames = params."rowNames[]"
+        List<String> colSignificances = params."colNames[]"
+        List<Float> significanceValues = []
+        for (String oneSignificance in colSignificances) {
+            try {
+                significanceValues << Float.parseFloat(oneSignificance)
+            } catch (ex) {
+                log.error("nonnumeric significance value (${oneSignificance}) in genepValueCounts action in GeneController")
+            }
+        }
         JSONObject jsonObject =  restServerService.combinedVariantCountByGeneNameAndPValue ( geneToStartWith.trim().toUpperCase(),
-        [RestServerService.TECHNOLOGY_GWAS,RestServerService.TECHNOLOGY_EXOME_CHIP,RestServerService.TECHNOLOGY_EXOME_SEQ],
-        [1f,0.00000005f,0.00005f,0.05f])
+                                                                                             rowNames, significanceValues )
         render(status:200, contentType:"application/json") {
             [geneInfo:jsonObject]
         }

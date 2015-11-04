@@ -56,19 +56,6 @@ $.ajax({
                 noSignificantAssociationsExist:'<g:message code="gene.variantassociations.noSignificantAssociations"
                                                            default="no significant associations"/>'
             };
-            var biologicalHypothesisTesting = {
-                question1explanation:'<g:message code="gene.biologicalhypothesis.question1.explanation"
-                                                 default="explanation" args="[geneName]"/>',
-                question1insufficient:'<g:message code="gene.biologicalhypothesis.question1.insufficientdata"
-                                                  default="insufficient data"/>',
-                question1nominal:'<g:message code="gene.biologicalhypothesis.question1.nominaldifference"
-                                             default="nominal difference"/>',
-                question1significant:'<g:message code="gene.biologicalhypothesis.question1.significantdifference"
-                                                 default="significant difference"/>',
-                question1significantQ:'<g:helpText title="gene.biologicalhypothesis.question1.significance.help.header"
-                                                   qplacer="2px 0 0 6px" placement="right"
-                                                   body="gene.biologicalhypothesis.question1.significance.help.text"/>'
-            };
             var variantsAndAssociationsRowHelpText ={
                  genomeWide:'<g:message code="gene.variantassociations.table.rowhdr.gwas" default="gwas"/>',
                  genomeWideQ:'<g:helpText title="gene.variantassociations.table.rowhdr.gwas.help.header"
@@ -87,67 +74,18 @@ $.ajax({
                                              qplacer="2px 0 0 6px" placement="right"
                                              body="gene.variantassociations.table.rowhdr.exomeSequence.help.text"/>'
             };
-            continentalAncestryText = {
-                continentalAA:'<g:message code="gene.continentalancestry.title.rowhdr.AA" default="gwas"/>',
-                continentalAAQ:'<g:helpText title="gene.continentalancestry.title.rowhdr.AA.help.header"
-                                            qplacer="2px 0 0 6px" placement="right"
-                                            body="gene.continentalancestry.title.rowhdr.AA.help.text"/>',
-                continentalAAdatatype:'<g:message code="gene.continentalancestry.datatype.exomeSequence"
-                                                  default="exome sequence"/>'+
-                        '<g:helpText title="gene.continentalancestry.datatype.exomeSequence.help.header"
-                                     qplacer="2px 0 0 6px" placement="right"
-                                     body="gene.continentalancestry.datatype.exomeSequence.help.text"/>',
-                continentalEA:'<g:message code="gene.continentalancestry.title.rowhdr.EA" default="gwas"/>',
-                continentalEAQ:'<g:helpText title="gene.continentalancestry.title.rowhdr.EA.help.header"
-                                            qplacer="2px 0 0 6px" placement="right"
-                                            body="gene.continentalancestry.title.rowhdr.EA.help.text"/>',
-                continentalEAdatatype:'<g:message code="gene.continentalancestry.datatype.exomeSequence"
-                                                  default="exome sequence"/>',
-                continentalSA:'<g:message code="gene.continentalancestry.title.rowhdr.SA" default="gwas"/>',
-                continentalSAQ:'<g:helpText title="gene.continentalancestry.title.rowhdr.SA.help.header"
-                                            qplacer="2px 0 0 6px" placement="right"
-                                            body="gene.continentalancestry.title.rowhdr.SA.help.text"/>',
-                continentalSAdatatype:'<g:message code="gene.continentalancestry.datatype.exomeSequence"
-                                                  default="exome sequence"/>',
-                continentalEU:'<g:message code="gene.continentalancestry.title.rowhdr.EU" default="gwas"/>',
-                continentalEUQ:'<g:helpText title="gene.continentalancestry.title.rowhdr.EU.help.header"
-                                            qplacer="2px 0 0 6px" placement="right"
-                                            body="gene.continentalancestry.title.rowhdr.EU.help.text"/>',
-                continentalEUdatatype:'<g:message code="gene.continentalancestry.datatype.exomeSequence"
-                                                  default="exome sequence"/>',
-                continentalHS:'<g:message code="gene.continentalancestry.title.rowhdr.HS" default="gwas"/>',
-                continentalHSQ:'<g:helpText title="gene.continentalancestry.title.rowhdr.HS.help.header"
-                                            qplacer="2px 0 0 6px" placement="right"
-                                            body="gene.continentalancestry.title.rowhdr.HS.help.text"/>',
-                continentalHSdatatype:'<g:message code="gene.continentalancestry.datatype.exomeSequence"
-                                                  default="exome sequence"/>',
-                continentalEUchip:'<g:message code="gene.continentalancestry.title.rowhdr.chipEU" default="gwas"/>',
-                continentalEUchipQ:'<g:helpText title="gene.continentalancestry.title.rowhdr.chipEU.help.header"
-                                                qplacer="2px 0 0 6px" placement="right"
-                                                body="gene.continentalancestry.title.rowhdr.chipEU.help.text"/>',
-                continentalEUchipDatatype:'<g:message code="gene.continentalancestry.datatype.exomeChip"
-                                                      default="exome chip"/>'+
-                        '<g:helpText title="gene.continentalancestry.datatype.exomeChip.help.header"
-                                     qplacer="2px 0 0 6px" placement="right"
-                                     body="gene.continentalancestry.datatype.exomeChip.help.text"/>'
-
-            };
-
 
             if ((typeof data !== 'undefined') &&
                 (data)){
                     if ((data.geneInfo) &&
                         (data.geneInfo.results)){//assume we have data and process it
-                          var collector = {}
+                          var collector = [];
                           for (var i = 0 ; i < data.geneInfo.results.length ; i++) {
                                var d = [];
                                for (var j = 0 ; j < data.geneInfo.results[i].pVals.length ; j++ ){
-                                  var contents={};
-                                  contents["level"] = data.geneInfo.results[i].pVals[j].level;
-                                  contents["count"] = data.geneInfo.results[i].pVals[j].count;
-                                  d.push(contents);
+                                  d.push(data.geneInfo.results[i].pVals[j].count);
                                }
-                               collector["d"+i] = d;
+                               collector.push(d);
                             }
 
                             mpgSoftware.geneInfo.fillTheVariantAndAssociationsTableFromNewApi(data,
@@ -159,19 +97,13 @@ $.ajax({
                                 '<g:createLink controller="variantSearch" action="gene"/>',
                                 {variantsAndAssociationsTableHeaders:variantsAndAssociationsTableHeaders,
                                  variantsAndAssociationsPhenotypeAssociations:variantsAndAssociationsPhenotypeAssociations,
-                                 biologicalHypothesisTesting:biologicalHypothesisTesting,
-                                 variantsAndAssociationsRowHelpText: variantsAndAssociationsRowHelpText,
-                                 continentalAncestryText: continentalAncestryText},
+                                 variantsAndAssociationsRowHelpText: variantsAndAssociationsRowHelpText},
                                 '${geneChromosome}',${geneExtentBegin},${geneExtentEnd},
                                 <g:renderRowMaps data='${rowInformation}'/>,
                                 <g:renderColMaps data='${columnInformation}'/>,
-                                [[collector["d0"][0].count,collector["d0"][1].count,collector["d0"][2].count,collector["d0"][3].count],
-                                [collector["d1"][0].count,collector["d1"][1].count,collector["d1"][2].count,collector["d1"][3].count],
-                                [collector["d2"][0].count,collector["d2"][1].count,collector["d2"][2].count,collector["d2"][3].count],
-                                [collector["d0"][0].count,collector["d0"][1].count,collector["d0"][2].count,collector["d0"][3].count]],
+                                collector,
                                 '<%=geneName%>'
                             );
-
                     }
                 }
             $('[data-toggle="popover"]').popover();
