@@ -19,6 +19,7 @@
     div.burden-test-result {
         font-size: 25px;
         padding-top: 20px;
+        display: none;
     }
 
     .burden-test-result .pValue {
@@ -59,7 +60,7 @@
         font-size: 14px;
     }
     .variantsListLabel {
-        text-align: right;
+        text-align: center;
     }
     .burdenTestResultHolder {
         height: 140px;
@@ -121,35 +122,30 @@
          */
         var runBurdenTest = function (){
 
-             var fillInResultsSection = function (pValue, oddsRatio, stdError, variantArray, urlLink){
-                 $('.burden-test-result').empty();  // clear out whatever was there before
+             var fillInResultsSection = function (pValue, oddsRatio, stdError, numberVariants, variantArray, urlLink){
+                var test = "";
+                 // $('.burden-test-result').empty();  // clear out whatever was there before
                  if ((typeof variantArray === 'undefined') ||
                      (variantArray.length <= 0)){
-                      $('.burden-test-result').append(
-                        '<div class="col-sm-6 col-sm-offset-3 ">'+
-                            'No variants matched your filter criteria'+
-                        '</div>'+
-                        '<div class="col-sm-3 "></div>');
+                        // show the no results
+                        $("#burden-test-some-results").hide();
+                        $("#burden-test-no-results").show();
                   } else {
                      var variantAnchors = [];
                      for ( var i = 0 ; i < variantArray.length ; i++ ) {
                         variantAnchors.push("<div><a href='"+urlLink+"/"+variantArray[i]+"'>"+variantArray[i]+"</a></div>");
                      }
-                     $('.burden-test-result').append('<div class="col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-1  col-sm-3 col-sm-offset-1 burdenTestResultHolder">'+
-            '<div class="vertical-center">'+
-                '<div class="pValue">'+pValue+'</div>'+
-                '<div class="orValue">'+oddsRatio+'</div>'+
-                '<div class="ciValue">'+stdError+'</div>'+
-            '</div>'+
-        '</div>'+
-        '<div class="col-sm-3"></div>'+
-        '<div class="col-sm-2 variantsListLabel">variants:</div>'+
-        '<div class="col-md-2 col-sm-3">'+
-            '<div class="variantList">'+
-            variantAnchors.join('\n')+
-            '</div>'+
-        '</div>'+
-        '<div class="col-sm-1"></div>');
+
+                    // populate the data
+                    $('#pValue').text(pValue);
+                    $('#orValue').text(oddsRatio);
+                    $('#ciValue').text(stdError);
+                    $('#variantLabel').text(numberVariants);
+                    $('#variantList').html(variantAnchors.join('\n'));
+
+                    // show the results
+                    $('#burden-test-some-results').show();
+                    $('#burden-test-no-results').hide();
                   }
 
              };
@@ -231,16 +227,18 @@
                                    var pValue = data.stats.pValue;
                                    var oddsRatio = data.stats.oddsRatio;
                                    var stdError = data.stats.stdError;
+                                   var numberVariants = data.stats.numInputVariants;
 //                                   $('.burden-test-result').empty();
-                                   $('.burden-test-result .pValue').text("");
-                                   $('.burden-test-result .pValue').append('p-Value = '+UTILS.realNumberFormatter(pValue));
-                                   $('.burden-test-result .orValue').text("");
-                                   $('.burden-test-result .orValue').append('odds ratio = ' +UTILS.realNumberFormatter(oddsRatio));
-                                   $('.burden-test-result .ciValue').text("");
-                                   $('.burden-test-result .ciValue').append('standard error = ' +UTILS.realNumberFormatter(stdError));
+//                                   $('.burden-test-result .pValue').text("");
+//                                   $('.burden-test-result .pValue').append('p-Value = '+UTILS.realNumberFormatter(pValue));
+//                                   $('.burden-test-result .orValue').text("");
+//                                   $('.burden-test-result .orValue').append('odds ratio = ' +UTILS.realNumberFormatter(oddsRatio));
+//                                   $('.burden-test-result .ciValue').text("");
+//                                   $('.burden-test-result .ciValue').append('standard error = ' +UTILS.realNumberFormatter(stdError));
                                    fillInResultsSection('p-Value = '+UTILS.realNumberFormatter(data.stats.pValue),
                                    'odds ratio = ' +UTILS.realNumberFormatter(data.stats.oddsRatio),
                                    'standard error = ' +UTILS.realNumberFormatter(data.stats.stdError),
+                                   numberVariants,
                                    data.variants,"${createLink(controller: 'variantInfo', action: 'variantInfo')}");
 
                                }
@@ -330,9 +328,30 @@ $( document ).ready( function (){
         </div>
     </div>
 
-    <div class="row burden-test-result">
-
+    <div id="burden-test-no-results" class="row burden-test-result">
+        <div class="col-sm-6 col-sm-offset-3 ">No variants matched your filter criteria</div>
+        <div class="col-sm-3 "></div>
     </div>
+
+    <div id="burden-test-some-results" class="row burden-test-result">
+        <div class="col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-1  col-sm-3 col-sm-offset-1 burdenTestResultHolder">
+            <div class="vertical-center">
+                <div id="pValue" class="pValue"></div>
+                <div id="orValue" class="orValue"></div>
+                <div id="ciValue" class="ciValue"></div>
+            </div>
+        </div>
+        <div class="col-sm-5"></div>
+        <div class="col-md-2 col-sm-3">
+            <div>
+                <div class="variantsListLabel"><span  id="variantLabel"></span> variants:</div>
+                <div id="variantList" class="variantList">
+            </div>
+        </div>
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+
 </div>
 
 
