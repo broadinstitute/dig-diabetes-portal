@@ -70,10 +70,10 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
 
         where:
         label                       | significance      |   dataset
-        "query exome seq all"       |   1               |   1
-        "query exome chip gws"      |   2               |   2
-        "query gwas locus sig"      |   3               |   3
-        "query exome seq nominal"   |   4               |   1
+        "query exome seq all"       |   0.001           |   RestServerService.TECHNOLOGY_EXOME_SEQ
+        "query exome chip gws"      |   0.005           |   RestServerService.TECHNOLOGY_EXOME_CHIP
+        "query gwas locus sig"      |   0.000005        |   RestServerService.TECHNOLOGY_GWAS
+        "query exome seq nominal"   |   0.5             |   RestServerService.TECHNOLOGY_EXOME_SEQ
 
     }
 

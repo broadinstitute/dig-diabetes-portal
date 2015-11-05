@@ -107,8 +107,10 @@ class FilterManagementService {
                     break;
             }
         }
+        if ((dataSet)&&(pValueSpec)){
+            returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<${significance}"
+        }
 
-        returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<${significance}"
 
         if (region) { // If there's a region then use it. Otherwise depend on the gene name. Don't use both
             LinkedHashMap extractedNumbers = restServerService.extractNumbersWeNeed(region)

@@ -562,7 +562,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param dataSet
      * @return
      */
-    private JSONObject  requestGeneCountByPValue (String geneName, Float significanceIndicator, String dataSet){
+    public JSONObject  requestGeneCountByPValue (String geneName, Float significanceIndicator, String dataSet){
         String dataSetId = ""
         //String significance
         String geneRegion
@@ -1013,7 +1013,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 dataSetId = "total"
         }
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID"])
-        List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName,"","","","${codeForMafSlice}-${codeForEthnicity}")
+        List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName,0f,"","","${codeForMafSlice}-${codeForEthnicity}")
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters,searchBuilderService,metaDataService)
         if (cellNumber==0){
             if (ethnicity != "chipEu"){
