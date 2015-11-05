@@ -37,6 +37,10 @@
         white-space: nowrap;
     }
 
+    .burden-test-result .ciValue {
+        white-space: nowrap;
+    }
+
     .mafOptionChooser div.radio {
         padding: 0 20px 0 0;
     }
@@ -117,7 +121,7 @@
          */
         var runBurdenTest = function (){
 
-             var fillInResultsSection = function (pValue,oddsRatio,variantArray,urlLink){
+             var fillInResultsSection = function (pValue, oddsRatio, stdError, variantArray, urlLink){
                  $('.burden-test-result').empty();  // clear out whatever was there before
                  if ((typeof variantArray === 'undefined') ||
                      (variantArray.length <= 0)){
@@ -135,7 +139,7 @@
             '<div class="vertical-center">'+
                 '<div class="pValue">'+pValue+'</div>'+
                 '<div class="orValue">'+oddsRatio+'</div>'+
-                '<div class="ciValue"></div>'+
+                '<div class="ciValue">'+stdError+'</div>'+
             '</div>'+
         '</div>'+
         '<div class="col-sm-3"></div>'+
@@ -215,8 +219,9 @@
                                     console.log('burdenTestAjax returned is_error ='+data.is_error +'.');
                                 }
                                 else if ((typeof data.stats.pValue === 'undefined') ||
-                                         (typeof data.stats.oddsRatio === 'undefined')){
-                                     console.log('burdenTestAjax returned undefined for P value or odds ratio.');
+                                         (typeof data.stats.oddsRatio === 'undefined') ||
+                                         (typeof data.stats.stdError === 'undefined')){
+                                     console.log('burdenTestAjax returned undefined for P value, standard error or odds ratio.');
                                }else {
 //    <div class="col-md-7 col-sm-7 col-xs-3 col-md-offset-5 col-sm-offset-5 col-xs-offset-3">
 //        <div class="pValue"></div>
@@ -225,13 +230,17 @@
 //    </div>
                                    var pValue = data.stats.pValue;
                                    var oddsRatio = data.stats.oddsRatio;
+                                   var stdError = data.stats.stdError;
 //                                   $('.burden-test-result').empty();
                                    $('.burden-test-result .pValue').text("");
                                    $('.burden-test-result .pValue').append('p-Value = '+UTILS.realNumberFormatter(pValue));
                                    $('.burden-test-result .orValue').text("");
                                    $('.burden-test-result .orValue').append('odds ratio = ' +UTILS.realNumberFormatter(oddsRatio));
+                                   $('.burden-test-result .ciValue').text("");
+                                   $('.burden-test-result .ciValue').append('standard error = ' +UTILS.realNumberFormatter(stdError));
                                    fillInResultsSection('p-Value = '+UTILS.realNumberFormatter(data.stats.pValue),
                                    'odds ratio = ' +UTILS.realNumberFormatter(data.stats.oddsRatio),
+                                   'standard error = ' +UTILS.realNumberFormatter(data.stats.stdError),
                                    data.variants,"${createLink(controller: 'variantInfo', action: 'variantInfo')}");
 
                                }
