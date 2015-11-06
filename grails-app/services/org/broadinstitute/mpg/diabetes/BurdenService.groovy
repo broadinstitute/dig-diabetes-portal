@@ -148,7 +148,7 @@ class BurdenService {
         }
 
         if (returnJson == null) {
-            JSONTokener tokener = new JSONTokener("{\"pValue\": \"0.0\", \"oddsRatio\": \"0.0\", \"is_error\": false, \"variants\": []}");
+            JSONTokener tokener = new JSONTokener("{\"stats\": { \"pValue\": \"0.0\", \"oddsRatio\": \"0.0\", \"stdError\": 0, \"is_error\": false, \"variants\": []}}");
             returnJson = new JSONObject(tokener);
             log.info("returning empty burden rest result: " + returnJson);
         }
