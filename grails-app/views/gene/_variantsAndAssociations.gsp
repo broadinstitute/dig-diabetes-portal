@@ -14,7 +14,51 @@
     <g:message code="gene.variantassociations.subDirective" default="Click on a number below to generate a table of variants associated with type 2 diabetes in the following categories:"/></p>
 <br/>
 
+<div id="dialog" title="Variants and Associations table modifier">
+<div style = "width: 500px">
 
+    <div class="row burden-test-wrapper-options">
+        <div  class="row">
+            <div class="text-center" style="margin:15px 8px 15px 10px">Add additional columns</div>
+        </div>
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-xs-12">
+                    <label>P value:&nbsp;&nbsp;</label>
+
+                </div>
+
+                <div class="col-md-8 col-sm-8 col-xs-12">
+                    <input style="display: inline-block" type="text" class="form-control" id="addPValue"
+                           placeholder="value">
+                </div>
+            </div>
+
+            <div  class="row">
+                <div style="margin:15px 8px 15px 10px"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-xs-12">
+
+                    <label>Column name:</label><br>
+                    <label>(optional)</label>
+
+                </div>
+
+                <div class="col-md-8 col-sm-8 col-xs-12">
+                    <input style="display: inline-block" type="text" class="form-control" id="newColumnName"
+                           placeholder="value">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</div>
+<button id="opener">Add additional columns</button>
 <table id="variantsAndAssociationsTable" class="table table-striped distinctivetable distinctive">
     <thead id="variantsAndAssociationsHead">
     </thead>
@@ -24,6 +68,39 @@
 
 
 <g:javascript>
+$( document ).ready(function() {
+  $(function() {
+    $( "#dialog" ).dialog({
+      autoOpen: false,
+      show: {
+        effect: "fade",
+        duration: 500
+      },
+      hide: {
+        effect: "fade",
+        duration: 500
+      },
+      width: 560,
+      modal: true,
+      buttons: {
+        Cancel: function() {
+          $( this ).dialog( "close" );
+        },
+        "Add column": function() {
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+  });
+
+var popUpVAndAExtender = function() {
+      $( "#dialog" ).dialog( "open" );
+    };
+$( "#opener" ).click(popUpVAndAExtender);
+}
+);
+//$( "#opener" ).click(popUpVAndAExtender());
+
 var variantsAndAssociationTable = function (){
 $.ajax({
     cache: false,
