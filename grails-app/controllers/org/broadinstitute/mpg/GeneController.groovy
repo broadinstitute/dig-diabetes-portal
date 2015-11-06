@@ -43,8 +43,15 @@ class GeneController {
      */
     def geneInfo() {
         String geneToStartWith = params.id
+        String newVandAColumnName = "custom significance"
+        String newVandAColumnPValue
 
-        // DIGP-112: needed for the gwas region summary
+        if (params.pValue) {
+            newVandAColumnPValue =  params.pValue
+        }
+        if (params.columnName) {
+            newVandAColumnName =  params.columnName
+        }
         String phenotypeList = this.metaDataService?.urlEncodedListOfPhenotypes();
         String regionSpecification = null
 
@@ -66,6 +73,9 @@ class GeneController {
 //        columnInformation << [name:'exome wide <br>significance', value:'0.000009', count:'0']
         columnInformation << [name:'locus-wide', value:'0.00005', count:'0']
         columnInformation << [name:'nominal', value:'0.05', count:'0']
+        if (newVandAColumnPValue){
+            columnInformation << [name:"${newVandAColumnName}", value:"${newVandAColumnPValue}", count:'0']
+        }
 
         if (geneToStartWith)  {
             String  geneUpperCase =   geneToStartWith.toUpperCase()

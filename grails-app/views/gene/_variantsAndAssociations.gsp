@@ -18,20 +18,24 @@
 <div style = "width: 500px">
 
     <div class="row burden-test-wrapper-options">
+        <g:form role="form" action="geneInfo" id="${geneName}">
         <div  class="row">
             <div class="text-center" style="margin:15px 8px 15px 10px">Add additional columns</div>
         </div>
 
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="row">
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                    <label>P value:&nbsp;&nbsp;</label>
+                <div class="form-group">
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <label>P value:&nbsp;&nbsp;</label>
 
-                </div>
+                    </div>
 
-                <div class="col-md-8 col-sm-8 col-xs-12">
-                    <input style="display: inline-block" type="text" class="form-control" id="addPValue"
-                           placeholder="value">
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <g:textField style="display: inline-block" name="pValue" type="text" class="form-control" id="addPValue"
+                               placeholder="value">
+                        </g:textField>
+                    </div>
                 </div>
             </div>
 
@@ -40,20 +44,23 @@
             </div>
 
             <div class="row">
-                <div class="col-md-4 col-sm-4 col-xs-12">
+                <div class="form-group">
+                    <div class="col-md-4 col-sm-4 col-xs-12">
 
-                    <label>Column name:</label><br>
-                    <label>(optional)</label>
+                        <label>Column name:</label><br>
+                        <label>(optional)</label>
 
-                </div>
+                    </div>
 
-                <div class="col-md-8 col-sm-8 col-xs-12">
-                    <input style="display: inline-block" type="text" class="form-control" id="newColumnName"
-                           placeholder="value">
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <input style="display: inline-block" name="columnName" class="form-control" id="newColumnName"
+                               placeholder="value">
+                    </div>
                 </div>
             </div>
+            <button type="submit" id="vandasubmit" class="btn btn-default" style="display: none">Submit</button>
         </div>
-
+        </g:form>
     </div>
 
 </div>
@@ -87,6 +94,7 @@ $( document ).ready(function() {
           $( this ).dialog( "close" );
         },
         "Add column": function() {
+          $('#vandasubmit').click();
           $( this ).dialog( "close" );
         }
       }
