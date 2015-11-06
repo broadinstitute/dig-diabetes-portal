@@ -42,6 +42,21 @@ class DataToJavascriptTagLib {
     }
 
 
+    def renderPassBackColumns = { attrs,body ->
+        if (attrs.data){
+            GspToJavascript gspToJavascript = new GspToJavascript(attrs.data, GspToJavascript.TRANSTYPE_V_AND_A_COLUMN )
+            List <String> passBackValues = gspToJavascript.codeValuesForPassBack()
+            for ( int  i = 0 ; i < passBackValues.size() ; i++ ){
+                out << "<input style=\"hidden\" name=\"savedCol${i}\" class=\"form-control\" id=\"savedCol${i}\">\n"
+//                out << "<g:hiddenField name=\"savedCol${i}\"  value=\"${passBackValues[i]}\"/>\n"
+            }
+            out << body()
+        }
+
+    }
+
+
+
 
 
 }

@@ -58,6 +58,8 @@
                     </div>
                 </div>
             </div>
+            <g:hiddenField name="xx"  value="yy"/>
+            <g:renderPassBackColumns data='${columnInformation}'></g:renderPassBackColumns>
             <button type="submit" id="vandasubmit" class="btn btn-default" style="display: none">Submit</button>
         </div>
         </g:form>
@@ -115,8 +117,8 @@ $.ajax({
     type: "post",
     url: "${createLink(controller:'gene',action: 'genepValueCounts')}",
     data: {geneName: '<%=geneName%>',
-           rowNames:<g:renderRowValues data='${rowInformation}'/>,
-           colNames:<g:renderColValues data='${columnInformation}'/>},
+           rowNames:<g:renderRowValues data='${rowInformation}'></g:renderRowValues>,
+           colNames:<g:renderColValues data='${columnInformation}'></g:renderColValues>},
         async: true,
         success: function (data) {
 
