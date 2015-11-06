@@ -57,6 +57,7 @@ class GeneController {
         rowInformation << [name:'GWAS', value:RestServerService.TECHNOLOGY_GWAS, count:'69,033']
         rowInformation << [name:'exome chip', value:RestServerService.TECHNOLOGY_EXOME_CHIP, count:'79,854']
         rowInformation << [name:'exome sequence', value:RestServerService.TECHNOLOGY_EXOME_SEQ, count:'16,760']
+// example of additional row
 //        rowInformation << [name:'AA exome seq', value:"ExSeq_17k_aa_mdv2", count:'4777']
         List <LinkedHashMap<String,String>> columnInformation = []
         columnInformation << [name:'total variants', value:'1', count:'0']
