@@ -68,13 +68,31 @@
 
                     <div class="col-md-8 col-sm-8 col-xs-12">
                         <g:renderColumnCheckboxes data='${columnInformation}'></g:renderColumnCheckboxes>
-                        %{--<div class="checkbox">--}%
-                            %{--<label><input type="checkbox"> Remember me</label>--}%
-                        %{--</div>--}%
                      </div>
                 </div>
             </div>
-            %{--<g:renderPassBackColumns data='${columnInformation}'></g:renderPassBackColumns>--}%
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+
+                        <label>Existing rows:</label><br>
+
+                    </div>
+
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <div class="row">
+                            <div class="col-xs-12"  id="vandaRowHolder">
+                                <g:renderRowCheckboxes data='${rowInformation}'></g:renderRowCheckboxes>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <g:renderSampleGroupDropDown data='${allAvailableRows}'></g:renderSampleGroupDropDown>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <button type="submit" id="vandasubmit" class="btn btn-default" style="display: none">Submit</button>
         </div>
         </g:form>
@@ -124,6 +142,11 @@ var popUpVAndAExtender = function() {
 $( "#opener" ).click(popUpVAndAExtender);
 }
 );
+var insertVandARow  = function(name, value) {
+      var counter = 100;
+      $('#vandaRowHolder').add("<label><input type='checkbox' class='checkbox checkbox-primary' name='savedRow"+counter+"' class='form-control' id='savedRow"+counter+"' value='"+name+"^"+value+"^47' checked>"+name+"</label>");
+      return false;
+ };
 //$( "#opener" ).click(popUpVAndAExtender());
 
 var variantsAndAssociationTable = function (){

@@ -71,6 +71,41 @@ class DataToJavascriptTagLib {
 
     }
 
+    def renderRowCheckboxes = { attrs,body ->
+        if (attrs.data){
+            GspToJavascript gspToJavascript = new GspToJavascript(attrs.data, GspToJavascript.TRANSTYPE_V_AND_A_ROW )
+            LinkedHashMap<String,String> namesAndValues = gspToJavascript.namesAndValues()
+            int counter = 0
+            namesAndValues.each {String name,String value->
+                out << "<div class=\"checkbox\">\n"
+                out << "<label><input type=\"checkbox\" class=\"checkbox checkbox-primary\" name=\"savedRow${counter}\" class=\"form-control\" id=\"savedRow${counter}\" value=\"${name}^${value}^47\" checked>${name}</label>\n"
+                out << "</div>\n"
+                counter++
+            }
+            out << body()
+        }
+
+    }
+
+    def renderSampleGroupDropDown = { attrs,body ->
+        if (attrs.data){
+            GspToJavascript gspToJavascript = new GspToJavascript(attrs.data, GspToJavascript.TRANSTYPE_V_AND_A_ROW )
+            LinkedHashMap<String,String> namesAndValues = gspToJavascript.namesAndValues()
+            int counter = 0
+            out << "<div class=\"dropdown\">"
+            out << "<button class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\">Dropdown Example<span class=\"caret\"></span></button>"
+            out << "<ul class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n"
+            namesAndValues.each {String name,String value->
+                out << "<li><a onclick=\"insertVandARow('${name}','${value}')\">${name}</a></li>\n"
+                counter++
+            }
+            out << "</ul>\n"
+            out << "</div>\n"
+            out << body()
+        }
+
+    }
+
 
 
 

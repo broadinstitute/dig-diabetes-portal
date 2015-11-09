@@ -3,6 +3,7 @@ package org.broadinstitute.mpg
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class GeneController {
@@ -44,9 +45,11 @@ class GeneController {
     def geneInfo() {
         String geneToStartWith = params.id
         LinkedHashMap savedCols = params.findAll{ it.key =~ /^savedCol/ }
+        LinkedHashMap savedRows = params.findAll{ it.key =~ /^savedRow/ }
         String newVandAColumnName = "custom significance"
         String newVandAColumnPValue
 
+        // capture requests related to a new column
         if (params.pValue) {
             newVandAColumnPValue =  params.pValue
         }
@@ -60,13 +63,27 @@ class GeneController {
         if (geneToStartWith != null) {
             regionSpecification = this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 100000)
         }
-
+        List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupList()
+        List <LinkedHashMap<String,String>> allAvailableRows = []
+        for(SampleGroup sampleGroup in sampleGroupList){
+            allAvailableRows << [name:sampleGroup.name, value:sampleGroup.systemId, count:'4747']
+        }
         List <LinkedHashMap<String,String>> rowInformation = []
-        rowInformation << [name:'GWAS', value:RestServerService.TECHNOLOGY_GWAS, count:'69,033']
-        rowInformation << [name:'exome chip', value:RestServerService.TECHNOLOGY_EXOME_CHIP, count:'79,854']
-        rowInformation << [name:'exome sequence', value:RestServerService.TECHNOLOGY_EXOME_SEQ, count:'16,760']
+        if (savedRows.size()>0) { // no saved rows -- provide some defaults
+            savedRows.each{String key, String value->
+                List <String> listOfProperties = value.tokenize("^")
+                if (listOfProperties.size()>2) {
+                    rowInformation << [name:listOfProperties[0], value:listOfProperties[1], count:listOfProperties[2]]
+                }
+            }
+        } else {
+            rowInformation << [name:'GWAS', value:RestServerService.TECHNOLOGY_GWAS, count:'69,033']
+            rowInformation << [name:'exome chip', value:RestServerService.TECHNOLOGY_EXOME_CHIP, count:'79,854']
+            rowInformation << [name:'exome sequence', value:RestServerService.TECHNOLOGY_EXOME_SEQ, count:'16,760']
 // example of additional row
 //        rowInformation << [name:'AA exome seq', value:"ExSeq_17k_aa_mdv2", count:'4777']
+        }
+
         List <LinkedHashMap<String,String>> columnInformation = []
         // if we have saved values then use them, otherwise add the defaults
         if (savedCols.size()>0){
@@ -76,7 +93,7 @@ class GeneController {
                     columnInformation << [name:listOfProperties[0], value:listOfProperties[1], count:listOfProperties[2]]
                 }
             }
-        } else {
+        } else { // no saved columns -- provide some defaults
             columnInformation << [name:'total variants', value:'1', count:'0']
             columnInformation << [name:'genome-wide', value:'0.00000005', count:'0']
 //        columnInformation << [name:'exome wide <br>significance', value:'0.000009', count:'0']  // example of additional column
@@ -100,7 +117,8 @@ class GeneController {
                                              geneExtentEnd:geneExtent.endExtent,
                                              geneChromosome:geneExtent.chrom,
                                              rowInformation:rowInformation,
-                                             columnInformation:columnInformation
+                                             columnInformation:columnInformation,
+                                             allAvailableRows:allAvailableRows
             ] )
         }
      }
