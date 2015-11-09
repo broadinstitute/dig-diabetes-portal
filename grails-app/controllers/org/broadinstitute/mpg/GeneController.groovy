@@ -63,7 +63,7 @@ class GeneController {
         if (geneToStartWith != null) {
             regionSpecification = this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 100000)
         }
-        List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupList()
+        List<SampleGroup> sampleGroupList = metaDataService?.getSampleGroupList()
         List <LinkedHashMap<String,String>> allAvailableRows = []
         for(SampleGroup sampleGroup in sampleGroupList){
             allAvailableRows << [name:sampleGroup.name, value:sampleGroup.systemId, count:'4747']
