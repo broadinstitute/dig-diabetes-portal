@@ -20,7 +20,7 @@
     <div class="row burden-test-wrapper-options">
         <g:form role="form" action="geneInfo" id="${geneName}">
         <div  class="row">
-            <div class="text-center" style="margin:15px 8px 15px 10px">Add additional columns</div>
+            <div class="text-center" style="margin:15px 8px 15px 10px">Revise table</div>
         </div>
 
         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -58,8 +58,23 @@
                     </div>
                 </div>
             </div>
-            <g:hiddenField name="xx"  value="yy"/>
-            <g:renderPassBackColumns data='${columnInformation}'></g:renderPassBackColumns>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+
+                        <label>Existing columns:</label><br>
+
+                    </div>
+
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <g:renderColumnCheckboxes data='${columnInformation}'></g:renderColumnCheckboxes>
+                        %{--<div class="checkbox">--}%
+                            %{--<label><input type="checkbox"> Remember me</label>--}%
+                        %{--</div>--}%
+                     </div>
+                </div>
+            </div>
+            %{--<g:renderPassBackColumns data='${columnInformation}'></g:renderPassBackColumns>--}%
             <button type="submit" id="vandasubmit" class="btn btn-default" style="display: none">Submit</button>
         </div>
         </g:form>
@@ -67,7 +82,7 @@
 
 </div>
 </div>
-<button id="opener">Add additional columns</button>
+<button id="opener"  class="pull-right btn btn-default">Revise table properties</button>
 <table id="variantsAndAssociationsTable" class="table table-striped distinctivetable distinctive">
     <thead id="variantsAndAssociationsHead">
     </thead>
@@ -95,7 +110,7 @@ $( document ).ready(function() {
         Cancel: function() {
           $( this ).dialog( "close" );
         },
-        "Add column": function() {
+        "Rebuild table": function() {
           $('#vandasubmit').click();
           $( this ).dialog( "close" );
         }

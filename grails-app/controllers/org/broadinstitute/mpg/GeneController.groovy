@@ -43,6 +43,7 @@ class GeneController {
      */
     def geneInfo() {
         String geneToStartWith = params.id
+        LinkedHashMap savedCols = params.findAll{ it.key =~ /^savedCol/ }
         String newVandAColumnName = "custom significance"
         String newVandAColumnPValue
 
@@ -67,12 +68,21 @@ class GeneController {
 // example of additional row
 //        rowInformation << [name:'AA exome seq', value:"ExSeq_17k_aa_mdv2", count:'4777']
         List <LinkedHashMap<String,String>> columnInformation = []
-        columnInformation << [name:'total variants', value:'1', count:'0']
-        columnInformation << [name:'genome-wide', value:'0.00000005', count:'0']
-// example of additional column
-//        columnInformation << [name:'exome wide <br>significance', value:'0.000009', count:'0']
-        columnInformation << [name:'locus-wide', value:'0.00005', count:'0']
-        columnInformation << [name:'nominal', value:'0.05', count:'0']
+        // if we have saved values then use them, otherwise add the defaults
+        if (savedCols.size()>0){
+            savedCols.each{String key, String value->
+                List <String> listOfProperties = value.tokenize("^")
+                if (listOfProperties.size()>2) {
+                    columnInformation << [name:listOfProperties[0], value:listOfProperties[1], count:listOfProperties[2]]
+                }
+            }
+        } else {
+            columnInformation << [name:'total variants', value:'1', count:'0']
+            columnInformation << [name:'genome-wide', value:'0.00000005', count:'0']
+//        columnInformation << [name:'exome wide <br>significance', value:'0.000009', count:'0']  // example of additional column
+            columnInformation << [name:'locus-wide', value:'0.00005', count:'0']
+            columnInformation << [name:'nominal', value:'0.05', count:'0']
+        }
         if (newVandAColumnPValue){
             columnInformation << [name:"${newVandAColumnName}", value:"${newVandAColumnPValue}", count:'0']
         }
