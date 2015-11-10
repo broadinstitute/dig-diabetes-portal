@@ -39,17 +39,9 @@ $( document ).ready(function() {
         duration: 500
       },
       width: 560,
-      modal: true,
-      buttons: {
-        Cancel: function() {
-          $( this ).dialog( "close" );
-        },
-        "Rebuild table": function() {
-          $('#vandasubmit').click();
-          $( this ).dialog( "close" );
-        }
-      }
+      modal: true
     });
+    $(".ui-dialog-titlebar").hide();
   });
 
 var popUpVAndAExtender = function() {

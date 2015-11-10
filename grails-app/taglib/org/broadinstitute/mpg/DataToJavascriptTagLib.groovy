@@ -62,7 +62,7 @@ class DataToJavascriptTagLib {
             int counter = 0
             namesAndValues.each {String name,String value->
                 out << "<div class=\"checkbox\">\n"
-                out << "<label><input type=\"checkbox\" class=\"checkbox checkbox-primary\" name=\"savedCol${counter}\" class=\"form-control\" id=\"savedCol${counter}\" value=\"${name}^${value}^0\" checked>${name}&nbsp;(p&nbsp&lt;&nbsp;${value})</label>\n"
+                out << "<label><input type=\"checkbox\" name=\"savedCol${counter}\" id=\"savedCol${counter}\" value=\"${name}^${value}^0\" checked>${name}&nbsp;(p&nbsp&lt;&nbsp;${value})</label>\n"
                 out << "</div>\n"
                 counter++
             }
@@ -78,7 +78,7 @@ class DataToJavascriptTagLib {
             int counter = 0
             namesAndValues.each {String name,String value->
                 out << "<div class=\"checkbox\">\n"
-                out << "<label><input type=\"checkbox\" class=\"checkbox checkbox-primary\" name=\"savedRow${counter}\" class=\"form-control\" id=\"savedRow${counter}\" value=\"${name}^${value}^47\" checked>${name}</label>\n"
+                out << "<label><input type=\"checkbox\" name=\"savedRow${counter}\" id=\"savedRow${counter}\" value=\"${name}^${value}^47\" checked>${name}</label>\n"
                 out << "</div>\n"
                 counter++
             }
