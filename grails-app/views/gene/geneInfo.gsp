@@ -306,7 +306,7 @@
 
 </g:if>
 
-<g:if test="${show_exseq}">
+<g:if test="${false}">
 
     <div class="separator"></div>
 

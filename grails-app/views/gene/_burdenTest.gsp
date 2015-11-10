@@ -17,8 +17,8 @@
     }
 
     div.burden-test-result {
-        font-size: 25px;
-        padding-top: 20px;
+        font-size: 16px;
+        padding-top: 10px;
         display: none;
     }
 
@@ -70,6 +70,48 @@
 
 <g:javascript>
     var mpgSoftware = mpgSoftware || {};
+
+    mpgSoftware.burdenInfo = (function () {
+
+        var delayedBurdenDataPresentation = {};
+
+        // burden testing hypothesis testing section
+        var fillBurdenBiologicalHypothesisTesting = function (caseNumerator, caseDenominator, controlNumerator, controlDenominator) {
+            var retainBarchartPtr;
+
+            // The bar chart graphic
+            if ((caseNumerator) ||
+                (caseDenominator) &&
+                (controlNumerator) &&
+                (controlDenominator)) {
+                delayedBurdenDataPresentation = {functionToRun: mpgSoftware.geneInfo.fillUpBarChart,
+                    barchartPtr: retainBarchartPtr,
+                    launch: function () {
+                        retainBarchartPtr = mpgSoftware.geneInfo.fillUpBarChart(caseNumerator, caseDenominator, controlNumerator, controlDenominator, 'T2D');
+                        return retainBarchartPtr;
+                    },
+                    removeBarchart: function () {
+                        if ((typeof retainBarchartPtr !== 'undefined') &&
+                            (typeof retainBarchartPtr.clear !== 'undefined')) {
+                            retainBarchartPtr.clear('T2D');
+                        }
+//                        $('#significanceDescriptorFormatter').empty();
+//                        $('#possibleCarrierVariantsLink').empty();
+                    }
+                };
+            }
+        };
+
+        var retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter = function () {
+            return delayedBurdenDataPresentation;
+        };
+
+        return {
+            // public routines
+            fillBurdenBiologicalHypothesisTesting: fillBurdenBiologicalHypothesisTesting,
+            retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter: retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter
+        }
+    }());
 
     mpgSoftware.burdenTest = (function () {
          var loading = $('#rSpinner');
@@ -150,7 +192,7 @@
 
              };
 
-             var selectedFilterValue = $('.proteinEffectFilter option:selected').val(),
+        var selectedFilterValue = $('.proteinEffectFilter option:selected').val(),
              selectedFilterValueId = parseInt(selectedFilterValue),
              selectedDataSetValue = $('input[name=dataset]:checked').val(),
              selectedDataSetValueId = parseInt(selectedDataSetValue),
@@ -219,27 +261,41 @@
                                          (typeof data.stats.stdError === 'undefined')){
                                      console.log('burdenTestAjax returned undefined for P value, standard error or odds ratio.');
                                }else {
-//    <div class="col-md-7 col-sm-7 col-xs-3 col-md-offset-5 col-sm-offset-5 col-xs-offset-3">
-//        <div class="pValue"></div>
-//        <div class="orValue"></div>
-//        <div class="ciValue"></div>
-//    </div>
                                    var pValue = data.stats.pValue;
                                    var oddsRatio = data.stats.oddsRatio;
                                    var stdError = data.stats.stdError;
                                    var numberVariants = data.stats.numInputVariants;
-//                                   $('.burden-test-result').empty();
-//                                   $('.burden-test-result .pValue').text("");
-//                                   $('.burden-test-result .pValue').append('p-Value = '+UTILS.realNumberFormatter(pValue));
-//                                   $('.burden-test-result .orValue').text("");
-//                                   $('.burden-test-result .orValue').append('odds ratio = ' +UTILS.realNumberFormatter(oddsRatio));
-//                                   $('.burden-test-result .ciValue').text("");
-//                                   $('.burden-test-result .ciValue').append('standard error = ' +UTILS.realNumberFormatter(stdError));
                                    fillInResultsSection('p-Value = '+UTILS.realNumberFormatter(data.stats.pValue),
                                    'odds ratio = ' +UTILS.realNumberFormatter(data.stats.oddsRatio),
                                    'standard error = ' +UTILS.realNumberFormatter(data.stats.stdError),
                                    numberVariants,
                                    data.variants,"${createLink(controller: 'variantInfo', action: 'variantInfo')}");
+
+                                   if ((typeof data.stats.numCases === 'undefined') ||
+                                        (typeof data.stats.numControls === 'undefined') ||
+                                        (typeof data.stats.numCaseCarriers === 'undefined') ||
+                                        (typeof data.stats.numControlCarriers === 'undefined')) {
+                                     console.log('burdenTestAjax returned undefined for case/control number, so not displaying hypothesis graphic.');
+
+                                   }else {
+                                       // fill in the hypothesis graphic
+                                       var caseCount = data.stats.numCases;
+                                       var controlCount = data.stats.numControls;
+                                       var caseCarrierCount = data.stats.numCaseCarriers;
+                                       var controlCarrierCount = data.stats.numControlCarriers;
+
+                                       // first clear any existing bar chart
+                                       if ((typeof mpgSoftware.burdenInfo.retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter() !== 'undefined') &&
+                                            (typeof mpgSoftware.burdenInfo.retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter().launch !== 'undefined')) {
+                                            mpgSoftware.burdenInfo.retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter().removeBarchart();
+                                       }
+
+                                       /// fill up the bar chart
+                                       mpgSoftware.burdenInfo.fillBurdenBiologicalHypothesisTesting(caseCarrierCount, caseCount, controlCarrierCount, controlCount);
+
+                                       // launch
+                                       mpgSoftware.burdenInfo.retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter().launch();
+                                   }
 
                                }
                             }
@@ -334,22 +390,27 @@ $( document ).ready( function (){
     </div>
 
     <div id="burden-test-some-results" class="row burden-test-result">
-        <div class="col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-1  col-sm-3 col-sm-offset-1 burdenTestResultHolder">
+        <div class="col-md-8 col-sm-6">
+            <div class="barchartFormatter">
+                <div id="chart">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-3">
+        </div>
+        <div class="col-md-2 col-sm-3">
             <div class="vertical-center">
                 <div id="pValue" class="pValue"></div>
                 <div id="orValue" class="orValue"></div>
                 <div id="ciValue" class="ciValue"></div>
             </div>
-        </div>
-        <div class="col-sm-5"></div>
-        <div class="col-md-2 col-sm-3">
+            <div>&nbsp;</div>
             <div>
                 <div class="variantsListLabel"><span  id="variantLabel"></span> variants:</div>
-                <div id="variantList" class="variantList">
+                <div id="variantList" class="variantList"></div>
             </div>
         </div>
-        </div>
-        <div class="col-sm-1"></div>
     </div>
 
 </div>
