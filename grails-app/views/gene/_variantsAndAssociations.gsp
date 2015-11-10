@@ -14,7 +14,93 @@
     <g:message code="gene.variantassociations.subDirective" default="Click on a number below to generate a table of variants associated with type 2 diabetes in the following categories:"/></p>
 <br/>
 
+<div id="dialog" title="Variants and Associations table modifier">
+<div style = "width: 500px">
 
+    <div class="row burden-test-wrapper-options">
+        <g:form role="form" action="geneInfo" id="${geneName}">
+        <div  class="row">
+            <div class="text-center" style="margin:15px 8px 15px 10px">Revise table</div>
+        </div>
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+                        <label>P value:&nbsp;&nbsp;</label>
+
+                    </div>
+
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <g:textField style="display: inline-block" name="pValue" type="text" class="form-control" id="addPValue"
+                               placeholder="value">
+                        </g:textField>
+                    </div>
+                </div>
+            </div>
+
+            <div  class="row">
+                <div style="margin:15px 8px 15px 10px"></div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+
+                        <label>Column name:</label><br>
+                        <label>(optional)</label>
+
+                    </div>
+
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <input style="display: inline-block" name="columnName" class="form-control" id="newColumnName"
+                               placeholder="value">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+
+                        <label>Existing columns:</label><br>
+
+                    </div>
+
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <g:renderColumnCheckboxes data='${columnInformation}'></g:renderColumnCheckboxes>
+                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-md-4 col-sm-4 col-xs-12">
+
+                        <label>Existing rows:</label><br>
+
+                    </div>
+
+                    <div class="col-md-8 col-sm-8 col-xs-12">
+                        <div class="row">
+                            <div class="col-xs-12"  id="vandaRowHolder">
+                                <g:renderRowCheckboxes data='${rowInformation}'></g:renderRowCheckboxes>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <g:renderSampleGroupDropDown data='${allAvailableRows}'></g:renderSampleGroupDropDown>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" id="vandasubmit" class="btn btn-default" style="display: none">Submit</button>
+        </div>
+        </g:form>
+    </div>
+
+</div>
+</div>
+<button id="opener"  class="pull-right btn btn-default">Revise table properties</button>
 <table id="variantsAndAssociationsTable" class="table table-striped distinctivetable distinctive">
     <thead id="variantsAndAssociationsHead">
     </thead>
@@ -24,14 +110,53 @@
 
 
 <g:javascript>
+$( document ).ready(function() {
+  $(function() {
+    $( "#dialog" ).dialog({
+      autoOpen: false,
+      show: {
+        effect: "fade",
+        duration: 500
+      },
+      hide: {
+        effect: "fade",
+        duration: 500
+      },
+      width: 560,
+      modal: true,
+      buttons: {
+        Cancel: function() {
+          $( this ).dialog( "close" );
+        },
+        "Rebuild table": function() {
+          $('#vandasubmit').click();
+          $( this ).dialog( "close" );
+        }
+      }
+    });
+  });
+
+var popUpVAndAExtender = function() {
+      $( "#dialog" ).dialog( "open" );
+    };
+$( "#opener" ).click(popUpVAndAExtender);
+}
+);
+var insertVandARow  = function(name, value) {
+      var counter = 100;
+      $('#vandaRowHolder').add("<label><input type='checkbox' class='checkbox checkbox-primary' name='savedRow"+counter+"' class='form-control' id='savedRow"+counter+"' value='"+name+"^"+value+"^47' checked>"+name+"</label>");
+      return false;
+ };
+//$( "#opener" ).click(popUpVAndAExtender());
+
 var variantsAndAssociationTable = function (){
 $.ajax({
     cache: false,
     type: "post",
     url: "${createLink(controller:'gene',action: 'genepValueCounts')}",
     data: {geneName: '<%=geneName%>',
-           rowNames:<g:renderRowValues data='${rowInformation}'/>,
-           colNames:<g:renderColValues data='${columnInformation}'/>},
+           rowNames:<g:renderRowValues data='${rowInformation}'></g:renderRowValues>,
+           colNames:<g:renderColValues data='${columnInformation}'></g:renderColValues>},
         async: true,
         success: function (data) {
 

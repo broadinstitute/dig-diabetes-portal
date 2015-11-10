@@ -54,6 +54,28 @@ class GspToJavascript {
 
 
 
+    public List <String> codeValuesForPassBack(){
+        List <String> allValuesToReturn = []
+        for ( int  i = 0 ; i < storedValues?.size() ; i++ ){
+            if ((storedValues[i].value)&&((storedValues[i].name))){
+                allValuesToReturn << "${storedValues[i].name}^${storedValues[i].value}^${storedValues[i].count}"
+            }
+        }
+        return allValuesToReturn
+    }
+
+
+
+    public LinkedHashMap<String,String> namesAndValues(){
+        LinkedHashMap<String,String> returnValue = [:]
+        for ( int  i = 0 ; i < storedValues?.size() ; i++ ){
+            if ((storedValues[i].value)&&((storedValues[i].name))){
+                returnValue["${storedValues[i].name}"]="${storedValues[i].value}"
+            }
+        }
+        return returnValue
+    }
+
 
 
 

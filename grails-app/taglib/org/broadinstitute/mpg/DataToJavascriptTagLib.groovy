@@ -42,6 +42,72 @@ class DataToJavascriptTagLib {
     }
 
 
+    def renderPassBackColumns = { attrs,body ->
+        if (attrs.data){
+            GspToJavascript gspToJavascript = new GspToJavascript(attrs.data, GspToJavascript.TRANSTYPE_V_AND_A_COLUMN )
+            List <String> passBackValues = gspToJavascript.codeValuesForPassBack()
+            for ( int  i = 0 ; i < passBackValues.size() ; i++ ){
+                out << "<input type=\"hidden\" name=\"savedCol${i}\" class=\"form-control\" id=\"savedCol${i}\" value=\"${passBackValues[i]}\">\n"
+            }
+            out << body()
+        }
+
+    }
+
+
+    def renderColumnCheckboxes = { attrs,body ->
+        if (attrs.data){
+            GspToJavascript gspToJavascript = new GspToJavascript(attrs.data, GspToJavascript.TRANSTYPE_V_AND_A_COLUMN )
+            LinkedHashMap<String,String> namesAndValues = gspToJavascript.namesAndValues()
+            int counter = 0
+            namesAndValues.each {String name,String value->
+                out << "<div class=\"checkbox\">\n"
+                out << "<label><input type=\"checkbox\" class=\"checkbox checkbox-primary\" name=\"savedCol${counter}\" class=\"form-control\" id=\"savedCol${counter}\" value=\"${name}^${value}^0\" checked>${name}&nbsp;(p&nbsp&lt;&nbsp;${value})</label>\n"
+                out << "</div>\n"
+                counter++
+            }
+            out << body()
+        }
+
+    }
+
+    def renderRowCheckboxes = { attrs,body ->
+        if (attrs.data){
+            GspToJavascript gspToJavascript = new GspToJavascript(attrs.data, GspToJavascript.TRANSTYPE_V_AND_A_ROW )
+            LinkedHashMap<String,String> namesAndValues = gspToJavascript.namesAndValues()
+            int counter = 0
+            namesAndValues.each {String name,String value->
+                out << "<div class=\"checkbox\">\n"
+                out << "<label><input type=\"checkbox\" class=\"checkbox checkbox-primary\" name=\"savedRow${counter}\" class=\"form-control\" id=\"savedRow${counter}\" value=\"${name}^${value}^47\" checked>${name}</label>\n"
+                out << "</div>\n"
+                counter++
+            }
+            out << body()
+        }
+
+    }
+
+    def renderSampleGroupDropDown = { attrs,body ->
+        if (attrs.data){
+            GspToJavascript gspToJavascript = new GspToJavascript(attrs.data, GspToJavascript.TRANSTYPE_V_AND_A_ROW )
+            LinkedHashMap<String,String> namesAndValues = gspToJavascript.namesAndValues()
+            int counter = 0
+            out << "<div class=\"dropdown\">"
+            out << "<button class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\">Dropdown Example<span class=\"caret\"></span></button>"
+            out << "<ul class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu1\">\n"
+            namesAndValues.each {String name,String value->
+                out << "<li><a onclick=\"insertVandARow('${name}','${value}')\">${name}</a></li>\n"
+                counter++
+            }
+            out << "</ul>\n"
+            out << "</div>\n"
+            out << body()
+        }
+
+    }
+
+
+
 
 
 }
