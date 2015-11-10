@@ -38,12 +38,13 @@ class GeneControllerUnitSpec extends Specification {
         controller.geneManagementService = geneManagementService
         controller.sharedToolsService = sharedToolsService
         controller.metaDataService = metaDataService
+        metaDataService.metaClass.getSampleGroupList = {->[]}
 
         when:
          controller.geneInfo()
 
         then:
-        response.status == 200
+       response.status == 200
     }
 
 

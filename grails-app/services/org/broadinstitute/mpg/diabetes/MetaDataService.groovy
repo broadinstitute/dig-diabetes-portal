@@ -237,6 +237,27 @@ class MetaDataService {
         return jsonString;
     }
 
+
+    public List<SampleGroup>  getSampleGroupList() {
+        // local variables
+        GString jsonString;
+        List<SampleGroup> groupList;
+        StringBuilder builder = new StringBuilder();
+        List<String> nameList = new ArrayList<String>();
+
+        // get the sample group list independent of phenotype
+        try {
+
+            groupList = this.getJsonParser().getSamplesGroupsForPhenotype("", this.getDataVersion());
+
+        } catch (PortalException exception) {
+            log.error("Got exception retrieving sample group name list : " + exception.getMessage());
+        }
+
+        // return
+        return groupList;
+    }
+
     /***
      * Retrieve a list of PhenotypeBeans on the basis of phenotype name. Restrict the results by technology==GWAS
      * @param phenotypicTrait

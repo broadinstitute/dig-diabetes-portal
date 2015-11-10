@@ -14,7 +14,9 @@
     <g:message code="gene.variantassociations.subDirective" default="Click on a number below to generate a table of variants associated with type 2 diabetes in the following categories:"/></p>
 <br/>
 
+<g:render template="variantsAndAssociationsTableChanger"/>
 
+<button id="opener"  class="pull-right btn btn-default">Revise table properties</button>
 <table id="variantsAndAssociationsTable" class="table table-striped distinctivetable distinctive">
     <thead id="variantsAndAssociationsHead">
     </thead>
@@ -24,14 +26,45 @@
 
 
 <g:javascript>
+$( document ).ready(function() {
+  $(function() {
+    $( "#dialog" ).dialog({
+      autoOpen: false,
+      show: {
+        effect: "fade",
+        duration: 500
+      },
+      hide: {
+        effect: "fade",
+        duration: 500
+      },
+      width: 560,
+      modal: true
+    });
+    $(".ui-dialog-titlebar").hide();
+  });
+
+var popUpVAndAExtender = function() {
+      $( "#dialog" ).dialog( "open" );
+    };
+$( "#opener" ).click(popUpVAndAExtender);
+}
+);
+var insertVandARow  = function(name, value) {
+      var counter = 100;
+      $('#vandaRowHolder').add("<label><input type='checkbox' class='checkbox checkbox-primary' name='savedRow"+counter+"' class='form-control' id='savedRow"+counter+"' value='"+name+"^"+value+"^47' checked>"+name+"</label>");
+      return false;
+ };
+//$( "#opener" ).click(popUpVAndAExtender());
+
 var variantsAndAssociationTable = function (){
 $.ajax({
     cache: false,
     type: "post",
     url: "${createLink(controller:'gene',action: 'genepValueCounts')}",
     data: {geneName: '<%=geneName%>',
-           rowNames:<g:renderRowValues data='${rowInformation}'/>,
-           colNames:<g:renderColValues data='${columnInformation}'/>},
+           rowNames:<g:renderRowValues data='${rowInformation}'></g:renderRowValues>,
+           colNames:<g:renderColValues data='${columnInformation}'></g:renderColValues>},
         async: true,
         success: function (data) {
 

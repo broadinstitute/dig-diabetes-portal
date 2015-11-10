@@ -3,6 +3,7 @@ package org.broadinstitute.mpg
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class GeneController {
@@ -43,8 +44,18 @@ class GeneController {
      */
     def geneInfo() {
         String geneToStartWith = params.id
+        LinkedHashMap savedCols = params.findAll{ it.key =~ /^savedCol/ }
+        LinkedHashMap savedRows = params.findAll{ it.key =~ /^savedRow/ }
+        String newVandAColumnName = "custom significance"
+        String newVandAColumnPValue
 
-        // DIGP-112: needed for the gwas region summary
+        // capture requests related to a new column
+        if (params.pValue) {
+            newVandAColumnPValue =  params.pValue
+        }
+        if (params.columnName) {
+            newVandAColumnName =  params.columnName
+        }
         String phenotypeList = this.metaDataService?.urlEncodedListOfPhenotypes();
         String regionSpecification = null
 
@@ -52,20 +63,46 @@ class GeneController {
         if (geneToStartWith != null) {
             regionSpecification = this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 100000)
         }
-
+        List<SampleGroup> sampleGroupList = metaDataService?.getSampleGroupList()
+        List <LinkedHashMap<String,String>> allAvailableRows = []
+        for(SampleGroup sampleGroup in sampleGroupList){
+            allAvailableRows << [name:sampleGroup.name, value:sampleGroup.systemId, count:'4747']
+        }
         List <LinkedHashMap<String,String>> rowInformation = []
-        rowInformation << [name:'GWAS', value:RestServerService.TECHNOLOGY_GWAS, count:'69,033']
-        rowInformation << [name:'exome chip', value:RestServerService.TECHNOLOGY_EXOME_CHIP, count:'79,854']
-        rowInformation << [name:'exome sequence', value:RestServerService.TECHNOLOGY_EXOME_SEQ, count:'16,760']
+        if (savedRows.size()>0) { // no saved rows -- provide some defaults
+            savedRows.each{String key, String value->
+                List <String> listOfProperties = value.tokenize("^")
+                if (listOfProperties.size()>2) {
+                    rowInformation << [name:listOfProperties[0], value:listOfProperties[1], count:listOfProperties[2]]
+                }
+            }
+        } else {
+            rowInformation << [name:'GWAS', value:RestServerService.TECHNOLOGY_GWAS, count:'69,033']
+            rowInformation << [name:'exome chip', value:RestServerService.TECHNOLOGY_EXOME_CHIP, count:'79,854']
+            rowInformation << [name:'exome sequence', value:RestServerService.TECHNOLOGY_EXOME_SEQ, count:'16,760']
 // example of additional row
 //        rowInformation << [name:'AA exome seq', value:"ExSeq_17k_aa_mdv2", count:'4777']
+        }
+
         List <LinkedHashMap<String,String>> columnInformation = []
-        columnInformation << [name:'total variants', value:'1', count:'0']
-        columnInformation << [name:'genome-wide', value:'0.00000005', count:'0']
-// example of additional column
-//        columnInformation << [name:'exome wide <br>significance', value:'0.000009', count:'0']
-        columnInformation << [name:'locus-wide', value:'0.00005', count:'0']
-        columnInformation << [name:'nominal', value:'0.05', count:'0']
+        // if we have saved values then use them, otherwise add the defaults
+        if (savedCols.size()>0){
+            savedCols.each{String key, String value->
+                List <String> listOfProperties = value.tokenize("^")
+                if (listOfProperties.size()>2) {
+                    columnInformation << [name:listOfProperties[0], value:listOfProperties[1], count:listOfProperties[2]]
+                }
+            }
+        } else { // no saved columns -- provide some defaults
+            columnInformation << [name:'total variants', value:'1', count:'0']
+            columnInformation << [name:'genome-wide', value:'0.00000005', count:'0']
+//        columnInformation << [name:'exome wide <br>significance', value:'0.000009', count:'0']  // example of additional column
+            columnInformation << [name:'locus-wide', value:'0.00005', count:'0']
+            columnInformation << [name:'nominal', value:'0.05', count:'0']
+        }
+        if (newVandAColumnPValue){
+            columnInformation << [name:"${newVandAColumnName}", value:"${newVandAColumnPValue}", count:'0']
+        }
 
         if (geneToStartWith)  {
             String  geneUpperCase =   geneToStartWith.toUpperCase()
@@ -80,7 +117,8 @@ class GeneController {
                                              geneExtentEnd:geneExtent.endExtent,
                                              geneChromosome:geneExtent.chrom,
                                              rowInformation:rowInformation,
-                                             columnInformation:columnInformation
+                                             columnInformation:columnInformation,
+                                             allAvailableRows:allAvailableRows
             ] )
         }
      }
@@ -152,17 +190,46 @@ class GeneController {
      */
     def genepValueCounts() {
         String geneToStartWith = params.geneName
-        List<String> rowNames = params."rowNames[]"
-        List<String> colSignificances = params."colNames[]"
-        List<Float> significanceValues = []
-        for (String oneSignificance in colSignificances) {
-            try {
-                significanceValues << Float.parseFloat(oneSignificance)
-            } catch (ex) {
-                log.error("nonnumeric significance value (${oneSignificance}) in genepValueCounts action in GeneController")
+        def rawRowNames = params."rowNames[]"
+        def colSignificances = params."colNames[]"
+
+
+        List<String> rowNames = []
+        if ((rawRowNames)&&
+                (rawRowNames.size()>0)){
+            if (rawRowNames.getClass().simpleName=="String"){ // single value
+                String rowName = rawRowNames
+                rowNames << rowName
+             } else { // we must have a list of values
+                List<String> rowNameList = rawRowNames as List
+                for (String oneRowName in rowNameList) {
+                    rowNames << oneRowName as String
+                }
             }
         }
-        JSONObject jsonObject =  restServerService.combinedVariantCountByGeneNameAndPValue ( geneToStartWith.trim().toUpperCase(),
+
+        List<Float> significanceValues = []
+        if ((colSignificances)&&
+                (colSignificances.size()>0)){
+            if (colSignificances.getClass().simpleName=="String"){ // single value
+                String colSignificance = colSignificances
+                try {
+                    significanceValues << Float.parseFloat(colSignificance)
+                } catch (ex) {
+                    log.error("nonnumeric significance value (${colSignificance}) in genepValueCounts action in GeneController")
+                }
+            } else { // we must have a list of values
+                List<String> colSignificanceList = colSignificances as List
+                for (String oneSignificance in colSignificanceList) {
+                    try {
+                        significanceValues << Float.parseFloat(oneSignificance)
+                    } catch (ex) {
+                        log.error("nonnumeric significance value (${oneSignificance}) in genepValueCounts action in GeneController")
+                    }
+                }
+            }
+         }
+         JSONObject jsonObject =  restServerService.combinedVariantCountByGeneNameAndPValue ( geneToStartWith.trim().toUpperCase(),
                                                                                              rowNames, significanceValues )
         render(status:200, contentType:"application/json") {
             [geneInfo:jsonObject]
