@@ -736,7 +736,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var fillUpBarChart = function (peopleWithDiseaseNumeratorString, peopleWithDiseaseDenominatorString, peopleWithoutDiseaseNumeratorString, peopleWithoutDiseaseDenominatorString) {
+        var fillUpBarChart = function (peopleWithDiseaseNumeratorString, peopleWithDiseaseDenominatorString, peopleWithoutDiseaseNumeratorString, peopleWithoutDiseaseDenominatorString, traitString) {
             var peopleWithDiseaseDenominator,
                 peopleWithoutDiseaseDenominator,
                 peopleWithDiseaseNumerator,
@@ -759,28 +759,29 @@ var mpgSoftware = mpgSoftware || {};
                     proportionWithoutDiseaseDescriptiveString = "(" + peopleWithoutDiseaseNumerator + " out of " + peopleWithoutDiseaseDenominator + ")";
                     var dataForBarChart = [
                             { value: calculatedPercentWithDisease,
-                                barname: 'have T2D',
+                                barname: 'have ' + traitString,
                                 barsubname: '(cases)',
                                 barsubnamelink: '',
                                 inbar: '',
                                 descriptor: proportionWithDiseaseDescriptiveString},
                             {value: calculatedPercentWithoutDisease,
-                                barname: 'do not have T2D',
+                                barname: 'do not have ' + traitString,
                                 barsubname: '(controls)',
                                 barsubnamelink: '',
                                 inbar: '',
                                 descriptor: proportionWithoutDiseaseDescriptiveString}
                         ],
                         roomForLabels = 120,
-                        maximumPossibleValue = (Math.max(calculatedPercentWithDisease, calculatedPercentWithoutDisease) * 1.5),
+                        maximumPossibleValue = (Math.max(calculatedPercentWithDisease, Math.min(100, calculatedPercentWithoutDisease) * 1.5)),
                         labelSpacer = 10;
 
-                    var margin = {top: 0, right: 20, bottom: 0, left: 70},
+                    var margin = {top: 0, right: 20, bottom: 0, left: 50},
                         width = 800 - margin.left - margin.right,
                         height = 150 - margin.top - margin.bottom;
 
 
-                    var barChart = baget.barChart()
+                    // use trait string as name as well
+                    var barChart = baget.barChart(traitString)
                         .width(width)
                         .height(height)
                         .margin(margin)
@@ -855,7 +856,7 @@ var mpgSoftware = mpgSoftware || {};
                     peopleWithoutDiseaseDenominator: peopleWithoutDiseaseDenominator,
                     barchartPtr: retainBarchartPtr,
                     launch: function () {
-                        retainBarchartPtr = fillUpBarChart(peopleWithDiseaseNumerator, peopleWithDiseaseDenominator, peopleWithoutDiseaseNumerator, peopleWithoutDiseaseDenominator);
+                        retainBarchartPtr = fillUpBarChart(peopleWithDiseaseNumerator, peopleWithDiseaseDenominator, peopleWithoutDiseaseNumerator, peopleWithoutDiseaseDenominator, 'T2D');
                         return retainBarchartPtr;
                     },
                     removeBarchart: function () {
@@ -888,6 +889,8 @@ var mpgSoftware = mpgSoftware || {};
             }
 
         };
+
+
         var fillUniprotSummary = function (geneInfo) {
             var funcDescrLine = "";
             if ((geneInfo) && (geneInfo["Function_description"])) {
@@ -977,7 +980,8 @@ var mpgSoftware = mpgSoftware || {};
             fillBiologicalHypothesisTesting: fillBiologicalHypothesisTesting,
             fillVariationAcrossEthnicityTable:fillVariationAcrossEthnicityTable,
             retrieveDelayedBiologicalHypothesisOneDataPresenter: retrieveDelayedBiologicalHypothesisOneDataPresenter,
-            fillTheVariantAndAssociationsTableFromNewApi: fillTheVariantAndAssociationsTableFromNewApi
+            fillTheVariantAndAssociationsTableFromNewApi: fillTheVariantAndAssociationsTableFromNewApi,
+            fillUpBarChart: fillUpBarChart
         }
 
 
