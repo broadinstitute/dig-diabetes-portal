@@ -60,6 +60,8 @@ class RestServerService {
     private String EXOMESEQUENCEOR  = "OR_FIRTH_FE_IV"
     private String HETEROZYGOTE_AFFECTED  = "HETA"
     private String HETEROZYGOTE_UNAFFECTED  = "HETU"
+    private String MINORALLELECOUNTS_AFFECTED  = "MINA"
+    private String MINORALLELECOUNTS_UNAFFECTED  = "MINU"
     private String HOMOZYGOTE_AFFECTED  = "HOMA"
     private String HOMOZYGOTE_UNAFFECTED  = "HOMU"
     private String OBSERVED_AFFECTED  = "OBSA"
@@ -803,6 +805,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName],searchBuilderService,metaDataService)
         addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","${HETEROZYGOTE_AFFECTED}")
         addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","${HETEROZYGOTE_UNAFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","${MINORALLELECOUNTS_AFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","${MINORALLELECOUNTS_UNAFFECTED}")
         addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","${HOMOZYGOTE_AFFECTED}")
         addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","${HOMOZYGOTE_UNAFFECTED}")
         addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","${OBSERVED_AFFECTED}")
@@ -844,6 +848,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                         }
                         if (variant ["HETU"]){
                             sb  << "{\"level\":\"HETU\",\"count\":${variant["HETU"][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)][attribute]}},"
+                        }
+                        if (variant [MINORALLELECOUNTS_AFFECTED]){
+                            sb  << "{\"level\":\"${MINORALLELECOUNTS_AFFECTED}\",\"count\":${variant[MINORALLELECOUNTS_AFFECTED][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)][attribute]}},"
+                        }
+                        if (variant [MINORALLELECOUNTS_UNAFFECTED]){
+                            sb  << "{\"level\":\"${MINORALLELECOUNTS_UNAFFECTED}\",\"count\":${variant[MINORALLELECOUNTS_UNAFFECTED][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)][attribute]}},"
                         }
                         if (variant ["HOMA"]){
                             sb  << "{\"level\":\"HOMA\",\"count\":${variant["HOMA"][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)][attribute]}},"

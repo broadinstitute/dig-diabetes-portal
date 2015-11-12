@@ -572,21 +572,25 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 },
 
-                fillDiseaseRiskBurdenTest = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, PVALUE, ORVALUE, show_gwas, show_exchp, show_exseq, rootVariantUrl, diseaseBurdenStrings) {
+                fillDiseaseRiskBurdenTest = function (OBSU, OBSA, MINA, MINU, PVALUE, ORVALUE, show_gwas, show_exchp, show_exseq, rootVariantUrl, diseaseBurdenStrings) {
                     var hetu = 0,
                         heta = 0,
                         homa = 0,
                         homu = 0,
+                        mina = 0,
+                        minu = 0,
                         totalUnaffected = 0,
                         totalAffected = 0,
                         pValue = 0,
                         retainBarchartPtr,
                         oddsRatio;
                     if (show_exseq) {
-                        heta = HETA;
-                        hetu = HETU;
-                        homa = HOMA;
-                        homu = HOMU;
+//                        heta = HETA;
+//                        hetu = HETU;
+//                        homa = HOMA;
+//                        homu = HOMU;
+                        mina = MINA;
+                        minu = MINU;
                         totalUnaffected = OBSU;
                         totalAffected = OBSA;
                         pValue = PVALUE;
@@ -600,8 +604,8 @@ var mpgSoftware = mpgSoftware || {};
                         numeratorAffected,
                         denominatorAffected;
                     if ((totalUnaffected) && (totalAffected)) {
-                        numeratorUnaffected = hetu + (2 * homu);
-                        numeratorAffected = heta + (2 * homa);
+                        numeratorUnaffected = minu;
+                        numeratorAffected = mina;
                         denominatorUnaffected = totalUnaffected;
                         denominatorAffected = totalAffected;
                         delayedBurdenTestPresentation = {
@@ -758,12 +762,12 @@ var mpgSoftware = mpgSoftware || {};
                            server:restServerRoot};
                 },
              externalVariantAssociationStatistics = variantAssociations;
-            var calculateDiseaseBurden = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, PVALUE, ORVALUE, variantTitle, showGwas, showExchp, showExseq, diseaseBurdenStrings) {// disease burden
+            var calculateDiseaseBurden = function (OBSU, OBSA, MINA, MINU, HOMA, HETA, HOMU, HETU, PVALUE, ORVALUE, variantTitle, showGwas, showExchp, showExseq, diseaseBurdenStrings) {// disease burden
                 var weHaveEnoughDataForRiskBurdenTest;
-                weHaveEnoughDataForRiskBurdenTest = (!UTILS.nullSafetyTest([OBSU, OBSA, HOMA, HETA, HOMU, HETU ]));
+                weHaveEnoughDataForRiskBurdenTest = (!UTILS.nullSafetyTest([OBSU, OBSA, MINA, MINU ]));
                 UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataForRiskBurdenTest, $('#diseaseRiskExists'), $('#diseaseRiskNoExists'));
                 if (weHaveEnoughDataForRiskBurdenTest) {
-                    privateMethods.fillDiseaseRiskBurdenTest(OBSU, OBSA, HOMA, HETA, HOMU, HETU, PVALUE, ORVALUE, showGwas, showExchp, showExseq, null, diseaseBurdenStrings);
+                    privateMethods.fillDiseaseRiskBurdenTest(OBSU, OBSA, MINA, MINU, PVALUE, ORVALUE, showGwas, showExchp, showExseq, null, diseaseBurdenStrings);
                 }
             };
             // externalize!
