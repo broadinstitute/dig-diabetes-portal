@@ -596,6 +596,34 @@ class MetaDataService {
         return this.jsonParser.getPhenotypeListByTechnologyAndVersion(technology, dataVersion);
     }
 
+
+
+
+
+    public List<String> getTechnologyListByPhenotypeAndVersion(String phenotypeName,String dataVersion) {
+        List<String> technologyList = this.jsonParser.getTechnologyListByVersion(dataVersion);
+        LinkedHashMap<String,List<Phenotype>> technologyToPhenotype = [:]
+        List<String> returnValue = []
+        // we have all the technologies.  Let's loop through them and create a map from technologies to phenotypes
+        for (String technology in technologyList){
+            technologyToPhenotype[technology] = this.jsonParser.getPhenotypeListByTechnologyAndVersion(technology, dataVersion);
+        }
+        // now pull back the information we need for a single phenotype
+        technologyToPhenotype.each{ String technologyName, List<Phenotype> phenotypeList ->
+            if (phenotypeList){
+                List<Phenotype> discretePhenotypes = phenotypeList.unique{ a,b-> a.name <=> b.name }
+                if (discretePhenotypes.findIndexOf { Phenotype phenotype -> phenotype.getName() == phenotypeName } > -1){
+                    returnValue << technologyName
+                }
+
+            }
+
+        }
+        return returnValue
+    }
+
+
+
     /**
      * return the json object emulating a trait-search call given a phenotype list
      *

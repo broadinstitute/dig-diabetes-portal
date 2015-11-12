@@ -217,6 +217,24 @@ class VariantSearchController {
     }
 
 
+    def retrieveTechnologiesAjax() {
+        String phenotypeName
+        if (params.phenotype) {
+            phenotypeName = params.phenotype
+            log.debug "variantSearch params.phenotype = ${params.phenotype}"
+        }
+
+        List<String> technologyList = this.metaDataService.getTechnologyListByPhenotypeAndVersion(phenotypeName,sharedToolsService.getCurrentDataVersion())
+        String technologyListAsJson = sharedToolsService.packageUpAListAsJson(technologyList)
+        def slurper = new JsonSlurper()
+        def technologyListJsonObject = slurper.parseText(technologyListAsJson)
+
+        render(status: 200, contentType: "application/json") {
+            [technologyList:technologyListJsonObject]
+        }
+    }
+
+
 
 
 

@@ -1,6 +1,61 @@
+<g:javascript>
+$( document ).ready(function() {
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: "${createLink(controller: 'VariantSearch', action: 'retrievePhenotypesAjax')}",
+            data: {},
+            async: true,
+            success: function (data) {
+                if (( data !==  null ) &&
+                        ( typeof data !== 'undefined') &&
+                        ( typeof data.datasets !== 'undefined' ) &&
+                        (  data.datasets !==  null ) ) {
+                    UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#phenotypeChooser',true);
+                }
+            },
+            error: function (jqXHR, exception) {
+                core.errorReporter(jqXHR, exception);
+            }
+        });
+});
+var getTechnologies = function(sel){
+            $.ajax({
+            cache: false,
+            type: "post",
+            url: "${createLink(controller: 'VariantSearch', action: 'retrieveTechnologiesAjax')}",
+            data: {phenotype:sel.value},
+            async: true,
+            success: function (data) {
+                if (( data !==  null ) &&
+                    ( typeof data !== 'undefined') &&
+                    ( typeof data.technologyList !== 'undefined' ) &&
+                    ( typeof data.technologyList.dataset !== 'undefined' ) &&
+                    (  data.technologyList.dataset !==  null ) ) {
+                        var technologies = data.technologyList.dataset;
+                        if (typeof technologies !== 'undefined'){
+                            var technologyChooser = $('#technologyChooser');
+                            technologyChooser.empty();
+                            for ( var i = 0 ; i < technologies.length ; i++ ){
+                                if (technologies[i] === "ExSeq") {
+                                   technologyChooser.append($("<option>").val(technologies[i]).text("Exome Sequencing"));
+                                } else if (technologies[i] === "ExChip") {
+                                   technologyChooser.append($("<option>").val(technologies[i]).text("Exome Chip"));
+                                } else {
+                                   technologyChooser.append($("<option>").val(technologies[i]).text(technologies[i]));
+                                }
 
-%{--<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">--}%
-%{--<div class="modal-dialog" role="document">--}%
+                            }
+                        }
+                }
+            },
+            error: function (jqXHR, exception) {
+                core.errorReporter(jqXHR, exception);
+            }
+        });
+
+}
+</g:javascript>
 <div class="modal-content" id="dialog">
     <div class="modal-header">
         <h4 class="modal-title" id="dataModalLabel">Variants and Associations table modifier</h4>
@@ -59,33 +114,8 @@
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
-                        <select class="form-control">
-                            <option selected>No limit</option>
-                            <option>type 2 diabetes</option>
-                            <option>proinsulin levels</option>
-                            <option>fasting glucose</option>
-                            <option>HOMA-B</option>
-                            <option>two-hour glucose</option>
-                            <option>chronic kidney disease</option>
-                            <option>triglycerides</option>
-                            <option>LDL cholesterol</option>
-                            <option>cholesterol</option>
-                            <option>BMI</option>
-                            <option>eGFR-cys (serum cystatin C)</option>
-                            <option>waist-hip ratio</option>
-                            <option>HbA1c</option>
-                            <option>height</option>
-                            <option>HDL cholesterol</option>
-                            <option>bipolar disorder</option>
-                            <option>eGFR-creat (serum creatinine)</option>
-                            <option>schizophrenia</option>
-                            <option>microalbuminuria</option>
-                            <option>urinary albumin-to-creatinine ratio</option>
-                            <option>fasting insulin</option>
-                            <option>coronary artery disease</option>
-                            <option>two-hour insulin</option>
-                            <option>major depressive disorder</option>
-                            <option>HOMA-IR</option>
+                        <select class="form-control" id="phenotypeChooser" onchange="getTechnologies(this)">
+
                         </select>
                     </div>
                 </div>
@@ -96,11 +126,8 @@
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
-                        <select class="form-control">
-                            <option selected>No limit</option>
-                            <option>GWAS</option>
-                            <option>exome chip</option>
-                            <option>exome sequence</option>
+                        <select class="form-control"  id="technologyChooser">
+
                         </select>
                     </div>
                 </div>

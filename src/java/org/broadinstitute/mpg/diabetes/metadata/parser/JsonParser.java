@@ -11,23 +11,7 @@ import org.broadinstitute.mpg.diabetes.metadata.Property;
 import org.broadinstitute.mpg.diabetes.metadata.PropertyBean;
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup;
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.AllDataSetHashSetVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.CommonPropertyVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.DataSetDirectChildByTypeVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.ExperimentByVersionVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.GwasTechSampleGroupByPhenotypeVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.JsNameTranslationVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeByNameVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeByTechAndVersionVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.PhenotypeNameVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyByItsAndParentNamesVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyByNameFinderVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyByPropertyTypeVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.PropertyPerExperimentVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupByIdSelectingVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.SampleGroupForPhenotypeVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchablePropertyIncludingChildrenVisitor;
-import org.broadinstitute.mpg.diabetes.metadata.visitor.SearchablePropertyVisitor;
+import org.broadinstitute.mpg.diabetes.metadata.visitor.*;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
 import org.codehaus.groovy.grails.web.json.JSONArray;
@@ -784,6 +768,25 @@ public class JsonParser {
         // return
         return phenotypeList;
     }
+
+
+
+
+    public List<String> getTechnologyListByVersion(String dataVersion) throws PortalException {
+        // local variables
+        List<String> technologyList = null;
+
+        // create the visitor and visit on root
+        RetrieveAllTechnologiesVisitor visitor = new RetrieveAllTechnologiesVisitor( dataVersion);
+        this.getMetaDataRoot().acceptVisitor(visitor);
+        technologyList = visitor.getTechnologyList();
+
+        // return
+        return technologyList;
+    }
+
+
+
 
     /**
      * find all the distinct phenotypes; return the first one found for duplicates
