@@ -1,104 +1,5 @@
-%{--<div id="dialog" title="Variants and Associations table modifier">--}%
-    %{--<div style="width: 500px">--}%
 
-        %{--<div class="row burden-test-wrapper-options">--}%
-            %{--<g:form role="form" action="geneInfo" id="${geneName}">--}%
-                %{--<div class="row">--}%
-                    %{--<div class="text-center" style="margin:15px 8px 15px 10px">Revise table</div>--}%
-                %{--</div>--}%
-
-                %{--<div class="col-md-12 col-sm-12 col-xs-12">--}%
-                    %{--<div class="row">--}%
-                        %{--<div class="form-group">--}%
-                            %{--<div class="col-md-4 col-sm-4 col-xs-12">--}%
-                                %{--<label>P value:&nbsp;&nbsp;</label>--}%
-
-                            %{--</div>--}%
-
-                            %{--<div class="col-md-8 col-sm-8 col-xs-12">--}%
-                                %{--<g:textField style="display: inline-block" name="pValue" type="text"--}%
-                                             %{--class="form-control" id="addPValue"--}%
-                                             %{--placeholder="value">--}%
-                                %{--</g:textField>--}%
-                            %{--</div>--}%
-                        %{--</div>--}%
-                    %{--</div>--}%
-
-                    %{--<div class="row">--}%
-                        %{--<div style="margin:15px 8px 15px 10px"></div>--}%
-                    %{--</div>--}%
-
-                    %{--<div class="row">--}%
-                        %{--<div class="form-group">--}%
-                            %{--<div class="col-md-4 col-sm-4 col-xs-12">--}%
-
-                                %{--<label>Column name:</label><br>--}%
-                                %{--<label>(optional)</label>--}%
-
-                            %{--</div>--}%
-
-                            %{--<div class="col-md-8 col-sm-8 col-xs-12">--}%
-                                %{--<input style="display: inline-block" name="columnName" class="form-control"--}%
-                                       %{--id="newColumnName"--}%
-                                       %{--placeholder="value">--}%
-                            %{--</div>--}%
-                        %{--</div>--}%
-                    %{--</div>--}%
-
-                    %{--<div class="row">--}%
-                        %{--<div class="form-group">--}%
-                            %{--<div class="col-md-4 col-sm-4 col-xs-12">--}%
-
-                                %{--<label>Existing columns:</label><br>--}%
-
-                            %{--</div>--}%
-
-                            %{--<div class="col-md-8 col-sm-8 col-xs-12">--}%
-                                %{--<g:renderColumnCheckboxes data='${columnInformation}'></g:renderColumnCheckboxes>--}%
-                            %{--</div>--}%
-                        %{--</div>--}%
-                    %{--</div>--}%
-
-                    %{--<div class="row">--}%
-                        %{--<div class="form-group">--}%
-                            %{--<div class="col-md-4 col-sm-4 col-xs-12">--}%
-
-                                %{--<label>Existing rows:</label><br>--}%
-
-                            %{--</div>--}%
-
-                            %{--<div class="col-md-8 col-sm-8 col-xs-12">--}%
-                                %{--<div class="row">--}%
-                                    %{--<div class="col-xs-12" id="vandaRowHolder">--}%
-                                        %{--<g:renderRowCheckboxes data='${rowInformation}'></g:renderRowCheckboxes>--}%
-                                    %{--</div>--}%
-                                %{--</div>--}%
-
-                                %{--<div class="row">--}%
-                                    %{--<div class="col-xs-12">--}%
-                                        %{--<g:renderSampleGroupDropDown--}%
-                                                %{--data='${allAvailableRows}'></g:renderSampleGroupDropDown>--}%
-                                    %{--</div>--}%
-                                %{--</div>--}%
-                            %{--</div>--}%
-                        %{--</div>--}%
-                    %{--</div>--}%
-                    %{--<button type="submit" id="vandasubmit" class="btn btn-default" style="display: none">Submit</button>--}%
-                %{--</div>--}%
-            %{--</g:form>--}%
-        %{--</div>--}%
-
-    %{--</div>--}%
-%{--</div>--}%
-
-
-
-
-
-
-
-
-%{--<div class="modal fade" id="dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">--}%
+%{--<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">--}%
 %{--<div class="modal-dialog" role="document">--}%
 <div class="modal-content" id="dialog">
     <div class="modal-header">
@@ -107,7 +8,6 @@
 
     <div class="modal-body">
         <g:form role="form" class="dk-modal-form" action="geneInfo" id="${geneName}">
-        %{--<form class="dk-modal-form">--}%
             <div class="dk-modal-form-input-group">
                 <h4>Add / hide column</h4>
 
@@ -137,9 +37,7 @@
                         </div>
 
                         <div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
-
                             <g:textField name="pValue" type="text" class="form-control" id="addPValue"/>
-                            %{--<input type="text" class="form-control">--}%
                         </div>
                     </div>
                 </div>
