@@ -4,6 +4,7 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.codehaus.groovy.grails.web.json.JSONObject
 
@@ -233,6 +234,63 @@ class VariantSearchController {
             [technologyList:technologyListJsonObject]
         }
     }
+
+
+
+
+
+    def retrieveAncestriesAjax() {
+        String phenotypeName
+        String technologyName
+        if (params.phenotype) {
+            phenotypeName = params.phenotype
+        }
+        if (params.technology) {
+            technologyName = params.technology
+        }
+
+        List<SampleGroup> sampleGroupList = this.metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotypeName,
+                technologyName,
+                sharedToolsService.getCurrentDataVersion(), "")
+        List<String> ancestryList = sampleGroupList.unique{ a,b -> a.getAncestry() <=> b.getAncestry() }*.getAncestry()
+        String ancestryListAsJson = sharedToolsService.packageUpAListAsJson(ancestryList)
+        def slurper = new JsonSlurper()
+        def ancestryListJsonObject = slurper.parseText(ancestryListAsJson)
+
+        render(status: 200, contentType: "application/json") {
+            [ancestryList:ancestryListJsonObject]
+        }
+    }
+
+
+
+    def retrieveSampleGroupsAjax() {
+        String phenotypeName
+        String technologyName
+        String ancestryName
+        if (params.phenotype) {
+            phenotypeName = params.phenotype
+        }
+        if (params.technology) {
+            technologyName = params.technology
+        }
+        if (params.ancestry) {
+            ancestryName = params.ancestry
+        }
+
+        List<SampleGroup> sampleGroupList = this.metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotypeName,
+                technologyName,
+                sharedToolsService.getCurrentDataVersion(), ancestryName)
+        List<String> dataSetNameList = sampleGroupList.unique{ a,b -> a.getSystemId() <=> b.getSystemId() }*.getSystemId()
+        String dataSetNameAsJson = sharedToolsService.packageUpAListAsJson(dataSetNameList)
+        def slurper = new JsonSlurper()
+        def dataSetNametJsonObject = slurper.parseText(dataSetNameAsJson)
+
+        render(status: 200, contentType: "application/json") {
+            [dataSetList:dataSetNametJsonObject]
+        }
+    }
+
 
 
 

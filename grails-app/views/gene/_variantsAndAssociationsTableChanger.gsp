@@ -55,6 +55,66 @@ var getTechnologies = function(sel){
         });
 
 }
+var getAncestries = function(sel){
+    $.ajax({
+        cache: false,
+        type: "post",
+        url: "${createLink(controller: 'VariantSearch', action: 'retrieveAncestriesAjax')}",
+        data: { technology:sel.value,
+                phenotype:$("#phenotypeChooser option:selected").val()},
+        async: true,
+        success: function (data) {
+            if (( data !==  null ) &&
+                ( typeof data !== 'undefined') &&
+                ( typeof data.ancestryList !== 'undefined' ) &&
+                ( typeof data.ancestryList.dataset !== 'undefined' ) &&
+                (  data.ancestryList.dataset !==  null ) ) {
+                    var ancestries = data.ancestryList.dataset;
+                    if (typeof ancestries !== 'undefined'){
+                        var ancestryChooser = $('#ancestryChooser');
+                        ancestryChooser.empty();
+                        for ( var i = 0 ; i < ancestries.length ; i++ ){
+                            ancestryChooser.append($("<option>").val(ancestries[i]).text(ancestries[i]));
+                        }
+                    }
+                }
+            },
+        error: function (jqXHR, exception) {
+            core.errorReporter(jqXHR, exception);
+        }
+    });
+}
+var getDataSets = function(sel){
+    $.ajax({
+        cache: false,
+        type: "post",
+        url: "${createLink(controller: 'VariantSearch', action: 'retrieveSampleGroupsAjax')}",
+        data: { ancestry:sel.value,
+                phenotype:$("#phenotypeChooser option:selected").val(),
+                technology:$("#technologyChooser option:selected").val()},
+        async: true,
+        success: function (data) {
+            if (( data !==  null ) &&
+                ( typeof data !== 'undefined') &&
+                ( typeof data.dataSetList !== 'undefined' ) &&
+                ( typeof data.dataSetList.dataset !== 'undefined' ) &&
+                (  data.dataSetList.dataset !==  null ) ) {
+                    var dataSets = data.dataSetList.dataset;
+                    if (typeof dataSets !== 'undefined'){
+                        var dataSetChooser = $('#dataSetChooser');
+                        dataSetChooser.empty();
+                        for ( var i = 0 ; i < dataSets.length ; i++ ){
+                            dataSetChooser.append($("<option>").val(dataSets[i]).text(dataSets[i]));
+                        }
+                    }
+                }
+            },
+        error: function (jqXHR, exception) {
+            core.errorReporter(jqXHR, exception);
+        }
+        });
+}
+
 </g:javascript>
 <div class="modal-content" id="dialog">
     <div class="modal-header">
@@ -126,8 +186,8 @@ var getTechnologies = function(sel){
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
-                        <select class="form-control"  id="technologyChooser">
-
+                        <select class="form-control"  id="technologyChooser" onchange="getAncestries(this)" onclick="getAncestries(this)">
+                            <option selected>---</option>
                         </select>
                     </div>
                 </div>
@@ -138,13 +198,8 @@ var getTechnologies = function(sel){
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
-                        <select class="form-control">
-                            <option selected>No limit</option>
-                            <option>African-American</option>
-                            <option>Latino</option>
-                            <option>East Asian</option>
-                            <option>South Asian</option>
-                            <option>European</option>
+                        <select class="form-control" id="ancestryChooser" onchange="getDataSets(this)" onclick="getDataSets(this)">
+                            <option selected>---</option>
                         </select>
                     </div>
                 </div>
@@ -155,47 +210,8 @@ var getTechnologies = function(sel){
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
-                        <select class="form-control">
-                            <option selected>Select a dataset</option>
-                            <option>17k</option>
-                            <option>17k_aa</option>
-                            <option>17k_aa_genes</option>
-                            <option>17k_aa_genes_aj</option>
-                            <option>17k_aa_genes_aw</option>
-                            <option>17k_ea_genes</option>
-                            <option>17k_ea_genes_ek</option>
-                            <option>17k_ea_genes_es</option>
-                            <option>17k_eu</option>
-                            <option>17k_eu_genes</option>
-                            <option>17k_eu_genes_ua</option>
-                            <option>17k_eu_genes_um</option>
-                            <option>17k_eu_go</option>
-                            <option>17k_hs</option>
-                            <option>17k_hs_genes</option>
-                            <option>17k_hs_genes_ha</option>
-                            <option>17k_hs_genes_hs</option>
-                            <option>17k_hs_sigma</option>
-                            <option>17k_hs_sigma_mec</option>
-                            <option>17k_hs_sigma_mexb1</option>
-                            <option>17k_hs_sigma_mexb2</option>
-                            <option>17k_hs_sigma_mexb3</option>
-                            <option>17k_sa_genes</option>
-                            <option>17k_sa_genes_sl</option>
-                            <option>17k_sa_genes_ss</option>
-                            <option>13k</option>
-                            <option>13k_aa_genes</option>
-                            <option>13k_ea_genes</option>
-                            <option>13k_eu</option>
-                            <option>13k_hs_genes</option>
-                            <option>13k_sa_genes</option>
-                            <option>82k</option>
-                            <option>CARDIoGRAM</option>
-                            <option>CKDGenConsortium</option>
-                            <option>DIAGRAM</option>
-                            <option>GIANT</option>
-                            <option>GLGC</option>
-                            <option>MAGIC</option>
-                            <option>PGC</option>
+                        <select class="form-control" id="dataSetChooser">
+                            <option selected>---</option>
                         </select>
                     </div>
                 </div>
