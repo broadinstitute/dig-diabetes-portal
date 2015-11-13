@@ -12,6 +12,10 @@ $( document ).ready(function() {
                         ( typeof data.datasets !== 'undefined' ) &&
                         (  data.datasets !==  null ) ) {
                     UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#phenotypeChooser',true);
+                    // resetting the phenotype clears all boxes except for the technology chooser
+                    var dataSetChooser = $('#dataSetChooser');
+                    dataSetChooser.empty();
+                    dataSetChooser.append($("<option>").text("---"));
                 }
             },
             error: function (jqXHR, exception) {
@@ -46,6 +50,12 @@ var getTechnologies = function(sel){
                                 }
 
                             }
+                            var ancestryChooser = $('#ancestryChooser');
+                            ancestryChooser.empty();
+                            ancestryChooser.append($("<option>").text("---"));
+                            var dataSetChooser = $('#dataSetChooser');
+                            dataSetChooser.empty();
+                            dataSetChooser.append($("<option>").text("---"));
                         }
                 }
             },
@@ -77,6 +87,9 @@ var getAncestries = function(sel){
                             ancestryChooser.append($("<option>").val(ancestries[i]).text(ancestries[i]));
                         }
                     }
+                    var dataSetChooser = $('#dataSetChooser');
+                    dataSetChooser.empty();
+                    dataSetChooser.append($("<option>").text("---"));
                 }
             },
         error: function (jqXHR, exception) {
