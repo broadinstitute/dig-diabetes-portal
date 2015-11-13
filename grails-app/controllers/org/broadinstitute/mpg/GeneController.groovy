@@ -48,6 +48,13 @@ class GeneController {
         LinkedHashMap savedRows = params.findAll{ it.key =~ /^savedRow/ }
         String newVandAColumnName = "custom significance"
         String newVandAColumnPValue
+        String newDatasetName
+        String newDatasetRowName = ""
+        String phenotype = "T2D"
+
+        if (params.phenotype){
+            phenotype = params.phenotype
+        }
 
         // capture requests related to a new column
         if (params.pValue) {
@@ -55,6 +62,12 @@ class GeneController {
         }
         if (params.columnName) {
             newVandAColumnName =  params.columnName
+        }
+        if (params.dataSetChooser) {
+            newDatasetName =  params.dataSetChooser
+        }
+        if (params.newRowName) {
+            newDatasetRowName =  params.newRowName
         }
         String phenotypeList = this.metaDataService?.urlEncodedListOfPhenotypes();
         String regionSpecification = null
@@ -75,6 +88,12 @@ class GeneController {
                 if (listOfProperties.size()>2) {
                     rowInformation << [name:listOfProperties[0], value:listOfProperties[1], count:listOfProperties[2]]
                 }
+            }
+            if (newDatasetName){
+                if (!(newDatasetRowName)) {
+                    newDatasetRowName =  newDatasetName
+                }
+                rowInformation << [name:newDatasetRowName, value:newDatasetName, count:'5656']
             }
         } else {
             rowInformation << [name:'GWAS', value:RestServerService.TECHNOLOGY_GWAS, count:'69,033']

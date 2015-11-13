@@ -16,6 +16,7 @@ $( document ).ready(function() {
                     var dataSetChooser = $('#dataSetChooser');
                     dataSetChooser.empty();
                     dataSetChooser.append($("<option>").text("---"));
+                    $('#phenotypeChooser').removeAttr('disabled');
                 }
             },
             error: function (jqXHR, exception) {
@@ -56,6 +57,7 @@ var getTechnologies = function(sel){
                             var dataSetChooser = $('#dataSetChooser');
                             dataSetChooser.empty();
                             dataSetChooser.append($("<option>").text("---"));
+                            $('#technologyChooser').removeAttr('disabled');
                         }
                 }
             },
@@ -90,6 +92,7 @@ var getAncestries = function(sel){
                     var dataSetChooser = $('#dataSetChooser');
                     dataSetChooser.empty();
                     dataSetChooser.append($("<option>").text("---"));
+                    $('#ancestryChooser').removeAttr('disabled');
                 }
             },
         error: function (jqXHR, exception) {
@@ -119,6 +122,7 @@ var getDataSets = function(sel){
                         for ( var i = 0 ; i < dataSets.length ; i++ ){
                             dataSetChooser.append($("<option>").val(dataSets[i]).text(dataSets[i]));
                         }
+                        dataSetChooser.removeAttr('disabled');
                     }
                 }
             },
@@ -145,7 +149,6 @@ var getDataSets = function(sel){
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
-                        %{--<input type="text" class="form-control">--}%
                         <input  type="text" class="form-control"  id="newColumnName">
                     </div>
                 </div>
@@ -187,7 +190,7 @@ var getDataSets = function(sel){
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
-                        <select class="form-control" id="phenotypeChooser" onchange="getTechnologies(this)">
+                        <select class="form-control" id="phenotypeChooser" onchange="getTechnologies(this)"  disabled>
 
                         </select>
                     </div>
@@ -199,7 +202,7 @@ var getDataSets = function(sel){
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
-                        <select class="form-control"  id="technologyChooser" onchange="getAncestries(this)" onclick="getAncestries(this)">
+                        <select class="form-control"  id="technologyChooser" onchange="getAncestries(this)" onclick="getAncestries(this)" disabled>
                             <option selected>---</option>
                         </select>
                     </div>
@@ -211,7 +214,7 @@ var getDataSets = function(sel){
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
-                        <select class="form-control" id="ancestryChooser" onchange="getDataSets(this)" onclick="getDataSets(this)">
+                        <select class="form-control" id="ancestryChooser" onchange="getDataSets(this)" onclick="getDataSets(this)"  disabled>
                             <option selected>---</option>
                         </select>
                     </div>
@@ -223,7 +226,7 @@ var getDataSets = function(sel){
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
-                        <select class="form-control" id="dataSetChooser">
+                        <select class="form-control" name="dataSetChooser" id="dataSetChooser"  disabled>
                             <option selected>---</option>
                         </select>
                     </div>
@@ -235,7 +238,7 @@ var getDataSets = function(sel){
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control"   id="newRowName">
                     </div>
                 </div>
 
