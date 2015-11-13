@@ -76,7 +76,7 @@
         var delayedBurdenDataPresentation = {};
 
         // burden testing hypothesis testing section
-        var fillBurdenBiologicalHypothesisTesting = function (caseNumerator, caseDenominator, controlNumerator, controlDenominator) {
+        var fillBurdenBiologicalHypothesisTesting = function (caseNumerator, caseDenominator, controlNumerator, controlDenominator, traitName) {
             var retainBarchartPtr;
 
             // The bar chart graphic
@@ -87,7 +87,7 @@
                 delayedBurdenDataPresentation = {functionToRun: mpgSoftware.geneInfo.fillUpBarChart,
                     barchartPtr: retainBarchartPtr,
                     launch: function () {
-                        retainBarchartPtr = mpgSoftware.geneInfo.fillUpBarChart(caseNumerator, caseDenominator, controlNumerator, controlDenominator, 'T2D');
+                        retainBarchartPtr = mpgSoftware.geneInfo.fillUpBarChart(caseNumerator, caseDenominator, controlNumerator, controlDenominator, traitName);
                         return retainBarchartPtr;
                     },
                     removeBarchart: function () {
@@ -290,8 +290,12 @@
                                             mpgSoftware.burdenInfo.retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter().removeBarchart();
                                        }
 
+                                       // populate the bar legend
+                                       $("#traitSpan").text('T2D');
+                                       $("#variantNumberSpan").text(numberVariants);
+
                                        /// fill up the bar chart
-                                       mpgSoftware.burdenInfo.fillBurdenBiologicalHypothesisTesting(caseCarrierCount, caseCount, controlCarrierCount, controlCount);
+                                       mpgSoftware.burdenInfo.fillBurdenBiologicalHypothesisTesting(caseCarrierCount, caseCount, controlCarrierCount, controlCount, 'T2D');
 
                                        // launch
                                        mpgSoftware.burdenInfo.retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter().launch();
@@ -391,6 +395,9 @@ $( document ).ready( function (){
 
     <div id="burden-test-some-results" class="row burden-test-result">
         <div class="col-md-8 col-sm-6">
+            <div>
+                <p class="standardFont">Of the <span id="traitSpan"></span> cases/controls, the following carry at least one of the <span id="variantNumberSpan"></span> applicable variants.</p>
+            </div>
             <div class="barchartFormatter">
                 <div id="chart">
 
