@@ -55,8 +55,8 @@ class FilterManagementService {
      * @param receivedParameters
      * @return
      */
-    public  List <String>  retrieveFiltersCodedFilters (  String geneId, Float significance,String dataset,String region,String receivedParameters)    {
-        Map paramsMap = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters)
+    public  List <String>  retrieveFiltersCodedFilters (  String geneId, Float significance,String dataset,String region,String receivedParameters,String phenotype)    {
+        Map paramsMap = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters, phenotype)
         List <String> listOfCodedFilters = observeMultipleFilters (paramsMap)
         return  listOfCodedFilters
     }
@@ -76,7 +76,8 @@ class FilterManagementService {
                                               Float significance,
                                               String dataset,
                                               String region,
-                                              String filter) {
+                                              String filter,
+                                              String phenotype) {
         HashMap returnValue = [:]
 
         String dataSet =  ""
@@ -108,7 +109,7 @@ class FilterManagementService {
             }
         }
         if ((dataSet)&&(pValueSpec)){
-            returnValue['savedValue1'] = "17=T2D[${dataSet}]${pValueSpec}<${significance}"
+            returnValue['savedValue1'] = "17=${phenotype}[${dataSet}]${pValueSpec}<${significance}"
         }
 
 

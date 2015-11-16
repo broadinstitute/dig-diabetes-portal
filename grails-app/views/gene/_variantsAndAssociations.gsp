@@ -64,7 +64,8 @@ $.ajax({
     url: "${createLink(controller:'gene',action: 'genepValueCounts')}",
     data: {geneName: '<%=geneName%>',
            rowNames:<g:renderRowValues data='${rowInformation}'></g:renderRowValues>,
-           colNames:<g:renderColValues data='${columnInformation}'></g:renderColValues>},
+           colNames:<g:renderColValues data='${columnInformation}'></g:renderColValues>,
+           phenotype:'${phenotype}'},
         async: true,
         success: function (data) {
 

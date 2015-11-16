@@ -137,7 +137,8 @@ class GeneController {
                                              geneChromosome:geneExtent.chrom,
                                              rowInformation:rowInformation,
                                              columnInformation:columnInformation,
-                                             allAvailableRows:allAvailableRows
+                                             allAvailableRows:allAvailableRows,
+                                             phenotype:phenotype
             ] )
         }
      }
@@ -209,6 +210,7 @@ class GeneController {
      */
     def genepValueCounts() {
         String geneToStartWith = params.geneName
+        String phenotype = params.phenotype
         def rawRowNames = params."rowNames[]"
         def colSignificances = params."colNames[]"
 
@@ -249,7 +251,7 @@ class GeneController {
             }
          }
          JSONObject jsonObject =  restServerService.combinedVariantCountByGeneNameAndPValue ( geneToStartWith.trim().toUpperCase(),
-                                                                                             rowNames, significanceValues )
+                                                                                             rowNames, significanceValues, phenotype )
         render(status:200, contentType:"application/json") {
             [geneInfo:jsonObject]
         }

@@ -564,7 +564,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param dataSet
      * @return
      */
-    public JSONObject  requestGeneCountByPValue (String geneName, Float significanceIndicator, String dataSet){
+    public JSONObject  requestGeneCountByPValue (String geneName, Float significanceIndicator, String dataSet, String phenotype){
         String dataSetId = ""
         //String significance
         String geneRegion
@@ -582,25 +582,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             default:
                 log.error("Trouble: user requested data set = ${dataSet} which I don't recognize")
         }
-//        switch (significanceIndicator){
-//            case 1:
-//                significance = "everything"
-//                break;
-//            case 2:
-//                significance = "genome-wide"
-//                break;
-//            case 3:
-//                significance = "locus"
-//                break;
-//            case 4:
-//                significance = "nominal"
-//                break;
-//            default:
-//                log.error("Trouble: user requested data set = ${dataSet} which I don't recognize")
-//        }
         Float significance = significanceIndicator
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["CHROM", "POS"])
-        List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName, significance, dataSet, geneRegion,"")
+        List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName, significance, dataSet, geneRegion,"", phenotype)
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters,searchBuilderService,metaDataService)
         Boolean isCount = true;
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
@@ -901,7 +885,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     public JSONObject combinedVariantCountByGeneNameAndPValue(String geneName,
                                                               List <String> dataSeteList,
-                                                              List <Float> significanceList){
+                                                              List <Float> significanceList,
+                                                              String phenotype ){
         JSONObject returnValue
        // List <Integer> dataSeteList = [3, 2, 1]
        // List <Integer> significanceList = [1,2,  3, 4]
@@ -911,7 +896,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             sb  << "{ \"dataset\": \"${dataSeteList[j]}\",\"pVals\": ["
             for ( int  i = 0 ; i < significanceList.size () ; i++ ){
                 sb  << "{"
-                JSONObject apiData = requestGeneCountByPValue(geneName, significanceList[i], dataSeteList[j])
+                JSONObject apiData = requestGeneCountByPValue(geneName, significanceList[i], dataSeteList[j],phenotype)
                 if (apiData.is_error == false) {
                     sb  << "\"level\":\"${significanceList[i]}\",\"count\":${apiData.numRecords}"
                 }
@@ -1023,7 +1008,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 dataSetId = "total"
         }
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID"])
-        List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName,0f,"","","${codeForMafSlice}-${codeForEthnicity}")
+        List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName,0f,"","","${codeForMafSlice}-${codeForEthnicity}","T2D")
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters,searchBuilderService,metaDataService)
         if (cellNumber==0){
             if (ethnicity != "chipEu"){
