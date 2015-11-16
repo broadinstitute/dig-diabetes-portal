@@ -62,7 +62,7 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
     @Unroll("testing  requestGeneCountByPValue with #label")
     void "test requestGeneCountByPValue"() {
         when:
-        JSONObject jsonObject = restServerService.requestGeneCountByPValue("PTEN",significance,dataset)
+        JSONObject jsonObject = restServerService.requestGeneCountByPValue("PTEN",significance,dataset,"T2D")
 
         then:
         assert jsonObject
