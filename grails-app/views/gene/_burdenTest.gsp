@@ -257,17 +257,19 @@
                                     console.log('burdenTestAjax returned is_error ='+data.is_error +'.');
                                 }
                                 else if ((typeof data.stats.pValue === 'undefined') ||
-                                         (typeof data.stats.oddsRatio === 'undefined') ||
+                                         (typeof data.stats.beta === 'undefined') ||
                                          (typeof data.stats.stdError === 'undefined')){
-                                     console.log('burdenTestAjax returned undefined for P value, standard error or odds ratio.');
+                                     console.log('burdenTestAjax returned undefined for P value, standard error or beta.');
                                }else {
                                    var pValue = data.stats.pValue;
-                                   var oddsRatio = data.stats.oddsRatio;
+                                   //var oddsRatio = data.stats.oddsRatio; // must remove oddsRatio ref due to API change
+                                   var beta = data.stats.beta;
                                    var stdError = data.stats.stdError;
+                                   var pValue = data.stats.pValue;
                                    var numberVariants = data.stats.numInputVariants;
-                                   fillInResultsSection('p-Value = '+UTILS.realNumberFormatter(data.stats.pValue),
-                                   'odds ratio = ' +UTILS.realNumberFormatter(data.stats.oddsRatio),
-                                   'standard error = ' +UTILS.realNumberFormatter(data.stats.stdError),
+                                   fillInResultsSection('p-Value = '+UTILS.realNumberFormatter(pValue),
+                                   'odds ratio = ' +UTILS.realNumberFormatter(Math.exp(beta)),
+                                   'standard error = ' +UTILS.realNumberFormatter(stdError),
                                    numberVariants,
                                    data.variants,"${createLink(controller: 'variantInfo', action: 'variantInfo')}");
 
