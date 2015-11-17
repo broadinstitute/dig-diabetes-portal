@@ -7,27 +7,30 @@ package org.broadinstitute.mpg.diabetes.util
 class PortalConstants {
     // json mapping keys
 
-    public final static String JSON_EXPERIMENT_KEY      = "experiments";
-    public final static String JSON_VERSION_KEY         = "version";
-    public final static String JSON_NAME_KEY            = "name";
-    public final static String JSON_TYPE_KEY            = "type";
-    public final static String JSON_GROUP_KEY            = "group";
-    public final static String JSON_TECHNOLOGY_KEY      = "technology";
-    public final static String JSON_ANCESTRY_KEY        = "ancestry";
-    public final static String JSON_ID_KEY              = "id";
-    public final static String JSON_SEARCHABLE_KEY      = "searchable";
-    public final static String JSON_SORT_ORDER_KEY      = "sort_order";
-    public final static String JSON_MEANING_KEY         = "meaning";
-    public final static String JSON_VARIANTS_KEY        = "variants";
-    public final static String JSON_VARIANT_ID_KEY      = "VAR_ID";
-    public final static String JSON_VARIANT_MOST_DEL_SCORE_KEY  = "MOST_DEL_SCORE";
-    public final static String JSON_VARIANT_CHROMOSOME_KEY      = "CHROM";
-    public final static String JSON_VARIANT_POLYPHEN_PRED_KEY   = "PolyPhen_PRED";
-    public final static String JSON_VARIANT_SIFT_PRED_KEY       = "SIFT_PRED";
-    public final static String JSON_VARIANT_CONDEL_PRED_KEY     = "Condel_PRED";
-    public final static String JSON_NUMBER_RECORDS_KEY  = "numRecords";
-    public final static String JSON_ERROR_KEY           = "is_error";
-    public final static String JSON_PASSBACK_KEY        = "passback";
+    public final static String JSON_EXPERIMENT_KEY                      = "experiments";
+    public final static String JSON_VERSION_KEY                         = "version";
+    public final static String JSON_NAME_KEY                            = "name";
+    public final static String JSON_TYPE_KEY                            = "type";
+    public final static String JSON_GROUP_KEY                           = "group";
+    public final static String JSON_TECHNOLOGY_KEY                      = "technology";
+    public final static String JSON_ANCESTRY_KEY                        = "ancestry";
+    public final static String JSON_SUBJECTS_KEY                        = "subjects";
+    public final static String JSON_CASES_KEY                           = "cases";
+    public final static String JSON_CONTROLS_KEY                        = "controls";
+    public final static String JSON_ID_KEY                              = "id";
+    public final static String JSON_SEARCHABLE_KEY                      = "searchable";
+    public final static String JSON_SORT_ORDER_KEY                      = "sort_order";
+    public final static String JSON_MEANING_KEY                         = "meaning";
+    public final static String JSON_VARIANTS_KEY                        = "variants";
+    public final static String JSON_VARIANT_ID_KEY                      = "VAR_ID";
+    public final static String JSON_VARIANT_MOST_DEL_SCORE_KEY          = "MOST_DEL_SCORE";
+    public final static String JSON_VARIANT_CHROMOSOME_KEY              = "CHROM";
+    public final static String JSON_VARIANT_POLYPHEN_PRED_KEY           = "PolyPhen_PRED";
+    public final static String JSON_VARIANT_SIFT_PRED_KEY               = "SIFT_PRED";
+    public final static String JSON_VARIANT_CONDEL_PRED_KEY             = "Condel_PRED";
+    public final static String JSON_NUMBER_RECORDS_KEY                  = "numRecords";
+    public final static String JSON_ERROR_KEY                           = "is_error";
+    public final static String JSON_PASSBACK_KEY                        = "passback";
 
 
     // json mapping array key values
@@ -102,6 +105,10 @@ class PortalConstants {
     public final static String PROPERTY_KEY_PH_BETA_13K_FG                = "metadata_root_ExSeq_13k_mdv2_13kFGBETA";
     public final static String PROPERTY_KEY_PH_BETA_13K_HBA1C             = "metadata_root_ExSeq_13k_mdv2_13kHBA1CBETA";
     public final static String PROPERTY_KEY_PH_BETA_GWAS_MAGIC_2HRG       = "metadata_root_GWAS_MAGIC_mdv2_MAGIC2hrGBETA";
+
+    // constants of property id keys (these are automatically generated, but caching often used ones here)
+    public final static String SAMPLE_GROUP_KEY_SG_SIGMA1                 = "metadata_root_GWAS_SIGMA1_mdv2_SIGMA1";
+    public final static String SAMPLE_GROUP_KEY_SG_GWAS_PGC               = "metadata_root_GWAS_PGC_mdv2_PGC";
 
     public final static int PROTEIN_PREDICTION_TYPE_PROTEINEFFECT                   = 1;
     public final static int PROTEIN_PREDICTION_TYPE_POLYPHEN                        = 2;

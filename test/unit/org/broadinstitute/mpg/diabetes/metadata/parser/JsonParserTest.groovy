@@ -549,4 +549,35 @@ class JsonParserTest extends TestCase {
         assertNotNull(propertyWithOtherMeaning);
         assertTrue(!propertyWithOtherMeaning.hasMeaning(PortalConstants.PROPERTY_MEANING_P_VALUE_KEY));
     }
+
+    @Test
+    public void testGetSampleGroupCasesControlsSubjects() {
+        // local variables
+        SampleGroup sampleGroupWithNumbers = null;
+        SampleGroup sampleGroupWithoutNumbers = null;
+
+        try {
+            // retrieve the properties
+            sampleGroupWithNumbers = (SampleGroup)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.SAMPLE_GROUP_KEY_SG_SIGMA1);
+            sampleGroupWithoutNumbers = (SampleGroup)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.SAMPLE_GROUP_KEY_SG_GWAS_PGC);
+
+        } catch (PortalException exception) {
+            fail("got error: " + exception.getMessage());
+        }
+
+        // test for sample group with numbers
+        assertNotNull(sampleGroupWithNumbers);
+        assertNotNull(sampleGroupWithNumbers.getSubjectsNumber());
+        assertNotNull(sampleGroupWithNumbers.getCasesNumber());
+        assertNotNull(sampleGroupWithNumbers.getControlsNumber());
+        assertTrue(sampleGroupWithNumbers.getSubjectsNumber() > 0);
+        assertTrue(sampleGroupWithNumbers.getCasesNumber() > 0);
+        assertTrue(sampleGroupWithNumbers.getControlsNumber() > 0);
+
+        // test for sample group with numbers
+        assertNotNull(sampleGroupWithoutNumbers);
+        assertNull(sampleGroupWithoutNumbers.getSubjectsNumber());
+        assertNull(sampleGroupWithoutNumbers.getCasesNumber());
+        assertNull(sampleGroupWithoutNumbers.getControlsNumber());
+    }
 }

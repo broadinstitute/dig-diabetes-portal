@@ -319,6 +319,41 @@ public class JsonParser {
                 sampleGroup.setSortOrder(Float.valueOf(tempJsonValue).intValue());
             }
 
+            // add in cases/controls/subjects numbers if they exists
+            if (jsonObject.containsKey(PortalConstants.JSON_SUBJECTS_KEY)) {
+                tempJsonValue = jsonObject.getString(PortalConstants.JSON_SUBJECTS_KEY);
+                if (tempJsonValue != null) {
+                    try {
+                        sampleGroup.setSubjectsNumber(Integer.valueOf(tempJsonValue).intValue());
+                    } catch (NumberFormatException exception) {
+                        // value will stay null
+                        sampleGroup.setSubjectsNumber(null);
+                    }
+                }
+            }
+            if (jsonObject.containsKey(PortalConstants.JSON_CASES_KEY)) {
+                tempJsonValue = jsonObject.getString(PortalConstants.JSON_CASES_KEY);
+                if (tempJsonValue != null) {
+                    try {
+                        sampleGroup.setCasesNumber(Integer.valueOf(tempJsonValue).intValue());
+                    } catch (NumberFormatException exception) {
+                        // value will stay null
+                        sampleGroup.setCasesNumber(null);
+                    }
+                }
+            }
+            if (jsonObject.containsKey(PortalConstants.JSON_CONTROLS_KEY)) {
+                tempJsonValue = jsonObject.getString(PortalConstants.JSON_CONTROLS_KEY);
+                if (tempJsonValue != null) {
+                    try {
+                        sampleGroup.setControlsNumber(Integer.valueOf(tempJsonValue).intValue());
+                    } catch (NumberFormatException exception) {
+                        // value will stay null
+                        sampleGroup.setControlsNumber(null);
+                    }
+                }
+            }
+
             // add in properties
             tempArray = jsonObject.getJSONArray(PortalConstants.JSON_PROPERTIES_KEY);
             for (int i = 0; i < tempArray.length(); i++) {
