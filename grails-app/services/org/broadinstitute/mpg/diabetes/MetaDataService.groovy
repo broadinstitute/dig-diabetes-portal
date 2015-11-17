@@ -195,6 +195,16 @@ class MetaDataService {
         return groovyString;
     }
 
+
+
+
+    public SampleGroup  getSampleGroupByName(String sampleGroupId){
+        return jsonParser.getSampleGroupByName(sampleGroupId)
+    }
+
+
+
+
     public String getSampleGroupNameListForPhenotypeAsJson(String phenotypeName) {
         // local variables
         GString jsonString;

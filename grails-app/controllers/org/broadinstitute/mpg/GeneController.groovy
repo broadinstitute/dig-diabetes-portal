@@ -109,6 +109,26 @@ class GeneController {
             rowInformation << [name:'exome sequence', value:RestServerService.TECHNOLOGY_EXOME_SEQ,  pvalue: RestServerService.EXOMESEQUENCEPVALUE, count:'16,760']
         }
          for (LinkedHashMap row in rowInformation){
+             String dataSet=row.value
+             switch (dataSet) {
+                 case RestServerService.TECHNOLOGY_GWAS :
+                     dataSet = restServerService.getSampleGroup(dataSet,RestServerService.EXPERIMENT_DIAGRAM,RestServerService.ANCESTRY_NONE)
+                     break;
+                 case RestServerService.TECHNOLOGY_EXOME_SEQ :
+                     dataSet = restServerService.getSampleGroup(dataSet,"none",RestServerService.ANCESTRY_NONE)
+                     break;
+                 case RestServerService.TECHNOLOGY_EXOME_CHIP :
+                     dataSet = restServerService.getSampleGroup(dataSet,"none",RestServerService.ANCESTRY_NONE)
+                     break;
+                 default:
+                     break;
+             }
+             SampleGroup sampleGroup = metaDataService.getSampleGroupByName(dataSet)
+             if (sampleGroup){
+                 if (sampleGroup.subjectsNumber){
+                     row.count = "${sampleGroup.subjectsNumber}"
+                 }
+             }
             // List<Property> propertyList = metaDataService.getSpecificPhenotypeProperties(row.value,phenotype)
 
          }

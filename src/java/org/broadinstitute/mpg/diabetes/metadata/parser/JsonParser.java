@@ -639,6 +639,25 @@ public class JsonParser {
         return propertyNameList;
     }
 
+
+
+    public SampleGroup  getSampleGroupByName(String sampleGroupId) throws PortalException {
+        // local variables
+        SampleGroup sampleGroup;
+
+        // find the sample group
+        SampleGroupByIdSelectingVisitor finderVisitor = new SampleGroupByIdSelectingVisitor(sampleGroupId);
+        this.getMetaDataRoot().acceptVisitor(finderVisitor);
+        sampleGroup = finderVisitor.getSampleGroup();
+
+        // return the property string
+        return sampleGroup;
+    }
+
+
+
+
+
     /**
      * find the first property by its name
      *
