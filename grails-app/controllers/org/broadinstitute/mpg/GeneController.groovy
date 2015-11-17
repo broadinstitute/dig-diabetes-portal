@@ -113,6 +113,10 @@ class GeneController {
         List <LinkedHashMap<String,String>> columnInformation = []
         // if we have saved values then use them, otherwise add the defaults
         if (savedCols.size()>0){
+//            Really should've worked...
+//            LinkedHashMap<String,String> sortedMap = savedCols.sort( {  a,  b -> List aL=(a.value as String).tokenize('^');
+//                List bL=(b.value as String).tokenize('^');
+//                return (bL[1] as Float) <=> (aL[1] as Float) } as Comparator )
             savedCols.each{String key, String value->
                 List <String> listOfProperties = value.tokenize("^")
                 if (listOfProperties.size()>2) {
@@ -121,15 +125,16 @@ class GeneController {
             }
         } else { // no saved columns -- provide some defaults
             columnInformation << [name:'total variants', value:'1', count:'0']
-            columnInformation << [name:'genome-wide', value:'0.00000005', count:'0']
 //        columnInformation << [name:'exome wide <br>significance', value:'0.000009', count:'0']  // example of additional column
-            columnInformation << [name:'locus-wide', value:'0.00005', count:'0']
             columnInformation << [name:'nominal', value:'0.05', count:'0']
+            columnInformation << [name:'locus-wide', value:'0.00005', count:'0']
+            columnInformation << [name:'genome-wide', value:'0.00000005', count:'0']
         }
         if (newVandAColumnPValue){
             columnInformation << [name:"${newVandAColumnName}", value:"${newVandAColumnPValue}", count:'0']
         }
-
+        List <LinkedHashMap<String,String>> sortedColumnInformation = columnInformation.sort{a,b-> (b.value as Float)<=>(a.value as Float)}
+        List <LinkedHashMap<String,String>> sortedRowInformation = rowInformation.sort{ a, b-> (b.name as String).toUpperCase()<=>(a.name as String).toUpperCase()}
         if (geneToStartWith)  {
             String  geneUpperCase =   geneToStartWith.toUpperCase()
             LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
@@ -142,8 +147,8 @@ class GeneController {
                                              geneExtentBegin:geneExtent.startExtent,
                                              geneExtentEnd:geneExtent.endExtent,
                                              geneChromosome:geneExtent.chrom,
-                                             rowInformation:rowInformation,
-                                             columnInformation:columnInformation,
+                                             rowInformation:sortedRowInformation,
+                                             columnInformation:sortedColumnInformation,
                                              allAvailableRows:allAvailableRows,
                                              phenotype:phenotype
             ] )

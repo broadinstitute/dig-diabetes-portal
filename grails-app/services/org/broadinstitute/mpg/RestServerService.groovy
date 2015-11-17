@@ -568,19 +568,20 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String dataSetId = ""
         //String significance
         String geneRegion
+        // known special case data sets
         switch (dataSet){
             case RestServerService.TECHNOLOGY_EXOME_SEQ:
-             //   dataSetId = "exomeseq"
                 break;
             case RestServerService.EXPERIMENT_DIAGRAM:
-              //  dataSetId = "exomechip"
                 break;
             case RestServerService.TECHNOLOGY_GWAS:
-               // dataSetId = "gwas"
                 geneRegion = sharedToolsService.getGeneExpandedRegionSpec(geneName)
                 break;
             default:
-                log.error("Trouble: user requested data set = ${dataSet} which I don't recognize")
+                if (dataSet.indexOf("GWAS")>-1){
+                    geneRegion = sharedToolsService.getGeneExpandedRegionSpec(geneName)
+                }
+
         }
         Float significance = significanceIndicator
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["CHROM", "POS"])

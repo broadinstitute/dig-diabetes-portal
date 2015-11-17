@@ -12,6 +12,8 @@ $( document ).ready(function() {
                         ( typeof data.datasets !== 'undefined' ) &&
                         (  data.datasets !==  null ) ) {
                     UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#phenotypeChooser',true);
+                    // Can we set the default option on the phenotype list?
+                    $('#phenotypeChooser').val('${phenotype}');
                     // resetting the phenotype clears all boxes except for the technology chooser
                     var dataSetChooser = $('#dataSetChooser');
                     dataSetChooser.empty();
@@ -24,7 +26,7 @@ $( document ).ready(function() {
             }
         });
 });
-var getTechnologies = function(sel){
+var getTechnologies = function(sel,clearExistingRows){
             $.ajax({
             cache: false,
             type: "post",
@@ -41,6 +43,10 @@ var getTechnologies = function(sel){
                         if (typeof technologies !== 'undefined'){
                             var technologyChooser = $('#technologyChooser');
                             technologyChooser.empty();
+                            if (clearExistingRows){
+                               $('.savedRowHolder .checkbox label').empty();
+                               $('.savedRowHolderLabel').hide()
+                            }
                             for ( var i = 0 ; i < technologies.length ; i++ ){
                                 if (technologies[i] === "ExSeq") {
                                    technologyChooser.append($("<option>").val(technologies[i]).text("Exome Sequencing"));
@@ -192,7 +198,7 @@ var getDataSets = function(sel){
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
-                        <select class="form-control" id="phenotypeChooser" name="phenotypeChooser" onchange="getTechnologies(this)"  disabled>
+                        <select class="form-control" id="phenotypeChooser" name="phenotypeChooser" onchange="getTechnologies(this,true)"  onclick="getTechnologies(this,false)" disabled>
 
                         </select>
                     </div>
@@ -240,16 +246,16 @@ var getDataSets = function(sel){
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
-                        <input type="text" class="form-control"   id="newRowName">
+                        <input type="text" class="form-control" name="newRowName"   id="newRowName">
                     </div>
                 </div>
 
                 <div class="dk-modal-form-input-row">
-                    <div class="dk-variant-search-builder-title">
+                    <div class="dk-variant-search-builder-title savedRowHolderLabel">
                         Show rows
                     </div>
 
-                    <div class="dk-variant-search-builder-ui">
+                    <div class="dk-variant-search-builder-ui savedRowHolder">
                         <g:renderRowCheckboxes data='${rowInformation}'></g:renderRowCheckboxes>
                     </div>
                 </div>
