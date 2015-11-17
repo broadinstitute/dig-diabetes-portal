@@ -281,13 +281,32 @@ class VariantSearchController {
         List<SampleGroup> sampleGroupList = this.metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotypeName,
                 technologyName,
                 sharedToolsService.getCurrentDataVersion(), ancestryName)
-        List<String> dataSetNameList = sampleGroupList.unique{ a,b -> a.getSystemId() <=> b.getSystemId() }*.getSystemId()
-        String dataSetNameAsJson = sharedToolsService.packageUpAListAsJson(dataSetNameList)
+        List<SampleGroup> uniqueDataSetNameList = sampleGroupList.unique{ a,b -> a.getSystemId() <=> b.getSystemId() }
+        LinkedHashMap<String,String> dataSetNamesAndPProperyNames = [:]
+        String pValMatcher = /^P_(EMMAX|FIRTH|FE|VALUE)/
+        for (SampleGroup sampleGroup in uniqueDataSetNameList){
+            List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = sampleGroup.getPhenotypes()
+            List<String> pValuePropertyNames = []
+            for (org.broadinstitute.mpg.diabetes.metadata.Phenotype phenotype in phenotypeList){
+                if (phenotype.name == phenotypeName){
+                    pValuePropertyNames = phenotype.getProperties().findAll{it.name =~ pValMatcher}*.getName()
+                }
+            }
+            // for now take the first, though we will eventually choose between them.
+            if (pValuePropertyNames.size()>0){
+                dataSetNamesAndPProperyNames[sampleGroup.systemId] = pValuePropertyNames[0]
+            }
+        }
+        String dataSetMapAsJson = sharedToolsService.packageUpASimpleMapAsJson(dataSetNamesAndPProperyNames)
         def slurper = new JsonSlurper()
-        def dataSetNametJsonObject = slurper.parseText(dataSetNameAsJson)
+        def dataSetMapJsonObject = slurper.parseText(dataSetMapAsJson)
+//        List<String> dataSetNameList = sampleGroupList.unique{ a,b -> a.getSystemId() <=> b.getSystemId() }*.getSystemId()
+//        String dataSetNameAsJson = sharedToolsService.packageUpAListAsJson(dataSetNameList)
+//        def slurper = new JsonSlurper()
+//        def dataSetNametJsonObject = slurper.parseText(dataSetNameAsJson)
 
         render(status: 200, contentType: "application/json") {
-            [dataSetList:dataSetNametJsonObject]
+            [dataSetList:dataSetMapJsonObject]
         }
     }
 

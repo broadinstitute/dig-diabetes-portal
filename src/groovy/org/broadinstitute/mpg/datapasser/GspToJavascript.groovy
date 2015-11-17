@@ -35,16 +35,33 @@ class GspToJavascript {
         return returnValue.toString()
     }
 
-
+    /***
+     * convert a Java representation into a JavaScript object
+     * @return
+     */
     public String printValuesAsJavascriptMaps(){
         StringBuilder returnValue = new StringBuilder("[")
-        for ( int  i = 0 ; i < storedValues?.size() ; i++ ){
-            if ((storedValues[i].value)&&((storedValues[i].name))){
-                returnValue << "{'name':'${storedValues[i].name}',"
-                returnValue << "'value':'${storedValues[i].value}',"
-                returnValue << "'count':'${storedValues[i].count}'}"
-                if (i+1 < storedValues?.size()){
-                    returnValue << ","
+        if (transType == TRANSTYPE_V_AND_A_COLUMN){
+            for ( int  i = 0 ; i < storedValues?.size() ; i++ ){
+                if ((storedValues[i].value)&&((storedValues[i].name))){
+                    returnValue << "{'name':'${storedValues[i].name}',"
+                    returnValue << "'value':'${storedValues[i].value}',"
+                    returnValue << "'count':'${storedValues[i].count}'}"
+                    if (i+1 < storedValues?.size()){
+                        returnValue << ","
+                    }
+                }
+            }
+        } else if (transType == TRANSTYPE_V_AND_A_ROW) {
+            for (int i = 0; i < storedValues?.size(); i++) {
+                if ((storedValues[i].value) && ((storedValues[i].name))) {
+                    returnValue << "{'name':'${storedValues[i].name}',"
+                    returnValue << "'value':'${storedValues[i].value}',"
+                    returnValue << "'pvalue':'${storedValues[i].pvalue}',"
+                    returnValue << "'count':'${storedValues[i].count}'}"
+                    if (i + 1 < storedValues?.size()) {
+                        returnValue << ","
+                    }
                 }
             }
         }
@@ -56,9 +73,17 @@ class GspToJavascript {
 
     public List <String> codeValuesForPassBack(){
         List <String> allValuesToReturn = []
-        for ( int  i = 0 ; i < storedValues?.size() ; i++ ){
-            if ((storedValues[i].value)&&((storedValues[i].name))){
-                allValuesToReturn << "${storedValues[i].name}^${storedValues[i].value}^${storedValues[i].count}"
+        if (transType == TRANSTYPE_V_AND_A_COLUMN) {
+            for ( int  i = 0 ; i < storedValues?.size() ; i++ ){
+                if ((storedValues[i].value)&&((storedValues[i].name))){
+                    allValuesToReturn << "${storedValues[i].name}^${storedValues[i].value}^${storedValues[i].count}"
+                }
+            }
+        } else if (transType == TRANSTYPE_V_AND_A_ROW) {
+            for (int i = 0; i < storedValues?.size(); i++) {
+                if ((storedValues[i].value) && ((storedValues[i].name))) {
+                    allValuesToReturn << "${storedValues[i].name}^${storedValues[i].value}^${storedValues[i].count}^${storedValues[i].pvalue}"
+                }
             }
         }
         return allValuesToReturn
@@ -66,13 +91,29 @@ class GspToJavascript {
 
 
 
-    public LinkedHashMap<String,String> namesAndValues(){
+    public LinkedHashMap<String,LinkedHashMap<String,String>> namesAndValues(){
         LinkedHashMap<String,String> returnValue = [:]
-        for ( int  i = 0 ; i < storedValues?.size() ; i++ ){
-            if ((storedValues[i].value)&&((storedValues[i].name))){
-                returnValue["${storedValues[i].name}"]="${storedValues[i].value}"
+        if (transType == TRANSTYPE_V_AND_A_COLUMN) {
+            for ( int  i = 0 ; i < storedValues?.size() ; i++ ) {
+                if ((storedValues[i].value) && ((storedValues[i].name))) {
+                    LinkedHashMap<String,String> values = [:]
+                    values['value'] = storedValues[i].value
+                    values['count'] = storedValues[i].count
+                    returnValue["${storedValues[i].name}"] = values
+                }
+            }
+        } else if (transType == TRANSTYPE_V_AND_A_ROW) {
+            for ( int  i = 0 ; i < storedValues?.size() ; i++ ) {
+                if ((storedValues[i].value) && ((storedValues[i].name))) {
+                    LinkedHashMap<String,String> values = [:]
+                    values['value'] = storedValues[i].value
+                    values['count'] = storedValues[i].count
+                    values['pvalue'] = storedValues[i].pvalue
+                    returnValue["${storedValues[i].name}"] = values
+                }
             }
         }
+
         return returnValue
     }
 

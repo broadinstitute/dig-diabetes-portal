@@ -52,8 +52,8 @@ class GeneController {
         String newDatasetRowName = ""
         String phenotype = "T2D"
 
-        if (params.phenotype){
-            phenotype = params.phenotype
+        if (params.phenotypeChooser){
+            phenotype = params.phenotypeChooser
         }
 
         // capture requests related to a new column
@@ -64,7 +64,7 @@ class GeneController {
             newVandAColumnName =  params.columnName
         }
         if (params.dataSetChooser) {
-            newDatasetName =  params.dataSetChooser
+            newDatasetName =  params.dataSetChooser // data set^ P value property name
         }
         if (params.newRowName) {
             newDatasetRowName =  params.newRowName
@@ -82,23 +82,30 @@ class GeneController {
             allAvailableRows << [name:sampleGroup.name, value:sampleGroup.systemId, count:'4747']
         }
         List <LinkedHashMap<String,String>> rowInformation = []
-        if (savedRows.size()>0) { // no saved rows -- provide some defaults
+        if ((savedRows.size()>0)||
+                (newDatasetName)){ // no saved rows -- provide some defaults
             savedRows.each{String key, String value->
                 List <String> listOfProperties = value.tokenize("^")
                 if (listOfProperties.size()>2) {
-                    rowInformation << [name:listOfProperties[0], value:listOfProperties[1], count:listOfProperties[2]]
+                    rowInformation << [name:listOfProperties[0], value:listOfProperties[1], count:listOfProperties[2], pvalue:listOfProperties[3]]
                 }
             }
             if (newDatasetName){
-                if (!(newDatasetRowName)) {
-                    newDatasetRowName =  newDatasetName
+                // break apart data set name and P value name
+                List <String> nameAndAssociatedPValue = newDatasetName.tokenize("^")
+                if (nameAndAssociatedPValue.size()==2) {
+                    if (!(newDatasetRowName)) {
+                        newDatasetRowName =  nameAndAssociatedPValue[0]
+                    }
+                    rowInformation << [name:newDatasetRowName, value:nameAndAssociatedPValue[0],count:'5656', pvalue: nameAndAssociatedPValue[1] ]
                 }
-                rowInformation << [name:newDatasetRowName, value:newDatasetName, count:'5656']
+
+
             }
         } else {
-            rowInformation << [name:'GWAS', value:RestServerService.TECHNOLOGY_GWAS, count:'69,033']
-            rowInformation << [name:'exome chip', value:RestServerService.TECHNOLOGY_EXOME_CHIP, count:'79,854']
-            rowInformation << [name:'exome sequence', value:RestServerService.TECHNOLOGY_EXOME_SEQ, count:'16,760']
+            rowInformation << [name:'GWAS', value:RestServerService.TECHNOLOGY_GWAS,  pvalue: RestServerService.GWASDATAPVALUE, count:'69,033']
+            rowInformation << [name:'exome chip', value:RestServerService.TECHNOLOGY_EXOME_CHIP,  pvalue: RestServerService.EXOMECHIPPVALUE, count:'79,854']
+            rowInformation << [name:'exome sequence', value:RestServerService.TECHNOLOGY_EXOME_SEQ,  pvalue: RestServerService.EXOMESEQUENCEPVALUE, count:'16,760']
 // example of additional row
 //        rowInformation << [name:'AA exome seq', value:"ExSeq_17k_aa_mdv2", count:'4777']
         }

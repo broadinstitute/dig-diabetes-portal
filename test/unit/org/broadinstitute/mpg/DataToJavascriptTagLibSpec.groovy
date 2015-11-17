@@ -25,4 +25,22 @@ class DataToJavascriptTagLibSpec extends Specification {
         assert actualResults.size()==0
 
     }
+
+
+    void "smoke test renderColumnCheckboxes no data"() {
+        given:
+        Map attributes
+        //Map attributes=[name:'GWAS', value:RestServerService.TECHNOLOGY_GWAS, count:'69,033']
+        String template = '<g:renderColumnCheckboxes></g:renderColumnCheckboxes>'
+
+        when:
+        String actualResults = applyTemplate(template,[data:attributes]).toString()
+
+        then:
+        assert actualResults.size()==0
+
+    }
+
+
+
 }

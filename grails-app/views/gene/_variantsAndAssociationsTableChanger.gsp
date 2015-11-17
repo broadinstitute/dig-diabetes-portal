@@ -119,8 +119,10 @@ var getDataSets = function(sel){
                     if (typeof dataSets !== 'undefined'){
                         var dataSetChooser = $('#dataSetChooser');
                         dataSetChooser.empty();
-                        for ( var i = 0 ; i < dataSets.length ; i++ ){
-                            dataSetChooser.append($("<option>").val(dataSets[i]).text(dataSets[i]));
+                        for (var key in dataSets) {
+                        if (dataSets.hasOwnProperty(key)) {
+                                dataSetChooser.append($("<option>").val(key+"^"+dataSets[key]).text(key));
+                            }
                         }
                         dataSetChooser.removeAttr('disabled');
                     }
@@ -175,7 +177,7 @@ var getDataSets = function(sel){
 
                 <div class="dk-modal-form-input-row">
                     <div class="dk-variant-search-builder-title">
-                        Hide added columns
+                        Show columns
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
@@ -190,7 +192,7 @@ var getDataSets = function(sel){
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
-                        <select class="form-control" id="phenotypeChooser" onchange="getTechnologies(this)"  disabled>
+                        <select class="form-control" id="phenotypeChooser" name="phenotypeChooser" onchange="getTechnologies(this)"  disabled>
 
                         </select>
                     </div>
@@ -244,7 +246,7 @@ var getDataSets = function(sel){
 
                 <div class="dk-modal-form-input-row">
                     <div class="dk-variant-search-builder-title">
-                        Hide added rows
+                        Show rows
                     </div>
 
                     <div class="dk-variant-search-builder-ui">

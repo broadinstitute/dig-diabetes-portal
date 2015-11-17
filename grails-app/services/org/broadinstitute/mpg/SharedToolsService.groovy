@@ -663,18 +663,46 @@ class SharedToolsService {
             sortedMapOfStrings.each{k,List v->
                 sb <<  "\"${k}\":[".toString()
                 int individualGroupLength  = v.size()
-                    for ( int  i = 0 ; i < individualGroupLength ; i++ ){
-                        sb << "\"${v[i]}\"".toString()
-                        if (i < individualGroupLength - 1) {
-                            sb << ","
-                        }
+                for ( int  i = 0 ; i < individualGroupLength ; i++ ){
+                    sb << "\"${v[i]}\"".toString()
+                    if (i < individualGroupLength - 1) {
+                        sb << ","
                     }
+                }
                 sb <<  "]"
                 groupCounter++
                 if (numberOfGroups > groupCounter) {
                     sb << ","
                 }
             }
+        }
+
+        return  """
+{"is_error": false,
+"numRecords":${numberOfGroups},
+"dataset":{${sb.toString()}}
+}""".toString()
+    }
+
+
+
+    public String packageUpASimpleMapAsJson (LinkedHashMap<String,String> mapOfStrings ){
+        // now that we have a list, build it into a string suitable for JSON
+        int numberOfGroups = 0
+        StringBuilder sb = new StringBuilder ()
+
+        if ((mapOfStrings) && (mapOfStrings?.size() > 0)){
+            LinkedHashMap sortedMapOfStrings = mapOfStrings
+            numberOfGroups = sortedMapOfStrings.size()
+            int groupCounter  = 0
+            sortedMapOfStrings.each{String k,String v->
+                sb <<  "\"${k}\":".toString()
+                    sb << "\"${v}\"".toString()
+                 }
+                groupCounter++
+                if (numberOfGroups > groupCounter) {
+                    sb << ","
+                }
         }
 
         return  """
