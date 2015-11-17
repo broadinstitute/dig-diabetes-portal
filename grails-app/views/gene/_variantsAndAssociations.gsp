@@ -16,7 +16,7 @@
 
 <g:render template="variantsAndAssociationsTableChanger"/>
 
-<button id="opener"  class="pull-right btn btn-default" style="display: none">Revise table properties</button>
+<button id="opener"  class="pull-right btn btn-default" style="display: none" >Revise table properties</button>
 <table id="variantsAndAssociationsTable" class="table table-striped distinctivetable distinctive">
     <thead id="variantsAndAssociationsHead">
     </thead>
@@ -136,7 +136,8 @@ $.ajax({
                                 <g:renderRowMaps data='${rowInformation}'/>,
                                 <g:renderColMaps data='${columnInformation}'/>,
                                 collector,
-                                '<%=geneName%>'
+                                '<%=geneName%>',
+                                '<%=phenotype%>'
                             );
                     }
                 }

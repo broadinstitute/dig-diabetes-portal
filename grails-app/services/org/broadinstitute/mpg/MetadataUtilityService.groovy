@@ -199,7 +199,7 @@ class MetadataUtilityService {
      * @param pprops
      * @return
      */
-    private List<String> propertiesPerSampleGroup(List<PhenotypeBean>  phenotypeList, String sampleGroup, String phenotypeName, Boolean dprops, Boolean pprops) {
+    private List<PropertyBean> propertiesRawPerSampleGroup(List<PhenotypeBean>  phenotypeList, String sampleGroup, String phenotypeName, Boolean dprops, Boolean pprops) {
         List<String>  returnValue = []
         List <PropertyBean> propertyBeanList = []
 
@@ -220,10 +220,21 @@ class MetadataUtilityService {
         if (pprops){
             propertyBeanList << phenotypeList.findAll{it.name==phenotypeName}?.findAll{it.parent.systemId==sampleGroup}?.propertyList[0]?.findAll{it.searchable}
         }
-        returnValue = propertyBeanList?.flatten()?.sort{ a, b -> a.sortOrder <=> b.sortOrder }?.name
+        return propertyBeanList?.flatten()?.sort{ a, b -> a.sortOrder <=> b.sortOrder }
+    }
 
+
+
+    private List<String> propertiesPerSampleGroup(List<PhenotypeBean>  phenotypeList, String sampleGroup, String phenotypeName, Boolean dprops, Boolean pprops) {
+        List<String>  returnValue = []
+        List<PropertyBean> propertyBeanList  = propertiesRawPerSampleGroup( phenotypeList,  sampleGroup,  phenotypeName,  dprops,  pprops)
+        returnValue = propertyBeanList.name
         return returnValue
     }
+
+
+
+
 
 
 
@@ -316,7 +327,7 @@ class MetadataUtilityService {
 
 
     /***
-     *   Create a list of properties that match a particular phenotype and sample group name, including only P properties
+     *   Create a list of property names that match a particular phenotype and sample group name, including only P properties
      * @param phenotypeList
      * @param dprops
      * @param pprops
@@ -332,6 +343,29 @@ class MetadataUtilityService {
         }
         return returnValue
     }
+
+    /***
+     *  Create a list of properties that match a particular phenotype and sample group name, including only P properties
+     *
+     * @param phenotypeList
+     * @param phenotypeName
+     * @param sampleGroupName
+     * @return
+     */
+    public List<Property> phenotypeBasedProperties(List<PhenotypeBean>  phenotypeList,String phenotypeName,String sampleGroupName ) {
+        List<Property>  returnValue = []
+        if ((phenotypeList) &&
+                (phenotypeName) &&
+                (sampleGroupName)){
+
+            returnValue = propertiesRawPerSampleGroup(phenotypeList,  sampleGroupName, phenotypeName,  false,  true)
+        }
+        return returnValue
+    }
+
+
+
+
 
 
 

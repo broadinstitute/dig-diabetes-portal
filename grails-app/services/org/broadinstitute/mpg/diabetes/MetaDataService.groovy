@@ -350,7 +350,7 @@ class MetaDataService {
     }
 
     /***
-     * For every sample group/phenotype combination, return a list of all P properties
+     * For every sample group/phenotype combination, return a list of all P property names
      * @param sampleGroupName
      * @param phenotypeName
      * @return
@@ -358,6 +358,18 @@ class MetaDataService {
     public List<String> getSpecificPhenotypePropertyList(String sampleGroupName,String  phenotypeName){
         List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
         List<String> propertyList =  metadataUtilityService.phenotypeBasedPropertyList(phenotypeList,phenotypeName,sampleGroupName)
+        return propertyList
+    }
+
+    /***
+     * For every sample group/phenotype combination, return a list of all P properties
+     * @param sampleGroupName
+     * @param phenotypeName
+     * @return
+     */
+    public List<Property> getSpecificPhenotypeProperties(String sampleGroupName,String  phenotypeName){
+        List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
+        List<Property> propertyList =  metadataUtilityService.phenotypeBasedProperties(phenotypeList,phenotypeName,sampleGroupName)
         return propertyList
     }
 

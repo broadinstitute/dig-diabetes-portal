@@ -5,6 +5,8 @@ import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SearchBuilderService
 import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.query.JsNamingQueryTranslator
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 
@@ -63,6 +65,24 @@ class FilterManagementService {
 
 
 
+
+    public String findFavoredPValue ( String dataSetName, String phenotypeName ) {
+        String favoredPValue = ""
+        List<Property> propertyList = metaDataService.getSpecificPhenotypeProperties(dataSetName,phenotypeName)
+        String pValMatcher = /^P_(EMMAX|FIRTH|FE|VALUE)/
+        List <String> pValuePropertyNames = propertyList.findAll{it.name =~ pValMatcher}*.getName()
+            // for now take the first, though we will eventually choose between them.
+        if (pValuePropertyNames.size()>0){
+            favoredPValue = pValuePropertyNames[0]
+        }
+        return favoredPValue
+    }
+
+
+
+
+
+
     /***
      * Assign those filters
      * @param gene
@@ -83,28 +103,38 @@ class FilterManagementService {
         String dataSet =  ""
         String pValueSpec = ""
         if (dataset) {
+
+
+
+
+
             switch (dataset) {
                 case RestServerService.TECHNOLOGY_GWAS :
                     dataSet = restServerService.getSampleGroup(dataset,RestServerService.EXPERIMENT_DIAGRAM,RestServerService.ANCESTRY_NONE)
-                    pValueSpec = "${gwasDataPValue}"
+                    pValueSpec = findFavoredPValue (dataSet,phenotype)
+//                    pValueSpec = "${gwasDataPValue}"
                     break;
                 case 'sigma' :
                     dataSet = "${sigmaData}"
-                    pValueSpec = "${sigmaDataPValue}"
+                    pValueSpec = findFavoredPValue (dataSet,phenotype)
+//                    pValueSpec = "${sigmaDataPValue}"
                     break;
                 case RestServerService.TECHNOLOGY_EXOME_SEQ :
                     dataSet = restServerService.getSampleGroup(dataset,"none",RestServerService.ANCESTRY_NONE)
-                    pValueSpec = "${exomeSequencePValue}"
+                    pValueSpec = findFavoredPValue (dataSet,phenotype)
+//                    pValueSpec = "${exomeSequencePValue}"
                     returnValue['savedValue0'] = "11=MOST_DEL_SCORE<4"
                     break;
                 case RestServerService.TECHNOLOGY_EXOME_CHIP :
                     dataSet = restServerService.getSampleGroup(dataset,"none",RestServerService.ANCESTRY_NONE)
-                    pValueSpec = "${exomeChipPValue}"
+                    pValueSpec = findFavoredPValue (dataSet,phenotype)
+//                    pValueSpec = "${exomeChipPValue}"
                     returnValue['savedValue0'] = "11=MOST_DEL_SCORE<4"
                     break;
                 default:
                     dataSet = restServerService.getSampleGroup(dataset,"none",RestServerService.ANCESTRY_NONE)
-                    pValueSpec = "P_FIRTH_FE_IV"
+                    pValueSpec = findFavoredPValue (dataSet,phenotype)
+//                    pValueSpec = "P_FIRTH_FE_IV"
                     break;
             }
         }

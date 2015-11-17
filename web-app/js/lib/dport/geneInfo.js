@@ -607,17 +607,17 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var buildAnchorForRegionVariantSearches = function (displayableContents, geneName, significanceFilter, dataset, regionSpecification, rootVariantUrl) {
+        var buildAnchorForRegionVariantSearches = function (displayableContents, geneName, significanceFilter, dataset, regionSpecification, rootVariantUrl, phenotype) {
             var returnValue = "";
             returnValue += ("<a class='boldlink' href='" + rootVariantUrl + "/" + geneName + "?sig=" + significanceFilter +
-                "&dataset=" + dataset + "&region=" + regionSpecification + "'>" +
+                "&dataset=" + dataset + "&region=" + regionSpecification + "&phenotype=" + phenotype + "'>" +
                 displayableContents + "</a>");
             return  returnValue;
         };
-        var buildAnchorForGeneVariantSearches = function (displayableContents, geneName, significanceFilter, dataset, junk, rootVariantUrl) {
+        var buildAnchorForGeneVariantSearches = function (displayableContents, geneName, significanceFilter, dataset, junk, rootVariantUrl, phenotype) {
             var returnValue = "";
             returnValue += ("<a class='boldlink' href='" + rootVariantUrl + "/" + geneName + "?sig=" + significanceFilter +
-                "&dataset=" + dataset + "'>" +
+                "&dataset=" + dataset + "&phenotype=" + phenotype +"'>" +
                 displayableContents + "</a>");
             return  returnValue;
         };
@@ -631,7 +631,8 @@ var mpgSoftware = mpgSoftware || {};
                                                        anchorBuildingFunction,  // which anchor building function should we use
                                                        emphasizeGwas,    // 0->no emphasis, 1-> Emphasize middle row, 2-> Emphasize bottom row
                                                        rootVariantUrl, // root URL is the basis for callbacks
-                                                       rowHelpText) { // help text for each row
+                                                       rowHelpText,
+                                                       phenotype) { // help text for each row
             if (geneName) {
                 var dataSetNameForUser;
                 switch (dataSetCode) {
@@ -660,15 +661,10 @@ var mpgSoftware = mpgSoftware || {};
                     '<td>' + sampleSize + '</td>';
                 for ( var i = 0 ; i < columnMap.length ; i++ ) {
                     tableRow += '<td>';
-                    tableRow += anchorBuildingFunction(valueArray[i], geneName, columnMap[i].value, dataSetCode, genomicRegion, rootVariantUrl)
+                    tableRow += anchorBuildingFunction(valueArray[i], geneName, columnMap[i].value, dataSetCode, genomicRegion, rootVariantUrl, phenotype)
                     tableRow += '</td>';
                 }
                 tableRow += '</tr>';
-//                tableRow += '<td>';
-//                tableRow += anchorBuildingFunction(valueArray[1], geneName, '0.00000005', dataSetName, genomicRegion, rootVariantUrl) + '</td>';
-//                tableRow += '<td>' + anchorBuildingFunction(valueArray[2], geneName, '0.00005', dataSetName, genomicRegion, rootVariantUrl) + '</td>' +
-//                    '<td>' + anchorBuildingFunction(valueArray[3], geneName, '0.05', dataSetName, genomicRegion, rootVariantUrl) + '</td>' +
-//                    '</tr>';
                 $('#variantsAndAssociationsTableBody').append(tableRow);
             }
         };
@@ -676,7 +672,8 @@ var mpgSoftware = mpgSoftware || {};
                                                          chromosomeNumber,extentBegin,extentEnd,
                                                          rowInformation,columnInformation,
                                                          valueHolder,
-                                                         geneName) {
+                                                         geneName,
+                                                         phenotype) {
 
             var geneInfo;
             var regionSpecifier =  chromosomeNumber + ":" +
@@ -719,16 +716,7 @@ var mpgSoftware = mpgSoftware || {};
                 }
                 fillVariantsAndAssociationLine(geneName, rowCode, rowName, rowCount, regionSpecifier,
                     valueHolder[row],columnInformation,
-                    rowProcessorFunction, emphasizeGwas, rootVariantUrl, rowHelpText);
-//                fillVariantsAndAssociationLine(geneName, 'gwas', '69,033', regionSpecifier,
-//                        valueHolder[0],
-//                        buildAnchorForRegionVariantSearches, emphasizeGwas, rootVariantUrl, rowHelpText);
-//                    fillVariantsAndAssociationLine(geneName, 'exomechip', '79,854', regionSpecifier,
-//                        valueHolder[1],
-//                        buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl, rowHelpText);
-//                    fillVariantsAndAssociationLine(geneName, 'exomeseq', '16,760', regionSpecifier,
-//                        valueHolder[2],
-//                        buildAnchorForGeneVariantSearches, emphasizeGwas, rootVariantUrl, rowHelpText);
+                    rowProcessorFunction, emphasizeGwas, rootVariantUrl, rowHelpText,phenotype);
 
             }
         };
@@ -925,11 +913,8 @@ var mpgSoftware = mpgSoftware || {};
                                                                          chromosomeNumber,extentBegin,extentEnd,
                                                                          rowInformation,columnInformation,
                                                                          valueHolder,
-//                                                                         gwasTotal,gwasGenomeWide,gwasLocusWide,gwasNominal,
-//                                                                         exChipTotal,exChipGenomeWide,exChipLocusWide,exChipNominal,
-//                                                                         exSeqTotal,exSeqGenomeWide,exSeqLocusWide,exSeqNominal,
-//                                                                         sigmaTotal,sigmaGenomeWide,sigmaLocusWide,sigmaNominal,
-                                                                         geneName) {
+                                                                         geneName,
+                                                                         phenotype) {
                 fillVariantsAndAssociationsTable(false, show_gwas, show_exchp, show_exseq,
                     rootVariantUrl,
                     textStringObject.variantsAndAssociationsTableHeaders,
@@ -939,23 +924,8 @@ var mpgSoftware = mpgSoftware || {};
                     extentEnd,
                     rowInformation,columnInformation,
                     valueHolder,
-//                    gwasTotal,
-//                    gwasGenomeWide,
-//                    gwasLocusWide,
-//                    gwasNominal,
-//                    exChipTotal,
-//                    exChipGenomeWide,
-//                    exChipLocusWide,
-//                    exChipNominal,
-//                    exSeqTotal,
-//                    exSeqGenomeWide,
-//                    exSeqLocusWide,
-//                    exSeqNominal,
-//                    sigmaTotal,
-//                    sigmaGenomeWide,
-//                    sigmaLocusWide,
-//                    sigmaNominal,
-                    geneName
+                    geneName,
+                    phenotype
                 );
             }
 
