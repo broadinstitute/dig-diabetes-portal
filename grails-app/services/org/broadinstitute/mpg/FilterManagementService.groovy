@@ -112,29 +112,24 @@ class FilterManagementService {
                 case RestServerService.TECHNOLOGY_GWAS :
                     dataSet = restServerService.getSampleGroup(dataset,RestServerService.EXPERIMENT_DIAGRAM,RestServerService.ANCESTRY_NONE)
                     pValueSpec = findFavoredPValue (dataSet,phenotype)
-//                    pValueSpec = "${gwasDataPValue}"
                     break;
                 case 'sigma' :
                     dataSet = "${sigmaData}"
                     pValueSpec = findFavoredPValue (dataSet,phenotype)
-//                    pValueSpec = "${sigmaDataPValue}"
                     break;
                 case RestServerService.TECHNOLOGY_EXOME_SEQ :
                     dataSet = restServerService.getSampleGroup(dataset,"none",RestServerService.ANCESTRY_NONE)
                     pValueSpec = findFavoredPValue (dataSet,phenotype)
-//                    pValueSpec = "${exomeSequencePValue}"
                     returnValue['savedValue0'] = "11=MOST_DEL_SCORE<4"
                     break;
                 case RestServerService.TECHNOLOGY_EXOME_CHIP :
                     dataSet = restServerService.getSampleGroup(dataset,"none",RestServerService.ANCESTRY_NONE)
                     pValueSpec = findFavoredPValue (dataSet,phenotype)
-//                    pValueSpec = "${exomeChipPValue}"
                     returnValue['savedValue0'] = "11=MOST_DEL_SCORE<4"
                     break;
                 default:
                     dataSet = restServerService.getSampleGroup(dataset,"none",RestServerService.ANCESTRY_NONE)
                     pValueSpec = findFavoredPValue (dataSet,phenotype)
-//                    pValueSpec = "P_FIRTH_FE_IV"
                     break;
             }
         }

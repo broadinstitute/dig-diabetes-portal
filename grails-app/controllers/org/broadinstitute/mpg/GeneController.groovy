@@ -3,6 +3,7 @@ package org.broadinstitute.mpg
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.codehaus.groovy.grails.web.json.JSONObject
 
@@ -106,17 +107,19 @@ class GeneController {
             rowInformation << [name:'GWAS', value:RestServerService.TECHNOLOGY_GWAS,  pvalue: RestServerService.GWASDATAPVALUE, count:'69,033']
             rowInformation << [name:'exome chip', value:RestServerService.TECHNOLOGY_EXOME_CHIP,  pvalue: RestServerService.EXOMECHIPPVALUE, count:'79,854']
             rowInformation << [name:'exome sequence', value:RestServerService.TECHNOLOGY_EXOME_SEQ,  pvalue: RestServerService.EXOMESEQUENCEPVALUE, count:'16,760']
-// example of additional row
-//        rowInformation << [name:'AA exome seq', value:"ExSeq_17k_aa_mdv2", count:'4777']
         }
+         for (LinkedHashMap row in rowInformation){
+            // List<Property> propertyList = metaDataService.getSpecificPhenotypeProperties(row.value,phenotype)
+
+         }
+
+
+
+
 
         List <LinkedHashMap<String,String>> columnInformation = []
         // if we have saved values then use them, otherwise add the defaults
         if (savedCols.size()>0){
-//            Really should've worked...
-//            LinkedHashMap<String,String> sortedMap = savedCols.sort( {  a,  b -> List aL=(a.value as String).tokenize('^');
-//                List bL=(b.value as String).tokenize('^');
-//                return (bL[1] as Float) <=> (aL[1] as Float) } as Comparator )
             savedCols.each{String key, String value->
                 List <String> listOfProperties = value.tokenize("^")
                 if (listOfProperties.size()>2) {
