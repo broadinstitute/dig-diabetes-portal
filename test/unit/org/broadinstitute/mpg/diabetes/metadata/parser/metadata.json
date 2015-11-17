@@ -19813,6 +19813,9 @@
                     "id": "GWAS_SIGMA1_mdv2",
                     "ancestry": "Mixed",
                     "sort_order": 10,
+                    "subjects": 10,
+                    "cases": 20,
+                    "controls": 30,
                     "properties": [
                         {
                             "name": "IMP_QC",
