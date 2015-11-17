@@ -17,6 +17,7 @@ class PortalConstants {
     public final static String JSON_ID_KEY              = "id";
     public final static String JSON_SEARCHABLE_KEY      = "searchable";
     public final static String JSON_SORT_ORDER_KEY      = "sort_order";
+    public final static String JSON_MEANING_KEY         = "meaning";
     public final static String JSON_VARIANTS_KEY        = "variants";
     public final static String JSON_VARIANT_ID_KEY      = "VAR_ID";
     public final static String JSON_VARIANT_MOST_DEL_SCORE_KEY  = "MOST_DEL_SCORE";
@@ -183,7 +184,11 @@ class PortalConstants {
     // START - BURDEN TEST SECTION
 
 
-    //
+    // property meaning types
+    public static final String PROPERTY_MEANING_P_VALUE_KEY                 = "P_VALUE";
+    public static final String PROPERTY_MEANING_ODDS_RATIO_KEY              = "ODDS_RATIO";
+    public static final String PROPERTY_MEANING_BETA_KEY                    = "BETA";
+
 
 
 }

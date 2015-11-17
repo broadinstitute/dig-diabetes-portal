@@ -372,6 +372,14 @@ public class JsonParser {
             if (tempJsonValue != null) {
                 property.setSortOrder(Float.valueOf(tempJsonValue).intValue());
             }
+
+            // DIGP-198: add meaning; backward compatible for now and also assumes only one value
+            if (jsonObject.containsKey(PortalConstants.JSON_MEANING_KEY)) {
+                tempJsonValue = jsonObject.getString(PortalConstants.JSON_MEANING_KEY);
+                if (tempJsonValue != null) {
+                    property.addMeaning(tempJsonValue);
+                }
+            }
             property.setParent(parent);
 
         } catch (JSONException exception) {

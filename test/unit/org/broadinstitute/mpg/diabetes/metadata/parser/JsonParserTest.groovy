@@ -519,4 +519,34 @@ class JsonParserTest extends TestCase {
         assertTrue(phenotypeMap.size() > 0);
         assertEquals(25, phenotypeMap.size());
     }
+
+    @Test
+    public void testGetPropertyMeaning() {
+        // local variables
+        Property propertyWithMeaning = null;
+        Property propertyWithoutMeaning = null;
+        Property propertyWithOtherMeaning = null;
+
+        try {
+            // retrieve the properties
+            propertyWithMeaning = (Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_P_VALUE_82K_T2D);
+            propertyWithoutMeaning = (Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_BETA_13K_FG);
+            propertyWithOtherMeaning = (Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_BETA_GWAS_MAGIC_2HRG);
+
+        } catch (PortalException exception) {
+            fail("got error: " + exception.getMessage());
+        }
+
+        // test for meaning
+        assertNotNull(propertyWithMeaning);
+        assertTrue(propertyWithMeaning.hasMeaning(PortalConstants.PROPERTY_MEANING_P_VALUE_KEY));
+
+        // test for lack of meaning
+        assertNotNull(propertyWithoutMeaning);
+        assertTrue(!propertyWithoutMeaning.hasMeaning(PortalConstants.PROPERTY_MEANING_P_VALUE_KEY));
+
+        // test for other meaning
+        assertNotNull(propertyWithOtherMeaning);
+        assertTrue(!propertyWithOtherMeaning.hasMeaning(PortalConstants.PROPERTY_MEANING_P_VALUE_KEY));
+    }
 }
