@@ -157,7 +157,7 @@ var getDataSets = function(sel){
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
-                        <input  type="text" class="form-control"  id="newColumnName">
+                        <input  type="text" class="form-control"  name="columnName" id="columnName">
                     </div>
                 </div>
 

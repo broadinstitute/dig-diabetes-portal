@@ -69,11 +69,14 @@ class FilterManagementService {
     public String findFavoredPValue ( String dataSetName, String phenotypeName ) {
         String favoredPValue = ""
         List<Property> propertyList = metaDataService.getSpecificPhenotypeProperties(dataSetName,phenotypeName)
-        String pValMatcher = /^P_(EMMAX|FIRTH|FE|VALUE)/
-        List <String> pValuePropertyNames = propertyList.findAll{it.name =~ pValMatcher}*.getName()
+        List<Property> sortedPValueProps = propertyList.
+                findAll{Property property->property.hasMeaning('P_VALUE')}.
+                sort{Property property1,Property property2->property1.sortOrder<=>property2.sortOrder}
+//        String pValMatcher = /^P_(EMMAX|FIRTH|FE|VALUE)/
+//        List <String> pValuePropertyNames = propertyList.findAll{it.name =~ pValMatcher}*.getName()
             // for now take the first, though we will eventually choose between them.
-        if (pValuePropertyNames.size()>0){
-            favoredPValue = pValuePropertyNames[0]
+        if (sortedPValueProps.size()>0){
+            favoredPValue = sortedPValueProps[0]?.name
         }
         return favoredPValue
     }
