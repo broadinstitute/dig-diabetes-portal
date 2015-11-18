@@ -124,6 +124,8 @@ class BurdenService {
             burdenVariantList = this.transformAndFilterVariantList(variantList, variantSelectionOptionId);
             log.info("got filtered variant list of size: " + burdenVariantList.size());
 
+
+            /*
             // check to make sure we have at least one variant
             if (burdenVariantList.size() < 1) {
                 throw new PortalException("Got no variants to match filters");
@@ -142,16 +144,115 @@ class BurdenService {
             JSONArray variantArray = new JSONArray(burdenVariantList);
             returnJson.put(PortalConstants.JSON_VARIANTS_KEY, variantArray);
             log.info("passing enhanced burden rest result: " + returnJson);
+            */
+
+            returnJson = this.getBurdenResultForVariantIdList(sampleGroupName, burdenVariantList);
 
         } catch (PortalException exception) {
             log.error("Got error creating burden test for gene: " + geneString + " and sample group option: " + sampleGroupOptionId + ": " + exception.getMessage());
         }
 
         if (returnJson == null) {
-            JSONTokener tokener = new JSONTokener("{\"stats\": { \"pValue\": \"0.0\", \"oddsRatio\": \"0.0\", \"stdError\": 0, \"is_error\": false, \"variants\": []}}");
+            JSONTokener tokener = new JSONTokener("{\"stats\": { \"pValue\": \"0.0\", \"beta\": \"0.0\", \"stdError\": 0, \"is_error\": false, \"variants\": []}}");
             returnJson = new JSONObject(tokener);
             log.info("returning empty burden rest result: " + returnJson);
         }
+
+        // return
+        return returnJson;
+    }
+
+    /**
+     * call burden test for single variant
+     *
+     * @param traitOption
+     * @param burdenVariantDbSnpId
+     * @return
+     * @throws PortalException
+     */
+    protected JSONObject callBurdenTestForTraitAndDbSnpId(String traitOption, String burdenVariantDbSnpId) throws PortalException {
+        // local variables
+        org.broadinstitute.mpg.Variant burdenVariant;
+        JSONObject returnJson = null;
+
+        // get the burden db_snp_id
+        burdenVariant = org.broadinstitute.mpg.Variant.findByDbSnpId(burdenVariantDbSnpId)
+
+        if (burdenVariant == null) {
+            throw new PortalException("found no varId dbSnpId: " + burdenVariantDbSnpId)
+        }
+
+        // call shared method
+        returnJson = this.callBurdenTestForTraitAndVariantId(traitOption, burdenVariant.varId);
+
+        // return
+        return returnJson;
+    }
+
+    /**
+     * call burden for single variant
+     *
+     * @param traitOption
+     * @param burdenVariantId
+     * @return
+     * @throws PortalException
+     */
+    protected JSONObject callBurdenTestForTraitAndVariantId(String traitOption, String burdenVariantId) throws PortalException {
+        // local variables
+        String sampleGroupName = PortalConstants.BURDEN_DATASET_OPTION_26K;
+        List<String> burdenVariantList = new ArrayList<String>();
+        JSONObject returnJson = null;
+
+        // if the variant is not null, add it in (empty list will throw exception in next call)
+        if (burdenVariantId != null) {
+            burdenVariantList.add(burdenVariantId);
+        } else {
+            throw new PortalException("got null variantId for single variant burden call")
+        }
+
+        // call shared method
+        returnJson = this.getBurdenResultForVariantIdList(sampleGroupName, burdenVariantList);
+
+        // return
+        return returnJson;
+    }
+
+    /**
+     * common method used whether we have one or more variants
+     *
+     * @param sampleGroupName                   - if null, use default
+     * @param burdenVariantList
+     * @return
+     * @throws PortalException
+     */
+    protected JSONObject getBurdenResultForVariantIdList(String sampleGroupName, List<String> burdenVariantList) throws PortalException {
+        // local variables
+        JSONObject jsonObject = null;
+        JSONObject returnJson = null;
+
+        // if sample group is null, use default
+        if (sampleGroupName == null) {
+            sampleGroupName = PortalConstants.BURDEN_DATASET_OPTION_13K;
+        }
+
+        // check to make sure we have at least one variant
+        if ((burdenVariantList) == null || (burdenVariantList.size() < 1)) {
+            throw new PortalException("Got no variants to match filters");
+        }
+
+        // create the json payload for the burden call
+        jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(sampleGroupName, burdenVariantList, null);
+        log.info("created burden rest payload: " + jsonObject);
+
+        // get the results of the burden call
+        returnJson = this.getBurdenRestCallResults(jsonObject.toString());
+        log.info("got burden rest result: " + returnJson);
+
+        // add json array of variant strings to the return json
+        Collections.sort(burdenVariantList);
+        JSONArray variantArray = new JSONArray(burdenVariantList);
+        returnJson.put(PortalConstants.JSON_VARIANTS_KEY, variantArray);
+        log.info("passing enhanced burden rest result: " + returnJson);
 
         // return
         return returnJson;
@@ -245,6 +346,28 @@ class BurdenService {
     }
 
     /**
+     * returns final hard coded (for now) trait selection options
+     *
+     * @return
+     */
+    public JSONObject getBurdenTraitSelectionOptions() {
+        StringBuilder builder = new StringBuilder();
+
+        // build the default options string
+        builder.append("{\"options\": [ ");
+        builder.append(this.buildOptionString("t2d", "Type 2 Diabetes", true));
+        builder.append(this.buildOptionString("CHOL_ANAL", "Whatever CHOL_ANAL is", false));
+        builder.append(" ]}");
+
+        // create the json object and return
+        JSONTokener tokener = new JSONTokener(builder.toString());
+        JSONObject returnObject = new JSONObject(tokener);
+
+        // return
+        return returnObject;
+    }
+
+    /**
      * protected method to help building an option list json string
      *
      * @param optionId
@@ -253,6 +376,31 @@ class BurdenService {
      * @return
      */
     protected String buildOptionString(int optionId, String optionName, boolean addComma) {
+        StringBuilder builder = new StringBuilder();
+
+        // build the default options string
+        builder.append("{ \"id\": ");
+        builder.append(optionId);
+        builder.append(" , \"name\": \"");
+        builder.append(optionName);
+        builder.append("\"}");
+        if (addComma) {
+            builder.append(", ");
+        }
+
+        // return
+        return builder.toString()
+    }
+
+    /**
+     * protected method to help building an option list json string
+     *
+     * @param optionId
+     * @param optionName
+     * @param addComma
+     * @return
+     */
+    protected String buildOptionString(String optionId, String optionName, boolean addComma) {
         StringBuilder builder = new StringBuilder();
 
         // build the default options string

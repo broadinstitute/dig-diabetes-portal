@@ -107,4 +107,25 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
         assert object != null
         assert object.size() > 0
     }
+
+    void "test burden test for single variant"() {
+        when:
+        String variantId = "8_118184783_C_T";
+        JSONObject resultJson = this.burdenService.callBurdenTestForTraitAndVariantId("t2d", variantId);
+
+        then:
+        assert resultJson != null
+        assert resultJson.size() > 0
+    }
+
+    void "test burden test for variant list"() {
+        when:
+        List<String> varIdList = new ArrayList<String>();
+        varIdList.add("8_118184783_C_T");
+        JSONObject resultJson = this.burdenService.getBurdenResultForVariantIdList(null, varIdList);
+
+        then:
+        assert resultJson != null
+        assert resultJson.size() > 0
+    }
 }
