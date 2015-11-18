@@ -8,6 +8,7 @@ import org.broadinstitute.mpg.diabetes.metadata.Phenotype
 import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.CommonGetDataQueryBuilder
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
@@ -201,7 +202,6 @@ class MetaDataService {
     public SampleGroup  getSampleGroupByName(String sampleGroupId){
         return jsonParser.getSampleGroupByName(sampleGroupId)
     }
-
 
 
 

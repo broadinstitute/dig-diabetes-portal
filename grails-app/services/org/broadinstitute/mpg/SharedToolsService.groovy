@@ -6,6 +6,8 @@ import groovy.json.StringEscapeUtils
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
 import org.broadinstitute.mpg.diabetes.metadata.query.JsNamingQueryTranslator
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
@@ -710,6 +712,49 @@ class SharedToolsService {
 "numRecords":${numberOfGroups},
 "dataset":{${sb.toString()}}
 }""".toString()
+    }
+
+
+
+
+
+    public String packageSampleGroupsHierarchicallyForJsTree (SampleGroupBean sampleGroupBean, String phenotypeName){
+        StringBuilder sb  = new StringBuilder ()
+        if (sampleGroupBean){
+            sb = recursivelyDescendSampleGroupsHierarchically( sampleGroupBean, phenotypeName,  sb)
+        }
+        return sb.toString()
+    }
+
+
+    public StringBuilder recursivelyDescendSampleGroupsHierarchically(SampleGroupBean sampleGroupBean, String phenotypeName, StringBuilder sb){
+        if (sampleGroupBean){
+            List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = sampleGroupBean.getPhenotypes()
+            for (org.broadinstitute.mpg.diabetes.metadata.Phenotype phenotype in phenotypeList){
+                if (phenotype.name == phenotypeName){// we care about this sample group
+                    sb << """{
+  "text"        : "${sampleGroupBean.getSystemId()}",
+  "state"       : {
+    "opened"    : false,
+    "disabled"  : false,
+    "selected"  : false
+  },
+  "children"    : [""".toString()
+                    List<SampleGroup> sampleGroupList = sampleGroupBean.getSampleGroups()
+                    int sampleGroupCount = 0
+                    for (SampleGroup sampleGroup in sampleGroupList){
+                        recursivelyDescendSampleGroupsHierarchically(sampleGroup, phenotypeName, sb)
+                        sampleGroupCount++
+                        if (sampleGroupCount<sampleGroupList.size()){
+                            sb << ","
+                        }
+                    }
+                    sb << """]
+}""".toString()
+                }
+            }
+        }
+        return sb
     }
 
 

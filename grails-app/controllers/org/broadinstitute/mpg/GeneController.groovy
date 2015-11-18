@@ -108,6 +108,7 @@ class GeneController {
             rowInformation << [name:'exome chip', value:RestServerService.TECHNOLOGY_EXOME_CHIP,  pvalue: RestServerService.EXOMECHIPPVALUE, count:'79,854']
             rowInformation << [name:'exome sequence', value:RestServerService.TECHNOLOGY_EXOME_SEQ,  pvalue: RestServerService.EXOMESEQUENCEPVALUE, count:'16,760']
         }
+        List <String> jsonForJSTreeList = []
          for (LinkedHashMap row in rowInformation){
              String dataSet=row.value
              switch (dataSet) {
@@ -128,6 +129,7 @@ class GeneController {
                  if (sampleGroup.subjectsNumber){
                      row.count = "${sampleGroup.subjectsNumber}"
                  }
+                // jsonForJSTreeList << sharedToolsService.packageSampleGroupsHierarchicallyForJsTree(sampleGroup,phenotype)
              }
             // List<Property> propertyList = metaDataService.getSpecificPhenotypeProperties(row.value,phenotype)
 
