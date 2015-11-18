@@ -697,12 +697,12 @@ class SharedToolsService {
             int groupCounter  = 0
             sortedMapOfStrings.each{String k,String v->
                 sb <<  "\"${k}\":".toString()
-                    sb << "\"${v}\"".toString()
-                 }
+                sb << "\"${v}\"".toString()
                 groupCounter++
                 if (numberOfGroups > groupCounter) {
                     sb << ","
                 }
+            }
         }
 
         return  """
