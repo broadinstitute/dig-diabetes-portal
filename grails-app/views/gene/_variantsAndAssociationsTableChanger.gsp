@@ -127,7 +127,7 @@ var getDataSets = function(sel){
                         dataSetChooser.empty();
                         for (var key in dataSets) {
                         if (dataSets.hasOwnProperty(key)) {
-                                dataSetChooser.append($("<option>").val(key+"^"+dataSets[key]).text(key));
+                                dataSetChooser.append($("<option>").val(key+"^"+dataSets[key]).text( mpgSoftware.trans.translator(key)));
                             }
                         }
                         dataSetChooser.removeAttr('disabled');

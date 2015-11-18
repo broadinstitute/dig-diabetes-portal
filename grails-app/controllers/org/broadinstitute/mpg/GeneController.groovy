@@ -96,7 +96,7 @@ class GeneController {
                 List <String> nameAndAssociatedPValue = newDatasetName.tokenize("^")
                 if (nameAndAssociatedPValue.size()==2) {
                     if (!(newDatasetRowName)) {
-                        newDatasetRowName =  nameAndAssociatedPValue[0]
+                        newDatasetRowName =  sharedToolsService.translator(nameAndAssociatedPValue[0])
                     }
                     rowInformation << [name:newDatasetRowName, value:nameAndAssociatedPValue[0],count:'5656', pvalue: nameAndAssociatedPValue[1] ]
                 }
