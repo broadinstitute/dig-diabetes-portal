@@ -632,7 +632,8 @@ var mpgSoftware = mpgSoftware || {};
                                                        emphasizeGwas,    // 0->no emphasis, 1-> Emphasize middle row, 2-> Emphasize bottom row
                                                        rootVariantUrl, // root URL is the basis for callbacks
                                                        rowHelpText,
-                                                       phenotype) { // help text for each row
+                                                       phenotype,
+                                                       rowNumber) { // help text for each row
             if (geneName) {
                 var dataSetNameForUser;
                 switch (dataSetCode) {
@@ -657,7 +658,7 @@ var mpgSoftware = mpgSoftware || {};
                 }
                 var tableRow = '';
                 tableRow += '<tr>' +
-                    '<td>' + dataSetNameForUser + '</td>' +
+                    '<td class="vandaRowTd" style="text-align: left"><div class="vandaRowHdr" id="vandaRow'+rowNumber+'"></div></td>' +
                     '<td>' + sampleSize + '</td>';
                 for ( var i = 0 ; i < columnMap.length ; i++ ) {
                     tableRow += '<td>';
@@ -716,7 +717,7 @@ var mpgSoftware = mpgSoftware || {};
                 }
                 fillVariantsAndAssociationLine(geneName, rowCode, rowName, rowCount, regionSpecifier,
                     valueHolder[row],columnInformation,
-                    rowProcessorFunction, emphasizeGwas, rootVariantUrl, rowHelpText,phenotype);
+                    rowProcessorFunction, emphasizeGwas, rootVariantUrl, rowHelpText,phenotype,row);
 
             }
         };

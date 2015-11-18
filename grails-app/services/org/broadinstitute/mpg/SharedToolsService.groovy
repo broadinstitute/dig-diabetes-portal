@@ -728,16 +728,17 @@ class SharedToolsService {
 
 
     public StringBuilder recursivelyDescendSampleGroupsHierarchically(SampleGroupBean sampleGroupBean, String phenotypeName, StringBuilder sb){
+        String checkedByDef =  (sb.toString().length()==0)?"true":"false"
         if (sampleGroupBean){
             List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = sampleGroupBean.getPhenotypes()
             for (org.broadinstitute.mpg.diabetes.metadata.Phenotype phenotype in phenotypeList){
                 if (phenotype.name == phenotypeName){// we care about this sample group
                     sb << """{
-  "text"        : "${sampleGroupBean.getSystemId()}",
+  "text"        : "${translator(sampleGroupBean.getSystemId())}",
   "state"       : {
     "opened"    : false,
     "disabled"  : false,
-    "selected"  : false
+    "selected"  : ${checkedByDef}
   },
   "children"    : [""".toString()
                     List<SampleGroup> sampleGroupList = sampleGroupBean.getSampleGroups()

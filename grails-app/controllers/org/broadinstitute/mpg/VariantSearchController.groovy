@@ -36,6 +36,22 @@ class VariantSearchController {
 
     }
 
+    def retrieveJSTreeAjax(){
+        def slurper = new JsonSlurper()
+        String phenotypeName = params.phenotype
+        String sampleGroupName = params.sampleGroup
+        String convertedSampleGroupName = restServerService.convertKnownDataSetsToRealNames(sampleGroupName)
+        SampleGroup sampleGroup = metaDataService.getSampleGroupByName(convertedSampleGroupName)
+        String jsonDescr = sharedToolsService.packageSampleGroupsHierarchicallyForJsTree(sampleGroup,phenotypeName)
+        def result = slurper.parseText(jsonDescr)
+        render(status: 200, contentType: "application/json") {
+            result
+        }
+
+    }
+
+
+
     /***
      * Pullback of phenotypes hierarchy, though only for GWAS data
      * @return

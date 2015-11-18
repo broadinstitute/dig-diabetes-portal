@@ -556,6 +556,26 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     }
 
+    public String convertKnownDataSetsToRealNames(String dataSet){
+        String returnValue = dataSet
+        switch (dataSet) {
+            case TECHNOLOGY_GWAS :
+                returnValue = getSampleGroup(dataSet,EXPERIMENT_DIAGRAM,ANCESTRY_NONE)
+                break;
+            case TECHNOLOGY_EXOME_SEQ :
+                returnValue = getSampleGroup(dataSet,"none",ANCESTRY_NONE)
+                break;
+            case TECHNOLOGY_EXOME_CHIP :
+                returnValue = getSampleGroup(dataSet,"none",ANCESTRY_NONE)
+                break;
+            default:
+                break;
+        }
+        return returnValue
+    }
+
+
+
     /***
      * Generate the numbers for the 'variants and associations' table on the gene info page
      *
