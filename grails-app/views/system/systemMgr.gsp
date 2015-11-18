@@ -186,12 +186,7 @@
                 </div>
             </g:form>
 
-
-
-
-
-
-
+            <div class="separator"></div>
 
             <g:form action='changeRecognizedStringsOnly' method='POST' class='form form-horizontal cssform' autocomplete='off'>
                 <h4>Do we insist  that we recognize a string (as  a range, gene, or variant) before we act upon it?  A nonzero

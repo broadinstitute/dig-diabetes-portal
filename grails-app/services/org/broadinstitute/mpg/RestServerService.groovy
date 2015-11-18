@@ -137,9 +137,9 @@ class RestServerService {
         //
         BASE_URL = grailsApplication.config.server.URL
         DBT_URL = grailsApplication.config.dbtRestServer.URL
-        EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URL
+        EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URLburdenRestServer
 
-        this.BURDEN_REST_SERVER = grailsApplication.config.burdenRestServer;
+        this.BURDEN_REST_SERVER = grailsApplication.config.burdenRestServerProd;
 
        // pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
 
@@ -237,8 +237,8 @@ class RestServerService {
             // add in all known servers
             // could do this in config.groovy
             this.burdenServerList = new ArrayList<ServerBean>();
-            this.burdenServerList.add(this.BURDEN_REST_SERVER);
-            this.burdenServerList.add(new ServerBean("dummy server", this.BURDEN_REST_SERVER?.getUrl()));
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerDev);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerProd);
         }
 
         return this.burdenServerList;
