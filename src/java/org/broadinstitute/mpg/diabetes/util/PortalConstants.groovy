@@ -65,6 +65,8 @@ class PortalConstants {
     public final static String JSON_BURDEN_COVARIATES_KEY               = "covariates";
     public final static String JSON_BURDEN_FILTERS_KEY                  = "filters";
     public final static String JSON_BURDEN_DATASET_KEY                  = "study";
+    public final static String JSON_BURDEN_DATA_VERSION_KEY             = "mdv";
+    public final static String JSON_BURDEN_PHENOTYPE_KEY                = "phenotype";
 
     // constants for getData calls
     public final static String OPERATOR_LESS_THAN_EQUALS                 = "LTE";
@@ -171,6 +173,7 @@ class PortalConstants {
     public final static int BURDEN_DATASET_OPTION_ID_26K                  = 2;
     public final static int BURDEN_MAF_OPTION_ID_ALL                      = 1;
     public final static int BURDEN_MAF_OPTION_ID_ANCESTRY                 = 2;
+    public final static String BURDEN_DEFAULT_PHENOTYPE_KEY               = "t2d";
 
     // burden root datasets for the 13k/26k MAF filtering = TEMP FOR NOW until further factoring
     public static final String BURDEN_SAMPLE_GROUP_ROOT_26k_ID                   = "metadata_root_ExSeq_26k_mdv3_26k";

@@ -50,16 +50,16 @@ public class BurdenJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public JSONObject getBurdenPostJson(String dataset, List<String> variantList, List<String> covariatesList) throws PortalException {
+    public JSONObject getBurdenPostJson(int dataVersion, String phenotype, List<String> variantList, List<String> covariatesList) throws PortalException {
         // local variables
         JSONObject finalObject;
 
         // create the json object
         try {
-            finalObject = new JSONObject(this.getBurdenPostJsonString(dataset, variantList, covariatesList));
+            finalObject = new JSONObject(this.getBurdenPostJsonString(dataVersion, phenotype, variantList, covariatesList));
 
         } catch (JSONException exception) {
-            throw new PortalException(("got json creation exception for burden test payload geneeration: " + exception.getMessage()));
+            throw new PortalException(("got json creation exception for burden test payload generation: " + exception.getMessage()));
         }
 
         // return
@@ -74,7 +74,7 @@ public class BurdenJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public String getBurdenPostJsonString(String dataset, List<String> variantList, List<String> covariatesList) throws PortalException {
+    public String getBurdenPostJsonString(int dataVersion, String phenotype, List<String> variantList, List<String> covariatesList) throws PortalException {
         // local variables
         String finalString;
         StringBuilder stringBuilder = new StringBuilder();
@@ -82,11 +82,18 @@ public class BurdenJsonBuilder {
         // open the json object
         stringBuilder.append("{");
 
-        // add in the dataset/study key
+        // add in the data version
         stringBuilder.append("\"");
-        stringBuilder.append(PortalConstants.JSON_BURDEN_DATASET_KEY);
+        stringBuilder.append(PortalConstants.JSON_BURDEN_DATA_VERSION_KEY);
+        stringBuilder.append("\": ");
+        stringBuilder.append(dataVersion);
+        stringBuilder.append(", ");
+
+        // add in the phenotype
+        stringBuilder.append("\"");
+        stringBuilder.append(PortalConstants.JSON_BURDEN_PHENOTYPE_KEY);
         stringBuilder.append("\": \"");
-        stringBuilder.append(dataset);
+        stringBuilder.append(phenotype);
         stringBuilder.append("\", ");
 
         // create the variant list json object string

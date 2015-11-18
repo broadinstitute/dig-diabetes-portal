@@ -17,8 +17,8 @@ button.burden-test-btn {
 }
 
 div.burden-test-result {
-    font-size: 20px;
-    padding-top: 10px;
+    font-size: 18px;
+    padding-top: 30px;
     display: none;
 }
 
@@ -142,14 +142,14 @@ div.labelAndInput > input {
                                 } else if (data.is_error) {
                                     console.log('burdenTestAjax returned is_error ='+data.is_error +'.');
                                 }
-                                else if ((typeof data.options === 'undefined') ||
-                                         (data.options.length <= 0)){
+                                else if ((typeof data.phenotypes === 'undefined') ||
+                                         (data.phenotypes.length <= 0)){
                                      console.log('burdenTestAjax returned undefined (or length = 0) for options.');
                                }else {
-                                   var optionList = data.options;
+                                   var optionList = data.phenotypes;
                                    var dropDownHolder = $('#traitFilter');
                                    for ( var i = 0 ; i < optionList.length ; i++ ){
-                                        dropDownHolder.append('<option value="'+optionList[i].id+'">'+optionList[i].name+'</option>')
+                                        dropDownHolder.append('<option value="'+optionList[i].name+'">'+optionList[i].description+'</option>')
                                    }
                                 }
                             }
@@ -187,12 +187,14 @@ div.labelAndInput > input {
              };
 
              $('#rSpinner').show();
+            var traitFilterSelectedOption = $('#traitFilter').val();
 
             $.ajax({
                 cache: false,
                 type: "post",
                 url: "${createLink(controller:'variantInfo',action: 'burdenTestAjax')}",
-                data: {variantName: '<%=variantIdentifier%>'
+                data: {variantName: '<%=variantIdentifier%>',
+                        traitFilterSelectedOption: traitFilterSelectedOption
                      },
                     async: true,
                     success: function (data) {
@@ -321,7 +323,7 @@ $( document ).ready( function (){
                     <div class="col-md-8 col-sm-6">
                         <div id="variantFrequencyDiv">
                             <div>
-                                <p class="standardFont">Of the <span id="traitSpan"></span> cases/controls, the following carry at the variant <span id="variantNameSpan"></span>.</p>
+                                <p class="standardFont">Of the <span id="traitSpan"></span> cases/controls, the following carry the variant ${variantIdentifier}.</p>
                             </div>
                             <div class="barchartFormatter">
                                 <div id="chart">

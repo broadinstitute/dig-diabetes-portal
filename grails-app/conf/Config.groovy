@@ -209,7 +209,7 @@ dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/
 //experimentalRestServer.URL = 'http://69.173.71.178:8888/dev2/server/'
 experimentalRestServer.URL = 'http://dig-dev.broadinstitute.org:8888/dev/gs/'
 
-burdenRestServer = new ServerBean("dev burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden/v2");
+burdenRestServer = new ServerBean("dev burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden");
 
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")

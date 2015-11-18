@@ -434,8 +434,20 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @return
      */
     public JSONObject postBurdenRestCall(String jsonString) {
-        JSONObject tempObject = this.postRestCallBase(jsonString, "", this.getCurrentBurdenServer()?.getUrl());
+        JSONObject tempObject = this.postRestCallBase(jsonString, "", this.getCurrentBurdenServer()?.getRestServiceCallUrl(ServerBean.BURDEN_TEST_CALL_V2));
         return tempObject;
+    }
+
+    /**
+     * burden call to the REST server
+     *
+     * @param jsonString
+     * @return
+     */
+    public JSONObject getRestBurdenGetPhenotypesCall() {
+        String tempObject = this.getRestCallBase(ServerBean.BURDEN_TEST_CALL_GET_PHENOTYPES_WITH_SLASH, this.getCurrentBurdenServer()?.url);
+        JSONObject returnJson = new JSONObject(tempObject)
+        return returnJson;
     }
 
     /**

@@ -1,6 +1,7 @@
 package org.broadinstitute.mpg.diabetes
 import org.broadinstitute.mpg.RestServerService
 import grails.transaction.Transactional
+import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.diabetes.burden.parser.BurdenJsonBuilder
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
@@ -14,6 +15,7 @@ import org.codehaus.groovy.grails.web.json.JSONTokener
 class BurdenService {
 
     RestServerService restServerService;
+    SharedToolsService sharedToolsService;
 
     def serviceMethod() {
 
@@ -88,28 +90,22 @@ class BurdenService {
      * @param mostDelScore
      * @return
      */
-    public JSONObject callBurdenTest(int sampleGroupOptionId, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue) {
+    public JSONObject callBurdenTest(String phenotype, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue) {
         // local variables
         JSONObject jsonObject, returnJson;
         List<Variant> variantList;
         List<String> burdenVariantList;
-        String sampleGroupName = PortalConstants.BURDEN_DATASET_OPTION_13K;
+        int dataVersionId = this.sharedToolsService.getDataVersion();
         List<QueryFilter> queryFilterList;
 
         // log
-        log.info("called burden test for gene: " + geneString + " and variant select option: " + variantSelectionOptionId + " and sample group id: " + sampleGroupOptionId);
+        log.info("called burden test for gene: " + geneString + " and variant select option: " + variantSelectionOptionId + " and data version id: " + dataVersionId);
         log.info("also had MAF option: " + mafSampleGroupOption + " and MAF value: " + mafValue);
-
-        // translate the sample group selection option
-        // only set 26k if specifically asked for it; all others assume 13k
-        if (sampleGroupOptionId == PortalConstants.BURDEN_DATASET_OPTION_ID_26K) {
-            sampleGroupName = PortalConstants.BURDEN_DATASET_OPTION_26K;
-        }
 
         try {
             // DIGP-104: create new MAF filters if needed
             // log for clarity
-            queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFilters(sampleGroupOptionId, mafSampleGroupOption, mafValue);
+            queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFilters(dataVersionId, mafSampleGroupOption, mafValue);
             log.info("returning query MAF filter list of size: " + queryFilterList.size() + " for mafValue: " + mafValue + " and sample group ancestry option: " + mafSampleGroupOption);
 
             // get the getData results payload
@@ -146,7 +142,7 @@ class BurdenService {
             log.info("passing enhanced burden rest result: " + returnJson);
             */
 
-            returnJson = this.getBurdenResultForVariantIdList(sampleGroupName, burdenVariantList);
+            returnJson = this.getBurdenResultForVariantIdList(dataVersionId, phenotype, burdenVariantList);
 
         } catch (PortalException exception) {
             log.error("Got error creating burden test for gene: " + geneString + " and sample group option: " + sampleGroupOptionId + ": " + exception.getMessage());
@@ -199,9 +195,9 @@ class BurdenService {
      */
     protected JSONObject callBurdenTestForTraitAndVariantId(String traitOption, String burdenVariantId) throws PortalException {
         // local variables
-        String sampleGroupName = PortalConstants.BURDEN_DATASET_OPTION_26K;
         List<String> burdenVariantList = new ArrayList<String>();
         JSONObject returnJson = null;
+        int dataVersion = this.sharedToolsService.getDataVersion();
 
         // if the variant is not null, add it in (empty list will throw exception in next call)
         if (burdenVariantId != null) {
@@ -211,7 +207,7 @@ class BurdenService {
         }
 
         // call shared method
-        returnJson = this.getBurdenResultForVariantIdList(sampleGroupName, burdenVariantList);
+        returnJson = this.getBurdenResultForVariantIdList(dataVersion, traitOption, burdenVariantList);
 
         // return
         return returnJson;
@@ -225,15 +221,10 @@ class BurdenService {
      * @return
      * @throws PortalException
      */
-    protected JSONObject getBurdenResultForVariantIdList(String sampleGroupName, List<String> burdenVariantList) throws PortalException {
+    protected JSONObject getBurdenResultForVariantIdList(int dataVersionId, String phenotype, List<String> burdenVariantList) throws PortalException {
         // local variables
         JSONObject jsonObject = null;
         JSONObject returnJson = null;
-
-        // if sample group is null, use default
-        if (sampleGroupName == null) {
-            sampleGroupName = PortalConstants.BURDEN_DATASET_OPTION_13K;
-        }
 
         // check to make sure we have at least one variant
         if ((burdenVariantList) == null || (burdenVariantList.size() < 1)) {
@@ -241,7 +232,7 @@ class BurdenService {
         }
 
         // create the json payload for the burden call
-        jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(sampleGroupName, burdenVariantList, null);
+        jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(dataVersionId, phenotype, burdenVariantList, null);
         log.info("created burden rest payload: " + jsonObject);
 
         // get the results of the burden call
@@ -350,11 +341,11 @@ class BurdenService {
      *
      * @return
      */
-    public JSONObject getBurdenTraitSelectionOptions() {
+    public JSONObject getBurdenTraitSelectionOptionsTest() {
         StringBuilder builder = new StringBuilder();
 
         // build the default options string
-        builder.append("{\"options\": [ ");
+        builder.append("{\"phenotypes\": [ ");
         builder.append(this.buildOptionString("t2d", "Type 2 Diabetes", true));
         builder.append(this.buildOptionString("CHOL_ANAL", "Whatever CHOL_ANAL is", false));
         builder.append(" ]}");
@@ -365,6 +356,16 @@ class BurdenService {
 
         // return
         return returnObject;
+    }
+
+    /**
+     * use GET call to burden web service to get burden phenotype filter list
+     *
+     * @return
+     */
+    protected JSONObject getBurdenTraitSelectionOptions() {
+        JSONObject phenotypeJsonObject = this.restServerService.getRestBurdenGetPhenotypesCall();
+        return phenotypeJsonObject;
     }
 
     /**

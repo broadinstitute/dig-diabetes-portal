@@ -110,7 +110,7 @@ class VariantInfoController {
 
         // cast the parameters
         String variantName = params.variantName;
-        String traitFilterOptionId = (params.filterNum ? params.filterNum : "t2d");     // default to t2d if none given
+        String traitFilterOptionId = (params.traitFilterSelectedOption ? params.traitFilterSelectedOption : "t2d");     // default to t2d if none given
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
         JSONObject result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantName);

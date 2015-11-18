@@ -1,10 +1,9 @@
 package org.broadinstitute.mpg
-
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
-import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
+import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class GeneController {
@@ -334,12 +333,11 @@ class GeneController {
         Float mafValue = ((params.mafValue && !params.mafValue?.equals("NaN")) ? new Float(params.mafValue) : null);                      // null float if none specified
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
-        JSONObject result = this.burdenService.callBurdenTest(datasetOptionId, geneName, variantFilterOptionId, mafOption, mafValue);
+        JSONObject result = this.burdenService.callBurdenTest(PortalConstants.BURDEN_DEFAULT_PHENOTYPE_KEY, geneName, variantFilterOptionId, mafOption, mafValue);
 
         // send json response back
         render(status: 200, contentType: "application/json") {result}
     }
-
 
 
     /***
