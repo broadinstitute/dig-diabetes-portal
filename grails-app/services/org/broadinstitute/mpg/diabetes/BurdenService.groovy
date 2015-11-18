@@ -179,7 +179,7 @@ class BurdenService {
         burdenVariant = org.broadinstitute.mpg.Variant.findByDbSnpId(burdenVariantDbSnpId)
 
         if (burdenVariant == null) {
-            throw new PortalException("found no varId dbSnpId: " + burdenVariantDbSnpId)
+            throw new PortalException("found no varId for dbSnpId: " + burdenVariantDbSnpId)
         }
 
         // call shared method
