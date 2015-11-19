@@ -620,6 +620,35 @@ class SharedToolsService {
 
 
 
+    public String packageUpASingleLevelTreeAsJson (LinkedHashMap<String, LinkedHashMap <String,List <String>>> bigTree ){
+        // now that we have a multilevel tree, build it into a string suitable for JSON
+        StringBuilder returnValue = new StringBuilder ()
+        if ((bigTree) && (bigTree?.size() > 0)){
+            List <String> phenotypeHolder = []
+            bigTree.each {String phenotype,  LinkedHashMap phenotypeSpecificSampleGroups->
+                StringBuilder sb = new StringBuilder ()
+                sb << """  \"${phenotype}\":
+    {""".toString()
+                List <String> sampleGroupList = []
+                if (phenotypeSpecificSampleGroups?.size() > 0){
+                    phenotypeSpecificSampleGroups.each { String sampleGroupName, String propertyName ->
+                        sampleGroupList << """        \"${sampleGroupName}\":\"$propertyName\" """.toString()
+                    }
+                }
+                sb << """
+          ${sampleGroupList.join(",")}
+  }""".toString()
+                phenotypeHolder << sb.toString()
+            }
+            returnValue << """{
+            ${phenotypeHolder.join(",")}
+            }"""
+        }
+        return returnValue.toString()
+    }
+
+
+
 
     public String packageUpSortedHierarchicalListAsJson (LinkedHashMap mapOfSampleGroups ){
         // now that we have a list, build it into a string suitable for JSON

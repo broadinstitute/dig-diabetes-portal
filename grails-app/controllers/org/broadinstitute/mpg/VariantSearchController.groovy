@@ -254,6 +254,58 @@ class VariantSearchController {
 
 
 
+    def retrieveTopSGsByTechnologyAndPhenotypeAjax() {
+        String phenotypeName
+        if (params.phenotype) {
+            phenotypeName = params.phenotype
+            log.debug "variantSearch params.phenotype = ${params.phenotype}"
+        }
+        def rawTechnologies = params."technologies[]"
+        List<String> technologies = []
+        if ((rawTechnologies)&&
+                (rawTechnologies.size()>0)){
+            if (rawTechnologies.getClass().simpleName=="String"){ // single value
+                String rowName = rawTechnologies
+                technologies << rowName
+            } else { // we must have a list of values
+                List<String> rowNameList = rawTechnologies as List
+                for (String oneRowName in rowNameList) {
+                    technologies << oneRowName as String
+                }
+            }
+        }
+
+        List<SampleGroup> fullListOfSampleGroups = []
+        for (String technologyName in technologies){
+            List<SampleGroup> technologySpecificSampleGroups = this.metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotypeName,
+                                                                                                    technologyName,
+                                                                                                    sharedToolsService.getCurrentDataVersion(), "")
+            // pick a favorite -- use sample size eventually.  For now we use a shortcut...
+            if (technologySpecificSampleGroups){
+                List<SampleGroup> sortedTechnologySpecificSampleGroups = technologySpecificSampleGroups.sort{SampleGroup a, SampleGroup b -> a.name.length() <=> b.name.length()}
+                fullListOfSampleGroups << sortedTechnologySpecificSampleGroups[0]
+            }
+        }
+        LinkedHashMap<String,LinkedHashMap<String,String>> mapSampleGroupsToProperties = [:]
+        for (SampleGroup sampleGroup in fullListOfSampleGroups){
+            LinkedHashMap<String,String> sampleGroupProperties = [:]
+            sampleGroupProperties["name"] =  sampleGroup.systemId
+            sampleGroupProperties["value"] =  sampleGroup.systemId
+            sampleGroupProperties["pvalue"] =  filterManagementService.findFavoredPValue ( sampleGroup.systemId, phenotypeName )
+            sampleGroupProperties["count"] =  "${sampleGroup.subjectsNumber}"
+            mapSampleGroupsToProperties[sampleGroup.systemId] = sampleGroupProperties
+        }
+        String technologyListAsJson = sharedToolsService.packageUpASingleLevelTreeAsJson(mapSampleGroupsToProperties)
+        def slurper = new JsonSlurper()
+        def technologyListJsonObject = slurper.parseText(technologyListAsJson)
+
+        render(status: 200, contentType: "application/json") {
+            [sampleGroupMap:technologyListJsonObject]
+        }
+    }
+
+
+
 
 
     def retrieveAncestriesAjax() {

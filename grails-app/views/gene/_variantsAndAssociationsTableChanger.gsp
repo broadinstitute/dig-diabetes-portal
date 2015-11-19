@@ -1,16 +1,19 @@
 
 <g:javascript>
-
-$( document ).ready(function() {
-var variantsAndAssociationTable = function (){
+var variantsAndAssociationTable = function (phenotype,rowValueParameter,rowMapParameter){
+    var rowValue = rowValueParameter;
+    var rowMap = rowMapParameter;
+    // make sure table is empty
+    $('#variantsAndAssociationsHead').empty()
+    $('#variantsAndAssociationsTableBody').empty()
     $.ajax({
         cache: false,
         type: "post",
         url: "${createLink(controller: 'gene', action: 'genepValueCounts')}",
         data: {geneName: '<%=geneName%>',
-               rowNames:<g:renderRowValues data='${rowInformation}'></g:renderRowValues>,
+               rowNames:rowValue,
                colNames:<g:renderColValues data='${columnInformation}'></g:renderColValues>,
-               phenotype:'${phenotype}'},
+               phenotype: phenotype},
             async: true,
             success: function (data) {
 
@@ -78,16 +81,16 @@ ${show_exseq},
                                      variantsAndAssociationsPhenotypeAssociations:variantsAndAssociationsPhenotypeAssociations,
                                      variantsAndAssociationsRowHelpText: variantsAndAssociationsRowHelpText},
                                     '${geneChromosome}',${geneExtentBegin},${geneExtentEnd},
-<g:renderRowMaps data='${rowInformation}'/>,
+rowMap,
 <g:renderColMaps data='${columnInformation}'/>,
                                     collector,
                                     '<%=geneName%>',
-                                    '<%=phenotype%>'
+                                    phenotype
                                 );
-                                var rowsToExpand = <g:renderRowValues data='${rowInformation}'></g:renderRowValues>;
+                                var rowsToExpand = rowValue;
                                 if (typeof rowsToExpand !== 'undefined') {
                                    for ( var i = 0 ; i < rowsToExpand.length ; i++ ){
-                                       jsTreeDataRetriever ('#vandaRow'+i,'${phenotype}',rowsToExpand[i]);
+                                       jsTreeDataRetriever ('#vandaRow'+i,phenotype,rowsToExpand[i]);
                                    }
                                 }
 
@@ -104,8 +107,9 @@ ${show_exseq},
     };
 
 
-    variantsAndAssociationTable ();
-});
+%{--$( document ).ready(function() {--}%
+    %{--variantsAndAssociationTable ('${phenotype}',<g:renderRowValues data='${rowInformation}'></g:renderRowValues>,<g:renderRowMaps data='${rowInformation}'></g:renderRowMaps>);--}%
+%{--});--}%
 
 $( document ).ready(function() {
         $.ajax({
@@ -182,6 +186,68 @@ var getTechnologies = function(sel,clearExistingRows){
         });
 
 }
+// this is a two-part call: first we use the phenotype to get the relevant technologies, and
+//  then we can launch the table refresh
+var retrieveSampleGroupsbyTechnologyAndPhenotype = function(technologies,phenotype){
+    var phenotypeName = phenotype;
+    $.ajax({
+        cache: false,
+        type: "post",
+        url: "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",
+        data: {phenotype:phenotype,
+               technologies: technologies},
+        async: true,
+        success: function (data) {
+            if (( data !==  null ) &&
+            ( typeof data !== 'undefined') &&
+            ( typeof data.sampleGroupMap !== 'undefined' )  ) {
+                var sampleGroupMap = data.sampleGroupMap;
+                if (typeof sampleGroupMap !== 'undefined'){
+                   var dataSetNames =  Object.keys(sampleGroupMap);
+                   var dataSetPropertyValues = [];
+                   for (var i = 0; i < dataSetNames.length; i++) {
+                        if (sampleGroupMap[dataSetNames[i]]) {
+                            dataSetPropertyValues.push(sampleGroupMap[dataSetNames[i]]);
+                        }
+                    }
+                   variantsAndAssociationTable (phenotypeName,dataSetNames,dataSetPropertyValues);
+                }
+            }
+            },
+        error: function (jqXHR, exception) {
+        core.errorReporter(jqXHR, exception);
+    }
+});
+};
+var refreshVAndAByPhenotype = function(sel){
+    var phenotypeName = sel.value;
+    $.ajax({
+        cache: false,
+        type: "post",
+        url: "${createLink(controller: 'VariantSearch', action: 'retrieveTechnologiesAjax')}",
+        data: {phenotype:phenotypeName},
+        async: true,
+        success: function (data) {
+            if (( data !==  null ) &&
+            ( typeof data !== 'undefined') &&
+            ( typeof data.technologyList !== 'undefined' ) &&
+            ( typeof data.technologyList.dataset !== 'undefined' ) &&
+            (  data.technologyList.dataset !==  null ) ) {
+                var technologies = data.technologyList.dataset;
+                if (typeof technologies !== 'undefined'){
+                    retrieveSampleGroupsbyTechnologyAndPhenotype(technologies,phenotypeName);
+                }
+            }
+        },
+        error: function (jqXHR, exception) {
+        core.errorReporter(jqXHR, exception);
+    }
+});
+
+};
+
+
+
 var getAncestries = function(sel){
     $.ajax({
         cache: false,

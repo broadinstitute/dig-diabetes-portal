@@ -832,7 +832,6 @@ public class JsonParser {
     }
 
 
-
     public List<SampleGroup> getSampleGroupForPhenotypeTechnologyAncestry(String phenotypeName, String technologyName, String metadataVersion, String ancestryName) throws PortalException {
         // local variables
         List<SampleGroup> sampleGroupList = null;

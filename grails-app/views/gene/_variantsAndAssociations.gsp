@@ -16,7 +16,20 @@
 
 <g:render template="variantsAndAssociationsTableChanger"/>
 
-<button id="opener"  class="pull-right btn btn-default">Revise table properties</button>
+<div class="row clearfix">
+    <div class="col-md-3">
+        <select class="form-control" id="phenotypeTableChooser" name="phenotypeTableChooser" onchange="refreshVAndAByPhenotype(this)">
+
+        </select>
+    </div>
+    <div class="col-md-6">
+
+    </div>
+    <div class="col-md-3">
+        <button id="opener"  class="pull-right btn btn-default">Revise columns</button>
+    </div>
+</div>
+
 <table id="variantsAndAssociationsTable" class="table table-striped distinctivetable distinctive">
     <thead id="variantsAndAssociationsHead">
     </thead>
@@ -27,6 +40,7 @@
 
 <g:javascript>
 $( document ).ready(function() {
+  // initialize the v and a adjuster widget
   $(function() {
     $( "#dialog" ).dialog({
       autoOpen: false,
@@ -44,12 +58,40 @@ $( document ).ready(function() {
     $(".ui-dialog-titlebar").hide();
   });
 
-var popUpVAndAExtender = function() {
-      $( "#dialog" ).dialog( "open" );
-    };
-$( "#opener" ).click(popUpVAndAExtender);
-}
-);
+  // initialize the main phenotype drop-down
+  $(function() {
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: "${createLink(controller: 'VariantSearch', action: 'retrievePhenotypesAjax')}",
+            data: {},
+            async: true,
+            success: function (data) {
+                if (( data !==  null ) &&
+                        ( typeof data !== 'undefined') &&
+                        ( typeof data.datasets !== 'undefined' ) &&
+                        (  data.datasets !==  null ) ) {
+                    UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#phenotypeTableChooser',true);
+                    // Can we set the default option on the phenotype list?
+                    $('#phenotypeTableChooser').val('${phenotype}');
+                    refreshVAndAByPhenotype({'value':'T2D'});
+                    // resetting the phenotype clears all boxes except for the technology chooser
+                }
+            },
+            error: function (jqXHR, exception) {
+                core.errorReporter(jqXHR, exception);
+            }
+        });
+  });
+
+    // open the v and a adjuster widget
+    var popUpVAndAExtender = function() {
+          $( "#dialog" ).dialog( "open" );
+        };
+
+    // attach the opening function to a DOM ID
+    $( "#opener" ).click(popUpVAndAExtender);
+});
 var insertVandARow  = function(name, value) {
       var counter = 100;
       $('#vandaRowHolder').add("<label><input type='checkbox' class='checkbox checkbox-primary' name='savedRow"+counter+"' class='form-control' id='savedRow"+counter+"' value='"+name+"^"+value+"^47' checked>"+name+"</label>");
