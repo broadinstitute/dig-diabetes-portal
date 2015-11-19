@@ -293,7 +293,7 @@ $( document ).ready( function (){
 <div class="accordion-group">
     <div class="accordion-heading">
         <a class="accordion-toggle  collapsed" data-toggle="collapse" href="#collapseBurden">
-            <h2><strong><g:message code="gene.burdenTesting.title" default="Run a burden test"/></strong></h2>
+            <h2><strong><g:message code="variant.info.burden.test.title" default="Test for association with quantitative traits"/></strong></h2>
         </a>
     </div>
 
@@ -302,19 +302,19 @@ $( document ).ready( function (){
 
 
             <div class="container">
-                <h3>Preparing to run a burden test based on the variant <%=variantIdentifier%>.</h3>
+                <h3>Select a trait to test for association.</h3>
 
                 <div class="row burden-test-wrapper-options">
                     <div  class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter"></div>
                     <div  class="col-md-4 col-sm-4 col-xs-12 burden-test-btn-wrapper vcenter">
-                        <label>Available trait filter:
+                        <label>Available traits:
                             <select id="traitFilter" class="traitFilter form-control">
                             </select>
                         </label>
                     </div>
                     <div  class="col-md-4 col-sm-4 col-xs-12 burden-test-btn-wrapper vcenter">
                         <button id="singlebutton" name="singlebutton" style="height: 80px"
-                                class="btn btn-primary btn-lg burden-test-btn" onclick="mpgSoftware.burdenTestShared.runBurdenTest()">Run burden test</button>
+                                class="btn btn-primary btn-lg burden-test-btn" onclick="mpgSoftware.burdenTestShared.runBurdenTest()">Run</button>
                     </div>
                     <div  class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter"></div>
                 </div>
