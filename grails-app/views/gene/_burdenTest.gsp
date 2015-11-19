@@ -261,22 +261,47 @@
                                          (typeof data.stats.stdError === 'undefined')){
                                      console.log('burdenTestAjax returned undefined for P value, standard error or beta.');
                                }else {
-                                   var pValue = data.stats.pValue;
-                                   //var oddsRatio = data.stats.oddsRatio; // must remove oddsRatio ref due to API change
-                                   var beta = data.stats.beta;
-                                   var stdError = data.stats.stdError;
-                                   var pValue = data.stats.pValue;
-                                   var numberVariants = data.stats.numInputVariants;
-                                   fillInResultsSection('p-Value = '+UTILS.realNumberFormatter(pValue),
-                                   'odds ratio = ' +UTILS.realNumberFormatter(Math.exp(beta)),
-                                   'standard error = ' +UTILS.realNumberFormatter(stdError),
-                                   numberVariants,
-                                   data.variants,"${createLink(controller: 'variantInfo', action: 'variantInfo')}");
-
+                                   var isDichotomousTrait = false;
                                    if ((typeof data.stats.numCases === 'undefined') ||
                                         (typeof data.stats.numControls === 'undefined') ||
                                         (typeof data.stats.numCaseCarriers === 'undefined') ||
                                         (typeof data.stats.numControlCarriers === 'undefined')) {
+                                       isDichotomousTrait = false;
+                                   } else {
+                                       isDichotomousTrait = true;
+                                   }
+
+                                   //var oddsRatio = data.stats.oddsRatio; // must remove oddsRatio ref due to API change
+                                   var oddsRatio = UTILS.realNumberFormatter(Math.exp(data.stats.beta));
+                                   var beta = UTILS.realNumberFormatter(data.stats.beta);
+                                   var stdError = UTILS.realNumberFormatter(data.stats.stdError);
+                                   var pValue = UTILS.realNumberFormatter(data.stats.pValue);
+                                   var numberVariants = data.stats.numInputVariants;
+
+                                   var ciDisplay = '';
+                                   if (!((typeof data.stats.ciLower === 'undefined') ||
+                                        (typeof data.stats.ciUpper === 'undefined') ||
+                                        (typeof data.stats.ciLevel === 'undefined'))) {
+                                       var ciUpper = data.stats.ciUpper;
+                                       var ciLower = data.stats.ciLower;
+                                       var ciLevel = data.stats.ciLevel;
+
+                                       if (isDichotomousTrait) {
+                                            ciLower = UTILS.realNumberFormatter(Math.exp(data.stats.ciLower));
+                                            ciUpper = UTILS.realNumberFormatter(Math.exp(data.stats.ciUpper));
+                                       } else {
+                                            ciLower = UTILS.realNumberFormatter(data.stats.ciLower);
+                                            ciUpper = UTILS.realNumberFormatter(data.stats.ciUpper);
+                                       }
+                                       ciDisplay = (ciLevel * 100) + '% CI: (' + ciLower + ' to ' + ciUpper + ')';
+                                   }
+
+                                   fillInResultsSection('p-Value = '+ pValue,
+                                        (isDichotomousTrait ? 'odds ratio = ' + oddsRatio : 'beta = ' + beta),
+                                        ciDisplay, numberVariants,
+                                        data.variants,"${createLink(controller: 'variantInfo', action: 'variantInfo')}");
+
+                                   if (!isDichotomousTrait) {
                                      console.log('burdenTestAjax returned undefined for case/control number, so not displaying hypothesis graphic.');
 
                                    }else {

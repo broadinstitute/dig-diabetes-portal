@@ -67,6 +67,8 @@ class PortalConstants {
     public final static String JSON_BURDEN_DATASET_KEY                  = "study";
     public final static String JSON_BURDEN_DATA_VERSION_KEY             = "mdv";
     public final static String JSON_BURDEN_PHENOTYPE_KEY                = "phenotype";
+    public final static String JSON_BURDEN_CI_CALC_KEY                  = "calc_ci";
+    public final static String JSON_BURDEN_CI_LEVEL_KEY                 = "ci_level";
 
     // constants for getData calls
     public final static String OPERATOR_LESS_THAN_EQUALS                 = "LTE";
