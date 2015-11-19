@@ -96,6 +96,20 @@ public class BurdenJsonBuilder {
         stringBuilder.append(phenotype);
         stringBuilder.append("\", ");
 
+        // add in the confidence interval calculation boolean
+        stringBuilder.append("\"");
+        stringBuilder.append(PortalConstants.JSON_BURDEN_CI_CALC_KEY);
+        stringBuilder.append("\": ");
+        stringBuilder.append(true);
+        stringBuilder.append(", ");
+
+        // add in the confidence interval setting
+        stringBuilder.append("\"");
+        stringBuilder.append(PortalConstants.JSON_BURDEN_CI_LEVEL_KEY);
+        stringBuilder.append("\": ");
+        stringBuilder.append(0.95);
+        stringBuilder.append(", ");
+
         // create the variant list json object string
         stringBuilder.append("\"");
         stringBuilder.append(PortalConstants.JSON_BURDEN_VARIANTS_KEY);

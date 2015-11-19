@@ -223,15 +223,34 @@ div.labelAndInput > input {
                                        isDichotomousTrait = true;
                                    }
 
-                                   var pValue = data.stats.pValue;
                                    //var oddsRatio = data.stats.oddsRatio; // must remove oddsRatio ref due to API change
-                                   var beta = data.stats.beta;
-                                   var stdError = data.stats.stdError;
-                                   var pValue = data.stats.pValue;
+                                   var oddsRatio = UTILS.realNumberFormatter(Math.exp(data.stats.beta));
+                                   var beta = UTILS.realNumberFormatter(data.stats.beta);
+                                   var stdError = UTILS.realNumberFormatter(data.stats.stdError);
+                                   var pValue = UTILS.realNumberFormatter(data.stats.pValue);
                                    var numberVariants = data.stats.numInputVariants;
-                                   fillInResultsSection('p-Value = '+UTILS.realNumberFormatter(pValue),
-                                   'odds ratio = ' +UTILS.realNumberFormatter(Math.exp(beta)),
-                                   'standard error = ' +UTILS.realNumberFormatter(stdError), isDichotomousTrait);
+
+                                   var ciDisplay = '';
+                                   if (!((typeof data.stats.ciLower === 'undefined') ||
+                                        (typeof data.stats.ciUpper === 'undefined') ||
+                                        (typeof data.stats.ciLevel === 'undefined'))) {
+                                       var ciUpper = data.stats.ciUpper;
+                                       var ciLower = data.stats.ciLower;
+                                       var ciLevel = data.stats.ciLevel;
+
+                                       if (isDichotomousTrait) {
+                                            ciLower = UTILS.realNumberFormatter(Math.exp(data.stats.ciLower));
+                                            ciUpper = UTILS.realNumberFormatter(Math.exp(data.stats.ciUpper));
+                                       } else {
+                                            ciLower = UTILS.realNumberFormatter(data.stats.ciLower);
+                                            ciUpper = UTILS.realNumberFormatter(data.stats.ciUpper);
+                                       }
+                                       ciDisplay = '( ' + (ciLevel * 100) + '% CI: ' + ciLower + ' to ' + ciUpper + ')';
+                                   }
+
+                                   fillInResultsSection('p-Value = '+ pValue,
+                                   (isDichotomousTrait ? 'odds ratio = ' + oddsRatio : 'beta = ' + beta),
+                                        ciDisplay, isDichotomousTrait);
 
                                    // now see if we fill the hypothesis section
                                    if (!isDichotomousTrait) {
