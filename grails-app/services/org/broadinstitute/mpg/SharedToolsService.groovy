@@ -764,6 +764,9 @@ class SharedToolsService {
                 if (phenotype.name == phenotypeName){// we care about this sample group
                     sb << """{
   "text"        : "${translator(sampleGroupBean.getSystemId())}",
+  "attr"        : {"ref":"${sampleGroupBean.getSystemId()}"},
+  "data"        : "${sampleGroupBean.getSystemId()}",
+  "metadata"    : {"name":"${sampleGroupBean.getSystemId()}"},
   "state"       : {
     "opened"    : false,
     "disabled"  : false,

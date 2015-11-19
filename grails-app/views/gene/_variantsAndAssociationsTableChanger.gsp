@@ -314,9 +314,13 @@ var getDataSets = function(sel){
         }
         });
 }
+function cb(a,b){
+return b;
+}
 var jsTreeDataRetriever = function (divId,phenotypeName,sampleGroupName){
     var dataPasser = {phenotype:phenotypeName,sampleGroup:sampleGroupName};
     $(divId).jstree({
+          "dataType": "json",
           "core" : {
                 "animation" : 0,
                 "check_callback" : true,
@@ -324,14 +328,17 @@ var jsTreeDataRetriever = function (divId,phenotypeName,sampleGroupName){
                 'data' : {
                   'type': "post",
                   'url' :  "${createLink(controller: 'VariantSearch', action: 'retrieveJSTreeAjax')}",
-                  'data': dataPasser
+                  'data': function (c,i) {
+                         return dataPasser;
+                   },
+                  'metadata': dataPasser
                 }
           },
           "checkbox" : {
             "keep_selected_style" : false,
             "three_state": false
           },
-          "plugins" : [ "wholerow", "checkbox" ]
+          "plugins" : [  "themes","core", "wholerow", "checkbox", "json_data", "ui", "types"]
 });
 };
 
