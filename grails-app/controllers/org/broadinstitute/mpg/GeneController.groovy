@@ -328,12 +328,12 @@ class GeneController {
         // cast the parameters
         String geneName = params.geneName;
         int variantFilterOptionId = (params.filterNum ? Integer.valueOf(params.filterNum) : 0);     // default to all variants if none given
-        int datasetOptionId = (params.dataSet ? Integer.valueOf(params.dataSet) : 1);               // default ot 1 if none given
+        String burdenTraitFilterSelectedOption = (params.burdenTraitFilterSelectedOption ? params.burdenTraitFilterSelectedOption : PortalConstants.BURDEN_DEFAULT_PHENOTYPE_KEY);               // default ot t2d if none given
         int mafOption = (params.mafOption ? Integer.valueOf(params.mafOption) : 1);                 // 1 is default, 2 is different ancestries if specified
         Float mafValue = ((params.mafValue && !params.mafValue?.equals("NaN")) ? new Float(params.mafValue) : null);                      // null float if none specified
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
-        JSONObject result = this.burdenService.callBurdenTest(PortalConstants.BURDEN_DEFAULT_PHENOTYPE_KEY, geneName, variantFilterOptionId, mafOption, mafValue);
+        JSONObject result = this.burdenService.callBurdenTest(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue);
 
         // send json response back
         render(status: 200, contentType: "application/json") {result}
