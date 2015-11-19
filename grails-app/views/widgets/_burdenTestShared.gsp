@@ -245,7 +245,7 @@ div.labelAndInput > input {
                                             ciLower = UTILS.realNumberFormatter(data.stats.ciLower);
                                             ciUpper = UTILS.realNumberFormatter(data.stats.ciUpper);
                                        }
-                                       ciDisplay = '( ' + (ciLevel * 100) + '% CI: ' + ciLower + ' to ' + ciUpper + ')';
+                                       ciDisplay = (ciLevel * 100) + '% CI: (' + ciLower + ' to ' + ciUpper + ')';
                                    }
 
                                    fillInResultsSection('p-Value = '+ pValue,
