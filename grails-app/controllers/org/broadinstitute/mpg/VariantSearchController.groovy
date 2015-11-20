@@ -282,7 +282,8 @@ class VariantSearchController {
                                                                                                     sharedToolsService.getCurrentDataVersion(), "")
             // pick a favorite -- use sample size eventually.  For now we use a shortcut...
             if (technologySpecificSampleGroups){
-                List<SampleGroup> sortedTechnologySpecificSampleGroups = technologySpecificSampleGroups.sort{SampleGroup a, SampleGroup b -> a.name.length() <=> b.name.length()}
+                List<SampleGroup> sortedTechnologySpecificSampleGroups = technologySpecificSampleGroups.sort{ SampleGroup a, SampleGroup b ->
+                                                                                                              (a.subjectsNumber as Integer) <=> (b.subjectsNumber as Integer) }
                 fullListOfSampleGroups << sortedTechnologySpecificSampleGroups[0]
             }
         }
