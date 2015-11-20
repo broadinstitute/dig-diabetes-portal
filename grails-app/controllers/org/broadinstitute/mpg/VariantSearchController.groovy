@@ -283,7 +283,7 @@ class VariantSearchController {
             // pick a favorite -- use sample size eventually.  For now we use a shortcut...
             if (technologySpecificSampleGroups){
                 List<SampleGroup> sortedTechnologySpecificSampleGroups = technologySpecificSampleGroups.sort{ SampleGroup a, SampleGroup b ->
-                                                                                                              (a.subjectsNumber as Integer) <=> (b.subjectsNumber as Integer) }
+                                                                                                              (b.subjectsNumber as Integer) <=> (a.subjectsNumber as Integer) }
                 fullListOfSampleGroups << sortedTechnologySpecificSampleGroups[0]
             }
         }
