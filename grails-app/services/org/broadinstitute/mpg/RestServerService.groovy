@@ -1527,7 +1527,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                         }
 
                         element = variant["MAF"].findAll{it}[0]
-                        sb  << "{\"level\":\"MAF\",\"count\":${element[dataSet]}}"
+                        if ((element)&&
+                            (element[dataSet])){
+                            sb  << "{\"level\":\"MAF\",\"count\":${element[dataSet]}}"
+                        } else {
+                            sb  << "{\"level\":\"MAF\",\"count\":\"0\"}"
+                        }
+
 
                     }
             }
