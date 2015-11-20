@@ -762,11 +762,10 @@ class SharedToolsService {
             List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = sampleGroupBean.getPhenotypes()
             for (org.broadinstitute.mpg.diabetes.metadata.Phenotype phenotype in phenotypeList){
                 if (phenotype.name == phenotypeName){// we care about this sample group
+                    String pValue = filterManagementService.findFavoredPValue( sampleGroupBean.getSystemId(), phenotypeName ) ;
                     sb << """{
   "text"        : "${translator(sampleGroupBean.getSystemId())}",
-  "attr"        : {"ref":"${sampleGroupBean.getSystemId()}"},
-  "data"        : "${sampleGroupBean.getSystemId()}",
-  "metadata"    : {"name":"${sampleGroupBean.getSystemId()}"},
+  "id"          : "${sampleGroupBean.getSystemId()}^${pValue}^${sampleGroupBean.subjectsNumber}",
   "state"       : {
     "opened"    : false,
     "disabled"  : false,

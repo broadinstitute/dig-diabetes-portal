@@ -320,7 +320,6 @@ return b;
 var jsTreeDataRetriever = function (divId,phenotypeName,sampleGroupName){
     var dataPasser = {phenotype:phenotypeName,sampleGroup:sampleGroupName};
     $(divId).jstree({
-          "dataType": "json",
           "core" : {
                 "animation" : 0,
                 "check_callback" : true,
@@ -393,75 +392,78 @@ var jsTreeDataRetriever = function (divId,phenotypeName,sampleGroupName){
                         <g:renderColumnCheckboxes data='${columnInformation}'></g:renderColumnCheckboxes>
                     </div>
                 </div>
-                <h4>Add / hide row</h4>
+                <div style="display:none">
+                    <h4>Add / hide row</h4>
 
-                <div class="dk-modal-form-input-row">
-                    <div class="dk-variant-search-builder-title">
-                        Phenotype
+                    <div class="dk-modal-form-input-row">
+                        <div class="dk-variant-search-builder-title">
+                            Phenotype
+                        </div>
+
+                        <div class="dk-variant-search-builder-ui">
+                            <select class="form-control" id="phenotypeChooser" name="phenotypeChooser" onchange="getTechnologies(this,true)"  onclick="getTechnologies(this,false)" disabled>
+
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="dk-variant-search-builder-ui">
-                        <select class="form-control" id="phenotypeChooser" name="phenotypeChooser" onchange="getTechnologies(this,true)"  onclick="getTechnologies(this,false)" disabled>
+                    <div class="dk-modal-form-input-row">
+                        <div class="dk-variant-search-builder-title">
+                            Technology
+                        </div>
 
-                        </select>
-                    </div>
-                </div>
-
-                <div class="dk-modal-form-input-row">
-                    <div class="dk-variant-search-builder-title">
-                        Technology
-                    </div>
-
-                    <div class="dk-variant-search-builder-ui">
-                        <select class="form-control"  id="technologyChooser" onchange="getAncestries(this)" onclick="getAncestries(this)" disabled>
-                            <option selected>---</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="dk-modal-form-input-row">
-                    <div class="dk-variant-search-builder-title">
-                        Ancestry
+                        <div class="dk-variant-search-builder-ui">
+                            <select class="form-control"  id="technologyChooser" onchange="getAncestries(this)" onclick="getAncestries(this)" disabled>
+                                <option selected>---</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="dk-variant-search-builder-ui">
-                        <select class="form-control" id="ancestryChooser" onchange="getDataSets(this)" onclick="getDataSets(this)"  disabled>
-                            <option selected>---</option>
-                        </select>
-                    </div>
-                </div>
+                    <div class="dk-modal-form-input-row">
+                        <div class="dk-variant-search-builder-title">
+                            Ancestry
+                        </div>
 
-                <div class="dk-modal-form-input-row">
-                    <div class="dk-variant-search-builder-title">
-                        Available dataset
-                        <div id="jstree"></div>
-                    </div>
-
-                    <div class="dk-variant-search-builder-ui">
-                        <select class="form-control" name="dataSetChooser" id="dataSetChooser"  disabled>
-                            <option selected>---</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="dk-modal-form-input-row">
-                    <div class="dk-variant-search-builder-title">
-                        Row title (optional)
+                        <div class="dk-variant-search-builder-ui">
+                            <select class="form-control" id="ancestryChooser" onchange="getDataSets(this)" onclick="getDataSets(this)"  disabled>
+                                <option selected>---</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="dk-variant-search-builder-ui">
-                        <input type="text" class="form-control" name="newRowName"   id="newRowName">
-                    </div>
-                </div>
+                    <div class="dk-modal-form-input-row">
+                        <div class="dk-variant-search-builder-title">
+                            Available dataset
+                            <div id="jstree"></div>
+                        </div>
 
-                <div class="dk-modal-form-input-row">
-                    <div class="dk-variant-search-builder-title savedRowHolderLabel">
-                        Show rows
+                        <div class="dk-variant-search-builder-ui">
+                            <select class="form-control" name="dataSetChooser" id="dataSetChooser"  disabled>
+                                <option selected>---</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="dk-variant-search-builder-ui savedRowHolder">
-                        <g:renderRowCheckboxes data='${rowInformation}'></g:renderRowCheckboxes>
+                    <div class="dk-modal-form-input-row">
+                        <div class="dk-variant-search-builder-title">
+                            Row title (optional)
+                        </div>
+
+                        <div class="dk-variant-search-builder-ui">
+                            <input type="text" class="form-control" name="newRowName"   id="newRowName">
+                        </div>
                     </div>
+
+                    <div class="dk-modal-form-input-row">
+                        <div class="dk-variant-search-builder-title savedRowHolderLabel">
+                            Show rows
+                        </div>
+
+                        <div class="dk-variant-search-builder-ui savedRowHolder">
+                            <g:renderRowCheckboxes data='${rowInformation}'></g:renderRowCheckboxes>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         <button type="submit" id="vandasubmit" class="btn" style="display: none">

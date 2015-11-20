@@ -22,6 +22,12 @@
         display: none;
     }
 
+    div.burden-test-result-reduced {
+        font-size: 25px;
+        padding-top: 10px;
+        display: none;
+    }
+
     .burden-test-result .pValue {
         white-space: nowrap;
     }
@@ -120,7 +126,46 @@
         *  Fill the drop down list with values.  Presumably we need to run this method right after the page load completes.
         *
         */
-        var fillFilterDropDown = function (){
+        var fillBurdenTraitFilterDropDown = function (){
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "${createLink(controller:'variantInfo',action: 'burdenTestTraitSelectionOptionsAjax')}",
+                data: {},
+                    async: true,
+                    success: function (data) {
+
+                       if ((typeof data !== 'undefined') && (data)){
+                               //first check for error conditions
+                                if (!data){
+                                    console.log('null return data from burdenTestTraitSelectionOptionsAjax');
+                                } else if (data.is_error) {
+                                    console.log('burdenTestAjax returned is_error ='+data.is_error +'.');
+                                }
+                                else if ((typeof data.phenotypes === 'undefined') ||
+                                         (data.phenotypes.length <= 0)){
+                                     console.log('burdenTestAjax returned undefined (or length = 0) for options.');
+                               }else {
+                                   var optionList = data.phenotypes;
+                                   var dropDownHolder = $('#burdenTraitFilter');
+                                   for ( var i = 0 ; i < optionList.length ; i++ ){
+                                        dropDownHolder.append('<option value="'+optionList[i].name+'">'+optionList[i].description+'</option>')
+                                   }
+                                }
+                            }
+
+                    },
+                    error: function (jqXHR, exception) {
+                        core.errorReporter(jqXHR, exception);
+                    }
+                });
+        }; // fillBurdenTraitFilterDropDown
+
+        /***
+        *  Fill the drop down list with values.  Presumably we need to run this method right after the page load completes.
+        *
+        */
+        var fillVariantOptionFilterDropDown = function (){
             $.ajax({
                 cache: false,
                 type: "post",
@@ -141,7 +186,7 @@
                                      console.log('burdenTestAjax returned undefined (or length = 0) for options.');
                                }else {
                                    var optionList = data.options;
-                                   var dropDownHolder = $('.proteinEffectFilter');
+                                   var dropDownHolder = $('#burdenProteinEffectFilter');
                                    for ( var i = 0 ; i < optionList.length ; i++ ){
                                         dropDownHolder.append('<option value="'+optionList[i].id+'">'+optionList[i].name+'</option>')
                                    }
@@ -164,7 +209,7 @@
          */
         var runBurdenTest = function (){
 
-             var fillInResultsSection = function (pValue, oddsRatio, stdError, numberVariants, variantArray, urlLink){
+             var fillInResultsSection = function (pValue, oddsRatio, stdError, numberVariants, variantArray, urlLink, isDichotomousTrait){
                 var test = "";
                  // $('.burden-test-result').empty();  // clear out whatever was there before
                  if ((typeof variantArray === 'undefined') ||
@@ -179,20 +224,29 @@
                      }
 
                     // populate the data
-                    $('#pValue').text(pValue);
-                    $('#orValue').text(oddsRatio);
-                    $('#ciValue').text(stdError);
-                    $('#variantLabel').text(numberVariants);
-                    $('#variantList').html(variantAnchors.join('\n'));
+                    $('.pValue').text(pValue);
+                    $('.orValue').text(oddsRatio);
+                    $('.ciValue').text(stdError);
+                    $('.variantList').html(variantAnchors.join('\n'));
 
                     // show the results
-                    $('#burden-test-some-results').show();
+                    if (isDichotomousTrait) {
+                        $('#variantLabel').text(numberVariants);
+                        $('#burden-test-some-results-reduced').hide();
+                        $('#burden-test-some-results').show();
+                    } else {
+                        $('#variantLabelReduced').text(numberVariants);
+                        $('#burden-test-some-results').hide();
+                        $('#burden-test-some-results-reduced').show();
+                    }
+
+                    // show the results
                     $('#burden-test-no-results').hide();
                   }
 
              };
 
-        var selectedFilterValue = $('.proteinEffectFilter option:selected').val(),
+        var selectedFilterValue = $('.burdenProteinEffectFilter option:selected').val(),
              selectedFilterValueId = parseInt(selectedFilterValue),
              selectedDataSetValue = $('input[name=dataset]:checked').val(),
              selectedDataSetValueId = parseInt(selectedDataSetValue),
@@ -200,6 +254,8 @@
              selectedMafOptionId =  parseInt(selectedMafOption),
              specifiedMafValue = $('#mafInput').val(),
              specifiedMafValueId;
+        var burdenTraitFilterSelectedOption = $('#burdenTraitFilter').val();
+
              // JavaScript can't understand a number of it starts with a decimal.  Prepend a zero just to be safe, since that will never hurt
              if ((specifiedMafValue)&&
                  (specifiedMafValue.length> 0)){
@@ -242,7 +298,7 @@
                 url: "${createLink(controller:'gene',action: 'burdenTestAjax')}",
                 data: {geneName: '<%=geneName%>',
                        filterNum: selectedFilterValueId,
-                       dataSet: selectedDataSetValueId,
+                       burdenTraitFilterSelectedOption: burdenTraitFilterSelectedOption,
                        mafValue: specifiedMafValueId,
                        mafOption: selectedMafOptionId
                      },
@@ -299,7 +355,7 @@
                                    fillInResultsSection('p-Value = '+ pValue,
                                         (isDichotomousTrait ? 'odds ratio = ' + oddsRatio : 'beta = ' + beta),
                                         ciDisplay, numberVariants,
-                                        data.variants,"${createLink(controller: 'variantInfo', action: 'variantInfo')}");
+                                        data.variants,"${createLink(controller: 'variantInfo', action: 'variantInfo')}", isDichotomousTrait);
 
                                    if (!isDichotomousTrait) {
                                      console.log('burdenTestAjax returned undefined for case/control number, so not displaying hypothesis graphic.');
@@ -342,13 +398,15 @@
         // public routines are declared below
         return {
             runBurdenTest:runBurdenTest,
-            fillFilterDropDown:fillFilterDropDown
+            fillVariantOptionFilterDropDown:fillVariantOptionFilterDropDown,
+            fillBurdenTraitFilterDropDown: fillBurdenTraitFilterDropDown
         }
 
     }());
 
 $( document ).ready( function (){
-   mpgSoftware.burdenTest.fillFilterDropDown ();
+   mpgSoftware.burdenTest.fillVariantOptionFilterDropDown ();
+   mpgSoftware.burdenTest.fillBurdenTraitFilterDropDown ();
 } );
 
 //runBurdenTest ();
@@ -366,19 +424,14 @@ $( document ).ready( function (){
         <div class="col-md-8 col-sm-8 col-xs-12">
             <div  class="row">
                 <div class="col-md-4 col-sm-4 col-xs-4">
-                    <label>Select data set:&nbsp;&nbsp;</label>
-                    <div class="form-inline">
-                        <div class="radio">
-                            <label><input type="radio" name="dataset" value="1" checked>&nbsp;13k&nbsp;&nbsp;</label>
-                        </div>
-                        <div class="radio">
-                            <label><input type="radio" name="dataset"  value="2" disabled>&nbsp;<span style="color: DarkGray">26k</span></label>
-                        </div>
-                    </div>
+                    <label>Available traits:
+                        <select id="burdenTraitFilter" class="burdenTraitFilter form-control">
+                        </select>
+                    </label>
                 </div>
                 <div class="col-md-8 col-sm-8 col-xs-8">
                     <label>Available variant filter:
-                        <select class="proteinEffectFilter form-control">
+                        <select id= "burdenProteinEffectFilter" class="burdenProteinEffectFilter form-control">
                             <option selected hidden>Select a filter</option>
                         </select>
                     </label>
@@ -447,6 +500,25 @@ $( document ).ready( function (){
         </div>
     </div>
 
+    <div id="burden-test-some-results-reduced" class="row burden-test-result-reduced">
+        <div class="col-md-3 col-sm-3">
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <div class="vertical-center">
+                <div id="pValue2" class="pValue"></div>
+                <div id="orValue2" class="orValue"></div>
+                <div id="ciValue2" class="ciValue"></div>
+            </div>
+        </div>
+        <div class="col-md-2 col-sm-2">
+            <div>
+                <div class="variantsListLabel"><span id="variantLabelReduced"></span> variants:</div>
+                <div id="variantListReduced" class="variantList"></div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-1">
+        </div>
+    </div>
 </div>
 
 
