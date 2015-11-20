@@ -16,17 +16,20 @@
 
 <g:render template="variantsAndAssociationsTableChanger"/>
 
-<div class="row clearfix">
-    <div class="col-md-3">
+<div class="row clearfix" style="margin: 0 0 10px 0">
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-3" style="text-align: right; font-size: 18px; font-weight: bold">
+        Change phenotype choice
+    </div>
+    <div class="col-md-3 pull-left" style="text-align: left; font-size: 18px">
         <select class="form-control" id="phenotypeTableChooser" name="phenotypeTableChooser" onchange="refreshVAndAByPhenotype(this)">
 
         </select>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
 
-    </div>
-    <div class="col-md-3">
-        <button id="opener"  class="pull-right btn btn-default">Revise columns</button>
     </div>
 </div>
 
@@ -38,11 +41,14 @@
 </table>
 
 <div class="row clearfix">
-    <div class="col-md-9">
+    <div class="col-md-8">
 
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
         <button id="reviser"  class="btn btn-primary" onclick="reviseRows()">Revise rows</button>
+    </div>
+    <div class="col-md-2">
+        <button id="opener"  class="btn btn-primary">Revise columns</button>
     </div>
 </div>
 
