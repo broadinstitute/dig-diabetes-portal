@@ -61,7 +61,7 @@ function reviseRows(){
   var dataSetMaps  = [];
   for  ( var i = 0 ; i < clickedBoxes.length ; i++ )   {
       var  comboName  =  $(clickedBoxes[i]).attr('id');
-      var partsOfCombo =   comboName.split("^");
+      var partsOfCombo =   comboName.split("-");
       var  dataSetWithoutAnchor  =  partsOfCombo[0];
       dataSetNames.push(dataSetWithoutAnchor);
       var  dataSetMap = {"name":dataSetWithoutAnchor,

@@ -338,7 +338,12 @@ var jsTreeDataRetriever = function (divId,phenotypeName,sampleGroupName){
             "three_state": false
           },
           "plugins" : [  "themes","core", "wholerow", "checkbox", "json_data", "ui", "types"]
-});
+    });
+    $(divId).on ('after_open.jstree', function (e, data) {
+    for ( var i = 0 ; i < data.node.children.length ; i++ )  {
+       $('#'+data.node.children[i]+' .jstree-checkbox').click   ();
+    }
+    }) ;
 };
 
 
