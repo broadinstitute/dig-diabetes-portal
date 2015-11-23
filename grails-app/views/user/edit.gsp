@@ -108,7 +108,7 @@
             <div class="dport-template-view">
 
                 <div class="row">
-                    <div class="col-md-4"><h1>Edit user</h1></div>
+                    <div class="col-md-4"><h1><g:message code="users.admin.edit"/></h1></div>
 
                     <div class="col-md-8"></div>
                 </div>
@@ -193,11 +193,11 @@
                         <table id="userSessionsTable" class="table table-striped basictable">
                             <thead>
                             <tr>
-                                <th>user</th>
-                                <th>startSession</th>
-                                <th>endSession</th>
-                                <th>remoteAddress</th>
-                                <th>dataField</th>
+                                <th><g:message code="users.admin.user"/></th>
+                                <th><g:message code="users.attributes.startSession"/></th>
+                                <th><g:message code="users.attributes.endSession"/></th>
+                                <th><g:message code="users.attributes.remoteAddress"/></th>
+                                <th><g:message code="users.attributes.dataField"/></th>
                             </tr>
                             </thead>
                             <tbody id="userSessionsBody">

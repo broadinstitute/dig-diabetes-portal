@@ -1,9 +1,9 @@
 <g:if test="${show_exseq}">
     <p>
-        This <span ID="variantCharacterization"></span>
-        variant <span ID="describingVariantAssociation"></span>.
-    Among datasets available on this portal, its strongest association with T2D has a p-value of <span
-            id="variantPValue"></span> in  <span id="variantInfoGeneratingDataSet"></span>.
+        <g:message code="site.shared.phrases.this" /> <span ID="variantCharacterization"></span>
+        <g:message code="variant.label.variant" /> <span ID="describingVariantAssociation"></span>.
+    <g:message code="variant.messages.variantPageHeader.association" /> <span
+            id="variantPValue"></span> <g:message code="site.shared.phrases.in" />  <span id="variantInfoGeneratingDataSet"></span>.
 
     </p>
 

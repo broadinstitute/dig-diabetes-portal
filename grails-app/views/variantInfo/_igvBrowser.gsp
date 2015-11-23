@@ -11,15 +11,13 @@
 
 <div id="myVariantDiv">
 <p>
-    Use the browser below to explore all genome-wide and locus-wide
-    significant variants within 50kb of this variant. Choose "Tracks" to view
-    results relevant to type 2 diabetes
+    <g:message code="variant.messages.igv.section_1" />
     <g:renderT2dGenesSection>
-    (exome sequencing, exome chip, or GWAS)
+    (<g:message code="variant.variantAssociations.source.exomeSequenceQ.help.header" />, <g:message code="variant.variantAssociations.source.exomeChip" />, <g:message code="site.shared.phrases.or" /> <g:message code='gene.variantassociations.table.rowhdr.gwas'/>)
     </g:renderT2dGenesSection>
-     or any of 24 other related traits
+     <g:message code="variant.messages.igv.section_2" />
     <g:renderT2dGenesSection>
-    (GWAS)
+    (<g:message code='gene.variantassociations.table.rowhdr.gwas'/>)
     </g:renderT2dGenesSection>
     .
 </p>
@@ -30,13 +28,13 @@
 <div class="container-fluid">
 <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse"
-            data-target="#bs-example-navbar-collapse-1"><span class="sr-only">Toggle navigation</span><span
+            data-target="#bs-example-navbar-collapse-1"><span class="sr-only"><g:message code="controls.shared.igv.toggle_nav" /></span><span
             class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
     <a class="navbar-brand">IGV</a></div>
 <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
 <ul class="nav navbar-nav navbar-left">
 <li class="dropdown" id="tracks-menu-dropdown">
-<a href="#" class="dropdown-toggle" data-toggle="dropdown">Tracks<b class="caret"></b></a>
+<a href="#" class="dropdown-toggle" data-toggle="dropdown"><g:message code="controls.shared.igv.tracks" /><b class="caret"></b></a>
 <ul id="trackList" class="dropdown-menu">
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -50,7 +48,7 @@
         },
         description: ('<strong>fasting glucose</strong><br/>'+
                 'Results in this track are from a study of 79,854 people conducted by the GoT2D consortium.')
-    })">fasting glucose</a>
+    })"><g:message code="informational.shared.traits.fasting_glucose" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -65,7 +63,7 @@
         },
         description: ('<strong>two-hour glucose</strong><br/>'+
                 'Results in this track are from a study of 79,854 people conducted by the GoT2D consortium.')
-    })">two-hour glucose</a>
+    })"><g:message code="informational.shared.traits.two_hour_glucose" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -80,7 +78,7 @@
         },
         description: ('<strong>two-hour insulin</strong><br/>'+
                 'Results in this track are from a study of 79,854 people conducted by the GoT2D consortium.')
-    })">two-hour insulin</a>
+    })"><g:message code="informational.shared.traits.two_hour_insulin" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -95,7 +93,7 @@
         },
         description: ('<strong>fasting insulin</strong><br/>'+
                 'Results in this track are from a study of 79,854 people conducted by the GoT2D consortium.')
-    })">fasting insulin</a>
+    })"><g:message code="informational.shared.traits.fasting_insulin" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -110,7 +108,7 @@
         },
         description: ('<strong>fasting proinsulin</strong><br/>'+
                 'Results in this track are from a study of 79,854 people conducted by the GoT2D consortium.')
-    })">fasting proinsulin</a>
+    })"><g:message code="informational.shared.traits.fasting_proinsulin" /></a>
 </li>                            <li>
     <a onclick="igv.browser.loadTrack({
         type: 't2d',
@@ -124,7 +122,7 @@
         },
         description: ('<strong>HbA1c</strong><br/>'+
                 'Results in this track are from a study of 79,854 people conducted by the GoT2D consortium.')
-    })">HBA1C</a>
+    })"><g:message code="informational.shared.traits.HBA1C" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -139,7 +137,7 @@
         },
         description: ('<strong>HOMA-IR</strong><br/>'+
                 'Results in this track are from a study of 79,854 people conducted by the GoT2D consortium.')
-    })">HOMA_IR</a>
+    })"><g:message code="informational.shared.traits.HOMA_IR" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -154,7 +152,7 @@
         },
         description: ('<strong>HOMA-B</strong><br/>'+
                 'Results in this track are from a study of 79,854 people conducted by the GoT2D consortium.')
-    })">HOMA_B</a>
+    })"><g:message code="informational.shared.traits.HOMA_B" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -169,7 +167,7 @@
         },
         description: ('<strong>BMI</strong><br/>'+
                 'Results in this track are from a GWAS meta-analysis of as many as 123,865 people conducted by the GIANT Consortium.')
-    })">BMI</a>
+    })"><g:message code="informational.shared.traits.BMI" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -184,7 +182,7 @@
         },
         description: ('<strong>waist circumference</strong><br/>'+
                 'Results in this track are from a GWAS meta-analysis of people conducted by the GIANT Consortium.')
-    })">waist circumference</a>
+    })"><g:message code="informational.shared.traits.waist_circumference" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -199,7 +197,7 @@
         },
         description: ('<strong>hip circumference</strong><br/>'+
                 'Results in this track are from a GWAS meta-analysis of people conducted by the GIANT Consortium.')
-    })">hip circumference</a>
+    })"><g:message code="informational.shared.traits.hip_circumference" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -214,7 +212,7 @@
         },
         description: ('<strong>waist-hip ratio</strong><br/>'+
                 'Results in this track are from a GWAS meta-analysis of as many as 77,167 people conducted by the GIANT Consortium.')
-    })">waist-hip ratio</a>
+    })"><g:message code="informational.shared.traits.waist_hip_ratio" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -229,7 +227,7 @@
         },
         description: ('<strong>height</strong><br/>'+
                 'Results in this track are from a GWAS meta-analysis of as many as 183,727 people conducted by the GIANT Consortium.')
-    })">height</a>
+    })"><g:message code="informational.shared.traits.height" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -244,7 +242,7 @@
         },
         description: ('<strong>HDL cholesterol</strong><br/>'+
                 'Results in this track are from a GWAS meta-analysis of as many as 99,900 people conducted by the Global Lipid Genetics Consortium.')
-    })">HDL</a>
+    })"><g:message code="informational.shared.traits.HDL_cholesterol" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -259,7 +257,7 @@
         },
         description: ('<strong>LDL cholesterol</strong><br/>'+
                 'Results in this track are from a GWAS meta-analysis of as many as 95,454 people conducted by the Global Lipid Genetics Consortium.')
-    })">LDL</a>
+    })"><g:message code="informational.shared.traits.LDL_cholesterol" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -274,7 +272,7 @@
         },
         description: ('<strong>triglycerides</strong><br/>'+
                 'Results in this track are from a GWAS meta-analysis of as many as 96,598 people conducted by the Global Lipid Genetics Consortium.')
-    })">triglycerides</a>
+    })"><g:message code="informational.shared.traits.triglycerides" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -289,7 +287,7 @@
         },
         description: ('<strong>coronary artery disease</strong><br/>'+
                 'Results in this track are from a GWAS meta-analysis of as many as 86,995 people conducted by the CARDIoGRAM Consortium.')
-    })">coronary artery disease</a>
+    })"><g:message code="informational.shared.traits.coronary_artery_disease" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -304,7 +302,7 @@
         },
         description: ('<strong>chronic kidney disease</strong><br/>'+
                 'Results in this track are from a GWAS meta-analysis of as many as 67,093 people conducted by the CKDGen Consortium.')
-    })">chronic kidney disease</a>
+    })"><g:message code="informational.shared.traits.chronic_kidney_disease" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -319,7 +317,7 @@
         },
         description: ('<strong>eGFR-creat (serum creatinine)</strong><br/>'+
                 'Results in this track are from a GWAS meta-analysis of as many as 67,093 people conducted by the CKDGen Consortium.')
-    })">eGFR-creat (serum creatinine)</a>
+    })"><g:message code="informational.shared.traits.eGFR-creat" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -334,7 +332,7 @@
         },
         description: ('<strong>eGFR-cys (serum cystatin C)</strong><br/>'+
                 'Results in this track are from a GWAS meta-analysis of as many as 67,093 people conducted by the CKDGen Consortium.')
-    })">eGFR-cys (serum cystatin C)</a>
+    })"><g:message code="informational.shared.traits.eGFR-cys" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -349,7 +347,7 @@
         },
         description: ('<strong>microalbuminuria</strong><br/>'+
                 'Results in this track are from a GWAS meta-analysis of as many as 67,093 people conducted by the CKDGen Consortium.')
-    })">microalbuminuria</a>
+    })"><g:message code="informational.shared.traits.microalbuminuria" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -364,7 +362,7 @@
         },
         description: ('<strong>urinary albumin-to-creatinine ratio</strong><br/>'+
                 'Results in this track are from a GWAS meta-analysis of as many as 67,093 people conducted by the CKDGen Consortium.')
-    })">urinary albumin-to-creatinine ratio</a>
+    })"><g:message code="informational.shared.traits.urinary_atc_ratio" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -379,7 +377,7 @@
         },
         description: ('<strong>schizophrenia</strong><br/>'+
                 'Results in this track are from a GWAS Psychiatric Genetics Consortium.')
-    })">schizophrenia</a>
+    })"><g:message code="informational.shared.traits.schizophrenia" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -394,7 +392,7 @@
         },
         description: ('<strong>major depressive disorder</strong><br/>'+
                 'Results in this track are from a GWAS meta-analysis of many as 18,759 people conducted by the Psychiatric Genetics Consortium.')
-    })">major depressive disorder</a>
+    })"><g:message code="informational.shared.traits.depression" /></a>
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
@@ -409,7 +407,7 @@
         },
         description: ('<strong>bipolar disorder</strong><br/>'+
                 'Results in this track are from a GWAS meta-analysis of many as 16,731 people conducted by the Psychiatric Genetics Consortium.')
-    })">bipolar disorder</a>
+    })"><g:message code="informational.shared.traits.bipolar" /></a>
 </li>
 </ul>
 </li>
@@ -423,7 +421,7 @@
 <div class="nav navbar-nav navbar-left">
     <div class="well-sm">
         <button id="goBox" class="btn btn-default" onclick="igvSearch($('#goBoxInput')[0].value)">
-            Search
+            <g:message code="controls.shared.igv.search" />
         </button>
     </div>
 </div>

@@ -221,16 +221,16 @@
              }
              if (specifiedMafValue){
                  if (isNaN(specifiedMafValueId)){
-                    alert('Please specify a numeric value for the minor allele frequency (MAF).  The value "'+specifiedMafValue+'" is invalid');
+                    alert("<g:message code='gene.burdenTesting.maf_error_nan' />" + specifiedMafValue + " <g:message code='gene.burdenTesting.maf_is_invalid' />");
                     $('#rSpinner').hide();
                     return;
                   } else if (specifiedMafValueId <= 0) {
-                    alert('Please specify a minor allele frequency (MAF) value greater than 0.  The value "'+specifiedMafValue+'" is invalid');
+                    alert("<g:message code='gene.burdenTesting.maf_error_lt0'/>" + specifiedMafValue + " <g:message code='gene.burdenTesting.maf_is_invalid' />");
                     $('#rSpinner').hide();
                     return;
                   }
                   else if (specifiedMafValueId > 1) {
-                    alert('Please specify a value less than or equal to one for the minor allele frequency (MAF).  The value "'+specifiedMafValue+'" is invalid');
+                    alert("<g:message code='gene.burdenTesting.maf_error_gt1' />" + specifiedMafValue + " <g:message code='gene.burdenTesting.maf_is_invalid' />");
                     $('#rSpinner').hide();
                     return;
                   }
@@ -335,13 +335,13 @@ $( document ).ready( function (){
 
 
 <div class="container">
-    <h3>Preparing to run a burden test based on the variants in gene <%=geneName%>.</h3>
+    <h3><g:message code="gene.burdenTesting.prepare_run"/> <%=geneName%>.</h3>
 
     <div class="row burden-test-wrapper-options">
         <div class="col-md-8 col-sm-8 col-xs-12">
             <div  class="row">
                 <div class="col-md-4 col-sm-4 col-xs-4">
-                    <label>Select data set:&nbsp;&nbsp;</label>
+                    <label><g:message code="gene.burdenTesting.label.select_dataset"/>:&nbsp;&nbsp;</label>
                     <div class="form-inline">
                         <div class="radio">
                             <label><input type="radio" name="dataset" value="1" checked>&nbsp;13k&nbsp;&nbsp;</label>
@@ -352,9 +352,9 @@ $( document ).ready( function (){
                     </div>
                 </div>
                 <div class="col-md-8 col-sm-8 col-xs-8">
-                    <label>Available variant filter:
+                    <label><g:message code="gene.burdenTesting.label.available_variant_filter"/>:
                         <select class="proteinEffectFilter form-control">
-                            <option selected hidden>Select a filter</option>
+                            <option selected hidden><g:message code="gene.burdenTesting.label.select_filter"/></option>
                         </select>
                     </label>
                 </div>
@@ -364,7 +364,7 @@ $( document ).ready( function (){
             </div>
             <div  class="row">
                 <div class="col-md-6 col-sm-6 col-xs-6">
-                    <label for="mafInput">Minor Allele Frequency:</label>
+                    <label for="mafInput"><g:message code="gene.burdenTesting.label.maf"/>:</label>
                     <div class="labelAndInput">
                         MAF &lt;&nbsp;
                         <input style="display: inline-block" type="text" class="form-control" id="mafInput" placeholder="value">
@@ -372,13 +372,13 @@ $( document ).ready( function (){
 
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6">
-                    <label>Apply MAF across:&nbsp;&nbsp;</label>
+                    <label><g:message code="gene.burdenTesting.label.apply_maf"/>:&nbsp;&nbsp;</label>
                     <div class="form-inline mafOptionChooser">
                         <div class="radio">
-                            <label><input type="radio" name="mafOption" value="1" />&nbsp;All samples</label>
+                            <label><input type="radio" name="mafOption" value="1" />&nbsp;<g:message code="gene.burdenTesting.label.all_samples"/></label>
                         </div>
                         <div class="radio">
-                            <label><input type="radio" name="mafOption"  value="2" checked />&nbsp;Each ancestry</label>
+                            <label><input type="radio" name="mafOption"  value="2" checked />&nbsp;<g:message code="gene.burdenTesting.label.each_ancestry"/></label>
                         </div>
                     </div>
                 </div>
@@ -386,19 +386,19 @@ $( document ).ready( function (){
         </div>
         <div  class="col-md-4 col-sm-4 col-xs-12 burden-test-btn-wrapper vcenter">
             <button id="singlebutton" name="singlebutton" style="height: 80px"
-                    class="btn btn-primary btn-lg burden-test-btn" onclick="mpgSoftware.burdenTest.runBurdenTest()">Run burden test</button>
+                    class="btn btn-primary btn-lg burden-test-btn" onclick="mpgSoftware.burdenTest.runBurdenTest()"><g:message code="gene.burdenTesting.label.run"/></button>
         </div>
     </div>
 
     <div id="burden-test-no-results" class="row burden-test-result">
-        <div class="col-sm-6 col-sm-offset-3 ">No variants matched your filter criteria</div>
+        <div class="col-sm-6 col-sm-offset-3 "><g:message code="gene.burdenTesting.messages.no_results"/></div>
         <div class="col-sm-3 "></div>
     </div>
 
     <div id="burden-test-some-results" class="row burden-test-result">
         <div class="col-md-8 col-sm-6">
             <div>
-                <p class="standardFont">Of the <span id="traitSpan"></span> cases/controls, the following carry at least one of the <span id="variantNumberSpan"></span> applicable variants.</p>
+                <p class="standardFont"><g:message code="gene.burdenTesting.messages.some_results"/></p>
             </div>
             <div class="barchartFormatter">
                 <div id="chart">
@@ -416,7 +416,7 @@ $( document ).ready( function (){
             </div>
             <div>&nbsp;</div>
             <div>
-                <div class="variantsListLabel"><span  id="variantLabel"></span> variants:</div>
+                <div class="variantsListLabel"><span  id="variantLabel"></span> <g:message code="variant.label.variants"/>:</div>
                 <div id="variantList" class="variantList"></div>
             </div>
         </div>

@@ -11,7 +11,7 @@
 
 <div id="main">
     <div class="container">
-        <h1>About the data</h1>
+        <h1><g:message code="localized.aboutTheData"/></h1>
 
         <div class="row">
             <div class="buttonHolder tabbed-about-page">

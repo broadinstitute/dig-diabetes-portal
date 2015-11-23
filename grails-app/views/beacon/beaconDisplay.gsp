@@ -55,15 +55,15 @@
                     // clear previously created table content, if any
                     resultTable.empty();
                     // regenerate table content with updated data
-                    resultTable.append('<thead><tr><th style=\"text-align:left\" colspan=\"2\">Result</th></tr></thead>');
-                    resultTable.append('<tbody><tr><td style=\"text-align:left\">Project</td><td style=\"text-align:left\">' + dataset + '</td></tr>');
-                    resultTable.append('<tr><td style=\"text-align:left\">Chromosome</td><td style=\"text-align:left\">' + chromosome + '</td></tr>');
-                    resultTable.append('<tr><td style=\"text-align:left\">Position</td><td style=\"text-align:left\">' + position + '</td></tr>');
-                    resultTable.append('<tr><td style=\"text-align:left\">Allele</td><td style=\"text-align:left\">' + allele + '</td></tr>');
+                    resultTable.append('<thead><tr><th style=\"text-align:left\" colspan=\"2\">'+ <g:message code="beacon.label.result"/> +'</th></tr></thead>');
+                    resultTable.append('<tbody><tr><td style=\"text-align:left\">' + <g:message code="beacon.label.project"/> + '</td><td style=\"text-align:left\">' + dataset + '</td></tr>');
+                    resultTable.append('<tr><td style=\"text-align:left\">' + <g:message code="beacon.label.chromosome"/> + '</td><td style=\"text-align:left\">' + chromosome + '</td></tr>');
+                    resultTable.append('<tr><td style=\"text-align:left\">' + <g:message code="beacon.label.position"/> + '</td><td style=\"text-align:left\">' + position + '</td></tr>');
+                    resultTable.append('<tr><td style=\"text-align:left\">' + <g:message code="beacon.label.allele"/> + '</td><td style=\"text-align:left\">' + allele + '</td></tr>');
                     if (data === 'YES') { // display query answer in bold; in green if positive and in red if negative
-                        resultTable.append('<tr><td style=\"font-weight:bold;text-align:left\">Exist</td><td style=\"color:green;font-weight:bold;text-align:left\">' + data + '</td></tr></tbody>');
+                        resultTable.append('<tr><td style=\"font-weight:bold;text-align:left\">' + <g:message code="beacon.label.exists"/> + '</td><td style=\"color:green;font-weight:bold;text-align:left\">' + data + '</td></tr></tbody>');
                     } else {
-                        resultTable.append('<tr><td style=\"font-weight:bold;text-align: left\">Exist</td><td style=\"color:red;font-weight:bold;text-align:left\">' + data + '</td></tr></tbody>');
+                        resultTable.append('<tr><td style=\"font-weight:bold;text-align: left\">' + <g:message code="beacon.label.exists"/> + '</td><td style=\"color:red;font-weight:bold;text-align:left\">' + data + '</td></tr></tbody>');
                     }
 
                     // clear previously created json content, if any
@@ -94,7 +94,7 @@
             }
         }
         if (missingParams.length > 0) {
-            displayError.append("Please enter values for the following fields: " + missingParams.join(", "));
+            displayError.append(<g:message code="beacon.label.enter_values"/> + ": " + missingParams.join(", "));
             return false;
         }
 
@@ -140,29 +140,28 @@
 
         <div class="beaconDisplay">
             <p>
-                Learn more about the Global Alliance for Genomics and Health (GA4GH) <a class="boldlink" href="http://genomicsandhealth.org">here</a>,
-                and about the GA4GH Beacon project <a class="boldlink" href="http://genomicsandhealth.org">here</a>.
+                <g:message code="beacon.messages.learn_more"/>
             </p>
 
             <div>
                 <p>
-                    <b>Example queries:</b>
+                    <b><g:message code="beacon.label.example_queries"/>:</b>
                 </p>
 
                 <div>
                     <p>
                         <span>
-                            <a class="boldlink" onclick="resetForm('exac0.3', 1, 13417, 'CGAGA');">Chromosome: 1&nbsp;Position: 13417&nbsp;Allele: CGAGA&nbsp;Project: exac0.3</a>
+                            <a class="boldlink" onclick="resetForm('exac0.3', 1, 13417, 'CGAGA');"><g:message code="beacon.label.chromosome"/>: 1&nbsp;<g:message code="beacon.label.position"/>: 13417&nbsp;<g:message code="beacon.label.allele"/>: CGAGA&nbsp;<g:message code="beacon.label.project"/>: exac0.3</a>
                         </span>
                     </p>
                     <p>
                         <span>
-                            <a class="boldlink" onclick="resetForm('exac0.3', 5, 989870, 'D');">Chromosome: 5&nbsp;Position: 989870&nbsp;Allele: D&nbsp;Project: exac0.3</a>
+                            <a class="boldlink" onclick="resetForm('exac0.3', 5, 989870, 'D');"><g:message code="beacon.label.chromosome"/>: 5&nbsp;<g:message code="beacon.label.position"/>: 989870&nbsp;<g:message code="beacon.label.allele"/>: D&nbsp;<g:message code="beacon.label.project"/>: exac0.3</a>
                         </span>
                     </p>
                     <p>
                         <span>
-                            <a class="boldlink" onclick="resetForm('exac0.3', 'X', 20038741, 'G');">Chromosome: X&nbsp;Position: 20038741&nbsp;Allele: G&nbsp;Project: exac0.3</a>
+                            <a class="boldlink" onclick="resetForm('exac0.3', 'X', 20038741, 'G');"><g:message code="beacon.label.chromosome"/>: X&nbsp;<g:message code="beacon.label.position"/>: 20038741&nbsp;<g:message code="beacon.label.allele"/>: G&nbsp;<g:message code="beacon.label.project"/>: exac0.3</a>
                         </span>
                     </p>
                 </div>
@@ -172,7 +171,7 @@
             <div class="input-group input-group-lg">
                 <select name="" id="dataset-input" class="form-control" style="width:100%;">
                     <option value=""><g:message code="beacon.select.dataset"/></option>
-                    <option value="exac0.3" selected="selected">exac0.3 -- The Exome Aggregation Consortium (ExAC) v0.3</option>
+                    <option value="exac0.3" selected="selected">exac0.3 -- <g:message code="beacon.label.exac03"/></option>
                 </select>
             </div>
             <br>
@@ -208,19 +207,19 @@
             <div class="input-group input-group-lg">
                 <form style="width:90%;">
                     <br>
-                    Position:
+                    <g:message code="beacon.label.position"/>:
                     <input type="text" name="position" id="position-input">
                     <br>
                     <br>
-                    Allele:
+                    <g:message code="beacon.label.allele"/>:
                     <input type="text" name="allele" id="allele-input">
                     <br>
                     <br>
-                    Format Type:&nbsp;
+                    <g:message code="beacon.label.format_type"/>:&nbsp;
                     <span>
                     <label>
                         <input id="textRadio" type="radio" name="resultFormat" value="text" onclick="switchDisplay()" style="margin-right:2px" checked/>
-                        Text&nbsp;
+                        <g:message code="beacon.label.text"/>&nbsp;
                         <input id="jsonRadio" type="radio" name="resultFormat" value="text" onclick="switchDisplay()" style="margin-right:2px"/>
                         JSON
                     </label>
@@ -239,7 +238,7 @@
                 <table id="displayError" class="table table-striped basictable" style="color:red;font-weight:bold;width:53%">
                 </table>
             </div>
-            <div class="save btn btn-lg btn-primary pull-left" onclick="queryVariants()">Submit</div>
+            <div class="save btn btn-lg btn-primary pull-left" onclick="queryVariants()"><g:message code="default.button.submit.label"/></div>
         </div>
     </div>
 

@@ -1,16 +1,16 @@
 
-<h4>Restrict to a region</h4>
+<h4><g:message code='hypothesisGen.variantSearchRestrictToRegion.title'/></h4>
 <div class="row clearfix">
     <div class="col-md-6">
         <div id="datatypes-form">
             <div class="row" style="margin-bottom: 20px;">
-                <div class="col-xs-3" style="text-align: right;">Gene</div>
+                <div class="col-xs-3" style="text-align: right;"><g:message code='hypothesisGen.variantSearchRestrictToRegion.label.gene'/></div>
                 <div class="col-xs-6">
                     <input type="text" class="form-control" id="region_gene_input"/>
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-3" style="text-align: right;">Region</div>
+                <div class="col-xs-3" style="text-align: right;"><g:message code='hypothesisGen.variantSearchRestrictToRegion.label.region'/></div>
                 <div class="col-xs-2">
                     <input class="form-control" type="text" id="region_chrom_input" placeholder="chrom"/>
                 </div>

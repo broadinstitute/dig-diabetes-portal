@@ -10,7 +10,7 @@
     <h4>
         <g:message code="sigmasite.learn.rarevariant.1"></g:message>
         <a class="sigma-link" data-toggle="collapse" href="#rareVariantStory" aria-expanded="false" aria-controls="collapseExample">
-            Read more...
+            <g:message code="sigmasite.learn.messages.read_more" />
         </a>
     </h4>
 

@@ -16,7 +16,7 @@
 
 <g:render template="variantsAndAssociationsTableChanger"/>
 
-<button id="opener"  class="pull-right btn btn-default" style="display: none" >Revise table properties</button>
+<button id="opener"  class="pull-right btn btn-default" style="display: none" ><g:message code="gene.variantassociations.label.revise_table_props"/></button>
 <table id="variantsAndAssociationsTable" class="table table-striped distinctivetable distinctive">
     <thead id="variantsAndAssociationsHead">
     </thead>

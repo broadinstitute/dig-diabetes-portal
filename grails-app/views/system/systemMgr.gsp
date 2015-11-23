@@ -60,7 +60,7 @@
 
                     <div class="col-md-12">
                         <h2>
-                            Remember: any changes you make on this page impact the whole server, and will therefore be felt by all the other users
+                            <g:message code="system.messages.rest_server.prod" />
                         </h2>
                     </div>
 
@@ -69,7 +69,7 @@
                 <div class="separator"></div>
 
                 <g:form action='updateRestServer' method='POST' id='updateRestServer' class='form form-horizontal cssform' autocomplete='off'>
-                <h4>Choose your backend REST server (<em>current server = <a href="${currentRestServer}">${currentRestServer}</a></em>)</h4>
+                <h4><g:message code="system.header.rest_server.prod" /> (<em><g:message code="system.shared.messages.current_server" /> = <a href="${currentRestServer}">${currentRestServer}</a></em>)</h4>
                 <div class="row clearfix">
                     <div class="col-md-2"></div>
                     <div class="col-md-7">
@@ -78,7 +78,7 @@
                                 <label>
                                     <input id="testserver" type="radio" name="datatype" value="aws01restserver"
                                         <%=restServer.getCurrentServer()==restServer.getAws01RestServer()?" checked ":"" %> />
-                                    AWS01 rest server (${restServer.getAws01RestServer()})
+                                    <g:message code="system.radio.rest_server.AWS01" /> (${restServer.getAws01RestServer()})
                                 </label>
                             </div>
 
@@ -86,7 +86,7 @@
                                 <label>
                                     <input id="testserver" type="radio" name="datatype" value="devloadbalancedserver"
                                         <%=restServer.getCurrentServer()==restServer.getDevLoadBalanced()?" checked ":"" %> />
-                                    dev load balanced server(s) (${restServer.getDevLoadBalanced()})
+                                    <g:message code="system.radio.rest_server.dev" /> (${restServer.getDevLoadBalanced()})
                                 </label>
                             </div>
 
@@ -94,7 +94,7 @@
                                 <label>
                                     <input id="qaserver" type="radio" name="datatype" value="qaloadbalancedserver"
                                         <%=restServer.getCurrentServer()==restServer.getQaLoadBalanced()?" checked ":"" %>  />
-                                    qa load balanced server(s) (${restServer.getQaLoadBalanced()})
+                                    <g:message code="system.radio.rest_server.qa" /> (${restServer.getQaLoadBalanced()})
                                 </label>
                             </div>
 
@@ -102,7 +102,7 @@
                                 <label>
                                     <input id="prodserver" type="radio" name="datatype" value="prodloadbalancedserver"
                                         <%=restServer.getCurrentServer()==restServer.getProdLoadBalanced()?" checked ":"" %>  />
-                                    prod load balanced server(s) (${restServer.getProdLoadBalanced()})
+                                    <g:message code="system.radio.rest_server.prod" /> (${restServer.getProdLoadBalanced()})
                                 </label>
                             </div>
 
@@ -141,7 +141,7 @@
             <div class="separator"></div>
 
             <g:form action='updateBurdenRestServer' method='POST' id='updateBurdenRestServer' class='form form-horizontal cssform' autocomplete='off'>
-                <h4>Choose your backend burden test REST server (<em>current server = <a href="${burdenCurrentRestServer?.url}">${burdenCurrentRestServer?.name}</a></em>)</h4>
+                <h4><g:message code="system.header.rest_server.burden_test" /> (<em><g:message code="system.shared.messages.current_server" /> = <a href="${burdenCurrentRestServer?.url}">${burdenCurrentRestServer?.name}</a></em>)</h4>
                 <div class="row clearfix">
                     <div class="col-md-2"></div>
                     <div class="col-md-7">
@@ -194,8 +194,7 @@
 
 
             <g:form action='changeRecognizedStringsOnly' method='POST' class='form form-horizontal cssform' autocomplete='off'>
-                <h4>Do we insist  that we recognize a string (as  a range, gene, or variant) before we act upon it?  A nonzero
-                value means recognized strings only are allowed</h4>
+                <h4><g:message code="system.header.rest_server.recognize_strings" /></h4>
                 <input type="text" name="datatype" Value="${recognizedStringsOnly}"><br>
                 <div class="row clearfix">
                     <div class="col-md-6"></div>
@@ -237,33 +236,33 @@
 
                  <div class="row clearfix">
                      <div class="col-md-2"></div>
-                     <div class="col-md-3"> <div><a class='btn btn-primary btn-lg' onclick="refreshGenesForChromosome()" href="#">Refresh gene cache</a></div>
+                     <div class="col-md-3"> <div><a class='btn btn-primary btn-lg' onclick="refreshGenesForChromosome()" href="#"><g:message code="system.action.refresh_cache" args="${['gene']}" /></a></div>
                              <g:if test="${(currentGeneChromosome=='1')}">
-                                  <h5>Genes have not been refreshed since last reboot</h5>
+                                  <h5><g:message code="system.messages.cache.not_refreshed" args="${['Genes']}" /></h5>
                              </g:if>
                              <g:elseif test="${((currentGeneChromosome!='1') && (currentGeneChromosome?.length()>0))}">
-                                 Currently refreshing genes for chromosome ${currentGeneChromosome}
+                                 <g:message code="system.messages.cache.refreshing" args="${['genes']}" /> ${currentGeneChromosome}
                              </g:elseif>
                              <g:elseif test="${(currentGeneChromosome?.length()==0)}">
-                                 Gene cache has been refreshed
+                                 <g:message code="system.messages.cache.refreshed" args="${['gene']}" />
                              </g:elseif>
                              <div class="text-center" style="font-weight: bold">
-                                 Cached genes: <g:formatNumber number="${totalNumberOfGenes}" format="###,###,###"/>
+                                 <g:message code="system.messages.cache.cached" args="${['genes']}" />: <g:formatNumber number="${totalNumberOfGenes}" format="###,###,###"/>
                              </div>
                      </div>
                      <div class="col-md-2"></div>
                      <div class="col-md-3"> <div><a class='btn btn-primary btn-lg' onclick="refreshVariantsForChromosome()">Refresh variant cache</a> </div>
                          <g:if test="${(currentVariantChromosome=='1')}">
-                             <h5>Variants have not been refreshed since last reboot</h5>
+                             <h5><g:message code="system.messages.cache.not_refreshed" args="${['Variants']}" /></h5>
                          </g:if>
                          <g:elseif test="${((currentVariantChromosome!='1') && (currentVariantChromosome?.length()>0))}">
-                             Currently refreshing variants for chromosome ${currentVariantChromosome}
+                             <g:message code="system.messages.cache.refreshing" args="${['variants']}" /> ${currentVariantChromosome}
                          </g:elseif>
                          <g:elseif test="${(currentVariantChromosome?.length()==0)}">
-                             Variant cache has been refreshed
+                             <g:message code="system.messages.cache.refreshed" args="${['variant']}" />
                          </g:elseif>
                          <div class="text-center" style="font-weight: bold">
-                             Cached variants: <g:formatNumber number="${totalNumberOfVariants}" format="###,###,###"/>
+                             <g:message code="system.messages.cache.cached" args="${['variants']}" />: <g:formatNumber number="${totalNumberOfVariants}" format="###,###,###"/>
                          </div>
                      </div>
                      <div class="col-md-2"></div>
@@ -288,7 +287,7 @@
             <div class="separator"></div>
 
                 <g:form action='switchSigmaT2d' method='POST' class='form form-horizontal cssform' autocomplete='off'>
-                    <h4>Choose your application(<em>current application = <strong>${currentApplicationIsSigma}</strong></em>)</h4>
+                    <h4><g:message code="system.header.application" />(<em><g:message code="system.shared.messages.current_app" /> = <strong>${currentApplicationIsSigma}</strong></em>)</h4>
                     <div class="row clearfix">
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
@@ -298,13 +297,13 @@
                                 <div class="radio">
                                     <label>
                                         <input id="t2dgenes" type="radio" name="datatype" value="t2dgenes"  <%=(currentApplicationIsSigma=='t2dGenes')?'checked':''%> />
-                                        T2D Genes
+                                        <g:message code="informational.shared.cohort.t2dgenes" />
                                     </label>
                                 </div>
                                 <div class="radio">
                                     <label>
                                         <input id="beacon" type="radio" name="datatype" value="beacon"  <%=(currentApplicationIsSigma=='Beacon')?'checked':''%> />
-                                        beacon
+                                        <g:message code="site.shared.phrases.beacon" />
                                     </label>
                                 </div>
                             </div>
@@ -342,7 +341,7 @@
 
 
             <g:form action='updateHelpTextLevel' method='POST' class='form form-horizontal cssform' autocomplete='off'>
-                <h4>Adjust help text presentation(<em>current Setting = <strong>${helpTextLevel}</strong></em>)</h4>
+                <h4><g:message code="system.header.help_text" />(<em><g:message code="system.shared.messages.current_setting" /> = <strong>${helpTextLevel}</strong></em>)</h4>
                 <div class="row clearfix">
                     <div class="col-md-3"></div>
                     <div class="col-md-6">
@@ -352,19 +351,19 @@
                             <div class="radio">
                                 <label>
                                     <input id="noHelpText" type="radio" name="datatype" value="none"  <%=(helpTextLevel==0)?'checked':''%> />
-                                    Never display help text
+                                    <g:message code="system.radio.help_text.never_display" />
                                 </label>
                             </div>
                             <div class="radio">
                                 <label>
                                     <input id="conditionalHelpText" type="radio" name="datatype" value="conditional" <%=(helpTextLevel==1)?'checked':''%> />
-                                    Display help text question marks only if mapped to real text
+                                    <g:message code="system.radio.help_text.sometimes_display" />
                                 </label>
                             </div>
                             <div class="radio">
                                 <label>
                                     <input id="allHelpText" type="radio" name="datatype" value="always"  <%=(helpTextLevel==2)?'checked':''%> />
-                                    Display help text question marks unconditionally
+                                    <g:message code="system.radio.help_text.always_display" />
                                 </label>
                             </div>
                         </div>
@@ -404,7 +403,7 @@
 
 
             <g:form action='changeDataVersion' method='POST' class='form form-horizontal cssform' autocomplete='off'>
-                <h4>Which version should we draw the data from?</h4>
+                <h4><g:message code="system.header.data_version" /></h4>
                 <input type="text" name="datatype" Value="${dataVersion}"><br>
                 <div class="row clearfix">
                     <div class="col-md-6"></div>
@@ -442,7 +441,7 @@
 
 
             <g:form action='forceMetadataCacheUpdate' method='POST' class='form form-horizontal cssform' autocomplete='off'>
-                <h4>We usually call the metadata once, cache that value, and then rely on</h4>
+                <h4><g:message code="system.header.metadata_cache" /></h4>
                 <div class="row clearfix">
                     <div class="col-md-3"></div>
                     <div class="col-md-6">
@@ -452,13 +451,13 @@
                             <div class="radio">
                                 <label>
                                     <input id="noOverrideIsNecessary" type="radio" name="datatype" value="forceIt"  <%=(forceMetadataCacheOverride==true)?'checked':''%> />
-                                    A metadata cache override has been scheduled
+                                    <g:message code="system.radio.metadata_cache.override" />
                                 </label>
                             </div>
                             <div class="radio">
                                 <label>
                                     <input id="overrideIsNecessary" type="radio" name="datatype" value="doNot" <%=(forceMetadataCacheOverride==false)?'checked':''%> />
-                                    No metadata cache override has been scheduled
+                                    <g:message code="system.radio.metadata_cache.no_override" />
                                 </label>
                             </div>
                         </div>
@@ -506,7 +505,7 @@
             <div class="separator"></div>
 
             <g:form action='updateWarningText' method='POST' class='form form-horizontal cssform' autocomplete='off'>
-                <h4>Set warning text(<em>current Setting = <strong>${warningText}</strong></em>)</h4>
+                <h4><g:message code="system.header.warning_text" />(<em><g:message code="system.shared.messages.current_setting" /> = <strong>${warningText}</strong></em>)</h4>
                 <input type="text" name="warningText" Value="${warningText}"><br>
                 <div class="row clearfix">
                     <div class="col-md-6"></div>
@@ -542,9 +541,9 @@
             <div class="row clearfix">
                     <div class="col-md-12">
                         <strong>
-                            Logged with google?
-                            <s2o:ifLoggedInWith provider="google">yes</s2o:ifLoggedInWith>
-                            <s2o:ifNotLoggedInWith provider="google">no</s2o:ifNotLoggedInWith>
+                            <g:message code="system.header.google_log" />
+                            <s2o:ifLoggedInWith provider="google"><g:message code="default.confirmation.yes" /></s2o:ifLoggedInWith>
+                            <s2o:ifNotLoggedInWith provider="google"><g:message code="default.confirmation.no" /></s2o:ifNotLoggedInWith>
                         </strong>
                     </div>
                 </div>

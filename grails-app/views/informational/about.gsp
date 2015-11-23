@@ -89,7 +89,7 @@
 
         <div class="row pull-left consortium-spacing">
             <div class="medText">
-                <a href="${createLink(controller:'informational', action:'hgat')}"><strong>GWAS<br/> meta-analyses</strong></a>
+                <a href="${createLink(controller:'informational', action:'hgat')}"><strong><g:message code='gene.variantassociations.table.rowhdr.gwas'/><br/> <g:message code='gene.variantassociations.table.rowhdr.meta_analyses'/></strong></a>
             </div>
         </div>
 

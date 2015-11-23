@@ -43,9 +43,9 @@ var getTechnologies = function(sel){
                             technologyChooser.empty();
                             for ( var i = 0 ; i < technologies.length ; i++ ){
                                 if (technologies[i] === "ExSeq") {
-                                   technologyChooser.append($("<option>").val(technologies[i]).text("Exome Sequencing"));
+                                   technologyChooser.append($("<option>").val(technologies[i]).text("<g:message code="gene.variantassociations.technologyChooser.option.exome_sequencing"/>"));
                                 } else if (technologies[i] === "ExChip") {
-                                   technologyChooser.append($("<option>").val(technologies[i]).text("Exome Chip"));
+                                   technologyChooser.append($("<option>").val(technologies[i]).text("<g:message code="gene.variantassociations.technologyChooser.option.exome_chip"/>"));
                                 } else {
                                    technologyChooser.append($("<option>").val(technologies[i]).text(technologies[i]));
                                 }
@@ -137,17 +137,17 @@ var getDataSets = function(sel){
 </g:javascript>
 <div class="modal-content" id="dialog">
     <div class="modal-header">
-        <h4 class="modal-title" id="dataModalLabel">Variants and Associations table modifier</h4>
+        <h4 class="modal-title" id="dataModalLabel"><g:message code="gene.variantassociations.tableModifier.title"/></h4>
     </div>
 
     <div class="modal-body">
         <g:form role="form" class="dk-modal-form" action="geneInfo" id="${geneName}">
             <div class="dk-modal-form-input-group">
-                <h4>Add / hide column</h4>
+                <h4><g:message code="gene.variantassociations.tableModifier.modify_cols"/></h4>
 
                 <div class="dk-modal-form-input-row">
                     <div class="dk-variant-search-builder-title">
-                        Column title (optional)
+                        <g:message code="gene.variantassociations.tableModifier.col_label"/>
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
@@ -157,7 +157,7 @@ var getDataSets = function(sel){
 
                 <div class="dk-modal-form-input-row">
                     <div class="dk-variant-search-builder-title">
-                        P-value
+                        <g:message code="variantTable.columnHeaders.shared.pValue"/>
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
@@ -177,18 +177,18 @@ var getDataSets = function(sel){
 
                 <div class="dk-modal-form-input-row">
                     <div class="dk-variant-search-builder-title">
-                        Show columns
+                        <g:message code="gene.variantassociations.tableModifier.show_cols"/>
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
                         <g:renderColumnCheckboxes data='${columnInformation}'></g:renderColumnCheckboxes>
                     </div>
                 </div>
-                <h4>Add / hide row</h4>
+                <h4><g:message code="gene.variantassociations.tableModifier.modify_rows"/></h4>
 
                 <div class="dk-modal-form-input-row">
                     <div class="dk-variant-search-builder-title">
-                        Phenotype
+                        <g:message code="gene.variantassociations.shared.label.phenotype"/>
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
@@ -200,7 +200,7 @@ var getDataSets = function(sel){
 
                 <div class="dk-modal-form-input-row">
                     <div class="dk-variant-search-builder-title">
-                        Technology
+                        <g:message code="gene.variantassociations.shared.label.technology"/>
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
@@ -212,7 +212,7 @@ var getDataSets = function(sel){
 
                 <div class="dk-modal-form-input-row">
                     <div class="dk-variant-search-builder-title">
-                        Ancestry
+                        <g:message code="gene.variantassociations.shared.label.ancestry"/>
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
@@ -224,7 +224,7 @@ var getDataSets = function(sel){
 
                 <div class="dk-modal-form-input-row">
                     <div class="dk-variant-search-builder-title">
-                        Available dataset
+                        <g:message code="gene.variantassociations.tableModifier.available_dataset"/>
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
@@ -236,7 +236,7 @@ var getDataSets = function(sel){
 
                 <div class="dk-modal-form-input-row">
                     <div class="dk-variant-search-builder-title">
-                        Row title (optional)
+                        <g:message code="gene.variantassociations.tableModifier.row_label"/>
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
@@ -246,7 +246,7 @@ var getDataSets = function(sel){
 
                 <div class="dk-modal-form-input-row">
                     <div class="dk-variant-search-builder-title">
-                        Show rows
+                        <g:message code="gene.variantassociations.tableModifier.show_rows"/>
                     </div>
 
                     <div class="dk-variant-search-builder-ui">
@@ -259,8 +259,8 @@ var getDataSets = function(sel){
     </div>
 
     <div class="modal-footer dk-modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="$('#vandasubmit').click()">Rebuild table</button>
-        <button type="button" class="btn btn-warning" data-dismiss="modal" onclick="$('#dialog').dialog('close')">Cancel</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="$('#vandasubmit').click()"><g:message code="gene.variantassociations.tableModifier.rebuild_table"/></button>
+        <button type="button" class="btn btn-warning" data-dismiss="modal" onclick="$('#dialog').dialog('close')"><g:message code="default.button.cancel.label"/></button>
     </div>
 </div>
 

@@ -115,7 +115,7 @@
             </div>
             <div>
 
-                <a data-toggle="collapse"  data-parent="#accordion" href="#cPropertiesSection"><span id="cPropertyToggleText">Open advanced filtering</span></a>
+                <a data-toggle="collapse"  data-parent="#accordion" href="#cPropertiesSection"><span id="cPropertyToggleText"><g:message code="variantSearch.spec.actions.open_adv_filter"/></span></a>
 
                 <div id="cPropertiesSection" class="panel-collapse collapse">
                     <div class="panel-body">
@@ -147,9 +147,9 @@
 
         <span class="pull-right">
             <button class="btn btn-med btn-primary variant-filter-button"
-                    onclick="mpgSoftware.variantWF.cancelThisFieldCollection()">Cancel</button>
+                    onclick="mpgSoftware.variantWF.cancelThisFieldCollection()"><g:message code="default.button.cancel.label"/></button>
             <button class="btn btn-med btn-primary variant-filter-button"
-                    onclick="mpgSoftware.variantWF.gatherFieldsAndPostResults()">Build request &gt;&gt;</button>
+                    onclick="mpgSoftware.variantWF.gatherFieldsAndPostResults()"><g:message code="variantSearch.spec.actions.build_req"/> &gt;&gt;</button>
 
         </span>
 

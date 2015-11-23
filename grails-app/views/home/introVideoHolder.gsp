@@ -19,7 +19,7 @@
                 <div class="col-md-offset-2 col-md-8 col-sm-12">
                     <div class="medTextDark" style="padding-bottom: 20px"><strong>Video: How to use the portal</strong></div>
                     <iframe src="//player.vimeo.com/video/119352074" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                    <p><a href="https://vimeo.com/119352074">T2D portal tutorial</a> from <a href="https://vimeo.com/user33530350">Broad Institute</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+                    <p><g:message code="portal.introVideo.t2d.link"/>.</p>
 
                 </div>
 

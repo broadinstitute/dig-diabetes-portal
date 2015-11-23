@@ -88,16 +88,16 @@
 
             // password expired
             if (user.expired) {
-                retVal += "<td><a href='" + autoPasswordUnexpireUrl + "/" + replacePeriodsInUsername + "' class='boldlink'>expired</a></td>";
+                retVal += "<td><a href='" + autoPasswordUnexpireUrl + "/" + replacePeriodsInUsername + "' class='boldlink'><g:message code='users.attributes.expired'/></a></td>";
             } else {
-                retVal += "<td><a href='" + autoPasswordExpireUrl + "/" + replacePeriodsInUsername + "' class='boldlink'>active</a></td>";
+                retVal += "<td><a href='" + autoPasswordExpireUrl + "/" + replacePeriodsInUsername + "' class='boldlink'><g:message code='users.attributes.active'/></a></td>";
             }
 
             // account disabled
             if (!user.enabled) {
-                retVal += "<td><a href='" + autoAccountExpireUrl + "/" + replacePeriodsInUsername + "' class='boldlink'>enabled</a></td>";
+                retVal += "<td><a href='" + autoAccountExpireUrl + "/" + replacePeriodsInUsername + "' class='boldlink'><g:message code='users.attributes.enabled'/></a></td>";
             } else {
-                retVal += "<td><a href='" + autoAccountUnexpireUrl + "/" + replacePeriodsInUsername + "' class='boldlink'>not enabled</a></td>"
+                retVal += "<td><a href='" + autoAccountUnexpireUrl + "/" + replacePeriodsInUsername + "' class='boldlink'><g:message code='users.attributes.not_enabled'/></a></td>"
             }
             retVal += "</tr>";
 

@@ -7,7 +7,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href=img/favicon.ico>
 
-    <title>IGV - Integrative Genomics Viewer</title>
+    <title>IGV - <g:message code="informational.shared.tools.igv" /></title>
 
     <!-- Bootstrap core CSS -->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">

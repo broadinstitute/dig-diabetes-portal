@@ -3,7 +3,7 @@
     <div class="row adminform2">
         <g:if test="${userInstance?.username}">
                 <div class="col-md-2 displayUserLabel">
-                   <span id="username-label" class="property-label">Username</span>
+                   <span id="username-label" class="property-label"><g:message code="users.attributes.username"/></span>
                 </div>
                 <div class="col-md-6 displayUserField">
                     <span class="property-value" aria-labelledby="username-label"><g:fieldValue bean="${userInstance}" field="username"/></span>
@@ -16,10 +16,10 @@
 <div class="row adminform2">
     <g:if test="${userInstance?.password}">
             <div class="col-md-2 displayUserLabel">
-                <span id="password-label" class="property-label">password</span>
+                <span id="password-label" class="property-label"><g:message code="users.attributes.password"/></span>
             </div>
             <div class="col-md-6 displayUserField">
-                <span class="property-value" aria-labelledby="password-label">[encoded]</span>
+                <span class="property-value" aria-labelledby="password-label">[<g:message code="users.label.encoded"/>]</span>
             </div>
             <div class="col-md-4"></div>
 
@@ -30,7 +30,7 @@
 <div class="row adminform2">
     <g:if test="${userInstance?.email}">
             <div class="col-md-2 displayUserLabel">
-                <span id="email-label" class="property-label">email</span>
+                <span id="email-label" class="property-label"><g:message code="users.attributes.email"/></span>
             </div>
             <div class="col-md-6 displayUserField">
                 <span class="property-value" aria-labelledby="email-label"><g:fieldValue bean="${userInstance}" field="email"/></span>
@@ -43,7 +43,7 @@
 <div class="row adminform2">
     <g:if test="${userInstance?.fullName}">
             <div class="col-md-2 displayUserLabel">
-                <span id="fullName-label" class="property-label">fullName</span>
+                <span id="fullName-label" class="property-label"><g:message code="users.attributes.fullName"/></span>
             </div>
             <div class="col-md-6 displayUserField">
                 <span class="property-value" aria-labelledby="fullName-label"><g:fieldValue bean="${userInstance}" field="fullName"/></span>
@@ -56,7 +56,7 @@
 <div class="row adminform2">
     <g:if test="${userInstance?.nickname}">
             <div class="col-md-2 displayUserLabel">
-                <span id="nickname-label" class="property-label">nickname</span>
+                <span id="nickname-label" class="property-label"><g:message code="users.attributes.nickname"/></span>
             </div>
             <div class="col-md-6 displayUserField">
                 <span class="property-value" aria-labelledby="nickname-label"><g:fieldValue bean="${userInstance}" field="nickname"/></span>
@@ -72,7 +72,7 @@
         <g:if test="${userInstance?.hasLoggedIn}">
             <div class="col-md-3">
                 <span id="hasLoggedIn-label" class="property-label">
-                    hasLoggedIn
+                    <g:message code="users.attributes.hasLoggedIn"/>
                 </span>
             </div>
 
@@ -87,7 +87,7 @@
         <g:if test="${userInstance?.enabled}">
             <div class="col-md-3">
                 <span id="enabled-label" class="property-label">
-                    enabled
+                    <g:message code="users.attributes.enabled"/>
                 </span>
             </div>
 
@@ -109,7 +109,7 @@
         <g:if test="${userInstance?.accountExpired}">
             <div class="col-md-3">
                 <span id="accountExpired-label" class="property-label">
-                    accountExpired
+                    <g:message code="users.attributes.accountExpired"/>
                 </span>
             </div>
 
@@ -124,7 +124,7 @@
         <g:if test="${userInstance?.accountLocked}">
             <div class="col-md-3">
                 <span id="accountLocked-label" class="property-label">
-                    accountLocked
+                    <g:message code="users.attributes.accountLocked"/>
                 </span>
             </div>
 
@@ -144,7 +144,7 @@
         <g:if test="${userInstance?.passwordExpired}">
             <div class="col-md-3">
                 <span id="passwordExpired-label" class="property-label">
-                    passwordExpired
+                    <g:message code="users.attributes.passwordExpired"/>
                 </span>
             </div>
 
@@ -158,7 +158,7 @@
     <div class="row adminform2">
             <div class="col-md-5">
                 <span id="userPrivs-label" class="property-label">
-                    USER PRIVS
+                    <g:message code="users.privileges.user_privs"/>
                 </span>
             </div>
 
@@ -177,7 +177,7 @@
     <div class="row adminform2">
         <div class="col-md-5">
             <span id="mgrPrivs-label" class="property-label">
-                ADMIN PRIVS
+                <g:message code="users.privileges.admin_privs"/>
             </span>
         </div>
 
@@ -196,7 +196,7 @@
     <div class="row adminform2">
         <div class="col-md-5">
             <span id="systemPrivs-label" class="property-label">
-                SYSTEM PRIVS
+                <g:message code="users.privileges.system_privs"/>
             </span>
         </div>
 

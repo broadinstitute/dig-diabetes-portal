@@ -87,14 +87,14 @@ div.helix::after {
     <div class="container">
         <g:renderExomeSequenceSection>
             <p>
-                This portal contains results from genetic association studies of type 2 diabetes.
-                Datatsets include exome sequencing results contributed by
+                <g:message code="beacon.home.messages.renderExomeSequence1" />.
+                <g:message code="beacon.home.messages.renderExomeSequence2" />
                 <a class="boldlink" href="${createLink(controller: 'informational', action: 't2dgenes')}">T2D-GENES</a>
-                and <a class="boldlink" href="${createLink(controller: 'informational', action: 'got2d')}">GoT2D</a> (n&asymp;12,940);
-                exome chip results contributed by <a class="boldlink" href="${createLink(controller: 'informational', action: 'got2d')}">GoT2D</a> (n&asymp;79,854);
-                and GWAS results contributed by <a class="boldlink" href="http://diagram-consortium.org/about.html">DIAGRAM</a> (n&asymp;69,033).
-                The portal also contains  results from large GWAS meta-analyses of <a class="boldlink" href="${createLink(controller: 'informational', action: 'hgat')}">
-                24 other traits</a>.
+                <g:message code="site.shared.phrases.and" /> <a class="boldlink" href="${createLink(controller: 'informational', action: 'got2d')}">GoT2D</a> (n&asymp;12,940);
+                <g:message code="beacon.home.messages.renderExomeSequence3" /> <a class="boldlink" href="${createLink(controller: 'informational', action: 'got2d')}">GoT2D</a> (n&asymp;79,854);
+                <g:message code="beacon.home.messages.renderExomeSequence4" /> <a class="boldlink" href="http://diagram-consortium.org/about.html">DIAGRAM</a> (n&asymp;69,033).
+                <g:message code="beacon.home.messages.renderExomeSequence5" /> <a class="boldlink" href="${createLink(controller: 'informational', action: 'hgat')}">
+                <g:message code="beacon.home.messages.renderExomeSequence6" /></a>.
             </p>
 
         </g:renderExomeSequenceSection>
@@ -173,8 +173,8 @@ div.helix::after {
                     <div class="row">
                         <div class="col-sm-9">
                             <h2>
-                                Develop hypotheses<br/>
-                                <small>(dynamically calculated burden tests)</small>
+                                <g:message code="beacon.home.messages.develop_hypotheses.title"/><br/>
+                                <small>(<g:message code="beacon.home.messages.develop_hypotheses.desc"/>)</small>
                             </h2>
                         </div>
 

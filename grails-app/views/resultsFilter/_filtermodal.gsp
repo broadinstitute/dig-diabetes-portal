@@ -20,13 +20,13 @@
     <div class='modal-content'>
         <div class='modal-header'>
             <button aria-hidden='true' class='close' data-dismiss='modal' type='button'>&times;</button>
-            <h4 class='modal-title'>Customize Result Columns</h4>
+            <h4 class='modal-title'><g:message code='filterModal.title.customize'/></h4>
         </div>
         <div class='modal-body'>
             <div class='row'>
                 <div class='col-md-12'>
                     <!-- %h2 Choose custom columns to display in results table -->
-                    <p>Your results include variants from the datasets you selected above. The table of these variants will automatically show results (e.g., p-value, effect size) from your selected datasets and, for comparison, the largest dataset for your data type that is available through this portal. If variants in your table were genotyped in other studies, you can view results from those studies as well by adding a column for each study using these tools.</p>
+                    <p><g:message code='filterModal.message.results'/>.</p>
                 </div>
             </div>
             <div ng-show="tree.length == 0" class="row">
@@ -38,17 +38,17 @@
             <!-- This is a chunk that just creates filters based upon an enumeration of the possible filters -->
             <div class='dynamicfilters form-group'>
                 <div class='row'>
-                    <h4 class='col-xs-6'>1. Select datasets by category</h4>
+                    <h4 class='col-xs-6'>1. <g:message code='filterModal.step.select_datasets_category'/></h4>
                         <div class='iconbutton pull-right'
                              data='Reset'
                              ng-click='resetFilters()'>
                             <div class='glyphicon glyphicon-refresh'></div>
-                            Reset
+                            <g:message code='filterModal.shared.actions.reset'/>
                         </div>
                 </div>
                 <div class='row' ng-repeat='(filter_name, filter_values) in view.filters'>
                     <div ng-if="filter_name != 'version'">
-                        <div class='col-md-4'>By {{filter_name}}:</div>
+                        <div class='col-md-4'><g:message code='filterModal.shared.phrases.by'/> {{filter_name}}:</div>
                         <div class='col-md-8'>
                             <select class='form-control'
                                     ng-change='view.filters = refineFilters(search.currentQuery)'
@@ -63,17 +63,17 @@
 
                 <div class='row flex-container'>
                     <div class='col-xs-8'>
-                        <h4>2. Select individual datasets ({{getDatasetsFromQuery(search.currentQuery).length}} found)</h4>
+                        <h4>2. <g:message code='filterModal.step.select_datasets_single'/> ({{getDatasetsFromQuery(search.currentQuery).length}} <g:message code='filterModal.shared.phrases.found'/>)</h4>
                     </div>
                     <div class='col-xs-6'>
                         <div class='flex-container pull-right'>
                             <div class='iconbutton' data='Select Matches' ng-click='selectTextMatches(getDatasetsFromQuery(search.currentQuery))'>
                                 <div class='glyphicon glyphicon-ok'></div>
-                                All
+                                <g:message code='filterModal.shared.phrases.all'/>
                             </div>
                             <div class='iconbutton' data='Deselect Matches' ng-click='toggleItems(getDatasetsFromQuery(search.currentQuery), false)'>
                                 <div class='glyphicon glyphicon-unchecked'></div>
-                                None
+                                <g:message code='filterModal.shared.phrases.none'/>
                             </div>
                         </div>
                     </div>
@@ -100,18 +100,18 @@
             </div>
             <div class='row'>
                 <div class='col-xs-12'>
-                    <h4>3. Confirm selected columns and update results table</h4>
+                    <h4>3. <g:message code='filterModal.step.confirm_selection'/></h4>
                 </div>
                 <div class='col-xs-12'>
                     <div>
                         <div class='row'>
                             <div class='col-xs-8'>
-                                <p>{{getSelectedSets(tree).length}} datasets selected for additional result columns:</p>
+                                <p>{{getSelectedSets(tree).length}} <g:message code='filterModal.message.addt_results'/>:</p>
                             </div>
                             <div class='col-xs-4'>
                                 <div class='iconbutton pull-right' data='Clear All Selections' ng-click='toggleItems(flattenTree(tree))' style="padding-right: 10px;">
                                     <div class='glyphicon glyphicon-trash'></div>
-                                    Remove all datasets
+                                    <g:message code='filterModal.shared.actions.remove'/>
                                 </div>
                             </div>
                         </div>
@@ -135,8 +135,8 @@
             <div class='row'>
                 <div class='col-xs-12'>
                     <button class='btn btn-primary btn-lg pull-right' data-dismiss='modal'
-                            ng-click="setColumnFilter(getSelectedSetNames(tree))">Update Results</button>
-                    <button class='btn btn-lg pull-right' data-dismiss='modal' ng-click='view.showAdvancedSelector = false'>Cancel</button>
+                            ng-click="setColumnFilter(getSelectedSetNames(tree))"><g:message code='filterModal.shared.actions.update'/></button>
+                    <button class='btn btn-lg pull-right' data-dismiss='modal' ng-click='view.showAdvancedSelector = false'><g:message code='filterModal.shared.actions.cancel'/></button>
                 </div>
             </div>
         </div>

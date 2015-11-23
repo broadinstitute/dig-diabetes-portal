@@ -4,12 +4,12 @@
     <table id="traitsPerVariantTable" class="table table-striped basictable gwas-table">
         <thead>
         <tr>
-            <th>trait</th>
-            <th>p-value</th>
-            <th>direction of effect</th>
-            <th>odds ratio</th>
-            <th>minor allele frequency</th>
-            <th>effect</th>
+            <th><g:message code="informational.shared.header.trait" /></th>
+            <th><g:message code="variantTable.columnHeaders.sigma.pValue" /></th>
+            <th><g:message code="variantTable.columnHeaders.shared.direction" /></th>
+            <th><g:message code="variantTable.columnHeaders.shared.oddsRatio" /></th>
+            <th><g:message code="variantTable.columnHeaders.shared.maf" /></th>
+            <th><g:message code="variantTable.columnHeaders.shared.effect" /></th>
         </tr>
         </thead>
         <tbody id="traitsPerVariantTableBody">

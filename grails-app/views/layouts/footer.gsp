@@ -12,7 +12,7 @@
             <div class="col-lg-6"></div>
             <div class="col-lg-6 small-buildinfo">
                 <span class="pull-right" style="padding-right:10px">
-                    Built on ${BuildInfo?.buildHost} at ${BuildInfo?.buildTime}.  Version=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}
+                    <g:message code="buildInfo.shared.build_message" args="${[BuildInfo?.buildHost, BuildInfo?.buildTime]}"/>.  <g:message code='buildInfo.shared.version'/>=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}
                 </span>
             </div>
 

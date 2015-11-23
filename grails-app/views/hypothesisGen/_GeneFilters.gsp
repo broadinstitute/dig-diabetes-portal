@@ -4,7 +4,7 @@
         <div class="dbtInnerBoundingBox" id="innerVariantSelectingBox">
             <div class="row">
                 <div class="col-sm-12">
-                    <h3>There are three ways to create a list of variants:</h3>
+                    <h3><g:message code='hypothesisGen.geneFilters.intro'/>:</h3>
                 </div>
             </div>
 
@@ -19,7 +19,7 @@
                                     <a class="accordion-toggle collapsed" data-toggle="collapse"
                                        data-parent="#accordionVariantAnnotations"
                                        href="#collapseVariantAnnotationOne">
-                                        <h3><strong>Enter the list by hand</strong></h3>
+                                        <h3><strong><g:message code='hypothesisGen.geneFilters.by_hand.title'/></strong></h3>
                                     </a>
                                 </div>
 
@@ -27,8 +27,7 @@
                                     <div class="accordion-inner">
                                         <g:form action="variantUpload">
                                             <div class="row">
-                                                <div class="col-sm-5">Type (or else copy and paste) a variant list. Each variant should be
-                                                in quotes and separated by commas</div>
+                                                <div class="col-sm-5"><g:message code='hypothesisGen.geneFilters.by_hand.desc'/></div>
 
                                                 <div class="col-sm-5">
                                                     <g:textField name="explicitVariants" size="45"
@@ -48,7 +47,7 @@
                                     <a class="accordion-toggle collapsed" data-toggle="collapse"
                                        data-parent="#accordionVariantAnnotations"
                                        href="#collapseVariantAnnotationTwo">
-                                        <h3><strong>Reference an existing list in a file</strong></h3>
+                                        <h3><strong><g:message code='hypothesisGen.geneFilters.file.title'/></strong></h3>
                                     </a>
                                 </div>
 
@@ -56,8 +55,7 @@
                                     <div class="accordion-inner">
                                         <g:uploadForm action="variantFileUpload">
                                             <div class="row">
-                                                <div class="col-sm-5">Choose a file containing variant. The file must contain
-                                                only one variant on each line</div>
+                                                <div class="col-sm-5"><g:message code='hypothesisGen.geneFilters.file.desc'/></div>
 
                                                 <div class="col-sm-5"><input type="file" class="btn btn-default btn-sm"
                                                                              name="myVariantFile" size="45"/></div>
@@ -76,7 +74,7 @@
                                     <a class="accordion-toggle collapsed" data-toggle="collapse"
                                        data-parent="#accordionVariantAnnotations"
                                        href="#collapseVariantAnnotationThree">
-                                        <h3><strong>Search for variants in the database using annotations</strong></h3>
+                                        <h3><strong><g:message code='hypothesisGen.geneFilters.database.title'/></strong></h3>
                                     </a>
                                 </div>
 

@@ -43,21 +43,21 @@
 
         <div class="row clearfix">
             <div class="col-md-12">
-                getData payload:<br/> ${getDataPayload}
+                <g:message code="variantSearch.freeForm.label.getDataPayload"/>:<br/> ${getDataPayload}
                 <hr/>
             </div>
         </div>
 
         <div class="row clearfix">
             <div class="col-md-12">
-                getData result:<br/> ${getDataResult}
+                <g:message code="variantSearch.freeForm.label.getDataResult"/>:<br/> ${getDataResult}
                 <hr/>
             </div>
         </div>
 
         <div class="row clearfix">
             <div class="col-md-12">
-                <strong>Select at least one of the c/d/p properties and at least one filter property</strong>
+                <strong><g:message code="variantSearch.freeForm.message.properties"/></strong>
                 <hr/>
             </div>
         </div>
@@ -68,20 +68,20 @@
                     <form method=""post>
 
                         <div class="col-md-3">
-                            <strong>Select your common properties</strong><br/>
+                            <strong><g:message code="variantSearch.freeForm.label.properties.common"/></strong><br/>
                             <g:render template='propertiesOptionList' model="[propertyList: cPropertyList]"/>
                             <input type="submit"/>
                         </div>
                         <div class="col-md-3">
-                            <strong>Select your sample group propertie</strong>s<br/>
+                            <strong><g:message code="variantSearch.freeForm.label.properties.sample"/></strong><br/>
                             <g:render template="propertiesOptionList" model="[propertyList: dPropertyList]"/>
                         </div>
                         <div class="col-md-3">
-                            <strong>Select your phenotype properties</strong><br/>
+                            <strong><g:message code="variantSearch.freeForm.label.properties.phenotype"/></strong><br/>
                             <g:render template="propertiesOptionList" model="[propertyList: pPropertyList]"/>
                         </div>
                         <div class="col-md-3">
-                            <strong>Select your filter properties</strong><br/>
+                            <strong><g:message code="variantSearch.freeForm.label.properties.filter"/></strong><br/>
                             <g:render template="propertiesOptionList" model="[propertyList: filterPropertyList, isFilter: true]"/>
                         </div>
                     </form>

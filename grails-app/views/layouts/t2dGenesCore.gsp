@@ -51,7 +51,7 @@
 
 
 <div class="row column-center" style="background-color: #65A1DC;padding-top:7px;padding-bottom: 7px;">
-    <div class="text-center" style="color: #ffffff;">Please use the following citation when referring to data from this portal: AMP T2D-GENES Program, SIGMA; Year Month Date of Access; URL of page you are citing. </div>
+    <div class="text-center" style="color: #ffffff;"><g:message code="portal.use.citation.request"/><g:message code="portal.use.citation.itself"/> </div>
 </div>
 
 <div>
@@ -60,7 +60,7 @@
     </div>
 
     <div class="row column-center"  style="padding-top:5px;">
-        <div style="font-size: 10px;">Built  on ${BuildInfo?.buildHost} at ${BuildInfo?.buildTime}.  Version=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}</div>
+        <div style="font-size: 10px;"><g:message code="buildInfo.shared.build_message" args="${[BuildInfo?.buildHost, BuildInfo?.buildTime]}"/>.  <g:message code='buildInfo.shared.version'/>=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}</div>
     </div>
 </div>
 

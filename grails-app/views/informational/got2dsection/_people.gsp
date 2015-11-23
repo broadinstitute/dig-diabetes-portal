@@ -2,7 +2,7 @@
     <div class="row about-people">
         <div class="col-md-3">
             <div class="institution">
-                <span class="name">The Broad Institute</span> <br/>
+                <span class="name"><g:message code="informational.shared.institution.broad_institute" /></span> <br/>
                 Jason Flannick <br/>
                 Alisa Manning <br/>
                 Christopher Hartl <br/>
@@ -14,7 +14,7 @@
                 Ryan Poplin <br/>
                 Khalid Shakir <br/>
                 Timothy Fennell <br/>
-                Pål R. Njølstad (Bergen) <br/>
+                Pål R. Njølstad (<g:message code="informational.shared.cohort.Bergen"/>) <br/>
                 Noël Burtt <br/>
                 Stacey Gabriel <br/>
                 <a href="http://www.broadinstitute.org/scientific-community/science/core-faculty-labs/altshuler-lab/altshuler-lab-home" class="pi">David Altshuler</a> <br/>
@@ -22,7 +22,7 @@
         </div>
         <div class="col-md-3">
             <div class="institution">
-                <span class="name">FUSION</span> <br/>
+                <span class="name"><g:message code="informational.shared.cohort.FUSION" /></span> <br/>
                 Christian Fuchsberger <br/>
                 Hyun Min Kang <br/>
                 Xueling Sim <br/>
@@ -50,7 +50,7 @@
         </div>
         <div class="col-md-3">
             <div class="institution">
-                <span class="name">Helmholtz München/KORA</span> <br/>
+                <span class="name"><g:message code="informational.shared.cohort.Helmholtz" />/<g:message code="informational.shared.cohort.KORA" /></span> <br/>
                 Tim Strom <br/>
                 Christian Gieger <br/>
                 Martina Müller-Nurasyid <br/>
@@ -66,7 +66,7 @@
                 <a href="http://www.helmholtz-muenchen.de/en/ihg/staff/meitinger-thomas/index.html" class="pi">Thomas Meitinger</a> <br/>
             </div>
             <div class="institution">
-                <span class="name">Lund University</span> <br/>
+                <span class="name"><g:message code="informational.shared.institution.lund" /></span> <br/>
                 Jasmina Kravic <br/>
                 Peter Algren <br/>
                 Claes Ladenvall <br/>
@@ -77,7 +77,7 @@
         </div>
         <div class="col-md-3">
             <div class="institution">
-                <span class="name">University of Oxford/UK</span> <br/>
+                <span class="name"><g:message code="informational.shared.institution.oxford" /></span> <br/>
                 Kyle Gaulton <br/>
                 Loukas Moutsianas <br/>
                 Manny Rivas <br/>
@@ -86,19 +86,19 @@
                 Inga Prokopenko <br/>
                 Ashish Kumar <br/>
                 John Perry <br/>
-                Bryan Howie (Chicago) <br/>
+                Bryan Howie (<g:message code="informational.shared.cohort.Chicago"/>) <br/>
                 Martijn van de Bunt <br/>
-                Kerrin Small (Kings) <br/>
+                Kerrin Small (<g:message code="informational.shared.cohort.Kings"/>) <br/>
                 Cecilia Lindgren <br/>
                 Gerton Lunter <br/>
                 Neil Robertson <br/>
                 Will Rayner <br/>
                 Andrew Morris <br/>
                 David Buck <br/>
-                Andrew Hattersley (Exeter) <br/>
-                Tim Spector (Kings) <br/>
+                Andrew Hattersley (<g:message code="informational.shared.cohort.Exeter"/>) <br/>
+                Tim Spector (<g:message code="informational.shared.cohort.Kings"/>) <br/>
                 Gil McVean <br/>
-                Tim Frayling (Exeter) <br/>
+                Tim Frayling (<g:message code="informational.shared.cohort.Exeter"/>) <br/>
                 Peter Donnelly <br/>
                 <a class="pi" href="http://www.ndm.ox.ac.uk/principal-investigators/researcher/mark-mccarthy">Mark McCarthy</a> <br/>
             </div>

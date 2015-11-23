@@ -2,7 +2,7 @@
     <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'username', 'error')} required">
         <div class="col-md-2">
             <label class="pull-right" for="username">
-                Username
+                <g:message code="users.attributes.user_name"/>
                 <span class="required-indicator">*</span>
             </label>
         </div>
@@ -20,7 +20,7 @@
     <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'password', 'error')} required">
         <div class="col-md-2">
             <label class="pull-right" for="password">
-                Password
+                <g:message code="users.attributes.password"/>
                 <span class="required-indicator">*</span>
             </label>
         </div>
@@ -39,7 +39,7 @@
     <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'email', 'error')} required">
         <div class="col-md-2">
             <label class="pull-right" for="email">
-                email
+                <g:message code="users.attributes.email"/>
                 <span class="required-indicator">*</span>
             </label>
         </div>
@@ -58,7 +58,7 @@
     <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'fullName', 'error')} required">
         <div class="col-md-2">
             <label class="pull-right" for="fullName">
-                fullName
+                <g:message code="users.attributes.fullName"/>
                 <span class="required-indicator">*</span>
             </label>
         </div>
@@ -77,7 +77,7 @@
     <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'nickname', 'error')} required">
         <div class="col-md-2">
             <label class="pull-right" for="nickname">
-                nickname
+                <g:message code="users.attributes.nickname"/>
                 <span class="required-indicator">*</span>
             </label>
         </div>
@@ -96,7 +96,7 @@
     <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'hasLoggedIn', 'error')} required">
         <div class="col-md-3">
             <label class="pull-right" for="hasLoggedIn">
-                hasLoggedIn
+                <g:message code="users.attributes.hasLoggedIn"/>
             </label>
         </div>
 
@@ -109,7 +109,7 @@
     <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'enabled', 'error')} required">
         <div class="col-md-3">
             <label class="pull-right" for="enabled">
-                enabled
+                <g:message code="users.attributes.enabled"/>
             </label>
         </div>
 
@@ -128,7 +128,7 @@
     <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'accountExpired', 'error')} required">
         <div class="col-md-3">
             <label class="pull-right" for="accountExpired">
-                accountExpired
+                <g:message code="users.attributes.accountExpired"/>
             </label>
         </div>
 
@@ -141,7 +141,7 @@
     <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'accountLocked', 'error')} required">
         <div class="col-md-3">
             <label class="pull-right" for="accountLocked">
-                accountLocked
+                <g:message code="users.attributes.accountLocked"/>
             </label>
         </div>
 
@@ -162,7 +162,7 @@
     <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'passwordExpired', 'error')} required">
         <div class="col-md-3">
             <label class="pull-right" for="passwordExpired">
-                passwordExpired
+                <g:message code="users.attributes.passwordExpired"/>
             </label>
         </div>
 
@@ -182,7 +182,7 @@
 
     <div class="col-md-5">
         <label class="pull-right" for="userPrivs">
-            USER PRIVS
+            <g:message code="users.privileges.user_privs"/>
         </label>
     </div>
 
@@ -199,7 +199,7 @@
 
     <div class="col-md-5">
         <label class="pull-right" for="mgrPrivs">
-            ADMIN PRIVS
+            <g:message code="users.privileges.admin_privs"/>
         </label>
     </div>
 
@@ -218,7 +218,7 @@
 
     <div class="col-md-5">
         <label class="pull-right" for="systemPrivs">
-            SYSTEM PRIVS
+            <g:message code="users.privileges.system_privs"/>
         </label>
     </div>
 
