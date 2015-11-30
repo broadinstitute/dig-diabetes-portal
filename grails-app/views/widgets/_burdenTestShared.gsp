@@ -149,7 +149,10 @@ div.labelAndInput > input {
                                    var optionList = data.phenotypes;
                                    var dropDownHolder = $('#traitFilter');
                                    for ( var i = 0 ; i < optionList.length ; i++ ){
+                                    // DIGP-211: hiding t2d for now
+                                    if (optionList[i].name != 't2d') {
                                         dropDownHolder.append('<option value="'+optionList[i].name+'">'+optionList[i].description+'</option>')
+                                    }
                                    }
                                 }
                             }
