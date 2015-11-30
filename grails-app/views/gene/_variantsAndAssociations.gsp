@@ -16,20 +16,28 @@
 
 <g:render template="variantsAndAssociationsTableChanger"/>
 
-<div class="row clearfix" style="margin: 0 0 10px 0">
-    <div class="col-md-2">
+<div class="row clearfix">
+
+    <div class="col-md-6" style="text-align: left; font-size: 18px; font-weight: bold">
+        <div  class="form-horizontal">
+            <div class="form-group">
+                <label for="phenotypeTableChooser"><g:message code="gene.variantassociations.change.phenotype" default="Change phenotype choice"/></label>
+                &nbsp;
+                <select id="phenotypeTableChooser" name="phenotypeTableChooser" onchange="refreshVAndAByPhenotype(this)">
+                </select>
+            </div>
+        </div>
 
     </div>
-    <div class="col-md-3" style="text-align: right; font-size: 18px; font-weight: bold">
-        Change phenotype choice
-    </div>
-    <div class="col-md-3 pull-left" style="text-align: left; font-size: 18px">
-        <select class="form-control" id="phenotypeTableChooser" name="phenotypeTableChooser" onchange="refreshVAndAByPhenotype(this)">
+    %{--<div class="col-md-3 pull-left" style="text-align: left; font-size: 18px">--}%
+        %{--<select class="form-control" id="phenotypeTableChooser" name="phenotypeTableChooser" onchange="refreshVAndAByPhenotype(this)">--}%
 
-        </select>
-    </div>
-    <div class="col-md-4">
-
+        %{--</select>--}%
+    %{--</div>--}%
+    <div class="col-md-6">
+        <button id="opener"  class="btn btn-primary pull-right">
+            <g:message code="gene.variantassociations.change.columns" default="Revise columns"/>
+        </button>
     </div>
 </div>
 
@@ -45,10 +53,12 @@
 
     </div>
     <div class="col-md-2">
-        <button id="reviser"  class="btn btn-primary" onclick="reviseRows()">Revise rows</button>
+
     </div>
     <div class="col-md-2">
-        <button id="opener"  class="btn btn-primary">Revise columns</button>
+        <button id="reviser"  class="btn btn-primary pull-right" onclick="reviseRows()">
+            <g:message code="gene.variantassociations.change.rows" default="Revise rows"/>
+        </button>
     </div>
 </div>
 

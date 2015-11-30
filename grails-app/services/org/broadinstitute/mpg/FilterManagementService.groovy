@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg
 import grails.transaction.Transactional
+import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SearchBuilderService
@@ -9,6 +10,7 @@ import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.query.JsNamingQueryTranslator
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
+import org.codehaus.groovy.grails.web.json.JSONObject
 
 @Transactional
 class FilterManagementService {
@@ -18,6 +20,7 @@ class FilterManagementService {
     SharedToolsService sharedToolsService
     SearchBuilderService searchBuilderService
     MetaDataService metaDataService
+    FilterManagementService filterManagementService
 
 
     private String sigmaData  = "unknown"
@@ -62,6 +65,32 @@ class FilterManagementService {
         List <String> listOfCodedFilters = observeMultipleFilters (paramsMap)
         return  listOfCodedFilters
     }
+
+
+    /***
+     * Take a list of sample groups and a single phenotype and package up some information that we can pass down to the browser
+     * @param sampleGroupList
+     * @param phenotypeName
+     * @return
+     */
+    public JSONObject convertSampleGroupListToJson (List <SampleGroup> sampleGroupList,String phenotypeName){
+        LinkedHashMap<String,LinkedHashMap<String,String>> mapSampleGroupsToProperties = [:]
+        List<SampleGroup> uniqueSampleGroupList = sampleGroupList.unique{ a,b -> a.getSystemId() <=> b.getSystemId() }
+        for (SampleGroup sampleGroup in uniqueSampleGroupList){
+            LinkedHashMap<String,String> sampleGroupProperties = [:]
+            sampleGroupProperties["name"] =  sampleGroup.systemId
+            sampleGroupProperties["value"] =  sampleGroup.systemId
+            sampleGroupProperties["pvalue"] =  filterManagementService.findFavoredPValue ( sampleGroup.systemId, phenotypeName )
+            sampleGroupProperties["count"] =  "${sampleGroup.subjectsNumber}"
+            mapSampleGroupsToProperties[sampleGroup.systemId] = sampleGroupProperties
+        }
+        String technologyListAsJson = sharedToolsService.packageUpASingleLevelTreeAsJson(mapSampleGroupsToProperties)
+        JsonSlurper slurper = new JsonSlurper()
+        return slurper.parseText(technologyListAsJson)
+    }
+
+
+
 
 
 

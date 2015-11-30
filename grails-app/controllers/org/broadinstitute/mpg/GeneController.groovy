@@ -231,45 +231,33 @@ class GeneController {
     def genepValueCounts() {
         String geneToStartWith = params.geneName
         String phenotype = params.phenotype
-        def rawRowNames = params."rowNames[]"
-        def colSignificances = params."colNames[]"
+        List<String> rowNames = sharedToolsService.convertAnHttpList(params."rowNames[]")
+        List<String> colSignificances = sharedToolsService.convertAnHttpList(params."colNames[]")
 
 
-        List<String> rowNames = []
-        if ((rawRowNames)&&
-                (rawRowNames.size()>0)){
-            if (rawRowNames.getClass().simpleName=="String"){ // single value
-                String rowName = rawRowNames
-                rowNames << rowName
-             } else { // we must have a list of values
-                List<String> rowNameList = rawRowNames as List
-                for (String oneRowName in rowNameList) {
-                    rowNames << oneRowName as String
-                }
+//        List<String> rowNames = []
+//        if ((rawRowNames)&&
+//                (rawRowNames.size()>0)){
+//            if (rawRowNames.getClass().simpleName=="String"){ // single value
+//                String rowName = rawRowNames
+//                rowNames << rowName
+//             } else { // we must have a list of values
+//                List<String> rowNameList = rawRowNames as List
+//                for (String oneRowName in rowNameList) {
+//                    rowNames << oneRowName as String
+//                }
+//            }
+//        }
+
+        List<Float> significanceValues = []
+        for(String significance in colSignificances){
+            try {
+                significanceValues << Float.parseFloat(significance)
+            } catch (ex) {
+                log.error("nonnumeric significance value (${significance}) in genepValueCounts action in GeneController")
             }
         }
 
-        List<Float> significanceValues = []
-        if ((colSignificances)&&
-                (colSignificances.size()>0)){
-            if (colSignificances.getClass().simpleName=="String"){ // single value
-                String colSignificance = colSignificances
-                try {
-                    significanceValues << Float.parseFloat(colSignificance)
-                } catch (ex) {
-                    log.error("nonnumeric significance value (${colSignificance}) in genepValueCounts action in GeneController")
-                }
-            } else { // we must have a list of values
-                List<String> colSignificanceList = colSignificances as List
-                for (String oneSignificance in colSignificanceList) {
-                    try {
-                        significanceValues << Float.parseFloat(oneSignificance)
-                    } catch (ex) {
-                        log.error("nonnumeric significance value (${oneSignificance}) in genepValueCounts action in GeneController")
-                    }
-                }
-            }
-         }
          JSONObject jsonObject =  restServerService.combinedVariantCountByGeneNameAndPValue ( geneToStartWith.trim().toUpperCase(),
                                                                                              rowNames, significanceValues, phenotype )
         render(status:200, contentType:"application/json") {

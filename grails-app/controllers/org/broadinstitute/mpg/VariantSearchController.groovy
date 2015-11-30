@@ -221,7 +221,6 @@ class VariantSearchController {
             dataset = params.dataset
         }
 
-        // DIGP_60: using new medatata data structure to retrieve datasets
         String dataSetString = this.metaDataService.getSampleGroupNameListForPhenotypeAsJson(params.phenotype);
         def slurper = new JsonSlurper()
         def result = slurper.parseText(dataSetString)
@@ -235,6 +234,10 @@ class VariantSearchController {
     }
 
 
+    /***
+     * Given a phenotype, return all matching technologies
+     * @return
+     */
     def retrieveTechnologiesAjax() {
         String phenotypeName
         if (params.phenotype) {
@@ -252,28 +255,18 @@ class VariantSearchController {
         }
     }
 
-
-
+    /***
+     * Given one phenotype and one or more technologies, return every matching sample group
+     * @return
+     */
     def retrieveTopSGsByTechnologyAndPhenotypeAjax() {
         String phenotypeName
         if (params.phenotype) {
             phenotypeName = params.phenotype
             log.debug "variantSearch params.phenotype = ${params.phenotype}"
         }
-        def rawTechnologies = params."technologies[]"
-        List<String> technologies = []
-        if ((rawTechnologies)&&
-                (rawTechnologies.size()>0)){
-            if (rawTechnologies.getClass().simpleName=="String"){ // single value
-                String rowName = rawTechnologies
-                technologies << rowName
-            } else { // we must have a list of values
-                List<String> rowNameList = rawTechnologies as List
-                for (String oneRowName in rowNameList) {
-                    technologies << oneRowName as String
-                }
-            }
-        }
+
+        List<String> technologies = sharedToolsService.convertAnHttpList(params."technologies[]")
 
         List<SampleGroup> fullListOfSampleGroups = []
         for (String technologyName in technologies){
@@ -287,28 +280,19 @@ class VariantSearchController {
                 fullListOfSampleGroups << sortedTechnologySpecificSampleGroups[0]
             }
         }
-        LinkedHashMap<String,LinkedHashMap<String,String>> mapSampleGroupsToProperties = [:]
-        for (SampleGroup sampleGroup in fullListOfSampleGroups){
-            LinkedHashMap<String,String> sampleGroupProperties = [:]
-            sampleGroupProperties["name"] =  sampleGroup.systemId
-            sampleGroupProperties["value"] =  sampleGroup.systemId
-            sampleGroupProperties["pvalue"] =  filterManagementService.findFavoredPValue ( sampleGroup.systemId, phenotypeName )
-            sampleGroupProperties["count"] =  "${sampleGroup.subjectsNumber}"
-            mapSampleGroupsToProperties[sampleGroup.systemId] = sampleGroupProperties
-        }
-        String technologyListAsJson = sharedToolsService.packageUpASingleLevelTreeAsJson(mapSampleGroupsToProperties)
-        def slurper = new JsonSlurper()
-        def technologyListJsonObject = slurper.parseText(technologyListAsJson)
+
+        JSONObject sampleGroupMapJsonObject = filterManagementService.convertSampleGroupListToJson(fullListOfSampleGroups, phenotypeName)
 
         render(status: 200, contentType: "application/json") {
-            [sampleGroupMap:technologyListJsonObject]
+            [sampleGroupMap:sampleGroupMapJsonObject]
         }
     }
 
-
-
-
-
+    /***
+     * Given a single phenotype and a single technology, get a list of all relevant ancestries. We can make this happen by
+     * retrieving all of the matching sample groups, and from these retrieving all ancestries (filtered for uniqueness)
+     * @return
+     */
     def retrieveAncestriesAjax() {
         String phenotypeName
         String technologyName
@@ -334,6 +318,11 @@ class VariantSearchController {
 
 
 
+    /***
+     * Given a combination of one phenotype, one technology, and one ancestry, return a list of all matching sample groups
+     *
+     * @return
+     */
     def retrieveSampleGroupsAjax() {
         String phenotypeName
         String technologyName
@@ -351,29 +340,7 @@ class VariantSearchController {
         List<SampleGroup> sampleGroupList = this.metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotypeName,
                 technologyName,
                 sharedToolsService.getCurrentDataVersion(), ancestryName)
-        List<SampleGroup> uniqueDataSetNameList = sampleGroupList.unique{ a,b -> a.getSystemId() <=> b.getSystemId() }
-        LinkedHashMap<String,String> dataSetNamesAndPProperyNames = [:]
-        String pValMatcher = /^P_(EMMAX|FIRTH|FE|VALUE)/
-        for (SampleGroup sampleGroup in uniqueDataSetNameList){
-            List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = sampleGroup.getPhenotypes()
-            List<String> pValuePropertyNames = []
-            for (org.broadinstitute.mpg.diabetes.metadata.Phenotype phenotype in phenotypeList){
-                if (phenotype.name == phenotypeName){
-                    pValuePropertyNames = phenotype.getProperties().findAll{it.name =~ pValMatcher}*.getName()
-                }
-            }
-            // for now take the first, though we will eventually choose between them.
-            if (pValuePropertyNames.size()>0){
-                dataSetNamesAndPProperyNames[sampleGroup.systemId] = pValuePropertyNames[0]
-            }
-        }
-        String dataSetMapAsJson = sharedToolsService.packageUpASimpleMapAsJson(dataSetNamesAndPProperyNames)
-        def slurper = new JsonSlurper()
-        def dataSetMapJsonObject = slurper.parseText(dataSetMapAsJson)
-//        List<String> dataSetNameList = sampleGroupList.unique{ a,b -> a.getSystemId() <=> b.getSystemId() }*.getSystemId()
-//        String dataSetNameAsJson = sharedToolsService.packageUpAListAsJson(dataSetNameList)
-//        def slurper = new JsonSlurper()
-//        def dataSetNametJsonObject = slurper.parseText(dataSetNameAsJson)
+        JSONObject dataSetMapJsonObject = filterManagementService.convertSampleGroupListToJson(sampleGroupList, phenotypeName)
 
         render(status: 200, contentType: "application/json") {
             [dataSetList:dataSetMapJsonObject]
