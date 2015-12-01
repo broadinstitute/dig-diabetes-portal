@@ -234,20 +234,7 @@ class GeneController {
         List<String> rowNames = sharedToolsService.convertAnHttpList(params."rowNames[]")
         List<String> colSignificances = sharedToolsService.convertAnHttpList(params."colNames[]")
 
-
-//        List<String> rowNames = []
-//        if ((rawRowNames)&&
-//                (rawRowNames.size()>0)){
-//            if (rawRowNames.getClass().simpleName=="String"){ // single value
-//                String rowName = rawRowNames
-//                rowNames << rowName
-//             } else { // we must have a list of values
-//                List<String> rowNameList = rawRowNames as List
-//                for (String oneRowName in rowNameList) {
-//                    rowNames << oneRowName as String
-//                }
-//            }
-//        }
+        rowNames
 
         List<Float> significanceValues = []
         for(String significance in colSignificances){
@@ -258,8 +245,9 @@ class GeneController {
             }
         }
 
-         JSONObject jsonObject =  restServerService.combinedVariantCountByGeneNameAndPValue ( geneToStartWith.trim().toUpperCase(),
-                                                                                             rowNames, significanceValues, phenotype )
+        List <String> uniqueRowNames = rowNames.unique{ a,b -> a <=> b }
+        JSONObject jsonObject =  restServerService.combinedVariantCountByGeneNameAndPValue ( geneToStartWith.trim().toUpperCase(),
+                                                                                              uniqueRowNames, significanceValues, phenotype )
         render(status:200, contentType:"application/json") {
             [geneInfo:jsonObject]
         }

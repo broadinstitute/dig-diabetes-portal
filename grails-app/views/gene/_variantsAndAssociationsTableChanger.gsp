@@ -59,11 +59,18 @@ var variantsAndAssociationTable = function (phenotype,rowValueParameter,rowMapPa
 
                 if ((typeof data !== 'undefined') &&
                     (data)){
+                        rowMap = [];
+                        rowValue = [];
                         if ((data.geneInfo) &&
                             (data.geneInfo.results)){//assume we have data and process it
                               var collector = [];
                               for (var i = 0 ; i < data.geneInfo.results.length ; i++) {
                                    var d = [];
+                                   rowValue.push(data.geneInfo.results[i].dataset);
+                                   rowMap.push({"name":data.geneInfo.results[i].dataset,
+                                                "value":data.geneInfo.results[i].dataset,
+                                                "pvalue":"UNUSED",
+                                                "count":data.geneInfo.results[i].subjectsNumber});
                                    for (var j = 0 ; j < data.geneInfo.results[i].pVals.length ; j++ ){
                                       d.push(data.geneInfo.results[i].pVals[j].count);
                                    }
@@ -81,8 +88,8 @@ ${show_exseq},
                                      variantsAndAssociationsPhenotypeAssociations:variantsAndAssociationsPhenotypeAssociations,
                                      variantsAndAssociationsRowHelpText: variantsAndAssociationsRowHelpText},
                                     '${geneChromosome}',${geneExtentBegin},${geneExtentEnd},
-rowMap,
-<g:renderColMaps data='${columnInformation}'/>,
+                                    rowMap,
+                                    <g:renderColMaps data='${columnInformation}'/>,
                                     collector,
                                     '<%=geneName%>',
                                     phenotype

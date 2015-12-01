@@ -7,6 +7,7 @@ import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
@@ -926,7 +927,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()
         for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
-            sb  << "{ \"dataset\": \"${dataSeteList[j]}\",\"pVals\": ["
+            SampleGroup sampleGroup = metaDataService.getSampleGroupByName(dataSeteList[j])
+            sb  << "{ \"dataset\": \"${dataSeteList[j]}\",\"subjectsNumber\": ${sampleGroup?.getSubjectsNumber()}, \"pVals\": ["
             for ( int  i = 0 ; i < significanceList.size () ; i++ ){
                 sb  << "{"
                 JSONObject apiData = requestGeneCountByPValue(geneName, significanceList[i], dataSeteList[j],phenotype)
