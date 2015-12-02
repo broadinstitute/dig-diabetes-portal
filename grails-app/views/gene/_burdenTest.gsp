@@ -30,6 +30,8 @@
 
     .burden-test-result .pValue {
         white-space: nowrap;
+        font-size: 18px;
+        font-weight: bold;
     }
 
     div.labelAndInput {
@@ -42,10 +44,14 @@
 
     .burden-test-result .orValue {
         white-space: nowrap;
+        font-size: 18px;
+        font-weight: bold;
     }
 
     .burden-test-result .ciValue {
         white-space: nowrap;
+        font-size: 18px;
+        font-weight: bold;
     }
 
     .mafOptionChooser div.radio {
