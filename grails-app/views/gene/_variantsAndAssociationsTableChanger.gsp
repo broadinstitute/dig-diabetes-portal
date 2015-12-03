@@ -114,10 +114,6 @@ ${show_exseq},
     };
 
 
-%{--$( document ).ready(function() {--}%
-    %{--variantsAndAssociationTable ('${phenotype}',<g:renderRowValues data='${rowInformation}'></g:renderRowValues>,<g:renderRowMaps data='${rowInformation}'></g:renderRowMaps>);--}%
-%{--});--}%
-
 $( document ).ready(function() {
         $.ajax({
             cache: false,

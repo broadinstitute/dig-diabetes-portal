@@ -234,8 +234,6 @@ class GeneController {
         List<String> rowNames = sharedToolsService.convertAnHttpList(params."rowNames[]")
         List<String> colSignificances = sharedToolsService.convertAnHttpList(params."colNames[]")
 
-        rowNames
-
         List<Float> significanceValues = []
         for(String significance in colSignificances){
             try {
@@ -260,7 +258,38 @@ class GeneController {
      */
     def geneEthnicityCounts (){
         String geneToStartWith = params.geneName
-        JSONObject jsonObject =  restServerService.combinedEthnicityTable ( geneToStartWith.trim().toUpperCase())
+        List<String> rowNames = sharedToolsService.convertAnHttpList(params."rowNames[]")
+        List<String> colSignificances = sharedToolsService.convertAnHttpList(params."colNames[]")
+        if (!rowNames)  {
+            rowNames  = []
+            rowNames << "ExChip_82k_mdv2"
+            rowNames << "ExSeq_17k_hs_mdv2"
+            rowNames << "ExSeq_17k_ea_genes_mdv2"
+            rowNames << "ExSeq_17k_sa_genes_mdv2"
+            rowNames << "ExSeq_17k_aa_genes_mdv2"
+            rowNames << "ExSeq_17k_eu_mdv2"
+        }
+        List<Float> significanceValues = []
+        for(String significance in colSignificances){
+            try {
+                significanceValues << Float.parseFloat(significance)
+            } catch (ex) {
+                log.error("nonnumeric significance value (${significance}) in genepValueCounts action in GeneController")
+            }
+        }
+        significanceValues = significanceValues.sort()
+        List <LinkedHashMap<String,String>> numericBounds = []
+        if ((!significanceValues)||(significanceValues.size()<2))   {
+            significanceValues = [0.0005f,0.005f,0.05f,1f]
+        }
+        for ( int  i = 1 ; i < significanceValues.size() ; i++ )  {
+            LinkedHashMap singleNumericBounds = [:]
+            singleNumericBounds["lowerValue"] = significanceValues[i-1]
+            singleNumericBounds["higherValue"] = significanceValues[i]
+            numericBounds << singleNumericBounds
+        }
+
+        JSONObject jsonObject =  restServerService.combinedEthnicityTable ( geneToStartWith.trim().toUpperCase(), rowNames,numericBounds)
         render(status:200, contentType:"application/json") {
             [ethnicityInfo:jsonObject]
         }

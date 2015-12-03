@@ -953,61 +953,61 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    private String ancestryDataSet (String ethnicity){
-        String dataSetId = ""
-        switch (ethnicity){
-            case "HS":
-                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_HS)
-                break;
-            case "AA":
-                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_AA)
-                break;
-            case "EA":
-                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_EA)
-                break;
-            case "SA":
-                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_SA)
-                break;
-            case "EU":
-                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_EU)
-                break;
-            case "chipEu":
-                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_CHIP,"none",ANCESTRY_NONE)
-                break;
-            default:
-                log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
-                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_AA)
-        }
-        return dataSetId
-    }
+//    private String ancestryDataSet (String ethnicity){
+//        String dataSetId = ""
+//        switch (ethnicity){
+//            case "HS":
+//                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_HS)
+//                break;
+//            case "AA":
+//                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_AA)
+//                break;
+//            case "EA":
+//                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_EA)
+//                break;
+//            case "SA":
+//                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_SA)
+//                break;
+//            case "EU":
+//                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_EU)
+//                break;
+//            case "chipEu":
+//                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_CHIP,"none",ANCESTRY_NONE)
+//                break;
+//            default:
+//                log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
+//                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_AA)
+//        }
+//        return dataSetId
+//    }
 
-    private String generalizedAncestryDataSet (String ethnicity){
-        String dataSetId = ""
-        switch (ethnicity){
-            case "HS":
-                dataSetId = "hs"
-                break;
-            case "AA":
-                dataSetId = "aa"
-                break;
-            case "EA":
-                dataSetId = "ea"
-                break;
-            case "SA":
-                dataSetId = "sa"
-                break;
-            case "EU":
-                dataSetId = "eu"
-                break;
-            case "chipEu":
-                dataSetId = "exchp"
-                break;
-            default:
-                log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
-                dataSetId = "aa"
-        }
-        return dataSetId
-    }
+//    private String generalizedAncestryDataSet (String ethnicity){
+//        String dataSetId = ""
+//        switch (ethnicity){
+//            case "HS":
+//                dataSetId = "hs"
+//                break;
+//            case "AA":
+//                dataSetId = "aa"
+//                break;
+//            case "EA":
+//                dataSetId = "ea"
+//                break;
+//            case "SA":
+//                dataSetId = "sa"
+//                break;
+//            case "EU":
+//                dataSetId = "eu"
+//                break;
+//            case "chipEu":
+//                dataSetId = "exchp"
+//                break;
+//            default:
+//                log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
+//                dataSetId = "aa"
+//        }
+//        return dataSetId
+//    }
 
     /***
      * Used to fill the 'variation across continental ancestry' table on the gene info page
@@ -1017,36 +1017,37 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param cellNumber
      * @return
      */
-    private JSONObject generateJsonVariantCountByGeneAndMaf(String geneName, String ethnicity, int cellNumber){
+    private JSONObject generateJsonVariantCountByGeneAndMaf(String geneName, String dataSetName, LinkedHashMap<String,String> numericBound ){
         String dataSetId = ""
         String codeForMafSlice = ""
-        String codeForEthnicity = generalizedAncestryDataSet ( ethnicity)
-        dataSetId = ancestryDataSet ( ethnicity)
-        switch (cellNumber){
-            case 0:
-                codeForMafSlice = "total"
-                break;
-            case 1:
-                codeForMafSlice = "total"
-                break;
-            case 2:
-                codeForMafSlice = "common"
-                break;
-            case 3:
-                codeForMafSlice = "lowfreq"
-                break;
-            case 4:
-                codeForMafSlice = "rare"
-                break;
-            default:
-                log.error("Trouble: user requested cell number = ${cellNumber} which I don't recognize")
-                dataSetId = "total"
-        }
+        //String codeForEthnicity = generalizedAncestryDataSet ( ethnicity)
+        //dataSetId = ancestryDataSet ( ethnicity)
+//        switch (cellNumber){
+//            case 0:
+//                codeForMafSlice = "total"
+//                break;
+//            case 1:
+//                codeForMafSlice = "total"
+//                break;
+//            case 2:
+//                codeForMafSlice = "common"
+//                break;
+//            case 3:
+//                codeForMafSlice = "lowfreq"
+//                break;
+//            case 4:
+//                codeForMafSlice = "rare"
+//                break;
+//            default:
+//                log.error("Trouble: user requested cell number = ${cellNumber} which I don't recognize")
+//                dataSetId = "total"
+//        }
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID"])
-        List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName,0f,"","","${codeForMafSlice}-${codeForEthnicity}","T2D")
+        List<String> codedFilters = filterManagementService.generateSampleGroupLevelQueries (geneName, dataSetName, numericBound.lowerValue, numericBound.higherValue, "MAF" )
+        //List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName,0f,"","","${codeForMafSlice}-${codeForEthnicity}","T2D")
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters,searchBuilderService,metaDataService)
-        if (cellNumber==0){
-            if (ethnicity != "chipEu"){
+        if (numericBound.numericBound.higherValue==1){
+            if (dataSetName != "ExChip_82k_mdv2"){
                 addColumnsForPProperties(resultColumnsToDisplay,"T2D","${dataSetId}","OBSA")
                 addColumnsForPProperties(resultColumnsToDisplay,"T2D","${dataSetId}","OBSU")
             }
@@ -1083,31 +1084,33 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param geneName
      * @return
      */
-    public JSONObject combinedEthnicityTable(String geneName){
+    public JSONObject combinedEthnicityTable(String geneName,
+                                             List <String> dataSetNames,
+                                             List <LinkedHashMap<String,String>> numericBounds){
         JSONObject returnValue
         String attribute = "T2D"
-        List <String> dataSeteList = ["AA", "HS", "EA", "SA", "EU","chipEu"]
+        //List <String> dataSeteList = ["AA", "HS", "EA", "SA", "EU","chipEu"]
         List <Integer> cellNumberList = [0,1,2,3,4]
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()
-        for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
-            String dataSetId =  ancestryDataSet ( dataSeteList[j] )
-            sb  << "{ \"dataset\": \"${dataSeteList[j]}\",\"pVals\": ["
-            for ( int  i = 0 ; i < cellNumberList.size () ; i++ ){
+        for ( int  j = 0 ; j < dataSetNames.size () ; j++ ) {
+            //String dataSetId =  ancestryDataSet ( dataSeteList[j] )
+            sb  << "{ \"dataset\": \"${dataSetNames[j]}\",\"pVals\": ["
+            for ( int  i = 0 ; i < numericBounds.size () ; i++ ){
                 sb  << "{"
-                JSONObject apiResults =  generateJsonVariantCountByGeneAndMaf( geneName,  dataSeteList[j], cellNumberList[i])
+                JSONObject apiResults =  generateJsonVariantCountByGeneAndMaf( geneName,  dataSetNames[j], numericBounds[i])
                 if (apiResults.is_error == false) {
                     if (cellNumberList[i] == 0){
                         // the first cell is different than the others. We need to pull back the number of participants,
                         //  which can be found only by adding the OBSA and OBSU fields
                         int unaffected = 0
                         int affected =  0
-                        if (dataSeteList[j]!="chipEu"){
+                        if (dataSetNames[j]!="ExChip_82k_mdv2"){
                             def variant = apiResults.variants[0]
                             if ((variant) && (variant != 'null')){
                                 def element = variant["OBSU"].findAll{it}[0]
                                 if ((element) && (element != 'null')){
-                                    if (element[dataSetId][attribute]!=null){
+                                    if (element[dataSetNames[j]][attribute]!=null){
                                         unaffected =  element[dataSetId][attribute]
                                     }
 
@@ -1135,7 +1138,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 }
             }
             sb  << "]}"
-            if (j<dataSeteList.size ()-1){
+            if (j<dataSetNames.size ()-1){
                 sb  << ","
             }
         }
