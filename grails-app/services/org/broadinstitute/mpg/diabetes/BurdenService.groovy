@@ -172,7 +172,13 @@ class BurdenService {
         JSONObject returnJson = null;
 
         // get the burden db_snp_id
-        burdenVariant = org.broadinstitute.mpg.Variant.findByDbSnpId(burdenVariantDbSnpId)
+
+        // first check that this is a db_snp_id
+        if (burdenVariantDbSnpId =~ /r.*/) {
+            burdenVariant = org.broadinstitute.mpg.Variant.findByDbSnpId(burdenVariantDbSnpId)
+        } else {
+            burdenVariant = org.broadinstitute.mpg.Variant.findByVarId(burdenVariantDbSnpId)
+        }
 
         if (burdenVariant == null) {
             throw new PortalException("found no varId for dbSnpId: " + burdenVariantDbSnpId)
