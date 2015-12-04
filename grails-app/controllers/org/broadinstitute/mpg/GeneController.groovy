@@ -279,15 +279,27 @@ class GeneController {
         }
         significanceValues = significanceValues.sort()
         List <LinkedHashMap<String,String>> numericBounds = []
-        if ((!significanceValues)||(significanceValues.size()<2))   {
-            significanceValues = [0.0005f,0.005f,0.05f,1f]
-        }
-        for ( int  i = 1 ; i < significanceValues.size() ; i++ )  {
-            LinkedHashMap singleNumericBounds = [:]
-            singleNumericBounds["lowerValue"] = significanceValues[i-1]
-            singleNumericBounds["higherValue"] = significanceValues[i]
-            numericBounds << singleNumericBounds
-        }
+        LinkedHashMap singleNumericBounds = [:]
+        singleNumericBounds["lowerValue"] = 0.0f
+        singleNumericBounds["higherValue"] = 1.0f
+        numericBounds << singleNumericBounds
+        singleNumericBounds = [:]
+        singleNumericBounds["lowerValue"] = 0.0f
+        singleNumericBounds["higherValue"] = 1.0f
+        numericBounds << singleNumericBounds
+        singleNumericBounds = [:]
+        singleNumericBounds["lowerValue"] = 0.05f
+        singleNumericBounds["higherValue"] = 1.0f
+        numericBounds << singleNumericBounds
+        singleNumericBounds = [:]
+        singleNumericBounds["lowerValue"] = 0.0005f
+        singleNumericBounds["higherValue"] = 0.05f
+        numericBounds << singleNumericBounds
+        singleNumericBounds = [:]
+        singleNumericBounds["lowerValue"] = 0.0f
+        singleNumericBounds["higherValue"] = 0.0005f
+        numericBounds << singleNumericBounds
+        singleNumericBounds = [:]
 
         JSONObject jsonObject =  restServerService.combinedEthnicityTable ( geneToStartWith.trim().toUpperCase(), rowNames,numericBounds)
         render(status:200, contentType:"application/json") {

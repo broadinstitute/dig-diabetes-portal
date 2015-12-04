@@ -13,14 +13,25 @@
     mpgSoftware.ancestryTable = (function () {
         var loadAncestryTable = function () {
 
-
+            var tempKeyGen = function (dataset){
+                var retVal = "";
+                switch (dataset) {
+                    case "ExChip_82k_mdv2": retVal = 'EUchip';  break;
+                    case "ExSeq_17k_aa_genes_mdv2": retVal = 'AA';  break;
+                    case "ExSeq_17k_ea_genes_mdv2": retVal = 'EA';  break;
+                    case "ExSeq_17k_sa_genes_mdv2": retVal = 'SA';  break;
+                    case "ExSeq_17k_hs_mdv2": retVal = 'HS';  break;
+                    case "ExSeq_17k_eu_mdv2": retVal = 'EU';  break;
+                    default: alert(' unrecognized data set = '+dataset+".")
+                }
+                return retVal;
+            }
             var buildDataStructure = function (data) {
                 var ethnicitySequence = {},
                         ethnicityChip = {};
                 for (var i = 0; i < data.ethnicityInfo.results.length; i++) {
-                    if (i < 5) {
                         var currentDataSet = data.ethnicityInfo.results[i];
-                        var key = currentDataSet["dataset"];
+                        var key = tempKeyGen(currentDataSet["dataset"]);
                         var oneEthnicity = {};
                         for (var j = 0; j < data.ethnicityInfo.results[i].pVals.length; j++) {
                             switch (j) {
@@ -45,34 +56,33 @@
                             }
                         }
                         ethnicitySequence [key] = oneEthnicity;
-                    } else {
-                        var currentDataSet = data.ethnicityInfo.results[i];
-                        var key = currentDataSet["dataset"];
-                        var oneEthnicity = {};
-                        for (var j = 0; j < data.ethnicityInfo.results[i].pVals.length; j++) {
-                            switch (j) {
-                                case 0:
-                                    oneEthnicity ["ns"] = data.ethnicityInfo.results[i].pVals[j].count;
-                                    break;
-                                case 1:
-                                    oneEthnicity ["total"] = data.ethnicityInfo.results[i].pVals[j].count;
-                                    break;
-                                case 2:
-                                    oneEthnicity ["common"] = data.ethnicityInfo.results[i].pVals[j].count;
-                                    break;
-                                case 3:
-                                    oneEthnicity ["lowFrequency"] = data.ethnicityInfo.results[i].pVals[j].count;
-                                    break;
-                                case 4:
-                                    oneEthnicity ["sing"] = data.ethnicityInfo.results[i].pVals[j].count;
-                                    oneEthnicity ["rare"] = data.ethnicityInfo.results[i].pVals[j].count;
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                        ethnicityChip["EU"] = oneEthnicity;
-                    }
+//                        var currentDataSet = data.ethnicityInfo.results[i];
+//                        var key = currentDataSet["dataset"];
+//                        var oneEthnicity = {};
+//                        for (var j = 0; j < data.ethnicityInfo.results[i].pVals.length; j++) {
+//                            switch (j) {
+//                                case 0:
+//                                    oneEthnicity ["ns"] = data.ethnicityInfo.results[i].pVals[j].count;
+//                                    break;
+//                                case 1:
+//                                    oneEthnicity ["total"] = data.ethnicityInfo.results[i].pVals[j].count;
+//                                    break;
+//                                case 2:
+//                                    oneEthnicity ["common"] = data.ethnicityInfo.results[i].pVals[j].count;
+//                                    break;
+//                                case 3:
+//                                    oneEthnicity ["lowFrequency"] = data.ethnicityInfo.results[i].pVals[j].count;
+//                                    break;
+//                                case 4:
+//                                    oneEthnicity ["sing"] = data.ethnicityInfo.results[i].pVals[j].count;
+//                                    oneEthnicity ["rare"] = data.ethnicityInfo.results[i].pVals[j].count;
+//                                    break;
+//                                default:
+//                                    break;
+//                            }
+//                        }
+                        //ethnicityChip["EU"] = oneEthnicity;
+                  //  }
 
 
                 }
@@ -91,8 +101,7 @@
                     var continentalAncestryText = {
                         continentalAA: '<g:message code="gene.continentalancestry.title.rowhdr.AA" default="gwas"/>',
                         continentalAAQ: '<g:helpText title="gene.continentalancestry.title.rowhdr.AA.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.title.rowhdr.AA.help.text"/>',
-                        continentalAAdatatype: '<g:message code="gene.continentalancestry.datatype.exomeSequence" default="exome sequence"/>' +
-                                '<g:helpText title="gene.continentalancestry.datatype.exomeSequence.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.datatype.exomeSequence.help.text"/>',
+                        continentalAAdatatype: '<g:message code="gene.continentalancestry.datatype.exomeSequence" default="exome sequence"/>',
                         continentalEA: '<g:message code="gene.continentalancestry.title.rowhdr.EA" default="gwas"/>',
                         continentalEAQ: '<g:helpText title="gene.continentalancestry.title.rowhdr.EA.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.title.rowhdr.EA.help.text"/>',
                         continentalEAdatatype: '<g:message code="gene.continentalancestry.datatype.exomeSequence" default="exome sequence"/>',
@@ -107,8 +116,7 @@
                         continentalHSdatatype: '<g:message code="gene.continentalancestry.datatype.exomeSequence" default="exome sequence"/>',
                         continentalEUchip: '<g:message code="gene.continentalancestry.title.rowhdr.chipEU" default="gwas"/>',
                         continentalEUchipQ: '<g:helpText title="gene.continentalancestry.title.rowhdr.chipEU.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.title.rowhdr.chipEU.help.text"/>',
-                        continentalEUchipDatatype: '<g:message code="gene.continentalancestry.datatype.exomeChip" default="exome chip"/>' +
-                                '<g:helpText title="gene.continentalancestry.datatype.exomeChip.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.datatype.exomeChip.help.text"/>'
+                        continentalEUchipDatatype: '<g:message code="gene.continentalancestry.datatype.exomeChip" default="exome chip"/>'
 
                     };
 
@@ -118,10 +126,7 @@
                         if ((data.ethnicityInfo) &&
                                 (data.ethnicityInfo.results)) {//assume we have data and process it
                             var holdingStructure = buildDataStructure(data);
-                            mpgSoftware.geneInfo.fillVariationAcrossEthnicityTable(${show_gwas},
-                                    ${show_exchp},
-                                    ${show_exseq},
-                                    '<g:createLink controller="variantSearch" action="gene" />',
+                            mpgSoftware.geneInfo.fillVariationAcrossEthnicityTable('<g:createLink controller="variantSearch" action="gene" />',
                                     continentalAncestryText,
                                     holdingStructure.ethnicitySequence,
                                     holdingStructure.ethnicityChip,

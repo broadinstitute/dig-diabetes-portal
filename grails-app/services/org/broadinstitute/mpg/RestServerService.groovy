@@ -1018,42 +1018,18 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @return
      */
     private JSONObject generateJsonVariantCountByGeneAndMaf(String geneName, String dataSetName, LinkedHashMap<String,String> numericBound ){
-        String dataSetId = ""
-        String codeForMafSlice = ""
-        //String codeForEthnicity = generalizedAncestryDataSet ( ethnicity)
-        //dataSetId = ancestryDataSet ( ethnicity)
-//        switch (cellNumber){
-//            case 0:
-//                codeForMafSlice = "total"
-//                break;
-//            case 1:
-//                codeForMafSlice = "total"
-//                break;
-//            case 2:
-//                codeForMafSlice = "common"
-//                break;
-//            case 3:
-//                codeForMafSlice = "lowfreq"
-//                break;
-//            case 4:
-//                codeForMafSlice = "rare"
-//                break;
-//            default:
-//                log.error("Trouble: user requested cell number = ${cellNumber} which I don't recognize")
-//                dataSetId = "total"
-//        }
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID"])
         List<String> codedFilters = filterManagementService.generateSampleGroupLevelQueries (geneName, dataSetName, numericBound.lowerValue, numericBound.higherValue, "MAF" )
         //List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName,0f,"","","${codeForMafSlice}-${codeForEthnicity}","T2D")
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters,searchBuilderService,metaDataService)
-        if (numericBound.numericBound.higherValue==1){
+        if (numericBound.higherValue==1){
             if (dataSetName != "ExChip_82k_mdv2"){
-                addColumnsForPProperties(resultColumnsToDisplay,"T2D","${dataSetId}","OBSA")
-                addColumnsForPProperties(resultColumnsToDisplay,"T2D","${dataSetId}","OBSU")
+                addColumnsForPProperties(resultColumnsToDisplay,"T2D","${dataSetName}","OBSA")
+                addColumnsForPProperties(resultColumnsToDisplay,"T2D","${dataSetName}","OBSU")
             }
         }else {
-            addColumnsForPProperties(resultColumnsToDisplay,"T2D","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","OBSA")
-            addColumnsForPProperties(resultColumnsToDisplay,"T2D","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","OBSU")
+            addColumnsForPProperties(resultColumnsToDisplay,"T2D","${dataSetName}","OBSA")
+            addColumnsForPProperties(resultColumnsToDisplay,"T2D","${dataSetName}","OBSU")
         }
         JsonSlurper slurper = new JsonSlurper()
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
@@ -1090,7 +1066,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         JSONObject returnValue
         String attribute = "T2D"
         //List <String> dataSeteList = ["AA", "HS", "EA", "SA", "EU","chipEu"]
-        List <Integer> cellNumberList = [0,1,2,3,4]
+//        List <Integer> cellNumberList = [0,1,2,3,4]
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()
         for ( int  j = 0 ; j < dataSetNames.size () ; j++ ) {
@@ -1100,7 +1076,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 sb  << "{"
                 JSONObject apiResults =  generateJsonVariantCountByGeneAndMaf( geneName,  dataSetNames[j], numericBounds[i])
                 if (apiResults.is_error == false) {
-                    if (cellNumberList[i] == 0){
+                    if (i == 0){
                         // the first cell is different than the others. We need to pull back the number of participants,
                         //  which can be found only by adding the OBSA and OBSU fields
                         int unaffected = 0
@@ -1111,29 +1087,29 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                 def element = variant["OBSU"].findAll{it}[0]
                                 if ((element) && (element != 'null')){
                                     if (element[dataSetNames[j]][attribute]!=null){
-                                        unaffected =  element[dataSetId][attribute]
+                                        unaffected =  element[dataSetNames[j]][attribute]
                                     }
 
                                 }
                                 element = variant["OBSA"].findAll{it}[0]
                                 if ((element) && (element != 'null')) {
-                                    if (element[dataSetId][attribute]!=null) {
-                                        affected = element[dataSetId][attribute]
+                                    if (element[dataSetNames[j]][attribute]!=null) {
+                                        affected = element[dataSetNames[j]][attribute]
                                     }
                                 }
                             }
-                            sb  << "\"level\":${cellNumberList[i]},\"count\":${(unaffected +affected)}"
+                            sb  << "\"level\":${i},\"count\":${(unaffected +affected)}"
 
                         } else {
-                            sb  << "\"level\":${cellNumberList[i]},\"count\":${(79854)}"// We don't have this number.  Special case it
+                            sb  << "\"level\":${i},\"count\":${(79854)}"// We don't have this number.  Special case it
                         }
                     }else {
-                        sb  << "\"level\":${cellNumberList[i]},\"count\":${apiResults.numRecords}"
+                        sb  << "\"level\":${i},\"count\":${apiResults.numRecords}"
                     }
 
                 }
                 sb  << "}"
-                if (i<cellNumberList.size ()-1){
+                if (i < numericBounds.size ()-1){
                     sb  << ","
                 }
             }

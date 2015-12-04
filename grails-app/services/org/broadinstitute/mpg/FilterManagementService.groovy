@@ -206,7 +206,7 @@ class FilterManagementService {
         List<String> returnValue = []
         returnValue << "7=${geneName}"
         returnValue << "17=T2D[${sampleGroupName}]${propertyName}>${lowerValue.toString()}"
-        returnValue << "17=T2D[${sampleGroupName}]${propertyName}<${lowerValue.toString()}"
+        returnValue << "17=T2D[${sampleGroupName}]${propertyName}<${higherValue.toString()}"
         returnValue << "11=MOST_DEL_SCORE<4"
         return returnValue
     }
@@ -251,7 +251,9 @@ class FilterManagementService {
                      String baseEthnicityMarker =  "ethnicity_af_"+ ethnicity  + "-"
                      String sampleGroup = ""
                      switch (ethnicity){
-                         case "aa":sampleGroup = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_AA)
+                         case "EUchip":sampleGroup = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)
+                             break;
+                         case "aa":sampleGroup = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_SEQ,"none",RestServerService.ANCESTRY_AA)
                              break;
                          case "ea":sampleGroup = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_SEQ,"none",RestServerService.ANCESTRY_EA)
                              break;
