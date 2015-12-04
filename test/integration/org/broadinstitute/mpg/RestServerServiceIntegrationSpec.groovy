@@ -108,8 +108,22 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
 
 
     void "test combinedEthnicityTable"() {
+        given:
+        List<String> rowNames = []
+        rowNames << "ExChip_82k_mdv2"
+        rowNames << "ExSeq_17k_hs_mdv2"
+        List <LinkedHashMap<String,String>> numericBounds = []
+        LinkedHashMap singleNumericBounds = [:]
+        singleNumericBounds["lowerValue"] = 0.0f
+        singleNumericBounds["higherValue"] = 1.0f
+        numericBounds << singleNumericBounds
+        singleNumericBounds = [:]
+        singleNumericBounds["lowerValue"] = 0.0f
+        singleNumericBounds["higherValue"] = 0.0005f
+        numericBounds << singleNumericBounds
+
         when:
-        JSONObject jsonObject = restServerService.combinedEthnicityTable("FAT1")
+        JSONObject jsonObject = restServerService.combinedEthnicityTable("FAT1", rowNames,numericBounds)
         then:
         assert jsonObject
     }
