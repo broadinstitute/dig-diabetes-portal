@@ -202,13 +202,23 @@ class FilterManagementService {
 
 
 
+    public List<String> generateSampleGroupLevelQueries (String geneName, String sampleGroupName, Float lowerValue, Float higherValue, String propertyName)   {
+        List<String> returnValue = []
+        returnValue << "7=${geneName}"
+        returnValue << "17=T2D[${sampleGroupName}]${propertyName}>${lowerValue.toString()}"
+        returnValue << "17=T2D[${sampleGroupName}]${propertyName}<${higherValue.toString()}"
+        returnValue << "11=MOST_DEL_SCORE<4"
+        return returnValue
+    }
+
+
+
+
 
 
 
     private HashMap interpretSpecialFilters(HashMap developingParameterCollection,String filter)  {
          LinkedHashMap returnValue = new LinkedHashMap()
-
-        developingParameterCollection['predictedEffects'] = 'lessThan_noEffectNoncoding';
 
         if (filter) {
              String[] requestPortionList =  filter.split("-")
@@ -220,26 +230,18 @@ class FilterManagementService {
                          case "total":
                              returnValue['savedValue5'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF>0.0"
                              returnValue['savedValue6'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF<1.0"
-                             returnValue['ethnicity_af_eu-min'] = 0.0
-                             returnValue['ethnicity_af_eu-max'] = 1.0
                              break;
                          case "common":
                              returnValue['savedValue5'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF>0.05"
                              returnValue['savedValue6'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF<1.0"
-                             returnValue['ethnicity_af_eu-min'] = 0.05
-                             returnValue['ethnicity_af_eu-max'] = 1.0
                              break;
                          case "lowfreq":
                              returnValue['savedValue5'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF>0.0005"
                              returnValue['savedValue6'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF<0.05"
-                             returnValue['ethnicity_af_eu-min'] = 0.0005
-                             returnValue['ethnicity_af_eu-max'] = 0.05
                              break;
                          case "rare":
                              returnValue['savedValue5'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF>0.0"
                              returnValue['savedValue6'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF<0.0005"
-                             returnValue['ethnicity_af_eu-min'] = 0.0
-                             returnValue['ethnicity_af_eu-max'] = 0.0005
                              break;
                          default:
                              log.error("FilterManagementService:interpretSpecialFilters. Unexpected string 1 = ${requestPortionList[0]}")
@@ -249,7 +251,9 @@ class FilterManagementService {
                      String baseEthnicityMarker =  "ethnicity_af_"+ ethnicity  + "-"
                      String sampleGroup = ""
                      switch (ethnicity){
-                         case "aa":sampleGroup = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_AA)
+                         case "EUchip":sampleGroup = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)
+                             break;
+                         case "aa":sampleGroup = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_SEQ,"none",RestServerService.ANCESTRY_AA)
                              break;
                          case "ea":sampleGroup = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_SEQ,"none",RestServerService.ANCESTRY_EA)
                              break;
@@ -265,26 +269,18 @@ class FilterManagementService {
                          case "total":
                              returnValue['savedValue5'] = "17=T2D[${sampleGroup}]MAF>0.0"
                              returnValue['savedValue6'] = "17=T2D[${sampleGroup}]MAF<1.0"
-                             returnValue[baseEthnicityMarker  +'min'] = 0.0
-                             returnValue[baseEthnicityMarker  +'max'] = 1.0
                              break;
                          case "common":
                              returnValue['savedValue5'] = "17=T2D[${sampleGroup}]MAF>0.05"
                              returnValue['savedValue6'] = "17=T2D[${sampleGroup}]MAF<1.0"
-                             returnValue[baseEthnicityMarker  +'min'] = 0.05
-                             returnValue[baseEthnicityMarker  +'max'] = 1.0
                              break;
                          case "lowfreq":
                              returnValue['savedValue5'] = "17=T2D[${sampleGroup}]MAF>0.0005"
                              returnValue['savedValue6'] = "17=T2D[${sampleGroup}]MAF<0.05"
-                             returnValue[baseEthnicityMarker  +'min'] = 0.0005
-                             returnValue[baseEthnicityMarker  +'max'] = 0.05
                              break;
                          case "rare":
                              returnValue['savedValue5'] = "17=T2D[${sampleGroup}]MAF>0.0"
                              returnValue['savedValue6'] = "17=T2D[${sampleGroup}]MAF<0.0005"
-                             returnValue[baseEthnicityMarker  +'min'] = 0.0
-                             returnValue[baseEthnicityMarker  +'max'] = 0.0005
                              break;
                          default:
                              log.error("FilterManagementService:interpretSpecialFilters. Unexpected string 2 = ${requestPortionList[0]}")
