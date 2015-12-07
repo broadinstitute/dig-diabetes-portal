@@ -515,8 +515,4 @@ grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.peopl
 // placeholder for data version
 diabetes.data.version = "mdv2";
 
-if (System.properties['server.URL']) {
-    server.URL = System.properties['server.URL']
-}
-
 
