@@ -26,69 +26,30 @@
                 }
                 return retVal;
             }
-            var buildDataStructure = function (data) {
-                var ethnicitySequence = {},
-                        ethnicityChip = {};
+            var buildRowDataStructure = function (data) {
+                var returnValues = [];
                 for (var i = 0; i < data.ethnicityInfo.results.length; i++) {
                         var currentDataSet = data.ethnicityInfo.results[i];
-                        var key = tempKeyGen(currentDataSet["dataset"]);
-                        var oneEthnicity = {};
-                        for (var j = 0; j < data.ethnicityInfo.results[i].pVals.length; j++) {
-                            switch (j) {
-                                case 0:
-                                    oneEthnicity ["ns"] = data.ethnicityInfo.results[i].pVals[j].count;
-                                    break;
-                                case 1:
-                                    oneEthnicity ["total"] = data.ethnicityInfo.results[i].pVals[j].count;
-                                    break;
-                                case 2:
-                                    oneEthnicity ["common"] = data.ethnicityInfo.results[i].pVals[j].count;
-                                    break;
-                                case 3:
-                                    oneEthnicity ["lowFrequency"] = data.ethnicityInfo.results[i].pVals[j].count;
-                                    break;
-                                case 4:
-                                    oneEthnicity ["sing"] = data.ethnicityInfo.results[i].pVals[j].count;
-                                    oneEthnicity ["rare"] = data.ethnicityInfo.results[i].pVals[j].count;
-                                    break;
-                                default:
-                                    break;
-                            }
+                        var singleRow = {};
+                        singleRow["dataset"] = currentDataSet["dataset"];
+                        var rowValues = [];
+                        for (var j = 0; j < currentDataSet.pVals.length; j++) {
+                            rowValues.push( currentDataSet.pVals[j].count );
                         }
-                        ethnicitySequence [key] = oneEthnicity;
-//                        var currentDataSet = data.ethnicityInfo.results[i];
-//                        var key = currentDataSet["dataset"];
-//                        var oneEthnicity = {};
-//                        for (var j = 0; j < data.ethnicityInfo.results[i].pVals.length; j++) {
-//                            switch (j) {
-//                                case 0:
-//                                    oneEthnicity ["ns"] = data.ethnicityInfo.results[i].pVals[j].count;
-//                                    break;
-//                                case 1:
-//                                    oneEthnicity ["total"] = data.ethnicityInfo.results[i].pVals[j].count;
-//                                    break;
-//                                case 2:
-//                                    oneEthnicity ["common"] = data.ethnicityInfo.results[i].pVals[j].count;
-//                                    break;
-//                                case 3:
-//                                    oneEthnicity ["lowFrequency"] = data.ethnicityInfo.results[i].pVals[j].count;
-//                                    break;
-//                                case 4:
-//                                    oneEthnicity ["sing"] = data.ethnicityInfo.results[i].pVals[j].count;
-//                                    oneEthnicity ["rare"] = data.ethnicityInfo.results[i].pVals[j].count;
-//                                    break;
-//                                default:
-//                                    break;
-//                            }
-//                        }
-                        //ethnicityChip["EU"] = oneEthnicity;
-                  //  }
-
-
+                        singleRow["values"] = rowValues;
+                        returnValues.push(singleRow);
                 }
                 ;
-                return {ethnicitySequence: ethnicitySequence,
-                    ethnicityChip: ethnicityChip};
+                return returnValues;
+            };
+            var buildColumnDataStructure = function (data) {
+                var returnValues = [];
+                for (var i = 0; i < data.ethnicityInfo.columns.length; i++) {
+                    var currentDataSet = data.ethnicityInfo.columns[i];
+                    returnValues.push({"key":i,"lowerValue":currentDataSet["lowerValue"],"higherValue":currentDataSet["higherValue"]});
+                 }
+                ;
+                return returnValues;
             };
             $.ajax({
                 cache: false,
@@ -125,11 +86,11 @@
                             (data)) {
                         if ((data.ethnicityInfo) &&
                                 (data.ethnicityInfo.results)) {//assume we have data and process it
-                            var holdingStructure = buildDataStructure(data);
                             mpgSoftware.geneInfo.fillVariationAcrossEthnicityTable('<g:createLink controller="variantSearch" action="gene" />',
                                     continentalAncestryText,
-                                    holdingStructure.ethnicitySequence,
-                                    holdingStructure.ethnicityChip,
+                                    buildRowDataStructure(data),
+                                    buildColumnDataStructure(data),
+                                    "MAFTable",
                                     '<%=geneName%>');
                         }
                     }
@@ -145,6 +106,40 @@
         return {loadAncestryTable: loadAncestryTable}
     }());
 
+
+    // this is a two-part call: first we use the phenotype to get the relevant technologies, and
+    //  then we can launch the table refresh
+    var retrieveSampleGroupsbyTechAndPhenotype = function(technologies,phenotype){
+        var phenotypeName = phenotype;
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",
+            data: {phenotype:phenotype,
+                technologies: technologies},
+            async: true,
+            success: function (data) {
+                if (( data !==  null ) &&
+                        ( typeof data !== 'undefined') &&
+                        ( typeof data.sampleGroupMap !== 'undefined' )  ) {
+                    var sampleGroupMap = data.sampleGroupMap;
+                    if (typeof sampleGroupMap !== 'undefined'){
+                        var dataSetNames =  Object.keys(sampleGroupMap);
+                        var dataSetPropertyValues = [];
+                        for (var i = 0; i < dataSetNames.length; i++) {
+                            if (sampleGroupMap[dataSetNames[i]]) {
+                                dataSetPropertyValues.push(sampleGroupMap[dataSetNames[i]]);
+                            }
+                        }
+                        //variantsAndAssociationTable (phenotypeName,dataSetNames,dataSetPropertyValues);
+                    }
+                }
+            },
+            error: function (jqXHR, exception) {
+                core.errorReporter(jqXHR, exception);
+            }
+        });
+    };
 
     $("#collapseTwo").on("show.bs.collapse", function() {
         mpgSoftware.ancestryTable.loadAncestryTable();

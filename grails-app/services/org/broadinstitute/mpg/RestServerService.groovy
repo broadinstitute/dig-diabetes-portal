@@ -1065,12 +1065,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                              List <LinkedHashMap<String,String>> numericBounds){
         JSONObject returnValue
         String attribute = "T2D"
-        //List <String> dataSeteList = ["AA", "HS", "EA", "SA", "EU","chipEu"]
-//        List <Integer> cellNumberList = [0,1,2,3,4]
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()
         for ( int  j = 0 ; j < dataSetNames.size () ; j++ ) {
-            //String dataSetId =  ancestryDataSet ( dataSeteList[j] )
             sb  << "{ \"dataset\": \"${dataSetNames[j]}\",\"pVals\": ["
             for ( int  i = 0 ; i < numericBounds.size () ; i++ ){
                 sb  << "{"
@@ -1118,6 +1115,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 sb  << ","
             }
         }
+        sb  << "]," // end results sections.  Store some column information
+        sb  << "\"columns\":["
+        List<String> colInfo = []
+        for ( int  i = 0 ; i < numericBounds.size () ; i++ ) {
+            colInfo << "{\"lowerValue\":\"${numericBounds[i].lowerValue}\", \"higherValue\":\"${numericBounds[i].higherValue}\"}"
+        }
+        sb << colInfo.join(",")
         sb  << "]}"
         returnValue = slurper.parseText(sb.toString())
         return returnValue
