@@ -201,9 +201,9 @@ t2dNewDevRestServer { //current 'dev'
 }
 
 //server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
-//server.URL = t2dAws01RestServer.base+t2dAws01RestServer.name+t2dAws01RestServer.path
+server.URL = t2dAws01RestServer.base+t2dAws01RestServer.name+t2dAws01RestServer.path
 //server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
-server.URL = t2dDevLoadBalancedServer.base+t2dDevLoadBalancedServer.name+t2dDevLoadBalancedServer.path
+//server.URL = t2dDevLoadBalancedServer.base+t2dDevLoadBalancedServer.name+t2dDevLoadBalancedServer.path
 dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
 //dbtRestServer.URL = 'http://diabetesgeneticsportal2.broadinstitute.org:8888/dev/burden/'
 //experimentalRestServer.URL = 'http://69.173.71.178:8888/dev2/server/'
@@ -296,6 +296,11 @@ environments {
         // DIGKB-23: keep this here as placeholder for U Michigan setup
 //        grails.serverURL = "http://portaldev.sph.umich.edu/dig-diabetes-portal"
         grails.logging.jul.usebridge = true
+        if (System.properties['server.URL']) {
+            server.URL = System.properties['server.URL']
+            println "server.URL=${server.URL}"
+        }
+
     }
     production {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
@@ -313,6 +318,11 @@ environments {
 //      grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false
+        if (System.properties['server.URL']) {
+            server.URL = System.properties['server.URL']
+            println "server.URL=${server.URL}"
+        }
+
     }
 }
 
@@ -514,3 +524,5 @@ grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.peopl
 
 // placeholder for data version
 diabetes.data.version = "mdv2";
+
+
