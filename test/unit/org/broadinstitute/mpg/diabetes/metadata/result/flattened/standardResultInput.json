@@ -1,0 +1,17 @@
+
+{
+    "passback": "123abc",
+    "entity": "variant",
+    "limit": 5,
+    "count": false,
+    "properties":    {
+        "cproperty": ["VAR_ID" , "CLOSEST_GENE" , "DBSNP_ID" , "Consequence" , "CHROM" , "POS" , "VAR_ID"],
+        "dproperty" : {} , "pproperty" : { "P_FIRTH_FE_IV" : {  "ExSeq_17k_mdv2" : [ "T2D"] }  } } ,
+
+    "filters":    [
+        {"dataset_id": "blah", "phenotype": "blah", "operand": "CHROM", "operator": "EQ", "value": "8", "operand_type": "STRING"},
+        {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "GT", "value": 118000000, "operand_type": "FLOAT"},
+        {"dataset_id": "blah", "phenotype": "blah", "operand": "POS", "operator": "LT", "value": 121000000, "operand_type": "FLOAT"},
+        {"dataset_id": "ExSeq_17k_mdv2", "phenotype": "T2D", "operand": "P_FIRTH_FE_IV", "operator": "LT", "value": 1, "operand_type": "FLOAT"}
+    ]
+}
