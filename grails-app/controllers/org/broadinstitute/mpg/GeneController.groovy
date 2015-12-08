@@ -267,7 +267,7 @@ class GeneController {
             rowMaps << ["dataset":"ExSeq_17k_hs_mdv2","technology":"ExSeq"]
             rowMaps << ["dataset":"ExSeq_17k_ea_genes_mdv2","technology":"ExSeq"]
             rowMaps << ["dataset":"ExSeq_17k_sa_genes_mdv2","technology":"ExSeq"]
-            rowMaps << ["dataset":"ExSeq_17k_aa_genes_mdv2","technology":"ExSeq"]
+            rowMaps << ["dataset":"ExSeq_17k_aa_mdv2","technology":"ExSeq"]
             rowMaps << ["dataset":"ExSeq_17k_eu_mdv2","technology":"ExSeq"]
         }
         List<Float> significanceValues = []
