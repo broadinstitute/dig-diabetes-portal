@@ -296,6 +296,11 @@ environments {
         // DIGKB-23: keep this here as placeholder for U Michigan setup
 //        grails.serverURL = "http://portaldev.sph.umich.edu/dig-diabetes-portal"
         grails.logging.jul.usebridge = true
+        if (System.properties['server.URL']) {
+            server.URL = System.properties['server.URL']
+            println "server.URL=${server.URL}"
+        }
+
     }
     production {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
@@ -313,6 +318,11 @@ environments {
 //      grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false
+        if (System.properties['server.URL']) {
+            server.URL = System.properties['server.URL']
+            println "server.URL=${server.URL}"
+        }
+
     }
 }
 
