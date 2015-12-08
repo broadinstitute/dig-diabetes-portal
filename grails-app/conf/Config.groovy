@@ -296,9 +296,26 @@ environments {
         // DIGKB-23: keep this here as placeholder for U Michigan setup
 //        grails.serverURL = "http://portaldev.sph.umich.edu/dig-diabetes-portal"
         grails.logging.jul.usebridge = true
+        
         if (System.properties['server.URL']) {
             server.URL = System.properties['server.URL']
             println "server.URL=${server.URL}"
+        }
+        if (System.properties['app.version']) {
+            app.version = System.properties['app.version']
+            println "app.version=${app.version}"
+        }
+        if (System.properties['build.number']) {
+            build.number = System.properties['build.number']
+            println "build.number=${build.number}"
+        }
+        if (System.properties['site.version']) {
+            site.version = System.properties['site.version']
+            println "site.version=${site.version}"
+        }
+        if (System.properties['grails.serverURL']) {
+            grails.serverURL= System.properties['grails.serverURL']
+            println "grails.serverURL=${grails.serverURL}"
         }
 
     }
