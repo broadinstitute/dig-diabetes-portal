@@ -300,7 +300,23 @@ environments {
             server.URL = System.properties['server.URL']
             println "server.URL=${server.URL}"
         }
-
+        if (System.properties['app.version']) {
+            app.version = System.properties['app.version']
+            println "app.version=${app.version}"
+        }
+        if (System.properties['build.number']) {
+            build.number = System.properties['build.number']
+            println "build.number=${build.number}"
+        }
+        if (System.properties['site.version']) {
+            site.version = System.properties['site.version']
+            println "site.version=${site.version}"
+        }
+        if (System.properties['environments.production.grails.serverURL']) {
+            environments.production.grails.serverURL= System.properties['environments.production.grails.serverURL']
+            println "environments.production.grails.serverURL=${environments.production.grails.serverURL}"
+        }
+    
     }
     production {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
