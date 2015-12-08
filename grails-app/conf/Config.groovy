@@ -313,7 +313,7 @@ environments {
             println "site.version=${site.version}"
         }
         if (System.properties['grails.serverURL']) {
-            environments.production.grails.serverURL= System.properties['grails.serverURL']
+            grails.serverURL= System.properties['grails.serverURL']
             println "grails.serverURL=${grails.serverURL}"
         }
     
