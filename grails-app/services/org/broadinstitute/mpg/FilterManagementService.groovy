@@ -61,7 +61,7 @@ class FilterManagementService {
      * @return
      */
     public  List <String>  retrieveFiltersCodedFilters (  String geneId, Float significance,String dataset,String region,String receivedParameters,String phenotype)    {
-        Map paramsMap = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters, phenotype)
+        Map paramsMap = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters, phenotype,"","")
         List <String> listOfCodedFilters = observeMultipleFilters (paramsMap)
         return  listOfCodedFilters
     }
@@ -126,16 +126,16 @@ class FilterManagementService {
                                               String dataset,
                                               String region,
                                               String filter,
-                                              String phenotype) {
+                                              String phenotype,
+                                              String parmType,
+                                              String parmVal ) {
         HashMap returnValue = [:]
 
         String dataSet =  ""
         String pValueSpec = ""
+
+        // any mention of a data set
         if (dataset) {
-
-
-
-
 
             switch (dataset) {
                 case RestServerService.TECHNOLOGY_GWAS :
@@ -162,30 +162,29 @@ class FilterManagementService {
                     break;
             }
         }
+
+        // data set and P value implies another restriction
         if ((dataSet)&&(pValueSpec)){
             returnValue['savedValue1'] = "17=${phenotype}[${dataSet}]${pValueSpec}<${significance}"
         }
 
-
+        // we can restrict by region...
         if (region) { // If there's a region then use it. Otherwise depend on the gene name. Don't use both
             LinkedHashMap extractedNumbers = restServerService.extractNumbersWeNeed(region)
             List <String> regionSpecifierList = []
             if (extractedNumbers) {
                 if (extractedNumbers["chromosomeNumber"]) {
-                    returnValue["region_chrom_input"] = extractedNumbers["chromosomeNumber"]
                     regionSpecifierList << "8=${extractedNumbers['chromosomeNumber']}"
                 }
                 if (extractedNumbers["startExtent"]) {
-                    returnValue["region_start_input"] = extractedNumbers["startExtent"]
                     regionSpecifierList << "9=${extractedNumbers['startExtent']}"
                 }
                 if (extractedNumbers["endExtent"]) {
-                    returnValue["region_stop_input"] = extractedNumbers["endExtent"]
                     regionSpecifierList << "10=${extractedNumbers['endExtent']}"
                 }
                 returnValue['savedValue2'] = "${regionSpecifierList.join('^')}"
             }
-        } else if (gene) {
+        } else if (gene) { // ...or we can restrict by Jean
             returnValue['savedValue3'] = "7=${gene}"
         }
 
@@ -193,7 +192,33 @@ class FilterManagementService {
         if (filter) {
             returnValue = interpretSpecialFilters (returnValue, filter)
         }
-
+        if (parmType == "MAFTable"){
+          if (parmVal){
+              List <String> listOfProperties = parmVal.tokenize("~")
+              if (listOfProperties.size()>4) {
+                  if ((listOfProperties[0]=="lowerValue") && (listOfProperties[2]=="higherValue")){
+                      String technology = listOfProperties[4]
+                      if (technology == "ExSeq"){
+                          returnValue['savedValue17'] = "11=MOST_DEL_SCORE<4"
+                      }
+                      try {
+                          Float lowerValue = Float.parseFloat(listOfProperties[1])
+                          returnValue['savedValue15'] = "17=T2D[${dataSet}]MAF>${lowerValue}"
+                      } catch (Exception e){
+                          log.error("Failed conversion of numbers from MAF request: low==${listOfProperties[1]}")
+                          e.printStackTrace()
+                      }
+                      try {
+                          Float higherValue = Float.parseFloat(listOfProperties[3])
+                          returnValue['savedValue16'] = "17=T2D[${dataSet}]MAF<${higherValue}"
+                      } catch (Exception e){
+                          log.error("Failed conversion of numbers from MAF request: higher=${listOfProperties[3]}")
+                          e.printStackTrace()
+                      }
+                  }
+              }
+          }
+        }
 
 
         return returnValue

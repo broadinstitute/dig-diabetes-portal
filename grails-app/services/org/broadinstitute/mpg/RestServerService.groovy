@@ -1061,37 +1061,37 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @return
      */
     public JSONObject combinedEthnicityTable(String geneName,
-                                             List <String> dataSetNames,
+                                             List <LinkedHashMap<String,String>> dataSetNames,
                                              List <LinkedHashMap<String,String>> numericBounds){
         JSONObject returnValue
         String attribute = "T2D"
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()
         for ( int  j = 0 ; j < dataSetNames.size () ; j++ ) {
-            sb  << "{ \"dataset\": \"${dataSetNames[j]}\",\"pVals\": ["
+            sb  << "{ \"dataset\": \"${dataSetNames[j].dataset}\",\"technology\": \"${dataSetNames[j].technology}\",\"pVals\": ["
             for ( int  i = 0 ; i < numericBounds.size () ; i++ ){
                 sb  << "{"
-                JSONObject apiResults =  generateJsonVariantCountByGeneAndMaf( geneName,  dataSetNames[j], numericBounds[i])
+                JSONObject apiResults =  generateJsonVariantCountByGeneAndMaf( geneName,  dataSetNames[j].dataset, numericBounds[i])
                 if (apiResults.is_error == false) {
                     if (i == 0){
                         // the first cell is different than the others. We need to pull back the number of participants,
                         //  which can be found only by adding the OBSA and OBSU fields
                         int unaffected = 0
                         int affected =  0
-                        if (dataSetNames[j]!="ExChip_82k_mdv2"){
+                        if (dataSetNames[j].dataset!="ExChip_82k_mdv2"){
                             def variant = apiResults.variants[0]
                             if ((variant) && (variant != 'null')){
                                 def element = variant["OBSU"].findAll{it}[0]
                                 if ((element) && (element != 'null')){
-                                    if (element[dataSetNames[j]][attribute]!=null){
-                                        unaffected =  element[dataSetNames[j]][attribute]
+                                    if (element[dataSetNames[j].dataset][attribute]!=null){
+                                        unaffected =  element[dataSetNames[j].dataset][attribute]
                                     }
 
                                 }
                                 element = variant["OBSA"].findAll{it}[0]
                                 if ((element) && (element != 'null')) {
-                                    if (element[dataSetNames[j]][attribute]!=null) {
-                                        affected = element[dataSetNames[j]][attribute]
+                                    if (element[dataSetNames[j].dataset][attribute]!=null) {
+                                        affected = element[dataSetNames[j].dataset][attribute]
                                     }
                                 }
                             }

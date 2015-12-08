@@ -186,6 +186,8 @@ class VariantSearchController {
         String dataset = params.dataset
         String region = params.region
         String phenotype = params.phenotype
+        String parmType = params.parmType
+        String parmVal = params.parmVal
         Float significance = 0f
         try {
             significance = Float.parseFloat(significanceString)
@@ -193,7 +195,7 @@ class VariantSearchController {
             log.error("receive nonnumeric significance value = (${params.sig}) in action=gene, VariantSearchController")
         }
 
-        Map paramsMap = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters,phenotype)
+        Map paramsMap = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters,phenotype,parmType,parmVal)
 
 
         List <String> listOfCodedFilters = filterManagementService.observeMultipleFilters (paramsMap)

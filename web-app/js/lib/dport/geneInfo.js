@@ -336,7 +336,7 @@ var mpgSoftware = mpgSoftware || {};
         anchorVariantSearches = function (displayableContents, geneName, rowElement, colElement, rootVariantUrl,parmType) {
             var returnValue = "";
             returnValue += ("<a class='boldlink' href='" + rootVariantUrl + "/" + geneName + "?dataset=" + rowElement.dataset +
-                "&parmType="+parmType+ "&parmVal="+colElement.code+"'>" +
+                "&parmType="+parmType+ "&parmVal="+colElement.code+"~"+rowElement.technology+"'>" +
                 displayableContents + "</a>");
             return  returnValue;
         };
@@ -354,15 +354,18 @@ var mpgSoftware = mpgSoftware || {};
             if (rowSequence) {
                 for ( var i = 0 ; i < rowSequence.length ; i++ ) {
 
-                        $('#continentalVariationTableBody').append('<tr>' +
-                            '<td>' + rowSequence[i].name + '</td>');
-
+                        var singleRow = '<td>' + rowSequence[i].dataset + '</td>';
+                        singleRow += ('<td>' + rowSequence[i].technology + '</td>');
                         for ( var j = 0 ; j < rowSequence[i].values.length ; j++ ){
-                            $('#continentalVariationTableBody').append('<tr>' +
-                                '<td>' + anchorVariantSearches(rowSequence[i].values[j], geneId, rowSequence[i],colSequence[j], rootVariantUrl, parmType) + '</td>');
+                            if (j===0){// sample count has no link
+                                singleRow += ('<td>' +rowSequence[i].values[j] + '</td>');
+                            } else {
+                                singleRow += ('<td>' +
+                                    anchorVariantSearches(rowSequence[i].values[j], geneId, rowSequence[i],colSequence[j], rootVariantUrl, parmType) + '</td>');
+                            }
                         }
 
-                        $('#continentalVariationTableBody').append('</tr>');
+                        $('#continentalVariationTableBody').append('<tr>'+singleRow+'</tr>');
                     }
 
             }

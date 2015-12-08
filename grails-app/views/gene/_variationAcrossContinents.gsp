@@ -32,6 +32,7 @@
                         var currentDataSet = data.ethnicityInfo.results[i];
                         var singleRow = {};
                         singleRow["dataset"] = currentDataSet["dataset"];
+                        singleRow["technology"] = currentDataSet["technology"];
                         var rowValues = [];
                         for (var j = 0; j < currentDataSet.pVals.length; j++) {
                             rowValues.push( currentDataSet.pVals[j].count );
@@ -46,7 +47,8 @@
                 var returnValues = [];
                 for (var i = 0; i < data.ethnicityInfo.columns.length; i++) {
                     var currentDataSet = data.ethnicityInfo.columns[i];
-                    returnValues.push({"key":i,"lowerValue":currentDataSet["lowerValue"],"higherValue":currentDataSet["higherValue"]});
+                    returnValues.push({"key":i,"lowerValue":currentDataSet["lowerValue"],"higherValue":currentDataSet["higherValue"],
+                                       "code":"lowerValue~"+currentDataSet["lowerValue"]+"~higherValue~"+currentDataSet["higherValue"]});
                  }
                 ;
                 return returnValues;
