@@ -1,5 +1,5 @@
 {
-    "mdv": 2,
+    "mdv": "mdv2",
     "phenotype": "t2d",
     "ci_level": 0.95,
     "calc_ci": true,

@@ -83,11 +83,12 @@ public class BurdenJsonBuilder {
         stringBuilder.append("{");
 
         // add in the data version
+        // DIGP-195: changed "mdv" field from integer 2 to "mdv2" string to stay consistent with KB versioning
         stringBuilder.append("\"");
         stringBuilder.append(PortalConstants.JSON_BURDEN_DATA_VERSION_KEY);
-        stringBuilder.append("\": ");
+        stringBuilder.append("\": \"mdv");
         stringBuilder.append(dataVersion);
-        stringBuilder.append(", ");
+        stringBuilder.append("\", ");
 
         // add in the phenotype
         stringBuilder.append("\"");
