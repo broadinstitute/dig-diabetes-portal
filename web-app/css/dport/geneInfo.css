@@ -354,3 +354,6 @@ div.significantDifferenceText {
 span.bhtLossOfFunctionVariants {
     text-decoration: underline;
 }
+.vandaRowTd {
+    text-align:left;
+}

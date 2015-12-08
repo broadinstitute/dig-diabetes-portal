@@ -83,19 +83,26 @@
 
                     };
 
-
+                    var rowDataStructure = [];
                     if ((typeof data !== 'undefined') &&
                             (data)) {
                         if ((data.ethnicityInfo) &&
                                 (data.ethnicityInfo.results)) {//assume we have data and process it
+                            rowDataStructure = buildRowDataStructure(data);
                             mpgSoftware.geneInfo.fillVariationAcrossEthnicityTable('<g:createLink controller="variantSearch" action="gene" />',
                                     continentalAncestryText,
-                                    buildRowDataStructure(data),
+                                    rowDataStructure,
                                     buildColumnDataStructure(data),
                                     "MAFTable",
                                     '<%=geneName%>');
                         }
                     }
+                    if (typeof rowDataStructure !== 'undefined') {
+                        for ( var i = 0 ; i < rowDataStructure.length ; i++ ){
+                            jsTreeDataRetriever ('#mafTableRow'+i,"T2D",rowDataStructure[i].dataset);
+                        }
+                    }
+
                     $('[data-toggle="popover"]').popover();
                 },
                 error: function (jqXHR, exception) {

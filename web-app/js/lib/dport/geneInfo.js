@@ -354,7 +354,7 @@ var mpgSoftware = mpgSoftware || {};
             if (rowSequence) {
                 for ( var i = 0 ; i < rowSequence.length ; i++ ) {
 
-                        var singleRow = '<td>' + rowSequence[i].dataset + '</td>';
+                        var singleRow = '<td class="vandaRowTd" style="text-align: left"><div class="vandaRowHdr" id="mafTableRow'+i+'"></div></td>';
                         singleRow += ('<td>' + rowSequence[i].technology + '</td>');
                         for ( var j = 0 ; j < rowSequence[i].values.length ; j++ ){
                             if (j===0){// sample count has no link
@@ -438,7 +438,7 @@ var mpgSoftware = mpgSoftware || {};
                 }
                 var tableRow = '';
                 tableRow += '<tr>' +
-                    '<td class="vandaRowTd" style="text-align: left"><div class="vandaRowHdr" id="vandaRow'+rowNumber+'"></div></td>' +
+                    '<td class="vandaRowTd"  style="text-align: left"><div class="vandaRowHdr" id="vandaRow'+rowNumber+'"></div></td>' +
                     '<td>' + sampleSize + '</td>';
                 for ( var i = 0 ; i < columnMap.length ; i++ ) {
                     tableRow += '<td>';
