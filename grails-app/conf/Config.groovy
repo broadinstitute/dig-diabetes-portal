@@ -213,6 +213,11 @@ burdenRestServerDev = new ServerBean("dev burden server", "http://dig-dev.broadi
 burdenRestServerProd = new ServerBean("prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
 
 
+if (System.properties['server.URL']) {
+    server.URL = System.properties['server.URL']
+    println "server.URL=${server.URL}"
+}
+
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
 
 
