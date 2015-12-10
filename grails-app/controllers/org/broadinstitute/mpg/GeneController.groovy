@@ -97,15 +97,15 @@ class GeneController {
                     if (!(newDatasetRowName)) {
                         newDatasetRowName =  sharedToolsService.translator(nameAndAssociatedPValue[0])
                     }
-                    rowInformation << [name:newDatasetRowName, value:nameAndAssociatedPValue[0],count:'5656', pvalue: nameAndAssociatedPValue[1] ]
+                    rowInformation << [name:newDatasetRowName, value:nameAndAssociatedPValue[0], pvalue: nameAndAssociatedPValue[1] ]
                 }
 
 
             }
         } else {
-            rowInformation << [name:'GWAS', value:RestServerService.TECHNOLOGY_GWAS,  pvalue: RestServerService.GWASDATAPVALUE, count:'69,033']
-            rowInformation << [name:'exome chip', value:RestServerService.TECHNOLOGY_EXOME_CHIP,  pvalue: RestServerService.EXOMECHIPPVALUE, count:'79,854']
-            rowInformation << [name:'exome sequence', value:RestServerService.TECHNOLOGY_EXOME_SEQ,  pvalue: RestServerService.EXOMESEQUENCEPVALUE, count:'16,760']
+            rowInformation << [name:'GWAS', value:RestServerService.TECHNOLOGY_GWAS,  pvalue: RestServerService.GWASDATAPVALUE]
+            rowInformation << [name:'exome chip', value:RestServerService.TECHNOLOGY_EXOME_CHIP,  pvalue: RestServerService.EXOMECHIPPVALUE]
+            rowInformation << [name:'exome sequence', value:RestServerService.TECHNOLOGY_EXOME_SEQ,  pvalue: RestServerService.EXOMESEQUENCEPVALUE]
         }
         for (LinkedHashMap row in rowInformation){
              String dataSet=row.value
@@ -133,7 +133,6 @@ class GeneController {
             }
         } else { // no saved columns -- provide some defaults
             columnInformation << [name:'total variants', value:'1', count:'0']
-//        columnInformation << [name:'exome wide <br>significance', value:'0.000009', count:'0']  // example of additional column
             columnInformation << [name:'nominal', value:'0.05', count:'0']
             columnInformation << [name:'locus-wide', value:'0.00005', count:'0']
             columnInformation << [name:'genome-wide', value:'0.00000005', count:'0']
@@ -259,17 +258,23 @@ class GeneController {
     def geneEthnicityCounts (){
         String geneToStartWith = params.geneName
         List<String> rowNames = sharedToolsService.convertAnHttpList(params."rowNames[]")
+        def rowMap = sharedToolsService.convertAnHttpList(params."rowMap")
         List<String> colSignificances = sharedToolsService.convertAnHttpList(params."colNames[]")
         List <LinkedHashMap<String,String>> rowMaps = []
         if (!rowNames)  {
             rowMaps  = []
-            rowMaps << ["dataset":"ExChip_82k_mdv2","technology":"ExChip"]
-            rowMaps << ["dataset":"ExSeq_17k_hs_mdv2","technology":"ExSeq"]
-            rowMaps << ["dataset":"ExSeq_17k_ea_genes_mdv2","technology":"ExSeq"]
-            rowMaps << ["dataset":"ExSeq_17k_sa_genes_mdv2","technology":"ExSeq"]
-            rowMaps << ["dataset":"ExSeq_17k_aa_mdv2","technology":"ExSeq"]
-            rowMaps << ["dataset":"ExSeq_17k_eu_mdv2","technology":"ExSeq"]
+            rowMaps << ["dataset":"ExChip_82k_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExChip_82k_mdv2')}"]
+            rowMaps << ["dataset":"ExSeq_17k_hs_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExSeq_17k_hs_mdv2')}"]
+            rowMaps << ["dataset":"ExSeq_17k_ea_genes_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExChip_82k_mdv2')}"]
+            rowMaps << ["dataset":"ExSeq_17k_sa_genes_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExChip_82k_mdv2')}"]
+            rowMaps << ["dataset":"ExSeq_17k_aa_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExChip_82k_mdv2')}"]
+            rowMaps << ["dataset":"ExSeq_17k_eu_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExChip_82k_mdv2')}"]
+        } else {
+            for (String oneName in rowNames){
+                rowMaps << ["dataset":oneName,"technology":"${metaDataService.getTechnologyPerSampleGroup(oneName)}"]
+            }
         }
+        List <LinkedHashMap<String,String>> uniqueRowMaps = rowMaps.unique{ LinkedHashMap a,LinkedHashMap b -> a.dataset <=> b.dataset }
         List<Float> significanceValues = []
         for(String significance in colSignificances){
             try {
@@ -288,7 +293,7 @@ class GeneController {
         numericBounds << ["lowerValue":0.0f,"higherValue":0.0005f]
 
 
-        JSONObject jsonObject =  restServerService.combinedEthnicityTable ( geneToStartWith.trim().toUpperCase(), rowMaps, numericBounds)
+        JSONObject jsonObject =  restServerService.combinedEthnicityTable ( geneToStartWith.trim().toUpperCase(), uniqueRowMaps, numericBounds)
         render(status:200, contentType:"application/json") {
             [ethnicityInfo:jsonObject]
         }
