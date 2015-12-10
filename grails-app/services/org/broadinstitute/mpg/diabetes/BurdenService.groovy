@@ -145,7 +145,7 @@ class BurdenService {
             returnJson = this.getBurdenResultForVariantIdList(dataVersionId, phenotype, burdenVariantList);
 
         } catch (PortalException exception) {
-            log.error("Got error creating burden test for gene: " + geneString + " and sample group option: " + sampleGroupOptionId + ": " + exception.getMessage());
+            log.error("Got error creating burden test for gene: " + geneString + " and phenotype: " + phenotype + ": " + exception.getMessage());
         }
 
         if (returnJson == null) {
