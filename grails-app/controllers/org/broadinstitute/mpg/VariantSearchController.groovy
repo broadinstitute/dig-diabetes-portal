@@ -270,28 +270,7 @@ class VariantSearchController {
 
         List<String> technologies = sharedToolsService.convertAnHttpList(params."technologies[]")
 
-        List<SampleGroup> fullListOfSampleGroups = []
-        for (String technologyName in technologies){
-            List<SampleGroup> technologySpecificSampleGroups = this.metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotypeName,
-                                                                                                    technologyName,
-                                                                                                    sharedToolsService.getCurrentDataVersion(), "")
-            // pick a favorite -- use sample size eventually.  For now we use a shortcut...
-            if (technologySpecificSampleGroups){
-                List<SampleGroup> sortedTechnologySpecificSampleGroups = technologySpecificSampleGroups.sort{ SampleGroup a, SampleGroup b ->
-                                                                                                              (b.subjectsNumber as Integer) <=> (a.subjectsNumber as Integer) }
-                fullListOfSampleGroups << sortedTechnologySpecificSampleGroups[0]
-                // add in Sigma by hand
-                SampleGroup sigmaGroup
-                sigmaGroup = sortedTechnologySpecificSampleGroups.find{it.systemId=='ExChip_SIGMA1_mdv2'}
-                if (sigmaGroup){
-                    fullListOfSampleGroups << sigmaGroup
-                }
-                sigmaGroup = sortedTechnologySpecificSampleGroups.find{it.systemId=='GWAS_SIGMA1_mdv2'}
-                if (sigmaGroup){
-                    fullListOfSampleGroups << sigmaGroup
-                }
-            }
-        }
+        List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups( phenotypeName, technologies)
 
         JSONObject sampleGroupMapJsonObject = filterManagementService.convertSampleGroupListToJson(fullListOfSampleGroups, phenotypeName)
 

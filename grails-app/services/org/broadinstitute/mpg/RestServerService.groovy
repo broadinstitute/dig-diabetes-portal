@@ -928,7 +928,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         def slurper = new JsonSlurper()
         for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
             SampleGroup sampleGroup = metaDataService.getSampleGroupByName(dataSeteList[j])
-            sb  << "{ \"dataset\": \"${dataSeteList[j]}\",\"subjectsNumber\": ${sampleGroup?.getSubjectsNumber()}, \"pVals\": ["
+            sb  << "{ \"dataset\": \"${dataSeteList[j]}\",\"subjectsNumber\": ${sampleGroup?.getSubjectsNumber()}, \"technology\": \"${metaDataService.getTechnologyPerSampleGroup(dataSeteList[j])}\", \"pVals\": ["
             for ( int  i = 0 ; i < significanceList.size () ; i++ ){
                 sb  << "{"
                 JSONObject apiData = requestGeneCountByPValue(geneName, significanceList[i], dataSeteList[j],phenotype)

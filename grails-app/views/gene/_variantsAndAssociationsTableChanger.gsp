@@ -4,8 +4,13 @@ var variantsAndAssociationTable = function (phenotype,rowValueParameter,rowMapPa
     var rowValue = rowValueParameter;
     var rowMap = rowMapParameter;
     // make sure table is empty
-    $('#variantsAndAssociationsHead').empty()
-    $('#variantsAndAssociationsTableBody').empty()
+    $('#variantsAndAssociationsHead').empty();
+    $('#variantsAndAssociationsTableBody').empty();
+    var compareDatasetsByTechnology = function (a, b) {
+      if (a.technology < b. technology) return -1;
+      if (a.technology > b. technology) return 1;
+      return 0;
+    };
     $.ajax({
         cache: false,
         type: "post",
@@ -63,16 +68,17 @@ var variantsAndAssociationTable = function (phenotype,rowValueParameter,rowMapPa
                         rowValue = [];
                         if ((data.geneInfo) &&
                             (data.geneInfo.results)){//assume we have data and process it
+                            var sortedDataSetArray = data.geneInfo.results.sort(compareDatasetsByTechnology);
                               var collector = [];
-                              for (var i = 0 ; i < data.geneInfo.results.length ; i++) {
+                              for (var i = 0 ; i < sortedDataSetArray.length ; i++) {
                                    var d = [];
-                                   rowValue.push(data.geneInfo.results[i].dataset);
-                                   rowMap.push({"name":data.geneInfo.results[i].dataset,
-                                                "value":data.geneInfo.results[i].dataset,
+                                   rowValue.push(sortedDataSetArray[i].dataset);
+                                   rowMap.push({"name":sortedDataSetArray[i].dataset,
+                                                "value":sortedDataSetArray[i].dataset,
                                                 "pvalue":"UNUSED",
-                                                "count":data.geneInfo.results[i].subjectsNumber});
-                                   for (var j = 0 ; j < data.geneInfo.results[i].pVals.length ; j++ ){
-                                      d.push(data.geneInfo.results[i].pVals[j].count);
+                                                "count":sortedDataSetArray[i].subjectsNumber});
+                                   for (var j = 0 ; j < sortedDataSetArray[i].pVals.length ; j++ ){
+                                      d.push(sortedDataSetArray[i].pVals[j].count);
                                    }
                                    collector.push(d);
                                 }
@@ -193,6 +199,11 @@ var getTechnologies = function(sel,clearExistingRows){
 //  then we can launch the table refresh
 var retrieveSampleGroupsbyTechnologyAndPhenotype = function(technologies,phenotype){
     var phenotypeName = phenotype;
+    var compareDatasetsByTechnology = function (a, b) {
+      if (a.technology < b. technology) return -1;
+      if (a.technology > b. technology) return 1;
+      return 0;
+    }
     $.ajax({
         cache: false,
         type: "post",
@@ -207,10 +218,15 @@ var retrieveSampleGroupsbyTechnologyAndPhenotype = function(technologies,phenoty
                 var sampleGroupMap = data.sampleGroupMap;
                 if (typeof sampleGroupMap !== 'undefined'){
                    var dataSetNames =  Object.keys(sampleGroupMap);
-                   var dataSetPropertyValues = [];
+                   var dataSetArray = [];
                    for (var i = 0; i < dataSetNames.length; i++) {
-                        if (sampleGroupMap[dataSetNames[i]]) {
-                            dataSetPropertyValues.push(sampleGroupMap[dataSetNames[i]]);
+                       dataSetArray.push(sampleGroupMap[dataSetNames[i]]);
+                   }
+                   var sortedDataSetArray = dataSetArray.sort(compareDatasetsByTechnology);
+                   var dataSetPropertyValues = [];
+                   for (var i = 0; i < sortedDataSetArray.length; i++) {
+                        if (sortedDataSetArray[i]) {
+                            dataSetPropertyValues.push(sortedDataSetArray[i]);
                         }
                     }
                    variantsAndAssociationTable (phenotypeName,dataSetNames,dataSetPropertyValues);

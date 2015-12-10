@@ -262,13 +262,21 @@ class GeneController {
         List<String> colSignificances = sharedToolsService.convertAnHttpList(params."colNames[]")
         List <LinkedHashMap<String,String>> rowMaps = []
         if (!rowNames)  {
+
             rowMaps  = []
+            List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups( "T2D", ["ExSeq"])
+            for (SampleGroup sampleGroup in fullListOfSampleGroups){
+                rowMaps << ["dataset":"${sampleGroup.systemId}","technology":"${metaDataService.getTechnologyPerSampleGroup(sampleGroup.systemId)}"]
+            }
             rowMaps << ["dataset":"ExChip_82k_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExChip_82k_mdv2')}"]
-            rowMaps << ["dataset":"ExSeq_17k_hs_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExSeq_17k_hs_mdv2')}"]
-            rowMaps << ["dataset":"ExSeq_17k_ea_genes_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExChip_82k_mdv2')}"]
-            rowMaps << ["dataset":"ExSeq_17k_sa_genes_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExChip_82k_mdv2')}"]
-            rowMaps << ["dataset":"ExSeq_17k_aa_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExChip_82k_mdv2')}"]
-            rowMaps << ["dataset":"ExSeq_17k_eu_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExChip_82k_mdv2')}"]
+            rowMaps << ["dataset":"ExChip_SIGMA1_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExChip_SIGMA1_mdv2')}"]
+
+//            rowMaps << ["dataset":"ExChip_82k_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExChip_82k_mdv2')}"]
+//            rowMaps << ["dataset":"ExSeq_17k_hs_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExSeq_17k_hs_mdv2')}"]
+//            rowMaps << ["dataset":"ExSeq_17k_ea_genes_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExChip_82k_mdv2')}"]
+//            rowMaps << ["dataset":"ExSeq_17k_sa_genes_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExChip_82k_mdv2')}"]
+//            rowMaps << ["dataset":"ExSeq_17k_aa_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExChip_82k_mdv2')}"]
+//            rowMaps << ["dataset":"ExSeq_17k_eu_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExChip_82k_mdv2')}"]
         } else {
             for (String oneName in rowNames){
                 rowMaps << ["dataset":oneName,"technology":"${metaDataService.getTechnologyPerSampleGroup(oneName)}"]

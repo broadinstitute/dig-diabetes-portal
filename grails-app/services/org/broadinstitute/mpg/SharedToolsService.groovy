@@ -578,10 +578,41 @@ class SharedToolsService {
         return returnValue.toString()
     }
 
+    /***
+     * get top level sample groups for display
+     *
+     **/
+    public List<SampleGroup> listOfTopLevelSampleGroups(String phenotypeName, List<String> technologies) {
+        List<SampleGroup> fullListOfSampleGroups = []
+        for (String technologyName in technologies) {
+            List<SampleGroup> technologySpecificSampleGroups = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotypeName,
+                    technologyName,
+                    getCurrentDataVersion(), "")
+            // pick a favorite -- use sample size eventually.  For now we use a shortcut...
+            if (technologySpecificSampleGroups) {
+                List<SampleGroup> sortedTechnologySpecificSampleGroups = technologySpecificSampleGroups.sort { SampleGroup a, SampleGroup b ->
+                    (b.subjectsNumber as Integer) <=> (a.subjectsNumber as Integer)
+                }
+                fullListOfSampleGroups << sortedTechnologySpecificSampleGroups[0]
+                // add in Sigma by hand
+                SampleGroup sigmaGroup
+                sigmaGroup = sortedTechnologySpecificSampleGroups.find { it.systemId == 'ExChip_SIGMA1_mdv2' }
+                if (sigmaGroup) {
+                    fullListOfSampleGroups << sigmaGroup
+                }
+                sigmaGroup = sortedTechnologySpecificSampleGroups.find { it.systemId == 'GWAS_SIGMA1_mdv2' }
+                if (sigmaGroup) {
+                    fullListOfSampleGroups << sigmaGroup
+                }
+            }
+        }
+        return fullListOfSampleGroups
+    }
 
 
     public String packageUpASingleLevelTreeAsJson (LinkedHashMap<String, LinkedHashMap <String,List <String>>> bigTree ){
         // now that we have a multilevel tree, build it into a string suitable for JSON
+        //LinkedHashMap<String, LinkedHashMap <String,List <String>>> sortedBigTree = bigTree.sort{it.value.technology}
         StringBuilder returnValue = new StringBuilder ()
         if ((bigTree) && (bigTree?.size() > 0)){
             List <String> phenotypeHolder = []

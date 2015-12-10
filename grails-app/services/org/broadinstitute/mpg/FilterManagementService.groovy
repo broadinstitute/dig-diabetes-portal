@@ -81,6 +81,7 @@ class FilterManagementService {
             sampleGroupProperties["name"] =  sampleGroup.systemId
             sampleGroupProperties["value"] =  sampleGroup.systemId
             sampleGroupProperties["pvalue"] =  filterManagementService.findFavoredPValue ( sampleGroup.systemId, phenotypeName )
+            sampleGroupProperties["technology"] =  metaDataService.getTechnologyPerSampleGroup( sampleGroup.systemId )
             sampleGroupProperties["count"] =  "${sampleGroup.subjectsNumber}"
             mapSampleGroupsToProperties[sampleGroup.systemId] = sampleGroupProperties
         }
