@@ -19918,6 +19918,22 @@
             "sort_order": 66
         },
         {
+            "name": "Reference_Allele",
+            "type": "STRING",
+            "searchable": "TRUE",
+            "meaning": "NULL",
+            "displayable": "TRUE",
+            "sort_order": 66
+        },
+        {
+            "name": "Effect_Allele",
+            "type": "STRING",
+            "searchable": "TRUE",
+            "meaning": "NULL",
+            "displayable": "TRUE",
+            "sort_order": 66
+        },
+        {
             "name": "PolyPhen_PRED",
             "type": "STRING",
             "searchable": "TRUE",

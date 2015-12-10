@@ -10,13 +10,13 @@
                 "CLOSEST_GENE": "SLC30A8"
             },
             {
-                "Consequence": "5_prime_UTR_variant"
-            },
-            {
                 "DBSNP_ID": "rs112881768"
             },
             {
                 "POS": 118147522
+            },
+            {
+                "Reference_Allele": "G"
             },
             {
                 "VAR_ID": "8_118147522_G_A"
@@ -37,13 +37,13 @@
                 "CLOSEST_GENE": "SLC30A8"
             },
             {
-                "Consequence": "5_prime_UTR_variant"
-            },
-            {
                 "DBSNP_ID": null
             },
             {
                 "POS": 118147534
+            },
+            {
+                "Reference_Allele": "C"
             },
             {
                 "VAR_ID": "8_118147534_C_T"
@@ -64,13 +64,13 @@
                 "CLOSEST_GENE": "SLC30A8"
             },
             {
-                "Consequence": "5_prime_UTR_variant"
-            },
-            {
                 "DBSNP_ID": null
             },
             {
                 "POS": 118147545
+            },
+            {
+                "Reference_Allele": "G"
             },
             {
                 "VAR_ID": "8_118147545_G_A"
@@ -91,13 +91,13 @@
                 "CLOSEST_GENE": "SLC30A8"
             },
             {
-                "Consequence": "5_prime_UTR_variant"
-            },
-            {
                 "DBSNP_ID": null
             },
             {
                 "POS": 118147547
+            },
+            {
+                "Reference_Allele": "C"
             },
             {
                 "VAR_ID": "8_118147547_C_T"
@@ -118,13 +118,13 @@
                 "CLOSEST_GENE": "SLC30A8"
             },
             {
-                "Consequence": "5_prime_UTR_variant"
-            },
-            {
                 "DBSNP_ID": null
             },
             {
                 "POS": 118147548
+            },
+            {
+                "Reference_Allele": "G"
             },
             {
                 "VAR_ID": "8_118147548_G_A"

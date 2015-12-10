@@ -1,11 +1,10 @@
-
 {
     "passback": "123abc",
     "entity": "variant",
     "limit": 5,
     "count": false,
     "properties":    {
-        "cproperty": ["VAR_ID" , "CLOSEST_GENE" , "DBSNP_ID" , "Consequence" , "CHROM" , "POS" , "VAR_ID"],
+        "cproperty": ["VAR_ID" , "CLOSEST_GENE" , "DBSNP_ID" , "CHROM" , "POS" , "VAR_ID", "Reference_Allele"],
         "dproperty" : {} , "pproperty" : { "P_FIRTH_FE_IV" : {  "ExSeq_17k_mdv2" : [ "T2D"] }  } } ,
 
     "filters":    [
