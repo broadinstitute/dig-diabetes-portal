@@ -7,6 +7,7 @@ import java.util.List;
  * Created by mduby on 9/2/15.
  */
 public interface Variant {
+
     public String getChromosome();
 
     public String getVariantId();
