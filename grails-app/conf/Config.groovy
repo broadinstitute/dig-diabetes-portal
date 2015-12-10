@@ -13,6 +13,7 @@ if (!catalinaBase) catalinaBase = '.'   // just in case
 def logDirectory = "${catalinaBase}/logs"
 
 
+
 site.version = 't2dgenes' // could be 'sigma', 't2dgenes', or 'beacon'
 if (site.version == 't2dgenes'){
     site.title = 'Type 2 Diabetes Genetics'  // could be 'SIGMA T2D' or 'Type 2 Diabetes Genetics'
@@ -34,7 +35,6 @@ if (site.version == 't2dgenes'){
     site.title = 'SIGMA T2D'  // could be 'SIGMA T2D' or 'Type 2 Diabetes Genetics'
     site.subtext = 'a resource on the genetics of type 2 diabetes in Mexico'
     site.operator = 't2d-error@googlegroups.com'
-
     portal {
         sections {
             show_gene = 1
@@ -45,9 +45,6 @@ if (site.version == 't2dgenes'){
             show_beacon = 0
         }
     }
-
-
-
 } else if (site.version == 'sigma'){
     site.title = 'BEACON'  // could be 'SIGMA T2D' or 'Type 2 Diabetes Genetics'
     site.subtext = 'index lookup for all variants'
@@ -230,10 +227,10 @@ if (System.properties['site.version']) {
     site.version = System.properties['site.version']
     println "site.version=${site.version}"
 }
-if (System.properties['grails.serverURL']) {
-    grails.serverURL= System.properties['grails.serverURL']
-    println "grails.serverURL=${grails.serverURL}"
-}
+//if (System.properties['grails.serverURL']) {
+//    grails.serverURL= System.properties['grails.serverURL']
+//    println "grails.serverURL=${grails.serverURL}"
+//}
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
 
@@ -352,7 +349,7 @@ environments {
 //        grails.serverURL = "http://sigmat2ddevsrv2.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
-      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 //      grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false
