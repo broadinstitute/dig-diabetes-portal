@@ -203,7 +203,9 @@ class MetaDataService {
         return jsonParser.getSampleGroupByName(sampleGroupId)
     }
 
-
+    public String  getTechnologyPerSampleGroup(String sampleGroupId){
+        return jsonParser.getTechnologyPerSampleGroup(sampleGroupId)
+    }
 
     public String getSampleGroupNameListForPhenotypeAsJson(String phenotypeName) {
         // local variables

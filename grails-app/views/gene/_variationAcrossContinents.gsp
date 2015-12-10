@@ -11,21 +11,8 @@
     var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.ancestryTable = (function () {
-        var loadAncestryTable = function () {
+        var loadAncestryTable = function (chosenGene,dataSetMap) {
 
-            var tempKeyGen = function (dataset){
-                var retVal = "";
-                switch (dataset) {
-                    case "ExChip_82k_mdv2": retVal = 'EUchip';  break;
-                    case "ExSeq_17k_aa_genes_mdv2": retVal = 'AA';  break;
-                    case "ExSeq_17k_ea_genes_mdv2": retVal = 'EA';  break;
-                    case "ExSeq_17k_sa_genes_mdv2": retVal = 'SA';  break;
-                    case "ExSeq_17k_hs_mdv2": retVal = 'HS';  break;
-                    case "ExSeq_17k_eu_mdv2": retVal = 'EU';  break;
-                    default: alert(' unrecognized data set = '+dataset+".")
-                }
-                return retVal;
-            }
             var buildRowDataStructure = function (data) {
                 var returnValues = [];
                 for (var i = 0; i < data.ethnicityInfo.results.length; i++) {
@@ -53,11 +40,19 @@
                 ;
                 return returnValues;
             };
+            var rowNames = [];
+            if (typeof dataSetMap !== 'undefined'){
+                for ( var i = 0 ; i < dataSetMap.length ; i++ ){
+                    rowNames.push(dataSetMap[i].name);
+                }
+            }
             $.ajax({
                 cache: false,
                 type: "post",
                 url: "${createLink(controller:'gene',action: 'geneEthnicityCounts')}",
-                data: {geneName: '<%=geneName%>'},
+                data: {geneName: chosenGene,
+                       rowMap:dataSetMap,
+                       rowNames:rowNames},
                 async: true,
                 success: function (data) {
 
@@ -94,7 +89,7 @@
                                     rowDataStructure,
                                     buildColumnDataStructure(data),
                                     "MAFTable",
-                                    '<%=geneName%>');
+                                    chosenGene);
                         }
                     }
                     if (typeof rowDataStructure !== 'undefined') {
@@ -151,13 +146,33 @@
     };
 
     $("#collapseTwo").on("show.bs.collapse", function() {
-        mpgSoftware.ancestryTable.loadAncestryTable();
+        mpgSoftware.ancestryTable.loadAncestryTable('<%=geneName%>');
     });
 
     $('#collapseHowCommonIsVariant').on('hide.bs.collapse', function (e) {
             $("#ancestryInner").html('');
     });
 
+    function reviseVACRows(){
+//        var phenotype = $('#phenotypeTableChooser option:selected').val();
+        var clickedBoxes =  $('#continentalVariationTableBody .jstree-clicked');
+        var dataSetNames  = [];
+        var dataSetMaps  = [];
+        for  ( var i = 0 ; i < clickedBoxes.length ; i++ )   {
+            var  comboName  =  $(clickedBoxes[i]).attr('id');
+            var partsOfCombo =   comboName.split("-");
+            var  dataSetWithoutAnchor  =  partsOfCombo[0];
+            dataSetNames.push(dataSetWithoutAnchor);
+            var  dataSetMap = {"name":dataSetWithoutAnchor,
+                "value":dataSetWithoutAnchor,
+                "pvalue":partsOfCombo[1],
+                "count":partsOfCombo[2].substring(0, partsOfCombo[2].length-7)};
+            dataSetMaps.push(dataSetMap);
+        }
+        //variantsAndAssociationTable (phenotype,dataSetNames,dataSetMaps);
+
+        mpgSoftware.ancestryTable.loadAncestryTable('<%=geneName%>',dataSetMaps);
+    }
 
 </script>
 
@@ -183,6 +198,19 @@
         <tbody id="continentalVariationTableBody">
         </tbody>
         </table>
+    <div class="row clearfix">
+        <div class="col-md-8">
+
+        </div>
+        <div class="col-md-2">
+
+        </div>
+        <div class="col-md-2">
+            <button id="reviser"  class="btn btn-primary pull-right" onclick="reviseVACRows()">
+                <g:message code="gene.variantassociations.change.rows" default="Revise rows"/>
+            </button>
+        </div>
+    </div>
 
 </g:if>
 

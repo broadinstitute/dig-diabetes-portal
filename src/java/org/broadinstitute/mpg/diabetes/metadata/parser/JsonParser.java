@@ -656,6 +656,20 @@ public class JsonParser {
 
 
 
+    public String  getTechnologyPerSampleGroup(String sampleGroupId) throws PortalException {
+        // local variables
+        String technology;
+
+        // find the sample group
+        TechnologyPerSampleGroupVisitor finderVisitor = new TechnologyPerSampleGroupVisitor(sampleGroupId);
+        this.getMetaDataRoot().acceptVisitor(finderVisitor);
+        technology = finderVisitor.getTechnology();
+
+        // return the property string
+        return technology;
+    }
+
+
 
 
     /**
