@@ -626,6 +626,13 @@ class MetaDataService {
     }
 
 
+
+    public List<SampleGroup> getSampleGroupForPhenotypeDatasetTechnologyAncestry(String phenotypeName,  String datasetName, String technologyName, String metadataVersion, String ancestryName){
+        return this.jsonParser.getSampleGroupForPhenotypeDatasetTechnologyAncestry ( phenotypeName, datasetName, technologyName,  metadataVersion,  ancestryName)
+    }
+
+
+
     public List<String> getTechnologyListByPhenotypeAndVersion(String phenotypeName,String dataVersion) {
         List<String> technologyList = this.jsonParser.getTechnologyListByVersion(dataVersion);
         LinkedHashMap<String,List<Phenotype>> technologyToPhenotype = [:]

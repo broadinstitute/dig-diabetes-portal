@@ -582,10 +582,10 @@ class SharedToolsService {
      * get top level sample groups for display
      *
      **/
-    public List<SampleGroup> listOfTopLevelSampleGroups(String phenotypeName, List<String> technologies) {
+    public List<SampleGroup> listOfTopLevelSampleGroups(String phenotypeName,String datasetName,  List<String> technologies) {
         List<SampleGroup> fullListOfSampleGroups = []
         for (String technologyName in technologies) {
-            List<SampleGroup> technologySpecificSampleGroups = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotypeName,
+            List<SampleGroup> technologySpecificSampleGroups = metaDataService.getSampleGroupForPhenotypeDatasetTechnologyAncestry(phenotypeName,datasetName,
                     technologyName,
                     getCurrentDataVersion(), "")
             // pick a favorite -- use sample size eventually.  For now we use a shortcut...
@@ -752,7 +752,7 @@ class SharedToolsService {
         if (sampleGroupBean){
             List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = sampleGroupBean.getPhenotypes()
             for (org.broadinstitute.mpg.diabetes.metadata.Phenotype phenotype in phenotypeList){
-                if (phenotype.name == phenotypeName){// we care about this sample group
+                if (("" == phenotypeName)||(phenotype.name == phenotypeName)){// we care about this sample group
                     String pValue = filterManagementService.findFavoredPValue( sampleGroupBean.getSystemId(), phenotypeName ) ;
                     sb << """{
   "text"        : "${translator(sampleGroupBean.getSystemId())}",

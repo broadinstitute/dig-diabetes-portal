@@ -97,13 +97,15 @@ class FilterManagementService {
 
 
     public String findFavoredPValue ( String dataSetName, String phenotypeName ) {
-        String favoredPValue = ""
-        List<Property> propertyList = metaDataService.getSpecificPhenotypeProperties(dataSetName,phenotypeName)
-        List<Property> sortedPValueProps = propertyList.
-                findAll{Property property->property.hasMeaning('P_VALUE')}.
-                sort{Property property1,Property property2->property1.sortOrder<=>property2.sortOrder}
-        if (sortedPValueProps.size()>0){
-            favoredPValue = sortedPValueProps[0]?.name
+        String favoredPValue = "P_VALUE"
+        if (phenotypeName){
+            List<Property> propertyList = metaDataService.getSpecificPhenotypeProperties(dataSetName,phenotypeName)
+            List<Property> sortedPValueProps = propertyList.
+                    findAll{Property property->property.hasMeaning('P_VALUE')}.
+                    sort{Property property1,Property property2->property1.sortOrder<=>property2.sortOrder}
+            if (sortedPValueProps.size()>0){
+                favoredPValue = sortedPValueProps[0]?.name
+            }
         }
         return favoredPValue
     }
@@ -165,8 +167,10 @@ class FilterManagementService {
         }
 
         // data set and P value implies another restriction
-        if ((dataSet)&&(pValueSpec)){
+        if ((dataSet)&&(pValueSpec)&&(phenotype)){
             returnValue['savedValue1'] = "17=${phenotype}[${dataSet}]${pValueSpec}<${significance}"
+        } else {
+            returnValue['savedValue0'] = "11=MOST_DEL_SCORE<4"
         }
 
         // we can restrict by region...
