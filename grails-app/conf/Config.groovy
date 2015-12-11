@@ -576,3 +576,4 @@ grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.peopl
 diabetes.data.version = "mdv2";
 
 
+println grailsApplication.config
