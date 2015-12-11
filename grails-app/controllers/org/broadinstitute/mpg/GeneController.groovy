@@ -258,7 +258,6 @@ class GeneController {
     def geneEthnicityCounts (){
         String geneToStartWith = params.geneName
         List<String> rowNames = sharedToolsService.convertAnHttpList(params."rowNames[]")
-        def rowMap = sharedToolsService.convertAnHttpList(params."rowMap")
         List<String> colSignificances = sharedToolsService.convertAnHttpList(params."colNames[]")
         List <LinkedHashMap<String,String>> rowMaps = []
         if (!rowNames)  {
@@ -277,6 +276,19 @@ class GeneController {
             }
         }
         List <LinkedHashMap<String,String>> uniqueRowMaps = rowMaps.unique{ LinkedHashMap a,LinkedHashMap b -> a.dataset <=> b.dataset }
+
+        for (LinkedHashMap row in uniqueRowMaps){
+            String dataSet=row.dataset
+            dataSet = restServerService.convertKnownDataSetsToRealNames(dataSet)
+            SampleGroup sampleGroup = metaDataService.getSampleGroupByName(dataSet)
+            if (sampleGroup){
+                if (sampleGroup.subjectsNumber){
+                    row.count = "${sampleGroup.subjectsNumber}"
+                }
+            }
+        }
+
+
         List<Float> significanceValues = []
         for(String significance in colSignificances){
             try {
