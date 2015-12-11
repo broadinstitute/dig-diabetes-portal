@@ -371,7 +371,7 @@ environments {
         }
         if (System.properties['environments.production.grails.serverURL']) {
             grails.serverURL= System.properties['environments.production.grails.serverURL']
-            println "environments.production.grails.serverURL=${environments.production.grails.serverURL}"
+            println "grails.serverURL=${grails.serverURL}"
         }
     }
 }
