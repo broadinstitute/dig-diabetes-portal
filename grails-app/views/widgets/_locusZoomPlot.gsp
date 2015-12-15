@@ -1,9 +1,4 @@
 
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>LocusZoom Plugin</title>
 
     <!-- TODO: migrate to using a task runner (grunt, gulp, etc.) to minify/uglify down to a smaller set of includes -->
     <script src="assets/js/vendor/jquery.min.js"></script>
@@ -128,5 +123,3 @@
         </td>
     </tr>
 </table>
-</body>
-</html>
