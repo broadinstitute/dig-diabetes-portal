@@ -952,63 +952,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-
-//    private String ancestryDataSet (String ethnicity){
-//        String dataSetId = ""
-//        switch (ethnicity){
-//            case "HS":
-//                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_HS)
-//                break;
-//            case "AA":
-//                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_AA)
-//                break;
-//            case "EA":
-//                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_EA)
-//                break;
-//            case "SA":
-//                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_SA)
-//                break;
-//            case "EU":
-//                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_EU)
-//                break;
-//            case "chipEu":
-//                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_CHIP,"none",ANCESTRY_NONE)
-//                break;
-//            default:
-//                log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
-//                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_AA)
-//        }
-//        return dataSetId
-//    }
-
-//    private String generalizedAncestryDataSet (String ethnicity){
-//        String dataSetId = ""
-//        switch (ethnicity){
-//            case "HS":
-//                dataSetId = "hs"
-//                break;
-//            case "AA":
-//                dataSetId = "aa"
-//                break;
-//            case "EA":
-//                dataSetId = "ea"
-//                break;
-//            case "SA":
-//                dataSetId = "sa"
-//                break;
-//            case "EU":
-//                dataSetId = "eu"
-//                break;
-//            case "chipEu":
-//                dataSetId = "exchp"
-//                break;
-//            default:
-//                log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
-//                dataSetId = "aa"
-//        }
-//        return dataSetId
-//    }
-
     /***
      * Used to fill the 'variation across continental ancestry' table on the gene info page
      *
@@ -1078,28 +1021,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                         //  which can be found only by adding the OBSA and OBSU fields
                         int unaffected = 0
                         int affected =  0
-                        if (dataSetNames[j].dataset!="ExChip_82k_mdv2"){
-                            def variant = apiResults.variants[0]
-                            if ((variant) && (variant != 'null')){
-                                def element = variant["OBSU"].findAll{it}[0]
-                                if ((element) && (element != 'null')){
-                                    if (element[dataSetNames[j].dataset][attribute]!=null){
-                                        unaffected =  element[dataSetNames[j].dataset][attribute]
-                                    }
-
-                                }
-                                element = variant["OBSA"].findAll{it}[0]
-                                if ((element) && (element != 'null')) {
-                                    if (element[dataSetNames[j].dataset][attribute]!=null) {
-                                        affected = element[dataSetNames[j].dataset][attribute]
-                                    }
-                                }
-                            }
-                            sb  << "\"level\":${i},\"count\":${(unaffected +affected)}"
-
-                        } else {
-                            sb  << "\"level\":${i},\"count\":${(79854)}"// We don't have this number.  Special case it
-                        }
+                        SampleGroup sampleGroup = metaDataService.getSampleGroupByName(dataSetNames[j].dataset)
+                        sb  << "\"level\":${i},\"count\":${sampleGroup.getSubjectsNumber()}"
                     }else {
                         sb  << "\"level\":${i},\"count\":${apiResults.numRecords}"
                     }

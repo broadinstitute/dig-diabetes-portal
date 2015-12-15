@@ -270,7 +270,7 @@ class VariantSearchController {
 
         List<String> technologies = sharedToolsService.convertAnHttpList(params."technologies[]")
 
-        List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups( phenotypeName, technologies)
+        List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups( phenotypeName,"",  technologies)
 
         JSONObject sampleGroupMapJsonObject = filterManagementService.convertSampleGroupListToJson(fullListOfSampleGroups, phenotypeName)
 
@@ -294,7 +294,7 @@ class VariantSearchController {
             technologyName = params.technology
         }
 
-        List<SampleGroup> sampleGroupList = this.metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotypeName,
+        List<SampleGroup> sampleGroupList = this.metaDataService.getSampleGroupForPhenotypeDatasetTechnologyAncestry(phenotypeName,"",
                 technologyName,
                 sharedToolsService.getCurrentDataVersion(), "")
         List<String> ancestryList = sampleGroupList.unique{ a,b -> a.getAncestry() <=> b.getAncestry() }*.getAncestry()
@@ -328,7 +328,7 @@ class VariantSearchController {
             ancestryName = params.ancestry
         }
 
-        List<SampleGroup> sampleGroupList = this.metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotypeName,
+        List<SampleGroup> sampleGroupList = this.metaDataService.getSampleGroupForPhenotypeDatasetTechnologyAncestry(phenotypeName,"",
                 technologyName,
                 sharedToolsService.getCurrentDataVersion(), ancestryName)
         JSONObject dataSetMapJsonObject = filterManagementService.convertSampleGroupListToJson(sampleGroupList, phenotypeName)

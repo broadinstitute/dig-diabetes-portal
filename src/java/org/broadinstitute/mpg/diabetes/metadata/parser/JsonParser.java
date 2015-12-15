@@ -859,7 +859,18 @@ public class JsonParser {
         return sampleGroupList;
     }
 
+    public List<SampleGroup> getSampleGroupForPhenotypeDatasetTechnologyAncestry(String phenotypeName,  String datasetName, String technologyName, String metadataVersion, String ancestryName) throws PortalException {
+        // local variables
+        List<SampleGroup> sampleGroupList = null;
 
+        // create the visitor and visit on root
+        SampleGroupForPhenotypeDatasetTechnologyAncestryVisitor visitor = new SampleGroupForPhenotypeDatasetTechnologyAncestryVisitor( phenotypeName,  datasetName, technologyName,  metadataVersion,  ancestryName);
+        this.getMetaDataRoot().acceptVisitor(visitor);
+        sampleGroupList = visitor.getSampleGroupList();
+
+        // return
+        return sampleGroupList;
+    }
 
 
 

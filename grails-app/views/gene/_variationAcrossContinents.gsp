@@ -94,7 +94,7 @@
                     }
                     if (typeof rowDataStructure !== 'undefined') {
                         for ( var i = 0 ; i < rowDataStructure.length ; i++ ){
-                            jsTreeDataRetriever ('#mafTableRow'+i,"T2D",rowDataStructure[i].dataset);
+                            jsTreeDataRetriever ('#mafTableRow'+i,"",rowDataStructure[i].dataset);
                         }
                     }
 
