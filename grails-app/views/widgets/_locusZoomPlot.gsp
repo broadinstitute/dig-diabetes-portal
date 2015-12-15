@@ -97,6 +97,10 @@
         }
         */
 
+        function formatDataRegion(region) {
+            return region.substring(2);
+        }
+
         function initPage() {
             // DIGP-209: taking out
             // listHits();
@@ -121,7 +125,10 @@
                 </form>
                 <br>
             </div>
+<!--
             <div id="lz-1" class="lz-instance" data-region="10:114550452-115067678"></div>
+            -->
+            <div id="lz-1" class="lz-instance" data-region="${regionSpecification?.substring(3)}"></div>
         </td>
         <td style="vertical-align:top">
             <h3>Top Hits</h3>
