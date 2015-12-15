@@ -1,15 +1,17 @@
 
 
     <!-- TODO: migrate to using a task runner (grunt, gulp, etc.) to minify/uglify down to a smaller set of includes -->
-    <script src="assets/js/vendor/jquery.min.js"></script>
-    <script src="assets/js/vendor/d3.min.js"></script>
-    <script src="assets/js/vendor/q.min.js"></script>
-    <script src="assets/js/app/locuszoom.js"></script>
-    <script src="assets/js/app/locuszoom.data.js" type="text/javascript"></script>
-    <script src="assets/js/app/Instance.js"></script>
-    <script src="assets/js/app/Panel.js"></script>
-    <script src="assets/js/app/DataLayer.js"></script>
-    <link rel="stylesheet" type="text/css" href="assets/css/locuszoom.css"/>
+    <!--
+    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/vendor/jquery.min.js"></script>
+    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/vendor/d3.min.js"></script>
+    -->
+    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/vendor/q.min.js"></script>
+    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/app/locuszoom.js"></script>
+    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/app/locuszoom.data.js" type="text/javascript"></script>
+    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/app/Instance.js"></script>
+    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/app/Panel.js"></script>
+    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/app/DataLayer.js"></script>
+    <!-- link rel="stylesheet" type="text/css" href="assets/css/locuszoom.css"/ -->
     <script type="text/javascript">
         //grep Lead /net/snowwhite/home/welchr/scratch/morris_2012_hits_fixed.csv | tr , "\t" | sort -g -k 7 | cut -f3,4,8 | head -15 | awk '{print "[\"" $1 ":" $2 "\",", "\"" $3 "\"],"}'
         var topHits = [
@@ -87,18 +89,22 @@
             });
         }
 
+        /*
         function listHits() {
             $("#tophits").empty().append("<ul>").children(0).append(topHits.map(function(e) {
                 return "<li><a href='javascript:jumpTo(\"" + e[0] + "\");'>" + e[1] + " </a></li>";
             }))
         }
+        */
 
         function initPage() {
-            listHits();
+            // DIGP-209: taking out
+            // listHits();
             LocusZoom.populate();
             populateForms();
-            $("#lz-1_hits").html(topHits.map(function(k) {return "<option>" + k + "</option>"}).join(""));
-        };
+            // $("#lz-1_hits").html(topHits.map(function(k) {return "<option>" + k + "</option>"}).join(""));
+        }
+        ;
 
     </script>
 </head>
