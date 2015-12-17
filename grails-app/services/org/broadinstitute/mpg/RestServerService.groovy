@@ -960,20 +960,14 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param cellNumber
      * @return
      */
-    private JSONObject generateJsonVariantCountByGeneAndMaf(String geneName, String dataSetName, LinkedHashMap<String,String> numericBound ){
+    private JSONObject generateJsonVariantCountByGeneAndMaf(String geneName, LinkedHashMap<String,String> dataSetInfo, LinkedHashMap<String,String> numericBound ){
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID"])
-        List<String> codedFilters = filterManagementService.generateSampleGroupLevelQueries (geneName, dataSetName, numericBound.lowerValue, numericBound.higherValue, "MAF" )
+        String dataSetName = dataSetInfo.dataset
+        String technology = dataSetInfo.technology
+        List<String> codedFilters = filterManagementService.generateSampleGroupLevelQueries (geneName, dataSetName,technology,
+                                                                                             numericBound.lowerValue, numericBound.higherValue, "MAF" )
         //List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName,0f,"","","${codeForMafSlice}-${codeForEthnicity}","T2D")
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters,searchBuilderService,metaDataService)
-        if (numericBound.higherValue==1){
-            if (dataSetName != "ExChip_82k_mdv2"){
-                addColumnsForPProperties(resultColumnsToDisplay,"T2D","${dataSetName}","OBSA")
-                addColumnsForPProperties(resultColumnsToDisplay,"T2D","${dataSetName}","OBSU")
-            }
-        }else {
-            addColumnsForPProperties(resultColumnsToDisplay,"T2D","${dataSetName}","OBSA")
-            addColumnsForPProperties(resultColumnsToDisplay,"T2D","${dataSetName}","OBSU")
-        }
         JsonSlurper slurper = new JsonSlurper()
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
@@ -1014,13 +1008,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             sb  << "{ \"dataset\": \"${dataSetNames[j].dataset}\",\"technology\": \"${dataSetNames[j].technology}\",\"pVals\": ["
             for ( int  i = 0 ; i < numericBounds.size () ; i++ ){
                 sb  << "{"
-                JSONObject apiResults =  generateJsonVariantCountByGeneAndMaf( geneName,  dataSetNames[j].dataset, numericBounds[i])
+                JSONObject apiResults =  generateJsonVariantCountByGeneAndMaf( geneName,  dataSetNames[j], numericBounds[i])
                 if (apiResults.is_error == false) {
                     if (i == 0){
-                        // the first cell is different than the others. We need to pull back the number of participants,
-                        //  which can be found only by adding the OBSA and OBSU fields
-                        int unaffected = 0
-                        int affected =  0
                         SampleGroup sampleGroup = metaDataService.getSampleGroupByName(dataSetNames[j].dataset)
                         sb  << "\"level\":${i},\"count\":${sampleGroup.getSubjectsNumber()}"
                     }else {

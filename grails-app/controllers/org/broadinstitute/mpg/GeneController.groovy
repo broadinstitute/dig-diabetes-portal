@@ -267,8 +267,6 @@ class GeneController {
             for (SampleGroup sampleGroup in fullListOfSampleGroups){
                 rowMaps << ["dataset":"${sampleGroup.systemId}","technology":"${metaDataService.getTechnologyPerSampleGroup(sampleGroup.systemId)}"]
             }
-//            rowMaps << ["dataset":"ExChip_82k_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExChip_82k_mdv2')}"]
-//            rowMaps << ["dataset":"ExChip_SIGMA1_mdv2","technology":"${metaDataService.getTechnologyPerSampleGroup('ExChip_SIGMA1_mdv2')}"]
 
         } else {
             for (String oneName in rowNames){

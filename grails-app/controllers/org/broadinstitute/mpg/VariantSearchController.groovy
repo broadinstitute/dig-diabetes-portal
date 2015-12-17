@@ -195,10 +195,11 @@ class VariantSearchController {
             log.error("receive nonnumeric significance value = (${params.sig}) in action=gene, VariantSearchController")
         }
 
-        Map paramsMap = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters,phenotype,parmType,parmVal)
-
-
-        List <String> listOfCodedFilters = filterManagementService.observeMultipleFilters (paramsMap)
+//        Map paramsMap = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters,phenotype,parmType,parmVal)
+//
+//
+//        List <String> listOfCodedFilters = filterManagementService.observeMultipleFilters (paramsMap)
+        List <String> listOfCodedFilters = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters,phenotype,parmType,parmVal)
         if ((listOfCodedFilters) &&
                 (listOfCodedFilters.size() > 0)){
             displayCombinedVariantSearch(listOfCodedFilters,[])
