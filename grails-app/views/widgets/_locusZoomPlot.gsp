@@ -97,7 +97,7 @@
 
         function initPage() {
             LocusZoom.populate();
-            populateForms();
+            // populateForms();
             // listHits();
             // $("#lz-1_hits").html(topHits.map(function(k) {return "<option>" + k + "</option>"}).join(""));
         };
@@ -111,18 +111,13 @@
     <tr>
         <td>
             <div>
-                <form>
-                    <b>lz-1</b> &middot;
-                    <label for="lz-1_region">Region: </label>
-                    <input type="text" size=25 id="lz-1_region">
-                    <input type="button" id="lz-1_submit" value="Go" onClick="handleFormSubmit('lz-1');" />
-                </form>
+                    <b>Region: ${regionSpecification}</b>
                 <br>
             </div>
             <div id="lz-1" class="lz-instance" data-region="${regionSpecification}"></div>
         </td>
         <td style="vertical-align:top">
-            <div id="tophits">${regionSpecification}</div>
+            <div id="tophits"></div>
         </td>
     </tr>
 </table>
