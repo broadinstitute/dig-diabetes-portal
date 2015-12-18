@@ -21,7 +21,7 @@
 
             function initLocusZoom() {
                 // TODO - will need to test that incorrect input format doesn't throw JS exception which stops all JS activity
-                // TODO - need to catch all exceptions to make sure rest of JS modules load properly (scope errors to this module)
+                // TODO - need to catch all exceptions to make sure rest of non LZ JS modules on page load properly (scope errors to this module)
                 LocusZoom.populate();
             };
 
@@ -55,11 +55,8 @@
                                 <b>Region: ${regionSpecification}</b>
                             <br>
                         </div>
-                        <!-- TODO: get LZ canvas to resize to width of enclosing div and height to minimum possible for display -->
+                        <!-- TODO: get LZ canvas to dynamically resize to width of enclosing div and height to minimum possible for display -->
                         <div id="lz-1" class="lz-instance" data-region="${regionSpecification}"></div>
-                    </td>
-                    <td style="vertical-align:top">
-                        <div id="tophits"></div>
                     </td>
                 </tr>
             </table>
