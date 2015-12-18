@@ -96,15 +96,17 @@
         }
 
         function initPage() {
-            // listHits();
             LocusZoom.populate();
             populateForms();
-            $("#lz-1_hits").html(topHits.map(function(k) {return "<option>" + k + "</option>"}).join(""));
+            // listHits();
+            // $("#lz-1_hits").html(topHits.map(function(k) {return "<option>" + k + "</option>"}).join(""));
         };
 
+        $( document ).ready( function (){
+            initPage();
+        } );
+
     </script>
-</head>
-<body style="background-color: #CCCCCC; margin: 10px;" onload="initPage()">
 <table border="0" cellspacing="10">
     <tr>
         <td>
