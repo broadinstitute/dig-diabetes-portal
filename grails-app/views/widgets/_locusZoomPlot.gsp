@@ -1,36 +1,36 @@
 
-
-    <!-- TODO: migrate to using a task runner (grunt, gulp, etc.) to minify/uglify down to a smaller set of includes -->
     <!--
-    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/vendor/jquery.min.js"></script>
-    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/vendor/d3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
     -->
-    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/vendor/q.min.js"></script>
-    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/app/locuszoom.js"></script>
-    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/app/locuszoom.data.js" type="text/javascript"></script>
-    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/app/Instance.js"></script>
-    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/app/Panel.js"></script>
-    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/app/DataLayer.js"></script>
-    <!-- link rel="stylesheet" type="text/css" href="assets/css/locuszoom.css"/ -->
-    <script type="text/javascript">
-        //grep Lead /net/snowwhite/home/welchr/scratch/morris_2012_hits_fixed.csv | tr , "\t" | sort -g -k 7 | cut -f3,4,8 | head -15 | awk '{print "[\"" $1 ":" $2 "\",", "\"" $3 "\"],"}'
-        var topHits = [
-            ["10:114758349", "TCF7L2"],
-            ["6:20679709", "CDKAL1"],
-            ["10:94462882", "HHEX/IDE"],
-            ["9:22134094", "CDKN2A/B"],
-            ["8:118185025", "SLC30A8"],
-            ["3:185511687", "IGF2BP2"],
-            ["16:53819169", "FTO"],
-            ["7:28196413", "JAZF1"],
-            ["3:12393125", "PPARG"],
-            ["7:130437689", "KLF14"],
-            ["12:66212318", "HMGA2"],
-            ["9:81905590", "TLE4"],
-            ["4:6289986", "WFS1"],
-            ["10:80942631", "ZMIZ1"],
-            ["11:72433098", "ARAP1"] ];
 
+    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/locuszoom.vendor.min.js" type="text/javascript"></script>
+    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/locuszoom.app.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" type="text/css" href="http://portaldev.sph.umich.edu/lzplug/assets/css/locuszoom.css"/>
+
+    <script type="text/javascript">
+        LocusZoom.DefaultDataSources = {
+            position: new LocusZoom.Data.AssociationSource("http://portaldev.sph.umich.edu/api_internal_dev/v1/single/"),
+            ld: new LocusZoom.Data.LDSource("http://portaldev.sph.umich.edu/api_internal_dev/v1/pair/LD/"),
+            gene: new LocusZoom.Data.GeneSource("http://portaldev.sph.umich.edu/api_internal_dev/v1/annotation/genes/")
+        };
+
+        var topHits = [
+            ["16:53819169", "FTO"],
+            ["9:22051670", "CDKN2A/B"],
+            ["7:28196413", "JAZF1"],
+            ["19:33909710", "PEPD"],
+            ["19:46158513", "GIPR"],
+            ["12:71433293", "TSPAN8/LGR5"],
+            ["10:114758349", "TCF7L2"],
+            ["8:95937502", "TP53INP1"],
+            ["2:27741237", "GCKR"],
+            ["6:20679709", "CDKAL1"],
+            ["2:161346447", "RBMS1"],
+            ["16:75247245", "BCAR1"],
+            ["15:77832762", "HMG20A"],
+            ["7:15052860", "DGKB"],
+            ["5:76427311", "ZBED3"] ];
 
         // Apply form data to a remapping of a LocusZoom object
         function handleFormSubmit(lz_id){
@@ -89,26 +89,18 @@
             });
         }
 
-        /*
         function listHits() {
             $("#tophits").empty().append("<ul>").children(0).append(topHits.map(function(e) {
                 return "<li><a href='javascript:jumpTo(\"" + e[0] + "\");'>" + e[1] + " </a></li>";
             }))
         }
-        */
-
-        function formatDataRegion(region) {
-            return region.substring(2);
-        }
 
         function initPage() {
-            // DIGP-209: taking out
             // listHits();
             LocusZoom.populate();
             populateForms();
-            // $("#lz-1_hits").html(topHits.map(function(k) {return "<option>" + k + "</option>"}).join(""));
-        }
-        ;
+            $("#lz-1_hits").html(topHits.map(function(k) {return "<option>" + k + "</option>"}).join(""));
+        };
 
     </script>
 </head>
@@ -125,9 +117,6 @@
                 </form>
                 <br>
             </div>
-<!--
-            <div id="lz-1" class="lz-instance" data-region="10:114550452-115067678"></div>
-            -->
             <div id="lz-1" class="lz-instance" data-region="${regionSpecification?.substring(3)}"></div>
         </td>
         <td style="vertical-align:top">
