@@ -117,10 +117,10 @@
                 </form>
                 <br>
             </div>
-            <div id="lz-1" class="lz-instance" data-region="${regionSpecification?.substring(3)}"></div>
+            <div id="lz-1" class="lz-instance" data-region="${regionSpecification}"></div>
         </td>
         <td style="vertical-align:top">
-            <div id="tophits"></div>
+            <div id="tophits">${regionSpecification}</div>
         </td>
     </tr>
 </table>
