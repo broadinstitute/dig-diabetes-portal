@@ -38,17 +38,32 @@
 
     </script>
 
-<table border="0" cellspacing="10">
-    <tr>
-        <td>
-            <div>
-                    <b>Region: ${regionSpecification}</b>
-                <br>
-            </div>
-            <div id="lz-1" class="lz-instance" data-region="${regionSpecification}"></div>
-        </td>
-        <td style="vertical-align:top">
-            <div id="tophits"></div>
-        </td>
-    </tr>
-</table>
+<div class="accordion-group">
+    <div class="accordion-heading">
+        <a class="accordion-toggle  collapsed" data-toggle="collapse" data-parent="#accordion3"
+           href="#collapseLZ">
+            <h2><strong><g:message code="gene.locusZoom.title" default="Locus Zoom"/></strong></h2>
+        </a>
+    </div>
+
+    <div id="collapseLZ" class="accordion-body collapse">
+        <div class="accordion-inner">
+            <table border="0" cellspacing="10">
+                <tr>
+                    <td>
+                        <div>
+                                <b>Region: ${regionSpecification}</b>
+                            <br>
+                        </div>
+                        <!-- TODO: get LZ canvas to resize to width of enclosing div and height to minimum possible for display -->
+                        <div id="lz-1" class="lz-instance" data-region="${regionSpecification}"></div>
+                    </td>
+                    <td style="vertical-align:top">
+                        <div id="tophits"></div>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+</div>
