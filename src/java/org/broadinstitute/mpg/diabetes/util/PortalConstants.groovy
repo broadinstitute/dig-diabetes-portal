@@ -95,6 +95,8 @@ class PortalConstants {
     public final static String PROPERTY_KEY_COMMON_POLYPHEN_PRED          = "metadata_rootPolyPhen_PRED";
     public final static String PROPERTY_KEY_COMMON_SIFT_PRED              = "metadata_rootSIFT_PRED";
     public final static String PROPERTY_KEY_COMMON_MOST_DEL_SCORE         = "metadata_rootMOST_DEL_SCORE";
+    public final static String PROPERTY_KEY_COMMON_EFFECT_ALLELE          = "metadata_rootEffect_Allele";
+    public final static String PROPERTY_KEY_COMMON_REFERENCE_ALLELE       = "metadata_rootReference_Allele";
 
     public final static String PROPERTY_KEY_SG_MAF_82K                    = "metadata_root_ExChip_82k_mdv2_82kMAF";
     public final static String PROPERTY_KEY_SG_MAF_SIGMA1                 = "metadata_root_ExChip_SIGMA1_mdv2_SIGMA1MAF";
@@ -195,6 +197,11 @@ class PortalConstants {
     public static final String SIFT_PRED_DELETERIOUS                        = "deleterious";
     // START - BURDEN TEST SECTION
 
+
+    // property common names, regardless of where in tree they are
+    public static final String PROPERTY_NAME_CHROMOSOME                     = "CHROM";
+    public static final String PROPERTY_NAME_POSITION                       = "POS";
+    public static final String PROPERTY_NAME_P_FIRTH                        = "P_FIRTH_FE_IV";
 
     // property meaning types
     public static final String PROPERTY_MEANING_P_VALUE_KEY                 = "P_VALUE";

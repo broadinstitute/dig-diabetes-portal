@@ -13,14 +13,16 @@ import java.util.List;
  */
 public class KnowledgeBaseFlatSearchTranslator implements KnowledgeBaseResultTranslator {
     // constants
-    private final String KEY_ANALYSIS               = "analysis";
-    private final String KEY_ID                     = "id";
-    private final String KEY_POSITION               = "position";
-    private final String KEY_CHROMOSOME             = "chr";
-    private final String KEY_REF_ALLELE_FREQ        = "refAlleleFreq";
-    private final String KEY_REF_ALLELE             = "refAllele";
-    private final String KEY_SCORE_TEST_STAT        = "scoreTestStat";
-    private final String KEY_P_VALUE                = "pvalue";
+    public static final String KEY_ANALYSIS               = "analysis";
+    public static  final String KEY_ID                     = "id";
+    public static  final String KEY_POSITION               = "position";
+    public static  final String KEY_CHROMOSOME             = "chr";
+    public static  final String KEY_REF_ALLELE_FREQ        = "refAlleleFreq";
+    public static  final String KEY_REF_ALLELE             = "refAllele";
+    public static  final String KEY_SCORE_TEST_STAT        = "scoreTestStat";
+    public static  final String KEY_P_VALUE                = "pvalue";
+    public static  final String KEY_DATA                   = "data";
+    public static  final String KEY_LAST_PAGE              = "lastPage";
 
 
     // instance variables
@@ -52,6 +54,7 @@ public class KnowledgeBaseFlatSearchTranslator implements KnowledgeBaseResultTra
         // local variables
         JSONObject rootObject = new JSONObject();
         PropertyValue tempPropertyValue;
+        JSONObject dataObject = new JSONObject();
 
         // variables to store properties
         Integer position;
@@ -71,30 +74,36 @@ public class KnowledgeBaseFlatSearchTranslator implements KnowledgeBaseResultTra
             throw new PortalException("Missing initializing property key for the flat result translator");
         }
 
+        // add in last page null object
+        rootObject.put(this.KEY_LAST_PAGE, JSONObject.NULL);
+
+        // add in data object
+        rootObject.put(this.KEY_DATA, dataObject);
+
         // brute force build one json array for each attribute
         JSONArray analysisArray = new JSONArray();
-        rootObject.put(KEY_ANALYSIS, analysisArray);
+        dataObject.put(KEY_ANALYSIS, analysisArray);
 
         JSONArray idArray = new JSONArray();
-        rootObject.put(KEY_ID, idArray);
+        dataObject.put(KEY_ID, idArray);
 
         JSONArray chromosomeArray = new JSONArray();
-        rootObject.put(KEY_CHROMOSOME, chromosomeArray);
+        dataObject.put(KEY_CHROMOSOME, chromosomeArray);
 
         JSONArray positionArray = new JSONArray();
-        rootObject.put(KEY_POSITION, positionArray);
+        dataObject.put(KEY_POSITION, positionArray);
 
         JSONArray refAlleleFrequencyArray = new JSONArray();
-        rootObject.put(KEY_REF_ALLELE_FREQ, refAlleleFrequencyArray);
+        dataObject.put(KEY_REF_ALLELE_FREQ, refAlleleFrequencyArray);
 
         JSONArray refAlleleArray = new JSONArray();
-        rootObject.put(KEY_REF_ALLELE, refAlleleArray);
+        dataObject.put(KEY_REF_ALLELE, refAlleleArray);
 
         JSONArray pValueArray = new JSONArray();
-        rootObject.put(KEY_P_VALUE, pValueArray);
+        dataObject.put(KEY_P_VALUE, pValueArray);
 
         JSONArray scoreTestStatArray = new JSONArray();
-        rootObject.put(KEY_SCORE_TEST_STAT, scoreTestStatArray);
+        dataObject.put(KEY_SCORE_TEST_STAT, scoreTestStatArray);
 
         // loop through the variants and populate the json arrays
         for (int i = 0; i < resultList.size(); i++) {

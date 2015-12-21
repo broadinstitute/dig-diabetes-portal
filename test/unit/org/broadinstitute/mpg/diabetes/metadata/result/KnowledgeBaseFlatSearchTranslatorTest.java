@@ -27,16 +27,6 @@ public class KnowledgeBaseFlatSearchTranslatorTest extends TestCase {
     private final String PHENOTYPE_KEY      = "T2D";
     private final String PROPERTY_KEY       = "P_FIRTH_FE_IV";
 
-    // array keys
-    private final String ARRAY_ID_KEY               = "id";
-    private final String ARRAY_ANALYSIS_KEY         = "analysis";
-    private final String ARRAY_CHROMOSOME_KEY       = "chr";
-    private final String ARRAY_POSITION_KEY         = "position";
-    private final String ARRAY_REF_ALLELE_KEY       = "refAllele";
-    private final String ARRAY_REF_ALLELE_FREQ_KEY  = "refAlleleFreq";
-    private final String ARRAY_P_VALUE_KEY          = "pvalue";
-    private final String ARRAY_SCORE_TEST_STAT_KEY  = "scoreTestStat";
-
 
     @Before
     public void setUp() throws Exception {
@@ -80,6 +70,8 @@ public class KnowledgeBaseFlatSearchTranslatorTest extends TestCase {
         InputStream compareStream = this.getClass().getResourceAsStream("./flattened/flatResultOutput.json");
         String compareString = new Scanner(compareStream).useDelimiter("//A").next();
         JSONObject compareJson = new JSONObject(compareString);
+        JSONObject compareDataJsonObject = null;
+        JSONObject dataJsonObject = null;
         List<Variant> variantList = null;
         JSONObject resultJson = null;
 
@@ -87,6 +79,8 @@ public class KnowledgeBaseFlatSearchTranslatorTest extends TestCase {
         assertNotNull(compareStream);
         assertNotNull(compareString);
         assertNotNull(compareJson);
+        compareDataJsonObject = compareJson.getJSONObject(KnowledgeBaseFlatSearchTranslator.KEY_DATA);
+        assertNotNull(compareDataJsonObject);
 
         // get the variant list from the result parser and create the json
         try {
@@ -104,15 +98,20 @@ public class KnowledgeBaseFlatSearchTranslatorTest extends TestCase {
             fail("got flat search exception: " + exception.getMessage());
         }
 
+        // get the data object
+        assertNotNull(resultJson);
+        dataJsonObject = resultJson.getJSONObject(KnowledgeBaseFlatSearchTranslator.KEY_DATA);
+        assertNotNull(dataJsonObject);
+
         // compare each individual array of values
-        assertEquals(compareJson.getJSONArray(this.ARRAY_ID_KEY), resultJson.getJSONArray(this.ARRAY_ID_KEY));
-        assertEquals(compareJson.getJSONArray(this.ARRAY_ANALYSIS_KEY), resultJson.getJSONArray(this.ARRAY_ANALYSIS_KEY));
-        assertEquals(compareJson.getJSONArray(this.ARRAY_CHROMOSOME_KEY), resultJson.getJSONArray(this.ARRAY_CHROMOSOME_KEY));
-        assertEquals(compareJson.getJSONArray(this.ARRAY_REF_ALLELE_KEY), resultJson.getJSONArray(this.ARRAY_REF_ALLELE_KEY));
-        assertEquals(compareJson.getJSONArray(this.ARRAY_REF_ALLELE_FREQ_KEY), resultJson.getJSONArray(this.ARRAY_REF_ALLELE_FREQ_KEY));
-        assertEquals(compareJson.getJSONArray(this.ARRAY_POSITION_KEY), resultJson.getJSONArray(this.ARRAY_POSITION_KEY));
-        assertEquals(compareJson.getJSONArray(this.ARRAY_P_VALUE_KEY), resultJson.getJSONArray(this.ARRAY_P_VALUE_KEY));
-        assertEquals(compareJson.getJSONArray(this.ARRAY_SCORE_TEST_STAT_KEY), resultJson.getJSONArray(this.ARRAY_SCORE_TEST_STAT_KEY));
+        assertEquals(compareDataJsonObject.getJSONArray(KnowledgeBaseFlatSearchTranslator.KEY_ID), dataJsonObject.getJSONArray(KnowledgeBaseFlatSearchTranslator.KEY_ID));
+        assertEquals(compareDataJsonObject.getJSONArray(KnowledgeBaseFlatSearchTranslator.KEY_ANALYSIS), dataJsonObject.getJSONArray(KnowledgeBaseFlatSearchTranslator.KEY_ANALYSIS));
+        assertEquals(compareDataJsonObject.getJSONArray(KnowledgeBaseFlatSearchTranslator.KEY_CHROMOSOME), dataJsonObject.getJSONArray(KnowledgeBaseFlatSearchTranslator.KEY_CHROMOSOME));
+        assertEquals(compareDataJsonObject.getJSONArray(KnowledgeBaseFlatSearchTranslator.KEY_REF_ALLELE), dataJsonObject.getJSONArray(KnowledgeBaseFlatSearchTranslator.KEY_REF_ALLELE));
+        assertEquals(compareDataJsonObject.getJSONArray(KnowledgeBaseFlatSearchTranslator.KEY_REF_ALLELE_FREQ), dataJsonObject.getJSONArray(KnowledgeBaseFlatSearchTranslator.KEY_REF_ALLELE_FREQ));
+        assertEquals(compareDataJsonObject.getJSONArray(KnowledgeBaseFlatSearchTranslator.KEY_POSITION), dataJsonObject.getJSONArray(KnowledgeBaseFlatSearchTranslator.KEY_POSITION));
+        assertEquals(compareDataJsonObject.getJSONArray(KnowledgeBaseFlatSearchTranslator.KEY_P_VALUE), dataJsonObject.getJSONArray(KnowledgeBaseFlatSearchTranslator.KEY_P_VALUE));
+        assertEquals(compareDataJsonObject.getJSONArray(KnowledgeBaseFlatSearchTranslator.KEY_SCORE_TEST_STAT), dataJsonObject.getJSONArray(KnowledgeBaseFlatSearchTranslator.KEY_SCORE_TEST_STAT));
 
         // compare the json result
         assertEquals(compareJson, resultJson);
