@@ -949,4 +949,40 @@ public class JsonParser {
         return property;
     }
 
+    /**
+     * returns an expected unique property of given name from a sample group
+     *
+     * @param name
+     * @param dataSet
+     * @return
+     * @throws PortalException
+     */
+    public Property getExpectedUniquePropertyFromSampleGroup(String name, DataSet dataSet) throws PortalException {
+        // local variables
+        List<DataSet> childPropertyList = null;
+        Property property = null;
+
+        // get the list of properties to iterate through
+        childPropertyList = this.getImmediateChildrenOfType(dataSet, PortalConstants.TYPE_PROPERTY_KEY);
+
+        // loop through and find the property with given name
+        for (DataSet childProperty: childPropertyList) {
+            if (childProperty.getName().equalsIgnoreCase(name)) {
+                if (property != null) {
+                    throw new PortalException("Found duplicate property: " + name + " for sample group: " + dataSet.getName());
+                } else {
+                    property = (Property) childProperty;
+                }
+            }
+        }
+
+        // check that not null
+        if (property == null) {
+            throw new PortalException("Found no property: " + name + " for sample group: " + dataSet.getName());
+        }
+
+        // return
+        return property;
+
+    }
 }

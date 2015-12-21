@@ -310,7 +310,7 @@ public class BurdenJsonBuilder {
         }
 
         // always add a check that MAF is greater than 0 for the root data set specified to make sure we are not pulling variants that do not occur
-        rootProperty = this.getExpectedUniquePropertyFromSampleGroup("MAF", rootDataSet);
+        rootProperty = parser.getExpectedUniquePropertyFromSampleGroup("MAF", rootDataSet);
         queryFilterList.add(new QueryFilterBean(rootProperty, PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS, "0.0"));
 
 
@@ -328,7 +328,7 @@ public class BurdenJsonBuilder {
 
             // for all sample groups in the list, find their MAF property and add it to the list
             for (DataSet sampleGroup: dataSetList) {
-                propertyList.add(this.getExpectedUniquePropertyFromSampleGroup("MAF", sampleGroup));
+                propertyList.add(parser.getExpectedUniquePropertyFromSampleGroup("MAF", sampleGroup));
             }
 
             // for all properties, add a new filter
@@ -345,42 +345,5 @@ public class BurdenJsonBuilder {
         return queryFilterList;
     }
 
-    /**
-     * returns an expected unique property of given name from a sample group
-     *
-     * @param name
-     * @param dataSet
-     * @return
-     * @throws PortalException
-     */
-    protected Property getExpectedUniquePropertyFromSampleGroup(String name, DataSet dataSet) throws PortalException {
-        // local variables
-        JsonParser parser = JsonParser.getService();
-        List<DataSet> childPropertyList = null;
-        Property property = null;
-
-        // get the list of properties to iterate through
-        childPropertyList = parser.getImmediateChildrenOfType(dataSet, PortalConstants.TYPE_PROPERTY_KEY);
-
-        // loop through and find the property with given name
-        for (DataSet childProperty: childPropertyList) {
-            if (childProperty.getName().equalsIgnoreCase(name)) {
-                if (property != null) {
-                    throw new PortalException("Found duplicate property: " + name + " for sample group: " + dataSet.getName());
-                } else {
-                    property = (Property) childProperty;
-                }
-            }
-        }
-
-        // check that not null
-        if (property == null) {
-            throw new PortalException("Found no property: " + name + " for sample group: " + dataSet.getName());
-        }
-
-        // return
-        return property;
-
-    }
 
 }
