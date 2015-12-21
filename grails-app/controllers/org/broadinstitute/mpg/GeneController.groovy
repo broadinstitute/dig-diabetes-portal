@@ -15,6 +15,7 @@ class GeneController {
     private static final log = LogFactory.getLog(this)
     SqlService sqlService
     BurdenService burdenService
+    WidgetService widgetService
 
     /***
      * return partial matches as Json for the purposes of the twitter typeahead handler
@@ -372,4 +373,39 @@ class GeneController {
         render(status: 200, contentType: "application/json") {jsonObject}
     }
 
+    def getLocusZoom() {
+        // local variables
+        String jsonReturn = null;
+        String chromosome = params.chromosome;
+        String startString = params.start;
+        String endString = params.end;
+        int startInteger = 0;
+        int endInteger = 0;
+        String errorJson = "{\"data\": {}, \"error\": true}";
+
+        // log
+        log.info("got LZ request with params: " + params);
+
+        // if have all the information, call the widget service
+        try {
+            startInteger = Integer.parseInt(startString);
+            endInteger = Integer.parseInt(endString);
+
+            if (chromosome != null) {
+                jsonReturn = widgetService.getVariantJsonForLocusZoomString(chromosome, startInteger, endInteger);
+            } else {
+                jsonReturn = errorJson;
+            }
+
+            // log
+            log.info("got LZ result: " + jsonReturn);
+
+        } catch (NumberFormatException exception) {
+            log.error("got incorrect parameters for LZ call: " + params);
+            jsonReturn = errorJson;
+        }
+
+        // return
+        render(jsonReturn)
+    }
 }
