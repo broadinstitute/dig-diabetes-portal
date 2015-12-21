@@ -15,6 +15,8 @@ public interface GetDataQuery {
 
     public void addQueryFilter(QueryFilter queryFilter);
 
+    public void addAllQueryFilters(List<QueryFilter> queryFilterList);
+
     public void addOrderByProperty(Property property);
 
     public void isCount(boolean isCountQuery);
