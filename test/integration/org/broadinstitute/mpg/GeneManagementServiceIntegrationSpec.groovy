@@ -1,13 +1,9 @@
 package org.broadinstitute.mpg
-
 import grails.test.spock.IntegrationSpec
 import groovy.json.JsonSlurper
-import org.broadinstitute.mpg.Gene
-import org.broadinstitute.mpg.GeneManagementService
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
-
 /**
  * Created by balexand on 8/18/2014.
  */
@@ -119,7 +115,7 @@ class GeneManagementServiceIntegrationSpec   extends IntegrationSpec {
     void "test get region specification for gene"() {
         when:
         String geneId = "SLC30A8"
-        String regionSpecificationExpected = "chr8:117962462-118189003"
+        String regionSpecificationExpected = "8:117962462-118189003"
 
         then:
         assert regionSpecificationExpected == this.geneManagementService.getRegionSpecificationForGene(geneId, 0)

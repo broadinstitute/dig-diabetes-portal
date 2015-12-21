@@ -1,10 +1,6 @@
 package org.broadinstitute.mpg
-
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
-import org.broadinstitute.mpg.FilterManagementService
-import org.broadinstitute.mpg.RestServerService
-import org.broadinstitute.mpg.SharedToolsService
 import spock.lang.Specification
 import spock.lang.Unroll
 /**
@@ -17,7 +13,7 @@ class FilterManagementServiceUnitSpec extends Specification {
 
 
 
-
+/* - The method call interpretSpecialFilters() seems to have been deprecated with DIGP-212, so commenting out test
     void "test ancestry group variation filters"() {
         given: "prepare the inputs"
             String filter = "lowfreq-ea"
@@ -30,6 +26,7 @@ class FilterManagementServiceUnitSpec extends Specification {
         resultMap.containsValue("SLC30A8")
         resultMap.containsValue("11=MOST_DEL_SCORE<4")
     }
+    */
 }
 
 //
