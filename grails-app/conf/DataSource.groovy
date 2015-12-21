@@ -17,31 +17,13 @@ hibernate {
 environments {
     development {
         dataSource {
-            username = System.getProperty("root")
-            password = System.getProperty("yoyoma")
-            pooled = true
-            //dbCreate = "validate"
-            dbCreate = "validate"
-            //dbCreate = "create"   /////////// caution!!
-            driverClassName = "com.mysql.jdbc.Driver"
-            url =  "jdbc:mysql://localhost:3306/dig_marc?user=root&password=yoyoma";
 
-//            dbCreate = "update"
-//            url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
+            dbCreate = "update"
+            url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
         }
     }
     test {
         dataSource {
-            /*
-            username = System.getProperty("root")
-            password = System.getProperty("yoyoma")
-            pooled = true
-            //dbCreate = "validate"
-            dbCreate = "validate"
-            //dbCreate = "create"   /////////// caution!!
-            driverClassName = "com.mysql.jdbc.Driver"
-            url =  "jdbc:mysql://localhost:3306/dig_marc?user=root&password=yoyoma";
-            */
             dbCreate = "update"
             url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
         }

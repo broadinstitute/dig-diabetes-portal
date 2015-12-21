@@ -349,11 +349,6 @@
 
     <div class="separator"></div>
 
-                <g:render template="/widgets/locusZoomPlot"/>
-
-
-    <div class="separator"></div>
-
     <div class="accordion-group">
         <div class="accordion-heading">
             <a class="accordion-toggle  collapsed" data-toggle="collapse" data-parent="#accordion2"
