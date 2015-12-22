@@ -1,5 +1,7 @@
 package org.broadinstitute.mpg.diabetes.knowledgebase.result;
 
+import org.broadinstitute.mpg.diabetes.util.PortalException;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -23,6 +25,8 @@ public interface Variant {
     public void addAllToPropertyValues(Collection<PropertyValue> values);
 
     public void addToPropertyValues(PropertyValue value);
+
+    public String getVariantIdWithFormat(String formatKey) throws PortalException;
 
     /**
      * returns the given property value if the given property search terms find one; null otherwise

@@ -84,6 +84,7 @@ class PortalConstants {
 
 
     // constants of property id keys (these are automatically generated, but caching often used ones here)
+    // USAGE: these keys mostly used to search through the getMetatadata results; these keys will correspond to unique keys in parsed map of getMetadata json
     public final static String PROPERTY_KEY_COMMON_VAR_ID                 = "metadata_rootVAR_ID";
     public final static String PROPERTY_KEY_COMMON_GENE                   = "metadata_rootGENE";
     public final static String PROPERTY_KEY_COMMON_CLOSEST_GENE           = "metadata_rootCLOSEST_GENE";
@@ -199,6 +200,8 @@ class PortalConstants {
 
 
     // property common names, regardless of where in tree they are
+    // USAGE: these mostly used for searching through getData results json by property name
+    public static final String PROPERTY_NAME_VAR_ID                         = "VAR_ID";
     public static final String PROPERTY_NAME_CHROMOSOME                     = "CHROM";
     public static final String PROPERTY_NAME_POSITION                       = "POS";
     public static final String PROPERTY_NAME_P_FIRTH                        = "P_FIRTH_FE_IV";

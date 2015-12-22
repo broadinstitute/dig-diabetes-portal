@@ -2,6 +2,7 @@ package org.broadinstitute.mpg.diabetes.metadata.result;
 
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.PropertyValue;
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant;
+import org.broadinstitute.mpg.diabetes.knowledgebase.result.VariantBean;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
 import org.codehaus.groovy.grails.web.json.JSONArray;
 import org.codehaus.groovy.grails.web.json.JSONObject;
@@ -117,54 +118,58 @@ public class KnowledgeBaseFlatSearchTranslator implements KnowledgeBaseResultTra
             // get the variant
             Variant variant = resultList.get(i);
 
-            // add in the var id
-            tempPropertyValue = variant.getPropertyValueFromCollection("VAR_ID", null, null);
-            if (tempPropertyValue.getValue() != null) {
-                varId = tempPropertyValue.getValue();
-            }
+            try {
+                // add in the var id
+                varId = variant.getVariantIdWithFormat(VariantBean.FORMAT_VAR_ID_UMICH);
 
-            // add in the position
-            tempPropertyValue = variant.getPropertyValueFromCollection("POS", null, null);
-            if ((tempPropertyValue != null) && (tempPropertyValue.getValue() != null)) {
-                try {
+                // add in the position
+                tempPropertyValue = variant.getPropertyValueFromCollection("POS", null, null);
+                if ((tempPropertyValue != null) && (tempPropertyValue.getValue() != null)) {
+                    try {
                         position = Integer.parseInt(tempPropertyValue.getValue());
-                } catch (NumberFormatException exception) {
-                    // do nothing; value will be null
+                    } catch (NumberFormatException exception) {
+                        // throw exception which will skip variant
+                        throw new PortalException("Got number format error for position for variant: " + variant + ": " + exception.getMessage());
+                    }
                 }
-            }
 
-            // add in the ref allele
-            tempPropertyValue = variant.getPropertyValueFromCollection("Reference_Allele", null, null);
-            if (tempPropertyValue.getValue() != null) {
-                referenceAllele = tempPropertyValue.getValue();
-            }
-
-            // add in the chromosome
-            tempPropertyValue = variant.getPropertyValueFromCollection("CHROM", null, null);
-            if (tempPropertyValue.getValue() != null) {
-                chromosome = tempPropertyValue.getValue();
-            }
-
-            // add in the pValue
-            tempPropertyValue = variant.getPropertyValueFromCollection(this.defaultPropertyKey, this.defaultDataSetKey, this.defaultPhenotypeKey);
-            if ((tempPropertyValue != null) && (tempPropertyValue.getValue() != null)) {
-                try {
-                    pValue = Double.valueOf(tempPropertyValue.getValue());
-                } catch (NumberFormatException exception) {
-                    // do nothing; value will be null
+                // add in the ref allele
+                tempPropertyValue = variant.getPropertyValueFromCollection("Reference_Allele", null, null);
+                if (tempPropertyValue.getValue() != null) {
+                    referenceAllele = tempPropertyValue.getValue();
                 }
-            }
 
-            // if al values there and no issues, then add to arrays (want to make sure to keep arrays synched)
-            // add in the ref allele frequency
-            refAlleleFrequencyArray.put(null);
-            analysisArray.put(3);
-            positionArray.put(position);
-            pValueArray.put(pValue);
-            chromosomeArray.put(chromosome);
-            idArray.put(varId);
-            scoreTestStatArray.put(null);
-            refAlleleArray.put(referenceAllele);
+                // add in the chromosome
+                tempPropertyValue = variant.getPropertyValueFromCollection("CHROM", null, null);
+                if (tempPropertyValue.getValue() != null) {
+                    chromosome = tempPropertyValue.getValue();
+                }
+
+                // add in the pValue
+                tempPropertyValue = variant.getPropertyValueFromCollection(this.defaultPropertyKey, this.defaultDataSetKey, this.defaultPhenotypeKey);
+                if ((tempPropertyValue != null) && (tempPropertyValue.getValue() != null)) {
+                    try {
+                        pValue = Double.valueOf(tempPropertyValue.getValue());
+                    } catch (NumberFormatException exception) {
+                        // throw exception which will skip variant
+                        throw new PortalException("Got number format error for pValue for variant: " + variant + ": " + exception.getMessage());
+                    }
+                }
+
+                // if al values there and no issues, then add to arrays (want to make sure to keep arrays synched)
+                // add in the ref allele frequency
+                refAlleleFrequencyArray.put(null);
+                analysisArray.put(3);
+                positionArray.put(position);
+                pValueArray.put(pValue);
+                chromosomeArray.put(chromosome);
+                idArray.put(varId);
+                scoreTestStatArray.put(null);
+                refAlleleArray.put(referenceAllele);
+
+            } catch (PortalException exception) {
+                // do nothing; variant will be skipped due to error
+            }
         }
 
         // return
