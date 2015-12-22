@@ -373,6 +373,11 @@ class GeneController {
         render(status: 200, contentType: "application/json") {jsonObject}
     }
 
+    /**
+     * method to serve LZ requests in the format needed
+     *
+     * @return
+     */
     def getLocusZoom() {
         // local variables
         String jsonReturn = null;
