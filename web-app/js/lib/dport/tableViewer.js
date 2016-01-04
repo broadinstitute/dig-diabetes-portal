@@ -484,38 +484,6 @@ var variantProcessing = (function () {
     };
 
 
-
-    var singleLineOfVariantTable = function( variant,show_gene,show_exseq,show_exchp,variantRootUrl,geneRootUrl,proteinEffectList) {
-        var arrayToBuild = [];
-        stringWithLink(arrayToBuild,geneRootUrl,(contentExists (geneRootUrl)),noop,variant.CLOSEST_GENE,variant.CLOSEST_GENE,"");
-        stringWithLink(arrayToBuild,variantRootUrl,((contentExists (variantRootUrl)) && (variant.ID)),noop,variant.ID,variant.CHROM+ ":" +variant.POS,"");
-        simpleString(arrayToBuild,(variant.DBSNP_ID),noop,variant.DBSNP_ID,"");
-        simpleString(arrayToBuild,(variant.Protein_change&& (variant.Protein_change !== 'null')),noop,variant.Protein_change,"");
-        simpleString(arrayToBuild,((variant.Consequence)&&(contentExists(proteinEffectList))&&
-            (contentExists(proteinEffectList.proteinEffectMap))&&(contentExists(proteinEffectList.proteinEffectMap[variant.Consequence]))),
-            lineBreakSubstitution,proteinEffectList.proteinEffectMap[variant.Consequence],lineBreakSubstitution((variant.Consequence && (variant.Consequence !== 'null'))?variant.Consequence:""));
-        if (show_exseq){
-            var highFreq = determineHighestFrequencyEthnicity(variant);
-            simpleString(arrayToBuild,(variant._13k_T2D_P_EMMAX_FE_IV),UTILS.realNumberFormatter,variant._13k_T2D_P_EMMAX_FE_IV,"");
-            simpleString(arrayToBuild,(variant._13k_T2D_OR_WALD_DOS_FE_IV),noop,grayOutOnValue (variant._13k_T2D_OR_WALD_DOS_FE_IV,variant._13k_T2D_SE),"");
-            simpleString(arrayToBuild,(contentExists (variant._13k_T2D_MINA) && contentExists (typeof variant._13k_T2D_MINU)),noop,(""+variant._13k_T2D_MINA + "/" +variant._13k_T2D_MINU),"");
-            simpleString(arrayToBuild,(highFreq.highestFrequency),UTILS.realNumberFormatter,highFreq.highestFrequency,"");
-            simpleString(arrayToBuild,((highFreq.populationWithHighestFrequency)&&(!highFreq.noData)),noop,highFreq.populationWithHighestFrequency,"");
-        }
-        if (show_exchp){
-            var highFreq = determineHighestFrequencyEthnicity(variant);
-            simpleString(arrayToBuild,(variant.EXCHP_T2D_P_value),UTILS.realNumberFormatter,variant.EXCHP_T2D_P_value,"");
-            simpleString(arrayToBuild,(variant.EXCHP_T2D_BETA),noop,grayOutBetaValue (variant.EXCHP_T2D_BETA,variant.EXCHP_T2D_SE),"");
-            simpleString(arrayToBuild,(variant.GWAS_T2D_PVALUE),UTILS.realNumberFormatter,variant.GWAS_T2D_PVALUE,"");
-            simpleString(arrayToBuild,(variant.GWAS_T2D_OR),UTILS.realNumberFormatter,variant.GWAS_T2D_OR,"");
-        }
-        return arrayToBuild;
-    };
-
-
-
-
-
     /* Sort col is *relative* to dynamic columns */
     var iterativeVariantTableFiller = function  (data, totCol, sortCol, divId,variantRootUrl,geneRootUrl,proteinEffectList,dataSetDetermination)  {
 
@@ -547,16 +515,6 @@ var variantProcessing = (function () {
             numericCol.push(colIndex++);
         }
 
-
-
-        //need to figure out how to add aaSorting and aoColumnDefs
-//        $(divId).dataTable({
-//            iDisplayLength: 20,
-//            bFilter: false,
-//            aaSorting: [[ sortCol + fixedCol, "asc" ]],
-//            aoColumnDefs: [{sType: "allnumeric", aTargets: numericCol } ]
-//        });
-        // need to be more flexible now that the number of rows is variable
         var table = $(divId).dataTable({
             iDisplayLength: 20,
             bFilter: false,
@@ -586,13 +544,6 @@ var variantProcessing = (function () {
                     variant[prop] = variantList[i][j][prop]
                 }
             }
-//            array.push(getStringWithLink(geneRootUrl,(contentExists (geneRootUrl)),noop,variant.CLOSEST_GENE,variant.CLOSEST_GENE,""));
-//            array.push(getStringWithLink(variantRootUrl,((contentExists (variantRootUrl)) && (variant.VAR_ID)),noop,variant.VAR_ID,variant.CHROM+ ":" +variant.POS,""));
-//            array.push(getSimpleString((variant.DBSNP_ID),noop,variant.DBSNP_ID,""));
-//            array.push(getSimpleString((variant.Protein_change&& (variant.Protein_change !== 'null')),noop,variant.Protein_change,""));
-//            array.push(getSimpleString(((variant.Consequence)&&(contentExists(proteinEffectList))&&
-//                    (contentExists(proteinEffectList.proteinEffectMap))&&(contentExists(proteinEffectList.proteinEffectMap[variant.Consequence]))),
-//                lineBreakSubstitution,proteinEffectList.proteinEffectMap[variant.Consequence],lineBreakSubstitution((variant.Consequence && (variant.Consequence !== 'null'))?variant.Consequence:"")));
 
             for (var cpropIndex in data.columns.cproperty) {
                 var cprop =  data.columns.cproperty[cpropIndex];
@@ -621,7 +572,6 @@ var variantProcessing = (function () {
                     array.push(getSimpleString((variant.IN_EXSEQ),noop,variant.IN_EXSEQ,""));
                 }  else if (cprop === "SIFT_PRED") {
                     array.push(getSimpleString((variant.SIFT_PRED),noop,variant.SIFT_PRED,""));
-//                }  else if (cprop === ) {
                 }
                 else if (cprop === "Condel_PRED") {
                     array.push(getSimpleString((variant.Condel_PRED),noop,variant.Condel_PRED,""));
@@ -666,49 +616,6 @@ var variantProcessing = (function () {
         }
     };
 
-    var oldIterativeVariantTableFiller = function  (data, divId, show_gene, show_exseq, show_exchp,variantRootUrl,geneRootUrl,proteinEffectList)  {
-        var variantList =  data['variants'];
-            $(divId).dataTable({
-                iDisplayLength: 20,
-                bFilter: false,
-                bDestroy:true,
-                aaSorting: [[ 5, "asc" ]],
-                aoColumnDefs: [{sType: "allnumeric", aTargets: [ 5, 6, 8, 10, 11, 12, 13 ] } ]
-            });
-        var dataLength = variantList.length;
-
-
-        for ( var i = 0 ; i < dataLength ; i++ ){
-            var variant = {};
-            var row = 0;
-            var array;
-            variant["DBSNP_ID"]=variantList[i].pVals[row++].count;
-            variant["ID"]=variantList[i].pVals[row++].count;
-            variant["CHROM"]=variantList[i].pVals[row++].count;
-            variant["POS"]=variantList[i].pVals[row++].count;
-            variant["CLOSEST_GENE"]=variantList[i].pVals[row++].count;
-            variant["Protein_change"]=variantList[i].pVals[row++].count;
-            variant["Consequence"]=variantList[i].pVals[row++].count;
-            variant["_13k_T2D_P_EMMAX_FE_IV"]=variantList[i].pVals[row++].count;
-            variant["_13k_T2D_OR_WALD_DOS_FE_IV"]=variantList[i].pVals[row++].count;
-            variant["_13k_T2D_SE"]=1;//variantList[i].pVals[row++].count;
-            row++; row++;
-            variant["_13k_T2D_MINA"]=variantList[i].pVals[row++].count;
-            variant["_13k_T2D_MINU"]=variantList[i].pVals[row++].count;
-            variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
-            variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
-            variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
-            variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
-            variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
-            variant["_13k_T2D_"+variantList[i].pVals[row].level+"_MAF"]=variantList[i].pVals[row++].count;
-            variant["EXCHP_T2D_P_value"]=variantList[i].pVals[row++].count;
-            variant["EXCHP_T2D_BETA"]=variantList[i].pVals[row++].count;
-            variant["GWAS_T2D_PVALUE"]=variantList[i].pVals[row++].count;
-            variant["GWAS_T2D_OR"]=variantList[i].pVals[row++].count;
-            array = singleLineOfVariantTable(variant,show_gene, show_exseq, show_exchp,variantRootUrl,geneRootUrl,proteinEffectList);
-            $(divId).dataTable().fnAddData( array, (i==25) || (i==(dataLength-1)));
-        }
-    };
 
     var getStringWithLink  = function(urlRoot, contingent, modder, linkField,displayField, alternate){
         var retVal = alternate;
@@ -747,7 +654,6 @@ var variantProcessing = (function () {
 
     return {
         iterativeVariantTableFiller:iterativeVariantTableFiller,
-        oldIterativeVariantTableFiller:oldIterativeVariantTableFiller,
         fillTheVariantTable: fillTheVariantTable,
         fillCollectedVariantsTable:fillCollectedVariantsTable,
         fillTraitsPerVariantTable:fillTraitsPerVariantTable
