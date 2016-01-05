@@ -106,7 +106,12 @@ ${show_exseq},
                                        jsTreeDataRetriever ('#vandaRow'+i,phenotype,rowsToExpand[i]);
                                    }
                                 }
-
+                                $('#variantsAndAssociationsTable').dataTable({
+                                iDisplayLength: 20,
+                                bFilter: false,
+                                aaSorting: [[ 0, "asc" ]],
+                                aoColumnDefs: [{sType: "allnumeric", aTargets: [1,2,3] } ]
+                            });
                         }
                     }
                 $('[data-toggle="popover"]').popover();
@@ -230,6 +235,7 @@ var retrieveSampleGroupsbyTechnologyAndPhenotype = function(technologies,phenoty
                         }
                     }
                    variantsAndAssociationTable (phenotypeName,dataSetNames,dataSetPropertyValues);
+
                 }
             }
             },
