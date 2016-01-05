@@ -55,6 +55,9 @@
                        rowNames:rowNames},
                 async: true,
                 success: function (data) {
+                    if ($.fn.DataTable.isDataTable( '#continentalVariation' )){
+                        $('#continentalVariation').dataTable({"bRetrieve":true}).fnDestroy();
+                    }
 
                     var continentalAncestryText = {
                         continentalAA: '<g:message code="gene.continentalancestry.title.rowhdr.AA" default="gwas"/>',
@@ -97,7 +100,25 @@
                             jsTreeDataRetriever ('#mafTableRow'+i,"",rowDataStructure[i].dataset);
                         }
                     }
-
+                    var continentalTable = $('#continentalVariation').dataTable({
+                        bDestroy: true,
+                        bPaginate:false,
+                        bInfo : false,
+                        bFilter: false,
+                        aaSorting: [[ 1, "desc" ]],
+                        aoColumnDefs: [{sType: "allAnchor", aTargets: [3,4,5,6] },
+                            {"bSortable": false , aTargets: [0] }]
+                    });
+//                    var tableTools = new $.fn.dataTable.TableTools( continentalTable, {
+//                        "buttons": [
+//                            "copy",
+//                            "csv",
+//                            "xls",
+//                            "pdf",
+//                            { "type": "print", "buttonText": "Print me!" }
+//                        ],
+//                        "sSwfPath": "../../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
+//                    } );
                     $('[data-toggle="popover"]').popover();
                 },
                 error: function (jqXHR, exception) {

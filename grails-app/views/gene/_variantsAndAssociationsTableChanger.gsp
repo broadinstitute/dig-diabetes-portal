@@ -173,6 +173,7 @@ var variantsAndAssociationTable = function (phenotype,rowValueParameter,rowMapPa
                                         bPaginate:false,
                                         iDisplayLength: 5,
                                         bFilter: false,
+                                        bInfo : false,
                                         aaSorting: [[ 1, "desc" ]],
                                         aoColumnDefs: [{sType: "allAnchor", aTargets: anchorColumnMarkers },
                                                        {"bSortable": false , aTargets: [0] }]
