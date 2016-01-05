@@ -3,26 +3,27 @@
     <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
     -->
 
-    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/locuszoom.vendor.min.js" type="text/javascript"></script>
-    <script src="http://portaldev.sph.umich.edu/lzplug/assets/js/locuszoom.app.js" type="text/javascript"></script>
-
-    <link rel="stylesheet" type="text/css" href="http://portaldev.sph.umich.edu/lzplug/assets/css/locuszoom.css"/>
+    <script src="http://portaldev.sph.umich.edu/lz-amp/locuszoom.vendor.min.js" type="text/javascript"></script>
+    <script src="http://portaldev.sph.umich.edu/lz-amp/locuszoom.current.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="http://portaldev.sph.umich.edu/lz-amp/locuszoom.current.css"/>
 
     <script type="text/javascript">
-        LocusZoom.DefaultDataSources = {
-            position: new LocusZoom.Data.AssociationSource("http://portaldev.sph.umich.edu/api_internal_dev/v1/single/"),
-            ld: new LocusZoom.Data.LDSource("http://portaldev.sph.umich.edu/api_internal_dev/v1/pair/LD/"),
-            gene: new LocusZoom.Data.GeneSource("http://portaldev.sph.umich.edu/api_internal_dev/v1/annotation/genes/")
-        };
+
 
         var mpgSoftware = mpgSoftware || {};
 
         mpgSoftware.locusZoom = (function () {
 
+            var apiBase = "http://portaldev.sph.umich.edu/api_internal_dev/v1/";
+            var ds = new LocusZoom.DataSources();
+            ds.addSource("base", ["AssociationLZ", {url:apiBase + "single/", params: {analysis: 3}}]);
+            ds.addSource("ld", ["LDLZ" ,apiBase + "pair/LD/"]);
+            ds.addSource("gene", ["GeneLZ", apiBase + "annotation/genes/"]);
+
             function initLocusZoom() {
                 // TODO - will need to test that incorrect input format doesn't throw JS exception which stops all JS activity
                 // TODO - need to catch all exceptions to make sure rest of non LZ JS modules on page load properly (scope errors to this module)
-                LocusZoom.populate();
+                LocusZoom.populate("#lz-1", ds);
             };
 
             // public routines are declared below
