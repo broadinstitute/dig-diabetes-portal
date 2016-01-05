@@ -204,7 +204,7 @@
         <g:message code="gene.continentalancestry.subtitle" default="click on a number to view variants"/>
     </p>
 
-    <table id="continentalVariation" class="table table-striped  distinctivetable distinctive">
+    <table id="continentalVariation" class="table table-striped  distinctivetable distinctive" style="border-bottom: 0">
         <thead>
         <tr>
             <th><g:message code="gene.continentalancestry.title.colhdr.1" default="ancestry"/></th>
@@ -220,16 +220,18 @@
         </tbody>
         </table>
     <div class="row clearfix">
+
+        <div class="col-md-2">
+            <button id="reviser"  class="btn btn-primary pull-left" onclick="reviseVACRows()">
+                <g:message code="gene.variantassociations.change.rows" default="Revise rows"/>
+            </button>
+        </div>
+
         <div class="col-md-8">
 
         </div>
         <div class="col-md-2">
 
-        </div>
-        <div class="col-md-2">
-            <button id="reviser"  class="btn btn-primary pull-right" onclick="reviseVACRows()">
-                <g:message code="gene.variantassociations.change.rows" default="Revise rows"/>
-            </button>
         </div>
     </div>
 

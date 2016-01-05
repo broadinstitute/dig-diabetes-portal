@@ -41,7 +41,7 @@
     </div>
 </div>
 
-<table id="variantsAndAssociationsTable" class="table table-striped distinctivetable distinctive">
+<table id="variantsAndAssociationsTable" class="table table-striped distinctivetable distinctive" style="border-bottom: 0">
     <thead id="variantsAndAssociationsHead">
     </thead>
     <tbody id="variantsAndAssociationsTableBody">
@@ -49,16 +49,17 @@
 </table>
 
 <div class="row clearfix">
+
+    <div class="col-md-2">
+        <button id="reviser"  class="btn btn-primary pull-left" onclick="reviseRows()">
+            <g:message code="gene.variantassociations.change.rows" default="Revise rows"/>
+        </button>
+    </div>
     <div class="col-md-8">
 
     </div>
     <div class="col-md-2">
 
-    </div>
-    <div class="col-md-2">
-        <button id="reviser"  class="btn btn-primary pull-right" onclick="reviseRows()">
-            <g:message code="gene.variantassociations.change.rows" default="Revise rows"/>
-        </button>
     </div>
 </div>
 
