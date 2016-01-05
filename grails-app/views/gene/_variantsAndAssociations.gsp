@@ -117,15 +117,7 @@ $( document ).ready(function() {
                     UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#phenotypeTableChooser',true);
                     // Can we set the default option on the phenotype list?
                     $('#phenotypeTableChooser').val('${phenotype}');
-
-//                    var table = $('#variantsAndAssociationsTable').dataTable( {
-//    "aoColumns": [
-//          1,2,3,4,5,6
-//        ]
-//});
                     refreshVAndAByPhenotype({'value':'T2D'});
-                    //$('#variantsAndAssociationsTable').DataTable();
-                    // resetting the phenotype clears all boxes except for the technology chooser
                 }
             },
             error: function (jqXHR, exception) {
@@ -138,24 +130,9 @@ $( document ).ready(function() {
     var popUpVAndAExtender = function() {
           $( "#dialog" ).dialog( "open" );
         };
+     $( "#opener" ).click(popUpVAndAExtender);
 
 
-//       var table = $('#variantsAndAssociationsTable').dataTable({
-//        iDisplayLength: 50,
-//        bFilter: false,
-//        aaSorting: [[ 1, "asc" ]],
-//        aoColumnDefs: [{sType: "allnumeric", aTargets: [2,3,4,5] } ]
-//        });
-//        var tableTools = new $.fn.dataTable.TableTools( table, {
-//            "buttons": [
-//                "copy",
-//                "csv",
-//                "xls",
-//                "pdf",
-//                { "type": "print", "buttonText": "Print me!" }
-//            ],
-//            "sSwfPath": "../../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
-//        } );
 
 
 });

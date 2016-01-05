@@ -1,15 +1,72 @@
 
 <g:javascript>
+    var extractAnchorTextAsInteger = function (fullAnchor){
+      var returnValue = 0;
+      var re = new RegExp("\>[0-9]+\<"); // retrieve text, but with angle brackets
+      var re2 = new RegExp("[0-9]+"); // specifically get the presumed integer
+      if (typeof fullAnchor !== 'undefined') {
+         var textWithAngles = fullAnchor.match(re);
+         if ( (typeof textWithAngles !== 'undefined') &&
+              (textWithAngles.length > 0) ) {
+                var textWithoutAngles = textWithAngles[0].match(re2);
+                if ( (typeof textWithoutAngles !== 'undefined') &&
+                     (textWithoutAngles.length > 0) ) {
+                        var textWeWant = textWithoutAngles[0];
+                        returnValue = parseInt (textWeWant,10);
+                }
+         }
+      }
+      return returnValue;
+    };
+    jQuery.fn.dataTableExt.oSort['allAnchor-asc']  = function(a,b) {
+        var x = extractAnchorTextAsInteger(a);
+        var y = extractAnchorTextAsInteger(b);
+        if (!x) { x = 0; }
+        if (!y) { y = 0; }
+        return ((x < y) ? -1 : ((x > y) ?  1 : 0));
+    };
+
+    jQuery.fn.dataTableExt.oSort['allAnchor-desc']  = function(a,b) {
+        var x = extractAnchorTextAsInteger(a);
+        var y = extractAnchorTextAsInteger(b);
+        if (!x) { x = 0; }
+        if (!y) { y = 0; }
+        return ((x < y) ? 1 : ((x > y) ?  -1 : 0));
+    };
+
 var variantsAndAssociationTable = function (phenotype,rowValueParameter,rowMapParameter){
     var rowValue = rowValueParameter;
     var rowMap = rowMapParameter;
     // make sure table is empty
+
+    if ($.fn.DataTable.isDataTable( '#variantsAndAssociationsTable' )){
+       $('#variantsAndAssociationsTable').dataTable({"bRetrieve":true}).fnDestroy();
+    }
     $('#variantsAndAssociationsHead').empty();
     $('#variantsAndAssociationsTableBody').empty();
+    $('#variantsAndAssociationsTable').empty();
+    $('#variantsAndAssociationsTable').append('<tbody id="variantsAndAssociationsTableBody"></tbody>');
+
+    $('#variantsAndAssociationsTable').prepend('<thead id="variantsAndAssociationsHead"></thead>');
+
+
     var compareDatasetsByTechnology = function (a, b) {
       if (a.technology < b. technology) return -1;
       if (a.technology > b. technology) return 1;
       return 0;
+    };
+
+    var determineNumberOfColumns  = function(data){
+      var returnValue = 0;
+      if ((typeof data !== 'undefined')  &&
+          (typeof data.geneInfo !== 'undefined') &&
+          (typeof data.geneInfo.results !== 'undefined') &&
+          (data.geneInfo.results.length > 0) &&
+          (typeof data.geneInfo.results[0] !== 'undefined') &&
+          (typeof data.geneInfo.results[0].pVals !== 'undefined')){
+         returnValue = data.geneInfo.results[0].pVals.length;
+      }
+      return returnValue;
     };
     $.ajax({
         cache: false,
@@ -68,7 +125,7 @@ var variantsAndAssociationTable = function (phenotype,rowValueParameter,rowMapPa
                         rowValue = [];
                         if ((data.geneInfo) &&
                             (data.geneInfo.results)){//assume we have data and process it
-                            var sortedDataSetArray = data.geneInfo.results.sort(compareDatasetsByTechnology);
+                              var sortedDataSetArray = data.geneInfo.results.sort(compareDatasetsByTechnology);
                               var collector = [];
                               for (var i = 0 ; i < sortedDataSetArray.length ; i++) {
                                    var d = [];
@@ -84,9 +141,9 @@ var variantsAndAssociationTable = function (phenotype,rowValueParameter,rowMapPa
                                 }
 
                                 mpgSoftware.geneInfo.fillTheVariantAndAssociationsTableFromNewApi(data,
-${show_gwas},
-${show_exchp},
-${show_exseq},
+                                    ${show_gwas},
+                                    ${show_exchp},
+                                    ${show_exseq},
                                     '<g:createLink controller="region" action="regionInfo"/>',
                                     '<g:createLink controller="trait" action="traitSearch"/>',
                                     '<g:createLink controller="variantSearch" action="gene"/>',
@@ -106,12 +163,20 @@ ${show_exseq},
                                        jsTreeDataRetriever ('#vandaRow'+i,phenotype,rowsToExpand[i]);
                                    }
                                 }
+                                var numberOfColumns = determineNumberOfColumns(data);
+                                var anchorColumnMarkers = [];
+                                for ( var i = 0 ; i < numberOfColumns ; i++ ){
+                                    anchorColumnMarkers.push(i+2);
+                                }
                                 $('#variantsAndAssociationsTable').dataTable({
-                                iDisplayLength: 20,
-                                bFilter: false,
-                                aaSorting: [[ 0, "asc" ]],
-                                aoColumnDefs: [{sType: "allnumeric", aTargets: [1,2,3] } ]
-                            });
+                                        bDestroy: true,
+                                        bPaginate:false,
+                                        iDisplayLength: 5,
+                                        bFilter: false,
+                                        aaSorting: [[ 1, "desc" ]],
+                                        aoColumnDefs: [{sType: "allAnchor", aTargets: anchorColumnMarkers },
+                                                       {"bSortable": false , aTargets: [0] }]
+                                    });
                         }
                     }
                 $('[data-toggle="popover"]').popover();
