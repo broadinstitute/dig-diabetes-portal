@@ -36,6 +36,22 @@ class VariantSearchController {
 
     }
 
+    def retrieveJSTreeAjax(){
+        def slurper = new JsonSlurper()
+        String phenotypeName = params.phenotype
+        String sampleGroupName = params.sampleGroup
+        String convertedSampleGroupName = restServerService.convertKnownDataSetsToRealNames(sampleGroupName)
+        SampleGroup sampleGroup = metaDataService.getSampleGroupByName(convertedSampleGroupName)
+        String jsonDescr = sharedToolsService.packageSampleGroupsHierarchicallyForJsTree(sampleGroup,phenotypeName)
+        def result = slurper.parseText(jsonDescr)
+        render(status: 200, contentType: "application/json") {
+            result
+        }
+
+    }
+
+
+
     /***
      * Pullback of phenotypes hierarchy, though only for GWAS data
      * @return
@@ -170,6 +186,8 @@ class VariantSearchController {
         String dataset = params.dataset
         String region = params.region
         String phenotype = params.phenotype
+        String parmType = params.parmType
+        String parmVal = params.parmVal
         Float significance = 0f
         try {
             significance = Float.parseFloat(significanceString)
@@ -177,10 +195,11 @@ class VariantSearchController {
             log.error("receive nonnumeric significance value = (${params.sig}) in action=gene, VariantSearchController")
         }
 
-        Map paramsMap = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters,phenotype)
-
-
-        List <String> listOfCodedFilters = filterManagementService.observeMultipleFilters (paramsMap)
+//        Map paramsMap = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters,phenotype,parmType,parmVal)
+//
+//
+//        List <String> listOfCodedFilters = filterManagementService.observeMultipleFilters (paramsMap)
+        List <String> listOfCodedFilters = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters,phenotype,parmType,parmVal)
         if ((listOfCodedFilters) &&
                 (listOfCodedFilters.size() > 0)){
             displayCombinedVariantSearch(listOfCodedFilters,[])
@@ -205,7 +224,6 @@ class VariantSearchController {
             dataset = params.dataset
         }
 
-        // DIGP_60: using new medatata data structure to retrieve datasets
         String dataSetString = this.metaDataService.getSampleGroupNameListForPhenotypeAsJson(params.phenotype);
         def slurper = new JsonSlurper()
         def result = slurper.parseText(dataSetString)
@@ -219,6 +237,10 @@ class VariantSearchController {
     }
 
 
+    /***
+     * Given a phenotype, return all matching technologies
+     * @return
+     */
     def retrieveTechnologiesAjax() {
         String phenotypeName
         if (params.phenotype) {
@@ -236,10 +258,33 @@ class VariantSearchController {
         }
     }
 
+    /***
+     * Given one phenotype and one or more technologies, return every matching sample group
+     * @return
+     */
+    def retrieveTopSGsByTechnologyAndPhenotypeAjax() {
+        String phenotypeName
+        if (params.phenotype) {
+            phenotypeName = params.phenotype
+            log.debug "variantSearch params.phenotype = ${params.phenotype}"
+        }
 
+        List<String> technologies = sharedToolsService.convertAnHttpList(params."technologies[]")
 
+        List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups( phenotypeName,"",  technologies)
 
+        JSONObject sampleGroupMapJsonObject = filterManagementService.convertSampleGroupListToJson(fullListOfSampleGroups, phenotypeName)
 
+        render(status: 200, contentType: "application/json") {
+            [sampleGroupMap:sampleGroupMapJsonObject]
+        }
+    }
+
+    /***
+     * Given a single phenotype and a single technology, get a list of all relevant ancestries. We can make this happen by
+     * retrieving all of the matching sample groups, and from these retrieving all ancestries (filtered for uniqueness)
+     * @return
+     */
     def retrieveAncestriesAjax() {
         String phenotypeName
         String technologyName
@@ -250,7 +295,7 @@ class VariantSearchController {
             technologyName = params.technology
         }
 
-        List<SampleGroup> sampleGroupList = this.metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotypeName,
+        List<SampleGroup> sampleGroupList = this.metaDataService.getSampleGroupForPhenotypeDatasetTechnologyAncestry(phenotypeName,"",
                 technologyName,
                 sharedToolsService.getCurrentDataVersion(), "")
         List<String> ancestryList = sampleGroupList.unique{ a,b -> a.getAncestry() <=> b.getAncestry() }*.getAncestry()
@@ -265,6 +310,11 @@ class VariantSearchController {
 
 
 
+    /***
+     * Given a combination of one phenotype, one technology, and one ancestry, return a list of all matching sample groups
+     *
+     * @return
+     */
     def retrieveSampleGroupsAjax() {
         String phenotypeName
         String technologyName
@@ -279,32 +329,10 @@ class VariantSearchController {
             ancestryName = params.ancestry
         }
 
-        List<SampleGroup> sampleGroupList = this.metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotypeName,
+        List<SampleGroup> sampleGroupList = this.metaDataService.getSampleGroupForPhenotypeDatasetTechnologyAncestry(phenotypeName,"",
                 technologyName,
                 sharedToolsService.getCurrentDataVersion(), ancestryName)
-        List<SampleGroup> uniqueDataSetNameList = sampleGroupList.unique{ a,b -> a.getSystemId() <=> b.getSystemId() }
-        LinkedHashMap<String,String> dataSetNamesAndPProperyNames = [:]
-        String pValMatcher = /^P_(EMMAX|FIRTH|FE|VALUE)/
-        for (SampleGroup sampleGroup in uniqueDataSetNameList){
-            List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = sampleGroup.getPhenotypes()
-            List<String> pValuePropertyNames = []
-            for (org.broadinstitute.mpg.diabetes.metadata.Phenotype phenotype in phenotypeList){
-                if (phenotype.name == phenotypeName){
-                    pValuePropertyNames = phenotype.getProperties().findAll{it.name =~ pValMatcher}*.getName()
-                }
-            }
-            // for now take the first, though we will eventually choose between them.
-            if (pValuePropertyNames.size()>0){
-                dataSetNamesAndPProperyNames[sampleGroup.systemId] = pValuePropertyNames[0]
-            }
-        }
-        String dataSetMapAsJson = sharedToolsService.packageUpASimpleMapAsJson(dataSetNamesAndPProperyNames)
-        def slurper = new JsonSlurper()
-        def dataSetMapJsonObject = slurper.parseText(dataSetMapAsJson)
-//        List<String> dataSetNameList = sampleGroupList.unique{ a,b -> a.getSystemId() <=> b.getSystemId() }*.getSystemId()
-//        String dataSetNameAsJson = sharedToolsService.packageUpAListAsJson(dataSetNameList)
-//        def slurper = new JsonSlurper()
-//        def dataSetNametJsonObject = slurper.parseText(dataSetNameAsJson)
+        JSONObject dataSetMapJsonObject = filterManagementService.convertSampleGroupListToJson(sampleGroupList, phenotypeName)
 
         render(status: 200, contentType: "application/json") {
             [dataSetList:dataSetMapJsonObject]

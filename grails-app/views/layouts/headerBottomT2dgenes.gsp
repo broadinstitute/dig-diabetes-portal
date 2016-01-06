@@ -10,10 +10,6 @@
                     <g:link controller='system' action="systemManager"><g:message code='site.layouts.option.system_mgr'/></g:link>
                     &middot;
                 </sec:ifAllGranted>
-                <sec:ifAllGranted roles="ROLE_SYSTEM,ROLE_ADMIN">
-                    <g:link controller='variantSearch' action="variantSearchWF">T</g:link>
-                    &middot;
-                </sec:ifAllGranted>
                 <sec:loggedInUserInfo field="username"/>   &middot;
                 <g:link controller='logout'><g:message code="mainpage.log.out"/></g:link>
             </div>

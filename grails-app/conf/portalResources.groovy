@@ -2,10 +2,12 @@ modules = {
 
     jquery {
         resource url: 'js/lib/jquery-1.11.0.min.js'
-        resource url: 'js/lib/jquery.dataTables.min.js'
-        resource url: 'css/lib/jquery.dataTables.css'
+//        resource url: 'js/lib/jquery.dataTables.min.js'
+//        resource url: 'css/lib/jquery.dataTables.css'
+        resource url: 'js/DataTables-1.10.7/media/js/jquery.dataTables.min.js'
         resource url: 'js/DataTables-1.10.7/media/css/jquery.dataTables.min.css'
         resource url: 'js/lib/dataTables.tableTools.min.js'
+        resource url: 'js/lib/jstree.min.js'
         resource url: 'css/lib/dataTables.tableTools.min.css'
     }
     scroller {

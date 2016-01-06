@@ -21,6 +21,11 @@ public class SampleGroupBean implements SampleGroup, Comparable {
     private DataSet parent;
     private String systemId;
 
+    // DIGP-196: adding subjects/cases/controls per data set
+    private Integer subjectsNumber;
+    private Integer casesNumber;
+    private Integer controlsNumber;
+
     /**
      * return a list of all the object's dataset children
      *
@@ -37,6 +42,45 @@ public class SampleGroupBean implements SampleGroup, Comparable {
 
         // return the resulting list
         return allChildrenList;
+    }
+
+    /**
+     * return the subjects number for the sample group
+     *
+     * @return
+     */
+    public Integer getSubjectsNumber() {
+        return this.subjectsNumber;
+    }
+
+    /**
+     * return the cases number for the sample group
+     *
+     * @return
+     */
+    public Integer getCasesNumber() {
+        return this.casesNumber;
+    }
+
+    /**
+     * return the controls number for the sample group
+     *
+     * @return
+     */
+    public Integer getControlsNumber() {
+        return this.controlsNumber;
+    }
+
+    public void setControlsNumber(Integer controlsNumber) {
+        this.controlsNumber = controlsNumber;
+    }
+
+    public void setSubjectsNumber(Integer subjectsNumber) {
+        this.subjectsNumber = subjectsNumber;
+    }
+
+    public void setCasesNumber(Integer casesNumber) {
+        this.casesNumber = casesNumber;
     }
 
     public void setName(String name) {

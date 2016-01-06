@@ -1,5 +1,8 @@
 package org.broadinstitute.mpg.diabetes.knowledgebase.result;
 
+import org.broadinstitute.mpg.diabetes.util.PortalConstants;
+import org.broadinstitute.mpg.diabetes.util.PortalException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -8,6 +11,10 @@ import java.util.List;
  * Created by mduby on 9/2/15.
  */
 public class VariantBean implements Variant {
+    // constants
+    public static final String FORMAT_VAR_ID_BROAD = "broadFormat";         // chrom_position_refAllele_altAllele
+    public static final String FORMAT_VAR_ID_UMICH = "uMichFormat";         // chrom:position_refAllele/altAllele
+
     // instance variables
     private String chromosome;
     private String variantId;
@@ -37,6 +44,17 @@ public class VariantBean implements Variant {
     }
 
     public String getVariantId() {
+        // if the variant id is null, try to see if we can find it in the property values
+        if (this.variantId == null) {
+            PropertyValue tempPropertyValue = this.getPropertyValueFromCollection(PortalConstants.PROPERTY_NAME_VAR_ID, null, null);
+
+            // if not null, get varId
+            if (tempPropertyValue != null) {
+                this.variantId = tempPropertyValue.getValue();
+            }
+        }
+
+        // return
         return variantId;
     }
 
@@ -91,5 +109,66 @@ public class VariantBean implements Variant {
 
         // return
         return propertyValue;
+    }
+
+    /**
+     * return the varId in given format
+     *
+     * @param formatKey
+     * @return
+     */
+    public String getVariantIdWithFormat(String formatKey) throws PortalException {
+        // local variables
+        String returnVarId = this.getVariantId();
+
+        if (formatKey != null) {
+            if (formatKey.equals(FORMAT_VAR_ID_UMICH)) {
+                // change to UMich format
+                returnVarId = this.formatVarIdForUMichiganFormat(variantId);
+            }
+        }
+
+        // return
+        return returnVarId;
+    }
+
+    /**
+     * return new formatted varId in UMich expected format
+     *
+     * @param originalVarId
+     * @return
+     * @throws PortalException
+     */
+    protected String formatVarIdForUMichiganFormat(String originalVarId) throws PortalException {
+        // local variables
+        StringBuffer formattedVarIdBuffer = new StringBuffer();
+        String[] splitStringArray = null;
+
+        // check string not null
+        if (originalVarId == null) {
+            throw new PortalException("Got null varId string to reformat");
+        }
+
+        // split the string into the 4 parts
+        splitStringArray = originalVarId.split("_");
+
+        // check array is 4 parts long
+        if (splitStringArray == null) {
+            throw new PortalException("Got null varId array split for reformat");
+        } else if (splitStringArray.length < 4) {
+            throw new PortalException("Got varId array split for reformat of size: " + splitStringArray.length);
+        }
+
+        // rebuild the string into the chrom:position_refAllele/altAllele format
+        formattedVarIdBuffer.append(splitStringArray[0]);
+        formattedVarIdBuffer.append(":");
+        formattedVarIdBuffer.append(splitStringArray[1]);
+        formattedVarIdBuffer.append("_");
+        formattedVarIdBuffer.append(splitStringArray[2]);
+        formattedVarIdBuffer.append("/");
+        formattedVarIdBuffer.append(splitStringArray[3]);
+
+        // return
+        return formattedVarIdBuffer.toString();
     }
 }

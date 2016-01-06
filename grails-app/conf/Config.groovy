@@ -201,14 +201,16 @@ t2dNewDevRestServer { //current 'dev'
 }
 
 //server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
-//server.URL = t2dAws01RestServer.base+t2dAws01RestServer.name+t2dAws01RestServer.path
-server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
+server.URL = t2dAws01RestServer.base+t2dAws01RestServer.name+t2dAws01RestServer.path
+//server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
+//server.URL = t2dDevLoadBalancedServer.base+t2dDevLoadBalancedServer.name+t2dDevLoadBalancedServer.path
 dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
 //dbtRestServer.URL = 'http://diabetesgeneticsportal2.broadinstitute.org:8888/dev/burden/'
 //experimentalRestServer.URL = 'http://69.173.71.178:8888/dev2/server/'
 experimentalRestServer.URL = 'http://dig-dev.broadinstitute.org:8888/dev/gs/'
 
-burdenRestServer = new ServerBean("dev burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden/v2");
+burdenRestServerDev = new ServerBean("dev burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden");
+burdenRestServerProd = new ServerBean("prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
 
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
@@ -294,11 +296,33 @@ environments {
         // DIGKB-23: keep this here as placeholder for U Michigan setup
 //        grails.serverURL = "http://portaldev.sph.umich.edu/dig-diabetes-portal"
         grails.logging.jul.usebridge = true
+        
+        if (System.properties['server.URL']) {
+            server.URL = System.properties['server.URL']
+            println "server.URL=${server.URL}"
+        }
+        if (System.properties['app.version']) {
+            app.version = System.properties['app.version']
+            println "app.version=${app.version}"
+        }
+        if (System.properties['build.number']) {
+            build.number = System.properties['build.number']
+            println "build.number=${build.number}"
+        }
+        if (System.properties['site.version']) {
+            site.version = System.properties['site.version']
+            println "site.version=${site.version}"
+        }
+        if (System.properties['grails.serverURL']) {
+            grails.serverURL= System.properties['grails.serverURL']
+            println "grails.serverURL=${grails.serverURL}"
+        }
+
     }
     production {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
-      grails.serverURL = "http://type2diabetesgenetics.org"
+//      grails.serverURL = "http://type2diabetesgenetics.org"
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
@@ -307,10 +331,15 @@ environments {
 //        grails.serverURL = "http://sigmat2ddevsrv2.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
-//      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 //      grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false
+        if (System.properties['server.URL']) {
+            server.URL = System.properties['server.URL']
+            println "server.URL=${server.URL}"
+        }
+
     }
 }
 
@@ -512,3 +541,5 @@ grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.peopl
 
 // placeholder for data version
 diabetes.data.version = "mdv2";
+
+
