@@ -11,58 +11,88 @@
     var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.ancestryTable = (function () {
-        var loadAncestryTable = function (chosenGene,dataSetMap) {
+        var loadAncestryTable = function () {
 
-            var buildRowDataStructure = function (data) {
-                var returnValues = [];
+
+            var buildDataStructure = function (data) {
+                var ethnicitySequence = {},
+                        ethnicityChip = {};
                 for (var i = 0; i < data.ethnicityInfo.results.length; i++) {
+                    if (i < 5) {
                         var currentDataSet = data.ethnicityInfo.results[i];
-                        var singleRow = {};
-                        singleRow["dataset"] = currentDataSet["dataset"];
-                        singleRow["technology"] = currentDataSet["technology"];
-                        var rowValues = [];
-                        for (var j = 0; j < currentDataSet.pVals.length; j++) {
-                            rowValues.push( currentDataSet.pVals[j].count );
+                        var key = currentDataSet["dataset"];
+                        var oneEthnicity = {};
+                        for (var j = 0; j < data.ethnicityInfo.results[i].pVals.length; j++) {
+                            switch (j) {
+                                case 0:
+                                    oneEthnicity ["ns"] = data.ethnicityInfo.results[i].pVals[j].count;
+                                    break;
+                                case 1:
+                                    oneEthnicity ["total"] = data.ethnicityInfo.results[i].pVals[j].count;
+                                    break;
+                                case 2:
+                                    oneEthnicity ["common"] = data.ethnicityInfo.results[i].pVals[j].count;
+                                    break;
+                                case 3:
+                                    oneEthnicity ["lowFrequency"] = data.ethnicityInfo.results[i].pVals[j].count;
+                                    break;
+                                case 4:
+                                    oneEthnicity ["sing"] = data.ethnicityInfo.results[i].pVals[j].count;
+                                    oneEthnicity ["rare"] = data.ethnicityInfo.results[i].pVals[j].count;
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
-                        singleRow["values"] = rowValues;
-                        returnValues.push(singleRow);
+                        ethnicitySequence [key] = oneEthnicity;
+                    } else {
+                        var currentDataSet = data.ethnicityInfo.results[i];
+                        var key = currentDataSet["dataset"];
+                        var oneEthnicity = {};
+                        for (var j = 0; j < data.ethnicityInfo.results[i].pVals.length; j++) {
+                            switch (j) {
+                                case 0:
+                                    oneEthnicity ["ns"] = data.ethnicityInfo.results[i].pVals[j].count;
+                                    break;
+                                case 1:
+                                    oneEthnicity ["total"] = data.ethnicityInfo.results[i].pVals[j].count;
+                                    break;
+                                case 2:
+                                    oneEthnicity ["common"] = data.ethnicityInfo.results[i].pVals[j].count;
+                                    break;
+                                case 3:
+                                    oneEthnicity ["lowFrequency"] = data.ethnicityInfo.results[i].pVals[j].count;
+                                    break;
+                                case 4:
+                                    oneEthnicity ["sing"] = data.ethnicityInfo.results[i].pVals[j].count;
+                                    oneEthnicity ["rare"] = data.ethnicityInfo.results[i].pVals[j].count;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        ethnicityChip["EU"] = oneEthnicity;
+                    }
+
+
                 }
                 ;
-                return returnValues;
+                return {ethnicitySequence: ethnicitySequence,
+                    ethnicityChip: ethnicityChip};
             };
-            var buildColumnDataStructure = function (data) {
-                var returnValues = [];
-                for (var i = 0; i < data.ethnicityInfo.columns.length; i++) {
-                    var currentDataSet = data.ethnicityInfo.columns[i];
-                    returnValues.push({"key":i,"lowerValue":currentDataSet["lowerValue"],"higherValue":currentDataSet["higherValue"],
-                                       "code":"lowerValue~"+currentDataSet["lowerValue"]+"~higherValue~"+currentDataSet["higherValue"]});
-                 }
-                ;
-                return returnValues;
-            };
-            var rowNames = [];
-            if (typeof dataSetMap !== 'undefined'){
-                for ( var i = 0 ; i < dataSetMap.length ; i++ ){
-                    rowNames.push(dataSetMap[i].name);
-                }
-            }
             $.ajax({
                 cache: false,
                 type: "post",
                 url: "${createLink(controller:'gene',action: 'geneEthnicityCounts')}",
-                data: {geneName: chosenGene,
-                       rowMap:dataSetMap,
-                       rowNames:rowNames},
+                data: {geneName: '<%=geneName%>'},
                 async: true,
                 success: function (data) {
-                    if ($.fn.DataTable.isDataTable( '#continentalVariation' )){
-                        $('#continentalVariation').dataTable({"bRetrieve":true}).fnDestroy();
-                    }
 
                     var continentalAncestryText = {
                         continentalAA: '<g:message code="gene.continentalancestry.title.rowhdr.AA" default="gwas"/>',
                         continentalAAQ: '<g:helpText title="gene.continentalancestry.title.rowhdr.AA.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.title.rowhdr.AA.help.text"/>',
-                        continentalAAdatatype: '<g:message code="gene.continentalancestry.datatype.exomeSequence" default="exome sequence"/>',
+                        continentalAAdatatype: '<g:message code="gene.continentalancestry.datatype.exomeSequence" default="exome sequence"/>' +
+                                '<g:helpText title="gene.continentalancestry.datatype.exomeSequence.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.datatype.exomeSequence.help.text"/>',
                         continentalEA: '<g:message code="gene.continentalancestry.title.rowhdr.EA" default="gwas"/>',
                         continentalEAQ: '<g:helpText title="gene.continentalancestry.title.rowhdr.EA.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.title.rowhdr.EA.help.text"/>',
                         continentalEAdatatype: '<g:message code="gene.continentalancestry.datatype.exomeSequence" default="exome sequence"/>',
@@ -77,48 +107,27 @@
                         continentalHSdatatype: '<g:message code="gene.continentalancestry.datatype.exomeSequence" default="exome sequence"/>',
                         continentalEUchip: '<g:message code="gene.continentalancestry.title.rowhdr.chipEU" default="gwas"/>',
                         continentalEUchipQ: '<g:helpText title="gene.continentalancestry.title.rowhdr.chipEU.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.title.rowhdr.chipEU.help.text"/>',
-                        continentalEUchipDatatype: '<g:message code="gene.continentalancestry.datatype.exomeChip" default="exome chip"/>'
+                        continentalEUchipDatatype: '<g:message code="gene.continentalancestry.datatype.exomeChip" default="exome chip"/>' +
+                                '<g:helpText title="gene.continentalancestry.datatype.exomeChip.help.header" qplacer="2px 0 0 6px" placement="right" body="gene.continentalancestry.datatype.exomeChip.help.text"/>'
 
                     };
 
-                    var rowDataStructure = [];
+
                     if ((typeof data !== 'undefined') &&
                             (data)) {
                         if ((data.ethnicityInfo) &&
                                 (data.ethnicityInfo.results)) {//assume we have data and process it
-                            rowDataStructure = buildRowDataStructure(data);
-                            mpgSoftware.geneInfo.fillVariationAcrossEthnicityTable('<g:createLink controller="variantSearch" action="gene" />',
+                            var holdingStructure = buildDataStructure(data);
+                            mpgSoftware.geneInfo.fillVariationAcrossEthnicityTable(${show_gwas},
+                                    ${show_exchp},
+                                    ${show_exseq},
+                                    '<g:createLink controller="variantSearch" action="gene" />',
                                     continentalAncestryText,
-                                    rowDataStructure,
-                                    buildColumnDataStructure(data),
-                                    "MAFTable",
-                                    chosenGene);
+                                    holdingStructure.ethnicitySequence,
+                                    holdingStructure.ethnicityChip,
+                                    '<%=geneName%>');
                         }
                     }
-                    if (typeof rowDataStructure !== 'undefined') {
-                        for ( var i = 0 ; i < rowDataStructure.length ; i++ ){
-                            jsTreeDataRetriever ('#mafTableRow'+i,"",rowDataStructure[i].dataset);
-                        }
-                    }
-                    var continentalTable = $('#continentalVariation').dataTable({
-                        bDestroy: true,
-                        bPaginate:false,
-                        bInfo : false,
-                        bFilter: false,
-                        aaSorting: [[ 1, "desc" ]],
-                        aoColumnDefs: [{sType: "allAnchor", aTargets: [3,4,5,6] },
-                            {"bSortable": false , aTargets: [0] }]
-                    });
-//                    var tableTools = new $.fn.dataTable.TableTools( continentalTable, {
-//                        "buttons": [
-//                            "copy",
-//                            "csv",
-//                            "xls",
-//                            "pdf",
-//                            { "type": "print", "buttonText": "Print me!" }
-//                        ],
-//                        "sSwfPath": "../../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
-//                    } );
                     $('[data-toggle="popover"]').popover();
                 },
                 error: function (jqXHR, exception) {
@@ -132,68 +141,14 @@
     }());
 
 
-    // this is a two-part call: first we use the phenotype to get the relevant technologies, and
-    //  then we can launch the table refresh
-    var retrieveSampleGroupsbyTechAndPhenotype = function(technologies,phenotype){
-        var phenotypeName = phenotype;
-        $.ajax({
-            cache: false,
-            type: "post",
-            url: "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",
-            data: {phenotype:phenotype,
-                technologies: technologies},
-            async: true,
-            success: function (data) {
-                if (( data !==  null ) &&
-                        ( typeof data !== 'undefined') &&
-                        ( typeof data.sampleGroupMap !== 'undefined' )  ) {
-                    var sampleGroupMap = data.sampleGroupMap;
-                    if (typeof sampleGroupMap !== 'undefined'){
-                        var dataSetNames =  Object.keys(sampleGroupMap);
-                        var dataSetPropertyValues = [];
-                        for (var i = 0; i < dataSetNames.length; i++) {
-                            if (sampleGroupMap[dataSetNames[i]]) {
-                                dataSetPropertyValues.push(sampleGroupMap[dataSetNames[i]]);
-                            }
-                        }
-                        //variantsAndAssociationTable (phenotypeName,dataSetNames,dataSetPropertyValues);
-                    }
-                }
-            },
-            error: function (jqXHR, exception) {
-                core.errorReporter(jqXHR, exception);
-            }
-        });
-    };
-
     $("#collapseTwo").on("show.bs.collapse", function() {
-        mpgSoftware.ancestryTable.loadAncestryTable('<%=geneName%>');
+        mpgSoftware.ancestryTable.loadAncestryTable();
     });
 
     $('#collapseHowCommonIsVariant').on('hide.bs.collapse', function (e) {
             $("#ancestryInner").html('');
     });
 
-    function reviseVACRows(){
-//        var phenotype = $('#phenotypeTableChooser option:selected').val();
-        var clickedBoxes =  $('#continentalVariationTableBody .jstree-clicked');
-        var dataSetNames  = [];
-        var dataSetMaps  = [];
-        for  ( var i = 0 ; i < clickedBoxes.length ; i++ )   {
-            var  comboName  =  $(clickedBoxes[i]).attr('id');
-            var partsOfCombo =   comboName.split("-");
-            var  dataSetWithoutAnchor  =  partsOfCombo[0];
-            dataSetNames.push(dataSetWithoutAnchor);
-            var  dataSetMap = {"name":dataSetWithoutAnchor,
-                "value":dataSetWithoutAnchor,
-                "pvalue":partsOfCombo[1],
-                "count":partsOfCombo[2].substring(0, partsOfCombo[2].length-7)};
-            dataSetMaps.push(dataSetMap);
-        }
-        //variantsAndAssociationTable (phenotype,dataSetNames,dataSetMaps);
-
-        mpgSoftware.ancestryTable.loadAncestryTable('<%=geneName%>',dataSetMaps);
-    }
 
 </script>
 
@@ -204,7 +159,7 @@
         <g:message code="gene.continentalancestry.subtitle" default="click on a number to view variants"/>
     </p>
 
-    <table id="continentalVariation" class="table table-striped  distinctivetable distinctive" style="border-bottom: 0">
+    <table id="continentalVariation" class="table table-striped  distinctivetable distinctive">
         <thead>
         <tr>
             <th><g:message code="gene.continentalancestry.title.colhdr.1" default="ancestry"/></th>
@@ -219,21 +174,6 @@
         <tbody id="continentalVariationTableBody">
         </tbody>
         </table>
-    <div class="row clearfix">
-
-        <div class="col-md-2">
-            <button id="reviser"  class="btn btn-primary pull-left" onclick="reviseVACRows()">
-                <g:message code="gene.variantassociations.change.rows" default="Revise rows"/>
-            </button>
-        </div>
-
-        <div class="col-md-8">
-
-        </div>
-        <div class="col-md-2">
-
-        </div>
-    </div>
 
 </g:if>
 

@@ -8,7 +8,6 @@ import org.broadinstitute.mpg.diabetes.metadata.Phenotype
 import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
-import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.CommonGetDataQueryBuilder
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
@@ -194,17 +193,6 @@ class MetaDataService {
 
         // return the json string
         return groovyString;
-    }
-
-
-
-
-    public SampleGroup  getSampleGroupByName(String sampleGroupId){
-        return jsonParser.getSampleGroupByName(sampleGroupId)
-    }
-
-    public String  getTechnologyPerSampleGroup(String sampleGroupId){
-        return jsonParser.getTechnologyPerSampleGroup(sampleGroupId)
     }
 
     public String getSampleGroupNameListForPhenotypeAsJson(String phenotypeName) {
@@ -624,13 +612,6 @@ class MetaDataService {
     public List<SampleGroup> getSampleGroupForPhenotypeTechnologyAncestry(String phenotypeName, String technologyName, String metadataVersion, String ancestryName){
         return this.jsonParser.getSampleGroupForPhenotypeTechnologyAncestry ( phenotypeName,  technologyName,  metadataVersion,  ancestryName)
     }
-
-
-
-    public List<SampleGroup> getSampleGroupForPhenotypeDatasetTechnologyAncestry(String phenotypeName,  String datasetName, String technologyName, String metadataVersion, String ancestryName){
-        return this.jsonParser.getSampleGroupForPhenotypeDatasetTechnologyAncestry ( phenotypeName, datasetName, technologyName,  metadataVersion,  ancestryName)
-    }
-
 
 
     public List<String> getTechnologyListByPhenotypeAndVersion(String phenotypeName,String dataVersion) {

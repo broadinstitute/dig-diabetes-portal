@@ -29,7 +29,7 @@ var mpgSoftware = mpgSoftware || {};
             } else {
                 retVal.push("<span class='" +pValueGreyedOut+ "'>--</span>");
             }
-            retVal.push(((variant.MAF)&&(variant.MAF!=='0'))?(""+variant.MAF.toPrecision(3)):"");
+            retVal.push((variant.MAF)?(""+variant.MAF.toPrecision(3)):"");
             retVal.push("<a class='boldlink' href='./traitInfo/"+ variant.DBSNP_ID+"'>click here</a>");
             return retVal;
          },

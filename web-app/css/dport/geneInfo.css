@@ -287,7 +287,8 @@ span.dotlabel {
     float: right;
     margin-top: 10px; }
 
-img.currentlanguage { }
+img.currentlanguage {
+    box-shadow: 0px 0px 16px #ddd; }
 
 .greyedout {
     color: #aaa; }
@@ -353,7 +354,4 @@ div.significantDifferenceText {
 }
 span.bhtLossOfFunctionVariants {
     text-decoration: underline;
-}
-.vandaRowTd {
-    text-align:left;
 }

@@ -37,11 +37,11 @@
                                     collector["d" + i] = d;
                                 }
                                 var carrierStatusDiseaseRisk = mpgSoftware.variantInfo.retrieveCarrierStatusDiseaseRisk();
-                                carrierStatusDiseaseRisk(parseInt(collector["d0"][6].count[0]),
-                                        parseInt(collector["d0"][7].count[0]),
-                                        parseInt(collector["d0"][4].count[0]),
-                                        parseInt(collector["d0"][0].count[0]),
+                                carrierStatusDiseaseRisk(parseInt(collector["d0"][4].count[0]),
                                         parseInt(collector["d0"][5].count[0]),
+                                        parseInt(collector["d0"][2].count[0]),
+                                        parseInt(collector["d0"][0].count[0]),
+                                        parseInt(collector["d0"][3].count[0]),
                                         parseInt(collector["d0"][1].count[0]),
                                         ${show_gwas}, ${show_exchp}, ${show_exseq}, carrierStatusImpact);
 

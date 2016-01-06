@@ -50,16 +50,16 @@ public class BurdenJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public JSONObject getBurdenPostJson(int dataVersion, String phenotype, List<String> variantList, List<String> covariatesList) throws PortalException {
+    public JSONObject getBurdenPostJson(String dataset, List<String> variantList, List<String> covariatesList) throws PortalException {
         // local variables
         JSONObject finalObject;
 
         // create the json object
         try {
-            finalObject = new JSONObject(this.getBurdenPostJsonString(dataVersion, phenotype, variantList, covariatesList));
+            finalObject = new JSONObject(this.getBurdenPostJsonString(dataset, variantList, covariatesList));
 
         } catch (JSONException exception) {
-            throw new PortalException(("got json creation exception for burden test payload generation: " + exception.getMessage()));
+            throw new PortalException(("got json creation exception for burden test payload geneeration: " + exception.getMessage()));
         }
 
         // return
@@ -74,7 +74,7 @@ public class BurdenJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public String getBurdenPostJsonString(int dataVersion, String phenotype, List<String> variantList, List<String> covariatesList) throws PortalException {
+    public String getBurdenPostJsonString(String dataset, List<String> variantList, List<String> covariatesList) throws PortalException {
         // local variables
         String finalString;
         StringBuilder stringBuilder = new StringBuilder();
@@ -82,34 +82,12 @@ public class BurdenJsonBuilder {
         // open the json object
         stringBuilder.append("{");
 
-        // add in the data version
-        // DIGP-195: changed "mdv" field from integer 2 to "mdv2" string to stay consistent with KB versioning
+        // add in the dataset/study key
         stringBuilder.append("\"");
-        stringBuilder.append(PortalConstants.JSON_BURDEN_DATA_VERSION_KEY);
-        stringBuilder.append("\": \"mdv");
-        stringBuilder.append(dataVersion);
-        stringBuilder.append("\", ");
-
-        // add in the phenotype
-        stringBuilder.append("\"");
-        stringBuilder.append(PortalConstants.JSON_BURDEN_PHENOTYPE_KEY);
+        stringBuilder.append(PortalConstants.JSON_BURDEN_DATASET_KEY);
         stringBuilder.append("\": \"");
-        stringBuilder.append(phenotype);
+        stringBuilder.append(dataset);
         stringBuilder.append("\", ");
-
-        // add in the confidence interval calculation boolean
-        stringBuilder.append("\"");
-        stringBuilder.append(PortalConstants.JSON_BURDEN_CI_CALC_KEY);
-        stringBuilder.append("\": ");
-        stringBuilder.append(true);
-        stringBuilder.append(", ");
-
-        // add in the confidence interval setting
-        stringBuilder.append("\"");
-        stringBuilder.append(PortalConstants.JSON_BURDEN_CI_LEVEL_KEY);
-        stringBuilder.append("\": ");
-        stringBuilder.append(0.95);
-        stringBuilder.append(", ");
 
         // create the variant list json object string
         stringBuilder.append("\"");
@@ -310,7 +288,7 @@ public class BurdenJsonBuilder {
         }
 
         // always add a check that MAF is greater than 0 for the root data set specified to make sure we are not pulling variants that do not occur
-        rootProperty = parser.getExpectedUniquePropertyFromSampleGroup("MAF", rootDataSet);
+        rootProperty = this.getExpectedUniquePropertyFromSampleGroup("MAF", rootDataSet);
         queryFilterList.add(new QueryFilterBean(rootProperty, PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS, "0.0"));
 
 
@@ -328,7 +306,7 @@ public class BurdenJsonBuilder {
 
             // for all sample groups in the list, find their MAF property and add it to the list
             for (DataSet sampleGroup: dataSetList) {
-                propertyList.add(parser.getExpectedUniquePropertyFromSampleGroup("MAF", sampleGroup));
+                propertyList.add(this.getExpectedUniquePropertyFromSampleGroup("MAF", sampleGroup));
             }
 
             // for all properties, add a new filter
@@ -345,5 +323,42 @@ public class BurdenJsonBuilder {
         return queryFilterList;
     }
 
+    /**
+     * returns an expected unique property of given name from a sample group
+     *
+     * @param name
+     * @param dataSet
+     * @return
+     * @throws PortalException
+     */
+    protected Property getExpectedUniquePropertyFromSampleGroup(String name, DataSet dataSet) throws PortalException {
+        // local variables
+        JsonParser parser = JsonParser.getService();
+        List<DataSet> childPropertyList = null;
+        Property property = null;
+
+        // get the list of properties to iterate through
+        childPropertyList = parser.getImmediateChildrenOfType(dataSet, PortalConstants.TYPE_PROPERTY_KEY);
+
+        // loop through and find the property with given name
+        for (DataSet childProperty: childPropertyList) {
+            if (childProperty.getName().equalsIgnoreCase(name)) {
+                if (property != null) {
+                    throw new PortalException("Found duplicate property: " + name + " for sample group: " + dataSet.getName());
+                } else {
+                    property = (Property) childProperty;
+                }
+            }
+        }
+
+        // check that not null
+        if (property == null) {
+            throw new PortalException("Found no property: " + name + " for sample group: " + dataSet.getName());
+        }
+
+        // return
+        return property;
+
+    }
 
 }

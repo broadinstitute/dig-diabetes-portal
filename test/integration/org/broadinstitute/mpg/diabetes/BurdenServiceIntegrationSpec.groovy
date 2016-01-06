@@ -36,7 +36,6 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
         JSONObject referenceJson = null;
         JSONObject generatedJson = null;
         JsonSlurper slurper = new JsonSlurper()
-        String phenotype = PortalConstants.BURDEN_DEFAULT_PHENOTYPE_KEY;
 
         // add 10 variants to the list
         variantList.add("1_2522446_");
@@ -52,7 +51,7 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
 
         // get the json payload for the burden call
         BurdenJsonBuilder jsonBuilder = BurdenJsonBuilder.getBurdenJsonBuilder();
-        String burdenJsonString = jsonBuilder.getBurdenPostJson(PortalConstants.BURDEN_DATASET_OPTION_ID_26K, phenotype, variantList, null);
+        String burdenJsonString = jsonBuilder.getBurdenPostJson(PortalConstants.BURDEN_DATASET_OPTION_13K, variantList, null);
         generatedJson = this.burdenService.getBurdenRestCallResults(burdenJsonString);
 
         // reference result string
@@ -107,35 +106,5 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
         then:
         assert object != null
         assert object.size() > 0
-    }
-
-    void "test burden test for single variant"() {
-        when:
-        String variantId = "8_118184783_C_T";
-        JSONObject resultJson = this.burdenService.callBurdenTestForTraitAndVariantId("t2d", variantId);
-
-        then:
-        assert resultJson != null
-        assert resultJson.size() > 0
-    }
-
-    void "test burden test for variant list"() {
-        when:
-        List<String> varIdList = new ArrayList<String>();
-        varIdList.add("8_118184783_C_T");
-        JSONObject resultJson = this.burdenService.getBurdenResultForVariantIdList(PortalConstants.BURDEN_DATASET_OPTION_ID_26K, PortalConstants.BURDEN_DEFAULT_PHENOTYPE_KEY, varIdList);
-
-        then:
-        assert resultJson != null
-        assert resultJson.size() > 0
-    }
-
-    void "test burden phenotype filter list call"() {
-        when:
-        JSONObject phenotypeJsonResult = this.burdenService.getBurdenTraitSelectionOptions()
-
-        then:
-        assert phenotypeJsonResult != null
-        assert phenotypeJsonResult.size() > 0
     }
 }

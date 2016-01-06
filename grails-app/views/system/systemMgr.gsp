@@ -186,7 +186,12 @@
                 </div>
             </g:form>
 
-            <div class="separator"></div>
+
+
+
+
+
+
 
             <g:form action='changeRecognizedStringsOnly' method='POST' class='form form-horizontal cssform' autocomplete='off'>
                 <h4><g:message code="system.header.rest_server.recognize_strings" /></h4>

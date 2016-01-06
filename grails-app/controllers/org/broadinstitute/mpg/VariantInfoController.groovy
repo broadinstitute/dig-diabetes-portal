@@ -1,6 +1,5 @@
 package org.broadinstitute.mpg
 
-import org.broadinstitute.mpg.diabetes.BurdenService
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 /**
@@ -9,7 +8,6 @@ import org.codehaus.groovy.grails.web.json.JSONObject
 class VariantInfoController {
     RestServerService   restServerService
     SharedToolsService sharedToolsService
-    BurdenService burdenService
 
     def index() { }
 
@@ -95,42 +93,4 @@ class VariantInfoController {
             [variantInfo:jsonObject]
         }
     }
-
-    /***
-     * This call supports the burden test on the variant info page
-     * @return
-     */
-    def burdenTestAjax() {
-        // log parameters received
-        // Here are some example parameters, as they show up in the params variable
-        // params.filterNum=="2" // value=id from burdenTestVariantSelectionOptionsAjax, or 0 if no selection was made (which is a legal choice)
-        // params.dataSet=="1" // where 1->13k, 2->26k"
-        // params.variantName=="SLC30A8" // string representing gene name
-        log.info("got parameters: " + params);
-
-        // cast the parameters
-        String variantName = params.variantName;
-        String traitFilterOptionId = (params.traitFilterSelectedOption ? params.traitFilterSelectedOption : "t2d");     // default to t2d if none given
-
-        // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
-        JSONObject result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantName);
-
-        // send json response back
-        render(status: 200, contentType: "application/json") {result}
-    }
-
-    /***
-     * Get the contents for the filter drop-down box on the burden test section of the gene info page
-     * @return
-     */
-    def burdenTestTraitSelectionOptionsAjax() {
-        JSONObject jsonObject = this.burdenService.getBurdenTraitSelectionOptions()
-
-        // log
-        log.info("got burden trait options: " + jsonObject);
-
-        // send json response back
-        render(status: 200, contentType: "application/json") {jsonObject}
-    }
-
 }

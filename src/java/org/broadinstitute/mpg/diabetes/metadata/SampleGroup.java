@@ -26,27 +26,6 @@ public interface SampleGroup extends DataSet {
 
     public String getAncestry();
 
-    /**
-     * return the subjects number for the sample group
-     *
-     * @return
-     */
-    public Integer getSubjectsNumber();
-
-    /**
-     * return the cases number for the sample group
-     *
-     * @return
-     */
-    public Integer getCasesNumber();
-
-    /**
-     * return the controls number for the sample group
-     *
-     * @return
-     */
-    public Integer getControlsNumber();
-
     public int getSortOrder();
 
     public String getSystemId();

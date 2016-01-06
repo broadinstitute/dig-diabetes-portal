@@ -46,8 +46,7 @@ public class BurdenJsonBuilderTest extends TestCase {
         List<String> variantList = new ArrayList<String>();
         JSONObject referenceJson = null;
         JSONObject generatedJson = null;
-        int dataVertsion = 2;
-        String phenotype = "t2d";
+        String dataset = "13k";
 
         // add 10 variants to the list
         variantList.add("1_2522446_");
@@ -69,7 +68,7 @@ public class BurdenJsonBuilderTest extends TestCase {
 
         // create the new json object from the builder call
         try {
-            generatedJson = this.burdenJsonBuilder.getBurdenPostJson(dataVertsion, phenotype, variantList, null);
+            generatedJson = this.burdenJsonBuilder.getBurdenPostJson(dataset, variantList, null);
 
         } catch (PortalException exception) {
             fail("Got exception generating burden call json payload: " + exception.getMessage());
@@ -80,10 +79,6 @@ public class BurdenJsonBuilderTest extends TestCase {
         assertEquals(referenceJson.toString(), generatedJson.toString());
     }
 
-    /**
-     * test building the getData payload generation
-     *
-     */
     public void testGetKnowledgeBaseQueryPayloadForVariantSearch() {
         // local variables
         JSONObject referenceJson = null;
@@ -157,8 +152,7 @@ public class BurdenJsonBuilderTest extends TestCase {
         // test
         assertNotNull(queryFilterList);
         assertTrue(queryFilterList.size() > 0);
-        // 2 filters (one for greater than 0, to avoid null results, then the one for upper limit
-        assertEquals(2, queryFilterList.size());
+        assertEquals(1, queryFilterList.size());
 
         // get the query filter list
         try {
@@ -171,8 +165,7 @@ public class BurdenJsonBuilderTest extends TestCase {
         // test
         assertNotNull(queryFilterList);
         assertTrue(queryFilterList.size() > 0);
-        // 2 filters (one for greater than 0, to avoid null results, then the one for upper limit
-        assertEquals(2, queryFilterList.size());
+        assertEquals(1, queryFilterList.size());
 
         // get the query filter list
         try {
@@ -185,7 +178,7 @@ public class BurdenJsonBuilderTest extends TestCase {
         // test
         assertNotNull(queryFilterList);
         assertTrue(queryFilterList.size() > 0);
-        assertEquals(6, queryFilterList.size());
+        assertEquals(5, queryFilterList.size());
 
         // get the query filter list
         try {
@@ -198,6 +191,6 @@ public class BurdenJsonBuilderTest extends TestCase {
         // test
         assertNotNull(queryFilterList);
         assertTrue(queryFilterList.size() > 0);
-        assertEquals(6, queryFilterList.size());
+        assertEquals(5, queryFilterList.size());
     }
 }

@@ -150,7 +150,7 @@ class JsonParserTest extends TestCase {
         assertTrue(metaData.getExperiments().size() > 0);
         assertTrue(metaData.getProperties().size() > 0);
         assertEquals(25, metaData.getExperiments().size());
-        assertEquals(15, metaData.getProperties().size());
+        assertEquals(13, metaData.getProperties().size());
     }
 
     /**
@@ -200,7 +200,7 @@ class JsonParserTest extends TestCase {
         // test
         assertNotNull(propertyList);
         assertTrue(propertyList.size() > 0);
-        assertEquals(15, propertyList.size());
+        assertEquals(13, propertyList.size());
     }
 
     /**
@@ -269,7 +269,7 @@ class JsonParserTest extends TestCase {
         // test
         assertNotNull(dataSetMap);
         assertTrue(dataSetMap.size() > 0);
-        assertEquals(3090, dataSetMap.size());
+        assertEquals(3088, dataSetMap.size());
     }
 
     @Test
@@ -284,7 +284,7 @@ class JsonParserTest extends TestCase {
         // test
         assertNotNull(propertyList);
         assertTrue(propertyList.size() > 0);
-        assertEquals(15, propertyList.size());
+        assertEquals(13, propertyList.size());
 
         // get the sample group properties
         propertyList = this.jsonParser.getPropertyListOfPropertyType(this.jsonParser.getMetaDataRoot(), PortalConstants.TYPE_SAMPLE_GROUP_PROPERTY_KEY);
@@ -518,66 +518,5 @@ class JsonParserTest extends TestCase {
         assertNotNull(phenotypeMap);
         assertTrue(phenotypeMap.size() > 0);
         assertEquals(25, phenotypeMap.size());
-    }
-
-    @Test
-    public void testGetPropertyMeaning() {
-        // local variables
-        Property propertyWithMeaning = null;
-        Property propertyWithoutMeaning = null;
-        Property propertyWithOtherMeaning = null;
-
-        try {
-            // retrieve the properties
-            propertyWithMeaning = (Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_P_VALUE_82K_T2D);
-            propertyWithoutMeaning = (Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_BETA_13K_FG);
-            propertyWithOtherMeaning = (Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_PH_BETA_GWAS_MAGIC_2HRG);
-
-        } catch (PortalException exception) {
-            fail("got error: " + exception.getMessage());
-        }
-
-        // test for meaning
-        assertNotNull(propertyWithMeaning);
-        assertTrue(propertyWithMeaning.hasMeaning(PortalConstants.PROPERTY_MEANING_P_VALUE_KEY));
-
-        // test for lack of meaning
-        assertNotNull(propertyWithoutMeaning);
-        assertTrue(!propertyWithoutMeaning.hasMeaning(PortalConstants.PROPERTY_MEANING_P_VALUE_KEY));
-
-        // test for other meaning
-        assertNotNull(propertyWithOtherMeaning);
-        assertTrue(!propertyWithOtherMeaning.hasMeaning(PortalConstants.PROPERTY_MEANING_P_VALUE_KEY));
-    }
-
-    @Test
-    public void testGetSampleGroupCasesControlsSubjects() {
-        // local variables
-        SampleGroup sampleGroupWithNumbers = null;
-        SampleGroup sampleGroupWithoutNumbers = null;
-
-        try {
-            // retrieve the properties
-            sampleGroupWithNumbers = (SampleGroup)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.SAMPLE_GROUP_KEY_SG_SIGMA1);
-            sampleGroupWithoutNumbers = (SampleGroup)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.SAMPLE_GROUP_KEY_SG_GWAS_PGC);
-
-        } catch (PortalException exception) {
-            fail("got error: " + exception.getMessage());
-        }
-
-        // test for sample group with numbers
-        assertNotNull(sampleGroupWithNumbers);
-        assertNotNull(sampleGroupWithNumbers.getSubjectsNumber());
-        assertNotNull(sampleGroupWithNumbers.getCasesNumber());
-        assertNotNull(sampleGroupWithNumbers.getControlsNumber());
-        assertTrue(sampleGroupWithNumbers.getSubjectsNumber() > 0);
-        assertTrue(sampleGroupWithNumbers.getCasesNumber() > 0);
-        assertTrue(sampleGroupWithNumbers.getControlsNumber() > 0);
-
-        // test for sample group with numbers
-        assertNotNull(sampleGroupWithoutNumbers);
-        assertNull(sampleGroupWithoutNumbers.getSubjectsNumber());
-        assertNull(sampleGroupWithoutNumbers.getCasesNumber());
-        assertNull(sampleGroupWithoutNumbers.getControlsNumber());
     }
 }

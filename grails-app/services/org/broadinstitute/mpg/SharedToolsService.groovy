@@ -6,8 +6,6 @@ import groovy.json.StringEscapeUtils
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Property
-import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
-import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
 import org.broadinstitute.mpg.diabetes.metadata.query.JsNamingQueryTranslator
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
@@ -196,6 +194,9 @@ class SharedToolsService {
         showGene = (grailsApplication.config.portal.sections.show_gene)?1:0
         showBeacon = (grailsApplication.config.portal.sections.show_beacon)?1:0
         showNewApi = 1
+
+        // DIGP_170: commenting out for final push to move to new metadata data structure (10/18/2015)
+        // retrieveMetadata()  // may as well get this early.  The value is stored in
     }
 
     public enum TypeOfSection {
@@ -257,6 +258,22 @@ class SharedToolsService {
         return showBeacon
     }
 
+    /**
+     * returns whether a metadada override has been set but not run yet
+     *
+     * @return
+     */
+    // DIGP-170: switch looking for the override from the SharedToolService to the new metadata object
+    /*
+    public Boolean getMetadataOverrideStatus() {
+        return (this.metaDataService.forceProcessedMetadataOverride == 1)
+//        return (forceMetadataOverride==1)
+    }
+
+    public void setMetadataOverrideStatus(int metadataOverride) {
+        this.forceMetadataOverride=metadataOverride
+    }
+    */
 
 
     public String  applicationName () {
@@ -344,35 +361,56 @@ class SharedToolsService {
         return canonicalForm
     }
 
+
+
     /***
-     * One peculiarity of values returned from an HTML page is as follows: multiple values can be retrieved
-     * by appending a "[]" string after your parameter name, and in this case the value is immediately convertible
-     * to a list.  That's nice.  But what if the user chooses only a single value?  In that case the value comes back
-     * not as a List but as a String, which is liable to lead to conversion errors if the code is expecting a list.
-     * So here is a little convenience routine which can always return a list (a single value returns a list of length = 1).
-     *
-     * Note the undefined type of the incoming parameter == "rawValue"
-     *
-     * @param rawValue
+     * Here's a shareable method to retrieve the contents of the metadata. The first time it's called it will store and cache the result.
+     * After that every call draws from the cache,  UNLESS  the variable has been set to force a metadata override.
      * @return
      */
-    public List<String> convertAnHttpList (def rawValue){
-        List<String> collatedValues = []
-        if ((rawValue)&&
-                (rawValue.size()>0)){
-            if (rawValue.getClass().simpleName=="String"){ // single value
-                String rowName = rawValue
-                collatedValues << rowName
-            } else { // we must have a list of values
-                List<String> rowNameList = rawValue as List
-                for (String oneRowName in rowNameList) {
-                    collatedValues << oneRowName as String
-                }
-            }
-        }
-        return collatedValues
-    }
+    // DIGP_170: commenting out for final push to move to new metadata data structure (10/18/2015)
+    /*
+    public JSONObject retrieveMetadata (){
+        if ( (!sharedMetadata) ||
+             (forceMetadataOverride == 1) ){
+            String temporary = restServerService.getMetadata()
+            def slurper = new JsonSlurper()
+            sharedMetadata = slurper.parseText(temporary)
+            forceMetadataOverride = 0
 
+            // whenever we update the metadata then let's go through the processing step
+            forceProcessedMetadataOverride = 1
+            processMetadata(sharedMetadata)
+        }
+        return sharedMetadata
+    }
+    */
+
+    /***
+     * walk through the metadata tree and pull out things we need
+     * @param metadata
+     * @return
+     */
+    // DIGP_170: commenting out for final push to move to new metadata data structure (10/18/2015)
+    /*
+    public LinkedHashMap processMetadata(JSONObject metadata) {
+        if ((!sharedProcessedMetadata) ||
+                (sharedProcessedMetadata.size() == 0) ||
+                (forceProcessedMetadataOverride == 1)) {
+            sharedProcessedMetadata = [:]
+            forceProcessedMetadataOverride = 0
+        }
+        return sharedProcessedMetadata
+    }
+    */
+
+    // DIGP_170: commenting out for final push to move to new metadata data structure (10/18/2015)
+    /*
+    public LinkedHashMap getProcessedMetadata(){
+        JSONObject jsonObject = retrieveMetadata()
+        return processMetadata(jsonObject)
+    }
+    */
 
 
 
@@ -578,66 +616,6 @@ class SharedToolsService {
         return returnValue.toString()
     }
 
-    /***
-     * get top level sample groups for display
-     *
-     **/
-    public List<SampleGroup> listOfTopLevelSampleGroups(String phenotypeName,String datasetName,  List<String> technologies) {
-        List<SampleGroup> fullListOfSampleGroups = []
-        for (String technologyName in technologies) {
-            List<SampleGroup> technologySpecificSampleGroups = metaDataService.getSampleGroupForPhenotypeDatasetTechnologyAncestry(phenotypeName,datasetName,
-                    technologyName,
-                    getCurrentDataVersion(), "")
-            // pick a favorite -- use sample size eventually.  For now we use a shortcut...
-            if (technologySpecificSampleGroups) {
-                List<SampleGroup> sortedTechnologySpecificSampleGroups = technologySpecificSampleGroups.sort { SampleGroup a, SampleGroup b ->
-                    (b.subjectsNumber as Integer) <=> (a.subjectsNumber as Integer)
-                }
-                fullListOfSampleGroups << sortedTechnologySpecificSampleGroups[0]
-                // add in Sigma by hand
-                SampleGroup sigmaGroup
-                sigmaGroup = sortedTechnologySpecificSampleGroups.find { it.systemId == 'ExChip_SIGMA1_mdv2' }
-                if (sigmaGroup) {
-                    fullListOfSampleGroups << sigmaGroup
-                }
-                sigmaGroup = sortedTechnologySpecificSampleGroups.find { it.systemId == 'GWAS_SIGMA1_mdv2' }
-                if (sigmaGroup) {
-                    fullListOfSampleGroups << sigmaGroup
-                }
-            }
-        }
-        return fullListOfSampleGroups
-    }
-
-
-    public String packageUpASingleLevelTreeAsJson (LinkedHashMap<String, LinkedHashMap <String,List <String>>> bigTree ){
-        // now that we have a multilevel tree, build it into a string suitable for JSON
-        //LinkedHashMap<String, LinkedHashMap <String,List <String>>> sortedBigTree = bigTree.sort{it.value.technology}
-        StringBuilder returnValue = new StringBuilder ()
-        if ((bigTree) && (bigTree?.size() > 0)){
-            List <String> phenotypeHolder = []
-            bigTree.each {String phenotype,  LinkedHashMap phenotypeSpecificSampleGroups->
-                StringBuilder sb = new StringBuilder ()
-                sb << """  \"${phenotype}\":
-    {""".toString()
-                List <String> sampleGroupList = []
-                if (phenotypeSpecificSampleGroups?.size() > 0){
-                    phenotypeSpecificSampleGroups.each { String sampleGroupName, String propertyName ->
-                        sampleGroupList << """        \"${sampleGroupName}\":\"$propertyName\" """.toString()
-                    }
-                }
-                sb << """
-          ${sampleGroupList.join(",")}
-  }""".toString()
-                phenotypeHolder << sb.toString()
-            }
-            returnValue << """{
-            ${phenotypeHolder.join(",")}
-            }"""
-        }
-        return returnValue.toString()
-    }
-
 
 
 
@@ -719,12 +697,12 @@ class SharedToolsService {
             int groupCounter  = 0
             sortedMapOfStrings.each{String k,String v->
                 sb <<  "\"${k}\":".toString()
-                sb << "\"${v}\"".toString()
+                    sb << "\"${v}\"".toString()
+                 }
                 groupCounter++
                 if (numberOfGroups > groupCounter) {
                     sb << ","
                 }
-            }
         }
 
         return  """
@@ -732,52 +710,6 @@ class SharedToolsService {
 "numRecords":${numberOfGroups},
 "dataset":{${sb.toString()}}
 }""".toString()
-    }
-
-
-
-
-
-    public String packageSampleGroupsHierarchicallyForJsTree (SampleGroupBean sampleGroupBean, String phenotypeName){
-        StringBuilder sb  = new StringBuilder ()
-        if (sampleGroupBean){
-            sb = recursivelyDescendSampleGroupsHierarchically( sampleGroupBean, phenotypeName,  sb)
-        }
-        return sb.toString()
-    }
-
-
-    public StringBuilder recursivelyDescendSampleGroupsHierarchically(SampleGroupBean sampleGroupBean, String phenotypeName, StringBuilder sb){
-        String checkedByDef =  (sb.toString().length()==0)?"true":"false"
-        if (sampleGroupBean){
-            List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = sampleGroupBean.getPhenotypes()
-            for (org.broadinstitute.mpg.diabetes.metadata.Phenotype phenotype in phenotypeList){
-                if (("" == phenotypeName)||(phenotype.name == phenotypeName)){// we care about this sample group
-                    String pValue = filterManagementService.findFavoredPValue( sampleGroupBean.getSystemId(), phenotypeName ) ;
-                    sb << """{
-  "text"        : "${translator(sampleGroupBean.getSystemId())}",
-  "id"          : "${sampleGroupBean.getSystemId()}-${pValue}-${sampleGroupBean.subjectsNumber}",
-  "state"       : {
-    "opened"    : false,
-    "disabled"  : false,
-    "selected"  : ${checkedByDef}
-  },
-  "children"    : [""".toString()
-                    List<SampleGroup> sampleGroupList = sampleGroupBean.getSampleGroups()
-                    int sampleGroupCount = 0
-                    for (SampleGroup sampleGroup in sampleGroupList){
-                        recursivelyDescendSampleGroupsHierarchically(sampleGroup, phenotypeName, sb)
-                        sampleGroupCount++
-                        if (sampleGroupCount<sampleGroupList.size()){
-                            sb << ","
-                        }
-                    }
-                    sb << """]
-}""".toString()
-                }
-            }
-        }
-        return sb
     }
 
 

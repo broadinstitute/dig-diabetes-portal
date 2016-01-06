@@ -22,14 +22,6 @@ public interface Property extends DataSet {
     public String getWebServiceFilterString(String operand, String value,String requestedPhenotype);
 
     /**
-     * determines if the property has been tagged with a given metadata word
-     *
-     * @param meaningValue
-     * @return
-     */
-    public boolean hasMeaning(String meaningValue);
-
-    /**
      * returns the property query string in json format
      *
      * @return

@@ -90,7 +90,7 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
 
         then:
         assert commonPropertyList != null
-        assert commonPropertyList.size() <= 20
+        assert commonPropertyList.size() < 20
     }
 
 

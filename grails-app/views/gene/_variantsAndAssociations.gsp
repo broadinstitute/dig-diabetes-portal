@@ -16,80 +16,17 @@
 
 <g:render template="variantsAndAssociationsTableChanger"/>
 
-<<<<<<< HEAD
 <button id="opener"  class="pull-right btn btn-default" style="display: none" ><g:message code="gene.variantassociations.label.revise_table_props"/></button>
 <table id="variantsAndAssociationsTable" class="table table-striped distinctivetable distinctive">
-=======
-<div class="row clearfix">
-
-    <div class="col-md-6" style="text-align: left; font-size: 18px; font-weight: bold">
-        <div  class="form-horizontal">
-            <div class="form-group">
-                <label for="phenotypeTableChooser"><g:message code="gene.variantassociations.change.phenotype" default="Change phenotype choice"/></label>
-                &nbsp;
-                <select id="phenotypeTableChooser" name="phenotypeTableChooser" onchange="refreshVAndAByPhenotype(this)">
-                </select>
-            </div>
-        </div>
-
-    </div>
-    %{--<div class="col-md-3 pull-left" style="text-align: left; font-size: 18px">--}%
-        %{--<select class="form-control" id="phenotypeTableChooser" name="phenotypeTableChooser" onchange="refreshVAndAByPhenotype(this)">--}%
-
-        %{--</select>--}%
-    %{--</div>--}%
-    <div class="col-md-6">
-        <button id="opener"  class="btn btn-primary pull-right">
-            <g:message code="gene.variantassociations.change.columns" default="Revise columns"/>
-        </button>
-    </div>
-</div>
-
-<table id="variantsAndAssociationsTable" class="table table-striped distinctivetable distinctive" style="border-bottom: 0">
->>>>>>> master
     <thead id="variantsAndAssociationsHead">
     </thead>
     <tbody id="variantsAndAssociationsTableBody">
     </tbody>
 </table>
 
-<div class="row clearfix">
-
-    <div class="col-md-2">
-        <button id="reviser"  class="btn btn-primary pull-left" onclick="reviseRows()">
-            <g:message code="gene.variantassociations.change.rows" default="Revise rows"/>
-        </button>
-    </div>
-    <div class="col-md-8">
-
-    </div>
-    <div class="col-md-2">
-
-    </div>
-</div>
-
 
 <g:javascript>
-function reviseRows(){
-  var phenotype = $('#phenotypeTableChooser option:selected').val();
-  var clickedBoxes =  $('#variantsAndAssociationsTable .jstree-clicked');
-  var dataSetNames  = [];
-  var dataSetMaps  = [];
-  for  ( var i = 0 ; i < clickedBoxes.length ; i++ )   {
-      var  comboName  =  $(clickedBoxes[i]).attr('id');
-      var partsOfCombo =   comboName.split("-");
-      var  dataSetWithoutAnchor  =  partsOfCombo[0];
-      dataSetNames.push(dataSetWithoutAnchor);
-      var  dataSetMap = {"name":dataSetWithoutAnchor,
-                          "value":dataSetWithoutAnchor,
-                          "pvalue":partsOfCombo[1],
-                          "count":partsOfCombo[2].substring(0, partsOfCombo[2].length-7)};
-      dataSetMaps.push(dataSetMap);
-  }
-  variantsAndAssociationTable (phenotype,dataSetNames,dataSetMaps);
-}
 $( document ).ready(function() {
-  // initialize the v and a adjuster widget
   $(function() {
     $( "#dialog" ).dialog({
       autoOpen: false,
@@ -107,47 +44,116 @@ $( document ).ready(function() {
     $(".ui-dialog-titlebar").hide();
   });
 
-  // initialize the main phenotype drop-down
-  $(function() {
-        $.ajax({
-            cache: false,
-            type: "post",
-            url: "${createLink(controller: 'VariantSearch', action: 'retrievePhenotypesAjax')}",
-            data: {},
-            async: true,
-            success: function (data) {
-                if (( data !==  null ) &&
-                        ( typeof data !== 'undefined') &&
-                        ( typeof data.datasets !== 'undefined' ) &&
-                        (  data.datasets !==  null ) ) {
-                    UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#phenotypeTableChooser',true);
-                    // Can we set the default option on the phenotype list?
-                    $('#phenotypeTableChooser').val('${phenotype}');
-                    refreshVAndAByPhenotype({'value':'T2D'});
-                }
-            },
-            error: function (jqXHR, exception) {
-                core.errorReporter(jqXHR, exception);
-            }
-        });
-  });
-
-    // open the v and a adjuster widget
-    var popUpVAndAExtender = function() {
-          $( "#dialog" ).dialog( "open" );
-        };
-     $( "#opener" ).click(popUpVAndAExtender);
-
-
-
-
-});
+var popUpVAndAExtender = function() {
+      $( "#dialog" ).dialog( "open" );
+    };
+$( "#opener" ).click(popUpVAndAExtender);
+}
+);
 var insertVandARow  = function(name, value) {
       var counter = 100;
       $('#vandaRowHolder').add("<label><input type='checkbox' class='checkbox checkbox-primary' name='savedRow"+counter+"' class='form-control' id='savedRow"+counter+"' value='"+name+"^"+value+"^47' checked>"+name+"</label>");
       return false;
  };
 //$( "#opener" ).click(popUpVAndAExtender());
+
+var variantsAndAssociationTable = function (){
+$.ajax({
+    cache: false,
+    type: "post",
+    url: "${createLink(controller:'gene',action: 'genepValueCounts')}",
+    data: {geneName: '<%=geneName%>',
+           rowNames:<g:renderRowValues data='${rowInformation}'></g:renderRowValues>,
+           colNames:<g:renderColValues data='${columnInformation}'></g:renderColValues>,
+           phenotype:'${phenotype}'},
+        async: true,
+        success: function (data) {
+
+
+                    var variantsAndAssociationsTableHeaders = {
+                hdr1:'<g:message code="gene.variantassociations.table.colhdr.1" default="data type"/>',
+                hdr2:'<g:message code="gene.variantassociations.table.colhdr.2" default="sample size"/>',
+                hdr3:'<g:message code="gene.variantassociations.table.colhdr.3" default="total variants"/>',
+                gwasSig:'<g:helpText title="gene.variantassociations.table.colhdr.4.help.header" placement="top"
+                                     body="gene.variantassociations.table.colhdr.4.help.text" qplacer="2px 0 0 6px"/>'+
+                        '<g:message code="gene.variantassociations.table.colhdr.4b" default="genome wide"/>',
+                locusSig:'<g:helpText title="gene.variantassociations.table.colhdr.5.help.header" placement="top"
+                                     body="gene.variantassociations.table.colhdr.5.help.text" qplacer="2px 0 0 6px"/>'+
+                        '<g:message code="gene.variantassociations.table.colhdr.5b" default="locus wide"/>',
+                nominalSig:'<g:helpText title="gene.variantassociations.table.colhdr.6.help.header" placement="top"
+                                  body="gene.variantassociations.table.colhdr.6.help.text" qplacer="2px 0 0 6px"/>'+
+                     '<g:message code="gene.variantassociations.table.colhdr.6b" default="nominal"/>'
+            };
+            var variantsAndAssociationsPhenotypeAssociations = {
+                significantAssociations:'<g:message code="gene.variantassociations.significantAssociations"
+                                                    default="variants were associated with" args="[geneName]"/>',
+                noSignificantAssociationsExist:'<g:message code="gene.variantassociations.noSignificantAssociations"
+                                                           default="no significant associations"/>'
+            };
+            var variantsAndAssociationsRowHelpText ={
+                 genomeWide:'<g:message code="gene.variantassociations.table.rowhdr.gwas" default="gwas"/>',
+                 genomeWideQ:'<g:helpText title="gene.variantassociations.table.rowhdr.gwas.help.header"
+                                          qplacer="2px 0 0 6px" placement="right"
+                                          body="gene.variantassociations.table.rowhdr.gwas.help.text"/>',
+                 exomeChip:'<g:message code="gene.variantassociations.table.rowhdr.exomeChip" default="gwas"/>',
+                 exomeChipQ:'<g:helpText title="gene.variantassociations.table.rowhdr.exomeChip.help.header"
+                                         qplacer="2px 0 0 6px" placement="right"
+                                         body="gene.variantassociations.table.rowhdr.exomeChip.help.text"/>',
+                 sigma:'<g:message code="gene.variantassociations.table.rowhdr.sigma" default="gwas"/>',
+                 sigmaQ:'<g:helpText title="gene.variantassociations.table.rowhdr.sigma.help.header"
+                                     qplacer="2px 0 0 6px" placement="right"
+                                     body="gene.variantassociations.table.rowhdr.sigma.help.text"/>',
+                 exomeSequence:'<g:message code="gene.variantassociations.table.rowhdr.exomeSequence" default="gwas"/>',
+                 exomeSequenceQ:'<g:helpText title="gene.variantassociations.table.rowhdr.exomeSequence.help.header"
+                                             qplacer="2px 0 0 6px" placement="right"
+                                             body="gene.variantassociations.table.rowhdr.exomeSequence.help.text"/>'
+            };
+
+            if ((typeof data !== 'undefined') &&
+                (data)){
+                    if ((data.geneInfo) &&
+                        (data.geneInfo.results)){//assume we have data and process it
+                          var collector = [];
+                          for (var i = 0 ; i < data.geneInfo.results.length ; i++) {
+                               var d = [];
+                               for (var j = 0 ; j < data.geneInfo.results[i].pVals.length ; j++ ){
+                                  d.push(data.geneInfo.results[i].pVals[j].count);
+                               }
+                               collector.push(d);
+                            }
+
+                            mpgSoftware.geneInfo.fillTheVariantAndAssociationsTableFromNewApi(data,
+                                ${show_gwas},
+                                ${show_exchp},
+                                ${show_exseq},
+                                '<g:createLink controller="region" action="regionInfo"/>',
+                                '<g:createLink controller="trait" action="traitSearch"/>',
+                                '<g:createLink controller="variantSearch" action="gene"/>',
+                                {variantsAndAssociationsTableHeaders:variantsAndAssociationsTableHeaders,
+                                 variantsAndAssociationsPhenotypeAssociations:variantsAndAssociationsPhenotypeAssociations,
+                                 variantsAndAssociationsRowHelpText: variantsAndAssociationsRowHelpText},
+                                '${geneChromosome}',${geneExtentBegin},${geneExtentEnd},
+                                <g:renderRowMaps data='${rowInformation}'/>,
+                                <g:renderColMaps data='${columnInformation}'/>,
+                                collector,
+                                '<%=geneName%>',
+                                '<%=phenotype%>'
+                            );
+                    }
+                }
+            $('[data-toggle="popover"]').popover();
+        },
+        error: function (jqXHR, exception) {
+            loading.hide();
+            core.errorReporter(jqXHR, exception);
+        }
+    });
+
+};
+
+
+variantsAndAssociationTable ();
+
 
 
 </g:javascript>

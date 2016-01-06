@@ -302,46 +302,6 @@ class GeneManagementService {
      * @param bufferSpace
      * @return
      */
-    public LinkedHashMap getRegionSpecificationDetailsForGene(String geneId, int bufferSpace) {
-        // local variables
-        LinkedHashMap returnValue =  [:]
-        Gene gene = null
-
-        // get the gene
-        gene = Gene.findByName2(geneId);
-        if (gene != null) {
-            Long startPosition = 0;
-            Long endPosition = 0;
-            String chromosome  = null;
-            startPosition = gene?.addrStart;
-            endPosition = gene?.addrEnd;
-            chromosome = gene?.chromosome
-            // it might be that chromosome number starts with the string 'chr'
-            if ((chromosome)&&
-                    (chromosome.startsWith("chr")) &&
-                    (chromosome.length()>3)){
-                chromosome = chromosome.substring(3)
-            }
-
-            // increment start/end positions of need be
-            if ((bufferSpace != null) && (bufferSpace != 0)) {
-                startPosition = startPosition - bufferSpace;
-                endPosition = endPosition + bufferSpace;
-            }
-
-            returnValue["startPosition"] = startPosition
-            returnValue["endPosition"] = endPosition
-            returnValue["chromosome"] = chromosome
-
-
-        }
-
-        // return
-        return returnValue;
-    }
-
-
-
     public String getRegionSpecificationForGene(String geneId, int bufferSpace) {
         // local variables
         Gene gene = null
@@ -350,17 +310,24 @@ class GeneManagementService {
         String chromosome  = null;
         String regionSpecification = null;
 
-        LinkedHashMap regionSpecificationDetailsForGene = getRegionSpecificationDetailsForGene( geneId,  bufferSpace)
         // get the gene
+        gene = Gene.findByName2(geneId);
+        if (gene != null) {
+            startPosition = gene?.addrStart;
+            endPosition = gene?.addrEnd;
+            chromosome = gene?.chromosome
 
-        if (!regionSpecificationDetailsForGene.isEmpty())
+            // increment start/end positions of need be
+            if ((bufferSpace != null) && (bufferSpace != 0)) {
+                startPosition = startPosition - bufferSpace;
+                endPosition = endPosition + bufferSpace;
+            }
+
             // create the region specification
-            regionSpecification = regionSpecificationDetailsForGene.chromosome + ":" + regionSpecificationDetailsForGene.startPosition?.toString() + "-" + regionSpecificationDetailsForGene.endPosition?.toString();
+            regionSpecification = chromosome + ":" + startPosition?.toString() + "-" + endPosition?.toString();
+        }
 
         // return
         return regionSpecification;
     }
-
-
-
 }

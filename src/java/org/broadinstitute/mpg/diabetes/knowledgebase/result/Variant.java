@@ -1,7 +1,5 @@
 package org.broadinstitute.mpg.diabetes.knowledgebase.result;
 
-import org.broadinstitute.mpg.diabetes.util.PortalException;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -9,7 +7,6 @@ import java.util.List;
  * Created by mduby on 9/2/15.
  */
 public interface Variant {
-
     public String getChromosome();
 
     public String getVariantId();
@@ -25,8 +22,6 @@ public interface Variant {
     public void addAllToPropertyValues(Collection<PropertyValue> values);
 
     public void addToPropertyValues(PropertyValue value);
-
-    public String getVariantIdWithFormat(String formatKey) throws PortalException;
 
     /**
      * returns the given property value if the given property search terms find one; null otherwise

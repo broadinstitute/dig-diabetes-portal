@@ -3,7 +3,6 @@
 <head>
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
-    <r:require modules="geneInfo"/>
     <r:require modules="variantInfo"/>
     <r:require modules="tableViewer,traitInfo"/>
     <r:layoutResources/>
@@ -76,9 +75,7 @@
 </head>
 
 <body>
-<div id="rSpinner" class="dk-loading-wheel center-block" style="display:none">
-    <img src="${resource(dir: 'images', file: 'ajax-loader.gif')}" alt="Loading"/>
-</div>
+
 <script>
     var variant;
     var loading = $('#spinner').show();
@@ -143,10 +140,8 @@
                 <g:render template="/widgets/associatedStatisticsTraitsPerVariant" model="['variantIdentifier': variantToSearch]"/>
 
 
-                <div class="separator"></div>
-                <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>
 
-                <div class="separator"></div>
+    <div class="separator"></div>
 
     <div class="accordion-group">
         <div class="accordion-heading">
