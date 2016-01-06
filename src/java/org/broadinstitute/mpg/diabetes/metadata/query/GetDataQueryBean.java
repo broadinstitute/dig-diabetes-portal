@@ -38,6 +38,10 @@ public class GetDataQueryBean implements GetDataQuery {
         this.filterList.add(queryFilter);
     }
 
+    public void addAllQueryFilters(List<QueryFilter> queryFilterList) {
+        this.filterList.addAll(queryFilterList);
+    }
+
     public void addOrderByProperty(Property property) {
 
     }

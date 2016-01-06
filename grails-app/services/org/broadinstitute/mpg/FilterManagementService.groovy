@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg
 import grails.transaction.Transactional
+import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SearchBuilderService
@@ -9,6 +10,7 @@ import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.query.JsNamingQueryTranslator
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
+import org.codehaus.groovy.grails.web.json.JSONObject
 
 @Transactional
 class FilterManagementService {
@@ -18,6 +20,8 @@ class FilterManagementService {
     SharedToolsService sharedToolsService
     SearchBuilderService searchBuilderService
     MetaDataService metaDataService
+    FilterManagementService filterManagementService
+    GeneManagementService geneManagementService
 
 
     private String sigmaData  = "unknown"
@@ -58,22 +62,52 @@ class FilterManagementService {
      * @return
      */
     public  List <String>  retrieveFiltersCodedFilters (  String geneId, Float significance,String dataset,String region,String receivedParameters,String phenotype)    {
-        Map paramsMap = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters, phenotype)
-        List <String> listOfCodedFilters = observeMultipleFilters (paramsMap)
+//        Map paramsMap = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters, phenotype,"","")
+//        List <String> listOfCodedFilters = observeMultipleFilters (paramsMap)
+        List <String> listOfCodedFilters = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters, phenotype,"","")
         return  listOfCodedFilters
+    }
+
+
+    /***
+     * Take a list of sample groups and a single phenotype and package up some information that we can pass down to the browser
+     * @param sampleGroupList
+     * @param phenotypeName
+     * @return
+     */
+    public JSONObject convertSampleGroupListToJson (List <SampleGroup> sampleGroupList,String phenotypeName){
+        LinkedHashMap<String,LinkedHashMap<String,String>> mapSampleGroupsToProperties = [:]
+        List<SampleGroup> uniqueSampleGroupList = sampleGroupList.unique{ a,b -> a.getSystemId() <=> b.getSystemId() }
+        for (SampleGroup sampleGroup in uniqueSampleGroupList){
+            LinkedHashMap<String,String> sampleGroupProperties = [:]
+            sampleGroupProperties["name"] =  sampleGroup.systemId
+            sampleGroupProperties["value"] =  sampleGroup.systemId
+            sampleGroupProperties["pvalue"] =  filterManagementService.findFavoredPValue ( sampleGroup.systemId, phenotypeName )
+            sampleGroupProperties["technology"] =  metaDataService.getTechnologyPerSampleGroup( sampleGroup.systemId )
+            sampleGroupProperties["count"] =  "${sampleGroup.subjectsNumber}"
+            mapSampleGroupsToProperties[sampleGroup.systemId] = sampleGroupProperties
+        }
+        String technologyListAsJson = sharedToolsService.packageUpASingleLevelTreeAsJson(mapSampleGroupsToProperties)
+        JsonSlurper slurper = new JsonSlurper()
+        return slurper.parseText(technologyListAsJson)
     }
 
 
 
 
+
+
+
     public String findFavoredPValue ( String dataSetName, String phenotypeName ) {
-        String favoredPValue = ""
-        List<Property> propertyList = metaDataService.getSpecificPhenotypeProperties(dataSetName,phenotypeName)
-        String pValMatcher = /^P_(EMMAX|FIRTH|FE|VALUE)/
-        List <String> pValuePropertyNames = propertyList.findAll{it.name =~ pValMatcher}*.getName()
-            // for now take the first, though we will eventually choose between them.
-        if (pValuePropertyNames.size()>0){
-            favoredPValue = pValuePropertyNames[0]
+        String favoredPValue = "P_VALUE"
+        if (phenotypeName){
+            List<Property> propertyList = metaDataService.getSpecificPhenotypeProperties(dataSetName,phenotypeName)
+            List<Property> sortedPValueProps = propertyList.
+                    findAll{Property property->property.hasMeaning('P_VALUE')}.
+                    sort{Property property1,Property property2->property1.sortOrder<=>property2.sortOrder}
+            if (sortedPValueProps.size()>0){
+                favoredPValue = sortedPValueProps[0]?.name
+            }
         }
         return favoredPValue
     }
@@ -92,85 +126,135 @@ class FilterManagementService {
      * @param filter
      * @return
      */
-    public HashMap storeParametersInHashmap ( String gene,
-                                              Float significance,
-                                              String dataset,
-                                              String region,
-                                              String filter,
-                                              String phenotype) {
-        HashMap returnValue = [:]
+    public List<String> storeParametersInHashmap(String gene,
+                                                 Float significance,
+                                                 String dataset,
+                                                 String region,
+                                                 String filter,
+                                                 String phenotype,
+                                                 String parmType,
+                                                 String parmVal) {
+        List<String> returnValue = []
 
-        String dataSet =  ""
+        String dataSet = ""
         String pValueSpec = ""
-        if (dataset) {
+        if (parmType != "MAFTable") {
+            if (dataset) {
+
+                switch (dataset) {
+                    case RestServerService.TECHNOLOGY_GWAS:
+                        dataSet = restServerService.getSampleGroup(dataset, RestServerService.EXPERIMENT_DIAGRAM, RestServerService.ANCESTRY_NONE)
+                        pValueSpec = findFavoredPValue(dataSet, phenotype)
+                        break;
+                    case 'sigma':
+                        dataSet = "${sigmaData}"
+                        pValueSpec = findFavoredPValue(dataSet, phenotype)
+                        break;
+                    case RestServerService.TECHNOLOGY_EXOME_SEQ:
+                        dataSet = restServerService.getSampleGroup(dataset, "none", RestServerService.ANCESTRY_NONE)
+                        pValueSpec = findFavoredPValue(dataSet, phenotype)
+                        returnValue << "11=MOST_DEL_SCORE<4"
+                        break;
+                    case RestServerService.TECHNOLOGY_EXOME_CHIP:
+                        dataSet = restServerService.getSampleGroup(dataset, "none", RestServerService.ANCESTRY_NONE)
+                        pValueSpec = findFavoredPValue(dataSet, phenotype)
+                        returnValue << "11=MOST_DEL_SCORE<4"
+                        break;
+                    default:
+                        dataSet = restServerService.getSampleGroup(dataset, "none", RestServerService.ANCESTRY_NONE)
+                        pValueSpec = findFavoredPValue(dataSet, phenotype)
+                        break;
+                }
+            }
+
+            // data set and P value implies another restriction
+            if ((dataSet) && (pValueSpec) && (phenotype)) {
+                returnValue << "17=${phenotype}[${dataSet}]${pValueSpec}<${significance}"
+            } else {
+                returnValue << "11=MOST_DEL_SCORE<4"
+            }
+
+            // we can restrict by region...
+            if (region) { // If there's a region then use it. Otherwise depend on the gene name. Don't use both
+                LinkedHashMap extractedNumbers = restServerService.extractNumbersWeNeed(region)
+                List<String> regionSpecifierList = []
+                if (extractedNumbers) {
+                    if (extractedNumbers["chromosomeNumber"]) {
+                        regionSpecifierList << "8=${extractedNumbers['chromosomeNumber']}"
+                    }
+                    if (extractedNumbers["startExtent"]) {
+                        regionSpecifierList << "9=${extractedNumbers['startExtent']}"
+                    }
+                    if (extractedNumbers["endExtent"]) {
+                        regionSpecifierList << "10=${extractedNumbers['endExtent']}"
+                    }
+                    returnValue << "${regionSpecifierList.join('^')}"
+                }
+            } else if (gene) { // ...or we can restrict by Jean
+                returnValue << "7=${gene}"
+            }
+
+        } else {
+            dataSet = restServerService.getSampleGroup(dataset, "none", RestServerService.ANCESTRY_NONE)
+            pValueSpec = findFavoredPValue(dataSet, phenotype)
+        }
+
+        // any mention of a data set
 
 
-
-
-
-            switch (dataset) {
-                case RestServerService.TECHNOLOGY_GWAS :
-                    dataSet = restServerService.getSampleGroup(dataset,RestServerService.EXPERIMENT_DIAGRAM,RestServerService.ANCESTRY_NONE)
-                    pValueSpec = findFavoredPValue (dataSet,phenotype)
-//                    pValueSpec = "${gwasDataPValue}"
-                    break;
-                case 'sigma' :
-                    dataSet = "${sigmaData}"
-                    pValueSpec = findFavoredPValue (dataSet,phenotype)
-//                    pValueSpec = "${sigmaDataPValue}"
-                    break;
-                case RestServerService.TECHNOLOGY_EXOME_SEQ :
-                    dataSet = restServerService.getSampleGroup(dataset,"none",RestServerService.ANCESTRY_NONE)
-                    pValueSpec = findFavoredPValue (dataSet,phenotype)
-//                    pValueSpec = "${exomeSequencePValue}"
-                    returnValue['savedValue0'] = "11=MOST_DEL_SCORE<4"
-                    break;
-                case RestServerService.TECHNOLOGY_EXOME_CHIP :
-                    dataSet = restServerService.getSampleGroup(dataset,"none",RestServerService.ANCESTRY_NONE)
-                    pValueSpec = findFavoredPValue (dataSet,phenotype)
-//                    pValueSpec = "${exomeChipPValue}"
-                    returnValue['savedValue0'] = "11=MOST_DEL_SCORE<4"
-                    break;
-                default:
-                    dataSet = restServerService.getSampleGroup(dataset,"none",RestServerService.ANCESTRY_NONE)
-                    pValueSpec = findFavoredPValue (dataSet,phenotype)
-//                    pValueSpec = "P_FIRTH_FE_IV"
-                    break;
+        if (parmType == "MAFTable") {
+            if (parmVal) {
+                List<String> listOfProperties = parmVal.tokenize("~")
+                if (listOfProperties.size() > 4) {
+                    if ((listOfProperties[0] == "lowerValue") && (listOfProperties[2] == "higherValue")) {
+                        String technology = listOfProperties[4]
+                        Float lowerValue = 0F
+                        Float higherValue = 1F
+                        try {
+                            lowerValue = Float.parseFloat(listOfProperties[1])
+                            returnValue['savedValue15'] = "17=T2D[${dataSet}]MAF>${lowerValue}"
+                        } catch (Exception e) {
+                            log.error("Failed conversion of numbers from MAF request: low==${listOfProperties[1]}")
+                            e.printStackTrace()
+                        }
+                        try {
+                            higherValue = Float.parseFloat(listOfProperties[3])
+                            returnValue['savedValue16'] = "17=T2D[${dataSet}]MAF<${higherValue}"
+                        } catch (Exception e) {
+                            log.error("Failed conversion of numbers from MAF request: higher=${listOfProperties[3]}")
+                            e.printStackTrace()
+                        }
+                        returnValue.addAll(generateSampleGroupLevelQueries(gene, dataSet, technology, lowerValue, higherValue, "MAF"))
+                    }
+                }
             }
         }
-        if ((dataSet)&&(pValueSpec)){
-            returnValue['savedValue1'] = "17=${phenotype}[${dataSet}]${pValueSpec}<${significance}"
-        }
 
 
-        if (region) { // If there's a region then use it. Otherwise depend on the gene name. Don't use both
-            LinkedHashMap extractedNumbers = restServerService.extractNumbersWeNeed(region)
-            List <String> regionSpecifierList = []
-            if (extractedNumbers) {
-                if (extractedNumbers["chromosomeNumber"]) {
-                    returnValue["region_chrom_input"] = extractedNumbers["chromosomeNumber"]
-                    regionSpecifierList << "8=${extractedNumbers['chromosomeNumber']}"
-                }
-                if (extractedNumbers["startExtent"]) {
-                    returnValue["region_start_input"] = extractedNumbers["startExtent"]
-                    regionSpecifierList << "9=${extractedNumbers['startExtent']}"
-                }
-                if (extractedNumbers["endExtent"]) {
-                    returnValue["region_stop_input"] = extractedNumbers["endExtent"]
-                    regionSpecifierList << "10=${extractedNumbers['endExtent']}"
-                }
-                returnValue['savedValue2'] = "${regionSpecifierList.join('^')}"
+        return returnValue
+    }
+
+
+    public List<String> generateSampleGroupLevelQueries (String geneName, String sampleGroupName, String technology, Float lowerValue, Float higherValue, String propertyName)   {
+        List<String> returnValue = []
+        if (technology == "GWAS"){
+            LinkedHashMap regionSpecificationDetailsForGene = geneManagementService.getRegionSpecificationDetailsForGene(geneName,50000)
+            if (regionSpecificationDetailsForGene.chromosome) {
+                returnValue << "8=${regionSpecificationDetailsForGene.chromosome}"
             }
-        } else if (gene) {
-            returnValue['savedValue3'] = "7=${gene}"
+            if (regionSpecificationDetailsForGene.startPosition) {
+                returnValue << "9=${regionSpecificationDetailsForGene.startPosition}"
+            }
+            if (regionSpecificationDetailsForGene.endPosition) {
+                returnValue << "10=${regionSpecificationDetailsForGene.endPosition}"
+            }
+
+        } else if ((technology == "ExChip")||(technology == "ExSeq")){
+            returnValue << "7=${geneName}"
+            returnValue << "11=MOST_DEL_SCORE<4"
         }
-
-
-        if (filter) {
-            returnValue = interpretSpecialFilters (returnValue, filter)
-        }
-
-
+        returnValue << "17=T2D[${sampleGroupName}]${propertyName}>${lowerValue.toString()}"
+        returnValue << "17=T2D[${sampleGroupName}]${propertyName}<${higherValue.toString()}"
 
         return returnValue
     }
@@ -178,120 +262,6 @@ class FilterManagementService {
 
 
 
-
-
-
-    private HashMap interpretSpecialFilters(HashMap developingParameterCollection,String filter)  {
-         LinkedHashMap returnValue = new LinkedHashMap()
-
-        developingParameterCollection['predictedEffects'] = 'lessThan_noEffectNoncoding';
-
-        if (filter) {
-             String[] requestPortionList =  filter.split("-")
-             if (requestPortionList.size() > 1) {  //  multipiece searches
-                 String ethnicity = (requestPortionList[1]).toLowerCase()
-                 if (ethnicity == 'exchp') { // we have no ethnicity. Everything comes from the European exome chipset
-                     returnValue['datatype'] = 'exomechip'
-                     switch ( requestPortionList[0] ){
-                         case "total":
-                             returnValue['savedValue5'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF>0.0"
-                             returnValue['savedValue6'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF<1.0"
-                             returnValue['ethnicity_af_eu-min'] = 0.0
-                             returnValue['ethnicity_af_eu-max'] = 1.0
-                             break;
-                         case "common":
-                             returnValue['savedValue5'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF>0.05"
-                             returnValue['savedValue6'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF<1.0"
-                             returnValue['ethnicity_af_eu-min'] = 0.05
-                             returnValue['ethnicity_af_eu-max'] = 1.0
-                             break;
-                         case "lowfreq":
-                             returnValue['savedValue5'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF>0.0005"
-                             returnValue['savedValue6'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF<0.05"
-                             returnValue['ethnicity_af_eu-min'] = 0.0005
-                             returnValue['ethnicity_af_eu-max'] = 0.05
-                             break;
-                         case "rare":
-                             returnValue['savedValue5'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF>0.0"
-                             returnValue['savedValue6'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_NONE)}]MAF<0.0005"
-                             returnValue['ethnicity_af_eu-min'] = 0.0
-                             returnValue['ethnicity_af_eu-max'] = 0.0005
-                             break;
-                         default:
-                             log.error("FilterManagementService:interpretSpecialFilters. Unexpected string 1 = ${requestPortionList[0]}")
-                             break;
-                     }
-                 } else {   // we have ethnicity data
-                     String baseEthnicityMarker =  "ethnicity_af_"+ ethnicity  + "-"
-                     String sampleGroup = ""
-                     switch (ethnicity){
-                         case "aa":sampleGroup = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_CHIP,"none",RestServerService.ANCESTRY_AA)
-                             break;
-                         case "ea":sampleGroup = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_SEQ,"none",RestServerService.ANCESTRY_EA)
-                             break;
-                         case "sa":sampleGroup = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_SEQ,"none",RestServerService.ANCESTRY_SA)
-                             break;
-                         case "eu":sampleGroup = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_SEQ,"none",RestServerService.ANCESTRY_EU)
-                             break;
-                         case "hs":sampleGroup = restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_SEQ,"none",RestServerService.ANCESTRY_HS)
-                             break;
-                         default: break
-                     }
-                     switch ( requestPortionList[0]){
-                         case "total":
-                             returnValue['savedValue5'] = "17=T2D[${sampleGroup}]MAF>0.0"
-                             returnValue['savedValue6'] = "17=T2D[${sampleGroup}]MAF<1.0"
-                             returnValue[baseEthnicityMarker  +'min'] = 0.0
-                             returnValue[baseEthnicityMarker  +'max'] = 1.0
-                             break;
-                         case "common":
-                             returnValue['savedValue5'] = "17=T2D[${sampleGroup}]MAF>0.05"
-                             returnValue['savedValue6'] = "17=T2D[${sampleGroup}]MAF<1.0"
-                             returnValue[baseEthnicityMarker  +'min'] = 0.05
-                             returnValue[baseEthnicityMarker  +'max'] = 1.0
-                             break;
-                         case "lowfreq":
-                             returnValue['savedValue5'] = "17=T2D[${sampleGroup}]MAF>0.0005"
-                             returnValue['savedValue6'] = "17=T2D[${sampleGroup}]MAF<0.05"
-                             returnValue[baseEthnicityMarker  +'min'] = 0.0005
-                             returnValue[baseEthnicityMarker  +'max'] = 0.05
-                             break;
-                         case "rare":
-                             returnValue['savedValue5'] = "17=T2D[${sampleGroup}]MAF>0.0"
-                             returnValue['savedValue6'] = "17=T2D[${sampleGroup}]MAF<0.0005"
-                             returnValue[baseEthnicityMarker  +'min'] = 0.0
-                             returnValue[baseEthnicityMarker  +'max'] = 0.0005
-                             break;
-                         default:
-                             log.error("FilterManagementService:interpretSpecialFilters. Unexpected string 2 = ${requestPortionList[0]}")
-                             break;
-                     }
-                     returnValue['savedValue7'] = "11=MOST_DEL_SCORE<4"
-                 }
-
-             } else {  // we can put specialized searches here
-                switch (requestPortionList[0]) {/// completely unused, I think
-                    case "lof":
-                        returnValue['savedValue8'] = "11=MOST_DEL_SCORE|1"
-                        returnValue['savedValue9'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_SEQ,"none",RestServerService.ANCESTRY_NONE)}]${exomeSequencePValue}<1"
-                        break;
-                    case "ptv":
-                        returnValue['savedValue8'] = "11=MOST_DEL_SCORE|1"
-                        returnValue['savedValue9'] = "17=T2D[${restServerService.getSampleGroup(RestServerService.TECHNOLOGY_EXOME_SEQ,"none",RestServerService.ANCESTRY_NONE)}]${exomeSequencePValue}<1"
-                        break;
-                    default:
-                        log.error("FilterManagementService:interpretSpecialFilters. Unexpected string 3 = ${requestPortionList[0]}")
-                        break;
-                }
-        }
-
-         }
-         if (developingParameterCollection)  {
-             developingParameterCollection.each{ k, v -> returnValue["${k}"]=v}
-         }
-
-         return returnValue
-     }
 
 
 

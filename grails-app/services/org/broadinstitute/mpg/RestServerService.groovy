@@ -7,6 +7,7 @@ import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
@@ -137,9 +138,9 @@ class RestServerService {
         //
         BASE_URL = grailsApplication.config.server.URL
         DBT_URL = grailsApplication.config.dbtRestServer.URL
-        EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URL
+        EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URLburdenRestServer
 
-        this.BURDEN_REST_SERVER = grailsApplication.config.burdenRestServer;
+        this.BURDEN_REST_SERVER = grailsApplication.config.burdenRestServerProd;
 
        // pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
 
@@ -237,8 +238,8 @@ class RestServerService {
             // add in all known servers
             // could do this in config.groovy
             this.burdenServerList = new ArrayList<ServerBean>();
-            this.burdenServerList.add(this.BURDEN_REST_SERVER);
-            this.burdenServerList.add(new ServerBean("dummy server", this.BURDEN_REST_SERVER?.getUrl()));
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerDev);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerProd);
         }
 
         return this.burdenServerList;
@@ -434,8 +435,20 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @return
      */
     public JSONObject postBurdenRestCall(String jsonString) {
-        JSONObject tempObject = this.postRestCallBase(jsonString, "", this.getCurrentBurdenServer()?.getUrl());
+        JSONObject tempObject = this.postRestCallBase(jsonString, "", this.getCurrentBurdenServer()?.getRestServiceCallUrl(ServerBean.BURDEN_TEST_CALL_V2));
         return tempObject;
+    }
+
+    /**
+     * burden call to the REST server
+     *
+     * @param jsonString
+     * @return
+     */
+    public JSONObject getRestBurdenGetPhenotypesCall() {
+        String tempObject = this.getRestCallBase(ServerBean.BURDEN_TEST_CALL_GET_PHENOTYPES_WITH_SLASH, this.getCurrentBurdenServer()?.url);
+        JSONObject returnJson = new JSONObject(tempObject)
+        return returnJson;
     }
 
     /**
@@ -556,6 +569,26 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     }
 
+    public String convertKnownDataSetsToRealNames(String dataSet){
+        String returnValue = dataSet
+        switch (dataSet) {
+            case TECHNOLOGY_GWAS :
+                returnValue = getSampleGroup(dataSet,EXPERIMENT_DIAGRAM,ANCESTRY_NONE)
+                break;
+            case TECHNOLOGY_EXOME_SEQ :
+                returnValue = getSampleGroup(dataSet,"none",ANCESTRY_NONE)
+                break;
+            case TECHNOLOGY_EXOME_CHIP :
+                returnValue = getSampleGroup(dataSet,"none",ANCESTRY_NONE)
+                break;
+            default:
+                break;
+        }
+        return returnValue
+    }
+
+
+
     /***
      * Generate the numbers for the 'variants and associations' table on the gene info page
      *
@@ -568,19 +601,20 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String dataSetId = ""
         //String significance
         String geneRegion
+        // known special case data sets
         switch (dataSet){
             case RestServerService.TECHNOLOGY_EXOME_SEQ:
-             //   dataSetId = "exomeseq"
                 break;
             case RestServerService.EXPERIMENT_DIAGRAM:
-              //  dataSetId = "exomechip"
                 break;
             case RestServerService.TECHNOLOGY_GWAS:
-               // dataSetId = "gwas"
                 geneRegion = sharedToolsService.getGeneExpandedRegionSpec(geneName)
                 break;
             default:
-                log.error("Trouble: user requested data set = ${dataSet} which I don't recognize")
+                if (dataSet.indexOf("GWAS")>-1){
+                    geneRegion = sharedToolsService.getGeneExpandedRegionSpec(geneName)
+                }
+
         }
         Float significance = significanceIndicator
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["CHROM", "POS"])
@@ -893,7 +927,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()
         for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
-            sb  << "{ \"dataset\": \"${dataSeteList[j]}\",\"pVals\": ["
+            SampleGroup sampleGroup = metaDataService.getSampleGroupByName(dataSeteList[j])
+            sb  << "{ \"dataset\": \"${dataSeteList[j]}\",\"subjectsNumber\": ${sampleGroup?.getSubjectsNumber()}, \"technology\": \"${metaDataService.getTechnologyPerSampleGroup(dataSeteList[j])}\", \"pVals\": ["
             for ( int  i = 0 ; i < significanceList.size () ; i++ ){
                 sb  << "{"
                 JSONObject apiData = requestGeneCountByPValue(geneName, significanceList[i], dataSeteList[j],phenotype)
@@ -917,63 +952,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-
-    private String ancestryDataSet (String ethnicity){
-        String dataSetId = ""
-        switch (ethnicity){
-            case "HS":
-                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_HS)
-                break;
-            case "AA":
-                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_AA)
-                break;
-            case "EA":
-                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_EA)
-                break;
-            case "SA":
-                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_SA)
-                break;
-            case "EU":
-                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_EU)
-                break;
-            case "chipEu":
-                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_CHIP,"none",ANCESTRY_NONE)
-                break;
-            default:
-                log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
-                dataSetId = getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_AA)
-        }
-        return dataSetId
-    }
-
-    private String generalizedAncestryDataSet (String ethnicity){
-        String dataSetId = ""
-        switch (ethnicity){
-            case "HS":
-                dataSetId = "hs"
-                break;
-            case "AA":
-                dataSetId = "aa"
-                break;
-            case "EA":
-                dataSetId = "ea"
-                break;
-            case "SA":
-                dataSetId = "sa"
-                break;
-            case "EU":
-                dataSetId = "eu"
-                break;
-            case "chipEu":
-                dataSetId = "exchp"
-                break;
-            default:
-                log.error("Trouble: user requested data set = ${ethnicity} which I don't recognize")
-                dataSetId = "aa"
-        }
-        return dataSetId
-    }
-
     /***
      * Used to fill the 'variation across continental ancestry' table on the gene info page
      *
@@ -982,43 +960,14 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param cellNumber
      * @return
      */
-    private JSONObject generateJsonVariantCountByGeneAndMaf(String geneName, String ethnicity, int cellNumber){
-        String dataSetId = ""
-        String codeForMafSlice = ""
-        String codeForEthnicity = generalizedAncestryDataSet ( ethnicity)
-        dataSetId = ancestryDataSet ( ethnicity)
-        switch (cellNumber){
-            case 0:
-                codeForMafSlice = "total"
-                break;
-            case 1:
-                codeForMafSlice = "total"
-                break;
-            case 2:
-                codeForMafSlice = "common"
-                break;
-            case 3:
-                codeForMafSlice = "lowfreq"
-                break;
-            case 4:
-                codeForMafSlice = "rare"
-                break;
-            default:
-                log.error("Trouble: user requested cell number = ${cellNumber} which I don't recognize")
-                dataSetId = "total"
-        }
+    private JSONObject generateJsonVariantCountByGeneAndMaf(String geneName, LinkedHashMap<String,String> dataSetInfo, LinkedHashMap<String,String> numericBound ){
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID"])
-        List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName,0f,"","","${codeForMafSlice}-${codeForEthnicity}","T2D")
+        String dataSetName = dataSetInfo.dataset
+        String technology = dataSetInfo.technology
+        List<String> codedFilters = filterManagementService.generateSampleGroupLevelQueries (geneName, dataSetName,technology,
+                                                                                             numericBound.lowerValue, numericBound.higherValue, "MAF" )
+        //List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName,0f,"","","${codeForMafSlice}-${codeForEthnicity}","T2D")
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters,searchBuilderService,metaDataService)
-        if (cellNumber==0){
-            if (ethnicity != "chipEu"){
-                addColumnsForPProperties(resultColumnsToDisplay,"T2D","${dataSetId}","OBSA")
-                addColumnsForPProperties(resultColumnsToDisplay,"T2D","${dataSetId}","OBSU")
-            }
-        }else {
-            addColumnsForPProperties(resultColumnsToDisplay,"T2D","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","OBSA")
-            addColumnsForPProperties(resultColumnsToDisplay,"T2D","${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}","OBSU")
-        }
         JsonSlurper slurper = new JsonSlurper()
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
@@ -1048,62 +997,44 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param geneName
      * @return
      */
-    public JSONObject combinedEthnicityTable(String geneName){
+    public JSONObject combinedEthnicityTable(String geneName,
+                                             List <LinkedHashMap<String,String>> dataSetNames,
+                                             List <LinkedHashMap<String,String>> numericBounds){
         JSONObject returnValue
         String attribute = "T2D"
-        List <String> dataSeteList = ["AA", "HS", "EA", "SA", "EU","chipEu"]
-        List <Integer> cellNumberList = [0,1,2,3,4]
         StringBuilder sb = new StringBuilder ("{\"results\":[")
         def slurper = new JsonSlurper()
-        for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
-            String dataSetId =  ancestryDataSet ( dataSeteList[j] )
-            sb  << "{ \"dataset\": \"${dataSeteList[j]}\",\"pVals\": ["
-            for ( int  i = 0 ; i < cellNumberList.size () ; i++ ){
+        for ( int  j = 0 ; j < dataSetNames.size () ; j++ ) {
+            sb  << "{ \"dataset\": \"${dataSetNames[j].dataset}\",\"technology\": \"${dataSetNames[j].technology}\",\"pVals\": ["
+            for ( int  i = 0 ; i < numericBounds.size () ; i++ ){
                 sb  << "{"
-                JSONObject apiResults =  generateJsonVariantCountByGeneAndMaf( geneName,  dataSeteList[j], cellNumberList[i])
+                JSONObject apiResults =  generateJsonVariantCountByGeneAndMaf( geneName,  dataSetNames[j], numericBounds[i])
                 if (apiResults.is_error == false) {
-                    if (cellNumberList[i] == 0){
-                        // the first cell is different than the others. We need to pull back the number of participants,
-                        //  which can be found only by adding the OBSA and OBSU fields
-                        int unaffected = 0
-                        int affected =  0
-                        if (dataSeteList[j]!="chipEu"){
-                            def variant = apiResults.variants[0]
-                            if ((variant) && (variant != 'null')){
-                                def element = variant["OBSU"].findAll{it}[0]
-                                if ((element) && (element != 'null')){
-                                    if (element[dataSetId][attribute]!=null){
-                                        unaffected =  element[dataSetId][attribute]
-                                    }
-
-                                }
-                                element = variant["OBSA"].findAll{it}[0]
-                                if ((element) && (element != 'null')) {
-                                    if (element[dataSetId][attribute]!=null) {
-                                        affected = element[dataSetId][attribute]
-                                    }
-                                }
-                            }
-                            sb  << "\"level\":${cellNumberList[i]},\"count\":${(unaffected +affected)}"
-
-                        } else {
-                            sb  << "\"level\":${cellNumberList[i]},\"count\":${(79854)}"// We don't have this number.  Special case it
-                        }
+                    if (i == 0){
+                        SampleGroup sampleGroup = metaDataService.getSampleGroupByName(dataSetNames[j].dataset)
+                        sb  << "\"level\":${i},\"count\":${sampleGroup.getSubjectsNumber()}"
                     }else {
-                        sb  << "\"level\":${cellNumberList[i]},\"count\":${apiResults.numRecords}"
+                        sb  << "\"level\":${i},\"count\":${apiResults.numRecords}"
                     }
 
                 }
                 sb  << "}"
-                if (i<cellNumberList.size ()-1){
+                if (i < numericBounds.size ()-1){
                     sb  << ","
                 }
             }
             sb  << "]}"
-            if (j<dataSeteList.size ()-1){
+            if (j<dataSetNames.size ()-1){
                 sb  << ","
             }
         }
+        sb  << "]," // end results sections.  Store some column information
+        sb  << "\"columns\":["
+        List<String> colInfo = []
+        for ( int  i = 0 ; i < numericBounds.size () ; i++ ) {
+            colInfo << "{\"lowerValue\":\"${numericBounds[i].lowerValue}\", \"higherValue\":\"${numericBounds[i].higherValue}\"}"
+        }
+        sb << colInfo.join(",")
         sb  << "]}"
         returnValue = slurper.parseText(sb.toString())
         return returnValue
@@ -1494,7 +1425,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                         }
 
                         element = variant["MAF"].findAll{it}[0]
-                        sb  << "{\"level\":\"MAF\",\"count\":${element[dataSet]}}"
+                        if ((element)&&
+                            (element[dataSet])){
+                            sb  << "{\"level\":\"MAF\",\"count\":${element[dataSet]}}"
+                        } else {
+                            sb  << "{\"level\":\"MAF\",\"count\":\"0\"}"
+                        }
+
 
                     }
             }

@@ -1,0 +1,142 @@
+{
+    "is_error": false,
+    "numRecords": 5,
+    "variants": [
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "CLOSEST_GENE": "SLC30A8"
+            },
+            {
+                "DBSNP_ID": "rs112881768"
+            },
+            {
+                "POS": 118147522
+            },
+            {
+                "Reference_Allele": "G"
+            },
+            {
+                "VAR_ID": "8_118147522_G_A"
+            },
+            {
+                "P_FIRTH_FE_IV": {
+                    "ExSeq_17k_mdv2": {
+                        "T2D": 0.7554
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "CLOSEST_GENE": "SLC30A8"
+            },
+            {
+                "DBSNP_ID": null
+            },
+            {
+                "POS": 118147534
+            },
+            {
+                "Reference_Allele": "C"
+            },
+            {
+                "VAR_ID": "8_118147534_C_T"
+            },
+            {
+                "P_FIRTH_FE_IV": {
+                    "ExSeq_17k_mdv2": {
+                        "T2D": 0.6947
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "CLOSEST_GENE": "SLC30A8"
+            },
+            {
+                "DBSNP_ID": null
+            },
+            {
+                "POS": 118147545
+            },
+            {
+                "Reference_Allele": "G"
+            },
+            {
+                "VAR_ID": "8_118147545_G_A"
+            },
+            {
+                "P_FIRTH_FE_IV": {
+                    "ExSeq_17k_mdv2": {
+                        "T2D": 0.6474
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "CLOSEST_GENE": "SLC30A8"
+            },
+            {
+                "DBSNP_ID": null
+            },
+            {
+                "POS": 118147547
+            },
+            {
+                "Reference_Allele": "C"
+            },
+            {
+                "VAR_ID": "8_118147547_C_T"
+            },
+            {
+                "P_FIRTH_FE_IV": {
+                    "ExSeq_17k_mdv2": {
+                        "T2D": 0.7831
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "CLOSEST_GENE": "SLC30A8"
+            },
+            {
+                "DBSNP_ID": null
+            },
+            {
+                "POS": 118147548
+            },
+            {
+                "Reference_Allele": "G"
+            },
+            {
+                "VAR_ID": "8_118147548_G_A"
+            },
+            {
+                "P_FIRTH_FE_IV": {
+                    "ExSeq_17k_mdv2": {
+                        "T2D": 0.6291
+                    }
+                }
+            }
+        ]
+    ],
+    "passback": "123abc"
+}

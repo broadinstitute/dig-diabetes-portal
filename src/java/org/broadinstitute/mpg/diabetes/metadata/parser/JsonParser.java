@@ -319,6 +319,41 @@ public class JsonParser {
                 sampleGroup.setSortOrder(Float.valueOf(tempJsonValue).intValue());
             }
 
+            // add in cases/controls/subjects numbers if they exists
+            if (jsonObject.containsKey(PortalConstants.JSON_SUBJECTS_KEY)) {
+                tempJsonValue = jsonObject.getString(PortalConstants.JSON_SUBJECTS_KEY);
+                if (tempJsonValue != null) {
+                    try {
+                        sampleGroup.setSubjectsNumber(Integer.valueOf(tempJsonValue).intValue());
+                    } catch (NumberFormatException exception) {
+                        // value will stay null
+                        sampleGroup.setSubjectsNumber(null);
+                    }
+                }
+            }
+            if (jsonObject.containsKey(PortalConstants.JSON_CASES_KEY)) {
+                tempJsonValue = jsonObject.getString(PortalConstants.JSON_CASES_KEY);
+                if (tempJsonValue != null) {
+                    try {
+                        sampleGroup.setCasesNumber(Integer.valueOf(tempJsonValue).intValue());
+                    } catch (NumberFormatException exception) {
+                        // value will stay null
+                        sampleGroup.setCasesNumber(null);
+                    }
+                }
+            }
+            if (jsonObject.containsKey(PortalConstants.JSON_CONTROLS_KEY)) {
+                tempJsonValue = jsonObject.getString(PortalConstants.JSON_CONTROLS_KEY);
+                if (tempJsonValue != null) {
+                    try {
+                        sampleGroup.setControlsNumber(Integer.valueOf(tempJsonValue).intValue());
+                    } catch (NumberFormatException exception) {
+                        // value will stay null
+                        sampleGroup.setControlsNumber(null);
+                    }
+                }
+            }
+
             // add in properties
             tempArray = jsonObject.getJSONArray(PortalConstants.JSON_PROPERTIES_KEY);
             for (int i = 0; i < tempArray.length(); i++) {
@@ -371,6 +406,14 @@ public class JsonParser {
             tempJsonValue = jsonObject.getString(PortalConstants.JSON_SORT_ORDER_KEY);
             if (tempJsonValue != null) {
                 property.setSortOrder(Float.valueOf(tempJsonValue).intValue());
+            }
+
+            // DIGP-198: add meaning; backward compatible for now and also assumes only one value
+            if (jsonObject.containsKey(PortalConstants.JSON_MEANING_KEY)) {
+                tempJsonValue = jsonObject.getString(PortalConstants.JSON_MEANING_KEY);
+                if (tempJsonValue != null) {
+                    property.addMeaning(tempJsonValue);
+                }
             }
             property.setParent(parent);
 
@@ -596,6 +639,39 @@ public class JsonParser {
         return propertyNameList;
     }
 
+
+
+    public SampleGroup  getSampleGroupByName(String sampleGroupId) throws PortalException {
+        // local variables
+        SampleGroup sampleGroup;
+
+        // find the sample group
+        SampleGroupByIdSelectingVisitor finderVisitor = new SampleGroupByIdSelectingVisitor(sampleGroupId);
+        this.getMetaDataRoot().acceptVisitor(finderVisitor);
+        sampleGroup = finderVisitor.getSampleGroup();
+
+        // return the property string
+        return sampleGroup;
+    }
+
+
+
+    public String  getTechnologyPerSampleGroup(String sampleGroupId) throws PortalException {
+        // local variables
+        String technology;
+
+        // find the sample group
+        TechnologyPerSampleGroupVisitor finderVisitor = new TechnologyPerSampleGroupVisitor(sampleGroupId);
+        this.getMetaDataRoot().acceptVisitor(finderVisitor);
+        technology = finderVisitor.getTechnology();
+
+        // return the property string
+        return technology;
+    }
+
+
+
+
     /**
      * find the first property by its name
      *
@@ -770,7 +846,6 @@ public class JsonParser {
     }
 
 
-
     public List<SampleGroup> getSampleGroupForPhenotypeTechnologyAncestry(String phenotypeName, String technologyName, String metadataVersion, String ancestryName) throws PortalException {
         // local variables
         List<SampleGroup> sampleGroupList = null;
@@ -784,7 +859,18 @@ public class JsonParser {
         return sampleGroupList;
     }
 
+    public List<SampleGroup> getSampleGroupForPhenotypeDatasetTechnologyAncestry(String phenotypeName,  String datasetName, String technologyName, String metadataVersion, String ancestryName) throws PortalException {
+        // local variables
+        List<SampleGroup> sampleGroupList = null;
 
+        // create the visitor and visit on root
+        SampleGroupForPhenotypeDatasetTechnologyAncestryVisitor visitor = new SampleGroupForPhenotypeDatasetTechnologyAncestryVisitor( phenotypeName,  datasetName, technologyName,  metadataVersion,  ancestryName);
+        this.getMetaDataRoot().acceptVisitor(visitor);
+        sampleGroupList = visitor.getSampleGroupList();
+
+        // return
+        return sampleGroupList;
+    }
 
 
 
@@ -863,4 +949,40 @@ public class JsonParser {
         return property;
     }
 
+    /**
+     * returns an expected unique property of given name from a sample group
+     *
+     * @param name
+     * @param dataSet
+     * @return
+     * @throws PortalException
+     */
+    public Property getExpectedUniquePropertyFromSampleGroup(String name, DataSet dataSet) throws PortalException {
+        // local variables
+        List<DataSet> childPropertyList = null;
+        Property property = null;
+
+        // get the list of properties to iterate through
+        childPropertyList = this.getImmediateChildrenOfType(dataSet, PortalConstants.TYPE_PROPERTY_KEY);
+
+        // loop through and find the property with given name
+        for (DataSet childProperty: childPropertyList) {
+            if (childProperty.getName().equalsIgnoreCase(name)) {
+                if (property != null) {
+                    throw new PortalException("Found duplicate property: " + name + " for sample group: " + dataSet.getName());
+                } else {
+                    property = (Property) childProperty;
+                }
+            }
+        }
+
+        // check that not null
+        if (property == null) {
+            throw new PortalException("Found no property: " + name + " for sample group: " + dataSet.getName());
+        }
+
+        // return
+        return property;
+
+    }
 }

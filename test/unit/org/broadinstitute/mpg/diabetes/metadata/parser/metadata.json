@@ -17953,7 +17953,8 @@
                                     "name": "P_VALUE",
                                     "type": "FLOAT",
                                     "searchable": "TRUE",
-                                    "sort_order": 10
+                                    "sort_order": 10,
+                                    "meaning": "P_VALUE"
                                 },
                                 {
                                     "name": "SE",
@@ -18008,7 +18009,8 @@
                                     "name": "P_VALUE",
                                     "type": "FLOAT",
                                     "searchable": "TRUE",
-                                    "sort_order": 10
+                                    "sort_order": 10,
+                                    "meaning": "P_VALUE"
                                 },
                                 {
                                     "name": "SE",
@@ -19320,7 +19322,8 @@
                                     "name": "BETA",
                                     "type": "FLOAT",
                                     "searchable": "TRUE",
-                                    "sort_order": 20
+                                    "sort_order": 20,
+                                    "meaning": "BETA"
                                 },
                                 {
                                     "name": "DIR",
@@ -19810,6 +19813,9 @@
                     "id": "GWAS_SIGMA1_mdv2",
                     "ancestry": "Mixed",
                     "sort_order": 10,
+                    "subjects": 10,
+                    "cases": 20,
+                    "controls": 30,
                     "properties": [
                         {
                             "name": "IMP_QC",
@@ -19909,6 +19915,22 @@
             "name": "POS",
             "type": "INTEGER",
             "searchable": "TRUE",
+            "sort_order": 66
+        },
+        {
+            "name": "Reference_Allele",
+            "type": "STRING",
+            "searchable": "TRUE",
+            "meaning": "NULL",
+            "displayable": "TRUE",
+            "sort_order": 66
+        },
+        {
+            "name": "Effect_Allele",
+            "type": "STRING",
+            "searchable": "TRUE",
+            "meaning": "NULL",
+            "displayable": "TRUE",
             "sort_order": 66
         },
         {

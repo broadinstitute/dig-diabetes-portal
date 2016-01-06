@@ -1,9 +1,9 @@
 package org.broadinstitute.mpg
-
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
+import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class GeneController {
@@ -15,6 +15,7 @@ class GeneController {
     private static final log = LogFactory.getLog(this)
     SqlService sqlService
     BurdenService burdenService
+    WidgetService widgetService
 
     /***
      * return partial matches as Json for the purposes of the twitter typeahead handler
@@ -95,20 +96,32 @@ class GeneController {
                 List <String> nameAndAssociatedPValue = newDatasetName.tokenize("^")
                 if (nameAndAssociatedPValue.size()==2) {
                     if (!(newDatasetRowName)) {
-                        newDatasetRowName =  nameAndAssociatedPValue[0]
+                        newDatasetRowName =  sharedToolsService.translator(nameAndAssociatedPValue[0])
                     }
-                    rowInformation << [name:newDatasetRowName, value:nameAndAssociatedPValue[0],count:'5656', pvalue: nameAndAssociatedPValue[1] ]
+                    rowInformation << [name:newDatasetRowName, value:nameAndAssociatedPValue[0], pvalue: nameAndAssociatedPValue[1] ]
                 }
 
 
             }
         } else {
-            rowInformation << [name:'GWAS', value:RestServerService.TECHNOLOGY_GWAS,  pvalue: RestServerService.GWASDATAPVALUE, count:'69,033']
-            rowInformation << [name:'exome chip', value:RestServerService.TECHNOLOGY_EXOME_CHIP,  pvalue: RestServerService.EXOMECHIPPVALUE, count:'79,854']
-            rowInformation << [name:'exome sequence', value:RestServerService.TECHNOLOGY_EXOME_SEQ,  pvalue: RestServerService.EXOMESEQUENCEPVALUE, count:'16,760']
-// example of additional row
-//        rowInformation << [name:'AA exome seq', value:"ExSeq_17k_aa_mdv2", count:'4777']
+            rowInformation << [name:'GWAS', value:RestServerService.TECHNOLOGY_GWAS,  pvalue: RestServerService.GWASDATAPVALUE]
+            rowInformation << [name:'exome chip', value:RestServerService.TECHNOLOGY_EXOME_CHIP,  pvalue: RestServerService.EXOMECHIPPVALUE]
+            rowInformation << [name:'exome sequence', value:RestServerService.TECHNOLOGY_EXOME_SEQ,  pvalue: RestServerService.EXOMESEQUENCEPVALUE]
         }
+        for (LinkedHashMap row in rowInformation){
+             String dataSet=row.value
+             dataSet = restServerService.convertKnownDataSetsToRealNames(dataSet)
+             SampleGroup sampleGroup = metaDataService.getSampleGroupByName(dataSet)
+             if (sampleGroup){
+                 if (sampleGroup.subjectsNumber){
+                     row.count = "${sampleGroup.subjectsNumber}"
+                 }
+             }
+         }
+
+
+
+
 
         List <LinkedHashMap<String,String>> columnInformation = []
         // if we have saved values then use them, otherwise add the defaults
@@ -121,15 +134,15 @@ class GeneController {
             }
         } else { // no saved columns -- provide some defaults
             columnInformation << [name:'total variants', value:'1', count:'0']
-            columnInformation << [name:'genome-wide', value:'0.00000005', count:'0']
-//        columnInformation << [name:'exome wide <br>significance', value:'0.000009', count:'0']  // example of additional column
-            columnInformation << [name:'locus-wide', value:'0.00005', count:'0']
             columnInformation << [name:'nominal', value:'0.05', count:'0']
+            columnInformation << [name:'locus-wide', value:'0.00005', count:'0']
+            columnInformation << [name:'genome-wide', value:'0.00000005', count:'0']
         }
         if (newVandAColumnPValue){
             columnInformation << [name:"${newVandAColumnName}", value:"${newVandAColumnPValue}", count:'0']
         }
-
+        List <LinkedHashMap<String,String>> sortedColumnInformation = columnInformation.sort{a,b-> (b.value as Float)<=>(a.value as Float)}
+        List <LinkedHashMap<String,String>> sortedRowInformation = rowInformation.sort{ a, b-> (b.name as String).toUpperCase()<=>(a.name as String).toUpperCase()}
         if (geneToStartWith)  {
             String  geneUpperCase =   geneToStartWith.toUpperCase()
             LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
@@ -142,8 +155,8 @@ class GeneController {
                                              geneExtentBegin:geneExtent.startExtent,
                                              geneExtentEnd:geneExtent.endExtent,
                                              geneChromosome:geneExtent.chrom,
-                                             rowInformation:rowInformation,
-                                             columnInformation:columnInformation,
+                                             rowInformation:sortedRowInformation,
+                                             columnInformation:sortedColumnInformation,
                                              allAvailableRows:allAvailableRows,
                                              phenotype:phenotype
             ] )
@@ -218,47 +231,21 @@ class GeneController {
     def genepValueCounts() {
         String geneToStartWith = params.geneName
         String phenotype = params.phenotype
-        def rawRowNames = params."rowNames[]"
-        def colSignificances = params."colNames[]"
+        List<String> rowNames = sharedToolsService.convertAnHttpList(params."rowNames[]")
+        List<String> colSignificances = sharedToolsService.convertAnHttpList(params."colNames[]")
 
-
-        List<String> rowNames = []
-        if ((rawRowNames)&&
-                (rawRowNames.size()>0)){
-            if (rawRowNames.getClass().simpleName=="String"){ // single value
-                String rowName = rawRowNames
-                rowNames << rowName
-             } else { // we must have a list of values
-                List<String> rowNameList = rawRowNames as List
-                for (String oneRowName in rowNameList) {
-                    rowNames << oneRowName as String
-                }
+        List<Float> significanceValues = []
+        for(String significance in colSignificances){
+            try {
+                significanceValues << Float.parseFloat(significance)
+            } catch (ex) {
+                log.error("nonnumeric significance value (${significance}) in genepValueCounts action in GeneController")
             }
         }
 
-        List<Float> significanceValues = []
-        if ((colSignificances)&&
-                (colSignificances.size()>0)){
-            if (colSignificances.getClass().simpleName=="String"){ // single value
-                String colSignificance = colSignificances
-                try {
-                    significanceValues << Float.parseFloat(colSignificance)
-                } catch (ex) {
-                    log.error("nonnumeric significance value (${colSignificance}) in genepValueCounts action in GeneController")
-                }
-            } else { // we must have a list of values
-                List<String> colSignificanceList = colSignificances as List
-                for (String oneSignificance in colSignificanceList) {
-                    try {
-                        significanceValues << Float.parseFloat(oneSignificance)
-                    } catch (ex) {
-                        log.error("nonnumeric significance value (${oneSignificance}) in genepValueCounts action in GeneController")
-                    }
-                }
-            }
-         }
-         JSONObject jsonObject =  restServerService.combinedVariantCountByGeneNameAndPValue ( geneToStartWith.trim().toUpperCase(),
-                                                                                             rowNames, significanceValues, phenotype )
+        List <String> uniqueRowNames = rowNames.unique{ a,b -> a <=> b }
+        JSONObject jsonObject =  restServerService.combinedVariantCountByGeneNameAndPValue ( geneToStartWith.trim().toUpperCase(),
+                                                                                              uniqueRowNames, significanceValues, phenotype )
         render(status:200, contentType:"application/json") {
             [geneInfo:jsonObject]
         }
@@ -271,7 +258,55 @@ class GeneController {
      */
     def geneEthnicityCounts (){
         String geneToStartWith = params.geneName
-        JSONObject jsonObject =  restServerService.combinedEthnicityTable ( geneToStartWith.trim().toUpperCase())
+        List<String> rowNames = sharedToolsService.convertAnHttpList(params."rowNames[]")
+        List<String> colSignificances = sharedToolsService.convertAnHttpList(params."colNames[]")
+        List <LinkedHashMap<String,String>> rowMaps = []
+        if (!rowNames)  {
+
+            rowMaps  = []
+            List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups( "", "MAF", ["ExSeq","ExChip","GWAS"])
+            for (SampleGroup sampleGroup in fullListOfSampleGroups){
+                rowMaps << ["dataset":"${sampleGroup.systemId}","technology":"${metaDataService.getTechnologyPerSampleGroup(sampleGroup.systemId)}"]
+            }
+
+        } else {
+            for (String oneName in rowNames){
+                rowMaps << ["dataset":oneName,"technology":"${metaDataService.getTechnologyPerSampleGroup(oneName)}"]
+            }
+        }
+        List <LinkedHashMap<String,String>> uniqueRowMaps = rowMaps.unique{ LinkedHashMap a,LinkedHashMap b -> a.dataset <=> b.dataset }
+
+        for (LinkedHashMap row in uniqueRowMaps){
+            String dataSet=row.dataset
+            dataSet = restServerService.convertKnownDataSetsToRealNames(dataSet)
+            SampleGroup sampleGroup = metaDataService.getSampleGroupByName(dataSet)
+            if (sampleGroup){
+                if (sampleGroup.subjectsNumber){
+                    row.count = "${sampleGroup.subjectsNumber}"
+                }
+            }
+        }
+
+
+        List<Float> significanceValues = []
+        for(String significance in colSignificances){
+            try {
+                significanceValues << Float.parseFloat(significance)
+            } catch (ex) {
+                log.error("nonnumeric significance value (${significance}) in genepValueCounts action in GeneController")
+            }
+        }
+        significanceValues = significanceValues.sort()
+
+        List <LinkedHashMap<String,String>> numericBounds = []
+        numericBounds << ["lowerValue":0.0f,"higherValue":1.0f]
+        numericBounds << ["lowerValue":0.0f,"higherValue":1.0f]
+        numericBounds << ["lowerValue":0.05f,"higherValue":1.0f]
+        numericBounds << ["lowerValue":0.0005f,"higherValue":0.05f]
+        numericBounds << ["lowerValue":0.0f,"higherValue":0.0005f]
+
+
+        JSONObject jsonObject =  restServerService.combinedEthnicityTable ( geneToStartWith.trim().toUpperCase(), uniqueRowMaps, numericBounds)
         render(status:200, contentType:"application/json") {
             [ethnicityInfo:jsonObject]
         }
@@ -315,17 +350,16 @@ class GeneController {
         // cast the parameters
         String geneName = params.geneName;
         int variantFilterOptionId = (params.filterNum ? Integer.valueOf(params.filterNum) : 0);     // default to all variants if none given
-        int datasetOptionId = (params.dataSet ? Integer.valueOf(params.dataSet) : 1);               // default ot 1 if none given
+        String burdenTraitFilterSelectedOption = (params.burdenTraitFilterSelectedOption ? params.burdenTraitFilterSelectedOption : PortalConstants.BURDEN_DEFAULT_PHENOTYPE_KEY);               // default ot t2d if none given
         int mafOption = (params.mafOption ? Integer.valueOf(params.mafOption) : 1);                 // 1 is default, 2 is different ancestries if specified
         Float mafValue = ((params.mafValue && !params.mafValue?.equals("NaN")) ? new Float(params.mafValue) : null);                      // null float if none specified
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
-        JSONObject result = this.burdenService.callBurdenTest(datasetOptionId, geneName, variantFilterOptionId, mafOption, mafValue);
+        JSONObject result = this.burdenService.callBurdenTest(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue);
 
         // send json response back
         render(status: 200, contentType: "application/json") {result}
     }
-
 
 
     /***
@@ -339,4 +373,44 @@ class GeneController {
         render(status: 200, contentType: "application/json") {jsonObject}
     }
 
+    /**
+     * method to serve LZ requests in the format needed
+     *
+     * @return
+     */
+    def getLocusZoom() {
+        // local variables
+        String jsonReturn = null;
+        String chromosome = params.chromosome;
+        String startString = params.start;
+        String endString = params.end;
+        int startInteger = 0;
+        int endInteger = 0;
+        String errorJson = "{\"data\": {}, \"error\": true}";
+
+        // log
+        log.info("got LZ request with params: " + params);
+
+        // if have all the information, call the widget service
+        try {
+            startInteger = Integer.parseInt(startString);
+            endInteger = Integer.parseInt(endString);
+
+            if (chromosome != null) {
+                jsonReturn = widgetService.getVariantJsonForLocusZoomString(chromosome, startInteger, endInteger);
+            } else {
+                jsonReturn = errorJson;
+            }
+
+            // log
+            log.info("got LZ result: " + jsonReturn);
+
+        } catch (NumberFormatException exception) {
+            log.error("got incorrect parameters for LZ call: " + params);
+            jsonReturn = errorJson;
+        }
+
+        // return
+        render(jsonReturn)
+    }
 }
