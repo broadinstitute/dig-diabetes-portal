@@ -449,7 +449,7 @@ var mpgSoftware = mpgSoftware || {};
                 $('#variantsAndAssociationsTableBody').append(tableRow);
             }
         };
-        var fillVariantsAndAssociationsTable = function (emphasisRequired,show_gwas, show_exchp, show_exseq, rootVariantUrl, headers,rowHelpText,
+        var fillVariantsAndAssociationsTable = function (emphasisRequired, rootVariantUrl, headers,rowHelpText,
                                                          chromosomeNumber,extentBegin,extentEnd,
                                                          rowInformation,columnInformation,
                                                          valueHolder,
@@ -688,15 +688,14 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
-            var fillTheVariantAndAssociationsTableFromNewApi = function (data, show_gwas, show_exchp, show_exseq,
-                                                                         rootRegionUrl, rootTraitUrl, rootVariantUrl,
+            var fillTheVariantAndAssociationsTableFromNewApi = function (data, rootRegionUrl, rootTraitUrl, rootVariantUrl,
                                                                          textStringObject,
                                                                          chromosomeNumber,extentBegin,extentEnd,
                                                                          rowInformation,columnInformation,
                                                                          valueHolder,
                                                                          geneName,
                                                                          phenotype) {
-                fillVariantsAndAssociationsTable(false, show_gwas, show_exchp, show_exseq,
+                fillVariantsAndAssociationsTable(false,
                     rootVariantUrl,
                     textStringObject.variantsAndAssociationsTableHeaders,
                     textStringObject.variantsAndAssociationsRowHelpText,

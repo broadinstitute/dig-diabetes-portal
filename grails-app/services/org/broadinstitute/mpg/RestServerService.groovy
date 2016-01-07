@@ -597,28 +597,20 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param dataSet
      * @return
      */
-    public JSONObject  requestGeneCountByPValue (String geneName, Float significanceIndicator, String dataSet, String phenotype){
-        String dataSetId = ""
-        //String significance
+    public JSONObject  requestGeneCountByPValue (String geneName, Float significanceIndicator, String dataSet, String phenotype,String technology){
         String geneRegion
         // known special case data sets
-        switch (dataSet){
-            case RestServerService.TECHNOLOGY_EXOME_SEQ:
-                break;
-            case RestServerService.EXPERIMENT_DIAGRAM:
-                break;
+        switch (technology){
             case RestServerService.TECHNOLOGY_GWAS:
                 geneRegion = sharedToolsService.getGeneExpandedRegionSpec(geneName)
                 break;
             default:
-                if (dataSet.indexOf("GWAS")>-1){
-                    geneRegion = sharedToolsService.getGeneExpandedRegionSpec(geneName)
-                }
+                break;
 
         }
         Float significance = significanceIndicator
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["CHROM", "POS"])
-        List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName, significance, dataSet, geneRegion,"", phenotype)
+        List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName, significance, dataSet, geneRegion,technology, phenotype)
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters,searchBuilderService,metaDataService)
         Boolean isCount = true;
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
@@ -928,10 +920,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         def slurper = new JsonSlurper()
         for ( int  j = 0 ; j < dataSeteList.size () ; j++ ) {
             SampleGroup sampleGroup = metaDataService.getSampleGroupByName(dataSeteList[j])
-            sb  << "{ \"dataset\": \"${dataSeteList[j]}\",\"subjectsNumber\": ${sampleGroup?.getSubjectsNumber()}, \"technology\": \"${metaDataService.getTechnologyPerSampleGroup(dataSeteList[j])}\", \"pVals\": ["
+            String technology = metaDataService.getTechnologyPerSampleGroup(dataSeteList[j])
+            sb  << "{ \"dataset\": \"${dataSeteList[j]}\",\"subjectsNumber\": ${sampleGroup?.getSubjectsNumber()}, \"technology\": \"${technology}\", \"pVals\": ["
             for ( int  i = 0 ; i < significanceList.size () ; i++ ){
                 sb  << "{"
-                JSONObject apiData = requestGeneCountByPValue(geneName, significanceList[i], dataSeteList[j],phenotype)
+                JSONObject apiData = requestGeneCountByPValue(geneName, significanceList[i], dataSeteList[j],phenotype, technology)
                 if (apiData.is_error == false) {
                     sb  << "\"level\":\"${significanceList[i]}\",\"count\":${apiData.numRecords}"
                 }

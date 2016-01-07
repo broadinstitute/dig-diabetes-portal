@@ -181,11 +181,11 @@ class VariantSearchController {
      */
     def gene() {
         String geneId = params.id
-        String receivedParameters = params.filter
-        String significanceString = params.sig
+//        String receivedParameters = params.filter
+        String significanceString = params.sig//
         String dataset = params.dataset
-        String region = params.region
-        String phenotype = params.phenotype
+        String region = params.region//
+        String phenotype = params.phenotype//
         String parmType = params.parmType
         String parmVal = params.parmVal
         Float significance = 0f
@@ -194,12 +194,36 @@ class VariantSearchController {
         } catch (ex) {
             log.error("receive nonnumeric significance value = (${params.sig}) in action=gene, VariantSearchController")
         }
+        String technology = metaDataService.getTechnologyPerSampleGroup(dataset)
 
-//        Map paramsMap = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters,phenotype,parmType,parmVal)
-//
-//
-//        List <String> listOfCodedFilters = filterManagementService.observeMultipleFilters (paramsMap)
-        List <String> listOfCodedFilters = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters,phenotype,parmType,parmVal)
+        List <String> listOfCodedFilters = []
+        if (parmVal) { // MAF table
+            List<String> listOfProperties = parmVal.tokenize("~")
+            if (listOfProperties.size() > 4) {
+                if ((listOfProperties[0] == "lowerValue") && (listOfProperties[2] == "higherValue")) {
+                    String mafTechnology = listOfProperties[4]
+                    Float lowerValue = 0F
+                    Float higherValue = 1F
+                    try {
+                        lowerValue = Float.parseFloat(listOfProperties[1])
+                    } catch (Exception e) {
+                        log.error("Failed conversion of numbers from MAF request: low==${listOfProperties[1]}")
+                        e.printStackTrace()
+                    }
+                    try {
+                        higherValue = Float.parseFloat(listOfProperties[3])
+                    } catch (Exception e) {
+                        log.error("Failed conversion of numbers from MAF request: higher=${listOfProperties[3]}")
+                        e.printStackTrace()
+                    }
+                    listOfCodedFilters.addAll(filterManagementService.generateSampleGroupLevelQueries(geneId, dataset, mafTechnology, lowerValue, higherValue, "MAF"))
+                }
+            }
+        } else {  // variants and associations table
+            listOfCodedFilters = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,technology,phenotype)
+        }
+
+        //  we must have generated coded filters or we're going to be in trouble
         if ((listOfCodedFilters) &&
                 (listOfCodedFilters.size() > 0)){
             displayCombinedVariantSearch(listOfCodedFilters,[])

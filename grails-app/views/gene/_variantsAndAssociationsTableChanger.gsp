@@ -42,11 +42,9 @@ var variantsAndAssociationTable = function (phenotype,rowValueParameter,rowMapPa
     if ($.fn.DataTable.isDataTable( '#variantsAndAssociationsTable' )){
        $('#variantsAndAssociationsTable').dataTable({"bRetrieve":true}).fnDestroy();
     }
-    $('#variantsAndAssociationsHead').empty();
-    $('#variantsAndAssociationsTableBody').empty();
+
     $('#variantsAndAssociationsTable').empty();
     $('#variantsAndAssociationsTable').append('<tbody id="variantsAndAssociationsTableBody"></tbody>');
-
     $('#variantsAndAssociationsTable').prepend('<thead id="variantsAndAssociationsHead"></thead>');
 
 
@@ -141,9 +139,6 @@ var variantsAndAssociationTable = function (phenotype,rowValueParameter,rowMapPa
                                 }
 
                                 mpgSoftware.geneInfo.fillTheVariantAndAssociationsTableFromNewApi(data,
-                                    ${show_gwas},
-                                    ${show_exchp},
-                                    ${show_exseq},
                                     '<g:createLink controller="region" action="regionInfo"/>',
                                     '<g:createLink controller="trait" action="traitSearch"/>',
                                     '<g:createLink controller="variantSearch" action="gene"/>',
@@ -171,7 +166,6 @@ var variantsAndAssociationTable = function (phenotype,rowValueParameter,rowMapPa
                                 $('#variantsAndAssociationsTable').dataTable({
                                         bDestroy: true,
                                         bPaginate:false,
-                                        iDisplayLength: 5,
                                         bFilter: false,
                                         bInfo : false,
                                         aaSorting: [[ 1, "desc" ]],
