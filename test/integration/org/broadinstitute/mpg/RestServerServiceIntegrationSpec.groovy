@@ -62,7 +62,7 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
     @Unroll("testing  requestGeneCountByPValue with #label")
     void "test requestGeneCountByPValue"() {
         when:
-        JSONObject jsonObject = restServerService.requestGeneCountByPValue("PTEN",significance,dataset,"T2D")
+        JSONObject jsonObject = restServerService.requestGeneCountByPValue("PTEN",significance,dataset,"T2D","GWAS")
 
         then:
         assert jsonObject
@@ -70,10 +70,8 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
 
         where:
         label                       | significance      |   dataset
-        "query exome seq all"       |   0.001           |   RestServerService.TECHNOLOGY_EXOME_SEQ
-        "query exome chip gws"      |   0.005           |   RestServerService.TECHNOLOGY_EXOME_CHIP
-        "query gwas locus sig"      |   0.000005        |   RestServerService.TECHNOLOGY_GWAS
-        "query exome seq nominal"   |   0.5             |   RestServerService.TECHNOLOGY_EXOME_SEQ
+        "query exome seq all"       |   0.001           |   "ExChip_82k_mdv2"
+        "query exome chip gws"      |   0.005           |   "ExChip_82k_mdv2"
 
     }
 

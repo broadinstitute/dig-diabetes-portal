@@ -194,7 +194,7 @@ class VariantSearchController {
         } catch (ex) {
             log.error("receive nonnumeric significance value = (${params.sig}) in action=gene, VariantSearchController")
         }
-        String technology = metaDataService.getTechnologyPerSampleGroup(dataset)
+
 
         List <String> listOfCodedFilters = []
         if (parmVal) { // MAF table
@@ -220,6 +220,7 @@ class VariantSearchController {
                 }
             }
         } else {  // variants and associations table
+            String technology = metaDataService.getTechnologyPerSampleGroup(dataset)
             listOfCodedFilters = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,technology,phenotype)
         }
 

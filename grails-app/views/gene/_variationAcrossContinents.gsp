@@ -105,7 +105,7 @@
                         bPaginate:false,
                         bInfo : false,
                         bFilter: false,
-                        aaSorting: [[ 1, "desc" ]],
+                        aaSorting: [[ 2, "desc" ]],
                         aoColumnDefs: [{sType: "allAnchor", aTargets: [3,4,5,6] },
                             {"bSortable": false , aTargets: [0] }]
                     });
@@ -209,7 +209,7 @@
         <tr>
             <th><g:message code="gene.continentalancestry.title.colhdr.1" default="ancestry"/></th>
             <th><g:message code="gene.continentalancestry.title.colhdr.2" default="data type"/></th>
-            <th><g:message code="gene.continentalancestry.title.colhdr.3" default="participants"/></th>
+            <th><g:message code="gene.continentalancestry.title.colhdr.3" default="sample size"/></th>
             <th><g:message code="gene.continentalancestry.title.colhdr.4" default="total variants"/></th>
             <th><g:message code="gene.continentalancestry.title.colhdr.5" default="common"/></th>
             <th><g:message code="gene.continentalancestry.title.colhdr.6" default="low frequency"/></th>
