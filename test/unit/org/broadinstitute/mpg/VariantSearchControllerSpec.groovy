@@ -1,6 +1,7 @@
 package org.broadinstitute.mpg
 
 import grails.test.mixin.TestFor
+import org.broadinstitute.mpg.diabetes.MetaDataService
 import spock.lang.Specification
 
 /**
@@ -78,12 +79,13 @@ class VariantSearchControllerSpec extends Specification {
     void "test gene"() {
         given:
         controller.filterManagementService = Mock(FilterManagementService)
+        controller.metaDataService = Mock(MetaDataService)
 
         when:
         params["id"] = "name"
         params["filter"] = "filter"
         params["sig"] = "sig"
-        params["dataset"] = "dataSet"
+        params["dataset"] = "ExChip_82k_mdv2"
         params["region"] = "region"
         controller.gene()
 

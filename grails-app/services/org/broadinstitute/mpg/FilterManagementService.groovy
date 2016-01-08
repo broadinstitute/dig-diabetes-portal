@@ -62,9 +62,7 @@ class FilterManagementService {
      * @return
      */
     public  List <String>  retrieveFiltersCodedFilters (  String geneId, Float significance,String dataset,String region,String receivedParameters,String phenotype)    {
-//        Map paramsMap = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters, phenotype,"","")
-//        List <String> listOfCodedFilters = observeMultipleFilters (paramsMap)
-        List <String> listOfCodedFilters = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters, phenotype,"","")
+        List <String> listOfCodedFilters = storeParametersInHashmap (geneId,significance,dataset,region,receivedParameters, phenotype)
         return  listOfCodedFilters
     }
 
@@ -130,46 +128,33 @@ class FilterManagementService {
                                                  Float significance,
                                                  String dataset,
                                                  String region,
-                                                 String filter,
-                                                 String phenotype,
-                                                 String parmType,
-                                                 String parmVal) {
+                                                 String technology,
+                                                 String phenotype) {
         List<String> returnValue = []
 
-        String dataSet = ""
         String pValueSpec = ""
-        if (parmType != "MAFTable") {
+
             if (dataset) {
 
-                switch (dataset) {
+                pValueSpec = findFavoredPValue(dataset, phenotype)
+
+                switch (technology) {
                     case RestServerService.TECHNOLOGY_GWAS:
-                        dataSet = restServerService.getSampleGroup(dataset, RestServerService.EXPERIMENT_DIAGRAM, RestServerService.ANCESTRY_NONE)
-                        pValueSpec = findFavoredPValue(dataSet, phenotype)
-                        break;
-                    case 'sigma':
-                        dataSet = "${sigmaData}"
-                        pValueSpec = findFavoredPValue(dataSet, phenotype)
                         break;
                     case RestServerService.TECHNOLOGY_EXOME_SEQ:
-                        dataSet = restServerService.getSampleGroup(dataset, "none", RestServerService.ANCESTRY_NONE)
-                        pValueSpec = findFavoredPValue(dataSet, phenotype)
                         returnValue << "11=MOST_DEL_SCORE<4"
                         break;
                     case RestServerService.TECHNOLOGY_EXOME_CHIP:
-                        dataSet = restServerService.getSampleGroup(dataset, "none", RestServerService.ANCESTRY_NONE)
-                        pValueSpec = findFavoredPValue(dataSet, phenotype)
                         returnValue << "11=MOST_DEL_SCORE<4"
                         break;
                     default:
-                        dataSet = restServerService.getSampleGroup(dataset, "none", RestServerService.ANCESTRY_NONE)
-                        pValueSpec = findFavoredPValue(dataSet, phenotype)
                         break;
                 }
             }
 
             // data set and P value implies another restriction
-            if ((dataSet) && (pValueSpec) && (phenotype)) {
-                returnValue << "17=${phenotype}[${dataSet}]${pValueSpec}<${significance}"
+            if ((dataset) && (pValueSpec) && (phenotype)) {
+                returnValue << "17=${phenotype}[${dataset}]${pValueSpec}<${significance}".toString()
             } else {
                 returnValue << "11=MOST_DEL_SCORE<4"
             }
@@ -180,55 +165,21 @@ class FilterManagementService {
                 List<String> regionSpecifierList = []
                 if (extractedNumbers) {
                     if (extractedNumbers["chromosomeNumber"]) {
-                        regionSpecifierList << "8=${extractedNumbers['chromosomeNumber']}"
+                        regionSpecifierList << "8=${extractedNumbers['chromosomeNumber']}".toString()
                     }
                     if (extractedNumbers["startExtent"]) {
-                        regionSpecifierList << "9=${extractedNumbers['startExtent']}"
+                        regionSpecifierList << "9=${extractedNumbers['startExtent']}".toString()
                     }
                     if (extractedNumbers["endExtent"]) {
-                        regionSpecifierList << "10=${extractedNumbers['endExtent']}"
+                        regionSpecifierList << "10=${extractedNumbers['endExtent']}".toString()
                     }
-                    returnValue << "${regionSpecifierList.join('^')}"
+                    returnValue << "${regionSpecifierList.join('^')}".toString()
                 }
             } else if (gene) { // ...or we can restrict by Jean
-                returnValue << "7=${gene}"
+                returnValue << "7=${gene}".toString()
             }
 
-        } else {
-            dataSet = restServerService.getSampleGroup(dataset, "none", RestServerService.ANCESTRY_NONE)
-            pValueSpec = findFavoredPValue(dataSet, phenotype)
-        }
 
-        // any mention of a data set
-
-
-        if (parmType == "MAFTable") {
-            if (parmVal) {
-                List<String> listOfProperties = parmVal.tokenize("~")
-                if (listOfProperties.size() > 4) {
-                    if ((listOfProperties[0] == "lowerValue") && (listOfProperties[2] == "higherValue")) {
-                        String technology = listOfProperties[4]
-                        Float lowerValue = 0F
-                        Float higherValue = 1F
-                        try {
-                            lowerValue = Float.parseFloat(listOfProperties[1])
-                            returnValue['savedValue15'] = "17=T2D[${dataSet}]MAF>${lowerValue}"
-                        } catch (Exception e) {
-                            log.error("Failed conversion of numbers from MAF request: low==${listOfProperties[1]}")
-                            e.printStackTrace()
-                        }
-                        try {
-                            higherValue = Float.parseFloat(listOfProperties[3])
-                            returnValue['savedValue16'] = "17=T2D[${dataSet}]MAF<${higherValue}"
-                        } catch (Exception e) {
-                            log.error("Failed conversion of numbers from MAF request: higher=${listOfProperties[3]}")
-                            e.printStackTrace()
-                        }
-                        returnValue.addAll(generateSampleGroupLevelQueries(gene, dataSet, technology, lowerValue, higherValue, "MAF"))
-                    }
-                }
-            }
-        }
 
 
         return returnValue
@@ -240,21 +191,21 @@ class FilterManagementService {
         if (technology == "GWAS"){
             LinkedHashMap regionSpecificationDetailsForGene = geneManagementService.getRegionSpecificationDetailsForGene(geneName,50000)
             if (regionSpecificationDetailsForGene.chromosome) {
-                returnValue << "8=${regionSpecificationDetailsForGene.chromosome}"
+                returnValue << "8=${regionSpecificationDetailsForGene.chromosome}".toString()
             }
             if (regionSpecificationDetailsForGene.startPosition) {
-                returnValue << "9=${regionSpecificationDetailsForGene.startPosition}"
+                returnValue << "9=${regionSpecificationDetailsForGene.startPosition}".toString()
             }
             if (regionSpecificationDetailsForGene.endPosition) {
-                returnValue << "10=${regionSpecificationDetailsForGene.endPosition}"
+                returnValue << "10=${regionSpecificationDetailsForGene.endPosition}".toString()
             }
 
         } else if ((technology == "ExChip")||(technology == "ExSeq")){
-            returnValue << "7=${geneName}"
+            returnValue << "7=${geneName}".toString()
             returnValue << "11=MOST_DEL_SCORE<4"
         }
-        returnValue << "17=T2D[${sampleGroupName}]${propertyName}>${lowerValue.toString()}"
-        returnValue << "17=T2D[${sampleGroupName}]${propertyName}<${higherValue.toString()}"
+        returnValue << "17=T2D[${sampleGroupName}]${propertyName}>${lowerValue.toString()}".toString()
+        returnValue << "17=T2D[${sampleGroupName}]${propertyName}<${higherValue.toString()}".toString()
 
         return returnValue
     }

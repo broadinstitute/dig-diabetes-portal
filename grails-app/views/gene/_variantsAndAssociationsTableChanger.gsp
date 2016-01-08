@@ -42,11 +42,9 @@ var variantsAndAssociationTable = function (phenotype,rowValueParameter,rowMapPa
     if ($.fn.DataTable.isDataTable( '#variantsAndAssociationsTable' )){
        $('#variantsAndAssociationsTable').dataTable({"bRetrieve":true}).fnDestroy();
     }
-    $('#variantsAndAssociationsHead').empty();
-    $('#variantsAndAssociationsTableBody').empty();
+
     $('#variantsAndAssociationsTable').empty();
     $('#variantsAndAssociationsTable').append('<tbody id="variantsAndAssociationsTableBody"></tbody>');
-
     $('#variantsAndAssociationsTable').prepend('<thead id="variantsAndAssociationsHead"></thead>');
 
 
@@ -81,9 +79,10 @@ var variantsAndAssociationTable = function (phenotype,rowValueParameter,rowMapPa
 
 
                         var variantsAndAssociationsTableHeaders = {
-                    hdr1:'<g:message code="gene.variantassociations.table.colhdr.1" default="data type"/>',
+                    hdr1:'<g:message code="gene.continentalancestry.title.colhdr.1" default="data set"/>',
                     hdr2:'<g:message code="gene.variantassociations.table.colhdr.2" default="sample size"/>',
                     hdr3:'<g:message code="gene.variantassociations.table.colhdr.3" default="total variants"/>',
+                    hdr4:'<g:message code="gene.continentalancestry.title.colhdr.2" default="data type"/>',
                     gwasSig:'<g:helpText title="gene.variantassociations.table.colhdr.4.help.header" placement="top"
                                          body="gene.variantassociations.table.colhdr.4.help.text" qplacer="2px 0 0 6px"/>'+
                             '<g:message code="gene.variantassociations.table.colhdr.4b" default="genome wide"/>',
@@ -133,6 +132,7 @@ var variantsAndAssociationTable = function (phenotype,rowValueParameter,rowMapPa
                                    rowMap.push({"name":sortedDataSetArray[i].dataset,
                                                 "value":sortedDataSetArray[i].dataset,
                                                 "pvalue":"UNUSED",
+                                                "technology":sortedDataSetArray[i].technology,
                                                 "count":sortedDataSetArray[i].subjectsNumber});
                                    for (var j = 0 ; j < sortedDataSetArray[i].pVals.length ; j++ ){
                                       d.push(sortedDataSetArray[i].pVals[j].count);
@@ -141,9 +141,6 @@ var variantsAndAssociationTable = function (phenotype,rowValueParameter,rowMapPa
                                 }
 
                                 mpgSoftware.geneInfo.fillTheVariantAndAssociationsTableFromNewApi(data,
-                                    ${show_gwas},
-                                    ${show_exchp},
-                                    ${show_exseq},
                                     '<g:createLink controller="region" action="regionInfo"/>',
                                     '<g:createLink controller="trait" action="traitSearch"/>',
                                     '<g:createLink controller="variantSearch" action="gene"/>',
@@ -166,15 +163,14 @@ var variantsAndAssociationTable = function (phenotype,rowValueParameter,rowMapPa
                                 var numberOfColumns = determineNumberOfColumns(data);
                                 var anchorColumnMarkers = [];
                                 for ( var i = 0 ; i < numberOfColumns ; i++ ){
-                                    anchorColumnMarkers.push(i+2);
+                                    anchorColumnMarkers.push(i+3);
                                 }
                                 $('#variantsAndAssociationsTable').dataTable({
                                         bDestroy: true,
                                         bPaginate:false,
-                                        iDisplayLength: 5,
                                         bFilter: false,
                                         bInfo : false,
-                                        aaSorting: [[ 1, "desc" ]],
+                                        aaSorting: [[ 2, "desc" ]],
                                         aoColumnDefs: [{sType: "allAnchor", aTargets: anchorColumnMarkers },
                                                        {"bSortable": false , aTargets: [0] }]
                                     });

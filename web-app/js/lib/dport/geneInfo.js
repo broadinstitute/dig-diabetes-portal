@@ -403,8 +403,9 @@ var mpgSoftware = mpgSoftware || {};
         };
         var fillVariantsAndAssociationLine = function (geneName,// our gene record
                                                        dataSetCode,// code for data set -- must be gwas,exomechip,exomeseq,or sigma
-                                                       dataSetName,// code for data set -- must be gwas,exomechip,exomeseq,or sigma
+                                                       dataSetName,// formal name for the data set
                                                        sampleSize, // listed sample size for this data set
+                                                       rowTechnology, // Which technology describes this data set
                                                        genomicRegion, // region specified as in this example: chr1:209348715-210349783
                                                        valueArray, // data for this row
                                                        columnMap, // since we are doing a whole row we need to know about all columns
@@ -439,6 +440,7 @@ var mpgSoftware = mpgSoftware || {};
                 var tableRow = '';
                 tableRow += '<tr>' +
                     '<td class="vandaRowTd"  style="text-align: left"><div class="vandaRowHdr" id="vandaRow'+rowNumber+'"></div></td>' +
+                    '<td>' + rowTechnology + '</td>'+
                     '<td>' + sampleSize + '</td>';
                 for ( var i = 0 ; i < columnMap.length ; i++ ) {
                     tableRow += '<td>';
@@ -449,7 +451,7 @@ var mpgSoftware = mpgSoftware || {};
                 $('#variantsAndAssociationsTableBody').append(tableRow);
             }
         };
-        var fillVariantsAndAssociationsTable = function (emphasisRequired,show_gwas, show_exchp, show_exseq, rootVariantUrl, headers,rowHelpText,
+        var fillVariantsAndAssociationsTable = function (emphasisRequired, rootVariantUrl, headers,rowHelpText,
                                                          chromosomeNumber,extentBegin,extentEnd,
                                                          rowInformation,columnInformation,
                                                          valueHolder,
@@ -465,6 +467,7 @@ var mpgSoftware = mpgSoftware || {};
             var emphasizeGwas = (0);
             var headerRow = "<tr>" +
                 "<th>" + headers.hdr1 + "</th>" +
+                "<th>" + headers.hdr4 + "</th>"+
                 "<th>" + headers.hdr2 + "</th>";
             for ( var i = 0 ; i < columnInformation.length ; i++ ) {
                 var significanceString =  columnInformation[i].value;
@@ -487,6 +490,7 @@ var mpgSoftware = mpgSoftware || {};
                 var rowName = rowInformation[row].name;
                 var rowCode = rowInformation[row].value;
                 var rowCount = rowInformation[row].count;
+                var rowTechnology = rowInformation[row].technology;
                 var rowProcessorFunction;
                 // we either search by region or by gene name.  We need to decide which reference to build
                 if ((typeof rowCode !== 'undefined') &&
@@ -495,7 +499,7 @@ var mpgSoftware = mpgSoftware || {};
                 } else {
                     rowProcessorFunction = buildAnchorForGeneVariantSearches;
                 }
-                fillVariantsAndAssociationLine(geneName, rowCode, rowName, rowCount, regionSpecifier,
+                fillVariantsAndAssociationLine(geneName, rowCode, rowName, rowCount, rowTechnology, regionSpecifier,
                     valueHolder[row],columnInformation,
                     rowProcessorFunction, emphasizeGwas, rootVariantUrl, rowHelpText,phenotype,row);
 
@@ -688,15 +692,14 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
-            var fillTheVariantAndAssociationsTableFromNewApi = function (data, show_gwas, show_exchp, show_exseq,
-                                                                         rootRegionUrl, rootTraitUrl, rootVariantUrl,
+            var fillTheVariantAndAssociationsTableFromNewApi = function (data, rootRegionUrl, rootTraitUrl, rootVariantUrl,
                                                                          textStringObject,
                                                                          chromosomeNumber,extentBegin,extentEnd,
                                                                          rowInformation,columnInformation,
                                                                          valueHolder,
                                                                          geneName,
                                                                          phenotype) {
-                fillVariantsAndAssociationsTable(false, show_gwas, show_exchp, show_exseq,
+                fillVariantsAndAssociationsTable(false,
                     rootVariantUrl,
                     textStringObject.variantsAndAssociationsTableHeaders,
                     textStringObject.variantsAndAssociationsRowHelpText,
