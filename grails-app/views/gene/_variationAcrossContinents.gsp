@@ -109,16 +109,6 @@
                         aoColumnDefs: [{sType: "allAnchor", aTargets: [3,4,5,6] },
                             {"bSortable": false , aTargets: [0] }]
                     });
-//                    var tableTools = new $.fn.dataTable.TableTools( continentalTable, {
-//                        "buttons": [
-//                            "copy",
-//                            "csv",
-//                            "xls",
-//                            "pdf",
-//                            { "type": "print", "buttonText": "Print me!" }
-//                        ],
-//                        "sSwfPath": "../../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
-//                    } );
                     $('[data-toggle="popover"]').popover();
                 },
                 error: function (jqXHR, exception) {
@@ -196,13 +186,6 @@
     }
 
 </script>
-
-
-    <a name="populations"></a>
-
-    <p>
-        <g:message code="gene.continentalancestry.subtitle" default="click on a number to view variants"/>
-    </p>
 
     <table id="continentalVariation" class="table table-striped  distinctivetable distinctive" style="border-bottom: 0">
         <thead>
