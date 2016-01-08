@@ -68,7 +68,7 @@
 
                 <div class="row clearfix">
                     <div class="col-md-12">
-                        <h4>Find genetic variants of interest</h4>
+                        <h4><g:message code="variantSearch.workflow.header.find_variants" /></h4>
                         <g:render template="variantWFSpec" />
                     </div>
                 </div>

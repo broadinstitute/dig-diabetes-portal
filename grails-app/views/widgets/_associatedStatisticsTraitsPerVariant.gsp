@@ -6,7 +6,7 @@
 <div class="accordion-group">
     <div class="accordion-heading">
         <a class="accordion-toggle  collapsed" data-toggle="collapse" href="#collapseVariantTraitAssociation">
-            <h2><strong><g:message code="widgets.variant.trait.associations.title" default="Association statistics across 25 traits"/><g:if test="${dnSnpId}"> for ${dnSnpId}</g:if></strong></h2>
+            <h2><strong><g:message code="widgets.variant.trait.associations.title" default="Association statistics across 25 traits"/><g:if test="${dnSnpId}"> <g:message code="site.shared.phrases.for" /> ${dnSnpId}</g:if></strong></h2>
         </a>
     </div>
 
@@ -68,12 +68,12 @@
             <table id="traitsPerVariantTable" class="table table-striped basictable gwas-table">
                 <thead>
                 <tr>
-                    <th>trait</th>
-                    <th>p-value</th>
-                    <th>direction of effect</th>
-                    <th>odds ratio</th>
-                    <th>minor allele frequency</th>
-                    <th>effect</th>
+                    <th><g:message code="informational.shared.header.trait" /></th>
+            		<th><g:message code="variantTable.columnHeaders.sigma.pValue" /></th>
+            		<th><g:message code="variantTable.columnHeaders.shared.direction" /></th>
+            		<th><g:message code="variantTable.columnHeaders.shared.oddsRatio" /></th>
+            		<th><g:message code="variantTable.columnHeaders.shared.maf" /></th>
+            		<th><g:message code="variantTable.columnHeaders.shared.effect" /></th>
                 </tr>
                 </thead>
                 <tbody id="traitsPerVariantTableBody">

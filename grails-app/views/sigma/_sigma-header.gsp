@@ -11,7 +11,7 @@
         <div class="col-sm-12 col-md-12 text-center">
             <img src="${resource(dir: 'images/icons', file: 'SlimSigmaLogo234fromai-outlines.jpg')}" alt="SIGMA logo" />
             SIGMA<strong style="font-weight: 400;color:#406993;">T2D</strong><br>
-            <span class="dk-sigma-sisters-sm"><a href="#">Spanish</a>  |  English  |  <a href="#">Data portal</a></span>
+            <span class="dk-sigma-sisters-sm"><a href="#"><g:message code="portal.language.setting.spanish" /></a>  |  <g:message code="portal.language.setting.english" />  |  <a href="#"><g:message code="portal.header.data_portal" /></a></span>
         </div>
     </div>
 </div>

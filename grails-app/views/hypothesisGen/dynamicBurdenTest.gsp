@@ -636,7 +636,7 @@
                             <div>
 
                                 <div id="collapseTwo" style="display: none">
-                                    <h2><strong>Refine variant list</strong></h2>
+                                    <h2><strong><g:message code="hypothesisGen.dynamicBurdenTest.header.refine_list"/></strong></h2>
                                     <div >
                                         <g:render template="refineVariantList"/>
                                     </div>
@@ -645,7 +645,7 @@
 
                         <g:if test='${(caller!=3)}'>
                             <div id="collapseOne">
-                                <h2><strong>Develop a list of variant</strong></h2>
+                                <h2><strong><g:message code="hypothesisGen.dynamicBurdenTest.header.develop_list"/></strong></h2>
                                 <div>
                                     <g:render template="geneFilters"/>
                                 </div>
@@ -660,7 +660,7 @@
                     <div class="innerResultsCage">
                     <div class="row">
                     <div class="col-sm-12">
-                        <h2><strong>Results from dynamic burden test:</strong></h2>
+                        <h2><strong><g:message code="hypothesisGen.dynamicBurdenTest.header.results"/>:</strong></h2>
                     </div>
                     </div>
 
@@ -671,9 +671,9 @@
                         <div class="col-sm-10">
                             <div id="dbtActualResultsExist">
                                 <div class ="dbtResults">
-                                    <div class ="dbtResultsSpecifics1">pValue = <span id="dbtPValue"></span></div>
-                                    <div class ="dbtResultsSpecifics2">Beta = <span id="dbtBeta"></span></div>
-                                    <div class ="dbtResultsSpecifics3">Std err = <span id="stdErr"></span></div>
+                                    <div class ="dbtResultsSpecifics1"><g:message code="variantTable.columnHeaders.shared.pValue"/> = <span id="dbtPValue"></span></div>
+                                    <div class ="dbtResultsSpecifics2"><g:message code="variantTable.columnHeaders.shared.beta"/> = <span id="dbtBeta"></span></div>
+                                    <div class ="dbtResultsSpecifics3"><g:message code="variantTable.columnHeaders.shared.std_err"/> = <span id="stdErr"></span></div>
                                 </div>
                             </div>
                         </div>

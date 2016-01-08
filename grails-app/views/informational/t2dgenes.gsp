@@ -59,7 +59,7 @@
                         <div class="col-md-2 text-center" id="aboutt2dDiv_project1">
                             <li role="presentation" id="aboutt2d_project1" class="myPills">
                                 <a href="#">
-                                    Project 1
+                                    <g:message code="beacon.label.project"/> 1
                                 </a>
                             </li>
                         </div>
@@ -67,7 +67,7 @@
                         <div class="col-md-2 text-center" id="aboutt2dDiv_project2">
                             <li role="presentation" id="aboutt2d_project2" class="myPills">
                                 <a href="#">
-                                    Project 2
+                                    <g:message code="beacon.label.project"/> 2
                                 </a>
                             </li>
                         </div>
@@ -75,7 +75,7 @@
                         <div class="col-md-2 text-center" id="aboutt2dDiv_project3">
                             <li role="presentation" id="aboutt2d_project3" class="myPills">
                                 <a href="#">
-                                    Project 3
+                                    <g:message code="beacon.label.project"/> 3
                                 </a>
                             </li>
                         </div>

@@ -16,6 +16,7 @@
 
 <g:render template="variantsAndAssociationsTableChanger"/>
 
+
 <div class="row clearfix">
 
     <div class="col-md-6" style="text-align: left; font-size: 18px; font-weight: bold">
@@ -42,6 +43,7 @@
 </div>
 
 <table id="variantsAndAssociationsTable" class="table table-striped distinctivetable distinctive" style="border-bottom: 0">
+
     <thead id="variantsAndAssociationsHead">
     </thead>
     <tbody id="variantsAndAssociationsTableBody">
@@ -153,4 +155,3 @@ var insertVandARow  = function(name, value) {
 <g:if test="${show_gwas}">
     <span id="gwasTraits"></span>
 </g:if>
-

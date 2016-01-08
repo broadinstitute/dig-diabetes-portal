@@ -11,9 +11,9 @@
     <div class="col-md-4">
         <div style="font-size: 8pt">
             <g:if test="${('UNKNOWN'!=BuildInfo?.buildNumber)}">
-                Build number: ${BuildInfo?.buildNumber}.<br />
+                <g:message code="buildInfo.shared.build_number" />: ${BuildInfo?.buildNumber}.<br />
             </g:if>
-            Built on ${BuildInfo?.buildHost} at ${BuildInfo?.buildTime}.
+            <g:message code="buildInfo.shared.build_message" args="${[BuildInfo?.buildHost, BuildInfo?.buildTime]}"/>.
         </div>
     </div>
     <div class="col-md-4"></div>

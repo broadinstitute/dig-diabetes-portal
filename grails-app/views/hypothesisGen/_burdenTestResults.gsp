@@ -1,1 +1,1 @@
-<h1> burden test results</h1>
+<h1><g:message code='hypothesisGen.burdenTestResults.title'/></h1>

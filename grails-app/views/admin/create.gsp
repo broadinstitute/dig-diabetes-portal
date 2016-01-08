@@ -31,7 +31,7 @@
             <div class="dport-template-view">
 
                 <div class="row">
-                    <div class="col-md-4"><h1>Create a user</h1></div>
+                    <div class="col-md-4"><h1><g:message code="users.admin.create"/></h1></div>
 
                     <div class="col-md-8"></div>
                 </div>

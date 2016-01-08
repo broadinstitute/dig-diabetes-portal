@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-sm-12">
-      <em>Current list of variants.</em>
+      <em><g:message code="variantTable.header.current_list"/>.</em>
     </div>
 </div>
 <div class="row">
@@ -12,13 +12,13 @@
                     <table id="btVariantTable" class="table table-striped basictable">
                         <thead>
                         <tr>
-                            <th>nearest gene</th>
-                            <th>variant</th>
-                            <th>rsid</th>
-                            <th>protein change</th>
-                            <th>effect on protein</th>
-                            <th>highest frequency</th>
-                            <th>population with highest frequency</th>
+                            <th><g:message code="variantTable.columnHeaders.shared.nearestGene"/></th>
+                            <th><g:message code="variantTable.columnHeaders.shared.variant"/></th>
+                            <th><g:message code="variantTable.columnHeaders.shared.rsid"/></th>
+                            <th><g:message code="variantTable.columnHeaders.shared.proteinChange"/></th>
+                            <th><g:message code="variantTable.columnHeaders.shared.effectOnProtein"/></th>
+                            <th><g:message code="variantTable.columnHeaders.exomeSequencing.highestFrequency"/></th>
+                            <th><g:message code="variantTable.columnHeaders.exomeSequencing.popWithHighestFrequency"/></th>
                         </tr>
                         </thead>
                         <tbody id="btVariantTableBody">
@@ -37,7 +37,7 @@
     <div class="row">
 
         <div class="col-sm-6">
-            <h2><strong>Modify your existing list:</strong></h2>
+            <h2><strong><g:message code="variantTable.header.modify_list"/>:</strong></h2>
         </div>
         <div class="col-sm-6"></div>
     </div>
@@ -52,7 +52,7 @@
                                 <a class="accordion-toggle collapsed" data-toggle="collapse"
                                    data-parent="#accordionVariantListRevisions"
                                    href="#collapseVariantListRevisionOne">
-                                    <h4><strong>Add variants to existing list</strong></h4>
+                                    <h4><strong><g:message code="variantTable.label.add_variants_to_list.title"/></strong></h4>
                                 </a>
                             </div>
 
@@ -61,9 +61,9 @@
                                     <g:form action="variantUpload">
                                         <div class="row">
                                             <ul>
-                                                <li><a href="#">Specify variant by ID to add to the existing list</a></li>
-                                                <li><a href="#">Use a file specifying variants to add to the existing list</a></li>
-                                                <li><a href="#">Perform a variant search and add the results to the existing list</a></li>
+                                                <li><a href="#"><g:message code="variantTable.label.add_variants_to_list.step1"/></a></li>
+                                                <li><a href="#"><g:message code="variantTable.label.add_variants_to_list.step2"/></a></li>
+                                                <li><a href="#"><g:message code="variantTable.label.add_variants_to_list.step3"/></a></li>
                                             </ul>
                                         </div>
                                     </g:form>
@@ -76,7 +76,7 @@
                                 <a class="accordion-toggle collapsed" data-toggle="collapse"
                                    data-parent="#accordionVariantListRevisions"
                                    href="#collapseVariantListRevisionTwo">
-                                    <h4><strong>Remove variants from existing list</strong></h4>
+                                    <h4><strong><g:message code="variantTable.label.remove_variants_from_list.title"/></strong></h4>
                                 </a>
                             </div>
 
@@ -85,9 +85,9 @@
                                     <g:uploadForm action="variantFileUpload">
                                         <div class="row">
                                             <ul>
-                                                <li><a href="#">Specify variant by ID to remove from the existing list</a></li>
-                                                <li><a href="#">Use a file specifying variants to remove from the existing list</a></li>
-                                                <li><a href="#">Perform a variant search and remove the results to the existing list</a></li>
+                                                <li><a href="#"><g:message code="variantTable.label.remove_variants_from_list.step1"/></a></li>
+                                                <li><a href="#"><g:message code="variantTable.label.remove_variants_from_list.step2"/></a></li>
+                                                <li><a href="#"><g:message code="variantTable.label.remove_variants_from_list.step3"/></a></li>
                                             </ul>
                                         </div>
                                     </g:uploadForm>
@@ -101,13 +101,13 @@
                                 <a class="accordion-toggle collapsed" data-toggle="collapse"
                                    data-parent="#accordionVariantListRevisions"
                                    href="#collapseVariantListRevisionThree">
-                                    <h4><strong>Execute burden test on existing list</strong></h4>
+                                    <h4><strong><g:message code="variantTable.label.execute_burden_test"/></strong></h4>
                                 </a>
                             </div>
 
                             <div id="collapseVariantListRevisionThree" class="accordion-body collapse">
                                 <div class="accordion-inner">
-                                    <a href="#"  onclick="launchDynamicBurdenTest()">Launch burden test now</a>
+                                    <a href="#"  onclick="launchDynamicBurdenTest()"><g:message code="variantTable.label.launch_burden_test"/></a>
                                     %{--<button class="btn btn-lg btn-primary" onclick="launchDynamicBurdenTest()">Execute</button>--}%
                                 </div>
                             </div>

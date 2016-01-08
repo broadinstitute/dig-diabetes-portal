@@ -50,9 +50,9 @@
 
 
                 <div class="jumbotron">
-                    <h1>Diabetes portal</h1>
-                    <p class="lead">This portal can give you everything you ever wanted (but you need to login first) stage in</p>
-                    <p><a class="btn btn-lg btn-success" href="#" role="button">Get started today</a></p>
+                    <h1><g:message code="mainpage.index.title"/></h1>
+                    <p class="lead"><g:message code="mainpage.index.lead"/></p>
+                    <p><a class="btn btn-lg btn-success" href="#" role="button"><g:message code="mainpage.index.start"/></a></p>
                  <span id="signinButton">
                      <span
                              class="g-signin"

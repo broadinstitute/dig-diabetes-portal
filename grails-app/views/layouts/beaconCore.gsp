@@ -8,7 +8,7 @@
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"><!--<![endif]-->
 <html>
 <head>
-<title>Broad Institute Beacon</title>
+<title><g:message code='site.shared.institution.broad'/> <g:message code='site.shared.phrases.beacon'/></title>
 
     <r:require modules="core"/>
     <r:layoutResources/>
@@ -38,7 +38,7 @@
             <% def locale = RequestContextUtils.getLocale(request) %>
             <g:renderBeaconSection>
                 <div id="branding">
-                    Broad Institute <strong>Beacon</strong>
+                    <g:message code='site.shared.institution.broad'/> <strong><g:message code='site.shared.phrases.beacon'/></strong>
                 </div>
             </g:renderBeaconSection>
         </div>
@@ -49,11 +49,11 @@
             <sec:ifLoggedIn>
                 <div class="rightlinks">
                     <sec:ifAllGranted roles="ROLE_ADMIN">
-                        <g:link controller='admin' action="users" class="mgr">manage  users</g:link>
+                        <g:link controller='admin' action="users" class="mgr"><g:message code='site.layouts.option.manage_users'/></g:link>
                         &middot;
                     </sec:ifAllGranted>
                     <sec:ifAllGranted roles="ROLE_SYSTEM">
-                        <g:link controller='system' action="systemManager">System Mgr</g:link>
+                        <g:link controller='system' action="systemManager"><g:message code='site.layouts.option.system_mgr'/></g:link>
                         &middot;
                     </sec:ifAllGranted>
                     <sec:loggedInUserInfo field="username"/>   &middot;
@@ -96,7 +96,7 @@
         <div class="footer">
             <div class="col-lg-6"></div>
             <div class="col-lg-6 small-buildinfo">
-                Built on ${BuildInfo?.buildHost} at ${BuildInfo?.buildTime}.  Version=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}
+                <g:message code="buildInfo.shared.build_message" args="${[BuildInfo?.buildHost, BuildInfo?.buildTime]}"/>.  <g:message code='buildInfo.shared.version'/>=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}
             </div>
 
         </div>

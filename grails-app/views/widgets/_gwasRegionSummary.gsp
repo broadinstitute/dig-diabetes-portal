@@ -170,18 +170,18 @@ rect.legendHolder {
 <div class="variant-info-container">
     <div class="variant-info-view">
 
-        <h2>Region: <strong><%=regionSpecification%></strong></h2>
+        <h2><g:message code='hypothesisGen.variantSearchRestrictToRegion.label.region'/>: <strong><%=regionSpecification%></strong></h2>
 
         <div class="separator"></div>
 
         <p>
-            The table below shows all GWAS variants in this region available in this portal.
-            Rows represent each of the <a class="boldlink"
-                                          href="${createLink(controller: 'informational', action: 'hgat')}">25 traits</a> that were studied in meta-analyses included in this portal.
-        </p>
+            <g:message code="variant.messages.GWAS_variants_region_1" />.
+                    <g:message code="variant.messages.GWAS_variants_region_2" /> <a class="boldlink"
+                                                  href="${createLink(controller: 'informational', action: 'hgat')}">25 <g:message code="informational.shared.header.traits" /></a> <g:message code="variant.messages.GWAS_variants_region_3" />.
+                </p>
 
-        <p>
-            Hover over a variant to see the additional details of that association.
+                <p>
+                    <g:message code="variant.messages.GWAS_variants_region_4" />..
         </p>
 
 

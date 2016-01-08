@@ -9,7 +9,7 @@
     <div class="container">
         <g:renderT2dGenesSection>
             <div id="branding">
-                Type 2 Diabetes <strong style="color:white">Genetics</strong> <small>beta</small>
+                <g:message code="portal.header.title.short"/> <strong style="color:white"><g:message code="portal.header.title.genetics"/></strong> <small><g:message code="portal.header.title.beta"/></small>
             </div>
         </g:renderT2dGenesSection>
         <span id="language" style="margin-top: -30px">

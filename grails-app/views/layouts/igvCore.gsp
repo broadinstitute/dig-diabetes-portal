@@ -57,7 +57,7 @@
             </g:if>
             <g:elseif test="${grailsApplication.config.site.version == 't2dgenes'}">
                 <div id="branding">
-                    Type 2 Diabetes <strong>Genetics</strong> <small>Beta</small>
+                	<g:message code="portal.header.title.short"/> <strong><g:message code="portal.header.title.genetics"/></strong> <small><g:message code="portal.header.title.beta"/></small>
                 </div>
             </g:elseif>
         </div>
@@ -68,26 +68,26 @@
             <sec:ifLoggedIn>
                 <div class="rightlinks">
                     <sec:ifAllGranted roles="ROLE_ADMIN">
-                        <g:link controller='admin' action="users" class="mgr">manage  users</g:link>
+                        <g:link controller='admin' action="users" class="mgr"><g:message code='site.layouts.option.manage_users'/></g:link>
                         &middot;
                     </sec:ifAllGranted>
                     <sec:ifAllGranted roles="ROLE_SYSTEM">
-                        <g:link controller='system' action="systemManager">System Mgr</g:link>
+                        <g:link controller='system' action="systemManager"><g:message code='site.layouts.option.system_mgr'/></g:link>
                         &middot;
                     </sec:ifAllGranted>
                     <sec:loggedInUserInfo field="username"/>   &middot;
-                    <g:link controller='logout'>Log Out</g:link>
+                    <g:link controller='logout'><g:message code='mainpage.log.out'/></g:link>
                 </div>
             </sec:ifLoggedIn>
             <sec:ifNotLoggedIn>
                 <div class="rightlinks">
-                    <g:link controller='login' action='auth'>Login</g:link>
+                    <g:link controller='login' action='auth'><g:message code='mainpage.log.in'/></g:link>
                 </div>
             </sec:ifNotLoggedIn>
             <g:if test="${grailsApplication.config.site.version == 't2dgenes'}">
-                <a href="${createLink(controller:'home',action:'portalHome')}">Home</a> &middot;
-                <a href="${createLink(controller:'informational', action:'about')}">About The Data</a> &middot;
-                <a href="${createLink(controller:'informational', action:'contact')}">Contact</a>
+                <a href="${createLink(controller:'home',action:'portalHome')}"><g:message code='localized.home'/></a> &middot;
+                <a href="${createLink(controller:'informational', action:'about')}"><g:message code='localized.aboutTheData'/></a> &middot;
+                <a href="${createLink(controller:'informational', action:'contact')}"><g:message code='localized.contact'/></a>
             </g:if>
             <g:elseif test="${grailsApplication.config.site.version == 'sigma'}">
                 <a href="/query">{% trans "Query" %}</a> &middot;
@@ -103,7 +103,7 @@
 <div id="footer">
     <div class="container-fluid">
         <div class="separator"></div>
-        <div id="helpus"><a href="${createLink(controller:'informational', action:'contact')}">Send feedback</a></div>
+        <div id="helpus"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code='mainpage.send.feedback'/></a></div>
     </div>
 </div>
 <div id="belowfooter"></div>

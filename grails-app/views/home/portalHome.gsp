@@ -123,7 +123,7 @@
                         </div>
 
                         <g:renderT2dGenesSection>
-                            <div class="helptext">examples:
+                            <div class="helptext"><g:message code="site.shared.phrases.examples" />:
                                 <a href='<g:createLink controller="gene" action="geneInfo"
                                                        params="[id: 'SLC30A8']"/>'>SLC30A8</a>
                                 <g:helpText title="input.searchTerm.geneExample.help.header" placement="bottom"
@@ -237,7 +237,7 @@
         <div class="wide-separator"></div>
     </div>
     <div class="text-center funders-color" style="margin-left:5px;margin-right: 5px;">
-        The following organizations provide funding and/or governance for this knowledge portal as part of the AMP T2D Program:
+        <g:message code='portal.home.funders'/>:
     </div>
     <div style="width:40vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
         <div class="wide-separator"></div>
@@ -285,7 +285,7 @@
         <div class="wide-separator"></div>
     </div>
     <div class="text-center funders-color" style="margin-left:5px;margin-right: 5px;">
-        Funding and guidance are also provided by:
+        <g:message code='portal.home.addtl_funders'/>:
     </div>
     <div style="width:45vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
         <div class="wide-separator"></div>

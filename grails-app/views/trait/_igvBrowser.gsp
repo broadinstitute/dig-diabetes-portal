@@ -30,13 +30,13 @@
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse"
-                        data-target="#bs-example-navbar-collapse-1"><span class="sr-only">Toggle navigation</span><span
+                        data-target="#bs-example-navbar-collapse-1"><span class="sr-only"><g:message code="controls.shared.igv.toggle_nav" /></span><span
                         class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
                 <a class="navbar-brand">IGV</a></div>
             <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-left">
                     <li class="dropdown" id="tracks-menu-dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tracks<b class="caret"></b></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><g:message code="controls.shared.igv.tracks" /><b class="caret"></b></a>
                         <ul id="trackList" class="dropdown-menu">
                         <li>
                             <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -47,7 +47,7 @@
                                 name: 'T2D (exome sequencing)',
                                 variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                 traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                            })">T2D (exome sequencing)</a>
+                            })">T2D (<g:message code="variant.variantAssociations.source.exomeSequenceQ.help.header" />)</a>
                         </li>
                         <li>
                             <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -58,7 +58,7 @@
                                 name: 'T2D (exome chip)',
                                 variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                 traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                            })">T2D (exome chip)</a>
+                            })">T2D (<g:message code="variant.variantAssociations.source.exomeChipQ.help.header" />)</a>
                         </li>
                         <li>
                             <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -69,7 +69,7 @@
                                 name: 'fasting glucose',
                                 variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                 traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                            })">fasting glucose</a>
+                            })"><g:message code="informational.shared.traits.fasting_glucose" /></a>
                         </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -80,7 +80,7 @@
                                     name: '2-hour glucose',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">2-hour glucose</a>
+                                })"><g:message code="informational.shared.traits.two_hour_glucose" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -91,7 +91,7 @@
                                     name: '2-hour insulin',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">2-hour insulin</a>
+                                })"><g:message code="informational.shared.traits.two_hour_insulin" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -102,7 +102,7 @@
                                     name: 'fasting insulin',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">fasting insulin</a>
+                                })"><g:message code="informational.shared.traits.fasting_insulin" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -113,7 +113,7 @@
                                     name: 'fasting proinsulin',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">fasting proinsulin</a>
+                                })"><g:message code="informational.shared.traits.fasting_proinsulin" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -124,7 +124,7 @@
                                     name: 'HBA1C',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">HBA1C</a>
+                                })"><g:message code="informational.shared.traits.HbA1c" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -135,7 +135,7 @@
                                     name: 'HOMA-IR',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">HOMA-IR</a>
+                                })"><g:message code="informational.shared.traits.HOMA-IR" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -146,7 +146,7 @@
                                     name: 'HOMA-B',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">HOMA-B</a>
+                                })"><g:message code="informational.shared.traits.HOMA-B" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -157,7 +157,7 @@
                                     name: 'BMI',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">BMI</a>
+                                })"><g:message code="informational.shared.traits.BMI" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -168,7 +168,7 @@
                                     name: 'waist-hip ratio',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">waist-hip ratio</a>
+                                })"><g:message code="informational.shared.traits.waist_hip_ratio" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -179,7 +179,7 @@
                                     name: 'height',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">height</a>
+                                })"><g:message code="informational.shared.traits.height" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -190,7 +190,7 @@
                                     name: 'HDL',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">HDL</a>
+                                })"><g:message code="informational.shared.traits.HDL_cholesterol" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -201,7 +201,7 @@
                                     name: 'LDL',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">LDL</a>
+                                })"><g:message code="informational.shared.traits.LDL_cholesterol" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -212,7 +212,7 @@
                                     name: 'triglycerides',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">triglycerides</a>
+                                })"><g:message code="informational.shared.traits.triglycerides" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -223,7 +223,7 @@
                                     name: 'coronary artery disease',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">coronary artery disease</a>
+                                })"><g:message code="informational.shared.traits.coronary_artery_disease" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -234,7 +234,7 @@
                                     name: 'coronary kidney disease',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">chronic kidney disease</a>
+                                })"><g:message code="informational.shared.traits.chronic_kidney_disease" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -245,7 +245,7 @@
                                     name: 'eGFR-creat (serum creatinine)',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">eGFR-creat (serum creatinine)</a>
+                                })"><g:message code="informational.shared.traits.eGFR-creat" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -256,7 +256,7 @@
                                     name: 'eGFR-creat (serum creatinine)',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">eGFR-cys (serum cystatin C)</a>
+                                })"><g:message code="informational.shared.traits.eGFR-cys" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -267,7 +267,7 @@
                                     name: 'microalbuminuria',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">microalbuminuria</a>
+                                })"><g:message code="informational.shared.traits.microalbuminuria" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -278,7 +278,7 @@
                                     name: 'urinary albumin-to-creatinine ratio',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">urinary albumin-to-creatinine ratio</a>
+                                })"><g:message code="informational.shared.traits.urinary_atc_ratio" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -289,7 +289,7 @@
                                     name: 'schizophrenia',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">schizophrenia</a>
+                                })"><g:message code="informational.shared.traits.schizophrenia" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -300,7 +300,7 @@
                                     name: 'major depressive disorder',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">major depressive disorder</a>
+                                })"><g:message code="informational.shared.traits.depression" /></a>
                             </li>
                             <li>
                                 <a onclick="igv.browser.loadTrack({ type: 't2d',
@@ -311,7 +311,7 @@
                                     name: 'bipolar disorder',
                                     variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-                                })">bipolar disorder</a>
+                                })"><g:message code="informational.shared.traits.bipolar" /></a>
                             </li>
 
                         </ul>
@@ -326,7 +326,7 @@
                 <div class="nav navbar-nav navbar-left">
                     <div class="well-sm">
                         <button id="goBox" class="btn btn-default" onclick="igvSearch($('#goBoxInput')[0].value)">
-                            Search
+                            <g:message code="controls.shared.igv.search" />
                         </button>
                     </div>
                 </div>
@@ -369,7 +369,7 @@
                     trait: "T2D",
                     dataset: "GWAS_DIAGRAM_mdv2",
                     pvalue: "P_VALUE",
-                    name: "Type 2 Diabetes",
+                    name: "<g:message code='portal.header.title.short' />",
                     variantURL: "http://www.type2diabetesgenetics.org/variantInfo/variantInfo/",
                     traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
                 },
@@ -379,7 +379,7 @@
                     trait: "FG",
                     dataset: "GWAS_MAGIC_mdv2",
                     pvalue: "P_VALUE",
-                    name: "fasting glucose",
+                    name: "<g:message code='informational.shared.traits.fasting_glucose' />",
                     variantURL: "http://www.type2diabetesgenetics.org/variantInfo/variantInfo/",
                     traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
                 },
@@ -389,7 +389,7 @@
                     trait: "FI",
                     dataset: "GWAS_MAGIC_mdv2",
                     pvalue: "P_VALUE",
-                    name: "fasting insulin",
+                    name: "<g:message code='informational.shared.traits.fasting_insulin' />",
                     variantURL: "http://www.type2diabetesgenetics.org/variantInfo/variantInfo/",
                     traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
                 },
@@ -397,7 +397,7 @@
                     url: "http://data.broadinstitute.org/igvdata/t2d/recomb_decode.bedgraph",
                     min: 0,
                     max: 7,
-                    name: "Recombination rate",
+                    name: "<g:message code='controls.shared.igv.tracks.recomb_rate' />",
                     order: 9998
                 },
                 {
@@ -406,7 +406,7 @@
                 },
                 {
                     url: "//dn7ywbm9isq8j.cloudfront.net/annotations/hg19/genes/gencode.v18.collapsed.bed",
-                    name: "Genes",
+                    name: "<g:message code='controls.shared.igv.tracks.genes' />",
                     order: 10000
                 }
             ]

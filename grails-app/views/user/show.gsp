@@ -31,10 +31,10 @@
             <div class="dport-template-view">
 
                 <div class="row">
-                    <div class="col-md-4"><h1>Show a user</h1></div>
+                    <div class="col-md-4"><h1><g:message code="users.admin.show"/></h1></div>
 
-                    <div class="col-md-4"><g:link class="list btn btn-sm btn-primary" controller="admin" action="users">User list</g:link></div>
-                    <div class="col-md-4"><g:link class="create btn btn-sm btn-primary" controller="admin" action="create">New user</g:link></div>
+                    <div class="col-md-4"><g:link class="list btn btn-sm btn-primary" controller="admin" action="users"><g:message code="users.admin.list"/></g:link></div>
+                    <div class="col-md-4"><g:link class="create btn btn-sm btn-primary" controller="admin" action="create"><g:message code="users.admin.create"/></g:link></div>
                 </div>
 
                 <div class="row">

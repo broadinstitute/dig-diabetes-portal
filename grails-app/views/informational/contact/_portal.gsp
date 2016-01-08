@@ -39,8 +39,7 @@
     </div>
     <div class="col-md-4">
         <div class="emphasize-block">
-            Not sure who to talk to?
-            Try our group email address:<br/>
+            <g:message code="portal.contact.message" />:<br/>
             <a href="mailto:help@type2diabetesgenetics.org">help@type2diabetesgenetics.org</a>
         </div>
 

@@ -1,119 +1,119 @@
 
-        <h2>Contact a cohort leader</h2>
+        <h2><g:message code="contact.header.cohort_leader"/></h2>
 
-        <h3>T2D-GENES: exomes (n=~10,000)</h3>
+        <h3><g:message code="informational.shared.cohort.t2dgenes"/>: <g:message code="gene.continentalancestry.datatype.exomes"/> (n=~10,000)</h3>
         <p>
-            Cohort: Jackson Heart Study Candidate Gene Association Resource <br/>
-            PI: <a href="mailto://james.wilson1@med.va.gov">Jim Wilson</a>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.jackson"/> <br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://james.wilson1@med.va.gov">Jim Wilson</a>
         </p>
         <p>
-            Cohort: Wake Forest Study<br/>
-            PI: <a href="mailto://dbowden@wakehealth.edu">Donald Bowden</a>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.wake"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://dbowden@wakehealth.edu">Donald Bowden</a>
         </p>
         <p>
-            Cohort: Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH)<br/>
-            PI: <a href="mailto://leejy63@nih.go.kr">Jong-Young Lee</a> and <a href="mailto://yooncho33@korea.kr">Yoon Shin Cho</a>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.KARE_KNIH"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://leejy63@nih.go.kr">Jong-Young Lee</a> <g:message code="site.shared.phrases.and" /> <a href="mailto://yooncho33@korea.kr">Yoon Shin Cho</a>
         </p>
         <p>
-            Cohort: Singapore Diabetes Cohort Study and Singapore Prospective Study Program<br/>
-            PI: <a href="mailto://eringpkd@nus.edu.sg">Daniel Ng Peng Keat</a> and <a href="mailto://e_shyong_tai@nuhs.edu.sg">Tai E. Shyong</a>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.SDCS_SPSP"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://eringpkd@nus.edu.sg">Daniel Ng Peng Keat</a> <g:message code="site.shared.phrases.and" /> <a href="mailto://e_shyong_tai@nuhs.edu.sg">Tai E. Shyong</a>
         </p>
         <p>
-            Cohort: Longevity Genes in Founder Populations (Ashkenazi)<br/>
-            PI: <a href="mailto://gil.atzmon@einstein.yu.edu">Gil Atzmon</a>
-        </p>
-
-        <p>
-            Cohort: Metabolic Syndrome in Men Study<br/>
-            PI: <a href="mailto://markku.laakso@kuh.fi">Markku Laakso</a>
-        </p>
-        <p>
-            Cohort: San Antonio, Texas<br/>
-            PI: <a href="mailto://ravid@txbiomedgenetics.org">Ravi Duggirala</a>
-        </p>
-        <p>
-            Cohort: Starr County, Texas<br/>
-            PI: <a href="mailto://craig.l.hanis@uth.tmc.edu">Craig Hanis</a>
-        </p>
-        <p>
-            Cohort: London Life Sciences Population (LOLIPOP)<br/>
-            PI: <a href="mailto://j.kooner@imperial.ac.uk">Jaspal Kooner</a>
-        </p>
-        <p>
-            Cohort: Singapore Indian Eye Study<br/>
-            PI: <a href="mailto://ophwty@nus.edu.sg">Wong Tien Yin</a>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.ashkenazi"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://gil.atzmon@einstein.yu.edu">Gil Atzmon</a>
         </p>
 
-        <h3>GoT2D: exome chip (n=~82,000)</h3>
         <p>
-            Cohort: University of Michigan/Finnish (METSIM, FUSION, Finrisk, D2D, Dr's Extra)<br/>
-            PI: <a href="mailto://markku.laakso@kuh.fi">Markku Laakso</a> (METSIM),
-            <a href="mailto://lbonnyca@mail.nih.gov">Lori Bonnycastle</a> (FUSION),
-            <a href="mailto://erkki.vartiainen@flinders.edu.au">Erkki Vartiainen</a> (Finrisk),
-            <a href="mailto://johan.eriksson@helsinki.fi">Johan Erikssson</a> (D2D),
-            <a href="mailto://rainer.rauramaa@uef.fi">Rainer Rauramaa</a> (Dr's Extra)
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.MSMS"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://markku.laakso@kuh.fi">Markku Laakso</a>
+        </p>
+        <p>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.san_antonio"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://ravid@txbiomedgenetics.org">Ravi Duggirala</a>
+        </p>
+        <p>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.starr"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://craig.l.hanis@uth.tmc.edu">Craig Hanis</a>
+        </p>
+        <p>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.LOLIPOP"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://j.kooner@imperial.ac.uk">Jaspal Kooner</a>
+        </p>
+        <p>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.SIES"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://ophwty@nus.edu.sg">Wong Tien Yin</a>
+        </p>
+
+        <h3><g:message code="informational.shared.cohort.GoT2D"/>: <g:message code="gene.continentalancestry.datatype.exomeChip"/> (n=~82,000)</h3>
+        <p>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.all_extra"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://markku.laakso@kuh.fi">Markku Laakso</a> (<g:message code="informational.shared.cohort.METSIM"/>),
+            <a href="mailto://lbonnyca@mail.nih.gov">Lori Bonnycastle</a> (<g:message code="informational.shared.cohort.FUSION"/>),
+            <a href="mailto://erkki.vartiainen@flinders.edu.au">Erkki Vartiainen</a> (<g:message code="informational.shared.cohort.Finrisk"/>),
+            <a href="mailto://johan.eriksson@helsinki.fi">Johan Erikssson</a> (<g:message code="informational.shared.cohort.D2D"/>),
+            <a href="mailto://rainer.rauramaa@uef.fi">Rainer Rauramaa</a> (<g:message code="informational.shared.cohort.drs_extra"/>)
 
         </p>
         <p>
-            Cohort: Broad-Finnish DIREVA/PPP<br/>
-            PI: <a href="mailto://leif.groop@med.lu.se">Leif Groop</a> (DIREVA),
-            <a href="mailto://tiinamaija.tuomi@helsinki.fi">Tiinamaija Tuomi</a> (PPP)
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.Broad-Finnish"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://leif.groop@med.lu.se">Leif Groop</a> (<g:message code="informational.shared.cohort.DIREVA"/>),
+            <a href="mailto://tiinamaija.tuomi@helsinki.fi">Tiinamaija Tuomi</a> (<g:message code="informational.shared.cohort.PPP"/>)
         </p>
         <p>
-            Cohort: Broad/PMB-Swedish/ANDIS/SDR<br/>
-            PI: <a href="mailto;//leif.groop@med.lu.se">Leif Groop</a>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.ANDIS"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto;//leif.groop@med.lu.se">Leif Groop</a>
         </p>
         <p>
-            Cohort: Pedersen/Denmark<br/>
-            PI: <a href="mailto://oluf@sund.ku.dk">Oluf Pedersen</a>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.Pedersen"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://oluf@sund.ku.dk">Oluf Pedersen</a>
         </p>
         <p>
-            Cohort: BC58<br/>
-            PI: <a href="mailto://p.deloukas@qmul.ac.uk">Panos Deloukas</a>,<a href="mailto://mark.mccarthy@drl.ox.ac.uk">Mark McCarthy</a>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.BC58"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://p.deloukas@qmul.ac.uk">Panos Deloukas</a>,<a href="mailto://mark.mccarthy@drl.ox.ac.uk">Mark McCarthy</a>
         </p>
         <p>
-            Cohort: Umeå/Franks<br/>
-            PI: <a href="mailto://paul.franks@medicin.umu.se">Paul Franks</a>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.umea"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://paul.franks@medicin.umu.se">Paul Franks</a>
         </p>
         <p>
-            Cohort: KORA<br/>
-            PI: <a href="mailto://Meitinger@helmholtz-muenchen.de">Thomas Meitinger</a>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.KORA"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://Meitinger@helmholtz-muenchen.de">Thomas Meitinger</a>
         </p>
         <p>
-            Cohort: Exeter<br/>
-            PI: <a href="mailto://T.M.Frayling@exeter.ac.uk">Timothy Frayling</a>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.Exeter"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://T.M.Frayling@exeter.ac.uk">Timothy Frayling</a>
         </p>
         <p>
-            Cohort: EGCUT<br/>
-            PI: <a href="mailto://nick.wareham@mrc-epid.cam.ac.uk">Andres Metspalu</a>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.EGCUT"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://nick.wareham@mrc-epid.cam.ac.uk">Andres Metspalu</a>
         </p>
         <p>
-            Cohort: Frank Hu et al<br/>
-            PI: <a href="mailto://frank.hu@channing.harvard.edu">Frank Hu</a>
+            <g:message code="contact.label.cohort"/>: Frank Hu et al<br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://frank.hu@channing.harvard.edu">Frank Hu</a>
         </p>
         <p>
-            Cohort: Nick Wareham et al<br/>
-            PI: <a href="mailto://nick.wareham@mrc-epid.cam.ac.uk">Nick Wareham</a>
+            <g:message code="contact.label.cohort"/>: Nick Wareham et al<br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://nick.wareham@mrc-epid.cam.ac.uk">Nick Wareham</a>
         </p>
         <p>
-            Cohort: EPIC Norfolk<br/>
-            PI: <a href="mailto://nick.wareham@mrc-epid.cam.ac.uk">Nicholas J Wareham</a>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.EPIC"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://nick.wareham@mrc-epid.cam.ac.uk">Nicholas J Wareham</a>
         </p>
         <p>
-            Cohort: FUSION (Finland-United States Investigation of NIDDM Genetics)<br/>
-            PI: <a href="mailto://lbonnyca@mail.nih.gov">Lori Bonnycastle</a>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.FUSION"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://lbonnyca@mail.nih.gov">Lori Bonnycastle</a>
         </p>
         <p>
-            Cohort: KORA-gen<br/>
-            PI: <a href="mailto://Meitinger@helmholtz-muenchen.de">Thomas Meitinger</a>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.KORA-gen"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://Meitinger@helmholtz-muenchen.de">Thomas Meitinger</a>
         </p>
         <p>
-            Cohort: UKT2D Consortium<br/>
-            PI: <a href="mailto://mark.mccarthy@drl.ox.ac.uk">Mark McCarthy</a> and <a href="mailto://tim.spector@kcl.ac.uk">Timothy Spector</a>
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.UKT2D"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://mark.mccarthy@drl.ox.ac.uk">Mark McCarthy</a> <g:message code="site.shared.phrases.and" /> <a href="mailto://tim.spector@kcl.ac.uk">Timothy Spector</a>
         </p>
         <p>
-            Cohort: PPP-Malmo-Botnia Study<br/>
-            PI: <a href="mailto://leif.groop@med.lu.se">Leif Groop</a>, <a href="mailto://Peter.Nilsson@med.lu.se">Peter Nilsson</a> and
+            <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.PPP_Malmo"/><br/>
+            <g:message code="contact.label.pi"/>: <a href="mailto://leif.groop@med.lu.se">Leif Groop</a>, <a href="mailto://Peter.Nilsson@med.lu.se">Peter Nilsson</a> <g:message code="site.shared.phrases.and" />
             <a href="mailto://tiinamaija.tuomi@helsinki.fi">Tiinamaija Tuomi</a>
         </p>
     </div>
