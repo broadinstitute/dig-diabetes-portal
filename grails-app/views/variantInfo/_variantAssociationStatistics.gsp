@@ -8,12 +8,14 @@
 
 <script>
     var variant;
-    var fillVariantStatistics = function (){
+    var fillVariantStatistics = function (phenotype,datasetDescription){
         $.ajax({
             cache: false,
             type: "get",
             url: "${createLink(controller:'variantInfo',action: 'variantDescriptiveStatistics')}",
-            data: {variantId: '<%=variantToSearch%>'},
+            data: {variantId: '<%=variantToSearch%>',
+                   phenotype: phenotype,
+                   datasets: JSON.stringify(datasetDescription)},
             async: true,
             success: function (data) {
                 var variantAssociationStrings = {
@@ -84,7 +86,9 @@
         });
 
     };
-    fillVariantStatistics();
+    UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],'T2D',
+            "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",fillVariantStatistics );
+    //fillVariantStatistics();
 
 </script>
 

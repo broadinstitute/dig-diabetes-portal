@@ -107,7 +107,48 @@ var UTILS = {
         this.proteinEffectMap = keyValue;
         this.proteinEffectArray = arrayHolder;
     },
+    retrieveSampleGroupsbyTechnologyAndPhenotype : function(technologies,phenotype, actionUrl, callBack){
+        var phenotypeName = phenotype;
+        var compareDatasetsByTechnology = function (a, b) {
+            if (a.technology < b. technology) return -1;
+            if (a.technology > b. technology) return 1;
+            return 0;
+        }
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: actionUrl,
+            data: {phenotype:phenotype,
+                technologies: technologies},
+            async: true,
+            success: function (data) {
+                if (( data !==  null ) &&
+                    ( typeof data !== 'undefined') &&
+                    ( typeof data.sampleGroupMap !== 'undefined' )  ) {
+                    var sampleGroupMap = data.sampleGroupMap;
+                    if (typeof sampleGroupMap !== 'undefined'){
+                        var dataSetNames =  Object.keys(sampleGroupMap);
+                        var dataSetArray = [];
+                        for (var i = 0; i < dataSetNames.length; i++) {
+                            dataSetArray.push(sampleGroupMap[dataSetNames[i]]);
+                        }
+                        var sortedDataSetArray = dataSetArray.sort(compareDatasetsByTechnology);
+                        var dataSetPropertyValues = [];
+                        for (var i = 0; i < sortedDataSetArray.length; i++) {
+                            if (sortedDataSetArray[i]) {
+                                dataSetPropertyValues.push(sortedDataSetArray[i]);
+                            }
+                        }
+                        callBack (phenotypeName,dataSetPropertyValues);
 
+                    }
+                }
+            },
+            error: function (jqXHR, exception) {
+                core.errorReporter(jqXHR, exception);
+            }
+        });
+    },
     frequencyCharacterization: function (proportion, cutoffs) {
         var retVal = "";
         if (proportion === 0) {

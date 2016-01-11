@@ -121,41 +121,6 @@
         return {loadAncestryTable: loadAncestryTable}
     }());
 
-
-    // this is a two-part call: first we use the phenotype to get the relevant technologies, and
-    //  then we can launch the table refresh
-    var retrieveSampleGroupsbyTechAndPhenotype = function(technologies,phenotype){
-        var phenotypeName = phenotype;
-        $.ajax({
-            cache: false,
-            type: "post",
-            url: "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",
-            data: {phenotype:phenotype,
-                technologies: technologies},
-            async: true,
-            success: function (data) {
-                if (( data !==  null ) &&
-                        ( typeof data !== 'undefined') &&
-                        ( typeof data.sampleGroupMap !== 'undefined' )  ) {
-                    var sampleGroupMap = data.sampleGroupMap;
-                    if (typeof sampleGroupMap !== 'undefined'){
-                        var dataSetNames =  Object.keys(sampleGroupMap);
-                        var dataSetPropertyValues = [];
-                        for (var i = 0; i < dataSetNames.length; i++) {
-                            if (sampleGroupMap[dataSetNames[i]]) {
-                                dataSetPropertyValues.push(sampleGroupMap[dataSetNames[i]]);
-                            }
-                        }
-                        //variantsAndAssociationTable (phenotypeName,dataSetNames,dataSetPropertyValues);
-                    }
-                }
-            },
-            error: function (jqXHR, exception) {
-                core.errorReporter(jqXHR, exception);
-            }
-        });
-    };
-
     $("#collapseTwo").on("show.bs.collapse", function() {
         mpgSoftware.ancestryTable.loadAncestryTable('<%=geneName%>');
     });
@@ -180,7 +145,6 @@
                 "count":partsOfCombo[2].substring(0, partsOfCombo[2].length-7)};
             dataSetMaps.push(dataSetMap);
         }
-        //variantsAndAssociationTable (phenotype,dataSetNames,dataSetMaps);
 
         mpgSoftware.ancestryTable.loadAncestryTable('<%=geneName%>',dataSetMaps);
     }

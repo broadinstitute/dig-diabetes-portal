@@ -1,6 +1,8 @@
 package org.broadinstitute.mpg
 
+import grails.converters.JSON
 import org.broadinstitute.mpg.diabetes.BurdenService
+import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 /**
@@ -77,6 +79,18 @@ class VariantInfoController {
      */
     def variantDescriptiveStatistics (){
         String variantId = params.variantId
+        String datasetStructs = params.datasets
+        JSONArray jsonArray = JSON.parse(datasetStructs)
+        Iterator<JSONObject> iterator = jsonArray.iterator()
+        List<LinkedHashMap> linkedHashMapList = []
+        while (iterator.hasNext()) {
+            JSONObject value = iterator.next();
+            LinkedHashMap linkedHashMap = [:]
+            linkedHashMap['technology']=value.technology
+            linkedHashMap['name']=value.name
+            linkedHashMap['pvalue']=value.pvalue
+            linkedHashMapList << linkedHashMap
+        }
         JSONObject jsonObject =  restServerService.combinedVariantAssociationStatistics ( variantId.trim().toUpperCase())
         render(status:200, contentType:"application/json") {
             [variantInfo:jsonObject]

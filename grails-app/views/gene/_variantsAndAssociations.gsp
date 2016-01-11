@@ -70,20 +70,18 @@
 function reviseRows(){
   var phenotype = $('#phenotypeTableChooser option:selected').val();
   var clickedBoxes =  $('#variantsAndAssociationsTable .jstree-clicked');
-  var dataSetNames  = [];
   var dataSetMaps  = [];
   for  ( var i = 0 ; i < clickedBoxes.length ; i++ )   {
       var  comboName  =  $(clickedBoxes[i]).attr('id');
       var partsOfCombo =   comboName.split("-");
       var  dataSetWithoutAnchor  =  partsOfCombo[0];
-      dataSetNames.push(dataSetWithoutAnchor);
       var  dataSetMap = {"name":dataSetWithoutAnchor,
                           "value":dataSetWithoutAnchor,
                           "pvalue":partsOfCombo[1],
                           "count":partsOfCombo[2].substring(0, partsOfCombo[2].length-7)};
       dataSetMaps.push(dataSetMap);
   }
-  variantsAndAssociationTable (phenotype,dataSetNames,dataSetMaps);
+  variantsAndAssociationTable (phenotype,dataSetMaps);
 }
 $( document ).ready(function() {
   // initialize the v and a adjuster widget

@@ -34,11 +34,19 @@
         return ((x < y) ? 1 : ((x > y) ?  -1 : 0));
     };
 
-var variantsAndAssociationTable = function (phenotype,rowValueParameter,rowMapParameter){
-    var rowValue = rowValueParameter;
+var variantsAndAssociationTable = function (phenotype,rowMapParameter){
+    var rowValue = [];
     var rowMap = rowMapParameter;
-    // make sure table is empty
+    if ((typeof rowMap !== 'undefined') &&
+        (rowMap)){
+            rowMap.map(function (d) {
+                                rowValue.push(d.name);
+                            });
+     }
 
+
+
+    // make sure table is empty
     if ($.fn.DataTable.isDataTable( '#variantsAndAssociationsTable' )){
        $('#variantsAndAssociationsTable').dataTable({"bRetrieve":true}).fnDestroy();
     }
@@ -264,48 +272,48 @@ var getTechnologies = function(sel,clearExistingRows){
 }
 // this is a two-part call: first we use the phenotype to get the relevant technologies, and
 //  then we can launch the table refresh
-var retrieveSampleGroupsbyTechnologyAndPhenotype = function(technologies,phenotype){
-    var phenotypeName = phenotype;
-    var compareDatasetsByTechnology = function (a, b) {
-      if (a.technology < b. technology) return -1;
-      if (a.technology > b. technology) return 1;
-      return 0;
-    }
-    $.ajax({
-        cache: false,
-        type: "post",
-        url: "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",
-        data: {phenotype:phenotype,
-               technologies: technologies},
-        async: true,
-        success: function (data) {
-            if (( data !==  null ) &&
-            ( typeof data !== 'undefined') &&
-            ( typeof data.sampleGroupMap !== 'undefined' )  ) {
-                var sampleGroupMap = data.sampleGroupMap;
-                if (typeof sampleGroupMap !== 'undefined'){
-                   var dataSetNames =  Object.keys(sampleGroupMap);
-                   var dataSetArray = [];
-                   for (var i = 0; i < dataSetNames.length; i++) {
-                       dataSetArray.push(sampleGroupMap[dataSetNames[i]]);
-                   }
-                   var sortedDataSetArray = dataSetArray.sort(compareDatasetsByTechnology);
-                   var dataSetPropertyValues = [];
-                   for (var i = 0; i < sortedDataSetArray.length; i++) {
-                        if (sortedDataSetArray[i]) {
-                            dataSetPropertyValues.push(sortedDataSetArray[i]);
-                        }
-                    }
-                   variantsAndAssociationTable (phenotypeName,dataSetNames,dataSetPropertyValues);
+%{--var retrieveSampleGroupsbyTechnologyAndPhenotype = function(technologies,phenotype){--}%
+    %{--var phenotypeName = phenotype;--}%
+    %{--var compareDatasetsByTechnology = function (a, b) {--}%
+      %{--if (a.technology < b. technology) return -1;--}%
+      %{--if (a.technology > b. technology) return 1;--}%
+      %{--return 0;--}%
+    %{--}--}%
+    %{--$.ajax({--}%
+        %{--cache: false,--}%
+        %{--type: "post",--}%
+        %{--url: "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",--}%
+        %{--data: {phenotype:phenotype,--}%
+               %{--technologies: technologies},--}%
+        %{--async: true,--}%
+        %{--success: function (data) {--}%
+            %{--if (( data !==  null ) &&--}%
+            %{--( typeof data !== 'undefined') &&--}%
+            %{--( typeof data.sampleGroupMap !== 'undefined' )  ) {--}%
+                %{--var sampleGroupMap = data.sampleGroupMap;--}%
+                %{--if (typeof sampleGroupMap !== 'undefined'){--}%
+                   %{--var dataSetNames =  Object.keys(sampleGroupMap);--}%
+                   %{--var dataSetArray = [];--}%
+                   %{--for (var i = 0; i < dataSetNames.length; i++) {--}%
+                       %{--dataSetArray.push(sampleGroupMap[dataSetNames[i]]);--}%
+                   %{--}--}%
+                   %{--var sortedDataSetArray = dataSetArray.sort(compareDatasetsByTechnology);--}%
+                   %{--var dataSetPropertyValues = [];--}%
+                   %{--for (var i = 0; i < sortedDataSetArray.length; i++) {--}%
+                        %{--if (sortedDataSetArray[i]) {--}%
+                            %{--dataSetPropertyValues.push(sortedDataSetArray[i]);--}%
+                        %{--}--}%
+                    %{--}--}%
+                   %{--variantsAndAssociationTable (phenotypeName,dataSetNames,dataSetPropertyValues);--}%
 
-                }
-            }
-            },
-        error: function (jqXHR, exception) {
-        core.errorReporter(jqXHR, exception);
-    }
-});
-};
+                %{--}--}%
+            %{--}--}%
+            %{--},--}%
+        %{--error: function (jqXHR, exception) {--}%
+        %{--core.errorReporter(jqXHR, exception);--}%
+    %{--}--}%
+%{--});--}%
+%{--};--}%
 var refreshVAndAByPhenotype = function(sel){
     var phenotypeName = sel.value;
     $.ajax({
@@ -322,7 +330,8 @@ var refreshVAndAByPhenotype = function(sel){
             (  data.technologyList.dataset !==  null ) ) {
                 var technologies = data.technologyList.dataset;
                 if (typeof technologies !== 'undefined'){
-                    retrieveSampleGroupsbyTechnologyAndPhenotype(technologies,phenotypeName);
+                    UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(technologies,phenotypeName,
+                                "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",variantsAndAssociationTable );
                 }
             }
         },
