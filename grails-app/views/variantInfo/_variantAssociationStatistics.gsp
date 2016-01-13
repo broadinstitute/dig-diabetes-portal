@@ -61,8 +61,10 @@
                 var mostdelscore= UTILS.convertStringToNumber(collector['common']['MOST_DEL_SCORE']);
                 var varId = collector['common']['VAR_ID'];
                 var dbsnpId = collector['common']['DBSNP_ID'];
-                mpgSoftware.variantInfo.setTitlesAndTheLikeFromData(varId,dbsnpId,mostdelscore,gene,closestGene,  '<%=variantToSearch%>',
-                        "<g:createLink controller='trait' action='traitInfo' />",variantAssociationStrings);
+                if ($('#variantTitle').html().length==0){ // initialize page.  do only once.  TODO: move somewhere else
+                    mpgSoftware.variantInfo.setTitlesAndTheLikeFromData(varId,dbsnpId,mostdelscore,gene,closestGene,  '<%=variantToSearch%>',
+                            "<g:createLink controller='trait' action='traitInfo' />",variantAssociationStrings);
+                }
 
                 // order the data that we are going to put into boxes for the variant info page
                 var datasetList = [];
@@ -121,12 +123,53 @@
     };
     UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],'T2D',
             "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",fillVariantStatistics );
+    $(function() {
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: "${createLink(controller: 'VariantSearch', action: 'retrievePhenotypesAjax')}",
+            data: {},
+            async: true,
+            success: function (data) {
+                if (( data !==  null ) &&
+                        ( typeof data !== 'undefined') &&
+                        ( typeof data.datasets !== 'undefined' ) &&
+                        (  data.datasets !==  null ) ) {
+                    UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#phenotypeTableChooser',true);
+                    // Can we set the default option on the phenotype list?
+                    $('#phenotypeTableChooser').val('T2D');
+                    %{--refreshVAndAByPhenotype({'value':'T2D'});--}%
+                }
+            },
+            error: function (jqXHR, exception) {
+                core.errorReporter(jqXHR, exception);
+            }
+        });
+    });
+    var launchVarAssocRefresh = function(phenotypeChooser){
+        UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],phenotypeChooser.value,
+                "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",fillVariantStatistics );
+    };
 
 </script>
 
 
 
 <br/>
+<div class="row clearfix">
+
+    <div class="col-md-6" style="text-align: left; font-size: 18px; font-weight: bold">
+        <div  class="form-horizontal">
+            <div class="form-group">
+                <label for="phenotypeTableChooser"><g:message code="gene.variantassociations.change.phenotype" default="Change phenotype choice"/></label>
+                &nbsp;
+                <select id="phenotypeTableChooser" name="phenotypeTableChooser" onchange="launchVarAssocRefresh(this)">
+                 </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6"></div>
+</div>
 <div id="VariantsAndAssociationsExist" style="display: block">
     <div class="row clearfix">
 

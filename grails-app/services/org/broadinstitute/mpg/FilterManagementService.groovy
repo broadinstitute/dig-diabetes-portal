@@ -80,7 +80,9 @@ class FilterManagementService {
             LinkedHashMap<String,String> sampleGroupProperties = [:]
             sampleGroupProperties["name"] =  sampleGroup.systemId
             sampleGroupProperties["value"] =  sampleGroup.systemId
-            sampleGroupProperties["pvalue"] =  filterManagementService.findFavoredPValue ( sampleGroup.systemId, phenotypeName )
+            sampleGroupProperties["pvalue"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "P_VALUE" )
+            sampleGroupProperties["orvalue"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "ODDS_RATIO" )
+            sampleGroupProperties["betavalue"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "BETA" )
             sampleGroupProperties["technology"] =  metaDataService.getTechnologyPerSampleGroup( sampleGroup.systemId )
             sampleGroupProperties["count"] =  "${sampleGroup.subjectsNumber}"
             mapSampleGroupsToProperties[sampleGroup.systemId] = sampleGroupProperties
@@ -96,12 +98,12 @@ class FilterManagementService {
 
 
 
-    public String findFavoredPValue ( String dataSetName, String phenotypeName ) {
-        String favoredPValue = "P_VALUE"
+    public String findFavoredMeaningValue ( String dataSetName, String phenotypeName, String meaningWeWant ) {
+        String favoredPValue = "" // is a default better than nothing in this context
         if (phenotypeName){
             List<Property> propertyList = metaDataService.getSpecificPhenotypeProperties(dataSetName,phenotypeName)
             List<Property> sortedPValueProps = propertyList.
-                    findAll{Property property->property.hasMeaning('P_VALUE')}.
+                    findAll{Property property->property.hasMeaning(meaningWeWant)}.
                     sort{Property property1,Property property2->property1.sortOrder<=>property2.sortOrder}
             if (sortedPValueProps.size()>0){
                 favoredPValue = sortedPValueProps[0]?.name
@@ -136,7 +138,7 @@ class FilterManagementService {
 
             if (dataset) {
 
-                pValueSpec = findFavoredPValue(dataset, phenotype)
+                pValueSpec = findFavoredMeaningValue(dataset, phenotype, "P_VALUE")
 
                 switch (technology) {
                     case RestServerService.TECHNOLOGY_GWAS:

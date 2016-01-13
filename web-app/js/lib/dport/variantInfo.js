@@ -50,19 +50,24 @@ var mpgSoftware = mpgSoftware || {};
 
             UTILS.verifyThatDisplayIsWarranted(weHaveVariantsAndAssociations, $('#VariantsAndAssociationsExist'), $('#VariantsAndAssociationsNoExist'));
             if (weHaveVariantsAndAssociations) {
+                $('#holdAssociationStatisticsBoxes').empty();
                 for ( var i = 0 ; i < pProperties.length ; i++ ){
                     var propertiesForDataSet = pProperties[i];
+                    var dealingWithBeta = (typeof propertiesForDataSet['beta_value'] !== 'undefined');
+//                    (typeof propertiesForDataSet['beta_value'] === 'undefined')
+//                    propertiesForDataSet['beta_value']
                     $('#holdAssociationStatisticsBoxes').append(privateMethods.describeAssociationsStatistics(
                         true,
                         propertiesForDataSet['p_value'],
                         propertiesForDataSet['or_value'],
+                        propertiesForDataSet['beta_value'],
                         5e-8,
                         5e-4,
                         5e-2,
                         variantTitle,
                         mpgSoftware.trans.translator(propertiesForDataSet['dataset']),
                         false,
-                        false,
+                        dealingWithBeta,
                         variantAssociationStrings));
                 }
             }
@@ -607,7 +612,7 @@ var mpgSoftware = mpgSoftware || {};
 //                    }
 
                 },
-                describeAssociationsStatistics = function (availableData, pValue, orValue, strongCutOff, mediumCutOff, weakCutOff, variantTitle, datatype, includeCaseControlComparison, takeExpOfOr, variantAssociationStrings) {
+                describeAssociationsStatistics = function (availableData, pValue, orValue, betaValue, strongCutOff, mediumCutOff, weakCutOff, variantTitle, datatype, includeCaseControlComparison, takeExpOfOr, variantAssociationStrings) {
                     var retVal = "";
                     var significanceDescriptor = "";
                     var orValueNumerical;
@@ -639,12 +644,11 @@ var mpgSoftware = mpgSoftware || {};
                         retVal += ("<div class='veryImportantText'>p = " + pTextValue +
                             variantAssociationStrings.associationPValueQ + "</div>");
                         retVal += ("<div class='notVeryImportantText'>" + significanceDescriptor + "</div>");
-                        orValueNumerical = orValue;
-                        if ((orValueNumerical) &&
-                            (orValueNumerical !== 'null')) {
-                            orValueNumericalAdjusted = (takeExpOfOr === true) ? Math.exp(orValueNumerical) : orValueNumerical;
+                        if (((orValue)||(betaValue)) &&
+                            ((orValue !== 'null')||(betaValue !== 'null'))) {
+                            orValueNumericalAdjusted = (takeExpOfOr === true) ? Math.exp(betaValue) : orValue;
                             orValueText = orValueNumericalAdjusted.toPrecision(3);
-                            retVal += ("<div class='veryImportantText'>OR = " + orValueText +
+                            retVal += ("<div class='veryImportantText'>"+((takeExpOfOr === true) ? 'BETA' : 'OR')+" = " + orValueText +
                                 variantAssociationStrings.associationOddsRatioQ + "</div>");
                         }
                         if (includeCaseControlComparison) {
@@ -654,16 +658,16 @@ var mpgSoftware = mpgSoftware || {};
                         retVal += '';
                     }
                     return retVal;
-                },
-                fillAssociationStatisticsLinkToTraitTable = function (weHaveData, dbsnp, variantId, rootTraitUrl, variantAssociationStrings) {
-                    var retVal = "";
-                    if (weHaveData) {
-                        retVal += ("<a class=\"boldlink\" href=\"" + rootTraitUrl + "/" +
-                            ((dbsnp!=="null") ? (dbsnp) : (variantId)) +
-                            "\">" + variantAssociationStrings.variantPValues);
-                    }
-                    return  retVal;
                 };
+//                fillAssociationStatisticsLinkToTraitTable = function (weHaveData, dbsnp, variantId, rootTraitUrl, variantAssociationStrings) {
+//                    var retVal = "";
+//                    if (weHaveData) {
+//                        retVal += ("<a class=\"boldlink\" href=\"" + rootTraitUrl + "/" +
+//                            ((dbsnp!=="null") ? (dbsnp) : (variantId)) +
+//                            "\">" + variantAssociationStrings.variantPValues);
+//                    }
+//                    return  retVal;
+//                };
 
 
             return {
@@ -680,8 +684,7 @@ var mpgSoftware = mpgSoftware || {};
                 // variantGenerateProteinsChooserTitle: variantGenerateProteinsChooserTitle,
                 variantGenerateProteinsChooser: variantGenerateProteinsChooser,
                 fillDiseaseRiskBurdenTest: fillDiseaseRiskBurdenTest,
-                describeAssociationsStatistics: describeAssociationsStatistics,
-                fillAssociationStatisticsLinkToTraitTable: fillAssociationStatisticsLinkToTraitTable
+                describeAssociationsStatistics: describeAssociationsStatistics
             }
 
 

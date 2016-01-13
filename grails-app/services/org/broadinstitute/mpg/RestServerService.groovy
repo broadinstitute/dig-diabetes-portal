@@ -640,12 +640,22 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             String dataSet = linkedHashMap.name
             String pValue = linkedHashMap.pvalue
             String orValue = linkedHashMap.orvalue
-            addColumnsForPProperties(resultColumnsToDisplay,phenotype,
-                    dataSet,
-                    pValue)
-            addColumnsForPProperties(resultColumnsToDisplay,phenotype,
-                    dataSet,
-                    orValue)
+            String betaValue = linkedHashMap.betavalue
+            if ((pValue) && (pValue.length()>0)){
+                addColumnsForPProperties(resultColumnsToDisplay,phenotype,
+                        dataSet,
+                        pValue)
+            }
+            if ((orValue) && (orValue.length()>0)) {
+                addColumnsForPProperties(resultColumnsToDisplay, phenotype,
+                        dataSet,
+                        orValue)
+            }
+            if ((betaValue) && (betaValue.length()>0)) {
+                addColumnsForPProperties(resultColumnsToDisplay, phenotype,
+                        dataSet,
+                        betaValue)
+            }
         }
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         JsonSlurper slurper = new JsonSlurper()
@@ -694,6 +704,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                         for (String orValueName in orValueNames){
                             orValueDataSets[orValueName] = linkedHashMapList.findAll{it.orvalue==orValueName}.collect{it.name}
                         }
+                        List <String> betaValueNames = linkedHashMapList.collect{it.betavalue}.unique()
+                        LinkedHashMap betaValueDataSets = [:]
+                        for (String betaValueName in betaValueNames){
+                            betaValueDataSets[betaValueName] = linkedHashMapList.findAll{it.betavalue==betaValueName}.collect{it.name}
+                        }
 
                         for (def s in pValueDataSets){
                             String pValueName = s.getKey()
@@ -718,7 +733,18 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                             }
 
                         }
+                        for (def s in betaValueDataSets){
+                            String betaValueName = s.getKey()
+                            List dataSetNames = s.getValue()
+                            if ((dataSetNames)&&
+                                    (dataSetNames.size()>0)&&
+                                    (dataSetNames[0]))  {
+                                for (String dataSetName in dataSetNames) {
+                                    requestedProperties  << "{\"meaning\":\"beta_value\",\"dataset\":\"${dataSetName}\", \"level\":\"${betaValueName}\",\"count\":${variant[betaValueName][dataSetName][phenotype]}}"
+                                }
+                            }
 
+                        }
                         sb  << requestedProperties.join(",")
                     }
 
