@@ -77,8 +77,10 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
 
 
     void "test combinedVariantAssociationStatistics"() {
+        given:
+        LinkedHashMap linkedHashMap = [:]
         when:
-        JSONObject jsonObject = restServerService.combinedVariantAssociationStatistics("rs13266634")
+        JSONObject jsonObject = restServerService.combinedVariantAssociationStatistics("rs13266634","T2D",[linkedHashMap])
         then:
         assert jsonObject
     }

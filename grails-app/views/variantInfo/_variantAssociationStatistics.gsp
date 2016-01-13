@@ -9,6 +9,7 @@
 <script>
     var variant;
     var fillVariantStatistics = function (phenotype,datasetDescription){
+        var rememberPhenotype = phenotype;
         $.ajax({
             cache: false,
             type: "get",
@@ -36,45 +37,77 @@
                     associationOddsRatioQ:'<g:helpText title="variant.variantAssociations.oddsRatio.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.oddsRatio.help.text"/>'
                 };
                 var collector = {}
-                for (var i = 0 ; i < data.variantInfo.results.length ; i++) {
-                    var d = [];
-                    for (var j = 0 ; j < data.variantInfo.results[i].pVals.length ; j++ ){
-                        var contents={};
-                        contents["level"] = data.variantInfo.results[i].pVals[j].level;
-                        contents["count"] = data.variantInfo.results[i].pVals[j].count;
-                        d.push(contents);
+                if ((typeof data !== 'undefined')&&
+                        (typeof data.variantInfo !== 'undefined')&&
+                        (typeof data.variantInfo.results !== 'undefined')&&
+                        (typeof data.variantInfo.results[0].pVals !== 'undefined')){
+                    for (var j = 0 ; j < data.variantInfo.results[0].pVals.length ; j++ ){
+                        if (typeof collector[data.variantInfo.results[0].pVals[j].dataset]=== 'undefined'){
+                            collector[data.variantInfo.results[0].pVals[j].dataset] = {};
+                        }
+                        if (data.variantInfo.results[0].pVals[j].dataset === 'common'){
+                            (collector[data.variantInfo.results[0].pVals[j].dataset])[data.variantInfo.results[0].pVals[j].level] = data.variantInfo.results[0].pVals[j].count;
+                        } else {
+                            (collector[data.variantInfo.results[0].pVals[j].dataset])[data.variantInfo.results[0].pVals[j].meaning] = data.variantInfo.results[0].pVals[j].count[0];
+                        }
                     }
-                    collector["d"+i] = d;
                 }
+                // we use the common properties for other touchups around the page
                 var gene = '';
-                if (collector["d0"][2]!==null) {
-                    gene =  collector["d0"][2].count;
+                if (collector['common']['GENE']!==null) {
+                    gene =  collector['common']['GENE'];
                 }
-                var closestGene = collector["d0"][3].count;
-                var mostdelscore= UTILS.convertStringToNumber(collector["d0"][4].count[0]);
-                var varId = collector["d0"][1].count;
-                var dbsnpId = collector["d0"][0].count;
+                var closestGene = collector['common']['CLOSEST_GENE'];
+                var mostdelscore= UTILS.convertStringToNumber(collector['common']['MOST_DEL_SCORE']);
+                var varId = collector['common']['VAR_ID'];
+                var dbsnpId = collector['common']['DBSNP_ID'];
                 mpgSoftware.variantInfo.setTitlesAndTheLikeFromData(varId,dbsnpId,mostdelscore,gene,closestGene,  '<%=variantToSearch%>',
                         "<g:createLink controller='trait' action='traitInfo' />",variantAssociationStrings);
+
+                // order the data that we are going to put into boxes for the variant info page
+                var datasetList = [];
+                for (var dataSetKey in collector) {
+                    if ((dataSetKey!=='common')&&
+                            (collector.hasOwnProperty(dataSetKey))) {
+                        var dsObject = collector[dataSetKey];
+                        if (dsObject["p_value"]!==null){ // if there are no associations then we're done with this data set
+                            var tempObject = {};
+                            tempObject['dataset'] = dataSetKey;
+                            for (var dsElement in dsObject) {
+                                if (dsObject.hasOwnProperty(dsElement)){
+                                    tempObject[dsElement] =  dsObject [dsElement] ;
+                                }
+                            }
+                            datasetList.push(tempObject);
+                        }
+                    }
+                }
+                var sortedDatasetList = [];
+                if (datasetList.length>0){
+                    sortedDatasetList = datasetList.sort(function(a,b){
+                        return (a.p_value - b.p_value);
+                    })
+                }
+
                 var variantAssociationStatistics = mpgSoftware.variantInfo.variantAssociations;
-                variantAssociationStatistics({"IN_GWAS":true,
-                        "DBSNP_ID":dbsnpId,
-                        "ID":varId,
-                        "GWAS_T2D_PVALUE":UTILS.convertStringToNumber(collector["d0"][6].count[0]),
-                        "GWAS_T2D_OR":UTILS.convertStringToNumber(collector["d0"][9].count[0]),
-                        "EXCHP_T2D_P_value":UTILS.convertStringToNumber(collector["d0"][7].count[0]),
-                        "EXCHP_T2D_BETA":UTILS.convertStringToNumber(collector["d0"][10].count[0]),
-                        "_13k_T2D_P_EMMAX_FE_IV":UTILS.convertStringToNumber(collector["d0"][5].count[0]),
-                        "_13k_T2D_OR_WALD_DOS_FE_IV":UTILS.convertStringToNumber(collector["d0"][8].count[0]),
-                        "SIGMA_T2D_P":UTILS.convertStringToNumber(collector["d0"][5].count[0]),
-                        "SIGMA_T2D_OR":UTILS.convertStringToNumber(collector["d0"][5].count[0])},
+                variantAssociationStatistics(
+                        collector['common'], // object
+                        sortedDatasetList, // array
                         "<%=variantToSearch%>",
                         "<g:createLink controller='trait' action='traitInfo' />",
                         variantAssociationStrings);
+                var dataSetAndPValues = {};
 
-                var pValueAndKey = UTILS.get_lowest_p_value_from_map({"GWAS": collector["d0"][6].count[0], "exome chip": collector["d0"][7].count[0], "exome sequence": collector["d0"][8].count[0]});
-                   $('#variantPValue').append((parseFloat(pValueAndKey[0])).toPrecision(4));
-                   $('#variantInfoGeneratingDataSet').append(pValueAndKey[1]);
+                if (sortedDatasetList.length>0){
+                    var chosenDataSet = sortedDatasetList[0];
+                    $('#variantPValue').append(chosenDataSet['p_value'].toPrecision(4));
+                    $('#variantInfoGeneratingDataSet').append(mpgSoftware.trans.translator(chosenDataSet['dataset']));
+
+                } else {
+                    $('#describeBestAssociation').hide();
+                    $('#noAssociationWithPhenotype').append(mpgSoftware.trans.translator(rememberPhenotype));
+                    $('#describeNoAssociation').show();
+                }
 
                 $('[data-toggle="popover"]').popover();
 
@@ -88,7 +121,6 @@
     };
     UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],'T2D',
             "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",fillVariantStatistics );
-    //fillVariantStatistics();
 
 </script>
 
@@ -99,16 +131,8 @@
     <div class="row clearfix">
 
         <g:renderT2dGenesSection>
-            <div class="col-md-3">
-                <div id="gwasAssociationStatisticsBox"></div>
-            </div>
-            <div class="col-md-1"></div>
-            <div class="col-md-3">
-                <div id="exomeChipAssociationStatisticsBox"></div>
-            </div>
-            <div class="col-md-1"></div>
-            <div class="col-md-3">
-                <div id="exomeSequenceAssociationStatisticsBox"></div>
+            <div  class="col-md-12 association_stats_boxes" id="holdAssociationStatisticsBoxes">
+
             </div>
         </g:renderT2dGenesSection>
 
@@ -121,9 +145,9 @@
 
 <br/>
 
-<p>
-    <span id="variantInfoAssociationStatisticsLinkToTraitTable"></span>
+%{--<p>--}%
+    %{--<span id="variantInfoAssociationStatisticsLinkToTraitTable"></span>--}%
 
-</p>
+%{--</p>--}%
 
 

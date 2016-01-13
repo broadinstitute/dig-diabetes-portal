@@ -44,68 +44,28 @@ var mpgSoftware = mpgSoftware || {};
             return returnValue;
         };
 
-        var variantAssociations = function (variantRec, variantTitle, traitsStudiedUrlRoot, variantAssociationStrings) {
+        var variantAssociations = function (cProperties,pProperties, variantTitle, traitsStudiedUrlRoot, variantAssociationStrings) {
             var weHaveVariantsAndAssociations;
-            weHaveVariantsAndAssociations = ((variantRec.IN_GWAS) || (variantRec.GWAS_T2D_PVALUE) || (variantRec.GWAS_T2D_OR) ||
-            (variantRec.EXCHP_T2D_P_value) || (variantRec.EXCHP_T2D_BETA) ||
-            (variantRec._13k_T2D_P_EMMAX_FE_IV) || (variantRec._13k_T2D_OR_WALD_DOS_FE_IV) );
-            var showGwas=true,showExchp=true,showExchp=true,showExseq=true;
+            weHaveVariantsAndAssociations = true;
 
             UTILS.verifyThatDisplayIsWarranted(weHaveVariantsAndAssociations, $('#VariantsAndAssociationsExist'), $('#VariantsAndAssociationsNoExist'));
             if (weHaveVariantsAndAssociations) {
-                if (showGwas) {
-                    $('#gwasAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
-                        variantRec.IN_GWAS,
-                        variantRec.GWAS_T2D_PVALUE,
-                        variantRec.GWAS_T2D_OR,
+                for ( var i = 0 ; i < pProperties.length ; i++ ){
+                    var propertiesForDataSet = pProperties[i];
+                    $('#holdAssociationStatisticsBoxes').append(privateMethods.describeAssociationsStatistics(
+                        true,
+                        propertiesForDataSet['p_value'],
+                        propertiesForDataSet['or_value'],
                         5e-8,
                         5e-4,
                         5e-2,
                         variantTitle,
-                            variantAssociationStrings.sourceDiagram +
-                            variantAssociationStrings.sourceDiagramQ,
-                        false,
-                        false,
-                        variantAssociationStrings));
-                }
-                if (showExchp) {
-                    $('#exomeChipAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
-                        variantRec.EXCHP_T2D_P_value,
-                        variantRec.EXCHP_T2D_P_value,
-                        variantRec.EXCHP_T2D_BETA,
-                        5e-8,
-                        5e-4,
-                        5e-2,
-                        variantTitle,
-                            variantAssociationStrings.sourceExomeChip +
-                            variantAssociationStrings.sourceExomeChipQ,
-                        false,
-                        false,
-                        variantAssociationStrings));
-                }
-                if (showExseq) {
-                    $('#exomeSequenceAssociationStatisticsBox').append(privateMethods.describeAssociationsStatistics(
-                        variantRec._13k_T2D_P_EMMAX_FE_IV,
-                        variantRec._13k_T2D_P_EMMAX_FE_IV,
-                        variantRec._13k_T2D_OR_WALD_DOS_FE_IV,
-                        5e-8,
-                        5e-4,
-                        5e-2,
-                        variantTitle,
-                            variantAssociationStrings.sourceExomeSequence +
-                            variantAssociationStrings.sourceExomeSequenceQ,
+                        mpgSoftware.trans.translator(propertiesForDataSet['dataset']),
                         false,
                         false,
                         variantAssociationStrings));
                 }
             }
-//            $('#variantInfoAssociationStatisticsLinkToTraitTable').append(privateMethods.fillAssociationStatisticsLinkToTraitTable(
-//                variantRec.IN_GWAS,
-//                variantRec.DBSNP_ID,
-//                variantRec.ID,
-//                traitsStudiedUrlRoot,
-//                variantAssociationStrings));
-
         };
 
         var describeImpactOfVariantOnProtein = function (variant, variantTitle, impactOnProtein) {
@@ -136,12 +96,12 @@ var mpgSoftware = mpgSoftware || {};
             $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
             $('#populationsHowCommonIs').append(variantTitle);
             $('#exploreSurroundingSequenceTitle').append(variantTitle);
-            $('#variantInfoAssociationStatisticsLinkToTraitTable').append(privateMethods.fillAssociationStatisticsLinkToTraitTable(
-                true,
-                dbsnpId,
-                varId,
-                traitsStudiedUrlRoot,
-                variantAssociationStrings));
+//            $('#variantInfoAssociationStatisticsLinkToTraitTable').append(privateMethods.fillAssociationStatisticsLinkToTraitTable(
+//                true,
+//                dbsnpId,
+//                varId,
+//                traitsStudiedUrlRoot,
+//                variantAssociationStrings));
         };
 
 

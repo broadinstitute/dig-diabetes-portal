@@ -480,11 +480,17 @@ body {
 #belowfooter {
   height: 150px; }
 div.boxyDisplay {
+    vertical-align: top;
     height: 200px;
+    width: 250px;
     margin: 5px;
-    padding:  15px;
+    padding:  0 5px 2px 5px;
     text-align: center;
     font-weight: 300;
+    display: inline-block;
+}
+.association_stats_boxes {
+    display: inline-block;
 }
 .genomeWideSignificant {
     background-color: #006633;

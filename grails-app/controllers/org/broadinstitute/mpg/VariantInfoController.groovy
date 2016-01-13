@@ -72,6 +72,18 @@ class VariantInfoController {
         }
     }
 
+// strictly static, but we need a metadata enhancement to pull these data back dynamically
+private String temporaryOrGenerator(String dataSet){
+    String returnValue
+    switch (dataSet){
+        case "ExChip_SIGMA1_mdv2" : returnValue = "OR_FIRTH"; break;
+        case "ExChip_82k_mdv2" :returnValue = "ODDS_RATIO"; break;
+        case "ExSeq_17k_mdv2" :returnValue = "OR_FIRTH_FE_IV"; break;
+        case "GWAS_DIAGRAM_mdv2" :returnValue = "ODDS_RATIO"; break;
+        case "GWAS_SIGMA1_mdv2" :returnValue = "ODDS_RATIO"; break;
+    }
+}
+
     /**
      * method to service the ajax call for the 'variant association statistics (pvalue/OR)' section/accordion
      *
@@ -80,6 +92,7 @@ class VariantInfoController {
     def variantDescriptiveStatistics (){
         String variantId = params.variantId
         String datasetStructs = params.datasets
+        String phenotype = params.phenotype
         JSONArray jsonArray = JSON.parse(datasetStructs)
         Iterator<JSONObject> iterator = jsonArray.iterator()
         List<LinkedHashMap> linkedHashMapList = []
@@ -89,9 +102,10 @@ class VariantInfoController {
             linkedHashMap['technology']=value.technology
             linkedHashMap['name']=value.name
             linkedHashMap['pvalue']=value.pvalue
+            linkedHashMap['orvalue']=temporaryOrGenerator(value.name)
             linkedHashMapList << linkedHashMap
         }
-        JSONObject jsonObject =  restServerService.combinedVariantAssociationStatistics ( variantId.trim().toUpperCase())
+        JSONObject jsonObject =  restServerService.combinedVariantAssociationStatistics ( variantId.trim().toUpperCase(),phenotype, linkedHashMapList)
         render(status:200, contentType:"application/json") {
             [variantInfo:jsonObject]
         }

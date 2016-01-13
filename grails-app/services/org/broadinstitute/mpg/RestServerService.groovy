@@ -631,28 +631,22 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param variantId
      * @return
      */
-    private JSONObject variantAssociationStatisticsSection(String variantId){
+    private JSONObject variantAssociationStatisticsSection(String variantId,String phenotype,List<LinkedHashMap> linkedHashMapList){
+        // First set up the common elements in the search
         String filterByVariantName = codedfilterByVariant(variantId)
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID","DBSNP_ID","CLOSEST_GENE","GENE","MOST_DEL_SCORE"])
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName],searchBuilderService,metaDataService)
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}",
-                "${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}",
-                "${EXOMESEQUENCEPVALUE}")
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}",
-                "${getSampleGroup(TECHNOLOGY_GWAS,EXPERIMENT_DIAGRAM,ANCESTRY_NONE)}",
-                "${GWASDATAPVALUE}")
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}",
-                "${getSampleGroup(TECHNOLOGY_EXOME_CHIP,"none",ANCESTRY_NONE)}",
-                "${EXOMECHIPPVALUE}")
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}",
-                "${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}",
-                "${EXOMESEQUENCEOR}")
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}",
-                "${getSampleGroup(TECHNOLOGY_GWAS,EXPERIMENT_DIAGRAM,ANCESTRY_NONE)}",
-                "${GWASDATAOR}")
-        addColumnsForPProperties(resultColumnsToDisplay,"${DEFAULTPHENOTYPE}",
-                "${getSampleGroup(TECHNOLOGY_EXOME_CHIP,"none",ANCESTRY_NONE)}",
-                "${EXOMECHIPOR}")
+        for (LinkedHashMap linkedHashMap in linkedHashMapList){
+            String dataSet = linkedHashMap.name
+            String pValue = linkedHashMap.pvalue
+            String orValue = linkedHashMap.orvalue
+            addColumnsForPProperties(resultColumnsToDisplay,phenotype,
+                    dataSet,
+                    pValue)
+            addColumnsForPProperties(resultColumnsToDisplay,phenotype,
+                    dataSet,
+                    orValue)
+        }
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
@@ -662,13 +656,14 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     /***
-     * Numbers for the variant and associations boxes across the top of the variant info page
+     * Numbers for the variant and associations boxes across the top of the variant info page.  we will combine
+     * a collection of common properties, along with some number of data sets/properties
      *
      * @param variantName
      * @return
      */
-    public JSONObject combinedVariantAssociationStatistics(String variantName){
-        String attribute = "T2D"
+    public JSONObject combinedVariantAssociationStatistics(String variantName,String phenotype,List<LinkedHashMap> linkedHashMapList){
+      //  String attribute = "T2D"
         JSONObject returnValue
         List <Integer> dataSeteList = [1]
         List <String> pValueList = [1]
@@ -678,43 +673,53 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             sb  << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
             for ( int  i = 0 ; i < pValueList.size () ; i++ ){
 
-                JSONObject apiResults = variantAssociationStatisticsSection(variantName)
+                JSONObject apiResults = variantAssociationStatisticsSection(variantName,phenotype,linkedHashMapList)
                 if (apiResults.is_error == false) {
                     if ((apiResults.variants) && (apiResults.variants[0])  && (apiResults.variants[0][0])){
                         def variant = apiResults.variants[0];
 
-                        def element = variant["DBSNP_ID"].findAll{it}[0]
-                        sb  << "{\"level\":\"DBSNP_ID\",\"count\":\"${element}\"},"
-
-                        element = variant["VAR_ID"].findAll{it}[0]
-                        sb  << "{\"level\":\"VAR_ID\",\"count\":\"${element}\"},"
-
-                        element = variant["GENE"].findAll{it}[0]
-                        sb  << "{\"level\":\"GENE\",\"count\":\"${element}\"},"
-
-                        element = variant["CLOSEST_GENE"].findAll{it}[0]
-                        sb  << "{\"level\":\"CLOSEST_GENE\",\"count\":\"${element}\"},"
-
-                        element = variant["MOST_DEL_SCORE"].findAll{it}[0]
-                        sb  << "{\"level\":\"MOST_DEL_SCORE\",\"count\":\"${element}\"},"
-
-                        if (variant ["P_FIRTH_FE_IV"]){
-                            sb  << "{\"level\":\"P_FIRTH_FE_IV\",\"count\":${variant["P_FIRTH_FE_IV"]["${getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)}"][attribute]}},"
-                        }
-                        if (variant ["P_VALUE"]){
-                            sb  << "{\"level\":\"P_VALUE_GWAS\",\"count\":${variant["P_VALUE"][getSampleGroup(TECHNOLOGY_GWAS,EXPERIMENT_DIAGRAM,ANCESTRY_NONE)][attribute]}},"
-                            sb  << "{\"level\":\"P_VALUE_EXCHIP\",\"count\":${variant["P_VALUE"][getSampleGroup(TECHNOLOGY_EXOME_CHIP,"none",ANCESTRY_NONE)][attribute]}},"
-                        }
-                        if (variant ["OR_FIRTH_FE_IV"]){
-                            sb  << "{\"level\":\"OR_FIRTH_FE_IV\",\"count\":${variant["OR_FIRTH_FE_IV"][getSampleGroup(TECHNOLOGY_EXOME_SEQ,"none",ANCESTRY_NONE)][attribute]}},"
-                        }
-                        if (variant ["ODDS_RATIO"]){
-                            sb  << "{\"level\":\"ODDS_RATIO\",\"count\":${variant["ODDS_RATIO"][getSampleGroup(TECHNOLOGY_GWAS,EXPERIMENT_DIAGRAM,ANCESTRY_NONE)][attribute]}},"
-                        }
-                        if (variant ["${ORCHIP}"]){
-                            sb  << "{\"level\":\"${ORCHIP}\",\"count\":${variant["${ORCHIP}"][getSampleGroup(TECHNOLOGY_EXOME_CHIP,"none",ANCESTRY_NONE)][attribute]}}"
+                        List <String> requestedProperties = []
+                        List<String> commonProperties = ['DBSNP_ID','VAR_ID','GENE','CLOSEST_GENE','MOST_DEL_SCORE']
+                        for (String commonProperty in commonProperties){
+                            requestedProperties << "{\"dataset\":\"common\",\"level\":\"${commonProperty}\",\"count\":\"${apiResults.variants[0][commonProperty].findAll{it}[0]}\"}".toString()
                         }
 
+                        List <String> pValueNames = linkedHashMapList.collect{it.pvalue}.unique()
+                        LinkedHashMap pValueDataSets = [:]
+                        for (String pValueName in pValueNames){
+                            pValueDataSets[pValueName] = linkedHashMapList.findAll{it.pvalue==pValueName}.collect{it.name}
+                        }
+                        List <String> orValueNames = linkedHashMapList.collect{it.orvalue}.unique()
+                        LinkedHashMap orValueDataSets = [:]
+                        for (String orValueName in orValueNames){
+                            orValueDataSets[orValueName] = linkedHashMapList.findAll{it.orvalue==orValueName}.collect{it.name}
+                        }
+
+                        for (def s in pValueDataSets){
+                            String pValueName = s.getKey()
+                            List dataSetNames = s.getValue()
+                            if ((dataSetNames)&&
+                                (dataSetNames.size()>0)&&
+                                (dataSetNames[0]))  {
+                                for (String dataSetName in dataSetNames){
+                                    requestedProperties  << "{\"meaning\":\"p_value\",\"dataset\":\"${dataSetName}\", \"level\":\"${pValueName}\",\"count\":${variant[pValueName][dataSetName][phenotype]}}"
+                                }
+                            }
+                        }
+                        for (def s in orValueDataSets){
+                            String orValueName = s.getKey()
+                            List dataSetNames = s.getValue()
+                            if ((dataSetNames)&&
+                                    (dataSetNames.size()>0)&&
+                                    (dataSetNames[0]))  {
+                                for (String dataSetName in dataSetNames) {
+                                    requestedProperties  << "{\"meaning\":\"or_value\",\"dataset\":\"${dataSetName}\", \"level\":\"${orValueName}\",\"count\":${variant[orValueName][dataSetName][phenotype]}}"
+                                }
+                            }
+
+                        }
+
+                        sb  << requestedProperties.join(",")
                     }
 
                 }
