@@ -524,7 +524,13 @@ public class JsonParser {
             sampleGroup.acceptVisitor(propertyVisitor);
 
             // get the list back
-            propertyList = propertyVisitor.getPropertyList();
+            List<Property> tempPropertyList = new ArrayList<Property>();
+            for ( int i = 0 ; i < propertyVisitor.getPropertyList().size() ; i++ ) {
+                if (propertyVisitor.getPropertyList().get(i).isSearchable()){
+                    tempPropertyList.add(propertyVisitor.getPropertyList().get(i));
+                }
+            }
+            propertyList = tempPropertyList;
         }
 
         // return the list
@@ -550,6 +556,7 @@ public class JsonParser {
     public List<Property> getSearchableCommonProperties() throws PortalException {
         // local variables
         List<Property> commonPropertyList;
+        List<Property> searchableCommonPropertyList = new ArrayList<Property>();
 
         // get the searchable common property visitor
         CommonPropertyVisitor visitor = new CommonPropertyVisitor(Boolean.TRUE);
@@ -560,8 +567,16 @@ public class JsonParser {
         // get the common property list
         commonPropertyList = visitor.getProperties();
 
+
+        for ( int i = 0 ; i < commonPropertyList.size() ; i++ ) {
+            if (commonPropertyList.get(i).isSearchable()){
+                searchableCommonPropertyList.add(commonPropertyList.get(i));
+            }
+        }
+
+
         // return the result
-        return commonPropertyList;
+        return searchableCommonPropertyList;
     }
 
 
