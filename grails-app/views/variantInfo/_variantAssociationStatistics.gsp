@@ -100,7 +100,11 @@
                         variantAssociationStrings);
                 var dataSetAndPValues = {};
 
-                if (sortedDatasetList.length>0){
+                if (sortedDatasetList.length>0){ // we have something to write
+                    if ($('#variantPValue').text().length>0){ // if we have already written something then clear it up
+                        $('#variantPValue').text('');
+                        $('#variantInfoGeneratingDataSet').text('');
+                    }
                     var chosenDataSet = sortedDatasetList[0];
                     $('#variantPValue').append(chosenDataSet['p_value'].toPrecision(4));
                     $('#variantInfoGeneratingDataSet').append(mpgSoftware.trans.translator(chosenDataSet['dataset']));

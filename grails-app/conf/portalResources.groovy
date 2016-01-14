@@ -56,9 +56,11 @@ modules = {
     variantInfo {
         resource url: 'css/dport/barchart.css'
         resource url: 'css/dport/variant.css'
+        resource url: 'css/lib/lightslider.css'
 
         resource url: 'js/lib/dport/variantInfo.js'
         resource url: 'js/lib/dport/barchart.js'
+        resource url: 'js/lib/lightslider.js'
 
         resource url: 'js/lib/dport/igvLaunch.js'
     }
