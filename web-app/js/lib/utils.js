@@ -107,8 +107,9 @@ var UTILS = {
         this.proteinEffectMap = keyValue;
         this.proteinEffectArray = arrayHolder;
     },
-    retrieveSampleGroupsbyTechnologyAndPhenotype : function(technologies,phenotype, actionUrl, callBack){
+    retrieveSampleGroupsbyTechnologyAndPhenotype : function(technologies,phenotype, actionUrl, callBack, passThru){
         var phenotypeName = phenotype;
+        var passThruValues = passThru;
         var compareDatasetsByTechnology = function (a, b) {
             if (a.technology < b. technology) return -1;
             if (a.technology > b. technology) return 1;
@@ -139,7 +140,7 @@ var UTILS = {
                                 dataSetPropertyValues.push(sortedDataSetArray[i]);
                             }
                         }
-                        callBack (phenotypeName,dataSetPropertyValues);
+                        callBack (phenotypeName,dataSetPropertyValues,passThruValues);
 
                     }
                 }

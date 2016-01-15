@@ -44,17 +44,17 @@ var mpgSoftware = mpgSoftware || {};
             return returnValue;
         };
 
-        var variantAssociations = function (cProperties,pProperties, variantTitle, traitsStudiedUrlRoot, variantAssociationStrings) {
+        var variantAssociations = function (cProperties,pProperties, variantTitle, traitsStudiedUrlRoot, variantAssociationStrings,selectorForBoxes) {
             var weHaveVariantsAndAssociations;
             weHaveVariantsAndAssociations = true;
 
             UTILS.verifyThatDisplayIsWarranted(weHaveVariantsAndAssociations, $('#VariantsAndAssociationsExist'), $('#VariantsAndAssociationsNoExist'));
             if (weHaveVariantsAndAssociations) {
-                $('#holdAssociationStatisticsBoxes').empty();
+                $(selectorForBoxes).empty();
                 for ( var i = 0 ; i < pProperties.length ; i++ ){
                     var propertiesForDataSet = pProperties[i];
                     var dealingWithBeta = (typeof propertiesForDataSet['beta_value'] !== 'undefined');
-                    $('#holdAssociationStatisticsBoxes').append(privateMethods.describeAssociationsStatistics(
+                    $(selectorForBoxes).append(privateMethods.describeAssociationsStatistics(
                         true,
                         propertiesForDataSet['p_value'],
                         propertiesForDataSet['or_value'],
@@ -64,7 +64,7 @@ var mpgSoftware = mpgSoftware || {};
                         5e-2,
                         variantTitle,
                         mpgSoftware.trans.translator(propertiesForDataSet['dataset']),
-                        false,
+                        selectorForBoxes,
                         dealingWithBeta,
                         variantAssociationStrings));
                 }
@@ -610,7 +610,8 @@ var mpgSoftware = mpgSoftware || {};
 //                    }
 
                 },
-                describeAssociationsStatistics = function (availableData, pValue, orValue, betaValue, strongCutOff, mediumCutOff, weakCutOff, variantTitle, datatype, includeCaseControlComparison, takeExpOfOr, variantAssociationStrings) {
+                describeAssociationsStatistics = function (availableData, pValue, orValue, betaValue, strongCutOff, mediumCutOff, weakCutOff, variantTitle, datatype, selectorForBoxes,
+                                                           takeExpOfOr, variantAssociationStrings) {
                     var retVal = "";
                     var significanceDescriptor = "";
                     var orValueNumerical;
@@ -649,9 +650,6 @@ var mpgSoftware = mpgSoftware || {};
                             orValueText = orValueNumericalAdjusted.toPrecision(3);
                             retVal += ("<div class='veryImportantText'>"+((takeExpOfOr === true) ? 'BETA' : 'OR')+" = " + orValueText +
                                 variantAssociationStrings.associationOddsRatioQ + "</div>");
-                        }
-                        if (includeCaseControlComparison) {
-                            ;
                         }
                     } else {
                         retVal += '';

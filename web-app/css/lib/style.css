@@ -530,6 +530,11 @@ div.veryImportantText {
     padding: 0px 5px 0px 20px;
     font-size: 16pt;
 }
+div.rowTitle {
+    font-size: 16pt;
+    font-weight: bold;
+}
+
 #variantTitleInAssociationStatistics {
     font-weight: bold;
 }
