@@ -182,8 +182,6 @@ ul.content-slider{
 }
 		.content-slider li{
 			min-height: 180px;
-			background-color:#060;
-			color: #fff;
 			padding-bottom: 10px;
 		}
 		.content-slider h2 {

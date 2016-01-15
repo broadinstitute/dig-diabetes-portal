@@ -168,7 +168,8 @@
                     associationPValueQ:'<g:helpText title="variant.variantAssociations.pValue.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.pValue.help.text"/>',
                     associationOddsRatioQ:'<g:helpText title="variant.variantAssociations.oddsRatio.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.oddsRatio.help.text"/>'
                 };
-                var collector = {}
+                var collector = {};
+                console.log('rememberPhenotype='+rememberPhenotype);
                 if ((typeof data !== 'undefined')&&
                         (typeof data.variantInfo !== 'undefined')&&
                         (typeof data.variantInfo.results !== 'undefined')&&
@@ -207,7 +208,7 @@
                         return (a.p_value - b.p_value);
                     })
                 }
-                if ((sortedDatasetList.length>1)&&
+                if ((sortedDatasetList.length>0)&&
                         (sortedDatasetList[0].p_value <.05)){
                     var formSelector = "#"+selectorForStatisticsBoxesValues;
                     var titleSelector = formSelector+"_title";
