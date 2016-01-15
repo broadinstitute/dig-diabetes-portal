@@ -2,8 +2,6 @@ modules = {
 
     jquery {
         resource url: 'js/lib/jquery-1.11.0.min.js'
-//        resource url: 'js/lib/jquery.dataTables.min.js'
-//        resource url: 'css/lib/jquery.dataTables.css'
         resource url: 'js/DataTables-1.10.7/media/js/jquery.dataTables.min.js'
         resource url: 'js/DataTables-1.10.7/media/css/jquery.dataTables.min.css'
         resource url: 'js/lib/dataTables.tableTools.min.js'
@@ -54,6 +52,10 @@ modules = {
         resource url: 'js/lib/dport/igvLaunch.js'
     }
     variantInfo {
+        dependsOn "core"
+
+        resource url: 'css/images/controls.png'
+
         resource url: 'css/dport/barchart.css'
         resource url: 'css/dport/variant.css'
         resource url: 'css/lib/lightslider.css'

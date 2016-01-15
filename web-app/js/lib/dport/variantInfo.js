@@ -54,8 +54,6 @@ var mpgSoftware = mpgSoftware || {};
                 for ( var i = 0 ; i < pProperties.length ; i++ ){
                     var propertiesForDataSet = pProperties[i];
                     var dealingWithBeta = (typeof propertiesForDataSet['beta_value'] !== 'undefined');
-//                    (typeof propertiesForDataSet['beta_value'] === 'undefined')
-//                    propertiesForDataSet['beta_value']
                     $('#holdAssociationStatisticsBoxes').append(privateMethods.describeAssociationsStatistics(
                         true,
                         propertiesForDataSet['p_value'],
@@ -621,7 +619,8 @@ var mpgSoftware = mpgSoftware || {};
                     var pNumericalValue = pValue;
                     var pTextValue = "";
                     if (availableData && (pValue !== null) && (orValue !== null)) {
-                        retVal += "<div class='boxyDisplay ";
+                        //retVal += "<div class='boxyDisplay ";
+                        retVal += "<li class=' ";
                         // may or may not be bold
                         if (pNumericalValue <= strongCutOff) {
                             retVal += "genomeWideSignificant'>";
@@ -640,7 +639,7 @@ var mpgSoftware = mpgSoftware || {};
                         }
                         // always needs descr
                         pTextValue = pNumericalValue.toPrecision(3);
-                        retVal += ("<h2>" + datatype + "</h2>");
+                        retVal += ("<div class='superImportantText'>" + datatype + "</div>");
                         retVal += ("<div class='veryImportantText'>p = " + pTextValue +
                             variantAssociationStrings.associationPValueQ + "</div>");
                         retVal += ("<div class='notVeryImportantText'>" + significanceDescriptor + "</div>");
@@ -659,15 +658,7 @@ var mpgSoftware = mpgSoftware || {};
                     }
                     return retVal;
                 };
-//                fillAssociationStatisticsLinkToTraitTable = function (weHaveData, dbsnp, variantId, rootTraitUrl, variantAssociationStrings) {
-//                    var retVal = "";
-//                    if (weHaveData) {
-//                        retVal += ("<a class=\"boldlink\" href=\"" + rootTraitUrl + "/" +
-//                            ((dbsnp!=="null") ? (dbsnp) : (variantId)) +
-//                            "\">" + variantAssociationStrings.variantPValues);
-//                    }
-//                    return  retVal;
-//                };
+
 
 
             return {

@@ -492,37 +492,42 @@ div.boxyDisplay {
 .association_stats_boxes {
     display: inline-block;
 }
-.genomeWideSignificant {
+.content-slider li+.genomeWideSignificant {
     background-color: #006633;
     color: white;
 }
-.locusWideSignificant {
+.content-slider li+.locusWideSignificant {
     background-color: #7AB317;
     color: white;
 }
-.nominallySignificant {
+.content-slider li+.nominallySignificant {
     background-color: #9ED54C;
     color: black;
 }
-.notSignificant {
+.content-slider li+.notSignificant {
     background-color: #ffffff;
     border: 1px solid black;
     color: black;
 }
+div.superImportantText{
+    padding: 12px 10px 6px 20px;
+    font-size: 18pt;
+    line-height: 26px;
+}
 div.notVeryImportantText {
-    padding: 2px;
+    padding: 0px 0 0px 20px;
     font-size: 9pt;
 }
 div.moreImportantText {
-    padding: 2px;
+    padding: 0px 0 0px 20px;
     font-size: 12pt;
 }
 div.prettyImportantText {
-    padding: 2px;
+    padding: 0px 0 0px 20px;
     font-size: 14pt;
 }
 div.veryImportantText {
-    padding: 2px;
+    padding: 0px 5px 0px 20px;
     font-size: 16pt;
 }
 #variantTitleInAssociationStatistics {

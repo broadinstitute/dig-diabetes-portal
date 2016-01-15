@@ -80,23 +80,23 @@
 .lSSlideOuter .lSPager.lSpg > li {
     cursor: pointer;
     display: inline-block;
-    padding: 0 5px;
+    padding: 10px 5px;
 }
 .lSSlideOuter .lSPager.lSpg > li a {
-    background-color: #222222;
+    background-color: #999;
     border-radius: 30px;
     display: inline-block;
-    height: 8px;
-    overflow: hidden;
+    height: 12px;
+    overflow: hidden; 
     text-indent: -999em;
-    width: 8px;
+    width: 12px;
     position: relative;
     z-index: 99;
     -webkit-transition: all 0.5s linear 0s;
     transition: all 0.5s linear 0s;
 }
 .lSSlideOuter .lSPager.lSpg > li:hover a, .lSSlideOuter .lSPager.lSpg > li.active a {
-    background-color: #428bca;
+    background-color:#06C;
 }
 .lSSlideOuter .media {
     opacity: 0.8;
@@ -107,6 +107,18 @@
 /* End of pager */
 
 /* slider actions */
+.lSAction {
+	position:fixed;
+	z-index:1000;
+	padding-right:15px;
+	padding-left:15px;
+	margin-right:auto;
+	margin-left:auto
+}
+@media (min-width:768px){.lSAction{width:750px}}
+@media (min-width:992px){.lSAction{width:970px}}
+@media (min-width:1200px){.lSAction{width:1170px}}
+
 .lSAction > a {
     width: 32px;
     display: block;
@@ -117,20 +129,22 @@
     position: absolute;
     z-index: 99;
     margin-top: -16px;
-    opacity: 0.5;
+    opacity: 0.3;
     -webkit-transition: opacity 0.35s linear 0s;
-    transition: opacity 0.35s linear 0s;
+    transition: opacity 0.1s linear 0s;
 }
 .lSAction > a:hover {
     opacity: 1;
 }
 .lSAction > .lSPrev {
     background-position: 0 0;
-    left: 10px;
+    left:-42px;
+	margin-top: -100px;
 }
 .lSAction > .lSNext {
     background-position: -32px 0;
-    right: 10px;
+    right: -10px;
+	margin-top: -100px;
 }
 .lSAction > a.disabled {
     pointer-events: none;
@@ -139,7 +153,7 @@
     height: 1px;
     opacity: 0;
     filter: alpha(opacity=0);
-    overflow: hidden;
+    overflow: hidden; 
 }
 
 /* Rtl */
@@ -159,3 +173,35 @@
 .lSSlideOuter.lSrtl .lightSlider > *,  .lSSlideOuter.lSrtl .lSGallery li {
     float: right !important;
 }
+
+/*variant page slider */
+ul.content-slider{
+			list-style: none outside none;
+		    padding-left: 0;
+			margin: 0;
+}
+		.content-slider li{
+			min-height: 180px;
+			background-color:#060;
+			color: #fff;
+			padding-bottom: 10px;
+		}
+		.content-slider h2 {
+		    margin: 0;
+		    padding: 15px 0 5px 15px;
+			font-size: 25px;
+		}
+		.content-slider p {
+			
+		}
+		.content-slider span {
+			font-size: 20px;
+			padding: 0 0 0 15px;
+		}
+		.items{
+			width: 100%;
+		}
+		span.dk-fine-print {
+			font-size: 12px;
+		}
+/* variant slider end */

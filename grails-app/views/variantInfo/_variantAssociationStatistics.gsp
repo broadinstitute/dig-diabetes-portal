@@ -114,6 +114,10 @@
                     $('#noAssociationWithPhenotype').append(mpgSoftware.trans.translator(rememberPhenotype));
                     $('#describeNoAssociation').show();
                 }
+                $("#holdAssociationStatisticsBoxes").lightSlider({
+                    loop:true,
+                    keyPress:true
+                });
 
                 $('[data-toggle="popover"]').popover();
 
@@ -157,7 +161,71 @@
 
 </script>
 
+<script>
+    $(document).ready(function() {
+//        $("#content-slider1").lightSlider({
+//            loop:true,
+//            keyPress:true
+//        });
+    });
+</script>
+%{--<div class="row clearfix">--}%
+    %{--<div class="items">--}%
+        %{--<div class="item">--}%
+            %{--<ul id="content-slider1" class="content-slider">--}%
+                %{--<li>--}%
+                    %{--<h2>DIAGRAM GWAS</h2>--}%
+                    %{--<span>p = 2.70e-20</span><br>--}%
+                    %{--<span class="dk-fine-print">genome-wide significant</span><br>--}%
+                    %{--<span>OR = 0.877</span>--}%
+                %{--</li>--}%
+                %{--<li>--}%
+                    %{--<h2>exome chip</h2>--}%
+                    %{--<span>p = 2.73e-18</span><br>--}%
+                    %{--<span class="dk-fine-print">genome-wide significant</span><br>--}%
+                    %{--<span>OR = 0.878</span>--}%
+                %{--</li>--}%
+                %{--<li>--}%
+                    %{--<h2>exome sequence</h2>--}%
+                    %{--<span>p = 7.66e-8</span><br>--}%
+                    %{--<span class="dk-fine-print">locus-wide significant</span><br>--}%
+                    %{--<span>OR = 0.869</span>--}%
+                %{--</li>--}%
+                %{--<li>--}%
+                    %{--<h2>Very very long sample name</h2>--}%
+                    %{--<span>p = 2.70e-20</span><br>--}%
+                    %{--<span class="dk-fine-print">genome-wide significant</span><br>--}%
+                    %{--<span>OR = 0.877</span>--}%
+                %{--</li>--}%
+                %{--<li>--}%
+                    %{--<h2>sample name 5</h2>--}%
+                    %{--<span>p = 2.70e-20</span><br>--}%
+                    %{--<span class="dk-fine-print">genome-wide significant</span><br>--}%
+                    %{--<span>OR = 0.877</span>--}%
+                %{--</li>--}%
+                %{--<li>--}%
+                    %{--<h2>sample name 6</h2>--}%
+                    %{--<span>p = 2.73e-18</span><br>--}%
+                    %{--<span class="dk-fine-print">genome-wide significant</span><br>--}%
+                    %{--<span>OR = 0.878</span>--}%
+                %{--</li>--}%
+                %{--<li>--}%
+                    %{--<h2>sample name 7</h2>--}%
+                    %{--<span>p = 7.66e-8</span><br>--}%
+                    %{--<span class="dk-fine-print">locus-wide significant</span><br>--}%
+                    %{--<span>OR = 0.869</span>--}%
+                %{--</li>--}%
+                %{--<li>--}%
+                    %{--<h2>sample name 8</h2>--}%
+                    %{--<span>p = 2.70e-20</span><br>--}%
+                    %{--<span class="dk-fine-print">genome-wide significant</span><br>--}%
+                    %{--<span>OR = 0.877</span>--}%
+                %{--</li>--}%
+            %{--</ul>--}%
+        %{--</div>--}%
+    %{--</div>--}%
 
+%{--</div>--}%
 
 <br/>
 <div class="row clearfix">
@@ -175,14 +243,19 @@
     <div class="col-md-6"></div>
 </div>
 <div id="VariantsAndAssociationsExist" style="display: block">
-    <div class="row clearfix">
+    %{--<div class="row clearfix">--}%
 
-        <g:renderT2dGenesSection>
-            <div  class="col-md-12 association_stats_boxes" id="holdAssociationStatisticsBoxes">
+        %{--<div  class="col-md-12 association_stats_boxes" id="holdAssociationStatisticsBoxes">--}%
 
-            </div>
-        </g:renderT2dGenesSection>
+        %{--</div>--}%
 
+    %{--</div>--}%
+    <div class="items">
+        <div class="item">
+            <ul id="holdAssociationStatisticsBoxes" class="content-slider">
+
+            </ul>
+        </div>
     </div>
 </div>
 
