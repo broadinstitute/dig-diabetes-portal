@@ -224,7 +224,9 @@
                     $(formSelector).lightSlider({
                         //loop:true,
                         //keyPress:true,
-                        autoWidth: false,
+//                        autoWidth: false,
+//                        item: 5,
+//                        slideMargin: 15
                         //vertical: false,
                         onSliderLoad: function() {
                             $(formSelector).removeClass('cS-hidden');

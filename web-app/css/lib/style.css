@@ -492,13 +492,14 @@ div.boxyDisplay {
     padding:  0 5px 2px 5px;
     text-align: center;
     font-weight: 300;
-    display: inline-block;
+    /*display: inline-block;*/
 }
 .association_stats_boxes {
-    display: inline-block;
+    /*display: inline-block;*/
 }
 .sigBox{
    padding-bottom: 0;
+
 }
 li.genomeWideSignificant,
 .content-slider li+.genomeWideSignificant {
