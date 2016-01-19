@@ -621,7 +621,7 @@ var mpgSoftware = mpgSoftware || {};
                     var pTextValue = "";
                     if (availableData && (pValue !== null) && (orValue !== null)) {
                         //retVal += "<div class='boxyDisplay ";
-                        retVal += "<li class=' ";
+                        retVal += "<li class='sigBox ";
                         // may or may not be bold
                         if (pNumericalValue <= strongCutOff) {
                             retVal += "genomeWideSignificant'>";

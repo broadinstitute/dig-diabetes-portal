@@ -12,7 +12,8 @@
 
     mpgSoftware.ancestryTable = (function () {
         var loadAncestryTable = function (chosenGene,dataSetMap) {
-
+            var loader = $('#rSpinner');
+            loader.show();
             var buildRowDataStructure = function (data) {
                 var returnValues = [];
                 for (var i = 0; i < data.ethnicityInfo.results.length; i++) {
@@ -109,6 +110,7 @@
                         aoColumnDefs: [{sType: "allAnchor", aTargets: [3,4,5,6] },
                             {"bSortable": false , aTargets: [0] }]
                     });
+                    loader.hide();
                     $('[data-toggle="popover"]').popover();
                 },
                 error: function (jqXHR, exception) {

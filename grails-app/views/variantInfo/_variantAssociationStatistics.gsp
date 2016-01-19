@@ -220,9 +220,15 @@
                             "<g:createLink controller='trait' action='traitInfo' />",
                             variantAssociationStrings,
                             formSelector);
+                    // lower boxes
                     $(formSelector).lightSlider({
-                        // loop:true,
-                        keyPress:true
+                        //loop:true,
+                        //keyPress:true,
+                        autoWidth: false,
+                        //vertical: false,
+                        onSliderLoad: function() {
+                            $(formSelector).removeClass('cS-hidden');
+                        }
                     });
                 }
             },
@@ -289,7 +295,7 @@
 
 <br/>
 
-<div id="VariantsAndAssociationsExist" style="display: block">
+<div id="VariantsAndAssociationsExist" style="overflow-y: scroll; height: 500px;">
     <div class="items">
         <div class="item">
             <div id='holdAssociationStatisticsBoxes_title' class='rowTitle'></div>

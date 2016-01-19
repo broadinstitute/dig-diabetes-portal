@@ -472,7 +472,12 @@ body {
   padding: 40px 0 80px;
   font-size: 12pt;
 }
-
+#VariantsAndAssociationsExist {
+    overflow-y: scroll;
+    height: 500px;
+    padding: 10px;
+    border: 1px solid #bbb;
+}
 #footer {
   padding: 20px 0 40px;
   font-size: 1.5em; }
@@ -491,6 +496,9 @@ div.boxyDisplay {
 }
 .association_stats_boxes {
     display: inline-block;
+}
+.sigBox{
+   padding-bottom: 0;
 }
 li.genomeWideSignificant,
 .content-slider li+.genomeWideSignificant {
@@ -511,6 +519,7 @@ li.notSignificant,
 .content-slider li+.notSignificant {
     background-color: #ffffff;
     border: 1px solid black;
+    padding-bottom: 0;
     color: black;
 }
 div.superImportantText{
