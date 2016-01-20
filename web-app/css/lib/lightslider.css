@@ -181,7 +181,7 @@ ul.content-slider{
 			margin: 0;
 }
 		.content-slider li{
-			min-height: 180px;
+			/*min-height: 180px;*/
 			padding-bottom: 10px;
 		}
 		.content-slider h2 {

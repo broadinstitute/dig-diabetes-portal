@@ -473,10 +473,7 @@ body {
   font-size: 12pt;
 }
 #VariantsAndAssociationsExist {
-    overflow-y: scroll;
-    height: 500px;
-    padding: 10px;
-    border: 1px solid #bbb;
+
 }
 #footer {
   padding: 20px 0 40px;
@@ -499,22 +496,35 @@ div.boxyDisplay {
 }
 .sigBox{
    padding-bottom: 0;
-
+   min-height: 130px;
 }
+.smallerStatBoxes {
+   /* display: inline-block;*/
+}
+.scrollerWin{
+    overflow-y: scroll;
+    height: 500px;
+    padding: 10px;
+    border: 1px solid #bbb;
+}
+/* big boxes */
 li.genomeWideSignificant,
 .content-slider li+.genomeWideSignificant {
     background-color: #006633;
     color: white;
+    min-height: 160px;
 }
 li.locusWideSignificant,
 .content-slider li+.locusWideSignificant {
     background-color: #7AB317;
     color: white;
+    min-height: 160px;
 }
 li.nominallySignificant,
 .content-slider li+.nominallySignificant {
     background-color: #9ED54C;
     color: black;
+    min-height: 160px;
 }
 li.notSignificant,
 .content-slider li+.notSignificant {
@@ -522,31 +532,94 @@ li.notSignificant,
     border: 1px solid black;
     padding-bottom: 0;
     color: black;
+    min-height: 160px;
 }
+
+/*smaller boxes*/
+li.genomeWideSignificantsmall,
+.content-slider li+.genomeWideSignificantsmall {
+    background-color: #006633;
+    color: white;
+    min-height: 130px;
+}
+li.locusWideSignificantsmall,
+.content-slider li+.locusWideSignificantsmall {
+    background-color: #7AB317;
+    color: white;
+    min-height: 130px;
+}
+li.nominallySignificantsmall,
+.content-slider li+.nominallySignificantsmall {
+    background-color: #9ED54C;
+    color: black;
+    min-height: 130px;
+}
+li.notSignificantsmall,
+.content-slider li+.notSignificantsmall {
+    background-color: #ffffff;
+    border: 1px solid black;
+    padding-bottom: 0;
+    color: black;
+    min-height: 130px;
+}
+
+/* big boxes */
 div.superImportantText{
-    padding: 12px 10px 6px 20px;
+    padding: 12px 10px 6px 12px;
     font-size: 18pt;
     line-height: 26px;
 }
 div.notVeryImportantText {
-    padding: 0px 0 0px 20px;
+    padding: 0px 0 0px 12px;
     font-size: 9pt;
 }
 div.moreImportantText {
-    padding: 0px 0 0px 20px;
+    padding: 0px 0 0px 12px;
     font-size: 12pt;
 }
 div.prettyImportantText {
-    padding: 0px 0 0px 20px;
+    padding: 0px 0 0px 12px;
     font-size: 14pt;
 }
 div.veryImportantText {
-    padding: 0px 5px 0px 20px;
-    font-size: 16pt;
+    padding: 0px 5px 0px 12px;
+    font-size: 14pt;
 }
+
+/*smaller boxes*/
+div.superImportantTextsmall{
+    padding: 6px 5px 6px 10px;
+    font-size: 12pt;
+    line-height: 18px;
+}
+div.notVeryImportantTextsmall {
+    padding: 0px 0 0px 10px;
+    font-size: 8pt;
+}
+div.moreImportantTextsmall {
+    padding: 0px 0 0px 10px;
+    font-size: 10pt;
+}
+div.prettyImportantTextsmall {
+    padding: 0px 0 0px 10px;
+    font-size: 12pt;
+}
+div.veryImportantTextsmall {
+    padding: 0px 5px 0px 20px;
+    font-size: 10pt;
+    font-weight: bold;
+}
+.lessProminent {
+    display: none;
+}
+.lineUpTitles {
+    display: inline-block;
+}
+
 div.rowTitle {
     font-size: 16pt;
     font-weight: bold;
+    display: inline-block;
 }
 
 #variantTitleInAssociationStatistics {

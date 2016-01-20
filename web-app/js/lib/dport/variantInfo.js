@@ -44,7 +44,7 @@ var mpgSoftware = mpgSoftware || {};
             return returnValue;
         };
 
-        var variantAssociations = function (cProperties,pProperties, variantTitle, traitsStudiedUrlRoot, variantAssociationStrings,selectorForBoxes) {
+        var variantAssociations = function (cProperties,pProperties, variantTitle, traitsStudiedUrlRoot, variantAssociationStrings,selectorForBoxes, prominentBoxes) {
             var weHaveVariantsAndAssociations;
             weHaveVariantsAndAssociations = true;
 
@@ -66,7 +66,8 @@ var mpgSoftware = mpgSoftware || {};
                         mpgSoftware.trans.translator(propertiesForDataSet['dataset']),
                         selectorForBoxes,
                         dealingWithBeta,
-                        variantAssociationStrings));
+                        variantAssociationStrings,
+                        prominentBoxes ));
                 }
             }
         };
@@ -171,6 +172,62 @@ var mpgSoftware = mpgSoftware || {};
                         }
                     }
                     return returnValue;
+                },
+                describeAssociationsStatistics = function (availableData, pValue, orValue, betaValue, strongCutOff, mediumCutOff, weakCutOff, variantTitle, datatype, selectorForBoxes,
+                                                           takeExpOfOr, variantAssociationStrings, prominentBoxes) {
+                    var retVal = "";
+                    var significanceDescriptor = "";
+                    var orValueNumerical;
+                    var orValueNumericalAdjusted;
+                    var orValueText = "";
+                    var pNumericalValue = pValue;
+                    var pTextValue = "";
+                    var textModifier = "";
+                    if (!prominentBoxes) {
+                        textModifier = "small";
+                    }
+                    if (availableData && (pValue !== null) && (orValue !== null)) {
+                        //retVal += "<div class='boxyDisplay ";
+                        retVal += "<li class='";
+                        // may or may not be bold
+                        if (pNumericalValue <= strongCutOff) {
+                            retVal += "genomeWideSignificant"+textModifier+"'>";
+                            significanceDescriptor = variantAssociationStrings.genomeSignificance;
+                        } else if ((pNumericalValue > strongCutOff) &&
+                            (pNumericalValue <= mediumCutOff )) {
+                            retVal += "locusWideSignificant"+textModifier+"'>";
+                            significanceDescriptor = variantAssociationStrings.locusSignificance;
+                        } else if ((pNumericalValue > mediumCutOff) &&
+                            (pNumericalValue <= weakCutOff )) {
+                            retVal += "nominallySignificant"+textModifier+"'>";
+                            significanceDescriptor = variantAssociationStrings.nominalSignificance;
+                        } else {
+                            retVal += "notSignificant"+textModifier+"'>";
+                            significanceDescriptor = "not significant";
+                        }
+                        // always needs descr
+                        pTextValue = pNumericalValue.toPrecision(3);
+                        retVal += ("<div class='superImportantText"+textModifier+"'>" + datatype + "</div>");
+                        retVal += ("<div class='veryImportantText"+textModifier+"'>p = " + pTextValue );
+                        if (prominentBoxes) {
+                            retVal += (variantAssociationStrings.associationPValueQ);
+                        }
+                        retVal += ("</div>");
+                        retVal += ("<div class='notVeryImportantText"+textModifier+"'>" + significanceDescriptor + "</div>");
+                        if (((orValue)||(betaValue)) &&
+                            ((orValue !== 'null')||(betaValue !== 'null'))) {
+                            orValueNumericalAdjusted = (takeExpOfOr === true) ? Math.exp(betaValue) : orValue;
+                            orValueText = orValueNumericalAdjusted.toPrecision(3);
+                            retVal += ("<div class='veryImportantText"+textModifier+"'>"+((takeExpOfOr === true) ? 'BETA' : 'OR')+" = " + orValueText );
+                            if (prominentBoxes) {
+                                retVal += (variantAssociationStrings.associationOddsRatioQ);
+                            }
+                            retVal += ("</div>");
+                        }
+                    } else {
+                        retVal += '';
+                    }
+                    return retVal;
                 },
 
                 fillHowCommonIsUpBarChart = function (africanAmericanFrequency, hispanicFrequency, eastAsianFrequency, southAsianFrequency, europeanSequenceFrequency, europeanChipFrequency, alleleFrequencyStrings) {
@@ -335,24 +392,7 @@ var mpgSoftware = mpgSoftware || {};
                 },
 
                 showEthnicityPercentageWithBarChart = function (ethnicityPercentages, alleleFrequencyStrings) {
-//                    var retVal = "";
-//                    var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
-//                    var ethnicityPercentages = [];
                     var retainBarchartPtr;
-//                    for (var i = 0; i < ethnicAbbreviation.length; i++) {
-//                        var stringProportion = variant['_13k_T2D_' + ethnicAbbreviation[i] + '_MAF'];
-//                        ethnicityPercentages.push(parseFloat(stringProportion) * 100);
-//                    }
-//                    // with a special case:  the chip data may be null, but we still want to show the rest of the plot.
-//                    // Replace the value with 'undefined' and the bar chart machinery knows to not display a bar
-//                    var euroValue;
-//                    if (variant["EXCHP_T2D_MAF"] !==  null ){
-//                        euroValue = parseFloat(variant["EXCHP_T2D_MAF"]);
-//                        if (variant["EXCHP_T2D_P_value"]) {
-//                            euroValue = parseFloat(euroValue) * 100;
-//                        }
-//                    }
-//                    ethnicityPercentages.push(euroValue);
 
                     // We have everything we need to build the bar chart.  Store the functional reference in an object
                     // that we can call whenever we want
@@ -536,11 +576,7 @@ var mpgSoftware = mpgSoftware || {};
                 },
 
                 fillDiseaseRiskBurdenTest = function (OBSU, OBSA, MINA, MINU, PVALUE, ORVALUE, show_gwas, show_exchp, show_exseq, rootVariantUrl, diseaseBurdenStrings) {
-                    var hetu = 0,
-                        heta = 0,
-                        homa = 0,
-                        homu = 0,
-                        mina = 0,
+                    var mina = 0,
                         minu = 0,
                         totalUnaffected = 0,
                         totalAffected = 0,
@@ -548,10 +584,6 @@ var mpgSoftware = mpgSoftware || {};
                         retainBarchartPtr,
                         oddsRatio;
                     if (show_exseq) {
-//                        heta = HETA;
-//                        hetu = HETU;
-//                        homa = HOMA;
-//                        homu = HOMU;
                         mina = MINA;
                         minu = MINU;
                         totalUnaffected = OBSU;
@@ -559,7 +591,6 @@ var mpgSoftware = mpgSoftware || {};
                         pValue = PVALUE;
                         oddsRatio = ORVALUE;
                     }
-                    // $('#bhtLossOfFunctionVariants').append(numberOfVariants);
 
                     // variables for bar chart
                     var numeratorUnaffected,
@@ -598,63 +629,6 @@ var mpgSoftware = mpgSoftware || {};
                             }
                         };
                     }
-//                    if (pValue > 0) {
-//                        var degreeOfSignificance = '';
-//                        $('#describePValueInDiseaseRisk').append("<p class='slimDescription'>" + degreeOfSignificance + "</p>\n" +
-//                            "<p  id='bhtMetaBurdenForDiabetes' class='slimAndTallDescription'>p=" + (pValue.toPrecision(3)) +
-//                            diseaseBurdenStrings.diseaseBurdenPValueQ + "</p>");
-//                        if (typeof oddsRatio !== 'undefined') {
-//                            $('#describePValueInDiseaseRisk').append("<p  id='bhtOddsRatioForDiabetes' class='slimAndTallDescription'>OR=" +
-//                                UTILS.realNumberFormatter(oddsRatio) +diseaseBurdenStrings.diseaseBurdenOddsRatioQ + "</p>");
-//                        }
-//                    }
-
-                },
-                describeAssociationsStatistics = function (availableData, pValue, orValue, betaValue, strongCutOff, mediumCutOff, weakCutOff, variantTitle, datatype, selectorForBoxes,
-                                                           takeExpOfOr, variantAssociationStrings) {
-                    var retVal = "";
-                    var significanceDescriptor = "";
-                    var orValueNumerical;
-                    var orValueNumericalAdjusted;
-                    var orValueText = "";
-                    var pNumericalValue = pValue;
-                    var pTextValue = "";
-                    if (availableData && (pValue !== null) && (orValue !== null)) {
-                        //retVal += "<div class='boxyDisplay ";
-                        retVal += "<li class='sigBox ";
-                        // may or may not be bold
-                        if (pNumericalValue <= strongCutOff) {
-                            retVal += "genomeWideSignificant'>";
-                            significanceDescriptor = variantAssociationStrings.genomeSignificance;
-                        } else if ((pNumericalValue > strongCutOff) &&
-                            (pNumericalValue <= mediumCutOff )) {
-                            retVal += "locusWideSignificant'>";
-                            significanceDescriptor = variantAssociationStrings.locusSignificance;
-                        } else if ((pNumericalValue > mediumCutOff) &&
-                            (pNumericalValue <= weakCutOff )) {
-                            retVal += "nominallySignificant'>";
-                            significanceDescriptor = variantAssociationStrings.nominalSignificance;
-                        } else {
-                            retVal += "notSignificant'>";
-                            significanceDescriptor = "not significant";
-                        }
-                        // always needs descr
-                        pTextValue = pNumericalValue.toPrecision(3);
-                        retVal += ("<div class='superImportantText'>" + datatype + "</div>");
-                        retVal += ("<div class='veryImportantText'>p = " + pTextValue +
-                            variantAssociationStrings.associationPValueQ + "</div>");
-                        retVal += ("<div class='notVeryImportantText'>" + significanceDescriptor + "</div>");
-                        if (((orValue)||(betaValue)) &&
-                            ((orValue !== 'null')||(betaValue !== 'null'))) {
-                            orValueNumericalAdjusted = (takeExpOfOr === true) ? Math.exp(betaValue) : orValue;
-                            orValueText = orValueNumericalAdjusted.toPrecision(3);
-                            retVal += ("<div class='veryImportantText'>"+((takeExpOfOr === true) ? 'BETA' : 'OR')+" = " + orValueText +
-                                variantAssociationStrings.associationOddsRatioQ + "</div>");
-                        }
-                    } else {
-                        retVal += '';
-                    }
-                    return retVal;
                 };
 
 

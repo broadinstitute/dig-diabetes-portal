@@ -128,10 +128,12 @@
                             sortedDatasetList, // array
                             "<%=variantToSearch%>",
                             "<g:createLink controller='trait' action='traitInfo' />",
-                            variantAssociationStrings,
-                            formSelector);
+                            variantAssociationStrings, // variable language strings
+                            formSelector, // where we put the boxes
+                            true); // these boxes should be prominent
                     $(formSelector).lightSlider({
                         //loop:true,
+                        items: 5,
                         keyPress: true
                     });
                 }
@@ -208,30 +210,32 @@
                         return (a.p_value - b.p_value);
                     })
                 }
-                if ((sortedDatasetList.length>0)&&
-                        (sortedDatasetList[0].p_value <.05)){
-                    var formSelector = "#"+selectorForStatisticsBoxesValues;
-                    var titleSelector = formSelector+"_title";
-                    $(titleSelector).text(mpgSoftware.trans.translator(rememberPhenotype));
-                    mpgSoftware.variantInfo.variantAssociations(
-                            collector['common'], // object
-                            sortedDatasetList, // array
-                            "<%=variantToSearch%>",
-                            "<g:createLink controller='trait' action='traitInfo' />",
-                            variantAssociationStrings,
-                            formSelector);
-                    // lower boxes
-                    $(formSelector).lightSlider({
-                        //loop:true,
-                        //keyPress:true,
-//                        autoWidth: false,
-//                        item: 5,
-//                        slideMargin: 15
-                        //vertical: false,
-                        onSliderLoad: function() {
-                            $(formSelector).removeClass('cS-hidden');
-                        }
-                    });
+                if (sortedDatasetList.length > 0) {
+                    var formSelector = "#" + selectorForStatisticsBoxesValues;
+                    var titleSelector = formSelector + "_title";
+                    if (sortedDatasetList[0].p_value < .05) {
+                        $(titleSelector).text(mpgSoftware.trans.translator(rememberPhenotype));
+                        $(titleSelector).append("<span class='traitTitleComma'>,&nbsp;</span>");
+                        mpgSoftware.variantInfo.variantAssociations(
+                                collector['common'], // object
+                                sortedDatasetList, // array
+                                "<%=variantToSearch%>",
+                                "<g:createLink controller='trait' action='traitInfo' />",
+                                variantAssociationStrings,
+                                formSelector,
+                                false);
+                        // lower boxes
+                        $(formSelector).lightSlider({
+                            item: 8,
+                            onSliderLoad: function () {
+                                $(formSelector).removeClass('cS-hidden');
+                                $(titleSelector + '+.smallerStatBoxes').hide();
+                            }
+                        });
+                    } else {
+                        $(formSelector).hide();
+                        $(titleSelector + '+.smallerStatBoxes').hide();
+                    }
                 }
             },
             error: function (jqXHR, exception) {
@@ -266,7 +270,7 @@
                             for ( var i = 0 ; i < propertyArray.length ; i++ ){
                                 if (propertyArray[i] !== 'T2D'){ // T2D is handled first by default, so we can skip it here
                                     var holdAssociationStatistics = "holdAssociationStatisticsBoxes_"+propertyArray[i];
-                                    $('#VariantsAndAssociationsExist').append( "<div id='"+holdAssociationStatistics+"_title' class='rowTitle'></div><div class='items'><div class='item'><ul id='"+holdAssociationStatistics+"' class='content-slider'></ul></div></div>");
+                                    $('#VariantsAndAssociationsExist').append( "<div id='"+holdAssociationStatistics+"_title' class='rowTitle'></div><div class='items smallerStatBoxes'><div class='item'><ul id='"+holdAssociationStatistics+"' class='content-slider'></ul></div></div>");
                                     UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],propertyArray[i],
                                             "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",gatherVariantStatistics, holdAssociationStatistics );
 
@@ -275,7 +279,9 @@
                             }
                         }
                     }
-
+//                    hideAssociationsForPhenotypes();
+//                    showAssociationsForPhenotypes();
+//                    hideAssociationsForPhenotypes();
                 }
             },
             error: function (jqXHR, exception) {
@@ -291,13 +297,37 @@
         UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],phenotype,
                 "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",fillVariantStatistics );
     };
-
+    var showAssociationsForPhenotypes = function(){
+       $('.rowTitle').removeClass('lessProminent');
+        $('#showAssociations').hide();
+        $('#hideAssociations').show();
+        $('.traitTitleComma').hide();
+        $('.rowTitle').css('display','block');
+        $('.smallerStatBoxes').show();
+        $('#VariantsAndAssociationsExist').addClass('scrollerWin');
+    };
+    var hideAssociationsForPhenotypes = function(){
+        $('#showAssociations').show();
+        $('#hideAssociations').hide();
+        $('.traitTitleComma').show();
+        $('.rowTitle').css('display','inline-block');
+        $('.smallerStatBoxes').hide();
+        $('#VariantsAndAssociationsExist').removeClass('scrollerWin');
+    };
+    $(document).ready(function() {
+        $("#showAssociations a").click(showAssociationsForPhenotypes);
+        $("#hideAssociations a").click(hideAssociationsForPhenotypes);
+    });
 </script>
 
 
-<br/>
-
-<div id="VariantsAndAssociationsExist" style="overflow-y: scroll; height: 500px;">
+<div class="row clearfix">
+    <div class="col-md-12">
+        <a id="showAssociations" class="pull-right" href="javascript:showAssociationsForPhenotypes()">expand associations for all traits</a>
+        <a id="hideAssociations" href="javascript:hideAssociationsForPhenotypes()" class="pull-right lessProminent">hide associations</a>
+    </div>
+</div>
+<div id="VariantsAndAssociationsExist">
     <div class="items">
         <div class="item">
             <div id='holdAssociationStatisticsBoxes_title' class='rowTitle'></div>
