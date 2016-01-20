@@ -139,8 +139,8 @@ var variantsAndAssociationTable = function (phenotype,rowMapParameter){
                               for (var i = 0 ; i < sortedDataSetArray.length ; i++) {
                                    var d = [];
                                    rowValue.push(sortedDataSetArray[i].dataset);
-                                   rowMap.push({"name":sortedDataSetArray[i].dataset,
-                                                "value":sortedDataSetArray[i].dataset,
+                                   rowMap.push({"name":(sortedDataSetArray[i].dataset),
+                                                "value":(sortedDataSetArray[i].dataset),
                                                 "pvalue":"UNUSED",
                                                 "technology":sortedDataSetArray[i].technology,
                                                 "count":sortedDataSetArray[i].subjectsNumber});
