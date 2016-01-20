@@ -194,12 +194,12 @@ var UTILS = {
         }
         return variantName;
     },
-    variantInfoHeaderSentence: function (inGene,closestGene,gene) {
+    variantInfoHeaderSentence: function (inGene,closestGene,gene,liesInString,isNearestToString) {
         var returnValue = "";
         if (inGene) {
-            returnValue += "lies in the gene <a href='../../gene/geneInfo/"+gene+"'>" + gene + "</a>";
+            returnValue += (liesInString+" <a href='../../gene/geneInfo/"+gene+"'>" + gene + "</a>");
         } else {
-            returnValue += "is nearest to the gene <a href='../../gene/geneInfo/"+closestGene+"'>" + closestGene + "</a>";
+            returnValue += (isNearestToString+" <a href='../../gene/geneInfo/"+closestGene+"'>" + closestGene + "</a>");
         }
         return  returnValue;
     },

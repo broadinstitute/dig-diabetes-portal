@@ -78,7 +78,7 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
-        var setTitlesAndTheLikeFromData = function (varId,dbsnpId,mostdelscore,gene,closestGene, searchString,traitsStudiedUrlRoot,variantAssociationStrings) {
+        var setTitlesAndTheLikeFromData = function (varId,dbsnpId,mostdelscore,gene,closestGene, searchString,liesInString,isNearestToString) {
             var variantTitle = searchString;
             if ((typeof dbsnpId !== 'undefined')  &&
                 (dbsnpId !== null) &&
@@ -94,18 +94,12 @@ var mpgSoftware = mpgSoftware || {};
             var inGene = ((gene != null) && (mostdelscore<4));
             $('#variantTitleInAssociationStatistics').append(variantTitle);
             $('#variantCharacterization').append(UTILS.getSimpleVariantsEffect(mostdelscore));
-            $('#describingVariantAssociation').append(UTILS.variantInfoHeaderSentence(inGene,closestGene,gene));
+            $('#describingVariantAssociation').append(UTILS.variantInfoHeaderSentence(inGene,closestGene,gene,liesInString,isNearestToString));
             $('#effectOnCommonProteinsTitle').append(variantTitle);
             $('#variantTitle').append(variantTitle);
             $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
             $('#populationsHowCommonIs').append(variantTitle);
             $('#exploreSurroundingSequenceTitle').append(variantTitle);
-//            $('#variantInfoAssociationStatisticsLinkToTraitTable').append(privateMethods.fillAssociationStatisticsLinkToTraitTable(
-//                true,
-//                dbsnpId,
-//                varId,
-//                traitsStudiedUrlRoot,
-//                variantAssociationStrings));
         };
 
 

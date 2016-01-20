@@ -45,7 +45,8 @@
             var dbsnpId = collector['common']['DBSNP_ID'];
             if ($('#variantTitle').html().length==0){ // initialize page.  do only once.  TODO: move somewhere else
                 mpgSoftware.variantInfo.setTitlesAndTheLikeFromData(varId,dbsnpId,mostdelscore,gene,closestGene,  '<%=variantToSearch%>',
-                        "<g:createLink controller='trait' action='traitInfo' />",variantAssociationStrings);
+                        "<g:message code="variant.variantAssociations.liesInString" default="lies in " />",
+                        "<g:message code="variant.variantAssociations.isNearestToString" default="is nearest to" />");
             }
         };
         $.ajax({
