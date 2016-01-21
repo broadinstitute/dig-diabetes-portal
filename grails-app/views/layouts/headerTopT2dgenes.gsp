@@ -17,10 +17,6 @@
                 <r:img class="currentlanguage" uri="/images/espanol2.png" alt="Spanish"/></a>
             <a href='<g:createLink controller="home" action="index" params="[lang:'en']"/>'>
                 <r:img class="currentlanguage" uri="/images/english2.png" alt="English"/></a>
-            %{--<a href='<g:createLink controller="home" action="index" params="[lang:'es']"/>'><i class="icon-user icon-white">--}%
-                %{--<g:message code="portal.language.spanish.switch" default="in Spanish"/></i></a>--}%
-            %{--<a href='<g:createLink controller="home" action="index" params="[lang:'en']"/>'> <i class="icon-user icon-white">--}%
-                %{--<g:message code="portal.language.english.switch" default="in English"/></i></a>--}%
         </span>
 
     </div>

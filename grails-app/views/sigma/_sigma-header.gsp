@@ -8,10 +8,20 @@
         </div>
     </div>
     <div class="row dk-sigma-site-title-sm visible-sm visible-xs ">
+    <div class="col-sm-12 col-md-12 text-center">
+        <img src="${resource(dir: 'images/icons', file: 'SlimSigmaLogo234fromai-outlines.jpg')}" alt="SIGMA logo" />
+        SIGMA<strong style="font-weight: 400;color:#406993;">T2D</strong><br>
+    </div>
+    </div>
+    <div class="row" >
         <div class="col-sm-12 col-md-12 text-center">
-            <img src="${resource(dir: 'images/icons', file: 'SlimSigmaLogo234fromai-outlines.jpg')}" alt="SIGMA logo" />
-            SIGMA<strong style="font-weight: 400;color:#406993;">T2D</strong><br>
-            <span class="dk-sigma-sisters-sm"><a href="#"><g:message code="portal.language.setting.spanish" /></a>  |  <g:message code="portal.language.setting.english" />  |  <a href="#"><g:message code="portal.header.data_portal" /></a></span>
+                <span style="float: right;">
+                    <a href='<g:createLink controller="sigma" action="index" params="[lang:'es']"/>' style="padding-right: 20px">
+                        <r:img class="currentlanguage" uri="/images/spanish_black_it.png" alt="Spanish"/></a>
+                    <a href='<g:createLink controller="sigma" action="index" params="[lang:'en']"/>'>
+                        <r:img class="currentlanguage" uri="/images/english_black_it.png" alt="English"/></a>
+                </span>
         </div>
     </div>
+
 </div>
