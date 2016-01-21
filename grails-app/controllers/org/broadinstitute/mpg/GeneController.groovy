@@ -5,6 +5,7 @@ import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONObject
+import org.springframework.web.servlet.support.RequestContextUtils
 
 class GeneController {
 
@@ -44,6 +45,7 @@ class GeneController {
      * @return
      */
     def geneInfo() {
+        String locale = RequestContextUtils.getLocale(request)
         String geneToStartWith = params.id
         LinkedHashMap savedCols = params.findAll{ it.key =~ /^savedCol/ }
         LinkedHashMap savedRows = params.findAll{ it.key =~ /^savedRow/ }
@@ -165,7 +167,8 @@ class GeneController {
                                              rowInformation:sortedRowInformation,
                                              columnInformation:sortedColumnInformation,
                                              allAvailableRows:allAvailableRows,
-                                             phenotype:phenotype
+                                             phenotype:phenotype,
+                                             locale:locale
             ] )
         }
      }

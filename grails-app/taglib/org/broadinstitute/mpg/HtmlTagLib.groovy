@@ -19,13 +19,21 @@ class HtmlTagLib {
     def renderGeneSummary = {attrs ->
 
         String geneName = attrs.geneFile
+        String locale = attrs.locale
 
         if (!geneName) {
             return;  // better to fail silently
             //throwTagError("'file' attribute must be provided")
         }
 
-        String fileName =  "/WEB-INF/resources/geneSummaries/${geneName}.html"
+        String fileName =  "/WEB-INF/resources/geneSummaries/${geneName}.html" // default value
+        if (locale){
+            if (locale.startsWith("en")) {
+                fileName =  "/WEB-INF/resources/geneSummaries/${geneName}.html"
+            } else  if (locale.startsWith("es")) {
+                fileName = "/WEB-INF/resources/geneSummaries/spanish/${geneName}.html"
+            }
+        }
 
         String fileDesignationOnDisk =  grailsApplication.mainContext.getResource(fileName).file.toString()
 

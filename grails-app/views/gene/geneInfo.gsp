@@ -187,7 +187,7 @@
 
         <div id="geneHolderTop" class="top">
             <script>
-                var contents = '<g:renderGeneSummary geneFile="${geneName}-top"></g:renderGeneSummary>';
+                var contents = '<g:renderGeneSummary geneFile="${geneName}-top" locale="${locale}"></g:renderGeneSummary>';
                 $('#geneHolderTop').html(contents);
             </script>
 
@@ -195,7 +195,7 @@
 
         <div class="bottom ishidden" id="geneHolderBottom" style="display: none;">
             <script>
-                var contents = '<g:renderGeneSummary geneFile="${geneName}-bottom"></g:renderGeneSummary>';
+                var contents = '<g:renderGeneSummary geneFile="${geneName}-bottom" locale="${locale}"></g:renderGeneSummary>';
                 $('#geneHolderBottom').html(contents);
                 function toggleGeneDescr() {
                     if ($('#geneHolderBottom').is(':visible')) {
