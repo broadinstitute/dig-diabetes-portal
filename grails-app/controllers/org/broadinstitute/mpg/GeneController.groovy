@@ -139,7 +139,14 @@ class GeneController {
             columnInformation << [name:'genome-wide', value:'0.00000005', count:'0']
         }
         if (newVandAColumnPValue){
-            columnInformation << [name:"${newVandAColumnName}", value:"${newVandAColumnPValue}", count:'0']
+            String filteredNumericPValue = newVandAColumnPValue.replaceAll(/\s*x\s*10/,"e") // take out any references to 10x, which would match the representation and the table, so I guess it's
+                                                                                            // a fair mistake for a novice.   replace with a legal numerical format
+            try {
+                new BigDecimal(filteredNumericPValue)
+                columnInformation << [name:"${newVandAColumnName}", value:"${filteredNumericPValue}", count:'0']
+            } catch (e){
+                columnInformation << [name:"${newVandAColumnName}", value:"1", count:'0'] // wrong value, but at least we don't crash
+            }
         }
         List <LinkedHashMap<String,String>> sortedColumnInformation = columnInformation.sort{a,b-> (b.value as Float)<=>(a.value as Float)}
         List <LinkedHashMap<String,String>> sortedRowInformation = rowInformation.sort{ a, b-> (b.name as String).toUpperCase()<=>(a.name as String).toUpperCase()}
