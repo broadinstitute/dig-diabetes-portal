@@ -196,9 +196,12 @@ ul.content-slider{
 			font-size: 20px;
 			padding: 0 0 0 15px;
 		}
-		.items{
-			width: 100%;
+        #boxHolderHolder1 .items{
+			width: 1140px;
 		}
+        #VariantsAndAssociationsExist>.items {
+            width: 1140px;
+        }
 		span.dk-fine-print {
 			font-size: 12px;
 		}

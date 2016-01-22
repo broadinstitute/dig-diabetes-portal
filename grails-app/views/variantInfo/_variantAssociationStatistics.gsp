@@ -7,13 +7,16 @@
     }
     .slidingBoxHolderBlocky {
         display: inline-block;
-        /*min-width: 300px;*/
-        min-width: 320px;
-        max-width: 320px;
+        width: 320px;
+        /*min-width: 320px;*/
+        /*max-width: 320px;*/
         margin: 20px 10px 5px 20px;
     }
     .slidingBoxHolderLiney {
         display: inline;
+    }
+    #boxHolderHolder1{
+        width: 1140px;
     }
 </style>
 
@@ -146,7 +149,7 @@
                             true); // these boxes should be prominent
                     $(formSelector).lightSlider({
                         //loop:true,
-                        items: 8,
+                        items: 1,
                         keyPress: true
                     });
                 }
@@ -249,7 +252,7 @@
                             }
                         });
                     } else {
-                        $(formSelector).parent().parent().parent().css('min-width','0');
+                        $(formSelector).parent().parent().parent().css('width','0');
                         $(formSelector).parent().parent().parent().css('margin','0');
                         $(titleSelector + '+.smallerStatBoxes').hide();
                     }
