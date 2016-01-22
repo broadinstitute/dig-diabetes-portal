@@ -502,10 +502,11 @@ div.boxyDisplay {
    /* display: inline-block;*/
 }
 .scrollerWin{
-    overflow-y: scroll;
-    height: 500px;
-    padding: 10px;
-    border: 1px solid #bbb;
+    /*overflow-y: scroll;*/
+    /*height: 500px;*/
+    /*padding: 10px;*/
+    width: 1140px;
+    /*border: 1px solid #bbb;*/
 }
 /* big boxes */
 li.genomeWideSignificant,

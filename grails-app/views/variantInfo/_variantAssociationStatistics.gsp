@@ -3,6 +3,18 @@
     h1,h2,h3,h4,label{
         font-weight: 300;
     }
+    .slidingBoxHolder {
+    }
+    .slidingBoxHolderBlocky {
+        display: inline-block;
+        /*min-width: 300px;*/
+        min-width: 320px;
+        max-width: 320px;
+        margin: 20px 10px 5px 20px;
+    }
+    .slidingBoxHolderLiney {
+        display: inline;
+    }
 </style>
 
 <div class="row clearfix">
@@ -134,7 +146,7 @@
                             true); // these boxes should be prominent
                     $(formSelector).lightSlider({
                         //loop:true,
-                        items: 5,
+                        items: 8,
                         keyPress: true
                     });
                 }
@@ -228,13 +240,17 @@
                         // lower boxes
                         $(formSelector).lightSlider({
                             item: 8,
+                            loop:false,
+                            enableDrag: true,
+                            controls:true,
                             onSliderLoad: function () {
                                 $(formSelector).removeClass('cS-hidden');
                                 $(titleSelector + '+.smallerStatBoxes').hide();
                             }
                         });
                     } else {
-                        $(formSelector).hide();
+                        $(formSelector).parent().parent().parent().css('min-width','0');
+                        $(formSelector).parent().parent().parent().css('margin','0');
                         $(titleSelector + '+.smallerStatBoxes').hide();
                     }
                 }
@@ -264,6 +280,7 @@
                         ( typeof data.datasets !== 'undefined' ) &&
                         (  data.datasets !==  null )  &&
                         ( typeof data.datasets.dataset !== 'undefined' ) ) {
+                    $('#VariantsAndAssociationsExist').append("<ul id='boxHolderHolder1' class='list-unstyled'></ul>");
                     for ( var category in data.datasets.dataset ){
 
                         if (data.datasets.dataset.hasOwnProperty(category)) {
@@ -271,9 +288,11 @@
                             for ( var i = 0 ; i < propertyArray.length ; i++ ){
                                 if (propertyArray[i] !== 'T2D'){ // T2D is handled first by default, so we can skip it here
                                     var holdAssociationStatistics = "holdAssociationStatisticsBoxes_"+propertyArray[i];
-                                    $('#VariantsAndAssociationsExist').append( "<div id='"+holdAssociationStatistics+"_title' class='rowTitle'></div><div class='items smallerStatBoxes'><div class='item'><ul id='"+holdAssociationStatistics+"' class='content-slider'></ul></div></div>");
+                                    $('#boxHolderHolder1').append( "<li class='slidingBoxHolder slidingBoxHolderLiney'><div id='"+holdAssociationStatistics+"_title' class='rowTitle'></div><div class='items smallerStatBoxes'><div class='item'><ul id='"+holdAssociationStatistics+"' class='content-slider'></ul></div></div></li>");
                                     UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],propertyArray[i],
                                             "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",gatherVariantStatistics, {holdAssociationStatistics:holdAssociationStatistics} );
+                                    %{--UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],'T2D',--}%
+                                            %{--"${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",gatherVariantStatistics, {holdAssociationStatistics:holdAssociationStatistics} );--}%
 
                                 }
 
@@ -303,6 +322,8 @@
         $('.rowTitle').css('display','block');
         $('.smallerStatBoxes').show();
         $('#VariantsAndAssociationsExist').addClass('scrollerWin');
+        $('.slidingBoxHolder').removeClass('slidingBoxHolderLiney');
+        $('.slidingBoxHolder').addClass('slidingBoxHolderBlocky');
     };
     var hideAssociationsForPhenotypes = function(){
         $('#showAssociations').show();
@@ -311,6 +332,9 @@
         $('.rowTitle').css('display','inline-block');
         $('.smallerStatBoxes').hide();
         $('#VariantsAndAssociationsExist').removeClass('scrollerWin');
+        $('.slidingBoxHolder').removeClass('slidingBoxHolderBlocky');
+        $('.slidingBoxHolder').addClass('slidingBoxHolderLiney');
+
     };
     $(document).ready(function() {
         $("#showAssociations a").click(showAssociationsForPhenotypes);
