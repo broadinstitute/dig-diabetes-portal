@@ -491,6 +491,10 @@ div.boxyDisplay {
     font-weight: 300;
     /*display: inline-block;*/
 }
+.otherDiseasesByline{
+    font-size: 16pt;
+    font-style: italic;
+}
 .association_stats_boxes {
     /*display: inline-block;*/
 }

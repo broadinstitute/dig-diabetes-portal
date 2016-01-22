@@ -7,9 +7,7 @@
     }
     .slidingBoxHolderBlocky {
         display: inline-block;
-        width: 320px;
-        /*min-width: 320px;*/
-        /*max-width: 320px;*/
+        width: 350px;
         margin: 20px 10px 5px 20px;
     }
     .slidingBoxHolderLiney {
@@ -148,8 +146,7 @@
                             formSelector, // where we put the boxes
                             true); // these boxes should be prominent
                     $(formSelector).lightSlider({
-                        //loop:true,
-                        items: 1,
+                        item: 5,
                         keyPress: true
                     });
                 }
@@ -242,8 +239,8 @@
                                 false);
                         // lower boxes
                         $(formSelector).lightSlider({
-                            item: 8,
-                            loop:false,
+                            item: 3,
+                            loop:true,
                             enableDrag: true,
                             controls:true,
                             onSliderLoad: function () {
@@ -283,6 +280,7 @@
                         ( typeof data.datasets !== 'undefined' ) &&
                         (  data.datasets !==  null )  &&
                         ( typeof data.datasets.dataset !== 'undefined' ) ) {
+                    $('#VariantsAndAssociationsExist').append("<div class='otherDiseasesByline'>Other traits with one or more nominally significant associations:</div>");
                     $('#VariantsAndAssociationsExist').append("<ul id='boxHolderHolder1' class='list-unstyled'></ul>");
                     for ( var category in data.datasets.dataset ){
 
@@ -294,9 +292,6 @@
                                     $('#boxHolderHolder1').append( "<li class='slidingBoxHolder slidingBoxHolderLiney'><div id='"+holdAssociationStatistics+"_title' class='rowTitle'></div><div class='items smallerStatBoxes'><div class='item'><ul id='"+holdAssociationStatistics+"' class='content-slider'></ul></div></div></li>");
                                     UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],propertyArray[i],
                                             "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",gatherVariantStatistics, {holdAssociationStatistics:holdAssociationStatistics} );
-                                    %{--UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],'T2D',--}%
-                                            %{--"${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",gatherVariantStatistics, {holdAssociationStatistics:holdAssociationStatistics} );--}%
-
                                 }
 
                             }
