@@ -8,9 +8,9 @@
                     <input type="text" class="form-control" id="region_gene_input" style="width: 90%; display: inline-block"/>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" style="margin: 30px 0 10px 0">
                 <div class="col-xs-3 searchBuilderPrompt" style="text-align: right;"><g:message code="variantSearch.restrictToRegion.region" default="Region" /></div>
-                <div class="col-xs-9 smallish">
+                <div class="col-xs-9 text-center smallish">
                     <input class="form-control" type="text" id="region_chrom_input" style="width: 30%; display: inline-block" placeholder="chrom"/>
 
                     <input class="form-control" type="text" id="region_start_input" style="width: 30%; display: inline-block" placeholder="start"/>
