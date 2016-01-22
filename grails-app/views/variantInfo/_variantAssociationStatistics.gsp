@@ -150,8 +150,8 @@
         });
 
     };
-    var gatherVariantStatistics = function (phenotype,datasetDescription,selectorForStatisticsBoxes){
-        var selectorForStatisticsBoxesValues = selectorForStatisticsBoxes;
+    var gatherVariantStatistics = function (phenotype,datasetDescription,passThroughObject){
+        var selectorForStatisticsBoxesValues = passThroughObject.holdAssociationStatistics;
         var rememberPhenotype = phenotype;
         $.ajax({
             cache: false,
@@ -273,16 +273,13 @@
                                     var holdAssociationStatistics = "holdAssociationStatisticsBoxes_"+propertyArray[i];
                                     $('#VariantsAndAssociationsExist').append( "<div id='"+holdAssociationStatistics+"_title' class='rowTitle'></div><div class='items smallerStatBoxes'><div class='item'><ul id='"+holdAssociationStatistics+"' class='content-slider'></ul></div></div>");
                                     UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],propertyArray[i],
-                                            "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",gatherVariantStatistics, holdAssociationStatistics );
+                                            "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",gatherVariantStatistics, {holdAssociationStatistics:holdAssociationStatistics} );
 
                                 }
 
                             }
                         }
                     }
-//                    hideAssociationsForPhenotypes();
-//                    showAssociationsForPhenotypes();
-//                    hideAssociationsForPhenotypes();
                 }
             },
             error: function (jqXHR, exception) {
