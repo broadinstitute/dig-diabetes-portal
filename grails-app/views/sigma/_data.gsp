@@ -3,8 +3,11 @@
         <g:message code="sigmasite.data.intro"></g:message>
     </h4>
 
-    <div class="embed-responsive embed-responsive-4by3">
-        <iframe src="//player.vimeo.com/video/119352074" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    <div class="sectionBuffer" style="padding: 0 25px 10px 25px">
+        <div>
+            <h2><a  class="standardLinks" href="${createLink(controller:'home',action:'provideTutorial')}"><g:message code="portal.introTutorial.title"/></a></h2>
+        </div>
+
     </div>
 
     <h4 class="sigma-data-detail-section-header">
