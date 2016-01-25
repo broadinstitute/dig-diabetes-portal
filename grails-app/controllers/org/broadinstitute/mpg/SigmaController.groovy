@@ -1,12 +1,13 @@
 package org.broadinstitute.mpg
 
+
 class SigmaController {
 
     WebRequestLanguageLookupService webRequestLanguageLookupService;
 
 
     def index() {
-        render(view:'sigmahome',model:[isEnglish: isEnglish(),isSpanish:isSpanish()])
+        render(view:'sigmahome',model:[isEnglish: isEnglish(),isSpanish:isSpanish(),locale:getLanguage()])
     }
 
     def isEnglish() {

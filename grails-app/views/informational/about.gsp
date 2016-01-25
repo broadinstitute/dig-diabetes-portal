@@ -63,8 +63,14 @@
         <div class="row pull-left consortium-spacing">
             <div>
                 <a href="http://www.sigmaT2D.org">
-                    <img src="${resource(dir: 'images/icons', file: 'SlimSigmaLogo234fromai-outlines.jpg')}"
-                         width="180" height="91px" alt="SLIM"/>
+                    <g:if test="${locale?.startsWith('es')}">
+                        <img src="${resource(dir: 'images/', file: 'LogoSigmaSPANISH.png')}"
+                             width="180" height="91px" alt="SLIM"/>
+                    </g:if>
+                    <g:else>
+                        <img src="${resource(dir: 'images/', file: 'LogoSigmaENGLISH.png')}"
+                             width="180" height="91px" alt="SLIM"/>
+                    </g:else>
                 </a>
             </div>
         </div>

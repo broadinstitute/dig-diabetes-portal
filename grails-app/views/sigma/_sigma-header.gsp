@@ -1,7 +1,14 @@
 <div class="container-fluid">
     <div class="row dk-sigma-site-title visible-lg visible-md ">
         <div class="col-lg-3 col-md-3 text-center">
-            <div class="dk-sigma-logo"><img src="${resource(dir: 'images/icons', file: 'SlimSigmaLogo234fromai-outlines.jpg')}" alt="SIGMA logo" /></div>
+            <g:if test="${locale?.startsWith('es')}">
+                <img src="${resource(dir: 'images/', file: 'LogoSigmaSPANISH.png')}"
+                     width="180" height="91px" alt="SLIM" style="margin-top: 35px"/>
+            </g:if>
+            <g:else>
+                <img src="${resource(dir: 'images/', file: 'LogoSigmaENGLISH.png')}"
+                     width="180" height="91px" alt="SLIM" style="margin-top: 35px"/>
+            </g:else>
         </div>
         <div class="col-lg-offset-0 col-md-offset-0 col-lg-8 col-md-8 col-sm-offset-1 col-xs-offset-1 col-sm-10 col-xs-10">
             <span class="dk-sigma-site-name">SIGMA<strong style="font-weight: 400;color:#406993;">T2D</strong></span>

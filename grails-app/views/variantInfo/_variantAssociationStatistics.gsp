@@ -280,7 +280,7 @@
                         ( typeof data.datasets !== 'undefined' ) &&
                         (  data.datasets !==  null )  &&
                         ( typeof data.datasets.dataset !== 'undefined' ) ) {
-                    $('#VariantsAndAssociationsExist').append("<div class='otherDiseasesByline'>Other traits with one or more nominally significant associations:</div>");
+                    $('#VariantsAndAssociationsExist').append("<div class='otherDiseasesByline'><g:message code="variant.variantAssociations.otherTraits" default="Other traits with one or more nominally significant associations:"/></div>");
                     $('#VariantsAndAssociationsExist').append("<ul id='boxHolderHolder1' class='list-unstyled'></ul>");
                     for ( var category in data.datasets.dataset ){
 
@@ -343,8 +343,8 @@
 
 <div class="row clearfix">
     <div class="col-md-12">
-        <a id="showAssociations" class="pull-right" href="javascript:showAssociationsForPhenotypes()">expand associations for all traits</a>
-        <a id="hideAssociations" href="javascript:hideAssociationsForPhenotypes()" class="pull-right lessProminent">hide associations</a>
+        <a id="showAssociations" class="pull-right" href="javascript:showAssociationsForPhenotypes()"><g:message code="variant.variantAssociations.expandAssociations" default="expand associations for all traits"/></a>
+        <a id="hideAssociations" href="javascript:hideAssociationsForPhenotypes()" class="pull-right lessProminent"><g:message code="variant.variantAssociations.hideAssociations" default="hide associations"/></a>
     </div>
 </div>
 <div id="VariantsAndAssociationsExist">

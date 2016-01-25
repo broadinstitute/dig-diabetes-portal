@@ -8,7 +8,8 @@ class  InformationalController {
 
     def index() {}
     def about (){
-        render (view: 'about')
+        String locale = RequestContextUtils.getLocale(request)
+        render (view: 'about', model:[locale:locale])
     }
     def aboutBeacon (){
         render (view: 'aboutBeacon')
