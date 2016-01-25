@@ -64,7 +64,7 @@
             <div>
                 <a href="http://www.sigmaT2D.org">
                     <g:if test="${locale?.startsWith('es')}">
-                        <img src="${resource(dir: 'images/', file: 'LogoSigmaSPANISH.png')}"
+                        <img src="${resource(dir: 'images/', file: 'LogoSIGMASPANISH.png')}"
                              width="180" height="91px" alt="SLIM"/>
                     </g:if>
                     <g:else>

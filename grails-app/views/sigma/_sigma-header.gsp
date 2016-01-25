@@ -2,7 +2,7 @@
     <div class="row dk-sigma-site-title visible-lg visible-md ">
         <div class="col-lg-3 col-md-3 text-center">
             <g:if test="${locale?.startsWith('es')}">
-                <img src="${resource(dir: 'images/', file: 'LogoSigmaSPANISH.png')}"
+                <img src="${resource(dir: 'images/', file: 'LogoSIGMASPANISH.png')}"
                      width="180" height="91px" alt="SLIM" style="margin-top: 35px"/>
             </g:if>
             <g:else>
