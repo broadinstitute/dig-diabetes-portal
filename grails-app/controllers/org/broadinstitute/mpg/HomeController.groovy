@@ -2,11 +2,15 @@ package org.broadinstitute.mpg
 
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.apache.juli.logging.LogFactory
+import org.codehaus.groovy.grails.core.io.ResourceLocator
+import org.springframework.core.io.Resource
+import org.springframework.web.servlet.support.RequestContextUtils
 
 class HomeController {
     private static final log = LogFactory.getLog(this)
     GrailsApplication grailsApplication
     SharedToolsService sharedToolsService
+    ResourceLocator grailsResourceLocator
     def mailService
 
     /***
@@ -25,6 +29,29 @@ class HomeController {
         }
 
     }
+
+
+    def provideTutorial = {
+        String locale = RequestContextUtils.getLocale(request)
+        String fileName
+        if (locale.startsWith("es")){
+            fileName =  "/WEB-INF/resources/tutorials/tutorial_ES.pdf"
+        } else {
+            fileName =  "/WEB-INF/resources/tutorials/tutorial_EN.pdf"
+        }
+        File file =  grailsApplication.mainContext.getResource(fileName).file
+        if (file.exists())
+        {
+            response.setContentType("application/octet-stream") // or or image/JPEG or text/xml or whatever type the file is
+            response.setHeader("Content-disposition", "attachment;filename=\"${file.name}\"")
+            response.outputStream << file.bytes
+        }
+        else {
+            render "Problem retrieving tutorial.  Please try again later."
+        }
+    }
+
+
 
     /***
      * This is our standard home page. We get directed here from a few places in the portal
