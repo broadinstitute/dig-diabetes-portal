@@ -512,6 +512,12 @@ div.boxyDisplay {
     width: 1140px;
     /*border: 1px solid #bbb;*/
 }
+li.hiddenBlockyBox{
+    width: 0;
+    margin: 0;
+}
+.traitProcessed {
+}
 /* big boxes */
 li.genomeWideSignificant,
 .content-slider li+.genomeWideSignificant {
