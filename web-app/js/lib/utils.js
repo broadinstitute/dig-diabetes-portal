@@ -772,9 +772,61 @@ var UTILS = {
             retVal += "<td><a class='boldlink' href='./traitInfo/" + variant.DBSNP_ID + "'>click here</a></td>";
         }
         return retVal;
+    },
+
+    extractAnchorTextAsInteger : function (fullAnchor){
+        var returnValue = 0;
+        var re = new RegExp("\>[0-9]+\<"); // retrieve text, but with angle brackets
+        var re2 = new RegExp("[0-9]+"); // specifically get the presumed integer
+        if (typeof fullAnchor !== 'undefined') {
+            var textWithAngles = fullAnchor.match(re);
+            if ( (typeof textWithAngles !== 'undefined') &&
+                (textWithAngles.length > 0) ) {
+                var textWithoutAngles = textWithAngles[0].match(re2);
+                if ( (typeof textWithoutAngles !== 'undefined') &&
+                    (textWithoutAngles.length > 0) ) {
+                    var textWeWant = textWithoutAngles[0];
+                    returnValue = parseInt (textWeWant,10);
+                }
+            }
+        }
+        return returnValue;
+    },
+ extractHeaderTextAsString : function (fullAnchor){
+    var returnValue = 0;
+    var re = new RegExp("vandaRow[0-9]+"); // retrieve text that identifies node
+    if (typeof fullAnchor !== 'undefined') {
+        var nodeName = fullAnchor.match(re);
+        if ( (typeof nodeName !== 'undefined') &&
+            (nodeName.length > 0) ) {
+            // var sampleGroupNamePlus = $('#'+nodeName[0]+'>ul>li').attr('id');
+            var sampleGroupNamePlus = $('#'+nodeName[0]).attr('datasetname');
+            if ( (typeof sampleGroupNamePlus !== 'undefined') &&
+                (sampleGroupNamePlus.length > 0) ) {
+                // var sampleGroupName = sampleGroupNamePlus.substring(0,sampleGroupNamePlus.indexOf('-'));
+                var sampleGroupName = sampleGroupNamePlus;
+                returnValue = mpgSoftware.trans.translator(sampleGroupName);
+            }
+        }
     }
-
-
+ },
+     extractConHeaderTextAsString : function (fullAnchor){
+         var returnValue = 0;
+         var re = new RegExp("mafTableRow[0-9]+"); // retrieve text that identifies node
+         if (typeof fullAnchor !== 'undefined') {
+             var nodeName = fullAnchor.match(re);
+             if ( (typeof nodeName !== 'undefined') &&
+                 (nodeName.length > 0) ) {
+                 var sampleGroupNamePlus = $('#'+nodeName[0]).attr('datasetname');
+                 if ( (typeof sampleGroupNamePlus !== 'undefined') &&
+                     (sampleGroupNamePlus.length > 0) ) {
+                     var sampleGroupName = sampleGroupNamePlus;
+                     returnValue = mpgSoftware.trans.translator(sampleGroupName);
+                 }
+             }
+         }
+    return returnValue;
+}
 
 
 

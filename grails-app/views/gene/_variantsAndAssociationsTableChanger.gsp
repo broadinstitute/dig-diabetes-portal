@@ -1,38 +1,36 @@
 
 <g:javascript>
-    var extractAnchorTextAsInteger = function (fullAnchor){
-      var returnValue = 0;
-      var re = new RegExp("\>[0-9]+\<"); // retrieve text, but with angle brackets
-      var re2 = new RegExp("[0-9]+"); // specifically get the presumed integer
-      if (typeof fullAnchor !== 'undefined') {
-         var textWithAngles = fullAnchor.match(re);
-         if ( (typeof textWithAngles !== 'undefined') &&
-              (textWithAngles.length > 0) ) {
-                var textWithoutAngles = textWithAngles[0].match(re2);
-                if ( (typeof textWithoutAngles !== 'undefined') &&
-                     (textWithoutAngles.length > 0) ) {
-                        var textWeWant = textWithoutAngles[0];
-                        returnValue = parseInt (textWeWant,10);
-                }
-         }
-      }
-      return returnValue;
-    };
-    jQuery.fn.dataTableExt.oSort['allAnchor-asc']  = function(a,b) {
-        var x = extractAnchorTextAsInteger(a);
-        var y = extractAnchorTextAsInteger(b);
-        if (!x) { x = 0; }
-        if (!y) { y = 0; }
-        return ((x < y) ? -1 : ((x > y) ?  1 : 0));
-    };
+jQuery.fn.dataTableExt.oSort['allAnchor-asc']  = function(a,b) {
+    var x = UTILS.extractAnchorTextAsInteger(a);
+    var y = extractAnchorTextAsInteger(b);
+    if (!x) { x = 0; }
+    if (!y) { y = 0; }
+    return ((x < y) ? -1 : ((x > y) ?  1 : 0));
+};
 
-    jQuery.fn.dataTableExt.oSort['allAnchor-desc']  = function(a,b) {
-        var x = extractAnchorTextAsInteger(a);
-        var y = extractAnchorTextAsInteger(b);
-        if (!x) { x = 0; }
-        if (!y) { y = 0; }
-        return ((x < y) ? 1 : ((x > y) ?  -1 : 0));
-    };
+jQuery.fn.dataTableExt.oSort['allAnchor-desc']  = function(a,b) {
+    var x = UTILS.extractAnchorTextAsInteger(a);
+    var y = UTILS.extractAnchorTextAsInteger(b);
+    if (!x) { x = 0; }
+    if (!y) { y = 0; }
+    return ((x < y) ? 1 : ((x > y) ?  -1 : 0));
+};
+jQuery.fn.dataTableExt.oSort['headerAnchor-asc']  = function(a,b) {
+    var str1 = UTILS.extractHeaderTextAsString(a);
+    var str2 = UTILS.extractHeaderTextAsString(b);
+    if (!str1) { str1 = ''; }
+    if (!str2) { str2 = ''; }
+    return str1.localeCompare(str2);
+};
+
+jQuery.fn.dataTableExt.oSort['headerAnchor-desc']  = function(a,b) {
+    var str1 = UTILS.extractHeaderTextAsString(a);
+    var str2 = UTILS.extractHeaderTextAsString(b);
+    if (!str1) { str1 = ''; }
+    if (!str2) { str2 = ''; }
+    return str2.localeCompare(str1);
+};
+
 
 var variantsAndAssociationTable = function (phenotype,rowMapParameter){
     var rowValue = [];
@@ -181,9 +179,9 @@ var variantsAndAssociationTable = function (phenotype,rowMapParameter){
                                         bPaginate:false,
                                         bFilter: false,
                                         bInfo : false,
-//                                        aaSorting: [[ 2, "desc" ]],
+                                        aaSorting: [[ 0, "desc" ]],
                                         aoColumnDefs: [{sType: "allAnchor", aTargets: anchorColumnMarkers },
-                                                       {"bSortable": false , aTargets: [0] }]
+                                                       {sType: "headerAnchor", aTargets: [0] }]
                                     });
                                 loader.hide();
                         }
