@@ -809,6 +809,7 @@ var UTILS = {
             }
         }
     }
+     return returnValue;
  },
      extractConHeaderTextAsString : function (fullAnchor){
          var returnValue = 0;
