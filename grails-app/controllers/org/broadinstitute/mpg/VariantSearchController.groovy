@@ -42,6 +42,9 @@ class VariantSearchController {
         String sampleGroupName = params.sampleGroup
         String convertedSampleGroupName = restServerService.convertKnownDataSetsToRealNames(sampleGroupName)
         SampleGroup sampleGroup = metaDataService.getSampleGroupByName(convertedSampleGroupName)
+        if (sampleGroup?.sampleGroupList?.size()>0){
+            sampleGroup.sampleGroupList = sampleGroup.sampleGroupList.sort{it.systemId}
+        }
         String jsonDescr = sharedToolsService.packageSampleGroupsHierarchicallyForJsTree(sampleGroup,phenotypeName)
         def result = slurper.parseText(jsonDescr)
         render(status: 200, contentType: "application/json") {

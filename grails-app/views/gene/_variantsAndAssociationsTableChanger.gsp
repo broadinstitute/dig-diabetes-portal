@@ -164,8 +164,9 @@ var variantsAndAssociationTable = function (phenotype,rowMapParameter){
                                     '<%=geneName%>',
                                     phenotype
                                 );
-                                var rowsToExpand = rowValue;
-                                if (typeof rowsToExpand !== 'undefined') {
+
+                                if (typeof rowValue !== 'undefined') {
+                                   var rowsToExpand = rowValue.sort();
                                    for ( var i = 0 ; i < rowsToExpand.length ; i++ ){
                                        jsTreeDataRetriever ('#vandaRow'+i,phenotype,rowsToExpand[i]);
                                    }
@@ -180,7 +181,7 @@ var variantsAndAssociationTable = function (phenotype,rowMapParameter){
                                         bPaginate:false,
                                         bFilter: false,
                                         bInfo : false,
-                                        aaSorting: [[ 2, "desc" ]],
+//                                        aaSorting: [[ 2, "desc" ]],
                                         aoColumnDefs: [{sType: "allAnchor", aTargets: anchorColumnMarkers },
                                                        {"bSortable": false , aTargets: [0] }]
                                     });
@@ -396,7 +397,7 @@ var jsTreeDataRetriever = function (divId,phenotypeName,sampleGroupName){
     });
     $(divId).on ('after_open.jstree', function (e, data) {
     for ( var i = 0 ; i < data.node.children.length ; i++ )  {
-       $('#'+data.node.children[i]+' .jstree-checkbox').click   ();
+       $(divId).jstree("select_node", '#'+data.node.children[i]+' .jstree-checkbox', true);
     }
     }) ;
 };
