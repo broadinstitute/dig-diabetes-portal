@@ -130,7 +130,7 @@
                         return (a.p_value - b.p_value);
                     })
                 }
-                if ((sortedDatasetList.length>1)&&
+                if ((sortedDatasetList.length>0)&&
                         (sortedDatasetList[0].p_value <.05)) {
                     var formSelector = "#holdAssociationStatisticsBoxes";
                     var titleSelector = formSelector + "_title";
@@ -164,6 +164,7 @@
     };
     var gatherVariantStatistics = function (phenotype,datasetDescription,passThroughObject){
         var selectorForStatisticsBoxesValues = passThroughObject.holdAssociationStatistics;
+        var traitCount = passThroughObject.traitCount;
         var rememberPhenotype = phenotype;
         $.ajax({
             cache: false,
@@ -184,7 +185,7 @@
                     associationOddsRatioQ:'<g:helpText title="variant.variantAssociations.oddsRatio.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.oddsRatio.help.text"/>'
                 };
                 var collector = {};
-                console.log('rememberPhenotype='+rememberPhenotype);
+                //console.log('rememberPhenotype='+rememberPhenotype);
                 if ((typeof data !== 'undefined')&&
                         (typeof data.variantInfo !== 'undefined')&&
                         (typeof data.variantInfo.results !== 'undefined')&&
@@ -223,10 +224,12 @@
                         return (a.p_value - b.p_value);
                     })
                 }
+                var formSelector = "#" + selectorForStatisticsBoxesValues;
+                var retrievedTraits;
                 if (sortedDatasetList.length > 0) {
-                    var formSelector = "#" + selectorForStatisticsBoxesValues;
                     var titleSelector = formSelector + "_title";
                     if (sortedDatasetList[0].p_value < .05) {
+                        $(formSelector).parent().parent().parent().addClass('traitProcessed');
                         $(titleSelector).text(mpgSoftware.trans.translator(rememberPhenotype));
                         $(titleSelector).append("<span class='traitTitleComma'>,&nbsp;</span>");
                         mpgSoftware.variantInfo.variantAssociations(
@@ -249,10 +252,28 @@
                             }
                         });
                     } else {
-                        $(formSelector).parent().parent().parent().css('width','0');
-                        $(formSelector).parent().parent().parent().css('margin','0');
+                        $(formSelector).parent().parent().parent().addClass('hiddenBlockyBox');
+                        $(formSelector).parent().parent().parent().addClass('traitProcessed');
                         $(titleSelector + '+.smallerStatBoxes').hide();
                     }
+                } else {
+                    $(formSelector).parent().parent().parent().addClass('traitProcessed');
+                    $(formSelector).parent().parent().parent().addClass('hiddenBlockyBox');
+                }
+                retrievedTraits = $('#boxHolderHolder1>li.traitProcessed').length;
+                if (traitCount == retrievedTraits){ // this is the last trait.  Take a sec to clean up/special case.
+                   var traitsWithoutSignificantValues = $('#boxHolderHolder1>li.hiddenBlockyBox').length;
+                   var traitsWithSignificantValues = retrievedTraits-traitsWithoutSignificantValues;
+                   var t2dAssociations = $('#holdAssociationStatisticsBoxes li').length;
+                   var atLeastT2dHadAssociations = '';
+                   if (t2dAssociations>0){
+                       atLeastT2dHadAssociations = ' other';
+                   }
+                   if (traitsWithSignificantValues==0){
+                       $('.otherDiseasesByline').text('No'+atLeastT2dHadAssociations+' traits with significant associations');
+                       $('#boxHolderHolder1').hide();
+                       $('#showAssociations').hide();
+                   }
                 }
             },
             error: function (jqXHR, exception) {
@@ -282,8 +303,14 @@
                         ( typeof data.datasets.dataset !== 'undefined' ) ) {
                     $('#VariantsAndAssociationsExist').append("<div class='otherDiseasesByline'><g:message code="variant.variantAssociations.otherTraits" default="Other traits with one or more nominally significant associations:"/></div>");
                     $('#VariantsAndAssociationsExist').append("<ul id='boxHolderHolder1' class='list-unstyled'></ul>");
+                    // count up the number of traits we need to deal with
+                    var traitCount = 0;
+                    for ( var category in data.datasets.dataset ) {
+                        if (data.datasets.dataset.hasOwnProperty(category)) {
+                            traitCount += data.datasets.dataset[category].length;
+                        }
+                    }
                     for ( var category in data.datasets.dataset ){
-
                         if (data.datasets.dataset.hasOwnProperty(category)) {
                             var propertyArray = data.datasets.dataset[category];
                             for ( var i = 0 ; i < propertyArray.length ; i++ ){
@@ -291,7 +318,11 @@
                                     var holdAssociationStatistics = "holdAssociationStatisticsBoxes_"+propertyArray[i];
                                     $('#boxHolderHolder1').append( "<li class='slidingBoxHolder slidingBoxHolderLiney'><div id='"+holdAssociationStatistics+"_title' class='rowTitle'></div><div class='items smallerStatBoxes'><div class='item'><ul id='"+holdAssociationStatistics+"' class='content-slider'></ul></div></div></li>");
                                     UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],propertyArray[i],
-                                            "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",gatherVariantStatistics, {holdAssociationStatistics:holdAssociationStatistics} );
+                                            "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",gatherVariantStatistics,
+                                            {holdAssociationStatistics:holdAssociationStatistics,
+                                             traitCount:traitCount-1,// -1 because we skip T2D
+                                             category:category,
+                                             countInCategory:i} );
                                 }
 
                             }
