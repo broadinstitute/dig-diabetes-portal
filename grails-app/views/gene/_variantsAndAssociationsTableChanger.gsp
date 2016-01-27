@@ -2,7 +2,7 @@
 <g:javascript>
 jQuery.fn.dataTableExt.oSort['allAnchor-asc']  = function(a,b) {
     var x = UTILS.extractAnchorTextAsInteger(a);
-    var y = extractAnchorTextAsInteger(b);
+    var y = UTILS.extractAnchorTextAsInteger(b);
     if (!x) { x = 0; }
     if (!y) { y = 0; }
     return ((x < y) ? -1 : ((x > y) ?  1 : 0));
