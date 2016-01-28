@@ -174,15 +174,15 @@ var variantsAndAssociationTable = function (phenotype,rowMapParameter){
                                 for ( var i = 0 ; i < numberOfColumns ; i++ ){
                                     anchorColumnMarkers.push(i+3);
                                 }
-                                $('#variantsAndAssociationsTable').dataTable({
-                                        bDestroy: true,
-                                        bPaginate:false,
-                                        bFilter: false,
-                                        bInfo : false,
-                                        aaSorting: [[ 0, "desc" ]],
-                                        aoColumnDefs: [{sType: "allAnchor", aTargets: anchorColumnMarkers },
-                                                       {sType: "headerAnchor", aTargets: [0] }]
-                                    });
+//                                $('#variantsAndAssociationsTable').dataTable({
+//                                        bDestroy: true,
+//                                        bPaginate:false,
+//                                        bFilter: false,
+//                                        bInfo : false,
+//                                        aaSorting: [[ 0, "desc" ]],
+//                                        aoColumnDefs: [{sType: "allAnchor", aTargets: anchorColumnMarkers },
+//                                                       {sType: "headerAnchor", aTargets: [0] }]
+//                                    });
                                 loader.hide();
                         }
                     }
@@ -374,6 +374,17 @@ return b;
 var jsTreeDataRetriever = function (divId,phenotypeName,sampleGroupName){
     var dataPasser = {phenotype:phenotypeName,sampleGroup:sampleGroupName};
     $(divId).jstree({
+    "grid": {
+                "columns": [
+                             {"width": 150},
+                             {"width": 150},
+                             {"width": 150},
+                             {"width": 50},
+                             {"width": 50},
+                             {"width": 50},
+                             {"width": 50}
+                          ]
+          },
           "core" : {
                 "animation" : 0,
                 "check_callback" : true,
@@ -391,7 +402,7 @@ var jsTreeDataRetriever = function (divId,phenotypeName,sampleGroupName){
             "keep_selected_style" : false,
             "three_state": false
           },
-          "plugins" : [  "themes","core", "wholerow", "checkbox", "json_data", "ui", "types"]
+          "plugins" : [  "themes","core", "wholerow", "checkbox", "json_data", "ui", "types","grid"]
     });
     $(divId).on ('after_open.jstree', function (e, data) {
     for ( var i = 0 ; i < data.node.children.length ; i++ )  {

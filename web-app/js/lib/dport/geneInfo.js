@@ -438,17 +438,16 @@ var mpgSoftware = mpgSoftware || {};
                         dataSetNameForUser = dataSetName;
                 }
                 var tableRow = '';
-                tableRow += '<tr>' +
-                    '<td class="vandaRowTd" style="text-align: left"><div class="vandaRowHdr" id="vandaRow'+rowNumber+'" datasetname="'+dataSetName+'"></div></td>' +
-//                    '<td class="vandaRowTd"><div class="vandaRowHdr" id="vandaRow'+rowNumber+'" datasetname="'+dataSetName+'"></div></td>' +
-                    '<td>' + rowTechnology + '</td>'+
-                    '<td>' + sampleSize + '</td>';
+                tableRow += '<div>' +
+                    '<span class="vandaRowTd" style="text-align: left"><div class="vandaRowHdr" id="vandaRow'+rowNumber+'" datasetname="'+dataSetName+'"></div></span>' +
+                    '<span>' + rowTechnology + '</span>'+
+                    '<span>' + sampleSize + '</span>';
                 for ( var i = 0 ; i < columnMap.length ; i++ ) {
-                    tableRow += '<td>';
+                    tableRow += '<span>';
                     tableRow += anchorBuildingFunction(valueArray[i], geneName, columnMap[i].value, dataSetCode, genomicRegion, rootVariantUrl, phenotype)
-                    tableRow += '</td>';
+                    tableRow += '</span>';
                 }
-                tableRow += '</tr>';
+                tableRow += '</div>';
                 $('#variantsAndAssociationsTableBody').append(tableRow);
             }
         };
