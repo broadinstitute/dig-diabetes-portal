@@ -7,6 +7,7 @@ import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.codehaus.groovy.grails.web.json.JSONObject
+import org.springframework.web.servlet.support.RequestContextUtils
 
 class VariantSearchController {
     FilterManagementService filterManagementService
@@ -511,7 +512,8 @@ class VariantSearchController {
                 }
             }
 
-
+            // get locale to provide to table-building plugin
+            String locale = RequestContextUtils.getLocale(request)
 
             render(view: 'variantSearchResults',
                     model: [show_gene           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
@@ -528,7 +530,8 @@ class VariantSearchController {
                             additionalProperties: requestForAdditionalProperties,
                             regionSearch        : (positioningInformation.size() > 2),
                             regionSpecification : regionSpecifier,
-                            geneNamesToDisplay  : identifiedGenes
+                            geneNamesToDisplay  : identifiedGenes,
+                            locale              : locale
                     ])
         }
     }

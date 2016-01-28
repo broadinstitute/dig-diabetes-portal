@@ -419,7 +419,7 @@
         variantProcessing.iterativeVariantTableFiller(data, totCol, sortCol, '#variantTable',
                 '<g:createLink controller="variantInfo" action="variantInfo" />',
                 '<g:createLink controller="gene" action="geneInfo" />',
-                proteinEffectList, {});
+                proteinEffectList, {}, "${locale}");
 
     }
 
