@@ -68,7 +68,7 @@
 
 <g:javascript>
 function reviseRows(){
-  var phenotype = $('#phenotypeTableChooser option:selected').val();
+   var phenotype = $('#phenotypeTableChooser option:selected').val();
   var clickedBoxes =  $('#variantsAndAssociationsTable .jstree-clicked');
   var dataSetMaps  = [];
   for  ( var i = 0 ; i < clickedBoxes.length ; i++ )   {

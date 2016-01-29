@@ -126,7 +126,7 @@
                         bPaginate:false,
                         bInfo : false,
                         bFilter: false,
-                        aaSorting: [[ 0, "desc" ]],
+                        aaSorting: [[ 0, "asc" ]],
                         aoColumnDefs: [{sType: "allAnchor", aTargets: [3,4,5,6] },
                             {sType: "headerConAnchor", aTargets: [0] }]
                     });

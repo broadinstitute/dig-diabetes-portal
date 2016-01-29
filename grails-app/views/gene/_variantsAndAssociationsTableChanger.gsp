@@ -24,12 +24,11 @@ jQuery.fn.dataTableExt.oSort['headerAnchor-asc']  = function(a,b) {
 };
 
 jQuery.fn.dataTableExt.oSort['headerAnchor-desc']  = function(a,b) {
-    var str1 = UTILS.extractHeaderTextAsString(a);
-    var str2 = UTILS.extractHeaderTextAsString(b);
+    var str1 = UTILS.extractHeaderTextAsString(b);
+    var str2 = UTILS.extractHeaderTextAsString(a);
     if (!str1) { str1 = ''; }
     if (!str2) { str2 = ''; }
-    return str2.localeCompare(str1);
-};
+    return str1.localeCompare(str2);};
 
 
 var variantsAndAssociationTable = function (phenotype,rowMapParameter){
@@ -164,7 +163,7 @@ var variantsAndAssociationTable = function (phenotype,rowMapParameter){
                                 );
 
                                 if (typeof rowValue !== 'undefined') {
-                                   var rowsToExpand = rowValue.sort();
+                                   var rowsToExpand = rowValue;
                                    for ( var i = 0 ; i < rowsToExpand.length ; i++ ){
                                        jsTreeDataRetriever ('#vandaRow'+i,phenotype,rowsToExpand[i]);
                                    }
@@ -179,7 +178,7 @@ var variantsAndAssociationTable = function (phenotype,rowMapParameter){
                                         bPaginate:false,
                                         bFilter: false,
                                         bInfo : false,
-                                        aaSorting: [[ 0, "desc" ]],
+                                        aaSorting: [[ 0, "asc" ]],
                                         aoColumnDefs: [{sType: "allAnchor", aTargets: anchorColumnMarkers },
                                                        {sType: "headerAnchor", aTargets: [0] }]
                                     });
