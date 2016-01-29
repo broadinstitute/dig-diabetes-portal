@@ -1,35 +1,86 @@
 
 <g:javascript>
-jQuery.fn.dataTableExt.oSort['allAnchor-asc']  = function(a,b) {
-    var x = UTILS.extractAnchorTextAsInteger(a);
-    var y = UTILS.extractAnchorTextAsInteger(b);
-    if (!x) { x = 0; }
-    if (!y) { y = 0; }
-    return ((x < y) ? -1 : ((x > y) ?  1 : 0));
-};
+$( document ).ready(function() {
+    jQuery.fn.dataTableExt.oSort['allAnchor-asc']  = function(a,b) {
+        var x = UTILS.extractAnchorTextAsInteger(a);
+        var y = UTILS.extractAnchorTextAsInteger(b);
+        if (!x) { x = 0; }
+        if (!y) { y = 0; }
+        return ((x < y) ? -1 : ((x > y) ?  1 : 0));
+    };
 
-jQuery.fn.dataTableExt.oSort['allAnchor-desc']  = function(a,b) {
-    var x = UTILS.extractAnchorTextAsInteger(a);
-    var y = UTILS.extractAnchorTextAsInteger(b);
-    if (!x) { x = 0; }
-    if (!y) { y = 0; }
-    return ((x < y) ? 1 : ((x > y) ?  -1 : 0));
-};
-jQuery.fn.dataTableExt.oSort['headerAnchor-asc']  = function(a,b) {
-    var str1 = UTILS.extractHeaderTextAsString(a);
-    var str2 = UTILS.extractHeaderTextAsString(b);
-    if (!str1) { str1 = ''; }
-    if (!str2) { str2 = ''; }
-    return str1.localeCompare(str2);
-};
+    jQuery.fn.dataTableExt.oSort['allAnchor-desc']  = function(a,b) {
+        var x = UTILS.extractAnchorTextAsInteger(a);
+        var y = UTILS.extractAnchorTextAsInteger(b);
+        if (!x) { x = 0; }
+        if (!y) { y = 0; }
+        return ((x < y) ? 1 : ((x > y) ?  -1 : 0));
+    };
+    jQuery.fn.dataTableExt.oSort['headerAnchor-asc']  = function(a,b) {
+        var str1 = UTILS.extractHeaderTextAsString(a);
+        var str2 = UTILS.extractHeaderTextAsString(b);
+        if (!str1) { str1 = ''; }
+        if (!str2) { str2 = ''; }
+        return str1.localeCompare(str2);
+    };
 
-jQuery.fn.dataTableExt.oSort['headerAnchor-desc']  = function(a,b) {
-    var str1 = UTILS.extractHeaderTextAsString(b);
-    var str2 = UTILS.extractHeaderTextAsString(a);
-    if (!str1) { str1 = ''; }
-    if (!str2) { str2 = ''; }
-    return str1.localeCompare(str2);};
+    jQuery.fn.dataTableExt.oSort['headerAnchor-desc']  = function(a,b) {
+        var str1 = UTILS.extractHeaderTextAsString(b);
+        var str2 = UTILS.extractHeaderTextAsString(a);
+        if (!str1) { str1 = ''; }
+        if (!str2) { str2 = ''; }
+        return str1.localeCompare(str2);};
 
+    var labelIndenter = function (tableId) {
+        var rowSGLabel = $('#'+tableId+' td.vandaRowTd div.vandaRowHdr');
+        if (typeof rowSGLabel !== 'undefined'){
+           var adjustmentMadeSoCheckAgain;
+           var indentationMultiplier = 0;
+           var usedAsCore = [];
+           var indentation = 0;
+           do {
+               var coreSGName = undefined;
+               indentationMultiplier++;
+               adjustmentMadeSoCheckAgain = false;
+               for ( var i = 0 ; i < rowSGLabel.length ; i++ ){
+                  var currentDiv = $(rowSGLabel[i]);
+                  var sampleGroupName = mpgSoftware.trans.translator(currentDiv.attr('datasetname'));
+                  if (typeof coreSGName === undefined){
+                     coreSGName = sampleGroupName;
+                     usedAsCore.push(coreSGName);
+                  } else {
+                     if (sampleGroupName.indexOf(coreSGName)>-1){
+                        indentation = 12*indentationMultiplier;
+                        currentDiv.css('padding-left',indentation+'px');
+                        adjustmentMadeSoCheckAgain = true;
+                     } else {
+                        if (usedAsCore.indexOf(sampleGroupName) === -1){ // you only get to be the core once
+                            coreSGName = sampleGroupName;
+                            usedAsCore.push(coreSGName);
+                        }
+                     }
+                  }
+               }
+           } while(adjustmentMadeSoCheckAgain);
+           if (indentation === 0){ // if nothing was intentionally indented then let's reset all the padding to zero
+              rowSGLabel.css('padding-left','0px');
+           }
+        }
+    } ;
+
+    var vAndALabelIndenter = function () {
+       labelIndenter('variantsAndAssociationsTable');
+    };
+    var continentalVariationLabelIndenter = function () {
+       labelIndenter('continentalVariation');
+    }
+
+
+    // can we do a little formatting after a reorder of the table
+    $('#variantsAndAssociationsTable').on( 'order.dt', vAndALabelIndenter );
+    $('#continentalVariation').on( 'order.dt', continentalVariationLabelIndenter );
+
+});
 
 var variantsAndAssociationTable = function (phenotype,rowMapParameter){
     var rowValue = [];
@@ -165,7 +216,7 @@ var variantsAndAssociationTable = function (phenotype,rowMapParameter){
                                 if (typeof rowValue !== 'undefined') {
                                    var rowsToExpand = rowValue;
                                    for ( var i = 0 ; i < rowsToExpand.length ; i++ ){
-                                       jsTreeDataRetriever ('#vandaRow'+i,phenotype,rowsToExpand[i]);
+                                       jsTreeDataRetriever ('#vandaRow'+i,'#variantsAndAssociationsTable',phenotype,rowsToExpand[i]);
                                    }
                                 }
                                 var numberOfColumns = determineNumberOfColumns(data);
@@ -370,7 +421,7 @@ var getDataSets = function(sel){
 function cb(a,b){
 return b;
 }
-var jsTreeDataRetriever = function (divId,phenotypeName,sampleGroupName){
+var jsTreeDataRetriever = function (divId,tableId,phenotypeName,sampleGroupName){
     var dataPasser = {phenotype:phenotypeName,sampleGroup:sampleGroupName};
     $(divId).jstree({
           "core" : {
@@ -392,11 +443,47 @@ var jsTreeDataRetriever = function (divId,phenotypeName,sampleGroupName){
           },
           "plugins" : [  "themes","core", "wholerow", "checkbox", "json_data", "ui", "types"]
     });
-    $(divId).on ('after_open.jstree', function (e, data) {
-    for ( var i = 0 ; i < data.node.children.length ; i++ )  {
-       $(divId).jstree("select_node", '#'+data.node.children[i]+' .jstree-checkbox', true);
-    }
+    $(divId).on ('open_node.jstree', function (e, data) {
+        var existingNodes = $(tableId+' td.vandaRowTd div.vandaRowHdr');
+        var sgsWeHaveAlready = [];
+        for ( var i = 0 ; i < existingNodes.length ; i++ ){
+          var currentDiv = $(existingNodes[i]);
+          sgsWeHaveAlready.push(currentDiv.attr('datasetname'));
+        }
+        for ( var i = 0 ; i < data.node.children.length ; i++ )  {
+           var nodeId =  data.node.children[i];
+           var sampleGroupName = nodeId.substring(0,nodeId.indexOf('-'));
+           if (sgsWeHaveAlready.indexOf(sampleGroupName)>-1){
+              $(divId).jstree("delete_node", data.node.children[i]);
+           }
+        }
     }) ;
+    $(divId).on ('after_open.jstree', function (e, data) {
+        var existingNodes = $(tableId+' td.vandaRowTd div.vandaRowHdr');
+        var sgsWeHaveAlready = [];
+        for ( var i = 0 ; i < existingNodes.length ; i++ ){
+          var currentDiv = $(existingNodes[i]);
+          sgsWeHaveAlready.push(currentDiv.attr('datasetname'));
+        }
+        for ( var i = 0 ; i < data.node.children.length ; i++ )  {
+           var nodeId =  data.node.children[i];
+           var sampleGroupName = nodeId.substring(0,nodeId.indexOf('-'));
+           if (sgsWeHaveAlready.indexOf(sampleGroupName)>-1){
+              $(divId).jstree("delete_node", data.node.children[i]);
+           }
+        }
+
+        for ( var i = 0 ; i < data.node.children.length ; i++ )  {
+          $(divId).jstree("select_node", '#'+data.node.children[i]+' .jstree-checkbox', true);
+        }
+    }) ;
+    $(divId).on ('load_node.jstree', function (e, data) {
+       console.log('load_node'+data.node.length);
+    }) ;
+    $(divId).on ('load_all.jstree', function (e, data) {
+       alert('load_all');
+    }) ;
+
 };
 
 

@@ -118,7 +118,7 @@
                     }
                     if (typeof rowDataStructure !== 'undefined') {
                         for ( var i = 0 ; i < rowDataStructure.length ; i++ ){
-                            jsTreeDataRetriever ('#mafTableRow'+i,"",rowDataStructure[i].dataset);
+                            jsTreeDataRetriever ('#mafTableRow'+i,'#continentalVariation',"",rowDataStructure[i].dataset);
                         }
                     }
                     var continentalTable = $('#continentalVariation').dataTable({
