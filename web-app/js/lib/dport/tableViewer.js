@@ -485,7 +485,7 @@ var variantProcessing = (function () {
 
 
     /* Sort col is *relative* to dynamic columns */
-    var iterativeVariantTableFiller = function  (data, totCol, sortCol, divId,variantRootUrl,geneRootUrl,proteinEffectList,dataSetDetermination)  {
+    var iterativeVariantTableFiller = function  (data, totCol, sortCol, divId,variantRootUrl,geneRootUrl,proteinEffectList,dataSetDetermination,locale)  {
 
         // Some of the common properties are nonnumeric.  We have type information but for right now I'm going to kludge it.
         //  TODO: Passed down the type information for each common property and use it to determine which are numeric and which aren't
@@ -515,12 +515,21 @@ var variantProcessing = (function () {
             numericCol.push(colIndex++);
         }
 
+        var languageSetting = {}
+        // check if the browser is using Spanish
+        if ( locale.startsWith("es")  ) {
+            languageSetting = { url : '../js/lib/es.json' }
+        }
+
         var table = $(divId).dataTable({
             iDisplayLength: 20,
             bFilter: false,
             aaSorting: [[ sortCol, "asc" ]],
-            aoColumnDefs: [{sType: "allnumeric", aTargets: numericCol } ]
+            aoColumnDefs: [{sType: "allnumeric", aTargets: numericCol } ],
+            language: languageSetting
         });
+
+
         var tableTools = new $.fn.dataTable.TableTools( table, {
             "buttons": [
                 "copy",
@@ -529,7 +538,7 @@ var variantProcessing = (function () {
                 "pdf",
                 { "type": "print", "buttonText": "Print me!" }
             ],
-            "sSwfPath": "../../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
+            "sSwfPath": "../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
         } );
         $( tableTools.fnContainer() ).insertAfter(divId);
 
