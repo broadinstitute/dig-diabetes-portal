@@ -131,7 +131,7 @@
                     })
                 }
                 if ((sortedDatasetList.length>0)&&
-                        (sortedDatasetList[0].p_value <.05)) {
+                        (sortedDatasetList[0].p_value <=1)) {
                     var formSelector = "#holdAssociationStatisticsBoxes";
                     var titleSelector = formSelector + "_title";
                     $(titleSelector).text(mpgSoftware.trans.translator(rememberPhenotype));
