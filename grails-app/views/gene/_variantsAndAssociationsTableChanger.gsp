@@ -443,21 +443,6 @@ var jsTreeDataRetriever = function (divId,tableId,phenotypeName,sampleGroupName)
           },
           "plugins" : [  "themes","core", "wholerow", "checkbox", "json_data", "ui", "types"]
     });
-    $(divId).on ('open_node.jstree', function (e, data) {
-        var existingNodes = $(tableId+' td.vandaRowTd div.vandaRowHdr');
-        var sgsWeHaveAlready = [];
-        for ( var i = 0 ; i < existingNodes.length ; i++ ){
-          var currentDiv = $(existingNodes[i]);
-          sgsWeHaveAlready.push(currentDiv.attr('datasetname'));
-        }
-        for ( var i = 0 ; i < data.node.children.length ; i++ )  {
-           var nodeId =  data.node.children[i];
-           var sampleGroupName = nodeId.substring(0,nodeId.indexOf('-'));
-           if (sgsWeHaveAlready.indexOf(sampleGroupName)>-1){
-              $(divId).jstree("delete_node", data.node.children[i]);
-           }
-        }
-    }) ;
     $(divId).on ('after_open.jstree', function (e, data) {
         var existingNodes = $(tableId+' td.vandaRowTd div.vandaRowHdr');
         var sgsWeHaveAlready = [];
@@ -465,25 +450,25 @@ var jsTreeDataRetriever = function (divId,tableId,phenotypeName,sampleGroupName)
           var currentDiv = $(existingNodes[i]);
           sgsWeHaveAlready.push(currentDiv.attr('datasetname'));
         }
+        var listToDelete = [];
         for ( var i = 0 ; i < data.node.children.length ; i++ )  {
            var nodeId =  data.node.children[i];
            var sampleGroupName = nodeId.substring(0,nodeId.indexOf('-'));
            if (sgsWeHaveAlready.indexOf(sampleGroupName)>-1){
-              $(divId).jstree("delete_node", data.node.children[i]);
+              listToDelete.push(data.node.children[i]);
+             // Note that I tried running the "delete_node" command here, but the results were inconsistent. I'm guessing
+             // that the deletion messes with the iterator somehow. Instead delete them below and everything's okay.
            }
+        }
+        for ( var i = 0 ; i < listToDelete.length ; i++ )  {
+           $(divId).jstree("delete_node", listToDelete[i]);
         }
 
         for ( var i = 0 ; i < data.node.children.length ; i++ )  {
-          $(divId).jstree("select_node", '#'+data.node.children[i]+' .jstree-checkbox', true);
+              console.log('select_node='+data.node.children[i]+'.');
+              $(divId).jstree("select_node", '#'+data.node.children[i]+' .jstree-checkbox', true);
         }
     }) ;
-    $(divId).on ('load_node.jstree', function (e, data) {
-       console.log('load_node'+data.node.length);
-    }) ;
-    $(divId).on ('load_all.jstree', function (e, data) {
-       alert('load_all');
-    }) ;
-
 };
 
 
