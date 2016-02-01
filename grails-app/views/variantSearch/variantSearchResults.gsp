@@ -419,7 +419,9 @@
         variantProcessing.iterativeVariantTableFiller(data, totCol, sortCol, '#variantTable',
                 '<g:createLink controller="variantInfo" action="variantInfo" />',
                 '<g:createLink controller="gene" action="geneInfo" />',
-                proteinEffectList, {}, "${locale}");
+                proteinEffectList, {}, "${locale}",
+                '<g:message code="table.buttons.copyText" default="Copy" />',
+                '<g:message code="table.buttons.printText" default="Print me!" />');
 
     }
 
