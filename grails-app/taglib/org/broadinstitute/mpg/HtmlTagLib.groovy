@@ -16,7 +16,7 @@ class HtmlTagLib {
 //    }
 
 
-    def renderGeneSummary = {attrs ->
+    def renderGeneSummary = { attrs ->
 
         String geneName = attrs.geneFile
         String locale = attrs.locale
@@ -26,16 +26,16 @@ class HtmlTagLib {
             //throwTagError("'file' attribute must be provided")
         }
 
-        String fileName =  "/WEB-INF/resources/geneSummaries/${geneName}.html" // default value
-        if (locale){
+        String fileName = "/WEB-INF/resources/geneSummaries/${geneName}.html" // default value
+        if (locale) {
             if (locale.startsWith("en")) {
-                fileName =  "/WEB-INF/resources/geneSummaries/${geneName}.html"
-            } else  if (locale.startsWith("es")) {
+                fileName = "/WEB-INF/resources/geneSummaries/${geneName}.html"
+            } else if (locale.startsWith("es")) {
                 fileName = "/WEB-INF/resources/geneSummaries/spanish/${geneName}.html"
             }
         }
 
-        String fileDesignationOnDisk =  grailsApplication.mainContext.getResource(fileName).file.toString()
+        String fileDesignationOnDisk = grailsApplication.mainContext.getResource(fileName).file.toString()
 
 
         if (!fileDesignationOnDisk) {
@@ -48,7 +48,7 @@ class HtmlTagLib {
             String rawCharacters = it
             fileContents += StringEscapeUtils.escapeJavaScript(rawCharacters)
         }
-         out << fileContents
+        out << fileContents
     }
 }
 

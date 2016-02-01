@@ -333,6 +333,7 @@ class GeneController {
      * @return
      */
     def geneInfoAjax() {
+        log.info("!!!!!!!!!!-------------------------------------------!!!!!!!!!!!!!!!")
         String geneToStartWith = params.geneName
         if (geneToStartWith)      {
             JSONObject jsonObject =  restServerService.retrieveGeneInfoByName (geneToStartWith.trim().toUpperCase())
