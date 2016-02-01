@@ -41,7 +41,10 @@
                             data['show_gene'],
                             data['show_exseq'],
                             data['show_exchp'],
-                            '<g:createLink controller="trait" action="traitSearch" />');
+                            '<g:createLink controller="trait" action="traitSearch" />',
+                            "${locale}",
+                            '<g:message code="table.buttons.copyText" default="Copy" />',
+                            '<g:message code="table.buttons.printText" default="Print me!" />');
                     loading.hide();
                 },
                 error: function (jqXHR, exception) {

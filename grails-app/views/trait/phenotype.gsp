@@ -74,7 +74,10 @@
             mpgSoftware.phenotype.iterativeTableFiller(collector,
                     ${show_gwas},
                     ${show_exchp},
-                    ${show_exseq});
+                    ${show_exseq},
+                    "${locale}",
+                    '<g:message code="table.buttons.copyText" default="Copy" />',
+                    '<g:message code="table.buttons.printText" default="Print me!" />');
             loading.hide();
         },
         error: function(jqXHR, exception) {

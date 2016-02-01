@@ -13,26 +13,37 @@ var mpgSoftware = mpgSoftware || {};
                                                        showGene,
                                                        showExomeSequence,
                                                        showExomeChip,
-                                                       traitUrl)  {
+                                                       traitUrl,
+                                                        locale,
+                                                        copyText,
+                                                        printText)  {
             var variant =  data['traitInfo'];
             $(traitsPerVariantTableBody).append(variantProcessing.fillTraitsPerVariantTable(variant,
                 showGene,
                 showExomeSequence,
                 showExomeChip,
                 traitUrl));
+
+            var languageSetting = {}
+            // check if the browser is using Spanish
+            if ( locale.startsWith("es")  ) {
+                languageSetting = { url : '../js/lib/i18n/table.es.json' }
+            }
+
             var table = $(traitsPerVariantTable).dataTable({
                 iDisplayLength: 25,
                 bFilter: false,
                 aaSorting: [[ 1, "asc" ]],
-                aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 1, 3, 4 ] } ]
+                aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 1, 3, 4 ] } ],
+                language: languageSetting
             });
             var tableTools = new $.fn.dataTable.TableTools( table, {
-                "buttons": [
-                    "copy",
+                "aButtons": [
+                    { "sExtends": "copy", "sButtonText": copyText },
                     "csv",
                     "xls",
                     "pdf",
-                    { "type": "print", "buttonText": "Print" }
+                    { "sExtends": "print", "sButtonText": printText }
                 ],
                 "sSwfPath": "../../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
             } );
