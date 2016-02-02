@@ -262,7 +262,7 @@ var variantProcessing = (function () {
         },
 
 
-        fillTheVariantTable = function (data, show_gene, show_exseq, show_exchp, variantRootUrl, geneRootUrl, dataSetDetermination, textStringObject) {
+        fillTheVariantTable = function (data, show_gene, show_exseq, show_exchp, variantRootUrl, geneRootUrl, dataSetDetermination, textStringObject, locale, copyText, printText) {
             $('#variantTableBody').append(fillCollectedVariantsTable(data,
                 show_gene,
                 show_exseq,
@@ -274,6 +274,13 @@ var variantProcessing = (function () {
             if (data.variants) {
                 var totalNumberOfResults = data.variants.length;
                 $('#numberOfVariantsDisplayed').append('' + totalNumberOfResults);
+
+                var languageSetting = {}
+                // check if the browser is using Spanish
+                if ( locale.startsWith("es")  ) {
+                    languageSetting = { url : '../js/lib/i18n/table.es.json' }
+                }
+
                 $('#variantTable').dataTable({
                     iDisplayLength: 20,
                     bFilter: false,
@@ -282,7 +289,8 @@ var variantProcessing = (function () {
                     ],
                     aoColumnDefs: [
                         { sType: "allnumeric", aTargets: [ 5, 6, 8, 10, 11, 12, 13 ] }
-                    ]
+                    ],
+                    language: languageSetting
                 });
                 if (totalNumberOfResults >= 1000) {
                     $('#warnIfMoreThan1000Results').html( textStringObject.variantTableContext.tooManyResults );
@@ -485,7 +493,7 @@ var variantProcessing = (function () {
 
 
     /* Sort col is *relative* to dynamic columns */
-    var iterativeVariantTableFiller = function  (data, totCol, sortCol, divId,variantRootUrl,geneRootUrl,proteinEffectList,dataSetDetermination,locale)  {
+    var iterativeVariantTableFiller = function  (data, totCol, sortCol, divId,variantRootUrl,geneRootUrl,proteinEffectList,dataSetDetermination,locale,copyText,printText)  {
 
         // Some of the common properties are nonnumeric.  We have type information but for right now I'm going to kludge it.
         //  TODO: Passed down the type information for each common property and use it to determine which are numeric and which aren't
@@ -518,7 +526,7 @@ var variantProcessing = (function () {
         var languageSetting = {}
         // check if the browser is using Spanish
         if ( locale.startsWith("es")  ) {
-            languageSetting = { url : '../js/lib/es.json' }
+            languageSetting = { url : '../js/lib/i18n/table.es.json' }
         }
 
         var table = $(divId).dataTable({
@@ -531,14 +539,14 @@ var variantProcessing = (function () {
 
 
         var tableTools = new $.fn.dataTable.TableTools( table, {
-            "buttons": [
-                "copy",
+            aButtons: [
+                { "sExtends": "copy", "sButtonText": copyText },
                 "csv",
                 "xls",
                 "pdf",
-                { "type": "print", "buttonText": "Print me!" }
+                { "sExtends": "print", "sButtonText": printText }
             ],
-            "sSwfPath": "../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
+            sSwfPath: "../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
         } );
         $( tableTools.fnContainer() ).insertAfter(divId);
 

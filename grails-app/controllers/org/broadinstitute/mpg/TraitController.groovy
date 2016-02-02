@@ -5,6 +5,7 @@ import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.codehaus.groovy.grails.web.json.JSONObject
+import org.springframework.web.servlet.support.RequestContextUtils
 
 class TraitController {
     RestServerService restServerService
@@ -22,10 +23,13 @@ class TraitController {
      */
      def traitInfo (){
           String variantIdentifier = params.getIdentifier()
+         // get locale to provide to table-building plugin
+         String locale = RequestContextUtils.getLocale(request)
 
          render(view: 'traitsPerVariant',
                  model: [dnSnpId: variantIdentifier,
-                         variantIdentifier: variantIdentifier])
+                         variantIdentifier: variantIdentifier,
+                         locale: locale])
      }
 
     /**
@@ -66,6 +70,8 @@ class TraitController {
         String sampleGroupOwner = this.metaDataService.getGwasSampleGroupNameForPhenotype(phenotypeKey)
         String phenotypeDataSet = ''
         String phenotypeTranslation = sharedToolsService.translator(phenotypeKey)
+        // get locale to provide to table-building plugin
+        String locale = RequestContextUtils.getLocale(request)
 
         render(view: 'phenotype',
                 model: [show_gwas            : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
@@ -76,7 +82,8 @@ class TraitController {
                         phenotypeName        : phenotypeTranslation,
                         phenotypeDataSet     : phenotypeDataSet,
                         sampleGroupOwner     : sampleGroupOwner,
-                        requestedSignificance: requestedSignificance])
+                        requestedSignificance: requestedSignificance,
+                        locale               : locale])
 
     }
 
