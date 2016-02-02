@@ -98,20 +98,16 @@ class BootStrap {
                         UserRole.create user, userRole
                         if ((username == 'ben') ||
                                 (username == 'balexand@broadinstitute.org') ||
-                                (username == 'tgreen@broadinstitute.org') ||
                                 (username == 'kyuksel@broadinstitute.org') ||
-                                (username == 'tjordan@broadinstitute.org') ||
                                 (username == 'flannick@broadinstitute.org') ||
                                 (username == 'andrew@broadinstitute.org') ||
-                                (username=='dkjang@broadinstitute.org')||
                                 (username == 'mduby@broadinstitute.org') ||
-                                (username == 'oliverr@broadinstitute.org') ||
-                                (username == 'dsiedzik@broadinstitute.org') ||
                                 (username == 'msanders@broadinstitute.org') ) {
                             UserRole.create user, adminRole
                             UserRole.create user, systemRole
                         }
-                        if (username == 'maryc@broadinstitute.org') {
+                        if ((username == 'dsiedzik@broadinstitute.org') ||
+                            (username == 'maryc@broadinstitute.org')) {
                             UserRole.create user, adminRole
                         }
                     } else {

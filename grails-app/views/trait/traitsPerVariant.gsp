@@ -15,7 +15,7 @@
         <div class="variant-info-container" >
             <div class="variant-info-view" >
 
-                <g:render template="/widgets/associatedStatisticsTraitsPerVariant" model="['variantIdentifier': variantIdentifier, 'openOnLoad': true, locale: ${locale}]"/>
+                <g:render template='/widgets/associatedStatisticsTraitsPerVariant' model='[variantIdentifier: variantIdentifier, openOnLoad: true, locale: "${locale}"]'/>
 
             </div>
 
