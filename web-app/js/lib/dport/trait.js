@@ -27,7 +27,7 @@ var mpgSoftware = mpgSoftware || {};
             var languageSetting = {}
             // check if the browser is using Spanish
             if ( locale.startsWith("es")  ) {
-                languageSetting = { url : '../js/lib/i18n/table.es.json' }
+                languageSetting = { url : '../../js/lib/i18n/table.es.json' }
             }
 
             var table = $(traitsPerVariantTable).dataTable({
