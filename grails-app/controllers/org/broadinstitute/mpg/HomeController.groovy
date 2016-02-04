@@ -1,9 +1,7 @@
 package org.broadinstitute.mpg
-
-import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.apache.juli.logging.LogFactory
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.core.io.ResourceLocator
-import org.springframework.core.io.Resource
 import org.springframework.web.servlet.support.RequestContextUtils
 
 class HomeController {
@@ -30,6 +28,30 @@ class HomeController {
 
     }
 
+    /**
+     * action to pick portal type
+     *
+     */
+    def pickPortal = {
+        String portalType
+
+        // if stroke, then switch or vice versa
+        if (request?.getSession()?.getAttribute("portalType")?.equals("stroke")) {
+            portalType = "t2d"
+        } else {
+            portalType = "stroke"
+        }
+
+        // log
+        log.info("setting portal type: " + portalType + " for session: " + request.getSession());
+
+        if (portalType != null) {
+            request?.getSession()?.setAttribute("portalType", portalType)
+        }
+
+        // forward to index page
+        redirect(action: 'index')
+    }
 
     def provideTutorial = {
         String locale = RequestContextUtils.getLocale(request)

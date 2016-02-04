@@ -278,7 +278,7 @@ var variantProcessing = (function () {
                 var languageSetting = {}
                 // check if the browser is using Spanish
                 if ( locale.startsWith("es")  ) {
-                    languageSetting = { url : '../js/lib/i18n/table.es.json' }
+                    languageSetting = { url : '../../js/lib/i18n/table.es.json' }
                 }
 
                 $('#variantTable').dataTable({
@@ -534,7 +534,7 @@ var variantProcessing = (function () {
         var languageSetting = {}
         // check if the browser is using Spanish
         if ( locale.startsWith("es")  ) {
-            languageSetting = { url : '../js/lib/i18n/table.es.json' }
+            languageSetting = { url : '../../js/lib/i18n/table.es.json' }
         }
 
         var table = $(divId).dataTable({
@@ -554,7 +554,7 @@ var variantProcessing = (function () {
                 "pdf",
                 { "sExtends": "print", "sButtonText": printText }
             ],
-            sSwfPath: "../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
+            sSwfPath: "../../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
         } );
         $( tableTools.fnContainer() ).insertAfter(divId);
 
