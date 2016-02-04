@@ -4,6 +4,7 @@ import grails.converters.JSON
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
+import org.springframework.web.servlet.support.RequestContextUtils
 
 /**
  * Controller class to control the /variantInfo section of the T2D site
@@ -20,13 +21,15 @@ class VariantInfoController {
      * @return
      */
     def variantInfo() {
+        String locale = RequestContextUtils.getLocale(request)
         String variantToStartWith = params.id
         if (variantToStartWith) {
             render(view: 'variantInfo',
                     model: [variantToSearch: variantToStartWith.trim(),
                             show_gwas      : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                             show_exchp     : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
-                            show_exseq     : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq)])
+                            show_exseq     : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
+                            locale:locale ])
 
         }
     }

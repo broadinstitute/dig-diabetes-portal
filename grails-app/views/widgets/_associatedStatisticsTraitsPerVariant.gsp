@@ -32,7 +32,8 @@
                 cache: false,
                 type: "get",
                 url: "../../trait/ajaxAssociatedStatisticsTraitPerVariant",
-                data: {variantIdentifier: '<%=variantIdentifier%>'},
+                data: {variantIdentifier: '<%=variantIdentifier%>',
+                       technology:'ExSeq'},
                 async: true,
                 success: function (data) {
                     mpgSoftware.trait.fillTheTraitsPerVariantFields(data,

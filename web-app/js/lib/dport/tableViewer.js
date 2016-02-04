@@ -320,8 +320,16 @@ var variantProcessing = (function () {
                   var splitKey = key.split("^");
                   if (splitKey.length>1){
                       // P value handling
-                      if (splitKey[0] === 'P_VALUE'){
-                          var phenotypeMap = {'phenotype':splitKey[1],'pValue':data [i].count};
+                      if (splitKey[0]  !== 'MAF'){
+//                          if (splitKey[0] === 'P_VALUE'){
+                          if (splitKey.length>3) {
+
+                          }
+                          var phenotypeMap = {'property':splitKey[0],
+                                              'phenotype':splitKey[1],
+                                              'meaning':splitKey[2],
+                                              'samplegroup':splitKey[3],
+                                              'pValue':data [i].count};
                           phenotypeShortcut[splitKey[1]] = phenotypeCounter++;
                           phenoStruct.push(phenotypeMap);
                        }

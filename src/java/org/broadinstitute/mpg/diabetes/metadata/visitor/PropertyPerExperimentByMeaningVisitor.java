@@ -1,33 +1,40 @@
 package org.broadinstitute.mpg.diabetes.metadata.visitor;
 
 import org.broadinstitute.mpg.diabetes.metadata.DataSet;
-import org.broadinstitute.mpg.diabetes.metadata.MetaDataRoot;
 import org.broadinstitute.mpg.diabetes.metadata.Property;
+import org.broadinstitute.mpg.diabetes.metadata.PropertyBean;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by balexand on 8/19/2015.
+ * Created by balexand on 2/2/2016.
  */
-public class PropertyPerExperimentVisitor implements DataSetVisitor {
-    private String propertyName;
+public class PropertyPerExperimentByMeaningVisitor implements DataSetVisitor {
+    private String propertyMeaning;
     private Boolean recursivelyDescendSampleGroups;
     private List<Property> propertyList = new ArrayList<Property>();
 
-    public PropertyPerExperimentVisitor(String propertyName, Boolean recursivelyDescendSampleGroups){
-        this.propertyName = propertyName;
+    /**
+     * default constructor with the property id string to find by
+     *
+     * @param propertyMeaning
+     */
+    public PropertyPerExperimentByMeaningVisitor(String propertyMeaning, Boolean recursivelyDescendSampleGroups ){
+        this.propertyMeaning = propertyMeaning;
         this.recursivelyDescendSampleGroups = recursivelyDescendSampleGroups;
     }
 
-    public List<Property> getPropertyList() {
-        return propertyList;
-    }
-
+    /**
+     * traverse dataset tree until find the first property with that value
+     *
+     * @param dataSet
+     */
     public void visit(DataSet dataSet) {
         if (dataSet.getType().equals(PortalConstants.TYPE_PROPERTY_KEY)) {
-            if (dataSet.getName().equalsIgnoreCase(this.propertyName)){
+            PropertyBean propertyBean = (PropertyBean) dataSet;
+            if (propertyBean.hasMeaning(this.propertyMeaning)){
                 this.propertyList.add((Property)dataSet);
 
             }
@@ -38,7 +45,7 @@ public class PropertyPerExperimentVisitor implements DataSetVisitor {
                 }  else { // if we shouldn't do send, make sure our sample group isn't a child of a sample group
                     if (child.getType().equals(PortalConstants.TYPE_SAMPLE_GROUP_KEY)){
                         if (!child.getParent().getType().equals(PortalConstants.TYPE_SAMPLE_GROUP_KEY)) {
-                            child.acceptVisitor(this);
+                           child.acceptVisitor(this);
                         }
                     } else {
                         child.acceptVisitor(this);
@@ -49,4 +56,9 @@ public class PropertyPerExperimentVisitor implements DataSetVisitor {
 
     }
 
+    public List<Property> getPropertyList() {
+        return propertyList;
+    }
+
 }
+

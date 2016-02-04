@@ -45,9 +45,9 @@ class MetadataUtilityService {
             // we will mostly iterate over this parent list
             List<PhenotypeBean> phenotypeBeanList = propertyList.collect{PropertyBean pb->return pb.parent}
             // create a list of sample groups associated with our property
-            List <String> sampleNames =  phenotypeBeanList.collect{PhenotypeBean pheno->return pheno.parent}.name?.sort()?.unique()
+            List <String> sampleNames =  phenotypeBeanList.collect{PhenotypeBean pheno->return pheno.parent}.systemId?.sort()?.unique()
             for (String sampleName in sampleNames){
-                List <String> phenotypeNames = phenotypeBeanList.findAll{org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype->return phenotype.parent.name==sampleName}.name
+                List <String> phenotypeNames = phenotypeBeanList.findAll{org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype->return phenotype.parent.systemId==sampleName}.name
                 returnValue[sampleName] = phenotypeNames
             }
         }
@@ -65,51 +65,51 @@ class MetadataUtilityService {
      * @param propertyList
      * @return
      */
-    public String createSampleGroupPropertyFieldRequester(List<Property>  propertyList) {
-        String returnValue = ""
-        if (propertyList){
-
-            // create a list of sample groups associated with our property
-            List <String> sampleGroupNames =  createSampleGroupPropertyList(propertyList)
-
-            returnValue = sampleGroupNames.collect {return "\"$it\""}.join(",")
-        }
-        return returnValue
-    }
-
-
-    public List <String> createSampleGroupPropertyList(List<Property>  propertyList) {
-        List <String> returnValue = []
-        if (propertyList){
-            // we will mostly iterate over this parent list
-            List<PropertyBean> propertyBeanList = propertyList.collect{PropertyBean pb->return pb.parent}
-            // create a list of sample groups associated with our property
-            List <String> sampleGroupNames =  propertyBeanList?.systemId?.sort()?.unique()
-
-            returnValue = sampleGroupNames
-        }
-        return returnValue
-    }
-
-
+//    public String createSampleGroupPropertyFieldRequester(List<Property>  propertyList) {
+//        String returnValue = ""
+//        if (propertyList){
+//
+//            // create a list of sample groups associated with our property
+//            List <String> sampleGroupNames =  createSampleGroupPropertyList(propertyList)
+//
+//            returnValue = sampleGroupNames.collect {return "\"$it\""}.join(",")
+//        }
+//        return returnValue
+//    }
+//
+//
+//    public List <String> createSampleGroupPropertyList(List<Property>  propertyList) {
+//        List <String> returnValue = []
+//        if (propertyList){
+//            // we will mostly iterate over this parent list
+//            List<PropertyBean> propertyBeanList = propertyList.collect{PropertyBean pb->return pb.parent}
+//            // create a list of sample groups associated with our property
+//            List <String> sampleGroupNames =  propertyBeanList?.systemId?.sort()?.unique()
+//
+//            returnValue = sampleGroupNames
+//        }
+//        return returnValue
+//    }
 
 
-    public LinkedHashMap<String,String> createPhenotypeSampleGroupMap(List<Property>  propertyList) {
-        LinkedHashMap<String,String>  returnValue = [:]
-        if (propertyList){
-            // we will mostly iterate over this parent list
-            List<PhenotypeBean> phenotypeBeanList = propertyList.collect{PropertyBean pb->return pb.parent}
-            // create a list of sample groups associated with our property
-            for (PhenotypeBean phenotypeBean in phenotypeBeanList){
-                if (!returnValue.containsKey(phenotypeBean.name)){
-                    returnValue [phenotypeBean.name]  = phenotypeBean?.parent?.systemId
-                } else {
-                    log.error("NOTE: Phenotype = ${phenotypeBean.name} Unexpectedly found in multiple sample groups: createPhenotypeSampleGroupMap")
-                }
-            }
-        }
-        return returnValue
-    }
+
+
+//    public LinkedHashMap<String,String> createPhenotypeSampleGroupMap(List<Property>  propertyList) {
+//        LinkedHashMap<String,String>  returnValue = [:]
+//        if (propertyList){
+//            // we will mostly iterate over this parent list
+//            List<PhenotypeBean> phenotypeBeanList = propertyList.collect{PropertyBean pb->return pb.parent}
+//            // create a list of sample groups associated with our property
+//            for (PhenotypeBean phenotypeBean in phenotypeBeanList){
+//                if (!returnValue.containsKey(phenotypeBean.name)){
+//                    returnValue [phenotypeBean.name]  = phenotypeBean?.parent?.systemId
+//                } else {
+//                    log.error("NOTE: Phenotype = ${phenotypeBean.name} Unexpectedly found in multiple sample groups: createPhenotypeSampleGroupMap")
+//                }
+//            }
+//        }
+//        return returnValue
+//    }
 
 
 

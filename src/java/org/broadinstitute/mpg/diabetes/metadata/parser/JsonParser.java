@@ -179,7 +179,7 @@ public class JsonParser {
         return nameList;
     }
 
-    public List<Property> getAllPropertiesWithNameForExperimentOfVersion(String propertyName, String version, String technology) throws PortalException {
+    public List<Property> getAllPropertiesWithNameForExperimentOfVersion(String propertyName, String version, String technology,Boolean recursivelyDescendSampleGroups) throws PortalException {
         List<Property> propertyList = new ArrayList<Property>();
         List<Experiment> experimentList;
         List<Property> finalPropertyList = new ArrayList<Property>();
@@ -192,9 +192,33 @@ public class JsonParser {
         // for experiment, find the property list
         for (Experiment experiment : experimentList) {
             if (experiment.getTechnology().equalsIgnoreCase(technology)){
-                PropertyPerExperimentVisitor propertyPerExperimentVisitor = new PropertyPerExperimentVisitor(propertyName);
+                PropertyPerExperimentVisitor propertyPerExperimentVisitor = new PropertyPerExperimentVisitor(propertyName,recursivelyDescendSampleGroups);
                 experiment.acceptVisitor(propertyPerExperimentVisitor);
                 propertyList = propertyPerExperimentVisitor.getPropertyList();
+                finalPropertyList.addAll(propertyList);
+            }
+        }
+
+        return finalPropertyList;
+    }
+
+
+    public List<Property> getAllPropertiesWithMeaningForExperimentOfVersion(String propertyMeaning, String version, String technology,Boolean recursivelyDescendSampleGroups) throws PortalException {
+        List<Property> propertyList = new ArrayList<Property>();
+        List<Experiment> experimentList;
+        List<Property> finalPropertyList = new ArrayList<Property>();
+
+        // find the experiment
+        ExperimentByVersionVisitor experimentVisitor = new ExperimentByVersionVisitor(version);
+        this.getMetaDataRoot().acceptVisitor(experimentVisitor);
+        experimentList = experimentVisitor.getExperimentList();
+
+        // for experiment, find the property list
+        for (Experiment experiment : experimentList) {
+            if (experiment.getTechnology().equalsIgnoreCase(technology)){
+                PropertyPerExperimentByMeaningVisitor propertyPerExperimentByMeaningVisitor = new PropertyPerExperimentByMeaningVisitor(propertyMeaning,recursivelyDescendSampleGroups);
+                experiment.acceptVisitor(propertyPerExperimentByMeaningVisitor);
+                propertyList = propertyPerExperimentByMeaningVisitor.getPropertyList();
                 finalPropertyList.addAll(propertyList);
             }
         }
