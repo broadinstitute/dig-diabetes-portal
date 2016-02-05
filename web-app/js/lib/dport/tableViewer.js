@@ -306,8 +306,8 @@ var variantProcessing = (function () {
               (typeof vRec.results !== 'undefined')  &&
               (typeof vRec.results[0] !== 'undefined')  &&
               (typeof vRec.results[0]["pVals"] !== 'undefined')  &&
-              (vRec.results[0]["pVals"].length > 0) ){
-              var data =  vRec.results[0]["pVals"];
+              (vRec.results[0]["pVals"].length > 0) ) {
+              var data = vRec.results[0]["pVals"];
               // first let's go through and process the metadata. For example we can make a data structure  with one
               // row for each phenotype (eventually these will correspond to the rows of the table).  as well, figure out
               //
@@ -315,90 +315,158 @@ var variantProcessing = (function () {
               var phenotypeCounter = 0;
               var phenoStruct = [];
               var mafValues = {};
-              for ( var i = 0 ; i < data.length ; i++ ){
+              for (var i = 0; i < data.length; i++) {
                   var key = data [i].level;
                   var splitKey = key.split("^");
-                  if (splitKey.length>1){
+                  if (splitKey.length > 1) {
                       // P value handling
-                      if (splitKey[0]  !== 'MAF'){
-//                          if (splitKey[0] === 'P_VALUE'){
-                          if (splitKey.length>3) {
-
+                      if (splitKey[0] !== 'MAF') {
+                          if (splitKey.length > 3) {
+                              var phenotypeMap = {'property': splitKey[0],
+                                  'phenotype': splitKey[1],
+                                  'meaning': splitKey[2],
+                                  'samplegroup': splitKey[3],
+                                  'pValue': data [i].count};
+                             // phenotypeShortcut[splitKey[1]] = phenotypeCounter++;
+                              phenoStruct.push(phenotypeMap);
                           }
-                          var phenotypeMap = {'property':splitKey[0],
-                                              'phenotype':splitKey[1],
-                                              'meaning':splitKey[2],
-                                              'samplegroup':splitKey[3],
-                                              'pValue':data [i].count};
-                          phenotypeShortcut[splitKey[1]] = phenotypeCounter++;
-                          phenoStruct.push(phenotypeMap);
                        }
 
                       // maf value handling
-                      if (splitKey[0] === 'MAF'){
-                          var sampleGroup = splitKey[1];
-                          var splitSampleGroup = sampleGroup.split("_");
-                          if (splitSampleGroup.length>2){
-                              mafValues[splitSampleGroup[1]]  = data [i].count;
-                          }
+                      if (splitKey[0] === 'MAF') {
+                          var phenotypeMap = {'property': 'MAF',
+                              'phenotype': 'none',
+                              'meaning': 'MAF',
+                              'samplegroup': splitKey[1],
+                              'pValue': data [i].count};
+                          phenoStruct.push(phenotypeMap);
                       }
 
                   }
               }
 
 
-              var currentPhenotype;
-              var phenotypeRow;
-              var rowPointer;
-              var currentPhenotypeList;
-              var splitPhenotypeList;
-              var mafGroup;
-              var mafValue = 0;
-
-              // ow we go through the list again.  Now we can use the list of phenotypes we compiled the first time through
-              //  and assign all of the values we find to somewhere in that phenotype list
-              for ( var i = 0 ; i < data.length ; i++ ){
-                  var key = data [i].level;
-                  var splitKey = key.split("^");
-                  if (splitKey.length>1) {
-                      if ((splitKey[0] === 'P_VALUE') || (splitKey[0] === 'MAF')) continue;
-                      if (splitKey[0] === 'ODDS_RATIO'){
-                          currentPhenotype = splitKey[1];
-                          phenotypeRow = phenotypeShortcut[currentPhenotype];
-                          rowPointer = phenoStruct[phenotypeRow];
-                          rowPointer['oddsRatio'] = data [i].count;
-                      }
-                      if (splitKey[0] === 'BETA'){
-                          currentPhenotype = splitKey[1];
-                          phenotypeRow = phenotypeShortcut[currentPhenotype];
-                          rowPointer = phenoStruct[phenotypeRow];
-                          rowPointer['beta'] = data [i].count;
-                      }
-                      if (splitKey[0] === 'DIR'){
-                          currentPhenotype = splitKey[1];
-                          phenotypeRow = phenotypeShortcut[currentPhenotype];
-                          rowPointer = phenoStruct[phenotypeRow];
-                          rowPointer['DIR'] = data [i].count;
-                      }
-                      if (splitKey[0] === 'MAPPER'){
-                          mafGroup = splitKey[1];
-                          mafValue = mafValues[mafGroup];
-                          phenotypeRow = phenotypeShortcut[currentPhenotype];
-                          rowPointer = phenoStruct[phenotypeRow];
-                          currentPhenotypeList = data [i].count;
-                          splitPhenotypeList = currentPhenotypeList.split(',');
-                          for ( var j = 0 ; j < splitPhenotypeList.length ; j++ ) {
-                              phenotypeRow = phenotypeShortcut[splitPhenotypeList[j]];
-                              rowPointer = phenoStruct[phenotypeRow];
-                              rowPointer['maf'] = mafValue;
-                          }
-                      }
-                  }
-              }
-
+//              var currentPhenotype;
+//              var phenotypeRow;
+//              var rowPointer;
+//              var currentPhenotypeList;
+//              var splitPhenotypeList;
+//              var mafGroup;
+//              var mafValue = 0;
+//
+//              // ow we go through the list again.  Now we can use the list of phenotypes we compiled the first time through
+//              //  and assign all of the values we find to somewhere in that phenotype list
+//              for ( var i = 0 ; i < data.length ; i++ ){
+//                  var key = data [i].level;
+//                  var splitKey = key.split("^");
+//                  if (splitKey.length>1) {
+//                      if ((splitKey[0] === 'P_VALUE') || (splitKey[0] === 'MAF')) continue;
+//                      if (splitKey[0] === 'ODDS_RATIO'){
+//                          currentPhenotype = splitKey[1];
+//                          phenotypeRow = phenotypeShortcut[currentPhenotype];
+//                          rowPointer = phenoStruct[phenotypeRow];
+//                          rowPointer['oddsRatio'] = data [i].count;
+//                      }
+//                      if (splitKey[0] === 'BETA'){
+//                          currentPhenotype = splitKey[1];
+//                          phenotypeRow = phenotypeShortcut[currentPhenotype];
+//                          rowPointer = phenoStruct[phenotypeRow];
+//                          rowPointer['beta'] = data [i].count;
+//                      }
+//                      if (splitKey[0] === 'DIR'){
+//                          currentPhenotype = splitKey[1];
+//                          phenotypeRow = phenotypeShortcut[currentPhenotype];
+//                          rowPointer = phenoStruct[phenotypeRow];
+//                          rowPointer['DIR'] = data [i].count;
+//                      }
+//                      if (splitKey[0] === 'MAPPER'){
+//                          mafGroup = splitKey[1];
+//                          mafValue = mafValues[mafGroup];
+//                          phenotypeRow = phenotypeShortcut[currentPhenotype];
+//                          rowPointer = phenoStruct[phenotypeRow];
+//                          currentPhenotypeList = data [i].count;
+//                          splitPhenotypeList = currentPhenotypeList.split(',');
+//                          for ( var j = 0 ; j < splitPhenotypeList.length ; j++ ) {
+//                              phenotypeRow = phenotypeShortcut[splitPhenotypeList[j]];
+//                              rowPointer = phenoStruct[phenotypeRow];
+//                              rowPointer['maf'] = mafValue;
+//                          }
+//                      }
+//                  }
+//              }
+//
+//          }
           }
-          return phenoStruct;
-      }
+        return phenoStruct;
+      },
+
+
+
+
+      buildIntoRows = function(arrayOfFields) {
+          var combinedStructure = {};
+
+          if ((typeof arrayOfFields !== 'undefined') &&
+              (arrayOfFields.length > 0)) {
+
+              // take a bunch of individual fields and build up the rows we will use
+
+              //   start by extracting the phenotypes, since the rows are organized by phenotype
+              var phenotypeList = [];
+              for (var i = 0; i < arrayOfFields.length; i++) {
+                  if (( typeof arrayOfFields[i].phenotype !== 'undefined') &&
+                      (arrayOfFields[i].phenotype.length > 0)) {
+                      var phenotype = arrayOfFields[i].phenotype;
+                      if (phenotypeList.indexOf(phenotype) === -1) {
+                          phenotypeList.push(phenotype);
+                      }
+                  }
+              }
+
+              // temp structure we can use to collect things
+              var collectingObject = {};
+              for ( var i = 0 ; i < phenotypeList.length ; i++ ) {
+                  collectingObject [phenotypeList[i]]  = [];
+              }
+
+              // Now we know which phenotypes we have to work with, bring together all information that shares a phenotype
+              //  At the same time let's figure out our column list
+              var columnList = [];
+              for (var i = 0; i < arrayOfFields.length; i++) {
+                  if (( typeof arrayOfFields[i].phenotype !== 'undefined') &&
+                      (arrayOfFields[i].phenotype.length > 0)) {
+                      collectingObject[arrayOfFields[i].phenotype].push(arrayOfFields[i]);
+                      if (( typeof arrayOfFields[i].meaning !== 'undefined') &&
+                          ( arrayOfFields[i].meaning.length  > 0)) {
+                          if (columnList.indexOf(arrayOfFields[i].meaning)===-1)  {
+                              columnList.push(arrayOfFields[i].meaning);
+                          }
+                       }
+                  }
+              }
+              columnList.push('samplegroup');
+
+              // we should have everything we need to make the structure from which the table can be derived
+              combinedStructure["columnList"] = columnList;
+              combinedStructure["phenotypeRows"] = {};
+              for (var phenotypeName in collectingObject) {
+                  if (collectingObject.hasOwnProperty(phenotypeName)) {
+                      combinedStructure["phenotypeRows"] [phenotypeName]   = {};
+                      var fieldsPerPhenotype =  collectingObject[phenotypeName];
+                      for  (var i = 0; i < columnList.length; i++) {
+                         combinedStructure["phenotypeRows"][phenotypeName][columnList [i]]  = '';
+                      }
+                      for  (var i = 0; i < fieldsPerPhenotype.length; i++) {
+                          combinedStructure["phenotypeRows"][phenotypeName][fieldsPerPhenotype[i].meaning]  =   fieldsPerPhenotype[i].pValue;
+                          combinedStructure["phenotypeRows"][phenotypeName]['samplegroup']  =   fieldsPerPhenotype[i].samplegroup;  // gets assigned multiple times but should always be the same
+                      }
+                  }
+              }
+          }
+         return combinedStructure;
+
+      },
+
 
 
 
@@ -410,51 +478,110 @@ var variantProcessing = (function () {
             }
 
             var vRec = deconvoluteVariantInfo(vRecO);
+            var structureForBuildingTable = buildIntoRows (vRec) ;
 
-            for (var i = 0; i < vRec.length; i++) {
+            for (var phenotypeName in structureForBuildingTable["phenotypeRows"]) {
+                if (structureForBuildingTable["phenotypeRows"].hasOwnProperty(phenotypeName)) {
+                    console.log(phenotypeName) ;
+                    var row =  structureForBuildingTable["phenotypeRows"] [phenotypeName];
 
-                var trait = vRec [i] ;
-                retVal += "<tr>"
+                 //   var trait = vRec [i] ;
+                    retVal += "<tr>"
 
-                var convertedTrait=mpgSoftware.trans.translator(trait.phenotype);
+                    var convertedTrait=mpgSoftware.trans.translator(phenotypeName);
 
-                retVal += "<td><a href='"+traitRootUrl+"?trait="+trait.phenotype+"&significance=5e-8'>"+convertedTrait+"</a></td>";
+                    retVal += "<td><a href='"+traitRootUrl+"?trait="+phenotypeName+"&significance=5e-8'>"+convertedTrait+"</a></td>";
 
-                retVal += "<td>" +((trait.pValue !== null)?trait.pValue.toPrecision(3):'')+"</td>";
+                    retVal += "<td>";
+                    if (row["P_VALUE"]!== '') {
+                        retVal += (parseFloat(row["P_VALUE"]).toPrecision(3));
+                    }
+                    retVal += "</td>";
 
-                retVal += "<td>";
-                if (trait.DIR === 1) {
-                    retVal += "<span class='assoc-up'>&uarr;</span>";
-                } else if (trait.DIR === -1) {
-                    retVal += "<span class='assoc-down'>&darr;</span>";
+
+                    retVal += "<td>";
+                    if (true) {
+                        retVal += "<span class='assoc-up'>&uarr;</span>";
+                    }
+//                    else if (trait.DIR === -1) {
+//                        retVal += "<span class='assoc-down'>&darr;</span>";
+//                    }
+                    retVal += "</td>";
+
+                    retVal += "<td>";
+                    if (row["ODDS_RATIO"]!== '') {
+                        retVal += (parseFloat(row["ODDS_RATIO"]).toPrecision(3));
+                    }
+                    retVal += "</td>";
+
+
+                    retVal += "<td>";
+                    if (row["MAF"]!== '') {
+                        retVal += (parseFloat(row["MAF"]).toPrecision(3));
+                    }
+                    retVal += "</td>";
+
+
+                    retVal += "<td>";
+                    if (row["BETA"]!== '') {
+                        retVal += ("beta: " + parseFloat(row["BETA"]).toPrecision(3));
+                    }
+//                    else if (trait.Z_SCORE){
+//                        retVal += "z-score: " + trait.ZSCORE.toPrecision(3);
+//                    }
+                    retVal += "</td>";
+
+
+                    retVal += "</tr>";
+
+
+
                 }
-                retVal += "</td>";
-
-                retVal += "<td>";
-                if (trait.oddsRatio) {
-                    retVal += (trait.oddsRatio.toPrecision(3));
-                }
-                retVal += "</td>";
-
-
-                retVal += "<td>";
-                if (trait.maf) {
-                    retVal += (trait.maf.toPrecision(3));
-                }
-                retVal += "</td>";
-
-
-                retVal += "<td>";
-                if (trait.beta) {
-                    retVal += "beta: " + trait.beta.toPrecision(3);
-                } else if (trait.Z_SCORE){
-                    retVal += "z-score: " + trait.ZSCORE.toPrecision(3);
-                }
-                retVal += "</td>";
-
-
-                retVal += "</tr>";
             }
+//            for (var i = 0; i < structureForBuildingTable ["phenotypeRows"].length; i++) {
+//
+//                var trait = vRec [i] ;
+//                retVal += "<tr>"
+//
+//                var convertedTrait=mpgSoftware.trans.translator(trait.phenotype);
+//
+//                retVal += "<td><a href='"+traitRootUrl+"?trait="+trait.phenotype+"&significance=5e-8'>"+convertedTrait+"</a></td>";
+//
+//                retVal += "<td>" +((trait.pValue !== null)?trait.pValue.toPrecision(3):'')+"</td>";
+//
+//                retVal += "<td>";
+//                if (trait.DIR === 1) {
+//                    retVal += "<span class='assoc-up'>&uarr;</span>";
+//                } else if (trait.DIR === -1) {
+//                    retVal += "<span class='assoc-down'>&darr;</span>";
+//                }
+//                retVal += "</td>";
+//
+//                retVal += "<td>";
+//                if (trait.oddsRatio) {
+//                    retVal += (trait.oddsRatio.toPrecision(3));
+//                }
+//                retVal += "</td>";
+//
+//
+//                retVal += "<td>";
+//                if (trait.maf) {
+//                    retVal += (trait.maf.toPrecision(3));
+//                }
+//                retVal += "</td>";
+//
+//
+//                retVal += "<td>";
+//                if (trait.beta) {
+//                    retVal += "beta: " + trait.beta.toPrecision(3);
+//                } else if (trait.Z_SCORE){
+//                    retVal += "z-score: " + trait.ZSCORE.toPrecision(3);
+//                }
+//                retVal += "</td>";
+//
+//
+//                retVal += "</tr>";
+//            }
             return retVal;
         }
     var contentExists = function (field){
