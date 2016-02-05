@@ -63,6 +63,12 @@ class LoginController {
             return
         }
 
+        // These two lines will result in user not having to see the "google login" button. It triggers the same thing
+        // that happens when the user clicks the login button. Removing this block will likely be necessary if/when
+        // multiple login providers are enabled.
+        redirect(controller: "oauth", action: "authenticate", params: [provider: "google"])
+        return
+
         String view = 'auth'
         String postUrl = "${request.contextPath}${config.apf.filterProcessesUrl}"
         render view: view, model: [postUrl: postUrl,
