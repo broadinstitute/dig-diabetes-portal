@@ -33,7 +33,7 @@
                 type: "get",
                 url: "../../trait/ajaxAssociatedStatisticsTraitPerVariant",
                 data: {variantIdentifier: '<%=variantIdentifier%>',
-                       technology:'ExSeq'},
+                       technology:'GWAS'},
                 async: true,
                 success: function (data) {
                     mpgSoftware.trait.fillTheTraitsPerVariantFields(data,
