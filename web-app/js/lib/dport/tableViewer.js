@@ -430,13 +430,48 @@ var variantProcessing = (function () {
                   if (collectingObject.hasOwnProperty(phenotypeName)) {
                       var fieldsPerPhenotype =  collectingObject[phenotypeName];
                       if (fieldsPerPhenotype.length>0){
+                          // we may have data from multiple sample groups.  For now, pick the lowest P
+                          var allSampleGroups  = [];
+                          for  (  var i = 0 ; i < fieldsPerPhenotype.length ; i++ ){
+                              if (allSampleGroups.indexOf(fieldsPerPhenotype[i].samplegroup) === -1) {
+                                  allSampleGroups.push (fieldsPerPhenotype[i].samplegroup);
+                              }
+                          }
+                          var fieldsPerPhenotypeForFavoredSampleGroup;
+                          if (allSampleGroups.length=== 1) {  // if only one sample group then use everything
+                              fieldsPerPhenotypeForFavoredSampleGroup =  fieldsPerPhenotype;
+                          }  else {   // multiple sample groups.  Pick a favorite
+                              // first create a sortable list of P values
+                              var pValsToCompare = []; // array of objects
+                              for  (  var i = 0 ; i < allSampleGroups.length ; i++ ){
+                                  for  (  var j = 0 ; j < fieldsPerPhenotype.length ; j++ ){
+                                      if ((fieldsPerPhenotype[j].samplegroup===allSampleGroups[i])&&
+                                          (fieldsPerPhenotype[j].meaning==='P_VALUE')){
+                                          pValsToCompare.push({'pval':fieldsPerPhenotype[j].pValue,'sg':fieldsPerPhenotype[i].samplegroup})
+                                      }
+                                  }
+                              }
+                              var chosenSampleGroup;
+                              if (pValsToCompare.length>0) {
+                                  var sortedPValsToCompare =  pValsToCompare.sort(function(a,b){return a.pval- b.pval;});
+                                  chosenSampleGroup =  sortedPValsToCompare[0].sg;
+                              } else {  // if there were no P values then pick the sample group arbitrarily
+                                  chosenSampleGroup = allSampleGroups[0];
+                              }
+                              // now get the fields associated with the sample group
+                              for  (  var i = 0 ; i < fieldsPerPhenotype.length ; i++ ){
+                                  if (fieldsPerPhenotype[i].samplegroup===chosenSampleGroup){
+                                      fieldsPerPhenotypeForFavoredSampleGroup.push(fieldsPerPhenotype[i]) ;
+                                  }
+                              }
+                          }
                           combinedStructure["phenotypeRows"] [phenotypeName]   = {};
                           for  (var i = 0; i < columnList.length; i++) {
                               combinedStructure["phenotypeRows"][phenotypeName][columnList [i]]  = '';
                           }
-                          for  (var i = 0; i < fieldsPerPhenotype.length; i++) {
-                              combinedStructure["phenotypeRows"][phenotypeName][fieldsPerPhenotype[i].meaning]  =   fieldsPerPhenotype[i].pValue;
-                              combinedStructure["phenotypeRows"][phenotypeName]['samplegroup']  =   fieldsPerPhenotype[i].samplegroup;  // gets assigned multiple times but should always be the same
+                          for  (var i = 0; i < fieldsPerPhenotypeForFavoredSampleGroup.length; i++) {
+                              combinedStructure["phenotypeRows"][phenotypeName][fieldsPerPhenotypeForFavoredSampleGroup[i].meaning]  =   fieldsPerPhenotypeForFavoredSampleGroup[i].pValue;
+                              combinedStructure["phenotypeRows"][phenotypeName]['samplegroup']  =   fieldsPerPhenotypeForFavoredSampleGroup[i].samplegroup;  // gets assigned multiple times but should always be the same
                           }
                       }
                    }

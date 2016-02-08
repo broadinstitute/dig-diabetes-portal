@@ -31,7 +31,7 @@
             $.ajax({
                 cache: false,
                 type: "get",
-                url: "../../trait/ajaxAssociatedStatisticsTraitPerVariant",
+                url: '<g:createLink controller="trait" action="ajaxAssociatedStatisticsTraitPerVariant" />',
                 data: {variantIdentifier: '<%=variantIdentifier%>',
                        technology:'GWAS'},
                 async: true,
