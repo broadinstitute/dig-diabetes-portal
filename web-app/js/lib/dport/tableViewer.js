@@ -437,9 +437,9 @@ var variantProcessing = (function () {
                                   allSampleGroups.push (fieldsPerPhenotype[i].samplegroup);
                               }
                           }
-                          var fieldsPerPhenotypeForFavoredSampleGroup=[];
+                          var fieldsPerPhenotypeForFavoredSampleGroup=[];   // this will become an array of field arrays, so that we can have multiple groupings for each phenotype
                           if (allSampleGroups.length=== 1) {  // if only one sample group then use everything
-                              fieldsPerPhenotypeForFavoredSampleGroup =  fieldsPerPhenotype;
+                              fieldsPerPhenotypeForFavoredSampleGroup.push(fieldsPerPhenotype);
                           }  else {   // multiple sample groups.  Pick a favorite
                               // first create a sortable list of P values
                               var pValsToCompare = []; // array of objects
@@ -452,26 +452,35 @@ var variantProcessing = (function () {
                                   }
                               }
                               var chosenSampleGroup;
+                              var sortedPValsToCompare = [];
                               if (pValsToCompare.length>0) {
-                                  var sortedPValsToCompare =  pValsToCompare.sort(function(a,b){return a.pval- b.pval;});
+                                  sortedPValsToCompare =  pValsToCompare.sort(function(a,b){return a.pval- b.pval;});
                                   chosenSampleGroup =  sortedPValsToCompare[0].sg;
                               } else {  // if there were no P values then pick the sample group arbitrarily
                                   chosenSampleGroup = allSampleGroups[0];
                               }
                               // now get the fields associated with the sample group
-                              for  (  var i = 0 ; i < fieldsPerPhenotype.length ; i++ ){
-                                  if (fieldsPerPhenotype[i].samplegroup===chosenSampleGroup){
-                                      fieldsPerPhenotypeForFavoredSampleGroup.push(fieldsPerPhenotype[i]) ;
+                              for ( var j = 0 ; j < sortedPValsToCompare.length ; j++ ){
+                                  chosenSampleGroup =  sortedPValsToCompare[j].sg;
+                                  var sampleGroupSpecificPhenotypeInfo = [];
+                                  for  (  var i = 0 ; i < fieldsPerPhenotype.length ; i++ ){
+                                      if (fieldsPerPhenotype[i].samplegroup===chosenSampleGroup){
+                                          sampleGroupSpecificPhenotypeInfo.push(fieldsPerPhenotype[i]) ;
+                                      }
                                   }
+                                  fieldsPerPhenotypeForFavoredSampleGroup.push(sampleGroupSpecificPhenotypeInfo) ;
                               }
                           }
                           combinedStructure["phenotypeRows"] [phenotypeName]   = {};
                           for  (var i = 0; i < columnList.length; i++) {
                               combinedStructure["phenotypeRows"][phenotypeName][columnList [i]]  = '';
                           }
-                          for  (var i = 0; i < fieldsPerPhenotypeForFavoredSampleGroup.length; i++) {
-                              combinedStructure["phenotypeRows"][phenotypeName][fieldsPerPhenotypeForFavoredSampleGroup[i].meaning]  =   fieldsPerPhenotypeForFavoredSampleGroup[i].pValue;
-                              combinedStructure["phenotypeRows"][phenotypeName]['samplegroup']  =   fieldsPerPhenotypeForFavoredSampleGroup[i].samplegroup;  // gets assigned multiple times but should always be the same
+                          for  (var i = 0; i < fieldsPerPhenotypeForFavoredSampleGroup[0].length; i++) {
+                              for  (var j = 0; j < fieldsPerPhenotypeForFavoredSampleGroup.length; j++) {
+
+                              }
+                              combinedStructure["phenotypeRows"][phenotypeName][fieldsPerPhenotypeForFavoredSampleGroup[0][i].meaning]  =   fieldsPerPhenotypeForFavoredSampleGroup[0][i].pValue;
+                              combinedStructure["phenotypeRows"][phenotypeName]['samplegroup']  =   fieldsPerPhenotypeForFavoredSampleGroup[0][i].samplegroup;  // gets assigned multiple times but should always be the same
                           }
                       }
                    }
