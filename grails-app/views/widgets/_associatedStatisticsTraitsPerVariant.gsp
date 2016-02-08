@@ -33,7 +33,7 @@
                 type: "get",
                 url: '<g:createLink controller="trait" action="ajaxAssociatedStatisticsTraitPerVariant" />',
                 data: {variantIdentifier: '<%=variantIdentifier%>',
-                       technology:'GWAS'},
+                       technology:''},
                 async: true,
                 success: function (data) {
                     mpgSoftware.trait.fillTheTraitsPerVariantFields(data,
@@ -78,6 +78,7 @@
             		<th><g:message code="variantTable.columnHeaders.shared.oddsRatio" /></th>
             		<th><g:message code="variantTable.columnHeaders.shared.maf" /></th>
             		<th><g:message code="variantTable.columnHeaders.shared.effect" /></th>
+                    <th><g:message code="variantTable.columnHeaders.shared.dataSet" /></th>
                 </tr>
                 </thead>
                 <tbody id="traitsPerVariantTableBody">

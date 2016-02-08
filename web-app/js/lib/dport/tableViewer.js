@@ -437,7 +437,7 @@ var variantProcessing = (function () {
                                   allSampleGroups.push (fieldsPerPhenotype[i].samplegroup);
                               }
                           }
-                          var fieldsPerPhenotypeForFavoredSampleGroup;
+                          var fieldsPerPhenotypeForFavoredSampleGroup=[];
                           if (allSampleGroups.length=== 1) {  // if only one sample group then use everything
                               fieldsPerPhenotypeForFavoredSampleGroup =  fieldsPerPhenotype;
                           }  else {   // multiple sample groups.  Pick a favorite
@@ -447,7 +447,7 @@ var variantProcessing = (function () {
                                   for  (  var j = 0 ; j < fieldsPerPhenotype.length ; j++ ){
                                       if ((fieldsPerPhenotype[j].samplegroup===allSampleGroups[i])&&
                                           (fieldsPerPhenotype[j].meaning==='P_VALUE')){
-                                          pValsToCompare.push({'pval':fieldsPerPhenotype[j].pValue,'sg':fieldsPerPhenotype[i].samplegroup})
+                                          pValsToCompare.push({'pval':fieldsPerPhenotype[j].pValue,'sg':fieldsPerPhenotype[j].samplegroup})
                                       }
                                   }
                               }
@@ -548,6 +548,12 @@ var variantProcessing = (function () {
 //                    }
                     retVal += "</td>";
 
+
+                    retVal += "<td>";
+                    if (( typeof row['samplegroup'] !== 'undefined')&&(row['samplegroup']!== '')) {
+                        retVal += (mpgSoftware.trans.translator(row['samplegroup']));
+                    }
+                    retVal += "</td>";
 
                     retVal += "</tr>";
 
