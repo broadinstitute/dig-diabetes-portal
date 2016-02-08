@@ -5,6 +5,8 @@
                 <sec:ifAllGranted roles="ROLE_ADMIN">
                     <g:link controller='admin' action="users" class="mgr"><g:message code='site.layouts.option.manage_users'/></g:link>
                     &middot;
+                    <g:link controller='home' action="pickPortal" class="mgr"><g:message code='site.layouts.option.manage_skin'/></g:link>
+                    &middot;
                 </sec:ifAllGranted>
                 <sec:ifAllGranted roles="ROLE_SYSTEM">
                     <g:link controller='system' action="systemManager"><g:message code='site.layouts.option.system_mgr'/></g:link>

@@ -31,17 +31,20 @@
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2 login-header">
                             <p>
-                                <g:message code="google.login.page.intro" default="welcome, go get yourself a Google account" />
+                                <g:message code="google.login.page.intro"
+                                           default="welcome, go get yourself a Google account"/>
                             </p>
                         </div>
+
                         <div class="col-md-2"></div>
                     </div>
 
                     <s2o:ifNotLoggedInWith provider="google">
-                        <div class="btn btn-primary btn-lg googleLoginButton text-center">
-                            <oauth:connect provider="google" id="google-connect-link"><g:message
-                                    code="google.log.in"/></oauth:connect>
-                        </div>
+                        <oauth:connect provider="google" id="google-connect-link">
+                            <div class="btn btn-primary btn-lg googleLoginButton text-center">
+                                <g:message code="google.log.in"/>
+                            </div>
+                        </oauth:connect>
                     </s2o:ifNotLoggedInWith>
                 </div>
             </div>

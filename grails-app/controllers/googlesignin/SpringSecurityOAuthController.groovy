@@ -57,31 +57,35 @@ class SpringSecurityOAuthController {
      *  we will swap that one time login code for an access key, then use the access key to obtain user information,
      *  and then use the email address we get from that user information to key into our local security system.
      */
-    def codeExchange  = {
+    def codeExchange = {
+        String code = params.code
+        String authProvider = params.provider
+        LinkedHashMap map = googleRestService.buildCallToRetrieveOneTimeCode(code)
+        if (!map) { // something went wrong.  Go back to the homepage, but this user is currently not getting in
+            redirect(controller: 'home', action: 'portalHome')
+            return
+        }
+        JSONObject jsonObject = map["identityInformation"]
+        String accessToken = map["accessToken"]
 
-       String code = params.code
-       String authProvider =   params.provider
-       LinkedHashMap map =   googleRestService.buildCallToRetrieveOneTimeCode(code)
-       if (!map) { // something went wrong.  Go back to the homepage, but this user is currently not getting in
-           redirect( controller: 'home', action: 'portalHome' )
-           return
-       }
-       JSONObject jsonObject = map["identityInformation"]
-       String accessToken = map["accessToken"]
+        String accessKey = oauthService.findSessionKeyForAccessToken(authProvider)
+        session[accessKey] = new org.scribe.model.Token(accessToken, grailsApplication.config.oauth.providers.google.secret, jsonObject.toString())
 
-       String accessKey = oauthService.findSessionKeyForAccessToken(authProvider)
-       session[accessKey] = new org.scribe.model.Token(accessToken, grailsApplication.config.oauth.providers.google.secret,jsonObject.toString())
-
-        Boolean weHaveSeenYouBefore = springManipService.forceLogin(jsonObject,session)
-        if (weHaveSeenYouBefore){
-            redirect( controller: 'home', action: 'portalHome' )
+        Boolean weHaveSeenYouBefore = springManipService.forceLogin(jsonObject, session)
+        if (weHaveSeenYouBefore) {
+            // check to see if the user was trying to access a specific page--if so, redirect them there
+            if(session["SPRING_SECURITY_SAVED_REQUEST"]) {
+                redirect url: session["SPRING_SECURITY_SAVED_REQUEST"].getRedirectUrl()
+            } else {
+                // I think this will only happen if a user goes directly to the login page
+                redirect(controller: 'home', action: 'portalHome')
+            }
         } else {
-            redirect( controller: 'home', action: 'signAContract' )
+            redirect(controller: 'home', action: 'signAContract')
         }
 
 
-   }
-
+    }
 
 
 }
