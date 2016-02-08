@@ -7,6 +7,7 @@ import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
+import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
@@ -1433,13 +1434,39 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return returnValue
     }
 
+    /***
+     * starting with a property name OR a meaning, produce a list of triplets mapping the name/meaning to phenotype and sample group name
+     * @param propertyOrMeaning
+     * @param technology
+     * @return
+     */
+    private List<LinkedHashMap<String, String>> identifyMatchers(String propertyOrMeaning,String technology){
+        List<LinkedHashMap<String, String>> matchers
+        if ( (propertyOrMeaning == "P_VALUE") ||
+                (propertyOrMeaning == "BETA") ||
+                (propertyOrMeaning == "ODDS_RATIO") ) {
+            List<Property> propertyList = JsonParser.getService().getAllPropertiesWithMeaningForExperimentOfVersion(propertyOrMeaning, sharedToolsService.getCurrentDataVersion(), technology, false)
+            matchers = propertyList.collect { ['pname':it.name,'pheno': it.parent.name, 'ds': it.parent.parent.systemId, 'meaning':propertyOrMeaning] }
+        } else {
+            matchers = JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion(propertyOrMeaning, sharedToolsService.getCurrentDataVersion(), technology, false).
+                    collect { ['pname':it.name,'pheno': it.parent.name, 'ds': it.parent.parent.systemId, 'meaning':propertyOrMeaning] }
+        }
+        return matchers
+    }
 
-    private LinkedHashMap buildColumnsRequestForPProperties(LinkedHashMap resultColumnsToDisplay, String property) {
-        List<LinkedHashMap<String, String>> matchers =
-                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion(property, sharedToolsService.getCurrentDataVersion(), "GWAS").
-                        collect { ['pheno': it.parent.name, 'ds': it.parent.parent.systemId] }
+    /***
+     * given a particular property or meaning, along with the technology, retrieve the P properties we need to use on our request
+     * @param resultColumnsToDisplay
+     * @param propertyOrMeaning
+     * @param technology
+     * @return
+     */
+    private LinkedHashMap buildColumnsRequestForPProperties(LinkedHashMap resultColumnsToDisplay, String propertyOrMeaning, String technology ) {
+
+        List<LinkedHashMap<String, String>> matchers = identifyMatchers( propertyOrMeaning, technology )
+
         for (LinkedHashMap dirMatcher in matchers) {
-            addColumnsForPProperties(resultColumnsToDisplay, dirMatcher.pheno, dirMatcher.ds, property)
+            addColumnsForPProperties(resultColumnsToDisplay, dirMatcher.pheno, dirMatcher.ds, dirMatcher.pname)
         }
         return resultColumnsToDisplay
     }
@@ -1449,15 +1476,15 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param variantName
      * @return
      */
-    private JSONObject gatherTraitPerVariantResults(String variantName) {
+    private JSONObject gatherTraitPerVariantResults(String variantName, String technology ) {
         String filterByVariantName = codedfilterByVariant(variantName)
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID", "DBSNP_ID", "CHROM", "POS"])
-        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "DIR")
-        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "BETA")
-        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "ODDS_RATIO")
-        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "P_VALUE")
+        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "DIR", technology )
+        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "BETA", technology )
+        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "ODDS_RATIO", technology )
+        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "P_VALUE", technology )
         List<String> sampleGroupsWithMaf =
-                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("MAF", sharedToolsService.getCurrentDataVersion(), "GWAS").collect {
+                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion( "MAF", sharedToolsService.getCurrentDataVersion(), technology, false ).collect {
                     it.parent.systemId
                 }
         for (String sampleGroupWithMaf in sampleGroupsWithMaf) {
@@ -1471,27 +1498,55 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return dataJsonObject
     }
 
+
+    LinkedHashMap<String, String> extractPhenotypeToSampleGroupMapping(String propertyName,JSONObject apiResults, String technology){
+        LinkedHashMap<String, String> returnValue = [:]
+        if (apiResults.variants.collect{it[propertyName]}[0].findAll { it }.size()>0){
+            Set sampleGroups = apiResults.variants.collect{it[propertyName]}[0].findAll { it }[0].keySet()
+            for ( String sampleGroupName in sampleGroups ){
+                Set phenotypes = apiResults.variants.collect{it[propertyName]}[0]?.collect { it }[sampleGroupName].collect { it }[0].keySet()
+                for ( String phenotypeName in phenotypes ){
+                    returnValue[phenotypeName] = sampleGroupName
+                }
+            }
+        }
+        return returnValue
+    }
+
+
+    List<String> extractSampleGroupListForProperty(String propertyName,JSONObject apiResults){
+        List<String> returnValue = []
+        Set sampleGroups = apiResults.variants.collect{it[propertyName]}[0].findAll { it }[0].keySet()
+        for ( String sampleGroupName in sampleGroups ){
+            returnValue << sampleGroupName
+        }
+        // need to work out how to do this extraction…
+        return returnValue
+    }
+
+
+
     /***
      * Generate the numbers for the 'Association statistics across 25 traits', which is displayed on the variant info page (elsewhere as well)
      * @param variantName
      * @return
      */
-    public JSONObject getTraitPerVariant(String variantName) {//region
+    public JSONObject getTraitPerVariant( String variantName, String technology ) {//region
 
         JSONObject returnValue
         def slurper = new JsonSlurper()
-        JSONObject apiResults = gatherTraitPerVariantResults(variantName)
-        LinkedHashMap<String, String> betaMatchersMap = metadataUtilityService.createPhenotypeSampleGroupMap(
-                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("BETA", sharedToolsService.getCurrentDataVersion(), "GWAS"))
-        LinkedHashMap<String, String> orMatchersMap = metadataUtilityService.createPhenotypeSampleGroupMap(
-                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("ODDS_RATIO", sharedToolsService.getCurrentDataVersion(), "GWAS"))
-        LinkedHashMap<String, String> pValueMatchersMap = metadataUtilityService.createPhenotypeSampleGroupMap(
-                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("P_VALUE", sharedToolsService.getCurrentDataVersion(), "GWAS"))
-        List<String> sampleGroupsContainingMafList = metadataUtilityService.createSampleGroupPropertyList(
-                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("MAF", sharedToolsService.getCurrentDataVersion(), "GWAS"))
-        LinkedHashMap<String, List<String>> phenotypeSampleGroupNameMap = metadataUtilityService.createPhenotypeSampleNameMapper(
-                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("P_VALUE", sharedToolsService.getCurrentDataVersion(), "GWAS"))
-        //JSONObject apiResults = slurper.parseText(apiData)
+        JSONObject apiResults = gatherTraitPerVariantResults( variantName, technology )
+        List <String> meaningFieldNames = ["BETA","ODDS_RATIO","P_VALUE","DIR"]
+        List<List<LinkedHashMap<String, String>>> meaningBasedMapper = []
+        for (String meaningFieldName in meaningFieldNames){
+            meaningBasedMapper << identifyMatchers(meaningFieldName, technology)
+        }
+        List <String> dataSetSpecificProperties = ["MAF"]
+        List <List<String>>  dataSetSpecificMapper = []
+        for (String dataSetSpecificProperty in dataSetSpecificProperties){
+            dataSetSpecificMapper <<  extractSampleGroupListForProperty(dataSetSpecificProperty, apiResults)
+        }
+       // List<String> sampleGroupsContainingMafList =extractSampleGroupListForProperty("MAF", apiResults)
         int numberOfVariants = apiResults.numRecords
         StringBuilder sb = new StringBuilder("{\"results\":[")
         for (int j = 0; j < numberOfVariants; j++) {
@@ -1510,39 +1565,54 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                     element = variant["CHROM"].findAll { it }[0]
                     sb << "{\"level\":\"CHROM\",\"count\":\"${element}\"},"
 
-                    element = variant["MAF"].findAll { it }[0]
-
-                    for (String sampleGroupsContainingMaf in sampleGroupsContainingMafList) {
-                        sb << "{\"level\":\"MAF^${sampleGroupsContainingMaf}\",\"count\":${element[sampleGroupsContainingMaf]}},"
-                    }
-
-                    element = variant["P_VALUE"].findAll { it }[0]
-                    pValueMatchersMap.each { String phenotypeName, String sampleGroupId ->
-                        sb << "{\"level\":\"P_VALUE^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
-                    }
-
-                    element = variant["ODDS_RATIO"].findAll { it }[0]
-                    orMatchersMap.each { String phenotypeName, String sampleGroupId ->
-                        sb << "{\"level\":\"ODDS_RATIO^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
-                    }
-
-                    element = variant["BETA"].findAll { it }[0]
-                    betaMatchersMap.each { String phenotypeName, String sampleGroupId ->
-                        sb << "{\"level\":\"BETA^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
-                    }
-
-                    element = variant["DIR"].findAll { it }[0]
-                    if (element) {
-                        betaMatchersMap.each { String phenotypeName, String sampleGroupId ->
-                            sb << "{\"level\":\"DIR^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
+                    for( List<List<String>> dataSetMapper in dataSetSpecificMapper) {
+                        element = variant["MAF"].findAll { it }[0]
+                        for (String sampleGroupsContainingMaf in dataSetMapper) {
+                            sb << "{\"level\":\"MAF^NONE^MAF^${sampleGroupsContainingMaf}\",\"count\":${element[sampleGroupsContainingMaf]}},"
                         }
                     }
 
-                    phenotypeSampleGroupNameMap.each { String sampleGroupId, List sgHolder ->
-                        if ((sgHolder) && (sgHolder.size() > 0)) {
-                            sb << "{\"level\":\"MAPPER^${sampleGroupId}\",\"count\":\"${sgHolder.join(",")}\"},"
+                    for( List<LinkedHashMap<String, String>> meaningMapper in meaningBasedMapper){
+                        for( String valueName in meaningMapper?.collect{it.pname}.unique()){
+                            for (LinkedHashMap valueMap in meaningMapper.findAll{it.pname==valueName}){
+                                String val = variant["${valueMap.pname}"].findAll{it}[0].findAll{it}["${valueMap.ds}"].findAll{it}["${valueMap.pheno}"] as String
+                                sb << "{\"level\":\"${valueMap.pname}^${valueMap.pheno}^${valueMap.meaning}^${valueMap.ds}\",\"count\":${val}},"
+                            }
                         }
                     }
+
+
+//                    element = variant["P_VALUE"].findAll { it }[0]
+//                    pValueMatchersMap.each { String phenotypeName, String sampleGroupId ->
+//                        sb << "{\"level\":\"P_VALUE^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
+//                    }
+//
+//                    element = variant["ODDS_RATIO"].findAll { it }[0]
+//                    orMatchersMap.each { String phenotypeName, String sampleGroupId ->
+//                        sb << "{\"level\":\"ODDS_RATIO^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
+//                    }
+//
+//                    element = variant["BETA"].findAll { it }[0]
+//                    betaMatchersMap.each { String phenotypeName, String sampleGroupId ->
+//                        sb << "{\"level\":\"BETA^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
+//                    }
+
+
+
+
+
+//                    element = variant["DIR"].findAll { it }[0]
+//                    if (element) {
+//                        betaMatchersMap.each { String phenotypeName, String sampleGroupId ->
+//                            sb << "{\"level\":\"DIR^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
+//                        }
+//                    }
+
+//                    phenotypeSampleGroupNameMap.each { String sampleGroupId, List sgHolder ->
+//                        if ((sgHolder) && (sgHolder.size() > 0)) {
+//                            sb << "{\"level\":\"MAPPER^${sampleGroupId}\",\"count\":\"${sgHolder.join(",")}\"},"
+//                        }
+//                    }
 
                     element = variant["POS"].findAll { it }[0]
                     sb << "{\"level\":\"POS\",\"count\":${element}}"

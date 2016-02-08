@@ -38,18 +38,13 @@ class TraitController {
      * @return
      */
     def ajaxAssociatedStatisticsTraitPerVariant () {
-        // log
-        log.info("got params: " + params);
-
         // parse
         String variant = params["variantIdentifier"]
-        JSONObject jsonObject = restServerService.getTraitPerVariant( variant)
-
-        // DIGP_170: commenting out for final push to move to new metadata data structure (10/18/2015)
-        //LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
-
-        // log result
-        log.info("variant json: " + jsonObject);
+        String technology = "GWAS"
+        if (params["technology"]){
+            technology =  params["technology"]
+        }
+        JSONObject jsonObject = restServerService.getTraitPerVariant( variant,technology)
 
         def showExomeChip = sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp);
         def showExomeSequence = sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq);
@@ -133,11 +128,11 @@ class TraitController {
      */
     def ajaxTraitsPerVariant()  {
         String variant = params["variantIdentifier"]
-
-        // DIGP_170: commenting out for final push to move to new metadata data structure (10/18/2015)
-        //LinkedHashMap processedMetadata = sharedToolsService.getProcessedMetadata()
-
-        JSONObject jsonObject = restServerService.getTraitPerVariant( variant)
+        String technology = "GWAS"
+        if (params["technology"]){
+            technology =  params["technology"]
+        }
+        JSONObject jsonObject = restServerService.getTraitPerVariant( variant, technology )
         render(status:200, contentType:"application/json") {
             [traitInfo:jsonObject]
         }

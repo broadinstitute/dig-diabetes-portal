@@ -24,15 +24,6 @@ class FilterManagementService {
     GeneManagementService geneManagementService
 
 
-    private String sigmaData  = "unknown"
-    private String exomeSequencePValue  = "P_FIRTH_FE_IV"
-    private String gwasDataPValue  = "P_VALUE"
-    private String exomeChipPValue  = "P_VALUE"
-    private String sigmaDataPValue  = "P_VALUE"
-
-
-
-
     /***
      * turn a list of properties (which may be empty) into a string that can go down to the browser (and then come back
      * during an Ajax call)

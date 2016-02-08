@@ -140,7 +140,7 @@
                     </div>
 
                 <div class="separator"></div>
-                <g:render template="/widgets/associatedStatisticsTraitsPerVariant" model="['variantIdentifier': variantToSearch]"/>
+                <g:render template="/widgets/associatedStatisticsTraitsPerVariant" model="[variantIdentifier: variantToSearch, locale: locale]"/>
 
 
                 <div class="separator"></div>

@@ -136,7 +136,7 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
 
     void "test getTraitPerVariant"() {
         when:
-        JSONObject jsonObject = restServerService.getTraitPerVariant("rs13266634")
+        JSONObject jsonObject = restServerService.getTraitPerVariant("rs13266634","GWAS")
         then:
         assert jsonObject
     }

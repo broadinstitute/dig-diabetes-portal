@@ -31,8 +31,9 @@
             $.ajax({
                 cache: false,
                 type: "get",
-                url: "../../trait/ajaxAssociatedStatisticsTraitPerVariant",
-                data: {variantIdentifier: '<%=variantIdentifier%>'},
+                url: '<g:createLink controller="trait" action="ajaxAssociatedStatisticsTraitPerVariant" />',
+                data: {variantIdentifier: '<%=variantIdentifier%>',
+                       technology:'GWAS'},
                 async: true,
                 success: function (data) {
                     mpgSoftware.trait.fillTheTraitsPerVariantFields(data,
