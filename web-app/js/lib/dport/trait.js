@@ -23,7 +23,7 @@ var mpgSoftware = mpgSoftware || {};
                 showExomeSequence,
                 showExomeChip,
                 traitUrl));
-
+            $('[data-toggle="tooltip"]').tooltip({container: 'body'});
             var languageSetting = {}
             // check if the browser is using Spanish
             if ( locale.startsWith("es")  ) {
@@ -33,7 +33,7 @@ var mpgSoftware = mpgSoftware || {};
             var table = $(traitsPerVariantTable).dataTable({
                 iDisplayLength: 25,
                 bFilter: false,
-                aaSorting: [[ 1, "asc" ]],
+                aaSorting: [[ 0, "asc" ]],
                 aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 1, 3, 4 ] } ],
                 language: languageSetting
             });

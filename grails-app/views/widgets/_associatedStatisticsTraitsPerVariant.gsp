@@ -3,6 +3,17 @@
     dbSnpId: for the snp id, if provided (from the trait info page)
     openOnLoad: if accordion closed at start
 -->
+<style>
+    tr.bestAssociation {
+
+    }
+    tr.otherAssociations {
+       display: none;
+    }
+</style>
+
+
+
 <div class="accordion-group">
     <div class="accordion-heading">
         <a class="accordion-toggle  collapsed" data-toggle="collapse" href="#collapseVariantTraitAssociation">
@@ -69,7 +80,7 @@
 
 
         <div class="gwas-table-container">
-            <table id="traitsPerVariantTable" class="table table-striped basictable gwas-table">
+            <table id="traitsPerVariantTable" class="table basictable gwas-table">
                 <thead>
                 <tr>
                     <th><g:message code="informational.shared.header.trait" /></th>
