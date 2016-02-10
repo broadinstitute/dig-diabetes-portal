@@ -14,9 +14,9 @@ var mpgSoftware = mpgSoftware || {};
                                                        showExomeSequence,
                                                        showExomeChip,
                                                        traitUrl,
-                                                        locale,
-                                                        copyText,
-                                                        printText)  {
+                                                       locale,
+                                                       copyText,
+                                                       printText)  {
             var variant =  data['traitInfo'];
             $(traitsPerVariantTableBody).append(variantProcessing.fillTraitsPerVariantTable(variant,
                 showGene,
@@ -34,8 +34,8 @@ var mpgSoftware = mpgSoftware || {};
                 iDisplayLength: 50,
                 bFilter: false,
                 bPaginate: false,
+                aaSorting: [[ 1, "asc" ]],
                 sDom: '<"top">rt<"bottom"flp><"clear">',
-                aaSorting: [[ 0, "asc" ]],
                 aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 1, 3, 4 ] } ],
                 language: languageSetting
             });
@@ -50,7 +50,7 @@ var mpgSoftware = mpgSoftware || {};
                 "sSwfPath": "../../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
             } );
             $( tableTools.fnContainer() ).insertAfter(traitsPerVariantTable);
-            };
+        };
 
 
         var getDbSnpId = function (data) {
@@ -86,3 +86,4 @@ var mpgSoftware = mpgSoftware || {};
     }());
 
 })();
+
