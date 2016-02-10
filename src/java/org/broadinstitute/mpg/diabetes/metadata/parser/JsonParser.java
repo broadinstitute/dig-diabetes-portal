@@ -191,7 +191,8 @@ public class JsonParser {
 
         // for experiment, find the property list
         for (Experiment experiment : experimentList) {
-            if (experiment.getTechnology().equalsIgnoreCase(technology)){
+            if ( (technology.length()==0)||
+                    (experiment.getTechnology().equalsIgnoreCase(technology)) ){
                 PropertyPerExperimentVisitor propertyPerExperimentVisitor = new PropertyPerExperimentVisitor(propertyName,recursivelyDescendSampleGroups);
                 experiment.acceptVisitor(propertyPerExperimentVisitor);
                 propertyList = propertyPerExperimentVisitor.getPropertyList();
@@ -215,7 +216,8 @@ public class JsonParser {
 
         // for experiment, find the property list
         for (Experiment experiment : experimentList) {
-            if (experiment.getTechnology().equalsIgnoreCase(technology)){
+            if ( (technology.length()==0)||
+                 (experiment.getTechnology().equalsIgnoreCase(technology)) ){
                 PropertyPerExperimentByMeaningVisitor propertyPerExperimentByMeaningVisitor = new PropertyPerExperimentByMeaningVisitor(propertyMeaning,recursivelyDescendSampleGroups);
                 experiment.acceptVisitor(propertyPerExperimentByMeaningVisitor);
                 propertyList = propertyPerExperimentByMeaningVisitor.getPropertyList();

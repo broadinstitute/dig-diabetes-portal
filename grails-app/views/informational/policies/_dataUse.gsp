@@ -28,7 +28,7 @@
 		<h4><g:message code="informational.policies.data_release.process.header" /></h4>
 		<g:message code="informational.policies.data_release.process.section_1" />
 		<h4><g:message code="informational.policies.data_release.timeline.header" />:</h4>
-		<img src="../static/images/dataReleaseTimeline.png"/>
+		<img src=<g:message code="informational.dataReleaseImage" /> />
 		<h4><u><g:message code="informational.policies.conduct.header" /></u></h4>
 		<g:message code="informational.policies.conduct.section_1" />
 		<h4><g:message code="informational.policies.conduct.registration.header" /></h4>

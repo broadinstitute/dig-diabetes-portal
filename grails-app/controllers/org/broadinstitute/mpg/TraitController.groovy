@@ -40,7 +40,7 @@ class TraitController {
     def ajaxAssociatedStatisticsTraitPerVariant () {
         // parse
         String variant = params["variantIdentifier"]
-        String technology = "GWAS"
+        String technology = ""
         if (params["technology"]){
             technology =  params["technology"]
         }

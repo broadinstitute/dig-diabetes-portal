@@ -47,13 +47,7 @@ class LoginControllerUnitSpec extends Specification {
         controller.auth()
 
         then:
-        view=="/login/auth"
-        response.getStatus()==200
-        model.postUrl
-        model.rememberMeParameter
-        //       springSecurityServiceMock.getCurrentUser() >> userMock
-        //       userMock.getDefaultRoleForApplication("MYAPP") >> "ROLE"
-
+        response.redirectedUrl == "/oauth/authenticate?provider=google"
     }
 
 

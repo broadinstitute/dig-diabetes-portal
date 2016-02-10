@@ -450,17 +450,14 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @return
      */
     public JSONObject postGetDataCall(String jsonString) {
-        log.info("calling postGetDataCall")
         return this.postRestCall(jsonString, this.GET_DATA_URL);
     }
 
     private JSONObject postRestCall(String drivingJson, String targetUrl) {
-        log.info("calling postRestCall")
         return postRestCallBase(drivingJson, targetUrl, currentRestServer())
     }
 
     public JSONObject postDataQueryRestCall(GetDataQueryHolder getDataQueryHolder) {
-        log.info("calling postDataQueryRestCall")
         QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder()
         String drivingJson = queryJsonBuilder.getQueryJsonPayloadString(getDataQueryHolder.getGetDataQuery())
         return postRestCallBase(drivingJson, this.GET_DATA_URL, currentRestServer())
@@ -1541,12 +1538,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         for (String meaningFieldName in meaningFieldNames){
             meaningBasedMapper << identifyMatchers(meaningFieldName, technology)
         }
-        LinkedHashMap<String, String> betaMatchersMap =extractPhenotypeToSampleGroupMapping("BETA", apiResults, technology)
-        LinkedHashMap<String, String> orMatchersMap =extractPhenotypeToSampleGroupMapping("ODDS_RATIO", apiResults, technology)
-        LinkedHashMap<String, String> pValueMatchersMap =extractPhenotypeToSampleGroupMapping("P_VALUE", apiResults, technology)
-        List<String> sampleGroupsContainingMafList =extractSampleGroupListForProperty("MAF", apiResults)
-//        LinkedHashMap<String, List<String>> phenotypeSampleGroupNameMap = metadataUtilityService.createPhenotypeSampleNameMapper(
-//                JsonParser.getService().getAllPropertiesWithMeaningForExperimentOfVersion("P_VALUE", sharedToolsService.getCurrentDataVersion(), technology, false ))
+        List <String> dataSetSpecificProperties = ["MAF"]
+        List <List<String>>  dataSetSpecificMapper = []
+        for (String dataSetSpecificProperty in dataSetSpecificProperties){
+            dataSetSpecificMapper <<  extractSampleGroupListForProperty(dataSetSpecificProperty, apiResults)
+        }
+       // List<String> sampleGroupsContainingMafList =extractSampleGroupListForProperty("MAF", apiResults)
         int numberOfVariants = apiResults.numRecords
         StringBuilder sb = new StringBuilder("{\"results\":[")
         for (int j = 0; j < numberOfVariants; j++) {
@@ -1565,10 +1562,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                     element = variant["CHROM"].findAll { it }[0]
                     sb << "{\"level\":\"CHROM\",\"count\":\"${element}\"},"
 
-                    element = variant["MAF"].findAll { it }[0]
-
-                    for (String sampleGroupsContainingMaf in sampleGroupsContainingMafList) {
-                        sb << "{\"level\":\"MAF^${sampleGroupsContainingMaf}\",\"count\":${element[sampleGroupsContainingMaf]}},"
+                    for( List<List<String>> dataSetMapper in dataSetSpecificMapper) {
+                        element = variant["MAF"].findAll { it }[0]
+                        for (String sampleGroupsContainingMaf in dataSetMapper) {
+                            sb << "{\"level\":\"MAF^NONE^MAF^${sampleGroupsContainingMaf}\",\"count\":${element[sampleGroupsContainingMaf]}},"
+                        }
                     }
 
                     for( List<LinkedHashMap<String, String>> meaningMapper in meaningBasedMapper){
