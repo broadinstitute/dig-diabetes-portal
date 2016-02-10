@@ -145,8 +145,28 @@
             tableNotLoaded = false;
         }
     });
+    function reviseTraitsTableRows(){
+//        var phenotype = $('#phenotypeTableChooser option:selected').val();
+        var clickedBoxes =  $('#traitsPerVariantTable .jstree-clicked');
+        var dataSetNames  = [];
+        var dataSetMaps  = [];
+        for  ( var i = 0 ; i < clickedBoxes.length ; i++ )   {
+            var  comboName  =  $(clickedBoxes[i]).attr('id');
+            var partsOfCombo =   comboName.split("-");
+            var  dataSetWithoutAnchor  =  partsOfCombo[0];
+            dataSetNames.push(dataSetWithoutAnchor);
+            var  dataSetMap = {"name":dataSetWithoutAnchor,
+                "value":dataSetWithoutAnchor,
+                "pvalue":partsOfCombo[1],
+                "count":partsOfCombo[2].substring(0, partsOfCombo[2].length-7)};
+            dataSetMaps.push(dataSetMap);
+        }
 
-</script>
+      //  mpgSoftware.ancestryTable.loadAncestryTable('<%=geneName%>',dataSetMaps);
+    }
+
+
+    </script>
 
 
         <div class="gwas-table-container">
@@ -165,6 +185,11 @@
                 <tbody id="traitsPerVariantTableBody">
                 </tbody>
             </table>
+        </div>
+        <div class="pull-left">
+            <button id="reviser"  class="btn btn-primary pull-left" onclick="reviseTraitsTableRows()">
+                <g:message code="gene.variantassociations.change.rows" default="Revise rows"/>
+            </button>
         </div>
 </div>
 </div>
