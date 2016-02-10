@@ -513,7 +513,7 @@ var variantProcessing = (function () {
 
             var vRec = deconvoluteVariantInfo(vRecO);
             var structureForBuildingTable = buildIntoRows (vRec) ;
-
+            var rowCounter = 0;
             for (var phenotypeName in structureForBuildingTable["phenotypeRows"]) {
                 if ((structureForBuildingTable["phenotypeRows"].hasOwnProperty(phenotypeName))&&
                     (phenotypeName!=="NONE")){
@@ -522,15 +522,19 @@ var variantProcessing = (function () {
                     for ( var i = 0 ; i < rowsPerPhenotype.length ; i++  ){
                         var row = rowsPerPhenotype[i];
 
-                        if (i === 0){
+                        if (i === 0){ // set up the row
                             retVal += "<tr id='"+phenotypeName+"' class='clickable' data-toggle='collapse' data-target='."+phenotypeName+"collapsed'>"
                         } else {
                             retVal += "<tr class='collapse out budgets "+phenotypeName+"collapsed'>"
                         }
 
-
+                        // some shared variables
                         var convertedTrait=mpgSoftware.trans.translator(phenotypeName);
                         var convertedSampleGroup=mpgSoftware.trans.translator(row['samplegroup']);
+
+                        // now start filling in the cells
+                        retVal += "<td style='text-align: left'><div id='traitsTable"+(rowCounter)+"' class='sgIdentifierInTraitTable' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+"'></div>";
+                        retVal += "</td>";
 
                         // for now, restrict this link to GWAS data sets
                         if (convertedSampleGroup.indexOf('GWAS')>-1){ // GWAS data set - allow anchor
@@ -581,20 +585,10 @@ var variantProcessing = (function () {
                         if (( typeof row["BETA"] !== 'undefined')&&(row["BETA"]!== '')) {
                             retVal += ("beta: " + parseFloat(row["BETA"]).toPrecision(3));
                         }
-//                    else if (trait.Z_SCORE){
-//                        retVal += "z-score: " + trait.ZSCORE.toPrecision(3);
-//                    }
-                        retVal += "</td>";
-
-
-                        retVal += "<td>";
-                        if (( typeof row['samplegroup'] !== 'undefined')&&(row['samplegroup']!== '')) {
-                            retVal += (mpgSoftware.trans.translator(row['samplegroup']));
-                        }
                         retVal += "</td>";
 
                         retVal += "</tr>";
-
+                        rowCounter++;
                     }
 
                 }
