@@ -31,8 +31,10 @@ var mpgSoftware = mpgSoftware || {};
             }
 
             var table = $(traitsPerVariantTable).dataTable({
-                iDisplayLength: 25,
+                iDisplayLength: 50,
                 bFilter: false,
+                bPaginate: false,
+                sDom: '<"top">rt<"bottom"flp><"clear">',
                 aaSorting: [[ 0, "asc" ]],
                 aoColumnDefs: [{ sType: "allnumeric", aTargets: [ 1, 3, 4 ] } ],
                 language: languageSetting
