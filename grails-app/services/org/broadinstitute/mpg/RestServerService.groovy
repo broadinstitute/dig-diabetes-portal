@@ -450,17 +450,14 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @return
      */
     public JSONObject postGetDataCall(String jsonString) {
-        log.info("calling postGetDataCall")
         return this.postRestCall(jsonString, this.GET_DATA_URL);
     }
 
     private JSONObject postRestCall(String drivingJson, String targetUrl) {
-        log.info("calling postRestCall")
         return postRestCallBase(drivingJson, targetUrl, currentRestServer())
     }
 
     public JSONObject postDataQueryRestCall(GetDataQueryHolder getDataQueryHolder) {
-        log.info("calling postDataQueryRestCall")
         QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder()
         String drivingJson = queryJsonBuilder.getQueryJsonPayloadString(getDataQueryHolder.getGetDataQuery())
         return postRestCallBase(drivingJson, this.GET_DATA_URL, currentRestServer())

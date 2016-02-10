@@ -346,8 +346,17 @@ var variantProcessing = (function () {
       },
 
 
-
-
+        /***
+         *  Receive an array of objects as input.  Some of those objects will share common fields, notably 'phenotype',
+         *  'meaning', and 'samplegroup'.  Phenotype implies that the objects should be grouped together in the eventual table, either on
+         *  the same line or adjacent lines.  Meaning we use instead of property name to organize columns in the table (since properties
+         *  may differ, but meaning is more consistent).  Sample group we use to put together properties that are not dependent on phenotype
+         *  such as Minor Allele Frequency.  By the end of this function we build a structure which can be used to build our on-screen
+         *  table in a fairly straightforward way.
+         *
+         * @param arrayOfFields
+         * @returns {{}}
+         */
       buildIntoRows = function(arrayOfFields) {
           var combinedStructure = {};
 
@@ -437,9 +446,9 @@ var variantProcessing = (function () {
                                   allSampleGroups.push (fieldsPerPhenotype[i].samplegroup);
                               }
                           }
-                          var fieldsPerPhenotypeForFavoredSampleGroup=[];
+                          var fieldsPerPhenotypeForFavoredSampleGroup=[];   // this will become an array of field arrays, so that we can have multiple groupings for each phenotype
                           if (allSampleGroups.length=== 1) {  // if only one sample group then use everything
-                              fieldsPerPhenotypeForFavoredSampleGroup =  fieldsPerPhenotype;
+                              fieldsPerPhenotypeForFavoredSampleGroup.push(fieldsPerPhenotype);
                           }  else {   // multiple sample groups.  Pick a favorite
                               // first create a sortable list of P values
                               var pValsToCompare = []; // array of objects
@@ -452,26 +461,37 @@ var variantProcessing = (function () {
                                   }
                               }
                               var chosenSampleGroup;
+                              var sortedPValsToCompare = [];
                               if (pValsToCompare.length>0) {
-                                  var sortedPValsToCompare =  pValsToCompare.sort(function(a,b){return a.pval- b.pval;});
+                                  sortedPValsToCompare =  pValsToCompare.sort(function(a,b){return a.pval- b.pval;});
                                   chosenSampleGroup =  sortedPValsToCompare[0].sg;
                               } else {  // if there were no P values then pick the sample group arbitrarily
                                   chosenSampleGroup = allSampleGroups[0];
                               }
                               // now get the fields associated with the sample group
-                              for  (  var i = 0 ; i < fieldsPerPhenotype.length ; i++ ){
-                                  if (fieldsPerPhenotype[i].samplegroup===chosenSampleGroup){
-                                      fieldsPerPhenotypeForFavoredSampleGroup.push(fieldsPerPhenotype[i]) ;
+                              for ( var j = 0 ; j < sortedPValsToCompare.length ; j++ ){
+                                  chosenSampleGroup =  sortedPValsToCompare[j].sg;
+                                  var sampleGroupSpecificPhenotypeInfo = [];
+                                  for  (  var i = 0 ; i < fieldsPerPhenotype.length ; i++ ){
+                                      if (fieldsPerPhenotype[i].samplegroup===chosenSampleGroup){
+                                          sampleGroupSpecificPhenotypeInfo.push(fieldsPerPhenotype[i]) ;
+                                      }
                                   }
+                                  fieldsPerPhenotypeForFavoredSampleGroup.push(sampleGroupSpecificPhenotypeInfo) ;
                               }
                           }
                           combinedStructure["phenotypeRows"] [phenotypeName]   = {};
                           for  (var i = 0; i < columnList.length; i++) {
                               combinedStructure["phenotypeRows"][phenotypeName][columnList [i]]  = '';
                           }
+                          combinedStructure["phenotypeRows"][phenotypeName] = [];
                           for  (var i = 0; i < fieldsPerPhenotypeForFavoredSampleGroup.length; i++) {
-                              combinedStructure["phenotypeRows"][phenotypeName][fieldsPerPhenotypeForFavoredSampleGroup[i].meaning]  =   fieldsPerPhenotypeForFavoredSampleGroup[i].pValue;
-                              combinedStructure["phenotypeRows"][phenotypeName]['samplegroup']  =   fieldsPerPhenotypeForFavoredSampleGroup[i].samplegroup;  // gets assigned multiple times but should always be the same
+                              var fieldAccumulator = {}; // temporary variable necessary only for clarity
+                              for  (var j = 0; j < fieldsPerPhenotypeForFavoredSampleGroup[i].length; j++) {
+                                  fieldAccumulator[fieldsPerPhenotypeForFavoredSampleGroup[i][j].meaning]  =   fieldsPerPhenotypeForFavoredSampleGroup[i][j].pValue;
+                                  fieldAccumulator['samplegroup']  =   fieldsPerPhenotypeForFavoredSampleGroup[i][j].samplegroup;  // gets assigned multiple times but should always be the same
+                              }
+                              combinedStructure["phenotypeRows"][phenotypeName].push(fieldAccumulator);
                           }
                       }
                    }
@@ -497,67 +517,85 @@ var variantProcessing = (function () {
             for (var phenotypeName in structureForBuildingTable["phenotypeRows"]) {
                 if ((structureForBuildingTable["phenotypeRows"].hasOwnProperty(phenotypeName))&&
                     (phenotypeName!=="NONE")){
-                    console.log(phenotypeName) ;
-                    var row =  structureForBuildingTable["phenotypeRows"] [phenotypeName];
 
-                 //   var trait = vRec [i] ;
-                    retVal += "<tr>"
+                    var rowsPerPhenotype =  structureForBuildingTable["phenotypeRows"] [phenotypeName];
+                    for ( var i = 0 ; i < rowsPerPhenotype.length ; i++  ){
+                        var row = rowsPerPhenotype[i];
 
-                    var convertedTrait=mpgSoftware.trans.translator(phenotypeName);
-
-                    retVal += "<td><a href='"+traitRootUrl+"?trait="+phenotypeName+"&significance=5e-8'>"+convertedTrait+"</a></td>";
-
-                    retVal += "<td>";
-                    if (( typeof row["P_VALUE"] !== 'undefined')&&(row["P_VALUE"]!== '')) {
-                        retVal += (parseFloat(row["P_VALUE"]).toPrecision(3));
-                    }
-                    retVal += "</td>";
-
-
-                    retVal += "<td>";
-                    if (( typeof row["DIR"] !== 'undefined')&&(row["DIR"]!== '')) {
-                        if ( row["DIR"] === 1 ) {
-                            retVal += "<span class='assoc-up'>&uarr;</span>";
+                        if (i === 0){
+                            retVal += "<tr id='"+phenotypeName+"' class='clickable' data-toggle='collapse' data-target='."+phenotypeName+"collapsed'>"
+                        } else {
+                            retVal += "<tr class='collapse out budgets "+phenotypeName+"collapsed'>"
                         }
-                        else if ( row["DIR"] === -1 ) {
-                            retVal += "<span class='assoc-down'>&darr;</span>";
+
+
+                        var convertedTrait=mpgSoftware.trans.translator(phenotypeName);
+                        var convertedSampleGroup=mpgSoftware.trans.translator(row['samplegroup']);
+
+                        // for now, restrict this link to GWAS data sets
+                        if (convertedSampleGroup.indexOf('GWAS')>-1){ // GWAS data set - allow anchor
+                            retVal += "<td><a href='"+traitRootUrl+"?trait="+phenotypeName+"&significance=5e-8'>"+convertedTrait+"</a></td>";
+                        } else {
+                            retVal += "<td>"+convertedTrait+"</td>";
                         }
-                    }
-                    retVal += "</td>";
-
-                    retVal += "<td>";
-                    if (( typeof row["ODDS_RATIO"] !== 'undefined')&&(row["ODDS_RATIO"]!== '')) {
-                        retVal += (parseFloat(row["ODDS_RATIO"]).toPrecision(3));
-                    }
-                    retVal += "</td>";
 
 
-                    retVal += "<td>";
-                    if (( typeof row["MAF"] !== 'undefined')&&(row["MAF"]!== '')) {
-                        retVal += (parseFloat(row["MAF"]).toPrecision(3));
-                    }
-                    retVal += "</td>";
+
+                        retVal += "<td>";
+                        if (( typeof row["P_VALUE"] !== 'undefined')&&(row["P_VALUE"]!== '')) {
+                            retVal += (parseFloat(row["P_VALUE"]).toPrecision(3));
+                            if ((i==0) && (rowsPerPhenotype.length>1)){
+                                retVal += "<div class='glyphicon glyphicon-plus-sign pull-right' aria-hidden='true' data-toggle='tooltip' "+
+                                    "data-placement='right' title='Click to toggle additional associations for "+convertedTrait+" across other data sets'></div>";
+                            }
+                        }
+                        retVal += "</td>";
 
 
-                    retVal += "<td>";
-                    if (( typeof row["BETA"] !== 'undefined')&&(row["BETA"]!== '')) {
-                        retVal += ("beta: " + parseFloat(row["BETA"]).toPrecision(3));
-                    }
+                        retVal += "<td>";
+                        if (( typeof row["DIR"] !== 'undefined')&&(row["DIR"]!== '')) {
+                            if ( row["DIR"] === 1 ) {
+                                retVal += "<span class='assoc-up'>&uarr;</span>";
+                            }
+                            else if ( row["DIR"] === -1 ) {
+                                retVal += "<span class='assoc-down'>&darr;</span>";
+                            }
+                        }
+                        retVal += "</td>";
+
+                        retVal += "<td>";
+                        if (( typeof row["ODDS_RATIO"] !== 'undefined')&&(row["ODDS_RATIO"]!== '')) {
+                            retVal += (parseFloat(row["ODDS_RATIO"]).toPrecision(3));
+                        }
+                        retVal += "</td>";
+
+
+                        retVal += "<td>";
+                        if (( typeof row["MAF"] !== 'undefined')&&(row["MAF"]!== '')) {
+                            retVal += (parseFloat(row["MAF"]).toPrecision(3));
+                        }
+                        retVal += "</td>";
+
+
+                        retVal += "<td>";
+                        if (( typeof row["BETA"] !== 'undefined')&&(row["BETA"]!== '')) {
+                            retVal += ("beta: " + parseFloat(row["BETA"]).toPrecision(3));
+                        }
 //                    else if (trait.Z_SCORE){
 //                        retVal += "z-score: " + trait.ZSCORE.toPrecision(3);
 //                    }
-                    retVal += "</td>";
+                        retVal += "</td>";
 
 
-                    retVal += "<td>";
-                    if (( typeof row['samplegroup'] !== 'undefined')&&(row['samplegroup']!== '')) {
-                        retVal += (mpgSoftware.trans.translator(row['samplegroup']));
+                        retVal += "<td>";
+                        if (( typeof row['samplegroup'] !== 'undefined')&&(row['samplegroup']!== '')) {
+                            retVal += (mpgSoftware.trans.translator(row['samplegroup']));
+                        }
+                        retVal += "</td>";
+
+                        retVal += "</tr>";
+
                     }
-                    retVal += "</td>";
-
-                    retVal += "</tr>";
-
-
 
                 }
             }
