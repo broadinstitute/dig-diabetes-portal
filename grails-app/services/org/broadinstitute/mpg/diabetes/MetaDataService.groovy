@@ -7,6 +7,7 @@ import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
 import org.broadinstitute.mpg.diabetes.metadata.Phenotype
 import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.PropertyBean
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
@@ -653,6 +654,13 @@ class MetaDataService {
 
         }
         return returnValue
+    }
+
+    public String getMeaningForPhenotypeAndSampleGroup(String propertyName, String phenotypeName, String sampleGroupName){
+        String returnValue = ""
+        PropertyBean propertyBean =  this.getJsonParser().getPropertyGivenItsAndPhenotypeAndSampleGroupNames( propertyName,  phenotypeName,  sampleGroupName)
+        List<String> listOfStrings = propertyBean.getMeanings()
+        return listOfStrings[0]
     }
 
 

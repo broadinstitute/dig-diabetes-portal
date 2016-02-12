@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg
 
+import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
@@ -54,6 +55,45 @@ class TraitController {
             [show_gene: showGene, show_exseq: showExomeSequence, show_exchp: showExomeChip, traitInfo: jsonObject]
         }
     }
+
+
+
+
+    /**
+     * serves the associatedStatisticsTraitsPerVariant.gsp fragment; should be independent widget
+     *
+     * @return
+     */
+    def ajaxSpecifiedAssociationStatisticsTraitsPerVariant () {
+        // parse
+
+        JSONObject jsonObjectFromBrowser
+        JsonSlurper slurper = new JsonSlurper()
+        if (params["chosendataData"]){
+            jsonObjectFromBrowser =  slurper.parseText(params["chosendataData"])
+        }
+        String variant = params["variantIdentifier"]
+        String technology = ""
+        if (params["technology"]){
+            technology =  params["technology"]
+        }
+       // JSONObject jsonObject = restServerService.getTraitPerVariant( variant,technology)
+        JSONObject jsonObject = restServerService.getSpecifiedTraitPerVariant( variant,jsonObjectFromBrowser.vals.collect{return new LinkedHashMap(ds:it.ds,phenotype:it.phenotype,prop:it.prop)})
+
+        def showExomeChip = sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp);
+        def showExomeSequence = sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq);
+        def showGene = sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene);
+
+        render(status:200, contentType:"application/json") {
+            [show_gene: showGene, show_exseq: showExomeSequence, show_exchp: showExomeChip, traitInfo: jsonObject]
+        }
+    }
+
+
+
+
+
+
 
     /***
      *  search for a single trait from the main page and this will be the page frame.  The resulting Ajax call is  phenotypeAjax

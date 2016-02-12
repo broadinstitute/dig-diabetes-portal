@@ -827,7 +827,61 @@ var UTILS = {
              }
          }
     return returnValue;
-}
+},
+    jsTreeDataRetriever : function (divId,tableId,phenotypeName,sampleGroupName,retrieveJSTreeAjax){
+        var dataPasser = {phenotype:phenotypeName,sampleGroup:sampleGroupName};
+        $(divId).jstree({
+            "core" : {
+                "animation" : 0,
+                "check_callback" : true,
+                "themes" : { "stripes" : false },
+                'data' : {
+                    'type': "post",
+                    'url' :  retrieveJSTreeAjax,
+                    'data': function (c,i) {
+                        return dataPasser;
+                    },
+                    'metadata': dataPasser
+                }
+            },
+            "checkbox" : {
+                "keep_selected_style" : false,
+                "three_state": false
+            },
+            "plugins" : [  "themes","core", "wholerow", "checkbox", "json_data", "ui", "types"]
+        });
+        $(divId).on ('after_open.jstree', function (e, data) {
+            for ( var i = 0 ; i < data.node.children.length ; i++ )  {
+                $(divId).jstree("select_node", '#'+data.node.children[i]+' .jstree-checkbox', true);
+            }
+        }) ;
+        $(divId).on ('load_node.jstree', function (e, data) {
+            var existingNodes = $(tableId+' td.vandaRowTd div.vandaRowHdr');
+            var sgsWeHaveAlready = [];
+            for ( var i = 0 ; i < existingNodes.length ; i++ ){
+                var currentDiv = $(existingNodes[i]);
+                sgsWeHaveAlready.push(currentDiv.attr('datasetname'));
+            }
+            var listToDelete = [];
+            for ( var i = 0 ; i < data.node.children_d.length ; i++ )  {
+                var nodeId =  data.node.children_d[i];
+                if (data.node.children.indexOf(nodeId)==-1){ // elements in children_d and NOT children are actual child nodes.
+                    // Elements in children can be self pointers for a node, which we don't want to delete
+                    var sampleGroupName = nodeId.substring(0,nodeId.indexOf('-'));
+                    if (sgsWeHaveAlready.indexOf(sampleGroupName)>-1){
+                        listToDelete.push(data.node.children_d[i]);
+                    }
+                }
+            }
+            for ( var i = 0 ; i < listToDelete.length ; i++ )  {
+                $(divId).jstree("delete_node", listToDelete[i]);
+            }
+
+        });
+
+
+    }
+
 
 
 

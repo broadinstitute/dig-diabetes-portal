@@ -772,7 +772,7 @@ class SharedToolsService {
                     String pValue = filterManagementService.findFavoredMeaningValue( sampleGroupBean.getSystemId(), phenotypeName, "P_VALUE" ) ;
                     sb << """{
   "text"        : "${translator(sampleGroupBean.getSystemId())}",
-  "id"          : "${sampleGroupBean.getSystemId()}-${pValue}-${sampleGroupBean.subjectsNumber}",
+  "id"          : "${sampleGroupBean.getSystemId()}-${pValue}-${sampleGroupBean.subjectsNumber}-${phenotypeName}",
   "state"       : {
     "opened"    : false,
     "disabled"  : false,

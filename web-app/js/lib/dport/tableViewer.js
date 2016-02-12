@@ -525,7 +525,11 @@ var variantProcessing = (function () {
                         if (i === 0){ // set up the row
                             retVal += "<tr id='"+phenotypeName+"' class='clickable' data-toggle='collapse' data-target='."+phenotypeName+"collapsed'>"
                         } else {
-                            retVal += "<tr class='collapse out budgets "+phenotypeName+"collapsed'>"
+                            if (convertedSampleGroup.indexOf(':')===-1) {
+                                retVal += "<tr class='collapse out budgets "+phenotypeName+"collapsed'>"
+                            } else {
+                                retVal += "<tr>"
+                            }
                         }
 
                         // some shared variables
@@ -548,10 +552,13 @@ var variantProcessing = (function () {
                         retVal += "<td>";
                         if (( typeof row["P_VALUE"] !== 'undefined')&&(row["P_VALUE"]!== '')) {
                             retVal += (parseFloat(row["P_VALUE"]).toPrecision(3));
-                            if ((i==0) && (rowsPerPhenotype.length>1)){
-                                retVal += "<div class='glyphicon glyphicon-plus-sign pull-right' aria-hidden='true' data-toggle='tooltip' "+
-                                    "data-placement='right' title='Click to toggle additional associations for "+convertedTrait+" across other data sets'></div>";
+                            if (i==0) {
+                                if ((rowsPerPhenotype.length>1)&&(convertedSampleGroup.indexOf(':')===-1)){
+                                    retVal += "<div class='glyphicon glyphicon-plus-sign pull-right' aria-hidden='true' data-toggle='tooltip' "+
+                                        "data-placement='right' title='Click to toggle additional associations for "+convertedTrait+" across other data sets'></div>";
+                                }
                             }
+
                         }
                         retVal += "</td>";
 

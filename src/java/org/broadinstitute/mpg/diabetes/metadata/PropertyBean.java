@@ -77,6 +77,12 @@ public class PropertyBean implements Property, Comparable {
         this.meaningSet.add(meaningValue);
     }
 
+    public List<String> getMeanings() {
+        List<String> retstat = new ArrayList<String>();
+        retstat.addAll(this.meaningSet);
+        return retstat;
+    }
+
     public String getId() {
         return (this.parent == null ? "" : this.parent.getId()) + this.name;
     }

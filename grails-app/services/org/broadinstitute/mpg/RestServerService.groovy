@@ -1431,6 +1431,36 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return returnValue
     }
 
+
+
+
+
+
+    public JSONObject gatherSpecificTraitsPerVariantResults( String variantName, List<LinkedHashMap<String,String>> propsToUse) {
+        String filterByVariantName = codedfilterByVariant(variantName)
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID", "DBSNP_ID", "CHROM", "POS"])
+        for(LinkedHashMap oneReference in propsToUse){
+            addColumnsForPProperties(resultColumnsToDisplay, oneReference.phenotype, oneReference.ds, oneReference.prop)
+        }
+        List<String> sampleGroupsWithMaf =
+                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion( "MAF", sharedToolsService.getCurrentDataVersion(), "", false ).collect {
+                    it.parent.systemId
+                }
+        for (String sampleGroupWithMaf in sampleGroupsWithMaf) {
+            addColumnsForDProperties(resultColumnsToDisplay, MAFPHENOTYPE, sampleGroupWithMaf)
+        }
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName], searchBuilderService, metaDataService)
+        getDataQueryHolder.addProperties(resultColumnsToDisplay)
+        JsonSlurper slurper = new JsonSlurper()
+        String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        return dataJsonObject
+    }
+
+
+
+
+
     /***
      * starting with a property name OR a meaning, produce a list of triplets mapping the name/meaning to phenotype and sample group name
      * @param propertyOrMeaning
@@ -1522,8 +1552,75 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
+    public JSONObject getSpecifiedTraitPerVariant( String variantName, List<LinkedHashMap<String,String>> propsToUse) {
 
-    /***
+        JSONObject returnValue
+        JSONObject apiResults = gatherSpecificTraitsPerVariantResults(variantName, propsToUse)
+        int numberOfVariants = apiResults.numRecords
+        List<String> jsonComponentList = []
+        StringBuilder sb = new StringBuilder("{\"results\":[")
+        sb << "{ \"dataset\": \"traits\",\"pVals\": ["
+        if (!apiResults["is_error"]){
+            for (int j = 0; j < numberOfVariants; j++) {
+                List<String> keys = []
+                for (int i = 0; i < apiResults.variants[j].size(); i++) {
+                    keys << (new JSONObject(apiResults.variants[j][i]).keys()).next()
+                }
+                for (String key in keys) {
+                    ArrayList valueArray = apiResults.variants[j][key]
+                    def value = valueArray.findAll { it }[0]
+                    if (value instanceof String) {
+                        String stringValue = value as String
+                        jsonComponentList << "{\"level\":\"${key}\",\"count\":\"${stringValue}\"}"
+                    } else if (value instanceof Integer) {
+                        Integer integerValue = value as Integer
+                        jsonComponentList << "{\"level\":\"${key}\",\"count\":\"${integerValue}\"}"
+                    } else if (value instanceof BigDecimal) {
+                        BigDecimal bigDecimalValue = value as BigDecimal
+                        jsonComponentList << "{\"level\":\"${key}\",\"count\":\"${bigDecimalValue}\"}"
+                    } else if (value instanceof Map) {
+                        Map mapValue = value as Map
+                        List<String> subKeys = mapValue.keySet() as List
+                        for (String subKey in subKeys) {
+                            def particularMapValue = mapValue[subKey]
+                            if (particularMapValue instanceof BigDecimal) {// data set particular values
+                                BigDecimal particularMapBigDecimalValue = particularMapValue as BigDecimal
+                                jsonComponentList << "{\"level\":\"${key}^NONE^${key}^${subKey}\",\"count\":${particularMapBigDecimalValue}}"
+                            } else if (particularMapValue instanceof Map) {
+                                Map particularSubMap = particularMapValue as Map
+                                List<String> particularSubKeys = particularSubMap.keySet() as List
+                                for (String particularSubKey in particularSubKeys) {
+                                    def particularSubMapValue = particularSubMap[particularSubKey]
+                                    BigDecimal phenoValue = particularSubMapValue.findAll { it }[0] as BigDecimal
+                                    String meaning = metaDataService.getMeaningForPhenotypeAndSampleGroup(key, particularSubKey, subKey)
+                                    jsonComponentList << "{\"level\":\"${key}^${particularSubKey}^${meaning}^${subKey}\",\"count\":${phenoValue}}"
+                                    log.debug("Hey ${phenoValue}")
+                                }
+
+                            }
+                        }
+
+                    } else if (value instanceof ArrayList) {
+                        ArrayList arrayListValue = value as ArrayList
+                        log.debug("Hey, ArrayList")
+                    }
+                }
+            }
+
+        }
+         sb << jsonComponentList.join(",")
+        sb << "]}"
+        sb << "]}"
+        def slurper = new JsonSlurper()
+        returnValue = slurper.parseText(sb.toString())
+
+        return returnValue
+    }
+
+
+
+
+        /***
      * Generate the numbers for the 'Association statistics across 25 traits', which is displayed on the variant info page (elsewhere as well)
      * @param variantName
      * @return
@@ -1578,38 +1675,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                         }
                     }
 
-
-//                    element = variant["P_VALUE"].findAll { it }[0]
-//                    pValueMatchersMap.each { String phenotypeName, String sampleGroupId ->
-//                        sb << "{\"level\":\"P_VALUE^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
-//                    }
-//
-//                    element = variant["ODDS_RATIO"].findAll { it }[0]
-//                    orMatchersMap.each { String phenotypeName, String sampleGroupId ->
-//                        sb << "{\"level\":\"ODDS_RATIO^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
-//                    }
-//
-//                    element = variant["BETA"].findAll { it }[0]
-//                    betaMatchersMap.each { String phenotypeName, String sampleGroupId ->
-//                        sb << "{\"level\":\"BETA^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
-//                    }
-
-
-
-
-
-//                    element = variant["DIR"].findAll { it }[0]
-//                    if (element) {
-//                        betaMatchersMap.each { String phenotypeName, String sampleGroupId ->
-//                            sb << "{\"level\":\"DIR^${phenotypeName}\",\"count\":${element[sampleGroupId][phenotypeName]}},"
-//                        }
-//                    }
-
-//                    phenotypeSampleGroupNameMap.each { String sampleGroupId, List sgHolder ->
-//                        if ((sgHolder) && (sgHolder.size() > 0)) {
-//                            sb << "{\"level\":\"MAPPER^${sampleGroupId}\",\"count\":\"${sgHolder.join(",")}\"},"
-//                        }
-//                    }
 
                     element = variant["POS"].findAll { it }[0]
                     sb << "{\"level\":\"POS\",\"count\":${element}}"
