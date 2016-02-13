@@ -857,9 +857,9 @@ public class JsonParser {
 
         // get the property; throw exception if not found
         property = visitor.getProperty();
-        if (property == null) {
-            throw new PortalException("Did not find property for name: " + propertyName + " and sample group: " + sampleGroupName + " and phenotype: " + phenotypeName);
-        }
+//        if (property == null) {
+//            throw new PortalException("Did not find property for name: " + propertyName + " and sample group: " + sampleGroupName + " and phenotype: " + phenotypeName);
+//        }
 
         // return
         return property;

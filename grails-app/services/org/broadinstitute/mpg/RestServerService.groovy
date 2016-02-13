@@ -1441,14 +1441,31 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID", "DBSNP_ID", "CHROM", "POS"])
         for(LinkedHashMap oneReference in propsToUse){
             addColumnsForPProperties(resultColumnsToDisplay, oneReference.phenotype, oneReference.ds, oneReference.prop)
+            Property betaProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(oneReference.phenotype,oneReference.ds,"BETA")
+            if (betaProperty){
+                addColumnsForPProperties(resultColumnsToDisplay, oneReference.phenotype, oneReference.ds, betaProperty.name)
+            }
+            Property orProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(oneReference.phenotype,oneReference.ds,"ODDS_RATIO")
+            if (orProperty){
+                addColumnsForPProperties(resultColumnsToDisplay, oneReference.phenotype, oneReference.ds, orProperty.name)
+            }
+            Property dirProperty = metaDataService.getPropertyByNamePhenotypeAndSampleGroup("DIR",oneReference.phenotype,oneReference.ds)
+            if (dirProperty){
+                addColumnsForPProperties(resultColumnsToDisplay, oneReference.phenotype, oneReference.ds, dirProperty.name)
+            }
+            Property mafProperty = metaDataService.getSampleGroupProperty(oneReference.ds,"MAF")
+            if (mafProperty){
+                addColumnsForDProperties(resultColumnsToDisplay, MAFPHENOTYPE, oneReference.ds)
+            }
+
         }
-        List<String> sampleGroupsWithMaf =
-                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion( "MAF", sharedToolsService.getCurrentDataVersion(), "", false ).collect {
-                    it.parent.systemId
-                }
-        for (String sampleGroupWithMaf in sampleGroupsWithMaf) {
-            addColumnsForDProperties(resultColumnsToDisplay, MAFPHENOTYPE, sampleGroupWithMaf)
-        }
+//        List<String> sampleGroupsWithMaf =
+//                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion( "MAF", sharedToolsService.getCurrentDataVersion(), "", false ).collect {
+//                    it.parent.systemId
+//                }
+//        for (String sampleGroupWithMaf in sampleGroupsWithMaf) {
+//            addColumnsForDProperties(resultColumnsToDisplay, MAFPHENOTYPE, sampleGroupWithMaf)
+//        }
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName], searchBuilderService, metaDataService)
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         JsonSlurper slurper = new JsonSlurper()

@@ -99,6 +99,7 @@
         if ((typeof rowMap !== 'undefined') &&
                 (rowMap)){
             rowMap.map(function (d) {
+             //   rowValues.push("{\"ds\":\""+d.name+"\",\"prop\":\""+d.pvalue+"\",\"phenotype\":\""+d.phenotype+"\",\"otherFields\":\""+d.otherFields+"\"}");
                 rowValues.push("{\"ds\":\""+d.name+"\",\"prop\":\""+d.pvalue+"\",\"phenotype\":\""+d.phenotype+"\"}");
             });
             jsonString = "{\"vals\":[\n"+rowValues.join(",\n")+"\n]}";
@@ -176,6 +177,10 @@
         for  ( var i = 0 ; i < clickedBoxes.length ; i++ )   {
             var  comboName  =  $(clickedBoxes[i]).attr('id');
             var otherSections = $('#GWAS_GIANT_mdv2-P_VALUE-253288-BMI_anchor').closest('tr').children();
+//            var otherFields = ((otherFields[3]!=='')?'DIR':'NONE')+'^'+
+//                    ((otherFields[4]!=='')?'ODDS_RATIO':'NONE')+'^'+
+//                    ((otherFields[5]!=='')?'MAF':'NONE')+'^'+
+//                    ((otherFields[6]!=='')?'BETA':'NONE');
             var partsOfCombo =   comboName.split("-");
             var  dataSetWithoutAnchor  =  partsOfCombo[0];
             dataSetNames.push(dataSetWithoutAnchor);
@@ -183,8 +188,10 @@
                 "value":dataSetWithoutAnchor,
                 "pvalue":partsOfCombo[1],
                 "phenotype":partsOfCombo[3].substring(0, partsOfCombo[3].length-7)};
+ //               "otherFields":otherFields};
             dataSetMaps.push(dataSetMap);
         }
+
 
         traitTable('<%=variantIdentifier%>',dataSetMaps);
     }

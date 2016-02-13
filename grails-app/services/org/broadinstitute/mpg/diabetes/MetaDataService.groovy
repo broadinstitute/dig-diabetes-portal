@@ -251,6 +251,54 @@ class MetaDataService {
     }
 
 
+    public Property getPropertyForPhenotypeAndSampleGroupAndMeaning(String phenotypeName,String sampleGroupName,String  meaning) {
+        // local variables
+        List<SampleGroup> groupList;
+        List<SampleGroup> filteredSampleGroupList = [];
+        Property returnValue;
+
+
+        // get the sample group list for the phenotype
+        try {
+            groupList = this.getJsonParser().getSamplesGroupsForPhenotype(phenotypeName, this.getDataVersion());
+
+            // sort the group list
+            Collections.sort(groupList);
+
+            // filter sample groups by name
+            for (SampleGroup group : groupList) {
+                if (group.systemId == sampleGroupName)  {
+                    filteredSampleGroupList.add(group) ;
+                }
+            }
+
+            for (SampleGroup filteredSampleGroup : filteredSampleGroupList) {
+                List<Phenotype> phenotypeList = filteredSampleGroup.getPhenotypes();
+                for (Phenotype phenotype : phenotypeList) {
+                    List<Property> propertyList =  phenotype.getProperties();
+                    for (Property property : propertyList) {
+                        if (property.hasMeaning(meaning))  {
+                            returnValue =   property;
+                        }
+                    }
+                }
+
+            }
+        } catch (PortalException exception) {
+            log.error("Got exception retrieving sample group name list for selected phenotype: " + phenotypeName + " : " + exception.getMessage());
+        }
+
+        //create the json string
+
+        // return
+        return returnValue;
+    }
+
+
+
+
+
+
     public List<SampleGroup>  getSampleGroupList() {
         // local variables
         GString jsonString;
@@ -656,12 +704,18 @@ class MetaDataService {
         return returnValue
     }
 
+    public Property getPropertyByNamePhenotypeAndSampleGroup(String propertyName, String phenotypeName, String sampleGroupName){
+        Property property =  this.getJsonParser().getPropertyGivenItsAndPhenotypeAndSampleGroupNames( propertyName,  phenotypeName,  sampleGroupName)
+        return property
+    }
+
     public String getMeaningForPhenotypeAndSampleGroup(String propertyName, String phenotypeName, String sampleGroupName){
         String returnValue = ""
         PropertyBean propertyBean =  this.getJsonParser().getPropertyGivenItsAndPhenotypeAndSampleGroupNames( propertyName,  phenotypeName,  sampleGroupName)
         List<String> listOfStrings = propertyBean.getMeanings()
         return listOfStrings[0]
     }
+
 
 
 
