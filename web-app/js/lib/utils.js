@@ -52,7 +52,7 @@ var UTILS = {
     convertStringToNumber: function (incoming) {
         var returnValue = null;
         if (incoming !=  null ){
-             return parseFloat(incoming);
+            return parseFloat(incoming);
         } else {
             return  null;
         }
@@ -620,7 +620,7 @@ var UTILS = {
         }
     },
 
-/***
+    /***
      * We need to make sure that all the fields have values before starting the plotting routines. I'll formalize
      * this check, and cover both nulls and undefined
      * @param variant
@@ -792,42 +792,42 @@ var UTILS = {
         }
         return returnValue;
     },
- extractHeaderTextAsString : function (fullAnchor){
-    var returnValue = 0;
-    var re = new RegExp("vandaRow[0-9]+"); // retrieve text that identifies node
-    if (typeof fullAnchor !== 'undefined') {
-        var nodeName = fullAnchor.match(re);
-        if ( (typeof nodeName !== 'undefined') &&
-            (nodeName.length > 0) ) {
-            // var sampleGroupNamePlus = $('#'+nodeName[0]+'>ul>li').attr('id');
-            var sampleGroupNamePlus = $('#'+nodeName[0]).attr('datasetname');
-            if ( (typeof sampleGroupNamePlus !== 'undefined') &&
-                (sampleGroupNamePlus.length > 0) ) {
-                // var sampleGroupName = sampleGroupNamePlus.substring(0,sampleGroupNamePlus.indexOf('-'));
-                var sampleGroupName = sampleGroupNamePlus;
-                returnValue = mpgSoftware.trans.translator(sampleGroupName);
+    extractHeaderTextAsString : function (fullAnchor){
+        var returnValue = 0;
+        var re = new RegExp("vandaRow[0-9]+"); // retrieve text that identifies node
+        if (typeof fullAnchor !== 'undefined') {
+            var nodeName = fullAnchor.match(re);
+            if ( (typeof nodeName !== 'undefined') &&
+                (nodeName.length > 0) ) {
+                // var sampleGroupNamePlus = $('#'+nodeName[0]+'>ul>li').attr('id');
+                var sampleGroupNamePlus = $('#'+nodeName[0]).attr('datasetname');
+                if ( (typeof sampleGroupNamePlus !== 'undefined') &&
+                    (sampleGroupNamePlus.length > 0) ) {
+                    // var sampleGroupName = sampleGroupNamePlus.substring(0,sampleGroupNamePlus.indexOf('-'));
+                    var sampleGroupName = sampleGroupNamePlus;
+                    returnValue = mpgSoftware.trans.translator(sampleGroupName);
+                }
             }
         }
-    }
-     return returnValue;
- },
-     extractConHeaderTextAsString : function (fullAnchor){
-         var returnValue = 0;
-         var re = new RegExp("mafTableRow[0-9]+"); // retrieve text that identifies node
-         if (typeof fullAnchor !== 'undefined') {
-             var nodeName = fullAnchor.match(re);
-             if ( (typeof nodeName !== 'undefined') &&
-                 (nodeName.length > 0) ) {
-                 var sampleGroupNamePlus = $('#'+nodeName[0]).attr('datasetname');
-                 if ( (typeof sampleGroupNamePlus !== 'undefined') &&
-                     (sampleGroupNamePlus.length > 0) ) {
-                     var sampleGroupName = sampleGroupNamePlus;
-                     returnValue = mpgSoftware.trans.translator(sampleGroupName);
-                 }
-             }
-         }
-    return returnValue;
-},
+        return returnValue;
+    },
+    extractConHeaderTextAsString : function (fullAnchor){
+        var returnValue = 0;
+        var re = new RegExp("mafTableRow[0-9]+"); // retrieve text that identifies node
+        if (typeof fullAnchor !== 'undefined') {
+            var nodeName = fullAnchor.match(re);
+            if ( (typeof nodeName !== 'undefined') &&
+                (nodeName.length > 0) ) {
+                var sampleGroupNamePlus = $('#'+nodeName[0]).attr('datasetname');
+                if ( (typeof sampleGroupNamePlus !== 'undefined') &&
+                    (sampleGroupNamePlus.length > 0) ) {
+                    var sampleGroupName = sampleGroupNamePlus;
+                    returnValue = mpgSoftware.trans.translator(sampleGroupName);
+                }
+            }
+        }
+        return returnValue;
+    },
     jsTreeDataRetriever : function (divId,tableId,phenotypeName,sampleGroupName,retrieveJSTreeAjax){
         var dataPasser = {phenotype:phenotypeName,sampleGroup:sampleGroupName};
         $(divId).jstree({
@@ -1021,7 +1021,7 @@ var UTILS = {
             vDBSNP_ID: "dbSNP ID",
             vDIAGRAM: "DIAGRAM GWAS",
             vDirection: "direction of effect",
-			vDIR: "direction of effect",
+            vDIR: "direction of effect",
             vEAC_PH: "effect allele count",
             vEAF: "effect allele frequency",
             vEast_Asian: "East Asian",
@@ -1195,7 +1195,4 @@ var UTILS = {
     }());
 
 }());
-
-
-
 
