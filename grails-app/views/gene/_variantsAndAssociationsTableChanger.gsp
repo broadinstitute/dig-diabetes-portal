@@ -32,6 +32,7 @@ $( document ).ready(function() {
         return str1.localeCompare(str2);};
 
     var labelIndenter = function (tableId) {
+        console.log("beginning indentation process");
         var rowSGLabel = $('#'+tableId+' td.vandaRowTd div.vandaRowHdr');
         if (typeof rowSGLabel !== 'undefined'){
            var adjustmentMadeSoCheckAgain;
@@ -66,6 +67,7 @@ $( document ).ready(function() {
               rowSGLabel.css('padding-left','0px');
            }
         }
+        console.log("ending indentation process");
     } ;
 
     var vAndALabelIndenter = function () {
@@ -135,8 +137,7 @@ var variantsAndAssociationTable = function (phenotype,rowMapParameter){
             async: true,
             success: function (data) {
 
-
-                        var variantsAndAssociationsTableHeaders = {
+                var variantsAndAssociationsTableHeaders = {
                     hdr1:'<g:message code="gene.continentalancestry.title.colhdr.1" default="data set"/>',
                     hdr2:'<g:message code="gene.variantassociations.table.colhdr.2" default="sample size"/>',
                     hdr3:'<g:message code="gene.variantassociations.table.colhdr.3" default="total variants"/>',
@@ -225,6 +226,7 @@ var variantsAndAssociationTable = function (phenotype,rowMapParameter){
                                 for ( var i = 0 ; i < numberOfColumns ; i++ ){
                                     anchorColumnMarkers.push(i+3);
                                 }
+                                console.log("?!@?????!!!?!?!???!??!?!?!?!??!?")
                                 $('#variantsAndAssociationsTable').dataTable({
                                         bDestroy: true,
                                         bPaginate:false,
@@ -407,6 +409,7 @@ var getDataSets = function(sel){
                         dataSetChooser.empty();
                         for (var key in dataSets) {
                         if (dataSets.hasOwnProperty(key)) {
+                                console.log("how about this?", key);
                                 dataSetChooser.append($("<option>").val(key+"^"+dataSets[key]).text( mpgSoftware.trans.translator(key)));
                             }
                         }

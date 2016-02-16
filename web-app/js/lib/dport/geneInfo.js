@@ -473,6 +473,7 @@ var mpgSoftware = mpgSoftware || {};
             for ( var i = 0 ; i < columnInformation.length ; i++ ) {
                 var significanceString =  columnInformation[i].value;
                 var significance =  parseFloat(significanceString);
+                console.log("signficance is", significance);
                 headerRow += "<th>" + columnInformation[i].name;
                 if (significance===0.00000005){
                     headerRow += headers.gwasSig;

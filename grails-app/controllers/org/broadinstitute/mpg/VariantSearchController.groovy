@@ -30,6 +30,9 @@ class VariantSearchController {
         def slurper = new JsonSlurper()
         def result = slurper.parseText(phenotypesForTransmission)
 
+        log.info("wooooowoowooowooowoooowoooowooowooooooowoooo")
+        log.info(phenotypesForTransmission);
+        log.info(result);
 
         render(status: 200, contentType: "application/json") {
             [datasets: result]

@@ -377,12 +377,14 @@ class MetaDataService {
         StringBuilder sb   = new StringBuilder ("")
         for (int i = 0; i < phenotypeList.size(); i++){
             String phenotypeCode = phenotypeList.get(i)
+//            log.info("urlEncodedListOfPhenotypes case 1")
             sb<< (phenotypeCode + ":" + this.sharedToolsService.translator(phenotypeCode))
             sb<< ","
 
             // also add old keys from trait-search call if exists
             String oldCode = this.sharedToolsService?.convertNewPhenotypeStringsToOldOnes(phenotypeCode)
             if (!oldCode?.equals(phenotypeCode)) {
+//                log.info("urlEncodedListOfPhenotypes case 2")
                 sb<< (oldCode + ":" + this.sharedToolsService.translator(phenotypeCode))
                 sb<< ","
             }
@@ -390,6 +392,7 @@ class MetaDataService {
 
         // remove the last comma
         sb.deleteCharAt(sb.length() - 1);
+        log.info(sb.toString())
 
         // return
         return java.net.URLEncoder.encode( sb.toString())

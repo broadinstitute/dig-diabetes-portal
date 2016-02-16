@@ -582,6 +582,7 @@ var UTILS = {
             (typeof dataSetJson["is_error"] !== 'undefined')&&
             (dataSetJson["is_error"] === false))
         {
+            console.log("filling the phenotype dropdown", dataSetJson);
             var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
             var options = $(phenotypeDropDownIdentifier);
             options.empty();
@@ -897,6 +898,7 @@ var UTILS = {
 
         var translations;
         var translator = function (incoming) {
+            console.log("translating", incoming);
             var returnValue='';
             if (typeof incoming !== 'undefined') {
                 var newForm = translations['v' + incoming];
