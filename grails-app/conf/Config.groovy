@@ -174,6 +174,8 @@ t2dDev02BehindLoadBalancer {
 
 // individual servers
 t2dAws01RestServer {
+//    base = 'http://localhost:8888/'
+//    name =  'dig-genome-store/'
     base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
     name =  'aws/'
     path = 'gs/'
@@ -435,7 +437,8 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/oauth/**':          ['permitAll'],
         '/springSecurityOAuth/**':          ['permitAll'],
         '/dbconsole/**':      ['ROLE_ADMIN'],
-        '/localization/**':   ['ROLE_ADMIN']
+        '/localization/**':   ['ROLE_ADMIN'],
+        '/metadatainfo/**':       ['ROLE_USER']
 ]
 grails.plugin.auth.loginFormUrl='/Security/auth2'
 grails.plugin.springsecurity.logout.postOnly = false
@@ -544,5 +547,7 @@ grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.peopl
 
 // placeholder for data version
 diabetes.data.version = "mdv2";
+portal.data.version.map = ["t2d": "mdv2", "stroke": "mdv5", "mi" : "mdv2"];
+portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "MI"];
 
 

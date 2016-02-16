@@ -23,7 +23,7 @@ class TraitController {
      * @return
      */
      def traitInfo (){
-          String variantIdentifier = params.getIdentifier()
+         String variantIdentifier = params.getIdentifier()
          // get locale to provide to table-building plugin
          String locale = RequestContextUtils.getLocale(request)
 
@@ -78,7 +78,9 @@ class TraitController {
             technology =  params["technology"]
         }
        // JSONObject jsonObject = restServerService.getTraitPerVariant( variant,technology)
-        JSONObject jsonObject = restServerService.getSpecifiedTraitPerVariant( variant,jsonObjectFromBrowser.vals.collect{return new LinkedHashMap(ds:it.ds,phenotype:it.phenotype,prop:it.prop,otherFields:it.otherFields)})
+        JSONObject jsonObject = restServerService.getSpecifiedTraitPerVariant( variant,
+                                                                               jsonObjectFromBrowser.vals.collect{return new LinkedHashMap(ds:it.ds,phenotype:it.phenotype,prop:it.prop,otherFields:it.otherFields)},
+                                                                               jsonObjectFromBrowser.phenos )
 
         def showExomeChip = sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp);
         def showExomeSequence = sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq);
@@ -104,7 +106,7 @@ class TraitController {
         String requestedSignificance=params.significance
         String sampleGroupOwner = this.metaDataService.getGwasSampleGroupNameForPhenotype(phenotypeKey)
         String phenotypeDataSet = ''
-        String phenotypeTranslation = sharedToolsService.translator(phenotypeKey)
+        String phenotypeTranslation = g.message(code: "metadata." + phenotypeKey, default: phenotypeKey)
         // get locale to provide to table-building plugin
         String locale = RequestContextUtils.getLocale(request)
 
@@ -238,7 +240,8 @@ class TraitController {
         log.info("for traitVariantCrossGetDataAjaxTest call, got params: " + params)
 
         // get the phenotype list
-        phenotypeMap = this.metaDataService.getPhenotypeMapByTechnologyAndVersion("GWAS", "mdv2");
+        // DIGP-291: centralize metadata version
+        phenotypeMap = this.metaDataService.getPhenotypeMapByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion());
 
         // select the phenotypes to search for
         phenotypeList.add(phenotypeMap.get("T2D"));
@@ -274,7 +277,8 @@ class TraitController {
         log.info("for traitVariantCrossGetDataAjax call, got params: " + params)
 
         // get the phenotype list
-        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", "mdv2");
+        // DIGP-291: centralize metadata version
+        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion());
 
         // submit query
         JSONObject jsonObject =  this.metaDataService.searchTraitByUnparsedRegion(regionsSpecification, phenotypeList);

@@ -115,30 +115,11 @@ $( document ).ready(function() {
                         ( typeof data !== 'undefined') &&
                         ( typeof data.datasets !== 'undefined' ) &&
                         (  data.datasets !==  null ) ) {
-                    // data.datasets.dataset = {
-                    //      key: [array of names]
-                    // }
-                    // ->
-                    // data.datasets.dataset = {
-                    //      key: { key : displayName }
-                    // }
-
-                    %{--for (var key in data.datasets.dataset) {--}%
-                        %{--var mapping = {}--}%
-                        %{--var arrayOfPhenotypeCodesToProcess = data.datasets.dataset[key];--}%
-                        %{--console.log(arrayOfPhenotypeCodesToProcess);--}%
-                        %{--for(var i = 0; i < arrayOfPhenotypeCodesToProcess.length; i++) {--}%
-                            %{--var code = arrayOfPhenotypeCodesToProcess[i];--}%
-                            %{--console.log(code);--}%
-                            %{--//mapping[code] = "${g.message(code:"metadata." + code, default:"nothing")}"--}%
-                        %{--}--}%
-                        %{--data.datasets.dataset[key] = mapping;--}%
-                    %{--}--}%
 
                     UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#phenotypeTableChooser',true);
                     // Can we set the default option on the phenotype list?
-                    $('#phenotypeTableChooser').val('${phenotype}');
-                    refreshVAndAByPhenotype({'value':'T2D'});
+                    $('#phenotypeTableChooser').val('${g.defaultPhenotype()}');
+                    refreshVAndAByPhenotype({'value':'${g.defaultPhenotype()}'});
                 }
             },
             error: function (jqXHR, exception) {

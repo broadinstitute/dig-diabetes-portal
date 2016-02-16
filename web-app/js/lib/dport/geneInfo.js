@@ -9,336 +9,344 @@ var mpgSoftware = mpgSoftware || {};
 
         var delayedDataPresentation = {},
 
-            /***
-             *    geneInfoJsonMap:  Access the interior of the JSON records  symbolically
-             */
-            geneInfoJsonMap = (function () {
-                var geneInfoRec = {
-                        ID: 1,
-                        CHROM: 2,
-                        BEG: 3,
-                        END: 4,
-                        Function_description: 5,
-                        _13k_T2D_VAR_TOTAL: 6,
-                        _13k_T2D_ORIGIN_VAR_TOTALS: 7,
-                        HS: 8,
-                        AA: 9,
-                        EU: 10,
-                        EA: 11,
-                        SA: 12,
-                        SING: 13,
-                        RARE: 14,
-                        LOW_FREQUENCY: 15,
-                        COMMON: 16,
-                        TOTAL: 17,
-                        NS: 18,
-                        _17k_T2D_lof_NVAR: 19,
-                        _17k_T2D_lof_MINA_MINU_RET: 20,
-                        _17k_T2D_lof_P_METABURDEN: 21,
-                        _13k_T2D_GWS_TOTAL: 22,
-                        _13k_T2D_NOM_TOTAL: 23,
-                        EXCHP_T2D_VAR_TOTALS: 24,
-                        EXCHP_T2D_GWS_TOTAL: 25,
-                        EXCHP_T2D_NOM_TOTAL: 26,
-                        GWS_TRAITS: 27,
-                        GWAS_T2D_GWS_TOTAL: 28,
-                        GWAS_T2D_NOM_TOTAL: 29,
-                        GWAS_T2D_VAR_TOTAL: 30,
-                        EXCHP_T2D_VAR_TOTALS_EU_TOTAL: 31,
-                        SIGMA_T2D_VAR_TOTAL: 32,
-                        SIGMA_T2D_GWS_TOTAL: 33,
-                        SIGMA_T2D_NOM_TOTAL: 34,
-                        _17k_T2D_lof_OBSA: 35,
-                        _17k_T2D_lof_OBSU: 36,
-                        GWAS_T2D_LWS_TOTAL: 37,
-                        EXCHP_T2D_LWS_TOTAL: 38,
-                        _13k_T2D_LWS_TOTAL: 39,
-                        SIGMA_T2D_lof_OBSA: 40,
-                        SIGMA_T2D_lof_OBSU: 41,
-                        SIGMA_T2D_lof_NVAR: 42,
-                        SIGMA_T2D_lof_MINA: 43,
-                        SIGMA_T2D_lof_MINU: 44,
-                        SIGMA_T2D_lof_P: 45
-                    },
-                    revG = function (d) {
-                        var v;
-                        switch (d) {
-                            case 1:
-                                v = "ID";
-                                break;
-                            case 2:
-                                v = "CHROM";
-                                break;
-                            case 3:
-                                v = "BEG";
-                                break;
-                            case 4:
-                                v = "END";
-                                break;
-                            case 5:
-                                v = "Function_description";
-                                break;
-                            case 6:
-                                v = "_13k_T2D_VAR_TOTAL";
-                                break;
-                            case 7:
-                                v = "_13k_T2D_ORIGIN_VAR_TOTALS";
-                                break;
-                            case 8:
-                                v = "HS";
-                                break;
-                            case 9:
-                                v = "AA";
-                                break;
-                            case 10:
-                                v = "EU";
-                                break;
-                            case 11:
-                                v = "EA";
-                                break;
-                            case  12:
-                                v = "SA";
-                                break;
-                            case  13:
-                                v = "SING";
-                                break;
-                            case  14:
-                                v = "RARE";
-                                break;
-                            case  15:
-                                v = "LOW_FREQUENCY";
-                                break;
-                            case  16:
-                                v = "COMMON";
-                                break;
-                            case  17:
-                                v = "TOTAL";
-                                break;
-                            case  18:
-                                v = "NS";
-                                break;
-                            case  19:
-                                v = "_17k_T2D_lof_NVAR";
-                                break;
-                            case  20:
-                                v = "_17k_T2D_lof_MINA_MINU_RET";
-                                break;
-                            case  21:
-                                v = "_17k_T2D_lof_P_METABURDEN";
-                                break;
-                            case  22:
-                                v = "_13k_T2D_GWS_TOTAL";
-                                break;
-                            case  23:
-                                v = "_13k_T2D_NOM_TOTAL";
-                                break;
-                            case  24:
-                                v = "EXCHP_T2D_VAR_TOTALS";
-                                break;
-                            case  25:
-                                v = "EXCHP_T2D_GWS_TOTAL";
-                                break;
-                            case  26:
-                                v = "EXCHP_T2D_NOM_TOTAL";
-                                break;
-                            case  27:
-                                v = "GWS_TRAITS";
-                                break;
-                            case  28:
-                                v = "GWAS_T2D_GWS_TOTAL";
-                                break;
-                            case  29:
-                                v = "GWAS_T2D_NOM_TOTAL";
-                                break;
-                            case  30:
-                                v = "GWAS_T2D_VAR_TOTAL";
-                                break;
-                            case  31:
-                                v = "EXCHP_T2D_VAR_TOTALS.EU.TOTAL";
-                                break;
-                            case  32:
-                                v = "SIGMA_T2D_VAR_TOTAL";
-                                break;
-                            case  33:
-                                v = "SIGMA_T2D_GWS_TOTAL";
-                                break;
-                            case  34:
-                                v = "SIGMA_T2D_NOM_TOTAL";
-                                break;
-                            case  35:
-                                v = "_17k_T2D_lof_OBSA";
-                                break;
-                            case  36:
-                                v = "_17k_T2D_lof_OBSU";
-                                break;
-                            case  37:
-                                v = "GWAS_T2D_LWS_TOTAL";
-                                break;
-                            case  38:
-                                v = "EXCHP_T2D_LWS_TOTAL";
-                                break;
-                            case  40:
-                                v = "SIGMA_T2D_lof_OBSA";
-                                break;
-                            case  41:
-                                v = "SIGMA_T2D_lof_OBSU";
-                                break;
-                            case  42:
-                                v = "SIGMA_T2D_lof_NVAR";
-                                break;
-                            case  43:
-                                v = "SIGMA_T2D_lof_MINA";
-                                break;
-                            case  44:
-                                v = "SIGMA_T2D_lof_MINU";
-                                break;
-                            case  45:
-                                v = "SIGMA_T2D_lof_P";
-                                break;
-                            default:
-                                v = "";
-                        }
-                        return v;
-                    },
-                    fieldName = function (fieldId) {
-                        return revG(fieldId);
-                    },
-                    fieldSymbol = function () {
-                        return  geneInfoRec;
-                    };
-                return {
-                    fieldName: fieldName,
-                    fieldSymbol: fieldSymbol
-                }
-            }()),
+        /***
+         *    geneInfoJsonMap:  Access the interior of the JSON records  symbolically
+         */
+        geneInfoJsonMap = (function () {
+            var geneInfoRec = {
+                    ID: 1,
+                    CHROM: 2,
+                    BEG: 3,
+                    END: 4,
+                    Function_description: 5,
+                    _13k_T2D_VAR_TOTAL: 6,
+                    _13k_T2D_ORIGIN_VAR_TOTALS: 7,
+                    HS: 8,
+                    AA: 9,
+                    EU: 10,
+                    EA: 11,
+                    SA: 12,
+                    SING: 13,
+                    RARE: 14,
+                    LOW_FREQUENCY: 15,
+                    COMMON: 16,
+                    TOTAL: 17,
+                    NS: 18,
+                    _17k_T2D_lof_NVAR: 19,
+                    _17k_T2D_lof_MINA_MINU_RET: 20,
+                    _17k_T2D_lof_P_METABURDEN: 21,
+                    _13k_T2D_GWS_TOTAL: 22,
+                    _13k_T2D_NOM_TOTAL: 23,
+                    EXCHP_T2D_VAR_TOTALS: 24,
+                    EXCHP_T2D_GWS_TOTAL: 25,
+                    EXCHP_T2D_NOM_TOTAL: 26,
+                    GWS_TRAITS: 27,
+                    GWAS_T2D_GWS_TOTAL: 28,
+                    GWAS_T2D_NOM_TOTAL: 29,
+                    GWAS_T2D_VAR_TOTAL: 30,
+                    EXCHP_T2D_VAR_TOTALS_EU_TOTAL: 31,
+                    SIGMA_T2D_VAR_TOTAL: 32,
+                    SIGMA_T2D_GWS_TOTAL: 33,
+                    SIGMA_T2D_NOM_TOTAL: 34,
+                    _17k_T2D_lof_OBSA: 35,
+                    _17k_T2D_lof_OBSU: 36,
+                    GWAS_T2D_LWS_TOTAL: 37,
+                    EXCHP_T2D_LWS_TOTAL: 38,
+                    _13k_T2D_LWS_TOTAL: 39,
+                    SIGMA_T2D_lof_OBSA: 40,
+                    SIGMA_T2D_lof_OBSU: 41,
+                    SIGMA_T2D_lof_NVAR: 42,
+                    SIGMA_T2D_lof_MINA: 43,
+                    SIGMA_T2D_lof_MINU: 44,
+                    SIGMA_T2D_lof_P: 45
+                },
+                revG = function (d) {
+                    var v;
+                    switch (d) {
+                        case 1:
+                            v = "ID";
+                            break;
+                        case 2:
+                            v = "CHROM";
+                            break;
+                        case 3:
+                            v = "BEG";
+                            break;
+                        case 4:
+                            v = "END";
+                            break;
+                        case 5:
+                            v = "Function_description";
+                            break;
+                        case 6:
+                            v = "_13k_T2D_VAR_TOTAL";
+                            break;
+                        case 7:
+                            v = "_13k_T2D_ORIGIN_VAR_TOTALS";
+                            break;
+                        case 8:
+                            v = "HS";
+                            break;
+                        case 9:
+                            v = "AA";
+                            break;
+                        case 10:
+                            v = "EU";
+                            break;
+                        case 11:
+                            v = "EA";
+                            break;
+                        case  12:
+                            v = "SA";
+                            break;
+                        case  13:
+                            v = "SING";
+                            break;
+                        case  14:
+                            v = "RARE";
+                            break;
+                        case  15:
+                            v = "LOW_FREQUENCY";
+                            break;
+                        case  16:
+                            v = "COMMON";
+                            break;
+                        case  17:
+                            v = "TOTAL";
+                            break;
+                        case  18:
+                            v = "NS";
+                            break;
+                        case  19:
+                            v = "_17k_T2D_lof_NVAR";
+                            break;
+                        case  20:
+                            v = "_17k_T2D_lof_MINA_MINU_RET";
+                            break;
+                        case  21:
+                            v = "_17k_T2D_lof_P_METABURDEN";
+                            break;
+                        case  22:
+                            v = "_13k_T2D_GWS_TOTAL";
+                            break;
+                        case  23:
+                            v = "_13k_T2D_NOM_TOTAL";
+                            break;
+                        case  24:
+                            v = "EXCHP_T2D_VAR_TOTALS";
+                            break;
+                        case  25:
+                            v = "EXCHP_T2D_GWS_TOTAL";
+                            break;
+                        case  26:
+                            v = "EXCHP_T2D_NOM_TOTAL";
+                            break;
+                        case  27:
+                            v = "GWS_TRAITS";
+                            break;
+                        case  28:
+                            v = "GWAS_T2D_GWS_TOTAL";
+                            break;
+                        case  29:
+                            v = "GWAS_T2D_NOM_TOTAL";
+                            break;
+                        case  30:
+                            v = "GWAS_T2D_VAR_TOTAL";
+                            break;
+                        case  31:
+                            v = "EXCHP_T2D_VAR_TOTALS.EU.TOTAL";
+                            break;
+                        case  32:
+                            v = "SIGMA_T2D_VAR_TOTAL";
+                            break;
+                        case  33:
+                            v = "SIGMA_T2D_GWS_TOTAL";
+                            break;
+                        case  34:
+                            v = "SIGMA_T2D_NOM_TOTAL";
+                            break;
+                        case  35:
+                            v = "_17k_T2D_lof_OBSA";
+                            break;
+                        case  36:
+                            v = "_17k_T2D_lof_OBSU";
+                            break;
+                        case  37:
+                            v = "GWAS_T2D_LWS_TOTAL";
+                            break;
+                        case  38:
+                            v = "EXCHP_T2D_LWS_TOTAL";
+                            break;
+                        case  40:
+                            v = "SIGMA_T2D_lof_OBSA";
+                            break;
+                        case  41:
+                            v = "SIGMA_T2D_lof_OBSU";
+                            break;
+                        case  42:
+                            v = "SIGMA_T2D_lof_NVAR";
+                            break;
+                        case  43:
+                            v = "SIGMA_T2D_lof_MINA";
+                            break;
+                        case  44:
+                            v = "SIGMA_T2D_lof_MINU";
+                            break;
+                        case  45:
+                            v = "SIGMA_T2D_lof_P";
+                            break;
+                        default:
+                            v = "";
+                    }
+                    return v;
+                },
+                fieldName = function (fieldId) {
+                    return revG(fieldId);
+                },
+                fieldSymbol = function () {
+                    return  geneInfoRec;
+                };
+            return {
+                fieldName: fieldName,
+                fieldSymbol: fieldSymbol
+            }
+        }()),
 
 
-            /***
-             * Pushback  the region of a search from a gene
-             * @param geneExtentBeginning
-             * @returns {number}
-             */
-            expandRegionBegin = function (geneExtentBeginning) {
-                if (geneExtentBeginning) {
-                    return Math.max(geneExtentBeginning - 500000, 0);
-                } else {
-                    return 0;
-                }
-            },
+        /***
+         * Pushback  the region of a search from a gene
+         * @param geneExtentBeginning
+         * @returns {number}
+         */
+        expandRegionBegin = function (geneExtentBeginning) {
+            if (geneExtentBeginning) {
+                return Math.max(geneExtentBeginning - 500000, 0);
+            } else {
+                return 0;
+            }
+        },
 
 
-            /***
-             *
-             * @param geneExtentEnding
-             * @returns {*}
-             */
-            expandRegionEnd = function (geneExtentEnding) {
-                if (geneExtentEnding) {
-                    return geneExtentEnding + 500000;
-                } else {
-                    return 0;
-                }
-            },
+        /***
+         *
+         * @param geneExtentEnding
+         * @returns {*}
+         */
+        expandRegionEnd = function (geneExtentEnding) {
+            if (geneExtentEnding) {
+                return geneExtentEnding + 500000;
+            } else {
+                return 0;
+            }
+        },
 
-            /***
-             * Access an expected field iin the JSON.  If the expected result is absent  or undefined
-             * then return a numeric zero.
-             *
-             * @param geneInfo
-             * @param filedNumber
-             * @param defaultValue
-             * @returns {number}
-             */
-            geneFieldOrZero = function (geneInfo, filedNumber, defaultValue) {
-                var retval = 0;
-                var fieldName = geneInfoJsonMap.fieldName(filedNumber);
-                if ((geneInfo) && (fieldName.length > 0)) {
-                    var fieldBreakdown = fieldName.split("."); // step into complex fields
-                    retval = geneInfo[fieldBreakdown[0]];
-                    if ((retval) && (fieldBreakdown.length > 1)) {
-                        for (var i = 1; i < fieldBreakdown.length; i++) {
-                            var nextLevelSpec = fieldBreakdown[i];
-                            retval = retval[nextLevelSpec];
-                        }
+        /***
+         * Access an expected field in the JSON.  If the expected result is absent  or undefined
+         * then return a numeric zero.
+         *
+         * @param geneInfo
+         * @param filedNumber
+         * @param defaultValue
+         * @returns {number}
+         */
+        geneFieldOrZero = function (geneInfo, filedNumber, defaultValue) {
+            var retval = 0;
+            var fieldName = geneInfoJsonMap.fieldName(filedNumber);
+            if ((geneInfo) && (fieldName.length > 0)) {
+                var fieldBreakdown = fieldName.split("."); // step into complex fields
+                retval = geneInfo[fieldBreakdown[0]];
+                if ((retval) && (fieldBreakdown.length > 1)) {
+                    for (var i = 1; i < fieldBreakdown.length; i++) {
+                        var nextLevelSpec = fieldBreakdown[i];
+                        retval = retval[nextLevelSpec];
                     }
                 }
-                if (!retval) {    // deal with a null.  Use a zero unless we are given an explicit alternative
-                    if (typeof defaultValue !== "undefined") {
-                        retval = defaultValue;
-                    } else {
-                        retval = 0;
-                    }
+            }
+            if (!retval) {    // deal with a null.  Use a zero unless we are given an explicit alternative
+                if (typeof defaultValue !== "undefined") {
+                    retval = defaultValue;
+                } else {
+                    retval = 0;
                 }
-                return retval;
-            },
+            }
+            return retval;
+        },
 
-            /***
-             *  Fill out some DOM structures conditionally. Used in the  variant and associations table on the gene info page
-             * @param rawGeneInfo
-             * @param show_gwas
-             * @param show_exchp
-             * @param show_exseq
-             * @param rootRegionUrl
-             * @param rootTraitUrl
-             * @param rootVariantUrl
-             * @param significanceStrings
-             */
-            fillVarianceAndAssociations = function (rawGeneInfo, show_gwas, show_exchp, show_exseq, rootRegionUrl, rootTraitUrl, rootVariantUrl, significanceStrings) {
+        /***
+         *  Fill out some DOM structures conditionally. Used in the  variant and associations table on the gene info page
+         * @param rawGeneInfo
+         * @param show_gwas
+         * @param show_exchp
+         * @param show_exseq
+         * @param rootRegionUrl
+         * @param rootTraitUrl
+         * @param rootVariantUrl
+         * @param significanceStrings
+         */
+        fillVarianceAndAssociations = function (rawGeneInfo, show_gwas, show_exchp, show_exseq, rootRegionUrl, rootTraitUrl, rootVariantUrl, significanceStrings) {
+            // show traits
+            if (show_gwas) {
+                var signficanceStatement = document.createElement('strong');
+                if (rawGeneInfo["GWS_TRAITS"]) {
+                    var traitArray = rawGeneInfo["GWS_TRAITS"];
+                    if (traitArray.length > 0) {
+                        $(significanceStatement).append("<p>" + significanceStrings.significantAssociations + "</p>");
 
-                // show traits
-                if (show_gwas) {
-                    var htmlAccumulator = "";
-                    if (rawGeneInfo["GWS_TRAITS"]) {
-                        var traitArray = rawGeneInfo["GWS_TRAITS"];
-                        if (traitArray.length > 0) {
-                            htmlAccumulator += ("<strong> " +
-                                "<p>" + significanceStrings.significantAssociations + "</p>" +
-                                "<ul>");
-                            for (var i = 0; i < traitArray.length; i++) {
-                                var traitRepresentation = "";
-                                if ((typeof phenotype !== "undefined" ) &&
-                                    (phenotype.phenotypeMap) &&
-                                    (phenotype.phenotypeMap [traitArray[i]])) {
+                        var listOfGenes = document.createElement('ul');
+                        for (var i = 0; i < traitArray.length; i++) {
+                            var traitRepresentation = "";
+                            if ((typeof phenotype !== "undefined" ) &&
+                                (phenotype.phenotypeMap) &&
+                                (phenotype.phenotypeMap [traitArray[i]])) {
 
-                                    traitRepresentation = phenotype.phenotypeMap [traitArray[i]];
+                                traitRepresentation = phenotype.phenotypeMap [traitArray[i]];
 
-                                } else {
-                                    traitRepresentation = traitArray[i];
-                                }
-                                if (!(traitRepresentation.indexOf('diabetes') > -1)) {  // special case: don't include diabetes, since it is above in table
-                                    htmlAccumulator += ("<li><a href='" + rootTraitUrl + "?trait=" + traitArray[i] + "&significance=5e-8'>" + traitRepresentation + "</a></li>")
-                                }
+                            } else {
+                                traitRepresentation = traitArray[i];
                             }
-                            htmlAccumulator += ("</ul>" +
-                                "</strong>");
+                            if (!(traitRepresentation.indexOf('diabetes') > -1)) {  // special case: don't include diabetes, since it is above in table
+                                var listElement = document.createElement('li');
+                                var geneLink = document.createElement('a');
+                                $(geneLink).attr({
+                                    href: rootTraitUrl + "?trait=" + traitArray[i] + "&significance=5e-8'>" + traitRepresentation
+                                });
+                                $(listElement).append(geneLink);
+                                $(listOfGenes).append(listElement);
+                            }
                         }
-                    } else {
-                        htmlAccumulator += "<p>" + significanceStrings.noSignificantAssociationsExist + "</p>"
                     }
-                    $('#gwasTraits').append(htmlAccumulator);
+                } else {
+                    $(signficanceStatement).append("<p>" + significanceStrings.noSignificantAssociationsExist + "</p>");
                 }
-            },
+                $('#gwasTraits').append(signficanceStatement);
+            }
+        },
 
-            /***
-             * convenience method to build an anchor with all the right fields
-             * @param displayableContents
-             * @param geneName
-             * @param filter
-             * @param rootVariantUrl
-             * @returns {string}
-             */
-            buildAnchorForVariantSearches = function (displayableContents, geneName, filter, rootVariantUrl) {
-                var returnValue = "";
-                returnValue += ("<a class='boldlink' href='" + rootVariantUrl + "/" + geneName + "?filter=" + filter + "'>" +
-                    displayableContents + "</a>");
-                return  returnValue;
-            },
-        anchorVariantSearches = function (displayableContents, geneName, rowElement, colElement, rootVariantUrl,parmType) {
-            var returnValue = "";
-            returnValue += ("<a class='boldlink' href='" + rootVariantUrl + "/" + geneName + "?dataset=" + rowElement.dataset +
-                "&parmType="+parmType+ "&parmVal="+colElement.code+"~"+rowElement.technology+"'>" +
-                displayableContents + "</a>");
+        /***
+         * convenience method to build an anchor with all the right fields
+         * @param displayableContents
+         * @param geneName
+         * @param filter
+         * @param rootVariantUrl
+         * @returns {string}
+         */
+        buildAnchorForVariantSearches = function (displayableContents, geneName, filter, rootVariantUrl) {
+            var returnValue = document.createElement('a');
+            $(returnValue).attr({
+                class: 'boldlink',
+                href: rootVariantUrl + "/" + geneName + "?filter=" + filter
+            });
+            $(returnValue).append(displayableContents);
             return  returnValue;
+        },
+        anchorVariantSearches = function (displayableContents, geneName, rowElement, colElement, rootVariantUrl,parmType) {
+            var returnValue = document.createElement('a');
+            $(returnValue).attr({
+                class: 'boldlink',
+                href: rootVariantUrl + '/' + geneName + '?dataset=' + rowElement.dataset + '&parmType=' + parmType + '&parmVal=' + colElement.code + '~' + rowElement.technology
+            });
+            $(returnValue).append(displayableContents);
+            return returnValue;
         };
 
 
@@ -350,60 +358,58 @@ var mpgSoftware = mpgSoftware || {};
                                                            geneId) {
             //  directly executed code begins below this line
             $('#continentalVariationTableBody tr').remove() // start by removing any existing records (since we launched every time the accordion opens)
-
             if (rowSequence) {
                 for ( var i = 0 ; i < rowSequence.length ; i++ ) {
+                    var singleRow = document.createElement('tr');
+                    var rowTitle = document.createElement('td');
+                    $(rowTitle).attr({class: 'vandaRowTd', style: 'text-align: left'});
+                    var rowTitleTextDiv = document.createElement('div');
+                    $(rowTitleTextDiv).attr({class: 'vandaRowHdr',
+                                          id: 'mafTableRow' + i,
+                                          datasetname: rowSequence[i].dataset,
+                                          translatedName: rowSequence[i].datasetDisplayName});
 
-                        var singleRow = '<td class="vandaRowTd" style="text-align: left"><div class="vandaRowHdr" id="mafTableRow'+i+'" datasetname="'+rowSequence[i].dataset+'"></div></td>';
-                        singleRow += ('<td id="mafTechnology'+i+'">' + rowSequence[i].technology + '</td>');
-                        for ( var j = 0 ; j < rowSequence[i].values.length ; j++ ){
-                            if (j===0){// sample count has no link
-                                singleRow += ('<td>' +rowSequence[i].values[j] + '</td>');
-                            } else {
-                                singleRow += ('<td>' +
-                                    anchorVariantSearches(rowSequence[i].values[j], geneId, rowSequence[i],colSequence[j], rootVariantUrl, parmType) + '</td>');
-                            }
+                    $(rowTitle).append(rowTitleTextDiv);
+                    $(singleRow).append(rowTitle);
+                    $(singleRow).append('<td id="mafTechnology'+i+'">' + rowSequence[i].technology + '</td>');
+                    for ( var j = 0 ; j < rowSequence[i].values.length ; j++ ){
+                        if (j===0){// sample count has no link
+                            $(singleRow).append('<td>' +rowSequence[i].values[j] + '</td>');
+                        } else {
+                            var td = document.createElement('td');
+                            $(td).append(anchorVariantSearches(rowSequence[i].values[j], geneId, rowSequence[i],colSequence[j], rootVariantUrl, parmType));
+                            $(singleRow).append(td);
                         }
-
-                        $('#continentalVariationTableBody').append('<tr>'+singleRow+'</tr>');
                     }
+                    $('#continentalVariationTableBody').append(singleRow);
+                }
 
             }
 
         };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         var buildAnchorForRegionVariantSearches = function (displayableContents, geneName, significanceFilter, dataset, regionSpecification, rootVariantUrl, phenotype) {
-            var returnValue = "";
-            returnValue += ("<a class='boldlink' href='" + rootVariantUrl + "/" + geneName + "?sig=" + significanceFilter +
-                "&dataset=" + dataset + "&region=" + regionSpecification + "&phenotype=" + phenotype + "'>" +
-                displayableContents + "</a>");
-            return  returnValue;
+            var returnValue = document.createElement('a');
+            $(returnValue).attr({
+                class: 'boldlink',
+                href: rootVariantUrl + "/" + geneName + "?sig=" + significanceFilter + "&dataset=" + dataset + "&region=" + regionSpecification + "&phenotype=" + phenotype
+            });
+            $(returnValue).append(displayableContents);
+            return returnValue;
         };
         var buildAnchorForGeneVariantSearches = function (displayableContents, geneName, significanceFilter, dataset, junk, rootVariantUrl, phenotype) {
-            var returnValue = "";
-            returnValue += ("<a class='boldlink' href='" + rootVariantUrl + "/" + geneName + "?sig=" + significanceFilter +
-                "&dataset=" + dataset + "&phenotype=" + phenotype +"'>" +
-                displayableContents + "</a>");
-            return  returnValue;
+            var returnValue = document.createElement('a');
+            $(returnValue).attr({
+                class: 'boldlink',
+                href: rootVariantUrl + "/" + geneName + "?sig=" + significanceFilter + "&dataset=" + dataset + "&phenotype=" + phenotype
+            });
+            $(returnValue).append(displayableContents);
+            return returnValue;
         };
         var fillVariantsAndAssociationLine = function (geneName,// our gene record
                                                        dataSetCode,// code for data set -- must be gwas,exomechip,exomeseq,or sigma
                                                        dataSetName,// formal name for the data set
+                                                       translatedName,// the human-friendly version
                                                        sampleSize, // listed sample size for this data set
                                                        rowTechnology, // Which technology describes this data set
                                                        genomicRegion, // region specified as in this example: chr1:209348715-210349783
@@ -437,18 +443,33 @@ var mpgSoftware = mpgSoftware || {};
                     default:
                         dataSetNameForUser = dataSetName;
                 }
-                var tableRow = '';
-                tableRow += '<tr>' +
-                    '<td class="vandaRowTd" style="text-align: left"><div class="vandaRowHdr" id="vandaRow'+rowNumber+'" datasetname="'+dataSetName+'"></div></td>' +
-//                    '<td class="vandaRowTd"><div class="vandaRowHdr" id="vandaRow'+rowNumber+'" datasetname="'+dataSetName+'"></div></td>' +
-                    '<td>' + rowTechnology + '</td>'+
-                    '<td>' + sampleSize + '</td>';
+                var tableRow = document.createElement('tr');
+                var tableRowTitle = document.createElement('td');
+                $(tableRowTitle).attr({
+                    class: 'vandaRowTd',
+                    style: 'text-align: left'
+                });
+                var tableRowTitleText = document.createElement('div');
+                $(tableRowTitleText).attr({
+                    class: 'vandaRowHdr',
+                    id: 'vandaRow' + rowNumber,
+                    datasetname: dataSetName,
+                    translatedName: translatedName
+                });
+                $(tableRowTitle).append(tableRowTitleText);
+
+                $(tableRow).append(tableRowTitle);
+                $(tableRow).append('<td>' + rowTechnology + '</td>');
+                $(tableRow).append('<td>' + sampleSize + '</td>');
+
                 for ( var i = 0 ; i < columnMap.length ; i++ ) {
-                    tableRow += '<td>';
-                    tableRow += anchorBuildingFunction(valueArray[i], geneName, columnMap[i].value, dataSetCode, genomicRegion, rootVariantUrl, phenotype)
-                    tableRow += '</td>';
+                    var anchorTd = document.createElement('td');
+                    $(anchorTd).append(
+                        anchorBuildingFunction(valueArray[i], geneName, columnMap[i].value, dataSetCode, genomicRegion, rootVariantUrl, phenotype)
+                    )
+                    $(tableRow).append(anchorTd);
                 }
-                tableRow += '</tr>';
+
                 $('#variantsAndAssociationsTableBody').append(tableRow);
             }
         };
@@ -464,7 +485,6 @@ var mpgSoftware = mpgSoftware || {};
                 extentBegin + "-" +
                 extentEnd;
 
-           // var emphasisRequired = emphasisRecommended(geneInfo);
             var emphasizeGwas = (0);
             var headerRow = "<tr>" +
                 "<th>" + headers.hdr1 + "</th>" +
@@ -473,7 +493,7 @@ var mpgSoftware = mpgSoftware || {};
             for ( var i = 0 ; i < columnInformation.length ; i++ ) {
                 var significanceString =  columnInformation[i].value;
                 var significance =  parseFloat(significanceString);
-                console.log("signficance is", significance);
+
                 headerRow += "<th>" + columnInformation[i].name;
                 if (significance===0.00000005){
                     headerRow += headers.gwasSig;
@@ -490,6 +510,7 @@ var mpgSoftware = mpgSoftware || {};
             $('#variantsAndAssociationsHead').append(headerRow);
             for ( var row = 0 ; row < rowInformation.length ; row++ ) {
                 var rowName = rowInformation[row].name;
+                var rowTranslatedName = rowInformation[row].translatedName;
                 var rowCode = rowInformation[row].value;
                 var rowCount = rowInformation[row].count;
                 var rowTechnology = rowInformation[row].technology;
@@ -501,7 +522,7 @@ var mpgSoftware = mpgSoftware || {};
                 } else {
                     rowProcessorFunction = buildAnchorForGeneVariantSearches;
                 }
-                fillVariantsAndAssociationLine(geneName, rowCode, rowName, rowCount, rowTechnology, regionSpecifier,
+                fillVariantsAndAssociationLine(geneName, rowCode, rowName, rowTranslatedName, rowCount, rowTechnology, regionSpecifier,
                     valueHolder[row],columnInformation,
                     rowProcessorFunction, emphasizeGwas, rootVariantUrl, rowHelpText,phenotype,row);
 
@@ -694,26 +715,26 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
-            var fillTheVariantAndAssociationsTableFromNewApi = function (data, rootRegionUrl, rootTraitUrl, rootVariantUrl,
-                                                                         textStringObject,
-                                                                         chromosomeNumber,extentBegin,extentEnd,
-                                                                         rowInformation,columnInformation,
-                                                                         valueHolder,
-                                                                         geneName,
-                                                                         phenotype) {
-                fillVariantsAndAssociationsTable(false,
-                    rootVariantUrl,
-                    textStringObject.variantsAndAssociationsTableHeaders,
-                    textStringObject.variantsAndAssociationsRowHelpText,
-                    chromosomeNumber,
-                    extentBegin,
-                    extentEnd,
-                    rowInformation,columnInformation,
-                    valueHolder,
-                    geneName,
-                    phenotype
-                );
-            }
+        var fillTheVariantAndAssociationsTableFromNewApi = function (data, rootRegionUrl, rootTraitUrl, rootVariantUrl,
+                                                                     textStringObject,
+                                                                     chromosomeNumber,extentBegin,extentEnd,
+                                                                     rowInformation,columnInformation,
+                                                                     valueHolder,
+                                                                     geneName,
+                                                                     phenotype) {
+            fillVariantsAndAssociationsTable(false,
+                rootVariantUrl,
+                textStringObject.variantsAndAssociationsTableHeaders,
+                textStringObject.variantsAndAssociationsRowHelpText,
+                chromosomeNumber,
+                extentBegin,
+                extentEnd,
+                rowInformation,columnInformation,
+                valueHolder,
+                geneName,
+                phenotype
+            );
+        }
 
 
 

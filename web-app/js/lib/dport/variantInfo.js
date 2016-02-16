@@ -63,7 +63,7 @@ var mpgSoftware = mpgSoftware || {};
                         5e-4,
                         5e-2,
                         variantTitle,
-                        mpgSoftware.trans.translator(propertiesForDataSet['dataset']),
+                        propertiesForDataSet['dataset'],
                         selectorForBoxes,
                         dealingWithBeta,
                         variantAssociationStrings,

@@ -1,15 +1,11 @@
 package org.broadinstitute.mpg.diabetes
+import groovy.json.JsonSlurper
+import grails.transaction.Transactional
 import org.broadinstitute.mpg.MetadataUtilityService
 import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SharedToolsService
-import grails.transaction.Transactional
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
-import org.broadinstitute.mpg.diabetes.metadata.Phenotype
-import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
-import org.broadinstitute.mpg.diabetes.metadata.Property
-import org.broadinstitute.mpg.diabetes.metadata.PropertyBean
-import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
-import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean
+import org.broadinstitute.mpg.diabetes.metadata.*
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.CommonGetDataQueryBuilder
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
@@ -21,6 +17,7 @@ import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseTraitSearchT
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.web.json.JSONObject
+import org.codehaus.groovy.grails.web.util.WebUtils
 
 @Transactional
 class MetaDataService {
@@ -38,12 +35,44 @@ class MetaDataService {
     }
 
     /**
-     * returns the data version to use
+     * returns the data version to use based on the portal type setting in the user session
      *
      * @return
      */
     public String getDataVersion() {
-        return this.grailsApplication.config.diabetes.data.version;
+        // DIGP-291: adding different metadata versions by portal
+        String dataVersion;
+        String portalType = WebUtils.retrieveGrailsWebRequest()?.getSession()?.getAttribute('portalType');
+
+        // get the data version based on user session portal type; default to t2d
+        if (portalType == null) {
+            portalType = "t2d";
+        }
+        dataVersion = this.grailsApplication.config.portal.data.version.map[portalType];
+
+        // return
+        return dataVersion;
+//        return this.grailsApplication.config.diabetes.data.version;
+    }
+
+    /**
+     * returns the default phenotype based on the portal type setting in the user session
+     *
+     * @return
+     */
+    public String getDefaultPhenotype() {
+        // DIGP-291: adding different metadata versions by portal
+        String phenotype;
+        String portalType = WebUtils.retrieveGrailsWebRequest()?.getSession()?.getAttribute('portalType');
+
+        // get the data version based on user session portal type; default to t2d
+        if (portalType == null) {
+            portalType = "t2d";
+        }
+        phenotype = this.grailsApplication.config.portal.data.default.phenotype.map[portalType];
+
+        // return
+        return phenotype;
     }
 
     public void setForceProcessedMetadataOverride(Integer forceProcessedMetadataOverride) {
@@ -85,10 +114,13 @@ class MetaDataService {
      * @param sortFirst
      * @return
      */
-    public String getCommonPropertiesAsJson(Boolean sortFirst) {
+    public JSONObject getCommonPropertiesAsJson(Boolean sortFirst) {
         // local variables
         List<Property> propertyList;
-        StringBuilder builder = new StringBuilder();
+
+        JSONObject toReturn = [
+            dataset: new ArrayList<String>()
+        ]
 
         // get the list from the json service parse
         try {
@@ -99,26 +131,19 @@ class MetaDataService {
             log.error("Got metadata parsing exception getting common properties json: " + exception.getMessage());
         }
 
-
         // if need to sort, sort the list
         if (sortFirst) {
             Collections.sort(propertyList);
         }
 
-        // loop through and create a comma seperated list
         for (Property property : propertyList) {
-            builder.append("\"" + property.getName() + "\"" );
-            if (propertyList.get(propertyList.size() - 1) != property) {
-                builder.append(",");
-            }
+            toReturn.dataset << property.getName()
         }
 
-        // add the wrapping json and return
-        GString groovyString = """{"is_error": false,
-            "numRecords":${propertyList.size()},
-            "dataset":[${builder.toString()}]
-        }""";
-        return groovyString.toString();
+        toReturn.is_error = false
+        toReturn.numRecords = propertyList.size()
+
+        return toReturn
     }
 
 
@@ -208,12 +233,13 @@ class MetaDataService {
         return jsonParser.getTechnologyPerSampleGroup(sampleGroupId)
     }
 
-    public String getSampleGroupNameListForPhenotypeAsJson(String phenotypeName) {
+    public JSONObject getSampleGroupNameListForPhenotypeAsJson(String phenotypeName) {
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+
         // local variables
-        GString jsonString;
+        JSONObject toReturn = []
         List<SampleGroup> groupList;
-        StringBuilder builder = new StringBuilder();
-        List<String> nameList = new ArrayList<String>();
+        List<JSONObject> nameList = new ArrayList<String>();
 
         // get the sample group list for the phenotype
         try {
@@ -228,26 +254,23 @@ class MetaDataService {
                 for (int i = 0; i < group.getNestedLevel(); i++) {
                     depthBuilder.append("-");
                 }
-
-                nameList.add(depthBuilder.toString() + group.getSystemId());
+                String sysId = group.getSystemId()
+                JSONObject currentGroup = [
+                    name: sysId,
+                    displayName: depthBuilder.toString() + g.message(code: "metadata." + sysId, default: sysId)
+                ]
+                nameList.add(currentGroup);
             }
 
         } catch (PortalException exception) {
             log.error("Got exception retrieving sample group name list for selected phenotype: " + phenotypeName + " : " + exception.getMessage());
         }
 
-        //create the json string
-        for (String nameString : nameList) {
-            builder.append("\"" + nameString + "\"");
+        toReturn.is_error = false
+        toReturn.numRecords = nameList.size()
+        toReturn.dataset = nameList
 
-            if (!nameList.get(nameList.size() - 1).equalsIgnoreCase(nameString)) {
-                builder.append(",");
-            }
-        }
-        jsonString ="{\"is_error\": false, \"numRecords\":${nameList.size()}, \"dataset\":[${builder.toString()}]}";
-
-        // return
-        return jsonString;
+        return toReturn;
     }
 
 
@@ -334,7 +357,9 @@ class MetaDataService {
      * @return
      */
     public LinkedHashMap<String, List<String>> getHierarchicalPhenotypeTree(){
-        List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "GWAS")
+        // DIGP-291: looking to see if phenotypes for list only gets GWAS related phenotypes
+        // TODO: find better way to start filtering out phenotypes we want to show to people (rank by portal type)
+        List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), null)
         LinkedHashMap<String, List<String>> propertyTree =  metadataUtilityService.hierarchicalPhenotypeTree(phenotypeList)
         return propertyTree
     }
@@ -365,19 +390,19 @@ class MetaDataService {
      * @return
      */
     public String urlEncodedListOfPhenotypes() {
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+
         List<String> phenotypeList =  this.getJsonParser().getAllDistinctPhenotypeNames();
         StringBuilder sb   = new StringBuilder ("")
         for (int i = 0; i < phenotypeList.size(); i++){
             String phenotypeCode = phenotypeList.get(i)
-//            log.info("urlEncodedListOfPhenotypes case 1")
-            sb<< (phenotypeCode + ":" + this.sharedToolsService.translator(phenotypeCode))
+            sb<< (phenotypeCode + ":" + g.message(code: "metadata." + phenotypeCode, default: phenotypeCode))
             sb<< ","
 
             // also add old keys from trait-search call if exists
             String oldCode = this.sharedToolsService?.convertNewPhenotypeStringsToOldOnes(phenotypeCode)
             if (!oldCode?.equals(phenotypeCode)) {
-//                log.info("urlEncodedListOfPhenotypes case 2")
-                sb<< (oldCode + ":" + this.sharedToolsService.translator(phenotypeCode))
+                sb<< (oldCode + ":" + g.message(code: "metadata." + phenotypeCode, default: phenotypeCode))
                 sb<< ","
             }
         }
@@ -597,7 +622,8 @@ class MetaDataService {
 
 //        try {
             // get the 25 traits
-            List<Phenotype> phenotypeList = this.jsonParser.getPhenotypeListByTechnologyAndVersion("GWAS", "mdv2");
+        // DIGP-291: centralize metadata version
+            List<Phenotype> phenotypeList = this.jsonParser.getPhenotypeListByTechnologyAndVersion("GWAS", this.getDataVersion());
 
             // get the json object
             jsonObject = this.getTraitSearchResultForChromosomeAndPositionAndPhenotypes(phenotypeList, chromosome, startPosition, endPosition);
@@ -716,7 +742,14 @@ class MetaDataService {
         String returnValue = ""
         PropertyBean propertyBean =  this.getJsonParser().getPropertyGivenItsAndPhenotypeAndSampleGroupNames( propertyName,  phenotypeName,  sampleGroupName)
         List<String> listOfStrings = propertyBean.getMeanings()
-        return listOfStrings[0]
+
+        if (( listOfStrings.size() == 0 )||
+                (listOfStrings[0] == "NULL")){
+            returnValue = propertyName
+        } else {
+            returnValue = listOfStrings[0]
+        }
+
     }
 
 
@@ -760,5 +793,42 @@ class MetaDataService {
         return jsonObject
     }
 
-}
+    // returns a set of the metadata names in database form (i.e. not translated)
+    // used for translation support--though should be used sparingly
+    public Set<String> parseMetadataNames() {
+        String metadata = restServerService.getMetadata()
+        def jsonSlurper = new JsonSlurper()
 
+        JSONObject metadataParsed = jsonSlurper.parseText(metadata)
+
+        return pullOutMetadataNames(metadataParsed)
+    }
+
+    /*
+    Given the metadata, recursively go through it looking for
+    any "name" key, returning a set (i.e. unique values only) containing
+    the value for each "name" key. Built for use with parseMetadataNames()
+    function.
+     */
+    private Set<String> pullOutMetadataNames(Object metadata) {
+        Set<String> toReturn = new HashSet<String>()
+
+        if( metadata instanceof JSONObject ) {
+            def keys = metadata.keySet()
+
+            for (String key in keys) {
+                if (key == "name" && (metadata[key] instanceof String)) {
+                    toReturn << metadata[key]
+                }
+                toReturn.addAll(pullOutMetadataNames(metadata[key]))
+            }
+        } else if( metadata instanceof ArrayList ) {
+            metadata.each { item ->
+                toReturn.addAll(pullOutMetadataNames(item as JSONObject))
+            }
+        }
+
+        return toReturn
+    }
+
+}

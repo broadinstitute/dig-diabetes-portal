@@ -11,7 +11,6 @@ class HomeController {
     GrailsApplication grailsApplication
     SharedToolsService sharedToolsService
     ResourceLocator grailsResourceLocator
-    public translationObject = {}
     def mailService
 
     /***
@@ -82,11 +81,6 @@ class HomeController {
      * This is our standard home page. We get directed here from a few places in the portal
      */
     def portalHome = {
-        log.info("???????????????????????????");
-        def something = this.sharedToolsService.getConvertPhenotypes();
-        log.info(something['CAD']);
-        log.info(something['cat']);
-        log.info(something);
         render(controller: 'home', view: 'portalHome', model: [ticker:"${sharedToolsService.getWarningText()}",
                                                                show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                                                show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),

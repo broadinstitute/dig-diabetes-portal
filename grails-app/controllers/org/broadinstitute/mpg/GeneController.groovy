@@ -45,7 +45,6 @@ class GeneController {
      * @return
      */
     def geneInfo() {
-        this.sharedToolsService.setConvertPhenotypes(["cat": "meow"]);
         String locale = RequestContextUtils.getLocale(request)
         String geneToStartWith = params.id
         LinkedHashMap savedCols = params.findAll{ it.key =~ /^savedCol/ }
@@ -99,9 +98,7 @@ class GeneController {
                 List <String> nameAndAssociatedPValue = newDatasetName.tokenize("^")
                 if (nameAndAssociatedPValue.size()==2) {
                     if (!(newDatasetRowName)) {
-                        log.info("translator call being made from geneInfo() function");
-                        log.info(nameAndAssociatedPValue[0]);
-                        newDatasetRowName =  sharedToolsService.translator(nameAndAssociatedPValue[0])
+                        newDatasetRowName =  g.message(code: "metadata." + nameAndAssociatedPValue[0], default: nameAndAssociatedPValue[0])
                     }
                     rowInformation << [name:newDatasetRowName, value:nameAndAssociatedPValue[0], pvalue: nameAndAssociatedPValue[1] ]
                 }
@@ -259,6 +256,12 @@ class GeneController {
         List <String> uniqueRowNames = rowNames.unique{ a,b -> a <=> b }
         JSONObject jsonObject =  restServerService.combinedVariantCountByGeneNameAndPValue ( geneToStartWith.trim().toUpperCase(),
                                                                                               uniqueRowNames, significanceValues, phenotype )
+
+        // attach the translated name so that the client has access to it for sorting in the table
+        for(int i = 0; i < (jsonObject.results.size()); i++) {
+            jsonObject.results[i].translatedName = g.message(code: "metadata." + jsonObject.results[i].dataset, default: jsonObject.results[i].dataset)
+        }
+
         render(status:200, contentType:"application/json") {
             [geneInfo:jsonObject]
         }
@@ -299,7 +302,6 @@ class GeneController {
                 }
             }
         }
-
 
         List<Float> significanceValues = []
         for(String significance in colSignificances){
