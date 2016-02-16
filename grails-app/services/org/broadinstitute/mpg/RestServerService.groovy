@@ -541,7 +541,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         int beginSearchNumber, endSearchNumber;
 
         // get the phenotype list
-        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", "mdv2");
+        // DIGP-291: centralize metadata version
+        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion());
 
         try {
             beginSearchNumber = Integer.valueOf(beginSearch).intValue();
