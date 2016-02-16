@@ -30,6 +30,9 @@ class BootStrap {
 
         // read in users from file
         if (User.count()) {
+            def admin = Role.findByAuthority('ROLE_ADMIN');
+            def michael = User.findByEmail("msanders@broadinstitute.org");
+            UserRole.create(michael, admin);
             log.info( "Users already loaded. Total operational number = ${User.count()}")
         } else {
             String fileLocation = grailsApplication.mainContext.getResource("/WEB-INF/resources/users.tsv").file.toString()
