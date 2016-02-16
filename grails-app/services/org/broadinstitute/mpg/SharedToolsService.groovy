@@ -82,6 +82,10 @@ class SharedToolsService {
 
     Integer helpTextSetting = 1 // 0== never display, 1== display conditionally, 2== always display
 
+    public LinkedHashMap<String, String> retrieveConvertPhenotypes () {
+        return convertPhenotypes
+    }
+
     public String retrieveCurrentGeneChromosome ()  {
         return  currentGeneChromosome
     }
@@ -1830,6 +1834,7 @@ return returnValue
              trans["vmdv2"]= "Version 2"
              trans["vmdv3"]= "Version 3"
          }
+        log.info("translation happening " + stringToTranslate);
         if (trans.containsKey("v${stringToTranslate}".toString())){
             return trans ["v${stringToTranslate}".toString()]
         } else {

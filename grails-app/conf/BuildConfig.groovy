@@ -76,6 +76,7 @@ grails.project.dependency.resolution = {
         compile ":font-awesome-resources:4.2.0.0"
 //        compile 'org.objenesis:objenesis:1.4'
 //        compile "cglib:cglib:2.2"
+        compile ":localizations:2.4"
 
         // plugins needed at runtime but not for compilation
 //        runtime ":hibernate4:4.3.5.4" // or ":hibernate:3.6.10.16"

@@ -115,6 +115,26 @@ $( document ).ready(function() {
                         ( typeof data !== 'undefined') &&
                         ( typeof data.datasets !== 'undefined' ) &&
                         (  data.datasets !==  null ) ) {
+                    // data.datasets.dataset = {
+                    //      key: [array of names]
+                    // }
+                    // ->
+                    // data.datasets.dataset = {
+                    //      key: { key : displayName }
+                    // }
+
+                    %{--for (var key in data.datasets.dataset) {--}%
+                        %{--var mapping = {}--}%
+                        %{--var arrayOfPhenotypeCodesToProcess = data.datasets.dataset[key];--}%
+                        %{--console.log(arrayOfPhenotypeCodesToProcess);--}%
+                        %{--for(var i = 0; i < arrayOfPhenotypeCodesToProcess.length; i++) {--}%
+                            %{--var code = arrayOfPhenotypeCodesToProcess[i];--}%
+                            %{--console.log(code);--}%
+                            %{--//mapping[code] = "${g.message(code:"metadata." + code, default:"nothing")}"--}%
+                        %{--}--}%
+                        %{--data.datasets.dataset[key] = mapping;--}%
+                    %{--}--}%
+
                     UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#phenotypeTableChooser',true);
                     // Can we set the default option on the phenotype list?
                     $('#phenotypeTableChooser').val('${phenotype}');
@@ -127,16 +147,13 @@ $( document ).ready(function() {
         });
   });
 
-    // open the v and a adjuster widget
-    var popUpVAndAExtender = function() {
-          $( "#dialog" ).dialog( "open" );
-        };
-     $( "#opener" ).click(popUpVAndAExtender);
-
-
-
-
+// open the v and a adjuster widget
+var popUpVAndAExtender = function() {
+      $( "#dialog" ).dialog( "open" );
+    };
+ $( "#opener" ).click(popUpVAndAExtender);
 });
+
 var insertVandARow  = function(name, value) {
       var counter = 100;
       $('#vandaRowHolder').add("<label><input type='checkbox' class='checkbox checkbox-primary' name='savedRow"+counter+"' class='form-control' id='savedRow"+counter+"' value='"+name+"^"+value+"^47' checked>"+name+"</label>");
