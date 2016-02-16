@@ -2,7 +2,7 @@
 <html lang="en"
       ng-app="ChooserApp"
       ng-controller="ChooserController"
-      ng-init="init('${createLink(controller:'ResultsFilter', action:'metadata')}','mdv2')">
+      ng-init="init('${createLink(controller:'ResultsFilter', action:'metadata')}','${g.metadataVersion()}')">
 
 <body>
 

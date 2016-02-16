@@ -238,7 +238,8 @@ class TraitController {
         log.info("for traitVariantCrossGetDataAjaxTest call, got params: " + params)
 
         // get the phenotype list
-        phenotypeMap = this.metaDataService.getPhenotypeMapByTechnologyAndVersion("GWAS", "mdv2");
+        // DIGP-291: centralize metadata version
+        phenotypeMap = this.metaDataService.getPhenotypeMapByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion());
 
         // select the phenotypes to search for
         phenotypeList.add(phenotypeMap.get("T2D"));
@@ -274,7 +275,8 @@ class TraitController {
         log.info("for traitVariantCrossGetDataAjax call, got params: " + params)
 
         // get the phenotype list
-        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", "mdv2");
+        // DIGP-291: centralize metadata version
+        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion());
 
         // submit query
         JSONObject jsonObject =  this.metaDataService.searchTraitByUnparsedRegion(regionsSpecification, phenotypeList);

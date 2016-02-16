@@ -605,7 +605,8 @@ class MetaDataService {
 
 //        try {
             // get the 25 traits
-            List<Phenotype> phenotypeList = this.jsonParser.getPhenotypeListByTechnologyAndVersion("GWAS", "mdv2");
+        // DIGP-291: centralize metadata version
+            List<Phenotype> phenotypeList = this.jsonParser.getPhenotypeListByTechnologyAndVersion("GWAS", this.getDataVersion());
 
             // get the json object
             jsonObject = this.getTraitSearchResultForChromosomeAndPositionAndPhenotypes(phenotypeList, chromosome, startPosition, endPosition);
