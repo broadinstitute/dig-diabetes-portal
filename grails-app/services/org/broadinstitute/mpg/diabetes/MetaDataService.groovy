@@ -1,15 +1,10 @@
 package org.broadinstitute.mpg.diabetes
+import grails.transaction.Transactional
 import org.broadinstitute.mpg.MetadataUtilityService
 import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SharedToolsService
-import grails.transaction.Transactional
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
-import org.broadinstitute.mpg.diabetes.metadata.Phenotype
-import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
-import org.broadinstitute.mpg.diabetes.metadata.Property
-import org.broadinstitute.mpg.diabetes.metadata.PropertyBean
-import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
-import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean
+import org.broadinstitute.mpg.diabetes.metadata.*
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.CommonGetDataQueryBuilder
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
@@ -21,6 +16,7 @@ import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseTraitSearchT
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.web.json.JSONObject
+import org.codehaus.groovy.grails.web.util.WebUtils
 
 @Transactional
 class MetaDataService {
@@ -43,7 +39,19 @@ class MetaDataService {
      * @return
      */
     public String getDataVersion() {
-        return this.grailsApplication.config.diabetes.data.version;
+        // DIGP-291: adding different metadata versions by portal
+        String dataVersion;
+        String portalType = WebUtils.retrieveGrailsWebRequest()?.getSession()?.getAttribute('portalType');
+
+        // get the data version based on user session portal type; default to t2d
+        if (portalType == null) {
+            portalType = "t2d";
+        }
+        dataVersion = this.grailsApplication.config.portal.data.version.map[portalType];
+
+        // return
+        return dataVersion;
+//        return this.grailsApplication.config.diabetes.data.version;
     }
 
     public void setForceProcessedMetadataOverride(Integer forceProcessedMetadataOverride) {

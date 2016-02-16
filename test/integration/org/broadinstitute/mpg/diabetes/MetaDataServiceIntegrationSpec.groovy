@@ -10,6 +10,8 @@ import org.codehaus.groovy.grails.web.json.JSONObject
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
+import org.codehaus.groovy.grails.web.util.WebUtils
+
 /**
  * Created by balexand on 8/18/2014.
  */
@@ -147,5 +149,17 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
         assert resultJson != null;
         assert resultJson.toString().length() > 0
 //        assert "dude" == resultJson.toString()
+    }
+
+    void "test get metadata version"() {
+        when:
+        String expectedMetadataVersion = "mdv9";
+        // set the request session
+        WebUtils.retrieveGrailsWebRequest()?.getSession()?.setAttribute("portalType", "stroke");
+        String metadataVersion = this.metaDataService?.getDataVersion();
+
+        then:
+        assert metadataVersion != null
+        assert metadataVersion?.equals(expectedMetadataVersion)
     }
 }

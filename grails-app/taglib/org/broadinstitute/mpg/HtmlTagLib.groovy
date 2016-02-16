@@ -1,8 +1,10 @@
 package org.broadinstitute.mpg
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringEscapeUtils
+import org.broadinstitute.mpg.diabetes.MetaDataService;
 
 class HtmlTagLib {
+    MetaDataService metaDataService
 //    static defaultEncodeAs = [taglib: 'html']
 
 //    def renderHtml = {attrs ->
@@ -14,6 +16,16 @@ class HtmlTagLib {
 //        }
 //        IOUtils.copy((String)request.servletContext.getResourceAsStream(filePath), out);
 //    }
+
+    /**
+     * returns the metadata version to use for all metadata tree searches
+     *
+     */
+    def metadataVersion = {attrs, body ->
+        String metadataVersion = this.metaDataService?.getDataVersion();
+        out << metadataVersion;
+    }
+
 
 
     def renderGeneSummary = { attrs ->
