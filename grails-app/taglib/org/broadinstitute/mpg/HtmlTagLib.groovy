@@ -26,6 +26,14 @@ class HtmlTagLib {
         out << metadataVersion;
     }
 
+    /**
+     * returns the default phenotype to use
+     *
+     */
+    def defaultPhenotype = {attrs, body ->
+        String phenotype = this.metaDataService?.getDefaultPhenotype();
+        out << phenotype;
+    }
 
 
     def renderGeneSummary = { attrs ->

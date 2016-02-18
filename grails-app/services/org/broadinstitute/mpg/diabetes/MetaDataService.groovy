@@ -34,7 +34,7 @@ class MetaDataService {
     }
 
     /**
-     * returns the data version to use
+     * returns the data version to use based on the portal type setting in the user session
      *
      * @return
      */
@@ -52,6 +52,26 @@ class MetaDataService {
         // return
         return dataVersion;
 //        return this.grailsApplication.config.diabetes.data.version;
+    }
+
+    /**
+     * returns the default phenotype based on the portal type setting in the user session
+     *
+     * @return
+     */
+    public String getDefaultPhenotype() {
+        // DIGP-291: adding different metadata versions by portal
+        String phenotype;
+        String portalType = WebUtils.retrieveGrailsWebRequest()?.getSession()?.getAttribute('portalType');
+
+        // get the data version based on user session portal type; default to t2d
+        if (portalType == null) {
+            portalType = "t2d";
+        }
+        phenotype = this.grailsApplication.config.portal.data.default.phenotype.map[portalType];
+
+        // return
+        return phenotype;
     }
 
     public void setForceProcessedMetadataOverride(Integer forceProcessedMetadataOverride) {

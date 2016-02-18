@@ -137,8 +137,8 @@ $( document ).ready(function() {
 
                     UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#phenotypeTableChooser',true);
                     // Can we set the default option on the phenotype list?
-                    $('#phenotypeTableChooser').val('${phenotype}');
-                    refreshVAndAByPhenotype({'value':'T2D'});
+                    $('#phenotypeTableChooser').val('${g.defaultPhenotype()}');
+                    refreshVAndAByPhenotype({'value':'${g.defaultPhenotype()}'});
                 }
             },
             error: function (jqXHR, exception) {
