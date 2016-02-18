@@ -342,7 +342,9 @@ class MetaDataService {
      * @return
      */
     public LinkedHashMap<String, List<String>> getHierarchicalPhenotypeTree(){
-        List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "GWAS")
+        // DIGP-291: looking to see if phenotypes for list only gets GWAS related phenotypes
+        // TODO: find better way to start filtering out phenotypes we want to show to people (rank by portal type)
+        List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), null)
         LinkedHashMap<String, List<String>> propertyTree =  metadataUtilityService.hierarchicalPhenotypeTree(phenotypeList)
         return propertyTree
     }

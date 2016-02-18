@@ -950,6 +950,7 @@ var UTILS = {
             vBIP: "bipolar disorder",
             vMDD: "major depressive disorder",
             vSCZ: "schizophrenia",
+            vSTRK: "stroke",
             v13k: "13K exome sequence analysis",
             v13k_aa_genes: "13K exome sequence analysis: African-Americans",
             v13k_ea_genes: "13K exome sequence analysis: East Asians",

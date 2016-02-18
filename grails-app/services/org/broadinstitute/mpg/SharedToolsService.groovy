@@ -76,6 +76,7 @@ class SharedToolsService {
                                        "MA":"MA",
                                        "BIP":"BIP",
                                        "SCZ":"SCZ",
+                                       "STRK":"STRK",
                                        "MDD":"MDD"   ]
 
     LinkedHashMap convertPhenotypesFlipped = null;
@@ -94,7 +95,12 @@ class SharedToolsService {
     }
 
     public String getCurrentDataVersion (){
-        return "${dataSetPrefix}${getDataVersion()}"
+        // DIGP-291: switch to metedataservice metadata call
+        String centralMetadataVersion = this.metaDataService.getDataVersion();
+        String compareDataVersion = "${dataSetPrefix}${getDataVersion()}";
+        log.info("using metadata: " + centralMetadataVersion + " as opposed to previous: " + compareDataVersion);
+
+        return centralMetadataVersion;
     }
 
     public Integer getRecognizedStringsOnly() {
@@ -1668,6 +1674,7 @@ return returnValue
              trans["vGWAS_SIGMA1_mdv1"]= "GWAS SIGMA"
              trans["vGWAS_SIGMA1_mdv2"]= "GWAS SIGMA"
              trans["vGWAS_SIGMA1_mdv3"]= "GWAS SIGMA"
+             trans["vGWAS_SIGMA1_mdv9"]= "GWAS SIGMA"
              trans["vDirection"]= "Direction of effect"
              trans["vEAC_PH"]= "Effect allele count"
              trans["vEAF"]= "Effect allele frequency"
@@ -1833,6 +1840,19 @@ return returnValue
              trans["vmdv1"]= "Version 1"
              trans["vmdv2"]= "Version 2"
              trans["vmdv3"]= "Version 3"
+
+             // DIGP-291: stroke test; to remove once have real data
+             trans["vExSeq_39k_mdv9"]= "Stroke GWAS"
+             trans["vExSeq_39k_eu_mdv9"]= "Stroke GWAS, European study"
+             trans["vGWAS_CARDIoGRAM_mdv9"]= "CARDIoGRAM GWAS"
+             trans["vGWAS_CKDGenConsortium_mdv9"]= "CKDGen GWAS"
+             trans["vGWAS_DIAGRAM_mdv9"]= "DIAGRAM GWAS"
+             trans["vGWAS_GIANT_mdv9"]= "GIANT GWAS"
+             trans["vGWAS_GLGC_mdv9"]= "GLGC GWAS"
+             trans["vGWAS_MAGIC_mdv9"]= "MAGIC GWAS"
+             trans["vGWAS_PGC_mdv9"]= "PGC GWAS"
+             trans["vmdv9"]= "Version 9"
+             trans["vSTRK"]="stroke"
          }
         log.info("translation happening " + stringToTranslate);
         if (trans.containsKey("v${stringToTranslate}".toString())){
