@@ -286,7 +286,7 @@
 
 
 
-    UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],'T2D',
+    UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],'${g.defaultPhenotype()}',
             "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",fillVariantStatistics );
     $(function() {
         $.ajax({
