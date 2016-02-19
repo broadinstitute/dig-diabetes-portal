@@ -1135,6 +1135,7 @@ var UTILS = {
             vGWAS_GLGC: "GLGC GWAS",
             vGWAS_GLGC_mdv1: "GLGC GWAS",
             vGWAS_GLGC_mdv2: "GLGC GWAS",
+            vGWAS_GLGC_mdv9: "GLGC GWAS",           // DIGP-291: dummy data for now
             vGWAS_MAGIC: "MAGIC GWAS",
             vGWAS_MAGIC_mdv1: "MAGIC GWAS",
             vGWAS_MAGIC_mdv2: "MAGIC GWAS",
