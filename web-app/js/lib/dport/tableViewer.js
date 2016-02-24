@@ -620,24 +620,10 @@ var variantProcessing = (function () {
                     var row = rowsPerPhenotype[i];
                     retVal = [];
 
-//                    if (i === 0){ // set up the row
-//                        retVal += "<tr id='"+phenotypeName+"' class='clickable' data-toggle='collapse' data-target='."+phenotypeName+"collapsed'>"
-//                    } else {
-//                        if (convertedSampleGroup.indexOf(':')===-1) {
-//                            retVal += "<tr class='collapse out budgets "+phenotypeName+"collapsed'>"
-//                        } else {
-//                            retVal += "<tr>"
-//                        }
-//                    }
-
                     // some shared variables
                     var convertedTrait=mpgSoftware.trans.translator(phenotypeName);
                     var convertedSampleGroup=mpgSoftware.trans.translator(row['samplegroup']);
                     var firstOfMultiPhenotypes = (i===0);
-                    // now start filling in the cells
-//                    retVal += "<td style='text-align: left'><div id='traitsTable"+(rowCounter)+"' class='sgIdentifierInTraitTable' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+"'></div>";
-//                    retVal += "</td>";
-                    //if (i === 0) {
 
                     if (firstOfMultiPhenotypes) {
                         retVal.push("<div id='traitsTable"+(rowCounter)+"' class='sgIdentifierInTraitTable indexRow' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+
@@ -653,70 +639,74 @@ var variantProcessing = (function () {
                     if (convertedSampleGroup.indexOf('GWAS')>-1){ // GWAS data set - allow anchor
                         retVal.push("<a href='"+traitRootUrl+"?trait="+phenotypeName+"&significance=5e-8'>"+convertedTrait+"</a>");
                     } else {
-                        //retVal.push("<a href='"+traitRootUrl+"?trait="+phenotypeName+"&significance=5e-8'>"+convertedTrait+"</a>");
                         retVal.push("<div style='display:inline'>"+convertedTrait+"</div>");
                     }
 
 
-
-                   // retVal += "<td>";
                     if (( typeof row["P_VALUE"] !== 'undefined')&&(row["P_VALUE"]!== '')) {
                         retVal.push(parseFloat(row["P_VALUE"]).toPrecision(3));
-//                        if (i==0) {
-//                            if ((rowsPerPhenotype.length>1)&&(convertedSampleGroup.indexOf(':')===-1)){
-//                                retVal += "<div class='glyphicon glyphicon-plus-sign pull-right' aria-hidden='true' data-toggle='tooltip' "+
-//                                    "data-placement='right' title='Click to toggle additional associations for "+convertedTrait+" across other data sets'></div>";
-//                            }
-//                        }
-
                     } else {
                         retVal.push("");
                     }
-                   // retVal += "</td>";
 
-
-                   // retVal += "<td>";
+                    var rescueArrow = 0;
                     if (( typeof row["DIR"] !== 'undefined')&&(row["DIR"]!== '')) {
                         if ( row["DIR"] === 1 ) {
-                            retVal.push("<span class='assoc-up'>&uarr;</span>");
+                            rescueArrow = 1;
+                            //    retVal.push("<span class='assoc-up'>&uarr;</span>");
                         }
                         else if ( row["DIR"] === -1 ) {
-                            retVal.push("<span class='assoc-down'>&darr;</span>");
+                            rescueArrow = -1;
+                            //retVal.push("<span class='assoc-down'>&darr;</span>");
                         } else {
-                            retVal.push("");
+                          //  retVal.push("");
                         }
+                    } else {
+                        // no dir.  Can we rescue with beta or ODDS_RATIO
+                        if ((( typeof row["ODDS_RATIO"] !== 'undefined')&&(row["ODDS_RATIO"]!== ''))){
+                            if (row["ODDS_RATIO"]>1){
+                                rescueArrow = 1;
+                            }else if (row["ODDS_RATIO"]<1){
+                                rescueArrow = -1;
+                            }
+                        }
+                        if ((rescueArrow===0)&&(( typeof row["BETA"] !== 'undefined')&&(row["BETA"]!== ''))){
+                            if (row["BETA"]>0){
+                                rescueArrow = 1;
+                            }else if (row["BETA"]<0){
+                                rescueArrow = -1;
+                            }
+                        }
+                    }
+                    if ( rescueArrow === 1 ) {
+                        retVal.push("<span class='assoc-up'>&uarr;</span>");
+                    }
+                    else if ( rescueArrow === -1 ) {
+                        retVal.push("<span class='assoc-down'>&darr;</span>");
                     } else {
                         retVal.push("");
                     }
-                   // retVal += "</td>";
 
-                   // retVal += "<td>";
+
                     if (( typeof row["ODDS_RATIO"] !== 'undefined')&&(row["ODDS_RATIO"]!== '')) {
                         retVal.push(parseFloat(row["ODDS_RATIO"]).toPrecision(3));
                     } else {
                         retVal.push("");
                     }
-                    //retVal += "</td>";
 
 
-                   // retVal += "<td>";
                     if (( typeof row["MAF"] !== 'undefined')&&(row["MAF"]!== '')) {
                         retVal.push(parseFloat(row["MAF"]).toPrecision(3));
                     } else {
                         retVal.push("");
                     }
-                    //retVal += "</td>";
 
-
-                   // retVal += "<td>";
                     if (( typeof row["BETA"] !== 'undefined')&&(row["BETA"]!== '')) {
                         retVal.push( parseFloat(row["BETA"]).toPrecision(3));
                     } else {
                         retVal.push("");
                     }
-                   // retVal += "</td>";
 
-                   // retVal += "</tr>";
                     rowCounter++;
                     $(traitsPerVariantTable).dataTable().fnAddData( retVal );
                 }

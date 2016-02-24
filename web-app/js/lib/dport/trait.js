@@ -18,12 +18,6 @@ var mpgSoftware = mpgSoftware || {};
                                                        copyText,
                                                        printText)  {
             var variant =  data['traitInfo'];
-//            $(traitsPerVariantTableBody).append(variantProcessing.fillTraitsPerVariantTable(variant,
-//                showGene,
-//                showExomeSequence,
-//                showExomeChip,
-//                traitUrl));
-
             $('[data-toggle="tooltip"]').tooltip({container: 'body'});
             var languageSetting = {}
             // check if the browser is using Spanish
@@ -35,34 +29,47 @@ var mpgSoftware = mpgSoftware || {};
                 iDisplayLength: 250,
                 bFilter: false,
                 bPaginate: false,
-                aaSorting: [[ 0, "asc" ]],
+                aaSorting: [[ 1, "asc" ]],
                 sDom: '<"top">rt<"bottom"flp><"clear">',
                 aoColumnDefs: [ { sType: "allnumeric", aTargets: [ 2, 4, 5, 6 ] },
                     { sType: "stringAnchor", aTargets: [ 1 ] },
                     {sType: "headerAnchor", aTargets: [0] },
                     { "orderData": [ 0, 1 ],    "targets": 0 },
-//                    { "sClass": "pull-me-left", "aTargets": [ 0 ] },
+                    { "orderData": [ 1, 0 ],    "targets": 1 },
                     { "width": "80px", "aTargets": [ 4,5,6 ] },
                     { "width": "90px", "aTargets": [ 3 ] },
                     { "width": "100px", "aTargets": [ 2 ] }],
+                "headerCallback": function( thead, data, start, end, display ) {
+                    if (data.length===0){
+                        var label0 = $(thead).find('th').eq(0).html();
+                        var label1 = $(thead).find('th').eq(1).html();
+//                        $(thead).find('th').eq(0).html( label0+'<div><button type="button" class="btn btn-xs expandoButton" onclick="allowExpansionByCohort()">Allow expansion by cohort</button></div>' );
+//                        $(thead).find('th').eq(1).html( label0+'<div><button type="button" class="btn btn-xs expandoButton" onclick="allowExpansionByTrait()">Show all associations per trait</button></div>' );
+                    }
+                },
                 createdRow: function ( row, data, index ) {
-//                    if ( data[5].replace(/[\$,]/g, '') * 1 > 150000 ) {
-//                       // $('td', row).eq(5).addClass('highlight');
-//                    }
                     var rowPtr = $(row);
+                    var convertedSampleGroup = $(data[0]).attr('convertedSampleGroup');
                     if ($(data[0]).hasClass('indexRow')){
-                        var convertedSampleGroup = $(data[0]).attr('convertedSampleGroup');
                         var rowsPerPhenotype = parseInt($(data[0]).attr('rowsPerPhenotype'));
                         rowPtr.attr('id',$(data[0]).attr('phenotypename'));
                         rowPtr.attr('class','clickable');
                         rowPtr.attr('data-toggle','collapse');
                         rowPtr.attr('data-target',"."+$(data[0]).attr('phenotypename')+"collapsed");
                         rowPtr.attr('id',$(data[0]).attr('phenotypename'));
-                        if ((rowsPerPhenotype>1)&&(convertedSampleGroup.indexOf(':')===-1))
-                        $(rowPtr.children()[1]).append("<div class='glyphicon glyphicon-plus-sign pull-right' aria-hidden='true' data-toggle='tooltip' "+
-                            "data-placement='right' title='Click to toggle additional associations for "+convertedSampleGroup+" across other data sets'></div>");
-                    } else {
-                        rowPtr.attr('class',"collapse out budgets "+$(data[0]).attr('phenotypename')+"collapsed");
+                        if (rowsPerPhenotype>1) {
+                            if (convertedSampleGroup.indexOf(':')===-1) {
+                                $(rowPtr.children()[1]).append("<div class='glyphicon glyphicon-plus-sign pull-right' aria-hidden='true' data-toggle='tooltip' "+
+                                    "data-placement='right' title='Click to open additional associations for "+convertedSampleGroup+" across other data sets' onclick='respondToPlusSignClick(this)'></div>");
+                            }
+                        }
+                     } else {
+                        if (convertedSampleGroup.indexOf(':')===-1) { // non cohort may be collapsed
+                            rowPtr.attr('class',"collapse out "+$(data[0]).attr('phenotypename')+"collapsed");
+                        } else { // cohort data was requested specifically -- don't collapse it
+                            rowPtr.attr('class',"collapse in "+$(data[0]).attr('phenotypename')+"collapsed");
+                        }
+
                     }
                 },
                 language: languageSetting
