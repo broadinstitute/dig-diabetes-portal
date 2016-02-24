@@ -793,6 +793,27 @@ var UTILS = {
         }
         return returnValue;
     },
+    extractAnchorTextAsString : function (fullAnchor){
+        var returnValue = '';
+//        var re = new RegExp("\>[A-Za-z]+\<"); // retrieve text, but with angle brackets
+//        var re2 = new RegExp("[A-Za-z]+"); // specifically get the presumed integer
+        var re = new RegExp(/\>[a-z\d\s\-]+\</i); // retrieve text, but with angle brackets
+        var re2 = new RegExp(/[a-z\d\s\-]+/i); // specifically get the presumed integer
+        if (typeof fullAnchor !== 'undefined') {
+            var textWithAngles = fullAnchor.match(re);
+            if ( (typeof textWithAngles !== 'undefined') &&
+                ( textWithAngles !== null) &&
+                (textWithAngles.length > 0) ) {
+                var textWithoutAngles = textWithAngles[0].match(re2);
+                if ( (typeof textWithoutAngles !== 'undefined') &&
+                    (textWithoutAngles.length > 0) ) {
+                    returnValue = textWithoutAngles[0];
+                }
+            }
+        }
+        return returnValue;
+    },
+
     extractHeaderTextAsString : function (fullAnchor){
         var returnValue = 0;
         var re = new RegExp("vandaRow[0-9]+"); // retrieve text that identifies node
@@ -809,6 +830,13 @@ var UTILS = {
                     returnValue = mpgSoftware.trans.translator(sampleGroupName);
                 }
             }
+        }
+        return returnValue;
+    },
+    extractHeaderTextWJqueryAsString : function (fullAnchor){
+        var returnValue = 0;
+        if (typeof fullAnchor !== 'undefined') {
+            var returnValue = $(fullAnchor).attr('sampleGroup');
         }
         return returnValue;
     },
@@ -829,7 +857,45 @@ var UTILS = {
         }
         return returnValue;
     },
-    jsTreeDataRetriever : function (divId,tableId,phenotypeName,sampleGroupName,retrieveJSTreeAjax){
+    labelIndenter : function (tableId) {
+        console.log("beginning indentation process");
+        var rowSGLabel = $('#'+tableId+' td.vandaRowTd div.vandaRowHdr');
+        if (typeof rowSGLabel !== 'undefined'){
+            var adjustmentMadeSoCheckAgain;
+            var indentationMultiplier = 0;
+            var usedAsCore = [];
+            var indentation = 0;
+            do {
+                var coreSGName = undefined;
+                indentationMultiplier++;
+                adjustmentMadeSoCheckAgain = false;
+                for ( var i = 0 ; i < rowSGLabel.length ; i++ ){
+                    var currentDiv = $(rowSGLabel[i]);
+                    var sampleGroupName = mpgSoftware.trans.translator(currentDiv.attr('datasetname'));
+                    if (typeof coreSGName === undefined){
+                        coreSGName = sampleGroupName;
+                        usedAsCore.push(coreSGName);
+                    } else {
+                        if (sampleGroupName.indexOf(coreSGName)>-1){
+                            indentation = 12*indentationMultiplier;
+                            currentDiv.css('padding-left',indentation+'px');
+                            adjustmentMadeSoCheckAgain = true;
+                        } else {
+                            if (usedAsCore.indexOf(sampleGroupName) === -1){ // you only get to be the core once
+                                coreSGName = sampleGroupName;
+                                usedAsCore.push(coreSGName);
+                            }
+                        }
+                    }
+                }
+            } while(adjustmentMadeSoCheckAgain);
+            if (indentation === 0){ // if nothing was intentionally indented then let's reset all the padding to zero
+                rowSGLabel.css('padding-left','0px');
+            }
+        }
+        console.log("ending indentation process");
+    },
+jsTreeDataRetriever : function (divId,tableId,phenotypeName,sampleGroupName,retrieveJSTreeAjax){
         var dataPasser = {phenotype:phenotypeName,sampleGroup:sampleGroupName};
         $(divId).jstree({
             "core" : {

@@ -747,7 +747,14 @@ class MetaDataService {
         String returnValue = ""
         PropertyBean propertyBean =  this.getJsonParser().getPropertyGivenItsAndPhenotypeAndSampleGroupNames( propertyName,  phenotypeName,  sampleGroupName)
         List<String> listOfStrings = propertyBean.getMeanings()
-        return listOfStrings[0]
+
+        if (( listOfStrings.size() == 0 )||
+                (listOfStrings[0] == "NULL")){
+            returnValue = propertyName
+        } else {
+            returnValue = listOfStrings[0]
+        }
+
     }
 
 

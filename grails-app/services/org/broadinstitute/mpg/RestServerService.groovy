@@ -1604,6 +1604,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                             if (particularMapValue instanceof BigDecimal) {// data set particular values
                                 BigDecimal particularMapBigDecimalValue = particularMapValue as BigDecimal
                                 jsonComponentList << "{\"level\":\"${key}^NONE^${key}^${subKey}\",\"count\":${particularMapBigDecimalValue}}"
+                            } else if (particularMapValue instanceof Integer) {// data set particular values
+                                Integer particularMapIntegerValue = particularMapValue as Integer
+                                jsonComponentList << "{\"level\":\"${key}^NONE^${key}^${subKey}\",\"count\":${particularMapIntegerValue}}"
                             } else if (particularMapValue instanceof Map) {
                                 Map particularSubMap = particularMapValue as Map
                                 List<String> particularSubKeys = particularSubMap.keySet() as List

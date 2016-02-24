@@ -226,7 +226,6 @@ var variantsAndAssociationTable = function (phenotype,rowMapParameter){
                                 for ( var i = 0 ; i < numberOfColumns ; i++ ){
                                     anchorColumnMarkers.push(i+3);
                                 }
-                                console.log("?!@?????!!!?!?!???!??!?!?!?!??!?")
                                 $('#variantsAndAssociationsTable').dataTable({
                                         bDestroy: true,
                                         bPaginate:false,

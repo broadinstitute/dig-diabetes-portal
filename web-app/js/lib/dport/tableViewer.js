@@ -601,7 +601,130 @@ var variantProcessing = (function () {
                 }
             }
             return retVal;
+        };
+    addTraitsPerVariantTable = function ( vRecO, traitsPerVariantTable,traitRootUrl,existingRowCount ) {
+        var retVal = [];
+        if (!vRecO) {   // error condition
+            return;
         }
+
+        var vRec = deconvoluteVariantInfo(vRecO);
+        var structureForBuildingTable = buildIntoRows (vRec) ;
+        var rowCounter = existingRowCount;
+        for (var phenotypeName in structureForBuildingTable["phenotypeRows"]) {
+            if ((structureForBuildingTable["phenotypeRows"].hasOwnProperty(phenotypeName))&&
+                (phenotypeName!=="NONE")){
+
+                var rowsPerPhenotype =  structureForBuildingTable["phenotypeRows"] [phenotypeName];
+                for ( var i = 0 ; i < rowsPerPhenotype.length ; i++  ){
+                    var row = rowsPerPhenotype[i];
+                    retVal = [];
+
+//                    if (i === 0){ // set up the row
+//                        retVal += "<tr id='"+phenotypeName+"' class='clickable' data-toggle='collapse' data-target='."+phenotypeName+"collapsed'>"
+//                    } else {
+//                        if (convertedSampleGroup.indexOf(':')===-1) {
+//                            retVal += "<tr class='collapse out budgets "+phenotypeName+"collapsed'>"
+//                        } else {
+//                            retVal += "<tr>"
+//                        }
+//                    }
+
+                    // some shared variables
+                    var convertedTrait=mpgSoftware.trans.translator(phenotypeName);
+                    var convertedSampleGroup=mpgSoftware.trans.translator(row['samplegroup']);
+                    var firstOfMultiPhenotypes = (i===0);
+                    // now start filling in the cells
+//                    retVal += "<td style='text-align: left'><div id='traitsTable"+(rowCounter)+"' class='sgIdentifierInTraitTable' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+"'></div>";
+//                    retVal += "</td>";
+                    //if (i === 0) {
+
+                    if (firstOfMultiPhenotypes) {
+                        retVal.push("<div id='traitsTable"+(rowCounter)+"' class='sgIdentifierInTraitTable indexRow' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+
+                            "' samplegroup='"+row['samplegroup']+"' convertedSampleGroup='"+convertedSampleGroup+"' rowsPerPhenotype='"+rowsPerPhenotype.length+"'>");
+                    } else {
+                        retVal.push("<div id='traitsTable"+(rowCounter)+"' class='sgIdentifierInTraitTable' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+
+                            "' samplegroup='"+row['samplegroup']+"' convertedSampleGroup='"+convertedSampleGroup+"' rowsPerPhenotype='"+rowsPerPhenotype.length+"'>");
+                    }
+
+
+
+                    // for now, restrict this link to GWAS data sets
+                    if (convertedSampleGroup.indexOf('GWAS')>-1){ // GWAS data set - allow anchor
+                        retVal.push("<a href='"+traitRootUrl+"?trait="+phenotypeName+"&significance=5e-8'>"+convertedTrait+"</a>");
+                    } else {
+                        //retVal.push("<a href='"+traitRootUrl+"?trait="+phenotypeName+"&significance=5e-8'>"+convertedTrait+"</a>");
+                        retVal.push("<div style='display:inline'>"+convertedTrait+"</div>");
+                    }
+
+
+
+                   // retVal += "<td>";
+                    if (( typeof row["P_VALUE"] !== 'undefined')&&(row["P_VALUE"]!== '')) {
+                        retVal.push(parseFloat(row["P_VALUE"]).toPrecision(3));
+//                        if (i==0) {
+//                            if ((rowsPerPhenotype.length>1)&&(convertedSampleGroup.indexOf(':')===-1)){
+//                                retVal += "<div class='glyphicon glyphicon-plus-sign pull-right' aria-hidden='true' data-toggle='tooltip' "+
+//                                    "data-placement='right' title='Click to toggle additional associations for "+convertedTrait+" across other data sets'></div>";
+//                            }
+//                        }
+
+                    } else {
+                        retVal.push("");
+                    }
+                   // retVal += "</td>";
+
+
+                   // retVal += "<td>";
+                    if (( typeof row["DIR"] !== 'undefined')&&(row["DIR"]!== '')) {
+                        if ( row["DIR"] === 1 ) {
+                            retVal.push("<span class='assoc-up'>&uarr;</span>");
+                        }
+                        else if ( row["DIR"] === -1 ) {
+                            retVal.push("<span class='assoc-down'>&darr;</span>");
+                        } else {
+                            retVal.push("");
+                        }
+                    } else {
+                        retVal.push("");
+                    }
+                   // retVal += "</td>";
+
+                   // retVal += "<td>";
+                    if (( typeof row["ODDS_RATIO"] !== 'undefined')&&(row["ODDS_RATIO"]!== '')) {
+                        retVal.push(parseFloat(row["ODDS_RATIO"]).toPrecision(3));
+                    } else {
+                        retVal.push("");
+                    }
+                    //retVal += "</td>";
+
+
+                   // retVal += "<td>";
+                    if (( typeof row["MAF"] !== 'undefined')&&(row["MAF"]!== '')) {
+                        retVal.push(parseFloat(row["MAF"]).toPrecision(3));
+                    } else {
+                        retVal.push("");
+                    }
+                    //retVal += "</td>";
+
+
+                   // retVal += "<td>";
+                    if (( typeof row["BETA"] !== 'undefined')&&(row["BETA"]!== '')) {
+                        retVal.push( parseFloat(row["BETA"]).toPrecision(3));
+                    } else {
+                        retVal.push("");
+                    }
+                   // retVal += "</td>";
+
+                   // retVal += "</tr>";
+                    rowCounter++;
+                    $(traitsPerVariantTable).dataTable().fnAddData( retVal );
+                }
+
+            }
+        }
+        return retVal;
+    };
     var contentExists = function (field){
         return ((typeof field !== 'undefined') && (field !== null) );
     };
@@ -823,6 +946,7 @@ var variantProcessing = (function () {
     };
 
     return {
+        addTraitsPerVariantTable:addTraitsPerVariantTable,
         iterativeVariantTableFiller:iterativeVariantTableFiller,
         fillTheVariantTable: fillTheVariantTable,
         fillCollectedVariantsTable:fillCollectedVariantsTable,
