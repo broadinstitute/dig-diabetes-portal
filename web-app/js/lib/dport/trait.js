@@ -50,6 +50,10 @@ var mpgSoftware = mpgSoftware || {};
                 createdRow: function ( row, data, index ) {
                     var rowPtr = $(row);
                     var convertedSampleGroup = $(data[0]).attr('convertedSampleGroup');
+                    var cells = rowPtr.children();
+                    if (cells.length > 0){
+                        $(cells[0]).addClass('vandaRowTd');
+                    }
                     if ($(data[0]).hasClass('indexRow')){
                         var rowsPerPhenotype = parseInt($(data[0]).attr('rowsPerPhenotype'));
                         rowPtr.attr('id',$(data[0]).attr('phenotypename'));
@@ -87,7 +91,6 @@ var mpgSoftware = mpgSoftware || {};
             variantProcessing.addTraitsPerVariantTable(variant,
                 traitsPerVariantTable,
                 traitUrl,0);
-           // $( tableTools.fnContainer() ).insertAfter(traitsPerVariantTable);
         };
 
 

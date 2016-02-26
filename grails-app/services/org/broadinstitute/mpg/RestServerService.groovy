@@ -1347,10 +1347,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         if (orValue.length() > 0) {
             addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSet, orValue)
         }
-        filters << "17=${phenotypeName}[${dataSet}]P_VALUE<${maximumPValue.toString()}"
-        filters << "17=${phenotypeName}[${dataSet}]P_VALUE>${minimumPValue.toString()}"
+        String pValueName = filterManagementService.findFavoredMeaningValue ( dataSet, phenotypeName, "P_VALUE" )
+        filters << "17=${phenotypeName}[${dataSet}]${pValueName}<${maximumPValue.toString()}"
+        filters << "17=${phenotypeName}[${dataSet}]${pValueName}>${minimumPValue.toString()}"
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters, searchBuilderService, metaDataService)
-        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSet, "P_VALUE")
+        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSet, pValueName)
         addColumnsForDProperties(resultColumnsToDisplay, "${MAFPHENOTYPE}", dataSet)
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         JsonSlurper slurper = new JsonSlurper()
@@ -1370,7 +1371,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @return
      */
     public JSONObject getTraitSpecificInformation(String phenotypeName, String dataSet, LinkedHashMap properties, BigDecimal maximumPValue, BigDecimal minimumPValue) {
-//region
         JSONObject returnValue
         String orValue = orSubstitute(properties)
         def slurper = new JsonSlurper()

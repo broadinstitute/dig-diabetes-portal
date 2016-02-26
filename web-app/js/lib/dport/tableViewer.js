@@ -624,60 +624,81 @@ var variantProcessing = (function () {
                     var convertedTrait=mpgSoftware.trans.translator(phenotypeName);
                     var convertedSampleGroup=mpgSoftware.trans.translator(row['samplegroup']);
                     var firstOfMultiPhenotypes = (i===0);
+                    var oddsRatioValue = Number.NaN;
+                    var betaValue = Number.NaN;
+                    var pValue = Number.NaN;
+                    var mafValue = Number.NaN;
+                    var rescueArrow = 0;
 
+                    //
+                    // pull numeric data out of our structure. Be prepared for any values to be missing
+                    //
+                    if (( typeof row["P_VALUE"] !== 'undefined')&&(row["P_VALUE"]!== '')&&(row["P_VALUE"]!== null)) {
+                        pValue = parseFloat(row["P_VALUE"]);
+                    }
+
+                    if (( typeof row["ODDS_RATIO"] !== 'undefined')&&(row["ODDS_RATIO"]!== '')&&(row["ODDS_RATIO"]!== null)) {
+                        oddsRatioValue = parseFloat(row["ODDS_RATIO"]);
+                    }
+
+                    if (( typeof row["BETA"] !== 'undefined')&&(row["BETA"]!== '')&&(row["BETA"]!== null)) {
+                        betaValue = parseFloat(row["BETA"]);
+                    }
+
+                    if (( typeof row["MAF"] !== 'undefined')&&(row["MAF"]!== '')&&(row["MAF"]!== null)) {
+                        mafValue = parseFloat(row["MAF"]);
+                    }
+
+                    // direction of effect is a little tricky.  Take it from the odds ratio if we have an odds ratio
+                     if (!isNaN(oddsRatioValue)) {
+                        if (oddsRatioValue>1){
+                            rescueArrow = 1;
+                        }else if (oddsRatioValue<1){
+                            rescueArrow = -1;
+                        }
+                    }
+                    // No odds ratio?  Take direction of effect from the beta if we have a beta
+                    if ((rescueArrow===0)&&(!isNaN(betaValue))) {
+                        if (betaValue>0){
+                            rescueArrow = 1;
+                        }else if (betaValue<0){
+                            rescueArrow = -1;
+                        }
+                    }
+                    // No odds ratio and no beta?  Maybe we have a direction that is independently specified.  That works too.
+                    if ((rescueArrow===0)&&(( typeof row["DIR"] !== 'undefined')&&(row["DIR"]!== '')&&(row["DIR"]!== null) ) ){
+                        if ( row["DIR"] === 1 ) {
+                            rescueArrow = 1;
+                        }
+                        else if ( row["DIR"] === -1 ) {
+                            rescueArrow = -1;
+                        }
+                    }
+
+                    // field 1: data set
                     if (firstOfMultiPhenotypes) {
-                        retVal.push("<div id='traitsTable"+(rowCounter)+"' class='sgIdentifierInTraitTable indexRow' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+
+                        retVal.push("<div id='traitsTable"+(rowCounter)+"' class='vandaRowHdr sgIdentifierInTraitTable indexRow' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+
                             "' samplegroup='"+row['samplegroup']+"' convertedSampleGroup='"+convertedSampleGroup+"' rowsPerPhenotype='"+rowsPerPhenotype.length+"'>");
                     } else {
-                        retVal.push("<div id='traitsTable"+(rowCounter)+"' class='sgIdentifierInTraitTable' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+
+                        retVal.push("<div id='traitsTable"+(rowCounter)+"' class='vandaRowHdr sgIdentifierInTraitTable' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+
                             "' samplegroup='"+row['samplegroup']+"' convertedSampleGroup='"+convertedSampleGroup+"' rowsPerPhenotype='"+rowsPerPhenotype.length+"'>");
                     }
 
-
-
-                    // for now, restrict this link to GWAS data sets
+                    // field 2: phenotype, which may or may not be a link.  for now, restrict this link to GWAS data sets
                     if (convertedSampleGroup.indexOf('GWAS')>-1){ // GWAS data set - allow anchor
                         retVal.push("<a href='"+traitRootUrl+"?trait="+phenotypeName+"&significance=5e-8'>"+convertedTrait+"</a>");
                     } else {
                         retVal.push("<div style='display:inline'>"+convertedTrait+"</div>");
                     }
 
-
-                    if (( typeof row["P_VALUE"] !== 'undefined')&&(row["P_VALUE"]!== '')) {
-                        retVal.push(parseFloat(row["P_VALUE"]).toPrecision(3));
+                    // field 3: direction of pValue
+                    if (!isNaN(pValue)) {
+                        retVal.push(pValue.toPrecision(3));
                     } else {
                         retVal.push("");
                     }
 
-                    var rescueArrow = 0;
-                    if (( typeof row["DIR"] !== 'undefined')&&(row["DIR"]!== '')) {
-                        if ( row["DIR"] === 1 ) {
-                            rescueArrow = 1;
-                            //    retVal.push("<span class='assoc-up'>&uarr;</span>");
-                        }
-                        else if ( row["DIR"] === -1 ) {
-                            rescueArrow = -1;
-                            //retVal.push("<span class='assoc-down'>&darr;</span>");
-                        } else {
-                          //  retVal.push("");
-                        }
-                    } else {
-                        // no dir.  Can we rescue with beta or ODDS_RATIO
-                        if ((( typeof row["ODDS_RATIO"] !== 'undefined')&&(row["ODDS_RATIO"]!== ''))){
-                            if (row["ODDS_RATIO"]>1){
-                                rescueArrow = 1;
-                            }else if (row["ODDS_RATIO"]<1){
-                                rescueArrow = -1;
-                            }
-                        }
-                        if ((rescueArrow===0)&&(( typeof row["BETA"] !== 'undefined')&&(row["BETA"]!== ''))){
-                            if (row["BETA"]>0){
-                                rescueArrow = 1;
-                            }else if (row["BETA"]<0){
-                                rescueArrow = -1;
-                            }
-                        }
-                    }
+                    // field 4: direction of effect
                     if ( rescueArrow === 1 ) {
                         retVal.push("<span class='assoc-up'>&uarr;</span>");
                     }
@@ -687,25 +708,29 @@ var variantProcessing = (function () {
                         retVal.push("");
                     }
 
+                    // field 5: odds ratio
+                    if (!isNaN(oddsRatioValue)) {
+                        retVal.push(oddsRatioValue.toPrecision(3));
+                    } else {
+                        retVal.push("");
+                    }
 
-                    if (( typeof row["ODDS_RATIO"] !== 'undefined')&&(row["ODDS_RATIO"]!== '')) {
-                        retVal.push(parseFloat(row["ODDS_RATIO"]).toPrecision(3));
+                    // field 6: maf
+                    if (!isNaN(mafValue)) {
+                        retVal.push(mafValue.toPrecision(3));
+                    } else {
+                        retVal.push("");
+                    }
+
+                    // field 7: beta
+                    if (!isNaN(betaValue)) {
+                        retVal.push(betaValue.toPrecision(3));
                     } else {
                         retVal.push("");
                     }
 
 
-                    if (( typeof row["MAF"] !== 'undefined')&&(row["MAF"]!== '')) {
-                        retVal.push(parseFloat(row["MAF"]).toPrecision(3));
-                    } else {
-                        retVal.push("");
-                    }
 
-                    if (( typeof row["BETA"] !== 'undefined')&&(row["BETA"]!== '')) {
-                        retVal.push( parseFloat(row["BETA"]).toPrecision(3));
-                    } else {
-                        retVal.push("");
-                    }
 
                     rowCounter++;
                     $(traitsPerVariantTable).dataTable().fnAddData( retVal );

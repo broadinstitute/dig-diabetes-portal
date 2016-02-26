@@ -603,33 +603,11 @@ class SharedToolsService {
                 List<SampleGroup> sortedTechnologySpecificSampleGroups = technologySpecificSampleGroups.sort { SampleGroup a, SampleGroup b ->
                     (b.subjectsNumber as Integer) <=> (a.subjectsNumber as Integer)
                 }
-//                fullListOfSampleGroups << sortedTechnologySpecificSampleGroups[0]
-//                // add in Sigma by hand
-//                SampleGroup sigmaGroup
-//                sigmaGroup = sortedTechnologySpecificSampleGroups.find { it.systemId == 'ExChip_SIGMA1_mdv2' }
-//                if (sigmaGroup) {
-//                    fullListOfSampleGroups << sigmaGroup
-//                }
-//                sigmaGroup = sortedTechnologySpecificSampleGroups.find { it.systemId == 'GWAS_SIGMA1_mdv2' }
-//                if (sigmaGroup) {
-//                    fullListOfSampleGroups << sigmaGroup
-//                }
                 if ("ExSeq" == technologyName) {
                     fullListOfSampleGroups.add(sortedTechnologySpecificSampleGroups[0])
                 } else {
                     fullListOfSampleGroups.addAll(sortedTechnologySpecificSampleGroups)
                 }
-
-                // add in Sigma by hand
-//                SampleGroup sigmaGroup
-//                sigmaGroup = sortedTechnologySpecificSampleGroups.find { it.systemId == 'ExChip_SIGMA1_mdv2' }
-//                if (sigmaGroup) {
-//                    fullListOfSampleGroups << sigmaGroup
-//                }
-//                sigmaGroup = sortedTechnologySpecificSampleGroups.find { it.systemId == 'GWAS_SIGMA1_mdv2' }
-//                if (sigmaGroup) {
-//                    fullListOfSampleGroups << sigmaGroup
-//                }
             }
         }
         return fullListOfSampleGroups

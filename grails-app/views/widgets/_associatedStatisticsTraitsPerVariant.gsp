@@ -3,7 +3,11 @@
     dbSnpId: for the snp id, if provided (from the trait info page)
     openOnLoad: if accordion closed at start
 -->
+
 <style>
+tr.collapse.in {
+    display: table-row;
+}
 tr.bestAssociation {
 
 }
@@ -173,7 +177,7 @@ button.expandoButton:visited {
                 tableNotLoaded = false;
             }
         });
-        $('#collapseVariantTraitAssociation').on('order.dt', UTILS.labelIndenter('collapseVariantTraitAssociation'));
+        $('#traitsPerVariantTable').on('order.dt', UTILS.labelIndenter('traitsPerVariantTable'));
 
 
         var traitTable = function (variantIdentifier, datasetmaps) {
