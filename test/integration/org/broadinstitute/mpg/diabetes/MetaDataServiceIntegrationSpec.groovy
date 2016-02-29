@@ -151,15 +151,15 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
 //        assert "dude" == resultJson.toString()
     }
 
-    void "test get metadata version"() {
-        when:
-        String expectedMetadataVersion = "mdv9";
-        // set the request session
-        WebUtils.retrieveGrailsWebRequest()?.getSession()?.setAttribute("portalType", "stroke");
-        String metadataVersion = this.metaDataService?.getDataVersion();
-
-        then:
-        assert metadataVersion != null
-        assert metadataVersion?.equals(expectedMetadataVersion)
-    }
+//    void "test get metadata version"() {
+//        when:
+//        String expectedMetadataVersion = "mdv9";
+//        // set the request session
+//        WebUtils.retrieveGrailsWebRequest()?.getSession()?.setAttribute("portalType", "stroke");
+//        String metadataVersion = this.metaDataService?.getDataVersion();
+//
+//        then:
+//        assert metadataVersion != null
+//        assert metadataVersion?.equals(expectedMetadataVersion)
+//    }
 }

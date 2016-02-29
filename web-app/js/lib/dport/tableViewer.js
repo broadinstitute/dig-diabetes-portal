@@ -609,6 +609,7 @@ var variantProcessing = (function () {
         }
 
         var vRec = deconvoluteVariantInfo(vRecO);
+        var openPhenotypes = vRecO.results[0].openPhenotypes;
         var structureForBuildingTable = buildIntoRows (vRec) ;
         var rowCounter = existingRowCount;
         for (var phenotypeName in structureForBuildingTable["phenotypeRows"]) {
@@ -676,6 +677,8 @@ var variantProcessing = (function () {
                     }
 
                     // field 1: data set
+                    var openPhenotypeMarker = "";
+                   // if (openPhenotypes.indexOf())
                     if (firstOfMultiPhenotypes) {
                         retVal.push("<div id='traitsTable"+(rowCounter)+"' class='vandaRowHdr sgIdentifierInTraitTable indexRow' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+
                             "' samplegroup='"+row['samplegroup']+"' convertedSampleGroup='"+convertedSampleGroup+"' rowsPerPhenotype='"+rowsPerPhenotype.length+"'>");
