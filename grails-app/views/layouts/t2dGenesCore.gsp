@@ -51,7 +51,12 @@
 
 
 <div class="row column-center" style="background-color: #65A1DC;padding-top:7px;padding-bottom: 7px;">
+<g:if test="${session?.getAttribute('portalType')?.equals('stroke')}">
+    <div class="text-center" style="color: #ffffff;"><g:message code="portal.stroke.use.citation.request"/><g:message code="portal.stroke.use.citation.itself"/> </div>
+</g:if>
+<g:else>
     <div class="text-center" style="color: #ffffff;"><g:message code="portal.use.citation.request"/><g:message code="portal.use.citation.itself"/> </div>
+</g:else>
 </div>
 
 <div>
