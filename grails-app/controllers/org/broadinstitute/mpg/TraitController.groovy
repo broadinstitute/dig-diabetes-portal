@@ -78,7 +78,9 @@ class TraitController {
             technology =  params["technology"]
         }
        // JSONObject jsonObject = restServerService.getTraitPerVariant( variant,technology)
-        JSONObject jsonObject = restServerService.getSpecifiedTraitPerVariant( variant,jsonObjectFromBrowser.vals.collect{return new LinkedHashMap(ds:it.ds,phenotype:it.phenotype,prop:it.prop,otherFields:it.otherFields)})
+        JSONObject jsonObject = restServerService.getSpecifiedTraitPerVariant( variant,
+                                                                               jsonObjectFromBrowser.vals.collect{return new LinkedHashMap(ds:it.ds,phenotype:it.phenotype,prop:it.prop,otherFields:it.otherFields)},
+                                                                               jsonObjectFromBrowser.phenos )
 
         def showExomeChip = sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp);
         def showExomeSequence = sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq);

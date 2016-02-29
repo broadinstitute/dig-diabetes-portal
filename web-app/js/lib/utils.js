@@ -582,7 +582,6 @@ var UTILS = {
             (typeof dataSetJson["is_error"] !== 'undefined')&&
             (dataSetJson["is_error"] === false))
         {
-            console.log("filling the phenotype dropdown", dataSetJson);
             var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
             var options = $(phenotypeDropDownIdentifier);
             options.empty();
@@ -858,7 +857,6 @@ var UTILS = {
         return returnValue;
     },
     labelIndenter : function (tableId) {
-        console.log("beginning indentation process");
         var rowSGLabel = $('#'+tableId+' td.vandaRowTd div.vandaRowHdr');
         if (typeof rowSGLabel !== 'undefined'){
             var adjustmentMadeSoCheckAgain;
@@ -872,11 +870,15 @@ var UTILS = {
                 for ( var i = 0 ; i < rowSGLabel.length ; i++ ){
                     var currentDiv = $(rowSGLabel[i]);
                     var sampleGroupName = mpgSoftware.trans.translator(currentDiv.attr('datasetname'));
+                    var phenotypeName = mpgSoftware.trans.translator(currentDiv.attr('phenotypename'));
+                    if ((typeof phenotypeName !== 'undefined')  && (phenotypeName!=='') ){
+                        sampleGroupName =+ ("_"+phenotypeName);
+                    }
                     if (typeof coreSGName === undefined){
                         coreSGName = sampleGroupName;
                         usedAsCore.push(coreSGName);
                     } else {
-                        if (sampleGroupName.indexOf(coreSGName)>-1){
+                        if (usedAsCore.indexOf(coreSGName)>-1){
                             indentation = 12*indentationMultiplier;
                             currentDiv.css('padding-left',indentation+'px');
                             adjustmentMadeSoCheckAgain = true;
@@ -893,7 +895,6 @@ var UTILS = {
                 rowSGLabel.css('padding-left','0px');
             }
         }
-        console.log("ending indentation process");
     },
 jsTreeDataRetriever : function (divId,tableId,phenotypeName,sampleGroupName,retrieveJSTreeAjax){
         var dataPasser = {phenotype:phenotypeName,sampleGroup:sampleGroupName};
@@ -964,7 +965,6 @@ jsTreeDataRetriever : function (divId,tableId,phenotypeName,sampleGroupName,retr
 
         var translations;
         var translator = function (incoming) {
-            console.log("translating", incoming);
             var returnValue='';
             if (typeof incoming !== 'undefined') {
                 var newForm = translations['v' + incoming];

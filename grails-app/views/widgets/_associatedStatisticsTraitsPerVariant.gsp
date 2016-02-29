@@ -37,6 +37,10 @@ button.expandoButton:visited {
     color: white;
 }
 
+td.significantPValue {
+    background-color: #BADCFB;
+}
+
 #collapseVariantTraitAssociation th {
     vertical-align: middle;
 }
@@ -180,7 +184,7 @@ button.expandoButton:visited {
         $('#traitsPerVariantTable').on('order.dt', UTILS.labelIndenter('traitsPerVariantTable'));
 
 
-        var traitTable = function (variantIdentifier, datasetmaps) {
+        var traitTable = function (variantIdentifier, datasetmaps, arrayOfOpenPhenotypes) {
 
             var addMoreValues = function (data, howManyGroups) {
                 if (howManyGroups == 0) {
@@ -238,7 +242,8 @@ button.expandoButton:visited {
                     rowMap.map(function (d) {
                         rowValues.push("{\"ds\":\"" + d.name + "\",\"prop\":\"" + d.pvalue + "\",\"phenotype\":\"" + d.phenotype + "\"}");
                     });
-                    jsonString = "{\"vals\":[\n" + rowValues.join(",\n") + "\n]}";
+                    jsonString = "{\"vals\":[\n" + rowValues.join(",\n") + "\n],\n" +
+                            "\"phenos\":[\n" + arrayOfOpenPhenotypes.join(",\n") + "\n]}";
 
                 }
                 $.ajax({
@@ -281,12 +286,14 @@ button.expandoButton:visited {
                     }
                 });
             }
+            // get the indenting for now...
+            //UTILS.labelIndenter('traitsPerVariantTable');
 
         };
 
 
         function reviseTraitsTableRows() {
-
+            // get the boxes for which the cohorts have been requested
             var clickedBoxes = $('#traitsPerVariantTable .jstree-clicked');
             var dataSetNames = [];
             var dataSetMaps = [];
@@ -301,9 +308,14 @@ button.expandoButton:visited {
                     "phenotype": partsOfCombo[3].substring(0, partsOfCombo[3].length - 7)};
                 dataSetMaps.push(dataSetMap);
             }
+            // remember which phenotypes have been opened with a +
+            var openPhenotypes = $('.glyphicon-minus-sign');
+            var arrayOfOpenPhenotypes = [];
+            for ( var i = 0 ; i < openPhenotypes.length ; i++ ){
+                arrayOfOpenPhenotypes.push('"'+$(openPhenotypes[i]).closest('tr').children('.vandaRowTd').children('.vandaRowHdr').attr('phenotypename')+'"');
+            }
 
-
-            traitTable('<%=variantIdentifier%>', dataSetMaps);
+            traitTable('<%=variantIdentifier%>', dataSetMaps, arrayOfOpenPhenotypes);
         }
 
 

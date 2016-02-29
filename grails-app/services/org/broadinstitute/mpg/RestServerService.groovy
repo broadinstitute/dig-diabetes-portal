@@ -1570,14 +1570,16 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
-    public JSONObject getSpecifiedTraitPerVariant( String variantName, List<LinkedHashMap<String,String>> propsToUse) {
+    public JSONObject getSpecifiedTraitPerVariant( String variantName, List<LinkedHashMap<String,String>> propsToUse, List<String> openPhenotypes) {
 
         JSONObject returnValue
         JSONObject apiResults = gatherSpecificTraitsPerVariantResults(variantName, propsToUse)
         int numberOfVariants = apiResults.numRecords
         List<String> jsonComponentList = []
         StringBuilder sb = new StringBuilder("{\"results\":[")
-        sb << "{ \"dataset\": \"traits\",\"pVals\": ["
+        sb << "{ \"dataset\": \"traits\","+
+                "\"openPhenotypes\": [${openPhenotypes?.collect{("\""+it+"\"")}.join(",")}],"+
+                "\"pVals\": ["
         if (!apiResults["is_error"]){
             for (int j = 0; j < numberOfVariants; j++) {
                 List<String> keys = []
