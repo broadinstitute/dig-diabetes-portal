@@ -79,6 +79,9 @@
                             ( typeof data.datasets !== 'undefined' ) &&
                             (  data.datasets !==  null ) ) {
                         UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#trait-input');
+<g:if test="${session?.getAttribute('portalType')?.equals('stroke')}">
+                        $("select#trait-input").val("${g.defaultPhenotype()}");
+</g:if>
                     }
                     loading.hide();
                 },

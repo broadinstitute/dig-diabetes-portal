@@ -313,7 +313,41 @@
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
                                 })"><g:message code="informational.shared.traits.bipolar" /></a>
                             </li>
-
+<g:if test="${session?.getAttribute('portalType')?.equals('stroke')}">
+    <li>
+        <a onclick="igv.browser.loadTrack({ type: 't2d',
+            url: '${createLink(controller:'trait', action:'getData')}',
+            trait: 'Stroke_all',
+            dataset: 'GWAS_Stroke_mdv5',
+            pvalue: 'P_VALUE',
+            name: 'stroke',
+            variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
+            traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
+        })"><g:message code="informational.shared.traits.stroke" /></a>
+    </li>
+    <li>
+        <a onclick="igv.browser.loadTrack({ type: 't2d',
+            url: '${createLink(controller:'trait', action:'getData')}',
+            trait: 'Stroke_deep',
+            dataset: 'GWAS_Stroke_mdv5',
+            pvalue: 'P_VALUE',
+            name: 'stroke deep',
+            variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
+            traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
+        })"><g:message code="informational.shared.traits.stroke_deep" /></a>
+    </li>
+    <li>
+        <a onclick="igv.browser.loadTrack({ type: 't2d',
+            url: '${createLink(controller:'trait', action:'getData')}',
+            trait: 'Stroke_lobar',
+            dataset: 'GWAS_Stroke_mdv5',
+            pvalue: 'P_VALUE',
+            name: 'stroke lobar',
+            variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
+            traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
+        })"><g:message code="informational.shared.traits.stroke_lobar" /></a>
+    </li>
+</g:if>
                         </ul>
                     </li>
                 </ul>
@@ -362,6 +396,39 @@
             locus: locusName,
             flanking: 100000,
             tracks: [
+<g:if test="${session?.getAttribute('portalType')?.equals('stroke')}">
+                {
+                    type: "t2d",
+                    url: "${createLink(controller:'trait', action:'getData')}",
+                    trait: "Stroke_all",
+                    dataset: "GWAS_Stroke_mdv5",
+                    pvalue: "P_VALUE",
+                    name: "<g:message code='informational.shared.traits.stroke' />",
+                    variantURL: "http://www.type2diabetesgenetics.org/variantInfo/variantInfo/",
+                    traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
+                },
+                {
+                    type: "t2d",
+                    url: "${createLink(controller:'trait', action:'getData')}",
+                    trait: "Stroke_deep",
+                    dataset: "GWAS_Stroke_mdv5",
+                    pvalue: "P_VALUE",
+                    name: "<g:message code='informational.shared.traits.stroke_deep' />",
+                    variantURL: "http://www.type2diabetesgenetics.org/variantInfo/variantInfo/",
+                    traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
+                },
+                {
+                    type: "t2d",
+                    url: "${createLink(controller:'trait', action:'getData')}",
+                    trait: "Stroke_lobar",
+                    dataset: "GWAS_Stroke_mdv5",
+                    pvalue: "P_VALUE",
+                    name: "<g:message code='informational.shared.traits.stroke_lobar' />",
+                    variantURL: "http://www.type2diabetesgenetics.org/variantInfo/variantInfo/",
+                    traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
+                },
+</g:if>
+<g:else>
                 {
                     type: "t2d",
                     %{--url: "${restServer.currentRestServer()}getData",--}%
@@ -393,6 +460,7 @@
                     variantURL: "http://www.type2diabetesgenetics.org/variantInfo/variantInfo/",
                     traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
                 },
+</g:else>
                 {
                     url: "http://data.broadinstitute.org/igvdata/t2d/recomb_decode.bedgraph",
                     min: 0,
