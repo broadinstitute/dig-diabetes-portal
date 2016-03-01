@@ -796,8 +796,8 @@ var UTILS = {
         var returnValue = '';
 //        var re = new RegExp("\>[A-Za-z]+\<"); // retrieve text, but with angle brackets
 //        var re2 = new RegExp("[A-Za-z]+"); // specifically get the presumed integer
-        var re = new RegExp(/\>[a-z\d\s\-]+\</i); // retrieve text, but with angle brackets
-        var re2 = new RegExp(/[a-z\d\s\-]+/i); // specifically get the presumed integer
+        var re = new RegExp(/\>[a-z\d\s\-\(\)]+\</i); // retrieve text, but with angle brackets
+        var re2 = new RegExp(/[a-z\d\s\-\(\)]+/i); // specifically get the presumed integer
         if (typeof fullAnchor !== 'undefined') {
             var textWithAngles = fullAnchor.match(re);
             if ( (typeof textWithAngles !== 'undefined') &&
@@ -857,42 +857,64 @@ var UTILS = {
         return returnValue;
     },
     labelIndenter : function (tableId) {
+//        var orderFields = function(a,b){
+//            var aDom = $(a);
+//            var bDom = $(b);
+//            var aP = mpgSoftware.trans.translator(aDom.attr('phenotypename'));
+//            var aD = mpgSoftware.trans.translator(aDom.attr('datasetname'));
+//            var bP = mpgSoftware.trans.translator(bDom.attr('phenotypename'));
+//            var bD = mpgSoftware.trans.translator(bDom.attr('datasetname'));
+//            var pCmp =  aP.localeCompare(bP);
+//            if (pCmp!==0) return pCmp;
+//            return  aD.localeCompare(bD);
+//        }
         var rowSGLabel = $('#'+tableId+' td.vandaRowTd div.vandaRowHdr');
         if (typeof rowSGLabel !== 'undefined'){
             var adjustmentMadeSoCheckAgain;
             var indentationMultiplier = 0;
             var usedAsCore = [];
             var indentation = 0;
+           // var sortedRowSGLabel = rowSGLabel.sort(orderFields);
+            sortedRowSGLabel = rowSGLabel;
             do {
                 var coreSGName = undefined;
+                var lastPhenotype = undefined;
                 indentationMultiplier++;
                 adjustmentMadeSoCheckAgain = false;
-                for ( var i = 0 ; i < rowSGLabel.length ; i++ ){
-                    var currentDiv = $(rowSGLabel[i]);
+                for ( var i = 0 ; i < sortedRowSGLabel.length ; i++ ){
+                    var currentDiv = $(sortedRowSGLabel[i]);
                     var sampleGroupName = mpgSoftware.trans.translator(currentDiv.attr('datasetname'));
                     var phenotypeName = mpgSoftware.trans.translator(currentDiv.attr('phenotypename'));
-                    if ((typeof phenotypeName !== 'undefined')  && (phenotypeName!=='') ){
-                        sampleGroupName =+ ("_"+phenotypeName);
-                    }
-                    if (typeof coreSGName === undefined){
+                    if (typeof coreSGName === 'undefined'){
                         coreSGName = sampleGroupName;
-                        usedAsCore.push(coreSGName);
+                        lastPhenotype = phenotypeName;
+                        usedAsCore.push({'sg':coreSGName,'ph':phenotypeName});
                     } else {
-                        if (usedAsCore.indexOf(coreSGName)>-1){
+                        var haveSeenItBefore = false;
+                        for (var j = 0 ; j < usedAsCore.length ; j++){
+                            if ((usedAsCore[j].sg===sampleGroupName)&&
+                                (usedAsCore[j].ph===phenotypeName)){
+                                haveSeenItBefore = true;
+                            }
+                        }
+                        if ((sampleGroupName.indexOf(coreSGName)>-1)&&
+                            (lastPhenotype === phenotypeName)&&
+                            (!haveSeenItBefore)){
                             indentation = 12*indentationMultiplier;
                             currentDiv.css('padding-left',indentation+'px');
                             adjustmentMadeSoCheckAgain = true;
                         } else {
-                            if (usedAsCore.indexOf(sampleGroupName) === -1){ // you only get to be the core once
+                           if (!haveSeenItBefore){ // you only get to be the core once
                                 coreSGName = sampleGroupName;
-                                usedAsCore.push(coreSGName);
+                                lastPhenotype = phenotypeName;
+                                usedAsCore.push({'sg':coreSGName,'ph':phenotypeName});
                             }
                         }
                     }
                 }
             } while(adjustmentMadeSoCheckAgain);
             if (indentation === 0){ // if nothing was intentionally indented then let's reset all the padding to zero
-                rowSGLabel.css('padding-left','0px');
+                sortedRowSGLabel.css('padding-left','0px');
             }
         }
     },
@@ -948,7 +970,63 @@ jsTreeDataRetriever : function (divId,tableId,phenotypeName,sampleGroupName,retr
         });
 
 
+    },
+    jsTreeDataRetrieverPhenoSpec : function (divId,tableId,phenotypeName,sampleGroupName,retrieveJSTreeAjax){
+        var dataPasser = {phenotype:phenotypeName,sampleGroup:sampleGroupName};
+        $(divId).jstree({
+            "core" : {
+                "animation" : 0,
+                "check_callback" : true,
+                "themes" : { "stripes" : false },
+                'data' : {
+                    'type': "post",
+                    'url' :  retrieveJSTreeAjax,
+                    'data': function (c,i) {
+                        return dataPasser;
+                    },
+                    'metadata': dataPasser
+                }
+            },
+            "checkbox" : {
+                "keep_selected_style" : false,
+                "three_state": false
+            },
+            "plugins" : [  "themes","core", "wholerow", "checkbox", "json_data", "ui", "types"]
+        });
+        $(divId).on ('after_open.jstree', function (e, data) {
+            for ( var i = 0 ; i < data.node.children.length ; i++ )  {
+                $(divId).jstree("select_node", '#'+data.node.children[i]+' .jstree-checkbox', true);
+            }
+        }) ;
+        $(divId).on ('load_node.jstree', function (e, data) {
+            var existingNodes = $(tableId+' td.vandaRowTd div.vandaRowHdr');
+            var sgsWeHaveAlready = [];
+            for ( var i = 0 ; i < existingNodes.length ; i++ ){
+                var currentDiv = $(existingNodes[i]);
+              // sgsWeHaveAlready.push({'ds':currentDiv.attr('datasetname'),'ph':currentDiv.attr('phenotypename')});
+                sgsWeHaveAlready.push(""+currentDiv.attr('datasetname')+"_"+currentDiv.attr('phenotypename'));
+            }
+            var listToDelete = [];
+            for ( var i = 0 ; i < data.node.children_d.length ; i++ )  {
+                var nodeId =  data.node.children_d[i];
+                if (data.node.children.indexOf(nodeId)==-1){ // elements in children_d and NOT children are actual child nodes.
+                    // Elements in children can be self pointers for a node, which we don't want to delete
+                    var sampleGroupPieces = nodeId.split('-');
+                    var sampleGroupName = sampleGroupPieces[0]+"_"+sampleGroupPieces[3];
+                    if (sgsWeHaveAlready.indexOf(sampleGroupName)>-1){
+                        listToDelete.push(data.node.children_d[i]);
+                    }
+                }
+            }
+            for ( var i = 0 ; i < listToDelete.length ; i++ )  {
+                $(divId).jstree("delete_node", listToDelete[i]);
+            }
+
+        });
+
+
     }
+
 
 
 

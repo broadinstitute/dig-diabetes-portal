@@ -8,11 +8,9 @@ var mpgSoftware = mpgSoftware || {};
     mpgSoftware.trait = (function () {
 
         var fillTheTraitsPerVariantFields = function  (data,
+                                                       openPhenotypes,
                                                        traitsPerVariantTableBody,
                                                        traitsPerVariantTable,
-                                                       showGene,
-                                                       showExomeSequence,
-                                                       showExomeChip,
                                                        traitUrl,
                                                        locale,
                                                        copyText,
@@ -35,8 +33,8 @@ var mpgSoftware = mpgSoftware || {};
 //                    { sType: "allnumeric", aTargets: [ 2, 4, 5, 6 ] },
                     { sType: "stringAnchor", aTargets: [ 1 ] },
                     { sType: "headerAnchor", aTargets: [0] },
-                    { "bSortable": false, "aTargets": [0,1,2,3,4,5,6] },
-//                    { "orderData": [ 1, 0 ],    "targets": [ 0, 1] },
+                    { "bSortable": false, "aTargets": [0,2,3,4,5,6] },
+                    { "orderData": [ 1, 0 ],    "targets": [ 0, 1] },
 //                    { "orderData": [ 1, 2 ],    "targets": 2 },
 //                    { "orderData": [ 1, 3 ],    "targets": 3 },
 //                    { "orderData": [ 1, 4 ],    "targets": 4 },
@@ -66,8 +64,12 @@ var mpgSoftware = mpgSoftware || {};
                             (pValue !== "" )){
                             var pValueNumber = parseFloat(pValue);
                             if ( !isNaN(pValueNumber) ){
-                                if ( pValueNumber <= 0.05 ) {
-                                    $(cells[2]).addClass('significantPValue');
+                                if ( pValueNumber <= 5e-8 ) {
+                                    $(cells[2]).addClass('genomeWideSignificant');
+                                } else if (( pValueNumber <= 5e-4 ) && ( pValueNumber > 5e-8 )) {
+                                    $(cells[2]).addClass('locusWideSignificant');
+                                } else if (( pValueNumber <= 5e-2 ) && ( pValueNumber > 5e-4 )) {
+                                    $(cells[2]).addClass('nominallySignificant');
                                 }
                             }
                         }
@@ -81,13 +83,23 @@ var mpgSoftware = mpgSoftware || {};
                         rowPtr.attr('id',$(data[0]).attr('phenotypename'));
                         if (rowsPerPhenotype>1) {
                             if (convertedSampleGroup.indexOf(':')===-1) {
-                                $(rowPtr.children()[1]).append("<div class='glyphicon glyphicon-plus-sign pull-right' aria-hidden='true' data-toggle='tooltip' "+
-                                    "data-placement='right' title='Click to open additional associations for "+convertedSampleGroup+" across other data sets' onclick='respondToPlusSignClick(this)'></div>");
+                                if ($(data[0]).hasClass('openPhenotype')) { // it phenotype is already been opened, so don't prepare to open it
+                                    $(rowPtr.children()[1]).append("<div class='glyphicon glyphicon-minus-sign pull-right' aria-hidden='true' data-toggle='tooltip' "+
+                                        "data-placement='right' title='Click to open additional associations for "+convertedSampleGroup+" across other data sets' onclick='respondToPlusSignClick(this)'></div>");
+                                } else {
+                                    $(rowPtr.children()[1]).append("<div class='glyphicon glyphicon-plus-sign pull-right' aria-hidden='true' data-toggle='tooltip' "+
+                                        "data-placement='right' title='Click to open additional associations for "+convertedSampleGroup+" across other data sets' onclick='respondToPlusSignClick(this)'></div>");
+                                }
                             }
                         }
                      } else {
                         if (convertedSampleGroup.indexOf(':')===-1) { // non cohort may be collapsed
-                            rowPtr.attr('class',"collapse out "+$(data[0]).attr('phenotypename')+"collapsed");
+                            if ($(data[0]).hasClass('openPhenotype')){ // it phenotype is already been opened then don't hide it
+                                rowPtr.attr('class',"collapse in "+$(data[0]).attr('phenotypename')+"collapsed");
+                            } else {
+                                rowPtr.attr('class',"collapse out "+$(data[0]).attr('phenotypename')+"collapsed");
+                            }
+
                         } else { // cohort data was requested specifically -- don't collapse it
                             rowPtr.attr('class',"collapse in "+$(data[0]).attr('phenotypename')+"collapsed");
                         }
@@ -107,17 +119,16 @@ var mpgSoftware = mpgSoftware || {};
                 "sSwfPath": "../../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
             } );
             variantProcessing.addTraitsPerVariantTable(variant,
+                openPhenotypes,
                 traitsPerVariantTable,
                 traitUrl,0);
         };
 
 
         var addMoreTraitsPerVariantFields = function  (data,
+                                                       openPhenotypes,
                                                        traitsPerVariantTableBody,
                                                        traitsPerVariantTable,
-                                                       showGene,
-                                                       showExomeSequence,
-                                                       showExomeChip,
                                                        traitUrl,
                                                        locale,
                                                        copyText,
@@ -127,6 +138,7 @@ var mpgSoftware = mpgSoftware || {};
             var languageSetting = {};
             // check if the browser is using Spanish
             variantProcessing.addTraitsPerVariantTable(variant,
+                openPhenotypes,
                 traitsPerVariantTable,
                 traitUrl,
                 existingRows);

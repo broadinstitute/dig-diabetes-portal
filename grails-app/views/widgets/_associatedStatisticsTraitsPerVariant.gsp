@@ -37,10 +37,6 @@ button.expandoButton:visited {
     color: white;
 }
 
-td.significantPValue {
-    background-color: #BADCFB;
-}
-
 #collapseVariantTraitAssociation th {
     vertical-align: middle;
 }
@@ -67,20 +63,20 @@ td.significantPValue {
         var mpgSoftware = mpgSoftware || {};
 
         jQuery.fn.dataTableExt.oSort['stringAnchor-asc'] = function (a, b) {
-            var x = UTILS.extractAnchorTextAsString(a);
-            var y = UTILS.extractAnchorTextAsString(b);
+            var x = mpgSoftware.trans.translator(UTILS.extractAnchorTextAsString(a));
+            var y = mpgSoftware.trans.translator(UTILS.extractAnchorTextAsString(b));
             return (x.localeCompare(y));
         };
 
         jQuery.fn.dataTableExt.oSort['stringAnchor-desc'] = function (a, b) {
-            var x = UTILS.extractAnchorTextAsString(a);
-            var y = UTILS.extractAnchorTextAsString(b);
+            var x = mpgSoftware.trans.translator(UTILS.extractAnchorTextAsString(a));
+            var y = mpgSoftware.trans.translator(UTILS.extractAnchorTextAsString(b));
             return (y.localeCompare(x));
         };
 
         jQuery.fn.dataTableExt.oSort['headerAnchor-asc'] = function (a, b) {
-            var str1 = UTILS.extractHeaderTextWJqueryAsString(a);
-            var str2 = UTILS.extractHeaderTextWJqueryAsString(b);
+            var str1 = mpgSoftware.trans.translator(UTILS.extractHeaderTextWJqueryAsString(a));
+            var str2 = mpgSoftware.trans.translator(UTILS.extractHeaderTextWJqueryAsString(b));
             if (!str1) {
                 str1 = '';
             }
@@ -91,8 +87,8 @@ td.significantPValue {
         };
 
         jQuery.fn.dataTableExt.oSort['headerAnchor-desc'] = function (a, b) {
-            var str1 = UTILS.extractHeaderTextWJqueryAsString(b);
-            var str2 = UTILS.extractHeaderTextWJqueryAsString(a);
+            var str1 =mpgSoftware.trans.translator( UTILS.extractHeaderTextWJqueryAsString(b));
+            var str2 = mpgSoftware.trans.translator(UTILS.extractHeaderTextWJqueryAsString(a));
             if (!str1) {
                 str1 = '';
             }
@@ -144,11 +140,9 @@ td.significantPValue {
                     async: true,
                     success: function (data) {
                         mpgSoftware.trait.fillTheTraitsPerVariantFields(data,
+                                [],
                                 '#traitsPerVariantTableBody',
                                 '#traitsPerVariantTable',
-                                data['show_gene'],
-                                data['show_exseq'],
-                                data['show_exchp'],
                                 '<g:createLink controller="trait" action="traitSearch" />',
                                 "${locale}",
                                 '<g:message code="table.buttons.copyText" default="Copy" />',
@@ -157,7 +151,7 @@ td.significantPValue {
 
                         for (var i = 0; i < sgLinks.length; i++) {
                             var jqueryObj = $(sgLinks[i]);
-                            UTILS.jsTreeDataRetriever('#' + jqueryObj.attr('id'), '#traitsPerVariantTable',
+                            UTILS.jsTreeDataRetrieverPhenoSpec('#' + jqueryObj.attr('id'), '#traitsPerVariantTable',
                                     jqueryObj.attr('phenotypename'),
                                     jqueryObj.attr('datasetname'),
                                     "${createLink(controller: 'VariantSearch', action: 'retrieveJSTreeAjax')}");
@@ -189,22 +183,18 @@ td.significantPValue {
             var addMoreValues = function (data, howManyGroups) {
                 if (howManyGroups == 0) {
                     mpgSoftware.trait.fillTheTraitsPerVariantFields(data,
+                            data.traitInfo.results[0].openPhenotypes,
                             '#traitsPerVariantTableBody',
                             '#traitsPerVariantTable',
-                            data['show_gene'],
-                            data['show_exseq'],
-                            data['show_exchp'],
                             '<g:createLink controller="trait" action="traitSearch" />',
                             "${locale}",
                             '<g:message code="table.buttons.copyText" default="Copy" />',
                             '<g:message code="table.buttons.printText" default="Print me!" />');
                 } else {
                     mpgSoftware.trait.addMoreTraitsPerVariantFields(data,
+                            data.traitInfo.results[0].openPhenotypes,
                             '#traitsPerVariantTableBody',
                             '#traitsPerVariantTable',
-                            data['show_gene'],
-                            data['show_exseq'],
-                            data['show_exchp'],
                             '<g:createLink controller="trait" action="traitSearch" />',
                             "${locale}",
                             '<g:message code="table.buttons.copyText" default="Copy" />',
@@ -215,7 +205,7 @@ td.significantPValue {
 
                 for (var i = 0; i < sgLinks.length; i++) {
                     var jqueryObj = $(sgLinks[i]);
-                    UTILS.jsTreeDataRetriever('#' + jqueryObj.attr('id'), '#traitsPerVariantTable',
+                    UTILS.jsTreeDataRetrieverPhenoSpec('#' + jqueryObj.attr('id'), '#traitsPerVariantTable',
                             jqueryObj.attr('phenotypename'),
                             jqueryObj.attr('datasetname'),
                             "${createLink(controller: 'VariantSearch', action: 'retrieveJSTreeAjax')}");
@@ -276,6 +266,7 @@ td.significantPValue {
                                     '</thead>');
                             $('#traitsPerVariantTable').append('<tbody id="traitsPerVariantTableBody">' +
                                     '</tbody>');
+
                         }
                         addMoreValues(data, dataSetGroupCount);
                         loading.hide();
@@ -287,7 +278,9 @@ td.significantPValue {
                 });
             }
             // get the indenting for now...
-            //UTILS.labelIndenter('traitsPerVariantTable');
+            UTILS.labelIndenter('traitsPerVariantTable');
+          //  $('#traitsPerVariantTable').on( 'order.dt', UTILS.labelIndenter );
+
 
         };
 

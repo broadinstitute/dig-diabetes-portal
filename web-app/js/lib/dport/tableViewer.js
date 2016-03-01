@@ -602,14 +602,13 @@ var variantProcessing = (function () {
             }
             return retVal;
         };
-    addTraitsPerVariantTable = function ( vRecO, traitsPerVariantTable,traitRootUrl,existingRowCount ) {
+    addTraitsPerVariantTable = function ( vRecO, openPhenotypes, traitsPerVariantTable,traitRootUrl,existingRowCount ) {
         var retVal = [];
         if (!vRecO) {   // error condition
             return;
         }
 
         var vRec = deconvoluteVariantInfo(vRecO);
-        var openPhenotypes = vRecO.results[0].openPhenotypes;
         var structureForBuildingTable = buildIntoRows (vRec) ;
         var rowCounter = existingRowCount;
         for (var phenotypeName in structureForBuildingTable["phenotypeRows"]) {
@@ -617,6 +616,15 @@ var variantProcessing = (function () {
                 (phenotypeName!=="NONE")){
 
                 var rowsPerPhenotype =  structureForBuildingTable["phenotypeRows"] [phenotypeName];
+                var parentSG = "";
+                for ( var i = 0 ; i < rowsPerPhenotype.length ; i++  ){
+                    var row = rowsPerPhenotype[i];
+                    var convertedPreProcSampleGroup=mpgSoftware.trans.translator(row['samplegroup']);
+                    if (convertedPreProcSampleGroup.indexOf(':')>-1){
+                        var cohortStringEnd =  convertedPreProcSampleGroup.indexOf(':');
+                        parentSG = convertedPreProcSampleGroup.substr(0,cohortStringEnd);
+                    }
+                }
                 for ( var i = 0 ; i < rowsPerPhenotype.length ; i++  ){
                     var row = rowsPerPhenotype[i];
                     retVal = [];
@@ -678,14 +686,28 @@ var variantProcessing = (function () {
 
                     // field 1: data set
                     var openPhenotypeMarker = "";
+                    var additionalClassNames = "";
                    // if (openPhenotypes.indexOf())
                     if (firstOfMultiPhenotypes) {
-                        retVal.push("<div id='traitsTable"+(rowCounter)+"' class='vandaRowHdr sgIdentifierInTraitTable indexRow' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+
-                            "' samplegroup='"+row['samplegroup']+"' convertedSampleGroup='"+convertedSampleGroup+"' rowsPerPhenotype='"+rowsPerPhenotype.length+"'>");
+                        additionalClassNames = "indexRow";
+                        if (openPhenotypes.indexOf(phenotypeName)>-1){
+                            additionalClassNames += " openPhenotype";
+                        } else if (convertedSampleGroup === parentSG){
+                            additionalClassNames += " openPhenotype";
+                        }
+//                        retVal.push("<div id='traitsTable"+(rowCounter)+"' class='vandaRowHdr sgIdentifierInTraitTable indexRow' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+
+//                            "' samplegroup='"+row['samplegroup']+"' convertedSampleGroup='"+convertedSampleGroup+"' rowsPerPhenotype='"+rowsPerPhenotype.length+"'>");
                     } else {
-                        retVal.push("<div id='traitsTable"+(rowCounter)+"' class='vandaRowHdr sgIdentifierInTraitTable' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+
-                            "' samplegroup='"+row['samplegroup']+"' convertedSampleGroup='"+convertedSampleGroup+"' rowsPerPhenotype='"+rowsPerPhenotype.length+"'>");
+                        if (openPhenotypes.indexOf(phenotypeName)>-1){
+                            additionalClassNames = "openPhenotype";
+                        } else if (convertedSampleGroup === parentSG){
+                            additionalClassNames += "openPhenotype";
+                        }
+//                        retVal.push("<div id='traitsTable"+(rowCounter)+"' class='vandaRowHdr sgIdentifierInTraitTable' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+
+//                            "' samplegroup='"+row['samplegroup']+"' convertedSampleGroup='"+convertedSampleGroup+"' rowsPerPhenotype='"+rowsPerPhenotype.length+"'>");
                     }
+                    retVal.push("<div id='traitsTable"+(rowCounter)+"' class='vandaRowHdr sgIdentifierInTraitTable "+additionalClassNames+"' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+
+                        "' samplegroup='"+row['samplegroup']+"' convertedSampleGroup='"+convertedSampleGroup+"' rowsPerPhenotype='"+rowsPerPhenotype.length+"'>");
 
                     // field 2: phenotype, which may or may not be a link.  for now, restrict this link to GWAS data sets
                     if (convertedSampleGroup.indexOf('GWAS')>-1){ // GWAS data set - allow anchor
