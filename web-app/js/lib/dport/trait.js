@@ -82,7 +82,7 @@ var mpgSoftware = mpgSoftware || {};
                         rowPtr.attr('data-target',"."+$(data[0]).attr('phenotypename')+"collapsed");
                         rowPtr.attr('id',$(data[0]).attr('phenotypename'));
                         if (rowsPerPhenotype>1) {
-                            if (convertedSampleGroup.indexOf(':')===-1) {
+                           // if (convertedSampleGroup.indexOf(':')===-1) {
                                 if ($(data[0]).hasClass('openPhenotype')) { // it phenotype is already been opened, so don't prepare to open it
                                     $(rowPtr.children()[1]).append("<div class='glyphicon glyphicon-minus-sign pull-right' aria-hidden='true' data-toggle='tooltip' "+
                                         "data-placement='right' title='Click to open additional associations for "+convertedSampleGroup+" across other data sets' onclick='respondToPlusSignClick(this)'></div>");
@@ -90,7 +90,7 @@ var mpgSoftware = mpgSoftware || {};
                                     $(rowPtr.children()[1]).append("<div class='glyphicon glyphicon-plus-sign pull-right' aria-hidden='true' data-toggle='tooltip' "+
                                         "data-placement='right' title='Click to open additional associations for "+convertedSampleGroup+" across other data sets' onclick='respondToPlusSignClick(this)'></div>");
                                 }
-                            }
+                           // }
                         }
                      } else {
                         if (convertedSampleGroup.indexOf(':')===-1) { // non cohort may be collapsed

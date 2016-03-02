@@ -885,18 +885,20 @@ var UTILS = {
                     var currentDiv = $(sortedRowSGLabel[i]);
                     var sampleGroupName = mpgSoftware.trans.translator(currentDiv.attr('datasetname'));
                     var phenotypeName = mpgSoftware.trans.translator(currentDiv.attr('phenotypename'));
-                    if (typeof coreSGName === 'undefined'){
+                    var haveSeenItBefore = false;
+                    for (var j = 0 ; j < usedAsCore.length ; j++){
+                        if ((usedAsCore[j].sg===sampleGroupName)&&
+                            (usedAsCore[j].ph===phenotypeName)){
+                            haveSeenItBefore = true;
+                        }
+                    }
+                    if ( (typeof coreSGName === 'undefined')&&
+                         (!haveSeenItBefore) ){
                         coreSGName = sampleGroupName;
                         lastPhenotype = phenotypeName;
                         usedAsCore.push({'sg':coreSGName,'ph':phenotypeName});
                     } else {
-                        var haveSeenItBefore = false;
-                        for (var j = 0 ; j < usedAsCore.length ; j++){
-                            if ((usedAsCore[j].sg===sampleGroupName)&&
-                                (usedAsCore[j].ph===phenotypeName)){
-                                haveSeenItBefore = true;
-                            }
-                        }
+
                         if ((sampleGroupName.indexOf(coreSGName)>-1)&&
                             (lastPhenotype === phenotypeName)&&
                             (!haveSeenItBefore)){

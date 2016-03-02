@@ -61,42 +61,11 @@ button.expandoButton:visited {
 
     <script>
         var mpgSoftware = mpgSoftware || {};
-
-        jQuery.fn.dataTableExt.oSort['stringAnchor-asc'] = function (a, b) {
-            var x = mpgSoftware.trans.translator(UTILS.extractAnchorTextAsString(a));
-            var y = mpgSoftware.trans.translator(UTILS.extractAnchorTextAsString(b));
-            return (x.localeCompare(y));
-        };
-
-        jQuery.fn.dataTableExt.oSort['stringAnchor-desc'] = function (a, b) {
-            var x = mpgSoftware.trans.translator(UTILS.extractAnchorTextAsString(a));
-            var y = mpgSoftware.trans.translator(UTILS.extractAnchorTextAsString(b));
-            return (y.localeCompare(x));
-        };
-
-        jQuery.fn.dataTableExt.oSort['headerAnchor-asc'] = function (a, b) {
-            var str1 = mpgSoftware.trans.translator(UTILS.extractHeaderTextWJqueryAsString(a));
-            var str2 = mpgSoftware.trans.translator(UTILS.extractHeaderTextWJqueryAsString(b));
-            if (!str1) {
-                str1 = '';
-            }
-            if (!str2) {
-                str2 = '';
-            }
-            return str1.localeCompare(str2);
-        };
-
-        jQuery.fn.dataTableExt.oSort['headerAnchor-desc'] = function (a, b) {
-            var str1 =mpgSoftware.trans.translator( UTILS.extractHeaderTextWJqueryAsString(b));
-            var str2 = mpgSoftware.trans.translator(UTILS.extractHeaderTextWJqueryAsString(a));
-            if (!str1) {
-                str1 = '';
-            }
-            if (!str2) {
-                str2 = '';
-            }
-            return str1.localeCompare(str2);
-        };
+        $( document ).ready(function(){
+            $(".collapse").on('show.bs.collapse', function(a,b){
+                console.log('The collapsible content is about to show.');
+            });
+        });
 
 
         // track if data table loaded yet; get reinitialization error

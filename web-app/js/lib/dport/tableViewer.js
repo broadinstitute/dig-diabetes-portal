@@ -25,6 +25,43 @@
         return ((x < y) ? 1 : ((x > y) ? -1 : 0));
     };
 
+
+    jQuery.fn.dataTableExt.oSort['stringAnchor-asc'] = function (a, b) {
+        var x = UTILS.extractAnchorTextAsString(a);
+        var y = UTILS.extractAnchorTextAsString(b);
+        return (x.localeCompare(y));
+    };
+
+    jQuery.fn.dataTableExt.oSort['stringAnchor-desc'] = function (a, b) {
+        var x = UTILS.extractAnchorTextAsString(a);
+        var y = UTILS.extractAnchorTextAsString(b);
+        return (y.localeCompare(x));
+    };
+
+    jQuery.fn.dataTableExt.oSort['headerAnchor-asc'] = function (a, b) {
+        var str1 = mpgSoftware.trans.translator(UTILS.extractHeaderTextWJqueryAsString(a));
+        var str2 = mpgSoftware.trans.translator(UTILS.extractHeaderTextWJqueryAsString(b));
+        if (!str1) {
+            str1 = '';
+        }
+        if (!str2) {
+            str2 = '';
+        }
+        return str1.localeCompare(str2);
+    };
+
+    jQuery.fn.dataTableExt.oSort['headerAnchor-desc'] = function (a, b) {
+        var str1 =mpgSoftware.trans.translator( UTILS.extractHeaderTextWJqueryAsString(b));
+        var str2 = mpgSoftware.trans.translator(UTILS.extractHeaderTextWJqueryAsString(a));
+        if (!str1) {
+            str1 = '';
+        }
+        if (!str2) {
+            str2 = '';
+        }
+        return str1.localeCompare(str2);
+    };
+
 }());
 var variantProcessing = (function () {
 
@@ -625,6 +662,14 @@ var variantProcessing = (function () {
                         parentSG = convertedPreProcSampleGroup.substr(0,cohortStringEnd);
                     }
                 }
+                // find index row
+                var sortedByPVal = rowsPerPhenotype.sort(function(a,b){return a.P_VALUE-b.P_VALUE});
+                var indexRow = 0;
+                for ( var i = 0 ; i < rowsPerPhenotype.length ; i++  ){
+                    if (rowsPerPhenotype[i].samplegroup === sortedByPVal[0].samplegroup){
+                        indexRow = i;
+                    }
+                }
                 for ( var i = 0 ; i < rowsPerPhenotype.length ; i++  ){
                     var row = rowsPerPhenotype[i];
                     retVal = [];
@@ -632,7 +677,7 @@ var variantProcessing = (function () {
                     // some shared variables
                     var convertedTrait=mpgSoftware.trans.translator(phenotypeName);
                     var convertedSampleGroup=mpgSoftware.trans.translator(row['samplegroup']);
-                    var firstOfMultiPhenotypes = (i===0);
+                    var dealingWithIndexRow = (i===indexRow);
                     var oddsRatioValue = Number.NaN;
                     var betaValue = Number.NaN;
                     var pValue = Number.NaN;
@@ -688,23 +733,19 @@ var variantProcessing = (function () {
                     var openPhenotypeMarker = "";
                     var additionalClassNames = "";
                    // if (openPhenotypes.indexOf())
-                    if (firstOfMultiPhenotypes) {
+                    if (dealingWithIndexRow) {
                         additionalClassNames = "indexRow";
                         if (openPhenotypes.indexOf(phenotypeName)>-1){
                             additionalClassNames += " openPhenotype";
                         } else if (convertedSampleGroup === parentSG){
                             additionalClassNames += " openPhenotype";
                         }
-//                        retVal.push("<div id='traitsTable"+(rowCounter)+"' class='vandaRowHdr sgIdentifierInTraitTable indexRow' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+
-//                            "' samplegroup='"+row['samplegroup']+"' convertedSampleGroup='"+convertedSampleGroup+"' rowsPerPhenotype='"+rowsPerPhenotype.length+"'>");
                     } else {
                         if (openPhenotypes.indexOf(phenotypeName)>-1){
                             additionalClassNames = "openPhenotype";
                         } else if (convertedSampleGroup === parentSG){
                             additionalClassNames += "openPhenotype";
                         }
-//                        retVal.push("<div id='traitsTable"+(rowCounter)+"' class='vandaRowHdr sgIdentifierInTraitTable' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+
-//                            "' samplegroup='"+row['samplegroup']+"' convertedSampleGroup='"+convertedSampleGroup+"' rowsPerPhenotype='"+rowsPerPhenotype.length+"'>");
                     }
                     retVal.push("<div id='traitsTable"+(rowCounter)+"' class='vandaRowHdr sgIdentifierInTraitTable "+additionalClassNames+"' datasetname='"+row['samplegroup']+"' phenotypename='"+phenotypeName+
                         "' samplegroup='"+row['samplegroup']+"' convertedSampleGroup='"+convertedSampleGroup+"' rowsPerPhenotype='"+rowsPerPhenotype.length+"'>");
