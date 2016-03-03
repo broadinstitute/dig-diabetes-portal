@@ -35,6 +35,15 @@ class HtmlTagLib {
         out << phenotype;
     }
 
+    /**
+     * returns the portal type string from the user session
+     *
+     */
+    def portalTypeString = {attrs, body ->
+        String portalType = this.metaDataService?.getPortalTypeFromSession()
+        out << portalType;
+    }
+
 
     def renderGeneSummary = { attrs ->
 

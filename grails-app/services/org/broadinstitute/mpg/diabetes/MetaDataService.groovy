@@ -34,6 +34,24 @@ class MetaDataService {
     }
 
     /**
+     * return the portal type string from the user session
+     *
+     * @return
+     */
+    public String getPortalTypeFromSession() {
+        // DIGP-291: adding different metadata versions by portal
+        String portalType = WebUtils.retrieveGrailsWebRequest()?.getSession()?.getAttribute('portalType');
+
+        // get the data version based on user session portal type; default to t2d
+        if (portalType == null) {
+            portalType = "t2d";
+        }
+
+        // return
+        return portalType;
+    }
+
+    /**
      * returns the data version to use based on the portal type setting in the user session
      *
      * @return
@@ -41,17 +59,13 @@ class MetaDataService {
     public String getDataVersion() {
         // DIGP-291: adding different metadata versions by portal
         String dataVersion;
-        String portalType = WebUtils.retrieveGrailsWebRequest()?.getSession()?.getAttribute('portalType');
+        String portalType = this.getPortalTypeFromSession();
 
         // get the data version based on user session portal type; default to t2d
-        if (portalType == null) {
-            portalType = "t2d";
-        }
         dataVersion = this.grailsApplication.config.portal.data.version.map[portalType];
 
         // return
         return dataVersion;
-//        return this.grailsApplication.config.diabetes.data.version;
     }
 
     /**
@@ -62,12 +76,9 @@ class MetaDataService {
     public String getDefaultPhenotype() {
         // DIGP-291: adding different metadata versions by portal
         String phenotype;
-        String portalType = WebUtils.retrieveGrailsWebRequest()?.getSession()?.getAttribute('portalType');
+        String portalType = this.getPortalTypeFromSession();
 
         // get the data version based on user session portal type; default to t2d
-        if (portalType == null) {
-            portalType = "t2d";
-        }
         phenotype = this.grailsApplication.config.portal.data.default.phenotype.map[portalType];
 
         // return

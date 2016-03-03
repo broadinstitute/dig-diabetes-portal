@@ -972,6 +972,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 numericBound.lowerValue, numericBound.higherValue, "MAF")
         //List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName,0f,"","","${codeForMafSlice}-${codeForEthnicity}","T2D")
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters, searchBuilderService, metaDataService)
+
+        // DIGP-300: upping default getData limit to 5k for better MAF counts for HDAC9 gene (was getting counts > 1k)
+        getDataQueryHolder.getDataQuery.setLimit(5000)
         JsonSlurper slurper = new JsonSlurper()
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
