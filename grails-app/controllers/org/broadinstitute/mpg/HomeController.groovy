@@ -1,6 +1,5 @@
 package org.broadinstitute.mpg
 
-import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.core.io.ResourceLocator
@@ -39,7 +38,7 @@ class HomeController {
         String portalType
 
         // if stroke, then switch or vice versa
-        if (request?.getSession()?.getAttribute("portalType")?.equals("stroke")) {
+        if (g.portalTypeString()?.equals("stroke")) {
             portalType = "t2d"
         } else {
             portalType = "stroke"

@@ -315,7 +315,7 @@
                                 })"><g:message code="informational.shared.traits.bipolar" /></a>
                             </li>
 </g:if>
-<g:if test="${session?.getAttribute('portalType')?.equals('stroke')}">
+<g:if test="${g.portalTypeString()?.equals('stroke')}">
     <g:render template="/trait/igvBrowserLinksStroke"/>
 </g:if>
                         </ul>
@@ -372,7 +372,7 @@
             locus: locusName,
             flanking: 100000,
             tracks: [
-<g:if test="${session?.getAttribute('portalType')?.equals('stroke')}">
+<g:if test="${g.portalTypeString()?.equals('stroke')}">
                 {
                     type: "t2d",
                     url: "${createLink(controller:'trait', action:'getData')}",
