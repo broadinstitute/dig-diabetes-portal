@@ -39,7 +39,6 @@
     };
 
     jQuery.fn.dataTableExt.oSort['headerAnchor-asc'] = function (a, b) {
-        console.log("sorting with JqueryAsString", a, b);
         var str1 = UTILS.extractHeaderTextWJqueryAsString(a);
         var str2 = UTILS.extractHeaderTextWJqueryAsString(b);
         if (!str1) {
@@ -60,7 +59,7 @@
         if (!str2) {
             str2 = '';
         }
-        return str1.localeCompare(str2);
+        return str2.localeCompare(str1);
     };
 
 }());

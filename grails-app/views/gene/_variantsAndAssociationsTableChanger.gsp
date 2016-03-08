@@ -407,7 +407,6 @@ var getDataSets = function(sel){
                         dataSetChooser.empty();
                         for (var key in dataSets) {
                         if (dataSets.hasOwnProperty(key)) {
-                                console.log("how about this?", key);
                                 dataSetChooser.append($("<option>").val(key+"^"+dataSets[key]).text( key ));
                             }
                         }

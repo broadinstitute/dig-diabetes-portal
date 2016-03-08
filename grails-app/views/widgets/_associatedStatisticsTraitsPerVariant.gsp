@@ -293,7 +293,6 @@ button.expandoButton:visited {
                     dataType: "json",
                     async: false,
                     success: function (data) {
-                        console.log("responding", data);
                         var firstTime = (dataSetGroupCount == 0);
                         if (firstTime) {
                             if ($.fn.DataTable.isDataTable('#traitsPerVariantTable')) {
