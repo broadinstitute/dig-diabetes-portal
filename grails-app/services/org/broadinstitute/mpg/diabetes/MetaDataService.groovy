@@ -1,4 +1,5 @@
 package org.broadinstitute.mpg.diabetes
+import groovy.json.JsonSlurper
 import grails.transaction.Transactional
 import org.broadinstitute.mpg.MetadataUtilityService
 import org.broadinstitute.mpg.RestServerService
@@ -124,10 +125,13 @@ class MetaDataService {
      * @param sortFirst
      * @return
      */
-    public String getCommonPropertiesAsJson(Boolean sortFirst) {
+    public JSONObject getCommonPropertiesAsJson(Boolean sortFirst) {
         // local variables
         List<Property> propertyList;
-        StringBuilder builder = new StringBuilder();
+
+        JSONObject toReturn = [
+            dataset: new ArrayList<String>()
+        ]
 
         // get the list from the json service parse
         try {
@@ -138,26 +142,19 @@ class MetaDataService {
             log.error("Got metadata parsing exception getting common properties json: " + exception.getMessage());
         }
 
-
         // if need to sort, sort the list
         if (sortFirst) {
             Collections.sort(propertyList);
         }
 
-        // loop through and create a comma seperated list
         for (Property property : propertyList) {
-            builder.append("\"" + property.getName() + "\"" );
-            if (propertyList.get(propertyList.size() - 1) != property) {
-                builder.append(",");
-            }
+            toReturn.dataset << property.getName()
         }
 
-        // add the wrapping json and return
-        GString groovyString = """{"is_error": false,
-            "numRecords":${propertyList.size()},
-            "dataset":[${builder.toString()}]
-        }""";
-        return groovyString.toString();
+        toReturn.is_error = false
+        toReturn.numRecords = propertyList.size()
+
+        return toReturn
     }
 
 
@@ -247,12 +244,13 @@ class MetaDataService {
         return jsonParser.getTechnologyPerSampleGroup(sampleGroupId)
     }
 
-    public String getSampleGroupNameListForPhenotypeAsJson(String phenotypeName) {
+    public JSONObject getSampleGroupNameListForPhenotypeAsJson(String phenotypeName) {
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+
         // local variables
-        GString jsonString;
+        JSONObject toReturn = []
         List<SampleGroup> groupList;
-        StringBuilder builder = new StringBuilder();
-        List<String> nameList = new ArrayList<String>();
+        List<JSONObject> nameList = new ArrayList<String>();
 
         // get the sample group list for the phenotype
         try {
@@ -267,26 +265,23 @@ class MetaDataService {
                 for (int i = 0; i < group.getNestedLevel(); i++) {
                     depthBuilder.append("-");
                 }
-
-                nameList.add(depthBuilder.toString() + group.getSystemId());
+                String sysId = group.getSystemId()
+                JSONObject currentGroup = [
+                    name: sysId,
+                    displayName: depthBuilder.toString() + g.message(code: "metadata." + sysId, default: sysId)
+                ]
+                nameList.add(currentGroup);
             }
 
         } catch (PortalException exception) {
             log.error("Got exception retrieving sample group name list for selected phenotype: " + phenotypeName + " : " + exception.getMessage());
         }
 
-        //create the json string
-        for (String nameString : nameList) {
-            builder.append("\"" + nameString + "\"");
+        toReturn.is_error = false
+        toReturn.numRecords = nameList.size()
+        toReturn.dataset = nameList
 
-            if (!nameList.get(nameList.size() - 1).equalsIgnoreCase(nameString)) {
-                builder.append(",");
-            }
-        }
-        jsonString ="{\"is_error\": false, \"numRecords\":${nameList.size()}, \"dataset\":[${builder.toString()}]}";
-
-        // return
-        return jsonString;
+        return toReturn;
     }
 
 
@@ -406,19 +401,19 @@ class MetaDataService {
      * @return
      */
     public String urlEncodedListOfPhenotypes() {
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+
         List<String> phenotypeList =  this.getJsonParser().getAllDistinctPhenotypeNames();
         StringBuilder sb   = new StringBuilder ("")
         for (int i = 0; i < phenotypeList.size(); i++){
             String phenotypeCode = phenotypeList.get(i)
-//            log.info("urlEncodedListOfPhenotypes case 1")
-            sb<< (phenotypeCode + ":" + this.sharedToolsService.translator(phenotypeCode))
+            sb<< (phenotypeCode + ":" + g.message(code: "metadata." + phenotypeCode, default: phenotypeCode))
             sb<< ","
 
             // also add old keys from trait-search call if exists
             String oldCode = this.sharedToolsService?.convertNewPhenotypeStringsToOldOnes(phenotypeCode)
             if (!oldCode?.equals(phenotypeCode)) {
-//                log.info("urlEncodedListOfPhenotypes case 2")
-                sb<< (oldCode + ":" + this.sharedToolsService.translator(phenotypeCode))
+                sb<< (oldCode + ":" + g.message(code: "metadata." + phenotypeCode, default: phenotypeCode))
                 sb<< ","
             }
         }
@@ -809,5 +804,42 @@ class MetaDataService {
         return jsonObject
     }
 
-}
+    // returns a set of the metadata names in database form (i.e. not translated)
+    // used for translation support--though should be used sparingly
+    public Set<String> parseMetadataNames() {
+        String metadata = restServerService.getMetadata()
+        def jsonSlurper = new JsonSlurper()
 
+        JSONObject metadataParsed = jsonSlurper.parseText(metadata)
+
+        return pullOutMetadataNames(metadataParsed)
+    }
+
+    /*
+    Given the metadata, recursively go through it looking for
+    any "name" key, returning a set (i.e. unique values only) containing
+    the value for each "name" key. Built for use with parseMetadataNames()
+    function.
+     */
+    private Set<String> pullOutMetadataNames(Object metadata) {
+        Set<String> toReturn = new HashSet<String>()
+
+        if( metadata instanceof JSONObject ) {
+            def keys = metadata.keySet()
+
+            for (String key in keys) {
+                if (key == "name" && (metadata[key] instanceof String)) {
+                    toReturn << metadata[key]
+                }
+                toReturn.addAll(pullOutMetadataNames(metadata[key]))
+            }
+        } else if( metadata instanceof ArrayList ) {
+            metadata.each { item ->
+                toReturn.addAll(pullOutMetadataNames(item as JSONObject))
+            }
+        }
+
+        return toReturn
+    }
+
+}

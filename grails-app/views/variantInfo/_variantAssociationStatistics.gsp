@@ -26,8 +26,8 @@
 
 <script>
     var variant;
-    var fillVariantStatistics = function (phenotype,datasetDescription){
-        var rememberPhenotype = phenotype;
+    var fillVariantStatistics = function (phenotype, datasetDescription, passthrough){
+        var rememberPhenotype = passthrough.translatedPhenotypeName;
         var summaryAndAssociationHeadliner = function (sortedDatasetList, phenotype){
             if (sortedDatasetList.length>0){ // we have something to write
                 if ($('#variantPValue').text().length>0){ // if we have already written something then clear it up
@@ -38,11 +38,11 @@
                 var chosenDataSet = sortedDatasetList[0];
                 $('#variantPValue').append(chosenDataSet['p_value'].toPrecision(4));
                 $('#associationPhenotype').append(phenotype);
-                $('#variantInfoGeneratingDataSet').append(mpgSoftware.trans.translator(chosenDataSet['dataset']));
+                $('#variantInfoGeneratingDataSet').append(chosenDataSet['dataset']);
 
             } else {
                 $('#describeBestAssociation').hide();
-                $('#noAssociationWithPhenotype').append(mpgSoftware.trans.translator(phenotype));
+                $('#noAssociationWithPhenotype').append(phenotype);
                 $('#describeNoAssociation').show();
             }
         };
@@ -88,7 +88,7 @@
                     associationPValueQ:'<g:helpText title="variant.variantAssociations.pValue.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.pValue.help.text"/>',
                     associationOddsRatioQ:'<g:helpText title="variant.variantAssociations.oddsRatio.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.oddsRatio.help.text"/>'
                 };
-                var collector = {}
+                var collector = {};
                 if ((typeof data !== 'undefined')&&
                         (typeof data.variantInfo !== 'undefined')&&
                         (typeof data.variantInfo.results !== 'undefined')&&
@@ -134,8 +134,7 @@
                         (sortedDatasetList[0].p_value <=1)) {
                     var formSelector = "#holdAssociationStatisticsBoxes";
                     var titleSelector = formSelector + "_title";
-                    $(titleSelector).text(mpgSoftware.trans.translator(rememberPhenotype));
-                    '_title'
+                    $(titleSelector).text( rememberPhenotype );
                     var variantAssociationStatistics = mpgSoftware.variantInfo.variantAssociations;
                     variantAssociationStatistics(
                             collector['common'], // object
@@ -155,7 +154,7 @@
                 $('[data-toggle="popover"]').popover();
 
             },
-           error: function (jqXHR, exception) {
+            error: function (jqXHR, exception) {
                 loading.hide();
                 core.errorReporter(jqXHR, exception);
             }
@@ -166,6 +165,7 @@
         var selectorForStatisticsBoxesValues = passThroughObject.holdAssociationStatistics;
         var traitCount = passThroughObject.traitCount;
         var rememberPhenotype = phenotype;
+        var translatedPhenotype = passThroughObject.translatedPhenotype;
         $.ajax({
             cache: false,
             type: "get",
@@ -185,7 +185,6 @@
                     associationOddsRatioQ:'<g:helpText title="variant.variantAssociations.oddsRatio.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.oddsRatio.help.text"/>'
                 };
                 var collector = {};
-                //console.log('rememberPhenotype='+rememberPhenotype);
                 if ((typeof data !== 'undefined')&&
                         (typeof data.variantInfo !== 'undefined')&&
                         (typeof data.variantInfo.results !== 'undefined')&&
@@ -230,7 +229,7 @@
                     var titleSelector = formSelector + "_title";
                     if (sortedDatasetList[0].p_value < .05) {
                         $(formSelector).parent().parent().parent().addClass('traitProcessed');
-                        $(titleSelector).text(mpgSoftware.trans.translator(rememberPhenotype));
+                        $(titleSelector).text(translatedPhenotype);
                         $(titleSelector).append("<span class='traitTitleComma'>,&nbsp;</span>");
                         mpgSoftware.variantInfo.variantAssociations(
                                 collector['common'], // object
@@ -284,10 +283,14 @@
 
     };
 
-
-
+    // this fills in the main row of data
     UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],'${g.defaultPhenotype()}',
-            "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",fillVariantStatistics );
+            "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",
+            fillVariantStatistics,
+            // this passthrough object exists to provide the translated phenotype name later
+            { translatedPhenotypeName: '${g.message(code: "metadata." + g.defaultPhenotype(), default: g.defaultPhenotype())}'}
+    );
+    // this fills in all the other phenotype information
     $(function() {
         $.ajax({
             cache: false,
@@ -314,17 +317,36 @@
                         if (data.datasets.dataset.hasOwnProperty(category)) {
                             var propertyArray = data.datasets.dataset[category];
                             for ( var i = 0 ; i < propertyArray.length ; i++ ){
-                                if (propertyArray[i] !== 'T2D'){ // T2D is handled first by default, so we can skip it here
-                                    var holdAssociationStatistics = "holdAssociationStatisticsBoxes_"+propertyArray[i];
-                                    $('#boxHolderHolder1').append( "<li class='slidingBoxHolder slidingBoxHolderLiney'><div id='"+holdAssociationStatistics+"_title' class='rowTitle'></div><div class='items smallerStatBoxes'><div class='item'><ul id='"+holdAssociationStatistics+"' class='content-slider'></ul></div></div></li>");
-                                    UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],propertyArray[i],
-                                            "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",gatherVariantStatistics,
+                                if (propertyArray[i][0] !== 'T2D'){ // T2D is handled first by default, so we can skip it here
+                                    var holdAssociationStatistics = "holdAssociationStatisticsBoxes_"+propertyArray[i][0];
+                                    var newBox = document.createElement('li');
+                                    $(newBox).attr({
+                                        class: 'slidingBoxHolder slidingBoxHolderLiney',
+                                    });
+                                    $(newBox).append("<div id='"+holdAssociationStatistics+"_title' class='rowTitle'></div>");
+                                    var smallerStatBox = $.parseHTML(
+                                        "<div class='items smallerStatBoxes'>" +
+                                            "<div class='item'>" +
+                                                "<ul id='"+holdAssociationStatistics+"' class='content-slider'></ul>" +
+                                            "</div>" +
+                                        "</div>"
+                                    );
+                                    $(newBox).append(smallerStatBox);
+                                    $('#boxHolderHolder1').append(newBox);
+
+                                    UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(
+                                            ['GWAS','ExChip','ExSeq'],
+                                            propertyArray[i][0],
+                                            "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",
+                                            gatherVariantStatistics,
                                             {holdAssociationStatistics:holdAssociationStatistics,
                                              traitCount:traitCount-1,// -1 because we skip T2D
                                              category:category,
-                                             countInCategory:i} );
+                                             countInCategory:i,
+                                             translatedPhenotype: propertyArray[i][1]
+                                            }
+                                    );
                                 }
-
                             }
                         }
                     }
@@ -344,7 +366,7 @@
                 "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",fillVariantStatistics );
     };
     var showAssociationsForPhenotypes = function(){
-       $('.rowTitle').removeClass('lessProminent');
+        $('.rowTitle').removeClass('lessProminent');
         $('#showAssociations').hide();
         $('#hideAssociations').show();
         $('.traitTitleComma').hide();
@@ -365,10 +387,6 @@
         $('.slidingBoxHolder').addClass('slidingBoxHolderLiney');
 
     };
-    $(document).ready(function() {
-        $("#showAssociations a").click(showAssociationsForPhenotypes);
-        $("#hideAssociations a").click(hideAssociationsForPhenotypes);
-    });
 </script>
 
 
@@ -394,10 +412,3 @@
 </div>
 
 <br/>
-
-%{--<p>--}%
-    %{--<span id="variantInfoAssociationStatisticsLinkToTraitTable"></span>--}%
-
-%{--</p>--}%
-
-

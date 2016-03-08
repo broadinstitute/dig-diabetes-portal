@@ -111,9 +111,6 @@
 
                         <h3>
                             <g:message code="primary.text.input.header"/>
-                            <!-- unclear why this was put here, so just uncommenting for now
-                            <g:message code="metadata.ph" default="nothing to see here"/>
-                            -->
                         </h3>
 
                         <div class="input-group input-group-lg">

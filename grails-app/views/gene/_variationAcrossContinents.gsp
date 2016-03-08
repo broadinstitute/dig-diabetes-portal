@@ -34,31 +34,33 @@
         var loadAncestryTable = function (chosenGene,dataSetMap) {
             var loader = $('#rSpinner');
             loader.show();
+
+            // helper functions
             var buildRowDataStructure = function (data) {
                 var returnValues = [];
                 for (var i = 0; i < data.ethnicityInfo.results.length; i++) {
-                        var currentDataSet = data.ethnicityInfo.results[i];
-                        var singleRow = {};
-                        singleRow["dataset"] = currentDataSet["dataset"];
-                        singleRow["technology"] = currentDataSet["technology"];
-                        var rowValues = [];
-                        for (var j = 0; j < currentDataSet.pVals.length; j++) {
-                            rowValues.push( currentDataSet.pVals[j].count );
-                        }
-                        singleRow["values"] = rowValues;
-                        returnValues.push(singleRow);
+                    var currentDataSet = data.ethnicityInfo.results[i];
+                    var singleRow = {};
+                    singleRow["dataset"] = currentDataSet["dataset"];
+                    singleRow["technology"] = currentDataSet["technology"];
+                    singleRow["datasetDisplayName"] = currentDataSet["datasetDisplayName"]
+                    var rowValues = [];
+                    for (var j = 0; j < currentDataSet.pVals.length; j++) {
+                        rowValues.push( currentDataSet.pVals[j].count );
+                    }
+                    singleRow["values"] = rowValues;
+                    returnValues.push(singleRow);
                 }
-                ;
                 return returnValues;
             };
             var buildColumnDataStructure = function (data) {
                 var returnValues = [];
                 for (var i = 0; i < data.ethnicityInfo.columns.length; i++) {
                     var currentDataSet = data.ethnicityInfo.columns[i];
-                    returnValues.push({"key":i,"lowerValue":currentDataSet["lowerValue"],"higherValue":currentDataSet["higherValue"],
+                    returnValues.push({"key":i,"lowerValue":currentDataSet["lowerValue"],
+                                       "higherValue":currentDataSet["higherValue"],
                                        "code":"lowerValue~"+currentDataSet["lowerValue"]+"~higherValue~"+currentDataSet["higherValue"]});
-                 }
-                ;
+                }
                 return returnValues;
             };
             var rowNames = [];
@@ -135,7 +137,7 @@
                     $('[data-toggle="popover"]').popover();
                 },
                 error: function (jqXHR, exception) {
-                    loading.hide();
+                    loader.hide();
                     core.errorReporter(jqXHR, exception);
                 }
             });
@@ -149,18 +151,17 @@
     });
 
     $('#collapseHowCommonIsVariant').on('hide.bs.collapse', function (e) {
-            $("#ancestryInner").html('');
+        $("#ancestryInner").html('');
     });
 
     function reviseVACRows(){
-//        var phenotype = $('#phenotypeTableChooser option:selected').val();
         var clickedBoxes =  $('#continentalVariationTableBody .jstree-clicked');
         var dataSetNames  = [];
         var dataSetMaps  = [];
         for  ( var i = 0 ; i < clickedBoxes.length ; i++ )   {
-            var  comboName  =  $(clickedBoxes[i]).attr('id');
-            var partsOfCombo =   comboName.split("-");
-            var  dataSetWithoutAnchor  =  partsOfCombo[0];
+            var  comboName = $(clickedBoxes[i]).attr('id');
+            var partsOfCombo = comboName.split("-");
+            var  dataSetWithoutAnchor = partsOfCombo[0];
             dataSetNames.push(dataSetWithoutAnchor);
             var  dataSetMap = {"name":dataSetWithoutAnchor,
                 "value":dataSetWithoutAnchor,

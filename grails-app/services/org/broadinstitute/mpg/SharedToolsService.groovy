@@ -23,13 +23,13 @@ import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 @Transactional
 class SharedToolsService {
 
-     MailService mailService
+    MailService mailService
     GrailsApplication grailsApplication
     LinkGenerator grailsLinkGenerator
     RestServerService restServerService
     MetaDataService metaDataService
     FilterManagementService filterManagementService
-     private static final log = LogFactory.getLog(this)
+    private static final log = LogFactory.getLog(this)
     JSONObject sharedMetadata = null
     LinkedHashMap sharedProcessedMetadata = null
     Integer forceProcessedMetadataOverride = -1
@@ -52,49 +52,46 @@ class SharedToolsService {
     // TODO remove hack: currently we get phenotypes from the old geneinfo call, but
     // we need to interpret them with the new API, which uses different strings in some cases.
     //  Eventually we will pull the strings from the new API and then throw away this conversion utility
-    LinkedHashMap convertPhenotypes = ["T2D":"T2D",
-                                       "FastGlu":"FG",
-                                       "FastIns":"FI",
-                                       "ProIns":"PI",
-                                       "2hrGLU_BMIAdj":"2hrG",
-                                       "2hrIns_BMIAdj":"2hrI",
-                                       "HOMAIR":"HOMAIR",
-                                       "HOMAB":"HOMAB",
-                                       "HbA1c":"HBA1C",
-                                       "BMI":"BMI",
-                                       "WHR":"WHR",
-                                       "Height":"HEIGHT",
-                                       "TC":"CHOL",
-                                       "HDL":"HDL",
-                                       "LDL":"LDL",
-                                       "TG":"TG",
-                                       "CAD":"CAD",
-                                       "CKD":"CKD",
-                                       "eGFRcrea":"eGFRcrea",
-                                       "eGFRcys":"eGFRcys",
-                                       "UACR":"UACR",
-                                       "MA":"MA",
-                                       "BIP":"BIP",
-                                       "SCZ":"SCZ",
-                                       "STRK":"STRK",
-                                       "MDD":"MDD"   ]
+    LinkedHashMap convertPhenotypes = ["T2D"          : "T2D",
+                                       "FastGlu"      : "FG",
+                                       "FastIns"      : "FI",
+                                       "ProIns"       : "PI",
+                                       "2hrGLU_BMIAdj": "2hrG",
+                                       "2hrIns_BMIAdj": "2hrI",
+                                       "HOMAIR"       : "HOMAIR",
+                                       "HOMAB"        : "HOMAB",
+                                       "HbA1c"        : "HBA1C",
+                                       "BMI"          : "BMI",
+                                       "WHR"          : "WHR",
+                                       "Height"       : "HEIGHT",
+                                       "TC"           : "CHOL",
+                                       "HDL"          : "HDL",
+                                       "LDL"          : "LDL",
+                                       "TG"           : "TG",
+                                       "CAD"          : "CAD",
+                                       "CKD"          : "CKD",
+                                       "eGFRcrea"     : "eGFRcrea",
+                                       "eGFRcys"      : "eGFRcys",
+                                       "UACR"         : "UACR",
+                                       "MA"           : "MA",
+                                       "BIP"          : "BIP",
+                                       "SCZ"          : "SCZ",
+                                       "STRK"         : "STRK",
+                                       "MDD"          : "MDD"]
 
     LinkedHashMap convertPhenotypesFlipped = null;
 
     Integer helpTextSetting = 1 // 0== never display, 1== display conditionally, 2== always display
 
-    public LinkedHashMap<String, String> retrieveConvertPhenotypes () {
-        return convertPhenotypes
+    public String retrieveCurrentGeneChromosome() {
+        return currentGeneChromosome
     }
 
-    public String retrieveCurrentGeneChromosome ()  {
-        return  currentGeneChromosome
-    }
-    public String retrieveCurrentVariantChromosome ()  {
-        return  currentVariantChromosome
+    public String retrieveCurrentVariantChromosome() {
+        return currentVariantChromosome
     }
 
-    public String getCurrentDataVersion (){
+    public String getCurrentDataVersion() {
         // DIGP-291: switch to metedataservice metadata call
         String centralMetadataVersion = this.metaDataService.getDataVersion();
         String compareDataVersion = "${dataSetPrefix}${getDataVersion()}";
@@ -114,8 +111,8 @@ class SharedToolsService {
     /**
      * retrieve cached number of variants in the portal DB; pass in true for the cached number to be refreshed
      *
-     * @param forceReload               whether to refresh the number
-     * @return                          the total number of cached variants in the portal DB
+     * @param forceReload whether to refresh the number
+     * @return the total number of cached variants in the portal DB
      */
     public Integer getCachedVariantNumber(Boolean forceReload) {
         if ((this.cachedVariantNumber == null) || forceReload) {
@@ -127,8 +124,8 @@ class SharedToolsService {
     /**
      * retrieve cached number of genes in the portal DB; pass in true for the cached number to be refreshed
      *
-     * @param forceReload               whether to refresh the number
-     * @return                          the total number of cached genes in the portal DB
+     * @param forceReload whether to refresh the number
+     * @return the total number of cached genes in the portal DB
      */
     public Integer getCachedGeneNumber(Boolean forceReload) {
         if ((this.cachedGeneNumber == null) || forceReload) {
@@ -137,36 +134,36 @@ class SharedToolsService {
         return this.cachedGeneNumber;
     }
 
-    private String determineNextChromosome (String currentChromosome) {
+    private String determineNextChromosome(String currentChromosome) {
         String returnValue
-        if (currentChromosome == 'X')  {
+        if (currentChromosome == 'X') {
             returnValue = 'Y'
-        }  else  if (currentChromosome == 'Y')  {
+        } else if (currentChromosome == 'Y') {
             returnValue = ''
-        }   else {
-            int chromosomeNumber =  currentChromosome as int
-            if (chromosomeNumber == 23 )  {
+        } else {
+            int chromosomeNumber = currentChromosome as int
+            if (chromosomeNumber == 23) {
                 returnValue = 'X'
-            }   else {
-                returnValue =  (++chromosomeNumber)
+            } else {
+                returnValue = (++chromosomeNumber)
             }
         }
-        return  returnValue
+        return returnValue
     }
 
-    public void incrementCurrentGeneChromosome ()  {
-        currentGeneChromosome =   determineNextChromosome (retrieveCurrentGeneChromosome () )
-    }
-    public void incrementCurrentVariantChromosome ()  {
-        currentVariantChromosome =   determineNextChromosome (retrieveCurrentVariantChromosome () )
+    public void incrementCurrentGeneChromosome() {
+        currentGeneChromosome = determineNextChromosome(retrieveCurrentGeneChromosome())
     }
 
+    public void incrementCurrentVariantChromosome() {
+        currentVariantChromosome = determineNextChromosome(retrieveCurrentVariantChromosome())
+    }
 
 
-    public void setHelpTextSetting(int newHelpTextSetting){
-        if ((newHelpTextSetting>-1) && (newHelpTextSetting < 3)) {
+    public void setHelpTextSetting(int newHelpTextSetting) {
+        if ((newHelpTextSetting > -1) && (newHelpTextSetting < 3)) {
             helpTextSetting = newHelpTextSetting
-        }else{
+        } else {
             log.error("Attempt to set help text to ${newHelpTextSetting}.  Should be 0, 1, or 2.")
         }
     }
@@ -177,34 +174,30 @@ class SharedToolsService {
     }
 
     public void setDataVersion(String dataVersionString) {
-        int dataVersion  =   dataVersionString as int
+        int dataVersion = dataVersionString as int
         this.dataVersion = dataVersion
     }
 
 
-
-    public int getHelpTextSetting (){
+    public int getHelpTextSetting() {
         return helpTextSetting
     }
 
-    public String getWarningText(){
+    public String getWarningText() {
         return warningText
     }
 
-    public void setWarningText(String warningText){
+    public void setWarningText(String warningText) {
         this.warningText = warningText
     }
 
 
-
-
-
-    public void  initialize(){
-        showGwas = (grailsApplication.config.portal.sections.show_gwas)?1:0
-        showExomeChip = (grailsApplication.config.portal.sections.show_exchp)?1:0
-        showExomeSequence = (grailsApplication.config.portal.sections.show_exseq)?1:0
-        showGene = (grailsApplication.config.portal.sections.show_gene)?1:0
-        showBeacon = (grailsApplication.config.portal.sections.show_beacon)?1:0
+    public void initialize() {
+        showGwas = (grailsApplication.config.portal.sections.show_gwas) ? 1 : 0
+        showExomeChip = (grailsApplication.config.portal.sections.show_exchp) ? 1 : 0
+        showExomeSequence = (grailsApplication.config.portal.sections.show_exseq) ? 1 : 0
+        showGene = (grailsApplication.config.portal.sections.show_gene) ? 1 : 0
+        showBeacon = (grailsApplication.config.portal.sections.show_beacon) ? 1 : 0
         showNewApi = 1
     }
 
@@ -213,12 +206,12 @@ class SharedToolsService {
     }
 
 
-    public Boolean getSectionToDisplay( typeOfSection) {
-        showGwas = (showGwas==-1)?grailsApplication.config.portal.sections.show_gwas:showGwas
-        showExomeChip = (showExomeChip==-1)?grailsApplication.config.portal.sections.show_exchp:showExomeChip
-        showExomeSequence = (showExomeSequence==-1)?grailsApplication.config.portal.sections.show_exseq:showExomeSequence
-        showGene = (showGene==-1)?grailsApplication.config.portal.sections.show_gene:showGene
-        showBeacon = (showBeacon==-1)?grailsApplication.config.portal.sections.show_beacon:showBeacon
+    public Boolean getSectionToDisplay(typeOfSection) {
+        showGwas = (showGwas == -1) ? grailsApplication.config.portal.sections.show_gwas : showGwas
+        showExomeChip = (showExomeChip == -1) ? grailsApplication.config.portal.sections.show_exchp : showExomeChip
+        showExomeSequence = (showExomeSequence == -1) ? grailsApplication.config.portal.sections.show_exseq : showExomeSequence
+        showGene = (showGene == -1) ? grailsApplication.config.portal.sections.show_gene : showGene
+        showBeacon = (showBeacon == -1) ? grailsApplication.config.portal.sections.show_beacon : showBeacon
         Boolean returnValue = false
         switch (typeOfSection) {
             case TypeOfSection.show_gwas:
@@ -236,7 +229,7 @@ class SharedToolsService {
             case TypeOfSection.show_beacon:
                 returnValue = showBeacon
                 break;
-            default:break;
+            default: break;
         }
         return returnValue
     }
@@ -252,7 +245,7 @@ class SharedToolsService {
 
     public Boolean getApplicationIsT2dgenes() {
         return ((!showBeacon) &&
-                (showGwas || showExomeChip  || showExomeSequence))
+                (showGwas || showExomeChip || showExomeSequence))
     }
 
 
@@ -268,14 +261,13 @@ class SharedToolsService {
     }
 
 
-
-    public String  applicationName () {
+    public String applicationName() {
         String returnValue = ""
-        if (getApplicationIsT2dgenes())   {
+        if (getApplicationIsT2dgenes()) {
             returnValue = "t2dGenes"
-        }  else  if (getApplicationIsBeacon())   {
+        } else if (getApplicationIsBeacon()) {
             returnValue = "Beacon"
-        }  else  {
+        } else {
             returnValue = "Undetermined application: internal error"
         }
         return returnValue
@@ -286,12 +278,13 @@ class SharedToolsService {
      * @param oldKey
      * @return
      */
-    public String convertOldPhenotypeStringsToNewOnes (String oldKey){
+    public String convertOldPhenotypeStringsToNewOnes(String oldKey) {
         String returnValue = ""
-        if ((oldKey) && (oldKey.length ()> 0)){
-            if (convertPhenotypes.containsKey(oldKey)){
-                returnValue = convertPhenotypes [oldKey]
-            } else { // this should presumably never happen, but in case it does will guess that the string hasn't changed
+        if ((oldKey) && (oldKey.length() > 0)) {
+            if (convertPhenotypes.containsKey(oldKey)) {
+                returnValue = convertPhenotypes[oldKey]
+            } else {
+                // this should presumably never happen, but in case it does will guess that the string hasn't changed
                 returnValue = oldKey
             }
         }
@@ -304,7 +297,7 @@ class SharedToolsService {
      * @param newKey
      * @return
      */
-    public String convertNewPhenotypeStringsToOldOnes (String newKey){
+    public String convertNewPhenotypeStringsToOldOnes(String newKey) {
         if (this.convertPhenotypesFlipped == null) {
             this.convertPhenotypesFlipped = [];
             for (String key in this.convertPhenotypes.keySet()) {
@@ -326,30 +319,30 @@ class SharedToolsService {
      * @param rawString
      * @return
      */
-    public String createCanonicalVariantName (String  rawString){
+    public String createCanonicalVariantName(String rawString) {
         String canonicalForm = rawString
-        if (rawString){
+        if (rawString) {
             String chromosome
             String position
             String reference
             String alternate
-            if (rawString.indexOf(':')){
-                List <String> dividedByColons = rawString.tokenize(":")
-                if (dividedByColons.size()>1){
+            if (rawString.indexOf(':')) {
+                List<String> dividedByColons = rawString.tokenize(":")
+                if (dividedByColons.size() > 1) {
                     chromosome = dividedByColons[0]
                     position = dividedByColons[1]
                     canonicalForm = "${chromosome}_${position}"
                 }
-                if (dividedByColons.size()>2){
+                if (dividedByColons.size() > 2) {
                     reference = dividedByColons[2]
                     canonicalForm += "_${reference}"
                 }
-                if (dividedByColons.size()>3){
+                if (dividedByColons.size() > 3) {
                     alternate = dividedByColons[3]
                     canonicalForm += "_${alternate}"
                 }
             }
-            canonicalForm = rawString.replaceAll('-','_')
+            canonicalForm = rawString.replaceAll('-', '_')
         }
         return canonicalForm
     }
@@ -366,11 +359,11 @@ class SharedToolsService {
      * @param rawValue
      * @return
      */
-    public List<String> convertAnHttpList (def rawValue){
+    public List<String> convertAnHttpList(def rawValue) {
         List<String> collatedValues = []
-        if ((rawValue)&&
-                (rawValue.size()>0)){
-            if (rawValue.getClass().simpleName=="String"){ // single value
+        if ((rawValue) &&
+                (rawValue.size() > 0)) {
+            if (rawValue.getClass().simpleName == "String") { // single value
                 String rowName = rawValue
                 collatedValues << rowName
             } else { // we must have a list of values
@@ -382,12 +375,6 @@ class SharedToolsService {
         }
         return collatedValues
     }
-
-
-
-
-
-
 
     /***
      * Control the order in which the columns appear on the screen after a sort.  Here we take the tree
@@ -403,23 +390,23 @@ class SharedToolsService {
         // sort common
         if ((unsortedTree?.cproperty) && (unsortedTree?.cproperty?.size() > 0)) {
             LinkedHashMap temporaryHolder = [:]
-            List <Property> commonProperties = metaDataService.getCommonProperties()
+            List<Property> commonProperties = metaDataService.getCommonProperties()
             for (String property in unsortedTree.cproperty) {
-                if (commonProperties.collect{return it.name}?.contains(property)) {
-                    temporaryHolder[property] = commonProperties.find{it.name==property}.sortOrder
+                if (commonProperties.collect { return it.name }?.contains(property)) {
+                    temporaryHolder[property] = commonProperties.find { it.name == property }.sortOrder
                 }
             }
-            unsortedTree.cproperty = ["VAR_ID"]+temporaryHolder.sort { it.value }.keySet()
+            unsortedTree.cproperty = ["VAR_ID"] + temporaryHolder.sort { it.value }.keySet()
         }
 
         // sort dproperty
         if ((unsortedTree?.dproperty) && (unsortedTree?.dproperty?.size() > 0)) {
             for (String phenotype in unsortedTree.dproperty.keySet()) {
                 for (String sampleGroup in unsortedTree.dproperty[phenotype].keySet()) {
-                    List<String> properties =   unsortedTree.dproperty[phenotype][sampleGroup]
-                    List<String> props = metaDataService.getPhenotypeSpecificSampleGroupPropertyList(sampleGroup,phenotype)
-                    List<String> props2 = props.findAll{properties.contains(it)}
-                    if ((props2)&&(props2.size()>0)){
+                    List<String> properties = unsortedTree.dproperty[phenotype][sampleGroup]
+                    List<String> props = metaDataService.getPhenotypeSpecificSampleGroupPropertyList(sampleGroup, phenotype)
+                    List<String> props2 = props.findAll { properties.contains(it) }
+                    if ((props2) && (props2.size() > 0)) {
                         unsortedTree.dproperty[phenotype][sampleGroup] = props2
                     }
                 }
@@ -428,15 +415,14 @@ class SharedToolsService {
 
         }
 
-
         // sort pproperty
         if ((unsortedTree?.pproperty) && (unsortedTree?.pproperty?.size() > 0)) {
             for (String phenotype in unsortedTree.pproperty.keySet()) {
                 for (String sampleGroup in unsortedTree.pproperty[phenotype].keySet()) {
-                    List<String> properties =   unsortedTree.pproperty[phenotype][sampleGroup]
-                    List<String> props = metaDataService.getSpecificPhenotypePropertyList(sampleGroup,phenotype)
-                    List<String> props2 = props.findAll{properties.contains(it)}
-                    if ((props2)&&(props2.size()>0)){
+                    List<String> properties = unsortedTree.pproperty[phenotype][sampleGroup]
+                    List<String> props = metaDataService.getSpecificPhenotypePropertyList(sampleGroup, phenotype)
+                    List<String> props2 = props.findAll { properties.contains(it) }
+                    if ((props2) && (props2.size() > 0)) {
                         unsortedTree.pproperty[phenotype][sampleGroup] = props2
                     }
                 }
@@ -447,16 +433,6 @@ class SharedToolsService {
         return unsortedTree
     }
 
-
-
-
-
-
-
-
-
-
-
     /***
      * Subset the metadata to only columns we want to display
      * @param phenotypesToKeep The phenotypes to keep
@@ -464,9 +440,9 @@ class SharedToolsService {
      * @param propertiesToKeep The properties to keep 
      * @return
      */
-    public LinkedHashMap getColumnsToDisplayStructure(List <String> phenotypesToKeep=null,
-                                                      List <String> sampleGroupsToKeep=null, List <String> propertiesToKeep=null,
-                                                      List <String> commonProperties=null  ){
+    public LinkedHashMap getColumnsToDisplayStructure(List<String> phenotypesToKeep = null,
+                                                      List<String> sampleGroupsToKeep = null, List<String> propertiesToKeep = null,
+                                                      List<String> commonProperties = null) {
 
         // DIGP-170: modified method signature for final push to move to dynamic metadata structure
         if (phenotypesToKeep) {
@@ -488,43 +464,44 @@ class SharedToolsService {
         returnValue["pproperty"] = [:]
 
 
-            if (phenotypesToKeep == null) {
+        if (phenotypesToKeep == null) {
 
-                phenotypesToKeep = metaDataService.getEveryPhenotype()
-            } else
-            {
-                phenotypesToKeep = phenotypesToKeep.findAll({metaDataService.getEveryPhenotype().contains(it)})
+            phenotypesToKeep = metaDataService.getEveryPhenotype()
+        } else {
+            phenotypesToKeep = phenotypesToKeep.findAll({ metaDataService.getEveryPhenotype().contains(it) })
+        }
+
+        for (String phenotype in phenotypesToKeep) {
+            returnValue.pproperty[phenotype] = [:]
+            returnValue.dproperty[phenotype] = [:]
+            List<String> curSampleGroups = []
+            if (sampleGroupsToKeep == null) {
+                curSampleGroups.addAll(metaDataService.getSampleGroupPerPhenotype(phenotype))
+            } else {
+                curSampleGroups.addAll(sampleGroupsToKeep)
+                //curSampleGroups.addAll(sampleGroupsToKeep.findAll({metaDataService.getSampleGroupPerPhenotype(phenotype)?.contains(it)}))
             }
-
-            for (String phenotype in phenotypesToKeep) {
-                returnValue.pproperty[phenotype] = [:]
-                returnValue.dproperty[phenotype] = [:]
-                List<String> curSampleGroups = []
-                if (sampleGroupsToKeep == null) {
-                    curSampleGroups.addAll(metaDataService.getSampleGroupPerPhenotype(phenotype))
+            for (String sampleGroup in curSampleGroups) {
+                returnValue.dproperty[phenotype][sampleGroup] = []
+                returnValue.pproperty[phenotype][sampleGroup] = []
+                if (propertiesToKeep == null) {
+                    // I'm not sure that this branch is ever called
+                    returnValue.dproperty[phenotype][sampleGroup].addAll(metaDataService.getSampleGroupPropertyList(sampleGroup).contains(it))
+                    List<String> propertiesToAdd = metaDataService.getSpecificPhenotypePropertyList(sampleGroup, phenotype)
+                    if ((propertiesToAdd) && (propertiesToAdd.size() > 0)) {
+                        returnValue.pproperty[phenotype][sampleGroup].addAll(propertiesToAdd)
+                    }
                 } else {
-                    curSampleGroups.addAll(sampleGroupsToKeep)
-                    //curSampleGroups.addAll(sampleGroupsToKeep.findAll({metaDataService.getSampleGroupPerPhenotype(phenotype)?.contains(it)}))
-                }
-                for (String sampleGroup in curSampleGroups) {
-                    returnValue.dproperty[phenotype][sampleGroup] = []
-                    returnValue.pproperty[phenotype][sampleGroup] = []
-                    if (propertiesToKeep == null) {
-                        // I'm not sure that this branch is ever called
-                        returnValue.dproperty[phenotype][sampleGroup].addAll(metaDataService.getSampleGroupPropertyList(sampleGroup).contains(it))
-                        List<String> propertiesToAdd= metaDataService.getSpecificPhenotypePropertyList(sampleGroup,phenotype)
-                        if ((propertiesToAdd) && (propertiesToAdd.size()>0)) {
-                            returnValue.pproperty[phenotype][sampleGroup].addAll(propertiesToAdd)
-                        }
-                    } else {
-                        returnValue.dproperty[phenotype][sampleGroup].addAll(propertiesToKeep.findAll({metaDataService.getSampleGroupPropertyList(sampleGroup).contains(it)}))
-                        List<String> phenotypeProperties =metaDataService.getSpecificPhenotypePropertyList(sampleGroup,phenotype)
-                        List<String> propertiesToAdd= propertiesToKeep.findAll{phenotypeProperties}
-                        if ((propertiesToAdd) && (propertiesToAdd.size()>0)) {
-                            returnValue.pproperty[phenotype][sampleGroup].addAll(propertiesToAdd)
-                        }
+                    returnValue.dproperty[phenotype][sampleGroup].addAll(propertiesToKeep.findAll({
+                        metaDataService.getSampleGroupPropertyList(sampleGroup).contains(it)
+                    }))
+                    List<String> phenotypeProperties = metaDataService.getSpecificPhenotypePropertyList(sampleGroup, phenotype)
+                    List<String> propertiesToAdd = propertiesToKeep.findAll { phenotypeProperties }
+                    if ((propertiesToAdd) && (propertiesToAdd.size() > 0)) {
+                        returnValue.pproperty[phenotype][sampleGroup].addAll(propertiesToAdd)
                     }
                 }
+            }
 
         }
 
@@ -532,16 +509,13 @@ class SharedToolsService {
     }
 
 
-
-
-
-    public String packageUpAListAsJson (List <String> listOfStrings ){
+    public JSONObject packageUpAListAsJson(List<String> listOfStrings) {
         // now that we have a list, build it into a string suitable for JSON
         int numrec = 0
-        StringBuilder sb = new StringBuilder ()
-        if ((listOfStrings) && (listOfStrings?.size() > 0)){
+        StringBuilder sb = new StringBuilder()
+        if ((listOfStrings) && (listOfStrings?.size() > 0)) {
             numrec = listOfStrings.size()
-            for ( int  i = 0 ; i < numrec ; i++ ){
+            for (int i = 0; i < numrec; i++) {
                 sb << "\"${listOfStrings[i]}\"".toString()
                 if (i < listOfStrings.size() - 1) {
                     sb << ","
@@ -549,53 +523,34 @@ class SharedToolsService {
             }
         }
 
-        return  """
-{"is_error": false,
-"numRecords":${numrec},
-"dataset":[${sb.toString()}]
-}""".toString()
+        return [
+                is_error  : false,
+                numRecords: numrec,
+                dataset   : listOfStrings
+        ]
+
     }
 
 
-
-
-    public String packageUpATreeAsJson (LinkedHashMap<String, LinkedHashMap <String,List <String>>> bigTree ){
+    public JSONObject packageUpATreeAsJson(LinkedHashMap<String, LinkedHashMap<String, List<String>>> bigTree) {
         // now that we have a multilevel tree, build it into a string suitable for JSON
-        StringBuilder returnValue = new StringBuilder ()
-        if ((bigTree) && (bigTree?.size() > 0)){
-            List <String> phenotypeHolder = []
-            bigTree.each {String phenotype,  LinkedHashMap phenotypeSpecificSampleGroups->
-                StringBuilder sb = new StringBuilder ()
-                sb << """  \"${phenotype}\":
-    {""".toString()
-                List <String> sampleGroupList = []
-                if (phenotypeSpecificSampleGroups?.size() > 0){
-                    phenotypeSpecificSampleGroups.each { String sampleGroupName, List<String> propertyNames ->
-                        sampleGroupList << """        \"${sampleGroupName}\":[
-      ${propertyNames.collect {return "\"$it\""}.join(",")}
- ]""".toString()
-                    }
-                }
-                sb << """
-          ${sampleGroupList.join(",")}
-  }""".toString()
-                phenotypeHolder << sb.toString()
+        JSONObject toReturn = []
+        if ((bigTree) && (bigTree?.size() > 0)) {
+            bigTree.each { String phenotype, LinkedHashMap phenotypeSpecificSampleGroups ->
+                toReturn[phenotype] = phenotypeSpecificSampleGroups
             }
-            returnValue << """{
-            ${phenotypeHolder.join(",")}
-            }"""
         }
-        return returnValue.toString()
+        return toReturn
     }
 
     /***
      * get top level sample groups for display
      *
      **/
-    public List<SampleGroup> listOfTopLevelSampleGroups(String phenotypeName,String datasetName,  List<String> technologies) {
+    public List<SampleGroup> listOfTopLevelSampleGroups(String phenotypeName, String datasetName, List<String> technologies) {
         List<SampleGroup> fullListOfSampleGroups = []
         for (String technologyName in technologies) {
-            List<SampleGroup> technologySpecificSampleGroups = metaDataService.getSampleGroupForPhenotypeDatasetTechnologyAncestry(phenotypeName,datasetName,
+            List<SampleGroup> technologySpecificSampleGroups = metaDataService.getSampleGroupForPhenotypeDatasetTechnologyAncestry(phenotypeName, datasetName,
                     technologyName,
                     getCurrentDataVersion(), "")
             // pick a favorite -- use sample size eventually.  For now we use a shortcut...
@@ -614,18 +569,18 @@ class SharedToolsService {
     }
 
 
-    public String packageUpASingleLevelTreeAsJson (LinkedHashMap<String, LinkedHashMap <String,List <String>>> bigTree ){
+    public String packageUpASingleLevelTreeAsJson(LinkedHashMap<String, LinkedHashMap<String, List<String>>> bigTree) {
         // now that we have a multilevel tree, build it into a string suitable for JSON
         //LinkedHashMap<String, LinkedHashMap <String,List <String>>> sortedBigTree = bigTree.sort{it.value.technology}
-        StringBuilder returnValue = new StringBuilder ()
-        if ((bigTree) && (bigTree?.size() > 0)){
-            List <String> phenotypeHolder = []
-            bigTree.each {String phenotype,  LinkedHashMap phenotypeSpecificSampleGroups->
-                StringBuilder sb = new StringBuilder ()
+        StringBuilder returnValue = new StringBuilder()
+        if ((bigTree) && (bigTree?.size() > 0)) {
+            List<String> phenotypeHolder = []
+            bigTree.each { String phenotype, LinkedHashMap phenotypeSpecificSampleGroups ->
+                StringBuilder sb = new StringBuilder()
                 sb << """  \"${phenotype}\":
     {""".toString()
-                List <String> sampleGroupList = []
-                if (phenotypeSpecificSampleGroups?.size() > 0){
+                List<String> sampleGroupList = []
+                if (phenotypeSpecificSampleGroups?.size() > 0) {
                     phenotypeSpecificSampleGroups.each { String sampleGroupName, String propertyName ->
                         sampleGroupList << """        \"${sampleGroupName}\":\"$propertyName\" """.toString()
                     }
@@ -643,123 +598,102 @@ class SharedToolsService {
     }
 
 
-
-
-    public String packageUpSortedHierarchicalListAsJson (LinkedHashMap mapOfSampleGroups ){
-        // now that we have a list, build it into a string suitable for JSON
+    public JSONObject packageUpSortedHierarchicalListAsJson(LinkedHashMap mapOfSampleGroups) {
         int numberOfGroups = 0
-        StringBuilder sb = new StringBuilder ()
+        StringBuilder sb = new StringBuilder()
 
+        JSONObject toReturn = [
+                dataset: new JSONObject()
+        ]
 
-        List <String> sampleGroupList = []
-        if (mapOfSampleGroups?.size() > 0){
+        List<String> sampleGroupList = []
+        if (mapOfSampleGroups?.size() > 0) {
             mapOfSampleGroups.each { String sampleGroupName, List<String> propertyNames ->
-                sampleGroupList << """        \"${sampleGroupName}\":[
-      ${propertyNames.collect {return "\"$it\""}.join(",")}
- ]""".toString()
+                toReturn.dataset[sampleGroupName] = propertyNames
             }
         }
-        sb << """
-          ${sampleGroupList.join(",")}
-""".toString()
+        toReturn.is_error = false
+        toReturn.numRecords = numberOfGroups
 
-        return  """
-{"is_error": false,
-"numRecords":${numberOfGroups},
-"dataset":{${sb.toString()}}
-}""".toString()
+        return toReturn
     }
 
 
-
-
-
-
-
-
-    public String packageUpAHierarchicalListAsJson (LinkedHashMap mapOfStrings ){
-        // now that we have a list, build it into a string suitable for JSON
+    public JSONObject packageUpAHierarchicalListAsJson(LinkedHashMap mapOfStrings) {
         int numberOfGroups = 0
-        StringBuilder sb = new StringBuilder ()
 
-        if ((mapOfStrings) && (mapOfStrings?.size() > 0)){
+        JSONObject toReturn = [
+                dataset: new JSONObject()
+        ]
+
+        if ((mapOfStrings) && (mapOfStrings?.size() > 0)) {
             LinkedHashMap sortedMapOfStrings = mapOfStrings
             numberOfGroups = sortedMapOfStrings.size()
-            int groupCounter  = 0
-            sortedMapOfStrings.each{k,List v->
-                sb <<  "\"${k}\":[".toString()
-                int individualGroupLength  = v.size()
-                for ( int  i = 0 ; i < individualGroupLength ; i++ ){
-                    sb << "\"${v[i]}\"".toString()
-                    if (i < individualGroupLength - 1) {
-                        sb << ","
-                    }
+            int groupCounter = 0
+            sortedMapOfStrings.each { k, List v ->
+                ArrayList<String> listOfPhenotypes = new ArrayList<String>()
+                int individualGroupLength = v.size()
+                for (int i = 0; i < individualGroupLength; i++) {
+                    listOfPhenotypes << v[i]
                 }
-                sb <<  "]"
                 groupCounter++
-                if (numberOfGroups > groupCounter) {
-                    sb << ","
-                }
+                toReturn.dataset[k] = listOfPhenotypes
             }
         }
 
-        return  """
-{"is_error": false,
-"numRecords":${numberOfGroups},
-"dataset":{${sb.toString()}}
-}""".toString()
+        toReturn.is_error = false
+        toReturn.numRecords = numberOfGroups
+
+        return toReturn
     }
 
 
-
-    public String packageUpASimpleMapAsJson (LinkedHashMap<String,String> mapOfStrings ){
+    public JSONObject packageUpASimpleMapAsJson(LinkedHashMap<String, String> mapOfStrings) {
         // now that we have a list, build it into a string suitable for JSON
         int numberOfGroups = 0
-        StringBuilder sb = new StringBuilder ()
+        StringBuilder sb = new StringBuilder()
 
-        if ((mapOfStrings) && (mapOfStrings?.size() > 0)){
+        JSONObject toReturn = [
+                dataset: new JSONObject()
+        ]
+
+        if ((mapOfStrings) && (mapOfStrings?.size() > 0)) {
             LinkedHashMap sortedMapOfStrings = mapOfStrings
             numberOfGroups = sortedMapOfStrings.size()
-            int groupCounter  = 0
-            sortedMapOfStrings.each{String k,String v->
-                sb <<  "\"${k}\":".toString()
-                sb << "\"${v}\"".toString()
-                groupCounter++
-                if (numberOfGroups > groupCounter) {
-                    sb << ","
-                }
+            int groupCounter = 0
+            sortedMapOfStrings.each { String k, String v ->
+                toReturn.dataset[k] = v
             }
         }
 
-        return  """
-{"is_error": false,
-"numRecords":${numberOfGroups},
-"dataset":{${sb.toString()}}
-}""".toString()
+        toReturn.is_error = false
+        toReturn.numRecords = numberOfGroups
+
+        return toReturn
     }
 
 
-
-
-
-    public String packageSampleGroupsHierarchicallyForJsTree (SampleGroupBean sampleGroupBean, String phenotypeName){
-        StringBuilder sb  = new StringBuilder ()
-        if (sampleGroupBean){
-            sb = recursivelyDescendSampleGroupsHierarchically( sampleGroupBean, phenotypeName,  sb)
+    public String packageSampleGroupsHierarchicallyForJsTree(SampleGroupBean sampleGroupBean, String phenotypeName) {
+        StringBuilder sb = new StringBuilder()
+        if (sampleGroupBean) {
+            sb = recursivelyDescendSampleGroupsHierarchically(sampleGroupBean, phenotypeName, sb)
         }
         return sb.toString()
     }
 
 
-    public StringBuilder recursivelyDescendSampleGroupsHierarchically(SampleGroupBean sampleGroupBean, String phenotypeName, StringBuilder sb){
-        String checkedByDef =  (sb.toString().length()==0)?"true":"false"
-        if (sampleGroupBean){
+    public StringBuilder recursivelyDescendSampleGroupsHierarchically(SampleGroupBean sampleGroupBean, String phenotypeName, StringBuilder sb) {
+        String checkedByDef = (sb.toString().length() == 0) ? "true" : "false"
+        if (sampleGroupBean) {
+            def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
             List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = sampleGroupBean.getPhenotypes()
-            for (org.broadinstitute.mpg.diabetes.metadata.Phenotype phenotype in phenotypeList){
-                if (("" == phenotypeName)||(phenotype.name == phenotypeName)){// we care about this sample group
-                    String pValue = filterManagementService.findFavoredMeaningValue( sampleGroupBean.getSystemId(), phenotypeName, "P_VALUE" ) ;
+            for (org.broadinstitute.mpg.diabetes.metadata.Phenotype phenotype in phenotypeList) {
+                if (("" == phenotypeName) || (phenotype.name == phenotypeName)) {// we care about this sample group
+                    String pValue = filterManagementService.findFavoredMeaningValue(sampleGroupBean.getSystemId(), phenotypeName, "P_VALUE");
                     sb << """{
-  "text"        : "${translator(sampleGroupBean.getSystemId())}",
+  "text"        : "${
+                        g.message(code: "metadata." + sampleGroupBean.getSystemId(), default: sampleGroupBean.getSystemId())
+                    }",
   "id"          : "${sampleGroupBean.getSystemId()}-${pValue}-${sampleGroupBean.subjectsNumber}-${phenotypeName}",
   "state"       : {
     "opened"    : false,
@@ -769,10 +703,10 @@ class SharedToolsService {
   "children"    : [""".toString()
                     List<SampleGroup> sampleGroupList = sampleGroupBean.getSampleGroups()
                     int sampleGroupCount = 0
-                    for (SampleGroup sampleGroup in sampleGroupList){
+                    for (SampleGroup sampleGroup in sampleGroupList) {
                         recursivelyDescendSampleGroupsHierarchically(sampleGroup, phenotypeName, sb)
                         sampleGroupCount++
-                        if (sampleGroupCount<sampleGroupList.size()){
+                        if (sampleGroupCount < sampleGroupList.size()) {
                             sb << ","
                         }
                     }
@@ -785,31 +719,30 @@ class SharedToolsService {
     }
 
 
-
-    LinkedHashMap<String, LinkedHashMap<String, List <String>>> putPropertiesIntoHierarchy(String rawProperties){
+    LinkedHashMap<String, LinkedHashMap<String, List<String>>> putPropertiesIntoHierarchy(String rawProperties) {
         LinkedHashMap phenotypeHolder = [:]
         if ((rawProperties) &&
-            (rawProperties.length())){
-            List <String> listOfProperties = rawProperties.tokenize("^")
-            for (String property in listOfProperties){
-                List <String> propertyPieces = property.tokenize(":") // 0=Phenotype,1= data set,2= property
+                (rawProperties.length())) {
+            List<String> listOfProperties = rawProperties.tokenize("^")
+            for (String property in listOfProperties) {
+                List<String> propertyPieces = property.tokenize(":") // 0=Phenotype,1= data set,2= property
                 LinkedHashMap datasetHolder
-                if (phenotypeHolder.containsKey(propertyPieces[0])){
+                if (phenotypeHolder.containsKey(propertyPieces[0])) {
                     datasetHolder = phenotypeHolder[propertyPieces[0]]
-                } else{
+                } else {
                     datasetHolder = [:]
                     phenotypeHolder[propertyPieces[0]] = datasetHolder
                 }
                 List propertyHolder
-                if (datasetHolder.containsKey(propertyPieces[1])){
+                if (datasetHolder.containsKey(propertyPieces[1])) {
                     propertyHolder = datasetHolder[propertyPieces[1]]
-                }else{
+                } else {
                     propertyHolder = []
                     datasetHolder[propertyPieces[1]] = propertyHolder
                 }
-                if (!propertyHolder.contains(propertyPieces[2])){
+                if (!propertyHolder.contains(propertyPieces[2])) {
                     propertyHolder << propertyPieces[2]
-               }
+                }
 
             }
         }
@@ -817,10 +750,7 @@ class SharedToolsService {
     }
 
 
-
-
-
-    public String  parseChromosome (String rawChromosomeString) {
+    public String parseChromosome(String rawChromosomeString) {
         String returnValue = ""
         java.util.regex.Matcher chromosome = rawChromosomeString =~ /chr[\dXY]*/
         if (chromosome.size() == 0) {  // let's try to help if the user forgot to specify the chr
@@ -836,11 +766,11 @@ class SharedToolsService {
     }
 
 
-    public String  parseExtent (String rawExtentString) {
+    public String parseExtent(String rawExtentString) {
         String returnValue = ""
         java.util.regex.Matcher startExtentString = rawExtentString =~ /\d+/
-        if (startExtentString.size()>0)  {
-           returnValue =  startExtentString[0]
+        if (startExtentString.size() > 0) {
+            returnValue = startExtentString[0]
         }
         return returnValue;
     }
@@ -870,19 +800,17 @@ class SharedToolsService {
      * @param initialString
      * @return
      */
-    List<String> convertStringToArray (String initialString){
+    List<String> convertStringToArray(String initialString) {
         List<String> returnValue = []
         List<String> rawList = []
-        if (initialString){
-            rawList =  initialString.split(',')
+        if (initialString) {
+            rawList = initialString.split(',')
         }
-        for (String oneString in rawList){
-            returnValue << oneString.replaceAll("[^a-zA-Z_\\d\\s:]","")
+        for (String oneString in rawList) {
+            returnValue << oneString.replaceAll("[^a-zA-Z_\\d\\s:]", "")
         }
         return returnValue
     }
-
-
 
     /***
      * Convert a simple list into a collection of strings enclosed in quotation marks and separated
@@ -890,12 +818,14 @@ class SharedToolsService {
      * @param list
      * @return
      */
-    String convertListToString (List <String> list){
+    String convertListToString(List<String> list) {
         String returnValue = ""
         if (list) {
-            List filteredList = list.findAll{it.toString().size()>0} // make sure everything is a string with at least size > 0
-            if (filteredList.size()>0){
-                returnValue = "\""+filteredList.join("\",\"")+"\"" // put them together in a way that Json can consume
+            List filteredList = list.findAll { it.toString().size() > 0 }
+            // make sure everything is a string with at least size > 0
+            if (filteredList.size() > 0) {
+                returnValue = "\"" + filteredList.join("\",\"") + "\""
+                // put them together in a way that Json can consume
             }
         }
         return returnValue
@@ -909,13 +839,13 @@ class SharedToolsService {
      * @param multiline
      * @return
      */
-    List<String> convertMultilineToList (String multiline){
+    List<String> convertMultilineToList(String multiline) {
         List<String> returnValue = []
         multiline.eachLine {
             if (it) {
-                String filteredVersion =  it.toString().replaceAll("[^a-zA-Z_\\d\\s:]","")
-                if (filteredVersion){
-                    returnValue <<  filteredVersion
+                String filteredVersion = it.toString().replaceAll("[^a-zA-Z_\\d\\s:]", "")
+                if (filteredVersion) {
+                    returnValue << filteredVersion
                 }
             }
         }
@@ -923,12 +853,8 @@ class SharedToolsService {
     }
 
 
-
-
-
-
-    String createDistributedBurdenTestInput(List <String> variantList){
-        String returnValue ="""{
+    String createDistributedBurdenTestInput(List<String> variantList) {
+        String returnValue = """{
             "variants":[
                ${convertListToString(variantList)}
         ],
@@ -938,31 +864,25 @@ class SharedToolsService {
         return returnValue
     }
 
-
-
-
-
     /***
      * urlEncodedListOfProteinEffect delivers the information in of the ProteinEffect domain object
      * For convenient delivery to the browser
      * @return
      */
     public String urlEncodedListOfProteinEffect() {
-        List<ProteinEffect> proteinEffectList=ProteinEffect.list()
-        StringBuilder sb   = new StringBuilder ("")
-        int numberOfProteinEffects  =  proteinEffectList.size()
-        int iterationCount  = 0
-        for (ProteinEffect proteinEffect in proteinEffectList){
-            sb<< (proteinEffect.key + ":" + proteinEffect.name )
+        List<ProteinEffect> proteinEffectList = ProteinEffect.list()
+        StringBuilder sb = new StringBuilder("")
+        int numberOfProteinEffects = proteinEffectList.size()
+        int iterationCount = 0
+        for (ProteinEffect proteinEffect in proteinEffectList) {
+            sb << (proteinEffect.key + ":" + proteinEffect.name)
             iterationCount++
-            if (iterationCount  < numberOfProteinEffects){
-                sb<< "~"
+            if (iterationCount < numberOfProteinEffects) {
+                sb << "~"
             }
         }
-        return java.net.URLEncoder.encode( sb.toString())
+        return java.net.URLEncoder.encode(sb.toString())
     }
-
-
 
     /***
      * urlEncodedListOfProteinEffect delivers the information in of the ProteinEffect domain object
@@ -970,37 +890,35 @@ class SharedToolsService {
      * @return
      */
     public String urlEncodedListOfUsers() {
-        List<User> userList=User.list()
-        StringBuilder sb   = new StringBuilder ("")
-        int numberOfUsers  =  userList.size()
-        int iterationCount  = 0
-        for (User user in userList){
-            sb<< (user.username + ":" + (user.getPasswordExpired()?'T':'F') + ":" + (user.getAccountExpired()?'T':'F')+ ":" + user.getId())
+        List<User> userList = User.list()
+        StringBuilder sb = new StringBuilder("")
+        int numberOfUsers = userList.size()
+        int iterationCount = 0
+        for (User user in userList) {
+            sb << (user.username + ":" + (user.getPasswordExpired() ? 'T' : 'F') + ":" + (user.getAccountExpired() ? 'T' : 'F') + ":" + user.getId())
             iterationCount++
-            if (iterationCount  < numberOfUsers){
-                sb<< "~"
+            if (iterationCount < numberOfUsers) {
+                sb << "~"
             }
         }
-        return java.net.URLEncoder.encode( sb.toString())
+        return java.net.URLEncoder.encode(sb.toString())
     }
 
 
     public String urlEncodedListOfUserSessions(List<UserSession> userSessionList) {
-        StringBuilder sb   = new StringBuilder ("")
-        int numberOfUsers  =  userSessionList.size()
-        int iterationCount  = 0
-        for (UserSession userSession in userSessionList){
-            sb<< (userSession.user.username + "#" + (userSession.getStartSession().toString()) + "#" + (userSession.getEndSession()?:'none')+ "#" +
-                    (userSession.getRemoteAddress()?:'none') + "#" + (userSession.getDataField()?:'none') )
+        StringBuilder sb = new StringBuilder("")
+        int numberOfUsers = userSessionList.size()
+        int iterationCount = 0
+        for (UserSession userSession in userSessionList) {
+            sb << (userSession.user.username + "#" + (userSession.getStartSession().toString()) + "#" + (userSession.getEndSession() ?: 'none') + "#" +
+                    (userSession.getRemoteAddress() ?: 'none') + "#" + (userSession.getDataField() ?: 'none'))
             iterationCount++
-            if (iterationCount  < numberOfUsers){
-                sb<< "~"
+            if (iterationCount < numberOfUsers) {
+                sb << "~"
             }
         }
-        return java.net.URLEncoder.encode( sb.toString())
+        return java.net.URLEncoder.encode(sb.toString())
     }
-
-
 
     /***
      * Given a user, translate their privileges into a flag integer
@@ -1008,15 +926,15 @@ class SharedToolsService {
      * @param userInstance
      * @return
      */
-    public int extractPrivilegeFlags (User userInstance)  {
+    public int extractPrivilegeFlags(User userInstance) {
         int flag = 0
         List<UserRole> userRoleList = UserRole.findAllByUser(userInstance)
         for (UserRole oneUserRole in userRoleList) {
             if (oneUserRole.role == Role.findByAuthority("ROLE_USER")) {
                 flag += 1
-            }  else  if (oneUserRole.role == Role.findByAuthority("ROLE_ADMIN")) {
+            } else if (oneUserRole.role == Role.findByAuthority("ROLE_ADMIN")) {
                 flag += 2
-            }  else  if (oneUserRole.role == Role.findByAuthority("ROLE_SYSTEM")) {
+            } else if (oneUserRole.role == Role.findByAuthority("ROLE_SYSTEM")) {
                 flag += 4
             }
         }
@@ -1024,26 +942,24 @@ class SharedToolsService {
     }
 
 
-
-
-    private void adjustPrivileges (User userInstance, int targetFlag,int currentFlag, int bitToConsider, String targetRole )  {
-        if ((targetFlag&bitToConsider) > 0 ) {
+    private void adjustPrivileges(User userInstance, int targetFlag, int currentFlag, int bitToConsider, String targetRole) {
+        if ((targetFlag & bitToConsider) > 0) {
             // we want them to have it
 
-            if ((currentFlag&bitToConsider) == 0) {
+            if ((currentFlag & bitToConsider) == 0) {
                 // we want them to have it and they don't. Give it to them
-                Role role =  Role.findByAuthority(targetRole)
-                UserRole.create userInstance,role
+                Role role = Role.findByAuthority(targetRole)
+                UserRole.create userInstance, role
             }  // else we want them to have it and they do already == no-op
 
-        }   else {
+        } else {
             // we don't want them to have it
 
-            if ((currentFlag&bitToConsider) > 0) {
+            if ((currentFlag & bitToConsider) > 0) {
                 // we don't want them to have it but they do. Take it away
-                Role role =  Role.findByAuthority(targetRole)
-                UserRole userRole = UserRole.findByUserAndRole(userInstance,role)
-                        //               UserRole userRole =  UserRole.get(userInstance.id,role.id)
+                Role role = Role.findByAuthority(targetRole)
+                UserRole userRole = UserRole.findByUserAndRole(userInstance, role)
+                //               UserRole userRole =  UserRole.get(userInstance.id,role.id)
                 userRole.delete()
             }  // else we don't want them to have it and they don't already == no-op
 
@@ -1051,35 +967,33 @@ class SharedToolsService {
 
     }
 
-
-
     /***
      * Give the user the privileges we want them to have – no more, no less
      * @param userInstance
      * @param flag
      * @return
      */
-    public int storePrivilegesFromFlags (User userInstance,int targetFlag)  {
+    public int storePrivilegesFromFlags(User userInstance, int targetFlag) {
         // what privileges do they have already
-        int currentFlag = extractPrivilegeFlags ( userInstance)
+        int currentFlag = extractPrivilegeFlags(userInstance)
 
         // Now go through the flags we want them to have one by one and adjust accordingly
-        adjustPrivileges ( userInstance,  targetFlag, currentFlag, 0x1, "ROLE_USER" )
-        adjustPrivileges ( userInstance,  targetFlag, currentFlag, 0x2, "ROLE_ADMIN" )
-        adjustPrivileges ( userInstance,  targetFlag, currentFlag, 0x4, "ROLE_SYSTEM" )
+        adjustPrivileges(userInstance, targetFlag, currentFlag, 0x1, "ROLE_USER")
+        adjustPrivileges(userInstance, targetFlag, currentFlag, 0x2, "ROLE_ADMIN")
+        adjustPrivileges(userInstance, targetFlag, currentFlag, 0x4, "ROLE_SYSTEM")
 
         return targetFlag
     }
 
-    public int convertCheckboxesToPrivFlag(params){
+    public int convertCheckboxesToPrivFlag(params) {
         int flag = 0
-        if (params["userPrivs"]=="on"){
+        if (params["userPrivs"] == "on") {
             flag += 1
         }
-        if (params["mgrPrivs"]=="on"){
+        if (params["mgrPrivs"] == "on") {
             flag += 2
         }
-        if (params["systemPrivs"]=="on"){
+        if (params["systemPrivs"] == "on") {
             flag += 4
         }
         return flag
@@ -1092,32 +1006,32 @@ class SharedToolsService {
      * @param getDataQuery
      * @return
      */
-    public LinkedHashMap validGenomicExtents (GetDataQuery getDataQuery) {
+    public LinkedHashMap validGenomicExtents(GetDataQuery getDataQuery) {
         LinkedHashMap returnValue = [:]
-        List <Integer> geneIndex = getDataQuery.getPropertyIndexList(PortalConstants.PROPERTY_KEY_COMMON_GENE)
-        List <Integer> chromosomeIndex = getDataQuery.getPropertyIndexList(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME)
-        List <Integer> positionIndex = getDataQuery.getPropertyIndexList(PortalConstants.PROPERTY_KEY_COMMON_POSITION)
-        if (geneIndex?.size()==1){
+        List<Integer> geneIndex = getDataQuery.getPropertyIndexList(PortalConstants.PROPERTY_KEY_COMMON_GENE)
+        List<Integer> chromosomeIndex = getDataQuery.getPropertyIndexList(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME)
+        List<Integer> positionIndex = getDataQuery.getPropertyIndexList(PortalConstants.PROPERTY_KEY_COMMON_POSITION)
+        if (geneIndex?.size() == 1) {
             Property property = getDataQuery.getFilterList()[geneIndex[0]]?.property
             Gene geneList = Gene.retrieveGene(property?.getName())
-            if (geneList){
+            if (geneList) {
                 returnValue["addrStart"] = geneList.addrStart
                 returnValue["addrEnd"] = geneList.addrEnd
                 returnValue["chromosome"] = geneList.chromosome
                 returnValue["geneName"] = geneList.name2
             }
-        } else if ((chromosomeIndex?.size()==1) &&
-                   (positionIndex.size()==2) ){
+        } else if ((chromosomeIndex?.size() == 1) &&
+                (positionIndex.size() == 2)) {
             QueryFilter queryFilter0 = getDataQuery.getFilterList()[positionIndex[0]]
             QueryFilter queryFilter1 = getDataQuery.getFilterList()[positionIndex[1]]
             returnValue["addrStart"] = 0L
             returnValue["addrEnd"] = 3200000000L
-            if ((queryFilter0.operator==PortalConstants.OPERATOR_LESS_THAN_EQUALS)  ||
-                (queryFilter0.operator==PortalConstants.OPERATOR_LESS_THAN_NOT_EQUALS)){
+            if ((queryFilter0.operator == PortalConstants.OPERATOR_LESS_THAN_EQUALS) ||
+                    (queryFilter0.operator == PortalConstants.OPERATOR_LESS_THAN_NOT_EQUALS)) {
                 returnValue["addrEnd"] = queryFilter0.value as Long
             }
-            if ((queryFilter1.operator==PortalConstants.OPERATOR_MORE_THAN_EQUALS)  ||
-                    (queryFilter1.operator==PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS)){
+            if ((queryFilter1.operator == PortalConstants.OPERATOR_MORE_THAN_EQUALS) ||
+                    (queryFilter1.operator == PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS)) {
                 returnValue["addrStart"] = queryFilter1.value as Long
             }
             returnValue["chromosome"] = getDataQuery.getFilterList()[chromosomeIndex[0]]?.property
@@ -1126,17 +1040,15 @@ class SharedToolsService {
     }
 
 
-
-
-    List <String> allEncompassedGenes (LinkedHashMap genomicExtents){
-        List <String> returnValue = []
-        if (genomicExtents.size()>0){
-            List<Gene> geneList = Gene.findAllByChromosome("chr"+genomicExtents["chromosome"])
+    List<String> allEncompassedGenes(LinkedHashMap genomicExtents) {
+        List<String> returnValue = []
+        if (genomicExtents.size() > 0) {
+            List<Gene> geneList = Gene.findAllByChromosome("chr" + genomicExtents["chromosome"])
             for (Gene gene in geneList) {
                 int startExtent = genomicExtents["addrStart"] as Long
                 int endExtent = genomicExtents["addrEnd"] as Long
-                if (((gene.addrStart >startExtent) && (gene.addrStart < endExtent)) ||
-                        ((gene.addrEnd > startExtent) && (gene.addrEnd <endExtent))) {
+                if (((gene.addrStart > startExtent) && (gene.addrStart < endExtent)) ||
+                        ((gene.addrEnd > startExtent) && (gene.addrEnd < endExtent))) {
                     returnValue << gene.name1 as String
                 }
             }
@@ -1145,15 +1057,10 @@ class SharedToolsService {
     }
 
 
-    List <String> allEncompassedGenes (GetDataQuery getDataQuery){
-        LinkedHashMap genomicExtents = validGenomicExtents ( getDataQuery)
-        return allEncompassedGenes (genomicExtents)
+    List<String> allEncompassedGenes(GetDataQuery getDataQuery) {
+        LinkedHashMap genomicExtents = validGenomicExtents(getDataQuery)
+        return allEncompassedGenes(genomicExtents)
     }
-
-
-
-
-
 
     /***
      * packageUpFiltersForRoundTrip get back a list of filters that we need to pass to the backend. We package them up for a round trip to the client
@@ -1162,13 +1069,13 @@ class SharedToolsService {
      * @param listOfAllFilters
      * @return
      */
-    public String packageUpFiltersForRoundTrip (List <String> listOfAllFilters)  {
+    public String packageUpFiltersForRoundTrip(List<String> listOfAllFilters) {
 
-        StringBuilder sb = new  StringBuilder()
+        StringBuilder sb = new StringBuilder()
         if (listOfAllFilters) {
-            for ( int i=0 ; i<listOfAllFilters.size() ; i++ ) {
-                sb <<  listOfAllFilters[i]
-                if ((i+1)<listOfAllFilters.size()) {
+            for (int i = 0; i < listOfAllFilters.size(); i++) {
+                sb << listOfAllFilters[i]
+                if ((i + 1) < listOfAllFilters.size()) {
                     sb << ","
                 }
             }
@@ -1178,47 +1085,35 @@ class SharedToolsService {
     }
 
 
-
-
-    public LinkedHashMap<String,List<LinkedHashMap>> composePhenotypeOptions () {
-        LinkedHashMap<String,List<LinkedHashMap>> returnValue = [:]
+    public LinkedHashMap<String, List<LinkedHashMap>> composePhenotypeOptions() {
+        LinkedHashMap<String, List<LinkedHashMap>> returnValue = [:]
         LinkedHashMap<String, List<String>> propertyTree = metaDataService.getHierarchicalPhenotypeTree()
-        propertyTree.each{String categoryName,List<String> phenotypeList->
-            List<LinkedHashMap>  phenotypesAndTranslations = []
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+        propertyTree.each { String categoryName, List<String> phenotypeList ->
+            List<LinkedHashMap> phenotypesAndTranslations = []
             for (String phenotype in phenotypeList) {
-                phenotypesAndTranslations << ['mkey':phenotype,'name':translator(phenotype)]
+                phenotypesAndTranslations << ['mkey': phenotype, 'name': g.message(code: "metadata." + phenotype, default: phenotype)]
             }
-            returnValue[categoryName] =  phenotypesAndTranslations
+            returnValue[categoryName] = phenotypesAndTranslations
         }
-        return  returnValue
+        return returnValue
     }
-
-
-
-
-
 
     /***
      * build up a phenotype list
      * @return
      */
-    public LinkedHashMap<String,List<LinkedHashMap>> composeDatasetOptions (){
+    public LinkedHashMap<String, List<LinkedHashMap>> composeDatasetOptions() {
         LinkedHashMap returnValue = [:]
         List ancestry = []
-        ancestry << ['mkey':'AA','name':'African-American']
-        ancestry << ['mkey':'EA','name':'East Asian']
-        ancestry << ['mkey':'SA','name':'South Asian']
-        ancestry << ['mkey':'EU','name':'European']
-        ancestry << ['mkey':'HS','name':'Hispanic']
-        returnValue ["ancestry"] = ancestry
+        ancestry << ['mkey': 'AA', 'name': 'African-American']
+        ancestry << ['mkey': 'EA', 'name': 'East Asian']
+        ancestry << ['mkey': 'SA', 'name': 'South Asian']
+        ancestry << ['mkey': 'EU', 'name': 'European']
+        ancestry << ['mkey': 'HS', 'name': 'Hispanic']
+        returnValue["ancestry"] = ancestry
         return returnValue
     }
-
-
-
-
-
-
 
     /***
      *  we need to  encode the list of parameters so that we can reset them when we reenter  the filter setting form.  It
@@ -1232,11 +1127,11 @@ class SharedToolsService {
      * @param listOfAllEncodedParameters
      * @return
      */
-    public String packageUpEncodedParameters (List <String> listOfAllEncodedParameters ) {
-        StringBuilder sbEncoded = new  StringBuilder()
-        for ( int i=0 ; i<listOfAllEncodedParameters.size() ; i++ ) {
-            sbEncoded <<  listOfAllEncodedParameters[i]
-            if ((i+1)<listOfAllEncodedParameters.size()) {
+    public String packageUpEncodedParameters(List<String> listOfAllEncodedParameters) {
+        StringBuilder sbEncoded = new StringBuilder()
+        for (int i = 0; i < listOfAllEncodedParameters.size(); i++) {
+            sbEncoded << listOfAllEncodedParameters[i]
+            if ((i + 1) < listOfAllEncodedParameters.size()) {
                 sbEncoded << ","
             }
         }
@@ -1245,33 +1140,31 @@ class SharedToolsService {
     }
 
 
-    public String encodeUser (String putativeUsername)  {
-        int key=47
+    public String encodeUser(String putativeUsername) {
+        int key = 47
         String coded = ""
-        for ( int i = 0; i < putativeUsername.length(); ++i )
-        {
+        for (int i = 0; i < putativeUsername.length(); ++i) {
 
-            char c = putativeUsername.charAt( i );
+            char c = putativeUsername.charAt(i);
             int j = (int) c + key;
-            coded+=(j+"-")
+            coded += (j + "-")
 
 
         }
-        return  coded
+        return coded
     }
 
 
-
-    public String unencodeUser (String encodedUsername)  {
+    public String unencodeUser(String encodedUsername) {
         String returnValue = ""
         String[] elements = encodedUsername.split("-")
-        for  ( int i = 0; i < elements.size(); ++i ){
+        for (int i = 0; i < elements.size(); ++i) {
             String encChar = elements[i]
-            if (encChar.length()>0)    {
+            if (encChar.length() > 0) {
                 int codedVal = encChar.toInteger()
-                int decoded=codedVal-47
+                int decoded = codedVal - 47
                 String aChar = new Character((char) decoded).toString();
-                returnValue +=  aChar
+                returnValue += aChar
             }
         }
         return returnValue
@@ -1279,16 +1172,13 @@ class SharedToolsService {
     }
 
 
-
-
-
-    public String sendForgottenPasswordEmail(String userEmailAddress){
+    public String sendForgottenPasswordEmail(String userEmailAddress) {
         String serverUrl = "http://localhost:8080/dport"
-        String passwordResetUrl = grailsLinkGenerator.link(controller:'admin', action:'resetPasswordInteractive',absolute: true)
-        String bodyOfMessage = "Dear diabetes portal user;\n\n In order to access the updated version of the diabetes portal it will be necessary for you to reset your password."+
-        "Please copy the following string into the URL of your browser:\n\n" +
-                passwordResetUrl+ "/"+ encodeUser(userEmailAddress) +"\n"+
-                "\n"+
+        String passwordResetUrl = grailsLinkGenerator.link(controller: 'admin', action: 'resetPasswordInteractive', absolute: true)
+        String bodyOfMessage = "Dear diabetes portal user;\n\n In order to access the updated version of the diabetes portal it will be necessary for you to reset your password." +
+                "Please copy the following string into the URL of your browser:\n\n" +
+                passwordResetUrl + "/" + encodeUser(userEmailAddress) + "\n" +
+                "\n" +
                 "If you did not request a password reset then you can safely ignore this e-mail"
         mailService.sendMail {
             from "t2dPortal@gmail.com"
@@ -1300,102 +1190,99 @@ class SharedToolsService {
     }
 
 
-
-    public String encodeAFilterList(LinkedHashMap<String,String> parametersToEncode,LinkedHashMap<String,String> customFiltersToEncode) {
-        StringBuilder sb   = new StringBuilder ("")
+    public String encodeAFilterList(LinkedHashMap<String, String> parametersToEncode, LinkedHashMap<String, String> customFiltersToEncode) {
+        StringBuilder sb = new StringBuilder("")
         if (((parametersToEncode.containsKey("phenotype")) && (parametersToEncode["phenotype"]))) {
-            sb << ("1="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["phenotype"].toString())+"^")
+            sb << ("1=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["phenotype"].toString()) + "^")
         }
         if (((parametersToEncode.containsKey("dataSet")) && (parametersToEncode["dataSet"]))) {
-            sb << ("2="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["dataSet"].toString())+"^")
+            sb << ("2=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["dataSet"].toString()) + "^")
         }
         if (((parametersToEncode.containsKey("orValue")) && (parametersToEncode["orValue"]))) {
-            sb << ("3="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["orValue"].toString())+"^")
+            sb << ("3=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["orValue"].toString()) + "^")
         }
         if (((parametersToEncode.containsKey("orValueInequality")) && (parametersToEncode["orValueInequality"]))) {
-            sb << ("4="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["orValueInequality"])+"^")
+            sb << ("4=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["orValueInequality"]) + "^")
         }
         if (((parametersToEncode.containsKey("pValue")) && (parametersToEncode["pValue"]))) {
-            sb << ("5="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["pValue"].toString())+"^")
+            sb << ("5=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["pValue"].toString()) + "^")
         }
         if (((parametersToEncode.containsKey("pValueInequality")) && (parametersToEncode["pValueInequality"]))) {
-            sb << ("6="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["pValueInequality"].toString())+"^")
+            sb << ("6=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["pValueInequality"].toString()) + "^")
         }
         if (((parametersToEncode.containsKey("gene")) && (parametersToEncode["gene"]))) {
-            sb << ("7="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["gene"].toString())+"^")
+            sb << ("7=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["gene"].toString()) + "^")
         }
         if (((parametersToEncode.containsKey("regionChromosomeInput")) && (parametersToEncode["regionChromosomeInput"]))) {
-            sb << ("8="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["regionChromosomeInput"].toString())+"^")
+            sb << ("8=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["regionChromosomeInput"].toString()) + "^")
         }
         if (((parametersToEncode.containsKey("regionStartInput")) && (parametersToEncode["regionStartInput"]))) {
-            sb << ("9="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["regionStartInput"].toString())+"^")
+            sb << ("9=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["regionStartInput"].toString()) + "^")
         }
         if (((parametersToEncode.containsKey("regionStopInput")) && (parametersToEncode["regionStopInput"]))) {
-            sb << ("10="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["regionStopInput"].toString())+"^")
+            sb << ("10=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["regionStopInput"].toString()) + "^")
         }
-        if (((parametersToEncode.containsKey("predictedEffects")) && (parametersToEncode["predictedEffects"]))&&
-                (parametersToEncode["predictedEffects"]!="0")) {
-            sb << ("11="+
-             StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY}|${parametersToEncode["predictedEffects"]}")+"^")
+        if (((parametersToEncode.containsKey("predictedEffects")) && (parametersToEncode["predictedEffects"])) &&
+                (parametersToEncode["predictedEffects"] != "0")) {
+            sb << ("11=" +
+                    StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY}|${parametersToEncode["predictedEffects"]}") + "^")
         }
         if (((parametersToEncode.containsKey("esValue")) && (parametersToEncode["esValue"]))) {
-            sb << ("12="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["esValue"].toString())+"^")
+            sb << ("12=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["esValue"].toString()) + "^")
         }
         if (((parametersToEncode.containsKey("esValueInequality")) && (parametersToEncode["esValueInequality"]))) {
-            sb << ("13="+ StringEscapeUtils.escapeJavaScript(parametersToEncode["esValueInequality"].toString())+"^")
+            sb << ("13=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["esValueInequality"].toString()) + "^")
         }
         if (((parametersToEncode.containsKey("condelSelect")) && (parametersToEncode["condelSelect"]))) {
-            sb << ("11="+
-                    StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY}|${parametersToEncode["condelSelect"]}")+"^")
+            sb << ("11=" +
+                    StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY}|${parametersToEncode["condelSelect"]}") + "^")
         }
         if (((parametersToEncode.containsKey("polyphenSelect")) && (parametersToEncode["polyphenSelect"]))) {
-            sb << ("11="+
-            StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY}|${parametersToEncode["polyphenSelect"]}")+"^")
+            sb << ("11=" +
+                    StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY}|${parametersToEncode["polyphenSelect"]}") + "^")
         }
         if (((parametersToEncode.containsKey("siftSelect")) && (parametersToEncode["siftSelect"]))) {
-            sb << ("11="+
-                    StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_SIFT_PRED_KEY}|${parametersToEncode["siftSelect"]}")+"^")
+            sb << ("11=" +
+                    StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_SIFT_PRED_KEY}|${parametersToEncode["siftSelect"]}") + "^")
         }
         customFiltersToEncode?.each { String key, String value ->
             sb << ("17=" + StringEscapeUtils.escapeJavaScript(value.toString()) + "^")
         }
 
 
-        return  sb.toString()
+        return sb.toString()
     }
 
 
-    public LinkedHashMap getGeneExtent (String geneName){
-        LinkedHashMap<String, Integer> returnValue  = [startExtent:0,endExtent:3000000000,chrom:"1"]
-        if (geneName)   {
-            String geneUpperCase =   geneName.toUpperCase()
+    public LinkedHashMap getGeneExtent(String geneName) {
+        LinkedHashMap<String, Integer> returnValue = [startExtent: 0, endExtent: 3000000000, chrom: "1"]
+        if (geneName) {
+            String geneUpperCase = geneName.toUpperCase()
             Gene gene = Gene.retrieveGene(geneUpperCase)
-            returnValue.startExtent= gene?.addrStart ?: 0
-            returnValue.endExtent= gene?.addrEnd ?: 0
-            returnValue.chrom=gene?.chromosome
+            returnValue.startExtent = gene?.addrStart ?: 0
+            returnValue.endExtent = gene?.addrEnd ?: 0
+            returnValue.chrom = gene?.chromosome
         }
         return returnValue
     }
 
 
-    public LinkedHashMap getGeneExpandedExtent (String geneName){
-        LinkedHashMap<String, Integer> returnValue  = [startExtent:0,endExtent:3000000000]
-        if (geneName)   {
-            LinkedHashMap<String, Integer> geneExtent = getGeneExtent (geneName)
-            Integer addrStart =  geneExtent.startExtent
-            if (addrStart){
-                returnValue.startExtent = ((addrStart > 100000)?(addrStart - 100000):0)
+    public LinkedHashMap getGeneExpandedExtent(String geneName) {
+        LinkedHashMap<String, Integer> returnValue = [startExtent: 0, endExtent: 3000000000]
+        if (geneName) {
+            LinkedHashMap<String, Integer> geneExtent = getGeneExtent(geneName)
+            Integer addrStart = geneExtent.startExtent
+            if (addrStart) {
+                returnValue.startExtent = ((addrStart > 100000) ? (addrStart - 100000) : 0)
             }
-            returnValue.endExtent= geneExtent.endExtent+ 100000
-            returnValue.chrom=geneExtent.chrom
+            returnValue.endExtent = geneExtent.endExtent + 100000
+            returnValue.chrom = geneExtent.chrom
         }
         return returnValue
     }
 
 
-
-
-    public Long convertRegionString(String incomingExtent){
+    public Long convertRegionString(String incomingExtent) {
         Long returnValue = -1
         try {
             returnValue = Long.parseLong(incomingExtent)
@@ -1407,36 +1294,35 @@ class SharedToolsService {
     }
 
 
-
-    public String getGeneExpandedRegionSpec(String geneName){
+    public String getGeneExpandedRegionSpec(String geneName) {
         String returnValue = ""
-        if (geneName)   {
-            String geneUpperCase =   geneName.toUpperCase()
+        if (geneName) {
+            String geneUpperCase = geneName.toUpperCase()
             Gene gene = Gene.retrieveGene(geneUpperCase)
-            LinkedHashMap<String, Integer> geneExtent = getGeneExpandedExtent (geneName)
+            LinkedHashMap<String, Integer> geneExtent = getGeneExpandedExtent(geneName)
             returnValue = "${gene.chromosome}:${geneExtent.startExtent}-${geneExtent.endExtent}"
-          }
+        }
         return returnValue
     }
 
 
-    public void decodeAFilterList(List <String> encodedOldParameterList,LinkedHashMap<String,String> returnValue) {
+    public void decodeAFilterList(List<String> encodedOldParameterList, LinkedHashMap<String, String> returnValue) {
         int filterCount = 0
-        for (String encodedFilterString in encodedOldParameterList){
-            if (encodedFilterString){
-                List <String> parametersList =  encodedFilterString.split("\\^")
-                for ( int  i = 0 ; i < parametersList.size() ; i++  > 0){
-                    List <String> divKeys = parametersList[i].split("=")
-                    if (divKeys.size() != 2){
+        for (String encodedFilterString in encodedOldParameterList) {
+            if (encodedFilterString) {
+                List<String> parametersList = encodedFilterString.split("\\^")
+                for (int i = 0; i < parametersList.size(); i++ > 0) {
+                    List<String> divKeys = parametersList[i].split("=")
+                    if (divKeys.size() != 2) {
                         log.info("Problem interpreting filter list = ${parametersList}")
-                    }else {
+                    } else {
                         int parameterKey
                         try {
-                            parameterKey = Integer.parseInt(divKeys [0])
-                        }catch (e){
+                            parameterKey = Integer.parseInt(divKeys[0])
+                        } catch (e) {
                             log.info("Unexpected key when interpreting filter list = ${parametersList}")
                         }
-                        returnValue ["ofilter${filterCount++}"] = StringEscapeUtils.unescapeJavaScript(parametersList[i]);
+                        returnValue["ofilter${filterCount++}"] = StringEscapeUtils.unescapeJavaScript(parametersList[i]);
 //                        switch (parameterKey){
 //                            case 1:returnValue ["phenotype"] = StringEscapeUtils.unescapeJavaScript(divKeys [1]);
 //                                break
@@ -1483,374 +1369,44 @@ class SharedToolsService {
     }
 
 
-
-
-
-
-public String translatorFilter (String filterToTranslate){
-    //break apart the filter, substitute human readable strings
-    String returnValue
-    List <String> breakoutProperty = filterToTranslate.tokenize(JsNamingQueryTranslator.QUERY_SAMPLE_GROUP_AND_STRING)
-    if (breakoutProperty.size ()==2){
-        List <String> breakoutPhenotype = breakoutProperty [0].tokenize(JsNamingQueryTranslator.QUERY_SAMPLE_GROUP_BEGIN_STRING)
-        if (breakoutPhenotype.size ()==2) {
-            String comparator = ""
-            String displayableComparator = ""
-            if (breakoutProperty [1].contains (JsNamingQueryTranslator.QUERY_OPERATOR_EQUALS_STRING)){
-                comparator = JsNamingQueryTranslator.QUERY_OPERATOR_EQUALS_STRING
-                displayableComparator = "="
-            } else if (breakoutProperty [1].contains (JsNamingQueryTranslator.QUERY_OPERATOR_MORE_THAN_STRING)){
-                comparator = JsNamingQueryTranslator.QUERY_OPERATOR_MORE_THAN_STRING
-                displayableComparator = "&gt;"
-            } else if (breakoutProperty [1].contains (JsNamingQueryTranslator.QUERY_OPERATOR_LESS_THAN_STRING)){
-                comparator = JsNamingQueryTranslator.QUERY_OPERATOR_LESS_THAN_STRING
-                displayableComparator = "&lt;"
+    public String translatorFilter(String filterToTranslate) {
+        //break apart the filter, substitute human readable strings
+        String returnValue
+        List<String> breakoutProperty = filterToTranslate.tokenize(JsNamingQueryTranslator.QUERY_SAMPLE_GROUP_AND_STRING)
+        if (breakoutProperty.size() == 2) {
+            List<String> breakoutPhenotype = breakoutProperty[0].tokenize(JsNamingQueryTranslator.QUERY_SAMPLE_GROUP_BEGIN_STRING)
+            if (breakoutPhenotype.size() == 2) {
+                String comparator = ""
+                String displayableComparator = ""
+                if (breakoutProperty[1].contains(JsNamingQueryTranslator.QUERY_OPERATOR_EQUALS_STRING)) {
+                    comparator = JsNamingQueryTranslator.QUERY_OPERATOR_EQUALS_STRING
+                    displayableComparator = "="
+                } else if (breakoutProperty[1].contains(JsNamingQueryTranslator.QUERY_OPERATOR_MORE_THAN_STRING)) {
+                    comparator = JsNamingQueryTranslator.QUERY_OPERATOR_MORE_THAN_STRING
+                    displayableComparator = "&gt;"
+                } else if (breakoutProperty[1].contains(JsNamingQueryTranslator.QUERY_OPERATOR_LESS_THAN_STRING)) {
+                    comparator = JsNamingQueryTranslator.QUERY_OPERATOR_LESS_THAN_STRING
+                    displayableComparator = "&lt;"
+                } else {
+                    returnValue = filterToTranslate
+                }
+                if (comparator.length() > 0) {
+                    def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+                    // try for the fully expanded description
+                    List<String> valueComparisonBreakout = breakoutProperty[1].tokenize(comparator)
+                    if (valueComparisonBreakout.size() == 2) {
+                        returnValue = "${g.message(code: "metadata." + breakoutPhenotype[0], default: breakoutPhenotype[0])}[${g.message(code: "metadata." + breakoutPhenotype[1], default: breakoutPhenotype[1])}" +
+                                "]${g.message(code: "metadata." + valueComparisonBreakout[0], default: valueComparisonBreakout[0])}${displayableComparator}${valueComparisonBreakout[1]}"
+                    }
+                }
             } else {
+                // something surprising happened. Let's take our best shot at a filter
                 returnValue = filterToTranslate
             }
-            if (comparator.length () > 0){
-                // try for the fully expanded description
-                List <String> valueComparisonBreakout = breakoutProperty [1].tokenize(comparator)
-                if (valueComparisonBreakout.size () == 2){
-                    returnValue = "${translator (breakoutPhenotype[0])}[${translator (breakoutPhenotype[1])}"+
-                            "]${translator (valueComparisonBreakout[0])}${displayableComparator}${valueComparisonBreakout[1]}"
-                }
-            }
-        }else {
+        } else {
             // something surprising happened. Let's take our best shot at a filter
             returnValue = filterToTranslate
         }
-    }else {
-        // something surprising happened. Let's take our best shot at a filter
-        returnValue = filterToTranslate
+        return returnValue
     }
-return returnValue
-
-}
-
-
-
-
-
-
-
-
-
-
-
-/***
- * Clearly these belong somewhere other than hardcoded in the middle of this method
- * TODO remove this gross hack
- * @param stringToTranslate
- * @return
- */
-    public String translator(String stringToTranslate){
-    if (stringToTranslate){
-         if (trans.size()<=0) {
-             trans["vT2D"]="Type 2 diabetes"
-             trans["vBMI"]="BMI"
-             trans["vCHOL"]="Cholesterol"
-             trans["vDBP"]="Diastolic blood pressure"
-             trans["vFG"]="Fasting glucose"
-             trans["vFI"]="Fasting insulin"
-             trans["vHBA1C"]="HbA1c"
-             trans["vHDL"]="HDL cholesterol"
-             trans["vHEIGHT"]="Height"
-             trans["vHIPC"]="Hip circumference"
-             trans["vLDL"]="LDL cholesterol"
-             trans["vSBP"]="Systolic blood pressure"
-             trans["vTG"]="Triglycerides"
-             trans["vWAIST"]="Waist circumference"
-             trans["vWHR"]="Waist-hip ratio"
-             trans["vCAD"]="Coronary artery disease"
-             trans["vCKD"]="Chronic kidney disease"
-             trans["vUACR"]="Urinary albumin-to-creatinine ratio"
-             trans["veGFRcrea"]="eGFR-creat (serum creatinine)"
-             trans["veGFRcys"]="eGFR-cys (serum cystatin C)"
-             trans["vTC"]="Total cholesterol"
-             trans["v2hrG"]="Two-hour glucose"
-             trans["v2hrI"]="Two-hour insulin"
-             trans["vHOMAB"]="HOMA-B"
-             trans["vHOMAIR"]="HOMA-IR"
-             trans["vMA"]="Microalbuminuria"
-             trans["vPI"]="Proinsulin levels"
-             trans["vBIP"]="Bipolar disorder"
-             trans["vMDD"]="Major depressive disorder"
-             trans["vSCZ"]="Schizophrenia"
-             trans["v13k"]= "13K exome sequence analysis"
-             trans["v13k_aa_genes"]= "13K exome sequence analysis: African-Americans"
-             trans["v13k_ea_genes"]= "13K exome sequence analysis: East Asians"
-             trans["v13k_eu"]= "13K exome sequence analysis: Europeans"
-             trans["v13k_eu_genes"]= "13K exome sequence analysis: Europeans, T2D-GENES cohorts"
-             trans["v13k_eu_go"]= "13K exome sequence analysis: Europeans, GoT2D cohorts"
-             trans["v13k_hs_genes"]= "13K exome sequence analysis: Latinos"
-             trans["v13k_sa_genes"]= "13K exome sequence analysis: South Asians"
-             trans["v17k"]= "17K exome sequence analysis"
-             trans["v17k_aa"]= "17K exome sequence analysis: African-Americans"
-             trans["v17k_aa_genes"]= "17K exome sequence analysis: African-Americans, T2D-GENES cohorts"
-             trans["v17k_aa_genes_aj"]= "17K exome sequence analysis: African-Americans, Jackson Heart Study cohort"
-             trans["v17k_aa_genes_aw"]= "17K exome sequence analysis: African-Americans, Wake Forest Study cohort"
-             trans["v17k_ea_genes"]= "17K exome sequence analysis: East Asians"
-             trans["v17k_ea_genes_ek"]= "17K exome sequence analysis: East Asians, Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH) cohort"
-             trans["v17k_ea_genes_es"]= "17K exome sequence analysis: East Asians, Singapore Diabetes Cohort Study and Singapore Prospective Study Program cohort"
-             trans["v17k_eu"]= "17K exome sequence analysis: Europeans"
-             trans["v17k_eu_genes"]= "17K exome sequence analysis: Europeans, T2D-GENES cohorts"
-             trans["v17k_eu_genes_ua"]= "17K exome sequence analysis: Europeans, Longevity Genes in Founder Populations (Ashkenazi) cohort"
-             trans["v17k_eu_genes_um"]= "17K exome sequence analysis: Europeans, Metabolic Syndrome in Men (METSIM) Study cohort"
-             trans["v17k_eu_go"]= "17K exome sequence analysis: Europeans, GoT2D cohorts"
-             trans["v17k_hs"]= "17K exome sequence analysis: Latinos"
-             trans["v17k_hs_genes"]= "17K exome sequence analysis: Latinos, T2D-GENES cohorts"
-             trans["v17k_hs_genes_ha"]= "17K exome sequence analysis: Latinos, San Antonio cohort"
-             trans["v17k_hs_genes_hs"]= "17K exome sequence analysis: Latinos, Starr County cohort"
-             trans["v17k_hs_sigma"]= "17K exome sequence analysis: Latinos, SIGMA cohorts"
-             trans["v17k_hs_sigma_mec"]= "17K exome sequence analysis: Multiethnic Cohort (MEC)"
-             trans["v17k_hs_sigma_mexb1"]= "17K exome sequence analysis: UNAM/INCMNSZ Diabetes Study (UIDS) cohort"
-             trans["v17k_hs_sigma_mexb2"]= "17K exome sequence analysis: Diabetes in Mexico Study (DMS) cohort"
-             trans["v17k_hs_sigma_mexb3"]= "17K exome sequence analysis: Mexico City Diabetes Study (MCDS) cohort"
-             trans["v17k_sa_genes"]= "17K exome sequence analysis: South Asians"
-             trans["v17k_sa_genes_sl"]= "17K exome sequence analysis: South Asians, LOLIPOP cohort"
-             trans["v17k_sa_genes_ss"]= "17K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort"
-             trans["v26k"]= "26K exome sequence analysis"
-             trans["v26k_aa"]= "26K exome sequence analysis: all African-Americans"
-             trans["v26k_aa_esp"]= "26K exome sequence analysis: African-Americans, all ESP cohorts"
-             trans["v26k_aa_genes"]= "26K exome sequence analysis: African-Americans, T2D-GENES cohorts"
-             trans["v26k_aa_genes_aj"]= "26K exome sequence analysis: African-Americans, Jackson Heart Study cohort"
-             trans["v26k_aa_genes_aw"]= "26K exome sequence analysis: African-Americans, Wake Forest Study cohort"
-             trans["v26k_ea_genes"]= "26K exome sequence analysis: East Asians"
-             trans["v26k_ea_genes_ek"]= "26K exome sequence analysis: East Asians, Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH) cohort"
-             trans["v26k_ea_genes_es"]= "26K exome sequence analysis: East Asians, Singapore Diabetes Cohort Study and Singapore Prospective Study Program cohort"
-             trans["v26k_eu"]= "26K exome sequence analysis: Europeans"
-             trans["v26k_eu_esp"]= "26K exome sequence analysis: Europeans, all ESP cohorts"
-             trans["v26k_eu_genes"]= "26K exome sequence analysis: Europeans, T2D-GENES cohorts"
-             trans["v26k_eu_genes_ua"]= "26K exome sequence analysis: Europeans, Longevity Genes in Founder Populations (Ashkenazi) cohort"
-             trans["v26k_eu_genes_um"]= "26K exome sequence analysis: Europeans, Metabolic Syndrome in Men (METSIM) Study cohort"
-             trans["v26k_eu_go"]= "26K exome sequence analysis: Europeans, GoT2D cohorts"
-             trans["v26k_eu_lucamp"]= "26K exome sequence analysis: Europeans, LuCamp cohort"
-             trans["v26k_hs"]= "26K exome sequence analysis: Latinos"
-             trans["v26k_hs_genes"]= "26K exome sequence analysis: Latinos, T2D-GENES cohorts"
-             trans["v26k_hs_genes_ha"]= "26K exome sequence analysis: Latinos, San Antonio cohort"
-             trans["v26k_hs_genes_hs"]= "26K exome sequence analysis: Latinos, Starr County cohort"
-             trans["v26k_hs_sigma"]= "26K exome sequence analysis: Latinos, SIGMA cohorts"
-             trans["v26k_hs_sigma_mec"]= "26K exome sequence analysis: Multiethnic Cohort (MEC)"
-             trans["v26k_hs_sigma_mexb1"]= "26K exome sequence analysis: UNAM/INCMNSZ Diabetes Study (UIDS) cohort"
-             trans["v26k_hs_sigma_mexb2"]= "26K exome sequence analysis: Diabetes in Mexico Study (DMS) cohort"
-             trans["v26k_hs_sigma_mexb3"]= "26K exome sequence analysis: Mexico City Diabetes Study (MCDS) cohort"
-             trans["v26k_sa_genes"]= "26K exome sequence analysis: South Asians"
-             trans["v26k_sa_genes_sl"]= "26K exome sequence analysis: South Asians, LOLIPOP cohort"
-             trans["v26k_sa_genes_ss"]= "26K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort"
-             trans["v82k"]= "82K exome chip analysis"
-             trans["vAfrican_American"]= "African-American"
-             trans["vBETA"]= "Effect size (beta)"
-             trans["vCARDIoGRAM"]= "CARDIoGRAM GWAS"
-             trans["vCHROM"]= "Chromosome"
-             trans["vCKDGenConsortium"]= "CKDGen GWAS"
-             trans["vCLOSEST_GENE"]= "Nearest gene"
-             trans["vCondel_PRED"]= "Condel prediction"
-             trans["vConsequence"]= "Consequence"
-             trans["vDBSNP_ID"]= "dbSNP ID"
-             trans["vDIAGRAM"]= "DIAGRAM GWAS"
-             trans["vGWAS_SIGMA1_mdv1"]= "GWAS SIGMA"
-             trans["vGWAS_SIGMA1_mdv2"]= "GWAS SIGMA"
-             trans["vGWAS_SIGMA1_mdv3"]= "GWAS SIGMA"
-             trans["vGWAS_SIGMA1_mdv5"]= "GWAS SIGMA"
-             trans["vDirection"]= "Direction of effect"
-             trans["vEAC_PH"]= "Effect allele count"
-             trans["vEAF"]= "Effect allele frequency"
-             trans["vEast_Asian"]= "East Asian"
-             trans["vEuropean"]= "European"
-             trans["vExChip"]= "Exome chip"
-             trans["vExChip_82k"]= "82k exome chip analysis"
-             trans["vExChip_82k_mdv1"]= "82k exome chip analysis"
-             trans["vExChip_82k_mdv2"]= "82k exome chip analysis"
-             trans["vExSeq"]= "Exome sequencing"
-             trans["vExSeq_13k"]= "13K exome sequence analysis"
-             trans["vExSeq_13k_aa_genes_mdv1"]= "13K exome sequence analysis: African-Americans"
-             trans["vExSeq_13k_aa_genes_mdv2"]= "13K exome sequence analysis: African-Americans"
-             trans["vExSeq_13k_aa_genes_mdv3"]= "13K exome sequence analysis: African-Americans"
-             trans["vExSeq_13k_ea_genes_mdv1"]= "13K exome sequence analysis: East Asians"
-             trans["vExSeq_13k_ea_genes_mdv2"]= "13K exome sequence analysis: East Asians"
-             trans["vExSeq_13k_ea_genes_mdv3"]= "13K exome sequence analysis: East Asians"
-             trans["vExSeq_13k_eu_genes_mdv1"]= "13K exome sequence analysis: Europeans, T2D-GENES cohorts"
-             trans["vExSeq_13k_eu_go_mdv1"]= "13K exome sequence analysis: Europeans, GoT2D cohorts"
-             trans["vExSeq_13k_eu_mdv1"]= "13K exome sequence analysis: Europeans"
-             trans["vExSeq_13k_eu_mdv2"]= "13K exome sequence analysis: Europeans"
-             trans["vExSeq_13k_eu_mdv3"]= "13K exome sequence analysis: Europeans"
-             trans["vExSeq_13k_hs_genes_mdv1"]= "13K exome sequence analysis: Latinos"
-             trans["vExSeq_13k_hs_genes_mdv2"]= "13K exome sequence analysis: Latinos"
-             trans["vExSeq_13k_hs_genes_mdv3"]= "13K exome sequence analysis: Latinos"
-             trans["vExSeq_13k_mdv1"]= "13K exome sequence analysis"
-             trans["vExSeq_13k_mdv2"]= "13K exome sequence analysis"
-             trans["vExSeq_13k_mdv3"]= "13K exome sequence analysis"
-             trans["vExSeq_13k_sa_genes_mdv1"]= "13K exome sequence analysis: South Asians"
-             trans["vExSeq_13k_sa_genes_mdv2"]= "13K exome sequence analysis: South Asians"
-             trans["vExSeq_13k_sa_genes_mdv3"]= "13K exome sequence analysis: South Asians"
-             trans["vExSeq_17k"]= "17K exome sequence analysis"
-             trans["vExSeq_17k_aa_genes_aj_mdv2"]= "17K exome sequence analysis: African-Americans, Jackson Heart Study cohort"
-             trans["vExSeq_17k_aa_genes_aw_mdv2"]= "17K exome sequence analysis: African-Americans, Wake Forest Study cohort"
-             trans["vExSeq_17k_aa_genes_mdv2"]= "17K exome sequence analysis: African-Americans, T2D-GENES cohorts"
-             trans["vExSeq_17k_aa_mdv2"]= "17K exome sequence analysis: African-Americans"
-             trans["vExSeq_17k_ea_genes_ek_mdv2"]= "17K exome sequence analysis: East Asians, Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH) cohort"
-             trans["vExSeq_17k_ea_genes_es_mdv2"]= "17K exome sequence analysis: East Asians, Singapore Diabetes Cohort Study and Singapore Prospective Study Program cohort"
-             trans["vExSeq_17k_ea_genes_mdv2"]= "17K exome sequence analysis: East Asians"
-             trans["vExSeq_17k_eu_genes_mdv2"]= "17K exome sequence analysis: Europeans, T2D-GENES cohorts"
-             trans["vExSeq_17k_eu_genes_ua_mdv2"]= "17K exome sequence analysis: Europeans, Longevity Genes in Founder Populations (Ashkenazi) cohort"
-             trans["vExSeq_17k_eu_genes_um_mdv2"]= "17K exome sequence analysis: Europeans, Metabolic Syndrome in Men (METSIM) Study cohort"
-             trans["vExSeq_17k_eu_go_mdv2"]= "17K exome sequence analysis: Europeans, GoT2D cohorts"
-             trans["vExSeq_17k_eu_mdv2"]= "17K exome sequence analysis: Europeans"
-             trans["vExSeq_17k_hs_genes_ha_mdv2"]= "17K exome sequence analysis: Latinos, San Antonio cohort"
-             trans["vExSeq_17k_hs_genes_hs_mdv2"]= "17K exome sequence analysis: Latinos, Starr County cohort"
-             trans["vExSeq_17k_hs_genes_mdv2"]= "17K exome sequence analysis: Latinos, T2D-GENES cohorts"
-             trans["vExSeq_17k_hs_mdv2"]= "17K exome sequence analysis: Latinos"
-             trans["vExSeq_17k_hs_sigma_mdv2"]= "17K exome sequence analysis: Latinos, SIGMA cohorts"
-             trans["vExSeq_17k_hs_sigma_mec_mdv2"]= "17K exome sequence analysis: Multiethnic Cohort (MEC)"
-             trans["vExSeq_17k_hs_sigma_mexb1_mdv2"]= "17K exome sequence analysis: UNAM/INCMNSZ Diabetes Study (UIDS) cohort"
-             trans["vExSeq_17k_hs_sigma_mexb2_mdv2"]= "17K exome sequence analysis: Diabetes in Mexico Study (DMS) cohort"
-             trans["vExSeq_17k_hs_sigma_mexb3_mdv2"]= "17K exome sequence analysis: Mexico City Diabetes Study (MCDS) cohort"
-             trans["vExSeq_17k_mdv2"]= "17K exome sequence analysis"
-             trans["vExSeq_17k_sa_genes_mdv2"]= "17K exome sequence analysis: South Asians"
-             trans["vExSeq_17k_sa_genes_sl_mdv2"]= "17K exome sequence analysis: South Asians, LOLIPOP cohort"
-             trans["vExSeq_17k_sa_genes_ss_mdv2"]= "17K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort"
-             trans["vExSeq_26k_mdv3"]= "26K exome sequence analysis"
-             trans["vExSeq_26k_aa_mdv3"]= "26K exome sequence analysis: all African-Americans"
-             trans["vExSeq_26k_aa_esp_mdv3"]= "26K exome sequence analysis: African-Americans, all ESP cohorts"
-             trans["vExSeq_26k_aa_genes_mdv3"]= "26K exome sequence analysis: African-Americans, T2D-GENES cohorts"
-             trans["vExSeq_26k_aa_genes_aj_mdv3"]= "26K exome sequence analysis: African-Americans, Jackson Heart Study cohort"
-             trans["vExSeq_26k_aa_genes_aw_mdv3"]= "26K exome sequence analysis: African-Americans, Wake Forest Study cohort"
-             trans["vExSeq_26k_ea_genes_mdv3"]= "26K exome sequence analysis: East Asians"
-             trans["vExSeq_26k_ea_genes_ek_mdv3"]= "26K exome sequence analysis: East Asians, Korea Association Research Project (KARE) and Korean National Institute of Health (KNIH) cohort"
-             trans["vExSeq_26k_ea_genes_es_mdv3"]= "26K exome sequence analysis: East Asians, Singapore Diabetes Cohort Study and Singapore Prospective Study Program cohort"
-             trans["vExSeq_26k_eu_mdv3"]= "26K exome sequence analysis: Europeans"
-             trans["vExSeq_26k_eu_esp_mdv3"]= "26K exome sequence analysis: Europeans, all ESP cohorts"
-             trans["vExSeq_26k_eu_genes_mdv3"]= "26K exome sequence analysis: Europeans, T2D-GENES cohorts"
-             trans["vExSeq_26k_eu_genes_ua_mdv3"]= "26K exome sequence analysis: Europeans, Longevity Genes in Founder Populations (Ashkenazi) cohort"
-             trans["vExSeq_26k_eu_genes_um_mdv3"]= "26K exome sequence analysis: Europeans, Metabolic Syndrome in Men (METSIM) Study cohort"
-             trans["vExSeq_26k_eu_go_mdv3"]= "26K exome sequence analysis: Europeans, GoT2D cohorts"
-             trans["vExSeq_26k_eu_lucamp_mdv3"]= "26K exome sequence analysis: Europeans, LuCamp cohort"
-             trans["vExSeq_26k_hs_mdv3"]= "26K exome sequence analysis: Latinos"
-             trans["vExSeq_26k_hs_genes_mdv3"]= "26K exome sequence analysis: Latinos, T2D-GENES cohorts"
-             trans["vExSeq_26k_hs_genes_ha_mdv3"]= "26K exome sequence analysis: Latinos, San Antonio cohort"
-             trans["vExSeq_26k_hs_genes_hs_mdv3"]= "26K exome sequence analysis: Latinos, Starr County cohort"
-             trans["vExSeq_26k_hs_sigma_mdv3"]= "26K exome sequence analysis: Latinos, SIGMA cohorts"
-             trans["vExSeq_26k_hs_sigma_mec_mdv3"]= "26K exome sequence analysis: Multiethnic Cohort (MEC)"
-             trans["vExSeq_26k_hs_sigma_mexb1_mdv3"]= "26K exome sequence analysis: UNAM/INCMNSZ Diabetes Study (UIDS) cohort"
-             trans["vExSeq_26k_hs_sigma_mexb2_mdv3"]= "26K exome sequence analysis: Diabetes in Mexico Study (DMS) cohort"
-             trans["vExSeq_26k_hs_sigma_mexb3_mdv3"]= "26K exome sequence analysis: Mexico City Diabetes Study (MCDS) cohort"
-             trans["vExSeq_26k_sa_genes_mdv3"]= "26K exome sequence analysis: South Asians"
-             trans["vExSeq_26k_sa_genes_sl_mdv3"]= "26K exome sequence analysis: South Asians, LOLIPOP cohort"
-             trans["vExSeq_26k_sa_genes_ss_mdv3"]= "26K exome sequence analysis: South Asians, Singapore Indian Eye Study cohort"
-             trans["vExChip_SIGMA1_mdv1"]= "SIGMA exome chip analysis"
-             trans["vExChip_SIGMA1_mdv2"]= "SIGMA exome chip analysis"
-             trans["vExChip_SIGMA1_mdv3"]= "SIGMA exome chip analysis"
-             trans["vFMISS_17k"]= "Missing genotype rate, 17K exome sequence analysis"
-             trans["vFMISS_19k"]= "Missing genotype rate, 19K exome sequence analysis"
-             trans["vF_MISS"]= "Missing genotype rate"
-             trans["vGENE"]= "Gene"
-             trans["vGENO_26k"]= "Call rate, 26K Exome sequencing analysis"
-             trans["vGIANT"]= "GIANT GWAS"
-             trans["vGLGC"]= "GLGC GWAS"
-             trans["vGWAS"]= "GWAS"
-             trans["vGWAS_CARDIoGRAM"]= "CARDIoGRAM GWAS"
-             trans["vGWAS_CARDIoGRAM_mdv1"]= "CARDIoGRAM GWAS"
-             trans["vGWAS_CARDIoGRAM_mdv2"]= "CARDIoGRAM GWAS"
-             trans["vGWAS_CKDGenConsortium"]= "CKDGen GWAS"
-             trans["vGWAS_CKDGenConsortium_mdv1"]= "CKDGen GWAS"
-             trans["vGWAS_CKDGenConsortium_mdv2"]= "CKDGen GWAS"
-             trans["vGWAS_DIAGRAM"]= "DIAGRAM GWAS"
-             trans["vGWAS_DIAGRAM_mdv1"]= "DIAGRAM GWAS"
-             trans["vGWAS_DIAGRAM_mdv2"]= "DIAGRAM GWAS"
-             trans["vGWAS_GIANT"]= "GIANT GWAS"
-             trans["vGWAS_GIANT_mdv1"]= "GIANT GWAS"
-             trans["vGWAS_GIANT_mdv2"]= "GIANT GWAS"
-             trans["vGWAS_GLGC"]= "GLGC GWAS"
-             trans["vGWAS_GLGC_mdv1"]= "GLGC GWAS"
-             trans["vGWAS_GLGC_mdv2"]= "GLGC GWAS"
-             trans["vGWAS_MAGIC"]= "MAGIC GWAS"
-             trans["vGWAS_MAGIC_mdv1"]= "MAGIC GWAS"
-             trans["vGWAS_MAGIC_mdv2"]= "MAGIC GWAS"
-             trans["vGWAS_PGC"]= "PGC GWAS"
-             trans["vGWAS_PGC_mdv1"]= "PGC GWAS"
-             trans["vGWAS_PGC_mdv2"]= "PGC GWAS"
-             trans["vHETA"]= "Number of heterozygous cases"
-             trans["vHETU"]= "Number of heterozygous controls"
-             trans["vHOMA"]= "Number of homozygous cases"
-             trans["vHOMU"]= "Number of homozygous controls"
-             trans["vHispanic"]= "Latino"
-             trans["vIN_EXSEQ"]= "In exome sequencing"
-             trans["vIN_GENE"]= "Enclosing gene"
-             trans["vLOG_P_HWE_MAX_ORIGIN"]= "Log(p-value), hardy-weinberg equilibrium"
-             trans["vMAC"]= "Minor allele count"
-             trans["vMAC_PH"]= "Minor allele count"
-             trans["vMAF"]= "Minor allele frequency"
-             trans["vMAGIC"]= "MAGIC GWAS"
-             trans["vMINA"]= "Case minor allele counts"
-             trans["vMINU"]= "Control minor allele counts"
-             trans["vMOST_DEL_SCORE"]= "Deleteriousness category"
-             trans["vMixed"]= "Mixed"
-             trans["vNEFF"]= "Effective sample size"
-             trans["vN_PH"]= "Sample size"
-             trans["vOBSA"]= "Number of cases genotyped"
-             trans["vOBSU"]= "Number of controls genotyped"
-             trans["vODDS_RATIO"]= "Odds ratio"
-             trans["vOR_FIRTH"]= "Odds ratio"
-             trans["vOR_FIRTH_FE_IV"]= "Odds ratio"
-             trans["vOR_FISH"]= "Odds ratio"
-             trans["vOR_WALD"]= "Odds ratio"
-             trans["vOR_WALD_DOS"]= "Odds ratio"
-             trans["vOR_WALD_DOS_FE_IV"]= "Odds ratio"
-             trans["vOR_WALD_FE_IV"]= "Odds ratio"
-             trans["vPGC"]= "PGC GWAS"
-             trans["vPOS"]= "Position"
-             trans["vP_EMMAX"]= "P-value"
-             trans["vP_EMMAX_FE_IV"]= "P-value"
-             trans["vP_FIRTH"]= "P-value"
-             trans["vP_FIRTH_FE_IV"]= "P-value"
-             trans["vP_FIRTH_FE_IV_AW"]= "P-value"
-             trans["vP_FE_INV"]= "P-value"
-             trans["vP_VALUE"]= "P-value"
-             trans["vPolyPhen_PRED"]= "PolyPhen prediction"
-             trans["vProtein_change"]= "Protein change"
-             trans["vQCFAIL"]= "Failed quality control"
-             trans["vSE"]= "Std. Error"
-             trans["vSIFT_PRED"]= "SIFT prediction"
-             trans["vSouth_Asian"]= "South association"
-             trans["vTRANSCRIPT_ANNOT"]= "Annotations across transcripts"
-             trans["vVAR_ID"]= "Variant ID"
-             trans["vmdv1"]= "Version 1"
-             trans["vmdv2"]= "Version 2"
-             trans["vmdv3"]= "Version 3"
-
-             // DIGP-291: stroke test; to remove once have real data
-             trans["vExSeq_39k_mdv5"]= "Stroke GWAS"
-             trans["vExSeq_39k_eu_mdv5"]= "Stroke GWAS, European study"
-             trans["vGWAS_CARDIoGRAM_mdv5"]= "CARDIoGRAM GWAS"
-             trans["vGWAS_CKDGenConsortium_mdv5"]= "CKDGen GWAS"
-             trans["vGWAS_DIAGRAM_mdv5"]= "DIAGRAM GWAS"
-             trans["vGWAS_GIANT_mdv5"]= "GIANT GWAS"
-             trans["vGWAS_GLGC_mdv5"]= "GLGC GWAS"
-             trans["vGWAS_MAGIC_mdv5"]= "MAGIC GWAS"
-             trans["vGWAS_PGC_mdv5"]= "PGC GWAS"
-             trans["vGWAS_Stroke_mdv5"]= "Stroke GWAS"
-             trans["vExAC_r03_mdv5"]= "ExAC"
-             trans["v1kg_phase1_mdv5"]= "1K Genome"
-             trans["vmdv5"]= "Version 5"
-             trans["vStroke_all"]="stroke"
-             trans["vStroke_deep"]="stroke deep"
-             trans["vStroke_lobar"]="stroke lobar"
-         }
-        log.info("translation happening " + stringToTranslate);
-        if (trans.containsKey("v${stringToTranslate}".toString())){
-            return trans ["v${stringToTranslate}".toString()]
-        } else {
-            return stringToTranslate
-        }
-    }
-
-}
-
-
-
-
-
-
-
 }

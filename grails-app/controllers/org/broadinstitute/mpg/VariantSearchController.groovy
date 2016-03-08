@@ -1,6 +1,5 @@
 package org.broadinstitute.mpg
 
-import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
@@ -26,16 +25,30 @@ class VariantSearchController {
      */
     def retrievePhenotypesAjax(){
         LinkedHashMap<String, List<String>> propertyTree = metaDataService.getHierarchicalPhenotypeTree()
-        String phenotypesForTransmission = sharedToolsService.packageUpAHierarchicalListAsJson (propertyTree)
-        def slurper = new JsonSlurper()
-        def result = slurper.parseText(phenotypesForTransmission)
+        JSONObject result = sharedToolsService.packageUpAHierarchicalListAsJson (propertyTree)
 
-        log.info("wooooowoowooowooowoooowoooowooowooooooowoooo")
-        log.info(phenotypesForTransmission);
-        log.info(result);
+        // process `result` so that metadata is translated
+        String[] keys = result.dataset.keySet().toArray()
+        LinkedHashMap<String, String[]> translatedNames = []
+
+        LinkedHashMap<String, Object> toReturn = []
+        toReturn.is_error = result.is_error
+        toReturn.numRecords = result.numRecords
+
+        for( int j=0; j < keys.length; j++) {
+            def key = keys[j];
+            translatedNames[key] = new ArrayList<String>()
+            String[] termsToProcess = result.dataset[key]
+            for( int i=0; i < termsToProcess.length; i++ ) {
+                String thisTerm = termsToProcess[i]
+                translatedNames[key] << [thisTerm, g.message(code:"metadata." + thisTerm, default: thisTerm)]
+            }
+        }
+
+        toReturn.dataset = translatedNames
 
         render(status: 200, contentType: "application/json") {
-            [datasets: result]
+            [datasets: toReturn]
         }
 
     }
@@ -46,8 +59,9 @@ class VariantSearchController {
         String sampleGroupName = params.sampleGroup
         String convertedSampleGroupName = restServerService.convertKnownDataSetsToRealNames(sampleGroupName)
         SampleGroup sampleGroup = metaDataService.getSampleGroupByName(convertedSampleGroupName)
+
         if (sampleGroup?.sampleGroupList?.size()>0){
-            sampleGroup.sampleGroupList = sampleGroup.sampleGroupList.sort{sharedToolsService.translator(it.systemId)}
+            sampleGroup.sampleGroupList = sampleGroup.sampleGroupList.sort{g.message(code:"metadata." + it.systemId, default: it.systemId)}
         }
         String jsonDescr = sharedToolsService.packageSampleGroupsHierarchicallyForJsTree(sampleGroup,phenotypeName)
         def result = slurper.parseText(jsonDescr)
@@ -65,13 +79,30 @@ class VariantSearchController {
      */
     def retrieveGwasSpecificPhenotypesAjax(){
         LinkedHashMap<String, List<String>> propertyTree = metaDataService.getHierarchicalPhenotypeTree()
-        String phenotypesForTransmission = sharedToolsService.packageUpAHierarchicalListAsJson (propertyTree)
-        def slurper = new JsonSlurper()
-        def result = slurper.parseText(phenotypesForTransmission)
+        JSONObject result = sharedToolsService.packageUpAHierarchicalListAsJson (propertyTree)
 
+        // process `result` so that metadata is translated
+        String[] keys = result.dataset.keySet().toArray()
+        LinkedHashMap<String, String> translatedNames = []
+
+        LinkedHashMap<String, Object> toReturn = []
+        toReturn.is_error = result.is_error
+        toReturn.numRecords = result.numRecords
+
+        for( int j=0; j < keys.length; j++) {
+            def key = keys[j];
+            translatedNames[key] = new ArrayList<String>()
+            String[] termsToProcess = result.dataset[key]
+            for( int i=0; i < termsToProcess.length; i++ ) {
+                String thisTerm = termsToProcess[i]
+                translatedNames[key] << [thisTerm, g.message(code:"metadata." + thisTerm, default: thisTerm)]
+            }
+        }
+
+        toReturn.dataset = translatedNames
 
         render(status: 200, contentType: "application/json") {
-            [datasets: result]
+            [datasets: toReturn]
         }
 
     }
@@ -256,15 +287,12 @@ class VariantSearchController {
             dataset = params.dataset
         }
 
-        String dataSetString = this.metaDataService.getSampleGroupNameListForPhenotypeAsJson(params.phenotype);
-        def slurper = new JsonSlurper()
-        def result = slurper.parseText(dataSetString)
-        String sampleGroupForTransmission  = """{"sampleGroup":"${dataset}"}"""
-        def defaultSampleGroup = slurper.parseText(sampleGroupForTransmission)
+        JSONObject result = this.metaDataService.getSampleGroupNameListForPhenotypeAsJson(params.phenotype)
+        JSONObject sampleGroupForTransmission  = [sampleGroup: dataset]
 
         render(status: 200, contentType: "application/json") {
             [datasets: result,
-             sampleGroup:defaultSampleGroup]
+             sampleGroup:sampleGroupForTransmission]
         }
     }
 
@@ -281,9 +309,7 @@ class VariantSearchController {
         }
 
         List<String> technologyList = this.metaDataService.getTechnologyListByPhenotypeAndVersion(phenotypeName,sharedToolsService.getCurrentDataVersion())
-        String technologyListAsJson = sharedToolsService.packageUpAListAsJson(technologyList)
-        def slurper = new JsonSlurper()
-        def technologyListJsonObject = slurper.parseText(technologyListAsJson)
+        JSONObject technologyListJsonObject = sharedToolsService.packageUpAListAsJson(technologyList)
 
         render(status: 200, contentType: "application/json") {
             [technologyList:technologyListJsonObject]
@@ -331,9 +357,7 @@ class VariantSearchController {
                 technologyName,
                 sharedToolsService.getCurrentDataVersion(), "")
         List<String> ancestryList = sampleGroupList.unique{ a,b -> a.getAncestry() <=> b.getAncestry() }*.getAncestry()
-        String ancestryListAsJson = sharedToolsService.packageUpAListAsJson(ancestryList)
-        def slurper = new JsonSlurper()
-        def ancestryListJsonObject = slurper.parseText(ancestryListAsJson)
+        JSONObject ancestryListAsJson = sharedToolsService.packageUpAListAsJson(ancestryList)
 
         render(status: 200, contentType: "application/json") {
             [ancestryList:ancestryListJsonObject]
@@ -385,16 +409,22 @@ class VariantSearchController {
         if((params.dataset) && (params.dataset !=  null )){
             datasetChoice = params.dataset
         }
-        List <String> phenotypeList = []
-        if((params.phenotype) && (params.phenotype !=  null )){
-            phenotypeList << params.phenotype
-        }
 
         List <String> listOfProperties = metaDataService.getAllMatchingPropertyList(datasetChoice,params.phenotype)
+        JSONObject result = sharedToolsService.packageUpAListAsJson(listOfProperties)
 
-        String propertiesForTransmission = sharedToolsService.packageUpAListAsJson (listOfProperties)
-        def slurper = new JsonSlurper()
-        def result = slurper.parseText(propertiesForTransmission)
+        // attach translated names
+        ArrayList<JSONObject> translatedObjects = new ArrayList<JSONObject>()
+        for(int i = 0; i < result.dataset.size(); i++) {
+            String prop = result.dataset[i]
+            JSONObject translated = [
+                prop: prop,
+                translatedName: g.message(code: "metadata." + prop, default: prop)
+            ]
+            translatedObjects << translated
+        }
+
+        result.dataset = translatedObjects
 
         render(status: 200, contentType: "application/json") {
             [datasets: result,
@@ -446,26 +476,36 @@ class VariantSearchController {
         LinkedHashMap resultColumnsToDisplay= restServerService.getColumnsToDisplay("[${getDataQueryHolder.retrieveAllFiltersAsJson()}]",requestedProperties)
 
         // make the call to REST server
-        JsonSlurper slurper = new JsonSlurper()
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
-        String dataJsonObjectString = restServerService.postDataQueryRestCall(getDataQueryHolder)
-        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        JSONObject dataJsonObject = restServerService.postDataQueryRestCall(getDataQueryHolder)
 
-        JsonOutput resultColumnsJsonOutput = new JsonOutput()
-        String resultColumnsJsonObjectString = resultColumnsJsonOutput.toJson(resultColumnsToDisplay)
-        JSONObject resultColumnsJsonObject = slurper.parseText(resultColumnsJsonObjectString)
+        JSONObject resultColumnsJsonObject = resultColumnsToDisplay as JSONObject
 
         LinkedHashMap fullPropertyTree = metaDataService.getFullPropertyTree()
         LinkedHashMap fullSampleTree = metaDataService.getSampleGroupTree()
 
-        String jsonFormOfRelevantMetadataPhenotype = sharedToolsService.packageUpATreeAsJson(fullPropertyTree)
-        JSONObject metadata = slurper.parseText(jsonFormOfRelevantMetadataPhenotype)
+        JSONObject metadata = sharedToolsService.packageUpATreeAsJson(fullPropertyTree)
 
-        String jsonFormOfCommonProperties = this.metaDataService.getCommonPropertiesAsJson(true);
-        JSONObject commonPropertiesJsonObject = slurper.parseText(jsonFormOfCommonProperties)
+        JSONObject commonPropertiesJsonObject = this.metaDataService.getCommonPropertiesAsJson(true);
 
-        String jsonFormPropertiesPerSampleGroup = sharedToolsService.packageUpSortedHierarchicalListAsJson(fullSampleTree)
-        JSONObject propertiesPerSampleGroupJsonObject = slurper.parseText(jsonFormPropertiesPerSampleGroup)
+        JSONObject propertiesPerSampleGroupJsonObject = sharedToolsService.packageUpSortedHierarchicalListAsJson(fullSampleTree)
+
+        // prepare translation object
+        // this object contains metadata translations, where the database-form metadata
+        // text is a key to the translated text (ex. T2D -> Type 2 Diabetes).
+        // metadataNames contains most of what we need, but doesn't contain strings of the
+        // type <datasource>_<metadataVersion> (ex. GWAS_DIAGRAM_mdv2), so also go through
+        // the datasources applicable to this request
+        // (found in propertiesPerSampleGroupJsonObject.dataset) and add those strings to
+        // metadataNames
+        Set<String> metadataNames = metaDataService.parseMetadataNames()
+        Set<String> datasetNames = propertiesPerSampleGroupJsonObject.dataset.keySet()
+        metadataNames.addAll(datasetNames)
+
+        JSONObject translationDictionary = []
+        metadataNames.each { name ->
+            translationDictionary[name] = g.message(code: "metadata." + name, default: name)
+        }
 
         render(status: 200, contentType: "application/json") {
             [variants: dataJsonObject.variants,
@@ -473,7 +513,8 @@ class VariantSearchController {
             filters:revisedFiltersRaw,
             metadata:metadata,
             propertiesPerSampleGroup:propertiesPerSampleGroupJsonObject,
-            cProperties:commonPropertiesJsonObject
+            cProperties:commonPropertiesJsonObject,
+            translationDictionary: translationDictionary
             ]
         }
 
@@ -488,7 +529,7 @@ class VariantSearchController {
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters,searchBuilderService,metaDataService)
         if (getDataQueryHolder.isValid()) {
             String requestForAdditionalProperties = filterManagementService.convertPropertyListToTransferableString(listOfProperties)
-            String revisedFiltersRaw = java.net.URLEncoder.encode(getDataQueryHolder.retrieveAllFiltersAsJson())
+            String revisedFiltersRaw = URLEncoder.encode(getDataQueryHolder.retrieveAllFiltersAsJson())
              List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
             List<String> urlEncodedFilters = getDataQueryHolder.listOfUrlEncodedFilters(encodedFilters)
             List<String> displayableFilters = getDataQueryHolder.listOfReadableFilters(encodedFilters)

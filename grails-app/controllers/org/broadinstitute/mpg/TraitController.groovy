@@ -23,7 +23,7 @@ class TraitController {
      * @return
      */
      def traitInfo (){
-          String variantIdentifier = params.getIdentifier()
+         String variantIdentifier = params.getIdentifier()
          // get locale to provide to table-building plugin
          String locale = RequestContextUtils.getLocale(request)
 
@@ -106,7 +106,7 @@ class TraitController {
         String requestedSignificance=params.significance
         String sampleGroupOwner = this.metaDataService.getGwasSampleGroupNameForPhenotype(phenotypeKey)
         String phenotypeDataSet = ''
-        String phenotypeTranslation = sharedToolsService.translator(phenotypeKey)
+        String phenotypeTranslation = g.message(code: "metadata." + phenotypeKey, default: phenotypeKey)
         // get locale to provide to table-building plugin
         String locale = RequestContextUtils.getLocale(request)
 
