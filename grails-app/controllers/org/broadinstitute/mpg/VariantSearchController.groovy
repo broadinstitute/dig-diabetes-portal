@@ -438,11 +438,14 @@ class VariantSearchController {
      * @return
      */
     def variantVWRequest(){
-
+        log.info("variantVWRequest")
+        log.info(params)
         LinkedHashMap encodedFilterSets = filterManagementService.handleFilterRequestFromBrowser (params)
         List<String> encodedFilterList = encodedFilterSets.values() as List<String>
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(encodedFilterList,searchBuilderService,metaDataService)
         List <String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
+
+
 
         render(view: 'variantWorkflow',
                 model: [show_gwas : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),

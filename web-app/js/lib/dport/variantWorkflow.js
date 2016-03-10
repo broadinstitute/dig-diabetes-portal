@@ -636,9 +636,9 @@ var mpgSoftware = mpgSoftware || {};
             var phenotypeExtractor = {};
             var datasetExtractor = {};
             var phenotypeInput = UTILS.extractValsFromCombobox(['phenotype']);
-            phenotypeExtractor = UTILS.concatMap(phenotypeExtractor,phenotypeInput) ;
+            phenotypeExtractor = _.assign(phenotypeExtractor,phenotypeInput) ;
             var datasetInput = UTILS.extractValsFromCombobox(['dataSet']);
-            datasetExtractor = UTILS.concatMap(datasetExtractor,datasetInput) ;
+            datasetExtractor = _.assign(datasetExtractor,datasetInput) ;
             var idsToCollect =  customIds();
             var equivFields;
             var textFields;
@@ -668,11 +668,12 @@ var mpgSoftware = mpgSoftware || {};
                     savedValue = UTILS.extractValFromTextboxes(savedValuesList);
                 }
             }
-            varsToSend = UTILS.concatMap(varsToSend,restrictToRegion) ;
-            varsToSend = UTILS.concatMap(varsToSend,missensePredictions) ;
-            varsToSend = UTILS.concatMap(varsToSend,textFields) ;
-            varsToSend = UTILS.concatMap(varsToSend,savedValue) ;
+            varsToSend = _.assign(varsToSend,restrictToRegion) ;
+            varsToSend = _.assign(varsToSend,missensePredictions) ;
+            varsToSend = _.assign(varsToSend,textFields) ;
+            varsToSend = _.assign(varsToSend,savedValue) ;
             if (weHaveFiltersWorthAdding(varsToSend)) {
+                console.log("filters being sent", varsToSend);
                 UTILS.postQuery('./variantVWRequest',varsToSend);
             }
         };
