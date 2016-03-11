@@ -49,6 +49,7 @@ var baget = baget || {};  // encapsulating variable
             logXScale = 0,// by default go with a linear x axis.  Set value to 1 for log
             customBarColoring = 0,// by default don't color the bars differently.  Otherwise each one gets its own class
             customLegend = 0,// by default skip the legend.  Note that this legend (and legends in general) are tough to implement in a general form
+            smallDescriptorText = 0,// by default avoid the small descriptor text
             selection;   // no default because we can't make a plot without a place to put it
 
         // private variables
@@ -131,7 +132,7 @@ var baget = baget || {};  // encapsulating variable
                                 }
                             }
                             for (var i = 0; i < data.length; i++) {
-                                vPosition.nameMap[data[i].barname] = y(data[i].position - smallestPosition) + 5;
+                                vPosition.nameMap[data[i].barname+'_'+i] = y(data[i].position - smallestPosition) + 5;
                                 // look at the distance between each bar position in order to calculate bar height
                                 if (i > 0) {
                                     if (minspacing == 0) {
@@ -143,8 +144,8 @@ var baget = baget || {};  // encapsulating variable
                                     }
                                 }
                             }
-                            vPosition.pos = function (name) {
-                                return vPosition.nameMap[name];
+                            vPosition.pos = function (name,i) {
+                                return vPosition.nameMap[name+'_'+i];
                             }
                             vPosition.barHeight = (y(minspacing) - y(0)) / 2;
                         }
@@ -183,7 +184,7 @@ var baget = baget || {};  // encapsulating variable
                     // special handling in case the bars have groups
                     var bars = chart.selectAll("rect")
                         .data(data, function (d, i) {
-                            return d.barname;
+                            return d.barname+''+i;
                         });
 
                     bars.enter().append("rect")
@@ -196,7 +197,7 @@ var baget = baget || {};  // encapsulating variable
                         })
                         .attr("x", x(internalMin))
                         .attr("y", function (d, i) {
-                            return vPosition.pos(d.barname);
+                            return vPosition.pos(d.barname,i);
                         })
                         .attr("width", function (d, i) {
                             return (0)
@@ -229,7 +230,7 @@ var baget = baget || {};  // encapsulating variable
                     var gap = 5;
 
                     // labels to the left
-                    var textLeading = (90 - (data.length * 5)) / 100;
+                    var textLeading = (100 - (data.length * 2)) / 100;
                     chart.selectAll("text.barChartLabel")
                         .data(data)
                         .enter().append("text")
@@ -237,7 +238,7 @@ var baget = baget || {};  // encapsulating variable
                             return margin.left + roomForLabels - labelSpacer;
                         })
                         .attr("y", function (d, i) {
-                            return vPosition.pos(d.barname);
+                            return vPosition.pos(d.barname,i);
                         })
                         .attr("dy", "" + textLeading + "em")
                         .attr("text-anchor", "end")
@@ -251,6 +252,9 @@ var baget = baget || {};  // encapsulating variable
                         .text(function (d, i) {
                             return d.barname;
                         });
+                    if (smallDescriptorText){
+                        chart.selectAll("text.barChartLabel").attr('class', 'valueQualifiersSmall');
+                    }
 
                     // sub labels, just below the main labels above
                     chart.selectAll("text.barChartSubLabel")
@@ -258,7 +262,7 @@ var baget = baget || {};  // encapsulating variable
                         .enter().append("text")
                         .attr("x", margin.left + roomForLabels - labelSpacer)
                         .attr("y", function (d, i) {
-                            return vPosition.pos(d.barname);
+                            return vPosition.pos(d.barname,i);
                         })
                         .attr("dy", "" + (1.5 + textLeading) + "em")
                         .attr("dx", "-1em")
@@ -267,6 +271,10 @@ var baget = baget || {};  // encapsulating variable
                         .text(function (d, i) {
                             return d.barsubname;
                         });
+                    if (smallDescriptorText){
+                        chart.selectAll("text.barChartSubLabel").attr('class', 'valueQualifiersSmall');
+                    }
+
 
                     // labels to the right -- expected to be numeric
                     chart.selectAll("text.valueLabels")
@@ -281,8 +289,8 @@ var baget = baget || {};  // encapsulating variable
                             }
 
                         })
-                        .attr("y", function (d) {
-                            return vPosition.pos(d.barname);
+                        .attr("y", function (d,i) {
+                            return vPosition.pos(d.barname,i);
                         })
                         .attr("dx", 12)
                         .attr("dy", "" + textLeading + "em")
@@ -303,6 +311,10 @@ var baget = baget || {};  // encapsulating variable
                             }
 
                         });
+                    if (smallDescriptorText){
+                        chart.selectAll("text.valueLabels").attr('class', 'valueQualifiersSmall');
+                    }
+
 
                     // labels to the right of the right hand labels
                     chart.selectAll("text.valueQualifiers")
@@ -316,16 +328,20 @@ var baget = baget || {};  // encapsulating variable
                                 return 0;
                             }
                         })
-                        .attr("y", function (d) {
-                            return vPosition.pos(d.barname);
+                        .attr("y", function (d,i) {
+                            return vPosition.pos(d.barname,i);
                         })
                         .attr("dx", 108)
                         .attr("dy", "" + textLeading + "em")
                         .attr("text-anchor", "start")
                         .attr('class', 'valueQualifiers')
+                        //.attr('class', 'valueQualifiersSmall')
                         .text(function (d, i) {
                             return "" + d.descriptor;
-                        })
+                        });
+                    if (smallDescriptorText){
+                        chart.selectAll("text.valueQualifiers").attr('class', 'valueQualifiersSmall');
+                    }
 
                     if (customLegend == 1) {
                         // add legend
@@ -426,7 +442,7 @@ var baget = baget || {};  // encapsulating variable
                             .attr("cx",  margin.left+roomForLabels-labelSpacer)
                             .attr("cy", function(d, i){
                                 if (range!==0){
-                                    vPosition.pos(d.barname);
+                                    vPosition.pos(d.barname,i);
                                 }else{
                                     return y(d.barname) + y.rangeBand()/2;
                                 }
@@ -440,7 +456,7 @@ var baget = baget || {};  // encapsulating variable
                             .attr("x",  margin.left+roomForLabels-labelSpacer)
                             .attr("y", function(d, i){
                                 if (range!==0){
-                                    vPosition.pos(d.barname);
+                                    vPosition.pos(d.barname,i);
                                 }else{
                                     return y(d.barname) + y.rangeBand()/2;
                                 }                        } )
@@ -545,6 +561,12 @@ var baget = baget || {};  // encapsulating variable
             if (!arguments.length) return selectionIdentifier;
             selectionIdentifier = x;
             selection = d3.select(selectionIdentifier);
+            return instance;
+        };
+
+        instance.smallDescriptorText= function (x) {
+            if (!arguments.length) return smallDescriptorText;
+            smallDescriptorText = x;
             return instance;
         };
 

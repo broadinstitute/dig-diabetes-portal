@@ -91,7 +91,7 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
 
     void "test howCommonIsVariantAcrossEthnicities"() {
         when:
-        JSONObject jsonObject = restServerService.howCommonIsVariantAcrossEthnicities("rs13266634")
+        JSONObject jsonObject = restServerService.howCommonIsVariantAcrossEthnicities("rs13266634", "1")
         then:
         assert jsonObject
     }

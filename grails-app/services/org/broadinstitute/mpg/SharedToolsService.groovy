@@ -98,8 +98,6 @@ class SharedToolsService {
         // DIGP-291: switch to metedataservice metadata call
         String centralMetadataVersion = this.metaDataService.getDataVersion();
         String compareDataVersion = "${dataSetPrefix}${getDataVersion()}";
-        log.info("using metadata: " + centralMetadataVersion + " as opposed to previous: " + compareDataVersion);
-
         return centralMetadataVersion;
     }
 

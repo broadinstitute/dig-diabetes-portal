@@ -709,6 +709,9 @@ class MetaDataService {
     }
 
 
+    public List<SampleGroup> getSampleGroupForNonMixedAncestry( String metadataVersion, String ancestryName ){
+        return this.jsonParser.getSampleGroupForNonMixedAncestry (   metadataVersion,  ancestryName)
+    }
 
     public List<SampleGroup> getSampleGroupForPhenotypeDatasetTechnologyAncestry(String phenotypeName,  String datasetName, String technologyName, String metadataVersion, String ancestryName){
         return this.jsonParser.getSampleGroupForPhenotypeDatasetTechnologyAncestry ( phenotypeName, datasetName, technologyName,  metadataVersion,  ancestryName)

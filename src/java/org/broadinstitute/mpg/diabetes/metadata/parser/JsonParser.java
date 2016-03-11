@@ -900,6 +900,26 @@ public class JsonParser {
         return sampleGroupList;
     }
 
+
+
+
+    public List<SampleGroup> getSampleGroupForNonMixedAncestry( String metadataVersion, String ancestryName ) throws PortalException {
+        // local variables
+        List<SampleGroup> sampleGroupList = null;
+
+        // create the visitor and visit on root
+        SampleGroupForNonMixedAncestry visitor = new SampleGroupForNonMixedAncestry(  metadataVersion,  ancestryName);
+        this.getMetaDataRoot().acceptVisitor(visitor);
+        sampleGroupList = visitor.getSampleGroupList();
+
+        // return
+        return sampleGroupList;
+    }
+
+
+
+
+
     public List<SampleGroup> getSampleGroupForPhenotypeDatasetTechnologyAncestry(String phenotypeName,  String datasetName, String technologyName, String metadataVersion, String ancestryName) throws PortalException {
         // local variables
         List<SampleGroup> sampleGroupList = null;

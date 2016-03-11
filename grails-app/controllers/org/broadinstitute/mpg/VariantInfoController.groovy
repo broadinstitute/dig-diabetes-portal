@@ -113,7 +113,8 @@ class VariantInfoController {
      */
     def howCommonIsVariant(){
         String variantId = params.variantId
-        JSONObject jsonObject =  restServerService.howCommonIsVariantAcrossEthnicities ( variantId.trim().toUpperCase())
+        String showAll = params.showAll
+        JSONObject jsonObject =  restServerService.howCommonIsVariantAcrossEthnicities ( variantId.trim().toUpperCase(),showAll)
         render(status:200, contentType:"application/json") {
             [variantInfo:jsonObject]
         }

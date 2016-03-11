@@ -1,7 +1,10 @@
 text.barChartLabel  {
     font-family: 'Lato';
-    font-weight: 300;
+    font-weight: 400;
     font-size: 14pt;
+}
+text.barChartLabel.valueQualifiersSmall  {
+    font-size: 12pt;
 }
 text.rightBarChartLabel{
     font-family: 'Lato';
@@ -16,6 +19,10 @@ text.barSubChartLabel  {
     stroke: #aaaaaa;
     fill: #aaaaaa;
 }
+text.barSubChartLabel.valueQualifiersSmall  {
+    font-weight: 300;
+    font-size: 10pt;
+}
 text.valueLabels  {
     font-family: 'Lato';
     font-weight: 300;
@@ -24,12 +31,19 @@ text.valueLabels  {
     stroke: #052090;
     fill: #052090;
 }
+text.valueLabels.valueQualifiersSmall  {
+    font-size: 12pt;
+}
 text.valueQualifiers  {
     font-family: 'Lato';
     font-weight: 300;
     font-size: 14pt;
     stroke: #aaaaaa;
     fill: #aaaaaa;
+}
+text.valueQualifiers.valueQualifiersSmall  {
+    font-weight: 400;
+    font-size: 10pt;
 }
 text.clickableQuestionMark  {
     font-family: 'Arial';

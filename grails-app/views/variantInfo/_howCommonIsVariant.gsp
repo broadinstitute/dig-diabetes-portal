@@ -7,12 +7,12 @@
     var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.howCommonIsVariant  = (function() {
-        var loadHowCommonIsVariant = function () {
+        var loadHowCommonIsVariant = function (showAll) {
             $.ajax({
                 cache: false,
                 type: "get",
                 url: "${createLink(controller:'variantInfo',action: 'howCommonIsVariant')}",
-                data: {variantId: '<%=variantToSearch%>'},
+                data: {variantId: '<%=variantToSearch%>', showAll: showAll},
                 async: true,
                 success: function (data) {
                     var alleleFrequencyStrings = {
@@ -32,24 +32,22 @@
                         exomeChipQ:'<g:helpText title="variant.alleleFrequency.exomeChipQ.help.header"  qplacer="2px 6px 0 0" placement="right" body="variant.alleleFrequency.exomeChipQ.help.text"/>'
                     };
                     var collector = {}
+                    var mafInfo = [];
                     for (var i = 0; i < data.variantInfo.results.length; i++) {
-                        var d = [];
                         for (var j = 0; j < data.variantInfo.results[i].pVals.length; j++) {
                             var contents = {};
                             contents["level"] = data.variantInfo.results[i].pVals[j].level;
                             contents["count"] = data.variantInfo.results[i].pVals[j].count;
-                            d.push(contents);
+                            var fieldDescription = contents["level"].split('^');
+                            if ((fieldDescription.length>3) &&
+                                (fieldDescription[0]  === 'MAF')) {
+                                mafInfo.push(contents);
+                            }
                         }
-                        collector["d" + i] = d;
                     }
+
                     var howCommonIsThisVariantAcrossEthnicities = mpgSoftware.variantInfo.retrieveHowCommonIsThisVariantAcrossEthnicities();
-                    var rv = howCommonIsThisVariantAcrossEthnicities([(collector["d0"][0].count[0]*100.0),
-                                (collector["d0"][1].count[0]*100.0),
-                                (collector["d0"][2].count[0]*100.0),
-                                (collector["d0"][3].count[0]*100.0),
-                                (collector["d0"][4].count[0]*100.0),
-                                (collector["d0"][5].count[0]*100.0)],
-                            alleleFrequencyStrings);
+                    var rv = howCommonIsThisVariantAcrossEthnicities(mafInfo);
 
                     if ((typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation()  !== 'undefined') &&
                             (typeof mpgSoftware.variantInfo.retrieveDelayedHowCommonIsPresentation().launch !== 'undefined')) {
@@ -63,11 +61,27 @@
             });
 
         };
-        return {loadHowCommonIsVariant:loadHowCommonIsVariant}
+        var loadSummaryAncestryData = function () {
+            $("#summaryAncestryData").prop('disabled', true);
+            $("#allAncestryData").prop('disabled', false);
+            $("#howCommonIsChart").empty();
+            mpgSoftware.howCommonIsVariant.loadHowCommonIsVariant(0);
+        };
+        var loadAllAncestryData = function () {
+            $("#summaryAncestryData").prop('disabled', false);
+            $("#allAncestryData").prop('disabled', true);
+            $("#howCommonIsChart").empty();
+            mpgSoftware.howCommonIsVariant.loadHowCommonIsVariant(1);
+        };
+        return {
+            loadHowCommonIsVariant:loadHowCommonIsVariant,
+            loadSummaryAncestryData:loadSummaryAncestryData,
+            loadAllAncestryData:loadAllAncestryData
+        }
     }());
 
     $('#collapseHowCommonIsVariant').on('show.bs.collapse', function (e) {
-            mpgSoftware.howCommonIsVariant.loadHowCommonIsVariant();
+            mpgSoftware.howCommonIsVariant.loadHowCommonIsVariant(0);
     });
 
     $('#collapseHowCommonIsVariant').on('hide.bs.collapse', function (e) {
@@ -89,7 +103,9 @@
     <div id="howCommonIsExists" style="display: block">
 
         <p>
-             <g:message code="variant.alleleFrequency.subtitle" default="Relative allele frequencies" />
+            <g:message code="variant.alleleFrequency.subtitle" default="Relative allele frequencies" />
+            <button id="summaryAncestryData" type="button" class="btn  btn-md btn-primary" disabled onclick="mpgSoftware.howCommonIsVariant.loadSummaryAncestryData()">Largest sample only</button>
+            <button id="allAncestryData" type="button" class="btn  btn-md btn-primary" onclick="mpgSoftware.howCommonIsVariant.loadAllAncestryData()">Show all cohorts</button>
         </p>
 
 
