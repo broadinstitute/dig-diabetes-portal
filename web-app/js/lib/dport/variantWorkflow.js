@@ -1,6 +1,5 @@
 var mpgSoftware = mpgSoftware || {};
 
-
 (function () {
     "use strict";
 
@@ -384,6 +383,7 @@ var mpgSoftware = mpgSoftware || {};
                         dataset: dataset},
                     async: true,
                     success: function (data) {
+                        console.log("retrieving datasets", data);
                         if (( data !== null ) &&
                             ( typeof data !== 'undefined') &&
                             ( typeof data.datasets !== 'undefined' ) &&
@@ -424,6 +424,8 @@ var mpgSoftware = mpgSoftware || {};
                 data: {phenotype: phenotype,dataset: dataset},
                 async: true,
                 success: function (data) {
+                    console.log("retrieving properties ajax", data);
+                    console.log(property, equiv, value);
                     if (( data !==  null ) &&
                         ( typeof data !== 'undefined') &&
                         ( typeof data.datasets !== 'undefined' ) &&
@@ -524,6 +526,8 @@ var mpgSoftware = mpgSoftware || {};
                     options.append($("<option />").val(dataSetList[i].name.substr(preceedingUnderscores))
                                                   .text(replaceUnderscores+dataSetList[i].displayName.substr(preceedingUnderscores)));
                 }
+                // if there's only one record, just click it to make the value
+                // inputs appear
                 if (numberOfRecords===1){
                     $("#dataSet").val(rememberLastValue);
                     $("#dataSet").click();
@@ -541,12 +545,13 @@ var mpgSoftware = mpgSoftware || {};
                 (typeof dataSetJson["is_error"] !== 'undefined')&&
                 (dataSetJson["is_error"] === false))
             {
-                var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
-                var dataSetList = dataSetJson ["dataset"];
-                var holder = $('#filterHolder');
-                for ( var i = 0 ; i < numberOfRecords ; i++ ){
-                    mpgSoftware.firstResponders.addOnePropertyFilter(holder,dataSetList[i]);
-                }
+                var rowsToDisplay = _.flatMap(dataSetJson.dataset, function(v) {
+                    return v.translatedName;
+                });
+                var rowTemplate = document.getElementById("rowTemplate").innerHTML;
+                Mustache.parse(rowTemplate);
+                var rendered = Mustache.render(rowTemplate, {row: rowsToDisplay});
+                document.getElementById("rowTarget").innerHTML = rendered;
             }
         };
         var extractValsFromComboboxAndReturn = function (everyId) {
@@ -721,34 +726,19 @@ var mpgSoftware = mpgSoftware || {};
                     savedValue = UTILS.extractValFromTextboxes(savedValuesList);
                 }
             }
-            varsToSend = UTILS.concatMap(varsToSend, savedValue);
+
+            varsToSend = _.assign(varsToSend, savedValue);
+            console.log("varsToSend is", varsToSend);
             UTILS.postQuery('./launchAVariantSearch', varsToSend);
 
         };
 
-        var initializePage = function (){
-            if (numberExistingFilters() > 0){
-                handleBlueBoxVisibility ();
-                currentInteractivityState(1);
-                whatToDoNext(101);
-                emphasizeBlueBox(true);
-            } else {
-                handleBlueBoxVisibility ();
-                currentInteractivityState(0);
-                whatToDoNext(0);
-                emphasizeBlueBox(false);
-            }
-            retrievePhenotypes();
-//            $("#phenotype").prepend("<option value='' selected='selected'></option>");
-
-        };
         return {
             cancelThisFieldCollection:cancelThisFieldCollection,
             fillDataSetDropdown:fillDataSetDropdown,
             fillPropertiesDropdown:fillPropertiesDropdown,
             gatherFieldsAndPostResults:gatherFieldsAndPostResults,
             launchAVariantSearch:launchAVariantSearch,
-            initializePage:initializePage,
             removeThisClause:removeThisClause,
             editThisClause:editThisClause,
             removeThisFilter:removeThisFilter,
@@ -1048,8 +1038,8 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
         };
         var respondToPhenotypeSelection = function (){
             var phenotypeComboBox = UTILS.extractValsFromCombobox(['phenotype']);
+
             // phenotype is changed.  Before we get to the asynchronous parts let's wipe out the properties
-            $('.propertyHolderBox').remove();
             forceToPhenotypeSelection(phenotypeComboBox['phenotype']);
         };
 

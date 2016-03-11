@@ -1,5 +1,10 @@
 modules = {
-
+    bootstrap {
+        // fontawesome here for lack of a better place to put it
+        resource url: 'http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
+        resource url: 'css/lib/bootstrap.min.css'
+        resource url: 'js/lib/bootstrap.min.js'
+    }
     jquery {
         resource url: 'js/lib/jquery-1.11.0.min.js'
         resource url: 'js/DataTables-1.10.7/media/js/jquery.dataTables.min.js'
@@ -72,45 +77,25 @@ modules = {
         resource url: 'js/lib/dport/variantWorkflow.js'
     }
     igv {
-        dependsOn "jquery"
+        dependsOn "jquery", "bootstrap"
 
         resource url: 'images/ajaxLoadingAnimation.gif'
 
-//        resource url: 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'
-//        resource url: 'http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
-
-//        resource url: 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'
-
         resource url: 'https://data.broadinstitute.org/igvdata/web/beta/igv-beta.css'
         resource url: 'https://data.broadinstitute.org/igvdata/web/beta/igv-beta.min.js'
-
-
-//        resource url: 'css/lib/bootstrap.min.css'
-
     }
     tableViewer {
         resource url: 'js/lib/dport/tableViewer.js'
         resource url: 'css/dport/tableViewer.css'
     }
-    polymer {
-        resource url: 'js/lib/polymer/polymer/polymer-micro.js'
-        resource url: 'js/lib/polymer/polymer/polymer-mini.js'
-        resource url: 'js/lib/polymer/polymer/polymer.js'
-
-        resource url: 'js/lib/polymer/webcomponentsjs/CustomElements.min.js'
-        resource url: 'js/lib/polymer/webcomponentsjs/HTMLImports.min.js'
-        resource url: 'js/lib/polymer/webcomponentsjs/MutationObserver.min.js'
-        resource url: 'js/lib/polymer/webcomponentsjs/ShadowDOM.min.js'
-        resource url: 'js/lib/polymer/webcomponentsjs/webcomponents.min.js'
-        resource url: 'js/lib/polymer/webcomponentsjs/webcomponents-lite.min.js'
+    mustache {
+        resource url: 'js/lib/mustache.js'
     }
     core {
-        dependsOn "jquery"
+        dependsOn "jquery", "bootstrap"
 
         resource url: 'images/ajaxLoadingAnimation.gif'
         resource url: 'images/icons/dna-strands.ico'
-
-        resource url: 'css/lib/bootstrap.min.css'
 
         resource url: 'css/lib/style.css'
         resource url: 'css/lib/dkstyle.css'
