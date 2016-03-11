@@ -32,7 +32,6 @@ $( document ).ready(function() {
         return str1.localeCompare(str2);};
 
     var labelIndenter = function (tableId) {
-        console.log("beginning indentation process");
         var rowSGLabel = $('#'+tableId+' td.vandaRowTd div.vandaRowHdr');
         if (typeof rowSGLabel !== 'undefined'){
            var adjustmentMadeSoCheckAgain;
@@ -45,7 +44,7 @@ $( document ).ready(function() {
                adjustmentMadeSoCheckAgain = false;
                for ( var i = 0 ; i < rowSGLabel.length ; i++ ){
                   var currentDiv = $(rowSGLabel[i]);
-                  var sampleGroupName = mpgSoftware.trans.translator(currentDiv.attr('datasetname'));
+                  var sampleGroupName = currentDiv.attr('datasetname');
                   if (typeof coreSGName === undefined){
                      coreSGName = sampleGroupName;
                      usedAsCore.push(coreSGName);
@@ -67,7 +66,6 @@ $( document ).ready(function() {
               rowSGLabel.css('padding-left','0px');
            }
         }
-        console.log("ending indentation process");
     } ;
 
     var vAndALabelIndenter = function () {
@@ -189,6 +187,7 @@ var variantsAndAssociationTable = function (phenotype,rowMapParameter){
                                    var d = [];
                                    rowValue.push(sortedDataSetArray[i].dataset);
                                    rowMap.push({"name":(sortedDataSetArray[i].dataset),
+                                                "translatedName": sortedDataSetArray[i].translatedName,
                                                 "value":(sortedDataSetArray[i].dataset),
                                                 "pvalue":"UNUSED",
                                                 "technology":sortedDataSetArray[i].technology,
@@ -408,8 +407,7 @@ var getDataSets = function(sel){
                         dataSetChooser.empty();
                         for (var key in dataSets) {
                         if (dataSets.hasOwnProperty(key)) {
-                                console.log("how about this?", key);
-                                dataSetChooser.append($("<option>").val(key+"^"+dataSets[key]).text( mpgSoftware.trans.translator(key)));
+                                dataSetChooser.append($("<option>").val(key+"^"+dataSets[key]).text( key ));
                             }
                         }
                         dataSetChooser.removeAttr('disabled');

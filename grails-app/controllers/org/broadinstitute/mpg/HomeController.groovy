@@ -1,6 +1,5 @@
 package org.broadinstitute.mpg
 
-import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.core.io.ResourceLocator
@@ -11,7 +10,6 @@ class HomeController {
     GrailsApplication grailsApplication
     SharedToolsService sharedToolsService
     ResourceLocator grailsResourceLocator
-    public translationObject = {}
     def mailService
 
     /***
@@ -39,7 +37,7 @@ class HomeController {
         String portalType
 
         // if stroke, then switch or vice versa
-        if (request?.getSession()?.getAttribute("portalType")?.equals("stroke")) {
+        if (g.portalTypeString()?.equals("stroke")) {
             portalType = "t2d"
         } else {
             portalType = "stroke"
@@ -82,11 +80,6 @@ class HomeController {
      * This is our standard home page. We get directed here from a few places in the portal
      */
     def portalHome = {
-        log.info("???????????????????????????");
-        def something = this.sharedToolsService.getConvertPhenotypes();
-        log.info(something['CAD']);
-        log.info(something['cat']);
-        log.info(something);
         render(controller: 'home', view: 'portalHome', model: [ticker:"${sharedToolsService.getWarningText()}",
                                                                show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                                                show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),

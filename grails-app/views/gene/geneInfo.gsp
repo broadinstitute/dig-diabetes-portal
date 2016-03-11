@@ -335,6 +335,7 @@
                     </g:if>
 
 
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
                     <div class="separator"></div>
 
                     <div class="accordion-group">
@@ -352,7 +353,7 @@
                             </div>
                         </div>
                     </div>
-
+</g:if>
 
                     <div class="separator"></div>
 

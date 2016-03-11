@@ -143,8 +143,10 @@
                 <g:render template="/widgets/associatedStatisticsTraitsPerVariant" model="[variantIdentifier: variantToSearch, locale: locale]"/>
 
 
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
                 <div class="separator"></div>
                 <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>
+</g:if>
 
                 <div class="separator"></div>
 

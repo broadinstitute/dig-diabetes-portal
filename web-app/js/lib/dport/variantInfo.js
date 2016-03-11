@@ -63,7 +63,7 @@ var mpgSoftware = mpgSoftware || {};
                         5e-4,
                         5e-2,
                         variantTitle,
-                        mpgSoftware.trans.translator(propertiesForDataSet['dataset']),
+                        propertiesForDataSet['dataset'],
                         selectorForBoxes,
                         dealingWithBeta,
                         variantAssociationStrings,
@@ -210,9 +210,9 @@ var mpgSoftware = mpgSoftware || {};
                             var cohortFields = cohortInfo.split("^");
                             var displayableCohortName = "unknown ancestry";
                             var translatedCohortName = "unknown ancestry";
-                            if (cohortFields.length > 4){
-                                translatedCohortName = mpgSoftware.trans.translator( cohortFields [3] );
-                                displayableCohortName = mpgSoftware.trans.translator( cohortFields [4] );
+                            if (cohortFields.length > 5){
+                                translatedCohortName =  cohortFields [5] ;
+                                displayableCohortName = cohortFields [4] ;
                             }
                             dataForBarChart.push({ value: cohort.count,
                                 position: i,

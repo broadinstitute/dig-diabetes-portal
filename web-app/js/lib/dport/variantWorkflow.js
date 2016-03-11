@@ -413,39 +413,38 @@ var mpgSoftware = mpgSoftware || {};
          * @param value
          */
         var retrievePropertiesPerDataSet = function (phenotype,dataset,property,equiv,value) {
-                var loading = $('#spinner').show();
-                if (typeof property  === 'undefined') { // we are in case #1 as described above, and should therefore wipe out all existing properties
-                    $('.propertyHolderBox').remove();
-                }
-                $.ajax({
-                    cache: false,
-                    type: "post",
-                    url: "./retrievePropertiesAjax",
-                    data: {phenotype: phenotype,dataset: dataset},
-                    async: true,
-                    success: function (data) {
-                        if (( data !==  null ) &&
-                            ( typeof data !== 'undefined') &&
-                            ( typeof data.datasets !== 'undefined' ) &&
-                            (  data.datasets !==  null ) ) {
-                            var dropdownAlreadyPresent = ($('.cusText').is(":visible"));// Are there any properties already specified
-                            if (!dropdownAlreadyPresent) { // it may be that we already did this round-trip, in which case we don't need to do it again
-                                fillPropertiesDropdown(data.datasets);
-                            }
-                            mpgSoftware.firstResponders.forceToPropertySelection (property, equiv, value);
-                            // make sure that the data set drop-down choice points to the right thing
-                            if (typeof data.chosenDataset !== 'undefined'){
-                                $('#dataSet').val(data.chosenDataset);
-                            }
+            var loading = $('#spinner').show();
+            if (typeof property  === 'undefined') { // we are in case #1 as described above, and should therefore wipe out all existing properties
+                $('.propertyHolderBox').remove();
+            }
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "./retrievePropertiesAjax",
+                data: {phenotype: phenotype,dataset: dataset},
+                async: true,
+                success: function (data) {
+                    if (( data !==  null ) &&
+                        ( typeof data !== 'undefined') &&
+                        ( typeof data.datasets !== 'undefined' ) &&
+                        (  data.datasets !==  null ) ) {
+                        var dropdownAlreadyPresent = ($('.cusText').is(":visible"));// Are there any properties already specified
+                        if (!dropdownAlreadyPresent) { // it may be that we already did this round-trip, in which case we don't need to do it again
+                            fillPropertiesDropdown(data.datasets);
                         }
-                        loading.hide();
-                    },
-                    error: function (jqXHR, exception) {
-                        loading.hide();
-                        core.errorReporter(jqXHR, exception);
+                        mpgSoftware.firstResponders.forceToPropertySelection (property, equiv, value);
+                        // make sure that the data set drop-down choice points to the right thing
+                        if (typeof data.chosenDataset !== 'undefined'){
+                            $('#dataSet').val(data.chosenDataset);
+                        }
                     }
-                });
-
+                    loading.hide();
+                },
+                error: function (jqXHR, exception) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
         };
 
         var extractIndex = function (idLabel,currentObject){
@@ -520,9 +519,10 @@ var mpgSoftware = mpgSoftware || {};
                         if (dataSetList[i][j]!='-') break;
                         preceedingUnderscores++;
                     }
-                    var replaceUnderscores = dataSetList[i].substr(0,preceedingUnderscores);
-                    rememberLastValue = dataSetList[i].substr(preceedingUnderscores);
-                    options.append($("<option />").val(dataSetList[i].substr(preceedingUnderscores)).text(replaceUnderscores+mpgSoftware.trans.translator(dataSetList[i].substr(preceedingUnderscores))));
+                    var replaceUnderscores = dataSetList[i].displayName.substr(0,preceedingUnderscores);
+                    rememberLastValue = dataSetList[i].displayName.substr(preceedingUnderscores);
+                    options.append($("<option />").val(dataSetList[i].name.substr(preceedingUnderscores))
+                                                  .text(replaceUnderscores+dataSetList[i].displayName.substr(preceedingUnderscores)));
                 }
                 if (numberOfRecords===1){
                     $("#dataSet").val(rememberLastValue);
@@ -546,7 +546,6 @@ var mpgSoftware = mpgSoftware || {};
                 var holder = $('#filterHolder');
                 for ( var i = 0 ; i < numberOfRecords ; i++ ){
                     mpgSoftware.firstResponders.addOnePropertyFilter(holder,dataSetList[i]);
-                   // options.append($("<option />").val(dataSetList[i]).text(mpgSoftware.trans.translator(dataSetList[i])));
                 }
             }
         };
@@ -789,23 +788,10 @@ var mpgSoftware = mpgSoftware || {};
         /***
          * private
          */
-        var appendValueWithEquivalenceChooser = function (currentDiv,holderId,sectionName,helpTitle,helpText,equivalence,defaultValue){
-            var lessThanSelected = '';
-            var greaterThanSelected = '';
-            var equalToSelected = '';
-            var equivalenceValue = '';
-            if (typeof equivalence !== 'undefined'){
-                if (equivalence === 'lessThan'){
-                    lessThanSelected = "selected";
-                    equivalenceValue = "<";
-                } else if (equivalence === 'greaterThan'){
-                    greaterThanSelected = "selected";
-                    equivalenceValue = ">";
-                } else if (equivalence === 'equalTo'){
-                    equalToSelected = "selected";
-                    equivalenceValue = "|";
-                }
-            }
+        var appendValueWithEquivalenceChooser = function (currentDiv,holderId,section,helpTitle,helpText,equivalence,defaultValue){
+            var sectionName = section.prop
+            var displayName = section.translatedName
+
             var labelId = sectionName+'___nameId';
             var equivalenceId = sectionName+'___equivalenceId';
             var valueId = sectionName+'___valueId';
@@ -813,12 +799,12 @@ var mpgSoftware = mpgSoftware || {};
             // We need to create all of these fields and initialize them
             currentDiv.append("<div id='"+holderId+"' class='row clearfix propertyHolderBox'>"+
                 "<div class='primarySectionSeparator'>"+
-                "<div  id='"+labelId+"' class='col-sm-offset-1 col-md-3 text-right searchBuilderPrompt'>"+mpgSoftware.trans.translator(sectionName)+"</div>"+
+                "<div  id='"+labelId+"' class='col-sm-offset-1 col-md-3 text-right searchBuilderPrompt'>" + displayName + "</div>"+
                 "<div class='col-md-1'>"+
                 "<select id='"+equivalenceId+"' class='form-control btn-group btn-input clearfix cusEquiv'>"+
-                "<option "+lessThanSelected+" value='lessThan'>&lt;</option>"+
-                "<option "+greaterThanSelected+" value='greaterThan'>&gt;</option>"+
-                "<option "+equalToSelected+" value='equalTo'>=</option>"+
+                "<option value='lessThan'>&lt;</option>"+
+                "<option value='greaterThan'>&gt;</option>"+
+                "<option value='equalTo'>=</option>"+
                 "</select>"+
                 "</div>"+
                 "<div class='col-md-4'><input type='text' class='form-control cusText' id='"+valueId+"'></div>"+
@@ -827,6 +813,9 @@ var mpgSoftware = mpgSoftware || {};
                 "<div class='col-md-2'>"+
                 "</div>"+
                 "</div>");
+            if(equivalence) {
+                $('#' + equivalenceId).val(equivalence);
+            }
             if (typeof defaultValue !== 'undefined'){
                 $('#'+valueId).val(defaultValue);
             }
@@ -1086,7 +1075,7 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
 //                case 'effectsize':displayESChooser(holder,valueOne,valueTwo);
 //                    break;
                 default:
-                    appendValueWithEquivalenceChooser (holder,selection+'Holder',selection,
+                    appendValueWithEquivalenceChooser (holder,selection.prop+'Holder',selection,
                         'help title','everything there is to say to help you out','lessThan','');
                     break;
             }

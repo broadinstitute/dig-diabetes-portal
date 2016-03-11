@@ -79,9 +79,7 @@
                             ( typeof data.datasets !== 'undefined' ) &&
                             (  data.datasets !==  null ) ) {
                         UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#trait-input');
-<g:if test="${session?.getAttribute('portalType')?.equals('stroke')}">
                         $("select#trait-input").val("${g.defaultPhenotype()}");
-</g:if>
                     }
                     loading.hide();
                 },
@@ -113,7 +111,6 @@
 
                         <h3>
                             <g:message code="primary.text.input.header"/>
-                            <g:message code="metadata.ph" default="nothing to see here"/>
                         </h3>
 
                         <div class="input-group input-group-lg">
@@ -128,7 +125,7 @@
 
                         <g:renderT2dGenesSection>
                             <div class="helptext"><g:message code="site.shared.phrases.examples" />:
-                        <g:if test="${session?.getAttribute('portalType')?.equals('stroke')}">
+                        <g:if test="${g.portalTypeString()?.equals('stroke')}">
                                 <a href='<g:createLink controller="gene" action="geneInfo"
                                                        params="[id: 'HDAC9']"/>'>HDAC9</a>
                         </g:if>
@@ -138,9 +135,9 @@
                         </g:else>
                                 <g:helpText title="input.searchTerm.geneExample.help.header" placement="bottom"
                                             body="input.searchTerm.geneExample.help.text"/>,
-                                <g:if test="${session?.getAttribute('portalType')?.equals('stroke')}">
+                                <g:if test="${g.portalTypeString()?.equals('stroke')}">
                                     <a href='<g:createLink controller="variantInfo" action="variantInfo"
-                                                           params="[id: 'rs17346073']"/>'>rs17346073</a>
+                                                           params="[id: 'rs11179580']"/>'>rs11179580</a>
                                 </g:if>
                                 <g:else>
                                     <a href='<g:createLink controller="variantInfo" action="variantInfo"
@@ -148,7 +145,7 @@
                                 </g:else>
                                 <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
                                             body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
-                                <g:if test="${session?.getAttribute('portalType')?.equals('stroke')}">
+                                <g:if test="${g.portalTypeString()?.equals('stroke')}">
                                     <a href='<g:createLink controller="region" action="regionInfo"
                                                            params="[id: 'chr7:18,100,000-18,300,000']"/>'>chr7:18,100,000-18,300,000</a>
                                 </g:if>

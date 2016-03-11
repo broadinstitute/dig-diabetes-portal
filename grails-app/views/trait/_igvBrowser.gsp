@@ -38,6 +38,7 @@
                     <li class="dropdown" id="tracks-menu-dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><g:message code="controls.shared.igv.tracks" /><b class="caret"></b></a>
                         <ul id="trackList" class="dropdown-menu">
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <li>
                             <a onclick="igv.browser.loadTrack({ type: 't2d',
                                 url: '${createLink(controller:'trait', action:'getData')}',
@@ -313,40 +314,9 @@
                                     traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
                                 })"><g:message code="informational.shared.traits.bipolar" /></a>
                             </li>
-<g:if test="${session?.getAttribute('portalType')?.equals('stroke')}">
-    <li>
-        <a onclick="igv.browser.loadTrack({ type: 't2d',
-            url: '${createLink(controller:'trait', action:'getData')}',
-            trait: 'Stroke_all',
-            dataset: 'GWAS_Stroke_mdv5',
-            pvalue: 'P_VALUE',
-            name: 'stroke',
-            variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
-            traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-        })"><g:message code="informational.shared.traits.stroke" /></a>
-    </li>
-    <li>
-        <a onclick="igv.browser.loadTrack({ type: 't2d',
-            url: '${createLink(controller:'trait', action:'getData')}',
-            trait: 'Stroke_deep',
-            dataset: 'GWAS_Stroke_mdv5',
-            pvalue: 'P_VALUE',
-            name: 'stroke deep',
-            variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
-            traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-        })"><g:message code="informational.shared.traits.stroke_deep" /></a>
-    </li>
-    <li>
-        <a onclick="igv.browser.loadTrack({ type: 't2d',
-            url: '${createLink(controller:'trait', action:'getData')}',
-            trait: 'Stroke_lobar',
-            dataset: 'GWAS_Stroke_mdv5',
-            pvalue: 'P_VALUE',
-            name: 'stroke lobar',
-            variantURL: 'http://www.type2diabetesgenetics.org/variantInfo/variantInfo/',
-            traitURL: 'http://www.type2diabetesgenetics.org/trait/traitInfo/'
-        })"><g:message code="informational.shared.traits.stroke_lobar" /></a>
-    </li>
+</g:if>
+<g:if test="${g.portalTypeString()?.equals('stroke')}">
+    <g:render template="/trait/igvBrowserLinksStroke"/>
 </g:if>
                         </ul>
                     </li>
@@ -379,6 +349,12 @@
     </nav>
 
 </div>
+<div>
+    ${request.contextPath}
+</div>
+<div>
+    ${g.createLink(absolute:true, uri:"/variantInfo/variantInfo/")}
+</div>
 <script type="text/javascript">
 
    var setUpIgv = function (locusName, serverName){
@@ -396,7 +372,7 @@
             locus: locusName,
             flanking: 100000,
             tracks: [
-<g:if test="${session?.getAttribute('portalType')?.equals('stroke')}">
+<g:if test="${g.portalTypeString()?.equals('stroke')}">
                 {
                     type: "t2d",
                     url: "${createLink(controller:'trait', action:'getData')}",
@@ -404,8 +380,8 @@
                     dataset: "GWAS_Stroke_mdv5",
                     pvalue: "P_VALUE",
                     name: "<g:message code='informational.shared.traits.stroke' />",
-                    variantURL: "http://www.type2diabetesgenetics.org/variantInfo/variantInfo/",
-                    traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
+                    variantURL: '${g.createLink(absolute:true, uri:'/variantInfo/variantInfo/')}',
+                    traitURL: '${g.createLink(absolute:true, uri:'/trait/traitInfo/')}'
                 },
                 {
                     type: "t2d",
@@ -414,8 +390,8 @@
                     dataset: "GWAS_Stroke_mdv5",
                     pvalue: "P_VALUE",
                     name: "<g:message code='informational.shared.traits.stroke_deep' />",
-                    variantURL: "http://www.type2diabetesgenetics.org/variantInfo/variantInfo/",
-                    traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
+                    variantURL: '${g.createLink(absolute:true, uri:'/variantInfo/variantInfo/')}',
+                    traitURL: '${g.createLink(absolute:true, uri:'/trait/traitInfo/')}'
                 },
                 {
                     type: "t2d",
@@ -424,8 +400,8 @@
                     dataset: "GWAS_Stroke_mdv5",
                     pvalue: "P_VALUE",
                     name: "<g:message code='informational.shared.traits.stroke_lobar' />",
-                    variantURL: "http://www.type2diabetesgenetics.org/variantInfo/variantInfo/",
-                    traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
+                    variantURL: '${g.createLink(absolute:true, uri:'/variantInfo/variantInfo/')}',
+                    traitURL: '${g.createLink(absolute:true, uri:'/trait/traitInfo/')}'
                 },
 </g:if>
 <g:else>

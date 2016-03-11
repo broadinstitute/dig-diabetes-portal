@@ -505,7 +505,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 "columns": [${"\"" + getGeneColumns().join("\",\"") + "\""}]
 }
 """.toString()
-        log.info(drivingJson)
         returnValue = postRestCall(drivingJson, GENE_INFO_URL)
         return returnValue
     }
@@ -657,14 +656,19 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @return
      */
     public JSONObject combinedVariantAssociationStatistics(String variantName, String phenotype, List<LinkedHashMap> linkedHashMapList) {
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         //  String attribute = "T2D"
         JSONObject returnValue
         List<Integer> dataSeteList = [1]
         List<String> pValueList = [1]
-        StringBuilder sb = new StringBuilder("{\"results\":[")
-        def slurper = new JsonSlurper()
+        JSONObject toReturn = [
+            results: new ArrayList<JSONObject>()
+        ]
         for (int j = 0; j < dataSeteList.size(); j++) {
-            sb << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
+            JSONObject datasetObject = [
+                    dataset: dataSeteList[j],
+                    pVals: new ArrayList<JSONObject>()
+            ]
             for (int i = 0; i < pValueList.size(); i++) {
 
                 JSONObject apiResults = variantAssociationStatisticsSection(variantName, phenotype, linkedHashMapList)
@@ -672,10 +676,14 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                     if ((apiResults.variants) && (apiResults.variants[0]) && (apiResults.variants[0][0])) {
                         def variant = apiResults.variants[0];
 
-                        List<String> requestedProperties = []
                         List<String> commonProperties = ['DBSNP_ID', 'VAR_ID', 'GENE', 'CLOSEST_GENE', 'MOST_DEL_SCORE']
                         for (String commonProperty in commonProperties) {
-                            requestedProperties << "{\"dataset\":\"common\",\"level\":\"${commonProperty}\",\"count\":\"${apiResults.variants[0][commonProperty].findAll { it }[0]}\"}".toString()
+                            JSONObject newItem = [
+                                dataset: "common",
+                                level: commonProperty,
+                                count: apiResults.variants[0][commonProperty].findAll { it }[0]
+                            ]
+                            datasetObject.pVals << newItem
                         }
 
                         List<String> pValueNames = linkedHashMapList.collect { it.pvalue }.unique()
@@ -707,7 +715,14 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                     (dataSetNames.size() > 0) &&
                                     (dataSetNames[0])) {
                                 for (String dataSetName in dataSetNames) {
-                                    requestedProperties << "{\"meaning\":\"p_value\",\"dataset\":\"${dataSetName}\", \"level\":\"${pValueName}\",\"count\":${variant[pValueName][dataSetName][phenotype]}}"
+                                    String dataSetNameTranslated = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
+                                    JSONObject newItem = [
+                                        meaning: "p_value",
+                                        dataset: dataSetNameTranslated,
+                                        level: pValueName,
+                                        count: variant[pValueName][dataSetName][phenotype]
+                                    ]
+                                    datasetObject.pVals << newItem
                                 }
                             }
                         }
@@ -718,10 +733,16 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                     (dataSetNames.size() > 0) &&
                                     (dataSetNames[0])) {
                                 for (String dataSetName in dataSetNames) {
-                                    requestedProperties << "{\"meaning\":\"or_value\",\"dataset\":\"${dataSetName}\", \"level\":\"${orValueName}\",\"count\":${variant[orValueName][dataSetName][phenotype]}}"
+                                    String dataSetNameTranslated = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
+                                    JSONObject newItem = [
+                                        meaning: "or_value",
+                                        dataset: dataSetNameTranslated,
+                                        level: orValueName,
+                                        count: variant[orValueName][dataSetName][phenotype]
+                                    ]
+                                    datasetObject.pVals << newItem
                                 }
                             }
-
                         }
                         for (def s in betaValueDataSets) {
                             String betaValueName = s.getKey()
@@ -730,27 +751,25 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                     (dataSetNames.size() > 0) &&
                                     (dataSetNames[0])) {
                                 for (String dataSetName in dataSetNames) {
-                                    requestedProperties << "{\"meaning\":\"beta_value\",\"dataset\":\"${dataSetName}\", \"level\":\"${betaValueName}\",\"count\":${variant[betaValueName][dataSetName][phenotype]}}"
+                                    String dataSetNameTranslated = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
+                                    JSONObject newItem = [
+                                        meaning: "beta_value",
+                                        dataset: dataSetNameTranslated,
+                                        level: betaValueName,
+                                        count: variant[betaValueName][dataSetName][phenotype]
+                                    ]
+                                    datasetObject.pVals << newItem
                                 }
                             }
 
                         }
-                        sb << requestedProperties.join(",")
                     }
 
                 }
-                if (i < pValueList.size() - 1) {
-                    sb << ","
-                }
             }
-            sb << "]}"
-            if (j < dataSeteList.size() - 1) {
-                sb << ","
-            }
+            toReturn.results << datasetObject
         }
-        sb << "]}"
-        returnValue = slurper.parseText(sb.toString())
-        return returnValue
+        return toReturn
     }
 
     /***
@@ -985,6 +1004,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 numericBound.lowerValue, numericBound.higherValue, "MAF")
         //List<String> codedFilters = filterManagementService.retrieveFiltersCodedFilters(geneName,0f,"","","${codeForMafSlice}-${codeForEthnicity}","T2D")
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters, searchBuilderService, metaDataService)
+
+        // DIGP-300: upping default getData limit to 5k for better MAF counts for HDAC9 gene (was getting counts > 1k)
+        getDataQueryHolder.getDataQuery.setLimit(5000)
         JsonSlurper slurper = new JsonSlurper()
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
@@ -1012,44 +1034,40 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     public JSONObject combinedEthnicityTable(String geneName,
                                              List<LinkedHashMap<String, String>> dataSetNames,
                                              List<LinkedHashMap<String, String>> numericBounds) {
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         JSONObject returnValue
-        String attribute = "T2D"
-        StringBuilder sb = new StringBuilder("{\"results\":[")
-        def slurper = new JsonSlurper()
+        ArrayList<JSONObject> resultsArray = new ArrayList<JSONObject>()
         for (int j = 0; j < dataSetNames.size(); j++) {
-            sb << "{ \"dataset\": \"${dataSetNames[j].dataset}\",\"technology\": \"${dataSetNames[j].technology}\",\"pVals\": ["
+            String datasetDisplayName = g.message(code: "metadata." + dataSetNames[j].dataset, default: dataSetNames[j].dataset)
+            JSONObject dataSetObject = [dataset: dataSetNames[j].dataset,
+                                        datasetDisplayName: datasetDisplayName,
+                                        technology: dataSetNames[j].technology]
+            ArrayList<JSONObject> pValsArray = new ArrayList<JSONObject>()
             for (int i = 0; i < numericBounds.size(); i++) {
-                sb << "{"
+                JSONObject pValObject
                 JSONObject apiResults = generateJsonVariantCountByGeneAndMaf(geneName, dataSetNames[j], numericBounds[i])
                 if (apiResults.is_error == false) {
                     if (i == 0) {
                         SampleGroup sampleGroup = metaDataService.getSampleGroupByName(dataSetNames[j].dataset)
-                        sb << "\"level\":${i},\"count\":${sampleGroup.getSubjectsNumber()}"
+                        pValObject = [level: i, count: sampleGroup.getSubjectsNumber()]
                     } else {
-                        sb << "\"level\":${i},\"count\":${apiResults.numRecords}"
+                        pValObject = [level: i, count: apiResults.numRecords]
                     }
+                    pValsArray << pValObject
+                }
+            }
 
-                }
-                sb << "}"
-                if (i < numericBounds.size() - 1) {
-                    sb << ","
-                }
-            }
-            sb << "]}"
-            if (j < dataSetNames.size() - 1) {
-                sb << ","
-            }
+            dataSetObject.pVals = pValsArray
+            resultsArray << dataSetObject
         }
-        sb << "]," // end results sections.  Store some column information
-        sb << "\"columns\":["
-        List<String> colInfo = []
+        ArrayList<JSONObject> colInfo = new ArrayList<JSONObject>()
         for (int i = 0; i < numericBounds.size(); i++) {
-            colInfo << "{\"lowerValue\":\"${numericBounds[i].lowerValue}\", \"higherValue\":\"${numericBounds[i].higherValue}\"}"
+            JSONObject col = [lowerValue: numericBounds[i].lowerValue,
+                              higherValue: numericBounds[i].higherValue]
+            colInfo << col
         }
-        sb << colInfo.join(",")
-        sb << "]}"
-        returnValue = slurper.parseText(sb.toString())
-        return returnValue
+
+        return [results: resultsArray, columns: colInfo]
     }
 
     /***
@@ -1546,7 +1564,38 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
+
+
+    LinkedHashMap<String, String> extractPhenotypeToSampleGroupMapping(String propertyName,JSONObject apiResults, String technology){
+        LinkedHashMap<String, String> returnValue = [:]
+        if (apiResults.variants.collect{it[propertyName]}[0].findAll { it }.size()>0){
+            Set sampleGroups = apiResults.variants.collect{it[propertyName]}[0].findAll { it }[0].keySet()
+            for ( String sampleGroupName in sampleGroups ){
+                Set phenotypes = apiResults.variants.collect{it[propertyName]}[0]?.collect { it }[sampleGroupName].collect { it }[0].keySet()
+                for ( String phenotypeName in phenotypes ){
+                    returnValue[phenotypeName] = sampleGroupName
+                }
+            }
+        }
+        return returnValue
+    }
+
+
+    List<String> extractSampleGroupListForProperty(String propertyName,JSONObject apiResults){
+        log.info(["propertyName": propertyName, "apiResults": apiResults])
+        List<String> returnValue = []
+        Set sampleGroups = apiResults.variants.collect{it[propertyName]}[0].findAll { it }[0].keySet()
+        for ( String sampleGroupName in sampleGroups ){
+            returnValue << sampleGroupName
+        }
+        // need to work out how to do this extraction…
+        return returnValue
+    }
+
+
+
     private List<String> processInfoFromGetDataCall ( JSONObject apiResults ){
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         List<String> jsonComponentList = []
         if (!apiResults["is_error"]){
             int numberOfVariants = apiResults.numRecords
@@ -1573,6 +1622,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                         for (String subKey in subKeys) {
                             // maybe subKey is always a group ID
                             SampleGroup sampleGroup = metaDataService.getSampleGroupByName(subKey)
+                            String dataSetName = sampleGroup.systemId
+                            String translatedDatasetName = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
                             String ancestry = "unknown"
                             if (sampleGroup) {
                                 ancestry = sampleGroup.getAncestry()
@@ -1580,18 +1631,19 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                             def particularMapValue = mapValue[subKey]
                             if (particularMapValue instanceof BigDecimal) {// data set particular values
                                 BigDecimal particularMapBigDecimalValue = particularMapValue as BigDecimal
-                                jsonComponentList << "{\"level\":\"${key}^NONE^${key}^${subKey}^${ancestry}\",\"count\":${particularMapBigDecimalValue}}"
+                                jsonComponentList << "{\"level\":\"${key}^NONE^${key}^${subKey}^${ancestry}^${translatedDatasetName}\",\"count\":${particularMapBigDecimalValue}}"
                             } else if (particularMapValue instanceof Integer) {// data set particular values
                                 Integer particularMapIntegerValue = particularMapValue as Integer
-                                jsonComponentList << "{\"level\":\"${key}^NONE^${key}^${subKey}^${ancestry}\",\"count\":${particularMapIntegerValue}}"
+                                jsonComponentList << "{\"level\":\"${key}^NONE^${key}^${subKey}^${ancestry}^${translatedDatasetName}\",\"count\":${particularMapIntegerValue}}"
                             } else if (particularMapValue instanceof Map) {
                                 Map particularSubMap = particularMapValue as Map
                                 List<String> particularSubKeys = particularSubMap.keySet() as List
                                 for (String particularSubKey in particularSubKeys) {
                                     def particularSubMapValue = particularSubMap[particularSubKey]
                                     BigDecimal phenoValue = particularSubMapValue.findAll { it }[0] as BigDecimal
+                                    String translatedPhenotypeName = g.message(code: 'metadata.' + particularSubKey, default: particularSubKey);
                                     String meaning = metaDataService.getMeaningForPhenotypeAndSampleGroup(key, particularSubKey, subKey)
-                                    jsonComponentList << "{\"level\":\"${key}^${particularSubKey}^${meaning}^${subKey}^${ancestry}\",\"count\":${phenoValue}}"
+                                    jsonComponentList << "{\"level\":\"${key}^${particularSubKey}^${meaning}^${subKey}^${ancestry}^${translatedDatasetName}^${translatedPhenotypeName}\",\"count\":${phenoValue}}"
                                 }
 
                             }
@@ -1611,7 +1663,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-
     public JSONObject getSpecifiedTraitPerVariant( String variantName, List<LinkedHashMap<String,String>> propsToUse, List<String> openPhenotypes) {
 
         JSONObject returnValue
@@ -1626,7 +1677,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         sb << "]}"
         def slurper = new JsonSlurper()
         returnValue = slurper.parseText(sb.toString())
-
         return returnValue
     }
 
@@ -1639,7 +1689,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @return
      */
     public JSONObject getTraitPerVariant( String variantName, String technology ) {//region
-
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         JSONObject returnValue
         JSONObject apiResults = gatherTraitPerVariantResults( variantName, technology )
         StringBuilder sb = new StringBuilder("{\"results\":[")
@@ -1656,65 +1706,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return returnValue
 
 
-
-
-//        List <String> meaningFieldNames = ["BETA","ODDS_RATIO","P_VALUE","DIR"]
-//        List<List<LinkedHashMap<String, String>>> meaningBasedMapper = []
-//        for (String meaningFieldName in meaningFieldNames){
-//            meaningBasedMapper << identifyMatchers(meaningFieldName, technology)
-//        }
-//        List <String> dataSetSpecificProperties = ["MAF"]
-//        List <List<String>>  dataSetSpecificMapper = []
-//        for (String dataSetSpecificProperty in dataSetSpecificProperties){
-//            dataSetSpecificMapper <<  extractSampleGroupListForProperty(dataSetSpecificProperty, apiResults)
-//        }
-//       // List<String> sampleGroupsContainingMafList =extractSampleGroupListForProperty("MAF", apiResults)
-//        int numberOfVariants = apiResults.numRecords
-//        StringBuilder sb = new StringBuilder("{\"results\":[")
-//        for (int j = 0; j < numberOfVariants; j++) {
-//            sb << "{ \"dataset\": \"traits\",\"pVals\": ["
-//
-//            if (apiResults.is_error == false) {
-//                if ((apiResults.variants) && (apiResults.variants[j]) && (apiResults.variants[j][0])) {
-//                    def variant = apiResults.variants[j];
-//
-//                    def element = variant["VAR_ID"].findAll { it }[0]
-//                    sb << "{\"level\":\"VAR_ID\",\"count\":\"${element}\"},"
-//
-//                    element = variant["DBSNP_ID"].findAll { it }[0]
-//                    sb << "{\"level\":\"DBSNP_ID\",\"count\":\"${element}\"},"
-//
-//                    element = variant["CHROM"].findAll { it }[0]
-//                    sb << "{\"level\":\"CHROM\",\"count\":\"${element}\"},"
-//
-//                    for( List<List<String>> dataSetMapper in dataSetSpecificMapper) {
-//                        element = variant["MAF"].findAll { it }[0]
-//                        for (String sampleGroupsContainingMaf in dataSetMapper) {
-//                            sb << "{\"level\":\"MAF^NONE^MAF^${sampleGroupsContainingMaf}\",\"count\":${element[sampleGroupsContainingMaf]}},"
-//                        }
-//                    }
-//
-//                    for( List<LinkedHashMap<String, String>> meaningMapper in meaningBasedMapper){
-//                        for( String valueName in meaningMapper?.collect{it.pname}.unique()){
-//                            for (LinkedHashMap valueMap in meaningMapper.findAll{it.pname==valueName}){
-//                                String val = variant["${valueMap.pname}"].findAll{it}[0].findAll{it}["${valueMap.ds}"].findAll{it}["${valueMap.pheno}"] as String
-//                                sb << "{\"level\":\"${valueMap.pname}^${valueMap.pheno}^${valueMap.meaning}^${valueMap.ds}\",\"count\":${val}},"
-//                            }
-//                        }
-//                    }
-//
-//
-//                    element = variant["POS"].findAll { it }[0]
-//                    sb << "{\"level\":\"POS\",\"count\":${element}}"
-//
-//                }
-//            }
-//            sb << "]}"
-//        }
-//        sb << "]}"
-//        returnValue = slurper.parseText(sb.toString())
-//
-//        return returnValue
     }
 
     /***

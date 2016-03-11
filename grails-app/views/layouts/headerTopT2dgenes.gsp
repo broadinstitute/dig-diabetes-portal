@@ -9,11 +9,13 @@
     <div class="container">
         <g:renderT2dGenesSection>
             <div id="branding">
-                <g:if test="${session?.getAttribute('portalType')?.equals('stroke')}">
-                    <g:message code="portal.stroke.header.title.short"/> <strong style="color:white"><g:message code="portal.stroke.header.title.genetics"/></strong> <small><g:message code="portal.stroke.header.title.beta"/></small>
+                <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                    <g:message code="portal.stroke.header.title.short"/> <strong style="color:white"><g:message code="portal.stroke.header.title.genetics"/></strong>
+                    <small><g:message code="portal.header.title.beta"/></small>
                 </g:if>
                 <g:else>
-                        <g:message code="portal.header.title.short"/> <strong style="color:white"><g:message code="portal.header.title.genetics"/></strong> <small><g:message code="portal.header.title.beta"/></small>
+                        <g:message code="portal.header.title.short"/> <strong style="color:white"><g:message code="portal.header.title.genetics"/></strong>
+
                 </g:else>
             </div>
         </g:renderT2dGenesSection>

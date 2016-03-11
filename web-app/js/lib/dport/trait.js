@@ -30,27 +30,18 @@ var mpgSoftware = mpgSoftware || {};
                 aaSorting: [[ 1, "asc" ]],
                 sDom: '<"top">rt<"bottom"flp><"clear">',
                 aoColumnDefs: [
-//                    { sType: "allnumeric", aTargets: [ 2, 4, 5, 6 ] },
                     { sType: "stringAnchor", aTargets: [ 1 ] },
                     { sType: "headerAnchor", aTargets: [0] },
                     { "bSortable": false, "aTargets": [0,2,3,4,5,6] },
-                    { "orderData": [ 1, 0 ],    "targets": [ 0, 1] },
-//                    { "orderData": [ 1, 2 ],    "targets": 2 },
-//                    { "orderData": [ 1, 3 ],    "targets": 3 },
-//                    { "orderData": [ 1, 4 ],    "targets": 4 },
-//                    { "orderData": [ 1, 5 ],    "targets": 5 },
-//                    { "orderData": [ 1, 6 ],    "targets": 6 },
                     { "width": "80px", "aTargets": [ 4,5,6 ] },
                     { "width": "90px", "aTargets": [ 3 ] },
                     { "width": "100px", "aTargets": [ 2 ] }],
-                "headerCallback": function( thead, data, start, end, display ) {
+                headerCallback: function( thead, data, start, end, display ) {
                     if (data.length===0){
                         var label0 = $(thead).find('th').eq(0).html();
                         var label1 = $(thead).find('th').eq(1).html();
                         var label2 = $(thead).find('th').eq(2).html();
-                        $(thead).find('th').eq(2).html( label2+'<div style="font-size:9px">highlight if p < 0.05</div>');
-//                        $(thead).find('th').eq(0).html( label0+'<div><button type="button" class="btn btn-xs expandoButton" onclick="allowExpansionByCohort()">Allow expansion by cohort</button></div>' );
-//                        $(thead).find('th').eq(1).html( label0+'<div><button type="button" class="btn btn-xs expandoButton" onclick="allowExpansionByTrait()">Show all associations per trait</button></div>' );
+          //              $(thead).find('th').eq(2).html( label2+'<div style="font-size:9px">highlight if p < 0.05</div>');
                     }
                 },
                 createdRow: function ( row, data, index ) {
@@ -135,8 +126,6 @@ var mpgSoftware = mpgSoftware || {};
                                                        printText,
                                                        existingRows)  {
             var variant =  data['traitInfo'];
-            var languageSetting = {};
-            // check if the browser is using Spanish
             variantProcessing.addTraitsPerVariantTable(variant,
                 openPhenotypes,
                 traitsPerVariantTable,

@@ -34,7 +34,7 @@ class TraitControllerIntegrationSpec extends IntegrationSpec {
     }
 
 
-    void "test the search a trait (and potentially  ignificance) page"() {
+    void "test the search a trait (and potentially significance) page"() {
         when:
         controller.params.trait="CKD"
         controller.params.significance='5e-8'
