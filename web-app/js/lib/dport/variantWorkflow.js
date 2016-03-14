@@ -10,6 +10,7 @@ var mpgSoftware = mpgSoftware || {};
         activeColor = '#0008b',
         inactiveColor = '#808080',
         MAXIMUM_NUMBER_OF_FILTERS=1000;
+        var listOfSavedQueries = []
 
         /***
          * private methods
@@ -424,8 +425,6 @@ var mpgSoftware = mpgSoftware || {};
                 data: {phenotype: phenotype,dataset: dataset},
                 async: true,
                 success: function (data) {
-                    console.log("retrieving properties ajax", data);
-                    console.log(property, equiv, value);
                     if (( data !==  null ) &&
                         ( typeof data !== 'undefined') &&
                         ( typeof data.datasets !== 'undefined' ) &&
@@ -546,7 +545,10 @@ var mpgSoftware = mpgSoftware || {};
                 (dataSetJson["is_error"] === false))
             {
                 var rowsToDisplay = _.flatMap(dataSetJson.dataset, function(v) {
-                    return v.translatedName;
+                    return {
+                        translatedName: v.translatedName,
+                        propName: v.prop
+                    };
                 });
                 var rowTemplate = document.getElementById("rowTemplate").innerHTML;
                 Mustache.parse(rowTemplate);
@@ -733,6 +735,86 @@ var mpgSoftware = mpgSoftware || {};
 
         };
 
+        /**
+         * User has clicked "Build Search Request" button. Grab all the current
+         * inputs, save them to an object, then reset the builder to build the
+         * next part of the query.
+         */
+        var gatherCurrentQueryAndSave = function(event) {
+            var phenoAndDS = UTILS.extractValsFromCombobox(['phenotype', 'dataSet']);
+            var currentQuery = {
+                phenotype: phenoAndDS.phenotype,
+                translatedPhenotype: $('#phenotype option:selected').text(),
+                dataset: phenoAndDS.dataSet,
+                translatedDataset: $('#dataSet option:selected').html()
+            };
+
+            var params = [];
+            var propertiesInputs = $('input[data-type=propertiesInput]');
+            _.forEach(propertiesInputs, function(input) {
+                if( input.value !== "" ) {
+                    // get the comparator value
+                    var comparator = $('select[data-selectfor=' + input.dataset.prop +']')[0].value;
+                    var newParams = {
+                        prop: input.dataset.prop,
+                        translatedName: input.dataset.translatedname,
+                        value: input.value,
+                        comparator: comparator
+                    };
+                    params.push(newParams);
+                }
+            });
+
+            var advancedFilterInputs = $('input[data-type=advancedFilterInput]');
+            _.forEach(advancedFilterInputs, function(input) {
+                if( input.value !== "" ) {
+                    var newParams = {
+                        prop: input.dataset.prop,
+                        translatedName: input.dataset.translatedname,
+                        value: input.value,
+                        comparator: "=",
+                    };
+                    params.push(newParams);
+                }
+            });
+
+            currentQuery.params = params;
+
+            listOfSavedQueries.push(currentQuery);
+
+            // make call to update list of saved queries
+            updatePageWithNewQueryList();
+
+            // reset inputs
+            var options = document.getElementById("dataSet");
+            $(options).empty();
+            fillPropertiesDropdown({is_error: false});
+            document.getElementById('phenotype').value = 'default';
+        };
+
+        /**
+         * this function is called after the list of queries is updated,
+         * so that the page is updated appropriately
+         */
+        var updatePageWithNewQueryList = function() {
+            var searchDetailsTemplate = document.getElementById("searchDetailsTemplate").innerHTML;
+            Mustache.parse(searchDetailsTemplate);
+            var renderData = {
+                listOfSavedQueries: listOfSavedQueries,
+                // use this to support editing queries
+                index: function() {
+                    return listOfSavedQueries.indexOf(this);
+                }
+            }
+            var rendered = Mustache.render(searchDetailsTemplate, renderData);
+            document.getElementById("searchDetailsHolder").innerHTML = rendered;
+        };
+
+        var deleteQuery = function(indexToDelete) {
+            listOfSavedQueries.splice(indexToDelete, 1);
+            updatePageWithNewQueryList();
+        };
+
         return {
             cancelThisFieldCollection:cancelThisFieldCollection,
             fillDataSetDropdown:fillDataSetDropdown,
@@ -747,30 +829,12 @@ var mpgSoftware = mpgSoftware || {};
             retrievePhenotypes:retrievePhenotypes,
             retrieveDataSets:retrieveDataSets,
             retrievePropertiesPerDataSet:retrievePropertiesPerDataSet,
-            whatToDoNext:whatToDoNext
+            whatToDoNext:whatToDoNext,
+            gatherCurrentQueryAndSave: gatherCurrentQueryAndSave,
+            deleteQuery: deleteQuery
         }
 
     }());
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /***
      * lots of callbacks, and other methods that respond directly to user interaction
@@ -1137,6 +1201,39 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             var selection = choice.val();
             addOnePropertyFilter (holder,selection);
         };
+
+        /**
+         * Given a change in the contents of any of the inputs, update the
+         * "build search request" button to be enabled/disabled. The button
+         * should be enabled if any of the following conditions are met:
+         *      * any of properties fields (e.g. p-value, odds ratio) have a value, OR
+         *      * the gene is specified in the advanced filter, OR
+         *      * the region is specified in the advanced filter
+         * The button should be disabled otherwise.
+         */
+        var updateBuildSearchRequestButton = function () {
+            var propertiesInputsAreEmpty = _.every($('input[data-type=propertiesInput]'), function(input) {
+                return input.value === "";
+            });
+
+            var advancedFilterInputsAreEmpty = _.every($('input[data-type=advancedFilterInput]'), function(input) {
+                return input.value === "";
+            });
+
+            var areInputValuesPresent = ! ( propertiesInputsAreEmpty && advancedFilterInputsAreEmpty )
+
+            var button = document.getElementById('buildSearchRequest');
+            if(areInputValuesPresent) {
+                // enable the button
+                button.classList.remove('dk-search-btn-inactive')
+                button.disabled = false
+            } else {
+                // disable the button
+                button.classList.add('dk-search-btn-inactive')
+                button.disabled = true
+            }
+        };
+
         return {
             forceToPhenotypeSelection:forceToPhenotypeSelection,
             respondToPhenotypeSelection:respondToPhenotypeSelection,
@@ -1149,7 +1246,8 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
             requestToAddFilters:requestToAddFilters,
             addOnePropertyFilter:addOnePropertyFilter,
             appendValueWithEquivalenceChooser:appendValueWithEquivalenceChooser,
-            forceToPropertySelection:forceToPropertySelection
+            forceToPropertySelection:forceToPropertySelection,
+            updateBuildSearchRequestButton:updateBuildSearchRequestButton
         }
 
     }());

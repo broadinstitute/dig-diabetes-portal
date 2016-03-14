@@ -34,9 +34,10 @@
 }
 </style>
 <script>
+
     $(document).ready(function () {
         mpgSoftware.variantWF.retrievePhenotypes();
-        $('#region_gene_input').typeahead({
+        $('#geneInput').typeahead({
             source: function (query, process) {
                 $.get('<g:createLink controller="gene" action="index"/>', {query: query}, function (data) {
                     process(data);
@@ -81,7 +82,7 @@
                     <div class="dk-variant-search-builder">
                         <h6>Build search</h6>
 
-                        <form>
+                        <div>
                             <div class="row">
                                 <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-title">
                                     Trait or disease of interest
@@ -121,12 +122,12 @@
                                 {{ #row }}
                                     <div class="row">
                                         <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-title">
-                                            {{ . }}
+                                            {{ translatedName }}
                                         </div>
 
                                         <div class="col-md-5 col-sm-5 col-xs-5 dk-variant-search-builder-ui">
                                             <div class="col-md-3 col-sm-3 col-xs-3">
-                                                <select class="form-control">
+                                                <select class="form-control" data-selectfor="{{ propName }}">
                                                     <option>&lt;</option>
                                                     <option>&gt;</option>
                                                     <option>=</option>
@@ -134,7 +135,10 @@
                                             </div>
 
                                             <div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">
-                                                <input type="text" class="form-control">
+                                                <input type="text" class="form-control" data-type="propertiesInput"
+                                                       data-prop="{{ propName }}" data-translatedname="{{ translatedName }}"
+                                                       oninput="mpgSoftware.firstResponders.updateBuildSearchRequestButton()"
+                                                >
                                             </div>
                                         </div>
 
@@ -154,8 +158,12 @@
                                         <label>Gene <small style="color: #aaa;">(e.g. SLC30A8)</small></label>
 
                                         <div class="form-inline">
-                                            <input type="text" class="form-control" style="width:65%;"
-                                                   placeholder="gene">
+                                            <input id="geneInput" type="text" class="form-control"
+                                                   style="width:65%;"
+                                                   placeholder="gene" data-type="advancedFilterInput"
+                                                   data-prop="gene" data-translatedname="gene"
+                                                   oninput="mpgSoftware.firstResponders.updateBuildSearchRequestButton()"
+                                            >
                                             <label style="font-size: 20px; font-weight: 100;">&nbsp; &#177 &nbsp;</label>
                                             <select class="form-control" style="width:20%;">
                                                 <option val="1000">1000</option>
@@ -171,14 +179,17 @@
                                                 style="color: #aaa;">(e.g. chr9:21,940,000-22,190,000)</small>
                                         </label>
                                         <input type="text" class="form-control"
-                                               placeholder="chromosome: start - stop">
+                                               placeholder="chromosome: start - stop" data-type="advancedFilterInput"
+                                               data-prop="chromosome" data-translatedname="chromosome"
+                                               oninput="mpgSoftware.firstResponders.updateBuildSearchRequestButton()"
+                                        >
                                     </div>
 
                                     <div class="col-md-5 col-sm-5 col-xs-5">
                                         <div class="radio">
                                             <label>
                                                 <input type="radio" name="effects">
-                                                protain-truncating
+                                                protein-truncating
                                             </label>
                                         </div>
 
@@ -213,37 +224,39 @@
                             </div>
 
                             <div class="row dk-submit-btn-wrapper">
-                                <button class="btn btn-sm btn-primary dk-search-btn-inactive" disabled>
-                                    Build Search Request
-                                </button>
-
-                                <button class="btn btn-sm btn-primary">
+                                <button id="buildSearchRequest" class="btn btn-sm btn-primary dk-search-btn-inactive"
+                                        onclick="mpgSoftware.variantWF.gatherCurrentQueryAndSave()" disabled>
                                     Build Search Request
                                 </button>
                             </div>
 
-                        </form>
+                        </div>
                     </div>
 
-                    <div class="dk-variant-submit-search">
+                    <div id="searchDetailsHolder" class="dk-variant-submit-search"></div>
+
+                    <script id="searchDetailsTemplate" type="x-tmpl-mustache">
                         <h6>Submit search</h6>
                         <table class="table table-striped dk-search-collection">
                             <thead>
-                            <tr>
-                                <th>search detail</th><th>edit</th><th>delete</th>
-                            </tr>
+                                <tr>
+                                    <th>search detail</th>
+                                    <th>edit</th>
+                                    <th>delete</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>Type 2 diabetes[DIAGRAM GWAS]Odds ratio<3<br>
-                                    Type 2 diabetes[DIAGRAM GWAS]P-value<3</td><td><a href="#">edit</a>
-                            </td><td><a href="#">delete</a></td>
-                            </tr>
-                            <tr>
-                                <td>Type 2 diabetes[DIAGRAM GWAS]Odds ratio<3<br>
-                                    Type 2 diabetes[DIAGRAM GWAS]P-value<3</td><td><a href="#">edit</a>
-                            </td><td><a href="#">delete</a></td>
-                            </tr>
+                            {{ #listOfSavedQueries }}
+                                <tr>
+                                    <td>
+                                        {{ #params }}
+                                            {{ translatedPhenotype }} [{{ translatedDataset }}] {{ translatedName }} {{ comparator }} {{ value }}<br>
+                                        {{ /params }}
+                                    </td>
+                                    <td><a >edit</a></td>
+                                    <td><a onclick="mpgSoftware.variantWF.deleteQuery({{ index }})">delete</a></td>
+                                </tr>
+                            {{ /listOfSavedQueries }}
                             </tbody>
                         </table>
 
@@ -255,7 +268,7 @@
                                 Submit Search Request
                             </button>
                         </div>
-                    </div>
+                     </script>
                 </div>
             </div>
         </div>
