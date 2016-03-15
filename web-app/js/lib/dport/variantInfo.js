@@ -214,7 +214,7 @@ var mpgSoftware = mpgSoftware || {};
                                 translatedCohortName =  cohortFields [5] ;
                                 displayableCohortName = cohortFields [4] ;
                             }
-                            dataForBarChart.push({ value: cohort.count,
+                            dataForBarChart.push({ value: cohort.count*100,
                                 position: i,
                                 barname: displayableCohortName,
                                 barsubname: '',
@@ -246,7 +246,7 @@ var mpgSoftware = mpgSoftware || {};
                         });
 
                             var roomForLabels = 120;
-                            var maximumPossibleValue = (Math.max( ...allAlleleValues ) * 1.5);
+                            var maximumPossibleValue = (Math.max( ...allAlleleValues ) * 150);
                             var labelSpacer = 10;
 
                         var margin = {top: 20, right: 20, bottom: 0, left: 40},

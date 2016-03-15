@@ -15,22 +15,6 @@
                 data: {variantId: '<%=variantToSearch%>', showAll: showAll},
                 async: true,
                 success: function (data) {
-                    var alleleFrequencyStrings = {
-                        africanAmerican:'<g:message code="variant.alleleFrequency.africanAmerican" default="africanAmerican" />',
-                        africanAmericanQ:'<g:helpText title="variant.alleleFrequency.africanAmericanQ.help.header"  qplacer="2px 6px 0 0" placement="right" body="variant.alleleFrequency.africanAmericanQ.help.text"/>',
-                        hispanic:'<g:message code="variant.alleleFrequency.hispanic" default="hispanic" />',
-                        hispanicQ:'<g:helpText title="variant.alleleFrequency.hispanicQ.help.header"  qplacer="2px 6px 0 0" placement="right" body="variant.alleleFrequency.hispanicQ.help.text"/>',
-                        eastAsian:'<g:message code="variant.alleleFrequency.eastAsian" default="eastAsian" />',
-                        eastAsianQ:'<g:helpText title="variant.alleleFrequency.eastAsianQ.help.header"  qplacer="2px 6px 0 0" placement="right" body="variant.alleleFrequency.eastAsianQ.help.text"/>',
-                        southAsian:'<g:message code="variant.alleleFrequency.southAsian" default="southAsian" />',
-                        southAsianQ:'<g:helpText title="variant.alleleFrequency.southAsianQ.help.header"  qplacer="2px 6px 0 0" placement="right" body="variant.alleleFrequency.southAsianQ.help.text"/>',
-                        european:'<g:message code="variant.alleleFrequency.european" default="european" />',
-                        europeanQ:'<g:helpText title="variant.alleleFrequency.europeanQ.help.header"  qplacer="2px 6px 0 0" placement="right" body="variant.alleleFrequency.europeanQ.help.text"/>',
-                        exomeSequence:'<g:message code="variant.alleleFrequency.exomeSequence" default="exomeSequence" />',
-                        exomeSequenceQ:'<g:helpText title="variant.alleleFrequency.exomeSequenceQ.help.header"  qplacer="2px 6px 0 0" placement="right" body="variant.alleleFrequency.exomeSequenceQ.help.text"/>',
-                        exomeChip:'<g:message code="variant.alleleFrequency.exomeChip" default="exomeChip" />',
-                        exomeChipQ:'<g:helpText title="variant.alleleFrequency.exomeChipQ.help.header"  qplacer="2px 6px 0 0" placement="right" body="variant.alleleFrequency.exomeChipQ.help.text"/>'
-                    };
                     var collector = {}
                     var mafInfo = [];
                     for (var i = 0; i < data.variantInfo.results.length; i++) {

@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg
 
+import grails.converters.JSON
 import grails.plugins.rest.client.RestBuilder
 import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
@@ -7,6 +8,7 @@ import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
+import org.broadinstitute.mpg.diabetes.metadata.Experiment
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
@@ -288,6 +290,89 @@ class RestServerService {
         }
         return returnValue
     }
+
+
+    StringBuilder extendDataSetJsonRecursively (StringBuilder sb,SampleGroup sampleGroup,String description){
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+
+        // start the sample group definition
+        if ((sampleGroup)&&(sampleGroup.getSystemId())){
+            String dataSetName  = sampleGroup.getSystemId()
+            String dataSetNameTranslated = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
+            sb <<  """{"name":"${dataSetName}", "descr":"${dataSetNameTranslated} samples: ${sampleGroup.getSubjectsNumber()}","size": ${sampleGroup.getSubjectsNumber()},"col": 1""".toString()
+        }
+
+        // recurse, if necessary
+        if (sampleGroup.getSampleGroups().size()>0){
+            List <String> recursiveSampleGroups = []
+
+            // need to compare against last, NOT start in array then join with ","
+
+            SampleGroup lastSampleGroup = sampleGroup.getSampleGroups().last()
+
+            sb <<  ""","children": [""".toString()
+            for (SampleGroup recursiveSampleGroup in sampleGroup.getSampleGroups()){
+                extendDataSetJsonRecursively ( sb,recursiveSampleGroup, description+sampleGroup.getSystemId() )
+                if (recursiveSampleGroup.getSystemId()==lastSampleGroup.getSystemId()){
+                    sb << """,
+{"name":"zzull${description+sampleGroup.getSystemId()}", "descr":"null","col": 1,"size":1}
+""".toString()
+                } else {
+                    sb <<  """,
+"""
+                }
+            }
+            sb <<  """]
+}""".toString()
+        } else {
+            sb <<  """}
+""".toString()
+        }
+
+        return sb
+    }
+
+
+
+    public JSONObject extractDataSetHierarchy(String version,String technology) {
+        JSONObject returnValue
+        StringBuilder sb = new StringBuilder("""[
+                {"name":"ROOT", "descr":"76","size": 86,"col": 1,"children": [""".toString())
+
+
+        if ( (!version)||
+                (version.length()<1) ) {
+            version = this.metaDataService?.getDataVersion() // use current default version
+        }
+        if ( (!technology)||
+                (technology.length()<1)||
+                (technology=='none')) {
+            technology = ''
+        }
+        List<Experiment> experimentList = this.metaDataService.getExperimentByVersionAndTechnology(version, technology);
+        Experiment lastExperiment = experimentList.last()
+        for (Experiment experiment in experimentList){
+            List<SampleGroup> sampleGroups = experiment.getSampleGroups()
+            for (SampleGroup sampleGroup in sampleGroups){
+                extendDataSetJsonRecursively (sb,sampleGroup,sampleGroup.getSystemId())
+            }
+            if (experiment.name != lastExperiment.name){
+                sb << """,
+""".toString()
+            }
+        }
+
+        sb << """]}
+    ]""".toString()
+
+        JsonSlurper slurper = new JsonSlurper()
+        returnValue = slurper.parseText(sb.toString())
+
+       return returnValue
+    }
+
+
+
 
 
     public String getSampleGroup(String technology, String experiment, String ethnicity) {

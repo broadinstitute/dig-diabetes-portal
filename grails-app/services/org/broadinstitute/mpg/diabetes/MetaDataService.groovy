@@ -172,6 +172,31 @@ class MetaDataService {
 
     /**
      * return the root gwas sample group for a given phenotype
+     *List<Experiment> getAllExperimentsOfVersionTechnology( String version, String technology )
+     * @param phenotypeString
+     * @return
+     */
+    public List<Experiment> getExperimentByVersionAndTechnology( String version, String technology ) {
+        // local variables
+        List<Experiment> experimentList = []
+
+        // get the sample group string
+        try {
+            experimentList = this.getJsonParser().getAllExperimentsOfVersionTechnology( version, technology )
+
+        } catch (PortalException exception) {
+            log.error("Got metadata parsing exception getting getExperimentByVersionAndTechnology: " + exception.getMessage());
+        }
+
+        return experimentList
+    }
+
+
+
+
+
+    /**
+     * return the root gwas sample group for a given phenotype
      *
      * @param phenotypeString
      * @return

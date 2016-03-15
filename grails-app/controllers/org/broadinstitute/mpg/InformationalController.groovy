@@ -1,10 +1,12 @@
 package org.broadinstitute.mpg
 
+import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
 
 
 
 class  InformationalController {
+    RestServerService restServerService
 
     def index() {}
     def about (){
@@ -24,6 +26,23 @@ class  InformationalController {
     def aboutSigmaSection(){
         render (template: "sigma/${params.id}" )
     }
+
+
+    /***
+     * Get the contents for the filter drop-down box on the burden test section of the gene info page
+     * @return
+     */
+    def aboutTheDataAjax() {
+        String metadataVersion = params.metadataVersion
+        String technology = params.technology
+        JSONObject jsonObject = restServerService.extractDataSetHierarchy(metadataVersion, technology)
+
+        // send json response back
+        render(status: 200, contentType: "application/json") {jsonObject}
+    }
+
+
+
 
 
 //    def contact (){

@@ -179,6 +179,36 @@ public class JsonParser {
         return nameList;
     }
 
+
+
+
+    public List<Experiment> getAllExperimentsOfVersionTechnology( String version, String technology ) throws PortalException {
+        List<Experiment> experimentList;
+        List<Experiment> finalExperimentList = new ArrayList<Experiment>();
+
+        // find the experiment
+        ExperimentByVersionVisitor experimentVisitor = new ExperimentByVersionVisitor(version);
+        this.getMetaDataRoot().acceptVisitor(experimentVisitor);
+        experimentList = experimentVisitor.getExperimentList();
+
+        // for experiment, find the property list
+        for (Experiment experiment : experimentList) {
+            if ( ( (version.length()==0)||
+                    (experiment.getVersion().equalsIgnoreCase(version)) ) &&
+                 ( (technology.length()==0)||
+                        (experiment.getTechnology().equalsIgnoreCase(technology)) ) ){
+                finalExperimentList.add(experiment);
+            }
+        }
+
+        return finalExperimentList;
+    }
+
+
+
+
+
+
     public List<Property> getAllPropertiesWithNameForExperimentOfVersion(String propertyName, String version, String technology,Boolean recursivelyDescendSampleGroups) throws PortalException {
         List<Property> propertyList = new ArrayList<Property>();
         List<Experiment> experimentList;
