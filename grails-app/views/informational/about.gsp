@@ -42,26 +42,28 @@
     <div class="col-xs-3"></div>
 
     <div class="col-xs-3 pull-right">
+        <span class="pull-right">Technology filter</span>
         <select id="versionDatasetFilter" class="form-control">
-            <option>mdv1</option>
-            <option selected>mdv2</option>
-            <option>mdv3</option>
-            <option>mdv5</option>
+            <option value="mdv1">mdv1 (T2D)</option>
+            <option value="mdv2" selected>mdv2 (T2D)</option>
+            <option value="mdv3">mdv3 (T2D)</option>
+            <option value="mdv5">mdv5 (stroke)</option>
         </select>
     </div>
 
     <div class="col-xs-3 pull-right">
+        <span class="pull-right">Version filter</span>
         <select id="technologyFilter" class="form-control">
-            <option selected>none</option>
-            <option>GWAS</option>
-            <option>ExSeq</option>
-            <option>ExChip</option>
+            <option selected>all</option>
+            <option value="GWAS">GWAS</option>
+            <option value="ExSeq">Exome sequencing</option>
+            <option value="ExChip">Exome chip</option>
         </select>
 
     </div>
 
-    <div class="col-xs-3">
-        <button id="opener" class="btn btn-primary pull-right" onclick="mpgSoftware.resetSunburst()">
+    <div class="col-xs-3 vcenter">
+        <button id="opener" class="btn btn-primary pull-right" onclick="mpgSoftware.resetSunburst()"    style="margin-top: 10px">
             Reset graphic
         </button>
     </div>
@@ -81,7 +83,11 @@
         mpgSoftware.resetSunburst = function () {
             var versionDatasetFilter = $("#versionDatasetFilter").val();
             var technologyFilter = $("#technologyFilter").val();
+            if (technologyFilter==='all'){
+                technologyFilter = '';
+            }
             $('#sunburstdiv').empty();
+            $('.toolTextAppearance').remove();
             mpgSoftware.launchSunburst(versionDatasetFilter, technologyFilter);
         };
 

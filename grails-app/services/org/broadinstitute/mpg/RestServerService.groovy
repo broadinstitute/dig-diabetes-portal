@@ -299,7 +299,7 @@ class RestServerService {
         if ((sampleGroup)&&(sampleGroup.getSystemId())){
             String dataSetName  = sampleGroup.getSystemId()
             String dataSetNameTranslated = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
-            sb <<  """{"name":"${dataSetName}", "descr":"${dataSetNameTranslated} samples: ${sampleGroup.getSubjectsNumber()}","size": ${sampleGroup.getSubjectsNumber()},"col": 1""".toString()
+            sb <<  """{"name":"${dataSetName}", "label": "${dataSetNameTranslated}", "descr":"${dataSetNameTranslated}<br/>Total samples: ${sampleGroup.getSubjectsNumber()}","size": ${sampleGroup.getSubjectsNumber()},"col": 1""".toString()
         }
 
         // recurse, if necessary
@@ -337,7 +337,7 @@ class RestServerService {
     public JSONObject extractDataSetHierarchy(String version,String technology) {
         JSONObject returnValue
         StringBuilder sb = new StringBuilder("""[
-                {"name":"ROOT", "descr":"76","size": 86,"col": 1,"children": [""".toString())
+                {"name":"/", "descr":"click to zoom out", "label":"null", "size": 1,"col": 1,"children": [""".toString())
 
 
         if ( (!version)||
@@ -350,15 +350,17 @@ class RestServerService {
             technology = ''
         }
         List<Experiment> experimentList = this.metaDataService.getExperimentByVersionAndTechnology(version, technology);
-        Experiment lastExperiment = experimentList.last()
-        for (Experiment experiment in experimentList){
-            List<SampleGroup> sampleGroups = experiment.getSampleGroups()
-            for (SampleGroup sampleGroup in sampleGroups){
-                extendDataSetJsonRecursively (sb,sampleGroup,sampleGroup.getSystemId())
-            }
-            if (experiment.name != lastExperiment.name){
-                sb << """,
+        if (experimentList.size()>0){
+            Experiment lastExperiment = experimentList.last()
+            for (Experiment experiment in experimentList){
+                List<SampleGroup> sampleGroups = experiment.getSampleGroups()
+                for (SampleGroup sampleGroup in sampleGroups){
+                    extendDataSetJsonRecursively (sb,sampleGroup,sampleGroup.getSystemId())
+                }
+                if (experiment.name != lastExperiment.name){
+                    sb << """,
 """.toString()
+                }
             }
         }
 

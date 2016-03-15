@@ -22,7 +22,11 @@
     -moz-border-radius: 15px;
     border-radius: 15px;
 }
-
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
 .legend {
     font: 14px sans-serif;
     font-weight: bold;

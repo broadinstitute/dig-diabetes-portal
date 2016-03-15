@@ -70,7 +70,7 @@ var baget = baget || {};  // encapsulating variable
         this.mouseOver = function (d) {
             if ((d.name != '/') &&
                 (!(((d.name.length > 4) && (d.name.substring(0, 4) === 'zzul'))))) {
-                tooltip.html(d.name + '<br/>' + d.descr)
+                tooltip.html(d.descr)
                     .transition()
                     .duration(200)
                     .style("opacity", "1");
@@ -386,7 +386,9 @@ var baget = baget || {};  // encapsulating variable
             .attr("x", 0)
             .text(function (d) {
                 if ((d.depth) && (d.name.indexOf("zzul") === -1)) {
-                    return d.name.split(" ")[0];
+                    var displayName = ((typeof d.label !== 'undefined')  &&
+                        (d.label.length > 0))?d.label: d.name;
+                    return displayName.split(":")[0];
                 } else {
                     return "";
                 }
@@ -396,31 +398,37 @@ var baget = baget || {};  // encapsulating variable
             .attr("dy", "1em")
             .text(function (d) {
                 if ((d.depth) && (d.name.indexOf("zzul") === -1)) {
-                    return d.name.split(" ")[1] || "";
+                    var displayName = ((typeof d.label !== 'undefined')  &&
+                        (d.label.length > 0))?d.label: d.name;
+                    return displayName.split(":")[1] || "";
                 } else {
                     return "";
                 }
             });
-        textEnter.append("tspan")
-            .attr("x", 0)
-            .attr("dy", "1em")
-            .text(function (d) {
-                if ((d.depth) && (d.name.indexOf("zzul") === -1)) {
-                    return d.name.split(" ")[2] || "";
-                } else {
-                    return "";
-                }
-            });
-        textEnter.append("tspan")
-            .attr("x", 0)
-            .attr("dy", "1em")
-            .text(function (d) {
-                if ((d.depth) && (d.name.indexOf("zzul") === -1)) {
-                    return d.name.split(" ")[3] || "";
-                } else {
-                    return "";
-                }
-            });
+//        textEnter.append("tspan")
+//            .attr("x", 0)
+//            .attr("dy", "1em")
+//            .text(function (d) {
+//                if ((d.depth) && (d.name.indexOf("zzul") === -1)) {
+//                    var displayName = ((typeof d.label !== 'undefined')  &&
+//                        (d.label.length > 0))?d.label: d.name;
+//                    return displayName.split(" ")[2] || "";
+//                } else {
+//                    return "";
+//                }
+//            });
+//        textEnter.append("tspan")
+//            .attr("x", 0)
+//            .attr("dy", "1em")
+//            .text(function (d) {
+//                if ((d.depth) && (d.name.indexOf("zzul") === -1)) {
+//                    var displayName = ((typeof d.label !== 'undefined')  &&
+//                        (d.label.length > 0))?d.label: d.name;
+//                    return displayName.split(" ")[3] || "";
+//                } else {
+//                    return "";
+//                }
+//            });
 
 
 //            d3.select(self.frameElement).style("height", height + "px");
