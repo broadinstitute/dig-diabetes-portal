@@ -72,17 +72,34 @@
 
 
 <div class="row pull-left col-xs-12" style="margin-top: 5px">
-    <div class="col-xs-3"></div>
-    <div class="col-xs-9"  style="padding: 5px 0 12px 0; border: 1px solid #aaaaaa">
+    <div class="col-xs-2"></div>
+    <div class="col-xs-10"  style="padding: 5px 0 12px 0; border: 1px solid #aaaaaa">
         <div class="row col-xs-12">
 
-            <div class="col-xs-4">
+            <div class="col-xs-3">
                 <button id="opener" class="btn btn-primary pull-right" onclick="mpgSoftware.resetSunburst()"    style="margin: 16px 35px 0 0">
                     Apply filters
                 </button>
             </div>
 
-            <div class="col-xs-4">
+            <div class="col-xs-3">
+                <span style="text-decoration: underline; padding:35px 0 0 30px; margin-bottom: 0">Color mapping</span>
+                <div class="radio" style="margin-top: 0">
+                    <div>
+                        <label>
+                            <input type="radio" id="defaultColoring" name="coloring" value="1" checked/>Default coloring
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <input type="radio" id="ancestryColoring" name="coloring" value="2" />Color by ancestry
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-xs-3">
                 <span class="pull-right">Version filter</span>
                 <select id="versionDatasetFilter" class="form-control">
                     <option value="mdv1">mdv1 (T2D)</option>
@@ -92,7 +109,7 @@
                 </select>
             </div>
 
-            <div class="col-xs-4">
+            <div class="col-xs-3">
                 <span class="pull-right">Technology filter</span>
                 <select id="technologyFilter" class="form-control">
                     <option selected>all</option>
@@ -120,22 +137,30 @@
     var mpgSoftware = mpgSoftware || {};
     $(document).ready(function () {
         "use strict";
+        var defaultColoring;
+        var colorByAncestry = d3.scale.ordinal()
+                .domain(['Mixed','African American','East Asian','European','Hispanic','South Asian'])
+                .range(["#17becf", "#ff7f0e","#2ca02c", "#d62728","#9467bd", "#e377c2"]);
         mpgSoftware.resetSunburst = function () {
             var versionDatasetFilter = $("#versionDatasetFilter").val();
             var technologyFilter = $("#technologyFilter").val();
             if (technologyFilter==='all'){
                 technologyFilter = '';
             }
+            var coloringOption = $("input[name=coloring]:checked").val()
             $('#sunburstdiv').empty();
             $('.toolTextAppearance').remove();
-            mpgSoftware.launchSunburst(versionDatasetFilter, technologyFilter);
+            mpgSoftware.launchSunburst(versionDatasetFilter, technologyFilter,coloringOption);
         };
 
-        mpgSoftware.launchSunburst = function (metadataVersion, technology) {
+        mpgSoftware.launchSunburst = function (metadataVersion, technology,coloringOption) {
             var loading = $('#spinner').show();
-            var continuousColorScale = d3.scale.linear()
-                    .domain([0.5, 0.5])
-                    .range(["#000", "#000"]);
+            var colorScale;
+            switch (coloringOption)  {
+                case "1": colorScale =  defaultColoring;  break;
+                case "2": colorScale =  colorByAncestry;  break;
+                default: colorScale =  defaultColoring;  break;
+            }
             $.ajax({
                 cache: false,
                 type: "get",
@@ -146,7 +171,7 @@
                 success: function (data) {
                     //sunburst =  baget.createASunburst;
                     if (data.children !== undefined) {
-                        baget.createASunburst(1200, 1200, 5, 1000, continuousColorScale, 'div#sunburstdiv', data);
+                        baget.createASunburst(1200, 1200, 5, 1000, colorScale, 'div#sunburstdiv', data);
                     } else {
                         d3.select('div#sunburstdiv')
                                 .append('div')
@@ -168,7 +193,7 @@
                 }
             });
         };
-        mpgSoftware.launchSunburst('', '');
+        mpgSoftware.launchSunburst('', '', undefined);
     });
 
 </script>

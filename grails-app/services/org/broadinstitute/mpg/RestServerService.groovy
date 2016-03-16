@@ -291,7 +291,15 @@ class RestServerService {
         return returnValue
     }
 
-
+    /***
+     * Need to to send through metadata sample groups recursively in order to generate a JSON structure
+     * that can create the recursive Sunburst graphic
+     *
+     * @param sb
+     * @param sampleGroup
+     * @param description
+     * @return
+     */
     StringBuilder extendDataSetJsonRecursively (StringBuilder sb,SampleGroup sampleGroup,String description){
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
 
@@ -299,7 +307,7 @@ class RestServerService {
         if ((sampleGroup)&&(sampleGroup.getSystemId())){
             String dataSetName  = sampleGroup.getSystemId()
             String dataSetNameTranslated = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
-            sb <<  """{"name":"${dataSetName}", "label": "${dataSetNameTranslated}", "descr":"${dataSetNameTranslated}<br/>Total samples: ${sampleGroup.getSubjectsNumber()}","size": ${sampleGroup.getSubjectsNumber()},"col": 1""".toString()
+            sb <<  """{"name":"${dataSetName}", "ancestry":"${sampleGroup.getAncestry()}", "label": "${dataSetNameTranslated}", "descr":"${dataSetNameTranslated}<br/>Total samples: ${sampleGroup.getSubjectsNumber()}","size": ${sampleGroup.getSubjectsNumber()},"col": 1""".toString()
         }
 
         // recurse, if necessary
@@ -334,6 +342,14 @@ class RestServerService {
 
 
 
+    /***
+     * Build the top-level holder consumed by the Sunburst visualization. Most of the databases returned not by this
+     * routine itself, but instead by extendDataSetJsonRecursively
+     *
+     * @param version
+     * @param technology
+     * @return
+     */
     public JSONObject extractDataSetHierarchy(String version,String technology) {
         JSONObject returnValue
         StringBuilder sb = new StringBuilder("""[
@@ -1679,8 +1695,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return returnValue
     }
 
-
-
+    /***
+     * This is the universal API return value reader.
+     * @param apiResults
+     * @return
+     */
     private List<String> processInfoFromGetDataCall ( JSONObject apiResults ){
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         List<String> jsonComponentList = []

@@ -10,7 +10,7 @@ var baget = baget || {};  // encapsulating variable
 
         // Safety trick for constructors
         if (!(this instanceof baget.ColorManagementRoutines)) {
-            return new baget.ColorManagementRoutines();
+            return new baget.ColorManagementRoutines(colorScale);
         }
 
         // public methods
@@ -18,18 +18,15 @@ var baget = baget || {};  // encapsulating variable
             var returnValue = new String();
             colorCnt++;
 
-            if (d.ac != undefined) {
+            if (( typeof d.ancestry !== 'undefined')&&
+                ( typeof colorScale !== 'undefined'))
+            {
                 if (d.name === "/") { // root is special cased
                     return "#ffffff";
                 } else if ((d.name.length > 4) && (d.name.substring(0, 4) === 'zzul')) {
                     return "#ffffff";
                 }
-                var actives = parseInt(d.ac);
-                var inactives = parseInt(d.inac);
-                if ((actives + inactives) === 0) // this should never happen, but safety first!
-                    return "#fff";
-                var prop = actives / (actives + inactives);
-                returnValue = colorScale(prop);
+                returnValue = colorScale(d.ancestry);
             } else {
                 if ((d.name === "/") ||
                     ((d.name.length > 4) && (d.name.substring(0, 4) === 'zzul'))) { // root is special cased
@@ -37,7 +34,6 @@ var baget = baget || {};  // encapsulating variable
                 } else {
 
                 }
-//                returnValue ="#000";
                 returnValue = color(colorCnt % 20);//"#a8fafb";
             }
             return returnValue;
@@ -174,6 +170,10 @@ var baget = baget || {};  // encapsulating variable
         var x = d3.scale.linear()
             .range([0, 2 * Math.PI]);
 
+        var shift = function(x){
+            return x;
+        }
+
         var y = d3.scale.linear()
             .range([0, radius]);
 
@@ -187,10 +187,10 @@ var baget = baget || {};  // encapsulating variable
 
         var arc = d3.svg.arc()
             .startAngle(function (d) {
-                return Math.max(0, Math.min(2 * Math.PI, x(d.x)));
+                return Math.max(0, Math.min(2 * Math.PI, x(shift(d.x))));
             })
             .endAngle(function (d) {
-                return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx)));
+                return Math.max(0, Math.min(2 * Math.PI, x(shift(d.x + d.dx))));
             })
             .innerRadius(function (d) {
                 return Math.max(0, y(d.y));
@@ -341,13 +341,13 @@ var baget = baget || {};  // encapsulating variable
                 .duration(duration)
                 .attrTween("text-anchor", function (d) {
                     return function () {
-                        return x(d.x + d.dx / 2) > Math.PI ? "end" : "start";
+                        return x(shift(d.x + d.dx / 2)) > Math.PI ? "end" : "start";
                     };
                 })
                 .attrTween("transform", function (d) {
                     var multiline = (d.name || "").split(" ").length > 1;
                     return function () {
-                        var angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
+                        var angle = x(shift(d.x + d.dx / 2)) * 180 / Math.PI - 90,
                             rotate = angle + (multiline ? -.5 : 0);
                         return "rotate(" + rotate + ")translate(" + (y(d.y) + padding) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
                     };
@@ -368,12 +368,12 @@ var baget = baget || {};  // encapsulating variable
                 return  colorManagementRoutines.colorText(d);
             })
             .attr("text-anchor", function (d) {
-                return x(d.x + d.dx / 2) > Math.PI ? "end" : "start";
+                return x(shift(d.x + d.dx / 2)) > Math.PI ? "end" : "start";
             })
             .attr("dy", ".2em")
             .attr("transform", function (d) {
                 var multiline = (d.name || "").split(" ").length > 1,
-                    angle = x(d.x + d.dx / 2) * 180 / Math.PI - 90,
+                    angle = x(shift(d.x + d.dx / 2)) * 180 / Math.PI - 90,
                     rotate = angle + (multiline ? -.5 : 0);
                 return "rotate(" + rotate + ")translate(" + (y(d.y) + padding) + ")rotate(" + (angle > 90 ? -180 : 0) + ")";
             })
