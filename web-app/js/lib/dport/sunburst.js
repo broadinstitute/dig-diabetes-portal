@@ -299,7 +299,7 @@ var baget = baget || {};  // encapsulating variable
                 if ((d.name.length > 4) && (d.name.substring(0, 4) === 'zzul')) {
                     return '#ffffff';
                 } else {
-                    return '#000';
+                    return '#888';
                 }
             })
             .style("stroke-width", function (d) {
@@ -387,6 +387,7 @@ var baget = baget || {};  // encapsulating variable
         var textEnter = text.enter().append("svg:text")
             .style("fill-opacity", 1)
             .style("pointer-events", "none")
+            .style("class", "sunburstText")
             .style("fill", function (d) {
                 return  colorManagementRoutines.colorText(d);
             })

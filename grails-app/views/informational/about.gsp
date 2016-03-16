@@ -140,7 +140,7 @@
         var defaultColoring;
         var colorByAncestry = d3.scale.ordinal()
                 .domain(['Mixed','African American','East Asian','European','Hispanic','South Asian'])
-                .range(["#17becf", "#ff7f0e","#2ca02c", "#d62728","#9467bd", "#e377c2"]);
+                .range(["#cccccc", "#ff7f0e","#2ca02c", "#d62728","#9467bd", "#e377c2"]);
         mpgSoftware.resetSunburst = function () {
             var versionDatasetFilter = $("#versionDatasetFilter").val();
             var technologyFilter = $("#technologyFilter").val();
