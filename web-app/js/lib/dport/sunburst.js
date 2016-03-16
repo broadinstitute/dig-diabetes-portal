@@ -360,7 +360,30 @@ var baget = baget || {};  // encapsulating variable
                 });
         }
 
+        var smartLineBreak = function(incomingLine,topHalf){
+            if (incomingLine.indexOf(" ")>-1) {
+                var wordsSpacesToSeparate =   incomingLine.split(" ");
+                var numberOfSpaces =   wordsSpacesToSeparate.length;
+                var accumulatingString = "";
+                if (topHalf)  {
+                    for (var i = 0 ; i < Math.ceil(numberOfSpaces/2) ; i++) {
+                        if (wordsSpacesToSeparate[i].length>0){
+                            accumulatingString +=  (wordsSpacesToSeparate[i]+" ");
+                        }
+                    }
+                }  else {
+                    for (var i = Math.ceil(numberOfSpaces/2) ; i < numberOfSpaces ; i++) {
+                        if (wordsSpacesToSeparate[i].length>0){
+                            accumulatingString +=  (wordsSpacesToSeparate[i]+" ");
+                        }
+                    }
+                }
+                 return  accumulatingString;
+            } else {
+                return incomingLine;
+            }
 
+        };
         var textEnter = text.enter().append("svg:text")
             .style("fill-opacity", 1)
             .style("pointer-events", "none")
@@ -388,7 +411,21 @@ var baget = baget || {};  // encapsulating variable
                 if ((d.depth) && (d.name.indexOf("zzul") === -1)) {
                     var displayName = ((typeof d.label !== 'undefined')  &&
                         (d.label.length > 0))?d.label: d.name;
-                    return displayName.split(":")[0];
+                    if (displayName.indexOf(":")>-1) {
+                        var postColonName = displayName.split(":")[1];
+                        return postColonName.split(",")[0] || "";
+//                        var commaSplit = postColonName.split(",");
+//                        if (commaSplit.length > 0) {
+//                            var postCommaName =  commaSplit[0] || "";
+//                            return smartLineBreak(postCommaName,true);
+//                        } else {
+//                            return smartLineBreak(postColonName,true);
+//                        }
+
+                    } else {
+                        return smartLineBreak(displayName,true);
+                    }
+
                 } else {
                     return "";
                 }
@@ -400,23 +437,44 @@ var baget = baget || {};  // encapsulating variable
                 if ((d.depth) && (d.name.indexOf("zzul") === -1)) {
                     var displayName = ((typeof d.label !== 'undefined')  &&
                         (d.label.length > 0))?d.label: d.name;
-                    return displayName.split(":")[1] || "";
+                    if (displayName.indexOf(":")>-1) {
+                        var postColonName = displayName.split(":")[1];
+                        var commaSplit = postColonName.split(",");
+                       // if (commaSplit.length > 0) {
+                            var postCommaName =  postColonName.split(",")[1] || "";
+                            return smartLineBreak(postCommaName,true);
+//                        } else {
+//                            return smartLineBreak(postColonName,true);
+//                        }
+
+                    } else {
+                        //return "";
+                        return smartLineBreak(displayName,false);
+                    }
                 } else {
                     return "";
                 }
             });
-//        textEnter.append("tspan")
-//            .attr("x", 0)
-//            .attr("dy", "1em")
-//            .text(function (d) {
-//                if ((d.depth) && (d.name.indexOf("zzul") === -1)) {
-//                    var displayName = ((typeof d.label !== 'undefined')  &&
-//                        (d.label.length > 0))?d.label: d.name;
-//                    return displayName.split(" ")[2] || "";
-//                } else {
-//                    return "";
-//                }
-//            });
+
+        textEnter.append("tspan")
+            .attr("x", 0)
+            .attr("dy", "1em")
+            .text(function (d) {
+                if ((d.depth) && (d.name.indexOf("zzul") === -1)) {
+                    var displayName = ((typeof d.label !== 'undefined')  &&
+                        (d.label.length > 0))?d.label: d.name;
+                    if (displayName.indexOf(":")>-1) {
+                        var postColonName = displayName.split(":")[1];
+                        var postCommaName =  postColonName.split(",")[1] || "";
+                        return smartLineBreak(postCommaName,false);
+                    } else {
+                        return "";
+                    }
+                } else {
+                    return "";
+                }
+            });
+
 //        textEnter.append("tspan")
 //            .attr("x", 0)
 //            .attr("dy", "1em")
