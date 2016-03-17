@@ -1,5 +1,65 @@
 <h1><%=phenotypeName%></h1>
 
+
+
+<script>
+    var mpgSoftware = mpgSoftware || {};
+
+    mpgSoftware.manhattanPlot = (function () {
+
+        var fillSampleGroupDropdown = function (phenotype) {
+            var loader = $('#rSpinner');
+            loader.show();
+
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "${createLink(controller:'trait',action: 'ajaxSampleGroupsPerTrait')}",
+                data: {phenotype: phenotype},
+                async: false,
+                success: function (data) {
+
+                    var rowDataStructure = [];
+                    if ((typeof data !== 'undefined') &&
+                            (data)) {
+                        if ((data.sampleGroups) &&
+                                (data.sampleGroups.length>0)) {//assume we have data and process it
+                            for ( var i = 0 ; i < data.sampleGroups.length ; i++ ){
+                                var sampleGroup = data.sampleGroups[i];
+                                $('#manhattanSampleGroupChooser').append(new Option(sampleGroup.sgn,sampleGroup.sg))
+                            }
+                        }
+                    }
+                     loader.hide();
+                },
+                error: function (jqXHR, exception) {
+                    loader.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+
+        };
+        return {fillSampleGroupDropdown: fillSampleGroupDropdown}
+    }());
+
+
+
+    mpgSoftware.pickNewDataSet = function (){
+        var sampleGroup = $('#manhattanSampleGroupChooser').val();
+        mpgSoftware.manhattanPlot.fillSampleGroupDropdown('<%=phenotypeKey%>');
+    }
+
+
+    $( document ).ready(function() {
+        mpgSoftware.manhattanPlot.fillSampleGroupDropdown('<%=phenotypeKey%>');
+    });
+
+</script>
+
+
+
+
+
 <div class="separator"></div>
 
 <p>
@@ -30,6 +90,10 @@
            class="boldlink"><g:message code="informational.shared.institution.PGC" /></a>
     </g:elseif>
     <g:message code="gene.variantassociations.table.rowhdr.gwas" /> <g:message code="gene.variantassociations.table.rowhdr.meta_analyses" /> <g:message code="informational.shared.phrase.consortium" />:
+
+    <select id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.pickNewDataSet(this)" style="display:none">
+    </select>
+
 </p>
 
 <div id="manhattanPlot1"></div>

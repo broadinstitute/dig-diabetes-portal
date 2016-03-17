@@ -261,6 +261,7 @@ var mpgSoftware = mpgSoftware || {};
                             .maximumPossibleValue(maximumPossibleValue)
                             .labelSpacer(labelSpacer)
                             .smallDescriptorText(useSmallText)
+                            .customBarColoring(0)
                             .dataHanger("#howCommonIsChart", sortedDataForBarChart);
                         d3.select("#howCommonIsChart").call(commonBarChart.render);
                         return commonBarChart;

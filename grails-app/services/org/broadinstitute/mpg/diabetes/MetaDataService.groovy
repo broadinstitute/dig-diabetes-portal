@@ -357,13 +357,31 @@ class MetaDataService {
 
 
 
+    public List<SampleGroup>  getSampleGroupListForPhenotypeAndVersion(String phenotype, String version) {
+        List<SampleGroup> groupList;
+
+        if ((!version) ||
+                (version.length()==0)){
+            version = this.getDataVersion()
+        }
+
+        // get the sample group list for a particular phenotype
+        try {
+            groupList = this.getJsonParser().getSamplesGroupsForPhenotype(phenotype, version);
+
+        } catch (PortalException exception) {
+            log.error("Got exception retrieving sample group name list : " + exception.getMessage());
+        }
+
+        // return
+        return groupList;
+    }
+
+
+
 
     public List<SampleGroup>  getSampleGroupList() {
-        // local variables
-        GString jsonString;
         List<SampleGroup> groupList;
-        StringBuilder builder = new StringBuilder();
-        List<String> nameList = new ArrayList<String>();
 
         // get the sample group list independent of phenotype
         try {

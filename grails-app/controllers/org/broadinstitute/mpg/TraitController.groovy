@@ -5,6 +5,8 @@ import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
+import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
 
@@ -94,6 +96,29 @@ class TraitController {
 
 
 
+    /***
+     * Returns association statistics across 25 traits for a single variant.  The launching page is traitInfo
+     * @return
+     */
+    def ajaxSampleGroupsPerTrait()  {
+        String phenotype = params["phenotype"]
+        List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion(phenotype, "")
+        List <String> sampleGroupStrings = []
+        for (SampleGroup sampleGroup in sampleGroupList){
+            String sampleGroupId = sampleGroup.getSystemId()
+            String sampleGroupTranslation = g.message(code: "metadata." + sampleGroupId, default: sampleGroupId)
+            sampleGroupStrings << """{"sg":"${sampleGroupId}","sgn":"${sampleGroupTranslation}"}\n"""
+        }
+        String rawJson = "["+sampleGroupStrings.join(",")+"]"
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(rawJson)
+        render(status:200, contentType:"application/json") {
+            [sampleGroups:jsonArray]
+        }
+
+    }
+
+
 
 
 
@@ -107,7 +132,10 @@ class TraitController {
         String sampleGroupOwner = this.metaDataService.getGwasSampleGroupNameForPhenotype(phenotypeKey)
         String phenotypeDataSet = ''
         String phenotypeTranslation = g.message(code: "metadata." + phenotypeKey, default: phenotypeKey)
-        // get locale to provide to table-building plugin
+        List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion(phenotypeKey, "")
+        List<SampleGroup> sortedSampleGroups = sampleGroupList.sort{a, b -> b.subjectsNumber <=> a.subjectsNumber }
+        SampleGroup chosenSampleGroup = sortedSampleGroups?.first()
+        String chosenSampleGroupId = chosenSampleGroup?.getSystemId()
         String locale = RequestContextUtils.getLocale(request)
 
         render(view: 'phenotype',
@@ -120,6 +148,7 @@ class TraitController {
                         phenotypeDataSet     : phenotypeDataSet,
                         sampleGroupOwner     : sampleGroupOwner,
                         requestedSignificance: requestedSignificance,
+                        chosenSampleGroupId  : chosenSampleGroupId,
                         locale               : locale])
 
     }
