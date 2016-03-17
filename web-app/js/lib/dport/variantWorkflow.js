@@ -168,83 +168,7 @@ var mpgSoftware = mpgSoftware || {};
         var instantiatePhenotype = function (value) {
             $('#phenotype').val(value)
         };
-        var instantiateInputFields = function (clauseDefinition){
-            var extractString = function (fullString,marker){
-                var startIndex = fullString.indexOf(marker)+marker.length;
-                var remainingString = fullString.substr(startIndex);
-                var endIndex = remainingString.indexOf('^');
-                return fullString.substr(startIndex,endIndex);
-            };
-            if (typeof clauseDefinition  !== 'undefined') {
-                var filters = clauseDefinition.split("^");
-                for ( var i = 0 ; i < filters.length ; i++ ){
-                    var oneFilter = filters [i];
-                    if (oneFilter){
-                        var fieldVersusValue =  oneFilter.split("=");
-                        if (fieldVersusValue.length === 2 ){
-                            switch (fieldVersusValue[0]) {
-                                case '1'://instantiatePhenotype (fieldVersusValue[1]);
-                                    break;
-                                case '2':mpgSoftware.firstResponders.displayDataSetChooser(fieldVersusValue[1]);
-                                    break;
-                                case '3': // There are two fields we need to handle here.  Let's pull out the other one by hand
-                                    break;// or value and or inequality are handled together, so skip one
-                                case '4':break;// Ignore
-                                case '5': // There are two fields we need to handle here.  Let's pull out the other one by hand
-                                    break;// or value and or inequality are handled together, so skip one
-                                case '6':break;
-                                case '7':
-                                    $('#region_gene_input').val(fieldVersusValue[1]);
-                                    $('#cPropertiesSection').collapse('show');
-                                    break;
-                                case '8'://  chromosome name, handled under 10
-                                    $('#region_chrom_input').val(fieldVersusValue[1]);
-                                    $('#cPropertiesSection').collapse('show');
-                                    break;
-                                case '9':// chromosome start, handled under 10
-                                    $('#region_start_input').val(fieldVersusValue[1]);
-                                    $('#cPropertiesSection').collapse('show');
-                                case '10': // chromosome end -- handle a chromosome here
-                                    $('#region_stop_input').val(fieldVersusValue[1]);
-                                    $('#cPropertiesSection').collapse('show');
-                                    break;
-                                case '11':
-                                    var predictedValues = fieldVersusValue[1].split('|');
-                                    if ((typeof predictedValues !== 'undefined') &&
-                                        (predictedValues.length > 1)){
-                                        if ((predictedValues [0] === JSON_VARIANT_MOST_DEL_SCORE_KEY)){
-                                            $('[name="predictedEffects"]').filter ('[value ="'+predictedValues[1]+'"]').prop('checked',true);
-                                            if (predictedValues[1]==='2') {
-                                                chgRadioButton('2');
-                                            }
-                                        } else  if ((predictedValues [0] === JSON_VARIANT_POLYPHEN_PRED_KEY)){
-                                            $('[name="polyphen"]').val (predictedValues[1]);
-                                        } else if ((predictedValues [0] === JSON_VARIANT_SIFT_PRED_KEY)){
-                                            $('[name="sift"]').val (predictedValues[1]);
-                                        } else if ((predictedValues [0] === JSON_VARIANT_CONDEL_PRED_KEY)){
-                                            $('[name="condel"]').val (predictedValues[1]);
-                                        }
-                                        $('#cPropertiesSection').collapse('show');
-                                    }
-                                    break;
-                                case '12': // There are two fields we need to handle here.  Let's pull out the other one by hand
-                                    //mpgSoftware.firstResponders.respondToReviseFilters('effectsize',extractString (clauseDefinition,'^13='),fieldVersusValue[1]);
-                                    break;// or value and or inequality are handled together, so skip one
-                                case '14':break;//  chromosome name, handled under 11
-                                case '15':break;//  chromosome name, handled under 11
-                                case '16':break;//  chromosome name, handled under 11
-                                case '17':
-                                    mpgSoftware.firstResponders.respondToReviseCustomFilter(fieldVersusValue[1]);
-                                    break;
-                                default: break;
-                            }
-                        }
 
-                    }
-
-                }
-            }
-        };
         var makeClauseCurrent = function (indexNumber) {
             if (typeof indexNumber !== 'undefined') {
                 var codedFilters = $('#savedValue'+indexNumber).val();
@@ -556,16 +480,6 @@ var mpgSoftware = mpgSoftware || {};
                 document.getElementById("rowTarget").innerHTML = rendered;
             }
         };
-        var extractValsFromComboboxAndReturn = function (everyId) {
-            var returnValue = {};
-            for (var i = 0; i < everyId.length; i++) {
-                var domReference = $('#'+ everyId[i]);
-                if ((domReference) && (domReference.val())) {
-                    return domReference.val();
-                }
-            }
-            return returnValue;
-        };
         var extractValFromTextboxesWithPrependedName = function (everyId,prepender,equivalenceMap,forceNumeric) {
             var returnValue = {};
             for (var i = 0; i < everyId.length; i++) {
@@ -715,23 +629,21 @@ var mpgSoftware = mpgSoftware || {};
             }
          };
         var launchAVariantSearch = function (){
-            var varsToSend = {};
-            var savedValuesList = [];
-            var savedValue = {};
-            var totalFilterCount = UTILS.extractValFromTextboxes(['totalFilterCount']);
-            if (typeof totalFilterCount['totalFilterCount'] !== 'undefined') {
-                var valueCount = parseInt(totalFilterCount['totalFilterCount']);
-                if (valueCount > 0) {
-                    for (var i = 0; i < valueCount; i++) {
-                        savedValuesList.push('savedValue' + i);
-                    }
-                    savedValue = UTILS.extractValFromTextboxes(savedValuesList);
-                }
-            }
+            console.log('listOfSavedQueries', listOfSavedQueries);
 
-            varsToSend = _.assign(varsToSend, savedValue);
-            console.log("varsToSend is", varsToSend);
-            UTILS.postQuery('./launchAVariantSearch', varsToSend);
+            // process the queries to remove fields the server won't use
+            var listOfProcessedQueries = []
+            _.each(listOfSavedQueries, function(query) {
+                var keysToOmit = [
+                    'translatedPhenotype',
+                    'translatedName',
+                    'translatedDataset'
+                ];
+                listOfProcessedQueries.push(_.omit(query, keysToOmit));
+            });
+
+            console.log("listOfProcessedQueries is", listOfProcessedQueries);
+            UTILS.postJson('./launchAVariantSearch', listOfProcessedQueries);
 
         };
 
@@ -742,54 +654,90 @@ var mpgSoftware = mpgSoftware || {};
          */
         var gatherCurrentQueryAndSave = function(event) {
             var phenoAndDS = UTILS.extractValsFromCombobox(['phenotype', 'dataSet']);
-            var currentQuery = {
-                phenotype: phenoAndDS.phenotype,
-                translatedPhenotype: $('#phenotype option:selected').text(),
-                dataset: phenoAndDS.dataSet,
-                translatedDataset: $('#dataSet option:selected').html()
-            };
+            if( phenoAndDS.phenotype !== 'default' ) {
+                var phenotype = phenoAndDS.phenotype;
+                var translatedPhenotype = $('#phenotype option:selected').text();
+            }
+            // if no dataset is selected, then phenoAndDS will not have a dataset key
+            if( phenoAndDS.dataSet ) {
+                var dataset = phenoAndDS.dataSet;
+                var translatedDataset = $('#dataSet option:selected').html();
+            }
 
-            var params = [];
             var propertiesInputs = $('input[data-type=propertiesInput]');
             _.forEach(propertiesInputs, function(input) {
                 if( input.value !== "" ) {
                     // get the comparator value
                     var comparator = $('select[data-selectfor=' + input.dataset.prop +']')[0].value;
-                    var newParams = {
+                    var newQuery = {
+                        phenotype: phenotype,
+                        translatedPhenotype: translatedPhenotype,
+                        dataset: dataset,
+                        translatedDataset: translatedDataset,
                         prop: input.dataset.prop,
                         translatedName: input.dataset.translatedname,
                         value: input.value,
                         comparator: comparator
                     };
-                    params.push(newParams);
+                    listOfSavedQueries.push(newQuery);
                 }
             });
 
             var advancedFilterInputs = $('input[data-type=advancedFilterInput]');
             _.forEach(advancedFilterInputs, function(input) {
                 if( input.value !== "" ) {
-                    var newParams = {
+                    var newQuery = {
                         prop: input.dataset.prop,
                         translatedName: input.dataset.translatedname,
                         value: input.value,
-                        comparator: "=",
+                        comparator: '='
                     };
-                    params.push(newParams);
+                    listOfSavedQueries.push(newQuery);
                 }
             });
 
-            currentQuery.params = params;
+            // this handles just the predicted effect high-level selection, not
+            // the polyphen/sift/condel selections
+            // first check to see if something was selected in the first place
+            var selectedProteinEffect = document.querySelector('input[name="predictedEffects"]:checked');
+            if( !_.isNull(selectedProteinEffect) ) {
+                var proteinEffectSelection = selectedProteinEffect.value;
+                var newQuery = {
+                    prop: 'predictedEffects',
+                    translatedName: 'predicted effect',
+                    value: proteinEffectSelection,
+                    comparator: '='
+                };
+                listOfSavedQueries.push(newQuery);
+            }
 
-            listOfSavedQueries.push(currentQuery);
+            // if the "missense" predicted effect is selected, need to grab the
+            // polyphen/sift/condel selections here
+            if( proteinEffectSelection == 2 ) {
+                var missenseSelections = $('select[data-type="proteinEffectSelection"]');
+                _.each(missenseSelections, function(input) {
+                    // if the user has selected something other than the default, then
+                    // .value will not be the empty string
+                    if(input.value !== '') {
+                        var newQuery = {
+                            prop: input.name,
+                            translatedName: input.name,
+                            value: input.value,
+                            comparator: '='
+                        };
+                        listOfSavedQueries.push(newQuery);
+                    }
+                });
+            }
 
             // make call to update list of saved queries
             updatePageWithNewQueryList();
 
-            // reset inputs
-            var options = document.getElementById("dataSet");
-            $(options).empty();
-            fillPropertiesDropdown({is_error: false});
-            document.getElementById('phenotype').value = 'default';
+            // reset all of the inputs
+            resetInputFields();
+
+            // disable the build search request button
+            mpgSoftware.firstResponders.updateBuildSearchRequestButton();
         };
 
         /**
@@ -804,8 +752,26 @@ var mpgSoftware = mpgSoftware || {};
                 // use this to support editing queries
                 index: function() {
                     return listOfSavedQueries.indexOf(this);
+                },
+                // translate certain values into human-readable form
+                displayValue: function() {
+                    if( this.prop === 'predictedEffects' ) {
+                        switch(this.value) {
+                            case '0':
+                                return 'all effects';
+                            case '1':
+                                return 'protein-truncating';
+                            case '2':
+                                return 'missense';
+                            case '3':
+                                return 'no effect (synonymous coding)';
+                            case '4':
+                                return 'no effect (non-coding)';
+                        }
+                    }
+                    return this.value;
                 }
-            }
+            };
             var rendered = Mustache.render(searchDetailsTemplate, renderData);
             document.getElementById("searchDetailsHolder").innerHTML = rendered;
         };
@@ -813,6 +779,110 @@ var mpgSoftware = mpgSoftware || {};
         var deleteQuery = function(indexToDelete) {
             listOfSavedQueries.splice(indexToDelete, 1);
             updatePageWithNewQueryList();
+        };
+
+        // use this after submitting a query or resetting
+        var resetInputFields = function() {
+            var options = document.getElementById("dataSet");
+            $(options).empty();
+            fillPropertiesDropdown({is_error: false});
+            document.getElementById('phenotype').value = 'default';
+
+            document.getElementById('geneInput').value = '';
+            document.getElementById('chromosomeInput').value = '';
+            document.getElementById('geneRangeInput').value = '1000';
+
+            var selectedPredictedEffect = document.querySelector('input[name="predictedEffects"]:checked');
+            // if an effect is selected, clear it, otherwise do nothing
+            if( selectedPredictedEffect ) {
+                selectedPredictedEffect.checked = false;
+            }
+
+            var additionalPredictedEffects = $('select[data-type="proteinEffectSelection"]');
+            _.each(additionalPredictedEffects, function(dropdown) {
+                dropdown.value = '';
+            });
+
+            $('#missense-options').hide();
+            $('#advanced_filter').hide();
+        };
+
+        var instantiateInputFields = function (clauseDefinition){
+            var extractString = function (fullString,marker){
+                var startIndex = fullString.indexOf(marker)+marker.length;
+                var remainingString = fullString.substr(startIndex);
+                var endIndex = remainingString.indexOf('^');
+                return fullString.substr(startIndex,endIndex);
+            };
+            if (typeof clauseDefinition  !== 'undefined') {
+                var filters = clauseDefinition.split("^");
+                for ( var i = 0 ; i < filters.length ; i++ ){
+                    var oneFilter = filters [i];
+                    if (oneFilter){
+                        var fieldVersusValue =  oneFilter.split("=");
+                        if (fieldVersusValue.length === 2 ){
+                            switch (fieldVersusValue[0]) {
+                                case '1'://instantiatePhenotype (fieldVersusValue[1]);
+                                    break;
+                                case '2':mpgSoftware.firstResponders.displayDataSetChooser(fieldVersusValue[1]);
+                                    break;
+                                case '3': // There are two fields we need to handle here.  Let's pull out the other one by hand
+                                    break;// or value and or inequality are handled together, so skip one
+                                case '4':break;// Ignore
+                                case '5': // There are two fields we need to handle here.  Let's pull out the other one by hand
+                                    break;// or value and or inequality are handled together, so skip one
+                                case '6':break;
+                                case '7':
+                                    $('#region_gene_input').val(fieldVersusValue[1]);
+                                    $('#cPropertiesSection').collapse('show');
+                                    break;
+                                case '8'://  chromosome name, handled under 10
+                                    $('#region_chrom_input').val(fieldVersusValue[1]);
+                                    $('#cPropertiesSection').collapse('show');
+                                    break;
+                                case '9':// chromosome start, handled under 10
+                                    $('#region_start_input').val(fieldVersusValue[1]);
+                                    $('#cPropertiesSection').collapse('show');
+                                case '10': // chromosome end -- handle a chromosome here
+                                    $('#region_stop_input').val(fieldVersusValue[1]);
+                                    $('#cPropertiesSection').collapse('show');
+                                    break;
+                                case '11':
+                                    var predictedValues = fieldVersusValue[1].split('|');
+                                    if ((typeof predictedValues !== 'undefined') &&
+                                        (predictedValues.length > 1)){
+                                        if ((predictedValues [0] === JSON_VARIANT_MOST_DEL_SCORE_KEY)){
+                                            $('[name="predictedEffects"]').filter ('[value ="'+predictedValues[1]+'"]').prop('checked',true);
+                                            if (predictedValues[1]==='2') {
+                                                chgRadioButton('2');
+                                            }
+                                        } else  if ((predictedValues [0] === JSON_VARIANT_POLYPHEN_PRED_KEY)){
+                                            $('[name="polyphen"]').val (predictedValues[1]);
+                                        } else if ((predictedValues [0] === JSON_VARIANT_SIFT_PRED_KEY)){
+                                            $('[name="sift"]').val (predictedValues[1]);
+                                        } else if ((predictedValues [0] === JSON_VARIANT_CONDEL_PRED_KEY)){
+                                            $('[name="condel"]').val (predictedValues[1]);
+                                        }
+                                        $('#cPropertiesSection').collapse('show');
+                                    }
+                                    break;
+                                case '12': // There are two fields we need to handle here.  Let's pull out the other one by hand
+                                    //mpgSoftware.firstResponders.respondToReviseFilters('effectsize',extractString (clauseDefinition,'^13='),fieldVersusValue[1]);
+                                    break;// or value and or inequality are handled together, so skip one
+                                case '14':break;//  chromosome name, handled under 11
+                                case '15':break;//  chromosome name, handled under 11
+                                case '16':break;//  chromosome name, handled under 11
+                                case '17':
+                                    mpgSoftware.firstResponders.respondToReviseCustomFilter(fieldVersusValue[1]);
+                                    break;
+                                default: break;
+                            }
+                        }
+
+                    }
+
+                }
+            }
         };
 
         return {
@@ -831,7 +901,8 @@ var mpgSoftware = mpgSoftware || {};
             retrievePropertiesPerDataSet:retrievePropertiesPerDataSet,
             whatToDoNext:whatToDoNext,
             gatherCurrentQueryAndSave: gatherCurrentQueryAndSave,
-            deleteQuery: deleteQuery
+            deleteQuery: deleteQuery,
+            resetInputFields: resetInputFields
         }
 
     }());
@@ -1220,7 +1291,13 @@ var appendProteinEffectsButtons = function (currentDiv,holderId,sectionName,allF
                 return input.value === "";
             });
 
-            var areInputValuesPresent = ! ( propertiesInputsAreEmpty && advancedFilterInputsAreEmpty )
+            var proteinEffectsAreUnselected = _.every($('input[name="predictedEffects"]'), function(input) {
+                return ! input.checked;
+            });
+
+            var areInputValuesPresent = ! ( propertiesInputsAreEmpty &&
+                                            advancedFilterInputsAreEmpty &&
+                                            proteinEffectsAreUnselected )
 
             var button = document.getElementById('buildSearchRequest');
             if(areInputValuesPresent) {

@@ -146,8 +146,32 @@ class VariantSearchController {
      * @return
      */
     def launchAVariantSearch(){
-        log.info("got params: " + params);
+        log.info("got params for launch a variant search: " + params);
+        log.info("json is " + request.JSON)
+        // process the incoming JSON and build strings reflecting what the server is expecting
+        ArrayList<JSONObject> listOfQueries = request.JSON;
+        ArrayList<String> computedStrings = new ArrayList<String>();
+
+        for(int i = 0; i < listOfQueries.size(); i++) {
+            JSONObject currentQuery = listOfQueries[i]
+            String processedQuery;
+            log.info(currentQuery)
+            // if there is a phenotype defined, this is a query that has a
+            // phenotype, dataset, prop, comparator, and value
+            if( currentQuery.phenotype ) {
+                processedQuery = '17=' +
+                                 currentQuery.phenotype + '[' + currentQuery.dataset + ']' +
+                                 currentQuery.prop + currentQuery.comparator + currentQuery.value
+            } else {
+                switch(currentQuery.prop) {
+                    
+                }
+            }
+
+        }
+
         List <String> listOfCodedFilters = filterManagementService.observeMultipleFilters (params)
+        log.info('listOfCodedFilters is ' + listOfCodedFilters)
         if ((listOfCodedFilters) &&
                 (listOfCodedFilters.size() > 0)){
             displayCombinedVariantSearch(listOfCodedFilters,[])

@@ -684,6 +684,7 @@ var UTILS = {
         form.submit();
     },
     postJson: function (path, params) {
+        console.log('posting JSON', path, params);
         // construct an HTTP request
         var xhr = new XMLHttpRequest();
         xhr.open('POST', path, true);
