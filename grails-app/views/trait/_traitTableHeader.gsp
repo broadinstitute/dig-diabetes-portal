@@ -46,6 +46,11 @@
 
     mpgSoftware.pickNewDataSet = function (){
         var sampleGroup = $('#manhattanSampleGroupChooser').val();
+        $('#manhattanPlot1').empty();
+        $('#traitTableBody').empty();
+        $('#phenotypeTraits').DataTable().rows().remove();
+        $('#phenotypeTraits').dataTable({"bRetrieve": true}).fnDestroy();
+        %{--mpgSoftware.regionalTraitAnalysis.fillRegionalTraitAnalysis('<%=phenotypeKey%>',sampleGroup);--}%
         mpgSoftware.manhattanPlot.fillSampleGroupDropdown('<%=phenotypeKey%>');
     }
 
@@ -91,7 +96,7 @@
     </g:elseif>
     <g:message code="gene.variantassociations.table.rowhdr.gwas" /> <g:message code="gene.variantassociations.table.rowhdr.meta_analyses" /> <g:message code="informational.shared.phrase.consortium" />:
 
-    <select id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.pickNewDataSet(this)" style="display:none">
+    <select id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.pickNewDataSet(this)">
     </select>
 
 </p>
