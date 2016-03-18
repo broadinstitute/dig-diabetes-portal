@@ -13,27 +13,9 @@
 
 <body>
 <style>
-.panel.inputGoesHere {
-    border: 2px solid #052090;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -khtml-border-radius: 10px;
-    border-radius: 10px;
-    box-shadow: 8px 8px 5px #888888;
-}
-
-.bluebox.inputGoesHere {
-    border: 3px solid #052090;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -khtml-border-radius: 10px;
-    border-radius: 10px;
-
-}
-
-.cusEquiv {
-    min-width: 60px;
-}
+    .redBorder, .redBorder:focus {
+        border-color: red !important;
+    }
 </style>
 <script>
 
@@ -51,18 +33,11 @@
             });
         });
 
-    });
-
-    function updateProteinEffectSelection(buttonLabel){
-        // also update the build search button
-        mpgSoftware.firstResponders.updateBuildSearchRequestButton();
-
-        if (buttonLabel === ${PortalConstants.PROTEIN_PREDICTION_EFFECT_MISSENSE_CODE})  {
-            $('#missense-options').show();
-        }  else {
-            $('#missense-options').hide();
+        // check to see if we have any existing filters--if so, we need to initialize them
+        if('${encodedFilterSets}') {
+            mpgSoftware.variantWF.initializePage(JSON.parse(decodeURIComponent('${encodedFilterSets}')));
         }
-    }
+    });
 
 </script>
 
@@ -158,7 +133,7 @@
 
                             <div id="advanced_filter" class="container dk-t2d-advanced-filter">
                                 <div class="row">
-                                    <div class="col-md-7 col-sm-7 col-xs-7">
+                                    <div id="chromosomeInputHolder" class="col-md-7 col-sm-7 col-xs-7">
                                         <label><g:message code="variantSearch.restrictToRegion.gene"/></label>
 
                                         <div class="form-inline">
@@ -166,10 +141,13 @@
                                                    style="width:65%;"
                                                    placeholder="gene" data-type="advancedFilterInput"
                                                    data-prop="gene" data-translatedname="gene"
-                                                   oninput="mpgSoftware.firstResponders.updateBuildSearchRequestButton()"
+                                                   oninput="mpgSoftware.firstResponders.updateBuildSearchRequestButton();
+                                                            mpgSoftware.firstResponders.controlGeneAndChromosomeInputs();
+                                                   "
                                             >
                                             <label style="font-size: 20px; font-weight: 100;">&nbsp; &#177 &nbsp;</label>
                                             <select id="geneRangeInput" class="form-control" style="width:20%;">
+                                                <option selected hidden value="">---</option>
                                                 <option val="1000">1000</option>
                                                 <option val="2000">2000</option>
                                                 <option val="3000">3000</option>
@@ -183,7 +161,11 @@
                                         <input id="chromosomeInput" type="text" class="form-control"
                                                placeholder="chromosome: start - stop" data-type="advancedFilterInput"
                                                data-prop="chromosome" data-translatedname="chromosome"
-                                               oninput="mpgSoftware.firstResponders.updateBuildSearchRequestButton()"
+                                               oninput="
+                                                   mpgSoftware.firstResponders.updateBuildSearchRequestButton();
+                                                   mpgSoftware.firstResponders.validateChromosomeInput();
+                                                   mpgSoftware.firstResponders.controlGeneAndChromosomeInputs();
+                                               "
                                         >
                                     </div>
 
@@ -191,8 +173,8 @@
                                         <div class="radio">
                                             <label>
                                                 <input type="radio" name="predictedEffects"
-                                                       value=${PortalConstants.PROTEIN_PREDICTION_EFFECT_ALL_CODE}
-                                                       onclick="updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_ALL_CODE})"
+                                                       value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_ALL_CODE}"
+                                                       onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_ALL_CODE})"
                                                 >
                                                 <g:message code="variantSearch.proteinEffectRestrictions.allEffects" default="all effects" />
                                             </label>
@@ -200,8 +182,8 @@
                                         <div class="radio">
                                             <label>
                                                 <input type="radio" name="predictedEffects"
-                                                       value=${PortalConstants.PROTEIN_PREDICTION_EFFECT_PTV_CODE}
-                                                       onclick="updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_PTV_CODE})"
+                                                       value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_PTV_CODE}"
+                                                       onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_PTV_CODE})"
                                                 >
                                                 <g:message code="variantSearch.proteinEffectRestrictions.proteinTruncating" default="protein-truncating" />
                                             </label>
@@ -210,8 +192,8 @@
                                         <div class="radio">
                                             <label>
                                                 <input type="radio" name="predictedEffects"
-                                                       value=${PortalConstants.PROTEIN_PREDICTION_EFFECT_MISSENSE_CODE}
-                                                       onclick="updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_MISSENSE_CODE})"
+                                                       value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_MISSENSE_CODE}"
+                                                       onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_MISSENSE_CODE})"
                                                 >
                                                 <g:message code="variantSearch.proteinEffectRestrictions.missense" default="missense" />
                                             </label>
@@ -220,8 +202,8 @@
                                         <div class="radio">
                                             <label>
                                                 <input type="radio" name="predictedEffects"
-                                                       value=${PortalConstants.PROTEIN_PREDICTION_EFFECT_SYNONYMOUS_CODE}
-                                                       onclick="updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_SYNONYMOUS_CODE})"
+                                                       value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_SYNONYMOUS_CODE}"
+                                                       onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_SYNONYMOUS_CODE})"
                                                 >
                                                 <g:message code="variantSearch.proteinEffectRestrictions.synonymousCoding" default="no effect (synonymous coding)" />
                                             </label>
@@ -230,8 +212,8 @@
                                         <div class="radio">
                                             <label>
                                                 <input type="radio" name="predictedEffects"
-                                                       value=${PortalConstants.PROTEIN_PREDICTION_EFFECT_NONCODING_CODE}
-                                                       onclick="updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_NONCODING_CODE})"
+                                                       value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_NONCODING_CODE}"
+                                                       onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_NONCODING_CODE})"
                                                 >
                                                 <g:message code="variantSearch.proteinEffectRestrictions.noncoding" default="no effect (non-coding)" />
                                             </label>
@@ -243,7 +225,8 @@
                                          style="display: none">
                                         <div class="form-group form-group-sm">
                                             <label><g:message code="variantSearch.proteinEffectRestrictions.missense.polyphen" default="PolyPhen-2 prediction" /></label>
-                                            <select id="polyphenSelect" name="PolyPhen" data-type="proteinEffectSelection" class="form-control">
+                                            <select id="polyphenSelect" name="${PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY}" data-translatedname="<g:message code="metadata.PolyPhen_PRED" default="PolyPhen-2 prediction"/>"
+                                                    data-type="proteinEffectSelection" class="form-control">
                                                 <option value="">${PortalConstants.PROTEIN_PREDICTION_POLYPHEN_NONE_NAME}</option>
                                                 <option value="${PortalConstants.PROTEIN_PREDICTION_POLYPHEN_PROBABLYDAMAGING_STRING_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.polyphen.probablyDamaging" default="probably damaging" /></option>
                                                 <option value="${PortalConstants.PROTEIN_PREDICTION_POLYPHEN_POSSIBLYDAMAGING_STRING_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.polyphen.possiblyDamaging" default="possibly damaging" /></option>
@@ -252,7 +235,8 @@
                                         </div>
                                         <div class="form-group form-group-sm">
                                             <label><g:message code="variantSearch.proteinEffectRestrictions.missense.sift" default="SIFT prediction" /></label>
-                                            <select id="siftSelect" name="SIFT" data-type="proteinEffectSelection" class="form-control">
+                                            <select id="siftSelect" name="${PortalConstants.JSON_VARIANT_SIFT_PRED_KEY}" data-translatedname="<g:message code="metadata.SIFT_PRED" default="SIFT prediction"/>"
+                                                    data-type="proteinEffectSelection" class="form-control">
                                                 <option value="">${PortalConstants.PROTEIN_PREDICTION_SIFT_NONE_NAME}</option>
                                                 <option value="${PortalConstants.PROTEIN_PREDICTION_SIFT_DELETERIOUS_STRING_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.sift.deleterious" default="deleterious" /></option>
                                                 <option value="${PortalConstants.PROTEIN_PREDICTION_SIFT_TOLERATED_STRING_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.sift.tolerated" default="tolerated" /></option>
@@ -260,7 +244,8 @@
                                         </div>
                                         <div class="form-group form-group-sm">
                                             <label><g:message code="variantSearch.proteinEffectRestrictions.missense.condel" default="CONDEL prediction" /></label>
-                                            <select id="condelSelect" name="CONDEL" data-type="proteinEffectSelection" class="form-control">
+                                            <select id="condelSelect" name="${PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY}" data-translatedname="<g:message code="metadata.Condel_PRED" default="CONDEL prediction"/>"
+                                                    data-type="proteinEffectSelection" class="form-control">
                                                 <option value="">---</option>
                                                 <option value="${PortalConstants.PROTEIN_PREDICTION_CONDEL_DELETERIOUS_STRING_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.condel.deleterious" default="deleterious" /></option>
                                                 <option value="${PortalConstants.PROTEIN_PREDICTION_CONDEL_BENIGN_STRING_CODE}"><g:message code="variantSearch.proteinEffectRestrictions.missense.condel.benign" default="benign" /></option>
@@ -309,7 +294,7 @@
                                     <td>
                                         {{ translatedPhenotype }} {{ #translatedDataset }} [{{ translatedDataset }}] {{ /translatedDataset }} {{ translatedName }} {{ comparator }} {{ displayValue }}<br>
                                     </td>
-                                    <td><a >edit</a></td>
+                                    <td><a onclick="mpgSoftware.variantWF.editQuery({{ index }})">edit</a></td>
                                     <td><a onclick="mpgSoftware.variantWF.deleteQuery({{ index }})">delete</a></td>
                                 </tr>
                             {{ /listOfSavedQueries }}

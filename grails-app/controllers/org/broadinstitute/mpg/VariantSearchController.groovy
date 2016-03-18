@@ -5,6 +5,8 @@ import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
+import org.broadinstitute.mpg.diabetes.util.PortalConstants
+import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
 
@@ -125,10 +127,102 @@ class VariantSearchController {
         GetDataQueryHolder getDataQueryHolder
         List<String> urlEncodedFilters
 
+        JSONArray jsonQueries = new JSONArray()
+
         if ((encParams) && (encParams.length()>0)) {
             String urlDecodedEncParams = URLDecoder.decode(encParams.trim())
-            getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(urlDecodedEncParams?.replaceAll(~/,/,"^") , searchBuilderService, metaDataService)
-            encodedFilters = getDataQueryHolder.listOfEncodedFilters()
+            // urlDecodedEncParams are in the old query format (ex. "17=T2D[GWAS_DIAGRAM_mdv2]P_VALUE<1")
+            // need to convert that back to JSON before handing back to the client
+            // trim the opening and closing bracket from the array-turned-into-a-string
+            String trimmedParams = urlDecodedEncParams[1..-2];
+            List<String> listOfParams = trimmedParams.split(',')
+
+            // This is broken out here because we don't know what chromosome-related
+            // params we might have--could have none, just a chromosome number, or
+            // a chromosome number + start/end. So, dump anything chromosome-related
+            // here, then process it afterwards
+            JSONObject chromosomeQuery = []
+
+            for(int i = 0; i < listOfParams.size(); i++) {
+                String currentQuery = listOfParams[i]
+                JSONObject processedQuery = []
+
+                // id is the field that identifies what property the query refers to
+                def (id, data) = currentQuery.trim().split('=')
+                log.info('checking ' + id + ' ' + data)
+                switch(id) {
+                    case '7':
+                        // gene
+                        processedQuery = [
+                            prop: 'gene',
+                            translatedName: 'gene',
+                            value: data,
+                            comparator: '='
+                        ]
+                        jsonQueries << processedQuery
+                        break;
+                    case ['8','9','10']:
+                        chromosomeQuery[id] = data;
+                        break;
+                    case '11':
+                        // predicted effect
+                        def (specificEffect, value) = data.split(/\|/)
+                        processedQuery = [
+                            prop: specificEffect,
+                            translatedName: g.message(code:'metadata.'+specificEffect, default: specificEffect),
+                            value: value,
+                            comparator: '='
+                        ]
+                        jsonQueries << processedQuery
+                        break;
+                    case '17':
+                        // every other query--looks like
+                        // "T2D[GWAS_DIAGRAM_mdv2]ODDS_RATIO<2"
+                        def (phenotype, restOfQuery) = data.split(/\[/)
+                        def (dataset, param) = restOfQuery.split(/\]/)
+                        // split the param (ex. ODDS_RATION<2)--the comparator can be <, >, or =
+                        def prop, comparator, value
+                        if(param.indexOf('<') > -1) {
+                            (prop, value) = param.split(/\</)
+                            comparator = '<'
+                        } else if (param.indexOf('=') > -1) {
+                            (prop, value) = param.split(/\=/)
+                            comparator = '='
+                        } else if (param.indexOf('>') > -1) {
+                            (prop, value) = param.split(/\>/)
+                            comparator = '>'
+                        }
+                        processedQuery = [
+                            phenotype: phenotype,
+                            translatedPhenotype: g.message(code: 'metadata.' + phenotype, default: phenotype),
+                            dataset: dataset,
+                            translatedDataset: g.message(code: 'metadata.' + dataset, default: dataset),
+                            prop: prop,
+                            translatedName: g.message(code: 'metadata.' + prop, default: prop),
+                            comparator: comparator,
+                            value: value
+                        ]
+                        jsonQueries << processedQuery
+                        break;
+                }
+            }
+
+            // see if chromosomeQuery has key 8 defined--if it does, then we have
+            // something and should also see if keys 9/10 are defined
+            if( chromosomeQuery['8'] ) {
+                JSONObject processedChromosomeQuery = [
+                    prop: 'chromosome',
+                    translatedName: 'chromosome',
+                    comparator: '='
+                ]
+                if( chromosomeQuery['9'] && chromosomeQuery['10'] ) {
+                    processedChromosomeQuery.value = chromosomeQuery['8'][-1..-1] + ':' + chromosomeQuery['9'] + '-' + chromosomeQuery['10']
+                } else {
+                    processedChromosomeQuery.value = chromosomeQuery['8'][-1..-1]
+                }
+                log.info('chromosomeQuery is ' + processedChromosomeQuery)
+                jsonQueries << processedChromosomeQuery
+            }
         }
 
         render(view: 'variantWorkflow',
@@ -136,7 +230,7 @@ class VariantSearchController {
                         show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                         show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
                         variantWorkflowParmList:[],
-                        encodedFilterSets : encodedFilters])
+                        encodedFilterSets: URLEncoder.encode(jsonQueries.toString())])
     }
 
 
@@ -146,10 +240,9 @@ class VariantSearchController {
      * @return
      */
     def launchAVariantSearch(){
-        log.info("got params for launch a variant search: " + params);
-        log.info("json is " + request.JSON)
         // process the incoming JSON and build strings reflecting what the server is expecting
-        ArrayList<JSONObject> listOfQueries = request.JSON;
+        def jsonSlurper = new JsonSlurper();
+        JSONArray listOfQueries = jsonSlurper.parseText(URLDecoder.decode(request.queryString))
         ArrayList<String> computedStrings = new ArrayList<String>();
 
         for(int i = 0; i < listOfQueries.size(); i++) {
@@ -162,19 +255,74 @@ class VariantSearchController {
                 processedQuery = '17=' +
                                  currentQuery.phenotype + '[' + currentQuery.dataset + ']' +
                                  currentQuery.prop + currentQuery.comparator + currentQuery.value
+                computedStrings << processedQuery
             } else {
                 switch(currentQuery.prop) {
-                    
+                    case 'gene':
+                        // convert gene into chromosome and start/end points
+                        // also be prepared to handle ±value
+
+                        // assume that value is just the gene name
+                        def gene = currentQuery.value
+                        def adjustment
+
+                        // if the gene contains '±', then split to get the start and end
+                        // adjustments
+                        log.info('gene is ' + gene)
+                        if(gene.indexOf('±') > -1) {
+                            (gene, adjustment) = currentQuery.value.split(' ± ')
+                        }
+                        Gene geneObject = Gene.retrieveGene(gene)
+                        String chromosome = geneObject.getChromosome()
+                        Long start = geneObject.getAddrStart()
+                        Long end = geneObject.getAddrEnd()
+                        log.info([chrom: chromosome, start: start, end: end, adjustment: adjustment])
+                        if(adjustment) {
+                            start -= Integer.parseInt(adjustment)
+                            end += Integer.parseInt(adjustment)
+                        }
+                        log.info('post-adjustment ' + [start: start, end: end])
+                        processedQuery = '8=' + chromosome
+                        computedStrings << processedQuery
+                        processedQuery = '9=' + start
+                        computedStrings << processedQuery
+                        processedQuery = '10=' + end
+                        computedStrings << processedQuery
+                        break;
+                    case 'chromosome':
+                        // there are two types of inputs: either of the form <chromosome> or
+                        // the form <chrom>:<start>-<end>
+                        if(currentQuery.value =~ /^\d{1,2}$/ ) {
+                            // we have just the chromosome number
+                            processedQuery = '8=' + currentQuery.value;
+                            computedStrings << processedQuery
+                        } else {
+                            // looks like <chrom>:<start>-<end>
+                            // first split chrom from start/end
+                            def (chromNumber, startEnd) = currentQuery.value.split(':')
+                            def (start, end) = startEnd.split('-')
+                            processedQuery = '8=chr' + chromNumber
+                            computedStrings << processedQuery
+                            processedQuery = '9=' + start
+                            computedStrings << processedQuery
+                            processedQuery = '10=' + end
+                            computedStrings << processedQuery
+                        }
+                        break;
+                    case [PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY, PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY, PortalConstants.JSON_VARIANT_SIFT_PRED_KEY, PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY]:
+                        processedQuery = '11=' + currentQuery.prop + '|' + currentQuery.value
+                        computedStrings << processedQuery
+                        break;
                 }
             }
 
         }
 
         List <String> listOfCodedFilters = filterManagementService.observeMultipleFilters (params)
-        log.info('listOfCodedFilters is ' + listOfCodedFilters)
-        if ((listOfCodedFilters) &&
-                (listOfCodedFilters.size() > 0)){
-            displayCombinedVariantSearch(listOfCodedFilters,[])
+
+        if ((computedStrings) &&
+                (computedStrings.size() > 0)){
+            displayCombinedVariantSearch(computedStrings,[])
             return
         }
 
@@ -553,8 +701,10 @@ class VariantSearchController {
 
 
     private void displayCombinedVariantSearch(List <String> listOfCodedFilters, List <LinkedHashMap> listOfProperties) {
+        log.info('are we here?')
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters,searchBuilderService,metaDataService)
         if (getDataQueryHolder.isValid()) {
+            log.info('it was valid')
             String requestForAdditionalProperties = filterManagementService.convertPropertyListToTransferableString(listOfProperties)
             String revisedFiltersRaw = URLEncoder.encode(getDataQueryHolder.retrieveAllFiltersAsJson())
              List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
@@ -585,7 +735,7 @@ class VariantSearchController {
 
             // get locale to provide to table-building plugin
             String locale = RequestContextUtils.getLocale(request)
-
+            log.info('what about this place?')
             render(view: 'variantSearchResults',
                     model: [show_gene           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
                             show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
