@@ -249,6 +249,7 @@ var mpgSoftware = mpgSoftware || {};
                 if( input.value !== "" ) {
                     // get the comparator value
                     var comparator = $('select[data-selectfor=' + input.dataset.prop +']')[0].value;
+                    console.log('value is', input.value, parseFloat(input.value), parseFloat(input.value).toString());
                     var newQuery = {
                         phenotype: phenotype,
                         translatedPhenotype: translatedPhenotype,
@@ -256,9 +257,12 @@ var mpgSoftware = mpgSoftware || {};
                         translatedDataset: translatedDataset,
                         prop: input.dataset.prop,
                         translatedName: input.dataset.translatedname,
-                        value: input.value,
+                        // this parsing/toStringing is because the backend doesn't
+                        // like decimal values without leading zeros
+                        value: parseFloat(input.value).toString(),
                         comparator: comparator
                     };
+                    console.log(newQuery);
                     listOfSavedQueries.push(newQuery);
                 }
             });

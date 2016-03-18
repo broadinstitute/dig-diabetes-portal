@@ -242,7 +242,9 @@ class VariantSearchController {
     def launchAVariantSearch(){
         // process the incoming JSON and build strings reflecting what the server is expecting
         def jsonSlurper = new JsonSlurper();
-        JSONArray listOfQueries = jsonSlurper.parseText(URLDecoder.decode(request.queryString))
+        String decodedQuery = URLDecoder.decode(request.queryString)
+        ArrayList<JSONObject> listOfQueries = jsonSlurper.parseText(decodedQuery)
+
         ArrayList<String> computedStrings = new ArrayList<String>();
 
         for(int i = 0; i < listOfQueries.size(); i++) {
