@@ -191,9 +191,18 @@ var mpgSoftware = mpgSoftware || {};
                         propName: v.prop
                     };
                 });
+
+                var renderData = {
+                    row: rowsToDisplay,
+                    helpText: function() {
+                        if( this.propName === 'P_VALUE' ) {
+                            return 'Required. Examples: 0.005, 5.0E-4';
+                        }
+                    }
+                }
                 var rowTemplate = document.getElementById("rowTemplate").innerHTML;
                 Mustache.parse(rowTemplate);
-                var rendered = Mustache.render(rowTemplate, {row: rowsToDisplay});
+                var rendered = Mustache.render(rowTemplate, renderData);
                 document.getElementById("rowTarget").innerHTML = rendered;
             }
         };
@@ -444,12 +453,15 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         // use this after submitting a query or resetting
-        var resetInputFields = function() {
-            // clear out the phenotype and dataset dropdowns
-            var options = document.getElementById("dataSet");
-            $(options).empty();
-            fillPropertiesDropdown({is_error: false});
-            document.getElementById('phenotype').value = 'default';
+        // justAdvancedFiltering is true if only the advanced filters should be cleared
+        var resetInputFields = function(justAdvancedFiltering) {
+            if( ! justAdvancedFiltering ) {
+                // clear out the phenotype and dataset dropdowns
+                var options = document.getElementById("dataSet");
+                $(options).empty();
+                fillPropertiesDropdown({is_error: false});
+                document.getElementById('phenotype').value = 'default';
+            }
 
             // advanced filters
             document.getElementById('geneInput').value = '';
@@ -474,8 +486,8 @@ var mpgSoftware = mpgSoftware || {};
                 dropdown.value = '';
             });
 
-            $('#missense-options').hide();
-            $('#advanced_filter').hide();
+            $('#missense-options').hide(300);
+            $('#advanced_filter').hide(300);
         };
 
         /**
@@ -584,9 +596,9 @@ var mpgSoftware = mpgSoftware || {};
 
             // 2 comes from the definition of PortalConstants.PROTEIN_PREDICTION_EFFECT_MISSENSE_CODE
             if (buttonLabel == 2)  {
-                $('#missense-options').show();
+                $('#missense-options').show(200);
             }  else {
-                $('#missense-options').hide();
+                $('#missense-options').hide(200);
             }
         }
 

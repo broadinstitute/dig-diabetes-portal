@@ -248,7 +248,6 @@ class VariantSearchController {
         for(int i = 0; i < listOfQueries.size(); i++) {
             JSONObject currentQuery = listOfQueries[i]
             String processedQuery;
-            log.info(currentQuery)
             // if there is a phenotype defined, this is a query that has a
             // phenotype, dataset, prop, comparator, and value
             if( currentQuery.phenotype ) {
@@ -268,7 +267,6 @@ class VariantSearchController {
 
                         // if the gene contains '±', then split to get the start and end
                         // adjustments
-                        log.info('gene is ' + gene)
                         if(gene.indexOf('±') > -1) {
                             (gene, adjustment) = currentQuery.value.split(' ± ')
                         }
@@ -276,12 +274,10 @@ class VariantSearchController {
                         String chromosome = geneObject.getChromosome()
                         Long start = geneObject.getAddrStart()
                         Long end = geneObject.getAddrEnd()
-                        log.info([chrom: chromosome, start: start, end: end, adjustment: adjustment])
                         if(adjustment) {
                             start -= Integer.parseInt(adjustment)
                             end += Integer.parseInt(adjustment)
                         }
-                        log.info('post-adjustment ' + [start: start, end: end])
                         processedQuery = '8=' + chromosome
                         computedStrings << processedQuery
                         processedQuery = '9=' + start
@@ -606,32 +602,6 @@ class VariantSearchController {
     }
 
     /***
-     * this is the action associated with the 'build a request' button
-     * @return
-     */
-    def variantVWRequest(){
-        log.info("variantVWRequest")
-        log.info(params)
-        LinkedHashMap encodedFilterSets = filterManagementService.handleFilterRequestFromBrowser (params)
-        List<String> encodedFilterList = encodedFilterSets.values() as List<String>
-        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(encodedFilterList,searchBuilderService,metaDataService)
-        List <String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
-
-
-
-        render(view: 'variantWorkflow',
-                model: [show_gwas : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
-                        show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
-                        show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                        encodedFilterSets : getDataQueryHolder.listOfEncodedFilters()])
-
-    }
-
-
-
-
-
-    /***
      *  This is the main variant page. Wait a minute: how does this differ from launch a variant search?
      */
     def variantSearchAndResultColumnsAjax() {
@@ -701,10 +671,8 @@ class VariantSearchController {
 
 
     private void displayCombinedVariantSearch(List <String> listOfCodedFilters, List <LinkedHashMap> listOfProperties) {
-        log.info('are we here?')
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters,searchBuilderService,metaDataService)
         if (getDataQueryHolder.isValid()) {
-            log.info('it was valid')
             String requestForAdditionalProperties = filterManagementService.convertPropertyListToTransferableString(listOfProperties)
             String revisedFiltersRaw = URLEncoder.encode(getDataQueryHolder.retrieveAllFiltersAsJson())
              List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
@@ -735,7 +703,6 @@ class VariantSearchController {
 
             // get locale to provide to table-building plugin
             String locale = RequestContextUtils.getLocale(request)
-            log.info('what about this place?')
             render(view: 'variantSearchResults',
                     model: [show_gene           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene),
                             show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),

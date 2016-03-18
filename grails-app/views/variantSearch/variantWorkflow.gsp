@@ -29,8 +29,12 @@
             }
         });
         document.getElementById("a_filter_btn").addEventListener('click', function() {
-            $("#advanced_filter").toggle(function(event) {
-            });
+            $("#advanced_filter").toggle(300);
+            if ($("#a_filter_btn").text() == "Open advanced filtering"){
+                $("#a_filter_btn").text("Close advanced filtering")
+            } else {
+                $("#a_filter_btn").text("Open advanced filtering")
+            }
         });
 
         // check to see if we have any existing filters--if so, we need to initialize them
@@ -55,8 +59,6 @@
 
                 <div class="dk-fluid">
                     <span id="target"></span>
-
-                    <h3>Request searches</h3>
 
                     <div class="dk-variant-search-builder">
                         <h6>Build search</h6>
@@ -122,13 +124,13 @@
                                         </div>
 
                                         <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-description">
-
+                                            {{ helpText }}
                                         </div>
                                     </div>
                                 {{ /row }}
                             </script>
 
-                            <h5 class="dk-advanced-filter-toggle"><a id="a_filter_btn">Advanced filtering open</a><hr>
+                            <h5 class="dk-advanced-filter-toggle"><a id="a_filter_btn">Open advanced filtering</a><hr>
                             </h5>
 
                             <div id="advanced_filter" class="container dk-t2d-advanced-filter">
@@ -259,7 +261,7 @@
                                 <div class="row">
                                     <div class="col-md-12 col-sm-12 col-xs-12 text-center">
                                         <button class="btn btn-default btn-sm btn-success"
-                                                onclick="mpgSoftware.variantWF.resetInputFields()">
+                                                onclick="mpgSoftware.variantWF.resetInputFields(true)">
                                             Reset
                                         </button>
                                     </div>
