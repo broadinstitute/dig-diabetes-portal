@@ -1,5 +1,10 @@
 modules = {
-
+    bootstrap {
+        // fontawesome here for lack of a better place to put it
+        resource url: 'http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
+        resource url: 'css/lib/bootstrap.min.css'
+        resource url: 'js/lib/bootstrap.min.js'
+    }
     jquery {
         resource url: 'js/lib/jquery-1.11.0.min.js'
         resource url: 'js/DataTables-1.10.7/media/js/jquery.dataTables.min.js'
@@ -7,6 +12,7 @@ modules = {
         resource url: 'js/DataTables-1.10.7/extensions/TableTools/js/dataTables.tableTools.min.js'
         resource url: 'js/DataTables-1.10.7/extensions/TableTools/css/dataTables.tableTools.min.css'
         resource url: 'js/lib/jstree.min.js'
+        resource url: 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'
     }
     scroller {
         resource url: 'js/lib/dport/jquery.li-scroller.1.0.js'
@@ -74,36 +80,26 @@ modules = {
         resource url: 'css/dport/variantWorkflow.css'
         resource url: 'js/lib/dport/variantWorkflow.js'
     }
-    // igv and core independently call jquery
     igv {
-        resource url: 'js/lib/jquery-1.11.0.min.js'
+        dependsOn "jquery", "bootstrap"
 
         resource url: 'images/ajaxLoadingAnimation.gif'
 
-        resource url: 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'
-        resource url: 'http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
-
-        resource url: 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'
-
-        resource url: 'http://www.broadinstitute.org/igvdata/t2d/igv-all.min.css'
-        resource url: 'http://www.broadinstitute.org/igvdata/t2d/igv-all.min.js'
-
-
-        resource url: 'css/lib/bootstrap.min.css'
-
+        resource url: 'https://data.broadinstitute.org/igvdata/web/beta/igv-beta.css'
+        resource url: 'https://data.broadinstitute.org/igvdata/web/beta/igv-beta.min.js'
     }
     tableViewer {
         resource url: 'js/lib/dport/tableViewer.js'
         resource url: 'css/dport/tableViewer.css'
     }
-
+    mustache {
+        resource url: 'js/lib/mustache.js'
+    }
     core {
-        dependsOn "jquery"
+        dependsOn "jquery", "bootstrap"
 
         resource url: 'images/ajaxLoadingAnimation.gif'
         resource url: 'images/icons/dna-strands.ico'
-
-        resource url: 'css/lib/bootstrap.min.css'
 
         resource url: 'css/lib/style.css'
         resource url: 'css/lib/dkstyle.css'
@@ -116,12 +112,14 @@ modules = {
         resource url: 'js/lib/tooltip.js'
         resource url: 'js/lib/popover.js'
 
+        resource url: 'js/lib/lodash.js'
+
     }
     igvNarrow {  // IGV on a page with core
-        resource url: 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'
-        resource url: 'http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
+//        resource url: 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'
+//        resource url: 'http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
 
-        resource url: 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'
+//        resource url: 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'
 
         resource url: 'http://www.broadinstitute.org/igvdata/t2d/igv-all.min.css'
         resource url: 'http://www.broadinstitute.org/igvdata/t2d/igv-all.min.js'
@@ -129,7 +127,7 @@ modules = {
     sigma {  // sigma site
         resource url: 'css/dport/sigma.css'
         resource url: 'js/lib/jquery-1.11.0.min.js'
-        resource url: 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'
+//        resource url: 'http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'
     }
 }
 
