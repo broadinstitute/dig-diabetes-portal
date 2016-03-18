@@ -1501,62 +1501,73 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     public JSONObject getTraitSpecificInformation(String phenotypeName, String dataSet, LinkedHashMap properties, BigDecimal maximumPValue, BigDecimal minimumPValue) {
         JSONObject returnValue
-        String orValue = orSubstitute(properties)
-        def slurper = new JsonSlurper()
+
         JSONObject apiResults = gatherTraitSpecificResults(phenotypeName, dataSet, properties, maximumPValue, minimumPValue)
 
-        int numberOfVariants = apiResults.numRecords
         StringBuilder sb = new StringBuilder("{\"results\":[")
-        for (int j = 0; j < numberOfVariants; j++) {
-            sb << "{ \"dataset\": \"traits\",\"pVals\": ["
-
-            if (apiResults.is_error == false) {
-                if ((apiResults.variants) && (apiResults.variants[j]) && (apiResults.variants[j][0])) {
-                    def variant = apiResults.variants[j];
-
-                    def element = variant["DBSNP_ID"].findAll { it }[0]
-                    sb << "{\"level\":\"DBSNP_ID\",\"count\":\"${element}\"},"
-
-                    element = variant["CHROM"].findAll { it }[0]
-                    sb << "{\"level\":\"CHROM\",\"count\":\"${element}\"},"
-
-                    element = variant["POS"].findAll { it }[0]
-                    sb << "{\"level\":\"POS\",\"count\":${element}},"
-
-                    element = variant["VAR_ID"].findAll { it }[0]
-                    sb << "{\"level\":\"VAR_ID\",\"count\":\"${element}\"},"
-
-                    element = variant["CLOSEST_GENE"].findAll { it }[0]
-                    sb << "{\"level\":\"CLOSEST_GENE\",\"count\":\"${element}\"},"
-
-                    element = variant["P_VALUE"].findAll { it }[0]
-                    sb << "{\"level\":\"P_VALUE\",\"count\":${element[dataSet][phenotypeName]}},"
-
-                    if (orValue.length() > 0) {
-                        element = variant["${orValue}"].findAll { it }[0]
-                        sb << "{\"level\":\"${orValue}\",\"count\":\"${element[dataSet][phenotypeName]}\"},"
-                    } else {
-                        sb << "{\"level\":\"BETA\",\"count\":\"--\"},"
-                    }
-
-                    element = variant["MAF"].findAll { it }[0]
-                    if ((element) &&
-                            (element[dataSet])) {
-                        sb << "{\"level\":\"MAF\",\"count\":${element[dataSet]}}"
-                    } else {
-                        sb << "{\"level\":\"MAF\",\"count\":\"0\"}"
-                    }
-
-
-                }
-            }
-            sb << "]}"
-            if (j < numberOfVariants - 1) {
-                sb << ","
-            }
-        }
+        sb << "{ \"dataset\": 1,"+
+                "\"pVals\": ["
+        List<String> jsonComponentList = processInfoFromGetDataCall( apiResults )
+        sb << jsonComponentList.join(",")
         sb << "]}"
+        sb << "]}"
+        def slurper = new JsonSlurper()
         returnValue = slurper.parseText(sb.toString())
+
+//        String orValue = orSubstitute(properties)
+//        def slurper = new JsonSlurper()
+//        int numberOfVariants = apiResults.numRecords
+//        StringBuilder sb = new StringBuilder("{\"results\":[")
+//        for (int j = 0; j < numberOfVariants; j++) {
+//            sb << "{ \"dataset\": \"traits\",\"pVals\": ["
+//
+//            if (apiResults.is_error == false) {
+//                if ((apiResults.variants) && (apiResults.variants[j]) && (apiResults.variants[j][0])) {
+//                    def variant = apiResults.variants[j];
+//
+//                    def element = variant["DBSNP_ID"].findAll { it }[0]
+//                    sb << "{\"level\":\"DBSNP_ID\",\"count\":\"${element}\"},"
+//
+//                    element = variant["CHROM"].findAll { it }[0]
+//                    sb << "{\"level\":\"CHROM\",\"count\":\"${element}\"},"
+//
+//                    element = variant["POS"].findAll { it }[0]
+//                    sb << "{\"level\":\"POS\",\"count\":${element}},"
+//
+//                    element = variant["VAR_ID"].findAll { it }[0]
+//                    sb << "{\"level\":\"VAR_ID\",\"count\":\"${element}\"},"
+//
+//                    element = variant["CLOSEST_GENE"].findAll { it }[0]
+//                    sb << "{\"level\":\"CLOSEST_GENE\",\"count\":\"${element}\"},"
+//
+//                    element = variant["P_VALUE"].findAll { it }[0]
+//                    sb << "{\"level\":\"P_VALUE\",\"count\":${element[dataSet][phenotypeName]}},"
+//
+//                    if (orValue.length() > 0) {
+//                        element = variant["${orValue}"].findAll { it }[0]
+//                        sb << "{\"level\":\"${orValue}\",\"count\":\"${element[dataSet][phenotypeName]}\"},"
+//                    } else {
+//                        sb << "{\"level\":\"BETA\",\"count\":\"--\"},"
+//                    }
+//
+//                    element = variant["MAF"].findAll { it }[0]
+//                    if ((element) &&
+//                            (element[dataSet])) {
+//                        sb << "{\"level\":\"MAF\",\"count\":${element[dataSet]}}"
+//                    } else {
+//                        sb << "{\"level\":\"MAF\",\"count\":\"0\"}"
+//                    }
+//
+//
+//                }
+//            }
+//            sb << "]}"
+//            if (j < numberOfVariants - 1) {
+//                sb << ","
+//            }
+//        }
+//        sb << "]}"
+//        returnValue = slurper.parseText(sb.toString())
 
         return returnValue
     }

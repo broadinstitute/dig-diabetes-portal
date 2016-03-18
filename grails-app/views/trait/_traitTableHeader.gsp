@@ -50,8 +50,8 @@
         $('#traitTableBody').empty();
         $('#phenotypeTraits').DataTable().rows().remove();
         $('#phenotypeTraits').dataTable({"bRetrieve": true}).fnDestroy();
-        %{--mpgSoftware.regionalTraitAnalysis.fillRegionalTraitAnalysis('<%=phenotypeKey%>',sampleGroup);--}%
-        mpgSoftware.manhattanPlot.fillSampleGroupDropdown('<%=phenotypeKey%>');
+        mpgSoftware.regionalTraitAnalysis.fillRegionalTraitAnalysis('<%=phenotypeKey%>',sampleGroup);
+        %{--mpgSoftware.manhattanPlot.fillSampleGroupDropdown('<%=phenotypeKey%>');--}%
     }
 
 

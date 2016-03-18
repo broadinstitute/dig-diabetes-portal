@@ -159,7 +159,8 @@ class TraitController {
      */
      def phenotypeAjax() {
             String significance = params["significance"]
-            String phenotypicTrait  = params["trait"]
+         String phenotypicTrait  = params["trait"]
+         String dataSetName  = params["sampleGroup"]
             BigDecimal significanceValue
             try {
                 significanceValue = new BigDecimal(significance)
@@ -168,10 +169,11 @@ class TraitController {
                 // TODO: error condition.  Go with GWAS significance
                 significanceValue = 0.00000005
             }
-         String dataSetName
+
          LinkedHashMap properties = [:]
+         // todo: currently defaulting to diagram.  We could do better, but I need to know the right algorithm
          List<PhenotypeBean> phenotypeList = metaDataService.getAllPhenotypesWithName(phenotypicTrait)
-         if (phenotypeList?.size()>0){
+         if ((phenotypeList?.size()>0) && (!dataSetName)){
              List<Property> propertyList =  metadataUtilityService.retrievePhenotypeProperties(phenotypeList)
              dataSetName = metadataUtilityService.retrievePhenotypeSampleGroupId(phenotypeList)
              for (Property property in propertyList){

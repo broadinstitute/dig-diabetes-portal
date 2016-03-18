@@ -20,7 +20,7 @@
             $.ajax({
                 cache: false,
                 type: "post",
-                url: "./phenotypeAjax",
+                url: "${createLink(controller:'trait',action: 'phenotypeAjax')}",
                 data: { trait: '<%=phenotypeKey%>',
                         significance: '<%=requestedSignificance%>',
                         sampleGroup: sampleGroup  },

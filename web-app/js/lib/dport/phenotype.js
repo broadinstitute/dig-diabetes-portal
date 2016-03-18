@@ -19,17 +19,40 @@ var mpgSoftware = mpgSoftware || {};
         var convertLineForPhenotypicTraitTable = function (variant, effectsField) {
                 var retVal = [];
                 var pValueGreyedOut = (variant.P_VALUE > .05) ? "greyedout" : "normal";
+                var pValue='';
+                var orValue='';
+                var betaValue='';
+                var mafValue='';
+                for (var key in variant) {
+                    if (variant.hasOwnProperty(key)) {
+                        if (key.indexOf('^')>-1){
+                            var splitKey = key.split('^');
+                            if (splitKey[0] === 'P_VALUE'){
+                                pValue=parseFloat(variant[key]);
+                            } else if (splitKey[0] === 'BETA'){
+                                betaValue=parseFloat(variant[key]);
+                            } else if (splitKey[0] === 'ODDS_RATIO'){
+                                orValue=parseFloat(variant[key]);
+                            } else if (splitKey[0] === 'ODDS_RATIO'){
+                                mafValue=parseFloat(variant[key]);
+                            }
+                        }
+                    }
+                }
                 retVal.push("<a class='boldlink' href='../variantInfo/variantInfo/" + variant.DBSNP_ID + "'>" + variant.DBSNP_ID + "</a>");
                 retVal.push("<a class='boldItlink' href='../gene/geneInfo/" + variant.CLOSEST_GENE + "'>" + variant.CLOSEST_GENE + "</a>");
-                retVal.push("" + variant.P_VALUE.toPrecision(3));
+                if ($.isNumeric(pValue)){
+                    retVal.push("" + pValue.toPrecision(3));
+                }else{
+                    retVal.push("");
+                }
                 var betaVal;
-                if ($.isNumeric(variant[effectsField])) {
-                    betaVal = parseFloat(variant[effectsField]);
-                    retVal.push("<span class='" + pValueGreyedOut + "'>" + betaVal.toPrecision(3) + "</span>");
+                if ($.isNumeric(betaValue)) {
+                    retVal.push("<span class='" + pValueGreyedOut + "'>" + betaValue.toPrecision(3) + "</span>");
                 } else {
                     retVal.push("<span class='" + pValueGreyedOut + "'>--</span>");
                 }
-                retVal.push(((variant.MAF) && (variant.MAF !== '0')) ? ("" + variant.MAF.toPrecision(3)) : "");
+                retVal.push(($.isNumeric(mafValue)) ? ("" + mafValue.toPrecision(3)) : "");
                 retVal.push("<a class='boldlink' href='./traitInfo/" + variant.DBSNP_ID + "'>click here</a>");
                 return retVal;
             },
