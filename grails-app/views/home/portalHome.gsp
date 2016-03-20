@@ -240,7 +240,7 @@
 
 
 
-<g:if test="${session?.getAttribute('portalType')?.equals('stroke')}">
+<g:if test="${g.portalTypeString()?.equals('stroke')}">
     <g:message code="about.the.stroke.portal.text"/>
 </g:if>
 <g:else>
@@ -262,7 +262,7 @@
         <div class="wide-separator"></div>
     </div>
     <div class="text-center funders-color" style="margin-left:5px;margin-right: 5px;">
-        <g:if test="${session?.getAttribute('portalType')?.equals('stroke')}">
+        <g:if test="${g.portalTypeString()?.equals('stroke')}">
             <g:message code='portal.stroke.home.funders'/>:
         </g:if>
         <g:else>
@@ -277,33 +277,23 @@
 <div>
     <div class="row column-center" style="display: flex; align-content: center; align-items: center;">
         <div style="width:10%"></div>
-        <g:if test="${session?.getAttribute('portalType')?.equals('stroke')}">
-            <div class="col-xs-1">
-                <img class="img-responsive" src="${resource(dir: 'images/stroke', file: 'novo_nordisk_logo.png')}">
+        <g:if test="${g.portalTypeString()?.equals('stroke')}">
+            <div class="col-xs-3">
             </div>
             <div class="col-xs-1">
-                <img class="img-responsive" src="${resource(dir: 'images/stroke', file: 'bugher_logo2.gif')}">
+                <img class="img-responsive" src="${resource(dir: 'images/stroke', file: 'broadLogo.gif')}">
             </div>
             <div class="col-xs-1">
-                <img class="img-responsive" src="${resource(dir: 'images/stroke', file: 'wellcome_logo.png')}">
-            </div>
-            <div class="col-xs-1">
-                <img class="img-responsive" src="${resource(dir: 'images/stroke', file: 'AAN-logo.png')}">
-            </div>
-            <div class="col-xs-1">
-                <img class="img-responsive" src="${resource(dir: 'images/stroke', file: 'aha_logo2.png')}">
-            </div>
-            <div class="col-xs-1">
-                <img class="img-responsive" src="${resource(dir: 'images/stroke', file: 'rappaport_logo.png')}">
             </div>
             <div class="col-xs-1">
                 <img class="img-responsive" src="${resource(dir: 'images/stroke', file: 'nsf.png')}">
             </div>
             <div class="col-xs-1">
-                <img class="img-responsive" src="${resource(dir: 'images/stroke', file: 'nih-logo.png')}">
             </div>
-            <div class="col-xs-1">
+            <div class="col-xs-2">
                 <img class="img-responsive" src="${resource(dir: 'images/stroke', file: 'mgh-stroke-site-logo.gif')}">
+            </div>
+            <div class="col-xs-3">
             </div>
         </g:if>
         <g:else>
@@ -341,7 +331,7 @@
 
 
 
-<g:if test="${!session?.getAttribute('portalType')?.equals('stroke')}">
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
 <div class="row column-center" style="display: flex; align-content: center; align-items: center;">
     <div style="width:45vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
         <div class="wide-separator"></div>

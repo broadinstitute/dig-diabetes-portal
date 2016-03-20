@@ -146,7 +146,6 @@
 <g:if test="${g.portalTypeString()?.equals('t2d')}">
                 <div class="separator"></div>
                 <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>
-</g:if>
 
                 <div class="separator"></div>
 
@@ -163,11 +162,7 @@
 
     </div>
 
-
-
-
-
-      <div class="separator"></div>
+    <div class="separator"></div>
 
     <div class="accordion-group">
         <div class="accordion-heading">
@@ -181,7 +176,6 @@
         <g:render template="howCommonIsVariant"/>
 
     </div>
-
 
 
     <div class="separator"></div>
@@ -199,8 +193,9 @@
 
     </div>
 
+</g:if>
 
-                    <div class="separator"></div>
+    <div class="separator"></div>
 
                     <div class="accordion-group">
                         <div class="accordion-heading">
