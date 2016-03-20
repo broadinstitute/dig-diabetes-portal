@@ -335,7 +335,8 @@ environments {
 //      grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
       grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
-//      grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
+//      grails.serverURL = "http://default-environment-igfrae3vpi.elasticbeanstalk.com"             // stroke portal dev for now
+//        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false
         if (System.properties['server.URL']) {
