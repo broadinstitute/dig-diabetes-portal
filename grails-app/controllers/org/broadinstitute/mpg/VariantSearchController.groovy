@@ -149,7 +149,6 @@ class VariantSearchController {
 
                 // id is the field that identifies what property the query refers to
                 def (id, data) = currentQuery.trim().split('=')
-                log.info('checking ' + id + ' ' + data)
                 switch(id) {
                     case '7':
                         // gene
@@ -216,11 +215,10 @@ class VariantSearchController {
                     comparator: '='
                 ]
                 if( chromosomeQuery['9'] && chromosomeQuery['10'] ) {
-                    processedChromosomeQuery.value = chromosomeQuery['8'][-1..-1] + ':' + chromosomeQuery['9'] + '-' + chromosomeQuery['10']
+                    processedChromosomeQuery.value = chromosomeQuery['8'] + ':' + chromosomeQuery['9'] + '-' + chromosomeQuery['10']
                 } else {
-                    processedChromosomeQuery.value = chromosomeQuery['8'][-1..-1]
+                    processedChromosomeQuery.value = chromosomeQuery['8']
                 }
-                log.info('chromosomeQuery is ' + processedChromosomeQuery)
                 jsonQueries << processedChromosomeQuery
             }
         }
@@ -280,7 +278,8 @@ class VariantSearchController {
                             start -= Integer.parseInt(adjustment)
                             end += Integer.parseInt(adjustment)
                         }
-                        processedQuery = '8=' + chromosome
+                        // trim off 'chr' before the chromosome number
+                        processedQuery = '8=' + chromosome.substring(3)
                         computedStrings << processedQuery
                         processedQuery = '9=' + start
                         computedStrings << processedQuery
@@ -299,7 +298,7 @@ class VariantSearchController {
                             // first split chrom from start/end
                             def (chromNumber, startEnd) = currentQuery.value.split(':')
                             def (start, end) = startEnd.split('-')
-                            processedQuery = '8=chr' + chromNumber
+                            processedQuery = '8=' + chromNumber
                             computedStrings << processedQuery
                             processedQuery = '9=' + start
                             computedStrings << processedQuery
@@ -315,8 +314,6 @@ class VariantSearchController {
             }
 
         }
-
-        List <String> listOfCodedFilters = filterManagementService.observeMultipleFilters (params)
 
         if ((computedStrings) &&
                 (computedStrings.size() > 0)){

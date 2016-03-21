@@ -610,6 +610,9 @@ var UTILS = {
                 }
             }
 
+            // enable the input
+            options.prop('disabled', false);
+
         }
     },
 
