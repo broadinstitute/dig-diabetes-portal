@@ -2,6 +2,7 @@ package org.broadinstitute.mpg.manager
 
 import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SharedToolsService
+import org.broadinstitute.mpg.WidgetService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import temporary.BuildInfo
@@ -12,12 +13,17 @@ class SystemController {
     SharedToolsService sharedToolsService
     RestServerService restServerService
     MetaDataService metaDataService
+    WidgetService widgetService
 
     def index = {
         render "<h1>hi</h1>"
     }
 
     def systemManager = {
+
+        String test = this.widgetService.getLocusZoomEndpointSelection()
+        log.info("LZ endpoint is: " + test)
+        log.info("LZ map is: " + this.widgetService?.getLocusZoomEndpointList())
         render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
                                           currentRestServer:restServerService.currentRestServer(),
                                           burdenCurrentRestServer: restServerService?.getCurrentBurdenServer(),
@@ -30,6 +36,8 @@ class SystemController {
         currentVariantChromosome:sharedToolsService.retrieveCurrentVariantChromosome(),
         totalNumberOfGenes: sharedToolsService.getCachedGeneNumber(false),
         totalNumberOfVariants: sharedToolsService.getCachedVariantNumber(false),
+        locusZoomEndpointSelectionList: this.widgetService?.getLocusZoomEndpointList(),
+        currentLocusZoomEndpoint: this.widgetService.getLocusZoomEndpointSelection(),
         recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
     }
 
@@ -255,6 +263,25 @@ class SystemController {
             flash.message = "You are now using the ${restServer} server!"
         } else {
             flash.message = "But you were already using the ${currentServer} server!"
+        }
+
+        forward(action: "systemManager")
+    }
+
+    /**
+     * method to update the LocusZoom rest server
+     *
+     * @return
+     */
+    def updateLocusZoomRestServer() {
+        String restServer = params.locusZoomRestServer
+        String currentServer =  this.widgetService?.getLocusZoomEndpointSelection()
+
+        if  (!(restServer == currentServer)) {
+            this.widgetService?.setLocusZoomEndpointSelection(restServer)
+            flash.message = "You are now using the ${restServer} LocusZoom server!"
+        } else {
+            flash.message = "But you were already using the ${currentServer} LocusZoom server!"
         }
 
         forward(action: "systemManager")

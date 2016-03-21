@@ -1,6 +1,5 @@
 package org.broadinstitute.mpg
 
-import grails.converters.JSON
 import grails.plugins.rest.client.RestBuilder
 import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
@@ -40,6 +39,7 @@ class RestServerService {
     private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out, but used for (inefficiently) obtaining gene list.
     private String METADATA_URL = "getMetadata"
     private String GET_DATA_URL = "getData"
+    private String GET_HAIL_DATA_URL = "getHailData"
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
     public static String TECHNOLOGY_GWAS = "GWAS"
@@ -554,6 +554,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     public JSONObject postGetDataCall(String jsonString) {
         return this.postRestCall(jsonString, this.GET_DATA_URL);
+    }
+
+    public JSONObject postGetHailDataCall(String jsonString) {
+        // TODO - hard code to QA server for now
+//        return postRestCallBase(drivingJson, this.GET_HAIL_DATA_URL, currentRestServer())
+        return postRestCallBase(jsonString, this.GET_HAIL_DATA_URL, "http://dig-api-dev.broadinstitute.org/dev/gs/")
     }
 
     private JSONObject postRestCall(String drivingJson, String targetUrl) {

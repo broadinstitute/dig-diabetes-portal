@@ -15,6 +15,12 @@ class WidgetService {
     QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder();
     RestServerService restServerService;
 
+    // setting variables
+    private final String LOCUSZOOM_17K_ENDPOINT = "17k data";
+    private final String LOCUSZOOM_HAIL_ENDPOINT = "Hail Dev";
+    private String locusZoomEndpointSelection = LOCUSZOOM_17K_ENDPOINT;
+    private final List<String> locusZoomEndpointList = [this.LOCUSZOOM_17K_ENDPOINT, this.LOCUSZOOM_HAIL_ENDPOINT];
+
     // constants for now
     private final String dataSetKey = "ExSeq_17k_mdv2";
     private final String phenotypeKey = "T2D";
@@ -44,7 +50,16 @@ class WidgetService {
         jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition);
 
         // submit the post request
-        jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+        if (this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT) {
+            jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+
+        } else if (this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_HAIL_ENDPOINT) {
+            jsonResultString = this.restServerService.postGetHailDataCall(jsonGetDataString);
+
+        } else {
+            throw new PortalException("Got incorrect LZ endpoint selection: " + this.getLocusZoomEndpointSelection())
+        }
+
 
         // translate the returning json into variant list
         knowledgeBaseResultParser = new KnowledgeBaseResultParser(jsonResultString);
@@ -82,7 +97,7 @@ class WidgetService {
             if (jsonResultObject != null) {
                 jsonResultString = jsonResultObject.toString();
             } else {
-                throw PortalException("got null json objevt for LZ search");
+                throw PortalException("got null json object for LZ search");
             }
 
         } catch (PortalException exception) {
@@ -92,5 +107,32 @@ class WidgetService {
 
         // return
         return jsonResultString;
+    }
+
+    public String getLocusZoomEndpointSelection() {
+        return locusZoomEndpointSelection
+    }
+
+    /**
+     * sets the LZ endpoint setting
+     *
+     * @param locusZoomEndpointSelection
+     */
+    void setLocusZoomEndpointSelection(String locusZoomEndpointSelection) {
+        // log
+        if (locusZoomEndpointSelection == this.LOCUSZOOM_HAIL_ENDPOINT) {
+            log.info("now setting LZ endpoint to 17K dataset")
+        } else if (locusZoomEndpointSelection == this.LOCUSZOOM_HAIL_ENDPOINT) {
+            log.info("now setting LZ endpoint to Hail goT2D dataset")
+        } else {
+            log.error("now setting LZ endpoint to unknown: " + locusZoomEndpointSelection)
+        }
+
+        // set the endpoint setting
+        this.locusZoomEndpointSelection = locusZoomEndpointSelection
+    }
+
+    public List<String> getLocusZoomEndpointList() {
+        return locusZoomEndpointList
     }
 }

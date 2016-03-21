@@ -188,6 +188,54 @@
 
             <div class="separator"></div>
 
+            <g:form action='updateLocusZoomRestServer' method='POST' id='updateLocusZoomRestServer' class='form form-horizontal cssform' autocomplete='off'>
+                <h4><g:message code="system.header.rest_server.locuszoom" /> (<em><g:message code="system.shared.messages.current_server" /> = ${currentLocusZoomEndpoint}</em>)</h4>
+                <div class="row clearfix">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-7">
+                        <div id="datatypes-formlz">
+                            <g:each var="lZServer" in="${locusZoomEndpointSelectionList}">
+                                <div class="radio">
+                                    <label>
+                                        <input id="locusZoomRestServer" type="radio" name="locusZoomRestServer" value="${lZServer}"
+                                            <%=lZServer==currentLocusZoomEndpoint?" checked ":"" %> />
+                                        ${lZServer}
+                                    </label>
+                                </div>
+                            </g:each>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <div class="row clearfix">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <div >
+                            <div style="text-align:center; padding-top: 20px;">
+                                <input class="btn btn-primary btn-lg" type='submit' id="submitLocusZoom"
+                                       value='Commit'/>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row clearfix">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div >
+                            <g:if test='${flash.message}'>
+                                <div class="alert alert-danger">${flash.message}</div>
+                            </g:if>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+
+                </div>
+            </g:form>
+
+            <div class="separator"></div>
+
             <g:form action='changeRecognizedStringsOnly' method='POST' class='form form-horizontal cssform' autocomplete='off'>
                 <h4><g:message code="system.header.rest_server.recognize_strings" /></h4>
                 <input type="text" name="datatype" Value="${recognizedStringsOnly}"><br>
