@@ -177,7 +177,7 @@ var mpgSoftware = mpgSoftware || {};
                     (sampleGroup !== ''))){
                     $("#dataSet").val(sampleGroup);
                 }
-
+                options.prop('disabled', false);
             }
         };
         var fillPropertiesDropdown = function (dataSetJson) { // help text for each row
@@ -195,7 +195,7 @@ var mpgSoftware = mpgSoftware || {};
                 var renderData = {
                     row: rowsToDisplay,
                     helpText: function() {
-                        if( this.propName === 'P_VALUE' ) {
+                        if( this.propName === 'P_VALUE' || this.propName === 'P_EMMAX' ) {
                             return 'Required. Examples: 0.005, 5.0E-4';
                         }
                     }
@@ -208,7 +208,6 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var launchAVariantSearch = function (){
-            console.log('listOfSavedQueries', listOfSavedQueries);
 
             // process the queries to remove fields the server won't use
             var listOfProcessedQueries = []
@@ -249,7 +248,6 @@ var mpgSoftware = mpgSoftware || {};
                 if( input.value !== "" ) {
                     // get the comparator value
                     var comparator = $('select[data-selectfor=' + input.dataset.prop +']')[0].value;
-                    console.log('value is', input.value, parseFloat(input.value), parseFloat(input.value).toString());
                     var newQuery = {
                         phenotype: phenotype,
                         translatedPhenotype: translatedPhenotype,
@@ -262,7 +260,6 @@ var mpgSoftware = mpgSoftware || {};
                         value: parseFloat(input.value).toString(),
                         comparator: comparator
                     };
-                    console.log(newQuery);
                     listOfSavedQueries.push(newQuery);
                 }
             });
@@ -375,6 +372,9 @@ var mpgSoftware = mpgSoftware || {};
                         }
                     }
                     return this.value;
+                },
+                shouldSubmitBeEnabled: function() {
+                    return this.listOfSavedQueries.length > 0;
                 }
             };
             var rendered = Mustache.render(searchDetailsTemplate, renderData);
@@ -479,11 +479,18 @@ var mpgSoftware = mpgSoftware || {};
                 document.getElementById('chromosomeInput').setAttribute('disabled', 'true');
             }
 
-            var selectedPredictedEffect = document.querySelector('input[name="predictedEffects"]:checked');
-            // if an effect is selected, clear it, otherwise do nothing
-            if( selectedPredictedEffect ) {
-                selectedPredictedEffect.checked = false;
-            }
+            // if we have a protein effect input, we should disable the protein effect inputs
+            var disableProteinEffectInputs = propsWithQs.indexOf('MOST_DEL_SCORE') > -1;
+            var predictedEffectOptions = $('input[name="predictedEffects"]');
+            _.each(predictedEffectOptions, function(option) {
+                // if an effect is selected, clear it; disable all inputs if necessary
+                if(disableProteinEffectInputs) {
+                    option.setAttribute('disabled', true);
+                } else {
+                    option.removeAttribute('disabled');
+                }
+                option.checked = false;
+            });
 
             var additionalPredictedEffects = $('select[data-type="proteinEffectSelection"]');
             _.each(additionalPredictedEffects, function(dropdown) {
@@ -491,7 +498,10 @@ var mpgSoftware = mpgSoftware || {};
             });
 
             $('#missense-options').hide(300);
-            $('#advanced_filter').hide(300);
+            if($('advanced_filter').is(':visible')) {
+                // this is defined in variantWorkflow.gsp
+                toggleAdvancedFilter();
+            }
         };
 
         /**
@@ -591,6 +601,20 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         /**
+         * Validates a property input--matches any number, including scientific notation
+         * @param input
+         */
+        function validatePropertyInput(input) {
+            var numberRegex = /^((?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?)?$/
+            console.log(input.value, numberRegex.test(input.value));
+            if( ! numberRegex.test(input.value) ) {
+                input.classList.add('redBorder');
+            } else {
+                input.classList.remove('redBorder');
+            }
+        }
+
+        /**
          * If the missense protein effect option is selected, show the extended
          * options
          */
@@ -656,6 +680,7 @@ var mpgSoftware = mpgSoftware || {};
             respondToDataSetSelection:respondToDataSetSelection,
             forceToPropertySelection:forceToPropertySelection,
             updateBuildSearchRequestButton:updateBuildSearchRequestButton,
+            validatePropertyInput: validatePropertyInput,
             updateProteinEffectSelection: updateProteinEffectSelection,
             validateChromosomeInput: validateChromosomeInput,
             controlGeneAndChromosomeInputs: controlGeneAndChromosomeInputs

@@ -1,5 +1,7 @@
 package org.broadinstitute.mpg
 
+import org.codehaus.groovy.grails.web.json.JSONObject
+
 class RegionController {
 
     RestServerService   restServerService
@@ -12,7 +14,6 @@ class RegionController {
     def regionInfo() {
         String regionSpecification = params.id
         LinkedHashMap extractedNumbers =  restServerService.extractNumbersWeNeed(regionSpecification)
-        List <Gene> identifiedGenes = []
         if ((extractedNumbers)   &&
                 (extractedNumbers["startExtent"])   &&
                 (extractedNumbers["endExtent"])&&
@@ -24,8 +25,24 @@ class RegionController {
                 encounteredErrors = true
             }
             if (!encounteredErrors){
-                String searchParms = "8=${extractedNumbers["chromosomeNumber"]}^9=${startExtent}^10=${endExtent}^17=T2D[GWAS_DIAGRAM_mdv2]P_VALUE<1^".toString()
-                redirect(controller:'variantSearch',action:'launchAVariantSearch', params: [savedValue0: searchParms])
+                // Grails/Groovy does not seem to play nicely with JSON
+                ArrayList<String> query = [
+                    ([
+                        prop: 'chromosome',
+                        value: extractedNumbers['chromosomeNumber'] + ':' + startExtent + '-' + endExtent,
+                        comparator: '='
+                    ] as JSONObject).toString(),
+                    ([
+                        phenotype: 'T2D',
+                        dataset: 'GWAS_DIAGRAM_mdv2',
+                        prop: 'P_VALUE',
+                        value: '1',
+                        comparator:'<'
+                    ] as JSONObject).toString()
+                ]
+
+                String encodedQuery = URLEncoder.encode(query.toString())
+                redirect(url:'/variantSearch/launchAVariantSearch/?' + encodedQuery)
                 return
             }
 
