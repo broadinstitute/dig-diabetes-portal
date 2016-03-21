@@ -559,7 +559,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     public JSONObject postGetHailDataCall(String jsonString) {
         // TODO - hard code to QA server for now
 //        return postRestCallBase(drivingJson, this.GET_HAIL_DATA_URL, currentRestServer())
-        return postRestCallBase(jsonString, this.GET_HAIL_DATA_URL, "http://dig-api-dev.broadinstitute.org/dev/gs/")
+//        return postRestCallBase(jsonString, this.GET_HAIL_DATA_URL, "http://dig-api-dev.broadinstitute.org/dev/gs/")
+        return postRestCallBase(jsonString, this.GET_HAIL_DATA_URL, "http://dig-dev-02.broadinstitute.org:8888/dev/gs/")
     }
 
     private JSONObject postRestCall(String drivingJson, String targetUrl) {
