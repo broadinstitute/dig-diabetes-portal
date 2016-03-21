@@ -589,7 +589,7 @@ var UTILS = {
 
             if ((typeof includeDefault !== 'undefined') &&
                 (includeDefault)){
-                options.append("<option selected hidden>-- &nbsp;&nbsp;select a phenotype&nbsp;&nbsp; --</option>");
+                options.append("<option selected hidden value=default>-- &nbsp;&nbsp;select a phenotype&nbsp;&nbsp; --</option>");
             }
 
             // move GLYCEMIC to the front of the list, so it's the first section
