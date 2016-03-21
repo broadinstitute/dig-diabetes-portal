@@ -27,19 +27,23 @@ var mpgSoftware = mpgSoftware || {};
                     if (variant.hasOwnProperty(key)) {
                         if (key.indexOf('^')>-1){
                             var splitKey = key.split('^');
-                            if (splitKey[0] === 'P_VALUE'){
+                            if (splitKey[2] === 'P_VALUE'){
                                 pValue=parseFloat(variant[key]);
-                            } else if (splitKey[0] === 'BETA'){
+                            } else if (splitKey[2] === 'BETA'){
                                 betaValue=parseFloat(variant[key]);
-                            } else if (splitKey[0] === 'ODDS_RATIO'){
+                            } else if (splitKey[2] === 'ODDS_RATIO'){
                                 orValue=parseFloat(variant[key]);
-                            } else if (splitKey[0] === 'ODDS_RATIO'){
+                            } else if (splitKey[2] === 'MAF'){
                                 mafValue=parseFloat(variant[key]);
                             }
+                        }   else if (key === 'P_VALUE')  {
+                            pValue=parseFloat(variant[key]);
                         }
                     }
                 }
-                retVal.push("<a class='boldlink' href='../variantInfo/variantInfo/" + variant.DBSNP_ID + "'>" + variant.DBSNP_ID + "</a>");
+                var variantIdentifier =  (typeof variant.DBSNP_ID!=='undefined') ? variant.DBSNP_ID :  variant.VAR_ID;
+                var variantNameAbbreviation = (variantIdentifier.length > 14) ?   variantIdentifier.substring(0,13) :   variantIdentifier;
+                retVal.push("<a class='boldlink' href='../variantInfo/variantInfo/" + variantIdentifier + "'>" + variantNameAbbreviation + "</a>");
                 retVal.push("<a class='boldItlink' href='../gene/geneInfo/" + variant.CLOSEST_GENE + "'>" + variant.CLOSEST_GENE + "</a>");
                 if ($.isNumeric(pValue)){
                     retVal.push("" + pValue.toPrecision(3));
@@ -49,18 +53,19 @@ var mpgSoftware = mpgSoftware || {};
                 var betaVal;
                 if ($.isNumeric(betaValue)) {
                     retVal.push("<span class='" + pValueGreyedOut + "'>" + betaValue.toPrecision(3) + "</span>");
+                } if ($.isNumeric(orValue)) {
+                    retVal.push("<span class='" + pValueGreyedOut + "'>" + orValue.toPrecision(3) + "</span>");
                 } else {
                     retVal.push("<span class='" + pValueGreyedOut + "'>--</span>");
                 }
                 retVal.push(($.isNumeric(mafValue)) ? ("" + mafValue.toPrecision(3)) : "");
-                retVal.push("<a class='boldlink' href='./traitInfo/" + variant.DBSNP_ID + "'>click here</a>");
+                retVal.push("<a class='boldlink' href='./traitInfo/" + variantIdentifier + "'>click here</a>");
                 return retVal;
             },
 
-            iterativeTableFiller = function (variant, show_gene, show_exseq, show_exchp, locale, copyText, printText) {
-                var effectTypeTitle = UTILS.determineEffectsTypeHeader(variant);
-                var effectTypeString = UTILS.determineEffectsTypeString(effectTypeTitle);
-                $('#effectTypeHeader').append(effectTypeTitle);
+            iterativeTableFiller = function (variant, effectType, locale, copyText, printText) {
+                $('#effectTypeHeader').empty();
+                $('#effectTypeHeader').append(effectType);
                 var languageSetting = {}
                 // check if the browser is using Spanish
                 if (locale.startsWith("es")) {
@@ -87,7 +92,7 @@ var mpgSoftware = mpgSoftware || {};
                 var dataLength = variant.length;
                 var effectsField = UTILS.determineEffectsTypeString('#phenotypeTraits');
                 for (var i = 0; i < dataLength; i++) {
-                    var array = convertLineForPhenotypicTraitTable(variant[i], effectsField, show_gene, show_exseq, show_exchp);
+                    var array = convertLineForPhenotypicTraitTable(variant[i], effectsField);
                     $('#phenotypeTraits').dataTable().fnAddData(array, (i == 25) || (i == (dataLength - 1)));
                 }
             };

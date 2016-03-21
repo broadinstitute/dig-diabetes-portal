@@ -27,17 +27,34 @@
                 async: true,
                 success: function (data) {
 
+                    var collector = [];
+                    var effectType = 'beta';
                     if ((typeof data !== 'undefined') &&
                             (data)) {
                         if ((data.variant) &&
                                 (data.variant.results)) {//assume we have data and process it
-                            var collector = [];
+
                             for (var i = 0; i < data.variant.results.length; i++) {
                                 var d = {};
                                 for (var j = 0; j < data.variant.results[i].pVals.length; j++) {
                                     var key = data.variant.results[i].pVals[j].level;
                                     var value = data.variant.results[i].pVals[j].count;
-                                    d[key] = value;
+                                    var splitKey = key.split('^');
+                                    if (splitKey.length>3) {
+                                        if (splitKey[2]=='P_VALUE') {
+                                            d['P_VALUE'] = value;
+                                        } else if (splitKey[2]=='ODDS_RATIO') {
+                                            d[key] = value;
+                                            effectType = 'odds ratio'
+                                        } else if ((splitKey[2]=='BETA')||(splitKey[2]=='MAF')) {
+                                            d[key] = value;
+                                        }
+                                    } else if (key==='POS') {
+                                        d[key] = parseInt(value);
+                                    } else {
+                                        d[key] = value;
+                                    }
+
                                 }
                                 collector.push(d);
                             }
@@ -45,7 +62,11 @@
 
                         }
                     }
-
+                    if ((data.variant) &&
+                            (data.variant.dataset))  {
+//                        $('#traitTableDescription').text(data.variant.dataset);
+                        $('#manhattanSampleGroupChooser').val(data.variant.dataset);
+                    }
 
                         var margin = {top: 0, right: 20, bottom: 0, left: 70},
                                 width = 1050 - margin.left - margin.right,
@@ -87,9 +108,7 @@
                         d3.select("#manhattanPlot1").call(manhattan.render);
 
                         mpgSoftware.phenotype.iterativeTableFiller(collector,
-                                ${show_gwas},
-                                ${show_exchp},
-                                ${show_exseq},
+                                effectType,
                                 "${locale}",
                                 '<g:message code="table.buttons.copyText" default="Copy" />',
                                 '<g:message code="table.buttons.printText" default="Print me!" />');

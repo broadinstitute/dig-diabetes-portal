@@ -179,12 +179,6 @@ class TraitController {
              for (Property property in propertyList){
                  properties[property.getName()] = property.getPropertyType()
              }
-         } else  {
-             log.info("Unknown GWAS specific phenotype = '${phenotypicTrait}")
-             // nothing we can do with this
-             render(status:200, contentType:"application/json") {
-                 [variant:[]]
-             }
          }
          JSONObject jsonObject = restServerService.getTraitSpecificInformation(phenotypicTrait, dataSetName,properties,significanceValue,0.0)
          render(status:200, contentType:"application/json") {

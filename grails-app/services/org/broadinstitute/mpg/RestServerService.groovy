@@ -939,15 +939,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     public JSONObject howCommonIsVariantAcrossEthnicities(String variantName, String showAll) {
         JSONObject returnValue
         JSONObject apiResults = howCommonIsVariantSection(variantName,showAll)
-        StringBuilder sb = new StringBuilder("{\"results\":[")
-        sb << "{ \"dataset\": 1,"+
-                "\"pVals\": ["
-        List<String> jsonComponentList = processInfoFromGetDataCall( apiResults )
-        sb << jsonComponentList.join(",")
-        sb << "]}"
-        sb << "]}"
+        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "", "" )
         def slurper = new JsonSlurper()
-        returnValue = slurper.parseText(sb.toString())
+        returnValue = slurper.parseText(jsonParsedFromApi)
 
         return returnValue
 
@@ -1500,19 +1494,15 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @return
      */
     public JSONObject getTraitSpecificInformation(String phenotypeName, String dataSet, LinkedHashMap properties, BigDecimal maximumPValue, BigDecimal minimumPValue) {
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         JSONObject returnValue
 
         JSONObject apiResults = gatherTraitSpecificResults(phenotypeName, dataSet, properties, maximumPValue, minimumPValue)
 
-        StringBuilder sb = new StringBuilder("{\"results\":[")
-        sb << "{ \"dataset\": 1,"+
-                "\"pVals\": ["
-        List<String> jsonComponentList = processInfoFromGetDataCall( apiResults )
-        sb << jsonComponentList.join(",")
-        sb << "]}"
-        sb << "]}"
+     //   String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "", ",\n\"dataset\":\"${g.message(code: 'metadata.' + dataSet, default: dataSet)}\"" )
+        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "", ",\n\"dataset\":\"${dataSet}\"" )
         def slurper = new JsonSlurper()
-        returnValue = slurper.parseText(sb.toString())
+        returnValue = slurper.parseText(jsonParsedFromApi)
 
 //        String orValue = orSubstitute(properties)
 //        def slurper = new JsonSlurper()
@@ -1711,9 +1701,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param apiResults
      * @return
      */
-    private List<String> processInfoFromGetDataCall ( JSONObject apiResults ){
+    private String processInfoFromGetDataCall ( JSONObject apiResults, String additionalDataSetInformation, String topLevelInformation ){
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
-        List<String> jsonComponentList = []
+        List<String> crossVariantData = []
         if (!apiResults["is_error"]){
             int numberOfVariants = apiResults.numRecords
             for (int j = 0; j < numberOfVariants; j++) {
@@ -1721,18 +1711,19 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 for (int i = 0; i < apiResults.variants[j].size(); i++) {
                     keys << (new JSONObject(apiResults.variants[j][i]).keys()).next()
                 }
+                List<String> variantSpecificList = []
                 for (String key in keys) {
                     ArrayList valueArray = apiResults.variants[j][key]
                     def value = valueArray.findAll { it }[0]
                     if (value instanceof String) {
                         String stringValue = value as String
-                        jsonComponentList << "{\"level\":\"${key}\",\"count\":\"${stringValue}\"}"
+                        variantSpecificList << "{\"level\":\"${key}\",\"count\":\"${stringValue}\"}"
                     } else if (value instanceof Integer) {
                         Integer integerValue = value as Integer
-                        jsonComponentList << "{\"level\":\"${key}\",\"count\":\"${integerValue}\"}"
+                        variantSpecificList << "{\"level\":\"${key}\",\"count\":\"${integerValue}\"}"
                     } else if (value instanceof BigDecimal) {
                         BigDecimal bigDecimalValue = value as BigDecimal
-                        jsonComponentList << "{\"level\":\"${key}\",\"count\":\"${bigDecimalValue}\"}"
+                        variantSpecificList << "{\"level\":\"${key}\",\"count\":\"${bigDecimalValue}\"}"
                     } else if (value instanceof Map) {
                         Map mapValue = value as Map
                         List<String> subKeys = mapValue.keySet() as List
@@ -1748,10 +1739,10 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                             def particularMapValue = mapValue[subKey]
                             if (particularMapValue instanceof BigDecimal) {// data set particular values
                                 BigDecimal particularMapBigDecimalValue = particularMapValue as BigDecimal
-                                jsonComponentList << "{\"level\":\"${key}^NONE^${key}^${subKey}^${ancestry}^${translatedDatasetName}\",\"count\":${particularMapBigDecimalValue}}"
+                                variantSpecificList << "{\"level\":\"${key}^NONE^${key}^${subKey}^${ancestry}^${translatedDatasetName}\",\"count\":${particularMapBigDecimalValue}}"
                             } else if (particularMapValue instanceof Integer) {// data set particular values
                                 Integer particularMapIntegerValue = particularMapValue as Integer
-                                jsonComponentList << "{\"level\":\"${key}^NONE^${key}^${subKey}^${ancestry}^${translatedDatasetName}\",\"count\":${particularMapIntegerValue}}"
+                                variantSpecificList << "{\"level\":\"${key}^NONE^${key}^${subKey}^${ancestry}^${translatedDatasetName}\",\"count\":${particularMapIntegerValue}}"
                             } else if (particularMapValue instanceof Map) {
                                 Map particularSubMap = particularMapValue as Map
                                 List<String> particularSubKeys = particularSubMap.keySet() as List
@@ -1760,7 +1751,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                     BigDecimal phenoValue = particularSubMapValue.findAll { it }[0] as BigDecimal
                                     String translatedPhenotypeName = g.message(code: 'metadata.' + particularSubKey, default: particularSubKey);
                                     String meaning = metaDataService.getMeaningForPhenotypeAndSampleGroup(key, particularSubKey, subKey)
-                                    jsonComponentList << "{\"level\":\"${key}^${particularSubKey}^${meaning}^${subKey}^${ancestry}^${translatedDatasetName}^${translatedPhenotypeName}\",\"count\":${phenoValue}}"
+                                    variantSpecificList << "{\"level\":\"${key}^${particularSubKey}^${meaning}^${subKey}^${ancestry}^${translatedDatasetName}^${translatedPhenotypeName}\",\"count\":${phenoValue}}"
                                 }
 
                             }
@@ -1768,14 +1759,90 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
                     } else if (value instanceof ArrayList) {
                         ArrayList arrayListValue = value as ArrayList
-                        log.debug("Hey, ArrayList")
+                        log.error("An ArrayList is not an expected result.  Did the return data format change?")
                     }
                 }
+                crossVariantData << "{ \"dataset\": 1, ${additionalDataSetInformation}, \"pVals\": [".toString() + variantSpecificList.join(",") + "]}"
             }
-
         }
-        return jsonComponentList
+        return  "{\"results\":[" +  crossVariantData.join(",") + "]"+topLevelInformation+"}"
     }
+
+
+
+
+
+
+//
+//    private List<String> processInfoFromGetDataCall ( JSONObject apiResults ){
+//        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+//        List<String> jsonComponentList = []
+//        if (!apiResults["is_error"]){
+//            int numberOfVariants = apiResults.numRecords
+//            for (int j = 0; j < numberOfVariants; j++) {
+//                List<String> keys = []
+//                for (int i = 0; i < apiResults.variants[j].size(); i++) {
+//                    keys << (new JSONObject(apiResults.variants[j][i]).keys()).next()
+//                }
+//                for (String key in keys) {
+//                    ArrayList valueArray = apiResults.variants[j][key]
+//                    def value = valueArray.findAll { it }[0]
+//                    if (value instanceof String) {
+//                        String stringValue = value as String
+//                        jsonComponentList << "{\"level\":\"${key}\",\"count\":\"${stringValue}\"}"
+//                    } else if (value instanceof Integer) {
+//                        Integer integerValue = value as Integer
+//                        jsonComponentList << "{\"level\":\"${key}\",\"count\":\"${integerValue}\"}"
+//                    } else if (value instanceof BigDecimal) {
+//                        BigDecimal bigDecimalValue = value as BigDecimal
+//                        jsonComponentList << "{\"level\":\"${key}\",\"count\":\"${bigDecimalValue}\"}"
+//                    } else if (value instanceof Map) {
+//                        Map mapValue = value as Map
+//                        List<String> subKeys = mapValue.keySet() as List
+//                        for (String subKey in subKeys) {
+//                            // maybe subKey is always a group ID
+//                            SampleGroup sampleGroup = metaDataService.getSampleGroupByName(subKey)
+//                            String dataSetName = sampleGroup.systemId
+//                            String translatedDatasetName = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
+//                            String ancestry = "unknown"
+//                            if (sampleGroup) {
+//                                ancestry = sampleGroup.getAncestry()
+//                            }
+//                            def particularMapValue = mapValue[subKey]
+//                            if (particularMapValue instanceof BigDecimal) {// data set particular values
+//                                BigDecimal particularMapBigDecimalValue = particularMapValue as BigDecimal
+//                                jsonComponentList << "{\"level\":\"${key}^NONE^${key}^${subKey}^${ancestry}^${translatedDatasetName}\",\"count\":${particularMapBigDecimalValue}}"
+//                            } else if (particularMapValue instanceof Integer) {// data set particular values
+//                                Integer particularMapIntegerValue = particularMapValue as Integer
+//                                jsonComponentList << "{\"level\":\"${key}^NONE^${key}^${subKey}^${ancestry}^${translatedDatasetName}\",\"count\":${particularMapIntegerValue}}"
+//                            } else if (particularMapValue instanceof Map) {
+//                                Map particularSubMap = particularMapValue as Map
+//                                List<String> particularSubKeys = particularSubMap.keySet() as List
+//                                for (String particularSubKey in particularSubKeys) {
+//                                    def particularSubMapValue = particularSubMap[particularSubKey]
+//                                    BigDecimal phenoValue = particularSubMapValue.findAll { it }[0] as BigDecimal
+//                                    String translatedPhenotypeName = g.message(code: 'metadata.' + particularSubKey, default: particularSubKey);
+//                                    String meaning = metaDataService.getMeaningForPhenotypeAndSampleGroup(key, particularSubKey, subKey)
+//                                    jsonComponentList << "{\"level\":\"${key}^${particularSubKey}^${meaning}^${subKey}^${ancestry}^${translatedDatasetName}^${translatedPhenotypeName}\",\"count\":${phenoValue}}"
+//                                }
+//
+//                            }
+//                        }
+//
+//                    } else if (value instanceof ArrayList) {
+//                        ArrayList arrayListValue = value as ArrayList
+//                        log.debug("Hey, ArrayList")
+//                    }
+//                }
+//            }
+//
+//        }
+//        return jsonComponentList
+//    }
+//
+//
+
+
 
 
 
@@ -1784,16 +1851,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         JSONObject returnValue
         JSONObject apiResults = gatherSpecificTraitsPerVariantResults(variantName, propsToUse)
-        StringBuilder sb = new StringBuilder("{\"results\":[")
-        sb << "{ \"dataset\": \"traits\","+
-                "\"openPhenotypes\": [${openPhenotypes?.collect{("\""+it+"\"")}.join(",")}],"+
-                "\"pVals\": ["
-        List<String> jsonComponentList = processInfoFromGetDataCall( apiResults )
-        sb << jsonComponentList.join(",")
-        sb << "]}"
-        sb << "]}"
+
+        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults,"\"openPhenotypes\": ["+openPhenotypes.join(',')+"]", "" )
         def slurper = new JsonSlurper()
-        returnValue = slurper.parseText(sb.toString())
+        returnValue = slurper.parseText(jsonParsedFromApi)
+
         return returnValue
     }
 
@@ -1809,16 +1871,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         JSONObject returnValue
         JSONObject apiResults = gatherTraitPerVariantResults( variantName, technology )
-        StringBuilder sb = new StringBuilder("{\"results\":[")
-        sb << "{ \"dataset\": \"traits\","+
-                "\"openPhenotypes\": [],"+
-                "\"pVals\": ["
-        List<String> jsonComponentList = processInfoFromGetDataCall( apiResults )
-        sb << jsonComponentList.join(",")
-        sb << "]}"
-        sb << "]}"
+
+        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "\"openPhenotypes\": []", "" )
         def slurper = new JsonSlurper()
-        returnValue = slurper.parseText(sb.toString())
+        returnValue = slurper.parseText(jsonParsedFromApi)
+
 
         return returnValue
 
