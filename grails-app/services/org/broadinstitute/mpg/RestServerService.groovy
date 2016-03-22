@@ -668,23 +668,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     }
 
-    public String convertKnownDataSetsToRealNames(String dataSet) {
-        String returnValue = dataSet
-        switch (dataSet) {
-            case TECHNOLOGY_GWAS:
-                returnValue = getSampleGroup(dataSet, EXPERIMENT_DIAGRAM, ANCESTRY_NONE)
-                break;
-            case TECHNOLOGY_EXOME_SEQ:
-                returnValue = getSampleGroup(dataSet, "none", ANCESTRY_NONE)
-                break;
-            case TECHNOLOGY_EXOME_CHIP:
-                returnValue = getSampleGroup(dataSet, "none", ANCESTRY_NONE)
-                break;
-            default:
-                break;
-        }
-        return returnValue
-    }
+
 
     /***
      * Generate the numbers for the 'variants and associations' table on the gene info page
@@ -928,7 +912,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         List<String> ancestryList = chosenSampleGroupByAncestry.keySet()?.sort{a, b -> a <=> b }
         for (String ancestry in ancestryList) {
             SampleGroup sampleGroup = chosenSampleGroupByAncestry[ancestry]
-            addColumnsForDProperties(resultColumnsToDisplay, "${MAFPHENOTYPE}", "${getSampleGroup(sampleGroup.systemId, "none", ancestry)}")
+            addColumnsForDProperties(resultColumnsToDisplay, "${MAFPHENOTYPE}", sampleGroup.systemId)
+          //  addColumnsForDProperties(resultColumnsToDisplay, "${MAFPHENOTYPE}", "${getSampleGroup(sampleGroup.systemId, "none", ancestry)}")
         }
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         JsonSlurper slurper = new JsonSlurper()
@@ -964,20 +949,22 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param variantId
      * @return
      */
-    private JSONObject variantDiseaseRisk(String variantId) {
+    private JSONObject variantDiseaseRisk( String variantId,String sampleGroup ) {
         String filterByVariantName = codedfilterByVariant(variantId)
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID"])
+        List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(DEFAULTPHENOTYPE, TECHNOLOGY_EXOME_SEQ, metaDataService.getDataVersion(), "Mixed")
+        String sampleGroupName = sampleGroupList[0]?.systemId
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName], searchBuilderService, metaDataService)
-        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", "${getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)}", "${HETEROZYGOTE_AFFECTED}")
-        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", "${getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)}", "${HETEROZYGOTE_UNAFFECTED}")
-        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", "${getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)}", "${MINORALLELECOUNTS_AFFECTED}")
-        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", "${getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)}", "${MINORALLELECOUNTS_UNAFFECTED}")
-        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", "${getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)}", "${HOMOZYGOTE_AFFECTED}")
-        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", "${getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)}", "${HOMOZYGOTE_UNAFFECTED}")
-        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", "${getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)}", "${OBSERVED_AFFECTED}")
-        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", "${getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)}", "${OBSERVED_UNAFFECTED}")
-        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", "${getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)}", "${EXOMESEQUENCEPVALUE}")
-        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", "${getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)}", "${EXOMESEQUENCEOR}")
+        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", sampleGroupName, "${HETEROZYGOTE_AFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", sampleGroupName, "${HETEROZYGOTE_UNAFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", sampleGroupName, "${MINORALLELECOUNTS_AFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", sampleGroupName, "${MINORALLELECOUNTS_UNAFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", sampleGroupName, "${HOMOZYGOTE_AFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", sampleGroupName, "${HOMOZYGOTE_UNAFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", sampleGroupName, "${OBSERVED_AFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", sampleGroupName, "${OBSERVED_UNAFFECTED}")
+        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", sampleGroupName, "${EXOMESEQUENCEPVALUE}")
+        addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", sampleGroupName, "${EXOMESEQUENCEOR}")
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
@@ -991,7 +978,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param variantName
      * @return
      */
-    public JSONObject combinedVariantDiseaseRisk(String variantName) {
+    public JSONObject combinedVariantDiseaseRisk(String variantName, String sampleGroup) {
         String attribute = "T2D"
         JSONObject returnValue
         List<Integer> dataSeteList = [1]
@@ -1001,7 +988,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         for (int j = 0; j < dataSeteList.size(); j++) {
             sb << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
             for (int i = 0; i < pValueList.size(); i++) {
-                JSONObject apiResults = variantDiseaseRisk(variantName)
+                JSONObject apiResults = variantDiseaseRisk(variantName,sampleGroup)
                 if (apiResults.is_error == false) {
                     if ((apiResults.variants) && (apiResults.variants[0]) && (apiResults.variants[0][0])) {
                         def variant = apiResults.variants[0];
@@ -1505,67 +1492,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         JSONObject returnValue
 
         JSONObject apiResults = gatherTraitSpecificResults(phenotypeName, dataSet, properties, maximumPValue, minimumPValue)
-
-     //   String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "", ",\n\"dataset\":\"${g.message(code: 'metadata.' + dataSet, default: dataSet)}\"" )
         String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "", ",\n\"dataset\":\"${dataSet}\"" )
         def slurper = new JsonSlurper()
         returnValue = slurper.parseText(jsonParsedFromApi)
-
-//        String orValue = orSubstitute(properties)
-//        def slurper = new JsonSlurper()
-//        int numberOfVariants = apiResults.numRecords
-//        StringBuilder sb = new StringBuilder("{\"results\":[")
-//        for (int j = 0; j < numberOfVariants; j++) {
-//            sb << "{ \"dataset\": \"traits\",\"pVals\": ["
-//
-//            if (apiResults.is_error == false) {
-//                if ((apiResults.variants) && (apiResults.variants[j]) && (apiResults.variants[j][0])) {
-//                    def variant = apiResults.variants[j];
-//
-//                    def element = variant["DBSNP_ID"].findAll { it }[0]
-//                    sb << "{\"level\":\"DBSNP_ID\",\"count\":\"${element}\"},"
-//
-//                    element = variant["CHROM"].findAll { it }[0]
-//                    sb << "{\"level\":\"CHROM\",\"count\":\"${element}\"},"
-//
-//                    element = variant["POS"].findAll { it }[0]
-//                    sb << "{\"level\":\"POS\",\"count\":${element}},"
-//
-//                    element = variant["VAR_ID"].findAll { it }[0]
-//                    sb << "{\"level\":\"VAR_ID\",\"count\":\"${element}\"},"
-//
-//                    element = variant["CLOSEST_GENE"].findAll { it }[0]
-//                    sb << "{\"level\":\"CLOSEST_GENE\",\"count\":\"${element}\"},"
-//
-//                    element = variant["P_VALUE"].findAll { it }[0]
-//                    sb << "{\"level\":\"P_VALUE\",\"count\":${element[dataSet][phenotypeName]}},"
-//
-//                    if (orValue.length() > 0) {
-//                        element = variant["${orValue}"].findAll { it }[0]
-//                        sb << "{\"level\":\"${orValue}\",\"count\":\"${element[dataSet][phenotypeName]}\"},"
-//                    } else {
-//                        sb << "{\"level\":\"BETA\",\"count\":\"--\"},"
-//                    }
-//
-//                    element = variant["MAF"].findAll { it }[0]
-//                    if ((element) &&
-//                            (element[dataSet])) {
-//                        sb << "{\"level\":\"MAF\",\"count\":${element[dataSet]}}"
-//                    } else {
-//                        sb << "{\"level\":\"MAF\",\"count\":\"0\"}"
-//                    }
-//
-//
-//                }
-//            }
-//            sb << "]}"
-//            if (j < numberOfVariants - 1) {
-//                sb << ","
-//            }
-//        }
-//        sb << "]}"
-//        returnValue = slurper.parseText(sb.toString())
-
         return returnValue
     }
 
@@ -1646,6 +1575,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return resultColumnsToDisplay
     }
 
+
     /***
      * private method that does REST API generation for 'Association statistics across 25 traits'
      * @param variantName
@@ -1674,34 +1604,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
-
-
-
-    LinkedHashMap<String, String> extractPhenotypeToSampleGroupMapping(String propertyName,JSONObject apiResults, String technology){
-        LinkedHashMap<String, String> returnValue = [:]
-        if (apiResults.variants.collect{it[propertyName]}[0].findAll { it }.size()>0){
-            Set sampleGroups = apiResults.variants.collect{it[propertyName]}[0].findAll { it }[0].keySet()
-            for ( String sampleGroupName in sampleGroups ){
-                Set phenotypes = apiResults.variants.collect{it[propertyName]}[0]?.collect { it }[sampleGroupName].collect { it }[0].keySet()
-                for ( String phenotypeName in phenotypes ){
-                    returnValue[phenotypeName] = sampleGroupName
-                }
-            }
-        }
-        return returnValue
-    }
-
-
-    List<String> extractSampleGroupListForProperty(String propertyName,JSONObject apiResults){
-        log.info(["propertyName": propertyName, "apiResults": apiResults])
-        List<String> returnValue = []
-        Set sampleGroups = apiResults.variants.collect{it[propertyName]}[0].findAll { it }[0].keySet()
-        for ( String sampleGroupName in sampleGroups ){
-            returnValue << sampleGroupName
-        }
-        // need to work out how to do this extraction…
-        return returnValue
-    }
 
     /***
      * This is the universal API return value reader.
@@ -1776,78 +1678,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
-
-
-
-
-//
-//    private List<String> processInfoFromGetDataCall ( JSONObject apiResults ){
-//        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
-//        List<String> jsonComponentList = []
-//        if (!apiResults["is_error"]){
-//            int numberOfVariants = apiResults.numRecords
-//            for (int j = 0; j < numberOfVariants; j++) {
-//                List<String> keys = []
-//                for (int i = 0; i < apiResults.variants[j].size(); i++) {
-//                    keys << (new JSONObject(apiResults.variants[j][i]).keys()).next()
-//                }
-//                for (String key in keys) {
-//                    ArrayList valueArray = apiResults.variants[j][key]
-//                    def value = valueArray.findAll { it }[0]
-//                    if (value instanceof String) {
-//                        String stringValue = value as String
-//                        jsonComponentList << "{\"level\":\"${key}\",\"count\":\"${stringValue}\"}"
-//                    } else if (value instanceof Integer) {
-//                        Integer integerValue = value as Integer
-//                        jsonComponentList << "{\"level\":\"${key}\",\"count\":\"${integerValue}\"}"
-//                    } else if (value instanceof BigDecimal) {
-//                        BigDecimal bigDecimalValue = value as BigDecimal
-//                        jsonComponentList << "{\"level\":\"${key}\",\"count\":\"${bigDecimalValue}\"}"
-//                    } else if (value instanceof Map) {
-//                        Map mapValue = value as Map
-//                        List<String> subKeys = mapValue.keySet() as List
-//                        for (String subKey in subKeys) {
-//                            // maybe subKey is always a group ID
-//                            SampleGroup sampleGroup = metaDataService.getSampleGroupByName(subKey)
-//                            String dataSetName = sampleGroup.systemId
-//                            String translatedDatasetName = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
-//                            String ancestry = "unknown"
-//                            if (sampleGroup) {
-//                                ancestry = sampleGroup.getAncestry()
-//                            }
-//                            def particularMapValue = mapValue[subKey]
-//                            if (particularMapValue instanceof BigDecimal) {// data set particular values
-//                                BigDecimal particularMapBigDecimalValue = particularMapValue as BigDecimal
-//                                jsonComponentList << "{\"level\":\"${key}^NONE^${key}^${subKey}^${ancestry}^${translatedDatasetName}\",\"count\":${particularMapBigDecimalValue}}"
-//                            } else if (particularMapValue instanceof Integer) {// data set particular values
-//                                Integer particularMapIntegerValue = particularMapValue as Integer
-//                                jsonComponentList << "{\"level\":\"${key}^NONE^${key}^${subKey}^${ancestry}^${translatedDatasetName}\",\"count\":${particularMapIntegerValue}}"
-//                            } else if (particularMapValue instanceof Map) {
-//                                Map particularSubMap = particularMapValue as Map
-//                                List<String> particularSubKeys = particularSubMap.keySet() as List
-//                                for (String particularSubKey in particularSubKeys) {
-//                                    def particularSubMapValue = particularSubMap[particularSubKey]
-//                                    BigDecimal phenoValue = particularSubMapValue.findAll { it }[0] as BigDecimal
-//                                    String translatedPhenotypeName = g.message(code: 'metadata.' + particularSubKey, default: particularSubKey);
-//                                    String meaning = metaDataService.getMeaningForPhenotypeAndSampleGroup(key, particularSubKey, subKey)
-//                                    jsonComponentList << "{\"level\":\"${key}^${particularSubKey}^${meaning}^${subKey}^${ancestry}^${translatedDatasetName}^${translatedPhenotypeName}\",\"count\":${phenoValue}}"
-//                                }
-//
-//                            }
-//                        }
-//
-//                    } else if (value instanceof ArrayList) {
-//                        ArrayList arrayListValue = value as ArrayList
-//                        log.debug("Hey, ArrayList")
-//                    }
-//                }
-//            }
-//
-//        }
-//        return jsonComponentList
-//    }
-//
-//
 
 
 

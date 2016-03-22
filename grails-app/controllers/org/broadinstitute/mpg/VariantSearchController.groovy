@@ -59,8 +59,7 @@ class VariantSearchController {
         def slurper = new JsonSlurper()
         String phenotypeName = params.phenotype
         String sampleGroupName = params.sampleGroup
-        String convertedSampleGroupName = restServerService.convertKnownDataSetsToRealNames(sampleGroupName)
-        SampleGroup sampleGroup = metaDataService.getSampleGroupByName(convertedSampleGroupName)
+        SampleGroup sampleGroup = metaDataService.getSampleGroupByName(sampleGroupName)
 
         if (sampleGroup?.sampleGroupList?.size()>0){
             sampleGroup.sampleGroupList = sampleGroup.sampleGroupList.sort{g.message(code:"metadata." + it.systemId, default: it.systemId)}

@@ -69,7 +69,7 @@ class VariantInfoController {
      */
     def variantDiseaseRisk (){
         String variantId = params.variantId
-        JSONObject jsonObject =  restServerService.combinedVariantDiseaseRisk ( variantId.trim().toUpperCase())
+        JSONObject jsonObject =  restServerService.combinedVariantDiseaseRisk ( variantId.trim().toUpperCase(), "ExSeq_17k_mdv2")
         render(status:200, contentType:"application/json") {
             [variantInfo:jsonObject]
         }

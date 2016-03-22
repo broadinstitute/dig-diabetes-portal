@@ -100,7 +100,7 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
 
     void "test combinedVariantDiseaseRisk"() {
         when:
-        JSONObject jsonObject = restServerService.combinedVariantDiseaseRisk("rs13266634")
+        JSONObject jsonObject = restServerService.combinedVariantDiseaseRisk("rs13266634", "ExSeq_17k_mdv2")
         then:
         assert jsonObject
     }
