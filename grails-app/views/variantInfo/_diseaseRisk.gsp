@@ -28,29 +28,27 @@
                             diseaseBurdenPValueQ: '<g:helpText title="variant.diseaseBurden.control.pValue.help.header"  qplacer="2px 0 0 6px" placement="left" body="variant.variantAssociations.pValue.help.text"/>',
                             diseaseBurdenOddsRatioQ: '<g:helpText title="variant.diseaseBurden.control.oddsRatio.help.header"  qplacer="2px 0 0 6px" placement="left" body="variant.variantAssociations.oddsRatio.help.text"/>'
                         };
-                        var collector = {}
+                        var collector = [];
                         for (var i = 0; i < data.variantInfo.results.length; i++) {
-                            var d = [];
                             for (var j = 0; j < data.variantInfo.results[i].pVals.length; j++) {
                                 var contents = {};
                                 contents["level"] = data.variantInfo.results[i].pVals[j].level;
                                 contents["count"] = data.variantInfo.results[i].pVals[j].count;
-                                d.push(contents);
+                                collector.push(contents);
                             }
-                            collector["d" + i] = d;
                         }
                         var calculateDiseaseBurden = mpgSoftware.variantInfo.retrieveCalculateDiseaseBurden();
-                        var rv = calculateDiseaseBurden(parseInt(collector["d0"][6].count[0]),
-                                parseInt(collector["d0"][7].count[0]),
-                                parseInt(collector["d0"][2].count[0]),
-                                parseInt(collector["d0"][3].count[0]),
-                                parseInt(collector["d0"][4].count[0]),
-                                parseInt(collector["d0"][0].count[0]),
-                                parseInt(collector["d0"][5].count[0]),
-                                parseInt(collector["d0"][1].count[0]),
-                                parseFloat(collector["d0"][8].count[0]),
-                                parseFloat(collector["d0"][9].count[0]),
-                                "<%=variantToSearch%>", ${show_gwas}, ${show_exchp}, ${show_exseq}, diseaseBurdenStrings);
+                        var rv = calculateDiseaseBurden(UTILS.extractFieldBasedOnMeaning(collector,"OBSU",0),
+                                UTILS.extractFieldBasedOnMeaning(collector,"OBSA",0),
+                                UTILS.extractFieldBasedOnMeaning(collector,"MINA",0),
+                                UTILS.extractFieldBasedOnMeaning(collector,"MINU",0),
+                                UTILS.extractFieldBasedOnMeaning(collector,"HOMA",0),
+                                UTILS.extractFieldBasedOnMeaning(collector,"HETA",0),
+                                UTILS.extractFieldBasedOnMeaning(collector,"HOMU",0),
+                                UTILS.extractFieldBasedOnMeaning(collector,"HETU",0),
+                                UTILS.extractFieldBasedOnMeaning(collector,"P_VALUE",0),
+                                UTILS.extractFieldBasedOnMeaning(collector,"OR_VALUE",0),
+                                "<%=variantToSearch%>", diseaseBurdenStrings);
 
                         if ((typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation() !== 'undefined') &&
                                 (typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch !== 'undefined')) {

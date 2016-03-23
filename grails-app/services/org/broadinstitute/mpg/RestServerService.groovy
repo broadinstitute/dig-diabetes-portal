@@ -392,50 +392,6 @@ class RestServerService {
 
 
 
-
-    public String getSampleGroup(String technology, String experiment, String ethnicity) {
-        String dataSize = "17k"
-        String returnValue = ""
-        switch (technology) {
-            case TECHNOLOGY_GWAS:
-                returnValue = "${TECHNOLOGY_GWAS}_${experiment}_${sharedToolsService.getCurrentDataVersion()}"
-                break;
-            case TECHNOLOGY_EXOME_SEQ:
-                switch (ethnicity) {
-                    case ANCESTRY_AA:
-                        returnValue = "${TECHNOLOGY_EXOME_SEQ}_${dataSize}_aa_genes_${sharedToolsService.getCurrentDataVersion()}"
-                        break;
-                    case ANCESTRY_HS:
-                        returnValue = "${TECHNOLOGY_EXOME_SEQ}_${dataSize}_hs_${sharedToolsService.getCurrentDataVersion()}"
-                        break;
-                    case ANCESTRY_EA:
-                        returnValue = "${TECHNOLOGY_EXOME_SEQ}_${dataSize}_ea_genes_${sharedToolsService.getCurrentDataVersion()}"
-                        break;
-                    case ANCESTRY_SA:
-                        returnValue = "${TECHNOLOGY_EXOME_SEQ}_${dataSize}_sa_genes_${sharedToolsService.getCurrentDataVersion()}"
-                        break;
-                    case ANCESTRY_EU:
-                        returnValue = "${TECHNOLOGY_EXOME_SEQ}_${dataSize}_eu_${sharedToolsService.getCurrentDataVersion()}"
-                        break;
-                    case ANCESTRY_NONE:
-                        returnValue = "${TECHNOLOGY_EXOME_SEQ}_${dataSize}_${sharedToolsService.getCurrentDataVersion()}"
-                        break;
-                    default:
-                        log.error("Unexpected ethnicity=${ethnicity}")
-                        break
-                }
-                break;
-            case TECHNOLOGY_EXOME_CHIP:
-                returnValue = "${TECHNOLOGY_EXOME_CHIP}_82k_${sharedToolsService.getCurrentDataVersion()}"
-                break;
-            default: // if we don't recognize the data set then assume the reference verbatim
-                returnValue = technology
-                break
-
-        }
-        return returnValue
-    }
-
     /***
      * This is the underlying routine for every GET request to the REST backend
      * where response is text/plain type.
@@ -913,7 +869,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         for (String ancestry in ancestryList) {
             SampleGroup sampleGroup = chosenSampleGroupByAncestry[ancestry]
             addColumnsForDProperties(resultColumnsToDisplay, "${MAFPHENOTYPE}", sampleGroup.systemId)
-          //  addColumnsForDProperties(resultColumnsToDisplay, "${MAFPHENOTYPE}", "${getSampleGroup(sampleGroup.systemId, "none", ancestry)}")
         }
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         JsonSlurper slurper = new JsonSlurper()
@@ -974,68 +929,17 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     /***
      * Provide the numbers to fill the "is variant frequency different for patients with the disease" section
-     * of the variant info page
+     * of the variant info page  processInfoFromGetDataCall
      * @param variantName
      * @return
      */
     public JSONObject combinedVariantDiseaseRisk(String variantName, String sampleGroup) {
         String attribute = "T2D"
         JSONObject returnValue
-        List<Integer> dataSeteList = [1]
-        List<String> pValueList = [1]
-        StringBuilder sb = new StringBuilder("{\"results\":[")
+        JSONObject apiResults = variantDiseaseRisk(variantName,sampleGroup)
+        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults,"", "" )
         def slurper = new JsonSlurper()
-        for (int j = 0; j < dataSeteList.size(); j++) {
-            sb << "{ \"dataset\": ${dataSeteList[j]},\"pVals\": ["
-            for (int i = 0; i < pValueList.size(); i++) {
-                JSONObject apiResults = variantDiseaseRisk(variantName,sampleGroup)
-                if (apiResults.is_error == false) {
-                    if ((apiResults.variants) && (apiResults.variants[0]) && (apiResults.variants[0][0])) {
-                        def variant = apiResults.variants[0];
-                        if (variant["HETA"]) {
-                            sb << "{\"level\":\"HETA\",\"count\":${variant["HETA"][getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)][attribute]}},"
-                        }
-                        if (variant["HETU"]) {
-                            sb << "{\"level\":\"HETU\",\"count\":${variant["HETU"][getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)][attribute]}},"
-                        }
-                        if (variant[MINORALLELECOUNTS_AFFECTED]) {
-                            sb << "{\"level\":\"${MINORALLELECOUNTS_AFFECTED}\",\"count\":${variant[MINORALLELECOUNTS_AFFECTED][getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)][attribute]}},"
-                        }
-                        if (variant[MINORALLELECOUNTS_UNAFFECTED]) {
-                            sb << "{\"level\":\"${MINORALLELECOUNTS_UNAFFECTED}\",\"count\":${variant[MINORALLELECOUNTS_UNAFFECTED][getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)][attribute]}},"
-                        }
-                        if (variant["HOMA"]) {
-                            sb << "{\"level\":\"HOMA\",\"count\":${variant["HOMA"][getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)][attribute]}},"
-                        }
-                        if (variant["HOMU"]) {
-                            sb << "{\"level\":\"HOMU\",\"count\":${variant["HOMU"][getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)][attribute]}},"
-                        }
-                        if (variant["OBSU"]) {
-                            sb << "{\"level\":\"OBSU\",\"count\":${variant["OBSU"][getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)][attribute]}},"
-                        }
-                        if (variant["OBSA"]) {
-                            sb << "{\"level\":\"OBSA\",\"count\":${variant["OBSA"][getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)][attribute]}},"
-                        }
-                        if (variant["P_FIRTH_FE_IV"]) {
-                            sb << "{\"level\":\"P_FIRTH_FE_IV\",\"count\":${variant["P_FIRTH_FE_IV"][getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)][attribute]}},"
-                        }
-                        if (variant["OR_FIRTH_FE_IV"]) {
-                            sb << "{\"level\":\"OR_FIRTH_FE_IV\",\"count\":${variant["OR_FIRTH_FE_IV"][getSampleGroup(TECHNOLOGY_EXOME_SEQ, "none", ANCESTRY_NONE)][attribute]}}"
-                        }
-                    }
-
-                }
-                if (i < pValueList.size() - 1) {
-                    sb << ","
-                }
-            }
-            sb << "]}"
-            if (j < dataSeteList.size() - 1) {
-                sb << ","
-            }
-        }
-        sb << "]}"
-        returnValue = slurper.parseText(sb.toString())
+        returnValue = slurper.parseText(jsonParsedFromApi)
         return returnValue
     }
 

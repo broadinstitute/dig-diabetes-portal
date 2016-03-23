@@ -1009,5 +1009,18 @@ var UTILS = {
         });
 
 
+    },
+    extractFieldBasedOnMeaning: function(valueObjectArray,desiredMeaningField,defaultvalue){
+        var returnValue = defaultvalue;
+        for (var i = 0 ; i < valueObjectArray.length ; i++ ){
+            var splitValues = valueObjectArray[i].level.split('^');
+            if (splitValues.length > 2){
+                if (splitValues[2] === desiredMeaningField){
+                    returnValue =  valueObjectArray[i].count;
+                    break;
+                }
+            }
+        }
+        return returnValue;
     }
 };

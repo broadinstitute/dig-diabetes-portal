@@ -6,8 +6,20 @@
             <script>
                 var mpgSoftware = mpgSoftware || {};
 
-
                 mpgSoftware.carrierStatusImpact = (function () {
+//                    var extractFieldBasedOnMeaning = function(valueObjectArray,desiredMeaningField,defaultvalue){
+//                        var returnValue = defaultvalue;
+//                        for (var i = 0 ; i < valueObjectArray.length ; i++ ){
+//                            var splitValues = valueObjectArray[i].level.split('^');
+//                            if (splitValues.length > 2){
+//                                if (splitValues[2] === desiredMeaningField){
+//                                    returnValue =  valueObjectArray[i].count;
+//                                    break;
+//                                }
+//                            }
+//                        }
+//                        return returnValue;
+//                    };
                     var loadDiseaseRisk = function () {
                         var variant;
                         $.ajax({
@@ -25,25 +37,22 @@
                                     legendTextNoncarrier: '<g:message code="variant.carrierStatusImpact.legendText.nonCarrier" default="legendTextNoncarrier" />',
                                     designationTotal: '<g:message code="variant.carrierStatusImpact.designation.total" default="designationTotal" />'
                                 };
-                                var collector = {}
+                                var collector = [];
                                 for (var i = 0; i < data.variantInfo.results.length; i++) {
-                                    var d = [];
                                     for (var j = 0; j < data.variantInfo.results[i].pVals.length; j++) {
                                         var contents = {};
                                         contents["level"] = data.variantInfo.results[i].pVals[j].level;
                                         contents["count"] = data.variantInfo.results[i].pVals[j].count;
-                                        d.push(contents);
+                                        collector.push(contents);
                                     }
-                                    collector["d" + i] = d;
                                 }
                                 var carrierStatusDiseaseRisk = mpgSoftware.variantInfo.retrieveCarrierStatusDiseaseRisk();
-                                carrierStatusDiseaseRisk(parseInt(collector["d0"][6].count[0]),
-                                        parseInt(collector["d0"][7].count[0]),
-                                        parseInt(collector["d0"][4].count[0]),
-                                        parseInt(collector["d0"][0].count[0]),
-                                        parseInt(collector["d0"][5].count[0]),
-                                        parseInt(collector["d0"][1].count[0]),
-                                        ${show_gwas}, ${show_exchp}, ${show_exseq}, carrierStatusImpact);
+                                carrierStatusDiseaseRisk(UTILS.extractFieldBasedOnMeaning(collector,"OBSU",0),
+                                        UTILS.extractFieldBasedOnMeaning(collector,"OBSA",0),
+                                        UTILS.extractFieldBasedOnMeaning(collector,"HOMA",0),
+                                        UTILS.extractFieldBasedOnMeaning(collector,"HETA",0),
+                                        UTILS.extractFieldBasedOnMeaning(collector,"HOMU",0),
+                                        UTILS.extractFieldBasedOnMeaning(collector,"HETU",0), carrierStatusImpact);
 
                                 if ((typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation() !== 'undefined') &&
                                         (typeof mpgSoftware.variantInfo.retrieveDelayedCarrierStatusDiseaseRiskPresentation().launch !== 'undefined')) {
