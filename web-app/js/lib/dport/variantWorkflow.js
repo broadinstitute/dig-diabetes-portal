@@ -196,7 +196,7 @@ var mpgSoftware = mpgSoftware || {};
                     row: rowsToDisplay,
                     helpText: function() {
                         if( this.propName === 'P_VALUE' || this.propName === 'P_EMMAX' ) {
-                            return 'Required. Examples: 0.005, 5.0E-4';
+                            return 'Examples: 0.005, 5.0E-4';
                         }
                     }
                 }
@@ -606,7 +606,6 @@ var mpgSoftware = mpgSoftware || {};
          */
         function validatePropertyInput(input) {
             var numberRegex = /^((?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?)?$/
-            console.log(input.value, numberRegex.test(input.value));
             if( ! numberRegex.test(input.value) ) {
                 input.classList.add('redBorder');
             } else {

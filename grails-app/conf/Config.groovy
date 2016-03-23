@@ -270,6 +270,7 @@ grails {
 }
 
 grails.converters.encoding = "UTF-8"
+grails.converters.json.circular.reference.behaviour = 'INSERT_NULL'
 // scaffolding templates configuration
 grails.scaffolding.templates.domainSuffix = 'Instance'
 
@@ -551,4 +552,5 @@ diabetes.data.version = "mdv2";
 portal.data.version.map = ["t2d": "mdv2", "stroke": "mdv5", "mi" : "mdv2"];
 portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "MI"];
 portal.type.override = "t2d"     // options are "t2d" or "stroke"
+
 

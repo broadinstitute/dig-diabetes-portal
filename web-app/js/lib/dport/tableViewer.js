@@ -531,7 +531,7 @@ var variantProcessing = (function () {
                 "pdf",
                 { "sExtends": "print", "sButtonText": printText }
             ],
-            sSwfPath: "../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
+            sSwfPath: "../../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
         } );
         $( tableTools.fnContainer() ).insertAfter(divId);
 
@@ -560,9 +560,9 @@ var variantProcessing = (function () {
                 }  else if (cprop === "DBSNP_ID") {
                     array.push(getSimpleString((variant.DBSNP_ID),noop,variant.DBSNP_ID,""));
                 }  else if (cprop === "CLOSEST_GENE") {
-                    array.push(getStringWithLink(geneRootUrl,(contentExists (geneRootUrl)),noop,variant.CLOSEST_GENE,variant.CLOSEST_GENE,""));
+                    array.push(getStringWithLink(geneRootUrl,(geneRootUrl && variant.CLOSEST_GENE ),noop,variant.CLOSEST_GENE,variant.CLOSEST_GENE,""));
                 }  else if (cprop === "GENE") {
-                    array.push(getStringWithLink(geneRootUrl,(contentExists (geneRootUrl)),noop,variant.GENE,variant.GENE,""));
+                    array.push(getStringWithLink(geneRootUrl,(geneRootUrl && variant.GENE),noop,variant.GENE,variant.GENE,""));
                 }  else if (cprop === "IN_GENE") {
                     array.push(getSimpleString((variant.IN_GENE),noop,variant.IN_GENE,""));
                 }  else if (cprop === "Protein_change") {
@@ -611,7 +611,13 @@ var variantProcessing = (function () {
                 for (var dataset in data.columns.pproperty[pheno]) {
                     for (var k = 0; k < data.columns.pproperty[pheno][dataset].length; k++) {
                         var column = data.columns.pproperty[pheno][dataset][k]
-                        array.push(getSimpleString((variant[column][dataset][pheno]),Math.round(variant[column][dataset][pheno]) == variant[column][dataset][pheno] ? noop : UTILS.realNumberFormatter,variant[column][dataset][pheno],""));
+                        // the variant object may not have the column and/or column.dataset values defined
+                        // if that's the case, just return the empty string
+                        if (variant[column] && variant[column][dataset]) {
+                            array.push(getSimpleString((variant[column][dataset][pheno]), Math.round(variant[column][dataset][pheno]) == variant[column][dataset][pheno] ? noop : UTILS.realNumberFormatter, variant[column][dataset][pheno], ""));
+                        } else {
+                            array.push('');
+                        }
                     }
                 }
             }
