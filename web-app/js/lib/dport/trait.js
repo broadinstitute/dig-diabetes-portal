@@ -32,6 +32,7 @@ var mpgSoftware = mpgSoftware || {};
                 aoColumnDefs: [
                     { sType: "stringAnchor", aTargets: [ 1 ] },
                     { sType: "headerAnchor", aTargets: [0] },
+                    { "targets":  [1], orderData: [1,0, 2] },
                     { "bSortable": false, "aTargets": [0,2,3,4,5,6] },
                     { "width": "80px", "aTargets": [ 4,5,6 ] },
                     { "width": "90px", "aTargets": [ 3 ] },

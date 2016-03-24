@@ -1592,8 +1592,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         JSONObject returnValue
         JSONObject apiResults = gatherSpecificTraitsPerVariantResults(variantName, propsToUse)
-
-        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults,"\"openPhenotypes\": ["+openPhenotypes.join(',')+"]", "" )
+        List<String> openPhenotypesWithQuotes = []
+        for (String openPhenotype in openPhenotypes){
+            if (openPhenotypes[0].indexOf("\"")== -1){
+                openPhenotypesWithQuotes << "\"${openPhenotype}\""
+            }
+        }
+        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults,"\"openPhenotypes\": ["+openPhenotypesWithQuotes.join(',')+"]", "" )
         def slurper = new JsonSlurper()
         returnValue = slurper.parseText(jsonParsedFromApi)
 
