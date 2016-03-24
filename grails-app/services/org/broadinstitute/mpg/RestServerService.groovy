@@ -1454,7 +1454,16 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 (propertyOrMeaning == "BETA") ||
                 (propertyOrMeaning == "ODDS_RATIO") ) {
             List<Property> propertyList = JsonParser.getService().getAllPropertiesWithMeaningForExperimentOfVersion(propertyOrMeaning, sharedToolsService.getCurrentDataVersion(), technology, false)
-            matchers = propertyList.collect { ['pname':it.name,'pheno': it.parent.name, 'ds': it.parent.parent.systemId, 'meaning':propertyOrMeaning] }
+            LinkedHashMap tempPropertyList = [:]
+            for (Property property in propertyList){
+                String identifier = property.parent.name+"_"+property.parent.parent.systemId
+                if (!tempPropertyList.containsKey(identifier)){
+                    tempPropertyList[identifier] = property
+                } else if (tempPropertyList[identifier].sortOrder>property.sortOrder){
+                        tempPropertyList[identifier] = property
+                }
+            }
+            matchers = tempPropertyList.values().collect { ['pname':it.name,'pheno': it.parent.name, 'ds': it.parent.parent.systemId, 'meaning':propertyOrMeaning] }
         } else {
             matchers = JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion(propertyOrMeaning, sharedToolsService.getCurrentDataVersion(), technology, false).
                     collect { ['pname':it.name,'pheno': it.parent.name, 'ds': it.parent.parent.systemId, 'meaning':propertyOrMeaning] }
