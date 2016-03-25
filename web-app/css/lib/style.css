@@ -447,17 +447,24 @@ span.dotlabel {
 
 #header {
   color: white;
-  text-transform: uppercase; }
-  #header a, #header a:visited {
+}
+
+#header a, #header a:visited {
     color: white;
-    padding: 0 6px; }
+}
 
 #header-top {
   background: #052090; }
 
 #header-bottom {
-  background: rgba(43, 117, 207, 0.68);
-  padding: 10px 0; }
+    /* most styling is done on the element itself
+    due to having an image background */
+    text-transform: capitalize;
+}
+
+#usernameDisplay {
+    text-transform: none;
+}
 
 body {
   background: white; }
