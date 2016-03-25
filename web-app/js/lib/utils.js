@@ -828,7 +828,7 @@ var UTILS = {
     extractHeaderTextWJqueryAsString : function (fullAnchor){
         var returnValue = 0;
         if (typeof fullAnchor !== 'undefined') {
-            var returnValue = $(fullAnchor).attr('sampleGroup');
+            var returnValue = $(fullAnchor).attr('convertedSampleGroup');
         }
         return returnValue;
     },
@@ -865,7 +865,7 @@ var UTILS = {
                 adjustmentMadeSoCheckAgain = false;
                 for ( var i = 0 ; i < sortedRowSGLabel.length ; i++ ){
                     var currentDiv = $(sortedRowSGLabel[i]);
-                    var sampleGroupName = currentDiv.attr('datasetname');
+                    var sampleGroupName = currentDiv.attr('convertedsamplegroup');
                     var phenotypeName = currentDiv.attr('phenotypename');
                     var haveSeenItBefore = false;
                     for (var j = 0 ; j < usedAsCore.length ; j++){
@@ -1009,5 +1009,18 @@ var UTILS = {
         });
 
 
+    },
+    extractFieldBasedOnMeaning: function(valueObjectArray,desiredMeaningField,defaultvalue){
+        var returnValue = defaultvalue;
+        for (var i = 0 ; i < valueObjectArray.length ; i++ ){
+            var splitValues = valueObjectArray[i].level.split('^');
+            if (splitValues.length > 2){
+                if (splitValues[2] === desiredMeaningField){
+                    returnValue =  valueObjectArray[i].count;
+                    break;
+                }
+            }
+        }
+        return returnValue;
     }
 };

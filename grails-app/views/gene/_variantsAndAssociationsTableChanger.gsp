@@ -44,7 +44,7 @@ $( document ).ready(function() {
                adjustmentMadeSoCheckAgain = false;
                for ( var i = 0 ; i < rowSGLabel.length ; i++ ){
                   var currentDiv = $(rowSGLabel[i]);
-                  var sampleGroupName = currentDiv.attr('datasetname');
+                  var sampleGroupName = currentDiv.attr('translatedname');
                   if (typeof coreSGName === undefined){
                      coreSGName = sampleGroupName;
                      usedAsCore.push(coreSGName);

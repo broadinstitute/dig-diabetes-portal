@@ -177,21 +177,23 @@
 
     </div>
 
+%{--// Removing the section for now.  Maybe we will want to return it at some point--}%
+%{--// Removing the section for now.  Maybe we will want to return it at some point--}%
+%{--// Removing the section for now.  Maybe we will want to return it at some point--}%
+    %{--<div class="separator"></div>--}%
 
-    <div class="separator"></div>
+    %{--<div class="accordion-group">--}%
+        %{--<div class="accordion-heading">--}%
+            %{--<a class="accordion-toggle  collapsed" data-toggle="collapse"--}%
+               %{--data-parent="#accordionVariant"--}%
+               %{--href="#collapseCarrierStatusImpact">--}%
+                %{--<h2><strong><g:message code="variant.carrierStatusImpact.title" default="How many carriers in the data set"/></strong></h2>--}%
+            %{--</a>--}%
+        %{--</div>--}%
 
-    <div class="accordion-group">
-        <div class="accordion-heading">
-            <a class="accordion-toggle  collapsed" data-toggle="collapse"
-               data-parent="#accordionVariant"
-               href="#collapseCarrierStatusImpact">
-                <h2><strong><g:message code="variant.carrierStatusImpact.title" default="How many carriers in the data set"/></strong></h2>
-            </a>
-        </div>
+        %{--<g:render template="carrierStatusImpact"/>--}%
 
-        <g:render template="carrierStatusImpact"/>
-
-    </div>
+    %{--</div>--}%
 
 </g:if>
 

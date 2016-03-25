@@ -200,6 +200,7 @@ button.expandoButton:visited {
                     rowMap.map(function (d) {
                         rowValues.push("{\"ds\":\"" + d.name + "\",\"prop\":\"" + d.pvalue + "\",\"phenotype\":\"" + d.phenotype + "\"}");
                     });
+                   // var suppArrayOfOpenPhenotypes = arrayOfOpenPhenotypes.map(function (d) {return ('"'+d+'"')});
                     jsonString = "{\"vals\":[\n" + rowValues.join(",\n") + "\n],\n" +
                             "\"phenos\":[\n" + arrayOfOpenPhenotypes.join(",\n") + "\n]}";
 
@@ -246,83 +247,84 @@ button.expandoButton:visited {
                 });
             }
             // get the indenting for now...
+            //$('#traitsPerVariantTable').dataTable().rowReordering();
             UTILS.labelIndenter('traitsPerVariantTable');
           //  $('#traitsPerVariantTable').on( 'order.dt', UTILS.labelIndenter );
 
-            var loading = $('#spinner').show();
-            var chosendataJson = {};
-            // workaround necessary because we can't have too many joins in a single request.  The goal is to
-            //  fix this problem on the backend, but between now and then here is a trick we can use
-            var numberOfTopLevelLoops = Math.floor(datasetmaps.length / maximumDataSetsPerCall);
-            for (var dataSetGroupCount = 0; dataSetGroupCount < numberOfTopLevelLoops + 1; dataSetGroupCount++) {
-                var dataSetCount = 0;
-                var rowMap = [];
-                var rowValues = [];
-                while ((dataSetCount < maximumDataSetsPerCall) &&
-                        (((maximumDataSetsPerCall * dataSetGroupCount) + dataSetCount) < datasetmaps.length)) {
-                    rowMap.push(datasetmaps[(maximumDataSetsPerCall * dataSetGroupCount) + dataSetCount]);
-                    dataSetCount++;
-                }
-                if ((typeof rowMap !== 'undefined') &&
-                        (rowMap)) {
-                    rowMap.map(function (d) {
-                        var itemToPush = {
-                            ds: d.name,
-                            prop: d.pvalue,
-                            phenotype: d.phenotype,
-                        };
-                        rowValues.push({
-                            ds: d.name,
-                            prop: d.pvalue,
-                            phenotype: d.phenotype,
-                        });
-                    });
-                    chosendataJson = {
-                        vals: rowValues,
-                        phenos: arrayOfOpenPhenotypes
-                    };
-                }
-                $.ajax({
-                    cache: false,
-                    type: "get",
-                    url: '<g:createLink controller="trait" action="ajaxSpecifiedAssociationStatisticsTraitsPerVariant" />',
-                    data: { variantIdentifier: variantIdentifier,
-                        technology: '',
-                        chosendataData: JSON.stringify(chosendataJson)
-                    },
-                    dataType: "json",
-                    async: false,
-                    success: function (data) {
-                        var firstTime = (dataSetGroupCount == 0);
-                        if (firstTime) {
-                            if ($.fn.DataTable.isDataTable('#traitsPerVariantTable')) {
-                                $('#traitsPerVariantTable').dataTable({"bRetrieve": true}).fnDestroy();
-                            }
+            %{--var loading = $('#spinner').show();--}%
+            %{--var chosendataJson = {};--}%
+            %{--// workaround necessary because we can't have too many joins in a single request.  The goal is to--}%
+            %{--//  fix this problem on the backend, but between now and then here is a trick we can use--}%
+            %{--var numberOfTopLevelLoops = Math.floor(datasetmaps.length / maximumDataSetsPerCall);--}%
+            %{--for (var dataSetGroupCount = 0; dataSetGroupCount < numberOfTopLevelLoops + 1; dataSetGroupCount++) {--}%
+                %{--var dataSetCount = 0;--}%
+                %{--var rowMap = [];--}%
+                %{--var rowValues = [];--}%
+                %{--while ((dataSetCount < maximumDataSetsPerCall) &&--}%
+                        %{--(((maximumDataSetsPerCall * dataSetGroupCount) + dataSetCount) < datasetmaps.length)) {--}%
+                    %{--rowMap.push(datasetmaps[(maximumDataSetsPerCall * dataSetGroupCount) + dataSetCount]);--}%
+                    %{--dataSetCount++;--}%
+                %{--}--}%
+                %{--if ((typeof rowMap !== 'undefined') &&--}%
+                        %{--(rowMap)) {--}%
+                    %{--rowMap.map(function (d) {--}%
+                        %{--var itemToPush = {--}%
+                            %{--ds: d.name,--}%
+                            %{--prop: d.pvalue,--}%
+                            %{--phenotype: d.phenotype--}%
+                        %{--};--}%
+                        %{--rowValues.push({--}%
+                            %{--ds: d.name,--}%
+                            %{--prop: d.pvalue,--}%
+                            %{--phenotype: d.phenotype--}%
+                        %{--});--}%
+                    %{--});--}%
+                    %{--chosendataJson = {--}%
+                        %{--vals: rowValues,--}%
+                        %{--phenos: arrayOfOpenPhenotypes--}%
+                    %{--};--}%
+                %{--}--}%
+                %{--$.ajax({--}%
+                    %{--cache: false,--}%
+                    %{--type: "get",--}%
+                    %{--url: '<g:createLink controller="trait" action="ajaxSpecifiedAssociationStatisticsTraitsPerVariant" />',--}%
+                    %{--data: { variantIdentifier: variantIdentifier,--}%
+                        %{--technology: '',--}%
+                        %{--chosendataData: JSON.stringify(chosendataJson)--}%
+                    %{--},--}%
+                    %{--dataType: "json",--}%
+                    %{--async: false,--}%
+                    %{--success: function (data) {--}%
+                        %{--var firstTime = (dataSetGroupCount == 0);--}%
+                        %{--if (firstTime) {--}%
+                            %{--if ($.fn.DataTable.isDataTable('#traitsPerVariantTable')) {--}%
+                                %{--$('#traitsPerVariantTable').dataTable({"bRetrieve": true}).fnDestroy();--}%
+                            %{--}--}%
 
-                            $('#traitsPerVariantTable').empty();
-                            $('#traitsPerVariantTable').append('<thead>' +
-                                    '<tr>' +
-                                    '<th><g:message code="variantTable.columnHeaders.shared.dataSet" /></th>' +
-                                    '<th><g:message code="informational.shared.header.trait" /></th>' +
-                                    '<th><g:message code="variantTable.columnHeaders.sigma.pValue" /></th>' +
-                                    '<th><g:message code="variantTable.columnHeaders.shared.direction" /></th>' +
-                                    '<th><g:message code="variantTable.columnHeaders.shared.oddsRatio" /></th>' +
-                                    '<th><g:message code="variantTable.columnHeaders.shared.maf" /></th>' +
-                                    '<th><g:message code="variantTable.columnHeaders.shared.effect" /></th>' +
-                                    '</tr>' +
-                                    '</thead>');
-                            $('#traitsPerVariantTable').append('<tbody id="traitsPerVariantTableBody">' +
-                                    '</tbody>');
-                        }
-                        addMoreValues(data, dataSetGroupCount);
-                        loading.hide();
-                    },
-                    error: function (jqXHR, exception) {
-                        loading.hide();
-                        core.errorReporter(jqXHR, exception);
-                    }
-                });
-            }
+                            %{--$('#traitsPerVariantTable').empty();--}%
+                            %{--$('#traitsPerVariantTable').append('<thead>' +--}%
+                                    %{--'<tr>' +--}%
+                                    %{--'<th><g:message code="variantTable.columnHeaders.shared.dataSet" /></th>' +--}%
+                                    %{--'<th><g:message code="informational.shared.header.trait" /></th>' +--}%
+                                    %{--'<th><g:message code="variantTable.columnHeaders.sigma.pValue" /></th>' +--}%
+                                    %{--'<th><g:message code="variantTable.columnHeaders.shared.direction" /></th>' +--}%
+                                    %{--'<th><g:message code="variantTable.columnHeaders.shared.oddsRatio" /></th>' +--}%
+                                    %{--'<th><g:message code="variantTable.columnHeaders.shared.maf" /></th>' +--}%
+                                    %{--'<th><g:message code="variantTable.columnHeaders.shared.effect" /></th>' +--}%
+                                    %{--'</tr>' +--}%
+                                    %{--'</thead>');--}%
+                            %{--$('#traitsPerVariantTable').append('<tbody id="traitsPerVariantTableBody">' +--}%
+                                    %{--'</tbody>');--}%
+                        %{--}--}%
+                        %{--addMoreValues(data, dataSetGroupCount);--}%
+                        %{--loading.hide();--}%
+                    %{--},--}%
+                    %{--error: function (jqXHR, exception) {--}%
+                        %{--loading.hide();--}%
+                        %{--core.errorReporter(jqXHR, exception);--}%
+                    %{--}--}%
+                %{--});--}%
+            %{--}--}%
 
         };
 

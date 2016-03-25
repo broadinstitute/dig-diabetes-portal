@@ -130,6 +130,7 @@ var variantProcessing = (function () {
                         var phenotypeMap = {'property': splitKey[0],
                             'phenotype': splitKey[1],
                             'translatedName': splitKey[6],
+                            'translatedSGName': splitKey[5],
                             'meaning': splitKey[2],
                             'samplegroup': splitKey[3],
                             'pValue': data [i].count};
@@ -142,6 +143,7 @@ var variantProcessing = (function () {
                             'phenotype': splitKey[1],
                             'meaning': splitKey[2],
                             'samplegroup': splitKey[3],
+                            'translatedSGName': splitKey[5],
                             'pValue': data [i].count};
                         phenoStruct.push(phenotypeMap);
                     }
@@ -292,6 +294,7 @@ var variantProcessing = (function () {
                             for  (var j = 0; j < fieldsPerPhenotypeForFavoredSampleGroup[i].length; j++) {
                                 fieldAccumulator[fieldsPerPhenotypeForFavoredSampleGroup[i][j].meaning]  =   fieldsPerPhenotypeForFavoredSampleGroup[i][j].pValue;
                                 fieldAccumulator['samplegroup']  =   fieldsPerPhenotypeForFavoredSampleGroup[i][j].samplegroup;  // gets assigned multiple times but should always be the same
+                                fieldAccumulator['translatedSGName']  =   fieldsPerPhenotypeForFavoredSampleGroup[i][j].translatedSGName;  // gets assigned multiple times but should always be the same
                                 fieldAccumulator['translatedPhenotypeName'] = fieldsPerPhenotypeForFavoredSampleGroup[i][j].translatedName;  // gets assigned multiple times but should always be the same
                             }
                             combinedStructure["phenotypeRows"][phenotypeName].push(fieldAccumulator);
@@ -341,7 +344,7 @@ var variantProcessing = (function () {
 
                     // some shared variables
                     var convertedTrait= row.translatedPhenotypeName;
-                    var convertedSampleGroup= row.samplegroup;
+                    var convertedSampleGroup= row.translatedSGName;
                     var dealingWithIndexRow = (i===indexRow);
                     var oddsRatioValue = Number.NaN;
                     var betaValue = Number.NaN;

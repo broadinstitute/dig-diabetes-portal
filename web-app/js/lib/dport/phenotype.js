@@ -53,7 +53,7 @@ var mpgSoftware = mpgSoftware || {};
                 var betaVal;
                 if ($.isNumeric(betaValue)) {
                     retVal.push("<span class='" + pValueGreyedOut + "'>" + betaValue.toPrecision(3) + "</span>");
-                } if ($.isNumeric(orValue)) {
+                } else if ($.isNumeric(orValue)) {
                     retVal.push("<span class='" + pValueGreyedOut + "'>" + orValue.toPrecision(3) + "</span>");
                 } else {
                     retVal.push("<span class='" + pValueGreyedOut + "'>--</span>");

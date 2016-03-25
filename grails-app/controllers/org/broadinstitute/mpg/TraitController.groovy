@@ -104,14 +104,23 @@ class TraitController {
         String phenotype = params["phenotype"]
         List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion(phenotype, "")
         List <String> sampleGroupStrings = []
+        List <String> sortedSampleGroupStrings = sampleGroupList.sort{a,b->return b.subjectsNumber <=> a.subjectsNumber}
+        String largestSampleGroup = sortedSampleGroupStrings?.first()?.getSystemId()
         for (SampleGroup sampleGroup in sampleGroupList){
             String sampleGroupId = sampleGroup.getSystemId()
             String sampleGroupTranslation = g.message(code: "metadata." + sampleGroupId, default: sampleGroupId)
-            sampleGroupStrings << """{"sg":"${sampleGroupId}","sgn":"${sampleGroupTranslation}"}\n"""
+            sampleGroupStrings << """{"sg":"${sampleGroupId}","sgn":"${sampleGroupTranslation}","default":${(sampleGroupId==largestSampleGroup)?1:0}}\n"""
         }
         String rawJson = "["+sampleGroupStrings.join(",")+"]"
         JsonSlurper slurper = new JsonSlurper()
-        JSONArray jsonArray = slurper.parseText(rawJson)
+        JSONArray jsonArray = new JSONArray()
+        // Very strange.  the parseText call gives me a different datatype if I have an array with one object.  It shouldn't.  The following workaround
+        // seems to always function correctly: create JSONArray with a constructor, and add your collection to it, rather than directly assigning the
+        // results from parseText
+        def tempArray = slurper.parseText(rawJson)
+        jsonArray.addAll(tempArray)
+
+        //JSONArray jsonArray = slurper.parseText(rawJson)
         render(status:200, contentType:"application/json") {
             [sampleGroups:jsonArray]
         }
@@ -171,15 +180,28 @@ class TraitController {
             }
 
          LinkedHashMap properties = [:]
-         // todo: currently defaulting to diagram.  We could do better, but I need to know the right algorithm
-         List<PhenotypeBean> phenotypeList = metaDataService.getAllPhenotypesWithName(phenotypicTrait)
-         if ((phenotypeList?.size()>0) && (!dataSetName)){
+         if (phenotypicTrait){
+             if(!dataSetName){
+                 List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion(phenotypicTrait, "")
+                 List <String> sortedSampleGroupStrings = sampleGroupList.sort{a,b->return b.subjectsNumber <=> a.subjectsNumber}
+                 dataSetName = sortedSampleGroupStrings?.first()?.getSystemId()
+
+             }
+             List<PhenotypeBean> phenotypeList = metaDataService.getAllPhenotypesWithName(phenotypicTrait)
              List<Property> propertyList =  metadataUtilityService.retrievePhenotypeProperties(phenotypeList)
-             dataSetName = metadataUtilityService.retrievePhenotypeSampleGroupId(phenotypeList)
              for (Property property in propertyList){
                  properties[property.getName()] = property.getPropertyType()
              }
          }
+
+//          List<PhenotypeBean> phenotypeList = metaDataService.getAllPhenotypesWithName(phenotypicTrait)
+//         if ((phenotypeList?.size()>0) && (!dataSetName)){
+//             List<Property> propertyList =  metadataUtilityService.retrievePhenotypeProperties(phenotypeList)
+//             dataSetName = metadataUtilityService.retrievePhenotypeSampleGroupId(phenotypeList)
+//             for (Property property in propertyList){
+//                 properties[property.getName()] = property.getPropertyType()
+//             }
+//         }
          JSONObject jsonObject = restServerService.getTraitSpecificInformation(phenotypicTrait, dataSetName,properties,significanceValue,0.0)
          render(status:200, contentType:"application/json") {
                 [variant:jsonObject]

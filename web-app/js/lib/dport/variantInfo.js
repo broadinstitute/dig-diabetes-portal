@@ -455,23 +455,18 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 },
 
-                showCarrierStatusDiseaseRisk = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, show_gwas, show_exchp, show_exseq, carrierStatusImpact) {
+                showCarrierStatusDiseaseRisk = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, carrierStatusImpact) {
                     var heta = 1, hetu = 1, totalCases = 1,
                         homa = 1, homu = 1, totalControls = 1,
                         retainBarchartPtr;
-                    try {
-                        if (show_exseq) {
-                            heta = HETA;
-                            hetu = HETU;
-                            homa = HOMA;
-                            homu = HOMU;
-                            totalCases = OBSA;
-                            totalControls = OBSU;
-                        }
 
+                        heta = HETA;
+                        hetu = HETU;
+                        homa = HOMA;
+                        homu = HOMU;
+                        totalCases = OBSA;
+                        totalControls = OBSU;
 
-                    } catch (e) {
-                    }
 
                     delayedCarrierStatusDiseaseRiskPresentation = {
                         barchartPtr: retainBarchartPtr,
@@ -611,7 +606,7 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 },
 
-                fillDiseaseRiskBurdenTest = function (OBSU, OBSA, MINA, MINU, PVALUE, ORVALUE, show_gwas, show_exchp, show_exseq, rootVariantUrl, diseaseBurdenStrings) {
+                fillDiseaseRiskBurdenTest = function (OBSU, OBSA, MINA, MINU, PVALUE, ORVALUE, rootVariantUrl, diseaseBurdenStrings) {
                     var mina = 0,
                         minu = 0,
                         totalUnaffected = 0,
@@ -619,14 +614,13 @@ var mpgSoftware = mpgSoftware || {};
                         pValue = 0,
                         retainBarchartPtr,
                         oddsRatio;
-                    if (show_exseq) {
+
                         mina = MINA;
                         minu = MINU;
                         totalUnaffected = OBSU;
                         totalAffected = OBSA;
                         pValue = PVALUE;
                         oddsRatio = ORVALUE;
-                    }
 
                     // variables for bar chart
                     var numeratorUnaffected,
@@ -724,12 +718,12 @@ var mpgSoftware = mpgSoftware || {};
                            server:restServerRoot};
                 },
              externalVariantAssociationStatistics = variantAssociations;
-            var calculateDiseaseBurden = function (OBSU, OBSA, MINA, MINU, HOMA, HETA, HOMU, HETU, PVALUE, ORVALUE, variantTitle, showGwas, showExchp, showExseq, diseaseBurdenStrings) {// disease burden
+            var calculateDiseaseBurden = function (OBSU, OBSA, MINA, MINU, HOMA, HETA, HOMU, HETU, PVALUE, ORVALUE, variantTitle, diseaseBurdenStrings) {// disease burden
                 var weHaveEnoughDataForRiskBurdenTest;
                 weHaveEnoughDataForRiskBurdenTest = (!UTILS.nullSafetyTest([OBSU, OBSA, MINA, MINU ]));
                 UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataForRiskBurdenTest, $('#diseaseRiskExists'), $('#diseaseRiskNoExists'));
                 if (weHaveEnoughDataForRiskBurdenTest) {
-                    privateMethods.fillDiseaseRiskBurdenTest(OBSU, OBSA, MINA, MINU, PVALUE, ORVALUE, showGwas, showExchp, showExseq, null, diseaseBurdenStrings);
+                    privateMethods.fillDiseaseRiskBurdenTest(OBSU, OBSA, MINA, MINU, PVALUE, ORVALUE, null, diseaseBurdenStrings);
                 }
             };
             // externalize!
@@ -743,12 +737,12 @@ var mpgSoftware = mpgSoftware || {};
                 }
             };
             externalizeShowHowCommonIsThisVariantAcrossEthnicities = howCommonIsThisVariantAcrossEthnicities;
-            var showHowCarriersAreDistributed = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU, showGwas, showExchp, showExseq, carrierStatusImpact) {// case control data set characterization
+            var showHowCarriersAreDistributed = function (OBSU, OBSA, HOMA, HETA, HOMU, HETU,carrierStatusImpact) {// case control data set characterization
                 var weHaveEnoughDataToCharacterizeCaseControls;
                 weHaveEnoughDataToCharacterizeCaseControls = (!UTILS.nullSafetyTest([OBSU, OBSA, HOMA, HETA, HOMU, HETU  ]));
                 UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToCharacterizeCaseControls, $('#carrierStatusExist'), $('#carrierStatusNoExist'));
                 if (weHaveEnoughDataToCharacterizeCaseControls) {
-                    privateMethods.showCarrierStatusDiseaseRisk(OBSU, OBSA, HOMA, HETA, HOMU, HETU, showGwas, showExchp, showExseq, carrierStatusImpact);
+                    privateMethods.showCarrierStatusDiseaseRisk(OBSU, OBSA, HOMA, HETA, HOMU, HETU, carrierStatusImpact);
                 }
             };
             externalizeCarrierStatusDiseaseRisk = showHowCarriersAreDistributed;

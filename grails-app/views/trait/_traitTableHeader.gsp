@@ -26,7 +26,7 @@
                                 (data.sampleGroups.length>0)) {//assume we have data and process it
                             for ( var i = 0 ; i < data.sampleGroups.length ; i++ ){
                                 var sampleGroup = data.sampleGroups[i];
-                                $('#manhattanSampleGroupChooser').append(new Option(sampleGroup.sgn,sampleGroup.sg))
+                                $('#manhattanSampleGroupChooser').append(new Option(sampleGroup.sgn,sampleGroup.sg,sampleGroup.default))
                             }
                         }
                     }
