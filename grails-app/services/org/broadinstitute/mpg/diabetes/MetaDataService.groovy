@@ -41,20 +41,20 @@ class MetaDataService {
      */
     public String getPortalTypeFromSession() {
         // if portal type defined in config, use that
-        String portalTypeOverride =  this.grailsApplication.config.portal.type.override;
+        String portalTypeOverride = this.grailsApplication.config.portal.type.override;
         String portalType = null;
 
-        if (portalTypeOverride == null) {
-            // DIGP-291: adding different metadata versions by portal
-            portalType = WebUtils.retrieveGrailsWebRequest()?.getSession()?.getAttribute('portalType');
+        portalType = WebUtils.retrieveGrailsWebRequest()?.getSession()?.getAttribute('portalType');
 
-            // get the data version based on user session portal type; default to t2d
+        // DIGP-291: adding different metadata versions by portal
+        // get the data version based on user session portal type; default to portal override if no session preference set
+        if (portalType == null) {
+            portalType = portalTypeOverride;
+
+            // if not portal override set in config, set to t2d as last resort
             if (portalType == null) {
                 portalType = "t2d";
             }
-
-        } else {
-            portalType = portalTypeOverride;
         }
 
         // return
