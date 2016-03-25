@@ -5,6 +5,7 @@ import grails.transaction.Transactional
 import groovy.json.StringEscapeUtils
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.metadata.Experiment
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean
@@ -541,6 +542,43 @@ class SharedToolsService {
         return toReturn
     }
 
+
+
+    private List<SampleGroup> listOnlyTopLevelSampleGroups( List<SampleGroup> sampleGroupList ) {
+        List<SampleGroup> listToPrune = sampleGroupList
+        for (SampleGroup sampleGroup in sampleGroupList){
+            List<SampleGroup> myKids = listAllOfMyChildSampleGroups(sampleGroup)
+            listToPrune = listToPrune - myKids
+        }
+        return listToPrune
+    }
+
+
+
+    private List<SampleGroup> listAllOfMyChildSampleGroups( SampleGroup rootSampleGroup ) {
+        List<SampleGroup> returnValue = []
+        if ((rootSampleGroup)&&
+                (rootSampleGroup.getSampleGroups().size()>0)){
+            returnValue = descendThroughMyKids(rootSampleGroup,returnValue)
+        }
+        return returnValue
+    }
+
+
+    private List<SampleGroup> descendThroughMyKids( SampleGroup rootSampleGroup, List<SampleGroup> accumulatingList ){
+        SampleGroupBean rootSampleGroupBean = rootSampleGroup as SampleGroupBean
+        for (SampleGroup sampleGroup in rootSampleGroupBean.getSampleGroups()){
+            accumulatingList.add(sampleGroup)
+            descendThroughMyKids(sampleGroup,accumulatingList)
+        }
+        return accumulatingList
+    }
+
+
+
+
+
+
     /***
      * get top level sample groups for display
      *
@@ -556,10 +594,14 @@ class SharedToolsService {
                 List<SampleGroup> sortedTechnologySpecificSampleGroups = technologySpecificSampleGroups.sort { SampleGroup a, SampleGroup b ->
                     (b.subjectsNumber as Integer) <=> (a.subjectsNumber as Integer)
                 }
-                if ("ExSeq" == technologyName) {
-                    fullListOfSampleGroups.add(sortedTechnologySpecificSampleGroups[0])
-                } else {
-                    fullListOfSampleGroups.addAll(sortedTechnologySpecificSampleGroups)
+//                if (("ExSeq" == technologyName)||("GWAS" == technologyName)) {
+//                    fullListOfSampleGroups.add(sortedTechnologySpecificSampleGroups[0])
+//                } else {
+//                    fullListOfSampleGroups.addAll(sortedTechnologySpecificSampleGroups)
+//                }
+                List<SampleGroup> topLevelGroups = listOnlyTopLevelSampleGroups( sortedTechnologySpecificSampleGroups )
+                if (topLevelGroups.size()>0) {
+                    fullListOfSampleGroups.addAll(topLevelGroups)
                 }
             }
         }
@@ -684,14 +726,41 @@ class SharedToolsService {
         String checkedByDef = (sb.toString().length() == 0) ? "true" : "false"
         if (sampleGroupBean) {
             def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
-            List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = sampleGroupBean.getPhenotypes()
-            for (org.broadinstitute.mpg.diabetes.metadata.Phenotype phenotype in phenotypeList) {
-                if (("" == phenotypeName) || (phenotype.name == phenotypeName)) {// we care about this sample group
-                    String pValue = filterManagementService.findFavoredMeaningValue(sampleGroupBean.getSystemId(), phenotypeName, "P_VALUE");
-                    sb << """{
+            if ("" == phenotypeName) {
+                        sb << """{
   "text"        : "${
-                        g.message(code: "metadata." + sampleGroupBean.getSystemId(), default: sampleGroupBean.getSystemId())
-                    }",
+                            g.message(code: "metadata." + sampleGroupBean.getSystemId(), default: sampleGroupBean.getSystemId())
+                        }",
+  "id"          : "${sampleGroupBean.getSystemId()}--${sampleGroupBean.subjectsNumber}-${phenotypeName}",
+  "state"       : {
+    "opened"    : false,
+    "disabled"  : false,
+    "selected"  : ${checkedByDef}
+  },
+  "children"    : [""".toString()
+                        List<SampleGroup> sampleGroupList = sampleGroupBean.getSampleGroups()
+                        int sampleGroupCount = 0
+                        for (SampleGroup sampleGroup in sampleGroupList) {
+                            recursivelyDescendSampleGroupsHierarchically(sampleGroup, phenotypeName, sb)
+                            sampleGroupCount++
+                            if (sampleGroupCount < sampleGroupList.size()) {
+                                sb << ","
+                            }
+                        }
+                        sb << """]
+}""".toString()
+
+
+            }
+            else {
+                List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = sampleGroupBean.getPhenotypes()
+                for (org.broadinstitute.mpg.diabetes.metadata.Phenotype phenotype in phenotypeList) {
+                    if (("" == phenotypeName) || (phenotype.name == phenotypeName)) {// we care about this sample group
+                        String pValue = filterManagementService.findFavoredMeaningValue(sampleGroupBean.getSystemId(), phenotypeName, "P_VALUE");
+                        sb << """{
+  "text"        : "${
+                            g.message(code: "metadata." + sampleGroupBean.getSystemId(), default: sampleGroupBean.getSystemId())
+                        }",
   "id"          : "${sampleGroupBean.getSystemId()}-${pValue}-${sampleGroupBean.subjectsNumber}-${phenotypeName}",
   "state"       : {
     "opened"    : false,
@@ -699,18 +768,20 @@ class SharedToolsService {
     "selected"  : ${checkedByDef}
   },
   "children"    : [""".toString()
-                    List<SampleGroup> sampleGroupList = sampleGroupBean.getSampleGroups()
-                    int sampleGroupCount = 0
-                    for (SampleGroup sampleGroup in sampleGroupList) {
-                        recursivelyDescendSampleGroupsHierarchically(sampleGroup, phenotypeName, sb)
-                        sampleGroupCount++
-                        if (sampleGroupCount < sampleGroupList.size()) {
-                            sb << ","
+                        List<SampleGroup> sampleGroupList = sampleGroupBean.getSampleGroups()
+                        int sampleGroupCount = 0
+                        for (SampleGroup sampleGroup in sampleGroupList) {
+                            recursivelyDescendSampleGroupsHierarchically(sampleGroup, phenotypeName, sb)
+                            sampleGroupCount++
+                            if (sampleGroupCount < sampleGroupList.size()) {
+                                sb << ","
+                            }
                         }
-                    }
-                    sb << """]
+                        sb << """]
 }""".toString()
+                    }
                 }
+
             }
         }
         return sb

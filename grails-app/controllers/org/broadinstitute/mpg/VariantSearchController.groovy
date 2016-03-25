@@ -61,11 +61,21 @@ class VariantSearchController {
         String sampleGroupName = params.sampleGroup
         SampleGroup sampleGroup = metaDataService.getSampleGroupByName(sampleGroupName)
 
+        if (sampleGroupName=='GWAS_Stroke_mdv5'){
+            log.debug('foo')
+        }
+
+
         if (sampleGroup?.sampleGroupList?.size()>0){
             sampleGroup.sampleGroupList = sampleGroup.sampleGroupList.sort{g.message(code:"metadata." + it.systemId, default: it.systemId)}
         }
         String jsonDescr = sharedToolsService.packageSampleGroupsHierarchicallyForJsTree(sampleGroup,phenotypeName)
-        def result = slurper.parseText(jsonDescr)
+        def result = new JSONObject()
+        if ((jsonDescr)&&(jsonDescr.length()>0)) {
+            result = slurper.parseText(jsonDescr)
+        }  else {
+            log.debug('foo')
+        }
         render(status: 200, contentType: "application/json") {
             result
         }
