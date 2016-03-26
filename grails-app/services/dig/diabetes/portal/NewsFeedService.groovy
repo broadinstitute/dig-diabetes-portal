@@ -33,6 +33,10 @@ class NewsFeedService {
      * cache, and return the posts, otherwise just return the posts
      */
     public JSONObject getCurrentPosts(String portalType) {
+        // mostly for testing
+        if(portalType == '') {
+            return new JSONObject()
+        }
         Date currentDate = new Date()
         Date dateToUpdateAt = new Date(postsLastUpdatedAt[portalType].getTime() + cacheTimeout)
         if (currentDate.after(dateToUpdateAt)) {

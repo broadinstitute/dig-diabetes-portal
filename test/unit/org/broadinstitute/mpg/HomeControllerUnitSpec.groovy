@@ -34,7 +34,6 @@ class HomeControllerUnitSpec extends Specification {
         when:
         sharedToolsService.metaClass.getApplicationIsT2dgenes = {->true}
         sharedToolsService.metaClass.getSectionToDisplay = {unused->true}
-//        portalTypeString = {-> 't2d'}
         controller.index()
 
         then:
@@ -66,7 +65,6 @@ class HomeControllerUnitSpec extends Specification {
         mockTagLib HtmlTagLib
         sharedToolsService.metaClass.getApplicationIsT2dgenes = {->true}
         sharedToolsService.metaClass.getSectionToDisplay = {unused->true}
-//        portalTypeString = {-> 't2d'}
         controller.sharedToolsService = sharedToolsService
 
         when:
