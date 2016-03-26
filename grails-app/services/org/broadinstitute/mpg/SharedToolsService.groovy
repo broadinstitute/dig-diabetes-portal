@@ -509,17 +509,17 @@ class SharedToolsService {
 
     public JSONObject packageUpAListAsJson(List<String> listOfStrings) {
         // now that we have a list, build it into a string suitable for JSON
-        int numrec = 0
-        StringBuilder sb = new StringBuilder()
-        if ((listOfStrings) && (listOfStrings?.size() > 0)) {
-            numrec = listOfStrings.size()
-            for (int i = 0; i < numrec; i++) {
-                sb << "\"${listOfStrings[i]}\"".toString()
-                if (i < listOfStrings.size() - 1) {
-                    sb << ","
-                }
-            }
-        }
+//        int numrec = 0
+//        StringBuilder sb = new StringBuilder()
+//        if ((listOfStrings) && (listOfStrings?.size() > 0)) {
+//            numrec = listOfStrings.size()
+//            for (int i = 0; i < numrec; i++) {
+//                sb << "\"${listOfStrings[i]}\"".toString()
+//                if (i < listOfStrings.size() - 1) {
+//                    sb << ","
+//                }
+//            }
+//        }
 
         return [
                 is_error  : false,

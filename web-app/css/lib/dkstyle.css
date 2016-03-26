@@ -6,17 +6,17 @@
 }
 
 div.dk-amp-banner {
-	background-image:url(../images/AMP_banner_middle.png);
 	background-position:left top;
-	background-repeat:repeat-x;
+	/*background-repeat:repeat-x;*/
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
 	background-color:#397eb5;
-	height: 60px;
+	height: 70px;
 	padding: 0;
 	min-width: 900px;
 }
 
 div.dk-amp-name-wrapper {
-	background-image:url(../images/AMP_banner_right.png);
 	background-position:right top;
 	background-repeat:no-repeat;
 	height: 70px;
@@ -24,7 +24,6 @@ div.dk-amp-name-wrapper {
 }
 
 div.dk-amp-banner-name {
-	background-image:url(../images/AMP_banner_left.png);
 	background-position:left top;
 	background-repeat:no-repeat;
 	color: #fff;
@@ -76,7 +75,7 @@ div.dk-t2d-menu-banner {
 	font-size: 13px;
 }
 
-ul.dk-t2d-menu > * > a, ul.dk-t2d-menu > * > span {
+ul.dk-t2d-menu > li > a {
 	color: #fff;
 	padding: 3px 12px 3px 12px;
 }

@@ -21,7 +21,7 @@ class InformationalControllerUnitSpec extends Specification {
 
     void "test about"() {
         when:
-        controller.about()
+        controller.aboutthedata()
 
         then:
         response.status == 200

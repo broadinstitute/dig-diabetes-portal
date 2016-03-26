@@ -4,6 +4,7 @@
     <meta name="layout" content="t2dGenesCore"/>
     <meta name="wot-verification" content="9fd2c3983c1837397ff8"/>
     <r:require modules="core"/>
+    <r:require modules="portalHome"/>
     <r:layoutResources/>
 
 </head>
@@ -20,6 +21,12 @@
 
     $(function () {
         "use strict";
+
+        <g:applyCodec encodeAs="none">
+            var newsItems = ${newsItems};
+        </g:applyCodec>
+        mpgSoftware.homePage.loadNewsFeed(newsItems.posts);
+        mpgSoftware.homePage.setSlideWindows();
 
         /***
          * type ahead recognizing genes
@@ -99,6 +106,25 @@
 
 </script>
 
+<g:if test="${g.portalTypeString()?.equals('stroke')}">
+    <div class="fluid" style="background-image:url(${resource(dir: 'images', file: 'banner_bg3.png')});background-size:100% 100%; padding-bottom: 10px; padding-top:30px;">
+        <div class="container">
+            <div class="row" style="text-align:center;padding-bottom:15px;">
+                <img src="${resource(dir: 'images/stroke', file: 'R24_front_header.png')}" style="width:95%;" />
+            </div>
+        </div>
+    </div>
+</g:if>
+<g:else>
+    <div class="fluid" style="background-image:url(${resource(dir: 'images', file: 'banner_bg3.png')});background-size:100% 100%; padding-bottom: 10px; padding-top:30px;">
+        <div class="container">
+            <div class="row" style="text-align:center;padding-bottom:15px;">
+                <img src="${resource(dir: 'images', file: 't2d_front_header6.png')}" style="width:95%;" />
+            </div>
+        </div>
+    </div>
+</g:else>
+
 %{--Main search page for application--}%
 <div class="container dk-2td-content">
     <div class="row">
@@ -107,8 +133,8 @@
                 <h2 class="dk-search-title-homepage"><g:message code="primary.text.input.header"/></h2>
 
                 <div class="form-inline" style="padding-top: 10px;">
-                    <input type="text" class="form-control input-sm" style="width: 70%;">
-                    <button class="btn btn-primary btn-sm" type="button" style="width:15%; float:right; margin-right: 5%;"><g:message code="mainpage.button.imperative"/> ></button>
+                    <input id="generalized-input" type="text" class="form-control input-sm" style="width: 70%;">
+                    <button id="generalized-go" class="btn btn-primary btn-sm" type="button" style="width:15%; float:right; margin-right: 5%;"><g:message code="mainpage.button.imperative"/> ></button>
                 </div>
                 <div>
                     <strong><g:message code="site.shared.phrases.examples" />:</strong> <g:if test="${g.portalTypeString()?.equals('stroke')}">
@@ -161,77 +187,95 @@
             <hr />
             <img src="${resource(dir: 'images/icons', file: 'data_icon.png')}" style="width: 110px; margin-right: 10px;" align="left" >
             <h2><g:message code="aboutTheData.title" default="About the data" /></h2>
-            <p>The T2D Knowledge Portal enables browsing, searching, and analysis of human genetic information linked to type 2 diabetes and related traits, while protecting the integrity and confidentiality of the underlying data.
+            <p>
+                <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                    <g:message code="portal.stroke.about.the.data.text" />
+                </g:if>
+                <g:else>
+                    <g:message code="about.the.portal.data.text" />
+                </g:else>
             </p>
 
-            <h2>Citation</h2>
-            <p>Please use the following citation when referring to data from this portal: <br />
-                AMP T2D-GENES Program, SIGMA; Year Month Date of Access; URL of page you are citing.
+            <h2><g:message code="portal.use.citation.title" default="Citation" /></h2>
+            <p><g:message code="portal.use.citation.request" default="Please use the following citation when referring to data accessed via this portal:"/><br />
+                <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                    <g:message code="portal.stroke.use.citation.itself" />
+                </g:if>
+                <g:else>
+                    <g:message code="portal.use.citation.itself" />
+                </g:else>
             </p>
 
         </div>
 
         <div class="col-md-4">
-            <h3>What's new</h3>
-            <ul class="dk-news-items gallery-fade">
-                <li>News item 1, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ...<a href="javascript:;">Read more</a></li>
-                <li>News item 2, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ...<a href="javascript:;">Read more</a></li>
-                <li>News item 3, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ...<a href="javascript:;">Read more</a></li>
-                <li>News item 4, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ...<a href="javascript:;">Read more</a></li>
-            </ul>
-            <a class="btn btn-default" style="width:80%; margin-top: -50px; margin-right: 2%; margin-bottom: 0px;" href="javascript:;">Get email updates</a>
-            <a class="btn btn-default" style="width:15%; margin-top: -50px; margin-bottom: 0px; background-color:#55bcdf; border:solid 1px #1da1f2;" href="https://twitter.com/T2DKP"><img src="${resource(dir:'images/icons', file:'twitter.png')}" /></a>
+            <h3><g:message code="portal.home.news_headline" default="What's new" /></h3>
+            <ul id="newsFeedHolder" class="dk-news-items gallery-fade"></ul>
+            <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                <a class="btn btn-default" style="width:100%; margin-top: -50px; margin-right: 2%; margin-bottom: 0px;"
+                   href="#"
+                   target="_blank">
+                    <g:message code="portal.home.mailsignup" default="Get email updates"/>
+                </a>
+            </g:if>
+            <g:else>
+                <a class="btn btn-default" style="width:80%; margin-top: -50px; margin-right: 2%; margin-bottom: 0px;"
+                   href="https://docs.google.com/a/broadinstitute.org/forms/d/1bncgNMw89nmqukMPc7xIourH-Wu7Vpc4xJ6Uh4RSECI/viewform"
+                   target="_blank">
+                    <g:message code="portal.home.mailsignup" default="Get email updates"/>
+                </a>
+                <a class="btn btn-default" style="width:15%; margin-top: -50px; margin-bottom: 0px; background-color:#55bcdf; border:solid 1px #1da1f2;" href="https://twitter.com/T2DKP"><img src="${resource(dir:'images/icons', file:'twitter.png')}" /></a>
+            </g:else>
             <h3 style="margin-top: 0px;"><g:message code="about.the.portal.header"/></h3>
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 <g:message code="about.the.stroke.portal.text"/>
+                <g:message code='portal.stroke.home.funders'/>:
+                <p>
+                    <a href="http://www.niddk.nih.gov/Pages/default.aspx"><img src="${resource(dir: 'images/organizations', file:'NIH3.png')}" style="width: 70px;"></a>&nbsp;&nbsp;&nbsp;
+                    <a href="http://www.ninds.nih.gov/"><img src="${resource(dir: 'images/organizations', file:'NIND.png')}" style="width: 165px;"></a>
+                </p>
             </g:if>
             <g:else>
                 <g:message code="about.the.portal.text"/>
-            </g:else>
-
-            <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                <g:message code='portal.stroke.home.funders'/>:
-            </g:if>
-            <g:else>
                 <g:message code='portal.home.funders'/>:
+                <table>
+                    <tr>
+                        <td>
+                            <a href="http://www.niddk.nih.gov/Pages/default.aspx"><img src="${resource(dir:'images/organizations', file:'NIH.jpg')}" style="width: 110px;"></a>
+                        </td>
+                        <td>
+                            <a href="http://www.fnih.org"><img src="${resource(dir:'images/organizations', file:'FNIH.jpg')}" style="width: 110px;"></a>
+                        </td>
+                        <td>
+                            <a href="http://www.janssen.com"><img src="${resource(dir:'images/organizations', file:'janssen.jpg')}" style="width: 110px;"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="https://www.lilly.com/home.aspx"><img src="${resource(dir:'images/organizations', file:'lilly.jpg')}" style="width: 110px;"></a>
+                        </td>
+                        <td>
+                            <a href="http://www.merck.com/index.html"><img src="${resource(dir:'images/organizations', file:'merck.jpg')}" style="width: 110px;"></a>
+                        </td>
+                        <td>
+                            <a href="http://www.pfizer.com"><img src="${resource(dir:'images/organizations', file:'pfizer.jpg')}" style="width: 110px;"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="http://en.sanofi.com"><img src="${resource(dir:'images/organizations', file:'sanofi.jpg')}" style="width: 110px;"></a>
+                        </td>
+                        <td>
+                            <a href="http://jdrf.org"><img src="${resource(dir:'images/organizations', file:'jdrf.jpg')}" style="width: 110px;"></a>
+                        </td>
+                        <td>
+                            <a href="http://www.diabetes.org"><img src="${resource(dir:'images/organizations', file:'ADA.jpg')}" style="width: 110px;"></a>
+                        </td>
+                    </tr>
+                </table>
+                <g:message code='portal.home.addtl_funders'/>:
+                <p><a href="http://www.fundacioncarlosslim.org/en/"><img src="${resource(dir:'images/organizations', file:'slim.png')}" style="margin-left: 80px;"></a></p>
             </g:else>
-            <table>
-                <tr>
-                    <td>
-                        <a href="http://www.niddk.nih.gov/Pages/default.aspx"><img src="${resource(dir:'images/organizations', file:'NIH.jpg')}" style="width: 110px;"></a>
-                    </td>
-                    <td>
-                        <a href="http://www.fnih.org"><img src="${resource(dir:'images/organizations', file:'FNIH.jpg')}" style="width: 110px;"></a>
-                    </td>
-                    <td>
-                        <a href="http://www.janssen.com"><img src="${resource(dir:'images/organizations', file:'janssen.jpg')}" style="width: 110px;"></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="https://www.lilly.com/home.aspx"><img src="${resource(dir:'images/organizations', file:'lilly.jpg')}" style="width: 110px;"></a>
-                    </td>
-                    <td>
-                        <a href="http://www.merck.com/index.html"><img src="${resource(dir:'images/organizations', file:'merck.jpg')}" style="width: 110px;"></a>
-                    </td>
-                    <td>
-                        <a href="http://www.pfizer.com"><img src="${resource(dir:'images/organizations', file:'pfizer.jpg')}" style="width: 110px;"></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="http://en.sanofi.com"><img src="${resource(dir:'images/organizations', file:'sanofi.jpg')}" style="width: 110px;"></a>
-                    </td>
-                    <td>
-                        <a href="http://jdrf.org"><img src="${resource(dir:'images/organizations', file:'jdrf.jpg')}" style="width: 110px;"></a>
-                    </td>
-                    <td>
-                        <a href="http://www.diabetes.org"><img src="${resource(dir:'images/organizations', file:'ADA.jpg')}" style="width: 110px;"></a>
-                    </td>
-                </tr>
-            </table>
-            <g:message code='portal.home.addtl_funders'/>:
-            <p><a href="http://www.fundacioncarlosslim.org/en/"><img src="${resource(dir:'images/organizations', file:'slim.png')}" style="margin-left: 80px;"></a></p>
         </div>
     </div>
 </div>

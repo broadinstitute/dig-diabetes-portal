@@ -22,7 +22,7 @@ class InformationalControllerIntegrationSpec extends IntegrationSpec {
 
     void "test the about page"() {
         when:
-        controller.about()
+        controller.aboutthedata()
 
         then: 'verify that we get valid responses back'
         assert controller.response.status==200
