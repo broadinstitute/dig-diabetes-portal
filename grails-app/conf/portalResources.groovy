@@ -14,10 +14,6 @@ modules = {
         resource url: 'js/lib/jstree.min.js'
         resource url: 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'
     }
-    scroller {
-        resource url: 'js/lib/dport/jquery.li-scroller.1.0.js'
-        resource url: 'css/lib/li-scroller.css'
-    }
     portalHome {
         resource url: 'js/lib/dport/portalHome.js'
     }

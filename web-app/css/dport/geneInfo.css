@@ -304,20 +304,6 @@ img.currentlanguage { }
 .sigma-institution .program {
     font-weight: bold; }
 
-#header {
-    color: white;
-    text-transform: uppercase; }
-#header a, #header a:visited {
-    color: white;
-    padding: 0 6px; }
-
-#header-top {
-    background: #052090; }
-
-#header-bottom {
-    background: rgba(43, 117, 207, 0.68);
-    padding: 10px 0; }
-
 body {
     background: white; }
 

@@ -2,10 +2,9 @@
 <html>
 <head>
     <meta name="layout" content="t2dGenesCore"/>
-    <r:require modules="core"/>
-    <r:require modules="geneInfo"/>
     <r:require modules="variantInfo"/>
     <r:require modules="tableViewer,traitInfo"/>
+    <r:require modules="core"/>
     <r:layoutResources/>
     <%@ page import="org.broadinstitute.mpg.RestServerService" %>
     <%

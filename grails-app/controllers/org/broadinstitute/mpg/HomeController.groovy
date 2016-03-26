@@ -1,15 +1,18 @@
 package org.broadinstitute.mpg
 
+import dig.diabetes.portal.NewsFeedService
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.core.io.ResourceLocator
 import org.springframework.web.servlet.support.RequestContextUtils
+import grails.converters.JSON
 
 class HomeController {
     private static final log = LogFactory.getLog(this)
     GrailsApplication grailsApplication
     SharedToolsService sharedToolsService
     ResourceLocator grailsResourceLocator
+    NewsFeedService newsFeedService
     def mailService
 
     /***
@@ -17,7 +20,7 @@ class HomeController {
      */
     def index = {
         if  ((sharedToolsService.getApplicationIsT2dgenes())) {
-            render(view:'portalHome', model: [ticker:"${sharedToolsService.getWarningText()}",
+            render(view:'portalHome', model: [newsItems: (newsFeedService.getCurrentPosts(g.portalTypeString() as String) as JSON),
                                               show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                               show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
                                               show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq)])
@@ -80,23 +83,11 @@ class HomeController {
      * This is our standard home page. We get directed here from a few places in the portal
      */
     def portalHome = {
-        render(controller: 'home', view: 'portalHome', model: [ticker:"${sharedToolsService.getWarningText()}",
+        render(controller: 'home', view: 'portalHome', model: [newsItems: (newsFeedService.getCurrentPosts(g.portalTypeString() as String) as JSON),
                                                                show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                                                show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
                                                                show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq)])
     }
-
-//    // testing
-//    def updateData = {
-//        log.info(params)
-//        log.info(request.)
-//
-//        def jsonSlurper = new JsonSlurper();
-//
-//        def parsed = jsonSlurper.parse(request.getAttribute("body"))
-//        log.info(parsed);
-//        this.sharedToolsService.setConvertPhenotypes(parsed)
-//    }
 
     /***
      * The very first time you use the portal you have to sign something.  This should happen to everyone EXCEPT those
