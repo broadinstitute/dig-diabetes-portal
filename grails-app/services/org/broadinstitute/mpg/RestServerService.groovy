@@ -584,7 +584,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     JSONObject retrieveVariantInfoByName(String variantId) {
         String filters = codedfilterByVariant(variantId)
-        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["CHROM", "POS"])
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["CHROM", "POS", "VAR_ID"])
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filters], searchBuilderService, metaDataService)
         JsonSlurper slurper = new JsonSlurper()
         getDataQueryHolder.addProperties(resultColumnsToDisplay)

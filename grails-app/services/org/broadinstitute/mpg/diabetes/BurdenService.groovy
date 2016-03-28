@@ -173,19 +173,34 @@ class BurdenService {
 
         // get the burden db_snp_id
 
-        // first check that this is a db_snp_id
-        if (burdenVariantDbSnpId =~ /r.*/) {
-            burdenVariant = org.broadinstitute.mpg.Variant.findByDbSnpId(burdenVariantDbSnpId)
-        } else {
-            burdenVariant = org.broadinstitute.mpg.Variant.findByVarId(burdenVariantDbSnpId)
+//        // first check that this is a db_snp_id
+//        if (burdenVariantDbSnpId =~ /r.*/) {
+//            burdenVariant = org.broadinstitute.mpg.Variant.findByDbSnpId(burdenVariantDbSnpId)
+//        } else {
+//            burdenVariant = org.broadinstitute.mpg.Variant.findByVarId(burdenVariantDbSnpId)
+//        }
+//
+//        if (burdenVariant == null) {
+//            throw new PortalException("found no varId for dbSnpId: " + burdenVariantDbSnpId)
+//        }
+
+
+        String variantId = ""
+        if (burdenVariantDbSnpId)      {
+           JSONObject jsonObject =  restServerService.retrieveVariantInfoByName (burdenVariantDbSnpId)
+            if ((jsonObject) &&
+                    (!jsonObject.is_error)&&
+                    (jsonObject.variants.size()>0)){
+                variantId = jsonObject.variants[0]*.find{key,value->key=="VAR_ID"}.value[0]
+            }
         }
 
-        if (burdenVariant == null) {
-            throw new PortalException("found no varId for dbSnpId: " + burdenVariantDbSnpId)
-        }
+
+
+
 
         // call shared method
-        returnJson = this.callBurdenTestForTraitAndVariantId(traitOption, burdenVariant.varId);
+        returnJson = this.callBurdenTestForTraitAndVariantId(traitOption, variantId);
 
         // return
         return returnJson;

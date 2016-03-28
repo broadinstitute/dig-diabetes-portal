@@ -33,7 +33,7 @@
     $.ajax({
         cache: false,
         type: "post",
-        url: "../geneInfoAjax",
+        url:'<g:createLink controller="gene" action="geneInfoAjax"/>',
         data: {geneName: '<%=geneName%>'},
         async: true
     }).done(function (data) {
