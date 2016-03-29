@@ -17,9 +17,10 @@ class WidgetService {
 
     // setting variables
     private final String LOCUSZOOM_17K_ENDPOINT = "17k data";
-    private final String LOCUSZOOM_HAIL_ENDPOINT = "Hail Dev";
+    private final String LOCUSZOOM_HAIL_ENDPOINT_DEV = "Hail Dev";
+    private final String LOCUSZOOM_HAIL_ENDPOINT_QA = "Hail QA";
     private String locusZoomEndpointSelection = LOCUSZOOM_17K_ENDPOINT;
-    private final List<String> locusZoomEndpointList = [this.LOCUSZOOM_17K_ENDPOINT, this.LOCUSZOOM_HAIL_ENDPOINT];
+    private final List<String> locusZoomEndpointList = [this.LOCUSZOOM_17K_ENDPOINT, this.LOCUSZOOM_HAIL_ENDPOINT_DEV, LOCUSZOOM_HAIL_ENDPOINT_QA];
 
     // constants for now
     private final String dataSetKey = "ExSeq_17k_mdv2";
@@ -53,13 +54,15 @@ class WidgetService {
         if (this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT) {
             jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
 
-        } else if (this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_HAIL_ENDPOINT) {
-            jsonResultString = this.restServerService.postGetHailDataCall(jsonGetDataString);
+        } else if (this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_HAIL_ENDPOINT_DEV) {
+            jsonResultString = this.restServerService.postGetHailDataCall(jsonGetDataString, RestServerService.HAIL_SERVER_URL_DEV);
+
+        } else if (this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_HAIL_ENDPOINT_QA) {
+            jsonResultString = this.restServerService.postGetHailDataCall(jsonGetDataString, RestServerService.HAIL_SERVER_URL_QA);
 
         } else {
             throw new PortalException("Got incorrect LZ endpoint selection: " + this.getLocusZoomEndpointSelection())
         }
-
 
         // translate the returning json into variant list
         knowledgeBaseResultParser = new KnowledgeBaseResultParser(jsonResultString);
@@ -120,10 +123,15 @@ class WidgetService {
      */
     void setLocusZoomEndpointSelection(String locusZoomEndpointSelection) {
         // log
-        if (locusZoomEndpointSelection == this.LOCUSZOOM_HAIL_ENDPOINT) {
+        if (locusZoomEndpointSelection == this.LOCUSZOOM_17K_ENDPOINT) {
             log.info("now setting LZ endpoint to 17K dataset")
-        } else if (locusZoomEndpointSelection == this.LOCUSZOOM_HAIL_ENDPOINT) {
+
+        } else if (locusZoomEndpointSelection == this.LOCUSZOOM_HAIL_ENDPOINT_DEV) {
             log.info("now setting LZ endpoint to Hail goT2D dataset")
+
+        } else if (locusZoomEndpointSelection == this.LOCUSZOOM_HAIL_ENDPOINT_QA) {
+            log.info("now setting LZ endpoint to Hail goT2D dataset")
+
         } else {
             log.error("now setting LZ endpoint to unknown: " + locusZoomEndpointSelection)
         }

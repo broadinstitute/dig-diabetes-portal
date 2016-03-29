@@ -71,6 +71,9 @@ class RestServerService {
     private String OBSERVED_AFFECTED = "OBSA"
     private String OBSERVED_UNAFFECTED = "OBSU"
 
+    public static final String HAIL_SERVER_URL_DEV = "http://dig-api-dev.broadinstitute.org/dev/gs/";
+    public static final String HAIL_SERVER_URL_QA = "http://dig-api-qa.broadinstitute.org/qa/gs/";
+
     private List<ServerBean> burdenServerList;
 
     private ServerBean BURDEN_REST_SERVER = null;
@@ -512,11 +515,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return this.postRestCall(jsonString, this.GET_DATA_URL);
     }
 
-    public JSONObject postGetHailDataCall(String jsonString) {
+    public JSONObject postGetHailDataCall(String jsonString, String URL) {
         // TODO - hard code to QA server for now
 //        return postRestCallBase(drivingJson, this.GET_HAIL_DATA_URL, currentRestServer())
 //        return postRestCallBase(jsonString, this.GET_HAIL_DATA_URL, "http://dig-api-dev.broadinstitute.org/dev/gs/")
-        return postRestCallBase(jsonString, this.GET_HAIL_DATA_URL, "http://dig-dev-02.broadinstitute.org:8888/dev/gs/")
+        return postRestCallBase(jsonString, this.GET_HAIL_DATA_URL, URL)
     }
 
     private JSONObject postRestCall(String drivingJson, String targetUrl) {
