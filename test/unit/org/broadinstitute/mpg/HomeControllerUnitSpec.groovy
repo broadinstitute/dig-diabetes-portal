@@ -6,6 +6,7 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
+import org.codehaus.groovy.grails.web.json.JSONObject
 import spock.lang.Specification
 
 /**
@@ -13,7 +14,7 @@ import spock.lang.Specification
  */
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(HomeController)
-@Mock([HtmlTagLib, NewsFeedService])
+@Mock([HtmlTagLib])
 class HomeControllerUnitSpec extends Specification {
 
     SharedToolsService sharedToolsService = new SharedToolsService()
@@ -28,7 +29,9 @@ class HomeControllerUnitSpec extends Specification {
 
     void "test index"() {
         setup:
-        mockTagLib HtmlTagLib
+        def newsFeedServiceMock = mockFor(NewsFeedService)
+        newsFeedServiceMock.demand.getCurrentPosts {String type -> return ([posts: []] as JSONObject)}
+        controller.newsFeedService = newsFeedServiceMock.createMock()
         controller.sharedToolsService = sharedToolsService
 
         when:
@@ -62,10 +65,13 @@ class HomeControllerUnitSpec extends Specification {
 
     void "test portalHome"() {
         setup:
-        mockTagLib HtmlTagLib
         sharedToolsService.metaClass.getApplicationIsT2dgenes = {->true}
         sharedToolsService.metaClass.getSectionToDisplay = {unused->true}
         controller.sharedToolsService = sharedToolsService
+
+        def newsFeedServiceMock = mockFor(NewsFeedService)
+        newsFeedServiceMock.demand.getCurrentPosts {String type -> return ([posts: []] as JSONObject)}
+        controller.newsFeedService = newsFeedServiceMock.createMock()
 
         when:
         controller.portalHome()
