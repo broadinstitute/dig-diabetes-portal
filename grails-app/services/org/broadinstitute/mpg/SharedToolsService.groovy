@@ -534,7 +534,7 @@ class SharedToolsService {
 
         return [
                 is_error  : false,
-                numRecords: numrec,
+                numRecords: listOfStrings?.size(),
                 dataset   : listOfStrings
         ]
 
