@@ -56,6 +56,7 @@ grails.project.dependency.resolution = {
         test "org.grails:grails-datastore-test-support:1.0-grails-2.4"
         compile "com.google.api-client:google-api-client:1.16.0-rc"
         compile 'com.google.http-client:google-http-client-jackson2:1.16.0-rc'
+        compile 'org.ccil.cowan.tagsoup:tagsoup:1.2'
     }
 
     plugins {

@@ -1,9 +1,12 @@
 package org.broadinstitute.mpg
 
+import dig.diabetes.portal.NewsFeedService
 import grails.plugin.mail.MailService
+import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
+import org.codehaus.groovy.grails.web.json.JSONObject
 import spock.lang.Specification
 
 /**
@@ -11,6 +14,7 @@ import spock.lang.Specification
  */
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(HomeController)
+@Mock([HtmlTagLib])
 class HomeControllerUnitSpec extends Specification {
 
     SharedToolsService sharedToolsService = new SharedToolsService()
@@ -25,6 +29,9 @@ class HomeControllerUnitSpec extends Specification {
 
     void "test index"() {
         setup:
+        def newsFeedServiceMock = mockFor(NewsFeedService)
+        newsFeedServiceMock.demand.getCurrentPosts {String type -> return ([posts: []] as JSONObject)}
+        controller.newsFeedService = newsFeedServiceMock.createMock()
         controller.sharedToolsService = sharedToolsService
 
         when:
@@ -61,6 +68,10 @@ class HomeControllerUnitSpec extends Specification {
         sharedToolsService.metaClass.getApplicationIsT2dgenes = {->true}
         sharedToolsService.metaClass.getSectionToDisplay = {unused->true}
         controller.sharedToolsService = sharedToolsService
+
+        def newsFeedServiceMock = mockFor(NewsFeedService)
+        newsFeedServiceMock.demand.getCurrentPosts {String type -> return ([posts: []] as JSONObject)}
+        controller.newsFeedService = newsFeedServiceMock.createMock()
 
         when:
         controller.portalHome()

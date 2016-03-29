@@ -86,7 +86,7 @@
             </sec:ifNotLoggedIn>
             <g:if test="${grailsApplication.config.site.version == 't2dgenes'}">
                 <a href="${createLink(controller:'home',action:'portalHome')}"><g:message code='localized.home'/></a> &middot;
-                <a href="${createLink(controller:'informational', action:'about')}"><g:message code='localized.aboutTheData'/></a> &middot;
+                <a href="${createLink(controller:'informational', action:'aboutthedata')}"><g:message code='localized.aboutTheData'/></a> &middot;
                 <a href="${createLink(controller:'informational', action:'contact')}"><g:message code='localized.contact'/></a>
             </g:if>
             <g:elseif test="${grailsApplication.config.site.version == 'sigma'}">
