@@ -593,6 +593,70 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return dataJsonObject
     }
 
+
+
+
+    JSONObject retrieveBurdenMetadata() {
+        //
+        //  TODO: add a real metadata call
+        //
+        String burdenMetadata = """
+{
+    "is_error": false,
+    "numRecords": 43,
+    "sample_groups": [
+                {
+                    "name": "r03",
+                    "id": "ExAC_r03_mdv1",
+                    "phenotypes": [
+                       {
+                          "name": "T2D",
+                          "filters":[
+                              {
+                               "name": "BMI",
+                               "type": "FLOAT"
+                               },
+                              {
+                               "name": "SEX",
+                               "type": "CATEGORICAL",
+                               "categories": ["male","female"]
+                               }
+                            ],
+                          "covariates":[
+                              "PC1","PC2","PC3","PC4","PC5",
+                              "PC6","PC7","PC8","PC9","PC10",
+                              "BMI","CAD"
+                            ]
+                       },
+                       {
+                          "name": "FG",
+                          "filters":[
+                              {
+                               "name": "AGE",
+                               "type": "FLOAT"
+                               },
+                              {
+                               "name": "SMOKES",
+                               "type": "CATEGORICAL"
+                               }
+                           ],
+                          "covariates":[
+                              "PC1","PC2","PC3","PC4","PC5",
+                              "PC6","PC7","PC8","PC9","PC10",
+                              "T2D","BMI"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }""".toString()
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject dataJsonObject = slurper.parseText(burdenMetadata)
+        return dataJsonObject
+    }
+
+
+
     /***
      *   search for a trait on the basis of a region specification
      * @param chromosome

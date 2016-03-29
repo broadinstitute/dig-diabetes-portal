@@ -49,6 +49,26 @@ class VariantInfoController {
         }
     }
 
+
+
+
+    def retrieveBurdenMetadataAjax() {
+        JSONObject jsonObject =  restServerService.retrieveBurdenMetadata ()
+        render(status:200, contentType:"application/json") {
+            [metaData:jsonObject]
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
     /**
      * method to service ajax call for the 'What effect on the encoded protein' section/accordion
      *
