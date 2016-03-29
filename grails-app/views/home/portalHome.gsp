@@ -98,32 +98,22 @@
         };
         retrievePhenotypes();
 
-
-
-
-
     });
 
 </script>
 
-<g:if test="${g.portalTypeString()?.equals('stroke')}">
-    <div class="fluid" style="background-image:url(${resource(dir: 'images', file: 'banner_bg3.png')});background-size:100% 100%; padding-bottom: 10px; padding-top:30px;">
-        <div class="container">
-            <div class="row" style="text-align:center;padding-bottom:15px;">
-                <img src="${resource(dir: 'images/stroke', file: 'R24_front_header.png')}" style="width:95%;" />
-            </div>
+<div class="fluid" style="background-image:url(${resource(dir: 'images', file: 'banner_bg3.png')});background-size:100% auto; background-position: center; padding-bottom: 10px; padding-top:30px;">
+    <div class="container">
+        <div class="row" style="text-align:center;padding-bottom:15px;">
+            <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                <img src="${resource(dir: 'images/stroke', file: 'R24_front_header.png')}" style="width:75%;" />
+            </g:if>
+            <g:else>
+                <img src="${resource(dir: 'images', file: 't2d_front_header6.png')}" style="width:75%;" />
+            </g:else>
         </div>
     </div>
-</g:if>
-<g:else>
-    <div class="fluid" style="background-image:url(${resource(dir: 'images', file: 'banner_bg3.png')});background-size:100% 100%; padding-bottom: 10px; padding-top:30px;">
-        <div class="container">
-            <div class="row" style="text-align:center;padding-bottom:15px;">
-                <img src="${resource(dir: 'images', file: 't2d_front_header6.png')}" style="width:95%;" />
-            </div>
-        </div>
-    </div>
-</g:else>
+</div>
 
 %{--Main search page for application--}%
 <div class="container dk-2td-content">
@@ -181,7 +171,7 @@
                 <div class="form-inline" style="padding-top: 10px;">
                     <select name="" id="trait-input" class="form-control input-sm" style="width: 70%;">
                     </select>
-                    <button class="btn btn-primary btn-sm" type="button" style="width:15%; float:right; margin-right: 5%;"><g:message code="mainpage.button.imperative"/> ></button>
+                    <button id="traitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; float:right; margin-right: 5%;"><g:message code="mainpage.button.imperative"/> ></button>
                 </div>
             </div>
             <hr />
