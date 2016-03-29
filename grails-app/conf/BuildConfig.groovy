@@ -49,7 +49,6 @@ grails.project.dependency.resolution = {
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
         runtime 'mysql:mysql-connector-java:5.1.29'
-        runtime 'org.ccil.cowan.tagsoup:tagsoup:1.2'
         // runtime 'org.postgresql:postgresql:9.3-1101-jdbc41'
         test "org.grails:grails-datastore-test-support:1.0-grails-2.4"
 
@@ -57,6 +56,7 @@ grails.project.dependency.resolution = {
         test "org.grails:grails-datastore-test-support:1.0-grails-2.4"
         compile "com.google.api-client:google-api-client:1.16.0-rc"
         compile 'com.google.http-client:google-http-client-jackson2:1.16.0-rc'
+        compile 'org.ccil.cowan.tagsoup:tagsoup:1.2'
     }
 
     plugins {
