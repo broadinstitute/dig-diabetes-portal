@@ -85,7 +85,7 @@
     $.ajax({
         cache: false,
         type: "get",
-        url:('<g:createLink controller="variantInfo" action="variantAjax"/>'+'${variantToSearch}'),
+        url:('<g:createLink controller="variantInfo" action="variantAjax"/>'+'/${variantToSearch}'),
         async: true,
         success: function (data) {
             if ( typeof data !== 'undefined')  {

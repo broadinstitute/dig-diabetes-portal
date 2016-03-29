@@ -186,6 +186,71 @@
                 </div>
             </g:form>
 
+
+
+            <div class="separator"></div>
+
+            <g:form url="[action:'updateBetaFeaturesDisplayed', controller:'system']" method='POST' id='updateBetaFeatures' class='form form-horizontal cssform' autocomplete='off'>
+                <h4><g:message code="system.beta.feature.display.header" /> (<em><g:message code="system.beta.feature.display.header" /> = ${(betaFeaturesDisplayed)?"true":"false"}</em>)</h4>
+                <div class="row clearfix">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-7">
+                        <div id="datatypes-betafeatures">
+                            <div id="betaFeaturesDisplayed-form">
+                                <div class="radio">
+                                    <label>
+                                        <input id="testserver" type="radio" name="betaFeaturesDisplayed" value="1"
+                                            <%=(betaFeaturesDisplayed)?" checked ":"" %> />
+                                        <g:message code="system.beta.feature.display.radio1" />
+                                    </label>
+                                </div>
+
+                                <div class="radio">
+                                    <label>
+                                        <input id="prodserver" type="radio" name="betaFeaturesDisplayed" value="0"
+                                            <%=(!betaFeaturesDisplayed)?" checked ":"" %>  />
+                                        <g:message code="system.beta.feature.display.radio2" />
+                                    </label>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <div class="row clearfix">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <div >
+                            <div style="text-align:center; padding-top: 20px;">
+                                <input class="btn btn-primary btn-lg" type='submit' id="betaFeaturesDisplayed"
+                                       value='Commit'/>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row clearfix">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div >
+                            <g:if test='${flash.message}'>
+                                <div class="alert alert-danger">${flash.message}</div>
+                            </g:if>
+                        </div>
+                    </div>
+                    <div class="col-md-2"></div>
+
+                </div>
+            </g:form>
+
+
+
+
+
+
             <div class="separator"></div>
 
             <g:form action='updateLocusZoomRestServer' method='POST' id='updateLocusZoomRestServer' class='form form-horizontal cssform' autocomplete='off'>

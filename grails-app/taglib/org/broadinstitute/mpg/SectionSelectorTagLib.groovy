@@ -30,6 +30,14 @@ class SectionSelectorTagLib {
 
     }
 
+    def renderBetaFeaturesDisplayedValue = { attrs,body ->
+        if (sharedToolsService.getBetaFeaturesDisplayedValue ()){
+            out << body()
+        }
+
+    }
+
+
 
 
 

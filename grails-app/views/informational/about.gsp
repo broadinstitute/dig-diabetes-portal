@@ -38,78 +38,81 @@
 <div class="separator"></div>
 </div>
 
+<g:renderBetaFeaturesDisplayedValue>
+    <div class="row pull-left col-xs-12" style="margin-top: 5px">
+        <div class="col-xs-2"></div>
+        <div class="col-xs-10"  style="padding: 5px 0 12px 0; border: 1px solid #aaaaaa">
+            <div class="row col-xs-12">
 
-<div class="row pull-left col-xs-12" style="margin-top: 5px">
-    <div class="col-xs-2"></div>
-    <div class="col-xs-10"  style="padding: 5px 0 12px 0; border: 1px solid #aaaaaa">
-        <div class="row col-xs-12">
-
-            <div class="col-xs-3">
-                <button id="opener" class="btn btn-primary pull-right" onclick="mpgSoftware.resetSunburst()"    style="margin: 16px 35px 0 0">
-                    Apply filters
-                </button>
-            </div>
-
-            <div class="col-xs-3">
-                <span style="text-decoration: underline; padding:35px 0 0 30px; margin-bottom: 0">Color mapping</span>
-                <div class="radio" style="margin-top: 0">
-                    <div>
-                        <label>
-                            <input type="radio" id="defaultColoring" name="coloring" value="1" checked/>Default coloring
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-                            <input type="radio" id="ancestryColoring" name="coloring" value="2" />Color by ancestry
-                        </label>
-                    </div>
-
+                <div class="col-xs-3">
+                    <button id="opener" class="btn btn-primary pull-right" onclick="mpgSoftware.resetSunburst()"    style="margin: 16px 35px 0 0">
+                        Apply filters
+                    </button>
                 </div>
-            </div>
 
-            <div class="col-xs-3">
-                <span class="pull-right">Version filter</span>
-<sec:ifAllGranted roles="ROLE_SYSTEM">
-                <select id="versionDatasetFilter" class="form-control">
-                    <option value="mdv1">mdv1 (T2D)</option>
-                    <option value="mdv2" selected>mdv2 (T2D)</option>
-                    <option value="mdv3">mdv3 (T2D)</option>
-                    <option value="mdv5">mdv5 (stroke)</option>
-                </select>
-</sec:ifAllGranted>
-                <sec:ifNotGranted roles="ROLE_SYSTEM">
-                    <select id="versionDatasetFilter" class="form-control" disabled>
-                        <option value="mdv1">mdv1 (T2D)</option>
-                        <option value="mdv2" selected>latest</option>
-                        <option value="mdv3">mdv3 (T2D)</option>
-                        <option value="mdv5">mdv5 (stroke)</option>
-                    </select>
-                </sec:ifNotGranted>
-            </div>
+                <div class="col-xs-3">
+                    <span style="text-decoration: underline; padding:35px 0 0 30px; margin-bottom: 0">Color mapping</span>
+                    <div class="radio" style="margin-top: 0">
+                        <div>
+                            <label>
+                                <input type="radio" id="defaultColoring" name="coloring" value="1" checked/>Default coloring
+                            </label>
+                        </div>
+                        <div>
+                            <label>
+                                <input type="radio" id="ancestryColoring" name="coloring" value="2" />Color by ancestry
+                            </label>
+                        </div>
 
-            <div class="col-xs-3">
-                <span class="pull-right">Technology filter</span>
-                <select id="technologyFilter" class="form-control">
-                    <option selected>all</option>
-                    <option value="GWAS">GWAS</option>
-                    <option value="ExSeq">Exome sequencing</option>
-                    <option value="ExChip">Exome chip</option>
-                </select>
+                    </div>
+                </div>
 
-            </div>
+                <div class="col-xs-3">
+                    <span class="pull-right">Version filter</span>
+    <sec:ifAllGranted roles="ROLE_SYSTEM">
+        <select id="versionDatasetFilter" class="form-control">
+            <option value="mdv1">mdv1 (T2D)</option>
+            <option value="mdv2" selected>mdv2 (T2D)</option>
+            <option value="mdv3">mdv3 (T2D)</option>
+            <option value="mdv5">mdv5 (stroke)</option>
+        </select>
+    </sec:ifAllGranted>
+    <sec:ifNotGranted roles="ROLE_SYSTEM">
+        <select id="versionDatasetFilter" class="form-control" disabled>
+            <option value="mdv1">mdv1 (T2D)</option>
+            <option value="mdv2" selected>latest</option>
+            <option value="mdv3">mdv3 (T2D)</option>
+            <option value="mdv5">mdv5 (stroke)</option>
+        </select>
+    </sec:ifNotGranted>
+    </div>
 
-        </div>
+    <div class="col-xs-3">
+        <span class="pull-right">Technology filter</span>
+        <select id="technologyFilter" class="form-control">
+            <option selected>all</option>
+            <option value="GWAS">GWAS</option>
+            <option value="ExSeq">Exome sequencing</option>
+            <option value="ExChip">Exome chip</option>
+        </select>
 
-</div>
-
-
-
-<div class="row pull-left col-xs-12" style="margin-top: 20px">
-    <div id="sunburstdiv">
+    </div>
 
     </div>
 
 </div>
+
+</g:renderBetaFeaturesDisplayedValue>
+
+
+<g:renderBetaFeaturesDisplayedValue>
+    <div class="row pull-left col-xs-12" style="margin-top: 20px">
+        <div id="sunburstdiv">
+
+        </div>
+
+    </div>
+</g:renderBetaFeaturesDisplayedValue>
 
 <script>
     var mpgSoftware = mpgSoftware || {};
@@ -171,12 +174,16 @@
                 }
             });
         };
+<g:renderBetaFeaturesDisplayedValue>
         mpgSoftware.launchSunburst('', '', undefined);
+</g:renderBetaFeaturesDisplayedValue>
+
     });
 
 </script>
 
 
+<g:renderBetaFeaturesDisplayedValue>
 <div class="span3" style="padding-top: 50px;  height: 600px;">
     <div style="float:right;">
 
@@ -209,7 +216,7 @@
     </div>
 
 </div>
-
+</g:renderBetaFeaturesDisplayedValue>
 
 <div class="row pull-left consortium-spacing">
     <div>

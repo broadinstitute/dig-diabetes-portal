@@ -38,7 +38,8 @@ class SystemController {
         totalNumberOfVariants: sharedToolsService.getCachedVariantNumber(false),
         locusZoomEndpointSelectionList: this.widgetService?.getLocusZoomEndpointList(),
         currentLocusZoomEndpoint: this.widgetService.getLocusZoomEndpointSelection(),
-        recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly()])
+        recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly(),
+        betaFeaturesDisplayed:sharedToolsService.getBetaFeaturesDisplayed()])
     }
 
     def determineVersion = {
@@ -273,15 +274,25 @@ class SystemController {
      *
      * @return
      */
-    def updateLocusZoomRestServer() {
-        String restServer = params.locusZoomRestServer
-        String currentServer =  this.widgetService?.getLocusZoomEndpointSelection()
+    def updateBetaFeaturesDisplayed() {
+        Integer requestedBetaFeaturesDisplayed = 0
+        try {
+            requestedBetaFeaturesDisplayed = Integer.parseInt(params.betaFeaturesDisplayed)
+        } catch (e){
+            e.printStackTrace()
+        }
+        int  currentBetaFeaturesDisplayed =  sharedToolsService?.getBetaFeaturesDisplayed()
 
-        if  (!(restServer == currentServer)) {
-            this.widgetService?.setLocusZoomEndpointSelection(restServer)
-            flash.message = "You are now using the ${restServer} LocusZoom server!"
+
+        String areWeDisplaying = " not "
+        if  (!(requestedBetaFeaturesDisplayed == currentBetaFeaturesDisplayed)) {
+            sharedToolsService?.setBetaFeaturesDisplayed(requestedBetaFeaturesDisplayed)
+            if (sharedToolsService?.getBetaFeaturesDisplayed()){
+                areWeDisplaying = " "
+            }
+            flash.message = "The portal is now${areWeDisplaying}displaying beta features!"
         } else {
-            flash.message = "But you were already using the ${currentServer} LocusZoom server!"
+            flash.message = "But you were already${areWeDisplaying}displaying beta features!"
         }
 
         forward(action: "systemManager")

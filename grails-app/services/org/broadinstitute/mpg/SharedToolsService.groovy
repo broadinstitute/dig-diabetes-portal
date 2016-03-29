@@ -50,6 +50,7 @@ class SharedToolsService {
     Integer recognizedStringsOnly = 0
     Integer cachedVariantNumber;
     Integer cachedGeneNumber;
+    Integer betaFeaturesDisplayedValue = 0
     // TODO remove hack: currently we get phenotypes from the old geneinfo call, but
     // we need to interpret them with the new API, which uses different strings in some cases.
     //  Eventually we will pull the strings from the new API and then throw away this conversion utility
@@ -175,6 +176,15 @@ class SharedToolsService {
     public void setDataVersion(String dataVersionString) {
         int dataVersion = dataVersionString as int
         this.dataVersion = dataVersion
+    }
+
+
+    public Integer getBetaFeaturesDisplayed() {
+        return this.betaFeaturesDisplayedValue
+    }
+
+    public void setBetaFeaturesDisplayed(int betaFeaturesDisplayedString) {
+        this.betaFeaturesDisplayedValue = betaFeaturesDisplayedString
     }
 
 
