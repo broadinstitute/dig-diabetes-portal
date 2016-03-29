@@ -19,7 +19,7 @@ class WidgetService {
     private final String LOCUSZOOM_17K_ENDPOINT = "17k data";
     private final String LOCUSZOOM_HAIL_ENDPOINT_DEV = "Hail Dev";
     private final String LOCUSZOOM_HAIL_ENDPOINT_QA = "Hail QA";
-    private String locusZoomEndpointSelection = LOCUSZOOM_17K_ENDPOINT;
+    private String locusZoomEndpointSelection = LOCUSZOOM_HAIL_ENDPOINT_QA;
     private final List<String> locusZoomEndpointList = [this.LOCUSZOOM_17K_ENDPOINT, this.LOCUSZOOM_HAIL_ENDPOINT_DEV, LOCUSZOOM_HAIL_ENDPOINT_QA];
 
     // constants for now

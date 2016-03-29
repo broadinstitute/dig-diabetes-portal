@@ -274,6 +274,26 @@ class SystemController {
      *
      * @return
      */
+
+    def updateLocusZoomRestServer() {
+        String restServer = params.locusZoomRestServer
+        String currentServer =  this.widgetService?.getLocusZoomEndpointSelection()
+
+        if  (!(restServer == currentServer)) {
+            this.widgetService?.setLocusZoomEndpointSelection(restServer)
+            flash.message = "You are now using the ${restServer} LocusZoom server!"
+        } else {
+            flash.message = "But you were already using the ${currentServer} LocusZoom server!"
+        }
+
+        forward(action: "systemManager")
+    }
+
+    /**
+     * update whether beta features are displayed
+     *
+     * @return
+     */
     def updateBetaFeaturesDisplayed() {
         Integer requestedBetaFeaturesDisplayed = 0
         try {
