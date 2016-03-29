@@ -1,6 +1,8 @@
 package org.broadinstitute.mpg
 
+import dig.diabetes.portal.NewsFeedService
 import grails.plugin.mail.MailService
+import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
@@ -11,6 +13,7 @@ import spock.lang.Specification
  */
 @TestMixin(GrailsUnitTestMixin)
 @TestFor(HomeController)
+@Mock([HtmlTagLib, NewsFeedService])
 class HomeControllerUnitSpec extends Specification {
 
     SharedToolsService sharedToolsService = new SharedToolsService()
@@ -25,6 +28,7 @@ class HomeControllerUnitSpec extends Specification {
 
     void "test index"() {
         setup:
+        mockTagLib HtmlTagLib
         controller.sharedToolsService = sharedToolsService
 
         when:
@@ -58,6 +62,7 @@ class HomeControllerUnitSpec extends Specification {
 
     void "test portalHome"() {
         setup:
+        mockTagLib HtmlTagLib
         sharedToolsService.metaClass.getApplicationIsT2dgenes = {->true}
         sharedToolsService.metaClass.getSectionToDisplay = {unused->true}
         controller.sharedToolsService = sharedToolsService

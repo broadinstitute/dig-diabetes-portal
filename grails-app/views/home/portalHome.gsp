@@ -4,7 +4,7 @@
     <meta name="layout" content="t2dGenesCore"/>
     <meta name="wot-verification" content="9fd2c3983c1837397ff8"/>
     <r:require modules="core"/>
-    <r:require modules="scroller"/>
+    <r:require modules="portalHome"/>
     <r:layoutResources/>
 
 </head>
@@ -21,6 +21,12 @@
 
     $(function () {
         "use strict";
+
+        <g:applyCodec encodeAs="none">
+            var newsItems = ${newsItems};
+        </g:applyCodec>
+        mpgSoftware.homePage.loadNewsFeed(newsItems.posts);
+        mpgSoftware.homePage.setSlideWindows();
 
         /***
          * type ahead recognizing genes
@@ -100,256 +106,179 @@
 
 </script>
 
-%{--Main search page for application--}%
-<div id="main" style="padding-bottom: 0">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-7" style="margin-top: -10px">
-
-                %{--gene, variant or region--}%
-                <div class="row">
-                    <div class="col-xs-11 col-md-11 col-lg-11 unpaddedSection" style="padding-right: 2px">
-
-                        <h3>
-                            <g:message code="primary.text.input.header"/>
-                        </h3>
-
-                        <div class="input-group input-group-lg">
-                            <input type="text" class="form-control" id="generalized-input"></span>
-                            <span class="input-group-btn">
-                                %{--<span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>--}%
-                                <button id="generalized-go" class="btn btn-primary btn-lg" type="button">
-                                    <g:message code="mainpage.button.imperative"/>
-                                </button>
-                            </span>
-                        </div>
-
-                        <g:renderT2dGenesSection>
-                            <div class="helptext"><g:message code="site.shared.phrases.examples" />:
-                        <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                                <a href='<g:createLink controller="gene" action="geneInfo"
-                                                       params="[id: 'HDAC9']"/>'>HDAC9</a>
-                        </g:if>
-                        <g:else>
-                            <a href='<g:createLink controller="gene" action="geneInfo"
-                                                   params="[id: 'SLC30A8']"/>'>SLC30A8</a>
-                        </g:else>
-                                <g:helpText title="input.searchTerm.geneExample.help.header" placement="bottom"
-                                            body="input.searchTerm.geneExample.help.text"/>,
-                                <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                                    <a href='<g:createLink controller="variantInfo" action="variantInfo"
-                                                           params="[id: 'rs11179580']"/>'>rs11179580</a>
-                                </g:if>
-                                <g:else>
-                                    <a href='<g:createLink controller="variantInfo" action="variantInfo"
-                                                           params="[id: 'rs13266634']"/>'>rs13266634</a>
-                                </g:else>
-                                <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
-                                            body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
-                                <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                                    <a href='<g:createLink controller="region" action="regionInfo"
-                                                           params="[id: 'chr7:18,100,000-18,300,000']"/>'>chr7:18,100,000-18,300,000</a>
-                                </g:if>
-                                <g:else>
-                                    <a href='<g:createLink controller="region" action="regionInfo"
-                                                           params="[id: 'chr9:21,940,000-22,190,000']"/>'>chr9:21,940,000-22,190,000</a>
-                                </g:else>
-                                <g:helpText title="input.searchTerm.rangeExample.help.header"  placement="bottom"
-                                            body="input.searchTerm.rangeExample.help.text" qplacer="0 0 0 2px"/>
-                            </div>
-                        </g:renderT2dGenesSection>
-
-                    </div>
-
-                    <div class="col-xs-1 col-md-1 col-lg-1"></div>
-                </div>
-
-                %{--set up search form--}%
-
-
-                <div class="row sectionBuffer">
-                    <div class="col-xs-10 col-md-10 col-lg-10 unpaddedSection" style="padding-top: 10px">
-                        <h3>
-                            <g:message code="variant.search.header"/>
-                        </h3>
-                    </div>
-
-                    <div class="col-xs-1 col-md-1 col-lg-1 unpaddedSection" style="margin-top: 20px; padding: 0">
-                        <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}"
-                           class="btn btn-primary btn-lg"><g:message code="mainpage.button.imperative"/></a>
-                    </div>
-
-                    <div class="col-xs-1  col-md-1 col-lg-1">
-
-                    </div>
-
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="helptext">
-                            <g:message code="variant.search.specifics"/>
-                        </div>
-                    </div>
-                </div>
-
-                %{--variants with other traits--}%
-                <div class="row sectionBuffer">
-
-                    <div class="col-xs-10 col-md-10 col-lg-10 unpaddedSection">
-
-                        <h3>
-                            <g:message code="trait.search.header"/><br/>
-                        </h3>
-
-                        <select name="" id="trait-input" class="form-control btn-group btn-input clearfix">
-
-                        </select>
-
-                    </div>
-
-                    <div class="col-xs-1 col-md-1  col-lg-1 unpaddedSection" style="margin-top: 40px; padding: 0">
-                        <div id="traitSearchLaunch" class="btn btn-primary btn-lg"><g:message
-                                code="mainpage.button.imperative"/></div>
-                    </div>
-
-                    <div class="col-xs-1 col-md-1 col-lg-1">
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="col-md-5">
-                <div class="row">
-                    <div class="col-md-offset-1 col-md-10 medTextDark">
-                        <g:message code="about.the.portal.header"/>
-                        %{--<span style="padding-left:25px" class="glyphicon glyphicon-question-sign" aria-hidden="true" data-toggle="popover"--}%
-                              %{--title="<g:message code='about.the.portal.header'/>"--}%
-                              %{--data-content="<g:message code='about.the.portal.text'/>"--}%
-                        %{--></span>--}%
-                    </div>
-
-                    <div class="col-md-1"></div>
-
-                </div>
-
-                <div class="row">
-                    <div class="col-md-offset-1 col-md-10 smallText">
-
-
-
 <g:if test="${g.portalTypeString()?.equals('stroke')}">
-    <g:message code="about.the.stroke.portal.text"/>
-</g:if>
-<g:else>
-    <g:message code="about.the.portal.text"/>
-</g:else>
-                    </div>
-
-                    <div class="col-md-1"></div>
-                </div>
-
+    <div class="fluid" style="background-image:url(${resource(dir: 'images', file: 'banner_bg3.png')});background-size:100% 100%; padding-bottom: 10px; padding-top:30px;">
+        <div class="container">
+            <div class="row" style="text-align:center;padding-bottom:15px;">
+                <img src="${resource(dir: 'images/stroke', file: 'R24_front_header.png')}" style="width:95%;" />
             </div>
         </div>
+    </div>
+</g:if>
+<g:else>
+    <div class="fluid" style="background-image:url(${resource(dir: 'images', file: 'banner_bg3.png')});background-size:100% 100%; padding-bottom: 10px; padding-top:30px;">
+        <div class="container">
+            <div class="row" style="text-align:center;padding-bottom:15px;">
+                <img src="${resource(dir: 'images', file: 't2d_front_header6.png')}" style="width:95%;" />
+            </div>
+        </div>
+    </div>
+</g:else>
 
+%{--Main search page for application--}%
+<div class="container dk-2td-content">
+    <div class="row">
+        <div class="col-md-8">
+            <div>
+                <h2 class="dk-search-title-homepage"><g:message code="primary.text.input.header"/></h2>
+
+                <div class="form-inline" style="padding-top: 10px;">
+                    <input id="generalized-input" type="text" class="form-control input-sm" style="width: 70%;">
+                    <button id="generalized-go" class="btn btn-primary btn-sm" type="button" style="width:15%; float:right; margin-right: 5%;"><g:message code="mainpage.button.imperative"/> ></button>
+                </div>
+                <div>
+                    <strong><g:message code="site.shared.phrases.examples" />:</strong> <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                    <a href='<g:createLink controller="gene" action="geneInfo"
+                                           params="[id: 'HDAC9']"/>'>HDAC9</a>
+                </g:if>
+                    <g:else>
+                        <a href='<g:createLink controller="gene" action="geneInfo"
+                                               params="[id: 'SLC30A8']"/>'>SLC30A8</a>
+                    </g:else>
+                    <g:helpText title="input.searchTerm.geneExample.help.header" placement="bottom"
+                                body="input.searchTerm.geneExample.help.text"/>,
+                    <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                        <a href='<g:createLink controller="variantInfo" action="variantInfo"
+                                               params="[id: 'rs11179580']"/>'>rs11179580</a>
+                    </g:if>
+                    <g:else>
+                        <a href='<g:createLink controller="variantInfo" action="variantInfo"
+                                               params="[id: 'rs13266634']"/>'>rs13266634</a>
+                    </g:else>
+                    <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
+                                body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
+                    <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                        <a href='<g:createLink controller="region" action="regionInfo"
+                                               params="[id: 'chr7:18,100,000-18,300,000']"/>'>chr7:18,100,000-18,300,000</a>
+                    </g:if>
+                    <g:else>
+                        <a href='<g:createLink controller="region" action="regionInfo"
+                                               params="[id: 'chr9:21,940,000-22,190,000']"/>'>chr9:21,940,000-22,190,000</a>
+                    </g:else>
+                </div>
+            </div>
+            <hr />
+            <div>
+                <h2 class="dk-search-title-homepage"><g:message code="variant.search.header"/></h2>
+                <p class="dk-footnote"><g:message code="variant.search.specifics"/></p>
+                <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">
+                    <button class="btn btn-primary btn-sm" type="button" style="width:15%; float:right; margin-right: 5%; margin-top: -40px;"><g:message code="mainpage.button.imperative"/> ></button>
+                </a>
+            </div>
+            <hr />
+            <div>
+                <h2 class="dk-search-title-homepage">View full GWAS results for a phenotype</h2>
+                <div class="form-inline" style="padding-top: 10px;">
+                    <select name="" id="trait-input" class="form-control input-sm" style="width: 70%;">
+                    </select>
+                    <button class="btn btn-primary btn-sm" type="button" style="width:15%; float:right; margin-right: 5%;"><g:message code="mainpage.button.imperative"/> ></button>
+                </div>
+            </div>
+            <hr />
+            <img src="${resource(dir: 'images/icons', file: 'data_icon.png')}" style="width: 110px; margin-right: 10px;" align="left" >
+            <h2><g:message code="aboutTheData.title" default="About the data" /></h2>
+            <p>
+                <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                    <g:message code="portal.stroke.about.the.data.text" />
+                </g:if>
+                <g:else>
+                    <g:message code="about.the.portal.data.text" />
+                </g:else>
+            </p>
+
+            <h2><g:message code="portal.use.citation.title" default="Citation" /></h2>
+            <p><g:message code="portal.use.citation.request" default="Please use the following citation when referring to data accessed via this portal:"/><br />
+                <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                    <g:message code="portal.stroke.use.citation.itself" />
+                </g:if>
+                <g:else>
+                    <g:message code="portal.use.citation.itself" />
+                </g:else>
+            </p>
+
+        </div>
+
+        <div class="col-md-4">
+            <h3><g:message code="portal.home.news_headline" default="What's new" /></h3>
+            <ul id="newsFeedHolder" class="dk-news-items gallery-fade"></ul>
+            <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                <a class="btn btn-default" style="width:100%; margin-top: -50px; margin-right: 2%; margin-bottom: 0px;"
+                   href="#"
+                   target="_blank">
+                    <g:message code="portal.home.mailsignup" default="Get email updates"/>
+                </a>
+            </g:if>
+            <g:else>
+                <a class="btn btn-default" style="width:80%; margin-top: -50px; margin-right: 2%; margin-bottom: 0px;"
+                   href="https://docs.google.com/a/broadinstitute.org/forms/d/1bncgNMw89nmqukMPc7xIourH-Wu7Vpc4xJ6Uh4RSECI/viewform"
+                   target="_blank">
+                    <g:message code="portal.home.mailsignup" default="Get email updates"/>
+                </a>
+                <a class="btn btn-default" style="width:15%; margin-top: -50px; margin-bottom: 0px; background-color:#55bcdf; border:solid 1px #1da1f2;" href="https://twitter.com/T2DKP"><img src="${resource(dir:'images/icons', file:'twitter.png')}" /></a>
+            </g:else>
+            <h3 style="margin-top: 0px;"><g:message code="about.the.portal.header"/></h3>
+            <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                <g:message code="about.the.stroke.portal.text"/>
+                <g:message code='portal.stroke.home.funders'/>:
+                <p>
+                    <a href="http://www.niddk.nih.gov/Pages/default.aspx"><img src="${resource(dir: 'images/organizations', file:'NIH3.png')}" style="width: 70px;"></a>&nbsp;&nbsp;&nbsp;
+                    <a href="http://www.ninds.nih.gov/"><img src="${resource(dir: 'images/organizations', file:'NIND.png')}" style="width: 165px;"></a>
+                </p>
+            </g:if>
+            <g:else>
+                <g:message code="about.the.portal.text"/>
+                <g:message code='portal.home.funders'/>:
+                <table>
+                    <tr>
+                        <td>
+                            <a href="http://www.niddk.nih.gov/Pages/default.aspx"><img src="${resource(dir:'images/organizations', file:'NIH.jpg')}" style="width: 110px;"></a>
+                        </td>
+                        <td>
+                            <a href="http://www.fnih.org"><img src="${resource(dir:'images/organizations', file:'FNIH.jpg')}" style="width: 110px;"></a>
+                        </td>
+                        <td>
+                            <a href="http://www.janssen.com"><img src="${resource(dir:'images/organizations', file:'janssen.jpg')}" style="width: 110px;"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="https://www.lilly.com/home.aspx"><img src="${resource(dir:'images/organizations', file:'lilly.jpg')}" style="width: 110px;"></a>
+                        </td>
+                        <td>
+                            <a href="http://www.merck.com/index.html"><img src="${resource(dir:'images/organizations', file:'merck.jpg')}" style="width: 110px;"></a>
+                        </td>
+                        <td>
+                            <a href="http://www.pfizer.com"><img src="${resource(dir:'images/organizations', file:'pfizer.jpg')}" style="width: 110px;"></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="http://en.sanofi.com"><img src="${resource(dir:'images/organizations', file:'sanofi.jpg')}" style="width: 110px;"></a>
+                        </td>
+                        <td>
+                            <a href="http://jdrf.org"><img src="${resource(dir:'images/organizations', file:'jdrf.jpg')}" style="width: 110px;"></a>
+                        </td>
+                        <td>
+                            <a href="http://www.diabetes.org"><img src="${resource(dir:'images/organizations', file:'ADA.jpg')}" style="width: 110px;"></a>
+                        </td>
+                    </tr>
+                </table>
+                <g:message code='portal.home.addtl_funders'/>:
+                <p><a href="http://www.fundacioncarlosslim.org/en/"><img src="${resource(dir:'images/organizations', file:'slim.png')}" style="margin-left: 80px;"></a></p>
+            </g:else>
+        </div>
     </div>
 </div>
-
-<div class="row column-center" style="display: flex; align-content: center; align-items: center;margin-top:25px;">
-    <div style="width:40vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
-        <div class="wide-separator"></div>
-    </div>
-    <div class="text-center funders-color" style="margin-left:5px;margin-right: 5px;">
-        <g:if test="${g.portalTypeString()?.equals('stroke')}">
-            <g:message code='portal.stroke.home.funders'/>:
-        </g:if>
-        <g:else>
-            <g:message code='portal.home.funders'/>:
-        </g:else>
-    </div>
-    <div style="width:40vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
-        <div class="wide-separator"></div>
-    </div>
-</div>
-
-<div>
-    <div class="row column-center" style="display: flex; align-content: center; align-items: center;">
-        <div style="width:10%"></div>
-        <g:if test="${g.portalTypeString()?.equals('stroke')}">
-            <div class="col-xs-3">
-            </div>
-            <div class="col-xs-1">
-                <img class="img-responsive" src="${resource(dir: 'images/stroke', file: 'broadLogo.gif')}">
-            </div>
-            <div class="col-xs-1">
-            </div>
-            <div class="col-xs-1">
-                <img class="img-responsive" src="${resource(dir: 'images/stroke', file: 'nsf.png')}">
-            </div>
-            <div class="col-xs-1">
-            </div>
-            <div class="col-xs-2">
-                <img class="img-responsive" src="${resource(dir: 'images/stroke', file: 'mgh-stroke-site-logo.gif')}">
-            </div>
-            <div class="col-xs-3">
-            </div>
-        </g:if>
-        <g:else>
-            <div class="col-xs-1">
-                <img class="img-responsive" src="${resource(dir: 'images/icons', file: 'NIH_NIDDK.png')}">
-            </div>
-            <div class="col-xs-1">
-                <img class="img-responsive" src="${resource(dir: 'images/icons', file: 'FNIH.png')}">
-            </div>
-            <div class="col-xs-1">
-                <img class="img-responsive" src="${resource(dir: 'images/icons', file: 'Janssen-logo.png')}">
-            </div>
-            <div class="col-xs-1">
-                <img class="img-responsive" src="${resource(dir: 'images/icons', file: 'Lilly-logo.png')}">
-            </div>
-            <div class="col-xs-1">
-                <img class="img-responsive" src="${resource(dir: 'images/icons', file: 'merck_3282.png')}">
-            </div>
-            <div class="col-xs-1">
-                <img class="img-responsive" src="${resource(dir: 'images/icons', file: 'pfizer_rgb_pos.png')}">
-            </div>
-            <div class="col-xs-1">
-                <img class="img-responsive" src="${resource(dir: 'images/icons', file: 'sanofi-logo.png')}">
-            </div>
-            <div class="col-xs-1">
-                <img class="img-responsive" src="${resource(dir: 'images/icons', file: 'JDRF-logo.png')}">
-            </div>
-            <div class="col-xs-1">
-                <img class="img-responsive" src="${resource(dir: 'images/icons', file: 'american-diabetes-association.png')}">
-            </div>
-        </g:else>
-        <div style="width:10%"></div>
-    </div>
-</div>
-
-
-
-<g:if test="${g.portalTypeString()?.equals('t2d')}">
-<div class="row column-center" style="display: flex; align-content: center; align-items: center;">
-    <div style="width:45vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
-        <div class="wide-separator"></div>
-    </div>
-    <div class="text-center funders-color" style="margin-left:5px;margin-right: 5px;">
-        <g:message code='portal.home.addtl_funders'/>:
-    </div>
-    <div style="width:45vw;padding-left:0;padding-right:0;border-left:0;border-right:0;margin-left:0;margin-right:0;">
-        <div class="wide-separator"></div>
-    </div>
-</div>
-
-<div class="row column-center" style="display: flex; align-content: center; align-items: center;margin-top:10px;margin-bottom: 30px;">
-    <div class="col-xs-2">
-        <img class="img-responsive" src="${resource(dir: 'images/icons', file: 'logotipo_Fundacion_CarlosSlim.png')}">
-    </div>
-</div>
-</g:if>>
 
 </body>
 </html>

@@ -9,7 +9,7 @@ class  InformationalController {
     RestServerService restServerService
 
     def index() {}
-    def about (){
+    def aboutthedata (){
         String locale = RequestContextUtils.getLocale(request)
         render (view: 'about', model:[locale:locale])
     }
