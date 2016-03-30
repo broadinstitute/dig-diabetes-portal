@@ -325,34 +325,35 @@ class SystemController {
         if  (restServer == 'prodloadbalancedserver')  {
             if (!(currentServer == 'prodloadbalancedserver')) {
                 restServerService.goWithTheProdLoadBalancedServer()
-                flash.message = "You are now using the ${restServer} server!"
+                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"
             }
         } else  if (restServer == 'qaloadbalancedserver')  {
             if (!(currentServer == 'qaloadbalancedserver')) {
                 restServerService.goWithTheQaLoadBalancedServer()
-                flash.message = "You are now using the ${restServer} server!"
+                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"
             }
         } else  if (restServer == 'devloadbalancedserver')  {
             if (!(currentServer == 'devloadbalancedserver')) {
                 restServerService.goWithTheDevLoadBalancedServer()
-                flash.message = "You are now using the ${restServer} server!"
+                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"
             }
         } else  if (restServer == 'aws01restserver')  {
             if (!(currentServer == 'aws01restserver')) {
                 restServerService.goWithTheAws01RestServer()
-                flash.message = "You are now using the ${restServer} server!"
+                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"
             }
         }
-
-        forward(action: "systemManager")
+        params.datatype = "forceIt"
+        forward(action: "forceMetadataCacheUpdate")
+        //forward(action: "systemManager")
     }
 
     def switchSigmaT2d(){

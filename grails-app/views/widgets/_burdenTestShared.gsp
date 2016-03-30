@@ -321,22 +321,122 @@ $( document ).ready( function (){
                 <h3>Select a trait to test for association.</h3>
 
                 <div class="row burden-test-wrapper-options">
-                    <div class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter"></div>
 
-                    <div class="col-md-4 col-sm-4 col-xs-12 burden-test-btn-wrapper vcenter">
-                        <label>Available traits:
-                            <select id="traitFilter" class="traitFilter form-control">
-                            </select>
-                        </label>
+                    <div class="col-md-6 col-sm-6 col-xs-12 vcenter">
+                        <div class="row">
+                            <div class="col-sm-6 col-xs-12 text-right"><label>Choose a data set:</label></div>
+                            <div class="col-sm-6 col-xs-12 text-left">
+                                <select id="traitFilter" class="traitFilter form-control text-left">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-xs-12 text-right"><label>Choose a phenotype:</label></div>
+                            <div class="col-sm-6 col-xs-12 text-left">
+                                <select id="phenotypeFilter" class="traitFilter form-control text-left">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-xs-12 text-right"><label>Select all covariates:</label></div>
+                            <div class="col-sm-6 col-xs-12 text-center">
+                                <div id="covariate-form">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input id="covariate_PC1" type="checkbox" name="covariate" value="PC1" checked/>
+                                            PC1
+                                        </label>
+                                    </div>
+
+                                    <div class="checkbox">
+                                        <label>
+                                            <input id="covariate_PC2" type="checkbox" name="covariate" value="PC2" checked/>
+                                            PC2                                        </label>
+                                    </div>
+
+                                    <div class="checkbox">
+                                        <label>
+                                            <input id="covariate_PC3" type="checkbox" name="covariate" value="PC3" checked/>
+                                            PC3                                        </label>
+                                    </div>
+
+                                    <div class="checkbox">
+                                        <label>
+                                            <input id="covariate_PC4" type="checkbox" name="covariate" value="PC4" checked/>
+                                            PC4                                       </label>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 col-xs-12 text-right"><label>Select all filters:</label></div>
+                            <div class="col-sm-6 col-xs-12 text-left">
+                                <table class="table table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th width="10%">Use</th>
+                                        <th width="30%">Filter</th>
+                                        <th width="25%">Cmp</th>
+                                        <th width="35%">Parameter</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td><input id="useBmi" type="checkbox" name="useBmi" value="BMI" checked/></td>
+                                        <td>BMI</td>
+                                        <td >
+                                            <select class="form-control" data-selectfor="bmiComparator">
+                                                <option>&lt;</option>
+                                                <option>&gt;</option>
+                                                <option>=</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" data-type="propertiesInput" data-prop="bmiValue" data-translatedname="P-value">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><input id="useGender" type="checkbox" name="useGender" value="GENDER" checked/></td>
+                                        <td>Gender</td>
+                                        <td>
+                                              <label>=</label>
+                                         </td>
+                                        <td>
+                                            <input type="text" class="form-control" data-type="propertiesInput" data-prop="P_FE_INV" data-translatedname="P-value">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><input id="useAge" type="checkbox" name="useGender" value="GENDER" checked/></td>
+                                        <td>Age</td>
+                                        <td>
+                                            <select class="form-control" data-selectfor="ageComparator">
+                                                <option>&lt;</option>
+                                                <option>&gt;</option>
+                                                <option>=</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control" data-type="propertiesInput" data-prop="ageValue" data-translatedname="P-value">
+                                        </td>
+
+                                    </tr>
+                                    </tbody>
+                                </table>                            </div>
+                        </div>
+
+
                     </div>
 
-                    <div class="col-md-4 col-sm-4 col-xs-12 burden-test-btn-wrapper vcenter">
+                    <div class="col-md-4 col-sm-4 col-xs-12 vcenter"></div>
+
+                    <div class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter">
                         <button id="singlebutton" name="singlebutton" style="height: 80px"
                                 class="btn btn-primary btn-lg burden-test-btn"
                                 onclick="mpgSoftware.burdenTestShared.runBurdenTest()">Run</button>
                     </div>
 
-                    <div class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter"></div>
                 </div>
 
                 <div id="burden-test-some-results" class="row burden-test-result">
