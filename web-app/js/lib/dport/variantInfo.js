@@ -202,7 +202,9 @@ var mpgSoftware = mpgSoftware || {};
                         (freqInformation.length > 0)) {
                         var dataForBarChart = [];
                         var summaryChart = (freqInformation.length < 10);
+                        var extraSmallChart = (freqInformation.length < 4);
                         var chartHeight = (summaryChart)?250:550;
+                        var chartHeight = (extraSmallChart)?80:chartHeight;
                         var useSmallText = (summaryChart)?0:1;
                         for ( var i = 0 ; i < freqInformation.length ; i++ ){
                             var cohort = freqInformation[i];
@@ -252,6 +254,9 @@ var mpgSoftware = mpgSoftware || {};
                         var margin = {top: 20, right: 20, bottom: 0, left: 40},
                             width = 800 - margin.left - margin.right,
                             height = chartHeight - margin.top - margin.bottom;
+//                        margin = {top: 0, right: 20, bottom: 0, left: 70},
+//                            width = 800 - margin.left - margin.right,
+//                            height = 150 - margin.top - margin.bottom;
 
                         var commonBarChart = baget.barChart('howCommonIsChart')
                             .width(width)
@@ -270,74 +275,6 @@ var mpgSoftware = mpgSoftware || {};
                 },
 
 
-
-//                fillHowCommonIsUpBarChart = function (africanAmericanFrequency, hispanicFrequency, eastAsianFrequency, southAsianFrequency, europeanSequenceFrequency, europeanChipFrequency, alleleFrequencyStrings) {
-//                    if ((typeof africanAmericanFrequency !== 'undefined')) {
-//                        var dataForBarChart = [
-//                                { value: africanAmericanFrequency,
-//                                    position: 2,
-//                                    barname: alleleFrequencyStrings.africanAmerican,
-//                                    barsubname: '',
-//                                    barsubnamelink: '',
-//                                    inbar: '',
-//                                    descriptor: ''},
-//                                {value: hispanicFrequency,
-//                                    position: 4,
-//                                    barname: alleleFrequencyStrings.hispanic,
-//                                    barsubname: '',
-//                                    barsubnamelink: '',
-//                                    inbar: '',
-//                                    descriptor: ''},
-//                                { value: eastAsianFrequency,
-//                                    position: 6,
-//                                    barname: alleleFrequencyStrings.eastAsian,
-//                                    barsubname: '',
-//                                    barsubnamelink: '',
-//                                    inbar: '',
-//                                    descriptor: ''},
-//                                {  value: southAsianFrequency,
-//                                    position: 8,
-//                                    barname: alleleFrequencyStrings.southAsian,
-//                                    barsubname: '',
-//                                    barsubnamelink: '',
-//                                    inbar: '',
-//                                    descriptor: ''},
-//                                { value: europeanSequenceFrequency,
-//                                    position: 10,
-//                                    barname: alleleFrequencyStrings.european,
-//                                    barsubname: '',
-//                                    barsubnamelink: '',
-//                                    inbar: '',
-//                                    descriptor: alleleFrequencyStrings.exomeSequence},
-//                                { value: europeanChipFrequency,
-//                                    position: 11,
-//                                    barname: ' ',
-//                                    barsubname: '',
-//                                    barsubnamelink: '',
-//                                    inbar: '',
-//                                    descriptor: ((typeof europeanChipFrequency !== 'undefined' ) ? alleleFrequencyStrings.exomeChip : '')}
-//                            ],
-//                            roomForLabels = 120,
-//                            maximumPossibleValue = (Math.max(africanAmericanFrequency, hispanicFrequency, eastAsianFrequency, southAsianFrequency, europeanSequenceFrequency, europeanChipFrequency) * 1.5),
-//                            labelSpacer = 10;
-//
-//                        var margin = {top: 20, right: 20, bottom: 0, left: 70},
-//                            width = 800 - margin.left - margin.right,
-//                            height = 300 - margin.top - margin.bottom;
-//
-//                        var commonBarChart = baget.barChart('howCommonIsChart')
-//                            .width(width)
-//                            .height(height)
-//                            .margin(margin)
-//                            .roomForLabels(roomForLabels)
-//                            .maximumPossibleValue(maximumPossibleValue)
-//                            .labelSpacer(labelSpacer)
-//                            .dataHanger("#howCommonIsChart", dataForBarChart);
-//                        d3.select("#howCommonIsChart").call(commonBarChart.render);
-//                        return commonBarChart;
-//                    }
-//
-//                },
                 fillCarrierStatusDiseaseRisk = function (homozygCase, heterozygCase, nonCarrierCase, homozygControl, heterozygControl, nonCarrierControl, carrierStatusImpact) {
                     if ((typeof homozygCase !== 'undefined')) {
                         var data3 = [
@@ -730,7 +667,8 @@ var mpgSoftware = mpgSoftware || {};
             // externalize!
             externalCalculateDiseaseBurden = calculateDiseaseBurden;
             var howCommonIsThisVariantAcrossEthnicities = function (ethnicityPercentages) {// how common is this allele across different ethnicities
-                var weHaveEnoughDataToDescribeMinorAlleleFrequencies = (!UTILS.nullSafetyTest([ethnicityPercentages[0].count]));
+                var weHaveEnoughDataToDescribeMinorAlleleFrequencies = ((typeof ethnicityPercentages !== 'undefined')&&(typeof ethnicityPercentages[0] !== 'undefined'));
+                if (weHaveEnoughDataToDescribeMinorAlleleFrequencies)  {weHaveEnoughDataToDescribeMinorAlleleFrequencies = (!UTILS.nullSafetyTest([ethnicityPercentages[0].count]));}
                 UTILS.verifyThatDisplayIsWarranted(weHaveEnoughDataToDescribeMinorAlleleFrequencies, $('#howCommonIsExists'), $('#howCommonIsNoExists'));
                 if (weHaveEnoughDataToDescribeMinorAlleleFrequencies) {
                     privateMethods.showEthnicityPercentageWithBarChart(ethnicityPercentages);
