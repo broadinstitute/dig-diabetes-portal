@@ -95,9 +95,9 @@ class HomeControllerUnitSpec extends Specification {
 
 
 
-    void "test introVideoHolder"() {
+    void "test tutorials"() {
         when:
-        controller.introVideoHolder()
+        controller.tutorials()
 
         then:
         response.status == 200
