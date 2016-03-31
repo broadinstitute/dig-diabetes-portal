@@ -1,6 +1,7 @@
 package org.broadinstitute.mpg
 
 import grails.converters.JSON
+import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -151,13 +152,14 @@ class VariantInfoController {
         // params.dataSet=="1" // where 1->13k, 2->26k"
         // params.variantName=="SLC30A8" // string representing gene name
         log.info("got parameters: " + params);
-
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject = slurper.parseText(params.covariates)
         // cast the parameters
         String variantName = params.variantName;
         String traitFilterOptionId = (params.traitFilterSelectedOption ? params.traitFilterSelectedOption : "t2d");     // default to t2d if none given
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
-        JSONObject result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantName);
+        JSONObject result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantName, jsonObject);
 
         // send json response back
         render(status: 200, contentType: "application/json") {result}

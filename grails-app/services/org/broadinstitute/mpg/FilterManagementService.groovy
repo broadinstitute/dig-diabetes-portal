@@ -10,6 +10,7 @@ import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.query.JsNamingQueryTranslator
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 @Transactional
@@ -22,6 +23,7 @@ class FilterManagementService {
     MetaDataService metaDataService
     FilterManagementService filterManagementService
     GeneManagementService geneManagementService
+    GrailsApplication grailsApplication
 
 
     /***
@@ -65,6 +67,7 @@ class FilterManagementService {
      * @return
      */
     public JSONObject convertSampleGroupListToJson (List <SampleGroup> sampleGroupList,String phenotypeName){
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         LinkedHashMap<String,LinkedHashMap<String,String>> mapSampleGroupsToProperties = [:]
         List<SampleGroup> uniqueSampleGroupList = sampleGroupList.unique{ a,b -> a.getSystemId() <=> b.getSystemId() }
         for (SampleGroup sampleGroup in uniqueSampleGroupList){
@@ -76,6 +79,7 @@ class FilterManagementService {
             sampleGroupProperties["betavalue"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "BETA" )
             sampleGroupProperties["technology"] =  metaDataService.getTechnologyPerSampleGroup( sampleGroup.systemId )
             sampleGroupProperties["count"] =  "${sampleGroup.subjectsNumber}"
+            sampleGroupProperties["translation"] =  g.message(code: 'metadata.' + sampleGroup.systemId, default: sampleGroup.systemId);
             mapSampleGroupsToProperties[sampleGroup.systemId] = sampleGroupProperties
         }
         String technologyListAsJson = sharedToolsService.packageUpASingleLevelTreeAsJson(mapSampleGroupsToProperties)

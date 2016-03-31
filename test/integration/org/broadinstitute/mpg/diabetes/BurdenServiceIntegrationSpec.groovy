@@ -112,7 +112,7 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
     void "test burden test for single variant"() {
         when:
         String variantId = "8_118184783_C_T";
-        JSONObject resultJson = this.burdenService.callBurdenTestForTraitAndVariantId("t2d", variantId);
+        JSONObject resultJson = this.burdenService.callBurdenTestForTraitAndVariantId("t2d", variantId, null);
 
         then:
         assert resultJson != null
@@ -123,7 +123,7 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
         when:
         List<String> varIdList = new ArrayList<String>();
         varIdList.add("8_118184783_C_T");
-        JSONObject resultJson = this.burdenService.getBurdenResultForVariantIdList(PortalConstants.BURDEN_DATASET_OPTION_ID_26K, PortalConstants.BURDEN_DEFAULT_PHENOTYPE_KEY, varIdList);
+        JSONObject resultJson = this.burdenService.getBurdenResultForVariantIdList(PortalConstants.BURDEN_DATASET_OPTION_ID_26K, PortalConstants.BURDEN_DEFAULT_PHENOTYPE_KEY, varIdList, null);
 
         then:
         assert resultJson != null

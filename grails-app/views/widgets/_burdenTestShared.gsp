@@ -124,6 +124,24 @@ div.labelAndInput > input {
     mpgSoftware.burdenTestShared = (function () {
         var loading = $('#rSpinner');
 
+            var retrieveMatchingDataSets = function (selPhenotypeSelector,selDataSetSelector){
+                var processReturnedDataSets = function (phenotypeName,matchingDataSets){
+                   var dataSetDropDown = $(selDataSetSelector);
+                   if ((typeof dataSetDropDown !== 'undefined') &&
+                     (typeof matchingDataSets !== 'undefined') &&
+                     (matchingDataSets.length > 0)) {
+                     for ( var i = 0 ; i < matchingDataSets.length; i++ )
+                        dataSetDropDown.append(new Option(matchingDataSets[i].translation,matchingDataSets[i].name,matchingDataSets[i].translation));
+                     }
+                };
+                UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],selPhenotypeSelector.value,
+                "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",processReturnedDataSets );
+            };
+
+
+
+
+
         /***
         *  Fill the drop down list with values.  Presumably we need to run this method right after the page load completes.
         *
@@ -165,12 +183,47 @@ div.labelAndInput > input {
             });
         }; // fillFilterDropDown
 
-
+        var retrievePhenotypes = function (dropDownSelector) {
+            var loading = $('#spinner').show();
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "${createLink(controller:'VariantSearch', action:'retrieveGwasSpecificPhenotypesAjax')}",
+                data: {},
+                async: true,
+                success: function (data) {
+                    if (( data !==  null ) &&
+                            ( typeof data !== 'undefined') &&
+                            ( typeof data.datasets !== 'undefined' ) &&
+                            (  data.datasets !==  null ) ) {
+                        UTILS.fillPhenotypeCompoundDropdown(data.datasets,dropDownSelector);
+                        $("select#trait-input").val("${g.defaultPhenotype()}");
+                    }
+                    loading.hide();
+                },
+                error: function (jqXHR, exception) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+        };
         /**
          *  run the burden test, then display the results.  We will need to start by extracting
          *  the data fields we need from the DOM.
          */
         var runBurdenTest = function (){
+
+            var collectingCovariateValues = function (){
+               var pcCovariates = [];
+               for ( var i = 0 ; i < 10 ; i++ ) {
+                  var pcId = 'PC'+(i+1);
+                  var pcElement = $('#covariate_'+pcId);
+                  if ((pcElement).is(':checked')){
+                    pcCovariates.push(""+(i+1))
+                  }
+               }
+               return "{\"covariates\":[\n" + pcCovariates.join(",") + "\n]}";
+            }
 
             var fillInResultsSection = function (pValue, oddsRatio, stdError, isDichotomousTrait){
                 // populate the data
@@ -196,6 +249,7 @@ div.labelAndInput > input {
                 type: "post",
                 url: "${createLink(controller: 'variantInfo', action: 'burdenTestAjax')}",
                 data: {variantName: '<%=variantIdentifier%>',
+                       covariates: collectingCovariateValues(),
                        traitFilterSelectedOption: traitFilterSelectedOption
                 },
                 async: true,
@@ -295,84 +349,167 @@ div.labelAndInput > input {
         // public routines are declared below
         return {
             runBurdenTest:runBurdenTest,
-            fillFilterDropDown:fillFilterDropDown
+            fillFilterDropDown:fillFilterDropDown,
+            retrieveMatchingDataSets:retrieveMatchingDataSets,
+            retrievePhenotypes:retrievePhenotypes
         }
 
     }());
 
 $( document ).ready( function (){
-   mpgSoftware.burdenTestShared.fillFilterDropDown ();
+  // mpgSoftware.burdenTestShared.fillFilterDropDown ();
+  mpgSoftware.burdenTestShared.retrievePhenotypes('#phenotypeFilter');
 } );
 
 </g:javascript>
 
 <div class="accordion-group">
-    <div class="accordion-heading">
-        <a class="accordion-toggle  collapsed" data-toggle="collapse" href="#collapseBurden">
-            <h2><strong><g:message code="variant.info.burden.test.title"
-                                   default="Test for association with quantitative traits"/></strong></h2>
-        </a>
-    </div>
+<div class="accordion-heading">
+    <a class="accordion-toggle  collapsed" data-toggle="collapse" href="#collapseBurden">
+        <h2><strong><g:message code="variant.info.burden.test.title"
+                               default="Test for association with quantitative traits"/></strong></h2>
+    </a>
+</div>
 
-    <div id="collapseBurden" class="accordion-body collapse">
-        <div class="accordion-inner">
+<div id="collapseBurden" class="accordion-body collapse">
+<div class="accordion-inner">
 
-            <div class="container">
-                <h3>Select a trait to test for association.</h3>
+<div class="container">
+<h3>Select a trait to test for association.</h3>
 
-                <div class="row burden-test-wrapper-options">
+<div class="row burden-test-wrapper-options">
 
-                    <div class="col-md-6 col-sm-6 col-xs-12 vcenter">
+    <div class="col-md-6 col-sm-6 col-xs-12 vcenter">
+        <div class="row">
+            <div class="col-sm-4 col-xs-12 text-right"><label>Choose a phenotype:</label></div>
+
+            <div class="col-sm-8 col-xs-12 text-left">
+                <select id="phenotypeFilter" class="traitFilter form-control text-left"
+                        onchange="mpgSoftware.burdenTestShared.retrieveMatchingDataSets(this, '#datasetFilter')">
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4 col-xs-12 text-right"><label>Choose a data set:</label></div>
+
+            <div class="col-sm-8 col-xs-12 text-left">
+                <select id="datasetFilter" class="traitFilter form-control text-left">
+                </select>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-4 col-xs-12 text-right"><label>Refine search:</label></div>
+
+            <div class="col-sm-8 col-xs-12 text-left">
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#covariates" aria-controls="covariates" role="tab"
+                                                              data-toggle="tab">Covariates</a></li>
+                    <li role="presentation"><a href="#filters" aria-controls="filters" role="tab"
+                                               data-toggle="tab">Filters</a></li>
+                    <li role="presentation"><a href="#stratify" aria-controls="stratify" role="tab"
+                                               data-toggle="tab">Stratify</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content" style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px">
+                    <div role="tabpanel" class="tab-pane active" id="covariates">
                         <div class="row">
-                            <div class="col-sm-6 col-xs-12 text-right"><label>Choose a data set:</label></div>
-                            <div class="col-sm-6 col-xs-12 text-left">
-                                <select id="traitFilter" class="traitFilter form-control text-left">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6 col-xs-12 text-right"><label>Choose a phenotype:</label></div>
-                            <div class="col-sm-6 col-xs-12 text-left">
-                                <select id="phenotypeFilter" class="traitFilter form-control text-left">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-6 col-xs-12 text-right"><label>Select all covariates:</label></div>
-                            <div class="col-sm-6 col-xs-12 text-center">
-                                <div id="covariate-form">
+                            <div id="covariate-form">
+                                <div class="col-sm-4 col-xs-12 text-center">
+
                                     <div class="checkbox">
                                         <label>
-                                            <input id="covariate_PC1" type="checkbox" name="covariate" value="PC1" checked/>
+                                            <input id="covariate_PC1" type="checkbox" name="covariate" value="PC1"
+                                                   checked/>
                                             PC1
                                         </label>
                                     </div>
 
                                     <div class="checkbox">
                                         <label>
-                                            <input id="covariate_PC2" type="checkbox" name="covariate" value="PC2" checked/>
-                                            PC2                                        </label>
+                                            <input id="covariate_PC2" type="checkbox" name="covariate" value="PC2"
+                                                   checked/>
+                                            PC2</label>
                                     </div>
 
                                     <div class="checkbox">
                                         <label>
-                                            <input id="covariate_PC3" type="checkbox" name="covariate" value="PC3" checked/>
-                                            PC3                                        </label>
+                                            <input id="covariate_PC3" type="checkbox" name="covariate" value="PC3"
+                                                   checked/>
+                                            PC3</label>
                                     </div>
 
                                     <div class="checkbox">
                                         <label>
-                                            <input id="covariate_PC4" type="checkbox" name="covariate" value="PC4" checked/>
-                                            PC4                                       </label>
+                                            <input id="covariate_PC4" type="checkbox" name="covariate" value="PC4"
+                                                   checked/>
+                                            PC4</label>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-4 col-xs-12 text-center">
+
+                                    <div class="checkbox">
+                                        <label>
+                                            <input id="covariate_PC5" type="checkbox" name="covariate" value="PC5"
+                                                   checked/>
+                                            PC5
+                                        </label>
+                                    </div>
+
+                                    <div class="checkbox">
+                                        <label>
+                                            <input id="covariate_PC6" type="checkbox" name="covariate" value="PC6"
+                                                   checked/>
+                                            PC6</label>
+                                    </div>
+
+                                    <div class="checkbox">
+                                        <label>
+                                            <input id="covariate_PC7" type="checkbox" name="covariate" value="PC7"
+                                                   checked/>
+                                            PC7</label>
+                                    </div>
+
+                                    <div class="checkbox">
+                                        <label>
+                                            <input id="covariate_PC8" type="checkbox" name="covariate" value="PC8"
+                                                   checked/>
+                                            PC8</label>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-4 col-xs-12 text-center">
+
+                                    <div class="checkbox">
+                                        <label>
+                                            <input id="covariate_PC9" type="checkbox" name="covariate" value="PC9"
+                                                   checked/>
+                                            PC9
+                                        </label>
+                                    </div>
+
+                                    <div class="checkbox">
+                                        <label>
+                                            <input id="covariate_PC10" type="checkbox" name="covariate" value="PC10"
+                                                   checked/>
+                                            PC10</label>
                                     </div>
 
                                 </div>
                             </div>
                         </div>
+                    </div>
 
+                    <div role="tabpanel" class="tab-pane" id="filters">
                         <div class="row">
-                            <div class="col-sm-6 col-xs-12 text-right"><label>Select all filters:</label></div>
-                            <div class="col-sm-6 col-xs-12 text-left">
+                            <div class="col-sm-10 col-xs-12 text-left">
                                 <table class="table table-condensed">
                                     <thead>
                                     <tr>
@@ -386,7 +523,7 @@ $( document ).ready( function (){
                                     <tr>
                                         <td><input id="useBmi" type="checkbox" name="useBmi" value="BMI" checked/></td>
                                         <td>BMI</td>
-                                        <td >
+                                        <td>
                                             <select class="form-control" data-selectfor="bmiComparator">
                                                 <option>&lt;</option>
                                                 <option>&gt;</option>
@@ -394,21 +531,25 @@ $( document ).ready( function (){
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" data-type="propertiesInput" data-prop="bmiValue" data-translatedname="P-value">
+                                            <input type="text" class="form-control" data-type="propertiesInput"
+                                                   data-prop="bmiValue" data-translatedname="P-value">
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><input id="useGender" type="checkbox" name="useGender" value="GENDER" checked/></td>
+                                        <td><input id="useGender" type="checkbox" name="useGender" value="GENDER"
+                                                   checked/></td>
                                         <td>Gender</td>
                                         <td>
-                                              <label>=</label>
-                                         </td>
+                                            <label>=</label>
+                                        </td>
                                         <td>
-                                            <input type="text" class="form-control" data-type="propertiesInput" data-prop="P_FE_INV" data-translatedname="P-value">
+                                            <input type="text" class="form-control" data-type="propertiesInput"
+                                                   data-prop="P_FE_INV" data-translatedname="P-value">
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><input id="useAge" type="checkbox" name="useGender" value="GENDER" checked/></td>
+                                        <td><input id="useAge" type="checkbox" name="useGender" value="GENDER" checked/>
+                                        </td>
                                         <td>Age</td>
                                         <td>
                                             <select class="form-control" data-selectfor="ageComparator">
@@ -418,79 +559,91 @@ $( document ).ready( function (){
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" data-type="propertiesInput" data-prop="ageValue" data-translatedname="P-value">
+                                            <input type="text" class="form-control" data-type="propertiesInput"
+                                                   data-prop="ageValue" data-translatedname="P-value">
                                         </td>
 
                                     </tr>
                                     </tbody>
-                                </table>                            </div>
-                        </div>
-
-
-                    </div>
-
-                    <div class="col-md-4 col-sm-4 col-xs-12 vcenter"></div>
-
-                    <div class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter">
-                        <button id="singlebutton" name="singlebutton" style="height: 80px"
-                                class="btn btn-primary btn-lg burden-test-btn"
-                                onclick="mpgSoftware.burdenTestShared.runBurdenTest()">Run</button>
-                    </div>
-
-                </div>
-
-                <div id="burden-test-some-results" class="row burden-test-result">
-                    <div class="col-md-8 col-sm-6">
-                        <div id="variantFrequencyDiv">
-                            <div>
-                                <p class="standardFont">Of the <span
-                                        id="traitSpan"></span> cases/controls, the following carry the variant ${variantIdentifier}.
-                                </p>
-                            </div>
-
-                            <div class="barchartFormatter">
-                                <div id="chart">
-
-                                </div>
+                                </table>
                             </div>
                         </div>
+
                     </div>
 
-                    <div class="col-md-2 col-sm-3">
-                    </div>
-
-                    <div class="col-md-2 col-sm-3">
-                        <div class="vertical-center">
-                            <div id="pValue" class="pValue"></div>
-
-                            <div id="orValue" class="orValue"></div>
-
-                            <div id="ciValue" class="ciValue"></div>
-                        </div>
+                    <div role="tabpanel" class="tab-pane" id="stratify">
+                        <h1 style="color: #ccc">Not yet implemented</h1>
                     </div>
                 </div>
 
-                <div id="burden-test-some-results-large" class="row burden-test-result-large">
-                    <div class="col-md-4 col-sm-3">
-                    </div>
-
-                    <div class="col-md-4 col-sm-6">
-                        <div class="vertical-center">
-                            <div id="pValue2" class="pValue"></div>
-
-                            <div id="orValue2" class="orValue"></div>
-
-                            <div id="ciValue2" class="ciValue"></div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 col-sm-3">
-                    </div>
-                </div>
             </div>
 
         </div>
+
     </div>
+
+    <div class="col-md-4 col-sm-4 col-xs-12 vcenter"></div>
+
+    <div class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter">
+        <button id="singlebutton" name="singlebutton" style="height: 80px"
+                class="btn btn-primary btn-lg burden-test-btn"
+                onclick="mpgSoftware.burdenTestShared.runBurdenTest()">Run</button>
+    </div>
+
+</div>
+
+<div id="burden-test-some-results" class="row burden-test-result">
+    <div class="col-md-8 col-sm-6">
+        <div id="variantFrequencyDiv">
+            <div>
+                <p class="standardFont">Of the <span
+                        id="traitSpan"></span> cases/controls, the following carry the variant ${variantIdentifier}.
+                </p>
+            </div>
+
+            <div class="barchartFormatter">
+                <div id="chart">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2 col-sm-3">
+    </div>
+
+    <div class="col-md-2 col-sm-3">
+        <div class="vertical-center">
+            <div id="pValue" class="pValue"></div>
+
+            <div id="orValue" class="orValue"></div>
+
+            <div id="ciValue" class="ciValue"></div>
+        </div>
+    </div>
+</div>
+
+<div id="burden-test-some-results-large" class="row burden-test-result-large">
+    <div class="col-md-4 col-sm-3">
+    </div>
+
+    <div class="col-md-4 col-sm-6">
+        <div class="vertical-center">
+            <div id="pValue2" class="pValue"></div>
+
+            <div id="orValue2" class="orValue"></div>
+
+            <div id="ciValue2" class="ciValue"></div>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-sm-3">
+    </div>
+</div>
+</div>
+
+</div>
+</div>
 </div>
 
 

@@ -142,7 +142,7 @@ class BurdenService {
             log.info("passing enhanced burden rest result: " + returnJson);
             */
 
-            returnJson = this.getBurdenResultForVariantIdList(dataVersionId, phenotype, burdenVariantList);
+            returnJson = this.getBurdenResultForVariantIdList(dataVersionId, phenotype, burdenVariantList, null);
 
         } catch (PortalException exception) {
             log.error("Got error creating burden test for gene: " + geneString + " and phenotype: " + phenotype + ": " + exception.getMessage());
@@ -166,24 +166,10 @@ class BurdenService {
      * @return
      * @throws PortalException
      */
-    protected JSONObject callBurdenTestForTraitAndDbSnpId(String traitOption, String burdenVariantDbSnpId) throws PortalException {
+    protected JSONObject callBurdenTestForTraitAndDbSnpId(String traitOption, String burdenVariantDbSnpId, JSONObject callingParameters) throws PortalException {
         // local variables
         org.broadinstitute.mpg.Variant burdenVariant;
         JSONObject returnJson = null;
-
-        // get the burden db_snp_id
-
-//        // first check that this is a db_snp_id
-//        if (burdenVariantDbSnpId =~ /r.*/) {
-//            burdenVariant = org.broadinstitute.mpg.Variant.findByDbSnpId(burdenVariantDbSnpId)
-//        } else {
-//            burdenVariant = org.broadinstitute.mpg.Variant.findByVarId(burdenVariantDbSnpId)
-//        }
-//
-//        if (burdenVariant == null) {
-//            throw new PortalException("found no varId for dbSnpId: " + burdenVariantDbSnpId)
-//        }
-
 
         String variantId = ""
         if (burdenVariantDbSnpId)      {
@@ -195,12 +181,8 @@ class BurdenService {
             }
         }
 
-
-
-
-
         // call shared method
-        returnJson = this.callBurdenTestForTraitAndVariantId(traitOption, variantId);
+        returnJson = this.callBurdenTestForTraitAndVariantId(traitOption, variantId, callingParameters);
 
         // return
         return returnJson;
@@ -214,7 +196,7 @@ class BurdenService {
      * @return
      * @throws PortalException
      */
-    protected JSONObject callBurdenTestForTraitAndVariantId(String traitOption, String burdenVariantId) throws PortalException {
+    protected JSONObject callBurdenTestForTraitAndVariantId(String traitOption, String burdenVariantId, JSONObject callingParameters) throws PortalException {
         // local variables
         List<String> burdenVariantList = new ArrayList<String>();
         JSONObject returnJson = null;
@@ -228,7 +210,7 @@ class BurdenService {
         }
 
         // call shared method
-        returnJson = this.getBurdenResultForVariantIdList(dataVersion, traitOption, burdenVariantList);
+        returnJson = this.getBurdenResultForVariantIdList(dataVersion, traitOption, burdenVariantList, callingParameters);
 
         // return
         return returnJson;
@@ -242,7 +224,7 @@ class BurdenService {
      * @return
      * @throws PortalException
      */
-    protected JSONObject getBurdenResultForVariantIdList(int dataVersionId, String phenotype, List<String> burdenVariantList) throws PortalException {
+    protected JSONObject getBurdenResultForVariantIdList(int dataVersionId, String phenotype, List<String> burdenVariantList, JSONObject callingParameters) throws PortalException {
         // local variables
         JSONObject jsonObject = null;
         JSONObject returnJson = null;
@@ -253,7 +235,8 @@ class BurdenService {
         }
 
         // create the json payload for the burden call
-        jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(dataVersionId, phenotype, burdenVariantList, null);
+        List<String> covariateList = callingParameters.covariates.collect{return it.toString()} as List
+        jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(dataVersionId, phenotype, burdenVariantList, covariateList);
         log.info("created burden rest payload: " + jsonObject);
 
         // get the results of the burden call

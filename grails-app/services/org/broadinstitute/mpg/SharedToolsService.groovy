@@ -599,16 +599,11 @@ class SharedToolsService {
             List<SampleGroup> technologySpecificSampleGroups = metaDataService.getSampleGroupForPhenotypeDatasetTechnologyAncestry(phenotypeName, datasetName,
                     technologyName,
                     getCurrentDataVersion(), "")
-            // pick a favorite -- use sample size eventually.  For now we use a shortcut...
+            // pick a favorite -- use sample size
             if (technologySpecificSampleGroups) {
                 List<SampleGroup> sortedTechnologySpecificSampleGroups = technologySpecificSampleGroups.sort { SampleGroup a, SampleGroup b ->
                     (b.subjectsNumber as Integer) <=> (a.subjectsNumber as Integer)
                 }
-//                if (("ExSeq" == technologyName)||("GWAS" == technologyName)) {
-//                    fullListOfSampleGroups.add(sortedTechnologySpecificSampleGroups[0])
-//                } else {
-//                    fullListOfSampleGroups.addAll(sortedTechnologySpecificSampleGroups)
-//                }
                 List<SampleGroup> topLevelGroups = listOnlyTopLevelSampleGroups( sortedTechnologySpecificSampleGroups )
                 if (topLevelGroups.size()>0) {
                     fullListOfSampleGroups.addAll(topLevelGroups)
