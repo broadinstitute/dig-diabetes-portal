@@ -104,10 +104,7 @@ var variantProcessing = (function () {
             noData:noData};
     };
 
-
-    deconvoluteVariantInfo = function(vRec){
-        var retstat = [];
-
+    var deconvoluteVariantInfo = function(vRec) {
         if ((typeof vRec !== 'undefined') &&
             (typeof vRec.results !== 'undefined')  &&
             (typeof vRec.results[0] !== 'undefined')  &&
@@ -116,11 +113,8 @@ var variantProcessing = (function () {
             var data = vRec.results[0]["pVals"];
             // first let's go through and process the metadata. For example we can make a data structure  with one
             // row for each phenotype (eventually these will correspond to the rows of the table).  as well, figure out
-            //
-            var phenotypeShortcut = {}; // shortcut to the right line
-            var phenotypeCounter = 0;
+
             var phenoStruct = [];
-            var mafValues = {};
             for (var i = 0; i < data.length; i++) {
                 var key = data [i].level;
                 var splitKey = key.split("^");
@@ -151,7 +145,7 @@ var variantProcessing = (function () {
             }
         }
         return phenoStruct;
-    },
+    };
 
 
     /***
@@ -167,145 +161,59 @@ var variantProcessing = (function () {
      */
     buildIntoRows = function(arrayOfFields) {
         var combinedStructure = {};
-
         if ((typeof arrayOfFields !== 'undefined') &&
             (arrayOfFields.length > 0)) {
 
-            // take a bunch of individual fields and build up the rows we will use
-
-            //   start by extracting the phenotypes, since the rows are organized by phenotype
-            var phenotypeList = [];
-            for (var i = 0; i < arrayOfFields.length; i++) {
-                if (( typeof arrayOfFields[i].phenotype !== 'undefined') &&
-                    (arrayOfFields[i].phenotype.length > 0)) {
-                    var phenotype = arrayOfFields[i].phenotype;
-                    if (phenotypeList.indexOf(phenotype) === -1) {
-                        phenotypeList.push(phenotype);
-                    }
-                }
-            }
-
-            // temp structure we can use to collect things
-            var collectingObject = {};
-            for ( var i = 0 ; i < phenotypeList.length ; i++ ) {
-                collectingObject [phenotypeList[i]]  = [];
-            }
-
-            // data set specific properties need to be blended in.  create a temporary data structure to hold them.
-            var dataSetSpecificObject = {};
-            for (var i = 0; i < arrayOfFields.length; i++) {
-                if (( typeof arrayOfFields[i].phenotype !== 'undefined') &&
-                    (arrayOfFields[i].phenotype==='NONE') ) {
-                    if ( typeof dataSetSpecificObject[arrayOfFields[i].samplegroup]  === 'undefined')  {
-                        dataSetSpecificObject[arrayOfFields[i].samplegroup] = {};
-                    }
-                    dataSetSpecificObject[arrayOfFields[i].samplegroup][arrayOfFields[i].meaning] =  arrayOfFields[i];
-                }
-            }
-
-            // Now we know which phenotypes we have to work with, bring together all information that shares a phenotype
-            //  At the same time let's figure out our column list
-            var columnList = [];
-            for (var i = 0; i < arrayOfFields.length; i++) {
-                if ( typeof arrayOfFields[i].phenotype !== 'undefined')  {
-                    if (arrayOfFields[i].phenotype !== 'NONE'){
-                        if ((arrayOfFields[i].pValue!==null)&&  // if there are no data we don't care about this field
-                            (arrayOfFields[i].pValue!=='')){
-                            collectingObject[arrayOfFields[i].phenotype].push(arrayOfFields[i]);
-                            if (( typeof arrayOfFields[i].meaning !== 'undefined') &&
-                                ( arrayOfFields[i].meaning.length  > 0)) {
-                                if (columnList.indexOf(arrayOfFields[i].meaning)===-1)  {
-                                    columnList.push(arrayOfFields[i].meaning);
-                                }
-                            }
-                            // if sample group match then assign this dataset to the same phenotype group
-                            if ( typeof dataSetSpecificObject[arrayOfFields[i].samplegroup] !== 'undefined') {
-                                for (var dsSpecificName in dataSetSpecificObject[arrayOfFields[i].samplegroup]) {
-                                    if (dataSetSpecificObject[arrayOfFields[i].samplegroup].hasOwnProperty(dsSpecificName)) {
-                                        var mafDefined = false;
-                                        for (var j = 0 ; j < collectingObject[arrayOfFields[i].phenotype].length ; j++) {
-                                            if (collectingObject[arrayOfFields[i].phenotype][j].property === dsSpecificName)  {
-                                                mafDefined = true;
-                                            }
-                                        }
-                                        if (!mafDefined)  {
-                                            collectingObject[arrayOfFields[i].phenotype].push(dataSetSpecificObject[arrayOfFields[i].samplegroup][dsSpecificName]);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            var columnList = _.chain(arrayOfFields).map('meaning').uniq().value();
             columnList.push('samplegroup');
+
+            // temp structure we can use to collect things--pulls out all the phenotypes
+            // except for "NONE" and groups all of the field items by phenotype, excluding fields
+            // where pValue == (null or '')
+            var collectingObject = _.chain(arrayOfFields).reject(['phenotype', 'NONE'])
+                                                         .reject({pValue: null}).reject({pValue: ''})
+                                                         .groupBy('phenotype').value();
+
+            var newDataSetSpecificObject = _.chain(arrayOfFields).filter({phenotype: 'NONE'}).groupBy('samplegroup').value();
+            console.log('newDataSetSpecificObject', newDataSetSpecificObject);
+
+            // then, for each phenotype, grab all of the common dataset properties
+            _.forEach(collectingObject, function(arrayOfProperties, phenotype) {
+                var datasetsForPhenotype = _.chain(arrayOfProperties).map('samplegroup').uniq().value();
+                _.forEach(datasetsForPhenotype, function(dataset) {
+                    if( newDataSetSpecificObject[dataset] ) {
+                        collectingObject[phenotype] = collectingObject[phenotype].concat((newDataSetSpecificObject[dataset]));
+                    }
+                });
+            });
 
             // we should have everything we need to make the structure from which the table can be derived
             combinedStructure["columnList"] = columnList;
             combinedStructure["phenotypeRows"] = {};
-            for (var phenotypeName in collectingObject) {
-                if (collectingObject.hasOwnProperty(phenotypeName)) {
-                    var fieldsPerPhenotype =  collectingObject[phenotypeName];
-                    if (fieldsPerPhenotype.length>0){
-                        // we may have data from multiple sample groups.  For now, pick the lowest P
-                        var allSampleGroups  = [];
-                        for  (  var i = 0 ; i < fieldsPerPhenotype.length ; i++ ){
-                            if (allSampleGroups.indexOf(fieldsPerPhenotype[i].samplegroup) === -1) {
-                                allSampleGroups.push (fieldsPerPhenotype[i].samplegroup);
-                            }
-                        }
-                        var fieldsPerPhenotypeForFavoredSampleGroup=[];   // this will become an array of field arrays, so that we can have multiple groupings for each phenotype
-                        if (allSampleGroups.length=== 1) {  // if only one sample group then use everything
-                            fieldsPerPhenotypeForFavoredSampleGroup.push(fieldsPerPhenotype);
-                        }  else {   // multiple sample groups.  Pick a favorite
-                            // first create a sortable list of P values
-                            var pValsToCompare = []; // array of objects
-                            for  (  var i = 0 ; i < allSampleGroups.length ; i++ ){
-                                for  (  var j = 0 ; j < fieldsPerPhenotype.length ; j++ ){
-                                    if ((fieldsPerPhenotype[j].samplegroup===allSampleGroups[i])&&
-                                        (fieldsPerPhenotype[j].meaning==='P_VALUE')){
-                                        pValsToCompare.push({'pval':fieldsPerPhenotype[j].pValue,'sg':fieldsPerPhenotype[j].samplegroup})
-                                    }
-                                }
-                            }
-                            var chosenSampleGroup;
-                            var sortedPValsToCompare = [];
-                            if (pValsToCompare.length>0) {
-                                sortedPValsToCompare =  pValsToCompare.sort(function(a,b){return a.pval- b.pval;});
-                                chosenSampleGroup =  sortedPValsToCompare[0].sg;
-                            } else {  // if there were no P values then pick the sample group arbitrarily
-                                chosenSampleGroup = allSampleGroups[0];
-                            }
-                            // now get the fields associated with the sample group
-                            for ( var j = 0 ; j < sortedPValsToCompare.length ; j++ ){
-                                chosenSampleGroup =  sortedPValsToCompare[j].sg;
-                                var sampleGroupSpecificPhenotypeInfo = [];
-                                for  (  var i = 0 ; i < fieldsPerPhenotype.length ; i++ ){
-                                    if (fieldsPerPhenotype[i].samplegroup===chosenSampleGroup){
-                                        sampleGroupSpecificPhenotypeInfo.push(fieldsPerPhenotype[i]) ;
-                                    }
-                                }
-                                fieldsPerPhenotypeForFavoredSampleGroup.push(sampleGroupSpecificPhenotypeInfo) ;
-                            }
-                        }
-                        combinedStructure["phenotypeRows"][phenotypeName] = [];
-                        for  (var i = 0; i < fieldsPerPhenotypeForFavoredSampleGroup.length; i++) {
-                            var fieldAccumulator = {}; // temporary variable necessary only for clarity
-                            for  (var j = 0; j < fieldsPerPhenotypeForFavoredSampleGroup[i].length; j++) {
-                                fieldAccumulator[fieldsPerPhenotypeForFavoredSampleGroup[i][j].meaning]  =   fieldsPerPhenotypeForFavoredSampleGroup[i][j].pValue;
-                                fieldAccumulator['samplegroup']  =   fieldsPerPhenotypeForFavoredSampleGroup[i][j].samplegroup;  // gets assigned multiple times but should always be the same
-                                fieldAccumulator['translatedSGName']  =   fieldsPerPhenotypeForFavoredSampleGroup[i][j].translatedSGName;  // gets assigned multiple times but should always be the same
-                                fieldAccumulator['translatedPhenotypeName'] = fieldsPerPhenotypeForFavoredSampleGroup[i][j].translatedName;  // gets assigned multiple times but should always be the same
-                            }
-                            combinedStructure["phenotypeRows"][phenotypeName].push(fieldAccumulator);
-                        }
-                    }
+            _.forEach(collectingObject, function(fieldsPerPhenotype, phenotypeName) {
+                if (fieldsPerPhenotype.length>0){
+                    // for each phenotype, group all of the properties by samplegroup
+                    var groupedBySampleGroup = _.chain(fieldsPerPhenotype).groupBy('samplegroup').value();
+
+                    combinedStructure["phenotypeRows"][phenotypeName] = [];
+                    _.forEach(groupedBySampleGroup, function(properties) {
+                        // for every set of properties for a given sample group, merge all of the properties
+                        var fieldAccumulator = _.reduce(properties, function(finalObject, thisProperty) {
+                            finalObject[thisProperty.meaning] = thisProperty.pValue;
+                            // do this so we ignore fields we don't need
+                            var commonProps = _.pick(thisProperty, ['samplegroup', 'translatedSGName', 'translatedName']);
+                            _.merge(finalObject, commonProps);
+                            return finalObject;
+                        }, {});
+
+                        combinedStructure["phenotypeRows"][phenotypeName].push(fieldAccumulator);
+                    });
                 }
-            }
+            });
         }
         return combinedStructure;
 
-        },
+    };
 
     addTraitsPerVariantTable = function ( vRecO, openPhenotypes, traitsPerVariantTable,traitRootUrl,existingRowCount ) {
         var retVal = [];
@@ -343,7 +251,7 @@ var variantProcessing = (function () {
                     retVal = [];
 
                     // some shared variables
-                    var convertedTrait= row.translatedPhenotypeName;
+                    var convertedTrait= row.translatedName;
                     var convertedSampleGroup= row.translatedSGName;
                     var dealingWithIndexRow = (i===indexRow);
                     var oddsRatioValue = Number.NaN;
