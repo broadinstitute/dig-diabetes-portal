@@ -56,6 +56,7 @@
             var position = null;
             var chromosome = null;
             var locusZoomInput = null;
+            var rangeInteger = 80000;
             $.ajax({
                 cache: false,
                 type: "get",
@@ -79,11 +80,11 @@
                     }
 
                     // get the locuszoom range and set it on the LZ div
-                    var startPosition = parseInt(position) - 200000;
+                    var startPosition = parseInt(position) - rangeInteger;
                     if (startPosition < 0) {
                         startPosition = 0;
                     }
-                    var endPosition = parseInt(position) + 200000;
+                    var endPosition = parseInt(position) + rangeInteger;
                     locusZoomInput = chromosome + ":" + startPosition + "-" + endPosition;
                     console.log(locusZoomInput);
                     $("#lz-1").attr("data-region", locusZoomInput);
