@@ -889,25 +889,19 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return toReturn
     }
 
-    /***
-     * Private section associated with howCommonIsVariantAcrossEthnicities, used to fill up the "how common is"
-     *  section in variant info
-     *
-     * @param variantId
-     * @return
-     */
-    private JSONObject howCommonIsVariantSection(String variantId, String showAll) {
-        String filterByVariantName = codedfilterByVariant(variantId)
-        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID"])
+
+
+    private LinkedHashMap<String,List<SampleGroup>> generateSampleGroupByAncestry(String variantId){
         List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupForNonMixedAncestry( sharedToolsService.getCurrentDataVersion(), "Mixed" )
-        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName], searchBuilderService, metaDataService)
         // start by collecting all of the sample groups that share a common ancestry
         LinkedHashMap<String,List<SampleGroup>> sampleGroupByAncestry = [:]
         for ( int  i = 0 ; i < sampleGroupList.size() ; i++ ){
             SampleGroup sampleGroup = sampleGroupList[i]
             List<Property>  propertyList = sampleGroup.getProperties()
             for (Property property in propertyList){
-                if (property.name==MAFPHENOTYPE){
+                if ((property.hasMeaning("MAF"))||
+                        (property.name==MAFPHENOTYPE)||
+                        (property.name=="EAF")){
                     String ancestry = sampleGroup.getAncestry()
                     if (!sampleGroupByAncestry.containsKey(ancestry)){
                         sampleGroupByAncestry[ancestry] = [sampleGroup]
@@ -917,18 +911,36 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 }
             }
         }
+        return sampleGroupByAncestry
+
+    }
+
+
+
+
+
+
+    /***
+     * Private section associated with howCommonIsVariantAcrossEthnicities, used to fill up the "how common is"
+     *  section in variant info
+     *
+     * @param variantId
+     * @return
+     */
+    private JSONObject howCommonIsVariantSection(String variantId, LinkedHashMap<String,List<SampleGroup>> sampleGroupByAncestry ) {
+        String filterByVariantName = codedfilterByVariant(variantId)
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID"])
+
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName], searchBuilderService, metaDataService)
+        // start by collecting all of the sample groups that share a common ancestry
+
         // We will only chart the ancestry record with the larger sample group.
         LinkedHashMap<String,SampleGroup> chosenSampleGroupByAncestry = [:]
         for (Map.Entry<String, List<SampleGroup>> entry : sampleGroupByAncestry.entrySet()) {
             String ancestry = entry.getKey()
             List<SampleGroup> sampleGroups = entry.getValue()
-            if (showAll=="1"){ // show all data sets
-                for (SampleGroup oneSampleGroup in sampleGroups){
-                    chosenSampleGroupByAncestry["${ancestry}+${oneSampleGroup.getSystemId()}"] = oneSampleGroup
-                }
-            } else { // show only the top data set
-                List<SampleGroup> sortedSampleGroups = sampleGroups.sort{a, b -> b.subjectsNumber <=> a.subjectsNumber }
-                chosenSampleGroupByAncestry[ancestry] = sortedSampleGroups.first()
+            for (SampleGroup oneSampleGroup in sampleGroups){
+                chosenSampleGroupByAncestry["${ancestry}+${oneSampleGroup.getSystemId()}"] = oneSampleGroup
             }
         }
         // Add all of our chosen ancestries
@@ -937,6 +949,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             SampleGroup sampleGroup = chosenSampleGroupByAncestry[ancestry]
             addColumnsForDProperties(resultColumnsToDisplay, "${MAFPHENOTYPE}", sampleGroup.systemId)
         }
+
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
@@ -952,10 +965,57 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     public JSONObject howCommonIsVariantAcrossEthnicities(String variantName, String showAll) {
         JSONObject returnValue
-        JSONObject apiResults = howCommonIsVariantSection(variantName,showAll)
+        LinkedHashMap<String,List<SampleGroup>> sampleGroupByAncestry =  generateSampleGroupByAncestry(variantName)
+        JSONObject apiResults = howCommonIsVariantSection(variantName,sampleGroupByAncestry)
         String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "", "" )
         def slurper = new JsonSlurper()
         returnValue = slurper.parseText(jsonParsedFromApi)
+        if (showAll=="0"){// refine list based on sample size
+            LinkedHashMap variantIdentifier = [:]
+            LinkedHashMap<String,List<SampleGroup>> refiningAncestryList = [:]
+            List unrefinedList = returnValue ["results"]["pVals"]
+            if ((unrefinedList) &&
+                    (unrefinedList.size()>0)){
+                for (Map map in unrefinedList[0]){
+                    String fieldName = map["level"]
+                    String fieldValue = map["count"]
+                    if (fieldName.startsWith("MAF")){
+                        List<String> listOfFieldElements = fieldName.tokenize("^")
+                        if (listOfFieldElements.size()>5){
+                            List<String> ancestrySpecificSampleGroups = sampleGroupByAncestry[listOfFieldElements[4]]
+                            for ( int  i = 0 ; i < ancestrySpecificSampleGroups.size() ; i++ ){
+                                if (ancestrySpecificSampleGroups[i].systemId == listOfFieldElements[3]){
+                                    if (refiningAncestryList.containsKey(listOfFieldElements[4])){
+                                        refiningAncestryList[listOfFieldElements[4]]<<["count":fieldValue,"value":fieldName,"sortOrder":i]
+                                    }else{
+                                        refiningAncestryList[listOfFieldElements[4]]=[]
+                                        refiningAncestryList[listOfFieldElements[4]]<<["count":fieldValue,"value":fieldName,"sortOrder":i]
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        variantIdentifier["count"] = fieldValue
+                    }
+                }
+            }
+            List<LinkedHashMap> chosenMafs = []
+            for (String ancestry in refiningAncestryList.keySet()){
+                List<SampleGroup> recordsPerAncestry = refiningAncestryList[ancestry]
+                List<SampleGroup> sortedRecordsPerAncestry = recordsPerAncestry.sort{a,b->return b.sortOrder<=>a.sortOrder}
+                if (sortedRecordsPerAncestry?.first()){
+                    LinkedHashMap map = sortedRecordsPerAncestry.first()
+                    chosenMafs << """{"level":"${map.value}","count":${map.count}}""".toString()
+                }
+            }
+            StringBuilder sb = new StringBuilder("""{"results":[{ "dataset": 1, "pVals": [{"level":"VAR_ID","count":"${variantIdentifier["count"]}"}""".toString())
+            if (chosenMafs.size()>0){
+                sb << ","
+                sb << chosenMafs.join(",")
+            }
+            sb << "]}]}"
+            returnValue = slurper.parseText(sb.toString())
+        }
 
         return returnValue
 
@@ -963,6 +1023,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     }
+
+
 
     /***
      * Private counterpart to combinedVariantDiseaseRisk, which is used to fill the "is variant frequency different for patients with the disease" section
