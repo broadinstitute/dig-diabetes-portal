@@ -214,7 +214,7 @@
                    target="_blank">
                     <g:message code="portal.home.mailsignup" default="Get email updates"/>
                 </a>
-                <a class="btn btn-default" style="width:15%; margin-top: -50px; margin-bottom: 0px; background-color:#55bcdf; border:solid 1px #1da1f2;" href="https://twitter.com/T2DKP"><img src="${resource(dir:'images/icons', file:'twitter.png')}" /></a>
+                <a class="btn btn-default" style="width:15%; margin-top: -50px; margin-bottom: 0px; background-color:#55bcdf; border:solid 1px #1da1f2;" href="https://twitter.com/T2DKP" target="_blank"><img src="${resource(dir:'images/icons', file:'twitter.png')}" /></a>
             </g:else>
             <h3 style="margin-top: 0px;"><g:message code="about.the.portal.header"/></h3>
             <g:if test="${g.portalTypeString()?.equals('stroke')}">

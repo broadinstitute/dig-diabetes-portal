@@ -29,7 +29,7 @@ var mpgSoftware = mpgSoftware || {};
                 var text = document.createElement('span');
                 text.innerHTML = '<b>' + post.title + '</b>: ' +
                                   getFirstWordsOfPost(post.content, 15) + '... ' +
-                                  '<a href=' + post.url + '>Read more</a>';
+                                  '<a href=' + post.url + ' target="_blank">Read more</a>';
                 postHtml.appendChild(text);
                 document.getElementById('newsFeedHolder').appendChild(postHtml);
             });
