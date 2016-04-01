@@ -5,7 +5,7 @@
 
     <div class="sectionBuffer" style="padding: 0 25px 10px 25px">
         <div>
-            <h2><a  class="standardLinks" href="${createLink(controller:'home',action:'provideTutorial')}"><g:message code="portal.introTutorial.title"/></a></h2>
+            <h2><a  class="standardLinks" href="${createLink(controller:'home',action:'tutorials')}"><g:message code="portal.introTutorial.title"/></a></h2>
         </div>
 
     </div>

@@ -143,10 +143,17 @@
 
 
 <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                <div class="separator"></div>
-                <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>
+    <div class="separator"></div>
 
-                <div class="separator"></div>
+    <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>
+
+    <div class="separator"></div>
+
+    <g:renderBetaFeaturesDisplayedValue>
+        <g:render template="/widgets/locusZoomPlot"/>
+
+        <div class="separator"></div>
+    </g:renderBetaFeaturesDisplayedValue>
 
     <div class="accordion-group">
         <div class="accordion-heading">

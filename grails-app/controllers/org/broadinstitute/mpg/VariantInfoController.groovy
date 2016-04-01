@@ -1,12 +1,10 @@
 package org.broadinstitute.mpg
-
 import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
-
 /**
  * Controller class to control the /variantInfo section of the T2D site
  */
@@ -25,8 +23,33 @@ class VariantInfoController {
         String locale = RequestContextUtils.getLocale(request)
         String variantToStartWith = params.id
         if (variantToStartWith) {
+
+/*
+            // get the chrom/pos for the LZ widget
+            JSONObject jsonObject =  restServerService.retrieveVariantInfoByName (variantToStartWith.trim())
+            if (jsonObject != null) {
+                log.info(jsonObject)
+                JSONArray propertyArray = jsonObject?.getJSONArray("variants")?.get(0);
+                String chromosome = null;
+                Integer position = null;
+                log.info(jsonObject?.toString())
+
+                for (JSONObject property : propertyArray) {
+                    if (property?.getString("CHROM")) {
+                        chromosome = property?.getString("CHROM");
+                    }
+                    if (property?.getString("POS")) {
+                        position = Integer.valueOf(property?.getString("POS"))
+                    }
+                }
+
+                String regionSpecification = chromosome + ":" + ((position > 250) ? (position - 250) : 0) + "-" + (position + 250)
+
+            }
+*/
             render(view: 'variantInfo',
                     model: [variantToSearch: variantToStartWith.trim(),
+                            regionSpecification: "5:57000000-58000000",
                             show_gwas      : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                             show_exchp     : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                             show_exseq     : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),

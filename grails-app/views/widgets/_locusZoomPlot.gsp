@@ -3,6 +3,9 @@
     <script src="https://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
     -->
 
+    <script>
+    </script>
+
     <script src="http://portaldev.sph.umich.edu/lz-amp/locuszoom.vendor.min.js" type="text/javascript"></script>
     <script src="http://portaldev.sph.umich.edu/lz-amp/locuszoom.next.js" type="text/javascript"></script>
 
@@ -48,11 +51,59 @@
         }());
 
         $( document ).ready( function (){
-			//global object for debugging
-            locuszoom_plot = mpgSoftware.locusZoom.initLocusZoom();
-			$("#collapseLZ").on("shown.bs.collapse", function() {
-				locuszoom_plot.setDimensions();
-			})
+            var variant;
+            var loading = $('#spinner').show();
+            var position = null;
+            var chromosome = null;
+            var locusZoomInput = null;
+            var rangeInteger = 80000;
+            $.ajax({
+                cache: false,
+                type: "get",
+                url:('<g:createLink controller="variantInfo" action="variantAjax"/>'+'/${variantToSearch}'),
+                async: true,
+                success: function (data) {
+                    if ( typeof data !== 'undefined')  {
+                        data.variant.variants[0]
+                        if ( typeof data.variant !== 'undefined')  {
+                            if ( typeof data.variant.variants[0] !== 'undefined')  {
+                                data.variant.variants[0].forEach(function (v) {
+                                    if ( typeof v.CHROM !== 'undefined')  {
+                                        chromosome = v.CHROM;
+                                    }
+                                    if ( typeof v.POS !== 'undefined')  {
+                                        position = v.POS;
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                    // get the locuszoom range and set it on the LZ div
+                    var startPosition = parseInt(position) - rangeInteger;
+                    if (startPosition < 0) {
+                        startPosition = 0;
+                    }
+                    var endPosition = parseInt(position) + rangeInteger;
+                    locusZoomInput = chromosome + ":" + startPosition + "-" + endPosition;
+                    console.log(locusZoomInput);
+                    $("#lz-1").attr("data-region", locusZoomInput);
+                    $("#lzRegion").text(locusZoomInput);
+                    loading.hide();
+
+                    //global object for debugging
+                    locuszoom_plot = mpgSoftware.locusZoom.initLocusZoom();
+                    $("#collapseLZ").on("shown.bs.collapse", function() {
+                        locuszoom_plot.setDimensions();
+                    })
+
+                },
+                error: function (jqXHR, exception) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+
         } );
 
     </script>
@@ -68,7 +119,7 @@
     <div id="collapseLZ" class="accordion-body collapse">
         <div class="accordion-inner">
                         <div>
-                                <b>Region: ${regionSpecification}</b>
+                                <b>Region: <span id="lzRegion"></span></b>
                         </div>
                         <!-- TODO: get LZ canvas to dynamically resize to width of enclosing div and height to minimum possible for display -->
                         <div id="lz-1" class="lz-container-responsive" data-region="${regionSpecification}"></div>

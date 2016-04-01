@@ -4,6 +4,7 @@ import dig.diabetes.portal.NewsFeedService
 import org.apache.juli.logging.LogFactory
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.core.io.ResourceLocator
+import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
 import grails.converters.JSON
 
@@ -57,28 +58,6 @@ class HomeController {
         redirect(action: 'index')
     }
 
-    def provideTutorial = {
-        String locale = RequestContextUtils.getLocale(request)
-        String fileName
-        if (locale.startsWith("es")){
-            fileName =  "/WEB-INF/resources/tutorials/tutorial_ES.pdf"
-        } else {
-            fileName =  "/WEB-INF/resources/tutorials/tutorial_EN.pdf"
-        }
-        File file =  grailsApplication.mainContext.getResource(fileName).file
-        if (file.exists())
-        {
-            response.setContentType("application/octet-stream") // or or image/JPEG or text/xml or whatever type the file is
-            response.setHeader("Content-disposition", "attachment;filename=\"${file.name}\"")
-            response.outputStream << file.bytes
-        }
-        else {
-            render "Problem retrieving tutorial.  Please try again later."
-        }
-    }
-
-
-
     /***
      * This is our standard home page. We get directed here from a few places in the portal
      */
@@ -98,10 +77,15 @@ class HomeController {
     }
 
     /***
-     * prep to show a video. Get here from the tutorial link
+     * Show tutorial documents. Some tutorials have Spanish versions, so generate links appropriately
      */
-    def introVideoHolder = {
-        render(controller: 'home', view: 'introVideoHolder')
+    def tutorials = {
+        String locale = RequestContextUtils.getLocale(request)
+        JSONObject links = [
+            introTutorial: locale.startsWith('es') ? "https://s3.amazonaws.com/broad-portal-resources/tutorials/tutorial_ES.pdf" : "https://s3.amazonaws.com/broad-portal-resources/tutorials/tutorial_EN.pdf",
+            variantFinderTutorial: "https://s3.amazonaws.com/broad-portal-resources/tutorials/VariantFinderTutorial.pdf"
+        ]
+        render(controller: 'home', view: 'tutorials', model: [links: links])
     }
 
     /***
