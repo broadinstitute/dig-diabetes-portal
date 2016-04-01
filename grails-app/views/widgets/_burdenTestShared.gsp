@@ -7,7 +7,9 @@ div.burden-test-wrapper-options {
     padding-top: 15px;
     padding-bottom: 15px;
 }
-
+div.burden-test-wrapper-options .row {
+    margin: 0 0 8px 0;
+}
 div.burden-test-btn-wrapper {
     padding-top: 8px;
 }
@@ -94,17 +96,17 @@ div.labelAndInput > input {
                 (caseDenominator) &&
                 (controlNumerator) &&
                 (controlDenominator)) {
-                delayedBurdenDataPresentation = {functionToRun: mpgSoftware.geneInfo.fillUpBarChart,
+                delayedBurdenDataPresentation = {functionToRun: mpgSoftware.variantInfo.fillUpBarChart,
                     barchartPtr: retainBarchartPtr,
                     launch: function () {
-                        retainBarchartPtr = mpgSoftware.geneInfo.fillUpBarChart(caseNumerator, caseDenominator, controlNumerator, controlDenominator, traitName);
-                        return retainBarchartPtr;
+//                        retainBarchartPtr = mpgSoftware.variantInfo.fillUpBarChart(caseNumerator, caseDenominator, controlNumerator, controlDenominator, traitName);
+//                        return retainBarchartPtr;
                     },
                     removeBarchart: function () {
-                        if ((typeof retainBarchartPtr !== 'undefined') &&
-                            (typeof retainBarchartPtr.clear !== 'undefined')) {
-                            retainBarchartPtr.clear('T2D');
-                        }
+//                        if ((typeof retainBarchartPtr !== 'undefined') &&
+//                            (typeof retainBarchartPtr.clear !== 'undefined')) {
+//                            retainBarchartPtr.clear('T2D');
+//                        }
                     }
                 };
             }
@@ -242,7 +244,7 @@ div.labelAndInput > input {
             };
 
             $('#rSpinner').show();
-            var traitFilterSelectedOption = $('#traitFilter').val();
+            var traitFilterSelectedOption = $('#phenotypeFilter').val();
 
             $.ajax({
                 cache: false,

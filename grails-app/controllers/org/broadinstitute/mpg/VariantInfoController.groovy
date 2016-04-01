@@ -174,12 +174,28 @@ class VariantInfoController {
         // params.filterNum=="2" // value=id from burdenTestVariantSelectionOptionsAjax, or 0 if no selection was made (which is a legal choice)
         // params.dataSet=="1" // where 1->13k, 2->26k"
         // params.variantName=="SLC30A8" // string representing gene name
+
+        // Really?  Different names for phenotypes?  Well, okay, let's translate them
+        String traitFilterOptionId = (params.traitFilterSelectedOption ? params.traitFilterSelectedOption : "t2d");     // default to t2d if none given
+        switch (traitFilterOptionId) {
+            case "BMI": traitFilterOptionId = "BMI"; break
+            case "T2D": traitFilterOptionId = "t2d"; break
+            case "FG": traitFilterOptionId = "FAST_GLU_ANAL"; break
+            case "FI": traitFilterOptionId = "FAST_INS_ANAL"; break
+            case "CHOL": traitFilterOptionId = "CHOL_ANAL"; break
+            case "LDL": traitFilterOptionId = "LDL_ANAL"; break
+            case "HDL": traitFilterOptionId = "HDL_ANAL"; break
+            case "TG": traitFilterOptionId = "TG_ANAL"; break
+            case "SBP": traitFilterOptionId = "SBP_ANAL"; break
+            case "DBP": traitFilterOptionId = "DBP_ANAL"; break
+            default:traitFilterOptionId = "t2d"; break
+        }
+
         log.info("got parameters: " + params);
         JsonSlurper slurper = new JsonSlurper()
         JSONObject jsonObject = slurper.parseText(params.covariates)
         // cast the parameters
         String variantName = params.variantName;
-        String traitFilterOptionId = (params.traitFilterSelectedOption ? params.traitFilterSelectedOption : "t2d");     // default to t2d if none given
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
         JSONObject result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantName, jsonObject);

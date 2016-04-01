@@ -235,7 +235,10 @@ class BurdenService {
         }
 
         // create the json payload for the burden call
-        List<String> covariateList = callingParameters.covariates.collect{return it.toString()} as List
+        List<String> covariateList = []
+        if (callingParameters?.covariates) {
+            covariateList = callingParameters.covariates.collect{return it.toString()} as List
+        }
         jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(dataVersionId, phenotype, burdenVariantList, covariateList);
         log.info("created burden rest payload: " + jsonObject);
 
