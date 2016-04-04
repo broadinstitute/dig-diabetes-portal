@@ -28,6 +28,42 @@ class WidgetService {
     private final String propertyKey = "P_FIRTH_FE_IV";
     private final String errorResponse = "{\"data\": {}, \"error\": true}";
 
+
+
+
+
+
+
+
+
+
+    public  JSONObject  getSampleList() {
+        // local variables
+        JSONObject jsonResultString
+        String jsonGetDataString
+
+        // get json getData query string
+        jsonGetDataString = "{}"
+
+        // submit the post request
+        jsonResultString = this.restServerService.postGetSampleDataCall(jsonGetDataString, RestServerService.SAMPLE_SERVER_URL_QA)
+
+        // return
+        return jsonResultString
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * returns a variant list for the LZ query
      *

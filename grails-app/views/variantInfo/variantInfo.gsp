@@ -5,6 +5,7 @@
     <r:require modules="variantInfo"/>
     <r:require modules="tableViewer,traitInfo"/>
     <r:require modules="core"/>
+    <r:require modules="boxwhisker"/>
     <r:layoutResources/>
     <%@ page import="org.broadinstitute.mpg.RestServerService" %>
     <%

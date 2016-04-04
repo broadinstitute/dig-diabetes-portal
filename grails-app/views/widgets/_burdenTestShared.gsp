@@ -348,8 +348,62 @@ div.labelAndInput > input {
             });
         }; // runBurdenTest
 
+        var sampleInfo = {};
+        var retrieveSampleInformation = function (variantName){
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "${createLink(controller: 'variantInfo', action: 'retrieveSampleListAjax')}",
+                data: {},
+                async: true,
+                success: function (data) {
+
+                   if ((typeof data !== 'undefined') && (data)){
+                       //first check for error conditions
+                        if (!data){
+                            console.log('null return data from burdenTestTraitSelectionOptionsAjax');
+                        } else if (data.is_error) {
+                            console.log('burdenTestAjax returned is_error ='+data.is_error +'.');
+                        }
+                        else if ((typeof data.metaData === 'undefined') ||
+                                 (typeof data.metaData.samples === 'undefined') ||
+                                 (data.metaData.samples.length <= 0)){
+                             console.log('burdenTestAjax returned undefined (or length = 0) for options.');
+                       }else {
+                            for ( var i = 0 ; i < data.metaData.samples.length ; i++ )  {
+                               var sampleFields =  data.metaData.samples[i] ;
+                               for ( var j = 0 ; j < sampleFields.length ; j++ ) {
+                                   var fieldObject =  sampleFields[j];
+                                   for (var dataSetName in fieldObject) {
+                                       if(!fieldObject.hasOwnProperty(dataSetName)) continue;
+                                       var dataSetObject =  fieldObject[dataSetName];
+                                       for (var propertyName in dataSetObject) {
+                                           if(!dataSetObject.hasOwnProperty(propertyName)) continue;
+                                           var dataSetValue =  dataSetObject[propertyName];
+                                           if (dataSetName in sampleInfo)  {
+                                               sampleInfo [dataSetName].push(dataSetValue);
+                                           } else {
+                                               sampleInfo [dataSetName]   = [dataSetValue] ;
+                                           }
+                                       }
+                                   }
+                               }
+                            }
+                        }
+                    }
+                    console.log('d');
+                },
+                error: function (jqXHR, exception) {
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+        }; // fillFilterDropDown
+
+
+
         // public routines are declared below
         return {
+            retrieveSampleInformation:retrieveSampleInformation,
             runBurdenTest:runBurdenTest,
             fillFilterDropDown:fillFilterDropDown,
             retrieveMatchingDataSets:retrieveMatchingDataSets,
@@ -361,6 +415,7 @@ div.labelAndInput > input {
 $( document ).ready( function (){
   // mpgSoftware.burdenTestShared.fillFilterDropDown ();
   mpgSoftware.burdenTestShared.retrievePhenotypes('#phenotypeFilter');
+  mpgSoftware.burdenTestShared.retrieveSampleInformation  ( '<%=variantIdentifier%>' );
 } );
 
 </g:javascript>

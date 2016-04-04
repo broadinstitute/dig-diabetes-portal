@@ -40,6 +40,7 @@ class RestServerService {
     private String METADATA_URL = "getMetadata"
     private String GET_DATA_URL = "getData"
     private String GET_HAIL_DATA_URL = "getHailData"
+    private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
     public static String TECHNOLOGY_GWAS = "GWAS"
@@ -73,6 +74,7 @@ class RestServerService {
 
     public static final String HAIL_SERVER_URL_DEV = "http://dig-api-dev.broadinstitute.org/dev/gs/";
     public static final String HAIL_SERVER_URL_QA = "http://dig-api-qa.broadinstitute.org/qa/gs/";
+    public static final String SAMPLE_SERVER_URL_QA = "http://dig-api-qa.broadinstitute.org/qa/gs/";
 
     private List<ServerBean> burdenServerList;
 
@@ -520,6 +522,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 //        return postRestCallBase(drivingJson, this.GET_HAIL_DATA_URL, currentRestServer())
 //        return postRestCallBase(jsonString, this.GET_HAIL_DATA_URL, "http://dig-api-dev.broadinstitute.org/dev/gs/")
         return postRestCallBase(jsonString, this.GET_HAIL_DATA_URL, URL)
+    }
+
+
+    public JSONObject postGetSampleDataCall(String jsonString, String URL) {
+         return postRestCallBase(jsonString, this.GET_SAMPLE_DATA_URL, URL)
     }
 
     private JSONObject postRestCall(String drivingJson, String targetUrl) {

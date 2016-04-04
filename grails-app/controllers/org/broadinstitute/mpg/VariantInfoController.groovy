@@ -12,6 +12,7 @@ class VariantInfoController {
     RestServerService   restServerService
     SharedToolsService sharedToolsService
     BurdenService burdenService
+    WidgetService widgetService
 
     def index() { }
 
@@ -86,10 +87,12 @@ class VariantInfoController {
 
 
 
-
-
-
-
+    def retrieveSampleListAjax() {
+        JSONObject jsonObject =  widgetService.getSampleList ()
+        render(status:200, contentType:"application/json") {
+            [metaData:jsonObject]
+        }
+    }
 
 
 

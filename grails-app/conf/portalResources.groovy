@@ -38,6 +38,12 @@ modules = {
         resource url: 'js/lib/dport/manhattan.js'
         resource url: 'css/dport/manhattan.css'
     }
+    boxwhisker {
+        dependsOn "d3tooltip"
+
+        resource url: 'js/lib/dport/boxWhiskerPlot.js'
+        resource url: 'css/dport/boxWhiskerPlot.css'
+    }
     crossMap {
         dependsOn "d3tooltip"
 
