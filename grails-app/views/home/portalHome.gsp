@@ -64,7 +64,7 @@
          */
         $('#traitSearchLaunch').on('click', function () {
             var trait_val = $('#trait-input option:selected').val();
-            var significance = 5e-4;
+            var significance = 0.0005;
             if (trait_val == "" || significance == 0) {
                 alert('Please choose a trait and enter a valid significance!')
             } else {
