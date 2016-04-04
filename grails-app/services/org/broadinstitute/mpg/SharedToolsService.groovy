@@ -519,19 +519,6 @@ class SharedToolsService {
 
 
     public JSONObject packageUpAListAsJson(List<String> listOfStrings) {
-        // now that we have a list, build it into a string suitable for JSON
-//        int numrec = 0
-//        StringBuilder sb = new StringBuilder()
-//        if ((listOfStrings) && (listOfStrings?.size() > 0)) {
-//            numrec = listOfStrings.size()
-//            for (int i = 0; i < numrec; i++) {
-//                sb << "\"${listOfStrings[i]}\"".toString()
-//                if (i < listOfStrings.size() - 1) {
-//                    sb << ","
-//                }
-//            }
-//        }
-
         return [
                 is_error  : false,
                 numRecords: listOfStrings?.size(),
@@ -1267,71 +1254,6 @@ class SharedToolsService {
         }
 
     }
-
-
-    public String encodeAFilterList(LinkedHashMap<String, String> parametersToEncode, LinkedHashMap<String, String> customFiltersToEncode) {
-        StringBuilder sb = new StringBuilder("")
-        if (((parametersToEncode.containsKey("phenotype")) && (parametersToEncode["phenotype"]))) {
-            sb << ("1=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["phenotype"].toString()) + "^")
-        }
-        if (((parametersToEncode.containsKey("dataSet")) && (parametersToEncode["dataSet"]))) {
-            sb << ("2=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["dataSet"].toString()) + "^")
-        }
-        if (((parametersToEncode.containsKey("orValue")) && (parametersToEncode["orValue"]))) {
-            sb << ("3=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["orValue"].toString()) + "^")
-        }
-        if (((parametersToEncode.containsKey("orValueInequality")) && (parametersToEncode["orValueInequality"]))) {
-            sb << ("4=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["orValueInequality"]) + "^")
-        }
-        if (((parametersToEncode.containsKey("pValue")) && (parametersToEncode["pValue"]))) {
-            sb << ("5=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["pValue"].toString()) + "^")
-        }
-        if (((parametersToEncode.containsKey("pValueInequality")) && (parametersToEncode["pValueInequality"]))) {
-            sb << ("6=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["pValueInequality"].toString()) + "^")
-        }
-        if (((parametersToEncode.containsKey("gene")) && (parametersToEncode["gene"]))) {
-            sb << ("7=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["gene"].toString()) + "^")
-        }
-        if (((parametersToEncode.containsKey("regionChromosomeInput")) && (parametersToEncode["regionChromosomeInput"]))) {
-            sb << ("8=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["regionChromosomeInput"].toString()) + "^")
-        }
-        if (((parametersToEncode.containsKey("regionStartInput")) && (parametersToEncode["regionStartInput"]))) {
-            sb << ("9=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["regionStartInput"].toString()) + "^")
-        }
-        if (((parametersToEncode.containsKey("regionStopInput")) && (parametersToEncode["regionStopInput"]))) {
-            sb << ("10=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["regionStopInput"].toString()) + "^")
-        }
-        if (((parametersToEncode.containsKey("predictedEffects")) && (parametersToEncode["predictedEffects"])) &&
-                (parametersToEncode["predictedEffects"] != "0")) {
-            sb << ("11=" +
-                    StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY}|${parametersToEncode["predictedEffects"]}") + "^")
-        }
-        if (((parametersToEncode.containsKey("esValue")) && (parametersToEncode["esValue"]))) {
-            sb << ("12=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["esValue"].toString()) + "^")
-        }
-        if (((parametersToEncode.containsKey("esValueInequality")) && (parametersToEncode["esValueInequality"]))) {
-            sb << ("13=" + StringEscapeUtils.escapeJavaScript(parametersToEncode["esValueInequality"].toString()) + "^")
-        }
-        if (((parametersToEncode.containsKey("condelSelect")) && (parametersToEncode["condelSelect"]))) {
-            sb << ("11=" +
-                    StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY}|${parametersToEncode["condelSelect"]}") + "^")
-        }
-        if (((parametersToEncode.containsKey("polyphenSelect")) && (parametersToEncode["polyphenSelect"]))) {
-            sb << ("11=" +
-                    StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY}|${parametersToEncode["polyphenSelect"]}") + "^")
-        }
-        if (((parametersToEncode.containsKey("siftSelect")) && (parametersToEncode["siftSelect"]))) {
-            sb << ("11=" +
-                    StringEscapeUtils.escapeJavaScript("${PortalConstants.JSON_VARIANT_SIFT_PRED_KEY}|${parametersToEncode["siftSelect"]}") + "^")
-        }
-        customFiltersToEncode?.each { String key, String value ->
-            sb << ("17=" + StringEscapeUtils.escapeJavaScript(value.toString()) + "^")
-        }
-
-
-        return sb.toString()
-    }
-
 
     public LinkedHashMap getGeneExtent(String geneName) {
         LinkedHashMap<String, Integer> returnValue = [startExtent: 0, endExtent: 3000000000, chrom: "1"]
