@@ -435,7 +435,7 @@ var baget = baget || {};  // encapsulating variable
                     }  else {
                         var  pValue= yAxisAccessor(d);
                         textToPresent = nameAccessor (d)+
-                            '<br/>pValue='+ pValue.toPrecision(3)+
+                            '<br/>pValue='+ Math.pow(10,(0-pValue)).toPrecision(3)+
                             '<br/>Chr='+chromosomeAccessor (d)+', pos='+xAxisAccessor (d);
                     }
                 }

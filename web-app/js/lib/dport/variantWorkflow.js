@@ -153,6 +153,9 @@ var mpgSoftware = mpgSoftware || {};
                 var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
                 var options = $("#dataSet");
                 options.empty();
+
+                options.append("<option selected hidden value=default>-- &nbsp;&nbsp;select a dataset&nbsp;&nbsp; --</option>");
+
                 var dataSetList = dataSetJson ["dataset"];
                 var rememberLastValue;
                 for ( var i = 0 ; i < numberOfRecords ; i++ ){
@@ -465,6 +468,7 @@ var mpgSoftware = mpgSoftware || {};
                 $(options).empty();
                 fillPropertiesDropdown({is_error: false});
                 document.getElementById('phenotype').value = 'default';
+                document.getElementById('dataSet').disabled = true;
             }
 
             // advanced filters

@@ -37,10 +37,11 @@
 			ds.addSource("ld", ["LDLZ" ,apiBase + "pair/LD/"]);
 			ds.addSource("gene", ["GeneLZ", apiBase + "annotation/genes/"]);
 
-            function initLocusZoom() {
+            function initLocusZoom(stateInput) {
                 // TODO - will need to test that incorrect input format doesn't throw JS exception which stops all JS activity
                 // TODO - need to catch all exceptions to make sure rest of non LZ JS modules on page load properly (scope errors to this module)
-                return LocusZoom.populate("#lz-1", ds);
+//                return LocusZoom.populate("#lz-1", ds);
+                return LocusZoom.populate("#lz-1", ds, null, stateInput);
             };
 
             // public routines are declared below
@@ -55,6 +56,7 @@
             var loading = $('#spinner').show();
             var position = null;
             var chromosome = null;
+            var varId = null;
             var locusZoomInput = null;
             var rangeInteger = 80000;
             $.ajax({
@@ -74,6 +76,9 @@
                                     if ( typeof v.POS !== 'undefined')  {
                                         position = v.POS;
                                     }
+                                    if ( typeof v.VAR_ID !== 'undefined')  {
+                                        varId = v.VAR_ID;
+                                    }
                                 });
                             }
                         }
@@ -91,8 +96,22 @@
                     $("#lzRegion").text(locusZoomInput);
                     loading.hide();
 
+                    // build state for the lz object
+                    var stateVar;
+                    if (typeof varId !== 'undefined')  {
+                        var varIdArray = varId.split("_");
+                        stateVar = {
+                            chr: chromosome,
+                            start: startPosition,
+                            end: endPosition,
+                            ldrefvar: varIdArray[0] + ":" + varIdArray[1] + "_" + varIdArray[2] + "/" + varIdArray[3]
+                        };
+                    }
+
+//                    alert(stateVar);
+
                     //global object for debugging
-                    locuszoom_plot = mpgSoftware.locusZoom.initLocusZoom();
+                    locuszoom_plot = mpgSoftware.locusZoom.initLocusZoom(stateVar);
                     $("#collapseLZ").on("shown.bs.collapse", function() {
                         locuszoom_plot.setDimensions();
                     })

@@ -64,7 +64,7 @@
          */
         $('#traitSearchLaunch').on('click', function () {
             var trait_val = $('#trait-input option:selected').val();
-            var significance = 5e-4;
+            var significance = 0.0005;
             if (trait_val == "" || significance == 0) {
                 alert('Please choose a trait and enter a valid significance!')
             } else {
@@ -203,7 +203,7 @@
             <ul id="newsFeedHolder" class="dk-news-items gallery-fade"></ul>
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 <a class="btn btn-default" style="width:100%; margin-top: -50px; margin-right: 2%; margin-bottom: 0px;"
-                   href="#"
+                   href="https://docs.google.com/forms/d/1r5q_DFKzYDT8YtN7jHY-kvmDX74KfOXAIxC0sGCN2j8/viewform"
                    target="_blank">
                     <g:message code="portal.home.mailsignup" default="Get email updates"/>
                 </a>
@@ -214,7 +214,7 @@
                    target="_blank">
                     <g:message code="portal.home.mailsignup" default="Get email updates"/>
                 </a>
-                <a class="btn btn-default" style="width:15%; margin-top: -50px; margin-bottom: 0px; background-color:#55bcdf; border:solid 1px #1da1f2;" href="https://twitter.com/T2DKP"><img src="${resource(dir:'images/icons', file:'twitter.png')}" /></a>
+                <a class="btn btn-default" style="width:15%; margin-top: -50px; margin-bottom: 0px; background-color:#55bcdf; border:solid 1px #1da1f2;" href="https://twitter.com/T2DKP" target="_blank"><img src="${resource(dir:'images/icons', file:'twitter.png')}" /></a>
             </g:else>
             <h3 style="margin-top: 0px;"><g:message code="about.the.portal.header"/></h3>
             <g:if test="${g.portalTypeString()?.equals('stroke')}">

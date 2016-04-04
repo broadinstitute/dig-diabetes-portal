@@ -917,7 +917,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-
     /***
      * Private section associated with howCommonIsVariantAcrossEthnicities, used to fill up the "how common is"
      *  section in variant info
@@ -980,9 +979,10 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                     if (fieldName.startsWith("MAF")){
                         List<String> listOfFieldElements = fieldName.tokenize("^")
                         if (listOfFieldElements.size()>5){
-                            List<String> ancestrySpecificSampleGroups = sampleGroupByAncestry[listOfFieldElements[4]]
-                            for ( int  i = 0 ; i < ancestrySpecificSampleGroups.size() ; i++ ){
-                                if (ancestrySpecificSampleGroups[i].systemId == listOfFieldElements[3]){
+                            List<SampleGroup> ancestrySpecificSampleGroups = sampleGroupByAncestry[listOfFieldElements[4]]
+                            List<SampleGroup> sortedAncestrySpecificSampleGroups = ancestrySpecificSampleGroups.sort{a,b->a.subjectsNumber<=>b.subjectsNumber}
+                            for ( int  i = 0 ; i < sortedAncestrySpecificSampleGroups.size() ; i++ ){
+                                if (sortedAncestrySpecificSampleGroups[i].systemId == listOfFieldElements[3]){
                                     if (refiningAncestryList.containsKey(listOfFieldElements[4])){
                                         refiningAncestryList[listOfFieldElements[4]]<<["count":fieldValue,"value":fieldName,"sortOrder":i]
                                     }else{
@@ -1021,6 +1021,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     }
+
+
 
     /***
      * Private counterpart to combinedVariantDiseaseRisk, which is used to fill the "is variant frequency different for patients with the disease" section

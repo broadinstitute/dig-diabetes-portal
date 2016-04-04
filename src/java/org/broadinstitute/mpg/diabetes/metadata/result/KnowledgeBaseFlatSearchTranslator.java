@@ -2,6 +2,7 @@ package org.broadinstitute.mpg.diabetes.metadata.result;
 
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.PropertyValue;
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant;
+import org.broadinstitute.mpg.diabetes.knowledgebase.result.VariantBean;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
 import org.codehaus.groovy.grails.web.json.JSONArray;
 import org.codehaus.groovy.grails.web.json.JSONObject;
@@ -119,11 +120,11 @@ public class KnowledgeBaseFlatSearchTranslator implements KnowledgeBaseResultTra
 
             try {
                 // add in the var id
-//                varId = variant.getVariantIdWithFormat(VariantBean.FORMAT_VAR_ID_UMICH);
-                tempPropertyValue = variant.getPropertyValueFromCollection("VAR_ID", null, null);
-                if (tempPropertyValue.getValue() != null) {
-                    varId = tempPropertyValue.getValue();
-                }
+                varId = variant.getVariantIdWithFormat(VariantBean.FORMAT_VAR_ID_UMICH);
+//                tempPropertyValue = variant.getPropertyValueFromCollection("VAR_ID", null, null);
+//                if (tempPropertyValue.getValue() != null) {
+//                    varId = tempPropertyValue.getValue();
+//                }
 
                 // add in the position
                 tempPropertyValue = variant.getPropertyValueFromCollection("POS", null, null);

@@ -18,7 +18,7 @@ class NewsFeedService {
 
     private JSONObject blogIds = [
             t2d   : '5010306206573083521',
-            stroke: ''
+            stroke: '7857348124942584918'
     ]
     // the last time the posts were successfully retrieved
     private JSONObject postsLastUpdatedAt = [
