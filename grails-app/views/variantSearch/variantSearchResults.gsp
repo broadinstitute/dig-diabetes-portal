@@ -118,7 +118,7 @@
                 savedValue = UTILS.extractValFromTextboxes(savedValuesList);
             }
         }
-        varsToSend = UTILS.concatMap(varsToSend, savedValue);
+        varsToSend = _.merge(varsToSend, savedValue);
         return varsToSend;
     };
     var skipBubbleUp = false;

@@ -28,16 +28,13 @@
         if (varsToSend["predictedEffects"]==='missense'){
             missensePredictions = UTILS.extractValsFromCombobox(['polyphenSelect','siftSelect','condelSelect']);
         }
-       // varsToSend = UTILS.concatMap(varsToSend,customSignificance) ;
-       // varsToSend = UTILS.concatMap(varsToSend,caseControlRequests) ;
-        varsToSend = UTILS.concatMap(varsToSend,alleleFrequencies) ;
-        varsToSend = UTILS.concatMap(varsToSend,restrictToRegion) ;
-        varsToSend = UTILS.concatMap(varsToSend,missensePredictions) ;
-        varsToSend = UTILS.concatMap(varsToSend,restrictToOr) ;
-        varsToSend = UTILS.concatMap(varsToSend,orInequality) ;
+        // this array is all of the objects that we want to merge into varsToSend
+        // order is important--duplicate keys will be overwritten by the later assignment
+        var arrayOfObjectsToMerge = [alleleFrequencies, restrictToRegion, missensePredictions, restrictToOr, orInequality];
+        varsToSend = _.merge(varsToSend, arrayOfObjectsToMerge);
 
         //   add some defaults:
-        varsToSend = UTILS.concatMap(varsToSend,{'datatype':'exomeseq'}) ;
+        varsToSend = _.merge(varsToSend,{'datatype':'exomeseq'}) ;
 
         UTILS.postQuery('./variantSearch',varsToSend);
     };
