@@ -22,7 +22,9 @@
             <li><a href="${createLink(controller: 'home', action: 'tutorials')}"><g:message code="portal.header.nav.tutorials"/></a></li>
             <li><a href="${createLink(controller:'informational', action:'policies')}"><g:message code="portal.header.nav.policies"/></a></li>
             <li><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact"/></a></li>
-            <li><a href="${createLink(controller:'informational', action:'forum')}"><g:message code="portal.header.nav.forum"/></a></li>
+            <g:if test="${!g.portalTypeString()?.equals('stroke')}">
+                <li><a href="${createLink(controller:'informational', action:'forum')}"><g:message code="portal.header.nav.forum"/></a></li>
+            </g:if>
         </ul>
     </g:renderT2dGenesSection>
 </div>
