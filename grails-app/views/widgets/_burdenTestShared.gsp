@@ -349,6 +349,20 @@ div.labelAndInput > input {
         }; // runBurdenTest
 
         var sampleInfo = {};
+        var convertToBoxWhiskerPreferredForm = function (inData) {
+           var returnValue = [];
+           for (var phenotype in inData){
+                if(!inData.hasOwnProperty(phenotype)) continue;
+                var arrayOfValues = [];
+                inData [phenotype].map(function(d){
+                   arrayOfValues.push('{"d":"m","v":'+d+'}');
+                });
+                var element = {};
+                element ['name'] =   phenotype;
+                element ['data'] =   '['+;
+                returnValue.push (element) ;
+           }
+        }
         var retrieveSampleInformation = function (variantName){
             $.ajax({
                 cache: false,
