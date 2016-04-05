@@ -1,5 +1,10 @@
 <style>
-
+rect.histogramHolder {
+    fill: #6699cc;
+}
+rect.box {
+    fill: #ccaaaa;
+}
 div.burden-test-wrapper-options {
     background-color: #eee;
     border: solid 1px #ddd;
@@ -380,21 +385,15 @@ div.labelAndInput > input {
            }
            return elementAccumulator;
         };
-        var buildBoxWhiskerPlot = function (inData) {
+        var buildBoxWhiskerPlot = function (inData,selector) {
             var margin = {top: 50, right: 50, bottom: 20, left: 50},
-            width = 1000 - margin.left - margin.right,
-            height = 550 - margin.top - margin.bottom;
+            width = 500 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
 
             // initial value of the interquartile multiplier. Note that this value
             //  is adjustable via a UI slider
             var defaultInterquartileMultiplier = 1.5,
-                    maximumInterquartileMultiplier = 3,
-                    minimumInterquartileMultiplier = 0,
-                    onScreenStart = 0,
-                    onScreenEnd = 100,
-                    defaultHistogramBarSize = 1.1;
-
-            var whiskerSlider;
+                    defaultHistogramBarSize = 1;
 
             /***
              *   Initial data-independent initializations oof the box whisker plot.  Note that this initialization has to take place
@@ -404,13 +403,13 @@ div.labelAndInput > input {
                     .width(width)
                     .height(height);
 
-            chart.selectionIdentifier('#boxWhiskerPlot') // the Dom element from which we will hang the plot
+            chart.selectionIdentifier(selector) // the Dom element from which we will hang the plot
                     .initData(inData,width,height+50)            // the information that goes into the plot
                     .whiskers(chart.iqr(defaultInterquartileMultiplier))  // adjust the whiskers so that they go to the right initial  position
-                    .histogramBarMultiplier(0);        // let's start with no histogram visible
+                    .histogramBarMultiplier(defaultHistogramBarSize);        // let's start with no histogram visible
 
             //  Now we are ready to actually launch the box whisker plot
-            d3.select('#boxWhiskerPlot')
+            d3.select(selector)
                     .selectAll('svg')
                     .call(chart.boxWhisker);
 
@@ -457,7 +456,17 @@ div.labelAndInput > input {
                             }
                         }
                     }
-                    buildBoxWhiskerPlot(convertToBoxWhiskerPreferredObject(sampleInfo));
+                    var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
+                    var plotHoldingStructure = $('#boxWhiskerPlot');
+                    plotHoldingStructure.empty();
+                    for ( var i = 0 ; i < displayableData.length ; i++ ){
+                        var singleElement = displayableData[i];
+                        var elementName = singleElement.name;
+                        var divElementName = 'bwp_'+elementName;
+                        plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
+                        $('#'+divElementName).hide();
+                        buildBoxWhiskerPlot([singleElement],'#'+divElementName);
+                    }
                 },
                 error: function (jqXHR, exception) {
                     core.errorReporter(jqXHR, exception);
@@ -629,6 +638,16 @@ $( document ).ready( function (){
                             </div>
                         </div>
                     </div>
+                <script>
+                    var displaySampleDistribution = function(propertyName,holderSection){
+                        var kids = $(holderSection).children();
+                        _.forEach(kids,function(d){
+                            console.log('d');
+                            $(d).hide();
+                        });
+                       $('#bwp_'+propertyName).show();
+                    }
+                </script>
 
                     <div role="tabpanel" class="tab-pane" id="filters">
                         <div class="row">
@@ -645,7 +664,7 @@ $( document ).ready( function (){
                                     <tbody>
                                     <tr>
                                         <td><input id="useBmi" type="checkbox" name="useBmi" value="BMI" checked/></td>
-                                        <td>BMI</td>
+                                        <td><span onmouseover="displaySampleDistribution('BMI','#boxWhiskerPlot')">BMI</span></td>
                                         <td>
                                             <select class="form-control" data-selectfor="bmiComparator">
                                                 <option>&lt;</option>
@@ -673,7 +692,7 @@ $( document ).ready( function (){
                                     <tr>
                                         <td><input id="useAge" type="checkbox" name="useGender" value="GENDER" checked/>
                                         </td>
-                                        <td>Age</td>
+                                        <td><span onmouseover="displaySampleDistribution('AGE','#boxWhiskerPlot')">Age</span></td>
                                         <td>
                                             <select class="form-control" data-selectfor="ageComparator">
                                                 <option>&lt;</option>
@@ -705,7 +724,10 @@ $( document ).ready( function (){
 
     </div>
 
-    <div class="col-md-4 col-sm-4 col-xs-12 vcenter"></div>
+    <div class="col-md-4 col-sm-4 col-xs-12 vcenter">
+        <div id="boxWhiskerPlot">
+        </div>
+    </div>
 
     <div class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter">
         <button id="singlebutton" name="singlebutton" style="height: 80px"
@@ -717,8 +739,7 @@ $( document ).ready( function (){
 
 <div class="row burden-test-result" style="display:block">
     <div class="col-md-12 col-sm-6">
-        <div id="boxWhiskerPlot">
-        </div>
+
     </div>
 
 </div>

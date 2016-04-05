@@ -17,6 +17,15 @@ var baget = baget || {};
             whiskers = function (d) { return [0, d.length - 1]; }, // function to set the whiskers
             outlierRadius = 2,  // size of outlier dots on screen
             histogramBarMultiplier = 0.9,  // how big should we make the bars on the histogram? 0 implies no display
+            tooltipTextFunction = function(nodeData){
+                var valueToDisplay = nodeData.v;
+                if ($.isNumeric(valueToDisplay)){
+                    return "<span> value: " + valueToDisplay.toPrecision(3) + "</span>";
+                } else {
+                    return "<span>" + valueToDisplay + "</span>";
+                }
+
+            },
 
         // Private variables, which can be surfaced as necessary
             duration = 500,  // How many milliseconds to animations require
@@ -113,8 +122,7 @@ var baget = baget || {};
                 .html(function (d) {
                     var nodeData = d3.select(this.parentNode).data()[0].data[d];
                     var valueToDisplay = new Number(nodeData.v);
-                    return "<strong></strong> <span style='color:#00ff00'>Gene: " + nodeData.d + "<br/>" +
-                        "Correlation: " + valueToDisplay.toPrecision(3) + "</span>";
+                    return tooltipTextFunction(nodeData);
                 });
         })();
 
@@ -765,6 +773,12 @@ var baget = baget || {};
         instance.histogramBarMultiplier = function (x) {
             if (!arguments.length) return histogramBarMultiplier;
             histogramBarMultiplier = x;
+            return instance;
+        };
+
+        instance.tooltipTextFunction = function (x) {
+            if (!arguments.length) return tooltipTextFunction;
+            tooltipTextFunction = x;
             return instance;
         };
 
