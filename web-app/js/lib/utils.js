@@ -1022,5 +1022,72 @@ var UTILS = {
             }
         }
         return returnValue;
+    },
+    boxQuartiles: function (d) {
+        var accumulator = [];
+        d.forEach(function (x) {
+            accumulator.push(x.v);
+        });
+        return [
+            d3.quantile(accumulator, .25),
+            d3.quantile(accumulator, .5),
+            d3.quantile(accumulator, .75)
+        ];
+    },
+    /***
+     * take an array and break it into distribution information with  numberOfBinsRequested bins
+     *
+     *
+     * @param incomingArray
+     * @param numberOfBinsRequested:
+     * @param accessor
+     * @returns {  binSize // how big is each bin (all bins are the same size)
+     *    min // smallest value
+     *    max // highest value
+     *    binMap // map, where keys are counting numbers (0 to  numberOfBinsRequested-1)
+     *  }
+     *   Note: error condition is implied if  binSize===0
+     *
+     */
+    distributionMapper: function (incomingArray,numberOfBinsRequested,accessor) {
+        var defAcc = function (x){return x},
+            sortedSet,
+            numberOfElements,
+            currentBin = 1,
+            curBinCounter = 0,
+            binWalker,
+            returnValue = {binSize:0,binMap:d3.map()};  // indicate error state to begin with
+        if (( typeof accessor !== 'undefined')){
+            defAcc =  accessor;  // use custom accessor if requested
+        }
+        if ( ( typeof incomingArray !== 'undefined')    &&
+            ( incomingArray.length > 0)    &&
+            ( typeof numberOfBinsRequested !== 'undefined') &&
+            ( numberOfBinsRequested  >  0)) {   //with all obvious error states ruled out we can start processing
+            numberOfElements =  incomingArray.length;
+            sortedSet =  incomingArray.sort (function (a,b){return (defAcc (a)-defAcc (b)); }); // sort in ascending order
+            returnValue.min =  defAcc(sortedSet[0]);
+            returnValue.max =  defAcc(sortedSet[numberOfElements-1]);
+            if ((returnValue.max-returnValue.min) > 0){  // make sure ranges nonzero
+                // we are ready to count the elements in each bin
+                returnValue.binSize =  (returnValue.max-returnValue.min)/numberOfBinsRequested;
+                binWalker = returnValue.min+(currentBin*returnValue.binSize);
+                for ( var i = 0 ; i < numberOfElements ; i++ )   {
+                    while (defAcc(incomingArray[i])>binWalker) {
+                        returnValue.binMap.set(currentBin,curBinCounter);
+                        curBinCounter = 0;
+                        currentBin++;
+                        binWalker = returnValue.min+(currentBin*returnValue.binSize);
+                    } ;
+                    curBinCounter++;
+                }
+                returnValue.binMap.set(numberOfBinsRequested,curBinCounter);
+            }
+        }
+        return returnValue;
     }
+
+
+
+
 };

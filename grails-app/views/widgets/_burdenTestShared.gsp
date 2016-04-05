@@ -349,20 +349,72 @@ div.labelAndInput > input {
         }; // runBurdenTest
 
         var sampleInfo = {};
-        var convertToBoxWhiskerPreferredForm = function (inData) {
-           var returnValue = [];
+        var convertToBoxWhiskerPreferredJsonString = function (inData) {
+           var elementAccumulator = [];
            for (var phenotype in inData){
                 if(!inData.hasOwnProperty(phenotype)) continue;
+                if((phenotype === 'ANCESTRY') ||
+                   (phenotype === 'ID')) continue;
                 var arrayOfValues = [];
                 inData [phenotype].map(function(d){
                    arrayOfValues.push('{"d":"m","v":'+d+'}');
                 });
-                var element = {};
-                element ['name'] =   phenotype;
-                element ['data'] =   '['+;
-                returnValue.push (element) ;
+                var element = '{"name":"'+ phenotype+'",'+
+                '"data": ['+arrayOfValues.join(',')+']}\n';
+                elementAccumulator.push (element) ;
            }
-        }
+           return '['+elementAccumulator.join(',')+']';
+        };
+        var convertToBoxWhiskerPreferredObject = function (inData) {
+           var elementAccumulator = [];
+           for (var phenotype in inData){
+                if(!inData.hasOwnProperty(phenotype)) continue;
+                if((phenotype === 'ANCESTRY') ||
+                   (phenotype === 'ID')) continue;
+                var arrayOfValues = [];
+                inData [phenotype].map(function(d){
+                   arrayOfValues.push({"d":"m","v":d});
+                });
+                elementAccumulator.push ({"name": phenotype,
+                                           "data": arrayOfValues}) ;
+           }
+           return elementAccumulator;
+        };
+        var buildBoxWhiskerPlot = function (inData) {
+            var margin = {top: 50, right: 50, bottom: 20, left: 50},
+            width = 1000 - margin.left - margin.right,
+            height = 550 - margin.top - margin.bottom;
+
+            // initial value of the interquartile multiplier. Note that this value
+            //  is adjustable via a UI slider
+            var defaultInterquartileMultiplier = 1.5,
+                    maximumInterquartileMultiplier = 3,
+                    minimumInterquartileMultiplier = 0,
+                    onScreenStart = 0,
+                    onScreenEnd = 100,
+                    defaultHistogramBarSize = 1.1;
+
+            var whiskerSlider;
+
+            /***
+             *   Initial data-independent initializations oof the box whisker plot.  Note that this initialization has to take place
+             *   so that we have something to which we can connect the slider
+             */
+            var chart = baget.boxWhiskerPlot()
+                    .width(width)
+                    .height(height);
+
+            chart.selectionIdentifier('#boxWhiskerPlot') // the Dom element from which we will hang the plot
+                    .initData(inData,width,height+50)            // the information that goes into the plot
+                    .whiskers(chart.iqr(defaultInterquartileMultiplier))  // adjust the whiskers so that they go to the right initial  position
+                    .histogramBarMultiplier(0);        // let's start with no histogram visible
+
+            //  Now we are ready to actually launch the box whisker plot
+            d3.select('#boxWhiskerPlot')
+                    .selectAll('svg')
+                    .call(chart.boxWhisker);
+
+        };
         var retrieveSampleInformation = function (variantName){
             $.ajax({
                 cache: false,
@@ -405,7 +457,7 @@ div.labelAndInput > input {
                             }
                         }
                     }
-                    console.log('d');
+                    buildBoxWhiskerPlot(convertToBoxWhiskerPreferredObject(sampleInfo));
                 },
                 error: function (jqXHR, exception) {
                     core.errorReporter(jqXHR, exception);
@@ -662,6 +714,15 @@ $( document ).ready( function (){
     </div>
 
 </div>
+
+<div class="row burden-test-result" style="display:block">
+    <div class="col-md-12 col-sm-6">
+        <div id="boxWhiskerPlot">
+        </div>
+    </div>
+
+</div>
+
 
 <div id="burden-test-some-results" class="row burden-test-result">
     <div class="col-md-8 col-sm-6">

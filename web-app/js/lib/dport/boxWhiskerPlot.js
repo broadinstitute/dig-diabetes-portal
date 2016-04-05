@@ -642,7 +642,7 @@ var baget = baget || {};
 
 
         // Note:  this method will assign data to the DOM
-        instance.initData = function (x) {
+        instance.initData = function (x,width,height) {
             if (!arguments.length) return boxWhiskerData;
             boxWhiskerData = x;
             var bwHolderLength,
@@ -650,8 +650,8 @@ var baget = baget || {};
             var bwPlot = selection
                 .append("svg")
                 .attr("class", "box")
-                .attr("width", "470px")
-                .attr("height", "500px")
+                .attr("width", width+"px")
+                .attr("height", height+"px")
                 .selectAll("g")
                 .data(boxWhiskerData)
                 .enter()
