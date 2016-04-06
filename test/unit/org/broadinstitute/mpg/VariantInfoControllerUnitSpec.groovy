@@ -2,6 +2,7 @@ package org.broadinstitute.mpg
 
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
+import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.codehaus.groovy.grails.web.json.JSONObject
 import spock.lang.Specification
 
@@ -14,6 +15,8 @@ class VariantInfoControllerUnitSpec extends Specification {
 
 
     def setup() {
+        controller.metaDataService = Mock(MetaDataService)
+        controller.restServerService = Mock(RestServerService)
     }
 
     def cleanup() {

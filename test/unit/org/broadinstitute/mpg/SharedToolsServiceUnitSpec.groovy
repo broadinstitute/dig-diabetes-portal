@@ -103,25 +103,4 @@ p
         chr4==''
     }
 
-    /***
-     * try encoding and decoding some values
-     */
-//    void "test Filter encoding"() {
-//        when:
-//        String encoded = service.encodeAFilterList([phenotype:'t2d',
-//        'dataSet':'ExSeq',
-//        'orValue':'123',
-//        'pValue':'0.123'],[:])
-//        LinkedHashMap<String,String>  decoded = service.decodeAFilterList(encoded)
-//        then:
-//        decoded['phenotype']=='t2d'
-//        decoded['dataSet']=='ExSeq'
-//        decoded['orValue']=='123'
-//        decoded['pValue']=='0.123'
-//    }
-
-
-
-
-
 }

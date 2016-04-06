@@ -322,6 +322,8 @@ environments {
             println "grails.serverURL=${grails.serverURL}"
         }
 
+        grails.dbconsole.enabled = true
+
     }
     production {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
