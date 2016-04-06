@@ -41,6 +41,7 @@ class RestServerService {
     private String GET_DATA_URL = "getData"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
+    private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
     public static String TECHNOLOGY_GWAS = "GWAS"
@@ -1152,6 +1153,18 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         retdat = getRestCall(METADATA_URL)
         return retdat
     }
+
+
+    public String getSampleMetadata() {
+        String retdat
+        retdat = getRestCallBase(GET_SAMPLE_METADATA_URL, "http://dig-api-qa.broadinstitute.org/qa/gs/")
+        //retdat = getRestCall(GET_SAMPLE_METADATA_URL)
+        currentRestServer()
+        return retdat
+    }
+
+
+
 
     /***
      * Make multiple calls to fill up the 'variation across continental ancestries' table, then combine all of those

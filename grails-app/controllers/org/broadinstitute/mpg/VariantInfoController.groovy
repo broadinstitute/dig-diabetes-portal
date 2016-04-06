@@ -2,6 +2,8 @@ package org.broadinstitute.mpg
 import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.BurdenService
+import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
@@ -13,6 +15,7 @@ class VariantInfoController {
     SharedToolsService sharedToolsService
     BurdenService burdenService
     WidgetService widgetService
+    MetaDataService metaDataService
 
     def index() { }
 
@@ -167,6 +170,22 @@ class VariantInfoController {
         }
     }
 
+
+
+
+    def sampleMetadataAjax() {
+        SampleGroup sampleGroup = metaDataService.getSampleGroupByFromSamplesName("samples_13k_mdv2")
+        JSONObject jsonObject = burdenService.convertSampleGroupPropertyListToJson (sampleGroup)
+
+        // send json response back
+        render(status: 200, contentType: "application/json") {jsonObject}
+    }
+
+
+
+
+
+
     /***
      * This call supports the burden test on the variant info page
      * @return
@@ -177,6 +196,7 @@ class VariantInfoController {
         // params.filterNum=="2" // value=id from burdenTestVariantSelectionOptionsAjax, or 0 if no selection was made (which is a legal choice)
         // params.dataSet=="1" // where 1->13k, 2->26k"
         // params.variantName=="SLC30A8" // string representing gene name
+
 
         // Really?  Different names for phenotypes?  Well, okay, let's translate them
         String traitFilterOptionId = (params.traitFilterSelectedOption ? params.traitFilterSelectedOption : "t2d");     // default to t2d if none given

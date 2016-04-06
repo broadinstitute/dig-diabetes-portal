@@ -1,9 +1,13 @@
 package org.broadinstitute.mpg.diabetes
+
+import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.RestServerService
 import grails.transaction.Transactional
 import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.diabetes.burden.parser.BurdenJsonBuilder
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
+import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
@@ -81,6 +85,41 @@ class BurdenService {
         // return the result
         return resultJson;
     }
+
+
+
+
+
+
+    public JSONObject convertSampleGroupPropertyListToJson (SampleGroup sampleGroup){
+        List <String> phenotypeList = []
+        List <String> covariateList = []
+        List <String> filterList = []
+        List <Property> propertyList = sampleGroup.properties.findAll{it.meaningSet[0].contains("PHENOTYPE")}
+        for (Property property in propertyList){
+            phenotypeList << """{"name":"${property.name}"}"""
+        }
+        propertyList = sampleGroup.properties.findAll{it.meaningSet[0].contains("COVARIATE")}
+        for (Property property in propertyList){
+            covariateList << """{"name":"${property.name}"}"""
+        }
+        propertyList = sampleGroup.properties.findAll{it.meaningSet[0].contains("FILTER")}
+        for (Property property in propertyList){
+            filterList << """{"name":"${property.name}"}"""
+        }
+        String jsonString = """{"phenotypes":[${phenotypeList.join(",")}],
+"covariates":[${covariateList.join(",")}],
+"filters":[${filterList.join(",")}]
+}""".toString()
+        JsonSlurper slurper = new JsonSlurper()
+        return slurper.parseText(jsonString)
+    }
+
+
+
+
+
+
 
     /**
      * method to return the burden test REST payload

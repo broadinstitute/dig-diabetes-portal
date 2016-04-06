@@ -146,11 +146,11 @@
 <g:if test="${g.portalTypeString()?.equals('t2d')}">
     <div class="separator"></div>
 
-    <g:renderBetaFeaturesDisplayedValue>
+    %{--<g:renderBetaFeaturesDisplayedValue>--}%
         <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>
 
         <div class="separator"></div>
-    </g:renderBetaFeaturesDisplayedValue>
+    %{--</g:renderBetaFeaturesDisplayedValue>--}%
 
     <g:renderBetaFeaturesDisplayedValue>
         <g:render template="/widgets/locusZoomPlot"/>

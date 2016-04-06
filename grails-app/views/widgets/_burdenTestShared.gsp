@@ -214,6 +214,44 @@ div.labelAndInput > input {
                 }
             });
         };
+
+
+
+         var retrieveSampleMetadata = function (dropDownSelector) {
+            var loading = $('#spinner').show();
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "${createLink(controller:'VariantInfo', action:'sampleMetadataAjax')}",
+                data: {},
+                async: true,
+                success: function (data) {
+                    var phenotypeDropdown = $('#phenotypeFilter');
+                    if ( ( data !==  null ) &&
+                            ( typeof data !== 'undefined') &&
+                            ( typeof data.phenotypes !== 'undefined' ) &&
+                            (  data.phenotypes !==  null ) ) {
+                        _.forEach(data.phenotypes,function(d){
+                           phenotypeDropdown.append( new Option(d.name, d.name));
+                        });
+                        %{--UTILS.fillPhenotypeCompoundDropdown(data.datasets,dropDownSelector);--}%
+                        %{--$("select#trait-input").val("${g.defaultPhenotype()}");--}%
+                    }
+                    loading.hide();
+                },
+                error: function (jqXHR, exception) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+        };
+
+
+
+
+
+
+
         /**
          *  run the burden test, then display the results.  We will need to start by extracting
          *  the data fields we need from the DOM.
@@ -482,15 +520,17 @@ div.labelAndInput > input {
             runBurdenTest:runBurdenTest,
             fillFilterDropDown:fillFilterDropDown,
             retrieveMatchingDataSets:retrieveMatchingDataSets,
-            retrievePhenotypes:retrievePhenotypes
+            retrievePhenotypes:retrievePhenotypes,
+            retrieveSampleMetadata:retrieveSampleMetadata
         }
 
     }());
 
 $( document ).ready( function (){
   // mpgSoftware.burdenTestShared.fillFilterDropDown ();
-  mpgSoftware.burdenTestShared.retrievePhenotypes('#phenotypeFilter');
+ // mpgSoftware.burdenTestShared.retrievePhenotypes('#phenotypeFilter');
   mpgSoftware.burdenTestShared.retrieveSampleInformation  ( '<%=variantIdentifier%>' );
+  mpgSoftware.burdenTestShared.retrieveSampleMetadata();
 } );
 
 </g:javascript>

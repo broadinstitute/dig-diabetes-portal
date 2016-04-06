@@ -33,6 +33,7 @@ import java.util.Map;
 public class JsonParser {
     // static singleton
     private static JsonParser service;
+    private static JsonParser sampleService;
 
     // private cached results
     private MetaDataRoot metaDataRoot = null;
@@ -40,6 +41,11 @@ public class JsonParser {
 
     // cached data set map
     Map<String, DataSet> dataSetMap = new HashMap<String, DataSet>();
+
+    public static final String METADATA_VARIANT                             = "VARIANT";
+    public static final String METADATA_SAMPLE                              = "SAMPLE";
+
+
 
     /**
      * singleton service to parse metadata
@@ -51,6 +57,14 @@ public class JsonParser {
         }
 
         return service;
+    }
+
+    public static JsonParser getSampleService() {
+        if (sampleService == null) {
+            sampleService = new JsonParser();
+        }
+
+        return sampleService;
     }
 
 
@@ -411,24 +425,30 @@ public class JsonParser {
             }
 
             // add in properties
-            tempArray = jsonObject.getJSONArray(PortalConstants.JSON_PROPERTIES_KEY);
-            for (int i = 0; i < tempArray.length(); i++) {
-                tempProperty = this.createPropertyFromJson(tempArray.getJSONObject(i), sampleGroup);
-                sampleGroup.getProperties().add(tempProperty);
+            if (jsonObject.containsKey(PortalConstants.JSON_PROPERTIES_KEY)){
+                tempArray = jsonObject.getJSONArray(PortalConstants.JSON_PROPERTIES_KEY);
+                for (int i = 0; i < tempArray.length(); i++) {
+                    tempProperty = this.createPropertyFromJson(tempArray.getJSONObject(i), sampleGroup);
+                    sampleGroup.getProperties().add(tempProperty);
+                }
             }
 
             // add in phenotypes
-            tempArray = jsonObject.getJSONArray(PortalConstants.JSON_PHENOTYPES_KEY);
-            for (int i = 0; i < tempArray.length(); i++) {
-                tempPhenotype = this.createPhenotypeFromJson(tempArray.getJSONObject(i), sampleGroup);
-                sampleGroup.getPhenotypes().add(tempPhenotype);
+            if (jsonObject.containsKey(PortalConstants.JSON_PHENOTYPES_KEY)){
+                tempArray = jsonObject.getJSONArray(PortalConstants.JSON_PHENOTYPES_KEY);
+                for (int i = 0; i < tempArray.length(); i++) {
+                    tempPhenotype = this.createPhenotypeFromJson(tempArray.getJSONObject(i), sampleGroup);
+                    sampleGroup.getPhenotypes().add(tempPhenotype);
+                }
             }
 
             // recursively add in any other child sample groups
-            tempArray = jsonObject.getJSONArray(PortalConstants.JSON_DATASETS_KEY);
-            for (int i = 0; i < tempArray.length(); i++) {
-                tempSampleGroup = this.createSampleGroupFromJson(tempArray.getJSONObject(i), sampleGroup);
-                sampleGroup.getSampleGroups().add(tempSampleGroup);
+            if (jsonObject.containsKey(PortalConstants.JSON_DATASETS_KEY)){
+                tempArray = jsonObject.getJSONArray(PortalConstants.JSON_DATASETS_KEY);
+                for (int i = 0; i < tempArray.length(); i++) {
+                    tempSampleGroup = this.createSampleGroupFromJson(tempArray.getJSONObject(i), sampleGroup);
+                    sampleGroup.getSampleGroups().add(tempSampleGroup);
+                }
             }
 
         } catch (JSONException exception) {

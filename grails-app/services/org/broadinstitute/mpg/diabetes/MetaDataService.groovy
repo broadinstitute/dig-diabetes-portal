@@ -23,8 +23,10 @@ import org.codehaus.groovy.grails.web.util.WebUtils
 class MetaDataService {
     // instance variables
     JsonParser jsonParser = JsonParser.getService();
+    JsonParser jsonSampleParser = JsonParser.getSampleService();
     QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder();
     Integer forceProcessedMetadataOverride = -1
+    Integer forceProcessedSampleMetadataOverride = -1
     RestServerService restServerService
     SharedToolsService sharedToolsService
     MetadataUtilityService metadataUtilityService
@@ -109,6 +111,22 @@ class MetaDataService {
         return (this.forceProcessedMetadataOverride == 1)
     }
 
+
+
+    public void setForceProcessedSampleMetadataOverride(Integer forceProcessedSampleMetadataOverride) {
+        this.forceProcessedSampleMetadataOverride = forceProcessedSampleMetadataOverride
+    }
+
+    /**
+     * returns whether a metadada override has been set but not run yet
+     *
+     * @return
+     */
+    public Boolean getSampleMetadataOverrideStatus() {
+        // DIGP-170: switch looking for the override from the SharedToolService to the new metadata object
+        return (this.forceProcessedSampleMetadataOverride == 1)
+    }
+
     /**
      * returns the json parser after first checking that the metadata hadn't been set to be reloaded
      *
@@ -127,6 +145,26 @@ class MetaDataService {
         // return
         return this.jsonParser;
     }
+
+
+
+    private JsonParser getJsonSampleParser() {
+        // reload the metadata if scheduled
+       if (this.forceProcessedSampleMetadataOverride != 0) {
+            String jsonString = this.restServerService.getSampleMetadata();
+            this.jsonSampleParser.forceMetadataReload(jsonString);
+        }
+
+        // reset reload indicator
+       this.forceProcessedSampleMetadataOverride = 0;
+
+        // return
+        return this.jsonSampleParser;
+    }
+
+
+
+
 
     /**
      * return the list of common cproperties in json format
@@ -272,6 +310,10 @@ class MetaDataService {
 
     public SampleGroup  getSampleGroupByName(String sampleGroupId){
         return jsonParser.getSampleGroupByName(sampleGroupId)
+    }
+
+    public SampleGroup  getSampleGroupByFromSamplesName(String sampleGroupId){
+        return this.getJsonSampleParser().getSampleGroupByName(sampleGroupId)
     }
 
     public String  getTechnologyPerSampleGroup(String sampleGroupId){

@@ -211,6 +211,10 @@ class PortalConstants {
     public static final String PROPERTY_MEANING_ODDS_RATIO_KEY              = "ODDS_RATIO";
     public static final String PROPERTY_MEANING_BETA_KEY                    = "BETA";
 
+    //  types of metadata
+    public static final String METADATA_VARIANT                             = "VARIANT";
+    public static final String METADATA_SAMPLE                              = "SAMPLE";
+
 
 
 }
