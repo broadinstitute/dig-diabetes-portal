@@ -6,6 +6,7 @@ import org.broadinstitute.mpg.diabetes.metadata.Phenotype;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
 import org.codehaus.groovy.grails.web.json.JSONArray;
+import org.codehaus.groovy.grails.web.json.JSONException;
 import org.codehaus.groovy.grails.web.json.JSONObject;
 
 import java.util.List;
@@ -87,7 +88,11 @@ public class KnowledgeBaseTraitSearchTranslator implements KnowledgeBaseResultTr
             // now cast based on property type
             if (propertyValue.getProperty().getVariableType().equals(PortalConstants.OPERATOR_TYPE_FLOAT)) {
                 try {
-                    jsonObject.put(propertyValue.getProperty().getName(), (tempPropertyValue == null ? JSONObject.NULL : Float.valueOf(tempPropertyValue).floatValue()));
+                    try {
+                        jsonObject.put(propertyValue.getProperty().getName(), (tempPropertyValue == null ? JSONObject.NULL : Float.valueOf(tempPropertyValue).floatValue()));
+                    } catch (JSONException exception) {
+                        jsonObject.put(propertyValue.getProperty().getName(), JSONObject.NULL);
+                    }
 
                     if (propertyValue.getProperty().getName().equals(this.KEY_P_VALUE)) {
                         // add in translated key value for trait-search emulation
