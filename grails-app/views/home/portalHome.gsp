@@ -7,13 +7,22 @@
     <r:require modules="portalHome"/>
     <r:layoutResources/>
 
+    <style>
+        /* the following rules make the funders lists appear nicely */
+        #supporterList {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+        #supporterList a {
+            width: 50%;
+        }
+        #supporterList a img {
+            width: 100%;
+        }
+    </style>
 </head>
-<style>
-.unpaddedSection {
-    padding-left: 0;
-    padding-right: 0;
-}
-</style>
 
 <body>
 
@@ -228,43 +237,20 @@
             <g:else>
                 <p><g:message code="about.the.portal.text"/></p>
                 <p><g:message code='portal.home.funders'/>:</p>
-                <table>
-                    <tr>
-                        <td>
-                            <a href="http://www.niddk.nih.gov/Pages/default.aspx"><img src="${resource(dir:'images/organizations', file:'NIH.jpg')}" style="width: 110px;"></a>
-                        </td>
-                        <td>
-                            <a href="http://www.fnih.org"><img src="${resource(dir:'images/organizations', file:'FNIH.jpg')}" style="width: 110px;"></a>
-                        </td>
-                        <td>
-                            <a href="http://www.janssen.com"><img src="${resource(dir:'images/organizations', file:'janssen.jpg')}" style="width: 110px;"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a href="https://www.lilly.com/home.aspx"><img src="${resource(dir:'images/organizations', file:'lilly.jpg')}" style="width: 110px;"></a>
-                        </td>
-                        <td>
-                            <a href="http://www.merck.com/index.html"><img src="${resource(dir:'images/organizations', file:'merck.jpg')}" style="width: 110px;"></a>
-                        </td>
-                        <td>
-                            <a href="http://www.pfizer.com"><img src="${resource(dir:'images/organizations', file:'pfizer.jpg')}" style="width: 110px;"></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <a href="http://en.sanofi.com"><img src="${resource(dir:'images/organizations', file:'sanofi.jpg')}" style="width: 110px;"></a>
-                        </td>
-                        <td>
-                            <a href="http://jdrf.org"><img src="${resource(dir:'images/organizations', file:'jdrf.jpg')}" style="width: 110px;"></a>
-                        </td>
-                        <td>
-                            <a href="http://www.diabetes.org"><img src="${resource(dir:'images/organizations', file:'ADA.jpg')}" style="width: 110px;"></a>
-                        </td>
-                    </tr>
-                </table>
-                <g:message code='portal.home.addtl_funders'/>:
-                <p><a href="http://www.fundacioncarlosslim.org/en/"><img src="${resource(dir:'images/organizations', file:'slim.png')}" style="margin-left: 80px;"></a></p>
+                <div id="supporterList">
+                    <a href="http://www.niddk.nih.gov/Pages/default.aspx"><img src="${resource(dir:'images/organizations', file:'NIH_NIDDK.png')}"></a>
+                    <a href="http://www.fnih.org"><img src="${resource(dir:'images/organizations', file:'FNIH.jpg')}"></a>
+                    <a href="http://www.janssen.com"><img src="${resource(dir:'images/organizations', file:'janssen.jpg')}"></a>
+                    <a href="https://www.lilly.com/home.aspx"><img src="${resource(dir:'images/organizations', file:'lilly.jpg')}"></a>
+                    <a href="http://www.merck.com/index.html"><img src="${resource(dir:'images/organizations', file:'merck.jpg')}"></a>
+                    <a href="http://www.pfizer.com"><img src="${resource(dir:'images/organizations', file:'pfizer.jpg')}"></a>
+                    <a href="http://en.sanofi.com"><img src="${resource(dir:'images/organizations', file:'sanofi.jpg')}"></a>
+                    <a href="http://jdrf.org"><img src="${resource(dir:'images/organizations', file:'jdrf.jpg')}"></a>
+                    <a href="http://www.diabetes.org"><img src="${resource(dir:'images/organizations', file:'ADA.jpg')}"></a>
+
+                    <p><g:message code='portal.home.addtl_funders'/>:</p>
+                    <a href="http://www.fundacioncarlosslim.org/en/"><img src="${resource(dir:'images/organizations', file:'slim.png')}"></a>
+                </div>
             </g:else>
         </div>
     </div>
