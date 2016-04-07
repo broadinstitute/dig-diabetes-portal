@@ -232,7 +232,7 @@ div.labelAndInput > input {
                             ( typeof data.phenotypes !== 'undefined' ) &&
                             (  data.phenotypes !==  null ) ) {
                         _.forEach(data.phenotypes,function(d){
-                           phenotypeDropdown.append( new Option(d.name, d.name));
+                           phenotypeDropdown.append( new Option(d.trans, d.name));
                         });
                         %{--UTILS.fillPhenotypeCompoundDropdown(data.datasets,dropDownSelector);--}%
                         %{--$("select#trait-input").val("${g.defaultPhenotype()}");--}%

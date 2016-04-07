@@ -11,6 +11,7 @@ import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.codehaus.groovy.grails.web.json.JSONTokener
@@ -20,7 +21,7 @@ class BurdenService {
 
     RestServerService restServerService;
     SharedToolsService sharedToolsService;
-
+    GrailsApplication grailsApplication
     def serviceMethod() {
 
     }
@@ -92,20 +93,40 @@ class BurdenService {
 
 
     public JSONObject convertSampleGroupPropertyListToJson (SampleGroup sampleGroup){
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+
         List <String> phenotypeList = []
         List <String> covariateList = []
         List <String> filterList = []
         List <Property> propertyList = sampleGroup.properties.findAll{it.meaningSet[0].contains("PHENOTYPE")}
         for (Property property in propertyList){
-            phenotypeList << """{"name":"${property.name}"}"""
+            if (("T2D" == property.name)||
+                    ("FAST_GLU" == property.name)||
+                    ("FAST_INS" == property.name)||
+                    ("BMI" == property.name)||
+                    ("HDL" == property.name)||
+                    ("LDL" == property.name)) {
+                phenotypeList << """{"name":"${property.name}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}"  }""".toString()
+            }
         }
         propertyList = sampleGroup.properties.findAll{it.meaningSet[0].contains("COVARIATE")}
         for (Property property in propertyList){
-            covariateList << """{"name":"${property.name}"}"""
+
+                covariateList << """{"name":"${property.name}"}""".toString()
+
         }
         propertyList = sampleGroup.properties.findAll{it.meaningSet[0].contains("FILTER")}
         for (Property property in propertyList){
-            filterList << """{"name":"${property.name}"}"""
+            if (("T2D" == property.name)||
+                    ("AGE" == property.name)||
+                    ("FAST_GLU" == property.name)||
+                    ("FAST_INS" == property.name)||
+                    ("BMI" == property.name)||
+                    ("WEIGHT" == property.name)||
+                    ("HDL" == property.name)||
+                    ("LDL" == property.name)) {
+                filterList << """{"name":"${property.name}", "type":"${property.type}"  }""".toString()
+            }
         }
         String jsonString = """{"phenotypes":[${phenotypeList.join(",")}],
 "covariates":[${covariateList.join(",")}],

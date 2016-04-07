@@ -214,7 +214,6 @@ class VariantInfoController {
             default:traitFilterOptionId = "t2d"; break
         }
 
-        log.info("got parameters: " + params);
         JsonSlurper slurper = new JsonSlurper()
         JSONObject jsonObject = slurper.parseText(params.covariates)
         // cast the parameters
