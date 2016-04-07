@@ -30,7 +30,12 @@
 
 <div class="row pull-left col-xs-12">
     <div class="medText">
-        <g:message code="aboutTheData.descr" default="about the data"/>
+        <g:if test="${!g.portalTypeString()?.equals('stroke')}">
+            <g:message code="aboutTheData.descr" default="about the data"/>
+        </g:if>
+        <g:else>
+            <g:message code="aboutTheData.stroke.descr" default="about the data"/>
+        </g:else>
     </div>
 </div>
 
@@ -72,17 +77,22 @@
     <sec:ifAllGranted roles="ROLE_SYSTEM">
         <select id="versionDatasetFilter" class="form-control">
             <option value="mdv1">mdv1 (T2D)</option>
-            <option value="mdv2" selected>mdv2 (T2D)</option>
+            <option value="mdv2" selected>latest</option>
             <option value="mdv3">mdv3 (T2D)</option>
             <option value="mdv5">mdv5 (stroke)</option>
         </select>
     </sec:ifAllGranted>
     <sec:ifNotGranted roles="ROLE_SYSTEM">
         <select id="versionDatasetFilter" class="form-control" disabled>
-            <option value="mdv1">mdv1 (T2D)</option>
-            <option value="mdv2" selected>latest</option>
-            <option value="mdv3">mdv3 (T2D)</option>
-            <option value="mdv5">mdv5 (stroke)</option>
+            <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                <option value="mdv5" selected>mdv5 (stroke)</option>
+            </g:if>
+            <g:else>
+                <option value="mdv1">mdv1 (T2D)</option>
+                <option value="mdv2" selected>latest</option>
+                <option value="mdv3">mdv3 (T2D)</option>
+                <option value="mdv5">mdv5 (stroke)</option>
+            </g:else>
         </select>
     </sec:ifNotGranted>
     </div>
@@ -218,6 +228,7 @@
 </div>
 </g:renderBetaFeaturesDisplayedValue>
 
+<g:if test="${!g.portalTypeString()?.equals('stroke')}">
 <div class="row pull-left consortium-spacing">
     <div>
         <a href="${createLink(controller: 'informational', action: 't2dgenes')}">
@@ -289,6 +300,59 @@
     <g:message code="aboutTheData.datasets.gwasMetaAnalysis" default="about the data"/>
 </div>
 
+</g:if>
+<g:else>
+    <div class="row pull-left consortium-spacing">
+        <div class="medText">
+            <strong><g:message code="aboutTheData.stroke.datasets.race.title"/></strong>
+        </div>
+    </div>
+
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <g:message code="aboutTheData.stroke.datasets.race" default="about the data"/>
+    </div>
+
+    <div class="row pull-left consortium-spacing">
+        <div class="medText">
+            <strong><g:message code="aboutTheData.stroke.datasets.gerfhs.title"/></strong>
+        </div>
+    </div>
+
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <g:message code="aboutTheData.stroke.datasets.gerfhs" default="about the data"/>
+    </div>
+
+    <div class="row pull-left consortium-spacing">
+        <div class="medText">
+            <strong><g:message code="aboutTheData.stroke.datasets.gocha.title"/></strong>
+        </div>
+    </div>
+
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <g:message code="aboutTheData.stroke.datasets.gocha" default="about the data"/>
+    </div>
+
+    <div class="row pull-left consortium-spacing">
+        <div class="medText">
+            <strong><g:message code="aboutTheData.stroke.datasets.gwas_eu.title"/></strong>
+        </div>
+    </div>
+
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <g:message code="aboutTheData.stroke.datasets.gwas_eu" default="about the data"/>
+    </div>
+
+    <div class="row pull-left consortium-spacing">
+        <div class="medText">
+            <strong><g:message code="aboutTheData.stroke.datasets.malmo.title"/></strong>
+        </div>
+    </div>
+
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <g:message code="aboutTheData.stroke.datasets.malmo" default="about the data"/>
+    </div>
+
+</g:else>
 </div>
 </div>
 
