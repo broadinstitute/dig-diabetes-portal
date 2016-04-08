@@ -217,25 +217,23 @@ div.labelAndInput > input {
 
 
 
-         var retrieveSampleMetadata = function (dropDownSelector) {
+        var retrieveExperimentMetadata = function (dropDownSelector) {
             var loading = $('#spinner').show();
             $.ajax({
                 cache: false,
                 type: "post",
-                url: "${createLink(controller:'VariantInfo', action:'sampleMetadataAjax')}",
+                url: "${createLink(controller: 'VariantInfo', action: 'sampleMetadataExperimentAjax')}",
                 data: {},
                 async: true,
                 success: function (data) {
-                    var phenotypeDropdown = $('#phenotypeFilter');
+                    var experimentDropdown = $(dropDownSelector);
                     if ( ( data !==  null ) &&
                             ( typeof data !== 'undefined') &&
-                            ( typeof data.phenotypes !== 'undefined' ) &&
-                            (  data.phenotypes !==  null ) ) {
-                        _.forEach(data.phenotypes,function(d){
-                           phenotypeDropdown.append( new Option(d.trans, d.name));
+                            ( typeof data.sampleGroups !== 'undefined' ) &&
+                            (  data.sampleGroups !==  null ) ) {
+                        _.forEach(data.sampleGroups,function(d){
+                           experimentDropdown.append( new Option(d.trans, d.name));
                         });
-                        %{--UTILS.fillPhenotypeCompoundDropdown(data.datasets,dropDownSelector);--}%
-                        %{--$("select#trait-input").val("${g.defaultPhenotype()}");--}%
                     }
                     loading.hide();
                 },
@@ -247,6 +245,69 @@ div.labelAndInput > input {
         };
 
 
+
+        var retrieveSampleMetadata = function (dropdownSel, dropDownSelector) {
+            var loading = $('#spinner').show();
+            var domSelector = $(dropdownSel);
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "${createLink(controller:'VariantInfo', action:'sampleMetadataAjax')}",
+                        data: {dataset:domSelector.val()},
+                        async: true,
+                        success: function (data) {
+                            var phenotypeDropdown = $(dropDownSelector);
+                            if ( ( data !==  null ) &&
+                                    ( typeof data !== 'undefined') &&
+                                    ( typeof data.phenotypes !== 'undefined' ) &&
+                                    (  data.phenotypes !==  null ) ) {
+                                _.forEach(data.phenotypes,function(d){
+                                   phenotypeDropdown.append( new Option(d.trans, d.name));
+                                });
+                            }
+                            loading.hide();
+                        },
+                        error: function (jqXHR, exception) {
+                            loading.hide();
+                            core.errorReporter(jqXHR, exception);
+                        }
+                });
+        };
+
+
+        var retrieveSampleFilterMetadata = function (dropdownSel, dropDownSelector) {
+            var loading = $('#spinner').show();
+            var domSelector = $(dropdownSel);
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "${createLink(controller:'VariantInfo', action:'sampleMetadataAjax')}",
+                        data: {dataset:domSelector.val()},
+                        async: true,
+                        success: function (data) {
+                            var phenotypeDropdown = $(dropDownSelector);
+                            if ( ( data !==  null ) &&
+                                    ( typeof data !== 'undefined') &&
+                                    ( typeof data.filters !== 'undefined' ) &&
+                                    (  data.filters !==  null ) ) {
+                                    var output = '';
+                                    var template = $('#filterTemplate')[0].innerHTML;
+                                    _.forEach(data.filters,function(d,i){
+                                      output += Mustache.render(template, d);
+                                    });
+                                    $("#person").html(output);
+//                                  var template = $('#filterTemplate')[0].innerHTML;
+//                                  var output = Mustache.render(template, data.filters);
+                                  $("#person").html(output);
+                            }
+                            loading.hide();
+                        },
+                        error: function (jqXHR, exception) {
+                            loading.hide();
+                            core.errorReporter(jqXHR, exception);
+                        }
+                });
+        };
 
 
 
@@ -426,7 +487,7 @@ div.labelAndInput > input {
         var buildBoxWhiskerPlot = function (inData,selector) {
             var margin = {top: 50, right: 50, bottom: 20, left: 50},
             width = 500 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
+            height = 350 - margin.top - margin.bottom;
 
             // initial value of the interquartile multiplier. Note that this value
             //  is adjustable via a UI slider
@@ -516,12 +577,14 @@ div.labelAndInput > input {
 
         // public routines are declared below
         return {
+            retrieveExperimentMetadata:retrieveExperimentMetadata,
             retrieveSampleInformation:retrieveSampleInformation,
             runBurdenTest:runBurdenTest,
             fillFilterDropDown:fillFilterDropDown,
             retrieveMatchingDataSets:retrieveMatchingDataSets,
             retrievePhenotypes:retrievePhenotypes,
-            retrieveSampleMetadata:retrieveSampleMetadata
+            retrieveSampleMetadata:retrieveSampleMetadata,
+            retrieveSampleFilterMetadata:retrieveSampleFilterMetadata
         }
 
     }());
@@ -529,8 +592,9 @@ div.labelAndInput > input {
 $( document ).ready( function (){
   // mpgSoftware.burdenTestShared.fillFilterDropDown ();
  // mpgSoftware.burdenTestShared.retrievePhenotypes('#phenotypeFilter');
+  mpgSoftware.burdenTestShared.retrieveExperimentMetadata( '#datasetFilter' );
   mpgSoftware.burdenTestShared.retrieveSampleInformation  ( '<%=variantIdentifier%>' );
-  mpgSoftware.burdenTestShared.retrieveSampleMetadata();
+//  mpgSoftware.burdenTestShared.retrieveSampleMetadata( '#phenotypeFilter' );
 } );
 
 </g:javascript>
@@ -551,46 +615,157 @@ $( document ).ready( function (){
 
 <div class="row burden-test-wrapper-options">
 
-    <div class="col-md-6 col-sm-6 col-xs-12 vcenter">
-        <div class="row">
-            <div class="col-sm-4 col-xs-12 text-right"><label>Choose a phenotype:</label></div>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist_for_chooseSamples">
+        <li role="presentation"  class="active"><a href="#chooseSamples" aria-controls="chooseSamples" role="tab"
+                                                  data-toggle="tab">Choose samples</a></li>
+        <li role="presentation"><a href="#initiateAnalysis" aria-controls="initiateAnalysis" role="tab"
+                                   data-toggle="tab">Initiate analysis</a></li>
+    </ul>
 
-            <div class="col-sm-8 col-xs-12 text-left">
-                <select id="phenotypeFilter" class="traitFilter form-control text-left"
-                        onchange="mpgSoftware.burdenTestShared.retrieveMatchingDataSets(this, '#datasetFilter')">
-                </select>
+    <div class="tab-content" style="border-top: 1px solid #ccc; height: 400px; padding: 4px 0 0 10px">
+        <div  role="tabpanel" class="tab-pane active" id="chooseSamples">
+            <div class="col-md-6 col-sm-6 col-xs-12 vcenter">
+            <div class="row">
+                <div class="col-sm-4 col-xs-12 text-right"><label>Choose a data set:</label></div>
+
+                <div class="col-sm-8 col-xs-12 text-left">
+                    <select id="datasetFilter" class="traitFilter form-control text-left"
+                            onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata( this, '#phenotypeFilter' );"
+                            onclick="mpgSoftware.burdenTestShared.retrieveSampleMetadata( this, '#phenotypeFilter' );">
+                    </select>
+                </div>
+
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-sm-4 col-xs-12 text-right"><label>Choose a data set:</label></div>
+            <div class="row">
+                <div class="col-sm-4 col-xs-12 text-right"><label>Choose a phenotype:</label></div>
 
-            <div class="col-sm-8 col-xs-12 text-left">
-                <select id="datasetFilter" class="traitFilter form-control text-left">
-                </select>
+                <div class="col-sm-8 col-xs-12 text-left">
+                    <select id="phenotypeFilter" class="traitFilter form-control text-left"
+                            onchange="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata( $('#datasetFilter'), '#phenotypeFilter' );">
+                    </select>
+                </div>
             </div>
+
+
+            <div class="row">
+                <div class="col-sm-4 col-xs-12 text-right"><label>Sample filters:</label></div>
+                <div class="col-sm-8 col-xs-12 text-left">
+                    <p id="person"></p>
+                    <div id="filterTemplate" style="display: none;"><p><span>name={{name}},type={{type}}</span></p></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4 col-xs-12 text-right"><label>Sample filters:</label></div>
+
+                <div class="col-sm-8 col-xs-12 text-left">
+
+
+                    <!-- Tab panes -->
+                    <div  style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px">
+
+
+                        <div  id="filters">
+                            <div class="row">
+                                <div class="col-sm-10 col-xs-12 text-left">
+                                    <table class="table table-condensed">
+                                        <thead>
+                                        <tr>
+                                            <th width="10%">Use</th>
+                                            <th width="30%">Filter</th>
+                                            <th width="25%">Cmp</th>
+                                            <th width="35%">Parameter</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td><input id="useBmi" type="checkbox" name="useBmi" value="BMI" checked/></td>
+                                            <td><span onmouseover="displaySampleDistribution('BMI', '#boxWhiskerPlot')">BMI</span>
+                                            </td>
+                                            <td>
+                                                <select class="form-control" data-selectfor="bmiComparator">
+                                                    <option>&lt;</option>
+                                                    <option>&gt;</option>
+                                                    <option>=</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" data-type="propertiesInput"
+                                                       data-prop="bmiValue" data-translatedname="P-value">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input id="useGender" type="checkbox" name="useGender" value="GENDER"
+                                                       checked/></td>
+                                            <td>Gender</td>
+                                            <td>
+                                                <label>=</label>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" data-type="propertiesInput"
+                                                       data-prop="P_FE_INV" data-translatedname="P-value">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input id="useAge" type="checkbox" name="useGender" value="GENDER" checked/>
+                                            </td>
+                                            <td><span onmouseover="displaySampleDistribution('AGE', '#boxWhiskerPlot')">Age</span>
+                                            </td>
+                                            <td>
+                                                <select class="form-control" data-selectfor="ageComparator">
+                                                    <option>&lt;</option>
+                                                    <option>&gt;</option>
+                                                    <option>=</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" data-type="propertiesInput"
+                                                       data-prop="ageValue" data-translatedname="P-value">
+                                            </td>
+
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            </div>
+
+            <div class="col-md-6 col-sm-6 col-xs-12 vcenter">
+                <div id="boxWhiskerPlot">
+                </div>
+            </div>
+
         </div>
+        <div  role="tabpanel" class="tab-pane" id="initiateAnalysis">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation"  class="active"><a href="#covariates" aria-controls="covariates" role="tab"
+                                                          data-toggle="tab">Covariates</a></li>
+
+                <li role="presentation"><a href="#stratify" aria-controls="stratify" role="tab"
+                                           data-toggle="tab">Stratify</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane" id="covariates" style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px">
+                    <div class="row">
+                        <div class="col-md-10 col-sm-10 col-xs-12 vcenter">
 
 
-        <div class="row">
-            <div class="col-sm-4 col-xs-12 text-right"><label>Refine search:</label></div>
-
-            <div class="col-sm-8 col-xs-12 text-left">
-
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#covariates" aria-controls="covariates" role="tab"
-                                                              data-toggle="tab">Covariates</a></li>
-                    <li role="presentation"><a href="#filters" aria-controls="filters" role="tab"
-                                               data-toggle="tab">Filters</a></li>
-                    <li role="presentation"><a href="#stratify" aria-controls="stratify" role="tab"
-                                               data-toggle="tab">Stratify</a></li>
-                </ul>
-
-                <!-- Tab panes -->
-                <div class="tab-content" style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px">
-                    <div role="tabpanel" class="tab-pane active" id="covariates">
-                        <div class="row">
                             <div id="covariate-form">
                                 <div class="col-sm-4 col-xs-12 text-center">
 
@@ -657,6 +832,7 @@ $( document ).ready( function (){
                                     </div>
 
                                 </div>
+
                                 <div class="col-sm-4 col-xs-12 text-center">
 
                                     <div class="checkbox">
@@ -677,162 +853,91 @@ $( document ).ready( function (){
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter">
+                            <button id="singlebutton" name="singlebutton" style="height: 80px"
+                                    class="btn btn-primary btn-lg burden-test-btn"
+                                    onclick="mpgSoftware.burdenTestShared.runBurdenTest()">Run</button>
+                        </div>
                     </div>
+                </div>
+
                 <script>
-                    var displaySampleDistribution = function(propertyName,holderSection){
+                    var displaySampleDistribution = function (propertyName, holderSection) {
                         var kids = $(holderSection).children();
-                        _.forEach(kids,function(d){
+                        _.forEach(kids, function (d) {
                             console.log('d');
                             $(d).hide();
                         });
-                       $('#bwp_'+propertyName).show();
+                        $('#bwp_' + propertyName).show();
                     }
                 </script>
 
-                    <div role="tabpanel" class="tab-pane" id="filters">
-                        <div class="row">
-                            <div class="col-sm-10 col-xs-12 text-left">
-                                <table class="table table-condensed">
-                                    <thead>
-                                    <tr>
-                                        <th width="10%">Use</th>
-                                        <th width="30%">Filter</th>
-                                        <th width="25%">Cmp</th>
-                                        <th width="35%">Parameter</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td><input id="useBmi" type="checkbox" name="useBmi" value="BMI" checked/></td>
-                                        <td><span onmouseover="displaySampleDistribution('BMI','#boxWhiskerPlot')">BMI</span></td>
-                                        <td>
-                                            <select class="form-control" data-selectfor="bmiComparator">
-                                                <option>&lt;</option>
-                                                <option>&gt;</option>
-                                                <option>=</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" data-type="propertiesInput"
-                                                   data-prop="bmiValue" data-translatedname="P-value">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><input id="useGender" type="checkbox" name="useGender" value="GENDER"
-                                                   checked/></td>
-                                        <td>Gender</td>
-                                        <td>
-                                            <label>=</label>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" data-type="propertiesInput"
-                                                   data-prop="P_FE_INV" data-translatedname="P-value">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><input id="useAge" type="checkbox" name="useGender" value="GENDER" checked/>
-                                        </td>
-                                        <td><span onmouseover="displaySampleDistribution('AGE','#boxWhiskerPlot')">Age</span></td>
-                                        <td>
-                                            <select class="form-control" data-selectfor="ageComparator">
-                                                <option>&lt;</option>
-                                                <option>&gt;</option>
-                                                <option>=</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" data-type="propertiesInput"
-                                                   data-prop="ageValue" data-translatedname="P-value">
-                                        </td>
-
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div role="tabpanel" class="tab-pane" id="stratify">
-                        <h1 style="color: #ccc">Not yet implemented</h1>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="col-md-4 col-sm-4 col-xs-12 vcenter">
-        <div id="boxWhiskerPlot">
-        </div>
-    </div>
-
-    <div class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter">
-        <button id="singlebutton" name="singlebutton" style="height: 80px"
-                class="btn btn-primary btn-lg burden-test-btn"
-                onclick="mpgSoftware.burdenTestShared.runBurdenTest()">Run</button>
-    </div>
-
-</div>
-
-<div class="row burden-test-result" style="display:block">
-    <div class="col-md-12 col-sm-6">
-
-    </div>
-
-</div>
-
-
-<div id="burden-test-some-results" class="row burden-test-result">
-    <div class="col-md-8 col-sm-6">
-        <div id="variantFrequencyDiv">
-            <div>
-                <p class="standardFont">Of the <span
-                        id="traitSpan"></span> cases/controls, the following carry the variant ${variantIdentifier}.
-                </p>
-            </div>
-
-            <div class="barchartFormatter">
-                <div id="chart">
-
+                <div role="tabpanel" class="tab-pane" id="stratify" style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px">
+                    <h1 style="color: #ccc">Not yet implemented</h1>
                 </div>
             </div>
         </div>
+
+
     </div>
 
-    <div class="col-md-2 col-sm-3">
+    <div class="row burden-test-result" style="display:block">
+        <div class="col-md-12 col-sm-6">
+
+        </div>
+
     </div>
 
-    <div class="col-md-2 col-sm-3">
-        <div class="vertical-center">
-            <div id="pValue" class="pValue"></div>
 
-            <div id="orValue" class="orValue"></div>
+    <div id="burden-test-some-results" class="row burden-test-result">
+        <div class="col-md-8 col-sm-6">
+            <div id="variantFrequencyDiv">
+                <div>
+                    <p class="standardFont">Of the <span
+                            id="traitSpan"></span> cases/controls, the following carry the variant ${variantIdentifier}.
+                    </p>
+                </div>
 
-            <div id="ciValue" class="ciValue"></div>
+                <div class="barchartFormatter">
+                    <div id="chart">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2 col-sm-3">
+        </div>
+
+        <div class="col-md-2 col-sm-3">
+            <div class="vertical-center">
+                <div id="pValue" class="pValue"></div>
+
+                <div id="orValue" class="orValue"></div>
+
+                <div id="ciValue" class="ciValue"></div>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="burden-test-some-results-large" class="row burden-test-result-large">
-    <div class="col-md-4 col-sm-3">
-    </div>
+    <div id="burden-test-some-results-large" class="row burden-test-result-large">
+        <div class="col-md-4 col-sm-3">
+        </div>
 
-    <div class="col-md-4 col-sm-6">
-        <div class="vertical-center">
-            <div id="pValue2" class="pValue"></div>
+        <div class="col-md-4 col-sm-6">
+            <div class="vertical-center">
+                <div id="pValue2" class="pValue"></div>
 
-            <div id="orValue2" class="orValue"></div>
+                <div id="orValue2" class="orValue"></div>
 
-            <div id="ciValue2" class="ciValue"></div>
+                <div id="ciValue2" class="ciValue"></div>
+            </div>
+        </div>
+
+        <div class="col-md-4 col-sm-3">
         </div>
     </div>
-
-    <div class="col-md-4 col-sm-3">
-    </div>
-</div>
 </div>
 
 </div>

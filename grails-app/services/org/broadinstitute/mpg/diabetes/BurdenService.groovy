@@ -6,6 +6,7 @@ import grails.transaction.Transactional
 import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.diabetes.burden.parser.BurdenJsonBuilder
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
+import org.broadinstitute.mpg.diabetes.metadata.Experiment
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
@@ -85,6 +86,23 @@ class BurdenService {
 
         // return the result
         return resultJson;
+    }
+
+
+
+
+    public JSONObject convertSampleGroupListToJson (List <SampleGroup> sampleGroupList){
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+        List <String> sampleGroupNamesAsJson = []
+        for (SampleGroup sampleGroup in sampleGroupList) {
+            sampleGroupNamesAsJson << """{"name":"${sampleGroup.systemId}", "trans":"${
+                g.message(code: 'metadata.' + sampleGroup.systemId, default: sampleGroup.systemId)
+            }"  }""".toString()
+        }
+         String jsonString = """{"sampleGroups":[${sampleGroupNamesAsJson.join(",")}]
+}""".toString()
+        JsonSlurper slurper = new JsonSlurper()
+        return slurper.parseText(jsonString)
     }
 
 

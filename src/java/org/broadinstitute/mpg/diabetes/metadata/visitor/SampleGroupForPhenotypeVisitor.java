@@ -36,15 +36,22 @@ public class SampleGroupForPhenotypeVisitor implements DataSetVisitor {
         if (dataSet.getType() == PortalConstants.TYPE_SAMPLE_GROUP_KEY) {
             group = (SampleGroup)dataSet;
 
-            // go through the phenotypes and see if the one being looked for is contained
-            for (Phenotype phenotype: group.getPhenotypes()) {
-                // if contained (or else if a blank phenotype match was provided), then add sample group name to list
-                if ((phenotype.getName().equalsIgnoreCase(this.phenotypeName))||
-                    (this.phenotypeName.length()==0)){
-                    this.sampleGroupNameList.add(group.getSystemId());
-                    this.sampleGroupList.add(group);
-                    break;
+            // go through the phenotypes, if we care about phenotypes, and see if the one being looked for is contained
+            if ((this.phenotypeName!=null)&&
+                    (this.phenotypeName.length()>0)) {
+                for (Phenotype phenotype: group.getPhenotypes()) {
+                    // if contained (or else if a blank phenotype match was provided), then add sample group name to list
+                    if ((phenotype.getName().equalsIgnoreCase(this.phenotypeName))||
+                            (this.phenotypeName.length()==0)){
+                        this.sampleGroupNameList.add(group.getSystemId());
+                        this.sampleGroupList.add(group);
+                        break;
+                    }
                 }
+
+            } else { // we don't care about phenotypes.  This end through the sample group list anyway
+                this.sampleGroupNameList.add(group.getSystemId());
+                this.sampleGroupList.add(group);
             }
        }
 

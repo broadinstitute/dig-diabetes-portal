@@ -102,7 +102,7 @@ class TraitController {
      */
     def ajaxSampleGroupsPerTrait()  {
         String phenotype = params["phenotype"]
-        List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion(phenotype, "")
+        List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion(phenotype, "", MetaDataService.METADATA_VARIANT)
         List <String> sampleGroupStrings = []
         List <String> sortedSampleGroupStrings = sampleGroupList.sort{a,b->return b.subjectsNumber <=> a.subjectsNumber}
         String largestSampleGroup = sortedSampleGroupStrings?.first()?.getSystemId()
@@ -141,7 +141,7 @@ class TraitController {
         String sampleGroupOwner = this.metaDataService.getGwasSampleGroupNameForPhenotype(phenotypeKey)
         String phenotypeDataSet = ''
         String phenotypeTranslation = g.message(code: "metadata." + phenotypeKey, default: phenotypeKey)
-        List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion(phenotypeKey, "")
+        List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion(phenotypeKey, "", MetaDataService.METADATA_VARIANT)
         List<SampleGroup> sortedSampleGroups = sampleGroupList.sort{a, b -> b.subjectsNumber <=> a.subjectsNumber }
         SampleGroup chosenSampleGroup = sortedSampleGroups?.first()
         String chosenSampleGroupId = chosenSampleGroup?.getSystemId()
@@ -182,7 +182,7 @@ class TraitController {
          LinkedHashMap properties = [:]
          if (phenotypicTrait){
              if(!dataSetName){
-                 List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion(phenotypicTrait, "")
+                 List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion(phenotypicTrait, "", MetaDataService.METADATA_VARIANT)
                  List <String> sortedSampleGroupStrings = sampleGroupList.sort{a,b->return b.subjectsNumber <=> a.subjectsNumber}
                  dataSetName = sortedSampleGroupStrings?.first()?.getSystemId()
 

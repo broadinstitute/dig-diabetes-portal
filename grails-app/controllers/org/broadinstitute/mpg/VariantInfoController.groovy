@@ -3,6 +3,7 @@ import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.metadata.Experiment
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -171,10 +172,20 @@ class VariantInfoController {
     }
 
 
+    def sampleMetadataExperimentAjax() {
+        List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "", MetaDataService.METADATA_SAMPLE)
+         JSONObject jsonObject = burdenService.convertSampleGroupListToJson (sampleGroupList)
+
+        // send json response back
+        render(status: 200, contentType: "application/json") {jsonObject}
+    }
+
+
 
 
     def sampleMetadataAjax() {
-        SampleGroup sampleGroup = metaDataService.getSampleGroupByFromSamplesName("samples_13k_mdv2")
+        String dataset = params.dataset
+        SampleGroup sampleGroup = metaDataService.getSampleGroupByFromSamplesName(dataset)
         JSONObject jsonObject = burdenService.convertSampleGroupPropertyListToJson (sampleGroup)
 
         // send json response back

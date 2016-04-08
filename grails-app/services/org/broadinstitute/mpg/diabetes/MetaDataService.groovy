@@ -21,6 +21,11 @@ import org.codehaus.groovy.grails.web.util.WebUtils
 
 @Transactional
 class MetaDataService {
+    // handle multiple metadata trees
+    public static Integer METADATA_NONE = 0
+    public static Integer METADATA_VARIANT = 1
+    public static Integer METADATA_SAMPLE = 2
+
     // instance variables
     JsonParser jsonParser = JsonParser.getService();
     JsonParser jsonSampleParser = JsonParser.getSampleService();
@@ -223,13 +228,23 @@ class MetaDataService {
      * @param phenotypeString
      * @return
      */
-    public List<Experiment> getExperimentByVersionAndTechnology( String version, String technology ) {
+    public List<Experiment> getExperimentByVersionAndTechnology( String version, String technology, int metadataTree ) {
         // local variables
         List<Experiment> experimentList = []
 
         // get the sample group string
         try {
-            experimentList = this.getJsonParser().getAllExperimentsOfVersionTechnology( version, technology )
+            switch (metadataTree){
+                case METADATA_VARIANT:
+                    experimentList = this.getJsonParser().getAllExperimentsOfVersionTechnology( version, technology )
+                    break;
+                case METADATA_SAMPLE:
+                    experimentList = this.getJsonSampleParser().getAllExperimentsOfVersionTechnology( version, technology )
+                    break;
+                case METADATA_NONE:
+                default:
+                    break;
+            }
 
         } catch (PortalException exception) {
             log.error("Got metadata parsing exception getting getExperimentByVersionAndTechnology: " + exception.getMessage());
@@ -315,6 +330,7 @@ class MetaDataService {
     public SampleGroup  getSampleGroupByFromSamplesName(String sampleGroupId){
         return this.getJsonSampleParser().getSampleGroupByName(sampleGroupId)
     }
+
 
     public String  getTechnologyPerSampleGroup(String sampleGroupId){
         return jsonParser.getTechnologyPerSampleGroup(sampleGroupId)
@@ -408,8 +424,8 @@ class MetaDataService {
 
 
 
-    public List<SampleGroup>  getSampleGroupListForPhenotypeAndVersion(String phenotype, String version) {
-        List<SampleGroup> groupList;
+    public List<SampleGroup>  getSampleGroupListForPhenotypeAndVersion(String phenotype, String version, int metadataTree) {
+        List<SampleGroup> groupList = [];
 
         if ((!version) ||
                 (version.length()==0)){
@@ -418,8 +434,17 @@ class MetaDataService {
 
         // get the sample group list for a particular phenotype
         try {
-            groupList = this.getJsonParser().getSamplesGroupsForPhenotype(phenotype, version);
-
+            switch (metadataTree) {
+                case METADATA_VARIANT:
+                    groupList = this.getJsonParser().getSamplesGroupsForPhenotype(phenotype, version)
+                    break;
+                case METADATA_SAMPLE:
+                    groupList = this.getJsonSampleParser().getSamplesGroupsForPhenotype(phenotype, version)
+                    break;
+                case METADATA_NONE:
+                default:
+                    break;
+            }
         } catch (PortalException exception) {
             log.error("Got exception retrieving sample group name list : " + exception.getMessage());
         }

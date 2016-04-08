@@ -371,7 +371,7 @@ class RestServerService {
                 (technology=='none')) {
             technology = ''
         }
-        List<Experiment> experimentList = this.metaDataService.getExperimentByVersionAndTechnology(version, technology);
+        List<Experiment> experimentList = this.metaDataService.getExperimentByVersionAndTechnology(version, technology, MetaDataService.METADATA_VARIANT);
         if (experimentList.size()>0){
             Experiment lastExperiment = experimentList.last()
             for (Experiment experiment in experimentList){
@@ -681,7 +681,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         int beginSearchNumber, endSearchNumber;
 
         // get the phenotype list
-        // DIGP-291: centralize metadata version
         phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion());
 
         try {
