@@ -60,7 +60,8 @@
         </h4>
 
         <h4>
-            <g:message code="sigmasite.learn.rarevariant.13"></g:message>
+            <g:message code="sigmasite.learn.rarevariant.13.1"></g:message>
+            <g:message code="sigmasite.learn.rarevariant.13.2"></g:message>
         </h4>
     </div>
 </div>

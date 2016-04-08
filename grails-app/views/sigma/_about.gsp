@@ -1,5 +1,4 @@
 <div class="sigma-detail">
-    <h4>
-        <g:message code="sigmasite.about.content"></g:message>
-    </h4>
+    <g:message code="sigmasite.about.content.1"></g:message>
+    <g:message code="sigmasite.about.content.2"></g:message>
 </div>
