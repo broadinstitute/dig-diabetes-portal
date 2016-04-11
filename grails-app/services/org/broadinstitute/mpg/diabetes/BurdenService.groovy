@@ -143,7 +143,7 @@ class BurdenService {
                     ("WEIGHT" == property.name)||
                     ("HDL" == property.name)||
                     ("LDL" == property.name)) {
-                filterList << """{"name":"${property.name}", "type":"${property.type}"  }""".toString()
+                filterList << """{"name":"${property.name}", "type":"${property.variableType}"  }""".toString()
             }
         }
         String jsonString = """{"phenotypes":[${phenotypeList.join(",")}],

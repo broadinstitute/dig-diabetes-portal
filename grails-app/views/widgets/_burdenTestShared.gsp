@@ -82,6 +82,10 @@ div.labelAndInput > input {
 .burdenTestResultHolder {
     height: 140px;
 }
+#person div.row div {
+    padding: 0;
+    line-height: 20px;
+}
 </style>
 
 
@@ -291,14 +295,18 @@ div.labelAndInput > input {
                                     ( typeof data.filters !== 'undefined' ) &&
                                     (  data.filters !==  null ) ) {
                                     var output = '';
-                                    var template = $('#filterTemplate')[0].innerHTML;
+                                    var floatTemplate = $('#filterFloatTemplate')[0].innerHTML;
+                                    var categoricalTemplate = $('#filterCategoricalTemplate')[0].innerHTML;
                                     _.forEach(data.filters,function(d,i){
-                                      output += Mustache.render(template, d);
+                                      if (d.type === 'FLOAT') {
+                                         output = (output + Mustache.render(floatTemplate, d));
+                                      } else {
+                                         output = (output+Mustache.render(categoricalTemplate, d));
+                                      }
+
                                     });
-                                    $("#person").html(output);
-//                                  var template = $('#filterTemplate')[0].innerHTML;
-//                                  var output = Mustache.render(template, data.filters);
-                                  $("#person").html(output);
+                                    $("#sampleRow").show();
+                                   $("#person").append(output);
                             }
                             loading.hide();
                         },
@@ -530,12 +538,12 @@ div.labelAndInput > input {
                             console.log('burdenTestAjax returned is_error ='+data.is_error +'.');
                         }
                         else if ((typeof data.metaData === 'undefined') ||
-                                 (typeof data.metaData.samples === 'undefined') ||
-                                 (data.metaData.samples.length <= 0)){
+                                 (typeof data.metaData.variants === 'undefined') ||
+                                 (data.metaData.variants.length <= 0)){
                              console.log('burdenTestAjax returned undefined (or length = 0) for options.');
                        }else {
-                            for ( var i = 0 ; i < data.metaData.samples.length ; i++ )  {
-                               var sampleFields =  data.metaData.samples[i] ;
+                            for ( var i = 0 ; i < data.metaData.variants.length ; i++ )  {
+                               var sampleFields =  data.metaData.variants[i] ;
                                for ( var j = 0 ; j < sampleFields.length ; j++ ) {
                                    var fieldObject =  sampleFields[j];
                                    for (var dataSetName in fieldObject) {
@@ -649,86 +657,76 @@ $( document ).ready( function (){
             </div>
 
 
-            <div class="row">
+            <div class="row" id="sampleRow" style="display:none">
                 <div class="col-sm-4 col-xs-12 text-right"><label>Sample filters:</label></div>
                 <div class="col-sm-8 col-xs-12 text-left">
-                    <p id="person"></p>
-                    <div id="filterTemplate" style="display: none;"><p><span>name={{name}},type={{type}}</span></p></div>
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col-sm-4 col-xs-12 text-right"><label>Sample filters:</label></div>
-
-                <div class="col-sm-8 col-xs-12 text-left">
+                <div  style="height: 200px; padding: 4px 0 0 10px; overflow-y: scroll;">
 
 
-                    <!-- Tab panes -->
-                    <div  style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px">
+                    <div  id="filters">
+                        <div class="row">
 
-
-                        <div  id="filters">
-                            <div class="row">
-                                <div class="col-sm-10 col-xs-12 text-left">
-                                    <table class="table table-condensed">
-                                        <thead>
-                                        <tr>
-                                            <th width="10%">Use</th>
-                                            <th width="30%">Filter</th>
-                                            <th width="25%">Cmp</th>
-                                            <th width="35%">Parameter</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td><input id="useBmi" type="checkbox" name="useBmi" value="BMI" checked/></td>
-                                            <td><span onmouseover="displaySampleDistribution('BMI', '#boxWhiskerPlot')">BMI</span>
-                                            </td>
-                                            <td>
-                                                <select class="form-control" data-selectfor="bmiComparator">
-                                                    <option>&lt;</option>
-                                                    <option>&gt;</option>
-                                                    <option>=</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" data-type="propertiesInput"
-                                                       data-prop="bmiValue" data-translatedname="P-value">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><input id="useGender" type="checkbox" name="useGender" value="GENDER"
-                                                       checked/></td>
-                                            <td>Gender</td>
-                                            <td>
-                                                <label>=</label>
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" data-type="propertiesInput"
-                                                       data-prop="P_FE_INV" data-translatedname="P-value">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><input id="useAge" type="checkbox" name="useGender" value="GENDER" checked/>
-                                            </td>
-                                            <td><span onmouseover="displaySampleDistribution('AGE', '#boxWhiskerPlot')">Age</span>
-                                            </td>
-                                            <td>
-                                                <select class="form-control" data-selectfor="ageComparator">
-                                                    <option>&lt;</option>
-                                                    <option>&gt;</option>
-                                                    <option>=</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" data-type="propertiesInput"
-                                                       data-prop="ageValue" data-translatedname="P-value">
-                                            </td>
-
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                                <div class="row">
+                                    <div class="col-sm-1">
+                                        Use
+                                    </div>
+                                    <div class="col-sm-3">
+                                        Filter
+                                    </div>
+                                    <div class="col-sm-3">
+                                    Cmp
+                                    </div>
+                                    <div class="col-sm-4">
+                                    Parameter
+                                    </div>
                                 </div>
+                                <div id="person"></div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+                    <div id="filterFloatTemplate" style="display: none;">
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <input id="use{{name}}" type="checkbox" name="use{{name}}" value="{{name}}" checked/></td>
+                            </div>
+                            <div class="col-sm-3">
+                                <span onmouseover="displaySampleDistribution('{{name}}', '#boxWhiskerPlot')">{{name}}</span>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="form-control" data-selectfor="bmiComparator">
+                                    <option>&lt;</option>
+                                    <option>&gt;</option>
+                                    <option>=</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" data-type="propertiesInput"
+                                       data-prop="bmiValue" data-translatedname="P-value">
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div id="filterCategoricalTemplate" style="display: none;">
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <input id="use{{name}}" type="checkbox" name="use{{name}}" value="{{name}}" checked/></td>
+                            </div>
+                            <div class="col-sm-3">
+                                <span onmouseover="displaySampleDistribution('{{name}}', '#boxWhiskerPlot')">{{name}}</span>
+                            </div>
+                            <div class="col-sm-3">
+                                =
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" data-type="propertiesInput"
+                                       data-prop="{{name}}Value" data-translatedname="{{name}}">
                             </div>
 
                         </div>
@@ -736,9 +734,97 @@ $( document ).ready( function (){
 
                     </div>
 
-                </div>
 
+
+
+                    %{--<p><span>name={{name}},type={{type}}</span></p></div>--}%
+                    <div id="filterStringTemplate" style="display: none;"><p><span>str name={{name}},type={{type}}</span></p></div>
+                    %{--<div id="filterCategoricalTemplate" style="display: none;"><p><span>cat name={{name}},type={{type}}</span></p></div>--}%
+                </div>
             </div>
+
+            %{--<div class="row">--}%
+                %{--<div class="col-sm-4 col-xs-12 text-right"><label>Sample filters:</label></div>--}%
+
+                %{--<div class="col-sm-8 col-xs-12 text-left">--}%
+
+
+                    %{--<!-- Tab panes -->--}%
+                    %{--<div  style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px">--}%
+
+
+                        %{--<div  id="filters2">--}%
+                            %{--<div class="row">--}%
+                                %{--<div class="col-sm-10 col-xs-12 text-left">--}%
+                                    %{--<table class="table table-condensed">--}%
+                                        %{--<thead>--}%
+                                        %{--<tr>--}%
+                                            %{--<th width="10%">Use</th>--}%
+                                            %{--<th width="30%">Filter</th>--}%
+                                            %{--<th width="25%">Cmp</th>--}%
+                                            %{--<th width="35%">Parameter</th>--}%
+                                        %{--</tr>--}%
+                                        %{--</thead>--}%
+                                        %{--<tbody>--}%
+                                        %{--<tr>--}%
+                                            %{--<td><input id="useBmi" type="checkbox" name="useBmi" value="BMI" checked/></td>--}%
+                                            %{--<td><span onmouseover="displaySampleDistribution('BMI', '#boxWhiskerPlot')">BMI</span>--}%
+                                            %{--</td>--}%
+                                            %{--<td>--}%
+                                                %{--<select class="form-control" data-selectfor="bmiComparator">--}%
+                                                    %{--<option>&lt;</option>--}%
+                                                    %{--<option>&gt;</option>--}%
+                                                    %{--<option>=</option>--}%
+                                                %{--</select>--}%
+                                            %{--</td>--}%
+                                            %{--<td>--}%
+                                                %{--<input type="text" class="form-control" data-type="propertiesInput"--}%
+                                                       %{--data-prop="bmiValue" data-translatedname="P-value">--}%
+                                            %{--</td>--}%
+                                        %{--</tr>--}%
+                                        %{--<tr>--}%
+                                            %{--<td><input id="useGender" type="checkbox" name="useGender" value="GENDER"--}%
+                                                       %{--checked/></td>--}%
+                                            %{--<td>Gender</td>--}%
+                                            %{--<td>--}%
+                                                %{--<label>=</label>--}%
+                                            %{--</td>--}%
+                                            %{--<td>--}%
+                                                %{--<input type="text" class="form-control" data-type="propertiesInput"--}%
+                                                       %{--data-prop="P_FE_INV" data-translatedname="P-value">--}%
+                                            %{--</td>--}%
+                                        %{--</tr>--}%
+                                        %{--<tr>--}%
+                                            %{--<td><input id="useAge" type="checkbox" name="useGender" value="GENDER" checked/>--}%
+                                            %{--</td>--}%
+                                            %{--<td><span onmouseover="displaySampleDistribution('AGE', '#boxWhiskerPlot')">Age</span>--}%
+                                            %{--</td>--}%
+                                            %{--<td>--}%
+                                                %{--<select class="form-control" data-selectfor="ageComparator">--}%
+                                                    %{--<option>&lt;</option>--}%
+                                                    %{--<option>&gt;</option>--}%
+                                                    %{--<option>=</option>--}%
+                                                %{--</select>--}%
+                                            %{--</td>--}%
+                                            %{--<td>--}%
+                                                %{--<input type="text" class="form-control" data-type="propertiesInput"--}%
+                                                       %{--data-prop="ageValue" data-translatedname="P-value">--}%
+                                            %{--</td>--}%
+
+                                        %{--</tr>--}%
+                                        %{--</tbody>--}%
+                                    %{--</table>--}%
+                                %{--</div>--}%
+                            %{--</div>--}%
+
+                        %{--</div>--}%
+
+
+                    %{--</div>--}%
+
+                %{--</div>--}%
+
+            %{--</div>--}%
 
             </div>
 

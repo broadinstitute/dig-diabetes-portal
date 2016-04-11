@@ -43,7 +43,26 @@ class WidgetService {
         String jsonGetDataString
 
         // get json getData query string
-        jsonGetDataString = "{}"
+        jsonGetDataString = """{
+    "passback": "123abc",
+    "entity": "variant",
+    "page_number": 0,
+    "count": false,
+    "properties":    {
+                           "cproperty": [],
+                          "orderBy":    [],
+"dproperty" : { "HDL" : [ "samples_13k_mdv2"],
+                "BMI" : [ "samples_13k_mdv2"],
+                "AGE" : [ "samples_13k_mdv2"],
+                "LDL" : [ "samples_13k_mdv2"],
+                "ID" : [ "samples_13k_mdv2"] } ,
+      "pproperty" : { }} ,
+
+    "filters":    [
+                    {"dataset_id": "samples_13k_mdv2", "phenotype": "blah", "operand": "LDL", "operator": "LT", "value": 200, "operand_type": "FLOAT"},
+                    {"dataset_id": "samples_13k_mdv2", "phenotype": "blah", "operand": "HDL", "operator": "LT", "value": 60, "operand_type": "FLOAT"}
+                ]
+}""".toString()
 
         // submit the post request
         jsonResultString = this.restServerService.postGetSampleDataCall(jsonGetDataString, RestServerService.SAMPLE_SERVER_URL_QA)
