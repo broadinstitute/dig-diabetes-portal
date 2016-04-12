@@ -8,12 +8,6 @@
     <r:layoutResources/>
 
 </head>
-<style>
-.unpaddedSection {
-    padding-left: 0;
-    padding-right: 0;
-}
-</style>
 
 <body>
 
@@ -231,7 +225,7 @@
                 <table>
                     <tr>
                         <td>
-                            <a href="http://www.niddk.nih.gov/Pages/default.aspx"><img src="${resource(dir:'images/organizations', file:'NIH.jpg')}" style="width: 110px;"></a>
+                            <a href="http://www.niddk.nih.gov/Pages/default.aspx"><img src="${resource(dir:'images/organizations', file:'NIH_NIDDK.png')}" style="width: 132px;"></a>
                         </td>
                         <td>
                             <a href="http://www.fnih.org"><img src="${resource(dir:'images/organizations', file:'FNIH.jpg')}" style="width: 110px;"></a>
