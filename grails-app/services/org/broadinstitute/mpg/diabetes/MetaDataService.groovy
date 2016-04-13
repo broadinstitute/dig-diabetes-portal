@@ -514,7 +514,7 @@ class MetaDataService {
      * @param phenotypeName
      * @return
      */
-    public List<String> getAllMatchingPropertyList(String sampleGroupName,String  phenotypeName){
+    public List<String> getAllMatchingPropertyList(String sampleGroupName, String phenotypeName){
         List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
         List<String> propertyList =  metadataUtilityService.sampleGroupAndPhenotypeBasedPropertyList(phenotypeList,phenotypeName,sampleGroupName)
         return propertyList

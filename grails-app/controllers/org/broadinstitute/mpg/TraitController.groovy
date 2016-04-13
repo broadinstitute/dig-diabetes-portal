@@ -167,7 +167,7 @@ class TraitController {
      * @return
      */
      def phenotypeAjax() {
-            String significance = params["significance"]
+         String significance = params["significance"]
          String phenotypicTrait  = params["trait"]
          String dataSetName  = params["sampleGroup"]
             BigDecimal significanceValue

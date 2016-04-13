@@ -40,7 +40,7 @@ public class SampleGroupForPhenotypeVisitor implements DataSetVisitor {
             for (Phenotype phenotype: group.getPhenotypes()) {
                 // if contained (or else if a blank phenotype match was provided), then add sample group name to list
                 if ((phenotype.getName().equalsIgnoreCase(this.phenotypeName))||
-                    (this.phenotypeName.length()==0)){
+                        (this.phenotypeName.length()==0)){
                     this.sampleGroupNameList.add(group.getSystemId());
                     this.sampleGroupList.add(group);
                     break;

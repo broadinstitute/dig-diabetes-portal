@@ -48,7 +48,7 @@ var mpgSoftware = mpgSoftware || {};
                 cache: false,
                 type: "post",
                 url: "./retrievePhenotypesAjax",
-                data: {},
+                data: {getNonePhenotype: true},
                 async: true,
                 success: function (data) {
                     if (( data !==  null ) &&
@@ -67,6 +67,10 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var retrieveDataSets = function (phenotype, dataset,dropdownAlreadyPresent) {
+            // prevent requests being sent with pointless data
+            if(phenotype == 'default') {
+                return;
+            }
             if (!dropdownAlreadyPresent) { // it may be that we already did this round-trip, in which case we don't need to do it again
                 var loading = $('#spinner').show();
                 $.ajax({
@@ -106,6 +110,10 @@ var mpgSoftware = mpgSoftware || {};
          * @param value
          */
         var retrievePropertiesPerDataSet = function (phenotype,dataset,property,equiv,value) {
+            // prevent requests being sent with pointless data
+            if( phenotype == 'default' || dataset == 'default' || _.isUndefined(dataset) ) {
+                return;
+            }
             var loading = $('#spinner').show();
             if (typeof property  === 'undefined') { // we are in case #1 as described above, and should therefore wipe out all existing properties
                 $('.propertyHolderBox').remove();
@@ -181,6 +189,9 @@ var mpgSoftware = mpgSoftware || {};
                     $("#dataSet").val(sampleGroup);
                 }
                 options.prop('disabled', false);
+                
+                // clear out the properties list
+                fillPropertiesDropdown({is_error: false});
             }
         };
         var fillPropertiesDropdown = function (dataSetJson) { // help text for each row

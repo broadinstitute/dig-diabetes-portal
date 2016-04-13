@@ -423,6 +423,16 @@ public class JsonParser {
                 tempPhenotype = this.createPhenotypeFromJson(tempArray.getJSONObject(i), sampleGroup);
                 sampleGroup.getPhenotypes().add(tempPhenotype);
             }
+            // handle a dataset with no phenotypes, by adding a made-up "none" phenotype
+            if(tempArray.length() == 0) {
+                JSONObject nonePhenotype = new JSONObject();
+                nonePhenotype.put("name", "none");
+                nonePhenotype.put("group", "OTHER");
+                nonePhenotype.put("sort_order", 1);
+                nonePhenotype.put("properties", new JSONArray());
+                tempPhenotype = this.createPhenotypeFromJson(nonePhenotype, sampleGroup);
+                sampleGroup.getPhenotypes().add(tempPhenotype);
+            }
 
             // recursively add in any other child sample groups
             tempArray = jsonObject.getJSONArray(PortalConstants.JSON_DATASETS_KEY);
@@ -543,7 +553,6 @@ public class JsonParser {
         // local variables
         SampleGroupForPhenotypeVisitor sampleGroupVisitor = new SampleGroupForPhenotypeVisitor(phenotypeName);
         List<SampleGroup> groupList;
-
         // pass in visitor looking for sample groups with the selected phenotype
         for (Experiment experiment: this.getMetaDataRoot().getExperiments()) {
             // if no version, then go through all experiments

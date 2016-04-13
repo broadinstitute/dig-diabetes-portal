@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg
 
+import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
@@ -26,6 +27,10 @@ class VariantSearchController {
      * @return
      */
     def retrievePhenotypesAjax(){
+        // specify whether to inclue the NONE phenotype--if this is unspecified,
+        // default to no
+        Boolean getNonePhenotype = params.getNonePhenotype || false
+
         LinkedHashMap<String, List<String>> propertyTree = metaDataService.getHierarchicalPhenotypeTree()
         JSONObject result = sharedToolsService.packageUpAHierarchicalListAsJson (propertyTree)
 
@@ -37,8 +42,12 @@ class VariantSearchController {
         toReturn.is_error = result.is_error
         toReturn.numRecords = result.numRecords
 
-        for( int j=0; j < keys.length; j++) {
-            def key = keys[j];
+        keys.each {
+            def key = it;
+            // if we don't want the NONE phenotype, skip it
+            if(!getNonePhenotype && key == "OTHER") {
+                return
+            }
             translatedNames[key] = new ArrayList<String>()
             String[] termsToProcess = result.dataset[key]
             for( int i=0; i < termsToProcess.length; i++ ) {
@@ -100,8 +109,12 @@ class VariantSearchController {
         toReturn.is_error = result.is_error
         toReturn.numRecords = result.numRecords
 
-        for( int j=0; j < keys.length; j++) {
-            def key = keys[j];
+        keys.each {
+            def key = it;
+            // this particular method shouldn't return the NONE phenotype
+            if(key == "OTHER") {
+                return
+            }
             translatedNames[key] = new ArrayList<String>()
             String[] termsToProcess = result.dataset[key]
             for( int i=0; i < termsToProcess.length; i++ ) {
@@ -454,16 +467,14 @@ class VariantSearchController {
      * @return
      */
     def retrieveDatasetsAjax() {
-        List <String> phenotypeList = []
         String dataset = ""
-        if((params.phenotype) && (params.phenotype !=  null )){
-            phenotypeList << params.phenotype
-        }
+        String phenotype = params.phenotype
+
         if ((params.dataset) && (params.dataset !=  null )){
             dataset = params.dataset
         }
 
-        JSONObject result = this.metaDataService.getSampleGroupNameListForPhenotypeAsJson(params.phenotype)
+        JSONObject result = this.metaDataService.getSampleGroupNameListForPhenotypeAsJson(phenotype)
         JSONObject sampleGroupForTransmission  = [sampleGroup: dataset]
 
         render(status: 200, contentType: "application/json") {
@@ -581,12 +592,14 @@ class VariantSearchController {
      * after selecting a data set.
      */
     def retrievePropertiesAjax(){
-        String datasetChoice = []
+        String phenotype = params.phenotype
+
+        String datasetChoice = ""
         if((params.dataset) && (params.dataset !=  null )){
             datasetChoice = params.dataset
         }
 
-        List <String> listOfProperties = metaDataService.getAllMatchingPropertyList(datasetChoice,params.phenotype)
+        List <String> listOfProperties = metaDataService.getAllMatchingPropertyList(datasetChoice, phenotype)
         JSONObject result = sharedToolsService.packageUpAListAsJson(listOfProperties)
 
         // attach translated names
@@ -631,7 +644,6 @@ class VariantSearchController {
         // make the call to REST server
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         JSONObject dataJsonObject = restServerService.postDataQueryRestCall(getDataQueryHolder)
-
         JSONObject resultColumnsJsonObject = resultColumnsToDisplay as JSONObject
 
         LinkedHashMap fullPropertyTree = metaDataService.getFullPropertyTree()
@@ -654,6 +666,9 @@ class VariantSearchController {
         Set<String> metadataNames = metaDataService.parseMetadataNames()
         Set<String> datasetNames = propertiesPerSampleGroupJsonObject.dataset.keySet()
         metadataNames.addAll(datasetNames)
+        // this supports the "no phenotype" stuff--since "none" is not actually in the data,
+        // we need to add it manually here
+        metadataNames.add("none")
 
         JSONObject translationDictionary = []
         metadataNames.each { name ->
