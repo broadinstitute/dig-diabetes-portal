@@ -20,6 +20,7 @@
                             "name": "F_MISS",
                             "type": "FLOAT",
                             "searchable": "FALSE",
+                            "meaning": ["test", "dude"],
                             "sort_order": 70
                         },
                         {
@@ -17954,7 +17955,7 @@
                                     "type": "FLOAT",
                                     "searchable": "TRUE",
                                     "sort_order": 10,
-                                    "meaning": "P_VALUE"
+                                    "meaning": ["P_VALUE"]
                                 },
                                 {
                                     "name": "SE",
@@ -18010,7 +18011,7 @@
                                     "type": "FLOAT",
                                     "searchable": "TRUE",
                                     "sort_order": 10,
-                                    "meaning": "P_VALUE"
+                                    "meaning": ["P_VALUE"]
                                 },
                                 {
                                     "name": "SE",
