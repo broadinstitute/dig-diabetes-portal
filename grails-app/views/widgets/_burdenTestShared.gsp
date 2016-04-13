@@ -318,14 +318,76 @@ div.labelAndInput > input {
         };
 
 
+        var filterAndRun = function (data){
+            var filters = extractFilters();
+            var relevantFilters = _.remove(filters,function(v){return (v.parm.length>0)})
+            var groupedBySampleId =  _.groupBy(data.metaData.variants,
+                                               function(inv){
+                                                    return _.find(_.find(inv,
+                                                                  function(o,i){
+                                                                       return _.find(o,function(v,k){
+                                                                            return k==="ID"
+                                                                       })
+                                                                  })["ID"],
+                                                                  function(key,val){
+                                                                      return val;
+                                                                  })
+                                               });
+            var samplesWeWant = [];
+            _.forEach(groupedBySampleId,function(sampleVals,sampleId){
+                 var rejectSample = false;
+                 _.forEach(sampleVals,function(propObject){
+                     _.forEach(propObject,function(propVal){
+                         _.forEach(propVal,function(dsObject,propName){
+                            var filter = _.find(relevantFilters,function(filt){return (filt.name===propName)});
+                            if (filter){
+                                var propertyValue;
+                                 _.forEach(dsObject,function(propVal,dsName){
+                                    propertyValue = propVal;
+                                })
+                                var numericalFilterValue = parseFloat(filter.parm);
+                                if (filter.cmp==="1"){
+                                   if (propertyValue>=numericalFilterValue){
+                                      rejectSample = true;
+                                   }
+                                } else if (filter.cmp==="2"){
+                                   if (propertyValue<=numericalFilterValue){
+                                      rejectSample = true;
+                                   }
+                                }
+                            }
 
+                         })
+                     })
+                 })
+                 if (!rejectSample){
+                    samplesWeWant.push('"'+sampleId+'"');
+                 }
+            });
+            var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
+            runBurdenTest(samplesWeWant);
+        };
 
 
         /**
          *  run the burden test, then display the results.  We will need to start by extracting
          *  the data fields we need from the DOM.
          */
-        var runBurdenTest = function (){
+        var runBurdenTest = function (samplesWeWant){
+
+
+            var collectingFilterValues = function (){
+               var filterStrings = [];
+               _.forEach( extractFilters(), function(filterObject){
+                   var oneFilter = [];
+                   _.forEach( filterObject, function(value, key){
+                       oneFilter.push("\""+key+"\": \""+value+"\"");
+                   });
+                   filterStrings.push("{"+oneFilter.join(",\n")+"}");
+               } );
+               return "{\"filters\":[\n" + filterStrings.join(",") + "\n]}";
+            }
+
 
             var collectingCovariateValues = function (){
                var pcCovariates = [];
@@ -364,6 +426,7 @@ div.labelAndInput > input {
                 url: "${createLink(controller: 'variantInfo', action: 'burdenTestAjax')}",
                 data: {variantName: '<%=variantIdentifier%>',
                        covariates: collectingCovariateValues(),
+                       samples: "{\"samples\":[\n" + samplesWeWant.join(",") + "\n]}",
                        traitFilterSelectedOption: traitFilterSelectedOption
                 },
                 async: true,
@@ -521,59 +584,209 @@ div.labelAndInput > input {
                     .call(chart.boxWhisker);
 
         };
-        var retrieveSampleInformation = function (variantName){
+
+        function extractFilters(){
+            var allFilters =  $('.considerFilter')
+            var requestedFilters = [];
+            for  ( var i = 0 ; i < allFilters.length ; i++ )   {
+                var filterRowDom = $(allFilters[i]);
+                var  filterId = $(allFilters[i]).attr('id');
+                var partsOfFilterName = filterId.split("_");
+                var  filterName = partsOfFilterName[1];
+                var filterCheck = filterRowDom.find('.utilize');
+                var filterParm = filterRowDom.find('.filterParm');
+                var filterCmp = filterRowDom.find('.filterCmp');
+                if (filterCheck.is(':checked')){
+                     var  dataSetMap = {"name":filterName,
+                        "parm":filterParm.val(),
+                        "cmp":filterCmp.val()};
+                    requestedFilters.push(dataSetMap);
+                }
+            }
+            return requestedFilters;
+        };
+
+
+
+
+
+        %{--var retrieveSampleInformation = function (variantName){--}%
+            %{--$.ajax({--}%
+                %{--cache: false,--}%
+                %{--type: "post",--}%
+                %{--url: "${createLink(controller: 'variantInfo', action: 'retrieveSampleListAjax')}",--}%
+                %{--data: {},--}%
+                %{--async: true,--}%
+                %{--success: function (data) {--}%
+
+                   %{--if ((typeof data !== 'undefined') && (data)){--}%
+                       %{--//first check for error conditions--}%
+                        %{--if (!data){--}%
+                            %{--console.log('null return data from burdenTestTraitSelectionOptionsAjax');--}%
+                        %{--} else if (data.is_error) {--}%
+                            %{--console.log('burdenTestAjax returned is_error ='+data.is_error +'.');--}%
+                        %{--}--}%
+                        %{--else if ((typeof data.metaData === 'undefined') ||--}%
+                                 %{--(typeof data.metaData.variants === 'undefined') ||--}%
+                                 %{--(data.metaData.variants.length <= 0)){--}%
+                             %{--console.log('burdenTestAjax returned undefined (or length = 0) for options.');--}%
+                       %{--}else {--}%
+                            %{--for ( var i = 0 ; i < data.metaData.variants.length ; i++ )  {--}%
+                               %{--var sampleFields =  data.metaData.variants[i] ;--}%
+                               %{--for ( var j = 0 ; j < sampleFields.length ; j++ ) {--}%
+                                   %{--var fieldObject =  sampleFields[j];--}%
+                                   %{--for (var dataSetName in fieldObject) {--}%
+                                       %{--if(!fieldObject.hasOwnProperty(dataSetName)) continue;--}%
+                                       %{--var dataSetObject =  fieldObject[dataSetName];--}%
+                                       %{--for (var propertyName in dataSetObject) {--}%
+                                           %{--if(!dataSetObject.hasOwnProperty(propertyName)) continue;--}%
+                                           %{--var dataSetValue =  dataSetObject[propertyName];--}%
+                                           %{--if (dataSetName in sampleInfo)  {--}%
+                                               %{--sampleInfo [dataSetName].push(dataSetValue);--}%
+                                           %{--} else {--}%
+                                               %{--sampleInfo [dataSetName]   = [dataSetValue] ;--}%
+                                           %{--}--}%
+                                       %{--}--}%
+                                   %{--}--}%
+                               %{--}--}%
+                            %{--}--}%
+                        %{--}--}%
+                    %{--}--}%
+                    %{--var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);--}%
+                    %{--var plotHoldingStructure = $('#boxWhiskerPlot');--}%
+                    %{--plotHoldingStructure.empty();--}%
+                    %{--for ( var i = 0 ; i < displayableData.length ; i++ ){--}%
+                        %{--var singleElement = displayableData[i];--}%
+                        %{--var elementName = singleElement.name;--}%
+                        %{--var divElementName = 'bwp_'+elementName;--}%
+                        %{--plotHoldingStructure.append('<div id="'+divElementName+'"></div>');--}%
+                        %{--$('#'+divElementName).hide();--}%
+                        %{--buildBoxWhiskerPlot([singleElement],'#'+divElementName);--}%
+                    %{--}--}%
+                %{--},--}%
+                %{--error: function (jqXHR, exception) {--}%
+                    %{--core.errorReporter(jqXHR, exception);--}%
+                %{--}--}%
+            %{--});--}%
+        %{--}; // fillFilterDropDown--}%
+
+
+
+       var groupValuesByPhenotype = function(data){
+           var sampleInfo = {};
+           if ((typeof data !== 'undefined') && (data)){
+               //first check for error conditions
+                if (!data){
+                    console.log('null return data from burdenTestTraitSelectionOptionsAjax');
+                } else if (data.is_error) {
+                    console.log('burdenTestAjax returned is_error ='+data.is_error +'.');
+                }
+                else if ((typeof data.metaData === 'undefined') ||
+                         (typeof data.metaData.variants === 'undefined') ||
+                         (data.metaData.variants.length <= 0)){
+                     console.log('burdenTestAjax returned undefined (or length = 0) for options.');
+               }else {
+                    for ( var i = 0 ; i < data.metaData.variants.length ; i++ )  {
+                       var sampleFields =  data.metaData.variants[i] ;
+                       for ( var j = 0 ; j < sampleFields.length ; j++ ) {
+                           var fieldObject =  sampleFields[j];
+                           for (var dataSetName in fieldObject) {
+                               if(!fieldObject.hasOwnProperty(dataSetName)) continue;
+                               var dataSetObject =  fieldObject[dataSetName];
+                               for (var propertyName in dataSetObject) {
+                                   if(!dataSetObject.hasOwnProperty(propertyName)) continue;
+                                   var dataSetValue =  dataSetObject[propertyName];
+                                   if (dataSetName in sampleInfo)  {
+                                       sampleInfo [dataSetName].push(dataSetValue);
+                                   } else {
+                                       sampleInfo [dataSetName]   = [dataSetValue] ;
+                                   }
+                               }
+                           }
+                       }
+                    }
+                }
+            }
+            return sampleInfo;
+       }
+
+
+
+
+        var utilizeSampleInfoForDistributionPlots = function (data){
+            var sampleInfo = groupValuesByPhenotype(data);
+            var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
+            var plotHoldingStructure = $('#boxWhiskerPlot');
+            plotHoldingStructure.empty();
+            for ( var i = 0 ; i < displayableData.length ; i++ ){
+                var singleElement = displayableData[i];
+                var elementName = singleElement.name;
+                var divElementName = 'bwp_'+elementName;
+                plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
+                $('#'+divElementName).hide();
+                buildBoxWhiskerPlot([singleElement],'#'+divElementName);
+            }
+        };
+
+
+
+
+
+
+        var retrieveSampleInformation = function (data, callback){
             $.ajax({
                 cache: false,
                 type: "post",
                 url: "${createLink(controller: 'variantInfo', action: 'retrieveSampleListAjax')}",
-                data: {},
+                data: data,
                 async: true,
                 success: function (data) {
-
-                   if ((typeof data !== 'undefined') && (data)){
-                       //first check for error conditions
-                        if (!data){
-                            console.log('null return data from burdenTestTraitSelectionOptionsAjax');
-                        } else if (data.is_error) {
-                            console.log('burdenTestAjax returned is_error ='+data.is_error +'.');
-                        }
-                        else if ((typeof data.metaData === 'undefined') ||
-                                 (typeof data.metaData.variants === 'undefined') ||
-                                 (data.metaData.variants.length <= 0)){
-                             console.log('burdenTestAjax returned undefined (or length = 0) for options.');
-                       }else {
-                            for ( var i = 0 ; i < data.metaData.variants.length ; i++ )  {
-                               var sampleFields =  data.metaData.variants[i] ;
-                               for ( var j = 0 ; j < sampleFields.length ; j++ ) {
-                                   var fieldObject =  sampleFields[j];
-                                   for (var dataSetName in fieldObject) {
-                                       if(!fieldObject.hasOwnProperty(dataSetName)) continue;
-                                       var dataSetObject =  fieldObject[dataSetName];
-                                       for (var propertyName in dataSetObject) {
-                                           if(!dataSetObject.hasOwnProperty(propertyName)) continue;
-                                           var dataSetValue =  dataSetObject[propertyName];
-                                           if (dataSetName in sampleInfo)  {
-                                               sampleInfo [dataSetName].push(dataSetValue);
-                                           } else {
-                                               sampleInfo [dataSetName]   = [dataSetValue] ;
-                                           }
-                                       }
-                                   }
-                               }
-                            }
-                        }
-                    }
-                    var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
-                    var plotHoldingStructure = $('#boxWhiskerPlot');
-                    plotHoldingStructure.empty();
-                    for ( var i = 0 ; i < displayableData.length ; i++ ){
-                        var singleElement = displayableData[i];
-                        var elementName = singleElement.name;
-                        var divElementName = 'bwp_'+elementName;
-                        plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
-                        $('#'+divElementName).hide();
-                        buildBoxWhiskerPlot([singleElement],'#'+divElementName);
-                    }
+//                   var sampleInfo = {};
+//                   if ((typeof data !== 'undefined') && (data)){
+//                       //first check for error conditions
+//                        if (!data){
+//                            console.log('null return data from burdenTestTraitSelectionOptionsAjax');
+//                        } else if (data.is_error) {
+//                            console.log('burdenTestAjax returned is_error ='+data.is_error +'.');
+//                        }
+//                        else if ((typeof data.metaData === 'undefined') ||
+//                                 (typeof data.metaData.variants === 'undefined') ||
+//                                 (data.metaData.variants.length <= 0)){
+//                             console.log('burdenTestAjax returned undefined (or length = 0) for options.');
+//                       }else {
+//                            for ( var i = 0 ; i < data.metaData.variants.length ; i++ )  {
+//                               var sampleFields =  data.metaData.variants[i] ;
+//                               for ( var j = 0 ; j < sampleFields.length ; j++ ) {
+//                                   var fieldObject =  sampleFields[j];
+//                                   for (var dataSetName in fieldObject) {
+//                                       if(!fieldObject.hasOwnProperty(dataSetName)) continue;
+//                                       var dataSetObject =  fieldObject[dataSetName];
+//                                       for (var propertyName in dataSetObject) {
+//                                           if(!dataSetObject.hasOwnProperty(propertyName)) continue;
+//                                           var dataSetValue =  dataSetObject[propertyName];
+//                                           if (dataSetName in sampleInfo)  {
+//                                               sampleInfo [dataSetName].push(dataSetValue);
+//                                           } else {
+//                                               sampleInfo [dataSetName]   = [dataSetValue] ;
+//                                           }
+//                                       }
+//                                   }
+//                               }
+//                            }
+//                        }
+//                    }
+                    callback(data);
+//                    var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
+//                    var plotHoldingStructure = $('#boxWhiskerPlot');
+//                    plotHoldingStructure.empty();
+//                    for ( var i = 0 ; i < displayableData.length ; i++ ){
+//                        var singleElement = displayableData[i];
+//                        var elementName = singleElement.name;
+//                        var divElementName = 'bwp_'+elementName;
+//                        plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
+//                        $('#'+divElementName).hide();
+//                        buildBoxWhiskerPlot([singleElement],'#'+divElementName);
+//                    }
                 },
                 error: function (jqXHR, exception) {
                     core.errorReporter(jqXHR, exception);
@@ -583,11 +796,17 @@ div.labelAndInput > input {
 
 
 
+
+
+
+
         // public routines are declared below
         return {
             retrieveExperimentMetadata:retrieveExperimentMetadata,
             retrieveSampleInformation:retrieveSampleInformation,
+            filterAndRun:filterAndRun,
             runBurdenTest:runBurdenTest,
+            utilizeSampleInfoForDistributionPlots: utilizeSampleInfoForDistributionPlots,
             fillFilterDropDown:fillFilterDropDown,
             retrieveMatchingDataSets:retrieveMatchingDataSets,
             retrievePhenotypes:retrievePhenotypes,
@@ -601,7 +820,7 @@ $( document ).ready( function (){
   // mpgSoftware.burdenTestShared.fillFilterDropDown ();
  // mpgSoftware.burdenTestShared.retrievePhenotypes('#phenotypeFilter');
   mpgSoftware.burdenTestShared.retrieveExperimentMetadata( '#datasetFilter' );
-  mpgSoftware.burdenTestShared.retrieveSampleInformation  ( '<%=variantIdentifier%>' );
+  mpgSoftware.burdenTestShared.retrieveSampleInformation  ( '<%=variantIdentifier%>', mpgSoftware.burdenTestShared.utilizeSampleInfoForDistributionPlots  );
 //  mpgSoftware.burdenTestShared.retrieveSampleMetadata( '#phenotypeFilter' );
 } );
 
@@ -690,23 +909,23 @@ $( document ).ready( function (){
 
 
                     <div id="filterFloatTemplate" style="display: none;">
-                        <div class="row">
+                        <div class="row considerFilter" id="filter_{{name}}">
                             <div class="col-sm-1">
-                                <input id="use{{name}}" type="checkbox" name="use{{name}}" value="{{name}}" checked/></td>
+                                <input class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}" value="{{name}}" checked/></td>
                             </div>
                             <div class="col-sm-3">
                                 <span onmouseover="displaySampleDistribution('{{name}}', '#boxWhiskerPlot')">{{name}}</span>
                             </div>
                             <div class="col-sm-3">
-                                <select class="form-control" data-selectfor="bmiComparator">
-                                    <option>&lt;</option>
-                                    <option>&gt;</option>
-                                    <option>=</option>
+                                <select id="cmp{{name}}" class="form-control filterCmp" data-selectfor="{{name}}Comparator">
+                                    <option value="1">&lt;</option>
+                                    <option value="2">&gt;</option>
+                                    <option value="3">=</option>
                                 </select>
                             </div>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" data-type="propertiesInput"
-                                       data-prop="bmiValue" data-translatedname="P-value">
+                                <input  id="inp{{name}}" type="text" class="filterParm form-control" data-type="propertiesInput"
+                                       data-prop="{{name}}Value" data-translatedname="{{name}}">
                             </div>
 
                         </div>
@@ -943,7 +1162,8 @@ $( document ).ready( function (){
                         <div class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter">
                             <button id="singlebutton" name="singlebutton" style="height: 80px"
                                     class="btn btn-primary btn-lg burden-test-btn"
-                                    onclick="mpgSoftware.burdenTestShared.runBurdenTest()">Run</button>
+                                    onclick="mpgSoftware.burdenTestShared.retrieveSampleInformation  ( '', mpgSoftware.burdenTestShared.filterAndRun  )">Run</button>
+                                    %{--onclick="mpgSoftware.burdenTestShared.runBurdenTest()">Run</button>--}%
                         </div>
                     </div>
                 </div>

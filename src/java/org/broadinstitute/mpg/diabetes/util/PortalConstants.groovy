@@ -63,6 +63,7 @@ class PortalConstants {
     // burden test json keys
     public final static String JSON_BURDEN_VARIANTS_KEY                 = "variants";
     public final static String JSON_BURDEN_COVARIATES_KEY               = "covariates";
+    public final static String JSON_BURDEN_SAMPLES_KEY                  = "samples";
     public final static String JSON_BURDEN_FILTERS_KEY                  = "filters";
     public final static String JSON_BURDEN_DATASET_KEY                  = "study";
     public final static String JSON_BURDEN_DATA_VERSION_KEY             = "mdv";

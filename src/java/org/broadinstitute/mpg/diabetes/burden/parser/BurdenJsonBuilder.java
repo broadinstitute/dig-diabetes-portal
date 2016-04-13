@@ -50,13 +50,13 @@ public class BurdenJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public JSONObject getBurdenPostJson(int dataVersion, String phenotype, List<String> variantList, List<String> covariatesList) throws PortalException {
+    public JSONObject getBurdenPostJson(int dataVersion, String phenotype, List<String> variantList, List<String> covariatesList, List<String> sampleList) throws PortalException {
         // local variables
         JSONObject finalObject;
 
         // create the json object
         try {
-            finalObject = new JSONObject(this.getBurdenPostJsonString(dataVersion, phenotype, variantList, covariatesList));
+            finalObject = new JSONObject(this.getBurdenPostJsonString( dataVersion, phenotype, variantList, covariatesList,  sampleList));
 
         } catch (JSONException exception) {
             throw new PortalException(("got json creation exception for burden test payload generation: " + exception.getMessage()));
@@ -74,7 +74,7 @@ public class BurdenJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public String getBurdenPostJsonString(int dataVersion, String phenotype, List<String> variantList, List<String> covariatesList) throws PortalException {
+    public String getBurdenPostJsonString(int dataVersion, String phenotype, List<String> variantList, List<String> covariatesList, List<String> sampleList) throws PortalException {
         // local variables
         String finalString;
         StringBuilder stringBuilder = new StringBuilder();
@@ -123,6 +123,22 @@ public class BurdenJsonBuilder {
             for (int i = 0; i < variantList.size(); i++) {
                 stringBuilder.append("\"" + variantList.get(i) + "\"");
                 if (i < variantList.size() - 1) {
+                    stringBuilder.append(",");
+                }
+            }
+        }
+        stringBuilder.append("],");
+
+        // create the covariates list json object string
+        stringBuilder.append("\"");
+        stringBuilder.append(PortalConstants.JSON_BURDEN_SAMPLES_KEY);
+        stringBuilder.append("\" : [");
+        if (sampleList == null) {
+            throw new PortalException("Got null sampleList  for the burden test");
+        } else {
+            for (int i = 0; i < sampleList.size(); i++) {
+                stringBuilder.append("\"" + sampleList.get(i) + "\"");
+                if (i < sampleList.size() - 1) {
                     stringBuilder.append(",");
                 }
             }

@@ -226,12 +226,13 @@ class VariantInfoController {
         }
 
         JsonSlurper slurper = new JsonSlurper()
-        JSONObject jsonObject = slurper.parseText(params.covariates)
+        JSONObject covariateJsonObject = slurper.parseText(params.covariates)
+        JSONObject sampleJsonObject = slurper.parseText(params.samples)
         // cast the parameters
         String variantName = params.variantName;
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
-        JSONObject result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantName, jsonObject);
+        JSONObject result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantName, covariateJsonObject, sampleJsonObject );
 
         // send json response back
         render(status: 200, contentType: "application/json") {result}
