@@ -175,7 +175,6 @@ var variantProcessing = (function () {
                                                          .groupBy('phenotype').value();
 
             var newDataSetSpecificObject = _.chain(arrayOfFields).filter({phenotype: 'NONE'}).groupBy('samplegroup').value();
-            console.log('newDataSetSpecificObject', newDataSetSpecificObject);
 
             // then, for each phenotype, grab all of the common dataset properties
             _.forEach(collectingObject, function(arrayOfProperties, phenotype) {

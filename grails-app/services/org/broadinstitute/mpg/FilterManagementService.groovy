@@ -78,6 +78,7 @@ class FilterManagementService {
             sampleGroupProperties["orvalue"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "ODDS_RATIO" )
             sampleGroupProperties["betavalue"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "BETA" )
             sampleGroupProperties["technology"] =  metaDataService.getTechnologyPerSampleGroup( sampleGroup.systemId )
+            sampleGroupProperties["maf"] = metaDataService.getSampleGroupProperty(sampleGroup.systemId, "MAF")?.getName()
             sampleGroupProperties["count"] =  "${sampleGroup.subjectsNumber}"
             sampleGroupProperties["translation"] =  g.message(code: 'metadata.' + sampleGroup.systemId, default: sampleGroup.systemId);
             mapSampleGroupsToProperties[sampleGroup.systemId] = sampleGroupProperties

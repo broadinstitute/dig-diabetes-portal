@@ -595,7 +595,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     JSONObject retrieveVariantInfoByName(String variantId) {
         String filters = codedfilterByVariant(variantId)
-        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["CHROM", "POS", "VAR_ID"])
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["CHROM",
+                                                                         "POS",
+                                                                         "VAR_ID",
+                                                                         "DBSNP_ID",
+                                                                         "GENE",
+                                                                         "CLOSEST_GENE",
+                                                                         "TRANSCRIPT_ANNOT"])
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filters], searchBuilderService, metaDataService)
         JsonSlurper slurper = new JsonSlurper()
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
@@ -749,6 +755,10 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             String pValue = linkedHashMap.pvalue
             String orValue = linkedHashMap.orvalue
             String betaValue = linkedHashMap.betavalue
+            String mafValue = linkedHashMap.maf
+            if(mafValue && mafValue.length() > 0) {
+                addColumnsForDProperties(resultColumnsToDisplay, mafValue, dataSet)
+            }
             if ((pValue) && (pValue.length() > 0)) {
                 addColumnsForPProperties(resultColumnsToDisplay, phenotype,
                         dataSet,
@@ -781,119 +791,120 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     public JSONObject combinedVariantAssociationStatistics(String variantName, String phenotype, List<LinkedHashMap> linkedHashMapList) {
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
-        //  String attribute = "T2D"
-        JSONObject returnValue
-        List<Integer> dataSeteList = [1]
-        List<String> pValueList = [1]
-        JSONObject toReturn = [
-            results: new ArrayList<JSONObject>()
+        JSONObject datasetObject = [
+            pVals: new ArrayList<JSONObject>()
         ]
-        for (int j = 0; j < dataSeteList.size(); j++) {
-            JSONObject datasetObject = [
-                    dataset: dataSeteList[j],
-                    pVals: new ArrayList<JSONObject>()
-            ]
-            for (int i = 0; i < pValueList.size(); i++) {
 
-                JSONObject apiResults = variantAssociationStatisticsSection(variantName, phenotype, linkedHashMapList)
-                if (apiResults.is_error == false) {
-                    if ((apiResults.variants) && (apiResults.variants[0]) && (apiResults.variants[0][0])) {
-                        def variant = apiResults.variants[0];
+        JSONObject apiResults = variantAssociationStatisticsSection(variantName, phenotype, linkedHashMapList)
+        if (apiResults.is_error == false) {
+            if ((apiResults.variants) && (apiResults.variants[0]) && (apiResults.variants[0][0])) {
+                def variant = apiResults.variants[0];
 
-                        List<String> commonProperties = ['DBSNP_ID', 'VAR_ID', 'GENE', 'CLOSEST_GENE', 'MOST_DEL_SCORE']
-                        for (String commonProperty in commonProperties) {
+                List<String> commonProperties = ['DBSNP_ID', 'VAR_ID', 'GENE', 'CLOSEST_GENE', 'MOST_DEL_SCORE']
+                for (String commonProperty in commonProperties) {
+                    JSONObject newItem = [
+                        dataset: "common",
+                        level: commonProperty,
+                        count: apiResults.variants[0][commonProperty].findAll { it }[0]
+                    ]
+                    datasetObject.pVals << newItem
+                }
+
+                List<String> pValueNames = linkedHashMapList.collect { it.pvalue }.unique()
+                LinkedHashMap pValueDataSets = [:]
+                for (String pValueName in pValueNames) {
+                    pValueDataSets[pValueName] = linkedHashMapList.findAll { it.pvalue == pValueName }.collect {
+                        it.name
+                    }
+                }
+                List<String> orValueNames = linkedHashMapList.collect { it.orvalue }.unique()
+                LinkedHashMap orValueDataSets = [:]
+                for (String orValueName in orValueNames) {
+                    orValueDataSets[orValueName] = linkedHashMapList.findAll {
+                        it.orvalue == orValueName
+                    }.collect { it.name }
+                }
+                List<String> betaValueNames = linkedHashMapList.collect { it.betavalue }.unique()
+                LinkedHashMap betaValueDataSets = [:]
+                for (String betaValueName in betaValueNames) {
+                    betaValueDataSets[betaValueName] = linkedHashMapList.findAll {
+                        it.betavalue == betaValueName
+                    }.collect { it.name }
+                }
+
+                def mafObject = variant.MAF.findAll { it }[0]
+                for( def s in mafObject ) {
+                    String dataSetName = s.getKey()
+                    Number value = s.getValue()
+                    String dataSetNameTranslated = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
+                    JSONObject newItem = [
+                        meaning: 'MAF',
+                        dataset: dataSetNameTranslated,
+                        level: 'MAF',
+                        count: value
+                    ]
+                    datasetObject.pVals << newItem
+                }
+
+                for (def s in pValueDataSets) {
+                    String pValueName = s.getKey()
+                    List dataSetNames = s.getValue()
+                    if ((dataSetNames) &&
+                            (dataSetNames.size() > 0) &&
+                            (dataSetNames[0])) {
+                        for (String dataSetName in dataSetNames) {
+                            String dataSetNameTranslated = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
                             JSONObject newItem = [
-                                dataset: "common",
-                                level: commonProperty,
-                                count: apiResults.variants[0][commonProperty].findAll { it }[0]
+                                meaning: "p_value",
+                                dataset: dataSetNameTranslated,
+                                level: pValueName,
+                                count: variant[pValueName][dataSetName][phenotype][0]
                             ]
                             datasetObject.pVals << newItem
                         }
-
-                        List<String> pValueNames = linkedHashMapList.collect { it.pvalue }.unique()
-                        LinkedHashMap pValueDataSets = [:]
-                        for (String pValueName in pValueNames) {
-                            pValueDataSets[pValueName] = linkedHashMapList.findAll { it.pvalue == pValueName }.collect {
-                                it.name
-                            }
+                    }
+                }
+                for (def s in orValueDataSets) {
+                    String orValueName = s.getKey()
+                    List dataSetNames = s.getValue()
+                    if ((dataSetNames) &&
+                            (dataSetNames.size() > 0) &&
+                            (dataSetNames[0])) {
+                        for (String dataSetName in dataSetNames) {
+                            String dataSetNameTranslated = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
+                            JSONObject newItem = [
+                                meaning: "or_value",
+                                dataset: dataSetNameTranslated,
+                                level: orValueName,
+                                count: variant[orValueName][dataSetName][phenotype][0]
+                            ]
+                            datasetObject.pVals << newItem
                         }
-                        List<String> orValueNames = linkedHashMapList.collect { it.orvalue }.unique()
-                        LinkedHashMap orValueDataSets = [:]
-                        for (String orValueName in orValueNames) {
-                            orValueDataSets[orValueName] = linkedHashMapList.findAll {
-                                it.orvalue == orValueName
-                            }.collect { it.name }
-                        }
-                        List<String> betaValueNames = linkedHashMapList.collect { it.betavalue }.unique()
-                        LinkedHashMap betaValueDataSets = [:]
-                        for (String betaValueName in betaValueNames) {
-                            betaValueDataSets[betaValueName] = linkedHashMapList.findAll {
-                                it.betavalue == betaValueName
-                            }.collect { it.name }
-                        }
-
-                        for (def s in pValueDataSets) {
-                            String pValueName = s.getKey()
-                            List dataSetNames = s.getValue()
-                            if ((dataSetNames) &&
-                                    (dataSetNames.size() > 0) &&
-                                    (dataSetNames[0])) {
-                                for (String dataSetName in dataSetNames) {
-                                    String dataSetNameTranslated = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
-                                    JSONObject newItem = [
-                                        meaning: "p_value",
-                                        dataset: dataSetNameTranslated,
-                                        level: pValueName,
-                                        count: variant[pValueName][dataSetName][phenotype]
-                                    ]
-                                    datasetObject.pVals << newItem
-                                }
-                            }
-                        }
-                        for (def s in orValueDataSets) {
-                            String orValueName = s.getKey()
-                            List dataSetNames = s.getValue()
-                            if ((dataSetNames) &&
-                                    (dataSetNames.size() > 0) &&
-                                    (dataSetNames[0])) {
-                                for (String dataSetName in dataSetNames) {
-                                    String dataSetNameTranslated = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
-                                    JSONObject newItem = [
-                                        meaning: "or_value",
-                                        dataset: dataSetNameTranslated,
-                                        level: orValueName,
-                                        count: variant[orValueName][dataSetName][phenotype]
-                                    ]
-                                    datasetObject.pVals << newItem
-                                }
-                            }
-                        }
-                        for (def s in betaValueDataSets) {
-                            String betaValueName = s.getKey()
-                            List dataSetNames = s.getValue()
-                            if ((dataSetNames) &&
-                                    (dataSetNames.size() > 0) &&
-                                    (dataSetNames[0])) {
-                                for (String dataSetName in dataSetNames) {
-                                    String dataSetNameTranslated = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
-                                    JSONObject newItem = [
-                                        meaning: "beta_value",
-                                        dataset: dataSetNameTranslated,
-                                        level: betaValueName,
-                                        count: variant[betaValueName][dataSetName][phenotype]
-                                    ]
-                                    datasetObject.pVals << newItem
-                                }
-                            }
-
+                    }
+                }
+                for (def s in betaValueDataSets) {
+                    String betaValueName = s.getKey()
+                    List dataSetNames = s.getValue()
+                    if ((dataSetNames) &&
+                            (dataSetNames.size() > 0) &&
+                            (dataSetNames[0])) {
+                        for (String dataSetName in dataSetNames) {
+                            String dataSetNameTranslated = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
+                            JSONObject newItem = [
+                                meaning: "beta_value",
+                                dataset: dataSetNameTranslated,
+                                level: betaValueName,
+                                count: variant[betaValueName][dataSetName][phenotype][0]
+                            ]
+                            datasetObject.pVals << newItem
                         }
                     }
 
                 }
             }
-            toReturn.results << datasetObject
+
         }
-        return toReturn
+        return datasetObject
     }
 
 

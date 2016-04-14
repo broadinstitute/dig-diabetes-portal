@@ -26,39 +26,20 @@ class VariantInfoController {
      */
     def variantInfo() {
         String locale = RequestContextUtils.getLocale(request)
+        JSONObject phenotypeDatasetMapping = metaDataService.getPhenotypeDatasetMapping()
         String variantToStartWith = params.id
         if (variantToStartWith) {
 
-/*
-            // get the chrom/pos for the LZ widget
-            JSONObject jsonObject =  restServerService.retrieveVariantInfoByName (variantToStartWith.trim())
-            if (jsonObject != null) {
-                log.info(jsonObject)
-                JSONArray propertyArray = jsonObject?.getJSONArray("variants")?.get(0);
-                String chromosome = null;
-                Integer position = null;
-                log.info(jsonObject?.toString())
-
-                for (JSONObject property : propertyArray) {
-                    if (property?.getString("CHROM")) {
-                        chromosome = property?.getString("CHROM");
-                    }
-                    if (property?.getString("POS")) {
-                        position = Integer.valueOf(property?.getString("POS"))
-                    }
-                }
-
-                String regionSpecification = chromosome + ":" + ((position > 250) ? (position - 250) : 0) + "-" + (position + 250)
-
-            }
-*/
             render(view: 'variantInfo',
                     model: [variantToSearch: variantToStartWith.trim(),
                             regionSpecification: "5:57000000-58000000",
                             show_gwas      : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                             show_exchp     : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                             show_exseq     : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                            locale:locale ])
+                            locale:locale,
+                            phenotypeDatasetMapping: (phenotypeDatasetMapping as JSON),
+                            restServer: restServerService.currentRestServer()
+                    ])
 
         }
     }
@@ -78,9 +59,6 @@ class VariantInfoController {
         }
     }
 
-
-
-
     def retrieveBurdenMetadataAjax() {
         JSONObject jsonObject =  restServerService.retrieveBurdenMetadata ()
         render(status:200, contentType:"application/json") {
@@ -90,13 +68,13 @@ class VariantInfoController {
 
 
 
-
     def retrieveSampleListAjax() {
         JSONObject jsonObject =  widgetService.getSampleList ()
         render(status:200, contentType:"application/json") {
             [metaData:jsonObject]
         }
     }
+
 
 
 
@@ -126,9 +104,6 @@ class VariantInfoController {
         }
     }
 
-// strictly static, but we need a metadata enhancement to pull these data back dynamically
-//on
-
     /**
      * method to service the ajax call for the 'variant association statistics (pvalue/OR)' section/accordion
      *
@@ -149,11 +124,13 @@ class VariantInfoController {
             linkedHashMap['pvalue']=value.pvalue
             linkedHashMap['orvalue']=value.orvalue
             linkedHashMap['betavalue']=value.betavalue
+            linkedHashMap['maf']=value.maf
             linkedHashMapList << linkedHashMap
         }
         JSONObject jsonObject =  restServerService.combinedVariantAssociationStatistics ( variantId.trim().toUpperCase(),phenotype, linkedHashMapList)
+        jsonObject.displayName = g.message(code: "metadata." + phenotype, default: phenotype);
         render(status:200, contentType:"application/json") {
-            [variantInfo:jsonObject]
+            jsonObject
         }
     }
 
@@ -173,7 +150,7 @@ class VariantInfoController {
 
 
     def sampleMetadataExperimentAjax() {
-        List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "", MetaDataService.METADATA_SAMPLE)
+        List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "mdv1", MetaDataService.METADATA_SAMPLE)
          JSONObject jsonObject = burdenService.convertSampleGroupListToJson (sampleGroupList)
 
         // send json response back

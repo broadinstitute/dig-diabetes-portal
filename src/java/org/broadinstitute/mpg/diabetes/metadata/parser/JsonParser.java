@@ -470,6 +470,7 @@ public class JsonParser {
         // local variables
         PropertyBean property = new PropertyBean();
         String tempJsonValue;
+        JSONArray tempArray = null;
 
         // get values and put in new object
         try {
@@ -486,9 +487,21 @@ public class JsonParser {
 
             // DIGP-198: add meaning; backward compatible for now and also assumes only one value
             if (jsonObject.containsKey(PortalConstants.JSON_MEANING_KEY)) {
-                tempJsonValue = jsonObject.getString(PortalConstants.JSON_MEANING_KEY);
-                if (tempJsonValue != null) {
-                    property.addMeaning(tempJsonValue);
+                // DIGP-320: adding capability of parsing json array meaning fields; stay backwards compatible with single string meaning fields, which will be deprecated later
+                tempArray = jsonObject.optJSONArray(PortalConstants.JSON_MEANING_KEY);
+                // array will be null object at the key is not an array
+                if (tempArray != null) {
+                    for (int i = 0; i < tempArray.size(); i++) {
+                        String value = tempArray.getString(i);
+                        if ((value != null) && (value.trim().length() > 0)) {
+                            property.addMeaning(value.trim());
+                        }
+                    }
+                } else {
+                    tempJsonValue = jsonObject.getString(PortalConstants.JSON_MEANING_KEY);
+                    if (tempJsonValue != null) {
+                        property.addMeaning(tempJsonValue);
+                    }
                 }
             }
             property.setParent(parent);

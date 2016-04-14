@@ -1,6 +1,7 @@
 package org.broadinstitute.mpg.diabetes
 import groovy.json.JsonSlurper
 import grails.transaction.Transactional
+import org.broadinstitute.mpg.FilterManagementService
 import org.broadinstitute.mpg.MetadataUtilityService
 import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SharedToolsService
@@ -35,6 +36,7 @@ class MetaDataService {
     RestServerService restServerService
     SharedToolsService sharedToolsService
     MetadataUtilityService metadataUtilityService
+    FilterManagementService filterManagementService
     def grailsApplication
 
     def serviceMethod() {
@@ -453,8 +455,24 @@ class MetaDataService {
         return groupList;
     }
 
+    /**
+     * Get a JSON object listing every phenotype and the top-level datasets containing data for that phenotype
+     * @return
+     */
+    public JSONObject getPhenotypeDatasetMapping() {
+        List<String> everyPhenotype = getEveryPhenotype()
+        JSONObject mapping = []
 
+        List<String> technologies = ["GWAS", "ExChip", "ExSeq"]
 
+        everyPhenotype.each {
+            List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups(it ,"",  technologies)
+            JSONObject jsonList = filterManagementService.convertSampleGroupListToJson(fullListOfSampleGroups, it)
+            mapping[it] = jsonList
+        }
+
+        return mapping
+    }
 
     public List<SampleGroup>  getSampleGroupList() {
         List<SampleGroup> groupList;
@@ -957,7 +975,9 @@ class MetaDataService {
             }
         } else if( metadata instanceof ArrayList ) {
             metadata.each { item ->
-                toReturn.addAll(pullOutMetadataNames(item as JSONObject))
+                if ( item instanceof groovy.json.internal.LazyMap) {
+                    toReturn.addAll(pullOutMetadataNames(item as JSONObject))
+                }
             }
         }
 

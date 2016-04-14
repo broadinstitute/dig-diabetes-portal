@@ -2,26 +2,128 @@
 <html>
 <head>
     <meta name="layout" content="t2dGenesCore"/>
-    <r:require modules="variantInfo"/>
+    <r:require modules="variantInfo, igv"/>
     <r:require modules="tableViewer,traitInfo"/>
-    <r:require modules="core"/>
     <r:require modules="boxwhisker"/>
-    <r:require modules="mustache"/>
+    <r:require modules="core, mustache"/>
 
     <r:layoutResources/>
-    <%@ page import="org.broadinstitute.mpg.RestServerService" %>
-    <%
-        RestServerService restServerService = grailsApplication.classLoader.loadClass('org.broadinstitute.mpg.RestServerService').newInstance()
-    %>
     <style>
-    .parentsFont {
-        font-family: inherit;
-        font-weight: inherit;
-        font-size: inherit;
-    }
-    b, strong {
-        color: #052090;
-    }
+        /* for associations at a glance */
+        .smallRow {
+            border-top-style: solid;
+            border-top-width: 2px;
+            border-color: #1fff11;
+            margin-top: 10px;
+            margin-right: 10px;
+            padding: 5px 0px 10px;
+        }
+        .t2d-info-box-wrapper, .other-traits-info-box-wrapper, #primaryPhenotype {
+            padding: 20px 0 0;
+        }
+
+        .t2d-info-box-wrapper ul, .other-traits-info-box-wrapper ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .t2d-info-box-wrapper li, .other-traits-info-box-wrapper li {
+            display:inline-block;
+            vertical-align: top;
+        }
+
+        .normal-info-box-holder h3 {
+            font-size: 20px;
+            line-height: 20px;
+            margin-top: 0;
+        }
+
+        .normal-info-box-holder > ul > li > h3 {
+            font-weight: 400;
+        }
+
+        .normal-info-box-holder span.p-value {
+            display:block;
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: -5px;
+        }
+
+        .normal-info-box-holder span.p-value-significance {
+            font-size: 11px;
+        }
+
+        .normal-info-box-holder span.observation {
+            display:block;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .small-info-box-holder {
+            margin-top: 10px;
+            margin-right: 10px;
+            padding: 5px 0 10px;
+            border-top: solid 2px; /* color is defined on each item */
+        }
+
+        .small-info-box-holder h3 {
+            font-size: 14px;
+            line-height: 14px;
+            font-weight: 600;
+            margin-top: 0;
+        }
+
+        .small-info-box-holder > ul > li > h3 {
+            font-weight: 400;
+        }
+
+        .small-info-box-holder span.p-value {
+            display:block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: -5px;
+        }
+
+        .small-info-box-holder span.p-value-significance {
+            font-size: 9px;
+        }
+
+        .small-info-box-holder span.extra-info {
+            font-size: 12px;
+        }
+
+        .info-box {
+            position: relative;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            text-align: center;
+            /* just in case the text isn't otherwise colored */
+            color: white;
+        }
+
+        .normal-info-box {
+            width: 170px;
+            height: 170px;
+        }
+        .small-info-box {
+            width: 140px;
+            height: 140px;
+        }
+
+        .not-significant-box {
+            border: solid 1px black;
+        }
+
+        .parentsFont {
+            font-family: inherit;
+            font-weight: inherit;
+            font-size: inherit;
+        }
+        b, strong {
+            color: #052090;
+        }
     </style>
 
 
@@ -30,8 +132,6 @@
     <link type="application/x-font-ttf">
     <link type="font/opentype">
 
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css"
-          rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -39,40 +139,9 @@
     <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <!-- IGV js  and css code -->
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-
-    <!-- jQuery UI CSS -->
-    <link rel="stylesheet" type="text/css"
-          href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css"/>
-
-    <!-- Font Awesome CSS -->
-    <link rel="stylesheet" type="text/css"
-          href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"/>
-
-    <!-- jQuery UI CSS -->
-    <link rel="stylesheet" type="text/css"
-          href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/redmond/jquery-ui.css"/>
-
     <!-- Google fonts -->
     <link rel="stylesheet" type="text/css" href='//fonts.googleapis.com/css?family=PT+Sans:400,700'>
     <link rel="stylesheet" type="text/css" href='//fonts.googleapis.com/css?family=Open+Sans'>
-
-    <!-- Font Awesome CSS -->
-    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-
-    <!-- IGV CSS -->
-    <link rel="stylesheet" type="text/css" href="//igv.org/web/beta/igv-beta.css">
-
-    <!-- jQuery UI JS -->
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
-
-    <!-- IGV JS -->
-    <script type="text/javascript" src="//igv.org/web/beta/igv-beta.min.js"></script>
-    <g:set var="restServer" bean="restServerService"/>
-
-
-
 
 
 </head>
@@ -82,32 +151,31 @@
     <img src="${resource(dir: 'images', file: 'ajax-loader.gif')}" alt="Loading"/>
 </div>
 <script>
-    var variant;
+    // generate the texts here so that the appropriate one can be selected in initializePage
+    // the keys (1,2,3,4) map to the assignments for MOST_DEL_SCORE
+    var variantSummaryText = {
+        1: "${g.message(code: "variant.summaryText.proteinTruncating")}",
+        2: "${g.message(code: "variant.summaryText.missense")}",
+        3: "${g.message(code: "variant.summaryText.synonymous")}",
+        4: "${g.message(code: "variant.summaryText.noncoding")}"
+    };
+
     var loading = $('#spinner').show();
     $.ajax({
         cache: false,
         type: "get",
         url:('<g:createLink controller="variantInfo" action="variantAjax"/>'+'/${variantToSearch}'),
-        async: true,
-        success: function (data) {
-            if ( typeof data !== 'undefined')  {
-                mpgSoftware.variantInfo.fillTheFields(data,
-                        "<%=variantToSearch%>",
-                        "<g:createLink controller='trait' action='traitInfo' />",
-                        "${restServer.currentRestServer()}");
-            }
-            $(".pop-top").popover({placement : 'top'});
-            $(".pop-right").popover({placement : 'right'});
-            $(".pop-bottom").popover({placement : 'bottom'});
-            $(".pop-left").popover({ placement : 'left'});
-            $(".pop-auto").popover({ placement : 'auto'});
-            loading.hide();
-        },
-        error: function (jqXHR, exception) {
-            loading.hide();
-            core.errorReporter(jqXHR, exception);
-        }
-    });
+        async: true
+    }).done(function(data, textStatus, jqXHR) {
+        mpgSoftware.variantInfo.initializePage(data,
+                                               "<%=variantToSearch%>",
+                                               "<g:createLink controller='trait' action='traitInfo' />",
+                                               "<%=restServer%>",
+                                               variantSummaryText);
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+        loading.hide();
+        core.errorReporter(jqXHR, errorThrown)
+    })
 </script>
 
 
@@ -119,7 +187,7 @@
             <div class="variant-info-view">
 
                 <h1>
-                    <strong><span id="variantTitle" class="parentsFont"></span></strong>
+                    <strong><span id="variantTitle" class="parentsFont"></span> summary</strong>
                 </h1>
 
                 <g:render template="variantPageHeader"/>
@@ -127,10 +195,10 @@
                 <div class="accordion" id="accordionVariant">
                     <div class="accordion-group">
                         <div class="accordion-heading">
-                            <a class="accordion-toggle  collapsed" data-toggle="collapse"
+                            <a class="accordion-toggle" data-toggle="collapse"
                                data-parent="#accordionVariant"
                                href="#collapseVariantAssociationStatistics">
-                                <h2><strong><g:message code="variant.variantAssociationStatistics.title" default="Is variant associated with T2D"/></strong></h2>
+                                <h2><strong><g:message code="variant.variantAssociationStatistics.title" default="Variant associations at a glance"/></strong></h2>
                             </a>
                         </div>
 
@@ -141,74 +209,77 @@
                         </div>
                     </div>
 
-                <div class="separator"></div>
-                <g:render template="/widgets/associatedStatisticsTraitsPerVariant" model="[variantIdentifier: variantToSearch, locale: locale]"/>
+                    <div class="separator"></div>
+
+                    <g:render template="/widgets/associatedStatisticsTraitsPerVariant" model="[variantIdentifier: variantToSearch, locale: locale]"/>
 
 
-<g:if test="${g.portalTypeString()?.equals('t2d')}">
-    <div class="separator"></div>
 
-    %{--<g:renderBetaFeaturesDisplayedValue>--}%
-        <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>
+        %{--<g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>--}%
 
-        <div class="separator"></div>
-    %{--</g:renderBetaFeaturesDisplayedValue>--}%
+        %{--<div class="separator"></div>--}%
 
-    <g:renderBetaFeaturesDisplayedValue>
-        <g:render template="/widgets/locusZoomPlot"/>
+                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                        <div class="separator"></div>
 
-        <div class="separator"></div>
-    </g:renderBetaFeaturesDisplayedValue>
+                        <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>
 
-    <div class="accordion-group">
-        <div class="accordion-heading">
-            <a class="accordion-toggle  collapsed" data-toggle="collapse"
-               data-parent="#accordionVariant"
-               href="#collapseDiseaseRisk">
-                <h2><strong><g:message code="variant.diseaseRisk.title" default="How does carrier status impact risk"/></strong></h2>
-            </a>
-        </div>
 
-        <g:render template="diseaseRisk"/>
+                        <div class="separator"></div>
 
-    </div>
+                        <g:renderBetaFeaturesDisplayedValue>
+                            <g:render template="/widgets/locusZoomPlot"/>
 
-    <div class="separator"></div>
+                            <div class="separator"></div>
+                        </g:renderBetaFeaturesDisplayedValue>
 
-    <div class="accordion-group">
-        <div class="accordion-heading">
-            <a class="accordion-toggle  collapsed" data-toggle="collapse"
-               data-parent="#accordionVariant"
-               href="#collapseHowCommonIsVariant">
-                <h2><strong><g:message code="variant.howCommonIsVariant.title" default="How common is variant"/></strong></h2>
-            </a>
-        </div>
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle  collapsed" data-toggle="collapse"
+                                   data-parent="#accordionVariant"
+                                   href="#collapseDiseaseRisk">
+                                    <h2><strong><g:message code="variant.diseaseRisk.title" default="How does carrier status impact risk"/></strong></h2>
+                                </a>
+                            </div>
 
-        <g:render template="howCommonIsVariant"/>
+                            <g:render template="diseaseRisk"/>
 
-    </div>
+                        </div>
 
-%{--// Removing the section for now.  Maybe we will want to return it at some point--}%
-%{--// Removing the section for now.  Maybe we will want to return it at some point--}%
-%{--// Removing the section for now.  Maybe we will want to return it at some point--}%
-    %{--<div class="separator"></div>--}%
+                        <div class="separator"></div>
 
-    %{--<div class="accordion-group">--}%
-        %{--<div class="accordion-heading">--}%
-            %{--<a class="accordion-toggle  collapsed" data-toggle="collapse"--}%
-               %{--data-parent="#accordionVariant"--}%
-               %{--href="#collapseCarrierStatusImpact">--}%
-                %{--<h2><strong><g:message code="variant.carrierStatusImpact.title" default="How many carriers in the data set"/></strong></h2>--}%
-            %{--</a>--}%
-        %{--</div>--}%
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle  collapsed" data-toggle="collapse"
+                                   data-parent="#accordionVariant"
+                                   href="#collapseHowCommonIsVariant">
+                                    <h2><strong><g:message code="variant.howCommonIsVariant.title" default="How common is variant"/></strong></h2>
+                                </a>
+                            </div>
 
-        %{--<g:render template="carrierStatusImpact"/>--}%
+                            <g:render template="howCommonIsVariant"/>
 
-    %{--</div>--}%
+                        </div>
 
-</g:if>
+                    %{--// Removing the section for now.  Maybe we will want to return it at some point--}%
+                        %{--<div class="separator"></div>--}%
 
-    <div class="separator"></div>
+                        %{--<div class="accordion-group">--}%
+                            %{--<div class="accordion-heading">--}%
+                                %{--<a class="accordion-toggle  collapsed" data-toggle="collapse"--}%
+                                   %{--data-parent="#accordionVariant"--}%
+                                   %{--href="#collapseCarrierStatusImpact">--}%
+                                    %{--<h2><strong><g:message code="variant.carrierStatusImpact.title" default="How many carriers in the data set"/></strong></h2>--}%
+                                %{--</a>--}%
+                            %{--</div>--}%
+
+                            %{--<g:render template="carrierStatusImpact"/>--}%
+
+                        %{--</div>--}%
+
+                    </g:if>
+
+                    <div class="separator"></div>
 
                     <div class="accordion-group">
                         <div class="accordion-heading">
@@ -241,12 +312,11 @@
                         <div id="collapseIgv" class="accordion-body collapse">
                             <div class="accordion-inner">
                                 <g:render template="../trait/igvBrowser"/>
-                                %{--<g:render template="igvBrowser"/>--}%
                             </div>
                         </div>
                     </div>
 
-                <div class="separator"></div>
+                    <div class="separator"></div>
 
                     <div class="accordion-group">
                         <div class="accordion-heading">

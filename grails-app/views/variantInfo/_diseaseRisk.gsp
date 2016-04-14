@@ -12,7 +12,12 @@
         var mpgSoftware = mpgSoftware || {};
 
         mpgSoftware.diseaseRisk  = (function() {
+            // don't make a server call if we've already done this once
+            var alreadyLoaded = false;
             var loadDiseaseRisk = function () {
+                if(alreadyLoaded) {
+                    return;
+                }
                 $.ajax({
                     cache: false,
                     type: "get",
@@ -54,6 +59,7 @@
                                 (typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch !== 'undefined')) {
                             mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch();
                         }
+                        alreadyLoaded = true;
                     },
                     error: function (jqXHR, exception) {
                         loading.hide();
@@ -69,30 +75,10 @@
         $("#collapseDiseaseRisk").on("show.bs.collapse", function() {
                 mpgSoftware.diseaseRisk.loadDiseaseRisk();
         });
-        $('#collapseDiseaseRisk').on('hide.bs.collapse', function (e) {
-                if ((typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation() !== 'undefined') &&
-                        (typeof mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().launch !== 'undefined')) {
-                    mpgSoftware.variantInfo.retrieveDelayedBurdenTestPresentation().removeBarchart();
-                }
-            });
     </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     <p></p>
     <p class="standardFont">
-        %{--<a class="variantlink" id="linkToVariantsPredictedToTruncate"><span id="bhtLossOfFunctionVariants" class="bhtLossOfFunctionVariants"></span></a> variants are predicted to truncate a protein encoded by <em><%=geneName%></em>.--}%
     %{--Carriers of at least one copy of one of these variants:--}%
     </p>
     <div id="diseaseRiskExists" style="display: block">

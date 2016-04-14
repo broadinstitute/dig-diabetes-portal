@@ -116,24 +116,24 @@ class BurdenService {
         List <String> phenotypeList = []
         List <String> covariateList = []
         List <String> filterList = []
-        List <Property> propertyList = sampleGroup.properties.findAll{it.meaningSet[0].contains("PHENOTYPE")}
+        List <Property> propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("PHENOTYPE")}
         for (Property property in propertyList){
-            if (("T2D" == property.name)||
-                    ("FAST_GLU" == property.name)||
-                    ("FAST_INS" == property.name)||
-                    ("BMI" == property.name)||
-                    ("HDL" == property.name)||
-                    ("LDL" == property.name)) {
+//            if (("T2D" == property.name)||
+//                    ("FAST_GLU" == property.name)||
+//                    ("FAST_INS" == property.name)||
+//                    ("BMI" == property.name)||
+//                    ("HDL" == property.name)||
+//                    ("LDL" == property.name)) {
                 phenotypeList << """{"name":"${property.name}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}"  }""".toString()
-            }
+//            }
         }
-        propertyList = sampleGroup.properties.findAll{it.meaningSet[0].contains("COVARIATE")}
+        propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("COVARIATE")}
         for (Property property in propertyList){
 
                 covariateList << """{"name":"${property.name}"}""".toString()
 
         }
-        propertyList = sampleGroup.properties.findAll{it.meaningSet[0].contains("FILTER")}
+        propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("FILTER")}
         for (Property property in propertyList){
 //            if (("T2D" == property.name)||
 //                    ("AGE" == property.name)||
@@ -288,7 +288,12 @@ class BurdenService {
         }
 
         // call shared method
-        returnJson = this.getBurdenResultForVariantIdList(dataVersion, traitOption, burdenVariantList, covariateJsonObject, sampleJsonObject );
+
+        //kludge: force mdv==1
+
+
+
+        returnJson = this.getBurdenResultForVariantIdList(1, traitOption, burdenVariantList, covariateJsonObject, sampleJsonObject );
 
         // return
         return returnJson;
