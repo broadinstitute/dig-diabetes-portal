@@ -593,7 +593,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                                                          "DBSNP_ID",
                                                                          "GENE",
                                                                          "CLOSEST_GENE",
-                                                                         "TRANSCRIPT_ANNOT"])
+                                                                         "TRANSCRIPT_ANNOT",
+                                                                         "Reference_Allele",
+                                                                         "Effect_Allele"])
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filters], searchBuilderService, metaDataService)
         JsonSlurper slurper = new JsonSlurper()
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
@@ -752,6 +754,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             if(mafValue && mafValue.length() > 0) {
                 addColumnsForDProperties(resultColumnsToDisplay, mafValue, dataSet)
             }
+            addColumnsForDProperties(resultColumnsToDisplay, "count", dataSet)
             if ((pValue) && (pValue.length() > 0)) {
                 addColumnsForPProperties(resultColumnsToDisplay, phenotype,
                         dataSet,
@@ -767,6 +770,14 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                         dataSet,
                         betaValue)
             }
+            // OBSA/OBSU are phenotype-dependent, so they weren't included in the data
+            // previously sent to the client
+            addColumnsForPProperties(resultColumnsToDisplay, phenotype,
+                    dataSet,
+                    "OBSA")
+            addColumnsForPProperties(resultColumnsToDisplay, phenotype,
+                    dataSet,
+                    "OBSU")
         }
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         JsonSlurper slurper = new JsonSlurper()
@@ -833,6 +844,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                     JSONObject newItem = [
                         meaning: 'MAF',
                         dataset: dataSetNameTranslated,
+                        datasetCode: dataSetName,
                         level: 'MAF',
                         count: value
                     ]
@@ -850,6 +862,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                             JSONObject newItem = [
                                 meaning: "p_value",
                                 dataset: dataSetNameTranslated,
+                                // datasetCode is here to support a lookup on the client
+                                datasetCode: dataSetName,
                                 level: pValueName,
                                 count: variant[pValueName][dataSetName][phenotype][0]
                             ]
@@ -868,6 +882,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                             JSONObject newItem = [
                                 meaning: "or_value",
                                 dataset: dataSetNameTranslated,
+                                datasetCode: dataSetName,
                                 level: orValueName,
                                 count: variant[orValueName][dataSetName][phenotype][0]
                             ]
@@ -886,13 +901,49 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                             JSONObject newItem = [
                                 meaning: "beta_value",
                                 dataset: dataSetNameTranslated,
+                                datasetCode: dataSetName,
                                 level: betaValueName,
                                 count: variant[betaValueName][dataSetName][phenotype][0]
                             ]
                             datasetObject.pVals << newItem
                         }
                     }
+                }
 
+                // it would probably be better to not hardcode OBSA/OBSU, but right now
+                // there's not an obviously better way to do it
+                String obsaKey = "OBSA"
+                def obsaObjectList = variant[obsaKey].findAll { it }
+                if(obsaObjectList.size() > 0) {
+                    def obsaObject = obsaObjectList[0] as JSONObject
+                    for (def dataset in obsaObject.keys()) {
+                        String dataSetNameTranslated = g.message(code: 'metadata.' + dataset, default: dataset);
+                        JSONObject newItem = [
+                                meaning: "OBSA",
+                                dataset: dataSetNameTranslated,
+                                datasetCode: dataset,
+                                level  : obsaKey,
+                                count  : variant[obsaKey][dataset][phenotype][0]
+                        ]
+                        datasetObject.pVals << newItem
+                    }
+                }
+
+                String obsuKey = "OBSU"
+                def obsuObjectList = variant[obsuKey].findAll { it }
+                if(obsuObjectList.size() > 0) {
+                    def obsuObject = obsuObjectList[0] as JSONObject
+                    for (def dataset in obsuObject.keys()) {
+                        String dataSetNameTranslated = g.message(code: 'metadata.' + dataset, default: dataset);
+                        JSONObject newItem = [
+                                meaning: "OBSU",
+                                dataset: dataSetNameTranslated,
+                                datasetCode: dataset,
+                                level  : obsuKey,
+                                count  : variant[obsuKey][dataset][phenotype][0]
+                        ]
+                        datasetObject.pVals << newItem
+                    }
                 }
             }
 

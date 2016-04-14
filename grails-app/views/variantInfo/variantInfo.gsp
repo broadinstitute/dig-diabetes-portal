@@ -119,9 +119,6 @@
             font-weight: inherit;
             font-size: inherit;
         }
-        b, strong {
-            color: #052090;
-        }
     </style>
 
 
@@ -270,26 +267,6 @@
                         %{--</div>--}%
 
                     </g:if>
-
-                    <div class="separator"></div>
-
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle  collapsed" data-toggle="collapse"
-                               data-parent="#accordionVariant"
-                               href="#collapseAffectOfVariantOnProtein">
-                                <h2><strong><g:message code="variant.effectOfVariantOnProtein.title" default="What is the effect of this variant on the associated protein"/></strong></h2>
-                            </a>
-                        </div>
-
-                        <div id="collapseAffectOfVariantOnProtein" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <g:render template="effectOfVariantOnProtein"/>
-                            </div>
-                        </div>
-
-                    </div>
-
 
                     <div class="separator"></div>
 

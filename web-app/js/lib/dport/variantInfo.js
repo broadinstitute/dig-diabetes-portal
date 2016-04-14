@@ -6,7 +6,7 @@ var mpgSoftware = mpgSoftware || {};
     mpgSoftware.variantInfo = (function () {
 
         // this defines the maximum places to show after the decimal place the box data
-        var precision = 10;
+        var precision = 3;
         // the upper breakpoints for p-value significance
         var significanceBoundaries = {
             genomeWide: 5e-8,
@@ -16,11 +16,13 @@ var mpgSoftware = mpgSoftware || {};
         // provide the color assignments for the phenotypes
         // if a phenotype is undefined, a random one is generated
         var colorCodeArray = {
+            'All ICH': '#6aa',
             'Bipolar disorder':"#f0b",
             'BMI':"#8bd",
             'Cholesterol':"#3cc",
             'Chronic kidney disease':"#90f",
             'Coronary artery disease':"#fd0",
+            'Deep ICH': '#290',
             'Diastolic blood pressure': '#63c',
             'eGFR-creat (serum creatinine)':"#a00",
             'eGFR-cys (serum cystatin C)':"#9f0",
@@ -33,6 +35,7 @@ var mpgSoftware = mpgSoftware || {};
             'HOMA-B':"#C6F",
             'HOMA-IR':"#0a6",
             'LDL cholesterol':"#77f",
+            'Lobar ICH': '#c9a',
             'Major depressive disorder':"#952",
             'Microalbuminuria':"#060",
             'Proinsulin levels':"#F55",
@@ -47,7 +50,7 @@ var mpgSoftware = mpgSoftware || {};
             'Waist-hip ratio': '#ea7'
         };
 
-        var setVariantTitleAndSummary = function (varId, dbsnpId, chrom, pos, gene, closestGene) {
+        var setVariantTitleAndSummary = function (varId, dbsnpId, chrom, pos, gene, closestGene, refAllele, effectAllele) {
             // load all the headers
             // variantTitle defaults to dbsnpId, or if that's undefined, then varId
             var variantTitle = dbsnpId || varId;
@@ -61,7 +64,7 @@ var mpgSoftware = mpgSoftware || {};
 
             // load the summary text
             $("#chromosomeNumber").append(chrom);
-            $("#coordinateNumber").append(pos);
+            $("#positionNumber").append(pos);
             if(gene && gene != 'Outside') {
                 $('#closestToGeneInfo').hide();
                 $('#geneNumber').append('<a href=../../gene/geneInfo/'+gene+'>' + gene + '</a>.');
@@ -73,33 +76,50 @@ var mpgSoftware = mpgSoftware || {};
                 $('#inGeneInfo').hide();
                 $('#closestToGeneInfo').hide();
             }
+            $("#referenceNucleotide").append(refAllele);
+            $("#variantNucleotide").append(effectAllele);
+            // we're punting this for now, but we don't want to forget it
+            if(new Date() > Date(2016, 8, 1)) {
+                console.error('The genome build number hardcoding needs to be fixed');
+            }
+            $("#genomeBuildNumber").append('hg19');
         };
 
         var displayTranscriptSummaries = function(transcripts, variantSummaryText) {
-            var transcriptTemplate = document.getElementById('transcriptSummaryTemplate').innerHTML;
+            var transcriptTemplate = document.getElementById('transcriptTableTemplate').innerHTML;
             Mustache.parse(transcriptTemplate);
+            // build up the arrays for each field. because the table is horizontal (i.e. the
+            // different variants are named going left to right, not top to bottom) we can't
+            // really use the objects the variants came in. so long as the arrays aren't changed
+            // wrt order, then things should display fine
+            var transcriptName = [];
+            var proteinChange = [];
+            var polyphen = [];
+            var sift = [];
+            var consequence = [];
+
             _.each(transcripts, function(transcriptData, transcriptKey) {
-                // pull out the nucleotide data -- first get rid of all the lower case letters,
-                // then split on /
-                // note that the transcript may not have codon data--if this is the case, don't
-                // do any processing. the template parsing will not display the nucleotide lines if
-                // the nucleotide variables are null
-                var referenceNucleotide= null;
-                var variantNucleotide = null;
-                if(transcriptData.Codons) {
-                    var trimmedNucleotides = transcriptData.Codons.replace(/[a-z]/g, '').split('/');
-                    referenceNucleotide = trimmedNucleotides[0];
-                    variantNucleotide = trimmedNucleotides[1];
-                }
-                var thisTranscriptSummary = Mustache.render(transcriptTemplate, {
-                    transcriptName: transcriptKey,
-                    referenceNucleotide: referenceNucleotide,
-                    variantNucleotide: variantNucleotide,
-                    proteinChange: transcriptData.Protein_change,
-                    consequence: variantSummaryText[transcriptData.MOST_DEL_SCORE]
-                });
-                $('#transcriptSummaries').append(thisTranscriptSummary);
+                transcriptName.push(transcriptKey);
+                proteinChange.push(transcriptData.Protein_change);
+                polyphen.push(transcriptData.PolyPhen_PRED);
+                sift.push(transcriptData.SIFT_PRED);
+                consequence.push(transcriptData.Consequence);
             });
+
+            var renderData = {
+                transcriptName: transcriptName,
+                transcriptNameText: function() {
+                    // todo: figure out how to link to Ensembl
+                    return this;
+                },
+                proteinChange: proteinChange,
+                polyphen: polyphen,
+                sift: sift,
+                consequence: consequence
+            };
+
+            var transcriptTableHtml = Mustache.render(transcriptTemplate, renderData);
+            $('#transcriptHeader').append(transcriptTableHtml);
         };
 
         var initializePage = function(data, variantToSearch, traitInfoUrl, restServer, variantSummaryText) {
@@ -117,7 +137,9 @@ var mpgSoftware = mpgSoftware || {};
                                         variantObject.CHROM,
                                         variantObject.POS,
                                         variantObject.GENE,
-                                        variantObject.CLOSEST_GENE);
+                                        variantObject.CLOSEST_GENE,
+                                        variantObject.Reference_Allele,
+                                        variantObject.Effect_Allele);
 
             displayTranscriptSummaries(variantObject.TRANSCRIPT_ANNOT, variantSummaryText);
 
@@ -131,69 +153,26 @@ var mpgSoftware = mpgSoftware || {};
 
             loading.hide();
         };
-        
+
         /**
-         * This function fills in the association boxes for the primary phenotype
+         * Fills in all of the associations at a glance boxes. Retrieves all of the data, then decides which
+         * phenotype is the primary based on the portal type (as specified by the defaultPhenotype argument).
+         * @param phenotypeDatasetMap   map of phenotypes and associated datasets
+         * @param variantId
+         * @param variantAssociationStrings     strings used for variant summary text
+         * @param dataUrl
+         * @param defaultPhenotype
          */
-        var fillPrimaryPhenotypeBoxes = function(phenotype, datasetList, variantId, variantAssociationStrings, dataUrl) {
-            // make the ajax call to get the data for this phenotype
-            $.ajax({
-                cache: false,
-                type: 'get',
-                url: dataUrl,
-                data: {
-                    variantId: variantId,
-                    phenotype: phenotype,
-                    datasets: JSON.stringify(datasetList)
-                },
-                async: true
-            }).done(function(data, textStatus, jqXHR) {
-                loading.hide();
-                // this is the translated phenotype
-                var displayName = data.displayName;
+        var retrieveVariantPhenotypeData = function(phenotypeDatasetMap, variantId, variantAssociationStrings, dataUrl, defaultPhenotype) {
+            // use this array to track all the promises from the AJAX calls so we only
+            // execute once all are finished
+            var arrayOfPromises = [];
 
-                // groupedByDataset has as keys dataset names, mapping to arrays
-                // that contain all of the data--need to go through each array, and pull
-                // each property into a new object
-                var groupedByDataset = _.chain(data.pVals).groupBy('dataset').omit('common').value();
-
-                var processedDatasets = [];
-                _.each(groupedByDataset, function(arrayOfValues) {
-                    var thisDataset = {};
-                    _.each(arrayOfValues, function(property) {
-                        thisDataset.dataset = property.dataset;     // this is the same for every property
-
-                        thisDataset[property.meaning] = property.count
-                    });
-                    processedDatasets.push(thisDataset);
-                });
-
-                processedDatasets = _.sortBy(processedDatasets, 'p_value');
-
-                // all of the dataset objects are now processed and ordered correctly
-                // call renderAPhenotype to get all of the HTML we need
-                var generatedHTML = renderAPhenotype(displayName, processedDatasets, 'primary', variantAssociationStrings);
-                var rowId = generatedHTML.rowId;
-                var phenotypeRow = generatedHTML.renderedRow;
-                var associations = generatedHTML.associationsArray;
-                // it's apparently easiest to attach the row HTML followed by attaching the boxes to the row,
-                // than it is to make a new object from the row HTML, attach the boxes to that, and then attach
-                // the object to the document
-                $('#primaryPhenotype').append(phenotypeRow);
-                _.forEach(associations, function(association) {
-                    $('#' + rowId + '> ul').append(association);
-                });
-
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                loading.hide();
-                core.errorReporter(jqXHR, errorThrown);
-            });
-        };
-
-        var fillOtherPhenotypeBoxes = function(datasetList, variantId, variantAssociationStrings, dataUrl) {
+            // store all the retrieved data across the calls so we can process on it later
+            var phenotypeData = [];
             // make the ajax call to get the data for each phenotype
-            _.forEach(datasetList, function(datasets, phenotype) {
-                $.ajax({
+            _.forEach(phenotypeDatasetMap, function(datasets, phenotype) {
+                var thisRequest = $.ajax({
                     cache: false,
                     type: 'get',
                     url: dataUrl,
@@ -203,56 +182,125 @@ var mpgSoftware = mpgSoftware || {};
                         datasets: JSON.stringify(_.values(datasets))
                     },
                     async: true
-                }).done(function(data, textStatus, jqXHR) {
-                    // this is the translated phenotype
-                    var displayName = data.displayName;
+                });
+                arrayOfPromises.push(
+                    thisRequest.done(function(data, textStatus, jqXHR) {
+                        // this is the translated phenotype
+                        var displayName = data.displayName;
+                        // groupedByDataset has as keys dataset names, mapping to arrays
+                        // that contain all of the data--need to go through each array, and pull
+                        // each property into a new object
+                        // omit any data items where count is null or undefined
+                        var groupedByDataset = _.chain(data.pVals).filter('count').groupBy('dataset').omit('common').value();
+                        var processedDatasets = [];
+                        _.each(groupedByDataset, function(arrayOfValues) {
+                            var thisDataset = {};
+                            _.each(arrayOfValues, function(property) {
+                                thisDataset.dataset = property.dataset;     // this is the same for every property
+                                thisDataset[property.meaning] = property.count
+                                if(property.datasetCode) {
+                                    // this exists to support getting the count property
+                                    thisDataset.datasetCode = property.datasetCode;
+                                }
+                            });
 
-                    // groupedByDataset has as keys dataset names, mapping to arrays
-                    // that contain all of the data--need to go through each array, and pull
-                    // each property into a new object
-                    var groupedByDataset = _.chain(data.pVals).groupBy('dataset').omit('common').value();
-
-                    var processedDatasets = [];
-                    _.each(groupedByDataset, function(arrayOfValues) {
-                        var thisDataset = {};
-                        _.each(arrayOfValues, function(property) {
-                            thisDataset.dataset = property.dataset;     // this is the same for every property
-
-                            thisDataset[property.meaning] = property.count
+                            // tack on count from the previously-loaded data
+                            thisDataset.count = parseInt(datasets[thisDataset.datasetCode].count);
+                            processedDatasets.push(thisDataset);
                         });
-                        processedDatasets.push(thisDataset);
-                    });
 
-                    processedDatasets = _.sortBy(processedDatasets, 'p_value');
+                        processedDatasets = _.sortBy(processedDatasets, 'p_value');
+                        // check to see if any dataset has at least a nominal signficance
+                        // reject those that don't. If none do, then don't display anything
+                        // for this phenotype
+                        var areThereAnySignificantDatasets = _.some(processedDatasets, function(dataset) {
+                            return dataset.p_value <= significanceBoundaries.nominal;
+                        });
+                        if( ! areThereAnySignificantDatasets ) {
+                            // no dataset has a p-value that is at least nominally significant,
+                            // so don't display anything for this phenotype
+                            return;
+                        }
 
-                    // check to see if any dataset has at least a nominal signficance
-                    // reject those that don't. If none do, then don't display anything
-                    // for this phenotype
-                    var areThereAnySignificantDatasets = _.some(processedDatasets, function(dataset) {
-                        return dataset.p_value <= significanceBoundaries.nominal;
-                    });
-                    if( ! areThereAnySignificantDatasets ) {
-                        // no dataset has a p-value that is at least nominally significant,
-                        // so don't display anything for this phenotype
-                        return;
-                    }
+                        // all of the dataset objects are now processed and ordered correctly
+                        // save the data for later
+                        phenotypeData.push({
+                            displayName: displayName,
+                            // this field exists so we know which phenotype has the smallest p-value
+                            // since processedDatasets is sorted by p-value, the first element has the smallest p-value
+                            bestPVal: processedDatasets[0].p_value,
+                            datasets: processedDatasets
+                        });
+                        
+                    }).fail(function(jqXHR, textStatus, errorThrown) {
+                        core.errorReporter(jqXHR, errorThrown);
+                    })
+                );
+            });
 
-                    // all of the dataset objects are now processed and ordered correctly
-                    // call renderAPhenotype to get all of the HTML we need
-                    var generatedHTML = renderAPhenotype(displayName, processedDatasets, 'secondary', variantAssociationStrings);
-                    var rowId = generatedHTML.rowId;
-                    var phenotypeRow = generatedHTML.renderedRow;
-                    var associations = generatedHTML.associationsArray;
-                    // it's apparently easiest to attach the row HTML followed by attaching the boxes to the row,
-                    // than it is to make a new object from the row HTML, attach the boxes to that, and then attach
-                    // the object to the document
-                    $('#otherTraitsSection').append(phenotypeRow);
-                    _.forEach(associations, function(association) {
-                        $('#' + rowId + '> ul').append(association);
-                    });
+            // when every AJAX call has returned, then sort the results and add them to the
+            // document--this way, everything gets shown in alphabetical order consistently
+            $.when.apply($, arrayOfPromises).then(function() {
+                // in case of data problems, abandon ship
+                if(phenotypeData.length == 0) {
+                    return;
+                }
+                if(defaultPhenotype == 'T2D') {
+                    // pull out t2d object and display that for primary
+                    var t2dData = _.find(phenotypeData, ['displayName', 'Type 2 diabetes']);
+                    fillPrimaryPhenotypeBoxes(t2dData, variantAssociationStrings);
+                    // everything else is other
+                    var everythingElse = _.chain(phenotypeData).reject(['displayName', 'Type 2 diabetes']).sortBy('bestPVal').value();
+                    fillOtherPhenotypeBoxes(everythingElse, variantAssociationStrings);
+                } else {
+                    // otherwise, the primary phenotype is the one with the smallest p-value
+                    var sortedPhenotypeData = _.sortBy(phenotypeData, 'bestPVal');
+                    fillPrimaryPhenotypeBoxes(_.head(sortedPhenotypeData), variantAssociationStrings);
+                    fillOtherPhenotypeBoxes(_.tail(sortedPhenotypeData), variantAssociationStrings);
+                }
+            });
 
-                }).fail(function(jqXHR, textStatus, errorThrown) {
-                    core.errorReporter(jqXHR, errorThrown);
+        };
+
+        /**
+         * This function fills in the association boxes for the primary phenotype
+         */
+        // var fillPrimaryPhenotypeBoxes = function(phenotype, datasetList, variantId, variantAssociationStrings, dataUrl) {
+        var fillPrimaryPhenotypeBoxes = function(data, variantAssociationStrings) {
+            var displayName = data.displayName;
+            var processedDatasets = _.chain(data.datasets).sortBy('count').reverse().value();
+            var generatedHTML = renderAPhenotype(displayName, processedDatasets, 'primary', variantAssociationStrings);
+            var rowId = generatedHTML.rowId;
+            var phenotypeRow = generatedHTML.renderedRow;
+            var associations = generatedHTML.associationsArray;
+            // it's apparently easiest to attach the row HTML followed by attaching the boxes to the row,
+            // than it is to make a new object from the row HTML, attach the boxes to that, and then attach
+            // the object to the document
+            $('#primaryPhenotype').append(phenotypeRow);
+            _.forEach(associations, function(association) {
+                $('#' + rowId + '> ul').append(association);
+            });
+        };
+
+        var fillOtherPhenotypeBoxes = function(dataArray, variantAssociationStrings) {
+            var arrayOfHTMLObjectsToDisplay = [];
+            _.each(dataArray, function(phenotypeObject) {
+                var displayName = phenotypeObject.displayName;
+                var datasets = _.chain(phenotypeObject.datasets).sortBy('count').reverse().value();
+                var generatedHTML = renderAPhenotype(displayName, datasets, 'secondary', variantAssociationStrings);
+                arrayOfHTMLObjectsToDisplay.push(generatedHTML);
+            });
+
+            _.each(arrayOfHTMLObjectsToDisplay, function(generatedHTML) {
+                var rowId = generatedHTML.rowId;
+                var phenotypeRow = generatedHTML.renderedRow;
+                var associations = generatedHTML.associationsArray;
+                // it's apparently easiest to attach the row HTML followed by attaching the boxes to the row,
+                // than it is to make a new object from the row HTML, attach the boxes to that, and then attach
+                // the object to the document
+                $('#otherTraitsSection').append(phenotypeRow);
+                _.forEach(associations, function(association) {
+                    $('#' + rowId + '> ul').append(association);
                 });
             });
         };
@@ -288,10 +336,9 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 },
                 boxClass: function() {
-                    // todo: finish implementing
                     // start this as an array so we can use .join(' ') later,
                     // instead of having to worry about parsing spaces correctly
-                    var classStringArray = []
+                    var classStringArray = [];
                     switch(boxSize) {
                         case 'primary':
                             classStringArray.push('info-box', 'normal-info-box');
@@ -332,41 +379,35 @@ var mpgSoftware = mpgSoftware || {};
                         return '\u00a0';
                     }
                 },
-                mafTextColor: function() {
-                    // todo: implement
-                    // may change based on background color
-                    return 'white';
-                },
-                mafTextBackgroundColor: function() {
-                    if(this.MAF) {
-                        return '#0066ff';
+                oddsRatioOrEffectTextBackgroundColor: function() {
+                    if(this.beta_value) {
+                        return this.beta_value >= 0 ? '#3333cc' : '#9900ff';
+                    } else if(this.or_value) {
+                        return '#3399ff';
                     }
                     return 'transparent';
                 },
-                mafText: function() {
-                    if( this.MAF ) {
-                        return 'MAF = ' + UTILS.parseANumber(this.MAF, precision);
+                oddsRatioOrEffectText: function() {
+                    if( this.or_value ) {
+                        return 'OR = ' + UTILS.parseANumber(this.or_value, precision);
+                    } else if (this.beta_value ) {
+                        var effectArrow = this.beta_value >= 0 ? '↑' : '↓';
+                        return effectArrow + ' effect = ' + UTILS.parseANumber(this.beta_value, precision);
                     }
                     // this is &nbsp;
                     return '\u00a0';
                 },
-                betaTextColor: function() {
-                    // todo: implement
-                    // may change based on background color
-                    return 'white';
-                },
-                betaTextBackgroundColor: function() {
-                    if( this.beta_value ) {
-                        return this.beta_value >= 0 ? '#3399ff' : '#ff6600';
+                freqInCases: function() {
+                    if(this.OBSA) {
+                        // debugger
+                        return (this.OBSA/this.count*100).toFixed(1) + '%';
                     }
-                    return 'transparent';
+                    return '\u00a0';
                 },
-                betaText: function() {
-                    if( this.beta_value ) {
-                        var effectArrow = this.beta_value >= 0 ? '↑' : '↓';
-                        return effectArrow + 'Effect = beta: ' + UTILS.parseANumber(this.beta_value, precision);
+                freqInControls: function() {
+                    if(this.OBSU) {
+                        return (this.OBSU/this.count*100).toFixed(1) + '%';
                     }
-                    // this is &nbsp;
                     return '\u00a0';
                 }
             };
@@ -397,6 +438,10 @@ var mpgSoftware = mpgSoftware || {};
             // so convert it to something that can work as an HTML id
             var rowId = phenotype.replace(/[\s()]/g, '') + 'Row';
 
+            // generate a random color in case we don't have one defined for this phenotype
+            // 4095 = 0xfff, so this just gets a random value between 000 and fff
+            var randomColor = '#' + Math.floor((Math.random()*4095)).toString(16);
+
             var phenotypeRowTemplate = document.getElementById('phenotypeTemplate').innerHTML;
             Mustache.parse(phenotypeRowTemplate);
             var data = {
@@ -407,8 +452,7 @@ var mpgSoftware = mpgSoftware || {};
                     if(colorCodeArray[phenotype]) {
                         return colorCodeArray[phenotype];
                     }
-                    // 4095 = 0xfff, so this just gets a random value between 000 and fff
-                    return '#' + Math.floor((Math.random()*4095)).toString(16);
+                    return randomColor;
                 },
                 rowClass: function() {
                     switch(displaySize) {
@@ -439,30 +483,7 @@ var mpgSoftware = mpgSoftware || {};
             externalCalculateDiseaseBurden,
             externalizeCarrierStatusDiseaseRisk,
             externalVariantAssociationStatistics,
-            externalizeShowHowCommonIsThisVariantAcrossEthnicities,
-            describeImpactOfVariantOnProtein
-            ;
-
-        /**
-         * Given an array of objects mapFromApi, pull out the objects with keys
-         * included in listOfFieldNames and put them into a new object. Note that
-         * this assumes there are no duplicate keys in mapFromApi.
-         * @param mapFromApi
-         * @param listOfFieldNames
-         */
-        var retrieveFieldsByName = function (mapFromApi, listOfFieldNames) {
-            // this is a result of needing to merge an array of objects--_.merge
-            // doesn't process arrays in the way we need it
-            var args = _.flatten([{}, mapFromApi]);
-            var mergedObject = _.merge.apply(_, args);
-            var toReturn = _.pick(mergedObject, listOfFieldNames);
-            return toReturn;
-        };
-
-        var describeImpactOfVariantOnProtein = function (variant, variantTitle, impactOnProtein) {
-            $('#effectOfVariantOnProtein').append(privateMethods.variantGenerateProteinsChooser(variant, variantTitle, impactOnProtein));
-            UTILS.verifyThatDisplayIsWarranted(variant["_13k_T2D_TRANSCRIPT_ANNOT"], $('#variationInfoEncodedProtein'), $('#puntOnNoncodingVariant'));
-        };
+            externalizeShowHowCommonIsThisVariantAcrossEthnicities;
 
         /**
         * We need to encapsulate a bunch of methods in order to retain control of everything that's going on.
@@ -1037,10 +1058,6 @@ var mpgSoftware = mpgSoftware || {};
             retrieveHowCommonIsThisVariantAcrossEthnicities = function () {
                 return externalizeShowHowCommonIsThisVariantAcrossEthnicities;
             },
-            retrieveDescribeImpactOfVariantOnProtein = function () {
-                return describeImpactOfVariantOnProtein;
-            },
-
             retrieveDelayedIgvLaunch = function () {
                 return delayedIgvLaunch;
             },
@@ -1055,7 +1072,6 @@ var mpgSoftware = mpgSoftware || {};
             // private routines MADE PUBLIC FOR UNIT TESTING ONLY (find a way to do this in test mode only)
 
             // public routines
-            retrieveDescribeImpactOfVariantOnProtein: retrieveDescribeImpactOfVariantOnProtein,
             retrieveCalculateDiseaseBurden: retrieveCalculateDiseaseBurden,
             retrieveCarrierStatusDiseaseRisk: retrieveCarrierStatusDiseaseRisk,
             retrieveVariantAssociationStatistics: retrieveVariantAssociationStatistics,
@@ -1064,14 +1080,10 @@ var mpgSoftware = mpgSoftware || {};
             retrieveDelayedBurdenTestPresentation: retrieveDelayedBurdenTestPresentation,
             retrieveHowCommonIsThisVariantAcrossEthnicities: retrieveHowCommonIsThisVariantAcrossEthnicities,
             retrieveDelayedIgvLaunch: retrieveDelayedIgvLaunch,
-            retrieveFieldsByName: retrieveFieldsByName,
             retrieveVariantPosition: retrieveVariantPosition,
-            describeImpactOfVariantOnProtein: describeImpactOfVariantOnProtein,
             // ---------------------------------------
             firstReponders: firstResponders,
-            fillPrimaryPhenotypeBoxes: fillPrimaryPhenotypeBoxes,
-            fillOtherPhenotypeBoxes: fillOtherPhenotypeBoxes,
-            renderAPhenotype: renderAPhenotype,
+            retrieveVariantPhenotypeData: retrieveVariantPhenotypeData,
             initializePage: initializePage
         }
 

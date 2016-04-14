@@ -1,31 +1,39 @@
 <style>
-    .transcriptSummary {
-        max-width: 24%;
-        margin-right: 10px;
+    #transcriptTable th {
+        font-weight: bold;
     }
-    .transcriptSummary > ul {
-        list-style: none;
-        padding: 0;
+
+    #transcriptTable > * {
+        font-size: 14px;
     }
+
 </style>
 
 
 <div>
     <p id="variantSummaryText"><g:message code="variant.summaryText.summary" /></p>
-    <h4><g:message code="variant.summaryText.transcriptHeader" default="Transcripts" /></h4>
-    <div id="transcriptSummaries" style="display: flex; flex-wrap: wrap; width: 100%">
-    </div>
-   <div class="col-md-4"></div>
+    <h4 id="transcriptHeader"><g:message code="variant.summaryText.transcriptHeader" default="Transcripts" /></h4>
+    <script id="transcriptTableTemplate" type="x-tmpl-mustache">
+        <table id=transcriptTable class="table table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th>Transcript</th> {{ #transcriptName }}<th>{{ transcriptNameText }}</th> {{ /transcriptName }}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Protein change</th> {{ #proteinChange }} <td> {{ . }} </td> {{ /proteinChange }}
+                </tr>
+                <tr>
+                    <th>PolyPhen prediction</th> {{ #polyphen }} <td> {{ . }} </td> {{ /polyphen }}
+                </tr>
+                <tr>
+                    <th>SIFT prediction</th> {{ #sift }} <td> {{ . }} </td> {{ /sift }}
+                </tr>
+                <tr>
+                    <th>Consequence</th> {{ #consequence }} <td> {{ . }} </td> {{ /consequence }}
+                </tr>
+            </tbody>
+        </table>
+    </script>
 </div>
-
-<script id="transcriptSummaryTemplate" type="x-tmpl-mustache">
-    <div class="transcriptSummary" style="">
-        <h5><b>{{ transcriptName }}</b></h5>
-        <ul>
-            {{ #referenceNucleotide }}<li><g:message code="variant.summaryText.refNucleotide" default="Reference nucleotide:" /> {{ referenceNucleotide }}</li>{{ /referenceNucleotide }}
-            {{ #variantNucleotide }}<li><g:message code="variant.summaryText.varNucleotide" default="Variant nucleotide:" /> {{ variantNucleotide }}</li>{{ /variantNucleotide }}
-            {{ #proteinChange }}<li><g:message code="variant.impactOnProtein.proteinChange" default="Protein change:" /> {{ proteinChange }}</li>{{ /proteinChange }}
-            {{ #consequence }}<li><g:message code="variant.summaryText.consequence" default="Consequence:" /> {{ consequence }}</li>{{ /consequence }}
-        </ul>
-    </div>
-</script>
