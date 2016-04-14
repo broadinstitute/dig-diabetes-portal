@@ -13,7 +13,7 @@ div.burden-test-wrapper-options {
     padding-bottom: 15px;
 }
 div.burden-test-wrapper-options .row {
-    margin: 0 0 8px 0;
+    margin: 0 0 1px 0;
 }
 div.burden-test-btn-wrapper {
     padding-top: 8px;
@@ -148,77 +148,6 @@ div.labelAndInput > input {
                 UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],selPhenotypeSelector.value,
                 "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",processReturnedDataSets );
             };
-
-
-
-
-
-        /***
-        *  Fill the drop down list with values.  Presumably we need to run this method right after the page load completes.
-        *
-        */
-        var fillFilterDropDown = function (){
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: "${createLink(controller: 'variantInfo', action: 'burdenTestTraitSelectionOptionsAjax')}",
-                data: {},
-                async: true,
-                success: function (data) {
-
-                   if ((typeof data !== 'undefined') && (data)){
-                       //first check for error conditions
-                        if (!data){
-                            console.log('null return data from burdenTestTraitSelectionOptionsAjax');
-                        } else if (data.is_error) {
-                            console.log('burdenTestAjax returned is_error ='+data.is_error +'.');
-                        }
-                        else if ((typeof data.phenotypes === 'undefined') ||
-                                 (data.phenotypes.length <= 0)){
-                             console.log('burdenTestAjax returned undefined (or length = 0) for options.');
-                       }else {
-                           var optionList = data.phenotypes;
-                           var dropDownHolder = $('#traitFilter');
-                           for ( var i = 0 ; i < optionList.length ; i++ ){
-                            // DIGP-211: hiding t2d for now
-                            if (optionList[i].name != 't2d') {
-                                dropDownHolder.append('<option value="'+optionList[i].name+'">'+optionList[i].description+'</option>')
-                            }
-                           }
-                        }
-                    }
-                },
-                error: function (jqXHR, exception) {
-                    core.errorReporter(jqXHR, exception);
-                }
-            });
-        }; // fillFilterDropDown
-
-        var retrievePhenotypes = function (dropDownSelector) {
-            var loading = $('#spinner').show();
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: "${createLink(controller:'VariantSearch', action:'retrieveGwasSpecificPhenotypesAjax')}",
-                data: {},
-                async: true,
-                success: function (data) {
-                    if (( data !==  null ) &&
-                            ( typeof data !== 'undefined') &&
-                            ( typeof data.datasets !== 'undefined' ) &&
-                            (  data.datasets !==  null ) ) {
-                        UTILS.fillPhenotypeCompoundDropdown(data.datasets,dropDownSelector);
-                        $("select#trait-input").val("${g.defaultPhenotype()}");
-                    }
-                    loading.hide();
-                },
-                error: function (jqXHR, exception) {
-                    loading.hide();
-                    core.errorReporter(jqXHR, exception);
-                }
-            });
-        };
-
 
 
         var retrieveExperimentMetadata = function (dropDownSelector) {
@@ -607,71 +536,6 @@ div.labelAndInput > input {
         };
 
 
-
-
-
-        %{--var retrieveSampleInformation = function (variantName){--}%
-            %{--$.ajax({--}%
-                %{--cache: false,--}%
-                %{--type: "post",--}%
-                %{--url: "${createLink(controller: 'variantInfo', action: 'retrieveSampleListAjax')}",--}%
-                %{--data: {},--}%
-                %{--async: true,--}%
-                %{--success: function (data) {--}%
-
-                   %{--if ((typeof data !== 'undefined') && (data)){--}%
-                       %{--//first check for error conditions--}%
-                        %{--if (!data){--}%
-                            %{--console.log('null return data from burdenTestTraitSelectionOptionsAjax');--}%
-                        %{--} else if (data.is_error) {--}%
-                            %{--console.log('burdenTestAjax returned is_error ='+data.is_error +'.');--}%
-                        %{--}--}%
-                        %{--else if ((typeof data.metaData === 'undefined') ||--}%
-                                 %{--(typeof data.metaData.variants === 'undefined') ||--}%
-                                 %{--(data.metaData.variants.length <= 0)){--}%
-                             %{--console.log('burdenTestAjax returned undefined (or length = 0) for options.');--}%
-                       %{--}else {--}%
-                            %{--for ( var i = 0 ; i < data.metaData.variants.length ; i++ )  {--}%
-                               %{--var sampleFields =  data.metaData.variants[i] ;--}%
-                               %{--for ( var j = 0 ; j < sampleFields.length ; j++ ) {--}%
-                                   %{--var fieldObject =  sampleFields[j];--}%
-                                   %{--for (var dataSetName in fieldObject) {--}%
-                                       %{--if(!fieldObject.hasOwnProperty(dataSetName)) continue;--}%
-                                       %{--var dataSetObject =  fieldObject[dataSetName];--}%
-                                       %{--for (var propertyName in dataSetObject) {--}%
-                                           %{--if(!dataSetObject.hasOwnProperty(propertyName)) continue;--}%
-                                           %{--var dataSetValue =  dataSetObject[propertyName];--}%
-                                           %{--if (dataSetName in sampleInfo)  {--}%
-                                               %{--sampleInfo [dataSetName].push(dataSetValue);--}%
-                                           %{--} else {--}%
-                                               %{--sampleInfo [dataSetName]   = [dataSetValue] ;--}%
-                                           %{--}--}%
-                                       %{--}--}%
-                                   %{--}--}%
-                               %{--}--}%
-                            %{--}--}%
-                        %{--}--}%
-                    %{--}--}%
-                    %{--var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);--}%
-                    %{--var plotHoldingStructure = $('#boxWhiskerPlot');--}%
-                    %{--plotHoldingStructure.empty();--}%
-                    %{--for ( var i = 0 ; i < displayableData.length ; i++ ){--}%
-                        %{--var singleElement = displayableData[i];--}%
-                        %{--var elementName = singleElement.name;--}%
-                        %{--var divElementName = 'bwp_'+elementName;--}%
-                        %{--plotHoldingStructure.append('<div id="'+divElementName+'"></div>');--}%
-                        %{--$('#'+divElementName).hide();--}%
-                        %{--buildBoxWhiskerPlot([singleElement],'#'+divElementName);--}%
-                    %{--}--}%
-                %{--},--}%
-                %{--error: function (jqXHR, exception) {--}%
-                    %{--core.errorReporter(jqXHR, exception);--}%
-                %{--}--}%
-            %{--});--}%
-        %{--}; // fillFilterDropDown--}%
-
-
-
        var groupValuesByPhenotype = function(data){
            var sampleInfo = {};
            if ((typeof data !== 'undefined') && (data)){
@@ -741,58 +605,13 @@ div.labelAndInput > input {
                 data: data,
                 async: true,
                 success: function (data) {
-//                   var sampleInfo = {};
-//                   if ((typeof data !== 'undefined') && (data)){
-//                       //first check for error conditions
-//                        if (!data){
-//                            console.log('null return data from burdenTestTraitSelectionOptionsAjax');
-//                        } else if (data.is_error) {
-//                            console.log('burdenTestAjax returned is_error ='+data.is_error +'.');
-//                        }
-//                        else if ((typeof data.metaData === 'undefined') ||
-//                                 (typeof data.metaData.variants === 'undefined') ||
-//                                 (data.metaData.variants.length <= 0)){
-//                             console.log('burdenTestAjax returned undefined (or length = 0) for options.');
-//                       }else {
-//                            for ( var i = 0 ; i < data.metaData.variants.length ; i++ )  {
-//                               var sampleFields =  data.metaData.variants[i] ;
-//                               for ( var j = 0 ; j < sampleFields.length ; j++ ) {
-//                                   var fieldObject =  sampleFields[j];
-//                                   for (var dataSetName in fieldObject) {
-//                                       if(!fieldObject.hasOwnProperty(dataSetName)) continue;
-//                                       var dataSetObject =  fieldObject[dataSetName];
-//                                       for (var propertyName in dataSetObject) {
-//                                           if(!dataSetObject.hasOwnProperty(propertyName)) continue;
-//                                           var dataSetValue =  dataSetObject[propertyName];
-//                                           if (dataSetName in sampleInfo)  {
-//                                               sampleInfo [dataSetName].push(dataSetValue);
-//                                           } else {
-//                                               sampleInfo [dataSetName]   = [dataSetValue] ;
-//                                           }
-//                                       }
-//                                   }
-//                               }
-//                            }
-//                        }
-//                    }
                     callback(data);
-//                    var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
-//                    var plotHoldingStructure = $('#boxWhiskerPlot');
-//                    plotHoldingStructure.empty();
-//                    for ( var i = 0 ; i < displayableData.length ; i++ ){
-//                        var singleElement = displayableData[i];
-//                        var elementName = singleElement.name;
-//                        var divElementName = 'bwp_'+elementName;
-//                        plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
-//                        $('#'+divElementName).hide();
-//                        buildBoxWhiskerPlot([singleElement],'#'+divElementName);
-//                    }
                 },
                 error: function (jqXHR, exception) {
                     core.errorReporter(jqXHR, exception);
                 }
             });
-        }; // fillFilterDropDown
+        };
 
 
 
@@ -807,9 +626,7 @@ div.labelAndInput > input {
             filterAndRun:filterAndRun,
             runBurdenTest:runBurdenTest,
             utilizeSampleInfoForDistributionPlots: utilizeSampleInfoForDistributionPlots,
-            fillFilterDropDown:fillFilterDropDown,
             retrieveMatchingDataSets:retrieveMatchingDataSets,
-            retrievePhenotypes:retrievePhenotypes,
             retrieveSampleMetadata:retrieveSampleMetadata,
             retrieveSampleFilterMetadata:retrieveSampleFilterMetadata
         }
@@ -817,11 +634,8 @@ div.labelAndInput > input {
     }());
 
 $( document ).ready( function (){
-  // mpgSoftware.burdenTestShared.fillFilterDropDown ();
- // mpgSoftware.burdenTestShared.retrievePhenotypes('#phenotypeFilter');
   mpgSoftware.burdenTestShared.retrieveExperimentMetadata( '#datasetFilter' );
   mpgSoftware.burdenTestShared.retrieveSampleInformation  ( '<%=variantIdentifier%>', mpgSoftware.burdenTestShared.utilizeSampleInfoForDistributionPlots  );
-//  mpgSoftware.burdenTestShared.retrieveSampleMetadata( '#phenotypeFilter' );
 } );
 
 </g:javascript>
@@ -850,61 +664,62 @@ $( document ).ready( function (){
                                    data-toggle="tab">Initiate analysis</a></li>
     </ul>
 
-    <div class="tab-content" style="border-top: 1px solid #ccc; height: 400px; padding: 4px 0 0 10px">
+    <div class="tab-content" style="border-top: 1px solid #ccc; padding: 4px 0 0 10px">
         <div  role="tabpanel" class="tab-pane active" id="chooseSamples">
-            <div class="col-md-6 col-sm-6 col-xs-12 vcenter">
-            <div class="row">
-                <div class="col-sm-4 col-xs-12 text-right"><label>Choose a data set:</label></div>
+            <div class="col-sm-8 col-xs-12 vcenter">
+                <div class="row">
+                    <div class="col-sm-4 col-xs-12 text-right"><label>Choose a data set:</label></div>
 
-                <div class="col-sm-8 col-xs-12 text-left">
-                    <select id="datasetFilter" class="traitFilter form-control text-left"
-                            onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata( this, '#phenotypeFilter' );"
-                            onclick="mpgSoftware.burdenTestShared.retrieveSampleMetadata( this, '#phenotypeFilter' );">
-                    </select>
+                    <div class="col-sm-8 col-xs-12 text-left">
+                        <select id="datasetFilter" class="traitFilter form-control text-left"
+                                onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata( this, '#phenotypeFilter' );"
+                                onclick="mpgSoftware.burdenTestShared.retrieveSampleMetadata( this, '#phenotypeFilter' );">
+                        </select>
+                    </div>
+
                 </div>
 
-            </div>
+                <div class="row">
+                    <div class="col-sm-4 col-xs-12 text-right"><label>Choose a phenotype:</label></div>
 
-            <div class="row">
-                <div class="col-sm-4 col-xs-12 text-right"><label>Choose a phenotype:</label></div>
-
-                <div class="col-sm-8 col-xs-12 text-left">
-                    <select id="phenotypeFilter" class="traitFilter form-control text-left"
-                            onchange="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata( $('#datasetFilter'), '#phenotypeFilter' );">
-                    </select>
-                </div>
-            </div>
-
-
-            <div class="row" id="sampleRow" style="display:none">
-                <div class="col-sm-4 col-xs-12 text-right"><label>Sample filters:</label></div>
-                <div class="col-sm-8 col-xs-12 text-left">
-
-                <div  style="height: 200px; padding: 4px 0 0 10px; overflow-y: scroll;">
-
-
-                    <div  id="filters">
-                        <div class="row">
-
-                                <div class="row">
-                                    <div class="col-sm-1">
-                                        Use
-                                    </div>
-                                    <div class="col-sm-3">
-                                        Filter
-                                    </div>
-                                    <div class="col-sm-3">
-                                    Cmp
-                                    </div>
-                                    <div class="col-sm-4">
-                                    Parameter
-                                    </div>
-                                </div>
-                                <div id="person"></div>
-
-                        </div>
+                    <div class="col-sm-8 col-xs-12 text-left">
+                        <select id="phenotypeFilter" class="traitFilter form-control text-left"
+                                onchange="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata( $('#datasetFilter'), '#phenotypeFilter' );">
+                        </select>
                     </div>
                 </div>
+
+
+                <div class="row" id="sampleRow" style="display:none">
+                    <div class="col-sm-4 col-xs-12 text-right"><label>Sample filters:</label></div>
+                    <div class="col-sm-8 col-xs-12 text-left">
+                    <div class="row sampleFilterHeader">
+                        <div class="col-sm-1">
+                            Use
+                        </div>
+                        <div class="col-sm-3">
+                            Filter
+                        </div>
+                        <div class="col-sm-3">
+                            Cmp
+                        </div>
+                        <div class="col-sm-4">
+                            Parameter
+                        </div>
+                    </div>
+                    <div  style="height: 300px; padding: 4px 0 0 10px; overflow-y: scroll;">
+
+
+
+                        <div  id="filters">
+                            <div class="row">
+
+
+                                    <div id="person"></div>
+
+                            </div>
+                        </div>
+                    </div>
 
 
 
@@ -954,100 +769,14 @@ $( document ).ready( function (){
                     </div>
 
 
-
-
-                    %{--<p><span>name={{name}},type={{type}}</span></p></div>--}%
                     <div id="filterStringTemplate" style="display: none;"><p><span>str name={{name}},type={{type}}</span></p></div>
-                    %{--<div id="filterCategoricalTemplate" style="display: none;"><p><span>cat name={{name}},type={{type}}</span></p></div>--}%
                 </div>
             </div>
 
-            %{--<div class="row">--}%
-                %{--<div class="col-sm-4 col-xs-12 text-right"><label>Sample filters:</label></div>--}%
-
-                %{--<div class="col-sm-8 col-xs-12 text-left">--}%
-
-
-                    %{--<!-- Tab panes -->--}%
-                    %{--<div  style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px">--}%
-
-
-                        %{--<div  id="filters2">--}%
-                            %{--<div class="row">--}%
-                                %{--<div class="col-sm-10 col-xs-12 text-left">--}%
-                                    %{--<table class="table table-condensed">--}%
-                                        %{--<thead>--}%
-                                        %{--<tr>--}%
-                                            %{--<th width="10%">Use</th>--}%
-                                            %{--<th width="30%">Filter</th>--}%
-                                            %{--<th width="25%">Cmp</th>--}%
-                                            %{--<th width="35%">Parameter</th>--}%
-                                        %{--</tr>--}%
-                                        %{--</thead>--}%
-                                        %{--<tbody>--}%
-                                        %{--<tr>--}%
-                                            %{--<td><input id="useBmi" type="checkbox" name="useBmi" value="BMI" checked/></td>--}%
-                                            %{--<td><span onmouseover="displaySampleDistribution('BMI', '#boxWhiskerPlot')">BMI</span>--}%
-                                            %{--</td>--}%
-                                            %{--<td>--}%
-                                                %{--<select class="form-control" data-selectfor="bmiComparator">--}%
-                                                    %{--<option>&lt;</option>--}%
-                                                    %{--<option>&gt;</option>--}%
-                                                    %{--<option>=</option>--}%
-                                                %{--</select>--}%
-                                            %{--</td>--}%
-                                            %{--<td>--}%
-                                                %{--<input type="text" class="form-control" data-type="propertiesInput"--}%
-                                                       %{--data-prop="bmiValue" data-translatedname="P-value">--}%
-                                            %{--</td>--}%
-                                        %{--</tr>--}%
-                                        %{--<tr>--}%
-                                            %{--<td><input id="useGender" type="checkbox" name="useGender" value="GENDER"--}%
-                                                       %{--checked/></td>--}%
-                                            %{--<td>Gender</td>--}%
-                                            %{--<td>--}%
-                                                %{--<label>=</label>--}%
-                                            %{--</td>--}%
-                                            %{--<td>--}%
-                                                %{--<input type="text" class="form-control" data-type="propertiesInput"--}%
-                                                       %{--data-prop="P_FE_INV" data-translatedname="P-value">--}%
-                                            %{--</td>--}%
-                                        %{--</tr>--}%
-                                        %{--<tr>--}%
-                                            %{--<td><input id="useAge" type="checkbox" name="useGender" value="GENDER" checked/>--}%
-                                            %{--</td>--}%
-                                            %{--<td><span onmouseover="displaySampleDistribution('AGE', '#boxWhiskerPlot')">Age</span>--}%
-                                            %{--</td>--}%
-                                            %{--<td>--}%
-                                                %{--<select class="form-control" data-selectfor="ageComparator">--}%
-                                                    %{--<option>&lt;</option>--}%
-                                                    %{--<option>&gt;</option>--}%
-                                                    %{--<option>=</option>--}%
-                                                %{--</select>--}%
-                                            %{--</td>--}%
-                                            %{--<td>--}%
-                                                %{--<input type="text" class="form-control" data-type="propertiesInput"--}%
-                                                       %{--data-prop="ageValue" data-translatedname="P-value">--}%
-                                            %{--</td>--}%
-
-                                        %{--</tr>--}%
-                                        %{--</tbody>--}%
-                                    %{--</table>--}%
-                                %{--</div>--}%
-                            %{--</div>--}%
-
-                        %{--</div>--}%
-
-
-                    %{--</div>--}%
-
-                %{--</div>--}%
-
-            %{--</div>--}%
 
             </div>
 
-            <div class="col-md-6 col-sm-6 col-xs-12 vcenter">
+            <div class="col-sm-4 col-xs-12 vcenter" style="padding-left: 0">
                 <div id="boxWhiskerPlot">
                 </div>
             </div>
@@ -1057,16 +786,16 @@ $( document ).ready( function (){
 
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation"  class="active"><a href="#covariates" aria-controls="covariates" role="tab"
+                <li role="presentation" class="active"><a href="#covariates" aria-controls="covariates" role="tab"
                                                           data-toggle="tab">Covariates</a></li>
 
-                <li role="presentation"><a href="#stratify" aria-controls="stratify" role="tab"
-                                           data-toggle="tab">Stratify</a></li>
+                <li role="presentation" ><a href="#stratify" class="disabled" aria-controls="stratify" role="tab"
+                                           data-toggle="tab" style="cursor: not-allowed; pointer-events: none;">Stratify</a></li>
             </ul>
 
             <!-- Tab panes -->
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane" id="covariates" style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px">
+                <div role="tabpanel" class="tab-pane active" id="covariates" style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px">
                     <div class="row">
                         <div class="col-md-10 col-sm-10 col-xs-12 vcenter">
 
@@ -1163,7 +892,6 @@ $( document ).ready( function (){
                             <button id="singlebutton" name="singlebutton" style="height: 80px"
                                     class="btn btn-primary btn-lg burden-test-btn"
                                     onclick="mpgSoftware.burdenTestShared.retrieveSampleInformation  ( '', mpgSoftware.burdenTestShared.filterAndRun  )">Run</button>
-                                    %{--onclick="mpgSoftware.burdenTestShared.runBurdenTest()">Run</button>--}%
                         </div>
                     </div>
                 </div>

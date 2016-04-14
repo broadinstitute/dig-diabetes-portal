@@ -5,6 +5,7 @@ package org.broadinstitute.mpg.diabetes.bean;
  */
 public class ServerBean {
     // static constants for the method call signatures
+    public static final String BURDEN_TEST_CALL_V1                              = "v1";
     public static final String BURDEN_TEST_CALL_V2                              = "v2";
     public static final String BURDEN_TEST_CALL_GET_PHENOTYPES                  = "getPhenotypes";
     public static final String BURDEN_TEST_CALL_GET_PHENOTYPES_WITH_SLASH       = "/getPhenotypes";

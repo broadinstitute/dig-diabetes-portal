@@ -135,16 +135,16 @@ class BurdenService {
         }
         propertyList = sampleGroup.properties.findAll{it.meaningSet[0].contains("FILTER")}
         for (Property property in propertyList){
-            if (("T2D" == property.name)||
-                    ("AGE" == property.name)||
-                    ("FAST_GLU" == property.name)||
-                    ("FAST_INS" == property.name)||
-                    ("BMI" == property.name)||
-                    ("WEIGHT" == property.name)||
-                    ("HDL" == property.name)||
-                    ("LDL" == property.name)) {
+//            if (("T2D" == property.name)||
+//                    ("AGE" == property.name)||
+//                    ("FAST_GLU" == property.name)||
+//                    ("FAST_INS" == property.name)||
+//                    ("BMI" == property.name)||
+//                    ("WEIGHT" == property.name)||
+//                    ("HDL" == property.name)||
+//                    ("LDL" == property.name)) {
                 filterList << """{"name":"${property.name}", "type":"${property.variableType}"  }""".toString()
-            }
+//            }
         }
         String jsonString = """{"phenotypes":[${phenotypeList.join(",")}],
 "covariates":[${covariateList.join(",")}],
