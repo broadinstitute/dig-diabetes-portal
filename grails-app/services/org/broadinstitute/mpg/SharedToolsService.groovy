@@ -591,11 +591,6 @@ class SharedToolsService {
                 List<SampleGroup> sortedTechnologySpecificSampleGroups = technologySpecificSampleGroups.sort { SampleGroup a, SampleGroup b ->
                     (b.subjectsNumber as Integer) <=> (a.subjectsNumber as Integer)
                 }
-//                if (("ExSeq" == technologyName)||("GWAS" == technologyName)) {
-//                    fullListOfSampleGroups.add(sortedTechnologySpecificSampleGroups[0])
-//                } else {
-//                    fullListOfSampleGroups.addAll(sortedTechnologySpecificSampleGroups)
-//                }
                 List<SampleGroup> topLevelGroups = listOnlyTopLevelSampleGroups( sortedTechnologySpecificSampleGroups )
                 if (topLevelGroups.size()>0) {
                     fullListOfSampleGroups.addAll(topLevelGroups)

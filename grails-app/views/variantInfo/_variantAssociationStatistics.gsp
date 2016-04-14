@@ -42,24 +42,27 @@
         }
     };
 
-    // this fills in the main row of data
-    mpgSoftware.variantInfo.fillPrimaryPhenotypeBoxes('${g.defaultPhenotype()}',
-                                                      _.values(phenotypeDatasetMapping['${g.defaultPhenotype()}']),
-                                                      variantId, variantAssociationStrings,
-                                                      '${createLink(controller:'variantInfo',action: 'variantDescriptiveStatistics')}');
-    // pass in the phenotype/dataset mapping, but without the phenotype that was just displayed
-    mpgSoftware.variantInfo.fillOtherPhenotypeBoxes(_.omit(phenotypeDatasetMapping, '${g.defaultPhenotype()}'),
-                                                    variantId, variantAssociationStrings,
-                                                    '${createLink(controller:'variantInfo',action: 'variantDescriptiveStatistics')}');
+    mpgSoftware.variantInfo.retrieveVariantPhenotypeData(phenotypeDatasetMapping,
+                                                         variantId,
+                                                         variantAssociationStrings,
+                                                         '${createLink(controller:'variantInfo',action: 'variantDescriptiveStatistics')}',
+                                                         '${g.defaultPhenotype()}');
 </script>
 
 
 <div class="container content-wrapper">
     <h5><g:message code="variant.info.associations.description" /></h5>
-    <div>Glossary:
-        <button class="btn btn-default btn-sm" data-container="body" data-toggle="popover" data-content="${g.message(code: 'variant.variantAssociations.pValue.help.text')}" data-trigger="focus">P-value</button>
-        <button class="btn btn-default btn-sm" data-container="body" data-toggle="popover" data-content="${g.message(code: 'variant.variantAssociations.MAF.help.text')}" data-trigger="focus">MAF</button>
-        <button class="btn btn-default btn-sm" data-container="body" data-toggle="popover" data-content="${g.message(code: 'variant.variantAssociations.effect.help.text')}" data-trigger="focus">Effect</button>
+    <table class="table table-condensed"><tr>
+        <th>Direction of effect</th><th>Dataset</th><th>Glossary</th>
+    </tr><tr>
+        <td><span style="float: left;display:block; margin-right: 5px;">up</span><span style="float: left;display:block; background-color: #33C; color:#fff;width: 10px;text-align:center; margin-right: 5px;">&#8593</span><span style="float: left;display:block; margin-right: 5px;">down</span><span style="float:left; display:block; background-color: #90f; color:#fff;width: 10px; text-align:center;">&#8595</span></td>
+        <td><div style="background-color: #ccc; color: #fff; width:auto; margin:auto; float: left; padding: 0 5px;"><strong style="color: #333;">sample size</strong> | <strong style="color: #F00;">frequency in cases</strong> | <strong style="color:#33F;">frequency in controls</strong><div></td>
+        <td><button class="btn btn-default btn-sm" data-container="body" data-toggle="popover" data-content="${g.message(code: 'variant.variantAssociations.pValue.help.text')}" data-trigger="focus">P-value</button>
+            <button class="btn btn-default btn-sm" data-container="body" data-toggle="popover" data-content="${g.message(code: 'variant.variantAssociations.MAF.help.text')}" data-trigger="focus">MAF</button>
+            <button class="btn btn-default btn-sm" data-container="body" data-toggle="popover" data-content="${g.message(code: 'variant.variantAssociations.effect.help.text')}" data-trigger="focus">Effect</button>
+        </td>
+    </tr>
+    </table>
     <div class="info-box-wrappers">
         <div id="primaryPhenotype" class="col-md-12 t2d-info-box-wrapper"></div>
         <h4><i><g:message code="variant.variantAssociations.otherTraits" default="Other traits with one or more nominally significant associations:"/></i></h4>
@@ -77,11 +80,11 @@
                 <span class="p-value">{{ pValueText }}</span>
                 <span class="p-value-significance">{{ pValueSignificance }}</span>
             </div>
-            <div style="color: {{ mafTextColor }}; background-color: {{ mafTextBackgroundColor }}; padding-top: 2px; padding-bottom: 2px; width: 100%" >
-                <span class="extra-info">{{ mafText }}</span>
+            <div style="background-color: {{ oddsRatioOrEffectTextBackgroundColor }}; padding-top: 2px; padding-bottom: 2px; width: 100%" >
+                <span class="extra-info">{{ oddsRatioOrEffectText }}</span>
             </div>
-            <div style="color: {{ betaTextColor }}; background-color: {{ betaTextBackgroundColor }}; padding-top: 2px; padding-bottom: 2px; width: 100%" >
-                <span class="extra-info">{{ betaText }}</span>
+            <div style="color: white; background-color: #bbb; padding-top: 2px; padding-bottom: 2px; width: 100%; display: flex; justify-content: space-around; align-items: center" >
+                <span class="extra-info" style="color: #333;"><strong>{{ count }}</strong></span> | <span class="extra-info" style="color: #f03;"><strong>{{ freqInCases }}</strong></span> | <span class="extra-info" style="color: #30f;"><strong>{{ freqInControls }}</strong></span>
             </div>
         </div>
     </li>
