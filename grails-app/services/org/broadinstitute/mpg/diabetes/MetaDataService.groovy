@@ -1,6 +1,7 @@
 package org.broadinstitute.mpg.diabetes
-import groovy.json.JsonSlurper
+
 import grails.transaction.Transactional
+import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.FilterManagementService
 import org.broadinstitute.mpg.MetadataUtilityService
 import org.broadinstitute.mpg.RestServerService
@@ -881,6 +882,7 @@ class MetaDataService {
     // used for translation support--though should be used sparingly
     public Set<String> parseMetadataNames() {
         String metadata = restServerService.getMetadata()
+        // TODO - DIGP-320: move this call to use the JsonParser class to access the cached metadata, avoiding differences in cached vs real time call data
         def jsonSlurper = new JsonSlurper()
 
         JSONObject metadataParsed = jsonSlurper.parseText(metadata)
@@ -908,7 +910,9 @@ class MetaDataService {
             }
         } else if( metadata instanceof ArrayList ) {
             metadata.each { item ->
-                toReturn.addAll(pullOutMetadataNames(item as JSONObject))
+                if (item instanceof JSONObject) {
+                    toReturn.addAll(pullOutMetadataNames(item as JSONObject))
+                }
             }
         }
 
