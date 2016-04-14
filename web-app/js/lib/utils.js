@@ -2,50 +2,17 @@ var mpgSoftware = mpgSoftware || {};
 
 var UTILS = {
     /***
-     * General-purpose utility that JavaScript ought to have.
-     * @param map
-     * @returns {{}}
-     */
-    invertMap: function (map) {
-        var inv = {};
-        var keys = Object.keys(map);
-        for (var i = 0; i < keys.length; i++) {
-            if (map[keys[i]]) {
-                inv[map[keys[i]]] = keys[i];
-            }
-        }
-        return inv;
-    },
-    /***
-     * One of those things JavaScript ought to have. The only warning-- these maps must share no keys Or
-     * else to lose  values
-     * @param workingMap
-     * @param mapFromWhichWeExtract
-     * @returns Resulting concatenated map, though this is also available through the first input parameter
-     */
-    concatMap: function (workingMap, mapFromWhichWeExtract) {
-        if (typeof(workingMap) === "undefined") {
-            workingMap = {};
-        }
-        if (mapFromWhichWeExtract)
-            var keys = Object.keys(mapFromWhichWeExtract);
-        if (typeof keys !== 'undefined') {
-            for (var i = 0; i < keys.length; i++) {
-                workingMap[keys[i]] = mapFromWhichWeExtract [keys[i]];
-            }
-        }
-        return workingMap;
-    },
-    /***
      * Everyone seems to use three digits of precision. I wonder why
      * @param incoming
      * @returns {string}
      */
-    realNumberFormatter: function (incoming) {
+    realNumberFormatter: function (incoming, precision) {
+        // if precision isn't defined, default to 3
+        precision = precision || 3;
         var returnValue = "(null)";
         if (incoming !=  null ){
             var value = parseFloat(incoming);
-            returnValue = value.toPrecision(3);
+            returnValue = value.toPrecision(precision);
         }
         return returnValue;
     },
@@ -56,6 +23,18 @@ var UTILS = {
         } else {
             return  null;
         }
+    },
+    /**
+     * Parses the input to the specified number of digits, returning a float
+     * without trailing zeros
+     * @param numberToParse
+     * @param precision
+     */
+    parseANumber: function(numberToParse, precision) {
+        // if precision isn't defined, default to 10
+        precision = precision || 10;
+        var stringedNumber = UTILS.realNumberFormatter(numberToParse, precision);
+        return parseFloat(stringedNumber);
     },
     /***
      * Take phenotype information delivered by the server and change it into a usable form.
@@ -114,7 +93,7 @@ var UTILS = {
             if (a.technology < b. technology) return -1;
             if (a.technology > b. technology) return 1;
             return 0;
-        }
+        };
         $.ajax({
             cache: false,
             type: "post",
@@ -128,19 +107,8 @@ var UTILS = {
                     ( typeof data.sampleGroupMap !== 'undefined' )  ) {
                     var sampleGroupMap = data.sampleGroupMap;
                     if (typeof sampleGroupMap !== 'undefined'){
-                        var dataSetNames =  Object.keys(sampleGroupMap);
-                        var dataSetArray = [];
-                        for (var i = 0; i < dataSetNames.length; i++) {
-                            dataSetArray.push(sampleGroupMap[dataSetNames[i]]);
-                        }
-                        var sortedDataSetArray = dataSetArray.sort(compareDatasetsByTechnology);
-                        var dataSetPropertyValues = [];
-                        for (var i = 0; i < sortedDataSetArray.length; i++) {
-                            if (sortedDataSetArray[i]) {
-                                dataSetPropertyValues.push(sortedDataSetArray[i]);
-                            }
-                        }
-                        callBack (phenotypeName,dataSetPropertyValues,passThruValues);
+                        var datasets = _.chain(sampleGroupMap).values().sortBy('technology').value();
+                        callBack (phenotypeName,datasets,passThruValues);
 
                     }
                 }
@@ -169,196 +137,7 @@ var UTILS = {
         }
         return retVal;
     },
-    get_variant_repr: function (v) {
-        return v.CHROM + ':' + v.POS;
-    },
 
-    /***
-     * We need a name for the variant
-     * @param v
-     * @param emergencyTitle
-     * @returns {*}
-     */
-    get_variant_title: function (v, emergencyTitle) {
-        var variantName;
-        if (v) {
-            if (v.DBSNP_ID) {
-                variantName = v.DBSNP_ID;
-            } else if (v.ID) {
-                variantName = v.ID;
-            } else {
-                variantName = emergencyTitle;
-            }
-        } else {
-            variantName = emergencyTitle;
-        }
-        return variantName;
-    },
-    variantInfoHeaderSentence: function (inGene,closestGene,gene,liesInString,isNearestToString) {
-        var returnValue = "";
-        if (inGene) {
-            returnValue += (liesInString+" <a href='../../gene/geneInfo/"+gene+"'>" + gene + "</a>");
-        } else {
-            returnValue += (isNearestToString+" <a href='../../gene/geneInfo/"+closestGene+"'>" + closestGene + "</a>");
-        }
-        return  returnValue;
-    },
-    get_highest_frequency: function (v) {
-        var max = 0;
-        var max_pop = '';
-        _.each(['AA', 'EA', 'SA', 'EU', 'HS'], function (k) {
-            var af = v['_13k_T2D_' + k + '_MAF'];
-            if (af > max) {
-                max = af;
-                max_pop = k;
-            }
-        });
-        return [max, max_pop];
-    },
-
-    get_simple_variant_effect: function (v) {
-        if (v.MOST_DEL_SCORE == 1) {
-            return 'protein-truncating'
-        }
-        else if (v.MOST_DEL_SCORE == 2) {
-            return 'missense'
-        }
-        else if (v.MOST_DEL_SCORE == 3) {
-            return 'synonymous-coding'
-        }
-        // if MOST_DEL_SCORE is null, treat it as 4
-        else {
-            return 'non-coding';
-        }
-    },
-
-    getSimpleVariantsEffect: function (vMOST_DEL_SCORE) {
-        if (vMOST_DEL_SCORE == 1) {
-            return 'protein-truncating'
-        }
-        else if (vMOST_DEL_SCORE == 2) {
-            return 'missense'
-        }
-        else if (vMOST_DEL_SCORE == 3) {
-            return 'synonymous-coding'
-        }
-        // if MOST_DEL_SCORE is null, treat it as 4
-        else {
-            return 'non-coding';
-        }
-    },
-
-    get_significance_text: function (significance) {
-        if (significance < 5e-8) {
-            return 'genome-wide';
-        } else if (significance < 5e-2) {
-            return 'nominal';
-        } else {
-            return
-        }
-    },
-
-    // try map way of doing it
-    // pass in sequencing tech as key, p-value as value
-    get_lowest_p_value_from_map: function (pValueMap) {
-        // map has sequencing tech as key, p-value as value
-        var pValue = 1;
-        var dataType = '';
-
-        for (var key in pValueMap) {
-            if (pValueMap.hasOwnProperty(key)) {
-                var pValueTemp = pValueMap[key];
-                if ((pValueTemp != null) && (pValueTemp < pValue)) {
-                    pValue = pValueMap[key];
-                    dataType = key;
-                }
-            }
-        }
-        return [pValue, dataType];
-    },
-
-    get_lowest_p_value: function (variant) {
-        var pval = 1;
-        var datatype = '';
-        if (variant.IN_EXCHP && variant.EXCHP_T2D_P_value < pval) {
-            pval = variant.EXCHP_T2D_P_value;
-            datatype = 'exome chip';
-        }
-        if (variant.IN_EXSEQ && variant._13k_T2D_P_EMMAX_FE_IV < pval) {
-            pval = variant._13k_T2D_P_EMMAX_FE_IV;
-            datatype = 'exome sequencing';
-        }
-        if (variant.IN_GWAS && variant.GWAS_T2D_PVALUE < pval) {
-            pval = variant.GWAS_T2D_PVALUE;
-            datatype = 'GWAS';
-        }
-        return [pval, datatype];
-    },
-    expandEthnicityDesignation: function (shortName) {
-        var retVal = "";
-        var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
-        var ethnicityFullName = ["African-Americans", "East Asians", "South Asians", "Europeans", "Hispanics"];
-        for (var i = 0; i < ethnicAbbreviation.length; i++) {
-            if (shortName === (ethnicAbbreviation [i])) break;
-        }
-        if (i < ethnicityFullName.length) {
-            retVal = ethnicityFullName [i];
-        } else {
-            retVal = shortName;
-        }
-        return  retVal;
-    },
-
-    get_consequence_names: function (variant) {
-        if (!variant.Consequence) return [];
-        var keys = variant.Consequence.split(';');
-        var names = [];
-        _.each(keys, function (k) {
-            if (!k) return;
-            var consequence = _.find(CONSTANTS.so_consequences, function (c) {
-                return c.key == k
-            });
-            if (consequence) {
-                names.push(consequence.name);
-            } else {
-                names.push(k);
-            }
-        });
-        return names;
-    },
-
-    fillAssociationsStatistics: function (variant, vMap, availableData, pValue, strongCutOff, weakCutOff, variantTitle, textStrongLine1, textStrongLine2, textMediumLine, textWeakLine, noDataLine) {
-        var retVal = "";
-        var iMap = UTILS.invertMap(vMap);
-        if (variant[iMap[availableData]]) {
-            retVal += "<p>";
-            // may or may not be bold
-            if (variant[iMap[pValue]] <= strongCutOff) {
-                retVal += "<strong>";
-            }
-            // always needs descr
-            retVal += (textStrongLine1 + " " + variantTitle + " ");
-            if (variant[iMap[pValue]] <= strongCutOff) {
-                retVal += textStrongLine2;
-            }
-            if (variant[iMap[pValue]] > strongCutOff && variant[iMap[pValue]] <= weakCutOff) {
-                retVal += textMediumLine;
-            }
-            if (variant[iMap[pValue]] > weakCutOff) {
-                retVal += textWeakLine;
-            }
-            if (variant[iMap[pValue]] <= strongCutOff) {
-                retVal += "</strong>";
-            }
-            retVal += "</p>" +
-                "<ul>" +
-                "<li>p-value from this analysis: " + variant[iMap[pValue]] + "</li>" +
-                "</ul>";
-        } else {
-            retVal += noDataLine;
-        }
-        return retVal;
-    },
     verifyThatDisplayIsWarranted: function (fieldToTest, divToDisplayIfWeHaveData, giveToDisplayIfWeHaveNoData) {
         if (!fieldToTest) {
             divToDisplayIfWeHaveData.hide();

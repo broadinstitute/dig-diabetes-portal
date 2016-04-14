@@ -547,6 +547,7 @@ class JsonParserTest extends TestCase {
         // test for other meaning
         assertNotNull(propertyWithOtherMeaning);
         assertTrue(!propertyWithOtherMeaning.hasMeaning(PortalConstants.PROPERTY_MEANING_P_VALUE_KEY));
+        assertTrue(propertyWithOtherMeaning.hasMeaning(PortalConstants.PROPERTY_MEANING_BETA_KEY));
     }
 
     @Test
