@@ -59,24 +59,6 @@ class VariantInfoController {
         }
     }
 
-    def retrieveBurdenMetadataAjax() {
-        JSONObject jsonObject =  restServerService.retrieveBurdenMetadata ()
-        render(status:200, contentType:"application/json") {
-            [metaData:jsonObject]
-        }
-    }
-
-
-
-    def retrieveSampleListAjax() {
-        JSONObject jsonObject =  widgetService.getSampleList ()
-        render(status:200, contentType:"application/json") {
-            [metaData:jsonObject]
-        }
-    }
-
-
-
 
     /**
      * method to service ajax call for the 'What effect on the encoded protein' section/accordion
@@ -149,6 +131,29 @@ class VariantInfoController {
     }
 
 
+
+    /***
+     * retrieves samples with values along all requested properties
+     *
+     * @return
+     */
+    def retrieveSampleListAjax() {
+        JsonSlurper slurper = new JsonSlurper()
+        String jsonDataAsString = params.data
+        JSONObject sampleCallSpecifics = slurper.parseText(jsonDataAsString)
+
+        JSONObject jsonObject =  widgetService.getSampleList ( sampleCallSpecifics)
+        render(status:200, contentType:"application/json") {
+            [metaData:jsonObject]
+        }
+    }
+
+
+    /***
+     * Returns the names for available data sets so that the user can choose between them
+     *
+     * @return
+     */
     def sampleMetadataExperimentAjax() {
         List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "mdv1", MetaDataService.METADATA_SAMPLE)
          JSONObject jsonObject = burdenService.convertSampleGroupListToJson (sampleGroupList)
@@ -157,9 +162,11 @@ class VariantInfoController {
         render(status: 200, contentType: "application/json") {jsonObject}
     }
 
-
-
-
+    /***
+     *  returns lists of  filters, covariates, and phenotypes
+     *
+     * @return
+     */
     def sampleMetadataAjax() {
         String dataset = params.dataset
         SampleGroup sampleGroup = metaDataService.getSampleGroupByFromSamplesName(dataset)

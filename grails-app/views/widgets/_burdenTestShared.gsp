@@ -210,6 +210,7 @@ div.labelAndInput > input {
 
         var retrieveSampleFilterMetadata = function (dropdownSel, dropDownSelector) {
             var loading = $('#spinner').show();
+
             var domSelector = $(dropdownSel);
             $.ajax({
                 cache: false,
@@ -236,6 +237,7 @@ div.labelAndInput > input {
                                     });
                                     $("#sampleRow").show();
                                    $("#person").append(output);
+                                   refreshSampleData('#datasetFilter',mpgSoftware.burdenTestShared.utilizeSampleInfoForDistributionPlots);
                             }
                             loading.hide();
                         },
@@ -245,6 +247,46 @@ div.labelAndInput > input {
                         }
                 });
         };
+
+
+
+        var refreshSampleData = function (dataSetSel,callback){
+
+           var collectingFilterNames = function (){
+               var filterStrings = [];
+               _.forEach( extractAllFilterNames(), function(filterObject){
+                   var oneFilter = [];
+                   _.forEach( filterObject, function(value, key){
+                       oneFilter.push("\""+key+"\": \""+value+"\"");
+                   });
+                   filterStrings.push("{"+oneFilter.join(",\n")+"}");
+               } );
+               return "[\n" + filterStrings.join(",") + "\n]";
+            };
+
+
+
+
+            var collectingFilterValues = function (){
+               var filterStrings = [];
+               _.forEach( extractFilters(), function(filterObject){
+                   var oneFilter = [];
+                   _.forEach( filterObject, function(value, key){
+                       oneFilter.push("\""+key+"\": \""+value+"\"");
+                   });
+                   filterStrings.push("{"+oneFilter.join(",\n")+"}");
+               } );
+               return "[\n" + filterStrings.join(",") + "\n]";
+            };
+
+            var domSelector = $(dataSetSel);
+            var dataSetName = domSelector.val();
+            var jsonDescr = "{\"dataset\":\""+dataSetName+"\"," +
+                              "\"requestedData\":"+collectingFilterNames()+"," +
+                              "\"filters\":"+collectingFilterValues()+"}";
+
+            mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, callback  );
+        }
 
 
         var filterAndRun = function (data){
@@ -305,17 +347,6 @@ div.labelAndInput > input {
         var runBurdenTest = function (samplesWeWant){
 
 
-            var collectingFilterValues = function (){
-               var filterStrings = [];
-               _.forEach( extractFilters(), function(filterObject){
-                   var oneFilter = [];
-                   _.forEach( filterObject, function(value, key){
-                       oneFilter.push("\""+key+"\": \""+value+"\"");
-                   });
-                   filterStrings.push("{"+oneFilter.join(",\n")+"}");
-               } );
-               return "{\"filters\":[\n" + filterStrings.join(",") + "\n]}";
-            }
 
 
             var collectingCovariateValues = function (){
@@ -514,6 +545,25 @@ div.labelAndInput > input {
 
         };
 
+
+
+
+       function extractAllFilterNames(){
+            var allFilters =  $('.considerFilter')
+            var requestedFilters = _.map( allFilters, function(filter){
+                var  filterId = $(filter).attr('id');
+                var partsOfFilterName = filterId.split("_");
+                if (partsOfFilterName[1].indexOf("{{")==-1){
+                   return  {"name":partsOfFilterName[1]};
+                }
+            } );
+            return requestedFilters;
+        };
+
+
+
+
+
         function extractFilters(){
             var allFilters =  $('.considerFilter')
             var requestedFilters = [];
@@ -525,7 +575,7 @@ div.labelAndInput > input {
                 var filterCheck = filterRowDom.find('.utilize');
                 var filterParm = filterRowDom.find('.filterParm');
                 var filterCmp = filterRowDom.find('.filterCmp');
-                if (filterCheck.is(':checked')){
+                if (filterCheck.is(':checked')&&(filterName.indexOf("{{")==-1)&&(filterParm.val().length>0)){
                      var  dataSetMap = {"name":filterName,
                         "parm":filterParm.val(),
                         "cmp":filterCmp.val()};
@@ -602,10 +652,10 @@ div.labelAndInput > input {
                 cache: false,
                 type: "post",
                 url: "${createLink(controller: 'variantInfo', action: 'retrieveSampleListAjax')}",
-                data: data,
+                data: {'data':data},
                 async: true,
-                success: function (data) {
-                    callback(data);
+                success: function (returnedData) {
+                    callback(returnedData);
                 },
                 error: function (jqXHR, exception) {
                     core.errorReporter(jqXHR, exception);
@@ -628,6 +678,7 @@ div.labelAndInput > input {
             utilizeSampleInfoForDistributionPlots: utilizeSampleInfoForDistributionPlots,
             retrieveMatchingDataSets:retrieveMatchingDataSets,
             retrieveSampleMetadata:retrieveSampleMetadata,
+            refreshSampleData:refreshSampleData,
             retrieveSampleFilterMetadata:retrieveSampleFilterMetadata
         }
 
@@ -635,7 +686,6 @@ div.labelAndInput > input {
 
 $( document ).ready( function (){
   mpgSoftware.burdenTestShared.retrieveExperimentMetadata( '#datasetFilter' );
-  mpgSoftware.burdenTestShared.retrieveSampleInformation  ( '<%=variantIdentifier%>', mpgSoftware.burdenTestShared.utilizeSampleInfoForDistributionPlots  );
 } );
 
 </g:javascript>
@@ -891,7 +941,8 @@ $( document ).ready( function (){
                         <div class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter">
                             <button id="singlebutton" name="singlebutton" style="height: 80px"
                                     class="btn btn-primary btn-lg burden-test-btn"
-                                    onclick="mpgSoftware.burdenTestShared.retrieveSampleInformation  ( '', mpgSoftware.burdenTestShared.filterAndRun  )">Run</button>
+                                    onclick="mpgSoftware.burdenTestShared.refreshSampleData  ( '#datasetFilter', mpgSoftware.burdenTestShared.filterAndRun  )">Run</button>
+                            %{--onclick="mpgSoftware.burdenTestShared.retrieveSampleInformation  ( '', mpgSoftware.burdenTestShared.filterAndRun  )">Run</button>--}%
                         </div>
                     </div>
                 </div>

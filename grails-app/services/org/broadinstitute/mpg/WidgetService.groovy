@@ -6,6 +6,7 @@ import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
 import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseFlatSearchTranslator
 import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseResultParser
 import org.broadinstitute.mpg.diabetes.util.PortalException
+import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 @Transactional
@@ -37,10 +38,23 @@ class WidgetService {
 
 
 
-    public  JSONObject  getSampleList() {
+    public  JSONObject  getSampleList( JSONObject jsonObject) {
         // local variables
         JSONObject jsonResultString
+        def filters = jsonObject.filters
+        // apparently if the list contains one object then it is not returned is a list with one object, but as an object.  Come on -- really?
+        String dataset = jsonObject.dataset
+        JSONArray requestedData = jsonObject.requestedData
         String jsonGetDataString
+        List<String> requestedDataList = []
+
+        for (Map map in requestedData){
+            if (map.name){
+                requestedDataList << """ "${map.name}":["${dataset}"]""".toString()
+            }
+        }
+        requestedDataList << """ "ID":["${dataset}"]""".toString()
+
 
         // get json getData query string
         jsonGetDataString = """{
@@ -51,16 +65,11 @@ class WidgetService {
     "properties":    {
                            "cproperty": [],
                           "orderBy":    [],
-"dproperty" : { "HDL" : [ "samples_13k_mdv2"],
-                "BMI" : [ "samples_13k_mdv2"],
-                "AGE" : [ "samples_13k_mdv2"],
-                "LDL" : [ "samples_13k_mdv2"],
-                "ID" : [ "samples_13k_mdv2"] } ,
+"dproperty" : { ${requestedDataList.join(",")} } ,
       "pproperty" : { }} ,
 
     "filters":    [
-                    {"dataset_id": "samples_13k_mdv2", "phenotype": "blah", "operand": "LDL", "operator": "LT", "value": 200, "operand_type": "FLOAT"},
-                    {"dataset_id": "samples_13k_mdv2", "phenotype": "blah", "operand": "HDL", "operator": "LT", "value": 60, "operand_type": "FLOAT"}
+                    {"dataset_id": "samples_13k_mdv2", "phenotype": "blah", "operand": "LDL", "operator": "LT", "value": 2000, "operand_type": "FLOAT"}
                 ]
 }""".toString()
 
