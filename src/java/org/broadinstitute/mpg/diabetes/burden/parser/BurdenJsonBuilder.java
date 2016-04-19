@@ -149,14 +149,22 @@ public class BurdenJsonBuilder {
         stringBuilder.append("\"");
         stringBuilder.append(PortalConstants.JSON_BURDEN_COVARIATES_KEY);
         stringBuilder.append("\" : [");
-        if ((covariatesList == null) || (covariatesList.size() == 0)) {
-            for (int i = 1; i < 11; i++) {
-                stringBuilder.append("\"C" + i + "\"");
-                if (i < 10) {
+        if (covariatesList != null)  {
+            for (int i = 0; i < covariatesList.size(); i++) {
+                stringBuilder.append("\"C" + covariatesList.get(i) + "\"");
+                if (i < covariatesList.size()-1) {
                     stringBuilder.append(",");
                 }
             }
         }
+//        if ((covariatesList == null) || (covariatesList.size() == 0)) {
+//            for (int i = 1; i < 11; i++) {
+//                stringBuilder.append("\"C" + i + "\"");
+//                if (i < 10) {
+//                    stringBuilder.append(",");
+//                }
+//            }
+//        }
         stringBuilder.append("]}");
 
         // create the filters list object string

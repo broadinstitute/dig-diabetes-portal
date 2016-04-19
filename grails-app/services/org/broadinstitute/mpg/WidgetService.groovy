@@ -47,6 +47,7 @@ class WidgetService {
         JSONArray requestedData = jsonObject.requestedData
         String jsonGetDataString
         List<String> requestedDataList = []
+        List<String> requestedFilterList = []
 
         for (Map map in requestedData){
             if (map.name){
@@ -54,6 +55,32 @@ class WidgetService {
             }
         }
         requestedDataList << """ "ID":["${dataset}"]""".toString()
+        String filterDesignation = ""
+        if (filters.size()==0){
+            filterDesignation =  """            "filters":    [
+                    {"dataset_id": "samples_13k_mdv2", "phenotype": "blah", "operand": "LDL", "operator": "LT", "value": 2000, "operand_type": "FLOAT"}
+                ]
+""".toString()
+        }
+        else if (filters.size()> 1){
+            for (Map map in filters){
+                String operator = (map.cmp=="1") ? "LT" : "GT"
+                if (map.name){
+                    requestedFilterList << """{"dataset_id": "${dataset}", "phenotype": "b", "operand": "${map.name}", "operator": "${operator}", "value": ${map.parm}, "operand_type": "FLOAT"}""".toString()
+                }
+            }
+            filterDesignation = """ "filters":    [
+                    ${requestedFilterList.join(",")}
+            ]
+""".toString()
+        } else {
+            String operator = (filters.cmp[0]=="1") ? "LT" : "GT"
+            filterDesignation = """ "filters":    [
+                    {"dataset_id": "${dataset}", "phenotype": "b", "operand": "${filters[0].name}", "operator": "${operator}", "value": ${filters[0].parm}, "operand_type": "FLOAT"}
+            ]""".toString()
+        }
+
+
 
 
         // get json getData query string
@@ -67,11 +94,17 @@ class WidgetService {
                           "orderBy":    [],
 "dproperty" : { ${requestedDataList.join(",")} } ,
       "pproperty" : { }} ,
+       ${filterDesignation}
+}""".toString()
 
-    "filters":    [
+
+
+        /*
+            "filters":    [
                     {"dataset_id": "samples_13k_mdv2", "phenotype": "blah", "operand": "LDL", "operator": "LT", "value": 2000, "operand_type": "FLOAT"}
                 ]
-}""".toString()
+         */
+
 
         // submit the post request
         jsonResultString = this.restServerService.postGetSampleDataCall(jsonGetDataString, RestServerService.SAMPLE_SERVER_URL_QA)

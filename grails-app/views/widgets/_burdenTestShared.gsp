@@ -190,6 +190,7 @@ div.labelAndInput > input {
                         async: true,
                         success: function (data) {
                             var phenotypeDropdown = $(dropDownSelector);
+                            phenotypeDropdown.empty();
                             if ( ( data !==  null ) &&
                                     ( typeof data !== 'undefined') &&
                                     ( typeof data.phenotypes !== 'undefined' ) &&
@@ -740,17 +741,17 @@ $( document ).ready( function (){
                 </div>
 
 
-                <div class="row" id="sampleRow" style="display:none">
+                <div class="row" id="sampleRow" style="display:none; padding: 10px 0 0 0">
                     <div class="col-sm-4 col-xs-12 text-right"><label>Sample filters:</label></div>
                     <div class="col-sm-8 col-xs-12 text-left">
-                    <div class="row sampleFilterHeader">
-                        <div class="col-sm-1">
+                    <div class="row sampleFilterHeader" style="text-decoration: underline">
+                        <div class="col-sm-1"  style="padding-left: 4px">
                             Use
                         </div>
                         <div class="col-sm-3">
                             Filter
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-3" style="padding-left: 4px">
                             Cmp
                         </div>
                         <div class="col-sm-4">
@@ -770,6 +771,12 @@ $( document ).ready( function (){
                             </div>
                         </div>
                     </div>
+                    <div class="pull-right" style="padding: 10px 0 0 0">
+                        <button class="btn btn-xs"
+                                onClick="mpgSoftware.burdenTestShared.refreshSampleData  ( '#datasetFilter', mpgSoftware.burdenTestShared.utilizeSampleInfoForDistributionPlots  )">
+                            Refresh distributions &gt;&gt;</button>
+                    </div>
+
 
 
 
@@ -779,9 +786,9 @@ $( document ).ready( function (){
                                 <input class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}" value="{{name}}" checked/></td>
                             </div>
                             <div class="col-sm-3">
-                                <span onmouseover="displaySampleDistribution('{{name}}', '#boxWhiskerPlot')">{{name}}</span>
+                                <span>{{name}}</span>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                                 <select id="cmp{{name}}" class="form-control filterCmp" data-selectfor="{{name}}Comparator">
                                     <option value="1">&lt;</option>
                                     <option value="2">&gt;</option>
@@ -791,6 +798,10 @@ $( document ).ready( function (){
                             <div class="col-sm-4">
                                 <input  id="inp{{name}}" type="text" class="filterParm form-control" data-type="propertiesInput"
                                        data-prop="{{name}}Value" data-translatedname="{{name}}">
+
+                            </div>
+                            <div class="col-sm-1">
+                                <span  onmouseover="displaySampleDistribution('{{name}}', '#boxWhiskerPlot')" class="glyphicon glyphicon-arrow-right pull-right"></span>
                             </div>
 
                         </div>
@@ -803,14 +814,17 @@ $( document ).ready( function (){
                                 <input id="use{{name}}" type="checkbox" name="use{{name}}" value="{{name}}" checked/></td>
                             </div>
                             <div class="col-sm-3">
-                                <span onmouseover="displaySampleDistribution('{{name}}', '#boxWhiskerPlot')">{{name}}</span>
+                                <span>{{name}}</span>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2" style="text-align: center">
                                 =
                             </div>
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" data-type="propertiesInput"
                                        data-prop="{{name}}Value" data-translatedname="{{name}}">
+                            </div>
+                            <div class="col-sm-1">
+                                <span  onmouseover="displaySampleDistribution('{{name}}', '#boxWhiskerPlot')" class="glyphicon glyphicon-arrow-right pull-right"></span>
                             </div>
 
                         </div>
@@ -942,7 +956,6 @@ $( document ).ready( function (){
                             <button id="singlebutton" name="singlebutton" style="height: 80px"
                                     class="btn btn-primary btn-lg burden-test-btn"
                                     onclick="mpgSoftware.burdenTestShared.refreshSampleData  ( '#datasetFilter', mpgSoftware.burdenTestShared.filterAndRun  )">Run</button>
-                            %{--onclick="mpgSoftware.burdenTestShared.retrieveSampleInformation  ( '', mpgSoftware.burdenTestShared.filterAndRun  )">Run</button>--}%
                         </div>
                     </div>
                 </div>
