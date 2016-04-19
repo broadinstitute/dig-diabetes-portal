@@ -134,20 +134,31 @@ div.labelAndInput > input {
 
     mpgSoftware.burdenTestShared = (function () {
         var loading = $('#rSpinner');
+        var storedSampleMetadata;
 
-            var retrieveMatchingDataSets = function (selPhenotypeSelector,selDataSetSelector){
-                var processReturnedDataSets = function (phenotypeName,matchingDataSets){
-                   var dataSetDropDown = $(selDataSetSelector);
-                   if ((typeof dataSetDropDown !== 'undefined') &&
-                     (typeof matchingDataSets !== 'undefined') &&
-                     (matchingDataSets.length > 0)) {
-                     for ( var i = 0 ; i < matchingDataSets.length; i++ )
-                        dataSetDropDown.append(new Option(matchingDataSets[i].translation,matchingDataSets[i].name,matchingDataSets[i].translation));
-                     }
-                };
-                UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],selPhenotypeSelector.value,
-                "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",processReturnedDataSets );
+
+        var storeSampleMetadata = function (metadata){
+            storedSampleMetadata = metadata;
+        };
+
+
+        var getStoredSampleMetadata  = function (metadata){
+            return storedSampleMetadata;
+        };
+
+        var retrieveMatchingDataSets = function (selPhenotypeSelector,selDataSetSelector){
+            var processReturnedDataSets = function (phenotypeName,matchingDataSets){
+               var dataSetDropDown = $(selDataSetSelector);
+               if ((typeof dataSetDropDown !== 'undefined') &&
+                 (typeof matchingDataSets !== 'undefined') &&
+                 (matchingDataSets.length > 0)) {
+                 for ( var i = 0 ; i < matchingDataSets.length; i++ )
+                    dataSetDropDown.append(new Option(matchingDataSets[i].translation,matchingDataSets[i].name,matchingDataSets[i].translation));
+                 }
             };
+            UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],selPhenotypeSelector.value,
+            "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",processReturnedDataSets );
+        };
 
 
         var retrieveExperimentMetadata = function (dropDownSelector) {
@@ -189,6 +200,7 @@ div.labelAndInput > input {
                         data: {dataset:domSelector.val()},
                         async: true,
                         success: function (data) {
+                            storeSampleMetadata(data);
                             var phenotypeDropdown = $(dropDownSelector);
                             phenotypeDropdown.empty();
                             if ( ( data !==  null ) &&
@@ -548,6 +560,55 @@ div.labelAndInput > input {
 
 
 
+        var buildCategoricalPlot = function (inData,selector) {
+            var data = [
+                { category: 'male',
+                    value: 230,
+                    color: '#0000b4'},
+                { category: 'female',
+                    value: 245,
+                    color: '#0082ca'}
+//                ,
+//                { category: 'we go',
+//                    value: 20,
+//                    color: '#5500ca'},
+//                { category: 'the',
+//                    value: 190,
+//                    color: '#009400'},
+//                { category: 'rounder',
+//                    value: 170,
+//                    color: '#3394aa'} ,
+//                { category: 'we get',
+//                    value: 150,
+//                    color: '#0000ff'}
+            ],
+            roomForLabels = 120,
+            maximumPossibleValue = 1,
+            labelSpacer = 10;
+
+    var margin = {top: 50, right: 50, bottom: 20, left: 30},
+            width = 500 - margin.left - margin.right,
+            height = 350 - margin.top - margin.bottom;
+
+
+
+        var barChart = baget.mBar()
+                .width(width)
+                .height(height)
+                .margin(margin)
+                .showGridLines (false)
+                .blackTextAfterBar (true)
+                .labelSpacer (labelSpacer)
+                .dataHanger(selector,data);
+
+        d3.select(selector).call(barChart.render);
+
+     };
+
+
+
+
+
 
        function extractAllFilterNames(){
             var allFilters =  $('.considerFilter')
@@ -633,13 +694,25 @@ div.labelAndInput > input {
             var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
             var plotHoldingStructure = $('#boxWhiskerPlot');
             plotHoldingStructure.empty();
+            var sampleMetadata = getStoredSampleMetadata();
             for ( var i = 0 ; i < displayableData.length ; i++ ){
                 var singleElement = displayableData[i];
                 var elementName = singleElement.name;
                 var divElementName = 'bwp_'+elementName;
                 plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
                 $('#'+divElementName).hide();
-                buildBoxWhiskerPlot([singleElement],'#'+divElementName);
+                if (sampleMetadata.filters){
+                  var filter = _.find(sampleMetadata.filters, ['name',elementName]);
+                  if (filter){
+                     if (filter.type === 'INTEGER'){
+                        buildCategoricalPlot([singleElement],'#'+divElementName);
+                     } else if (filter.type === 'STRING'){
+                        buildCategoricalPlot([singleElement],'#'+divElementName);
+                     } if (filter.type === 'FLOAT'){
+                        buildBoxWhiskerPlot([singleElement],'#'+divElementName);
+                     }
+                  }
+                }
             }
         };
 
@@ -680,7 +753,8 @@ div.labelAndInput > input {
             retrieveMatchingDataSets:retrieveMatchingDataSets,
             retrieveSampleMetadata:retrieveSampleMetadata,
             refreshSampleData:refreshSampleData,
-            retrieveSampleFilterMetadata:retrieveSampleFilterMetadata
+            retrieveSampleFilterMetadata:retrieveSampleFilterMetadata,
+            getStoredSampleMetadata: getStoredSampleMetadata
         }
 
     }());

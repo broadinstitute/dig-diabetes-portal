@@ -82,8 +82,7 @@ class WidgetService {
 
 
 
-
-        // get json getData query string
+        // TODO:  uncomment the real code
         jsonGetDataString = """{
     "passback": "123abc",
     "entity": "variant",
@@ -96,6 +95,22 @@ class WidgetService {
       "pproperty" : { }} ,
        ${filterDesignation}
 }""".toString()
+
+        // TODO:  uncomment the real code
+//        jsonGetDataString = """{
+//    "passback": "123abc",
+//    "entity": "variant",
+//    "page_number": 0,
+//    "count": false,
+//    "properties":    {
+//                           "cproperty": [],
+//                          "orderBy":    [],
+//"dproperty" : { "ID" : [ "samples_stroke_mdv5"], "AGE" : [ "samples_stroke_mdv5"], "SEX" : [ "samples_stroke_mdv5"], "Lobar_ICH" : [ "samples_stroke_mdv5"] } ,
+//      "pproperty" : { }} ,
+//        "filters":    [
+//                    {"dataset_id": "samples_stroke_mdv5", "phenotype": "blah", "operand": "AGE", "operator": "LT", "value": 40, "operand_type": "FLOAT"}
+//                ]
+//}""".toString()
 
 
 

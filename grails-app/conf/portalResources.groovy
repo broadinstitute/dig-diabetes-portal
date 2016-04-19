@@ -28,6 +28,11 @@ modules = {
         resource url: 'css/dport/sunburst.css'
         resource url: 'js/lib/dport/sunburst.js'
     }
+    mbar {
+        resource url: 'css/dport/mbarchart.css'
+        resource url: 'js/lib/dport/mbarchart.js'
+    }
+
     d3tooltip {
         resource url: 'js/lib/dport/d3tooltip.js'
         resource url: 'css/dport/d3tooltip.css'
@@ -64,7 +69,7 @@ modules = {
         resource url: 'js/lib/dport/igvLaunch.js'
     }
     variantInfo {
-        dependsOn "core"
+        dependsOn "core", "mbar"
 
         resource url: 'css/images/controls.png'
 
