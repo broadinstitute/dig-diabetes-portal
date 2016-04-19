@@ -38,7 +38,7 @@
 <ul id="trackList" class="dropdown-menu">
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'FastGlu',
         label: 'fasting glucose',
@@ -52,7 +52,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: '2hrGLU_BMIAdj',
         label: 'two-hour glucose',
@@ -67,7 +67,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: '2hrIns_BMIAdj',
         label: 'two-hour insulin',
@@ -82,7 +82,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'FastIns',
         label: 'fasting insulin',
@@ -97,7 +97,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'ProIns',
         label: 'fasting proinsulin',
@@ -111,7 +111,7 @@
     })"><g:message code="informational.shared.traits.fasting_proinsulin" /></a>
 </li>                            <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'HbA1c',
         label: 'HBA1C',
@@ -126,7 +126,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'HOMAIR',
         label: 'HOMA-IR',
@@ -141,7 +141,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'HOMAB',
         label: 'HOMA-B',
@@ -156,7 +156,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'BMI',
         label: 'BMI',
@@ -171,7 +171,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'WAIST_CIRCUMFRENCE',
         label: 'waist circumference',
@@ -186,7 +186,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'HIP_CIRCUMFRENCE',
         label: 'hip circumference',
@@ -201,7 +201,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'WHR',
         label: 'waist-hip ratio',
@@ -216,7 +216,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'Height',
         label: 'height',
@@ -231,7 +231,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'HDL',
         label: 'HDL',
@@ -246,7 +246,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'LDL',
         label: 'LDL',
@@ -261,7 +261,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'TG',
         label: 'triglycerides',
@@ -276,7 +276,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'CAD',
         label: 'coronary artery disease',
@@ -291,7 +291,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'CKD',
         label: 'chronic kidney disease',
@@ -306,7 +306,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'eGFRcrea',
         label: 'eGFR-creat (serum creatinine)',
@@ -321,7 +321,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'eGFRcys',
         label: 'eGFR-cys (serum cystatin C)',
@@ -336,7 +336,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'MA',
         label: 'microalbuminuria',
@@ -351,7 +351,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'UACR',
         label: 'urinary albumin-to-creatinine ratio',
@@ -366,7 +366,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'SCZ',
         label: 'schizophrenia',
@@ -381,7 +381,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'MDD',
         label: 'major depressive disorder',
@@ -396,7 +396,7 @@
 </li>
 <li>
     <a onclick="igv.browser.loadTrack({
-        type: 't2d',
+        type: 'gwas',
         url: '${restServer.currentRestServer()}trait-search',
         trait: 'BIP',
         label: 'bipolar disorder',

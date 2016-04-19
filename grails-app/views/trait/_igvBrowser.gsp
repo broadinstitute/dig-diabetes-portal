@@ -40,7 +40,7 @@
                         <ul id="trackList" class="dropdown-menu">
 <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <li>
-                            <a onclick="igv.browser.loadTrack({ type: 't2d',
+                            <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                 url: '${createLink(controller:'trait', action:'getData')}',
                                 trait: 'T2D',
                                 dataset: 'ExSeq_17k_mdv2',
@@ -51,7 +51,7 @@
                             })">T2D (<g:message code="variant.variantAssociations.source.exomeSequenceQ.help.header" />)</a>
                         </li>
                         <li>
-                            <a onclick="igv.browser.loadTrack({ type: 't2d',
+                            <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                 url: '${createLink(controller:'trait', action:'getData')}',
                                 trait: 'T2D',
                                 dataset: 'ExChip_82k_mdv2',
@@ -62,7 +62,7 @@
                             })">T2D (<g:message code="variant.variantAssociations.source.exomeChipQ.help.header" />)</a>
                         </li>
                         <li>
-                            <a onclick="igv.browser.loadTrack({ type: 't2d',
+                            <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                 url: '${createLink(controller:'trait', action:'getData')}',
                                 trait: 'FG',
                                 dataset: 'GWAS_MAGIC_mdv2',
@@ -73,7 +73,7 @@
                             })"><g:message code="informational.shared.traits.fasting_glucose" /></a>
                         </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: '2hrG',
                                     dataset: 'GWAS_MAGIC_mdv2',
@@ -84,7 +84,7 @@
                                 })"><g:message code="informational.shared.traits.two_hour_glucose" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: '2hrI',
                                     dataset: 'GWAS_MAGIC_mdv2',
@@ -95,7 +95,7 @@
                                 })"><g:message code="informational.shared.traits.two_hour_insulin" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'FI',
                                     dataset: 'GWAS_MAGIC_mdv2',
@@ -106,7 +106,7 @@
                                 })"><g:message code="informational.shared.traits.fasting_insulin" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'PI',
                                     dataset: 'GWAS_MAGIC_mdv2',
@@ -117,7 +117,7 @@
                                 })"><g:message code="informational.shared.traits.fasting_proinsulin" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'HBA1C',
                                     dataset: 'GWAS_MAGIC_mdv2',
@@ -128,7 +128,7 @@
                                 })"><g:message code="informational.shared.traits.HbA1c" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'HOMAIR',
                                     dataset: 'GWAS_MAGIC_mdv2',
@@ -139,7 +139,7 @@
                                 })"><g:message code="informational.shared.traits.HOMA-IR" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'HOMAB',
                                     dataset: 'GWAS_MAGIC_mdv2',
@@ -150,7 +150,7 @@
                                 })"><g:message code="informational.shared.traits.HOMA-B" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'BMI',
                                     dataset: 'GWAS_GIANT_mdv2',
@@ -161,7 +161,7 @@
                                 })"><g:message code="informational.shared.traits.BMI" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'WHR',
                                     dataset: 'GWAS_GIANT_mdv2',
@@ -172,7 +172,7 @@
                                 })"><g:message code="informational.shared.traits.waist_hip_ratio" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'HEIGHT',
                                     dataset: 'GWAS_GIANT_mdv2',
@@ -183,7 +183,7 @@
                                 })"><g:message code="informational.shared.traits.height" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'HDL',
                                     dataset: 'GWAS_GLGC_mdv2',
@@ -194,7 +194,7 @@
                                 })"><g:message code="informational.shared.traits.HDL_cholesterol" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'LDL',
                                     dataset: 'GWAS_GLGC_mdv2',
@@ -205,7 +205,7 @@
                                 })"><g:message code="informational.shared.traits.LDL_cholesterol" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'TG',
                                     dataset: 'GWAS_GLGC_mdv2',
@@ -216,7 +216,7 @@
                                 })"><g:message code="informational.shared.traits.triglycerides" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'CAD',
                                     dataset: 'GWAS_CARDIoGRAM_mdv2',
@@ -227,7 +227,7 @@
                                 })"><g:message code="informational.shared.traits.coronary_artery_disease" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'CKD',
                                     dataset: 'GWAS_CKDGenConsortium_mdv2',
@@ -238,7 +238,7 @@
                                 })"><g:message code="informational.shared.traits.chronic_kidney_disease" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'eGFRcrea',
                                     dataset: 'GWAS_CKDGenConsortium_mdv2',
@@ -249,7 +249,7 @@
                                 })"><g:message code="informational.shared.traits.eGFR-creat" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'eGFRcys',
                                     dataset: 'GWAS_CKDGenConsortium_mdv2',
@@ -260,7 +260,7 @@
                                 })"><g:message code="informational.shared.traits.eGFR-cys" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'MA',
                                     dataset: 'GWAS_MAGIC_mdv2',
@@ -271,7 +271,7 @@
                                 })"><g:message code="informational.shared.traits.microalbuminuria" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'UACR',
                                     dataset: 'GWAS_CKDGenConsortium_mdv2',
@@ -282,7 +282,7 @@
                                 })"><g:message code="informational.shared.traits.urinary_atc_ratio" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'SCZ',
                                     dataset: 'GWAS_PGC_mdv2',
@@ -293,7 +293,7 @@
                                 })"><g:message code="informational.shared.traits.schizophrenia" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'MDD',
                                     dataset: 'GWAS_PGC_mdv2',
@@ -304,7 +304,7 @@
                                 })"><g:message code="informational.shared.traits.depression" /></a>
                             </li>
                             <li>
-                                <a onclick="igv.browser.loadTrack({ type: 't2d',
+                                <a onclick="igv.browser.loadTrack({ type: 'gwas',
                                     url: '${createLink(controller:'trait', action:'getData')}',
                                     trait: 'BIP',
                                     dataset: 'GWAS_PGC_mdv2',
@@ -374,7 +374,7 @@
             tracks: [
 <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 {
-                    type: "t2d",
+                    type: "gwas",
                     url: "${createLink(controller:'trait', action:'getData')}",
                     trait: "Stroke_all",
                     dataset: "GWAS_Stroke_mdv5",
@@ -384,7 +384,7 @@
                     traitURL: '${g.createLink(absolute:true, uri:'/trait/traitInfo/')}'
                 },
                 {
-                    type: "t2d",
+                    type: "gwas",
                     url: "${createLink(controller:'trait', action:'getData')}",
                     trait: "Stroke_deep",
                     dataset: "GWAS_Stroke_mdv5",
@@ -394,7 +394,7 @@
                     traitURL: '${g.createLink(absolute:true, uri:'/trait/traitInfo/')}'
                 },
                 {
-                    type: "t2d",
+                    type: "gwas",
                     url: "${createLink(controller:'trait', action:'getData')}",
                     trait: "Stroke_lobar",
                     dataset: "GWAS_Stroke_mdv5",
@@ -406,7 +406,7 @@
 </g:if>
 <g:else>
                 {
-                    type: "t2d",
+                    type: "gwas",
                     %{--url: "${restServer.currentRestServer()}getData",--}%
                     url: "${createLink(controller:'trait', action:'getData')}",
                     trait: "T2D",
@@ -417,7 +417,7 @@
                     traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
                 },
                 {
-                    type: "t2d",
+                    type: "gwas",
                     url: "${createLink(controller:'trait', action:'getData')}",
                     trait: "FG",
                     dataset: "GWAS_MAGIC_mdv2",
@@ -427,7 +427,7 @@
                     traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"
                 },
                 {
-                    type: "t2d",
+                    type: "gwas",
                     url: "${createLink(controller:'trait', action:'getData')}",
                     trait: "FI",
                     dataset: "GWAS_MAGIC_mdv2",
