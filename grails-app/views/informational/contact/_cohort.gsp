@@ -120,35 +120,25 @@
         </g:if>
         <g:else>
             <p>
-                <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.gerfhs"/><br/>
-                <g:message code="contact.label.pi"/>: <a href="mailto://woodl@ucmail.uc.edu">Dan Woo</a>
+                <g:message code="informational.shared.cohort.gerfhs"/><br/>
+                <a href="mailto://woodl@ucmail.uc.edu">Dan Woo</a>
             </p>
             <p>
-                <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.gocha"/><br/>
-                <g:message code="contact.label.pi"/>: <a href="mailto://jrosand@partners.org">Jonathan Rosand</a>
+                <g:message code="informational.shared.cohort.gocha"/><br/>
+                <a href="mailto://jrosand@partners.org">Jonathan Rosand</a>
             </p>
             <p>
-                <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.race"/><br/>
-                <g:message code="contact.label.pi"/>: <a href="mailto://saleheen@mail.med.upenn.edu">Danish Saleheen</a>
+                <g:message code="informational.shared.cohort.jagiellonian_university"/><br/>
+                <a href="mailto://">Agnieska Slowik</a>
             </p>
             <p>
-                <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.univ_graz"/><br/>
-                <g:message code="contact.label.pi"/>: <a href="mailto://Helena.schmidt@medunigraz.at">Helena Schmidt</a>
+                <g:message code="informational.shared.cohort.lund_stroke_register"/><br/>
+                <a href="mailto://">Arne Lindgren</a><br/>
             </p>
             <p>
-                <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.krakow_hospital"/><br/>
-                <g:message code="contact.label.pi"/>: <a href="mailto://jeremiasz.jagiella@gmail.com">Jeremiasz M. Jagiella</a>
+                <g:message code="informational.shared.cohort..vall_hebron"/><br/>
+                <a href="mailto://">Joan Montaner</a><br/>
             </p>
-            <p>
-                <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.lund_university"/><br/>
-                <g:message code="contact.label.pi"/>: <a href="mailto://bjorn.hansen@med.lu.se">Bjorn M. Hansen</a><br/>
-                <g:message code="contact.label.pi"/>: <a href="mailto://bo.norrving@med.lu.se">Bo Norrving</a>
-            </p>
-            <p>
-                <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.malmo"/><br/>
-                <g:message code="contact.label.pi"/>: <a href="mailto://olle.melander@med.lu.se">Olle Melander</a>
-            </p>
-
         </g:else>
     </div>
     </div>

@@ -13,7 +13,12 @@
 <div id="main">
 
     <div class="container">
-        <h1><g:message code="contact.title" default="Contact"/></h1>
+        <g:if test="${g.portalTypeString()?.equals('stroke')}">
+            <h1><g:message code="contact.title" default="Contact"/></h1>
+        </g:if>
+        <g:else>
+            <h1><g:message code="contact.title.plural" default="Contact"/></h1>
+        </g:else>
 
         <div class="row">
             <div class="buttonHolder tabbed-about-page">
@@ -21,26 +26,45 @@
                 <ul class="nav nav-pills">
                     <div class="row">
 
+                        <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                            <h1><g:message code="contact.title" default="Contact"/></h1>
+                        </g:if>
+                        <g:else>
+                            <h1><g:message code="contact.title.plural" default="Contact"/></h1>
+                        </g:else>
                         <div class="col-md-3 text-center">
                             <li role="presentation" id="contact_consortium" class="myPills  activated">
                                 <a href="#">
-                                    <g:message code="contact.consortium" default="exome"/>
+                                    <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                                        <g:message code="contact.consortium.single_word" default="Consortium"/>
+                                    </g:if>
+                                    <g:else>
+                                        <g:message code="contact.consortium" default="Consortium"/>
+                                    </g:else>
                                 </a>
                             </li>
                         </div>
-
                         <div class="col-md-3 text-center">
                             <li role="presentation" id="contact_cohort" class="myPills">
                                 <a href="#">
-                                    <g:message code="contact.cohort" default="papers"/>
+                                    <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                                        <g:message code="contact.study.single_word" default="Studies"/>
+                                    </g:if>
+                                    <g:else>
+                                        <g:message code="contact.cohort" default="Studies"/>
+                                    </g:else>
                                 </a>
                             </li>
                         </div>
-
                         <div class="col-md-3 text-center">
                             <li role="presentation" id="contact_portal" class="myPills active">
                                 <a href="#">
-                                    <g:message code="contact.portal" default="cohorts"/>
+                                    <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                                        <g:message code="contact.portal.single_word" default="Portal"/>
+                                    </g:if>
+                                    <g:else>
+                                        <g:message code="contact.portal" default="Portal"/>
+                                    </g:else>
                                 </a>
                             </li>
                         </div>
