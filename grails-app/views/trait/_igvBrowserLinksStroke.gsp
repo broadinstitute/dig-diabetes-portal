@@ -1,6 +1,39 @@
 <li>
     <a onclick="igv.browser.loadTrack({ type: 'gwas',
         url: '${createLink(controller:'trait', action:'getData')}',
+        trait: 'Stroke_all',
+        dataset: 'GWAS_Stroke_mdv5',
+        pvalue: 'P_VALUE',
+        name: 'stroke',
+        variantURL: '${g.createLink(absolute:true, uri:'/variantInfo/variantInfo/')}',
+        traitURL: '${g.createLink(absolute:true, uri:'/trait/traitInfo/')}'
+    })"><g:message code="metadata.Stroke_all" /></a>
+</li>
+<li>
+    <a onclick="igv.browser.loadTrack({ type: 'gwas',
+        url: '${createLink(controller:'trait', action:'getData')}',
+        trait: 'Stroke_deep',
+        dataset: 'GWAS_Stroke_mdv5',
+        pvalue: 'P_VALUE',
+        name: 'stroke deep',
+        variantURL: '${g.createLink(absolute:true, uri:'/variantInfo/variantInfo/')}',
+        traitURL: '${g.createLink(absolute:true, uri:'/trait/traitInfo/')}'
+    })"><g:message code="metadata.Stroke_deep" /></a>
+</li>
+<li>
+    <a onclick="igv.browser.loadTrack({ type: 'gwas',
+        url: '${createLink(controller:'trait', action:'getData')}',
+        trait: 'Stroke_lobar',
+        dataset: 'GWAS_Stroke_mdv5',
+        pvalue: 'P_VALUE',
+        name: 'stroke lobar',
+        variantURL: '${g.createLink(absolute:true, uri:'/variantInfo/variantInfo/')}',
+        traitURL: '${g.createLink(absolute:true, uri:'/trait/traitInfo/')}'
+    })"><g:message code="metadata.Stroke_lobar" /></a>
+</li>
+<li>
+    <a onclick="igv.browser.loadTrack({ type: 'gwas',
+        url: '${createLink(controller:'trait', action:'getData')}',
         trait: 'FG',
         dataset: 'GWAS_MAGIC_mdv5',
         pvalue: 'P_VALUE',
@@ -250,37 +283,4 @@
         variantURL: '${g.createLink(absolute:true, uri:'/variantInfo/variantInfo/')}',
         traitURL: '${g.createLink(absolute:true, uri:'/trait/traitInfo/')}'
     })"><g:message code="informational.shared.traits.bipolar" /></a>
-</li>
-<li>
-    <a onclick="igv.browser.loadTrack({ type: 'gwas',
-        url: '${createLink(controller:'trait', action:'getData')}',
-        trait: 'Stroke_all',
-        dataset: 'GWAS_Stroke_mdv5',
-        pvalue: 'P_VALUE',
-        name: 'stroke',
-        variantURL: '${g.createLink(absolute:true, uri:'/variantInfo/variantInfo/')}',
-        traitURL: '${g.createLink(absolute:true, uri:'/trait/traitInfo/')}'
-    })"><g:message code="informational.shared.traits.stroke" /></a>
-</li>
-<li>
-    <a onclick="igv.browser.loadTrack({ type: 'gwas',
-        url: '${createLink(controller:'trait', action:'getData')}',
-        trait: 'Stroke_deep',
-        dataset: 'GWAS_Stroke_mdv5',
-        pvalue: 'P_VALUE',
-        name: 'stroke deep',
-        variantURL: '${g.createLink(absolute:true, uri:'/variantInfo/variantInfo/')}',
-        traitURL: '${g.createLink(absolute:true, uri:'/trait/traitInfo/')}'
-    })"><g:message code="informational.shared.traits.stroke_deep" /></a>
-</li>
-<li>
-    <a onclick="igv.browser.loadTrack({ type: 'gwas',
-        url: '${createLink(controller:'trait', action:'getData')}',
-        trait: 'Stroke_lobar',
-        dataset: 'GWAS_Stroke_mdv5',
-        pvalue: 'P_VALUE',
-        name: 'stroke lobar',
-        variantURL: '${g.createLink(absolute:true, uri:'/variantInfo/variantInfo/')}',
-        traitURL: '${g.createLink(absolute:true, uri:'/trait/traitInfo/')}'
-    })"><g:message code="informational.shared.traits.stroke_lobar" /></a>
 </li>

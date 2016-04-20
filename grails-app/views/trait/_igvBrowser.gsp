@@ -379,7 +379,7 @@
                     trait: "Stroke_all",
                     dataset: "GWAS_Stroke_mdv5",
                     pvalue: "P_VALUE",
-                    name: "<g:message code='informational.shared.traits.stroke' />",
+                    name: "<g:message code='metadata.Stroke_all' />",
                     variantURL: '${g.createLink(absolute:true, uri:'/variantInfo/variantInfo/')}',
                     traitURL: '${g.createLink(absolute:true, uri:'/trait/traitInfo/')}'
                 },
@@ -389,7 +389,7 @@
                     trait: "Stroke_deep",
                     dataset: "GWAS_Stroke_mdv5",
                     pvalue: "P_VALUE",
-                    name: "<g:message code='informational.shared.traits.stroke_deep' />",
+                    name: "<g:message code='metadata.Stroke_deep' />",
                     variantURL: '${g.createLink(absolute:true, uri:'/variantInfo/variantInfo/')}',
                     traitURL: '${g.createLink(absolute:true, uri:'/trait/traitInfo/')}'
                 },
@@ -399,7 +399,7 @@
                     trait: "Stroke_lobar",
                     dataset: "GWAS_Stroke_mdv5",
                     pvalue: "P_VALUE",
-                    name: "<g:message code='informational.shared.traits.stroke_lobar' />",
+                    name: "<g:message code='metadata.Stroke_lobar' />",
                     variantURL: '${g.createLink(absolute:true, uri:'/variantInfo/variantInfo/')}',
                     traitURL: '${g.createLink(absolute:true, uri:'/trait/traitInfo/')}'
                 },
