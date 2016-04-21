@@ -1,7 +1,7 @@
 
-        <h2><g:message code="contact.header.cohort_leader"/></h2>
-
         <g:if test="${g.portalTypeString()?.equals('t2d')}">
+            <h2><g:message code="contact.header.cohort_leader"/></h2>
+
             <h3><g:message code="informational.shared.cohort.t2dgenes"/>: <g:message code="gene.continentalancestry.datatype.exomes"/> (n=~10,000)</h3>
             <p>
                 <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.jackson"/> <br/>
@@ -119,6 +119,8 @@
             </p>
         </g:if>
         <g:else>
+            <h2><g:message code="contact.header.study_leader"/></h2>
+
             <p>
                 <g:message code="informational.shared.cohort.gerfhs"/><br/>
                 <a href="mailto://woodl@ucmail.uc.edu">Dan Woo</a>

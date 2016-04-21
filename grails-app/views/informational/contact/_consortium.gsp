@@ -1,7 +1,9 @@
 
 
 
-        <h2><g:message code="contact.consortium_leader"/></h2>
+        <g:if test="${!g.portalTypeString()?.equals('stroke')}">
+            <h2><g:message code="contact.consortium_leader"/></h2>
+        </g:if>
 
         <g:if test="${g.portalTypeString()?.equals('stroke')}">
             <h3><g:message code="informational.shared.cohort.stroke"/></h3>
