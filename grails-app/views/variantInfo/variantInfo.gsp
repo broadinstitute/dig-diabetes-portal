@@ -219,7 +219,7 @@
 
         %{--<div class="separator"></div>--}%
 
-                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                    %{--<g:if test="${g.portalTypeString()?.equals('t2d')}">--}%
                         <div class="separator"></div>
 
                         <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>
@@ -277,7 +277,7 @@
 
                         %{--</div>--}%
 
-                    </g:if>
+                    %{--</g:if>--}%
 
                     <div class="separator"></div>
 

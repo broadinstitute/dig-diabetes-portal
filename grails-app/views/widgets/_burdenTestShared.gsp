@@ -5,6 +5,10 @@ rect.histogramHolder {
 rect.box {
     fill: #ccaaaa;
 }
+div.sampleNumberReporter {
+    display: none;
+    font-weight: bold;
+}
 div.burden-test-wrapper-options {
     background-color: #eee;
     border: solid 1px #ddd;
@@ -135,14 +139,24 @@ div.labelAndInput > input {
     mpgSoftware.burdenTestShared = (function () {
         var loading = $('#rSpinner');
         var storedSampleMetadata;
+        var storedSampleData;
 
+
+        var storeSampleData = function (data){
+            storedSampleData = data;
+        };
+
+
+        var getStoredSampleData  = function (){
+            return storedSampleData;
+        };
 
         var storeSampleMetadata = function (metadata){
             storedSampleMetadata = metadata;
         };
 
 
-        var getStoredSampleMetadata  = function (metadata){
+        var getStoredSampleMetadata  = function (){
             return storedSampleMetadata;
         };
 
@@ -249,6 +263,7 @@ div.labelAndInput > input {
 
                                     });
                                     $("#sampleRow").show();
+                                   $('.sampleNumberReporter').show();
                                    $("#person").append(output);
                                    refreshSampleData('#datasetFilter',mpgSoftware.burdenTestShared.utilizeSampleInfoForDistributionPlots);
                             }
@@ -561,6 +576,9 @@ div.labelAndInput > input {
 
 
         var buildCategoricalPlot = function (inData,selector) {
+
+        //UTILS.distributionMapper
+            var binInfo = UTILS.distributionMapper(inData[0].data,20,function(d){return d.v})
             var data = [
                 { category: 'male',
                     value: 230,
@@ -614,9 +632,9 @@ div.labelAndInput > input {
             var allFilters =  $('.considerFilter')
             var requestedFilters = _.map( allFilters, function(filter){
                 var  filterId = $(filter).attr('id');
-                var partsOfFilterName = filterId.split("_");
-                if (partsOfFilterName[1].indexOf("{{")==-1){
-                   return  {"name":partsOfFilterName[1]};
+                var nonConstantPartOfFilterName = filterId.substring(7);
+                if (nonConstantPartOfFilterName.indexOf("{{")==-1){
+                   return  {"name":nonConstantPartOfFilterName};
                 }
             } );
             return requestedFilters;
@@ -687,6 +705,32 @@ div.labelAndInput > input {
        }
 
 
+        var coreUtilizeSampleInfoForDistributionPlots = function (sampleInfo){
+            var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
+            var plotHoldingStructure = $('#boxWhiskerPlot');
+            plotHoldingStructure.empty();
+            var sampleMetadata = getStoredSampleMetadata();
+            for ( var i = 0 ; i < displayableData.length ; i++ ){
+                var singleElement = displayableData[i];
+                var elementName = singleElement.name;
+                var divElementName = 'bwp_'+elementName;
+                plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
+                $('.sampleNumberReporter .numberOfSamples').text(singleElement.data.length);
+                $('#'+divElementName).hide();
+                if (sampleMetadata.filters){
+                  var filter = _.find(sampleMetadata.filters, ['name',elementName]);
+                  if (filter){
+                     if (filter.type === 'INTEGER'){
+                        buildCategoricalPlot([singleElement],'#'+divElementName);
+                     } else if (filter.type === 'STRING'){
+                        buildCategoricalPlot([singleElement],'#'+divElementName);
+                     } if (filter.type === 'FLOAT'){
+                        buildBoxWhiskerPlot([singleElement],'#'+divElementName);
+                     }
+                  }
+                }
+            }
+        };
 
 
         var utilizeSampleInfoForDistributionPlots = function (data){
@@ -700,6 +744,7 @@ div.labelAndInput > input {
                 var elementName = singleElement.name;
                 var divElementName = 'bwp_'+elementName;
                 plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
+                $('.sampleNumberReporter .numberOfSamples').text(singleElement.data.length);
                 $('#'+divElementName).hide();
                 if (sampleMetadata.filters){
                   var filter = _.find(sampleMetadata.filters, ['name',elementName]);
@@ -729,6 +774,7 @@ div.labelAndInput > input {
                 data: {'data':data},
                 async: true,
                 success: function (returnedData) {
+                    storeSampleData(returnedData);
                     callback(returnedData);
                 },
                 error: function (jqXHR, exception) {
@@ -738,6 +784,119 @@ div.labelAndInput > input {
         };
 
 
+
+
+        var determineEachFiltersType = function (){
+             var returnValue = {};
+            var sampleMetadata = getStoredSampleMetadata();
+            for ( var i = 0 ; i < sampleMetadata.filters.length ; i++ ){
+                var singleElement = sampleMetadata.filters[i];
+                var elementName = singleElement.name;
+                if (sampleMetadata.filters){
+                  var filter = _.find(sampleMetadata.filters, ['name',elementName]);
+                  if (filter){
+                     returnValue[singleElement.name] = singleElement.type;
+                  }
+                }
+            }
+            return returnValue;
+        }
+
+
+
+
+
+        var dynamicallyFilterSamples = function (){
+            var data = getStoredSampleData();
+            if (typeof data === 'undefined') return;
+            var filters = extractFilters();
+            var relevantFilters = _.remove(filters,function(v){return (v.parm.length>0)});
+            var filterTypeMap = determineEachFiltersType();
+            var optionsPerFilter = {};
+            _.forEach(data.metaData.variants,function(obj){
+               _.forEach(filterTypeMap,function(filtType,filtName){
+                  if ((filtType === 'STRING')||(filtType === 'INTEGER')){
+                     if (!(filtName in optionsPerFilter)){
+                        optionsPerFilter[filtName] = [];
+                     }
+                    _.forEach(obj,function(filterHolder){
+                        _.forEach(filterHolder,function(val,key){
+                           if (key === filtName){
+                              _.forEach(val,function(value){
+                                  if (optionsPerFilter[filtName].indexOf(value)==-1){
+                                     optionsPerFilter[filtName].push(value);
+                                  }
+                              })
+                           }
+                        })
+                    })
+                  }
+               })
+            });
+            var groupedBySampleId =  _.groupBy(data.metaData.variants,
+                                               function(inv){
+                                                    return _.find(_.find(inv,
+                                                                  function(o,i){
+                                                                       return _.find(o,function(v,k){
+                                                                            return k==="ID"
+                                                                       })
+                                                                  })["ID"],
+                                                                  function(key,val){
+                                                                      return val;
+                                                                  })
+                                               });
+            var samplesWeWant = [];
+            _.forEach(groupedBySampleId,function(sampleVals,sampleId){
+                 var rejectSample = false;
+                 _.forEach(sampleVals,function(propObject){
+                     _.forEach(propObject,function(propVal){
+                         _.forEach(propVal,function(dsObject,propName){
+                            var filter = _.find(relevantFilters,function(filt){return (filt.name===propName)});
+                            if (filter){
+                                var propertyValue;
+                                 _.forEach(dsObject,function(propVal,dsName){
+                                    propertyValue = propVal;
+                                })
+                                var numericalFilterValue = parseFloat(filter.parm);
+                                if (filter.cmp==="1"){
+                                   if (propertyValue>=numericalFilterValue){
+                                      rejectSample = true;
+                                   }
+                                } else if (filter.cmp==="2"){
+                                   if (propertyValue<=numericalFilterValue){
+                                      rejectSample = true;
+                                   }
+                                }
+                            }
+
+                         })
+                     })
+                 })
+                 if (!rejectSample){
+                    samplesWeWant.push('"'+sampleId+'"');
+                 }
+            });
+            $('.sampleNumberReporter .numberOfSamples').text(samplesWeWant.length);
+            var filteredVariants = [];
+            _.forEach(data.metaData.variants,
+                   function(d){
+                          _.find(d,
+                              function(el){
+                                  if (el["ID"]) {
+                                     _.forEach(el["ID"],
+                                         function(v,k){
+                                           if (samplesWeWant.indexOf("\""+v+"\"")>-1){
+                                              filteredVariants.push(d);
+                                           }
+                                         });
+                                         }
+                                         }
+                                         )
+                                         }
+                                         );
+            data.metaData.variants = filteredVariants;
+            utilizeSampleInfoForDistributionPlots(data);
+        };
 
 
 
@@ -751,10 +910,12 @@ div.labelAndInput > input {
             runBurdenTest:runBurdenTest,
             utilizeSampleInfoForDistributionPlots: utilizeSampleInfoForDistributionPlots,
             retrieveMatchingDataSets:retrieveMatchingDataSets,
+            getStoredSampleData:getStoredSampleData,
             retrieveSampleMetadata:retrieveSampleMetadata,
             refreshSampleData:refreshSampleData,
             retrieveSampleFilterMetadata:retrieveSampleFilterMetadata,
-            getStoredSampleMetadata: getStoredSampleMetadata
+            getStoredSampleMetadata: getStoredSampleMetadata,
+            dynamicallyFilterSamples: dynamicallyFilterSamples
         }
 
     }());
@@ -915,6 +1076,9 @@ $( document ).ready( function (){
             </div>
 
             <div class="col-sm-4 col-xs-12 vcenter" style="padding-left: 0">
+                <div class="sampleNumberReporter text-center">
+                    number of samples equals <span class="numberOfSamples"></span>
+                </div>
                 <div id="boxWhiskerPlot">
                 </div>
             </div>
@@ -1036,6 +1200,7 @@ $( document ).ready( function (){
 
                 <script>
                     var displaySampleDistribution = function (propertyName, holderSection) {
+                        mpgSoftware.burdenTestShared.dynamicallyFilterSamples();
                         var kids = $(holderSection).children();
                         _.forEach(kids, function (d) {
                             console.log('d');

@@ -58,11 +58,15 @@ class WidgetService {
         String filterDesignation = ""
         if (filters.size()==0){
             filterDesignation =  """            "filters":    [
-                    {"dataset_id": "samples_13k_mdv2", "phenotype": "blah", "operand": "LDL", "operator": "LT", "value": 2000, "operand_type": "FLOAT"}
+                    {"dataset_id": "${dataset}", "phenotype": "b", "operand": "ID", "operator": "LT", "value": "ZZZZZ", "operand_type": "STRING"}
                 ]
 """.toString()
-        }
-        else if (filters.size()> 1){
+        } else  if (filters.size()== 1) {
+            String operator = (filters.cmp[0]=="1") ? "LT" : "GT"
+            filterDesignation = """ "filters":    [
+                    {"dataset_id": "${dataset}", "phenotype": "b", "operand": "${filters[0].name}", "operator": "${operator}", "value": ${filters[0].parm}, "operand_type": "FLOAT"}
+            ]""".toString()
+        }  else { // filters > 1
             for (Map map in filters){
                 String operator = (map.cmp=="1") ? "LT" : "GT"
                 if (map.name){
@@ -73,11 +77,6 @@ class WidgetService {
                     ${requestedFilterList.join(",")}
             ]
 """.toString()
-        } else {
-            String operator = (filters.cmp[0]=="1") ? "LT" : "GT"
-            filterDesignation = """ "filters":    [
-                    {"dataset_id": "${dataset}", "phenotype": "b", "operand": "${filters[0].name}", "operator": "${operator}", "value": ${filters[0].parm}, "operand_type": "FLOAT"}
-            ]""".toString()
         }
 
 
@@ -96,7 +95,7 @@ class WidgetService {
        ${filterDesignation}
 }""".toString()
 
-        // TODO:  uncomment the real code
+//        // TODO:  uncomment the real code
 //        jsonGetDataString = """{
 //    "passback": "123abc",
 //    "entity": "variant",
@@ -105,9 +104,13 @@ class WidgetService {
 //    "properties":    {
 //                           "cproperty": [],
 //                          "orderBy":    [],
-//"dproperty" : { "ID" : [ "samples_stroke_mdv5"], "AGE" : [ "samples_stroke_mdv5"], "SEX" : [ "samples_stroke_mdv5"], "Lobar_ICH" : [ "samples_stroke_mdv5"] } ,
+//"dproperty" : { "ID" : [ "samples_stroke_mdv5"],
+//               "AGE" : [ "samples_stroke_mdv5"],
+//               "SEX" : [ "samples_stroke_mdv5"],
+//               "Lobar_ICH" : [ "samples_stroke_mdv5"] } ,
 //      "pproperty" : { }} ,
-//        "filters":    [
+//
+//    "filters":    [
 //                    {"dataset_id": "samples_stroke_mdv5", "phenotype": "blah", "operand": "AGE", "operator": "LT", "value": 40, "operand_type": "FLOAT"}
 //                ]
 //}""".toString()

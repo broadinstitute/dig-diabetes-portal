@@ -1,4 +1,6 @@
-<h2>Contact the portal team</h2>
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
+    <h2>Contact the portal team</h2>
+</g:if>
 <style>
 .emphasize-block {
     background: #052090;
@@ -19,11 +21,47 @@
 
    </div>
 </div>
-<div class="row sectionBuffer">
-    <div class="col-md-5">
 
-        <g:if test="${g.portalTypeString()?.equals('stroke')}">
+<g:if test="${g.portalTypeString()?.equals('stroke')}">
+    <div class="row sectionBuffer">
+        <div class="col-md-3">
             <p>
+                <strong>Steering Committee</strong><br/>
+                Brad Worrall (chair)<br/>
+                Devin Brown<br/>
+                Martin Dichgans<br/>
+                Jemma Hopewell<br/>
+                Steven Kittner<br/>
+                Chris Levi<br/>
+                Arne Lindgren<br/>
+                Jennifer Majersik<br/>
+                Hugh Markus<br/>
+                James Meschia<br/>
+                Joe Montaner<br/>
+            </p>
+        </div>
+        <div class="col-md-3">
+            <p>
+                &nbsp;<br/>
+                Alex Reiner<br/>
+                Jaume Roquer<br/>
+                Jonathan Rosand<br/>
+                Magdy Selim<br/>
+                Sudha Seshadri<br/>
+                Pankaj Sharma<br/>
+                Scott Silliman<br/>
+                Agnieska Slowik<br/>
+                David Tirschwell<br/>
+                Dan Woo<br/>
+            </p>
+        </div>
+        <div class="col-md-6">
+        </div>
+    </div>
+    <div class="row sectionBuffer">
+        <div class="col-md-5">
+            <p>
+                <strong>Portal Developers</strong><br/>
                 Jonathan Rosand<br/>
                 Jason Flannick<br/>
                 Noel Burtt<br/>
@@ -32,12 +70,29 @@
                 Marc Duby<br/>
                 Michael Sanders<br/>
                 Ryan Koesterer<br/>
+                Scott Sutherland<br/>
+                David Siedzik<br/>
+                Guido Falcone<br/>
+                Rainer Malik<br/>
                 Christina Kourkoulis<br/>
                 Neil Vaishnav<br/>
                 Katherine Crawford<br/>
             </p>
-        </g:if>
-        <g:else>
+        </div>
+        <div class="col-md-4">
+            <div class="emphasize-block">
+                <g:message code="portal.contact.message" />:<br/>
+                <a href="mailto:cerebrovascularportal@gmail.com">cerebrovascularportal@gmail.com</a>
+            </div>
+        </div>
+        <div class="col-md-3">
+        </div>
+    </div>
+</g:if>
+
+<g:else>
+    <div class="row sectionBuffer">
+        <div class="col-md-5">
             <p>
                 Jose Florez<br/>
                 Jason Flannick<br/>
@@ -53,21 +108,15 @@
                 Clint Gilbert<br/>
                 Ryan Koesterer<br/>
             </p>
-        </g:else>
-
-    </div>
-    <div class="col-md-4">
-        <div class="emphasize-block">
-            <g:message code="portal.contact.message" />:<br/>
-        <g:if test="${g.portalTypeString()?.equals('stroke')}">
-            <a href="mailto:cerebrovascularportal@gmail.com">cerebrovascularportal@gmail.com</a>
-        </g:if>
-        <g:else>
-            <a href="mailto:help@type2diabetesgenetics.org">help@type2diabetesgenetics.org</a>
-        </g:else>
         </div>
+        <div class="col-md-4">
+            <div class="emphasize-block">
+                <g:message code="portal.contact.message" />:<br/>
+                <a href="mailto:help@type2diabetesgenetics.org">help@type2diabetesgenetics.org</a>
+            </div>
+        </div>
+        <div class="col-md-3">
+        </div>
+    </div>
+</g:else>
 
-    </div>
-    <div class="col-md-3">
-    </div>
-</div>

@@ -155,7 +155,7 @@ class VariantInfoController {
      * @return
      */
     def sampleMetadataExperimentAjax() {
-        List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "mdv1", MetaDataService.METADATA_SAMPLE)
+        List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "", MetaDataService.METADATA_SAMPLE)
          JSONObject jsonObject = burdenService.convertSampleGroupListToJson (sampleGroupList)
 
         // send json response back

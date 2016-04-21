@@ -6,15 +6,7 @@
         <g:if test="${g.portalTypeString()?.equals('stroke')}">
             <h3><g:message code="informational.shared.cohort.stroke"/></h3>
             <a href="mailto://woodl@ucmail.uc.edu">Dan Woo</a> | <g:message code="informational.shared.institution.univ_cincinnati"/> <br/>
-            <a href="mailto://sdebette@bu.edu">Stephanie Debette</a> | <g:message code="informational.shared.institution.boston_university"/> <br/>
-            <a href="mailto://cdanderson@partners.org">Christopher Anderson</a> | <g:message code="informational.shared.institution.broad_institute"/> <br/>
-            <a href="mailto://Giorgio.Boncoraglio@istituto-besta.it">Giorgio Boncoraglio</a> | <g:message code="informational.shared.institution.instituto_carlo_besta"/> <br/>
-
-            <h3><g:message code="informational.shared.cohort.metastroke"/></h3>
-            <a href="mailto://suseshad@bu.edu)">Sudha Seshadri</a> | <g:message code="informational.shared.institution.boston_university"/> <br/>
-            <a href="mailto://jemma.hopewell@ctsu.ox.ac.uk)">Jemma Hopewell</a> | <g:message code="informational.shared.institution.oxford"/> <br/>
-            <a href="mailto://qyang@bu.edu">Qiong Yang</a> | <g:message code="informational.shared.institution.boston_university"/> <br/>
-            <a href="mailto://rainer.malik@med.uni-muenchen.de">Rainer Malik</a> | <g:message code="informational.shared.institution.munich"/> <br/>
+            <a href="mailto://sdebette@bu.edu">Stephanie Debette</a> | <g:message code="informational.shared.institution.bordeaux_university"/> <br/>
         </g:if>
         <g:else>
             <h3><g:message code="informational.shared.cohort.t2dgenes"/></h3>
