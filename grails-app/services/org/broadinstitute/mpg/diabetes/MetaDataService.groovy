@@ -2,6 +2,7 @@ package org.broadinstitute.mpg.diabetes
 
 import grails.transaction.Transactional
 import groovy.json.JsonSlurper
+import groovy.json.internal.LazyMap
 import org.broadinstitute.mpg.FilterManagementService
 import org.broadinstitute.mpg.MetadataUtilityService
 import org.broadinstitute.mpg.RestServerService
@@ -910,7 +911,7 @@ class MetaDataService {
             }
         } else if( metadata instanceof ArrayList ) {
             metadata.each { item ->
-                if (item instanceof JSONObject) {
+                if (item instanceof JSONObject || item instanceof LazyMap) {
                     toReturn.addAll(pullOutMetadataNames(item as JSONObject))
                 }
             }

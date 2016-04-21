@@ -223,7 +223,9 @@ class MetadataUtilityService {
             }?.findAll { return it.parent.systemId == sampleGroup }?.propertyList[0]?.findAll { it.searchable }
         }
 
-        return propertyBeanList?.flatten()?.sort{ a, b -> a.sortOrder <=> b.sortOrder }
+        // need to filter out null values, because the sort chokes if propertyBeanList contains at least one
+        // null element and at least one non-null element
+        return propertyBeanList?.flatten()?.findAll({return it != null}).sort { a, b -> a.sortOrder <=> b.sortOrder }
     }
 
     private List<String> propertiesPerSampleGroup(List<PhenotypeBean>  phenotypeList, String sampleGroup, String phenotypeName, Boolean dprops, Boolean pprops) {
