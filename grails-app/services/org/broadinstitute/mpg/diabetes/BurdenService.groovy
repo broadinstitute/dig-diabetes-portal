@@ -118,33 +118,15 @@ class BurdenService {
         List <String> filterList = []
         List <Property> propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("PHENOTYPE")}
         for (Property property in propertyList){
-//            if (("T2D" == property.name)||
-//                    ("FAST_GLU" == property.name)||
-//                    ("FAST_INS" == property.name)||
-//                    ("BMI" == property.name)||
-//                    ("HDL" == property.name)||
-//                    ("LDL" == property.name)) {
-                phenotypeList << """{"name":"${property.name}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}"  }""".toString()
-//            }
+            phenotypeList << """{"name":"${property.name}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}"  }""".toString()
         }
         propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("COVARIATE")}
         for (Property property in propertyList){
-
-                covariateList << """{"name":"${property.name}"}""".toString()
-
+             covariateList << """{"name":"${property.name}"}""".toString()
         }
         propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("FILTER")}
         for (Property property in propertyList){
-//            if (("T2D" == property.name)||
-//                    ("AGE" == property.name)||
-//                    ("FAST_GLU" == property.name)||
-//                    ("FAST_INS" == property.name)||
-//                    ("BMI" == property.name)||
-//                    ("WEIGHT" == property.name)||
-//                    ("HDL" == property.name)||
-//                    ("LDL" == property.name)) {
-                filterList << """{"name":"${property.name}", "type":"${property.variableType}"  }""".toString()
-//            }
+            filterList << """{"name":"${property.name}", "type":"${property.variableType}"  }""".toString()
         }
         String jsonString = """{"phenotypes":[${phenotypeList.join(",")}],
 "covariates":[${covariateList.join(",")}],

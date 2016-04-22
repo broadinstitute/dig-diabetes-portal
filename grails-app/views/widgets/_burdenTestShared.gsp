@@ -237,44 +237,95 @@ div.labelAndInput > input {
 
         var retrieveSampleFilterMetadata = function (dropdownSel, dropDownSelector) {
             var loading = $('#spinner').show();
+            var data = getStoredSampleMetadata();
+            var categoricalFilterValues = {};
+            if ( ( data !==  null ) &&
+                    ( typeof data !== 'undefined') &&
+                    ( typeof data.filters !== 'undefined' ) &&
+                    (  data.filters !==  null ) ) {
+                    // retrieve sample info for all filters
+                    var filtersSpecs = [];
+                    _.forEach(data.filters,function(filterObjs){
+                       filtersSpecs.push("{\"name\": \""+filterObjs.name+"\"}");
+                    });
+                    var jsonDescr = "{\"dataset\":\""+$(dropdownSel).val()+"\"," +
+                              "\"requestedData\":["+filtersSpecs.join(',')+"]," +
+                              "\"filters\":[]}";
 
-            var domSelector = $(dropdownSel);
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: "${createLink(controller:'VariantInfo', action:'sampleMetadataAjax')}",
-                        data: {dataset:domSelector.val()},
-                        async: true,
-                        success: function (data) {
-                            var phenotypeDropdown = $(dropDownSelector);
-                            if ( ( data !==  null ) &&
-                                    ( typeof data !== 'undefined') &&
-                                    ( typeof data.filters !== 'undefined' ) &&
-                                    (  data.filters !==  null ) ) {
-                                    var output = '';
-                                    var floatTemplate = $('#filterFloatTemplate')[0].innerHTML;
-                                    var categoricalTemplate = $('#filterCategoricalTemplate')[0].innerHTML;
-                                    _.forEach(data.filters,function(d,i){
-                                      if (d.type === 'FLOAT') {
-                                         output = (output + Mustache.render(floatTemplate, d));
-                                      } else {
-                                         output = (output+Mustache.render(categoricalTemplate, d));
-                                         $('#multi'+d.name).append(new Option('maleKey','maleValue'))
-                                      }
+                   //mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, mpgSoftware.burdenTestShared.utilizeSampleInfoForDistributionPlots  );
 
-                                    });
-                                    $("#sampleRow").show();
-                                   $('.sampleNumberReporter').show();
-                                   $("#person").append(output);
-                                   refreshSampleData('#datasetFilter',mpgSoftware.burdenTestShared.utilizeSampleInfoForDistributionPlots);
-                            }
-                            loading.hide();
-                        },
-                        error: function (jqXHR, exception) {
-                            loading.hide();
-                            core.errorReporter(jqXHR, exception);
-                        }
-                });
+                    var output = '';
+                    var floatTemplate = $('#filterFloatTemplate')[0].innerHTML;
+                    var categoricalTemplate = $('#filterCategoricalTemplate')[0].innerHTML;
+                    _.forEach(data.filters,function(d,i){
+                      if (d.type === 'FLOAT') {
+                         output = (output + Mustache.render(floatTemplate, d));
+                      } else {
+                         output = (output+Mustache.render(categoricalTemplate, d));
+                         if (categoricalFilterValues[d.name]  === undefined) {
+                            categoricalFilterValues[d.name] = [new Option('male','maleValue')];
+                         }
+                      }
+
+                    });
+                    $("#sampleRow").show();
+                   $('.sampleNumberReporter').show();
+                   $("#person").append(output);
+//                   _.forEach(categoricalFilterValues,function(filterValueArray,filterName){
+//                      _.forEach(filterValueArray,function(option){
+//                         $('#multi'+filterName).append(option);
+//                      })
+//                   });
+                   mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, fillDistributionPlotsAndDropdowns );
+                   //refreshSampleData('#datasetFilter',mpgSoftware.burdenTestShared.utilizeSampleInfoForDistributionPlots);
+            }
+
+
+%{--var domSelector = $(dropdownSel);--}%
+            %{--$.ajax({--}%
+                %{--cache: false,--}%
+                %{--type: "post",--}%
+                %{--url: "${createLink(controller:'VariantInfo', action:'sampleMetadataAjax')}",--}%
+                        %{--data: {dataset:domSelector.val()},--}%
+                        %{--async: true,--}%
+                        %{--success: function (data) {--}%
+//                            var phenotypeDropdown = $(dropDownSelector);
+//                            var categoricalFilterValues = {};
+//                            if ( ( data !==  null ) &&
+//                                    ( typeof data !== 'undefined') &&
+//                                    ( typeof data.filters !== 'undefined' ) &&
+//                                    (  data.filters !==  null ) ) {
+//                                    var output = '';
+//                                    var floatTemplate = $('#filterFloatTemplate')[0].innerHTML;
+//                                    var categoricalTemplate = $('#filterCategoricalTemplate')[0].innerHTML;
+//                                    _.forEach(data.filters,function(d,i){
+//                                      if (d.type === 'FLOAT') {
+//                                         output = (output + Mustache.render(floatTemplate, d));
+//                                      } else {
+//                                         output = (output+Mustache.render(categoricalTemplate, d));
+//                                         if (categoricalFilterValues[d.name]  === undefined) {
+//                                            categoricalFilterValues[d.name] = [new Option('male','maleValue')];
+//                                         }
+//                                      }
+//
+//                                    });
+//                                    $("#sampleRow").show();
+//                                   $('.sampleNumberReporter').show();
+//                                   $("#person").append(output);
+//                                   _.forEach(categoricalFilterValues,function(filterValueArray,filterName){
+//                                      _.forEach(filterValueArray,function(option){
+//                                         $('#multi'+filterName).append(option);
+//                                      })
+//                                   });
+//                                   refreshSampleData('#datasetFilter',mpgSoftware.burdenTestShared.utilizeSampleInfoForDistributionPlots);
+//                            }
+                            %{--loading.hide();--}%
+                        %{--},--}%
+                        %{--error: function (jqXHR, exception) {--}%
+                            %{--loading.hide();--}%
+                            %{--core.errorReporter(jqXHR, exception);--}%
+                        %{--}--}%
+                %{--});--}%
         };
 
 
@@ -579,14 +630,20 @@ div.labelAndInput > input {
         var buildCategoricalPlot = function (inData,selector) {
 
         //UTILS.distributionMapper
-            var binInfo = UTILS.distributionMapper(inData[0].data,20,function(d){return d.v})
-            var data = [
-                { category: 'male',
-                    value: 230,
-                    color: '#0000b4'},
-                { category: 'female',
-                    value: 245,
-                    color: '#0082ca'}
+           // var binInfo = UTILS.distributionMapper(inData[0].data,20,function(d){return d.v})
+           data=[];
+           _.forEach(inData,function(arrObj){
+              data.push({ category: arrObj.name,
+                    value: arrObj.samples,
+                    color: '#0000b4'});
+           });
+//            var data = [
+//                { category: 'male',
+//                    value: 230,
+//                    color: '#0000b4'},
+//                { category: 'female',
+//                    value: 245,
+//                    color: '#0082ca'}
 //                ,
 //                { category: 'we go',
 //                    value: 20,
@@ -600,7 +657,7 @@ div.labelAndInput > input {
 //                { category: 'we get',
 //                    value: 150,
 //                    color: '#0000ff'}
-            ],
+//            ],
             roomForLabels = 120,
             maximumPossibleValue = 1,
             labelSpacer = 10;
@@ -706,32 +763,26 @@ div.labelAndInput > input {
        }
 
 
-//        var coreUtilizeSampleInfoForDistributionPlots = function (sampleInfo){
-//            var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
-//            var plotHoldingStructure = $('#boxWhiskerPlot');
-//            plotHoldingStructure.empty();
-//            var sampleMetadata = getStoredSampleMetadata();
-//            for ( var i = 0 ; i < displayableData.length ; i++ ){
-//                var singleElement = displayableData[i];
-//                var elementName = singleElement.name;
-//                var divElementName = 'bwp_'+elementName;
-//                plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
-//                $('.sampleNumberReporter .numberOfSamples').text(singleElement.data.length);
-//                $('#'+divElementName).hide();
-//                if (sampleMetadata.filters){
-//                  var filter = _.find(sampleMetadata.filters, ['name',elementName]);
-//                  if (filter){
-//                     if (filter.type === 'INTEGER'){
-//                        buildCategoricalPlot([singleElement],'#'+divElementName);
-//                     } else if (filter.type === 'STRING'){
-//                        buildCategoricalPlot([singleElement],'#'+divElementName);
-//                     } if (filter.type === 'FLOAT'){
-//                        buildBoxWhiskerPlot([singleElement],'#'+divElementName);
-//                     }
-//                  }
-//                }
-//            }
-//        };
+
+        var fillDistributionPlotsAndDropdowns = function (sampleData){
+             // make dist plots
+            utilizeSampleInfoForDistributionPlots(sampleData);
+            var optionsPerFilter = generateOptionsPerFilter(sampleData) ;
+            var sampleMetadata = getStoredSampleMetadata();
+            _.forEach(sampleMetadata.filters,function(d,i){
+                if (d.type !== 'FLOAT') {
+                    if (optionsPerFilter[d.name]!==undefined){
+                       _.forEach(optionsPerFilter[d.name],function(filterVal){
+                           $('#multi'+d.name).append(new Option(filterVal.name,filterVal));
+                       });
+                    }
+                 }
+            });
+        };
+
+
+
+
 
 
         var utilizeSampleInfoForDistributionPlots = function (data){
@@ -752,9 +803,9 @@ div.labelAndInput > input {
                   var filter = _.find(sampleMetadata.filters, ['name',elementName]);
                   if (filter){
                      if (filter.type === 'INTEGER'){
-                        buildCategoricalPlot([singleElement],'#'+divElementName);
+                        buildCategoricalPlot(optionsPerFilter[elementName],'#'+divElementName);
                      } else if (filter.type === 'STRING'){
-                        buildCategoricalPlot([singleElement],'#'+divElementName);
+                        buildCategoricalPlot(optionsPerFilter[elementName],'#'+divElementName);
                      } if (filter.type === 'FLOAT'){
                         buildBoxWhiskerPlot([singleElement],'#'+divElementName);
                      }
@@ -768,7 +819,7 @@ div.labelAndInput > input {
 
 
 
-        var retrieveSampleInformation = function (data, callback){
+        var retrieveSampleInformation = function (data, callback,passThru){
             $.ajax({
                 cache: false,
                 type: "post",
@@ -777,7 +828,7 @@ div.labelAndInput > input {
                 async: true,
                 success: function (returnedData) {
                     storeSampleData(returnedData);
-                    callback(returnedData);
+                    callback(returnedData,passThru);
                 },
                 error: function (jqXHR, exception) {
                     core.errorReporter(jqXHR, exception);
@@ -821,15 +872,23 @@ div.labelAndInput > input {
                      if (!(filtName in optionsPerFilter)){
                         optionsPerFilter[filtName] = [];
                      }
-                    _.forEach(obj,function(filterHolder){
+                    _.forEach(obj.variants,function(filterHolder){
                         _.forEach(filterHolder,function(val,key){
-                           if (key === filtName){
-                              _.forEach(val,function(value){
-                                  if (optionsPerFilter[filtName].indexOf(value)==-1){
-                                     optionsPerFilter[filtName].push(value);
-                                  }
-                              })
-                           }
+                           _.forEach(val,function(filterObj,filterKey){
+                               if (filtName === filterKey){
+                                  _.forEach(val,function(valueObject){
+                                      _.forEach(valueObject,function(valueOfFilter,dsOfFilter){
+                                         var refToLevel = _.find(optionsPerFilter[filterKey],function(d){return d.name==valueOfFilter});
+                                         if (refToLevel===undefined){
+                                             optionsPerFilter[filterKey].push({name:valueOfFilter,samples:1});
+                                         } else {
+                                             refToLevel.samples++;
+                                         }
+                                      });
+
+                                  })
+                               }
+                           });
                         })
                     })
                   }
