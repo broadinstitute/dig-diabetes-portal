@@ -1,7 +1,7 @@
 
-        <h2><g:message code="contact.header.cohort_leader"/></h2>
-
         <g:if test="${g.portalTypeString()?.equals('t2d')}">
+            <h2><g:message code="contact.header.cohort_leader"/></h2>
+
             <h3><g:message code="informational.shared.cohort.t2dgenes"/>: <g:message code="gene.continentalancestry.datatype.exomes"/> (n=~10,000)</h3>
             <p>
                 <g:message code="contact.label.cohort"/>: <g:message code="informational.shared.cohort.jackson"/> <br/>
@@ -119,6 +119,8 @@
             </p>
         </g:if>
         <g:else>
+            <h2><g:message code="contact.header.study_leader"/></h2>
+
             <p>
                 <g:message code="informational.shared.cohort.gerfhs"/><br/>
                 <a href="mailto://woodl@ucmail.uc.edu">Dan Woo</a>
@@ -129,15 +131,20 @@
             </p>
             <p>
                 <g:message code="informational.shared.cohort.jagiellonian_university"/><br/>
-                <a href="mailto://">Agnieska Slowik</a>
+                <a href="mailto://slowik@neuro.cm-uj.krakow.pl">Agnieszka Slowik</a>
             </p>
             <p>
                 <g:message code="informational.shared.cohort.lund_stroke_register"/><br/>
-                <a href="mailto://">Arne Lindgren</a><br/>
+                <a href="mailto://arne.lindgren@med.lu.se">Arne Lindgren</a><br/>
             </p>
             <p>
-                <g:message code="informational.shared.cohort..vall_hebron"/><br/>
-                <a href="mailto://">Joan Montaner</a><br/>
+                <g:message code="informational.shared.cohort.vall_hebron"/><br/>
+                <a href="mailto://31862jmv@comb.cat">Joan Montaner</a><br/>
+            </p>
+            <p>
+                <g:message code="informational.shared.cohort.metastroke"/><br/>
+                <a href="mailto://suseshad@bu.edu">Sudha Seshadri</a><br/>
+                <a href="mailto://jemma.hopewell@ndph.ox.ac.uk">Jemma Hopewell</a><br/>
             </p>
         </g:else>
     </div>

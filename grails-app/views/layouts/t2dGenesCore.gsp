@@ -8,7 +8,12 @@
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"><!--<![endif]-->
 <html>
 <head>
-    <title>${grailsApplication.config.site.title}</title>
+    <g:if test="${g.portalTypeString()?.equals('stroke')}">
+        <title><g:message code="portal.stroke.header.title.short"/> <g:message code="portal.stroke.header.title.genetics"/></title>
+    </g:if>
+    <g:else>
+        <title><g:message code="portal.header.title.short"/> <g:message code="portal.header.title.genetics"/></title>
+    </g:else>
 
     <r:require modules="core"/>
     <r:layoutResources/>

@@ -1,12 +1,17 @@
 
 
 
-        <h2><g:message code="contact.consortium_leader"/></h2>
+        <g:if test="${!g.portalTypeString()?.equals('stroke')}">
+            <h2><g:message code="contact.consortium_leader"/></h2>
+        </g:if>
 
         <g:if test="${g.portalTypeString()?.equals('stroke')}">
             <h3><g:message code="informational.shared.cohort.stroke"/></h3>
             <a href="mailto://woodl@ucmail.uc.edu">Dan Woo</a> | <g:message code="informational.shared.institution.univ_cincinnati"/> <br/>
             <a href="mailto://sdebette@bu.edu">Stephanie Debette</a> | <g:message code="informational.shared.institution.bordeaux_university"/> <br/>
+
+            <h3><g:message code="informational.shared.cohort.gocha"/></h3>
+            <a href="mailto://jroquer@hospitaldelmar.cat">Jaume Roquer</a> | <g:message code="informational.shared.institution.hospital_del_mar"/> <br/>
         </g:if>
         <g:else>
             <h3><g:message code="informational.shared.cohort.t2dgenes"/></h3>

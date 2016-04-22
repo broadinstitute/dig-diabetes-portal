@@ -37,7 +37,7 @@
                 Jennifer Majersik<br/>
                 Hugh Markus<br/>
                 James Meschia<br/>
-                Joe Montaner<br/>
+                Joan Montaner<br/>
             </p>
         </div>
         <div class="col-md-3">
@@ -50,7 +50,7 @@
                 Sudha Seshadri<br/>
                 Pankaj Sharma<br/>
                 Scott Silliman<br/>
-                Agnieska Slowik<br/>
+                Agnieszka Slowik<br/>
                 David Tirschwell<br/>
                 Dan Woo<br/>
             </p>

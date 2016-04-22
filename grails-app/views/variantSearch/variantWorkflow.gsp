@@ -82,7 +82,6 @@
 
                                 <div class="col-md-5 col-sm-5 col-xs-5 dk-variant-search-builder-ui">
                                     <select id="phenotype" class="form-control" disabled
-                                            onclick="mpgSoftware.firstResponders.respondToPhenotypeSelection()"
                                             onchange="mpgSoftware.firstResponders.respondToPhenotypeSelection()"></select>
                                 </div>
 
@@ -98,7 +97,6 @@
 
                                 <div class="col-md-5 col-sm-5 col-xs-5 dk-variant-search-builder-ui">
                                     <select id="dataSet" class="form-control" disabled
-                                            onclick="mpgSoftware.firstResponders.respondToDataSetSelection()"
                                             onchange="mpgSoftware.firstResponders.respondToDataSetSelection()"></select>
                                 </div>
 

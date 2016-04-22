@@ -1434,7 +1434,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         }
 
         LinkedHashMap columnsToDisplayStructure = sharedToolsService.getColumnsToDisplayStructure(phenotypesToFetch, datasetsToFetch, propertiesToFetch, commonProperties)
-        println(columnsToDisplayStructure)
         return columnsToDisplayStructure
     }
 
@@ -1491,7 +1490,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @return
      */
     public JSONObject getTraitSpecificInformation(String phenotypeName, String dataSet, LinkedHashMap properties, BigDecimal maximumPValue, BigDecimal minimumPValue) {
-        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         JSONObject returnValue
 
         JSONObject apiResults = gatherTraitSpecificResults(phenotypeName, dataSet, properties, maximumPValue, minimumPValue)

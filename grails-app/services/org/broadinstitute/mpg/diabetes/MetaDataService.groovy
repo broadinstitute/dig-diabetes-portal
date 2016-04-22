@@ -2,6 +2,7 @@ package org.broadinstitute.mpg.diabetes
 
 import grails.transaction.Transactional
 import groovy.json.JsonSlurper
+import groovy.json.internal.LazyMap
 import org.broadinstitute.mpg.FilterManagementService
 import org.broadinstitute.mpg.MetadataUtilityService
 import org.broadinstitute.mpg.RestServerService
@@ -584,7 +585,7 @@ class MetaDataService {
      * @param phenotypeName
      * @return
      */
-    public List<String> getAllMatchingPropertyList(String sampleGroupName,String  phenotypeName){
+    public List<String> getAllMatchingPropertyList(String sampleGroupName, String phenotypeName){
         List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
         List<String> propertyList =  metadataUtilityService.sampleGroupAndPhenotypeBasedPropertyList(phenotypeList,phenotypeName,sampleGroupName)
         return propertyList
@@ -981,9 +982,7 @@ class MetaDataService {
         } else if( metadata instanceof ArrayList ) {
             metadata.each { item ->
 
-              //  if ( item instanceof groovy.json.internal.LazyMap) {
-
-                if (item instanceof JSONObject) {
+                if (item instanceof JSONObject || item instanceof LazyMap) {
 
                     toReturn.addAll(pullOutMetadataNames(item as JSONObject))
                 }

@@ -5,10 +5,12 @@ import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.PropertyBean
-import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
+import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 
 @Transactional
 class MetadataUtilityService {
+    JsonParser jsonParser = JsonParser.getService();
 
     private static final log = LogFactory.getLog(this)
 
@@ -200,9 +202,7 @@ class MetadataUtilityService {
      * @return
      */
     private List<PropertyBean> propertiesRawPerSampleGroup(List<PhenotypeBean>  phenotypeList, String sampleGroup, String phenotypeName, Boolean dprops, Boolean pprops) {
-        List<String>  returnValue = []
         List <PropertyBean> propertyBeanList = []
-
         // Consistency check
         if ((dprops) &&
                 (!(sampleGroup?.length()>0))) {
@@ -215,20 +215,22 @@ class MetadataUtilityService {
         }
 
         if (dprops){
-            propertyBeanList << phenotypeList.findAll{it.parent.systemId==sampleGroup}?.parent?.propertyList[0]?.findAll{it.searchable}
+           propertyBeanList << phenotypeList.findAll{it.parent.systemId==sampleGroup}?.parent?.propertyList[0]?.findAll{it.searchable}
         }
-        if (pprops){
-            propertyBeanList << phenotypeList.findAll{it.name==phenotypeName}?.findAll{it.parent.systemId==sampleGroup}?.propertyList[0]?.findAll{it.searchable}
+        if (pprops) {
+            propertyBeanList << phenotypeList.findAll {
+                return it.name == phenotypeName
+            }?.findAll { return it.parent.systemId == sampleGroup }?.propertyList[0]?.findAll { it.searchable }
         }
-        return propertyBeanList?.flatten()?.sort{ a, b -> a.sortOrder <=> b.sortOrder }
+
+        // need to filter out null values, because the sort chokes if propertyBeanList contains at least one
+        // null element and at least one non-null element
+        return propertyBeanList?.flatten()?.findAll({return it != null}).sort { a, b -> a.sortOrder <=> b.sortOrder }
     }
 
-
-
     private List<String> propertiesPerSampleGroup(List<PhenotypeBean>  phenotypeList, String sampleGroup, String phenotypeName, Boolean dprops, Boolean pprops) {
-        List<String>  returnValue = []
         List<PropertyBean> propertyBeanList  = propertiesRawPerSampleGroup( phenotypeList,  sampleGroup,  phenotypeName,  dprops,  pprops)
-        returnValue = propertyBeanList.name
+        def returnValue = propertyBeanList.name
         return returnValue
     }
 
@@ -317,10 +319,9 @@ class MetadataUtilityService {
     public List<String> sampleGroupAndPhenotypeBasedPropertyList(List<PhenotypeBean>  phenotypeList,String phenotypeName,String sampleGroupName ) {
         List<String>  returnValue = []
         if ((phenotypeList) &&
-                (phenotypeName) &&
+                ((phenotypeName) || phenotypeName == "")&&
                 (sampleGroupName)){
-
-            returnValue = propertiesPerSampleGroup(phenotypeList,  sampleGroupName, phenotypeName,  true,  true)
+            returnValue = propertiesPerSampleGroup(phenotypeList, sampleGroupName, phenotypeName,  true,  true)
         }
         return returnValue
     }
