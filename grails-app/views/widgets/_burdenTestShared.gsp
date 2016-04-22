@@ -252,8 +252,6 @@ div.labelAndInput > input {
                               "\"requestedData\":["+filtersSpecs.join(',')+"]," +
                               "\"filters\":[]}";
 
-                   //mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, mpgSoftware.burdenTestShared.utilizeSampleInfoForDistributionPlots  );
-
                     var output = '';
                     var floatTemplate = $('#filterFloatTemplate')[0].innerHTML;
                     var categoricalTemplate = $('#filterCategoricalTemplate')[0].innerHTML;
@@ -271,61 +269,8 @@ div.labelAndInput > input {
                     $("#sampleRow").show();
                    $('.sampleNumberReporter').show();
                    $("#person").append(output);
-//                   _.forEach(categoricalFilterValues,function(filterValueArray,filterName){
-//                      _.forEach(filterValueArray,function(option){
-//                         $('#multi'+filterName).append(option);
-//                      })
-//                   });
                    mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, fillDistributionPlotsAndDropdowns );
-                   //refreshSampleData('#datasetFilter',mpgSoftware.burdenTestShared.utilizeSampleInfoForDistributionPlots);
             }
-
-
-%{--var domSelector = $(dropdownSel);--}%
-            %{--$.ajax({--}%
-                %{--cache: false,--}%
-                %{--type: "post",--}%
-                %{--url: "${createLink(controller:'VariantInfo', action:'sampleMetadataAjax')}",--}%
-                        %{--data: {dataset:domSelector.val()},--}%
-                        %{--async: true,--}%
-                        %{--success: function (data) {--}%
-//                            var phenotypeDropdown = $(dropDownSelector);
-//                            var categoricalFilterValues = {};
-//                            if ( ( data !==  null ) &&
-//                                    ( typeof data !== 'undefined') &&
-//                                    ( typeof data.filters !== 'undefined' ) &&
-//                                    (  data.filters !==  null ) ) {
-//                                    var output = '';
-//                                    var floatTemplate = $('#filterFloatTemplate')[0].innerHTML;
-//                                    var categoricalTemplate = $('#filterCategoricalTemplate')[0].innerHTML;
-//                                    _.forEach(data.filters,function(d,i){
-//                                      if (d.type === 'FLOAT') {
-//                                         output = (output + Mustache.render(floatTemplate, d));
-//                                      } else {
-//                                         output = (output+Mustache.render(categoricalTemplate, d));
-//                                         if (categoricalFilterValues[d.name]  === undefined) {
-//                                            categoricalFilterValues[d.name] = [new Option('male','maleValue')];
-//                                         }
-//                                      }
-//
-//                                    });
-//                                    $("#sampleRow").show();
-//                                   $('.sampleNumberReporter').show();
-//                                   $("#person").append(output);
-//                                   _.forEach(categoricalFilterValues,function(filterValueArray,filterName){
-//                                      _.forEach(filterValueArray,function(option){
-//                                         $('#multi'+filterName).append(option);
-//                                      })
-//                                   });
-//                                   refreshSampleData('#datasetFilter',mpgSoftware.burdenTestShared.utilizeSampleInfoForDistributionPlots);
-//                            }
-                            %{--loading.hide();--}%
-                        %{--},--}%
-                        %{--error: function (jqXHR, exception) {--}%
-                            %{--loading.hide();--}%
-                            %{--core.errorReporter(jqXHR, exception);--}%
-                        %{--}--}%
-                %{--});--}%
         };
 
 
@@ -635,7 +580,7 @@ div.labelAndInput > input {
            _.forEach(inData,function(arrObj){
               data.push({ category: arrObj.name,
                     value: arrObj.samples,
-                    color: '#0000b4'});
+                    color: '#0082ca'});
            });
 //            var data = [
 //                { category: 'male',
@@ -910,28 +855,6 @@ div.labelAndInput > input {
             if (typeof data === 'undefined') return;
             var filters = extractFilters();
             var relevantFilters = _.remove(filters,function(v){return (v.parm.length>0)});
-            var filterTypeMap = determineEachFiltersType();
-//            var optionsPerFilter = {};
-//            _.forEach(data.metaData.variants,function(obj){
-//               _.forEach(filterTypeMap,function(filtType,filtName){
-//                  if ((filtType === 'STRING')||(filtType === 'INTEGER')){
-//                     if (!(filtName in optionsPerFilter)){
-//                        optionsPerFilter[filtName] = [];
-//                     }
-//                    _.forEach(obj,function(filterHolder){
-//                        _.forEach(filterHolder,function(val,key){
-//                           if (key === filtName){
-//                              _.forEach(val,function(value){
-//                                  if (optionsPerFilter[filtName].indexOf(value)==-1){
-//                                     optionsPerFilter[filtName].push(value);
-//                                  }
-//                              })
-//                           }
-//                        })
-//                    })
-//                  }
-//               })
-//            });
             var groupedBySampleId =  _.groupBy(data.metaData.variants,
                                                function(inv){
                                                     return _.find(_.find(inv,
@@ -988,11 +911,11 @@ div.labelAndInput > input {
                                               filteredVariants.push(d);
                                            }
                                          });
-                                         }
-                                         }
-                                         )
-                                         }
-                                         );
+                                  }
+                              }
+                          )
+                   }
+             );
             data.metaData.variants = filteredVariants;
             utilizeSampleInfoForDistributionPlots(data);
         };

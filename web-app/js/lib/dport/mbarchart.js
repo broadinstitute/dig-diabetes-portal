@@ -198,7 +198,6 @@ var baget = baget || {};  // encapsulating variable
 
                     // give the bar length
                     d3.select("#bars").selectAll('rect')
-//                    d3.select("svg").selectAll("rect")
                         .data(values)
                         .transition()
                         .duration(1000)
