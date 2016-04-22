@@ -13,7 +13,7 @@
 <div id="main">
 
     <div class="container">
-        <g:if test="${g.portalTypeString()?.equals('stroke')}">
+        <g:if test="${g.portalTypeString()?.equals('t2d')}">
             <h1><g:message code="contact.title" default="Contact"/></h1>
         </g:if>
         <g:else>
@@ -26,12 +26,6 @@
                 <ul class="nav nav-pills">
                     <div class="row">
 
-                        <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                            <h1><g:message code="contact.title" default="Contact"/></h1>
-                        </g:if>
-                        <g:else>
-                            <h1><g:message code="contact.title.plural" default="Contact"/></h1>
-                        </g:else>
                         <div class="col-md-3 text-center">
                             <li role="presentation" id="contact_consortium" class="myPills  activated">
                                 <a href="#">
