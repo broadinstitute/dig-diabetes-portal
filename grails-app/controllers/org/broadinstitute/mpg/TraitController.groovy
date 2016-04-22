@@ -330,12 +330,19 @@ class TraitController {
         // submit query
         JSONObject jsonObject =  this.metaDataService.searchTraitByUnparsedRegion(regionsSpecification, phenotypeList);
 
+        ArrayList<JSONObject> arrayOfResults = jsonObject.variants;
+        // it turns out that getting 4000 results will cause some systems to break,
+        // so arbitrarily limit the number of results to 1500, sorted by lowest p-value
+        def variants = arrayOfResults.sort({
+            return it.PVALUE
+        }).subList(0, 1500)
+
         // log
         log.info("for traitVariantCrossAjax, got json results object: " + jsonObject);
 
         if (jsonObject) {
             render(status: 200, contentType: "application/json") {
-                [variants: jsonObject['variants']]
+                [variants: variants]
             }
         } else {
             render(status:300, contentType:"application/json")
