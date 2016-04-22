@@ -275,7 +275,7 @@ class BurdenService {
 
 
 
-        returnJson = this.getBurdenResultForVariantIdList(1, traitOption, burdenVariantList, covariateJsonObject, sampleJsonObject );
+        returnJson = this.getBurdenResultForVariantIdList(dataVersion, traitOption, burdenVariantList, covariateJsonObject, sampleJsonObject );
 
         // return
         return returnJson;

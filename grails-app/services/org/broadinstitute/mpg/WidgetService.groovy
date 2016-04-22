@@ -86,6 +86,7 @@ class WidgetService {
     "passback": "123abc",
     "entity": "variant",
     "page_number": 0,
+    "limit": 2000,
     "count": false,
     "properties":    {
                            "cproperty": [],

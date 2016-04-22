@@ -225,6 +225,14 @@ div.labelAndInput > input {
                                    phenotypeDropdown.append( new Option(d.trans, d.name));
                                 });
                             }
+                            var filtersSpecs = [];
+                            _.forEach(data.filters,function(filterObjs){
+                               filtersSpecs.push("{\"name\": \""+filterObjs.name+"\"}");
+                            });
+                            var jsonDescr = "{\"dataset\":\""+$(dropdownSel).val()+"\"," +
+                                      "\"requestedData\":["+filtersSpecs.join(',')+"]," +
+                                      "\"filters\":[]}";
+                            mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, function(){} );
                             loading.hide();
                         },
                         error: function (jqXHR, exception) {
@@ -238,7 +246,6 @@ div.labelAndInput > input {
         var retrieveSampleFilterMetadata = function (dropdownSel, dropDownSelector) {
             var loading = $('#spinner').show();
             var data = getStoredSampleMetadata();
-            var categoricalFilterValues = {};
             if ( ( data !==  null ) &&
                     ( typeof data !== 'undefined') &&
                     ( typeof data.filters !== 'undefined' ) &&
@@ -260,9 +267,6 @@ div.labelAndInput > input {
                          output = (output + Mustache.render(floatTemplate, d));
                       } else {
                          output = (output+Mustache.render(categoricalTemplate, d));
-                         if (categoricalFilterValues[d.name]  === undefined) {
-                            categoricalFilterValues[d.name] = [new Option('male','maleValue')];
-                         }
                       }
 
                     });
@@ -271,6 +275,7 @@ div.labelAndInput > input {
                    $("#person").append(output);
                    mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, fillDistributionPlotsAndDropdowns );
             }
+            loading.hide();
         };
 
 
@@ -317,7 +322,7 @@ div.labelAndInput > input {
         var filterAndRun = function (data){
             var filters = extractFilters();
             var relevantFilters = _.remove(filters,function(v){return (v.parm.length>0)})
-            var groupedBySampleId =  _.groupBy(data.metaData.variants,
+            var groupedBySampleId =  _.groupBy(data,
                                                function(inv){
                                                     return _.find(_.find(inv,
                                                                   function(o,i){
@@ -673,18 +678,11 @@ div.labelAndInput > input {
            var sampleInfo = {};
            if ((typeof data !== 'undefined') && (data)){
                //first check for error conditions
-                if (!data){
-                    console.log('null return data from burdenTestTraitSelectionOptionsAjax');
-                } else if (data.is_error) {
-                    console.log('burdenTestAjax returned is_error ='+data.is_error +'.');
-                }
-                else if ((typeof data.metaData === 'undefined') ||
-                         (typeof data.metaData.variants === 'undefined') ||
-                         (data.metaData.variants.length <= 0)){
-                     console.log('burdenTestAjax returned undefined (or length = 0) for options.');
+                if (data.length<1){
+                    console.log('no samples to work with');
                }else {
-                    for ( var i = 0 ; i < data.metaData.variants.length ; i++ )  {
-                       var sampleFields =  data.metaData.variants[i] ;
+                    for ( var i = 0 ; i < data.length ; i++ )  {
+                       var sampleFields =  data[i] ;
                        for ( var j = 0 ; j < sampleFields.length ; j++ ) {
                            var fieldObject =  sampleFields[j];
                            for (var dataSetName in fieldObject) {
@@ -730,9 +728,9 @@ div.labelAndInput > input {
 
 
 
-        var utilizeSampleInfoForDistributionPlots = function (data){
-            var sampleInfo = groupValuesByPhenotype(data);
-            var optionsPerFilter = generateOptionsPerFilter(data) ;
+        var utilizeSampleInfoForDistributionPlots = function (variantData){
+            var sampleInfo = groupValuesByPhenotype(variantData);
+            var optionsPerFilter = generateOptionsPerFilter(variantData) ;
             var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
             var plotHoldingStructure = $('#boxWhiskerPlot');
             plotHoldingStructure.empty();
@@ -764,21 +762,43 @@ div.labelAndInput > input {
 
 
 
+        %{--var retrieveSampleInformation = function (data, callback,passThru){--}%
+            %{--$.ajax({--}%
+                %{--cache: false,--}%
+                %{--type: "post",--}%
+                %{--url: "${createLink(controller: 'variantInfo', action: 'retrieveSampleListAjax')}",--}%
+                %{--data: {'data':data},--}%
+                %{--async: true,--}%
+                %{--success: function (returnedData) {--}%
+                    %{--storeSampleData(returnedData);--}%
+                    %{--callback(returnedData.metaData.variants,passThru);--}%
+                %{--},--}%
+                %{--error: function (jqXHR, exception) {--}%
+                    %{--core.errorReporter(jqXHR, exception);--}%
+                %{--}--}%
+            %{--});--}%
+        %{--};--}%
+
         var retrieveSampleInformation = function (data, callback,passThru){
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: "${createLink(controller: 'variantInfo', action: 'retrieveSampleListAjax')}",
-                data: {'data':data},
-                async: true,
-                success: function (returnedData) {
-                    storeSampleData(returnedData);
-                    callback(returnedData,passThru);
-                },
-                error: function (jqXHR, exception) {
-                    core.errorReporter(jqXHR, exception);
-                }
-            });
+            var returnedData = getStoredSampleData();
+            if (typeof returnedData === 'undefined') {
+                $.ajax({
+                    cache: false,
+                    type: "post",
+                    url: "${createLink(controller: 'variantInfo', action: 'retrieveSampleListAjax')}",
+                    data: {'data':data},
+                    async: true,
+                    success: function (returnedData) {
+                        storeSampleData(returnedData);
+                        callback(returnedData.metaData.variants,passThru);
+                    },
+                    error: function (jqXHR, exception) {
+                        core.errorReporter(jqXHR, exception);
+                    }
+                });
+            } else {
+               callback(returnedData.metaData.variants,passThru);
+            }
         };
 
 
@@ -811,13 +831,12 @@ div.labelAndInput > input {
          var generateOptionsPerFilter = function (variants) {
              var optionsPerFilter = {};
              var filterTypeMap = determineEachFiltersType();
-            _.forEach(variants,function(obj){
                _.forEach(filterTypeMap,function(filtType,filtName){
                   if ((filtType === 'STRING')||(filtType === 'INTEGER')){
                      if (!(filtName in optionsPerFilter)){
                         optionsPerFilter[filtName] = [];
                      }
-                    _.forEach(obj.variants,function(filterHolder){
+                    _.forEach(variants,function(filterHolder){
                         _.forEach(filterHolder,function(val,key){
                            _.forEach(val,function(filterObj,filterKey){
                                if (filtName === filterKey){
@@ -837,8 +856,7 @@ div.labelAndInput > input {
                         })
                     })
                   }
-               })
-            });
+               });
             return optionsPerFilter;
          }
 
@@ -916,8 +934,8 @@ div.labelAndInput > input {
                           )
                    }
              );
-            data.metaData.variants = filteredVariants;
-            utilizeSampleInfoForDistributionPlots(data);
+           // data.metaData.variants = filteredVariants;
+            utilizeSampleInfoForDistributionPlots(filteredVariants);
         };
 
 

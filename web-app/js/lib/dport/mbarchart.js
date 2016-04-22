@@ -39,7 +39,8 @@ var baget = baget || {};  // encapsulating variable
             expansionPercentage = 20,
             numberOfGridlines = 10,
             textLabelLengthFromEnd =10,
-            verticalSpaceForXAxis =20;
+            verticalSpaceForXAxis =20,
+            disambiguator='';
 
         var margin = {top: 30, right: 20, bottom: 50, left: 70},
             width = 800 - margin.left - margin.right,
@@ -115,14 +116,13 @@ var baget = baget || {};  // encapsulating variable
                         .domain([0,categories.length])
                         .range(colors);
 
-                    //var canvas = d3.select('#wrapper')
                     var canvas = selection
                         .append('svg')
                         .attr({'width':width,'height':height+margin.top+margin.bottom+verticalSpaceForXAxis});
 
                     if (showGridLines=== true)  {
                         canvas.append('g')
-                            .attr('id','grid')
+                            .attr('id','grid'+disambiguator)
                             .attr('transform','translate('+margin.left+spaceForYAxisLabels+',0)')
                             .selectAll('line')
                             .data(grid)
@@ -165,7 +165,7 @@ var baget = baget || {};  // encapsulating variable
 
                     canvas.append('g')
                         .attr("transform", "translate("+(margin.left+spaceForYAxisLabels)+","+(margin.top+(barHeight/2))+")")
-                        .attr('id','yaxis')
+                        .attr('id','yaxis_'+disambiguator)
                         .call(yAxis)
                         .call(function(me){
                             me.selectAll('.domain').style('display','none');
@@ -174,7 +174,7 @@ var baget = baget || {};  // encapsulating variable
 
                     canvas.append('g')
                         .attr("transform", "translate("+(margin.left+spaceForYAxisLabels)+","+(margin.top+height)+")")
-                        .attr('id','xaxis')
+                        .attr('id','xaxis_'+disambiguator)
                         .call(xAxis)
                         .call(function(me){
                             me.selectAll('.domain').style('display','none');
@@ -184,7 +184,7 @@ var baget = baget || {};  // encapsulating variable
                     // create each bar
                     canvas.append('g')
                         .attr("transform", "translate("+(margin.left+spaceForYAxisLabels)+","+margin.top+")")
-                        .attr('id','bars')
+                        .attr('id','bars'+disambiguator)
                         .selectAll('rect')
                         .data(values)
                         .enter()
@@ -197,7 +197,7 @@ var baget = baget || {};  // encapsulating variable
                         });
 
                     // give the bar length
-                    d3.select("#bars").selectAll('rect')
+                    d3.select("#bars"+disambiguator).selectAll('rect')
                         .data(values)
                         .transition()
                         .duration(1000)
@@ -207,7 +207,7 @@ var baget = baget || {};  // encapsulating variable
 
                     // label on bar
                   //  d3.select('#bars')
-                    d3.select("#bars")
+                    d3.select("#bars"+disambiguator)
                         .selectAll('text')
                         .data(values)
                         .enter()
@@ -257,7 +257,7 @@ var baget = baget || {};  // encapsulating variable
                 .attr('class', 'chart')
                 .attr('width', width*1.5)
                 .attr('height', height+margin.top+margin.bottom);
-
+            disambiguator = selectionIdentifier.substring(1); // make unique IDs
             return instance;
         };
 
