@@ -259,6 +259,7 @@ div.labelAndInput > input {
                                          output = (output + Mustache.render(floatTemplate, d));
                                       } else {
                                          output = (output+Mustache.render(categoricalTemplate, d));
+                                         $('#multi'+d.name).append(new Option('maleKey','maleValue'))
                                       }
 
                                     });
@@ -705,36 +706,37 @@ div.labelAndInput > input {
        }
 
 
-        var coreUtilizeSampleInfoForDistributionPlots = function (sampleInfo){
-            var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
-            var plotHoldingStructure = $('#boxWhiskerPlot');
-            plotHoldingStructure.empty();
-            var sampleMetadata = getStoredSampleMetadata();
-            for ( var i = 0 ; i < displayableData.length ; i++ ){
-                var singleElement = displayableData[i];
-                var elementName = singleElement.name;
-                var divElementName = 'bwp_'+elementName;
-                plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
-                $('.sampleNumberReporter .numberOfSamples').text(singleElement.data.length);
-                $('#'+divElementName).hide();
-                if (sampleMetadata.filters){
-                  var filter = _.find(sampleMetadata.filters, ['name',elementName]);
-                  if (filter){
-                     if (filter.type === 'INTEGER'){
-                        buildCategoricalPlot([singleElement],'#'+divElementName);
-                     } else if (filter.type === 'STRING'){
-                        buildCategoricalPlot([singleElement],'#'+divElementName);
-                     } if (filter.type === 'FLOAT'){
-                        buildBoxWhiskerPlot([singleElement],'#'+divElementName);
-                     }
-                  }
-                }
-            }
-        };
+//        var coreUtilizeSampleInfoForDistributionPlots = function (sampleInfo){
+//            var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
+//            var plotHoldingStructure = $('#boxWhiskerPlot');
+//            plotHoldingStructure.empty();
+//            var sampleMetadata = getStoredSampleMetadata();
+//            for ( var i = 0 ; i < displayableData.length ; i++ ){
+//                var singleElement = displayableData[i];
+//                var elementName = singleElement.name;
+//                var divElementName = 'bwp_'+elementName;
+//                plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
+//                $('.sampleNumberReporter .numberOfSamples').text(singleElement.data.length);
+//                $('#'+divElementName).hide();
+//                if (sampleMetadata.filters){
+//                  var filter = _.find(sampleMetadata.filters, ['name',elementName]);
+//                  if (filter){
+//                     if (filter.type === 'INTEGER'){
+//                        buildCategoricalPlot([singleElement],'#'+divElementName);
+//                     } else if (filter.type === 'STRING'){
+//                        buildCategoricalPlot([singleElement],'#'+divElementName);
+//                     } if (filter.type === 'FLOAT'){
+//                        buildBoxWhiskerPlot([singleElement],'#'+divElementName);
+//                     }
+//                  }
+//                }
+//            }
+//        };
 
 
         var utilizeSampleInfoForDistributionPlots = function (data){
             var sampleInfo = groupValuesByPhenotype(data);
+            var optionsPerFilter = generateOptionsPerFilter(data) ;
             var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
             var plotHoldingStructure = $('#boxWhiskerPlot');
             plotHoldingStructure.empty();
@@ -803,17 +805,17 @@ div.labelAndInput > input {
         }
 
 
-
-
-
-        var dynamicallyFilterSamples = function (){
-            var data = getStoredSampleData();
-            if (typeof data === 'undefined') return;
-            var filters = extractFilters();
-            var relevantFilters = _.remove(filters,function(v){return (v.parm.length>0)});
-            var filterTypeMap = determineEachFiltersType();
-            var optionsPerFilter = {};
-            _.forEach(data.metaData.variants,function(obj){
+        /***
+        *   generate a map with an array of values for each filter name.  The values represent every possible value
+        *   the filter might hold.
+        *
+        * @param variants
+        * @returns {{}}
+        */
+         var generateOptionsPerFilter = function (variants) {
+             var optionsPerFilter = {};
+             var filterTypeMap = determineEachFiltersType();
+            _.forEach(variants,function(obj){
                _.forEach(filterTypeMap,function(filtType,filtName){
                   if ((filtType === 'STRING')||(filtType === 'INTEGER')){
                      if (!(filtName in optionsPerFilter)){
@@ -833,6 +835,44 @@ div.labelAndInput > input {
                   }
                })
             });
+            return optionsPerFilter;
+         }
+
+
+
+
+
+
+
+
+
+        var dynamicallyFilterSamples = function (){
+            var data = getStoredSampleData();
+            if (typeof data === 'undefined') return;
+            var filters = extractFilters();
+            var relevantFilters = _.remove(filters,function(v){return (v.parm.length>0)});
+            var filterTypeMap = determineEachFiltersType();
+//            var optionsPerFilter = {};
+//            _.forEach(data.metaData.variants,function(obj){
+//               _.forEach(filterTypeMap,function(filtType,filtName){
+//                  if ((filtType === 'STRING')||(filtType === 'INTEGER')){
+//                     if (!(filtName in optionsPerFilter)){
+//                        optionsPerFilter[filtName] = [];
+//                     }
+//                    _.forEach(obj,function(filterHolder){
+//                        _.forEach(filterHolder,function(val,key){
+//                           if (key === filtName){
+//                              _.forEach(val,function(value){
+//                                  if (optionsPerFilter[filtName].indexOf(value)==-1){
+//                                     optionsPerFilter[filtName].push(value);
+//                                  }
+//                              })
+//                           }
+//                        })
+//                    })
+//                  }
+//               })
+//            });
             var groupedBySampleId =  _.groupBy(data.metaData.variants,
                                                function(inv){
                                                     return _.find(_.find(inv,
@@ -1055,8 +1095,8 @@ $( document ).ready( function (){
                                 =
                             </div>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" data-type="propertiesInput"
-                                       data-prop="{{name}}Value" data-translatedname="{{name}}">
+                                <select id="multi{{name}}" class="form-control multiSelect" data-selectfor="{{name}}FilterOpts">
+                                </select>
                             </div>
                             <div class="col-sm-1">
                                 <span  onmouseover="displaySampleDistribution('{{name}}', '#boxWhiskerPlot')" class="glyphicon glyphicon-arrow-right pull-right"></span>
