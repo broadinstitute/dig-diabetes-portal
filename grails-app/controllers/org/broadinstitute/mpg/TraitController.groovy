@@ -335,7 +335,7 @@ class TraitController {
         // so arbitrarily limit the number of results to 1500, sorted by lowest p-value
         def variants = arrayOfResults.sort({
             return it.PVALUE
-        }).subList(0, 1500)
+        }).subList(0, 1000)
 
         // log
         log.info("for traitVariantCrossAjax, got json results object: " + jsonObject);
