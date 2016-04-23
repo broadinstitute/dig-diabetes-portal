@@ -332,22 +332,22 @@ class TraitController {
 
         ArrayList<JSONObject> arrayOfResults = jsonObject.variants
         log.info("arrayOfResults size: ${arrayOfResults.size()}")
-        // cap the number of results to return at the smaller of 1500 or the
+        // cap the number of results to return at the smaller of 1000 or the
         // number of results
-        int lengthToTrimTo = Math.min(1500, arrayOfResults.size())
+        int lengthToTrimTo = Math.min(1000, arrayOfResults.size())
         log.info("limit of results: ${lengthToTrimTo}")
         // it turns out that getting 4000 results will cause some systems to break,
-        // so arbitrarily limit the number of results to 1500, sorted by lowest p-value
+        // so arbitrarily limit the number of results, sorted by lowest p-value
         def variants = arrayOfResults.sort({
             return it.PVALUE
         }).subList(0, lengthToTrimTo)
 
         // log
-        log.info("for traitVariantCrossAjax, got json results object: " + jsonObject);
+        log.info("for traitVariantCrossAjax, got json results object: " + variants);
 
         if (jsonObject) {
             render(status: 200, contentType: "application/json") {
-                [variants: variants]
+                [variants: variants, numRecords: lengthToTrimTo, is_error: false]
             }
         } else {
             render(status:300, contentType:"application/json")
