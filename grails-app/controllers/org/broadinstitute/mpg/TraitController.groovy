@@ -331,9 +331,11 @@ class TraitController {
         JSONObject jsonObject =  this.metaDataService.searchTraitByUnparsedRegion(regionsSpecification, phenotypeList);
 
         ArrayList<JSONObject> arrayOfResults = jsonObject.variants
+        log.info("arrayOfResults size: ${arrayOfResults.size()}")
         // cap the number of results to return at the smaller of 1500 or the
         // number of results
         int lengthToTrimTo = Math.min(1500, arrayOfResults.size())
+        log.info("limit of results: ${lengthToTrimTo}")
         // it turns out that getting 4000 results will cause some systems to break,
         // so arbitrarily limit the number of results to 1500, sorted by lowest p-value
         def variants = arrayOfResults.sort({
