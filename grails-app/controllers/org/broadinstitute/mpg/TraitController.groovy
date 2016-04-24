@@ -347,7 +347,8 @@ class TraitController {
 
         if (jsonObject) {
             render(status: 200, contentType: "application/json") {
-                [variants: variants, numRecords: lengthToTrimTo, is_error: false]
+//                [variants: variants, numRecords: lengthToTrimTo, is_error: false]
+                jsonObject
             }
         } else {
             render(status:300, contentType:"application/json")
