@@ -747,37 +747,61 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName], searchBuilderService, metaDataService)
         for (LinkedHashMap linkedHashMap in linkedHashMapList) {
             String dataSet = linkedHashMap.name
+            String mafValue = linkedHashMap.maf
+            String macValue = linkedHashMap.mac
             String pValue = linkedHashMap.pvalue
             String orValue = linkedHashMap.orvalue
             String betaValue = linkedHashMap.betavalue
-            String mafValue = linkedHashMap.maf
+            String minaValue = linkedHashMap.mina
+            String minuValue = linkedHashMap.minu
+            String obsValue = linkedHashMap.obs
+            String obsaValue = linkedHashMap.obsa
+            String obsuValue = linkedHashMap.obsu
+            String mafaValue = linkedHashMap.mafa
+            String mafuValue = linkedHashMap.mafu
+
+            ArrayList<String> pproperties = [pValue, orValue, betaValue, minaValue, minuValue, obsValue,
+                                             obsaValue, obsuValue, mafaValue, mafuValue]
+
             if(mafValue && mafValue.length() > 0) {
                 addColumnsForDProperties(resultColumnsToDisplay, mafValue, dataSet)
             }
-            addColumnsForDProperties(resultColumnsToDisplay, "count", dataSet)
-            if ((pValue) && (pValue.length() > 0)) {
-                addColumnsForPProperties(resultColumnsToDisplay, phenotype,
-                        dataSet,
-                        pValue)
+            if(macValue && macValue.length() > 0) {
+                addColumnsForDProperties(resultColumnsToDisplay, macValue, dataSet)
             }
-            if ((orValue) && (orValue.length() > 0)) {
-                addColumnsForPProperties(resultColumnsToDisplay, phenotype,
-                        dataSet,
-                        orValue)
+
+            pproperties.each {
+                if ((it) && (it.length() > 0)) {
+                    addColumnsForPProperties(resultColumnsToDisplay, phenotype,
+                            dataSet,
+                            it)
+                }
             }
-            if ((betaValue) && (betaValue.length() > 0)) {
-                addColumnsForPProperties(resultColumnsToDisplay, phenotype,
-                        dataSet,
-                        betaValue)
-            }
-            // OBSA/OBSU are phenotype-dependent, so they weren't included in the data
-            // previously sent to the client
-            addColumnsForPProperties(resultColumnsToDisplay, phenotype,
-                    dataSet,
-                    "OBSA")
-            addColumnsForPProperties(resultColumnsToDisplay, phenotype,
-                    dataSet,
-                    "OBSU")
+
+//            if ((pValue) && (pValue.length() > 0)) {
+//                addColumnsForPProperties(resultColumnsToDisplay, phenotype,
+//                        dataSet,
+//                        pValue)
+//            }
+//            if ((orValue) && (orValue.length() > 0)) {
+//                addColumnsForPProperties(resultColumnsToDisplay, phenotype,
+//                        dataSet,
+//                        orValue)
+//            }
+//            if ((betaValue) && (betaValue.length() > 0)) {
+//                addColumnsForPProperties(resultColumnsToDisplay, phenotype,
+//                        dataSet,
+//                        betaValue)
+//            }
+//            // OBSA/OBSU are phenotype-dependent, so they weren't included in the data
+//            // previously sent to the client
+//            addColumnsForPProperties(resultColumnsToDisplay, phenotype,
+//                    dataSet,
+//                    "OBSA")
+//            addColumnsForPProperties(resultColumnsToDisplay, phenotype,
+//                    dataSet,
+//                    "OBSU")
+
         }
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         JsonSlurper slurper = new JsonSlurper()

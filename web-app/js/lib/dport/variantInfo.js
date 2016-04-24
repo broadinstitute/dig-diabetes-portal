@@ -197,7 +197,7 @@ var mpgSoftware = mpgSoftware || {};
                             var thisDataset = {};
                             _.each(arrayOfValues, function(property) {
                                 thisDataset.dataset = property.dataset;     // this is the same for every property
-                                thisDataset[property.meaning] = property.count
+                                thisDataset[property.meaning] = property.count;
                                 if(property.datasetCode) {
                                     // this exists to support getting the count property
                                     thisDataset.datasetCode = property.datasetCode;
@@ -208,7 +208,7 @@ var mpgSoftware = mpgSoftware || {};
                             thisDataset.count = parseInt(datasets[thisDataset.datasetCode].count);
                             processedDatasets.push(thisDataset);
                         });
-
+                        // console.log(`so far we've got ${phenotype}`, processedDatasets);
                         processedDatasets = _.sortBy(processedDatasets, 'p_value');
                         // check to see if any dataset has at least a nominal signficance
                         // reject those that don't. If none do, then don't display anything
@@ -398,17 +398,26 @@ var mpgSoftware = mpgSoftware || {};
                     return '\u00a0';
                 },
                 freqInCases: function() {
-                    if(this.OBSA) {
-                        // debugger
-                        return (this.OBSA/this.count*100).toFixed(1) + '%';
+                    if(this.MAF) {
+                        return (this.MAF * 100).toFixed(1) + '%';
                     }
                     return '\u00a0';
                 },
-                freqInControls: function() {
-                    if(this.OBSU) {
-                        return (this.OBSU/this.count*100).toFixed(1) + '%';
+                countInCases: function() {
+                    if(this.MAC) {
+                        return this.MAC;
+                    } else if (this.MINA && this.MINU) {
+                        return this.MINA + this.MINU;
+                    } else if (this.OBS) {
+                        return (2 * this.OBS * this.MAF).toFixed(0);
+                    } else if (this.OBSA && this.MAFA && this.OBSU && this.MAFU) {
+                        return (2 * this.OBSA * this.MAFA + 2 * this.OBSU * this.MAFU).toFixed(0);
+                    } else if (this.count && this.MAF) {
+                        return (2 * this.count * this.MAF).toFixed(0);
+                    } else {
+                        console.log('missing count information for', this);
+                        return '\u00a0';
                     }
-                    return '\u00a0';
                 }
             };
 
