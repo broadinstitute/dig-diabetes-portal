@@ -370,7 +370,7 @@ public class JsonParser {
     protected SampleGroup createSampleGroupFromJson(JSONObject jsonObject, DataSet parent) throws PortalException {
         // local variables
         SampleGroupBean sampleGroup = new SampleGroupBean();
-        JSONArray tempArray;
+        JSONArray tempArray= null;
         SampleGroup tempSampleGroup;
         Property tempProperty;
         Phenotype tempPhenotype;
@@ -442,7 +442,7 @@ public class JsonParser {
                 }
             }
             // handle a dataset with no phenotypes, by adding a made-up "none" phenotype
-            if(tempArray.length() == 0) {
+            if ((tempArray == null) ||(tempArray.length() == 0)) {
                 JSONObject nonePhenotype = new JSONObject();
                 nonePhenotype.put("name", "none");
                 nonePhenotype.put("group", "OTHER");

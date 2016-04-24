@@ -90,6 +90,9 @@ div.labelAndInput > input {
     padding: 0;
     line-height: 20px;
 }
+#covariateHolder .row {
+    line-height: 15px;
+}
 </style>
 
 
@@ -247,34 +250,46 @@ div.labelAndInput > input {
             var loading = $('#spinner').show();
             var data = getStoredSampleMetadata();
             if ( ( data !==  null ) &&
-                    ( typeof data !== 'undefined') &&
-                    ( typeof data.filters !== 'undefined' ) &&
-                    (  data.filters !==  null ) ) {
-                    // retrieve sample info for all filters
-                    var filtersSpecs = [];
-                    _.forEach(data.filters,function(filterObjs){
-                       filtersSpecs.push("{\"name\": \""+filterObjs.name+"\"}");
-                    });
-                    var jsonDescr = "{\"dataset\":\""+$(dropdownSel).val()+"\"," +
-                              "\"requestedData\":["+filtersSpecs.join(',')+"]," +
-                              "\"filters\":[]}";
+                 ( typeof data !== 'undefined') ){
+                    if ( ( typeof data.filters !== 'undefined' ) &&
+                         (  data.filters !==  null ) ) {
+                            // retrieve sample info for all filters
+                            var filtersSpecs = [];
+                            _.forEach(data.filters,function(filterObjs){
+                               filtersSpecs.push("{\"name\": \""+filterObjs.name+"\"}");
+                            });
+                            var jsonDescr = "{\"dataset\":\""+$(dropdownSel).val()+"\"," +
+                                      "\"requestedData\":["+filtersSpecs.join(',')+"]," +
+                                      "\"filters\":[]}";
 
-                    var output = '';
-                    var floatTemplate = $('#filterFloatTemplate')[0].innerHTML;
-                    var categoricalTemplate = $('#filterCategoricalTemplate')[0].innerHTML;
-                    _.forEach(data.filters,function(d,i){
-                      if (d.type === 'FLOAT') {
-                         output = (output + Mustache.render(floatTemplate, d));
-                      } else {
-                         output = (output+Mustache.render(categoricalTemplate, d));
-                      }
+                            var output = '';
+                            var floatTemplate = $('#filterFloatTemplate')[0].innerHTML;
+                            var categoricalTemplate = $('#filterCategoricalTemplate')[0].innerHTML;
+                            _.forEach(data.filters,function(d,i){
+                              if (d.type === 'FLOAT') {
+                                 output = (output + Mustache.render(floatTemplate, d));
+                              } else {
+                                 output = (output+Mustache.render(categoricalTemplate, d));
+                              }
 
-                    });
-                    $("#sampleRow").show();
-                   $('.sampleNumberReporter').show();
-                   $("#person").append(output);
-                   mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, fillDistributionPlotsAndDropdowns );
-            }
+                            });
+                            $("#sampleRow").show();
+                           $('.sampleNumberReporter').show();
+                           $("#person").append(output);
+                           mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, fillDistributionPlotsAndDropdowns );
+                    }
+                     if ( ( typeof data.covariates !== 'undefined' ) &&
+                         (  data.covariates !==  null ) ) {
+                            output = '';
+                            var covariateTemplate = $('#covariateTemplate')[0].innerHTML;
+                             _.forEach(data.covariates,function(d,i){
+                                 output = (output + Mustache.render(covariateTemplate, d));
+                            });
+                            $("#covariateHolder").append(output);
+                    }
+
+             }
+
             loading.hide();
         };
 
@@ -760,25 +775,6 @@ div.labelAndInput > input {
 
 
 
-
-
-        %{--var retrieveSampleInformation = function (data, callback,passThru){--}%
-            %{--$.ajax({--}%
-                %{--cache: false,--}%
-                %{--type: "post",--}%
-                %{--url: "${createLink(controller: 'variantInfo', action: 'retrieveSampleListAjax')}",--}%
-                %{--data: {'data':data},--}%
-                %{--async: true,--}%
-                %{--success: function (returnedData) {--}%
-                    %{--storeSampleData(returnedData);--}%
-                    %{--callback(returnedData.metaData.variants,passThru);--}%
-                %{--},--}%
-                %{--error: function (jqXHR, exception) {--}%
-                    %{--core.errorReporter(jqXHR, exception);--}%
-                %{--}--}%
-            %{--});--}%
-        %{--};--}%
-
         var retrieveSampleInformation = function (data, callback,passThru){
             var returnedData = getStoredSampleData();
             if (typeof returnedData === 'undefined') {
@@ -1137,97 +1133,114 @@ $( document ).ready( function (){
 
             <!-- Tab panes -->
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="covariates" style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px">
+                <div role="tabpanel" class="tab-pane active" id="covariates" style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px;overflow-y: scroll;">
                     <div class="row">
                         <div class="col-md-10 col-sm-10 col-xs-12 vcenter">
 
+                            <div id="covariateHolder">
 
-                            <div id="covariate-form">
-                                <div class="col-sm-4 col-xs-12 text-center">
+                            </div>
 
-                                    <div class="checkbox">
+                            <div id="covariateTemplate" style="display: none;">
+                                <div class="row">
+                                    <div class="checkbox" style="margin:0">
                                         <label>
-                                            <input id="covariate_PC1" type="checkbox" name="covariate" value="PC1"
+                                            <input id="covariate_{{name}}" type="checkbox" name="covariate" value="{{name}}"
                                                    checked/>
-                                            PC1
+                                            {{name}}
                                         </label>
                                     </div>
-
-                                    <div class="checkbox">
-                                        <label>
-                                            <input id="covariate_PC2" type="checkbox" name="covariate" value="PC2"
-                                                   checked/>
-                                            PC2</label>
-                                    </div>
-
-                                    <div class="checkbox">
-                                        <label>
-                                            <input id="covariate_PC3" type="checkbox" name="covariate" value="PC3"
-                                                   checked/>
-                                            PC3</label>
-                                    </div>
-
-                                    <div class="checkbox">
-                                        <label>
-                                            <input id="covariate_PC4" type="checkbox" name="covariate" value="PC4"
-                                                   checked/>
-                                            PC4</label>
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-4 col-xs-12 text-center">
-
-                                    <div class="checkbox">
-                                        <label>
-                                            <input id="covariate_PC5" type="checkbox" name="covariate" value="PC5"
-                                                   checked/>
-                                            PC5
-                                        </label>
-                                    </div>
-
-                                    <div class="checkbox">
-                                        <label>
-                                            <input id="covariate_PC6" type="checkbox" name="covariate" value="PC6"
-                                                   checked/>
-                                            PC6</label>
-                                    </div>
-
-                                    <div class="checkbox">
-                                        <label>
-                                            <input id="covariate_PC7" type="checkbox" name="covariate" value="PC7"
-                                                   checked/>
-                                            PC7</label>
-                                    </div>
-
-                                    <div class="checkbox">
-                                        <label>
-                                            <input id="covariate_PC8" type="checkbox" name="covariate" value="PC8"
-                                                   checked/>
-                                            PC8</label>
-                                    </div>
-
-                                </div>
-
-                                <div class="col-sm-4 col-xs-12 text-center">
-
-                                    <div class="checkbox">
-                                        <label>
-                                            <input id="covariate_PC9" type="checkbox" name="covariate" value="PC9"
-                                                   checked/>
-                                            PC9
-                                        </label>
-                                    </div>
-
-                                    <div class="checkbox">
-                                        <label>
-                                            <input id="covariate_PC10" type="checkbox" name="covariate" value="PC10"
-                                                   checked/>
-                                            PC10</label>
-                                    </div>
-
                                 </div>
                             </div>
+
+
+
+                            %{--<div id="covariate-form">--}%
+                                %{--<div class="col-sm-4 col-xs-12 text-center">--}%
+
+                                    %{--<div class="checkbox">--}%
+                                        %{--<label>--}%
+                                            %{--<input id="covariate_PC1" type="checkbox" name="covariate" value="PC1"--}%
+                                                   %{--checked/>--}%
+                                            %{--PC1--}%
+                                        %{--</label>--}%
+                                    %{--</div>--}%
+
+                                    %{--<div class="checkbox">--}%
+                                        %{--<label>--}%
+                                            %{--<input id="covariate_PC2" type="checkbox" name="covariate" value="PC2"--}%
+                                                   %{--checked/>--}%
+                                            %{--PC2</label>--}%
+                                    %{--</div>--}%
+
+                                    %{--<div class="checkbox">--}%
+                                        %{--<label>--}%
+                                            %{--<input id="covariate_PC3" type="checkbox" name="covariate" value="PC3"--}%
+                                                   %{--checked/>--}%
+                                            %{--PC3</label>--}%
+                                    %{--</div>--}%
+
+                                    %{--<div class="checkbox">--}%
+                                        %{--<label>--}%
+                                            %{--<input id="covariate_PC4" type="checkbox" name="covariate" value="PC4"--}%
+                                                   %{--checked/>--}%
+                                            %{--PC4</label>--}%
+                                    %{--</div>--}%
+
+                                %{--</div>--}%
+
+                                %{--<div class="col-sm-4 col-xs-12 text-center">--}%
+
+                                    %{--<div class="checkbox">--}%
+                                        %{--<label>--}%
+                                            %{--<input id="covariate_PC5" type="checkbox" name="covariate" value="PC5"--}%
+                                                   %{--checked/>--}%
+                                            %{--PC5--}%
+                                        %{--</label>--}%
+                                    %{--</div>--}%
+
+                                    %{--<div class="checkbox">--}%
+                                        %{--<label>--}%
+                                            %{--<input id="covariate_PC6" type="checkbox" name="covariate" value="PC6"--}%
+                                                   %{--checked/>--}%
+                                            %{--PC6</label>--}%
+                                    %{--</div>--}%
+
+                                    %{--<div class="checkbox">--}%
+                                        %{--<label>--}%
+                                            %{--<input id="covariate_PC7" type="checkbox" name="covariate" value="PC7"--}%
+                                                   %{--checked/>--}%
+                                            %{--PC7</label>--}%
+                                    %{--</div>--}%
+
+                                    %{--<div class="checkbox">--}%
+                                        %{--<label>--}%
+                                            %{--<input id="covariate_PC8" type="checkbox" name="covariate" value="PC8"--}%
+                                                   %{--checked/>--}%
+                                            %{--PC8</label>--}%
+                                    %{--</div>--}%
+
+                                %{--</div>--}%
+
+                                %{--<div class="col-sm-4 col-xs-12 text-center">--}%
+
+                                    %{--<div class="checkbox">--}%
+                                        %{--<label>--}%
+                                            %{--<input id="covariate_PC9" type="checkbox" name="covariate" value="PC9"--}%
+                                                   %{--checked/>--}%
+                                            %{--PC9--}%
+                                        %{--</label>--}%
+                                    %{--</div>--}%
+
+                                    %{--<div class="checkbox">--}%
+                                        %{--<label>--}%
+                                            %{--<input id="covariate_PC10" type="checkbox" name="covariate" value="PC10"--}%
+                                                   %{--checked/>--}%
+                                            %{--PC10</label>--}%
+                                    %{--</div>--}%
+
+                                %{--</div>--}%
+                            %{--</div>--}%
                         </div>
 
                         <div class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter">

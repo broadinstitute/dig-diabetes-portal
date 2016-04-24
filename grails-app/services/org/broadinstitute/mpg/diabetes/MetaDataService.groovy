@@ -470,10 +470,12 @@ class MetaDataService {
 
         List<String> technologies = ["GWAS", "ExChip", "ExSeq"]
 
-        everyPhenotype.each {
-            List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups(it ,"",  technologies)
-            JSONObject jsonList = filterManagementService.convertSampleGroupListToJson(fullListOfSampleGroups, it)
-            mapping[it] = jsonList
+        everyPhenotype.each {  String phenoName ->
+            if (phenoName != 'none'){
+                List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups(phenoName ,"",  technologies)
+                JSONObject jsonList = filterManagementService.convertSampleGroupListToJson(fullListOfSampleGroups, phenoName)
+                mapping[phenoName] = jsonList
+            }
         }
 
         return mapping
