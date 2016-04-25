@@ -76,7 +76,7 @@ class RestServerService {
     public static final String HAIL_SERVER_URL_DEV = "http://dig-api-dev.broadinstitute.org/dev/gs/";
     public static final String HAIL_SERVER_URL_QA = "http://dig-api-qa.broadinstitute.org/qa/gs/";
     //public static final String SAMPLE_SERVER_URL_QA = "http://dig-api-qa.broadinstitute.org/qa/gs/";
-    public static final String SAMPLE_SERVER_URL_QA = "http://dig-qa-01.broadinstitute.org:8888/qa/gs/";
+    public static final String SAMPLE_SERVER_URL_QA = "http://dig-api-qa.broadinstitute.org/qa/gs/";
 
 
     private List<ServerBean> burdenServerList;

@@ -122,13 +122,14 @@ class BurdenService {
         }
         propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("COVARIATE")}
         for (Property property in propertyList){
-             covariateList << """{"name":"${property.name}"}""".toString()
+             covariateList << """{"name":"${property.name}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}"}""".toString()
         }
         propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("FILTER")}
         for (Property property in propertyList){
-            filterList << """{"name":"${property.name}", "type":"${property.variableType}"  }""".toString()
+            filterList << """{"name":"${property.name}", "type":"${property.variableType}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}"  }""".toString()
         }
-        String jsonString = """{"phenotypes":[${phenotypeList.join(",")}],
+        String jsonString = """{"dataset":"${sampleGroup.systemId}",
+"phenotypes":[${phenotypeList.join(",")}],
 "covariates":[${covariateList.join(",")}],
 "filters":[${filterList.join(",")}]
 }""".toString()

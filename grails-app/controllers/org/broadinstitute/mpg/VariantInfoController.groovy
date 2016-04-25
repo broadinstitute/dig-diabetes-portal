@@ -177,6 +177,17 @@ class VariantInfoController {
     }
 
 
+    def sampleMetadataAjaxWithAssumedExperiment() {
+        List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "", MetaDataService.METADATA_SAMPLE)
+        if (sampleGroupList.size()>0){
+            SampleGroup sampleGroup = metaDataService.getSampleGroupByFromSamplesName(sampleGroupList.first().systemId)
+            JSONObject jsonObject = burdenService.convertSampleGroupPropertyListToJson (sampleGroup)
+            render(status: 200, contentType: "application/json") {jsonObject}
+        }
+        render(status: 200, contentType: "application/json")
+
+    }
+
 
 
 

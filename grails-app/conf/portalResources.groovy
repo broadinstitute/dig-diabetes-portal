@@ -67,7 +67,7 @@ modules = {
         resource url: 'js/lib/dport/igvLaunch.js'
     }
     variantInfo {
-        dependsOn "core", "mbar"
+        dependsOn "core", "mbar", "bootstrapMultiselect"
 
         resource url: 'css/images/controls.png'
 
@@ -92,6 +92,10 @@ modules = {
 
         resource url: 'https://data.broadinstitute.org/igvdata/web/beta/igv-beta.css'
         resource url: 'https://data.broadinstitute.org/igvdata/web/beta/igv-beta.min.js'
+    }
+    bootstrapMultiselect {
+        resource url: 'js/lib/bootstrap-multiselect.js'
+        resource url: 'css/lib/bootstrap-multiselect.css'
     }
     tableViewer {
         resource url: 'js/lib/dport/tableViewer.js'

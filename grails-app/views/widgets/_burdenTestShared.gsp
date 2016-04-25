@@ -9,6 +9,11 @@ div.sampleNumberReporter {
     display: none;
     font-weight: bold;
 }
+div.secHeader {
+    font-weight: bold;
+    font-size: 18px;
+    text-decoration: underline;
+}
 div.burden-test-wrapper-options {
     background-color: #eee;
     border: solid 1px #ddd;
@@ -206,6 +211,33 @@ div.labelAndInput > input {
         };
 
 
+        var preloadInteractiveAnalysisData = function () {
+            var dropDownSelector = '#datasetFilter';
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "${createLink(controller: 'VariantInfo', action: 'sampleMetadataAjaxWithAssumedExperiment')}",
+                data: {},
+                async: true,
+                success: function (data) {
+                    var filtersSpecs = [];
+                    _.forEach(data.filters,function(filterObjs){
+                       filtersSpecs.push("{\"name\": \""+filterObjs.name+"\"}");
+                    });
+                    var domSelector = $(datasetFilter);
+                    var jsonDescr = "{\"dataset\":\""+data.dataset+"\"," +
+                                      "\"requestedData\":["+filtersSpecs.join(',')+"]," +
+                                      "\"filters\":[]}";
+                    mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, function(){} );
+                },
+                error: function (jqXHR, exception) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+        };
+
+
 
         var retrieveSampleMetadata = function (dropdownSel, dropDownSelector) {
             var loading = $('#spinner').show();
@@ -235,7 +267,7 @@ div.labelAndInput > input {
                             var jsonDescr = "{\"dataset\":\""+$(dropdownSel).val()+"\"," +
                                       "\"requestedData\":["+filtersSpecs.join(',')+"]," +
                                       "\"filters\":[]}";
-                            mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, function(){} );
+                           // mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, function(){} );
                             loading.hide();
                         },
                         error: function (jqXHR, exception) {
@@ -562,7 +594,7 @@ div.labelAndInput > input {
         };
         var buildBoxWhiskerPlot = function (inData,selector) {
             var margin = {top: 50, right: 50, bottom: 20, left: 50},
-            width = 500 - margin.left - margin.right,
+            width = 700 - margin.left - margin.right,
             height = 350 - margin.top - margin.bottom;
 
             // initial value of the interquartile multiplier. Note that this value
@@ -628,7 +660,7 @@ div.labelAndInput > input {
             labelSpacer = 10;
 
     var margin = {top: 50, right: 50, bottom: 20, left: 30},
-            width = 500 - margin.left - margin.right,
+            width = 700 - margin.left - margin.right,
             height = 350 - margin.top - margin.bottom;
 
 
@@ -668,21 +700,44 @@ div.labelAndInput > input {
 
 
         function extractFilters(){
-            var allFilters =  $('.considerFilter')
+            var allFilters =  $('.realValuedFilter');
             var requestedFilters = [];
             for  ( var i = 0 ; i < allFilters.length ; i++ )   {
                 var filterRowDom = $(allFilters[i]);
                 var  filterId = $(allFilters[i]).attr('id');
-                var partsOfFilterName = filterId.split("_");
-                var  filterName = partsOfFilterName[1];
-                var filterCheck = filterRowDom.find('.utilize');
-                var filterParm = filterRowDom.find('.filterParm');
-                var filterCmp = filterRowDom.find('.filterCmp');
-                if (filterCheck.is(':checked')&&(filterName.indexOf("{{")==-1)&&(filterParm.val().length>0)){
-                     var  dataSetMap = {"name":filterName,
-                        "parm":filterParm.val(),
-                        "cmp":filterCmp.val()};
-                    requestedFilters.push(dataSetMap);
+                if (filterId.indexOf("filter_")==0){
+                    var  filterName = filterId.substr(7);
+                    var filterCheck = filterRowDom.find('.utilize');
+                    var filterParm = filterRowDom.find('.filterParm');
+                    var filterCmp = filterRowDom.find('.filterCmp');
+                    if (filterCheck.is(':checked')&&(filterName.indexOf("{{")==-1)&&(filterParm.val().length>0)){
+                        var  dataSetMap = {"name":filterName,
+                                           "parm":filterParm.val(),
+                                           "cmp":filterCmp.val(),
+                                           "cat":0};
+                        requestedFilters.push(dataSetMap);
+                    }
+                }
+
+            }
+            allFilters =  $('.categoricalFilter');
+            for  ( var i = 0 ; i < allFilters.length ; i++ )   {
+                var filterRowDom = $(allFilters[i]);
+                var  filterId = $(allFilters[i]).attr('id');
+                if (filterId.indexOf("filter_")==0){
+                    var  filterName = filterId.substr(7);
+                    var filterCheck = filterRowDom.find('.utilize');
+                    var multiParm = filterRowDom.find('.multiSelect');
+                    if (filterCheck.is(':checked')&&(filterName.indexOf("{{")==-1)){
+                        var allSelected = [];
+                        _.forEach($('#multi'+filterName+' option:selected'),function(d){
+                            allSelected.push($(d).val());
+                        });
+                        var  dataSetMap = {"name":filterName,
+                                "parm":allSelected,
+                                "cat":1};
+                          requestedFilters.push(dataSetMap);
+                    }
                 }
             }
             return requestedFilters;
@@ -730,9 +785,21 @@ div.labelAndInput > input {
             _.forEach(sampleMetadata.filters,function(d,i){
                 if (d.type !== 'FLOAT') {
                     if (optionsPerFilter[d.name]!==undefined){
+                       var dropdownId = '#multi'+d.name;
                        _.forEach(optionsPerFilter[d.name],function(filterVal){
-                           $('#multi'+d.name).append(new Option(filterVal.name,filterVal));
+                           $(dropdownId).append(new Option(filterVal.name,filterVal.name));
                        });
+                       $(dropdownId).multiselect({onChange: function(element, checked) {
+                                                                 if (checked === true) {
+                                                                    // alert('el'+element+' is true');
+                                                                 }
+                                                             },
+                                                   includeSelectAllOption: true,
+                                                   allSelectedText: 'All Selected'
+                                                   });
+                       $(dropdownId).multiselect('selectAll', false);
+                       $(dropdownId).multiselect('updateButtonText');
+
                     }
                  }
             });
@@ -868,7 +935,7 @@ div.labelAndInput > input {
             var data = getStoredSampleData();
             if (typeof data === 'undefined') return;
             var filters = extractFilters();
-            var relevantFilters = _.remove(filters,function(v){return (v.parm.length>0)});
+            var relevantFilters = _.remove(filters,function(v){return ((v.cat===1)||(v.parm.length>0))});
             var groupedBySampleId =  _.groupBy(data.metaData.variants,
                                                function(inv){
                                                     return _.find(_.find(inv,
@@ -890,19 +957,35 @@ div.labelAndInput > input {
                             var filter = _.find(relevantFilters,function(filt){return (filt.name===propName)});
                             if (filter){
                                 var propertyValue;
-                                 _.forEach(dsObject,function(propVal,dsName){
+                                _.forEach(dsObject,function(propVal,dsName){
                                     propertyValue = propVal;
-                                })
-                                var numericalFilterValue = parseFloat(filter.parm);
-                                if (filter.cmp==="1"){
-                                   if (propertyValue>=numericalFilterValue){
-                                      rejectSample = true;
-                                   }
-                                } else if (filter.cmp==="2"){
-                                   if (propertyValue<=numericalFilterValue){
-                                      rejectSample = true;
-                                   }
-                                }
+                               });
+//                               if (filter.cat===1){ // categorical filter
+//                                    var catFilterValues = filter.parm;
+//                                    var matcher = _.find(catFilterValues,function(d){return d===propertyValue});
+//                                    if (matcher){
+//                                          rejectSample = false;
+//                                          console.log('sampleId(T)='+sampleId+',propertyValue'+propertyValue+',propName'+propName);
+//                                       } else {
+//                                          rejectSample = true;
+//                                           console.log('sampleId(F)='+sampleId+',propertyValue'+propertyValue+',propName'+propName);
+//                                          return;
+//
+//                                       }
+//                                } else {
+                                    var numericalFilterValue = parseFloat(filter.parm);
+                                    if (filter.cmp==="1"){
+                                       if (propertyValue>=numericalFilterValue){
+                                          rejectSample = true;
+                                          console.log('sampleId(Ta)='+sampleId);
+                                       }
+                                    } else if (filter.cmp==="2"){
+                                       if (propertyValue<=numericalFilterValue){
+                                          rejectSample = true;
+                                          console.log('sampleId(Fa)='+sampleId);
+                                       }
+                                    }
+//                                }
                             }
 
                          })
@@ -940,6 +1023,7 @@ div.labelAndInput > input {
 
         // public routines are declared below
         return {
+            preloadInteractiveAnalysisData:preloadInteractiveAnalysisData,
             retrieveExperimentMetadata:retrieveExperimentMetadata,
             retrieveSampleInformation:retrieveSampleInformation,
             filterAndRun:filterAndRun,
@@ -958,6 +1042,7 @@ div.labelAndInput > input {
 
 $( document ).ready( function (){
   mpgSoftware.burdenTestShared.retrieveExperimentMetadata( '#datasetFilter' );
+  mpgSoftware.burdenTestShared.preloadInteractiveAnalysisData();
 } );
 
 </g:javascript>
@@ -988,11 +1073,13 @@ $( document ).ready( function (){
 
     <div class="tab-content" style="border-top: 1px solid #ccc; padding: 4px 0 0 10px">
         <div  role="tabpanel" class="tab-pane active" id="chooseSamples">
-            <div class="col-sm-8 col-xs-12 vcenter">
-                <div class="row">
-                    <div class="col-sm-4 col-xs-12 text-right"><label>Choose a data set:</label></div>
+            <div class="col-sm-6 col-xs-12 vcenter">
 
-                    <div class="col-sm-8 col-xs-12 text-left">
+                <div class="row secHeader" style="padding: 20px 0 0 0">
+                    <div class="col-sm-12 col-xs-12 text-left"><label>Dataset</label></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12 text-left">
                         <select id="datasetFilter" class="traitFilter form-control text-left"
                                 onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata( this, '#phenotypeFilter' );"
                                 onclick="mpgSoftware.burdenTestShared.retrieveSampleMetadata( this, '#phenotypeFilter' );">
@@ -1001,10 +1088,11 @@ $( document ).ready( function (){
 
                 </div>
 
+                <div class="row secHeader" style="padding: 20px 0 0 0">
+                    <div class="col-sm-12 col-xs-12 text-left"><label>Phenotype</label></div>
+                </div>
                 <div class="row">
-                    <div class="col-sm-4 col-xs-12 text-right"><label>Choose a phenotype:</label></div>
-
-                    <div class="col-sm-8 col-xs-12 text-left">
+                    <div class="col-sm-12 col-xs-12 text-left">
                         <select id="phenotypeFilter" class="traitFilter form-control text-left"
                                 onchange="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata( $('#datasetFilter'), '#phenotypeFilter' );">
                         </select>
@@ -1012,9 +1100,12 @@ $( document ).ready( function (){
                 </div>
 
 
+                <div class="row secHeader" style="padding: 20px 0 0 0">
+                    <div class="col-sm-6 col-xs-12 text-left"><label>Filters</label></div>
+                    <div class="col-sm-6 col-xs-12 text-right"><label style="font-style: italic; font-size: 14px">Mouse-over arrows for distribution</label></div>
+                </div>
                 <div class="row" id="sampleRow" style="display:none; padding: 10px 0 0 0">
-                    <div class="col-sm-4 col-xs-12 text-right"><label>Sample filters:</label></div>
-                    <div class="col-sm-8 col-xs-12 text-left">
+                    <div class="col-sm-12 col-xs-12 text-left">
                     <div class="row sampleFilterHeader" style="text-decoration: underline">
                         <div class="col-sm-1"  style="padding-left: 4px">
                             Use
@@ -1042,22 +1133,22 @@ $( document ).ready( function (){
                             </div>
                         </div>
                     </div>
-                    <div class="pull-right" style="padding: 10px 0 0 0">
-                        <button class="btn btn-xs"
-                                onClick="mpgSoftware.burdenTestShared.refreshSampleData  ( '#datasetFilter', mpgSoftware.burdenTestShared.utilizeSampleInfoForDistributionPlots  )">
-                            Refresh distributions &gt;&gt;</button>
-                    </div>
+                    %{--<div class="pull-right" style="padding: 10px 0 0 0">--}%
+                        %{--<button class="btn btn-xs"--}%
+                                %{--onClick="mpgSoftware.burdenTestShared.refreshSampleData  ( '#datasetFilter', mpgSoftware.burdenTestShared.utilizeSampleInfoForDistributionPlots  )">--}%
+                            %{--Refresh distributions &gt;&gt;</button>--}%
+                    %{--</div>--}%
 
 
 
 
                     <div id="filterFloatTemplate" style="display: none;">
-                        <div class="row considerFilter" id="filter_{{name}}">
+                        <div class="row realValuedFilter considerFilter" id="filter_{{name}}">
                             <div class="col-sm-1">
                                 <input class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}" value="{{name}}" checked/></td>
                             </div>
-                            <div class="col-sm-3">
-                                <span>{{name}}</span>
+                            <div class="col-sm-5">
+                                <span>{{trans}}</span>
                             </div>
                             <div class="col-sm-2">
                                 <select id="cmp{{name}}" class="form-control filterCmp" data-selectfor="{{name}}Comparator">
@@ -1066,7 +1157,7 @@ $( document ).ready( function (){
                                     <option value="3">=</option>
                                 </select>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <input  id="inp{{name}}" type="text" class="filterParm form-control" data-type="propertiesInput"
                                        data-prop="{{name}}Value" data-translatedname="{{name}}">
 
@@ -1080,18 +1171,18 @@ $( document ).ready( function (){
 
 
                     <div id="filterCategoricalTemplate" style="display: none;">
-                        <div class="row">
+                        <div class="row categoricalFilter considerFilter"  id="filter_{{name}}">
                             <div class="col-sm-1">
-                                <input id="use{{name}}" type="checkbox" name="use{{name}}" value="{{name}}" checked/></td>
+                                <input  class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}" value="{{name}}" checked/></td>
                             </div>
-                            <div class="col-sm-3">
-                                <span>{{name}}</span>
+                            <div class="col-sm-5">
+                                <span>{{trans}}</span>
                             </div>
                             <div class="col-sm-2" style="text-align: center">
                                 =
                             </div>
-                            <div class="col-sm-4">
-                                <select id="multi{{name}}" class="form-control multiSelect" data-selectfor="{{name}}FilterOpts">
+                            <div class="col-sm-3">
+                                <select id="multi{{name}}" class="form-control multiSelect" data-selectfor="{{name}}FilterOpts" multiple="multiple">
                                 </select>
                             </div>
                             <div class="col-sm-1">
@@ -1111,7 +1202,7 @@ $( document ).ready( function (){
 
             </div>
 
-            <div class="col-sm-4 col-xs-12 vcenter" style="padding-left: 0">
+            <div class="col-sm-6 col-xs-12 vcenter" style="padding-left: 0">
                 <div class="sampleNumberReporter text-center">
                     number of samples equals <span class="numberOfSamples"></span>
                 </div>
@@ -1147,100 +1238,12 @@ $( document ).ready( function (){
                                         <label>
                                             <input id="covariate_{{name}}" type="checkbox" name="covariate" value="{{name}}"
                                                    checked/>
-                                            {{name}}
+                                            {{trans}}
                                         </label>
                                     </div>
                                 </div>
                             </div>
 
-
-
-                            %{--<div id="covariate-form">--}%
-                                %{--<div class="col-sm-4 col-xs-12 text-center">--}%
-
-                                    %{--<div class="checkbox">--}%
-                                        %{--<label>--}%
-                                            %{--<input id="covariate_PC1" type="checkbox" name="covariate" value="PC1"--}%
-                                                   %{--checked/>--}%
-                                            %{--PC1--}%
-                                        %{--</label>--}%
-                                    %{--</div>--}%
-
-                                    %{--<div class="checkbox">--}%
-                                        %{--<label>--}%
-                                            %{--<input id="covariate_PC2" type="checkbox" name="covariate" value="PC2"--}%
-                                                   %{--checked/>--}%
-                                            %{--PC2</label>--}%
-                                    %{--</div>--}%
-
-                                    %{--<div class="checkbox">--}%
-                                        %{--<label>--}%
-                                            %{--<input id="covariate_PC3" type="checkbox" name="covariate" value="PC3"--}%
-                                                   %{--checked/>--}%
-                                            %{--PC3</label>--}%
-                                    %{--</div>--}%
-
-                                    %{--<div class="checkbox">--}%
-                                        %{--<label>--}%
-                                            %{--<input id="covariate_PC4" type="checkbox" name="covariate" value="PC4"--}%
-                                                   %{--checked/>--}%
-                                            %{--PC4</label>--}%
-                                    %{--</div>--}%
-
-                                %{--</div>--}%
-
-                                %{--<div class="col-sm-4 col-xs-12 text-center">--}%
-
-                                    %{--<div class="checkbox">--}%
-                                        %{--<label>--}%
-                                            %{--<input id="covariate_PC5" type="checkbox" name="covariate" value="PC5"--}%
-                                                   %{--checked/>--}%
-                                            %{--PC5--}%
-                                        %{--</label>--}%
-                                    %{--</div>--}%
-
-                                    %{--<div class="checkbox">--}%
-                                        %{--<label>--}%
-                                            %{--<input id="covariate_PC6" type="checkbox" name="covariate" value="PC6"--}%
-                                                   %{--checked/>--}%
-                                            %{--PC6</label>--}%
-                                    %{--</div>--}%
-
-                                    %{--<div class="checkbox">--}%
-                                        %{--<label>--}%
-                                            %{--<input id="covariate_PC7" type="checkbox" name="covariate" value="PC7"--}%
-                                                   %{--checked/>--}%
-                                            %{--PC7</label>--}%
-                                    %{--</div>--}%
-
-                                    %{--<div class="checkbox">--}%
-                                        %{--<label>--}%
-                                            %{--<input id="covariate_PC8" type="checkbox" name="covariate" value="PC8"--}%
-                                                   %{--checked/>--}%
-                                            %{--PC8</label>--}%
-                                    %{--</div>--}%
-
-                                %{--</div>--}%
-
-                                %{--<div class="col-sm-4 col-xs-12 text-center">--}%
-
-                                    %{--<div class="checkbox">--}%
-                                        %{--<label>--}%
-                                            %{--<input id="covariate_PC9" type="checkbox" name="covariate" value="PC9"--}%
-                                                   %{--checked/>--}%
-                                            %{--PC9--}%
-                                        %{--</label>--}%
-                                    %{--</div>--}%
-
-                                    %{--<div class="checkbox">--}%
-                                        %{--<label>--}%
-                                            %{--<input id="covariate_PC10" type="checkbox" name="covariate" value="PC10"--}%
-                                                   %{--checked/>--}%
-                                            %{--PC10</label>--}%
-                                    %{--</div>--}%
-
-                                %{--</div>--}%
-                            %{--</div>--}%
                         </div>
 
                         <div class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter">
