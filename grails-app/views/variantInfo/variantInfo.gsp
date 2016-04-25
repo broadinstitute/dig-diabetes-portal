@@ -65,9 +65,6 @@
             margin-right: 20px;
             padding: 5px 0 10px;
             border-top: solid 2px; /* color is defined on each item */
-            /* this is to "pad" each trait to have 2 boxes--if more boxes are added, then
-            the min-width specification is ignored */
-            min-width: 303px;
         }
 
         .small-info-box-holder h3 {
@@ -79,6 +76,11 @@
 
         .small-info-box-holder > ul > li > h3 {
             font-weight: 400;
+        }
+
+        /* clear out the margin so the border doesn't have an extra tail */
+        .small-info-box-holder > ul > li:nth-last-child(1) {
+            margin-right: 0;
         }
 
         .small-info-box-holder span.p-value {

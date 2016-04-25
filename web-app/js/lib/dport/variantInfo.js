@@ -16,38 +16,44 @@ var mpgSoftware = mpgSoftware || {};
         // provide the color assignments for the phenotypes
         // if a phenotype is undefined, a random one is generated
         var colorCodeArray = {
-            'All ICH': '#6aa',
-            'Bipolar disorder':"#f0b",
-            'BMI':"#8bd",
-            'Cholesterol':"#3cc",
-            'Chronic kidney disease':"#90f",
-            'Coronary artery disease':"#fd0",
-            'Deep ICH': '#290',
-            'Diastolic blood pressure': '#63c',
-            'eGFR-creat (serum creatinine)':"#a00",
-            'eGFR-cys (serum cystatin C)':"#9f0",
-            'Fasting glucose':"#FA9",
-            'Fasting insulin':"#f00",
-            'HbA1c':"#3d3",
-            'HDL cholesterol':"#0a6",
-            'Height':"#9b8",
-            'Hip circumference': '#1d5',
-            'HOMA-B':"#C6F",
-            'HOMA-IR':"#0a6",
-            'LDL cholesterol':"#77f",
-            'Lobar ICH': '#c9a',
-            'Major depressive disorder':"#952",
-            'Microalbuminuria':"#060",
-            'Proinsulin levels':"#F55",
-            'Schizophrenia':"#f6f",
-            'Systolic blood pressure': '#1ea',
-            'Triglycerides':"#aaf",
-            'Two-hour glucose':"#609",
-            'Two-hour insulin':"#ab6",
-            'Type 2 diabetes':"#000",
-            'Urinary albumin-to-creatinine ratio':"#0a6",
-            'Waist circumference': '#428',
-            'Waist-hip ratio': '#ea7'
+            // can delete these if the grouping by phenotype group is approved
+            // 'All ICH': '#6aa',
+            // 'Bipolar disorder':"#f0b",
+            // 'BMI':"#8bd",
+            // 'Cholesterol':"#3cc",
+            // 'Chronic kidney disease':"#90f",
+            // 'Coronary artery disease':"#fd0",
+            // 'Deep ICH': '#290',
+            // 'Diastolic blood pressure': '#63c',
+            // 'eGFR-creat (serum creatinine)':"#a00",
+            // 'eGFR-cys (serum cystatin C)':"#9f0",
+            // 'Fasting glucose':"#FA9",
+            // 'Fasting insulin':"#f00",
+            // 'HbA1c':"#3d3",
+            // 'HDL cholesterol':"#0a6",
+            // 'Height':"#9b8",
+            // 'Hip circumference': '#1d5',
+            // 'HOMA-B':"#C6F",
+            // 'HOMA-IR':"#0a6",
+            // 'LDL cholesterol':"#77f",
+            // 'Lobar ICH': '#c9a',
+            // 'Major depressive disorder':"#952",
+            // 'Microalbuminuria':"#060",
+            // 'Proinsulin levels':"#F55",
+            // 'Schizophrenia':"#f6f",
+            // 'Systolic blood pressure': '#1ea',
+            // 'Triglycerides':"#aaf",
+            // 'Two-hour glucose':"#609",
+            // 'Two-hour insulin':"#ab6",
+            // 'Type 2 diabetes':"#000",
+            // 'Urinary albumin-to-creatinine ratio':"#0a6",
+            // 'Waist circumference': '#428',
+            // 'Waist-hip ratio': '#ea7',
+            'GLYCEMIC': '#fdb32b',
+            'PSYCHIATRIC': '#32fd2f',
+            'RENAL': '#28e4fd',
+            'ANTHROPOMETRIC': '#5025fb',
+            'LIPIDS': '#fc1680'
         };
 
         var setVariantTitleAndSummary = function (varId, dbsnpId, chrom, pos, gene, closestGene, refAllele, effectAllele) {
@@ -86,6 +92,12 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var displayTranscriptSummaries = function(transcripts, variantSummaryText) {
+            // in the event we have no transcripts, don't try to show the table
+            if(transcripts == null || transcripts.length == 0) {
+                $('#transcriptHeader').hide();
+                return;
+            }
+
             var transcriptTemplate = document.getElementById('transcriptTableTemplate').innerHTML;
             Mustache.parse(transcriptTemplate);
             // build up the arrays for each field. because the table is horizontal (i.e. the
@@ -206,6 +218,7 @@ var mpgSoftware = mpgSoftware || {};
 
                             // tack on count from the previously-loaded data
                             thisDataset.count = parseInt(datasets[thisDataset.datasetCode].count);
+                            thisDataset.phenotypeGroup = datasets[thisDataset.datasetCode].phenotypeGroup;
                             processedDatasets.push(thisDataset);
                         });
                         processedDatasets = _.sortBy(processedDatasets, 'p_value');
@@ -213,6 +226,11 @@ var mpgSoftware = mpgSoftware || {};
                         // reject those that don't. If none do, then don't display anything
                         // for this phenotype
                         var areThereAnySignificantDatasets = _.some(processedDatasets, function(dataset) {
+                            // in the event that we're on the T2D portal, we want to include the T2D
+                            // association regardless of if there's any significant associations
+                            if(defaultPhenotype == 'T2D' && phenotype == 'T2D') {
+                                return true;
+                            }
                             return dataset.p_value <= significanceBoundaries.nominal;
                         });
                         if( ! areThereAnySignificantDatasets ) {
@@ -463,9 +481,15 @@ var mpgSoftware = mpgSoftware || {};
             // add to document
 
             var associationsArray = [];
+            // if the phenotype has an odd number of datasets, add a special object to
+            // create an empty, invisible box for padding purposes
+            if(dataArray.length % 2 == 1) {
+                dataArray.push({ emptyBlock: true });
+            }
             _.each(dataArray, function(dataset) {
                 associationsArray.push(createABox(dataset, displaySize, variantAssociationStrings));
             });
+
             // the phenotype is the display name, which may have spaces and/or parens,
             // so convert it to something that can work as an HTML id
             var rowId = phenotype.replace(/[\s()]/g, '') + 'Row';
@@ -479,11 +503,12 @@ var mpgSoftware = mpgSoftware || {};
             var data = {
                 phenotypeName: phenotype,
                 phenotypeColor: function() {
-                    // if there's color defined for this phenotype, return that
+                    // if there's color defined for this phenotype group, return that
                     // otherwise, return a random 3-character hex value to use as the color
-                    if(colorCodeArray[phenotype]) {
-                        return colorCodeArray[phenotype];
+                    if(colorCodeArray[dataArray[0].phenotypeGroup]) {
+                        return colorCodeArray[dataArray[0].phenotypeGroup];
                     }
+                    // }
                     return randomColor;
                 },
                 rowClass: function() {

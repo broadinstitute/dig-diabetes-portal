@@ -1,10 +1,8 @@
 package org.broadinstitute.mpg
+
 import grails.transaction.Transactional
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
-import org.broadinstitute.mpg.RestServerService
-import org.broadinstitute.mpg.SearchBuilderService
-import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
@@ -69,6 +67,13 @@ class FilterManagementService {
     public JSONObject convertSampleGroupListToJson (List <SampleGroup> sampleGroupList,String phenotypeName){
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         LinkedHashMap<String,LinkedHashMap<String,String>> mapSampleGroupsToProperties = [:]
+
+        // get the phenotype group here so that the effort isn't duplicated for
+        // every dataset
+        String phenotypeGroup = sampleGroupList[0].getPhenotypes().findAll {
+            it.name == phenotypeName
+        }[0].group
+
         List<SampleGroup> uniqueSampleGroupList = sampleGroupList.unique{ a,b -> a.getSystemId() <=> b.getSystemId() }
         for (SampleGroup sampleGroup in uniqueSampleGroupList){
             LinkedHashMap<String,String> sampleGroupProperties = [:]
@@ -89,7 +94,7 @@ class FilterManagementService {
             sampleGroupProperties["maf"] = metaDataService.getSampleGroupProperty(sampleGroup.systemId, "MAF")?.getName()
             sampleGroupProperties["mac"] = metaDataService.getSampleGroupProperty(sampleGroup.systemId, "MAC")?.getName()
             sampleGroupProperties["count"] =  "${sampleGroup.subjectsNumber}"
-            sampleGroupProperties["translation"] =  g.message(code: 'metadata.' + sampleGroup.systemId, default: sampleGroup.systemId);
+            sampleGroupProperties["phenotypeGroup"] = phenotypeGroup
             mapSampleGroupsToProperties[sampleGroup.systemId] = sampleGroupProperties
         }
         String technologyListAsJson = sharedToolsService.packageUpASingleLevelTreeAsJson(mapSampleGroupsToProperties)

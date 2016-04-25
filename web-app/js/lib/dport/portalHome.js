@@ -46,7 +46,7 @@ var mpgSoftware = mpgSoftware || {};
                 }
             }
 
-            $(e).css("height", liHeight);
+            $(e).css("height", liHeight + 5);
             $("li", e).css("position", "absolute");
             $("li", e).css("top", "50px");
             $("li", e).hide();

@@ -25,8 +25,8 @@
         $("#advanced_filter").toggle(300);
 
         // these variables are here to make the code more readable
-        var openText = '${g.message(code:'variantSearch.spec.actions.open_adv_filter', default: 'Open advanced filtering')}';
-        var closeText = '${g.message(code:'variantSearch.spec.actions.close_adv_filter', default: 'Close advanced filtering')}';
+        var openText = '${g.message(code:'variantSearch.spec.actions.open_adv_filter', default: 'Open phenotype independent datasets')}';
+        var closeText = '${g.message(code:'variantSearch.spec.actions.close_adv_filter', default: 'Close phenotype independent datasets')}';
 
         if ($("#a_filter_btn").text().trim() == openText) {
             $("#a_filter_btn").text(closeText);

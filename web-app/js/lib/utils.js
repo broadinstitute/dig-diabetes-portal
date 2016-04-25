@@ -361,7 +361,6 @@ var UTILS = {
             (typeof dataSetJson["is_error"] !== 'undefined')&&
             (dataSetJson["is_error"] === false))
         {
-            var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
             var options = $(phenotypeDropDownIdentifier);
             options.empty();
             var groupList = dataSetJson.dataset;
@@ -376,6 +375,15 @@ var UTILS = {
             var keys = Object.keys(groupList);
             keys.splice(keys.indexOf("GLYCEMIC"), 1);
             keys.unshift("GLYCEMIC");
+
+            // if the OTHER key is defined, then move it to the bottom of the list
+            // currently, this should only appear on the variant search page, and will be going away soon
+            // I know that "soon" usually means in a couple years in the software world, but I mean
+            // it this time, I swear
+            if(keys.indexOf('OTHER') >= 0) {
+                keys.splice(keys.indexOf('OTHER'), 1);
+                keys.push('OTHER');
+            }
 
             for (var x = 0; x < keys.length; x++) {
                 var key = keys[x];

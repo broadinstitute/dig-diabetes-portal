@@ -11,17 +11,6 @@
         locusSignificance: '<g:message code="variant.variantAssociations.significance.locusSignificance" default="locus wide significance" />',
         nominalSignificance: '<g:message code="variant.variantAssociations.significance.nominalSignificance" default="nominal significance" />',
         nonSignificance: '<g:message code="variant.variantAssociations.significance.nonSignificance" default="no significance" />',
-        variantPValues: '<g:message code="variant.variantAssociations.variantPValues" default="click here to see a table of P values" />',
-        sourceDiagram: '<g:message code="variant.variantAssociations.source.diagram" default="diagram GWAS" />',
-        sourceDiagramQ: '<g:helpText title="variant.variantAssociations.source.diagramQ.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.source.diagramQ.help.text"/>',
-        sourceExomeChip: '<g:message code="variant.variantAssociations.source.exomeChip" default="Exome chip" />',
-        sourceExomeChipQ: '<g:helpText title="variant.variantAssociations.source.exomeChipQ.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.source.exomeChipQ.help.text"/>',
-        sourceExomeSequence: '<g:message code="variant.variantAssociations.source.exomeSequence" default="Exome sequence" />',
-        sourceExomeSequenceQ: '<g:helpText title="variant.variantAssociations.source.exomeSequenceQ.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.source.exomeSequenceQ.help.text"/>',
-        sourceSigma: '<g:message code="variant.variantAssociations.source.sigma" default="Sigma" />',
-        sourceSigmaQ: '<g:helpText title="variant.variantAssociations.source.sigmaQ.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.source.sigmaQ.help.text"/>',
-        associationPValueQ: '<g:helpText title="variant.variantAssociations.pValue.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.pValue.help.text"/>',
-        associationOddsRatioQ: '<g:helpText title="variant.variantAssociations.oddsRatio.help.header"  qplacer="2px 0 0 6px" placement="right" body="variant.variantAssociations.oddsRatio.help.text"/>'
     };
 
 
@@ -51,22 +40,25 @@
 
 <div class="container content-wrapper">
     <h5><g:message code="variant.info.associations.description"/></h5>
-    <table class="table table-condensed">
+    <table>
         <tr>
-            <th><g:message code="variant.variantAssociations.legend.directionOfEffect" default="Direction of effect" /></th><th><g:message code="variant.variantAssociations.legend.dataset" default="Dataset" /></th>
-        </tr>
-        <tr>
-            <td><span style="float: left;display:block; margin-right: 5px;"><g:message code="variant.variantAssociations.legend.up" default="up" /></span><span
-                    style="float: left;display:block; background-color: #33C; color:#fff;width: 10px;text-align:center; margin-right: 5px;">&#8593</span><span
-                    style="float: left;display:block; margin-right: 5px;"><g:message code="variant.variantAssociations.legend.down" default="down" /></span><span
-                    style="float:left; display:block; background-color: #90f; color:#fff;width: 10px; text-align:center;">&#8595</span>
+            <td><g:message code="variant.variantAssociations.legend.directionOfEffect"
+                       default="Direction of effect"/>:</td><td style="padding-right: 20px;"><span
+                style="float: left;display:block; margin-right: 5px; margin-left: 5px;"><g:message
+                    code="variant.variantAssociations.legend.up" default="up"/></span><span
+                style="float: left;display:block; background-color: #33C; color:#fff;width: 10px;text-align:center; margin-right: 5px;">&#8593</span><span
+                style="float: left;display:block; margin-right: 5px;"><g:message
+                    code="variant.variantAssociations.legend.down" default="down"/></span><span
+                style="float:left; display:block; background-color: #90f; color:#fff;width: 10px; text-align:center;">&#8595</span>
             </td>
-            <td>
-                <div style="background-color: #ccc; color: #fff; width:auto; margin:auto; float: left; padding: 0 5px;">
-                    <strong style="color: #333;"><g:message code="variant.variantAssociations.legend.sampleSize" default="sample size"/></strong> |
-                    <strong style="color: #F00;"><g:message code="variant.variantAssociations.legend.frequency" default="frequency"/></strong> |
-                    <strong style="color:#33F;"><g:message code="variant.variantAssociations.legend.count" default="count"/></strong>
-                </div>
+            <td><g:message code="variant.variantAssociations.legend.dataset" default="Dataset"/>:</td><td style="padding-right: 20px;"><div
+                style="background-color: #ccc; color: #fff; width:auto; margin-left: 5px; float: left; padding: 0 5px;"><span
+                    style="color: #333; font-size: 12px;"><g:message code="variant.variantAssociations.legend.sampleSize"
+                                                                     default="sample size"/></span>&nbsp;&nbsp;<span
+                    style="color: #F00; font-size: 12px;"><g:message code="variant.variantAssociations.legend.frequency"
+                                                                     default="frequency"/></span>&nbsp;&nbsp;<span
+                    style="color:#33F; font-size: 12px;"><g:message code="variant.variantAssociations.legend.count"
+                                                                    default="count"/></span></div>
             </td>
         </tr>
     </table>
@@ -74,9 +66,11 @@
     <div class="info-box-wrappers">
         <div id="primaryPhenotype" class="col-md-12 t2d-info-box-wrapper"></div>
         <h4 id="otherTraits"><i><g:message code="variant.variantAssociations.otherTraits"
-                          default="Other traits with one or more nominally significant associations:"/></i></h4>
+                                           default="Other traits with one or more nominally significant associations:"/></i>
+        </h4>
         <h4 id="noOtherTraits" style="display: none;"><i><g:message code="variant.variantAssociations.noOtherTraits"
-                          default="No other traits show nominally significant associations."/></i></h4>
+                                                                    default="No other traits show nominally significant associations."/></i>
+        </h4>
         <a id="toggleButton" class="btn btn-primary btn-sm" onClick="toggleOtherAssociations()"><g:message
                 code="variant.variantAssociations.expandAssociations" default="expand associations for all traits"/></a>
 
@@ -87,6 +81,8 @@
 </div>
 
 <script id="boxTemplate" type="x-tmpl-mustache">
+    %{--if emptyBlock is true, then show an invisible box to make the phenotypes line up nicely--}%
+    {{ ^emptyBlock }}
     <li class=" {{ boxClass }}" style="background-color: {{ backgroundColor }};">
         <h3 style="color: {{ datasetAndPValueTextColor }};">{{ dataset }}</h3>
         <div style="position: absolute; left: 0; bottom: 0; width:100%; display: flex; flex-direction: column; align-items: center">
@@ -95,13 +91,18 @@
                 <span class="p-value-significance">{{ pValueSignificance }}</span>
             </div>
             <div style="background-color: {{ oddsRatioOrEffectTextBackgroundColor }}; padding-top: 2px; padding-bottom: 2px; width: 100%" >
-                <span style='display:block; left: 5px; position:absolute;'>{{ effectArrow }}</span><span class="extra-info">{{ oddsRatioOrEffectText }}</span>
+                <span style='display:block; left: 5px; position:absolute; font-size: 12px; margin-top: 2px;'>{{ effectArrow }}</span><span class="extra-info">{{ oddsRatioOrEffectText }}</span>
             </div>
             <div style="color: white; background-color: #bbb; padding-top: 2px; padding-bottom: 2px; width: 100%; display: flex; justify-content: space-around; align-items: center" >
                 <span class="extra-info" style="color: #333;"><strong>{{ count }}</strong></span> | <span class="extra-info" style="color: #f03;"><strong>{{ freqInCases }}</strong></span> | <span class="extra-info" style="color: #30f;"><strong>{{ countInCases }}</strong></span>
             </div>
         </div>
     </li>
+    {{ /emptyBlock }}
+    {{ #emptyBlock }}
+    <li class=" {{ boxClass }}">
+    </li>
+    {{ /emptyBlock }}
 </script>
 
 <script id="phenotypeTemplate" type="x-tmpl-mustache">
