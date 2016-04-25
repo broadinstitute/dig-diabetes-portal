@@ -208,7 +208,6 @@ var mpgSoftware = mpgSoftware || {};
                             thisDataset.count = parseInt(datasets[thisDataset.datasetCode].count);
                             processedDatasets.push(thisDataset);
                         });
-                        // console.log(`so far we've got ${phenotype}`, processedDatasets);
                         processedDatasets = _.sortBy(processedDatasets, 'p_value');
                         // check to see if any dataset has at least a nominal signficance
                         // reject those that don't. If none do, then don't display anything
@@ -265,7 +264,6 @@ var mpgSoftware = mpgSoftware || {};
         /**
          * This function fills in the association boxes for the primary phenotype
          */
-        // var fillPrimaryPhenotypeBoxes = function(phenotype, datasetList, variantId, variantAssociationStrings, dataUrl) {
         var fillPrimaryPhenotypeBoxes = function(data, variantAssociationStrings) {
             var displayName = data.displayName;
             var processedDatasets = _.chain(data.datasets).sortBy('count').reverse().value();
@@ -283,6 +281,15 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var fillOtherPhenotypeBoxes = function(dataArray, variantAssociationStrings) {
+            // check for the case where there are no other significant phenotypes
+            if(dataArray.length == 0) {
+                // change out the text, and hide the button
+                $('#otherTraits').hide();
+                $('#noOtherTraits').show();
+                $('#toggleButton').hide();
+                // abandon ship
+                return;
+            }
             var arrayOfHTMLObjectsToDisplay = [];
             _.each(dataArray, function(phenotypeObject) {
                 var displayName = phenotypeObject.displayName;
@@ -380,19 +387,36 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 },
                 oddsRatioOrEffectTextBackgroundColor: function() {
+                    // use this so that we can have one return statement
+                    var effectIsUp;
                     if(this.beta_value) {
-                        return this.beta_value >= 0 ? '#3333cc' : '#9900ff';
+                        effectIsUp = this.beta_value >= 0;
                     } else if(this.or_value) {
-                        return '#3399ff';
+                        effectIsUp = this.or_value >= 1;
+                    }
+                    if(!_.isUndefined(effectIsUp)) {
+                        return effectIsUp ? '#3333cc' : '#9900ff';
                     }
                     return 'transparent';
+                },
+                effectArrow: function() {
+                    // use this so that we can have one return statement
+                    var effectIsUp;
+                    if(this.beta_value) {
+                        effectIsUp = this.beta_value >= 0;
+                    } else if(this.or_value) {
+                        effectIsUp = this.or_value >= 1;
+                    }
+                    if(!_.isUndefined(effectIsUp)) {
+                        return effectIsUp ? '↑' : '↓';
+                    }
+                    return '\u00a0';
                 },
                 oddsRatioOrEffectText: function() {
                     if( this.or_value ) {
                         return 'OR = ' + UTILS.parseANumber(this.or_value, precision);
                     } else if (this.beta_value ) {
-                        var effectArrow = this.beta_value >= 0 ? '↑' : '↓';
-                        return effectArrow + ' effect = ' + UTILS.parseANumber(this.beta_value, precision);
+                        return 'effect = ' + UTILS.parseANumber(this.beta_value, precision);
                     }
                     // this is &nbsp;
                     return '\u00a0';
@@ -401,7 +425,7 @@ var mpgSoftware = mpgSoftware || {};
                     if(this.MAF) {
                         return (this.MAF * 100).toFixed(1) + '%';
                     }
-                    return '\u00a0';
+                    return 'n/a';
                 },
                 countInCases: function() {
                     if(this.MAC) {
@@ -415,8 +439,7 @@ var mpgSoftware = mpgSoftware || {};
                     } else if (this.count && this.MAF) {
                         return (2 * this.count * this.MAF).toFixed(0);
                     } else {
-                        console.log('missing count information for', this);
-                        return '\u00a0';
+                        return 'n/a';
                     }
                 }
             };

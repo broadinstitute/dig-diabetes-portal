@@ -1,4 +1,8 @@
 <style>
+    #variantSummaryText {
+        margin-bottom: 25px;
+    }
+
     #transcriptTable th {
         font-weight: bold;
     }
@@ -25,13 +29,13 @@
                     <th>Protein change</th> {{ #proteinChange }} <td> {{ . }} </td> {{ /proteinChange }}
                 </tr>
                 <tr>
+                    <th>Consequence</th> {{ #consequence }} <td> {{ . }} </td> {{ /consequence }}
+                </tr>
+                <tr>
                     <th>PolyPhen prediction</th> {{ #polyphen }} <td> {{ . }} </td> {{ /polyphen }}
                 </tr>
                 <tr>
                     <th>SIFT prediction</th> {{ #sift }} <td> {{ . }} </td> {{ /sift }}
-                </tr>
-                <tr>
-                    <th>Consequence</th> {{ #consequence }} <td> {{ . }} </td> {{ /consequence }}
                 </tr>
             </tbody>
         </table>

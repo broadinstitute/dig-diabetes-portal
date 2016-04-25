@@ -53,7 +53,7 @@
     <h5><g:message code="variant.info.associations.description"/></h5>
     <table class="table table-condensed">
         <tr>
-            <th>Direction of effect</th><th>Dataset</th><th>Glossary</th>
+            <th>Direction of effect</th><th>Dataset</th>
         </tr>
         <tr>
             <td><span style="float: left;display:block; margin-right: 5px;">up</span><span
@@ -64,27 +64,19 @@
             <td>
                 <div style="background-color: #ccc; color: #fff; width:auto; margin:auto; float: left; padding: 0 5px;">
                     <strong style="color: #333;">sample size</strong> |
-                    <strong style="color: #F00;">frequency in cases</strong> |
-                    <strong style="color:#33F;">count in cases</strong>
+                    <strong style="color: #F00;">frequency</strong> |
+                    <strong style="color:#33F;">count</strong>
                 </div>
-            </td>
-            <td><button class="btn btn-default btn-sm" data-container="body" data-toggle="popover"
-                        data-content="${g.message(code: 'variant.variantAssociations.pValue.help.text')}"
-                        data-trigger="focus">P-value</button>
-                <button class="btn btn-default btn-sm" data-container="body" data-toggle="popover"
-                        data-content="${g.message(code: 'variant.variantAssociations.MAF.help.text')}"
-                        data-trigger="focus">MAF</button>
-                <button class="btn btn-default btn-sm" data-container="body" data-toggle="popover"
-                        data-content="${g.message(code: 'variant.variantAssociations.effect.help.text')}"
-                        data-trigger="focus">Effect</button>
             </td>
         </tr>
     </table>
 
     <div class="info-box-wrappers">
         <div id="primaryPhenotype" class="col-md-12 t2d-info-box-wrapper"></div>
-        <h4><i><g:message code="variant.variantAssociations.otherTraits"
+        <h4 id="otherTraits"><i><g:message code="variant.variantAssociations.otherTraits"
                           default="Other traits with one or more nominally significant associations:"/></i></h4>
+        <h4 id="noOtherTraits" style="display: none;"><i><g:message code="variant.variantAssociations.noOtherTraits"
+                          default="No other traits show nominally significant associations."/></i></h4>
         <a id="toggleButton" class="btn btn-primary btn-sm" onClick="toggleOtherAssociations()"><g:message
                 code="variant.variantAssociations.expandAssociations" default="expand associations for all traits"/></a>
 
@@ -103,7 +95,7 @@
                 <span class="p-value-significance">{{ pValueSignificance }}</span>
             </div>
             <div style="background-color: {{ oddsRatioOrEffectTextBackgroundColor }}; padding-top: 2px; padding-bottom: 2px; width: 100%" >
-                <span class="extra-info">{{ oddsRatioOrEffectText }}</span>
+                <span style='display:block; left: 5px; position:absolute;'>{{ effectArrow }}</span><span class="extra-info">{{ oddsRatioOrEffectText }}</span>
             </div>
             <div style="color: white; background-color: #bbb; padding-top: 2px; padding-bottom: 2px; width: 100%; display: flex; justify-content: space-around; align-items: center" >
                 <span class="extra-info" style="color: #333;"><strong>{{ count }}</strong></span> | <span class="extra-info" style="color: #f03;"><strong>{{ freqInCases }}</strong></span> | <span class="extra-info" style="color: #30f;"><strong>{{ countInCases }}</strong></span>

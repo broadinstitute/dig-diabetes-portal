@@ -60,9 +60,12 @@
 
         .small-info-box-holder {
             margin-top: 10px;
-            margin-right: 10px;
+            margin-right: 20px;
             padding: 5px 0 10px;
             border-top: solid 2px; /* color is defined on each item */
+            /* this is to "pad" each trait to have 2 boxes--if more boxes are added, then
+            the min-width specification is ignored */
+            min-width: 303px;
         }
 
         .small-info-box-holder h3 {
