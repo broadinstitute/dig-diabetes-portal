@@ -77,8 +77,17 @@ class FilterManagementService {
             sampleGroupProperties["pvalue"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "P_VALUE" )
             sampleGroupProperties["orvalue"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "ODDS_RATIO" )
             sampleGroupProperties["betavalue"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "BETA" )
+            sampleGroupProperties["mina"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "MINA" )
+            sampleGroupProperties["minu"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "MINU" )
+            sampleGroupProperties["obs"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "OBS" )
+            sampleGroupProperties["obsa"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "OBSA" )
+            sampleGroupProperties["obsu"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "OBSU" )
+            sampleGroupProperties["mafa"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "MAFA" )
+            sampleGroupProperties["mafu"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "MAFU" )
+
             sampleGroupProperties["technology"] =  metaDataService.getTechnologyPerSampleGroup( sampleGroup.systemId )
             sampleGroupProperties["maf"] = metaDataService.getSampleGroupProperty(sampleGroup.systemId, "MAF")?.getName()
+            sampleGroupProperties["mac"] = metaDataService.getSampleGroupProperty(sampleGroup.systemId, "MAC")?.getName()
             sampleGroupProperties["count"] =  "${sampleGroup.subjectsNumber}"
             sampleGroupProperties["translation"] =  g.message(code: 'metadata.' + sampleGroup.systemId, default: sampleGroup.systemId);
             mapSampleGroupsToProperties[sampleGroup.systemId] = sampleGroupProperties

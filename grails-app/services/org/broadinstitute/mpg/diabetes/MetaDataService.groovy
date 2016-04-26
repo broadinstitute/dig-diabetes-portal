@@ -534,9 +534,11 @@ class MetaDataService {
      * Build a tree, so that every phenotype points to its sample groups, and every sample group points to its properties (D and P)
      * @return
      */
-    public List<String> getEveryPhenotype(){
+    public List<String> getEveryPhenotype(Boolean includeNone){
         List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
-        return phenotypeList.sort{ a, b -> a.sortOrder <=> b.sortOrder }.collect{it.name}.unique()
+        return phenotypeList.sort{ a, b -> a.sortOrder <=> b.sortOrder }.findAll{
+            ! (it.name.equals("none"))
+        }.collect{it.name}.unique()
     }
 
     /**

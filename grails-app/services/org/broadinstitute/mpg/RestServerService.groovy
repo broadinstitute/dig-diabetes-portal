@@ -603,7 +603,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                                                          "DBSNP_ID",
                                                                          "GENE",
                                                                          "CLOSEST_GENE",
-                                                                         "TRANSCRIPT_ANNOT"])
+                                                                         "TRANSCRIPT_ANNOT",
+                                                                         "Reference_Allele",
+                                                                         "Effect_Allele"])
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filters], searchBuilderService, metaDataService)
         JsonSlurper slurper = new JsonSlurper()
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
@@ -694,28 +696,61 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName], searchBuilderService, metaDataService)
         for (LinkedHashMap linkedHashMap in linkedHashMapList) {
             String dataSet = linkedHashMap.name
+            String mafValue = linkedHashMap.maf
+            String macValue = linkedHashMap.mac
             String pValue = linkedHashMap.pvalue
             String orValue = linkedHashMap.orvalue
             String betaValue = linkedHashMap.betavalue
-            String mafValue = linkedHashMap.maf
+            String minaValue = linkedHashMap.mina
+            String minuValue = linkedHashMap.minu
+            String obsValue = linkedHashMap.obs
+            String obsaValue = linkedHashMap.obsa
+            String obsuValue = linkedHashMap.obsu
+            String mafaValue = linkedHashMap.mafa
+            String mafuValue = linkedHashMap.mafu
+
+            ArrayList<String> pproperties = [pValue, orValue, betaValue, minaValue, minuValue, obsValue,
+                                             obsaValue, obsuValue, mafaValue, mafuValue]
+
             if(mafValue && mafValue.length() > 0) {
                 addColumnsForDProperties(resultColumnsToDisplay, mafValue, dataSet)
             }
-            if ((pValue) && (pValue.length() > 0)) {
-                addColumnsForPProperties(resultColumnsToDisplay, phenotype,
-                        dataSet,
-                        pValue)
+            if(macValue && macValue.length() > 0) {
+                addColumnsForDProperties(resultColumnsToDisplay, macValue, dataSet)
             }
-            if ((orValue) && (orValue.length() > 0)) {
-                addColumnsForPProperties(resultColumnsToDisplay, phenotype,
-                        dataSet,
-                        orValue)
+
+            pproperties.each {
+                if ((it) && (it.length() > 0)) {
+                    addColumnsForPProperties(resultColumnsToDisplay, phenotype,
+                            dataSet,
+                            it)
+                }
             }
-            if ((betaValue) && (betaValue.length() > 0)) {
-                addColumnsForPProperties(resultColumnsToDisplay, phenotype,
-                        dataSet,
-                        betaValue)
-            }
+
+//            if ((pValue) && (pValue.length() > 0)) {
+//                addColumnsForPProperties(resultColumnsToDisplay, phenotype,
+//                        dataSet,
+//                        pValue)
+//            }
+//            if ((orValue) && (orValue.length() > 0)) {
+//                addColumnsForPProperties(resultColumnsToDisplay, phenotype,
+//                        dataSet,
+//                        orValue)
+//            }
+//            if ((betaValue) && (betaValue.length() > 0)) {
+//                addColumnsForPProperties(resultColumnsToDisplay, phenotype,
+//                        dataSet,
+//                        betaValue)
+//            }
+//            // OBSA/OBSU are phenotype-dependent, so they weren't included in the data
+//            // previously sent to the client
+//            addColumnsForPProperties(resultColumnsToDisplay, phenotype,
+//                    dataSet,
+//                    "OBSA")
+//            addColumnsForPProperties(resultColumnsToDisplay, phenotype,
+//                    dataSet,
+//                    "OBSU")
+
         }
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         JsonSlurper slurper = new JsonSlurper()
@@ -782,6 +817,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                     JSONObject newItem = [
                         meaning: 'MAF',
                         dataset: dataSetNameTranslated,
+                        datasetCode: dataSetName,
                         level: 'MAF',
                         count: value
                     ]
@@ -799,6 +835,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                             JSONObject newItem = [
                                 meaning: "p_value",
                                 dataset: dataSetNameTranslated,
+                                // datasetCode is here to support a lookup on the client
+                                datasetCode: dataSetName,
                                 level: pValueName,
                                 count: variant[pValueName][dataSetName][phenotype][0]
                             ]
@@ -817,6 +855,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                             JSONObject newItem = [
                                 meaning: "or_value",
                                 dataset: dataSetNameTranslated,
+                                datasetCode: dataSetName,
                                 level: orValueName,
                                 count: variant[orValueName][dataSetName][phenotype][0]
                             ]
@@ -835,13 +874,49 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                             JSONObject newItem = [
                                 meaning: "beta_value",
                                 dataset: dataSetNameTranslated,
+                                datasetCode: dataSetName,
                                 level: betaValueName,
                                 count: variant[betaValueName][dataSetName][phenotype][0]
                             ]
                             datasetObject.pVals << newItem
                         }
                     }
+                }
 
+                // it would probably be better to not hardcode OBSA/OBSU, but right now
+                // there's not an obviously better way to do it
+                String obsaKey = "OBSA"
+                def obsaObjectList = variant[obsaKey].findAll { it }
+                if(obsaObjectList.size() > 0) {
+                    def obsaObject = obsaObjectList[0] as JSONObject
+                    for (def dataset in obsaObject.keys()) {
+                        String dataSetNameTranslated = g.message(code: 'metadata.' + dataset, default: dataset);
+                        JSONObject newItem = [
+                                meaning: "OBSA",
+                                dataset: dataSetNameTranslated,
+                                datasetCode: dataset,
+                                level  : obsaKey,
+                                count  : variant[obsaKey][dataset][phenotype][0]
+                        ]
+                        datasetObject.pVals << newItem
+                    }
+                }
+
+                String obsuKey = "OBSU"
+                def obsuObjectList = variant[obsuKey].findAll { it }
+                if(obsuObjectList.size() > 0) {
+                    def obsuObject = obsuObjectList[0] as JSONObject
+                    for (def dataset in obsuObject.keys()) {
+                        String dataSetNameTranslated = g.message(code: 'metadata.' + dataset, default: dataset);
+                        JSONObject newItem = [
+                                meaning: "OBSU",
+                                dataset: dataSetNameTranslated,
+                                datasetCode: dataset,
+                                level  : obsuKey,
+                                count  : variant[obsuKey][dataset][phenotype][0]
+                        ]
+                        datasetObject.pVals << newItem
+                    }
                 }
             }
 
