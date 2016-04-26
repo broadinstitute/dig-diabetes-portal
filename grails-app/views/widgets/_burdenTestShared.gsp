@@ -16,7 +16,6 @@ div.secHeader {
 }
 div.burden-test-wrapper-options {
     background-color: #eee;
-    border: solid 1px #ddd;
     font-size: 16px;
     padding-top: 15px;
     padding-bottom: 15px;
@@ -267,7 +266,7 @@ div.labelAndInput > input {
                             var jsonDescr = "{\"dataset\":\""+$(dropdownSel).val()+"\"," +
                                       "\"requestedData\":["+filtersSpecs.join(',')+"]," +
                                       "\"filters\":[]}";
-                           // mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, function(){} );
+                            mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, function(){} );
                             loading.hide();
                         },
                         error: function (jqXHR, exception) {
@@ -1063,107 +1062,117 @@ $( document ).ready( function (){
 
 <div class="row burden-test-wrapper-options">
 
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist_for_chooseSamples">
-        <li role="presentation"  class="active"><a href="#chooseSamples" aria-controls="chooseSamples" role="tab"
-                                                  data-toggle="tab">Choose samples</a></li>
-        <li role="presentation"><a href="#initiateAnalysis" aria-controls="initiateAnalysis" role="tab"
-                                   data-toggle="tab">Initiate analysis</a></li>
-    </ul>
+<!-- Nav tabs -->
+%{--<ul class="nav nav-tabs" role="tablist_for_chooseSamples">--}%
+    %{--<li role="presentation" class="active"><a href="#chooseSamples" aria-controls="chooseSamples" role="tab"--}%
+                                              %{--data-toggle="tab">Choose samples</a></li>--}%
+    %{--<li role="presentation"><a href="#initiateAnalysis" aria-controls="initiateAnalysis" role="tab"--}%
+                               %{--data-toggle="tab">Initiate analysis</a></li>--}%
+%{--</ul>--}%
 
-    <div class="tab-content" style="border-top: 1px solid #ccc; padding: 4px 0 0 10px">
-        <div  role="tabpanel" class="tab-pane active" id="chooseSamples">
-            <div class="col-sm-6 col-xs-12 vcenter">
+<div class="user-interaction" style="border-top: 1px solid #ccc; padding: 4px 0 0 10px">
+    <div  id="chooseSamples" class="row">
+        <div class="col-sm-12 col-xs-12 vcenter">
 
-                <div class="row secHeader" style="padding: 20px 0 0 0">
-                    <div class="col-sm-12 col-xs-12 text-left"><label>Dataset</label></div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 col-xs-12 text-left">
-                        <select id="datasetFilter" class="traitFilter form-control text-left"
-                                onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata( this, '#phenotypeFilter' );"
-                                onclick="mpgSoftware.burdenTestShared.retrieveSampleMetadata( this, '#phenotypeFilter' );">
-                        </select>
-                    </div>
+            <div class="row secHeader" style="padding: 20px 0 0 0">
+                <div class="col-sm-12 col-xs-12 text-left"><label>Dataset</label></div>
+            </div>
 
-                </div>
-
-                <div class="row secHeader" style="padding: 20px 0 0 0">
-                    <div class="col-sm-12 col-xs-12 text-left"><label>Phenotype</label></div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 col-xs-12 text-left">
-                        <select id="phenotypeFilter" class="traitFilter form-control text-left"
-                                onchange="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata( $('#datasetFilter'), '#phenotypeFilter' );">
-                        </select>
-                    </div>
+            <div class="row">
+                <div class="col-sm-12 col-xs-12 text-left">
+                    <select id="datasetFilter" class="traitFilter form-control text-left"
+                            onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');"
+                            onclick="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');">
+                    </select>
                 </div>
 
+            </div>
 
-                <div class="row secHeader" style="padding: 20px 0 0 0">
-                    <div class="col-sm-6 col-xs-12 text-left"><label>Filters</label></div>
-                    <div class="col-sm-6 col-xs-12 text-right"><label style="font-style: italic; font-size: 14px">Mouse-over arrows for distribution</label></div>
+            <div class="row secHeader" style="padding: 20px 0 0 0">
+                <div class="col-sm-12 col-xs-12 text-left"><label>Phenotype</label></div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-xs-12 text-left">
+                    <select id="phenotypeFilter" class="traitFilter form-control text-left"
+                            onchange="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata($('#datasetFilter'), '#phenotypeFilter');">
+                    </select>
                 </div>
-                <div class="row" id="sampleRow" style="display:none; padding: 10px 0 0 0">
-                    <div class="col-sm-12 col-xs-12 text-left">
+            </div>
+        </div>
+    </div>
+
+    <div  id="filterSamples" class="row">
+        <div class="col-sm-6 col-xs-12 vcenter">
+            <div class="row secHeader" style="padding: 20px 0 0 0">
+                <div class="col-sm-6 col-xs-12 text-left"><label>Filters</label></div>
+
+                <div class="col-sm-6 col-xs-12 text-right"><label
+                        style="font-style: italic; font-size: 14px">Mouse-over arrows for distribution</label></div>
+            </div>
+
+            <div class="row" id="sampleRow" style="display:none; padding: 10px 0 0 0">
+                <div class="col-sm-12 col-xs-12 text-left">
                     <div class="row sampleFilterHeader" style="text-decoration: underline">
-                        <div class="col-sm-1"  style="padding-left: 4px">
+                        <div class="col-sm-1" style="padding-left: 4px">
                             Use
                         </div>
+
                         <div class="col-sm-3">
                             Filter
                         </div>
+
                         <div class="col-sm-3" style="padding-left: 4px">
                             Cmp
                         </div>
+
                         <div class="col-sm-4">
                             Parameter
                         </div>
                     </div>
-                    <div  style="height: 300px; padding: 4px 0 0 10px; overflow-y: scroll;">
 
+                    <div style="height: 300px; padding: 4px 0 0 10px; overflow-y: scroll;">
 
-
-                        <div  id="filters">
+                        <div id="filters">
                             <div class="row">
 
-
-                                    <div id="person"></div>
+                                <div id="person"></div>
 
                             </div>
                         </div>
                     </div>
-                    %{--<div class="pull-right" style="padding: 10px 0 0 0">--}%
-                        %{--<button class="btn btn-xs"--}%
-                                %{--onClick="mpgSoftware.burdenTestShared.refreshSampleData  ( '#datasetFilter', mpgSoftware.burdenTestShared.utilizeSampleInfoForDistributionPlots  )">--}%
-                            %{--Refresh distributions &gt;&gt;</button>--}%
-                    %{--</div>--}%
-
-
 
 
                     <div id="filterFloatTemplate" style="display: none;">
                         <div class="row realValuedFilter considerFilter" id="filter_{{name}}">
                             <div class="col-sm-1">
-                                <input class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}" value="{{name}}" checked/></td>
+                                <input class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}"
+                                       value="{{name}}" checked/></td>
                             </div>
+
                             <div class="col-sm-5">
                                 <span>{{trans}}</span>
                             </div>
+
                             <div class="col-sm-2">
-                                <select id="cmp{{name}}" class="form-control filterCmp" data-selectfor="{{name}}Comparator">
+                                <select id="cmp{{name}}" class="form-control filterCmp"
+                                        data-selectfor="{{name}}Comparator">
                                     <option value="1">&lt;</option>
                                     <option value="2">&gt;</option>
                                     <option value="3">=</option>
                                 </select>
                             </div>
+
                             <div class="col-sm-3">
-                                <input  id="inp{{name}}" type="text" class="filterParm form-control" data-type="propertiesInput"
+                                <input id="inp{{name}}" type="text" class="filterParm form-control"
+                                       data-type="propertiesInput"
                                        data-prop="{{name}}Value" data-translatedname="{{name}}">
 
                             </div>
+
                             <div class="col-sm-1">
-                                <span  onmouseover="displaySampleDistribution('{{name}}', '#boxWhiskerPlot')" class="glyphicon glyphicon-arrow-right pull-right"></span>
+                                <span onmouseover="displaySampleDistribution('{{name}}', '#boxWhiskerPlot')"
+                                      class="glyphicon glyphicon-arrow-right pull-right"></span>
                             </div>
 
                         </div>
@@ -1171,166 +1180,176 @@ $( document ).ready( function (){
 
 
                     <div id="filterCategoricalTemplate" style="display: none;">
-                        <div class="row categoricalFilter considerFilter"  id="filter_{{name}}">
+                        <div class="row categoricalFilter considerFilter" id="filter_{{name}}">
                             <div class="col-sm-1">
-                                <input  class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}" value="{{name}}" checked/></td>
+                                <input class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}"
+                                       value="{{name}}" checked/></td>
                             </div>
+
                             <div class="col-sm-5">
                                 <span>{{trans}}</span>
                             </div>
+
                             <div class="col-sm-2" style="text-align: center">
                                 =
                             </div>
+
                             <div class="col-sm-3">
-                                <select id="multi{{name}}" class="form-control multiSelect" data-selectfor="{{name}}FilterOpts" multiple="multiple">
+                                <select id="multi{{name}}" class="form-control multiSelect"
+                                        data-selectfor="{{name}}FilterOpts" multiple="multiple">
                                 </select>
                             </div>
+
                             <div class="col-sm-1">
-                                <span  onmouseover="displaySampleDistribution('{{name}}', '#boxWhiskerPlot')" class="glyphicon glyphicon-arrow-right pull-right"></span>
+                                <span onmouseover="displaySampleDistribution('{{name}}', '#boxWhiskerPlot')"
+                                      class="glyphicon glyphicon-arrow-right pull-right"></span>
                             </div>
 
                         </div>
 
-
                     </div>
 
 
-                    <div id="filterStringTemplate" style="display: none;"><p><span>str name={{name}},type={{type}}</span></p></div>
-                </div>
-            </div>
-
-
-            </div>
-
-            <div class="col-sm-6 col-xs-12 vcenter" style="padding-left: 0">
-                <div class="sampleNumberReporter text-center">
-                    number of samples equals <span class="numberOfSamples"></span>
-                </div>
-                <div id="boxWhiskerPlot">
+                    <div id="filterStringTemplate"
+                         style="display: none;"><p><span>str name={{name}},type={{type}}</span></p></div>
                 </div>
             </div>
 
         </div>
-        <div  role="tabpanel" class="tab-pane" id="initiateAnalysis">
 
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#covariates" aria-controls="covariates" role="tab"
-                                                          data-toggle="tab">Covariates</a></li>
+        <div class="col-sm-6 col-xs-12 vcenter" style="padding-left: 0">
+            <div class="sampleNumberReporter text-center">
+                number of samples equals <span class="numberOfSamples"></span>
+            </div>
 
-                <li role="presentation" ><a href="#stratify" class="disabled" aria-controls="stratify" role="tab"
-                                           data-toggle="tab" style="cursor: not-allowed; pointer-events: none;">Stratify</a></li>
-            </ul>
+            <div id="boxWhiskerPlot">
+            </div>
+        </div>
 
-            <!-- Tab panes -->
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="covariates" style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px;overflow-y: scroll;">
-                    <div class="row">
-                        <div class="col-md-10 col-sm-10 col-xs-12 vcenter">
+    </div>
 
-                            <div id="covariateHolder">
+    <div id="initiateAnalysis" class="row">
 
-                            </div>
+        <!-- Nav tabs -->
+        %{--<ul class="nav nav-tabs" role="tablist">--}%
+            %{--<li role="presentation" class="active"><a href="#covariates" aria-controls="covariates" role="tab"--}%
+                                                      %{--data-toggle="tab">Covariates</a></li>--}%
 
-                            <div id="covariateTemplate" style="display: none;">
-                                <div class="row">
-                                    <div class="checkbox" style="margin:0">
-                                        <label>
-                                            <input id="covariate_{{name}}" type="checkbox" name="covariate" value="{{name}}"
-                                                   checked/>
-                                            {{trans}}
-                                        </label>
-                                    </div>
+            %{--<li role="presentation"><a href="#stratify" class="disabled" aria-controls="stratify" role="tab"--}%
+                                       %{--data-toggle="tab" style="cursor: not-allowed; pointer-events: none;">Stratify</a>--}%
+            %{--</li>--}%
+        %{--</ul>--}%
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="covariates"
+                 style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px;overflow-y: scroll;">
+                <div class="row">
+                    <div class="col-md-10 col-sm-10 col-xs-12 vcenter">
+
+                        <div id="covariateHolder">
+
+                        </div>
+
+                        <div id="covariateTemplate" style="display: none;">
+                            <div class="row">
+                                <div class="checkbox" style="margin:0">
+                                    <label>
+                                        <input id="covariate_{{name}}" type="checkbox" name="covariate" value="{{name}}"
+                                               checked/>
+                                        {{trans}}
+                                    </label>
                                 </div>
                             </div>
-
                         </div>
 
-                        <div class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter">
-                            <button id="singlebutton" name="singlebutton" style="height: 80px"
-                                    class="btn btn-primary btn-lg burden-test-btn"
-                                    onclick="mpgSoftware.burdenTestShared.refreshSampleData  ( '#datasetFilter', mpgSoftware.burdenTestShared.filterAndRun  )">Run</button>
-                        </div>
                     </div>
-                </div>
 
-                <script>
-                    var displaySampleDistribution = function (propertyName, holderSection) {
-                        mpgSoftware.burdenTestShared.dynamicallyFilterSamples();
-                        var kids = $(holderSection).children();
-                        _.forEach(kids, function (d) {
-                            console.log('d');
-                            $(d).hide();
-                        });
-                        $('#bwp_' + propertyName).show();
-                    }
-                </script>
-
-                <div role="tabpanel" class="tab-pane" id="stratify" style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px">
-                    <h1 style="color: #ccc">Not yet implemented</h1>
-                </div>
-            </div>
-        </div>
-
-
-    </div>
-
-    <div class="row burden-test-result" style="display:block">
-        <div class="col-md-12 col-sm-6">
-
-        </div>
-
-    </div>
-
-
-    <div id="burden-test-some-results" class="row burden-test-result">
-        <div class="col-md-8 col-sm-6">
-            <div id="variantFrequencyDiv">
-                <div>
-                    <p class="standardFont">Of the <span
-                            id="traitSpan"></span> cases/controls, the following carry the variant ${variantIdentifier}.
-                    </p>
-                </div>
-
-                <div class="barchartFormatter">
-                    <div id="chart">
-
+                    <div class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter">
+                        <button id="singlebutton" name="singlebutton" style="height: 80px"
+                                class="btn btn-primary btn-lg burden-test-btn"
+                                onclick="mpgSoftware.burdenTestShared.refreshSampleData('#datasetFilter', mpgSoftware.burdenTestShared.filterAndRun)">Run</button>
                     </div>
                 </div>
             </div>
+
+            <script>
+                var displaySampleDistribution = function (propertyName, holderSection) {
+                    mpgSoftware.burdenTestShared.dynamicallyFilterSamples();
+                    var kids = $(holderSection).children();
+                    _.forEach(kids, function (d) {
+                        console.log('d');
+                        $(d).hide();
+                    });
+                    $('#bwp_' + propertyName).show();
+                }
+            </script>
+
+            %{--<div role="tabpanel" class="tab-pane" id="stratify"--}%
+                 %{--style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px">--}%
+                %{--<h1 style="color: #ccc">Not yet implemented</h1>--}%
+            %{--</div>--}%
         </div>
+    </div>
 
-        <div class="col-md-2 col-sm-3">
-        </div>
+</div>
 
-        <div class="col-md-2 col-sm-3">
-            <div class="vertical-center">
-                <div id="pValue" class="pValue"></div>
+<div class="row burden-test-result" style="display:block">
+    <div class="col-md-12 col-sm-6">
 
-                <div id="orValue" class="orValue"></div>
+    </div>
 
-                <div id="ciValue" class="ciValue"></div>
+</div>
+
+
+<div id="burden-test-some-results" class="row burden-test-result">
+    <div class="col-md-8 col-sm-6">
+        <div id="variantFrequencyDiv">
+            <div>
+                <p class="standardFont">Of the <span
+                        id="traitSpan"></span> cases/controls, the following carry the variant ${variantIdentifier}.
+                </p>
+            </div>
+
+            <div class="barchartFormatter">
+                <div id="chart">
+
+                </div>
             </div>
         </div>
     </div>
 
-    <div id="burden-test-some-results-large" class="row burden-test-result-large">
-        <div class="col-md-4 col-sm-3">
-        </div>
+    <div class="col-md-2 col-sm-3">
+    </div>
 
-        <div class="col-md-4 col-sm-6">
-            <div class="vertical-center">
-                <div id="pValue2" class="pValue"></div>
+    <div class="col-md-2 col-sm-3">
+        <div class="vertical-center">
+            <div id="pValue" class="pValue"></div>
 
-                <div id="orValue2" class="orValue"></div>
+            <div id="orValue" class="orValue"></div>
 
-                <div id="ciValue2" class="ciValue"></div>
-            </div>
-        </div>
-
-        <div class="col-md-4 col-sm-3">
+            <div id="ciValue" class="ciValue"></div>
         </div>
     </div>
+</div>
+
+<div id="burden-test-some-results-large" class="row burden-test-result-large">
+    <div class="col-md-4 col-sm-3">
+    </div>
+
+    <div class="col-md-4 col-sm-6">
+        <div class="vertical-center">
+            <div id="pValue2" class="pValue"></div>
+
+            <div id="orValue2" class="orValue"></div>
+
+            <div id="ciValue2" class="ciValue"></div>
+        </div>
+    </div>
+
+    <div class="col-md-4 col-sm-3">
+    </div>
+</div>
 </div>
 
 </div>

@@ -150,7 +150,7 @@ class RestServerService {
         DBT_URL = grailsApplication.config.dbtRestServer.URL
         EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URLburdenRestServer
 
-        this.BURDEN_REST_SERVER = grailsApplication.config.burdenRestServerProd;
+        this.BURDEN_REST_SERVER = grailsApplication.config.burdenRestServerDev;
 
         // pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
 
