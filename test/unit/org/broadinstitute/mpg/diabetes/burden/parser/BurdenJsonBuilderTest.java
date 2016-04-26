@@ -48,6 +48,8 @@ public class BurdenJsonBuilderTest extends TestCase {
         JSONObject generatedJson = null;
         int dataVertsion = 2;
         String phenotype = "t2d";
+        List<String> sampleList = new ArrayList<String>();
+        List<String> covariatesList = new ArrayList<String>();
 
         // add 10 variants to the list
         variantList.add("1_2522446_");
@@ -69,7 +71,7 @@ public class BurdenJsonBuilderTest extends TestCase {
 
         // create the new json object from the builder call
         try {
-            generatedJson = this.burdenJsonBuilder.getBurdenPostJson(dataVertsion, phenotype, variantList, null);
+            generatedJson = this.burdenJsonBuilder.getBurdenPostJson(dataVertsion, phenotype, variantList, covariatesList, sampleList);
 
         } catch (PortalException exception) {
             fail("Got exception generating burden call json payload: " + exception.getMessage());
