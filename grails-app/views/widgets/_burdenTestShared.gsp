@@ -28,14 +28,21 @@ div.burden-test-wrapper-options .row {
 div.burden-test-btn-wrapper {
     padding-top: 8px;
 }
-
+div.burden-test-specific-results{
+    background-color: #ffffff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid;
+}
 button.burden-test-btn {
     width: 100%;
 }
 
 div.burden-test-result {
     font-size: 18px;
-    padding-top: 30px;
+    padding: 0px 0 14px 0;
     display: none;
 }
 
@@ -937,6 +944,7 @@ div.labelAndInput > input {
                                                                   })
                                                });
             var samplesWeWant = [];
+            var samplesValuesWeWant = [];
             _.forEach(groupedBySampleId,function(sampleVals,sampleId){
                  var rejectSample = false;
                  _.forEach(sampleVals,function(propObject){
@@ -948,41 +956,69 @@ div.labelAndInput > input {
                                 _.forEach(dsObject,function(propVal,dsName){
                                     propertyValue = propVal;
                                });
-//                               if (filter.cat===1){ // categorical filter
-//                                    var catFilterValues = filter.parm;
-//                                    var matcher = _.find(catFilterValues,function(d){return d===propertyValue});
-//                                    if (matcher){
-//                                          rejectSample = false;
-//                                          console.log('sampleId(T)='+sampleId+',propertyValue'+propertyValue+',propName'+propName);
-//                                       } else {
-//                                          rejectSample = true;
-//                                           console.log('sampleId(F)='+sampleId+',propertyValue'+propertyValue+',propName'+propName);
-//                                          return;
-//
-//                                       }
-//                                } else {
                                     var numericalFilterValue = parseFloat(filter.parm);
                                     if (filter.cmp==="1"){
                                        if (propertyValue>=numericalFilterValue){
                                           rejectSample = true;
-                                          console.log('sampleId(Ta)='+sampleId);
                                        }
                                     } else if (filter.cmp==="2"){
                                        if (propertyValue<=numericalFilterValue){
                                           rejectSample = true;
-                                          console.log('sampleId(Fa)='+sampleId);
                                        }
                                     }
-//                                }
                             }
 
                          })
                      })
                  })
                  if (!rejectSample){
-                    samplesWeWant.push('"'+sampleId+'"');
+                    samplesValuesWeWant.push(sampleId);
                  }
             });
+
+            var filteredSampleObjects = {};
+            _.map(groupedBySampleId,function(v,k){
+                    if (samplesValuesWeWant.indexOf(k)!==-1) {
+                        filteredSampleObjects[k]=v;} return false;
+                        });
+
+             _.forEach(filteredSampleObjects,function(sampleVals,sampleId){
+                 var rejectSample = false;
+                 _.forEach(sampleVals,function(propObject){
+                     _.forEach(propObject,function(propVal){
+                         _.forEach(propVal,function(dsObject,propName){
+                            var filter = _.find(relevantFilters,function(filt){return (filt.name===propName)});
+                            if (filter){
+                                var propertyValue;
+                                _.forEach(dsObject,function(propVal,dsName){
+                                    propertyValue = propVal;
+                               });
+                               if ((filter.cat===1)&&(typeof propertyValue !== 'undefined')) { // categorical filter
+                                    var catFilterValues = filter.parm;
+                                    var matcher = _.find(catFilterValues,function(d){return d===(""+propertyValue)});
+                                    if (matcher){
+                                          console.log('sampleId(T)='+sampleId+',propertyValue'+propertyValue+',propName'+propName);
+                                       } else {
+                                          rejectSample = true;
+                                           console.log('sampleId(F)='+sampleId+',propertyValue'+propertyValue+',propName'+propName);
+                                       }
+                                }
+
+                            }
+
+                         })
+                     });
+                     if (!rejectSample){
+                        samplesWeWant.push('"'+sampleId+'"');
+                     }
+                 })
+            });
+
+
+
+
+
+
             $('.sampleNumberReporter .numberOfSamples').text(samplesWeWant.length);
             var filteredVariants = [];
             _.forEach(data.metaData.variants,
@@ -1311,61 +1347,57 @@ $( document ).ready( function (){
 </div>%{--end accordion --}%
 </div>
 
-<div class="row burden-test-result" style="display:block">
-    <div class="col-md-12 col-sm-6">
-
-    </div>
-
-</div>
-
 
 <div id="burden-test-some-results" class="row burden-test-result">
-    <div class="col-md-8 col-sm-6">
-        <div id="variantFrequencyDiv">
-            <div>
-                <p class="standardFont">Of the <span
-                        id="traitSpan"></span> cases/controls, the following carry the variant ${variantIdentifier}.
-                </p>
+    <div class="col-xs-12">
+        <div class="row burden-test-specific-results">
+
+            <div class="col-md-8 col-sm-6">
+                <div id="variantFrequencyDiv">
+                    <div>
+                        <p class="standardFont">Of the <span
+                                id="traitSpan"></span> cases/controls, the following carry the variant ${variantIdentifier}.
+                        </p>
+                    </div>
+
+                    <div class="barchartFormatter">
+                        <div id="chart">
+
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="barchartFormatter">
-                <div id="chart">
+            <div class="col-md-4 col-sm-3">
+                <div class="vertical-center">
+                    <div id="pValue" class="pValue"></div>
 
+                    <div id="orValue" class="orValue"></div>
+
+                    <div id="ciValue" class="ciValue"></div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-2 col-sm-3">
-    </div>
+        <div id="burden-test-some-results-large" class="row burden-test-result-large">
+            <div class="col-md-4 col-sm-3">
+            </div>
 
-    <div class="col-md-2 col-sm-3">
-        <div class="vertical-center">
-            <div id="pValue" class="pValue"></div>
+            <div class="col-md-4 col-sm-6">
+                <div class="vertical-center">
+                    <div id="pValue2" class="pValue"></div>
 
-            <div id="orValue" class="orValue"></div>
+                    <div id="orValue2" class="orValue"></div>
 
-            <div id="ciValue" class="ciValue"></div>
-        </div>
-    </div>
-</div>
+                    <div id="ciValue2" class="ciValue"></div>
+                </div>
+            </div>
 
-<div id="burden-test-some-results-large" class="row burden-test-result-large">
-    <div class="col-md-4 col-sm-3">
-    </div>
-
-    <div class="col-md-4 col-sm-6">
-        <div class="vertical-center">
-            <div id="pValue2" class="pValue"></div>
-
-            <div id="orValue2" class="orValue"></div>
-
-            <div id="ciValue2" class="ciValue"></div>
+            <div class="col-md-4 col-sm-3">
+            </div>
         </div>
     </div>
 
-    <div class="col-md-4 col-sm-3">
-    </div>
 </div>
 </div>
 
