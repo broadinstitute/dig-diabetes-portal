@@ -53,19 +53,19 @@
     <h5><g:message code="variant.info.associations.description"/></h5>
     <table class="table table-condensed">
         <tr>
-            <th>Direction of effect</th><th>Dataset</th>
+            <th><g:message code="variant.variantAssociations.legend.directionOfEffect" default="Direction of effect" /></th><th><g:message code="variant.variantAssociations.legend.dataset" default="Dataset" /></th>
         </tr>
         <tr>
-            <td><span style="float: left;display:block; margin-right: 5px;">up</span><span
+            <td><span style="float: left;display:block; margin-right: 5px;"><g:message code="variant.variantAssociations.legend.up" default="up" /></span><span
                     style="float: left;display:block; background-color: #33C; color:#fff;width: 10px;text-align:center; margin-right: 5px;">&#8593</span><span
-                    style="float: left;display:block; margin-right: 5px;">down</span><span
+                    style="float: left;display:block; margin-right: 5px;"><g:message code="variant.variantAssociations.legend.down" default="down" /></span><span
                     style="float:left; display:block; background-color: #90f; color:#fff;width: 10px; text-align:center;">&#8595</span>
             </td>
             <td>
                 <div style="background-color: #ccc; color: #fff; width:auto; margin:auto; float: left; padding: 0 5px;">
-                    <strong style="color: #333;">sample size</strong> |
-                    <strong style="color: #F00;">frequency</strong> |
-                    <strong style="color:#33F;">count</strong>
+                    <strong style="color: #333;"><g:message code="variant.variantAssociations.legend.sampleSize" default="sample size"/></strong> |
+                    <strong style="color: #F00;"><g:message code="variant.variantAssociations.legend.frequency" default="frequency"/></strong> |
+                    <strong style="color:#33F;"><g:message code="variant.variantAssociations.legend.count" default="count"/></strong>
                 </div>
             </td>
         </tr>

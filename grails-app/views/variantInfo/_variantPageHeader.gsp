@@ -21,21 +21,21 @@
         <table id=transcriptTable class="table table-striped table-condensed">
             <thead>
                 <tr>
-                    <th>Transcript</th> {{ #transcriptName }}<th>{{ transcriptNameText }}</th> {{ /transcriptName }}
+                    <th><g:message code="variant.summaryText.transcript" default="Transcript" /></th> {{ #transcriptName }}<th>{{ transcriptNameText }}</th> {{ /transcriptName }}
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <th>Protein change</th> {{ #proteinChange }} <td> {{ . }} </td> {{ /proteinChange }}
+                    <th><g:message code="variant.impactOnProtein.proteinChange" default="Protein change" /></th> {{ #proteinChange }} <td> {{ . }} </td> {{ /proteinChange }}
                 </tr>
                 <tr>
-                    <th>Consequence</th> {{ #consequence }} <td> {{ . }} </td> {{ /consequence }}
+                    <th><g:message code="variant.summaryText.consequence" default="Consequence" /></th> {{ #consequence }} <td> {{ . }} </td> {{ /consequence }}
                 </tr>
                 <tr>
-                    <th>PolyPhen prediction</th> {{ #polyphen }} <td> {{ . }} </td> {{ /polyphen }}
+                    <th><g:message code="variant.impactOnProtein.polyphenPrediction" default="PolyPhen prediction" /></th> {{ #polyphen }} <td> {{ . }} </td> {{ /polyphen }}
                 </tr>
                 <tr>
-                    <th>SIFT prediction</th> {{ #sift }} <td> {{ . }} </td> {{ /sift }}
+                    <th><g:message code="variant.impactOnProtein.siftPrediction" default="SIFT prediction" /></th> {{ #sift }} <td> {{ . }} </td> {{ /sift }}
                 </tr>
             </tbody>
         </table>

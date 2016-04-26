@@ -149,6 +149,9 @@
                         <a href='<g:createLink controller="region" action="regionInfo"
                                                params="[id: 'chr9:21,940,000-22,190,000']"/>'>chr9:21,940,000-22,190,000</a>
                     </g:else>
+                    <g:helpText title="input.searchTerm.rangeExample.help.header" placement="bottom"
+                                body="input.searchTerm.rangeExample.help.text"/>
+
                 </div>
             </div>
             <hr />
