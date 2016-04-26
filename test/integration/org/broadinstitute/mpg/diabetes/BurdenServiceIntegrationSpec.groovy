@@ -30,40 +30,40 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
     }
 
 
-    void "test burden rest call using only variants"() {
-        when:
-        List<String> variantList = new ArrayList<String>();
-        JSONObject referenceJson = null;
-        JSONObject generatedJson = null;
-        JsonSlurper slurper = new JsonSlurper()
-        String phenotype = PortalConstants.BURDEN_DEFAULT_PHENOTYPE_KEY;
-
-        // add 10 variants to the list
-        variantList.add("1_2522446_");
-        variantList.add("1_2522529_");
-        variantList.add("1_2523027_");
-        variantList.add("1_2524110_");
-        variantList.add("1_2524271_");
-        variantList.add("1_2526245_");
-        variantList.add("1_2529663_");
-        variantList.add("1_2530211_");
-        variantList.add("1_2530219_");
-        variantList.add("1_2535651_");
-
-        // get the json payload for the burden call
-        BurdenJsonBuilder jsonBuilder = BurdenJsonBuilder.getBurdenJsonBuilder();
-        String burdenJsonString = jsonBuilder.getBurdenPostJson(PortalConstants.BURDEN_DATASET_OPTION_ID_26K, phenotype, variantList, null);
-        generatedJson = this.burdenService.getBurdenRestCallResults(burdenJsonString);
-
-        // reference result string
-        String referenceJsonString = "{\"is_error\": false, \"oddsRatio\": \"1.0138318997464533\",\"pValue\": \"0.4437344659074216\"}";
-        referenceJson = slurper.parseText(referenceJsonString);
-
-        then:
-        assert generatedJson != null
-        // will need to change this when data changes
-//        assert referenceJson == generatedJson
-    }
+//    void "test burden rest call using only variants"() {
+//        when:
+//        List<String> variantList = new ArrayList<String>();
+//        JSONObject referenceJson = null;
+//        JSONObject generatedJson = null;
+//        JsonSlurper slurper = new JsonSlurper()
+//        String phenotype = PortalConstants.BURDEN_DEFAULT_PHENOTYPE_KEY;
+//
+//        // add 10 variants to the list
+//        variantList.add("1_2522446_");
+//        variantList.add("1_2522529_");
+//        variantList.add("1_2523027_");
+//        variantList.add("1_2524110_");
+//        variantList.add("1_2524271_");
+//        variantList.add("1_2526245_");
+//        variantList.add("1_2529663_");
+//        variantList.add("1_2530211_");
+//        variantList.add("1_2530219_");
+//        variantList.add("1_2535651_");
+//
+//        // get the json payload for the burden call
+//        BurdenJsonBuilder jsonBuilder = BurdenJsonBuilder.getBurdenJsonBuilder();
+//        String burdenJsonString = jsonBuilder.getBurdenPostJson(PortalConstants.BURDEN_DATASET_OPTION_ID_26K, phenotype, variantList, null);
+//        generatedJson = this.burdenService.getBurdenRestCallResults(burdenJsonString);
+//
+//        // reference result string
+//        String referenceJsonString = "{\"is_error\": false, \"oddsRatio\": \"1.0138318997464533\",\"pValue\": \"0.4437344659074216\"}";
+//        referenceJson = slurper.parseText(referenceJsonString);
+//
+//        then:
+//        assert generatedJson != null
+//        // will need to change this when data changes
+////        assert referenceJson == generatedJson
+//    }
 
     void "test burden variant retrieval post call"() {
         when:
@@ -109,33 +109,33 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
         assert object.size() > 0
     }
 
-    void "test burden test for single variant"() {
-        when:
-        String variantId = "8_118184783_C_T";
-        JSONObject resultJson = this.burdenService.callBurdenTestForTraitAndVariantId("t2d", variantId, null);
+//    void "test burden test for single variant"() {
+//        when:
+//        String variantId = "8_118184783_C_T";
+//        JSONObject resultJson = this.burdenService.callBurdenTestForTraitAndVariantId("t2d", variantId, null);
+//
+//        then:
+//        assert resultJson != null
+//        assert resultJson.size() > 0
+//    }
 
-        then:
-        assert resultJson != null
-        assert resultJson.size() > 0
-    }
-
-    void "test burden test for variant list"() {
-        when:
-        List<String> varIdList = new ArrayList<String>();
-        varIdList.add("8_118184783_C_T");
-        JSONObject resultJson = this.burdenService.getBurdenResultForVariantIdList(PortalConstants.BURDEN_DATASET_OPTION_ID_26K, PortalConstants.BURDEN_DEFAULT_PHENOTYPE_KEY, varIdList, null);
-
-        then:
-        assert resultJson != null
-        assert resultJson.size() > 0
-    }
-
-    void "test burden phenotype filter list call"() {
-        when:
-        JSONObject phenotypeJsonResult = this.burdenService.getBurdenTraitSelectionOptions()
-
-        then:
-        assert phenotypeJsonResult != null
-        assert phenotypeJsonResult.size() > 0
-    }
+//    void "test burden test for variant list"() {
+//        when:
+//        List<String> varIdList = new ArrayList<String>();
+//        varIdList.add("8_118184783_C_T");
+//        JSONObject resultJson = this.burdenService.getBurdenResultForVariantIdList(PortalConstants.BURDEN_DATASET_OPTION_ID_26K, PortalConstants.BURDEN_DEFAULT_PHENOTYPE_KEY, varIdList, null);
+//
+//        then:
+//        assert resultJson != null
+//        assert resultJson.size() > 0
+//    }
+//
+//    void "test burden phenotype filter list call"() {
+//        when:
+//        JSONObject phenotypeJsonResult = this.burdenService.getBurdenTraitSelectionOptions()
+//
+//        then:
+//        assert phenotypeJsonResult != null
+//        assert phenotypeJsonResult.size() > 0
+//    }
 }
