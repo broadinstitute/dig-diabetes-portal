@@ -151,7 +151,7 @@ public class BurdenJsonBuilder {
         stringBuilder.append("\" : [");
         if (covariatesList != null)  {
             for (int i = 0; i < covariatesList.size(); i++) {
-                stringBuilder.append("\"C" + covariatesList.get(i) + "\"");
+                stringBuilder.append("\"" + covariatesList.get(i) + "\"");
                 if (i < covariatesList.size()-1) {
                     stringBuilder.append(",");
                 }

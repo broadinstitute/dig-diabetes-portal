@@ -36,6 +36,13 @@ div.burden-test-specific-results{
     padding: 10px;
     border: 1px solid;
 }
+span.distPlotter{
+    color: #000;
+    cursor: pointer;
+}
+span.activeDistPlotter{
+    color: #0082ca;
+}
 button.burden-test-btn {
     width: 100%;
 }
@@ -373,6 +380,17 @@ div.labelAndInput > input {
             mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, callback  );
         }
 
+        var immediateFilterAndRun = function (){
+            var filteredSamples = generateFilterSamples();
+            var filteredSamplesAsStrings = _.map(filteredSamples,function(d){
+               return('"'+d+'"');
+            });
+            runBurdenTest(filteredSamplesAsStrings);
+        };
+
+
+
+
 
         var filterAndRun = function (data){
             var filters = extractFilters();
@@ -420,7 +438,7 @@ div.labelAndInput > input {
                     samplesWeWant.push('"'+sampleId+'"');
                  }
             });
-            var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
+            //var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
             runBurdenTest(samplesWeWant);
         };
 
@@ -436,13 +454,22 @@ div.labelAndInput > input {
 
             var collectingCovariateValues = function (){
                var pcCovariates = [];
-               for ( var i = 0 ; i < 10 ; i++ ) {
-                  var pcId = 'PC'+(i+1);
-                  var pcElement = $('#covariate_'+pcId);
-                  if ((pcElement).is(':checked')){
-                    pcCovariates.push(""+(i+1))
+               var selectedCovariates = $('.covariate:checked');
+               _.forEach(selectedCovariates, function(d){
+                  var covariateDom = $(d);
+                  var covId = covariateDom.attr('id');
+                  var covariateName = covId.substr("covariate_".length);
+                  if (covariateName.indexOf("{{")===-1){
+                     pcCovariates.push('"'+covariateName+'"');
                   }
-               }
+               });
+//               for ( var i = 0 ; i < 10 ; i++ ) {
+//                  var pcId = 'PC'+(i+1);
+//                  var pcElement = $('#covariate_'+pcId);
+//                  if ((pcElement).is(':checked')){
+//                    pcCovariates.push(""+(i+1))
+//                  }
+//               }
                return "{\"covariates\":[\n" + pcCovariates.join(",") + "\n]}";
             }
 
@@ -812,12 +839,13 @@ div.labelAndInput > input {
             var plotHoldingStructure = $('#boxWhiskerPlot');
             plotHoldingStructure.empty();
             var sampleMetadata = getStoredSampleMetadata();
+            $('.sampleNumberReporter .numberOfSamples').text(variantData.length);
             for ( var i = 0 ; i < displayableData.length ; i++ ){
                 var singleElement = displayableData[i];
                 var elementName = singleElement.name;
                 var divElementName = 'bwp_'+elementName;
                 plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
-                $('.sampleNumberReporter .numberOfSamples').text(singleElement.data.length);
+               // $('.sampleNumberReporter .numberOfSamples').text(singleElement.data.length);
                 $('#'+divElementName).hide();
                 if (sampleMetadata.filters){
                   var filter = _.find(sampleMetadata.filters, ['name',elementName]);
@@ -926,7 +954,14 @@ div.labelAndInput > input {
 
 
 
-        var dynamicallyFilterSamples = function (){
+
+
+        /***
+        *   get the sample data and apply real valued filters. Apply categorical filters.  Pass back the filtered list of IDs.
+        *
+        * @returns {Array}
+        */
+        var generateFilterSamples = function (){
             var data = getStoredSampleData();
             if (typeof data === 'undefined') return;
             var filters = extractFilters();
@@ -996,12 +1031,9 @@ div.labelAndInput > input {
                                if ((filter.cat===1)&&(typeof propertyValue !== 'undefined')) { // categorical filter
                                     var catFilterValues = filter.parm;
                                     var matcher = _.find(catFilterValues,function(d){return d===(""+propertyValue)});
-                                    if (matcher){
-                                          console.log('sampleId(T)='+sampleId+',propertyValue'+propertyValue+',propName'+propName);
-                                       } else {
+                                    if (!matcher){
                                           rejectSample = true;
-                                           console.log('sampleId(F)='+sampleId+',propertyValue'+propertyValue+',propName'+propName);
-                                       }
+                                        }
                                 }
 
                             }
@@ -1009,17 +1041,20 @@ div.labelAndInput > input {
                          })
                      });
                      if (!rejectSample){
-                        samplesWeWant.push('"'+sampleId+'"');
+                        samplesWeWant.push(sampleId);
                      }
                  })
             });
+            return samplesWeWant;
+
+        };
 
 
 
 
-
-
-            $('.sampleNumberReporter .numberOfSamples').text(samplesWeWant.length);
+        var dynamicallyFilterSamples = function (){
+            var data = getStoredSampleData();
+            var samplesWeWant = generateFilterSamples();
             var filteredVariants = [];
             _.forEach(data.metaData.variants,
                    function(d){
@@ -1028,7 +1063,7 @@ div.labelAndInput > input {
                                   if (el["ID"]) {
                                      _.forEach(el["ID"],
                                          function(v,k){
-                                           if (samplesWeWant.indexOf("\""+v+"\"")>-1){
+                                           if (samplesWeWant.indexOf(v)>-1){
                                               filteredVariants.push(d);
                                            }
                                          });
@@ -1037,17 +1072,34 @@ div.labelAndInput > input {
                           )
                    }
              );
-           // data.metaData.variants = filteredVariants;
-            utilizeSampleInfoForDistributionPlots(filteredVariants);
+            return filteredVariants;
         };
 
-        var displaySampleDistribution = function (propertyName, holderSection) {
-            mpgSoftware.burdenTestShared.dynamicallyFilterSamples();
+
+
+
+
+
+        var displaySampleDistribution = function (propertyName, holderSection, caller) {
+            var filteredVariants = mpgSoftware.burdenTestShared.dynamicallyFilterSamples();
+            utilizeSampleInfoForDistributionPlots(filteredVariants);
             var kids = $(holderSection).children();
             _.forEach(kids, function (d) {
                 $(d).hide();
             });
+            $('.activeDistPlotter').removeClass('activeDistPlotter');
+            $(caller).addClass('activeDistPlotter');
             $('#bwp_' + propertyName).show();
+        };
+
+        var filterSamples = function (propertyName, holderSection) {
+            var filteredVariants = mpgSoftware.burdenTestShared.dynamicallyFilterSamples();
+            utilizeSampleInfoForDistributionPlots(filteredVariants);
+            var kids = $(holderSection).children();
+            _.forEach(kids, function (d) {
+                $(d).hide();
+            });
+            $('.activeDistPlotter').removeClass('activeDistPlotter');
         };
 
 
@@ -1055,11 +1107,13 @@ div.labelAndInput > input {
 
         // public routines are declared below
         return {
+            filterSamples : filterSamples,
             displaySampleDistribution:displaySampleDistribution,
             preloadInteractiveAnalysisData:preloadInteractiveAnalysisData,
             retrieveExperimentMetadata:retrieveExperimentMetadata,
             retrieveSampleInformation:retrieveSampleInformation,
             filterAndRun:filterAndRun,
+            immediateFilterAndRun:immediateFilterAndRun,
             runBurdenTest:runBurdenTest,
             utilizeSampleInfoForDistributionPlots: utilizeSampleInfoForDistributionPlots,
             retrieveMatchingDataSets:retrieveMatchingDataSets,
@@ -1187,13 +1241,14 @@ $( document ).ready( function (){
                                 </div>
                             </div>
 
-                            <div style="height: 300px; padding: 4px 0 0 10px; overflow-y: scroll;">
+                            <div style="direction: rtl; height: 300px; padding: 4px 0 0 10px; overflow-y: scroll;">
+                                <div style="direction: ltr">
+                                    <div id="filters">
+                                        <div class="row">
 
-                                <div id="filters">
-                                    <div class="row">
+                                            <div id="person"></div>
 
-                                        <div id="person"></div>
-
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1222,13 +1277,14 @@ $( document ).ready( function (){
                                     <div class="col-sm-3">
                                         <input id="inp{{name}}" type="text" class="filterParm form-control"
                                                data-type="propertiesInput"
-                                               data-prop="{{name}}Value" data-translatedname="{{name}}">
+                                               data-prop="{{name}}Value" data-translatedname="{{name}}"
+                                               onfocusout="mpgSoftware.burdenTestShared.filterSamples()">
 
                                     </div>
 
                                     <div class="col-sm-1">
-                                        <span onmouseover="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')"
-                                              class="glyphicon glyphicon-arrow-right pull-right"></span>
+                                        <span onmouseover="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot', this)"
+                                              class="glyphicon glyphicon-arrow-right pull-right distPlotter"></span>
                                     </div>
 
                                 </div>
@@ -1252,12 +1308,13 @@ $( document ).ready( function (){
 
                                     <div class="col-sm-3">
                                         <select id="multi{{name}}" class="form-control multiSelect"
-                                                data-selectfor="{{name}}FilterOpts" multiple="multiple">
+                                                data-selectfor="{{name}}FilterOpts" multiple="multiple"
+                                                onfocusout="mpgSoftware.burdenTestShared.filterSamples()">
                                         </select>
                                     </div>
 
                                     <div class="col-sm-1">
-                                        <span onmouseover="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')"
+                                        <span onmouseover="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot', this)"
                                               class="glyphicon glyphicon-arrow-right pull-right"></span>
                                     </div>
 
@@ -1315,7 +1372,7 @@ $( document ).ready( function (){
                                     <div class="row">
                                         <div class="checkbox" style="margin:0">
                                             <label>
-                                                <input id="covariate_{{name}}" type="checkbox" name="covariate"
+                                                <input id="covariate_{{name}}" class="covariate" type="checkbox" name="covariate"
                                                        value="{{name}}"
                                                        checked/>
                                                 {{trans}}
@@ -1332,7 +1389,9 @@ $( document ).ready( function (){
                 <div class="col-sm-3 col-xs-12 vcenter burden-test-btn-wrapper ">
                     <button id="singlebutton" name="singlebutton" style="height: 80px"
                             class="btn btn-primary btn-lg burden-test-btn"
-                            onclick="mpgSoftware.burdenTestShared.refreshSampleData('#datasetFilter', mpgSoftware.burdenTestShared.filterAndRun)">Run</button>
+
+                            onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun()">Run</button>
+                    %{--onclick="mpgSoftware.burdenTestShared.refreshSampleData('#datasetFilter', mpgSoftware.burdenTestShared.filterAndRun)">Run</button>--}%
                 </div>
             </div>
 
