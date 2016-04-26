@@ -14,11 +14,13 @@ div.secHeader {
     font-size: 18px;
     text-decoration: underline;
 }
+div.secBody {
+    background-color: #eee;
+}
 div.burden-test-wrapper-options {
     background-color: #eee;
     font-size: 16px;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding: 0;
 }
 div.burden-test-wrapper-options .row {
     margin: 0 0 1px 0;
@@ -640,19 +642,6 @@ div.labelAndInput > input {
 //                { category: 'female',
 //                    value: 245,
 //                    color: '#0082ca'}
-//                ,
-//                { category: 'we go',
-//                    value: 20,
-//                    color: '#5500ca'},
-//                { category: 'the',
-//                    value: 190,
-//                    color: '#009400'},
-//                { category: 'rounder',
-//                    value: 170,
-//                    color: '#3394aa'} ,
-//                { category: 'we get',
-//                    value: 150,
-//                    color: '#0000ff'}
 //            ],
             roomForLabels = 120,
             maximumPossibleValue = 1,
@@ -1016,12 +1005,21 @@ div.labelAndInput > input {
             utilizeSampleInfoForDistributionPlots(filteredVariants);
         };
 
+        var displaySampleDistribution = function (propertyName, holderSection) {
+            mpgSoftware.burdenTestShared.dynamicallyFilterSamples();
+            var kids = $(holderSection).children();
+            _.forEach(kids, function (d) {
+                $(d).hide();
+            });
+            $('#bwp_' + propertyName).show();
+        };
 
 
 
 
         // public routines are declared below
         return {
+            displaySampleDistribution:displaySampleDistribution,
             preloadInteractiveAnalysisData:preloadInteractiveAnalysisData,
             retrieveExperimentMetadata:retrieveExperimentMetadata,
             retrieveSampleInformation:retrieveSampleInformation,
@@ -1062,236 +1060,255 @@ $( document ).ready( function (){
 
 <div class="row burden-test-wrapper-options">
 
-<!-- Nav tabs -->
-%{--<ul class="nav nav-tabs" role="tablist_for_chooseSamples">--}%
-    %{--<li role="presentation" class="active"><a href="#chooseSamples" aria-controls="chooseSamples" role="tab"--}%
-                                              %{--data-toggle="tab">Choose samples</a></li>--}%
-    %{--<li role="presentation"><a href="#initiateAnalysis" aria-controls="initiateAnalysis" role="tab"--}%
-                               %{--data-toggle="tab">Initiate analysis</a></li>--}%
-%{--</ul>--}%
 
-<div class="user-interaction" style="border-top: 1px solid #ccc; padding: 4px 0 0 10px">
-    <div  id="chooseSamples" class="row">
-        <div class="col-sm-12 col-xs-12 vcenter">
+<div class="user-interaction">
 
-            <div class="row secHeader" style="padding: 20px 0 0 0">
-                <div class="col-sm-12 col-xs-12 text-left"><label>Dataset</label></div>
-            </div>
+<div class="panel-group" id="accordion_iat">
 
-            <div class="row">
-                <div class="col-sm-12 col-xs-12 text-left">
-                    <select id="datasetFilter" class="traitFilter form-control text-left"
-                            onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');"
-                            onclick="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');">
-                    </select>
-                </div>
+<div class="panel panel-default">%{--should hold the Choose data set panel--}%
 
-            </div>
-
-            <div class="row secHeader" style="padding: 20px 0 0 0">
-                <div class="col-sm-12 col-xs-12 text-left"><label>Phenotype</label></div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-12 col-xs-12 text-left">
-                    <select id="phenotypeFilter" class="traitFilter form-control text-left"
-                            onchange="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata($('#datasetFilter'), '#phenotypeFilter');">
-                    </select>
-                </div>
-            </div>
-        </div>
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion_iat" href="#chooseSamples">Choose data set</a>
+        </h4>
     </div>
 
-    <div  id="filterSamples" class="row">
-        <div class="col-sm-6 col-xs-12 vcenter">
-            <div class="row secHeader" style="padding: 20px 0 0 0">
-                <div class="col-sm-6 col-xs-12 text-left"><label>Filters</label></div>
+    <div id="chooseSamples" class="panel-collapse collapse in">
+        <div class="panel-body secBody">
+            %{--<div class="row">--}%
+                %{--<div class="col-sm-12 col-xs-12 vcenter">--}%
 
-                <div class="col-sm-6 col-xs-12 text-right"><label
-                        style="font-style: italic; font-size: 14px">Mouse-over arrows for distribution</label></div>
-            </div>
-
-            <div class="row" id="sampleRow" style="display:none; padding: 10px 0 0 0">
-                <div class="col-sm-12 col-xs-12 text-left">
-                    <div class="row sampleFilterHeader" style="text-decoration: underline">
-                        <div class="col-sm-1" style="padding-left: 4px">
-                            Use
-                        </div>
-
-                        <div class="col-sm-3">
-                            Filter
-                        </div>
-
-                        <div class="col-sm-3" style="padding-left: 4px">
-                            Cmp
-                        </div>
-
-                        <div class="col-sm-4">
-                            Parameter
-                        </div>
+                    <div class="row secHeader">
+                        <div class="col-sm-12 col-xs-12 text-left"><label>Dataset</label></div>
                     </div>
 
-                    <div style="height: 300px; padding: 4px 0 0 10px; overflow-y: scroll;">
-
-                        <div id="filters">
-                            <div class="row">
-
-                                <div id="person"></div>
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div id="filterFloatTemplate" style="display: none;">
-                        <div class="row realValuedFilter considerFilter" id="filter_{{name}}">
-                            <div class="col-sm-1">
-                                <input class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}"
-                                       value="{{name}}" checked/></td>
-                            </div>
-
-                            <div class="col-sm-5">
-                                <span>{{trans}}</span>
-                            </div>
-
-                            <div class="col-sm-2">
-                                <select id="cmp{{name}}" class="form-control filterCmp"
-                                        data-selectfor="{{name}}Comparator">
-                                    <option value="1">&lt;</option>
-                                    <option value="2">&gt;</option>
-                                    <option value="3">=</option>
-                                </select>
-                            </div>
-
-                            <div class="col-sm-3">
-                                <input id="inp{{name}}" type="text" class="filterParm form-control"
-                                       data-type="propertiesInput"
-                                       data-prop="{{name}}Value" data-translatedname="{{name}}">
-
-                            </div>
-
-                            <div class="col-sm-1">
-                                <span onmouseover="displaySampleDistribution('{{name}}', '#boxWhiskerPlot')"
-                                      class="glyphicon glyphicon-arrow-right pull-right"></span>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                    <div id="filterCategoricalTemplate" style="display: none;">
-                        <div class="row categoricalFilter considerFilter" id="filter_{{name}}">
-                            <div class="col-sm-1">
-                                <input class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}"
-                                       value="{{name}}" checked/></td>
-                            </div>
-
-                            <div class="col-sm-5">
-                                <span>{{trans}}</span>
-                            </div>
-
-                            <div class="col-sm-2" style="text-align: center">
-                                =
-                            </div>
-
-                            <div class="col-sm-3">
-                                <select id="multi{{name}}" class="form-control multiSelect"
-                                        data-selectfor="{{name}}FilterOpts" multiple="multiple">
-                                </select>
-                            </div>
-
-                            <div class="col-sm-1">
-                                <span onmouseover="displaySampleDistribution('{{name}}', '#boxWhiskerPlot')"
-                                      class="glyphicon glyphicon-arrow-right pull-right"></span>
-                            </div>
-
+                    <div class="row">
+                        <div class="col-sm-12 col-xs-12 text-left">
+                            <select id="datasetFilter" class="traitFilter form-control text-left"
+                                    onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');"
+                                    onclick="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');">
+                            </select>
                         </div>
 
                     </div>
 
-
-                    <div id="filterStringTemplate"
-                         style="display: none;"><p><span>str name={{name}},type={{type}}</span></p></div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="col-sm-6 col-xs-12 vcenter" style="padding-left: 0">
-            <div class="sampleNumberReporter text-center">
-                number of samples equals <span class="numberOfSamples"></span>
-            </div>
-
-            <div id="boxWhiskerPlot">
-            </div>
-        </div>
-
-    </div>
-
-    <div id="initiateAnalysis" class="row">
-
-        <!-- Nav tabs -->
-        %{--<ul class="nav nav-tabs" role="tablist">--}%
-            %{--<li role="presentation" class="active"><a href="#covariates" aria-controls="covariates" role="tab"--}%
-                                                      %{--data-toggle="tab">Covariates</a></li>--}%
-
-            %{--<li role="presentation"><a href="#stratify" class="disabled" aria-controls="stratify" role="tab"--}%
-                                       %{--data-toggle="tab" style="cursor: not-allowed; pointer-events: none;">Stratify</a>--}%
-            %{--</li>--}%
-        %{--</ul>--}%
-
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="covariates"
-                 style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px;overflow-y: scroll;">
-                <div class="row">
-                    <div class="col-md-10 col-sm-10 col-xs-12 vcenter">
-
-                        <div id="covariateHolder">
-
-                        </div>
-
-                        <div id="covariateTemplate" style="display: none;">
-                            <div class="row">
-                                <div class="checkbox" style="margin:0">
-                                    <label>
-                                        <input id="covariate_{{name}}" type="checkbox" name="covariate" value="{{name}}"
-                                               checked/>
-                                        {{trans}}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
+                    <div class="row secHeader" style="padding: 20px 0 0 0">
+                        <div class="col-sm-12 col-xs-12 text-left"><label>Phenotype</label></div>
                     </div>
 
-                    <div class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter">
-                        <button id="singlebutton" name="singlebutton" style="height: 80px"
-                                class="btn btn-primary btn-lg burden-test-btn"
-                                onclick="mpgSoftware.burdenTestShared.refreshSampleData('#datasetFilter', mpgSoftware.burdenTestShared.filterAndRun)">Run</button>
+                    <div class="row">
+                        <div class="col-sm-12 col-xs-12 text-left">
+                            <select id="phenotypeFilter" class="traitFilter form-control text-left"
+                                    onchange="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata($('#datasetFilter'), '#phenotypeFilter');">
+                            </select>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <script>
-                var displaySampleDistribution = function (propertyName, holderSection) {
-                    mpgSoftware.burdenTestShared.dynamicallyFilterSamples();
-                    var kids = $(holderSection).children();
-                    _.forEach(kids, function (d) {
-                        console.log('d');
-                        $(d).hide();
-                    });
-                    $('#bwp_' + propertyName).show();
-                }
-            </script>
-
-            %{--<div role="tabpanel" class="tab-pane" id="stratify"--}%
-                 %{--style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px">--}%
-                %{--<h1 style="color: #ccc">Not yet implemented</h1>--}%
+                %{--</div>--}%
             %{--</div>--}%
         </div>
     </div>
 
+</div>%{--end accordion panel for id=chooseSamples--}%
+
+
+<div class="panel panel-default">%{--should hold the Choose data set panel--}%
+
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion_iat" href="#filterSamples">Filters samples</a>
+        </h4>
+    </div>
+
+    <div id="filterSamples" class="panel-collapse collapse">
+        <div class="panel-body  secBody">
+            <div class="row">
+                <div class="col-sm-6 col-xs-12 vcenter">
+                    <div class="row secHeader" style="padding: 20px 0 0 0">
+                        <div class="col-sm-6 col-xs-12 text-left"><label>Filters</label></div>
+
+                        <div class="col-sm-6 col-xs-12 text-right"><label
+                                style="font-style: italic; font-size: 14px">Mouse-over arrows for distribution</label>
+                        </div>
+                    </div>
+
+                    <div class="row" id="sampleRow" style="display:none; padding: 10px 0 0 0">
+                        <div class="col-sm-12 col-xs-12 text-left">
+                            <div class="row sampleFilterHeader" style="text-decoration: underline">
+                                <div class="col-sm-1" style="padding-left: 4px">
+                                    Use
+                                </div>
+
+                                <div class="col-sm-3">
+                                    Filter
+                                </div>
+
+                                <div class="col-sm-3" style="padding-left: 4px">
+                                    Cmp
+                                </div>
+
+                                <div class="col-sm-4">
+                                    Parameter
+                                </div>
+                            </div>
+
+                            <div style="height: 300px; padding: 4px 0 0 10px; overflow-y: scroll;">
+
+                                <div id="filters">
+                                    <div class="row">
+
+                                        <div id="person"></div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div id="filterFloatTemplate" style="display: none;">
+                                <div class="row realValuedFilter considerFilter" id="filter_{{name}}">
+                                    <div class="col-sm-1">
+                                        <input class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}"
+                                               value="{{name}}" checked/></td>
+                                    </div>
+
+                                    <div class="col-sm-5">
+                                        <span>{{trans}}</span>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <select id="cmp{{name}}" class="form-control filterCmp"
+                                                data-selectfor="{{name}}Comparator">
+                                            <option value="1">&lt;</option>
+                                            <option value="2">&gt;</option>
+                                            <option value="3">=</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <input id="inp{{name}}" type="text" class="filterParm form-control"
+                                               data-type="propertiesInput"
+                                               data-prop="{{name}}Value" data-translatedname="{{name}}">
+
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                        <span onmouseover="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')"
+                                              class="glyphicon glyphicon-arrow-right pull-right"></span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div id="filterCategoricalTemplate" style="display: none;">
+                                <div class="row categoricalFilter considerFilter" id="filter_{{name}}">
+                                    <div class="col-sm-1">
+                                        <input class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}"
+                                               value="{{name}}" checked/></td>
+                                    </div>
+
+                                    <div class="col-sm-5">
+                                        <span>{{trans}}</span>
+                                    </div>
+
+                                    <div class="col-sm-2" style="text-align: center">
+                                        =
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <select id="multi{{name}}" class="form-control multiSelect"
+                                                data-selectfor="{{name}}FilterOpts" multiple="multiple">
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                        <span onmouseover="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')"
+                                              class="glyphicon glyphicon-arrow-right pull-right"></span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div id="filterStringTemplate"
+                                 style="display: none;"><p><span>str name={{name}},type={{type}}</span></p></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-sm-6 col-xs-12 vcenter" style="padding-left: 0">
+                    <div class="sampleNumberReporter text-center">
+                        number of samples equals <span class="numberOfSamples"></span>
+                    </div>
+
+                    <div id="boxWhiskerPlot">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>%{--end accordion panel for id=filterSamples--}%
+
+
+<div class="panel panel-default">%{--should hold the initiate analysis set panel--}%
+
+    <div class="panel-heading">
+        <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion_iat" href="#initiateAnalysis">Initiate analysis</a>
+        </h4>
+    </div>
+
+
+    <div id="initiateAnalysis" class="panel-collapse collapse">
+        <div class="panel-body secBody">
+            <div class="row">
+                <div class="col-sm-9 col-xs-12 vcenter">
+                    <div id="covariates"
+                         style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px;overflow-y: scroll;">
+                        <div class="row">
+                            <div class="col-md-10 col-sm-10 col-xs-12 vcenter">
+
+                                <div id="covariateHolder">
+
+                                </div>
+
+                                <div id="covariateTemplate" style="display: none;">
+                                    <div class="row">
+                                        <div class="checkbox" style="margin:0">
+                                            <label>
+                                                <input id="covariate_{{name}}" type="checkbox" name="covariate"
+                                                       value="{{name}}"
+                                                       checked/>
+                                                {{trans}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                         </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-xs-12 vcenter burden-test-btn-wrapper ">
+                    <button id="singlebutton" name="singlebutton" style="height: 80px"
+                            class="btn btn-primary btn-lg burden-test-btn"
+                            onclick="mpgSoftware.burdenTestShared.refreshSampleData('#datasetFilter', mpgSoftware.burdenTestShared.filterAndRun)">Run</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>%{--end id=initiateAnalysis panel--}%
+
+
+
+
+</div>%{--end accordion --}%
 </div>
 
 <div class="row burden-test-result" style="display:block">
