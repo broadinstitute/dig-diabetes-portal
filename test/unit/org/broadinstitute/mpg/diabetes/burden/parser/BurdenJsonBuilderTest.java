@@ -46,7 +46,7 @@ public class BurdenJsonBuilderTest extends TestCase {
         List<String> variantList = new ArrayList<String>();
         JSONObject referenceJson = null;
         JSONObject generatedJson = null;
-        int dataVertsion = 2;
+        String dataVertsion = "mdv2";
         String phenotype = "t2d";
         List<String> sampleList = new ArrayList<String>();
         List<String> covariatesList = new ArrayList<String>();
