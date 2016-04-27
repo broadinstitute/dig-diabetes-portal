@@ -12,6 +12,7 @@
 <div id="myDiv">
 <p>
 
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
     <g:message code="gene.igv.intro1" default="Use the browser"/>
     <g:renderT2dGenesSection>
         <g:message code="gene.igv.intro2" default="(non-Sigma databases)"/>
@@ -20,7 +21,11 @@
     <g:renderT2dGenesSection>
        <g:message code="gene.igv.intro4" default="(GWAS)"/>
     </g:renderT2dGenesSection>
-     .
+</g:if>
+<g:else>
+    <g:message code="gene.stroke.igv.intro1" default="Use the browser"/>
+</g:else>
+
 </p>
 
 <br/>

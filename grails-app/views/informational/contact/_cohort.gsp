@@ -130,6 +130,10 @@
                 <a href="mailto://jrosand@partners.org">Jonathan Rosand</a>
             </p>
             <p>
+                <g:message code="informational.shared.cohort.hospital_del_mar"/><br/>
+                <a href="mailto://jroquer@hospitaldelmar.cat">Jaume Roquer</a>
+            </p>
+            <p>
                 <g:message code="informational.shared.cohort.jagiellonian_university"/><br/>
                 <a href="mailto://slowik@neuro.cm-uj.krakow.pl">Agnieszka Slowik</a>
             </p>

@@ -27,7 +27,7 @@
         <div class="col-md-3">
             <p>
                 <strong>Steering Committee</strong><br/>
-                Brad Worrall (chair)<br/>
+                Brad Worrall (Chair)<br/>
                 Devin Brown<br/>
                 Martin Dichgans<br/>
                 Jemma Hopewell<br/>

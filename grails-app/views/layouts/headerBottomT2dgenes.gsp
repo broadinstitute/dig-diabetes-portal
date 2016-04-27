@@ -21,7 +21,13 @@
             <li><a href="${createLink(controller:'informational', action:'aboutthedata')}"><g:message code="portal.header.nav.about_data"/></a></li>
             <li><a href="${createLink(controller: 'home', action: 'tutorials')}"><g:message code="portal.header.nav.tutorials"/></a></li>
             <li><a href="${createLink(controller:'informational', action:'policies')}"><g:message code="portal.header.nav.policies"/></a></li>
-            <li><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact"/></a></li>
+
+            <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                <li><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact_plural"/></a></li>
+            </g:if>
+            <g:else>
+                <li><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact"/></a></li>
+            </g:else>
             <g:if test="${!g.portalTypeString()?.equals('stroke')}">
                 <li><a href="${createLink(controller:'informational', action:'forum')}"><g:message code="portal.header.nav.forum"/></a></li>
             </g:if>
