@@ -304,22 +304,13 @@
 <g:else>
     <div class="row pull-left consortium-spacing">
         <div class="medText">
-            <strong><g:message code="aboutTheData.stroke.datasets.race.title"/></strong>
+            <strong><g:message code="aboutTheData.stroke.datasets.isgc.title"/></strong>
         </div>
     </div>
-
     <div class="row pull-left medText consortium-spacing col-xs-12">
-        <g:message code="aboutTheData.stroke.datasets.race" default="about the data"/>
-    </div>
-
-    <div class="row pull-left consortium-spacing">
         <div class="medText">
-            <strong><g:message code="aboutTheData.stroke.datasets.gerfhs.title"/></strong>
+        <g:message code="aboutTheData.stroke.datasets.isgc" default="about the data"/>
         </div>
-    </div>
-
-    <div class="row pull-left medText consortium-spacing col-xs-12">
-        <g:message code="aboutTheData.stroke.datasets.gerfhs" default="about the data"/>
     </div>
 
     <div class="row pull-left consortium-spacing">
@@ -327,29 +318,168 @@
             <strong><g:message code="aboutTheData.stroke.datasets.gocha.title"/></strong>
         </div>
     </div>
-
-    <div class="row pull-left medText consortium-spacing col-xs-12">
+    <div class="row pull-left medText col-xs-12">
+        <g:message code="aboutTheData.stroke.datasets.gocha.pi" default="about the data"/>
+    </div>
+    <div class="row pull-left medText col-xs-12">
         <g:message code="aboutTheData.stroke.datasets.gocha" default="about the data"/>
     </div>
 
     <div class="row pull-left consortium-spacing">
         <div class="medText">
-            <strong><g:message code="aboutTheData.stroke.datasets.gwas_eu.title"/></strong>
+            <strong><g:message code="aboutTheData.stroke.datasets.gerfhs.title"/></strong>
         </div>
     </div>
-
-    <div class="row pull-left medText consortium-spacing col-xs-12">
-        <g:message code="aboutTheData.stroke.datasets.gwas_eu" default="about the data"/>
+    <div class="row pull-left medText col-xs-12">
+        <g:message code="aboutTheData.stroke.datasets.gerfhs.pi" default="about the data"/>
+    </div>
+    <div class="row pull-left medText col-xs-12">
+        <g:message code="aboutTheData.stroke.datasets.gerfhs" default="about the data"/>
     </div>
 
     <div class="row pull-left consortium-spacing">
         <div class="medText">
-            <strong><g:message code="aboutTheData.stroke.datasets.malmo.title"/></strong>
+            <strong><g:message code="aboutTheData.stroke.datasets.european_centers.title"/></strong>
+        </div>
+    </div>
+    <div class="row pull-left medText col-xs-12">
+        <g:message code="aboutTheData.stroke.datasets.european_centers" default="about the data"/>
+    </div>
+
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <div class="pull-left col-xs-1"></div>
+        <div class="pull-left medText col-xs-11">
+            <strong><g:message code="aboutTheData.stroke.datasets.hospital_del_mar.title"/></strong><br/>
+            <g:message code="aboutTheData.stroke.datasets.hospital_del_mar.pi" default="about the data"/>
+        </div>
+    </div>
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <div class="pull-left col-xs-1"></div>
+        <div class="pull-left medText col-xs-11">
+            <strong><g:message code="aboutTheData.stroke.datasets.juhss.title"/></strong><br/>
+            <g:message code="aboutTheData.stroke.datasets.juhss.pi" default="about the data"/>
+        </div>
+    </div>
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <div class="pull-left col-xs-1"></div>
+        <div class="pull-left medText col-xs-11">
+            <strong><g:message code="aboutTheData.stroke.datasets.lund_stroke.title"/></strong><br/>
+            <g:message code="aboutTheData.stroke.datasets.lund_stroke.pi" default="about the data"/>
+        </div>
+    </div>
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <div class="pull-left col-xs-1"></div>
+        <div class="pull-left medText col-xs-11">
+            <strong><g:message code="aboutTheData.stroke.datasets.vhh_ich.title"/></strong><br/>
+            <g:message code="aboutTheData.stroke.datasets.vhh_ich.pi" default="about the data"/>
         </div>
     </div>
 
     <div class="row pull-left medText consortium-spacing col-xs-12">
-        <g:message code="aboutTheData.stroke.datasets.malmo" default="about the data"/>
+        <g:message code="aboutTheData.stroke.datasets.for_published_results"/><br/>
+        <g:message code="aboutTheData.stroke.datasets.isgc.pi.reference" default="about the data"/>
+    </div>
+
+
+
+    <div class="row pull-left col-xs-12" style="margin-top: 10px">
+        <div class="separator"></div>
+    </div>
+
+
+    <div class="row pull-left consortium-spacing">
+        <div class="medText">
+            <strong><g:message code="aboutTheData.stroke.datasets.metastroke.title"/></strong>
+        </div>
+    </div>
+    <div class="row pull-left medText col-xs-12">
+        <g:message code="aboutTheData.stroke.datasets.metastroke.pi" default="about the data"/>
+    </div>
+    <div class="row pull-left medText col-xs-12">
+        <g:message code="aboutTheData.stroke.datasets.metastroke" default="about the data"/>
+    </div>
+
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <div class="pull-left col-xs-1"></div>
+        <div class="pull-left medText col-xs-11">
+            <strong><g:message code="aboutTheData.stroke.datasets.asgc.title"/></strong><br/>
+            <g:message code="aboutTheData.stroke.datasets.asgc.pi" default="about the data"/>
+        </div>
+    </div>
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <div class="pull-left col-xs-1"></div>
+        <div class="pull-left medText col-xs-11">
+            <strong><g:message code="aboutTheData.stroke.datasets.brains.title"/></strong><br/>
+            <g:message code="aboutTheData.stroke.datasets.brains.pi" default="about the data"/>
+        </div>
+    </div>
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <div class="pull-left col-xs-1"></div>
+        <div class="pull-left medText col-xs-11">
+            <strong><g:message code="aboutTheData.stroke.datasets.geos.title"/></strong><br/>
+            <g:message code="aboutTheData.stroke.datasets.geos.pi" default="about the data"/>
+        </div>
+    </div>
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <div class="pull-left col-xs-1"></div>
+        <div class="pull-left medText col-xs-11">
+            <strong><g:message code="aboutTheData.stroke.datasets.hps.title"/></strong><br/>
+            <g:message code="aboutTheData.stroke.datasets.hps.pi" default="about the data"/>
+        </div>
+    </div>
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <div class="pull-left col-xs-1"></div>
+        <div class="pull-left medText col-xs-11">
+            <strong><g:message code="aboutTheData.stroke.datasets.isgs_swiss.title"/></strong><br/>
+            <g:message code="aboutTheData.stroke.datasets.isgs_swiss.pi" default="about the data"/>
+        </div>
+    </div>
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <div class="pull-left col-xs-1"></div>
+        <div class="pull-left medText col-xs-11">
+            <strong><g:message code="aboutTheData.stroke.datasets.gasros.title"/></strong><br/>
+            <g:message code="aboutTheData.stroke.datasets.gasros.pi" default="about the data"/>
+        </div>
+    </div>
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <div class="pull-left col-xs-1"></div>
+        <div class="pull-left medText col-xs-11">
+            <strong><g:message code="aboutTheData.stroke.datasets.milan.title"/></strong><br/>
+            <g:message code="aboutTheData.stroke.datasets.milan.pi" default="about the data"/>
+        </div>
+    </div>
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <div class="pull-left col-xs-1"></div>
+        <div class="pull-left medText col-xs-11">
+            <strong><g:message code="aboutTheData.stroke.datasets.wtccc_deutschland.title"/></strong><br/>
+            <g:message code="aboutTheData.stroke.datasets.wtccc_deutschland.pi" default="about the data"/>
+        </div>
+    </div>
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <div class="pull-left col-xs-1"></div>
+        <div class="pull-left medText col-xs-11">
+            <strong><g:message code="aboutTheData.stroke.datasets.wtccc_england.title"/></strong><br/>
+            <g:message code="aboutTheData.stroke.datasets.wtccc_england.pi" default="about the data"/>
+        </div>
+    </div>
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <div class="pull-left col-xs-1"></div>
+        <div class="pull-left medText col-xs-11">
+            <strong><g:message code="aboutTheData.stroke.datasets.visp.title"/></strong><br/>
+            <g:message code="aboutTheData.stroke.datasets.visp.pi" default="about the data"/>
+        </div>
+    </div>
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <div class="pull-left col-xs-1"></div>
+        <div class="pull-left medText col-xs-11">
+            <strong><g:message code="aboutTheData.stroke.datasets.whi.title"/></strong><br/>
+            <g:message code="aboutTheData.stroke.datasets.whi.pi" default="about the data"/>
+        </div>
+    </div>
+
+    <div class="row pull-left medText consortium-spacing col-xs-12">
+        <g:message code="aboutTheData.stroke.datasets.for_published_results"/><br/>
+        <g:message code="aboutTheData.stroke.datasets.metastroke.pi.reference" default="about the data"/>
     </div>
 
 </g:else>
