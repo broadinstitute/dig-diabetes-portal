@@ -164,7 +164,7 @@
             </div>
             <hr />
             <div>
-                <h2 class="dk-search-title-homepage">View full GWAS results for a phenotype</h2>
+                <h2 class="dk-search-title-homepage"><g:message code="trait.search.header" default="View full GWAS results for a phenotype" /></h2>
                 <div class="form-inline" style="padding-top: 10px;">
                     <select name="" id="trait-input" class="form-control input-sm" style="width: 70%;">
                     </select>
