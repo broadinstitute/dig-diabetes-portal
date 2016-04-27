@@ -217,7 +217,7 @@ class VariantInfoController {
             case "TG": traitFilterOptionId = "TG_ANAL"; break
             case "SBP": traitFilterOptionId = "SBP_ANAL"; break
             case "DBP": traitFilterOptionId = "DBP_ANAL"; break
-            default:traitFilterOptionId = "t2d"; break
+            default:traitFilterOptionId = traitFilterOptionId; break
         }
 
         JsonSlurper slurper = new JsonSlurper()

@@ -5,6 +5,12 @@ rect.histogramHolder {
 rect.box {
     fill: #ccaaaa;
 }
+.caatSpinner{
+    position: absolute;
+    z-index: 1;
+    left: 30%;
+    top: 50%;
+}
 div.sampleNumberReporter {
     display: none;
     font-weight: bold;
@@ -227,6 +233,7 @@ div.labelAndInput > input {
 
 
         var preloadInteractiveAnalysisData = function () {
+           $('.caatSpinner').show();
             var dropDownSelector = '#datasetFilter';
             $.ajax({
                 cache: false,
@@ -243,7 +250,7 @@ div.labelAndInput > input {
                     var jsonDescr = "{\"dataset\":\""+data.dataset+"\"," +
                                       "\"requestedData\":["+filtersSpecs.join(',')+"]," +
                                       "\"filters\":[]}";
-                    mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, function(){} );
+                    mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, function(){$('.caatSpinner').hide();} );
                 },
                 error: function (jqXHR, exception) {
                     loading.hide();
@@ -327,7 +334,9 @@ div.labelAndInput > input {
                            if (_.trim(filterHolderElement.text()).length===0){
                               filterHolderElement.append(output);
                            }
-                           mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, fillDistributionPlotsAndDropdowns );
+                           mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, fillDistributionPlotsAndDropdowns, phenotype );
+
+                           //fillDistributionPlotsAndDropdowns(mpgSoftware.burdenTestShared.dynamicallyFilterSamples(),phenotype);
                     }
                      if ( ( typeof data.covariates !== 'undefined' ) &&
                          (  data.covariates !==  null ) ) {
@@ -801,9 +810,9 @@ div.labelAndInput > input {
 
 
 
-        var fillDistributionPlotsAndDropdowns = function (sampleData){
+        var fillDistributionPlotsAndDropdowns = function (sampleData,phenotype){
              // make dist plots
-            utilizeSampleInfoForDistributionPlots(sampleData);
+            utilizeSampleInfoForDistributionPlots(sampleData,phenotype);
             var optionsPerFilter = generateOptionsPerFilter(sampleData) ;
             var sampleMetadata = getStoredSampleMetadata();
             _.forEach(sampleMetadata.filters,function(d,i){
@@ -813,12 +822,7 @@ div.labelAndInput > input {
                        _.forEach(optionsPerFilter[d.name],function(filterVal){
                            $(dropdownId).append(new Option(filterVal.name,filterVal.name));
                        });
-                       $(dropdownId).multiselect({onChange: function(element, checked) {
-                                                                 if (checked === true) {
-                                                                    // alert('el'+element+' is true');
-                                                                 }
-                                                             },
-                                                   includeSelectAllOption: true,
+                       $(dropdownId).multiselect({includeSelectAllOption: true,
                                                    allSelectedText: 'All Selected'
                                                    });
                        $(dropdownId).multiselect('selectAll', false);
@@ -834,7 +838,7 @@ div.labelAndInput > input {
 
 
 
-        var utilizeSampleInfoForDistributionPlots = function (variantData){
+        var utilizeSampleInfoForDistributionPlots = function (variantData,phenotype){
             var sampleInfo = groupValuesByPhenotype(variantData);
             var optionsPerFilter = generateOptionsPerFilter(variantData) ;
             var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
@@ -847,7 +851,10 @@ div.labelAndInput > input {
                 var elementName = singleElement.name;
                 var divElementName = 'bwp_'+elementName;
                 plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
-               // $('.sampleNumberReporter .numberOfSamples').text(singleElement.data.length);
+                if (elementName === phenotype){
+                   $('.sampleNumberReporter .numberOfPhenotypeSpecificSamples').text(singleElement.data.length);
+                   $('.sampleNumberReporter .phenotypeSpecifier').text(phenotype);
+                }
                 $('#'+divElementName).hide();
                 if (sampleMetadata.filters){
                   var filter = _.find(sampleMetadata.filters, ['name',elementName]);
@@ -1084,7 +1091,7 @@ div.labelAndInput > input {
 
         var displaySampleDistribution = function (propertyName, holderSection, caller) {
             var filteredVariants = mpgSoftware.burdenTestShared.dynamicallyFilterSamples();
-            utilizeSampleInfoForDistributionPlots(filteredVariants);
+            utilizeSampleInfoForDistributionPlots(filteredVariants,propertyName);
             var kids = $(holderSection).children();
             _.forEach(kids, function (d) {
                 $(d).hide();
@@ -1096,7 +1103,7 @@ div.labelAndInput > input {
 
         var filterSamples = function (propertyName, holderSection) {
             var filteredVariants = mpgSoftware.burdenTestShared.dynamicallyFilterSamples();
-            utilizeSampleInfoForDistributionPlots(filteredVariants);
+            utilizeSampleInfoForDistributionPlots(filteredVariants,propertyName);
             var kids = $(holderSection).children();
             _.forEach(kids, function (d) {
                 $(d).hide();
@@ -1152,6 +1159,9 @@ $( document ).ready( function (){
 
 <div class="row burden-test-wrapper-options">
 
+%{--<r:img class="caatSpinner" uri="/images/InternetSlowdown_Day.gif" alt="Loading CAAT data"/>--}%
+<r:img class="caatSpinner" uri="/images/loadingCaat.gif" alt="Loading CAAT data"/>
+
 
 <div class="user-interaction">
 
@@ -1191,7 +1201,8 @@ $( document ).ready( function (){
                     <div class="row">
                         <div class="col-sm-12 col-xs-12 text-left">
                             <select id="phenotypeFilter" class="traitFilter form-control text-left"
-                                    onchange="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata($('#datasetFilter'), '#phenotypeFilter');">
+                                    onchange="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata($('#datasetFilter'), '#phenotypeFilter');"
+                                    onclick="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata($('#datasetFilter'), '#phenotypeFilter');">
                             </select>
                         </div>
                     </div>
@@ -1214,12 +1225,12 @@ $( document ).ready( function (){
     <div id="filterSamples" class="panel-collapse collapse">
         <div class="panel-body  secBody">
             <div class="row">
-                <div class="col-sm-6 col-xs-12 vcenter">
+                <div class="col-sm-6 col-xs-12 vcenter" style="margin-top:0">
                     <div class="row secHeader" style="padding: 20px 0 0 0">
-                        <div class="col-sm-6 col-xs-12 text-left"><label>Filters</label></div>
+                        <div class="col-sm-6 col-xs-12 text-left"></div>
 
                         <div class="col-sm-6 col-xs-12 text-right"><label
-                                style="font-style: italic; font-size: 14px">Mouse-over arrows for distribution</label>
+                                style="font-style: italic; font-size: 14px">Mouse-over arrows<br/> for distribution</label>
                         </div>
                     </div>
 
@@ -1332,9 +1343,10 @@ $( document ).ready( function (){
 
                 </div>
 
-                <div class="col-sm-6 col-xs-12 vcenter" style="padding-left: 0">
+                <div class="col-sm-6 col-xs-12 vcenter" style="padding-left: 0; margin-top: 0">
                     <div class="sampleNumberReporter text-center">
-                        number of samples equals <span class="numberOfSamples"></span>
+                        <div>total number of filtered samples: <span class="numberOfSamples"></span></div>
+                        <div>number of samples for <span class="phenotypeSpecifier"></span>: <span class="numberOfPhenotypeSpecificSamples"></span></div>
                     </div>
 
                     <div id="boxWhiskerPlot">

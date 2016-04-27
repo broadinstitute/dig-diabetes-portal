@@ -23,6 +23,8 @@ class BurdenService {
     RestServerService restServerService;
     SharedToolsService sharedToolsService;
     GrailsApplication grailsApplication
+    MetaDataService metaDataService
+
     def serviceMethod() {
 
     }
@@ -117,14 +119,22 @@ class BurdenService {
         List <String> covariateList = []
         List <String> filterList = []
         List <Property> propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("PHENOTYPE")}
+        propertyList = propertyList.sort{a,b->return a.sortOrder<=>b.sortOrder}
         for (Property property in propertyList){
             phenotypeList << """{"name":"${property.name}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}"  }""".toString()
         }
-        propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("COVARIATE")}
+        propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("COVARIATE")&&(it.meaningSet.contains("COVARIATE_DEFAULT"))}
+        propertyList = propertyList.sort{a,b->return a.sortOrder<=>b.sortOrder}
         for (Property property in propertyList){
-             covariateList << """{"name":"${property.name}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}"}""".toString()
+            covariateList << """{"name":"${property.name}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}","def":1}""".toString()
+        }
+        propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("COVARIATE")&&(!it.meaningSet.contains("COVARIATE_DEFAULT"))}
+        propertyList = propertyList.sort{a,b->return a.sortOrder<=>b.sortOrder}
+        for (Property property in propertyList){
+             covariateList << """{"name":"${property.name}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}","def":0}""".toString()
         }
         propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("FILTER")}
+        propertyList = propertyList.sort{a,b->return a.sortOrder<=>b.sortOrder}
         for (Property property in propertyList){
             filterList << """{"name":"${property.name}", "type":"${property.variableType}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}"  }""".toString()
         }
@@ -261,7 +271,8 @@ class BurdenService {
         // local variables
         List<String> burdenVariantList = new ArrayList<String>();
         JSONObject returnJson = null;
-        int dataVersion = this.sharedToolsService.getDataVersion();
+        //int dataVersion = this.sharedToolsService.getDataVersion();
+        String stringDataVersion = metaDataService.getDataVersion()
 
         // if the variant is not null, add it in (empty list will throw exception in next call)
         if (burdenVariantId != null) {
@@ -276,7 +287,7 @@ class BurdenService {
 
 
 
-        returnJson = this.getBurdenResultForVariantIdList(dataVersion, traitOption, burdenVariantList, covariateJsonObject, sampleJsonObject );
+        returnJson = this.getBurdenResultForVariantIdList(stringDataVersion , traitOption, burdenVariantList, covariateJsonObject, sampleJsonObject );
 
         // return
         return returnJson;
@@ -290,7 +301,7 @@ class BurdenService {
      * @return
      * @throws PortalException
      */
-    protected JSONObject getBurdenResultForVariantIdList(int dataVersionId, String phenotype, List<String> burdenVariantList,
+    protected JSONObject getBurdenResultForVariantIdList(String stringDataVersion, String phenotype, List<String> burdenVariantList,
                                                          JSONObject covariateJsonObject, JSONObject sampleJsonObject) throws PortalException {
         // local variables
         JSONObject jsonObject = null;
@@ -311,7 +322,7 @@ class BurdenService {
         if (sampleJsonObject?.samples) {
             sampleList = sampleJsonObject.samples.collect{return it.toString()} as List
         }
-        jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(dataVersionId, phenotype, burdenVariantList, covariateList, sampleList);
+        jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(stringDataVersion, phenotype, burdenVariantList, covariateList, sampleList);
         log.info("created burden rest payload: " + jsonObject);
 
         // get the results of the burden call
