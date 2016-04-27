@@ -91,11 +91,11 @@ public class BurdenJsonBuilder {
         stringBuilder.append("\", ");
 
         // add in the phenotype
-//        stringBuilder.append("\"");
-//        stringBuilder.append(PortalConstants.JSON_BURDEN_PHENOTYPE_KEY);
-//        stringBuilder.append("\": \"");
-//        stringBuilder.append(phenotype);
-//        stringBuilder.append("\", ");
+        stringBuilder.append("\"");
+        stringBuilder.append(PortalConstants.JSON_BURDEN_PHENOTYPE_KEY);
+        stringBuilder.append("\": \"");
+        stringBuilder.append(phenotype);
+        stringBuilder.append("\", ");
 
         // add in the confidence interval calculation boolean
         stringBuilder.append("\"");

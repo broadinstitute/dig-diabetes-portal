@@ -106,7 +106,7 @@ div.labelAndInput > input {
 .burdenTestResultHolder {
     height: 140px;
 }
-#person div.row div {
+#filterHolder div.row div {
     padding: 0;
     line-height: 20px;
 }
@@ -296,10 +296,12 @@ div.labelAndInput > input {
         var retrieveSampleFilterMetadata = function (dropdownSel, dropDownSelector) {
             var loading = $('#spinner').show();
             var data = getStoredSampleMetadata();
+            var phenotype = $(dropDownSelector).val();
             if ( ( data !==  null ) &&
                  ( typeof data !== 'undefined') ){
                     if ( ( typeof data.filters !== 'undefined' ) &&
                          (  data.filters !==  null ) ) {
+                            var filterHolderElement = $("#filterHolder");
                             // retrieve sample info for all filters
                             var filtersSpecs = [];
                             _.forEach(data.filters,function(filterObjs){
@@ -322,17 +324,24 @@ div.labelAndInput > input {
                             });
                             $("#sampleRow").show();
                            $('.sampleNumberReporter').show();
-                           $("#person").append(output);
+                           if (_.trim(filterHolderElement.text()).length===0){
+                              filterHolderElement.append(output);
+                           }
                            mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, fillDistributionPlotsAndDropdowns );
                     }
                      if ( ( typeof data.covariates !== 'undefined' ) &&
                          (  data.covariates !==  null ) ) {
-                            output = '';
-                            var covariateTemplate = $('#covariateTemplate')[0].innerHTML;
-                             _.forEach(data.covariates,function(d,i){
-                                 output = (output + Mustache.render(covariateTemplate, d));
-                            });
-                            $("#covariateHolder").append(output);
+                        var covariateHolderElement = $("#covariateHolder");
+                        covariateHolderElement.text("");
+                        output = '';
+                        var covariateTemplate = $('#covariateTemplate')[0].innerHTML;
+                         _.forEach(data.covariates,function(d,i){
+                             if (d.name !== phenotype){
+                                output = (output + Mustache.render(covariateTemplate, d));
+                             }
+                        });
+                        covariateHolderElement.append(output);
+
                     }
 
              }
@@ -463,13 +472,6 @@ div.labelAndInput > input {
                      pcCovariates.push('"'+covariateName+'"');
                   }
                });
-//               for ( var i = 0 ; i < 10 ; i++ ) {
-//                  var pcId = 'PC'+(i+1);
-//                  var pcElement = $('#covariate_'+pcId);
-//                  if ((pcElement).is(':checked')){
-//                    pcCovariates.push(""+(i+1))
-//                  }
-//               }
                return "{\"covariates\":[\n" + pcCovariates.join(",") + "\n]}";
             }
 
@@ -480,13 +482,13 @@ div.labelAndInput > input {
                 $('.ciValue').text(stdError);
 
                 // show the results
-                if (isDichotomousTrait) {
+//                if (isDichotomousTrait) {
                     $('#burden-test-some-results-large').hide();
                     $('#burden-test-some-results').show();
-                } else {
-                    $('#burden-test-some-results').hide();
-                    $('#burden-test-some-results-large').show();
-                }
+//                } else {
+//                    $('#burden-test-some-results').hide();
+//                    $('#burden-test-some-results-large').show();
+//                }
             };
 
             $('#rSpinner').show();
@@ -1246,7 +1248,7 @@ $( document ).ready( function (){
                                     <div id="filters">
                                         <div class="row">
 
-                                            <div id="person"></div>
+                                            <div id="filterHolder"></div>
 
                                         </div>
                                     </div>
@@ -1362,7 +1364,7 @@ $( document ).ready( function (){
                     <div id="covariates"
                          style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px;overflow-y: scroll;">
                         <div class="row">
-                            <div class="col-md-10 col-sm-10 col-xs-12 vcenter">
+                            <div class="col-md-10 col-sm-10 col-xs-12 vcenter" style="margin-top:0">
 
                                 <div id="covariateHolder">
 
@@ -1373,8 +1375,7 @@ $( document ).ready( function (){
                                         <div class="checkbox" style="margin:0">
                                             <label>
                                                 <input id="covariate_{{name}}" class="covariate" type="checkbox" name="covariate"
-                                                       value="{{name}}"
-                                                       checked/>
+                                                       value="{{name}}"/>
                                                 {{trans}}
                                             </label>
                                         </div>
