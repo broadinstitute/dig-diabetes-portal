@@ -163,7 +163,7 @@ class VariantInfoController {
     }
 
     /***
-     *  returns lists of  filters, covariates, and phenotypes
+     *  returns lists of  filters, covariates, and phenotypes given a starting data set
      *
      * @return
      */
@@ -176,7 +176,10 @@ class VariantInfoController {
         render(status: 200, contentType: "application/json") {jsonObject}
     }
 
-
+    /***
+     * Let's assume a data set ( take the first one that comes back.  Currently there is only one option, so that works, but it won't forever)
+     * @return
+     */
     def sampleMetadataAjaxWithAssumedExperiment() {
         List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "", MetaDataService.METADATA_SAMPLE)
         if (sampleGroupList.size()>0){

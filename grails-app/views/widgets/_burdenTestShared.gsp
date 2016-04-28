@@ -32,7 +32,8 @@ div.burden-test-wrapper-options .row {
     margin: 0 0 1px 0;
 }
 div.burden-test-btn-wrapper {
-    padding-top: 8px;
+    padding: 0 10px 10px;
+    margin-top: 0;
 }
 div.burden-test-specific-results{
     background-color: #ffffff;
@@ -55,7 +56,7 @@ button.burden-test-btn {
 
 div.burden-test-result {
     font-size: 18px;
-    padding: 0px 0 14px 0;
+    padding: 0 0 5px 0;
     display: none;
 }
 
@@ -231,10 +232,12 @@ div.labelAndInput > input {
             });
         };
 
-
+        /***
+        *  Use this if you have only one data set, since then we don't need to burden the user with the choice
+        */
         var preloadInteractiveAnalysisData = function () {
            $('.caatSpinner').show();
-            var dropDownSelector = '#datasetFilter';
+            var dropDownSelector = '#phenotypeFilter';
             $.ajax({
                 cache: false,
                 type: "post",
@@ -242,6 +245,17 @@ div.labelAndInput > input {
                 data: {},
                 async: true,
                 success: function (data) {
+                    storeSampleMetadata(data);
+                    var phenotypeDropdown = $(dropDownSelector);
+                    phenotypeDropdown.empty();
+                    if ( ( data !==  null ) &&
+                            ( typeof data !== 'undefined') &&
+                            ( typeof data.phenotypes !== 'undefined' ) &&
+                            (  data.phenotypes !==  null ) ) {
+                        _.forEach(data.phenotypes,function(d){
+                           phenotypeDropdown.append( new Option(d.trans, d.name));
+                        });
+                    }
                     var filtersSpecs = [];
                     _.forEach(data.filters,function(filterObjs){
                        filtersSpecs.push("{\"name\": \""+filterObjs.name+"\"}");
@@ -260,7 +274,13 @@ div.labelAndInput > input {
         };
 
 
-
+        /***
+        *
+        * If the user must choose between different data sets then use this call instead of preloadInteractiveAnalysisData
+        *
+        * @param dropdownSel
+        * @param dropDownSelector
+        */
         var retrieveSampleMetadata = function (dropdownSel, dropDownSelector) {
             var loading = $('#spinner').show();
             var domSelector = $(dropdownSel);
@@ -334,9 +354,9 @@ div.labelAndInput > input {
                            if (_.trim(filterHolderElement.text()).length===0){
                               filterHolderElement.append(output);
                            }
-                           mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, fillDistributionPlotsAndDropdowns, phenotype );
+                           //mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, fillDistributionPlotsAndDropdowns, phenotype );
 
-                           //fillDistributionPlotsAndDropdowns(mpgSoftware.burdenTestShared.dynamicallyFilterSamples(),phenotype);
+                           fillDistributionPlotsAndDropdowns(mpgSoftware.burdenTestShared.dynamicallyFilterSamples(),phenotype);
                     }
                      if ( ( typeof data.covariates !== 'undefined' ) &&
                          (  data.covariates !==  null ) ) {
@@ -344,9 +364,14 @@ div.labelAndInput > input {
                         covariateHolderElement.text("");
                         output = '';
                         var covariateTemplate = $('#covariateTemplate')[0].innerHTML;
+                        var covariateTemplateChecked = $('#covariateTemplateChecked')[0].innerHTML;
                          _.forEach(data.covariates,function(d,i){
                              if (d.name !== phenotype){
-                                output = (output + Mustache.render(covariateTemplate, d));
+                                if (d.def === 1){
+                                   output = (output + Mustache.render(covariateTemplateChecked, d));
+                                } else {
+                                   output = (output + Mustache.render(covariateTemplate, d));
+                                }
                              }
                         });
                         covariateHolderElement.append(output);
@@ -494,6 +519,8 @@ div.labelAndInput > input {
 //                if (isDichotomousTrait) {
                     $('#burden-test-some-results-large').hide();
                     $('#burden-test-some-results').show();
+                    $('.burden-test-result').show();
+
 //                } else {
 //                    $('#burden-test-some-results').hide();
 //                    $('#burden-test-some-results-large').show();
@@ -1089,8 +1116,9 @@ div.labelAndInput > input {
 
 
 
-        var displaySampleDistribution = function (propertyName, holderSection, caller) {
+        var displaySampleDistribution = function (propertyName, holderSection) {
             var filteredVariants = mpgSoftware.burdenTestShared.dynamicallyFilterSamples();
+            var caller = $("#distPlotter_" +propertyName);
             utilizeSampleInfoForDistributionPlots(filteredVariants,propertyName);
             var kids = $(holderSection).children();
             _.forEach(kids, function (d) {
@@ -1166,7 +1194,7 @@ variant by specifying the phenotype to test for association, a subset of samples
 
 <div class="user-interaction">
 
-<div class="panel-group" id="accordion_iat">
+<div class="panel-group" id="accordion_iat" style="margin-bottom: 10px">
 
 <div class="panel panel-default">%{--should hold the Choose data set panel--}%
 
@@ -1178,14 +1206,12 @@ variant by specifying the phenotype to test for association, a subset of samples
 
     <div id="chooseSamples" class="panel-collapse collapse in">
         <div class="panel-body secBody">
-            %{--<div class="row">--}%
-                %{--<div class="col-sm-12 col-xs-12 vcenter">--}%
 
-                    <div class="row secHeader">
+                    <div class="row secHeader" style="display:none">
                         <div class="col-sm-12 col-xs-12 text-left"><label>Dataset</label></div>
                     </div>
 
-                    <div class="row">
+                    <div class="row"  style="display:none">
                         <div class="col-sm-12 col-xs-12 text-left">
                             <select id="datasetFilter" class="traitFilter form-control text-left"
                                     onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');"
@@ -1195,7 +1221,7 @@ variant by specifying the phenotype to test for association, a subset of samples
 
                     </div>
 
-                    <div class="row secHeader" style="padding: 20px 0 0 0">
+                    <div class="row secHeader" style="padding: 0 0 5px 0">
                         <div class="col-sm-12 col-xs-12 text-left"><label>Phenotype</label></div>
                     </div>
 
@@ -1207,8 +1233,7 @@ variant by specifying the phenotype to test for association, a subset of samples
                             </select>
                         </div>
                     </div>
-                %{--</div>--}%
-            %{--</div>--}%
+
         </div>
     </div>
 
@@ -1227,7 +1252,7 @@ variant by specifying the phenotype to test for association, a subset of samples
         <div class="panel-body  secBody">
 
             <div class="row">
-                <div class="col-sm-12 col-xs-12 vcenter">
+                <div class="col-sm-12 col-xs-12">
                     <p>
                         Each of the boxes below enables you to define a criterion for inclusion of samples in your analysis; each criterion is specified as a filter based on a single phenotype.
                         The final subset of samples used will be those that match all of the specified criteria; to omit a criterion either leave the text box blank or unselect the checkbox on the left.
@@ -1238,6 +1263,8 @@ variant by specifying the phenotype to test for association, a subset of samples
                     </p>
                 </div>
             </div>
+
+            <hr width="25%"/>
 
             <div class="row">
                 <div class="col-sm-6 col-xs-12 vcenter" style="margin-top:0">
@@ -1306,13 +1333,14 @@ variant by specifying the phenotype to test for association, a subset of samples
                                         <input id="inp{{name}}" type="text" class="filterParm form-control"
                                                data-type="propertiesInput"
                                                data-prop="{{name}}Value" data-translatedname="{{name}}"
-                                               onfocusout="mpgSoftware.burdenTestShared.filterSamples()">
+                                               onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')"
+                                               onkeyup="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')">
 
                                     </div>
 
                                     <div class="col-sm-1">
-                                        <span onmouseover="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot', this)"
-                                              class="glyphicon glyphicon-arrow-right pull-right distPlotter"></span>
+                                        <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')"
+                                              class="glyphicon glyphicon-arrow-right pull-right distPlotter" id="distPlotter_{{name}}"></span>
                                     </div>
 
                                 </div>
@@ -1337,13 +1365,14 @@ variant by specifying the phenotype to test for association, a subset of samples
                                     <div class="col-sm-3">
                                         <select id="multi{{name}}" class="form-control multiSelect"
                                                 data-selectfor="{{name}}FilterOpts" multiple="multiple"
-                                                onfocusout="mpgSoftware.burdenTestShared.filterSamples()">
+                                                onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')"
+                                                onchange="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')">
                                         </select>
                                     </div>
 
                                     <div class="col-sm-1">
-                                        <span onmouseover="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot', this)"
-                                              class="glyphicon glyphicon-arrow-right pull-right"></span>
+                                        <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')"
+                                              class="glyphicon glyphicon-arrow-right pull-right"  id="distPlotter_{{name}}"></span>
                                     </div>
 
                                 </div>
@@ -1414,17 +1443,25 @@ variant by specifying the phenotype to test for association, a subset of samples
                                     </div>
                                 </div>
 
+                                <div id="covariateTemplateChecked" style="display: none;">
+                                    <div class="row">
+                                        <div class="checkbox" style="margin:0">
+                                            <label>
+                                                <input id="covariate_{{name}}" class="covariate" type="checkbox" name="covariate"
+                                                       value="{{name}}" checked/>
+                                                {{trans}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                             </div>
 
                          </div>
                     </div>
                 </div>
-                <div class="col-sm-3 col-xs-12 vcenter burden-test-btn-wrapper ">
-                    <button id="singlebutton" name="singlebutton" style="height: 80px"
-                            class="btn btn-primary btn-lg burden-test-btn"
-
-                            onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun()">Run</button>
-                    %{--onclick="mpgSoftware.burdenTestShared.refreshSampleData('#datasetFilter', mpgSoftware.burdenTestShared.filterAndRun)">Run</button>--}%
+                <div class="col-sm-3 col-xs-12">
                 </div>
             </div>
 
@@ -1440,28 +1477,27 @@ variant by specifying the phenotype to test for association, a subset of samples
 </div>
 
 
-<div id="burden-test-some-results" class="row burden-test-result">
-    <div class="col-xs-12">
-        <div class="row burden-test-specific-results">
+<div id="burden-test-some-results" class="row">
+    <div class="col-sm-8 col-xs-12">
+        <div class="row burden-test-specific-results burden-test-result">
 
             <div class="col-md-8 col-sm-6">
                 <div id="variantFrequencyDiv">
-                    <div>
-                        <p class="standardFont">Of the <span
-                                id="traitSpan"></span> cases/controls, the following carry the variant ${variantIdentifier}.
+                    <div class="vertical-center">
+                        <p class="standardFont">Results of your analysis:
                         </p>
                     </div>
 
-                    <div class="barchartFormatter">
-                        <div id="chart">
+                    %{--<div class="barchartFormatter">--}%
+                        %{--<div id="chart">--}%
 
-                        </div>
-                    </div>
+                        %{--</div>--}%
+                    %{--</div>--}%
                 </div>
             </div>
 
             <div class="col-md-4 col-sm-3">
-                <div class="vertical-center">
+                <div>
                     <div id="pValue" class="pValue"></div>
 
                     <div id="orValue" class="orValue"></div>
@@ -1488,6 +1524,12 @@ variant by specifying the phenotype to test for association, a subset of samples
             <div class="col-md-4 col-sm-3">
             </div>
         </div>
+    </div>
+    <div class="col-sm-4 col-xs-12 vcenter burden-test-btn-wrapper ">
+        <button id="singlebutton" name="singlebutton" style="height: 80px"
+                class="btn btn-primary btn-lg burden-test-btn"
+
+                onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun()">Run</button>
     </div>
 
 </div>

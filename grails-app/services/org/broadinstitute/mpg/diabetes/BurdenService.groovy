@@ -123,12 +123,12 @@ class BurdenService {
         for (Property property in propertyList){
             phenotypeList << """{"name":"${property.name}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}"  }""".toString()
         }
-        propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("COVARIATE")&&(it.meaningSet.contains("COVARIATE_DEFAULT"))}
+        propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("COVARIATE")&&(it.meaningSet.contains("DEFAULT_COVARIATE"))}
         propertyList = propertyList.sort{a,b->return a.sortOrder<=>b.sortOrder}
         for (Property property in propertyList){
             covariateList << """{"name":"${property.name}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}","def":1}""".toString()
         }
-        propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("COVARIATE")&&(!it.meaningSet.contains("COVARIATE_DEFAULT"))}
+        propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("COVARIATE")&&(!it.meaningSet.contains("DEFAULT_COVARIATE"))}
         propertyList = propertyList.sort{a,b->return a.sortOrder<=>b.sortOrder}
         for (Property property in propertyList){
              covariateList << """{"name":"${property.name}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}","def":0}""".toString()
