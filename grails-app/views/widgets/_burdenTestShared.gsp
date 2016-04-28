@@ -1384,8 +1384,8 @@ variant by specifying the phenotype to test for association, a subset of samples
 
                 <div class="col-sm-6 col-xs-12 vcenter" style="padding-left: 0; margin-top: 0">
                     <div class="sampleNumberReporter text-center">
-                        <div>total number of filtered samples: <span class="numberOfSamples"></span></div>
-                        <div>number of samples for <span class="phenotypeSpecifier"></span>: <span class="numberOfPhenotypeSpecificSamples"></span></div>
+                        <div>Number of samples included in analysis:<span class="numberOfSamples"></span></div>
+                        <div style="display:none">number of samples for <span class="phenotypeSpecifier"></span>: <span class="numberOfPhenotypeSpecificSamples"></span></div>
                     </div>
 
                     <div id="boxWhiskerPlot">

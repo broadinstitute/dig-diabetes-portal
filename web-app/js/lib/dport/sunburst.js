@@ -218,12 +218,11 @@ var baget = baget || {};  // encapsulating variable
             return returnValue;
         }
 
-        var labelAcceptable = function(wedge){
+        var labelAcceptable = function(wedgeSize){
             return true;
-            if ((typeof wedge !== 'undefined')&&
-                (typeof wedge.size !== 'undefined')){
-                var wedgeSize = wedge.size/totalSize;
-                if (wedgeSize > 0.01){
+            if (typeof wedgeSize !== 'undefined'){
+                if (wedgeSize > 0.5){
+                    console.log(wedgeSize);
                     return true;
                 } else {
                     return false;
@@ -430,7 +429,7 @@ var baget = baget || {};  // encapsulating variable
         textEnter.append("tspan")
             .attr("x", 0)
             .text(function (d) {
-                if ((d.depth) && (d.name.indexOf("zzul") === -1) &&(labelAcceptable(d))) {
+                if ((d.depth) && (d.name.indexOf("zzul") === -1) &&(labelAcceptable(x(shift(d.x + d.dx / 2))))) {
                     var displayName = ((typeof d.label !== 'undefined')  &&
                         (d.label.length > 0))?d.label: d.name;
                     if (displayName.indexOf(":")>-1) {
@@ -448,7 +447,7 @@ var baget = baget || {};  // encapsulating variable
             .attr("x", 0)
             .attr("dy", "1em")
             .text(function (d) {
-                if ((d.depth) && (d.name.indexOf("zzul") === -1) &&(labelAcceptable(d))) {
+                if ((d.depth) && (d.name.indexOf("zzul") === -1) &&(labelAcceptable(x(shift(d.x + d.dx / 2))))) {
                     var displayName = ((typeof d.label !== 'undefined')  &&
                         (d.label.length > 0))?d.label: d.name;
                     if (displayName.indexOf(":")>-1) {
@@ -470,7 +469,7 @@ var baget = baget || {};  // encapsulating variable
             .attr("x", 0)
             .attr("dy", "1em")
             .text(function (d) {
-                if ((d.depth) && (d.name.indexOf("zzul") === -1) &&(labelAcceptable(d))) {
+                if ((d.depth) && (d.name.indexOf("zzul") === -1) &&(labelAcceptable(x(shift(d.x + d.dx / 2))))) {
                     var displayName = ((typeof d.label !== 'undefined')  &&
                         (d.label.length > 0))?d.label: d.name;
                     if (displayName.indexOf(":")>-1) {
