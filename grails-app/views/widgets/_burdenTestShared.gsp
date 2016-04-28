@@ -354,9 +354,9 @@ div.labelAndInput > input {
                            if (_.trim(filterHolderElement.text()).length===0){
                               filterHolderElement.append(output);
                            }
-                           //mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, fillDistributionPlotsAndDropdowns, phenotype );
+                           mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, fillDistributionPlotsAndDropdowns, phenotype );
 
-                           fillDistributionPlotsAndDropdowns(mpgSoftware.burdenTestShared.dynamicallyFilterSamples(),phenotype);
+                           //fillDistributionPlotsAndDropdowns(mpgSoftware.burdenTestShared.dynamicallyFilterSamples(),phenotype);
                     }
                      if ( ( typeof data.covariates !== 'undefined' ) &&
                          (  data.covariates !==  null ) ) {
