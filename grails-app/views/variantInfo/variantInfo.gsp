@@ -229,26 +229,13 @@
 
                         <div class="separator"></div>
 
+            <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <g:renderBetaFeaturesDisplayedValue>
                             <g:render template="/widgets/locusZoomPlot"/>
 
                             <div class="separator"></div>
                         </g:renderBetaFeaturesDisplayedValue>
-
-                        <div class="accordion-group">
-                            <div class="accordion-heading">
-                                <a class="accordion-toggle  collapsed" data-toggle="collapse"
-                                   data-parent="#accordionVariant"
-                                   href="#collapseDiseaseRisk">
-                                    <h2><strong><g:message code="variant.diseaseRisk.title" default="How does carrier status impact risk"/></strong></h2>
-                                </a>
-                            </div>
-
-                            <g:render template="diseaseRisk"/>
-
-                        </div>
-
-                        <div class="separator"></div>
+            </g:if>
 
                         <div class="accordion-group">
                             <div class="accordion-heading">

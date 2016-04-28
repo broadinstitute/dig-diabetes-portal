@@ -206,7 +206,7 @@
                     </div>
 
 
-                    <g:if test="${1}">
+                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
 
                         <div class="separator"></div>
                         <g:render template="/widgets/gwasRegionSummary"
