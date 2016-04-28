@@ -1146,8 +1146,7 @@ $( document ).ready( function (){
 <div class="accordion-group">
 <div class="accordion-heading">
     <a class="accordion-toggle  collapsed" data-toggle="collapse" href="#collapseBurden">
-        <h2><strong><g:message code="variant.info.burden.test.title"
-                               default="Test for association with quantitative traits"/></strong></h2>
+        <h2><strong>Custom analysis tool</strong></h2>
     </a>
 </div>
 
@@ -1155,7 +1154,9 @@ $( document ).ready( function (){
 <div class="accordion-inner">
 
 <div class="container">
-<h3>Select a trait to test for association.</h3>
+<h4>The custom analysis tool allows you to compute custom association statistics for this
+variant by specifying the phenotype to test for association, a subset of samples to analyze based on specific phenotypic criteria, and a set of covariates to control for in the analysis.</h4>
+
 
 <div class="row burden-test-wrapper-options">
 
@@ -1171,7 +1172,7 @@ $( document ).ready( function (){
 
     <div class="panel-heading">
         <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#accordion_iat" href="#chooseSamples">Choose data set</a>
+            <a data-toggle="collapse" data-parent="#accordion_iat" href="#chooseSamples">Step 1: Select a phenotype to test for association</a>
         </h4>
     </div>
 
@@ -1218,12 +1219,26 @@ $( document ).ready( function (){
 
     <div class="panel-heading">
         <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#accordion_iat" href="#filterSamples">Filters samples</a>
+            <a data-toggle="collapse" data-parent="#accordion_iat" href="#filterSamples">Step 2: Select a subset of samples based on phenotypic criteria</a>
         </h4>
     </div>
 
     <div id="filterSamples" class="panel-collapse collapse">
         <div class="panel-body  secBody">
+
+            <div class="row">
+                <div class="col-sm-12 col-xs-12 vcenter">
+                    <p>
+                        Each of the boxes below enables you to define a criterion for inclusion of samples in your analysis; each criterion is specified as a filter based on a single phenotype.
+                        The final subset of samples used will be those that match all of the specified criteria; to omit a criterion either leave the text box blank or unselect the checkbox on the left.
+                    </p>
+                    <p>
+                        To guide selection of each criterion, you can click on the arrow to the right of the text box to view the distribution of phenotypic values for the samples currently included
+                        in the analysis. The number of samples included, as well as the distributions, will update whenever you modify the value in the text box.
+                    </p>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-sm-6 col-xs-12 vcenter" style="margin-top:0">
                     <div class="row secHeader" style="padding: 20px 0 0 0">
@@ -1364,13 +1379,18 @@ $( document ).ready( function (){
 
     <div class="panel-heading">
         <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#accordion_iat" href="#initiateAnalysis">Initiate analysis</a>
+            <a data-toggle="collapse" data-parent="#accordion_iat" href="#initiateAnalysis">Step 3: Control for covariates</a>
         </h4>
     </div>
 
 
     <div id="initiateAnalysis" class="panel-collapse collapse">
         <div class="panel-body secBody">
+            <div class="row">
+                <div class="col-sm-9 col-xs-12 vcenter">
+                    <p>Select the phenotypes to be used as covariates in your association analysis. The recommended default covariates are pre-selected</p>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-sm-9 col-xs-12 vcenter">
                     <div id="covariates"
