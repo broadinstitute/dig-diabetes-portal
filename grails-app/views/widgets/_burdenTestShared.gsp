@@ -320,8 +320,8 @@ div.labelAndInput > input {
         };
 
 
+
         var retrieveSampleFilterMetadata = function (dropdownSel, dropDownSelector) {
-            var loading = $('#spinner').show();
             var data = getStoredSampleMetadata();
             var phenotype = $(dropDownSelector).val();
             if ( ( data !==  null ) &&
@@ -329,14 +329,6 @@ div.labelAndInput > input {
                     if ( ( typeof data.filters !== 'undefined' ) &&
                          (  data.filters !==  null ) ) {
                             var filterHolderElement = $("#filterHolder");
-                            // retrieve sample info for all filters
-                            var filtersSpecs = [];
-                            _.forEach(data.filters,function(filterObjs){
-                               filtersSpecs.push("{\"name\": \""+filterObjs.name+"\"}");
-                            });
-                            var jsonDescr = "{\"dataset\":\""+$(dropdownSel).val()+"\"," +
-                                      "\"requestedData\":["+filtersSpecs.join(',')+"]," +
-                                      "\"filters\":[]}";
 
                             var output = '';
                             var floatTemplate = $('#filterFloatTemplate')[0].innerHTML;
@@ -354,9 +346,11 @@ div.labelAndInput > input {
                            if (_.trim(filterHolderElement.text()).length===0){
                               filterHolderElement.append(output);
                            }
-                           mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, fillDistributionPlotsAndDropdowns, phenotype );
+                          // mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, fillDistributionPlotsAndDropdowns, phenotype );
+                           var sampleData = getStoredSampleData();
+                           fillDistributionPlotsAndDropdowns(sampleData.metaData.variants,phenotype);
 
-                           //fillDistributionPlotsAndDropdowns(mpgSoftware.burdenTestShared.dynamicallyFilterSamples(),phenotype);
+
                     }
                      if ( ( typeof data.covariates !== 'undefined' ) &&
                          (  data.covariates !==  null ) ) {
@@ -376,11 +370,13 @@ div.labelAndInput > input {
                         });
                         covariateHolderElement.append(output);
 
+
                     }
 
              }
 
-            loading.hide();
+
+            $('.caatSpinner').hide();
         };
 
 
@@ -1228,8 +1224,7 @@ variant by specifying the phenotype to test for association, a subset of samples
                     <div class="row">
                         <div class="col-sm-12 col-xs-12 text-left">
                             <select id="phenotypeFilter" class="traitFilter form-control text-left"
-                                    onchange="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata($('#datasetFilter'), '#phenotypeFilter');"
-                                    onclick="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata($('#datasetFilter'), '#phenotypeFilter');">
+                                    onchange="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata($('#datasetFilter'), '#phenotypeFilter');">
                             </select>
                         </div>
                     </div>

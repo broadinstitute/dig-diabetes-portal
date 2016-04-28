@@ -91,7 +91,6 @@ var baget = baget || {};  // encapsulating variable
         };
     };
 
-
     baget.createASunburst = function (width, height, padding, duration, colorScale, domSelector, data) {
 
 
@@ -99,6 +98,7 @@ var baget = baget || {};  // encapsulating variable
         var colorManagementRoutines = new baget.ColorManagementRoutines(colorScale);
         var radius = Math.min(width, height) / 2;
         var hideOrDisplayColors = 1;
+        var totalSize = 0;
 
 
         var toggleColorDisplay = function () {
@@ -159,6 +159,13 @@ var baget = baget || {};  // encapsulating variable
             },
             sunburstAnimation = SunburstAnimation();
 
+        // can we generate a total size?
+        if (typeof data.children !== 'undefined') {
+            for ( var i = 0 ; i < data.children.length ; i++ ){
+                totalSize += data.children[i].size;
+            }
+        }
+
 
         var svg = d3.select(domSelector).append("svg")
             .attr("width", width)
@@ -209,6 +216,20 @@ var baget = baget || {};  // encapsulating variable
                 returnValue = preliminaryGeneratedId;
             }
             return returnValue;
+        }
+
+        var labelAcceptable = function(wedge){
+            return true;
+            if ((typeof wedge !== 'undefined')&&
+                (typeof wedge.size !== 'undefined')){
+                var wedgeSize = wedge.size/totalSize;
+                if (wedgeSize > 0.01){
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
         }
 
         //
@@ -409,20 +430,12 @@ var baget = baget || {};  // encapsulating variable
         textEnter.append("tspan")
             .attr("x", 0)
             .text(function (d) {
-                if ((d.depth) && (d.name.indexOf("zzul") === -1)) {
+                if ((d.depth) && (d.name.indexOf("zzul") === -1) &&(labelAcceptable(d))) {
                     var displayName = ((typeof d.label !== 'undefined')  &&
                         (d.label.length > 0))?d.label: d.name;
                     if (displayName.indexOf(":")>-1) {
                         var postColonName = displayName.split(":")[1];
                         return postColonName.split(",")[0] || "";
-//                        var commaSplit = postColonName.split(",");
-//                        if (commaSplit.length > 0) {
-//                            var postCommaName =  commaSplit[0] || "";
-//                            return smartLineBreak(postCommaName,true);
-//                        } else {
-//                            return smartLineBreak(postColonName,true);
-//                        }
-
                     } else {
                         return smartLineBreak(displayName,true);
                     }
@@ -435,22 +448,18 @@ var baget = baget || {};  // encapsulating variable
             .attr("x", 0)
             .attr("dy", "1em")
             .text(function (d) {
-                if ((d.depth) && (d.name.indexOf("zzul") === -1)) {
+                if ((d.depth) && (d.name.indexOf("zzul") === -1) &&(labelAcceptable(d))) {
                     var displayName = ((typeof d.label !== 'undefined')  &&
                         (d.label.length > 0))?d.label: d.name;
                     if (displayName.indexOf(":")>-1) {
                         var postColonName = displayName.split(":")[1];
                         var commaSplit = postColonName.split(",");
-                       // if (commaSplit.length > 0) {
-                            var postCommaName =  postColonName.split(",")[1] || "";
-                            return smartLineBreak(postCommaName,true);
-//                        } else {
-//                            return smartLineBreak(postColonName,true);
-//                        }
-
+                        var postCommaName =  postColonName.split(",")[1] || "";
+                        return smartLineBreak(postCommaName,true);
                     } else {
-                        //return "";
-                        return smartLineBreak(displayName,false);
+                        if (displayName.indexOf(" ")>-1){ // we need a reason if we're going to make a second line
+                            return smartLineBreak(displayName,false);
+                        }
                     }
                 } else {
                     return "";
@@ -461,7 +470,7 @@ var baget = baget || {};  // encapsulating variable
             .attr("x", 0)
             .attr("dy", "1em")
             .text(function (d) {
-                if ((d.depth) && (d.name.indexOf("zzul") === -1)) {
+                if ((d.depth) && (d.name.indexOf("zzul") === -1) &&(labelAcceptable(d))) {
                     var displayName = ((typeof d.label !== 'undefined')  &&
                         (d.label.length > 0))?d.label: d.name;
                     if (displayName.indexOf(":")>-1) {
