@@ -27,9 +27,9 @@ class VariantSearchController {
      * @return
      */
     def retrievePhenotypesAjax(){
-        // specify whether to inclue the NONE phenotype--if this is unspecified,
+        // specify whether to include the NONE phenotype--if this is unspecified,
         // default to no
-        Boolean getNonePhenotype = params.getNonePhenotype || false
+        Boolean getNonePhenotype = params.getNonePhenotype.toBoolean() || false
 
         LinkedHashMap<String, List<String>> propertyTree = metaDataService.getHierarchicalPhenotypeTree()
         JSONObject result = sharedToolsService.packageUpAHierarchicalListAsJson (propertyTree)
