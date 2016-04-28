@@ -24,10 +24,10 @@
     <g:renderT2dGenesSection>
         <div class="container-fluid dk-t2d-banner" style="background-image: url('${resource(dir: 'images', file: 'logo_bg.jpg')}')">
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                <img src="${resource(dir: 'images/stroke', file:'R24_logo.png')}" />
+                <img src="${resource(dir: 'images/stroke', file:g.message(code:"files.strokeBannerText", default:"R24_logo.png"))}" />
             </g:if>
             <g:else>
-                <img src="${resource(dir: 'images', file:'t2d_logo.png')}" />
+                <img src="${resource(dir: 'images', file:g.message(code:"files.t2dBannerText", default:"t2d_logo.png"))}" />
             </g:else>
             <div class="container-fluid dk-t2d-user-banner">
                 <a href='<g:createLink controller="home" action="index" params="[lang:'es']"/>'>

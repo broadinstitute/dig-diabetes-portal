@@ -54,9 +54,9 @@
             <td><g:message code="variant.variantAssociations.legend.dataset" default="Dataset"/>:</td><td style="padding-right: 20px;"><div
                 style="background-color: #ccc; color: #fff; width:auto; margin-left: 5px; float: left; padding: 0 5px;"><span
                     style="color: #333; font-size: 12px;"><g:message code="variant.variantAssociations.legend.sampleSize"
-                                                                     default="sample size"/></span>&nbsp;&nbsp;<span
+                                                                     default="sample size"/></span> | <span
                     style="color: #F00; font-size: 12px;"><g:message code="variant.variantAssociations.legend.frequency"
-                                                                     default="frequency"/></span>&nbsp;&nbsp;<span
+                                                                     default="frequency"/></span> | <span
                     style="color:#33F; font-size: 12px;"><g:message code="variant.variantAssociations.legend.count"
                                                                     default="count"/></span></div>
             </td>

@@ -100,10 +100,10 @@
     <div class="container">
         <div class="row" style="text-align:center;padding-bottom:15px;">
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                <img src="${resource(dir: 'images/stroke', file: 'R24_front_header.png')}" style="width:75%;" />
+                <img src="${resource(dir: 'images/stroke', file: g.message(code: "files.strokeFrontHeader", default: "R24_front_header.png"))}" style="width:75%;" />
             </g:if>
             <g:else>
-                <img src="${resource(dir: 'images', file: 't2d_front_header6.png')}" style="width:75%;" />
+                <img src="${resource(dir: 'images', file: g.message(code: "files.t2dFrontHeader", default: "t2d_front_header6.png"))}" style="width:75%;" />
             </g:else>
         </div>
     </div>

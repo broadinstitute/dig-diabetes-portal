@@ -106,7 +106,6 @@ modules = {
     }
     locusZoom {
         // version 0.3.3 for now
-//        resource url: 'js/lib/locuszoom/locuszoom.vendor.min.js'
         resource url: 'js/lib/locuszoom/locuszoom.app.js'
         resource url: 'css/locuszoom/locuszoom.css'
     }
