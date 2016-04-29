@@ -167,7 +167,7 @@ class VariantSearchController {
 
             for(int i = 0; i < listOfParams.size(); i++) {
                 String currentQuery = listOfParams[i]
-                JSONObject processedQuery = []
+                JSONObject processedQuery
 
                 // id is the field that identifies what property the query refers to
                 def (id, data) = currentQuery.trim().split('=')
@@ -187,12 +187,22 @@ class VariantSearchController {
                         break;
                     case '11':
                         // predicted effect
-                        def (specificEffect, value) = data.split(/\|/)
+                        def specificEffect, comparator, value
+                        if(data.indexOf('<') > -1) {
+                            (specificEffect, value) = data.split(/\</)
+                            comparator = '<'
+                        } else if (data.indexOf('|') > -1) {
+                            (specificEffect, value) = data.split(/\|/)
+                            comparator = '|'
+                        } else if (data.indexOf('>') > -1) {
+                            (specificEffect, value) = data.split(/\>/)
+                            comparator = '>'
+                        }
                         processedQuery = [
                             prop: specificEffect,
                             translatedName: g.message(code:'metadata.'+specificEffect, default: specificEffect),
                             value: value,
-                            comparator: '='
+                            comparator: comparator
                         ]
                         jsonQueries << processedQuery
                         break;
