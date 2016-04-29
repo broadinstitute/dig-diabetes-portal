@@ -264,7 +264,11 @@ div.labelAndInput > input {
                     var jsonDescr = "{\"dataset\":\""+data.dataset+"\"," +
                                       "\"requestedData\":["+filtersSpecs.join(',')+"]," +
                                       "\"filters\":[]}";
-                    mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, function(){$('.caatSpinner').hide();} );
+                    mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, function(){
+                             mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata($('#datasetFilter'), '#phenotypeFilter');
+                             displayTestResultsSection(false);
+                             $('.caatSpinner').hide();
+                         } );
                 },
                 error: function (jqXHR, exception) {
                     loading.hide();
@@ -349,7 +353,7 @@ div.labelAndInput > input {
                           // mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, fillDistributionPlotsAndDropdowns, phenotype );
                            var sampleData = getStoredSampleData();
                            fillDistributionPlotsAndDropdowns(sampleData.metaData.variants,phenotype);
-
+                           displayTestResultsSection(false);
 
                     }
                      if ( ( typeof data.covariates !== 'undefined' ) &&
@@ -482,6 +486,16 @@ div.labelAndInput > input {
         };
 
 
+
+         var displayTestResultsSection = function (display)  {
+            burdenTestResult = $('.burden-test-result');
+            if (display){
+                burdenTestResult.show () ;
+            } else {
+                burdenTestResult.hide () ;
+            }
+         }
+
         /**
          *  run the burden test, then display the results.  We will need to start by extracting
          *  the data fields we need from the DOM.
@@ -513,6 +527,9 @@ div.labelAndInput > input {
 
                 // show the results
 //                if (isDichotomousTrait) {
+
+                    displayTestResultsSection(true);
+
                     $('#burden-test-some-results-large').hide();
                     $('#burden-test-some-results').show();
                     $('.burden-test-result').show();
@@ -846,7 +863,13 @@ div.labelAndInput > input {
                            $(dropdownId).append(new Option(filterVal.name,filterVal.name));
                        });
                        $(dropdownId).multiselect({includeSelectAllOption: true,
-                                                   allSelectedText: 'All Selected'
+                                                   allSelectedText: 'All Selected',
+                                                   multiselectclose: function(event, ui){
+                                                            console.log('event');
+                                                        },
+                                                   open: function(event, ui){
+                                                            console.log('event2');
+                                                        }
                                                    });
                        $(dropdownId).multiselect('selectAll', false);
                        $(dropdownId).multiselect('updateButtonText');
@@ -1155,7 +1178,8 @@ div.labelAndInput > input {
             refreshSampleData:refreshSampleData,
             retrieveSampleFilterMetadata:retrieveSampleFilterMetadata,
             getStoredSampleMetadata: getStoredSampleMetadata,
-            dynamicallyFilterSamples: dynamicallyFilterSamples
+            dynamicallyFilterSamples: dynamicallyFilterSamples,
+            displayTestResultsSection: displayTestResultsSection
         }
 
     }());
@@ -1360,9 +1384,14 @@ variant by specifying the phenotype to test for association, a subset of samples
                                     <div class="col-sm-3">
                                         <select id="multi{{name}}" class="form-control multiSelect"
                                                 data-selectfor="{{name}}FilterOpts" multiple="multiple"
-                                                onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')"
-                                                onchange="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')">
+                                                onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')">
                                         </select>
+                                        %{--<g:javascript>--}%
+                                            %{--$("#multi{{name}}").bind("multiselectclose", function(event, ui){--}%
+                                                %{--mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')--}%
+                                            %{--});--}%
+                                        %{--</g:javascript>--}%
+
                                     </div>
 
                                     <div class="col-sm-1">
