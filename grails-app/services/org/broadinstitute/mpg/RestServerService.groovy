@@ -1186,7 +1186,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String retdat
         retdat = getRestCallBase(GET_SAMPLE_METADATA_URL, "http://dig-api-qa.broadinstitute.org/qa/gs/")
         //retdat = getRestCall(GET_SAMPLE_METADATA_URL)
-        currentRestServer()
+        //currentRestServer()
         return retdat
     }
 

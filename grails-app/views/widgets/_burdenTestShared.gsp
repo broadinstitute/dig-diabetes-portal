@@ -877,7 +877,8 @@ div.labelAndInput > input {
                                                         },
                                                    open: function(event, ui){
                                                             console.log('event2');
-                                                        }
+                                                        },
+                                                   buttonWidth: '100%'
                                                    });
                        $(dropdownId).multiselect('selectAll', false);
                        $(dropdownId).multiselect('updateButtonText');
