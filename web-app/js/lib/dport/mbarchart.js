@@ -20,7 +20,7 @@ var baget = baget || {};  // encapsulating variable
             showGridLines = true,
             blackTextAfterBar = false,
             labelSpacer = 10,
-            spaceForYAxisLabels = 30,
+            spaceForYAxisLabels = 50,
             valueAccessor = function (x){return x.value},
             colorAccessor = function (x){return x.color},
             categoryAccessor = function (x){return x.category},
@@ -164,7 +164,7 @@ var baget = baget || {};  // encapsulating variable
                         .tickValues(d3.range(categories.length));
 
                     canvas.append('g')
-                        .attr("transform", "translate("+(margin.left+spaceForYAxisLabels)+","+(margin.top+(barHeight/2))+")")
+                        .attr("transform", "translate("+((margin.left+spaceForYAxisLabels)*2)+","+(margin.top+(barHeight/2))+")")
                         .attr('id','yaxis_'+disambiguator)
                         .call(yAxis)
                         .call(function(me){

@@ -337,11 +337,13 @@ div.labelAndInput > input {
                             var output = '';
                             var floatTemplate = $('#filterFloatTemplate')[0].innerHTML;
                             var categoricalTemplate = $('#filterCategoricalTemplate')[0].innerHTML;
+                            var categoricalDropDowns = [];
                             _.forEach(data.filters,function(d,i){
                               if (d.type === 'FLOAT') {
                                  output = (output + Mustache.render(floatTemplate, d));
                               } else {
                                  output = (output+Mustache.render(categoricalTemplate, d));
+                                 categoricalDropDowns.push(d);
                               }
 
                             });
@@ -350,7 +352,13 @@ div.labelAndInput > input {
                            if (_.trim(filterHolderElement.text()).length===0){
                               filterHolderElement.append(output);
                            }
-                          // mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, fillDistributionPlotsAndDropdowns, phenotype );
+                          // filters should be in place now.  Attach events
+                          _.forEach(data.filters,function(d){
+                              $("#multi"+d.name).bind("change", function(event, ui){
+                                   mpgSoftware.burdenTestShared.displaySampleDistribution(d.name, '#boxWhiskerPlot')
+                              });
+                          });
+
                            var sampleData = getStoredSampleData();
                            fillDistributionPlotsAndDropdowns(sampleData.metaData.variants,phenotype);
                            displayTestResultsSection(false);
@@ -730,9 +738,9 @@ div.labelAndInput > input {
 //            ],
             roomForLabels = 120,
             maximumPossibleValue = 1,
-            labelSpacer = 10;
+            labelSpacer = 50;
 
-    var margin = {top: 50, right: 50, bottom: 20, left: 30},
+    var margin = {top: 50, right: 50, bottom: 20, left: 15},
             width = 700 - margin.left - margin.right,
             height = 350 - margin.top - margin.bottom;
 
@@ -1220,7 +1228,7 @@ variant by specifying the phenotype to test for association, a subset of samples
 
     <div class="panel-heading">
         <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#accordion_iat" href="#chooseSamples">Step 1: Select a phenotype to test for association</a>
+            <a data-toggle="collapse" data-parent="#chooseSamples" href="#chooseSamples">Step 1: Select a phenotype to test for association</a>
         </h4>
     </div>
 
@@ -1263,7 +1271,7 @@ variant by specifying the phenotype to test for association, a subset of samples
 
     <div class="panel-heading">
         <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#accordion_iat" href="#filterSamples">Step 2: Select a subset of samples based on phenotypic criteria</a>
+            <a data-toggle="collapse" data-parent="#filterSamples" href="#filterSamples">Step 2: Select a subset of samples based on phenotypic criteria</a>
         </h4>
     </div>
 
@@ -1387,7 +1395,7 @@ variant by specifying the phenotype to test for association, a subset of samples
                                                 onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')">
                                         </select>
                                         %{--<g:javascript>--}%
-                                            %{--$("#multi{{name}}").bind("multiselectclose", function(event, ui){--}%
+                                            %{--$("#multi{{name}}").multiselect().bind("change", function(event, ui){--}%
                                                 %{--mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')--}%
                                             %{--});--}%
                                         %{--</g:javascript>--}%
@@ -1432,7 +1440,7 @@ variant by specifying the phenotype to test for association, a subset of samples
 
     <div class="panel-heading">
         <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#accordion_iat" href="#initiateAnalysis">Step 3: Control for covariates</a>
+            <a data-toggle="collapse" data-parent="#initiateAnalysis" href="#initiateAnalysis">Step 3: Control for covariates</a>
         </h4>
     </div>
 
