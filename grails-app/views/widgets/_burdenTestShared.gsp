@@ -3,7 +3,7 @@ rect.histogramHolder {
     fill: #6699cc;
 }
 rect.box {
-    fill: #ccaaaa;
+    fill: #fff;
 }
 .caatSpinner{
     position: absolute;
