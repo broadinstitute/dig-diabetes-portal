@@ -5,18 +5,17 @@ var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.variantWF = (function () {
         // private variables
-        var MAXIMUM_NUMBER_OF_FILTERS = 1000;
-        var listOfSavedQueries = []
+        var listOfSavedQueries = [];
 
         /***
          * private methods
          * @param indexNumber
          */
-        var JSON_VARIANT_MOST_DEL_SCORE_KEY      = "MOST_DEL_SCORE",
-            JSON_VARIANT_CHROMOSOME_KEY      = "CHROM",
-            JSON_VARIANT_POLYPHEN_PRED_KEY      = "PolyPhen_PRED",
-            JSON_VARIANT_SIFT_PRED_KEY      = "SIFT_PRED",
-            JSON_VARIANT_CONDEL_PRED_KEY    = "Condel_PRED";
+        var JSON_VARIANT_MOST_DEL_SCORE_KEY = "MOST_DEL_SCORE",
+            JSON_VARIANT_CHROMOSOME_KEY = "CHROM",
+            JSON_VARIANT_POLYPHEN_PRED_KEY = "PolyPhen_PRED",
+            JSON_VARIANT_SIFT_PRED_KEY = "SIFT_PRED",
+            JSON_VARIANT_CONDEL_PRED_KEY = "Condel_PRED";
 
         /**
          * If the page is provided a list of queries on load, then this function is called
@@ -30,9 +29,9 @@ var mpgSoftware = mpgSoftware || {};
 
             var keysToCheck = ['translatedName', 'translatedDataset', 'translatedPhenotype'];
 
-            _.each(listOfQueries, function(query) {
-                _.each(keysToCheck, function(key) {
-                    if(query[key]) {
+            _.each(listOfQueries, function (query) {
+                _.each(keysToCheck, function (key) {
+                    if (query[key]) {
                         query[key] = query[key].replace(/\+/g, ' ');
                     }
                 });
@@ -42,20 +41,21 @@ var mpgSoftware = mpgSoftware || {};
             updatePageWithNewQueryList();
         }
 
+        // called when page loads
         var retrievePhenotypes = function () {
             var loading = $('#spinner').show();
             $.ajax({
                 cache: false,
                 type: "post",
                 url: "./retrievePhenotypesAjax",
-                data: {getNonePhenotype: true},
+                data: {getNonePhenotype: false},
                 async: true,
                 success: function (data) {
-                    if (( data !==  null ) &&
+                    if (( data !== null ) &&
                         ( typeof data !== 'undefined') &&
                         ( typeof data.datasets !== 'undefined' ) &&
-                        (  data.datasets !==  null ) ) {
-                        UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#phenotype',true);
+                        (  data.datasets !== null )) {
+                        UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#phenotype', true);
                     }
                     loading.hide();
                 },
@@ -66,84 +66,74 @@ var mpgSoftware = mpgSoftware || {};
             });
         };
 
-        var retrieveDataSets = function (phenotype, dataset,dropdownAlreadyPresent) {
+        // called when page loads
+        var retrievePhenotypeIndependentDatasets = function () {
+            retrieveDatasets('none', 'independent');
+        };
+
+        // query is a passthrough value, and may be undefined
+        var retrieveDatasets = function (phenotype, target, query) {
             // prevent requests being sent with pointless data
-            if(phenotype == 'default') {
+            if (phenotype == 'default') {
                 return;
             }
-            if (!dropdownAlreadyPresent) { // it may be that we already did this round-trip, in which case we don't need to do it again
-                var loading = $('#spinner').show();
-                $.ajax({
-                    cache: false,
-                    type: "post",
-                    url: "./retrieveDatasetsAjax",
-                    data: {phenotype: phenotype,
-                        dataset: dataset},
-                    async: true,
-                    success: function (data) {
-                        if (( data !== null ) &&
-                            ( typeof data !== 'undefined') &&
-                            ( typeof data.datasets !== 'undefined' ) &&
-                            (  data.datasets !== null )) {
-                            fillDataSetDropdown(data.datasets,data.sampleGroup.sampleGroup);
-                        }
-                        loading.hide();
-                    },
-                    error: function (jqXHR, exception) {
-                        loading.hide();
-                        core.errorReporter(jqXHR, exception);
+            var loading = $('#spinner').show();
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "./retrieveDatasetsAjax",
+                data: {phenotype: phenotype},
+                async: true,
+                success: function (data) {
+                    if (data && data.datasets) {
+                        fillDatasetDropdown(data.datasets, target, query);
                     }
-                });
-            }
+                    loading.hide();
+                },
+                error: function (jqXHR, exception) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
         };
         /***
          * we need to go back to the server to get a list of properties. This can happen
          * into conditions:
          * 1) when the user has specified a phenotype and we need to pull back all associated properties.
          *    In this case none of the properties have values
-         * 2) when the user is seeking to edit an existing filter.  In this case one or more of those properties
-         *    may have an associated value. In this case this routine will be called once for each property
-         * @param phenotype
-         * @param dataset
-         * @param property
-         * @param equiv
-         * @param value
+         * 2) when the user is seeking to edit an existing filter.  In this case the property, equiv,
+         *    and value fields must be defined, and are used to load the inputs
+         * @param phenotype     the selected phenotype value
+         * @param dataset       the selected dataset value
+         * @param target        states whether this is tied to the dependent or independent search--may be 'dependent' or 'independent'
+         * @param query         if editing an existing criteria, the object containing the criteria data--may be undefined
          */
-        var retrievePropertiesPerDataSet = function (phenotype,dataset,property,equiv,value) {
+        var retrievePropertiesPerDataSet = function (phenotype, dataset, target, query) {
             // prevent requests being sent with pointless data
-            if( phenotype == 'default' || dataset == 'default' || _.isUndefined(dataset) ) {
+            if (phenotype == 'default' || dataset == 'default' || _.isUndefined(dataset)) {
                 return;
             }
             var loading = $('#spinner').show();
-            if (typeof property  === 'undefined') { // we are in case #1 as described above, and should therefore wipe out all existing properties
-                $('.propertyHolderBox').remove();
-            }
+
             $.ajax({
                 cache: false,
                 type: "post",
                 url: "./retrievePropertiesAjax",
-                data: {phenotype: phenotype,dataset: dataset},
+                data: {phenotype: phenotype, dataset: dataset},
                 async: true,
                 success: function (data) {
-                    if (( data !==  null ) &&
-                        ( typeof data !== 'undefined') &&
-                        ( typeof data.datasets !== 'undefined' ) &&
-                        (  data.datasets !==  null ) ) {
+                    if (data && data.datasets) {
+                        fillPropertiesDropdown(data.datasets, target);
 
-                        fillPropertiesDropdown(data.datasets);
-
-                        // only force a property selection if property is defined
-                        if(property) {
-                            mpgSoftware.firstResponders.forceToPropertySelection(property, equiv, value);
+                        // only force a property selection if query is defined
+                        if (query) {
+                            mpgSoftware.firstResponders.forceToPropertySelection(query);
                             // because of the async nature of the ajax call, the text boxes would
                             // be filled after updateBuildSearchRequestButton called if this
                             // call wasn't here
-                            mpgSoftware.firstResponders.updateBuildSearchRequestButton();
+                            mpgSoftware.firstResponders.updateBuildSearchRequestButton(target);
                         }
-                        // make sure that the data set drop-down choice points to the right thing
-                        if (typeof data.chosenDataset !== 'undefined'){
-                            $('#dataSet').val(data.chosenDataset);
-                        }
+
                     }
                     loading.hide();
                 },
@@ -153,53 +143,42 @@ var mpgSoftware = mpgSoftware || {};
                 }
             });
         };
-        var fillDataSetDropdown = function (dataSetJson, sampleGroup) { // help text for each row
-            if ((typeof dataSetJson !== 'undefined')  &&
-                (typeof dataSetJson["is_error"] !== 'undefined')&&
-                (dataSetJson["is_error"] === false))
-            {
-                var numberOfRecords = parseInt (dataSetJson ["numRecords"]);
-                var options = $("#dataSet");
+        // target is the indicator for the select element to be filled--'dependent' or 'independent'
+        var fillDatasetDropdown = function (datasetJson, target, query) {
+            if (datasetJson && datasetJson.is_error == false) {
+                var numberOfRecords = parseInt(datasetJson.numRecords);
+                var targetSelect = target == 'dependent' ? '#datasetDependent' : '#datasetIndependent';
+                var options = $(targetSelect);
                 options.empty();
 
                 options.append("<option selected hidden value=default>-- &nbsp;&nbsp;select a dataset&nbsp;&nbsp; --</option>");
 
-                var dataSetList = dataSetJson ["dataset"];
-                var rememberLastValue;
-                for ( var i = 0 ; i < numberOfRecords ; i++ ){
-                    var preceedingUnderscores = 0;
-                    for (var j=0; j<dataSetList[i].length;j++ ){
-                        if (dataSetList[i][j]!='-') break;
-                        preceedingUnderscores++;
-                    }
-                    var replaceUnderscores = dataSetList[i].displayName.substr(0,preceedingUnderscores);
-                    rememberLastValue = dataSetList[i].displayName.substr(preceedingUnderscores);
-                    options.append($("<option />").val(dataSetList[i].name.substr(preceedingUnderscores))
-                        .text(replaceUnderscores+dataSetList[i].displayName.substr(preceedingUnderscores)));
+                var datasetList = datasetJson ["dataset"];
+                for (var i = 0; i < numberOfRecords; i++) {
+                    options.append($("<option />").val(datasetList[i].name)
+                        .text(datasetList[i].displayName));
                 }
-                // if there's only one record, just click it to make the value
-                // inputs appear
-                if (numberOfRecords===1){
-                    $("#dataSet").val(rememberLastValue);
-                    $("#dataSet").click();
-                }
-                if (((typeof sampleGroup !== 'undefined')  &&
-                    (sampleGroup !== 'null') &&
-                    (sampleGroup !== ''))){
-                    $("#dataSet").val(sampleGroup);
-                }
-                options.prop('disabled', false);
-                
+
                 // clear out the properties list
                 fillPropertiesDropdown({is_error: false});
+
+                // if there's only one record, just click it to make the property inputs appear
+                if (numberOfRecords === 1) {
+                    $(targetSelect).val(datasetList[0].name);
+                    $(targetSelect).click();
+                }
+
+                options.prop('disabled', false);
+
+                if (query) {
+                    $(targetSelect).val(query.dataset);
+                    retrievePropertiesPerDataSet(query.phenotype, query.dataset, target, query);
+                }
             }
         };
-        var fillPropertiesDropdown = function (dataSetJson) { // help text for each row
-            if ((typeof dataSetJson !== 'undefined')  &&
-                (typeof dataSetJson["is_error"] !== 'undefined')&&
-                (dataSetJson["is_error"] === false))
-            {
-                var rowsToDisplay = _.flatMap(dataSetJson.dataset, function(v) {
+        var fillPropertiesDropdown = function (data, target) { // help text for each row
+            if (data && data.is_error == false) {
+                var rowsToDisplay = _.flatMap(data.dataset, function (v) {
                     return {
                         translatedName: v.translatedName,
                         propName: v.prop
@@ -208,24 +187,28 @@ var mpgSoftware = mpgSoftware || {};
 
                 var renderData = {
                     row: rowsToDisplay,
-                    helpText: function() {
-                        if( this.propName === 'P_VALUE' || this.propName === 'P_EMMAX' ) {
+                    helpText: function () {
+                        if (this.propName === 'P_VALUE' || this.propName === 'P_EMMAX') {
                             return 'Examples: 0.005, 5.0E-4';
                         }
+                    },
+                    category: function () {
+                        return target;
                     }
-                }
+                };
                 var rowTemplate = document.getElementById("rowTemplate").innerHTML;
                 Mustache.parse(rowTemplate);
                 var rendered = Mustache.render(rowTemplate, renderData);
-                document.getElementById("rowTarget").innerHTML = rendered;
+                var targetElement = target == 'dependent' ? 'dependentRowTarget' : 'independentRowTarget';
+
+                document.getElementById(targetElement).innerHTML = rendered;
             }
         };
 
-        var launchAVariantSearch = function (){
-
+        var launchAVariantSearch = function () {
             // process the queries to remove fields the server won't use
-            var listOfProcessedQueries = []
-            _.each(listOfSavedQueries, function(query) {
+            var listOfProcessedQueries = [];
+            _.each(listOfSavedQueries, function (query) {
                 var keysToOmit = [
                     'translatedPhenotype',
                     'translatedName',
@@ -243,136 +226,171 @@ var mpgSoftware = mpgSoftware || {};
          * User has clicked "Build Search Request" button. Grab all the current
          * inputs, save them to an object, then reset the builder to build the
          * next part of the query.
+         * group is either 'dependent' or 'independent'--which builder did the request
+         * come from, so that the appropriate fields can be gathered
          */
-        var gatherCurrentQueryAndSave = function(event) {
-
-            var phenoAndDS = UTILS.extractValsFromCombobox(['phenotype', 'dataSet']);
-            if( phenoAndDS.phenotype !== 'default' ) {
-                var phenotype = phenoAndDS.phenotype;
-                var translatedPhenotype = $('#phenotype option:selected').text();
-            }
-            // if no dataset is selected, then phenoAndDS will not have a dataset key
-            if( phenoAndDS.dataSet ) {
-                var dataset = phenoAndDS.dataSet;
-                var translatedDataset = $('#dataSet option:selected').html();
-            }
-
-            var propertiesInputs = $('input[data-type=propertiesInput]');
-            _.forEach(propertiesInputs, function(input) {
-                if( input.value !== "" ) {
-                    // get the comparator value
-                    var comparator = $('select[data-selectfor=' + input.dataset.prop +']')[0].value;
-                    var newQuery = {
-                        phenotype: phenotype,
-                        translatedPhenotype: translatedPhenotype,
-                        dataset: dataset,
-                        translatedDataset: translatedDataset,
-                        prop: input.dataset.prop,
-                        translatedName: input.dataset.translatedname,
-                        // this parsing/toStringing is because the backend doesn't
-                        // like decimal values without leading zeros
-                        value: parseFloat(input.value).toString(),
-                        comparator: comparator
-                    };
-                    listOfSavedQueries.push(newQuery);
+        var gatherCurrentQueryAndSave = function (category) {
+            var dataset, translatedDataset, propertiesInputs;
+            if (category == 'dependent') {
+                var phenoAndDS = UTILS.extractValsFromCombobox(['phenotype', 'datasetDependent']);
+                if (phenoAndDS.phenotype !== 'default') {
+                    var phenotype = phenoAndDS.phenotype;
+                    var translatedPhenotype = $('#phenotype option:selected').text();
                 }
-            });
-
-            // get the current query types so that we can prevent the user
-            // from adding both a gene input and a chromosome input
-            var currentlyDefinedQueryTypes = _.map(listOfSavedQueries, 'prop');
-            var geneInputAlreadyDefined = currentlyDefinedQueryTypes.indexOf('gene') > -1;
-            var chromosomeInputAlreadyDefined = currentlyDefinedQueryTypes.indexOf('chromosome') > -1;
-
-            var advancedFilterInputs = $('input[data-type=advancedFilterInput]');
-            _.forEach(advancedFilterInputs, function(input) {
-                if( input.value !== "" ) {
-                    // if this input is a gene, and there's a chromosome query,
-                    // or vice versa, ignore the input
-                    if ((geneInputAlreadyDefined && input.dataset.prop == 'chromosome') ||
-                        (chromosomeInputAlreadyDefined && input.dataset.prop == 'gene')) {
-                        return
-                    }
-                    var newQuery = {
-                        prop: input.dataset.prop,
-                        translatedName: input.dataset.translatedname,
-                        value: input.value,
-                        comparator: '='
-                    };
-                    // If we have a gene input, check to see if the +/- dropdown
-                    // has been set. If so, tack on that value to newQuery.value
-                    var geneRangeInputSetting = document.getElementById('geneRangeInput').value;
-                    if( input.dataset.prop === 'gene' && geneRangeInputSetting != '' ) {
-                        newQuery.value += ' ± ' + geneRangeInputSetting;
-                    }
-                    listOfSavedQueries.push(newQuery);
+                // if no dataset is selected, then phenoAndDS will not have a dataset key
+                if (phenoAndDS.datasetDependent) {
+                    dataset = phenoAndDS.datasetDependent;
+                    translatedDataset = $('#datasetDependent option:selected').html();
+                    // get rid of the leading hyphens for display
+                    translatedDataset = translatedDataset.replace(/^-*/, '');
                 }
-            });
 
-            // this handles just the predicted effect high-level selection, not
-            // the polyphen/sift/condel selections
-            // first check to see if something was selected in the first place
-            var selectedProteinEffect = document.querySelector('input[name="predictedEffects"]:checked');
-            if( !_.isNull(selectedProteinEffect) ) {
-                var proteinEffectSelection = selectedProteinEffect.value;
-                var newQuery = {
-                    prop: JSON_VARIANT_MOST_DEL_SCORE_KEY,
-                    translatedName: 'Deleteriousness category',
-                    value: proteinEffectSelection,
-                    comparator: '='
-                };
-                // if we already have a missense query, no need to add another one
-                if( propsWithQueries().indexOf(JSON_VARIANT_MOST_DEL_SCORE_KEY) === -1 ) {
-                    listOfSavedQueries.push(newQuery);
-                }
-            }
-
-            // if the "missense" predicted effect is selected, need to grab the
-            // polyphen/sift/condel selections here
-            if( proteinEffectSelection == 2 ) {
-                var missenseSelections = $('select[data-type="proteinEffectSelection"]');
-                _.each(missenseSelections, function(input) {
-                    // if the user has selected something other than the default, then
-                    // .value will not be the empty string
-                    if(input.value !== '') {
+                propertiesInputs = $('input[data-type=propertiesInput][data-category=dependent]');
+                _.forEach(propertiesInputs, function (input) {
+                    if (input.value !== "") {
+                        // get the comparator value
+                        var comparator = $('select[data-selectfor=' + input.dataset.prop + ']')[0].value;
                         var newQuery = {
-                            prop: input.name,
+                            phenotype: phenotype,
+                            translatedPhenotype: translatedPhenotype,
+                            dataset: dataset,
+                            translatedDataset: translatedDataset,
+                            prop: input.dataset.prop,
                             translatedName: input.dataset.translatedname,
-                            value: input.value,
-                            comparator: '='
+                            // this parsing/toStringing is because the backend doesn't
+                            // like decimal values without leading zeros
+                            value: parseFloat(input.value).toString(),
+                            comparator: comparator
                         };
                         listOfSavedQueries.push(newQuery);
                     }
                 });
-            }
 
+                // reset all of the inputs
+                resetInputFields();
+
+                mpgSoftware.firstResponders.updateBuildSearchRequestButton('dependent');
+            } else if (category == 'independent') {
+                propertiesInputs = $('input[data-type=propertiesInput][data-category=independent]');
+
+                dataset = UTILS.extractValsFromCombobox(['datasetIndependent']).datasetIndependent;
+                translatedDataset = $('#datasetIndependent option:selected').html();
+                // get rid of the leading hyphens for display
+                translatedDataset = translatedDataset.replace(/^-*/, '');
+                _.forEach(propertiesInputs, function (input) {
+                    if (input.value !== "") {
+                        // get the comparator value
+                        var comparator = $('select[data-selectfor=' + input.dataset.prop + ']')[0].value;
+                        var newQuery = {
+                            // the phenotype field is needed on the server, but not on the client
+                            phenotype: 'none',
+                            dataset: dataset,
+                            translatedDataset: translatedDataset,
+                            prop: input.dataset.prop,
+                            translatedName: input.dataset.translatedname,
+                            // this parsing/toStringing is because the backend doesn't
+                            // like decimal values without leading zeros
+                            value: parseFloat(input.value).toString(),
+                            comparator: comparator
+                        };
+                        listOfSavedQueries.push(newQuery);
+                    }
+                });
+                // get the current query types so that we can prevent the user
+                // from adding both a gene input and a chromosome input
+                var currentlyDefinedQueryTypes = _.map(listOfSavedQueries, 'prop');
+                var geneInputAlreadyDefined = currentlyDefinedQueryTypes.indexOf('gene') > -1;
+                var chromosomeInputAlreadyDefined = currentlyDefinedQueryTypes.indexOf('chromosome') > -1;
+
+                var advancedFilterInputs = $('input[data-type=advancedFilterInput]');
+                _.forEach(advancedFilterInputs, function (input) {
+                    if (input.value !== "") {
+                        // if this input is a gene, and there's a chromosome query,
+                        // or vice versa, ignore the input
+                        if ((geneInputAlreadyDefined && input.dataset.prop == 'chromosome') ||
+                            (chromosomeInputAlreadyDefined && input.dataset.prop == 'gene')) {
+                            return
+                        }
+                        var newQuery = {
+                            prop: input.dataset.prop,
+                            translatedName: input.dataset.translatedname,
+                            value: input.value,
+                            comparator: '='
+                        };
+                        // If we have a gene input, check to see if the +/- dropdown
+                        // has been set. If so, tack on that value to newQuery.value
+                        var geneRangeInputSetting = document.getElementById('geneRangeInput').value;
+                        if (input.dataset.prop === 'gene' && geneRangeInputSetting != '') {
+                            newQuery.value += ' ± ' + geneRangeInputSetting;
+                        }
+                        listOfSavedQueries.push(newQuery);
+                    }
+                });
+
+                // this handles just the predicted effect high-level selection, not
+                // the polyphen/sift/condel selections
+                // first check to see if something was selected in the first place
+                var selectedProteinEffect = document.querySelector('input[name="predictedEffects"]:checked');
+                if (!_.isNull(selectedProteinEffect)) {
+                    var proteinEffectSelection = selectedProteinEffect.value;
+                    var newQuery = {
+                        prop: JSON_VARIANT_MOST_DEL_SCORE_KEY,
+                        translatedName: 'Deleteriousness category',
+                        value: proteinEffectSelection,
+                        comparator: '='
+                    };
+                    // if we already have a missense query, no need to add another one
+                    if (propsWithQueries().indexOf(JSON_VARIANT_MOST_DEL_SCORE_KEY) === -1) {
+                        listOfSavedQueries.push(newQuery);
+                    }
+                }
+
+                // if the "missense" predicted effect is selected, need to grab the
+                // polyphen/sift/condel selections here
+                if (proteinEffectSelection == 2) {
+                    var missenseSelections = $('select[data-type="proteinEffectSelection"]');
+                    _.each(missenseSelections, function (input) {
+                        // if the user has selected something other than the default, then
+                        // .value will not be the empty string
+                        if (input.value !== '') {
+                            var newQuery = {
+                                prop: input.name,
+                                translatedName: input.dataset.translatedname,
+                                value: input.value,
+                                comparator: '='
+                            };
+                            listOfSavedQueries.push(newQuery);
+                        }
+                    });
+                }
+
+                // reset all of the inputs
+                resetInputFields();
+
+                mpgSoftware.firstResponders.updateBuildSearchRequestButton('independent');
+            }
             // make call to update list of saved queries
             updatePageWithNewQueryList();
 
-            // reset all of the inputs
-            resetInputFields();
-
-            // disable the build search request button
-            mpgSoftware.firstResponders.updateBuildSearchRequestButton();
         };
 
         /**
          * this function is called after the list of queries is updated,
          * so that the page is updated appropriately
          */
-        var updatePageWithNewQueryList = function() {
+        var updatePageWithNewQueryList = function () {
             var searchDetailsTemplate = document.getElementById("searchDetailsTemplate").innerHTML;
             Mustache.parse(searchDetailsTemplate);
             var renderData = {
                 listOfSavedQueries: listOfSavedQueries,
                 // use this to support editing queries
-                index: function() {
+                index: function () {
                     return listOfSavedQueries.indexOf(this);
                 },
                 // translate certain values into human-readable form
-                displayValue: function() {
-                    if( this.prop === JSON_VARIANT_MOST_DEL_SCORE_KEY ) {
-                        switch(this.value) {
+                displayValue: function () {
+                    if (this.prop === JSON_VARIANT_MOST_DEL_SCORE_KEY) {
+                        switch (this.value) {
                             case '0':
                                 return 'all effects';
                             case '1':
@@ -387,7 +405,7 @@ var mpgSoftware = mpgSoftware || {};
                     }
                     return this.value;
                 },
-                shouldSubmitBeEnabled: function() {
+                shouldSubmitBeEnabled: function () {
                     return this.listOfSavedQueries.length > 0;
                 }
             };
@@ -409,15 +427,20 @@ var mpgSoftware = mpgSoftware || {};
             // update the displayed list of queries
             updatePageWithNewQueryList();
             // reenable the build search button
+            // updateBuildSearchRequestButton will get called twice if the edited criteria
+            // is something involving a dataset--because all the dropdowns have to be repopulated,
+            // there's some asynchronous calls, and this call to updateBuildSearchRequestButton
+            // fires before those calls have finished
             mpgSoftware.firstResponders.updateBuildSearchRequestButton();
         };
 
-        var deleteQuery = function(indexToDelete) {
+        var deleteQuery = function (indexToDelete) {
             var deletedQuery = listOfSavedQueries.splice(indexToDelete, 1)[0];
             // if the deleted query was a chromosome or gene query, reenable
             // the chromosome and gene inputs
-            if( ['chromosome', 'gene'].indexOf(deletedQuery.prop) > -1 ) {
+            if (['chromosome', 'gene'].indexOf(deletedQuery.prop) > -1) {
                 document.getElementById('geneInput').removeAttribute('disabled');
+                document.getElementById('geneRangeInput').removeAttribute('disabled');
                 document.getElementById('chromosomeInput').removeAttribute('disabled');
             }
             updatePageWithNewQueryList();
@@ -428,12 +451,12 @@ var mpgSoftware = mpgSoftware || {};
          * query
          * @param query
          */
-        var resetInputsToQuery = function (query){
-            switch(query.prop) {
+        var resetInputsToQuery = function (query) {
+            switch (query.prop) {
                 case 'gene':
                     // the gene value could be the gene name, or the gene name
                     // along with a +/- setting
-                    if(query.value.indexOf('±') === -1) {
+                    if (query.value.indexOf('±') === -1) {
                         // just the gene name
                         document.getElementById('geneInput').value = query.value;
                     } else {
@@ -441,65 +464,77 @@ var mpgSoftware = mpgSoftware || {};
                         document.getElementById('geneInput').value = geneSplit[0];
                         document.getElementById('geneRangeInput').value = geneSplit[1];
                     }
-                    $('#advanced_filter').show();
                     document.getElementById('geneInput').removeAttribute('disabled');
+                    $('#independentTab').tab('show');
                     break;
                 case 'chromosome':
                     document.getElementById('chromosomeInput').value = query.value;
-                    $('#advanced_filter').show();
                     document.getElementById('chromosomeInput').removeAttribute('disabled');
+                    $('#independentTab').tab('show');
+
                     break;
                 case JSON_VARIANT_MOST_DEL_SCORE_KEY:
-                    document.querySelector('input[name="predictedEffects"][value="'+query.value+'"]').checked = true;
-                    $('#advanced_filter').show();
+                    document.querySelector('input[name="predictedEffects"][value="' + query.value + '"]').checked = true;
+                    $('#independentTab').tab('show');
                     break;
                 case JSON_VARIANT_POLYPHEN_PRED_KEY:
                 case JSON_VARIANT_SIFT_PRED_KEY:
                 case JSON_VARIANT_CONDEL_PRED_KEY:
                     document.querySelector('input[name="predictedEffects"][value="2"]').checked = true;
                     document.querySelector('select[name="' + query.prop + '"]').value = query.value;
-                    $('#advanced_filter').show();
                     mpgSoftware.firstResponders.updateProteinEffectSelection('2');
+                    $('#independentTab').tab('show');
                     break;
-                // this catches all of the basic queries (e.g. p-value, odds ratio)
+                // this catches all of the queries that deal with datasets (e.g. p-value, odds ratio)
+                // they can be from the phenotype-dependent OR phenotype-independent tabs
                 default:
-                    document.getElementById('phenotype').value = query.phenotype;
-                    mpgSoftware.firstResponders.forceToPhenotypeSelection(query.phenotype,query.dataset);
-                    mpgSoftware.firstResponders.forceToDataSetSelection(query.dataset,query.phenotype,query.prop,query.comparator,query.value);
+                    if (query.phenotype == 'none') {
+                        // this is phenotype-independent
+                        // show independent tab
+                        $('#independentTab').tab('show');
+                        mpgSoftware.variantWF.retrieveDatasets(query.phenotype, 'independent', query);
+                    } else {
+                        // phenotype-dependent
+                        // show dependent tab
+                        $('#dependentTab').tab('show');
+                        mpgSoftware.firstResponders.forceToPhenotypeSelection(query);
+                    }
                     break;
             }
         };
 
         // use this after submitting a query or resetting
-        // justAdvancedFiltering is true if only the advanced filters should be cleared
-        var resetInputFields = function(justAdvancedFiltering) {
-            if( ! justAdvancedFiltering ) {
-                // clear out the phenotype and dataset dropdowns
-                var options = document.getElementById("dataSet");
-                $(options).empty();
-                fillPropertiesDropdown({is_error: false});
-                document.getElementById('phenotype').value = 'default';
-                document.getElementById('dataSet').disabled = true;
-            }
+        var resetInputFields = function () {
+            // dependent section
+            // clear out the phenotype and dataset dropdowns
+            var options = document.getElementById("datasetDependent");
+            $(options).empty();
+            fillPropertiesDropdown({is_error: false}, 'dependent');
+            document.getElementById('phenotype').value = 'default';
+            document.getElementById('datasetDependent').disabled = true;
 
-            // advanced filters
+            // independent section
+            fillPropertiesDropdown({is_error: false}, 'independent');
+            document.getElementById('datasetIndependent').value = 'default';
+
             document.getElementById('geneInput').value = '';
-            document.getElementById('chromosomeInput').value = '';
             document.getElementById('geneRangeInput').value = '';
+            document.getElementById('chromosomeInput').value = '';
 
             // if we have a gene or chromosome input, disable both of them
             var propsWithQs = propsWithQueries();
-            if( propsWithQs.indexOf('chromosome') > -1 || propsWithQs.indexOf('gene') > -1 ) {
+            if (propsWithQs.indexOf('chromosome') > -1 || propsWithQs.indexOf('gene') > -1) {
                 document.getElementById('geneInput').setAttribute('disabled', 'true');
+                document.getElementById('geneRangeInput').setAttribute('disabled', 'true');
                 document.getElementById('chromosomeInput').setAttribute('disabled', 'true');
             }
 
             // if we have a protein effect input, we should disable the protein effect inputs
             var disableProteinEffectInputs = propsWithQs.indexOf('MOST_DEL_SCORE') > -1;
             var predictedEffectOptions = $('input[name="predictedEffects"]');
-            _.each(predictedEffectOptions, function(option) {
+            _.each(predictedEffectOptions, function (option) {
                 // if an effect is selected, clear it; disable all inputs if necessary
-                if(disableProteinEffectInputs) {
+                if (disableProteinEffectInputs) {
                     option.setAttribute('disabled', true);
                 } else {
                     option.removeAttribute('disabled');
@@ -508,15 +543,11 @@ var mpgSoftware = mpgSoftware || {};
             });
 
             var additionalPredictedEffects = $('select[data-type="proteinEffectSelection"]');
-            _.each(additionalPredictedEffects, function(dropdown) {
+            _.each(additionalPredictedEffects, function (dropdown) {
                 dropdown.value = '';
             });
 
             $('#missense-options').hide(300);
-            if($('advanced_filter').is(':visible')) {
-                // this is defined in variantWorkflow.gsp
-                toggleAdvancedFilter();
-            }
         };
 
         /**
@@ -527,12 +558,13 @@ var mpgSoftware = mpgSoftware || {};
         }
 
         return {
-            fillDataSetDropdown:fillDataSetDropdown,
-            fillPropertiesDropdown:fillPropertiesDropdown,
-            launchAVariantSearch:launchAVariantSearch,
-            retrievePhenotypes:retrievePhenotypes,
-            retrieveDataSets:retrieveDataSets,
-            retrievePropertiesPerDataSet:retrievePropertiesPerDataSet,
+            fillDatasetDropdown: fillDatasetDropdown,
+            fillPropertiesDropdown: fillPropertiesDropdown,
+            launchAVariantSearch: launchAVariantSearch,
+            retrievePhenotypes: retrievePhenotypes,
+            retrievePhenotypeIndependentDatasets: retrievePhenotypeIndependentDatasets,
+            retrieveDatasets: retrieveDatasets,
+            retrievePropertiesPerDataSet: retrievePropertiesPerDataSet,
             gatherCurrentQueryAndSave: gatherCurrentQueryAndSave,
             editQuery: editQuery,
             deleteQuery: deleteQuery,
@@ -548,33 +580,37 @@ var mpgSoftware = mpgSoftware || {};
      */
     mpgSoftware.firstResponders = (function () {
 
-        var forceToPropertySelection = function (sectionName, equivalence, value){
-            // this function sometimes gets called with all 3 arguments being 'undefined',
-            // which would cause this function to throw a few errors
-            if( sectionName ) {
-                document.querySelector('select[data-selectfor="' + sectionName + '"]').value = equivalence;
-                document.querySelector('input[data-prop="' + sectionName + '"]').value = value;
+        var forceToPropertySelection = function (query) {
+            if (query) {
+                var prop = query.prop;
+                var comparator = query.comparator;
+                var value = query.value;
+                // need to select the right area to input
+                var category = query.phenotype == 'none' ? 'independent' : 'dependent';
+                document.querySelector('select[data-selectfor="' + prop + '"][data-category="' + category + '"]').value = comparator;
+                document.querySelector('input[data-prop="' + prop + '"][data-category="' + category + '"]').value = value;
             }
         };
-        var forceToPhenotypeSelection = function (phenotypeComboBox,dataset){
-            mpgSoftware.variantWF.retrieveDataSets(phenotypeComboBox,dataset);
-            $('#dataSetChooser').show ();
+        // this is called when there's a query being edited. It sets the phenotype input,
+        // then begins the chain to fill in the rest of the inputs.
+        var forceToPhenotypeSelection = function (query) {
+            $('#phenotype').val(query.phenotype);
+            mpgSoftware.variantWF.retrieveDatasets(query.phenotype, 'dependent', query);
         };
-        var respondToPhenotypeSelection = function (){
-            var phenotypeComboBox = UTILS.extractValsFromCombobox(['phenotype']);
+        var respondToPhenotypeSelection = function () {
+            var phenotype = UTILS.extractValsFromCombobox(['phenotype']).phenotype;
 
             // phenotype is changed.  Before we get to the asynchronous parts let's wipe out the properties
-            forceToPhenotypeSelection(phenotypeComboBox['phenotype']);
+            mpgSoftware.variantWF.retrieveDatasets(phenotype, 'dependent');
         };
 
-        var forceToDataSetSelection = function (dataSetComboBox,phenotypeComboBox,property,equiv,value ){
-            mpgSoftware.variantWF.retrievePropertiesPerDataSet(phenotypeComboBox,dataSetComboBox,property,equiv,value);
-        };
-
-        var respondToDataSetSelection = function (){
-            var dataSetComboBox = UTILS.extractValsFromCombobox(['dataSet']);
-            var phenotypeComboBox = UTILS.extractValsFromCombobox(['phenotype']);
-            forceToDataSetSelection(dataSetComboBox["dataSet"],phenotypeComboBox["phenotype"]);
+        var respondToDataSetSelection = function (target) {
+            var datasetSelector = target == 'dependent' ? 'datasetDependent' : 'datasetIndependent';
+            // if we're looking at the dependent tab, then get the phenotype from the dropdown,
+            // otherwise it's just 'none'
+            var phenotype = target == 'dependent' ? UTILS.extractValsFromCombobox(['phenotype'])['phenotype'] : 'none';
+            var dataset = UTILS.extractValsFromCombobox([datasetSelector])[datasetSelector];
+            mpgSoftware.variantWF.retrievePropertiesPerDataSet(phenotype, dataset, target);
         };
 
         /**
@@ -585,32 +621,44 @@ var mpgSoftware = mpgSoftware || {};
          *      * the gene is specified in the advanced filter, OR
          *      * the region is specified in the advanced filter
          * The button should be disabled otherwise.
+         * Note that the dependent and independent tabs have buttons that work independently
+         * of each other--so if the dependent tab has some values filled in, its button will be enabled,
+         * but the independent tab button will be disabled
          */
-        var updateBuildSearchRequestButton = function () {
-            var propertiesInputsAreEmpty = _.every($('input[data-type=propertiesInput]'), function(input) {
-                return input.value === "";
-            });
+        var updateBuildSearchRequestButton = function (target) {
+            var areInputValuesPresent = false;
+            var targetButtonId = '';
+            if (target == 'dependent') {
+                var propertiesInputsAreEmpty = _.every($('input[data-type=propertiesInput][data-category=dependent]'), function (input) {
+                    return input.value === "";
+                });
 
-            var advancedFilterInputsAreEmpty = _.every($('input[data-type=advancedFilterInput]'), function(input) {
-                return input.value === "";
-            });
+                areInputValuesPresent = !propertiesInputsAreEmpty;
+                targetButtonId = 'buildSearchRequestDependent'
+            } else {
+                var propertiesInputsAreEmpty = _.every($('input[data-type=propertiesInput][data-category=independent]'), function (input) {
+                    return input.value === "";
+                });
+                var regionInputsAreEmpty = _.every($('input[data-type=advancedFilterInput]'), function (input) {
+                    return input.value === "";
+                });
 
-            var proteinEffectsAreUnselected = _.every($('input[name="predictedEffects"]'), function(input) {
-                return ! input.checked;
-            });
+                var proteinEffectsAreUnselected = _.every($('input[name="predictedEffects"]'), function (input) {
+                    return !input.checked;
+                });
 
-            var areInputValuesPresent = ! ( propertiesInputsAreEmpty &&
-                                            advancedFilterInputsAreEmpty &&
-                                            proteinEffectsAreUnselected )
+                areInputValuesPresent = !( propertiesInputsAreEmpty && regionInputsAreEmpty && proteinEffectsAreUnselected );
+                targetButtonId = 'buildSearchRequestIndependent'
+            }
 
-            var button = document.getElementById('buildSearchRequest');
-            if(areInputValuesPresent) {
+            var button = document.getElementById(targetButtonId);
+            if (areInputValuesPresent) {
                 // enable the button
-                button.classList.remove('dk-search-btn-inactive')
+                button.classList.remove('dk-search-btn-inactive');
                 button.disabled = false
             } else {
                 // disable the button
-                button.classList.add('dk-search-btn-inactive')
+                button.classList.add('dk-search-btn-inactive');
                 button.disabled = true
             }
         };
@@ -621,7 +669,7 @@ var mpgSoftware = mpgSoftware || {};
          */
         function validatePropertyInput(input) {
             var numberRegex = /^((?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?)?$/
-            if( ! numberRegex.test(input.value) ) {
+            if (!numberRegex.test(input.value)) {
                 input.classList.add('redBorder');
             } else {
                 input.classList.remove('redBorder');
@@ -632,14 +680,14 @@ var mpgSoftware = mpgSoftware || {};
          * If the missense protein effect option is selected, show the extended
          * options
          */
-        function updateProteinEffectSelection(buttonLabel){
+        function updateProteinEffectSelection(buttonLabel) {
             // also update the build search button
-            mpgSoftware.firstResponders.updateBuildSearchRequestButton();
+            mpgSoftware.firstResponders.updateBuildSearchRequestButton('independent');
 
             // 2 comes from the definition of PortalConstants.PROTEIN_PREDICTION_EFFECT_MISSENSE_CODE
-            if (buttonLabel == 2)  {
+            if (buttonLabel == 2) {
                 $('#missense-options').show(200);
-            }  else {
+            } else {
                 $('#missense-options').hide(200);
             }
         }
@@ -655,7 +703,7 @@ var mpgSoftware = mpgSoftware || {};
             var chromosomeInputValue = document.getElementById('chromosomeInput').value;
             // matches: '1', '1:2-3', and ''
             var doesChromosomeInputMakeSense = /^(\d{1,2}(:\d+-\d+)?)?$/.test(chromosomeInputValue);
-            if( !doesChromosomeInputMakeSense ) {
+            if (!doesChromosomeInputMakeSense) {
                 document.getElementById('chromosomeInput').classList.add('redBorder');
             } else {
                 document.getElementById('chromosomeInput').classList.remove('redBorder');
@@ -674,26 +722,27 @@ var mpgSoftware = mpgSoftware || {};
             var queryProps = mpgSoftware.variantWF.propsWithQueries();
 
             // if we have no gene input, AND there's not already a chromosome query defined
-            if( geneInputValue === '' && queryProps.indexOf('chromosome') === -1 ) {
+            if (geneInputValue === '' && queryProps.indexOf('chromosome') === -1) {
                 document.getElementById('chromosomeInput').removeAttribute('disabled');
             } else {
                 document.getElementById('chromosomeInput').setAttribute('disabled', 'true');
             }
             // if we have no chromosome input, AND there's not already a gene query defined
-            if( chromosomeInputValue === '' && queryProps.indexOf('gene') === -1) {
+            if (chromosomeInputValue === '' && queryProps.indexOf('gene') === -1) {
                 document.getElementById('geneInput').removeAttribute('disabled');
+                document.getElementById('geneRangeInput').removeAttribute('disabled');
             } else {
                 document.getElementById('geneInput').setAttribute('disabled', 'true');
+                document.getElementById('geneRangeInput').setAttribute('disabled', 'true');
             }
         }
 
         return {
-            forceToPhenotypeSelection:forceToPhenotypeSelection,
-            respondToPhenotypeSelection:respondToPhenotypeSelection,
-            forceToDataSetSelection:forceToDataSetSelection,
-            respondToDataSetSelection:respondToDataSetSelection,
-            forceToPropertySelection:forceToPropertySelection,
-            updateBuildSearchRequestButton:updateBuildSearchRequestButton,
+            forceToPhenotypeSelection: forceToPhenotypeSelection,
+            respondToPhenotypeSelection: respondToPhenotypeSelection,
+            respondToDataSetSelection: respondToDataSetSelection,
+            forceToPropertySelection: forceToPropertySelection,
+            updateBuildSearchRequestButton: updateBuildSearchRequestButton,
             validatePropertyInput: validatePropertyInput,
             updateProteinEffectSelection: updateProteinEffectSelection,
             validateChromosomeInput: validateChromosomeInput,

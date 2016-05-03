@@ -99,7 +99,7 @@ div.dk-2td-content h1,div.dk-2td-content h2,div.dk-2td-content h3 {
 	font-weight: 300;
 }
 
-div.dk-variant-search-builder, div.dk-variant-submit-search {
+div.dk-variant-submit-search {
 	border-top: solid 1px #ddd;
 }
 
@@ -140,7 +140,6 @@ div.dk-variant-search-builder-description{
 }
 
 div.dk-t2d-advanced-filter {
-	display:none;
 	padding-left: 45px;
 	border-bottom: solid 1px #ddd;
 }
