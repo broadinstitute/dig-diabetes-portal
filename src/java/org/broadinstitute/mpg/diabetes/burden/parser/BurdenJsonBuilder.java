@@ -268,8 +268,16 @@ public class BurdenJsonBuilder {
                     Map<String, Object> map = this.getHashMapOfJsonArray(tempArray2);
                     variant.setVariantId((String)map.get(PortalConstants.JSON_VARIANT_ID_KEY));
                     variant.setChromosome((String) map.get(PortalConstants.JSON_VARIANT_CHROMOSOME_KEY));
-                    variant.setPolyphenPredictor((String) map.get(PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY));
-                    variant.setSiftPredictor((String) map.get(PortalConstants.JSON_VARIANT_SIFT_PRED_KEY));
+                    if (map.get(PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY) == null) {
+                        variant.setPolyphenPredictor((String)"");
+                    }else{
+                        variant.setPolyphenPredictor((String) map.get(PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY));
+                    }
+                    if (map.get(PortalConstants.JSON_VARIANT_SIFT_PRED_KEY) == null) {
+                        variant.setSiftPredictor((String)"");
+                    }else{
+                        variant.setSiftPredictor((String) map.get(PortalConstants.JSON_VARIANT_SIFT_PRED_KEY));
+                    }
                     variant.setMostDelScore((Integer)map.get(PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY));
                     variantList.add(variant);
                 }

@@ -212,8 +212,15 @@ class BurdenService {
             returnJson.put(PortalConstants.JSON_VARIANTS_KEY, variantArray);
             log.info("passing enhanced burden rest result: " + returnJson);
             */
+            JSONObject samplesObject = new JSONObject()
+            JSONArray samplesArray = new JSONArray()
+            samplesObject.put(PortalConstants.JSON_BURDEN_SAMPLES_KEY, samplesArray)
 
-            returnJson = this.getBurdenResultForVariantIdList(dataVersionId, phenotype, burdenVariantList, null);
+            JSONObject covariatesObject = new JSONObject()
+            JSONArray covariatesArray = new JSONArray(["C1","C2","C3","C4"])
+            covariatesObject.put(PortalConstants.JSON_BURDEN_COVARIATES_KEY, covariatesArray);
+
+            returnJson = this.getBurdenResultForVariantIdList("mdv${dataVersionId}".toString(), phenotype, burdenVariantList, covariatesObject, samplesObject);
 
         } catch (PortalException exception) {
             log.error("Got error creating burden test for gene: " + geneString + " and phenotype: " + phenotype + ": " + exception.getMessage());

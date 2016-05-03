@@ -128,6 +128,36 @@
     mpgSoftware.burdenTest = (function () {
          var loading = $('#rSpinner');
 
+
+        var retrieveEgadPhenotype = function ( dropDownSelector) {
+            var loading = $('#spinner').show();
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "${createLink(controller:'VariantInfo', action:'sampleMetadataAjaxWithAssumedExperiment')}",
+                        async: true,
+                        success: function (data) {
+                            var phenotypeDropdown = $(dropDownSelector);
+                            phenotypeDropdown.empty();
+                            if ( ( data !==  null ) &&
+                                    ( typeof data !== 'undefined') &&
+                                    ( typeof data.phenotypes !== 'undefined' ) &&
+                                    (  data.phenotypes !==  null ) ) {
+                                _.forEach(data.phenotypes,function(d){
+                                   phenotypeDropdown.append( new Option(d.trans, d.name));
+                                });
+                            }
+                            loading.hide();
+                        },
+                        error: function (jqXHR, exception) {
+                            loading.hide();
+                            core.errorReporter(jqXHR, exception);
+                        }
+                });
+        };
+
+
+
         /***
         *  Fill the drop down list with values.  Presumably we need to run this method right after the page load completes.
         *
@@ -404,6 +434,7 @@
         // public routines are declared below
         return {
             runBurdenTest:runBurdenTest,
+            retrieveEgadPhenotype:retrieveEgadPhenotype,
             fillVariantOptionFilterDropDown:fillVariantOptionFilterDropDown,
             fillBurdenTraitFilterDropDown: fillBurdenTraitFilterDropDown
         }
@@ -412,7 +443,8 @@
 
 $( document ).ready( function (){
    mpgSoftware.burdenTest.fillVariantOptionFilterDropDown ();
-   mpgSoftware.burdenTest.fillBurdenTraitFilterDropDown ();
+  // mpgSoftware.burdenTest.fillBurdenTraitFilterDropDown ();
+   mpgSoftware.burdenTest.retrieveEgadPhenotype ('#burdenTraitFilter');
 } );
 
 //runBurdenTest ();
