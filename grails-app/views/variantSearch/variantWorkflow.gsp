@@ -78,16 +78,16 @@
 
         <div class="variantWF-container">
             <h1><g:message code="variantSearch.workflow.header.title" default="Variant Finder"/></h1>
-            <p><g:message code="variantSearch.workflow.header.find_variants"/></p>
+            <div><g:message code="variantSearch.workflow.header.find_variants"/></div>
 
             <!-- tabs -->
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active" ><a href="#dependent" aria-controls="dependent" role="tab"
                                                            id="dependentTab"
-                                                           data-toggle="tab">Phenotype-dependent</a></li>
+                                                           data-toggle="tab"><g:message code="variantSearch.workflow.tab.phenotypeDependent.title" /></a></li>
                 <li role="presentation"><a href="#independent" aria-controls="independent" role="tab"
                                            id="independentTab"
-                                           data-toggle="tab">Phenotype-independent</a></li>
+                                           data-toggle="tab"><g:message code="variantSearch.workflow.tab.phenotypeIndependent.title" /></a></li>
             </ul>
 
             <!-- content -->
@@ -96,6 +96,8 @@
                 <div class="dk-fluid">
                     <div class="dk-variant-search-builder">
                         <div style="padding: 10px 0;">
+                        <p><g:message code="variantSearch.workflow.tab.phenotypeDependent.text" /></p>
+
                             <div class="row">
                                 <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-title">
                                     <g:message code="searchBuilder.traitOrDisease.prompt"
@@ -147,8 +149,8 @@
 
                 <div role="tabpanel" class="tab-pane" id="independent">
                     <div style="padding: 10px 0;" class="dk-variant-search-builder">
-                        %{--<div class="">--}%
-                            <div id="datasetChooserIndependent" class="row">
+                        <p><g:message code="variantSearch.workflow.tab.phenotypeIndependent.text" /></p>
+                        <div id="datasetChooserIndependent" class="row">
                                 <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-title">
                                     <g:message code="searchBuilder.dataset.prompt" default="Data set"/>
                                 </div>
@@ -164,7 +166,6 @@
                                 </div>
                             </div>
                             <div id="independentRowTarget"></div>
-                        %{--</div>--}%
                         <div class="row">
                             <div id="chromosomeInputHolder" class="col-md-7 col-sm-7 col-xs-7">
                                 <label><g:message code="variantSearch.restrictToRegion.gene"/></label>

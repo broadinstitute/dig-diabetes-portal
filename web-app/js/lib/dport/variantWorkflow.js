@@ -165,7 +165,7 @@ var mpgSoftware = mpgSoftware || {};
                 // if there's only one record, just click it to make the property inputs appear
                 if (numberOfRecords === 1) {
                     $(targetSelect).val(datasetList[0].name);
-                    $(targetSelect).click();
+                    $(targetSelect).change();
                 }
 
                 options.prop('disabled', false);
