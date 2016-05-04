@@ -43,6 +43,14 @@ div.burden-test-specific-results{
     padding: 10px;
     border: 1px solid;
 }
+div.iatError {
+    background-color: #ffffc9;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    padding: 2px 2px 2px 8px;
+    border: 1px solid #888888;
+}
 span.distPlotter{
     color: #000;
     cursor: pointer;
@@ -565,17 +573,19 @@ div.labelAndInput > input {
                     if ((typeof data !== 'undefined') && (data)){
                     //first check for error conditions
                         if (!data){
-                            console.log('null return data from burdenTestAjax');
-
+                             $('.iatErrorText').text('No data returned from burden test module!');
+                            $('#iatErrorFailure').show();
                         } else if (data.is_error) {
-                            console.log('burdenTestAjax returned is_error =' + data.is_error +'.');
-
+                            $('.iatErrorText').text('Error: '+data.error_msg);
+                            $('#iatErrorFailure').show();
                         } else if ((typeof data.stats.pValue === 'undefined') ||
                                  (typeof data.stats.beta === 'undefined') ||
                                  (typeof data.stats.stdError === 'undefined')){
                              console.log('burdenTestAjax returned undefined for P value, standard error or beta.');
 
                         } else {
+                            $('.iatErrorText').text('');
+                            $('#iatErrorFailure').hide();
                             var isDichotomousTrait = false;
                             if ((typeof data.stats.numCases === 'undefined') ||
                                 (typeof data.stats.numControls === 'undefined') ||
@@ -1511,6 +1521,16 @@ variant by specifying the phenotype to test for association, a subset of samples
 
 
 <div id="burden-test-some-results" class="row">
+    <div class="row" id="iatErrorFailure" style="display:none">
+        <div class="col-md-8 col-sm-6">
+            <div class="iatError">
+                <div class="iatErrorText"></div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6">
+
+        </div>
+    </div>
     <div class="col-sm-8 col-xs-12">
         <div class="row burden-test-specific-results burden-test-result">
 

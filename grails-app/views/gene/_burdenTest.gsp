@@ -513,7 +513,7 @@ $( document ).ready( function (){
     </div>
 
     <div id="burden-test-some-results" class="row burden-test-result">
-        <div class="col-md-8 col-sm-6">
+         <div class="col-md-8 col-sm-6">
             <div>
                 <p class="standardFont"><g:message code="gene.burdenTesting.messages.some_results"/></p>
             </div>
