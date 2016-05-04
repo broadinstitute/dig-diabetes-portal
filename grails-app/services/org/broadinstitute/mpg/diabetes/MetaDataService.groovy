@@ -468,7 +468,7 @@ class MetaDataService {
         List<String> everyPhenotype = getEveryPhenotype()
         JSONObject mapping = []
 
-        List<String> technologies = ["GWAS", "ExChip", "ExSeq"]
+        List<String> technologies = ["GWAS", "ExChip", "ExSeq", "WGS"]
 
         everyPhenotype.each {  String phenoName ->
             if (phenoName != 'none'){
