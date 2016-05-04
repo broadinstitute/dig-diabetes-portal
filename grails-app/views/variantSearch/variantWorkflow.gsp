@@ -24,6 +24,18 @@
 #missense-options.form-control {
     padding-right: 5px;
 }
+
+.additionalInputGroup {
+    padding: 30px 0;
+}
+
+.additionalInputGroup:first-of-type {
+    padding-top: 0;
+}
+
+#dependent h5, #independent h5 {
+    padding: 10px 0 25px 0;
+}
 </style>
 <script>
     $(document).ready(function () {
@@ -41,7 +53,10 @@
 
         // check to see if we have any existing filters--if so, we need to initialize them
         if ('${encodedFilterSets}') {
-            mpgSoftware.variantWF.initializePage(JSON.parse(decodeURIComponent('${encodedFilterSets}')));
+            var encodedFilters = JSON.parse(decodeURIComponent('${encodedFilterSets}'));
+            if(encodedFilters.length > 0) {
+                mpgSoftware.variantWF.initializePage(encodedFilters);
+            }
         }
     });
 
@@ -87,7 +102,7 @@
         <div class="variantWF-container">
             <h1><g:message code="variantSearch.workflow.header.title" default="Variant Finder"/></h1>
 
-            <div><g:message code="variantSearch.workflow.header.find_variants"/></div>
+            <p style="margin-bottom: 30px;"><g:message code="variantSearch.workflow.header.find_variants"/></p>
 
             <!-- tabs -->
             <ul class="nav nav-tabs" role="tablist">
@@ -107,7 +122,7 @@
                     <div class="dk-fluid">
                         <div class="dk-variant-search-builder">
                             <div style="padding: 10px 0;">
-                                <p><g:message code="variantSearch.workflow.tab.phenotypeDependent.text"/></p>
+                                <h5><g:message code="variantSearch.workflow.tab.phenotypeDependent.text"/></h5>
 
                                 <div class="row">
                                     <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-title">
@@ -161,9 +176,9 @@
 
                 <div role="tabpanel" class="tab-pane" id="independent">
                     <div style="padding: 10px 0;" class="dk-variant-search-builder">
-                        <p><g:message code="variantSearch.workflow.tab.phenotypeIndependent.text"/></p>
+                        <h5><g:message code="variantSearch.workflow.tab.phenotypeIndependent.text"/></h5>
 
-                        <div id="datasetChooserIndependent" class="row">
+                        <div id="datasetChooserIndependent" class="row additionalInputGroup">
                             <div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-2 dk-variant-search-builder-ui">
 
                                 <label>Data set <small style="color: #aaa;">(Choose a data set from which
@@ -175,14 +190,14 @@
                             <div id="independentRowTarget"></div>
                         </div>
 
-                        <div class="row">
+                        <div class="row additionalInputGroup">
                             <div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-2">
                                 <label>Genomic location of variants</label>
 
                                 <div id="chromosomeInputHolder" class="form-inline">
                                     <div class="form-inline">
                                         <input id="geneInput" type="text" class="form-control"
-                                               style="width:65%;"
+                                               style="width:50%;"
                                                placeholder="gene (e.g. SLC30A8)" data-type="advancedFilterInput"
                                                data-prop="gene" data-translatedname="gene"
                                                oninput="mpgSoftware.firstResponders.updateBuildSearchRequestButton('independent');
@@ -190,8 +205,8 @@
                                                ">
                                         <label style="font-size: 20px; font-weight: 100;">&nbsp; &#177 &nbsp;</label>
                                         <input type="number" id="geneRangeInput" class="form-control"
-                                               placeholder="flanking seq. (nt)"
-                                               style="width:20%;"/>
+                                               placeholder="flanking sequence (nt)"
+                                               style="width:35%;"/>
                                     </div>
 
                                     <div class="text-center" style="color:#f70; padding: 10px 0 10px 0;">
@@ -213,65 +228,57 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row additionalInputGroup">
                             <div class="col-md-10 col-sm-10 col-xs-10 col-md-offset-2">
                                 <label>Predicted effect of the variants on proteins</label>
 
                                 <div class="form-inline">
-                                    <div class="radio-inline">
-                                        <label>
-                                            <input type="radio" name="predictedEffects"
-                                                   value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_ALL_CODE}"
-                                                   onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_ALL_CODE})">
-                                            <g:message code="variantSearch.proteinEffectRestrictions.allEffects"
-                                                       default="all effects"/>
-                                        </label>
-                                    </div>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="predictedEffects" id="allProteinEffects"
+                                               value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_ALL_CODE}"
+                                               checked
+                                               onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_ALL_CODE})">
+                                        <g:message code="variantSearch.proteinEffectRestrictions.allEffects"
+                                                   default="all effects"/>
+                                    </label>
 
-                                    <div class="radio-inline">
-                                        <label>
-                                            <input type="radio" name="predictedEffects"
-                                                   value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_PTV_CODE}"
-                                                   onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_PTV_CODE})">
-                                            <g:message
-                                                    code="variantSearch.proteinEffectRestrictions.proteinTruncating"
-                                                    default="protein-truncating"/>
-                                        </label>
-                                    </div>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="predictedEffects"
+                                               value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_PTV_CODE}"
+                                               onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_PTV_CODE})">
+                                        <g:message
+                                                code="variantSearch.proteinEffectRestrictions.proteinTruncating"
+                                                default="protein-truncating"/>
+                                    </label>
 
-                                    <div class="radio-inline">
-                                        <label>
-                                            <input type="radio" name="predictedEffects"
-                                                   value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_MISSENSE_CODE}"
-                                                   onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_MISSENSE_CODE})">
-                                            <g:message code="variantSearch.proteinEffectRestrictions.missense"
-                                                       default="missense"/>
-                                        </label>
-                                    </div>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="predictedEffects"
+                                               value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_MISSENSE_CODE}"
+                                               onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_MISSENSE_CODE})">
+                                        <g:message code="variantSearch.proteinEffectRestrictions.missense"
+                                                   default="missense"/>
+                                    </label>
 
-                                    <div class="radio-inline">
-                                        <label>
-                                            <input type="radio" name="predictedEffects"
-                                                   value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_SYNONYMOUS_CODE}"
-                                                   onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_SYNONYMOUS_CODE})">
-                                            <g:message
-                                                    code="variantSearch.proteinEffectRestrictions.synonymousCoding"
-                                                    default="no effect (synonymous coding)"/>
-                                        </label>
-                                    </div>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="predictedEffects"
+                                               value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_SYNONYMOUS_CODE}"
+                                               onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_SYNONYMOUS_CODE})">
+                                        <g:message
+                                                code="variantSearch.proteinEffectRestrictions.synonymousCoding"
+                                                default="no effect (synonymous coding)"/>
+                                    </label>
 
-                                    <div class="radio-inline">
-                                        <label>
-                                            <input type="radio" name="predictedEffects"
-                                                   value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_NONCODING_CODE}"
-                                                   onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_NONCODING_CODE})">
-                                            <g:message code="variantSearch.proteinEffectRestrictions.noncoding"
-                                                       default="no effect (non-coding)"/>
-                                        </label>
-                                    </div>
+
+                                    <label class="radio-inline">
+                                        <input type="radio" name="predictedEffects"
+                                               value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_NONCODING_CODE}"
+                                               onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_NONCODING_CODE})">
+                                        <g:message code="variantSearch.proteinEffectRestrictions.noncoding"
+                                                   default="no effect (non-coding)"/>
+                                    </label>
+
                                 </div>
                             </div>
-
 
                             <div id="missense-options"
                                  class="form-inline col-md-10 col-sm-10 col-xs-10 col-md-offset-2"
@@ -339,7 +346,7 @@
                         </div>
 
 
-                        <div class="row">
+                        <div class="row additionalInputGroup">
                             <div class="col-md-12 col-sm-12 col-xs-12 text-right">
                                 <button id="buildSearchRequestIndependent"
                                         class="btn btn-sm btn-primary dk-search-btn-inactive"
@@ -352,14 +359,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div style="text-align: center; padding-bottom: 10px;">
-                <button class="btn btn-default btn-sm btn-success"
-                        onclick="mpgSoftware.variantWF.resetInputFields()">
-                    <g:message code="variantSearch.spec.actions.reset_adv_filter"
-                               default="Reset"/>
-                </button>
             </div>
 
             <div id="searchDetailsHolder" class="dk-variant-submit-search"></div>

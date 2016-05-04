@@ -159,6 +159,14 @@ table.dk-search-collection {
 	border-bottom: solid 2px #ddd;
 }
 
+table.dk-search-collection a:hover {
+	cursor: pointer;
+}
+
+table.dk-search-collection th {
+	font-weight: bold;
+}
+
 table.dk-search-collection td {
 	vertical-align:middle !important;
 }
