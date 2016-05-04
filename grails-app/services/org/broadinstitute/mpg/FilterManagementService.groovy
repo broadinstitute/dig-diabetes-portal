@@ -91,8 +91,8 @@ class FilterManagementService {
             sampleGroupProperties["mafu"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "MAFU" )
 
             sampleGroupProperties["technology"] =  metaDataService.getTechnologyPerSampleGroup( sampleGroup.systemId )
-            sampleGroupProperties["maf"] = metaDataService.getSampleGroupProperty(sampleGroup.systemId, "MAF")?.getName()
-            sampleGroupProperties["mac"] = metaDataService.getSampleGroupProperty(sampleGroup.systemId, "MAC")?.getName()
+            sampleGroupProperties["maf"] = metaDataService.getSampleGroupProperty(sampleGroup.systemId, "MAF")?.getName() ?: ""
+            sampleGroupProperties["mac"] = metaDataService.getSampleGroupProperty(sampleGroup.systemId, "MAC")?.getName() ?: ""
             sampleGroupProperties["count"] =  "${sampleGroup.subjectsNumber}"
             sampleGroupProperties["phenotypeGroup"] = phenotypeGroup
             mapSampleGroupsToProperties[sampleGroup.systemId] = sampleGroupProperties
