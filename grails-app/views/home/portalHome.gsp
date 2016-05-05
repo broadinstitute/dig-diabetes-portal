@@ -199,19 +199,22 @@
             <h3><g:message code="portal.home.news_headline" default="What's new" /></h3>
             <ul id="newsFeedHolder" class="dk-news-items gallery-fade"></ul>
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                <a class="btn btn-default" style="width:100%; margin-top: -50px; margin-right: 2%; margin-bottom: 0px;"
+                <a class="btn btn-default" style="width:100%; margin-right: 2%; margin-bottom: 10px;"
                    href="https://docs.google.com/forms/d/1r5q_DFKzYDT8YtN7jHY-kvmDX74KfOXAIxC0sGCN2j8/viewform"
                    target="_blank">
                     <g:message code="portal.home.mailsignup" default="Get email updates"/>
                 </a>
             </g:if>
             <g:else>
-                <a class="btn btn-default" style="width:80%; margin-top: -50px; margin-right: 2%; margin-bottom: 0px;"
-                   href="https://docs.google.com/a/broadinstitute.org/forms/d/1bncgNMw89nmqukMPc7xIourH-Wu7Vpc4xJ6Uh4RSECI/viewform"
-                   target="_blank">
-                    <g:message code="portal.home.mailsignup" default="Get email updates"/>
-                </a>
-                <a class="btn btn-default" style="width:15%; margin-top: -50px; margin-bottom: 0px; background-color:#55bcdf; border:solid 1px #1da1f2;" href="https://twitter.com/T2DKP" target="_blank"><img src="${resource(dir:'images/icons', file:'twitter.png')}" /></a>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <a class="btn btn-default" style="width:65%; margin-right: 2%; margin-bottom: 0px;"
+                       href="https://docs.google.com/a/broadinstitute.org/forms/d/1bncgNMw89nmqukMPc7xIourH-Wu7Vpc4xJ6Uh4RSECI/viewform"
+                       target="_blank">
+                        <g:message code="portal.home.mailsignup" default="Get email updates"/>
+                    </a>
+                    <a class="btn btn-default" style="width:12%; margin-bottom: 0px; background-color:#55bcdf; border:solid 1px #1da1f2;" href="https://twitter.com/T2DKP" target="_blank"><img src="${resource(dir:'images/icons', file:'twitter.png')}" /></a>
+                    <a class="btn btn-default" style="width:12%; margin-bottom: 0px; background-color:#00A0DC; border:solid 1px #1da1f2;" href="https://www.linkedin.com/groups/8505761" target="_blank"><img src="${resource(dir:'images/icons', file:'linkedin.png')}" /></a>
+                </div>
             </g:else>
             <h3 style="margin-top: 0px;"><g:message code="about.the.portal.header"/></h3>
             <g:if test="${g.portalTypeString()?.equals('stroke')}">

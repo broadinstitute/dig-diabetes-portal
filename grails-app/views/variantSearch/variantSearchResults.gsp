@@ -316,6 +316,7 @@
                 'properties': additionalProperties
             },
             url: '<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsAjax" />',
+            timeout: 90 * 1000,
             async: true,
             success: function (data, textStatus) {
                 var variantTableContext = {
@@ -326,8 +327,14 @@
                 loading.hide();
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
+                if(errorThrown == 'timeout') {
+                    // attach the data for the error message so we know what queries are taking a long time
+                    XMLHttpRequest.data = this.data;
+                    var errorMessage = $('<h4></h4>').text('The query you requested took too long to perform. Please try restricting your criteria and searching again.').css('color', 'red');
+                    $('#variantTable').html(errorMessage);
+                }
                 loading.hide();
-                errorReporter(XMLHttpRequest, exception);
+                core.errorReporter(XMLHttpRequest, errorThrown);
             }
         });
     }

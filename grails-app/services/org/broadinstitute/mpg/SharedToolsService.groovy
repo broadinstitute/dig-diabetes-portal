@@ -477,7 +477,7 @@ class SharedToolsService {
 
             phenotypesToKeep = metaDataService.getEveryPhenotype()
         } else {
-            phenotypesToKeep = phenotypesToKeep.findAll({ metaDataService.getEveryPhenotype().contains(it) })
+            phenotypesToKeep = phenotypesToKeep.findAll({ metaDataService.getEveryPhenotype(true).contains(it) })
         }
 
         for (String phenotype in phenotypesToKeep) {
@@ -487,8 +487,7 @@ class SharedToolsService {
             if (sampleGroupsToKeep == null) {
                 curSampleGroups.addAll(metaDataService.getSampleGroupPerPhenotype(phenotype))
             } else {
-                curSampleGroups.addAll(sampleGroupsToKeep)
-                //curSampleGroups.addAll(sampleGroupsToKeep.findAll({metaDataService.getSampleGroupPerPhenotype(phenotype)?.contains(it)}))
+                curSampleGroups.addAll(sampleGroupsToKeep.findAll({metaDataService.getSampleGroupPerPhenotype(phenotype)?.contains(it)}))
             }
             for (String sampleGroup in curSampleGroups) {
                 returnValue.dproperty[phenotype][sampleGroup] = []

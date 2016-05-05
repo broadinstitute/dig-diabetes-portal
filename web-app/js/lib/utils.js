@@ -389,7 +389,8 @@ var UTILS = {
                 var key = keys[x];
                 if (groupList.hasOwnProperty(key)) {
                     var groupContents = groupList[key];
-                    options.append("<optgroup label='"+key+"'>");
+                    // add some whitespace to create indentation
+                    options.append("<optgroup label='&nbsp;&nbsp;&nbsp;"+key+"'>");
                     for (var j = 0; j < groupContents.length; j++) {
                         options.append($("<option />").val(groupContents[j][0]).text(groupContents[j][1]));
                     }

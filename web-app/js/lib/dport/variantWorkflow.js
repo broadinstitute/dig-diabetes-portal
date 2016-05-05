@@ -155,6 +155,12 @@ var mpgSoftware = mpgSoftware || {};
             if (datasetJson && datasetJson.is_error == false) {
                 var numberOfRecords = parseInt(datasetJson.numRecords);
                 var targetSelect = target == 'dependent' ? '#datasetDependent' : '#datasetIndependent';
+
+                if(numberOfRecords == 0 && target == 'independent') {
+                    // if we have no phenotype-independent datasets, hide this option
+                    $('#datasetChooserIndependent').hide();
+                }
+
                 var options = $(targetSelect);
                 options.empty();
 
@@ -167,7 +173,7 @@ var mpgSoftware = mpgSoftware || {};
                 }
 
                 // clear out the properties list
-                fillPropertiesDropdown({is_error: false});
+                fillPropertiesDropdown({is_error: false}, target);
 
                 // if there's only one record, just click it to make the property inputs appear
                 if (numberOfRecords === 1) {
@@ -689,7 +695,7 @@ var mpgSoftware = mpgSoftware || {};
          * @param input
          */
         function validatePropertyInput(input) {
-            var numberRegex = /^((?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?)?$/
+            var numberRegex = /^((?:0|[1-9]\d*)?(?:\.\d*)?(?:[eE][+\-]?\d+)?)?$/
             if (!numberRegex.test(input.value)) {
                 input.classList.add('redBorder');
             } else {

@@ -339,7 +339,7 @@ class VariantSearchController {
                         }
                         break;
                     case PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY:
-                        if(currentQuery.value == 0) {
+                        if(currentQuery.value == '0') {
                             // if value is 0, then drop the query--reason: there are variants
                             // in the DB with MDS=NULL. There's no way to make SQL return those variants
                             // if the value being compared against is 0 (as far as I'm aware), so the

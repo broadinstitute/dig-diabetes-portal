@@ -42,7 +42,7 @@ var mpgSoftware = mpgSoftware || {};
 
                 newHeight = $("li", e).eq(l).height();
                 if (newHeight >= liHeight) {
-                    liHeight = newHeight + 40;
+                    liHeight = newHeight;
                 }
             }
 
