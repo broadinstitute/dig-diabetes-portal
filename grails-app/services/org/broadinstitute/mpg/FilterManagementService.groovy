@@ -200,8 +200,8 @@ class FilterManagementService {
 
     public List<String> generateSampleGroupLevelQueries (String geneName, String sampleGroupName, String technology, Float lowerValue, Float higherValue, String propertyName)   {
         List<String> returnValue = []
-        if (technology == "GWAS"){
-            LinkedHashMap regionSpecificationDetailsForGene = geneManagementService.getRegionSpecificationDetailsForGene(geneName,50000)
+        if ((technology == "GWAS")||(technology == "WGS")){
+            LinkedHashMap regionSpecificationDetailsForGene = geneManagementService.getRegionSpecificationDetailsForGene(geneName,100000)
             if (regionSpecificationDetailsForGene.chromosome) {
                 returnValue << "8=${regionSpecificationDetailsForGene.chromosome}".toString()
             }
@@ -216,8 +216,10 @@ class FilterManagementService {
             returnValue << "7=${geneName}".toString()
             returnValue << "11=MOST_DEL_SCORE<4"
         }
-        returnValue << "17=T2D[${sampleGroupName}]${propertyName}>${lowerValue.toString()}".toString()
-        returnValue << "17=T2D[${sampleGroupName}]${propertyName}<${higherValue.toString()}".toString()
+        //if ((lowerValue!=0)||(higherValue!=1)){ // because if they are then the filters are unnecessary
+            returnValue << "17=T2D[${sampleGroupName}]${propertyName}>${lowerValue.toString()}".toString()
+            returnValue << "17=T2D[${sampleGroupName}]${propertyName}<${higherValue.toString()}".toString()
+        //}
 
         return returnValue
     }

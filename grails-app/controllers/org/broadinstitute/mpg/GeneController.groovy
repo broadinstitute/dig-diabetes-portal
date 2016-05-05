@@ -232,7 +232,7 @@ class GeneController {
         if (!rowNames)  {
 
             rowMaps  = []
-            List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups( "", "MAF", ["ExSeq","ExChip","GWAS"])
+            List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups( "", "MAF", ["ExSeq","ExChip","GWAS", "WGS"])
             for (SampleGroup sampleGroup in fullListOfSampleGroups){
                 rowMaps << ["dataset":"${sampleGroup.systemId}","technology":"${metaDataService.getTechnologyPerSampleGroup(sampleGroup.systemId)}"]
             }

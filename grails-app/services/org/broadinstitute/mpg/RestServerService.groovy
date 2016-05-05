@@ -47,22 +47,12 @@ class RestServerService {
     public static String TECHNOLOGY_GWAS = "GWAS"
     public static String TECHNOLOGY_EXOME_SEQ = "ExSeq"
     public static String TECHNOLOGY_EXOME_CHIP = "ExChip"
-    public static String ANCESTRY_AA = "AA"
-    public static String ANCESTRY_HS = "HS"
-    public static String ANCESTRY_EA = "EA"
-    public static String ANCESTRY_SA = "SA"
-    public static String ANCESTRY_EU = "EU"
-    public static String ANCESTRY_NONE = "none"
-    public static String EXPERIMENT_DIAGRAM = "DIAGRAM"
+    public static String TECHNOLOGY_WGS_CHIP = "WGS"
     public static String EXOMESEQUENCEPVALUE = "P_FIRTH_FE_IV"
     public static String GWASDATAPVALUE = "P_VALUE"
     public static String EXOMECHIPPVALUE = "P_VALUE"
-    private String ORCHIP = "ODDS_RATIO"
-    private String SIGMADATAPVALUE = "P_VALUE"
     private String DEFAULTPHENOTYPE = "T2D"
     private String MAFPHENOTYPE = "MAF"
-    private String GWASDATAOR = "ODDS_RATIO"
-    private String EXOMECHIPOR = "ODDS_RATIO"
     private String EXOMESEQUENCEOR = "OR_FIRTH_FE_IV"
     private String HETEROZYGOTE_AFFECTED = "HETA"
     private String HETEROZYGOTE_UNAFFECTED = "HETU"
@@ -663,6 +653,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         // known special case data sets
         switch (technology) {
             case RestServerService.TECHNOLOGY_GWAS:
+            case RestServerService.TECHNOLOGY_WGS_CHIP:
                 geneRegion = sharedToolsService.getGeneExpandedRegionSpec(geneName)
                 break;
             default:
@@ -1163,7 +1154,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters, searchBuilderService, metaDataService)
 
         // DIGP-300: upping default getData limit to 5k for better MAF counts for HDAC9 gene (was getting counts > 1k)
-        getDataQueryHolder.getDataQuery.setLimit(5000)
+        //getDataQueryHolder.getDataQuery.setLimit(5000)
+        // DIGP-300: upping default getData limit to 5k for better MAF counts for HDAC9 gene (was getting counts > 1k)
+        Boolean isCount = true;
+        getDataQueryHolder.isCount(isCount);
+       // getDataQueryHolder.getDataQuery.setLimit(1000)
         JsonSlurper slurper = new JsonSlurper()
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)

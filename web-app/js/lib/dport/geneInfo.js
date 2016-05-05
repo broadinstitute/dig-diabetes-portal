@@ -517,11 +517,17 @@ var mpgSoftware = mpgSoftware || {};
                 var rowProcessorFunction;
                 // we either search by region or by gene name.  We need to decide which reference to build
                 if ((typeof rowCode !== 'undefined') &&
-                    (rowCode.indexOf('GWAS')>-1)){
+                    ((rowTechnology=='GWAS')||(rowTechnology=='WGS'))){
                     rowProcessorFunction = buildAnchorForRegionVariantSearches;
                 } else {
                     rowProcessorFunction = buildAnchorForGeneVariantSearches;
                 }
+//                if ((typeof rowCode !== 'undefined') &&
+//                    (rowCode.indexOf('GWAS')>-1)){
+//                    rowProcessorFunction = buildAnchorForRegionVariantSearches;
+//                } else {
+//                    rowProcessorFunction = buildAnchorForGeneVariantSearches;
+//                }
                 fillVariantsAndAssociationLine(geneName, rowCode, rowName, rowTranslatedName, rowCount, rowTechnology, regionSpecifier,
                     valueHolder[row],columnInformation,
                     rowProcessorFunction, emphasizeGwas, rootVariantUrl, rowHelpText,phenotype,row);
