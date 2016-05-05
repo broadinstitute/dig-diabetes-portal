@@ -5,6 +5,7 @@ import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.WidgetService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.web.json.JSONObject
 import temporary.BuildInfo
 
 class SystemController {
@@ -43,12 +44,13 @@ class SystemController {
     }
 
     def determineVersion = {
-        String jsonVersion  =  """
-{"buildHost": "${BuildInfo?.buildHost}",
-"buildTime":"${BuildInfo?.buildTime}",
-"appVersion":"${BuildInfo?.appVersion}",
-"buildNumber":"${BuildInfo?.buildNumber}"
-}""".toString()
+        JSONObject jsonVersion = [
+            buildHost: "${BuildInfo?.buildHost}",
+            buildTime:"${BuildInfo?.buildTime}",
+            appVersion:"${BuildInfo?.appVersion}",
+            buildNumber:"${BuildInfo?.buildNumber}"
+        ]
+
         render(status:200, contentType:"application/json") {
             [info:jsonVersion]
         }
