@@ -16,6 +16,26 @@
 .redBorder, .redBorder:focus {
     border-color: red !important;
 }
+
+.dk-variant-search-builder-ui {
+    padding-bottom: 10px;
+}
+
+#missense-options.form-control {
+    padding-right: 5px;
+}
+
+.additionalInputGroup {
+    padding: 30px 0;
+}
+
+.additionalInputGroup:first-of-type {
+    padding-top: 0;
+}
+
+#dependent h5, #independent h5 {
+    padding: 10px 0 25px 0;
+}
 </style>
 <script>
     $(document).ready(function () {
@@ -33,7 +53,10 @@
 
         // check to see if we have any existing filters--if so, we need to initialize them
         if ('${encodedFilterSets}') {
-            mpgSoftware.variantWF.initializePage(JSON.parse(decodeURIComponent('${encodedFilterSets}')));
+            var encodedFilters = JSON.parse(decodeURIComponent('${encodedFilterSets}'));
+            if(encodedFilters.length > 0) {
+                mpgSoftware.variantWF.initializePage(encodedFilters);
+            }
         }
     });
 
@@ -78,139 +101,148 @@
 
         <div class="variantWF-container">
             <h1><g:message code="variantSearch.workflow.header.title" default="Variant Finder"/></h1>
-            <div><g:message code="variantSearch.workflow.header.find_variants"/></div>
+
+            <p style="margin-bottom: 30px;"><g:message code="variantSearch.workflow.header.find_variants"/></p>
 
             <!-- tabs -->
             <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active" ><a href="#dependent" aria-controls="dependent" role="tab"
-                                                           id="dependentTab"
-                                                           data-toggle="tab"><g:message code="variantSearch.workflow.tab.phenotypeDependent.title" /></a></li>
+                <li role="presentation" class="active"><a href="#dependent" aria-controls="dependent" role="tab"
+                                                          id="dependentTab"
+                                                          data-toggle="tab"><g:message
+                            code="variantSearch.workflow.tab.phenotypeDependent.title"/></a></li>
                 <li role="presentation"><a href="#independent" aria-controls="independent" role="tab"
                                            id="independentTab"
-                                           data-toggle="tab"><g:message code="variantSearch.workflow.tab.phenotypeIndependent.title" /></a></li>
+                                           data-toggle="tab"><g:message
+                            code="variantSearch.workflow.tab.phenotypeIndependent.title"/></a></li>
             </ul>
 
             <!-- content -->
             <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="dependent">
-                <div class="dk-fluid">
-                    <div class="dk-variant-search-builder">
-                        <div style="padding: 10px 0;">
-                        <p><g:message code="variantSearch.workflow.tab.phenotypeDependent.text" /></p>
+                <div role="tabpanel" class="tab-pane active" id="dependent">
+                    <div class="dk-fluid">
+                        <div class="dk-variant-search-builder">
+                            <div style="padding: 10px 0;">
+                                <h5><g:message code="variantSearch.workflow.tab.phenotypeDependent.text"/></h5>
 
-                            <div class="row">
-                                <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-title">
-                                    <g:message code="searchBuilder.traitOrDisease.prompt"
-                                               default="Trait or disease of interest"/>
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-title">
+                                        <g:message code="searchBuilder.traitOrDisease.prompt"
+                                                   default="Trait or disease of interest"/>
+                                    </div>
+
+                                    <div class="col-md-5 col-sm-5 col-xs-5 dk-variant-search-builder-ui">
+                                        <select id="phenotype" class="form-control" disabled
+                                                onchange="mpgSoftware.firstResponders.respondToPhenotypeSelection()"></select>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-description">
+                                        <g:message code="variantSearch.wfRequest.phenotype.help.text"
+                                                   default="Choose a phenotype to act as the basis of a search"/>
+                                    </div>
                                 </div>
 
-                                <div class="col-md-5 col-sm-5 col-xs-5 dk-variant-search-builder-ui">
-                                    <select id="phenotype" class="form-control" disabled
-                                            onchange="mpgSoftware.firstResponders.respondToPhenotypeSelection()"></select>
+                                <div id="datasetChooserDependent" class="row">
+                                    <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-title">
+                                        <g:message code="searchBuilder.dataset.prompt" default="Data set"/>
+                                    </div>
+
+                                    <div class="col-md-5 col-sm-5 col-xs-5 dk-variant-search-builder-ui">
+                                        <select id="datasetDependent" class="form-control" disabled
+                                                onchange="mpgSoftware.firstResponders.respondToDataSetSelection('dependent')"></select>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-description">
+                                        <g:message code="variantSearch.wfRequest.dataSet.help.text"
+                                                   default="Choose a data set from which variants may be found"/>
+                                    </div>
                                 </div>
 
-                                <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-description">
-                                    <g:message code="variantSearch.wfRequest.phenotype.help.text"
-                                               default="Choose a phenotype to act as the basis of a search"/>
-                                </div>
+                                <div id="dependentRowTarget"></div>
+
                             </div>
 
-                            <div id="datasetChooserDependent" class="row">
-                                <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-title">
-                                    <g:message code="searchBuilder.dataset.prompt" default="Data set"/>
-                                </div>
-
-                                <div class="col-md-5 col-sm-5 col-xs-5 dk-variant-search-builder-ui">
-                                    <select id="datasetDependent" class="form-control" disabled
-                                            onchange="mpgSoftware.firstResponders.respondToDataSetSelection('dependent')"></select>
-                                </div>
-
-                                <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-description">
-                                    <g:message code="variantSearch.wfRequest.dataSet.help.text"
-                                               default="Choose a data set from which variants may be found"/>
-                                </div>
+                            <div class="row dk-submit-btn-wrapper">
+                                <button id="buildSearchRequestDependent"
+                                        class="btn btn-sm btn-primary dk-search-btn-inactive"
+                                        onclick="mpgSoftware.variantWF.gatherCurrentQueryAndSave('dependent')" disabled>
+                                    <g:message code="variantSearch.spec.actions.build_req"
+                                               default="Build search request"/>
+                                </button>
                             </div>
 
-                            <div id="dependentRowTarget"></div>
-
                         </div>
-
-                        <div class="row dk-submit-btn-wrapper">
-                            <button id="buildSearchRequestDependent" class="btn btn-sm btn-primary dk-search-btn-inactive"
-                                    onclick="mpgSoftware.variantWF.gatherCurrentQueryAndSave('dependent')" disabled>
-                                <g:message code="variantSearch.spec.actions.build_req"
-                                           default="Build search request"/>
-                            </button>
-                        </div>
-
                     </div>
                 </div>
-            </div>
 
                 <div role="tabpanel" class="tab-pane" id="independent">
                     <div style="padding: 10px 0;" class="dk-variant-search-builder">
-                        <p><g:message code="variantSearch.workflow.tab.phenotypeIndependent.text" /></p>
-                        <div id="datasetChooserIndependent" class="row">
-                                <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-title">
-                                    <g:message code="searchBuilder.dataset.prompt" default="Data set"/>
-                                </div>
+                        <h5><g:message code="variantSearch.workflow.tab.phenotypeIndependent.text"/></h5>
 
-                                <div class="col-md-5 col-sm-5 col-xs-5 dk-variant-search-builder-ui">
-                                    <select id="datasetIndependent" class="form-control"
-                                            onchange="mpgSoftware.firstResponders.respondToDataSetSelection('independent')"></select>
-                                </div>
+                        <div id="datasetChooserIndependent" class="row additionalInputGroup">
+                            <div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-2 dk-variant-search-builder-ui">
 
-                                <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-description">
-                                    <g:message code="variantSearch.wfRequest.dataSet.help.text"
-                                               default="Choose a data set from which variants may be found"/>
+                                <label>Data set <small style="color: #aaa;">(Choose a data set from which
+                                variants may be found)</small></label>
+                                <select id="datasetIndependent" class="form-control" style="width: 90%"
+                                        onchange="mpgSoftware.firstResponders.respondToDataSetSelection('independent')"></select>
+                            </div>
+
+                            <div id="independentRowTarget"></div>
+                        </div>
+
+                        <div class="row additionalInputGroup">
+                            <div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-2">
+                                <label>Genomic location of variants</label>
+
+                                <div id="chromosomeInputHolder" class="form-inline">
+                                    <div class="form-inline">
+                                        <input id="geneInput" type="text" class="form-control"
+                                               style="width:50%;"
+                                               placeholder="gene (e.g. SLC30A8)" data-type="advancedFilterInput"
+                                               data-prop="gene" data-translatedname="gene"
+                                               oninput="mpgSoftware.firstResponders.updateBuildSearchRequestButton('independent');
+                                               mpgSoftware.firstResponders.controlGeneAndChromosomeInputs();
+                                               ">
+                                        <label style="font-size: 20px; font-weight: 100;">&nbsp; &#177 &nbsp;</label>
+                                        <input type="number" id="geneRangeInput" class="form-control"
+                                               placeholder="flanking sequence (nt)"
+                                               style="width:35%;"/>
+                                    </div>
+
+                                    <div class="text-center" style="color:#f70; padding: 10px 0 10px 0;">
+                                        &#8212; or &#8212;
+                                    </div>
+
+                                    <div class="form-inline">
+                                        <input id="chromosomeInput" type="text" class="form-control" style="width: 90%"
+                                               placeholder="Region chromosome: start - stop (e.g. chr9:21,940,000-22,190,000)"
+                                               data-type="advancedFilterInput"
+                                               data-prop="chromosome" data-translatedname="chromosome"
+                                               oninput="
+                                                   mpgSoftware.firstResponders.updateBuildSearchRequestButton('independent');
+                                                   mpgSoftware.firstResponders.validateChromosomeInput();
+                                                   mpgSoftware.firstResponders.controlGeneAndChromosomeInputs();
+                                               ">
+                                    </div>
                                 </div>
                             </div>
-                            <div id="independentRowTarget"></div>
-                        <div class="row">
-                            <div id="chromosomeInputHolder" class="col-md-7 col-sm-7 col-xs-7">
-                                <label><g:message code="variantSearch.restrictToRegion.gene"/></label>
+                        </div>
+
+                        <div class="row additionalInputGroup">
+                            <div class="col-md-10 col-sm-10 col-xs-10 col-md-offset-2">
+                                <label>Predicted effect of the variants on proteins</label>
 
                                 <div class="form-inline">
-                                    <input id="geneInput" type="text" class="form-control"
-                                           style="width:65%;"
-                                           placeholder="gene" data-type="advancedFilterInput"
-                                           data-prop="gene" data-translatedname="gene"
-                                           oninput="mpgSoftware.firstResponders.updateBuildSearchRequestButton('independent');
-                                           mpgSoftware.firstResponders.controlGeneAndChromosomeInputs();
-                                           ">
-                                    <label style="font-size: 20px; font-weight: 100;">&nbsp; &#177 &nbsp;</label>
-                                    <input type="number" id="geneRangeInput" class="form-control"
-                                           style="width:20%;"/>
-                                </div>
-
-                                <div class="text-center" style="color:#f70; padding: 10px 0 10px 0;">
-                                    &#8212; or &#8212;
-                                </div>
-                                <label><g:message code="variantSearch.restrictToRegion.region"/></label>
-                                <input id="chromosomeInput" type="text" class="form-control"
-                                       placeholder="chromosome: start - stop"
-                                       data-type="advancedFilterInput"
-                                       data-prop="chromosome" data-translatedname="chromosome"
-                                       oninput="
-                                           mpgSoftware.firstResponders.updateBuildSearchRequestButton('independent');
-                                           mpgSoftware.firstResponders.validateChromosomeInput();
-                                           mpgSoftware.firstResponders.controlGeneAndChromosomeInputs();
-                                       ">
-                            </div>
-
-                            <div class="col-md-3 col-sm-3 col-xs-3">
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="predictedEffects"
+                                    <label class="radio-inline">
+                                        <input type="radio" name="predictedEffects" id="allProteinEffects"
                                                value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_ALL_CODE}"
+                                               checked
                                                onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_ALL_CODE})">
                                         <g:message code="variantSearch.proteinEffectRestrictions.allEffects"
                                                    default="all effects"/>
                                     </label>
-                                </div>
 
-                                <div class="radio">
-                                    <label>
+                                    <label class="radio-inline">
                                         <input type="radio" name="predictedEffects"
                                                value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_PTV_CODE}"
                                                onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_PTV_CODE})">
@@ -218,20 +250,16 @@
                                                 code="variantSearch.proteinEffectRestrictions.proteinTruncating"
                                                 default="protein-truncating"/>
                                     </label>
-                                </div>
 
-                                <div class="radio">
-                                    <label>
+                                    <label class="radio-inline">
                                         <input type="radio" name="predictedEffects"
                                                value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_MISSENSE_CODE}"
                                                onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_MISSENSE_CODE})">
                                         <g:message code="variantSearch.proteinEffectRestrictions.missense"
                                                    default="missense"/>
                                     </label>
-                                </div>
 
-                                <div class="radio">
-                                    <label>
+                                    <label class="radio-inline">
                                         <input type="radio" name="predictedEffects"
                                                value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_SYNONYMOUS_CODE}"
                                                onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_SYNONYMOUS_CODE})">
@@ -239,26 +267,23 @@
                                                 code="variantSearch.proteinEffectRestrictions.synonymousCoding"
                                                 default="no effect (synonymous coding)"/>
                                     </label>
-                                </div>
 
-                                <div class="radio">
-                                    <label>
+
+                                    <label class="radio-inline">
                                         <input type="radio" name="predictedEffects"
                                                value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_NONCODING_CODE}"
                                                onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_NONCODING_CODE})">
                                         <g:message code="variantSearch.proteinEffectRestrictions.noncoding"
                                                    default="no effect (non-coding)"/>
                                     </label>
+
                                 </div>
                             </div>
 
                             <div id="missense-options"
-                                 class="col-md-2 col-sm-2 col-xs-2 missense-options"
+                                 class="form-inline col-md-10 col-sm-10 col-xs-10 col-md-offset-2"
                                  style="display: none">
                                 <div class="form-group form-group-sm">
-                                    <label><g:message
-                                            code="variantSearch.proteinEffectRestrictions.missense.polyphen"
-                                            default="PolyPhen-2 prediction"/></label>
                                     <select id="polyphenSelect"
                                             name="${PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY}"
                                             data-translatedname="<g:message code="metadata.PolyPhen_PRED"
@@ -275,12 +300,12 @@
                                                 code="variantSearch.proteinEffectRestrictions.missense.polyphen.benign"
                                                 default="benign"/></option>
                                     </select>
+                                    <label><g:message
+                                            code="variantSearch.proteinEffectRestrictions.missense.polyphen"
+                                            default="PolyPhen-2 prediction"/></label>
                                 </div>
 
                                 <div class="form-group form-group-sm">
-                                    <label><g:message
-                                            code="variantSearch.proteinEffectRestrictions.missense.sift"
-                                            default="SIFT prediction"/></label>
                                     <select id="siftSelect"
                                             name="${PortalConstants.JSON_VARIANT_SIFT_PRED_KEY}"
                                             data-translatedname="<g:message code="metadata.SIFT_PRED"
@@ -294,12 +319,12 @@
                                                 code="variantSearch.proteinEffectRestrictions.missense.sift.tolerated"
                                                 default="tolerated"/></option>
                                     </select>
+                                    <label><g:message
+                                            code="variantSearch.proteinEffectRestrictions.missense.sift"
+                                            default="SIFT prediction"/></label>
                                 </div>
 
                                 <div class="form-group form-group-sm">
-                                    <label><g:message
-                                            code="variantSearch.proteinEffectRestrictions.missense.condel"
-                                            default="CONDEL prediction"/></label>
                                     <select id="condelSelect"
                                             name="${PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY}"
                                             data-translatedname="<g:message code="metadata.Condel_PRED"
@@ -313,21 +338,20 @@
                                                 code="variantSearch.proteinEffectRestrictions.missense.condel.benign"
                                                 default="benign"/></option>
                                     </select>
-
+                                    <label><g:message
+                                            code="variantSearch.proteinEffectRestrictions.missense.condel"
+                                            default="CONDEL prediction"/></label>
                                 </div>
                             </div>
                         </div>
 
 
-                        <div class="row">
+                        <div class="row additionalInputGroup">
                             <div class="col-md-12 col-sm-12 col-xs-12 text-right">
-                                <button class="btn btn-default btn-sm btn-success"
-                                        onclick="mpgSoftware.variantWF.resetInputFields()">
-                                    <g:message code="variantSearch.spec.actions.reset_adv_filter"
-                                               default="Reset"/>
-                                </button>
-                                <button id="buildSearchRequestIndependent" class="btn btn-sm btn-primary dk-search-btn-inactive"
-                                        onclick="mpgSoftware.variantWF.gatherCurrentQueryAndSave('independent')" disabled>
+                                <button id="buildSearchRequestIndependent"
+                                        class="btn btn-sm btn-primary dk-search-btn-inactive"
+                                        onclick="mpgSoftware.variantWF.gatherCurrentQueryAndSave('independent')"
+                                        disabled>
                                     <g:message code="variantSearch.spec.actions.build_req"
                                                default="Build search request"/>
                                 </button>
@@ -356,9 +380,9 @@
                             {{ translatedPhenotype }} {{ #translatedDataset }} [{{ translatedDataset }}] {{ /translatedDataset }} {{ translatedName }} {{ comparator }} {{ displayValue }}<br>
                         </td>
                         <td><a onclick="mpgSoftware.variantWF.editQuery({{ index }})"><g:message
-                                code="variantSearch.spec.actions.edit" default="Edit"/></a></td>
+                    code="variantSearch.spec.actions.edit" default="Edit"/></a></td>
                         <td><a onclick="mpgSoftware.variantWF.deleteQuery({{ index }})"><g:message
-                                code="variantSearch.spec.actions.delete" default="Delete"/></a></td>
+                    code="variantSearch.spec.actions.delete" default="Delete"/></a></td>
                     </tr>
                     {{ /listOfSavedQueries }}
                     </tbody>

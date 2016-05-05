@@ -38,7 +38,14 @@ var mpgSoftware = mpgSoftware || {};
                 listOfSavedQueries.push(query);
             });
 
+            // unset the "all effects" protein effect button, which is checked by default
+            // for the situation where you're coming to the variant finder for a fresh search
+            document.getElementById('allProteinEffects').removeAttribute('checked');
+
             updatePageWithNewQueryList();
+            // calling resetInputFields() will disable any inputs for which we have
+            // an existing query
+            resetInputFields();
         }
 
         // called when page loads
@@ -266,10 +273,6 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 });
 
-                // reset all of the inputs
-                resetInputFields();
-
-                mpgSoftware.firstResponders.updateBuildSearchRequestButton('dependent');
             } else if (category == 'independent') {
                 propertiesInputs = $('input[data-type=propertiesInput][data-category=independent]');
 
@@ -364,11 +367,13 @@ var mpgSoftware = mpgSoftware || {};
                     });
                 }
 
-                // reset all of the inputs
-                resetInputFields();
-
-                mpgSoftware.firstResponders.updateBuildSearchRequestButton('independent');
             }
+
+            // reset all of the inputs
+            resetInputFields();
+
+            mpgSoftware.firstResponders.updateBuildSearchRequestButton(category);
+
             // make call to update list of saved queries
             updatePageWithNewQueryList();
 
@@ -442,6 +447,15 @@ var mpgSoftware = mpgSoftware || {};
                 document.getElementById('geneInput').removeAttribute('disabled');
                 document.getElementById('geneRangeInput').removeAttribute('disabled');
                 document.getElementById('chromosomeInput').removeAttribute('disabled');
+            }
+            // same thing with a protein input
+            if(deletedQuery.prop == 'MOST_DEL_SCORE') {
+                var predictedEffectOptions = $('input[name="predictedEffects"]');
+                _.each(predictedEffectOptions, function (option) {
+                    option.removeAttribute('disabled');
+                    option.checked = false;
+                });
+
             }
             updatePageWithNewQueryList();
         };
@@ -527,6 +541,11 @@ var mpgSoftware = mpgSoftware || {};
                 document.getElementById('geneInput').setAttribute('disabled', 'true');
                 document.getElementById('geneRangeInput').setAttribute('disabled', 'true');
                 document.getElementById('chromosomeInput').setAttribute('disabled', 'true');
+            } else {
+                // enable all of the inputs
+                document.getElementById('geneInput').removeAttribute('disabled');
+                document.getElementById('geneRangeInput').removeAttribute('disabled');
+                document.getElementById('chromosomeInput').removeAttribute('disabled');
             }
 
             // if we have a protein effect input, we should disable the protein effect inputs
@@ -548,6 +567,8 @@ var mpgSoftware = mpgSoftware || {};
             });
 
             $('#missense-options').hide(300);
+            mpgSoftware.firstResponders.updateBuildSearchRequestButton('independent');
+            mpgSoftware.firstResponders.updateBuildSearchRequestButton('dependent');
         };
 
         /**

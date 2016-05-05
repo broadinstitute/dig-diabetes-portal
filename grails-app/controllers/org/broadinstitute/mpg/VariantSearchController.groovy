@@ -193,7 +193,7 @@ class VariantSearchController {
                             comparator = '<'
                         } else if (data.indexOf('|') > -1) {
                             (specificEffect, value) = data.split(/\|/)
-                            comparator = '|'
+                            comparator = '='
                         } else if (data.indexOf('>') > -1) {
                             (specificEffect, value) = data.split(/\>/)
                             comparator = '>'
@@ -338,7 +338,17 @@ class VariantSearchController {
                             computedStrings << processedQuery
                         }
                         break;
-                    case [PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY, PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY, PortalConstants.JSON_VARIANT_SIFT_PRED_KEY, PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY]:
+                    case PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY:
+                        if(currentQuery.value == 0) {
+                            // if value is 0, then drop the query--reason: there are variants
+                            // in the DB with MDS=NULL. There's no way to make SQL return those variants
+                            // if the value being compared against is 0 (as far as I'm aware), so the
+                            // simplest thing to do is just drop this query. If we get to the point of
+                            // supporting ORing queries, this may change
+                            break;
+                        }
+                        // Otherwise, process the query like normal, so fall through to the next case
+                    case [PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY, PortalConstants.JSON_VARIANT_SIFT_PRED_KEY, PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY]:
                         processedQuery = '11=' + currentQuery.prop + '|' + currentQuery.value
                         computedStrings << processedQuery
                         break;
