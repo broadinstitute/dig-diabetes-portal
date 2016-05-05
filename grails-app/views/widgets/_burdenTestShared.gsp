@@ -332,7 +332,11 @@ div.labelAndInput > input {
         };
 
 
-
+        /***
+        *  Build the UI widgets which can be used to specify the filters for DAGA.  Once they are in place
+        *  we can use fillDistributionPlotsAndDropdowns to create plots.
+        *
+        */
         var retrieveSampleFilterMetadata = function (dropdownSel, dropDownSelector) {
             var data = getStoredSampleMetadata();
             var phenotype = $(dropDownSelector).val();
@@ -400,7 +404,12 @@ div.labelAndInput > input {
         };
 
 
-
+        /***
+        * Get new sample data to match our filters
+        *
+        * @param dataSetSel
+        * @param callback
+        */
         var refreshSampleData = function (dataSetSel,callback){
 
            var collectingFilterNames = function (){
@@ -502,8 +511,11 @@ div.labelAndInput > input {
         };
 
 
-
-         var displayTestResultsSection = function (display)  {
+        /***
+        *   Determine whether or not we should see the section displaying IAT test results
+        * @param display
+        */
+        var displayTestResultsSection = function (display)  {
             burdenTestResult = $('.burden-test-result');
             if (display){
                 burdenTestResult.show () ;
@@ -738,17 +750,8 @@ div.labelAndInput > input {
                     value: arrObj.samples,
                     color: '#0082ca'});
            });
-//            var data = [
-//                { category: 'male',
-//                    value: 230,
-//                    color: '#0000b4'},
-//                { category: 'female',
-//                    value: 245,
-//                    color: '#0082ca'}
-//            ],
-            roomForLabels = 120,
-            maximumPossibleValue = 1,
-            labelSpacer = 50;
+
+           var roomForLabels = 50;
 
     var margin = {top: 50, right: 50, bottom: 20, left: 15},
             width = 700 - margin.left - margin.right,
@@ -762,7 +765,7 @@ div.labelAndInput > input {
                 .margin(margin)
                 .showGridLines (false)
                 .blackTextAfterBar (true)
-                .labelSpacer (labelSpacer)
+                .spaceForYAxisLabels (roomForLabels)
                 .dataHanger(selector,data);
 
         d3.select(selector).call(barChart.render);
@@ -1125,7 +1128,10 @@ div.labelAndInput > input {
 
 
 
-
+        /***
+        *  Produce a culled list of samples based on user-specified filters.
+        *
+        */
         var dynamicallyFilterSamples = function (){
             var data = getStoredSampleData();
             var samplesWeWant = generateFilterSamples();
@@ -1195,9 +1201,8 @@ div.labelAndInput > input {
             getStoredSampleData:getStoredSampleData,
             retrieveSampleMetadata:retrieveSampleMetadata,
             refreshSampleData:refreshSampleData,
+            dynamicallyFilterSamples:dynamicallyFilterSamples,
             retrieveSampleFilterMetadata:retrieveSampleFilterMetadata,
-            getStoredSampleMetadata: getStoredSampleMetadata,
-            dynamicallyFilterSamples: dynamicallyFilterSamples,
             displayTestResultsSection: displayTestResultsSection
         }
 

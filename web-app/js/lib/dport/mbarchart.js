@@ -19,7 +19,6 @@ var baget = baget || {};  // encapsulating variable
         var data, // no defaults because we can't make a plot without some data to plot
             showGridLines = true,
             blackTextAfterBar = false,
-            labelSpacer = 10,
             spaceForYAxisLabels = 50,
             valueAccessor = function (x){return x.value},
             colorAccessor = function (x){return x.color},
@@ -287,9 +286,9 @@ var baget = baget || {};  // encapsulating variable
             return instance;
         };
 
-        instance.labelSpacer = function (x) {
-            if (!arguments.length) return labelSpacer;
-            labelSpacer = x;
+        instance.spaceForYAxisLabels = function (x) {
+            if (!arguments.length) return spaceForYAxisLabels;
+            spaceForYAxisLabels = x;
             return instance;
         };
 

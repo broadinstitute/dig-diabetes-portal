@@ -217,14 +217,12 @@
 
 
 
-        %{--<g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>--}%
 
-        %{--<div class="separator"></div>--}%
+                        <g:renderBetaFeaturesDisplayedValue>
+                            <div class="separator"></div>
 
-                    %{--<g:if test="${g.portalTypeString()?.equals('t2d')}">--}%
-                        <div class="separator"></div>
-
-                        <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>
+                            <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>
+                        </g:renderBetaFeaturesDisplayedValue>
 
 
                         <div class="separator"></div>
