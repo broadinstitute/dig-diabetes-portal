@@ -25,7 +25,9 @@
                 if (exception === 'parsererror') {
                     errorText += 'Requested JSON parse failed.';
                 } else if (exception === 'timeout') {
-                    errorText += 'Time out error.';
+                    // tack on the data for the query (from variant search results page)
+                    // if jqXHR.data is undefined, it'll just add "undefined"
+                    errorText += 'Time out error. Data: ' + decodeURIComponent(decodeURIComponent(jqXHR.data));
                 } else if (exception === 'abort') {
                     errorText += 'Ajax request aborted.';
                 } else {

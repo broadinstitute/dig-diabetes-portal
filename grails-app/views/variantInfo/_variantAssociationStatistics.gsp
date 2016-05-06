@@ -84,7 +84,7 @@
     %{--if emptyBlock is true, then show an invisible box to make the phenotypes line up nicely--}%
     {{ ^emptyBlock }}
     <li class=" {{ boxClass }}" style="background-color: {{ backgroundColor }};">
-        <h3 style="color: {{ datasetAndPValueTextColor }};">{{ dataset }}</h3>
+        <h3 style="color: {{ datasetAndPValueTextColor }};">{{{ dataset }}}</h3>
         <div style="position: absolute; left: 0; bottom: 0; width:100%; display: flex; flex-direction: column; align-items: center">
             <div style="color: {{ datasetAndPValueTextColor }}; padding-top: 2px; padding-bottom: 2px; width: 100%" >
                 <span class="p-value">{{ pValueText }}</span>

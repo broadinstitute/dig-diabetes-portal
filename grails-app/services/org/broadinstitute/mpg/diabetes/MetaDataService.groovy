@@ -537,7 +537,9 @@ class MetaDataService {
     public List<String> getEveryPhenotype(Boolean includeNone){
         List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
         return phenotypeList.sort{ a, b -> a.sortOrder <=> b.sortOrder }.findAll{
-            ! (it.name.equals("none"))
+            // if includeNone is true, then return true regardless; otherwise, return whether
+            // the phenotype.name == "none"
+            (! it.name.equals("none") || includeNone)
         }.collect{it.name}.unique()
     }
 

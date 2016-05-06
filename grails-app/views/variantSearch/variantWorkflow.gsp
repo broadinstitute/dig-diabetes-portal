@@ -181,8 +181,10 @@
                         <div id="datasetChooserIndependent" class="row additionalInputGroup">
                             <div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-2 dk-variant-search-builder-ui">
 
-                                <label>Data set <small style="color: #aaa;">(Choose a data set from which
-                                variants may be found)</small></label>
+                                <label><g:message code="searchBuilder.dataset.prompt" default="Data set"/>
+                                    <small style="color: #aaa;">(<g:message code="variantSearch.wfRequest.dataSet.help.text"
+                                                                            default="Choose a data set from which variants may be found"/>)
+                                    </small></label>
                                 <select id="datasetIndependent" class="form-control" style="width: 90%"
                                         onchange="mpgSoftware.firstResponders.respondToDataSetSelection('independent')"></select>
                             </div>
@@ -192,8 +194,9 @@
 
                         <div class="row additionalInputGroup">
                             <div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-2">
-                                <label>Genomic location of variants</label>
-
+                                <label><g:message code="variantSearch.workflow.tab.phenotypeIndependent.genomicLocation"
+                                                  default="Genomic location of variants" />
+                                </label>
                                 <div id="chromosomeInputHolder" class="form-inline">
                                     <div class="form-inline">
                                         <input id="geneInput" type="text" class="form-control"
@@ -230,7 +233,9 @@
 
                         <div class="row additionalInputGroup">
                             <div class="col-md-10 col-sm-10 col-xs-10 col-md-offset-2">
-                                <label>Predicted effect of the variants on proteins</label>
+                                <label><g:message code="variantSearch.workflow.tab.phenotypeIndependent.proteinEffect"
+                                                  default="Predicted effect of the variants on proteins" />
+                                </label>
 
                                 <div class="form-inline">
                                     <label class="radio-inline">

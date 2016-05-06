@@ -18,10 +18,10 @@
     <g:renderT2dGenesSection>
         <ul class="nav nav-pills dk-t2d-menu">
             <li><a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a>
+            <li><a href="${createLink(controller:'variantSearch', action:'variantSearchWF')}"><g:message code="variant.search.header"/></a></li>
             <li><a href="${createLink(controller:'informational', action:'aboutthedata')}"><g:message code="portal.header.nav.about_data"/></a></li>
             <li><a href="${createLink(controller: 'home', action: 'tutorials')}"><g:message code="portal.header.nav.tutorials"/></a></li>
             <li><a href="${createLink(controller:'informational', action:'policies')}"><g:message code="portal.header.nav.policies"/></a></li>
-
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 <li><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact_plural"/></a></li>
             </g:if>
