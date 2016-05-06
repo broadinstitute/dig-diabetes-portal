@@ -184,7 +184,10 @@ div.labelAndInput > input {
             storedSampleData = data;
         };
 
-
+        /***
+        *  Get sample data from our local storage.  This routine presumably disappears in v0.2
+        * @returns {*}
+        */
         var getStoredSampleData  = function (){
             return storedSampleData;
         };
@@ -405,7 +408,8 @@ div.labelAndInput > input {
 
 
         /***
-        * Get new sample data to match our filters
+        * Previously (V0.1) used to get sample data reflecting a set of filters. Presumably this is where we insert (v0.2)
+        * the ability to pull back distributions based on filters
         *
         * @param dataSetSel
         * @param callback
@@ -1200,7 +1204,7 @@ div.labelAndInput > input {
             retrieveMatchingDataSets:retrieveMatchingDataSets,
             getStoredSampleData:getStoredSampleData,
             retrieveSampleMetadata:retrieveSampleMetadata,
-            refreshSampleData:refreshSampleData,
+           // refreshSampleData:refreshSampleData,
             dynamicallyFilterSamples:dynamicallyFilterSamples,
             retrieveSampleFilterMetadata:retrieveSampleFilterMetadata,
             displayTestResultsSection: displayTestResultsSection
