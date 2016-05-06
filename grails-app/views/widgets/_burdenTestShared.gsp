@@ -201,6 +201,11 @@ div.labelAndInput > input {
             return storedSampleMetadata;
         };
 
+        /***
+        * Get back data sets based on phenotype and insert them into a drop-down box
+        * @param selPhenotypeSelector
+        * @param selDataSetSelector
+        */
         var retrieveMatchingDataSets = function (selPhenotypeSelector,selDataSetSelector){
             var processReturnedDataSets = function (phenotypeName,matchingDataSets){
                var dataSetDropDown = $(selDataSetSelector);
@@ -211,11 +216,16 @@ div.labelAndInput > input {
                     dataSetDropDown.append(new Option(matchingDataSets[i].translation,matchingDataSets[i].name,matchingDataSets[i].translation));
                  }
             };
-            UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq'],selPhenotypeSelector.value,
+            UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq','WGS'],selPhenotypeSelector.value,
             "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",processReturnedDataSets );
         };
 
 
+
+        /***
+        * Retrieve sample metadata only to get the experiment list and insert it in a drop-down.  Seems wasteful...
+        * @param dropDownSelector
+        */
         var retrieveExperimentMetadata = function (dropDownSelector) {
             var loading = $('#spinner').show();
             $.ajax({
@@ -275,7 +285,7 @@ div.labelAndInput > input {
                     var jsonDescr = "{\"dataset\":\""+data.dataset+"\"," +
                                       "\"requestedData\":["+filtersSpecs.join(',')+"]," +
                                       "\"filters\":[]}";
-                    mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, function(){
+                    retrieveSampleInformation  ( jsonDescr, function(){
                              mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata($('#datasetFilter'), '#phenotypeFilter');
                              displayTestResultsSection(false);
                              $('.caatSpinner').hide();
@@ -324,7 +334,7 @@ div.labelAndInput > input {
                             var jsonDescr = "{\"dataset\":\""+$(dropdownSel).val()+"\"," +
                                       "\"requestedData\":["+filtersSpecs.join(',')+"]," +
                                       "\"filters\":[]}";
-                            mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, function(){} );
+                            retrieveSampleInformation  ( jsonDescr, function(){} );
                             loading.hide();
                         },
                         error: function (jqXHR, exception) {
@@ -449,9 +459,13 @@ div.labelAndInput > input {
                               "\"requestedData\":"+collectingFilterNames()+"," +
                               "\"filters\":"+collectingFilterValues()+"}";
 
-            mpgSoftware.burdenTestShared.retrieveSampleInformation  ( jsonDescr, callback  );
+            retrieveSampleInformation  ( jsonDescr, callback  );
         }
 
+
+        /***
+        * filter our samples and then launch the IAT test
+        */
         var immediateFilterAndRun = function (){
             var filteredSamples = generateFilterSamples();
             var filteredSamplesAsStrings = _.map(filteredSamples,function(d){
@@ -462,57 +476,6 @@ div.labelAndInput > input {
 
 
 
-
-
-        var filterAndRun = function (data){
-            var filters = extractFilters();
-            var relevantFilters = _.remove(filters,function(v){return (v.parm.length>0)})
-            var groupedBySampleId =  _.groupBy(data,
-                                               function(inv){
-                                                    return _.find(_.find(inv,
-                                                                  function(o,i){
-                                                                       return _.find(o,function(v,k){
-                                                                            return k==="ID"
-                                                                       })
-                                                                  })["ID"],
-                                                                  function(key,val){
-                                                                      return val;
-                                                                  })
-                                               });
-            var samplesWeWant = [];
-            _.forEach(groupedBySampleId,function(sampleVals,sampleId){
-                 var rejectSample = false;
-                 _.forEach(sampleVals,function(propObject){
-                     _.forEach(propObject,function(propVal){
-                         _.forEach(propVal,function(dsObject,propName){
-                            var filter = _.find(relevantFilters,function(filt){return (filt.name===propName)});
-                            if (filter){
-                                var propertyValue;
-                                 _.forEach(dsObject,function(propVal,dsName){
-                                    propertyValue = propVal;
-                                })
-                                var numericalFilterValue = parseFloat(filter.parm);
-                                if (filter.cmp==="1"){
-                                   if (propertyValue>=numericalFilterValue){
-                                      rejectSample = true;
-                                   }
-                                } else if (filter.cmp==="2"){
-                                   if (propertyValue<=numericalFilterValue){
-                                      rejectSample = true;
-                                   }
-                                }
-                            }
-
-                         })
-                     })
-                 })
-                 if (!rejectSample){
-                    samplesWeWant.push('"'+sampleId+'"');
-                 }
-            });
-            //var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
-            runBurdenTest(samplesWeWant);
-        };
 
 
         /***
@@ -680,23 +643,7 @@ div.labelAndInput > input {
             });
         }; // runBurdenTest
 
-        var sampleInfo = {};
-        var convertToBoxWhiskerPreferredJsonString = function (inData) {
-           var elementAccumulator = [];
-           for (var phenotype in inData){
-                if(!inData.hasOwnProperty(phenotype)) continue;
-                if((phenotype === 'ANCESTRY') ||
-                   (phenotype === 'ID')) continue;
-                var arrayOfValues = [];
-                inData [phenotype].map(function(d){
-                   arrayOfValues.push('{"d":"m","v":'+d+'}');
-                });
-                var element = '{"name":"'+ phenotype+'",'+
-                '"data": ['+arrayOfValues.join(',')+']}\n';
-                elementAccumulator.push (element) ;
-           }
-           return '['+elementAccumulator.join(',')+']';
-        };
+
         var convertToBoxWhiskerPreferredObject = function (inData) {
            var elementAccumulator = [];
            for (var phenotype in inData){
@@ -909,7 +856,11 @@ div.labelAndInput > input {
 
 
 
-
+        /***
+        * Given sample information build all of the distribution plots
+        * @param variantData
+        * @param phenotype
+        */
         var utilizeSampleInfoForDistributionPlots = function (variantData,phenotype){
             var sampleInfo = groupValuesByPhenotype(variantData);
             var optionsPerFilter = generateOptionsPerFilter(variantData) ;
@@ -945,7 +896,12 @@ div.labelAndInput > input {
 
 
 
-
+        /***
+        *   Do we have sample information stored locally? Then pass it back. Otherwise, we go and get it from the server.
+        * @param data
+        * @param callback
+        * @param passThru
+        */
         var retrieveSampleInformation = function (data, callback,passThru){
             var returnedData = getStoredSampleData();
             if (typeof returnedData === 'undefined') {
@@ -1163,9 +1119,14 @@ div.labelAndInput > input {
 
 
 
-
+        /***
+        * Make sure every distribution plot is hidden, then display the one we want
+        *
+        * @param propertyName
+        * @param holderSection
+        */
         var displaySampleDistribution = function (propertyName, holderSection) {
-            var filteredVariants = mpgSoftware.burdenTestShared.dynamicallyFilterSamples();
+            var filteredVariants = dynamicallyFilterSamples();
             var caller = $("#distPlotter_" +propertyName);
             utilizeSampleInfoForDistributionPlots(filteredVariants,propertyName);
             var kids = $(holderSection).children();
@@ -1177,37 +1138,20 @@ div.labelAndInput > input {
             $('#bwp_' + propertyName).show();
         };
 
-        var filterSamples = function (propertyName, holderSection) {
-            var filteredVariants = mpgSoftware.burdenTestShared.dynamicallyFilterSamples();
-            utilizeSampleInfoForDistributionPlots(filteredVariants,propertyName);
-            var kids = $(holderSection).children();
-            _.forEach(kids, function (d) {
-                $(d).hide();
-            });
-            $('.activeDistPlotter').removeClass('activeDistPlotter');
-        };
-
-
-
 
         // public routines are declared below
         return {
-            filterSamples : filterSamples,
-            displaySampleDistribution:displaySampleDistribution,
-            preloadInteractiveAnalysisData:preloadInteractiveAnalysisData,
-            retrieveExperimentMetadata:retrieveExperimentMetadata,
-            retrieveSampleInformation:retrieveSampleInformation,
-            filterAndRun:filterAndRun,
-            immediateFilterAndRun:immediateFilterAndRun,
-            runBurdenTest:runBurdenTest,
-            utilizeSampleInfoForDistributionPlots: utilizeSampleInfoForDistributionPlots,
-            retrieveMatchingDataSets:retrieveMatchingDataSets,
-            getStoredSampleData:getStoredSampleData,
-            retrieveSampleMetadata:retrieveSampleMetadata,
-           // refreshSampleData:refreshSampleData,
-            dynamicallyFilterSamples:dynamicallyFilterSamples,
-            retrieveSampleFilterMetadata:retrieveSampleFilterMetadata,
-            displayTestResultsSection: displayTestResultsSection
+            displaySampleDistribution:displaySampleDistribution,  // display a distribution plot based on the name of the filter
+            preloadInteractiveAnalysisData:preloadInteractiveAnalysisData, // assuming there is only one data set we can get most everything at page load
+            retrieveExperimentMetadata:retrieveExperimentMetadata, //Retrieve sample metadata only to get the experiment list
+            immediateFilterAndRun:immediateFilterAndRun, // apply filters locally and then launch IAT
+           // runBurdenTest:runBurdenTest, // currently wrapped by a filter call
+            retrieveMatchingDataSets:retrieveMatchingDataSets, // retrieve data set matching phenotype
+            getStoredSampleData:getStoredSampleData, // retrieve stored sample data
+            retrieveSampleMetadata:retrieveSampleMetadata, // if user changes data set reset phenotype (and potentially reload samples)
+            dynamicallyFilterSamples:dynamicallyFilterSamples,  // filter all our samples (currently done locally)
+            retrieveSampleFilterMetadata:retrieveSampleFilterMetadata, //Build the UI widgets and fill
+            displayTestResultsSection: displayTestResultsSection  // simply display results section (show() or hide()
         }
 
     }());
