@@ -128,6 +128,16 @@ div.labelAndInput > input {
 #covariateHolder .row {
     line-height: 15px;
 }
+ text.box{
+     /*   display: none; /* if you don't want text labels on your boxes*/
+ }
+text.whisker{
+    /*  display: none; /*if you don't want text labels on your boxes*/
+}
+line.center{
+    /*  display: none; /*if you don't want text labels on your boxes*/
+}
+
 </style>
 
 
@@ -680,7 +690,34 @@ div.labelAndInput > input {
             chart.selectionIdentifier(selector) // the Dom element from which we will hang the plot
                     .initData(inData,width,height+50)            // the information that goes into the plot
                     .whiskers(chart.iqr(defaultInterquartileMultiplier))  // adjust the whiskers so that they go to the right initial  position
-                    .histogramBarMultiplier(defaultHistogramBarSize);        // let's start with no histogram visible
+                    .histogramBarMultiplier(defaultHistogramBarSize)        // let's start with no histogram visible
+                    .leftShiftPlotWithinAxes(130);
+
+                // Following settings if you want only an explicitly specified bar chart
+//                .histogramBarMultiplier(2)
+//                .leftShiftPlotWithinAxes(170)
+//                .outlierRadius(1e-6)
+//                .boxAndWhiskerWidthMultiplier(0)  // 0 to skip the box whisker presentation, 1 for default box size
+//                .explicitlySpecifiedHistogram( [{   "start": -3,
+//                                                    "end": -1,
+//                                                    "count": 3 },
+//                                                {   "start": -1,
+//                                                    "end": 1,
+//                                                    "count": 10 },
+//                                                {   "start": 1,
+//                                                    "end": 3,
+//                                                    "count": 18 },
+//                                                {   "start": 3,
+//                                                    "end": 5,
+//                                                    "count": 13 },
+//                                                {   "start": 5,
+//                                                    "end": 7,
+//                                                    "count": 3 },
+//                                                {   "start": 7,
+//                                                    "end": 9,
+//                                                    "count": 1 }
+//                ]
+//                                                 );
 
             //  Now we are ready to actually launch the box whisker plot
             d3.select(selector)
