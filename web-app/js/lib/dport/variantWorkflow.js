@@ -169,7 +169,7 @@ var mpgSoftware = mpgSoftware || {};
                 var datasetList = datasetJson ["dataset"];
                 for (var i = 0; i < numberOfRecords; i++) {
                     options.append($("<option />").val(datasetList[i].name)
-                        .text(datasetList[i].displayName));
+                        .html(datasetList[i].displayName));
                 }
 
                 // clear out the properties list
