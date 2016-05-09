@@ -132,6 +132,47 @@ public class PropertyBean implements Property, Comparable {
     }
 
     /**
+     * Get the string needed for adding this property as an order_by criteria
+     * @param directionOfSort   "" if sorting ascending, "-1" if descending
+     * @return
+     */
+    public String getWebServiceOrderByString(String directionOfSort) {
+        // local variables
+        StringBuilder builder = new StringBuilder();
+        String dataset = "blah";
+        String phenotype = "blah";
+
+        // based on what type of property you are, add in dataset and phenotype
+        if (this.getPropertyType() == PortalConstants.TYPE_SAMPLE_GROUP_PROPERTY_KEY) {
+            if (this.getParent() != null) {
+                SampleGroup parentGroup = (SampleGroup)this.getParent();
+                dataset = parentGroup.getSystemId();
+            }
+
+        } else if (this.getPropertyType() == PortalConstants.TYPE_PHENOTYPE_PROPERTY_KEY) {
+            if (this.getParent().getParent() != null) {
+                SampleGroup parentGroup = (SampleGroup)this.getParent().getParent();
+                dataset = parentGroup.getSystemId();
+            }
+            phenotype = (this.getParent() != null ? this.getParent().getName() : "blah");
+        }
+
+        // build the filter string
+        builder.append("{\"dataset_id\": \"");
+        builder.append(dataset);
+        builder.append("\", \"phenotype\": \"");
+        builder.append(phenotype);
+        builder.append("\", \"operand\": \"");
+        builder.append(this.getName());
+        builder.append("\", \"operator\": \"");
+        builder.append(directionOfSort);
+        builder.append("\"}");
+
+        // return the string
+        return builder.toString();
+    }
+
+    /**
      * returns the filter string based on what type of property it is (common, dataset or phenotype property)
      *
      * @param operator

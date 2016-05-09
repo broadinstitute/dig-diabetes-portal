@@ -19,6 +19,8 @@ public interface Property extends DataSet {
 
     public int getSortOrder();
 
+    public String getWebServiceOrderByString(String directionOfSort);
+
     public String getWebServiceFilterString(String operand, String value,String requestedPhenotype);
 
     /**

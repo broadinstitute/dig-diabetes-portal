@@ -111,6 +111,28 @@ class GetDataQueryHolder {
         this.getDataQuery = new GetDataQueryBean()
     }
 
+    /**
+     * Wrapper for the underlying GetDataQuery methods
+     * @param pageNumber
+     * @param pageSize
+     * @return
+     */
+    public addOrderByProperty(Property property, String directionOfSort) {
+        QueryFilterBean queryFilterBean = new QueryFilterBean(property, directionOfSort, '')
+        this.getDataQuery.addOrderByQueryFilter(queryFilterBean)
+    }
+
+    /**
+     * Wrapper for the underlying GetDataQuery methods
+     * @param pageNumber
+     * @param pageSize
+     * @return
+     */
+    public setPageStartAndSize(int pageStart, int pageSize) {
+        this.getDataQuery.setPageStart(pageStart)
+        this.getDataQuery.setPageSize(pageSize)
+    }
+
     /***
      * This method is used by the constructor to build a GetDataQuery out of a set of filters
      * @param listOfCodedFilters

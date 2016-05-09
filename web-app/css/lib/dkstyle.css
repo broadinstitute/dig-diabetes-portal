@@ -86,7 +86,7 @@ ul.dk-t2d-menu > * > a:hover, ul.dk-t2d-menu > * > a:active, ul.dk-t2d-menu > * 
 	border-radius: 0;
 }
 
-div.dk-2td-content {
+div.dk-t2d-content {
 	color: #333;
 }
 
@@ -95,7 +95,7 @@ div.dk-2td-content {
 	line-height: 15px;
 }
 
-div.dk-2td-content h1,div.dk-2td-content h2,div.dk-2td-content h3 {
+div.dk-t2d-content h1,div.dk-t2d-content h2,div.dk-t2d-content h3 {
 	font-weight: 300;
 }
 
@@ -172,7 +172,7 @@ table.dk-search-collection td {
 }
 
 div.dk-t2d-back-to-search {
-	padding: 30px 0 30px 15px;
+	padding: 0 0 30px 15px;
 }
 
 div.dk-variant-table-header {
@@ -192,11 +192,7 @@ table.dk-search-result td {
 }
 
 table.dk-search-result th.dk-common {
-	background-color: #ddd;
-}
-
-table.dk-search-result th.dk-common {
-	background-color: #ddd;
+	background-color: #aaa;
 }
 
 th.dk-property-100 {

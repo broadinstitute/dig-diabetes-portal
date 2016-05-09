@@ -14,6 +14,8 @@ public interface QueryFilter {
      */
     public String getFilterString();
 
+    public String getOrderByString();
+
     public Property getProperty();
 
     public String getOperator();

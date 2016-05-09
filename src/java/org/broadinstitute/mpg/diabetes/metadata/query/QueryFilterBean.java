@@ -41,6 +41,10 @@ public class QueryFilterBean implements QueryFilter {
         return (this.property == null ? "" : property.getWebServiceFilterString(operator, value,requestedPhenotype));
     }
 
+    public String getOrderByString() {
+        return property.getWebServiceOrderByString(operator);
+    }
+
     public Property getProperty() {
         return property;
     }

@@ -248,7 +248,7 @@ var mpgSoftware = mpgSoftware || {};
                 var phenoAndDS = UTILS.extractValsFromCombobox(['phenotype', 'datasetDependent']);
                 if (phenoAndDS.phenotype !== 'default') {
                     var phenotype = phenoAndDS.phenotype;
-                    var translatedPhenotype = $('#phenotype option:selected').text();
+                    var translatedPhenotype = $('#phenotype option:selected').text().trim();
                 }
                 // if no dataset is selected, then phenoAndDS will not have a dataset key
                 if (phenoAndDS.datasetDependent) {

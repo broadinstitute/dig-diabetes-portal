@@ -44,8 +44,8 @@ public class QueryJsonBuilder {
         stringBuilder.append(query.getPassback());
         stringBuilder.append("\", \"entity\": \"");
         stringBuilder.append(query.getEntity());
-        stringBuilder.append("\", \"page_number\":");
-        stringBuilder.append(query.getPageNumber());
+        stringBuilder.append("\", \"page_start\":");
+        stringBuilder.append(query.getPageStart());
         stringBuilder.append(", \"page_size\": ");
         stringBuilder.append(query.getPageSize());
         stringBuilder.append(", \"limit\": ");
@@ -55,7 +55,7 @@ public class QueryJsonBuilder {
         stringBuilder.append(", ");
 
         // get the rest of the payload
-        finalString = this.getQueryJsonPayloadString(stringBuilder.toString(), query.getQueryPropertyList(), null, query.getFilterList());
+        finalString = this.getQueryJsonPayloadString(stringBuilder.toString(), query.getQueryPropertyList(), query.getOrderByQueryFilters(), query.getFilterList());
 
         // return
         return finalString;
@@ -69,7 +69,7 @@ public class QueryJsonBuilder {
      * @param queryFilterList
      * @return
      */
-    public String getQueryJsonPayloadString(String headerData, List<Property> requestPropertyList, List<Property> orderByPropertyList, List<QueryFilter> queryFilterList) {
+    public String getQueryJsonPayloadString(String headerData, List<Property> requestPropertyList, List<QueryFilter> orderByPropertyList, List<QueryFilter> queryFilterList) {
         // local variables
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -78,6 +78,19 @@ public class QueryJsonBuilder {
 
         // add in header data
         stringBuilder.append(headerData);
+
+        // add orderBy info
+        stringBuilder.append("\"order_by\": [");
+        if(orderByPropertyList.size() > 0) {
+            for (QueryFilter item : orderByPropertyList) {
+                String criteria = item.getOrderByString();
+                stringBuilder.append(criteria + ",");
+            }
+            // trim off the last comma
+            stringBuilder.setLength(stringBuilder.length() - 1);
+        }
+
+        stringBuilder.append("],");
 
         // add in properties header
         stringBuilder.append("\"properties\": {");

@@ -1,10 +1,12 @@
 package org.broadinstitute.mpg
 
-import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
+import org.broadinstitute.mpg.diabetes.metadata.PropertyBean
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONArray
@@ -133,7 +135,7 @@ class VariantSearchController {
 
     /***
      *  Someone has requested the 'search builder' page.  If they are coming to this page without a search
-     *  context then encParamswill be empty.   If instead they are trying to revise their search then
+     *  context then encParams will be empty.   If instead they are trying to revise their search then
      *  encParams is going to hold a list of every encoded filter that they want to use.
      *
      * @return
@@ -623,7 +625,7 @@ class VariantSearchController {
             datasetChoice = params.dataset
         }
 
-        List <String> listOfProperties = metaDataService.getAllMatchingPropertyList(datasetChoice, phenotype)
+        List<String> listOfProperties = metaDataService.getAllMatchingPropertyList(datasetChoice, phenotype)
         JSONObject result = sharedToolsService.packageUpAListAsJson(listOfProperties)
 
         // attach translated names
@@ -646,10 +648,105 @@ class VariantSearchController {
 
     }
 
-    /***
-     *  This is the main variant page. Wait a minute: how does this differ from launch a variant search?
+    /**
+     * This function collects and returns the data to populate the search results table. It
+     * expects data formatted by the Datatables function.
      */
-    def variantSearchAndResultColumnsAjax() {
+    def variantSearchAndResultColumnsData() {
+        String filtersRaw = params['keys']
+        String propertiesRaw = params['properties']
+        JSONArray columns = (new JsonSlurper().parseText(params.columns)) as JSONArray;
+        JSONArray orderBy = (new JsonSlurper().parseText(params.order)) as JSONArray;
+
+        String filters = URLDecoder.decode(filtersRaw, "UTF-8")
+        String properties = URLDecoder.decode(propertiesRaw, "UTF-8")
+        LinkedHashMap requestedProperties = sharedToolsService.putPropertiesIntoHierarchy(properties)
+
+        // build up filters our data query
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters,searchBuilderService,metaDataService)
+        // determine columns to display
+        LinkedHashMap resultColumnsToDisplay= restServerService.getColumnsToDisplay("[${getDataQueryHolder.retrieveAllFiltersAsJson()}]",requestedProperties)
+
+        int pageStart = Integer.parseInt(params.start)
+        int pageSize = Integer.parseInt(params.length)
+        getDataQueryHolder.setPageStartAndSize(pageStart, pageSize)
+
+        // add ordering info
+        for(orderByElement in orderBy) {
+            int columnNumber = orderByElement.column
+            // name gives us the property being sorted on--use it to create a PropertyBean
+            String columnName = columns[columnNumber].name
+            String[] propInfo = columnName.split("\\.")
+
+            PropertyBean propertyBean = new PropertyBean()
+            PhenotypeBean phenotypeBean
+
+            // if propInfo has 3 elements, it's a pprop, 2 elements, a dprop, and 1 element, a cprop
+            switch(propInfo.length) {
+                case 3:
+                    String phenotype = propInfo[2]
+
+                    phenotypeBean = new PhenotypeBean()
+                    phenotypeBean.setName(phenotype)
+                    propertyBean.setParent(phenotypeBean)
+                case 2:
+                    String dataset = propInfo[1]
+                    SampleGroupBean sampleGroupBean = metaDataService.getSampleGroupByName(dataset)
+
+                    if(propertyBean.getParent() == null) {
+                        propertyBean.setParent(sampleGroupBean)
+                    } else {
+                        phenotypeBean.setParent(sampleGroupBean)
+                    }
+                case 1:
+                    String prop = propInfo[0]
+                    propertyBean.setName(prop)
+                    break
+                default:
+                    // in any other case, we'll ignore it
+                    break
+            }
+
+            // convert 'asc'/'desc' to ''/'-1' to match KB expectation
+            String directionOfSort = orderByElement.dir == 'asc' ? '' : '-1'
+            getDataQueryHolder.addOrderByProperty(propertyBean, directionOfSort)
+        }
+
+        // make the call to REST server
+        getDataQueryHolder.addProperties(resultColumnsToDisplay)
+        JSONObject dataJsonObject = restServerService.postDataQueryRestCall(getDataQueryHolder)
+
+        // process the variants
+        def variants = dataJsonObject.variants
+        ArrayList toReturn = []
+        for(variant in variants) {
+            // merge all of the data into one object, which is then processed clientside
+            JSONObject newVariantObject = []
+            for(data in variant) {
+                def keys = data.keySet()
+                for(k in keys) {
+                    newVariantObject[k] = data[k]
+                }
+            }
+
+            toReturn << newVariantObject
+        }
+
+        render(status: 200, contentType: "application/json") {
+            [
+                draw: Integer.parseInt(params.draw),
+                recordsTotal: params.numberOfVariants,
+                recordsFiltered: params.numberOfVariants,
+                data: toReturn
+            ]
+        }
+    }
+
+    /***
+     *  This function gets all of the table construction info--column names, metadata, etc--but
+     *  not the actual data that populates the table
+     */
+    def variantSearchAndResultColumnsInfo() {
         String filtersRaw = params['keys']
         String propertiesRaw = params['properties']
         String filters = URLDecoder.decode(filtersRaw, "UTF-8")
@@ -660,15 +757,16 @@ class VariantSearchController {
 
         // build up filters our data query
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters,searchBuilderService,metaDataService)
-        String revisedFiltersRaw = java.net.URLEncoder.encode(getDataQueryHolder.retrieveAllFiltersAsJson())
-
         // determine columns to display
         LinkedHashMap resultColumnsToDisplay= restServerService.getColumnsToDisplay("[${getDataQueryHolder.retrieveAllFiltersAsJson()}]",requestedProperties)
+        JSONObject resultColumnsJsonObject = resultColumnsToDisplay as JSONObject
 
         // make the call to REST server
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
-        JSONObject dataJsonObject = restServerService.postDataQueryRestCall(getDataQueryHolder)
-        JSONObject resultColumnsJsonObject = resultColumnsToDisplay as JSONObject
+        // get the number of variants that this query will return
+        // do this here so it doesn't have to happen after every resort or change in the table
+        getDataQueryHolder.isCount(true)
+        JSONObject dataJsonObjectCount = restServerService.postDataQueryRestCall(getDataQueryHolder)
 
         LinkedHashMap fullPropertyTree = metaDataService.getFullPropertyTree()
         LinkedHashMap fullSampleTree = metaDataService.getSampleGroupTree()
@@ -677,6 +775,7 @@ class VariantSearchController {
 
         JSONObject commonPropertiesJsonObject = this.metaDataService.getCommonPropertiesAsJson(true);
 
+        // should be replaced by metadata
         JSONObject propertiesPerSampleGroupJsonObject = sharedToolsService.packageUpSortedHierarchicalListAsJson(fullSampleTree)
 
         // prepare translation object
@@ -700,13 +799,13 @@ class VariantSearchController {
         }
 
         render(status: 200, contentType: "application/json") {
-            [variants: dataJsonObject.variants,
-            columns: resultColumnsJsonObject,
-            filters:revisedFiltersRaw,
-            metadata:metadata,
-            propertiesPerSampleGroup:propertiesPerSampleGroupJsonObject,
-            cProperties:commonPropertiesJsonObject,
-            translationDictionary: translationDictionary
+            [
+                columns: resultColumnsJsonObject,
+                metadata:metadata,
+                propertiesPerSampleGroup:propertiesPerSampleGroupJsonObject,
+                cProperties:commonPropertiesJsonObject,
+                translationDictionary: translationDictionary,
+                numberOfVariants: dataJsonObjectCount.numRecords
             ]
         }
 
@@ -721,10 +820,8 @@ class VariantSearchController {
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters,searchBuilderService,metaDataService)
         if (getDataQueryHolder.isValid()) {
             String requestForAdditionalProperties = filterManagementService.convertPropertyListToTransferableString(listOfProperties)
-            String revisedFiltersRaw = URLEncoder.encode(getDataQueryHolder.retrieveAllFiltersAsJson())
-             List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
+            List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
             List<String> urlEncodedFilters = getDataQueryHolder.listOfUrlEncodedFilters(encodedFilters)
-            List<String> displayableFilters = getDataQueryHolder.listOfReadableFilters(encodedFilters)
             LinkedHashMap genomicExtents = sharedToolsService.validGenomicExtents (getDataQueryHolder.retrieveGetDataQuery())
             List<String> identifiedGenes = sharedToolsService.allEncompassedGenes(genomicExtents)
             String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
@@ -755,13 +852,14 @@ class VariantSearchController {
                             show_gwas           : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                             show_exchp          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                             show_exseq          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                            filterForResend     : urlEncodedFilters.join("^"), //encodedFilters,
-                            filter              : revisedFiltersRaw, //encodedFilters,
-                            filterDescriptions  : displayableFilters,
+                            // what actually constitutes the query
+                            queryFilters        : urlEncodedFilters.join("^"), //encodedFilters,
                             proteinEffectsList  : encodedProteinEffects,
+                            // used to list the filters on the page
                             encodedFilters      : encodedFilters,
+                            // the URL-encoded parameters to go back to the search builder with the filters saved
                             encodedParameters   : urlEncodedFilters,
-                            dataSetDetermination: 2,
+                            // all the extra things added
                             additionalProperties: requestForAdditionalProperties,
                             regionSearch        : (positioningInformation.size() > 2),
                             regionSpecification : regionSpecifier,

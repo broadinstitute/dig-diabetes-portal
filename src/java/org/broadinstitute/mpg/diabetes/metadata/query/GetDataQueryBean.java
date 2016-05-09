@@ -16,9 +16,10 @@ public class GetDataQueryBean implements GetDataQuery {
     // local variables
     private Map<String, Property> queryPropertyMap = new HashMap<String, Property>();
     private List<QueryFilter> filterList = new ArrayList<QueryFilter>();
+    private List<QueryFilter> orderByList = new ArrayList<QueryFilter>();
     String passback = "abc123";
     String entity = "variant";
-    int pageNumber = 0;
+    int pageStart = 0;
     int pageSize = 100;
     int limit = 1000;
     boolean isCount = false;
@@ -42,8 +43,12 @@ public class GetDataQueryBean implements GetDataQuery {
         this.filterList.addAll(queryFilterList);
     }
 
-    public void addOrderByProperty(Property property) {
+    public void addOrderByQueryFilter(QueryFilter queryFilter) {
+        this.orderByList.add(queryFilter);
+    }
 
+    public List<QueryFilter> getOrderByQueryFilters() {
+        return this.orderByList;
     }
 
     public void isCount(boolean isCountQuery) {
@@ -58,8 +63,8 @@ public class GetDataQueryBean implements GetDataQuery {
         this.entity = entity;
     }
 
-    public void setPageNumber(int pageNumber) {
-        this.pageNumber = pageNumber;
+    public void setPageStart(int pageStart) {
+        this.pageStart = pageStart;
     }
 
     public void setPageSize(int pageSize) {
@@ -78,8 +83,8 @@ public class GetDataQueryBean implements GetDataQuery {
         return entity;
     }
 
-    public int getPageNumber() {
-        return pageNumber;
+    public int getPageStart() {
+        return pageStart;
     }
 
     public int getPageSize() {

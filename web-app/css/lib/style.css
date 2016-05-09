@@ -154,14 +154,14 @@ div.linkout a {
     margin-right: 10px;
 }
 
-table.basictable {
-    width: 100%;
-}
+/*table.basictable {*/
+    /*width: 100%;*/
+/*}*/
 
-table.basictable th {
-    text-align: center;
-    font-weight: 300;
-}
+/*table.basictable th {*/
+    /*text-align: center;*/
+    /*font-weight: 300;*/
+/*}*/
 
 table.distinctivetable thead th {
     padding: 19px 9px 19px 9px;
@@ -176,9 +176,9 @@ table.distinctivetable td {
     text-align: center;
 }
 
-table.basictable td {
-    text-align: center;
-}
+/*table.basictable td {*/
+    /*text-align: center;*/
+/*}*/
 
 table.distinctive th {
     border-right: 2px solid #ddd;
@@ -204,18 +204,18 @@ table td.emphasizedBottom {
     border-bottom: 3px solid #ee0;
 }
 
-table.basictable th.datatype-header {
-    border-left: 1px solid black;
-}
+/*table.basictable th.datatype-header {*/
+    /*border-left: 1px solid black;*/
+/*}*/
 
-table.basictable thead th {
-    padding: 9px;
-    vertical-align: middle;
-    background: #052090;
-    color: white;
-    font-size: 14px;
-    font-weight: normal;
-}
+/*table.basictable thead th {*/
+    /*padding: 9px;*/
+    /*vertical-align: middle;*/
+    /*background: #052090;*/
+    /*color: white;*/
+    /*font-size: 14px;*/
+    /*font-weight: normal;*/
+/*}*/
 
 table.basictable thead th.sorting_desc:before {
     content: "▴ ";

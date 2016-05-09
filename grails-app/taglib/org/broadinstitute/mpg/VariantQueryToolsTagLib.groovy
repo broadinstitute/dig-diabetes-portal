@@ -1,7 +1,5 @@
 package org.broadinstitute.mpg
 
-import org.broadinstitute.mpg.SearchBuilderService
-import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
@@ -132,27 +130,26 @@ class VariantQueryToolsTagLib {
     def renderUlFilters = { attrs, body ->
         if ((attrs.encodedFilters) &&
                 (attrs.encodedFilters.size() > 0)) {
-            int blockCount = 0
             List filterList = attrs.encodedFilters
             GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filterList,searchBuilderService,metaDataService)
             List<String> noncommonEncodedFilterList = getDataQueryHolder.listOfEncodedFilters(PortalConstants.TYPE_PHENOTYPE_PROPERTY_KEY)
             noncommonEncodedFilterList += getDataQueryHolder.listOfEncodedFilters(PortalConstants.TYPE_SAMPLE_GROUP_PROPERTY_KEY)
-            out  << "<ul>"
+
             for (String filter in noncommonEncodedFilterList) {
                 if (filter) {
 
-                    out << """<li>""".toString()
+                    out << """<tr><td>""".toString()
 
                     out << sharedToolsService.translatorFilter (searchBuilderService.writeOutFiltersAsHtml( out, filter ))
 
-                    out << """</li>""".toString()
+                    out << """</td></tr>""".toString()
 
                 }
             }
             List<String> commonEncodedFilterList = getDataQueryHolder.listOfEncodedFilters(PortalConstants.TYPE_COMMON_PROPERTY_KEY)
             if (commonEncodedFilterList?.size()>0){
 
-                out << """<li>""".toString()
+                out << """<tr><td>""".toString()
 
                     List<String> listOfFilters = []
                     for (String filter in commonEncodedFilterList) {
@@ -162,11 +159,10 @@ class VariantQueryToolsTagLib {
                     }
                     out << listOfFilters.join(", ")
 
-                out << """</li>""".toString()
-
+                out << """</td></tr>""".toString()
 
             }
-            out  << "</ul>"
+
         } else {
             out << ""
         }

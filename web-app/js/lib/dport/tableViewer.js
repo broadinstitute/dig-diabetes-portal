@@ -69,41 +69,6 @@ var variantProcessing = (function () {
      * private functions
      */
 
-    /***
-     * Find the population with the highest frequency.
-     *
-     * @param variant
-     * @returns {{highestFrequency: number, populationWithHighestFrequency: number, noData: boolean}}
-     */
-    var determineHighestFrequencyEthnicity = function (variant) {
-        var highestValue = 0;
-        var winningEthnicity = 0;
-        var ethnicAbbreviation = ['AA', 'EA', 'SA', 'EU', 'HS'];
-        var noData=true;
-        for (var i = 0; i < ethnicAbbreviation.length; i++) {
-            var stringValue = variant['_13k_T2D_' + ethnicAbbreviation[i] + '_MAF'];
-            if (stringValue!==null){
-                var realValue = parseFloat(stringValue);
-                if (i==0){
-                    highestValue = realValue;
-                    winningEthnicity =  ethnicAbbreviation[i];
-                } else {
-                    noData=false;
-                    if (realValue > highestValue) {
-                        highestValue = realValue;
-                        winningEthnicity =  ethnicAbbreviation[i];
-                    }
-                }
-            }
-        }
-        if (noData === true){
-            populationWithHighestFrequency = '--';
-        }
-        return  {highestFrequency:highestValue,
-            populationWithHighestFrequency:winningEthnicity,
-            noData:noData};
-    };
-
     var deconvoluteVariantInfo = function(vRec) {
         if ((typeof vRec !== 'undefined') &&
             (typeof vRec.results !== 'undefined')  &&
@@ -388,48 +353,140 @@ var variantProcessing = (function () {
 
 
     /* Sort col is *relative* to dynamic columns */
-    var iterativeVariantTableFiller = function  (data, totCol, sortCol, divId,variantRootUrl,geneRootUrl,proteinEffectList,dataSetDetermination,locale,copyText,printText)  {
+    var iterativeVariantTableFiller = function  (data,      // all the table information--doesn't include the variants
+                                                 totCol,    // total number of columns
+                                                 sortCol,   // index of the column to sort by--currently defaults to the last p-value
+                                                 divId,     // id of the div to attach to
+                                                 variantRootUrl,    // url for the variant id link
+                                                 geneRootUrl,       // url for the gene link
+                                                 proteinEffectList,    // strings for protein effects
+                                                 locale,            // if we need to display the table in Spanish
+                                                 copyText,          // text to display in the copy button
+                                                 printText,         // text to display in the print button
+                                                 querySpecifications   // the filters and properties that are being requested
+    ) {
 
         // Some of the common properties are nonnumeric.  We have type information but for right now I'm going to kludge it.
         //  TODO: Passed down the type information for each common property and use it to determine which are numeric and which aren't
         // Then, assume all remaining columns are numeric.
 
-        var stringColumns = []
-        var numericCol = []
+        var stringColumns = [];
+        var numericCol = [];
         var colIndex;
+        // these columns are treated as strings
+        var stringColumnHeaders = ['VAR_ID',
+                                    'DBSNP_ID',
+                                    'CHROM',
+                                    'CLOSEST_GENE',
+                                    'Condel_PRED',
+                                    'Consequence',
+                                    'GENE',
+                                    'PolyPhen_PRED',
+                                    'SIFT_PRED',
+                                    'TRANSCRIPT_ANNOT'];
         for (colIndex = 0; colIndex < data.columns.cproperty.length; colIndex++) {
             var prop = data.columns.cproperty[colIndex];
-            if ((prop === 'VAR_ID')||
-                (prop === 'DBSNP_ID')||
-                (prop === 'CHROM')||         // technically the datatype is a string, but we usually want to treat it like an integer
-                (prop === 'CLOSEST_GENE')||
-                (prop === 'Condel_PRED')||
-                (prop === 'Consequence')||
-                (prop === 'GENE')||
-                (prop === 'PolyPhen_PRED')||
-                (prop === 'SIFT_PRED')||
-                (prop === 'TRANSCRIPT_ANNOT')){
+            if (_.includes(stringColumnHeaders, prop)){
                 stringColumns.push(colIndex);
             } else {
                 numericCol.push(colIndex);
             }
         }
+        // any remaining columns are assumed to be numeric
         while (colIndex<totCol){
             numericCol.push(colIndex++);
         }
 
-        var languageSetting = {}
+        var languageSetting = {};
         // check if the browser is using Spanish
         if ( locale.startsWith("es")  ) {
             languageSetting = { url : '../js/lib/i18n/table.es.json' }
         }
+
+        // we've stored unique names to each column. they are structured <property>.<dataset>.<phenotype>--in
+        // other words, the dot notation for how variant objects are returned. for dprops/cprops, the phenotype
+        // and dataset parts do not exist as appropriate.
+        // we do this to ensure that the right data is put in each column. without this, we'd have to guarantee
+        // that the server and the client always order the columns in the same way.
+        var headers = $('#variantTableHeaderRow3').children('th');
+        var columnNames = _.map(headers, function(header) {
+            var name = $(header).attr('data-colname');
+            return {
+                name: name,
+                data: name,
+                // this is the function that allows us to format the data
+                render: function(data, type, full, meta) {
+                    // if Datatables is calling this function to do anything besides display data (ex. sorting),
+                    // just return the data without processing it
+                    if(type != 'display') {
+                        return data;
+                    }
+                    // this is the really roundabout way of knowing which field we're working with
+                    var columnName = meta.settings.aoColumns[meta.col].colname;
+                    // if columnName has 2 periods, then it's a pprop. 1 period, it's a dprop.
+                    // no periods, it's a cprop. The easy way to get the number of periods is split the
+                    // name on '.', and count the number of elements we have.
+                    var whatKindOfPropertyIsThis = columnName.split('.').length;
+                    if(whatKindOfPropertyIsThis == 3 || whatKindOfPropertyIsThis == 2) {
+                        // pprop or dprop
+                        // if the number is already an integer (in which case the rounded value is equal to itself) don't do anything
+                        // otherwise, pass the number through UTILS.realNumberFormatter
+                        return getSimpleString(data, Math.round(data) == data ? noop : UTILS.realNumberFormatter, data, "");
+                    } else if(whatKindOfPropertyIsThis == 1) {
+                        // cprop
+                        switch(columnName) {
+                            case "VAR_ID":
+                                return getStringWithLinkForVarId(variantRootUrl, (contentExists(variantRootUrl) && data), noop, data, full.CHROM + ':' + full.POS, data);
+                            case "CHROM":
+                            case "POS":
+                            case "DBSNP_ID":
+                            case "IN_GENE":
+                            case "Protein_change":
+                            case "IN_EXSEQ":
+                            case "Condel_PRED":
+                            case "MOST_DEL_SCORE":
+                            case "PolyPhen_PRED":
+                            case "SIFT_PRED":
+                            case "TRANSCRIPT_ANNOT":
+                                return getSimpleString(data, noop, data, "");
+                            case "CLOSEST_GENE":
+                            case "GENE":
+                                return getStringWithLink(geneRootUrl,(geneRootUrl && data), noop, data, data, "");
+                            case "Consequence":
+                                return getSimpleString(((data)&&(contentExists(proteinEffectList))&&
+                                    (contentExists(proteinEffectList.proteinEffectMap))&&(contentExists(proteinEffectList.proteinEffectMap[data]))),
+                                    lineBreakSubstitution,proteinEffectList.proteinEffectMap[data],lineBreakSubstitution((data && (data !== 'null')) ? data:""));
+                            default:
+                                return getSimpleString(data, noop, data, "");
+                        }
+                    } else {
+                        // just in case
+                        return data;
+                    }
+                }
+            };
+        });
 
         var table = $(divId).dataTable({
             iDisplayLength: 20,
             bFilter: false,
             aaSorting: [[ sortCol, "asc" ]],
             aoColumnDefs: [{sType: "allnumeric", aTargets: numericCol } ],
-            language: languageSetting
+            language: languageSetting,
+            columns: columnNames,
+            serverSide: true,
+            ajax: {
+                url: '../variantSearchAndResultColumnsData',
+                data: function(d) {
+                    d.keys = querySpecifications.keys;
+                    d.properties = querySpecifications.properties;
+                    d.numberOfVariants = data.numberOfVariants,
+                    // need to stringify because otherwise Groovy gets a lot of
+                    // parameters that aren't grouped correctly
+                    d.columns = JSON.stringify(d.columns);
+                    d.order = JSON.stringify(d.order);
+                }
+            }
         });
 
 
@@ -443,96 +500,9 @@ var variantProcessing = (function () {
             ],
             sSwfPath: "../../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
         } );
-        $( tableTools.fnContainer() ).insertAfter(divId);
+        $( tableTools.fnContainer() ).insertBefore(divId);
 
-        var variantList =  data.variants
-        var dataLength = variantList ? variantList.length : 0;
-
-        for ( var i = 0 ; i < dataLength ; i++ ){
-            var array = [];
-            var variant = {};
-            for (var j = 0; j < variantList[i].length; j++) {
-                for (prop in variantList[i][j]) {
-                    variant[prop] = variantList[i][j][prop]
-                }
-            }
-
-
-            for (var cpropIndex in data.columns.cproperty) {
-                var cprop =  data.columns.cproperty[cpropIndex];
-                var value = variant[cprop];
-                if (cprop === "VAR_ID")  {
-                    array.push(getStringWithLinkForVarId(variantRootUrl,((contentExists (variantRootUrl)) && (variant.VAR_ID)),noop,variant.VAR_ID,variant.CHROM+ ":" +variant.POS,variant.VAR_ID));
-                } else if (cprop === "CHROM") {
-                    array.push(getSimpleString((variant.CHROM),noop,variant.CHROM,""));
-                }  else if (cprop === "POS") {
-                    array.push(getSimpleString((variant.POS),noop,variant.POS,""));
-                }  else if (cprop === "DBSNP_ID") {
-                    array.push(getSimpleString((variant.DBSNP_ID),noop,variant.DBSNP_ID,""));
-                }  else if (cprop === "CLOSEST_GENE") {
-                    array.push(getStringWithLink(geneRootUrl,(geneRootUrl && variant.CLOSEST_GENE ),noop,variant.CLOSEST_GENE,variant.CLOSEST_GENE,""));
-                }  else if (cprop === "GENE") {
-                    array.push(getStringWithLink(geneRootUrl,(geneRootUrl && variant.GENE),noop,variant.GENE,variant.GENE,""));
-                }  else if (cprop === "IN_GENE") {
-                    array.push(getSimpleString((variant.IN_GENE),noop,variant.IN_GENE,""));
-                }  else if (cprop === "Protein_change") {
-                    array.push(getSimpleString((variant.Protein_change&& (variant.Protein_change !== 'null')),noop,variant.Protein_change,""));
-                }  else if (cprop === "Consequence") {
-                    array.push(getSimpleString(((variant.Consequence)&&(contentExists(proteinEffectList))&&
-                        (contentExists(proteinEffectList.proteinEffectMap))&&(contentExists(proteinEffectList.proteinEffectMap[variant.Consequence]))),
-                        lineBreakSubstitution,proteinEffectList.proteinEffectMap[variant.Consequence],lineBreakSubstitution((variant.Consequence && (variant.Consequence !== 'null'))?variant.Consequence:"")));
-                }  else if (cprop === "IN_EXSEQ") {
-                    array.push(getSimpleString((variant.IN_EXSEQ),noop,variant.IN_EXSEQ,""));
-                }  else if (cprop === "SIFT_PRED") {
-                    array.push(getSimpleString((variant.SIFT_PRED),noop,variant.SIFT_PRED,""));
-                }
-                else if (cprop === "Condel_PRED") {
-                    array.push(getSimpleString((variant.Condel_PRED),noop,variant.Condel_PRED,""));
-                }
-                else if (cprop === "MOST_DEL_SCORE") {
-                    array.push(getSimpleString((variant.MOST_DEL_SCORE),noop,variant.MOST_DEL_SCORE,""));
-                }
-                else if (cprop === "PolyPhen_PRED") {
-                    array.push(getSimpleString((variant.PolyPhen_PRED),noop,variant.PolyPhen_PRED,""));
-                }
-                else if (cprop === "SIFT_PRED") {
-                    array.push(getSimpleString((variant.SIFT_PRED),noop,variant.SIFT_PRED,""));
-                }
-                else if (cprop === "TRANSCRIPT_ANNOT") {
-                    array.push(getSimpleString((variant.TRANSCRIPT_ANNOT),noop,variant.TRANSCRIPT_ANNOT,""));
-                }
-                else {
-                    array.push(getSimpleString((variant[cprop]),noop,variant[cprop],""));
-                }
-            }
-
-
-
-            for (var pheno in data.columns.dproperty) {
-                for (var dataset in data.columns.dproperty[pheno]) {
-                    for (var k = 0; k < data.columns.dproperty[pheno][dataset].length; k++) {
-                        var column = data.columns.dproperty[pheno][dataset][k]
-                        array.push(getSimpleString((variant[column][dataset]),Math.round(variant[column][dataset]) == variant[column][dataset] ? noop : UTILS.realNumberFormatter,variant[column][dataset],""));
-                    }
-                }
-            }
-
-            for (var pheno in data.columns.pproperty) {
-                for (var dataset in data.columns.pproperty[pheno]) {
-                    for (var k = 0; k < data.columns.pproperty[pheno][dataset].length; k++) {
-                        var column = data.columns.pproperty[pheno][dataset][k]
-                        // the variant object may not have the column and/or column.dataset values defined
-                        // if that's the case, just return the empty string
-                        if (variant[column] && variant[column][dataset]) {
-                            array.push(getSimpleString((variant[column][dataset][pheno]), Math.round(variant[column][dataset][pheno]) == variant[column][dataset][pheno] ? noop : UTILS.realNumberFormatter, variant[column][dataset][pheno], ""));
-                        } else {
-                            array.push('');
-                        }
-                    }
-                }
-            }
-            $(divId).dataTable().fnAddData( array, (i==25) || (i==(dataLength-1)));
-        }
+        return;
     };
 
 

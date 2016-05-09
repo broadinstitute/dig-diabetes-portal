@@ -17,7 +17,9 @@ public interface GetDataQuery {
 
     public void addAllQueryFilters(List<QueryFilter> queryFilterList);
 
-    public void addOrderByProperty(Property property);
+    public void addOrderByQueryFilter(QueryFilter queryFilter);
+
+    public List<QueryFilter> getOrderByQueryFilters();
 
     public void isCount(boolean isCountQuery);
 
@@ -29,7 +31,7 @@ public interface GetDataQuery {
 
     public void setEntity(String entity);
 
-    public void setPageNumber(int pageNumber);
+    public void setPageStart(int pageStart);
 
     public void setPageSize(int pageSize);
 
@@ -39,7 +41,7 @@ public interface GetDataQuery {
 
     public String getEntity();
 
-    public int getPageNumber();
+    public int getPageStart();
 
     public int getPageSize();
 
