@@ -470,8 +470,8 @@ var baget = baget || {};
                 explicitBarValues = function(explicitBinCounts){
                     if (( typeof explicitBinCounts !== 'undefined')   &&
                         ( explicitBinCounts.length  >  0)  )   {
-                        var minVal = d3.min(explicitBinCounts, function(d){return d.start});
-                        var maxVal = d3.max(explicitBinCounts, function(d){return d.end});
+                        var minVal = d3.min(explicitBinCounts, function(d){return d.start_value});
+                        var maxVal = d3.max(explicitBinCounts, function(d){return d.end_value});
                         summaryData = {min: minVal,
                             max: maxVal,
                             binSize:(maxVal-minVal)/explicitBinCounts.length };

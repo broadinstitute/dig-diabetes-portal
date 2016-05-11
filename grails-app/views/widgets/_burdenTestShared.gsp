@@ -434,7 +434,7 @@ line.center{
         * @param dataSetSel
         * @param callback
         */
-        var refreshSampleDistribution = function (dataSetSel,callback){
+        var refreshSampleDistribution = function (dataSetSel,callback,propertyName){
 
            var collectingFilterNames = function (){
                var filterStrings = [];
@@ -448,9 +448,6 @@ line.center{
                return "[\n" + filterStrings.join(",") + "\n]";
             };
 
-
-
-
             var collectingFilterValues = function (){
                var filterStrings = [];
                _.forEach( extractFilters(), function(filterObject){
@@ -463,13 +460,21 @@ line.center{
                return "[\n" + filterStrings.join(",") + "\n]";
             };
 
+
+            var collectingPropertyNames = function (propertyName){
+               var propertyStrings = [];
+               propertyStrings.push("{\"name\": \""+propertyName+"\"}");
+               return "[\n" + propertyStrings.join(",") + "\n]";
+            };
+
+
             var domSelector = $(dataSetSel);
             var dataSetName = domSelector.val();
             var jsonDescr = "{\"dataset\":\""+dataSetName+"\"," +
-                              "\"requestedData\":"+collectingFilterNames()+"," +
+                              "\"requestedData\":"+collectingPropertyNames(propertyName)+"," +
                               "\"filters\":"+collectingFilterValues()+"}";
 
-            retrieveSampleDistribution  ( jsonDescr, callback  );
+            retrieveSampleDistribution  ( jsonDescr, callback, propertyName  );
         }
 
 
@@ -669,13 +674,74 @@ line.center{
            }
            return elementAccumulator;
         };
+
+        var predefinedBoxWhiskerPlot = function (inData,selector) {
+            var margin = {top: 50, right: 50, bottom: 20, left: 50},
+            width = 700 - margin.left - margin.right,
+            height = 350 - margin.top - margin.bottom;
+
+            var defaultInterquartileMultiplier = 1.5,
+                    defaultHistogramBarSize = 1;
+
+            /***
+             *   Initial data-independent initializations oof the box whisker plot.  Note that this initialization has to take place
+             *   so that we have something to which we can connect the slider
+             */
+            var chart = baget.boxWhiskerPlot()
+                    .width(width)
+                    .height(height);
+
+            chart.selectionIdentifier(selector) // the Dom element from which we will hang the plot
+                    .initData([{data:[{d:'j',v:0.0}]}],width,height+50)            // the information that goes into the plot
+                    .whiskers(chart.iqr(defaultInterquartileMultiplier))  // adjust the whiskers so that they go to the right initial  position
+                    .histogramBarMultiplier(defaultHistogramBarSize)        // let's start with no histogram visible
+
+
+                // Following settings if you want only an explicitly specified bar chart
+                .histogramBarMultiplier(2)
+                .leftShiftPlotWithinAxes(170)
+                .outlierRadius(1e-6)
+                .boxAndWhiskerWidthMultiplier(0)  // 0 to skip the box whisker presentation, 1 for default box size
+                .explicitlySpecifiedHistogram( inData.distribution_array
+                                                 );
+//                .explicitlySpecifiedHistogram( [{   "start": -3,
+//                                                    "end": -1,
+//                                                    "count": 3 },
+//                                                {   "start": -1,
+//                                                    "end": 1,
+//                                                    "count": 10 },
+//                                                {   "start": 1,
+//                                                    "end": 3,
+//                                                    "count": 18 },
+//                                                {   "start": 3,
+//                                                    "end": 5,
+//                                                    "count": 13 },
+//                                                {   "start": 5,
+//                                                    "end": 7,
+//                                                    "count": 3 },
+//                                                {   "start": 7,
+//                                                    "end": 9,
+//                                                    "count": 1 }
+//                ]
+//                                                 );
+
+            //  Now we are ready to actually launch the box whisker plot
+            d3.select(selector)
+                    .selectAll('svg')
+                    .call(chart.boxWhisker);
+
+        };
+
+
+
+
+
+
         var buildBoxWhiskerPlot = function (inData,selector) {
             var margin = {top: 50, right: 50, bottom: 20, left: 50},
             width = 700 - margin.left - margin.right,
             height = 350 - margin.top - margin.bottom;
 
-            // initial value of the interquartile multiplier. Note that this value
-            //  is adjustable via a UI slider
             var defaultInterquartileMultiplier = 1.5,
                     defaultHistogramBarSize = 1;
 
@@ -965,8 +1031,8 @@ line.center{
 
 
         var retrieveSampleDistribution = function (data, callback,passThru){
-            var returnedData = getStoredSampleData();
-            if (typeof returnedData === 'undefined') {
+          //  var returnedData = getStoredSampleData();
+          //  if (typeof returnedData === 'undefined') {
                 $.ajax({
                     cache: false,
                     type: "post",
@@ -975,15 +1041,15 @@ line.center{
                     async: true,
                     success: function (returnedData) {
                         storeSampleData(returnedData);
-                        callback(returnedData.metaData.variants,passThru);
+                        callback(returnedData,passThru);
                     },
                     error: function (jqXHR, exception) {
                         core.errorReporter(jqXHR, exception);
                     }
                 });
-            } else {
-               callback(returnedData.metaData.variants,passThru);
-            }
+//            } else {
+//               callback(returnedData.metaData.variants,passThru);
+//            }
         };
 
 
@@ -1184,11 +1250,40 @@ line.center{
 
 
         var utilizeDistributionInformationToCreatePlot = function (distributionInfo,propertyName){
-             if (typeof distributionInfo !== 'undefined'){
-
+           if (typeof distributionInfo !== 'undefined'){
+                var plotHoldingStructure = $('#boxWhiskerPlot');
+                plotHoldingStructure.empty();
+                var sampleMetadata = getStoredSampleMetadata();
+                $('.sampleNumberReporter .numberOfSamples').text('47');
+               // $('.sampleNumberReporter .numberOfSamples').text(variantData.length);
+               // for ( var i = 0 ; i < displayableData.length ; i++ ){
+                    //var singleElement = displayableData[i];
+                     var singleElement = {};
+                    var elementName = propertyName;
+                    var divElementName = 'bwp_'+elementName;
+                    plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
+                    if (elementName === propertyName){
+                       //$('.sampleNumberReporter .numberOfPhenotypeSpecificSamples').text(singleElement.data.length);
+                       $('.sampleNumberReporter .numberOfPhenotypeSpecificSamples').text('47');
+                       $('.sampleNumberReporter .phenotypeSpecifier').text(propertyName);
+                    }
+                    $('#'+divElementName).hide();
+                    if (sampleMetadata.filters){
+                      var filter = _.find(sampleMetadata.filters, ['name',propertyName]);
+                      if (filter){
+                         if (filter.type === 'INTEGER'){
+                            buildCategoricalPlot(optionsPerFilter[elementName],'#'+divElementName);
+                         } else if (filter.type === 'STRING'){
+                            buildCategoricalPlot(optionsPerFilter[elementName],'#'+divElementName);
+                         } if (filter.type === 'FLOAT'){
+                            predefinedBoxWhiskerPlot(distributionInfo.sampleData,'#'+divElementName);
+                            $('#'+divElementName).show();
+                         }
+                      }
+                    }
+                //}
              }
         }
-
 
 
         /***
@@ -1198,10 +1293,9 @@ line.center{
         * @param holderSection
         */
         var displaySampleDistribution = function (propertyName, holderSection) {
-            var backendFiltering = false;
+            var backendFiltering = true;
             if (backendFiltering){
-                refreshSampleDistribution( '#datasetFilter', function(){}, propertyName );
-                utilizeSampleInfoForDistributionPlots(filteredVariants,propertyName);
+                refreshSampleDistribution( '#datasetFilter', utilizeDistributionInformationToCreatePlot, propertyName );
             } else {
                 var filteredVariants = dynamicallyFilterSamples();
                 var caller = $("#distPlotter_" +propertyName);
@@ -1437,11 +1531,6 @@ variant by specifying the phenotype to test for association, a subset of samples
                                                 data-selectfor="{{name}}FilterOpts" multiple="multiple"
                                                 onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')">
                                         </select>
-                                        %{--<g:javascript>--}%
-                                            %{--$("#multi{{name}}").multiselect().bind("change", function(event, ui){--}%
-                                                %{--mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')--}%
-                                            %{--});--}%
-                                        %{--</g:javascript>--}%
 
                                     </div>
 

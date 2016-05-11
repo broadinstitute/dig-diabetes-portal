@@ -195,36 +195,36 @@ class VariantInfoController {
 def retrieveSampleSummary (){
     JsonSlurper slurper = new JsonSlurper()
     String jsonDataAsString = params.data
-    JSONObject sampleSummary = slurper.parseText(jsonDataAsString)
+    JSONObject querySpecification = slurper.parseText(jsonDataAsString)
 
     // right way
-JSONObject jsonObject = widgetService.getSampleDistribution ( sampleCallSpecifics)
+JSONObject sampleSummary = widgetService.getSampleDistribution ( querySpecification )
 
     // workaround for now
-    String staticJson = """{
-    "is_error": false,
-    "numRecords": 400,
-    "distributionType": "continuous",
-    "distribution":[{   "start": -3,
-                                        "end": -1,
-                                        "count": 3 },
-                                    {   "start": -1,
-                                        "end": 1,
-                                        "count": 10 },
-                                    {   "start": 1,
-                                        "end": 3,
-                                        "count": 18 },
-                                    {   "start": 3,
-                                        "end": 5,
-                                        "count": 13 },
-                                    {   "start": 5,
-                                        "end": 7,
-                                        "count": 3 },
-                                    {   "start": 7,
-                                        "end": 9,
-                                        "count": 1 }
-    ]}""".toString()
-    sampleSummary = slurper.parseText(staticJson)
+//    String staticJson = """{
+//    "is_error": false,
+//    "numRecords": 400,
+//    "distributionType": "continuous",
+//    "distribution":[{   "start": -3,
+//                                        "end": -1,
+//                                        "count": 3 },
+//                                    {   "start": -1,
+//                                        "end": 1,
+//                                        "count": 10 },
+//                                    {   "start": 1,
+//                                        "end": 3,
+//                                        "count": 18 },
+//                                    {   "start": 3,
+//                                        "end": 5,
+//                                        "count": 13 },
+//                                    {   "start": 5,
+//                                        "end": 7,
+//                                        "count": 3 },
+//                                    {   "start": 7,
+//                                        "end": 9,
+//                                        "count": 1 }
+//    ]}""".toString()
+//    JSONObject sampleSummary = slurper.parseText(jsonObject)
 
 
     render(status:200, contentType:"application/json") {

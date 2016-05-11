@@ -29,9 +29,46 @@ class WidgetService {
     private final String propertyKey = "P_FIRTH_FE_IV";
     private final String errorResponse = "{\"data\": {}, \"error\": true}";
 
+    private String singleFilter ( String categorical, //
+                                  String comparator,
+                                  String propertyName,
+                                  String propertyValue,
+                                  String dataset
+                                 ){
+        String returnValue
+        String operatorType
+        String operator
+        switch (categorical){
+            case "0":
+                operatorType = "FLOAT"
+                break
+            case "1":
+                operatorType = "STRING"
+                break
+            case "2":
+                operatorType = "INTEGER"
+                break
+            default: operatorType = "FLOAT"; break
+        }
+        switch (comparator){
+            case "1":
+                operator = "LT"
+                break
+            case "2":
+                operator = "GT"
+                break
+            case "3":
+                operator = "EQ"
+                break
+            default: operator = "LT"; break
+        }
+        returnValue = """{"dataset_id": "${dataset}", "phenotype": "b", "operand": "${propertyName}", "operator": "${operator}", "value": ${propertyValue}, "operand_type": "${operatorType}"}""".toString()
+        return returnValue
+    }
 
 
-    private String buildFilterDesignation (def filters){
+
+    private String buildFilterDesignation (def filters,String dataset){
         String filterDesignation = ""
         if (filters){
             if (filters.size()==0){
@@ -45,18 +82,30 @@ class WidgetService {
                 for (Map map in filters){
                     String operator = (map.cmp=="1") ? "LT" : "GT"
                     if (map.name){
-                        requestedFilterList << """{"dataset_id": "${dataset}", "phenotype": "b", "operand": "${map.name}", "operator": "${operator}", "value": ${map.parm}, "operand_type": "FLOAT"}""".toString()
+                       // requestedFilterList << """{"dataset_id": "${dataset}", "phenotype": "b", "operand": "${map.name}", "operator": "${operator}", "value": ${map.parm}, "operand_type": "FLOAT"}""".toString()
+                        if (map.cat!="1"){ // JUST FOR NOW  TODO: remove conditional
+                            requestedFilterList << singleFilter ( map.cat, map.cmp, map.name, map.parm, dataset )
+                        }
                     }
                 }
-                filterDesignation = """ "filters":    [
+                if (requestedFilterList.size()==0){
+                    filterDesignation =  """            "filters":    [
+                     ${singleFilter ( "0", "1", "LDL", "2000", dataset )}
+                ]
+""".toString()
+                } else {
+                    filterDesignation = """ "filters":    [
                     ${requestedFilterList.join(",")}
             ]
 """.toString()
+                }
+
             } else {
                 String operator = (filters.cmp[0]=="1") ? "LT" : "GT"
                 filterDesignation = """ "filters":    [
-                    {"dataset_id": "${dataset}", "phenotype": "b", "operand": "${filters[0].name}", "operator": "${operator}", "value": ${filters[0].parm}, "operand_type": "FLOAT"}
+                    ${singleFilter ( filters[0].cat, filters[0].cmp, filters[0].name, filters[0].parm, dataset )}
             ]""".toString()
+                //{"dataset_id": "${dataset}", "phenotype": "b", "operand": "${filters[0].name}", "operator": "${operator}", "value": ${filters[0].parm}, "operand_type": "FLOAT"}
             }
 
         }
@@ -67,23 +116,23 @@ class WidgetService {
 
     public JSONObject getSampleDistribution( JSONObject jsonObject) {
         String dataset = jsonObject.dataset
-        JSONArray requestedData = jsonObject.requestedData
+        JSONArray requestedData = jsonObject.requestedData as JSONArray
         List<String> requestedDataList = []
         for (Map map in requestedData){
             if (map.name){
                 requestedDataList << """ "${map.name}":["${dataset}"]""".toString()
             }
         }
-//        requestedDataList << """ "ID":["${dataset}"]""".toString()
+
         def filters = jsonObject.filters
-        String filterDesignation = buildFilterDesignation (filters)
+        String filterDesignation = buildFilterDesignation (filters, dataset)
         String jsonGetDataString = """{
     "passback": "123abc",
     "entity": "variant",
     "page_number": 0,
     "count": false,
     "distribution": true,
-    "bin_number": 10,
+    "bin_number": 24,
     "properties":    {
                            "cproperty": [],
                           "orderBy":    [],
