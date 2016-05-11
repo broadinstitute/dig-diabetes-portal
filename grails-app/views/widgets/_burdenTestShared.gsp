@@ -434,7 +434,7 @@ line.center{
         * @param dataSetSel
         * @param callback
         */
-        var refreshSampleData = function (dataSetSel,callback){
+        var refreshSampleDistribution = function (dataSetSel,callback){
 
            var collectingFilterNames = function (){
                var filterStrings = [];
@@ -469,7 +469,7 @@ line.center{
                               "\"requestedData\":"+collectingFilterNames()+"," +
                               "\"filters\":"+collectingFilterValues()+"}";
 
-            retrieveSampleInformation  ( jsonDescr, callback  );
+            retrieveSampleDistribution  ( jsonDescr, callback  );
         }
 
 
@@ -964,6 +964,35 @@ line.center{
 
 
 
+        var retrieveSampleDistribution = function (data, callback,passThru){
+            var returnedData = getStoredSampleData();
+            if (typeof returnedData === 'undefined') {
+                $.ajax({
+                    cache: false,
+                    type: "post",
+                    url: "${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}",
+                    data: {'data':data},
+                    async: true,
+                    success: function (returnedData) {
+                        storeSampleData(returnedData);
+                        callback(returnedData.metaData.variants,passThru);
+                    },
+                    error: function (jqXHR, exception) {
+                        core.errorReporter(jqXHR, exception);
+                    }
+                });
+            } else {
+               callback(returnedData.metaData.variants,passThru);
+            }
+        };
+
+
+
+
+
+
+
+
         var determineEachFiltersType = function (){
              var returnValue = {};
             var sampleMetadata = getStoredSampleMetadata();
@@ -1154,6 +1183,12 @@ line.center{
 
 
 
+        var utilizeDistributionInformationToCreatePlot = function (distributionInfo,propertyName){
+             if (typeof distributionInfo !== 'undefined'){
+
+             }
+        }
+
 
 
         /***
@@ -1163,16 +1198,22 @@ line.center{
         * @param holderSection
         */
         var displaySampleDistribution = function (propertyName, holderSection) {
-            var filteredVariants = dynamicallyFilterSamples();
-            var caller = $("#distPlotter_" +propertyName);
-            utilizeSampleInfoForDistributionPlots(filteredVariants,propertyName);
-            var kids = $(holderSection).children();
-            _.forEach(kids, function (d) {
-                $(d).hide();
-            });
-            $('.activeDistPlotter').removeClass('activeDistPlotter');
-            $(caller).addClass('activeDistPlotter');
-            $('#bwp_' + propertyName).show();
+            var backendFiltering = false;
+            if (backendFiltering){
+                refreshSampleDistribution( '#datasetFilter', function(){}, propertyName );
+                utilizeSampleInfoForDistributionPlots(filteredVariants,propertyName);
+            } else {
+                var filteredVariants = dynamicallyFilterSamples();
+                var caller = $("#distPlotter_" +propertyName);
+                utilizeSampleInfoForDistributionPlots(filteredVariants,propertyName);
+                var kids = $(holderSection).children();
+                _.forEach(kids, function (d) {
+                    $(d).hide();
+                });
+                $('.activeDistPlotter').removeClass('activeDistPlotter');
+                $(caller).addClass('activeDistPlotter');
+                $('#bwp_' + propertyName).show();
+            }
         };
 
 
@@ -1182,6 +1223,7 @@ line.center{
             preloadInteractiveAnalysisData:preloadInteractiveAnalysisData, // assuming there is only one data set we can get most everything at page load
             retrieveExperimentMetadata:retrieveExperimentMetadata, //Retrieve sample metadata only to get the experiment list
             immediateFilterAndRun:immediateFilterAndRun, // apply filters locally and then launch IAT
+            //refreshSampleDistribution:refreshSampleDistribution, // get data to display distribution of property
            // runBurdenTest:runBurdenTest, // currently wrapped by a filter call
             retrieveMatchingDataSets:retrieveMatchingDataSets, // retrieve data set matching phenotype
             getStoredSampleData:getStoredSampleData, // retrieve stored sample data

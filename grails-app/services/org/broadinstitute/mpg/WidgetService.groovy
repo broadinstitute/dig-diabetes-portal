@@ -31,9 +31,74 @@ class WidgetService {
 
 
 
+    private String buildFilterDesignation (def filters){
+        String filterDesignation = ""
+        if (filters){
+            if (filters.size()==0){
+                filterDesignation =  """            "filters":    [
+                    {"dataset_id": "samples_13k_mdv2", "phenotype": "blah", "operand": "LDL", "operator": "LT", "value": 2000, "operand_type": "FLOAT"}
+                ]
+""".toString()
+            }
+            else if (filters.size()> 1){
+                List<String> requestedFilterList = []
+                for (Map map in filters){
+                    String operator = (map.cmp=="1") ? "LT" : "GT"
+                    if (map.name){
+                        requestedFilterList << """{"dataset_id": "${dataset}", "phenotype": "b", "operand": "${map.name}", "operator": "${operator}", "value": ${map.parm}, "operand_type": "FLOAT"}""".toString()
+                    }
+                }
+                filterDesignation = """ "filters":    [
+                    ${requestedFilterList.join(",")}
+            ]
+""".toString()
+            } else {
+                String operator = (filters.cmp[0]=="1") ? "LT" : "GT"
+                filterDesignation = """ "filters":    [
+                    {"dataset_id": "${dataset}", "phenotype": "b", "operand": "${filters[0].name}", "operator": "${operator}", "value": ${filters[0].parm}, "operand_type": "FLOAT"}
+            ]""".toString()
+            }
+
+        }
+        return filterDesignation
+    }
 
 
 
+    public JSONObject getSampleDistribution( JSONObject jsonObject) {
+        String dataset = jsonObject.dataset
+        JSONArray requestedData = jsonObject.requestedData
+        List<String> requestedDataList = []
+        for (Map map in requestedData){
+            if (map.name){
+                requestedDataList << """ "${map.name}":["${dataset}"]""".toString()
+            }
+        }
+//        requestedDataList << """ "ID":["${dataset}"]""".toString()
+        def filters = jsonObject.filters
+        String filterDesignation = buildFilterDesignation (filters)
+        String jsonGetDataString = """{
+    "passback": "123abc",
+    "entity": "variant",
+    "page_number": 0,
+    "count": false,
+    "distribution": true,
+    "bin_number": 10,
+    "properties":    {
+                           "cproperty": [],
+                          "orderBy":    [],
+"dproperty" : { ${requestedDataList.join(",")} } ,
+      "pproperty" : { }} ,
+       ${filterDesignation}
+}""".toString()
+
+        // submit the post request
+        JSONObject jsonResultString = this.restServerService.postGetSampleDataCall(jsonGetDataString, RestServerService.SAMPLE_SERVER_URL_QA)
+
+        // return
+        return jsonResultString
+
+    }
 
 
 
@@ -79,9 +144,6 @@ class WidgetService {
 """.toString()
         }
 
-
-
-        // TODO:  uncomment the real code
         jsonGetDataString = """{
     "passback": "123abc",
     "entity": "variant",
@@ -95,35 +157,6 @@ class WidgetService {
       "pproperty" : { }} ,
        ${filterDesignation}
 }""".toString()
-
-//        // TODO:  uncomment the real code
-//        jsonGetDataString = """{
-//    "passback": "123abc",
-//    "entity": "variant",
-//    "page_number": 0,
-//    "count": false,
-//    "properties":    {
-//                           "cproperty": [],
-//                          "orderBy":    [],
-//"dproperty" : { "ID" : [ "samples_stroke_mdv5"],
-//               "AGE" : [ "samples_stroke_mdv5"],
-//               "SEX" : [ "samples_stroke_mdv5"],
-//               "Lobar_ICH" : [ "samples_stroke_mdv5"] } ,
-//      "pproperty" : { }} ,
-//
-//    "filters":    [
-//                    {"dataset_id": "samples_stroke_mdv5", "phenotype": "blah", "operand": "AGE", "operator": "LT", "value": 40, "operand_type": "FLOAT"}
-//                ]
-//}""".toString()
-
-
-
-        /*
-            "filters":    [
-                    {"dataset_id": "samples_13k_mdv2", "phenotype": "blah", "operand": "LDL", "operator": "LT", "value": 2000, "operand_type": "FLOAT"}
-                ]
-         */
-
 
         // submit the post request
         jsonResultString = this.restServerService.postGetSampleDataCall(jsonGetDataString, RestServerService.SAMPLE_SERVER_URL_QA)
