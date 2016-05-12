@@ -38,6 +38,7 @@ class WidgetService {
         String returnValue
         String operatorType
         String operator
+        Boolean generateFilter = true;
         switch (categorical){
             case "0":
                 operatorType = "FLOAT"
@@ -62,7 +63,27 @@ class WidgetService {
                 break
             default: operator = "LT"; break
         }
-        returnValue = """{"dataset_id": "${dataset}", "phenotype": "b", "operand": "${propertyName}", "operator": "${operator}", "value": ${propertyValue}, "operand_type": "${operatorType}"}""".toString()
+        switch (operatorType){
+            case "FLOAT": break;
+            case "INTEGER":
+            case "STRING":
+                if (propertyValue?.length()<1){
+                    generateFilter = false
+                } else { // currently we can only send in one value.
+                    List <String> listOfSelectedValues = propertyValue.tokenize(",")
+                    if (listOfSelectedValues.size()>1){
+                        generateFilter = false
+                    } else {
+                        propertyValue = "\"${propertyValue}\""
+                    }
+                }
+                break;
+        }
+        if (generateFilter){
+            returnValue = """{"dataset_id": "${dataset}", "phenotype": "b", "operand": "${propertyName}", "operator": "${operator}", "value": ${propertyValue}, "operand_type": "${operatorType}"}""".toString()
+        }else {
+            returnValue=""
+        }
         return returnValue
     }
 
@@ -73,18 +94,17 @@ class WidgetService {
         if (filters){
             if (filters.size()==0){
                 filterDesignation =  """            "filters":    [
-                    {"dataset_id": "samples_13k_mdv2", "phenotype": "blah", "operand": "LDL", "operator": "LT", "value": 2000, "operand_type": "FLOAT"}
+                    ${singleFilter ( "0", "1", "LDL", "2000", dataset )}
                 ]
 """.toString()
             }
             else if (filters.size()> 1){
                 List<String> requestedFilterList = []
                 for (Map map in filters){
-                    String operator = (map.cmp=="1") ? "LT" : "GT"
                     if (map.name){
-                       // requestedFilterList << """{"dataset_id": "${dataset}", "phenotype": "b", "operand": "${map.name}", "operator": "${operator}", "value": ${map.parm}, "operand_type": "FLOAT"}""".toString()
-                        if (map.cat!="1"){ // JUST FOR NOW  TODO: remove conditional
-                            requestedFilterList << singleFilter ( map.cat, map.cmp, map.name, map.parm, dataset )
+                         String proposedFilter = singleFilter ( map.cat, map.cmp, map.name, map.parm, dataset )
+                        if (proposedFilter?.length()>1){
+                            requestedFilterList << proposedFilter
                         }
                     }
                 }

@@ -363,6 +363,8 @@ line.center{
         var retrieveSampleFilterMetadata = function (dropdownSel, dropDownSelector) {
             var data = getStoredSampleMetadata();
             var phenotype = $(dropDownSelector).val();
+            var sampleData = getStoredSampleData();
+            var optionsPerFilter = generateOptionsPerFilter(sampleData.metaData.variants) ;
             if ( ( data !==  null ) &&
                  ( typeof data !== 'undefined') ){
                     if ( ( typeof data.filters !== 'undefined' ) &&
@@ -377,8 +379,12 @@ line.center{
                               if (d.type === 'FLOAT') {
                                  output = (output + Mustache.render(floatTemplate, d));
                               } else {
-                                 output = (output+Mustache.render(categoricalTemplate, d));
-                                 categoricalDropDowns.push(d);
+                                 var filterName = d.name;
+                                 if ((optionsPerFilter[d.name]!==undefined)&&
+                                     (optionsPerFilter[d.name].length<3)){
+                                         output = (output+Mustache.render(categoricalTemplate, d));
+                                         categoricalDropDowns.push(d);
+                                 }
                               }
 
                             });
@@ -702,28 +708,8 @@ line.center{
                 .leftShiftPlotWithinAxes(170)
                 .outlierRadius(1e-6)
                 .boxAndWhiskerWidthMultiplier(0)  // 0 to skip the box whisker presentation, 1 for default box size
-                .explicitlySpecifiedHistogram( inData.distribution_array
-                                                 );
-//                .explicitlySpecifiedHistogram( [{   "start": -3,
-//                                                    "end": -1,
-//                                                    "count": 3 },
-//                                                {   "start": -1,
-//                                                    "end": 1,
-//                                                    "count": 10 },
-//                                                {   "start": 1,
-//                                                    "end": 3,
-//                                                    "count": 18 },
-//                                                {   "start": 3,
-//                                                    "end": 5,
-//                                                    "count": 13 },
-//                                                {   "start": 5,
-//                                                    "end": 7,
-//                                                    "count": 3 },
-//                                                {   "start": 7,
-//                                                    "end": 9,
-//                                                    "count": 1 }
-//                ]
-//                                                 );
+                .explicitlySpecifiedHistogram( inData.distribution_array );
+
 
             //  Now we are ready to actually launch the box whisker plot
             d3.select(selector)
@@ -759,32 +745,6 @@ line.center{
                     .histogramBarMultiplier(defaultHistogramBarSize)        // let's start with no histogram visible
                     .leftShiftPlotWithinAxes(130);
 
-                // Following settings if you want only an explicitly specified bar chart
-//                .histogramBarMultiplier(2)
-//                .leftShiftPlotWithinAxes(170)
-//                .outlierRadius(1e-6)
-//                .boxAndWhiskerWidthMultiplier(0)  // 0 to skip the box whisker presentation, 1 for default box size
-//                .explicitlySpecifiedHistogram( [{   "start": -3,
-//                                                    "end": -1,
-//                                                    "count": 3 },
-//                                                {   "start": -1,
-//                                                    "end": 1,
-//                                                    "count": 10 },
-//                                                {   "start": 1,
-//                                                    "end": 3,
-//                                                    "count": 18 },
-//                                                {   "start": 3,
-//                                                    "end": 5,
-//                                                    "count": 13 },
-//                                                {   "start": 5,
-//                                                    "end": 7,
-//                                                    "count": 3 },
-//                                                {   "start": 7,
-//                                                    "end": 9,
-//                                                    "count": 1 }
-//                ]
-//                                                 );
-
             //  Now we are ready to actually launch the box whisker plot
             d3.select(selector)
                     .selectAll('svg')
@@ -794,10 +754,35 @@ line.center{
 
 
 
-        var buildCategoricalPlot = function (inData,selector) {
+        var predefinedCategoricalPlot = function (data,selector) {
+           var roomForLabels = 50;
 
-        //UTILS.distributionMapper
-           // var binInfo = UTILS.distributionMapper(inData[0].data,20,function(d){return d.v})
+    var margin = {top: 50, right: 50, bottom: 20, left: 15},
+            width = 700 - margin.left - margin.right,
+            height = 350 - margin.top - margin.bottom;
+
+
+
+        var barChart = baget.mBar()
+                .width(width)
+                .height(height)
+                .margin(margin)
+                .valueAccessor(function (x) {return x.count})
+                .colorAccessor(function (x) {return '#0082ca'})
+                .categoryAccessor(function (x) {return x.value})
+                .showGridLines (false)
+                .blackTextAfterBar (true)
+                .spaceForYAxisLabels (roomForLabels)
+                .dataHanger(selector,data);
+
+        d3.select(selector).call(barChart.render);
+     };
+
+
+
+
+     var buildCategoricalPlot = function (inData,selector) {
+
            data=[];
            _.forEach(inData,function(arrObj){
               data.push({ category: arrObj.name,
@@ -883,6 +868,7 @@ line.center{
                         });
                         var  dataSetMap = {"name":filterName,
                                 "parm":allSelected,
+                                "cmp": "3",
                                 "cat":1};
                           requestedFilters.push(dataSetMap);
                     }
@@ -1272,9 +1258,11 @@ line.center{
                       var filter = _.find(sampleMetadata.filters, ['name',propertyName]);
                       if (filter){
                          if (filter.type === 'INTEGER'){
-                            buildCategoricalPlot(optionsPerFilter[elementName],'#'+divElementName);
+                            predefinedCategoricalPlot(distributionInfo.sampleData.distribution_array,'#'+divElementName);
+                            $('#'+divElementName).show();
                          } else if (filter.type === 'STRING'){
-                            buildCategoricalPlot(optionsPerFilter[elementName],'#'+divElementName);
+                            predefinedCategoricalPlot(distributionInfo.sampleData.distribution_array,'#'+divElementName);
+                            $('#'+divElementName).show();
                          } if (filter.type === 'FLOAT'){
                             predefinedBoxWhiskerPlot(distributionInfo.sampleData,'#'+divElementName);
                             $('#'+divElementName).show();
