@@ -188,7 +188,7 @@ line.center{
         var loading = $('#rSpinner');
         var storedSampleMetadata;
         var storedSampleData;
-
+        var backendFiltering = false;
 
         var storeSampleData = function (data){
             storedSampleData = data;
@@ -432,6 +432,26 @@ line.center{
             $('.caatSpinner').hide();
         };
 
+        /***
+        *   pull all of the filters out of the Dom and put them into a JSON string suitable for transmission to the server
+        *
+        */
+        var collectingFilterValues = function (){
+           var filterStrings = [];
+           _.forEach( extractFilters(), function(filterObject){
+               var oneFilter = [];
+               _.forEach( filterObject, function(value, key){
+                   oneFilter.push("\""+key+"\": \""+value+"\"");
+               });
+               filterStrings.push("{"+oneFilter.join(",\n")+"}");
+           } );
+           return "[\n" + filterStrings.join(",") + "\n]";
+        };
+
+
+
+
+
 
         /***
         * Previously (V0.1) used to get sample data reflecting a set of filters. Presumably this is where we insert (v0.2)
@@ -445,18 +465,6 @@ line.center{
            var collectingFilterNames = function (){
                var filterStrings = [];
                _.forEach( extractAllFilterNames(), function(filterObject){
-                   var oneFilter = [];
-                   _.forEach( filterObject, function(value, key){
-                       oneFilter.push("\""+key+"\": \""+value+"\"");
-                   });
-                   filterStrings.push("{"+oneFilter.join(",\n")+"}");
-               } );
-               return "[\n" + filterStrings.join(",") + "\n]";
-            };
-
-            var collectingFilterValues = function (){
-               var filterStrings = [];
-               _.forEach( extractFilters(), function(filterObject){
                    var oneFilter = [];
                    _.forEach( filterObject, function(value, key){
                        oneFilter.push("\""+key+"\": \""+value+"\"");
@@ -488,11 +496,15 @@ line.center{
         * filter our samples and then launch the IAT test
         */
         var immediateFilterAndRun = function (){
-            var filteredSamples = generateFilterSamples();
-            var filteredSamplesAsStrings = _.map(filteredSamples,function(d){
-               return('"'+d+'"');
-            });
-            runBurdenTest(filteredSamplesAsStrings);
+            if (backendFiltering){
+                runBurdenTest([""]);
+            } else {
+                var filteredSamples = generateFilterSamples();
+                var filteredSamplesAsStrings = _.map(filteredSamples,function(d){
+                   return('"'+d+'"');
+                });
+                runBurdenTest(filteredSamplesAsStrings);
+            }
         };
 
 
@@ -541,19 +553,12 @@ line.center{
                 $('.orValue').text(oddsRatio);
                 $('.ciValue').text(stdError);
 
-                // show the results
-//                if (isDichotomousTrait) {
-
                     displayTestResultsSection(true);
 
                     $('#burden-test-some-results-large').hide();
                     $('#burden-test-some-results').show();
                     $('.burden-test-result').show();
 
-//                } else {
-//                    $('#burden-test-some-results').hide();
-//                    $('#burden-test-some-results-large').show();
-//                }
             };
 
             $('#rSpinner').show();
@@ -566,6 +571,7 @@ line.center{
                 data: {variantName: '<%=variantIdentifier%>',
                        covariates: collectingCovariateValues(),
                        samples: "{\"samples\":[\n" + samplesWeWant.join(",") + "\n]}",
+                       filters: "{\"filters\":"+collectingFilterValues()+"}",
                        traitFilterSelectedOption: traitFilterSelectedOption
                 },
                 async: true,
@@ -1281,7 +1287,7 @@ line.center{
         * @param holderSection
         */
         var displaySampleDistribution = function (propertyName, holderSection) {
-            var backendFiltering = true;
+//            var backendFiltering = true;
             if (backendFiltering){
                 refreshSampleDistribution( '#datasetFilter', utilizeDistributionInformationToCreatePlot, propertyName );
             } else {

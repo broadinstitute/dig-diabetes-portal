@@ -238,11 +238,12 @@ JSONObject sampleSummary = widgetService.getSampleDistribution ( querySpecificat
         JsonSlurper slurper = new JsonSlurper()
         JSONObject covariateJsonObject = slurper.parseText(params.covariates)
         JSONObject sampleJsonObject = slurper.parseText(params.samples)
+        JSONObject filtersJsonObject = slurper.parseText(params.filters)
         // cast the parameters
         String variantName = params.variantName;
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
-        JSONObject result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantName, covariateJsonObject, sampleJsonObject );
+        JSONObject result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantName, covariateJsonObject, sampleJsonObject, filtersJsonObject  );
 
         // send json response back
         render(status: 200, contentType: "application/json") {result}

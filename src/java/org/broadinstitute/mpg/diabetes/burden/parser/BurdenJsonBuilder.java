@@ -50,13 +50,13 @@ public class BurdenJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public JSONObject getBurdenPostJson(String stringDataVersion, String phenotype, List<String> variantList, List<String> covariatesList, List<String> sampleList) throws PortalException {
+    public JSONObject getBurdenPostJson(String stringDataVersion, String phenotype, List<String> variantList, List<String> covariatesList, List<String> sampleList, String filters) throws PortalException {
         // local variables
         JSONObject finalObject;
 
         // create the json object
         try {
-            finalObject = new JSONObject(this.getBurdenPostJsonString( stringDataVersion, phenotype, variantList, covariatesList,  sampleList));
+            finalObject = new JSONObject(this.getBurdenPostJsonString( stringDataVersion, phenotype, variantList, covariatesList,  sampleList, filters));
 
         } catch (JSONException exception) {
             throw new PortalException(("got json creation exception for burden test payload generation: " + exception.getMessage()));
@@ -74,7 +74,7 @@ public class BurdenJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public String getBurdenPostJsonString(String stringDataVersion , String phenotype, List<String> variantList, List<String> covariatesList, List<String> sampleList) throws PortalException {
+    public String getBurdenPostJsonString(String stringDataVersion , String phenotype, List<String> variantList, List<String> covariatesList, List<String> sampleList, String filters) throws PortalException {
         // local variables
         String finalString;
         StringBuilder stringBuilder = new StringBuilder();
@@ -157,15 +157,10 @@ public class BurdenJsonBuilder {
                 }
             }
         }
-//        if ((covariatesList == null) || (covariatesList.size() == 0)) {
-//            for (int i = 1; i < 11; i++) {
-//                stringBuilder.append("\"C" + i + "\"");
-//                if (i < 10) {
-//                    stringBuilder.append(",");
-//                }
-//            }
-//        }
-        stringBuilder.append("]}");
+
+        stringBuilder.append("],");
+        stringBuilder.append(filters);
+        stringBuilder.append("}");
 
         // create the filters list object string
         // TODO - no filters for DIGP-42 09/13/15 deadline

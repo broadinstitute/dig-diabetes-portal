@@ -89,7 +89,7 @@ class WidgetService {
 
 
 
-    private String buildFilterDesignation (def filters,String dataset){
+    public String buildFilterDesignation (def filters,String dataset){
         String filterDesignation = ""
         if (filters){
             if (filters.size()==0){
