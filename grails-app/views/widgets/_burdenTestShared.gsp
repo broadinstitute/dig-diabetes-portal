@@ -188,7 +188,7 @@ line.center{
         var loading = $('#rSpinner');
         var storedSampleMetadata;
         var storedSampleData;
-        var backendFiltering = false;
+        var backendFiltering = true;
 
         var storeSampleData = function (data){
             storedSampleData = data;
@@ -396,7 +396,7 @@ line.center{
                           // filters should be in place now.  Attach events
                           _.forEach(data.filters,function(d){
                               $("#multi"+d.name).bind("change", function(event, ui){
-                                   mpgSoftware.burdenTestShared.displaySampleDistribution(d.name, '#boxWhiskerPlot')
+                                   mpgSoftware.burdenTestShared.displaySampleDistribution(d.name, '#boxWhiskerPlot',0)
                               });
                           });
 
@@ -1286,7 +1286,7 @@ line.center{
         * @param propertyName
         * @param holderSection
         */
-        var displaySampleDistribution = function (propertyName, holderSection) {
+        var displaySampleDistribution = function (propertyName, holderSection, categorical) { // for categorical, 0== float, 1== string or int
 //            var backendFiltering = true;
             if (backendFiltering){
                 refreshSampleDistribution( '#datasetFilter', utilizeDistributionInformationToCreatePlot, propertyName );
@@ -1491,13 +1491,13 @@ variant by specifying the phenotype to test for association, a subset of samples
                                         <input id="inp{{name}}" type="text" class="filterParm form-control"
                                                data-type="propertiesInput"
                                                data-prop="{{name}}Value" data-translatedname="{{name}}"
-                                               onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')"
-                                               onkeyup="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')">
+                                               onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',0)"
+                                               onkeyup="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',0)">
 
                                     </div>
 
                                     <div class="col-sm-1">
-                                        <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')"
+                                        <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',0)"
                                               class="glyphicon glyphicon-arrow-right pull-right distPlotter" id="distPlotter_{{name}}"></span>
                                     </div>
 
@@ -1523,13 +1523,13 @@ variant by specifying the phenotype to test for association, a subset of samples
                                     <div class="col-sm-3">
                                         <select id="multi{{name}}" class="form-control multiSelect"
                                                 data-selectfor="{{name}}FilterOpts" multiple="multiple"
-                                                onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')">
+                                                onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',1)">
                                         </select>
 
                                     </div>
 
                                     <div class="col-sm-1">
-                                        <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot')"
+                                        <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',1)"
                                               class="glyphicon glyphicon-arrow-right pull-right"  id="distPlotter_{{name}}"></span>
                                     </div>
 
