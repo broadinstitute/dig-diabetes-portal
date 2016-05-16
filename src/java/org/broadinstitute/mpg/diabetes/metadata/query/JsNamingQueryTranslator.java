@@ -273,7 +273,7 @@ public class JsNamingQueryTranslator {
 
         if (inputFilterString != null) {
             // split the string on the line delimiter
-            tempArray = inputFilterString.split(this.QUERY_NUMBER_DELIMITER_STRING);
+            tempArray = inputFilterString.split(this.QUERY_NUMBER_DELIMITER_STRING,2);
 
             // make sure we have two parts
             if (tempArray.length > 1) {
