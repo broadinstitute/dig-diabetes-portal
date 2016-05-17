@@ -142,7 +142,18 @@ class VariantInfoController {
         String jsonDataAsString = params.data
         JSONObject sampleCallSpecifics = slurper.parseText(jsonDataAsString)
 
-        JSONObject jsonObject =  widgetService.getSampleList ( sampleCallSpecifics)
+        String dataset =  sampleCallSpecifics.dataset
+        JSONArray requestedData = sampleCallSpecifics.requestedData as JSONArray
+        List<String> requestedDataList = []
+        for (Map map in requestedData){
+            if (map.name){
+                requestedDataList << """ "${map.name}":["${dataset}"]""".toString()
+            }
+        }
+        requestedDataList << """ "ID":["${dataset}"]""".toString()
+        JSONObject jsonObject = widgetService.getSampleDistribution ( dataset, requestedDataList, false, sampleCallSpecifics.filters )
+
+        //JSONObject jsonObject =  widgetService.getSampleList ( sampleCallSpecifics)
         render(status:200, contentType:"application/json") {
             [metaData:jsonObject]
         }
@@ -198,7 +209,16 @@ def retrieveSampleSummary (){
     JSONObject querySpecification = slurper.parseText(jsonDataAsString)
 
     // right way
-JSONObject sampleSummary = widgetService.getSampleDistribution ( querySpecification )
+//JSONObject sampleSummary = widgetService.getSampleDistribution ( querySpecification )
+    String dataset =  querySpecification.dataset
+    JSONArray requestedData = querySpecification.requestedData as JSONArray
+    List<String> requestedDataList = []
+    for (Map map in requestedData){
+        if (map.name){
+            requestedDataList << """ "${map.name}":["${dataset}"]""".toString()
+        }
+    }
+    JSONObject sampleSummary = widgetService.getSampleDistribution ( dataset, requestedDataList, true, querySpecification.filters )
 
     render(status:200, contentType:"application/json") {
         [sampleData:sampleSummary]

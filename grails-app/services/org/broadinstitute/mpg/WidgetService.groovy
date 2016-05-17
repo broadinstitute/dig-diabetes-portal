@@ -91,67 +91,56 @@ class WidgetService {
 
     public String buildFilterDesignation (def filters,String dataset){
         String filterDesignation = ""
-        if (filters){
-            if (filters.size()==0){
-                filterDesignation =  """            "filters":    [
-                    ${singleFilter ( "0", "1", "LDL", "2000", dataset )}
-                ]
-""".toString()
-            }
-            else if (filters.size()> 1){
-                List<String> requestedFilterList = []
-                for (Map map in filters){
-                    if (map.name){
-                         String proposedFilter = singleFilter ( map.cat, map.cmp, map.name, map.parm, dataset )
-                        if (proposedFilter?.length()>1){
-                            requestedFilterList << proposedFilter
-                        }
-                    }
-                }
-                if (requestedFilterList.size()==0){
-                    filterDesignation =  """            "filters":    [
-                     ${singleFilter ( "0", "1", "LDL", "2000", dataset )}
-                ]
-""".toString()
-                } else {
-                    filterDesignation = """ "filters":    [
-                    ${requestedFilterList.join(",")}
+
+        if (filters.size()==0){
+            filterDesignation =  """            "filters":    [
+                ${singleFilter ( "1", "1", "ID", "ZZZZZ", dataset )}
             ]
 """.toString()
+        }
+        else if (filters.size()> 1){
+            List<String> requestedFilterList = []
+            for (Map map in filters){
+                if (map.name){
+                     String proposedFilter = singleFilter ( map.cat, map.cmp, map.name, map.parm, dataset )
+                    if (proposedFilter?.length()>1){
+                        requestedFilterList << proposedFilter
+                    }
                 }
-
+            }
+            if (requestedFilterList.size()==0){
+                filterDesignation =  """            "filters":    [
+                 ${singleFilter ( "1", "1", "ID", "ZZZZZ", dataset )}
+            ]
+""".toString()
             } else {
-                String operator = (filters.cmp[0]=="1") ? "LT" : "GT"
                 filterDesignation = """ "filters":    [
-                    ${singleFilter ( filters[0].cat, filters[0].cmp, filters[0].name, filters[0].parm, dataset )}
-            ]""".toString()
-                //{"dataset_id": "${dataset}", "phenotype": "b", "operand": "${filters[0].name}", "operator": "${operator}", "value": ${filters[0].parm}, "operand_type": "FLOAT"}
+                ${requestedFilterList.join(",")}
+        ]
+""".toString()
             }
 
+        } else {
+            String operator = (filters.cmp[0]=="1") ? "LT" : "GT"
+            filterDesignation = """ "filters":    [
+                ${singleFilter ( filters[0].cat, filters[0].cmp, filters[0].name, filters[0].parm, dataset )}
+        ]""".toString()
         }
+
         return filterDesignation
     }
 
 
 
-    public JSONObject getSampleDistribution( JSONObject jsonObject) {
-        String dataset = jsonObject.dataset
-        JSONArray requestedData = jsonObject.requestedData as JSONArray
-        List<String> requestedDataList = []
-        for (Map map in requestedData){
-            if (map.name){
-                requestedDataList << """ "${map.name}":["${dataset}"]""".toString()
-            }
-        }
-
-        def filters = jsonObject.filters
+    public JSONObject getSampleDistribution( String dataset, List<String> requestedDataList, Boolean distributionRequested, def filters) {
         String filterDesignation = buildFilterDesignation (filters, dataset)
         String jsonGetDataString = """{
     "passback": "123abc",
     "entity": "variant",
     "page_number": 0,
+    "limit": 2000,
     "count": false,
-    "distribution": true,
+    "distribution": ${(distributionRequested)?'true':'false'},
     "bin_number": 24,
     "properties":    {
                            "cproperty": [],
@@ -168,6 +157,40 @@ class WidgetService {
         return jsonResultString
 
     }
+//    public JSONObject getSampleDistribution( JSONObject jsonObject) {
+//        String dataset = jsonObject.dataset
+//        JSONArray requestedData = jsonObject.requestedData as JSONArray
+//        List<String> requestedDataList = []
+//        for (Map map in requestedData){
+//            if (map.name){
+//                requestedDataList << """ "${map.name}":["${dataset}"]""".toString()
+//            }
+//        }
+//
+//        def filters = jsonObject.filters
+//        String filterDesignation = buildFilterDesignation (filters, dataset)
+//        String jsonGetDataString = """{
+//    "passback": "123abc",
+//    "entity": "variant",
+//    "page_number": 0,
+//    "count": false,
+//    "distribution": true,
+//    "bin_number": 24,
+//    "properties":    {
+//                           "cproperty": [],
+//                          "orderBy":    [],
+//"dproperty" : { ${requestedDataList.join(",")} } ,
+//      "pproperty" : { }} ,
+//       ${filterDesignation}
+//}""".toString()
+//
+//        // submit the post request
+//        JSONObject jsonResultString = this.restServerService.postGetSampleDataCall(jsonGetDataString, RestServerService.SAMPLE_SERVER_URL_QA)
+//
+//        // return
+//        return jsonResultString
+//
+//    }
 
 
 

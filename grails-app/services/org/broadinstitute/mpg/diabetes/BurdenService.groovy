@@ -319,6 +319,19 @@ class BurdenService {
         JSONObject jsonObject = null;
         JSONObject returnJson = null;
 
+
+        // TODO: remove this workaround when the backend can gather samples on its own
+
+        List<String> sampleList = []
+        if (sampleJsonObject?.samples) {
+            sampleList = sampleJsonObject.samples.collect{return it.toString()} as List
+        } else {
+            List<String> requestedDataList = []
+            requestedDataList << """ "ID":["samples_17k_mdv2"]""".toString()
+            JSONObject samples = widgetService.getSampleDistribution( 'samples_17k_mdv2', requestedDataList, false, filtersJsonObject.filters)
+            sampleList = samples.variants.collect{variant->variant[0].ID.samples_17k_mdv2} as List
+        }
+
         String filters = widgetService.buildFilterDesignation (filtersJsonObject.filters,"mydataset")
 
         // check to make sure we have at least one variant
@@ -332,10 +345,10 @@ class BurdenService {
             covariateList = covariateJsonObject.covariates.collect{return it.toString()} as List
         }
         // create the json payload for the burden call
-        List<String> sampleList = []
-        if (sampleJsonObject?.samples) {
-            sampleList = sampleJsonObject.samples.collect{return it.toString()} as List
-        }
+//        List<String> sampleList = []
+//        if (sampleJsonObject?.samples) {
+//            sampleList = sampleJsonObject.samples.collect{return it.toString()} as List
+//        }
         jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(stringDataVersion, phenotype, burdenVariantList, covariateList, sampleList, filters);
         log.info("created burden rest payload: " + jsonObject);
 
