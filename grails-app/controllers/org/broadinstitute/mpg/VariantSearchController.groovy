@@ -286,7 +286,7 @@ class VariantSearchController {
             // if there is a phenotype defined, this is a query that has a
             // phenotype, dataset, prop, comparator, and value
             if( currentQuery.phenotype ) {
-                String comparator = (currentQuery.comparator!='=')?:'|' // if anyone passes in a real = then swap it out -- we demand a coded character
+                String comparator = (currentQuery.comparator=='=')?'|':currentQuery.comparator // if anyone passes in a real = then swap it out -- we demand a coded character
                 processedQuery = '17=' +
                                  currentQuery.phenotype + '[' + currentQuery.dataset + ']' +
                                  currentQuery.prop + comparator + currentQuery.value
