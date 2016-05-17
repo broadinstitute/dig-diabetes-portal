@@ -55,6 +55,15 @@
         if ('${encodedFilterSets}') {
             var encodedFilters = JSON.parse(decodeURIComponent('${encodedFilterSets}'));
             if(encodedFilters.length > 0) {
+                // make sure we don't display any control/formatting characters
+                _.forEach(encodedFilters,function(eachFilter){
+                    _.forEach(eachFilter,function(fieldValue,fieldKey){
+                        if ((typeof fieldValue !== 'undefined') &&
+                                (fieldValue !== null)){
+                            eachFilter[fieldKey] = fieldValue.replace(/\&.*;/i, ''); // remove formatting characters.  Would rather do this with with html()-type call but don't see an easy way
+                        }
+                    })
+                });
                 mpgSoftware.variantWF.initializePage(encodedFilters);
             }
         }
