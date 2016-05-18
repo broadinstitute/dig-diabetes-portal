@@ -374,20 +374,31 @@ line.center{
                             var output = '';
                             var floatTemplate = $('#filterFloatTemplate')[0].innerHTML;
                             var categoricalTemplate = $('#filterCategoricalTemplate')[0].innerHTML;
-                            var categoricalDropDowns = [];
+                            var categoricalFilters = [];
+                            var realValuedFilters = [];
                             _.forEach(data.filters,function(d,i){
                               if (d.type === 'FLOAT') {
-                                 output = (output + Mustache.render(floatTemplate, d));
+                                 realValuedFilters.push(d);
+                                // output = (output + Mustache.render(floatTemplate, d));
                               } else {
                                  var filterName = d.name;
                                  if ((optionsPerFilter[d.name]!==undefined)&&
                                      (optionsPerFilter[d.name].length<3)){
-                                         output = (output+Mustache.render(categoricalTemplate, d));
-                                         categoricalDropDowns.push(d);
+                                 //        output = (output+Mustache.render(categoricalTemplate, d));
+                                         categoricalFilters.push(d);
                                  }
                               }
 
                             });
+                             var renderData = {
+                                categoricalFilters: categoricalFilters
+                                };
+                            output = Mustache.render(categoricalTemplate, renderData);
+                            renderData = {
+                                realValuedFilters: realValuedFilters
+                            };
+                            output = (output + Mustache.render(floatTemplate, renderData));
+
                             $("#sampleRow").show();
                            $('.sampleNumberReporter').show();
                            if (_.trim(filterHolderElement.text()).length===0){
@@ -1347,56 +1358,56 @@ variant by specifying the phenotype to test for association, a subset of samples
 
 <div class="row burden-test-wrapper-options">
 
-%{--<r:img class="caatSpinner" uri="/images/InternetSlowdown_Day.gif" alt="Loading CAAT data"/>--}%
 <r:img class="caatSpinner" uri="/images/loadingCaat.gif" alt="Loading CAAT data"/>
-
 
 <div class="user-interaction">
 
-<div class="panel-group" id="accordion_iat" style="margin-bottom: 10px">
 
-<div class="panel panel-default">%{--should hold the Choose data set panel--}%
+<div class="panel panel-default">    %{--should hold the Choose data set panel--}%
 
     <div class="panel-heading">
         <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#chooseSamples" href="#chooseSamples">Step 1: Select a phenotype to test for association</a>
+            <a>Step 1: Select a phenotype to test for association</a>
         </h4>
     </div>
 
     <div id="chooseSamples" class="panel-collapse collapse in">
         <div class="panel-body secBody">
 
-                    <div class="row secHeader" style="display:none">
-                        <div class="col-sm-12 col-xs-12 text-left"><label>Dataset</label></div>
-                    </div>
+            <div class="row secHeader" style="display:none">
+                <div class="col-sm-12 col-xs-12 text-left"><label>Dataset</label></div>
+            </div>
 
-                    <div class="row"  style="display:none">
-                        <div class="col-sm-12 col-xs-12 text-left">
-                            <select id="datasetFilter" class="traitFilter form-control text-left"
-                                    onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');"
-                                    onclick="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');">
-                            </select>
-                        </div>
+            <div class="row"  style="display:none">
+                <div class="col-sm-12 col-xs-12 text-left">
+                    <select id="datasetFilter" class="traitFilter form-control text-left"
+                            onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');"
+                            onclick="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');">
+                    </select>
+                </div>
 
-                    </div>
+            </div>
 
-                    <div class="row secHeader" style="padding: 0 0 5px 0">
-                        <div class="col-sm-12 col-xs-12 text-left"><label>Phenotype</label></div>
-                    </div>
+            <div class="row secHeader" style="padding: 0 0 5px 0">
+                <div class="col-sm-12 col-xs-12 text-left"><label>Phenotype</label></div>
+            </div>
 
-                    <div class="row">
-                        <div class="col-sm-12 col-xs-12 text-left">
-                            <select id="phenotypeFilter" class="traitFilter form-control text-left"
-                                    onchange="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata($('#datasetFilter'), '#phenotypeFilter');">
-                            </select>
-                        </div>
-                    </div>
+            <div class="row">
+                <div class="col-sm-12 col-xs-12 text-left">
+                    <select id="phenotypeFilter" class="traitFilter form-control text-left"
+                            onchange="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata($('#datasetFilter'), '#phenotypeFilter');">
+                    </select>
+                </div>
+            </div>
 
         </div>
     </div>
 
-</div>%{--end accordion panel for id=chooseSamples--}%
+</div>    %{--end accordion panel for id=chooseSamples--}%
 
+
+
+<div class="panel-group" id="accordion_iat" style="margin-bottom: 10px">
 
 <div class="panel panel-default">%{--should hold the Choose data set panel--}%
 
@@ -1430,34 +1441,35 @@ variant by specifying the phenotype to test for association, a subset of samples
                         <div class="col-sm-6 col-xs-12 text-left"></div>
 
                         <div class="col-sm-6 col-xs-12 text-right"><label
-                                style="font-style: italic; font-size: 14px">Mouse-over arrows<br/> for distribution</label>
+                                style="font-style: italic; font-size: 14px">Click arrows<br/> for distribution</label>
                         </div>
                     </div>
 
                     <div class="row" id="sampleRow" style="display:none; padding: 10px 0 0 0">
-                        <div class="col-sm-12 col-xs-12 text-left">
-                            <div class="row sampleFilterHeader" style="text-decoration: underline">
-                                <div class="col-sm-1" style="padding-left: 4px">
-                                    Use
-                                </div>
-
-                                <div class="col-sm-3">
-                                    Filter
-                                </div>
-
-                                <div class="col-sm-3" style="padding-left: 4px">
-                                    Cmp
-                                </div>
-
-                                <div class="col-sm-4">
-                                    Parameter
-                                </div>
-                            </div>
+                        <div class="col-sm-12 col-xs-12 text-left">will
 
                             <div style="direction: rtl; height: 300px; padding: 4px 0 0 10px; overflow-y: scroll;">
                                 <div style="direction: ltr">
                                     <div id="filters">
                                         <div class="row">
+
+                                            <div class="row sampleFilterHeader" style="text-decoration: underline">
+                                                <div class="col-sm-1" style="padding-left: 4px">
+                                                    Use
+                                                </div>
+
+                                                <div class="col-sm-3">
+                                                    Filter
+                                                </div>
+
+                                                <div class="col-sm-3" style="padding-left: 4px">
+                                                    Cmp
+                                                </div>
+
+                                                <div class="col-sm-4">
+                                                    Parameter
+                                                </div>
+                                            </div>
 
                                             <div id="filterHolder"></div>
 
@@ -1467,7 +1479,11 @@ variant by specifying the phenotype to test for association, a subset of samples
                             </div>
 
 
-                            <div id="filterFloatTemplate" style="display: none;">
+                            <script id="filterFloatTemplate"  type="x-tmpl-mustache">
+
+
+
+                                {{ #realValuedFilters }}
                                 <div class="row realValuedFilter considerFilter" id="filter_{{name}}">
                                     <div class="col-sm-1">
                                         <input class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}"
@@ -1502,10 +1518,13 @@ variant by specifying the phenotype to test for association, a subset of samples
                                     </div>
 
                                 </div>
-                            </div>
+                                {{ /realValuedFilters }}
+                            </script>
 
 
-                            <div id="filterCategoricalTemplate" style="display: none;">
+                            %{--<div id="filterCategoricalTemplate" style="display: none;">--}%
+                            <script id="filterCategoricalTemplate" type="x-tmpl-mustache">
+                                {{ #categoricalFilters }}
                                 <div class="row categoricalFilter considerFilter" id="filter_{{name}}">
                                     <div class="col-sm-1">
                                         <input class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}"
@@ -1534,12 +1553,14 @@ variant by specifying the phenotype to test for association, a subset of samples
                                     </div>
 
                                 </div>
-
-                            </div>
+                                {{ /categoricalFilters }}
+                            </script>
 
 
                             <div id="filterStringTemplate"
-                                 style="display: none;"><p><span>str name={{name}},type={{type}}</span></p></div>
+                                 style="display: none;"><p><span>str name={{name}},type={{type}}</span></p>
+                            </div>
+
                         </div>
                     </div>
 
