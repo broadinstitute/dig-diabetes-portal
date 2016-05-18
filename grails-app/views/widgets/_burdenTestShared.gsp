@@ -374,30 +374,28 @@ line.center{
                             var output = '';
                             var floatTemplate = $('#filterFloatTemplate')[0].innerHTML;
                             var categoricalTemplate = $('#filterCategoricalTemplate')[0].innerHTML;
+                            var allTemplate = $('#allFiltersTemplate')[0].innerHTML;
+                            var partialContainer = {filterFloatTemplate:floatTemplate,
+                                                    filterCategoricalTemplate:categoricalTemplate};
                             var categoricalFilters = [];
                             var realValuedFilters = [];
                             _.forEach(data.filters,function(d,i){
                               if (d.type === 'FLOAT') {
                                  realValuedFilters.push(d);
-                                // output = (output + Mustache.render(floatTemplate, d));
                               } else {
                                  var filterName = d.name;
                                  if ((optionsPerFilter[d.name]!==undefined)&&
                                      (optionsPerFilter[d.name].length<3)){
-                                 //        output = (output+Mustache.render(categoricalTemplate, d));
                                          categoricalFilters.push(d);
                                  }
                               }
 
                             });
-                             var renderData = {
-                                categoricalFilters: categoricalFilters
-                                };
-                            output = Mustache.render(categoricalTemplate, renderData);
-                            renderData = {
+                            var renderAllFiltersData = {
+                                categoricalFilters: categoricalFilters,
                                 realValuedFilters: realValuedFilters
                             };
-                            output = (output + Mustache.render(floatTemplate, renderData));
+                            output = (output + Mustache.render(allTemplate, renderAllFiltersData,partialContainer));
 
                             $("#sampleRow").show();
                            $('.sampleNumberReporter').show();
@@ -421,17 +419,27 @@ line.center{
                         var covariateHolderElement = $("#covariateHolder");
                         covariateHolderElement.text("");
                         output = '';
+                        var allCovariatesTemplate = $('#allCovariateSpecifierTemplate')[0].innerHTML;
                         var covariateTemplate = $('#covariateTemplate')[0].innerHTML;
                         var covariateTemplateChecked = $('#covariateTemplateChecked')[0].innerHTML;
+                        var partialContainer = {covariateTemplate:covariateTemplate};
+                        var covariateSpecifiers = [];
                          _.forEach(data.covariates,function(d,i){
                              if (d.name !== phenotype){
-                                if (d.def === 1){
-                                   output = (output + Mustache.render(covariateTemplateChecked, d));
-                                } else {
-                                   output = (output + Mustache.render(covariateTemplate, d));
-                                }
+                                covariateSpecifiers.push(d);
                              }
                         });
+                        var renderAllCovariatesData = {
+                                covariateSpecifiers: covariateSpecifiers,
+                                defaultCovariate: function(){
+                                     if (this.def) {
+                                        return " checked";
+                                     } else {
+                                        return "";
+                                     }
+                                }
+                        };
+                        output = (output + Mustache.render(allCovariatesTemplate, renderAllCovariatesData, partialContainer));
                         covariateHolderElement.append(output);
 
 
@@ -1446,30 +1454,13 @@ variant by specifying the phenotype to test for association, a subset of samples
                     </div>
 
                     <div class="row" id="sampleRow" style="display:none; padding: 10px 0 0 0">
-                        <div class="col-sm-12 col-xs-12 text-left">will
+                        <div class="col-sm-12 col-xs-12 text-left">
 
                             <div style="direction: rtl; height: 300px; padding: 4px 0 0 10px; overflow-y: scroll;">
                                 <div style="direction: ltr">
                                     <div id="filters">
                                         <div class="row">
 
-                                            <div class="row sampleFilterHeader" style="text-decoration: underline">
-                                                <div class="col-sm-1" style="padding-left: 4px">
-                                                    Use
-                                                </div>
-
-                                                <div class="col-sm-3">
-                                                    Filter
-                                                </div>
-
-                                                <div class="col-sm-3" style="padding-left: 4px">
-                                                    Cmp
-                                                </div>
-
-                                                <div class="col-sm-4">
-                                                    Parameter
-                                                </div>
-                                            </div>
 
                                             <div id="filterHolder"></div>
 
@@ -1478,6 +1469,27 @@ variant by specifying the phenotype to test for association, a subset of samples
                                 </div>
                             </div>
 
+                            <script id="allFiltersTemplate"  type="x-tmpl-mustache">
+                                <div class="row sampleFilterHeader" style="text-decoration: underline">
+                                    <div class="col-sm-1" style="padding-left: 4px">
+                                        Use
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        Filter name
+                                    </div>
+
+                                    <div class="col-sm-3" style="padding-left: 4px">
+                                        Cmp
+                                    </div>
+
+                                    <div class="col-sm-4 pull-right">
+                                        Parameter
+                                    </div>
+                                </div>
+                                {{>filterCategoricalTemplate}}
+                                {{>filterFloatTemplate}}
+                            </script>
 
                             <script id="filterFloatTemplate"  type="x-tmpl-mustache">
 
@@ -1521,8 +1533,6 @@ variant by specifying the phenotype to test for association, a subset of samples
                                 {{ /realValuedFilters }}
                             </script>
 
-
-                            %{--<div id="filterCategoricalTemplate" style="display: none;">--}%
                             <script id="filterCategoricalTemplate" type="x-tmpl-mustache">
                                 {{ #categoricalFilters }}
                                 <div class="row categoricalFilter considerFilter" id="filter_{{name}}">
@@ -1556,10 +1566,9 @@ variant by specifying the phenotype to test for association, a subset of samples
                                 {{ /categoricalFilters }}
                             </script>
 
-
-                            <div id="filterStringTemplate"
-                                 style="display: none;"><p><span>str name={{name}},type={{type}}</span></p>
-                            </div>
+                            <script id="filterStringTemplate" type="x-tmpl-mustache">
+                                <p><span>str name={{name}},type={{type}}</span></p>
+                            </script>
 
                         </div>
                     </div>
@@ -1610,30 +1619,26 @@ variant by specifying the phenotype to test for association, a subset of samples
 
                                 </div>
 
-                                <div id="covariateTemplate" style="display: none;">
+                                <script id="allCovariateSpecifierTemplate"  type="x-tmpl-mustache">
+
+                                {{>covariateTemplate}}
+
+                                </script>
+
+
+                                <script id="covariateTemplate"  type="x-tmpl-mustache">
+                                    {{ #covariateSpecifiers }}
                                     <div class="row">
                                         <div class="checkbox" style="margin:0">
                                             <label>
                                                 <input id="covariate_{{name}}" class="covariate" type="checkbox" name="covariate"
-                                                       value="{{name}}"/>
+                                                       value="{{name}}" {{defaultCovariate}}/>
                                                 {{trans}}
                                             </label>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div id="covariateTemplateChecked" style="display: none;">
-                                    <div class="row">
-                                        <div class="checkbox" style="margin:0">
-                                            <label>
-                                                <input id="covariate_{{name}}" class="covariate" type="checkbox" name="covariate"
-                                                       value="{{name}}" checked/>
-                                                {{trans}}
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
+                                    {{ /covariateSpecifiers }}
+                                </script>
 
                             </div>
 
