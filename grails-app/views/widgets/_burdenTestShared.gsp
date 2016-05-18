@@ -357,33 +357,34 @@ line.center{
 
         /***
         *  Build the UI widgets which can be used to specify the filters for DAGA.  Once they are in place
-        *  we can use fillDistributionPlotsAndDropdowns to create plots.
+        *  we can use fillCategoricalDropDownBoxes to create plots.
         *
         */
         var retrieveSampleFilterMetadata = function (dropdownSel, dropDownSelector) {
             var data = getStoredSampleMetadata();
             var phenotype = $(dropDownSelector).val();
             var sampleData = getStoredSampleData();
+            var filterHolderElement = $("#filterHolder");
+            var allTemplate;
+            var renderAllFiltersData;
+            var allCovariatesTemplate;
+            var renderAllCovariatesData;
             var optionsPerFilter = generateOptionsPerFilter(sampleData.metaData.variants) ;
             if ( ( data !==  null ) &&
                  ( typeof data !== 'undefined') ){
                     if ( ( typeof data.filters !== 'undefined' ) &&
                          (  data.filters !==  null ) ) {
-                            var filterHolderElement = $("#filterHolder");
 
-                            var output = '';
                             var floatTemplate = $('#filterFloatTemplate')[0].innerHTML;
                             var categoricalTemplate = $('#filterCategoricalTemplate')[0].innerHTML;
-                            var allTemplate = $('#allFiltersTemplate')[0].innerHTML;
-                            var partialContainer = {filterFloatTemplate:floatTemplate,
-                                                    filterCategoricalTemplate:categoricalTemplate};
+                            allTemplate = $('#allFiltersTemplate')[0].innerHTML;
+
                             var categoricalFilters = [];
                             var realValuedFilters = [];
                             _.forEach(data.filters,function(d,i){
                               if (d.type === 'FLOAT') {
                                  realValuedFilters.push(d);
                               } else {
-                                 var filterName = d.name;
                                  if ((optionsPerFilter[d.name]!==undefined)&&
                                      (optionsPerFilter[d.name].length<3)){
                                          categoricalFilters.push(d);
@@ -391,45 +392,26 @@ line.center{
                               }
 
                             });
-                            var renderAllFiltersData = {
+                            renderAllFiltersData = {
                                 categoricalFilters: categoricalFilters,
                                 realValuedFilters: realValuedFilters
                             };
-                            output = (output + Mustache.render(allTemplate, renderAllFiltersData,partialContainer));
-
-                            $("#sampleRow").show();
-                           $('.sampleNumberReporter').show();
-                           if (_.trim(filterHolderElement.text()).length===0){
-                              filterHolderElement.append(output);
-                           }
-                          // filters should be in place now.  Attach events
-                          _.forEach(data.filters,function(d){
-                              $("#multi"+d.name).bind("change", function(event, ui){
-                                   mpgSoftware.burdenTestShared.displaySampleDistribution(d.name, '#boxWhiskerPlot',0)
-                              });
-                          });
-
-                           var sampleData = getStoredSampleData();
-                           fillDistributionPlotsAndDropdowns(sampleData.metaData.variants,phenotype);
-                           displayTestResultsSection(false);
 
                     }
                      if ( ( typeof data.covariates !== 'undefined' ) &&
                          (  data.covariates !==  null ) ) {
                         var covariateHolderElement = $("#covariateHolder");
                         covariateHolderElement.text("");
-                        output = '';
-                        var allCovariatesTemplate = $('#allCovariateSpecifierTemplate')[0].innerHTML;
+                        allCovariatesTemplate = $('#allCovariateSpecifierTemplate')[0].innerHTML;
                         var covariateTemplate = $('#covariateTemplate')[0].innerHTML;
-                        var covariateTemplateChecked = $('#covariateTemplateChecked')[0].innerHTML;
-                        var partialContainer = {covariateTemplate:covariateTemplate};
+
                         var covariateSpecifiers = [];
                          _.forEach(data.covariates,function(d,i){
                              if (d.name !== phenotype){
                                 covariateSpecifiers.push(d);
                              }
                         });
-                        var renderAllCovariatesData = {
+                        renderAllCovariatesData = {
                                 covariateSpecifiers: covariateSpecifiers,
                                 defaultCovariate: function(){
                                      if (this.def) {
@@ -439,12 +421,34 @@ line.center{
                                      }
                                 }
                         };
-                        output = (output + Mustache.render(allCovariatesTemplate, renderAllCovariatesData, partialContainer));
-                        covariateHolderElement.append(output);
-
 
                     }
+                    filterHolderElement.append(Mustache.render( allTemplate,
+                                            renderAllFiltersData,
+                                            { filterFloatTemplate:floatTemplate,
+                                              filterCategoricalTemplate:categoricalTemplate }));
 
+                    covariateHolderElement.append(Mustache.render( allCovariatesTemplate,
+                                                                   renderAllCovariatesData,
+                                                                   {covariateTemplate:covariateTemplate}));
+                    $("#sampleRow").show();
+                   $('.sampleNumberReporter').show();
+
+                  // filters should be in place now.  Attach events
+                  _.forEach(data.filters,function(d){
+                      $("#multi"+d.name).bind("change", function(event, ui){
+                           mpgSoftware.burdenTestShared.displaySampleDistribution(d.name, '#boxWhiskerPlot',0)
+                      });
+                  });
+
+                   var sampleData = getStoredSampleData();
+
+                   fillCategoricalDropDownBoxes(sampleData.metaData.variants,phenotype);
+                   if (backendFiltering){
+                      utilizeSampleInfoForDistributionPlots(sampleData.metaData.variants,phenotype);
+                   }
+
+                   displayTestResultsSection(false);
              }
 
 
@@ -936,9 +940,9 @@ line.center{
 
 
 
-        var fillDistributionPlotsAndDropdowns = function (sampleData,phenotype){
+        var fillCategoricalDropDownBoxes = function (sampleData,phenotype){
              // make dist plots
-            utilizeSampleInfoForDistributionPlots(sampleData,phenotype);
+            //utilizeSampleInfoForDistributionPlots(sampleData,phenotype);
             var optionsPerFilter = generateOptionsPerFilter(sampleData) ;
             var sampleMetadata = getStoredSampleMetadata();
             _.forEach(sampleMetadata.filters,function(d,i){
@@ -1469,106 +1473,6 @@ variant by specifying the phenotype to test for association, a subset of samples
                                 </div>
                             </div>
 
-                            <script id="allFiltersTemplate"  type="x-tmpl-mustache">
-                                <div class="row sampleFilterHeader" style="text-decoration: underline">
-                                    <div class="col-sm-1" style="padding-left: 4px">
-                                        Use
-                                    </div>
-
-                                    <div class="col-sm-3">
-                                        Filter name
-                                    </div>
-
-                                    <div class="col-sm-3" style="padding-left: 4px">
-                                        Cmp
-                                    </div>
-
-                                    <div class="col-sm-4 pull-right">
-                                        Parameter
-                                    </div>
-                                </div>
-                                {{>filterCategoricalTemplate}}
-                                {{>filterFloatTemplate}}
-                            </script>
-
-                            <script id="filterFloatTemplate"  type="x-tmpl-mustache">
-
-
-
-                                {{ #realValuedFilters }}
-                                <div class="row realValuedFilter considerFilter" id="filter_{{name}}">
-                                    <div class="col-sm-1">
-                                        <input class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}"
-                                               value="{{name}}" checked/></td>
-                                    </div>
-
-                                    <div class="col-sm-5">
-                                        <span>{{trans}}</span>
-                                    </div>
-
-                                    <div class="col-sm-2">
-                                        <select id="cmp{{name}}" class="form-control filterCmp"
-                                                data-selectfor="{{name}}Comparator">
-                                            <option value="1">&lt;</option>
-                                            <option value="2">&gt;</option>
-                                            <option value="3">=</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-sm-3">
-                                        <input id="inp{{name}}" type="text" class="filterParm form-control"
-                                               data-type="propertiesInput"
-                                               data-prop="{{name}}Value" data-translatedname="{{name}}"
-                                               onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',0)"
-                                               onkeyup="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',0)">
-
-                                    </div>
-
-                                    <div class="col-sm-1">
-                                        <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',0)"
-                                              class="glyphicon glyphicon-arrow-right pull-right distPlotter" id="distPlotter_{{name}}"></span>
-                                    </div>
-
-                                </div>
-                                {{ /realValuedFilters }}
-                            </script>
-
-                            <script id="filterCategoricalTemplate" type="x-tmpl-mustache">
-                                {{ #categoricalFilters }}
-                                <div class="row categoricalFilter considerFilter" id="filter_{{name}}">
-                                    <div class="col-sm-1">
-                                        <input class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}"
-                                               value="{{name}}" checked/></td>
-                                    </div>
-
-                                    <div class="col-sm-5">
-                                        <span>{{trans}}</span>
-                                    </div>
-
-                                    <div class="col-sm-2" style="text-align: center">
-                                        =
-                                    </div>
-
-                                    <div class="col-sm-3">
-                                        <select id="multi{{name}}" class="form-control multiSelect"
-                                                data-selectfor="{{name}}FilterOpts" multiple="multiple"
-                                                onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',1)">
-                                        </select>
-
-                                    </div>
-
-                                    <div class="col-sm-1">
-                                        <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',1)"
-                                              class="glyphicon glyphicon-arrow-right pull-right"  id="distPlotter_{{name}}"></span>
-                                    </div>
-
-                                </div>
-                                {{ /categoricalFilters }}
-                            </script>
-
-                            <script id="filterStringTemplate" type="x-tmpl-mustache">
-                                <p><span>str name={{name}},type={{type}}</span></p>
-                            </script>
 
                         </div>
                     </div>
@@ -1619,26 +1523,6 @@ variant by specifying the phenotype to test for association, a subset of samples
 
                                 </div>
 
-                                <script id="allCovariateSpecifierTemplate"  type="x-tmpl-mustache">
-
-                                {{>covariateTemplate}}
-
-                                </script>
-
-
-                                <script id="covariateTemplate"  type="x-tmpl-mustache">
-                                    {{ #covariateSpecifiers }}
-                                    <div class="row">
-                                        <div class="checkbox" style="margin:0">
-                                            <label>
-                                                <input id="covariate_{{name}}" class="covariate" type="checkbox" name="covariate"
-                                                       value="{{name}}" {{defaultCovariate}}/>
-                                                {{trans}}
-                                            </label>
-                                        </div>
-                                    </div>
-                                    {{ /covariateSpecifiers }}
-                                </script>
 
                             </div>
 
@@ -1733,6 +1617,126 @@ variant by specifying the phenotype to test for association, a subset of samples
 </div>
 </div>
 
+<script id="allFiltersTemplate"  type="x-tmpl-mustache">
+                                <div class="row sampleFilterHeader" style="text-decoration: underline">
+                                    <div class="col-sm-1" style="padding-left: 4px">
+                                        Use
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        Filter name
+                                    </div>
+
+                                    <div class="col-sm-3" style="padding-left: 4px">
+                                        Cmp
+                                    </div>
+
+                                    <div class="col-sm-4 pull-right">
+                                        Parameter
+                                    </div>
+                                </div>
+                                {{>filterCategoricalTemplate}}
+                                {{>filterFloatTemplate}}
+                            </script>
+
+<script id="filterFloatTemplate"  type="x-tmpl-mustache">
+
+
+
+                                {{ #realValuedFilters }}
+                                <div class="row realValuedFilter considerFilter" id="filter_{{name}}">
+                                    <div class="col-sm-1">
+                                        <input class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}"
+                                               value="{{name}}" checked/></td>
+                                    </div>
+
+                                    <div class="col-sm-5">
+                                        <span>{{trans}}</span>
+                                    </div>
+
+                                    <div class="col-sm-2">
+                                        <select id="cmp{{name}}" class="form-control filterCmp"
+                                                data-selectfor="{{name}}Comparator">
+                                            <option value="1">&lt;</option>
+                                            <option value="2">&gt;</option>
+                                            <option value="3">=</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <input id="inp{{name}}" type="text" class="filterParm form-control"
+                                               data-type="propertiesInput"
+                                               data-prop="{{name}}Value" data-translatedname="{{name}}"
+                                               onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',0)"
+                                               onkeyup="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',0)">
+
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                        <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',0)"
+                                              class="glyphicon glyphicon-arrow-right pull-right distPlotter" id="distPlotter_{{name}}"></span>
+                                    </div>
+
+                                </div>
+                                {{ /realValuedFilters }}
+                            </script>
+
+<script id="filterCategoricalTemplate" type="x-tmpl-mustache">
+                                {{ #categoricalFilters }}
+                                <div class="row categoricalFilter considerFilter" id="filter_{{name}}">
+                                    <div class="col-sm-1">
+                                        <input class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}"
+                                               value="{{name}}" checked/></td>
+                                    </div>
+
+                                    <div class="col-sm-5">
+                                        <span>{{trans}}</span>
+                                    </div>
+
+                                    <div class="col-sm-2" style="text-align: center">
+                                        =
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <select id="multi{{name}}" class="form-control multiSelect"
+                                                data-selectfor="{{name}}FilterOpts" multiple="multiple"
+                                                onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',1)">
+                                        </select>
+
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                        <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',1)"
+                                              class="glyphicon glyphicon-arrow-right pull-right"  id="distPlotter_{{name}}"></span>
+                                    </div>
+
+                                </div>
+                                {{ /categoricalFilters }}
+                            </script>
+
+<script id="filterStringTemplate" type="x-tmpl-mustache">
+                                <p><span>str name={{name}},type={{type}}</span></p>
+                            </script>
+
+<script id="allCovariateSpecifierTemplate"  type="x-tmpl-mustache">
+
+                                {{>covariateTemplate}}
+
+                                </script>
+
+<script id="covariateTemplate"  type="x-tmpl-mustache">
+                                    {{ #covariateSpecifiers }}
+                                    <div class="row">
+                                        <div class="checkbox" style="margin:0">
+                                            <label>
+                                                <input id="covariate_{{name}}" class="covariate" type="checkbox" name="covariate"
+                                                       value="{{name}}" {{defaultCovariate}}/>
+                                                {{trans}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    {{ /covariateSpecifiers }}
+                                </script>
 
 
 
