@@ -270,9 +270,9 @@ line.center{
            $('.caatSpinner').show();
             var dropDownSelector = '#phenotypeFilter';
 
-            var chooseDataSetAndPhenotypeTemplate = $('#chooseDataSetAndPhenotypeTemplate')[0].innerHTML;
-            var chooseDataSetAndPhenotypeLocationVar = $("#chooseDataSetAndPhenotypeLocation");
-            chooseDataSetAndPhenotypeLocationVar.append(Mustache.render( chooseDataSetAndPhenotypeTemplate,
+//            var chooseDataSetAndPhenotypeTemplate = $('#chooseDataSetAndPhenotypeTemplate')[0].innerHTML;
+//            var chooseDataSetAndPhenotypeLocationVar = $("#chooseDataSetAndPhenotypeLocation");
+            $("#chooseDataSetAndPhenotypeLocation").empty().append(Mustache.render( $('#chooseDataSetAndPhenotypeTemplate')[0].innerHTML,
                                     {}));
 
             $.ajax({
@@ -439,11 +439,19 @@ line.center{
                                             { filterFloatTemplate:$('#filterFloatTemplate')[0].innerHTML,
                                               filterCategoricalTemplate:$('#filterCategoricalTemplate')[0].innerHTML }));
 
+                    // set up the section where the covariates will go
+                    $("#chooseCovariatesLocation").empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML));
+
+                    // put those covariates into place
                     $("#covariateHolder").empty().append(Mustache.render( $('#allCovariateSpecifierTemplate')[0].innerHTML,
                                                                            generateCovariateRenderData(data.covariates,phenotype),
                                                                            {covariateTemplate:$('#covariateTemplate')[0].innerHTML}));
+
+                    // display the results section
+                    $("#displayResultsLocation").empty().append(Mustache.render( $('#displayResultsTemplate')[0].innerHTML,{}));
+
                     $("#sampleRow").show();
-                   $('.sampleNumberReporter').show();
+                    $('.sampleNumberReporter').show();
 
                   // filters should be in place now.  Attach events
                   _.forEach(data.filters,function(d){
@@ -582,16 +590,19 @@ line.center{
             }
 
             var fillInResultsSection = function (pValue, oddsRatio, stdError, isDichotomousTrait){
+
+
+
                 // populate the data
                 $('.pValue').text(pValue);
                 $('.orValue').text(oddsRatio);
                 $('.ciValue').text(stdError);
 
-                    displayTestResultsSection(true);
+                displayTestResultsSection(true);
 
-                    $('#burden-test-some-results-large').hide();
-                    $('#burden-test-some-results').show();
-                    $('.burden-test-result').show();
+                $('#burden-test-some-results-large').hide();
+                $('#burden-test-some-results').show();
+                $('.burden-test-result').show();
 
             };
 
@@ -1365,27 +1376,121 @@ $( document ).ready( function (){
 </g:javascript>
 
 <div class="accordion-group">
-<div class="accordion-heading">
-    <a class="accordion-toggle  collapsed" data-toggle="collapse" href="#collapseBurden">
-        <h2><strong>Custom analysis tool</strong></h2>
-    </a>
-</div>
+    <div class="accordion-heading">
+        <a class="accordion-toggle  collapsed" data-toggle="collapse" href="#collapseBurden">
+            <h2><strong>Custom analysis tool</strong></h2>
+        </a>
+    </div>
 
-<div id="collapseBurden" class="accordion-body collapse">
-<div class="accordion-inner">
+    <div id="collapseBurden" class="accordion-body collapse">
+        <div class="accordion-inner">
 
-<div class="container">
-<h4>The custom analysis tool allows you to compute custom association statistics for this
-variant by specifying the phenotype to test for association, a subset of samples to analyze based on specific phenotypic criteria, and a set of covariates to control for in the analysis.</h4>
+            <div class="container">
+                <h4>The custom analysis tool allows you to compute custom association statistics for this
+                variant by specifying the phenotype to test for association, a subset of samples to analyze based on specific phenotypic criteria, and a set of covariates to control for in the analysis.</h4>
 
 
-<div class="row burden-test-wrapper-options">
+                <div class="row burden-test-wrapper-options">
 
-<r:img class="caatSpinner" uri="/images/loadingCaat.gif" alt="Loading CAAT data"/>
+                    <r:img class="caatSpinner" uri="/images/loadingCaat.gif" alt="Loading CAAT data"/>
 
-<div class="user-interaction">
+                    <div class="user-interaction">
 
-<div id="chooseDataSetAndPhenotypeLocation"></div>
+                        <div id="chooseDataSetAndPhenotypeLocation"></div>
+
+                        <div class="panel-group" id="accordion_iat" style="margin-bottom: 10px">%{--start accordion --}%
+                            <div id="chooseFiltersLocation"></div>
+                            <div id="chooseCovariatesLocation"></div>
+                        </div>
+
+                    </div>
+                    <div id="displayResultsLocation"></div>
+
+                </div>
+
+            </div>  %{--close container--}%
+
+        </div>  %{--close accordion inner--}%
+
+    </div>  %{--accordion body--}%
+
+</div> %{--end accordion group--}%
+
+
+<script id="displayResultsTemplate"  type="x-tmpl-mustache">
+    <div id="burden-test-some-results" class="row">
+        <div class="row" id="iatErrorFailure" style="display:none">
+            <div class="col-md-8 col-sm-6">
+                <div class="iatError">
+                    <div class="iatErrorText"></div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+
+            </div>
+        </div>
+
+        <div class="col-sm-8 col-xs-12">
+            <div class="row burden-test-specific-results burden-test-result">
+
+                <div class="col-md-8 col-sm-6">
+                    <div id="variantFrequencyDiv">
+                        <div class="vertical-center">
+                            <p class="standardFont">Results of your analysis:
+                            </p>
+                        </div>
+
+                        %{--<div class="barchartFormatter">--}%
+%{--<div id="chart">--}%
+
+%{--</div>--}%
+%{--</div>--}%
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-3">
+                    <div>
+                        <div id="pValue" class="pValue"></div>
+
+                        <div id="orValue" class="orValue"></div>
+
+                        <div id="ciValue" class="ciValue"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="burden-test-some-results-large" class="row burden-test-result-large">
+                <div class="col-md-4 col-sm-3">
+                </div>
+
+                <div class="col-md-4 col-sm-6">
+                    <div class="vertical-center">
+                        <div id="pValue2" class="pValue"></div>
+
+                        <div id="orValue2" class="orValue"></div>
+
+                        <div id="ciValue2" class="ciValue"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-3">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4 col-xs-12 vcenter burden-test-btn-wrapper ">
+            <button id="singlebutton" name="singlebutton" style="height: 80px"
+                    class="btn btn-primary btn-lg burden-test-btn"
+
+                    onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun()">Run</button>
+        </div>
+
+    </div>
+</script>
+
+
+
 <script id="chooseDataSetAndPhenotypeTemplate"  type="x-tmpl-mustache">
     <div class="panel panel-default">%{--should hold the Choose data set panel--}%
 
@@ -1430,8 +1535,7 @@ variant by specifying the phenotype to test for association, a subset of samples
     </div>    %{--end accordion panel for id=chooseSamples--}%
 </script>
 
-<div class="panel-group" id="accordion_iat" style="margin-bottom: 10px">
-<div id="chooseFiltersLocation"></div>
+
 <script id="chooseFiltersTemplate"  type="x-tmpl-mustache">
         <div class="panel panel-default">%{--should hold the Choose filters panel--}%
 
@@ -1513,6 +1617,7 @@ variant by specifying the phenotype to test for association, a subset of samples
         </div>%{--end accordion panel for id=filterSamples--}%
 </script>
 
+<script id="chooseCovariatesTemplate"  type="x-tmpl-mustache">
         <div class="panel panel-default">%{--should hold the initiate analysis set panel--}%
 
             <div class="panel-heading">
@@ -1556,86 +1661,11 @@ variant by specifying the phenotype to test for association, a subset of samples
             </div>
 
         </div>%{--end id=initiateAnalysis panel--}%
-
-    </div>%{--end accordion --}%
-</div>
+</script>
 
 
-<div id="burden-test-some-results" class="row">
-    <div class="row" id="iatErrorFailure" style="display:none">
-        <div class="col-md-8 col-sm-6">
-            <div class="iatError">
-                <div class="iatErrorText"></div>
-            </div>
-        </div>
 
-        <div class="col-md-4 col-sm-6">
 
-        </div>
-    </div>
-
-    <div class="col-sm-8 col-xs-12">
-        <div class="row burden-test-specific-results burden-test-result">
-
-            <div class="col-md-8 col-sm-6">
-                <div id="variantFrequencyDiv">
-                    <div class="vertical-center">
-                        <p class="standardFont">Results of your analysis:
-                        </p>
-                    </div>
-
-                    %{--<div class="barchartFormatter">--}%
-                    %{--<div id="chart">--}%
-
-                    %{--</div>--}%
-                    %{--</div>--}%
-                </div>
-            </div>
-
-            <div class="col-md-4 col-sm-3">
-                <div>
-                    <div id="pValue" class="pValue"></div>
-
-                    <div id="orValue" class="orValue"></div>
-
-                    <div id="ciValue" class="ciValue"></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="burden-test-some-results-large" class="row burden-test-result-large">
-            <div class="col-md-4 col-sm-3">
-            </div>
-
-            <div class="col-md-4 col-sm-6">
-                <div class="vertical-center">
-                    <div id="pValue2" class="pValue"></div>
-
-                    <div id="orValue2" class="orValue"></div>
-
-                    <div id="ciValue2" class="ciValue"></div>
-                </div>
-            </div>
-
-            <div class="col-md-4 col-sm-3">
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-4 col-xs-12 vcenter burden-test-btn-wrapper ">
-        <button id="singlebutton" name="singlebutton" style="height: 80px"
-                class="btn btn-primary btn-lg burden-test-btn"
-
-                onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun()">Run</button>
-    </div>
-
-</div>
-</div>
-
-</div>
-</div>
-</div>
-</div>
 
 <script id="allFiltersTemplate"  type="x-tmpl-mustache">
                                 <div class="row sampleFilterHeader" style="text-decoration: underline">
