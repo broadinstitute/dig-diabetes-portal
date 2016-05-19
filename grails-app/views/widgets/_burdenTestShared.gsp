@@ -269,6 +269,12 @@ line.center{
         var preloadInteractiveAnalysisData = function () {
            $('.caatSpinner').show();
             var dropDownSelector = '#phenotypeFilter';
+
+            var chooseDataSetAndPhenotypeTemplate = $('#chooseDataSetAndPhenotypeTemplate')[0].innerHTML;
+            var chooseDataSetAndPhenotypeLocationVar = $("#chooseDataSetAndPhenotypeLocation");
+            chooseDataSetAndPhenotypeLocationVar.append(Mustache.render( chooseDataSetAndPhenotypeTemplate,
+                                    {}));
+
             $.ajax({
                 cache: false,
                 type: "post",
@@ -355,6 +361,58 @@ line.center{
         };
 
 
+
+       var generateFilterRenderData = function(dataFilters,optionsPerFilter){
+            var returnValue = {};
+            if ( ( typeof dataFilters !== 'undefined' ) &&
+                         (  dataFilters !==  null ) ) {
+                var categoricalFilters = [];
+                var realValuedFilters = [];
+                _.forEach(dataFilters,function(d,i){
+                  if (d.type === 'FLOAT') {
+                     realValuedFilters.push(d);
+                  } else {
+                     if ((optionsPerFilter[d.name]!==undefined)&&
+                         (optionsPerFilter[d.name].length<3)){
+                             categoricalFilters.push(d);
+                     }
+                  }
+
+                });
+                returnValue = {
+                    categoricalFilters: categoricalFilters,
+                    realValuedFilters: realValuedFilters
+                };
+            }
+            return returnValue;
+       }
+
+       var generateCovariateRenderData = function(dataCovariates,phenotype){
+            var returnValue = {};
+            if ( ( typeof dataCovariates !== 'undefined' ) &&
+                         (  dataCovariates !==  null ) ) {
+               var covariateSpecifiers = [];
+                 _.forEach(dataCovariates,function(d,i){
+                     if (d.name !== phenotype){
+                        covariateSpecifiers.push(d);
+                     }
+                });
+                returnValue = {
+                        covariateSpecifiers: covariateSpecifiers,
+                        defaultCovariate: function(){
+                             if (this.def) {
+                                return " checked";
+                             } else {
+                                return "";
+                             }
+                        }
+                };
+            }
+            return returnValue;
+       }
+
+
+
         /***
         *  Build the UI widgets which can be used to specify the filters for DAGA.  Once they are in place
         *  we can use fillCategoricalDropDownBoxes to create plots.
@@ -364,73 +422,26 @@ line.center{
             var data = getStoredSampleMetadata();
             var phenotype = $(dropDownSelector).val();
             var sampleData = getStoredSampleData();
-            var filterHolderElement = $("#filterHolder");
             var allTemplate;
             var renderAllFiltersData;
-            var allCovariatesTemplate;
             var renderAllCovariatesData;
+
             var optionsPerFilter = generateOptionsPerFilter(sampleData.metaData.variants) ;
             if ( ( data !==  null ) &&
                  ( typeof data !== 'undefined') ){
-                    if ( ( typeof data.filters !== 'undefined' ) &&
-                         (  data.filters !==  null ) ) {
 
-                            var floatTemplate = $('#filterFloatTemplate')[0].innerHTML;
-                            var categoricalTemplate = $('#filterCategoricalTemplate')[0].innerHTML;
-                            allTemplate = $('#allFiltersTemplate')[0].innerHTML;
+                    // set up the section where the filters will go
+                    $("#chooseFiltersLocation").empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML));
 
-                            var categoricalFilters = [];
-                            var realValuedFilters = [];
-                            _.forEach(data.filters,function(d,i){
-                              if (d.type === 'FLOAT') {
-                                 realValuedFilters.push(d);
-                              } else {
-                                 if ((optionsPerFilter[d.name]!==undefined)&&
-                                     (optionsPerFilter[d.name].length<3)){
-                                         categoricalFilters.push(d);
-                                 }
-                              }
+                    // put those filters in place
+                    $("#filterHolder").empty().append(Mustache.render( $('#allFiltersTemplate')[0].innerHTML,
+                                            generateFilterRenderData(data.filters,optionsPerFilter),
+                                            { filterFloatTemplate:$('#filterFloatTemplate')[0].innerHTML,
+                                              filterCategoricalTemplate:$('#filterCategoricalTemplate')[0].innerHTML }));
 
-                            });
-                            renderAllFiltersData = {
-                                categoricalFilters: categoricalFilters,
-                                realValuedFilters: realValuedFilters
-                            };
-
-                    }
-                     if ( ( typeof data.covariates !== 'undefined' ) &&
-                         (  data.covariates !==  null ) ) {
-                        var covariateHolderElement = $("#covariateHolder");
-                        covariateHolderElement.text("");
-                        allCovariatesTemplate = $('#allCovariateSpecifierTemplate')[0].innerHTML;
-                        var covariateTemplate = $('#covariateTemplate')[0].innerHTML;
-
-                        var covariateSpecifiers = [];
-                         _.forEach(data.covariates,function(d,i){
-                             if (d.name !== phenotype){
-                                covariateSpecifiers.push(d);
-                             }
-                        });
-                        renderAllCovariatesData = {
-                                covariateSpecifiers: covariateSpecifiers,
-                                defaultCovariate: function(){
-                                     if (this.def) {
-                                        return " checked";
-                                     } else {
-                                        return "";
-                                     }
-                                }
-                        };
-
-                    }
-                    filterHolderElement.append(Mustache.render( allTemplate,
-                                            renderAllFiltersData,
-                                            { filterFloatTemplate:floatTemplate,
-                                              filterCategoricalTemplate:categoricalTemplate }));
-
-                    covariateHolderElement.append(Mustache.render( allCovariatesTemplate,
-                                                                   renderAllCovariatesData,
-                                                                   {covariateTemplate:covariateTemplate}));
+                    $("#covariateHolder").empty().append(Mustache.render( $('#allCovariateSpecifierTemplate')[0].innerHTML,
+                                                                           generateCovariateRenderData(data.covariates,phenotype),
+                                                                           {covariateTemplate:$('#covariateTemplate')[0].innerHTML}));
                     $("#sampleRow").show();
                    $('.sampleNumberReporter').show();
 
@@ -1374,174 +1385,179 @@ variant by specifying the phenotype to test for association, a subset of samples
 
 <div class="user-interaction">
 
+<div id="chooseDataSetAndPhenotypeLocation"></div>
+<script id="chooseDataSetAndPhenotypeTemplate"  type="x-tmpl-mustache">
+    <div class="panel panel-default">%{--should hold the Choose data set panel--}%
 
-<div class="panel panel-default">    %{--should hold the Choose data set panel--}%
-
-    <div class="panel-heading">
-        <h4 class="panel-title">
-            <a>Step 1: Select a phenotype to test for association</a>
-        </h4>
-    </div>
-
-    <div id="chooseSamples" class="panel-collapse collapse in">
-        <div class="panel-body secBody">
-
-            <div class="row secHeader" style="display:none">
-                <div class="col-sm-12 col-xs-12 text-left"><label>Dataset</label></div>
-            </div>
-
-            <div class="row"  style="display:none">
-                <div class="col-sm-12 col-xs-12 text-left">
-                    <select id="datasetFilter" class="traitFilter form-control text-left"
-                            onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');"
-                            onclick="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');">
-                    </select>
-                </div>
-
-            </div>
-
-            <div class="row secHeader" style="padding: 0 0 5px 0">
-                <div class="col-sm-12 col-xs-12 text-left"><label>Phenotype</label></div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-12 col-xs-12 text-left">
-                    <select id="phenotypeFilter" class="traitFilter form-control text-left"
-                            onchange="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata($('#datasetFilter'), '#phenotypeFilter');">
-                    </select>
-                </div>
-            </div>
-
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a>Step 1: Select a phenotype to test for association</a>
+            </h4>
         </div>
-    </div>
 
-</div>    %{--end accordion panel for id=chooseSamples--}%
+        <div id="chooseSamples" class="panel-collapse collapse in">
+            <div class="panel-body secBody">
 
+                <div class="row secHeader" style="display:none">
+                    <div class="col-sm-12 col-xs-12 text-left"><label>Dataset</label></div>
+                </div>
 
+                <div class="row" style="display:none">
+                    <div class="col-sm-12 col-xs-12 text-left">
+                        <select id="datasetFilter" class="traitFilter form-control text-left"
+                                onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');"
+                                onclick="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');">
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="row secHeader" style="padding: 0 0 5px 0">
+                    <div class="col-sm-12 col-xs-12 text-left"><label>Phenotype</label></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12 text-left">
+                        <select id="phenotypeFilter" class="traitFilter form-control text-left"
+                                onchange="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata($('#datasetFilter'), '#phenotypeFilter');">
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>    %{--end accordion panel for id=chooseSamples--}%
+</script>
 
 <div class="panel-group" id="accordion_iat" style="margin-bottom: 10px">
+<div id="chooseFiltersLocation"></div>
+<script id="chooseFiltersTemplate"  type="x-tmpl-mustache">
+        <div class="panel panel-default">%{--should hold the Choose filters panel--}%
 
-<div class="panel panel-default">%{--should hold the Choose data set panel--}%
-
-    <div class="panel-heading">
-        <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#filterSamples" href="#filterSamples">Step 2: Select a subset of samples based on phenotypic criteria</a>
-        </h4>
-    </div>
-
-    <div id="filterSamples" class="panel-collapse collapse">
-        <div class="panel-body  secBody">
-
-            <div class="row">
-                <div class="col-sm-12 col-xs-12">
-                    <p>
-                        Each of the boxes below enables you to define a criterion for inclusion of samples in your analysis; each criterion is specified as a filter based on a single phenotype.
-                        The final subset of samples used will be those that match all of the specified criteria; to omit a criterion either leave the text box blank or unselect the checkbox on the left.
-                    </p>
-                    <p>
-                        To guide selection of each criterion, you can click on the arrow to the right of the text box to view the distribution of phenotypic values for the samples currently included
-                        in the analysis. The number of samples included, as well as the distributions, will update whenever you modify the value in the text box.
-                    </p>
-                </div>
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#filterSamples"
+                       href="#filterSamples">Step 2: Select a subset of samples based on phenotypic criteria</a>
+                </h4>
             </div>
 
-            <hr width="25%"/>
+            <div id="filterSamples" class="panel-collapse collapse">
+                <div class="panel-body  secBody">
 
-            <div class="row">
-                <div class="col-sm-6 col-xs-12 vcenter" style="margin-top:0">
-                    <div class="row secHeader" style="padding: 20px 0 0 0">
-                        <div class="col-sm-6 col-xs-12 text-left"></div>
+                    <div class="row">
+                        <div class="col-sm-12 col-xs-12">
+                            <p>
+                                Each of the boxes below enables you to define a criterion for inclusion of samples in your analysis; each criterion is specified as a filter based on a single phenotype.
+                                The final subset of samples used will be those that match all of the specified criteria; to omit a criterion either leave the text box blank or unselect the checkbox on the left.
+                            </p>
 
-                        <div class="col-sm-6 col-xs-12 text-right"><label
-                                style="font-style: italic; font-size: 14px">Click arrows<br/> for distribution</label>
+                            <p>
+                                To guide selection of each criterion, you can click on the arrow to the right of the text box to view the distribution of phenotypic values for the samples currently included
+                                in the analysis. The number of samples included, as well as the distributions, will update whenever you modify the value in the text box.
+                            </p>
                         </div>
                     </div>
 
-                    <div class="row" id="sampleRow" style="display:none; padding: 10px 0 0 0">
-                        <div class="col-sm-12 col-xs-12 text-left">
+                    <hr width="25%"/>
 
-                            <div style="direction: rtl; height: 300px; padding: 4px 0 0 10px; overflow-y: scroll;">
-                                <div style="direction: ltr">
-                                    <div id="filters">
-                                        <div class="row">
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12 vcenter" style="margin-top:0">
+                            <div class="row secHeader" style="padding: 20px 0 0 0">
+                                <div class="col-sm-6 col-xs-12 text-left"></div>
+
+                                <div class="col-sm-6 col-xs-12 text-right"><label
+                                        style="font-style: italic; font-size: 14px">Click arrows<br/> for distribution
+                                </label>
+                                </div>
+                            </div>
+
+                            <div class="row" id="sampleRow" style="display:none; padding: 10px 0 0 0">
+                                <div class="col-sm-12 col-xs-12 text-left">
+
+                                    <div style="direction: rtl; height: 300px; padding: 4px 0 0 10px; overflow-y: scroll;">
+                                        <div style="direction: ltr">
+                                            <div id="filters">
+                                                <div class="row">
+
+                                                    <div id="filterHolder"></div>
 
 
-                                            <div id="filterHolder"></div>
-
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
 
+                        </div>
 
+                        <div class="col-sm-6 col-xs-12 vcenter" style="padding-left: 0; margin-top: 0">
+                            <div class="sampleNumberReporter text-center">
+                                <div>Number of samples included in analysis:<span class="numberOfSamples"></span></div>
+
+                                <div style="display:none">number of samples for <span
+                                        class="phenotypeSpecifier"></span>: <span
+                                        class="numberOfPhenotypeSpecificSamples"></span></div>
+                            </div>
+
+                            <div id="boxWhiskerPlot">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>%{--end accordion panel for id=filterSamples--}%
+</script>
+
+        <div class="panel panel-default">%{--should hold the initiate analysis set panel--}%
+
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#initiateAnalysis"
+                       href="#initiateAnalysis">Step 3: Control for covariates</a>
+                </h4>
+            </div>
+
+
+            <div id="initiateAnalysis" class="panel-collapse collapse">
+                <div class="panel-body secBody">
+                    <div class="row">
+                        <div class="col-sm-9 col-xs-12 vcenter">
+                            <p>Select the phenotypes to be used as covariates in your association analysis. The recommended default covariates are pre-selected</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-9 col-xs-12 vcenter">
+                            <div id="covariates"
+                                 style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px;overflow-y: scroll;">
+                                <div class="row">
+                                    <div class="col-md-10 col-sm-10 col-xs-12 vcenter" style="margin-top:0">
+
+                                        <div id="covariateHolder">
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3 col-xs-12">
                         </div>
                     </div>
 
                 </div>
-
-                <div class="col-sm-6 col-xs-12 vcenter" style="padding-left: 0; margin-top: 0">
-                    <div class="sampleNumberReporter text-center">
-                        <div>Number of samples included in analysis:<span class="numberOfSamples"></span></div>
-                        <div style="display:none">number of samples for <span class="phenotypeSpecifier"></span>: <span class="numberOfPhenotypeSpecificSamples"></span></div>
-                    </div>
-
-                    <div id="boxWhiskerPlot">
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-</div>%{--end accordion panel for id=filterSamples--}%
-
-
-<div class="panel panel-default">%{--should hold the initiate analysis set panel--}%
-
-    <div class="panel-heading">
-        <h4 class="panel-title">
-            <a data-toggle="collapse" data-parent="#initiateAnalysis" href="#initiateAnalysis">Step 3: Control for covariates</a>
-        </h4>
-    </div>
-
-
-    <div id="initiateAnalysis" class="panel-collapse collapse">
-        <div class="panel-body secBody">
-            <div class="row">
-                <div class="col-sm-9 col-xs-12 vcenter">
-                    <p>Select the phenotypes to be used as covariates in your association analysis. The recommended default covariates are pre-selected</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-9 col-xs-12 vcenter">
-                    <div id="covariates"
-                         style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px;overflow-y: scroll;">
-                        <div class="row">
-                            <div class="col-md-10 col-sm-10 col-xs-12 vcenter" style="margin-top:0">
-
-                                <div id="covariateHolder">
-
-                                </div>
-
-
-                            </div>
-
-                         </div>
-                    </div>
-                </div>
-                <div class="col-sm-3 col-xs-12">
-                </div>
             </div>
 
-        </div>
-    </div>
+        </div>%{--end id=initiateAnalysis panel--}%
 
-</div>%{--end id=initiateAnalysis panel--}%
-
-
-
-
-</div>%{--end accordion --}%
+    </div>%{--end accordion --}%
 </div>
 
 
@@ -1552,10 +1568,12 @@ variant by specifying the phenotype to test for association, a subset of samples
                 <div class="iatErrorText"></div>
             </div>
         </div>
+
         <div class="col-md-4 col-sm-6">
 
         </div>
     </div>
+
     <div class="col-sm-8 col-xs-12">
         <div class="row burden-test-specific-results burden-test-result">
 
@@ -1567,9 +1585,9 @@ variant by specifying the phenotype to test for association, a subset of samples
                     </div>
 
                     %{--<div class="barchartFormatter">--}%
-                        %{--<div id="chart">--}%
+                    %{--<div id="chart">--}%
 
-                        %{--</div>--}%
+                    %{--</div>--}%
                     %{--</div>--}%
                 </div>
             </div>
@@ -1603,6 +1621,7 @@ variant by specifying the phenotype to test for association, a subset of samples
             </div>
         </div>
     </div>
+
     <div class="col-sm-4 col-xs-12 vcenter burden-test-btn-wrapper ">
         <button id="singlebutton" name="singlebutton" style="height: 80px"
                 class="btn btn-primary btn-lg burden-test-btn"
@@ -1613,6 +1632,7 @@ variant by specifying the phenotype to test for association, a subset of samples
 </div>
 </div>
 
+</div>
 </div>
 </div>
 </div>
