@@ -121,7 +121,7 @@ div.labelAndInput > input {
 .burdenTestResultHolder {
     height: 140px;
 }
-#filterHolder div.row div {
+.filterHolder div.row div {
     padding: 0;
     line-height: 20px;
 }
@@ -433,7 +433,7 @@ line.center{
                     $("#chooseFiltersLocation").empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML,{stratum:stratumName}));
 
                     // put those filters in place
-                    $("#filterHolder").empty().append(Mustache.render( $('#allFiltersTemplate')[0].innerHTML,
+                    $(".filterHolder_"+stratumName).empty().append(Mustache.render( $('#allFiltersTemplate')[0].innerHTML,
                                             generateFilterRenderData(data.filters,optionsPerFilter,stratumName),
                                             { filterFloatTemplate:$('#filterFloatTemplate')[0].innerHTML,
                                               filterCategoricalTemplate:$('#filterCategoricalTemplate')[0].innerHTML }));
@@ -455,7 +455,7 @@ line.center{
                   // filters should be in place now.  Attach events
                   _.forEach(data.filters,function(d){
                       $("#multi"+d.name).bind("change", function(event, ui){
-                           mpgSoftware.burdenTestShared.displaySampleDistribution(d.name, '#boxWhiskerPlot',0)
+                           mpgSoftware.burdenTestShared.displaySampleDistribution(d.name, '.boxWhiskerPlot_'+stratumName,0)
                       });
                   });
 
@@ -501,7 +501,7 @@ line.center{
         * @param dataSetSel
         * @param callback
         */
-        var refreshSampleDistribution = function (dataSetSel,callback,propertyName){
+        var refreshSampleDistribution = function (dataSetSel,callback,params){
 
            var collectingFilterNames = function (){
                var filterStrings = [];
@@ -526,10 +526,10 @@ line.center{
             var domSelector = $(dataSetSel);
             var dataSetName = domSelector.val();
             var jsonDescr = "{\"dataset\":\""+dataSetName+"\"," +
-                              "\"requestedData\":"+collectingPropertyNames(propertyName)+"," +
+                              "\"requestedData\":"+collectingPropertyNames(params.propertyName)+"," +
                               "\"filters\":"+collectingFilterValues()+"}";
 
-            retrieveSampleDistribution  ( jsonDescr, callback, propertyName  );
+            retrieveSampleDistribution  ( jsonDescr, callback, params  );
         }
 
 
@@ -1069,8 +1069,7 @@ line.center{
 
 
         var retrieveSampleDistribution = function (data, callback,passThru){
-          //  var returnedData = getStoredSampleData();
-          //  if (typeof returnedData === 'undefined') {
+
                 $.ajax({
                     cache: false,
                     type: "post",
@@ -1085,9 +1084,7 @@ line.center{
                         core.errorReporter(jqXHR, exception);
                     }
                 });
-//            } else {
-//               callback(returnedData.metaData.variants,passThru);
-//            }
+
         };
 
 
@@ -1287,9 +1284,9 @@ line.center{
 
 
 
-        var utilizeDistributionInformationToCreatePlot = function (distributionInfo,propertyName){
+        var utilizeDistributionInformationToCreatePlot = function (distributionInfo,params){
            if (typeof distributionInfo !== 'undefined'){
-                var plotHoldingStructure = $('#boxWhiskerPlot');
+                var plotHoldingStructure = $(params.holderSection);
                 plotHoldingStructure.empty();
                 var sampleMetadata = getStoredSampleMetadata();
                 var  sampleCount = 0;
@@ -1298,17 +1295,14 @@ line.center{
                    _.forEach(distributionInfo.sampleData.distribution_array,function(d){sampleCount += d.count;})
                 }
                 $('.sampleNumberReporter .numberOfSamples').text(sampleCount);
-                var elementName = propertyName;
-                var divElementName = 'bwp_'+elementName;
+                var divElementName = 'bwp_'+params.propertyName;
                 plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
-                if (elementName === propertyName){
                    //$('.sampleNumberReporter .numberOfPhenotypeSpecificSamples').text(singleElement.data.length);
                    //$('.sampleNumberReporter .numberOfPhenotypeSpecificSamples').text('47');
-                   $('.sampleNumberReporter .phenotypeSpecifier').text(propertyName);
-                }
+                   $('.sampleNumberReporter .phenotypeSpecifier').text(params.propertyName);
                 $('#'+divElementName).hide();
                 if (sampleMetadata.filters){
-                  var filter = _.find(sampleMetadata.filters, ['name',propertyName]);
+                  var filter = _.find(sampleMetadata.filters, ['name',params.propertyName]);
                   if (filter){
                      if (filter.type === 'INTEGER'){
                         predefinedCategoricalPlot(distributionInfo.sampleData.distribution_array,'#'+divElementName);
@@ -1334,9 +1328,8 @@ line.center{
         * @param holderSection
         */
         var displaySampleDistribution = function (propertyName, holderSection, categorical) { // for categorical, 0== float, 1== string or int
-//            var backendFiltering = true;
             if (backendFiltering){
-                refreshSampleDistribution( '#datasetFilter', utilizeDistributionInformationToCreatePlot, propertyName );
+                refreshSampleDistribution( '#datasetFilter', utilizeDistributionInformationToCreatePlot, {propertyName:propertyName,holderSection:holderSection} );
             } else {
                 var filteredVariants = dynamicallyFilterSamples();
                 var caller = $("#distPlotter_" +propertyName);
@@ -1572,7 +1565,7 @@ $( document ).ready( function (){
                                 </div>
                             </div>
 
-                            <div class="row" id="sampleRow" style="padding: 10px 0 0 0">
+                            <div class="row" style="padding: 10px 0 0 0">
                                 <div class="col-sm-12 col-xs-12 text-left">
 
                                     <div style="direction: rtl; height: 300px; padding: 4px 0 0 10px; overflow-y: scroll;">
@@ -1580,7 +1573,7 @@ $( document ).ready( function (){
                                             <div>
                                                 <div class="row">
 
-                                                    <div id="filterHolder"></div>
+                                                    <div class="filterHolder filterHolder_{{stratum}}"></div>
 
 
                                                 </div>
@@ -1602,8 +1595,8 @@ $( document ).ready( function (){
                                         class="numberOfPhenotypeSpecificSamples"></span></div>
                             </div>
 
-                            <div id="boxWhiskerPlot">
-                            </div>
+                            <div class="boxWhiskerPlot boxWhiskerPlot_{{stratum}}"></div>
+
                         </div>
 
                     </div>
@@ -1713,13 +1706,13 @@ $( document ).ready( function (){
                                         <input id="inp{{name}}" type="text" class="filterParm form-control"
                                                data-type="propertiesInput"
                                                data-prop="{{name}}Value" data-translatedname="{{name}}"
-                                               onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',0)"
-                                               onkeyup="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',0)">
+                                               onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0)"
+                                               onkeyup="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0)">
 
                                     </div>
 
                                     <div class="col-sm-1">
-                                        <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',0)"
+                                        <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0)"
                                               class="glyphicon glyphicon-arrow-right pull-right distPlotter" id="distPlotter_{{name}}"></span>
                                     </div>
 
@@ -1746,13 +1739,13 @@ $( document ).ready( function (){
                                     <div class="col-sm-3">
                                         <select id="multi{{name}}" class="form-control multiSelect"
                                                 data-selectfor="{{name}}FilterOpts" multiple="multiple"
-                                                onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',1)">
+                                                onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',1)">
                                         </select>
 
                                     </div>
 
                                     <div class="col-sm-1">
-                                        <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '#boxWhiskerPlot',1)"
+                                        <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',1)"
                                               class="glyphicon glyphicon-arrow-right pull-right"  id="distPlotter_{{name}}"></span>
                                     </div>
 
