@@ -599,8 +599,8 @@ line.center{
 
                 displayTestResultsSection(true);
 
-                $('#burden-test-some-results-large').hide();
-                $('#burden-test-some-results').show();
+                $('.burden-test-some-results-large').hide();
+                $('.burden-test-some-results').show();
                 $('.burden-test-result').show();
 
             };
@@ -624,10 +624,10 @@ line.center{
                     //first check for error conditions
                         if (!data){
                              $('.iatErrorText').text('No data returned from burden test module!');
-                            $('#iatErrorFailure').show();
+                            $('.iatErrorFailure').show();
                         } else if (data.is_error) {
                             $('.iatErrorText').text('Error: '+data.error_msg);
-                            $('#iatErrorFailure').show();
+                            $('.iatErrorFailure').show();
                         } else if ((typeof data.stats.pValue === 'undefined') ||
                                  (typeof data.stats.beta === 'undefined') ||
                                  (typeof data.stats.stdError === 'undefined')){
@@ -635,7 +635,7 @@ line.center{
 
                         } else {
                             $('.iatErrorText').text('');
-                            $('#iatErrorFailure').hide();
+                            $('.iatErrorFailure').hide();
                             var isDichotomousTrait = false;
                             if ((typeof data.stats.numCases === 'undefined') ||
                                 (typeof data.stats.numControls === 'undefined') ||
@@ -806,6 +806,8 @@ line.center{
 
         var predefinedCategoricalPlot = function (data,selector) {
            var roomForLabels = 50;
+
+           if (typeof data === 'undefined') return;
 
     var margin = {top: 50, right: 50, bottom: 20, left: 15},
             width = 700 - margin.left - margin.right,
@@ -1290,36 +1292,37 @@ line.center{
                 var plotHoldingStructure = $('#boxWhiskerPlot');
                 plotHoldingStructure.empty();
                 var sampleMetadata = getStoredSampleMetadata();
-                $('.sampleNumberReporter .numberOfSamples').text('47');
-               // $('.sampleNumberReporter .numberOfSamples').text(variantData.length);
-               // for ( var i = 0 ; i < displayableData.length ; i++ ){
-                    //var singleElement = displayableData[i];
-                     var singleElement = {};
-                    var elementName = propertyName;
-                    var divElementName = 'bwp_'+elementName;
-                    plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
-                    if (elementName === propertyName){
-                       //$('.sampleNumberReporter .numberOfPhenotypeSpecificSamples').text(singleElement.data.length);
-                       $('.sampleNumberReporter .numberOfPhenotypeSpecificSamples').text('47');
-                       $('.sampleNumberReporter .phenotypeSpecifier').text(propertyName);
-                    }
-                    $('#'+divElementName).hide();
-                    if (sampleMetadata.filters){
-                      var filter = _.find(sampleMetadata.filters, ['name',propertyName]);
-                      if (filter){
-                         if (filter.type === 'INTEGER'){
-                            predefinedCategoricalPlot(distributionInfo.sampleData.distribution_array,'#'+divElementName);
-                            $('#'+divElementName).show();
-                         } else if (filter.type === 'STRING'){
-                            predefinedCategoricalPlot(distributionInfo.sampleData.distribution_array,'#'+divElementName);
-                            $('#'+divElementName).show();
-                         } if (filter.type === 'FLOAT'){
-                            predefinedBoxWhiskerPlot(distributionInfo.sampleData,'#'+divElementName);
-                            $('#'+divElementName).show();
-                         }
-                      }
-                    }
-                //}
+                var  sampleCount = 0;
+                if ((typeof distributionInfo.sampleData !== 'undefined')  &&
+                    (typeof distributionInfo.sampleData.distribution_array !== 'undefined')){
+                   _.forEach(distributionInfo.sampleData.distribution_array,function(d){sampleCount += d.count;})
+                }
+                $('.sampleNumberReporter .numberOfSamples').text(sampleCount);
+                var elementName = propertyName;
+                var divElementName = 'bwp_'+elementName;
+                plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
+                if (elementName === propertyName){
+                   //$('.sampleNumberReporter .numberOfPhenotypeSpecificSamples').text(singleElement.data.length);
+                   //$('.sampleNumberReporter .numberOfPhenotypeSpecificSamples').text('47');
+                   $('.sampleNumberReporter .phenotypeSpecifier').text(propertyName);
+                }
+                $('#'+divElementName).hide();
+                if (sampleMetadata.filters){
+                  var filter = _.find(sampleMetadata.filters, ['name',propertyName]);
+                  if (filter){
+                     if (filter.type === 'INTEGER'){
+                        predefinedCategoricalPlot(distributionInfo.sampleData.distribution_array,'#'+divElementName);
+                        $('#'+divElementName).show();
+                     } else if (filter.type === 'STRING'){
+                        predefinedCategoricalPlot(distributionInfo.sampleData.distribution_array,'#'+divElementName);
+                        $('#'+divElementName).show();
+                     } if (filter.type === 'FLOAT'){
+                        predefinedBoxWhiskerPlot(distributionInfo.sampleData,'#'+divElementName);
+                        $('#'+divElementName).show();
+                     }
+                  }
+                }
+
              }
         }
 
@@ -1417,8 +1420,8 @@ $( document ).ready( function (){
 
 
 <script id="displayResultsTemplate"  type="x-tmpl-mustache">
-    <div id="burden-test-some-results" class="row">
-        <div class="row" id="iatErrorFailure" style="display:none">
+    <div class="row burden-test-some-results burden-test-some-results_{{stratum}}">
+        <div class="row iatErrorFailure" style="display:none">
             <div class="col-md-8 col-sm-6">
                 <div class="iatError">
                     <div class="iatErrorText"></div>
@@ -1434,42 +1437,36 @@ $( document ).ready( function (){
             <div class="row burden-test-specific-results burden-test-result">
 
                 <div class="col-md-8 col-sm-6">
-                    <div id="variantFrequencyDiv">
+                    <div>
                         <div class="vertical-center">
                             <p class="standardFont">Results of your analysis:
                             </p>
                         </div>
-
-                        %{--<div class="barchartFormatter">--}%
-%{--<div id="chart">--}%
-
-%{--</div>--}%
-%{--</div>--}%
                     </div>
                 </div>
 
                 <div class="col-md-4 col-sm-3">
                     <div>
-                        <div id="pValue" class="pValue"></div>
+                        <div class="pValue"></div>
 
-                        <div id="orValue" class="orValue"></div>
+                        <div class="orValue"></div>
 
-                        <div id="ciValue" class="ciValue"></div>
+                        <div class="ciValue"></div>
                     </div>
                 </div>
             </div>
 
-            <div id="burden-test-some-results-large" class="row burden-test-result-large">
+            <div class="row burden-test-result-large burden-test-some-results-large_{{stratum}}">
                 <div class="col-md-4 col-sm-3">
                 </div>
 
                 <div class="col-md-4 col-sm-6">
                     <div class="vertical-center">
-                        <div id="pValue2" class="pValue"></div>
+                        <div class="pValue"></div>
 
-                        <div id="orValue2" class="orValue"></div>
+                        <div class="orValue"></div>
 
-                        <div id="ciValue2" class="ciValue"></div>
+                        <div class="ciValue"></div>
                     </div>
                 </div>
 
@@ -1479,7 +1476,7 @@ $( document ).ready( function (){
         </div>
 
         <div class="col-sm-4 col-xs-12 vcenter burden-test-btn-wrapper ">
-            <button id="singlebutton" name="singlebutton" style="height: 80px"
+            <button name="singlebutton" style="height: 80px"
                     class="btn btn-primary btn-lg burden-test-btn"
 
                     onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun()">Run</button>
