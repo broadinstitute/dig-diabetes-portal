@@ -125,7 +125,7 @@ div.labelAndInput > input {
     padding: 0;
     line-height: 20px;
 }
-#covariateHolder .row {
+.covariateHolder .row {
     line-height: 15px;
 }
  text.box{
@@ -439,10 +439,10 @@ line.center{
                                               filterCategoricalTemplate:$('#filterCategoricalTemplate')[0].innerHTML }));
 
                     // set up the section where the covariates will go
-                    $("#chooseCovariatesLocation").empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML));
+                    $("#chooseCovariatesLocation").empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML,{stratum:stratumName}));
 
                     // put those covariates into place
-                    $("#covariateHolder").empty().append(Mustache.render( $('#allCovariateSpecifierTemplate')[0].innerHTML,
+                    $(".covariateHolder_"+stratumName).empty().append(Mustache.render( $('#allCovariateSpecifierTemplate')[0].innerHTML,
                                                                            generateCovariateRenderData(data.covariates,phenotype,stratumName),
                                                                            {covariateTemplate:$('#covariateTemplate')[0].innerHTML}));
 
@@ -1611,13 +1611,13 @@ $( document ).ready( function (){
 
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#initiateAnalysis"
-                       href="#initiateAnalysis">Step 3: Control for covariates</a>
+                    <a data-toggle="collapse" data-parent="#initiateAnalysis_{{stratum}}"
+                       href="#initiateAnalysis_{{stratum}}">Step 3: Control for covariates</a>
                 </h4>
             </div>
 
 
-            <div id="initiateAnalysis" class="panel-collapse collapse">
+            <div id="initiateAnalysis_{{stratum}}" class="panel-collapse collapse">
                 <div class="panel-body secBody">
                     <div class="row">
                         <div class="col-sm-9 col-xs-12 vcenter">
@@ -1627,12 +1627,12 @@ $( document ).ready( function (){
 
                     <div class="row">
                         <div class="col-sm-9 col-xs-12 vcenter">
-                            <div id="covariates"
+                            <div class="covariates"
                                  style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px;overflow-y: scroll;">
                                 <div class="row">
                                     <div class="col-md-10 col-sm-10 col-xs-12 vcenter" style="margin-top:0">
 
-                                        <div id="covariateHolder">
+                                        <div class="covariateHolder covariateHolder_{{stratum}}">
 
                                         </div>
 
