@@ -302,7 +302,7 @@ line.center{
                                       "\"requestedData\":["+filtersSpecs.join(',')+"]," +
                                       "\"filters\":[]}";
                     retrieveSampleInformation  ( jsonDescr, function(){
-                             mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata($('#datasetFilter'), '#phenotypeFilter');
+                             mpgSoftware.burdenTestShared.fillInSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val());
                              displayTestResultsSection(false);
                              $('.caatSpinner').hide();
                          } );
@@ -362,7 +362,7 @@ line.center{
 
 
 
-       var generateFilterRenderData = function(dataFilters,optionsPerFilter){
+       var generateFilterRenderData = function(dataFilters,optionsPerFilter,stratumName){
             var returnValue = {};
             if ( ( typeof dataFilters !== 'undefined' ) &&
                          (  dataFilters !==  null ) ) {
@@ -381,13 +381,14 @@ line.center{
                 });
                 returnValue = {
                     categoricalFilters: categoricalFilters,
-                    realValuedFilters: realValuedFilters
+                    realValuedFilters: realValuedFilters,
+                    stratum: stratumName
                 };
             }
             return returnValue;
        }
 
-       var generateCovariateRenderData = function(dataCovariates,phenotype){
+       var generateCovariateRenderData = function(dataCovariates,phenotype,stratumName){
             var returnValue = {};
             if ( ( typeof dataCovariates !== 'undefined' ) &&
                          (  dataCovariates !==  null ) ) {
@@ -405,7 +406,8 @@ line.center{
                              } else {
                                 return "";
                              }
-                        }
+                        },
+                        stratum: stratumName
                 };
             }
             return returnValue;
@@ -418,24 +420,21 @@ line.center{
         *  we can use fillCategoricalDropDownBoxes to create plots.
         *
         */
-        var retrieveSampleFilterMetadata = function (dropdownSel, dropDownSelector) {
+        var fillInSampleAndCovariateSection = function (dataSetId, phenotype, stratum) {
             var data = getStoredSampleMetadata();
-            var phenotype = $(dropDownSelector).val();
             var sampleData = getStoredSampleData();
-            var allTemplate;
-            var renderAllFiltersData;
-            var renderAllCovariatesData;
+            var stratumName = 'strat1';
 
             var optionsPerFilter = generateOptionsPerFilter(sampleData.metaData.variants) ;
             if ( ( data !==  null ) &&
                  ( typeof data !== 'undefined') ){
 
                     // set up the section where the filters will go
-                    $("#chooseFiltersLocation").empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML));
+                    $("#chooseFiltersLocation").empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML,{stratum:stratumName}));
 
                     // put those filters in place
                     $("#filterHolder").empty().append(Mustache.render( $('#allFiltersTemplate')[0].innerHTML,
-                                            generateFilterRenderData(data.filters,optionsPerFilter),
+                                            generateFilterRenderData(data.filters,optionsPerFilter,stratumName),
                                             { filterFloatTemplate:$('#filterFloatTemplate')[0].innerHTML,
                                               filterCategoricalTemplate:$('#filterCategoricalTemplate')[0].innerHTML }));
 
@@ -444,13 +443,13 @@ line.center{
 
                     // put those covariates into place
                     $("#covariateHolder").empty().append(Mustache.render( $('#allCovariateSpecifierTemplate')[0].innerHTML,
-                                                                           generateCovariateRenderData(data.covariates,phenotype),
+                                                                           generateCovariateRenderData(data.covariates,phenotype,stratumName),
                                                                            {covariateTemplate:$('#covariateTemplate')[0].innerHTML}));
 
                     // display the results section
-                    $("#displayResultsLocation").empty().append(Mustache.render( $('#displayResultsTemplate')[0].innerHTML,{}));
+                    $("#displayResultsLocation").empty().append(Mustache.render( $('#displayResultsTemplate')[0].innerHTML,{stratum:stratumName}));
 
-                    $("#sampleRow").show();
+//                    $("#sampleRow").show();
                     $('.sampleNumberReporter').show();
 
                   // filters should be in place now.  Attach events
@@ -463,7 +462,7 @@ line.center{
                    var sampleData = getStoredSampleData();
 
                    fillCategoricalDropDownBoxes(sampleData.metaData.variants,phenotype);
-                   if (backendFiltering){
+                   if (!backendFiltering){
                       utilizeSampleInfoForDistributionPlots(sampleData.metaData.variants,phenotype);
                    }
 
@@ -1362,7 +1361,7 @@ line.center{
             getStoredSampleData:getStoredSampleData, // retrieve stored sample data
             retrieveSampleMetadata:retrieveSampleMetadata, // if user changes data set reset phenotype (and potentially reload samples)
             dynamicallyFilterSamples:dynamicallyFilterSamples,  // filter all our samples (currently done locally)
-            retrieveSampleFilterMetadata:retrieveSampleFilterMetadata, //Build the UI widgets and fill
+            fillInSampleAndCovariateSection:fillInSampleAndCovariateSection, //Build the UI widgets and fill
             displayTestResultsSection: displayTestResultsSection  // simply display results section (show() or hide()
         }
 
@@ -1524,7 +1523,7 @@ $( document ).ready( function (){
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
                         <select id="phenotypeFilter" class="traitFilter form-control text-left"
-                                onchange="mpgSoftware.burdenTestShared.retrieveSampleFilterMetadata($('#datasetFilter'), '#phenotypeFilter');">
+                                onchange="mpgSoftware.burdenTestShared.fillInSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val() );">
                         </select>
                     </div>
                 </div>
@@ -1541,12 +1540,12 @@ $( document ).ready( function (){
 
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#filterSamples"
-                       href="#filterSamples">Step 2: Select a subset of samples based on phenotypic criteria</a>
+                    <a data-toggle="collapse" data-parent="#filterSamples_{{stratum}}"
+                       href="#filterSamples_{{stratum}}">Step 2: Select a subset of samples based on phenotypic criteria</a>
                 </h4>
             </div>
 
-            <div id="filterSamples" class="panel-collapse collapse">
+            <div id="filterSamples_{{stratum}}" class="panel-collapse collapse">
                 <div class="panel-body  secBody">
 
                     <div class="row">
@@ -1576,12 +1575,12 @@ $( document ).ready( function (){
                                 </div>
                             </div>
 
-                            <div class="row" id="sampleRow" style="display:none; padding: 10px 0 0 0">
+                            <div class="row" id="sampleRow" style="padding: 10px 0 0 0">
                                 <div class="col-sm-12 col-xs-12 text-left">
 
                                     <div style="direction: rtl; height: 300px; padding: 4px 0 0 10px; overflow-y: scroll;">
                                         <div style="direction: ltr">
-                                            <div id="filters">
+                                            <div>
                                                 <div class="row">
 
                                                     <div id="filterHolder"></div>
