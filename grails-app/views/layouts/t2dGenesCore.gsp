@@ -32,8 +32,6 @@
 
 <body>
 
-<g:javascript src="lib/bootstrap.min.js" />
-
 
 <g:applyLayout name="errorReporter"/>
 
