@@ -56,7 +56,7 @@
         <h2>Data Deposition and Data Transfer Agreements</h2>
     </div>
     <div class="row pull-left medText consortium-spacing col-xs-12">
-        Investigators who wish to deposit data into the Portal are encouraged to do so. For information on submitting individual-level data, please <a href="">click here</a>. For information on submitting summary data, please <a href="">click here</a>
+        Investigators who wish to deposit data into the Portal are encouraged to do so. For information on submitting individual-level data, please <a href="https://s3.amazonaws.com/broad-portal-resources/stroke/Stroke_SOP-R24IndividualLevelDataSubmission.docx">click here</a>. For information on submitting summary data, please <a href="https://s3.amazonaws.com/broad-portal-resources/stroke/Stroke_SOP-R24SummaryDataSubmission.docx">click here</a>
     </div>
 
     <div class="row pull-left medText consortium-spacing col-xs-12">
