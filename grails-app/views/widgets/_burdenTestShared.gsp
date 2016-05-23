@@ -454,14 +454,14 @@ line.center{
 
                   // filters should be in place now.  Attach events
                   _.forEach(data.filters,function(d){
-                      $("#multi"+d.name).bind("change", function(event, ui){
+                      $("#multi_"+stratumName+"_"+d.name).bind("change", function(event, ui){
                            mpgSoftware.burdenTestShared.displaySampleDistribution(d.name, '.boxWhiskerPlot_'+stratumName,0)
                       });
                   });
 
                    var sampleData = getStoredSampleData();
 
-                   fillCategoricalDropDownBoxes(sampleData.metaData.variants,phenotype);
+                   fillCategoricalDropDownBoxes(sampleData.metaData.variants,phenotype,stratumName);
                    if (!backendFiltering){
                       utilizeSampleInfoForDistributionPlots(sampleData.metaData.variants,phenotype);
                    }
@@ -482,8 +482,21 @@ line.center{
            _.forEach( extractFilters(), function(filterObject){
                var oneFilter = [];
                _.forEach( filterObject, function(value, key){
-                   oneFilter.push("\""+key+"\": \""+value+"\"");
-               });
+                   if (typeof value !== 'undefined'){
+                       console.log('value='+value+'.');
+                       if (key==="cat"){
+                          oneFilter.push("\""+key+"\": \""+value+"\"");
+                       }else{
+                          var divider = value.indexOf('_');
+                           if (divider>-1){
+                               var propName = value.substr(divider+1,value.length-divider);
+                               oneFilter.push("\""+key+"\": \""+propName+"\"");
+                           } else {
+                                oneFilter.push("\""+key+"\": \""+value+"\"");
+                           }
+                       }
+                    }
+                });
                filterStrings.push("{"+oneFilter.join(",\n")+"}");
            } );
            return "[\n" + filterStrings.join(",") + "\n]";
@@ -915,7 +928,7 @@ line.center{
                     var multiParm = filterRowDom.find('.multiSelect');
                     if (filterCheck.is(':checked')&&(filterName.indexOf("{{")==-1)){
                         var allSelected = [];
-                        _.forEach($('#multi'+filterName+' option:selected'),function(d){
+                        _.forEach($('#multi_'+filterName+' option:selected'),function(d){
                             allSelected.push($(d).val());
                         });
                         var  dataSetMap = {"name":filterName,
@@ -963,7 +976,7 @@ line.center{
 
 
 
-        var fillCategoricalDropDownBoxes = function (sampleData,phenotype){
+        var fillCategoricalDropDownBoxes = function (sampleData,phenotype,stratum){
              // make dist plots
             //utilizeSampleInfoForDistributionPlots(sampleData,phenotype);
             var optionsPerFilter = generateOptionsPerFilter(sampleData) ;
@@ -971,7 +984,7 @@ line.center{
             _.forEach(sampleMetadata.filters,function(d,i){
                 if (d.type !== 'FLOAT') {
                     if (optionsPerFilter[d.name]!==undefined){
-                       var dropdownId = '#multi'+d.name;
+                       var dropdownId = '#multi_'+stratum+"_"+d.name;
                        _.forEach(optionsPerFilter[d.name],function(filterVal){
                            $(dropdownId).append(new Option(filterVal.name,filterVal.name));
                        });
@@ -1683,10 +1696,10 @@ $( document ).ready( function (){
 
 
                                 {{ #realValuedFilters }}
-                                <div class="row realValuedFilter considerFilter" id="filter_{{name}}">
+                                <div class="row realValuedFilter considerFilter" id="filter_{{stratum}}_{{name}}">
                                     <div class="col-sm-1">
-                                        <input class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}"
-                                               value="{{name}}" checked/></td>
+                                        <input class="utilize" id="use{{name}}" type="checkbox" name="use_{{stratum}}_{{name}}"
+                                               value="{{stratum}}_{{name}}" checked/></td>
                                     </div>
 
                                     <div class="col-sm-5">
@@ -1694,8 +1707,8 @@ $( document ).ready( function (){
                                     </div>
 
                                     <div class="col-sm-2">
-                                        <select id="cmp{{name}}" class="form-control filterCmp"
-                                                data-selectfor="{{name}}Comparator">
+                                        <select id="cmp_{{stratum}}_{{name}}" class="form-control filterCmp"
+                                                data-selectfor="{{stratum}}_{{name}}Comparator">
                                             <option value="1">&lt;</option>
                                             <option value="2">&gt;</option>
                                             <option value="3">=</option>
@@ -1705,7 +1718,7 @@ $( document ).ready( function (){
                                     <div class="col-sm-3">
                                         <input id="inp{{name}}" type="text" class="filterParm form-control"
                                                data-type="propertiesInput"
-                                               data-prop="{{name}}Value" data-translatedname="{{name}}"
+                                               data-prop="{{stratum}}_{{name}}Value" data-translatedname="{{stratum}}_{{name}}"
                                                onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0)"
                                                onkeyup="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0)">
 
@@ -1713,7 +1726,7 @@ $( document ).ready( function (){
 
                                     <div class="col-sm-1">
                                         <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0)"
-                                              class="glyphicon glyphicon-arrow-right pull-right distPlotter" id="distPlotter_{{name}}"></span>
+                                              class="glyphicon glyphicon-arrow-right pull-right distPlotter" id="distPlotter_{{stratum}}_{{name}}"></span>
                                     </div>
 
                                 </div>
@@ -1722,10 +1735,10 @@ $( document ).ready( function (){
 
 <script id="filterCategoricalTemplate" type="x-tmpl-mustache">
                                 {{ #categoricalFilters }}
-                                <div class="row categoricalFilter considerFilter" id="filter_{{name}}">
+                                <div class="row categoricalFilter considerFilter" id="filter_{{stratum}}_{{name}}">
                                     <div class="col-sm-1">
-                                        <input class="utilize" id="use{{name}}" type="checkbox" name="use{{name}}"
-                                               value="{{name}}" checked/></td>
+                                        <input class="utilize" id="use_{{stratum}}_{{name}}" type="checkbox" name="use_{{stratum}}_{{name}}"
+                                               value="{{stratum}}_{{name}}" checked/></td>
                                     </div>
 
                                     <div class="col-sm-5">
@@ -1737,8 +1750,8 @@ $( document ).ready( function (){
                                     </div>
 
                                     <div class="col-sm-3">
-                                        <select id="multi{{name}}" class="form-control multiSelect"
-                                                data-selectfor="{{name}}FilterOpts" multiple="multiple"
+                                        <select id="multi_{{stratum}}_{{name}}" class="form-control multiSelect"
+                                                data-selectfor="{{stratum}}_{{name}}FilterOpts" multiple="multiple"
                                                 onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',1)">
                                         </select>
 
@@ -1746,22 +1759,21 @@ $( document ).ready( function (){
 
                                     <div class="col-sm-1">
                                         <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',1)"
-                                              class="glyphicon glyphicon-arrow-right pull-right"  id="distPlotter_{{name}}"></span>
+                                              class="glyphicon glyphicon-arrow-right pull-right"  id="distPlotter_{{stratum}}_{{name}}"></span>
                                     </div>
 
                                 </div>
                                 {{ /categoricalFilters }}
-                            </script>
+</script>
 
 <script id="filterStringTemplate" type="x-tmpl-mustache">
                                 <p><span>str name={{name}},type={{type}}</span></p>
-                            </script>
+</script>
 
 <script id="allCovariateSpecifierTemplate"  type="x-tmpl-mustache">
 
                                 {{>covariateTemplate}}
-
-                                </script>
+</script>
 
 <script id="covariateTemplate"  type="x-tmpl-mustache">
                                     {{ #covariateSpecifiers }}
@@ -1775,7 +1787,7 @@ $( document ).ready( function (){
                                         </div>
                                     </div>
                                     {{ /covariateSpecifiers }}
-                                </script>
+</script>
 
 
 
