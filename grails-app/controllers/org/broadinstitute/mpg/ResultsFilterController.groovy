@@ -12,7 +12,7 @@ class ResultsFilterController {
     def index() {}
 
     def resultsfilter() {
-        render(view:"filtermodal")
+        render(template:"filtermodal")
     }
 
 

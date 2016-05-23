@@ -83,7 +83,9 @@ class HomeController {
         String locale = RequestContextUtils.getLocale(request)
         JSONObject links = [
             introTutorial: locale.startsWith('es') ? "https://s3.amazonaws.com/broad-portal-resources/tutorials/tutorial_ES.pdf" : "https://s3.amazonaws.com/broad-portal-resources/tutorials/tutorial_EN.pdf",
-            variantFinderTutorial: "https://s3.amazonaws.com/broad-portal-resources/tutorials/VariantFinderTutorial.pdf"
+            variantFinderTutorial: "https://s3.amazonaws.com/broad-portal-resources/tutorials/VariantFinderTutorial.pdf",
+            strokeVariantFinderTutorial: "https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/Cerebrovascular_VF_Tutorial.pdf",
+            strokeIntroTutorial: "https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/Cerebrovascular_disease_KP_tutorial.pdf"
         ]
         render(controller: 'home', view: 'tutorials', model: [links: links])
     }

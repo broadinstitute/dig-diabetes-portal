@@ -73,11 +73,9 @@ modules = {
 
         resource url: 'css/dport/barchart.css'
         resource url: 'css/dport/variant.css'
-        resource url: 'css/lib/lightslider.css'
 
         resource url: 'js/lib/dport/variantInfo.js'
         resource url: 'js/lib/dport/barchart.js'
-        resource url: 'js/lib/lightslider.js'
 
         resource url: 'js/lib/dport/igvLaunch.js'
     }
@@ -116,6 +114,7 @@ modules = {
         resource url: 'images/icons/dna-strands.ico'
 
         resource url: 'css/lib/bootstrap.min.css'
+        resource url: 'js/lib/bootstrap.min.js'
 
         resource url: 'css/lib/style.css'
         resource url: 'css/lib/dkstyle.css'
@@ -125,8 +124,6 @@ modules = {
 
         resource url: 'js/lib/bootstrap3-typeahead.min.js'
         resource url: 'js/lib/shared.js'
-        resource url: 'js/lib/tooltip.js'
-        resource url: 'js/lib/popover.js'
 
         resource url: 'js/lib/lodash.js'
 
