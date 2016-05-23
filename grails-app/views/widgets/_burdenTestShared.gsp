@@ -425,7 +425,8 @@ line.center{
             var sampleData = getStoredSampleData();
             var stratumName = 'strat1';
 
-            var optionsPerFilter = generateOptionsPerFilter(sampleData.metaData.variants) ;
+            var optionsPerFilter = generateOptionsPerFilter() ;
+            //var optionsPerFilter = generateOptionsPerFilter(sampleData.metaData.variants) ;
             if ( ( data !==  null ) &&
                  ( typeof data !== 'undefined') ){
 
@@ -461,7 +462,7 @@ line.center{
 
                    var sampleData = getStoredSampleData();
 
-                   fillCategoricalDropDownBoxes(sampleData.metaData.variants,phenotype,stratumName);
+                   fillCategoricalDropDownBoxes({},phenotype,stratumName);
                    if (!backendFiltering){
                       utilizeSampleInfoForDistributionPlots(sampleData.metaData.variants,phenotype);
                    }
@@ -472,6 +473,97 @@ line.center{
 
             $('.caatSpinner').hide();
         };
+
+
+
+        /***
+        *  Build the UI widgets which can be used to specify the filters for DAGA.  Once they are in place
+        *  we can use fillCategoricalDropDownBoxes to create plots.
+        *
+        */
+        var stratifiedSampleAndCovariateSection = function (dataSetId, phenotype, strataProperty) {
+            var data = getStoredSampleMetadata();
+            var sampleData = getStoredSampleData();
+            var allStrata = ['East-Asian','European','Hispanic','South-Asian'];
+           // var allStrata = ['East-Asian'];
+            var stratumName = 'strat1';
+
+          //  var optionsPerFilter = generateOptionsPerFilter(sampleData.metaData.variants) ;
+            var optionsPerFilter = generateOptionsPerFilter() ;
+            if ( ( data !==  null ) &&
+                 ( typeof data !== 'undefined') ){
+
+                    var renderData = {strataProperty:"origin",
+                    strataNames:[],
+                    strataContent:[],
+                    defaultDisplay: function(count){
+                             if (this.count==0) {
+                                return " active";
+                             } else {
+                                return "";
+                             }
+                        }
+                    };
+                    _.forEach(allStrata,function(stratum){
+                       renderData.strataNames.push({name:stratum,trans:stratum,count:renderData.strataNames.length});
+                       renderData.strataContent.push({name:stratum,trans:stratum,count:renderData.strataContent.length});
+                    });
+
+                    $("#accordion_iat").empty();
+                    $(".stratified-user-interaction").empty().append(Mustache.render( $('#strataTemplate')[0].innerHTML,renderData));
+
+                    _.forEach(allStrata, function (stratumName){
+
+                       // set up the section where the filters will go
+                        $("#chooseFiltersLocation_"+stratumName).empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML,{stratum:stratumName}));
+
+                        // put those filters in place
+                        $(".filterHolder_"+stratumName).empty().append(Mustache.render( $('#allFiltersTemplate')[0].innerHTML,
+                                                generateFilterRenderData(data.filters,optionsPerFilter,stratumName),
+                                                { filterFloatTemplate:$('#filterFloatTemplate')[0].innerHTML,
+                                                  filterCategoricalTemplate:$('#filterCategoricalTemplate')[0].innerHTML }));
+
+                        // set up the section where the covariates will go
+                        $("#chooseCovariatesLocation_"+stratumName).empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML,{stratum:stratumName}));
+
+                        // put those covariates into place
+                        $(".covariateHolder_"+stratumName).empty().append(Mustache.render( $('#allCovariateSpecifierTemplate')[0].innerHTML,
+                                                                               generateCovariateRenderData(data.covariates,phenotype,stratumName),
+                                                                               {covariateTemplate:$('#covariateTemplate')[0].innerHTML}));
+
+                        // display the results section
+                        $("#displayResultsLocation_"+stratumName).empty().append(Mustache.render( $('#displayResultsTemplate')[0].innerHTML,{stratum:stratumName}));
+
+                        $('.sampleNumberReporter').show();
+
+                      // filters should be in place now.  Attach events
+                      _.forEach(data.filters,function(d){
+                          $("#multi_"+stratumName+"_"+d.name).bind("change", function(event, ui){
+                               mpgSoftware.burdenTestShared.displaySampleDistribution(d.name, '.boxWhiskerPlot_'+stratumName,0)
+                          });
+                      });
+
+                       var sampleData = getStoredSampleData();
+
+                       fillCategoricalDropDownBoxes({},phenotype,stratumName);
+                       if (!backendFiltering){
+                          utilizeSampleInfoForDistributionPlots(sampleData.metaData.variants,phenotype);
+                       }
+
+                       displayTestResultsSection(false);
+
+                    });
+
+              }
+
+
+            $('.caatSpinner').hide();
+        };
+
+
+
+
+
 
         /***
         *   pull all of the filters out of the Dom and put them into a JSON string suitable for transmission to the server
@@ -979,7 +1071,8 @@ line.center{
         var fillCategoricalDropDownBoxes = function (sampleData,phenotype,stratum){
              // make dist plots
             //utilizeSampleInfoForDistributionPlots(sampleData,phenotype);
-            var optionsPerFilter = generateOptionsPerFilter(sampleData) ;
+           // var optionsPerFilter = generateOptionsPerFilter(sampleData) ;
+            var optionsPerFilter = generateOptionsPerFilter() ;
             var sampleMetadata = getStoredSampleMetadata();
             _.forEach(sampleMetadata.filters,function(d,i){
                 if (d.type !== 'FLOAT') {
@@ -1017,7 +1110,8 @@ line.center{
         */
         var utilizeSampleInfoForDistributionPlots = function (variantData,phenotype){
             var sampleInfo = groupValuesByPhenotype(variantData);
-            var optionsPerFilter = generateOptionsPerFilter(variantData) ;
+           // var optionsPerFilter = generateOptionsPerFilter(variantData) ;
+            var optionsPerFilter = generateOptionsPerFilter() ;
             var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
             var plotHoldingStructure = $('#boxWhiskerPlot');
             plotHoldingStructure.empty();
@@ -1133,33 +1227,39 @@ line.center{
         */
          var generateOptionsPerFilter = function (variants) {
              var optionsPerFilter = {};
-             var filterTypeMap = determineEachFiltersType();
-               _.forEach(filterTypeMap,function(filtType,filtName){
-                  if ((filtType === 'STRING')||(filtType === 'INTEGER')){
-                     if (!(filtName in optionsPerFilter)){
-                        optionsPerFilter[filtName] = [];
-                     }
-                    _.forEach(variants,function(filterHolder){
-                        _.forEach(filterHolder,function(val,key){
-                           _.forEach(val,function(filterObj,filterKey){
-                               if (filtName === filterKey){
-                                  _.forEach(val,function(valueObject){
-                                      _.forEach(valueObject,function(valueOfFilter,dsOfFilter){
-                                         var refToLevel = _.find(optionsPerFilter[filterKey],function(d){return d.name==valueOfFilter});
-                                         if (refToLevel===undefined){
-                                             optionsPerFilter[filterKey].push({name:valueOfFilter,samples:1});
-                                         } else {
-                                             refToLevel.samples++;
-                                         }
-                                      });
-
-                                  })
-                               }
-                           });
-                        })
-                    })
-                  }
-               });
+              optionsPerFilter = { T2D_readable: [{name:"No", samples:982},{name:"Yes", samples:1028}],
+                                   origin:[   {name:"African-American", samples: 2076},
+                                              {name:"East-Asian", samples: 2166},
+                                              {name:"European", samples: 4554},
+                                              {name:"Hispanic", samples: 5818},
+                                              {name:"South-Asian", samples: 2225}] };
+//             var filterTypeMap = determineEachFiltersType();
+//               _.forEach(filterTypeMap,function(filtType,filtName){
+//                  if ((filtType === 'STRING')||(filtType === 'INTEGER')){
+//                     if (!(filtName in optionsPerFilter)){
+//                        optionsPerFilter[filtName] = [];
+//                     }
+//                    _.forEach(variants,function(filterHolder){
+//                        _.forEach(filterHolder,function(val,key){
+//                           _.forEach(val,function(filterObj,filterKey){
+//                               if (filtName === filterKey){
+//                                  _.forEach(val,function(valueObject){
+//                                      _.forEach(valueObject,function(valueOfFilter,dsOfFilter){
+//                                         var refToLevel = _.find(optionsPerFilter[filterKey],function(d){return d.name==valueOfFilter});
+//                                         if (refToLevel===undefined){
+//                                             optionsPerFilter[filterKey].push({name:valueOfFilter,samples:1});
+//                                         } else {
+//                                             refToLevel.samples++;
+//                                         }
+//                                      });
+//
+//                                  })
+//                               }
+//                           });
+//                        })
+//                    })
+//                  }
+//               });
             return optionsPerFilter;
          }
 
@@ -1297,6 +1397,9 @@ line.center{
 
 
 
+
+
+
         var utilizeDistributionInformationToCreatePlot = function (distributionInfo,params){
            if (typeof distributionInfo !== 'undefined'){
                 var plotHoldingStructure = $(params.holderSection);
@@ -1310,8 +1413,6 @@ line.center{
                 $('.sampleNumberReporter .numberOfSamples').text(sampleCount);
                 var divElementName = 'bwp_'+params.propertyName;
                 plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
-                   //$('.sampleNumberReporter .numberOfPhenotypeSpecificSamples').text(singleElement.data.length);
-                   //$('.sampleNumberReporter .numberOfPhenotypeSpecificSamples').text('47');
                    $('.sampleNumberReporter .phenotypeSpecifier').text(params.propertyName);
                 $('#'+divElementName).hide();
                 if (sampleMetadata.filters){
@@ -1366,6 +1467,7 @@ line.center{
             immediateFilterAndRun:immediateFilterAndRun, // apply filters locally and then launch IAT
             //refreshSampleDistribution:refreshSampleDistribution, // get data to display distribution of property
            // runBurdenTest:runBurdenTest, // currently wrapped by a filter call
+            stratifiedSampleAndCovariateSection: stratifiedSampleAndCovariateSection,
             retrieveMatchingDataSets:retrieveMatchingDataSets, // retrieve data set matching phenotype
             getStoredSampleData:getStoredSampleData, // retrieve stored sample data
             retrieveSampleMetadata:retrieveSampleMetadata, // if user changes data set reset phenotype (and potentially reload samples)
@@ -1402,9 +1504,13 @@ $( document ).ready( function (){
 
                     <r:img class="caatSpinner" uri="/images/loadingCaat.gif" alt="Loading CAAT data"/>
 
+
+
                     <div class="user-interaction">
 
                         <div id="chooseDataSetAndPhenotypeLocation"></div>
+
+                        <div class="stratified-user-interaction"></div>
 
                         <div class="panel-group" id="accordion_iat" style="margin-bottom: 10px">%{--start accordion --}%
                             <div id="chooseFiltersLocation"></div>
@@ -1531,15 +1637,57 @@ $( document ).ready( function (){
                     </div>
                 </div>
 
+
+
+                <div class="row secHeader" style="padding: 0 0 5px 0; display:none">
+                    <div class="col-sm-12 col-xs-12 text-left"><label>Stratify</label></div>
+                </div>
+
+                <div class="row" style="display:none">
+                    <div class="col-sm-12 col-xs-12 text-left">
+                        <select id="stratifyDesignation" class="stratifyFilter form-control text-left"
+                                onclick="mpgSoftware.burdenTestShared.stratifiedSampleAndCovariateSection ($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val() );">
+                                    <option value="origin">ancestry</option>
+                        </select>
+                    </div>
+                </div>
+
+
+
             </div>
         </div>
 
     </div>    %{--end accordion panel for id=chooseSamples--}%
 </script>
 
+<script id="strataTemplate"  type="x-tmpl-mustache">
+<ul class="nav nav-tabs" id="myTab">
+    {{ #strataNames }}
+       <li class="{{defaultDisplay}}"><a data-target="#{{name}}" data-toggle="tab">{{trans}}</a></li>
+    {{ /strataNames }}
+</ul>
+
+<div class="tab-content">
+  {{ #strataContent }}
+     <div class="tab-pane {{defaultDisplay}}" id="{{name}}">
+                   <div class="user-interaction user-interaction-{{name}}">
+
+                        <div class="panel-group" id="accordion_iat_{{name}}" style="margin-bottom: 10px">%{--start accordion --}%
+                            <div id="chooseFiltersLocation_{{name}}"></div>
+                            <div id="chooseCovariatesLocation_{{name}}"></div>
+                        </div>
+<div id="displayResultsLocation_{{name}}"></div>
+                    </div>
+
+     </div>
+  {{ /strataContent }}
+
+</div>
+</script>
+
 
 <script id="chooseFiltersTemplate"  type="x-tmpl-mustache">
-        <div class="panel panel-default">%{--should hold the Choose filters panel--}%
+<div class="panel panel-default">%{--should hold the Choose filters panel--}%
 
             <div class="panel-heading">
                 <h4 class="panel-title">

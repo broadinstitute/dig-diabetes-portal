@@ -122,9 +122,17 @@ class WidgetService {
 
         } else {
             String operator = (filters.cmp[0]=="1") ? "LT" : "GT"
-            filterDesignation = """ "filters":    [
+            String proposedFilter = singleFilter ( filters[0].cat, filters[0].cmp, filters[0].name, filters[0].parm, dataset ).trim()
+            if (proposedFilter.size()==0){
+                filterDesignation =  """            "filters":    [
+                 ${singleFilter ( "1", "1", "ID", "ZZZZZ", dataset )}
+            ]
+""".toString()
+            }else{
+                filterDesignation = """ "filters":    [
                 ${singleFilter ( filters[0].cat, filters[0].cmp, filters[0].name, filters[0].parm, dataset )}
         ]""".toString()
+            }
         }
 
         return filterDesignation
