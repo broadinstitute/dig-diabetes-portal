@@ -323,7 +323,7 @@
         }
     });
 
-    $('#collapseVariantAssociationStatistics').collapse({hide: false})
+   // $('#collapseVariantAssociationStatistics').collapse({hide: false})
 </script>
 
 </body>
