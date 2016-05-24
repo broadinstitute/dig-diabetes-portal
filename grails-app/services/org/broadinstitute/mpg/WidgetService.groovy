@@ -286,7 +286,7 @@ class WidgetService {
      * @return
      * @throws PortalException
      */
-    public List<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant> getVariantListForLocusZoom(String chromosome, int startPosition, int endPosition) throws PortalException {
+    public List<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant> getVariantListForLocusZoom(String chromosome, int startPosition, int endPosition, String dataset, String phenotype) throws PortalException {
         // local variables
         List<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant> variantList;
         String jsonResultString, jsonGetDataString;
@@ -294,7 +294,7 @@ class WidgetService {
         KnowledgeBaseResultParser knowledgeBaseResultParser;
 
         // build the LZ json builder
-        locusZoomJsonBuilder = new LocusZoomJsonBuilder(this.dataSetKey, this.phenotypeKey);
+        locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype);
 
         // get json getData query string
         jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition);
@@ -329,20 +329,28 @@ class WidgetService {
      * @param endPosition
      * @return
      */
-    public String getVariantJsonForLocusZoomString(String chromosome, int startPosition, int endPosition) {
+    public String getVariantJsonForLocusZoomString(String chromosome, int startPosition, int endPosition, String dataset, String phenotype) {
         // local variables
-        List<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant> variantList = null;
+        List<Variant> variantList = null;
         JSONObject jsonResultObject = null;
         KnowledgeBaseFlatSearchTranslator knowledgeBaseFlatSearchTranslator;
         String jsonResultString = null;
 
+        if(dataset == null) {
+            dataset = this.dataSetKey
+        }
+        if(phenotype == null) {
+            phenotype = this.phenotypeKey
+        }
+
         // get the query result and translate to a json string
         try {
             // get the variant list
-            variantList = this.getVariantListForLocusZoom(chromosome, startPosition, endPosition);
+            variantList = this.getVariantListForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype);
 
+            // TODO: DIGP-354: Review property spoofing for Hail multiple phenotype call to see if appropriate
             // translate to json string
-            knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(this.dataSetKey, this.phenotypeKey, this.propertyKey);
+            knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(dataset, "T2D", this.propertyKey);
             jsonResultObject = knowledgeBaseFlatSearchTranslator.translate(variantList);
 
             // translate to json string
@@ -356,6 +364,8 @@ class WidgetService {
             log.error("Got LZ getData query error: " + exception.getMessage());
             jsonResultString = this.errorResponse;
         }
+
+        log.info("?!?!?!? ${jsonResultObject}")
 
         // return
         return jsonResultString;
