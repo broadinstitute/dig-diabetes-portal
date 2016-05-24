@@ -1639,11 +1639,11 @@ $( document ).ready( function (){
 
 
 
-                <div class="row secHeader" style="padding: 0 0 5px 0; display:none">
+                <div class="row secHeader" style="padding: 0 0 5px 0">
                     <div class="col-sm-12 col-xs-12 text-left"><label>Stratify</label></div>
                 </div>
 
-                <div class="row" style="display:none">
+                <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
                         <select id="stratifyDesignation" class="stratifyFilter form-control text-left"
                                 onclick="mpgSoftware.burdenTestShared.stratifiedSampleAndCovariateSection ($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val() );">
@@ -1676,7 +1676,7 @@ $( document ).ready( function (){
                             <div id="chooseFiltersLocation_{{name}}"></div>
                             <div id="chooseCovariatesLocation_{{name}}"></div>
                         </div>
-<div id="displayResultsLocation_{{name}}"></div>
+                        <div id="displayResultsLocation_{{name}}"></div>
                     </div>
 
      </div>

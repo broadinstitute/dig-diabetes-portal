@@ -218,11 +218,11 @@
 
 
 
-                        <g:renderBetaFeaturesDisplayedValue>
+                        %{--<g:renderBetaFeaturesDisplayedValue>--}%
                             <div class="separator"></div>
 
                             <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>
-                        </g:renderBetaFeaturesDisplayedValue>
+                        %{--from the--}%
 
 
                         <div class="separator"></div>
@@ -323,7 +323,7 @@
         }
     });
 
-   // $('#collapseVariantAssociationStatistics').collapse({hide: false})
+    $('#collapseVariantAssociationStatistics').collapse({hide: false})
 </script>
 
 </body>
