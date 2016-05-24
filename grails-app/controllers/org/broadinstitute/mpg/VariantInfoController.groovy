@@ -4,6 +4,7 @@ import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Experiment
+import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -28,6 +29,9 @@ class VariantInfoController {
         String locale = RequestContextUtils.getLocale(request)
         JSONObject phenotypeDatasetMapping = metaDataService.getPhenotypeDatasetMapping()
         String variantToStartWith = params.id
+
+        List<PhenotypeBean> lzOptions = GeneController.getHailPhenotypeMap()
+
         if (variantToStartWith) {
 
             render(view: 'variantInfo',
@@ -38,7 +42,8 @@ class VariantInfoController {
                             show_exseq     : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
                             locale:locale,
                             phenotypeDatasetMapping: (phenotypeDatasetMapping as JSON),
-                            restServer: restServerService.currentRestServer()
+                            restServer: restServerService.currentRestServer(),
+                            lzOptions   : lzOptions
                     ])
 
         }

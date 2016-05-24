@@ -1,7 +1,6 @@
 package org.broadinstitute.mpg.diabetes.json.builder;
 
-import org.broadinstitute.mpg.diabetes.metadata.DataSet;
-import org.broadinstitute.mpg.diabetes.metadata.Property;
+import org.broadinstitute.mpg.diabetes.metadata.*;
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser;
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery;
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryBean;
@@ -38,12 +37,23 @@ public class LocusZoomJsonBuilder {
     public String getLocusZoomQueryString(String chromosome, int startPosition, int endPosition) throws PortalException {
         // local variables
         GetDataQuery query = new GetDataQueryBean();
-        Property pValueProperty;
+        PropertyBean pValueProperty;
         String jsonQueryString;
         DataSet rootDataSet = null;
-
-        // find the pvalue property based on the instance variables
-        pValueProperty = this.jsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames(PortalConstants.PROPERTY_NAME_P_FIRTH, this.phenotypeString, this.rootDataSetString);
+        System.out.println(this.phenotypeString + " " + this.rootDataSetString);
+        // get a dummy p-value property--we don't want to look it up because we don't know (or care) about
+        // dataset, we just need to add a p-value property to the query
+        // TODO: DIGP-354: Review property spoofing for Hail multiple phenotype call to see if appropriate
+        pValueProperty = new PropertyBean();
+        pValueProperty.setName("P_VALUE");
+        pValueProperty.setVariableType(PortalConstants.OPERATOR_TYPE_FLOAT);
+        PhenotypeBean phenotypeBean = new PhenotypeBean();
+        phenotypeBean.setName(this.phenotypeString);
+        SampleGroupBean sgBean = new SampleGroupBean();
+        sgBean.setName("ExSeq_17k_mdv2");
+        phenotypeBean.setParent(sgBean);
+        pValueProperty.setParent(phenotypeBean);
+        // end property spoofing
 
         // get the query properties
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION));

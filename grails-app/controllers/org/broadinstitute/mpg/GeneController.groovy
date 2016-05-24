@@ -335,21 +335,22 @@ class GeneController {
      *
      * @return
      */
-    def getHailPhenotypeMap() {
+    public static List<PhenotypeBean> getHailPhenotypeMap() {
         // local variables
         List<PhenotypeBean> beanList = new ArrayList<PhenotypeBean>();
 
         // build the phenotype list
         beanList.add(new PhenotypeBean(key: "T2D", name: "T2D", description: "Type 2 Diabetes", defaultSelected: true));
         beanList.add(new PhenotypeBean(key: "BMI", name: "BMI", description: "Body Mass Index", defaultSelected: false));
-        beanList.add(new PhenotypeBean(key: "WC", name: "WC", description: "WC", defaultSelected: false));
-        beanList.add(new PhenotypeBean(key: "LDL", name: "LDL", description: "LDL Cholesterol", defaultSelected: false));
-        beanList.add(new PhenotypeBean(key: "HDL", name: "HDL", description: "HDL Cholesterol", defaultSelected: false));
-        beanList.add(new PhenotypeBean(key: "TC", name: "TC", description: "TC", defaultSelected: false));
-        beanList.add(new PhenotypeBean(key: "TG", name: "TG", description: "TG", defaultSelected: false));
-
+//        beanList.add(new PhenotypeBean(key: "WC", name: "WC", description: "WC", defaultSelected: false));
+//        beanList.add(new PhenotypeBean(key: "LDL", name: "LDL", description: "LDL Cholesterol", defaultSelected: false));
+//        beanList.add(new PhenotypeBean(key: "HDL", name: "HDL", description: "HDL Cholesterol", defaultSelected: false));
+//        beanList.add(new PhenotypeBean(key: "TC", name: "TC", description: "TC", defaultSelected: false));
+//        beanList.add(new PhenotypeBean(key: "TG", name: "TG", description: "TG", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "NUMSING", name: "NUMSING", description: "some phenotype"))
+        beanList.add(new PhenotypeBean(key: "NUMRARE", name: "NUMRARE", description: "some phenotype #2"))
         // return
-        [beanList: beanList]
+        return beanList
     }
 
     /**
@@ -359,12 +360,16 @@ class GeneController {
      */
     def getLocusZoom() {
         // local variables
-        String jsonReturn = null;
+        String jsonReturn;
         String chromosome = params.chromosome;
+        chromosome = "22"
         String startString = params.start;
+//        startString = "29737203"
         String endString = params.end;
-        int startInteger = 0;
-        int endInteger = 0;
+//        endString = "29937203"
+        String phenotype = params.phenotype;
+        int startInteger;
+        int endInteger;
         String errorJson = "{\"data\": {}, \"error\": true}";
 
         // log
@@ -376,7 +381,7 @@ class GeneController {
             endInteger = Integer.parseInt(endString);
 
             if (chromosome != null) {
-                jsonReturn = widgetService.getVariantJsonForLocusZoomString(chromosome, startInteger, endInteger);
+                jsonReturn = widgetService.getVariantJsonForLocusZoomString(chromosome, startInteger, endInteger, null, phenotype);
             } else {
                 jsonReturn = errorJson;
             }

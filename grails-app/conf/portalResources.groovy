@@ -114,11 +114,6 @@ modules = {
     mustache {
         resource url: 'js/lib/mustache.js'
     }
-    locusZoom {
-        // version 0.3.3 for now
-        resource url: 'js/lib/locuszoom/locuszoom.app.js'
-        resource url: 'css/locuszoom/locuszoom.css'
-    }
     core {
         dependsOn "jquery"
 
