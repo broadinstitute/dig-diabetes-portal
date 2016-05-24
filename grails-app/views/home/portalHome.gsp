@@ -22,6 +22,10 @@
         mpgSoftware.homePage.loadNewsFeed(newsItems.posts);
         mpgSoftware.homePage.setSlideWindows();
 
+        function goToSelectedItem(item) {
+            window.location.href = "${createLink(controller:'gene',action:'findTheRightDataPage')}/" + item;
+        }
+
         /***
          * type ahead recognizing genes
          */
@@ -30,6 +34,9 @@
                 $.get('<g:createLink controller="gene" action="index"/>', {query: query}, function (data) {
                     process(data);
                 })
+            },
+            afterSelect: function(selection) {
+                goToSelectedItem(selection);
             }
         });
 
@@ -39,7 +46,7 @@
         $('#generalized-go').on('click', function () {
             var somethingSymbol = $('#generalized-input').val();
             if (somethingSymbol) {
-                window.location.href = "${createLink(controller:'gene',action:'findTheRightDataPage')}/" + somethingSymbol;
+                goToSelectedItem(somethingSymbol)
             }
         });
 

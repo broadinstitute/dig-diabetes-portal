@@ -354,12 +354,7 @@
     </nav>
 
 </div>
-<div>
-    ${request.contextPath}
-</div>
-<div>
-    ${g.createLink(absolute:true, uri:"/variantInfo/variantInfo/")}
-</div>
+
 <script type="text/javascript">
 
    var setUpIgv = function (locusName, serverName){
