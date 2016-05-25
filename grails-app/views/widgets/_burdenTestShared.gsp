@@ -5,6 +5,11 @@ rect.histogramHolder {
 rect.box {
     fill: #fff;
 }
+ul.strataResults {
+    margin-bottom: 0;
+    padding: 0;
+    list-style-type: none;
+}
 .caatSpinner{
     position: absolute;
     z-index: 1;
@@ -301,12 +306,7 @@ line.center{
                     var jsonDescr = "{\"dataset\":\""+data.dataset+"\"," +
                                       "\"requestedData\":["+filtersSpecs.join(',')+"]," +
                                       "\"filters\":[]}";
-//                    retrieveSampleInformation  ( jsonDescr, function(){
-//                             mpgSoftware.burdenTestShared.fillInSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val());
-//                             displayTestResultsSection(false);
-//                             $('.caatSpinner').hide();
-//                         } );
-                             mpgSoftware.burdenTestShared.fillInSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val());
+                             populateSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val());
                              displayTestResultsSection(false);
                              $('.caatSpinner').hide();
 
@@ -418,6 +418,20 @@ line.center{
        }
 
 
+      var populateSampleAndCovariateSection = function (dataSetId, phenotype, stratificationProperty) {
+          if ((typeof stratificationProperty === 'undefined')  ||
+               (stratificationProperty === 'none')) {
+                  $('#stratsTabs').empty();
+                  fillInSampleAndCovariateSection(dataSetId, phenotype );
+               } else {
+                  stratifiedSampleAndCovariateSection(dataSetId, phenotype, stratificationProperty);
+               }
+      }
+
+
+
+
+
 
         /***
         *  Build the UI widgets which can be used to specify the filters for DAGA.  Once they are in place
@@ -499,7 +513,6 @@ line.center{
         */
         var stratifiedSampleAndCovariateSection = function (dataSetId, phenotype, strataProperty) {
             var data = getStoredSampleMetadata();
-            var sampleData = getStoredSampleData();
             var allStrata = ['East-Asian','European','Hispanic','South-Asian'];
            // var allStrata = ['East-Asian'];
             var stratumName = 'strat1';
@@ -779,7 +792,7 @@ line.center{
                             if (currentStratum==='strat1'){
                                 printFullResultsSection(data.stats,pValue,beta,oddsRatio);
                             } else {
-                                $('.strataResults').empty().append('<li>'+currentStratum+' = '+pValue+'.</li>');
+                                $('.strataResults').append('<li>'+currentStratum+' = '+pValue+'.</li>');
                             }
 
 
@@ -846,6 +859,7 @@ line.center{
             } else {
                 var propertyDesignationDom = $('div.stratsTabs_property');
                 var propertyName = propertyDesignationDom.attr("id");
+                $('.strataResults').empty(); // clear stata reporting section
                 _.forEach(stratsTabs,function (stratum){
                     var stratumName = $(stratum).text();
                     executeAssociationTest(collectingFilterValues(propertyName,stratumName),collectingCovariateValues(),propertyName,stratumName);
@@ -1506,12 +1520,13 @@ line.center{
             immediateFilterAndRun:immediateFilterAndRun, // apply filters locally and then launch IAT
             //refreshSampleDistribution:refreshSampleDistribution, // get data to display distribution of property
            // runBurdenTest:runBurdenTest, // currently wrapped by a filter call
-            stratifiedSampleAndCovariateSection: stratifiedSampleAndCovariateSection,
+           // stratifiedSampleAndCovariateSection: stratifiedSampleAndCovariateSection,
             retrieveMatchingDataSets:retrieveMatchingDataSets, // retrieve data set matching phenotype
             getStoredSampleData:getStoredSampleData, // retrieve stored sample data
             retrieveSampleMetadata:retrieveSampleMetadata, // if user changes data set reset phenotype (and potentially reload samples)
             dynamicallyFilterSamples:dynamicallyFilterSamples,  // filter all our samples (currently done locally)
-            fillInSampleAndCovariateSection:fillInSampleAndCovariateSection, //Build the UI widgets and fill
+           // fillInSampleAndCovariateSection:fillInSampleAndCovariateSection, //Build the UI widgets and fill
+            populateSampleAndCovariateSection:populateSampleAndCovariateSection,
             displayTestResultsSection: displayTestResultsSection  // simply display results section (show() or hide()
         }
 
@@ -1677,7 +1692,7 @@ $( document ).ready( function (){
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
                         <select id="phenotypeFilter" class="traitFilter form-control text-left"
-                                onchange="mpgSoftware.burdenTestShared.fillInSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val() );">
+                                onchange="mpgSoftware.burdenTestShared.populateSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val() );">
                         </select>
                     </div>
                 </div>
@@ -1691,7 +1706,7 @@ $( document ).ready( function (){
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
                         <select id="stratifyDesignation" class="stratifyFilter form-control text-left"
-                                onchange="mpgSoftware.burdenTestShared.stratifiedSampleAndCovariateSection ($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val() );">
+                                onchange="mpgSoftware.burdenTestShared.populateSampleAndCovariateSection ($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val() );">
                                     <option value="none">none</option>
                                     <option value="origin">ancestry</option>
                         </select>
