@@ -255,6 +255,7 @@ def retrieveSampleSummary (){
             default:traitFilterOptionId = traitFilterOptionId; break
         }
 
+        String stratum = params.stratum ?: ''
         JsonSlurper slurper = new JsonSlurper()
         JSONObject covariateJsonObject = slurper.parseText(params.covariates)
         JSONObject sampleJsonObject = slurper.parseText(params.samples)
@@ -266,6 +267,9 @@ def retrieveSampleSummary (){
         JSONObject result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantName, covariateJsonObject, sampleJsonObject, filtersJsonObject  );
 
         // send json response back
+        if (stratum){
+            result.put('stratum',stratum)
+        }
         render(status: 200, contentType: "application/json") {result}
     }
 

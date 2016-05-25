@@ -620,7 +620,6 @@ line.center{
                var oneFilter = [];
                _.forEach( filterObject, function(value, key){
                    if (typeof value !== 'undefined'){
-                       console.log('value='+value+'.');
                        if (key==="cat"){
                           oneFilter.push("\""+key+"\": \""+value+"\"");
                        }else{
@@ -634,7 +633,11 @@ line.center{
                        }
                     }
                 });
-               if ((typeof additionalKey !== 'undefined')  && (typeof additionalValue !== 'undefined')) {
+               if ((typeof additionalKey !== 'undefined') &&
+                   (additionalKey.length > 0) &&
+                   (typeof additionalValue !== 'undefined') &&
+                   (additionalValue !== 'strat1') &&
+                   (additionalValue.length > 0) ) {
                   filterStrings.push("{\"name\": \""+additionalKey+"\","+
 "\"parm\": \""+additionalValue+"\","+
 "\"cmp\": \"3\",\"cat\": \"1\"}");
@@ -658,17 +661,17 @@ line.center{
         */
         var refreshSampleDistribution = function (dataSetSel,callback,params){
 
-           var collectingFilterNames = function (){
-               var filterStrings = [];
-               _.forEach( extractAllFilterNames(), function(filterObject){
-                   var oneFilter = [];
-                   _.forEach( filterObject, function(value, key){
-                       oneFilter.push("\""+key+"\": \""+value+"\"");
-                   });
-                   filterStrings.push("{"+oneFilter.join(",\n")+"}");
-               } );
-               return "[\n" + filterStrings.join(",") + "\n]";
-            };
+//           var collectingFilterNames = function (){
+//               var filterStrings = [];
+//               _.forEach( extractAllFilterNames(), function(filterObject){
+//                   var oneFilter = [];
+//                   _.forEach( filterObject, function(value, key){
+//                       oneFilter.push("\""+key+"\": \""+value+"\"");
+//                   });
+//                   filterStrings.push("{"+oneFilter.join(",\n")+"}");
+//               } );
+//               return "[\n" + filterStrings.join(",") + "\n]";
+//            };
 
 
             var collectingPropertyNames = function (propertyName){
@@ -677,12 +680,14 @@ line.center{
                return "[\n" + propertyStrings.join(",") + "\n]";
             };
 
+            var strataName = '';
+            strataName=params.strataName;
 
             var domSelector = $(dataSetSel);
             var dataSetName = domSelector.val();
             var jsonDescr = "{\"dataset\":\""+dataSetName+"\"," +
                               "\"requestedData\":"+collectingPropertyNames(params.propertyName)+"," +
-                              "\"filters\":"+collectingFilterValues()+"}";
+                              "\"filters\":"+collectingFilterValues('origin',strataName)+"}";
 
             retrieveSampleDistribution  ( jsonDescr, callback, params  );
         }
@@ -714,7 +719,7 @@ line.center{
 
 
       var executeAssociationTest = function (filterValues,covariateValues,propertyName,stratum){
-           var currentStratum = stratum; // 'strat1' marks no distinct strata used
+
 
 
            var printFullResultsSection = function(stats,pValue,beta,oddsRatio){
@@ -763,7 +768,8 @@ line.center{
                        covariates: covariateValues,
                        samples: "{\"samples\":[]}",
                        filters: "{\"filters\":"+filterValues+"}",
-                       traitFilterSelectedOption: ""
+                       traitFilterSelectedOption: "",
+                       stratum: stratum
                 },
                 async: true,
                 success: function (data) {
@@ -788,13 +794,17 @@ line.center{
                             var beta = UTILS.realNumberFormatter(data.stats.beta);
                             var pValue = UTILS.realNumberFormatter(data.stats.pValue);
 
-
+                            var currentStratum = 'stratum'; // 'strat1' marks no distinct strata used
+                            if (typeof data.stratum !== 'undefined'){
+                               currentStratum = data.stratum;
+                            }
                             if (currentStratum==='strat1'){
                                 printFullResultsSection(data.stats,pValue,beta,oddsRatio);
                             } else {
                                 $('.strataResults').append('<li>'+currentStratum+' = '+pValue+'.</li>');
                             }
 
+                            displayTestResultsSection(true);
 
                        }
                     }
@@ -1053,7 +1063,9 @@ line.center{
                     var filterCheck = filterRowDom.find('.utilize');
                     var filterParm = filterRowDom.find('.filterParm');
                     var filterCmp = filterRowDom.find('.filterCmp');
-                    if (filterCheck.is(':checked')&&(filterName.indexOf("{{")==-1)&&(filterParm.val().length>0)){
+                    if (filterCheck.is(':checked')&&
+                        (filterName.indexOf("{{")===-1)&&
+                        (filterParm.val().length>0)){
                         var  dataSetMap = {"name":filterName,
                                            "parm":filterParm.val(),
                                            "cmp":filterCmp.val(),
@@ -1495,20 +1507,8 @@ line.center{
         * @param holderSection
         */
         var displaySampleDistribution = function (propertyName, holderSection, categorical) { // for categorical, 0== float, 1== string or int
-            if (backendFiltering){
-                refreshSampleDistribution( '#datasetFilter', utilizeDistributionInformationToCreatePlot, {propertyName:propertyName,holderSection:holderSection} );
-            } else {
-                var filteredVariants = dynamicallyFilterSamples();
-                var caller = $("#distPlotter_" +propertyName);
-                utilizeSampleInfoForDistributionPlots(filteredVariants,propertyName);
-                var kids = $(holderSection).children();
-                _.forEach(kids, function (d) {
-                    $(d).hide();
-                });
-                $('.activeDistPlotter').removeClass('activeDistPlotter');
-                $(caller).addClass('activeDistPlotter');
-                $('#bwp_' + propertyName).show();
-            }
+            var strataName = holderSection.substring(holderSection.indexOf('_')+1);
+            refreshSampleDistribution( '#datasetFilter', utilizeDistributionInformationToCreatePlot, {propertyName:propertyName,holderSection:holderSection,strataName:strataName} );
         };
 
 
@@ -1520,12 +1520,10 @@ line.center{
             immediateFilterAndRun:immediateFilterAndRun, // apply filters locally and then launch IAT
             //refreshSampleDistribution:refreshSampleDistribution, // get data to display distribution of property
            // runBurdenTest:runBurdenTest, // currently wrapped by a filter call
-           // stratifiedSampleAndCovariateSection: stratifiedSampleAndCovariateSection,
             retrieveMatchingDataSets:retrieveMatchingDataSets, // retrieve data set matching phenotype
             getStoredSampleData:getStoredSampleData, // retrieve stored sample data
             retrieveSampleMetadata:retrieveSampleMetadata, // if user changes data set reset phenotype (and potentially reload samples)
             dynamicallyFilterSamples:dynamicallyFilterSamples,  // filter all our samples (currently done locally)
-           // fillInSampleAndCovariateSection:fillInSampleAndCovariateSection, //Build the UI widgets and fill
             populateSampleAndCovariateSection:populateSampleAndCovariateSection,
             displayTestResultsSection: displayTestResultsSection  // simply display results section (show() or hide()
         }
@@ -1926,7 +1924,7 @@ $( document ).ready( function (){
                                     </div>
 
                                     <div class="col-sm-3">
-                                        <input id="inp{{name}}" type="text" class="filterParm form-control"
+                                        <input id="inp_{{stratum}}_{{name}}" type="text" class="filterParm form-control"
                                                data-type="propertiesInput"
                                                data-prop="{{stratum}}_{{name}}Value" data-translatedname="{{stratum}}_{{name}}"
                                                onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0)"
