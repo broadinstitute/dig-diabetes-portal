@@ -4,6 +4,7 @@ import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
+import org.broadinstitute.mpg.locuszoom.PhenotypeBean
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
 
@@ -327,6 +328,28 @@ class GeneController {
 
         // send json response back
         render(status: 200, contentType: "application/json") {jsonObject}
+    }
+
+    /**
+     * returns a list of phenotypes to select from for the LZ plot display
+     *
+     * @return
+     */
+    def getHailPhenotypeMap() {
+        // local variables
+        List<PhenotypeBean> beanList = new ArrayList<PhenotypeBean>();
+
+        // build the phenotype list
+        beanList.add(new PhenotypeBean(key: "T2D", name: "T2D", description: "Type 2 Diabetes", defaultSelected: true));
+        beanList.add(new PhenotypeBean(key: "BMI", name: "BMI", description: "Body Mass Index", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "WC", name: "WC", description: "WC", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "LDL", name: "LDL", description: "LDL Cholesterol", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "HDL", name: "HDL", description: "HDL Cholesterol", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "TC", name: "TC", description: "TC", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "TG", name: "TG", description: "TG", defaultSelected: false));
+
+        // return
+        [beanList: beanList]
     }
 
     /**
