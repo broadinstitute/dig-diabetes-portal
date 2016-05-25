@@ -146,7 +146,7 @@ class WidgetService {
     "passback": "123abc",
     "entity": "variant",
     "page_number": 0,
-    "limit": 2000,
+    "limit": 18000,
     "count": false,
     "distribution": ${(distributionRequested)?'true':'false'},
     "bin_number": 24,

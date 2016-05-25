@@ -301,11 +301,15 @@ line.center{
                     var jsonDescr = "{\"dataset\":\""+data.dataset+"\"," +
                                       "\"requestedData\":["+filtersSpecs.join(',')+"]," +
                                       "\"filters\":[]}";
-                    retrieveSampleInformation  ( jsonDescr, function(){
+//                    retrieveSampleInformation  ( jsonDescr, function(){
+//                             mpgSoftware.burdenTestShared.fillInSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val());
+//                             displayTestResultsSection(false);
+//                             $('.caatSpinner').hide();
+//                         } );
                              mpgSoftware.burdenTestShared.fillInSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val());
                              displayTestResultsSection(false);
                              $('.caatSpinner').hide();
-                         } );
+
                 },
                 error: function (jqXHR, exception) {
                     loading.hide();
@@ -422,7 +426,6 @@ line.center{
         */
         var fillInSampleAndCovariateSection = function (dataSetId, phenotype, stratum) {
             var data = getStoredSampleMetadata();
-            var sampleData = getStoredSampleData();
             var stratumName = 'strat1';
 
             var optionsPerFilter = generateOptionsPerFilter() ;
@@ -447,8 +450,21 @@ line.center{
                                                                            generateCovariateRenderData(data.covariates,phenotype,stratumName),
                                                                            {covariateTemplate:$('#covariateTemplate')[0].innerHTML}));
 
-                    // display the results section
-                    $("#displayResultsLocation").empty().append(Mustache.render( $('#displayResultsTemplate')[0].innerHTML,{stratum:stratumName}));
+                        var renderRunData = {
+                            strataProperty:"origin",
+                            stratum:stratumName,
+                            singleRunButtonDisplay: function(){
+                                     var singleRunButton = $('#singleRunButton');
+                                     if (singleRunButton.text().length===0) {
+                                        return ('<button name="singlebutton" style="height: 80px; z-index: 10" id="singleRunButton" '+
+                                                       'class="btn btn-primary btn-lg burden-test-btn" '+
+                                                       'onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun()">Run</button>');
+                                     } else {
+                                        return "";
+                                     }
+                                }
+                        };
+                    $("#displayResultsLocation").empty().append(Mustache.render( $('#displayResultsTemplate')[0].innerHTML,renderRunData));
 
 //                    $("#sampleRow").show();
                     $('.sampleNumberReporter').show();
@@ -493,16 +509,17 @@ line.center{
             if ( ( data !==  null ) &&
                  ( typeof data !== 'undefined') ){
 
-                    var renderData = {strataProperty:"origin",
-                    strataNames:[],
-                    strataContent:[],
-                    defaultDisplay: function(count){
-                             if (this.count==0) {
-                                return " active";
-                             } else {
-                                return "";
-                             }
-                        }
+                    var renderData = {
+                        strataProperty:"origin",
+                        strataNames:[],
+                        strataContent:[],
+                        defaultDisplay: function(count){
+                                 if (this.count==0) {
+                                    return " active";
+                                 } else {
+                                    return "";
+                                 }
+                            }
                     };
                     _.forEach(allStrata,function(stratum){
                        renderData.strataNames.push({name:stratum,trans:stratum,count:renderData.strataNames.length});
@@ -532,7 +549,22 @@ line.center{
                                                                                {covariateTemplate:$('#covariateTemplate')[0].innerHTML}));
 
                         // display the results section
-                        $("#displayResultsLocation_"+stratumName).empty().append(Mustache.render( $('#displayResultsTemplate')[0].innerHTML,{stratum:stratumName}));
+                        var renderRunData = {
+                            strataProperty:"origin",
+                            stratum:stratumName,
+                            singleRunButtonDisplay: function(){
+                                     var singleRunButton = $('#singleRunButton');
+                                     if (singleRunButton.text().length===0) {
+                                        return ('<button name="singlebutton" style="height: 80px; z-index: 10" id="singleRunButton" '+
+                                                       'class="btn btn-primary btn-lg burden-test-btn" '+
+                                                       'onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun()">Run</button>');
+                                     } else {
+                                        return "";
+                                     }
+                                }
+                        };
+
+                        //$("#displayResultsLocation_"+stratumName).empty().append(Mustache.render( $('#displayResultsTemplate')[0].innerHTML,renderRunData));
 
                         $('.sampleNumberReporter').show();
 
@@ -550,7 +582,7 @@ line.center{
                           utilizeSampleInfoForDistributionPlots(sampleData.metaData.variants,phenotype);
                        }
 
-                       displayTestResultsSection(false);
+                       //displayTestResultsSection(false);
 
                     });
 
@@ -569,9 +601,9 @@ line.center{
         *   pull all of the filters out of the Dom and put them into a JSON string suitable for transmission to the server
         *
         */
-        var collectingFilterValues = function (){
+        var collectingFilterValues = function (additionalKey,additionalValue){
            var filterStrings = [];
-           _.forEach( extractFilters(), function(filterObject){
+           _.forEach( extractFilters(additionalValue), function(filterObject){
                var oneFilter = [];
                _.forEach( filterObject, function(value, key){
                    if (typeof value !== 'undefined'){
@@ -589,6 +621,11 @@ line.center{
                        }
                     }
                 });
+               if ((typeof additionalKey !== 'undefined')  && (typeof additionalValue !== 'undefined')) {
+                  filterStrings.push("{\"name\": \""+additionalKey+"\","+
+"\"parm\": \""+additionalValue+"\","+
+"\"cmp\": \"3\",\"cat\": \"1\"}");
+               }
                filterStrings.push("{"+oneFilter.join(",\n")+"}");
            } );
            return "[\n" + filterStrings.join(",") + "\n]";
@@ -642,16 +679,8 @@ line.center{
         * filter our samples and then launch the IAT test
         */
         var immediateFilterAndRun = function (){
-            if (backendFiltering){
-                runBurdenTest([""]);
-            } else {
-                var filteredSamples = generateFilterSamples();
-                var filteredSamplesAsStrings = _.map(filteredSamples,function(d){
-                   return('"'+d+'"');
-                });
-                runBurdenTest(filteredSamplesAsStrings);
-            }
-        };
+             runBurdenTest();
+         };
 
 
 
@@ -670,58 +699,58 @@ line.center{
             }
          }
 
-        /**
-         *  run the burden test, then display the results.  We will need to start by extracting
-         *  the data fields we need from the DOM.
-         */
-        var runBurdenTest = function (samplesWeWant){
+
+      var executeAssociationTest = function (filterValues,covariateValues,propertyName,stratum){
+           var currentStratum = stratum; // 'strat1' marks no distinct strata used
+
+
+           var printFullResultsSection = function(stats,pValue,beta,oddsRatio){
+                var isDichotomousTrait = false;
+                if ((typeof stats.numCases === 'undefined') ||
+                    (typeof stats.numControls === 'undefined') ||
+                    (typeof stats.numCaseCarriers === 'undefined') ||
+                    (typeof stats.numControlCarriers === 'undefined')) {
+                   isDichotomousTrait = false;
+                } else {
+                   isDichotomousTrait = true;
+                }
+
+
+                var ciDisplay = '';
+                if (!((typeof stats.ciLower === 'undefined') ||
+                    (typeof stats.ciUpper === 'undefined') ||
+                    (typeof stats.ciLevel === 'undefined'))) {
+                   var ciUpper = stats.ciUpper;
+                   var ciLower = stats.ciLower;
+                   var ciLevel = stats.ciLevel;
+
+                   if (isDichotomousTrait) {
+                        ciLower = UTILS.realNumberFormatter(Math.exp(stats.ciLower));
+                        ciUpper = UTILS.realNumberFormatter(Math.exp(stats.ciUpper));
+                   } else {
+                        ciLower = UTILS.realNumberFormatter(stats.ciLower);
+                        ciUpper = UTILS.realNumberFormatter(stats.ciUpper);
+                   }
+                   ciDisplay = (ciLevel * 100) + '% CI: (' + ciLower + ' to ' + ciUpper + ')';
+                }
+
+                fillInResultsSection(stratum,'p-Value = '+ pValue,
+                    (isDichotomousTrait ? 'odds ratio = ' + oddsRatio : 'beta = ' + beta),
+                    ciDisplay, isDichotomousTrait);
+
+           }
 
 
 
-
-            var collectingCovariateValues = function (){
-               var pcCovariates = [];
-               var selectedCovariates = $('.covariate:checked');
-               _.forEach(selectedCovariates, function(d){
-                  var covariateDom = $(d);
-                  var covId = covariateDom.attr('id');
-                  var covariateName = covId.substr("covariate_".length);
-                  if (covariateName.indexOf("{{")===-1){
-                     pcCovariates.push('"'+covariateName+'"');
-                  }
-               });
-               return "{\"covariates\":[\n" + pcCovariates.join(",") + "\n]}";
-            }
-
-            var fillInResultsSection = function (pValue, oddsRatio, stdError, isDichotomousTrait){
-
-
-
-                // populate the data
-                $('.pValue').text(pValue);
-                $('.orValue').text(oddsRatio);
-                $('.ciValue').text(stdError);
-
-                displayTestResultsSection(true);
-
-                $('.burden-test-some-results-large').hide();
-                $('.burden-test-some-results').show();
-                $('.burden-test-result').show();
-
-            };
-
-            $('#rSpinner').show();
-            var traitFilterSelectedOption = $('#phenotypeFilter').val();
-
-            $.ajax({
+           $.ajax({
                 cache: false,
                 type: "post",
                 url: "${createLink(controller: 'variantInfo', action: 'burdenTestAjax')}",
                 data: {variantName: '<%=variantIdentifier%>',
-                       covariates: collectingCovariateValues(),
-                       samples: "{\"samples\":[\n" + samplesWeWant.join(",") + "\n]}",
-                       filters: "{\"filters\":"+collectingFilterValues()+"}",
-                       traitFilterSelectedOption: traitFilterSelectedOption
+                       covariates: covariateValues,
+                       samples: "{\"samples\":[]}",
+                       filters: "{\"filters\":"+filterValues+"}",
+                       traitFilterSelectedOption: ""
                 },
                 async: true,
                 success: function (data) {
@@ -741,72 +770,18 @@ line.center{
                         } else {
                             $('.iatErrorText').text('');
                             $('.iatErrorFailure').hide();
-                            var isDichotomousTrait = false;
-                            if ((typeof data.stats.numCases === 'undefined') ||
-                                (typeof data.stats.numControls === 'undefined') ||
-                                (typeof data.stats.numCaseCarriers === 'undefined') ||
-                                (typeof data.stats.numControlCarriers === 'undefined')) {
-                               isDichotomousTrait = false;
-                            } else {
-                               isDichotomousTrait = true;
-                            }
 
-                            //var oddsRatio = data.stats.oddsRatio; // must remove oddsRatio ref due to API change
                             var oddsRatio = UTILS.realNumberFormatter(Math.exp(data.stats.beta));
                             var beta = UTILS.realNumberFormatter(data.stats.beta);
-                            var stdError = UTILS.realNumberFormatter(data.stats.stdError);
                             var pValue = UTILS.realNumberFormatter(data.stats.pValue);
-                            var numberVariants = data.stats.numInputVariants;
 
-                            var ciDisplay = '';
-                            if (!((typeof data.stats.ciLower === 'undefined') ||
-                                (typeof data.stats.ciUpper === 'undefined') ||
-                                (typeof data.stats.ciLevel === 'undefined'))) {
-                               var ciUpper = data.stats.ciUpper;
-                               var ciLower = data.stats.ciLower;
-                               var ciLevel = data.stats.ciLevel;
 
-                               if (isDichotomousTrait) {
-                                    ciLower = UTILS.realNumberFormatter(Math.exp(data.stats.ciLower));
-                                    ciUpper = UTILS.realNumberFormatter(Math.exp(data.stats.ciUpper));
-                               } else {
-                                    ciLower = UTILS.realNumberFormatter(data.stats.ciLower);
-                                    ciUpper = UTILS.realNumberFormatter(data.stats.ciUpper);
-                               }
-                               ciDisplay = (ciLevel * 100) + '% CI: (' + ciLower + ' to ' + ciUpper + ')';
-                            }
-
-                            fillInResultsSection('p-Value = '+ pValue,
-                                (isDichotomousTrait ? 'odds ratio = ' + oddsRatio : 'beta = ' + beta),
-                                ciDisplay, isDichotomousTrait);
-
-                            // now see if we fill the hypothesis section
-                            if (!isDichotomousTrait) {
-                             console.log('burdenTestAjax returned undefined for case/control number, so not displaying hypothesis graphic.');
-
+                            if (currentStratum==='strat1'){
+                                printFullResultsSection(data.stats,pValue,beta,oddsRatio);
                             } else {
-                               // fill in the hypothesis graphic
-                               var caseCount = data.stats.numCases;
-                               var controlCount = data.stats.numControls;
-                               var caseCarrierCount = data.stats.numCaseCarriers;
-                               var controlCarrierCount = data.stats.numControlCarriers;
-
-                               // first clear any existing bar chart
-                               if ((typeof mpgSoftware.burdenInfo.retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter() !== 'undefined') &&
-                                    (typeof mpgSoftware.burdenInfo.retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter().launch !== 'undefined')) {
-                                    mpgSoftware.burdenInfo.retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter().removeBarchart();
-                               }
-
-                               // populate the bar legend
-                               $("#traitSpan").text('T2D');
-                               $("#variantNumberSpan").text(numberVariants);
-
-                               /// fill up the bar chart
-                               mpgSoftware.burdenInfo.fillBurdenBiologicalHypothesisTesting(caseCarrierCount, caseCount, controlCarrierCount, controlCount, 'T2D');
-
-                               // launch
-                               mpgSoftware.burdenInfo.retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter().launch();
+                                $('.strataResults').empty().append('<li>'+currentStratum+' = '+pValue+'.</li>');
                             }
+
 
                        }
                     }
@@ -817,6 +792,66 @@ line.center{
                     core.errorReporter(jqXHR, exception);
                 }
             });
+      }
+
+
+
+            var fillInResultsSection = function (stratum,pValue, oddsRatio, stdError, isDichotomousTrait){
+
+
+
+                // populate the data
+                $('.pValue_'+stratum).text(pValue);
+                $('.orValue_'+stratum).text(oddsRatio);
+                $('.ciValue_'+stratum).text(stdError);
+
+                displayTestResultsSection(true);
+
+                $('.burden-test-some-results-large_'+stratum).hide();
+                $('.burden-test-some-results '+stratum).show();
+                $('.burden-test-result '+stratum).show();
+
+            };
+
+
+
+
+
+        /**
+         *  run the burden test, then display the results.  We will need to start by extracting
+         *  the data fields we need from the DOM.
+         */
+        var runBurdenTest = function (){
+
+            var collectingCovariateValues = function (){
+               var pcCovariates = [];
+               var selectedCovariates = $('.covariate:checked');
+               _.forEach(selectedCovariates, function(d){
+                  var covariateDom = $(d);
+                  var covId = covariateDom.attr('id');
+                  var covariateName = covId.substr("covariate_".length);
+                  if (covariateName.indexOf("{{")===-1){
+                     pcCovariates.push('"'+covariateName+'"');
+                  }
+               });
+               return "{\"covariates\":[\n" + pcCovariates.join(",") + "\n]}";
+            }
+
+
+            $('#rSpinner').show();
+            var traitFilterSelectedOption = $('#phenotypeFilter').val();
+            var stratsTabs  = $('#stratsTabs li a');
+            if (stratsTabs.length===0){
+               executeAssociationTest(collectingFilterValues(),collectingCovariateValues(),'none','strat1');
+            } else {
+                var propertyDesignationDom = $('div.stratsTabs_property');
+                var propertyName = propertyDesignationDom.attr("id");
+                _.forEach(stratsTabs,function (stratum){
+                    var stratumName = $(stratum).text();
+                    executeAssociationTest(collectingFilterValues(propertyName,stratumName),collectingCovariateValues(),propertyName,stratumName);
+                });
+            }
+
         }; // runBurdenTest
 
 
@@ -989,8 +1024,12 @@ line.center{
 
 
 
-        function extractFilters(){
-            var allFilters =  $('.realValuedFilter');
+        function extractFilters(stratum){
+            var stratumName = "";
+            if (typeof stratum !== 'undefined') {
+               stratumName = '.'+stratum;
+            }
+            var allFilters =  $('.realValuedFilter'+stratumName);
             var requestedFilters = [];
             for  ( var i = 0 ; i < allFilters.length ; i++ )   {
                 var filterRowDom = $(allFilters[i]);
@@ -1010,7 +1049,7 @@ line.center{
                 }
 
             }
-            allFilters =  $('.categoricalFilter');
+            allFilters =  $('.categoricalFilter'+stratumName);
             for  ( var i = 0 ; i < allFilters.length ; i++ )   {
                 var filterRowDom = $(allFilters[i]);
                 var  filterId = $(allFilters[i]).attr('id');
@@ -1548,22 +1587,31 @@ $( document ).ready( function (){
         <div class="col-sm-8 col-xs-12">
             <div class="row burden-test-specific-results burden-test-result">
 
-                <div class="col-md-8 col-sm-6">
+                <div class="col-md-2 col-sm-12">
                     <div>
                         <div class="vertical-center">
-                            <p class="standardFont">Results of your analysis:
+                            <p class="standardFont">Results:
                             </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-sm-6">
+                    <div>
+                        <div class="vertical-center">
+                            <ul class="strataResults">
+                            </ul>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-md-4 col-sm-3">
                     <div>
-                        <div class="pValue"></div>
+                        <div class="pValue pValue_{{stratum}}"></div>
 
-                        <div class="orValue"></div>
+                        <div class="orValue orValue_{{stratum}}"></div>
 
-                        <div class="ciValue"></div>
+                        <div class="ciValue ciValue_{{stratum}}"></div>
                     </div>
                 </div>
             </div>
@@ -1574,11 +1622,11 @@ $( document ).ready( function (){
 
                 <div class="col-md-4 col-sm-6">
                     <div class="vertical-center">
-                        <div class="pValue"></div>
+                        <div class="pValue pValue_{{stratum}}"></div>
 
-                        <div class="orValue"></div>
+                        <div class="orValue orValue_{{stratum}}"></div>
 
-                        <div class="ciValue"></div>
+                        <div class="ciValue ciValue_{{stratum}}"></div>
                     </div>
                 </div>
 
@@ -1587,11 +1635,8 @@ $( document ).ready( function (){
             </div>
         </div>
 
-        <div class="col-sm-4 col-xs-12 vcenter burden-test-btn-wrapper ">
-            <button name="singlebutton" style="height: 80px"
-                    class="btn btn-primary btn-lg burden-test-btn"
-
-                    onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun()">Run</button>
+        <div class="col-sm-4 col-xs-12 vcenter burden-test-btn-wrapper">
+            {{{singleRunButtonDisplay}}}
         </div>
 
     </div>
@@ -1646,7 +1691,8 @@ $( document ).ready( function (){
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
                         <select id="stratifyDesignation" class="stratifyFilter form-control text-left"
-                                onclick="mpgSoftware.burdenTestShared.stratifiedSampleAndCovariateSection ($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val() );">
+                                onchange="mpgSoftware.burdenTestShared.stratifiedSampleAndCovariateSection ($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val() );">
+                                    <option value="none">none</option>
                                     <option value="origin">ancestry</option>
                         </select>
                     </div>
@@ -1661,10 +1707,11 @@ $( document ).ready( function (){
 </script>
 
 <script id="strataTemplate"  type="x-tmpl-mustache">
-<ul class="nav nav-tabs" id="myTab">
+<ul class="nav nav-tabs" id="stratsTabs">
     {{ #strataNames }}
        <li class="{{defaultDisplay}}"><a data-target="#{{name}}" data-toggle="tab">{{trans}}</a></li>
     {{ /strataNames }}
+    <div class="stratsTabs_property" id="{{strataProperty}}" style="display: none"></div>
 </ul>
 
 <div class="tab-content">
@@ -1676,7 +1723,7 @@ $( document ).ready( function (){
                             <div id="chooseFiltersLocation_{{name}}"></div>
                             <div id="chooseCovariatesLocation_{{name}}"></div>
                         </div>
-                        <div id="displayResultsLocation_{{name}}"></div>
+
                     </div>
 
      </div>
@@ -1844,7 +1891,7 @@ $( document ).ready( function (){
 
 
                                 {{ #realValuedFilters }}
-                                <div class="row realValuedFilter considerFilter" id="filter_{{stratum}}_{{name}}">
+                                <div class="row realValuedFilter {{stratum}} considerFilter" id="filter_{{stratum}}_{{name}}">
                                     <div class="col-sm-1">
                                         <input class="utilize" id="use{{name}}" type="checkbox" name="use_{{stratum}}_{{name}}"
                                                value="{{stratum}}_{{name}}" checked/></td>
@@ -1883,7 +1930,7 @@ $( document ).ready( function (){
 
 <script id="filterCategoricalTemplate" type="x-tmpl-mustache">
                                 {{ #categoricalFilters }}
-                                <div class="row categoricalFilter considerFilter" id="filter_{{stratum}}_{{name}}">
+                                <div class="row categoricalFilter considerFilter {{stratum}}" id="filter_{{stratum}}_{{name}}">
                                     <div class="col-sm-1">
                                         <input class="utilize" id="use_{{stratum}}_{{name}}" type="checkbox" name="use_{{stratum}}_{{name}}"
                                                value="{{stratum}}_{{name}}" checked/></td>
