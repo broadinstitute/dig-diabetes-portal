@@ -534,18 +534,29 @@ line.center{
                                  }
                             }
                     };
+                     var renderFiltersTemplateData = {
+                        strataProperty:"origin",
+                        strataNames:[],
+                        strataContent:[]
+                    };
                     _.forEach(allStrata,function(stratum){
-                       renderData.strataNames.push({name:stratum,trans:stratum,count:renderData.strataNames.length});
-                       renderData.strataContent.push({name:stratum,trans:stratum,count:renderData.strataContent.length});
+                       renderData.strataNames.push({name:stratum,trans:stratum,count:renderData.strataNames.length}); // to get rid of
+                       renderData.strataContent.push({name:stratum,trans:stratum,count:renderData.strataContent.length});  // to get rid of
+                       renderFiltersTemplateData.strataNames.push({name:stratum,trans:stratum,count:renderData.strataNames.length});
+                       renderFiltersTemplateData.strataContent.push({name:stratum,trans:stratum,count:renderData.strataContent.length});
                     });
 
-                    $("#accordion_iat").empty();
+                    $("#chooseDataSetAndPhenotypeLocation").empty();
+                    $("#chooseFiltersLocation").empty();
+                    $("#chooseCovariatesLocation").empty();
                     $(".stratified-user-interaction").empty().append(Mustache.render( $('#strataTemplate')[0].innerHTML,renderData));
+
+                    $("#chooseFiltersLocation").empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML,renderFiltersTemplateData));
 
                     _.forEach(allStrata, function (stratumName){
 
                        // set up the section where the filters will go
-                        $("#chooseFiltersLocation_"+stratumName).empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML,{stratum:stratumName}));
+                       // $("#chooseFiltersLocation_"+stratumName).empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML,{stratum:stratumName}));
 
                         // put those filters in place
                         $(".filterHolder_"+stratumName).empty().append(Mustache.render( $('#allFiltersTemplate')[0].innerHTML,
@@ -1720,27 +1731,10 @@ $( document ).ready( function (){
 </script>
 
 <script id="strataTemplate"  type="x-tmpl-mustache">
-<ul class="nav nav-tabs" id="stratsTabs">
-    {{ #strataNames }}
-       <li class="{{defaultDisplay}}"><a data-target="#{{name}}" data-toggle="tab">{{trans}}</a></li>
-    {{ /strataNames }}
-    <div class="stratsTabs_property" id="{{strataProperty}}" style="display: none"></div>
-</ul>
+
 
 <div class="tab-content">
-  {{ #strataContent }}
-     <div class="tab-pane {{defaultDisplay}}" id="{{name}}">
-                   <div class="user-interaction user-interaction-{{name}}">
 
-                        <div class="panel-group" id="accordion_iat_{{name}}" style="margin-bottom: 10px">%{--start accordion --}%
-                            <div id="chooseFiltersLocation_{{name}}"></div>
-                            <div id="chooseCovariatesLocation_{{name}}"></div>
-                        </div>
-
-                    </div>
-
-     </div>
-  {{ /strataContent }}
 
 </div>
 </script>
@@ -1773,6 +1767,17 @@ $( document ).ready( function (){
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-sm-12 col-xs-12">
+                            <ul class="nav nav-tabs" id="stratsTabs">
+                                {{ #strataNames }}
+                                   <li class="{{defaultDisplay}}"><a data-target="#{{name}}" data-toggle="tab">{{trans}}</a></li>
+                                {{ /strataNames }}
+                                <div class="stratsTabs_property" id="{{strataProperty}}" style="display: none"></div>
+                            </ul>
+                        </div>
+                    </div>
+
                     <hr width="25%"/>
 
                     <div class="row">
@@ -1794,7 +1799,19 @@ $( document ).ready( function (){
                                             <div>
                                                 <div class="row">
 
-                                                    <div class="filterHolder filterHolder_{{stratum}}"></div>
+                                                  {{ #strataContent }}
+                                                     <div class="tab-pane {{defaultDisplay}}" id="{{name}}">
+                                                                   <div class="user-interaction user-interaction-{{name}}">
+
+                                                                         <div class="filterHolder filterHolder_{{name}}"></div>
+
+                                                                    </div>
+
+                                                     </div>
+                                                  {{ /strataContent }}
+
+
+
 
 
                                                 </div>
