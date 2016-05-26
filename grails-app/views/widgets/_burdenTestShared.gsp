@@ -306,7 +306,7 @@ line.center{
                     var jsonDescr = "{\"dataset\":\""+data.dataset+"\"," +
                                       "\"requestedData\":["+filtersSpecs.join(',')+"]," +
                                       "\"filters\":[]}";
-                             populateSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val());
+                             populateSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val());
                              displayTestResultsSection(false);
                              $('.caatSpinner').hide();
 
@@ -419,6 +419,7 @@ line.center{
 
 
       var populateSampleAndCovariateSection = function (dataSetId, phenotype, stratificationProperty) {
+
           if ((typeof stratificationProperty === 'undefined')  ||
                (stratificationProperty === 'none')) {
                   $('#stratsTabs').empty();
@@ -447,8 +448,15 @@ line.center{
             if ( ( data !==  null ) &&
                  ( typeof data !== 'undefined') ){
 
+                    var renderFiltersTemplateData = {
+                        strataProperty:"origin",
+                        strataNames:[{name:'strat1',trans:'strat1',count:0}],
+                        strataContent:[{name:'strat1',trans:'strat1',count:0}],
+                        defaultDisplay: ' active'
+                    };
+
                     // set up the section where the filters will go
-                    $("#chooseFiltersLocation").empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML,{stratum:stratumName}));
+                    $("#chooseFiltersLocation").empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML,renderFiltersTemplateData));
 
                     // put those filters in place
                     $(".filterHolder_"+stratumName).empty().append(Mustache.render( $('#allFiltersTemplate')[0].innerHTML,
@@ -523,7 +531,7 @@ line.center{
                  ( typeof data !== 'undefined') ){
 
                     var renderData = {
-                        strataProperty:"origin",
+                        strataProperty:strataProperty,
                         strataNames:[],
                         strataContent:[],
                         defaultDisplay: function(count){
@@ -535,7 +543,7 @@ line.center{
                             }
                     };
                      var renderFiltersTemplateData = {
-                        strataProperty:"origin",
+                        strataProperty:strataProperty,
                         strataNames:[],
                         strataContent:[]
                     };
@@ -546,7 +554,7 @@ line.center{
                        renderFiltersTemplateData.strataContent.push({name:stratum,trans:stratum,count:renderData.strataContent.length});
                     });
 
-                    $("#chooseDataSetAndPhenotypeLocation").empty();
+                   // $("#chooseDataSetAndPhenotypeLocation").empty();
                     $("#chooseFiltersLocation").empty();
                     $("#chooseCovariatesLocation").empty();
                     $(".stratified-user-interaction").empty().append(Mustache.render( $('#strataTemplate')[0].innerHTML,renderData));
@@ -1701,7 +1709,7 @@ $( document ).ready( function (){
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
                         <select id="phenotypeFilter" class="traitFilter form-control text-left"
-                                onchange="mpgSoftware.burdenTestShared.populateSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val() );">
+                                onchange="mpgSoftware.burdenTestShared.populateSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val() );">
                         </select>
                     </div>
                 </div>
@@ -1733,10 +1741,6 @@ $( document ).ready( function (){
 <script id="strataTemplate"  type="x-tmpl-mustache">
 
 
-<div class="tab-content">
-
-
-</div>
 </script>
 
 
@@ -1745,12 +1749,12 @@ $( document ).ready( function (){
 
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#filterSamples_{{stratum}}"
-                       href="#filterSamples_{{stratum}}">Step 2: Select a subset of samples based on phenotypic criteria</a>
+                    <a data-toggle="collapse" data-parent="#filterSamples"
+                       href="#filterSamples">Step 2: Select a subset of samples based on phenotypic criteria</a>
                 </h4>
             </div>
 
-            <div id="filterSamples_{{stratum}}" class="panel-collapse collapse">
+            <div id="filterSamples" class="panel-collapse collapse">
                 <div class="panel-body  secBody">
 
                     <div class="row">
@@ -1779,64 +1783,60 @@ $( document ).ready( function (){
                     </div>
 
                     <hr width="25%"/>
+                    <div class="tab-content">
+                        {{ #strataContent }}
+                            <div class="tab-pane {{defaultDisplay}}" id="{{name}}">
+                                <div class="row">
+                                    <div class="col-sm-6 col-xs-12 vcenter" style="margin-top:0">
+                                        <div class="row secHeader" style="padding: 20px 0 0 0">
+                                            <div class="col-sm-6 col-xs-12 text-left"></div>
 
-                    <div class="row">
-                        <div class="col-sm-6 col-xs-12 vcenter" style="margin-top:0">
-                            <div class="row secHeader" style="padding: 20px 0 0 0">
-                                <div class="col-sm-6 col-xs-12 text-left"></div>
-
-                                <div class="col-sm-6 col-xs-12 text-right"><label
-                                        style="font-style: italic; font-size: 14px">Click arrows<br/> for distribution
-                                </label>
-                                </div>
-                            </div>
-
-                            <div class="row" style="padding: 10px 0 0 0">
-                                <div class="col-sm-12 col-xs-12 text-left">
-
-                                    <div style="direction: rtl; height: 300px; padding: 4px 0 0 10px; overflow-y: scroll;">
-                                        <div style="direction: ltr">
-                                            <div>
-                                                <div class="row">
-
-                                                  {{ #strataContent }}
-                                                     <div class="tab-pane {{defaultDisplay}}" id="{{name}}">
-                                                                   <div class="user-interaction user-interaction-{{name}}">
-
-                                                                         <div class="filterHolder filterHolder_{{name}}"></div>
-
-                                                                    </div>
-
-                                                     </div>
-                                                  {{ /strataContent }}
-
-
-
-
-
-                                                </div>
+                                            <div class="col-sm-6 col-xs-12 text-right"><label
+                                                    style="font-style: italic; font-size: 14px">Click arrows<br/> for distribution
+                                            </label>
                                             </div>
                                         </div>
+
+                                        <div class="row" style="padding: 10px 0 0 0">
+                                            <div class="col-sm-12 col-xs-12 text-left">
+
+                                                <div style="direction: rtl; height: 300px; padding: 4px 0 0 10px; overflow-y: scroll;">
+                                                    <div style="direction: ltr">
+                                                        <div>
+                                                            <div class="row">
+
+                                                               <div class="user-interaction user-interaction-{{name}}">
+
+                                                                     <div class="filterHolder filterHolder_{{name}}"></div>
+
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-6 col-xs-12 vcenter" style="padding-left: 0; margin-top: 0">
+                                        <div class="sampleNumberReporter text-center">
+                                            <div>Number of samples included in analysis:<span class="numberOfSamples"></span></div>
+
+                                            <div style="display:none">number of samples for <span
+                                                    class="phenotypeSpecifier"></span>: <span
+                                                    class="numberOfPhenotypeSpecificSamples"></span></div>
+                                        </div>
+
+                                        <div class="boxWhiskerPlot boxWhiskerPlot_{{name}}"></div>
+
                                     </div>
 
                                 </div>
                             </div>
-
-                        </div>
-
-                        <div class="col-sm-6 col-xs-12 vcenter" style="padding-left: 0; margin-top: 0">
-                            <div class="sampleNumberReporter text-center">
-                                <div>Number of samples included in analysis:<span class="numberOfSamples"></span></div>
-
-                                <div style="display:none">number of samples for <span
-                                        class="phenotypeSpecifier"></span>: <span
-                                        class="numberOfPhenotypeSpecificSamples"></span></div>
-                            </div>
-
-                            <div class="boxWhiskerPlot boxWhiskerPlot_{{stratum}}"></div>
-
-                        </div>
-
+                        {{ /strataContent }}
                     </div>
                 </div>
             </div>
