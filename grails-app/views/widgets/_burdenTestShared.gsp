@@ -465,7 +465,7 @@ line.center{
                                               filterCategoricalTemplate:$('#filterCategoricalTemplate')[0].innerHTML }));
 
                     // set up the section where the covariates will go
-                    $("#chooseCovariatesLocation").empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML,{stratum:stratumName}));
+                    $("#chooseCovariatesLocation").empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML,renderFiltersTemplateData));
 
                     // put those covariates into place
                     $(".covariateHolder_"+stratumName).empty().append(Mustache.render( $('#allCovariateSpecifierTemplate')[0].innerHTML,
@@ -561,6 +561,9 @@ line.center{
 
                     $("#chooseFiltersLocation").empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML,renderFiltersTemplateData));
 
+                   // set up the section where the covariates will go
+                    $("#chooseCovariatesLocation_"+stratumName).empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML,renderFiltersTemplateData));
+
                     _.forEach(allStrata, function (stratumName){
 
                        // set up the section where the filters will go
@@ -572,8 +575,6 @@ line.center{
                                                 { filterFloatTemplate:$('#filterFloatTemplate')[0].innerHTML,
                                                   filterCategoricalTemplate:$('#filterCategoricalTemplate')[0].innerHTML }));
 
-                        // set up the section where the covariates will go
-                        $("#chooseCovariatesLocation_"+stratumName).empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML,{stratum:stratumName}));
 
                         // put those covariates into place
                         $(".covariateHolder_"+stratumName).empty().append(Mustache.render( $('#allCovariateSpecifierTemplate')[0].innerHTML,
@@ -1782,7 +1783,6 @@ $( document ).ready( function (){
                         </div>
                     </div>
 
-                    <hr width="25%"/>
                     <div class="tab-content">
                         {{ #strataContent }}
                             <div class="tab-pane {{defaultDisplay}}" id="{{name}}">
@@ -1864,6 +1864,20 @@ $( document ).ready( function (){
                     </div>
 
                     <div class="row">
+                        <div class="col-sm-12 col-xs-12">
+                            <ul class="nav nav-tabs" id="stratsTabs">
+                                {{ #strataNames }}
+                                   <li class="{{defaultDisplay}}"><a data-target="#cov_{{name}}" data-toggle="tab">{{trans}}</a></li>
+                                {{ /strataNames }}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="tab-content">
+                        {{ #strataContent }}
+                            <div class="tab-pane {{defaultDisplay}}" id="{{name}}">
+
+                    <div class="row">
                         <div class="col-sm-9 col-xs-12 vcenter">
                             <div class="covariates"
                                  style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px;overflow-y: scroll;">
@@ -1882,6 +1896,9 @@ $( document ).ready( function (){
 
                         <div class="col-sm-3 col-xs-12">
                         </div>
+                    </div>
+                            </div>
+                        {{ /strataContent }}
                     </div>
 
                 </div>
