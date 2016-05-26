@@ -452,7 +452,8 @@ line.center{
                         strataProperty:"origin",
                         strataNames:[{name:'strat1',trans:'strat1',count:0}],
                         strataContent:[{name:'strat1',trans:'strat1',count:0}],
-                        defaultDisplay: ' active'
+                        defaultDisplay: ' active',
+                        tabDisplay: 'display: none'
                     };
 
                     // set up the section where the filters will go
@@ -522,10 +523,7 @@ line.center{
         var stratifiedSampleAndCovariateSection = function (dataSetId, phenotype, strataProperty) {
             var data = getStoredSampleMetadata();
             var allStrata = ['East-Asian','European','Hispanic','South-Asian'];
-           // var allStrata = ['East-Asian'];
-            var stratumName = 'strat1';
 
-          //  var optionsPerFilter = generateOptionsPerFilter(sampleData.metaData.variants) ;
             var optionsPerFilter = generateOptionsPerFilter() ;
             if ( ( data !==  null ) &&
                  ( typeof data !== 'undefined') ){
@@ -540,7 +538,8 @@ line.center{
                                  } else {
                                     return "";
                                  }
-                            }
+                            },
+                        tabDisplay:""
                     };
                      var renderFiltersTemplateData = {
                         strataProperty:strataProperty,
@@ -559,17 +558,15 @@ line.center{
                     $("#chooseCovariatesLocation").empty();
                     $(".stratified-user-interaction").empty().append(Mustache.render( $('#strataTemplate')[0].innerHTML,renderData));
 
+                    // set up the section where the filters will go
                     $("#chooseFiltersLocation").empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML,renderFiltersTemplateData));
 
                    // set up the section where the covariates will go
-                    $("#chooseCovariatesLocation_"+stratumName).empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML,renderFiltersTemplateData));
+                    $("#chooseCovariatesLocation").empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML,renderFiltersTemplateData));
 
                     _.forEach(allStrata, function (stratumName){
 
-                       // set up the section where the filters will go
-                       // $("#chooseFiltersLocation_"+stratumName).empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML,{stratum:stratumName}));
-
-                        // put those filters in place
+                         // put those filters in place
                         $(".filterHolder_"+stratumName).empty().append(Mustache.render( $('#allFiltersTemplate')[0].innerHTML,
                                                 generateFilterRenderData(data.filters,optionsPerFilter,stratumName),
                                                 { filterFloatTemplate:$('#filterFloatTemplate')[0].innerHTML,
@@ -597,9 +594,7 @@ line.center{
                                 }
                         };
 
-                        //$("#displayResultsLocation_"+stratumName).empty().append(Mustache.render( $('#displayResultsTemplate')[0].innerHTML,renderRunData));
-
-                        $('.sampleNumberReporter').show();
+                         $('.sampleNumberReporter').show();
 
                       // filters should be in place now.  Attach events
                       _.forEach(data.filters,function(d){
@@ -866,9 +861,9 @@ line.center{
          */
         var runBurdenTest = function (){
 
-            var collectingCovariateValues = function (){
+            var collectingCovariateValues = function (propertyName,stratumName){
                var pcCovariates = [];
-               var selectedCovariates = $('.covariate:checked');
+               var selectedCovariates = $('#cov_'+stratumName+' .covariate:checked');
                _.forEach(selectedCovariates, function(d){
                   var covariateDom = $(d);
                   var covId = covariateDom.attr('id');
@@ -878,12 +873,12 @@ line.center{
                   }
                });
                return "{\"covariates\":[\n" + pcCovariates.join(",") + "\n]}";
-            }
+            };
 
 
             $('#rSpinner').show();
             var traitFilterSelectedOption = $('#phenotypeFilter').val();
-            var stratsTabs  = $('#stratsTabs li a');
+            var stratsTabs  = $('#stratsTabs li a.filterCohort');
             if (stratsTabs.length===0){
                executeAssociationTest(collectingFilterValues(),collectingCovariateValues(),'none','strat1');
             } else {
@@ -892,7 +887,7 @@ line.center{
                 $('.strataResults').empty(); // clear stata reporting section
                 _.forEach(stratsTabs,function (stratum){
                     var stratumName = $(stratum).text();
-                    executeAssociationTest(collectingFilterValues(propertyName,stratumName),collectingCovariateValues(),propertyName,stratumName);
+                    executeAssociationTest(collectingFilterValues(propertyName,stratumName),collectingCovariateValues(propertyName,stratumName),propertyName,stratumName);
                 });
             }
 
@@ -1772,11 +1767,11 @@ $( document ).ready( function (){
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row" style="{{tabDisplay}}">
                         <div class="col-sm-12 col-xs-12">
                             <ul class="nav nav-tabs" id="stratsTabs">
                                 {{ #strataNames }}
-                                   <li class="{{defaultDisplay}}"><a data-target="#{{name}}" data-toggle="tab">{{trans}}</a></li>
+                                   <li class="{{defaultDisplay}}"><a data-target="#{{name}}" data-toggle="tab" class="filterCohort">{{trans}}</a></li>
                                 {{ /strataNames }}
                                 <div class="stratsTabs_property" id="{{strataProperty}}" style="display: none"></div>
                             </ul>
@@ -1863,7 +1858,7 @@ $( document ).ready( function (){
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row"  style="{{tabDisplay}}">
                         <div class="col-sm-12 col-xs-12">
                             <ul class="nav nav-tabs" id="stratsTabs">
                                 {{ #strataNames }}
@@ -1875,24 +1870,24 @@ $( document ).ready( function (){
 
                     <div class="tab-content">
                         {{ #strataContent }}
-                            <div class="tab-pane {{defaultDisplay}}" id="{{name}}">
+                            <div class="tab-pane {{defaultDisplay}}" id="cov_{{name}}">
 
-                    <div class="row">
-                        <div class="col-sm-9 col-xs-12 vcenter">
-                            <div class="covariates"
-                                 style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px;overflow-y: scroll;">
                                 <div class="row">
-                                    <div class="col-md-10 col-sm-10 col-xs-12 vcenter" style="margin-top:0">
+                                    <div class="col-sm-9 col-xs-12 vcenter">
+                                        <div class="covariates"
+                                             style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px;overflow-y: scroll;">
+                                            <div class="row">
+                                                <div class="col-md-10 col-sm-10 col-xs-12 vcenter" style="margin-top:0">
 
-                                        <div class="covariateHolder covariateHolder_{{stratum}}">
+                                                    <div class="covariateHolder covariateHolder_{{name}}">
 
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
                                         </div>
-
                                     </div>
-
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="col-sm-3 col-xs-12">
                         </div>
