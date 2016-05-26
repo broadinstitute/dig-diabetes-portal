@@ -774,7 +774,7 @@ line.center{
            }
 
 
-
+           var phenotypeToPredict = $('#phenotypeFilter').val();
            $.ajax({
                 cache: false,
                 type: "post",
@@ -783,7 +783,7 @@ line.center{
                        covariates: covariateValues,
                        samples: "{\"samples\":[]}",
                        filters: "{\"filters\":"+filterValues+"}",
-                       traitFilterSelectedOption: "",
+                       traitFilterSelectedOption: phenotypeToPredict,
                        stratum: stratum
                 },
                 async: true,
