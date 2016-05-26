@@ -163,21 +163,25 @@
     };
 
     var loading = $('#spinner').show();
-    $.ajax({
-        cache: false,
-        type: "get",
-        url:('<g:createLink controller="variantInfo" action="variantAjax"/>'+'/${variantToSearch}'),
-        async: true
-    }).done(function(data, textStatus, jqXHR) {
-        mpgSoftware.variantInfo.initializePage(data,
-                                               "<%=variantToSearch%>",
-                                               "<g:createLink controller='trait' action='traitInfo' />",
-                                               "<%=restServer%>",
-                                               variantSummaryText);
-    }).fail(function(jqXHR, textStatus, errorThrown) {
-        loading.hide();
-        core.errorReporter(jqXHR, errorThrown)
-    })
+    // sometimes the headers weren't fully loaded before the initializePage function was called,
+    // so don't run it until the DOM is ready
+    $(document).ready(function() {
+        $.ajax({
+            cache: false,
+            type: "get",
+            url:('<g:createLink controller="variantInfo" action="variantAjax"/>'+'/${variantToSearch}'),
+            async: true
+        }).done(function(data, textStatus, jqXHR) {
+            mpgSoftware.variantInfo.initializePage(data,
+                                                   "<%=variantToSearch%>",
+                                                   "<g:createLink controller='trait' action='traitInfo' />",
+                                                   "<%=restServer%>",
+                                                   variantSummaryText);
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            loading.hide();
+            core.errorReporter(jqXHR, errorThrown)
+        });
+    });
 </script>
 
 

@@ -55,15 +55,6 @@
         if ('${encodedFilterSets}') {
             var encodedFilters = JSON.parse(decodeURIComponent('${encodedFilterSets}'));
             if(encodedFilters.length > 0) {
-                // make sure we don't display any control/formatting characters
-                _.forEach(encodedFilters,function(eachFilter){
-                    _.forEach(eachFilter,function(fieldValue,fieldKey){
-                        if ((typeof fieldValue !== 'undefined') &&
-                                (fieldValue !== null)){
-                            eachFilter[fieldKey] = fieldValue.replace(/\&.*;/i, ''); // remove formatting characters.  Would rather do this with with html()-type call but don't see an easy way
-                        }
-                    })
-                });
                 mpgSoftware.variantWF.initializePage(encodedFilters);
             }
         }
@@ -109,6 +100,7 @@
     <div class="container">
 
         <div class="variantWF-container">
+            <p style="text-align: right; padding:0"><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/VariantFinderTutorial.pdf" target="_blank">Variant Finder tutorial</a> </p>
             <h1><g:message code="variantSearch.workflow.header.title" default="Variant Finder"/></h1>
 
             <p style="margin-bottom: 30px;"><g:message code="variantSearch.workflow.header.find_variants"/></p>
@@ -391,7 +383,7 @@
                     {{ #listOfSavedQueries }}
                     <tr>
                         <td>
-                            {{ translatedPhenotype }} {{ #translatedDataset }} [{{ translatedDataset }}] {{ /translatedDataset }} {{ translatedName }} {{ comparator }} {{ displayValue }}<br>
+                            {{ translatedPhenotype }} {{ #translatedDataset }} [{{{ translatedDataset }}}] {{ /translatedDataset }} {{ translatedName }} {{ comparator }} {{ displayValue }}<br>
                         </td>
                         <td><a onclick="mpgSoftware.variantWF.editQuery({{ index }})"><g:message
                     code="variantSearch.spec.actions.edit" default="Edit"/></a></td>

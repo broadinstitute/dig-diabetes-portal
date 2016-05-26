@@ -188,7 +188,10 @@ var mpgSoftware = mpgSoftware || {};
                             thisDataset.phenotypeGroup = datasets[thisDataset.datasetCode].phenotypeGroup;
                             processedDatasets.push(thisDataset);
                         });
-                        processedDatasets = _.sortBy(processedDatasets, 'p_value');
+                        // remove datasets that don't have p_values defined--occasionally we'll have datasets
+                        // that have counts or other info, but no p-values, which would result in a box with
+                        // "NaN" showing
+                        processedDatasets = _.chain(processedDatasets).filter('p_value').sortBy('p_value').value();
                         // check to see if any dataset has at least a nominal signficance
                         // reject those that don't. If none do, then don't display anything
                         // for this phenotype

@@ -20,8 +20,10 @@
             <li><a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a>
             <li><a href="${createLink(controller:'variantSearch', action:'variantSearchWF')}"><g:message code="variant.search.header"/></a></li>
             <li><a href="${createLink(controller:'informational', action:'aboutthedata')}"><g:message code="portal.header.nav.about_data"/></a></li>
-            <li><a href="${createLink(controller: 'home', action: 'tutorials')}"><g:message code="portal.header.nav.tutorials"/></a></li>
+            %{-- to be uncommented once the about page is made --}%
+            %{--<li><a href="${createLink(controller:'informational', action:'about')}"><g:message code="portal.header.nav.about"/></a></li>--}%
             <li><a href="${createLink(controller:'informational', action:'policies')}"><g:message code="portal.header.nav.policies"/></a></li>
+            <li><a href="${createLink(controller: 'home', action: 'tutorials')}"><g:message code="portal.header.nav.tutorials"/></a></li>
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 <li><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact_plural"/></a></li>
             </g:if>
@@ -29,6 +31,7 @@
                 <li><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact"/></a></li>
             </g:else>
             <g:if test="${!g.portalTypeString()?.equals('stroke')}">
+                <li><a href="https://t2d-genetics-portal.blogspot.com/" target="_blank"><g:message code="portal.header.nav.blog" default="blog" /></a></li>
                 <li><a href="${createLink(controller:'informational', action:'forum')}"><g:message code="portal.header.nav.forum"/></a></li>
             </g:if>
         </ul>
