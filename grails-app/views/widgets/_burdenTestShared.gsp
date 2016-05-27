@@ -16,6 +16,38 @@ ul.strataResults {
     left: 30%;
     top: 50%;
 }
+.boxWhiskerPlot {
+    margin: 50px 0 0 0;
+}
+.burden-test-some-results{
+    background: #eee;
+}
+#stratsCovTabs li.active {
+    margin-bottom: -3px;
+    margin-right: 5px;
+    border-top: solid 1px black;
+    border-left: solid 1px black;
+    border-right: solid 1px black;
+    border-bottom: solid 1px white;
+    border-radius: 4px 4px 0px 0px;
+}
+#stratsTabs li.active {
+    margin-bottom: -3px;
+    margin-right: 5px;
+    border-top: solid 1px black;
+    border-left: solid 1px black;
+    border-right: solid 1px black;
+    border-bottom: solid 1px white;
+    border-radius: 4px 4px 0px 0px;
+}
+.tab-pane.active > div.row {
+    background: #fff;
+    padding: 20px 2px 20px 5px;
+    border: 1px solid #000;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
 div.sampleNumberReporter {
     display: none;
     font-weight: bold;
@@ -134,13 +166,13 @@ div.labelAndInput > input {
     line-height: 15px;
 }
  text.box{
-     /*   display: none; /* if you don't want text labels on your boxes*/
+        display: none; /* if you don't want text labels on your boxes*/
  }
 text.whisker{
-    /*  display: none; /*if you don't want text labels on your boxes*/
+      display: none; /*if you don't want text labels on your boxes*/
 }
 line.center{
-    /*  display: none; /*if you don't want text labels on your boxes*/
+      display: none; /*if you don't want text labels on your boxes*/
 }
 
 </style>
@@ -523,6 +555,13 @@ line.center{
         var stratifiedSampleAndCovariateSection = function (dataSetId, phenotype, strataProperty) {
             var data = getStoredSampleMetadata();
             var allStrata = ['East-Asian','European','Hispanic','South-Asian'];
+            var defaultDisplayCount = function(count){
+                                 if (this.count==1) {
+                                    return " active";
+                                 } else {
+                                    return "";
+                                 }
+                            };
 
             var optionsPerFilter = generateOptionsPerFilter() ;
             if ( ( data !==  null ) &&
@@ -532,13 +571,6 @@ line.center{
                         strataProperty:strataProperty,
                         strataNames:[],
                         strataContent:[],
-                        defaultDisplay: function(count){
-                                 if (this.count==0) {
-                                    return " active";
-                                 } else {
-                                    return "";
-                                 }
-                            },
                         tabDisplay:""
                     };
                      var renderFiltersTemplateData = {
@@ -549,8 +581,8 @@ line.center{
                     _.forEach(allStrata,function(stratum){
                        renderData.strataNames.push({name:stratum,trans:stratum,count:renderData.strataNames.length}); // to get rid of
                        renderData.strataContent.push({name:stratum,trans:stratum,count:renderData.strataContent.length});  // to get rid of
-                       renderFiltersTemplateData.strataNames.push({name:stratum,trans:stratum,count:renderData.strataNames.length});
-                       renderFiltersTemplateData.strataContent.push({name:stratum,trans:stratum,count:renderData.strataContent.length});
+                       renderFiltersTemplateData.strataNames.push({name:stratum,trans:stratum,count:renderData.strataNames.length,defaultDisplay:defaultDisplayCount});
+                       renderFiltersTemplateData.strataContent.push({name:stratum,trans:stratum,count:renderData.strataContent.length,defaultDisplay:defaultDisplayCount});
                     });
 
                    // $("#chooseDataSetAndPhenotypeLocation").empty();
@@ -816,7 +848,20 @@ line.center{
                             if (currentStratum==='strat1'){
                                 printFullResultsSection(data.stats,pValue,beta,oddsRatio);
                             } else {
-                                $('.strataResults').append('<li>'+currentStratum+' = '+pValue+'.</li>');
+                                var existingResults = $('.strataResults li');
+                                if (existingResults.length===0){
+                                   $('.strataResults').append('<li>'+currentStratum+' = '+pValue+'.</li>');
+                                } else {
+                                   var existingTextResults = [];
+                                   _.forEach(existingResults,function(d){
+                                   existingTextResults.push( '<li>'+$(d).text()+'</li>');
+                                   })
+                                   existingTextResults.push('<li>'+currentStratum+' = '+pValue+'.</li>');
+                                   var sortedResults = existingTextResults.sort();
+                                   $('.strataResults li').empty();
+                                   _.forEach(sortedResults,function(result){$('.strataResults').append(result)})
+                                }
+
                             }
 
                             displayTestResultsSection(true);
@@ -988,7 +1033,7 @@ line.center{
 
            if (typeof data === 'undefined') return;
 
-    var margin = {top: 50, right: 50, bottom: 20, left: 15},
+    var margin = {top: 20, right: 50, bottom: 30, left: 15},
             width = 700 - margin.left - margin.right,
             height = 350 - margin.top - margin.bottom;
 
@@ -1579,7 +1624,7 @@ $( document ).ready( function (){
 
                         <div class="stratified-user-interaction"></div>
 
-                        <div class="panel-group" id="accordion_iat" style="margin-bottom: 10px">%{--start accordion --}%
+                        <div class="panel-group" id="accordion_iat" style="margin-bottom: 0px">%{--start accordion --}%
                             <div id="chooseFiltersLocation"></div>
                             <div id="chooseCovariatesLocation"></div>
                         </div>
@@ -1599,6 +1644,14 @@ $( document ).ready( function (){
 
 
 <script id="displayResultsTemplate"  type="x-tmpl-mustache">
+    <div class="panel panel-default">%{--should hold the Choose data set panel--}%
+
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a>Step 4: Launch analysis</a>
+            </h4>
+        </div>
+
     <div class="row burden-test-some-results burden-test-some-results_{{stratum}}">
         <div class="row iatErrorFailure" style="display:none">
             <div class="col-md-8 col-sm-6">
@@ -1668,6 +1721,7 @@ $( document ).ready( function (){
         </div>
 
     </div>
+</div>
 </script>
 
 
@@ -1712,7 +1766,7 @@ $( document ).ready( function (){
 
 
 
-                <div class="row secHeader" style="padding: 0 0 5px 0">
+                <div class="row secHeader" style="margin: 20px 0 0 0">
                     <div class="col-sm-12 col-xs-12 text-left"><label>Stratify</label></div>
                 </div>
 
@@ -1796,7 +1850,7 @@ $( document ).ready( function (){
                                             <div class="col-sm-12 col-xs-12 text-left">
 
                                                 <div style="direction: rtl; height: 300px; padding: 4px 0 0 10px; overflow-y: scroll;">
-                                                    <div style="direction: ltr">
+                                                    <div style="direction: ltr; margin: 10px 0 0 5px">
                                                         <div>
                                                             <div class="row">
 
@@ -1816,7 +1870,7 @@ $( document ).ready( function (){
 
                                     </div>
 
-                                    <div class="col-sm-6 col-xs-12 vcenter" style="padding-left: 0; margin-top: 0">
+                                    <div class="col-sm-6 col-xs-12 vcenter" style="padding: 0; margin: 0">
                                         <div class="sampleNumberReporter text-center">
                                             <div>Number of samples included in analysis:<span class="numberOfSamples"></span></div>
 
@@ -1860,7 +1914,7 @@ $( document ).ready( function (){
 
                     <div class="row"  style="{{tabDisplay}}">
                         <div class="col-sm-12 col-xs-12">
-                            <ul class="nav nav-tabs" id="stratsTabs">
+                            <ul class="nav nav-tabs" id="stratsCovTabs">
                                 {{ #strataNames }}
                                    <li class="{{defaultDisplay}}"><a data-target="#cov_{{name}}" data-toggle="tab">{{trans}}</a></li>
                                 {{ /strataNames }}
@@ -1873,7 +1927,7 @@ $( document ).ready( function (){
                             <div class="tab-pane {{defaultDisplay}}" id="cov_{{name}}">
 
                                 <div class="row">
-                                    <div class="col-sm-9 col-xs-12 vcenter">
+                                    <div class="col-sm-6 col-xs-12 vcenter">
                                         <div class="covariates"
                                              style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px;overflow-y: scroll;">
                                             <div class="row">
@@ -1889,9 +1943,9 @@ $( document ).ready( function (){
                                         </div>
                                     </div>
 
-                        <div class="col-sm-3 col-xs-12">
-                        </div>
-                    </div>
+                                    <div class="col-sm-6 col-xs-12">
+                                    </div>
+                                 </div>
                             </div>
                         {{ /strataContent }}
                     </div>
