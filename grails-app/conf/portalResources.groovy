@@ -97,9 +97,10 @@ modules = {
         dependsOn "jquery"
 
         resource url: 'images/ajaxLoadingAnimation.gif'
+        resource url: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
 
-        resource url: 'https://data.broadinstitute.org/igvdata/web/beta/igv-beta.css'
-        resource url: 'https://data.broadinstitute.org/igvdata/web/beta/igv-beta.min.js'
+        resource url: 'https://igv.org/web/release/1.0.0-rc1/igv-1.0.0-rc1.css'
+        resource url: 'https://igv.org/web/release/1.0.0-rc1/igv-1.0.0-rc1.min.js'
     }
     bootstrapMultiselect {
         resource url: 'js/lib/bootstrap-multiselect.js'
@@ -139,8 +140,9 @@ modules = {
 
     }
     igvNarrow {  // IGV on a page with core
-        resource url: 'http://www.broadinstitute.org/igvdata/t2d/igv-all.min.css'
-        resource url: 'http://www.broadinstitute.org/igvdata/t2d/igv-all.min.js'
+        resource url: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
+        resource url: 'https://igv.org/web/release/1.0.0-rc1/igv-1.0.0-rc1.css'
+        resource url: 'https://igv.org/web/release/1.0.0-rc1/igv-1.0.0-rc1.min.js'
     }
     sigma {  // sigma site
         resource url: 'css/dport/sigma.css'

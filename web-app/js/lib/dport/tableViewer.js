@@ -427,7 +427,7 @@ var variantProcessing = (function () {
                 data: function(d) {
                     d.keys = querySpecifications.keys;
                     d.properties = querySpecifications.properties;
-                    d.numberOfVariants = data.numberOfVariants,
+                    d.numberOfVariants = data.numberOfVariants;
                     // need to stringify because otherwise Groovy gets a lot of
                     // parameters that aren't grouped correctly
                     d.columns = JSON.stringify(d.columns);

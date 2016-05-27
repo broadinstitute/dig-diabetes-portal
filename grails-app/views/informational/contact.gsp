@@ -6,7 +6,21 @@
     <r:require modules="informational"/>
     <r:layoutResources/>
 
+    <style>
+        #t2dImageHolder {
+            display: flex;
+            justify-content: space-around;
+            height: 60px;
+            width: 100%;
+        }
+
+        #t2dImageHolder a, #t2dImageHolder a img {
+            height: 100%;
+        }
+
+    </style>
 </head>
+
 
 <body>
 
@@ -14,69 +28,139 @@
 
     <div class="container">
         <g:if test="${g.portalTypeString()?.equals('t2d')}">
-            <h1><g:message code="contact.title" default="Contact"/></h1>
         </g:if>
         <g:else>
             <h1><g:message code="contact.title.plural" default="Contact"/></h1>
         </g:else>
 
         <div class="row">
-            <div class="buttonHolder tabbed-about-page">
+            <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                <div style="width: 70%;">
+                    <h2><g:message code="contact.header" /></h2>
 
-                <ul class="nav nav-pills">
-                    <div class="row">
+                    <p><g:message code="contact.summary" /></p>
 
-                        <div class="col-md-3 text-center">
-                            <li role="presentation" id="contact_consortium" class="myPills  activated">
-                                <a href="#">
-                                    <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                                        <g:message code="contact.consortium.single_word" default="Consortium"/>
-                                    </g:if>
-                                    <g:else>
-                                        <g:message code="contact.consortium" default="Consortium"/>
-                                    </g:else>
-                                </a>
-                            </li>
-                        </div>
-                        <div class="col-md-3 text-center">
-                            <li role="presentation" id="contact_cohort" class="myPills">
-                                <a href="#">
-                                    <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                                        <g:message code="contact.study.single_word" default="Studies"/>
-                                    </g:if>
-                                    <g:else>
-                                        <g:message code="contact.cohort" default="Studies"/>
-                                    </g:else>
-                                </a>
-                            </li>
-                        </div>
-                        <div class="col-md-3 text-center">
-                            <li role="presentation" id="contact_portal" class="myPills active">
-                                <a href="#">
-                                    <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                                        <g:message code="contact.portal.single_word" default="Portal"/>
-                                    </g:if>
-                                    <g:else>
-                                        <g:message code="contact.portal" default="Portal"/>
-                                    </g:else>
-                                </a>
-                            </li>
-                        </div>
+                    <p><g:message code="contact.getInTouch" />
+                        <ul>
+                            <li><g:message code="contact.option.contactTeam" /></li>
+                            <li><g:message code="contact.option.forum" /></li>
+                            <li><g:message code="contact.option.emailList" /></li>
+                            <li><g:message code="contact.option.contribute" /></li>
+                        </ul>
+                    </p>
+                    <h3>Accelerating Medicines Partnership (AMP) Type 2 Diabetes Knowledge Portal (T2DKP) and Data Collection Center (DCC) Team</h3>
+                    <table border="0">
+                        <tr>
+                            <td>Jose Florez</td><td>&nbsp;</td><td>Principal Investigator</td>
+                        </tr>
+                        <tr>
+                            <td>Jason Flannick</td><td>&nbsp;</td><td>Senior Group Leader</td>
+                        </tr>
+                        <tr>
+                            <td>Noël Burtt</td><td>&nbsp;</td><td>Associate Director, Operations</td>
+                        </tr>
+                    </table>
+                    <h5>Manager of content and community</h5>
 
+                    <p>Maria Costanzo</p>
+                    <h5>Software engineers</h5>
 
-                        <div class="col-md-3 text-center">
-                        </div>
+                    <p>Benjamin Alexander<br>
+                        Marc Duby<br>
+                        Clint Gilbert<br>
+                        Todd Green<br>
+                        Dong-Keun Jang<br>
+                        Oliver Ruebenacker<br>
+                        Michael Sanders<br>
+                        David Siedzik<br>
+                        Kaan Yuksel</p>
+                    <h5>Computational biologists</h5>
 
-                    </div>
+                    <p>Marcin von Grotthuss<br>
+                        Ryan Koesterer</p>
+                    <h5>Project manager</h5>
 
-                </ul>
+                    <p>Lizz Caulkins</p>
 
-                <div class="content">
-                    <div id="contactContent">
-                        <g:render template="contact/${specifics}"/>
+                    <h3>Methods and Tool Development Teams</h3>
+                    <h5>AMP Type 2 Diabetes Knowledge (T2DK)</h5>
+
+                    <p>Daniel MacArthur (Principal Investigator)<br>
+                        Benjamin Neale (Principal Investigator)<br>
+                        Jonathan Bloom<br>
+                        Konrad Karczewski<br>
+                        Cotton Seed</p>
+                    <h5>AMP Enhanced Diabetes Portal</h5>
+
+                    <p>Michael Boehnke (Principal Investigator)<br>
+                        Gonçalo Abecasis (Principal Investigator)<br>
+                        Christopher Clark<br>
+                        Matthew Flickinger<br>
+                        Ryan Welch</p>
+                    <h5>AMP Federated Nodes</h5>
+
+                    <p>Paul Flicek (Principal Investigator)<br>
+                        Mark McCarthy (Principal Investigator)<br>
+                        Gil McVean (Principal Investigator)<br>
+                        Helen Parkinson<br>
+                        Dylan Spalding</p>
+
+                    <div id="t2dImageHolder">
+                        <a href="https://broadinstitute.org" target="_blank">
+                            <img src="${resource(dir: 'images', file:'BroadInstLogoforDigitalRGB.png')}" />
+                        </a>
+                        <a href="https://sph.umich.edu" target="_blank">
+                            <img src="${resource(dir: 'images/organizations', file:'UM-SPH.png')}" />
+                        </a>
+                        <a href="https://www.ebi.ac.uk" target="_blank">
+                            <img src="${resource(dir: 'images/organizations', file:'EBI.png')}" />
+                        </a>
                     </div>
                 </div>
-            </div>
+            </g:if>
+            <g:else>
+                <div class="buttonHolder tabbed-about-page">
+
+                    <ul class="nav nav-pills">
+                        <div class="row">
+
+                            <div class="col-md-3 text-center">
+                                <li role="presentation" id="contact_consortium" class="myPills activated">
+                                    <a href="#">
+                                        <g:message code="contact.consortium" default="Consortium"/>
+                                    </a>
+                                </li>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <li role="presentation" id="contact_cohort" class="myPills">
+                                    <a href="#">
+                                        <g:message code="contact.cohort" default="Studies"/>
+                                    </a>
+                                </li>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <li role="presentation" id="contact_portal" class="myPills active">
+                                    <a href="#">
+                                        <g:message code="contact.portal" default="Portal"/>
+                                    </a>
+                                </li>
+                            </div>
+
+
+                            <div class="col-md-3 text-center">
+                            </div>
+
+                        </div>
+
+                    </ul>
+
+                    <div class="content">
+                        <div id="contactContent">
+                            <g:render template="contact/${specifics}"/>
+                        </div>
+                    </div>
+                </div>
+            </g:else>
         </div>
 
 
