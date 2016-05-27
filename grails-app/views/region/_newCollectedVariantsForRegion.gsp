@@ -1,4 +1,4 @@
-<table id="variantTable" class="table table-striped dk-search-result">
+<table id="variantTable" class="table table-striped dk-search-result" style="border-collapse: collapse;">
     <thead>
     <tr id="variantTableHeaderRow">
         <th colspan=5 class="datatype-header dk-common"/>

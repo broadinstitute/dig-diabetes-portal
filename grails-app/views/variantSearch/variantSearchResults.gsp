@@ -95,6 +95,15 @@
         padding-left: 40px;
     }
 
+    th.sorting_asc, th.sorting_desc {
+        background-color: #84e171;
+        color: black;
+    }
+
+    td.sorting_1 {
+        background-color: #ddf7d7 !important;
+    }
+
     </style>
 
 </head>
@@ -140,6 +149,7 @@
     var encodedParameters = decodeURIComponent("<%=encodedParameters%>");
 
     function dynamicFillTheFields(data) {
+        console.log('data is', data);
         /**
          * This function exists to avoid having to do
          * "if translationDictionary[string] defined, return that, else return string"
@@ -171,53 +181,64 @@
         $('#variantTableHeaderRow2').children().first().attr('colspan', commonWidth);
         totCol += commonWidth;
 
-        // use this array to come up with a coloring scheme for a given dataset's columns (in the case of
-        // dprops) or a given phenotype's columns (in the case of pprops)
-        var columnColoring = _.shuffle([10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
-
         // dataset specific props
-        for (var pheno in data.columns.dproperty) {
+//        for (var pheno in data.columns.dproperty) {
+//            var pheno_width = 0;
+//            for (var dataset in data.columns.dproperty[pheno]) {
+//                var thisDatasetColor = 'dk-property-' + columnColoring.pop();
+//                var dataset_width = 0;
+//                var datasetDisp = translationFunction(dataset);
+//                for (var i = 0; i < data.columns.dproperty[pheno][dataset].length; i++) {
+//                    var column = data.columns.dproperty[pheno][dataset][i];
+//                    var columnDisp = translationFunction(column);
+//                    pheno_width++;
+//                    dataset_width++;
+//                    // the data-colname attribute is used in the table generation function
+//                    var newHeaderElement = $('<th>', {class: 'datatype-header ' + thisDatasetColor, html: columnDisp}).attr('data-colName', column + '.' + dataset);
+//                    $('#variantTableHeaderRow3').append(newHeaderElement);
+//                }
+//                if (dataset_width > 0) {
+//                    var newTableHeader = document.createElement('th');
+//                    newTableHeader.setAttribute('class', 'datatype-header ' + thisDatasetColor);
+//                    newTableHeader.setAttribute('colspan', dataset_width);
+//                    $(newTableHeader).append(datasetDisp);
+//                    $('#variantTableHeaderRow2').append(newTableHeader);
+//                }
+//            }
+//            if (pheno_width > 0) {
+//                $('#variantTableHeaderRow').append("<th colspan=" + pheno_width + " class=\"datatype-header " + thisDatasetColor + "\"></th>")
+//            }
+//            totCol += pheno_width
+//        }
+
+        // dataset props and pheno specific props
+        _.forEach(_.keys(data.columns.pproperty), function(pheno, index) {
             var pheno_width = 0;
-            for (var dataset in data.columns.dproperty[pheno]) {
-                var thisDatasetColor = 'dk-property-' + columnColoring.pop();
+            // generate the class name for this phenotype. class names are only defined up
+            // to dk-property-100, so if we have more than 10 phenotypes, just use 100 for all
+            // of the extras
+            var thisPhenotypeColor = 'dk-property-' + Math.min((index + 1) * 10, 100);
+            var phenoDisp = translationFunction(pheno);
+            for (var dataset in data.columns.pproperty[pheno]) {
                 var dataset_width = 0;
                 var datasetDisp = translationFunction(dataset);
+                // this first for-loop makes it so that dprops are displayed with each phenotype, even
+                // though they're technically independent. it is done this way because of how the column information
+                // is generated on the server.
                 for (var i = 0; i < data.columns.dproperty[pheno][dataset].length; i++) {
                     var column = data.columns.dproperty[pheno][dataset][i];
                     var columnDisp = translationFunction(column);
                     pheno_width++;
                     dataset_width++;
                     // the data-colname attribute is used in the table generation function
-                    var newHeaderElement = $('<th>', {class: 'datatype-header ' + thisDatasetColor, html: columnDisp}).attr('data-colName', column + '.' + dataset);
+                    var newHeaderElement = $('<th>', {class: 'datatype-header ' + thisPhenotypeColor, html: columnDisp}).attr('data-colName', column + '.' + dataset);
                     $('#variantTableHeaderRow3').append(newHeaderElement);
                 }
-                if (dataset_width > 0) {
-                    var newTableHeader = document.createElement('th');
-                    newTableHeader.setAttribute('class', 'datatype-header ' + thisDatasetColor);
-                    newTableHeader.setAttribute('colspan', dataset_width);
-                    $(newTableHeader).append(datasetDisp);
-                    $('#variantTableHeaderRow2').append(newTableHeader);
-                }
-            }
-            if (pheno_width > 0) {
-                $('#variantTableHeaderRow').append("<th colspan=" + pheno_width + " class=\"datatype-header " + thisDatasetColor + "\"></th>")
-            }
-            totCol += pheno_width
-        }
-
-        // pheno specific props
-        for (var pheno in data.columns.pproperty) {
-            var pheno_width = 0;
-            var thisPhenotypeColor = 'dk-property-' + columnColoring.pop();
-            var phenoDisp = translationFunction(pheno);
-            for (var dataset in data.columns.pproperty[pheno]) {
-                var dataset_width = 0;
-                var datasetDisp = translationFunction(dataset);
                 for (var i = 0; i < data.columns.pproperty[pheno][dataset].length; i++) {
                     var column = data.columns.pproperty[pheno][dataset][i];
                     var columnDisp = translationFunction(column);
-                    pheno_width++
-                    dataset_width++
+                    pheno_width++;
+                    dataset_width++;
                     //HACK HACK HACK HACK HACK
                     if (column.substring(0, 2) == "P_") {
                         sortCol = totCol + pheno_width - 1;
@@ -241,11 +262,11 @@
                 $(newTableHeader).append(phenoDisp);
                 $('#variantTableHeaderRow').append(newTableHeader);
             }
-            totCol += pheno_width
-        }
+            totCol += pheno_width;
+        });
 
         var proteinEffectList = new UTILS.proteinEffectListConstructor(decodeURIComponent("${proteinEffectsList}"));
-
+//        debugger
         variantProcessing.iterativeVariantTableFiller(data, totCol, sortCol, '#variantTable',
                 '<g:createLink controller="variantInfo" action="variantInfo" />',
                 '<g:createLink controller="gene" action="geneInfo" />',
