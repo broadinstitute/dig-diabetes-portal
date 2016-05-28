@@ -84,10 +84,10 @@
 
 
         $('#userTable').dataTable({
-            iDisplayLength: 20,
-            bFilter: false,
-            aaSorting: [[ 0, "asc" ]],
-            aoColumnDefs: [{ sType: "allnumeric", aTargets: [] } ]
+            pageLength: 20,
+            filter: false,
+            order: [[ 0, "asc" ]],
+            columnDefs: [{ type: "allnumeric", targets: [] } ]
         });
         console.log('constructed userTable Fields');
     } ;

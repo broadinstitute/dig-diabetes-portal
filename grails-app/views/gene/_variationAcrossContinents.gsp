@@ -27,10 +27,6 @@
             return str2.localeCompare(str1);
         };
 
-
-
-
-
         var loadAncestryTable = function (chosenGene,dataSetMap) {
             var loader = $('#rSpinner');
             loader.show();
@@ -79,7 +75,7 @@
                 async: true,
                 success: function (data) {
                     if ($.fn.DataTable.isDataTable( '#continentalVariation' )){
-                        $('#continentalVariation').dataTable({"bRetrieve":true}).fnDestroy();
+                        $('#continentalVariation').dataTable({retrieve:true}).fnDestroy();
                     }
 
                     var continentalAncestryText = {
@@ -125,13 +121,13 @@
                         }
                     }
                     var continentalTable = $('#continentalVariation').dataTable({
-                        bDestroy: true,
-                        bPaginate:false,
-                        bInfo : false,
-                        bFilter: false,
-                        aaSorting: [[ 0, "asc" ]],
-                        aoColumnDefs: [{sType: "allAnchor", aTargets: [3,4,5,6] },
-                            {sType: "headerConAnchor", aTargets: [0] }]
+                        destroy: true,
+                        paging: false,
+                        info : false,
+                        searching: false,
+                        ordering: [[ 0, "asc" ]],
+                        columnDefs: [{type: "allAnchor", targets: [3,4,5,6] },
+                            {type: "headerConAnchor", targets: [0] }]
                     });
                     loader.hide();
                     $('[data-toggle="popover"]').popover();

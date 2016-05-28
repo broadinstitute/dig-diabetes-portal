@@ -7,101 +7,18 @@
     <r:require modules="variantWF"/>
     <r:layoutResources/>
     <style>
-    .propertyAdder {
-        margin: 0 0 0 15px;
-    }
-
-    span.singprop {
-        white-space: nowrap;
-    }
-
-    div.propertyHolder {
-        position: absolute;
-        background-color: white;
-        height: 170px;
-        width: 290px;
-        -moz-border-radius: 3px;
-        -webkit-border-radius: 3px;
-        -khtml-border-radius: 3px;
-        border-radius: 3px;
-        border: 2px outset rgba(43, 117, 207, 0.68);
-        margin: 5px;
-        padding: 5px 10px 10px 10px;
-        text-align: left;
-        z-index: 10;
-    }
-
-    div.propertySubHolder {
-        position: relative;
-        margin: 3px;
-        padding: 3px;
-        height: 100px;
-        width: 260px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        background-color: #fefefe;
-        -moz-border-radius: 5px;
-        -webkit-border-radius: 5px;
-        -khtml-border-radius: 5px;
-        border-radius: 5px;
-        border: 2px inset;
-        z-index: 10;
-    }
-
-    div.propertyHolder .propertyHolderChk {
-        color: black;
-        margin: 5px 0 5px 0;
-        z-index: 10;
-    }
-
-    .singprop {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-    }
-
-
-    .chkBoxText {
-        color: black;
-        margin: 5px 0 5px 0;
-        padding: 0 0 0 10px;
-        white-space: normal;
-        /* to make sure the checkbox stays fullsized */
-        max-width: 90%;
-    }
-
-    .chkBoxTextGrey {
-        color: #777;
-        margin: 5px 0 5px 0;
-        padding: 0 0 0 10px;
-        white-space: normal;
-    }
-
-    .propBox {
-        color: white;
-        bottom: 0;
-        background-color: rgba(43, 117, 207, 0.68);
-        border-style: double;
-        font-weight: bold;
-        margin: 8px 0 0 auto;
-    }
-
-    span.propboxtitle {
-        color: black;
-        text-align: center;
-        font-weight: bold;
-        line-height: 20px;
-        padding-left: 40px;
-    }
-
+    /* sorting_asc/desc/1 are classes applied by datatables to the column that is being sorted on  */
     th.sorting_asc, th.sorting_desc {
         background-color: #84e171;
         color: black;
     }
-
     td.sorting_1 {
         background-color: #ddf7d7 !important;
+    }
+
+    /* override the default styling of the buttons div */
+    div.dt-buttons {
+        float: right;
     }
 
     </style>

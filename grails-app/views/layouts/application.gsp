@@ -8,7 +8,7 @@
 <html>
 <head>
     <meta name="layout" content="t2dGenesCore"/>
-    <r:require modules="core"/>
+    <r:require modules="core, datatables"/>
     <r:layoutResources/>
 
     <script>
@@ -112,10 +112,10 @@
 
 
         $('#userTable').dataTable({
-            iDisplayLength: 20,
-            bFilter: false,
-            aaSorting: [[ 0, "asc" ]],
-            aoColumnDefs: [{ sType: "allnumeric", aTargets: [] } ]
+            pageLength: 20,
+            filter: false,
+            order: [[ 0, "asc" ]],
+            columnDefs: [{ type: "allnumeric", targets: [] } ]
         });
         console.log('constructed userTable Fields');
     } ;

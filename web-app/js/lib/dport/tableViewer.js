@@ -1,43 +1,17 @@
 // Some DOM assignments that we can encapsulate inside an immediate execution function.
 (function () {
-
-    jQuery.fn.dataTableExt.oSort['allnumeric-asc'] = function (a, b) {
-        var x = parseFloat(a);
-        var y = parseFloat(b);
-        if (!x) {
-            x = 1;
-        }
-        if (!y) {
-            y = 1;
-        }
-        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-    };
-
-    jQuery.fn.dataTableExt.oSort['allnumeric-desc'] = function (a, b) {
-        var x = parseFloat(a);
-        var y = parseFloat(b);
-        if (!x) {
-            x = 1;
-        }
-        if (!y) {
-            y = 1;
-        }
-        return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-    };
-
-
     jQuery.fn.dataTableExt.oSort['stringAnchor-asc'] = function (a, b) {
         var x = UTILS.extractAnchorTextAsString(a);
         var y = UTILS.extractAnchorTextAsString(b);
         return (x.localeCompare(y));
     };
-
+    
     jQuery.fn.dataTableExt.oSort['stringAnchor-desc'] = function (a, b) {
         var x = UTILS.extractAnchorTextAsString(a);
         var y = UTILS.extractAnchorTextAsString(b);
         return (y.localeCompare(x));
     };
-
+    
     jQuery.fn.dataTableExt.oSort['headerAnchor-asc'] = function (a, b) {
         var str1 = UTILS.extractHeaderTextWJqueryAsString(a);
         var str2 = UTILS.extractHeaderTextWJqueryAsString(b);
@@ -49,7 +23,7 @@
         }
         return str1.localeCompare(str2);
     };
-
+    
     jQuery.fn.dataTableExt.oSort['headerAnchor-desc'] = function (a, b) {
         var str1 = UTILS.extractHeaderTextWJqueryAsString(b);
         var str2 = UTILS.extractHeaderTextWJqueryAsString(a);
@@ -366,41 +340,10 @@ var variantProcessing = (function () {
                                                  querySpecifications   // the filters and properties that are being requested
     ) {
 
-        // Some of the common properties are nonnumeric.  We have type information but for right now I'm going to kludge it.
-        //  TODO: Passed down the type information for each common property and use it to determine which are numeric and which aren't
-        // Then, assume all remaining columns are numeric.
-
-        var stringColumns = [];
-        var numericCol = [];
-        var colIndex;
-        // these columns are treated as strings
-        var stringColumnHeaders = ['VAR_ID',
-                                    'DBSNP_ID',
-                                    'CHROM',
-                                    'CLOSEST_GENE',
-                                    'Condel_PRED',
-                                    'Consequence',
-                                    'GENE',
-                                    'PolyPhen_PRED',
-                                    'SIFT_PRED',
-                                    'TRANSCRIPT_ANNOT'];
-        for (colIndex = 0; colIndex < data.columns.cproperty.length; colIndex++) {
-            var prop = data.columns.cproperty[colIndex];
-            if (_.includes(stringColumnHeaders, prop)){
-                stringColumns.push(colIndex);
-            } else {
-                numericCol.push(colIndex);
-            }
-        }
-        // any remaining columns are assumed to be numeric
-        while (colIndex<totCol){
-            numericCol.push(colIndex++);
-        }
-
         var languageSetting = {};
         // check if the browser is using Spanish
         if ( locale.startsWith("es")  ) {
-            languageSetting = { url : '../js/lib/i18n/table.es.json' }
+            languageSetting = { url : '../../js/lib/i18n/table.es.json' }
         }
 
         // we've stored unique names to each column. they are structured <property>.<dataset>.<phenotype>--in
@@ -409,7 +352,7 @@ var variantProcessing = (function () {
         // we do this to ensure that the right data is put in each column. without this, we'd have to guarantee
         // that the server and the client always order the columns in the same way.
         var headers = $('#variantTableHeaderRow3').children('th');
-        var columnNames = _.map(headers, function(header) {
+        var columnInfo = _.map(headers, function(header) {
             var name = $(header).attr('data-colname');
             return {
                 name: name,
@@ -468,12 +411,16 @@ var variantProcessing = (function () {
         });
 
         var table = $(divId).dataTable({
-            iDisplayLength: 20,
-            bFilter: false,
-            aaSorting: [[ sortCol, "asc" ]],
-            aoColumnDefs: [{sType: "allnumeric", aTargets: numericCol } ],
+            // default number of rows
+            pageLength: 25,
+            // menu to select number of rows to display
+            lengthMenu: [ 10, 25, 50, 1000 ],
+            // defaults to sorting the first p-value column found when generating the columns
+            order: [[ sortCol, 'asc' ]],
             language: languageSetting,
-            columns: columnNames,
+            columns: columnInfo,
+            // this means that all data manipulation takes place on the server, including sorting
+            // the table just displays things
             serverSide: true,
             ajax: {
                 url: '../variantSearchAndResultColumnsData',
@@ -486,23 +433,15 @@ var variantProcessing = (function () {
                     d.columns = JSON.stringify(d.columns);
                     d.order = JSON.stringify(d.order);
                 }
-            }
+            },
+            dom: 'lBtip',
+            buttons: [
+                { extend: "copy", text: copyText },
+                'csv',
+                'pdf',
+                { extend: "print", text: printText }
+            ]
         });
-
-
-        var tableTools = new $.fn.dataTable.TableTools( table, {
-            aButtons: [
-                { "sExtends": "copy", "sButtonText": copyText },
-                "csv",
-                "xls",
-                "pdf",
-                { "sExtends": "print", "sButtonText": printText }
-            ],
-            sSwfPath: "../../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
-        } );
-        $( tableTools.fnContainer() ).insertBefore(divId);
-
-        return;
     };
 
 

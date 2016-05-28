@@ -98,7 +98,7 @@ var variantsAndAssociationTable = function (phenotype,rowMapParameter){
 
     // make sure table is empty
     if ($.fn.DataTable.isDataTable( '#variantsAndAssociationsTable' )){
-       $('#variantsAndAssociationsTable').dataTable({"bRetrieve":true}).fnDestroy();
+       $('#variantsAndAssociationsTable').dataTable({retrieve: true}).fnDestroy();
     }
 
     $('#variantsAndAssociationsTable').empty();
@@ -107,8 +107,8 @@ var variantsAndAssociationTable = function (phenotype,rowMapParameter){
 
 
     var compareDatasetsByTechnology = function (a, b) {
-      if (a.technology < b. technology) return -1;
-      if (a.technology > b. technology) return 1;
+      if (a.technology < b.technology) return -1;
+      if (a.technology > b.technology) return 1;
       return 0;
     };
 
@@ -181,60 +181,62 @@ var variantsAndAssociationTable = function (phenotype,rowMapParameter){
                         rowValue = [];
                         if ((data.geneInfo) &&
                             (data.geneInfo.results)){//assume we have data and process it
-                              var sortedDataSetArray = data.geneInfo.results.sort(compareDatasetsByTechnology);
-                              var collector = [];
-                              for (var i = 0 ; i < sortedDataSetArray.length ; i++) {
-                                   var d = [];
-                                   rowValue.push(sortedDataSetArray[i].dataset);
-                                   rowMap.push({"name":(sortedDataSetArray[i].dataset),
-                                                "translatedName": sortedDataSetArray[i].translatedName,
-                                                "value":(sortedDataSetArray[i].dataset),
-                                                "pvalue":"UNUSED",
-                                                "technology":sortedDataSetArray[i].technology,
-                                                "count":sortedDataSetArray[i].subjectsNumber});
-                                   for (var j = 0 ; j < sortedDataSetArray[i].pVals.length ; j++ ){
-                                      d.push(sortedDataSetArray[i].pVals[j].count);
-                                   }
-                                   collector.push(d);
+                            var sortedDataSetArray = data.geneInfo.results.sort(compareDatasetsByTechnology);
+                            var collector = [];
+                            for (var i = 0 ; i < sortedDataSetArray.length ; i++) {
+                                var d = [];
+                                rowValue.push(sortedDataSetArray[i].dataset);
+                                rowMap.push({"name":(sortedDataSetArray[i].dataset),
+                                            "translatedName": sortedDataSetArray[i].translatedName,
+                                            "value":(sortedDataSetArray[i].dataset),
+                                            "pvalue":"UNUSED",
+                                            "technology":sortedDataSetArray[i].technology,
+                                            "count":sortedDataSetArray[i].subjectsNumber});
+                                for (var j = 0 ; j < sortedDataSetArray[i].pVals.length ; j++ ){
+                                  d.push(sortedDataSetArray[i].pVals[j].count);
                                 }
+                                collector.push(d);
+                            }
 
-                                mpgSoftware.geneInfo.fillTheVariantAndAssociationsTableFromNewApi(data,
-                                    '<g:createLink controller="region" action="regionInfo"/>',
-                                    '<g:createLink controller="trait" action="traitSearch"/>',
-                                    '<g:createLink controller="variantSearch" action="gene"/>',
-                                    {variantsAndAssociationsTableHeaders:variantsAndAssociationsTableHeaders,
-                                     variantsAndAssociationsPhenotypeAssociations:variantsAndAssociationsPhenotypeAssociations,
-                                     variantsAndAssociationsRowHelpText: variantsAndAssociationsRowHelpText},
-                                    '${geneChromosome}',${geneExtentBegin},${geneExtentEnd},
-                                    rowMap,
-                                    <g:renderColMaps data='${columnInformation}'/>,
-                                    collector,
-                                    '<%=geneName%>',
-                                    phenotype
-                                );
+                            mpgSoftware.geneInfo.fillTheVariantAndAssociationsTableFromNewApi(data,
+                                '<g:createLink controller="region" action="regionInfo"/>',
+                                '<g:createLink controller="trait" action="traitSearch"/>',
+                                '<g:createLink controller="variantSearch" action="gene"/>',
+                                {variantsAndAssociationsTableHeaders:variantsAndAssociationsTableHeaders,
+                                 variantsAndAssociationsPhenotypeAssociations:variantsAndAssociationsPhenotypeAssociations,
+                                 variantsAndAssociationsRowHelpText: variantsAndAssociationsRowHelpText},
+                                '${geneChromosome}',${geneExtentBegin},${geneExtentEnd},
+                                rowMap,
+                                <g:renderColMaps data='${columnInformation}'/>,
+                                collector,
+                                '<%=geneName%>',
+                                phenotype
+                            );
 
-                                if (typeof rowValue !== 'undefined') {
-                                   var rowsToExpand = rowValue;
-                                   for ( var i = 0 ; i < rowsToExpand.length ; i++ ){
-                                       UTILS.jsTreeDataRetriever ('#vandaRow'+i,'#variantsAndAssociationsTable',phenotype,rowsToExpand[i],
-                                       "${createLink(controller: 'VariantSearch', action: 'retrieveJSTreeAjax')}");
-                                   }
-                                }
-                                var numberOfColumns = determineNumberOfColumns(data);
-                                var anchorColumnMarkers = [];
-                                for ( var i = 0 ; i < numberOfColumns ; i++ ){
-                                    anchorColumnMarkers.push(i+3);
-                                }
-                                $('#variantsAndAssociationsTable').dataTable({
-                                        bDestroy: true,
-                                        bPaginate:false,
-                                        bFilter: false,
-                                        bInfo : false,
-                                        aaSorting: [[ 0, "asc" ]],
-                                        aoColumnDefs: [{sType: "allAnchor", aTargets: anchorColumnMarkers },
-                                                       {sType: "headerAnchor", aTargets: [0] }]
-                                    });
-                                loader.hide();
+                            if (typeof rowValue !== 'undefined') {
+                               var rowsToExpand = rowValue;
+                               for ( var i = 0 ; i < rowsToExpand.length ; i++ ){
+                                   UTILS.jsTreeDataRetriever ('#vandaRow'+i,'#variantsAndAssociationsTable',phenotype,rowsToExpand[i],
+                                   "${createLink(controller: 'VariantSearch', action: 'retrieveJSTreeAjax')}");
+                               }
+                            }
+                            var numberOfColumns = determineNumberOfColumns(data);
+                            var anchorColumnMarkers = [];
+                            for ( var i = 0 ; i < numberOfColumns ; i++ ){
+                                anchorColumnMarkers.push(i+3);
+                            }
+
+                            var table = $('#variantsAndAssociationsTable').dataTable({
+                                    destroy: true,
+                                    paging: false,
+                                    searching: false,
+                                    info : false,
+                                    ordering: [[ 0, "asc" ]],
+                                    columnDefs: [{type: "allAnchor", targets: anchorColumnMarkers },
+                                                 {type: "headerAnchor", targets: [0] }]
+                            });
+
+                            loader.hide();
                         }
                     }
                 $('[data-toggle="popover"]').popover();

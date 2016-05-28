@@ -3,6 +3,7 @@
 <head>
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
+    <r:require modules="datatables" />
     <r:require modules="geneInfo"/>
     <r:require modules="crossMap"/>
     <r:require modules="igv"/>

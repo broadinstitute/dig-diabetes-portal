@@ -367,12 +367,6 @@
 
 
     var  proteinEffectList;
-//    var dynamicBurdenTest = function (variantIds){
-//        $('dbtActualResultsExist').hide();
-//        var loading = $('#spinner').show();
-//        postVariantReq("./burdenAjax",variantIds);
-//        return;
-//    };
 
     var dynamicBurdenTest2 = function (variantIds){
         $('resultsCage').hide();

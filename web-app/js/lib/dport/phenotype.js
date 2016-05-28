@@ -73,23 +73,18 @@ var mpgSoftware = mpgSoftware || {};
                 languageSetting = {url: '../js/lib/i18n/table.es.json'}
             }
             var table = $('#phenotypeTraits').dataTable({
-                iDisplayLength: 25,
-                bFilter: false,
-                aaSorting: [[2, "asc"]],
-                aoColumnDefs: [{sType: "allnumeric", aTargets: [2, 3, 4]}],
-                language: languageSetting
+                pageLength: 25,
+                filter: false,
+                order: [[2, "asc"]],
+                columnDefs: [{type: "allnumeric", targets: [2, 3, 4]}],
+                language: languageSetting,
+                buttons: [
+                    { extend: 'copy', text: copyText },
+                    'csv',
+                    'pdf',
+                    { extend: 'print', text: printText }
+                ]
             });
-            var tableTools = new $.fn.dataTable.TableTools(table, {
-                "aButtons": [
-                    {"sExtends": "copy", "sButtonText": copyText},
-                    "csv",
-                    "xls",
-                    "pdf",
-                    {"sExtends": "print", "sButtonText": printText}
-                ],
-                "sSwfPath": "../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
-            });
-            $(tableTools.fnContainer()).insertAfter('#phenotypeTraits');
             var dataLength = variant.length;
             var effectsField = UTILS.determineEffectsTypeString('#phenotypeTraits');
             for (var i = 0; i < dataLength; i++) {

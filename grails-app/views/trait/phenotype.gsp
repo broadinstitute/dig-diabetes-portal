@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="t2dGenesCore"/>
-    <r:require modules="core,phenotype,traitInfo"/>
+    <r:require modules="core,phenotype,traitInfo, datatables"/>
     <r:layoutResources/>
     <%@ page import="org.broadinstitute.mpg.RestServerService" %>
 </head>

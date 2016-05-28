@@ -218,7 +218,7 @@ button.expandoButton:visited {
                         var firstTime = (dataSetGroupCount == 0);
                         if (firstTime) {
                             if ($.fn.DataTable.isDataTable('#traitsPerVariantTable')) {
-                                $('#traitsPerVariantTable').dataTable({"bRetrieve": true}).fnDestroy();
+                                $('#traitsPerVariantTable').dataTable({"retrieve": true}).fnDestroy();
                             }
 
                             $('#traitsPerVariantTable').empty();
@@ -247,7 +247,6 @@ button.expandoButton:visited {
                 });
             }
             // get the indenting for now...
-            //$('#traitsPerVariantTable').dataTable().rowReordering();
             UTILS.labelIndenter('traitsPerVariantTable');
         };
 

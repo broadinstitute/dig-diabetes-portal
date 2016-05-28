@@ -216,7 +216,10 @@ var mpgSoftware = mpgSoftware || {};
                             // this field exists so we know which phenotype has the smallest p-value
                             // since processedDatasets is sorted by p-value, the first element has the smallest p-value
                             bestPVal: processedDatasets[0].p_value,
-                            datasets: processedDatasets
+                            datasets: processedDatasets,
+                            // need this so we can track the T2D phenotype even when the portal
+                            // is not being displayed in English
+                            phenotype: phenotype
                         });
                         
                     }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -226,7 +229,7 @@ var mpgSoftware = mpgSoftware || {};
             });
 
             // when every AJAX call has returned, then sort the results and add them to the
-            // document--this way, everything gets shown in alphabetical order consistently
+            // document--this way, everything gets shown in the correct order consistently
             $.when.apply($, arrayOfPromises).then(function() {
                 // in case of data problems, abandon ship
                 if(phenotypeData.length == 0) {
@@ -234,10 +237,10 @@ var mpgSoftware = mpgSoftware || {};
                 }
                 if(defaultPhenotype == 'T2D') {
                     // pull out t2d object and display that for primary
-                    var t2dData = _.find(phenotypeData, ['displayName', 'Type 2 diabetes']);
+                    var t2dData = _.find(phenotypeData, {phenotype: 'T2D'});
                     fillPrimaryPhenotypeBoxes(t2dData, variantAssociationStrings);
                     // everything else is other
-                    var everythingElse = _.chain(phenotypeData).reject(['displayName', 'Type 2 diabetes']).sortBy('bestPVal').value();
+                    var everythingElse = _.chain(phenotypeData).reject({phenotype: 'T2D'}).sortBy('bestPVal').value();
                     fillOtherPhenotypeBoxes(everythingElse, variantAssociationStrings);
                 } else {
                     // otherwise, the primary phenotype is the one with the smallest p-value

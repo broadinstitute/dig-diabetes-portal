@@ -24,19 +24,25 @@ var mpgSoftware = mpgSoftware || {};
             }
 
             var table = $(traitsPerVariantTable).dataTable({
-                iDisplayLength: 250,
-                bFilter: false,
-                bPaginate: false,
-                aaSorting: [[ 1, "asc" ]],
-                sDom: '<"top">rt<"bottom"flp><"clear">',
-                aoColumnDefs: [
-                    { sType: "stringAnchor", aTargets: [ 1 ] },
-                    { sType: "headerAnchor", aTargets: [0] },
-                    { "targets":  [1], orderData: [1,0, 2] },
-                    { "bSortable": false, "aTargets": [0,2,3,4,5,6] },
-                    { "width": "80px", "aTargets": [ 4,5,6 ] },
-                    { "width": "90px", "aTargets": [ 3 ] },
-                    { "width": "100px", "aTargets": [ 2 ] }],
+                pageLength: 250,
+                filter: false,
+                paging: false,
+                order: [[ 1, "asc" ]],
+                dom: '<"top">Brt<"bottom"flp><"clear">',
+                buttons: [
+                    { extend: "copy", text: copyText },
+                    'csv',
+                    'pdf',
+                    { extend: "print", text: printText }
+                ],
+                columnDefs: [
+                    { type: "html", targets: [ 1 ] },
+                    { type: "headerAnchor", targets: [0] },
+                    { target:  [1], orderData: [1,0, 2] },
+                    { orderable: false, targets: [0,2,3,4,5,6] },
+                    { width: "80px", targets: [ 4,5,6 ] },
+                    { width: "90px", targets: [ 3 ] },
+                    { width: "100px", targets: [ 2 ] }],
                 headerCallback: function( thead, data, start, end, display ) {
                     if (data.length===0){
                         var label0 = $(thead).find('th').eq(0).html();
@@ -100,16 +106,7 @@ var mpgSoftware = mpgSoftware || {};
                 },
                 language: languageSetting
             });
-            var tableTools = new $.fn.dataTable.TableTools( table, {
-                "aButtons": [
-                    { "sExtends": "copy", "sButtonText": copyText },
-                    "csv",
-                    "xls",
-                    "pdf",
-                    { "sExtends": "print", "sButtonText": printText }
-                ],
-                "sSwfPath": "../../js/DataTables-1.10.7/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
-            } );
+
             variantProcessing.addTraitsPerVariantTable(variant,
                 openPhenotypes,
                 traitsPerVariantTable,
