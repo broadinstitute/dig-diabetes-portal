@@ -1,12 +1,22 @@
 modules = {
     jquery {
         resource url: 'js/lib/jquery-1.11.0.min.js'
-        resource url: 'js/DataTables-1.10.7/media/js/jquery.dataTables.min.js'
-        resource url: 'js/DataTables-1.10.7/media/css/jquery.dataTables.min.css'
-        resource url: 'js/DataTables-1.10.7/extensions/TableTools/js/dataTables.tableTools.min.js'
-        resource url: 'js/DataTables-1.10.7/extensions/TableTools/css/dataTables.tableTools.min.css'
         resource url: 'js/lib/jstree.min.js'
         resource url: 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'
+    }
+    datatables {
+        dependsOn 'jquery'
+        resource url: 'js/lib/datatables/jquery.dataTables.js'
+
+        resource url: 'js/lib/datatables/pdfmake.js'
+        resource url: 'js/lib/datatables/vfs_fonts.js'
+        resource url: 'js/lib/datatables/buttons.html5.js'
+        resource url: 'js/lib/datatables/buttons.print.js'
+        resource url: 'js/lib/datatables/dataTables.buttons.js'
+
+        resource url: 'css/lib/datatables/buttons.dataTables.css'
+        resource url: 'css/lib/datatables/jquery.dataTables.css'
+
     }
     scroller {
         resource url: 'js/lib/dport/jquery.li-scroller.1.0.js'
@@ -96,6 +106,7 @@ modules = {
         resource url: 'css/lib/bootstrap-multiselect.css'
     }
     tableViewer {
+        dependsOn 'datatables'
         resource url: 'js/lib/dport/tableViewer.js'
         resource url: 'css/dport/tableViewer.css'
     }
@@ -123,9 +134,8 @@ modules = {
         resource url: 'js/lib/utils.js'
 
         resource url: 'js/lib/bootstrap3-typeahead.min.js'
-        resource url: 'js/lib/shared.js'
 
-        resource url: 'js/lib/lodash.js'
+        resource url: 'js/lib/lodash.min.js'
 
     }
     igvNarrow {  // IGV on a page with core

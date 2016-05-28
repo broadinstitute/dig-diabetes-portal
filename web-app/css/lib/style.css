@@ -245,10 +245,6 @@ table.basictable thead th.sorting_asc:before {
     border-radius: 8px;
 }
 
-.dataTables_length {
-    display: none;
-}
-
 .big-button-container {
     text-align: center;
     padding: 20px;
