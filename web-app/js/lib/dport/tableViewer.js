@@ -322,7 +322,7 @@ var variantProcessing = (function () {
     };
     var noop = function (field){return field;};
     var lineBreakSubstitution = function (field){
-        return (contentExists(field))?field.replace(/[;,]/g,'<br/>'):'';
+        return (contentExists(field)) ? field.replace(/[;,]/g,'<br/>') : '';
     };
 
 
@@ -339,7 +339,6 @@ var variantProcessing = (function () {
                                                  printText,         // text to display in the print button
                                                  querySpecifications   // the filters and properties that are being requested
     ) {
-
         var languageSetting = {};
         // check if the browser is using Spanish
         if ( locale.startsWith("es")  ) {
@@ -357,6 +356,8 @@ var variantProcessing = (function () {
             return {
                 name: name,
                 data: name,
+                // don't show anything if the data is undefined
+                defaultContent: '',
                 // this is the function that allows us to format the data
                 render: function(data, type, full, meta) {
                     // if Datatables is calling this function to do anything besides display data (ex. sorting),
@@ -374,7 +375,7 @@ var variantProcessing = (function () {
                         // pprop or dprop
                         // if the number is already an integer (in which case the rounded value is equal to itself) don't do anything
                         // otherwise, pass the number through UTILS.realNumberFormatter
-                        return getSimpleString(data, Math.round(data) == data ? noop : UTILS.realNumberFormatter, data, "");
+                        return getSimpleString(true, Math.round(data) == data ? noop : UTILS.realNumberFormatter, data, "");
                     } else if(whatKindOfPropertyIsThis == 1) {
                         // cprop
                         switch(columnName) {
@@ -396,9 +397,10 @@ var variantProcessing = (function () {
                             case "GENE":
                                 return getStringWithLink(geneRootUrl,(geneRootUrl && data), noop, data, data, "");
                             case "Consequence":
-                                return getSimpleString(((data)&&(contentExists(proteinEffectList))&&
-                                    (contentExists(proteinEffectList.proteinEffectMap))&&(contentExists(proteinEffectList.proteinEffectMap[data]))),
-                                    lineBreakSubstitution,proteinEffectList.proteinEffectMap[data],lineBreakSubstitution((data && (data !== 'null')) ? data:""));
+                                var contingent = (data) && (contentExists(proteinEffectList)) && (contentExists(proteinEffectList.proteinEffectMap)) && (contentExists(proteinEffectList.proteinEffectMap[data]));
+                                var displayField = proteinEffectList.proteinEffectMap[data];
+                                var alternate = lineBreakSubstitution((data && (data !== 'null')) ? data : "");
+                                return getSimpleString(contingent, lineBreakSubstitution, displayField, alternate);
                             default:
                                 return getSimpleString(data, noop, data, "");
                         }
@@ -410,7 +412,11 @@ var variantProcessing = (function () {
             };
         });
 
+        console.log('querySpecifications.properties:', querySpecifications.properties);
+
         var table = $(divId).dataTable({
+            // so that we can regenerate the table if the inputs change
+            destroy: true,
             // default number of rows
             pageLength: 25,
             // menu to select number of rows to display
@@ -425,8 +431,9 @@ var variantProcessing = (function () {
             ajax: {
                 url: '../variantSearchAndResultColumnsData',
                 data: function(d) {
-                    d.keys = querySpecifications.keys;
+                    d.filters = querySpecifications.filters;
                     d.properties = querySpecifications.properties;
+                    // d.properties = '';
                     d.numberOfVariants = data.numberOfVariants;
                     // need to stringify because otherwise Groovy gets a lot of
                     // parameters that aren't grouped correctly
@@ -440,8 +447,12 @@ var variantProcessing = (function () {
                 'csv',
                 { extend: 'pdf', orientation: 'landscape'},
                 { extend: "print", text: printText }
-            ]
+            ],
+            drawCallback: function(settings) {
+                $('#spinner').hide();
+            }
         });
+
     };
 
 
@@ -468,6 +479,9 @@ var variantProcessing = (function () {
     };
     var getSimpleString  = function(contingent,  modder,  displayField, alternate){
         var retVal = alternate;
+        if(contingent === true) {
+            // debugger
+        }
         if (contingent){
             retVal = ""+ modder (displayField);
         }

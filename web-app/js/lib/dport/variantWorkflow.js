@@ -281,7 +281,7 @@ var mpgSoftware = mpgSoftware || {};
             });
 
             var encodedListOfQueries = encodeURIComponent(JSON.stringify(listOfProcessedQueries));
-            window.location = './launchAVariantSearch/?' + encodedListOfQueries
+            window.location = './launchAVariantSearch/?filters=' + encodedListOfQueries
 
         };
 

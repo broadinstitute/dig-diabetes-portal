@@ -276,152 +276,14 @@ class VariantSearchController {
      */
     def launchAVariantSearch(){
         // process the incoming JSON and build strings reflecting what the server is expecting
-        def jsonSlurper = new JsonSlurper();
-        String decodedQuery = URLDecoder.decode(request.queryString)
-        ArrayList<JSONObject> listOfQueries = jsonSlurper.parseText(decodedQuery)
+//        def jsonSlurper = new JsonSlurper();
+//        String decodedQuery = URLDecoder.decode(request.queryString)
+//        String decodedQuery = URLDecoder.decode(params.filters)
+//        log.info("decodedQuery: ${decodedQuery}")
+//        String properties = params.props
+//        ArrayList<JSONObject> listOfQueries = jsonSlurper.parseText(decodedQuery)
 
-        ArrayList<String> computedStrings = new ArrayList<String>();
-
-        for(int i = 0; i < listOfQueries.size(); i++) {
-            JSONObject currentQuery = listOfQueries[i]
-            String processedQuery;
-            // if there is a phenotype defined, this is a query that has a
-            // phenotype, dataset, prop, comparator, and value
-            if( currentQuery.phenotype ) {
-                String comparator = (currentQuery.comparator=='=')?'|':currentQuery.comparator // if anyone passes in a real = then swap it out -- we demand a coded character
-                processedQuery = '17=' +
-                                 currentQuery.phenotype + '[' + currentQuery.dataset + ']' +
-                                 currentQuery.prop + comparator + currentQuery.value
-                computedStrings << processedQuery
-            } else {
-                switch(currentQuery.prop) {
-                    case 'gene':
-                        // convert gene into chromosome and start/end points
-                        // also be prepared to handle ±value
-
-                        // assume that value is just the gene name
-                        def gene = currentQuery.value
-                        def adjustment
-
-                        // if the gene contains '±', then split to get the start and end
-                        // adjustments
-                        if(gene.indexOf('±') > -1) {
-                            (gene, adjustment) = currentQuery.value.split(' ± ')
-                        }
-                        Gene geneObject = Gene.retrieveGene(gene)
-                        String chromosome = geneObject.getChromosome()
-                        Long start = geneObject.getAddrStart()
-                        Long end = geneObject.getAddrEnd()
-                        if(adjustment) {
-                            start -= Integer.parseInt(adjustment)
-                            end += Integer.parseInt(adjustment)
-                        }
-                        // trim off 'chr' before the chromosome number
-                        processedQuery = '8=' + chromosome.substring(3)
-                        computedStrings << processedQuery
-                        processedQuery = '9=' + start
-                        computedStrings << processedQuery
-                        processedQuery = '10=' + end
-                        computedStrings << processedQuery
-                        break;
-                    case 'chromosome':
-                        // there are two types of inputs: either of the form <chromosome> or
-                        // the form <chrom>:<start>-<end>
-                        if(currentQuery.value =~ /^\d{1,2}$/ ) {
-                            // we have just the chromosome number
-                            processedQuery = '8=' + currentQuery.value;
-                            computedStrings << processedQuery
-                        } else {
-                            // looks like <chrom>:<start>-<end>
-                            // first split chrom from start/end
-                            def (chromNumber, startEnd) = currentQuery.value.split(':')
-                            def (start, end) = startEnd.split('-')
-                            processedQuery = '8=' + chromNumber
-                            computedStrings << processedQuery
-                            processedQuery = '9=' + start
-                            computedStrings << processedQuery
-                            processedQuery = '10=' + end
-                            computedStrings << processedQuery
-                        }
-                        break;
-                    case PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY:
-                        if(currentQuery.value == '0') {
-                            // if value is 0, then drop the query--reason: there are variants
-                            // in the DB with MDS=NULL. There's no way to make SQL return those variants
-                            // if the value being compared against is 0 (as far as I'm aware), so the
-                            // simplest thing to do is just drop this query. If we get to the point of
-                            // supporting ORing queries, this may change
-                            break;
-                        }
-                        // Otherwise, process the query like normal, so fall through to the next case
-                    case [PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY, PortalConstants.JSON_VARIANT_SIFT_PRED_KEY, PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY]:
-                        processedQuery = '11=' + currentQuery.prop + '|' + currentQuery.value
-                        computedStrings << processedQuery
-                        break;
-                }
-            }
-
-        }
-
-        if ((computedStrings) &&
-                (computedStrings.size() > 0)){
-            displayCombinedVariantSearch(computedStrings,[])
-            return
-        }
-
-    }
-
-    /***
-     * I think the action below is never, ever used.
-     * @return
-     */
-    def relaunchAVariantSearch() {
-        String encodedParameters = params.encodedParameters
-
-        String urlDecodedEncParams = URLDecoder.decode(encodedParameters.trim())
-        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(urlDecodedEncParams?.replaceAll(~/,/,"^") , searchBuilderService, metaDataService)
-
-        LinkedHashMap propertiesToDisplay = params.findAll { it.key =~ /^savedValue/ }
-        List<LinkedHashMap> listOfProperties = []
-        if ((propertiesToDisplay) &&
-                (propertiesToDisplay.size() > 0)) {
-            propertiesToDisplay.each { String key, value ->
-                if ((value) &&
-                        (value != null)) {
-                    if (value.class.isArray()) {  // two identical keys will result in an array of keys
-                        for (String oneProperty in value) {
-                            List<String> disambiguator = oneProperty.tokenize("^")
-                            LinkedHashMap valuePasser = [:]
-                            valuePasser["phenotype"] = disambiguator[1]
-                            valuePasser["dataset"] = disambiguator[2]
-                            valuePasser["property"] = disambiguator[3]
-                            listOfProperties << valuePasser
-                        }
-                    } else {
-                        List<String> disambiguator = value.tokenize("^")
-                        LinkedHashMap valuePasser = [:]
-                        valuePasser["phenotype"] = disambiguator[1]
-                        valuePasser["dataset"] = disambiguator[2]
-                        valuePasser["property"] = disambiguator[3]
-                        listOfProperties << valuePasser
-                    }
-
-                }
-
-            }
-        }
-
-        // now convert these coded parameters into a form we can handle, combine in the properties, and reproduce the table
-        List<String> listOfFilters = getDataQueryHolder.listOfEncodedFilters()
-
-        if ((listOfFilters) &&
-                (listOfFilters.size() > 0)) {
-            displayCombinedVariantSearch(listOfFilters, listOfProperties)
-            return
-        }
-
-        // NOTE: we should never get here. Error condition, but a better way to fail
-        log.error("relaunchAVariantSearch Was unable to process encoded parameters = ${encodedParameters}.")
+        displayCombinedVariantSearch(params.filters, params.props)
 
     }
 
@@ -617,11 +479,6 @@ class VariantSearchController {
         }
     }
 
-
-
-
-
-
     /***
      * get properties given a data set. This Ajax call takes place on the search builder
      * after selecting a data set.
@@ -657,12 +514,98 @@ class VariantSearchController {
 
     }
 
+    private ArrayList<String> parseFilterJson(ArrayList<JSONObject> listOfQueries) {
+        ArrayList<String> computedStrings = new ArrayList<String>();
+
+        for(int i = 0; i < listOfQueries.size(); i++) {
+            JSONObject currentQuery = listOfQueries[i]
+            String processedQuery;
+            // if there is a phenotype defined, this is a query that has a
+            // phenotype, dataset, prop, comparator, and value
+            if( currentQuery.phenotype ) {
+                String comparator = (currentQuery.comparator=='=')?'|':currentQuery.comparator // if anyone passes in a real = then swap it out -- we demand a coded character
+                processedQuery = '17=' +
+                        currentQuery.phenotype + '[' + currentQuery.dataset + ']' +
+                        currentQuery.prop + comparator + currentQuery.value
+                computedStrings << processedQuery
+            } else {
+                switch(currentQuery.prop) {
+                    case 'gene':
+                        // convert gene into chromosome and start/end points
+                        // also be prepared to handle ±value
+
+                        // assume that value is just the gene name
+                        def gene = currentQuery.value
+                        def adjustment
+
+                        // if the gene contains '±', then split to get the start and end
+                        // adjustments
+                        if(gene.indexOf('±') > -1) {
+                            (gene, adjustment) = currentQuery.value.split(' ± ')
+                        }
+                        Gene geneObject = Gene.retrieveGene(gene)
+                        String chromosome = geneObject.getChromosome()
+                        Long start = geneObject.getAddrStart()
+                        Long end = geneObject.getAddrEnd()
+                        if(adjustment) {
+                            start -= Integer.parseInt(adjustment)
+                            end += Integer.parseInt(adjustment)
+                        }
+                        // trim off 'chr' before the chromosome number
+                        processedQuery = '8=' + chromosome.substring(3)
+                        computedStrings << processedQuery
+                        processedQuery = '9=' + start
+                        computedStrings << processedQuery
+                        processedQuery = '10=' + end
+                        computedStrings << processedQuery
+                        break;
+                    case 'chromosome':
+                        // there are two types of inputs: either of the form <chromosome> or
+                        // the form <chrom>:<start>-<end>
+                        if(currentQuery.value =~ /^\d{1,2}$/ ) {
+                            // we have just the chromosome number
+                            processedQuery = '8=' + currentQuery.value;
+                            computedStrings << processedQuery
+                        } else {
+                            // looks like <chrom>:<start>-<end>
+                            // first split chrom from start/end
+                            def (chromNumber, startEnd) = currentQuery.value.split(':')
+                            def (start, end) = startEnd.split('-')
+                            processedQuery = '8=' + chromNumber
+                            computedStrings << processedQuery
+                            processedQuery = '9=' + start
+                            computedStrings << processedQuery
+                            processedQuery = '10=' + end
+                            computedStrings << processedQuery
+                        }
+                        break;
+                    case PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY:
+                        if(currentQuery.value == '0') {
+                            // if value is 0, then drop the query--reason: there are variants
+                            // in the DB with MDS=NULL. There's no way to make SQL return those variants
+                            // if the value being compared against is 0 (as far as I'm aware), so the
+                            // simplest thing to do is just drop this query. If we get to the point of
+                            // supporting ORing queries, this may change
+                            break;
+                        }
+                // Otherwise, process the query like normal, so fall through to the next case
+                    case [PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY, PortalConstants.JSON_VARIANT_SIFT_PRED_KEY, PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY]:
+                        processedQuery = '11=' + currentQuery.prop + '|' + currentQuery.value
+                        computedStrings << processedQuery
+                        break;
+                }
+            }
+
+        }
+        return computedStrings
+    }
+
     /**
      * This function collects and returns the data to populate the search results table. It
      * expects data formatted by the Datatables function.
      */
     def variantSearchAndResultColumnsData() {
-        String filtersRaw = params['keys']
+        String filtersRaw = params['filters']
         String propertiesRaw = params['properties']
         JSONArray columns = (new JsonSlurper().parseText(params.columns)) as JSONArray;
         JSONArray orderBy = (new JsonSlurper().parseText(params.order)) as JSONArray;
@@ -756,7 +699,7 @@ class VariantSearchController {
      *  not the actual data that populates the table
      */
     def variantSearchAndResultColumnsInfo() {
-        String filtersRaw = params['keys']
+        String filtersRaw = params['filters']
         String propertiesRaw = params['properties']
         String filters = URLDecoder.decode(filtersRaw, "UTF-8")
         String properties = URLDecoder.decode(propertiesRaw, "UTF-8")
@@ -825,10 +768,14 @@ class VariantSearchController {
 
 
 
-    private void displayCombinedVariantSearch(List <String> listOfCodedFilters, List <LinkedHashMap> listOfProperties) {
+    private void displayCombinedVariantSearch(String filters, String requestForAdditionalProperties) {
+        String decodedFilters = URLDecoder.decode(filters)
+        ArrayList<JSONObject> listOfQueries = (new JsonSlurper()).parseText(decodedFilters)
+        ArrayList<String> listOfCodedFilters = parseFilterJson(listOfQueries);
+
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters,searchBuilderService,metaDataService)
         if (getDataQueryHolder.isValid()) {
-            String requestForAdditionalProperties = filterManagementService.convertPropertyListToTransferableString(listOfProperties)
+//            String requestForAdditionalProperties = filterManagementService.convertPropertyListToTransferableString(listOfProperties)
             List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
             List<String> urlEncodedFilters = getDataQueryHolder.listOfUrlEncodedFilters(encodedFilters)
             LinkedHashMap genomicExtents = sharedToolsService.validGenomicExtents (getDataQueryHolder.retrieveGetDataQuery())
@@ -863,6 +810,8 @@ class VariantSearchController {
                             show_exseq          : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
                             // what actually constitutes the query
                             queryFilters        : urlEncodedFilters.join("^"), //encodedFilters,
+                            // link to this page again
+                            filtersForSharing   : filters,
                             proteinEffectsList  : encodedProteinEffects,
                             // used to list the filters on the page
                             encodedFilters      : encodedFilters,

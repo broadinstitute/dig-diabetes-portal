@@ -117,7 +117,7 @@ modules = {
     core {
         dependsOn "jquery"
 
-        resource url: 'images/ajaxLoadingAnimation.gif'
+        resource url: 'images/ajax-loader.gif'
         resource url: 'images/icons/dna-strands.ico'
 
         resource url: 'css/lib/bootstrap.min.css'

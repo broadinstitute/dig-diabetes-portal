@@ -36,8 +36,8 @@
 <g:applyLayout name="errorReporter"/>
 
 
-<div id="spinner" class="spinner" style="display:none;">
-    <img id="img-spinner" src="${resource(dir: 'images', file: 'ajaxLoadingAnimation.gif')}" alt="Loading"/>
+<div id="spinner" class="dk-loading-wheel center-block" style="display:none;">
+    <img id="img-spinner" src="${resource(dir: 'images', file: 'ajax-loader.gif')}" alt="Loading"/>
 </div>
 <div id="header">
 

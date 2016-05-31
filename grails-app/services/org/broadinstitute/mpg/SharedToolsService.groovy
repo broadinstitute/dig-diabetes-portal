@@ -783,9 +783,9 @@ class SharedToolsService {
         LinkedHashMap phenotypeHolder = [:]
         if ((rawProperties) &&
                 (rawProperties.length())) {
-            List<String> listOfProperties = rawProperties.tokenize("^")
+            List<String> listOfProperties = rawProperties.tokenize(":")
             for (String property in listOfProperties) {
-                List<String> propertyPieces = property.tokenize(":") // 0=Phenotype,1= data set,2= property
+                List<String> propertyPieces = property.tokenize("-") // 0=Phenotype,1= data set,2= property
                 LinkedHashMap datasetHolder
                 if (phenotypeHolder.containsKey(propertyPieces[0])) {
                     datasetHolder = phenotypeHolder[propertyPieces[0]]

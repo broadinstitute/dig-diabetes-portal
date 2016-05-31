@@ -1407,14 +1407,14 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param requestedProperties
      * @return
      */
-    public LinkedHashMap getColumnsToDisplay(String filterJson, LinkedHashMap requestedProperties) {
+    public LinkedHashMap getColumnsToDisplay(String filterJson, LinkedHashMap<String, LinkedHashMap> requestedProperties) {
         //Get the sample groups and phenotypes from the filters
         List<String> datasetsToFetch = []
         List<String> phenotypesToFetch = []
         List<String> propertiesToFetch = []
         List<String> commonProperties = [] // default common properties
 
-        if (!requestedProperties) {
+//        if (!requestedProperties) {
             commonProperties << "CLOSEST_GENE"
             commonProperties << "VAR_ID"
             commonProperties << "DBSNP_ID"
@@ -1422,17 +1422,17 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             commonProperties << "Consequence"
             commonProperties << "CHROM"
             commonProperties << "POS"
-        }
+//        }
 
         //  if we don't have a better idea then launch the search based on the filters.  Otherwise used our stored criteria
-        if (!requestedProperties) {
+//        if (!requestedProperties) {
             JsonSlurper slurper = new JsonSlurper()
             for (def parsedFilter in slurper.parseText(filterJson)) {
                 datasetsToFetch << parsedFilter.dataset_id
                 phenotypesToFetch << parsedFilter.phenotype
                 propertiesToFetch << parsedFilter.operand
             }
-        }
+//        }
 
         // if specific data sets are requested then add them to the list
         if (requestedProperties) {
@@ -1476,7 +1476,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 if (phenotype == 'common') {
                     phenotypeProperties?.each { String datasetName, v ->
                         if (datasetName == 'common') {
-                            commonProperties = []
+//                            commonProperties = []
                             if (v?.size() > 0) {
                                 for (String property in v) {
                                     commonProperties << property
@@ -1513,10 +1513,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         // Adding Phenotype specific properties
         propertiesToFetch = expandPropertyList(propertiesToFetch, requestedProperties)
-        if (!requestedProperties) {
+//        if (!requestedProperties) {
             commonProperties = expandCommonPropertyList(commonProperties, requestedProperties)
-        }
+//        }
 
+        log.info("commonProps: ${commonProperties}")
         LinkedHashMap columnsToDisplayStructure = sharedToolsService.getColumnsToDisplayStructure(phenotypesToFetch, datasetsToFetch, propertiesToFetch, commonProperties)
         return columnsToDisplayStructure
     }

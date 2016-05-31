@@ -9,7 +9,7 @@ var UTILS = {
     realNumberFormatter: function (incoming, precision) {
         // if precision isn't defined, default to 3
         precision = precision || 3;
-        var returnValue = "(null)";
+        var returnValue = "";
         if (incoming !=  null ){
             var value = parseFloat(incoming);
             returnValue = value.toPrecision(precision);
