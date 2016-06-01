@@ -232,11 +232,10 @@
                         <div class="separator"></div>
 
             <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                        <g:renderBetaFeaturesDisplayedValue>
                             <g:render template="/widgets/locusZoomPlot"/>
 
                             <div class="separator"></div>
-                        </g:renderBetaFeaturesDisplayedValue>
+
             </g:if>
 
                         <div class="accordion-group">
