@@ -871,6 +871,13 @@ class MetaDataService {
         return this.jsonParser.getSampleGroupForPhenotypeDatasetTechnologyAncestry ( phenotypeName, datasetName, technologyName,  metadataVersion,  ancestryName)
     }
 
+    public List<String> getTechnologyListByVersion(String dataVersion) {
+        if(dataVersion == null) {
+            dataVersion = 'mdv2'
+        }
+        List<String> technologyList = this.jsonParser.getTechnologyListByVersion(dataVersion);
+        return technologyList
+    }
 
 
     public List<String> getTechnologyListByPhenotypeAndVersion(String phenotypeName,String dataVersion) {

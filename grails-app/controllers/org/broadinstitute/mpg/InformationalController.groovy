@@ -1,5 +1,8 @@
 package org.broadinstitute.mpg
 
+import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.metadata.Experiment
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
 
@@ -7,16 +10,48 @@ import org.springframework.web.servlet.support.RequestContextUtils
 
 class  InformationalController {
     RestServerService restServerService
+    MetaDataService metaDataService
 
     def index() {}
 
     def about() {
-
+        render (view: 'about')
     }
 
-    def data(){
+    def data (){
+        Set<Experiment> allExperimentsForGivenVersion = []
+
+        String currentVersion = metaDataService.getDataVersion()
+        List<String> technologies = metaDataService.getTechnologyListByVersion(currentVersion)
+
+        technologies.each {
+            allExperimentsForGivenVersion.add(metaDataService.getExperimentByVersionAndTechnology(currentVersion, it, 1))
+//            experiments.each {
+//                allSampleGroupsForGivenVersion.addAll(it.sampleGroups)
+//            }
+        }
+
+        log.info("allExperiments: ${allExperimentsForGivenVersion}")
+
+//        allExperimentsForGivenVersion.addAll()
+//        allExperimentsForGivenVersion.addAll(metaDataService.getExperimentByVersionAndTechnology('mdv2', 'ExSeq', 1))
+//        allExperimentsForGivenVersion.addAll(metaDataService.getExperimentByVersionAndTechnology('mdv2', 'ExChip', 1))
+//        allExperimentsForGivenVersion.addAll(metaDataService.getExperimentByVersionAndTechnology('mdv2', '1kg', 1))
+//        allExperimentsForGivenVersion.addAll(metaDataService.getExperimentByVersionAndTechnology('mdv2', 'WGS', 1))
+//
+//
+//        allExperimentsForGivenVersion.each {
+//            log.info(it.name)
+//            it.sampleGroups.each {
+//                log.info(it.name)
+//                log.info(it.ancestry)
+//                log.info(it.casesNumber)
+//                log.info(it.controlsNumber)
+//            }
+//        }
+
         String locale = RequestContextUtils.getLocale(request)
-        render (view: 'data', model:[locale:locale])
+        render (view: 'data', model:[locale:locale, experiments: allExperimentsForGivenVersion])
     }
     def aboutBeacon (){
         render (view: 'aboutBeacon')

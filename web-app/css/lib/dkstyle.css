@@ -6,10 +6,9 @@
 }
 
 div.dk-amp-banner {
+	background-image:url(../images/AMP_banner_middle.png);
 	background-position:left top;
-	/*background-repeat:repeat-x;*/
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
+	background-repeat:repeat-x;
 	background-color:#397eb5;
 	height: 70px;
 	padding: 0;
@@ -17,6 +16,7 @@ div.dk-amp-banner {
 }
 
 div.dk-amp-name-wrapper {
+	background-image:url(../images/AMP_banner_right.png);
 	background-position:right top;
 	background-repeat:no-repeat;
 	height: 70px;
@@ -24,6 +24,7 @@ div.dk-amp-name-wrapper {
 }
 
 div.dk-amp-banner-name {
+	background-image:url(../images/AMP_banner_left.png);
 	background-position:left top;
 	background-repeat:no-repeat;
 	color: #fff;
@@ -38,6 +39,7 @@ div.dk-t2d-banner {
 	color: #fff;
 	padding: 10px 10px 5px 10px;
 	background-color:#283096;
+	background-image:url(../images/logo_bg.jpg);
 	background-size: 100% 100%;
 }
 
@@ -71,11 +73,11 @@ div.dk-t2d-menu-banner {
 	background-color:#347;
 	color: #fff;
 	text-shadow: #666 0 1px 2px;
-	padding: 0 7px 0 7px;
+	padding: 0 0 0 7px;
 	font-size: 13px;
 }
 
-ul.dk-t2d-menu > li > a {
+ul.dk-t2d-menu > * > a {
 	color: #fff;
 	padding: 3px 12px 3px 12px;
 }
@@ -86,7 +88,7 @@ ul.dk-t2d-menu > * > a:hover, ul.dk-t2d-menu > * > a:active, ul.dk-t2d-menu > * 
 	border-radius: 0;
 }
 
-div.dk-t2d-content {
+div.dk-2td-content {
 	color: #333;
 }
 
@@ -95,11 +97,11 @@ div.dk-t2d-content {
 	line-height: 15px;
 }
 
-div.dk-t2d-content h1,div.dk-t2d-content h2,div.dk-t2d-content h3 {
+div.dk-2td-content h1,div.dk-2td-content h2,div.dk-2td-content h3 {
 	font-weight: 300;
 }
 
-div.dk-variant-submit-search {
+div.dk-variant-search-builder, div.dk-variant-submit-search {
 	border-top: solid 1px #ddd;
 }
 
@@ -140,6 +142,7 @@ div.dk-variant-search-builder-description{
 }
 
 div.dk-t2d-advanced-filter {
+	display:none;
 	padding-left: 45px;
 	border-bottom: solid 1px #ddd;
 }
@@ -159,20 +162,12 @@ table.dk-search-collection {
 	border-bottom: solid 2px #ddd;
 }
 
-table.dk-search-collection a:hover {
-	cursor: pointer;
-}
-
-table.dk-search-collection th {
-	font-weight: bold;
-}
-
 table.dk-search-collection td {
 	vertical-align:middle !important;
 }
 
 div.dk-t2d-back-to-search {
-	padding: 0 0 30px 15px;
+	padding: 30px 0 30px 15px;
 }
 
 div.dk-variant-table-header {
@@ -189,6 +184,10 @@ table.dk-search-result td {
 	text-align: center;
 	border:solid 1px #fff !important;
 	font-size: 12px;
+}
+
+table.dk-search-result th.dk-common {
+	background-color: #ddd;
 }
 
 table.dk-search-result th.dk-common {
