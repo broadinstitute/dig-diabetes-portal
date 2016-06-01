@@ -66,7 +66,6 @@
     var encodedParameters = decodeURIComponent("<%=encodedParameters%>");
 
     function dynamicFillTheFields(data) {
-        console.log('data is', data);
         /**
          * This function exists to avoid having to do
          * "if translationDictionary[string] defined, return that, else return string"

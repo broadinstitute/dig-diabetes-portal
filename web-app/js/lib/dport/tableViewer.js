@@ -438,7 +438,7 @@ var variantProcessing = (function () {
             buttons: [
                 { extend: "copy", text: copyText },
                 'csv',
-                'pdf',
+                { extend: 'pdf', orientation: 'landscape'},
                 { extend: "print", text: printText }
             ]
         });
