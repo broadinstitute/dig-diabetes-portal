@@ -48,18 +48,11 @@
                             <li><g:message code="contact.option.contribute" /></li>
                         </ul>
                     </p>
-                    <h3>Accelerating Medicines Partnership (AMP) Type 2 Diabetes Knowledge Portal (T2DKP) and Data Collection Center (DCC) Team</h3>
-                    <table border="0">
-                        <tr>
-                            <td>Jose Florez</td><td>&nbsp;</td><td>Principal Investigator</td>
-                        </tr>
-                        <tr>
-                            <td>Jason Flannick</td><td>&nbsp;</td><td>Senior Group Leader</td>
-                        </tr>
-                        <tr>
-                            <td>Noël Burtt</td><td>&nbsp;</td><td>Associate Director, Operations</td>
-                        </tr>
-                    </table>
+                    <h3>Accelerating Medicines Partnership (AMP) Type 2 Diabetes Knowledge Portal (T2DKP) and Data Coordinating Center (DCC) Team</h3>
+                    <p>Jose Florez (Principal Investigator)<br>
+                        Jason Flannick (Senior Group Leader)<br>
+                        Noël Burtt (Associate Director, Operations<br></p>
+                        
                     <h4>Manager of content and community</h4>
 
                     <p>Maria Costanzo</p>
