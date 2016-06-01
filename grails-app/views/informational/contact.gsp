@@ -60,10 +60,10 @@
                             <td>Noël Burtt</td><td>&nbsp;</td><td>Associate Director, Operations</td>
                         </tr>
                     </table>
-                    <h5>Manager of content and community</h5>
+                    <h4>Manager of content and community</h4>
 
                     <p>Maria Costanzo</p>
-                    <h5>Software engineers</h5>
+                    <h4>Software engineers</h4>
 
                     <p>Benjamin Alexander<br>
                         Marc Duby<br>
@@ -74,30 +74,30 @@
                         Michael Sanders<br>
                         David Siedzik<br>
                         Kaan Yuksel</p>
-                    <h5>Computational biologists</h5>
+                    <h4>Computational biologists</h4>
 
                     <p>Marcin von Grotthuss<br>
                         Ryan Koesterer</p>
-                    <h5>Project manager</h5>
+                    <h4>Project manager</h4>
 
                     <p>Lizz Caulkins</p>
 
                     <h3>Methods and Tool Development Teams</h3>
-                    <h5>AMP Type 2 Diabetes Knowledge (T2DK)</h5>
+                    <h4>AMP Type 2 Diabetes Knowledge (T2DK)</h4>
 
                     <p>Daniel MacArthur (Principal Investigator)<br>
                         Benjamin Neale (Principal Investigator)<br>
                         Jonathan Bloom<br>
                         Konrad Karczewski<br>
                         Cotton Seed</p>
-                    <h5>AMP Enhanced Diabetes Portal</h5>
+                    <h4>AMP Enhanced Diabetes Portal</h4>
 
                     <p>Michael Boehnke (Principal Investigator)<br>
                         Gonçalo Abecasis (Principal Investigator)<br>
                         Christopher Clark<br>
                         Matthew Flickinger<br>
                         Ryan Welch</p>
-                    <h5>AMP Federated Nodes</h5>
+                    <h4>AMP Federated Nodes</h4>
 
                     <p>Paul Flicek (Principal Investigator)<br>
                         Mark McCarthy (Principal Investigator)<br>
