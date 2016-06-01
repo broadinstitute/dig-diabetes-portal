@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by mduby on 8/27/15.
+ * Concrete class to represent the getData query data
+ *
  */
 public class GetDataQueryBean implements GetDataQuery {
     // local variables
@@ -23,7 +24,7 @@ public class GetDataQueryBean implements GetDataQuery {
     int pageSize = 100;
     int limit = 1000;
     boolean isCount = false;
-
+    private List<Covariate> covariateList = new ArrayList<Covariate>();
 
     public void addQueryProperty(Property property) {
         if (!(this.queryPropertyMap.containsKey(property.getId()))){
@@ -143,5 +144,20 @@ public class GetDataQueryBean implements GetDataQuery {
         return returnValue;
     }
 
+    /**
+     * add to the covariate list
+     *
+     * @param covariate
+     */
+    public void addToCovariateList(Covariate covariate) {
+        if (this.covariateList == null) {
+            this.covariateList = new ArrayList<Covariate>();
+        }
 
+        this.covariateList.add(covariate);
+    }
+
+    public List<Covariate> getCovariateList() {
+        return covariateList;
+    }
 }

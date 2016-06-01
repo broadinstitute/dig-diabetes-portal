@@ -51,4 +51,7 @@ public interface GetDataQuery {
 
     public List <Integer> getPropertyIndexList(String propertyName);
 
+    public void addToCovariateList(Covariate covariate);
+
+    public List<Covariate> getCovariateList();
 }

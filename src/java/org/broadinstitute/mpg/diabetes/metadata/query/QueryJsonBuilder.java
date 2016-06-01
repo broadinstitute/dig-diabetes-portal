@@ -192,6 +192,42 @@ public class QueryJsonBuilder {
         return builder.toString();
     }
 
+    protected String getCovariateString(List<Covariate> covariateList) {
+        // local variables
+        StringBuilder stringBuilder = new StringBuilder();
+        String queryComma = "";
+
+        if ((covariateList != null) && (covariateList.size() > 0)) {
+            // add in the query header
+            stringBuilder.append("\"covariates\": [ ");
+
+            // add in the covariates
+            for (Covariate covariate: covariateList) {
+                // just handle variants for now
+                if (covariate.getVariant() != null) {
+                    stringBuilder.append(queryComma);
+                    stringBuilder.append("{\"type\": \"variant\", \"chrom\": \"");
+                    stringBuilder.append(covariate.getVariant().getChromosome());
+                    stringBuilder.append("\", \"pos\": ");
+                    stringBuilder.append(covariate.getVariant().getPosition());
+                    stringBuilder.append(", \"ref\": \"");
+                    stringBuilder.append(covariate.getVariant().getReferenceAllele());
+                    stringBuilder.append("\", \"alt\": \"");
+                    stringBuilder.append(covariate.getVariant().getAlternateAllele());
+                    stringBuilder.append("\"}");
+
+                    queryComma = ", ";
+                }
+            }
+
+            // close out the query header
+            stringBuilder.append(" ] ");
+        }
+
+        // return
+        return stringBuilder.toString();
+    }
+
     /**
      * get the filter string for the getData call
      * @param filterList

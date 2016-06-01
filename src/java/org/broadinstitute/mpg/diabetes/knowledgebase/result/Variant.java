@@ -37,4 +37,18 @@ public interface Variant {
      * @return
      */
     public PropertyValue getPropertyValueFromCollection(String propertyName, String sampleGroupName, String phenotypeName);
+
+    public int getPosition();
+
+    public void setPosition(int position);
+
+    public String getReferenceAllele();
+
+    public void setReferenceAllele(String referenceAllele);
+
+    public String getAlternateAllele();
+
+    public void setAlternateAllele(String alternateAllele);
+
+    public void setChromosome(String chromosome);
 }

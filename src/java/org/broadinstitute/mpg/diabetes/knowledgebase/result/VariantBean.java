@@ -17,6 +17,9 @@ public class VariantBean implements Variant {
 
     // instance variables
     private String chromosome;
+    private int position;
+    private String referenceAllele;
+    private String alternateAllele;
     private String variantId;
     private String polyphenPredictor;
     private String siftPredictor;
@@ -170,5 +173,29 @@ public class VariantBean implements Variant {
 
         // return
         return formattedVarIdBuffer.toString();
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public String getReferenceAllele() {
+        return referenceAllele;
+    }
+
+    public void setReferenceAllele(String referenceAllele) {
+        this.referenceAllele = referenceAllele;
+    }
+
+    public String getAlternateAllele() {
+        return alternateAllele;
+    }
+
+    public void setAlternateAllele(String alternateAllele) {
+        this.alternateAllele = alternateAllele;
     }
 }

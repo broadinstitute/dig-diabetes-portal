@@ -1,6 +1,8 @@
 package org.broadinstitute.mpg.diabetes.metadata.query;
 
 import junit.framework.TestCase;
+import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant;
+import org.broadinstitute.mpg.diabetes.knowledgebase.result.VariantBean;
 import org.broadinstitute.mpg.diabetes.metadata.Property;
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser;
 import org.broadinstitute.mpg.diabetes.metadata.sort.PropertyListForQueryComparator;
@@ -121,6 +123,40 @@ public class QueryJsonBuilderTest extends TestCase {
 
         // build the genererated string
         generatedString = this.queryJsonBuilder.getFilterString(this.filterList);
+
+        // test
+        assertNotNull(generatedString);
+        assertTrue(generatedString.length() > 0);
+        assertEquals(referenceString, generatedString);
+
+        // print for test copy
+        System.out.println(generatedString);
+    }
+
+    @Test
+    public void testGetCovariateString() {
+        // local variables
+        StringBuilder builder = new StringBuilder();
+        String referenceString = null;
+        String generatedString = null;
+
+        // create variant, add it to new covariate, then add to covariate
+        Variant variant = new VariantBean();
+        variant.setChromosome("22");
+        variant.setPosition(29838203);
+        variant.setReferenceAllele("A");
+        variant.setAlternateAllele("T");
+        Covariate covariate = new CovariateBean();
+        covariate.setVariant(variant);
+        List<Covariate> covariateList = new ArrayList<Covariate>();
+        covariateList.add(covariate);
+
+        // build the reference string
+        builder.append("\"covariates\": [ {\"type\": \"variant\", \"chrom\": \"22\", \"pos\": 29838203, \"ref\": \"A\", \"alt\": \"T\"} ] ");
+        referenceString = builder.toString();
+
+        // build the genererated string
+        generatedString = this.queryJsonBuilder.getCovariateString(covariateList);
 
         // test
         assertNotNull(generatedString);
