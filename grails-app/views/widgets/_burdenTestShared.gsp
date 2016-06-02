@@ -807,7 +807,7 @@ line.center{
 
 
            var phenotypeToPredict = $('#phenotypeFilter').val();
-           $.ajax({
+           var promise = $.ajax({
                 cache: false,
                 type: "post",
                 url: "${createLink(controller: 'variantInfo', action: 'burdenTestAjax')}",
@@ -875,6 +875,7 @@ line.center{
                     core.errorReporter(jqXHR, exception);
                 }
             });
+
       }
 
 
@@ -1253,7 +1254,7 @@ line.center{
                 }
                 $('#'+divElementName).hide();
                 if (sampleMetadata.filters){
-                  var filter = _.find(sampleMetadata.filters, ['name',elementName]);
+                  var filter = _.find(sampleMetadata.filters, {'name':elementName});
                   if (filter){
                      if (filter.type === 'INTEGER'){
                         buildCategoricalPlot(optionsPerFilter[elementName],'#'+divElementName);
@@ -1333,7 +1334,7 @@ line.center{
                 var singleElement = sampleMetadata.filters[i];
                 var elementName = singleElement.name;
                 if (sampleMetadata.filters){
-                  var filter = _.find(sampleMetadata.filters, ['name',elementName]);
+                  var filter = _.find(sampleMetadata.filters, {'name':elementName});
                   if (filter){
                      returnValue[singleElement.name] = singleElement.type;
                   }
@@ -1541,7 +1542,7 @@ line.center{
                    $('.sampleNumberReporter .phenotypeSpecifier').text(params.propertyName);
                 $('#'+divElementName).hide();
                 if (sampleMetadata.filters){
-                  var filter = _.find(sampleMetadata.filters, ['name',params.propertyName]);
+                  var filter = _.find(sampleMetadata.filters, {'name':params.propertyName});
                   if (filter){
                      if (filter.type === 'INTEGER'){
                         predefinedCategoricalPlot(distributionInfo.sampleData.distribution_array,'#'+divElementName);
