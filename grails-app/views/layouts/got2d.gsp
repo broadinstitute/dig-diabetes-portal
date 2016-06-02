@@ -6,13 +6,13 @@
     <r:require modules="core"/>
     <r:require modules="sigma"/>
     <r:layoutResources/>
-    <title>Sigma T2D</title>
+    <title>GoT2D</title>
     <g:layoutHead/>
 </head>
 
 <body>
 <div class="container-fluid" style="padding:0;">
-    <div><g:render template="sigma/sigma-header"/></div>
+    <div><g:render template="got2d/got2d-header"/></div>
     <g:layoutBody/>
 </div>
 </body>

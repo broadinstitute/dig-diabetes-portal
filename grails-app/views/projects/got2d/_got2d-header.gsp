@@ -23,9 +23,9 @@
     <div class="row" >
         <div class="col-sm-12 col-md-12 text-center">
                 <span style="float: right;">
-                    <a href='<g:createLink controller="sigma" action="index" params="[lang:'es']"/>' style="padding-right: 20px">
+                    <a href='<g:createLink controller="projects" action="sigma" params="[lang:'es']"/>' style="padding-right: 20px">
                         <r:img class="currentlanguage" uri="/images/spanish_black_it.png" alt="Spanish"/></a>
-                    <a href='<g:createLink controller="sigma" action="index" params="[lang:'en']"/>'>
+                    <a href='<g:createLink controller="projects" action="sigma" params="[lang:'en']"/>'>
                         <r:img class="currentlanguage" uri="/images/english_black_it.png" alt="English"/></a>
                 </span>
         </div>

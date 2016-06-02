@@ -6,8 +6,8 @@ import spock.lang.Specification
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
-@TestFor(SigmaController)
-class SigmaControllerSpec extends Specification {
+@TestFor(ProjectsController)
+class ProjectsControllerSpec extends Specification {
 
     public static final String ENGLISH = "en"
     public static final String SPANISH = "es"
