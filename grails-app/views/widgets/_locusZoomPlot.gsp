@@ -188,9 +188,10 @@
                             }
                         }
                     }
-                    chromosome = 22;
-                    position = 29837203;
-                    rangeInteger = 100000;
+                    // take these ludge values for now since Hail supports all chroms again
+                    // chromosome = 22;
+                    // position = 29837203;
+                    // rangeInteger = 100000;
 
                     // get the locuszoom range and set it on the LZ div
                     var startPosition = parseInt(position) - rangeInteger;

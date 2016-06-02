@@ -362,7 +362,7 @@ class GeneController {
         // local variables
         String jsonReturn;
         String chromosome = params.chromosome;
-        chromosome = "22"
+//        chromosome = "22"
         String startString = params.start;
 //        startString = "29737203"
         String endString = params.end;
