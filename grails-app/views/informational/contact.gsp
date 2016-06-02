@@ -89,6 +89,7 @@
                         Gonçalo Abecasis (Principal Investigator)<br>
                         Christopher Clark<br>
                         Matthew Flickinger<br>
+                        Daniel Taliun<br>
                         Ryan Welch</p>
                     <h4>AMP Federated Nodes</h4>
 
