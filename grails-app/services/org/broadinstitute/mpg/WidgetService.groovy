@@ -365,8 +365,6 @@ class WidgetService {
             jsonResultString = this.errorResponse;
         }
 
-        log.info("?!?!?!? ${jsonResultObject}")
-
         // return
         return jsonResultString;
     }

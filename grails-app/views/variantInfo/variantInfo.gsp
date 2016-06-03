@@ -5,6 +5,7 @@
     <r:require modules="variantInfo, igv"/>
     <r:require modules="tableViewer,traitInfo"/>
     <r:require modules="boxwhisker"/>
+    <r:require module="locusZoom" />
     <r:require modules="core, mustache"/>
 
     <r:layoutResources/>

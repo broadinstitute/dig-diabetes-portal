@@ -347,9 +347,6 @@ class GeneController {
 //        beanList.add(new PhenotypeBean(key: "HDL", name: "HDL", description: "HDL Cholesterol", defaultSelected: false));
 //        beanList.add(new PhenotypeBean(key: "TC", name: "TC", description: "TC", defaultSelected: false));
 //        beanList.add(new PhenotypeBean(key: "TG", name: "TG", description: "TG", defaultSelected: false));
-        beanList.add(new PhenotypeBean(key: "NUMSING", name: "NUMSING", description: "some phenotype"))
-        beanList.add(new PhenotypeBean(key: "NUMRARE", name: "NUMRARE", description: "some phenotype #2"))
-        // return
         return beanList
     }
 
