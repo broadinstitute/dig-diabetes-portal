@@ -9,6 +9,7 @@ public class ServerBean {
     public static final String BURDEN_TEST_CALL_V2                              = "v2";
     public static final String BURDEN_TEST_CALL_GET_PHENOTYPES                  = "getPhenotypes";
     public static final String BURDEN_TEST_CALL_GET_PHENOTYPES_WITH_SLASH       = "/getPhenotypes";
+    public static final String BURDEN_TEST_CALL_META_ANALYSIS                   = "metaAnalysis";
 
     // instance variables
     private String url;

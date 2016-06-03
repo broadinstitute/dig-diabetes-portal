@@ -807,7 +807,7 @@ line.center{
 
 
            var phenotypeToPredict = $('#phenotypeFilter').val();
-           var promise = $.ajax({
+           return $.ajax({
                 cache: false,
                 type: "post",
                 url: "${createLink(controller: 'variantInfo', action: 'burdenTestAjax')}",
@@ -818,8 +818,9 @@ line.center{
                        traitFilterSelectedOption: phenotypeToPredict,
                        stratum: stratum
                 },
-                async: true,
-                success: function (data) {
+                async: true
+            }).success(
+               function (data) {
                     if ((typeof data !== 'undefined') && (data)){
                     //first check for error conditions
                         if (!data){
@@ -839,6 +840,7 @@ line.center{
 
                             var oddsRatio = UTILS.realNumberFormatter(Math.exp(data.stats.beta));
                             var beta = UTILS.realNumberFormatter(data.stats.beta);
+                            var stdErr = UTILS.realNumberFormatter(data.stats.stdError);
                             var pValue = UTILS.realNumberFormatter(data.stats.pValue);
 
                             var currentStratum = 'stratum'; // 'strat1' marks no distinct strata used
@@ -850,15 +852,24 @@ line.center{
                             } else {
                                 var existingResults = $('.strataResults li');
                                 if (existingResults.length===0){
-                                   $('.strataResults').append('<li>'+currentStratum+' = '+pValue+'.</li>');
+                                   $('.strataResults').append(  '<li>'+currentStratum+' pValue = <span class="pv '+currentStratum+'">'+pValue+'</span>'+
+                                                                '<span class="be '+currentStratum+'" style="display: none">'+data.stats.beta+'</span>'+
+                                                                '<span class="st '+currentStratum+'" style="display: none">'+data.stats.stdError+'</span>'+
+                                                                '</li>');
                                 } else {
+                                   // we want to add these results in order, which create some complexity, since we get these results asynchronously in no particular order
+                                   //  therefore retrieve all the results from the dom, put them in an array, sort the array, clear out the Dom, and then append the sorted array
+                                   //  to the Dom.  It works okay for a few results -- for many more it would become inefficient
                                    var existingTextResults = [];
                                    _.forEach(existingResults,function(d){
-                                   existingTextResults.push( '<li>'+$(d).text()+'</li>');
+                                   existingTextResults.push( '<li>'+$(d).html()+'</li>');
                                    })
-                                   existingTextResults.push('<li>'+currentStratum+' = '+pValue+'.</li>');
+                                   existingTextResults.push('<li>'+currentStratum+' pValue = <span class="pv '+currentStratum+'">'+pValue+'</span>'+
+                                                            '<span class="be '+currentStratum+'" style="display: none">'+data.stats.beta+'</span>'+
+                                                            '<span class="st '+currentStratum+'" style="display: none">'+data.stats.stdError+'</span>'+
+                                                            '</li>');
                                    var sortedResults = existingTextResults.sort();
-                                   $('.strataResults li').empty();
+                                   $('.strataResults').empty();
                                    _.forEach(sortedResults,function(result){$('.strataResults').append(result)})
                                 }
 
@@ -869,13 +880,13 @@ line.center{
                        }
                     }
                     $('#rSpinner').hide();
-                },
-                error: function (jqXHR, exception) {
+                    }
+            ).fail(function (jqXHR, exception) {
                     $('#rSpinner').hide();
                     core.errorReporter(jqXHR, exception);
                 }
-            });
 
+            );
       }
 
 
@@ -907,6 +918,49 @@ line.center{
          */
         var runBurdenTest = function (){
 
+            var runMetaAnalysis = function (){
+               var domHolder = $('.strataResults li');
+               var allElements = [];
+               // collect the numbers we need from the Dom
+               _.forEach(domHolder, function(eachStratum){
+                   allElements.push({'pv': $(eachStratum).find('.pv').text(),
+                   'be': $(eachStratum).find('.be').text(),
+                   'st': $(eachStratum).find('.st').text()});
+               });
+               // create JSON we can send to the server
+               var jsonHolder = [];
+                _.forEach(allElements, function(stratum){
+                    jsonHolder.push('{"pv":'+stratum.pv+',"be":'+stratum.be+',"st":'+stratum.st+'}');
+                });
+                var json = '['+jsonHolder.join(',')+']';
+                var promise =  $.ajax({
+                    cache: false,
+                    type: "post",
+                    url: "${createLink(controller: 'variantInfo', action: 'metadataAjax')}",
+                    data: {valueArray: json },
+                    async: true
+                 });
+                 promise.done(
+                  function (data) {
+                    if ((typeof data !== 'undefined') &&
+                         (data) &&
+                         (!(data.is_error))&&
+                         (data.stats)){
+                            var oddsRatio = UTILS.realNumberFormatter(Math.exp(data.stats.beta));
+                            var beta = UTILS.realNumberFormatter(data.stats.beta);
+                            var stdErr = UTILS.realNumberFormatter(data.stats.stdError);
+                            var pValue = UTILS.realNumberFormatter(data.stats.pValue);
+                             $('.strataResults').append(  '<li>Meta-analysis: pValue = <span class="pv metaAnalysis">'+pValue+'</span>'+
+'<span class="be metaAnalysis">Beta='+beta+'</span>'+
+'<span class="st metaAnalysis">Std error='+stdErr+'</span>'+
+'</li>');
+                       }
+                    }
+                 );
+
+                 promise.fail();
+            }
+
             var collectingCovariateValues = function (propertyName,stratumName){
                var pcCovariates = [];
                var selectedCovariates = $('#cov_'+stratumName+' .covariate:checked');
@@ -926,14 +980,21 @@ line.center{
             var traitFilterSelectedOption = $('#phenotypeFilter').val();
             var stratsTabs  = $('#stratsTabs li a.filterCohort');
             if (stratsTabs.length===0){
-               executeAssociationTest(collectingFilterValues(),collectingCovariateValues(),'none','strat1');
+               var f=executeAssociationTest(collectingFilterValues(),collectingCovariateValues(),'none','strat1');
+               $.when(f).then(function() {
+                      alert('all done with 1');
+                });
             } else {
                 var propertyDesignationDom = $('div.stratsTabs_property');
                 var propertyName = propertyDesignationDom.attr("id");
                 $('.strataResults').empty(); // clear stata reporting section
+                var deferreds = [];
                 _.forEach(stratsTabs,function (stratum){
                     var stratumName = $(stratum).text();
-                    executeAssociationTest(collectingFilterValues(propertyName,stratumName),collectingCovariateValues(propertyName,stratumName),propertyName,stratumName);
+                    deferreds.push(executeAssociationTest(collectingFilterValues(propertyName,stratumName),collectingCovariateValues(propertyName,stratumName),propertyName,stratumName));
+                });
+                $.when.apply($,deferreds).then(function() {
+                      runMetaAnalysis();
                 });
             }
 
