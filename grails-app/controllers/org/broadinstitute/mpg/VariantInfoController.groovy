@@ -232,6 +232,20 @@ def retrieveSampleSummary (){
 }
 
 
+    def metadataAjax(){
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray valueArray = slurper.parseText(params.valueArray)
+        JSONObject result = this.burdenService.getBurdenResultForMetadata( valueArray  );
+
+        render(status: 200, contentType: "application/json") {result}
+
+    }
+
+
+
+
+
+
     /***
      * This call supports the burden test on the variant info page
      * @return

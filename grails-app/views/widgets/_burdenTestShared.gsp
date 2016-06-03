@@ -5,6 +5,18 @@ rect.histogramHolder {
 rect.box {
     fill: #fff;
 }
+.stratumName{
+    font-weight: bold;
+}
+.strataHolder {
+    padding: 5px 10px 10px 5px;
+}
+.metaAnalysis{
+    padding: 5px 10px 10px 5px;
+}
+.hider {
+    display: none;
+}
 ul.strataResults {
     margin-bottom: 0;
     padding: 0;
@@ -764,12 +776,13 @@ line.center{
             }
          }
 
-
-      var executeAssociationTest = function (filterValues,covariateValues,propertyName,stratum){
-
-
-
-           var printFullResultsSection = function(stats,pValue,beta,oddsRatio){
+                var addStrataSection = function(domElement,stratum){
+                    domElement.append('<div class="stratum_'+stratum+' stratumName"></div>');
+                    domElement.append('<div class="pValue_'+stratum+'"></div>');
+                    domElement.append('<div class="orValue_'+stratum+'"></div>');
+                    domElement.append('<div class="ciValue_'+stratum+'"></div>');
+                };
+          var printFullResultsSection = function(stats,pValue,beta,oddsRatio,currentStratum,additionalText){
                 var isDichotomousTrait = false;
                 if ((typeof stats.numCases === 'undefined') ||
                     (typeof stats.numControls === 'undefined') ||
@@ -799,15 +812,18 @@ line.center{
                    ciDisplay = (ciLevel * 100) + '% CI: (' + ciLower + ' to ' + ciUpper + ')';
                 }
 
-                fillInResultsSection(stratum,'p-Value = '+ pValue,
+                fillInResultsSection(currentStratum,'p-Value = '+ pValue,
                     (isDichotomousTrait ? 'odds ratio = ' + oddsRatio : 'beta = ' + beta),
-                    ciDisplay, isDichotomousTrait);
+                    ciDisplay, isDichotomousTrait,additionalText);
 
            }
 
+      var executeAssociationTest = function (filterValues,covariateValues,propertyName,stratum){
+
+
 
            var phenotypeToPredict = $('#phenotypeFilter').val();
-           var promise = $.ajax({
+           return $.ajax({
                 cache: false,
                 type: "post",
                 url: "${createLink(controller: 'variantInfo', action: 'burdenTestAjax')}",
@@ -818,8 +834,9 @@ line.center{
                        traitFilterSelectedOption: phenotypeToPredict,
                        stratum: stratum
                 },
-                async: true,
-                success: function (data) {
+                async: true
+            }).success(
+               function (data) {
                     if ((typeof data !== 'undefined') && (data)){
                     //first check for error conditions
                         if (!data){
@@ -839,6 +856,7 @@ line.center{
 
                             var oddsRatio = UTILS.realNumberFormatter(Math.exp(data.stats.beta));
                             var beta = UTILS.realNumberFormatter(data.stats.beta);
+                            var stdErr = UTILS.realNumberFormatter(data.stats.stdError);
                             var pValue = UTILS.realNumberFormatter(data.stats.pValue);
 
                             var currentStratum = 'stratum'; // 'strat1' marks no distinct strata used
@@ -846,45 +864,43 @@ line.center{
                                currentStratum = data.stratum;
                             }
                             if (currentStratum==='strat1'){
-                                printFullResultsSection(data.stats,pValue,beta,oddsRatio);
+                                $('.strataResults').append('<div class="'+currentStratum+' strataHolder"></div>');
+                                var strataDomIdentifierClass = $('.'+currentStratum+'.strataHolder');
+                                addStrataSection(strataDomIdentifierClass,currentStratum);
+                                printFullResultsSection(data.stats,pValue,beta,oddsRatio,currentStratum,'');
                             } else {
-                                var existingResults = $('.strataResults li');
-                                if (existingResults.length===0){
-                                   $('.strataResults').append('<li>'+currentStratum+' = '+pValue+'.</li>');
-                                } else {
-                                   var existingTextResults = [];
-                                   _.forEach(existingResults,function(d){
-                                   existingTextResults.push( '<li>'+$(d).text()+'</li>');
-                                   })
-                                   existingTextResults.push('<li>'+currentStratum+' = '+pValue+'.</li>');
-                                   var sortedResults = existingTextResults.sort();
-                                   $('.strataResults li').empty();
-                                   _.forEach(sortedResults,function(result){$('.strataResults').append(result)})
-                                }
 
-                            }
+                                    $('.strataResults').append('<div class="strataJar">'+
+                                                                '<span class="hider stratum '+currentStratum+'">'+currentStratum+'</span>'+
+                                                                '<span class="hider pv '+currentStratum+'">'+pValue+'</span>'+
+                                                                '<span class="hider be '+currentStratum+'">'+beta+'</span>'+
+                                                                '<span class="hider st '+currentStratum+'" >'+stdErr+'</span>'+
+                                                                '</div>');
 
                             displayTestResultsSection(true);
 
-                       }
+                       }}
                     }
                     $('#rSpinner').hide();
-                },
-                error: function (jqXHR, exception) {
+                    }
+            ).fail(function (jqXHR, exception) {
                     $('#rSpinner').hide();
                     core.errorReporter(jqXHR, exception);
                 }
-            });
 
+            );
       }
 
 
 
-            var fillInResultsSection = function (stratum,pValue, oddsRatio, stdError, isDichotomousTrait){
+            var fillInResultsSection = function (stratum,pValue, oddsRatio, stdError, isDichotomousTrait,additionalText){
 
 
 
                 // populate the data
+                if (additionalText.length>0){
+                  $('.stratum_'+stratum).text(additionalText);
+                }
                 $('.pValue_'+stratum).text(pValue);
                 $('.orValue_'+stratum).text(oddsRatio);
                 $('.ciValue_'+stratum).text(stdError);
@@ -907,6 +923,82 @@ line.center{
          */
         var runBurdenTest = function (){
 
+            var runMetaAnalysis = function (){
+               var domHolder = $('.strataJar');
+               var allElements = [];
+               // collect the numbers we need from the Dom
+               if (domHolder.length<1) return;
+               _.forEach(domHolder, function(eachStratum){
+                   allElements.push({'pv': $(eachStratum).find('.pv').text(),
+                   'be': $(eachStratum).find('.be').text(),
+                   'st': $(eachStratum).find('.st').text(),
+                   'stratum': $(eachStratum).find('.stratum').text()});
+               });
+               // create JSON we can send to the server
+               var jsonHolder = [];
+                _.forEach(allElements, function(stratum){
+                    jsonHolder.push('{"pv":'+stratum.pv+',"be":'+stratum.be+',"st":'+stratum.st+'}');
+                });
+                var json = '['+jsonHolder.join(',')+']';
+                var sortedElements = allElements.sort(function(a, b) {
+                    var nameA = a.stratum.toUpperCase();
+                    var nameB = b.stratum.toUpperCase(); // ignore upper and lowercase
+                      if (nameA < nameB) {
+                        return -1;
+                      }
+                      if (nameA > nameB) {
+                        return 1;
+                      }
+                      return 0;
+                 });
+                // now display all previously collected sessions
+                $('.strataResults').append("<ul class='list-inline'></ul>")
+                _.forEach(sortedElements,function(el){
+                     var currentStratum  = el.stratum;
+                                                 var oddsRatio = UTILS.realNumberFormatter(Math.exp(el.be));
+                            var beta = UTILS.realNumberFormatter(el.be);
+                            var stdErr = UTILS.realNumberFormatter(el.st);
+                            var pValue = UTILS.realNumberFormatter(el.pv);
+                     $('.strataResults ul').append('<li><div class="'+currentStratum+' strataHolder"></div></li>');
+                    var strataDomIdentifierClass = $('.'+currentStratum+'.strataHolder');
+                    addStrataSection(strataDomIdentifierClass,currentStratum);
+                    var isDichotomousTrait=true;
+                    fillInResultsSection(currentStratum,'p-Value = '+ pValue,
+                    (isDichotomousTrait ? 'odds ratio = ' + oddsRatio : 'beta = ' + beta),
+                    'std. err. = '+stdErr, isDichotomousTrait,currentStratum);
+                    //printFullResultsSection(data.stats,pValue,beta,oddsRatio,currentStratum,'');
+                });
+
+
+
+                var promise =  $.ajax({
+                    cache: false,
+                    type: "post",
+                    url: "${createLink(controller: 'variantInfo', action: 'metadataAjax')}",
+                    data: {valueArray: json },
+                    async: true
+                 });
+                 promise.done(
+                  function (data) {
+                    if ((typeof data !== 'undefined') &&
+                         (data) &&
+                         (!(data.is_error))&&
+                         (data.stats)){
+                            var oddsRatio = UTILS.realNumberFormatter(Math.exp(data.stats.beta));
+                            var beta = UTILS.realNumberFormatter(data.stats.beta);
+                            var stdErr = UTILS.realNumberFormatter(data.stats.stdError);
+                            var pValue = UTILS.realNumberFormatter(data.stats.pValue);
+                             $('.strataResults').append( '<div clas="metana">Meta-analysis: pValue = <span class="pv metaAnalysis">'+pValue+'</span>'+
+'<span class="be metaAnalysis">Beta='+beta+'</span>'+
+'<span class="st metaAnalysis">Std error='+stdErr+'</span>'+
+'</div>');
+                       }
+                    }
+                 );
+
+                 promise.fail();
+            }
+
             var collectingCovariateValues = function (propertyName,stratumName){
                var pcCovariates = [];
                var selectedCovariates = $('#cov_'+stratumName+' .covariate:checked');
@@ -926,14 +1018,21 @@ line.center{
             var traitFilterSelectedOption = $('#phenotypeFilter').val();
             var stratsTabs  = $('#stratsTabs li a.filterCohort');
             if (stratsTabs.length===0){
-               executeAssociationTest(collectingFilterValues(),collectingCovariateValues(),'none','strat1');
+               var f=executeAssociationTest(collectingFilterValues(),collectingCovariateValues(),'none','strat1');
+               $.when(f).then(function() {
+                      alert('all done with 1');
+                });
             } else {
                 var propertyDesignationDom = $('div.stratsTabs_property');
                 var propertyName = propertyDesignationDom.attr("id");
                 $('.strataResults').empty(); // clear stata reporting section
+                var deferreds = [];
                 _.forEach(stratsTabs,function (stratum){
                     var stratumName = $(stratum).text();
-                    executeAssociationTest(collectingFilterValues(propertyName,stratumName),collectingCovariateValues(propertyName,stratumName),propertyName,stratumName);
+                    deferreds.push(executeAssociationTest(collectingFilterValues(propertyName,stratumName),collectingCovariateValues(propertyName,stratumName),propertyName,stratumName));
+                });
+                $.when.apply($,deferreds).then(function() {
+                      runMetaAnalysis();
                 });
             }
 
@@ -1669,33 +1768,19 @@ $( document ).ready( function (){
         <div class="col-sm-8 col-xs-12">
             <div class="row burden-test-specific-results burden-test-result">
 
-                <div class="col-md-2 col-sm-12">
+
+
+                <div class="col-md-12 col-sm-12">
                     <div>
                         <div class="vertical-center">
-                            <p class="standardFont">Results:
-                            </p>
+                            <div class="strataResults">
+
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6 col-sm-6">
-                    <div>
-                        <div class="vertical-center">
-                            <ul class="strataResults">
-                            </ul>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-md-4 col-sm-3">
-                    <div>
-                        <div class="pValue pValue_{{stratum}}"></div>
-
-                        <div class="orValue orValue_{{stratum}}"></div>
-
-                        <div class="ciValue ciValue_{{stratum}}"></div>
-                    </div>
-                </div>
             </div>
 
             <div class="row burden-test-result-large burden-test-some-results-large_{{stratum}}">

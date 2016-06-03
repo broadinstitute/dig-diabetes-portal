@@ -488,6 +488,19 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return tempObject;
     }
 
+    /***
+     * perform a meta-analysis api call
+     *
+     * @param jsonString
+     * @return
+     */
+    public JSONObject postRestBurdenMetaData(String jsonString) {
+        JSONObject tempObject = this.postRestCallBase(jsonString, "", this.getCurrentBurdenServer()?.getRestServiceCallUrl(ServerBean.BURDEN_TEST_CALL_META_ANALYSIS));
+        return tempObject;
+    }
+
+
+
     /**
      * burden call to the REST server
      *
@@ -499,6 +512,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         JSONObject returnJson = new JSONObject(tempObject)
         return returnJson;
     }
+
 
     /**
      * post a getData call with the given json string

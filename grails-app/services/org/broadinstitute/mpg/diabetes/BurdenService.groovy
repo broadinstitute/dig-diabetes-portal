@@ -51,6 +51,15 @@ class BurdenService {
         return burdenJson;
     }
 
+
+    protected JSONObject getBurdenRestMetaData(String burdenCallJsonPayloadString) {
+        JSONObject burdenJson = this.restServerService.postRestBurdenMetaData(burdenCallJsonPayloadString);
+        return burdenJson;
+    }
+
+
+
+
     /**
      * method to get the variants from the getData call
      *
@@ -237,6 +246,42 @@ class BurdenService {
         // return
         return returnJson;
     }
+
+
+
+
+    public JSONObject getBurdenResultForMetadata(JSONArray statsObjectList) throws PortalException {
+
+        // create the json payload for the burden call
+        List<String> metadataList = []
+        if (statsObjectList) {
+            metadataList = statsObjectList.collect{return """{ "beta":${it.be}, "stdError": ${it.st}  }""".toString()} as List
+        }
+        String jsonObject = """{
+    "stats": [ ${metadataList.join(",")}
+    ],
+    "passback": "123pass",
+    "method": "inverse_variance"
+}""".toString()
+
+        // get the results of the burden call
+        JSONObject returnJson = this.getBurdenRestMetaData(jsonObject.toString())
+
+        // return
+        return returnJson
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * call burden test for single variant
