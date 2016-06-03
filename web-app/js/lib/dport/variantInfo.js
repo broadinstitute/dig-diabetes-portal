@@ -34,6 +34,7 @@ var mpgSoftware = mpgSoftware || {};
             $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
             $('#populationsHowCommonIs').append(variantTitle);
             $('#exploreSurroundingSequenceTitle').append(variantTitle);
+            $('#locusZoomTitle').append(variantTitle);
 
             // load the summary text
             $("#chromosomeNumber").append(chrom);

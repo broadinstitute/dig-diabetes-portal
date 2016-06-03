@@ -19,24 +19,14 @@
     function addLZPhenotype(lzParameters) {
         var phenotype = lzParameters.phenotype;
 
-        var ld_source = [ "LDLZ",
-            { url: mpgSoftware.locusZoom.apiBase + "pair/LD/",
-                params: {
-                    pvalue_field: phenotype + ":pvalue|neglog10",
-                    position_field: phenotype + ":position",
-                    id_field: phenotype + ":id"
-                }
-            }
-        ];
         dataSources.add(phenotype, new broadAssociationSource("${createLink(controller:"gene", action:"getLocusZoom")}", phenotype))
-                    .add(phenotype + "_ld", ld_source);
 
         var layout = {
             title: lzParameters.description,
             description: phenotype,
             y_index: -1,
-            min_width:  400,
-            min_height: 112.5,
+            min_width: 400,
+            min_height: 100,
             margin: { top: 35, right: 50, bottom: 40, left: 50 },
             inner_border: "rgba(210, 210, 210, 0.85)",
             axes: {
@@ -54,6 +44,7 @@
             data_layers: {
                 significance: {
                     type: "line",
+                    z_index: 0,
                     fields: ["sig:x", "sig:y"],
                     style: {
                         "stroke": "#D3D3D3",
@@ -72,16 +63,35 @@
                         html: "Significance Threshold: 3 × 10^-5"
                     }
                 },
+                recomb: {
+                    type: "line",
+                    z_index: 1,
+                    fields: ["recomb:position", "recomb:recomb_rate"],
+                    style: {
+                        "stroke": "#0000FF",
+                        "stroke-width": "1.5px"
+                    },
+                    x_axis: {
+                        field: "recomb:position"
+                    },
+                    y_axis: {
+                        axis: 2,
+                        field: "recomb:recomb_rate",
+                        floor: 0,
+                        ceiling: 100
+                    }
+                },
                 positions: {
                     type: "scatter",
-                    point_shape: "circle",
-                    point_size: 40,
+                    z_index: 2,
                     fields: [phenotype+":id",
                         phenotype+":position",
                         phenotype+":pvalue|scinotation",
                         phenotype+":pvalue|neglog10",
                         phenotype+":refAllele",
-                        phenotype+"_ld:state"],
+                        "ld:state",
+                        "ld:isrefvar"
+                    ],
                     id_field: phenotype+":id",
                     x_axis: {
                         field: phenotype+":position"
@@ -93,21 +103,40 @@
                         upper_buffer: 0.05,
                         min_extent: [ 0, 10 ]
                     },
-                    color: {
-                        field: phenotype+"_ld:state",
-                        scale_function: "numerical_bin",
+                    point_shape: "circle",
+                    point_size: {
+                        scale_function: "if",
+                        field: "ld:isrefvar",
                         parameters: {
-                            breaks: [0, 0.2, 0.4, 0.6, 0.8],
-                            values: ["#357ebd","#46b8da","#5cb85c","#eea236","#d43f3a"],
-                            null_value: "#B8B8B8"
+                            field_value: 1,
+                            then: 80,
+                            else: 40
                         }
                     },
+                    color: [
+                        {
+                            scale_function: "if",
+                            field: "ld:isrefvar",
+                            parameters: {
+                                field_value: 1,
+                                then: "#9632b8"
+                            }
+                        },
+                        {
+                            scale_function: "numerical_bin",
+                            field: "ld:state",
+                            parameters: {
+                                breaks: [0, 0.2, 0.4, 0.6, 0.8],
+                                values: ["#357ebd","#46b8da","#5cb85c","#eea236","#d43f3a"]
+                            }
+                        },
+                        "#B8B8B8"
+                    ],
+                    selectable: "one",
                     tooltip: {
-                        divs: [
-                            { html: "<strong>{{"+phenotype+":id}}</strong>" },
-                            { html: "P Value: <strong>{{"+phenotype+":pvalue|scinotation}}</strong>" },
-                            { html: "Ref. Allele: <strong>{{"+phenotype+":refAllele}}</strong>" }
-                        ]
+                        html: "<strong>{{"+phenotype+":id}}</strong><br>"
+                        + "P Value: <strong>{{"+phenotype+":pvalue|scinotation}}</strong><br>"
+                        + "Ref. Allele: <strong>{{"+phenotype+":refAllele}}</strong>"
                     }
                 }
             }

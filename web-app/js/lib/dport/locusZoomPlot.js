@@ -7,7 +7,7 @@ mpgSoftware.locusZoom = {
     // standard layout
     StandardLayout: {
         resizable: "responsive",
-        aspect_ratio: 5.5,
+        aspect_ratio: 2.5,
         panels: {
             genes: {
                 margin: { top: 20, right: 50, bottom: 20, left: 50 },
@@ -46,8 +46,9 @@ mpgSoftware.locusZoom = {
             .add("gene", ["GeneLZ", mpgSoftware.locusZoom.apiBase + "annotation/genes/"])
             .add("recomb", ["RecombLZ", { url: mpgSoftware.locusZoom.apiBase + "annotation/recomb/results/", params: {source: 15} }])
             .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
+        var lzp = LocusZoom.populate(selector, ds, mpgSoftware.locusZoom.StandardLayout);
         return {
-            locusZoomPlot: LocusZoom.populate(selector, ds, mpgSoftware.locusZoom.StandardLayout),
+            locusZoomPlot: lzp,
             dataSources: ds
         };
     }
