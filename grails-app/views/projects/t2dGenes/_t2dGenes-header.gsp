@@ -6,12 +6,12 @@
                      width="180" height="91px" alt="SLIM" style="margin-top: 35px"/>
             </g:if>
             <g:else>
-                <img src="${resource(dir: 'images/', file: 'LogoSigmaENGLISH.png')}"
-                     width="180" height="91px" alt="SLIM" style="margin-top: 35px"/>
+                <img src="${resource(dir: 'images/', file: 'basicT2DG.png')}"
+                     width="197px" height="250px" alt="T2D-GENES" style="margin-top: 35px"/>
             </g:else>
         </div>
         <div class="col-lg-offset-0 col-md-offset-0 col-lg-8 col-md-8 col-sm-offset-1 col-xs-offset-1 col-sm-10 col-xs-10">
-            <span class="dk-sigma-site-name">SIGMA<strong style="font-weight: 400;color:#406993;">T2D</strong></span>
+            <span class="dk-sigma-site-name"><strong style="font-weight: 400;color:#406993;">T2D-GENES</strong></span>
         </div>
     </div>
     <div class="row dk-sigma-site-title-sm visible-sm visible-xs ">

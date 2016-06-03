@@ -47,7 +47,7 @@
         </div>
         <div class="col-sm-4 col-xs-4 sigma-learn-gradient">
             <g:if test="${params.section == 'learn'}">
-                <g:link action='got2d' params="[section: 'learn']"><strong><g:message code="sigmasite.home.section.caps.learn" /></strong></g:link>
+                <g:link action='got2d' params="[section: 'learn']"><strong>COHORTS</strong></g:link>
             </g:if>
             <g:else>
                 <g:link action='got2d' params="[section: 'learn']"><g:message code="sigmasite.home.section.caps.learn" /></g:link>
@@ -65,7 +65,7 @@
     <g:if test="${params.section == 'about' || params.section == null}"> 
         <div class="row sigma-about-gradient dk-sigma-section-header visible-lg visible-md">
             <div class="col-lg-3 col-md-3 text-center dk-sigma-nopadding"><div class="sigma-about-gradient dk-sigma-section-link"><g:link action='got2d' params="[section: 'about']"><g:message code="sigmasite.home.section.caps.about" /></g:link></div></div>
-            <div class="col-lg-8 col-md-8 dk-sigma-content-summary"><g:message code="sigmasite.about.summary"></g:message></div>
+            <div class="col-lg-8 col-md-8 dk-sigma-content-summary">a consortium investigating the Genetics of Type 2 Diabetes</div>
         </div>
         <div class="row sigma-about-gradient dk-sigma-section-header-sm visible-sm visible-xs">
             <div class="col-sm-offset-1 col-xs-offset-1 col-sm-10 col-xs-10 dk-sigma-content-summary"><g:message code="sigmasite.about.summary"></g:message></div>
@@ -74,7 +74,7 @@
     <g:if test="${params.section == 'data'}"> 
         <div class="row sigma-data-gradient dk-sigma-section-header visible-lg visible-md">
             <div class="col-lg-3 col-md-3 text-center dk-sigma-nopadding"><div class="sigma-about-gradient dk-sigma-section-link"><g:link action='got2d' params="[section: 'about']"><g:message code="sigmasite.home.section.caps.about" /></g:link></div></div>
-            <div class="col-lg-8 col-md-8 dk-sigma-content-summary"><g:message code="sigmasite.data.summary"></g:message></div>
+            <div class="col-lg-8 col-md-8 dk-sigma-content-summary">data from the GoT2D consortium in the T2D Knowledge Portal</div>
         </div>
         <div class="row sigma-data-gradient dk-sigma-section-header-sm visible-sm visible-xs">
             <div class="col-sm-offset-1 col-xs-offset-1 col-sm-10 col-xs-10 dk-sigma-content-summary"><g:message code="sigmasite.data.summary"></g:message></div>
@@ -83,7 +83,7 @@
     <g:if test="${params.section == 'papers'}"> 
         <div class="row sigma-papers-gradient dk-sigma-section-header visible-lg visible-md">
             <div class="col-lg-3 col-md-3 text-center dk-sigma-nopadding"><div class="sigma-about-gradient dk-sigma-section-link"><g:link action='got2d' params="[section: 'about']"><g:message code="sigmasite.home.section.caps.about" /></g:link></div></div>
-            <div class="col-lg-8 col-md-8 dk-sigma-content-summary"><g:message code="sigmasite.research.summary"></g:message></div>
+            <div class="col-lg-8 col-md-8 dk-sigma-content-summary">publications from the GoT2D consortium</div>
         </div>
         <div class="row sigma-papers-gradient dk-sigma-section-header-sm visible-sm visible-xs">
             <div class="col-sm-offset-1 col-xs-offset-1 col-sm-10 col-xs-10 dk-sigma-content-summary"><g:message code="sigmasite.research.summary"></g:message></div>
@@ -92,7 +92,7 @@
     <g:if test="${params.section == 'partners'}"> 
         <div class="row sigma-partners-gradient dk-sigma-section-header visible-lg visible-md">
             <div class="col-lg-3 col-md-3 text-center dk-sigma-nopadding"><div class="sigma-about-gradient dk-sigma-section-link"><g:link action='got2d' params="[section: 'about']"><g:message code="sigmasite.home.section.caps.about" /></g:link></div></div>
-            <div class="col-lg-8 col-md-8 dk-sigma-content-summary"><g:message code="sigmasite.partners.summary"></g:message></div>
+            <div class="col-lg-8 col-md-8 dk-sigma-content-summary">members of the GoT2D consortium</div>
         </div>
         <div class="row sigma-partners-gradient dk-sigma-section-header-sm visible-sm visible-xs">
             <div class="col-sm-offset-1 col-xs-offset-1 col-sm-10 col-xs-10 dk-sigma-content-summary"><g:message code="sigmasite.partners.summary"></g:message></div>
@@ -101,7 +101,7 @@
     <g:if test="${params.section == 'learn'}"> 
         <div class="row sigma-learn-gradient dk-sigma-section-header visible-lg visible-md">
             <div class="col-lg-3 col-md-3 text-center dk-sigma-nopadding"><div class="sigma-about-gradient dk-sigma-section-link"><g:link action='got2d' params="[section: 'about']"><g:message code="sigmasite.home.section.caps.about" /></g:link></div></div>
-            <div class="col-lg-8 col-md-8 dk-sigma-content-summary"><g:message code="sigmasite.learn.summary"></g:message></div>
+            <div class="col-lg-8 col-md-8 dk-sigma-content-summary">find out more about cohorts studied by the GoT2D consortium</div>
         </div>
         <div class="row sigma-learn-gradient dk-sigma-section-header-sm visible-sm visible-xs">
             <div class="col-sm-offset-1 col-xs-offset-1 col-sm-10 col-xs-10 dk-sigma-content-summary"><g:message code="sigmasite.learn.summary"></g:message></div>
@@ -110,7 +110,7 @@
     <g:if test="${params.section == 'contact'}"> 
         <div class="row sigma-contact-gradient dk-sigma-section-header visible-lg visible-md">
             <div class="col-lg-3 col-md-3 text-center dk-sigma-nopadding"><div class="sigma-about-gradient dk-sigma-section-link"><g:link action='got2d' params="[section: 'about']"><g:message code="sigmasite.home.section.caps.about" /></g:link></div></div>
-            <div class="col-lg-8 col-md-8 dk-sigma-content-summary"><g:message code="sigmasite.contact.summary"></g:message></div>
+            <div class="col-lg-8 col-md-8 dk-sigma-content-summary">contact the GoT2D consortium with questions or suggestions</div>
         </div>
         <div class="row sigma-contact-gradient dk-sigma-section-header-sm visible-sm visible-xs">
             <div class="col-sm-offset-1 col-xs-offset-1 col-sm-10 col-xs-10 dk-sigma-content-summary"><g:message code="sigmasite.contact.summary"></g:message></div>
