@@ -1,6 +1,10 @@
 package org.broadinstitute.mpg.diabetes.json.builder;
 
-import org.broadinstitute.mpg.diabetes.metadata.*;
+import org.broadinstitute.mpg.diabetes.metadata.DataSet;
+import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean;
+import org.broadinstitute.mpg.diabetes.metadata.Property;
+import org.broadinstitute.mpg.diabetes.metadata.PropertyBean;
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean;
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser;
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery;
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryBean;
@@ -62,6 +66,7 @@ public class LocusZoomJsonBuilder {
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_EFFECT_ALLELE));
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_REFERENCE_ALLELE));
+        query.setLimit(5000);
 
         // get the query filters
         query.addAllQueryFilters(this.getStandardQueryFilters(chromosome, startPosition, endPosition));
