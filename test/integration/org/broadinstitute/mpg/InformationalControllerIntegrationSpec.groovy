@@ -1,7 +1,6 @@
 package org.broadinstitute.mpg
 
 import grails.test.spock.IntegrationSpec
-import org.broadinstitute.mpg.InformationalController
 
 /**
  *
@@ -22,7 +21,7 @@ class InformationalControllerIntegrationSpec extends IntegrationSpec {
 
     void "test the about page"() {
         when:
-        controller.aboutthedata()
+        controller.data()
 
         then: 'verify that we get valid responses back'
         assert controller.response.status==200

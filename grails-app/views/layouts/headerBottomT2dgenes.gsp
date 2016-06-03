@@ -19,7 +19,7 @@
         <ul class="nav nav-pills dk-t2d-menu">
             <li><a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a>
             <li><a href="${createLink(controller:'variantSearch', action:'variantSearchWF')}"><g:message code="variant.search.header"/></a></li>
-            <li><a href="${createLink(controller:'informational', action:'aboutthedata')}"><g:message code="portal.header.nav.about_data"/></a></li>
+            <li><a href="${createLink(controller:'informational', action:'data')}"><g:message code="portal.header.nav.about_data"/></a></li>
             %{-- to be uncommented once the about page is made --}%
             %{--<li><a href="${createLink(controller:'informational', action:'about')}"><g:message code="portal.header.nav.about"/></a></li>--}%
             <li><a href="${createLink(controller:'informational', action:'policies')}"><g:message code="portal.header.nav.policies"/></a></li>

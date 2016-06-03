@@ -3,7 +3,6 @@ package org.broadinstitute.mpg
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
-import org.broadinstitute.mpg.InformationalController
 import spock.lang.Specification
 
 /**
@@ -21,7 +20,7 @@ class InformationalControllerUnitSpec extends Specification {
 
     void "test about"() {
         when:
-        controller.aboutthedata()
+        controller.data()
 
         then:
         response.status == 200
