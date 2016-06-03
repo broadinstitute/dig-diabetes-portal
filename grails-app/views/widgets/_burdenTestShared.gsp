@@ -922,6 +922,7 @@ line.center{
                var domHolder = $('.strataResults li');
                var allElements = [];
                // collect the numbers we need from the Dom
+               if (domHolder.length<1) return;
                _.forEach(domHolder, function(eachStratum){
                    allElements.push({'pv': $(eachStratum).find('.pv').text(),
                    'be': $(eachStratum).find('.be').text(),
