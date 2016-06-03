@@ -36,7 +36,6 @@ class VariantInfoController {
 
             render(view: 'variantInfo',
                     model: [variantToSearch: variantToStartWith.trim(),
-                            regionSpecification: "5:57000000-58000000",
                             show_gwas      : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                             show_exchp     : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                             show_exseq     : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),

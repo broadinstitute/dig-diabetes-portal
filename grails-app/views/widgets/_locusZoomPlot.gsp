@@ -1,17 +1,17 @@
-
 <script type="text/javascript">
+    // these get defined when the LZ plot is initialized
     var locusZoomPlot;
     var dataSources;
     // objects needed for both initialization and for adding more phenotypes
-    var broadAssociationSource = LocusZoom.Data.Source.extend(function(init, phenotype) {
+    var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, phenotype) {
         this.parseInit(init);
-        this.getURL = function(state, chain, fields) {
+        this.getURL = function (state, chain, fields) {
             //var analysis = state.analysis || chain.header.analysis || this.params.analysis || 3;
             return this.url + "?" +
-             "chromosome=" + state.chr + "&" +
-             "start=" + state.start + "&"+
-             "end=" + state.end + "&" +
-             "phenotype=" + phenotype;
+                    "chromosome=" + state.chr + "&" +
+                    "start=" + state.start + "&" +
+                    "end=" + state.end + "&" +
+                    "phenotype=" + phenotype;
         }
     }, "BroadT2D");
 
@@ -27,7 +27,7 @@
             y_index: -1,
             min_width: 400,
             min_height: 100,
-            margin: { top: 35, right: 50, bottom: 40, left: 50 },
+            margin: {top: 35, right: 50, bottom: 40, left: 50},
             inner_border: "rgba(210, 210, 210, 0.85)",
             axes: {
                 x: {
@@ -39,6 +39,10 @@
                 y1: {
                     label: "-log10 p-value",
                     label_offset: 28
+                },
+                y2: {
+                    label: "Recombination Rate (cM/Mb)",
+                    label_offset: 40
                 }
             },
             data_layers: {
@@ -84,24 +88,24 @@
                 positions: {
                     type: "scatter",
                     z_index: 2,
-                    fields: [phenotype+":id",
-                        phenotype+":position",
-                        phenotype+":pvalue|scinotation",
-                        phenotype+":pvalue|neglog10",
-                        phenotype+":refAllele",
+                    fields: [phenotype + ":id",
+                        phenotype + ":position",
+                        phenotype + ":pvalue|scinotation",
+                        phenotype + ":pvalue|neglog10",
+                        phenotype + ":refAllele",
                         "ld:state",
                         "ld:isrefvar"
                     ],
-                    id_field: phenotype+":id",
+                    id_field: phenotype + ":id",
                     x_axis: {
-                        field: phenotype+":position"
+                        field: phenotype + ":position"
                     },
                     y_axis: {
                         axis: 1,
-                        field: phenotype+":pvalue|neglog10",
+                        field: phenotype + ":pvalue|neglog10",
                         floor: 0,
                         upper_buffer: 0.05,
-                        min_extent: [ 0, 10 ]
+                        min_extent: [0, 10]
                     },
                     point_shape: "circle",
                     point_size: {
@@ -127,16 +131,16 @@
                             field: "ld:state",
                             parameters: {
                                 breaks: [0, 0.2, 0.4, 0.6, 0.8],
-                                values: ["#357ebd","#46b8da","#5cb85c","#eea236","#d43f3a"]
+                                values: ["#357ebd", "#46b8da", "#5cb85c", "#eea236", "#d43f3a"]
                             }
                         },
                         "#B8B8B8"
                     ],
                     selectable: "one",
                     tooltip: {
-                        html: "<strong>{{"+phenotype+":id}}</strong><br>"
-                        + "P Value: <strong>{{"+phenotype+":pvalue|scinotation}}</strong><br>"
-                        + "Ref. Allele: <strong>{{"+phenotype+":refAllele}}</strong>"
+                        html: "<strong>{{" + phenotype + ":id}}</strong><br>"
+                        + "P Value: <strong>{{" + phenotype + ":pvalue|scinotation}}</strong><br>"
+                        + "Ref. Allele: <strong>{{" + phenotype + ":refAllele}}</strong>"
                     }
                 }
             }
@@ -146,9 +150,7 @@
     }
 
 
-
-
-    $( document ).ready( function (){
+    $(document).ready(function () {
         var variant;
         var loading = $('#spinner').show();
         var position = null;
@@ -159,20 +161,20 @@
         $.ajax({
             cache: false,
             type: "get",
-            url:('<g:createLink controller="variantInfo" action="variantAjax"/>'+'/${variantToSearch}'),
+            url: ('<g:createLink controller="variantInfo" action="variantAjax"/>' + '/${variantToSearch}'),
             async: true,
             success: function (data) {
-                if ( typeof data !== 'undefined')  {
-                    if ( typeof data.variant !== 'undefined')  {
-                        if ( typeof data.variant.variants[0] !== 'undefined')  {
+                if (typeof data !== 'undefined') {
+                    if (typeof data.variant !== 'undefined') {
+                        if (typeof data.variant.variants[0] !== 'undefined') {
                             data.variant.variants[0].forEach(function (v) {
-                                if ( typeof v.CHROM !== 'undefined')  {
+                                if (typeof v.CHROM !== 'undefined') {
                                     chromosome = v.CHROM;
                                 }
-                                if ( typeof v.POS !== 'undefined')  {
+                                if (typeof v.POS !== 'undefined') {
                                     position = v.POS;
                                 }
-                                if ( typeof v.VAR_ID !== 'undefined')  {
+                                if (typeof v.VAR_ID !== 'undefined') {
                                     varId = v.VAR_ID;
                                 }
                             });
@@ -187,7 +189,6 @@
                 }
                 var endPosition = parseInt(position) + rangeInteger;
                 locusZoomInput = chromosome + ":" + startPosition + "-" + endPosition;
-                console.log(locusZoomInput);
                 $("#lz-1").attr("data-region", locusZoomInput);
                 $("#lzRegion").text(locusZoomInput);
                 loading.hide();
@@ -202,7 +203,7 @@
                     description: 'Type 2 Diabetes'
                 });
 
-                $("#collapseLZ").on("shown.bs.collapse", function() {
+                $("#collapseLZ").on("shown.bs.collapse", function () {
                     locusZoomPlot.rescaleSVG();
                 })
 
@@ -213,7 +214,7 @@
             }
         });
 
-    } );
+    });
 
 
 </script>
@@ -222,12 +223,13 @@
     <div class="accordion-heading">
         <a class="accordion-toggle  collapsed" data-toggle="collapse" data-parent="#accordion3"
            href="#collapseLZ">
-            <h2><strong><g:message code="gene.locusZoom.title" default="Locus Zoom"/></strong></h2>
+            <h2><strong><g:message code="variant.locusZoom.title" default="Locus Zoom"/></strong></h2>
         </a>
     </div>
 
     <div id="collapseLZ" class="accordion-body collapse">
-        <ul class="nav navbar-nav navbar-left">
+        <p><g:message code="variant.locusZoom.text" /></p>
+        <ul class="nav navbar-nav navbar-left" style="display: flex;">
             <li class="dropdown" id="tracks-menu-dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes<b class="caret"></b></a>
                 <ul id="trackList" class="dropdown-menu">
@@ -241,14 +243,23 @@
                     </g:each>
                 </ul>
             </li>
+            <li style="margin: auto;">
+                <b>Region: <span id="lzRegion"></span></b>
+            </li>
         </ul>
-        <div class="accordion-inner">
-                        <div>
-                                <b>Region: <span id="lzRegion"></span></b>
-                        </div>
-                        <!-- TODO: get LZ canvas to dynamically resize to width of enclosing div and height to minimum possible for display -->
-                        <div id="lz-1" class="lz-container-responsive" data-region="${regionSpecification}"></div>
 
+        <div class="accordion-inner">
+            <div id="lz-1" class="lz-container-responsive"></div>
+        </div>
+        <div style="display: flex; justify-content: space-around;">
+            <p>Linkage disequilibrium (r<sup>2</sup>) with the reference variant:</p>
+            <p><i class="fa fa-circle" style="color: #d43f3a"></i> 1 - 0.8</p>
+            <p><i class="fa fa-circle" style="color: #eea236"></i> 0.8 - 0.6</p>
+            <p><i class="fa fa-circle" style="color: #5cb85c"></i> 0.6 - 0.4</p>
+            <p><i class="fa fa-circle" style="color: #46b8da"></i> 0.4 - 0.2</p>
+            <p><i class="fa fa-circle" style="color: #357ebd"></i> 0.2 - 0</p>
+            <p><i class="fa fa-circle" style="color: #B8B8B8"></i> no information</p>
+            <p><i class="fa fa-circle" style="color: #9632b8"></i> reference variant</p>
         </div>
     </div>
 </div>

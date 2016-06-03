@@ -7,7 +7,7 @@ mpgSoftware.locusZoom = {
     // standard layout
     StandardLayout: {
         resizable: "responsive",
-        aspect_ratio: 2.5,
+        aspect_ratio: 7.5,
         panels: {
             genes: {
                 margin: { top: 20, right: 50, bottom: 20, left: 50 },

@@ -29,12 +29,10 @@ var mpgSoftware = mpgSoftware || {};
             var variantTitle = dbsnpId || varId;
             $('#variantTitle').append(variantTitle);
             $("[data-textfield='variantName']").append(variantTitle);
-            $('#variantTitleInAssociationStatistics').append(variantTitle);
             $('#effectOnCommonProteinsTitle').append(variantTitle);
             $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
             $('#populationsHowCommonIs').append(variantTitle);
             $('#exploreSurroundingSequenceTitle').append(variantTitle);
-            $('#locusZoomTitle').append(variantTitle);
 
             // load the summary text
             $("#chromosomeNumber").append(chrom);
