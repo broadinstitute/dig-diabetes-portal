@@ -568,7 +568,6 @@ class MetaDataService {
 
         // remove the last comma
         sb.deleteCharAt(sb.length() - 1);
-        log.info(sb.toString())
 
         // return
         return java.net.URLEncoder.encode( sb.toString())

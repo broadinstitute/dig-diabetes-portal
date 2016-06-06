@@ -135,6 +135,8 @@
             // ajax calls returns
             mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation);
             $('span[data-textfield="variantName"]').append(data.geneInfo.ID);
+            $('#variantPageText').hide();
+            $('#genePageText').show();
         });
 
 
