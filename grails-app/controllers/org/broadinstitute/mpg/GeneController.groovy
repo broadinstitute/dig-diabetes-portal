@@ -346,8 +346,6 @@ class GeneController {
         beanList.add(new PhenotypeBean(key: "HDL", name: "HDL", description: "HDL Cholesterol", defaultSelected: false));
         beanList.add(new PhenotypeBean(key: "fastingInsulin", name: "FI", description: "Fasting Insulin", defaultSelected: false));
         beanList.add(new PhenotypeBean(key: "fastingGlucose", name: "FG", description: "Fasting Glucose", defaultSelected: false));
-        beanList.add(new PhenotypeBean(key: "BPMEDS", name: "BPMEDS", description: "BPMEDS", defaultSelected: false));
-        beanList.add(new PhenotypeBean(key: "LIPIDMEDS", name: "LIPIDMEDS", description: "LIPIDMEDS", defaultSelected: false));
         beanList.add(new PhenotypeBean(key: "WC", name: "WC", description: "Waist CircumferenceC", defaultSelected: false));
         beanList.add(new PhenotypeBean(key: "WHR", name: "WHR", description: "Waist Hip Ratio", defaultSelected: false));
         beanList.add(new PhenotypeBean(key: "TC", name: "TC", description: "Total Cholesterol", defaultSelected: false));
