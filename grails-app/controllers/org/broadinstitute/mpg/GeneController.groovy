@@ -342,11 +342,16 @@ class GeneController {
         // build the phenotype list
         beanList.add(new PhenotypeBean(key: "T2D", name: "T2D", description: "Type 2 Diabetes", defaultSelected: true));
         beanList.add(new PhenotypeBean(key: "BMI", name: "BMI", description: "Body Mass Index", defaultSelected: false));
-//        beanList.add(new PhenotypeBean(key: "WC", name: "WC", description: "WC", defaultSelected: false));
-//        beanList.add(new PhenotypeBean(key: "LDL", name: "LDL", description: "LDL Cholesterol", defaultSelected: false));
-//        beanList.add(new PhenotypeBean(key: "HDL", name: "HDL", description: "HDL Cholesterol", defaultSelected: false));
-//        beanList.add(new PhenotypeBean(key: "TC", name: "TC", description: "TC", defaultSelected: false));
-//        beanList.add(new PhenotypeBean(key: "TG", name: "TG", description: "TG", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "LDL", name: "LDL", description: "LDL Cholesterol", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "HDL", name: "HDL", description: "HDL Cholesterol", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "fastingInsulin", name: "FI", description: "Fasting Insulin", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "fastingGlucose", name: "FG", description: "Fasting Glucose", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "BPMEDS", name: "BPMEDS", description: "BPMEDS", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "LIPIDMEDS", name: "LIPIDMEDS", description: "LIPIDMEDS", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "WC", name: "WC", description: "Waist CircumferenceC", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "WHR", name: "WHR", description: "Waist Hip Ratio", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "TC", name: "TC", description: "Total Cholesterol", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "TG", name: "TG", description: "Triglycerides", defaultSelected: false));
         return beanList
     }
 
