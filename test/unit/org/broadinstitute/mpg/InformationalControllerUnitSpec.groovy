@@ -3,6 +3,7 @@ package org.broadinstitute.mpg
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
+import org.broadinstitute.mpg.diabetes.MetaDataService
 import spock.lang.Specification
 
 /**
@@ -13,12 +14,13 @@ import spock.lang.Specification
 class InformationalControllerUnitSpec extends Specification {
 
     def setup() {
+        controller.metaDataService = Mock(MetaDataService)
     }
 
     def cleanup() {
     }
 
-    void "test about"() {
+    void "test data"() {
         when:
         controller.data()
 
