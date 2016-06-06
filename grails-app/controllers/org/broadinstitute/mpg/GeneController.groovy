@@ -107,6 +107,9 @@ class GeneController {
             }
         }
         List <LinkedHashMap<String,String>> sortedColumnInformation = columnInformation.sort{a,b-> (b.value as Float)<=>(a.value as Float)}
+
+        List<PhenotypeBean> lzOptions = getHailPhenotypeMap()
+
         if (geneToStartWith)  {
             String  geneUpperCase =   geneToStartWith.toUpperCase()
             LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
@@ -121,7 +124,8 @@ class GeneController {
                                              geneChromosome:geneExtent.chrom,
                                              columnInformation:sortedColumnInformation,
                                              phenotype:phenotype,
-                                             locale:locale
+                                             locale:locale,
+                                             lzOptions:lzOptions
             ] )
         }
      }

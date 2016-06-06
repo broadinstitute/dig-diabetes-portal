@@ -45,8 +45,7 @@ mpgSoftware.locusZoom = {
                 ldrefvar: variantIdString
             };
         }
-
-
+        
         var ds = new LocusZoom.DataSources();
         ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
             .add("ld", ["LDLZ" , mpgSoftware.locusZoom.apiBase + "pair/LD/"])

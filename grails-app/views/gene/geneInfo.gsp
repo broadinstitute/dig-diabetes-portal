@@ -3,10 +3,11 @@
 <head>
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
-    <r:require modules="datatables" />
+    <r:require modules="datatables"/>
     <r:require modules="geneInfo"/>
     <r:require modules="crossMap"/>
     <r:require modules="igv"/>
+    <r:require module="locusZoom"/>
     <r:layoutResources/>
     <%@ page import="org.broadinstitute.mpg.RestServerService" %>
 
@@ -22,7 +23,12 @@
     b, strong {
         color: #052090;
     }
-    </style>
+    .parentsFont {
+        font-family: inherit;
+        font-weight: inherit;
+        font-size: inherit;
+    }
+</style>
 </head>
 
 <body>
@@ -34,7 +40,7 @@
     $.ajax({
         cache: false,
         type: "post",
-        url:'<g:createLink controller="gene" action="geneInfoAjax"/>',
+        url: '<g:createLink controller="gene" action="geneInfoAjax"/>',
         data: {geneName: '<%=geneName%>'},
         async: true
     }).done(function (data) {
@@ -116,6 +122,22 @@
             html: true,
             template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
         });
+
+        var genePageExtent = 100000;
+
+        var positioningInformation = {
+            chromosome: data.geneInfo.CHROM,
+            startPosition: data.geneInfo.BEG - genePageExtent,
+            endPosition: data.geneInfo.END + genePageExtent
+        };
+        $(document).ready(function() {
+            // call this inside the ready function because the page is still loading when the the parent
+            // ajax calls returns
+            mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation);
+            $('span[data-textfield="variantName"]').append(data.geneInfo.ID);
+        });
+
+
         $(".pop-top").popover({placement: 'top'});
         $(".pop-right").popover({placement: 'right'});
         $(".pop-bottom").popover({placement: 'bottom'});
@@ -301,25 +323,29 @@
                     </g:if>
 
 
-<g:if test="${g.portalTypeString()?.equals('t2d')}">
-                    <div class="separator"></div>
+                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                        <div class="separator"></div>
 
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle  collapsed" data-toggle="collapse" data-parent="#accordion3"
-                               href="#collapseFour">
-                                <h2><strong><g:message code="gene.burdenTesting.title"
-                                                       default="Run a burden test"/></strong></h2>
-                            </a>
-                        </div>
+                        <g:render template="/widgets/locusZoomPlot"/>
 
-                        <div id="collapseFour" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <g:render template="burdenTest"/>
+                        <div class="separator"></div>
+
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle  collapsed" data-toggle="collapse" data-parent="#accordion3"
+                                   href="#collapseFour">
+                                    <h2><strong><g:message code="gene.burdenTesting.title"
+                                                           default="Run a burden test"/></strong></h2>
+                                </a>
+                            </div>
+
+                            <div id="collapseFour" class="accordion-body collapse">
+                                <div class="accordion-inner">
+                                    <g:render template="burdenTest"/>
+                                </div>
                             </div>
                         </div>
-                    </div>
-</g:if>
+                    </g:if>
 
                     <div class="separator"></div>
 
