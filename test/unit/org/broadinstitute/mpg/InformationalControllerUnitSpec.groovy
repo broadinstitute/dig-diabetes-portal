@@ -24,7 +24,7 @@ class InformationalControllerUnitSpec extends Specification {
 
         then:
         response.status == 200
-        view == '/informational/about'
+        view == '/informational/data'
     }
 
     void "test contact"() {
