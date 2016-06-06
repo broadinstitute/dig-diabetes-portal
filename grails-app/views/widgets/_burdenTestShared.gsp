@@ -5,6 +5,9 @@ rect.histogramHolder {
 rect.box {
     fill: #fff;
 }
+.metana {
+    text-align: center;
+}
 .stratumName{
     font-weight: bold;
 }
@@ -524,7 +527,7 @@ line.center{
                                      var singleRunButton = $('#singleRunButton');
                                      if (singleRunButton.text().length===0) {
                                         return ('<button name="singlebutton" style="height: 80px; z-index: 10" id="singleRunButton" '+
-                                                       'class="btn btn-primary btn-lg burden-test-btn" '+
+                                                       'class="btn btn-primary btn-lg burden-test-btn vcenter" '+
                                                        'onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun()">Run</button>');
                                      } else {
                                         return "";
@@ -566,7 +569,7 @@ line.center{
         */
         var stratifiedSampleAndCovariateSection = function (dataSetId, phenotype, strataProperty) {
             var data = getStoredSampleMetadata();
-            var allStrata = ['East-Asian','European','Hispanic','South-Asian'];
+            var allStrata = ['African-American','East-Asian','European','Hispanic','South-Asian'];
             var defaultDisplayCount = function(count){
                                  if (this.count==1) {
                                     return " active";
@@ -630,7 +633,7 @@ line.center{
                                      var singleRunButton = $('#singleRunButton');
                                      if (singleRunButton.text().length===0) {
                                         return ('<button name="singlebutton" style="height: 80px; z-index: 10" id="singleRunButton" '+
-                                                       'class="btn btn-primary btn-lg burden-test-btn" '+
+                                                       'class="btn btn-primary btn-lg burden-test-btn vcenter" '+
                                                        'onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun()">Run</button>');
                                      } else {
                                         return "";
@@ -988,7 +991,7 @@ line.center{
                             var beta = UTILS.realNumberFormatter(data.stats.beta);
                             var stdErr = UTILS.realNumberFormatter(data.stats.stdError);
                             var pValue = UTILS.realNumberFormatter(data.stats.pValue);
-                             $('.strataResults').append( '<div clas="metana">Meta-analysis: pValue = <span class="pv metaAnalysis">'+pValue+'</span>'+
+                             $('.strataResults').append( '<div clas="metana" style="text-align: center"><span class="stratumName">Meta-analysis:</span> &nbsp;&nbsp;&nbsp;pValue = <span class="pv metaAnalysis">'+pValue+'</span>'+
 '<span class="be metaAnalysis">Beta='+beta+'</span>'+
 '<span class="st metaAnalysis">Std error='+stdErr+'</span>'+
 '</div>');
@@ -1636,7 +1639,7 @@ line.center{
                    _.forEach(distributionInfo.sampleData.distribution_array,function(d){sampleCount += d.count;})
                 }
                 $('.sampleNumberReporter .numberOfSamples').text(sampleCount);
-                var divElementName = 'bwp_'+params.propertyName;
+                var divElementName = 'bwp_'+params.strataName+'_'+params.propertyName;
                 plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
                    $('.sampleNumberReporter .phenotypeSpecifier').text(params.propertyName);
                 $('#'+divElementName).hide();
@@ -1765,7 +1768,7 @@ $( document ).ready( function (){
             </div>
         </div>
 
-        <div class="col-sm-8 col-xs-12">
+        <div class="col-sm-10 col-xs-12">
             <div class="row burden-test-specific-results burden-test-result">
 
 
@@ -1802,7 +1805,7 @@ $( document ).ready( function (){
             </div>
         </div>
 
-        <div class="col-sm-4 col-xs-12 vcenter burden-test-btn-wrapper">
+        <div class="col-sm-2 col-xs-12 vcenter burden-test-btn-wrapper">
             {{{singleRunButtonDisplay}}}
         </div>
 
