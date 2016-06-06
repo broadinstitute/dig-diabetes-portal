@@ -821,9 +821,26 @@ line.center{
 
            }
 
+
+
+
+
+
+
       var executeAssociationTest = function (filterValues,covariateValues,propertyName,stratum){
 
-
+             var isCategoricalF = function (stats){
+                       var isDichotomousTrait = false;
+                        if ((typeof stats.numCases === 'undefined') ||
+                            (typeof stats.numControls === 'undefined') ||
+                            (typeof stats.numCaseCarriers === 'undefined') ||
+                            (typeof stats.numControlCarriers === 'undefined')) {
+                           isDichotomousTrait = false;
+                        } else {
+                           isDichotomousTrait = true;
+                        }
+                        return isDichotomousTrait;
+                    };
 
            var phenotypeToPredict = $('#phenotypeFilter').val();
            return $.ajax({
@@ -861,6 +878,7 @@ line.center{
                             var beta = UTILS.realNumberFormatter(data.stats.beta);
                             var stdErr = UTILS.realNumberFormatter(data.stats.stdError);
                             var pValue = UTILS.realNumberFormatter(data.stats.pValue);
+                            var isCategorical = isCategoricalF (data.stats);
 
                             var currentStratum = 'stratum'; // 'strat1' marks no distinct strata used
                             if (typeof data.stratum !== 'undefined'){
@@ -878,6 +896,7 @@ line.center{
                                                                 '<span class="hider pv '+currentStratum+'">'+pValue+'</span>'+
                                                                 '<span class="hider be '+currentStratum+'">'+beta+'</span>'+
                                                                 '<span class="hider st '+currentStratum+'" >'+stdErr+'</span>'+
+                                                                '<span class="hider ca '+currentStratum+'" >'+(isCategorical?"1":"0")+'</span>'+
                                                                 '</div>');
 
                             displayTestResultsSection(true);
@@ -935,12 +954,13 @@ line.center{
                    allElements.push({'pv': $(eachStratum).find('.pv').text(),
                    'be': $(eachStratum).find('.be').text(),
                    'st': $(eachStratum).find('.st').text(),
+                   'ca': $(eachStratum).find('.ca').text(),
                    'stratum': $(eachStratum).find('.stratum').text()});
                });
                // create JSON we can send to the server
                var jsonHolder = [];
                 _.forEach(allElements, function(stratum){
-                    jsonHolder.push('{"pv":'+stratum.pv+',"be":'+stratum.be+',"st":'+stratum.st+'}');
+                    jsonHolder.push('{"pv":'+stratum.pv+',"be":'+stratum.be+',"st":'+stratum.st+',"ca":'+stratum.ca+'}');
                 });
                 var json = '['+jsonHolder.join(',')+']';
                 var sortedElements = allElements.sort(function(a, b) {
@@ -958,14 +978,15 @@ line.center{
                 $('.strataResults').append("<ul class='list-inline'></ul>")
                 _.forEach(sortedElements,function(el){
                      var currentStratum  = el.stratum;
-                                                 var oddsRatio = UTILS.realNumberFormatter(Math.exp(el.be));
-                            var beta = UTILS.realNumberFormatter(el.be);
-                            var stdErr = UTILS.realNumberFormatter(el.st);
-                            var pValue = UTILS.realNumberFormatter(el.pv);
+                    var oddsRatio = UTILS.realNumberFormatter(Math.exp(el.be));
+                    var beta = UTILS.realNumberFormatter(el.be);
+                    var stdErr = UTILS.realNumberFormatter(el.st);
+                    var pValue = UTILS.realNumberFormatter(el.pv);
+                    var isCategorical = el.ca;
                      $('.strataResults ul').append('<li><div class="'+currentStratum+' strataHolder"></div></li>');
                     var strataDomIdentifierClass = $('.'+currentStratum+'.strataHolder');
                     addStrataSection(strataDomIdentifierClass,currentStratum);
-                    var isDichotomousTrait=true;
+                    var isDichotomousTrait=(isCategorical==='1');
                     fillInResultsSection(currentStratum,'p-Value = '+ pValue,
                     (isDichotomousTrait ? 'odds ratio = ' + oddsRatio : 'beta = ' + beta),
                     'std. err. = '+stdErr, isDichotomousTrait,currentStratum);
@@ -987,12 +1008,13 @@ line.center{
                          (data) &&
                          (!(data.is_error))&&
                          (data.stats)){
+                            var categorical = data.categorical;
                             var oddsRatio = UTILS.realNumberFormatter(Math.exp(data.stats.beta));
                             var beta = UTILS.realNumberFormatter(data.stats.beta);
                             var stdErr = UTILS.realNumberFormatter(data.stats.stdError);
                             var pValue = UTILS.realNumberFormatter(data.stats.pValue);
                              $('.strataResults').append( '<div clas="metana" style="text-align: center"><span class="stratumName">Meta-analysis:</span> &nbsp;&nbsp;&nbsp;pValue = <span class="pv metaAnalysis">'+pValue+'</span>'+
-'<span class="be metaAnalysis">Beta='+beta+'</span>'+
+((categorical==='1')?('<span class="be metaAnalysis">Odds ratio='+oddsRatio+'</span>'):('<span class="be metaAnalysis">Beta='+beta+'</span>'))+
 '<span class="st metaAnalysis">Std error='+stdErr+'</span>'+
 '</div>');
                        }
