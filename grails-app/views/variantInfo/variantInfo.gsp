@@ -178,6 +178,7 @@
                                                    "<g:createLink controller='trait' action='traitInfo' />",
                                                    "<%=restServer%>",
                                                    variantSummaryText);
+            mpgSoftware.locusZoom.initializeLZPage('variantInfo');
         }).fail(function(jqXHR, textStatus, errorThrown) {
             loading.hide();
             core.errorReporter(jqXHR, errorThrown)

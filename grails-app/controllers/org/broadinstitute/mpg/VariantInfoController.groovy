@@ -30,6 +30,13 @@ class VariantInfoController {
         JSONObject phenotypeDatasetMapping = metaDataService.getPhenotypeDatasetMapping()
         String variantToStartWith = params.id
 
+        // this supports variant searches coming from links inside of LZ plots
+        if(params.lzId) {
+            // if defined, lzId will look like: 8:118184783_C/T
+            // need to get format like: 8_118184783_C_T
+            variantToStartWith = params.lzId.replaceAll(/\:|\//, '_')
+        }
+
         List<PhenotypeBean> lzOptions = GeneController.getHailPhenotypeMap()
 
         if (variantToStartWith) {

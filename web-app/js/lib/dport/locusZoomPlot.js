@@ -37,9 +37,16 @@ mpgSoftware.locusZoom = {
         }
     },
     
-    initLocusZoom: function(selector) {
+    initLocusZoom: function(selector, variantIdString) {
         // TODO - will need to test that incorrect input format doesn't throw JS exception which stops all JS activity
         // TODO - need to catch all exceptions to make sure rest of non LZ JS modules on page load properly (scope errors to this module)
+        if(variantIdString != '') {
+            mpgSoftware.locusZoom.StandardLayout.state = {
+                ldrefvar: variantIdString
+            };
+        }
+
+
         var ds = new LocusZoom.DataSources();
         ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
             .add("ld", ["LDLZ" , mpgSoftware.locusZoom.apiBase + "pair/LD/"])

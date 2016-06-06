@@ -1,0 +1,3 @@
+<p style="color: red; width: 90%; margin: auto; padding: 10px;">
+    Note: this tool is intended to facilitate exploration and to produce results that are accurate, informative, and broadly concordant. However, it is possible that results may change over time. The software is currently under development, and changing parameters may affect results. Additionally, the underlying data may be added, corrected, or updated. We are happy to help in evaluating results from this tool; please contact us.
+</p>

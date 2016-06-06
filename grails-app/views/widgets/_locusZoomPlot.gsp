@@ -1,4 +1,6 @@
 <script type="text/javascript">
+    var mpgSoftware = mpgSoftware || {};
+
     // these get defined when the LZ plot is initialized
     var locusZoomPlot;
     var dataSources;
@@ -138,7 +140,7 @@
                     ],
                     selectable: "one",
                     tooltip: {
-                        html: "<strong>{{" + phenotype + ":id}}</strong><br>"
+                        html: "<strong><a href=${g.createLink(controller: "variantInfo", action: "variantInfo")}/?lzId={{" + phenotype + ":id}} target=_blank>{{" + phenotype + ":id}}</a></strong><br>"
                         + "P Value: <strong>{{" + phenotype + ":pvalue|scinotation}}</strong><br>"
                         + "Ref. Allele: <strong>{{" + phenotype + ":refAllele}}</strong>"
                     }
@@ -150,7 +152,7 @@
     }
 
 
-    $(document).ready(function () {
+    var initializeLZPage = function(page) {
         var variant;
         var loading = $('#spinner').show();
         var position = null;
@@ -164,6 +166,7 @@
             url: ('<g:createLink controller="variantInfo" action="variantAjax"/>' + '/${variantToSearch}'),
             async: true,
             success: function (data) {
+                console.log('we got data', data);
                 if (typeof data !== 'undefined') {
                     if (typeof data.variant !== 'undefined') {
                         if (typeof data.variant.variants[0] !== 'undefined') {
@@ -193,7 +196,18 @@
                 $("#lzRegion").text(locusZoomInput);
                 loading.hide();
 
-                var returned = mpgSoftware.locusZoom.initLocusZoom('#lz-1');
+                var lzVarId = '';
+                // need to process the varId to match the IDs that LZ is getting, so that
+                // the correct reference variant is displayed
+                if(page == 'variantInfo') {
+                    lzVarId = varId;
+                    // we have format: 8_118184783_C_T
+                    // need to get format like: 8:118184783_C/T
+                    var splitVarId = varId.split('_');
+                    lzVarId = splitVarId[0] + ':' + splitVarId[1] + '_' + splitVarId[2] + '/' + splitVarId[3];
+                }
+
+                var returned = mpgSoftware.locusZoom.initLocusZoom('#lz-1', lzVarId);
                 locusZoomPlot = returned.locusZoomPlot;
                 dataSources = returned.dataSources;
 
@@ -214,8 +228,9 @@
             }
         });
 
-    });
+    };
 
+    mpgSoftware.locusZoom.initializeLZPage = initializeLZPage;
 
 </script>
 
@@ -229,6 +244,16 @@
 
     <div id="collapseLZ" class="accordion-body collapse">
         <p><g:message code="variant.locusZoom.text" /></p>
+        <div style="display: flex; justify-content: space-around;">
+            <p>Linkage disequilibrium (r<sup>2</sup>) with the reference variant:</p>
+            <p><i class="fa fa-circle" style="color: #d43f3a"></i> 1 - 0.8</p>
+            <p><i class="fa fa-circle" style="color: #eea236"></i> 0.8 - 0.6</p>
+            <p><i class="fa fa-circle" style="color: #5cb85c"></i> 0.6 - 0.4</p>
+            <p><i class="fa fa-circle" style="color: #46b8da"></i> 0.4 - 0.2</p>
+            <p><i class="fa fa-circle" style="color: #357ebd"></i> 0.2 - 0</p>
+            <p><i class="fa fa-circle" style="color: #B8B8B8"></i> no information</p>
+            <p><i class="fa fa-circle" style="color: #9632b8"></i> reference variant</p>
+        </div>
         <ul class="nav navbar-nav navbar-left" style="display: flex;">
             <li class="dropdown" id="tracks-menu-dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes<b class="caret"></b></a>
@@ -251,15 +276,7 @@
         <div class="accordion-inner">
             <div id="lz-1" class="lz-container-responsive"></div>
         </div>
-        <div style="display: flex; justify-content: space-around;">
-            <p>Linkage disequilibrium (r<sup>2</sup>) with the reference variant:</p>
-            <p><i class="fa fa-circle" style="color: #d43f3a"></i> 1 - 0.8</p>
-            <p><i class="fa fa-circle" style="color: #eea236"></i> 0.8 - 0.6</p>
-            <p><i class="fa fa-circle" style="color: #5cb85c"></i> 0.6 - 0.4</p>
-            <p><i class="fa fa-circle" style="color: #46b8da"></i> 0.4 - 0.2</p>
-            <p><i class="fa fa-circle" style="color: #357ebd"></i> 0.2 - 0</p>
-            <p><i class="fa fa-circle" style="color: #B8B8B8"></i> no information</p>
-            <p><i class="fa fa-circle" style="color: #9632b8"></i> reference variant</p>
-        </div>
+
+        <g:render template="/widgets/dataWarning" />
     </div>
 </div>
