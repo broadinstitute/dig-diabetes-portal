@@ -27,6 +27,8 @@ class BurdenService {
     MetaDataService metaDataService
     WidgetService widgetService
 
+    final static Integer MINIMUM_ALLOWABLE_NUMBER_OF_SAMPLES = 100
+
     def serviceMethod() {
 
     }
@@ -231,7 +233,7 @@ class BurdenService {
             JSONArray covariatesArray = new JSONArray(["C1","C2","C3","C4"])
             covariatesObject.put(PortalConstants.JSON_BURDEN_COVARIATES_KEY, covariatesArray);
 
-            returnJson = this.getBurdenResultForVariantIdList("mdv${dataVersionId}".toString(), phenotype, burdenVariantList, covariatesObject, samplesObject);
+            returnJson = this.getBurdenResultForVariantIdList("mdv${dataVersionId}".toString(), phenotype, burdenVariantList, covariatesObject, samplesObject, "");
 
         } catch (PortalException exception) {
             log.error("Got error creating burden test for gene: " + geneString + " and phenotype: " + phenotype + ": " + exception.getMessage());
@@ -294,7 +296,8 @@ class BurdenService {
     protected JSONObject callBurdenTestForTraitAndDbSnpId(String traitOption, String burdenVariantDbSnpId,
                                                           JSONObject covariateJsonObject,
                                                           JSONObject sampleJsonObject,
-                                                          JSONObject filtersJsonObject ) throws PortalException {
+                                                          JSONObject filtersJsonObject,
+                                                          String dataset ) throws PortalException {
         // local variables
         org.broadinstitute.mpg.Variant burdenVariant;
         JSONObject returnJson = null;
@@ -310,7 +313,7 @@ class BurdenService {
         }
 
         // call shared method
-        returnJson = this.callBurdenTestForTraitAndVariantId(traitOption, variantId, covariateJsonObject, sampleJsonObject, filtersJsonObject );
+        returnJson = this.callBurdenTestForTraitAndVariantId(traitOption, variantId, covariateJsonObject, sampleJsonObject, filtersJsonObject, dataset );
 
         // return
         return returnJson;
@@ -324,7 +327,11 @@ class BurdenService {
      * @return
      * @throws PortalException
      */
-    protected JSONObject callBurdenTestForTraitAndVariantId(String traitOption, String burdenVariantId, JSONObject covariateJsonObject, JSONObject sampleJsonObject, JSONObject filtersJsonObject) throws PortalException {
+    protected JSONObject callBurdenTestForTraitAndVariantId(String traitOption, String burdenVariantId,
+                                                            JSONObject covariateJsonObject,
+                                                            JSONObject sampleJsonObject,
+                                                            JSONObject filtersJsonObject,
+                                                            String dataset) throws PortalException {
         // local variables
         List<String> burdenVariantList = new ArrayList<String>();
         JSONObject returnJson = null;
@@ -344,7 +351,7 @@ class BurdenService {
 
 
 
-        returnJson = this.getBurdenResultForVariantIdList(stringDataVersion , traitOption, burdenVariantList, covariateJsonObject, sampleJsonObject,  filtersJsonObject );
+        returnJson = this.getBurdenResultForVariantIdList(stringDataVersion , traitOption, burdenVariantList, covariateJsonObject, sampleJsonObject,  filtersJsonObject, dataset );
 
         // return
         return returnJson;
@@ -359,7 +366,7 @@ class BurdenService {
      * @throws PortalException
      */
     protected JSONObject getBurdenResultForVariantIdList(String stringDataVersion, String phenotype, List<String> burdenVariantList,
-                                                         JSONObject covariateJsonObject, JSONObject sampleJsonObject, JSONObject filtersJsonObject) throws PortalException {
+                                                         JSONObject covariateJsonObject, JSONObject sampleJsonObject, JSONObject filtersJsonObject, String dataset) throws PortalException {
         // local variables
         JSONObject jsonObject = null;
         JSONObject returnJson = null;
@@ -368,16 +375,20 @@ class BurdenService {
         // TODO: remove this workaround when the backend can gather samples on its own
 
         List<String> sampleList = []
+        String goWithDataSet = "samples_17k_mdv2"
         if (sampleJsonObject?.samples) {
             sampleList = sampleJsonObject.samples.collect{return it.toString()} as List
         } else {
+            if ((dataset)&&( dataset.length() > 0 )){
+                goWithDataSet = dataset
+            }
             List<String> requestedDataList = []
-            requestedDataList << """ "ID":["samples_17k_mdv2"]""".toString()
+            requestedDataList << """ "ID":["${goWithDataSet}"]""".toString()
             JSONObject samples = widgetService.getSampleDistribution( 'samples_17k_mdv2', requestedDataList, false, filtersJsonObject.filters)
             sampleList = samples.variants.collect{variant->variant[0].ID.samples_17k_mdv2} as List
         }
 
-        String filters = widgetService.buildFilterDesignation (filtersJsonObject.filters,"mydataset")
+        String filters = widgetService.buildFilterDesignation (filtersJsonObject.filters,goWithDataSet)
 
         // check to make sure we have at least one variant
         if ((burdenVariantList) == null || (burdenVariantList.size() < 1)) {
@@ -392,20 +403,29 @@ class BurdenService {
         // create the json payload for the burden call
 //        List<String> sampleList = []
 //        if (sampleJsonObject?.samples) {
-//            sampleList = sampleJsonObject.samples.collect{return it.toString()} as List
+//            saminpleList = sampleJsonObject.samples.collect{return it.toString()} as List
 //        }
-        jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(stringDataVersion, phenotype, burdenVariantList, covariateList, sampleList, filters);
-        log.info("created burden rest payload: " + jsonObject);
+        if (sampleList?.size()>MINIMUM_ALLOWABLE_NUMBER_OF_SAMPLES){
+            jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(stringDataVersion, phenotype, burdenVariantList, covariateList, sampleList, filters);
+            log.info("created burden rest payload: " + jsonObject);
+        } else {
+            log.info("needed more samples than ${MINIMUM_ALLOWABLE_NUMBER_OF_SAMPLES}");
+        }
 
-        // get the results of the burden call
-        returnJson = this.getBurdenRestCallResults(jsonObject.toString());
-        log.info("got burden rest result: " + returnJson);
 
-        // add json array of variant strings to the return json
-        Collections.sort(burdenVariantList);
-        JSONArray variantArray = new JSONArray(burdenVariantList);
-        returnJson.put(PortalConstants.JSON_VARIANTS_KEY, variantArray);
-        log.info("passing enhanced burden rest result: " + returnJson);
+        if (jsonObject){
+
+            // get the results of the burden call
+            returnJson = this.getBurdenRestCallResults(jsonObject.toString());
+            log.info("got burden rest result: " + returnJson);
+
+            // add json array of variant strings to the return json
+            Collections.sort(burdenVariantList);
+            JSONArray variantArray = new JSONArray(burdenVariantList);
+            returnJson.put(PortalConstants.JSON_VARIANTS_KEY, variantArray);
+            log.info("passing enhanced burden rest result: " + returnJson);
+
+        }
 
         // return
         return returnJson;

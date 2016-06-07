@@ -240,6 +240,7 @@ line.center{
         var loading = $('#rSpinner');
         var storedSampleMetadata;
         var storedSampleData;
+        var minimumNumberOfSamples = 100;
         var backendFiltering = true;
 
         var storeSampleData = function (data){
@@ -843,6 +844,7 @@ line.center{
                     };
 
            var phenotypeToPredict = $('#phenotypeFilter').val();
+           var datasetUse = $('#datasetFilter').val();
            return $.ajax({
                 cache: false,
                 type: "post",
@@ -852,6 +854,7 @@ line.center{
                        samples: "{\"samples\":[]}",
                        filters: "{\"filters\":"+filterValues+"}",
                        traitFilterSelectedOption: phenotypeToPredict,
+                       dataset: datasetUse,
                        stratum: stratum
                 },
                 async: true
@@ -865,6 +868,10 @@ line.center{
                         } else if (data.is_error) {
                             $('.iatErrorText').text('Error: '+data.error_msg);
                             $('.iatErrorFailure').show();
+                        } else if ((typeof data.stats === 'undefined') &&
+                                 (typeof data.stratum !== 'undefined') ){
+                             $('.iatErrorText').text('Insufficient number of samples.  Please broaden your filter criteria and try again.');
+                             $('.iatErrorFailure').show();
                         } else if ((typeof data.stats.pValue === 'undefined') ||
                                  (typeof data.stats.beta === 'undefined') ||
                                  (typeof data.stats.stdError === 'undefined')){
@@ -1660,25 +1667,31 @@ line.center{
                     (typeof distributionInfo.sampleData.distribution_array !== 'undefined')){
                    _.forEach(distributionInfo.sampleData.distribution_array,function(d){sampleCount += d.count;})
                 }
-                $('.sampleNumberReporter .numberOfSamples').text(sampleCount);
-                var divElementName = 'bwp_'+params.strataName+'_'+params.propertyName;
-                plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
-                   $('.sampleNumberReporter .phenotypeSpecifier').text(params.propertyName);
-                $('#'+divElementName).hide();
-                if (sampleMetadata.filters){
-                  var filter = _.find(sampleMetadata.filters, {'name':params.propertyName});
-                  if (filter){
-                     if (filter.type === 'INTEGER'){
-                        predefinedCategoricalPlot(distributionInfo.sampleData.distribution_array,'#'+divElementName);
-                        $('#'+divElementName).show();
-                     } else if (filter.type === 'STRING'){
-                        predefinedCategoricalPlot(distributionInfo.sampleData.distribution_array,'#'+divElementName);
-                        $('#'+divElementName).show();
-                     } if (filter.type === 'FLOAT'){
-                        predefinedBoxWhiskerPlot(distributionInfo.sampleData,'#'+divElementName);
-                        $('#'+divElementName).show();
-                     }
-                  }
+                if (sampleCount < minimumNumberOfSamples){
+                    $('.sampleNumberReporter .numberOfSamples').text(" < "+minimumNumberOfSamples);
+                    displayTestResultsSection(false);
+                } else {
+                    $('.sampleNumberReporter .numberOfSamples').text(sampleCount);
+                    var divElementName = 'bwp_'+params.strataName+'_'+params.propertyName;
+                    plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
+                       $('.sampleNumberReporter .phenotypeSpecifier').text(params.propertyName);
+                    $('#'+divElementName).hide();
+                    if (sampleMetadata.filters){
+                      var filter = _.find(sampleMetadata.filters, {'name':params.propertyName});
+                      if (filter){
+                         if (filter.type === 'INTEGER'){
+                            predefinedCategoricalPlot(distributionInfo.sampleData.distribution_array,'#'+divElementName);
+                            $('#'+divElementName).show();
+                         } else if (filter.type === 'STRING'){
+                            predefinedCategoricalPlot(distributionInfo.sampleData.distribution_array,'#'+divElementName);
+                            $('#'+divElementName).show();
+                         } if (filter.type === 'FLOAT'){
+                            predefinedBoxWhiskerPlot(distributionInfo.sampleData,'#'+divElementName);
+                            $('#'+divElementName).show();
+                         }
+                      }
+                    }
+
                 }
 
              }

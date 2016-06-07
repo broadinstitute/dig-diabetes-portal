@@ -285,13 +285,17 @@ def retrieveSampleSummary (){
         JSONObject covariateJsonObject = slurper.parseText(params.covariates)
         JSONObject sampleJsonObject = slurper.parseText(params.samples)
         JSONObject filtersJsonObject = slurper.parseText(params.filters)
+        String dataset = params.dataset
         // cast the parameters
         String variantName = params.variantName;
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
-        JSONObject result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantName, covariateJsonObject, sampleJsonObject, filtersJsonObject  );
+        JSONObject result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantName, covariateJsonObject, sampleJsonObject, filtersJsonObject, dataset  );
 
         // send json response back
+        if (!result){
+            result = new JSONObject()
+        }
         if (stratum){
             result.put('stratum',stratum)
         }
