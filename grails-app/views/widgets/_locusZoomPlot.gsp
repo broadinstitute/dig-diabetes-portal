@@ -252,6 +252,5 @@
             <div id="lz-1" class="lz-container-responsive"></div>
         </div>
 
-        <g:render template="/widgets/dataWarning"/>
     </div>
 </div>

@@ -78,8 +78,6 @@
              style="display: none; flex-wrap: wrap; padding-left:0; padding-right: 0;">
         </div>
     </div>
-
-    <g:render template="/widgets/dataWarning" />
 </div>
 
 <script id="boxTemplate" type="x-tmpl-mustache">
