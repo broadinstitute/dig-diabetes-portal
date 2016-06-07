@@ -53,5 +53,7 @@ public interface GetDataQuery {
 
     public void addToCovariateList(Covariate covariate);
 
+    public void addAllToCovariateList(List<Covariate> covariateList);
+
     public List<Covariate> getCovariateList();
 }

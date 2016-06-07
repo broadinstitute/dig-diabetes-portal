@@ -4,6 +4,7 @@ import org.broadinstitute.mpg.diabetes.metadata.Property;
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup;
 import org.broadinstitute.mpg.diabetes.metadata.sort.PropertyListForQueryComparator;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
+import org.broadinstitute.mpg.diabetes.util.PortalException;
 
 import java.util.Collections;
 import java.util.List;
@@ -55,7 +56,7 @@ public class QueryJsonBuilder {
         stringBuilder.append(", ");
 
         // get the rest of the payload
-        finalString = this.getQueryJsonPayloadString(stringBuilder.toString(), query.getQueryPropertyList(), query.getOrderByQueryFilters(), query.getFilterList());
+        finalString = this.getQueryJsonPayloadString(stringBuilder.toString(), query.getQueryPropertyList(), query.getOrderByQueryFilters(), query.getFilterList(), query.getCovariateList());
 
         // return
         return finalString;
@@ -69,7 +70,7 @@ public class QueryJsonBuilder {
      * @param queryFilterList
      * @return
      */
-    public String getQueryJsonPayloadString(String headerData, List<Property> requestPropertyList, List<QueryFilter> orderByPropertyList, List<QueryFilter> queryFilterList) {
+    public String getQueryJsonPayloadString(String headerData, List<Property> requestPropertyList, List<QueryFilter> orderByPropertyList, List<QueryFilter> queryFilterList, List<Covariate> covariateList) {
         // local variables
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -81,7 +82,7 @@ public class QueryJsonBuilder {
 
         // add orderBy info
         stringBuilder.append("\"order_by\": [");
-        if(orderByPropertyList.size() > 0) {
+        if((orderByPropertyList != null) && (orderByPropertyList.size() > 0)) {
             for (QueryFilter item : orderByPropertyList) {
                 String criteria = item.getOrderByString();
                 stringBuilder.append(criteria + ",");
@@ -110,12 +111,61 @@ public class QueryJsonBuilder {
         // add in the filter string
         stringBuilder.append(this.getFilterString(queryFilterList));
 
+        // if have covariates, add in the list
+        if ((covariateList != null) && (covariateList.size() > 0)) {
+            String covariateString = null;
+
+            try {
+                covariateString = this.getCovariatesString(covariateList);
+                stringBuilder.append(", ");
+                stringBuilder.append(covariateString);
+
+            } catch (PortalException exception) {
+                // log
+            }
+        }
+
         // close out the query
         stringBuilder.append("} ");
 
         // return the string
         return stringBuilder.toString();
     }
+
+    protected String getCovariatesString(List<Covariate> covariateList) throws PortalException {
+        // local variables
+        StringBuffer buffer = new StringBuffer();
+        boolean isFirst = true;
+
+        // start the array
+        buffer.append("\"covariates\": [");
+
+        // add in the covariates
+        for (Covariate covariate : covariateList) {
+            if (covariate.getVariant() != null) {
+                if (!isFirst) {
+                    buffer.append(", ");
+                }
+                isFirst = false;
+                buffer.append("{\"type\": \"variant\", \"chrom\": \"");
+                buffer.append(covariate.getVariant().getChromosome());
+                buffer.append("\", \"pos\": ");
+                buffer.append(covariate.getVariant().getPosition());
+                buffer.append(", \"ref\": \"");
+                buffer.append(covariate.getVariant().getReferenceAllele());
+                buffer.append("\", \"alt\": \"");
+                buffer.append(covariate.getVariant().getAlternateAllele());
+                buffer.append("\"}");
+            }
+        }
+
+        // end the array
+        buffer.append("] ");
+
+        // return
+        return buffer.toString();
+    }
+
 
     /**
      * return the pproperties string in the format needed for the getData call

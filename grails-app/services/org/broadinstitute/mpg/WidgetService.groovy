@@ -2,6 +2,7 @@ package org.broadinstitute.mpg
 import grails.transaction.Transactional
 import org.broadinstitute.mpg.diabetes.json.builder.LocusZoomJsonBuilder
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
+import org.broadinstitute.mpg.diabetes.metadata.query.Covariate
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
 import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseFlatSearchTranslator
 import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseResultParser
@@ -287,18 +288,24 @@ class WidgetService {
      * @return
      * @throws PortalException
      */
-    public List<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant> getVariantListForLocusZoom(String chromosome, int startPosition, int endPosition, String dataset, String phenotype) throws PortalException {
+    public List<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant> getVariantListForLocusZoom(String chromosome, int startPosition, int endPosition, String dataset, String phenotype, List<String> covariateVariants) throws PortalException {
         // local variables
         List<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant> variantList;
         String jsonResultString, jsonGetDataString;
         LocusZoomJsonBuilder locusZoomJsonBuilder = null;
         KnowledgeBaseResultParser knowledgeBaseResultParser;
+        List<Covariate> covariateList = null;
 
         // build the LZ json builder
         locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype);
 
+        // adding covariates for variant
+        if (covariateVariants?.size() > 0) {
+            covariateList = locusZoomJsonBuilder.parseLzVariants(covariateVariants);
+        }
+
         // get json getData query string
-        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition);
+        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList);
 
         // submit the post request
         if (this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT) {
@@ -330,7 +337,7 @@ class WidgetService {
      * @param endPosition
      * @return
      */
-    public String getVariantJsonForLocusZoomString(String chromosome, int startPosition, int endPosition, String dataset, String phenotype) {
+    public String getVariantJsonForLocusZoomString(String chromosome, int startPosition, int endPosition, String dataset, String phenotype, List<String> covariateVariants) {
         // local variables
         List<Variant> variantList = null;
         JSONObject jsonResultObject = null;
@@ -347,7 +354,7 @@ class WidgetService {
         // get the query result and translate to a json string
         try {
             // get the variant list
-            variantList = this.getVariantListForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype);
+            variantList = this.getVariantListForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, covariateVariants);
 
             // TODO: DIGP-354: Review property spoofing for Hail multiple phenotype call to see if appropriate
             // translate to json string

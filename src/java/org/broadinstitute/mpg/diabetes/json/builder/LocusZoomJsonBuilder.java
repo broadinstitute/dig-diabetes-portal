@@ -1,11 +1,14 @@
 package org.broadinstitute.mpg.diabetes.json.builder;
 
-import org.broadinstitute.mpg.diabetes.metadata.DataSet;
+import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant;
+import org.broadinstitute.mpg.diabetes.knowledgebase.result.VariantBean;
 import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean;
 import org.broadinstitute.mpg.diabetes.metadata.Property;
 import org.broadinstitute.mpg.diabetes.metadata.PropertyBean;
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean;
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser;
+import org.broadinstitute.mpg.diabetes.metadata.query.Covariate;
+import org.broadinstitute.mpg.diabetes.metadata.query.CovariateBean;
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery;
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryBean;
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter;
@@ -38,12 +41,45 @@ public class LocusZoomJsonBuilder {
         this.phenotypeString = phenotype;
     }
 
-    public String getLocusZoomQueryString(String chromosome, int startPosition, int endPosition) throws PortalException {
+    /**
+     * build the locus zoom query string
+     *
+     * @param chromosome
+     * @param startPosition
+     * @param endPosition
+     * @return
+     * @throws PortalException
+     */
+    public String getLocusZoomQueryString(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList) throws PortalException {
+        // local variables
+        GetDataQuery query = new GetDataQueryBean();
+        String jsonQueryString;
+        System.out.println(this.phenotypeString + " " + this.rootDataSetString);
+
+        // get the query object
+        query = this.getLocusZoomQueryBean(chromosome, startPosition, endPosition, covariateList);
+
+        // get the payload string
+        jsonQueryString = this.jsonBuilder.getQueryJsonPayloadString(query);
+
+        // return
+        return jsonQueryString;
+    }
+
+    /**
+     * build the locus zoom query object
+     *
+     * @param chromosome
+     * @param startPosition
+     * @param endPosition
+     * @param covariateList
+     * @return
+     * @throws PortalException
+     */
+    public GetDataQuery getLocusZoomQueryBean(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList) throws PortalException {
         // local variables
         GetDataQuery query = new GetDataQueryBean();
         PropertyBean pValueProperty;
-        String jsonQueryString;
-        DataSet rootDataSet = null;
         System.out.println(this.phenotypeString + " " + this.rootDataSetString);
         // get a dummy p-value property--we don't want to look it up because we don't know (or care) about
         // dataset, we just need to add a p-value property to the query
@@ -72,11 +108,56 @@ public class LocusZoomJsonBuilder {
         query.addAllQueryFilters(this.getStandardQueryFilters(chromosome, startPosition, endPosition));
         query.addFilterProperty(pValueProperty, PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS, String.valueOf(0.0));
 
-        // get the payload string
-        jsonQueryString = this.jsonBuilder.getQueryJsonPayloadString(query);
+        // add the covariates
+        if ((covariateList != null) && (covariateList.size() > 0)) {
+            query.addAllToCovariateList(covariateList);
+        }
 
         // return
-        return jsonQueryString;
+        return query;
+    }
+
+    /**
+     * parse the chrom_pos_ref_alt formatted string into variant objects
+     *
+     * @param variantStringList
+     * @return
+     * @throws PortalException
+     */
+    public List<Covariate> parseLzVariants(List<String> variantStringList) throws PortalException {
+        // local variables
+        List<Covariate> covariateList = new ArrayList<Covariate>();
+
+        // loop through the strings, catch format exception
+        if (variantStringList != null) {
+            for (String variantString : variantStringList) {
+                // split
+                String[] split = variantString.split("_");
+                if (split.length == 4) {
+                    try {
+                        Variant variant = new VariantBean();
+                        variant.setChromosome(split[0]);
+                        variant.setReferenceAllele(split[2]);
+                        variant.setAlternateAllele(split[3]);
+
+                        int position = Integer.valueOf(split[1]).intValue();
+                        variant.setPosition(position);
+
+                        // add to the collection
+                        Covariate covariate = new CovariateBean();
+                        covariate.setVariant(variant);
+                        covariateList.add(covariate);
+
+                    } catch (NumberFormatException exception) {
+                        // add log here
+                    }
+
+                }
+            }
+        }
+
+        // return
+        return covariateList;
     }
 
     /**

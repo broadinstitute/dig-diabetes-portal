@@ -376,6 +376,13 @@ class GeneController {
         int endInteger;
         String errorJson = "{\"data\": {}, \"error\": true}";
 
+        // get the covariate variants
+        List<String> conditionVariants
+        if (params.conditionVariantId) {
+            conditionVariants = params.list("conditionVariantId")
+            log.info("got covariates: " + conditionVariants)
+        }
+
         // log
         log.info("got LZ request with params: " + params);
 
@@ -385,7 +392,7 @@ class GeneController {
             endInteger = Integer.parseInt(endString);
 
             if (chromosome != null) {
-                jsonReturn = widgetService.getVariantJsonForLocusZoomString(chromosome, startInteger, endInteger, null, phenotype);
+                jsonReturn = widgetService.getVariantJsonForLocusZoomString(chromosome, startInteger, endInteger, null, phenotype, conditionVariants);
             } else {
                 jsonReturn = errorJson;
             }

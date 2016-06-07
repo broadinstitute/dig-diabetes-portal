@@ -8,12 +8,15 @@
     var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, phenotype) {
         this.parseInit(init);
         this.getURL = function (state, chain, fields) {
-            //var analysis = state.analysis || chain.header.analysis || this.params.analysis || 3;
-            return this.url + "?" +
+            var url = this.url + "?" +
                     "chromosome=" + state.chr + "&" +
                     "start=" + state.start + "&" +
                     "end=" + state.end + "&" +
                     "phenotype=" + phenotype;
+            if (state.condition_on_variant){
+                url += "&conditionVariantId=" + state.condition_on_variant.replace(/[^0-9ATCG]/g,"_")
+            }
+            return url;
         }
     }, "BroadT2D");
 
@@ -138,11 +141,15 @@
                         },
                         "#B8B8B8"
                     ],
+                    transition: {
+                        duration: 500
+                    },
                     selectable: "one",
                     tooltip: {
                         html: "<strong><a href=${g.createLink(controller: "variantInfo", action: "variantInfo")}/?lzId={{" + phenotype + ":id}} target=_blank>{{" + phenotype + ":id}}</a></strong><br>"
                         + "P Value: <strong>{{" + phenotype + ":pvalue|scinotation}}</strong><br>"
-                        + "Ref. Allele: <strong>{{" + phenotype + ":refAllele}}</strong>"
+                        + "Ref. Allele: <strong>{{" + phenotype + ":refAllele}}</strong><br>"
+                        + "<a href=\"#\" onClick=\"locusZoomPlot.applyState({condition_on_variant:'{{" + phenotype + ":id}}'});\">Condition on this variant</a>"
                     }
                 }
             }
@@ -245,6 +252,5 @@
             <div id="lz-1" class="lz-container-responsive"></div>
         </div>
 
-        <g:render template="/widgets/dataWarning"/>
     </div>
 </div>
