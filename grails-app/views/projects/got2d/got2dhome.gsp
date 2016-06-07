@@ -77,7 +77,7 @@
             <div class="col-lg-8 col-md-8 dk-sigma-content-summary">data from the GoT2D consortium in the T2D Knowledge Portal</div>
         </div>
         <div class="row sigma-data-gradient dk-sigma-section-header-sm visible-sm visible-xs">
-            <div class="col-sm-offset-1 col-xs-offset-1 col-sm-10 col-xs-10 dk-sigma-content-summary">data from the GoT2D consortium in the T2D Knowledge Portal</g:message></div>
+            <div class="col-sm-offset-1 col-xs-offset-1 col-sm-10 col-xs-10 dk-sigma-content-summary">data from the GoT2D consortium in the T2D Knowledge Portal</div>
         </div>
     </g:if>
     <g:if test="${params.section == 'papers'}"> 
