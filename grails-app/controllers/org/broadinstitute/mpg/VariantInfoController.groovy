@@ -239,6 +239,7 @@ def retrieveSampleSummary (){
 
 
     def metadataAjax(){
+        log.debug("&&&&&&&&&&&&&&&&&&&&&    metadataAjax    &&&&&&&&&&&&&&&&&&&&&")
         JsonSlurper slurper = new JsonSlurper()
         log.debug("params.valueArray=${params.valueArray.toString()}")
         JSONArray valueArray = slurper.parseText(params.valueArray)

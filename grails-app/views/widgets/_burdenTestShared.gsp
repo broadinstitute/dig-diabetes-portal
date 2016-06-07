@@ -5,6 +5,15 @@ rect.histogramHolder {
 rect.box {
     fill: #fff;
 }
+div.corvariateDisplay {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+div.corvariateDisplay [class*="col"], /* TWBS v3 */
+div.corvariateDisplay [class*="span"] {  /* TWBS v2 */
+    display: inline-block;
+    float: none; /* Very important */
+}
 .metana {
     text-align: center;
 }
@@ -19,6 +28,9 @@ rect.box {
 }
 .hider {
     display: none;
+}
+div.covariate_holder {
+    margin: 0;
 }
 ul.strataResults {
     margin-bottom: 0;
@@ -414,20 +426,24 @@ line.center{
 
 
 
-       var generateFilterRenderData = function(dataFilters,optionsPerFilter,stratumName){
+       var generateFilterRenderData = function(dataFilters,optionsPerFilter,stratumName, phenotype){
             var returnValue = {};
             if ( ( typeof dataFilters !== 'undefined' ) &&
                          (  dataFilters !==  null ) ) {
                 var categoricalFilters = [];
                 var realValuedFilters = [];
                 _.forEach(dataFilters,function(d,i){
-                  if (d.type === 'FLOAT') {
-                     realValuedFilters.push(d);
-                  } else {
-                     if ((optionsPerFilter[d.name]!==undefined)&&
-                         (optionsPerFilter[d.name].length<3)){
-                             categoricalFilters.push(d);
-                     }
+                  if (d.name!==phenotype){
+                      if (d.type === 'FLOAT') {
+                         realValuedFilters.push(d);
+                      } else {
+                         if ((optionsPerFilter[d.name]!==undefined)&&
+                             (optionsPerFilter[d.name].length<3)&&
+                             (d.name!==phenotype)){
+                                 categoricalFilters.push(d);
+                         }
+                      }
+
                   }
 
                 });
@@ -445,13 +461,23 @@ line.center{
             if ( ( typeof dataCovariates !== 'undefined' ) &&
                          (  dataCovariates !==  null ) ) {
                var covariateSpecifiers = [];
+               var covariateSpecifiersC1 = [];
+               var covariateSpecifiersC2 = [];
                  _.forEach(dataCovariates,function(d,i){
                      if (d.name !== phenotype){
                         covariateSpecifiers.push(d);
+                        if (d.trans.substr(0,2)==='PC'){
+                            covariateSpecifiersC1.push(d);
+                        } else {
+                            covariateSpecifiersC2.push(d);
+
+                        }
                      }
                 });
                 returnValue = {
                         covariateSpecifiers: covariateSpecifiers,
+                        covariateSpecifiersC1: covariateSpecifiersC1,
+                        covariateSpecifiersC2: covariateSpecifiersC2,
                         defaultCovariate: function(){
                              if (this.def) {
                                 return " checked";
@@ -509,7 +535,7 @@ line.center{
 
                     // put those filters in place
                     $(".filterHolder_"+stratumName).empty().append(Mustache.render( $('#allFiltersTemplate')[0].innerHTML,
-                                            generateFilterRenderData(data.filters,optionsPerFilter,stratumName),
+                                            generateFilterRenderData(data.filters,optionsPerFilter,stratumName, phenotype),
                                             { filterFloatTemplate:$('#filterFloatTemplate')[0].innerHTML,
                                               filterCategoricalTemplate:$('#filterCategoricalTemplate')[0].innerHTML }));
 
@@ -519,7 +545,8 @@ line.center{
                     // put those covariates into place
                     $(".covariateHolder_"+stratumName).empty().append(Mustache.render( $('#allCovariateSpecifierTemplate')[0].innerHTML,
                                                                            generateCovariateRenderData(data.covariates,phenotype,stratumName),
-                                                                           {covariateTemplate:$('#covariateTemplate')[0].innerHTML}));
+                                                                           {covariateTemplateC1:$('#covariateTemplateC1')[0].innerHTML,
+                                                                           covariateTemplateC2:$('#covariateTemplateC2')[0].innerHTML}));
 
                         var renderRunData = {
                             strataProperty:"origin",
@@ -616,7 +643,7 @@ line.center{
 
                          // put those filters in place
                         $(".filterHolder_"+stratumName).empty().append(Mustache.render( $('#allFiltersTemplate')[0].innerHTML,
-                                                generateFilterRenderData(data.filters,optionsPerFilter,stratumName),
+                                                generateFilterRenderData(data.filters,optionsPerFilter,stratumName, phenotype),
                                                 { filterFloatTemplate:$('#filterFloatTemplate')[0].innerHTML,
                                                   filterCategoricalTemplate:$('#filterCategoricalTemplate')[0].innerHTML }));
 
@@ -624,7 +651,8 @@ line.center{
                         // put those covariates into place
                         $(".covariateHolder_"+stratumName).empty().append(Mustache.render( $('#allCovariateSpecifierTemplate')[0].innerHTML,
                                                                                generateCovariateRenderData(data.covariates,phenotype,stratumName),
-                                                                               {covariateTemplate:$('#covariateTemplate')[0].innerHTML}));
+                                                                               {covariateTemplateC1:$('#covariateTemplateC1')[0].innerHTML,
+                                                                                covariateTemplateC2:$('#covariateTemplateC2')[0].innerHTML}));
 
                         // display the results section
                         var renderRunData = {
@@ -1959,7 +1987,7 @@ $( document ).ready( function (){
                         {{ #strataContent }}
                             <div class="tab-pane {{defaultDisplay}}" id="{{name}}">
                                 <div class="row">
-                                    <div class="col-sm-6 col-xs-12 vcenter" style="margin-top:0">
+                                    <div class="col-sm-5 col-xs-12 vcenter" style="margin-top:0">
                                         <div class="row secHeader" style="padding: 20px 0 0 0">
                                             <div class="col-sm-6 col-xs-12 text-left"></div>
 
@@ -1972,7 +2000,7 @@ $( document ).ready( function (){
                                         <div class="row" style="padding: 10px 0 0 0">
                                             <div class="col-sm-12 col-xs-12 text-left">
 
-                                                <div style="direction: rtl; height: 300px; padding: 4px 0 0 10px; overflow-y: scroll;">
+                                                <div style="direction: rtl; height: 320px; padding: 4px 0 0 10px; overflow-y: auto;">
                                                     <div style="direction: ltr; margin: 10px 0 0 5px">
                                                         <div>
                                                             <div class="row">
@@ -1993,7 +2021,7 @@ $( document ).ready( function (){
 
                                     </div>
 
-                                    <div class="col-sm-6 col-xs-12 vcenter" style="padding: 0; margin: 0">
+                                    <div class="col-sm-7 col-xs-12 vcenter" style="padding: 0; margin: 0">
                                         <div class="sampleNumberReporter text-center">
                                             <div>Number of samples included in analysis:<span class="numberOfSamples"></span></div>
 
@@ -2050,9 +2078,8 @@ $( document ).ready( function (){
                             <div class="tab-pane {{defaultDisplay}}" id="cov_{{name}}">
 
                                 <div class="row">
-                                    <div class="col-sm-6 col-xs-12 vcenter">
-                                        <div class="covariates"
-                                             style="border: 1px solid #ccc; height: 200px; padding: 4px 0 0 10px;overflow-y: scroll;">
+                                    <div class="col-sm-6 col-xs-12 vcenter covariate_holder">
+                                        <div class="covariates">
                                             <div class="row">
                                                 <div class="col-md-10 col-sm-10 col-xs-12 vcenter" style="margin-top:0">
 
@@ -2084,23 +2111,7 @@ $( document ).ready( function (){
 
 
 <script id="allFiltersTemplate"  type="x-tmpl-mustache">
-                                <div class="row sampleFilterHeader" style="text-decoration: underline">
-                                    <div class="col-sm-1" style="padding-left: 4px">
-                                        Use
-                                    </div>
 
-                                    <div class="col-sm-3">
-                                        Filter name
-                                    </div>
-
-                                    <div class="col-sm-3" style="padding-left: 4px">
-                                        Cmp
-                                    </div>
-
-                                    <div class="col-sm-4 pull-right">
-                                        Parameter
-                                    </div>
-                                </div>
                                 {{>filterCategoricalTemplate}}
                                 {{>filterFloatTemplate}}
                             </script>
@@ -2111,12 +2122,12 @@ $( document ).ready( function (){
 
                                 {{ #realValuedFilters }}
                                 <div class="row realValuedFilter {{stratum}} considerFilter" id="filter_{{stratum}}_{{name}}">
-                                    <div class="col-sm-1">
+                                    %{--<div class="col-sm-1">--}%
                                         <input class="utilize" id="use{{name}}" type="checkbox" name="use_{{stratum}}_{{name}}"
-                                               value="{{stratum}}_{{name}}" checked/></td>
-                                    </div>
+                                               value="{{stratum}}_{{name}}" checked style="display: none"/></td>
+                                    %{--</div>--}%
 
-                                    <div class="col-sm-5">
+                                    <div class="col-sm-6">
                                         <span>{{trans}}</span>
                                     </div>
 
@@ -2150,20 +2161,17 @@ $( document ).ready( function (){
 <script id="filterCategoricalTemplate" type="x-tmpl-mustache">
                                 {{ #categoricalFilters }}
                                 <div class="row categoricalFilter considerFilter {{stratum}}" id="filter_{{stratum}}_{{name}}">
-                                    <div class="col-sm-1">
+                                   %{-- <div class="col-sm-1">--}%
                                         <input class="utilize" id="use_{{stratum}}_{{name}}" type="checkbox" name="use_{{stratum}}_{{name}}"
-                                               value="{{stratum}}_{{name}}" checked/></td>
-                                    </div>
+                                               value="{{stratum}}_{{name}}" checked  style="display: none"/></td>
+                                   %{-- </div>--}%
 
-                                    <div class="col-sm-5">
+                                    <div class="col-sm-6">
                                         <span>{{trans}}</span>
                                     </div>
 
-                                    <div class="col-sm-2" style="text-align: center">
-                                        =
-                                    </div>
 
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-5">
                                         <select id="multi_{{stratum}}_{{name}}" class="form-control multiSelect"
                                                 data-selectfor="{{stratum}}_{{name}}FilterOpts" multiple="multiple"
                                                 onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',1)">
@@ -2185,8 +2193,15 @@ $( document ).ready( function (){
 </script>
 
 <script id="allCovariateSpecifierTemplate"  type="x-tmpl-mustache">
+                                <div class="row">
+                                   <div class="col-sm-6">
+                                   {{>covariateTemplateC1}}
+                                   </div>
+                                   <div class="col-sm-6">
+                                   {{>covariateTemplateC2}}
+                                   </div>
+                                </div>
 
-                                {{>covariateTemplate}}
 </script>
 
 <script id="covariateTemplate"  type="x-tmpl-mustache">
@@ -2201,6 +2216,32 @@ $( document ).ready( function (){
                                         </div>
                                     </div>
                                     {{ /covariateSpecifiers }}
+</script>
+<script id="covariateTemplateC1"  type="x-tmpl-mustache">
+                                    {{ #covariateSpecifiersC1 }}
+                                    <div class="row">
+                                        <div class="checkbox" style="margin:0">
+                                            <label>
+                                                <input id="covariate_{{name}}" class="covariate" type="checkbox" name="covariate"
+                                                       value="{{name}}" {{defaultCovariate}}/>
+                                                {{trans}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    {{ /covariateSpecifiersC1 }}
+</script>
+<script id="covariateTemplateC2"  type="x-tmpl-mustache">
+                                    {{ #covariateSpecifiersC2 }}
+                                    <div class="row">
+                                        <div class="checkbox" style="margin:0">
+                                            <label>
+                                                <input id="covariate_{{name}}" class="covariate" type="checkbox" name="covariate"
+                                                       value="{{name}}" {{defaultCovariate}}/>
+                                                {{trans}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    {{ /covariateSpecifiersC2 }}
 </script>
 
 
