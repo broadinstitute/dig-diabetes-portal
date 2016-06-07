@@ -7,6 +7,7 @@ import org.broadinstitute.mpg.diabetes.metadata.Property;
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser;
 import org.broadinstitute.mpg.diabetes.metadata.sort.PropertyListForQueryComparator;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
+import org.broadinstitute.mpg.diabetes.util.PortalException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -196,6 +197,38 @@ public class QueryJsonBuilderTest extends TestCase {
     }
 
     @Test
+    public void testGetCovariatesSingleVariantString() {
+        // local variables
+        Covariate covariate = new CovariateBean();
+        List<Covariate> covariateList = new ArrayList<Covariate>();
+        Variant variant = new VariantBean();
+        String expectedString = "\"covariates\": [{\"type\": \"variant\", \"chrom\": \"22\", \"pos\": 29838203, \"ref\": \"A\", \"alt\": \"T\"}] ";
+        String resultString = null;
+
+        // set the variant
+        variant.setChromosome("22");
+        variant.setPosition(29838203);
+        variant.setReferenceAllele("A");
+        variant.setAlternateAllele("T");
+
+        // add to list
+        covariate.setVariant(variant);
+        covariateList.add(covariate);
+
+        // get the string
+        try {
+            resultString = this.queryJsonBuilder.getCovariatesString(covariateList);
+
+        } catch (PortalException exception) {
+            fail("got exception; " + exception.getMessage());
+        }
+
+        // test
+        assertNotNull(resultString);
+        assertEquals(expectedString, resultString);
+    }
+
+    @Test
     public void testgetQueryJsonPayloadString() {
         // local variables
         StringBuilder builder = new StringBuilder();
@@ -203,7 +236,7 @@ public class QueryJsonBuilderTest extends TestCase {
         String generatedString = null;
 
         // build the generated string
-        generatedString = this.queryJsonBuilder.getQueryJsonPayloadString(this.headerDataString, this.propertyList, null, this.filterList);
+        generatedString = this.queryJsonBuilder.getQueryJsonPayloadString(this.headerDataString, this.propertyList, null, this.filterList, null);
 
         // test
         assertNotNull(generatedString);
@@ -216,7 +249,7 @@ public class QueryJsonBuilderTest extends TestCase {
     }
 
      @Test
-     public void testgetQueryJsonPayloadStringUsingQueryBean() {
+     public void testGetQueryJsonPayloadStringUsingQueryBean() {
         // local variables
         StringBuilder builder = new StringBuilder();
         String referenceString = null;

@@ -47,7 +47,7 @@ public class LocusZoomJsonBuilderTest extends TestCase {
 
         // get the json string
         try {
-            jsonString = locusZoomJsonBuilder.getLocusZoomQueryString("8", 118000000, 121000000);
+            jsonString = locusZoomJsonBuilder.getLocusZoomQueryString("8", 118000000, 121000000, null);
 
             // create the json object
             locusZoomJsonObject = new JSONObject(jsonString);

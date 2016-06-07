@@ -14,7 +14,7 @@
                     "end=" + state.end + "&" +
                     "phenotype=" + phenotype;
             if (state.condition_on_variant){
-                url += "&variantId=" + state.condition_on_variant.replace(/[^0-9ATCG]/g,"_")
+                url += "&conditionVariantId=" + state.condition_on_variant.replace(/[^0-9ATCG]/g,"_")
             }
             return url;
         }

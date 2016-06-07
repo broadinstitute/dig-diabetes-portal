@@ -1,5 +1,7 @@
 package org.broadinstitute.mpg.diabetes.metadata.query;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.impl.Log4JLogger;
 import org.broadinstitute.mpg.diabetes.metadata.Property;
 import org.broadinstitute.mpg.diabetes.metadata.sort.PropertyListForQueryComparator;
 
@@ -25,6 +27,9 @@ public class GetDataQueryBean implements GetDataQuery {
     int limit = 1000;
     boolean isCount = false;
     private List<Covariate> covariateList = new ArrayList<Covariate>();
+
+    // creating log
+    Log queryLog = new Log4JLogger(this.getClass().getName());
 
     public void addQueryProperty(Property property) {
         if (!(this.queryPropertyMap.containsKey(property.getId()))){
@@ -155,6 +160,21 @@ public class GetDataQueryBean implements GetDataQuery {
         }
 
         this.covariateList.add(covariate);
+    }
+
+    /**
+     * add all covariates to the query covariate list
+     *
+     * @param covariateList
+     */
+    public void addAllToCovariateList(List<Covariate> covariateList) {
+        if (this.covariateList == null) {
+            this.covariateList = new ArrayList<Covariate>();
+        }
+
+        // add
+        this.queryLog.info("added covariates list of size: " + this.covariateList.size());
+        this.covariateList.addAll(covariateList);
     }
 
     public List<Covariate> getCovariateList() {
