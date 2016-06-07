@@ -240,6 +240,7 @@ def retrieveSampleSummary (){
 
     def metadataAjax(){
         JsonSlurper slurper = new JsonSlurper()
+        log.debug("params.valueArray=${params.valueArray.toString()}")
         JSONArray valueArray = slurper.parseText(params.valueArray)
         String categorical = valueArray.find()?.'ca'
         JSONObject result = this.burdenService.getBurdenResultForMetadata( valueArray  );

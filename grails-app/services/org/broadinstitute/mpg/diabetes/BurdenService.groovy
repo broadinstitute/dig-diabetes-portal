@@ -233,7 +233,10 @@ class BurdenService {
             JSONArray covariatesArray = new JSONArray(["C1","C2","C3","C4"])
             covariatesObject.put(PortalConstants.JSON_BURDEN_COVARIATES_KEY, covariatesArray);
 
-            returnJson = this.getBurdenResultForVariantIdList("mdv${dataVersionId}".toString(), phenotype, burdenVariantList, covariatesObject, samplesObject, "");
+            JSONObject filtersObject = new JSONObject()
+
+
+            returnJson = this.getBurdenResultForVariantIdList("mdv${dataVersionId}".toString(), phenotype, burdenVariantList, covariatesObject, samplesObject, filtersObject, "");
 
         } catch (PortalException exception) {
             log.error("Got error creating burden test for gene: " + geneString + " and phenotype: " + phenotype + ": " + exception.getMessage());

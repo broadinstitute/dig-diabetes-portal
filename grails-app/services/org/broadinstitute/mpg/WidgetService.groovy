@@ -92,7 +92,8 @@ class WidgetService {
     public String buildFilterDesignation (def filters,String dataset){
         String filterDesignation = ""
 
-        if (filters.size()==0){
+        if ((filters==null)||
+            (filters.size()==0)){
             filterDesignation =  """            "filters":    [
                 ${singleFilter ( "1", "1", "ID", "ZZZZZ", dataset )}
             ]
