@@ -121,6 +121,16 @@ var mpgSoftware = mpgSoftware || {};
 
             displayTranscriptSummaries(variantObject.TRANSCRIPT_ANNOT, variantSummaryText);
 
+            // pretty much arbitrary
+            var locusZoomRange = 80000;
+            var positioningInformation = {
+                chromosome: variantObject.CHROM,
+                startPosition: variantObject.POS - locusZoomRange,
+                endPosition: variantObject.POS + locusZoomRange
+            };
+
+            mpgSoftware.locusZoom.initializeLZPage('variantInfo', variantObject.VAR_ID, positioningInformation);
+
             $('[data-toggle="popover"]').popover();
 
             $(".pop-top").popover({placement : 'top'});

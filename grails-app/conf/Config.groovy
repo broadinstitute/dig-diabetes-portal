@@ -413,6 +413,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/home/**':                 ['permitAll'],
         '/articles/**':             ['permitAll'],
         '/resultsfilter/**':             ['permitAll'],
+        '/about/**':                ['permitAll'],
         '/projects/**':             ['permitAll'],
         '/system/**':               ['ROLE_SYSTEM'],
         '/system/determineVersion':               ['permitAll'],

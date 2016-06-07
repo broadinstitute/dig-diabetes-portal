@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <meta name="layout" content="got2d"/>
+    <meta name="layout" content="t2dGenes"/>
     <r:require modules="core"/>
     <r:require modules="sigma"/>
     <r:layoutResources/>

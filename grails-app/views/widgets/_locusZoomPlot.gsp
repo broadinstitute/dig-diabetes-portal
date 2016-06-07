@@ -1,4 +1,6 @@
 <script type="text/javascript">
+    var mpgSoftware = mpgSoftware || {};
+
     // these get defined when the LZ plot is initialized
     var locusZoomPlot;
     var dataSources;
@@ -138,7 +140,7 @@
                     ],
                     selectable: "one",
                     tooltip: {
-                        html: "<strong>{{" + phenotype + ":id}}</strong><br>"
+                        html: "<strong><a href=${g.createLink(controller: "variantInfo", action: "variantInfo")}/?lzId={{" + phenotype + ":id}} target=_blank>{{" + phenotype + ":id}}</a></strong><br>"
                         + "P Value: <strong>{{" + phenotype + ":pvalue|scinotation}}</strong><br>"
                         + "Ref. Allele: <strong>{{" + phenotype + ":refAllele}}</strong>"
                     }
@@ -150,72 +152,45 @@
     }
 
 
-    $(document).ready(function () {
-        var variant;
+    var initializeLZPage = function (page, variantId, positionInfo) {
         var loading = $('#spinner').show();
-        var position = null;
-        var chromosome = null;
-        var varId = null;
-        var locusZoomInput = null;
-        var rangeInteger = 80000;
-        $.ajax({
-            cache: false,
-            type: "get",
-            url: ('<g:createLink controller="variantInfo" action="variantAjax"/>' + '/${variantToSearch}'),
-            async: true,
-            success: function (data) {
-                if (typeof data !== 'undefined') {
-                    if (typeof data.variant !== 'undefined') {
-                        if (typeof data.variant.variants[0] !== 'undefined') {
-                            data.variant.variants[0].forEach(function (v) {
-                                if (typeof v.CHROM !== 'undefined') {
-                                    chromosome = v.CHROM;
-                                }
-                                if (typeof v.POS !== 'undefined') {
-                                    position = v.POS;
-                                }
-                                if (typeof v.VAR_ID !== 'undefined') {
-                                    varId = v.VAR_ID;
-                                }
-                            });
-                        }
-                    }
-                }
+        var chromosome = positionInfo.chromosome;
+        // make sure we don't get a negative start point
+        var startPosition = Math.max(0, positionInfo.startPosition);
+        var endPosition = positionInfo.endPosition;
 
-                // get the locuszoom range and set it on the LZ div
-                var startPosition = parseInt(position) - rangeInteger;
-                if (startPosition < 0) {
-                    startPosition = 0;
-                }
-                var endPosition = parseInt(position) + rangeInteger;
-                locusZoomInput = chromosome + ":" + startPosition + "-" + endPosition;
-                $("#lz-1").attr("data-region", locusZoomInput);
-                $("#lzRegion").text(locusZoomInput);
-                loading.hide();
+        var locusZoomInput = chromosome + ":" + startPosition + "-" + endPosition;
+        $("#lz-1").attr("data-region", locusZoomInput);
+        $("#lzRegion").text(locusZoomInput);
+        loading.hide();
 
-                var returned = mpgSoftware.locusZoom.initLocusZoom('#lz-1');
-                locusZoomPlot = returned.locusZoomPlot;
-                dataSources = returned.dataSources;
+        var lzVarId = '';
+        // need to process the varId to match the IDs that LZ is getting, so that
+        // the correct reference variant is displayed
+        if (page == 'variantInfo') {
+            lzVarId = variantId;
+            // we have format: 8_118184783_C_T
+            // need to get format like: 8:118184783_C/T
+            var splitVarId = variantId.split('_');
+            lzVarId = splitVarId[0] + ':' + splitVarId[1] + '_' + splitVarId[2] + '/' + splitVarId[3];
+        }
 
-                // default panel
-                addLZPhenotype({
-                    phenotype: 'T2D',
-                    description: 'Type 2 Diabetes'
-                });
+        var returned = mpgSoftware.locusZoom.initLocusZoom('#lz-1', lzVarId);
+        locusZoomPlot = returned.locusZoomPlot;
+        dataSources = returned.dataSources;
 
-                $("#collapseLZ").on("shown.bs.collapse", function () {
-                    locusZoomPlot.rescaleSVG();
-                })
-
-            },
-            error: function (jqXHR, exception) {
-                loading.hide();
-                core.errorReporter(jqXHR, exception);
-            }
+        // default panel
+        addLZPhenotype({
+            phenotype: 'T2D',
+            description: 'Type 2 Diabetes'
         });
 
-    });
+        $("#collapseLZ").on("shown.bs.collapse", function () {
+            locusZoomPlot.rescaleSVG();
+        });
+    };
 
+    mpgSoftware.locusZoom.initializeLZPage = initializeLZPage;
 
 </script>
 
@@ -228,7 +203,25 @@
     </div>
 
     <div id="collapseLZ" class="accordion-body collapse">
-        <p><g:message code="variant.locusZoom.text" /></p>
+        <p><g:message code="variant.locusZoom.text"/></p>
+
+        <div style="display: flex; justify-content: space-around;">
+            <p>Linkage disequilibrium (r<sup>2</sup>) with the reference variant:</p>
+
+            <p><i class="fa fa-circle" style="color: #d43f3a"></i> 1 - 0.8</p>
+
+            <p><i class="fa fa-circle" style="color: #eea236"></i> 0.8 - 0.6</p>
+
+            <p><i class="fa fa-circle" style="color: #5cb85c"></i> 0.6 - 0.4</p>
+
+            <p><i class="fa fa-circle" style="color: #46b8da"></i> 0.4 - 0.2</p>
+
+            <p><i class="fa fa-circle" style="color: #357ebd"></i> 0.2 - 0</p>
+
+            <p><i class="fa fa-circle" style="color: #B8B8B8"></i> no information</p>
+
+            <p><i class="fa fa-circle" style="color: #9632b8"></i> reference variant</p>
+        </div>
         <ul class="nav navbar-nav navbar-left" style="display: flex;">
             <li class="dropdown" id="tracks-menu-dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes<b class="caret"></b></a>
@@ -251,15 +244,7 @@
         <div class="accordion-inner">
             <div id="lz-1" class="lz-container-responsive"></div>
         </div>
-        <div style="display: flex; justify-content: space-around;">
-            <p>Linkage disequilibrium (r<sup>2</sup>) with the reference variant:</p>
-            <p><i class="fa fa-circle" style="color: #d43f3a"></i> 1 - 0.8</p>
-            <p><i class="fa fa-circle" style="color: #eea236"></i> 0.8 - 0.6</p>
-            <p><i class="fa fa-circle" style="color: #5cb85c"></i> 0.6 - 0.4</p>
-            <p><i class="fa fa-circle" style="color: #46b8da"></i> 0.4 - 0.2</p>
-            <p><i class="fa fa-circle" style="color: #357ebd"></i> 0.2 - 0</p>
-            <p><i class="fa fa-circle" style="color: #B8B8B8"></i> no information</p>
-            <p><i class="fa fa-circle" style="color: #9632b8"></i> reference variant</p>
-        </div>
+
+        <g:render template="/widgets/dataWarning"/>
     </div>
 </div>

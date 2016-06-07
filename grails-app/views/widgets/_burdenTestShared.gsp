@@ -1775,9 +1775,8 @@ $( document ).ready( function (){
             </div>  %{--close container--}%
 
         </div>  %{--close accordion inner--}%
-
+    <g:render template="/widgets/dataWarning" />
     </div>  %{--accordion body--}%
-
 </div> %{--end accordion group--}%
 
 

@@ -568,7 +568,6 @@ class MetaDataService {
 
         // remove the last comma
         sb.deleteCharAt(sb.length() - 1);
-        log.info(sb.toString())
 
         // return
         return java.net.URLEncoder.encode( sb.toString())
@@ -871,6 +870,13 @@ class MetaDataService {
         return this.jsonParser.getSampleGroupForPhenotypeDatasetTechnologyAncestry ( phenotypeName, datasetName, technologyName,  metadataVersion,  ancestryName)
     }
 
+    public List<String> getTechnologyListByVersion(String dataVersion) {
+        if(dataVersion == null) {
+            dataVersion = 'mdv2'
+        }
+        List<String> technologyList = this.jsonParser.getTechnologyListByVersion(dataVersion);
+        return technologyList
+    }
 
 
     public List<String> getTechnologyListByPhenotypeAndVersion(String phenotypeName,String dataVersion) {

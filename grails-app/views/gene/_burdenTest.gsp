@@ -558,4 +558,5 @@ $( document ).ready( function (){
         <div class="col-md-3 col-sm-1">
         </div>
     </div>
+    <g:render template="/widgets/dataWarning" />
 </div>
