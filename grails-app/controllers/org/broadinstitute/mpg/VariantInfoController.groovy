@@ -239,6 +239,7 @@ def retrieveSampleSummary (){
 
 
     def metadataAjax(){
+        log.debug("&&&&&&&&&&&&&&&&&&&&&    metadataAjax    &&&&&&&&&&&&&&&&&&&&&")
         JsonSlurper slurper = new JsonSlurper()
         JSONArray valueArray = slurper.parseText(params.valueArray)  as JSONArray
         String categorical = valueArray.find()?.'ca'
