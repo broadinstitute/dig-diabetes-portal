@@ -51,7 +51,7 @@
                     <h3>Accelerating Medicines Partnership (AMP) Type 2 Diabetes Knowledge Portal (T2DKP) and Data Coordinating Center (DCC) Team</h3>
                     <p>Jose Florez (Principal Investigator)<br>
                         Jason Flannick (Senior Group Leader)<br>
-                        Noël Burtt (Associate Director, Operations<br></p>
+                        Noël Burtt (Associate Director, Operations)<br></p>
                         
                     <h4>Manager of content and community</h4>
 
