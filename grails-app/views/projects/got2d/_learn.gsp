@@ -157,7 +157,7 @@
 </div>
 
 <div class="cohort">
-    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span></div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span>Frank Hu et al.</div>
 
     <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> <g:message code="got2d.cohorts.european" default="European"/></div>
 
@@ -173,7 +173,7 @@
 </div>
 
 <div class="cohort">
-    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> Nick Wareham et al</div>
+    <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> Nick Wareham et al.</div>
 
     <div class="detail"><span><g:message code="got2d.cohorts.ethnicity" default="ethnicity"/></span> <g:message code="got2d.cohorts.european" default="European"/></div>
 
@@ -223,8 +223,6 @@
                     href="http://www.ncbi.nlm.nih.gov/pubmed/9614613"><g:message code="informational.shared.publications.Valle_1998_DiabCare" />.</a> Diabetes Care 21(6), 949-958 (1998)
             </li>
             <li>
-
-            </li>
             Scott, L. et al. <a
                 href="http://www.ncbi.nlm.nih.gov/pubmed/17463248"><g:message code="informational.shared.publications.Scott_2007_Science" />.</a> Science 316(5829), 1341-1345 (2007)
         </li>
@@ -252,7 +250,6 @@
                 Wichmann, H. E., Gieger, C. <g:message code="site.shared.phrases.and" /> Illig, T. <a
                     href="http://www.ncbi.nlm.nih.gov/pubmed/16032514"><g:message code="informational.shared.publications.Wichmann_2005_Gesundheitswesen" />.</a> Gesundheitswesen 67 Suppl 1, 26–30 (2005)
             </li>
-            <li>
         </ul>
     </div>
 
@@ -276,7 +273,7 @@
             <li>
                 <g:message code="informational.shared.cohort.Wellcome" />. <a
                     href="http://www.ncbi.nlm.nih.gov/pubmed/17554300"><g:message code="informational.shared.publications.Wellcome_2007_Nature" />.</a> Nature 447, 661–78 (2007)
-            <li>
+            </li>
             <li>
                 Voight, B.F. et al. <a
                     href="http://www.ncbi.nlm.nih.gov/pubmed/20581827"><g:message code="informational.shared.publications.Voight_2010_Nat_Genet" />.</a> Nat. Genet. 42, 579–589 (2010)
@@ -322,8 +319,8 @@
         <ul>
             <li>
                 Groop, L. et al. <a
-                    href="http://www.ncbi.nlm.nih.gov/pubmed/8866565"><g:message code="informational.shared.publications.Groop_1996_Diabetes" />.</a> Diabetes 45, 1585–93 (1996);
-            <li>
+                    href="http://www.ncbi.nlm.nih.gov/pubmed/8866565"><g:message code="informational.shared.publications.Groop_1996_Diabetes" />.</a> Diabetes 45, 1585–93 (1996)
+            </li>
             <li>
                 Forsen, T. et al. <g:message code="informational.shared.publications.Forsen_2001_JGP" />. J. of General Practitioner 6, 17–21 (2011)
             </li>

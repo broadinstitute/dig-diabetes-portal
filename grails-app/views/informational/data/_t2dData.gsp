@@ -56,8 +56,11 @@
                             <strong>Data type:</strong> ${g.message(code: 'metadata.' + exp[0].technology)}
                             %{--, <strong>Experiment type:</strong> {{ exome sequencing }}--}%<br />
                             <strong>Total number of samples:</strong> ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )},
-                            <strong>No. cases:</strong> ${g.formatNumber(number: sg[0].getCasesNumber(), format: "###,###" )},
-                            <strong>No. controls:</strong> ${g.formatNumber(number: sg[0].getControlsNumber(), format: "###,###" )},
+                            %{-- sample groups for qualitative traits have # cases/# controls = -1, which we don't want to display--}%
+                            <g:if test="${sg[0].getCasesNumber() != -1}" >
+                                <strong>No. cases:</strong> ${g.formatNumber(number: sg[0].getCasesNumber(), format: "###,###" )},
+                                <strong>No. controls:</strong> ${g.formatNumber(number: sg[0].getControlsNumber(), format: "###,###" )},
+                            </g:if>
                             <strong>Ethnicity:</strong> ${sg[0].getAncestry()}
                         </p>
                         <h5 class="panel-title">

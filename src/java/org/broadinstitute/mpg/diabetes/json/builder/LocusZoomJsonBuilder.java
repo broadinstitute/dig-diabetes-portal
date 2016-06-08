@@ -102,7 +102,7 @@ public class LocusZoomJsonBuilder {
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_EFFECT_ALLELE));
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_REFERENCE_ALLELE));
-        query.setLimit(3000);
+        query.setLimit(5000);
 
         // get the query filters
         query.addAllQueryFilters(this.getStandardQueryFilters(chromosome, startPosition, endPosition));

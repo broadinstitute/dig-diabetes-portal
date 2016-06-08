@@ -16,9 +16,8 @@
         </div>
 
         <div class="institution">
-            <span class="name"><g:message code="informational.shared.cohort.broad_institute" /></span> <br/>
-            <a href="http://www.broadinstitute.org/scientific-community/science/core-faculty-labs/altshuler-lab/altshuler-lab-home"
-               class="pi">David Altshuler</a> <br/>
+            <span class="name">Broad Institute</span> <br/>
+            David Altshuler <br/>
             Noël Burtt <br/>
             Jason Flannick <br/>
             Pierre Fontanillas <br/>

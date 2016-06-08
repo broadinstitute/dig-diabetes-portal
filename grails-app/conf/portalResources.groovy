@@ -152,6 +152,9 @@ modules = {
 
         resource url: 'js/lib/dport/locusZoomPlot.js'
     }
+    media {
+        resource url: 'https://malsup.github.com/jquery.media.js'
+    }
 
 }
 

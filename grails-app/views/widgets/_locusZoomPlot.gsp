@@ -20,6 +20,24 @@
         }
     }, "BroadT2D");
 
+    function conditionOnVariant(variantId, phenotype) {
+        locusZoomPlot.panels[phenotype].data_layers.positions.destroyAllTooltips();
+        locusZoomPlot.state[phenotype+".positions"].selected = [];
+        var newStateObject = {
+            condition_on_variant: variantId
+        };
+        locusZoomPlot.applyState(newStateObject);
+    }
+
+    function changeLDReference(variantId, phenotype) {
+        locusZoomPlot.panels[phenotype].data_layers.positions.destroyAllTooltips();
+        locusZoomPlot.state[phenotype+".positions"].selected = [];
+        var newStateObject = {
+            ldrefvar: variantId
+        };
+        locusZoomPlot.applyState(newStateObject);
+    }
+
 
     function addLZPhenotype(lzParameters) {
         var phenotype = lzParameters.phenotype;
@@ -149,7 +167,8 @@
                         html: "<strong><a href=${g.createLink(controller: "variantInfo", action: "variantInfo")}/?lzId={{" + phenotype + ":id}} target=_blank>{{" + phenotype + ":id}}</a></strong><br>"
                         + "P Value: <strong>{{" + phenotype + ":pvalue|scinotation}}</strong><br>"
                         + "Ref. Allele: <strong>{{" + phenotype + ":refAllele}}</strong><br>"
-                        + "<a href=\"#\" onClick=\"locusZoomPlot.applyState({condition_on_variant:'{{" + phenotype + ":id}}'});\">Condition on this variant</a>"
+                        + "<a onClick=\"conditionOnVariant('{{" + phenotype + ":id}}', '" + phenotype + "');\" style=\"cursor: pointer;\">Condition on this variant</a><br>"
+                        + "<a onClick=\"changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "');\" style=\"cursor: pointer;\">Make LD Reference</a>"
                     }
                 }
             }
