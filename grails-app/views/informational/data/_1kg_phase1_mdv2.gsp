@@ -7,30 +7,27 @@
         Publication: <a href="http://www.ncbi.nlm.nih.gov/pubmed/26432245" target="_blank">PMID: 26432245</a></p>
 
     <h6 style="color:#ccc;">Data set subjects</h6>
-    <table border="1">
-    <tr>
-    <th>Cohort name</th>
-    <th>Number of subjects</th>
-    <th>Ethnicity</th>
-    </tr>
-    <tr>
-    <td>1000 Genomes: African American</td>
-    <td>246</td>
-    <td>African American</td>
-    </tr>
-    <td>1000 Genomes: East Asian</td>
-    <td>286</td>
-    <td>East Asian</td>
-    </tr>
-    <td>1000 Genomes: European</td>
-    <td>379</td>
-    <td>European</td>
-    </tr>
-    <td>1000 Genomes: Hispanic</td>
-    <td>181</td>
-    <td>Hispanic</td>
-    </tr>
-    </table>
+    <table class="table table-condensed table-responsive table-striped">
+
+    <tr><<th>Number of subjects</th><th>Cohort</th><th>Ethnicity</th></tr>
+   
+ <tr><td>246</td><td>1000 Genomes: African American
+
+        <div class="cohortDetail"></div></td><td>African American</td></tr>
+
+ <tr><td>286</td><td>1000 Genomes: East Asian
+
+        <div class="cohortDetail"></div></td><td>East Asian</td></tr>
+
+ <tr><td>379</td><td>1000 Genomes: European
+
+        <div class="cohortDetail"></div></td><td>European</td></tr>
+
+ <tr><td>181</td><td>1000 Genomes: Hispanic
+
+        <div class="cohortDetail"></div></td><td>Hispanic</td></tr>
+
+</table>
 
 
     <h6 style="color:#ccc;">Project</h6>
