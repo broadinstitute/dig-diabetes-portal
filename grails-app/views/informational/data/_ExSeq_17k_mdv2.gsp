@@ -81,5 +81,4 @@
         <div class="cohortDetail"></div></td><td>Latino</td></tr>
     <tr><td>SIGMA</td><td>487</td><td>443</td><td>Multiethnic Cohort (MEC)
         <div class="cohortDetail"></div></td><td>Latino</td></tr>
-    <tr><td></td><td></td><td></td></tr>
     <tr><td>Total</td><td>8321</td><td>8421</td><td></td><td></td></tr></table>
