@@ -1893,6 +1893,17 @@ $( document ).ready( function (){
                     <div class="col-sm-12 col-xs-12 text-left"><label>Dataset</label></div>
                 </div>
 
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12">
+                        <p>
+                            The Genetic Association Interactive Tool (GAIT) allows you to compute custom association statistics for this variant by specifying a phenotype to test,
+                            a subset of samples, and a collection of covariates. GAIT queries the 17K exome sequence analysis data set. In order to protect patient privacy, results
+                            will not be displayed for queries that are satisfied by data from fewer than 100 individuals.
+                        </p>
+
+                    </div>
+                </div>
+
                 <div class="row" style="display:none">
                     <div class="col-sm-12 col-xs-12 text-left">
                         <select id="datasetFilter" class="traitFilter form-control text-left"
@@ -1962,7 +1973,7 @@ $( document ).ready( function (){
                         <div class="col-sm-12 col-xs-12">
                             <p>
                                 Each of the boxes below enables you to define a criterion for inclusion of samples in your analysis; each criterion is specified as a filter based on a single phenotype.
-                                The final subset of samples used will be those that match all of the specified criteria; to omit a criterion either leave the text box blank or unselect the checkbox on the left.
+                                The final subset of samples used will be those that match all of the specified criteria; to omit a criterion either leave the text box blank.
                             </p>
 
                             <p>
@@ -2057,11 +2068,21 @@ $( document ).ready( function (){
 
             <div id="initiateAnalysis_{{stratum}}" class="panel-collapse collapse">
                 <div class="panel-body secBody">
+
                     <div class="row">
-                        <div class="col-sm-9 col-xs-12 vcenter">
-                            <p>Select the phenotypes to be used as covariates in your association analysis. The recommended default covariates are pre-selected</p>
+                        <div class="col-sm-12 col-xs-12">
+                            <p>
+                                Select principal components and/or phenotypes to be used as covariates in your association analysis. Principal
+                                components 1-4 are selected by default to minimize the influence of ancestry, though additional principal components
+                                may be selected to control for finer grained substructure within a population. Selecting phenotypes as covariates
+                                allows you to remove those variables from the analysis.
+                            </p>
+                            <p>
+                                Select the phenotypes to be used as covariates in your association analysis. The recommended default covariates are pre-selected
+                            </p>
                         </div>
                     </div>
+
 
                     <div class="row"  style="{{tabDisplay}}">
                         <div class="col-sm-12 col-xs-12">
@@ -2078,7 +2099,7 @@ $( document ).ready( function (){
                             <div class="tab-pane {{defaultDisplay}}" id="cov_{{name}}">
 
                                 <div class="row">
-                                    <div class="col-sm-6 col-xs-12 vcenter covariate_holder">
+                                    <div class="col-sm-8 col-xs-12 vcenter covariate_holder">
                                         <div class="covariates">
                                             <div class="row">
                                                 <div class="col-md-10 col-sm-10 col-xs-12 vcenter" style="margin-top:0">
