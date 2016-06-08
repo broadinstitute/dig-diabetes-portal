@@ -354,8 +354,12 @@ line.center{
                             ( typeof data !== 'undefined') &&
                             ( typeof data.phenotypes !== 'undefined' ) &&
                             (  data.phenotypes !==  null ) ) {
+                        var t2d = _.find(data.phenotypes, { 'name': 't2d'});  // force t2d first
+                        phenotypeDropdown.append( new Option(t2d.trans, t2d.name));
                         _.forEach(data.phenotypes,function(d){
-                           phenotypeDropdown.append( new Option(d.trans, d.name));
+                           if (d.name !== 't2d'){
+                              phenotypeDropdown.append( new Option(d.trans, d.name));
+                           }
                         });
                     }
                     var filtersSpecs = [];
@@ -844,7 +848,7 @@ line.center{
                    ciDisplay = (ciLevel * 100) + '% CI: (' + ciLower + ' to ' + ciUpper + ')';
                 }
 
-                fillInResultsSection(currentStratum,'p-Value = '+ pValue,
+                fillInResultsSection(currentStratum,'pValue = '+ pValue,
                     (isDichotomousTrait ? 'odds ratio = ' + oddsRatio : 'beta = ' + beta),
                     ciDisplay, isDichotomousTrait,additionalText);
 
@@ -1022,7 +1026,7 @@ line.center{
                     var strataDomIdentifierClass = $('.'+currentStratum+'.strataHolder');
                     addStrataSection(strataDomIdentifierClass,currentStratum);
                     var isDichotomousTrait=(isCategorical==='1');
-                    fillInResultsSection(currentStratum,'p-Value = '+ pValue,
+                    fillInResultsSection(currentStratum,'pValue = '+ pValue,
                     (isDichotomousTrait ? 'odds ratio = ' + oddsRatio : 'beta = ' + beta),
                     'std. err. = '+stdErr, isDichotomousTrait,currentStratum);
                     //printFullResultsSection(data.stats,pValue,beta,oddsRatio,currentStratum,'');
