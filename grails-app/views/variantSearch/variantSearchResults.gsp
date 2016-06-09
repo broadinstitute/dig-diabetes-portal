@@ -235,13 +235,13 @@
 
     </div>
 
-    <div class="container dk-variant-table-header">
-        <div class="row">
-            <div class="text-right">
-                <button class="btn btn-primary btn-xs" style="margin-bottom: 5px;">Add / Subtract Data</button>
-            </div>
-        </div>
-    </div>
+    %{--<div class="container dk-variant-table-header">--}%
+        %{--<div class="row">--}%
+            %{--<div class="text-right">--}%
+                %{--<button class="btn btn-primary btn-xs" style="margin-bottom: 5px;">Add / Subtract Data</button>--}%
+            %{--</div>--}%
+        %{--</div>--}%
+    %{--</div>--}%
 
     <div class="container-fluid">
         <g:render template="../region/newCollectedVariantsForRegion"/>

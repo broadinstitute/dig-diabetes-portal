@@ -106,6 +106,9 @@
                         <a href="https://sph.umich.edu" target="_blank">
                             <img src="${resource(dir: 'images/organizations', file:'UM-SPH.png')}" />
                         </a>
+                        <a href="http://www.ox.ac.uk/" target="_blank">
+                            <img src="${resource(dir: 'images/organizations', file:'University_of_Oxford.png')}" />
+                        </a>
                         <a href="https://www.ebi.ac.uk" target="_blank">
                             <img src="${resource(dir: 'images/organizations', file:'EBI.png')}" />
                         </a>
