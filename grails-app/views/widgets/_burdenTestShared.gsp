@@ -1756,7 +1756,7 @@ $( document ).ready( function (){
 <div class="accordion-group">
     <div class="accordion-heading">
         <a class="accordion-toggle  collapsed" data-toggle="collapse" href="#collapseBurden">
-            <h2><strong>Custom analysis tool</strong></h2>
+            <h2><strong>Genetic Association Interactive Tool</strong></h2>
         </a>
     </div>
 
@@ -1764,7 +1764,7 @@ $( document ).ready( function (){
         <div class="accordion-inner">
 
             <div class="container">
-                <h5>The custom analysis tool allows you to compute custom association statistics for this
+                <h5>The Genetic Association Interactive Tool allows you to compute custom association statistics for this
                 variant by specifying the phenotype to test for association, a subset of samples to analyze based on specific phenotypic criteria, and a set of covariates to control for in the analysis.</h5>
 
 
@@ -2144,7 +2144,8 @@ $( document ).ready( function (){
 
                                     <div class="col-sm-2">
                                         <select id="cmp_{{stratum}}_{{name}}" class="form-control filterCmp"
-                                                data-selectfor="{{stratum}}_{{name}}Comparator">
+                                                data-selectfor="{{stratum}}_{{name}}Comparator"
+                                               onchange="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0)">
                                             <option value="1">&lt;</option>
                                             <option value="2">&gt;</option>
                                         </select>
