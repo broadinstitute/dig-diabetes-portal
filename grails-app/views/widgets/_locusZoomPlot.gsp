@@ -22,7 +22,7 @@
 
     function conditionOnVariant(variantId, phenotype) {
         // see where clearCurtain() is defined for why this is commented out
-        // locusZoomPlot.curtain.drop("message");
+        // locusZoomPlot.curtain.drop('Loading...');
         locusZoomPlot.panels[phenotype].data_layers.positions.destroyAllTooltips();
         locusZoomPlot.state[phenotype+".positions"].selected = [];
         var newStateObject = {
@@ -33,7 +33,7 @@
 
     function changeLDReference(variantId, phenotype) {
         // see where clearCurtain() is defined for why this is commented out
-        // locusZoomPlot.curtain.drop("message");
+        // locusZoomPlot.curtain.drop('Loading...');
         locusZoomPlot.panels[phenotype].data_layers.positions.destroyAllTooltips();
         var newStateObject = {
             ldrefvar: variantId
@@ -223,7 +223,7 @@
         //    locusZoomPlot.curtain.raise();
         // };
         // any time LZ updates, this function is called
-        // locusZoomPlot.onUpdate(l);
+        // locusZoomPlot.onUpdate(clearCurtain);
     };
 
     mpgSoftware.locusZoom.initializeLZPage = initializeLZPage;
