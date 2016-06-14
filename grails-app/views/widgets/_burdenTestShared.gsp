@@ -5,6 +5,9 @@ rect.histogramHolder {
 rect.box {
     fill: #fff;
 }
+.nav-tabs>li>a {
+    cursor: pointer;
+}
 div.corvariateDisplay {
     overflow-x: auto;
     white-space: nowrap;
@@ -436,8 +439,10 @@ line.center{
                          (  dataFilters !==  null ) ) {
                 var categoricalFilters = [];
                 var realValuedFilters = [];
+                var phenotypeUppercase  =   phenotype.toUpperCase();
                 _.forEach(dataFilters,function(d,i){
-                  if (d.name!==phenotype){
+                  if ((d.name!==phenotype)&&
+                      (d.name.substr(0,phenotype.length)!==phenotypeUppercase)){
                       if (d.type === 'FLOAT') {
                          realValuedFilters.push(d);
                       } else {
@@ -640,6 +645,13 @@ line.center{
                     // set up the section where the filters will go
                     $("#chooseFiltersLocation").empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML,renderFiltersTemplateData));
 
+
+                    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                        var target = $(e.target).text(); // activated tab
+                        displaySampleDistribution('ID',"_"+target,0);
+                    });
+
+
                    // set up the section where the covariates will go
                     $("#chooseCovariatesLocation").empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML,renderFiltersTemplateData));
 
@@ -728,7 +740,10 @@ line.center{
                        }
                     }
                 });
-               if ((typeof additionalKey !== 'undefined') &&
+
+               filterStrings.push("{"+oneFilter.join(",\n")+"}");
+           } );
+           if ((typeof additionalKey !== 'undefined') &&
                    (additionalKey.length > 0) &&
                    (typeof additionalValue !== 'undefined') &&
                    (additionalValue !== 'strat1') &&
@@ -736,9 +751,7 @@ line.center{
                   filterStrings.push("{\"name\": \""+additionalKey+"\","+
 "\"parm\": \""+additionalValue+"\","+
 "\"cmp\": \"3\",\"cat\": \"1\"}");
-               }
-               filterStrings.push("{"+oneFilter.join(",\n")+"}");
-           } );
+           }
            return "[\n" + filterStrings.join(",") + "\n]";
         };
 
@@ -1522,33 +1535,6 @@ line.center{
                                               {name:"European", samples: 4554},
                                               {name:"Hispanic", samples: 5818},
                                               {name:"South-Asian", samples: 2225}] };
-//             var filterTypeMap = determineEachFiltersType();
-//               _.forEach(filterTypeMap,function(filtType,filtName){
-//                  if ((filtType === 'STRING')||(filtType === 'INTEGER')){
-//                     if (!(filtName in optionsPerFilter)){
-//                        optionsPerFilter[filtName] = [];
-//                     }
-//                    _.forEach(variants,function(filterHolder){
-//                        _.forEach(filterHolder,function(val,key){
-//                           _.forEach(val,function(filterObj,filterKey){
-//                               if (filtName === filterKey){
-//                                  _.forEach(val,function(valueObject){
-//                                      _.forEach(valueObject,function(valueOfFilter,dsOfFilter){
-//                                         var refToLevel = _.find(optionsPerFilter[filterKey],function(d){return d.name==valueOfFilter});
-//                                         if (refToLevel===undefined){
-//                                             optionsPerFilter[filterKey].push({name:valueOfFilter,samples:1});
-//                                         } else {
-//                                             refToLevel.samples++;
-//                                         }
-//                                      });
-//
-//                                  })
-//                               }
-//                           });
-//                        })
-//                    })
-//                  }
-//               });
             return optionsPerFilter;
          }
 
@@ -1770,7 +1756,7 @@ $( document ).ready( function (){
 <div class="accordion-group">
     <div class="accordion-heading">
         <a class="accordion-toggle  collapsed" data-toggle="collapse" href="#collapseBurden">
-            <h2><strong>Custom analysis tool</strong></h2>
+            <h2><strong>Genetic Association Interactive Tool</strong></h2>
         </a>
     </div>
 
@@ -1778,8 +1764,8 @@ $( document ).ready( function (){
         <div class="accordion-inner">
 
             <div class="container">
-                <h4>The custom analysis tool allows you to compute custom association statistics for this
-                variant by specifying the phenotype to test for association, a subset of samples to analyze based on specific phenotypic criteria, and a set of covariates to control for in the analysis.</h4>
+                <h5>The Genetic Association Interactive Tool allows you to compute custom association statistics for this
+                variant by specifying the phenotype to test for association, a subset of samples to analyze based on specific phenotypic criteria, and a set of covariates to control for in the analysis.</h5>
 
 
                 <div class="row burden-test-wrapper-options">
@@ -2158,10 +2144,10 @@ $( document ).ready( function (){
 
                                     <div class="col-sm-2">
                                         <select id="cmp_{{stratum}}_{{name}}" class="form-control filterCmp"
-                                                data-selectfor="{{stratum}}_{{name}}Comparator">
+                                                data-selectfor="{{stratum}}_{{name}}Comparator"
+                                               onchange="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0)">
                                             <option value="1">&lt;</option>
                                             <option value="2">&gt;</option>
-                                            <option value="3">=</option>
                                         </select>
                                     </div>
 

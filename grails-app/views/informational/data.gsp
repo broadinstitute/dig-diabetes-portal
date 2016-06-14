@@ -76,12 +76,9 @@
             <h1><g:message code="aboutTheData.title" default="about the data"/></h1>
 
             <p style="font-weight: 300; line-height: 20px; font-size: 16px;">
-                <g:if test="${!g.portalTypeString()?.equals('stroke')}">
-                    <g:message code="aboutTheData.descr" default="about the data"/>
-                </g:if>
-                <g:else>
+                <g:if test="${g.portalTypeString()?.equals('stroke')}">
                     <g:message code="aboutTheData.stroke.descr" default="about the data"/>
-                </g:else>
+                </g:if>
             </p>
         </div>
 

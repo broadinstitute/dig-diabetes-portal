@@ -21,6 +21,8 @@
     }, "BroadT2D");
 
     function conditionOnVariant(variantId, phenotype) {
+        // see where clearCurtain() is defined for why this is commented out
+        // locusZoomPlot.curtain.drop('Loading...');
         locusZoomPlot.panels[phenotype].data_layers.positions.destroyAllTooltips();
         locusZoomPlot.state[phenotype+".positions"].selected = [];
         var newStateObject = {
@@ -30,8 +32,9 @@
     }
 
     function changeLDReference(variantId, phenotype) {
+        // see where clearCurtain() is defined for why this is commented out
+        // locusZoomPlot.curtain.drop('Loading...');
         locusZoomPlot.panels[phenotype].data_layers.positions.destroyAllTooltips();
-        locusZoomPlot.state[phenotype+".positions"].selected = [];
         var newStateObject = {
             ldrefvar: variantId
         };
@@ -214,6 +217,13 @@
         $("#collapseLZ").on("shown.bs.collapse", function () {
             locusZoomPlot.rescaleSVG();
         });
+        // currently awaiting LZ PR merge
+        // once their issue #64 is fixed, we can uncomment all this
+        // var clearCurtain = function() {
+        //    locusZoomPlot.curtain.raise();
+        // };
+        // any time LZ updates, this function is called
+        // locusZoomPlot.onUpdate(clearCurtain);
     };
 
     mpgSoftware.locusZoom.initializeLZPage = initializeLZPage;
