@@ -177,8 +177,14 @@ class VariantInfoController {
      * @return
      */
     def sampleMetadataExperimentAjax() {
-        List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "", MetaDataService.METADATA_SAMPLE)
-         JSONObject jsonObject = burdenService.convertSampleGroupListToJson (sampleGroupList)
+        List<SampleGroup> sampleGroupList
+
+       // if (g.portalTypeString()?.equals("stroke")){
+
+        sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "", MetaDataService.METADATA_SAMPLE)
+
+
+        JSONObject jsonObject = burdenService.convertSampleGroupListToJson (sampleGroupList)
 
         // send json response back
         render(status: 200, contentType: "application/json") {jsonObject}
@@ -239,7 +245,6 @@ def retrieveSampleSummary (){
 
 
     def metadataAjax(){
-        log.debug("&&&&&&&&&&&&&&&&&&&&&    metadataAjax    &&&&&&&&&&&&&&&&&&&&&")
         JsonSlurper slurper = new JsonSlurper()
         JSONArray valueArray = slurper.parseText(params.valueArray)  as JSONArray
         String categorical = valueArray.find()?.'ca'

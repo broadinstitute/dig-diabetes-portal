@@ -358,7 +358,15 @@ line.center{
                             ( typeof data.phenotypes !== 'undefined' ) &&
                             (  data.phenotypes !==  null ) ) {
                         var t2d = _.find(data.phenotypes, { 'name': 't2d'});  // force t2d first
-                        phenotypeDropdown.append( new Option(t2d.trans, t2d.name));
+                        var weHaveADefaultFirstElement = false;
+                        if ((t2d) &&
+                            (typeof t2d !== 'undefined') &&
+                            (typeof t2d.trans !== 'undefined')){
+                             weHaveADefaultFirstElement = true;
+                        }
+                        if (weHaveADefaultFirstElement){
+                           phenotypeDropdown.append( new Option(t2d.trans, t2d.name));
+                        }
                         _.forEach(data.phenotypes,function(d){
                            if (d.name !== 't2d'){
                               phenotypeDropdown.append( new Option(d.trans, d.name));
@@ -911,8 +919,10 @@ line.center{
                              $('.iatErrorText').text('No data returned from burden test module!');
                             $('.iatErrorFailure').show();
                         } else if (data.is_error) {
-                            $('.iatErrorText').text('Error: '+data.error_msg);
-                            $('.iatErrorFailure').show();
+                            if (data.error_msg !== "Regression results could not be retrieved"){ // Not a message users need to see
+                                $('.iatErrorText').text('Error: '+data.error_msg);
+                                $('.iatErrorFailure').show();
+                            }
                         } else if ((typeof data.stats === 'undefined') &&
                                  (typeof data.stratum !== 'undefined') ){
                              $('.iatErrorText').text('Insufficient number of samples.  Please broaden your filter criteria and try again.');
@@ -1887,8 +1897,8 @@ $( document ).ready( function (){
                     <div class="col-sm-12 col-xs-12">
                         <p>
                             The Genetic Association Interactive Tool (GAIT) allows you to compute custom association statistics for this variant by specifying a phenotype to test,
-                            a subset of samples, and a collection of covariates. GAIT queries the 17K exome sequence analysis data set. In order to protect patient privacy, results
-                            will not be displayed for queries that are satisfied by data from fewer than 100 individuals.
+                            a subset of samples, and a collection of covariates. GAIT queries the 17K exome sequence analysis data set. In order to protect patient privacy,
+                            GAIT will only allow visualization or analysis of data from more than 100 individuals.
                         </p>
 
                     </div>
@@ -1963,7 +1973,7 @@ $( document ).ready( function (){
                         <div class="col-sm-12 col-xs-12">
                             <p>
                                 Each of the boxes below enables you to define a criterion for inclusion of samples in your analysis; each criterion is specified as a filter based on a single phenotype.
-                                The final subset of samples used will be those that match all of the specified criteria; to omit a criterion either leave the text box blank.
+                                The final subset of samples used will be those that match all of the specified criteria; to omit a criterion leave the text box blank.
                             </p>
 
                             <p>
@@ -2065,10 +2075,7 @@ $( document ).ready( function (){
                                 Select principal components and/or phenotypes to be used as covariates in your association analysis. Principal
                                 components 1-4 are selected by default to minimize the influence of ancestry, though additional principal components
                                 may be selected to control for finer grained substructure within a population. Selecting phenotypes as covariates
-                                allows you to remove those variables from the analysis.
-                            </p>
-                            <p>
-                                Select the phenotypes to be used as covariates in your association analysis. The recommended default covariates are pre-selected
+                                allows you to estimate the effects of the response phenotype independently of the covariate phenotypes.
                             </p>
                         </div>
                     </div>

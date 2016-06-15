@@ -378,7 +378,7 @@ class BurdenService {
         // TODO: remove this workaround when the backend can gather samples on its own
 
         List<String> sampleList = []
-        String goWithDataSet = "samples_17k_mdv2"
+        String goWithDataSet
         if (sampleJsonObject?.samples) {
             sampleList = sampleJsonObject.samples.collect{return it.toString()} as List
         } else {
@@ -387,8 +387,8 @@ class BurdenService {
             }
             List<String> requestedDataList = []
             requestedDataList << """ "ID":["${goWithDataSet}"]""".toString()
-            JSONObject samples = widgetService.getSampleDistribution( 'samples_17k_mdv2', requestedDataList, false, filtersJsonObject.filters)
-            sampleList = samples.variants.collect{variant->variant[0].ID.samples_17k_mdv2} as List
+            JSONObject samples = widgetService.getSampleDistribution( goWithDataSet, requestedDataList, false, filtersJsonObject.filters)
+            sampleList = samples.variants.collect{variant->variant[0].ID."$goWithDataSet"} as List
         }
 
         String filters = widgetService.buildFilterDesignation (filtersJsonObject.filters,goWithDataSet)
