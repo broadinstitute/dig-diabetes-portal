@@ -178,6 +178,10 @@ public class LocusZoomJsonBuilder {
         tempProperty = this.jsonParser.findCommonPropertyWithName(PortalConstants.PROPERTY_NAME_CHROMOSOME);
         filterList.add(new QueryFilterBean(tempProperty, PortalConstants.OPERATOR_EQUALS, chromosome));
 
+        // DIGKB-83: adding minimum MAC of 20 for the LZ plot; or else get large values for singletons
+        tempProperty = this.jsonParser.buildPropertyFromScratch(PortalConstants.PROPERTY_NAME_MINOR_ALLELE_COUNT, PortalConstants.OPERATOR_TYPE_INTEGER);
+        filterList.add(new QueryFilterBean(tempProperty, PortalConstants.OPERATOR_MORE_THAN_EQUALS, "20"));
+
         // add start position filter
         tempProperty = this.jsonParser.findCommonPropertyWithName(PortalConstants.PROPERTY_NAME_POSITION);
         filterList.add(new QueryFilterBean(tempProperty, PortalConstants.OPERATOR_MORE_THAN_EQUALS, String.valueOf(startPosition)));

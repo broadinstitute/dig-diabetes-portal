@@ -1118,4 +1118,32 @@ public class JsonParser {
         return property;
 
     }
+
+    /**
+     * returns an empty non searched for property with data
+     *
+     * @param propertyName
+     * @param variableType
+     * @return
+     * @throws PortalException
+     */
+    public Property buildPropertyFromScratch(String propertyName, String variableType) throws PortalException {
+        //local variables
+        PropertyBean property = null;
+
+        // make sure you have all necessary data
+        if (propertyName == null) {
+            throw new PortalException("Got null name for scratch property");
+        } else if (variableType == null) {
+            throw new PortalException("Got null variable type for scratch property");
+        }
+
+        // build the property
+        property = new PropertyBean();
+        property.setName(propertyName);
+        property.setVariableType(variableType);
+
+        // return
+        return property;
+    }
 }
