@@ -1,5 +1,5 @@
 <div id="header-bottom" class="container-fluid dk-t2d-menu-banner" style="background-image:url(${resource(dir: 'images', file:'menu_bg.jpg')}); background-size:100% 100%;">
-    <ul class="rightlinks nav nav-pills dk-t2d-menu">
+    <ul class="container-fluid rightlinks nav nav-pills dk-t2d-menu">
         <sec:ifLoggedIn>
             <sec:ifAllGranted roles="ROLE_ADMIN">
                 <li><g:link controller='admin' action="users" class="mgr"><g:message code='site.layouts.option.manage_users'/></g:link></li>
