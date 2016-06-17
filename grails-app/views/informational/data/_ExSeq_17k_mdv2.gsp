@@ -28,9 +28,13 @@
 <table class="table table-condensed table-responsive table-striped">
     <tr><th>Project</th><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small>
     </th><th>Ethnicity</th></tr>
-    <tr><td>T2D-GENES</td><td>500</td><td>526</td><td>Jackson Heart Study Candidate Gene Association Resource
-
-        <div class="cohortDetail"></div></td><td>African American</td></tr>
+    <tr><td>T2D-GENES</td><td>500</td><td>526</td><td><a onclick="showSection(event)">Jackson Heart Study Candidate Gene Association Resource</a>
+        <div style="display: none;" class="cohortDetail">
+            <table>
+                <tr><th>Cases</th><th>Controls</th></tr>
+                <tr><td>critera 1</td><td>criteria 2</td></tr>
+            </table>
+        </div></td><td>African American</td></tr>
     <tr><td>T2D-GENES</td><td>518</td><td>530</td><td>Wake Forest Study
 
         <div class="cohortDetail"></div></td><td>African American</td></tr>

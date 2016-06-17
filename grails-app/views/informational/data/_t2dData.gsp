@@ -10,6 +10,11 @@
         }
     };
 
+    // used for showing/hiding cohort information
+    function showSection(event) {
+        $(event.target.nextElementSibling).toggle();
+    }
+
     $(document).ready(function() {
         // gather all the known data types
         var knownDataTypes = _.chain($('.sampleGroup')).map(function(sgPanel) {
