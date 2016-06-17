@@ -35,6 +35,8 @@ public class LocusZoomJsonBuilderTest extends TestCase {
     @Test
     public void testGetLocusZoomQueryString() {
         // local variables
+        InputStream expectedInputStream = getClass().getResourceAsStream("locusZoomGetDataRequest.json");
+        String expectedLocusZoomJsonString = new Scanner(expectedInputStream).useDelimiter("\\A").next();
         LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder("ExSeq_17k_mdv2", "T2D");
         String jsonString = null;
         JSONObject testJsonObject = null;
@@ -42,7 +44,7 @@ public class LocusZoomJsonBuilderTest extends TestCase {
 
         // make sur etest string is not null
         assertNotNull(this.locusZoomJsonString);
-        testJsonObject = new JSONObject(this.locusZoomJsonString);
+        testJsonObject = new JSONObject(expectedLocusZoomJsonString);
         assertNotNull(testJsonObject);
 
         // get the json string
@@ -59,5 +61,6 @@ public class LocusZoomJsonBuilderTest extends TestCase {
         // compare to the test string
         assertNotNull(locusZoomJsonObject);
         assertEquals(testJsonObject.toString(), locusZoomJsonObject.toString());
+//        assertEquals(testJsonObject, locusZoomJsonObject);
     }
 }

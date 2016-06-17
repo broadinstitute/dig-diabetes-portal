@@ -206,6 +206,7 @@ class PortalConstants {
     public static final String PROPERTY_NAME_VAR_ID                         = "VAR_ID";
     public static final String PROPERTY_NAME_CHROMOSOME                     = "CHROM";
     public static final String PROPERTY_NAME_POSITION                       = "POS";
+    public static final String PROPERTY_NAME_MINOR_ALLELE_COUNT             = "MAC";
     public static final String PROPERTY_NAME_P_FIRTH                        = "P_FIRTH_FE_IV";
 
     // property meaning types
