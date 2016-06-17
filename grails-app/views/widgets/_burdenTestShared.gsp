@@ -255,8 +255,18 @@ line.center{
         var loading = $('#rSpinner');
         var storedSampleMetadata;
         var storedSampleData;
+        var storedFilterData;
         var minimumNumberOfSamples = 100;
         var backendFiltering = true;
+
+       var storeFilterData = function (data){
+            storedFilterData = data;
+        };
+
+        var getStoredFilterData  = function (){
+            return storedFilterData;
+        };
+
 
         var storeSampleData = function (data){
             storedSampleData = data;
@@ -338,8 +348,6 @@ line.center{
            $('.caatSpinner').show();
             var dropDownSelector = '#phenotypeFilter';
 
-//            var chooseDataSetAndPhenotypeTemplate = $('#chooseDataSetAndPhenotypeTemplate')[0].innerHTML;
-//            var chooseDataSetAndPhenotypeLocationVar = $("#chooseDataSetAndPhenotypeLocation");
             $("#chooseDataSetAndPhenotypeLocation").empty().append(Mustache.render( $('#chooseDataSetAndPhenotypeTemplate')[0].innerHTML,
                                     {}));
 
@@ -373,17 +381,10 @@ line.center{
                            }
                         });
                     }
-                    var filtersSpecs = [];
-                    _.forEach(data.filters,function(filterObjs){
-                       filtersSpecs.push("{\"name\": \""+filterObjs.name+"\"}");
-                    });
-                    var domSelector = $(datasetFilter);
-                    var jsonDescr = "{\"dataset\":\""+data.dataset+"\"," +
-                                      "\"requestedData\":["+filtersSpecs.join(',')+"]," +
-                                      "\"filters\":[]}";
-                             populateSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val());
-                             displayTestResultsSection(false);
-                             $('.caatSpinner').hide();
+
+                     populateSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val(),data.filters);
+                     displayTestResultsSection(false);
+                     $('.caatSpinner').hide();
 
                 },
                 error: function (jqXHR, exception) {
@@ -402,7 +403,7 @@ line.center{
         * @param dropDownSelector
         */
         var retrieveSampleMetadata = function (dropdownSel, dropDownSelector) {
-            var loading = $('#spinner').show();
+           $('.caatSpinner').show();
             var domSelector = $(dropdownSel);
             $.ajax({
                 cache: false,
@@ -411,27 +412,32 @@ line.center{
                         data: {dataset:domSelector.val()},
                         async: true,
                         success: function (data) {
-                            storeSampleMetadata(data);
-                            var phenotypeDropdown = $(dropDownSelector);
-                            phenotypeDropdown.empty();
-                            if ( ( data !==  null ) &&
-                                    ( typeof data !== 'undefined') &&
-                                    ( typeof data.phenotypes !== 'undefined' ) &&
-                                    (  data.phenotypes !==  null ) ) {
-                                _.forEach(data.phenotypes,function(d){
-                                   phenotypeDropdown.append( new Option(d.trans, d.name));
-                                });
-                            }
-                            var filtersSpecs = [];
-                            _.forEach(data.filters,function(filterObjs){
-                               filtersSpecs.push("{\"name\": \""+filterObjs.name+"\"}");
-                            });
-                            var jsonDescr = "{\"dataset\":\""+$(dropdownSel).val()+"\"," +
-                                      "\"requestedData\":["+filtersSpecs.join(',')+"]," +
-                                      "\"filters\":[]}";
-                            retrieveSampleInformation  ( jsonDescr, function(){} );
-                            loading.hide();
-                        },
+                    storeSampleMetadata(data);
+                    var phenotypeDropdown = $(dropDownSelector);
+                    phenotypeDropdown.empty();
+                    if ( ( data !==  null ) &&
+                            ( typeof data !== 'undefined') &&
+                            ( typeof data.phenotypes !== 'undefined' ) &&
+                            (  data.phenotypes !==  null ) ) {
+                        var t2d = _.find(data.phenotypes, { 'name': 't2d'});  // force t2d first
+                        var weHaveADefaultFirstElement = false;
+                        if ((t2d) &&
+                            (typeof t2d !== 'undefined') &&
+                            (typeof t2d.trans !== 'undefined')){
+                             weHaveADefaultFirstElement = true;
+                        }
+                        if (weHaveADefaultFirstElement){
+                           phenotypeDropdown.append( new Option(t2d.trans, t2d.name));
+                        }
+                        _.forEach(data.phenotypes,function(d){
+                           if (d.name !== 't2d'){
+                              phenotypeDropdown.append( new Option(d.trans, d.name));
+                           }
+                        });
+                    }
+                     populateSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val(),data.filters);
+                     displayTestResultsSection(false);
+                     $('.caatSpinner').hide();                        },
                         error: function (jqXHR, exception) {
                             loading.hide();
                             core.errorReporter(jqXHR, exception);
@@ -509,14 +515,14 @@ line.center{
        }
 
 
-      var populateSampleAndCovariateSection = function (dataSetId, phenotype, stratificationProperty) {
+      var populateSampleAndCovariateSection = function (dataSetId, phenotype, stratificationProperty, filterSpec) {
 
           if ((typeof stratificationProperty === 'undefined')  ||
                (stratificationProperty === 'none')) {
                   $('#stratsTabs').empty();
-                  fillInSampleAndCovariateSection(dataSetId, phenotype );
+                  fillInSampleAndCovariateSection(dataSetId, phenotype, filterSpec );
                } else {
-                  stratifiedSampleAndCovariateSection(dataSetId, phenotype, stratificationProperty);
+                  stratifiedSampleAndCovariateSection(dataSetId, phenotype, stratificationProperty, filterSpec);
                }
       }
 
@@ -530,12 +536,11 @@ line.center{
         *  we can use fillCategoricalDropDownBoxes to create plots.
         *
         */
-        var fillInSampleAndCovariateSection = function (dataSetId, phenotype, stratum) {
+        var fillInSampleAndCovariateSection = function (dataSetId, phenotype,  filterInfo) {
             var data = getStoredSampleMetadata();
             var stratumName = 'strat1';
 
-            var optionsPerFilter = generateOptionsPerFilter() ;
-            //var optionsPerFilter = generateOptionsPerFilter(sampleData.metaData.variants) ;
+            var optionsPerFilter = generateOptionsPerFilter(filterInfo) ;
             if ( ( data !==  null ) &&
                  ( typeof data !== 'undefined') ){
 
@@ -593,7 +598,7 @@ line.center{
 
                    var sampleData = getStoredSampleData();
 
-                   fillCategoricalDropDownBoxes({},phenotype,stratumName);
+                   fillCategoricalDropDownBoxes({},phenotype,stratumName,optionsPerFilter);
                    if (!backendFiltering){
                       utilizeSampleInfoForDistributionPlots(sampleData.metaData.variants,phenotype);
                    }
@@ -612,7 +617,7 @@ line.center{
         *  we can use fillCategoricalDropDownBoxes to create plots.
         *
         */
-        var stratifiedSampleAndCovariateSection = function (dataSetId, phenotype, strataProperty) {
+        var stratifiedSampleAndCovariateSection = function (dataSetId, phenotype, strataProperty, filterInfo) {
             var data = getStoredSampleMetadata();
             var allStrata = ['African-American','East-Asian','European','Hispanic','South-Asian'];
             var defaultDisplayCount = function(count){
@@ -623,7 +628,7 @@ line.center{
                                  }
                             };
 
-            var optionsPerFilter = generateOptionsPerFilter() ;
+            var optionsPerFilter = generateOptionsPerFilter(filterInfo) ;
             if ( ( data !==  null ) &&
                  ( typeof data !== 'undefined') ){
 
@@ -705,7 +710,7 @@ line.center{
 
                        var sampleData = getStoredSampleData();
 
-                       fillCategoricalDropDownBoxes({},phenotype,stratumName);
+                       fillCategoricalDropDownBoxes({},phenotype,stratumName,optionsPerFilter);
                        if (!backendFiltering){
                           utilizeSampleInfoForDistributionPlots(sampleData.metaData.variants,phenotype);
                        }
@@ -1380,11 +1385,8 @@ line.center{
 
 
 
-        var fillCategoricalDropDownBoxes = function (sampleData,phenotype,stratum){
+        var fillCategoricalDropDownBoxes = function (sampleData,phenotype,stratum,optionsPerFilter){
              // make dist plots
-            //utilizeSampleInfoForDistributionPlots(sampleData,phenotype);
-           // var optionsPerFilter = generateOptionsPerFilter(sampleData) ;
-            var optionsPerFilter = generateOptionsPerFilter() ;
             var sampleMetadata = getStoredSampleMetadata();
             _.forEach(sampleMetadata.filters,function(d,i){
                 if (d.type !== 'FLOAT') {
@@ -1537,14 +1539,19 @@ line.center{
         * @param variants
         * @returns {{}}
         */
-         var generateOptionsPerFilter = function (variants) {
+         var generateOptionsPerFilter = function (filterInfo) {
              var optionsPerFilter = {};
-              optionsPerFilter = { T2D_readable: [{name:"No", samples:982},{name:"Yes", samples:1028}],
-                                   origin:[   {name:"African-American", samples: 2076},
-                                              {name:"East-Asian", samples: 2166},
-                                              {name:"European", samples: 4554},
-                                              {name:"Hispanic", samples: 5818},
-                                              {name:"South-Asian", samples: 2225}] };
+             _.forEach(filterInfo,function(oneFilter){
+                if (typeof oneFilter.levels !== 'undefined') {
+                         optionsPerFilter[oneFilter.name] = oneFilter.levels;
+                }
+             });
+//              optionsPerFilter = { T2D_readable: [{name:"No", samples:982},{name:"Yes", samples:1028}],
+//                                   origin:[   {name:"African-American", samples: 2076},
+//                                              {name:"East-Asian", samples: 2166},
+//                                              {name:"European", samples: 4554},
+//                                              {name:"Hispanic", samples: 5818},
+//                                              {name:"South-Asian", samples: 2225}] };
             return optionsPerFilter;
          }
 
@@ -1921,7 +1928,7 @@ $( document ).ready( function (){
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
                         <select id="phenotypeFilter" class="traitFilter form-control text-left"
-                                onchange="mpgSoftware.burdenTestShared.populateSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val() );">
+                                onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata ($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val() );">
                         </select>
                     </div>
                 </div>
@@ -1935,7 +1942,7 @@ $( document ).ready( function (){
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
                         <select id="stratifyDesignation" class="stratifyFilter form-control text-left"
-                                onchange="mpgSoftware.burdenTestShared.populateSampleAndCovariateSection ($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val() );">
+                                onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata  ($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val() );">
                                     <option value="none">none</option>
                                     <option value="origin">ancestry</option>
                         </select>

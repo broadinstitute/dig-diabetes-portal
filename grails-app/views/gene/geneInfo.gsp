@@ -133,7 +133,13 @@
         $(document).ready(function() {
             // call this inside the ready function because the page is still loading when the the parent
             // ajax calls returns
-            mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation);
+            var portalType = "t2d";
+            <g:if test="${g.portalTypeString()?.equals('stroke')}">
+            portalType = "stroke";
+            </g:if>
+            if (portalType === 't2d'){
+                mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation);
+            }
             $('span[data-textfield="variantName"]').append(data.geneInfo.ID);
             $('#variantPageText').hide();
             $('#genePageText').show();

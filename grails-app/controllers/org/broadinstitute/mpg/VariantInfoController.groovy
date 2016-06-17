@@ -214,6 +214,7 @@ class VariantInfoController {
             SampleGroup sampleGroup = metaDataService.getSampleGroupByFromSamplesName(sampleGroupList.first().systemId)
             JSONObject jsonObject = burdenService.convertSampleGroupPropertyListToJson (sampleGroup)
             render(status: 200, contentType: "application/json") {jsonObject}
+            return
         }
         render(status: 200, contentType: "application/json")
 

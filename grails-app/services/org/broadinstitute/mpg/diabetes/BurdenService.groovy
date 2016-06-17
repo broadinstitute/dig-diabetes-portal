@@ -131,26 +131,58 @@ class BurdenService {
         List <String> phenotypeList = []
         List <String> covariateList = []
         List <String> filterList = []
-        List <Property> propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("PHENOTYPE")}
+        List <String> filtersRequiringMoreInfo = []
+
+        // preview filter list and then go and retrieve categorical levels
+        List <Property> propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("FILTER")}
+        propertyList = propertyList.sort{a,b->return a.sortOrder<=>b.sortOrder}
+        for (Property property in propertyList){
+            if (property.variableType!="FLOAT"){
+                filtersRequiringMoreInfo <<  property.name
+            }
+        }
+
+        LinkedHashMap<String,List<String>> categoryLevelInfo = []
+        for (String filterName in filtersRequiringMoreInfo){
+            JSONObject sampleSummary = widgetService.getSampleDistribution ( sampleGroup.getSystemId(),
+                                                                             [""" "${filterName}":["${sampleGroup.getSystemId()}"]""".toString()],
+                                                                             true, [] )
+            categoryLevelInfo[filterName] = sampleSummary.distribution_array.collect{return """{"samples":${it.count},"name":"${it.value}"}""".toString()}
+        }
+
+        // now go back through the filter list, generating the strings we need, and supplementing them with category information
+        for (Property property in propertyList){
+            if (property.variableType!="FLOAT"){
+                String levels = "["+categoryLevelInfo[property.name].join(",")+"]"
+                filterList << """{"name":"${property.name}", "type":"${property.variableType}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}","levels":${levels}  }""".toString()
+            } else {
+                filterList << """{"name":"${property.name}", "type":"${property.variableType}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}"  }""".toString()
+            }
+        }
+
+
+
+        // collect phenotypes
+        propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("PHENOTYPE")}
         propertyList = propertyList.sort{a,b->return a.sortOrder<=>b.sortOrder}
         for (Property property in propertyList){
             phenotypeList << """{"name":"${property.name}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}"  }""".toString()
         }
+
+        // collect covariates that are selected by default
         propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("COVARIATE")&&(it.meaningSet.contains("DEFAULT_COVARIATE"))}
         propertyList = propertyList.sort{a,b->return a.sortOrder<=>b.sortOrder}
         for (Property property in propertyList){
             covariateList << """{"name":"${property.name}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}","def":1}""".toString()
         }
+
+        // collect covariates that are not selected by default
         propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("COVARIATE")&&(!it.meaningSet.contains("DEFAULT_COVARIATE"))}
         propertyList = propertyList.sort{a,b->return a.sortOrder<=>b.sortOrder}
         for (Property property in propertyList){
              covariateList << """{"name":"${property.name}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}","def":0}""".toString()
         }
-        propertyList = sampleGroup.properties.findAll{it.meaningSet.contains("FILTER")}
-        propertyList = propertyList.sort{a,b->return a.sortOrder<=>b.sortOrder}
-        for (Property property in propertyList){
-            filterList << """{"name":"${property.name}", "type":"${property.variableType}", "trans":"${g.message(code: 'metadata.' +property.name, default: property.name)}"  }""".toString()
-        }
+
         String jsonString = """{"dataset":"${sampleGroup.systemId}",
 "phenotypes":[${phenotypeList.join(",")}],
 "covariates":[${covariateList.join(",")}],
@@ -174,7 +206,7 @@ class BurdenService {
      * @param mostDelScore
      * @return
      */
-    public JSONObject callBurdenTest(String phenotype, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue) {
+    public JSONObject callBurdenTest(String phenotype, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue, String dataSet, Boolean explicitlySelectSamples) {
         // local variables
         JSONObject jsonObject, returnJson;
         List<Variant> variantList;
@@ -204,27 +236,6 @@ class BurdenService {
             burdenVariantList = this.transformAndFilterVariantList(variantList, variantSelectionOptionId);
             log.info("got filtered variant list of size: " + burdenVariantList.size());
 
-
-            /*
-            // check to make sure we have at least one variant
-            if (burdenVariantList.size() < 1) {
-                throw new PortalException("Got no variants to match filters");
-            }
-
-            // create the json payload for the burden call
-            jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(sampleGroupName, burdenVariantList, null);
-            log.info("created burden rest payload: " + jsonObject);
-
-            // get the results of the burden call
-            returnJson = this.getBurdenRestCallResults(jsonObject.toString());
-            log.info("got burden rest result: " + returnJson);
-
-            // add json array of variant strings to the return json
-            Collections.sort(burdenVariantList);
-            JSONArray variantArray = new JSONArray(burdenVariantList);
-            returnJson.put(PortalConstants.JSON_VARIANTS_KEY, variantArray);
-            log.info("passing enhanced burden rest result: " + returnJson);
-            */
             JSONObject samplesObject = new JSONObject()
             JSONArray samplesArray = new JSONArray()
             samplesObject.put(PortalConstants.JSON_BURDEN_SAMPLES_KEY, samplesArray)
@@ -236,7 +247,7 @@ class BurdenService {
             JSONObject filtersObject = new JSONObject()
 
 
-            returnJson = this.getBurdenResultForVariantIdList("mdv${dataVersionId}".toString(), phenotype, burdenVariantList, covariatesObject, samplesObject, filtersObject, "");
+            returnJson = this.getBurdenResultForVariantIdList("mdv${dataVersionId}".toString(), phenotype, burdenVariantList, covariatesObject, samplesObject, filtersObject, dataSet, explicitlySelectSamples);
 
         } catch (PortalException exception) {
             log.error("Got error creating burden test for gene: " + geneString + " and phenotype: " + phenotype + ": " + exception.getMessage());
@@ -354,7 +365,7 @@ class BurdenService {
 
 
 
-        returnJson = this.getBurdenResultForVariantIdList(stringDataVersion , traitOption, burdenVariantList, covariateJsonObject, sampleJsonObject,  filtersJsonObject, dataset );
+        returnJson = this.getBurdenResultForVariantIdList(stringDataVersion , traitOption, burdenVariantList, covariateJsonObject, sampleJsonObject,  filtersJsonObject, dataset, true );
 
         // return
         return returnJson;
@@ -369,7 +380,7 @@ class BurdenService {
      * @throws PortalException
      */
     protected JSONObject getBurdenResultForVariantIdList(String stringDataVersion, String phenotype, List<String> burdenVariantList,
-                                                         JSONObject covariateJsonObject, JSONObject sampleJsonObject, JSONObject filtersJsonObject, String dataset) throws PortalException {
+                                                         JSONObject covariateJsonObject, JSONObject sampleJsonObject, JSONObject filtersJsonObject, String dataset, Boolean explicitlySelectSamples) throws PortalException {
         // local variables
         JSONObject jsonObject = null;
         JSONObject returnJson = null;
@@ -379,16 +390,18 @@ class BurdenService {
 
         List<String> sampleList = []
         String goWithDataSet
-        if (sampleJsonObject?.samples) {
-            sampleList = sampleJsonObject.samples.collect{return it.toString()} as List
-        } else {
-            if ((dataset)&&( dataset.length() > 0 )){
-                goWithDataSet = dataset
+        if (explicitlySelectSamples){
+            if (sampleJsonObject?.samples) {
+                sampleList = sampleJsonObject.samples.collect{return it.toString()} as List
+            } else {
+                if ((dataset)&&( dataset.length() > 0 )){
+                    goWithDataSet = dataset
+                }
+                List<String> requestedDataList = []
+                requestedDataList << """ "ID":["${goWithDataSet}"]""".toString()
+                JSONObject samples = widgetService.getSampleDistribution( goWithDataSet, requestedDataList, false, filtersJsonObject.filters)
+                sampleList = samples.variants.collect{variant->variant[0].ID."$goWithDataSet"} as List
             }
-            List<String> requestedDataList = []
-            requestedDataList << """ "ID":["${goWithDataSet}"]""".toString()
-            JSONObject samples = widgetService.getSampleDistribution( goWithDataSet, requestedDataList, false, filtersJsonObject.filters)
-            sampleList = samples.variants.collect{variant->variant[0].ID."$goWithDataSet"} as List
         }
 
         String filters = widgetService.buildFilterDesignation (filtersJsonObject.filters,goWithDataSet)
@@ -408,7 +421,7 @@ class BurdenService {
 //        if (sampleJsonObject?.samples) {
 //            saminpleList = sampleJsonObject.samples.collect{return it.toString()} as List
 //        }
-        if (sampleList?.size()>MINIMUM_ALLOWABLE_NUMBER_OF_SAMPLES){
+        if ((sampleList?.size()>MINIMUM_ALLOWABLE_NUMBER_OF_SAMPLES) || (!explicitlySelectSamples)){
             jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(stringDataVersion, phenotype, burdenVariantList, covariateList, sampleList, filters);
             log.info("created burden rest payload: " + jsonObject);
         } else {

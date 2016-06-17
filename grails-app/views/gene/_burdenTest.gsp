@@ -327,7 +327,7 @@
                     return;
                   }
              }
-             $('input[name=dataset]:checked').val();
+            var dataSet =  'samples_17k_mdv2';
             $.ajax({
                 cache: false,
                 type: "post",
@@ -336,7 +336,8 @@
                        filterNum: selectedFilterValueId,
                        burdenTraitFilterSelectedOption: burdenTraitFilterSelectedOption,
                        mafValue: specifiedMafValueId,
-                       mafOption: selectedMafOptionId
+                       mafOption: selectedMafOptionId,
+                       dataSet: dataSet
                      },
                     async: true,
                     success: function (data) {

@@ -302,21 +302,22 @@ class GeneController {
         // log parameters received
         // Here are some example parameters, as they show up in the params variable
         // params.filterNum=="2" // value=id from burdenTestVariantSelectionOptionsAjax, or 0 if no selection was made (which is a legal choice)
-        // params.dataSet=="1" // where 1->13k, 2->26k"
         // params.mafOption=="1" // where 1->apply maf across all samples, 2->apply maf to each ancestry"
         // params.mafValue=="0.47" // where value= real number x (where 0 <= x <= 1), and x is the MAF you'll pass into the REST call"
         // params.geneName=="SLC30A8" // string representing gene name
         log.info("got parameters: " + params);
 
         // cast the parameters
-        String geneName = params.geneName;
+        Boolean explicitlySelectSamples = false
+        String geneName = params.geneName
+        String dataSet = params.dataSet
         int variantFilterOptionId = (params.filterNum ? Integer.valueOf(params.filterNum) : 0);     // default to all variants if none given
         String burdenTraitFilterSelectedOption = (params.burdenTraitFilterSelectedOption ? params.burdenTraitFilterSelectedOption : PortalConstants.BURDEN_DEFAULT_PHENOTYPE_KEY);               // default ot t2d if none given
         int mafOption = (params.mafOption ? Integer.valueOf(params.mafOption) : 1);                 // 1 is default, 2 is different ancestries if specified
         Float mafValue = ((params.mafValue && !params.mafValue?.equals("NaN")) ? new Float(params.mafValue) : null);                      // null float if none specified
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
-        JSONObject result = this.burdenService.callBurdenTest(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue);
+        JSONObject result = this.burdenService.callBurdenTest(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue, dataSet, explicitlySelectSamples);
 
         // send json response back
         render(status: 200, contentType: "application/json") {result}
