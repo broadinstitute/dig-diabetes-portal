@@ -258,54 +258,59 @@ line.center{
         var storedFilterData;
         var minimumNumberOfSamples = 100;
         var backendFiltering = true;
-
-       var storeFilterData = function (data){
-            storedFilterData = data;
-        };
-
-        var getStoredFilterData  = function (){
-            return storedFilterData;
-        };
+        var portalTypeWithAncestry = true;
+        <g:if test="${g.portalTypeString()?.equals('stroke')}">
+        portalTypeWithAncestry = false;
+        </g:if>
 
 
-        var storeSampleData = function (data){
-            storedSampleData = data;
-        };
+var storeFilterData = function (data){
+     storedFilterData = data;
+ };
 
-        /***
-        *  Get sample data from our local storage.  This routine presumably disappears in v0.2
-        * @returns {*}
-        */
-        var getStoredSampleData  = function (){
-            return storedSampleData;
-        };
-
-        var storeSampleMetadata = function (metadata){
-            storedSampleMetadata = metadata;
-        };
+ var getStoredFilterData  = function (){
+     return storedFilterData;
+ };
 
 
-        var getStoredSampleMetadata  = function (){
-            return storedSampleMetadata;
-        };
+ var storeSampleData = function (data){
+     storedSampleData = data;
+ };
 
-        /***
-        * Get back data sets based on phenotype and insert them into a drop-down box
-        * @param selPhenotypeSelector
-        * @param selDataSetSelector
-        */
-        var retrieveMatchingDataSets = function (selPhenotypeSelector,selDataSetSelector){
-            var processReturnedDataSets = function (phenotypeName,matchingDataSets){
-               var dataSetDropDown = $(selDataSetSelector);
-               if ((typeof dataSetDropDown !== 'undefined') &&
-                 (typeof matchingDataSets !== 'undefined') &&
-                 (matchingDataSets.length > 0)) {
-                 for ( var i = 0 ; i < matchingDataSets.length; i++ )
-                    dataSetDropDown.append(new Option(matchingDataSets[i].translation,matchingDataSets[i].name,matchingDataSets[i].translation));
-                 }
-            };
-            UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq','WGS'],selPhenotypeSelector.value,
-            "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",processReturnedDataSets );
+ /***
+ *  Get sample data from our local storage.  This routine presumably disappears in v0.2
+ * @returns {*}
+ */
+ var getStoredSampleData  = function (){
+     return storedSampleData;
+ };
+
+ var storeSampleMetadata = function (metadata){
+     storedSampleMetadata = metadata;
+ };
+
+
+ var getStoredSampleMetadata  = function (){
+     return storedSampleMetadata;
+ };
+
+ /***
+ * Get back data sets based on phenotype and insert them into a drop-down box
+ * @param selPhenotypeSelector
+ * @param selDataSetSelector
+ */
+ var retrieveMatchingDataSets = function (selPhenotypeSelector,selDataSetSelector){
+     var processReturnedDataSets = function (phenotypeName,matchingDataSets){
+        var dataSetDropDown = $(selDataSetSelector);
+        if ((typeof dataSetDropDown !== 'undefined') &&
+          (typeof matchingDataSets !== 'undefined') &&
+          (matchingDataSets.length > 0)) {
+          for ( var i = 0 ; i < matchingDataSets.length; i++ )
+             dataSetDropDown.append(new Option(matchingDataSets[i].translation,matchingDataSets[i].name,matchingDataSets[i].translation));
+          }
+     };
+     UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq','WGS'],selPhenotypeSelector.value,
+     "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",processReturnedDataSets );
         };
 
 
@@ -348,8 +353,16 @@ line.center{
            $('.caatSpinner').show();
             var dropDownSelector = '#phenotypeFilter';
 
-            $("#chooseDataSetAndPhenotypeLocation").empty().append(Mustache.render( $('#chooseDataSetAndPhenotypeTemplate')[0].innerHTML,
-                                    {}));
+            if (portalTypeWithAncestry){
+                $("#chooseDataSetAndPhenotypeLocation").empty().append(Mustache.render( $('#chooseDataSetAndPhenotypeTemplate')[0].innerHTML,
+                                        {strataChooser:[1]}));
+
+            } else {
+                $("#chooseDataSetAndPhenotypeLocation").empty().append(Mustache.render( $('#chooseDataSetAndPhenotypeTemplate')[0].innerHTML,
+                                            {strataChooser:[]}));
+            }
+
+
 
             $.ajax({
                 cache: false,
@@ -1934,7 +1947,7 @@ $( document ).ready( function (){
                 </div>
 
 
-
+                {{ #strataChooser }}
                 <div class="row secHeader" style="margin: 20px 0 0 0">
                     <div class="col-sm-12 col-xs-12 text-left"><label>Stratify</label></div>
                 </div>
@@ -1948,7 +1961,7 @@ $( document ).ready( function (){
                         </select>
                     </div>
                 </div>
-
+                {{ /strataChooser }}
 
 
             </div>
@@ -1956,6 +1969,7 @@ $( document ).ready( function (){
 
     </div>    %{--end accordion panel for id=chooseSamples--}%
 </script>
+
 
 <script id="strataTemplate"  type="x-tmpl-mustache">
 
