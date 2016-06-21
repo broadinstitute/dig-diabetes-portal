@@ -34,6 +34,7 @@ class GetDataQueryHolder {
      * @return
      */
     public static GetDataQueryHolder createGetDataQueryHolder(String filterString, SearchBuilderService searchBuilderService, MetaDataService metaDataService) {
+        log.info("filterString here: ${filterString}")
         if ((filterString) &&
                 (filterString.size() > 0)) {
             String refinedFilterString = filterString
@@ -43,6 +44,7 @@ class GetDataQueryHolder {
                 refinedFilterString = filterString.replaceFirst(~/\[/, "")[0..-2]
             }
             List<String> filterList = refinedFilterString.tokenize("^")
+//            return createGetDataQueryHolder(filterList, searchBuilderService, metaDataService)
             return createGetDataQueryHolder(filterList, searchBuilderService, metaDataService)
             // call the list of filters constructor
         } else {

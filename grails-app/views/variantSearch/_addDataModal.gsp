@@ -3,11 +3,11 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="dataModalLabel">Add/Subtract</h4>
+                <h4 class="modal-title">Add/Subtract</h4>
             </div>
             <div class="modal-body">
                 <ul class="list-unstyled dk-modal-list">
-                    %{--<li><a href="#" data-toggle="modal" data-target="#phenotypeModal" data-dismiss="modal">Add / Subtract Phenotypes</a></li>--}%
+                    <li><a href="#" data-toggle="modal" data-target="#phenotypeModal" data-dismiss="modal">Add / Subtract Phenotypes</a></li>
                     <li><a href="#" data-toggle="modal" data-target="#datasetModal" data-dismiss="modal">Add / Subtract Data set</a></li>
                     <li><a href="#" data-toggle="modal" data-target="#propertiesModal" data-dismiss="modal">Add / Subtract Properties</a></li>
                 </ul>
@@ -20,121 +20,106 @@
 </div>
 
 <!-- Phenotype Modal- -->
-%{--<div class="modal fade" id="phenotypeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">--}%
-    %{--<div class="modal-dialog" role="document">--}%
-        %{--<div class="modal-content">--}%
-            %{--<div class="modal-header">--}%
-                %{--<h4 class="modal-title" id="dataModalLabel">Add/Subtract Phenotype</h4>--}%
-            %{--</div>--}%
-            %{--<div class="modal-body">--}%
-                %{--<div>--}%
+<div class="modal fade" id="phenotypeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add/Subtract Phenotype</h4>
+            </div>
+            <div class="modal-body">
+                <div>
 
-                    %{--<!-- Nav tabs -->--}%
-                    %{--<ul class="nav nav-tabs" role="tablist">--}%
-                        %{--<li role="presentation" class="active"><a href="#subtract_phenotype" aria-controls="subtract_phenotype" role="tab" data-toggle="tab">Subtract Phenotype</a></li>--}%
-                        %{--<li role="presentation"><a href="#add_phenotype" aria-controls="add_phenotype" role="tab" data-toggle="tab">Add Phenotype</a></li>--}%
-                    %{--</ul>--}%
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#subtract_phenotype" aria-controls="subtract_phenotype" role="tab" data-toggle="tab">Subtract Phenotype</a></li>
+                        <li role="presentation"><a href="#add_phenotype" aria-controls="add_phenotype" role="tab" data-toggle="tab">Add Phenotype</a></li>
+                    </ul>
 
-                    %{--<!-- Tab panes -->--}%
-                    %{--<div class="tab-content">--}%
-                        %{--<div role="tabpanel" class="tab-pane active" id="subtract_phenotype">--}%
-                            %{--<form class="dk-modal-form">--}%
-                                %{--<div id="subtractPhenotypeSelectors" class="dk-modal-form-input-group">--}%
-                                %{--</div>--}%
-                                %{--<button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Confirm</button>--}%
-                                %{--<button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">Cancel</button>--}%
-                            %{--</form>--}%
-                        %{--</div>--}%
-                        %{--<div role="tabpanel" class="tab-pane" id="add_phenotype">--}%
-                            %{--<form class="dk-modal-form">--}%
-                                %{--<div class="dk-modal-form-input-group">--}%
-                                    %{--<div class="dk-modal-form-input-row">--}%
-                                        %{--<div class="dk-variant-search-builder-title">--}%
-                                            %{--Trait or disease of interest--}%
-                                        %{--</div>--}%
-                                        %{--<div class="dk-variant-search-builder-ui">--}%
-                                            %{--<select class="form-control">--}%
-                                                %{--<option selected hidden>Select a phenotype</option>--}%
-                                                %{--<option>type 2 diabetes</option>--}%
-                                                %{--<option>HbA1c</option>--}%
-                                                %{--<option>fasting glucose</option>--}%
-                                                %{--<option>two-hour glucose</option>--}%
-                                                %{--<option>HOMA-B</option>--}%
-                                            %{--</select>--}%
-                                        %{--</div>--}%
-                                    %{--</div>--}%
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="subtract_phenotype">
+                            <form class="dk-modal-form">
+                                <div class="dk-modal-form-input-group">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" checked> Type 2 diabetes
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" checked> HbA1c
+                                        </label>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Confirm</button>
+                                <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">Cancel</button>
 
-                                    %{--<div class="dk-modal-form-input-row">--}%
-                                        %{--<div class="dk-variant-search-builder-title">--}%
-                                            %{--Data set--}%
-                                        %{--</div>--}%
-                                        %{--<div class="dk-variant-search-builder-ui">--}%
-                                            %{--<select class="form-control">--}%
-                                                %{--<option selected hidden>Select a data set</option>--}%
-                                                %{--<option>DIAGRAM GWAS</option>--}%
-                                                %{--<option>GWAS GIGMA</option>--}%
-                                                %{--<option>82K exome chip analysis</option>--}%
-                                            %{--</select>--}%
-                                        %{--</div>--}%
-                                    %{--</div>--}%
+                            </form>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="add_phenotype">
+                            <form class="dk-modal-form">
+                                <div class="dk-modal-form-input-group">
+                                    <div class="dk-modal-form-input-row">
+                                        <div class="dk-variant-search-builder-title">
+                                            Trait or disease of interest
+                                        </div>
+                                        <div class="dk-variant-search-builder-ui">
+                                            <select class="form-control">
+                                                <option selected hidden>Select a phenotype</option>
+                                                <option>type 2 diabetes</option>
+                                                <option>HbA1c</option>
+                                                <option>fasting glucose</option>
+                                                <option>two-hour glucose</option>
+                                                <option>HOMA-B</option>
+                                            </select>
+                                        </div>
+                                    </div>
 
-                                    %{--<div class="dk-modal-form-input-row">--}%
-                                        %{--<div class="dk-variant-search-builder-title">--}%
-                                            %{--P-value--}%
-                                        %{--</div>--}%
-                                        %{--<div class="dk-variant-search-builder-ui">--}%
-                                            %{--<div class="col-md-3 col-sm-3 col-xs-3">--}%
-                                                %{--<select class="form-control">--}%
-                                                    %{--<option>&lt;</option>--}%
-                                                    %{--<option>&gt;</option>--}%
-                                                    %{--<option>=</option>--}%
-                                                %{--</select>--}%
-                                            %{--</div>--}%
+                                    <div class="dk-modal-form-input-row">
+                                        <div class="dk-variant-search-builder-title">
+                                            Data set
+                                        </div>
+                                        <div class="dk-variant-search-builder-ui">
+                                            <select class="form-control">
+                                                <option selected hidden>Select a data set</option>
+                                                <option>DIAGRAM GWAS</option>
+                                                <option>GWAS GIGMA</option>
+                                                <option>82K exome chip analysis</option>
+                                            </select>
+                                        </div>
+                                    </div>
 
-                                            %{--<div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">--}%
-                                                %{--<input type="text" class="form-control">--}%
-                                            %{--</div>--}%
-                                        %{--</div>--}%
-                                    %{--</div>--}%
-
-                                    %{--<div class="dk-modal-form-input-row">--}%
-                                        %{--<div class="dk-variant-search-builder-title">--}%
-                                            %{--Odds ratio--}%
-                                        %{--</div>--}%
-                                        %{--<div class="dk-variant-search-builder-ui">--}%
-                                            %{--<div class="col-md-3 col-sm-3 col-xs-3">--}%
-                                                %{--<select class="form-control">--}%
-                                                    %{--<option>&lt;</option>--}%
-                                                    %{--<option>&gt;</option>--}%
-                                                    %{--<option>=</option>--}%
-                                                %{--</select>--}%
-                                            %{--</div>--}%
-
-                                            %{--<div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-1 col-sm-offset-1 col-xs-offset-1">--}%
-                                                %{--<input type="text" class="form-control">--}%
-                                            %{--</div>--}%
-                                        %{--</div>--}%
-                                    %{--</div>--}%
-                                %{--</div>--}%
-                                %{--<button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Confirm </button>--}%
-                                %{--<button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#datasetModal" data-dismiss="modal">Confirm & add more data set</button>--}%
-                                %{--<button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">Cancel</button>--}%
-                            %{--</form>--}%
-                        %{--</div>--}%
-                    %{--</div>--}%
-
-                %{--</div>--}%
-            %{--</div>--}%
-        %{--</div>--}%
-    %{--</div>--}%
-%{--</div>--}%
+                                    <div class="dk-modal-form-input-row">
+                                        <div class="dk-variant-search-builder-title">
+                                            Cohorts(optional)
+                                        </div>
+                                        <div class="dk-variant-search-builder-ui">
+                                            <select class="form-control">
+                                                <option selected hidden>Select a cohort</option>
+                                                <option>cohort</option>
+                                                <option>cohort</option>
+                                                <option>cohort</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Confirm </button>
+                                <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!--dataset Modal- -->
 <div class="modal fade" id="datasetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="dataModalLabel">Add/Subtract Data sets</h4>
+                <h4 class="modal-title">Add/Subtract Data sets</h4>
             </div>
             <div class="modal-body">
 
@@ -167,7 +152,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="dataModalLabel">Add/Subtract Properties</h4>
+                <h4 class="modal-title">Add/Subtract Properties</h4>
             </div>
             <div class="modal-body">
 

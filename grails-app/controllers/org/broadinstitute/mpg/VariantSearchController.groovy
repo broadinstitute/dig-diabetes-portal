@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg
 
+import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
@@ -275,6 +276,7 @@ class VariantSearchController {
      * @return
      */
     def launchAVariantSearch(){
+        log.info("pre-filters: ${params.filters}")
         // process the incoming JSON and build strings reflecting what the server is expecting
 //        def jsonSlurper = new JsonSlurper();
 //        String decodedQuery = URLDecoder.decode(request.queryString)
@@ -723,6 +725,8 @@ class VariantSearchController {
         LinkedHashMap fullPropertyTree = metaDataService.getFullPropertyTree()
         LinkedHashMap fullSampleTree = metaDataService.getSampleGroupTree()
 
+        log.info("fullSampleTree: ${fullPropertyTree}")
+
         JSONObject metadata = sharedToolsService.packageUpATreeAsJson(fullPropertyTree)
 
         JSONObject commonPropertiesJsonObject = this.metaDataService.getCommonPropertiesAsJson(true);
@@ -769,13 +773,13 @@ class VariantSearchController {
 
 
     private void displayCombinedVariantSearch(String filters, String requestForAdditionalProperties) {
-        String decodedFilters = URLDecoder.decode(filters)
-        ArrayList<JSONObject> listOfQueries = (new JsonSlurper()).parseText(decodedFilters)
+        ArrayList<JSONObject> listOfQueries = (new JsonSlurper()).parseText(filters)
         ArrayList<String> listOfCodedFilters = parseFilterJson(listOfQueries);
+
+        log.info("listOfQueries: ${listOfQueries}")
 
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters,searchBuilderService,metaDataService)
         if (getDataQueryHolder.isValid()) {
-//            String requestForAdditionalProperties = filterManagementService.convertPropertyListToTransferableString(listOfProperties)
             List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
             List<String> urlEncodedFilters = getDataQueryHolder.listOfUrlEncodedFilters(encodedFilters)
             LinkedHashMap genomicExtents = sharedToolsService.validGenomicExtents (getDataQueryHolder.retrieveGetDataQuery())
@@ -812,12 +816,13 @@ class VariantSearchController {
                             queryFilters        : urlEncodedFilters.join("^"), //encodedFilters,
                             // link to this page again
                             filtersForSharing   : filters,
-                            proteinEffectsList  : encodedProteinEffects,
                             // used to list the filters on the page
                             encodedFilters      : encodedFilters,
+                            listOfQueries       : listOfQueries as JSON,
                             // the URL-encoded parameters to go back to the search builder with the filters saved
                             encodedParameters   : urlEncodedFilters,
                             // all the extra things added
+                            proteinEffectsList  : encodedProteinEffects,
                             additionalProperties: requestForAdditionalProperties,
                             regionSearch        : (positioningInformation.size() > 2),
                             regionSpecification : regionSpecifier,

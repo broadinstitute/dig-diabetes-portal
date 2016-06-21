@@ -353,7 +353,7 @@ class MetaDataService {
 
         // get the sample group list for the phenotype
         try {
-            groupList = this.getJsonParser().getSamplesGroupsForPhenotype(phenotypeName, this.getDataVersion());
+            groupList = this.getJsonParser().getSampleGroupsForPhenotype(phenotypeName, this.getDataVersion());
 
             // sort the group list
             Collections.sort(groupList);
@@ -546,10 +546,6 @@ class MetaDataService {
     }
 
 
-    /***
-     * Build a tree, so that every phenotype points to its sample groups, and every sample group points to its properties (D and P)
-     * @return
-     */
     public List<String> getEveryPhenotype(Boolean includeNone){
         List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName("", sharedToolsService.getCurrentDataVersion (), "")
         return phenotypeList.sort{ a, b -> a.sortOrder <=> b.sortOrder }.findAll{

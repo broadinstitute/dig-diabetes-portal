@@ -42,6 +42,10 @@
 <body>
 
 <script>
+    <g:applyCodec encodeAs="none">
+    var filtersAsJson = ${listOfQueries};
+    </g:applyCodec>
+
     // hoisted here
     var translationFunction;
 
@@ -226,6 +230,7 @@
         var proteinEffectList = new UTILS.proteinEffectListConstructor(decodeURIComponent("${proteinEffectsList}"));
 //        debugger
         variantProcessing.iterativeVariantTableFiller(data, totCol, sortCol, '#variantTable',
+                '<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsData" />',
                 '<g:createLink controller="variantInfo" action="variantInfo" />',
                 '<g:createLink controller="gene" action="geneInfo" />',
                 proteinEffectList,
@@ -247,7 +252,6 @@
 
 
     function confirmAddingProperties(target) {
-        console.log('target:', target);
         var matchingSelectedInputs = $('input[data-category="' + target + '"]:checked:not(:disabled)').get();
         var matchingUnselectedInputs = $('input[data-category="' + target + '"]:not(:checked,:disabled)').get();
         var valuesToInclude = _.map(matchingSelectedInputs, function(input) {
@@ -256,8 +260,6 @@
         var valuesToRemove = _.map(matchingUnselectedInputs, function(input) {
             return $(input).val();
         });
-//        console.log(valuesToInclude);
-//        console.log(valuesToRemove);
 
         additionalProperties = _.difference(additionalProperties, valuesToRemove);
         additionalProperties = _.union(additionalProperties, valuesToInclude);
@@ -465,16 +467,19 @@
     }
 
     function saveLink() {
-        var url = "<g:createLink absolute="true" controller="variantSearch" action="launchAVariantSearch"/>"
-        url = url.concat('?filters=' + '<%=filtersForSharing%>' + '&props=' + additionalProperties.join(':'));
+        var url = "<g:createLink absolute="true" controller="variantSearch" action="launchAVariantSearch" params="[filters: "${filtersForSharing}"]"/>"
+        url = url.concat('&props=' + additionalProperties.join(':'));
 
         // save the url
         $('#linkToSave').text(url);
-//        var toCopy = $('#linkToSave').createTextRange();
         $('#linkToSave').select();
-        var s = document.execCommand('copy');
-        console.log(s);
-//        toCopy.execCommand('copy');
+        var success = document.execCommand('copy');
+        // if for whatever reason that fails (browser doesn't support it?), then display an error
+        // and copy the url into the href attribute of the link so that the user can manually copy it
+        if(! success ) {
+            $('#linkToSave').show();
+            alert('Sorry, this functionality isn\'t supported on your browser. Please copy the link from the text box below.')
+        }
     }
 
 </script>
@@ -483,17 +488,19 @@
 <div id="main">
 
     <div class="container dk-t2d-back-to-search">
+        <div>
         <a href="<g:createLink controller='variantSearch' action='variantSearchWF'
                                params='[encParams: "${encodedParameters}"]'/>">
             <button class="btn btn-primary btn-xs">
                 &laquo; <g:message code="variantTable.searchResults.backToSearchPage" />
             </button></a>
         <g:message code="variantTable.searchResults.editCriteria" />
-    </div>
-    <div>
-        <a onclick="saveLink()">Click here to copy the current search URL to the clipboard</a>
-        <textarea id="linkToSave" ></textarea>
-        %{--<textarea id="linkToSave" style="display: none;"></textarea>--}%
+            </div>
+        <div style="margin-top: 5px;">
+            <a id="linkToSaveText" href="#" onclick="saveLink()">Click here to copy the current search URL to the clipboard</a>
+            <textarea id="linkToSave" style="display: none; margin-left: 5px; width: 500px;"></textarea>
+        </div>
+
     </div>
 
     <div class="container dk-t2d-content">

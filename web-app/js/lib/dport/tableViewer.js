@@ -331,6 +331,7 @@ var variantProcessing = (function () {
                                                  totCol,    // total number of columns
                                                  sortCol,   // index of the column to sort by--currently defaults to the last p-value
                                                  divId,     // id of the div to attach to
+                                                 dataUrl,   // url for the data for the table
                                                  variantRootUrl,    // url for the variant id link
                                                  geneRootUrl,       // url for the gene link
                                                  proteinEffectList,    // strings for protein effects
@@ -429,7 +430,7 @@ var variantProcessing = (function () {
             // the table just displays things
             serverSide: true,
             ajax: {
-                url: '../variantSearchAndResultColumnsData',
+                url: dataUrl,
                 data: function(d) {
                     d.filters = querySpecifications.filters;
                     d.properties = querySpecifications.properties;
