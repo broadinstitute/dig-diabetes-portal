@@ -236,7 +236,7 @@ def retrieveSampleSummary (){
             requestedDataList << """ "${map.name}":["${dataset}"]""".toString()
         }
     }
-    JSONObject sampleSummary = widgetService.getSampleDistribution ( dataset, requestedDataList, true, querySpecification.filters )
+    JSONObject sampleSummary = widgetService.getSampleDistribution ( dataset, requestedDataList, true, querySpecification.filters as JSONArray )
 
     render(status:200, contentType:"application/json") {
         [sampleData:sampleSummary]

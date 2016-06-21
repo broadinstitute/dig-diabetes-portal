@@ -1706,15 +1706,15 @@ var storeFilterData = function (data){
 
 
         var utilizeDistributionInformationToCreatePlot = function (distributionInfo,params){
-           if (typeof distributionInfo !== 'undefined'){
+           if ((typeof distributionInfo !== 'undefined')&&
+              (typeof distributionInfo.sampleData !== 'undefined')&&
+              (distributionInfo.sampleData !== null)){
                 var plotHoldingStructure = $(params.holderSection);
                 plotHoldingStructure.empty();
                 var sampleMetadata = getStoredSampleMetadata();
                 var  sampleCount = 0;
-                if ((typeof distributionInfo.sampleData !== 'undefined')  &&
-                    (typeof distributionInfo.sampleData.distribution_array !== 'undefined')){
-                   _.forEach(distributionInfo.sampleData.distribution_array,function(d){sampleCount += d.count;})
-                }
+                if (typeof distributionInfo.sampleData.distribution_array === 'undefined'){ return; }
+                _.forEach(distributionInfo.sampleData.distribution_array,function(d){sampleCount += d.count;})
                 if (sampleCount < minimumNumberOfSamples){
                     $('.sampleNumberReporter .numberOfSamples').text(" < "+minimumNumberOfSamples);
                     displayTestResultsSection(false);
