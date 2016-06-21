@@ -388,6 +388,9 @@ class GeneController {
         // log
         log.info("got LZ request with params: " + params);
 
+        // log start
+        Date startTime = new Date();
+
         // if have all the information, call the widget service
         try {
             startInteger = Integer.parseInt(startString);
@@ -401,6 +404,10 @@ class GeneController {
 
             // log
             log.info("got LZ result: " + jsonReturn);
+
+            // log end
+            Date endTime = new Date();
+            log.info("LZ call returned in: " + (endTime?.getTime() - startTime?.getTime()) + " milliseconds");
 
         } catch (NumberFormatException exception) {
             log.error("got incorrect parameters for LZ call: " + params);
