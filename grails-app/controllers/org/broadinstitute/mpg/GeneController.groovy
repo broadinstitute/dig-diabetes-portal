@@ -346,15 +346,16 @@ class GeneController {
 
         // build the phenotype list
         beanList.add(new PhenotypeBean(key: "T2D", name: "T2D", description: "Type 2 Diabetes", defaultSelected: true));
-        beanList.add(new PhenotypeBean(key: "BMI", name: "BMI", description: "Body Mass Index", defaultSelected: false));
-        beanList.add(new PhenotypeBean(key: "LDL", name: "LDL", description: "LDL Cholesterol", defaultSelected: false));
-        beanList.add(new PhenotypeBean(key: "HDL", name: "HDL", description: "HDL Cholesterol", defaultSelected: false));
-        beanList.add(new PhenotypeBean(key: "fastingInsulin", name: "FI", description: "Fasting Insulin", defaultSelected: false));
-        beanList.add(new PhenotypeBean(key: "fastingGlucose", name: "FG", description: "Fasting Glucose", defaultSelected: false));
-        beanList.add(new PhenotypeBean(key: "WC", name: "WC", description: "Waist CircumferenceC", defaultSelected: false));
-        beanList.add(new PhenotypeBean(key: "WHR", name: "WHR", description: "Waist Hip Ratio", defaultSelected: false));
-        beanList.add(new PhenotypeBean(key: "TC", name: "TC", description: "Total Cholesterol", defaultSelected: false));
-        beanList.add(new PhenotypeBean(key: "TG", name: "TG", description: "Triglycerides", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "BMI_adj_withincohort_invn", name: "BMI", description: "Body Mass Index", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "LDL_lipidmeds_divide.7_adjT2D_invn", name: "LDL", description: "LDL Cholesterol", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "HDL_adjT2D_invn", name: "HDL", description: "HDL Cholesterol", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "logfastingInsulin_adj_invn", name: "FI", description: "Fasting Insulin", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "fastingGlucose_adj_invn", name: "FG", description: "Fasting Glucose", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "HIP_adjT2D_invn", name: "HIP", description: "Hip Circumference", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "WC_adjT2D_invn", name: "WC", description: "Waist Circumference", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "WHR_adjT2D_invn", name: "WHR", description: "Waist Hip Ratio", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "TC_adjT2D_invn", name: "TC", description: "Total Cholesterol", defaultSelected: false));
+        beanList.add(new PhenotypeBean(key: "TG_adjT2D_invn", name: "TG", description: "Triglycerides", defaultSelected: false));
         return beanList
     }
 
