@@ -632,7 +632,6 @@ var storeFilterData = function (data){
         */
         var stratifiedSampleAndCovariateSection = function (dataSetId, phenotype, strataProperty, filterInfo) {
             var data = getStoredSampleMetadata();
-            var allStrata = ['African-American','East-Asian','European','Hispanic','South-Asian'];
             var defaultDisplayCount = function(count){
                                  if (this.count==1) {
                                     return " active";
@@ -656,7 +655,14 @@ var storeFilterData = function (data){
                         strataNames:[],
                         strataContent:[]
                     };
-                    _.forEach(allStrata,function(stratum){
+                    var stratificationProperty = optionsPerFilter.origin;
+                    var totalSamples = 0;
+                    _.forEach(stratificationProperty,function(stratumHolder){
+                       totalSamples += stratumHolder.samples;
+                    });
+                    stratificationProperty.splice(0,0,{name:'all',samples:totalSamples});
+                    _.forEach(stratificationProperty,function(stratumHolder){
+                       var stratum=stratumHolder.name;
                        renderData.strataNames.push({name:stratum,trans:stratum,count:renderData.strataNames.length}); // to get rid of
                        renderData.strataContent.push({name:stratum,trans:stratum,count:renderData.strataContent.length});  // to get rid of
                        renderFiltersTemplateData.strataNames.push({name:stratum,trans:stratum,count:renderData.strataNames.length,defaultDisplay:defaultDisplayCount});
@@ -681,7 +687,8 @@ var storeFilterData = function (data){
                    // set up the section where the covariates will go
                     $("#chooseCovariatesLocation").empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML,renderFiltersTemplateData));
 
-                    _.forEach(allStrata, function (stratumName){
+                     _.forEach(stratificationProperty,function(stratumHolder){
+                        var stratumName=stratumHolder.name;
 
                          // put those filters in place
                         $(".filterHolder_"+stratumName).empty().append(Mustache.render( $('#allFiltersTemplate')[0].innerHTML,
@@ -773,7 +780,8 @@ var storeFilterData = function (data){
                    (additionalKey.length > 0) &&
                    (typeof additionalValue !== 'undefined') &&
                    (additionalValue !== 'strat1') &&
-                   (additionalValue.length > 0) ) {
+                   (additionalValue.length > 0) &&
+                    (additionalValue !== 'all')) {
                   filterStrings.push("{\"name\": \""+additionalKey+"\","+
 "\"parm\": \""+additionalValue+"\","+
 "\"cmp\": \"3\",\"cat\": \"1\"}");
@@ -1559,12 +1567,6 @@ var storeFilterData = function (data){
                          optionsPerFilter[oneFilter.name] = oneFilter.levels;
                 }
              });
-//              optionsPerFilter = { T2D_readable: [{name:"No", samples:982},{name:"Yes", samples:1028}],
-//                                   origin:[   {name:"African-American", samples: 2076},
-//                                              {name:"East-Asian", samples: 2166},
-//                                              {name:"European", samples: 4554},
-//                                              {name:"Hispanic", samples: 5818},
-//                                              {name:"South-Asian", samples: 2225}] };
             return optionsPerFilter;
          }
 
@@ -1583,93 +1585,93 @@ var storeFilterData = function (data){
         *
         * @returns {Array}
         */
-        var generateFilterSamples = function (){
-            var data = getStoredSampleData();
-            if (typeof data === 'undefined') return;
-            var filters = extractFilters();
-            var relevantFilters = _.remove(filters,function(v){return ((v.cat===1)||(v.parm.length>0))});
-            var groupedBySampleId =  _.groupBy(data.metaData.variants,
-                                               function(inv){
-                                                    return _.find(_.find(inv,
-                                                                  function(o,i){
-                                                                       return _.find(o,function(v,k){
-                                                                            return k==="ID"
-                                                                       })
-                                                                  })["ID"],
-                                                                  function(key,val){
-                                                                      return val;
-                                                                  })
-                                               });
-            var samplesWeWant = [];
-            var samplesValuesWeWant = [];
-            _.forEach(groupedBySampleId,function(sampleVals,sampleId){
-                 var rejectSample = false;
-                 _.forEach(sampleVals,function(propObject){
-                     _.forEach(propObject,function(propVal){
-                         _.forEach(propVal,function(dsObject,propName){
-                            var filter = _.find(relevantFilters,function(filt){return (filt.name===propName)});
-                            if (filter){
-                                var propertyValue;
-                                _.forEach(dsObject,function(propVal,dsName){
-                                    propertyValue = propVal;
-                               });
-                                    var numericalFilterValue = parseFloat(filter.parm);
-                                    if (filter.cmp==="1"){
-                                       if (propertyValue>=numericalFilterValue){
-                                          rejectSample = true;
-                                       }
-                                    } else if (filter.cmp==="2"){
-                                       if (propertyValue<=numericalFilterValue){
-                                          rejectSample = true;
-                                       }
-                                    }
-                            }
+        %{--var generateFilterSamples = function (){--}%
+            %{--var data = getStoredSampleData();--}%
+            %{--if (typeof data === 'undefined') return;--}%
+            %{--var filters = extractFilters();--}%
+            %{--var relevantFilters = _.remove(filters,function(v){return ((v.cat===1)||(v.parm.length>0))});--}%
+            %{--var groupedBySampleId =  _.groupBy(data.metaData.variants,--}%
+                                               %{--function(inv){--}%
+                                                    %{--return _.find(_.find(inv,--}%
+                                                                  %{--function(o,i){--}%
+                                                                       %{--return _.find(o,function(v,k){--}%
+                                                                            %{--return k==="ID"--}%
+                                                                       %{--})--}%
+                                                                  %{--})["ID"],--}%
+                                                                  %{--function(key,val){--}%
+                                                                      %{--return val;--}%
+                                                                  %{--})--}%
+                                               %{--});--}%
+            %{--var samplesWeWant = [];--}%
+            %{--var samplesValuesWeWant = [];--}%
+            %{--_.forEach(groupedBySampleId,function(sampleVals,sampleId){--}%
+                 %{--var rejectSample = false;--}%
+                 %{--_.forEach(sampleVals,function(propObject){--}%
+                     %{--_.forEach(propObject,function(propVal){--}%
+                         %{--_.forEach(propVal,function(dsObject,propName){--}%
+                            %{--var filter = _.find(relevantFilters,function(filt){return (filt.name===propName)});--}%
+                            %{--if (filter){--}%
+                                %{--var propertyValue;--}%
+                                %{--_.forEach(dsObject,function(propVal,dsName){--}%
+                                    %{--propertyValue = propVal;--}%
+                               %{--});--}%
+                                    %{--var numericalFilterValue = parseFloat(filter.parm);--}%
+                                    %{--if (filter.cmp==="1"){--}%
+                                       %{--if (propertyValue>=numericalFilterValue){--}%
+                                          %{--rejectSample = true;--}%
+                                       %{--}--}%
+                                    %{--} else if (filter.cmp==="2"){--}%
+                                       %{--if (propertyValue<=numericalFilterValue){--}%
+                                          %{--rejectSample = true;--}%
+                                       %{--}--}%
+                                    %{--}--}%
+                            %{--}--}%
 
-                         })
-                     })
-                 })
-                 if (!rejectSample){
-                    samplesValuesWeWant.push(sampleId);
-                 }
-            });
+                         %{--})--}%
+                     %{--})--}%
+                 %{--})--}%
+                 %{--if (!rejectSample){--}%
+                    %{--samplesValuesWeWant.push(sampleId);--}%
+                 %{--}--}%
+            %{--});--}%
 
-            var filteredSampleObjects = {};
-            _.map(groupedBySampleId,function(v,k){
-                    if (samplesValuesWeWant.indexOf(k)!==-1) {
-                        filteredSampleObjects[k]=v;} return false;
-                        });
+            %{--var filteredSampleObjects = {};--}%
+            %{--_.map(groupedBySampleId,function(v,k){--}%
+                    %{--if (samplesValuesWeWant.indexOf(k)!==-1) {--}%
+                        %{--filteredSampleObjects[k]=v;} return false;--}%
+                        %{--});--}%
 
-             _.forEach(filteredSampleObjects,function(sampleVals,sampleId){
-                 var rejectSample = false;
-                 _.forEach(sampleVals,function(propObject){
-                     _.forEach(propObject,function(propVal){
-                         _.forEach(propVal,function(dsObject,propName){
-                            var filter = _.find(relevantFilters,function(filt){return (filt.name===propName)});
-                            if (filter){
-                                var propertyValue;
-                                _.forEach(dsObject,function(propVal,dsName){
-                                    propertyValue = propVal;
-                               });
-                               if ((filter.cat===1)&&(typeof propertyValue !== 'undefined')) { // categorical filter
-                                    var catFilterValues = filter.parm;
-                                    var matcher = _.find(catFilterValues,function(d){return d===(""+propertyValue)});
-                                    if (!matcher){
-                                          rejectSample = true;
-                                        }
-                                }
+             %{--_.forEach(filteredSampleObjects,function(sampleVals,sampleId){--}%
+                 %{--var rejectSample = false;--}%
+                 %{--_.forEach(sampleVals,function(propObject){--}%
+                     %{--_.forEach(propObject,function(propVal){--}%
+                         %{--_.forEach(propVal,function(dsObject,propName){--}%
+                            %{--var filter = _.find(relevantFilters,function(filt){return (filt.name===propName)});--}%
+                            %{--if (filter){--}%
+                                %{--var propertyValue;--}%
+                                %{--_.forEach(dsObject,function(propVal,dsName){--}%
+                                    %{--propertyValue = propVal;--}%
+                               %{--});--}%
+                               %{--if ((filter.cat===1)&&(typeof propertyValue !== 'undefined')) { // categorical filter--}%
+                                    %{--var catFilterValues = filter.parm;--}%
+                                    %{--var matcher = _.find(catFilterValues,function(d){return d===(""+propertyValue)});--}%
+                                    %{--if (!matcher){--}%
+                                          %{--rejectSample = true;--}%
+                                        %{--}--}%
+                                %{--}--}%
 
-                            }
+                            %{--}--}%
 
-                         })
-                     });
-                     if (!rejectSample){
-                        samplesWeWant.push(sampleId);
-                     }
-                 })
-            });
-            return samplesWeWant;
+                         %{--})--}%
+                     %{--});--}%
+                     %{--if (!rejectSample){--}%
+                        %{--samplesWeWant.push(sampleId);--}%
+                     %{--}--}%
+                 %{--})--}%
+            %{--});--}%
+            %{--return samplesWeWant;--}%
 
-        };
+        %{--};--}%
 
 
 
@@ -1677,28 +1679,28 @@ var storeFilterData = function (data){
         *  Produce a culled list of samples based on user-specified filters.
         *
         */
-        var dynamicallyFilterSamples = function (){
-            var data = getStoredSampleData();
-            var samplesWeWant = generateFilterSamples();
-            var filteredVariants = [];
-            _.forEach(data.metaData.variants,
-                   function(d){
-                          _.find(d,
-                              function(el){
-                                  if (el["ID"]) {
-                                     _.forEach(el["ID"],
-                                         function(v,k){
-                                           if (samplesWeWant.indexOf(v)>-1){
-                                              filteredVariants.push(d);
-                                           }
-                                         });
-                                  }
-                              }
-                          )
-                   }
-             );
-            return filteredVariants;
-        };
+//        var dynamicallyFilterSamples = function (){
+//            var data = getStoredSampleData();
+//            var samplesWeWant = generateFilterSamples();
+//            var filteredVariants = [];
+//            _.forEach(data.metaData.variants,
+//                   function(d){
+//                          _.find(d,
+//                              function(el){
+//                                  if (el["ID"]) {
+//                                     _.forEach(el["ID"],
+//                                         function(v,k){
+//                                           if (samplesWeWant.indexOf(v)>-1){
+//                                              filteredVariants.push(d);
+//                                           }
+//                                         });
+//                                  }
+//                              }
+//                          )
+//                   }
+//             );
+//            return filteredVariants;
+//        };
 
 
 
@@ -1764,12 +1766,10 @@ var storeFilterData = function (data){
             preloadInteractiveAnalysisData:preloadInteractiveAnalysisData, // assuming there is only one data set we can get most everything at page load
             retrieveExperimentMetadata:retrieveExperimentMetadata, //Retrieve sample metadata only to get the experiment list
             immediateFilterAndRun:immediateFilterAndRun, // apply filters locally and then launch IAT
-            //refreshSampleDistribution:refreshSampleDistribution, // get data to display distribution of property
-           // runBurdenTest:runBurdenTest, // currently wrapped by a filter call
             retrieveMatchingDataSets:retrieveMatchingDataSets, // retrieve data set matching phenotype
             getStoredSampleData:getStoredSampleData, // retrieve stored sample data
             retrieveSampleMetadata:retrieveSampleMetadata, // if user changes data set reset phenotype (and potentially reload samples)
-            dynamicallyFilterSamples:dynamicallyFilterSamples,  // filter all our samples (currently done locally)
+            //dynamicallyFilterSamples:dynamicallyFilterSamples,  // filter all our samples (currently done locally)
             populateSampleAndCovariateSection:populateSampleAndCovariateSection,
             displayTestResultsSection: displayTestResultsSection  // simply display results section (show() or hide()
         }
