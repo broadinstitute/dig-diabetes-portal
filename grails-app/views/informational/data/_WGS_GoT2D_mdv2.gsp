@@ -19,6 +19,6 @@
 
 <tr><td>410</td><td>419</td><td>Malmo-Botnia Study<div class="cohortDetail"></div></td><td>European</td></tr>
 
-<tr><td>Total</td><td>1326</td><td>1331</td><td></td><td></td></tr>
+<tr><td>Total: 1326</td><td>Total: 1331</td><td></td><td></td></tr>
 </table>
 </div>

@@ -9,7 +9,7 @@
     <h6 style="color:#ccc;">Data set subjects</h6>
     <table class="table table-condensed table-responsive table-striped">
 
-    <tr><<th>Number of subjects</th><th>Cohort</th><th>Ethnicity</th></tr>
+    <tr><th>Number of subjects</th><th>Cohort</th><th>Ethnicity</th></tr>
    
  <tr><td>246</td><td>1000 Genomes: African American
 

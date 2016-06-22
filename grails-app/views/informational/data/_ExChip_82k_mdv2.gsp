@@ -40,7 +40,7 @@
     <tr><td>5864</td><td>4996</td><td>Danish T2D case-control<div class="cohortDetail"></div></td><td>European</td></tr>
     <tr><td>960</td><td>965</td><td>GLACIER<div class="cohortDetail"></div></td><td>European</td></tr>
     <tr><td>691</td><td>1157</td><td>EPIC-Norfolk (T2D cases) and the Fenland study (cohort)<div class="cohortDetail"></div></td><td>European</td></tr>
-    <tr><td>Total</td><td>29,161</td><td>48,571</td><td></td><td></td></tr>
+    <tr><td>Total: 29,161</td><td>Total: 48,571</td><td></td><td></td></tr>
 </table>
 </div>
 

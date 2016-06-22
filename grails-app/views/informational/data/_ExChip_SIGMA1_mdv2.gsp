@@ -19,7 +19,7 @@
 
 <tr><td>2056</td><td>2143</td><td>Multiethnic Cohort (MEC)<div class="cohortDetail"></div></td><td>Latino</td></tr>
 
-<tr><td>Total</td><td>3,848</td><td>4,366</td><td></td><td></td></tr>
+<tr><td>Total: 3,848</td><td>Total: 4,366</td><td></td><td></td></tr>
 </table>
 
 

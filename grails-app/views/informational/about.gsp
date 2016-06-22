@@ -43,7 +43,7 @@
         <ol>
             <li>To be a central repository for large datasets of human genetic information linked to type 2 diabetes and related traits.</li>
             <li>To function as a scientific discovery engine that can be harnessed by the community at large, and assist in the selection of new targets for diabetic drug design.</li>
-            <li>3.    Eventually, to facilitate the conduct of customized analyses by any interested user around the world, doing so in a secure manner that provides high quality results while protecting the integrity of the data.</li>
+            <li>Eventually, to facilitate the conduct of customized analyses by any interested user around the world, doing so in a secure manner that provides high quality results while protecting the integrity of the data.</li>
         </ol>
 
         <p>If successful, this model of making human genomic data accessible to the world might become a paradigm for other diseases, as a way to catalyze scientific advances throughout all fields of human biology.</p>

@@ -36,7 +36,7 @@
 
 <tr><td>1586</td><td>2938</td><td>Welcome Trust Case Control Consortium (WTCCC)<div class="cohortDetail"></div></td><td>European</td></tr>
     
- <tr><td>Total</td><td>11,645</td><td>32,769</td><td></td><td></td></tr>   
+ <tr><td>Total: 11,645</td><td>Total: 32,769</td><td></td><td></td></tr>   
     
     </table>
 </div>
