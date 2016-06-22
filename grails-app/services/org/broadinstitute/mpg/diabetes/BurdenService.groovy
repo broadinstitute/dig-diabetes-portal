@@ -146,7 +146,7 @@ class BurdenService {
         for (String filterName in filtersRequiringMoreInfo){
             JSONObject sampleSummary = widgetService.getSampleDistribution ( sampleGroup.getSystemId(),
                                                                              [""" "${filterName}":["${sampleGroup.getSystemId()}"]""".toString()],
-                                                                             true, [] )
+                                                                             true, [], true )
             categoryLevelInfo[filterName] = sampleSummary.distribution_array.collect{return """{"samples":${it.count},"name":"${it.value}"}""".toString()}
         }
 
@@ -399,7 +399,7 @@ class BurdenService {
                 }
                 List<String> requestedDataList = []
                 requestedDataList << """ "ID":["${goWithDataSet}"]""".toString()
-                JSONObject samples = widgetService.getSampleDistribution( goWithDataSet, requestedDataList, false, filtersJsonObject.filters)
+                JSONObject samples = widgetService.getSampleDistribution( goWithDataSet, requestedDataList, false, filtersJsonObject.filters, true)
                 sampleList = samples.variants.collect{variant->variant[0].ID."$goWithDataSet"} as List
             }
         }

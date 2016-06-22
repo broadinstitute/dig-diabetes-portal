@@ -29,6 +29,7 @@ class WidgetService {
     private final String phenotypeKey = "T2D";
     private final String propertyKey = "P_FIRTH_FE_IV";
     private final String errorResponse = "{\"data\": {}, \"error\": true}";
+    private final int  NUMBER_OF_DISTRIBUTION_BINS = 24
 
     private String singleFilter ( String categorical, //
                                   String comparator,
@@ -205,7 +206,12 @@ class WidgetService {
 
 
 
-    public JSONObject getSampleDistribution( String dataset, List<String> requestedDataList, Boolean distributionRequested, def filters) {
+    public JSONObject getSampleDistribution( String dataset, List<String> requestedDataList, Boolean distributionRequested, def filters, Boolean categorical ) {
+        String binRequest = ""
+        if ((!categorical) && distributionRequested){
+            binRequest = """
+"bin_number": $NUMBER_OF_DISTRIBUTION_BINS, """.toString()
+        }
         String filterDesignation = buildFilterDesignation (filters, dataset)
         String jsonGetDataString = """{
     "passback": "123abc",
@@ -213,8 +219,7 @@ class WidgetService {
     "page_number": 0,
     "limit": 18000,
     "count": false,
-    "distribution": ${(distributionRequested)?'true':'false'},
-    "bin_number": 24,
+    "distribution": ${(distributionRequested)?'true':'false'},${binRequest}
     "properties":    {
                            "cproperty": [],
                           "orderBy":    [],
