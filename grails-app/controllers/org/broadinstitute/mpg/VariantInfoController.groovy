@@ -162,7 +162,7 @@ class VariantInfoController {
             }
         }
         requestedDataList << """ "ID":["${dataset}"]""".toString()
-        JSONObject jsonObject = widgetService.getSampleDistribution ( dataset, requestedDataList, false, sampleCallSpecifics.filters )
+        JSONObject jsonObject = widgetService.getSampleDistribution ( dataset, requestedDataList, false, sampleCallSpecifics.filters, true )
 
         //JSONObject jsonObject =  widgetService.getSampleList ( sampleCallSpecifics)
         render(status:200, contentType:"application/json") {
@@ -231,12 +231,16 @@ def retrieveSampleSummary (){
     String dataset =  querySpecification.dataset
     JSONArray requestedData = querySpecification.requestedData as JSONArray
     List<String> requestedDataList = []
+    Boolean categorical = false
     for (Map map in requestedData){
         if (map.name){
             requestedDataList << """ "${map.name}":["${dataset}"]""".toString()
+            if (map.categorical==1){
+                categorical = true
+            }
         }
     }
-    JSONObject sampleSummary = widgetService.getSampleDistribution ( dataset, requestedDataList, true, querySpecification.filters as JSONArray )
+    JSONObject sampleSummary = widgetService.getSampleDistribution ( dataset, requestedDataList, true, querySpecification.filters as JSONArray, categorical )
 
     render(status:200, contentType:"application/json") {
         [sampleData:sampleSummary]

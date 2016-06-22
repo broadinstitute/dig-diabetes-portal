@@ -808,9 +808,9 @@ var storeFilterData = function (data){
 //            };
 
 
-            var collectingPropertyNames = function (propertyName){
+            var collectingPropertyNames = function (property){
                var propertyStrings = [];
-               propertyStrings.push("{\"name\": \""+propertyName+"\"}");
+               propertyStrings.push("{\"name\": \""+property.propertyName+"\",\"categorical\": "+property.categorical+"}");
                return "[\n" + propertyStrings.join(",") + "\n]";
             };
 
@@ -820,7 +820,7 @@ var storeFilterData = function (data){
             var domSelector = $(dataSetSel);
             var dataSetName = domSelector.val();
             var jsonDescr = "{\"dataset\":\""+dataSetName+"\"," +
-                              "\"requestedData\":"+collectingPropertyNames(params.propertyName)+"," +
+                              "\"requestedData\":"+collectingPropertyNames(params)+"," +
                               "\"filters\":"+collectingFilterValues('origin',strataName)+"}";
 
             retrieveSampleDistribution  ( jsonDescr, callback, params  );
@@ -1754,7 +1754,7 @@ var storeFilterData = function (data){
         */
         var displaySampleDistribution = function (propertyName, holderSection, categorical) { // for categorical, 0== float, 1== string or int
             var strataName = holderSection.substring(holderSection.indexOf('_')+1);
-            refreshSampleDistribution( '#datasetFilter', utilizeDistributionInformationToCreatePlot, {propertyName:propertyName,holderSection:holderSection,strataName:strataName} );
+            refreshSampleDistribution( '#datasetFilter', utilizeDistributionInformationToCreatePlot, {propertyName:propertyName,holderSection:holderSection,strataName:strataName,categorical:categorical} );
         };
 
 
