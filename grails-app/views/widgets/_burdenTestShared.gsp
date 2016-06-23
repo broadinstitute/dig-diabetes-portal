@@ -803,19 +803,6 @@ var storeFilterData = function (data){
         */
         var refreshSampleDistribution = function (dataSetSel,callback,params){
 
-//           var collectingFilterNames = function (){
-//               var filterStrings = [];
-//               _.forEach( extractAllFilterNames(), function(filterObject){
-//                   var oneFilter = [];
-//                   _.forEach( filterObject, function(value, key){
-//                       oneFilter.push("\""+key+"\": \""+value+"\"");
-//                   });
-//                   filterStrings.push("{"+oneFilter.join(",\n")+"}");
-//               } );
-//               return "[\n" + filterStrings.join(",") + "\n]";
-//            };
-
-
             var collectingPropertyNames = function (property){
                var propertyStrings = [];
                propertyStrings.push("{\"name\": \""+property.propertyName+"\",\"categorical\": "+property.categorical+"}");
@@ -1755,7 +1742,67 @@ var storeFilterData = function (data){
         * @param holderSection
         */
         var displaySampleDistribution = function (propertyName, holderSection, categorical) { // for categorical, 0== float, 1== string or int
-            var strataName = holderSection.substring(holderSection.indexOf('_')+1);
+            var locationOfFirstBreak = holderSection.indexOf('_');
+            var strataName = holderSection.substring(locationOfFirstBreak+1);
+            if ((locationOfFirstBreak> -1) &&(strataName==='all')) {
+
+               //real valued
+               var realValueFilters = $('.filterParm');
+               _.forEach(realValueFilters,function(oneFilter){
+                    var filterDom = $(oneFilter);
+                    var id = filterDom.attr('id');
+                    var idKeys = id.split('_');
+                    if (idKeys.length === 3){
+                        if ((idKeys[0]==='inp') &&
+                            (idKeys[1]!=='all')  &&
+                            (idKeys[2]===propertyName)){
+                                var templateFilter = $('#inp_all_'+propertyName);
+                                filterDom.val(templateFilter.val());
+                        }
+                   }
+               });
+
+
+
+               // categorical
+                var categoricalValueFilters =   $('.categoricalFilter');
+                _.forEach(categoricalValueFilters,function(oneFilter){
+                    var filterRowDom = $(oneFilter);
+                    var  filterId = filterRowDom.attr('id');
+                    if (filterId.indexOf("filter_")==0){
+                        var  filterName = filterId.substr(7);
+                        var locationOfSecondBreak = filterName.indexOf('_');
+                        if ((locationOfSecondBreak>-1)&&
+                            (locationOfSecondBreak<(filterName.length-1))&&
+                            (filterName.substr(locationOfSecondBreak+1)==propertyName)&&
+                            (filterName.substr(0,3)!=='all')){
+                            $('#multi_'+filterName).val($('#multi_all_'+propertyName).val());
+                            }
+                    }
+
+                });
+
+                // comparators
+               var realValueComparators =   $('.filterCmp');
+                _.forEach(realValueComparators,function(oneComparator){
+                    var cmpRowDom = $(oneComparator);
+                    var  cmpId = cmpRowDom.attr('id');
+                    if (cmpId.indexOf("cmp_")==0){
+                        var  cmpName = cmpId.substr(4);
+                        var locationOfSecondBreak = cmpName.indexOf('_');
+                        if ((locationOfSecondBreak>-1)&&
+                            (locationOfSecondBreak<(cmpName.length-1))&&
+                            (cmpName.substr(locationOfSecondBreak+1)==propertyName)&&
+                            (cmpName.substr(0,3)!=='all')){
+                            $('#cmp_'+cmpName).val($('#cmp_all_'+propertyName).val());
+                            }
+                    }
+
+                });
+
+           }
+
+
             refreshSampleDistribution( '#datasetFilter', utilizeDistributionInformationToCreatePlot, {propertyName:propertyName,holderSection:holderSection,strataName:strataName,categorical:categorical} );
         };
 
