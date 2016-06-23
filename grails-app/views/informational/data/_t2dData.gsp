@@ -1,3 +1,10 @@
+<style>
+    /* only applies to tables for cohort information */
+    .cohortDetail th {
+        width: 50%;
+    }
+</style>
+
 <script>
     var displaySelectedDataTypes = function() {
         var selectedDataType = $('#dataTypeSelector').val();
