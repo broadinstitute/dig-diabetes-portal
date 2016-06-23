@@ -2,23 +2,20 @@ package org.broadinstitute.mpg
 
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Experiment
-import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
 
-
-
-class  InformationalController {
+class InformationalController {
     RestServerService restServerService
     MetaDataService metaDataService
 
     def index() {}
 
     def about() {
-        render (view: 'about')
+        render(view: 'about')
     }
 
-    def data (){
+    def data() {
         Set<Experiment> allExperimentsForGivenVersion = []
 
         String currentVersion = metaDataService.getDataVersion()
@@ -27,24 +24,18 @@ class  InformationalController {
         technologies.each {
             allExperimentsForGivenVersion.add(metaDataService.getExperimentByVersionAndTechnology(currentVersion, it, 1))
         }
-        
+
         String locale = RequestContextUtils.getLocale(request)
-        render (view: 'data', model:[locale:locale, experiments: allExperimentsForGivenVersion])
-    }
-    def aboutBeacon (){
-        render (view: 'aboutBeacon')
-    }
-    def aboutSigma (){
-        String defaultDisplay = 'about'
-        render (view:'homeHolder', model:[specifics:defaultDisplay])
+        render(view: 'data', model: [locale: locale, experiments: allExperimentsForGivenVersion])
     }
 
-
-    // subsidiary pages for  contact
-    def aboutSigmaSection(){
-        render (template: "sigma/${params.id}" )
+    def aboutBeacon() {
+        render(view: 'aboutBeacon')
     }
 
+    def contactBeacon() {
+        render(view: 'contactBeacon')
+    }
 
     /***
      * Get the contents for the filter drop-down box on the burden test section of the gene info page
@@ -56,88 +47,41 @@ class  InformationalController {
         JSONObject jsonObject = restServerService.extractDataSetHierarchy(metadataVersion, technology)
 
         // send json response back
-        render(status: 200, contentType: "application/json") {jsonObject}
+        render(status: 200, contentType: "application/json") { jsonObject }
     }
 
-
-
-
-
-//    def contact (){
-//        render (view: 'contact')
-//    }
-    def contactBeacon (){
-        render (view: 'contactBeacon')
-    }
-    def hgat (){
-        render (view: 'hgat')
-    }
-    def ashg (){
-        forward(action:'blog')
-    }
-    def ASHG (){
-        forward(action:'blog')
+    def contact() {
+        render(view: 'contact')
     }
 
-    // the root page for t2dgenes.  This page recruits underlying pages via Ajax calls
-    def t2dgenes ()  {
-        String defaultDisplay = 'cohorts'
-        render (view: 't2dgenes', model:[specifics:defaultDisplay] )
-    }
-    // subsidiary pages for  t2dgenes
-    def t2dgenesection(){
-        render (template: "t2dsection/${params.id}" )
+    def hgat() {
+        render(view: 'hgat')
     }
 
-    // the root page for got2d.  This page recruits underlying pages via Ajax calls
-    def got2d()  {
-        String defaultDisplay = 'cohorts'
-        render (view: 'got2d', model:[specifics:defaultDisplay] )
-    }
-    // subsidiary pages for  got2d
-    def got2dsection(){
-        render (template: "got2dsection/${params.id}" )
+    def ashg() {
+        forward(action: 'blog')
     }
 
-
-    // the AMP ddata sharing policy.  We want a PDF to show up in the user's browser, live if possible, otherwise is download
-    def sharingPolicy()  {
-            String fileLocation = grailsApplication.mainContext.getResource("/WEB-INF/resources/AMP_KP_DAT_incoming.pdf").file.toString()
-            File file = new File(fileLocation)
-            response.contentType = "application/pdf"
-            response.outputStream << file.getBytes()
-            response.outputStream.flush()
+    def ASHG() {
+        forward(action: 'blog')
     }
 
-    // the root page for contact.  This page recruits underlying pages via Ajax calls
-    def contact()  {
-        String defaultDisplay = 'consortium'
-        render (view: 'contact', model:[specifics:defaultDisplay] )
-    }
-    // subsidiary pages for  contact
-    def contactsection(){
-        render (template: "contact/${params.id}" )
+    def forum() {
+        render(view: "forum")
     }
 
-    def forum(){
-        render (view: "forum" )
+    def blog() {
+        render(view: "blog")
     }
 
-    def blog(){
-        render (view: "blog" )
-    }
-
-
-    // the root page for contact.  This page recruits underlying pages via Ajax calls
-    def policies()  {
+    // the root page for policies.  This page recruits underlying pages via Ajax calls
+    def policies() {
         String defaultDisplay = 'dataUse'
-        render (view: 'policies', model:[specifics:defaultDisplay] )
+        render(view: 'policies', model: [specifics: defaultDisplay])
     }
     // subsidiary pages for  contact
-    def policiessection(){
-        render (template: "policies/${params.id}" )
+    def policiessection() {
+        render(template: "policies/${params.id}")
     }
-
-
 
 }

@@ -20,6 +20,15 @@ class InformationalControllerUnitSpec extends Specification {
     def cleanup() {
     }
 
+    void "test about"() {
+        when:
+        controller.about()
+
+        then:
+        response.status == 200
+        view == '/informational/about'
+    }
+
     void "test data"() {
         when:
         controller.data()
@@ -46,71 +55,4 @@ class InformationalControllerUnitSpec extends Specification {
         response.status == 200
         view == '/informational/hgat'
     }
-
-
-    void "test t2dgenes"() {
-        when:
-        controller.t2dgenes()
-
-        then:
-        response.status == 200
-        view == '/informational/t2dgenes'
-        model.specifics == 'cohorts'
-    }
-
-
-    void "test t2dgenesection"() {
-        when:
-        params.id=currentParameter
-        controller.t2dgenesection()
-
-        then:
-        response.status == 200
-        response.text.contains(currentText)
-
-        where:
-        label                  | currentText                             | currentParameter
-        "cohorts template"     | 'div'                                   | "cohorts"
-        "papers template"      | 'div'                                   | "papers"
-        "people's template"    | 'div'                                   | "people"
-        "project 1"            | 'div'                                   | "project1"
-        "project 2"            | 'div'                                   | "project2"
-        "project 3"            | 'div'                                   | "project3"
-
-    }
-
-
-
-    void "test got2d"() {
-        when:
-        controller.got2d()
-
-        then:
-        response.status == 200
-        view == '/informational/got2d'
-        model.specifics == 'cohorts'
-    }
-
-
-
-    void "test got2dsection"() {
-        when:
-        params.id=currentParameter
-        controller.got2dsection()
-
-        then:
-        response.status == 200
-        response.text.contains(currentText)
-
-        where:
-        label                  | currentText                             | currentParameter
-        "cohorts template"     | 'div'                                   | "cohorts"
-        "exomechip template"   | 'div'                                   | "exomechip"
-        "people's template"    | 'div'                                   | "people"
-        "project 1"            | 'div'                                   | "papers"
-
-    }
-
-
-
 }

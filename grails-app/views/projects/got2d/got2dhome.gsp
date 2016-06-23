@@ -100,7 +100,7 @@
     </g:if>
     <g:if test="${params.section == 'learn'}"> 
         <div class="row sigma-learn-gradient dk-sigma-section-header visible-lg visible-md">
-            <div class="col-lg-3 col-md-3 text-center dk-sigma-nopadding"><div class="sigma-about-gradient dk-sigma-section-link"><g:link action='got2d' params="[section: 'about']"><g:message code="sigmasite.home.section.caps.about" /></g:link></div></div>
+            <div class="col-lg-3 col-md-3 text-center dk-sigma-nopadding"><div class="sigma-about-gradient dk-sigma-section-link"><g:link action='got2d' params="[section: 'about']">COHORTS</g:link></div></div>
             <div class="col-lg-8 col-md-8 dk-sigma-content-summary">find out more about cohorts studied by the GoT2D consortium</div>
         </div>
         <div class="row sigma-learn-gradient dk-sigma-section-header-sm visible-sm visible-xs">
@@ -137,7 +137,7 @@
                 </g:if> 
             </div>
             <div class="sigma-learn-gradient dk-sigma-section-link">
-                <g:link action='got2d' params="[section: 'learn']"><g:message code="sigmasite.home.section.caps.learn" /></g:link>
+                <g:link action='got2d' params="[section: 'learn']">COHORTS</g:link>
                 <g:if test="${params.section == 'learn'}"> 
                     <img src="${resource(dir: 'images/icons', file: 'triangle.png')}" class="dk-sigma-section-pointer" />
                 </g:if> 

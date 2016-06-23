@@ -50,7 +50,7 @@
                 <g:link action='t2dGenes' params="[section: 'learn']"><strong>COHORTS</strong></g:link>
             </g:if>
             <g:else>
-                <g:link action='t2dGenes' params="[section: 'learn']"><g:message code="sigmasite.home.section.caps.learn" /></g:link>
+                <g:link action='t2dGenes' params="[section: 'learn']">COHORTS</g:link>
             </g:else>
         </div>
         <div class="col-sm-4 col-xs-4 sigma-contact-gradient">
@@ -137,7 +137,7 @@
                 </g:if> 
             </div>
             <div class="sigma-learn-gradient dk-sigma-section-link">
-                <g:link action='t2dGenes' params="[section: 'learn']"><g:message code="sigmasite.home.section.caps.learn" /></g:link>
+                <g:link action='t2dGenes' params="[section: 'learn']">COHORTS</g:link>
                 <g:if test="${params.section == 'learn'}"> 
                     <img src="${resource(dir: 'images/icons', file: 'triangle.png')}" class="dk-sigma-section-pointer" />
                 </g:if> 
