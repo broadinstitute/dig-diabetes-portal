@@ -53,21 +53,43 @@ ul.strataResults {
     background: #eee;
 }
 #stratsCovTabs li.active {
+    border-radius: 4px 4px 0px 0px;
+}
+#stratsCovTabs a.covariateCohort {
     margin-bottom: -3px;
     margin-right: 5px;
     border-top: solid 1px black;
     border-left: solid 1px black;
     border-right: solid 1px black;
-    border-bottom: solid 1px white;
+    border-radius: 4px 4px 0px 0px;
+}
+
+#stratsCovTabs a.covariateCohort.ALL {
+    margin-bottom: -3px;
+    margin-right: 5px;
+    border-top: solid 2px black;
+    border-left: solid 2px black;
+    border-right: solid 2px black;
     border-radius: 4px 4px 0px 0px;
 }
 #stratsTabs li.active {
+    border-radius: 4px 4px 0px 0px;
+}
+#stratsTabs a.filterCohort {
     margin-bottom: -3px;
     margin-right: 5px;
     border-top: solid 1px black;
     border-left: solid 1px black;
     border-right: solid 1px black;
-    border-bottom: solid 1px white;
+    border-radius: 4px 4px 0px 0px;
+}
+
+#stratsTabs a.filterCohort.ALL {
+    margin-bottom: -3px;
+    margin-right: 5px;
+    border-top: solid 2px black;
+    border-left: solid 2px black;
+    border-right: solid 2px black;
     border-radius: 4px 4px 0px 0px;
 }
 .tab-pane.active > div.row {
@@ -632,7 +654,6 @@ var storeFilterData = function (data){
         */
         var stratifiedSampleAndCovariateSection = function (dataSetId, phenotype, strataProperty, filterInfo) {
             var data = getStoredSampleMetadata();
-            var allStrata = ['African-American','East-Asian','European','Hispanic','South-Asian'];
             var defaultDisplayCount = function(count){
                                  if (this.count==1) {
                                     return " active";
@@ -656,7 +677,14 @@ var storeFilterData = function (data){
                         strataNames:[],
                         strataContent:[]
                     };
-                    _.forEach(allStrata,function(stratum){
+                    var stratificationProperty = optionsPerFilter.origin;
+                    var totalSamples = 0;
+                    _.forEach(stratificationProperty,function(stratumHolder){
+                       totalSamples += stratumHolder.samples;
+                    });
+                    stratificationProperty.splice(0,0,{name:'ALL',samples:totalSamples});
+                    _.forEach(stratificationProperty,function(stratumHolder){
+                       var stratum=stratumHolder.name;
                        renderData.strataNames.push({name:stratum,trans:stratum,count:renderData.strataNames.length}); // to get rid of
                        renderData.strataContent.push({name:stratum,trans:stratum,count:renderData.strataContent.length});  // to get rid of
                        renderFiltersTemplateData.strataNames.push({name:stratum,trans:stratum,count:renderData.strataNames.length,defaultDisplay:defaultDisplayCount});
@@ -681,7 +709,8 @@ var storeFilterData = function (data){
                    // set up the section where the covariates will go
                     $("#chooseCovariatesLocation").empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML,renderFiltersTemplateData));
 
-                    _.forEach(allStrata, function (stratumName){
+                     _.forEach(stratificationProperty,function(stratumHolder){
+                        var stratumName=stratumHolder.name;
 
                          // put those filters in place
                         $(".filterHolder_"+stratumName).empty().append(Mustache.render( $('#allFiltersTemplate')[0].innerHTML,
@@ -773,7 +802,8 @@ var storeFilterData = function (data){
                    (additionalKey.length > 0) &&
                    (typeof additionalValue !== 'undefined') &&
                    (additionalValue !== 'strat1') &&
-                   (additionalValue.length > 0) ) {
+                   (additionalValue.length > 0) &&
+                    (additionalValue !== 'ALL')) {
                   filterStrings.push("{\"name\": \""+additionalKey+"\","+
 "\"parm\": \""+additionalValue+"\","+
 "\"cmp\": \"3\",\"cat\": \"1\"}");
@@ -794,19 +824,6 @@ var storeFilterData = function (data){
         * @param callback
         */
         var refreshSampleDistribution = function (dataSetSel,callback,params){
-
-//           var collectingFilterNames = function (){
-//               var filterStrings = [];
-//               _.forEach( extractAllFilterNames(), function(filterObject){
-//                   var oneFilter = [];
-//                   _.forEach( filterObject, function(value, key){
-//                       oneFilter.push("\""+key+"\": \""+value+"\"");
-//                   });
-//                   filterStrings.push("{"+oneFilter.join(",\n")+"}");
-//               } );
-//               return "[\n" + filterStrings.join(",") + "\n]";
-//            };
-
 
             var collectingPropertyNames = function (property){
                var propertyStrings = [];
@@ -983,7 +1000,7 @@ var storeFilterData = function (data){
 
                        }}
                     }
-                    $('#rSpinner').hide();
+                    //$('#rSpinner').hide();
                     }
             ).fail(function (jqXHR, exception) {
                     $('#rSpinner').hide();
@@ -1110,7 +1127,7 @@ var storeFilterData = function (data){
                _.forEach(selectedCovariates, function(d){
                   var covariateDom = $(d);
                   var covId = covariateDom.attr('id');
-                  var covariateName = covId.substr("covariate_".length);
+                  var covariateName = covId.substr(("covariate_"+stratumName+"_").length);
                   if (covariateName.indexOf("{{")===-1){
                      pcCovariates.push('"'+covariateName+'"');
                   }
@@ -1125,7 +1142,7 @@ var storeFilterData = function (data){
             if (stratsTabs.length===0){
                var f=executeAssociationTest(collectingFilterValues(),collectingCovariateValues(),'none','strat1');
                $.when(f).then(function() {
-                      alert('all done with 1');
+                      //alert('all done with 1');
                 });
             } else {
                 var propertyDesignationDom = $('div.stratsTabs_property');
@@ -1134,10 +1151,13 @@ var storeFilterData = function (data){
                 var deferreds = [];
                 _.forEach(stratsTabs,function (stratum){
                     var stratumName = $(stratum).text();
-                    deferreds.push(executeAssociationTest(collectingFilterValues(propertyName,stratumName),collectingCovariateValues(propertyName,stratumName),propertyName,stratumName));
+                    if (stratumName!=='ALL'){
+                       deferreds.push(executeAssociationTest(collectingFilterValues(propertyName,stratumName),collectingCovariateValues(propertyName,stratumName),propertyName,stratumName));
+                    }
                 });
                 $.when.apply($,deferreds).then(function() {
                       runMetaAnalysis();
+                      $('#rSpinner').hide();
                 });
             }
 
@@ -1559,146 +1579,8 @@ var storeFilterData = function (data){
                          optionsPerFilter[oneFilter.name] = oneFilter.levels;
                 }
              });
-//              optionsPerFilter = { T2D_readable: [{name:"No", samples:982},{name:"Yes", samples:1028}],
-//                                   origin:[   {name:"African-American", samples: 2076},
-//                                              {name:"East-Asian", samples: 2166},
-//                                              {name:"European", samples: 4554},
-//                                              {name:"Hispanic", samples: 5818},
-//                                              {name:"South-Asian", samples: 2225}] };
             return optionsPerFilter;
-         }
-
-
-
-
-
-
-
-
-
-
-
-        /***
-        *   get the sample data and apply real valued filters. Apply categorical filters.  Pass back the filtered list of IDs.
-        *
-        * @returns {Array}
-        */
-        var generateFilterSamples = function (){
-            var data = getStoredSampleData();
-            if (typeof data === 'undefined') return;
-            var filters = extractFilters();
-            var relevantFilters = _.remove(filters,function(v){return ((v.cat===1)||(v.parm.length>0))});
-            var groupedBySampleId =  _.groupBy(data.metaData.variants,
-                                               function(inv){
-                                                    return _.find(_.find(inv,
-                                                                  function(o,i){
-                                                                       return _.find(o,function(v,k){
-                                                                            return k==="ID"
-                                                                       })
-                                                                  })["ID"],
-                                                                  function(key,val){
-                                                                      return val;
-                                                                  })
-                                               });
-            var samplesWeWant = [];
-            var samplesValuesWeWant = [];
-            _.forEach(groupedBySampleId,function(sampleVals,sampleId){
-                 var rejectSample = false;
-                 _.forEach(sampleVals,function(propObject){
-                     _.forEach(propObject,function(propVal){
-                         _.forEach(propVal,function(dsObject,propName){
-                            var filter = _.find(relevantFilters,function(filt){return (filt.name===propName)});
-                            if (filter){
-                                var propertyValue;
-                                _.forEach(dsObject,function(propVal,dsName){
-                                    propertyValue = propVal;
-                               });
-                                    var numericalFilterValue = parseFloat(filter.parm);
-                                    if (filter.cmp==="1"){
-                                       if (propertyValue>=numericalFilterValue){
-                                          rejectSample = true;
-                                       }
-                                    } else if (filter.cmp==="2"){
-                                       if (propertyValue<=numericalFilterValue){
-                                          rejectSample = true;
-                                       }
-                                    }
-                            }
-
-                         })
-                     })
-                 })
-                 if (!rejectSample){
-                    samplesValuesWeWant.push(sampleId);
-                 }
-            });
-
-            var filteredSampleObjects = {};
-            _.map(groupedBySampleId,function(v,k){
-                    if (samplesValuesWeWant.indexOf(k)!==-1) {
-                        filteredSampleObjects[k]=v;} return false;
-                        });
-
-             _.forEach(filteredSampleObjects,function(sampleVals,sampleId){
-                 var rejectSample = false;
-                 _.forEach(sampleVals,function(propObject){
-                     _.forEach(propObject,function(propVal){
-                         _.forEach(propVal,function(dsObject,propName){
-                            var filter = _.find(relevantFilters,function(filt){return (filt.name===propName)});
-                            if (filter){
-                                var propertyValue;
-                                _.forEach(dsObject,function(propVal,dsName){
-                                    propertyValue = propVal;
-                               });
-                               if ((filter.cat===1)&&(typeof propertyValue !== 'undefined')) { // categorical filter
-                                    var catFilterValues = filter.parm;
-                                    var matcher = _.find(catFilterValues,function(d){return d===(""+propertyValue)});
-                                    if (!matcher){
-                                          rejectSample = true;
-                                        }
-                                }
-
-                            }
-
-                         })
-                     });
-                     if (!rejectSample){
-                        samplesWeWant.push(sampleId);
-                     }
-                 })
-            });
-            return samplesWeWant;
-
-        };
-
-
-
-        /***
-        *  Produce a culled list of samples based on user-specified filters.
-        *
-        */
-        var dynamicallyFilterSamples = function (){
-            var data = getStoredSampleData();
-            var samplesWeWant = generateFilterSamples();
-            var filteredVariants = [];
-            _.forEach(data.metaData.variants,
-                   function(d){
-                          _.find(d,
-                              function(el){
-                                  if (el["ID"]) {
-                                     _.forEach(el["ID"],
-                                         function(v,k){
-                                           if (samplesWeWant.indexOf(v)>-1){
-                                              filteredVariants.push(d);
-                                           }
-                                         });
-                                  }
-                              }
-                          )
-                   }
-             );
-            return filteredVariants;
-        };
+         };
 
 
 
@@ -1743,7 +1625,31 @@ var storeFilterData = function (data){
                 }
 
              }
-        }
+        };
+
+
+       var carryCovChanges = function (propertyName, strataName){
+           var covariateDetermination =   $('.covariate');
+           if (strataName==='ALL'){
+                _.forEach(covariateDetermination,function(oneComparator){
+                    var cmpRowDom = $(oneComparator);
+                    var  cmpId = cmpRowDom.attr('id');
+                    if (cmpId.indexOf("covariate_")==0){
+                        var  cmpName = cmpId.substr(10);
+                        var locationOfSecondBreak = cmpName.indexOf('_');
+                        if ((locationOfSecondBreak>-1)&&
+                            (locationOfSecondBreak<(cmpName.length-1))&&
+                            (cmpName.substr(locationOfSecondBreak+1)==propertyName)&&
+                            (cmpName.substr(0,3)!=='ALL')){
+                            $('#covariate_'+cmpName).prop('checked',$('#covariate_ALL_'+propertyName).prop('checked'));
+                            }
+                    }
+
+                });
+           }
+       }
+
+
 
 
         /***
@@ -1753,7 +1659,67 @@ var storeFilterData = function (data){
         * @param holderSection
         */
         var displaySampleDistribution = function (propertyName, holderSection, categorical) { // for categorical, 0== float, 1== string or int
-            var strataName = holderSection.substring(holderSection.indexOf('_')+1);
+            var locationOfFirstBreak = holderSection.indexOf('_');
+            var strataName = holderSection.substring(locationOfFirstBreak+1);
+            if ((locationOfFirstBreak> -1) &&(strataName==='ALL')) {
+
+               //real valued
+               var realValueFilters = $('.filterParm');
+               _.forEach(realValueFilters,function(oneFilter){
+                    var filterDom = $(oneFilter);
+                    var id = filterDom.attr('id');
+                    var idKeys = id.split('_');
+                    if (idKeys.length === 3){
+                        if ((idKeys[0]==='inp') &&
+                            (idKeys[1]!=='ALL')  &&
+                            (idKeys[2]===propertyName)){
+                                var templateFilter = $('#inp_ALL_'+propertyName);
+                                filterDom.val(templateFilter.val());
+                        }
+                   }
+               });
+
+
+
+               // categorical
+                var categoricalValueFilters =   $('.categoricalFilter');
+                _.forEach(categoricalValueFilters,function(oneFilter){
+                    var filterRowDom = $(oneFilter);
+                    var  filterId = filterRowDom.attr('id');
+                    if (filterId.indexOf("filter_")==0){
+                        var  filterName = filterId.substr(7);
+                        var locationOfSecondBreak = filterName.indexOf('_');
+                        if ((locationOfSecondBreak>-1)&&
+                            (locationOfSecondBreak<(filterName.length-1))&&
+                            (filterName.substr(locationOfSecondBreak+1)==propertyName)&&
+                            (filterName.substr(0,3)!=='ALL')){
+                            $('#multi_'+filterName).val($('#multi_ALL_'+propertyName).val());
+                            }
+                    }
+
+                });
+
+                // comparators
+               var realValueComparators =   $('.filterCmp');
+                _.forEach(realValueComparators,function(oneComparator){
+                    var cmpRowDom = $(oneComparator);
+                    var  cmpId = cmpRowDom.attr('id');
+                    if (cmpId.indexOf("cmp_")==0){
+                        var  cmpName = cmpId.substr(4);
+                        var locationOfSecondBreak = cmpName.indexOf('_');
+                        if ((locationOfSecondBreak>-1)&&
+                            (locationOfSecondBreak<(cmpName.length-1))&&
+                            (cmpName.substr(locationOfSecondBreak+1)==propertyName)&&
+                            (cmpName.substr(0,3)!=='ALL')){
+                            $('#cmp_'+cmpName).val($('#cmp_ALL_'+propertyName).val());
+                            }
+                    }
+
+                });
+
+           }
+
+
             refreshSampleDistribution( '#datasetFilter', utilizeDistributionInformationToCreatePlot, {propertyName:propertyName,holderSection:holderSection,strataName:strataName,categorical:categorical} );
         };
 
@@ -1764,12 +1730,10 @@ var storeFilterData = function (data){
             preloadInteractiveAnalysisData:preloadInteractiveAnalysisData, // assuming there is only one data set we can get most everything at page load
             retrieveExperimentMetadata:retrieveExperimentMetadata, //Retrieve sample metadata only to get the experiment list
             immediateFilterAndRun:immediateFilterAndRun, // apply filters locally and then launch IAT
-            //refreshSampleDistribution:refreshSampleDistribution, // get data to display distribution of property
-           // runBurdenTest:runBurdenTest, // currently wrapped by a filter call
             retrieveMatchingDataSets:retrieveMatchingDataSets, // retrieve data set matching phenotype
             getStoredSampleData:getStoredSampleData, // retrieve stored sample data
             retrieveSampleMetadata:retrieveSampleMetadata, // if user changes data set reset phenotype (and potentially reload samples)
-            dynamicallyFilterSamples:dynamicallyFilterSamples,  // filter all our samples (currently done locally)
+            carryCovChanges:carryCovChanges,
             populateSampleAndCovariateSection:populateSampleAndCovariateSection,
             displayTestResultsSection: displayTestResultsSection  // simply display results section (show() or hide()
         }
@@ -2008,7 +1972,7 @@ $( document ).ready( function (){
                         <div class="col-sm-12 col-xs-12">
                             <ul class="nav nav-tabs" id="stratsTabs">
                                 {{ #strataNames }}
-                                   <li class="{{defaultDisplay}}"><a data-target="#{{name}}" data-toggle="tab" class="filterCohort">{{trans}}</a></li>
+                                   <li class="{{defaultDisplay}}"><a data-target="#{{name}}" data-toggle="tab" class="filterCohort {{trans}}">{{trans}}</a></li>
                                 {{ /strataNames }}
                                 <div class="stratsTabs_property" id="{{strataProperty}}" style="display: none"></div>
                             </ul>
@@ -2106,7 +2070,7 @@ $( document ).ready( function (){
                         <div class="col-sm-12 col-xs-12">
                             <ul class="nav nav-tabs" id="stratsCovTabs">
                                 {{ #strataNames }}
-                                   <li class="{{defaultDisplay}}"><a data-target="#cov_{{name}}" data-toggle="tab">{{trans}}</a></li>
+                                   <li class="{{defaultDisplay}}"><a data-target="#cov_{{name}}" data-toggle="tab" class="covariateCohort {{name}}">{{trans}}</a></li>
                                 {{ /strataNames }}
                             </ul>
                         </div>
@@ -2248,8 +2212,8 @@ $( document ).ready( function (){
                                     <div class="row">
                                         <div class="checkbox" style="margin:0">
                                             <label>
-                                                <input id="covariate_{{name}}" class="covariate" type="checkbox" name="covariate"
-                                                       value="{{name}}" {{defaultCovariate}}/>
+                                                <input id="covariate_{{stratum}}_{{name}}" class="covariate" type="checkbox" name="covariate"
+                                                       value="{{name}}" {{defaultCovariate}} onchange="mpgSoftware.burdenTestShared.carryCovChanges('{{name}}', '{{stratum}}')"/>
                                                 {{trans}}
                                             </label>
                                         </div>
@@ -2261,8 +2225,8 @@ $( document ).ready( function (){
                                     <div class="row">
                                         <div class="checkbox" style="margin:0">
                                             <label>
-                                                <input id="covariate_{{name}}" class="covariate" type="checkbox" name="covariate"
-                                                       value="{{name}}" {{defaultCovariate}}/>
+                                                <input id="covariate_{{stratum}}_{{name}}" class="covariate" type="checkbox" name="covariate"
+                                                       value="{{name}}" {{defaultCovariate}} onchange="mpgSoftware.burdenTestShared.carryCovChanges('{{name}}', '{{stratum}}')"/>
                                                 {{trans}}
                                             </label>
                                         </div>
@@ -2274,8 +2238,8 @@ $( document ).ready( function (){
                                     <div class="row">
                                         <div class="checkbox" style="margin:0">
                                             <label>
-                                                <input id="covariate_{{name}}" class="covariate" type="checkbox" name="covariate"
-                                                       value="{{name}}" {{defaultCovariate}}/>
+                                                <input id="covariate_{{stratum}}_{{name}}" class="covariate" type="checkbox" name="covariate"
+                                                       value="{{name}}" {{defaultCovariate}} onchange="mpgSoftware.burdenTestShared.carryCovChanges('{{name}}', '{{stratum}}')"/>
                                                 {{trans}}
                                             </label>
                                         </div>
