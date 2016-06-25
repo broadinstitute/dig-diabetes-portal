@@ -116,8 +116,7 @@ class JsonParserTest extends TestCase {
 
         // get the phenotype name list
         try {
-            groupList = this.jsonParser.getSamplesGroupsForPhenotype(phenotype, "mdv2");
-
+            groupList = this.jsonParser.getSampleGroupsForPhenotype(phenotype, "mdv2");
         } catch (PortalException exception) {
             fail("Got portal exception: " + exception.getMessage());
         }

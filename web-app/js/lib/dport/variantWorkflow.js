@@ -92,8 +92,8 @@ var mpgSoftware = mpgSoftware || {};
                 data: {phenotype: phenotype},
                 async: true,
                 success: function (data) {
-                    if (data && data.datasets) {
-                        fillDatasetDropdown(data.datasets, target, query);
+                    if (data) {
+                        fillDatasetDropdown(data.sampleGroupMap, target, query);
                     }
                     loading.hide();
                 },
@@ -151,42 +151,85 @@ var mpgSoftware = mpgSoftware || {};
             });
         };
         // target is the indicator for the select element to be filled--'dependent' or 'independent'
-        var fillDatasetDropdown = function (datasetJson, target, query) {
-            if (datasetJson && datasetJson.is_error == false) {
-                var numberOfRecords = parseInt(datasetJson.numRecords);
-                var targetSelect = target == 'dependent' ? '#datasetDependent' : '#datasetIndependent';
+        var fillDatasetDropdown = function (sampleGroupMap, target, query) {
+            var targetSelect = target == 'dependent' ? '#datasetDependent' : '#datasetIndependent';
 
-                if(numberOfRecords == 0 && target == 'independent') {
-                    // if we have no phenotype-independent datasets, hide this option
-                    $('#datasetChooserIndependent').hide();
+            var numberOfTopLevelDatasets = _.keys(sampleGroupMap).length;
+
+            if(numberOfTopLevelDatasets == 0 && target == 'independent') {
+                // if we have no phenotype-independent datasets, hide this option
+                $('#datasetChooserIndependent').hide();
+                return;
+            }
+
+            var options = $(targetSelect);
+            options.empty();
+
+            options.append("<option selected hidden value=default>-- &nbsp;&nbsp;select a dataset&nbsp;&nbsp; --</option>");
+
+            var datasetList = _.keys(sampleGroupMap);
+            _.each(datasetList, function(dataset) {
+                var newOption = $("<option />").val(dataset).html(sampleGroupMap[dataset].name);
+                // check to see if this dataset has any values besides "name" defined--if so, then
+                // it has child cohorts. in that case, attach them as data (via jquery) so that we
+                // can easily access them if the user chooses this dataset.
+                var childDatasets = _.chain(sampleGroupMap[dataset]).omit('name').value();
+                if(_.keys(childDatasets).length > 0) {
+                    newOption.data(childDatasets);
                 }
+                options.append(newOption);
+            });
 
-                var options = $(targetSelect);
-                options.empty();
+            // clear out the properties list
+            fillPropertiesDropdown({is_error: false}, target);
 
-                options.append("<option selected hidden value=default>-- &nbsp;&nbsp;select a dataset&nbsp;&nbsp; --</option>");
+            // if there's only one record, just click it to make the property inputs appear
+            if (numberOfTopLevelDatasets === 1) {
+                $(targetSelect).val(datasetList[0].name);
+                $(targetSelect).change();
+            }
 
-                var datasetList = datasetJson ["dataset"];
-                for (var i = 0; i < numberOfRecords; i++) {
-                    options.append($("<option />").val(datasetList[i].name)
-                        .html(datasetList[i].displayName));
-                }
+            options.prop('disabled', false);
 
-                // clear out the properties list
-                fillPropertiesDropdown({is_error: false}, target);
+            if (query) {
+                // we need to check if any of the options available match the query's
+                // dataset--if not, we're dealing with a cohort. in that case, we need to
+                // figure out the right parent dataset, set the dataset selector to that,
+                // then set the cohort selector correctly.
+                var availableDatasetOptions = _.map($(targetSelect + ' option'), function(ele) {
+                    return $(ele).val();
+                });
 
-                // if there's only one record, just click it to make the property inputs appear
-                if (numberOfRecords === 1) {
-                    $(targetSelect).val(datasetList[0].name);
-                    $(targetSelect).change();
-                }
-
-                options.prop('disabled', false);
-
-                if (query) {
+                if(availableDatasetOptions.includes(query.dataset)) {
                     $(targetSelect).val(query.dataset);
-                    retrievePropertiesPerDataSet(query.phenotype, query.dataset, target, query);
+                } else {
+                    // do string prefix matching. strip off the "_mdv#" from the query.dataset field
+                    var indexOfLastUnderscore = query.dataset.lastIndexOf('_');
+                    var datasetPrefix = query.dataset.substring(0, indexOfLastUnderscore);
+                    // save this for later
+                    var dataVersion = query.dataset.substring(indexOfLastUnderscore);
+                    var trimmedDatasetOptions = _.map(availableDatasetOptions, function(d) {
+                        var indexOfLastUnderscore = d.lastIndexOf('_');
+                        return d.substring(0, indexOfLastUnderscore);
+                    });
+                    var parentDataset = _.find(trimmedDatasetOptions, function(d) {
+                        // the 'default' option ends up as the empty string, which always matches,
+                        // but we don't want that
+                        if(d == '') {
+                            return false;
+                        }
+                        return datasetPrefix.indexOf(d) > -1;
+                    });
+
+                    // set the dataset selector to the determined parent dataset
+                    $(targetSelect).val(parentDataset + dataVersion);
+                    // to get the cohorts to load
+                    $(targetSelect).change();
+                    var cohortTargetSelect = targetSelect == '#datasetDependent' ? '#datasetCohortDependent' : '#datasetCohortIndependent';
+                    $(cohortTargetSelect).val(query.dataset);
                 }
+
+                retrievePropertiesPerDataSet(query.phenotype, query.dataset, target, query);
             }
         };
         var fillPropertiesDropdown = function (data, target) { // help text for each row
@@ -198,6 +241,8 @@ var mpgSoftware = mpgSoftware || {};
                     };
                 });
 
+                var targetedElement = target.toLowerCase().indexOf('independent') > -1 ? 'datasetIndependent' : 'datasetDependent';
+
                 var renderData = {
                     row: rowsToDisplay,
                     helpText: function () {
@@ -206,13 +251,18 @@ var mpgSoftware = mpgSoftware || {};
                         }
                     },
                     category: function () {
-                        return target;
+                        return targetedElement;
                     }
                 };
                 var rowTemplate = document.getElementById("rowTemplate").innerHTML;
                 Mustache.parse(rowTemplate);
                 var rendered = Mustache.render(rowTemplate, renderData);
-                var targetElement = target == 'dependent' ? 'dependentRowTarget' : 'independentRowTarget';
+                var targetElement;
+                if(target.toLowerCase().indexOf('independent') > -1 ) {
+                    targetElement = 'independentRowTarget';
+                } else {
+                    targetElement = 'dependentRowTarget';
+                }
 
                 document.getElementById(targetElement).innerHTML = rendered;
             }
@@ -245,7 +295,7 @@ var mpgSoftware = mpgSoftware || {};
         var gatherCurrentQueryAndSave = function (category) {
             var dataset, translatedDataset, propertiesInputs;
             if (category == 'dependent') {
-                var phenoAndDS = UTILS.extractValsFromCombobox(['phenotype', 'datasetDependent']);
+                var phenoAndDS = UTILS.extractValsFromCombobox(['phenotype', 'datasetDependent', 'datasetCohortDependent']);
                 if (phenoAndDS.phenotype !== 'default') {
                     var phenotype = phenoAndDS.phenotype;
                     var translatedPhenotype = $('#phenotype option:selected').text().trim();
@@ -254,11 +304,17 @@ var mpgSoftware = mpgSoftware || {};
                 if (phenoAndDS.datasetDependent) {
                     dataset = phenoAndDS.datasetDependent;
                     translatedDataset = $('#datasetDependent option:selected').html();
+                }
+                // in the case that the user has selected a specific cohort, the previous dataset info
+                // will be overwritten
+                if (phenoAndDS.datasetCohortDependent && phenoAndDS.datasetCohortDependent != 'default' ) {
+                    dataset = phenoAndDS.datasetCohortDependent;
+                    translatedDataset = $('#datasetCohortDependent option:selected').html();
                     // get rid of the leading hyphens for display
                     translatedDataset = translatedDataset.replace(/^-*/, '');
                 }
 
-                propertiesInputs = $('input[data-type=propertiesInput][data-category=dependent]');
+                propertiesInputs = $('input[data-type=propertiesInput][data-category=datasetDependent],input[data-type=propertiesInput][data-category=datasetCohortDependent]');
                 _.forEach(propertiesInputs, function (input) {
                     if (input.value !== "") {
                         // get the comparator value
@@ -280,12 +336,18 @@ var mpgSoftware = mpgSoftware || {};
                 });
 
             } else if (category == 'independent') {
-                propertiesInputs = $('input[data-type=propertiesInput][data-category=independent]');
+                propertiesInputs = $('input[data-type=propertiesInput][data-category=datasetIndependent],input[data-type=propertiesInput][data-category=datasetCohortIndependent]');
 
                 dataset = UTILS.extractValsFromCombobox(['datasetIndependent']).datasetIndependent;
                 translatedDataset = $('#datasetIndependent option:selected').html();
-                // get rid of the leading hyphens for display
-                translatedDataset = translatedDataset.replace(/^-*/, '');
+                var cohortSelection = $('#datasetCohortIndependent option:selected').val();
+                if(cohortSelection != undefined && cohortSelection != 'default') {
+                    // then the user has selected a cohort, so override the previous dataset selection
+                    dataset = cohortSelection;
+                    translatedDataset = $('#datasetCohortIndependent option:selected').html();
+                    // get rid of the leading hyphens for display
+                    translatedDataset = translatedDataset.replace(/^-*/, '');
+                }
                 _.forEach(propertiesInputs, function (input) {
                     if (input.value !== "") {
                         // get the comparator value
@@ -378,7 +440,8 @@ var mpgSoftware = mpgSoftware || {};
             // reset all of the inputs
             resetInputFields();
 
-            mpgSoftware.firstResponders.updateBuildSearchRequestButton(category);
+            var targetToUpdate = category == 'dependent' ? 'datasetDependent' : 'datasetIndependent';
+            mpgSoftware.firstResponders.updateBuildSearchRequestButton(targetToUpdate);
 
             // make call to update list of saved queries
             updatePageWithNewQueryList();
@@ -442,7 +505,13 @@ var mpgSoftware = mpgSoftware || {};
             // is something involving a dataset--because all the dropdowns have to be repopulated,
             // there's some asynchronous calls, and this call to updateBuildSearchRequestButton
             // fires before those calls have finished
-            mpgSoftware.firstResponders.updateBuildSearchRequestButton();
+            var targetSection;
+            if(queryToEdit.phenotype) {
+                targetSection = 'datasetDependent';
+            } else {
+                targetSection = 'datasetIndependent';
+            }
+            mpgSoftware.firstResponders.updateBuildSearchRequestButton(targetSection);
         };
 
         var deleteQuery = function (indexToDelete) {
@@ -532,10 +601,12 @@ var mpgSoftware = mpgSoftware || {};
             fillPropertiesDropdown({is_error: false}, 'dependent');
             document.getElementById('phenotype').value = 'default';
             document.getElementById('datasetDependent').disabled = true;
+            $('#datasetChooserCohortDependent').hide();
 
             // independent section
             fillPropertiesDropdown({is_error: false}, 'independent');
             document.getElementById('datasetIndependent').value = 'default';
+            $('#datasetChooserCohortIndependent').hide();
 
             document.getElementById('geneInput').value = '';
             document.getElementById('geneRangeInput').value = '';
@@ -613,7 +684,7 @@ var mpgSoftware = mpgSoftware || {};
                 var comparator = query.comparator;
                 var value = query.value;
                 // need to select the right area to input
-                var category = query.phenotype == 'none' ? 'independent' : 'dependent';
+                var category = query.phenotype == 'none' ? 'datasetIndependent' : 'datasetDependent';
                 document.querySelector('select[data-selectfor="' + prop + '"][data-category="' + category + '"]').value = comparator;
                 document.querySelector('input[data-prop="' + prop + '"][data-category="' + category + '"]').value = value;
             }
@@ -631,12 +702,69 @@ var mpgSoftware = mpgSoftware || {};
             mpgSoftware.variantWF.retrieveDatasets(phenotype, 'dependent');
         };
 
+        // private helper function that takes in a dataset map with cohorts and returns
+        // a flatten array of {dataset, name} objects
+        var flattenDatasetMap = function(map, depth) {
+            var toReturn = [];
+            _.forEach(_.keys(map), function(dataset) {
+                var prefix = '-'.repeat(depth);
+                toReturn.push({
+                    name: prefix + map[dataset].name,
+                    value: dataset
+                });
+                var childDatasets = _.chain(map[dataset]).omit('name').value();
+                if(_.keys(childDatasets).length > 0) {
+                    var childrenResults = flattenDatasetMap(childDatasets, depth + 1);
+                    toReturn = toReturn.concat(childrenResults);
+                }
+            });
+            return toReturn;
+        };
+
+        // target can be 'datasetDependent', 'datasetDependentCohort', 'datasetIndependent', or 'datasetIndependentCohort'
         var respondToDataSetSelection = function (target) {
-            var datasetSelector = target == 'dependent' ? 'datasetDependent' : 'datasetIndependent';
+            // we need to see if there's cohort information available
+            // if so, display the cohort selector
+            if(['datasetDependent', 'datasetIndependent'].includes(target)) {
+                // we have to do this in a roundabout way--figure out the selected value,
+                // then use that to get the actual DOM node, then pull the data from that
+                var currentValue = $('#' + target).val();
+                var selectedOptionElement = $('#' + target + ' option[value="'+ currentValue + '"]');
+                var data = selectedOptionElement.data();
+                var cohortChooserHolder = target == 'datasetDependent' ? 'datasetChooserCohortDependent' : 'datasetChooserCohortIndependent'
+                var cohortChooserTarget = target == 'datasetDependent' ? 'datasetCohortDependent' : 'datasetCohortIndependent'
+                var cohortOptions = $('#' + cohortChooserTarget);
+                cohortOptions.empty();
+                if(! _.isEmpty(data)) {
+                    // we have cohorts
+                    $('#' + cohortChooserHolder).show();
+                    cohortOptions.append("<option selected value=default>-- &nbsp;&nbsp;all cohorts&nbsp;&nbsp; --</option>");
+                    var displayData = flattenDatasetMap(data, 0);
+                    _.forEach(displayData, function(cohort) {
+                        var newOption = $("<option />").val(cohort.value).html(cohort.name);
+                        cohortOptions.append(newOption);
+                    });
+                } else {
+                    $('#' + cohortChooserHolder).hide();
+                }
+            }
+
             // if we're looking at the dependent tab, then get the phenotype from the dropdown,
             // otherwise it's just 'none'
-            var phenotype = target == 'dependent' ? UTILS.extractValsFromCombobox(['phenotype'])['phenotype'] : 'none';
-            var dataset = UTILS.extractValsFromCombobox([datasetSelector])[datasetSelector];
+            var phenotype;
+            if(target.toLowerCase().indexOf('independent') > -1) {
+                phenotype = 'none';
+            } else {
+                phenotype = $('#phenotype').val();
+            }
+            // getting the dataset via this call handles the case where a user selects a cohort
+            var dataset = $('#' + target).val();
+            // if the user has selected "all cohorts" again, then we need to go back
+            // and retrieve properties for the parent dataset
+            if(dataset == 'default') {
+                var selector = target == 'datasetCohortDependent' ? 'datasetDependent' : 'datasetIndependent';
+                dataset = $('#' + selector).val();
+            }
             mpgSoftware.variantWF.retrievePropertiesPerDataSet(phenotype, dataset, target);
         };
 
@@ -653,17 +781,23 @@ var mpgSoftware = mpgSoftware || {};
          * but the independent tab button will be disabled
          */
         var updateBuildSearchRequestButton = function (target) {
+            if(target == 'dependent') {
+                target = 'datasetDependent';
+            }
+            if(target == 'independent') {
+                target = 'datasetIndependent';
+            }
             var areInputValuesPresent = false;
             var targetButtonId = '';
-            if (target == 'dependent') {
-                var propertiesInputsAreEmpty = _.every($('input[data-type=propertiesInput][data-category=dependent]'), function (input) {
+            if (['datasetDependent', 'datasetCohortDependent'].includes(target)) {
+                var propertiesInputsAreEmpty = _.every($('input[data-type=propertiesInput][data-category=datasetDependent],input[data-type=propertiesInput][data-category=datasetCohortDependent]'), function (input) {
                     return input.value === "";
                 });
 
                 areInputValuesPresent = !propertiesInputsAreEmpty;
                 targetButtonId = 'buildSearchRequestDependent'
             } else {
-                var propertiesInputsAreEmpty = _.every($('input[data-type=propertiesInput][data-category=independent]'), function (input) {
+                var propertiesInputsAreEmpty = _.every($('input[data-type=propertiesInput][data-category=datasetIndependent],input[data-type=propertiesInput][data-category=datasetCohortIndependent]'), function (input) {
                     return input.value === "";
                 });
                 var regionInputsAreEmpty = _.every($('input[data-type=advancedFilterInput]'), function (input) {
