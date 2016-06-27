@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <div class="row dk-sigma-site-title visible-lg visible-md ">
+    <div class="row dk-sigma-site-title">
         <div class="col-lg-3 col-md-3 text-center">
             <img src="${resource(dir: 'images/organizations', file: 'GoT2D.png')}"
                  width="200" height="140px" alt="GoT2D" style="margin-top: 35px"/>
@@ -7,12 +7,6 @@
         <div class="col-lg-offset-0 col-md-offset-0 col-lg-8 col-md-8 col-sm-offset-1 col-xs-offset-1 col-sm-10 col-xs-10">
             <span class="dk-sigma-site-name"><strong style="font-weight: 400;color:#406993;">GoT2D</strong></span>
         </div>
-    </div>
-    <div class="row dk-sigma-site-title-sm visible-sm visible-xs ">
-    <div class="col-sm-12 col-md-12 text-center">
-        <img src="${resource(dir: 'images/icons', file: 'SlimSigmaLogo234fromai-outlines.jpg')}" alt="SIGMA logo" />
-        SIGMA<strong style="font-weight: 400;color:#406993;">T2D</strong><br>
-    </div>
     </div>
     <div class="row" >
         <div class="col-sm-12 col-md-12 text-center">
