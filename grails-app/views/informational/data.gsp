@@ -73,7 +73,8 @@
 <div id="main">
     <div class="container">
         <div class="row">
-            <h1><g:message code="aboutTheData.title" default="about the data"/></h1>
+            <p style="font-weight: 300; font-size: 10px;">
+            <g:message code="aboutTheData.title" default="about the data"/></p>
 
             <p style="font-weight: 300; line-height: 20px; font-size: 16px;">
                 <g:if test="${g.portalTypeString()?.equals('stroke')}">

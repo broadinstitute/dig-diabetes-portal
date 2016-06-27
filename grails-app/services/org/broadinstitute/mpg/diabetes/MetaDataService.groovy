@@ -383,6 +383,22 @@ class MetaDataService {
         return toReturn;
     }
 
+    /**
+     * For the given phenotype, return a tree of sample groups, with cohorts inside of their
+     * parent sample groups
+     * @param phenotypeName
+     * @return
+     */
+    public HashMap<String, HashMap> getSampleGroupStructureForPhenotypeAsJson(String phenotypeName) {
+        HashMap<String, HashMap> toReturn;
+        try {
+            toReturn = this.getJsonParser().getSampleGroupStructureForPhenotype(phenotypeName, this.getDataVersion());
+        } catch (PortalException exception) {
+            log.error("Got exception retrieving sample group name list for selected phenotype: " + phenotypeName + " : " + exception.getMessage());
+        }
+
+        return toReturn;
+    }
 
     public Property getPropertyForPhenotypeAndSampleGroupAndMeaning(String phenotypeName,String sampleGroupName,String  meaning) {
         // local variables
@@ -443,10 +459,10 @@ class MetaDataService {
         try {
             switch (metadataTree) {
                 case METADATA_VARIANT:
-                    groupList = this.getJsonParser().getSamplesGroupsForPhenotype(phenotype, version)
+                    groupList = this.getJsonParser().getSampleGroupsForPhenotype(phenotype, version)
                     break;
                 case METADATA_SAMPLE:
-                    groupList = this.getJsonSampleParser().getSamplesGroupsForPhenotype(phenotype, version)
+                    groupList = this.getJsonSampleParser().getSampleGroupsForPhenotype(phenotype, version)
                     break;
                 case METADATA_NONE:
                 default:

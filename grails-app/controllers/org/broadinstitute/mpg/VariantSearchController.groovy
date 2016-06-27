@@ -105,7 +105,7 @@ class VariantSearchController {
 
         // process `result` so that metadata is translated
         String[] keys = result.dataset.keySet().toArray()
-        LinkedHashMap<String, String> translatedNames = []
+        LinkedHashMap<String, String> translatedNames = []j
 
         LinkedHashMap<String, Object> toReturn = []
         toReturn.is_error = result.is_error
@@ -486,6 +486,20 @@ class VariantSearchController {
 
     }
 
+    private JSONObject addNamesToDatasetMap(HashMap<String, HashMap> map) {
+        JSONObject toReturn = [:]
+        map.each { dataset, children ->
+            JSONObject newDatasetObject = [:]
+            newDatasetObject.name = g.message(code: "metadata." + dataset, default: dataset)
+            children.each { childDataset, grandchildren ->
+                HashMap<String, HashMap> temp = [:]
+                temp.put(childDataset, grandchildren)
+                newDatasetObject[childDataset] = addNamesToDatasetMap(temp)[childDataset]
+            }
+            toReturn[dataset] = newDatasetObject
+        }
+        return toReturn
+    }
 
     /***
      * get data sets given a phenotype.  This Ajax call takes place on the search builder page after
@@ -493,19 +507,14 @@ class VariantSearchController {
      * @return
      */
     def retrieveDatasetsAjax() {
-        String dataset = ""
         String phenotype = params.phenotype
 
-        if ((params.dataset) && (params.dataset !=  null )){
-            dataset = params.dataset
-        }
+        HashMap<String, HashMap> datasetMap = this.metaDataService.getSampleGroupStructureForPhenotypeAsJson(phenotype)
+        JSONObject sampleGroupMap = addNamesToDatasetMap(datasetMap);
 
-        JSONObject result = this.metaDataService.getSampleGroupNameListForPhenotypeAsJson(phenotype)
-        JSONObject sampleGroupForTransmission  = [sampleGroup: dataset]
-
-        render(status: 200, contentType: "application/json") {
-            [datasets: result,
-             sampleGroup:sampleGroupForTransmission]
+        render(status: 200, contentType: "application/json") { [
+                sampleGroupMap: sampleGroupMap
+            ]
         }
     }
 

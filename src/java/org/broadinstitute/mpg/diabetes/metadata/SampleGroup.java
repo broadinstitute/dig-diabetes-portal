@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg.diabetes.metadata;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -52,9 +53,11 @@ public interface SampleGroup extends DataSet {
     public String getSystemId();
 
     /**
-     * returns how many levels down this sample grou is nested in other sample groups
+     * returns how many levels down this sample group is nested in other sample groups
      *
      * @return
      */
     public Integer getNestedLevel();
+
+    public HashMap<String, HashMap> getHierarchy(String phenotype);
 }

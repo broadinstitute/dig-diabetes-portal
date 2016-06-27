@@ -4,6 +4,8 @@ import org.broadinstitute.mpg.diabetes.metadata.visitor.DataSetVisitor;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -132,8 +134,21 @@ public class SampleGroupBean implements SampleGroup, Comparable {
         return tempList;
     }
 
+    /**
+     * Returns an array of ancestor sample groups, from most distant to least distant. Does not include
+     * the parent experiment.
+     * @return
+     */
     public List<SampleGroup> getRecursiveParents() {
-        return null;
+        SampleGroup current = this;
+        List<SampleGroup> toReturn = new ArrayList<SampleGroup>();
+        toReturn.add(current);
+        while( current.getParent() != null && ! current.getParent().getType().equals(PortalConstants.TYPE_EXPERIMENT_KEY)) {
+            current = (SampleGroup) current.getParent();
+            toReturn.add(current);
+        }
+        Collections.reverse(toReturn);
+        return toReturn;
     }
 
     public List<SampleGroup> getRecursiveChildrenForPhenotype(Phenotype phenotype) {
@@ -241,6 +256,33 @@ public class SampleGroupBean implements SampleGroup, Comparable {
                 return (this.getSortOrder() < otherBean.getSortOrder() ? -1 : 1);
             }
         }
+    }
+
+    /**
+     * Returns a nested structure of datasets and child datasets
+     * @param phenotype
+     * @return
+     */
+    public HashMap<String, HashMap> getHierarchy(String phenotype) {
+        HashMap<String, HashMap> map = new HashMap<String, HashMap>();
+        List<SampleGroup> children = this.getSampleGroups();
+        // base case
+        if (children.size() == 0) {
+            return map;
+        } else {
+            for(SampleGroup child : children) {
+                // we don't want to be doing this on anything that's not a sample group
+                if( ! child.getType().equalsIgnoreCase(PortalConstants.TYPE_SAMPLE_GROUP_KEY) ) {
+                    break;
+                }
+
+                String id = child.getSystemId();
+                HashMap<String, HashMap> childMap = child.getHierarchy(phenotype);
+                map.put(id, childMap);
+            }
+        }
+
+        return map;
     }
 
 }

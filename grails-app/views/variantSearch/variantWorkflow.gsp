@@ -149,12 +149,28 @@
 
                                     <div class="col-md-5 col-sm-5 col-xs-5 dk-variant-search-builder-ui">
                                         <select id="datasetDependent" class="form-control" disabled
-                                                onchange="mpgSoftware.firstResponders.respondToDataSetSelection('dependent')"></select>
+                                                onchange="mpgSoftware.firstResponders.respondToDataSetSelection('datasetDependent')"></select>
                                     </div>
 
                                     <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-description">
                                         <g:message code="variantSearch.wfRequest.dataSet.help.text"
                                                    default="Choose a data set from which variants may be found"/>
+                                    </div>
+                                </div>
+
+                                <div id="datasetChooserCohortDependent" class="row" style="display: none;">
+                                    <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-title">
+                                        <g:message code="searchBuilder.dataset.cohortPrompt" default="Data set"/>
+                                    </div>
+
+                                    <div class="col-md-5 col-sm-5 col-xs-5 dk-variant-search-builder-ui">
+                                        <select id="datasetCohortDependent" class="form-control"
+                                                onchange="mpgSoftware.firstResponders.respondToDataSetSelection('datasetCohortDependent')"></select>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-description">
+                                        <g:message code="variantSearch.wfRequest.dataSetCohort.help.text"
+                                                   default="Optional"/>
                                     </div>
                                 </div>
 
@@ -187,8 +203,25 @@
                                                                             default="Choose a data set from which variants may be found"/>)
                                     </small></label>
                                 <select id="datasetIndependent" class="form-control" style="width: 90%"
-                                        onchange="mpgSoftware.firstResponders.respondToDataSetSelection('independent')"></select>
+                                        onchange="mpgSoftware.firstResponders.respondToDataSetSelection('datasetIndependent')"></select>
                             </div>
+
+                            <div id="datasetChooserCohortIndependent" class="row" style="display: none;">
+                                <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-title">
+                                    <g:message code="searchBuilder.dataset.cohortPrompt" default="Data set"/>
+                                </div>
+
+                                <div class="col-md-5 col-sm-5 col-xs-5 dk-variant-search-builder-ui">
+                                    <select id="datasetCohortIndependent" class="form-control"
+                                            onchange="mpgSoftware.firstResponders.respondToDataSetSelection('datasetCohortIndependent')"></select>
+                                </div>
+
+                                <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-description">
+                                    <g:message code="variantSearch.wfRequest.dataSetCohort.help.text"
+                                               default="Optional"/>
+                                </div>
+                            </div>
+
 
                             <div id="independentRowTarget"></div>
                         </div>

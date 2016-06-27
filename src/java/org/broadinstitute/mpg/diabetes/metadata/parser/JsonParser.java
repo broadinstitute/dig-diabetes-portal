@@ -569,7 +569,7 @@ public class JsonParser {
      * @param phenotypeName
      * @return
      */
-    public List<SampleGroup> getSamplesGroupsForPhenotype(String phenotypeName, String dataVersion) throws PortalException {
+    public List<SampleGroup> getSampleGroupsForPhenotype(String phenotypeName, String dataVersion) throws PortalException {
         // local variables
         SampleGroupForPhenotypeVisitor sampleGroupVisitor = new SampleGroupForPhenotypeVisitor(phenotypeName);
         List<SampleGroup> groupList;
@@ -591,6 +591,43 @@ public class JsonParser {
         groupList = sampleGroupVisitor.getSampleGroupList();
 
         return groupList;
+    }
+
+    /**
+     * returns a nested structure representing the datasets available for the phenotype,
+     * with cohorts nested inside their parent datasets
+     *
+     * @param phenotypeName
+     * @return
+     */
+    public HashMap<String, HashMap> getSampleGroupStructureForPhenotype(String phenotypeName, String dataVersion) throws PortalException {
+        // local variables
+        HashMap<String, HashMap> map = new HashMap<String, HashMap>();
+        for (Experiment experiment: this.getMetaDataRoot().getExperiments()) {
+            // if no version, then go through all experiments
+            if (dataVersion == null || experiment.getVersion().equalsIgnoreCase(dataVersion)) {
+                for(SampleGroup child : experiment.getSampleGroups()) {
+                    // only run this for children that include the specified phenotype
+                    Boolean thisPhenotypeIsIncluded = false;
+                    for( Phenotype pheno: child.getPhenotypes() ) {
+                        if( pheno.getName().equalsIgnoreCase(phenotypeName) ) {
+                            thisPhenotypeIsIncluded = true;
+                            break;
+                        }
+                    }
+                    if( ! child.getType().equalsIgnoreCase(PortalConstants.TYPE_SAMPLE_GROUP_KEY) || ! thisPhenotypeIsIncluded) {
+                        break;
+                    }
+
+                    String id = child.getSystemId();
+                    HashMap<String, HashMap> childMap = child.getHierarchy(phenotypeName);
+                    map.put(id, childMap);
+                }
+
+            }
+        }
+
+        return map;
     }
 
     /**
