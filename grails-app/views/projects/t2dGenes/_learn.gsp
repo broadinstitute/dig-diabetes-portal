@@ -1,8 +1,5 @@
 <div class="sigma-detail">
 <div class="section" style="display : block">
-<h4 style="padding-bottom: 20px; line-height: 1.4em;">
-    <g:message code="t2dgenes.cohort.descr" default="go T2D"/>
-</h4>
 
 <div class="cohort">
     <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> <g:message code="informational.shared.cohort.jackson" /></div>

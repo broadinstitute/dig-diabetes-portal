@@ -180,7 +180,7 @@
             </div>
             <hr />
             <img src="${resource(dir: 'images/icons', file: 'data_icon.png')}" style="width: 110px; margin-right: 10px;" align="left" >
-            <h2><g:message code="aboutTheData.title" default="About the data" /></h2>
+            <h2><g:message code="portal.aboutTheData" default="About the data" /></h2>
             <p>
                 <g:if test="${g.portalTypeString()?.equals('stroke')}">
                     <g:message code="portal.stroke.about.the.data.text" />

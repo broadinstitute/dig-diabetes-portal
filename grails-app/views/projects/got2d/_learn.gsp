@@ -204,8 +204,6 @@
     </div>
 </div>
 
-<h4 style="padding-bottom: 20px"><g:message code="got2d.cohorts.exome_cohorts"/>:</h4>
-
 <div class="cohort">
     <div class="name"><span><g:message code="got2d.cohorts.cohort" default="cohort"/></span> <g:message code="informational.shared.cohort.FUSION" /></div>
 
@@ -299,20 +297,6 @@
     <div class="detail"><span><g:message code="got2d.cohorts.t2dCases" default="t2dCases"/></span> 478</div>
 
     <div class="detail"><span><g:message code="got2d.cohorts.controls" default="controls"/></span> 443</div>
-
-    <div class="bullets">
-        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.caseSelectionCriteria.title" default="case selection criteria"/></div>
-        <ul>
-            <g:message code="got2d.cohorts.pppMalmoBotnia.caseSelectionCriteria.descr" default="case selection criteria"/>
-        </ul>
-    </div>
-
-    <div class="bullets">
-        <div class="title"><g:message code="got2d.cohorts.pppMalmoBotnia.controlSelectionCriteria.title" default="control selection criteria"/></div>
-        <ul>
-            <g:message code="got2d.cohorts.pppMalmoBotnia.controlSelectionCriteria.descr" default="control selection criteria"/>
-        </ul>
-    </div>
 
     <div class="bullets">
         <div class="title"><g:message code="got2d.cohorts.relatedPublications" default=" related publications"/></div>

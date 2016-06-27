@@ -12,10 +12,8 @@
 
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
 
-        <tr><td>493</td><td>486</td><td><a
-                onclick="showSection(event)">Finland-United States Investigation of NIDDM Genetics (FUSION) Study</a>
-
-            <div class="cohortDetail">
+        <tr><td>493</td><td>486</td><td><a onclick="showSection(event)">Finland-United States Investigation of NIDDM Genetics (FUSION) Study</a>
+            <div style="display: none;" class="cohortDetail">
                 <table border=“1”>
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -37,10 +35,8 @@
 
             </div></td><td>European</td></tr>
 
-        <tr><td>101</td><td>104</td><td><a
-                onclick="showSection(event)">Kooperative Gesundheitsforschung in der Region Augsburg (KORA)</a>
-
-            <div class="cohortDetail">
+        <tr><td>101</td><td>104</td><td><a onclick="showSection(event)">Kooperative Gesundheitsforschung in der Region Augsburg (KORA)</a>
+            <div style="display: none;" class="cohortDetail">
                 <table border=“1”>
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -61,10 +57,9 @@
                 </table>
             </div></td><td>European</td></tr>
 
-        <tr><td>322</td><td>322</td><td><a
-                onclick="showSection(event)">UK Type 2 Diabetes Genetics Consortium (UKT2D)</a>
+        <tr><td>322</td><td>322</td><td><a onclick="showSection(event)">UK Type 2 Diabetes Genetics Consortium (UKT2D)</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border=“1”>
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -88,7 +83,7 @@
 
         <tr><td>410</td><td>419</td><td><a onclick="showSection(event)">Malmo-Botnia Study</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border=“1”>
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>

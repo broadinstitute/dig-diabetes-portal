@@ -73,7 +73,7 @@
 <div id="main">
     <div class="container">
         <div class="row">
-            <p style="font-weight: 300; font-size: 10px;">
+            <p style="font-weight: 300; font-size: 25px;">
             <g:message code="aboutTheData.title" default="about the data"/></p>
 
             <p style="font-weight: 300; line-height: 20px; font-size: 16px;">

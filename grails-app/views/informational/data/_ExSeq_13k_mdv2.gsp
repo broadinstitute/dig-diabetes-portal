@@ -2,15 +2,14 @@
 
 
 <h6 style="color:#ccc;">Project 1</h6>
-<h4>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a
-        href="javascript:;">Learn more ></a></small></h4>
+<h4>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a href="http://www.type2diabetesgenetics.org/projects/t2dGenes” target="_blank">Learn more ></a></small></h4>
 
 <p>T2D-GENES (Type 2 Diabetes Genetic Exploration by Next-generation sequencing in multi-Ethnic Samples) is a large collaborative effort to find genetic variants that influence risk of type 2 diabetes. With funding from NIDDK, the group is pursuing three projects: (1) deep whole-exome sequencing in 10,000 people from five ethnicities (African-American, East Asian, South Asian, European, and Hispanic); (2) deep whole-genome sequencing of 600 individuals selected from extended Mexican American pedigrees; and (3) a trans-ethnic fine-mapping "mega-meta-analysis."</p>
 
 <p>&nbsp;</p>
 
 <h6 style="color:#ccc;">Project 2</h6>
-<h4>Genetics of Type 2 Diabetes (GoT2D) <small><a href="javascript:;">Learn more ></a></small></h4>
+<h4>Genetics of Type 2 Diabetes (GoT2D) <small><a href="http://www.type2diabetesgenetics.org/projects/got2d" target="_blank">Learn more ></a></small></h4>
 
 <p>The GoT2D consortium aims to understand the allelic architecture of type 2 diabetes through whole-genome sequencing, high-density SNP genotyping, and imputation. The reference panel based on this work is intended as a comprehensive inventory of low-frequency variants in Europeans, including SNPs, small insertions and deletions, and structural variants.</p>
 

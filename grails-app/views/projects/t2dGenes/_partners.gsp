@@ -73,7 +73,7 @@
         <div class="institution">
             <span class="name"><g:message code="informational.shared.institution.oxford" /></span> <br/>
             <a class="pi"
-               href="http://www.ndm.ox.ac.uk/principal-investigators/researcher/mark-mccarthy">Mark McCarthy</a> <br/>
+               href="http://www.ndm.ox.ac.uk/principal-investigators/researcher/mark-mccarthy" target="_blank">Mark McCarthy</a> <br/>
             Nicola Beer <br/>
             Teresa Ferreira <br/>
             Cecilia Lindgren <br/>
@@ -127,15 +127,14 @@
         <div class="institution">
             <span class="name"><g:message code="informational.shared.institution.TBRI" /></span> <br/>
             John Blangero <br/>
-            <a class="pi"
-               href="https://txbiomed.org/departments/genetics/genetics-staff-bio?u=64">Ravi Duggirala</a> <br/>
+            Ravi Duggirala <br/>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="institution">
             <span class="name"><g:message code="informational.shared.institution.umich" /></span> <br/>
-            <a href="http://www.sph.umich.edu/iscr/faculty/profile.cfm?uniqname=boehnke"
+            <a href="https://sph.umich.edu/faculty-profiles/boehnke-michael.html" target="_blank"
                class="pi"></a>Michael Boehnke <br/>
             Gonçalo Abecasis <br/>
             Christian Fuchsberger <br/>
@@ -155,7 +154,7 @@
         <div class="institution">
             <span class="name"><g:message code="informational.shared.institution.UTHSC" /></span><br/>
             <a class="pi"
-               href="http://www.uthouston.edu/gsbs/faculty/faculty-directory/faculty-profiles.htm?id=1346215">Craig Hanis</a><br/>
+               href="https://gsbs.uth.edu/faculty/faculty-directory/faculty-profiles.htm?id=1346215" target="_blank">Craig Hanis</a><br/>
             Heather Highland <br/>
             Taylor Maxwell <br/>
         </div>

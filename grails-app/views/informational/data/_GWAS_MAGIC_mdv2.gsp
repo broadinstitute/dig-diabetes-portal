@@ -35,7 +35,7 @@ Hakonarson HH, Kathiresan S, Khaw KT, Roberts R, Samani NJ, Fleming MD, Sladek R
 Abecasis G, Boehnke M, Froguel P, Groop L, McCarthy MI, Kao WH, Florez JC, Uda M,
 Wareham NJ, Barroso I, Meigs JB.
 
-        <div class="citation">Diabetes. 2010 Dec;59(12):3229-39. doi: 10.2337/db10-0502. Epub 2010 Sep 21.
+        <div class="citation">Diabetes. 2010 Dec;59(12):3229-39. doi: 10.2337/db10-0502. Epub 2010 Sep 21.</div>
 
         </div>
 
@@ -67,7 +67,7 @@ ET, Boehnke M, McCarthy MI, Wareham NJ, Groop L, Pattou F, Gloyn AL, Dedoussis
 GV, Lyssenko V, Meigs JB, Barroso I, Watanabe RM, Ingelsson E, Langenberg C,
 Hamsten A, Florez JC.
 
-        <div class="citation">Diabetes. 2011 Oct;60(10):2624-34. doi: 10.2337/db11-0415. Epub 2011 Aug 26.
+        <div class="citation">Diabetes. 2011 Oct;60(10):2624-34. doi: 10.2337/db11-0415. Epub 2011 Aug 26.</div>
 
         </div>
 

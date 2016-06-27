@@ -53,7 +53,7 @@ PM, Chatterjee N, Loos RJ, Boehnke M, McCarthy MI, Ingelsson E, Lindgren CM,
 Abecasis GR, Stefansson K, Frayling TM, Hirschhorn JN.
 
         <div class="citation">Nature.
-2010 Oct 14;467(7317):832-8. doi: 10.1038/nature09410. Epub 2010 Sep 29.
+2010 Oct 14;467(7317):832-8. doi: 10.1038/nature09410. Epub 2010 Sep 29.</div>
 
         </div></p>
 

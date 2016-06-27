@@ -1,4 +1,4 @@
-<p>T2D-GENES is a large collaborative effort to find genetic variants that influence risk of type 2 diabetes. With funding from <a href="http://www.niddk.nih.gov/Pages/default.aspx">NIDDK</a>, the group is pursuing three projects as listed below. The T2D-GENES Consortium also funded and guided the construction of the Portal.</p>
+<p>T2D-GENES is a large collaborative effort to find genetic variants that influence risk of type 2 diabetes. With funding from <a href="http://www.niddk.nih.gov/Pages/default.aspx">NIDDK</a>, the group pursued three projects as listed below. The T2D-GENES Consortium also funded and guided the construction of the Portal.</p>
 
 <h3><strong>Project 1: Deep whole-exome sequencing in 10,000 people from five ethnicities</strong></h3>
 <p>The goal of Project 1 was to discover how variation in the protein-coding portion of the genome contributes to type 2 diabetes risk. The project’s dataset is unusually large and diverse, with exomes from 10,000 people across five ethnicities, including 1,000 type 2 diabetes cases and 1,000 controls from each:</p>

@@ -18,7 +18,7 @@
                 Pål R. Njølstad (<g:message code="informational.shared.cohort.Bergen"/>) <br/>
                 Noël Burtt <br/>
                 Stacey Gabriel <br/>
-                <a href="http://www.broadinstitute.org/scientific-community/science/core-faculty-labs/altshuler-lab/altshuler-lab-home" class="pi">David Altshuler</a> <br/>
+                David Altshuler<br/>
             </div>
         </div>
         <div class="col-md-3">
@@ -46,7 +46,7 @@
                 Laura Scott <br/>
                 Karen Mohlke <br/>
                 Gonçalo Abecasis <br/>
-                <a href="http://www.sph.umich.edu/iscr/faculty/profile.cfm?uniqname=boehnke" class="pi">Michael Boehnke</a> <br/>
+                <a href="https://sph.umich.edu/faculty-profiles/boehnke-michael.html" class="pi" target="_blank">Michael Boehnke</a> <br/>
             </div>
         </div>
         <div class="col-md-3">
@@ -64,7 +64,7 @@
                 Annette Peters <br/>
                 Wolfgang Rathmann <br/>
                 Konstantin Strauch <br/>
-                <a href="http://www.helmholtz-muenchen.de/en/ihg/staff/meitinger-thomas/index.html" class="pi">Thomas Meitinger</a> <br/>
+                Thomas Meitinger<br/>
             </div>
             <div class="institution">
                 <span class="name"><g:message code="informational.shared.institution.lund" /></span> <br/>
@@ -73,7 +73,7 @@
                 Claes Ladenvall <br/>
                 Tiinamaija Toumi <br/>
                 Bo Isomaa <br/>
-                <a href="http://www.ludc.med.lu.se/research-units/diabetes-and-endocrinology/group-members/head/" class="pi">Leif Groop</a> <br/>
+                <a href="http://www.ludc.med.lu.se/research-units/diabetes-and-endocrinology/group-members/head/" class="pi" target="_blank">Leif Groop</a> <br/>
             </div>
         </div>
         <div class="col-md-3">
@@ -101,7 +101,7 @@
                 Gil McVean <br/>
                 Tim Frayling (<g:message code="informational.shared.cohort.Exeter"/>) <br/>
                 Peter Donnelly <br/>
-                <a class="pi" href="http://www.ndm.ox.ac.uk/principal-investigators/researcher/mark-mccarthy">Mark McCarthy</a> <br/>
+                <a class="pi" href="http://www.ndm.ox.ac.uk/principal-investigators/researcher/mark-mccarthy" target="_blank">Mark McCarthy</a> <br/>
             </div>
         </div>
     </div>
