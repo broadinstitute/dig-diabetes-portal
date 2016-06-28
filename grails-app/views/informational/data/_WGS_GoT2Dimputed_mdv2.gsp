@@ -14,7 +14,7 @@
         <tr><td>132</td><td>455</td><td><a
                 onclick="showSection(event)">MT. SINAI BioMe Biobank Platform (BioMe (Affy))</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -35,7 +35,7 @@
         <tr><td>255</td><td>1647</td><td><a
                 onclick="showSection(event)">MT. SINAI BioMe Biobank Platform (BioMe (Illumina))</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -55,7 +55,7 @@
 
         <tr><td>677</td><td>697</td><td><a onclick="showSection(event)">Diabetes Gene Discovery Group (DGDG)</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -78,7 +78,7 @@
 
         <tr><td>899</td><td>1057</td><td><a onclick="showSection(event)">Diabetes Genetics Initiative (DGI)</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -98,7 +98,7 @@
         <tr><td>389</td><td>6013</td><td><a
                 onclick="showSection(event)">Estonian Genome Center, University of Tartu (EGCUT- OMNI)</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -116,7 +116,7 @@
         <tr><td>80</td><td>1768</td><td><a
                 onclick="showSection(event)">Estonian Genome Center, University of Tartu (EGCUT- 370)</a>
 
-            <div class="cohortDetail"><table border="1">
+            <div style="display: none;" class="cohortDetail"><table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
                     <td valign="top">
@@ -132,7 +132,7 @@
 
         <tr><td>673</td><td>7660</td><td><a onclick="showSection(event)">Framingham Heart Study (FHS)</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -151,7 +151,7 @@
         <tr><td>1060</td><td>1090</td><td><a
                 onclick="showSection(event)">Finland-United States Investigation of NIDDM Genetics (FUSION) Study</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -170,7 +170,7 @@
 
         <tr><td>4624</td><td>4668</td><td><a onclick="showSection(event)">InterAct</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -187,9 +187,8 @@
                 </table>
             </div></td><td>European</td></tr>
 
-        <tr><td>993</td><td>2985</td><td><a
-                onclick="showSection(event)">KORAgen Study Helmholtz zentrum München (KORA</a>)<div
-                class="cohortDetail"
+        <tr><td>993</td><td>2985</td><td><a onclick="showSection(event)">KORAgen Study Helmholtz zentrum München</a>
+        <div style="display: none;" class="cohortDetail">
             <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
@@ -201,12 +200,12 @@
                     <td valign="top">
                         <li>Non-diabetic by self-report</li>
                     </td></tr>
-            </table>></div></td><td>European</td></tr>
+            </table></div></td><td>European</td></tr>
 
 <tr><td>111</td><td>838</td><td><a
         onclick="showSection(event)">Prospective Investigation of the Vasculature in Uppsala Seniors (PIVUS)</a>
 
-    <div class="cohortDetail">
+    <div style="display: none;" class="cohortDetail">
         <table border="1">
             <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
             <tr>
@@ -220,8 +219,8 @@
                 </td></tr>
         </table></div></td><td>European</td></tr>
 
-<tr><td>166</td><td>953</td><td><a onclick="showSection(event)">Uppsala Longitudinal Study of Adult Men (ULSAM)<div
-        class="cohortDetail">
+<tr><td>166</td><td>953</td><td><a onclick="showSection(event)">Uppsala Longitudinal Study of Adult Men (ULSAM)</a>
+<div style="display: none;" class="cohortDetail">
     <table border="1">
         <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
         <tr>
@@ -236,9 +235,9 @@
     </table>
 </div></td><td>European</td></tr>
 
-<tr><td>1586</td><td>2938</td><td><a onclick="showSection(event)">Welcome Trust Case Control Consortium (WTCCC)</a>
+<tr><td>1586</td><td>2938</td><td><a onclick="showSection(event)">Wellcome Trust Case Control Consortium (WTCCC)</a>
 
-    <div class="cohortDetail">
+    <div style="display: none;" class="cohortDetail">
         <table border="1">
             <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
             <tr>

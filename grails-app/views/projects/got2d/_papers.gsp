@@ -1,9 +1,29 @@
 <div class="sigma-detail">
 <div class="section" data-section="papers">
     <div class="paper">
+        <a href="http://www.ncbi.nlm.nih.gov/pubmed/26908616" target="_blank">Testing the role of predicted gene knockouts in human anthropometric trait variation.</a><br/>
+        Lessard S, Manning AK, Low-Kam C, Auer PL, Giri A, Graff M, Schurmann C, Yaghootkar H, Luan J, Esko T, Karaderi T; NHLBI GO Exome Sequence Project; GOT2D; T2D-GENES; GIANT Consortium, Bottinger EP, Lu Y, Carlson C, Caulfield M, Dubé MP, Jackson RD, Kooperberg C, McKnight B, Mongrain I, Peters U, Reiner AP, Rhainds D, Sotoodehnia N, Hirschhorn JN, Scott RA, Munroe PB, Frayling TM, Loos RJ, North KE, Edwards TL, Tardif JC, Lindgren CM, Lettre G.
+        <div class="citation">Hum Mol Genet. 2016 Feb 21. pii: ddw055.</div>
+    </div>
+    <div class="paper">
+        <a href="http://www.ncbi.nlm.nih.gov/pubmed/26454253" target="_blank">Evaluating the Calibration and Power of Three Gene-Based Association Tests of Rare Variants for the X Chromosome.</a><br/>
+        Ma C, Boehnke M, Lee S; GoT2D Investigators.
+        <div class="citation">Genet Epidemiol. 2015 Nov;39(7):499-508. doi: 10.1002/gepi.21935.</div>
+    </div>
+    <div class="paper">
+        <a href="http://www.ncbi.nlm.nih.gov/pubmed/25906071" target="_blank">The power of gene-based rare variant methods to detect disease-associated variation and test hypotheses about complex disease.</a><br/>
+        Moutsianas L, Agarwala V, Fuchsberger C, Flannick J, Rivas MA, Gaulton KJ, Albers PK; GoT2D Consortium, McVean G, Boehnke M, Altshuler D, McCarthy MI.
+        <div class="citation">PLoS Genet. 2015 Apr 23;11(4):e1005165. doi: 10.1371/journal.pgen.1005165. </div>
+    </div>
+    <div class="paper">
         <a href="http://www.ncbi.nlm.nih.gov/pubmed/25625282"><g:message code="informational.shared.publications.Mahajan_2015_PLOS_Genet" />.</a> <br/>
         Mahajan A, Sim X, Ng HJ, Manning A, Rivas MA, Highland HM, Locke AE, Grarup N, Im HK, Cingolani P, Flannick J, Fontanillas P, Fuchsberger C, Gaulton KJ, Teslovich TM, Rayner NW, Robertson NR, Beer NL, Rundle JK, Bork-Jensen J, Ladenvall C, Blancher C, Buck D, Buck G, Burtt NP, Gabriel S, Gjesing AP, Groves CJ, Hollensted M, Huyghe JR, Jackson AU, Jun G, Justesen JM, Mangino M, Murphy J, Neville M, Onofrio R, Small KS, Stringham HM, Syvänen AC, Trakalo J, Abecasis G, Bell GI, Blangero J, Cox NJ, Duggirala R, Hanis CL, Seielstad M, Wilson JG, Christensen C, Brandslund I, Rauramaa R, Surdulescu GL, Doney AS, Lannfelt L, Linneberg A, Isomaa B, Tuomi T, Jørgensen ME, Jørgensen T, Kuusisto J, Uusitupa M, Salomaa V, Spector TD, Morris AD, Palmer CN, Collins FS, Mohlke KL, Bergman RN, Ingelsson E, Lind L, Tuomilehto J, Hansen T, Watanabe RM, Prokopenko I, Dupuis J, Karpe F, Groop L, Laakso M, Pedersen O, Florez JC, Morris AP, Altshuler D, Meigs JB, Boehnke M, McCarthy MI, Lindgren CM, Gloyn AL; T2D-GENES consortium and GoT2D consortium.
         <div class="citation">PLoS Genet. 2015 Jan 27;11(1):e1004876. doi: 10.1371/journal.pgen.1004876. eCollection 2015 Jan. </div>
+    </div>
+    <div class="paper">
+        <a href="http://www.ncbi.nlm.nih.gov/pubmed/25439097" target="_blank">A novel test for recessive contributions to complex diseases implicates Bardet-Biedl syndrome gene BBS10 in idiopathic type 2 diabetes and obesity.</a><br/>
+        Lim ET, Liu YP, Chan Y, Tiinamaija T, Käräjämäki A, Madsen E; Go-T2D Consortium, Altshuler DM, Raychaudhuri S, Groop L, Flannick J, Hirschhorn JN, Katsanis N, Daly MJ.
+        <div class="citation">Am J Hum Genet. 2014 Nov 6;95(5):509-20. doi: 10.1016/j.ajhg.2014.09.015.</div>
     </div>
     <div class="paper">
         <a href=" http://www.ncbi.nlm.nih.gov/pubmed/25157153 "><g:message code="informational.shared.publications.Majithia_2014_PNAS" />.</a> <br/>
@@ -26,6 +46,11 @@
         <a href="http://www.ncbi.nlm.nih.gov/pubmed/24141362"><g:message code="informational.shared.publications.Agarwala_2013_NatGenet" />.</a> <br/>
         Agarwala V, Flannick J, Sunyaev S; GoT2D Consortium, Altshuler D.
         <div class="citation">Nat Genet. 2013 Dec;45(12):1418-27. doi: 10.1038/ng.2804. Epub 2013 Oct 20.</div>
+    </div>
+    <div class="paper">
+        <a href="http://www.ncbi.nlm.nih.gov/pubmed/23788246" target="_blank">Recommended joint and meta-analysis strategies for case-control association testing of single low-count variants.</a><br/>
+        Ma C, Blackwell T, Boehnke M, Scott LJ; GoT2D investigators.
+        <div class="citation">Genet Epidemiol. 2013 Sep;37(6):539-50. doi: 10.1002/gepi.21742.</div>
     </div>
     <div class="paper">
         <a href="http://www.ncbi.nlm.nih.gov/pubmed/23860716"><g:message code="informational.shared.publications.Rivas_2013_Bioinformatics" />.</a> <br/>

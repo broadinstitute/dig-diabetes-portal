@@ -7,7 +7,7 @@
         Publication: <div class="paper">
         <a href="http://www.ncbi.nlm.nih.gov/pubmed/26432245" target="_blank">A global reference for human genetic variation.</a><br/>
         1000 Genomes Project Consortium, Auton A, Brooks LD, Durbin RM, Garrison EP, Kang HM, Korbel JO, Marchini JL, McCarthy S, McVean GA, Abecasis GR.</p>
-        <div class="citation">Nature. 2015 Oct 1;526(7571):68-74. doi: 10.1038/nature15393.
+        <div class="citation">Nature. 2015 Oct 1;526(7571):68-74. doi: 10.1038/nature15393.</div>
         </div>
     <h6 style="color:#ccc;">Data set subjects</h6>
     <table class="table table-condensed table-responsive table-striped">

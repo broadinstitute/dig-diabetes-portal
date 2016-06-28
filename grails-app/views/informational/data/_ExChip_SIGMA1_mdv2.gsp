@@ -14,7 +14,7 @@
 
         <tr><td>815</td><td>1138</td><td><a onclick="showSection(event)">UNAM/INCMNSZ Diabetes Study (UIDS)</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -26,7 +26,7 @@
                         <td valign="top">
                             <ul>
                                 <li>Age &ge;45 years</li>
-                                <li>fasting plasma glucose concentration < 100 mg/dl</li>
+                                <li>fasting plasma glucose concentration &lt; 100 mg/dl</li>
                                 <li>no previous history of hyperglycemia, gestational diabetes or use of metformin</li>
                             </ul>
                         </td></tr>
@@ -36,7 +36,7 @@
 
         <tr><td>690</td><td>472</td><td><a onclick="showSection(event)">Diabetes in Mexico Study (DMS)</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -58,7 +58,7 @@
 
         <tr><td>287</td><td>613</td><td><a onclick="showSection(event)">Mexico City Diabetes Study (MCDS)</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -80,7 +80,7 @@
 
         <tr><td>2056</td><td>2143</td><td><a onclick="showSection(event)">Multiethnic Cohort (MEC)</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>

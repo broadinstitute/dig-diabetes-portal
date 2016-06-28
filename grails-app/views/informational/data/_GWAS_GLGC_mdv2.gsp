@@ -39,7 +39,7 @@ JJ, Schadt EE, Rotter JI, Boerwinkle E, Strachan DP, Mooser V, Stefansson K,
 Reilly MP, Samani NJ, Schunkert H, Cupples LA, Sandhu MS, Ridker PM, Rader DJ,
 van Duijn CM, Peltonen L, Abecasis GR, Boehnke M, Kathiresan S.
 
-        <div class="citation">Nature. 2010 Aug 5;466(7307):707-13. doi: 10.1038/nature09270.
+        <div class="citation">Nature. 2010 Aug 5;466(7307):707-13. doi: 10.1038/nature09270.</div>
 
         </div>
 </p>

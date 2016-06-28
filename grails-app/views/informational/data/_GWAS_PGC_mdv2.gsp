@@ -10,7 +10,7 @@
 
         Psychiatric GWAS Consortium Bipolar Disorder Working Group.
 
-        <div class="citation">Nat Genet. 2011 Sep 18;43(10):977-83. doi: 10.1038/ng.943.
+        <div class="citation">Nat Genet. 2011 Sep 18;43(10):977-83. doi: 10.1038/ng.943.</div>
 
         </div>
 
@@ -39,7 +39,7 @@ SI, Sigurdsson E, Slager SL, Smit JH, Stefansson H, Steffens M, Thorgeirsson T,
 Tozzi F, Treutlein J, Uhr M, van den Oord EJ, Van Grootheest G, Völzke H,
 Weilburg JB, Willemsen G, Zitman FG, Neale B, Daly M, Levinson DF, Sullivan PF.
 
-        <div class="citation">Mol Psychiatry. 2013 Apr;18(4):497-511. doi: 10.1038/mp.2012.21.
+        <div class="citation">Mol Psychiatry. 2013 Apr;18(4):497-511. doi: 10.1038/mp.2012.21.</div>
 
         </div>
 

@@ -45,7 +45,7 @@ Deloukas P, Thorsteinsdottir U, Groop LC, Stefansson K, Hu F, Pankow JS, Dupuis
 J, Meigs JB, Altshuler D, Boehnke M, McCarthy MI; DIAbetes Genetics Replication
 And Meta-analysis (DIAGRAM) Consortium.
 
-        <div class="citation">Nat Genet. 2012 Sep;44(9):981-90. doi: 10.1038/ng.2383. Epub 2012 Aug 12.
+        <div class="citation">Nat Genet. 2012 Sep;44(9):981-90. doi: 10.1038/ng.2383. Epub 2012 Aug 12.</div>
 
         </div></p>
 

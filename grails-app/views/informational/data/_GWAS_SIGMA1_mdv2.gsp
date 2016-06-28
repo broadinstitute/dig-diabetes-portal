@@ -12,7 +12,7 @@ Huerta-Chagoya A, Churchhouse C, Márquez-Luna C, García-Ortíz H, Gómez-Vázq
 MJ, Burtt NP, Aguilar-Salinas CA, González-Villalpando C, Florez JC, Orozco L,
 Haiman CA, Tusié-Luna T, Altshuler D.
 
-        <div class="citation">Nature. 2014 Feb 6;506(7486):97-101. doi: 10.1038/nature12828.
+        <div class="citation">Nature. 2014 Feb 6;506(7486):97-101. doi: 10.1038/nature12828.</div>
 
         </div>
 
@@ -33,7 +33,7 @@ Gabriel S, Fontanillas P, Hanis CL, Lehman DM, Jenkinson CP, Abboud HE, Bell GI,
 Cortes ML, Boehnke M, González-Villalpando C, Orozco L, Haiman CA, Tusié-Luna T, 
 Aguilar-Salinas CA, Altshuler D, Njølstad PR, Florez JC, MacArthur DG.
 
-        <div class="citation">JAMA. 2014 Jun 11;311(22):2305-14. doi: 10.1001/jama.2014.6511.
+        <div class="citation">JAMA. 2014 Jun 11;311(22):2305-14. doi: 10.1001/jama.2014.6511.</div>
 
         </div>
 
@@ -47,7 +47,7 @@ Aguilar-Salinas CA, Altshuler D, Njølstad PR, Florez JC, MacArthur DG.
 SB; GoT2D Consortium; NHGRI JHS/FHS Allelic Spectrum Project; SIGMA T2D
 Consortium; T2D-GENES Consortium, Rosen ED, Altshuler D.
 
-        <div class="citation">Proc Natl Acad Sci U S A. 2014 Sep 9;111(36):13127-32. doi: 10.1073/pnas.1410428111.
+        <div class="citation">Proc Natl Acad Sci U S A. 2014 Sep 9;111(36):13127-32. doi: 10.1073/pnas.1410428111.</div>
 
         </div></p>
 
@@ -63,7 +63,8 @@ Consortium; T2D-GENES Consortium, Rosen ED, Altshuler D.
 <table class="table table-condensed table-responsive table-striped">
 <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
 
-    <tr><td>815</td><td>1138</td><td><a onclick="showSection(event)">UNAM/INCMNSZ Diabetes Study (UIDS)</a><div class="cohortDetail">
+    <tr><td>815</td><td>1138</td><td><a onclick="showSection(event)">UNAM/INCMNSZ Diabetes Study (UIDS)</a>
+    <div style="display: none;" class="cohortDetail">
     <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
 <tr>
@@ -83,7 +84,8 @@ Consortium; T2D-GENES Consortium, Rosen ED, Altshuler D.
             </table>
     </div></td><td>Latino</td></tr>
 
-<tr><td>690</td><td>472</td><td><a onclick="showSection(event)">Diabetes in Mexico Study (DMS)</a><div class="cohortDetail">
+<tr><td>690</td><td>472</td><td><a onclick="showSection(event)">Diabetes in Mexico Study (DMS)</a>
+<div style="display: none;" class="cohortDetail">
 <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
 <tr>
@@ -103,7 +105,8 @@ Consortium; T2D-GENES Consortium, Rosen ED, Altshuler D.
             </table>
 </div></td><td>Latino</td></tr>
 
-<tr><td>287</td><td>613</td><td><a onclick="showSection(event)">Mexico City Diabetes Study (MCDS)</a><div class="cohortDetail">
+<tr><td>287</td><td>613</td><td><a onclick="showSection(event)">Mexico City Diabetes Study (MCDS)</a>
+<div style="display: none;" class="cohortDetail">
 <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
 <tr>
@@ -124,7 +127,8 @@ Consortium; T2D-GENES Consortium, Rosen ED, Altshuler D.
 
 </div></td><td>Latino</td></tr>
 
-<tr><td>2056</td><td>2143</td><td><a onclick="showSection(event)">Multiethnic Cohort (MEC)</a><div class="cohortDetail">
+<tr><td>2056</td><td>2143</td><td><a onclick="showSection(event)">Multiethnic Cohort (MEC)</a>
+<div style="display: none;" class="cohortDetail">
 <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
 <tr>

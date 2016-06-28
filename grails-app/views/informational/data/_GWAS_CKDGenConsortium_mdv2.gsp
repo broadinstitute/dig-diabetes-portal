@@ -31,7 +31,7 @@ V, Shuldiner AR, Coresh J, Schmidt R, Ferrucci L, Shlipak MG, van Duijn CM,
 Borecki I, Krämer BK, Rudan I, Gyllensten U, Wilson JF, Witteman JC, Pramstaller 
 PP, Rettig R, Hastie N, Chasman DI, Kao WH, Heid IM, Fox CS.
 
-        <div class="citation">Nat Genet. 2010 May;42(5):376-84. doi: 10.1038/ng.568. Epub 2010 Apr 11.
+        <div class="citation">Nat Genet. 2010 May;42(5):376-84. doi: 10.1038/ng.568. Epub 2010 Apr 11.</div>
 
         </div></p>
 

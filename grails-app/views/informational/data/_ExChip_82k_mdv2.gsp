@@ -19,7 +19,7 @@
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
         <tr><td>1861</td><td>10882</td><td><a onclick="showSection(event)">Oxford-based UK T2D case-control</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -40,7 +40,7 @@
         <tr><td>1715</td><td>1793</td><td><a
                 onclick="showSection(event)">The Diabetes Audit and Research in Tayside Scotland (GoDarts)</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -58,7 +58,7 @@
         <tr><td>111</td><td>850</td><td><a
                 onclick="showSection(event)">Prospective Investigation of the Vasculature in Uppsala Seniors (PIVUS)</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -74,7 +74,7 @@
         <tr><td>160</td><td>941</td><td><a
                 onclick="showSection(event)">Uppsala Longitudinal Study of Adult Men (ULSAM)</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -89,7 +89,7 @@
                 </table></div></td><td>European</td></tr>
         <tr><td>773</td><td>4385</td><td><a onclick="showSection(event)">Metabolic Syndrome in Men Study (METSIM)</a>
 
-            <div class="cohortDetail">
+            <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
@@ -104,7 +104,8 @@
                         </td></tr>
                 </table>
             </div></td><td>European</td></tr>
-        <tr><td>646</td><td>1380</td><td><a onclick="showSection(event)">FIN-D2D 2007<div class="cohortDetail"></a>
+        <tr><td>646</td><td>1380</td><td><a onclick="showSection(event)">FIN-D2D 2007</a>
+        <div style="display: none;" class="cohortDetail">
             <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
@@ -122,7 +123,7 @@
 <tr><td>81</td><td>477</td><td><a
         onclick="showSection(event)">The Dose Responses to Exercise Training (DR's EXTRA) Study</a>
 
-    <div class="cohortDetail">
+    <div style="display: none;" class="cohortDetail">
         <table border="1">
             <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
             <tr>
@@ -139,7 +140,7 @@
     </div></td><td>European</td></tr>
 <tr><td>1112</td><td>1494</td><td><a onclick="showSection(event)">National FINRISK 2007 Study (FINRISK 2007)</a>
 
-    <div class="cohortDetail">
+    <div style="display: none;" class="cohortDetail">
         <table border="1">
             <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
             <tr>
@@ -158,7 +159,7 @@
 <tr><td>981</td><td>486</td><td><a
         onclick="showSection(event)">Finland-United States Investigation of NIDDM Genetics (FUSION) Study</a>
 
-    <div class="cohortDetail">
+    <div style="display: none;" class="cohortDetail">
         <table border="1">
             <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
             <tr>
@@ -175,7 +176,7 @@
 <tr><td>311</td><td>4688</td><td><a
         onclick="showSection(event)">Prevalence, Prediction and Prevention of diabetes (PPP) (Finnish)</a>
 
-    <div class="cohortDetail">
+    <div style="display: none;" class="cohortDetail">
         <table border="1">
             <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
             <tr>
@@ -191,7 +192,7 @@
     </div></td><td>European</td></tr>
 <tr><td>2601</td><td>0</td><td><a onclick="showSection(event)">Diabetes Registry Vaasa (DIREVA) (Finnish)</a>
 
-    <div class="cohortDetail">
+    <div style="display: none;" class="cohortDetail">
         <table border="1">
             <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
             <tr>
@@ -209,7 +210,7 @@
     </div></td><td>European</td></tr>
 <tr><td>1928</td><td>0</td><td><a onclick="showSection(event)">All New Diabetics In Scania (ANDiS) (Swedish)</a>
 
-    <div class="cohortDetail">
+    <div style="display: none;" class="cohortDetail">
         <table border="1">
             <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
             <tr>
@@ -225,8 +226,8 @@
                 </td></tr>
         </table>
     </div></td><td>European</td></tr>
-<tr><td>440</td><td>5173</td><td><a onclick="showSection(event)">Malmö Diet and Cancer (MDC) (Swedish</a>)<div
-        class="cohortDetail"
+<tr><td>440</td><td>5173</td><td><a onclick="showSection(event)">Malmö Diet and Cancer (MDC) (Swedish)</a>
+<div style="display: none;" class="cohortDetail">
     <table border="1">
         <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
         <tr>
@@ -242,7 +243,7 @@
 </div></td><td>European</td></tr>
 <tr><td>3192</td><td>0</td><td><a onclick="showSection(event)">Scania Diabetes Registry (SDR) (Swedish)</a>
 
-    <div class="cohortDetail">
+    <div style="display: none;" class="cohortDetail">
         <table border="1">
             <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
             <tr>
@@ -259,7 +260,7 @@
     </div></td><td>European</td></tr>
 <tr><td>1334</td><td>1754</td><td><a onclick="showSection(event)">Nurses' Health Study (NHS)</a>
 
-    <div class="cohortDetail">
+    <div style="display: none;" class="cohortDetail">
         <table border="1">
             <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
             <tr>
@@ -278,7 +279,7 @@
     </div></td><td>European</td></tr>
 <tr><td>1113</td><td>1298</td><td><a onclick="showSection(event)">Health Professional Follow-Up Study (HPFS)</a>
 
-    <div class="cohortDetail">
+    <div style="display: none;" class="cohortDetail">
         <table border="1">
             <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
             <tr>
@@ -296,7 +297,7 @@
     </div></td><td>European</td></tr>
 <tr><td>882</td><td>1506</td><td><a onclick="showSection(event)">Estonian Genome Center, University of Tartu (EGCUT)</a>
 
-    <div class="cohortDetail">
+    <div style="display: none;" class="cohortDetail">
         <table border="1">
             <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
             <tr>
@@ -312,7 +313,7 @@
     </div></td><td>European</td></tr>
 <tr><td>1446</td><td>1567</td><td><a onclick="showSection(event)">EFSOCH and DARE</a>
 
-    <div class="cohortDetail">
+    <div style="display: none;" class="cohortDetail">
         <table border="1">
             <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
             <tr>
@@ -329,7 +330,7 @@
 <tr><td>959</td><td>2779</td><td><a
         onclick="showSection(event)">Cooperative Health Research in the Region of Augsburg [KORA]</a>
 
-    <div class="cohortDetail">
+    <div style="display: none;" class="cohortDetail">
         <table border="1">
             <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
             <tr>
@@ -349,7 +350,7 @@
     </div></td><td>European</td></tr>
 <tr><td>5864</td><td>4996</td><td><a onclick="showSection(event)">Danish T2D case-control</a>
 
-    <div class="cohortDetail">
+    <div style="display: none;" class="cohortDetail">
         <table border="1">
             <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
             <tr>
@@ -366,7 +367,7 @@
     </div></td><td>European</td></tr>
 <tr><td>960</td><td>965</td><td><a onclick="showSection(event)">GLACIER</a>
 
-    <div class="cohortDetail">
+    <div style="display: none;" class="cohortDetail">
         <table border="1">
             <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
             <tr>
@@ -384,7 +385,7 @@
 <tr><td>691</td><td>1157</td><td><a
         onclick="showSection(event)">EPIC-Norfolk (T2D cases) and the Fenland study (cohort)</a>
 
-    <div class="cohortDetail">
+    <div style="display: none;" class="cohortDetail">
         <table border="1">
             <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
             <tr>
