@@ -1,12 +1,5 @@
 <div class="panel-body">
 
-    <h6 style="color:#ccc;">Project</h6>
-    <h4>Genetics of Type 2 Diabetes (GoT2D) <small><a href="http://www.type2diabetesgenetics.org/projects/got2d"
-                                                      target="_blank">Learn more ></a>
-    </small></h4>
-
-    <p>The GoT2D consortium aims to understand the allelic architecture of type 2 diabetes through whole-genome sequencing, high-density SNP genotyping, and imputation. The reference panel based on this work is intended as a comprehensive inventory of low-frequency variants in Europeans, including SNPs, small insertions and deletions, and structural variants.</p>
-
     <h4>Data Set Subjects</h4>
     <table class="table table-condensed table-responsive table-striped">
 
@@ -103,4 +96,12 @@
 
         <tr><td>Total: 1326</td><td>Total: 1331</td><td></td><td></td></tr>
     </table>
+    
+    
+    <h6 style="color:#ccc;">Project</h6>
+    <h4>Genetics of Type 2 Diabetes (GoT2D) <small><a href="http://www.type2diabetesgenetics.org/projects/got2d" target="_blank">Learn more ></a>
+    </small></h4>
+
+    <p>The GoT2D consortium aims to understand the allelic architecture of type 2 diabetes through whole-genome sequencing, high-density SNP genotyping, and imputation. The reference panel based on this work is intended as a comprehensive inventory of low-frequency variants in Europeans, including SNPs, small insertions and deletions, and structural variants.</p>
+
 </div>
