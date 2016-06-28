@@ -143,8 +143,14 @@
                                     ( typeof data !== 'undefined') &&
                                     ( typeof data.phenotypes !== 'undefined' ) &&
                                     (  data.phenotypes !==  null ) ) {
+                                var t2dOption = _.find(data.phenotypes, function(pheno){ return pheno.name == 't2d'; });
+                                if (typeof t2dOption !== 'undefined') {
+                                   phenotypeDropdown.append( new Option(t2dOption.trans, t2dOption.name));
+                                }
                                 _.forEach(data.phenotypes,function(d){
-                                   phenotypeDropdown.append( new Option(d.trans, d.name));
+                                    if (d.name !== 't2d'){
+                                        phenotypeDropdown.append( new Option(d.trans, d.name));
+                                    }
                                 });
                             }
                             loading.hide();
@@ -182,11 +188,14 @@
                                          (data.phenotypes.length <= 0)){
                                      console.log('burdenTestAjax returned undefined (or length = 0) for options.');
                                }else {
-                                   var optionList = data.phenotypes;
+                                  // var optionList = data.phenotypes;
                                    var dropDownHolder = $('#burdenTraitFilter');
-                                   for ( var i = 0 ; i < optionList.length ; i++ ){
-                                        dropDownHolder.append('<option value="'+optionList[i].name+'">'+optionList[i].description+'</option>')
-                                   }
+                                   _.forEach(data.phenotypes,function (oneOption){
+                                      dropDownHolder.append('<option value="'+oneOption.name+'">'+oneOption.description+'</option>')
+                                   });
+//                                   for ( var i = 0 ; i < optionList.length ; i++ ){
+//                                        dropDownHolder.append('<option value="'+optionList[i].name+'">'+optionList[i].description+'</option>')
+//                                   }
                                 }
                             }
 
@@ -472,7 +481,7 @@ $( document ).ready( function (){
                 <div class="col-md-8 col-sm-8 col-xs-8">
                     <label><g:message code="gene.burdenTesting.label.available_variant_filter"/>:
                         <select id= "burdenProteinEffectFilter" class="burdenProteinEffectFilter form-control">
-                            <option selected hidden><g:message code="gene.burdenTesting.label.select_filter"/></option>
+                            <option selected value="0"><g:message code="gene.burdenTesting.label.select_filter"/></option>
                         </select>
                     </label>
                 </div>
