@@ -148,6 +148,48 @@ class WidgetService {
    }
 
 
+    private List<String> addMultiFilter (String categorical,
+                                            String propertyName,
+                                            String rawFilterParm,
+                                            String dataset,
+                                            List<String> requestedFilterList){
+        List <String> listOfProperties = rawFilterParm?.tokenize(",")
+        if (listOfProperties.size()==2){
+            float lowerBound = Float.NaN
+            float upperBound = Float.NaN
+            // get the first number
+            int delimiterIndex = listOfProperties[0].indexOf(']')
+            try{
+                lowerBound = Float.parseFloat(listOfProperties[0].substring(delimiterIndex+1))
+            }catch (e){} // if it fails simply don't use it for now
+            delimiterIndex = listOfProperties[1].indexOf('[')
+            if (delimiterIndex>0){
+                try{
+                    upperBound = Float.parseFloat(listOfProperties[1].substring(0,delimiterIndex))
+                }catch (e){} // if it fails simply don't use it for now
+            }
+            if ((lowerBound == Float.NaN)||(upperBound == Float.NaN)) {
+                return requestedFilterList
+            } else {
+                addSingleFilter (   categorical, //
+                        "1",// gt
+                        propertyName,
+                        lowerBound as String,
+                        dataset,
+                        requestedFilterList )
+                addSingleFilter (   categorical, //
+                        "2",// lt
+                        propertyName,
+                        upperBound as String,
+                        dataset,
+                        requestedFilterList )
+
+            }
+        }
+        return requestedFilterList
+    }
+
+
 
 
     public String buildFilterDesignation (def filters,String dataset){
@@ -168,6 +210,8 @@ class WidgetService {
                     filterParameter = filterParameter.replaceAll("\\s","")
                     if (filterParameter ==~  /\[.+\,.+\]/) {  // this could be a range filter -- it has square brackets under, and a "," in the middle
                         requestedFilterList = addCompoundFilter( map.cat, map.name, filterParameter, dataset, requestedFilterList )
+                    } else if (filterParameter ==~  /\].+\,.+\[/) {  // this could be a extremes filter
+                        requestedFilterList = addMultiFilter( map.cat, map.name, filterParameter, dataset, requestedFilterList )
                     } else {
                         requestedFilterList = addSingleFilter ( map.cat, map.cmp, map.name, filterParameter, dataset, requestedFilterList )
                     }
@@ -186,20 +230,6 @@ class WidgetService {
             }
 
         }
-//        else {
-//            String operator = (filters.cmp[0]=="1") ? "LT" : "GT"
-//            String proposedFilter = singleFilter ( filters[0].cat, filters[0].cmp, filters[0].name, filters[0].parm, dataset ).trim()
-//            if (proposedFilter.size()==0){
-//                filterDesignation =  """            "filters":    [
-//                 ${singleFilter ( "1", "1", "ID", "ZZZZZ", dataset )}
-//            ]
-//""".toString()
-//            }else{
-//                filterDesignation = """ "filters":    [
-//                ${singleFilter ( filters[0].cat, filters[0].cmp, filters[0].name, filters[0].parm, dataset )}
-//        ]""".toString()
-//            }
-//        }
 
         return filterDesignation
     }

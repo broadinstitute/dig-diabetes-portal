@@ -284,19 +284,6 @@ def retrieveSampleSummary (){
 
         // Really?  Different names for phenotypes?  Well, okay, let's translate them
         String traitFilterOptionId = (params.traitFilterSelectedOption ? params.traitFilterSelectedOption : "t2d");     // default to t2d if none given
-        switch (traitFilterOptionId) {
-            case "BMI": traitFilterOptionId = "BMI"; break
-            case "T2D": traitFilterOptionId = "t2d"; break
-            case "FG": traitFilterOptionId = "FAST_GLU_ANAL"; break
-            case "FI": traitFilterOptionId = "FAST_INS_ANAL"; break
-            case "CHOL": traitFilterOptionId = "CHOL_ANAL"; break
-            case "LDL": traitFilterOptionId = "LDL_ANAL"; break
-            case "HDL": traitFilterOptionId = "HDL_ANAL"; break
-            case "TG": traitFilterOptionId = "TG_ANAL"; break
-            case "SBP": traitFilterOptionId = "SBP_ANAL"; break
-            case "DBP": traitFilterOptionId = "DBP_ANAL"; break
-            default:traitFilterOptionId = traitFilterOptionId; break
-        }
 
         String stratum = params.stratum ?: ''
         JsonSlurper slurper = new JsonSlurper()

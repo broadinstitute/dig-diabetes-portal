@@ -105,7 +105,7 @@ class VariantSearchController {
 
         // process `result` so that metadata is translated
         String[] keys = result.dataset.keySet().toArray()
-        LinkedHashMap<String, String> translatedNames = []j
+        LinkedHashMap<String, String> translatedNames = []
 
         LinkedHashMap<String, Object> toReturn = []
         toReturn.is_error = result.is_error

@@ -393,14 +393,15 @@ class BurdenService {
         if (explicitlySelectSamples){
             if (sampleJsonObject?.samples) {
                 sampleList = sampleJsonObject.samples.collect{return it.toString()} as List
-            } else {
+            }
+            else {
                 if ((dataset)&&( dataset.length() > 0 )){
                     goWithDataSet = dataset
                 }
-                List<String> requestedDataList = []
-                requestedDataList << """ "ID":["${goWithDataSet}"]""".toString()
-                JSONObject samples = widgetService.getSampleDistribution( goWithDataSet, requestedDataList, false, filtersJsonObject.filters, true)
-                sampleList = samples.variants.collect{variant->variant[0].ID."$goWithDataSet"} as List
+//                List<String> requestedDataList = []
+//                requestedDataList << """ "ID":["${goWithDataSet}"]""".toString()
+//                JSONObject samples = widgetService.getSampleDistribution( goWithDataSet, requestedDataList, false, filtersJsonObject.filters, true)
+//                sampleList = samples.variants.collect{variant->variant[0].ID."$goWithDataSet"} as List
             }
         }
 
@@ -416,17 +417,13 @@ class BurdenService {
         if (covariateJsonObject?.covariates) {
             covariateList = covariateJsonObject.covariates.collect{return it.toString()} as List
         }
-        // create the json payload for the burden call
-//        List<String> sampleList = []
-//        if (sampleJsonObject?.samples) {
-//            saminpleList = sampleJsonObject.samples.collect{return it.toString()} as List
-//        }
-        if ((sampleList?.size()>MINIMUM_ALLOWABLE_NUMBER_OF_SAMPLES) || (!explicitlySelectSamples)){
+
+//        if ((sampleList?.size()>MINIMUM_ALLOWABLE_NUMBER_OF_SAMPLES) || (!explicitlySelectSamples)){
             jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(stringDataVersion, phenotype, burdenVariantList, covariateList, sampleList, filters);
             log.info("created burden rest payload: " + jsonObject);
-        } else {
-            log.info("needed more samples than ${MINIMUM_ALLOWABLE_NUMBER_OF_SAMPLES}");
-        }
+//        } else {
+//            log.info("needed more samples than ${MINIMUM_ALLOWABLE_NUMBER_OF_SAMPLES}");
+//        }
 
 
         if (jsonObject){
