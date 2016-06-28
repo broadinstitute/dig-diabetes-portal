@@ -134,6 +134,108 @@ class VariantSearchController {
 
     }
 
+    private ArrayList<JSONObject> encodedFiltersToJSON(ArrayList<String> listOfParams) {
+        // This is broken out here because we don't know what chromosome-related
+        // params we might have--could have none, just a chromosome number, or
+        // a chromosome number + start/end. So, dump anything chromosome-related
+        // here, then process it afterwards
+        JSONObject chromosomeQuery = []
+
+        ArrayList<JSONObject> jsonQueries = new ArrayList<JSONObject>()
+
+        for(int i = 0; i < listOfParams.size(); i++) {
+            String currentQuery = listOfParams[i]
+            JSONObject processedQuery
+
+            // id is the field that identifies what property the query refers to
+            def (id, data) = currentQuery.trim().split('=')
+            switch(id) {
+                case '7':
+                    // gene
+                    processedQuery = [
+                            prop: 'gene',
+                            translatedName: 'gene',
+                            value: data,
+                            comparator: '='
+                    ]
+                    jsonQueries << processedQuery
+                    break;
+                case ['8','9','10']:
+                    chromosomeQuery[id] = data;
+                    break;
+                case '11':
+                    // predicted effect
+                    def specificEffect, comparator, value
+                    if(data.indexOf('<') > -1) {
+                        (specificEffect, value) = data.split(/\</)
+                        comparator = '<'
+                    } else if (data.indexOf('|') > -1) {
+                        (specificEffect, value) = data.split(/\|/)
+                        comparator = '='
+                    } else if (data.indexOf('>') > -1) {
+                        (specificEffect, value) = data.split(/\>/)
+                        comparator = '>'
+                    }
+                    processedQuery = [
+                            prop: specificEffect,
+                            translatedName: g.message(code:'metadata.'+specificEffect, default: specificEffect),
+                            value: value,
+                            comparator: comparator
+                    ]
+                    jsonQueries << processedQuery
+                    break;
+                case '17':
+                    // every other query--looks like
+                    // "T2D[GWAS_DIAGRAM_mdv2]ODDS_RATIO<2"
+                    def (phenotype, restOfQuery) = data.split(/\[/)
+                    def (dataset, param) = restOfQuery.split(/\]/)
+                    // split the param (ex. ODDS_RATION<2)--the comparator can be <, >, or =
+                    def prop, comparator, value
+                    if(param.indexOf('<') > -1) {
+                        (prop, value) = param.split(/\</)
+                        comparator = '<'
+                    } else if (param.indexOf('=') > -1) {
+                        (prop, value) = param.split(/\=/)
+                        comparator = '='
+                    } else if (param.indexOf('|') > -1) {
+                        (prop, value) = param.split(/\|/)
+                        comparator = '='
+                    } else if (param.indexOf('>') > -1) {
+                        (prop, value) = param.split(/\>/)
+                        comparator = '>'
+                    }
+                    processedQuery = [
+                            phenotype: phenotype,
+                            translatedPhenotype: g.message(code: 'metadata.' + phenotype, default: phenotype),
+                            dataset: dataset,
+                            translatedDataset: g.message(code: 'metadata.' + dataset, default: dataset),
+                            prop: prop,
+                            translatedName: g.message(code: 'metadata.' + prop, default: prop),
+                            comparator: comparator,
+                            value: value
+                    ]
+                    jsonQueries << processedQuery
+                    break;
+            }
+        }
+
+        // see if chromosomeQuery has key 8 defined--if it does, then we have
+        // something and should also see if keys 9/10 are defined
+        if( chromosomeQuery['8'] ) {
+            JSONObject processedChromosomeQuery = [
+                    prop: 'chromosome',
+                    translatedName: 'chromosome',
+                    comparator: '='
+            ]
+            if( chromosomeQuery['9'] && chromosomeQuery['10'] ) {
+                processedChromosomeQuery.value = chromosomeQuery['8'] + ':' + chromosomeQuery['9'] + '-' + chromosomeQuery['10']
+            } else {
+                processedChromosomeQuery.value = chromosomeQuery['8']
+            }
+            jsonQueries << processedChromosomeQuery
+        }
+    }
+
     /***
      *  Someone has requested the 'search builder' page.  If they are coming to this page without a search
      *  context then encParams will be empty.   If instead they are trying to revise their search then
@@ -147,12 +249,10 @@ class VariantSearchController {
             encParams = params.encParams
             log.debug "variantSearch params.encParams = ${params.encParams}"
         }
-        List<LinkedHashMap> encodedFilterSets = []
-        List<String> encodedFilters
-        GetDataQueryHolder getDataQueryHolder
-        List<String> urlEncodedFilters
 
-        JSONArray jsonQueries = new JSONArray()
+        ArrayList<JSONObject> jsonQueries = new ArrayList<JSONObject>()
+        JSONArray jsonQueriesToReturn = new JSONArray()
+
 
         if ((encParams) && (encParams.length()>0)) {
             String urlDecodedEncParams = URLDecoder.decode(encParams.trim())
@@ -160,113 +260,126 @@ class VariantSearchController {
             // need to convert that back to JSON before handing back to the client
             // trim the opening and closing bracket from the array-turned-into-a-string
             String trimmedParams = urlDecodedEncParams[1..-2];
-            List<String> listOfParams = trimmedParams.split(',')
+            ArrayList<String> listOfParams = trimmedParams.split(',')
 
-            // This is broken out here because we don't know what chromosome-related
-            // params we might have--could have none, just a chromosome number, or
-            // a chromosome number + start/end. So, dump anything chromosome-related
-            // here, then process it afterwards
-            JSONObject chromosomeQuery = []
+            jsonQueries = encodedFiltersToJSON(listOfParams)
 
-            for(int i = 0; i < listOfParams.size(); i++) {
-                String currentQuery = listOfParams[i]
-                JSONObject processedQuery
-
-                // id is the field that identifies what property the query refers to
-                def (id, data) = currentQuery.trim().split('=')
-                switch(id) {
-                    case '7':
-                        // gene
-                        processedQuery = [
-                            prop: 'gene',
-                            translatedName: 'gene',
-                            value: data,
-                            comparator: '='
-                        ]
-                        jsonQueries << processedQuery
-                        break;
-                    case ['8','9','10']:
-                        chromosomeQuery[id] = data;
-                        break;
-                    case '11':
-                        // predicted effect
-                        def specificEffect, comparator, value
-                        if(data.indexOf('<') > -1) {
-                            (specificEffect, value) = data.split(/\</)
-                            comparator = '<'
-                        } else if (data.indexOf('|') > -1) {
-                            (specificEffect, value) = data.split(/\|/)
-                            comparator = '='
-                        } else if (data.indexOf('>') > -1) {
-                            (specificEffect, value) = data.split(/\>/)
-                            comparator = '>'
-                        }
-                        processedQuery = [
-                            prop: specificEffect,
-                            translatedName: g.message(code:'metadata.'+specificEffect, default: specificEffect),
-                            value: value,
-                            comparator: comparator
-                        ]
-                        jsonQueries << processedQuery
-                        break;
-                    case '17':
-                        // every other query--looks like
-                        // "T2D[GWAS_DIAGRAM_mdv2]ODDS_RATIO<2"
-                        def (phenotype, restOfQuery) = data.split(/\[/)
-                        def (dataset, param) = restOfQuery.split(/\]/)
-                        // split the param (ex. ODDS_RATION<2)--the comparator can be <, >, or =
-                        def prop, comparator, value
-                        if(param.indexOf('<') > -1) {
-                            (prop, value) = param.split(/\</)
-                            comparator = '<'
-                        } else if (param.indexOf('=') > -1) {
-                            (prop, value) = param.split(/\=/)
-                            comparator = '='
-                        } else if (param.indexOf('|') > -1) {
-                            (prop, value) = param.split(/\|/)
-                            comparator = '='
-                        } else if (param.indexOf('>') > -1) {
-                            (prop, value) = param.split(/\>/)
-                            comparator = '>'
-                        }
-                        processedQuery = [
-                            phenotype: phenotype,
-                            translatedPhenotype: g.message(code: 'metadata.' + phenotype, default: phenotype),
-                            dataset: dataset,
-                            translatedDataset: g.message(code: 'metadata.' + dataset, default: dataset),
-                            prop: prop,
-                            translatedName: g.message(code: 'metadata.' + prop, default: prop),
-                            comparator: comparator,
-                            value: value
-                        ]
-                        jsonQueries << processedQuery
-                        break;
-                }
-            }
-
-            // see if chromosomeQuery has key 8 defined--if it does, then we have
-            // something and should also see if keys 9/10 are defined
-            if( chromosomeQuery['8'] ) {
-                JSONObject processedChromosomeQuery = [
-                    prop: 'chromosome',
-                    translatedName: 'chromosome',
-                    comparator: '='
-                ]
-                if( chromosomeQuery['9'] && chromosomeQuery['10'] ) {
-                    processedChromosomeQuery.value = chromosomeQuery['8'] + ':' + chromosomeQuery['9'] + '-' + chromosomeQuery['10']
-                } else {
-                    processedChromosomeQuery.value = chromosomeQuery['8']
-                }
-                jsonQueries << processedChromosomeQuery
-            }
+            jsonQueriesToReturn = (JSONArray) jsonQueries
         }
+//        if ((encParams) && (encParams.length()>0)) {
+//            String urlDecodedEncParams = URLDecoder.decode(encParams.trim())
+//            // urlDecodedEncParams are in the old query format (ex. "17=T2D[GWAS_DIAGRAM_mdv2]P_VALUE<1")
+//            // need to convert that back to JSON before handing back to the client
+//            // trim the opening and closing bracket from the array-turned-into-a-string
+//            String trimmedParams = urlDecodedEncParams[1..-2];
+//            List<String> listOfParams = trimmedParams.split(',')
+//
+//            // This is broken out here because we don't know what chromosome-related
+//            // params we might have--could have none, just a chromosome number, or
+//            // a chromosome number + start/end. So, dump anything chromosome-related
+//            // here, then process it afterwards
+//            JSONObject chromosomeQuery = []
+//
+//            for(int i = 0; i < listOfParams.size(); i++) {
+//                String currentQuery = listOfParams[i]
+//                JSONObject processedQuery
+//
+//                // id is the field that identifies what property the query refers to
+//                def (id, data) = currentQuery.trim().split('=')
+//                switch(id) {
+//                    case '7':
+//                        // gene
+//                        processedQuery = [
+//                            prop: 'gene',
+//                            translatedName: 'gene',
+//                            value: data,
+//                            comparator: '='
+//                        ]
+//                        jsonQueries << processedQuery
+//                        break;
+//                    case ['8','9','10']:
+//                        chromosomeQuery[id] = data;
+//                        break;
+//                    case '11':
+//                        // predicted effect
+//                        def specificEffect, comparator, value
+//                        if(data.indexOf('<') > -1) {
+//                            (specificEffect, value) = data.split(/\</)
+//                            comparator = '<'
+//                        } else if (data.indexOf('|') > -1) {
+//                            (specificEffect, value) = data.split(/\|/)
+//                            comparator = '='
+//                        } else if (data.indexOf('>') > -1) {
+//                            (specificEffect, value) = data.split(/\>/)
+//                            comparator = '>'
+//                        }
+//                        processedQuery = [
+//                            prop: specificEffect,
+//                            translatedName: g.message(code:'metadata.'+specificEffect, default: specificEffect),
+//                            value: value,
+//                            comparator: comparator
+//                        ]
+//                        jsonQueries << processedQuery
+//                        break;
+//                    case '17':
+//                        // every other query--looks like
+//                        // "T2D[GWAS_DIAGRAM_mdv2]ODDS_RATIO<2"
+//                        def (phenotype, restOfQuery) = data.split(/\[/)
+//                        def (dataset, param) = restOfQuery.split(/\]/)
+//                        // split the param (ex. ODDS_RATION<2)--the comparator can be <, >, or =
+//                        def prop, comparator, value
+//                        if(param.indexOf('<') > -1) {
+//                            (prop, value) = param.split(/\</)
+//                            comparator = '<'
+//                        } else if (param.indexOf('=') > -1) {
+//                            (prop, value) = param.split(/\=/)
+//                            comparator = '='
+//                        } else if (param.indexOf('|') > -1) {
+//                            (prop, value) = param.split(/\|/)
+//                            comparator = '='
+//                        } else if (param.indexOf('>') > -1) {
+//                            (prop, value) = param.split(/\>/)
+//                            comparator = '>'
+//                        }
+//                        processedQuery = [
+//                            phenotype: phenotype,
+//                            translatedPhenotype: g.message(code: 'metadata.' + phenotype, default: phenotype),
+//                            dataset: dataset,
+//                            translatedDataset: g.message(code: 'metadata.' + dataset, default: dataset),
+//                            prop: prop,
+//                            translatedName: g.message(code: 'metadata.' + prop, default: prop),
+//                            comparator: comparator,
+//                            value: value
+//                        ]
+//                        jsonQueries << processedQuery
+//                        break;
+//                }
+//            }
+//
+//            // see if chromosomeQuery has key 8 defined--if it does, then we have
+//            // something and should also see if keys 9/10 are defined
+//            if( chromosomeQuery['8'] ) {
+//                JSONObject processedChromosomeQuery = [
+//                    prop: 'chromosome',
+//                    translatedName: 'chromosome',
+//                    comparator: '='
+//                ]
+//                if( chromosomeQuery['9'] && chromosomeQuery['10'] ) {
+//                    processedChromosomeQuery.value = chromosomeQuery['8'] + ':' + chromosomeQuery['9'] + '-' + chromosomeQuery['10']
+//                } else {
+//                    processedChromosomeQuery.value = chromosomeQuery['8']
+//                }
+//                jsonQueries << processedChromosomeQuery
+//            }
+//        }
 
         render(view: 'variantWorkflow',
                 model: [show_gwas : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
                         show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
                         show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
                         variantWorkflowParmList:[],
-                        encodedFilterSets: URLEncoder.encode(jsonQueries.toString())])
+                        encodedFilterSets: URLEncoder.encode(jsonQueriesToReturn.toString())])
+//                        encodedFilterSets: URLEncoder.encode(jsonQueries.toString())])
     }
 
 
@@ -276,15 +389,9 @@ class VariantSearchController {
      * @return
      */
     def launchAVariantSearch(){
-        log.info("pre-filters: ${params.filters}")
-        // process the incoming JSON and build strings reflecting what the server is expecting
-//        def jsonSlurper = new JsonSlurper();
-//        String decodedQuery = URLDecoder.decode(request.queryString)
-//        String decodedQuery = URLDecoder.decode(params.filters)
-//        log.info("decodedQuery: ${decodedQuery}")
-//        String properties = params.props
-//        ArrayList<JSONObject> listOfQueries = jsonSlurper.parseText(decodedQuery)
-
+        log.info("params.filters: ${params.filters}")
+        ArrayList<JSONObject> listOfQueries = (new JsonSlurper()).parseText(params.filters)
+        ArrayList<String> listOfCodedFilters = parseFilterJson(listOfQueries);
         displayCombinedVariantSearch(params.filters, params.props)
 
     }
@@ -298,11 +405,10 @@ class VariantSearchController {
      */
     def gene() {
         String geneId = params.id
-//        String receivedParameters = params.filter
-        String significanceString = params.sig//
+        String significanceString = params.sig
         String dataset = params.dataset
-        String region = params.region//
-        String phenotype = params.phenotype//
+        String region = params.region
+        String phenotype = params.phenotype
         String parmType = params.parmType
         String parmVal = params.parmVal
         Float significance = 0f
@@ -313,7 +419,8 @@ class VariantSearchController {
         }
 
 
-        List <String> listOfCodedFilters = []
+        ArrayList<String> listOfCodedFilters = []
+//        ArrayList<String> listOfCodedFilters = []
         if (parmVal) { // MAF table
             List<String> listOfProperties = parmVal.tokenize("~")
             if (listOfProperties.size() > 4) {
@@ -341,11 +448,19 @@ class VariantSearchController {
             listOfCodedFilters = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,technology,phenotype)
         }
 
+        log.info("codedFilters are: ${listOfCodedFilters}")
+
         //  we must have generated coded filters or we're going to be in trouble
         if ((listOfCodedFilters) &&
                 (listOfCodedFilters.size() > 0)){
-            displayCombinedVariantSearch(listOfCodedFilters,[])
-            return
+            ArrayList<String> filters = new ArrayList<String>()
+            encodedFiltersToJSON(listOfCodedFilters).each {
+                filters.add(it.toString())
+            }
+//            String filters = encodedFiltersToJSON(listOfCodedFilters).toString()
+            displayCombinedVariantSearch(filters.toString(),"")
+//            displayCombinedVariantSearch(listOfCodedFilters.toString(),"")
+//            displayCombinedVariantSearch('[' + listOfCodedFilters.join(',') + ']',"")
         }
 
     }
@@ -521,6 +636,7 @@ class VariantSearchController {
 
         for(int i = 0; i < listOfQueries.size(); i++) {
             JSONObject currentQuery = listOfQueries[i]
+            log.info("currentQuery is ${currentQuery}")
             String processedQuery;
             // if there is a phenotype defined, this is a query that has a
             // phenotype, dataset, prop, comparator, and value
@@ -592,7 +708,7 @@ class VariantSearchController {
                         }
                 // Otherwise, process the query like normal, so fall through to the next case
                     case [PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY, PortalConstants.JSON_VARIANT_SIFT_PRED_KEY, PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY]:
-                        processedQuery = '11=' + currentQuery.prop + '|' + currentQuery.value
+                        processedQuery = '11=' + currentQuery.prop + currentQuery.comparator + currentQuery.value
                         computedStrings << processedQuery
                         break;
                 }
@@ -614,7 +730,9 @@ class VariantSearchController {
 
         String filters = URLDecoder.decode(filtersRaw, "UTF-8")
         String properties = URLDecoder.decode(propertiesRaw, "UTF-8")
+        log.info("properties in VSARCD: ${properties}")
         LinkedHashMap requestedProperties = sharedToolsService.putPropertiesIntoHierarchy(properties)
+        log.info("generated requestedProperties: ${requestedProperties}")
 
         // build up filters our data query
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters,searchBuilderService,metaDataService)
@@ -725,8 +843,6 @@ class VariantSearchController {
         LinkedHashMap fullPropertyTree = metaDataService.getFullPropertyTree()
         LinkedHashMap fullSampleTree = metaDataService.getSampleGroupTree()
 
-        log.info("fullSampleTree: ${fullPropertyTree}")
-
         JSONObject metadata = sharedToolsService.packageUpATreeAsJson(fullPropertyTree)
 
         JSONObject commonPropertiesJsonObject = this.metaDataService.getCommonPropertiesAsJson(true);
@@ -767,16 +883,23 @@ class VariantSearchController {
 
     }
 
-
-
-
-
-
     private void displayCombinedVariantSearch(String filters, String requestForAdditionalProperties) {
+//    private void displayCombinedVariantSearch(ArrayList<JSONObject> listOfQueries, String requestForAdditionalProperties) {
+        log.info("???? ${filters}")
         ArrayList<JSONObject> listOfQueries = (new JsonSlurper()).parseText(filters)
         ArrayList<String> listOfCodedFilters = parseFilterJson(listOfQueries);
 
-        log.info("listOfQueries: ${listOfQueries}")
+        if(requestForAdditionalProperties == null || "".compareTo(requestForAdditionalProperties) == 0) {
+            // if there are no specified properties, default to these
+            requestForAdditionalProperties =
+                    ["common-common-CLOSEST_GENE",
+                     "common-common-VAR_ID",
+                     "common-common-DBSNP_ID",
+                     "common-common-Protein_change",
+                     "common-common-Consequence",
+                     "common-common-CHROM",
+                     "common-common-POS"].join(":")
+        }
 
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters,searchBuilderService,metaDataService)
         if (getDataQueryHolder.isValid()) {
@@ -817,7 +940,11 @@ class VariantSearchController {
                             // link to this page again
                             filtersForSharing   : filters,
                             // used to list the filters on the page
+                            // this could be reworked, but based on my experience wrestling
+                            // with it, it's not worth the current hassle
                             encodedFilters      : encodedFilters,
+                            // used for the adding/removing properties modal,
+                            // to know which properties are part of the search
                             listOfQueries       : listOfQueries as JSON,
                             // the URL-encoded parameters to go back to the search builder with the filters saved
                             encodedParameters   : urlEncodedFilters,

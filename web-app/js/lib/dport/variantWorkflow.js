@@ -701,26 +701,7 @@ var mpgSoftware = mpgSoftware || {};
             // phenotype is changed.  Before we get to the asynchronous parts let's wipe out the properties
             mpgSoftware.variantWF.retrieveDatasets(phenotype, 'dependent');
         };
-
-        // private helper function that takes in a dataset map with cohorts and returns
-        // a flatten array of {dataset, name} objects
-        var flattenDatasetMap = function(map, depth) {
-            var toReturn = [];
-            _.forEach(_.keys(map), function(dataset) {
-                var prefix = '-'.repeat(depth);
-                toReturn.push({
-                    name: prefix + map[dataset].name,
-                    value: dataset
-                });
-                var childDatasets = _.chain(map[dataset]).omit('name').value();
-                if(_.keys(childDatasets).length > 0) {
-                    var childrenResults = flattenDatasetMap(childDatasets, depth + 1);
-                    toReturn = toReturn.concat(childrenResults);
-                }
-            });
-            return toReturn;
-        };
-
+        
         // target can be 'datasetDependent', 'datasetDependentCohort', 'datasetIndependent', or 'datasetIndependentCohort'
         var respondToDataSetSelection = function (target) {
             // we need to see if there's cohort information available
@@ -739,7 +720,7 @@ var mpgSoftware = mpgSoftware || {};
                     // we have cohorts
                     $('#' + cohortChooserHolder).show();
                     cohortOptions.append("<option selected value=default>-- &nbsp;&nbsp;all cohorts&nbsp;&nbsp; --</option>");
-                    var displayData = flattenDatasetMap(data, 0);
+                    var displayData = UTILS.flattenDatasetMap(data, 0);
                     _.forEach(displayData, function(cohort) {
                         var newOption = $("<option />").val(cohort.value).html(cohort.name);
                         cohortOptions.append(newOption);

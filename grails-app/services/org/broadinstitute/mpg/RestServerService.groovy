@@ -1414,7 +1414,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         List<String> propertiesToFetch = []
         List<String> commonProperties = [] // default common properties
 
-//        if (!requestedProperties) {
+        if (!requestedProperties) {
             commonProperties << "CLOSEST_GENE"
             commonProperties << "VAR_ID"
             commonProperties << "DBSNP_ID"
@@ -1422,7 +1422,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             commonProperties << "Consequence"
             commonProperties << "CHROM"
             commonProperties << "POS"
-//        }
+        }
 
         //  if we don't have a better idea then launch the search based on the filters.  Otherwise used our stored criteria
 //        if (!requestedProperties) {

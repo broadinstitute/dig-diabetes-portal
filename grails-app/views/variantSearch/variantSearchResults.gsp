@@ -228,7 +228,6 @@
         });
 
         var proteinEffectList = new UTILS.proteinEffectListConstructor(decodeURIComponent("${proteinEffectsList}"));
-//        debugger
         variantProcessing.iterativeVariantTableFiller(data, totCol, sortCol, '#variantTable',
                 '<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsData" />',
                 '<g:createLink controller="variantInfo" action="variantInfo" />',
@@ -240,10 +239,7 @@
                 {   filters: "<%=queryFilters%>",
                     properties: additionalProps
                 });
-//        if( ! modalHasBeenGenerated ) {
-//            modalHasBeenGenerated = true;
-            generateModal(data);
-//        }
+        generateModal(data);
     }
 
     $(document).ready(function () {
@@ -254,40 +250,127 @@
     function confirmAddingProperties(target) {
         var matchingSelectedInputs = $('input[data-category="' + target + '"]:checked:not(:disabled)').get();
         var matchingUnselectedInputs = $('input[data-category="' + target + '"]:not(:checked,:disabled)').get();
-        var valuesToInclude = _.map(matchingSelectedInputs, function(input) {
+        var valuesToInclude = _.map(matchingSelectedInputs, function (input) {
             return $(input).val();
         });
-        var valuesToRemove = _.map(matchingUnselectedInputs, function(input) {
+        var valuesToRemove = _.map(matchingUnselectedInputs, function (input) {
             return $(input).val();
         });
 
+        // if we're coming off the phenotype tab, we need to see if the user selected a dataset
+        // to add
+        if(target == 'phenotype' ) {
+            var phenotypeSelection = $('#phenotypeAddition').val();
+            var datasetSelection = $('#phenotypeAdditionDataset').val();
+            if(phenotypeSelection != 'default' && datasetSelection != 'default') {
+                // first see if a cohort was selected
+                var cohortSelection = $('#phenotypeAdditionCohort').val();
+                console.log(phenotypeSelection, datasetSelection, cohortSelection);
+                if(cohortSelection != 'default' && cohortSelection) {
+                    datasetSelection = cohortSelection;
+                }
+
+                var propertyToAdd = phenotypeSelection + '-' + datasetSelection;
+                valuesToInclude.push(propertyToAdd);
+            }
+
+            // the other part of this is removing datasets/properties for phenotypes that have been
+            // unselected. this isn't handled above because we don't add just a phenotype to
+            // additionalProperties, it's always a phenotype+dataset. therefore, for the phentoypes
+            // that have been unselected, go through additionalProperties and remove any dataset/property
+            // that is from that phenotype.
+            _.forEach(additionalProperties, function(prop) {
+                var propComponents = prop.split('-');
+                if(_.includes(valuesToRemove, propComponents[0])) {
+                    valuesToRemove.push(prop);
+                }
+            });
+        }
         additionalProperties = _.difference(additionalProperties, valuesToRemove);
         additionalProperties = _.union(additionalProperties, valuesToInclude);
+
+        console.log('adding', valuesToInclude);
+        console.log('removing', valuesToRemove);
+        console.log('additionalProps', additionalProperties);
 
         loadVariantTableViaAjax("<%=queryFilters%>", additionalProperties);
     }
 
     function generateModal(data) {
         // populate the modals to add/remove properties
+        console.log('data is', data)
+        // first do some processing on the search queries, so we know what can't
+        // be removed
+        var phenotypesInQueries = _.chain(filtersAsJson).map('phenotype').uniq().value();
+        var datasetsInQueries = _.chain(filtersAsJson).map(function(q) {
+            return q.phenotype + '-' + q.dataset;
+        }).uniq().value();
+        var propertiesInQueries = _.chain(filtersAsJson).map(function(q) {
+            return q.phenotype + '-' + q.dataset + '-' + q.prop;
+        }).uniq().value();
+        console.log(phenotypesInQueries, datasetsInQueries, propertiesInQueries);
 
-        // add/subtract phenotypes modal
+        // add/subtract phenotypes modal -------------------------------------------
         // first get the phenotypes displayed so we know what we can remove--we approximate this
         // by looking at the data.columns.pproperty object
-        console.log('data is', data)
         var displayedPhenotypes = _.keys(data.columns.pproperty);
 
-        // add/subtract datasets
+        // subtract phenotypes tab
+        // first, remove any phenotypes listed that are no longer displayed
+        _.forEach($('#subtractPhenotypesCheckboxes > div'), function(item) {
+            if(! displayedPhenotypes.includes($(item).attr('data-phenotype'))) {
+                $(item).remove();
+            }
+        });
+        var listedPhenotypes = _.map($('#subtractPhenotypesCheckboxes > div'), function(item) {
+            return $(item).attr('data-phenotype');
+        });
+        // phenotypesToAdd is any phenotype that wasn't previously displayed
+        var phenotypesToAdd = _.difference(displayedPhenotypes, listedPhenotypes);
+        // then, go add any new phenotypes being displayed
+        _.forEach(phenotypesToAdd, function(phenotype) {
+            var newBox = $('<input />').attr({
+                type: 'checkbox',
+                checked: true,
+                disabled: phenotypesInQueries.includes(phenotype),
+                'data-category': 'phenotype'
+            }).val(phenotype);
+            var label = $('<label />').append(newBox);
+            label.append(translationFunction(phenotype));
+            var checkboxDiv = $('<div />').addClass('checkbox').attr({'data-phenotype': phenotype}).append(label);
+            $('#subtractPhenotypesCheckboxes').append(checkboxDiv);
+        });
+
+        // add phenotypes tab
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: "${g.createLink(controller: 'VariantSearch', action: 'retrievePhenotypesAjax')}",
+            data: {getNonePhenotype: true},
+            async: true,
+            success: function (data) {
+                if (( data !== null ) &&
+                        ( typeof data !== 'undefined') &&
+                        ( typeof data.datasets !== 'undefined' ) &&
+                        (  data.datasets !== null )) {
+                    UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#phenotypeAddition', true);
+                }
+            },
+            error: function (jqXHR, exception) {
+                core.errorReporter(jqXHR, exception);
+            }
+        });
+
+        // end add/subtract phenotypes modal -------------------------------------------
+
+        // add/subtract datasets -------------------------------------------
         // use data.metadata[<phenotype>] (where <phenotype> is from the displayedPhenotypes array) to
         // get the list of all datasets for that phenotype. use data.columns.dproperty to get the list
         // of datasets currently being displayed
 
-        // first see if there's already phenotype tabs--if there are, then the modal has already been generated,
-        // and we don't want to edit the dataset selections, so just skip this section.
-        // make this check here because if we make it inside the forEach, the first tab will result in no other
-        // tabs being generated
-        var areTabsAlreadyPresent = $('#datasetTabList').children().length > 0;
         _.forEach(displayedPhenotypes, function(phenotype, index) {
-            if(areTabsAlreadyPresent) {
+            // see if this tab has already been generated--if so, don't do anything
+            if($('a[href="#' + phenotype + 'DatasetSelection"]').length) {
                 return;
             }
             // create the tab
@@ -295,9 +378,11 @@
                 href: '#' + phenotype + 'DatasetSelection',
                 'aria-controls': phenotype + 'DatasetSelection',
                 role: 'tab',
-                'data-toggle': 'tab'
+                'data-toggle': 'tab',
+                'data-phenotype': phenotype
             }).html(translationFunction(phenotype));
             var tabItem = $('<li />').attr({
+                'data-phenotype': phenotype,
                 role: 'presentation'
             });
             if( index == 0 ) {
@@ -340,7 +425,17 @@
 
         });
 
-        // add/subtract properties
+        // now check if any datasets got removed, so we can remove their tabs
+        _.forEach($('#datasetTabList li'), function(tab) {
+            var tabPhenotype = $(tab).attr('data-phenotype');
+            if(! displayedPhenotypes.includes(tabPhenotype)) {
+                $(tab).remove();
+            }
+        });
+
+        // end add/subtract datasets -------------------------------------------
+
+        // add/subtract properties -------------------------------------------
         // make a tab for each displayed phenotype, plus common properties
         // first clear out any existing tabs
         $('#propertiesTabList, #propertiesTabPanes').empty();
@@ -392,10 +487,11 @@
                 //      added them to the table
                 var groupedProperties = _.groupBy(displayedProperties, function(property) {
                     var propertyValue = phenotype + '-' + dataset + '-' + property;
-                    if(_.includes(additionalProperties, propertyValue)) {
-                        return 'addedProperties';
-                    } else {
+                    if(_.includes(propertiesInQueries, propertyValue)) {
                         return 'propertiesInherentToSearch';
+
+                    } else {
+                        return 'addedProperties';
                     }
                 });
                 var propertiesAvailableButNotDisplayed = _.difference(availableProperties, displayedProperties);
@@ -438,6 +534,7 @@
             var rendered = Mustache.render(propertiesInputsTemplate, renderData);
             $('#propertiesTabPanes').append(rendered);
         });
+
         // common properties
         var tabAnchor = $('<a/>').attr({
             href: '#commonPropertiesSelection',
@@ -464,21 +561,85 @@
         Mustache.parse(commonPropsInputTemplate);
         var rendered = Mustache.render(commonPropsInputTemplate, {properties: commonProps});
         $('#propertiesTabPanes').append(rendered);
+
+        // add/subtract properties -------------------------------------------
     }
 
     function saveLink() {
-        var url = "<g:createLink absolute="true" controller="variantSearch" action="launchAVariantSearch" params="[filters: "${filtersForSharing}"]"/>"
-        url = url.concat('&props=' + additionalProperties.join(':'));
+        var url = "<g:createLink absolute="true" controller="variantSearch" action="launchAVariantSearch" params="[filters: "${filtersForSharing}"]"/>";
+        url = url.concat('&props=' + encodeURIComponent(additionalProperties.join(':')));
 
+        var reference = $('#linkToSave');
+        // it appears the the browser may interrupt the copy if the element that's being
+        // copied isn't visible, so show the element long enough to grab the url
+        reference.show();
         // save the url
-        $('#linkToSave').text(url);
-        $('#linkToSave').select();
+        reference.val(url);
+        reference.focus();
+        reference.select();
         var success = document.execCommand('copy');
+        reference.hide();
         // if for whatever reason that fails (browser doesn't support it?), then display an error
-        // and copy the url into the href attribute of the link so that the user can manually copy it
+        // and the URL
         if(! success ) {
             $('#linkToSave').show();
-            alert('Sorry, this functionality isn\'t supported on your browser. Please copy the link from the text box below.')
+            alert('Sorry, this functionality isn\'t supported on your browser. Please copy the link from the text box.')
+        }
+    }
+
+    // called when a phenotype is selected on the "add phenotype" tab
+    function phenotypeSelected() {
+        var phenotype = $('#phenotypeAddition').val();
+        console.log(phenotype);
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: "${g.createLink(controller: 'VariantSearch', action: 'retrieveDatasetsAjax')}",
+            data: {phenotype: phenotype},
+            async: true,
+            success: function (data) {
+                if (data) {
+                    var sampleGroupMap = data.sampleGroupMap;
+                    var options = $('#phenotypeAdditionDataset');
+                    options.empty();
+
+                    options.append("<option selected hidden value=default>-- &nbsp;&nbsp;select a dataset&nbsp;&nbsp; --</option>");
+
+                    var datasetList = _.keys(sampleGroupMap);
+                    _.each(datasetList, function(dataset) {
+                        var newOption = $("<option />").val(dataset).html(sampleGroupMap[dataset].name);
+                        // check to see if this dataset has any values besides "name" defined--if so, then
+                        // it has child cohorts. in that case, attach them as data (via jquery) so that we
+                        // can easily access them if the user chooses this dataset.
+                        var childDatasets = _.chain(sampleGroupMap[dataset]).omit('name').value();
+                        if(_.keys(childDatasets).length > 0) {
+                            newOption.data(childDatasets);
+                        }
+                        options.append(newOption);
+                    });
+                }
+            },
+            error: function (jqXHR, exception) {
+                core.errorReporter(jqXHR, exception);
+            }
+        });
+    }
+
+    function datasetSelected() {
+        var selectedDataset = $('#phenotypeAdditionDataset option:selected');
+        var cohorts = selectedDataset.data();
+        if(! _.isEmpty(cohorts)) {
+            $('#phenotypeCohorts').show();
+            var cohortOptions = $('#phenotypeAdditionCohort');
+            cohortOptions.empty();
+            cohortOptions.append("<option selected value=default>-- &nbsp;&nbsp;all cohorts&nbsp;&nbsp; --</option>");
+            var displayData = UTILS.flattenDatasetMap(cohorts, 0);
+            _.forEach(displayData, function(cohort) {
+                var newOption = $("<option />").val(cohort.value).html(cohort.name);
+                cohortOptions.append(newOption);
+            });
+        } else {
+            $('#phenotypeCohorts').hide();
         }
     }
 
@@ -497,8 +658,8 @@
         <g:message code="variantTable.searchResults.editCriteria" />
             </div>
         <div style="margin-top: 5px;">
-            <a id="linkToSaveText" href="#" onclick="saveLink()">Click here to copy the current search URL to the clipboard</a>
-            <textarea id="linkToSave" style="display: none; margin-left: 5px; width: 500px;"></textarea>
+            <a id="linkToSaveText" onclick="saveLink()">Click here to copy the current search URL to the clipboard</a>
+            <input type="text" id="linkToSave" style="display: none; margin-left: 5px; width: 500px;" />
         </div>
 
     </div>
@@ -532,7 +693,7 @@
             </div>
         </div>
     </div>
-
+    <hr />
     <div class="container-fluid">
         <g:render template="../region/newCollectedVariantsForRegion"/>
     </div>

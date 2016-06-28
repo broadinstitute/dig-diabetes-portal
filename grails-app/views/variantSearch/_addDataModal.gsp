@@ -39,19 +39,9 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="subtract_phenotype">
                             <form class="dk-modal-form">
-                                <div class="dk-modal-form-input-group">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" checked> Type 2 diabetes
-                                        </label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" checked> HbA1c
-                                        </label>
-                                    </div>
+                                <div id="subtractPhenotypesCheckboxes" class="dk-modal-form-input-group">
                                 </div>
-                                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Confirm</button>
+                                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="confirmAddingProperties('phenotype')">Confirm</button>
                                 <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">Cancel</button>
 
                             </form>
@@ -64,13 +54,7 @@
                                             Trait or disease of interest
                                         </div>
                                         <div class="dk-variant-search-builder-ui">
-                                            <select class="form-control">
-                                                <option selected hidden>Select a phenotype</option>
-                                                <option>type 2 diabetes</option>
-                                                <option>HbA1c</option>
-                                                <option>fasting glucose</option>
-                                                <option>two-hour glucose</option>
-                                                <option>HOMA-B</option>
+                                            <select id="phenotypeAddition" class="form-control" onchange="phenotypeSelected()">
                                             </select>
                                         </div>
                                     </div>
@@ -80,30 +64,22 @@
                                             Data set
                                         </div>
                                         <div class="dk-variant-search-builder-ui">
-                                            <select class="form-control">
-                                                <option selected hidden>Select a data set</option>
-                                                <option>DIAGRAM GWAS</option>
-                                                <option>GWAS GIGMA</option>
-                                                <option>82K exome chip analysis</option>
+                                            <select id="phenotypeAdditionDataset" class="form-control" onchange="datasetSelected()">
                                             </select>
                                         </div>
                                     </div>
 
-                                    <div class="dk-modal-form-input-row">
+                                    <div id="phenotypeCohorts" class="dk-modal-form-input-row" style="display: none;">
                                         <div class="dk-variant-search-builder-title">
-                                            Cohorts(optional)
+                                            Cohorts (optional)
                                         </div>
                                         <div class="dk-variant-search-builder-ui">
-                                            <select class="form-control">
-                                                <option selected hidden>Select a cohort</option>
-                                                <option>cohort</option>
-                                                <option>cohort</option>
-                                                <option>cohort</option>
+                                            <select id="phenotypeAdditionCohort" class="form-control" style="max-width: 300px;">
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Confirm </button>
+                                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="confirmAddingProperties('phenotype')">Confirm </button>
                                 <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">Cancel</button>
                             </form>
                         </div>
@@ -132,7 +108,6 @@
                 </div>
                 <div class="modal-footer dk-modal-footer">
                     <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="confirmAddingProperties('datasets')">Confirm </button>
-                    %{--<button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#propertiesModal" data-dismiss="modal">Confirm & edit properties</button>--}%
                     <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">Cancel</button>
                 </div>
             </div>

@@ -874,9 +874,26 @@ var UTILS = {
             }
         }
         return returnValue;
+    },
+
+
+    // takes in a dataset map with cohorts and returns a flattened array of {dataset, name} objects
+    flattenDatasetMap: function(map, depth) {
+        var toReturn = [];
+        _.forEach(_.keys(map), function(dataset) {
+            var prefix = '-'.repeat(depth);
+            toReturn.push({
+                name: prefix + map[dataset].name,
+                value: dataset
+            });
+            var childDatasets = _.chain(map[dataset]).omit('name').value();
+            if(_.keys(childDatasets).length > 0) {
+                var childrenResults = UTILS.flattenDatasetMap(childDatasets, depth + 1);
+                toReturn = toReturn.concat(childrenResults);
+            }
+        });
+        return toReturn;
     }
-
-
 
 
 };

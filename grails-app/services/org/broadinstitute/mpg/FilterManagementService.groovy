@@ -177,15 +177,14 @@ class FilterManagementService {
                 List<String> regionSpecifierList = []
                 if (extractedNumbers) {
                     if (extractedNumbers["chromosomeNumber"]) {
-                        regionSpecifierList << "8=${extractedNumbers['chromosomeNumber']}".toString()
+                        returnValue << "8=${extractedNumbers['chromosomeNumber']}".toString()
                     }
                     if (extractedNumbers["startExtent"]) {
-                        regionSpecifierList << "9=${extractedNumbers['startExtent']}".toString()
+                        returnValue << "9=${extractedNumbers['startExtent']}".toString()
                     }
                     if (extractedNumbers["endExtent"]) {
-                        regionSpecifierList << "10=${extractedNumbers['endExtent']}".toString()
+                        returnValue << "10=${extractedNumbers['endExtent']}".toString()
                     }
-                    returnValue << "${regionSpecifierList.join('^')}".toString()
                 }
             } else if (gene) { // ...or we can restrict by Jean
                 returnValue << "7=${gene}".toString()
