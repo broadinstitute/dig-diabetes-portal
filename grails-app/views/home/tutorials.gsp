@@ -85,6 +85,9 @@
 <div id="main">
     <div class="container content-wrapper">
         <h1 class="page-header">Tutorials</h1>
+        <g:if test="${g.portalTypeString()?.equals('stroke')}">
+            <a href="https://www.youtube.com/watch?v=jsgUxsd7Z4w" target="_blank">Video walkthrough</a>
+        </g:if>
         <ul class="tutorial"><li><a id="portalPdf" class="btn btn-default btn-sm"><g:message
                 code="portal.introTutorial.title"/></a></li>
             <li><a id="variantPdf" class="btn btn-default btn-sm"><g:message
