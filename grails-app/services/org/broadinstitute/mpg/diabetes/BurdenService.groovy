@@ -365,7 +365,7 @@ class BurdenService {
 
 
 
-        returnJson = this.getBurdenResultForVariantIdList(stringDataVersion , traitOption, burdenVariantList, covariateJsonObject, sampleJsonObject,  filtersJsonObject, dataset, true );
+        returnJson = this.getBurdenResultForVariantIdList(stringDataVersion , traitOption, burdenVariantList, covariateJsonObject, sampleJsonObject,  filtersJsonObject, dataset, false );
 
         // return
         return returnJson;
@@ -390,18 +390,12 @@ class BurdenService {
 
         List<String> sampleList = []
         String goWithDataSet
+        if ((dataset)&&( dataset.length() > 0 )){
+            goWithDataSet = dataset
+        }
         if (explicitlySelectSamples){
             if (sampleJsonObject?.samples) {
                 sampleList = sampleJsonObject.samples.collect{return it.toString()} as List
-            }
-            else {
-                if ((dataset)&&( dataset.length() > 0 )){
-                    goWithDataSet = dataset
-                }
-//                List<String> requestedDataList = []
-//                requestedDataList << """ "ID":["${goWithDataSet}"]""".toString()
-//                JSONObject samples = widgetService.getSampleDistribution( goWithDataSet, requestedDataList, false, filtersJsonObject.filters, true)
-//                sampleList = samples.variants.collect{variant->variant[0].ID."$goWithDataSet"} as List
             }
         }
 
@@ -418,13 +412,15 @@ class BurdenService {
             covariateList = covariateJsonObject.covariates.collect{return it.toString()} as List
         }
 
-//        if ((sampleList?.size()>MINIMUM_ALLOWABLE_NUMBER_OF_SAMPLES) || (!explicitlySelectSamples)){
+        if (!explicitlySelectSamples){
             jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(stringDataVersion, phenotype, burdenVariantList, covariateList, sampleList, filters);
-            log.info("created burden rest payload: " + jsonObject);
-//        } else {
-//            log.info("needed more samples than ${MINIMUM_ALLOWABLE_NUMBER_OF_SAMPLES}");
-//        }
-
+        } else {
+            if (sampleList?.size()>MINIMUM_ALLOWABLE_NUMBER_OF_SAMPLES){
+                jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(stringDataVersion, phenotype, burdenVariantList, covariateList, sampleList, filters);
+            } else {
+                log.info("needed more samples than ${MINIMUM_ALLOWABLE_NUMBER_OF_SAMPLES}");
+            }
+        }
 
         if (jsonObject){
 
