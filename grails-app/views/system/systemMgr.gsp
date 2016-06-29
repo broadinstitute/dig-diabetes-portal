@@ -378,18 +378,18 @@
 
 
 
+            <div class="separator"></div>
 
 
-
-
-
-
-
-
-
-
-
-
+            <div class="row clearfix">
+                <div class="col-md-4" style="text-align: right">Change text and/or translations</div>
+                <div class="col-md-4">
+                     <a class='btn btn-primary btn-lg' href="<g:createLink controller='localization' action='list' />?format=">
+                        Interactive text manipulation tool
+                    </a>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
 
 
             <div class="separator"></div>
