@@ -413,8 +413,6 @@ var variantProcessing = (function () {
             };
         });
 
-        console.log('querySpecifications.properties:', querySpecifications.properties);
-
         var table = $(divId).dataTable({
             // so that we can regenerate the table if the inputs change
             destroy: true,
@@ -480,9 +478,6 @@ var variantProcessing = (function () {
     };
     var getSimpleString  = function(contingent,  modder,  displayField, alternate){
         var retVal = alternate;
-        if(contingent === true) {
-            // debugger
-        }
         if (contingent){
             retVal = ""+ modder (displayField);
         }

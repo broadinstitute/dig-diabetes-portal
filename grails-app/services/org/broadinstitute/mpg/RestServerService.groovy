@@ -1121,8 +1121,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                                               List<Float> significanceList,
                                                               String phenotype) {
         JSONObject returnValue
-        // List <Integer> dataSeteList = [3, 2, 1]
-        // List <Integer> significanceList = [1,2,  3, 4]
         StringBuilder sb = new StringBuilder("{\"results\":[")
         def slurper = new JsonSlurper()
         for (int j = 0; j < dataSeteList.size(); j++) {
@@ -1517,7 +1515,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             commonProperties = expandCommonPropertyList(commonProperties, requestedProperties)
 //        }
 
-        log.info("commonProps: ${commonProperties}")
         LinkedHashMap columnsToDisplayStructure = sharedToolsService.getColumnsToDisplayStructure(phenotypesToFetch, datasetsToFetch, propertiesToFetch, commonProperties)
         return columnsToDisplayStructure
     }

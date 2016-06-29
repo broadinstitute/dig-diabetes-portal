@@ -24,18 +24,17 @@ class VariantSearchController {
 
     def index() {}
 
-
     /***
      *   Pull back a phenotype hierarchy across all data sets
      * @return
      */
-    def retrievePhenotypesAjax(){
+    def retrievePhenotypesAjax() {
         // specify whether to include the NONE phenotype--if this is unspecified,
         // default to no
         Boolean getNonePhenotype = params.getNonePhenotype?.toBoolean() ?: false
 
         LinkedHashMap<String, List<String>> propertyTree = metaDataService.getHierarchicalPhenotypeTree()
-        JSONObject result = sharedToolsService.packageUpAHierarchicalListAsJson (propertyTree)
+        JSONObject result = sharedToolsService.packageUpAHierarchicalListAsJson(propertyTree)
 
         // process `result` so that metadata is translated
         String[] keys = result.dataset.keySet().toArray()
@@ -48,14 +47,14 @@ class VariantSearchController {
         keys.each {
             def key = it;
             // if we don't want the NONE phenotype, skip it
-            if(!getNonePhenotype && key == "OTHER") {
+            if (!getNonePhenotype && key == "OTHER") {
                 return
             }
             translatedNames[key] = new ArrayList<String>()
             String[] termsToProcess = result.dataset[key]
-            for( int i=0; i < termsToProcess.length; i++ ) {
+            for (int i = 0; i < termsToProcess.length; i++) {
                 String thisTerm = termsToProcess[i]
-                translatedNames[key] << [thisTerm, g.message(code:"metadata." + thisTerm, default: thisTerm)]
+                translatedNames[key] << [thisTerm, g.message(code: "metadata." + thisTerm, default: thisTerm)]
             }
         }
 
@@ -67,25 +66,26 @@ class VariantSearchController {
 
     }
 
-    def retrieveJSTreeAjax(){
+    def retrieveJSTreeAjax() {
         def slurper = new JsonSlurper()
         String phenotypeName = params.phenotype
         String sampleGroupName = params.sampleGroup
         SampleGroup sampleGroup = metaDataService.getSampleGroupByName(sampleGroupName)
 
-        if (sampleGroupName=='GWAS_Stroke_mdv5'){
+        if (sampleGroupName == 'GWAS_Stroke_mdv5') {
             log.debug('foo')
         }
 
-
-        if (sampleGroup?.sampleGroupList?.size()>0){
-            sampleGroup.sampleGroupList = sampleGroup.sampleGroupList.sort{g.message(code:"metadata." + it.systemId, default: it.systemId)}
+        if (sampleGroup?.sampleGroupList?.size() > 0) {
+            sampleGroup.sampleGroupList = sampleGroup.sampleGroupList.sort {
+                g.message(code: "metadata." + it.systemId, default: it.systemId)
+            }
         }
-        String jsonDescr = sharedToolsService.packageSampleGroupsHierarchicallyForJsTree(sampleGroup,phenotypeName)
+        String jsonDescr = sharedToolsService.packageSampleGroupsHierarchicallyForJsTree(sampleGroup, phenotypeName)
         def result = new JSONObject()
-        if ((jsonDescr)&&(jsonDescr.length()>0)) {
+        if ((jsonDescr) && (jsonDescr.length() > 0)) {
             result = slurper.parseText(jsonDescr)
-        }  else {
+        } else {
             log.debug('foo')
         }
         render(status: 200, contentType: "application/json") {
@@ -94,15 +94,13 @@ class VariantSearchController {
 
     }
 
-
-
     /***
      * Pullback of phenotypes hierarchy, though only for GWAS data
      * @return
      */
-    def retrieveGwasSpecificPhenotypesAjax(){
+    def retrieveGwasSpecificPhenotypesAjax() {
         LinkedHashMap<String, List<String>> propertyTree = metaDataService.getHierarchicalPhenotypeTree()
-        JSONObject result = sharedToolsService.packageUpAHierarchicalListAsJson (propertyTree)
+        JSONObject result = sharedToolsService.packageUpAHierarchicalListAsJson(propertyTree)
 
         // process `result` so that metadata is translated
         String[] keys = result.dataset.keySet().toArray()
@@ -115,14 +113,14 @@ class VariantSearchController {
         keys.each {
             def key = it;
             // this particular method shouldn't return the NONE phenotype
-            if(key == "OTHER") {
+            if (key == "OTHER") {
                 return
             }
             translatedNames[key] = new ArrayList<String>()
             String[] termsToProcess = result.dataset[key]
-            for( int i=0; i < termsToProcess.length; i++ ) {
+            for (int i = 0; i < termsToProcess.length; i++) {
                 String thisTerm = termsToProcess[i]
-                translatedNames[key] << [thisTerm, g.message(code:"metadata." + thisTerm, default: thisTerm)]
+                translatedNames[key] << [thisTerm, g.message(code: "metadata." + thisTerm, default: thisTerm)]
             }
         }
 
@@ -134,6 +132,7 @@ class VariantSearchController {
 
     }
 
+    // take a query of the form "17=T2D[DIAGRAM_GWAS]P_VAL<1" and convert it to JSON
     private ArrayList<JSONObject> encodedFiltersToJSON(ArrayList<String> listOfParams) {
         // This is broken out here because we don't know what chromosome-related
         // params we might have--could have none, just a chromosome number, or
@@ -143,30 +142,30 @@ class VariantSearchController {
 
         ArrayList<JSONObject> jsonQueries = new ArrayList<JSONObject>()
 
-        for(int i = 0; i < listOfParams.size(); i++) {
+        for (int i = 0; i < listOfParams.size(); i++) {
             String currentQuery = listOfParams[i]
             JSONObject processedQuery
 
             // id is the field that identifies what property the query refers to
             def (id, data) = currentQuery.trim().split('=')
-            switch(id) {
+            switch (id) {
                 case '7':
                     // gene
                     processedQuery = [
-                            prop: 'gene',
+                            prop          : 'gene',
                             translatedName: 'gene',
-                            value: data,
-                            comparator: '='
+                            value         : data,
+                            comparator    : '='
                     ]
                     jsonQueries << processedQuery
                     break;
-                case ['8','9','10']:
+                case ['8', '9', '10']:
                     chromosomeQuery[id] = data;
                     break;
                 case '11':
                     // predicted effect
                     def specificEffect, comparator, value
-                    if(data.indexOf('<') > -1) {
+                    if (data.indexOf('<') > -1) {
                         (specificEffect, value) = data.split(/\</)
                         comparator = '<'
                     } else if (data.indexOf('|') > -1) {
@@ -177,10 +176,10 @@ class VariantSearchController {
                         comparator = '>'
                     }
                     processedQuery = [
-                            prop: specificEffect,
-                            translatedName: g.message(code:'metadata.'+specificEffect, default: specificEffect),
-                            value: value,
-                            comparator: comparator
+                            prop          : specificEffect,
+                            translatedName: g.message(code: 'metadata.' + specificEffect, default: specificEffect),
+                            value         : value,
+                            comparator    : comparator
                     ]
                     jsonQueries << processedQuery
                     break;
@@ -191,7 +190,7 @@ class VariantSearchController {
                     def (dataset, param) = restOfQuery.split(/\]/)
                     // split the param (ex. ODDS_RATION<2)--the comparator can be <, >, or =
                     def prop, comparator, value
-                    if(param.indexOf('<') > -1) {
+                    if (param.indexOf('<') > -1) {
                         (prop, value) = param.split(/\</)
                         comparator = '<'
                     } else if (param.indexOf('=') > -1) {
@@ -205,14 +204,14 @@ class VariantSearchController {
                         comparator = '>'
                     }
                     processedQuery = [
-                            phenotype: phenotype,
+                            phenotype          : phenotype,
                             translatedPhenotype: g.message(code: 'metadata.' + phenotype, default: phenotype),
-                            dataset: dataset,
-                            translatedDataset: g.message(code: 'metadata.' + dataset, default: dataset),
-                            prop: prop,
-                            translatedName: g.message(code: 'metadata.' + prop, default: prop),
-                            comparator: comparator,
-                            value: value
+                            dataset            : dataset,
+                            translatedDataset  : g.message(code: 'metadata.' + dataset, default: dataset),
+                            prop               : prop,
+                            translatedName     : g.message(code: 'metadata.' + prop, default: prop),
+                            comparator         : comparator,
+                            value              : value
                     ]
                     jsonQueries << processedQuery
                     break;
@@ -221,19 +220,21 @@ class VariantSearchController {
 
         // see if chromosomeQuery has key 8 defined--if it does, then we have
         // something and should also see if keys 9/10 are defined
-        if( chromosomeQuery['8'] ) {
+        if (chromosomeQuery['8']) {
             JSONObject processedChromosomeQuery = [
-                    prop: 'chromosome',
+                    prop          : 'chromosome',
                     translatedName: 'chromosome',
-                    comparator: '='
+                    comparator    : '='
             ]
-            if( chromosomeQuery['9'] && chromosomeQuery['10'] ) {
+            if (chromosomeQuery['9'] && chromosomeQuery['10']) {
                 processedChromosomeQuery.value = chromosomeQuery['8'] + ':' + chromosomeQuery['9'] + '-' + chromosomeQuery['10']
             } else {
                 processedChromosomeQuery.value = chromosomeQuery['8']
             }
             jsonQueries << processedChromosomeQuery
         }
+
+        return jsonQueries
     }
 
     /***
@@ -250,11 +251,9 @@ class VariantSearchController {
             log.debug "variantSearch params.encParams = ${params.encParams}"
         }
 
-        ArrayList<JSONObject> jsonQueries = new ArrayList<JSONObject>()
         JSONArray jsonQueriesToReturn = new JSONArray()
 
-
-        if ((encParams) && (encParams.length()>0)) {
+        if ((encParams) && (encParams.length() > 0)) {
             String urlDecodedEncParams = URLDecoder.decode(encParams.trim())
             // urlDecodedEncParams are in the old query format (ex. "17=T2D[GWAS_DIAGRAM_mdv2]P_VALUE<1")
             // need to convert that back to JSON before handing back to the client
@@ -262,138 +261,22 @@ class VariantSearchController {
             String trimmedParams = urlDecodedEncParams[1..-2];
             ArrayList<String> listOfParams = trimmedParams.split(',')
 
-            jsonQueries = encodedFiltersToJSON(listOfParams)
-
-            jsonQueriesToReturn = (JSONArray) jsonQueries
+            jsonQueriesToReturn.addAll(encodedFiltersToJSON(listOfParams))
         }
-//        if ((encParams) && (encParams.length()>0)) {
-//            String urlDecodedEncParams = URLDecoder.decode(encParams.trim())
-//            // urlDecodedEncParams are in the old query format (ex. "17=T2D[GWAS_DIAGRAM_mdv2]P_VALUE<1")
-//            // need to convert that back to JSON before handing back to the client
-//            // trim the opening and closing bracket from the array-turned-into-a-string
-//            String trimmedParams = urlDecodedEncParams[1..-2];
-//            List<String> listOfParams = trimmedParams.split(',')
-//
-//            // This is broken out here because we don't know what chromosome-related
-//            // params we might have--could have none, just a chromosome number, or
-//            // a chromosome number + start/end. So, dump anything chromosome-related
-//            // here, then process it afterwards
-//            JSONObject chromosomeQuery = []
-//
-//            for(int i = 0; i < listOfParams.size(); i++) {
-//                String currentQuery = listOfParams[i]
-//                JSONObject processedQuery
-//
-//                // id is the field that identifies what property the query refers to
-//                def (id, data) = currentQuery.trim().split('=')
-//                switch(id) {
-//                    case '7':
-//                        // gene
-//                        processedQuery = [
-//                            prop: 'gene',
-//                            translatedName: 'gene',
-//                            value: data,
-//                            comparator: '='
-//                        ]
-//                        jsonQueries << processedQuery
-//                        break;
-//                    case ['8','9','10']:
-//                        chromosomeQuery[id] = data;
-//                        break;
-//                    case '11':
-//                        // predicted effect
-//                        def specificEffect, comparator, value
-//                        if(data.indexOf('<') > -1) {
-//                            (specificEffect, value) = data.split(/\</)
-//                            comparator = '<'
-//                        } else if (data.indexOf('|') > -1) {
-//                            (specificEffect, value) = data.split(/\|/)
-//                            comparator = '='
-//                        } else if (data.indexOf('>') > -1) {
-//                            (specificEffect, value) = data.split(/\>/)
-//                            comparator = '>'
-//                        }
-//                        processedQuery = [
-//                            prop: specificEffect,
-//                            translatedName: g.message(code:'metadata.'+specificEffect, default: specificEffect),
-//                            value: value,
-//                            comparator: comparator
-//                        ]
-//                        jsonQueries << processedQuery
-//                        break;
-//                    case '17':
-//                        // every other query--looks like
-//                        // "T2D[GWAS_DIAGRAM_mdv2]ODDS_RATIO<2"
-//                        def (phenotype, restOfQuery) = data.split(/\[/)
-//                        def (dataset, param) = restOfQuery.split(/\]/)
-//                        // split the param (ex. ODDS_RATION<2)--the comparator can be <, >, or =
-//                        def prop, comparator, value
-//                        if(param.indexOf('<') > -1) {
-//                            (prop, value) = param.split(/\</)
-//                            comparator = '<'
-//                        } else if (param.indexOf('=') > -1) {
-//                            (prop, value) = param.split(/\=/)
-//                            comparator = '='
-//                        } else if (param.indexOf('|') > -1) {
-//                            (prop, value) = param.split(/\|/)
-//                            comparator = '='
-//                        } else if (param.indexOf('>') > -1) {
-//                            (prop, value) = param.split(/\>/)
-//                            comparator = '>'
-//                        }
-//                        processedQuery = [
-//                            phenotype: phenotype,
-//                            translatedPhenotype: g.message(code: 'metadata.' + phenotype, default: phenotype),
-//                            dataset: dataset,
-//                            translatedDataset: g.message(code: 'metadata.' + dataset, default: dataset),
-//                            prop: prop,
-//                            translatedName: g.message(code: 'metadata.' + prop, default: prop),
-//                            comparator: comparator,
-//                            value: value
-//                        ]
-//                        jsonQueries << processedQuery
-//                        break;
-//                }
-//            }
-//
-//            // see if chromosomeQuery has key 8 defined--if it does, then we have
-//            // something and should also see if keys 9/10 are defined
-//            if( chromosomeQuery['8'] ) {
-//                JSONObject processedChromosomeQuery = [
-//                    prop: 'chromosome',
-//                    translatedName: 'chromosome',
-//                    comparator: '='
-//                ]
-//                if( chromosomeQuery['9'] && chromosomeQuery['10'] ) {
-//                    processedChromosomeQuery.value = chromosomeQuery['8'] + ':' + chromosomeQuery['9'] + '-' + chromosomeQuery['10']
-//                } else {
-//                    processedChromosomeQuery.value = chromosomeQuery['8']
-//                }
-//                jsonQueries << processedChromosomeQuery
-//            }
-//        }
 
         render(view: 'variantWorkflow',
-                model: [show_gwas : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
-                        show_exchp: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
-                        show_exseq: sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
-                        variantWorkflowParmList:[],
+                model: [show_gwas        : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gwas),
+                        show_exchp       : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp),
+                        show_exseq       : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq),
                         encodedFilterSets: URLEncoder.encode(jsonQueriesToReturn.toString())])
-//                        encodedFilterSets: URLEncoder.encode(jsonQueries.toString())])
     }
-
-
 
     /***
      * This call occurs when you press the 'submit search request' button.
      * @return
      */
-    def launchAVariantSearch(){
-        log.info("params.filters: ${params.filters}")
-        ArrayList<JSONObject> listOfQueries = (new JsonSlurper()).parseText(params.filters)
-        ArrayList<String> listOfCodedFilters = parseFilterJson(listOfQueries);
+    def launchAVariantSearch() {
         displayCombinedVariantSearch(params.filters, params.props)
-
     }
 
     /***
@@ -418,9 +301,7 @@ class VariantSearchController {
             log.error("receive nonnumeric significance value = (${params.sig}) in action=gene, VariantSearchController")
         }
 
-
         ArrayList<String> listOfCodedFilters = []
-//        ArrayList<String> listOfCodedFilters = []
         if (parmVal) { // MAF table
             List<String> listOfProperties = parmVal.tokenize("~")
             if (listOfProperties.size() > 4) {
@@ -445,26 +326,22 @@ class VariantSearchController {
             }
         } else {  // variants and associations table
             String technology = metaDataService.getTechnologyPerSampleGroup(dataset)
-            listOfCodedFilters = filterManagementService.storeParametersInHashmap (geneId,significance,dataset,region,technology,phenotype)
+            listOfCodedFilters = filterManagementService.storeParametersInHashmap(geneId, significance, dataset, region, technology, phenotype)
         }
 
-        log.info("codedFilters are: ${listOfCodedFilters}")
-
         //  we must have generated coded filters or we're going to be in trouble
-        if ((listOfCodedFilters) &&
-                (listOfCodedFilters.size() > 0)){
+        if (listOfCodedFilters && (listOfCodedFilters.size() > 0)) {
             ArrayList<String> filters = new ArrayList<String>()
             encodedFiltersToJSON(listOfCodedFilters).each {
                 filters.add(it.toString())
             }
-//            String filters = encodedFiltersToJSON(listOfCodedFilters).toString()
-            displayCombinedVariantSearch(filters.toString(),"")
-//            displayCombinedVariantSearch(listOfCodedFilters.toString(),"")
-//            displayCombinedVariantSearch('[' + listOfCodedFilters.join(',') + ']',"")
+            displayCombinedVariantSearch(filters.toString(), "")
         }
 
     }
 
+    // given a nested structure of datasets, add a "name" field with the
+    // display name to each object recursively
     private JSONObject addNamesToDatasetMap(HashMap<String, HashMap> map) {
         JSONObject toReturn = [:]
         map.each { dataset, children ->
@@ -491,12 +368,12 @@ class VariantSearchController {
         HashMap<String, HashMap> datasetMap = this.metaDataService.getSampleGroupStructureForPhenotypeAsJson(phenotype)
         JSONObject sampleGroupMap = addNamesToDatasetMap(datasetMap);
 
-        render(status: 200, contentType: "application/json") { [
-                sampleGroupMap: sampleGroupMap
+        render(status: 200, contentType: "application/json") {
+            [
+                    sampleGroupMap: sampleGroupMap
             ]
         }
     }
-
 
     /***
      * Given a phenotype, return all matching technologies
@@ -509,11 +386,11 @@ class VariantSearchController {
             log.debug "variantSearch params.phenotype = ${params.phenotype}"
         }
 
-        List<String> technologyList = this.metaDataService.getTechnologyListByPhenotypeAndVersion(phenotypeName,sharedToolsService.getCurrentDataVersion())
+        List<String> technologyList = this.metaDataService.getTechnologyListByPhenotypeAndVersion(phenotypeName, sharedToolsService.getCurrentDataVersion())
         JSONObject technologyListJsonObject = sharedToolsService.packageUpAListAsJson(technologyList)
 
         render(status: 200, contentType: "application/json") {
-            [technologyList:technologyListJsonObject]
+            [technologyList: technologyListJsonObject]
         }
     }
 
@@ -530,12 +407,12 @@ class VariantSearchController {
 
         List<String> technologies = sharedToolsService.convertAnHttpList(params."technologies[]")
 
-        List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups( phenotypeName,"",  technologies)
+        List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups(phenotypeName, "", technologies)
 
         JSONObject sampleGroupMapJsonObject = filterManagementService.convertSampleGroupListToJson(fullListOfSampleGroups, phenotypeName)
 
         render(status: 200, contentType: "application/json") {
-            [sampleGroupMap:sampleGroupMapJsonObject]
+            [sampleGroupMap: sampleGroupMapJsonObject]
         }
     }
 
@@ -554,18 +431,16 @@ class VariantSearchController {
             technologyName = params.technology
         }
 
-        List<SampleGroup> sampleGroupList = this.metaDataService.getSampleGroupForPhenotypeDatasetTechnologyAncestry(phenotypeName,"",
+        List<SampleGroup> sampleGroupList = this.metaDataService.getSampleGroupForPhenotypeDatasetTechnologyAncestry(phenotypeName, "",
                 technologyName,
                 sharedToolsService.getCurrentDataVersion(), "")
-        List<String> ancestryList = sampleGroupList.unique{ a,b -> a.getAncestry() <=> b.getAncestry() }*.getAncestry()
+        List<String> ancestryList = sampleGroupList.unique { a, b -> a.getAncestry() <=> b.getAncestry() }*.getAncestry()
         JSONObject ancestryListAsJson = sharedToolsService.packageUpAListAsJson(ancestryList)
 
         render(status: 200, contentType: "application/json") {
-            [ancestryList:ancestryListJsonObject]
+            [ancestryList: ancestryListJsonObject]
         }
     }
-
-
 
     /***
      * Given a combination of one phenotype, one technology, and one ancestry, return a list of all matching sample groups
@@ -586,13 +461,13 @@ class VariantSearchController {
             ancestryName = params.ancestry
         }
 
-        List<SampleGroup> sampleGroupList = this.metaDataService.getSampleGroupForPhenotypeDatasetTechnologyAncestry(phenotypeName,"",
+        List<SampleGroup> sampleGroupList = this.metaDataService.getSampleGroupForPhenotypeDatasetTechnologyAncestry(phenotypeName, "",
                 technologyName,
                 sharedToolsService.getCurrentDataVersion(), ancestryName)
         JSONObject dataSetMapJsonObject = filterManagementService.convertSampleGroupListToJson(sampleGroupList, phenotypeName)
 
         render(status: 200, contentType: "application/json") {
-            [dataSetList:dataSetMapJsonObject]
+            [dataSetList: dataSetMapJsonObject]
         }
     }
 
@@ -600,11 +475,11 @@ class VariantSearchController {
      * get properties given a data set. This Ajax call takes place on the search builder
      * after selecting a data set.
      */
-    def retrievePropertiesAjax(){
+    def retrievePropertiesAjax() {
         String phenotype = params.phenotype
 
         String datasetChoice = ""
-        if((params.dataset) && (params.dataset !=  null )){
+        if ((params.dataset) && (params.dataset != null)) {
             datasetChoice = params.dataset
         }
 
@@ -613,11 +488,11 @@ class VariantSearchController {
 
         // attach translated names
         ArrayList<JSONObject> translatedObjects = new ArrayList<JSONObject>()
-        for(int i = 0; i < result.dataset.size(); i++) {
+        for (int i = 0; i < result.dataset.size(); i++) {
             String prop = result.dataset[i]
             JSONObject translated = [
-                prop: prop,
-                translatedName: g.message(code: "metadata." + prop, default: prop)
+                    prop          : prop,
+                    translatedName: g.message(code: "metadata." + prop, default: prop)
             ]
             translatedObjects << translated
         }
@@ -625,8 +500,8 @@ class VariantSearchController {
         result.dataset = translatedObjects
 
         render(status: 200, contentType: "application/json") {
-            [datasets: result,
-             chosenDataset:datasetChoice]
+            [datasets     : result,
+             chosenDataset: datasetChoice]
         }
 
     }
@@ -634,20 +509,20 @@ class VariantSearchController {
     private ArrayList<String> parseFilterJson(ArrayList<JSONObject> listOfQueries) {
         ArrayList<String> computedStrings = new ArrayList<String>();
 
-        for(int i = 0; i < listOfQueries.size(); i++) {
+        for (int i = 0; i < listOfQueries.size(); i++) {
             JSONObject currentQuery = listOfQueries[i]
-            log.info("currentQuery is ${currentQuery}")
             String processedQuery;
             // if there is a phenotype defined, this is a query that has a
             // phenotype, dataset, prop, comparator, and value
-            if( currentQuery.phenotype ) {
-                String comparator = (currentQuery.comparator=='=')?'|':currentQuery.comparator // if anyone passes in a real = then swap it out -- we demand a coded character
+            if (currentQuery.phenotype) {
+                String comparator = (currentQuery.comparator == '=') ? '|' : currentQuery.comparator
+                // if anyone passes in a real = then swap it out -- we demand a coded character
                 processedQuery = '17=' +
                         currentQuery.phenotype + '[' + currentQuery.dataset + ']' +
                         currentQuery.prop + comparator + currentQuery.value
                 computedStrings << processedQuery
             } else {
-                switch(currentQuery.prop) {
+                switch (currentQuery.prop) {
                     case 'gene':
                         // convert gene into chromosome and start/end points
                         // also be prepared to handle ±value
@@ -658,14 +533,14 @@ class VariantSearchController {
 
                         // if the gene contains '±', then split to get the start and end
                         // adjustments
-                        if(gene.indexOf('±') > -1) {
+                        if (gene.indexOf('±') > -1) {
                             (gene, adjustment) = currentQuery.value.split(' ± ')
                         }
                         Gene geneObject = Gene.retrieveGene(gene)
                         String chromosome = geneObject.getChromosome()
                         Long start = geneObject.getAddrStart()
                         Long end = geneObject.getAddrEnd()
-                        if(adjustment) {
+                        if (adjustment) {
                             start -= Integer.parseInt(adjustment)
                             end += Integer.parseInt(adjustment)
                         }
@@ -680,7 +555,7 @@ class VariantSearchController {
                     case 'chromosome':
                         // there are two types of inputs: either of the form <chromosome> or
                         // the form <chrom>:<start>-<end>
-                        if(currentQuery.value =~ /^\d{1,2}$/ ) {
+                        if (currentQuery.value =~ /^\d{1,2}$/) {
                             // we have just the chromosome number
                             processedQuery = '8=' + currentQuery.value;
                             computedStrings << processedQuery
@@ -698,7 +573,7 @@ class VariantSearchController {
                         }
                         break;
                     case PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY:
-                        if(currentQuery.value == '0') {
+                        if (currentQuery.value == '0') {
                             // if value is 0, then drop the query--reason: there are variants
                             // in the DB with MDS=NULL. There's no way to make SQL return those variants
                             // if the value being compared against is 0 (as far as I'm aware), so the
@@ -706,7 +581,7 @@ class VariantSearchController {
                             // supporting ORing queries, this may change
                             break;
                         }
-                // Otherwise, process the query like normal, so fall through to the next case
+                    // Otherwise, process the query like normal, so fall through to the next case
                     case [PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY, PortalConstants.JSON_VARIANT_SIFT_PRED_KEY, PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY]:
                         processedQuery = '11=' + currentQuery.prop + currentQuery.comparator + currentQuery.value
                         computedStrings << processedQuery
@@ -730,21 +605,20 @@ class VariantSearchController {
 
         String filters = URLDecoder.decode(filtersRaw, "UTF-8")
         String properties = URLDecoder.decode(propertiesRaw, "UTF-8")
-        log.info("properties in VSARCD: ${properties}")
+
         LinkedHashMap requestedProperties = sharedToolsService.putPropertiesIntoHierarchy(properties)
-        log.info("generated requestedProperties: ${requestedProperties}")
 
         // build up filters our data query
-        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters,searchBuilderService,metaDataService)
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters, searchBuilderService, metaDataService)
         // determine columns to display
-        LinkedHashMap resultColumnsToDisplay= restServerService.getColumnsToDisplay("[${getDataQueryHolder.retrieveAllFiltersAsJson()}]",requestedProperties)
+        LinkedHashMap resultColumnsToDisplay = restServerService.getColumnsToDisplay("[${getDataQueryHolder.retrieveAllFiltersAsJson()}]", requestedProperties)
 
         int pageStart = Integer.parseInt(params.start)
         int pageSize = Integer.parseInt(params.length)
         getDataQueryHolder.setPageStartAndSize(pageStart, pageSize)
 
         // add ordering info
-        for(orderByElement in orderBy) {
+        for (orderByElement in orderBy) {
             int columnNumber = orderByElement.column
             // name gives us the property being sorted on--use it to create a PropertyBean
             String columnName = columns[columnNumber].name
@@ -754,7 +628,7 @@ class VariantSearchController {
             PhenotypeBean phenotypeBean
 
             // if propInfo has 3 elements, it's a pprop, 2 elements, a dprop, and 1 element, a cprop
-            switch(propInfo.length) {
+            switch (propInfo.length) {
                 case 3:
                     String phenotype = propInfo[2]
 
@@ -765,7 +639,7 @@ class VariantSearchController {
                     String dataset = propInfo[1]
                     SampleGroupBean sampleGroupBean = metaDataService.getSampleGroupByName(dataset)
 
-                    if(propertyBean.getParent() == null) {
+                    if (propertyBean.getParent() == null) {
                         propertyBean.setParent(sampleGroupBean)
                     } else {
                         phenotypeBean.setParent(sampleGroupBean)
@@ -791,12 +665,12 @@ class VariantSearchController {
         // process the variants
         def variants = dataJsonObject.variants
         ArrayList toReturn = []
-        for(variant in variants) {
+        for (variant in variants) {
             // merge all of the data into one object, which is then processed clientside
             JSONObject newVariantObject = []
-            for(data in variant) {
+            for (data in variant) {
                 def keys = data.keySet()
-                for(k in keys) {
+                for (k in keys) {
                     newVariantObject[k] = data[k]
                 }
             }
@@ -806,10 +680,10 @@ class VariantSearchController {
 
         render(status: 200, contentType: "application/json") {
             [
-                draw: Integer.parseInt(params.draw),
-                recordsTotal: params.numberOfVariants,
-                recordsFiltered: params.numberOfVariants,
-                data: toReturn
+                    draw           : Integer.parseInt(params.draw),
+                    recordsTotal   : params.numberOfVariants,
+                    recordsFiltered: params.numberOfVariants,
+                    data           : toReturn
             ]
         }
     }
@@ -828,9 +702,9 @@ class VariantSearchController {
         log.debug "variantSearch variantSearchAjax = ${filters}"
 
         // build up filters our data query
-        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters,searchBuilderService,metaDataService)
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters, searchBuilderService, metaDataService)
         // determine columns to display
-        LinkedHashMap resultColumnsToDisplay= restServerService.getColumnsToDisplay("[${getDataQueryHolder.retrieveAllFiltersAsJson()}]",requestedProperties)
+        LinkedHashMap resultColumnsToDisplay = restServerService.getColumnsToDisplay("[${getDataQueryHolder.retrieveAllFiltersAsJson()}]", requestedProperties)
         JSONObject resultColumnsJsonObject = resultColumnsToDisplay as JSONObject
 
         // make the call to REST server
@@ -872,44 +746,42 @@ class VariantSearchController {
 
         render(status: 200, contentType: "application/json") {
             [
-                columns: resultColumnsJsonObject,
-                metadata:metadata,
-                propertiesPerSampleGroup:propertiesPerSampleGroupJsonObject,
-                cProperties:commonPropertiesJsonObject,
-                translationDictionary: translationDictionary,
-                numberOfVariants: dataJsonObjectCount.numRecords
+                    columns                 : resultColumnsJsonObject,
+                    metadata                : metadata,
+                    propertiesPerSampleGroup: propertiesPerSampleGroupJsonObject,
+                    cProperties             : commonPropertiesJsonObject,
+                    translationDictionary   : translationDictionary,
+                    numberOfVariants        : dataJsonObjectCount.numRecords
             ]
         }
 
     }
 
     private void displayCombinedVariantSearch(String filters, String requestForAdditionalProperties) {
-//    private void displayCombinedVariantSearch(ArrayList<JSONObject> listOfQueries, String requestForAdditionalProperties) {
-        log.info("???? ${filters}")
         ArrayList<JSONObject> listOfQueries = (new JsonSlurper()).parseText(filters)
         ArrayList<String> listOfCodedFilters = parseFilterJson(listOfQueries);
 
-        if(requestForAdditionalProperties == null || "".compareTo(requestForAdditionalProperties) == 0) {
+        if (requestForAdditionalProperties == null || "".compareTo(requestForAdditionalProperties) == 0) {
             // if there are no specified properties, default to these
             requestForAdditionalProperties =
-                    ["common-common-CLOSEST_GENE",
-                     "common-common-VAR_ID",
-                     "common-common-DBSNP_ID",
-                     "common-common-Protein_change",
-                     "common-common-Consequence",
-                     "common-common-CHROM",
-                     "common-common-POS"].join(":")
+                ["common-common-CLOSEST_GENE",
+                 "common-common-VAR_ID",
+                 "common-common-DBSNP_ID",
+                 "common-common-Protein_change",
+                 "common-common-Consequence",
+                 "common-common-CHROM",
+                 "common-common-POS"].join(":")
         }
 
-        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters,searchBuilderService,metaDataService)
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters, searchBuilderService, metaDataService)
         if (getDataQueryHolder.isValid()) {
             List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
             List<String> urlEncodedFilters = getDataQueryHolder.listOfUrlEncodedFilters(encodedFilters)
-            LinkedHashMap genomicExtents = sharedToolsService.validGenomicExtents (getDataQueryHolder.retrieveGetDataQuery())
+            LinkedHashMap genomicExtents = sharedToolsService.validGenomicExtents(getDataQueryHolder.retrieveGetDataQuery())
             List<String> identifiedGenes = sharedToolsService.allEncompassedGenes(genomicExtents)
             String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
             String regionSpecifier = ""
-            LinkedHashMap<String,String> positioningInformation = getDataQueryHolder.positioningInformation()
+            LinkedHashMap<String, String> positioningInformation = getDataQueryHolder.positioningInformation()
             if (positioningInformation.size() > 2) {
                 regionSpecifier = "chr${positioningInformation.chromosomeSpecified}:${positioningInformation.beginningExtentSpecified}-${positioningInformation.endingExtentSpecified}"
                 List<Gene> geneList = Gene.findAllByChromosome("chr" + positioningInformation.chromosomeSpecified)
@@ -958,8 +830,6 @@ class VariantSearchController {
                     ])
         }
     }
-
-
 
 
 }

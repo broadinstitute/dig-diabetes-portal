@@ -93,6 +93,11 @@ modules = {
         resource url: 'css/dport/variantWorkflow.css'
         resource url: 'js/lib/dport/variantWorkflow.js'
     }
+    variantSearchResults {
+        dependsOn "tableViewer"
+
+        resource url: 'js/lib/dport/variantSearchResults.js'
+    }
     igv {
         dependsOn "jquery"
 

@@ -174,7 +174,6 @@ class FilterManagementService {
             // we can restrict by region...
             if (region) { // If there's a region then use it. Otherwise depend on the gene name. Don't use both
                 LinkedHashMap extractedNumbers = restServerService.extractNumbersWeNeed(region)
-                List<String> regionSpecifierList = []
                 if (extractedNumbers) {
                     if (extractedNumbers["chromosomeNumber"]) {
                         returnValue << "8=${extractedNumbers['chromosomeNumber']}".toString()

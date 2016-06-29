@@ -42,7 +42,7 @@ class RegionController {
                 ]
 
                 String encodedQuery = URLEncoder.encode(query.toString())
-                redirect(url:'/variantSearch/launchAVariantSearch/?' + encodedQuery)
+                redirect(url:'/variantSearch/launchAVariantSearch/?filters=' + encodedQuery)
                 return
             }
 
