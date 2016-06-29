@@ -93,9 +93,6 @@
         });
     }
 
-    // this kicks everything off
-    loadTheTable();
-
     // the following functions are here (instead of in a separate JS file or something) because
     // they either update the page state (in the form of additionalProperties), or need server-
     // generated URLs/strings
@@ -221,6 +218,9 @@
     }
 
     $(document).ready(function () {
+        // this kicks everything off
+        loadTheTable();
+
         $('[data-toggle="tooltip"]').tooltip();
     });
 

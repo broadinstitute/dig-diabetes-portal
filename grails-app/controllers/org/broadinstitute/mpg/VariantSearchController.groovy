@@ -368,9 +368,8 @@ class VariantSearchController {
         HashMap<String, HashMap> datasetMap = this.metaDataService.getSampleGroupStructureForPhenotypeAsJson(phenotype)
         JSONObject sampleGroupMap = addNamesToDatasetMap(datasetMap);
 
-        render(status: 200, contentType: "application/json") {
-            [
-                    sampleGroupMap: sampleGroupMap
+        render(status: 200, contentType: "application/json") {[
+                sampleGroupMap: sampleGroupMap
             ]
         }
     }

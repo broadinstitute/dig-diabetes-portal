@@ -6,13 +6,13 @@ var mpgSoftware = mpgSoftware || {};
     mpgSoftware.variantSearchResults = (function () {
         // hoisted here
         var translationFunction;
-        var loading = $('#spinner');
+        var loading;
 
         // this gets the data that builds the table structure. the table is populated via a later call to
         // variantProcessing.iterativeVariantTableFiller
         var loadVariantTableViaAjax = function (queryFilters, additionalProps, searchUrl) {
             additionalProps = encodeURIComponent(additionalProps.join(':'));
-            loading.show();
+            loading = $('#spinner').show();
             return $.ajax({
                 type: 'POST',
                 cache: false,

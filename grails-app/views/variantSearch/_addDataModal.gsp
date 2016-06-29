@@ -3,17 +3,17 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Add/Subtract</h4>
+                <h4 class="modal-title"><g:message code="variantSearch.results.modal.title" /></h4>
             </div>
             <div class="modal-body">
                 <ul class="list-unstyled dk-modal-list">
-                    <li><a href="#" data-toggle="modal" data-target="#phenotypeModal" data-dismiss="modal">Add / Subtract Phenotypes</a></li>
-                    <li><a href="#" data-toggle="modal" data-target="#datasetModal" data-dismiss="modal">Add / Subtract Data set</a></li>
-                    <li><a href="#" data-toggle="modal" data-target="#propertiesModal" data-dismiss="modal">Add / Subtract Properties</a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#phenotypeModal" data-dismiss="modal"><g:message code="variantSearch.results.modal.addSubPheno" /></a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#datasetModal" data-dismiss="modal"><g:message code="variantSearch.results.modal.addSubDatasets" /></a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#propertiesModal" data-dismiss="modal"><g:message code="variantSearch.results.modal.addSubProps" /></a></li>
                 </ul>
             </div>
             <div class="modal-footer dk-modal-footer">
-                <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
             </div>
         </div>
     </div>
@@ -24,15 +24,15 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Add/Subtract Phenotype</h4>
+                <h4 class="modal-title"><g:message code="variantSearch.results.modal.addSubPheno" /></h4>
             </div>
             <div class="modal-body">
                 <div>
 
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#subtract_phenotype" aria-controls="subtract_phenotype" role="tab" data-toggle="tab">Subtract Phenotype</a></li>
-                        <li role="presentation"><a href="#add_phenotype" aria-controls="add_phenotype" role="tab" data-toggle="tab">Add Phenotype</a></li>
+                        <li role="presentation" class="active"><a href="#subtract_phenotype" aria-controls="subtract_phenotype" role="tab" data-toggle="tab"><g:message code="variantSearch.results.modal.subPheno" /></a></li>
+                        <li role="presentation"><a href="#add_phenotype" aria-controls="add_phenotype" role="tab" data-toggle="tab"><g:message code="variantSearch.results.modal.addPheno" /></a></li>
                     </ul>
 
                     <!-- Tab panes -->
@@ -41,8 +41,8 @@
                             <form class="dk-modal-form">
                                 <div id="subtractPhenotypesCheckboxes" class="dk-modal-form-input-group">
                                 </div>
-                                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="confirmAddingProperties('phenotype')">Confirm</button>
-                                <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="confirmAddingProperties('phenotype')"><g:message code="variantSearch.results.modal.confirm" /></button>
+                                <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
 
                             </form>
                         </div>
@@ -51,7 +51,7 @@
                                 <div class="dk-modal-form-input-group">
                                     <div class="dk-modal-form-input-row">
                                         <div class="dk-variant-search-builder-title">
-                                            Trait or disease of interest
+                                            <g:message code="searchBuilder.traitOrDisease.prompt" />
                                         </div>
                                         <div class="dk-variant-search-builder-ui">
                                             <select id="phenotypeAddition" class="form-control" onchange="phenotypeSelected()">
@@ -61,7 +61,7 @@
 
                                     <div class="dk-modal-form-input-row">
                                         <div class="dk-variant-search-builder-title">
-                                            Data set
+                                            <g:message code="searchBuilder.dataset.prompt" />
                                         </div>
                                         <div class="dk-variant-search-builder-ui">
                                             <select id="phenotypeAdditionDataset" class="form-control" onchange="datasetSelected()">
@@ -71,7 +71,7 @@
 
                                     <div id="phenotypeCohorts" class="dk-modal-form-input-row" style="display: none;">
                                         <div class="dk-variant-search-builder-title">
-                                            Cohorts (optional)
+                                            <g:message code="variantSearch.results.modal.cohortOptional" />
                                         </div>
                                         <div class="dk-variant-search-builder-ui">
                                             <select id="phenotypeAdditionCohort" class="form-control" style="max-width: 300px;">
@@ -79,8 +79,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="confirmAddingProperties('phenotype')">Confirm </button>
-                                <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="confirmAddingProperties('phenotype')"><g:message code="variantSearch.results.modal.confirm" /></button>
+                                <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
                             </form>
                         </div>
                     </div>
@@ -95,7 +95,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Add/Subtract Data sets</h4>
+                <h4 class="modal-title"><g:message code="variantSearch.results.modal.addSubDatasets" /></h4>
             </div>
             <div class="modal-body">
 
@@ -107,8 +107,8 @@
                 <div id="datasetSelections" class="tab-content">
                 </div>
                 <div class="modal-footer dk-modal-footer">
-                    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="confirmAddingProperties('datasets')">Confirm </button>
-                    <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="confirmAddingProperties('datasets')"><g:message code="variantSearch.results.modal.confirm" /></button>
+                    <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
                 </div>
             </div>
         </div>
@@ -127,7 +127,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Add/Subtract Properties</h4>
+                <h4 class="modal-title"><g:message code="variantSearch.results.modal.addSubProps" /></h4>
             </div>
             <div class="modal-body">
 
@@ -144,7 +144,7 @@
                             <div class="dk-modal-form-input-group">
                                 <div class="dk-modal-form-input-row">
                                     <div class="dk-variant-search-builder-ui">
-                                        <h5>Data sets</h5>
+                                        <h5><g:message code="searchBuilder.dataset.prompt" /></h5>
                                         {{ #datasets }}
                                         <div class="radio" >
                                             <label>
@@ -156,7 +156,7 @@
                                         {{ /datasets }}
                                     </div>
                                     <div class="dk-variant-search-builder-ui">
-                                        <h5>Properties</h5>
+                                        <h5><g:message code="variantSearch.results.modal.props" /></h5>
                                         {{ #propertiesGroup }}
                                         <div data-dataset="{{ dataset }}" style="display: none;">
                                             {{ #properties }}
@@ -178,7 +178,7 @@
                     <div role="tabpanel" class="tab-pane" id="commonPropertiesSelection">
 
                         <form class="dk-modal-form">
-                            <h4>Available common properties</h4>
+                            <h4><g:message code="variantSearch.results.modal.availableCommonProps" /></h4>
                             <div class="dk-modal-form-input-group">
                                 {{ #properties }}
                                 <div class="checkbox">
@@ -194,8 +194,8 @@
             </div>
             <!-- modal body ends -->
             <div class="modal-footer dk-modal-footer">
-                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="confirmAddingProperties('properties')">Confirm </button>
-                <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="confirmAddingProperties('properties')"><g:message code="variantSearch.results.modal.confirm" /></button>
+                <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
             </div>
         </div>
     </div>
