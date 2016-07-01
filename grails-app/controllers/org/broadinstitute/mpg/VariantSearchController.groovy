@@ -582,7 +582,8 @@ class VariantSearchController {
                         }
                     // Otherwise, process the query like normal, so fall through to the next case
                     case [PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY, PortalConstants.JSON_VARIANT_SIFT_PRED_KEY, PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY]:
-                        processedQuery = '11=' + currentQuery.prop + currentQuery.comparator + currentQuery.value
+                        String comparator = currentQuery.comparator.replace(/=/, /|/)
+                        processedQuery = '11=' + currentQuery.prop + comparator + currentQuery.value
                         computedStrings << processedQuery
                         break;
                 }
@@ -714,26 +715,30 @@ class VariantSearchController {
         JSONObject dataJsonObjectCount = restServerService.postDataQueryRestCall(getDataQueryHolder)
 
         LinkedHashMap fullPropertyTree = metaDataService.getFullPropertyTree()
-        LinkedHashMap fullSampleTree = metaDataService.getSampleGroupTree()
 
-        JSONObject metadata = sharedToolsService.packageUpATreeAsJson(fullPropertyTree)
+        JSONObject propertyMap = sharedToolsService.packageUpATreeAsJson(fullPropertyTree)
+
+        JSONObject datasetStructure = [:]
+
+        List<String> allPhenotypes = this.metaDataService.getEveryPhenotype(true)
+        allPhenotypes.each { phenotype ->
+            HashMap<String, HashMap> datasetMap = this.metaDataService.getSampleGroupStructureForPhenotypeAsJson(phenotype)
+            datasetStructure[phenotype] = addNamesToDatasetMap(datasetMap);
+        }
 
         JSONObject commonPropertiesJsonObject = this.metaDataService.getCommonPropertiesAsJson(true);
-
-        // should be replaced by metadata
-        JSONObject propertiesPerSampleGroupJsonObject = sharedToolsService.packageUpSortedHierarchicalListAsJson(fullSampleTree)
 
         // prepare translation object
         // this object contains metadata translations, where the database-form metadata
         // text is a key to the translated text (ex. T2D -> Type 2 Diabetes).
         // metadataNames contains most of what we need, but doesn't contain strings of the
         // type <datasource>_<metadataVersion> (ex. GWAS_DIAGRAM_mdv2), so also go through
-        // the datasources applicable to this request
-        // (found in propertiesPerSampleGroupJsonObject.dataset) and add those strings to
+        // the datasources applicable to this request and add those strings to
         // metadataNames
         Set<String> metadataNames = metaDataService.parseMetadataNames()
-        Set<String> datasetNames = propertiesPerSampleGroupJsonObject.dataset.keySet()
-        metadataNames.addAll(datasetNames)
+        fullPropertyTree.each { phenotype, datasets ->
+            metadataNames.addAll(datasets.keySet())
+        }
         // this supports the "no phenotype" stuff--since "none" is not actually in the data,
         // we need to add it manually here
         metadataNames.add("none")
@@ -746,8 +751,8 @@ class VariantSearchController {
         render(status: 200, contentType: "application/json") {
             [
                     columns                 : resultColumnsJsonObject,
-                    metadata                : metadata,
-                    propertiesPerSampleGroup: propertiesPerSampleGroupJsonObject,
+                    metadata                : propertyMap,
+                    datasetStructure        : datasetStructure,
                     cProperties             : commonPropertiesJsonObject,
                     translationDictionary   : translationDictionary,
                     numberOfVariants        : dataJsonObjectCount.numRecords

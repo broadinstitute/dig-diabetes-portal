@@ -71,14 +71,14 @@
                 return;
             }
             var additionalProps = encodeURIComponent(additionalProperties.join(':'));
-            var columnNumbers = mpgSoftware.variantSearchResults.dynamicFillTheFields(data);
+            var totCol = mpgSoftware.variantSearchResults.dynamicFillTheFields(data);
 
             var proteinEffectList = new UTILS.proteinEffectListConstructor(decodeURIComponent("${proteinEffectsList}"));
-            variantProcessing.iterativeVariantTableFiller(data, columnNumbers.totCol, columnNumbers.sortCol, '#variantTable',
+            variantProcessing.iterativeVariantTableFiller(data, totCol, filtersAsJson, '#variantTable',
                     '<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsData" />',
                     '<g:createLink controller="variantInfo" action="variantInfo" />',
                     '<g:createLink controller="gene" action="geneInfo" />',
-                    proteinEffectList,
+                    proteinEffectList.proteinEffectMap,
                     "${locale}",
                     '<g:message code="table.buttons.copyText" default="Copy" />',
                     '<g:message code="table.buttons.printText" default="Print me!" />',
@@ -138,6 +138,11 @@
         additionalProperties = _.union(additionalProperties, valuesToInclude);
 
         loadTheTable();
+
+        // any necessary clean up
+        // reset the dataset/cohort dropdowns on the phenotype addition tab
+        $('#phenotypeAdditionDataset').empty();
+        $('#phenotypeCohorts').hide();
     }
 
     function saveLink() {
@@ -230,14 +235,19 @@
 <div id="main">
 
     <div class="container dk-t2d-back-to-search">
+        <div style="text-align: right;">
+            <a href="https://s3.amazonaws.com/broad-portal-resources/searchResultsHelp.pdf" target="_blank">
+                <g:message code="variantSearch.results.helpText" />
+            </a>
+        </div>
         <div>
-        <a href="<g:createLink controller='variantSearch' action='variantSearchWF'
-                               params='[encParams: "${encodedParameters}"]'/>">
-            <button class="btn btn-primary btn-xs">
-                &laquo; <g:message code="variantTable.searchResults.backToSearchPage" />
-            </button></a>
-        <g:message code="variantTable.searchResults.editCriteria" />
-            </div>
+            <a href="<g:createLink controller='variantSearch' action='variantSearchWF'
+                                   params='[encParams: "${encodedParameters}"]'/>">
+                <button class="btn btn-primary btn-xs">
+                    &laquo; <g:message code="variantTable.searchResults.backToSearchPage" />
+                </button></a>
+            <g:message code="variantTable.searchResults.editCriteria" />
+        </div>
         <div style="margin-top: 5px;">
             <a id="linkToSaveText" href="#" onclick="saveLink()">Click here to copy the current search URL to the clipboard</a>
             <input type="text" id="linkToSave" style="display: none; margin-left: 5px; width: 500px;" />

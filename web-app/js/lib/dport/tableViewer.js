@@ -317,19 +317,24 @@ var variantProcessing = (function () {
         }
         return retVal;
     };
-    var contentExists = function (field){
-        return ((typeof field !== 'undefined') && (field !== null) );
-    };
-    var noop = function (field){return field;};
-    var lineBreakSubstitution = function (field){
-        return (contentExists(field)) ? field.replace(/[;,]/g,'<br/>') : '';
-    };
 
+    // given a query, find the index of the column
+    function getColumnIndexGivenQuery(query) {
+        var columns = _.map($('#variantTableHeaderRow3 th'), function (h) {
+            return $(h).attr('data-colname');
+        });
+        var criteriaArray = [query.prop, query.dataset, query.phenotype];
+        var columnName = _.chain(criteriaArray).filter().join('.').value();
+        var index = _.findIndex(columns, function (column) {
+            return column.indexOf(columnName) == 0;
+        });
+        return index;
+    }
 
     /* Sort col is *relative* to dynamic columns */
     var iterativeVariantTableFiller = function  (data,      // all the table information--doesn't include the variants
                                                  totCol,    // total number of columns
-                                                 sortCol,   // index of the column to sort by--currently defaults to the last p-value
+                                                 filters,   // the filters in JSON form, for determining the column to order on
                                                  divId,     // id of the div to attach to
                                                  dataUrl,   // url for the data for the table
                                                  variantRootUrl,    // url for the variant id link
@@ -344,6 +349,49 @@ var variantProcessing = (function () {
         // check if the browser is using Spanish
         if ( locale.startsWith("es")  ) {
             languageSetting = { url : '../../js/lib/i18n/table.es.json' }
+        }
+
+        // decide on the column to order by using the following prioritization:
+        // 1. the first p-value in the criteria list
+        // 2. the first column in the table displaying a p-value
+        // 3. the first criteria in the list
+        // 4. the VAR_ID (so column 0)
+
+        // using a while-true to avoid several nested ifs
+        while(1) {
+            var sortCol;
+            // case 1
+            var queryIndex = _.findIndex(filters, function (query) {
+                // best guess
+                return query.prop.indexOf('P_') == 0;
+            });
+            if (queryIndex != -1) {
+                sortCol = getColumnIndexGivenQuery(filters[queryIndex]);
+                break;
+            }
+            // case 2
+            var columns = _.map($('#variantTableHeaderRow3 th'), function (h) {
+                return $(h).attr('data-colname');
+            });
+            sortCol = _.findIndex(columns, function (column) {
+                // best guess
+                return column.indexOf('P_') == 0;
+            });
+            if (sortCol != -1) {
+                break;
+            }
+            // case 3
+            // build the criteria--put each element in an array, so we can easily
+            // filter out undefined items and build the appropriate string
+            // it's unlikely this case will find correctly because if it gets here,
+            // then we're dealing with a dprop or cprop, and the generated column name
+            // may differ from what the colname actually is, so you'll usually end up
+            // sorting on VAR_ID anyway
+            sortCol = getColumnIndexGivenQuery(filters[0]);
+            if(sortCol == -1) {
+                sortCol = 0;
+                break;
+            }
         }
 
         // we've stored unique names to each column. they are structured <property>.<dataset>.<phenotype>--in
@@ -398,10 +446,7 @@ var variantProcessing = (function () {
                             case "GENE":
                                 return getStringWithLink(geneRootUrl,(geneRootUrl && data), noop, data, data, "");
                             case "Consequence":
-                                var contingent = (data) && (contentExists(proteinEffectList)) && (contentExists(proteinEffectList.proteinEffectMap)) && (contentExists(proteinEffectList.proteinEffectMap[data]));
-                                var displayField = proteinEffectList.proteinEffectMap[data];
-                                var alternate = lineBreakSubstitution((data && (data !== 'null')) ? data : "");
-                                return getSimpleString(contingent, lineBreakSubstitution, displayField, alternate);
+                                return getProteinString(proteinEffectList, data, '');
                             default:
                                 return getSimpleString(data, noop, data, "");
                         }
@@ -458,6 +503,10 @@ var variantProcessing = (function () {
     var getStringWithLink  = function(urlRoot, contingent, modder, linkField,displayField, alternate){
         var retVal = alternate;
         if (contingent){
+            if(displayField == 'Outside') {
+                return 'Extragenic';
+                // displayField = 'Extragenic';
+            }
             retVal = "<a  href='"+urlRoot+"/"+linkField+"' class='boldItlink'>"+modder(displayField);
         }
         return retVal
@@ -476,6 +525,7 @@ var variantProcessing = (function () {
         }
         return retVal
     };
+
     var getSimpleString  = function(contingent,  modder,  displayField, alternate){
         var retVal = alternate;
         if (contingent){
@@ -483,6 +533,26 @@ var variantProcessing = (function () {
         }
         return retVal
     };
+
+    var getProteinString = function(proteinEffectMap, data, alternate) {
+        if(! data) {
+            return alternate;
+        }
+        var consequences = data.split(/[;,]/g);
+        var translatedConsequences = _.map(consequences, function(c) {
+            if(proteinEffectMap[c]) {
+                return proteinEffectMap[c];
+            }
+            return alternate;
+        });
+        return translatedConsequences.join('<br />');
+    };
+
+    var contentExists = function (field){
+        return ((typeof field !== 'undefined') && (field !== null) );
+    };
+
+    var noop = function (field){return field;};
 
     return {
         addTraitsPerVariantTable:addTraitsPerVariantTable,

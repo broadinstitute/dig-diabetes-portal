@@ -356,7 +356,8 @@ var UTILS = {
             }
         }
     },
-    fillPhenotypeCompoundDropdown: function (dataSetJson,phenotypeDropDownIdentifier,includeDefault) { // help text for each row
+    // phenotypesToOmit is an array of the phenotype keys that should not be included
+    fillPhenotypeCompoundDropdown: function (dataSetJson,phenotypeDropDownIdentifier,includeDefault, phenotypesToOmit) { // help text for each row
         if ((typeof dataSetJson !== 'undefined')  &&
             (typeof dataSetJson["is_error"] !== 'undefined')&&
             (dataSetJson["is_error"] === false))
@@ -391,6 +392,9 @@ var UTILS = {
                     var groupContents = groupList[key];
                     options.append("<optgroup label='"+key+"'>");
                     for (var j = 0; j < groupContents.length; j++) {
+                        if(_.includes(phenotypesToOmit, groupContents[j][0])) {
+                            continue;
+                        }
                         options.append($("<option />").val(groupContents[j][0])
                             // add some whitespace to create indentation
                             .html("&nbsp;&nbsp;&nbsp;" + groupContents[j][1]));

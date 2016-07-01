@@ -53,7 +53,6 @@ var mpgSoftware = mpgSoftware || {};
             $('#variantTableHeaderRow3, #variantTableBody').empty();
 
             // common props section
-            var sortCol = 0;
             var totCol = 0;
             var varIdIndex = data.columns.cproperty.indexOf('VAR_ID');
             if (varIdIndex > 0) {
@@ -104,11 +103,6 @@ var mpgSoftware = mpgSoftware || {};
                         var columnDisp = translationFunction(column);
                         pheno_width++;
                         dataset_width++;
-                        //HACK HACK HACK HACK HACK
-                        // this causes the default sorted column to be the rightmost p-value column
-                        if (column.substring(0, 2) == "P_") {
-                            sortCol = totCol + pheno_width - 1;
-                        }
                         // the data-colname attribute is used in the table generation function
                         var newHeaderElement = $('<th>', {class: 'datatype-header ' + thisPhenotypeColor, html: columnDisp}).attr('data-colName', column + '.' + dataset + '.' + pheno);
                         $('#variantTableHeaderRow3').append(newHeaderElement);
@@ -130,20 +124,31 @@ var mpgSoftware = mpgSoftware || {};
                 }
                 totCol += pheno_width;
             });
-
-            // used to provide info to the table loader
-            return {
-                totCol: totCol,
-                sortCol: sortCol
-            };
             
+            
+            // used to provide info to the table loader
+            return totCol;
+            
+        };
+
+        // given the dataset map that reflects the structure of datasets and cohorts,
+        // flatten it into an array of objects containing the id and name fields.
+        // the order is that produced by a depth-first search.
+        function flattenDatasetStructure(datasetMap) {
+            var toReturn = [];
+            _.forEach(datasetMap, function(children, dataset) {
+                toReturn.push(dataset);
+                toReturn = toReturn.concat(flattenDatasetStructure(_.omit(children, 'name')));
+            });
+
+            return toReturn;
         };
 
         function generateModal(data, phenotypeUrl, commonPropsHeader) {
             // populate the modals to add/remove properties
             // first do some processing on the search queries, so we know what can't
             // be removed
-            var phenotypesInQueries = _.chain(filtersAsJson).map('phenotype').uniq().value();
+            var phenotypesInQueries = _.chain(filtersAsJson).map('phenotype').uniq().filter().value();
             var datasetsInQueries = _.chain(filtersAsJson).map(function(q) {
                 return q.phenotype + '-' + q.dataset;
             }).uniq().value();
@@ -187,12 +192,11 @@ var mpgSoftware = mpgSoftware || {};
                 cache: false,
                 type: "post",
                 url: phenotypeUrl,
-                // url: "${g.createLink(controller: 'VariantSearch', action: 'retrievePhenotypesAjax')}",
                 data: {getNonePhenotype: true},
                 async: true,
                 success: function (data) {
                     if ( data && data.datasets ) {
-                        UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#phenotypeAddition', true);
+                        UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#phenotypeAddition', true, displayedPhenotypes);
                     }
                 },
                 error: function (jqXHR, exception) {
@@ -208,7 +212,8 @@ var mpgSoftware = mpgSoftware || {};
             // of datasets currently being displayed
 
             _.forEach(displayedPhenotypes, function(phenotype, index) {
-                // see if this tab has already been generated--if so, don't do anything
+                // see if this tab has already been generated
+                // if it has, we need to
                 if($('a[href="#' + phenotype + 'DatasetSelection"]').length) {
                     return;
                 }
@@ -232,12 +237,10 @@ var mpgSoftware = mpgSoftware || {};
 
                 // create the list of datasets
                 var displayedDatasets = _.keys(data.columns.pproperty[phenotype]);
-                var allAvailableDatasetsForPhenotype = _.keys(data.metadata[phenotype]);
-                // pull out the datasets that shouldn't be checked, and order them according to
-                // their translated name
-                var datasetsAvailableButNotDisplayed = _.chain(allAvailableDatasetsForPhenotype).difference(displayedDatasets).sortBy(function(d) {
-                    return translationFunction(d);
-                }).value();
+
+                // pull out the datasets that shouldn't be checked
+                var allAvailableDatasetsForPhenotype = flattenDatasetStructure(data.datasetStructure[phenotype]);
+                var datasetsAvailableButNotDisplayed = _.chain(allAvailableDatasetsForPhenotype).difference(displayedDatasets).value();
 
                 var datasetsHolder = $('<div />').addClass('dk-modal-form-input-group');
                 _.forEach(displayedDatasets, function(dataset) {
@@ -264,7 +267,7 @@ var mpgSoftware = mpgSoftware || {};
 
             });
 
-            // now check if any datasets got removed, so we can remove their tabs
+            // now check if any phenotypes got removed, so we can remove their tabs
             _.forEach($('#datasetTabList li'), function(tab) {
                 var tabPhenotype = $(tab).attr('data-phenotype');
                 if(! displayedPhenotypes.includes(tabPhenotype)) {
