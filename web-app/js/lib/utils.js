@@ -89,11 +89,6 @@ var UTILS = {
     retrieveSampleGroupsbyTechnologyAndPhenotype : function(technologies,phenotype, actionUrl, callBack, passThru){
         var phenotypeName = phenotype;
         var passThruValues = passThru;
-        var compareDatasetsByTechnology = function (a, b) {
-            if (a.technology < b. technology) return -1;
-            if (a.technology > b. technology) return 1;
-            return 0;
-        };
         $.ajax({
             cache: false,
             type: "post",
@@ -106,11 +101,8 @@ var UTILS = {
                     ( typeof data !== 'undefined') &&
                     ( typeof data.sampleGroupMap !== 'undefined' )  ) {
                     var sampleGroupMap = data.sampleGroupMap;
-                    if (typeof sampleGroupMap !== 'undefined'){
-                        var datasets = _.chain(sampleGroupMap).values().sortBy('technology').value();
-                        callBack (phenotypeName,datasets,passThruValues);
-
-                    }
+                    var datasets = _.chain(sampleGroupMap).values().sortBy('technology').value();
+                    callBack (phenotypeName,datasets,passThruValues);
                 }
             },
             error: function (jqXHR, exception) {
@@ -698,31 +690,33 @@ var UTILS = {
     jsTreeDataRetriever : function (divId,tableId,phenotypeName,sampleGroupName,retrieveJSTreeAjax){
         var dataPasser = {phenotype:phenotypeName,sampleGroup:sampleGroupName};
         $(divId).jstree({
-            "core" : {
-                "animation" : 0,
-                "check_callback" : true,
-                "themes" : { "stripes" : false },
-                'data' : {
-                    'type': "post",
-                    'url' :  retrieveJSTreeAjax,
-                    'data': function (c,i) {
+            core : {
+                animation : 0,
+                check_callback : true,
+                themes : { "stripes" : false },
+                data : {
+                    type: "post",
+                    url:  retrieveJSTreeAjax,
+                    data: function (c,i) {
                         return dataPasser;
                     },
-                    'metadata': dataPasser
+                    metadata: dataPasser
                 }
             },
-            "checkbox" : {
-                "keep_selected_style" : false,
-                "three_state": false
+            checkbox: {
+                keep_selected_style: false,
+                three_state: false
             },
-            "plugins" : [  "themes","core", "wholerow", "checkbox", "json_data", "ui", "types"]
+            plugins: [ "themes","core", "wholerow", "checkbox", "json_data", "ui", "types"]
         });
         $(divId).on ('after_open.jstree', function (e, data) {
             for ( var i = 0 ; i < data.node.children.length ; i++ )  {
                 $(divId).jstree("select_node", '#'+data.node.children[i]+' .jstree-checkbox', true);
             }
-        }) ;
+        });
         $(divId).on ('load_node.jstree', function (e, data) {
+            // this removes the dataset text that was put in as a placeholder
+            $(divId + ' + p').remove();
             var existingNodes = $(tableId+' td.vandaRowTd div.vandaRowHdr');
             var sgsWeHaveAlready = [];
             for ( var i = 0 ; i < existingNodes.length ; i++ ){

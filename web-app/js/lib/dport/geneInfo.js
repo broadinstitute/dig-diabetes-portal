@@ -407,8 +407,7 @@ var mpgSoftware = mpgSoftware || {};
             return returnValue;
         };
         var fillVariantsAndAssociationLine = function (geneName,// our gene record
-                                                       dataSetCode,// code for data set -- must be gwas,exomechip,exomeseq,or sigma
-                                                       dataSetName,// formal name for the data set
+                                                       dataset,// dataset id
                                                        translatedName,// the human-friendly version
                                                        sampleSize, // listed sample size for this data set
                                                        rowTechnology, // Which technology describes this data set
@@ -416,33 +415,11 @@ var mpgSoftware = mpgSoftware || {};
                                                        valueArray, // data for this row
                                                        columnMap, // since we are doing a whole row we need to know about all columns
                                                        anchorBuildingFunction,  // which anchor building function should we use
-                                                       emphasizeGwas,    // 0->no emphasis, 1-> Emphasize middle row, 2-> Emphasize bottom row
                                                        rootVariantUrl, // root URL is the basis for callbacks
                                                        rowHelpText,
                                                        phenotype,
                                                        rowNumber) { // help text for each row
             if (geneName) {
-                var dataSetNameForUser;
-                switch (dataSetCode) {
-                    case 'GWAS':
-                        dataSetNameForUser = rowHelpText.genomeWide+
-                            rowHelpText.genomeWideQ;
-                        break;
-                    case 'ExChip':
-                        dataSetNameForUser = rowHelpText.exomeChip+
-                            rowHelpText.exomeChipQ;
-                        break;
-                    case 'ExSeq':
-                        dataSetNameForUser =  rowHelpText.exomeSequence+
-                            rowHelpText.exomeSequenceQ;
-                        break;
-                    case 'sigma':
-                        dataSetNameForUser =  rowHelpText.sigma+
-                            rowHelpText.sigmaQ;
-                        break;
-                    default:
-                        dataSetNameForUser = dataSetName;
-                }
                 var tableRow = document.createElement('tr');
                 var tableRowTitle = document.createElement('td');
                 $(tableRowTitle).attr({
@@ -453,11 +430,11 @@ var mpgSoftware = mpgSoftware || {};
                 $(tableRowTitleText).attr({
                     class: 'vandaRowHdr',
                     id: 'vandaRow' + rowNumber,
-                    datasetname: dataSetName,
+                    datasetname: dataset,
                     translatedName: translatedName
                 });
                 $(tableRowTitle).append(tableRowTitleText);
-
+                $(tableRowTitle).append('<p>' + translatedName + '</p>');
                 $(tableRow).append(tableRowTitle);
                 $(tableRow).append('<td>' + rowTechnology + '</td>');
                 $(tableRow).append('<td>' + sampleSize + '</td>');
@@ -465,42 +442,45 @@ var mpgSoftware = mpgSoftware || {};
                 for ( var i = 0 ; i < columnMap.length ; i++ ) {
                     var anchorTd = document.createElement('td');
                     $(anchorTd).append(
-                        anchorBuildingFunction(valueArray[i], geneName, columnMap[i].value, dataSetCode, genomicRegion, rootVariantUrl, phenotype)
-                    )
+                        anchorBuildingFunction(valueArray[i], geneName, columnMap[i].value, dataset, genomicRegion, rootVariantUrl, phenotype)
+                    );
                     $(tableRow).append(anchorTd);
                 }
 
                 $('#variantsAndAssociationsTableBody').append(tableRow);
             }
         };
-        var fillVariantsAndAssociationsTable = function (emphasisRequired, rootVariantUrl, headers,rowHelpText,
-                                                         chromosomeNumber,extentBegin,extentEnd,
-                                                         rowInformation,columnInformation,
-                                                         valueHolder,
+        var fillVariantsAndAssociationsTable = function (pValuesUrl,
+                                                         rootVariantUrl,
+                                                         headerText,
+                                                         rowHelpText,
+                                                         chromosomeNumber,
+                                                         extentBegin,
+                                                         extentEnd,
+                                                         datasets,
+                                                         columnInformation,
                                                          geneName,
                                                          phenotype) {
 
-            var geneInfo;
             var regionSpecifier =  chromosomeNumber + ":" +
                 extentBegin + "-" +
                 extentEnd;
 
-            var emphasizeGwas = (0);
             var headerRow = "<tr>" +
-                "<th>" + headers.hdr1 + "</th>" +
-                "<th>" + headers.hdr4 + "</th>"+
-                "<th>" + headers.hdr2 + "</th>";
+                "<th>" + headerText.hdr1 + "</th>" +
+                "<th>" + headerText.hdr4 + "</th>"+
+                "<th>" + headerText.hdr2 + "</th>";
             for ( var i = 0 ; i < columnInformation.length ; i++ ) {
                 var significanceString =  columnInformation[i].value;
                 var significance =  parseFloat(significanceString);
 
                 headerRow += "<th>" + columnInformation[i].name;
                 if (significance===0.00000005){
-                    headerRow += headers.gwasSig;
+                    headerRow += headerText.gwasSig;
                 } else if (significance===0.00005){
-                    headerRow += headers.locusSig;
+                    headerRow += headerText.locusSig;
                 } else if (significance===0.05){
-                    headerRow += headers.nominalSig;
+                    headerRow += headerText.nominalSig;
                 } else if ((significance > 0)  && (significance < 1)){
                     headerRow +=  "<br/><span class='headersubtext'>p&nbsp;&lt;&nbsp;"+significance.toPrecision(2)+"</span>";
                 }
@@ -508,31 +488,50 @@ var mpgSoftware = mpgSoftware || {};
             }
             headerRow += "</tr>";
             $('#variantsAndAssociationsHead').append(headerRow);
-            for ( var row = 0 ; row < rowInformation.length ; row++ ) {
-                var rowName = rowInformation[row].name;
-                var rowTranslatedName = rowInformation[row].translatedName;
-                var rowCode = rowInformation[row].value;
-                var rowCount = rowInformation[row].count;
-                var rowTechnology = rowInformation[row].technology;
-                var rowProcessorFunction;
-                // we either search by region or by gene name.  We need to decide which reference to build
-                if ((typeof rowCode !== 'undefined') &&
-                    ((rowTechnology=='GWAS')||(rowTechnology=='WGS'))){
-                    rowProcessorFunction = buildAnchorForRegionVariantSearches;
-                } else {
-                    rowProcessorFunction = buildAnchorForGeneVariantSearches;
-                }
-//                if ((typeof rowCode !== 'undefined') &&
-//                    (rowCode.indexOf('GWAS')>-1)){
-//                    rowProcessorFunction = buildAnchorForRegionVariantSearches;
-//                } else {
-//                    rowProcessorFunction = buildAnchorForGeneVariantSearches;
-//                }
-                fillVariantsAndAssociationLine(geneName, rowCode, rowName, rowTranslatedName, rowCount, rowTechnology, regionSpecifier,
-                    valueHolder[row],columnInformation,
-                    rowProcessorFunction, emphasizeGwas, rootVariantUrl, rowHelpText,phenotype,row);
+            
+            var allRowPromises = [];
+            _.forEach(datasets, function(dataset, index) {
+                allRowPromises.push($.ajax({
+                    cache: false,
+                    type: 'post',
+                    url: pValuesUrl,
+                    data: {
+                        geneName: geneName,
+                        dataset: dataset,
+                        colNames: _.map(columnInformation, 'value'),
+                        phenotype: phenotype
+                    },
+                    async: true
+                }).then(function(data) {
+                    var rowProcessorFunction;
+                    // we either search by region or by gene name.  We need to decide which reference to build
+                    if ((typeof data.dataset !== 'undefined') &&
+                        ((data.technology == 'GWAS') || (data.technology =='WGS'))){
+                        rowProcessorFunction = buildAnchorForRegionVariantSearches;
+                    } else {
+                        rowProcessorFunction = buildAnchorForGeneVariantSearches;
+                    }
 
-            }
+                    var pValues = _.chain(data.values).orderBy(['level'], ['desc']).map('count').value();
+
+                    fillVariantsAndAssociationLine(geneName,
+                        data.dataset,
+                        data.translatedName,
+                        data.subjectsNumber,
+                        data.technology,
+                        regionSpecifier,
+                        pValues,
+                        columnInformation,
+                        rowProcessorFunction,
+                        rootVariantUrl,
+                        rowHelpText,
+                        phenotype,
+                        index
+                    );
+                }));
+            });
+
+            return allRowPromises;
         };
 
 
@@ -680,7 +679,6 @@ var mpgSoftware = mpgSoftware || {};
                 } else if (bhtMetaBurdenForDiabetes < 5e-2) {
                     degreeOfSignificance = fillBiologicalHypothesisTesting.question1nominal;
                 }
-                ;
                 $('#significanceDescriptorFormatter').append("<div class='significantDifference'>" +
                     "<div id='describePValueInBiologicalHypothesis' class='significantDifferenceText'>" +
                     "<p class='slimDescription'>" + degreeOfSignificance + "</p>\n" +
@@ -715,36 +713,7 @@ var mpgSoftware = mpgSoftware || {};
                                           rootRegionUrl, rootTraitUrl, rootVariantUrl, textStringObject) {
             var rawGeneInfo = data['geneInfo'];
             fillUniprotSummary(rawGeneInfo);
-//            fillBiologicalHypothesisTesting(rawGeneInfo, show_gwas, show_exchp, show_exseq,
-//                rootVariantUrl,
-//                textStringObject.biologicalHypothesisTesting);
         };
-
-
-        var fillTheVariantAndAssociationsTableFromNewApi = function (data, rootRegionUrl, rootTraitUrl, rootVariantUrl,
-                                                                     textStringObject,
-                                                                     chromosomeNumber,extentBegin,extentEnd,
-                                                                     rowInformation,columnInformation,
-                                                                     valueHolder,
-                                                                     geneName,
-                                                                     phenotype) {
-            fillVariantsAndAssociationsTable(false,
-                rootVariantUrl,
-                textStringObject.variantsAndAssociationsTableHeaders,
-                textStringObject.variantsAndAssociationsRowHelpText,
-                chromosomeNumber,
-                extentBegin,
-                extentEnd,
-                rowInformation,columnInformation,
-                valueHolder,
-                geneName,
-                phenotype
-            );
-        }
-
-
-
-
 
 
         return {
@@ -763,7 +732,7 @@ var mpgSoftware = mpgSoftware || {};
             fillBiologicalHypothesisTesting: fillBiologicalHypothesisTesting,
             fillVariationAcrossEthnicityTable:fillVariationAcrossEthnicityTable,
             retrieveDelayedBiologicalHypothesisOneDataPresenter: retrieveDelayedBiologicalHypothesisOneDataPresenter,
-            fillTheVariantAndAssociationsTableFromNewApi: fillTheVariantAndAssociationsTableFromNewApi,
+            fillVariantsAndAssociationsTable: fillVariantsAndAssociationsTable,
             fillUpBarChart: fillUpBarChart
         }
 

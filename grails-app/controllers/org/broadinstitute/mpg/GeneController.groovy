@@ -198,7 +198,7 @@ class GeneController {
     def genepValueCounts() {
         String geneToStartWith = params.geneName
         String phenotype = params.phenotype
-        List<String> rowNames = sharedToolsService.convertAnHttpList(params."rowNames[]")
+        String dataset = params.dataset
         List<String> colSignificances = sharedToolsService.convertAnHttpList(params."colNames[]")
 
         List<Float> significanceValues = []
@@ -210,17 +210,13 @@ class GeneController {
             }
         }
 
-        List <String> uniqueRowNames = rowNames.unique{ a,b -> a <=> b }
-        JSONObject jsonObject =  restServerService.combinedVariantCountByGeneNameAndPValue ( geneToStartWith.trim().toUpperCase(),
-                                                                                              uniqueRowNames, significanceValues, phenotype )
+        JSONObject jsonObject =  restServerService.combinedVariantCountByGeneNameAndPValue ( geneToStartWith.trim().toUpperCase(), dataset, significanceValues, phenotype )
 
         // attach the translated name so that the client has access to it for sorting in the table
-        for(int i = 0; i < (jsonObject.results.size()); i++) {
-            jsonObject.results[i].translatedName = g.message(code: "metadata." + jsonObject.results[i].dataset, default: jsonObject.results[i].dataset)
-        }
+        jsonObject.translatedName = g.message(code: "metadata." + jsonObject.dataset, default: jsonObject.dataset)
 
         render(status:200, contentType:"application/json") {
-            [geneInfo:jsonObject]
+            jsonObject
         }
     }
 
