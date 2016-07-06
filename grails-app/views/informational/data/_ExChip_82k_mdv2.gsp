@@ -1,6 +1,11 @@
 <div class="panel-body">
-
-   
+<h6 style="color:#ccc;">Data set</h6>
+Publication:
+   <div class="paper">
+The genetic architecture of type 2 diabetes.<br/>
+Fuchsberger, C., et al.
+<div class="citation">Nature, in press.</div>
+</div>
 
     <h4>Data Set Subjects</h4>
     <table class="table table-condensed table-responsive table-striped">
@@ -402,5 +407,9 @@
     </small></h4>
 
     <p>GoT2D led an effort to aggregate data for a meta-analysis of low-frequency variants in coding regions that influence risk of in type 2 diabetes and related traits such as LDL cholesterol levels. The study was based on data from high-density SNP genotyping with a custom array (the exome chip) in 82,000 people, of which 16,000 were funded by GoT2D. The dataset includes ~35,000 type 2 diabetes cases and ~51,000 controls, all of European ancestry.</p>
+<h4>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a href="http://www.type2diabetesgenetics.org/projects/t2dGenes" target="_blank">Learn more ></a></small></h4>
+
+<p>T2D-GENES (Type 2 Diabetes Genetic Exploration by Next-generation sequencing in multi-Ethnic Samples) is a large collaborative effort to find genetic variants that influence risk of type 2 diabetes. With funding from NIDDK, the group is pursuing three projects: (1) deep whole-exome sequencing in 10,000 people from five ethnicities (African-American, East Asian, South Asian, European, and Hispanic); (2) deep whole-genome sequencing of 600 individuals selected from extended Mexican American pedigrees; and (3) a trans-ethnic fine-mapping "mega-meta-analysis." </p>
+
 </div>
 

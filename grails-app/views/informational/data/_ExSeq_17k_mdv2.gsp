@@ -1,4 +1,17 @@
-
+<div class="panel-body">
+    <h6 style="color:#ccc;">Data set</h6>
+    Publication:
+<div class="paper">
+The genetic architecture of type 2 diabetes.<br/>
+Fuchsberger, C., et al.
+<div class="citation">Nature, in press.</div>
+</div>
+Publication:
+<div class="paper">
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/24915262" target="_blank">Association of a low-frequency variant in HNF1A with type 2 diabetes in a Latino 
+population.</a><br/>
+SIGMA Type 2 Diabetes Consortium, Estrada K, Aukrust I, Bjørkhaug L, Burtt NP, Mercader JM, García-Ortiz H, Huerta-Chagoya A, Moreno-Macías H, Walford G, Flannick J, Williams AL, Gómez-Vázquez MJ, Fernandez-Lopez JC, Martínez-Hernández A, Jiménez-Morales S, Centeno-Cruz F, Mendoza-Caamal E, Revilla-Monsalve C, Islas-Andrade S, Córdova EJ, Soberón X, González-Villalpando ME, Henderson E, Wilkens LR, Le Marchand L, Arellano-Campos O, Ordóñez-Sánchez ML, Rodríguez-Torres M, Rodríguez-Guillén R, Riba L, Najmi LA, Jacobs SB, Fennell T,  Gabriel S, Fontanillas P, Hanis CL, Lehman DM, Jenkinson CP, Abboud HE, Bell GI, Cortes ML, Boehnke M, González-Villalpando C, Orozco L, Haiman CA, Tusié-Luna T, Aguilar-Salinas CA, Altshuler D, Njølstad PR, Florez JC, MacArthur DG.<div class="citation">JAMA. 2014 Jun 11;311(22):2305-14. doi: 10.1001/jama.2014.6511.</div>
+</div>
 <h4>Data Set Subjects</h4>
 <table class="table table-condensed table-responsive table-striped">
     <tr><th>Project</th><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small>
@@ -440,3 +453,4 @@
 </h4>
 
 <p>The SIGMA partnership aims to understand the genomic basis of type 2 diabetes in Mexican and Latin American populations. </p>
+</div>

@@ -1,4 +1,11 @@
-
+<div class="panel-body">
+    <h6 style="color:#ccc;">Data set</h6>
+    Publication:
+<div class="paper">
+The genetic architecture of type 2 diabetes.<br/>
+Fuchsberger, C., et al.
+<div class="citation">Nature, in press.</div>
+</div>
 
 <h4>Data Set Subjects</h4>
 <table class="table table-condensed table-responsive table-striped">
@@ -364,3 +371,4 @@
 
 <p>The GoT2D consortium aims to understand the allelic architecture of type 2 diabetes through whole-genome sequencing, high-density SNP genotyping, and imputation. The reference panel based on this work is intended as a comprehensive inventory of low-frequency variants in Europeans, including SNPs, small insertions and deletions, and structural variants.</p>
 
+</div>
