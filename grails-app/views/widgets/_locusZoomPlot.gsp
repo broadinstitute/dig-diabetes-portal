@@ -21,8 +21,7 @@
     }, "BroadT2D");
 
     function conditionOnVariant(variantId, phenotype) {
-        // see where clearCurtain() is defined for why this is commented out
-        // locusZoomPlot.curtain.drop('Loading...');
+        locusZoomPlot.curtain.show('Loading...', {'text-align': 'center'});
         locusZoomPlot.panels[phenotype].data_layers.positions.destroyAllTooltips();
         locusZoomPlot.state[phenotype+".positions"].selected = [];
         var newStateObject = {
@@ -32,8 +31,7 @@
     }
 
     function changeLDReference(variantId, phenotype) {
-        // see where clearCurtain() is defined for why this is commented out
-        // locusZoomPlot.curtain.drop('Loading...');
+        locusZoomPlot.curtain.show('Loading...', {'text-align': 'center'});
         locusZoomPlot.panels[phenotype].data_layers.positions.destroyAllTooltips();
         var newStateObject = {
             ldrefvar: variantId
@@ -48,6 +46,7 @@
         dataSources.add(phenotype, new broadAssociationSource("${createLink(controller:"gene", action:"getLocusZoom")}", phenotype))
 
         var layout = {
+            id: phenotype,
             title: lzParameters.description,
             description: phenotype,
             y_index: -1,
@@ -71,8 +70,9 @@
                     label_offset: 40
                 }
             },
-            data_layers: {
-                significance: {
+            data_layers: [
+                {
+                    id: 'significance',
                     type: "line",
                     z_index: 0,
                     fields: ["sig:x", "sig:y"],
@@ -93,7 +93,8 @@
                         html: "Significance Threshold: 3 × 10^-5"
                     }
                 },
-                recomb: {
+                {
+                    id: 'recomb',
                     type: "line",
                     z_index: 1,
                     fields: ["recomb:position", "recomb:recomb_rate"],
@@ -111,7 +112,8 @@
                         ceiling: 100
                     }
                 },
-                positions: {
+                {
+                    id: 'positions',
                     type: "scatter",
                     z_index: 2,
                     fields: [phenotype + ":id",
@@ -166,7 +168,18 @@
                         duration: 500
                     },
                     selectable: "one",
+                    highlighted: {
+                        onmouseover: "on",
+                        onmouseout: "off"
+                    },
+                    selected: {
+                        onclick: "toggle_exclusive",
+                        onshiftclick: "toggle"
+                    },
                     tooltip: {
+                        closable: true,
+                        show: { or: ["highlighted", "selected"] },
+                        hide: { and: ["unhighlighted", "unselected"] },
                         html: "<strong><a href=${g.createLink(controller: "variantInfo", action: "variantInfo")}/?lzId={{" + phenotype + ":id}} target=_blank>{{" + phenotype + ":id}}</a></strong><br>"
                         + "P Value: <strong>{{" + phenotype + ":pvalue|scinotation}}</strong><br>"
                         + "Ref. Allele: <strong>{{" + phenotype + ":refAllele}}</strong><br>"
@@ -174,10 +187,10 @@
                         + "<a onClick=\"changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "');\" style=\"cursor: pointer;\">Make LD Reference</a>"
                     }
                 }
-            }
+            ]
         };
 
-        locusZoomPlot.addPanel(phenotype, layout);
+        locusZoomPlot.addPanel(layout);
     }
 
 
@@ -217,13 +230,11 @@
         $("#collapseLZ").on("shown.bs.collapse", function () {
             locusZoomPlot.rescaleSVG();
         });
-        // currently awaiting LZ PR merge
-        // once their issue #64 is fixed, we can uncomment all this
-        // var clearCurtain = function() {
-        //    locusZoomPlot.curtain.raise();
-        // };
-        // any time LZ updates, this function is called
-        // locusZoomPlot.onUpdate(clearCurtain);
+
+        var clearCurtain = function() {
+            locusZoomPlot.curtain.hide();
+        };
+        locusZoomPlot.on('data_rendered', clearCurtain);
     };
 
     mpgSoftware.locusZoom.initializeLZPage = initializeLZPage;

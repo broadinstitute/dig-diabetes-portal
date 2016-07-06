@@ -8,17 +8,30 @@ mpgSoftware.locusZoom = {
     StandardLayout: {
         resizable: "responsive",
         aspect_ratio: 7.5,
-        panels: {
-            genes: {
+        panels: [
+            {
+                id: 'genes',
                 margin: { top: 20, right: 50, bottom: 20, left: 50 },
                 axes: {},
-                data_layers: {
-                    genes: {
+                data_layers: [
+                    {
+                        id: 'genes',
                         type: "genes",
                         fields: ["gene:gene", "constraint:constraint"],
                         id_field: "gene_id",
                         selectable: "one",
+                        highlighted: {
+                            onmouseover: "on",
+                            onmouseout: "off"
+                        },
+                        selected: {
+                            onclick: "toggle_exclusive",
+                            onshiftclick: "toggle"
+                        },
                         tooltip: {
+                            closable: true,
+                            show: { or: ["highlighted", "selected"] },
+                            hide: { and: ["unhighlighted", "unselected"] },
                             html: "<h4><strong><i>{{gene_name}}</i></strong></h4>"
                             + "<div style=\"float: left;\">Gene ID: <strong>{{gene_id}}</strong></div>"
                             + "<div style=\"float: right;\">Transcript ID: <strong>{{transcript_id}}</strong></div>"
@@ -32,9 +45,9 @@ mpgSoftware.locusZoom = {
                             + "<div style=\"width: 100%; text-align: right;\"><a href=\"http://exac.broadinstitute.org/gene/{{gene_id}}\" target=\"_new\">More data on ExAC</a></div>"
                         }
                     }
-                }
+                ]
             }
-        }
+        ]
     },
     
     initLocusZoom: function(selector, variantIdString) {
