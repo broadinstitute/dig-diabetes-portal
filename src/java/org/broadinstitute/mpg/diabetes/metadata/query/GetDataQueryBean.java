@@ -22,8 +22,12 @@ public class GetDataQueryBean implements GetDataQuery {
     private List<QueryFilter> orderByList = new ArrayList<QueryFilter>();
     String passback = "abc123";
     String entity = "variant";
-    int pageStart = 0;
-    int pageSize = 100;
+    // default pageStart/pageSize to -1, to signify to the KB
+    // that there is no setting. If they are set, then the limit is
+    // ignored. In practice, the limit is used more than the pageStart/pageSize
+    // settings, so default these to be ignored.
+    int pageStart = -1;
+    int pageSize = -1;
     int limit = 1000;
     boolean isCount = false;
     private List<Covariate> covariateList = new ArrayList<Covariate>();

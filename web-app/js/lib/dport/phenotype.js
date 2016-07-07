@@ -76,7 +76,7 @@ var mpgSoftware = mpgSoftware || {};
                 pageLength: 25,
                 filter: false,
                 order: [[2, "asc"]],
-                columnDefs: [{type: "allnumeric", targets: [2, 3, 4]}],
+                columnDefs: [{type: "scientific", targets: [2]}, {type: "allnumeric", targets: [3, 4]}],
                 language: languageSetting,
                 buttons: [
                     { extend: 'copy', text: copyText },

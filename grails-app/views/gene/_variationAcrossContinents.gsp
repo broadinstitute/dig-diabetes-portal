@@ -11,22 +11,6 @@
     var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.ancestryTable = (function () {
-        jQuery.fn.dataTableExt.oSort['headerConAnchor-asc']  = function(a,b) {
-            var str1 = UTILS.extractConHeaderTextAsString(a);
-            var str2 = UTILS.extractConHeaderTextAsString(b);
-            if (!str1) { str1 = ''; }
-            if (!str2) { str2 = ''; }
-            return str1.localeCompare(str2);
-        };
-
-        jQuery.fn.dataTableExt.oSort['headerConAnchor-desc']  = function(a,b) {
-            var str1 = UTILS.extractConHeaderTextAsString(a);
-            var str2 = UTILS.extractConHeaderTextAsString(b);
-            if (!str1) { str1 = ''; }
-            if (!str2) { str2 = ''; }
-            return str2.localeCompare(str1);
-        };
-
         var loadAncestryTable = function (chosenGene,dataSetMap) {
             var loader = $('#rSpinner');
             loader.show();

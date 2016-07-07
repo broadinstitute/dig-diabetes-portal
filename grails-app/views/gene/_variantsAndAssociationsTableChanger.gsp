@@ -1,52 +1,5 @@
 <script>
     $(document).ready(function () {
-        jQuery.fn.dataTableExt.oSort['allAnchor-asc'] = function (a, b) {
-            var x = UTILS.extractAnchorTextAsInteger(a);
-            var y = UTILS.extractAnchorTextAsInteger(b);
-            if (!x) {
-                x = 0;
-            }
-            if (!y) {
-                y = 0;
-            }
-            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-        };
-
-        jQuery.fn.dataTableExt.oSort['allAnchor-desc'] = function (a, b) {
-            var x = UTILS.extractAnchorTextAsInteger(a);
-            var y = UTILS.extractAnchorTextAsInteger(b);
-            if (!x) {
-                x = 0;
-            }
-            if (!y) {
-                y = 0;
-            }
-            return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-        };
-        jQuery.fn.dataTableExt.oSort['headerAnchor-asc'] = function (a, b) {
-            var str1 = UTILS.extractHeaderTextAsString(a);
-            var str2 = UTILS.extractHeaderTextAsString(b);
-            if (!str1) {
-                str1 = '';
-            }
-            if (!str2) {
-                str2 = '';
-            }
-            return str1.localeCompare(str2);
-        };
-
-        jQuery.fn.dataTableExt.oSort['headerAnchor-desc'] = function (a, b) {
-            var str1 = UTILS.extractHeaderTextAsString(b);
-            var str2 = UTILS.extractHeaderTextAsString(a);
-            if (!str1) {
-                str1 = '';
-            }
-            if (!str2) {
-                str2 = '';
-            }
-            return str1.localeCompare(str2);
-        };
-
         var labelIndenter = function (tableId) {
             var rowSGLabel = $('#' + tableId + ' td.vandaRowTd div.vandaRowHdr');
             if (typeof rowSGLabel !== 'undefined') {
@@ -195,7 +148,8 @@
                 columnDefs: [{type: "allAnchor", targets: anchorColumnMarkers},
                     {type: "headerAnchor", targets: [0]}]
             });
-
+            
+            $('[data-toggle="popover"]').popover();
             loader.hide();
         });
     };

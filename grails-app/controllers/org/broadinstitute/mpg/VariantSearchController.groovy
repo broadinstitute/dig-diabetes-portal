@@ -780,6 +780,10 @@ class VariantSearchController {
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters, searchBuilderService, metaDataService)
         if (getDataQueryHolder.isValid()) {
             List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
+            List<String> translatedFilters = []
+            encodedFilters.each {
+                translatedFilters.add(sharedToolsService.translatorFilter(getDataQueryHolder.decodeFilter(it)))
+            }
             List<String> urlEncodedFilters = getDataQueryHolder.listOfUrlEncodedFilters(encodedFilters)
             LinkedHashMap genomicExtents = sharedToolsService.validGenomicExtents(getDataQueryHolder.retrieveGetDataQuery())
             List<String> identifiedGenes = sharedToolsService.allEncompassedGenes(genomicExtents)
@@ -815,10 +819,9 @@ class VariantSearchController {
                             queryFilters        : urlEncodedFilters.join("^"), //encodedFilters,
                             // link to this page again
                             filtersForSharing   : filters,
-                            // used to list the filters on the page
-                            // this could be reworked, but based on my experience wrestling
-                            // with it, it's not worth the current hassle
-                            encodedFilters      : encodedFilters,
+                            // used for generating the filename of the csv/pdf table exports
+                            // and list of search criteria above the table
+                            translatedFilters   : translatedFilters.join(','),
                             // used for the adding/removing properties modal,
                             // to know which properties are part of the search
                             listOfQueries       : listOfQueries as JSON,

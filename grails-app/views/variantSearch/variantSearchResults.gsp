@@ -85,7 +85,10 @@
                     {
                         filters: "<%=queryFilters%>",
                         properties: additionalProps
-                    }
+                    },
+                    <g:applyCodec encodeAs="none">
+                        "<%= translatedFilters %>"
+                    </g:applyCodec>
             );
             mpgSoftware.variantSearchResults.generateModal(data,
                     '<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
@@ -263,7 +266,11 @@
 
         <table class="table table-striped dk-search-collection">
             <tbody>
-                <g:renderUlFilters encodedFilters='${encodedFilters}'/>
+                <g:each in="${translatedFilters.split(',')}">
+                    <tr>
+                        <td>${it}</td>
+                    </tr>
+                </g:each>
             </tbody>
         </table>
 

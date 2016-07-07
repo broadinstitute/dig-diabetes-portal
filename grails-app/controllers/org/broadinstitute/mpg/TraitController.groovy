@@ -17,101 +17,96 @@ class TraitController {
     MetaDataService metaDataService
     MetadataUtilityService metadataUtilityService
 
-
-
-
     /***
      * create page frame for association statistics across 25 traits for a single variant. The resulting Ajax call is  ajaxTraitsPerVariant
      * @return
      */
-     def traitInfo (){
-         String variantIdentifier = params.getIdentifier()
-         // get locale to provide to table-building plugin
-         String locale = RequestContextUtils.getLocale(request)
+    def traitInfo() {
+        String variantIdentifier = params.getIdentifier()
+        // get locale to provide to table-building plugin
+        String locale = RequestContextUtils.getLocale(request)
 
-         render(view: 'traitsPerVariant',
-                 model: [dnSnpId: variantIdentifier,
-                         variantIdentifier: variantIdentifier,
-                         locale: locale])
-     }
+        render(view: 'traitsPerVariant',
+                model: [dnSnpId          : variantIdentifier,
+                        variantIdentifier: variantIdentifier,
+                        locale           : locale])
+    }
 
     /**
      * serves the associatedStatisticsTraitsPerVariant.gsp fragment; should be independent widget
      *
      * @return
      */
-    def ajaxAssociatedStatisticsTraitPerVariant () {
+    def ajaxAssociatedStatisticsTraitPerVariant() {
         // parse
         String variant = params["variantIdentifier"]
         String technology = ""
-        if (params["technology"]){
-            technology =  params["technology"]
+        if (params["technology"]) {
+            technology = params["technology"]
         }
-        JSONObject jsonObject = restServerService.getTraitPerVariant( variant,technology)
+        JSONObject jsonObject = restServerService.getTraitPerVariant(variant, technology)
 
         def showExomeChip = sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp);
         def showExomeSequence = sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq);
         def showGene = sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene);
 
-        render(status:200, contentType:"application/json") {
+        render(status: 200, contentType: "application/json") {
             [show_gene: showGene, show_exseq: showExomeSequence, show_exchp: showExomeChip, traitInfo: jsonObject]
         }
     }
-
-
-
 
     /**
      * serves the associatedStatisticsTraitsPerVariant.gsp fragment; should be independent widget
      *
      * @return
      */
-    def ajaxSpecifiedAssociationStatisticsTraitsPerVariant () {
+    def ajaxSpecifiedAssociationStatisticsTraitsPerVariant() {
         // parse
 
         JSONObject jsonObjectFromBrowser
         JsonSlurper slurper = new JsonSlurper()
-        if (params["chosendataData"]){
-            jsonObjectFromBrowser =  slurper.parseText(params["chosendataData"])
+        if (params["chosendataData"]) {
+            jsonObjectFromBrowser = slurper.parseText(params["chosendataData"])
         }
         String variant = params["variantIdentifier"]
         String technology = ""
-        if (params["technology"]){
-            technology =  params["technology"]
+        if (params["technology"]) {
+            technology = params["technology"]
         }
-       // JSONObject jsonObject = restServerService.getTraitPerVariant( variant,technology)
-        JSONObject jsonObject = restServerService.getSpecifiedTraitPerVariant( variant,
-                                                                               jsonObjectFromBrowser.vals.collect{return new LinkedHashMap(ds:it.ds,phenotype:it.phenotype,prop:it.prop,otherFields:it.otherFields)},
-                                                                               jsonObjectFromBrowser.phenos )
+        // JSONObject jsonObject = restServerService.getTraitPerVariant( variant,technology)
+        JSONObject jsonObject = restServerService.getSpecifiedTraitPerVariant(variant,
+                jsonObjectFromBrowser.vals.collect {
+                    return new LinkedHashMap(ds: it.ds, phenotype: it.phenotype, prop: it.prop, otherFields: it.otherFields)
+                },
+                jsonObjectFromBrowser.phenos)
 
         def showExomeChip = sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exchp);
         def showExomeSequence = sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq);
         def showGene = sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_gene);
 
-        render(status:200, contentType:"application/json") {
+        render(status: 200, contentType: "application/json") {
             [show_gene: showGene, show_exseq: showExomeSequence, show_exchp: showExomeChip, traitInfo: jsonObject]
         }
     }
-
-
-
 
     /***
      * Returns association statistics across 25 traits for a single variant.  The launching page is traitInfo
      * @return
      */
-    def ajaxSampleGroupsPerTrait()  {
+    def ajaxSampleGroupsPerTrait() {
         String phenotype = params["phenotype"]
-        List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion(phenotype, "", MetaDataService.METADATA_VARIANT)
-        List <String> sampleGroupStrings = []
-        List <String> sortedSampleGroupStrings = sampleGroupList.sort{a,b->return b.subjectsNumber <=> a.subjectsNumber}
+        List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupListForPhenotypeAndVersion(phenotype, "", MetaDataService.METADATA_VARIANT)
+        List<String> sampleGroupStrings = []
+        List<String> sortedSampleGroupStrings = sampleGroupList.sort { a, b -> return b.subjectsNumber <=> a.subjectsNumber }
         String largestSampleGroup = sortedSampleGroupStrings?.first()?.getSystemId()
-        for (SampleGroup sampleGroup in sampleGroupList){
+        for (SampleGroup sampleGroup in sampleGroupList) {
             String sampleGroupId = sampleGroup.getSystemId()
             String sampleGroupTranslation = g.message(code: "metadata." + sampleGroupId, default: sampleGroupId)
-            sampleGroupStrings << """{"sg":"${sampleGroupId}","sgn":"${sampleGroupTranslation}","default":${(sampleGroupId==largestSampleGroup)?1:0}}\n"""
+            sampleGroupStrings << """{"sg":"${sampleGroupId}","sgn":"${sampleGroupTranslation}","default":${
+                (sampleGroupId == largestSampleGroup) ? 1 : 0
+            }}\n"""
         }
-        String rawJson = "["+sampleGroupStrings.join(",")+"]"
+        String rawJson = "[" + sampleGroupStrings.join(",") + "]"
         JsonSlurper slurper = new JsonSlurper()
         JSONArray jsonArray = new JSONArray()
         // Very strange.  the parseText call gives me a different datatype if I have an array with one object.  It shouldn't.  The following workaround
@@ -121,28 +116,24 @@ class TraitController {
         jsonArray.addAll(tempArray)
 
         //JSONArray jsonArray = slurper.parseText(rawJson)
-        render(status:200, contentType:"application/json") {
-            [sampleGroups:jsonArray]
+        render(status: 200, contentType: "application/json") {
+            [sampleGroups: jsonArray]
         }
 
     }
-
-
-
-
 
     /***
      *  search for a single trait from the main page and this will be the page frame.  The resulting Ajax call is  phenotypeAjax
      * @return
      */
     def traitSearch() {
-        String phenotypeKey=sharedToolsService.convertOldPhenotypeStringsToNewOnes (params.trait)
-        String requestedSignificance=params.significance
+        String phenotypeKey = sharedToolsService.convertOldPhenotypeStringsToNewOnes(params.trait)
+        String requestedSignificance = params.significance
         String sampleGroupOwner = this.metaDataService.getGwasSampleGroupNameForPhenotype(phenotypeKey)
         String phenotypeDataSet = ''
         String phenotypeTranslation = g.message(code: "metadata." + phenotypeKey, default: phenotypeKey)
-        List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion(phenotypeKey, "", MetaDataService.METADATA_VARIANT)
-        List<SampleGroup> sortedSampleGroups = sampleGroupList.sort{a, b -> b.subjectsNumber <=> a.subjectsNumber }
+        List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupListForPhenotypeAndVersion(phenotypeKey, "", MetaDataService.METADATA_VARIANT)
+        List<SampleGroup> sortedSampleGroups = sampleGroupList.sort { a, b -> b.subjectsNumber <=> a.subjectsNumber }
         SampleGroup chosenSampleGroup = sortedSampleGroups?.first()
         String chosenSampleGroupId = chosenSampleGroup?.getSystemId()
         String locale = RequestContextUtils.getLocale(request)
@@ -166,33 +157,33 @@ class TraitController {
      * This Ajax call is launched from the traitSearch page frame
      * @return
      */
-     def phenotypeAjax() {
-         String significance = params["significance"]
-         String phenotypicTrait  = params["trait"]
-         String dataSetName  = params["sampleGroup"]
-            BigDecimal significanceValue
-            try {
-                significanceValue = new BigDecimal(significance)
-            } catch (NumberFormatException nfe)  {
-                log.info("USER ERROR: User supplied a nonnumeric significance value = '${significance}")
-                // TODO: error condition.  Go with GWAS significance
-                significanceValue = 0.00000005
+    def phenotypeAjax() {
+        String significance = params["significance"]
+        String phenotypicTrait = params["trait"]
+        String dataSetName = params["sampleGroup"]
+        BigDecimal significanceValue
+        try {
+            significanceValue = new BigDecimal(significance)
+        } catch (NumberFormatException nfe) {
+            log.info("USER ERROR: User supplied a nonnumeric significance value = '${significance}")
+            // TODO: error condition.  Go with GWAS significance
+            significanceValue = 0.00000005
+        }
+        
+        LinkedHashMap properties = [:]
+        if (phenotypicTrait) {
+            if (!dataSetName) {
+                List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupListForPhenotypeAndVersion(phenotypicTrait, "", MetaDataService.METADATA_VARIANT)
+                List<String> sortedSampleGroupStrings = sampleGroupList.sort { a, b -> return b.subjectsNumber <=> a.subjectsNumber }
+                dataSetName = sortedSampleGroupStrings?.first()?.getSystemId()
+
             }
-
-         LinkedHashMap properties = [:]
-         if (phenotypicTrait){
-             if(!dataSetName){
-                 List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion(phenotypicTrait, "", MetaDataService.METADATA_VARIANT)
-                 List <String> sortedSampleGroupStrings = sampleGroupList.sort{a,b->return b.subjectsNumber <=> a.subjectsNumber}
-                 dataSetName = sortedSampleGroupStrings?.first()?.getSystemId()
-
-             }
-             List<PhenotypeBean> phenotypeList = metaDataService.getAllPhenotypesWithName(phenotypicTrait)
-             List<Property> propertyList =  metadataUtilityService.retrievePhenotypeProperties(phenotypeList)
-             for (Property property in propertyList){
-                 properties[property.getName()] = property.getPropertyType()
-             }
-         }
+            List<PhenotypeBean> phenotypeList = metaDataService.getAllPhenotypesWithName(phenotypicTrait)
+            List<Property> propertyList = metadataUtilityService.retrievePhenotypeProperties(phenotypeList)
+            for (Property property in propertyList) {
+                properties[property.getName()] = property.getPropertyType()
+            }
+        }
 
 //          List<PhenotypeBean> phenotypeList = metaDataService.getAllPhenotypesWithName(phenotypicTrait)
 //         if ((phenotypeList?.size()>0) && (!dataSetName)){
@@ -202,28 +193,26 @@ class TraitController {
 //                 properties[property.getName()] = property.getPropertyType()
 //             }
 //         }
-         JSONObject jsonObject = restServerService.getTraitSpecificInformation(phenotypicTrait, dataSetName,properties,significanceValue,0.0)
-         render(status:200, contentType:"application/json") {
-                [variant:jsonObject]
-            }
+        JSONObject jsonObject = restServerService.getTraitSpecificInformation(phenotypicTrait, dataSetName, properties, significanceValue, 0.0)
+        render(status: 200, contentType: "application/json") {
+            [variant: jsonObject]
+        }
 
     }
-
-
 
     /***
      * Returns association statistics across 25 traits for a single variant.  The launching page is traitInfo
      * @return
      */
-    def ajaxTraitsPerVariant()  {
+    def ajaxTraitsPerVariant() {
         String variant = params["variantIdentifier"]
         String technology = "GWAS"
-        if (params["technology"]){
-            technology =  params["technology"]
+        if (params["technology"]) {
+            technology = params["technology"]
         }
-        JSONObject jsonObject = restServerService.getTraitPerVariant( variant, technology )
-        render(status:200, contentType:"application/json") {
-            [traitInfo:jsonObject]
+        JSONObject jsonObject = restServerService.getTraitPerVariant(variant, technology)
+        render(status: 200, contentType: "application/json") {
+            [traitInfo: jsonObject]
         }
 
     }
@@ -272,7 +261,6 @@ class TraitController {
                         show_exseq         : sharedToolsService.getSectionToDisplay(SharedToolsService.TypeOfSection.show_exseq)])
     }
 
-
     /**
      * new method to use the getData call to get the data in trait-search REST call result format
      *
@@ -296,7 +284,7 @@ class TraitController {
         phenotypeList.add(phenotypeMap.get("BMI"));
 
         // submit query
-        JSONObject jsonObject =  this.metaDataService.searchTraitByUnparsedRegion(regionsSpecification, phenotypeList);
+        JSONObject jsonObject = this.metaDataService.searchTraitByUnparsedRegion(regionsSpecification, phenotypeList);
 
         // log
         log.info("for traitVariantCrossAjaxTest, got json results object: " + jsonObject);
@@ -306,7 +294,7 @@ class TraitController {
                 [variants: jsonObject['variants']]
             }
         } else {
-            render(status:300, contentType:"application/json")
+            render(status: 300, contentType: "application/json")
         }
 
     }
@@ -328,7 +316,7 @@ class TraitController {
         phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion());
 
         // submit query
-        JSONObject jsonObject =  this.metaDataService.searchTraitByUnparsedRegion(regionsSpecification, phenotypeList);
+        JSONObject jsonObject = this.metaDataService.searchTraitByUnparsedRegion(regionsSpecification, phenotypeList);
 
         // log
         log.info("for traitVariantCrossAjax, got json results object: " + jsonObject);
@@ -338,7 +326,7 @@ class TraitController {
                 [variants: jsonObject['variants']]
             }
         } else {
-            render(status:300, contentType:"application/json")
+            render(status: 300, contentType: "application/json")
         }
 
     }
@@ -360,12 +348,10 @@ class TraitController {
         JSONObject jsonObject = restServerService.postGetDataCall(requestPayload)
 
         render(status: 200, contentType: "application/json") {
-             jsonObject
+            jsonObject
         }
 
     }
-
-
 
     /***
      * called by regionInfo, this provides information across 25 phenotypes. Use it to populate our big region graphic (the one that
@@ -374,8 +360,8 @@ class TraitController {
      */
     def traitVariantCrossByGeneAjax() {
         String geneName = params.geneName
-        LinkedHashMap<String, Integer> geneExtents   = sharedToolsService.getGeneExpandedExtent(geneName)
-        JSONObject jsonObject =  restServerService.searchForTraitBySpecifiedRegion (geneExtents.chrom as String,
+        LinkedHashMap<String, Integer> geneExtents = sharedToolsService.getGeneExpandedExtent(geneName)
+        JSONObject jsonObject = restServerService.searchForTraitBySpecifiedRegion(geneExtents.chrom as String,
                 geneExtents.startExtent as String,
                 geneExtents.endExtent as String)
         if (jsonObject) {
@@ -383,17 +369,10 @@ class TraitController {
                 [variants: jsonObject['variants']]
             }
         } else {
-            render(status:300, contentType:"application/json")
+            render(status: 300, contentType: "application/json")
         }
 
     }
-
-
-
-
-
-
-
 
 
 }

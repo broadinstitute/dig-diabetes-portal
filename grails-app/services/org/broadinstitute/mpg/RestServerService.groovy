@@ -1612,20 +1612,22 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param minimumPValue
      * @return
      */
-    private JSONObject gatherTraitSpecificResults(String phenotypeName, String dataSet, LinkedHashMap properties, BigDecimal maximumPValue, BigDecimal minimumPValue) {
+    private JSONObject gatherTraitSpecificResults(String phenotypeName, String dataset, LinkedHashMap properties, BigDecimal maximumPValue, BigDecimal minimumPValue) {
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID", "DBSNP_ID", "CLOSEST_GENE", "CHROM", "POS"])
         List<String> filters = []
         String orValue = orSubstitute(properties)
         if (orValue.length() > 0) {
-            addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSet, orValue)
+            addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataset, orValue)
         }
-        String pValueName = filterManagementService.findFavoredMeaningValue ( dataSet, phenotypeName, "P_VALUE" )
-        filters << "17=${phenotypeName}[${dataSet}]${pValueName}<${maximumPValue.toString()}"
-        filters << "17=${phenotypeName}[${dataSet}]${pValueName}>${minimumPValue.toString()}"
+        String pValueName = filterManagementService.findFavoredMeaningValue ( dataset, phenotypeName, "P_VALUE" )
+        filters << "17=${phenotypeName}[${dataset}]${pValueName}<${maximumPValue.toString()}"
+        filters << "17=${phenotypeName}[${dataset}]${pValueName}>${minimumPValue.toString()}"
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters, searchBuilderService, metaDataService)
-        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSet, pValueName)
-        addColumnsForDProperties(resultColumnsToDisplay, "${MAFPHENOTYPE}", dataSet)
+        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataset, pValueName)
+        addColumnsForDProperties(resultColumnsToDisplay, "${MAFPHENOTYPE}", dataset)
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
+        getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(pValueName, phenotypeName, dataset), '1')
+        getDataQueryHolder.getDataQuery.setLimit(100000)
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
         JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)

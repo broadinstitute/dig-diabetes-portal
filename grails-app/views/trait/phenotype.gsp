@@ -83,7 +83,7 @@
     //                .overrideXMaximum (1000000000)
                                         .dotRadius(3)
                                     //.blockColoringThreshold(0.5)
-                                        .significanceThreshold(7.3)
+                                        .significanceThreshold(- Math.log10(parseFloat('<%=requestedSignificance%>')))
                                         .xAxisAccessor(function (d) {
                                             return d.POS
                                         })

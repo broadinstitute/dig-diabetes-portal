@@ -1340,10 +1340,10 @@ class SharedToolsService {
                     displayableComparator = "="
                 } else if (breakoutProperty[1].contains(JsNamingQueryTranslator.QUERY_OPERATOR_MORE_THAN_STRING)) {
                     comparator = JsNamingQueryTranslator.QUERY_OPERATOR_MORE_THAN_STRING
-                    displayableComparator = "&gt;"
+                    displayableComparator = ">"
                 } else if (breakoutProperty[1].contains(JsNamingQueryTranslator.QUERY_OPERATOR_LESS_THAN_STRING)) {
                     comparator = JsNamingQueryTranslator.QUERY_OPERATOR_LESS_THAN_STRING
-                    displayableComparator = "&lt;"
+                    displayableComparator = "<"
                 } else {
                     returnValue = filterToTranslate
                 }

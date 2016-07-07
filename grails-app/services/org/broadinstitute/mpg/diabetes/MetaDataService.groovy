@@ -1016,4 +1016,8 @@ class MetaDataService {
         return toReturn
     }
 
+    public String translateMetadata(String metadata) {
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+        return g.message(code: "metadata." + metadata, default: metadata)
+    }
 }

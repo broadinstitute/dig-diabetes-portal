@@ -7,6 +7,7 @@ modules = {
     datatables {
         dependsOn 'jquery'
         resource url: 'js/lib/datatables/jquery.dataTables.js'
+        resource url: 'js/lib/dport/datatablesSorting.js'
 
         resource url: 'js/lib/datatables/pdfmake.js'
         resource url: 'js/lib/datatables/vfs_fonts.js'
