@@ -1,9 +1,9 @@
-<!-- Modal- -->
 <div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title"><g:message code="variantSearch.results.modal.title" /></h4>
+                <p><g:message code="variantSearch.results.modal.subtitle" /></p>
             </div>
             <div class="modal-body">
                 <ul class="list-unstyled dk-modal-list">
@@ -25,6 +25,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title"><g:message code="variantSearch.results.modal.addSubPheno" /></h4>
+                <p><g:message code="variantSearch.results.modal.addSubPheno.subtitle" /></p>
             </div>
             <div class="modal-body">
                 <div>
@@ -96,6 +97,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title"><g:message code="variantSearch.results.modal.addSubDatasets" /></h4>
+                <p><g:message code="variantSearch.results.modal.addSubDatasets.subtitle" /></p>
             </div>
             <div class="modal-body">
 
@@ -128,6 +130,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title"><g:message code="variantSearch.results.modal.addSubProps" /></h4>
+                <p><g:message code="variantSearch.results.modal.addSubProps.subtitle" /></p>
             </div>
             <div class="modal-body">
 
