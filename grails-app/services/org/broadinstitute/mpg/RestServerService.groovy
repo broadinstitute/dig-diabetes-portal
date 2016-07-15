@@ -533,7 +533,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     public JSONObject postGetSampleDataCall(String jsonString, String URL) {
-         return postRestCallBase(jsonString, this.GET_SAMPLE_DATA_URL, URL)
+         return postRestCallBase(jsonString, this.GET_SAMPLE_DATA_URL, currentRestServer())
     }
 
     private JSONObject postRestCall(String drivingJson, String targetUrl) {

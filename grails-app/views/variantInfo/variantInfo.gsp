@@ -261,7 +261,7 @@
 
                     </div>
 
-                    %{--// Removing the section for now.  Maybe we will want to return it at some point--}%
+                    <g:renderBetaFeaturesDisplayedValue>
                     <div class="separator"></div>
 
                     <div class="accordion-group">
@@ -277,7 +277,7 @@
 
                     </div>
 
-                    %{--</g:if>--}%
+                    </g:renderBetaFeaturesDisplayedValue>
 
                     <div class="separator"></div>
 

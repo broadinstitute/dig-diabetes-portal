@@ -206,6 +206,7 @@ t2dNewDevRestServer { //current 'dev'
 //server.URL = t2dAws01RestServer.base+t2dAws01RestServer.name+t2dAws01RestServer.path
 //server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
 
+//server.URL = 'http://localhost:8888/dig-genome-store/gs/'
 server.URL = t2dQaLoadBalancedServer.base+t2dQaLoadBalancedServer.name+t2dQaLoadBalancedServer.path
 //server.URL = 'http://dig-qa-01.broadinstitute.org:8888/qa/gs/'
 

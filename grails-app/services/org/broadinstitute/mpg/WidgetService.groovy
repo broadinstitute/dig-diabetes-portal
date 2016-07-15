@@ -51,6 +51,12 @@ class WidgetService {
             case "2":
                 operatorType = "INTEGER"
                 break
+            case "3":
+                operatorType = "ORBLOCK"
+                break
+            case "4":
+                operatorType = "ANDBLOCK"
+                break
             default: operatorType = "FLOAT"; break
         }
         switch (comparator){
@@ -65,8 +71,10 @@ class WidgetService {
                 break
             default: operator = "LT"; break
         }
-        switch (operatorType){
-            case "FLOAT": break;
+        switch (operatorType){  // package up the property value if necessary
+            case "FLOAT":
+            case "ORBLOCK":
+            case "ANDBLOCK":  break;
             case "INTEGER":
             case "STRING":
                 if (propertyValue?.length()<1){
@@ -80,6 +88,7 @@ class WidgetService {
                     }
                 }
                 break;
+            default: break
         }
         if (generateFilter){
             returnValue = """{"dataset_id": "${dataset}", "phenotype": "b", "operand": "${propertyName}", "operator": "${operator}", "value": ${propertyValue}, "operand_type": "${operatorType}"}""".toString()
@@ -110,17 +119,18 @@ class WidgetService {
                                         String propertyName,
                                         String rawFilterParm,
                                         String dataset,
+                                        Boolean rangeFilter, // true -> look inside range, false -> look for everything outside range
                                         List<String> requestedFilterList){
        List <String> listOfProperties = rawFilterParm?.tokenize(",")
        if (listOfProperties.size()==2){
            float lowerBound = Float.NaN
            float upperBound = Float.NaN
            // get the first number
-           int delimiterIndex = listOfProperties[0].indexOf('[')
+           int delimiterIndex = listOfProperties[0].indexOf((rangeFilter)?'[':']')
            try{
                lowerBound = Float.parseFloat(listOfProperties[0].substring(delimiterIndex+1))
            }catch (e){} // if it fails simply don't use it for now
-           delimiterIndex = listOfProperties[1].indexOf(']')
+           delimiterIndex = listOfProperties[1].indexOf((rangeFilter)?']':'[')
            if (delimiterIndex>0){
                try{
                    upperBound = Float.parseFloat(listOfProperties[1].substring(0,delimiterIndex))
@@ -129,18 +139,46 @@ class WidgetService {
            if ((lowerBound == Float.NaN)||(upperBound == Float.NaN)) {
                return requestedFilterList
            } else {
-                addSingleFilter (   categorical, //
-                                    "2",// gt
-                                    propertyName,
-                                    lowerBound as String,
-                                    dataset,
-                                    requestedFilterList )
-               addSingleFilter (   categorical, //
-                       "1",// lt
-                       propertyName,
-                       upperBound as String,
-                       dataset,
-                       requestedFilterList )
+               List<String> compoundFilterList = []
+               if (rangeFilter){
+                   addSingleFilter (   categorical,
+                           "2",// gt
+                           propertyName,
+                           lowerBound as String,
+                           dataset,
+                           compoundFilterList )
+                   addSingleFilter (   categorical,
+                           "1",// lt
+                           propertyName,
+                           upperBound as String,
+                           dataset,
+                           compoundFilterList )
+                   addSingleFilter (   "4",//AND
+                           "3",// eq
+                           "blah",
+                           "[ ${compoundFilterList.join(",").toString()} ]".toString(),
+                           "blah",
+                           requestedFilterList )
+               } else {
+                   addSingleFilter (   categorical,
+                           "1",// lt
+                           propertyName,
+                           lowerBound as String,
+                           dataset,
+                           compoundFilterList )
+                   addSingleFilter (   categorical,
+                           "2",// gt
+                           propertyName,
+                           upperBound as String,
+                           dataset,
+                           compoundFilterList )
+                   addSingleFilter (   "3",//OR
+                           "3",// eq
+                           "blah",
+                           "[ ${compoundFilterList.join(",").toString()} ]".toString(),
+                           "blah",
+                           requestedFilterList )
+               }
 
            }
        }
@@ -209,9 +247,9 @@ class WidgetService {
                     String filterParameter = map.parm
                     filterParameter = filterParameter.replaceAll("\\s","")
                     if (filterParameter ==~  /\[.+\,.+\]/) {  // this could be a range filter -- it has square brackets under, and a "," in the middle
-                        requestedFilterList = addCompoundFilter( map.cat, map.name, filterParameter, dataset, requestedFilterList )
+                        requestedFilterList = addCompoundFilter( map.cat, map.name, filterParameter, dataset, true, requestedFilterList )
                     } else if (filterParameter ==~  /\].+\,.+\[/) {  // this could be a extremes filter
-                        requestedFilterList = addMultiFilter( map.cat, map.name, filterParameter, dataset, requestedFilterList )
+                        requestedFilterList = addCompoundFilter( map.cat, map.name, filterParameter, dataset, false, requestedFilterList )
                     } else {
                         requestedFilterList = addSingleFilter ( map.cat, map.cmp, map.name, filterParameter, dataset, requestedFilterList )
                     }
@@ -247,7 +285,7 @@ class WidgetService {
     "passback": "123abc",
     "entity": "variant",
     "page_number": 0,
-    "limit": 18000,
+    "limit": 100000,
     "count": false,
     "distribution": ${(distributionRequested)?'true':'false'},${binRequest}
     "properties":    {
@@ -265,40 +303,6 @@ class WidgetService {
         return jsonResultString
 
     }
-//    public JSONObject getSampleDistribution( JSONObject jsonObject) {
-//        String dataset = jsonObject.dataset
-//        JSONArray requestedData = jsonObject.requestedData as JSONArray
-//        List<String> requestedDataList = []
-//        for (Map map in requestedData){
-//            if (map.name){
-//                requestedDataList << """ "${map.name}":["${dataset}"]""".toString()
-//            }
-//        }
-//
-//        def filters = jsonObject.filters
-//        String filterDesignation = buildFilterDesignation (filters, dataset)
-//        String jsonGetDataString = """{
-//    "passback": "123abc",
-//    "entity": "variant",
-//    "page_number": 0,
-//    "count": false,
-//    "distribution": true,
-//    "bin_number": 24,
-//    "properties":    {
-//                           "cproperty": [],
-//                          "orderBy":    [],
-//"dproperty" : { ${requestedDataList.join(",")} } ,
-//      "pproperty" : { }} ,
-//       ${filterDesignation}
-//}""".toString()
-//
-//        // submit the post request
-//        JSONObject jsonResultString = this.restServerService.postGetSampleDataCall(jsonGetDataString, RestServerService.SAMPLE_SERVER_URL_QA)
-//
-//        // return
-//        return jsonResultString
-//
-//    }
 
 
 
