@@ -551,96 +551,9 @@ var storeFilterData = function (data){
 
 
       var populateSampleAndCovariateSection = function (dataSetId, phenotype, stratificationProperty, filterSpec) {
-
-          if ((typeof stratificationProperty === 'undefined')  ||
-               (stratificationProperty === 'none')) {
-                  $('#stratsTabs').empty();
-                  fillInSampleAndCovariateSection(dataSetId, phenotype, filterSpec );
-               } else {
-                  stratifiedSampleAndCovariateSection(dataSetId, phenotype, stratificationProperty, filterSpec);
-               }
+          $('#stratsTabs').empty();
+          stratifiedSampleAndCovariateSection(dataSetId, phenotype, stratificationProperty, filterSpec);
       }
-
-
-
-
-
-
-        /***
-        *  Build the UI widgets which can be used to specify the filters for DAGA.  Once they are in place
-        *  we can use fillCategoricalDropDownBoxes to create plots.
-        *
-        */
-        var fillInSampleAndCovariateSection = function (dataSetId, phenotype,  filterInfo) {
-            var data = getStoredSampleMetadata();
-            var stratumName = 'strat1';
-
-            var optionsPerFilter = generateOptionsPerFilter(filterInfo) ;
-            if ( ( data !==  null ) &&
-                 ( typeof data !== 'undefined') ){
-
-                    var renderFiltersTemplateData = {
-                        strataProperty:"origin",
-                        strataNames:[{name:'strat1',trans:'strat1',count:0}],
-                        strataContent:[{name:'strat1',trans:'strat1',count:0}],
-                        defaultDisplay: ' active',
-                        tabDisplay: 'display: none'
-                    };
-
-                    // set up the section where the filters will go
-                    $("#chooseFiltersLocation").empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML,renderFiltersTemplateData));
-
-                    // put those filters in place
-                    $(".filterHolder_"+stratumName).empty().append(Mustache.render( $('#allFiltersTemplate')[0].innerHTML,
-                                            generateFilterRenderData(data.filters,optionsPerFilter,stratumName, phenotype),
-                                            { filterFloatTemplate:$('#filterFloatTemplate')[0].innerHTML,
-                                              filterCategoricalTemplate:$('#filterCategoricalTemplate')[0].innerHTML }));
-
-                    // set up the section where the covariates will go
-                    $("#chooseCovariatesLocation").empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML,renderFiltersTemplateData));
-
-                    // put those covariates into place
-                    $(".covariateHolder_"+stratumName).empty().append(Mustache.render( $('#allCovariateSpecifierTemplate')[0].innerHTML,
-                                                                           generateCovariateRenderData(data.covariates,phenotype,stratumName),
-                                                                           {covariateTemplateC1:$('#covariateTemplateC1')[0].innerHTML,
-                                                                           covariateTemplateC2:$('#covariateTemplateC2')[0].innerHTML}));
-
-                        var renderRunData = {
-                            strataProperty:"origin",
-                            stratum:stratumName,
-                            singleRunButtonDisplay: function(){
-                                     var singleRunButton = $('#singleRunButton');
-                                     if (singleRunButton.text().length===0) {
-                                        return ('<button name="singlebutton" style="height: 80px; z-index: 10" id="singleRunButton" '+
-                                                       'class="btn btn-primary btn-lg burden-test-btn vcenter" '+
-                                                       'onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun()">Run</button>');
-                                     } else {
-                                        return "";
-                                     }
-                                }
-                        };
-                    $("#displayResultsLocation").empty().append(Mustache.render( $('#displayResultsTemplate')[0].innerHTML,renderRunData));
-
-//                    $("#sampleRow").show();
-                    $('.sampleNumberReporter').show();
-
-                  // filters should be in place now.  Attach events
-                  _.forEach(data.filters,function(d){
-                      $("#multi_"+stratumName+"_"+d.name).bind("change", function(event, ui){
-                           mpgSoftware.burdenTestShared.displaySampleDistribution(d.name, '.boxWhiskerPlot_'+stratumName,0)
-                      });
-                  });
-
-                   var sampleData = getStoredSampleData();
-
-                   fillCategoricalDropDownBoxes({},phenotype,stratumName,optionsPerFilter);
-
-                   displayTestResultsSection(false);
-             }
-
-
-            $('.caatSpinner').hide();
-        };
 
 
 
@@ -650,61 +563,81 @@ var storeFilterData = function (data){
         *
         */
         var stratifiedSampleAndCovariateSection = function (dataSetId, phenotype, strataProperty, filterInfo) {
+            var stratumName;
+            var multipleStrataExist = (strataProperty !== 'none');
+            if (!multipleStrataExist){
+               stratumName = 'strat1';
+            }
             var data = getStoredSampleMetadata();
-            var defaultDisplayCount = function(count){
-                                 if (this.count==1) {
-                                    return " active";
-                                 } else {
-                                    return "";
-                                 }
-                            };
 
-            var optionsPerFilter = generateOptionsPerFilter(filterInfo) ;
-            if ( ( data !==  null ) &&
-                 ( typeof data !== 'undefined') ){
-
-                    var renderData = {
-                        strataProperty:strataProperty,
-                        strataNames:[],
-                        strataContent:[],
-                        tabDisplay:""
-                    };
-                     var renderFiltersTemplateData = {
-                        strataProperty:strataProperty,
-                        strataNames:[],
-                        strataContent:[]
-                    };
-                    var stratificationProperty = optionsPerFilter.origin;
+            // How many strata do we need to deal with? Create an array to list the names.
+            var generateNamesOfStrata = function (multipleStrataExist, optionsPerFilter, strataProperty){
+                var stratificationProperty;
+                if (multipleStrataExist){
+                    stratificationProperty = optionsPerFilter[strataProperty];
                     var totalSamples = 0;
                     _.forEach(stratificationProperty,function(stratumHolder){
                        totalSamples += stratumHolder.samples;
                     });
                     stratificationProperty.splice(0,0,{name:'ALL',samples:totalSamples});
+                } else {
+                     stratificationProperty = [{name:stratumName }];
+                }
+                return stratificationProperty;
+            };
+
+            // For each strata create the necessary data. Handle the case of a single strata as a special case.
+            var generateRenderData = function(optionsPerFilter,strataProperty,stratificationProperty){
+                var renderData;
+                if (multipleStrataExist){
+                    renderData  = {
+                        strataProperty:strataProperty,
+                        strataNames:[],
+                        strataContent:[],
+                        tabDisplay:""
+                    };
                     _.forEach(stratificationProperty,function(stratumHolder){
                        var stratum=stratumHolder.name;
-                       renderData.strataNames.push({name:stratum,trans:stratum,count:renderData.strataNames.length}); // to get rid of
-                       renderData.strataContent.push({name:stratum,trans:stratum,count:renderData.strataContent.length});  // to get rid of
-                       renderFiltersTemplateData.strataNames.push({name:stratum,trans:stratum,count:renderData.strataNames.length,defaultDisplay:defaultDisplayCount});
-                       renderFiltersTemplateData.strataContent.push({name:stratum,trans:stratum,count:renderData.strataContent.length,defaultDisplay:defaultDisplayCount});
-                    });
+                       renderData.strataNames.push({name:stratum,trans:stratum,count:renderData.strataNames.length});
+                       renderData.strataContent.push({name:stratum,trans:stratum,count:renderData.strataContent.length});
+                     });
+                } else {
+                     renderData  = {
+                        strataProperty:strataProperty,
+                        strataNames:[{name:'strat1',trans:'strat1',count:0}],
+                        strataContent:[{name:'strat1',trans:'strat1',count:0}],
+                        defaultDisplay: ' active',
+                        tabDisplay: 'display: none'
+                    };
+                }
+                return renderData;
+            };
 
-                   // $("#chooseDataSetAndPhenotypeLocation").empty();
+            var optionsPerFilter = generateOptionsPerFilter(filterInfo) ;
+            var stratificationProperty = generateNamesOfStrata(multipleStrataExist, optionsPerFilter, strataProperty);
+            var renderData = generateRenderData(optionsPerFilter,strataProperty,stratificationProperty);
+
+            if ( ( data !==  null ) &&
+                 ( typeof data !== 'undefined') ){
+
                     $("#chooseFiltersLocation").empty();
                     $("#chooseCovariatesLocation").empty();
                     $(".stratified-user-interaction").empty().append(Mustache.render( $('#strataTemplate')[0].innerHTML,renderData));
 
+                    //
                     // set up the section where the filters will go
-                    $("#chooseFiltersLocation").empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML,renderFiltersTemplateData));
-
+                    //
+                    $("#chooseFiltersLocation").empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML,renderData));
 
                     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                         var target = $(e.target).text(); // activated tab
                         displaySampleDistribution('ID',"_"+target,0);
                     });
 
-
-                   // set up the section where the covariates will go
-                    $("#chooseCovariatesLocation").empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML,renderFiltersTemplateData));
+                    //
+                    // set up the section where the covariates will go
+                    //
+                    $("#chooseCovariatesLocation").empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML,renderData));
 
                      _.forEach(stratificationProperty,function(stratumHolder){
                         var stratumName=stratumHolder.name;
@@ -722,38 +655,43 @@ var storeFilterData = function (data){
                                                                                {covariateTemplateC1:$('#covariateTemplateC1')[0].innerHTML,
                                                                                 covariateTemplateC2:$('#covariateTemplateC2')[0].innerHTML}));
 
-                        // display the results section
-                        var renderRunData = {
-                            strataProperty:"origin",
-                            stratum:stratumName,
-                            singleRunButtonDisplay: function(){
-                                     var singleRunButton = $('#singleRunButton');
-                                     if (singleRunButton.text().length===0) {
-                                        return ('<button name="singlebutton" style="height: 80px; z-index: 10" id="singleRunButton" '+
-                                                       'class="btn btn-primary btn-lg burden-test-btn vcenter" '+
-                                                       'onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun()">Run</button>');
-                                     } else {
-                                        return "";
-                                     }
-                                }
-                        };
 
-                         $('.sampleNumberReporter').show();
+                        $('.sampleNumberReporter').show();
 
-                      // filters should be in place now.  Attach events
-                      _.forEach(data.filters,function(d){
-                          $("#multi_"+stratumName+"_"+d.name).bind("change", function(event, ui){
-                               mpgSoftware.burdenTestShared.displaySampleDistribution(d.name, '.boxWhiskerPlot_'+stratumName,0)
-                          });
-                      });
+                         // filters should be in place now.  Attach events
+                         _.forEach(data.filters,function(d){
+                              $("#multi_"+stratumName+"_"+d.name).bind("change", function(event, ui){
+                                   mpgSoftware.burdenTestShared.displaySampleDistribution(d.name, '.boxWhiskerPlot_'+stratumName,0)
+                              });
+                         });
 
-                       var sampleData = getStoredSampleData();
-
-                       fillCategoricalDropDownBoxes({},phenotype,stratumName,optionsPerFilter);
-
-                       //displayTestResultsSection(false);
+                        fillCategoricalDropDownBoxes({},phenotype,stratumName,optionsPerFilter);
 
                     });
+
+                    //
+                    // display the results section
+                    //
+                    var renderRunData = {
+                        strataProperty:"origin",
+                        stratum:stratumName,
+                        singleRunButtonDisplay: function(){
+                                 var singleRunButton = $('#singleRunButton');
+                                 if (singleRunButton.text().length===0) {
+                                    return ('<button name="singlebutton" style="height: 80px; z-index: 10" id="singleRunButton" '+
+                                                   'class="btn btn-primary btn-lg burden-test-btn vcenter" '+
+                                                   'onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun()">Run</button>');
+                                 } else {
+                                    return "";
+                                 }
+                            }
+                    };
+                    $("#displayResultsLocation").empty().append(Mustache.render( $('#displayResultsTemplate')[0].innerHTML,renderRunData));
+
+                    if (multipleStrataExist) {
+                        $('.filterCohort.ALL').click();
+                        $('.covariateCohort.ALL').click();
+                    }
 
               }
 
