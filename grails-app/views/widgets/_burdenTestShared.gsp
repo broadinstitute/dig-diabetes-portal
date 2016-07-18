@@ -634,9 +634,6 @@ var storeFilterData = function (data){
                    var sampleData = getStoredSampleData();
 
                    fillCategoricalDropDownBoxes({},phenotype,stratumName,optionsPerFilter);
-                   if (!backendFiltering){
-                      utilizeSampleInfoForDistributionPlots(sampleData.metaData.variants,phenotype);
-                   }
 
                    displayTestResultsSection(false);
              }
@@ -753,9 +750,6 @@ var storeFilterData = function (data){
                        var sampleData = getStoredSampleData();
 
                        fillCategoricalDropDownBoxes({},phenotype,stratumName,optionsPerFilter);
-                       if (!backendFiltering){
-                          utilizeSampleInfoForDistributionPlots(sampleData.metaData.variants,phenotype);
-                       }
 
                        //displayTestResultsSection(false);
 
@@ -1449,79 +1443,6 @@ var storeFilterData = function (data){
 
 
 
-
-        /***
-        * Given sample information build all of the distribution plots
-        * @param variantData
-        * @param phenotype
-        */
-        var utilizeSampleInfoForDistributionPlots = function (variantData,phenotype){
-            var sampleInfo = groupValuesByPhenotype(variantData);
-           // var optionsPerFilter = generateOptionsPerFilter(variantData) ;
-            var optionsPerFilter = generateOptionsPerFilter() ;
-            var displayableData = convertToBoxWhiskerPreferredObject(sampleInfo);
-            var plotHoldingStructure = $('#boxWhiskerPlot');
-            plotHoldingStructure.empty();
-            var sampleMetadata = getStoredSampleMetadata();
-            $('.sampleNumberReporter .numberOfSamples').text(variantData.length);
-            for ( var i = 0 ; i < displayableData.length ; i++ ){
-                var singleElement = displayableData[i];
-                var elementName = singleElement.name;
-                var divElementName = 'bwp_'+elementName;
-                plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
-                if (elementName === phenotype){
-                   $('.sampleNumberReporter .numberOfPhenotypeSpecificSamples').text(singleElement.data.length);
-                   $('.sampleNumberReporter .phenotypeSpecifier').text(phenotype);
-                }
-                $('#'+divElementName).hide();
-                if (sampleMetadata.filters){
-                  var filter = _.find(sampleMetadata.filters, {'name':elementName});
-                  if (filter){
-                     if (filter.type === 'INTEGER'){
-                        buildCategoricalPlot(optionsPerFilter[elementName],'#'+divElementName);
-                     } else if (filter.type === 'STRING'){
-                        buildCategoricalPlot(optionsPerFilter[elementName],'#'+divElementName);
-                     } if (filter.type === 'FLOAT'){
-                        buildBoxWhiskerPlot([singleElement],'#'+divElementName);
-                     }
-                  }
-                }
-            }
-        };
-
-
-
-        /***
-        *   Do we have sample information stored locally? Then pass it back. Otherwise, we go and get it from the server.
-        * @param data
-        * @param callback
-        * @param passThru
-        */
-        var retrieveSampleInformation = function (data, callback,passThru){
-            var returnedData = getStoredSampleData();
-            if (typeof returnedData === 'undefined') {
-                $.ajax({
-                    cache: false,
-                    type: "post",
-                    url: "${createLink(controller: 'variantInfo', action: 'retrieveSampleListAjax')}",
-                    data: {'data':data},
-                    async: true,
-                    success: function (returnedData) {
-                        storeSampleData(returnedData);
-                        callback(returnedData.metaData.variants,passThru);
-                    },
-                    error: function (jqXHR, exception) {
-                        core.errorReporter(jqXHR, exception);
-                    }
-                });
-            } else {
-               callback(returnedData.metaData.variants,passThru);
-            }
-        };
-
-
-
-
         var retrieveSampleDistribution = function (data, callback,passThru){
 
                 $.ajax({
@@ -1541,28 +1462,6 @@ var storeFilterData = function (data){
 
         };
 
-
-
-
-
-
-
-
-        var determineEachFiltersType = function (){
-             var returnValue = {};
-            var sampleMetadata = getStoredSampleMetadata();
-            for ( var i = 0 ; i < sampleMetadata.filters.length ; i++ ){
-                var singleElement = sampleMetadata.filters[i];
-                var elementName = singleElement.name;
-                if (sampleMetadata.filters){
-                  var filter = _.find(sampleMetadata.filters, {'name':elementName});
-                  if (filter){
-                     returnValue[singleElement.name] = singleElement.type;
-                  }
-                }
-            }
-            return returnValue;
-        }
 
 
         /***

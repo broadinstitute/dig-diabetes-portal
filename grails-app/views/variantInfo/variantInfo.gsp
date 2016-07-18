@@ -129,6 +129,10 @@
         font-weight: inherit;
         font-size: inherit;
     }
+
+    .mbar_xaxis text {
+        font-size: 14px;
+    }
     </style>
 
 

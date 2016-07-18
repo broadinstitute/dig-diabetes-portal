@@ -139,11 +139,7 @@ var baget = baget || {};  // encapsulating variable
                     var	xAxis = d3.svg.axis();
                     xAxis
                         .orient('bottom')
-                        .scale(xscale)
-//                        .tickValues([0,100,200,260]);
-//                        .tickFormat(function(d,i){
-//                            return d;
-//                        });
+                        .scale(xscale);
 
 
                     // unless we have been requested to hold the bar size constant, pick a nice value based on the amount
@@ -174,6 +170,7 @@ var baget = baget || {};  // encapsulating variable
                     canvas.append('g')
                         .attr("transform", "translate("+(margin.left+spaceForYAxisLabels)+","+(margin.top+height)+")")
                         .attr('id','xaxis_'+disambiguator)
+                        .attr('class','mbar_xaxis')
                         .call(xAxis)
                         .call(function(me){
                             me.selectAll('.domain').style('display','none');
