@@ -735,7 +735,49 @@ var storeFilterData = function (data){
         };
 
 
+        var convertFiltersIntoArraysOfStrings = function(filterKey){
+           var filterStrings = [];
+           _.forEach( extractFilters(filterKey), function(filterObject){
+               var oneFilter = [];
+               _.forEach( filterObject, function(value, key){
+                   if (typeof value !== 'undefined'){
+                       if (key==="cat"){
+                          oneFilter.push("\""+key+"\": \""+value+"\"");
+                       }else{
+                          var divider = value.indexOf('_');
+                           if (divider>-1){
+                               var propName = value.substr(divider+1,value.length-divider);
+                               oneFilter.push("\""+key+"\": \""+propName+"\"");
+                           } else {
+                                oneFilter.push("\""+key+"\": \""+value+"\"");
+                           }
+                       }
+                    }
+                });
 
+               filterStrings.push("{"+oneFilter.join(",\n")+"}");
+           } );
+        return filterStrings;
+        };
+
+
+
+
+
+
+        var compoundingFilterValues = function (arrayOfKeys){//additionalKey,additionalValue,alternateValue){
+           var arrayOfArrayOfFilters = [];
+           var filterStrings = [];
+            _.forEach( arrayOfKeys, function(oneSetOfKeys){
+                    var arraysOfStrings = convertFiltersIntoArraysOfStrings(oneSetOfKeys.stratumName);
+                    arraysOfStrings.push("{\"name\":\""+oneSetOfKeys.phenoPropertyName+"\",\n\"parm\":\""+oneSetOfKeys.phenoInstanceSpecifier+"\",\n\"cmp\":\"3\",\n\"cat\":\"1\"}");
+                   arrayOfArrayOfFilters.push(arraysOfStrings);
+            });
+            _.forEach( arrayOfArrayOfFilters, function(arrayOfFilters){
+                    filterStrings.push("["+arrayOfFilters.join(",\n")+"]");
+            } );
+           return "[\n" + filterStrings.join(",") + "\n]";
+        };
 
 
 
@@ -743,9 +785,13 @@ var storeFilterData = function (data){
         *   pull all of the filters out of the Dom and put them into a JSON string suitable for transmission to the server
         *
         */
-        var collectingFilterValues = function (additionalKey,additionalValue){
+        var collectingFilterValues = function (additionalKey,additionalValue,alternateValue){
            var filterStrings = [];
-           _.forEach( extractFilters(additionalValue), function(filterObject){
+           var searchValue = additionalValue;
+           if(typeof alternateValue !== 'undefined') {
+                searchValue = alternateValue;
+           }
+           _.forEach( extractFilters(searchValue), function(filterObject){
                var oneFilter = [];
                _.forEach( filterObject, function(value, key){
                    if (typeof value !== 'undefined'){
@@ -799,33 +845,27 @@ var storeFilterData = function (data){
             };
 
             // name of stratification property
-            var strataPropertyDesignationDom = $('div.stratsTabs_property'); // strata are tested independently
-            var strataPropertyName = strataPropertyDesignationDom.attr("id")
-
-            var phenoPropertyDesignationDom = $('div.phenoSplitTabs_property'); // pheno are treated independently
-            var phenoPropertyName = phenoPropertyDesignationDom.attr("id");
+            var phenoPropertyName = $('div.phenoSplitTabs_property').attr("id"); // what is the phenotype we are modeling
 
             var strataName = '';
+            var strataPropertyName = '';
             var phenoPropertySpecifier = $('a[data-target=#'+params.strataName+']+div.strataPhenoIdent div.phenoCategory').text();
             var phenoInstanceSpecifier = $('a[data-target=#'+params.strataName+']+div.strataPhenoIdent div.phenoInstance').text();
 
-            if (phenoPropertySpecifier === phenoPropertyName){ // this is a phenotype tab
-                strataPropertyName = phenoPropertySpecifier;
+            var jsonDescr;
+            if (phenoPropertySpecifier === phenoPropertyName){ // this tab specifies an instance of the phenotype we are modeling
+                strataPropertyName = phenoPropertyName;
                 strataName = phenoInstanceSpecifier;
-             } else {
+                jsonDescr = "{\"dataset\":\""+$(dataSetSel).val()+"\"," +
+                              "\"requestedData\":"+collectingPropertyNames(params)+"," +
+                              "\"filters\":"+collectingFilterValues(strataPropertyName,strataName,params.strataName)+"}";
+             } else { // This can only be a strata tab, not a phenotype tab
+                strataPropertyName = $('div.stratsTabs_property').attr("id");
                 strataName=params.strataName;
-             }
-
-
-            // particular strata
-
-
-
-            var domSelector = $(dataSetSel);
-            var dataSetName = domSelector.val();
-            var jsonDescr = "{\"dataset\":\""+dataSetName+"\"," +
+                jsonDescr = "{\"dataset\":\""+$(dataSetSel).val()+"\"," +
                               "\"requestedData\":"+collectingPropertyNames(params)+"," +
                               "\"filters\":"+collectingFilterValues(strataPropertyName,strataName)+"}";
+             }
 
             retrieveSampleDistribution  ( jsonDescr, callback, params  );
         }
@@ -903,7 +943,7 @@ var storeFilterData = function (data){
 
 
 
-      var executeAssociationTest = function (filterValues,covariateValues,propertyName,stratum){
+      var executeAssociationTest = function (filterValues,covariateValues,propertyName,stratum,compoundedFilterValues){
 
              var isCategoricalF = function (stats){
                        var isDichotomousTrait = false;
@@ -928,6 +968,7 @@ var storeFilterData = function (data){
                        covariates: covariateValues,
                        samples: "{\"samples\":[]}",
                        filters: "{\"filters\":"+filterValues+"}",
+                       compoundedFilterValues: compoundedFilterValues,
                        traitFilterSelectedOption: phenotypeToPredict,
                        dataset: datasetUse,
                        stratum: stratum
@@ -1125,6 +1166,7 @@ var storeFilterData = function (data){
 
             $('#rSpinner').show();
             var traitFilterSelectedOption = $('#phenotypeFilter').val();
+            var translatedPhenotypeName = convertPhenotypeNames(traitFilterSelectedOption);
             var stratsTabs  = $('#stratsTabs li a.filterCohort');
             if (stratsTabs.length===0){
                var f=executeAssociationTest(collectingFilterValues(),collectingCovariateValues(),'none','strat1');
@@ -1137,11 +1179,29 @@ var storeFilterData = function (data){
                 var phenoSplitDesignationDom = $('div.phenoSplitTabs_property');  // case/control go together
                 var phenoSplitPropertyName = phenoSplitDesignationDom.attr("id");
                 $('.strataResults').empty(); // clear stata reporting section
-                var deferreds = [];
+                var nonPhenotypeTabs = [];
+                var phenotypeTabs = [];
+                var phenoPropertyName = $('div.phenoSplitTabs_property').attr("id");
                 _.forEach(stratsTabs,function (stratum){
                     var stratumName = $(stratum).text();
+                     var phenoPropertySpecifier = $('a[data-target=#'+stratumName+']+div.strataPhenoIdent div.phenoCategory').text();
+                     var phenoInstanceSpecifier = $('a[data-target=#'+stratumName+']+div.strataPhenoIdent div.phenoInstance').text();
+                     if (phenoPropertySpecifier!==translatedPhenotypeName){
+                        nonPhenotypeTabs.push(stratum);
+                     } else {
+                        phenotypeTabs.push({
+                                            phenoPropertyName:phenoPropertyName,
+                                            phenoInstanceSpecifier:phenoInstanceSpecifier,
+                                            stratumName:stratumName
+                        });
+                     }
+                  });
+                var compoundedFilterValues = compoundingFilterValues(phenotypeTabs);
+                var deferreds = [];
+                _.forEach(nonPhenotypeTabs,function (stratum){
+                    var stratumName = $(stratum).text();
                     if (stratumName!=='ALL'){
-                       deferreds.push(executeAssociationTest(collectingFilterValues(strataPropertyName,stratumName),collectingCovariateValues(strataPropertyName,stratumName),strataPropertyName,stratumName));
+                       deferreds.push(executeAssociationTest(collectingFilterValues(strataPropertyName,stratumName),collectingCovariateValues(strataPropertyName,stratumName),strataPropertyName,stratumName,compoundedFilterValues));
                     }
                 });
                 $.when.apply($,deferreds).then(function() {
