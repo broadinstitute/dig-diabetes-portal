@@ -316,6 +316,21 @@ var storeFilterData = function (data){
      return storedSampleMetadata;
  };
 
+
+ var convertPhenotypeNames  = function (untranslatedPhenotype){
+    var convertedName = untranslatedPhenotype;
+    if (untranslatedPhenotype === 't2d'){
+       convertedName = 'T2D_readable';
+    } else if (untranslatedPhenotype === 'Yes'){
+       convertedName = 'CASE';
+    } else if (untranslatedPhenotype === 'No'){
+       convertedName = 'CONTROL';
+    }
+    return convertedName;
+ };
+
+
+
  /***
  * Get back data sets based on phenotype and insert them into a drop-down box
  * @param selPhenotypeSelector
@@ -571,41 +586,60 @@ var storeFilterData = function (data){
             var data = getStoredSampleMetadata();
 
             // How many strata do we need to deal with? Create an array to list the names.
-            var generateNamesOfStrata = function (multipleStrataExist, optionsPerFilter, strataProperty){
+            var generateNamesOfStrata = function (multipleStrataExist, optionsPerFilter, strataProperty, phenotype){
                 var stratificationProperty;
+                var modeledPhenotype = optionsPerFilter[convertPhenotypeNames(phenotype)];
                 if (multipleStrataExist){
                     stratificationProperty = optionsPerFilter[strataProperty];
+                    _.forEach(stratificationProperty,function(oneRec){
+                       oneRec.category = strataProperty;
+                       oneRec.val = oneRec.name;
+                    });
                     var totalSamples = 0;
                     _.forEach(stratificationProperty,function(stratumHolder){
                        totalSamples += stratumHolder.samples;
                     });
-                    stratificationProperty.splice(0,0,{name:'ALL',samples:totalSamples});
+                    stratificationProperty.splice(0,0,{name:'ALL',val:'ALL',samples:totalSamples, category:convertPhenotypeNames(phenotype)});
                 } else {
-                     stratificationProperty = [{name:stratumName }];
+                     stratificationProperty = [{name:stratumName, val:stratumName, category:convertPhenotypeNames(phenotype) }];
+                }
+                if ( (typeof modeledPhenotype !== 'undefined') &&(modeledPhenotype.length===2) ){
+                    stratificationProperty.splice(0,0,{ name:convertPhenotypeNames(modeledPhenotype[0].name),
+                                                        val:modeledPhenotype[0].name,
+                                                        samples:modeledPhenotype[0].samples,
+                                                        category:convertPhenotypeNames(phenotype)});
+                    stratificationProperty.splice(0,0,{ name:convertPhenotypeNames(modeledPhenotype[1].name),
+                                                        val:modeledPhenotype[1].name,
+                                                        samples:modeledPhenotype[1].samples,
+                                                        category:convertPhenotypeNames(phenotype)});
                 }
                 return stratificationProperty;
             };
 
             // For each strata create the necessary data. Handle the case of a single strata as a special case.
-            var generateRenderData = function(optionsPerFilter,strataProperty,stratificationProperty){
+            var generateRenderData = function(optionsPerFilter,strataProperty,stratificationProperty, phenotype){
                 var renderData;
                 if (multipleStrataExist){
                     renderData  = {
                         strataProperty:strataProperty,
+                        phenotypeProperty:convertPhenotypeNames(phenotype),
                         strataNames:[],
                         strataContent:[],
                         tabDisplay:""
                     };
                     _.forEach(stratificationProperty,function(stratumHolder){
                        var stratum=stratumHolder.name;
-                       renderData.strataNames.push({name:stratum,trans:stratum,count:renderData.strataNames.length});
-                       renderData.strataContent.push({name:stratum,trans:stratum,count:renderData.strataContent.length});
+                       var category=stratumHolder.category;
+                       var val=stratumHolder.val;
+                       renderData.strataNames.push({name:stratum,trans:stratum,val:val,category:category,count:renderData.strataNames.length});
+                       renderData.strataContent.push({name:stratum,trans:stratum,val:val,category:category,count:renderData.strataContent.length});
                      });
                 } else {
                      renderData  = {
                         strataProperty:strataProperty,
-                        strataNames:[{name:'strat1',trans:'strat1',count:0}],
-                        strataContent:[{name:'strat1',trans:'strat1',count:0}],
+                        phenotypeProperty:convertPhenotypeNames(phenotype),
+                        strataNames:[{name:'strat1',trans:'strat1',category:'strat1',count:0}],
+                        strataContent:[{name:'strat1',trans:'strat1',category:'strat1',count:0}],
                         defaultDisplay: ' active',
                         tabDisplay: 'display: none'
                     };
@@ -614,15 +648,15 @@ var storeFilterData = function (data){
             };
 
             var optionsPerFilter = generateOptionsPerFilter(filterInfo) ;
-            var stratificationProperty = generateNamesOfStrata(multipleStrataExist, optionsPerFilter, strataProperty);
-            var renderData = generateRenderData(optionsPerFilter,strataProperty,stratificationProperty);
+            var stratificationProperty = generateNamesOfStrata(multipleStrataExist, optionsPerFilter, strataProperty, phenotype);
+            var renderData = generateRenderData(optionsPerFilter,strataProperty,stratificationProperty, phenotype);
 
             if ( ( data !==  null ) &&
                  ( typeof data !== 'undefined') ){
 
                     $("#chooseFiltersLocation").empty();
                     $("#chooseCovariatesLocation").empty();
-                    $(".stratified-user-interaction").empty().append(Mustache.render( $('#strataTemplate')[0].innerHTML,renderData));
+                    $(".stratified-user-interaction").empty().append(Mustache.render( $('#strataTemplate')[0].innerHTML,renderData));// this line does nothing?
 
                     //
                     // set up the section where the filters will go
@@ -673,7 +707,8 @@ var storeFilterData = function (data){
                     // display the results section
                     //
                     var renderRunData = {
-                        strataProperty:"origin",
+                        strataProperty:strataProperty,
+                        phenotypeProperty:convertPhenotypeNames(phenotype),
                         stratum:stratumName,
                         singleRunButtonDisplay: function(){
                                  var singleRunButton = $('#singleRunButton');
@@ -763,14 +798,34 @@ var storeFilterData = function (data){
                return "[\n" + propertyStrings.join(",") + "\n]";
             };
 
+            // name of stratification property
+            var strataPropertyDesignationDom = $('div.stratsTabs_property'); // strata are tested independently
+            var strataPropertyName = strataPropertyDesignationDom.attr("id")
+
+            var phenoPropertyDesignationDom = $('div.phenoSplitTabs_property'); // pheno are treated independently
+            var phenoPropertyName = phenoPropertyDesignationDom.attr("id");
+
             var strataName = '';
-            strataName=params.strataName;
+            var phenoPropertySpecifier = $('a[data-target=#'+params.strataName+']+div.strataPhenoIdent div.phenoCategory').text();
+            var phenoInstanceSpecifier = $('a[data-target=#'+params.strataName+']+div.strataPhenoIdent div.phenoInstance').text();
+
+            if (phenoPropertySpecifier === phenoPropertyName){ // this is a phenotype tab
+                strataPropertyName = phenoPropertySpecifier;
+                strataName = phenoInstanceSpecifier;
+             } else {
+                strataName=params.strataName;
+             }
+
+
+            // particular strata
+
+
 
             var domSelector = $(dataSetSel);
             var dataSetName = domSelector.val();
             var jsonDescr = "{\"dataset\":\""+dataSetName+"\"," +
                               "\"requestedData\":"+collectingPropertyNames(params)+"," +
-                              "\"filters\":"+collectingFilterValues('origin',strataName)+"}";
+                              "\"filters\":"+collectingFilterValues(strataPropertyName,strataName)+"}";
 
             retrieveSampleDistribution  ( jsonDescr, callback, params  );
         }
@@ -1077,14 +1132,16 @@ var storeFilterData = function (data){
                       //alert('all done with 1');
                 });
             } else {
-                var propertyDesignationDom = $('div.stratsTabs_property');
-                var propertyName = propertyDesignationDom.attr("id");
+                var propertyDesignationDom = $('div.stratsTabs_property'); // strata are tested independently
+                var strataPropertyName = propertyDesignationDom.attr("id");
+                var phenoSplitDesignationDom = $('div.phenoSplitTabs_property');  // case/control go together
+                var phenoSplitPropertyName = phenoSplitDesignationDom.attr("id");
                 $('.strataResults').empty(); // clear stata reporting section
                 var deferreds = [];
                 _.forEach(stratsTabs,function (stratum){
                     var stratumName = $(stratum).text();
                     if (stratumName!=='ALL'){
-                       deferreds.push(executeAssociationTest(collectingFilterValues(propertyName,stratumName),collectingCovariateValues(propertyName,stratumName),propertyName,stratumName));
+                       deferreds.push(executeAssociationTest(collectingFilterValues(strataPropertyName,stratumName),collectingCovariateValues(strataPropertyName,stratumName),strataPropertyName,stratumName));
                     }
                 });
                 $.when.apply($,deferreds).then(function() {
@@ -1265,10 +1322,13 @@ var storeFilterData = function (data){
 
 
 
-        function extractFilters(stratum){
+        function extractFilters(stratum,strataCategory){
             var stratumName = "";
             if (typeof stratum !== 'undefined') {
-               stratumName = '.'+stratum;
+               stratumName += ('.'+stratum);
+            }
+            if (typeof strataCategory !== 'undefined') {
+               stratumName += ('.'+strataCategory);
             }
             var allFilters =  $('.realValuedFilter'+stratumName);
             var requestedFilters = [];
@@ -1809,9 +1869,16 @@ $( document ).ready( function (){
                         <div class="col-sm-12 col-xs-12">
                             <ul class="nav nav-tabs" id="stratsTabs">
                                 {{ #strataNames }}
-                                   <li class="{{defaultDisplay}}"><a data-target="#{{name}}" data-toggle="tab" class="filterCohort {{trans}}">{{trans}}</a></li>
+                                   <li class="{{defaultDisplay}}">
+                                       <a data-target="#{{name}}" data-toggle="tab" class="filterCohort {{trans}}">{{trans}}</a>
+                                       <div class="strataPhenoIdent">
+                                           <div class="phenoCategory" style="display: none">{{category}}</div>
+                                           <div class="phenoInstance" style="display: none">{{val}}</div>
+                                       </div>
+                                   </li>
                                 {{ /strataNames }}
                                 <div class="stratsTabs_property" id="{{strataProperty}}" style="display: none"></div>
+                                <div class="phenoSplitTabs_property" id="{{phenotypeProperty}}" style="display: none"></div>
                             </ul>
                         </div>
                     </div>
