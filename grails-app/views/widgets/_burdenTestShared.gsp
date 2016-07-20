@@ -599,7 +599,7 @@ var storeFilterData = function (data){
                     _.forEach(stratificationProperty,function(stratumHolder){
                        totalSamples += stratumHolder.samples;
                     });
-                    stratificationProperty.splice(0,0,{name:'ALL',val:'ALL',samples:totalSamples, category:convertPhenotypeNames(phenotype)});
+                    stratificationProperty.splice(0,0,{name:'ALL',val:'ALL',samples:totalSamples, category:convertPhenotypeNames(strataProperty)});
                 } else {
                      stratificationProperty = [{name:stratumName, val:stratumName, category:convertPhenotypeNames(phenotype) }];
                 }
@@ -765,7 +765,7 @@ var storeFilterData = function (data){
 
 
 
-        var compoundingFilterValues = function (arrayOfKeys){//additionalKey,additionalValue,alternateValue){
+        var compoundingFilterValues = function (arrayOfKeys){
            var arrayOfArrayOfFilters = [];
            var filterStrings = [];
             _.forEach( arrayOfKeys, function(oneSetOfKeys){

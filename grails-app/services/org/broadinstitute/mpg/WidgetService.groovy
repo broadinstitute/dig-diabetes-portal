@@ -22,26 +22,27 @@ class WidgetService {
     private final String LOCUSZOOM_HAIL_ENDPOINT_DEV = "Hail Dev";
     private final String LOCUSZOOM_HAIL_ENDPOINT_QA = "Hail QA";
     private String locusZoomEndpointSelection = LOCUSZOOM_HAIL_ENDPOINT_QA;
-    private final List<String> locusZoomEndpointList = [this.LOCUSZOOM_17K_ENDPOINT, this.LOCUSZOOM_HAIL_ENDPOINT_DEV, LOCUSZOOM_HAIL_ENDPOINT_QA];
+    private
+    final List<String> locusZoomEndpointList = [this.LOCUSZOOM_17K_ENDPOINT, this.LOCUSZOOM_HAIL_ENDPOINT_DEV, LOCUSZOOM_HAIL_ENDPOINT_QA];
 
     // constants for now
     private final String dataSetKey = "ExSeq_17k_mdv2";
     private final String phenotypeKey = "T2D";
     private final String propertyKey = "P_FIRTH_FE_IV";
     private final String errorResponse = "{\"data\": {}, \"error\": true}";
-    private final int  NUMBER_OF_DISTRIBUTION_BINS = 24
+    private final int NUMBER_OF_DISTRIBUTION_BINS = 24
 
-    private String singleFilter ( String categorical, //
-                                  String comparator,
-                                  String propertyName,
-                                  String propertyValue,
-                                  String dataset
-                                 ){
+    private String singleFilter(String categorical, //
+                                String comparator,
+                                String propertyName,
+                                String propertyValue,
+                                String dataset
+    ) {
         String returnValue
         String operatorType
         String operator
         Boolean generateFilter = true;
-        switch (categorical){
+        switch (categorical) {
             case "0":
                 operatorType = "FLOAT"
                 break
@@ -59,7 +60,7 @@ class WidgetService {
                 break
             default: operatorType = "FLOAT"; break
         }
-        switch (comparator){
+        switch (comparator) {
             case "1":
                 operator = "LT"
                 break
@@ -71,17 +72,17 @@ class WidgetService {
                 break
             default: operator = "LT"; break
         }
-        switch (operatorType){  // package up the property value if necessary
+        switch (operatorType) {  // package up the property value if necessary
             case "FLOAT":
             case "ORBLOCK":
-            case "ANDBLOCK":  break;
+            case "ANDBLOCK": break;
             case "INTEGER":
             case "STRING":
-                if (propertyValue?.length()<1){
+                if (propertyValue?.length() < 1) {
                     generateFilter = false
                 } else { // currently we can only send in one value.
-                    List <String> listOfSelectedValues = propertyValue.tokenize(",")
-                    if (listOfSelectedValues.size()>1){
+                    List<String> listOfSelectedValues = propertyValue.tokenize(",")
+                    if (listOfSelectedValues.size() > 1) {
                         generateFilter = false
                     } else {
                         propertyValue = "\"${propertyValue}\""
@@ -90,137 +91,98 @@ class WidgetService {
                 break;
             default: break
         }
-        if (generateFilter){
-            returnValue = """{"dataset_id": "${dataset}", "phenotype": "b", "operand": "${propertyName}", "operator": "${operator}", "value": ${propertyValue}, "operand_type": "${operatorType}"}""".toString()
-        }else {
-            returnValue=""
+        if (generateFilter) {
+            returnValue = """{"dataset_id": "${dataset}", "phenotype": "b", "operand": "${
+                propertyName
+            }", "operator": "${operator}", "value": ${propertyValue}, "operand_type": "${operatorType}"}""".toString()
+        } else {
+            returnValue = ""
         }
         return returnValue
     }
 //def c=s.replaceAll("\\s","").substring(s.indexOf('[')+1,s.size()-s.indexOf('[')-1)
 
 
-    private List<String> addSingleFilter (  String categorical, //
-                                            String comparator,
-                                            String propertyName,
-                                            String propertyValue,
-                                            String dataset,
-                                            List<String> requestedFilterList){
-        String proposedFilter = singleFilter ( categorical, comparator, propertyName, propertyValue, dataset )
-        if (proposedFilter?.length()>1){
+    private List<String> addSingleFilter(String categorical, //
+                                         String comparator,
+                                         String propertyName,
+                                         String propertyValue,
+                                         String dataset,
+                                         List<String> requestedFilterList) {
+        String proposedFilter = singleFilter(categorical, comparator, propertyName, propertyValue, dataset)
+        if (proposedFilter?.length() > 1) {
             requestedFilterList << proposedFilter
         }
         return requestedFilterList
     }
 
 
-
-   private List<String> addCompoundFilter (String categorical,
-                                        String propertyName,
-                                        String rawFilterParm,
-                                        String dataset,
-                                        Boolean rangeFilter, // true -> look inside range, false -> look for everything outside range
-                                        List<String> requestedFilterList){
-       List <String> listOfProperties = rawFilterParm?.tokenize(",")
-       if (listOfProperties.size()==2){
-           float lowerBound = Float.NaN
-           float upperBound = Float.NaN
-           // get the first number
-           int delimiterIndex = listOfProperties[0].indexOf((rangeFilter)?'[':']')
-           try{
-               lowerBound = Float.parseFloat(listOfProperties[0].substring(delimiterIndex+1))
-           }catch (e){} // if it fails simply don't use it for now
-           delimiterIndex = listOfProperties[1].indexOf((rangeFilter)?']':'[')
-           if (delimiterIndex>0){
-               try{
-                   upperBound = Float.parseFloat(listOfProperties[1].substring(0,delimiterIndex))
-               }catch (e){} // if it fails simply don't use it for now
-           }
-           if ((lowerBound == Float.NaN)||(upperBound == Float.NaN)) {
-               return requestedFilterList
-           } else {
-               List<String> compoundFilterList = []
-               if (rangeFilter){
-                   addSingleFilter (   categorical,
-                           "2",// gt
-                           propertyName,
-                           lowerBound as String,
-                           dataset,
-                           compoundFilterList )
-                   addSingleFilter (   categorical,
-                           "1",// lt
-                           propertyName,
-                           upperBound as String,
-                           dataset,
-                           compoundFilterList )
-                   addSingleFilter (   "4",//AND
-                           "3",// eq
-                           "blah",
-                           "[ ${compoundFilterList.join(",").toString()} ]".toString(),
-                           "blah",
-                           requestedFilterList )
-               } else {
-                   addSingleFilter (   categorical,
-                           "1",// lt
-                           propertyName,
-                           lowerBound as String,
-                           dataset,
-                           compoundFilterList )
-                   addSingleFilter (   categorical,
-                           "2",// gt
-                           propertyName,
-                           upperBound as String,
-                           dataset,
-                           compoundFilterList )
-                   addSingleFilter (   "3",//OR
-                           "3",// eq
-                           "blah",
-                           "[ ${compoundFilterList.join(",").toString()} ]".toString(),
-                           "blah",
-                           requestedFilterList )
-               }
-
-           }
-       }
-       return requestedFilterList
-   }
-
-
-    private List<String> addMultiFilter (String categorical,
-                                            String propertyName,
-                                            String rawFilterParm,
-                                            String dataset,
-                                            List<String> requestedFilterList){
-        List <String> listOfProperties = rawFilterParm?.tokenize(",")
-        if (listOfProperties.size()==2){
+    private List<String> addCompoundFilter(String categorical,
+                                           String propertyName,
+                                           String rawFilterParm,
+                                           String dataset,
+                                           Boolean rangeFilter, // true -> look inside range, false -> look for everything outside range
+                                           List<String> requestedFilterList) {
+        List<String> listOfProperties = rawFilterParm?.tokenize(",")
+        if (listOfProperties.size() == 2) {
             float lowerBound = Float.NaN
             float upperBound = Float.NaN
             // get the first number
-            int delimiterIndex = listOfProperties[0].indexOf(']')
-            try{
-                lowerBound = Float.parseFloat(listOfProperties[0].substring(delimiterIndex+1))
-            }catch (e){} // if it fails simply don't use it for now
-            delimiterIndex = listOfProperties[1].indexOf('[')
-            if (delimiterIndex>0){
-                try{
-                    upperBound = Float.parseFloat(listOfProperties[1].substring(0,delimiterIndex))
-                }catch (e){} // if it fails simply don't use it for now
+            int delimiterIndex = listOfProperties[0].indexOf((rangeFilter) ? '[' : ']')
+            try {
+                lowerBound = Float.parseFloat(listOfProperties[0].substring(delimiterIndex + 1))
+            } catch (e) {
+            } // if it fails simply don't use it for now
+            delimiterIndex = listOfProperties[1].indexOf((rangeFilter) ? ']' : '[')
+            if (delimiterIndex > 0) {
+                try {
+                    upperBound = Float.parseFloat(listOfProperties[1].substring(0, delimiterIndex))
+                } catch (e) {
+                } // if it fails simply don't use it for now
             }
-            if ((lowerBound == Float.NaN)||(upperBound == Float.NaN)) {
+            if ((lowerBound == Float.NaN) || (upperBound == Float.NaN)) {
                 return requestedFilterList
             } else {
-                addSingleFilter (   categorical, //
-                        "1",// gt
-                        propertyName,
-                        lowerBound as String,
-                        dataset,
-                        requestedFilterList )
-                addSingleFilter (   categorical, //
-                        "2",// lt
-                        propertyName,
-                        upperBound as String,
-                        dataset,
-                        requestedFilterList )
+                List<String> compoundFilterList = []
+                if (rangeFilter) {
+                    addSingleFilter(categorical,
+                            "2",// gt
+                            propertyName,
+                            lowerBound as String,
+                            dataset,
+                            compoundFilterList)
+                    addSingleFilter(categorical,
+                            "1",// lt
+                            propertyName,
+                            upperBound as String,
+                            dataset,
+                            compoundFilterList)
+                    addSingleFilter("4",//AND
+                            "3",// eq
+                            "blah",
+                            "[ ${compoundFilterList.join(",").toString()} ]".toString(),
+                            "blah",
+                            requestedFilterList)
+                } else {
+                    addSingleFilter(categorical,
+                            "1",// lt
+                            propertyName,
+                            lowerBound as String,
+                            dataset,
+                            compoundFilterList)
+                    addSingleFilter(categorical,
+                            "2",// gt
+                            propertyName,
+                            upperBound as String,
+                            dataset,
+                            compoundFilterList)
+                    addSingleFilter("3",//OR
+                            "3",// eq
+                            "blah",
+                            "[ ${compoundFilterList.join(",").toString()} ]".toString(),
+                            "blah",
+                            requestedFilterList)
+                }
 
             }
         }
@@ -228,9 +190,44 @@ class WidgetService {
     }
 
 
+    private List<String> processSingleFilter(Map map, String dataset, List<String> existingFilterList) {
+        if (map.name) {
+            String filterParameter = map.parm
+            filterParameter = filterParameter.replaceAll("\\s", "")
+            if (filterParameter ==~ /\[.+\,.+\]/) {
+                // this could be a range filter -- it has square brackets under, and a "," in the middle
+                existingFilterList = addCompoundFilter(map.cat, map.name, filterParameter, dataset, true, existingFilterList)
+            } else if (filterParameter ==~ /\].+\,.+\[/) {  // this could be a extremes filter
+                existingFilterList = addCompoundFilter(map.cat, map.name, filterParameter, dataset, false, existingFilterList)
+            } else {
+                existingFilterList = addSingleFilter(map.cat, map.cmp, map.name, filterParameter, dataset, existingFilterList)
+            }
+        }
+        return existingFilterList
+    }
+
+    private List<String> combineFiltersInANDBlock(List<String> filtersToCombine, List<String> listWeAreExpanding){
+        return addSingleFilter ( "4",//AND
+                "3",// eq
+                "blah",
+                " [  ${filtersToCombine.join(",").toString()}  ] ".toString ( ),
+                "blah",
+                listWeAreExpanding )
+    }
+
+    private List<String> combineFiltersInORBlock(List<String> filtersToCombine, List<String> listWeAreExpanding){
+        return addSingleFilter ( "3",//OR
+                "3",// eq
+                "blah",
+                " [  ${filtersToCombine.join(",").toString()}  ] ".toString ( ),
+                "blah",
+                listWeAreExpanding )
+    }
 
 
-    public String buildFilterDesignation (def filters,String dataset){
+
+
+    public String buildFilterDesignation (JSONArray filters, JSONArray compoundedFilterValues, String dataset){
         String filterDesignation = ""
 
         if ((filters==null)||
@@ -240,34 +237,49 @@ class WidgetService {
             ]
 """.toString()
         }
-        else if (filters.size()> 0){
+        else {
+            List<String> masterFilterList = []
             List<String> requestedFilterList = []
-            for (Map map in filters){
-                if (map.name){
-                    String filterParameter = map.parm
-                    filterParameter = filterParameter.replaceAll("\\s","")
-                    if (filterParameter ==~  /\[.+\,.+\]/) {  // this could be a range filter -- it has square brackets under, and a "," in the middle
-                        requestedFilterList = addCompoundFilter( map.cat, map.name, filterParameter, dataset, true, requestedFilterList )
-                    } else if (filterParameter ==~  /\].+\,.+\[/) {  // this could be a extremes filter
-                        requestedFilterList = addCompoundFilter( map.cat, map.name, filterParameter, dataset, false, requestedFilterList )
-                    } else {
-                        requestedFilterList = addSingleFilter ( map.cat, map.cmp, map.name, filterParameter, dataset, requestedFilterList )
-                    }
+            if (filters.size()> 0){
+                for (Map map in filters){
+                    requestedFilterList = processSingleFilter( map, dataset, requestedFilterList)
                 }
             }
-            if (requestedFilterList.size()==0){
+            List<String> compoundFilterList = []
+            if (compoundedFilterValues?.size()> 0){ // we have a group of filter groups
+                List<String> intermediateFilterList = []
+                for (List subFilters in compoundedFilterValues){
+                    List<String> developingCompoundFilterList = []
+                    for (Map map in subFilters){
+                        developingCompoundFilterList = processSingleFilter( map, dataset, developingCompoundFilterList)
+                    }
+                    intermediateFilterList = combineFiltersInANDBlock(developingCompoundFilterList,intermediateFilterList )
+                }
+                compoundFilterList = combineFiltersInORBlock(intermediateFilterList,compoundFilterList )
+            }
+            if ((requestedFilterList.size()>0)&&(compoundFilterList.size()==0)){
+                masterFilterList = requestedFilterList
+            } else if ((requestedFilterList.size()==0)&&(compoundFilterList.size()>0)){
+                masterFilterList = compoundFilterList
+            } else {
+                List<String> groupingFilterList = []
+                groupingFilterList=combineFiltersInANDBlock(requestedFilterList,groupingFilterList )
+                groupingFilterList=combineFiltersInANDBlock(compoundFilterList,groupingFilterList )
+                masterFilterList=combineFiltersInANDBlock(groupingFilterList,masterFilterList )
+            }
+            if (masterFilterList.size()==0){
                 filterDesignation =  """            "filters":    [
                  ${singleFilter ( "1", "1", "ID", "ZZZZZ", dataset )}
             ]
 """.toString()
             } else {
                 filterDesignation = """ "filters":    [
-                ${requestedFilterList.join(",")}
+                ${masterFilterList.join(",")}
         ]
 """.toString()
             }
-
         }
+
 
         return filterDesignation
     }
@@ -280,7 +292,7 @@ class WidgetService {
             binRequest = """
 "bin_number": $NUMBER_OF_DISTRIBUTION_BINS, """.toString()
         }
-        String filterDesignation = buildFilterDesignation (filters, dataset)
+        String filterDesignation = buildFilterDesignation (filters as JSONArray, [] as JSONArray, dataset)
         String jsonGetDataString = """{
     "passback": "123abc",
     "entity": "variant",

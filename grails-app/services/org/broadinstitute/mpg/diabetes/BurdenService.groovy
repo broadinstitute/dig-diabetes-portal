@@ -311,6 +311,7 @@ class BurdenService {
                                                           JSONObject covariateJsonObject,
                                                           JSONObject sampleJsonObject,
                                                           JSONObject filtersJsonObject,
+                                                          JSONArray phenotypeFilterValues,
                                                           String dataset ) throws PortalException {
         // local variables
         org.broadinstitute.mpg.Variant burdenVariant;
@@ -327,7 +328,7 @@ class BurdenService {
         }
 
         // call shared method
-        returnJson = this.callBurdenTestForTraitAndVariantId(traitOption, variantId, covariateJsonObject, sampleJsonObject, filtersJsonObject, dataset );
+        returnJson = this.callBurdenTestForTraitAndVariantId(traitOption, variantId, covariateJsonObject, sampleJsonObject, filtersJsonObject, phenotypeFilterValues, dataset );
 
         // return
         return returnJson;
@@ -345,6 +346,7 @@ class BurdenService {
                                                             JSONObject covariateJsonObject,
                                                             JSONObject sampleJsonObject,
                                                             JSONObject filtersJsonObject,
+                                                            JSONArray phenotypeFilterValues,
                                                             String dataset) throws PortalException {
         // local variables
         List<String> burdenVariantList = new ArrayList<String>();
@@ -359,13 +361,7 @@ class BurdenService {
             throw new PortalException("got null variantId for single variant burden call")
         }
 
-        // call shared method
-
-        //kludge: force mdv==1
-
-
-
-        returnJson = this.getBurdenResultForVariantIdList(stringDataVersion , traitOption, burdenVariantList, covariateJsonObject, sampleJsonObject,  filtersJsonObject, dataset, false );
+        returnJson = this.getBurdenResultForVariantIdList(stringDataVersion , traitOption, burdenVariantList, covariateJsonObject, sampleJsonObject,  filtersJsonObject, phenotypeFilterValues, dataset, false );
 
         // return
         return returnJson;
@@ -380,7 +376,8 @@ class BurdenService {
      * @throws PortalException
      */
     protected JSONObject getBurdenResultForVariantIdList(String stringDataVersion, String phenotype, List<String> burdenVariantList,
-                                                         JSONObject covariateJsonObject, JSONObject sampleJsonObject, JSONObject filtersJsonObject, String dataset, Boolean explicitlySelectSamples) throws PortalException {
+                                                         JSONObject covariateJsonObject, JSONObject sampleJsonObject, JSONObject filtersJsonObject,
+                                                         JSONArray phenotypeFilterValues, String dataset, Boolean explicitlySelectSamples) throws PortalException {
         // local variables
         JSONObject jsonObject = null;
         JSONObject returnJson = null;
@@ -399,7 +396,9 @@ class BurdenService {
             }
         }
 
-        String filters = widgetService.buildFilterDesignation (filtersJsonObject.filters,goWithDataSet)
+        String filters = widgetService.buildFilterDesignation (filtersJsonObject.filters  as JSONArray,
+                phenotypeFilterValues,
+                goWithDataSet)
 
         // check to make sure we have at least one variant
         if ((burdenVariantList) == null || (burdenVariantList.size() < 1)) {

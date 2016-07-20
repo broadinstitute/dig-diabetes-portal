@@ -162,7 +162,7 @@ class VariantInfoController {
             }
         }
         requestedDataList << """ "ID":["${dataset}"]""".toString()
-        JSONObject jsonObject = widgetService.getSampleDistribution ( dataset, requestedDataList, false, sampleCallSpecifics.filters, true )
+        JSONObject jsonObject = widgetService.getSampleDistribution ( dataset, requestedDataList, false, sampleCallSpecifics.filters  as JSONArray, true )
 
         //JSONObject jsonObject =  widgetService.getSampleList ( sampleCallSpecifics)
         render(status:200, contentType:"application/json") {
@@ -290,12 +290,13 @@ def retrieveSampleSummary (){
         JSONObject covariateJsonObject = slurper.parseText(params.covariates)
         JSONObject sampleJsonObject = slurper.parseText(params.samples)
         JSONObject filtersJsonObject = slurper.parseText(params.filters)
+        JSONArray phenotypeFilterValues = slurper.parseText(params.compoundedFilterValues) as JSONArray
         String dataset = params.dataset
         // cast the parameters
         String variantName = params.variantName;
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
-        JSONObject result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantName, covariateJsonObject, sampleJsonObject, filtersJsonObject, dataset  );
+        JSONObject result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantName, covariateJsonObject, sampleJsonObject, filtersJsonObject, phenotypeFilterValues, dataset  );
 
         // send json response back
         if (!result){
