@@ -247,7 +247,7 @@ class BurdenService {
             JSONObject filtersObject = new JSONObject()
 
 
-            returnJson = this.getBurdenResultForVariantIdList("mdv${dataVersionId}".toString(), phenotype, burdenVariantList, covariatesObject, samplesObject, filtersObject, dataSet, explicitlySelectSamples);
+            returnJson = this.getBurdenResultForVariantIdList("mdv${dataVersionId}".toString(), phenotype, burdenVariantList, covariatesObject, samplesObject, filtersObject, [] as JSONArray, dataSet, explicitlySelectSamples);
 
         } catch (PortalException exception) {
             log.error("Got error creating burden test for gene: " + geneString + " and phenotype: " + phenotype + ": " + exception.getMessage());

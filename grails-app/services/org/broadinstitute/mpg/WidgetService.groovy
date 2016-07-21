@@ -199,12 +199,36 @@ class WidgetService {
                 existingFilterList = addCompoundFilter(map.cat, map.name, filterParameter, dataset, true, existingFilterList)
             } else if (filterParameter ==~ /\].+\,.+\[/) {  // this could be a extremes filter
                 existingFilterList = addCompoundFilter(map.cat, map.name, filterParameter, dataset, false, existingFilterList)
+            } else if ((filterParameter ==~ /.+\,.+/)&&(map.cat=="1")) {  // Has at least one comma and the filter is categorical.  Maybe there are multiple elements that need to be simultaneously selected
+                existingFilterList = convertMultipleCategoricalsIntoFilterList(map.cat, map.cmp, map.name, filterParameter, dataset, existingFilterList)
             } else {
                 existingFilterList = addSingleFilter(map.cat, map.cmp, map.name, filterParameter, dataset, existingFilterList)
             }
         }
         return existingFilterList
     }
+
+
+    private List<String> convertMultipleCategoricalsIntoFilterList (String categorical,
+                                                                    String comparator,
+                                                                    String propertyName,
+                                                                    String rawFilterParm,
+                                                                    String dataset,
+                                                                    List<String> requestedFilterList){
+        List<String> listOfCategories = rawFilterParm.tokenize(",")
+        List<String> developingFilterList = []
+        if (listOfCategories.size() > 1) {
+            for (String singleCategory in listOfCategories){
+                developingFilterList = addSingleFilter(categorical, comparator, propertyName, singleCategory, dataset, developingFilterList)
+            }
+            requestedFilterList = combineFiltersInORBlock(developingFilterList, requestedFilterList)
+        } else if (listOfCategories.size() > 0) {
+            requestedFilterList = addSingleFilter(categorical, comparator, propertyName, rawFilterParm, dataset, requestedFilterList)
+        }
+        return requestedFilterList
+    }
+
+
 
     private List<String> combineFiltersInANDBlock(List<String> filtersToCombine, List<String> listWeAreExpanding){
         return addSingleFilter ( "4",//AND

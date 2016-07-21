@@ -617,13 +617,12 @@ var storeFilterData = function (data){
             };
 
             // For each strata create the necessary data. Handle the case of a single strata as a special case.
-            var generateRenderData = function(optionsPerFilter,strataProperty,stratificationProperty, phenotype){
+            var generateRenderData = function(optionsPerFilter,strataProperty,stratificationProperty, phenotype, specificsAboutFilters, specificsAboutCovariates){
                 var renderData;
                 if (multipleStrataExist){
                     renderData  = {
                         strataProperty:strataProperty,
                         phenotypeProperty:convertPhenotypeNames(phenotype),
-                        strataNames:[],
                         strataContent:[],
                         tabDisplay:""
                     };
@@ -631,15 +630,21 @@ var storeFilterData = function (data){
                        var stratum=stratumHolder.name;
                        var category=stratumHolder.category;
                        var val=stratumHolder.val;
-                       renderData.strataNames.push({name:stratum,trans:stratum,val:val,category:category,count:renderData.strataNames.length});
-                       renderData.strataContent.push({name:stratum,trans:stratum,val:val,category:category,count:renderData.strataContent.length});
+                       renderData.strataContent.push({  name:stratum,
+                                                        trans:stratum,
+                                                        val:val,
+                                                        category:category,
+                                                        count:renderData.strataContent.length,
+                                                        filterDetails:generateFilterRenderData(specificsAboutFilters,optionsPerFilter,stratum, phenotype),
+                                                        covariateDetails:generateCovariateRenderData(specificsAboutCovariates,phenotype,stratum)});
                      });
                 } else {
                      renderData  = {
                         strataProperty:strataProperty,
                         phenotypeProperty:convertPhenotypeNames(phenotype),
-                        strataNames:[{name:'strat1',trans:'strat1',category:'strat1',count:0}],
-                        strataContent:[{name:'strat1',trans:'strat1',category:'strat1',count:0}],
+                        strataContent:[{name:'strat1',trans:'strat1',category:'strat1',count:0,
+                                                        filterDetails:generateFilterRenderData(specificsAboutFilters,optionsPerFilter, 'strat1', phenotype),
+                                                        covariateDetails:generateCovariateRenderData(specificsAboutCovariates,phenotype, 'strat1' ) }],
                         defaultDisplay: ' active',
                         tabDisplay: 'display: none'
                     };
@@ -647,21 +652,25 @@ var storeFilterData = function (data){
                 return renderData;
             };
 
-            var optionsPerFilter = generateOptionsPerFilter(filterInfo) ;
-            var stratificationProperty = generateNamesOfStrata(multipleStrataExist, optionsPerFilter, strataProperty, phenotype);
-            var renderData = generateRenderData(optionsPerFilter,strataProperty,stratificationProperty, phenotype);
 
             if ( ( data !==  null ) &&
                  ( typeof data !== 'undefined') ){
 
+                    var optionsPerFilter = generateOptionsPerFilter(filterInfo) ;
+                    var stratificationProperty = generateNamesOfStrata(multipleStrataExist, optionsPerFilter, strataProperty, phenotype);
+                    var renderData = generateRenderData(optionsPerFilter,strataProperty,stratificationProperty, phenotype, data.filters, data.covariates);
+
+
                     $("#chooseFiltersLocation").empty();
                     $("#chooseCovariatesLocation").empty();
-                    $(".stratified-user-interaction").empty().append(Mustache.render( $('#strataTemplate')[0].innerHTML,renderData));// this line does nothing?
 
                     //
                     // set up the section where the filters will go
                     //
-                    $("#chooseFiltersLocation").empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML,renderData));
+                    $("#chooseFiltersLocation").empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML,renderData,
+                                                                                {   allFiltersTemplate: $('#allFiltersTemplate')[0].innerHTML,
+                                                                                    filterFloatTemplate:$('#filterFloatTemplate')[0].innerHTML,
+                                                                                    filterCategoricalTemplate:$('#filterCategoricalTemplate')[0].innerHTML }));
 
                     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                         var target = $(e.target).text(); // activated tab
@@ -671,24 +680,14 @@ var storeFilterData = function (data){
                     //
                     // set up the section where the covariates will go
                     //
-                    $("#chooseCovariatesLocation").empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML,renderData));
+                    $("#chooseCovariatesLocation").empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML,renderData,
+                                                                                {   allCovariateSpecifierTemplate: $('#allCovariateSpecifierTemplate')[0].innerHTML,
+                                                                                    covariateTemplateC1:$('#covariateTemplateC1')[0].innerHTML,
+                                                                                    covariateTemplateC2:$('#covariateTemplateC2')[0].innerHTML }));
 
+                    // do a few things in an old-fashioned, looping way
                      _.forEach(stratificationProperty,function(stratumHolder){
                         var stratumName=stratumHolder.name;
-
-                         // put those filters in place
-                        $(".filterHolder_"+stratumName).empty().append(Mustache.render( $('#allFiltersTemplate')[0].innerHTML,
-                                                generateFilterRenderData(data.filters,optionsPerFilter,stratumName, phenotype),
-                                                { filterFloatTemplate:$('#filterFloatTemplate')[0].innerHTML,
-                                                  filterCategoricalTemplate:$('#filterCategoricalTemplate')[0].innerHTML }));
-
-
-                        // put those covariates into place
-                        $(".covariateHolder_"+stratumName).empty().append(Mustache.render( $('#allCovariateSpecifierTemplate')[0].innerHTML,
-                                                                               generateCovariateRenderData(data.covariates,phenotype,stratumName),
-                                                                               {covariateTemplateC1:$('#covariateTemplateC1')[0].innerHTML,
-                                                                                covariateTemplateC2:$('#covariateTemplateC2')[0].innerHTML}));
-
 
                         $('.sampleNumberReporter').show();
 
@@ -1721,7 +1720,7 @@ $( document ).ready( function (){
 
                 <div class="row burden-test-wrapper-options">
 
-                    <r:img class="caatSpinner" uri="/images/loadingCaat.gif" alt="Loading CAAT data"/>
+                    <r:img class="caatSpinner" uri="/images/loadingCaat.gif" alt="Loading GAIT data"/>
 
 
 
@@ -1749,6 +1748,7 @@ $( document ).ready( function (){
 </div> %{--end accordion group--}%
 
 
+%{--IAT results section--}%
 <script id="displayResultsTemplate"  type="x-tmpl-mustache">
     <div class="panel panel-default">%{--should hold the Choose data set panel--}%
 
@@ -1817,7 +1817,7 @@ $( document ).ready( function (){
 </script>
 
 
-
+%{--Choose the phenotype and stratification options. Currently the top section in the interface--}%
 <script id="chooseDataSetAndPhenotypeTemplate"  type="x-tmpl-mustache">
     <div class="panel panel-default">%{--should hold the Choose data set panel--}%
 
@@ -1891,13 +1891,8 @@ $( document ).ready( function (){
     </div>    %{--end accordion panel for id=chooseSamples--}%
 </script>
 
-
-<script id="strataTemplate"  type="x-tmpl-mustache">
-
-
-</script>
-
-
+%{--Handles the filters section, both with and without strata.  Note however that we do not fill in
+the individual filters themselves. That work is handled later as part of a loop--}%
 <script id="chooseFiltersTemplate"  type="x-tmpl-mustache">
 <div class="panel panel-default">%{--should hold the Choose filters panel--}%
 
@@ -1928,7 +1923,7 @@ $( document ).ready( function (){
                     <div class="row" style="{{tabDisplay}}">
                         <div class="col-sm-12 col-xs-12">
                             <ul class="nav nav-tabs" id="stratsTabs">
-                                {{ #strataNames }}
+                                {{ #strataContent }}
                                    <li class="{{defaultDisplay}}">
                                        <a data-target="#{{name}}" data-toggle="tab" class="filterCohort {{trans}}">{{trans}}</a>
                                        <div class="strataPhenoIdent">
@@ -1936,7 +1931,7 @@ $( document ).ready( function (){
                                            <div class="phenoInstance" style="display: none">{{val}}</div>
                                        </div>
                                    </li>
-                                {{ /strataNames }}
+                                {{ /strataContent }}
                                 <div class="stratsTabs_property" id="{{strataProperty}}" style="display: none"></div>
                                 <div class="phenoSplitTabs_property" id="{{phenotypeProperty}}" style="display: none"></div>
                             </ul>
@@ -1967,7 +1962,11 @@ $( document ).ready( function (){
 
                                                                <div class="user-interaction user-interaction-{{name}}">
 
-                                                                     <div class="filterHolder filterHolder_{{name}}"></div>
+                                                                     <div class="filterHolder filterHolder_{{name}}">
+
+                                                                        {{ >allFiltersTemplate }}
+
+                                                                     </div>
 
                                                                 </div>
 
@@ -2004,88 +2003,16 @@ $( document ).ready( function (){
         </div>%{--end accordion panel for id=filterSamples--}%
 </script>
 
-<script id="chooseCovariatesTemplate"  type="x-tmpl-mustache">
-        <div class="panel panel-default">%{--should hold the initiate analysis set panel--}%
-
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#initiateAnalysis_{{stratum}}"
-                       href="#initiateAnalysis_{{stratum}}">Step 3: Control for covariates</a>
-                </h4>
-            </div>
 
 
-            <div id="initiateAnalysis_{{stratum}}" class="panel-collapse collapse">
-                <div class="panel-body secBody">
-
-                    <div class="row">
-                        <div class="col-sm-12 col-xs-12">
-                            <p>
-                                Select principal components and/or phenotypes to be used as covariates in your association analysis. Principal
-                                components 1-4 are selected by default to minimize the influence of ancestry, though additional principal components
-                                may be selected to control for finer grained substructure within a population. Selecting phenotypes as covariates
-                                allows you to estimate the effects of the response phenotype independently of the covariate phenotypes.
-                            </p>
-                        </div>
-                    </div>
-
-
-                    <div class="row"  style="{{tabDisplay}}">
-                        <div class="col-sm-12 col-xs-12">
-                            <ul class="nav nav-tabs" id="stratsCovTabs">
-                                {{ #strataNames }}
-                                   <li class="{{defaultDisplay}}"><a data-target="#cov_{{name}}" data-toggle="tab" class="covariateCohort {{name}}">{{trans}}</a></li>
-                                {{ /strataNames }}
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="tab-content">
-                        {{ #strataContent }}
-                            <div class="tab-pane {{defaultDisplay}}" id="cov_{{name}}">
-
-                                <div class="row">
-                                    <div class="col-sm-8 col-xs-12 vcenter covariate_holder">
-                                        <div class="covariates">
-                                            <div class="row">
-                                                <div class="col-md-10 col-sm-10 col-xs-12 vcenter" style="margin-top:0">
-
-                                                    <div class="covariateHolder covariateHolder_{{name}}">
-
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-6 col-xs-12">
-                                    </div>
-                                 </div>
-                            </div>
-                        {{ /strataContent }}
-                    </div>
-
-                </div>
-            </div>
-
-        </div>%{--end id=initiateAnalysis panel--}%
-</script>
-
-
-
-
-
-<script id="allFiltersTemplate"  type="x-tmpl-mustache">
-
+            <script id="allFiltersTemplate"  type="x-tmpl-mustache">
+                            {{ #filterDetails }}
                                 {{>filterCategoricalTemplate}}
                                 {{>filterFloatTemplate}}
-                            </script>
+                            {{/filterDetails }}
+            </script>
 
-<script id="filterFloatTemplate"  type="x-tmpl-mustache">
-
-
+                    <script id="filterFloatTemplate"  type="x-tmpl-mustache">
 
                                 {{ #realValuedFilters }}
                                 <div class="row realValuedFilter {{stratum}} considerFilter" id="filter_{{stratum}}_{{name}}">
@@ -2123,9 +2050,9 @@ $( document ).ready( function (){
 
                                 </div>
                                 {{ /realValuedFilters }}
-                            </script>
+                    </script>
 
-<script id="filterCategoricalTemplate" type="x-tmpl-mustache">
+                    <script id="filterCategoricalTemplate" type="x-tmpl-mustache">
                                 {{ #categoricalFilters }}
                                 <div class="row categoricalFilter considerFilter {{stratum}}" id="filter_{{stratum}}_{{name}}">
                                    %{-- <div class="col-sm-1">--}%
@@ -2153,13 +2080,86 @@ $( document ).ready( function (){
 
                                 </div>
                                 {{ /categoricalFilters }}
-</script>
+                    </script>
 
-<script id="filterStringTemplate" type="x-tmpl-mustache">
+                    <script id="filterStringTemplate" type="x-tmpl-mustache">
                                 <p><span>str name={{name}},type={{type}}</span></p>
+                    </script>
+
+
+
+<script id="chooseCovariatesTemplate"  type="x-tmpl-mustache">
+        <div class="panel panel-default">%{--should hold the initiate analysis set panel--}%
+
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#initiateAnalysis_{{stratum}}"
+                       href="#initiateAnalysis_{{stratum}}">Step 3: Control for covariates</a>
+                </h4>
+            </div>
+
+
+            <div id="initiateAnalysis_{{stratum}}" class="panel-collapse collapse">
+                <div class="panel-body secBody">
+
+                    <div class="row">
+                        <div class="col-sm-12 col-xs-12">
+                            <p>
+                                Select principal components and/or phenotypes to be used as covariates in your association analysis. Principal
+                                components 1-4 are selected by default to minimize the influence of ancestry, though additional principal components
+                                may be selected to control for finer grained substructure within a population. Selecting phenotypes as covariates
+                                allows you to estimate the effects of the response phenotype independently of the covariate phenotypes.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="row"  style="{{tabDisplay}}">
+                        <div class="col-sm-12 col-xs-12">
+                            <ul class="nav nav-tabs" id="stratsCovTabs">
+                                {{ #strataContent }}
+                                   <li class="{{defaultDisplay}}"><a data-target="#cov_{{name}}" data-toggle="tab" class="covariateCohort {{name}}">{{trans}}</a></li>
+                                {{ /strataContent }}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="tab-content">
+                        {{ #strataContent }}
+                            <div class="tab-pane {{defaultDisplay}}" id="cov_{{name}}">
+
+                                <div class="row">
+                                    <div class="col-sm-8 col-xs-12 vcenter covariate_holder">
+                                        <div class="covariates">
+                                            <div class="row">
+                                                <div class="col-md-10 col-sm-10 col-xs-12 vcenter" style="margin-top:0">
+
+                                                    <div class="covariateHolder covariateHolder_{{name}}">
+                                                        {{ >allCovariateSpecifierTemplate }}
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6 col-xs-12">
+                                    </div>
+                                 </div>
+                            </div>
+                        {{ /strataContent }}
+                    </div>
+
+                </div>
+            </div>
+
+        </div>%{--end id=initiateAnalysis panel--}%
 </script>
 
-<script id="allCovariateSpecifierTemplate"  type="x-tmpl-mustache">
+
+        <script id="allCovariateSpecifierTemplate"  type="x-tmpl-mustache">
+                                {{ #covariateDetails }}
                                 <div class="row">
                                    <div class="col-sm-6">
                                    {{>covariateTemplateC1}}
@@ -2168,23 +2168,12 @@ $( document ).ready( function (){
                                    {{>covariateTemplateC2}}
                                    </div>
                                 </div>
+                                {{ /covariateDetails }}
 
-</script>
+        </script>
 
-<script id="covariateTemplate"  type="x-tmpl-mustache">
-                                    {{ #covariateSpecifiers }}
-                                    <div class="row">
-                                        <div class="checkbox" style="margin:0">
-                                            <label>
-                                                <input id="covariate_{{stratum}}_{{name}}" class="covariate" type="checkbox" name="covariate"
-                                                       value="{{name}}" {{defaultCovariate}} onchange="mpgSoftware.burdenTestShared.carryCovChanges('{{name}}', '{{stratum}}')"/>
-                                                {{trans}}
-                                            </label>
-                                        </div>
-                                    </div>
-                                    {{ /covariateSpecifiers }}
-</script>
-<script id="covariateTemplateC1"  type="x-tmpl-mustache">
+
+                <script id="covariateTemplateC1"  type="x-tmpl-mustache">
                                     {{ #covariateSpecifiersC1 }}
                                     <div class="row">
                                         <div class="checkbox" style="margin:0">
@@ -2196,8 +2185,9 @@ $( document ).ready( function (){
                                         </div>
                                     </div>
                                     {{ /covariateSpecifiersC1 }}
-</script>
-<script id="covariateTemplateC2"  type="x-tmpl-mustache">
+                </script>
+
+                <script id="covariateTemplateC2"  type="x-tmpl-mustache">
                                     {{ #covariateSpecifiersC2 }}
                                     <div class="row">
                                         <div class="checkbox" style="margin:0">
@@ -2209,7 +2199,7 @@ $( document ).ready( function (){
                                         </div>
                                     </div>
                                     {{ /covariateSpecifiersC2 }}
-</script>
+                </script>
 
 
 
