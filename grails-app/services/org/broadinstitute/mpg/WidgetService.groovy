@@ -189,7 +189,17 @@ class WidgetService {
         return requestedFilterList
     }
 
-
+    /***
+     * Take the information from a single line on the UI and turn it into a filter list.  That single line might translate
+     * onto a filter list with a single filter, or it might translate into multiple filters.  In this routine we can convert
+     * ranges (internal or external) into a compound block (AND for an internal range, OR for an external range), and we can
+     * also turn a multivalue categorical into an OR block of values.
+     *
+     * @param map
+     * @param dataset
+     * @param existingFilterList
+     * @return
+     */
     private List<String> processSingleFilter(Map map, String dataset, List<String> existingFilterList) {
         if (map.name) {
             String filterParameter = map.parm
@@ -208,7 +218,18 @@ class WidgetService {
         return existingFilterList
     }
 
-
+    /***
+     * Categorical filters get passed in as a single filter, but with values separated by commas.  Break apart that list of commas,
+     * create a filter for each one, then combine the whole set within OR block.
+     *
+     * @param categorical
+     * @param comparator
+     * @param propertyName
+     * @param rawFilterParm
+     * @param dataset
+     * @param requestedFilterList
+     * @return
+     */
     private List<String> convertMultipleCategoricalsIntoFilterList (String categorical,
                                                                     String comparator,
                                                                     String propertyName,
@@ -228,8 +249,12 @@ class WidgetService {
         return requestedFilterList
     }
 
-
-
+    /***
+     * convenience routine: conbine this list of filters in an AND block
+     * @param filtersToCombine
+     * @param listWeAreExpanding
+     * @return
+     */
     private List<String> combineFiltersInANDBlock(List<String> filtersToCombine, List<String> listWeAreExpanding){
         return addSingleFilter ( "4",//AND
                 "3",// eq
@@ -239,6 +264,13 @@ class WidgetService {
                 listWeAreExpanding )
     }
 
+
+    /***
+     * convenience routine: conbine this list of filters in an OR block
+     * @param filtersToCombine
+     * @param listWeAreExpanding
+     * @return
+     */
     private List<String> combineFiltersInORBlock(List<String> filtersToCombine, List<String> listWeAreExpanding){
         return addSingleFilter ( "3",//OR
                 "3",// eq

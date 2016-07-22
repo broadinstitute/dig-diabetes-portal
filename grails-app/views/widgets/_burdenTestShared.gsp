@@ -567,7 +567,8 @@ var storeFilterData = function (data){
 
       var populateSampleAndCovariateSection = function (dataSetId, phenotype, stratificationProperty, filterSpec) {
           $('#stratsTabs').empty();
-          stratifiedSampleAndCovariateSection(dataSetId, phenotype, stratificationProperty, filterSpec);
+          var caseControlFiltering = $('#caseControlFiltering').prop('checked');
+          stratifiedSampleAndCovariateSection(dataSetId, phenotype, stratificationProperty, filterSpec, caseControlFiltering);
       }
 
 
@@ -577,7 +578,7 @@ var storeFilterData = function (data){
         *  we can use fillCategoricalDropDownBoxes to create plots.
         *
         */
-        var stratifiedSampleAndCovariateSection = function (dataSetId, phenotype, strataProperty, filterInfo) {
+        var stratifiedSampleAndCovariateSection = function (dataSetId, phenotype, strataProperty, filterInfo, caseControlFiltering) {
             var stratumName;
             var multipleStrataExist = (strataProperty !== 'none');
             if (!multipleStrataExist){
@@ -585,10 +586,35 @@ var storeFilterData = function (data){
             }
             var data = getStoredSampleMetadata();
 
+            var generateModeledPhenotypeElements = function ( optionsPerFilter, phenotype, caseControlFiltering ){
+                var modeledPhenotypeElements;
+                if (caseControlFiltering){
+                    var modeledPhenotype = optionsPerFilter[convertPhenotypeNames(phenotype)];
+                    if ((typeof modeledPhenotype !== 'undefined' ) && (modeledPhenotype.length>0)){
+                        modeledPhenotypeElements = {name:convertPhenotypeNames(phenotype),
+                                                    val:phenotype,
+                                                    levels:[]};
+                        var defaultDisplay = ' active';
+                        _.forEach(modeledPhenotype, function(phenotypeLevel){
+                            modeledPhenotypeElements.levels.push(
+                                                        {   name:convertPhenotypeNames(phenotypeLevel.name),
+                                                            val:phenotypeLevel.name,
+                                                            samples:phenotypeLevel.samples,
+                                                            category:convertPhenotypeNames(phenotype),
+                                                            defaultDisplay: defaultDisplay }
+                            );
+                            defaultDisplay = '';
+                        });
+                }
+            }
+            return modeledPhenotypeElements;
+        }
+
+
+
             // How many strata do we need to deal with? Create an array to list the names.
             var generateNamesOfStrata = function (multipleStrataExist, optionsPerFilter, strataProperty, phenotype){
                 var stratificationProperty;
-                var modeledPhenotype = optionsPerFilter[convertPhenotypeNames(phenotype)];
                 if (multipleStrataExist){
                     stratificationProperty = optionsPerFilter[strataProperty];
                     _.forEach(stratificationProperty,function(oneRec){
@@ -603,28 +629,19 @@ var storeFilterData = function (data){
                 } else {
                      stratificationProperty = [{name:stratumName, val:stratumName, category:convertPhenotypeNames(phenotype) }];
                 }
-                if ( (typeof modeledPhenotype !== 'undefined') &&(modeledPhenotype.length===2) ){
-                    stratificationProperty.splice(0,0,{ name:convertPhenotypeNames(modeledPhenotype[0].name),
-                                                        val:modeledPhenotype[0].name,
-                                                        samples:modeledPhenotype[0].samples,
-                                                        category:convertPhenotypeNames(phenotype)});
-                    stratificationProperty.splice(0,0,{ name:convertPhenotypeNames(modeledPhenotype[1].name),
-                                                        val:modeledPhenotype[1].name,
-                                                        samples:modeledPhenotype[1].samples,
-                                                        category:convertPhenotypeNames(phenotype)});
-                }
                 return stratificationProperty;
             };
 
             // For each strata create the necessary data. Handle the case of a single strata as a special case.
-            var generateRenderData = function(optionsPerFilter,strataProperty,stratificationProperty, phenotype, specificsAboutFilters, specificsAboutCovariates){
+            var generateRenderData = function(optionsPerFilter,strataProperty,stratificationProperty, phenotype, specificsAboutFilters, specificsAboutCovariates, modeledPhenotype){
                 var renderData;
                 if (multipleStrataExist){
                     renderData  = {
                         strataProperty:strataProperty,
                         phenotypeProperty:convertPhenotypeNames(phenotype),
                         strataContent:[],
-                        tabDisplay:""
+                        tabDisplay:"",
+                        modeledPhenotype:modeledPhenotype
                     };
                     _.forEach(stratificationProperty,function(stratumHolder){
                        var stratum=stratumHolder.name;
@@ -657,8 +674,9 @@ var storeFilterData = function (data){
                  ( typeof data !== 'undefined') ){
 
                     var optionsPerFilter = generateOptionsPerFilter(filterInfo) ;
+                    var modeledPhenotypeElements = generateModeledPhenotypeElements(optionsPerFilter, phenotype, caseControlFiltering);
                     var stratificationProperty = generateNamesOfStrata(multipleStrataExist, optionsPerFilter, strataProperty, phenotype);
-                    var renderData = generateRenderData(optionsPerFilter,strataProperty,stratificationProperty, phenotype, data.filters, data.covariates);
+                    var renderData = generateRenderData(optionsPerFilter,strataProperty,stratificationProperty, phenotype, data.filters, data.covariates, modeledPhenotypeElements);
 
 
                     $("#chooseFiltersLocation").empty();
@@ -1885,6 +1903,18 @@ $( document ).ready( function (){
                 {{ /strataChooser }}
 
 
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12 text-left">
+                        <div class="checkbox" style="margin:0">
+                            <label>
+                                <input id="caseControlFiltering" type="checkbox" name="caseControlFiltering"
+                                       value="caseControlFiltering"/>Filter cases and controls separately
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
         </div>
 
@@ -1920,6 +1950,25 @@ the individual filters themselves. That work is handled later as part of a loop-
                         </div>
                     </div>
 
+
+                    <div class="row" style="{{tabDisplay}}">
+                        <div class="col-sm-12 col-xs-12">
+                            <ul class="nav nav-tabs" id="modeledPhenotypeTabs">
+                                {{ #modeledPhenotype }}
+                                   {{ #levels }}
+                                        <li class="{{defaultDisplay}}">
+                                            <a data-target="#{{name}}" data-toggle="tab" class="filterCohort {{val}}">{{name}}</a>
+                                                <div class="modelledPhenoIdent">
+
+                                                </div>
+                                        </li>
+                                   {{ /levels }}
+                                {{ /modeledPhenotype }}
+                            </ul>
+                        </div>
+                    </div>
+
+
                     <div class="row" style="{{tabDisplay}}">
                         <div class="col-sm-12 col-xs-12">
                             <ul class="nav nav-tabs" id="stratsTabs">
@@ -1937,6 +1986,15 @@ the individual filters themselves. That work is handled later as part of a loop-
                             </ul>
                         </div>
                     </div>
+
+                    <div class="tab-content">
+                         {{ #modeledPhenotype }}
+                           {{ #levels }}
+                            <div class="tab-pane  {{defaultDisplay}}" id="{{name}}">
+                                <div class="row">
+                           {{ /levels }}
+                         {{ /modeledPhenotype }}
+
 
                     <div class="tab-content">
                         {{ #strataContent }}
@@ -1997,6 +2055,19 @@ the individual filters themselves. That work is handled later as part of a loop-
                             </div>
                         {{ /strataContent }}
                     </div>
+
+
+
+                         {{ #modeledPhenotype }}
+                           {{ #levels }}
+                                </div>
+                            </div>
+                           {{ /levels }}
+                         {{ /modeledPhenotype }}
+                    </div>
+
+
+
                 </div>
             </div>
 
