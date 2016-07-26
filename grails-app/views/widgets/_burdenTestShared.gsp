@@ -611,7 +611,8 @@ var storeFilterData = function (data){
                             });
                             modeledPhenotypeElements.levels.push(
                                                         {   name:convertPhenotypeNames(phenotypeLevel.name),
-                                                        phenoLevelName:convertPhenotypeNames(phenotypeLevel.name),
+                                                            phenoLevelName:convertPhenotypeNames(phenotypeLevel.name),
+                                                            phenoLevelVal:phenotypeLevel.name,
                                                             val:phenotypeLevel.name,
                                                             samples:phenotypeLevel.samples,
                                                             category:convertPhenotypeNames(phenotype),
@@ -735,11 +736,23 @@ var storeFilterData = function (data){
                                                                                 {   allFiltersTemplate: $('#allFiltersTemplate')[0].innerHTML,
                                                                                     filterFloatTemplate:$('#filterFloatTemplate')[0].innerHTML,
                                                                                     filterCategoricalTemplate:$('#filterCategoricalTemplate')[0].innerHTML }));
-
-                    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                        var target = $(e.target).text(); // activated tab
-                        displaySampleDistribution('ID',"_"+target,0);
+                   if  ((typeof renderData.modeledPhenotype  !== 'undefined')  &&
+                        (typeof renderData.modeledPhenotype.levels  !== 'undefined') &&
+                        ( renderData.modeledPhenotype.levels.length > 0)){
+                    _.forEach(renderData.modeledPhenotype.levels,function(level){
+                          $('a[data-toggle="tab"].'+level.name).on('shown.bs.tab', function (e) {
+                            var target = $(e.target).text(); // activated tab
+                            displaySampleDistribution('ID',"_"+target,0,level.name);
+                        });
                     });
+                   } else {
+                      $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                        var target = $(e.target).text(); // activated tab
+                        displaySampleDistribution('ID',"_"+target,0,'');
+                    });
+                   }
+
+
 
                     //
                     // set up the section where the covariates will go
@@ -917,8 +930,16 @@ var storeFilterData = function (data){
 
             var strataName = '';
             var strataPropertyName = '';
-            var phenoPropertySpecifier = $('a[data-target=#'+params.strataName+']+div.strataPhenoIdent div.phenoCategory').text();
-            var phenoInstanceSpecifier = $('a[data-target=#'+params.strataName+']+div.strataPhenoIdent div.phenoInstance').text();
+            var phenoPropertySpecifier = $('a[data-target=#'+params.strataName+'].'+modeledPhenotype+'+div.strataPhenoIdent div.phenoCategory').text();
+            var phenoInstanceSpecifier = $('a[data-target=#'+params.strataName+'].'+modeledPhenotype+'+div.strataPhenoIdent div.phenoInstance').text();
+            if (modeledPhenotype){
+                phenoPropertySpecifier = $('a[data-target=#'+params.strataName+'].'+modeledPhenotype+'+div.strataPhenoIdent div.phenoCategory').text();
+                phenoInstanceSpecifier = $('a[data-target=#'+params.strataName+'].'+modeledPhenotype+'+div.strataPhenoIdent div.phenoInstance').text();
+            } else {
+                phenoPropertySpecifier = $('a[data-target=#'+params.strataName+']+div.strataPhenoIdent div.phenoCategory').text();
+                phenoInstanceSpecifier = $('a[data-target=#'+params.strataName+']+div.strataPhenoIdent div.phenoInstance').text();
+            }
+
 
             var jsonDescr;
             if (phenoPropertySpecifier === phenoPropertyName){ // this tab specifies an instance of the phenotype we are modeling
@@ -929,6 +950,9 @@ var storeFilterData = function (data){
                               "\"filters\":"+collectingFilterValues(strataPropertyName,strataName,params.strataName)+"}";
              } else { // This can only be a strata tab, not a phenotype tab
                 strataPropertyName = $('div.stratsTabs_property').attr("id");
+                if (strataPropertyName.indexOf(params.modeledPhenotype+'_')>-1){
+                   strataPropertyName = strataPropertyName.substr((params.modeledPhenotype+'_').length);
+                }
                 strataName=params.strataName;
                 jsonDescr = "{\"dataset\":\""+$(dataSetSel).val()+"\"," +
                               "\"requestedData\":"+collectingPropertyNames(params)+"," +
@@ -2014,7 +2038,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                 {{ #modeledPhenotype }}
                                    {{ #levels }}
                                         <li class="{{defaultDisplay}}">
-                                            <a data-target="#{{name}}" data-toggle="tab" class="filterCohort {{val}}">{{name}}</a>
+                                            <a data-target="#{{name}}" data-toggle="tab" class="filterCohort {{val}} {{phenoLevelName}}">{{name}}</a>
                                                 <div class="modelledPhenoIdent">
 
                                                 </div>
@@ -2038,7 +2062,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                             <ul class="nav nav-tabs" id="{{name}}_stratsTabs">
                                                 {{ #strataContent }}
                                                    <li class="{{defaultDisplay}}">
-                                                       <a data-target="#{{name}}" data-toggle="tab" class="filterCohort {{trans}}">{{trans}}</a>
+                                                       <a data-target="#{{name}}" data-toggle="tab" class="filterCohort {{trans}} {{phenoLevelName}}">{{trans}}</a>
                                                        <div class="strataPhenoIdent">
                                                            <div class="phenoCategory  {{phenoName}}" style="display: none">{{category}}</div>
                                                            <div class="phenoInstance  {{phenoLevelName}}" style="display: none">{{val}}</div>
