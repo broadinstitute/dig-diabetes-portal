@@ -334,6 +334,8 @@ public class BurdenJsonBuilder {
         // get root data set
         if (samplegGroupId == PortalConstants.BURDEN_DATASET_OPTION_ID_13K) {
             rootDataSet = parser.getMapOfAllDataSetNodes().get(PortalConstants.BURDEN_SAMPLE_GROUP_ROOT_13k_ID);
+        } else if (samplegGroupId == PortalConstants.BURDEN_DATASET_OPTION_ID_17K) {
+            rootDataSet = parser.getMapOfAllDataSetNodes().get(PortalConstants.BURDEN_SAMPLE_GROUP_ROOT_17k_ID);
         } else {
             rootDataSet = parser.getMapOfAllDataSetNodes().get(PortalConstants.BURDEN_SAMPLE_GROUP_ROOT_26k_ID);
         }
@@ -373,6 +375,33 @@ public class BurdenJsonBuilder {
         // return
         return queryFilterList;
     }
+
+
+
+    protected List<QueryFilter> getPValueFilters(String sampleGroupName,  Float pValue, String phenotypeName, String pValueName ) throws PortalException {
+        // local variables
+        List<QueryFilter> queryFilterList = new ArrayList<QueryFilter>();
+        List<DataSet> dataSetList = new ArrayList<DataSet>();
+        DataSet rootDataSet = null;
+        JsonParser parser = JsonParser.getService();
+        List<Property> propertyList = new ArrayList<Property>();
+        Property rootProperty = null;
+
+
+        rootProperty = parser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames(pValueName, phenotypeName, sampleGroupName);
+        queryFilterList.add(new QueryFilterBean(rootProperty, PortalConstants.OPERATOR_LESS_THAN_NOT_EQUALS, "1.0"));
+
+
+
+
+        // return
+        return queryFilterList;
+    }
+
+
+
+
+
 
 
 }
