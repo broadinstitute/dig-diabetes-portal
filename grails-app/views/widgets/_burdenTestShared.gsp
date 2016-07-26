@@ -586,21 +586,36 @@ var storeFilterData = function (data){
             }
             var data = getStoredSampleMetadata();
 
-            var generateModeledPhenotypeElements = function ( optionsPerFilter, phenotype, caseControlFiltering ){
+            var generateModeledPhenotypeElements = function ( optionsPerFilter, phenotype, caseControlFiltering, strataContentArray ){
                 var modeledPhenotypeElements;
                 if (caseControlFiltering){
                     var modeledPhenotype = optionsPerFilter[convertPhenotypeNames(phenotype)];
                     if ((typeof modeledPhenotype !== 'undefined' ) && (modeledPhenotype.length>0)){
+                        _.forEach(strataContentArray[0], function(strataContentElement){
+                            strataContentElement["phenoName"] = convertPhenotypeNames(phenotype);
+                        });
                         modeledPhenotypeElements = {name:convertPhenotypeNames(phenotype),
+                                                    phenoName:convertPhenotypeNames(phenotype),
                                                     val:phenotype,
+                                                    strataContent: strataContentArray[0],
                                                     levels:[]};
                         var defaultDisplay = ' active';
+                        var loopCounter = 0;
                         _.forEach(modeledPhenotype, function(phenotypeLevel){
+                            var currentStrataContent = strataContentArray[loopCounter++];
+                            var defaultStrataDisplay = ' active';
+                            _.forEach(currentStrataContent, function(strataContentElement){
+                                strataContentElement["phenoLevelName"] = convertPhenotypeNames(phenotypeLevel.name);
+                                strataContentElement["defaultDisplay"] = defaultStrataDisplay;
+                                defaultStrataDisplay = ' ';
+                            });
                             modeledPhenotypeElements.levels.push(
                                                         {   name:convertPhenotypeNames(phenotypeLevel.name),
+                                                        phenoLevelName:convertPhenotypeNames(phenotypeLevel.name),
                                                             val:phenotypeLevel.name,
                                                             samples:phenotypeLevel.samples,
                                                             category:convertPhenotypeNames(phenotype),
+                                                            strataContent: currentStrataContent,
                                                             defaultDisplay: defaultDisplay }
                             );
                             defaultDisplay = '';
@@ -632,6 +647,34 @@ var storeFilterData = function (data){
                 return stratificationProperty;
             };
 
+
+
+             var generateStrataContent = function(optionsPerFilter,stratificationProperty, phenotype, specificsAboutFilters, specificsAboutCovariates, multipleStrataExist){
+                var strataContent = [];
+                if (multipleStrataExist){
+                    _.forEach(stratificationProperty,function(stratumHolder){
+                       var stratum=stratumHolder.name;
+                       var category=stratumHolder.category;
+                       var val=stratumHolder.val;
+                       strataContent.push({  name:stratum,
+                                                        trans:stratum,
+                                                        val:val,
+                                                        category:category,
+                                                        count:strataContent.length,
+                                                        filterDetails:generateFilterRenderData(specificsAboutFilters,optionsPerFilter,stratum, phenotype),
+                                                        covariateDetails:generateCovariateRenderData(specificsAboutCovariates,phenotype,stratum)});
+                     });
+                } else {
+                   strataContent = [{name:'strat1',trans:'strat1',category:'strat1',count:0,
+                                                        filterDetails:generateFilterRenderData(specificsAboutFilters,optionsPerFilter, 'strat1', phenotype),
+                                                        covariateDetails:generateCovariateRenderData(specificsAboutCovariates,phenotype, 'strat1' ) }];
+
+                }
+                return strataContent;
+            };
+
+
+
             // For each strata create the necessary data. Handle the case of a single strata as a special case.
             var generateRenderData = function(optionsPerFilter,strataProperty,stratificationProperty, phenotype, specificsAboutFilters, specificsAboutCovariates, modeledPhenotype){
                 var renderData;
@@ -639,31 +682,32 @@ var storeFilterData = function (data){
                     renderData  = {
                         strataProperty:strataProperty,
                         phenotypeProperty:convertPhenotypeNames(phenotype),
-                        strataContent:[],
+//                        strataContent:[],
                         tabDisplay:"",
                         modeledPhenotype:modeledPhenotype
                     };
-                    _.forEach(stratificationProperty,function(stratumHolder){
-                       var stratum=stratumHolder.name;
-                       var category=stratumHolder.category;
-                       var val=stratumHolder.val;
-                       renderData.strataContent.push({  name:stratum,
-                                                        trans:stratum,
-                                                        val:val,
-                                                        category:category,
-                                                        count:renderData.strataContent.length,
-                                                        filterDetails:generateFilterRenderData(specificsAboutFilters,optionsPerFilter,stratum, phenotype),
-                                                        covariateDetails:generateCovariateRenderData(specificsAboutCovariates,phenotype,stratum)});
-                     });
+//                    _.forEach(stratificationProperty,function(stratumHolder){
+//                       var stratum=stratumHolder.name;
+//                       var category=stratumHolder.category;
+//                       var val=stratumHolder.val;
+//                       renderData.strataContent.push({  name:stratum,
+//                                                        trans:stratum,
+//                                                        val:val,
+//                                                        category:category,
+//                                                        count:renderData.strataContent.length,
+//                                                        filterDetails:generateFilterRenderData(specificsAboutFilters,optionsPerFilter,stratum, phenotype),
+//                                                        covariateDetails:generateCovariateRenderData(specificsAboutCovariates,phenotype,stratum)});
+//                     });
                 } else {
                      renderData  = {
                         strataProperty:strataProperty,
                         phenotypeProperty:convertPhenotypeNames(phenotype),
-                        strataContent:[{name:'strat1',trans:'strat1',category:'strat1',count:0,
-                                                        filterDetails:generateFilterRenderData(specificsAboutFilters,optionsPerFilter, 'strat1', phenotype),
-                                                        covariateDetails:generateCovariateRenderData(specificsAboutCovariates,phenotype, 'strat1' ) }],
+//                        strataContent:[{name:'strat1',trans:'strat1',category:'strat1',count:0,
+//                                                        filterDetails:generateFilterRenderData(specificsAboutFilters,optionsPerFilter, 'strat1', phenotype),
+//                                                        covariateDetails:generateCovariateRenderData(specificsAboutCovariates,phenotype, 'strat1' ) }],
                         defaultDisplay: ' active',
-                        tabDisplay: 'display: none'
+                        tabDisplay: 'display: none',
+                        modeledPhenotype:modeledPhenotype
                     };
                 }
                 return renderData;
@@ -674,8 +718,10 @@ var storeFilterData = function (data){
                  ( typeof data !== 'undefined') ){
 
                     var optionsPerFilter = generateOptionsPerFilter(filterInfo) ;
-                    var modeledPhenotypeElements = generateModeledPhenotypeElements(optionsPerFilter, phenotype, caseControlFiltering);
                     var stratificationProperty = generateNamesOfStrata(multipleStrataExist, optionsPerFilter, strataProperty, phenotype);
+                    var strataContent1 = generateStrataContent(optionsPerFilter,stratificationProperty, phenotype, data.filters, data.covariates, multipleStrataExist);
+                    var strataContent2 = generateStrataContent(optionsPerFilter,stratificationProperty, phenotype, data.filters, data.covariates, multipleStrataExist);
+                    var modeledPhenotypeElements = generateModeledPhenotypeElements(optionsPerFilter, phenotype, caseControlFiltering, [strataContent1,strataContent2] );
                     var renderData = generateRenderData(optionsPerFilter,strataProperty,stratificationProperty, phenotype, data.filters, data.covariates, modeledPhenotypeElements);
 
 
@@ -862,7 +908,12 @@ var storeFilterData = function (data){
             };
 
             // name of stratification property
-            var phenoPropertyName = $('div.phenoSplitTabs_property').attr("id"); // what is the phenotype we are modeling
+            var modeledPhenotype = params.modeledPhenotype;
+            phenoPropertyName = _.find( $('div.phenoSplitTabs_property'), function(o){
+                var id = $(o).attr("id");
+                return (id.indexOf(modeledPhenotype)>-1);
+            });
+            var phenoPropertyName = $(phenoPropertyName).attr("id").substr(modeledPhenotype.length+1); // what is the phenotype we are modeling
 
             var strataName = '';
             var strataPropertyName = '';
@@ -1632,7 +1683,7 @@ var storeFilterData = function (data){
         * @param propertyName
         * @param holderSection
         */
-        var displaySampleDistribution = function (propertyName, holderSection, categorical) { // for categorical, 0== float, 1== string or int
+        var displaySampleDistribution = function (propertyName, holderSection, categorical,modeledPhenotype) { // for categorical, 0== float, 1== string or int
             var locationOfFirstBreak = holderSection.indexOf('_');
             var strataName = holderSection.substring(locationOfFirstBreak+1);
             if ((locationOfFirstBreak> -1) &&(strataName==='ALL')) {
@@ -1694,7 +1745,13 @@ var storeFilterData = function (data){
            }
 
 
-            refreshSampleDistribution( '#datasetFilter', utilizeDistributionInformationToCreatePlot, {propertyName:propertyName,holderSection:holderSection,strataName:strataName,categorical:categorical} );
+            refreshSampleDistribution( '#datasetFilter', utilizeDistributionInformationToCreatePlot, {
+                                                                                                        propertyName:propertyName,
+                                                                                                        holderSection:holderSection,
+                                                                                                        strataName:strataName,
+                                                                                                        categorical:categorical,
+                                                                                                        modeledPhenotype:modeledPhenotype
+                                                                                                      } );
         };
 
 
@@ -1969,97 +2026,95 @@ the individual filters themselves. That work is handled later as part of a loop-
                     </div>
 
 
-                    <div class="row" style="{{tabDisplay}}">
-                        <div class="col-sm-12 col-xs-12">
-                            <ul class="nav nav-tabs" id="stratsTabs">
-                                {{ #strataContent }}
-                                   <li class="{{defaultDisplay}}">
-                                       <a data-target="#{{name}}" data-toggle="tab" class="filterCohort {{trans}}">{{trans}}</a>
-                                       <div class="strataPhenoIdent">
-                                           <div class="phenoCategory" style="display: none">{{category}}</div>
-                                           <div class="phenoInstance" style="display: none">{{val}}</div>
-                                       </div>
-                                   </li>
-                                {{ /strataContent }}
-                                <div class="stratsTabs_property" id="{{strataProperty}}" style="display: none"></div>
-                                <div class="phenoSplitTabs_property" id="{{phenotypeProperty}}" style="display: none"></div>
-                            </ul>
-                        </div>
-                    </div>
 
                     <div class="tab-content">
                          {{ #modeledPhenotype }}
                            {{ #levels }}
                             <div class="tab-pane  {{defaultDisplay}}" id="{{name}}">
                                 <div class="row">
-                           {{ /levels }}
-                         {{ /modeledPhenotype }}
 
-
-                    <div class="tab-content">
-                        {{ #strataContent }}
-                            <div class="tab-pane {{defaultDisplay}}" id="{{name}}">
-                                <div class="row">
-                                    <div class="col-sm-5 col-xs-12 vcenter" style="margin-top:0">
-                                        <div class="row secHeader" style="padding: 20px 0 0 0">
-                                            <div class="col-sm-6 col-xs-12 text-left"></div>
-
-                                            <div class="col-sm-6 col-xs-12 text-right"><label
-                                                    style="font-style: italic; font-size: 14px">Click arrows<br/> for distribution
-                                            </label>
-                                            </div>
+                                    <div class="row" style="{{tabDisplay}}">
+                                        <div class="col-sm-12 col-xs-12">
+                                            <ul class="nav nav-tabs" id="{{name}}_stratsTabs">
+                                                {{ #strataContent }}
+                                                   <li class="{{defaultDisplay}}">
+                                                       <a data-target="#{{name}}" data-toggle="tab" class="filterCohort {{trans}}">{{trans}}</a>
+                                                       <div class="strataPhenoIdent">
+                                                           <div class="phenoCategory  {{phenoName}}" style="display: none">{{category}}</div>
+                                                           <div class="phenoInstance  {{phenoLevelName}}" style="display: none">{{val}}</div>
+                                                       </div>
+                                                   </li>
+                                                {{ /strataContent }}
+                                                <div class="stratsTabs_property" id="{{name}}_{{strataProperty}}" style="display: none"></div>
+                                                <div class="phenoSplitTabs_property" id="{{name}}_{{phenotypeProperty}}" style="display: none"></div>
+                                            </ul>
                                         </div>
+                                    </div>
 
-                                        <div class="row" style="padding: 10px 0 0 0">
-                                            <div class="col-sm-12 col-xs-12 text-left">
 
-                                                <div style="direction: rtl; height: 320px; padding: 4px 0 0 10px; overflow-y: auto;">
-                                                    <div style="direction: ltr; margin: 10px 0 0 5px">
-                                                        <div>
-                                                            <div class="row">
+                                    <div class="tab-content">
+                                        {{ #strataContent }}
+                                            <div class="tab-pane {{defaultDisplay}}" id="{{name}}">
+                                                <div class="row">
+                                                    <div class="col-sm-5 col-xs-12 vcenter" style="margin-top:0">
+                                                        <div class="row secHeader" style="padding: 20px 0 0 0">
+                                                            <div class="col-sm-6 col-xs-12 text-left"></div>
 
-                                                               <div class="user-interaction user-interaction-{{name}}">
+                                                            <div class="col-sm-6 col-xs-12 text-right"><label
+                                                                    style="font-style: italic; font-size: 14px">Click arrows<br/> for distribution
+                                                            </label>
+                                                            </div>
+                                                        </div>
 
-                                                                     <div class="filterHolder filterHolder_{{name}}">
+                                                        <div class="row" style="padding: 10px 0 0 0">
+                                                            <div class="col-sm-12 col-xs-12 text-left">
 
-                                                                        {{ >allFiltersTemplate }}
+                                                                <div style="direction: rtl; height: 320px; padding: 4px 0 0 10px; overflow-y: auto;">
+                                                                    <div style="direction: ltr; margin: 10px 0 0 5px">
+                                                                        <div>
+                                                                            <div class="row">
 
-                                                                     </div>
+                                                                               <div class="user-interaction user-interaction-{{name}}">
 
+                                                                                     <div class="filterHolder filterHolder_{{name}}">
+
+                                                                                        {{ >allFiltersTemplate }}
+
+                                                                                     </div>
+
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
 
                                                             </div>
                                                         </div>
+
                                                     </div>
+
+                                                    <div class="col-sm-7 col-xs-12 vcenter" style="padding: 0; margin: 0">
+                                                        <div class="sampleNumberReporter text-center">
+                                                            <div>Number of samples included in analysis:<span class="numberOfSamples"></span></div>
+
+                                                            <div style="display:none">number of samples for <span
+                                                                    class="phenotypeSpecifier"></span>: <span
+                                                                    class="numberOfPhenotypeSpecificSamples"></span></div>
+                                                        </div>
+
+                                                        <div class="boxWhiskerPlot boxWhiskerPlot_{{name}}"></div>
+
+                                                    </div>
+
                                                 </div>
-
                                             </div>
-                                        </div>
-
+                                        {{ /strataContent }}
                                     </div>
 
-                                    <div class="col-sm-7 col-xs-12 vcenter" style="padding: 0; margin: 0">
-                                        <div class="sampleNumberReporter text-center">
-                                            <div>Number of samples included in analysis:<span class="numberOfSamples"></span></div>
-
-                                            <div style="display:none">number of samples for <span
-                                                    class="phenotypeSpecifier"></span>: <span
-                                                    class="numberOfPhenotypeSpecificSamples"></span></div>
-                                        </div>
-
-                                        <div class="boxWhiskerPlot boxWhiskerPlot_{{name}}"></div>
-
-                                    </div>
-
-                                </div>
-                            </div>
-                        {{ /strataContent }}
-                    </div>
 
 
 
-                         {{ #modeledPhenotype }}
-                           {{ #levels }}
                                 </div>
                             </div>
                            {{ /levels }}
@@ -2099,7 +2154,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                     <div class="col-sm-2">
                                         <select id="cmp_{{stratum}}_{{name}}" class="form-control filterCmp"
                                                 data-selectfor="{{stratum}}_{{name}}Comparator"
-                                               onchange="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0)">
+                                               onchange="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0,'{{phenoLevelName}}')">
                                             <option value="1">&lt;</option>
                                             <option value="2">&gt;</option>
                                         </select>
@@ -2109,13 +2164,13 @@ the individual filters themselves. That work is handled later as part of a loop-
                                         <input id="inp_{{stratum}}_{{name}}" type="text" class="filterParm form-control"
                                                data-type="propertiesInput"
                                                data-prop="{{stratum}}_{{name}}Value" data-translatedname="{{stratum}}_{{name}}"
-                                               onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0)"
-                                               onkeyup="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0)">
+                                               onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0,'{{phenoLevelName}}')"
+                                               onkeyup="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0,'{{phenoLevelName}}')">
 
                                     </div>
 
                                     <div class="col-sm-1">
-                                        <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0)"
+                                        <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0,'{{phenoLevelName}}')"
                                               class="glyphicon glyphicon-arrow-right pull-right distPlotter" id="distPlotter_{{stratum}}_{{name}}"></span>
                                     </div>
 
@@ -2139,13 +2194,13 @@ the individual filters themselves. That work is handled later as part of a loop-
                                     <div class="col-sm-5">
                                         <select id="multi_{{stratum}}_{{name}}" class="form-control multiSelect"
                                                 data-selectfor="{{stratum}}_{{name}}FilterOpts" multiple="multiple"
-                                                onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',1)">
+                                                onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',1,'{{phenoLevelName}}')">
                                         </select>
 
                                     </div>
 
                                     <div class="col-sm-1">
-                                        <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',1)"
+                                        <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',1,'{{phenoLevelName}}')"
                                               class="glyphicon glyphicon-arrow-right pull-right"  id="distPlotter_{{stratum}}_{{name}}"></span>
                                     </div>
 
