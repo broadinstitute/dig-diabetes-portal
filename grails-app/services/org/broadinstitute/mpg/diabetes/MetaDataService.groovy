@@ -409,7 +409,7 @@ class MetaDataService {
 
         // get the sample group list for the phenotype
         try {
-            groupList = this.getJsonParser().getSamplesGroupsForPhenotype(phenotypeName, this.getDataVersion());
+            groupList = this.getJsonParser().getSampleGroupsForPhenotype(phenotypeName, this.getDataVersion());
 
             // sort the group list
             Collections.sort(groupList);
@@ -503,7 +503,7 @@ class MetaDataService {
         // get the sample group list independent of phenotype
         try {
 
-            groupList = this.getJsonParser().getSamplesGroupsForPhenotype("", this.getDataVersion());
+            groupList = this.getJsonParser().getSampleGroupsForPhenotype("", this.getDataVersion());
 
         } catch (PortalException exception) {
             log.error("Got exception retrieving sample group name list : " + exception.getMessage());
