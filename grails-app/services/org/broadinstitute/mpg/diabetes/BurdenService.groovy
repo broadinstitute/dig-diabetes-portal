@@ -1,6 +1,7 @@
 package org.broadinstitute.mpg.diabetes
 
 import groovy.json.JsonSlurper
+import org.broadinstitute.mpg.FilterManagementService
 import org.broadinstitute.mpg.RestServerService
 import grails.transaction.Transactional
 import org.broadinstitute.mpg.SharedToolsService
@@ -26,6 +27,7 @@ class BurdenService {
     GrailsApplication grailsApplication
     MetaDataService metaDataService
     WidgetService widgetService
+    FilterManagementService filterManagementService
 
     final static Integer MINIMUM_ALLOWABLE_NUMBER_OF_SAMPLES = 100
 
@@ -217,12 +219,22 @@ class BurdenService {
         // log
         log.info("called burden test for gene: " + geneString + " and variant select option: " + variantSelectionOptionId + " and data version id: " + dataVersionId);
         log.info("also had MAF option: " + mafSampleGroupOption + " and MAF value: " + mafValue);
+        // when the phenotypes no longer have multiple names each then we can remove this kludgefest
+        String convertedPhenotype = phenotype
+        switch (phenotype){
+            case "t2d": convertedPhenotype = "T2D"; break
+            default: break
+        }
+
+
+
+
 
         try {
-            // DIGP-104: create new MAF filters if needed
-            // log for clarity
+
             queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFilters(dataVersionId, mafSampleGroupOption, mafValue);
-            log.info("returning query MAF filter list of size: " + queryFilterList.size() + " for mafValue: " + mafValue + " and sample group ancestry option: " + mafSampleGroupOption);
+            String pValueName = filterManagementService.findFavoredMeaningValue ( "ExSeq_17k_mdv2", "T2D", "P_VALUE" )
+            queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters("ExSeq_17k_mdv2",1.0,"T2D",pValueName))
 
             // get the getData results payload
             jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList);

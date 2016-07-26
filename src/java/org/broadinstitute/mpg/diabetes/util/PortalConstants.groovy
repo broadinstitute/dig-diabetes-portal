@@ -177,13 +177,15 @@ class PortalConstants {
     public final static String BURDEN_DATASET_OPTION_13K                  = "13k";
     public final static String BURDEN_DATASET_OPTION_26K                  = "26k";
     public final static int BURDEN_DATASET_OPTION_ID_13K                  = 1;
-    public final static int BURDEN_DATASET_OPTION_ID_26K                  = 2;
+    public final static int BURDEN_DATASET_OPTION_ID_17K                  = 2;
+    public final static int BURDEN_DATASET_OPTION_ID_26K                  = 3;
     public final static int BURDEN_MAF_OPTION_ID_ALL                      = 1;
     public final static int BURDEN_MAF_OPTION_ID_ANCESTRY                 = 2;
     public final static String BURDEN_DEFAULT_PHENOTYPE_KEY               = "t2d";
 
     // burden root datasets for the 13k/26k MAF filtering = TEMP FOR NOW until further factoring
     public static final String BURDEN_SAMPLE_GROUP_ROOT_26k_ID                   = "metadata_root_ExSeq_26k_mdv3_26k";
+    public static final String BURDEN_SAMPLE_GROUP_ROOT_17k_ID                   = "metadata_root_ExSeq_17k_mdv2_17k";
     public static final String BURDEN_SAMPLE_GROUP_ROOT_13k_ID                   = "metadata_root_ExSeq_13k_mdv1_13k";
 
     // burden test variant selection options
