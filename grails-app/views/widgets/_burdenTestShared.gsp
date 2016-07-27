@@ -511,7 +511,7 @@ var storeFilterData = function (data){
                          realValuedFilters.push(d);
                       } else {
                          if ((optionsPerFilter[d.name]!==undefined)&&
-                             (optionsPerFilter[d.name].length<3)&&
+                         (optionsPerFilter[d.name].length<3)&&
                              (d.name!==phenotype)){
                                  categoricalFilters.push(d);
                          }
@@ -597,7 +597,7 @@ var storeFilterData = function (data){
                         modeledPhenotypeElements = {name:convertPhenotypeNames(phenotype),
                                                     phenoName:convertPhenotypeNames(phenotype),
                                                     val:phenotype,
-                                                    strataContent: strataContentArray[0],
+                                                    strataContent: strataContentArray,
                                                     levels:[]};
                         var defaultDisplay = ' active';
                         var loopCounter = 0;
@@ -659,6 +659,7 @@ var storeFilterData = function (data){
                        var val=stratumHolder.val;
                        strataContent.push({  name:stratum,
                                                         trans:stratum,
+                                                        stratumName:stratum,
                                                         val:val,
                                                         category:category,
                                                         count:strataContent.length,
@@ -861,7 +862,7 @@ var storeFilterData = function (data){
         *   pull all of the filters out of the Dom and put them into a JSON string suitable for transmission to the server
         *
         */
-        var collectingFilterValues = function (additionalKey,additionalValue,alternateValue){
+        var collectingFilterValues = function (additionalKey,additionalValue,alternateValue,modeledPropertyName,modeledPropertyInstance){
            var filterStrings = [];
            var searchValue = additionalValue;
            if(typeof alternateValue !== 'undefined') {
@@ -893,8 +894,21 @@ var storeFilterData = function (data){
                    (additionalValue !== 'strat1') &&
                    (additionalValue.length > 0) &&
                     (additionalValue !== 'ALL')) {
-                  filterStrings.push("{\"name\": \""+additionalKey+"\","+
+                           var convertedAdditionalKey = additionalKey;
+                           var divider = additionalKey.indexOf('_');
+                           if (divider>-1){
+                               convertedAdditionalKey = additionalKey.substr(divider+1);
+                           }
+                  filterStrings.push("{\"name\": \""+convertedAdditionalKey+"\","+
 "\"parm\": \""+additionalValue+"\","+
+"\"cmp\": \"3\",\"cat\": \"1\"}");
+           }
+           if ((typeof modeledPropertyName !== 'undefined') &&
+                   (modeledPropertyName.length > 0) &&
+                   (typeof modeledPropertyInstance !== 'undefined') &&
+                   (modeledPropertyInstance.length > 0)) {
+                  filterStrings.push("{\"name\": \""+modeledPropertyName+"\","+
+"\"parm\": \""+modeledPropertyInstance+"\","+
 "\"cmp\": \"3\",\"cat\": \"1\"}");
            }
            return "[\n" + filterStrings.join(",") + "\n]";
@@ -922,19 +936,21 @@ var storeFilterData = function (data){
 
             // name of stratification property
             var modeledPhenotype = params.modeledPhenotype;
-            phenoPropertyName = _.find( $('div.phenoSplitTabs_property'), function(o){
+            var phenoPropertyName = _.find( $('div.phenoSplitTabs_property'), function(o){
                 var id = $(o).attr("id");
                 return (id.indexOf(modeledPhenotype)>-1);
             });
-            var phenoPropertyName = $(phenoPropertyName).attr("id").substr(modeledPhenotype.length+1); // what is the phenotype we are modeling
+            var phenoPropertyNameId = $(phenoPropertyName).attr("id");
+            phenoPropertyName = phenoPropertyNameId.substr(modeledPhenotype.length+1); // what is the phenotype we are modeling
+            var phenoPropertyInstance = phenoPropertyNameId.substr(0,modeledPhenotype.length); // what is the phenotype we are modeling
 
             var strataName = '';
             var strataPropertyName = '';
-            var phenoPropertySpecifier = $('a[data-target=#'+params.strataName+'].'+modeledPhenotype+'+div.strataPhenoIdent div.phenoCategory').text();
-            var phenoInstanceSpecifier = $('a[data-target=#'+params.strataName+'].'+modeledPhenotype+'+div.strataPhenoIdent div.phenoInstance').text();
+            var phenoPropertySpecifier;
+            var phenoInstanceSpecifier;
             if (modeledPhenotype){
-                phenoPropertySpecifier = $('a[data-target=#'+params.strataName+'].'+modeledPhenotype+'+div.strataPhenoIdent div.phenoCategory').text();
-                phenoInstanceSpecifier = $('a[data-target=#'+params.strataName+'].'+modeledPhenotype+'+div.strataPhenoIdent div.phenoInstance').text();
+                phenoPropertySpecifier = $('a[data-target=#'+params.strataName+'_'+modeledPhenotype+'].'+modeledPhenotype+'+div.strataPhenoIdent div.phenoCategory').text();
+                phenoInstanceSpecifier = $('a[data-target=#'+params.strataName+'_'+modeledPhenotype+'].'+modeledPhenotype+'+div.strataPhenoIdent div.phenoInstance').text();
             } else {
                 phenoPropertySpecifier = $('a[data-target=#'+params.strataName+']+div.strataPhenoIdent div.phenoCategory').text();
                 phenoInstanceSpecifier = $('a[data-target=#'+params.strataName+']+div.strataPhenoIdent div.phenoInstance').text();
@@ -949,14 +965,15 @@ var storeFilterData = function (data){
                               "\"requestedData\":"+collectingPropertyNames(params)+"," +
                               "\"filters\":"+collectingFilterValues(strataPropertyName,strataName,params.strataName)+"}";
              } else { // This can only be a strata tab, not a phenotype tab
-                strataPropertyName = $('div.stratsTabs_property').attr("id");
+                strataPropertyName = $('div.stratsTabs_property.'+params.modeledPhenotype).attr("id");
                 if (strataPropertyName.indexOf(params.modeledPhenotype+'_')>-1){
                    strataPropertyName = strataPropertyName.substr((params.modeledPhenotype+'_').length);
                 }
                 strataName=params.strataName;
+                var undef;
                 jsonDescr = "{\"dataset\":\""+$(dataSetSel).val()+"\"," +
                               "\"requestedData\":"+collectingPropertyNames(params)+"," +
-                              "\"filters\":"+collectingFilterValues(strataPropertyName,strataName)+"}";
+                              "\"filters\":"+collectingFilterValues(strataPropertyName,strataName,undef,phenoPropertyName,phenoPropertyInstance)+"}";
              }
 
             retrieveSampleDistribution  ( jsonDescr, callback, params  );
@@ -1640,7 +1657,12 @@ var storeFilterData = function (data){
            if ((typeof distributionInfo !== 'undefined')&&
               (typeof distributionInfo.sampleData !== 'undefined')&&
               (distributionInfo.sampleData !== null)){
-                var plotHoldingStructure = $(params.holderSection);
+                var plotHoldingStructure;
+                if (params.modeledPhenotype){
+                    plotHoldingStructure = $(params.holderSection+'_'+params.modeledPhenotype);
+                } else {
+                    plotHoldingStructure = $(params.holderSection);
+                }
                 plotHoldingStructure.empty();
                 var sampleMetadata = getStoredSampleMetadata();
                 var  sampleCount = 0;
@@ -1651,9 +1673,9 @@ var storeFilterData = function (data){
                     displayTestResultsSection(false);
                 } else {
                     $('.sampleNumberReporter .numberOfSamples').text(sampleCount);
-                    var divElementName = 'bwp_'+params.strataName+'_'+params.propertyName;
+                    var divElementName = 'bwp_'+params.strataName+'_'+params.propertyName+'_'+params.modeledPhenotype;
                     plotHoldingStructure.append('<div id="'+divElementName+'"></div>');
-                       $('.sampleNumberReporter .phenotypeSpecifier').text(params.propertyName);
+                    $('.sampleNumberReporter .phenotypeSpecifier').text(params.propertyName);
                     $('#'+divElementName).hide();
                     if (sampleMetadata.filters){
                       var filter = _.find(sampleMetadata.filters, {'name':params.propertyName});
@@ -2062,14 +2084,14 @@ the individual filters themselves. That work is handled later as part of a loop-
                                             <ul class="nav nav-tabs" id="{{name}}_stratsTabs">
                                                 {{ #strataContent }}
                                                    <li class="{{defaultDisplay}}">
-                                                       <a data-target="#{{name}}" data-toggle="tab" class="filterCohort {{trans}} {{phenoLevelName}}">{{trans}}</a>
+                                                       <a data-target="#{{name}}_{{phenoLevelName}}" data-toggle="tab" class="filterCohort {{trans}} {{phenoLevelName}}">{{trans}}</a>
                                                        <div class="strataPhenoIdent">
                                                            <div class="phenoCategory  {{phenoName}}" style="display: none">{{category}}</div>
                                                            <div class="phenoInstance  {{phenoLevelName}}" style="display: none">{{val}}</div>
                                                        </div>
                                                    </li>
                                                 {{ /strataContent }}
-                                                <div class="stratsTabs_property" id="{{name}}_{{strataProperty}}" style="display: none"></div>
+                                                <div class="stratsTabs_property {{phenoLevelName}}" id="{{name}}_{{strataProperty}}" style="display: none"></div>
                                                 <div class="phenoSplitTabs_property" id="{{name}}_{{phenotypeProperty}}" style="display: none"></div>
                                             </ul>
                                         </div>
@@ -2078,7 +2100,7 @@ the individual filters themselves. That work is handled later as part of a loop-
 
                                     <div class="tab-content">
                                         {{ #strataContent }}
-                                            <div class="tab-pane {{defaultDisplay}}" id="{{name}}">
+                                            <div class="tab-pane {{defaultDisplay}}" id="{{name}}_{{phenoLevelName}}">
                                                 <div class="row">
                                                     <div class="col-sm-5 col-xs-12 vcenter" style="margin-top:0">
                                                         <div class="row secHeader" style="padding: 20px 0 0 0">
@@ -2127,7 +2149,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                                                     class="numberOfPhenotypeSpecificSamples"></span></div>
                                                         </div>
 
-                                                        <div class="boxWhiskerPlot boxWhiskerPlot_{{name}}"></div>
+                                                        <div class="boxWhiskerPlot boxWhiskerPlot_{{name}} boxWhiskerPlot_{{name}}_{{phenoLevelName}}"></div>
 
                                                     </div>
 
