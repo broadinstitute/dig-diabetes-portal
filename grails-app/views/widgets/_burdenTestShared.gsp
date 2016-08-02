@@ -937,13 +937,13 @@ var storeFilterData = function (data){
         *   pull all of the filters out of the Dom and put them into a JSON string suitable for transmission to the server
         *
         */
-        var collectingFilterValues = function (additionalKey,additionalValue,alternateValue,modeledPropertyName,modeledPropertyInstance){
+        var collectingFilterValues = function (additionalKey,additionalValue,alternateValue,modeledPropertyName,modeledPropertyInstance,modeledPropertyInstanceRaw){
            var filterStrings = [];
            var searchValue = additionalValue;
            if(typeof alternateValue !== 'undefined') {
                 searchValue = alternateValue;
            }
-           _.forEach( extractFilters(searchValue), function(filterObject){
+           _.forEach( extractFilters(searchValue,modeledPropertyInstanceRaw), function(filterObject){
                var oneFilter = [];
                _.forEach( filterObject, function(value, key){
                    if (typeof value !== 'undefined'){
@@ -1057,7 +1057,7 @@ var storeFilterData = function (data){
                 var undef;
                 jsonDescr = "{\"dataset\":\""+$(dataSetSel).val()+"\"," +
                               "\"requestedData\":"+collectingPropertyNames(params)+"," +
-                              "\"filters\":"+collectingFilterValues(strataPropertyName,strataName,undef,phenoPropertyName,phenoRawPropertyName)+"}";
+                              "\"filters\":"+collectingFilterValues(strataPropertyName,strataName,undef,phenoPropertyName,phenoRawPropertyName,modeledPhenotype)+"}";
              }
 
             retrieveSampleDistribution  ( jsonDescr, callback, params  );
@@ -1863,19 +1863,29 @@ var storeFilterData = function (data){
         var displaySampleDistribution = function (propertyName, holderSection, categorical,modeledPhenotype) { // for categorical, 0== float, 1== string or int
             var locationOfFirstBreak = holderSection.indexOf('_');
             var strataName = holderSection.substring(locationOfFirstBreak+1);
+
+
+            // carry 'ALL' filters across to everyone else
             if ((locationOfFirstBreak> -1) &&(strataName==='ALL')) {
 
                //real valued
-               var realValueFilters = $('.filterParm');
+               var filterIdentifier = '.filterParm';
+               var inputIdentifier = '.inp_ALL_'+propertyName;
+               if ((typeof modeledPhenotype !== 'undefined') &&
+                    ( modeledPhenotype.length > 0)){
+                    filterIdentifier += ('.'+modeledPhenotype);
+                    inputIdentifier += ('_'+modeledPhenotype);
+               }
+               var realValueFilters = $(filterIdentifier);
                _.forEach(realValueFilters,function(oneFilter){
                     var filterDom = $(oneFilter);
                     var id = filterDom.attr('id');
                     var idKeys = id.split('_');
-                    if (idKeys.length === 3){
+                    if (idKeys.length > 2){
                         if ((idKeys[0]==='inp') &&
                             (idKeys[1]!=='ALL')  &&
                             (idKeys[2]===propertyName)){
-                                var templateFilter = $('#inp_ALL_'+propertyName);
+                                var templateFilter = $(inputIdentifier);
                                 filterDom.val(templateFilter.val());
                         }
                    }
@@ -1884,7 +1894,14 @@ var storeFilterData = function (data){
 
 
                // categorical
-                var categoricalValueFilters =   $('.categoricalFilter');
+               filterIdentifier = '.categoricalFilter';
+               inputIdentifier = '.multi_ALL_'+propertyName;
+               if ((typeof modeledPhenotype !== 'undefined') &&
+                    ( modeledPhenotype.length > 0)){
+                    filterIdentifier += ('.'+modeledPhenotype);
+                    inputIdentifier += ('_'+modeledPhenotype);
+               }
+                var categoricalValueFilters =   $(filterIdentifier);
                 _.forEach(categoricalValueFilters,function(oneFilter){
                     var filterRowDom = $(oneFilter);
                     var  filterId = filterRowDom.attr('id');
@@ -1893,16 +1910,23 @@ var storeFilterData = function (data){
                         var locationOfSecondBreak = filterName.indexOf('_');
                         if ((locationOfSecondBreak>-1)&&
                             (locationOfSecondBreak<(filterName.length-1))&&
-                            (filterName.substr(locationOfSecondBreak+1)==propertyName)&&
+                            (filterName.substr(locationOfSecondBreak+1,propertyName.length)==propertyName)&&
                             (filterName.substr(0,3)!=='ALL')){
-                            $('#multi_'+filterName).val($('#multi_ALL_'+propertyName).val());
+                            $('#multi_'+filterName).val($(inputIdentifier).val());
                             }
                     }
 
                 });
 
                 // comparators
-               var realValueComparators =   $('.filterCmp');
+               filterIdentifier = '.filterCmp';
+               inputIdentifier = '.cmp_ALL_'+propertyName;
+               if ((typeof modeledPhenotype !== 'undefined') &&
+                    ( modeledPhenotype.length > 0)){
+                    filterIdentifier += ('.'+modeledPhenotype);
+                    inputIdentifier += ('_'+modeledPhenotype);
+               }
+               var realValueComparators =   $(filterIdentifier);
                 _.forEach(realValueComparators,function(oneComparator){
                     var cmpRowDom = $(oneComparator);
                     var  cmpId = cmpRowDom.attr('id');
@@ -1911,16 +1935,15 @@ var storeFilterData = function (data){
                         var locationOfSecondBreak = cmpName.indexOf('_');
                         if ((locationOfSecondBreak>-1)&&
                             (locationOfSecondBreak<(cmpName.length-1))&&
-                            (cmpName.substr(locationOfSecondBreak+1)==propertyName)&&
+                            (cmpName.substr(locationOfSecondBreak+1,propertyName.length)==propertyName)&&
                             (cmpName.substr(0,3)!=='ALL')){
-                            $('#cmp_'+cmpName).val($('#cmp_ALL_'+propertyName).val());
+                            $('#cmp_'+cmpName).val($(inputIdentifier).val());
                             }
                     }
 
                 });
 
            }
-
 
             refreshSampleDistribution( '#datasetFilter', utilizeDistributionInformationToCreatePlot, {
                                                                                                         propertyName:propertyName,
@@ -2330,7 +2353,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                     </div>
 
                                     <div class="col-sm-2">
-                                        <select id="cmp_{{stratum}}_{{name}}" class="form-control filterCmp"
+                                        <select id="cmp_{{stratum}}_{{name}}_{{phenoLevelName}}" class="form-control filterCmp cmp_{{stratum}}_{{name}}_{{phenoLevelName}} {{phenoLevelName}}"
                                                 data-selectfor="{{stratum}}_{{name}}Comparator"
                                                onchange="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0,'{{phenoLevelName}}')">
                                             <option value="1">&lt;</option>
@@ -2339,7 +2362,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                     </div>
 
                                     <div class="col-sm-3">
-                                        <input id="inp_{{stratum}}_{{name}}" type="text" class="filterParm form-control"
+                                        <input type="text" id="inp_{{stratum}}_{{name}}_{{phenoLevelName}}" class="filterParm form-control inp_{{stratum}}_{{name}}_{{phenoLevelName}} {{phenoLevelName}}"
                                                data-type="propertiesInput"
                                                data-prop="{{stratum}}_{{name}}Value" data-translatedname="{{stratum}}_{{name}}"
                                                onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0,'{{phenoLevelName}}')"
@@ -2370,7 +2393,7 @@ the individual filters themselves. That work is handled later as part of a loop-
 
 
                                     <div class="col-sm-5">
-                                        <select id="multi_{{stratum}}_{{name}}" class="form-control multiSelect"
+                                        <select id="multi_{{stratum}}_{{name}}_{{phenoLevelName}}" class="form-control multiSelect multi_{{stratum}}_{{name}}_{{phenoLevelName}} {{phenoLevelName}}"
                                                 data-selectfor="{{stratum}}_{{name}}FilterOpts" multiple="multiple"
                                                 onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',1,'{{phenoLevelName}}')">
                                         </select>
