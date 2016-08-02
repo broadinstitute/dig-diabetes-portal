@@ -329,6 +329,18 @@ var storeFilterData = function (data){
     return convertedName;
  };
 
+ var undoConversionPhenotypeNames  = function (untranslatedPhenotype){
+    var convertedName = untranslatedPhenotype;
+    if (untranslatedPhenotype === 'T2D_readable'){
+       convertedName = 't2d';
+    } else if (untranslatedPhenotype === 'CASE'){
+       convertedName = 'Yes';
+    } else if (untranslatedPhenotype === 'CONTROL'){
+       convertedName = 'No';
+    }
+    return convertedName;
+ };
+
 
 
  /***
@@ -840,6 +852,32 @@ var storeFilterData = function (data){
 
 
 
+        var convertBifurcatedFiltersIntoArraysOfStrings = function(filterKey,filterGrouping){
+           var filterStrings = [];
+           _.forEach( extractFilters(filterKey,filterGrouping), function(filterObject){
+               var oneFilter = [];
+               _.forEach( filterObject, function(value, key){
+                   if (typeof value !== 'undefined'){
+                       if (key==="cat"){
+                          oneFilter.push("\""+key+"\": \""+value+"\"");
+                       }else{
+                          var divider = value.indexOf('_');
+                           if (divider>-1){
+                               var propName = value.substr(divider+1,value.length-divider);
+                               oneFilter.push("\""+key+"\": \""+propName+"\"");
+                           } else {
+                                oneFilter.push("\""+key+"\": \""+value+"\"");
+                           }
+                       }
+                    }
+                });
+
+               filterStrings.push("{"+oneFilter.join(",\n")+"}");
+           } );
+        return filterStrings;
+        };
+
+
 
 
         var compoundingFilterValues = function (arrayOfKeys){
@@ -854,6 +892,43 @@ var storeFilterData = function (data){
                     filterStrings.push("["+arrayOfFilters.join(",\n")+"]");
             } );
            return "[\n" + filterStrings.join(",") + "\n]";
+        };
+
+
+
+        var compoundingStrataFilterValues = function ( arrayOfFilterArrays ){
+           var arrayOfArrayOfFilters = [];
+           var filterStrings = [];
+           var strataPropertyName = "";
+           var stratumName = "";
+            _.forEach( arrayOfFilterArrays, function(oneSetOfKeys){
+                    var phenoPropertyName = oneSetOfKeys.phenoPropertyName;
+                    var phenoPropertyNameExtracted;
+                    var phenoPropertyInstanceExtracted;
+                    var stratumPropertyNameExtracted;
+                    if (phenoPropertyName.indexOf('_') > 0){
+                         phenoPropertyInstanceExtracted = phenoPropertyName.substr(0,phenoPropertyName.indexOf('_'));
+                         phenoPropertyNameExtracted = phenoPropertyName.substr(phenoPropertyName.indexOf('_')+1);
+                    }
+                    stratumName = oneSetOfKeys.stratumName;
+                    strataPropertyName = oneSetOfKeys.strataPropertyName;
+                    if (strataPropertyName.indexOf('_') > 0){
+                         stratumPropertyNameExtracted = strataPropertyName.substr(strataPropertyName.indexOf('_')+1);
+                    }
+                    var arraysOfStrings = convertBifurcatedFiltersIntoArraysOfStrings(oneSetOfKeys.stratumName,phenoPropertyInstanceExtracted);
+                    arraysOfStrings.push("{\"name\":\""+phenoPropertyNameExtracted+"\",\n\"parm\":\""+undoConversionPhenotypeNames(phenoPropertyInstanceExtracted)+"\",\n\"cmp\":\"3\",\n\"cat\":\"1\"}");
+                    arraysOfStrings.push("{\"name\":\""+stratumPropertyNameExtracted+"\",\n\"parm\":\""+stratumName+"\",\n\"cmp\":\"3\",\n\"cat\":\"1\"}");
+                   arrayOfArrayOfFilters.push(arraysOfStrings);
+            });
+            _.forEach( arrayOfArrayOfFilters, function(arrayOfFilters){
+                    filterStrings.push("["+arrayOfFilters.join(",\n")+"]");
+            } );
+           return {
+                strataPropertyName: strataPropertyName,
+                stratumName: stratumName,
+                strataFilters : "[\n" + filterStrings.join(",") + "\n]"
+           };
+           ;
         };
 
 
@@ -1291,57 +1366,90 @@ var storeFilterData = function (data){
                 modeledPhenotypes.push($(eachTab).text());
             });
             // we need to handle cases and controls in a single query, perhaps across each stratum.  So let's generate the maximum strata list
-            var x;
+            var nonPhenotypeTabs = [];
+            var phenotypeTabs = [];
+            // compile unique strata names
+            var uniqueStrataNames = [];
             if (modeledPhenotypes.length>0){
                 for ( var i = 0 ; i < modeledPhenotypes.length ; i++ ) {
                     var modeledPhenotype = modeledPhenotypes[i];
-
                     var stratsTabs  = $('#'+modeledPhenotype+'_stratsTabs li a.filterCohort');
-                    if (stratsTabs.length===0){
-                       var f=executeAssociationTest(collectingFilterValues(),collectingCovariateValues(),'none','strat1');
-                       $.when(f).then(function() {
-                              //alert('all done with 1');
-                        });
-                    } else {
-                        var propertyDesignationDom = $('div.stratsTabs_property'); // strata are tested independently
-                        var strataPropertyName = propertyDesignationDom.attr("id");
-                        var phenoSplitDesignationDom = $('div.phenoSplitTabs_property.'+modeledPhenotype);  // case/control go together
-                        var phenoPropertyName = phenoSplitDesignationDom.attr("id");
-                        $('.strataResults').empty(); // clear stata reporting section
-                        var nonPhenotypeTabs = [];
-                        var phenotypeTabs = [];
-                        _.forEach(stratsTabs,function (stratum){
-                            var stratumName = $(stratum).text();
-                             var phenoPropertySpecifier = $('a[data-target=#'+stratumName+'_'+modeledPhenotype+']+div.strataPhenoIdent div.phenoCategory').text();
-                             var phenoInstanceSpecifier = $('a[data-target=#'+stratumName+'_'+modeledPhenotype+']+div.strataPhenoIdent div.phenoInstance').text();
-                             if (phenoPropertySpecifier!==translatedPhenotypeName){
-                                nonPhenotypeTabs.push(stratum);
-                             } else {
-                                phenotypeTabs.push({
-                                                    phenoPropertyName:phenoPropertyName,
-                                                    phenoInstanceSpecifier:phenoInstanceSpecifier,
-                                                    stratumName:stratumName
-                                });
-                             }
-                          });
-                        var compoundedFilterValues = compoundingFilterValues(phenotypeTabs);
-                        var deferreds = [];
-                        _.forEach(nonPhenotypeTabs,function (stratum){
-                            var stratumName = $(stratum).text();
-                            if (stratumName!=='ALL'){
-                               deferreds.push(executeAssociationTest(collectingFilterValues(strataPropertyName,stratumName),collectingCovariateValues(strataPropertyName,stratumName),strataPropertyName,stratumName,compoundedFilterValues));
+                    for ( var i = 0 ; i < stratsTabs.length ; i++ ) {
+                        var currentStratumName = $(stratsTabs[i]).text();
+                        if (uniqueStrataNames.indexOf(currentStratumName)<0){
+                            if (currentStratumName !== 'ALL'){
+                                uniqueStrataNames.push(currentStratumName);
                             }
-                        });
-                        $.when.apply($,deferreds).then(function() {
-                              runMetaAnalysis();
-                              $('#rSpinner').hide();
-                        });
+                        }
+                    }
+                }
+            }
+             $('.strataResults').empty(); // clear stata reporting section
+            if (uniqueStrataNames.length>0){
+                for ( var i = 0 ; i < uniqueStrataNames.length ; i++ ) {
+                    var stratumName = uniqueStrataNames[i];
+                    var strataPropertyName;
+                    var phenoPropertyName;
+                    var phenoPropertySpecifier;
+                    var phenoInstanceSpecifier;
+                    var caseAndControlArray = [];
+                    if (modeledPhenotypes.length>0){
+                        for ( var j = 0 ; j < modeledPhenotypes.length ; j++ ) {
+                            var modeledPhenotype = modeledPhenotypes[j];
+
+                            var stratsTabs  = $('#'+modeledPhenotype+'_stratsTabs li a.filterCohort');
+                            if (stratsTabs.length===0){
+                               var f=executeAssociationTest(collectingFilterValues(),collectingCovariateValues(),'none','strat1');
+                               $.when(f).then(function() {
+                                      //alert('all done with 1');
+                                });
+                            } else {
+                                strataPropertyName = $('div.stratsTabs_property').attr("id");
+                                phenoPropertyName = $('div.phenoSplitTabs_property.'+modeledPhenotype).attr("id");
+                                phenoPropertySpecifier = $('a[data-target=#'+stratumName+'_'+modeledPhenotype+']+div.strataPhenoIdent div.phenoCategory').text();
+                                phenoInstanceSpecifier = $('a[data-target=#'+stratumName+'_'+modeledPhenotype+']+div.strataPhenoIdent div.phenoInstance').text();
+                                caseAndControlArray.push({
+                                                        phenoPropertyName:phenoPropertyName,
+                                                        phenoInstanceSpecifier:phenoInstanceSpecifier,
+                                                        strataPropertyName: strataPropertyName,
+                                                        stratumName:stratumName
+                                    });
+//                                if (phenoPropertySpecifier!==translatedPhenotypeName){
+//                                    nonPhenotypeTabs.push({
+//                                                        phenoPropertyName:phenoPropertyName,
+//                                                        phenoInstanceSpecifier:phenoInstanceSpecifier,
+//                                                        strataPropertyName: strataPropertyName,
+//                                                        stratumName:stratumName
+//                                    });
+//                                } else {
+//                                    phenotypeTabs.push({
+//                                                        phenoPropertyName:phenoPropertyName,
+//                                                        phenoInstanceSpecifier:phenoInstanceSpecifier,
+//                                                        stratumName:stratumName
+//                                    });
+//                                 }
+                           }
+
+                        }
+                        nonPhenotypeTabs.push(caseAndControlArray);
                     }
 
-               }
-
+                }
             }
+           // var compoundedFilterValues = compoundingFilterValues(phenotypeTabs);
 
+            var deferreds = [];
+            _.forEach(nonPhenotypeTabs,function (stratum){
+                    var compoundedFilterValues =  compoundingStrataFilterValues(stratum);
+                    var strataPropertyName = stratum[0].strataPropertyName;
+                    var stratumName = stratum[0].stratumName;
+                    deferreds.push(executeAssociationTest('{}',collectingCovariateValues(strataPropertyName,stratumName),strataPropertyName,stratumName,compoundedFilterValues.strataFilters));
+
+            });
+            $.when.apply($,deferreds).then(function() {
+                  runMetaAnalysis();
+                  $('#rSpinner').hide();
+            });
         }; // runBurdenTest
 
 
@@ -2211,7 +2319,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                     <script id="filterFloatTemplate"  type="x-tmpl-mustache">
 
                                 {{ #realValuedFilters }}
-                                <div class="row realValuedFilter {{stratum}} considerFilter" id="filter_{{stratum}}_{{name}}">
+                                <div class="row realValuedFilter {{stratum}} {{phenoLevelName}} considerFilter" id="filter_{{stratum}}_{{name}}">
                                     %{--<div class="col-sm-1">--}%
                                         <input class="utilize" id="use{{name}}" type="checkbox" name="use_{{stratum}}_{{name}}"
                                                value="{{stratum}}_{{name}}" checked style="display: none"/></td>

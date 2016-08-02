@@ -286,14 +286,14 @@ class WidgetService {
     public String buildFilterDesignation (JSONArray filters, JSONArray compoundedFilterValues, String dataset){
         String filterDesignation = ""
 
-        if ((filters==null)||
-            (filters.size()==0)){
-            filterDesignation =  """            "filters":    [
-                ${singleFilter ( "1", "1", "ID", "ZZZZZ", dataset )}
-            ]
-""".toString()
-        }
-        else {
+//        if ((filters==null)||
+//            (filters.size()==0)){
+//            filterDesignation =  """            "filters":    [
+//                ${singleFilter ( "1", "1", "ID", "ZZZZZ", dataset )}
+//            ]
+//""".toString()
+//        }
+//        else {
             List<String> masterFilterList = []
             List<String> requestedFilterList = []
             if (filters.size()> 0){
@@ -317,7 +317,7 @@ class WidgetService {
                 masterFilterList = requestedFilterList
             } else if ((requestedFilterList.size()==0)&&(compoundFilterList.size()>0)){
                 masterFilterList = compoundFilterList
-            } else {
+            } else if (!((requestedFilterList.size()==0)&&(compoundFilterList.size()==0))) {
                 List<String> groupingFilterList = []
                 groupingFilterList=combineFiltersInANDBlock(requestedFilterList,groupingFilterList )
                 groupingFilterList=combineFiltersInANDBlock(compoundFilterList,groupingFilterList )
@@ -334,7 +334,7 @@ class WidgetService {
         ]
 """.toString()
             }
-        }
+//        }
 
 
         return filterDesignation
