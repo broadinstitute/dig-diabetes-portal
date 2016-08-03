@@ -908,7 +908,9 @@ var storeFilterData = function (data){
                     }
                     var arraysOfStrings = convertBifurcatedFiltersIntoArraysOfStrings(oneSetOfKeys.stratumName,phenoPropertyInstanceExtracted);
                     arraysOfStrings.push("{\"name\":\""+phenoPropertyNameExtracted+"\",\n\"parm\":\""+undoConversionPhenotypeNames(phenoPropertyInstanceExtracted)+"\",\n\"cmp\":\"3\",\n\"cat\":\"1\"}");
-                    arraysOfStrings.push("{\"name\":\""+stratumPropertyNameExtracted+"\",\n\"parm\":\""+stratumName+"\",\n\"cmp\":\"3\",\n\"cat\":\"1\"}");
+                    if (stratumName !== 'strat1' ) { // placeholder implying we have no strata
+                        arraysOfStrings.push("{\"name\":\""+stratumPropertyNameExtracted+"\",\n\"parm\":\""+stratumName+"\",\n\"cmp\":\"3\",\n\"cat\":\"1\"}");
+                    }
                    arrayOfArrayOfFilters.push(arraysOfStrings);
             });
             _.forEach( arrayOfArrayOfFilters, function(arrayOfFilters){
@@ -2201,7 +2203,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                     </div>
 
 
-                    <div class="row" style="{{tabDisplay}}">
+                    <div class="row" style="{{modeledPhenotypeDisplay}}">
                         <div class="col-sm-12 col-xs-12">
                             <ul class="nav nav-tabs" id="modeledPhenotypeTabs"  style="{{modeledPhenotypeDisplay}}">
                                 {{ #modeledPhenotype }}
