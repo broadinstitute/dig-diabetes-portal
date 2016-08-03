@@ -608,7 +608,6 @@ var storeFilterData = function (data){
             if (!multipleStrataExist){
                stratumName = 'strat1';
             }
-            var data = getStoredSampleMetadata();
 
             var generateModeledPhenotypeElements = function ( optionsPerFilter, phenotype, caseControlFiltering, strataContentArray ){
                 var modeledPhenotypeElements;
@@ -733,15 +732,16 @@ var storeFilterData = function (data){
             };
 
 
-            if ( ( data !==  null ) &&
-                 ( typeof data !== 'undefined') ){
+            var sampleMetadata = getStoredSampleMetadata();
+            if ( ( sampleMetadata !==  null ) &&
+                 ( typeof sampleMetadata !== 'undefined') ){
 
                     var optionsPerFilter = generateOptionsPerFilter(filterInfo) ;
                     var stratificationProperty = generateNamesOfStrata(multipleStrataExist, optionsPerFilter, strataProperty, phenotype);
-                    var strataContent1 = generateStrataContent(optionsPerFilter,stratificationProperty, phenotype, data.filters, data.covariates, multipleStrataExist);
-                    var strataContent2 = generateStrataContent(optionsPerFilter,stratificationProperty, phenotype, data.filters, data.covariates, multipleStrataExist);
+                    var strataContent1 = generateStrataContent(optionsPerFilter,stratificationProperty, phenotype, sampleMetadata.filters, sampleMetadata.covariates, multipleStrataExist);
+                    var strataContent2 = generateStrataContent(optionsPerFilter,stratificationProperty, phenotype, sampleMetadata.filters, sampleMetadata.covariates, multipleStrataExist);
                     var modeledPhenotypeElements = generateModeledPhenotypeElements(optionsPerFilter, phenotype, caseControlFiltering, [strataContent1,strataContent2] );
-                    var renderData = generateRenderData(optionsPerFilter,strataProperty,stratificationProperty, phenotype, data.filters, data.covariates, modeledPhenotypeElements);
+                    var renderData = generateRenderData(optionsPerFilter,strataProperty,stratificationProperty, phenotype, sampleMetadata.filters, sampleMetadata.covariates, modeledPhenotypeElements);
 
 
                     $("#chooseFiltersLocation").empty();
@@ -787,7 +787,7 @@ var storeFilterData = function (data){
                         $('.sampleNumberReporter').show();
 
                          // filters should be in place now.  Attach events
-                         _.forEach(data.filters,function(d){
+                         _.forEach(sampleMetadata.filters,function(d){
                               $("#multi_"+stratumName+"_"+d.name).bind("change", function(event, ui){
                                    mpgSoftware.burdenTestShared.displaySampleDistribution(d.name, '.boxWhiskerPlot_'+stratumName,0)
                               });
@@ -977,7 +977,8 @@ var storeFilterData = function (data){
                    (typeof additionalValue !== 'undefined') &&
                    (additionalValue !== 'strat1') &&
                    (additionalValue.length > 0) &&
-                    (additionalValue !== 'ALL')) {
+                    (additionalValue !== 'ALL')&&
+                    (additionalValue !== modeledPropertyInstanceRaw)) {
                            var convertedAdditionalKey = additionalKey;
                            var divider = additionalKey.indexOf('_');
                            if (divider>-1){
@@ -2147,7 +2148,7 @@ $( document ).ready( function (){
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
                         <select id="phenotypeFilter" class="traitFilter form-control text-left"
-                                onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata ($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val() );">
+                                onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata ($('#datasetFilter'), '#phenotypeFilter', $('#stratifyDesignation').val() );">
                         </select>
                     </div>
                 </div>
@@ -2161,7 +2162,7 @@ $( document ).ready( function (){
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
                         <select id="stratifyDesignation" class="stratifyFilter form-control text-left"
-                                onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata  ($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val() );">
+                                onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata  ($('#datasetFilter'), '#phenotypeFilter', $('#stratifyDesignation').val() );">
                                     <option value="none">none</option>
                                     <option value="origin">ancestry</option>
                         </select>
@@ -2176,7 +2177,7 @@ $( document ).ready( function (){
                             <label>
                                 <input id="caseControlFiltering" type="checkbox" name="caseControlFiltering"
                                        value="caseControlFiltering"
-                                        onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata  ($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val() );"/>Filter cases and controls separately
+                                        onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata  ($('#datasetFilter'), '#phenotypeFilter', $('#stratifyDesignation').val() );"/>Filter cases and controls separately
                             </label>
                         </div>
                     </div>

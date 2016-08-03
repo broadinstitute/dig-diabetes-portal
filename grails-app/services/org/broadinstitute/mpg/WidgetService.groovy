@@ -296,7 +296,7 @@ class WidgetService {
 //        else {
             List<String> masterFilterList = []
             List<String> requestedFilterList = []
-            if (filters.size()> 0){
+            if (filters?.size()> 0){
                 for (Map map in filters){
                     requestedFilterList = processSingleFilter( map, dataset, requestedFilterList)
                 }
