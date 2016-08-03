@@ -600,41 +600,45 @@ var storeFilterData = function (data){
 
             var generateModeledPhenotypeElements = function ( optionsPerFilter, phenotype, caseControlFiltering, strataContentArray ){
                 var modeledPhenotypeElements;
+                var modeledPhenotype;
                 if (caseControlFiltering){
-                    var modeledPhenotype = optionsPerFilter[convertPhenotypeNames(phenotype)];
-                    if ((typeof modeledPhenotype !== 'undefined' ) && (modeledPhenotype.length>0)){
-                        _.forEach(strataContentArray[0], function(strataContentElement){
-                            strataContentElement["phenoName"] = convertPhenotypeNames(phenotype);
-                        });
-                        modeledPhenotypeElements = {name:convertPhenotypeNames(phenotype),
-                                                    phenoName:convertPhenotypeNames(phenotype),
-                                                    val:phenotype,
-                                                    strataContent: strataContentArray,
-                                                    levels:[]};
-                        var defaultDisplay = ' active';
-                        var loopCounter = 0;
-                        _.forEach(modeledPhenotype, function(phenotypeLevel){
-                            var currentStrataContent = strataContentArray[loopCounter++];
-                            var defaultStrataDisplay = ' active';
-                            _.forEach(currentStrataContent, function(strataContentElement){
-                                strataContentElement["phenoLevelName"] = convertPhenotypeNames(phenotypeLevel.name);
-                                strataContentElement["defaultDisplay"] = defaultStrataDisplay;
-                                defaultStrataDisplay = ' ';
-                            });
-                            modeledPhenotypeElements.levels.push(
-                                                        {   name:convertPhenotypeNames(phenotypeLevel.name),
-                                                            phenoLevelName:convertPhenotypeNames(phenotypeLevel.name),
-                                                            phenoLevelVal:phenotypeLevel.name,
-                                                            val:phenotypeLevel.name,
-                                                            samples:phenotypeLevel.samples,
-                                                            category:convertPhenotypeNames(phenotype),
-                                                            strataContent: currentStrataContent,
-                                                            defaultDisplay: defaultDisplay }
-                            );
-                            defaultDisplay = '';
-                        });
+                     modeledPhenotype = optionsPerFilter[convertPhenotypeNames(phenotype)];
+                } else {
+                    modeledPhenotype = [{name:"strata1",sample:999}];
                 }
-            }
+                if ((typeof modeledPhenotype !== 'undefined' ) && (modeledPhenotype.length>0)){
+                    _.forEach(strataContentArray[0], function(strataContentElement){
+                        strataContentElement["phenoName"] = convertPhenotypeNames(phenotype);
+                    });
+                    modeledPhenotypeElements = {name:convertPhenotypeNames(phenotype),
+                                                phenoName:convertPhenotypeNames(phenotype),
+                                                val:phenotype,
+                                                strataContent: strataContentArray,
+                                                levels:[]};
+                    var defaultDisplay = ' active';
+                    var loopCounter = 0;
+                    _.forEach(modeledPhenotype, function(phenotypeLevel){
+                        var currentStrataContent = strataContentArray[loopCounter++];
+                        var defaultStrataDisplay = ' active';
+                        _.forEach(currentStrataContent, function(strataContentElement){
+                            strataContentElement["phenoLevelName"] = convertPhenotypeNames(phenotypeLevel.name);
+                            strataContentElement["defaultDisplay"] = defaultStrataDisplay;
+                            defaultStrataDisplay = ' ';
+                        });
+                        modeledPhenotypeElements.levels.push(
+                                                    {   name:convertPhenotypeNames(phenotypeLevel.name),
+                                                        phenoLevelName:convertPhenotypeNames(phenotypeLevel.name),
+                                                        phenoLevelVal:phenotypeLevel.name,
+                                                        val:phenotypeLevel.name,
+                                                        samples:phenotypeLevel.samples,
+                                                        category:convertPhenotypeNames(phenotype),
+                                                        strataContent: currentStrataContent,
+                                                        defaultDisplay: defaultDisplay }
+                        );
+                        defaultDisplay = '';
+                    });
+                }
+            //}
             return modeledPhenotypeElements;
         }
 
@@ -698,30 +702,17 @@ var storeFilterData = function (data){
                         phenotypeProperty:convertPhenotypeNames(phenotype),
 //                        strataContent:[],
                         tabDisplay:"",
-                        modeledPhenotype:modeledPhenotype
+                        modeledPhenotype:modeledPhenotype,
+                        modeledPhenotypeDisplay: function(){if (modeledPhenotype.levels.length<2) {return 'display: none'; } else {return '' ;}}
                     };
-//                    _.forEach(stratificationProperty,function(stratumHolder){
-//                       var stratum=stratumHolder.name;
-//                       var category=stratumHolder.category;
-//                       var val=stratumHolder.val;
-//                       renderData.strataContent.push({  name:stratum,
-//                                                        trans:stratum,
-//                                                        val:val,
-//                                                        category:category,
-//                                                        count:renderData.strataContent.length,
-//                                                        filterDetails:generateFilterRenderData(specificsAboutFilters,optionsPerFilter,stratum, phenotype),
-//                                                        covariateDetails:generateCovariateRenderData(specificsAboutCovariates,phenotype,stratum)});
-//                     });
                 } else {
                      renderData  = {
                         strataProperty:strataProperty,
                         phenotypeProperty:convertPhenotypeNames(phenotype),
-//                        strataContent:[{name:'strat1',trans:'strat1',category:'strat1',count:0,
-//                                                        filterDetails:generateFilterRenderData(specificsAboutFilters,optionsPerFilter, 'strat1', phenotype),
-//                                                        covariateDetails:generateCovariateRenderData(specificsAboutCovariates,phenotype, 'strat1' ) }],
                         defaultDisplay: ' active',
                         tabDisplay: 'display: none',
-                        modeledPhenotype:modeledPhenotype
+                        modeledPhenotype:modeledPhenotype,
+                        modeledPhenotypeDisplay: function(){if (modeledPhenotype.levels.length<2) {return 'display: none'; } else {return '' ;}}
                     };
                 }
                 return renderData;
@@ -981,7 +972,8 @@ var storeFilterData = function (data){
            if ((typeof modeledPropertyName !== 'undefined') &&
                    (modeledPropertyName.length > 0) &&
                    (typeof modeledPropertyInstance !== 'undefined') &&
-                   (modeledPropertyInstance.length > 0)) {
+                   (modeledPropertyInstance.length > 0)&&
+                   (modeledPropertyInstance!=='strata1')) {
                   filterStrings.push("{\"name\": \""+modeledPropertyName+"\","+
 "\"parm\": \""+modeledPropertyInstance+"\","+
 "\"cmp\": \"3\",\"cat\": \"1\"}");
@@ -2165,7 +2157,8 @@ $( document ).ready( function (){
                         <div class="checkbox" style="margin:0">
                             <label>
                                 <input id="caseControlFiltering" type="checkbox" name="caseControlFiltering"
-                                       value="caseControlFiltering"/>Filter cases and controls separately
+                                       value="caseControlFiltering"
+                                        onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata  ($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val() );"/>Filter cases and controls separately
                             </label>
                         </div>
                     </div>
@@ -2210,7 +2203,7 @@ the individual filters themselves. That work is handled later as part of a loop-
 
                     <div class="row" style="{{tabDisplay}}">
                         <div class="col-sm-12 col-xs-12">
-                            <ul class="nav nav-tabs" id="modeledPhenotypeTabs">
+                            <ul class="nav nav-tabs" id="modeledPhenotypeTabs"  style="{{modeledPhenotypeDisplay}}">
                                 {{ #modeledPhenotype }}
                                    {{ #levels }}
                                         <li class="{{defaultDisplay}}">
