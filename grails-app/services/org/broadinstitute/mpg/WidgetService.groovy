@@ -302,7 +302,8 @@ class WidgetService {
                 }
             }
             List<String> compoundFilterList = []
-            if (compoundedFilterValues?.size()> 0){ // we have a group of filter groups
+            if ((compoundedFilterValues?.size()> 0)&&(compoundedFilterValues[0].size()>0))
+                    { // we have a group of filter groups
                 List<String> intermediateFilterList = []
                 for (List subFilters in compoundedFilterValues){
                     List<String> developingCompoundFilterList = []

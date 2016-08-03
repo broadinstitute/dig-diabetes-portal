@@ -637,6 +637,7 @@ var storeFilterData = function (data){
                             strataContentElement["defaultDisplay"] = defaultStrataDisplay;
                             defaultStrataDisplay = ' ';
                         });
+                        var modeledPhenotypeElementsLevelsCount = modeledPhenotypeElements.levels.length;
                         modeledPhenotypeElements.levels.push(
                                                     {   name:convertPhenotypeNames(phenotypeLevel.name),
                                                         phenoLevelName:convertPhenotypeNames(phenotypeLevel.name),
@@ -645,7 +646,9 @@ var storeFilterData = function (data){
                                                         samples:phenotypeLevel.samples,
                                                         category:convertPhenotypeNames(phenotype),
                                                         strataContent: currentStrataContent,
-                                                        defaultDisplay: defaultDisplay }
+                                                        defaultDisplay: defaultDisplay,
+                                                        firstPhenotypeModelLevel: function(){if (modeledPhenotypeElementsLevelsCount===0){return '';} else {return 'display:none';}},
+                                                        undisplayedPhenotypeModelLevel: function(){if (modeledPhenotypeElementsLevelsCount===0){return '';} else {return 'display:none';}} }
                         );
                         defaultDisplay = '';
                     });
@@ -712,7 +715,6 @@ var storeFilterData = function (data){
                     renderData  = {
                         strataProperty:strataProperty,
                         phenotypeProperty:convertPhenotypeNames(phenotype),
-//                        strataContent:[],
                         tabDisplay:"",
                         modeledPhenotype:modeledPhenotype,
                         modeledPhenotypeDisplay: function(){if (modeledPhenotype.levels.length<2) {return 'display: none'; } else {return '' ;}}
@@ -919,7 +921,9 @@ var storeFilterData = function (data){
                          stratumPropertyNameExtracted = strataPropertyName.substr(strataPropertyName.indexOf('_')+1);
                     }
                     var arraysOfStrings = convertBifurcatedFiltersIntoArraysOfStrings(oneSetOfKeys.stratumName,phenoPropertyInstanceExtracted);
-                    arraysOfStrings.push("{\"name\":\""+phenoPropertyNameExtracted+"\",\n\"parm\":\""+undoConversionPhenotypeNames(phenoPropertyInstanceExtracted)+"\",\n\"cmp\":\"3\",\n\"cat\":\"1\"}");
+                    if (phenoPropertyInstanceExtracted !== 'strata1' ) { // placeholder implying we have no phenotype grouping
+                        arraysOfStrings.push("{\"name\":\""+phenoPropertyNameExtracted+"\",\n\"parm\":\""+undoConversionPhenotypeNames(phenoPropertyInstanceExtracted)+"\",\n\"cmp\":\"3\",\n\"cat\":\"1\"}");
+                    }
                     if (stratumName !== 'strat1' ) { // placeholder implying we have no strata
                         arraysOfStrings.push("{\"name\":\""+stratumPropertyNameExtracted+"\",\n\"parm\":\""+stratumName+"\",\n\"cmp\":\"3\",\n\"cat\":\"1\"}");
                     }
@@ -2451,38 +2455,46 @@ the individual filters themselves. That work is handled later as part of a loop-
                     <div class="row"  style="{{tabDisplay}}">
                         <div class="col-sm-12 col-xs-12">
                             <ul class="nav nav-tabs" id="stratsCovTabs">
-                                {{ #strataContent }}
-                                   <li class="{{defaultDisplay}}"><a data-target="#cov_{{name}}" data-toggle="tab" class="covariateCohort {{name}}">{{trans}}</a></li>
-                                {{ /strataContent }}
+                                {{ #modeledPhenotype }}
+                                    {{ #levels }}
+                                        {{ #strataContent }}
+                                           <li class="{{defaultDisplay}}" style="{{firstPhenotypeModelLevel}}"><a data-target="#cov_{{name}}" data-toggle="tab" class="covariateCohort {{name}}">{{trans}}</a></li>
+                                        {{ /strataContent }}
+                                    {{ /levels }}
+                                {{ /modeledPhenotype }}
                             </ul>
                         </div>
                     </div>
 
                     <div class="tab-content">
-                        {{ #strataContent }}
-                            <div class="tab-pane {{defaultDisplay}}" id="cov_{{name}}">
+                        {{ #modeledPhenotype }}
+                            {{ #levels }}
+                                {{ #strataContent }}
+                                    <div class="tab-pane {{defaultDisplay}}" id="cov_{{name}}{{undisplayedPhenotypeModelLevel}}" style="{{firstPhenotypeModelLevel}}">
 
-                                <div class="row">
-                                    <div class="col-sm-8 col-xs-12 vcenter covariate_holder">
-                                        <div class="covariates">
-                                            <div class="row">
-                                                <div class="col-md-10 col-sm-10 col-xs-12 vcenter" style="margin-top:0">
+                                        <div class="row">
+                                            <div class="col-sm-8 col-xs-12 vcenter covariate_holder">
+                                                <div class="covariates">
+                                                    <div class="row"  style="{{firstPhenotypeModelLevel}}">
+                                                        <div class="col-md-10 col-sm-10 col-xs-12 vcenter" style="margin-top:0">
 
-                                                    <div class="covariateHolder covariateHolder_{{name}}">
-                                                        {{ >allCovariateSpecifierTemplate }}
+                                                            <div class="covariateHolder covariateHolder_{{name}}"  style="{{firstPhenotypeModelLevel}}">
+                                                                {{ >allCovariateSpecifierTemplate }}
+                                                            </div>
+
+                                                        </div>
+
                                                     </div>
-
                                                 </div>
-
                                             </div>
-                                        </div>
-                                    </div>
 
-                                    <div class="col-sm-6 col-xs-12">
+                                            <div class="col-sm-6 col-xs-12">
+                                            </div>
+                                         </div>
                                     </div>
-                                 </div>
-                            </div>
-                        {{ /strataContent }}
+                                {{ /strataContent }}
+                            {{ /levels }}
+                        {{ /modeledPhenotype }}
                     </div>
 
                 </div>
