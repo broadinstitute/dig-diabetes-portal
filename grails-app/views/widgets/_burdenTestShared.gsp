@@ -72,10 +72,8 @@ ul.strataResults {
     border-right: solid 2px black;
     border-radius: 4px 4px 0px 0px;
 }
-#stratsTabs li.active {
-    border-radius: 4px 4px 0px 0px;
-}
-#stratsTabs a.filterCohort {
+
+.stratsTabs a.filterCohort {
     margin-bottom: -3px;
     margin-right: 5px;
     border-top: solid 1px black;
@@ -83,8 +81,22 @@ ul.strataResults {
     border-right: solid 1px black;
     border-radius: 4px 4px 0px 0px;
 }
-
-#stratsTabs a.filterCohort.ALL {
+.stratsTabs li.active {
+    border-radius: 4px 4px 0px 0px;
+    margin-right: 5px;
+    border-top: solid 1px black;
+    border-left: solid 1px black;
+    border-right: solid 1px black;
+}
+.stratsTabs a.filterCohort.ALL {
+    margin-bottom: -3px;
+    margin-right: 5px;
+    border-top: solid 2px black;
+    border-left: solid 2px black;
+    border-right: solid 2px black;
+    border-radius: 4px 4px 0px 0px;
+}
+.stratsTabs a.filterCohort.ALL:hover {
     margin-bottom: -3px;
     margin-right: 5px;
     border-top: solid 2px black;
@@ -2205,7 +2217,7 @@ the individual filters themselves. That work is handled later as part of a loop-
 
                     <div class="row" style="{{modeledPhenotypeDisplay}}">
                         <div class="col-sm-12 col-xs-12">
-                            <ul class="nav nav-tabs" id="modeledPhenotypeTabs"  style="{{modeledPhenotypeDisplay}}">
+                            <ul class="nav nav-pills modeledPhenotypeDisplay" id="modeledPhenotypeTabs">
                                 {{ #modeledPhenotype }}
                                    {{ #levels }}
                                         <li class="{{defaultDisplay}}">
@@ -2230,7 +2242,7 @@ the individual filters themselves. That work is handled later as part of a loop-
 
                                     <div class="row" style="{{tabDisplay}}">
                                         <div class="col-sm-12 col-xs-12">
-                                            <ul class="nav nav-tabs" id="{{name}}_stratsTabs">
+                                            <ul class="nav nav-tabs stratsTabs" id="{{name}}_stratsTabs">
                                                 {{ #strataContent }}
                                                    <li class="{{defaultDisplay}}">
                                                        <a data-target="#{{name}}_{{phenoLevelName}}" data-toggle="tab" class="filterCohort {{trans}} {{phenoLevelName}}">{{trans}}</a>
